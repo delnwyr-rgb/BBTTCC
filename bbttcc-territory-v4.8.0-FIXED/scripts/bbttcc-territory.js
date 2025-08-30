@@ -84,106 +84,182 @@ Hooks.once('ready', () => {
 });
 
 /**
- * Claim a territory for a faction
+ * Enhanced territory claiming with retry mechanism and race condition protection
  */
-async function claimTerritory(territoryData) {
-    try {
-        console.log('BBTTCC Territory | Claiming territory:', territoryData);
-        
-        const {
-            name,
-            factionId,
-            sceneId,
-            type = 'settlement',
-            size = 'medium',
-            description = '',
-            coordinates = { x: 0, y: 0 }
-        } = territoryData;
-        
-        if (!name || !factionId || !sceneId) {
-            throw new Error('Missing required territory data: name, factionId, or sceneId');
-        }
-        
-        const scene = game.scenes.get(sceneId);
-        const faction = game.actors.get(factionId);
-        
-        if (!scene) {
-            throw new Error(`Scene not found: ${sceneId}`);
-        }
-        
-        if (!faction) {
-            throw new Error(`Faction not found: ${factionId}`);
-        }
-        
-        // Get existing territories for this scene
-        const sceneTerritories = scene.flags['bbttcc-territory']?.territories || [];
-        
-        // Check if territory name already exists in this scene
-        if (sceneTerritories.some(t => t.name === name)) {
-            throw new Error(`Territory "${name}" already exists in this scene`);
-        }
-        
-        // Create territory data
-        const territory = {
-            id: foundry.utils.randomID(),
-            name: name,
-            factionId: factionId,
-            factionName: faction.name,
-            type: type,
-            size: size,
-            description: description,
-            coordinates: coordinates,
-            claimedAt: new Date().toISOString(),
-            resources: calculateTerritoryResources(type, size)
-        };
-        
-        // Add territory to scene
-        sceneTerritories.push(territory);
-        await scene.update({
-            'flags.bbttcc-territory.territories': sceneTerritories
-        });
-        
-        // Add territory to faction
-        const factionTerritories = faction.flags['bbttcc-factions']?.territories || [];
-        factionTerritories.push({
-            id: territory.id,
-            name: name,
-            sceneId: sceneId,
-            sceneName: scene.name,
-            type: type,
-            size: size,
-            resources: territory.resources
-        });
-        
-        await faction.update({
-            'flags.bbttcc-factions.territories': factionTerritories
-        });
-        
-        // Add war log entry to faction
-        if (faction.flags['bbttcc-factions']) {
-            const warLog = faction.flags['bbttcc-factions'].warLog || [];
-            warLog.push({
+async function claimTerritory(territoryData, options = {}) {
+    const maxRetries = options.maxRetries || 3;
+    const retryDelay = options.retryDelay || 1000;
+    const startTime = performance.now();
+    
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            console.log(`BBTTCC Territory | Claiming territory (attempt ${attempt}):`, territoryData);
+            
+            const {
+                name,
+                factionId,
+                sceneId,
+                type = 'settlement',
+                size = 'medium',
+                description = '',
+                coordinates = { x: 0, y: 0 }
+            } = territoryData;
+            
+            // Enhanced validation
+            if (!name || typeof name !== 'string' || name.trim().length === 0) {
+                throw new Error('Territory name is required and must be a non-empty string');
+            }
+            
+            if (!factionId || !sceneId) {
+                throw new Error('Missing required territory data: factionId or sceneId');
+            }
+            
+            // Validate territory type and size
+            if (!TERRITORY_TYPES[type]) {
+                throw new Error(`Invalid territory type: ${type}. Valid types: ${Object.keys(TERRITORY_TYPES).join(', ')}`);
+            }
+            
+            if (!SIZE_MULTIPLIERS[size]) {
+                throw new Error(`Invalid territory size: ${size}. Valid sizes: ${Object.keys(SIZE_MULTIPLIERS).join(', ')}`);
+            }
+            
+            const scene = game.scenes.get(sceneId);
+            const faction = game.actors.get(factionId);
+            
+            if (!scene) {
+                throw new Error(`Scene not found: ${sceneId}`);
+            }
+            
+            if (!faction) {
+                throw new Error(`Faction not found: ${factionId}`);
+            }
+            
+            if (!faction.flags?.['bbttcc-factions']?.isFaction) {
+                throw new Error(`Actor ${factionId} is not a valid BBTTCC faction`);
+            }
+            
+            // Atomic territory claim check - get fresh data each attempt
+            const sceneTerritories = scene.flags?.['bbttcc-territory']?.territories || [];
+            
+            // Check for name conflicts
+            const existingTerritory = sceneTerritories.find(t => t.name === name);
+            if (existingTerritory) {
+                if (existingTerritory.factionId === factionId) {
+                    throw new Error(`Territory "${name}" is already claimed by this faction`);
+                } else {
+                    throw new Error(`Territory "${name}" is already claimed by ${existingTerritory.factionName}`);
+                }
+            }
+            
+            // Create territory data with comprehensive information
+            const territory = {
+                id: foundry.utils.randomID(),
+                name: name.trim(),
+                factionId: factionId,
+                factionName: faction.name,
+                type: type,
+                size: size,
+                description: description.trim(),
+                coordinates: coordinates,
+                claimedAt: new Date().toISOString(),
+                claimedBy: game.user.id,
+                version: '4.8.0',
+                resources: calculateTerritoryResources(type, size)
+            };
+            
+            // Atomic update operations with verification
+            const updatedSceneTerritories = [...sceneTerritories, territory];
+            
+            // Update scene with new territory
+            await scene.update({
+                'flags.bbttcc-territory.territories': updatedSceneTerritories
+            });
+            
+            // Verify the scene update was successful
+            const verifySceneTerritories = scene.flags?.['bbttcc-territory']?.territories || [];
+            const verifyTerritory = verifySceneTerritories.find(t => t.id === territory.id);
+            if (!verifyTerritory) {
+                throw new Error('Failed to verify territory was added to scene');
+            }
+            
+            // Add territory reference to faction
+            const factionTerritories = faction.flags?.['bbttcc-factions']?.territories || [];
+            const factionTerritoryRef = {
+                id: territory.id,
+                name: name.trim(),
+                sceneId: sceneId,
+                sceneName: scene.name,
+                type: type,
+                size: size,
+                resources: territory.resources,
+                claimedAt: territory.claimedAt
+            };
+            
+            await faction.update({
+                'flags.bbttcc-factions.territories': [...factionTerritories, factionTerritoryRef]
+            });
+            
+            // Add war log entry to faction
+            const warLog = faction.flags?.['bbttcc-factions']?.warLog || [];
+            const warLogEntry = {
                 id: foundry.utils.randomID(),
                 title: `Territory Claimed: ${name}`,
                 description: `Claimed ${size} ${type} territory in ${scene.name}`,
-                timestamp: new Date().toISOString(),
+                timestamp: territory.claimedAt,
                 turn: game.combat?.round || 0
-            });
+            };
             
             await faction.update({
-                'flags.bbttcc-factions.warLog': warLog
+                'flags.bbttcc-factions.warLog': [...warLog, warLogEntry]
             });
+            
+            const endTime = performance.now();
+            console.log(`BBTTCC Territory | Territory claimed successfully (${(endTime - startTime).toFixed(2)}ms):`, {
+                territory: territory,
+                attempt: attempt,
+                claimTime: endTime - startTime
+            });
+            
+            ui.notifications.info(`Territory "${name}" claimed by ${faction.name}`);
+            
+            // Notify other modules
+            Hooks.callAll('bbttcc-territory.claimed', {
+                territory: territory,
+                faction: faction,
+                scene: scene,
+                timestamp: Date.now()
+            });
+            
+            return territory;
+            
+        } catch (error) {
+            if (attempt === maxRetries) {
+                const systemInfo = {
+                    foundryVersion: game.version,
+                    moduleVersion: game.modules.get('bbttcc-territory')?.version || 'unknown',
+                    userId: game.user.id,
+                    timestamp: new Date().toISOString(),
+                    totalAttempts: maxRetries,
+                    totalTime: performance.now() - startTime
+                };
+                
+                console.error(`BBTTCC Territory | Failed to claim territory after ${maxRetries} attempts:`, {
+                    error: {
+                        name: error.name,
+                        message: error.message,
+                        stack: error.stack
+                    },
+                    territoryData: territoryData,
+                    systemInfo: systemInfo
+                });
+                
+                ui.notifications.error(`Failed to claim territory: ${error.message}. Check console for details.`);
+                throw error;
+            }
+            
+            console.warn(`BBTTCC Territory | Claim attempt ${attempt} failed, retrying in ${retryDelay * attempt}ms:`, error.message);
+            await new Promise(resolve => setTimeout(resolve, retryDelay * attempt));
         }
-        
-        ui.notifications.info(`Territory "${name}" claimed by ${faction.name}`);
-        console.log('BBTTCC Territory | Territory claimed successfully:', territory);
-        
-        return territory;
-        
-    } catch (error) {
-        console.error('BBTTCC Territory | Error claiming territory:', error);
-        ui.notifications.error(`Failed to claim territory: ${error.message}`);
-        throw error;
     }
 }
 
@@ -393,6 +469,83 @@ async function openTerritoryManager(scene) {
         ui.notifications.error(`Failed to open territory manager: ${error.message}`);
     }
 }
+
+/**
+ * Scene integration hooks for cleanup and validation
+ */
+Hooks.on('deleteScene', async (scene) => {
+    try {
+        const territories = scene.flags?.['bbttcc-territory']?.territories || [];
+        
+        if (territories.length === 0) {
+            console.log(`BBTTCC Territory | No territories to clean up for scene ${scene.id}`);
+            return;
+        }
+        
+        console.log(`BBTTCC Territory | Cleaning up ${territories.length} territories for deleted scene ${scene.id}`);
+        
+        // Remove territory references from all factions
+        for (const territory of territories) {
+            try {
+                const faction = game.actors.get(territory.factionId);
+                if (faction?.flags?.['bbttcc-factions']?.territories) {
+                    const updatedTerritories = faction.flags['bbttcc-factions'].territories.filter(
+                        t => t.sceneId !== scene.id
+                    );
+                    
+                    await faction.update({
+                        'flags.bbttcc-factions.territories': updatedTerritories
+                    });
+                    
+                    // Add war log entry
+                    const warLog = faction.flags['bbttcc-factions'].warLog || [];
+                    warLog.push({
+                        id: foundry.utils.randomID(),
+                        title: `Territory Lost: ${territory.name}`,
+                        description: `Lost territory due to scene deletion: ${scene.name}`,
+                        timestamp: new Date().toISOString(),
+                        turn: game.combat?.round || 0
+                    });
+                    
+                    await faction.update({
+                        'flags.bbttcc-factions.warLog': warLog
+                    });
+                }
+            } catch (factionError) {
+                console.error(`BBTTCC Territory | Error cleaning up territory ${territory.id} for faction ${territory.factionId}:`, factionError);
+            }
+        }
+        
+        console.log(`BBTTCC Territory | Successfully cleaned up territories for deleted scene ${scene.id}`);
+        
+    } catch (error) {
+        console.error(`BBTTCC Territory | Failed to cleanup territories for deleted scene ${scene.id}:`, error);
+    }
+});
+
+/**
+ * Cross-module communication setup
+ */
+Hooks.once('ready', async () => {
+    try {
+        // Wait for factions module if available
+        if (game.modules.get('bbttcc-factions')?.active) {
+            const factionsModule = game.modules.get('bbttcc-factions');
+            if (factionsModule.api || window.BBTTCCFactions) {
+                console.log('BBTTCC Territory | Successfully connected to factions module');
+            } else {
+                // Wait for factions ready signal
+                Hooks.once('bbttcc-factions.ready', (api) => {
+                    console.log('BBTTCC Territory | Connected to factions module via ready hook');
+                });
+            }
+        } else {
+            console.warn('BBTTCC Territory | Factions module not available - some features may be limited');
+        }
+    } catch (error) {
+        console.error('BBTTCC Territory | Error setting up cross-module communication:', error);
+    }
+});
 
 /**
  * Add context menu options for territory management
