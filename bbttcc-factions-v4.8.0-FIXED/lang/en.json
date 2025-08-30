@@ -1,0 +1,56 @@
+{
+  "BBTTCC": {
+    "ModuleName": "BBTTCC Factions",
+    "OrganizationPoints": "Organization Points",
+    "ControlledTerritories": "Controlled Territories",
+    "WarLog": "War Log",
+    "FactionBases": "Faction Bases",
+    "Biography": "Biography",
+    
+    "Tabs": {
+      "OrganizationPoints": "Organization Points",
+      "Territory": "Territory",
+      "WarLog": "War Log", 
+      "Bases": "Bases",
+      "Biography": "Biography"
+    },
+    
+    "OPs": {
+      "Violence": "Violence",
+      "NonLethal": "Non-Lethal",
+      "Intrigue": "Intrigue", 
+      "Economy": "Economy",
+      "SoftPower": "Soft Power",
+      "Diplomacy": "Diplomacy"
+    },
+    
+    "RollD20": "Roll D20",
+    "AddLogEntry": "Add Log Entry",
+    "AddBase": "Add Base",
+    
+    "Type": "Type",
+    "Size": "Size",
+    "BaseDescription": "Base Description",
+    
+    "BaseTypes": {
+      "Bunker": "Bunker",
+      "Tower": "Tower", 
+      "Castle": "Castle",
+      "Outpost": "Outpost"
+    },
+    
+    "NoTerritoriesControlled": "No territories currently controlled",
+    "NoWarLogEntries": "No war log entries yet",
+    "NoBasesBuilt": "No bases built yet",
+    
+    "Notifications": {
+      "FactionCreated": "Faction created successfully",
+      "FactionCreateFailed": "Failed to create faction",
+      "OpsAdjusted": "Organization Points adjusted",
+      "WarLogAdded": "War log entry added",
+      "WarLogDeleted": "War log entry deleted",
+      "BaseAdded": "Base added",
+      "BaseDeleted": "Base deleted"
+    }
+  }
+}

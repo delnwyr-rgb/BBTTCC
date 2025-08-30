@@ -1,0 +1,368 @@
+/**
+ * BBTTCC Faction Sheet Styles v4.8.0 - FIXED
+ * Professional styling for faction sheets with modern CSS
+ */
+
+.bbttcc-faction {
+    background: #f8f9fa;
+}
+
+.bbttcc-faction .window-content {
+    background: #ffffff;
+}
+
+.bbttcc-faction .sheet-header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.bbttcc-faction .sheet-header .profile-img {
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+}
+
+.bbttcc-faction .sheet-header .header-fields {
+    flex: 1;
+}
+
+.bbttcc-faction .sheet-header .charname input {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 24px;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.bbttcc-faction .faction-type {
+    font-size: 14px;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+.bbttcc-faction .sheet-tabs {
+    background: #ecf0f1;
+    border-bottom: 2px solid #bdc3c7;
+    padding: 0;
+}
+
+.bbttcc-faction .sheet-tabs .item {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    font-weight: 500;
+    color: #2c3e50;
+    transition: all 0.2s ease;
+}
+
+.bbttcc-faction .sheet-tabs .item:hover {
+    background: rgba(52, 152, 219, 0.1);
+    color: #3498db;
+}
+
+.bbttcc-faction .sheet-tabs .item.active {
+    background: #3498db;
+    color: white;
+    border-bottom: 3px solid #2980b9;
+}
+
+/* Organization Points Styles */
+.ops-section {
+    padding: 20px;
+}
+
+.ops-section h3 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.ops-grid {
+    display: grid;
+    gap: 15px;
+}
+
+.op-row {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    transition: box-shadow 0.2s ease;
+}
+
+.op-row:hover {
+    box-shadow: 0 2px 10px rgba(52, 152, 219, 0.1);
+}
+
+.op-label {
+    margin-bottom: 10px;
+}
+
+.op-label strong {
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.op-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.op-adjust, .op-roll {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 12px;
+}
+
+.op-adjust:hover, .op-roll:hover {
+    background: #2980b9;
+}
+
+.op-value {
+    font-weight: bold;
+    color: #2c3e50;
+    min-width: 50px;
+    text-align: center;
+}
+
+.op-bar {
+    height: 8px;
+    background: #ecf0f1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.op-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #f1c40f, #2ecc71);
+    transition: width 0.3s ease;
+}
+
+.roll-section {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.roll-d20 {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.roll-d20:hover {
+    background: #c0392b;
+}
+
+/* Territory Styles */
+.territory-section, .war-log-section, .bases-section {
+    padding: 20px;
+}
+
+.territory-section h3, .war-log-section h3, .bases-section h3 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.territory-list, .bases-list {
+    display: grid;
+    gap: 15px;
+}
+
+.territory-item, .base-item {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.territory-item h4 {
+    color: #3498db;
+    margin: 0 0 10px 0;
+}
+
+.territory-item p {
+    margin: 5px 0;
+    color: #6c757d;
+}
+
+/* War Log Styles */
+.war-log-add, .base-add {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.2s ease;
+}
+
+.war-log-add:hover, .base-add:hover {
+    background: #229954;
+}
+
+.war-log-list {
+    display: grid;
+    gap: 15px;
+}
+
+.war-log-entry {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.entry-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.entry-header input {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.war-log-delete, .base-delete {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.war-log-delete:hover, .base-delete:hover {
+    background: #c0392b;
+}
+
+.war-log-entry textarea {
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px;
+    resize: vertical;
+}
+
+.entry-meta {
+    margin-top: 10px;
+    color: #6c757d;
+    font-size: 12px;
+}
+
+/* Base Styles */
+.base-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.base-header input {
+    flex: 2;
+    padding: 6px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.base-header select {
+    flex: 1;
+    padding: 6px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.base-item textarea {
+    width: 100%;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px;
+    resize: vertical;
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px dashed #dee2e6;
+}
+
+/* Chat Roll Styles */
+.bbttcc-roll {
+    background: #f8f9fa;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+}
+
+.bbttcc-roll h4 {
+    color: #2c3e50;
+    margin: 0 0 10px 0;
+}
+
+.roll-result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.roll-result strong {
+    font-size: 24px;
+    color: #e74c3c;
+}
+
+.roll-formula {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .op-controls {
+        flex-wrap: wrap;
+    }
+    
+    .base-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .entry-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

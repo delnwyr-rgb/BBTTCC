@@ -1,0 +1,162 @@
+<form class="bbttcc-raid-planner">
+    
+    <header class="planner-header">
+        <h2>{{faction.name}} - Raid Planning</h2>
+        <div class="faction-strength">
+            <strong>Military Strength: {{factionStrength}}</strong>
+        </div>
+    </header>
+    
+    <div class="planner-content">
+        
+        {{!-- Plan New Raid Section --}}
+        <section class="plan-section">
+            <h3>Plan New Raid</h3>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="target-faction">Target Faction:</label>
+                    <select id="target-faction" name="target-faction" required>
+                        <option value="">Select Target</option>
+                        {{#each targetFactions}}
+                        <option value="{{this.id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="raid-type">Raid Type:</label>
+                    <select id="raid-type" name="raid-type">
+                        {{#each raidTypes as |type key|}}
+                        <option value="{{key}}" data-description="{{type.description}}">{{type.name}}</option>
+                        {{/each}}
+                    </select>
+                    <small class="raid-type-info">{{raidTypes.assault.description}}</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="raid-objective">Objective:</label>
+                    <select id="raid-objective" name="raid-objective">
+                        {{#each raidObjectives as |objective key|}}
+                        <option value="{{key}}" data-difficulty="{{objective.difficulty}}">{{objective.name}}</option>
+                        {{/each}}
+                    </select>
+                    <small class="objective-info">{{raidObjectives.resources.description}}</small>
+                </div>
+            </div>
+            
+            <div class="force-commitment">
+                <label for="forces-committed">Forces Committed:</label>
+                <div class="slider-container">
+                    <input type="range" id="forces-committed" name="forces-committed" 
+                           min="1" max="100" value="50" class="force-slider">
+                    <span id="force-percentage">50%</span>
+                </div>
+                <div id="force-preview" class="force-preview">
+                    <div class="force-breakdown">
+                        <div>Total Strength: {{factionStrength}}</div>
+                        <div>Committed: {{math factionStrength '*' 0.5}} (50%)</div>
+                        <div>Reserved: {{math factionStrength '*' 0.5}}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group full-width">
+                <label for="raid-description">Description (Optional):</label>
+                <textarea id="raid-description" name="raid-description" rows="3" 
+                         placeholder="Optional raid description or strategy notes"></textarea>
+            </div>
+            
+            <button type="button" id="plan-raid" class="plan-btn">
+                <i class="fas fa-sword"></i> Plan Raid
+            </button>
+        </section>
+        
+        {{!-- Active Raids Section --}}
+        <section class="raids-section">
+            <h3>Active Raids ({{activeRaids.length}})</h3>
+            
+            {{#if activeRaids}}
+                <div class="raids-list">
+                    {{#each activeRaids as |raid|}}
+                    <div class="raid-card">
+                        <div class="raid-header">
+                            <h4>
+                                {{#if (eq raid.attackerId ../faction.id)}}
+                                    Attacking: {{raid.targetName}}
+                                {{else}}
+                                    Defending: {{raid.attackerName}}
+                                {{/if}}
+                            </h4>
+                            <div class="raid-actions">
+                                {{#if (eq raid.attackerId ../faction.id)}}
+                                    <button type="button" class="execute-raid" data-raid-id="{{raid.id}}" title="Execute Raid">
+                                        <i class="fas fa-play"></i>
+                                    </button>
+                                    <button type="button" class="cancel-raid" data-raid-id="{{raid.id}}" title="Cancel Raid">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                {{/if}}
+                            </div>
+                        </div>
+                        
+                        <div class="raid-details">
+                            <div class="raid-info">
+                                <span class="raid-type">{{lookup ../raidTypes raid.raidType 'name'}}</span>
+                                <span class="raid-objective">{{lookup ../raidObjectives raid.objective 'name'}}</span>
+                            </div>
+                            
+                            <div class="raid-forces">
+                                <strong>Forces Committed:</strong> {{raid.forcesCommitted}}%
+                            </div>
+                            
+                            {{#if raid.description}}
+                            <div class="raid-description">
+                                <p>{{raid.description}}</p>
+                            </div>
+                            {{/if}}
+                            
+                            <div class="raid-planned">
+                                <small>Planned: {{raid.plannedAt}} | Turn {{raid.turn}}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            {{else}}
+                <div class="empty-state">
+                    <i class="fas fa-peace"></i>
+                    <p>No active raids planned.</p>
+                    <p>Plan your first raid using the form above!</p>
+                </div>
+            {{/if}}
+        </section>
+        
+    </div>
+    
+</form>
+
+<script>
+// Update raid type description when selection changes
+document.addEventListener('DOMContentLoaded', function() {
+    const raidTypeSelect = document.getElementById('raid-type');
+    const raidTypeInfo = document.querySelector('.raid-type-info');
+    const objectiveSelect = document.getElementById('raid-objective');
+    const objectiveInfo = document.querySelector('.objective-info');
+    
+    if (raidTypeSelect && raidTypeInfo) {
+        raidTypeSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            raidTypeInfo.textContent = selectedOption.dataset.description || '';
+        });
+    }
+    
+    if (objectiveSelect && objectiveInfo) {
+        objectiveSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            // Update objective description from raidObjectives data
+            objectiveInfo.textContent = selectedOption.dataset.description || '';
+        });
+    }
+});
+</script>

@@ -1,0 +1,155 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    
+    {{!-- Header --}}
+    <header class="sheet-header">
+        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" width="100" height="100">
+        <div class="header-fields">
+            <h1 class="charname">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="Faction Name">
+            </h1>
+            <div class="faction-type">BBTTCC Faction v4.8.0</div>
+        </div>
+    </header>
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="ops">{{localize "BBTTCC.Tabs.OrganizationPoints"}}</a>
+        <a class="item" data-tab="territory">{{localize "BBTTCC.Tabs.Territory"}}</a>
+        <a class="item" data-tab="warlog">{{localize "BBTTCC.Tabs.WarLog"}}</a>
+        <a class="item" data-tab="bases">{{localize "BBTTCC.Tabs.Bases"}}</a>
+        <a class="item" data-tab="biography">{{localize "DND5E.Biography"}}</a>
+    </nav>
+    
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        
+        {{!-- Organization Points Tab --}}
+        <div class="tab ops" data-group="primary" data-tab="ops">
+            <div class="ops-section">
+                <h3>{{localize "BBTTCC.OrganizationPoints"}}</h3>
+                <div class="ops-grid">
+                    {{#each ops as |op key|}}
+                    <div class="op-row">
+                        <div class="op-label">
+                            <strong>{{lookup ../opsLabels key}}</strong>
+                        </div>
+                        <div class="op-controls">
+                            <button type="button" class="op-adjust" data-op="{{key}}" data-adjustment="-1">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="op-value">{{op.value}}/{{op.max}}</span>
+                            <button type="button" class="op-adjust" data-op="{{key}}" data-adjustment="1">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button type="button" class="op-roll" data-op="{{key}}" title="Roll 1d20 + {{key}}">
+                                <i class="fas fa-dice-d20"></i>
+                            </button>
+                        </div>
+                        <div class="op-bar">
+                            <div class="op-fill" style="width: {{op.value}}0%"></div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                
+                <div class="roll-section">
+                    <button type="button" class="roll-d20">
+                        <i class="fas fa-dice-d20"></i> {{localize "BBTTCC.RollD20"}}
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        {{!-- Territory Tab --}}
+        <div class="tab territory" data-group="primary" data-tab="territory">
+            <div class="territory-section">
+                <h3>{{localize "BBTTCC.ControlledTerritories"}}</h3>
+                {{#if territories}}
+                    <div class="territory-list">
+                        {{#each territories as |territory|}}
+                        <div class="territory-item">
+                            <h4>{{territory.name}}</h4>
+                            <p>{{localize "BBTTCC.Type"}}: {{territory.type}} | {{localize "BBTTCC.Size"}}: {{territory.size}}</p>
+                            <p>{{territory.description}}</p>
+                        </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p class="empty-state">{{localize "BBTTCC.NoTerritoriesControlled"}}</p>
+                {{/if}}
+            </div>
+        </div>
+        
+        {{!-- War Log Tab --}}
+        <div class="tab warlog" data-group="primary" data-tab="warlog">
+            <div class="war-log-section">
+                <h3>{{localize "BBTTCC.WarLog"}}</h3>
+                <button type="button" class="war-log-add">
+                    <i class="fas fa-plus"></i> {{localize "BBTTCC.AddLogEntry"}}
+                </button>
+                
+                {{#if warLog}}
+                    <div class="war-log-list">
+                        {{#each warLog as |entry|}}
+                        <div class="war-log-entry">
+                            <div class="entry-header">
+                                <input type="text" value="{{entry.title}}" name="flags.bbttcc-factions.warLog.{{@index}}.title">
+                                <button type="button" class="war-log-delete" data-entry-id="{{entry.id}}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <textarea name="flags.bbttcc-factions.warLog.{{@index}}.description" rows="3">{{entry.description}}</textarea>
+                            <div class="entry-meta">
+                                <small>{{entry.timestamp}} | Turn {{entry.turn}}</small>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p class="empty-state">{{localize "BBTTCC.NoWarLogEntries"}}</p>
+                {{/if}}
+            </div>
+        </div>
+        
+        {{!-- Bases Tab --}}
+        <div class="tab bases" data-group="primary" data-tab="bases">
+            <div class="bases-section">
+                <h3>{{localize "BBTTCC.FactionBases"}}</h3>
+                <button type="button" class="base-add">
+                    <i class="fas fa-plus"></i> {{localize "BBTTCC.AddBase"}}
+                </button>
+                
+                {{#if bases}}
+                    <div class="bases-list">
+                        {{#each bases as |base|}}
+                        <div class="base-item">
+                            <div class="base-header">
+                                <input type="text" value="{{base.name}}" name="flags.bbttcc-factions.bases.{{@index}}.name">
+                                <select name="flags.bbttcc-factions.bases.{{@index}}.type">
+                                    <option value="bunker" {{#if (eq base.type "bunker")}}selected{{/if}}>{{localize "BBTTCC.BaseTypes.Bunker"}}</option>
+                                    <option value="tower" {{#if (eq base.type "tower")}}selected{{/if}}>{{localize "BBTTCC.BaseTypes.Tower"}}</option>
+                                    <option value="castle" {{#if (eq base.type "castle")}}selected{{/if}}>{{localize "BBTTCC.BaseTypes.Castle"}}</option>
+                                    <option value="outpost" {{#if (eq base.type "outpost")}}selected{{/if}}>{{localize "BBTTCC.BaseTypes.Outpost"}}</option>
+                                </select>
+                                <button type="button" class="base-delete" data-base-id="{{base.id}}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <textarea name="flags.bbttcc-factions.bases.{{@index}}.description" rows="2" placeholder="{{localize 'BBTTCC.BaseDescription'}}">{{base.description}}</textarea>
+                        </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p class="empty-state">{{localize "BBTTCC.NoBasesBuilt"}}</p>
+                {{/if}}
+            </div>
+        </div>
+        
+        {{!-- Biography Tab --}}
+        <div class="tab biography" data-group="primary" data-tab="biography">
+            {{> "systems/dnd5e/templates/actors/parts/actor-biography.hbs"}}
+        </div>
+        
+    </section>
+    
+</form>

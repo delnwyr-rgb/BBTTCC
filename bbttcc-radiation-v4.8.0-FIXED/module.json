@@ -1,0 +1,60 @@
+{
+  "id": "bbttcc-radiation",
+  "title": "BBTTCC Radiation Exposure",
+  "description": "Real-time radiation exposure tracking for BBTTCC strategic warfare. Provides character sheet integration, visual indicators, and environmental hazard management.",
+  "version": "4.8.0",
+  "authors": [
+    {
+      "name": "BBTTCC Team",
+      "discord": "bbttcc"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13.0.0",
+    "verified": "13.348",
+    "maximum": "14"
+  },
+  "system": [
+    "dnd5e"
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "5.0.0",
+          "verified": "5.1.2"
+        }
+      }
+    ],
+    "requires": [],
+    "recommends": [
+      {
+        "id": "bbttcc-factions",
+        "type": "module"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/bbttcc-radiation.js"
+  ],
+  "styles": [
+    "styles/radiation-tracker.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "socket": false,
+  "manifest": "https://raw.githubusercontent.com/bbttcc/foundryvtt-modules/main/bbttcc-radiation/module.json",
+  "download": "https://github.com/bbttcc/foundryvtt-modules/releases/download/v4.8.0/bbttcc-radiation.zip",
+  "url": "https://github.com/bbttcc/foundryvtt-modules",
+  "license": "MIT",
+  "readme": "README.md",
+  "bugs": "https://github.com/bbttcc/foundryvtt-modules/issues",
+  "changelog": "CHANGELOG.md"
+}

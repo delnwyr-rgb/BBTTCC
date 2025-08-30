@@ -1,0 +1,133 @@
+<form class="bbttcc-territory-manager">
+    
+    <header class="manager-header">
+        <h2>{{scene.name}} - Territory Management</h2>
+        <p class="scene-info">Managing territories for scene: <strong>{{scene.name}}</strong></p>
+    </header>
+    
+    <div class="manager-content">
+        
+        {{!-- Claim New Territory Section --}}
+        <section class="claim-section">
+            <h3>Claim New Territory</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="territory-name">Territory Name:</label>
+                    <input type="text" id="territory-name" name="territory-name" required placeholder="Enter territory name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="faction-id">Controlling Faction:</label>
+                    <select id="faction-id" name="faction-id" required>
+                        <option value="">Select Faction</option>
+                        {{#each factions}}
+                        <option value="{{this.id}}">{{this.name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="territory-type">Territory Type:</label>
+                    <select id="territory-type" name="territory-type">
+                        {{#each territoryTypes as |label key|}}
+                        <option value="{{key}}">{{label}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="territory-size">Territory Size:</label>
+                    <select id="territory-size" name="territory-size">
+                        {{#each territorySizes as |label key|}}
+                        <option value="{{key}}" {{#if (eq key "medium")}}selected{{/if}}>{{label}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                
+                <div class="form-group coordinates">
+                    <label>Coordinates:</label>
+                    <div class="coordinate-inputs">
+                        <input type="number" name="coordinate-x" placeholder="X" value="0">
+                        <input type="number" name="coordinate-y" placeholder="Y" value="0">
+                    </div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="territory-description">Description:</label>
+                    <textarea id="territory-description" name="territory-description" rows="3" placeholder="Optional territory description"></textarea>
+                </div>
+            </div>
+            
+            <button type="button" id="claim-territory" class="claim-btn">
+                <i class="fas fa-flag"></i> Claim Territory
+            </button>
+        </section>
+        
+        {{!-- Existing Territories Section --}}
+        <section class="territories-section">
+            <h3>Existing Territories ({{territories.length}})</h3>
+            
+            {{#if territories}}
+                <div class="territories-list">
+                    {{#each territories as |territory|}}
+                    <div class="territory-card">
+                        <div class="territory-header">
+                            <h4>{{territory.name}}</h4>
+                            <div class="territory-actions">
+                                <button type="button" class="contest-territory" data-territory-id="{{territory.id}}" title="Contest Territory">
+                                    <i class="fas fa-sword"></i>
+                                </button>
+                                <button type="button" class="transfer-territory" data-territory-id="{{territory.id}}" title="Transfer Territory">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                                <button type="button" class="delete-territory" data-territory-id="{{territory.id}}" title="Delete Territory">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="territory-details">
+                            <div class="territory-info">
+                                <span class="territory-faction">{{territory.factionName}}</span>
+                                <span class="territory-meta">{{territory.type}} | {{territory.size}}</span>
+                            </div>
+                            
+                            {{#if territory.resources}}
+                            <div class="territory-resources">
+                                <strong>Resources:</strong>
+                                {{#each territory.resources as |value key|}}
+                                    {{#if value}}
+                                    <span class="resource">{{key}}: {{value}}</span>
+                                    {{/if}}
+                                {{/each}}
+                            </div>
+                            {{/if}}
+                            
+                            {{#if territory.description}}
+                            <div class="territory-description">
+                                <p>{{territory.description}}</p>
+                            </div>
+                            {{/if}}
+                            
+                            <div class="territory-claimed">
+                                <small>Claimed: {{territory.claimedAt}}</small>
+                                {{#if territory.coordinates}}
+                                <small>Coordinates: ({{territory.coordinates.x}}, {{territory.coordinates.y}})</small>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            {{else}}
+                <div class="empty-state">
+                    <i class="fas fa-map"></i>
+                    <p>No territories claimed in this scene yet.</p>
+                    <p>Use the form above to claim the first territory!</p>
+                </div>
+            {{/if}}
+        </section>
+        
+    </div>
+    
+</form>

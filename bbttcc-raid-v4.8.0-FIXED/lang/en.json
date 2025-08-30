@@ -1,0 +1,80 @@
+{
+  "BBTTCC": {
+    "RaidPlanner": "Raid Planner",
+    "PlanRaid": "Plan Raid",
+    "ExecuteRaid": "Execute Raid",
+    "CancelRaid": "Cancel Raid",
+    
+    "TargetFaction": "Target Faction",
+    "RaidType": "Raid Type",
+    "RaidObjective": "Raid Objective",
+    "ForcesCommitted": "Forces Committed",
+    "RaidDescription": "Raid Description",
+    "MilitaryStrength": "Military Strength",
+    
+    "RaidTypes": {
+      "Assault": "Assault",
+      "Siege": "Siege",
+      "HitAndRun": "Hit-and-Run",
+      "Reconnaissance": "Reconnaissance"
+    },
+    
+    "RaidObjectives": {
+      "Resources": "Capture Resources",
+      "Territory": "Claim Territory",
+      "Intelligence": "Gather Intelligence",
+      "Sabotage": "Destroy Infrastructure"
+    },
+    
+    "RaidStatus": {
+      "Planned": "Planned",
+      "Executing": "Executing", 
+      "Completed": "Completed",
+      "Failed": "Failed"
+    },
+    
+    "ActiveRaids": "Active Raids",
+    "NoActiveRaids": "No active raids planned.",
+    "PlanFirstRaid": "Plan your first raid using the form above!",
+    
+    "SelectTarget": "Select Target",
+    "OptionalDescription": "Optional raid description or strategy notes",
+    
+    "ForceBreakdown": {
+      "Total": "Total Strength",
+      "Committed": "Committed",
+      "Reserved": "Reserved"
+    },
+    
+    "RaidResults": {
+      "Successful": "RAID SUCCESSFUL",
+      "Failed": "RAID FAILED",
+      "Margin": "Margin",
+      "Casualties": "Casualties",
+      "ResourcesGained": "Resources gained",
+      "TerritoryGained": "Territory gained",
+      "Intelligence": "Intelligence",
+      "InfrastructureDamage": "Infrastructure damage"
+    },
+    
+    "Notifications": {
+      "RaidPlanned": "Raid planned successfully",
+      "RaidExecuted": "Raid executed",
+      "RaidCanceled": "Raid canceled",
+      "RaidPlanFailed": "Failed to plan raid",
+      "RaidExecuteFailed": "Failed to execute raid",
+      "TargetRequired": "Target faction must be selected",
+      "RaidNotFound": "Raid not found",
+      "CannotRaidSelf": "Faction cannot raid itself"
+    },
+    
+    "Dialog": {
+      "ConfirmExecute": "Are you sure you want to execute this raid? This action cannot be undone.",
+      "ConfirmCancel": "Are you sure you want to cancel this raid?",
+      "ExecuteRaid": "Execute Raid",
+      "CancelRaid": "Cancel Raid",
+      "Execute": "Execute",
+      "Cancel": "Cancel"
+    }
+  }
+}

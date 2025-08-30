@@ -1,0 +1,494 @@
+/**
+ * BBTTCC Radiation Tracker Styles v4.8.0 - FIXED
+ * Professional styling for radiation tracking interface
+ */
+
+.bbttcc-radiation-tracker {
+    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background: #f8f9fa;
+    min-height: 100%;
+}
+
+.bbttcc-radiation-tracker .window-content {
+    background: #ffffff;
+    padding: 20px;
+}
+
+/* Header */
+.tracker-header {
+    background: linear-gradient(135deg, #8e44ad, #9b59b6);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.tracker-header h2 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+/* Characters Section */
+.characters-section {
+    margin-bottom: 30px;
+}
+
+.characters-section h3 {
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #8e44ad;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.characters-list {
+    display: grid;
+    gap: 15px;
+}
+
+.character-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.character-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #8e44ad;
+}
+
+.character-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.character-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #dee2e6;
+}
+
+.character-info {
+    flex: 1;
+}
+
+.character-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 5px 0;
+}
+
+.radiation-level {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 12px;
+    color: white;
+}
+
+.character-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.expose-character,
+.reduce-radiation,
+.clear-radiation {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.expose-character {
+    background: #e74c3c;
+    color: white;
+}
+
+.expose-character:hover {
+    background: #c0392b;
+}
+
+.reduce-radiation {
+    background: #27ae60;
+    color: white;
+}
+
+.reduce-radiation:hover {
+    background: #229954;
+}
+
+.clear-radiation {
+    background: #95a5a6;
+    color: white;
+}
+
+.clear-radiation:hover {
+    background: #7f8c8d;
+}
+
+.character-details {
+    display: grid;
+    gap: 10px;
+}
+
+.radiation-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.radiation-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.exposure-history {
+    background: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.exposure-history h5 {
+    margin: 0 0 8px 0;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.exposure-entry {
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 4px;
+}
+
+.exposure-entry .exposure-amount {
+    font-weight: 600;
+    color: #e74c3c;
+}
+
+.exposure-entry .exposure-source {
+    font-style: italic;
+}
+
+/* Zones Section */
+.zones-section {
+    margin-bottom: 30px;
+}
+
+.zones-section h3 {
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f39c12;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.zone-controls {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.create-zone-btn {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(243, 156, 18, 0.3);
+}
+
+.create-zone-btn:hover {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+}
+
+.zones-list {
+    display: grid;
+    gap: 15px;
+}
+
+.zone-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.zone-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #f39c12;
+}
+
+.zone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.zone-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.delete-zone {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.delete-zone:hover {
+    background: #c0392b;
+}
+
+.zone-details {
+    display: grid;
+    gap: 8px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.zone-level {
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    color: white;
+    display: inline-block;
+}
+
+/* Controls Section */
+.controls-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.controls-section h3 {
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.background-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+}
+
+.background-info {
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+.background-level {
+    font-weight: bold;
+    color: #8e44ad;
+}
+
+.apply-background-btn {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+}
+
+.apply-background-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #1f4e79);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    background: #f8f9fa;
+    border: 1px dashed #dee2e6;
+    border-radius: 8px;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+/* Dialog Styles */
+.bbttcc-radiation-dialog,
+.bbttcc-zone-dialog {
+    padding: 20px;
+}
+
+.bbttcc-radiation-dialog h4,
+.bbttcc-zone-dialog h4 {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+.bbttcc-radiation-dialog .form-group,
+.bbttcc-zone-dialog .form-group {
+    margin-bottom: 15px;
+}
+
+.bbttcc-radiation-dialog label,
+.bbttcc-zone-dialog label {
+    display: block;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.bbttcc-radiation-dialog select,
+.bbttcc-radiation-dialog input,
+.bbttcc-radiation-dialog textarea,
+.bbttcc-zone-dialog select,
+.bbttcc-zone-dialog input,
+.bbttcc-zone-dialog textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.coordinate-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.coordinate-inputs input {
+    flex: 1;
+}
+
+.current-level {
+    background: #e8f4fd;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #b8daff;
+    color: #0c5460;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Radiation Level Colors */
+.radiation-level.safe,
+.zone-level.safe {
+    background-color: #27ae60;
+}
+
+.radiation-level.low,
+.zone-level.low {
+    background-color: #f1c40f;
+}
+
+.radiation-level.moderate,
+.zone-level.moderate {
+    background-color: #f39c12;
+}
+
+.radiation-level.high,
+.zone-level.high {
+    background-color: #e74c3c;
+}
+
+.radiation-level.severe,
+.zone-level.severe {
+    background-color: #8e44ad;
+}
+
+.radiation-level.lethal,
+.zone-level.lethal {
+    background-color: #2c3e50;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .character-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .character-actions {
+        justify-content: center;
+    }
+    
+    .zone-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .background-controls {
+        flex-direction: column;
+    }
+    
+    .radiation-display {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .bbttcc-radiation-tracker .window-content {
+        padding: 15px;
+    }
+    
+    .character-card,
+    .zone-card,
+    .controls-section {
+        padding: 15px;
+    }
+}

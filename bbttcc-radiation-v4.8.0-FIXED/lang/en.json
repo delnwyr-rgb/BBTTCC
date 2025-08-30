@@ -1,0 +1,80 @@
+{
+  "BBTTCC": {
+    "RadiationTracker": "Radiation Tracker",
+    "RadiationExposure": "Radiation Exposure",
+    "ExposeToRadiation": "Expose to Radiation",
+    "ReduceRadiation": "Reduce Radiation",
+    "ClearRadiation": "Clear Radiation",
+    
+    "RadiationLevels": {
+      "Safe": "Safe",
+      "Low": "Low",
+      "Moderate": "Moderate",
+      "High": "High",
+      "Severe": "Severe",
+      "Lethal": "Lethal",
+      "ExtremeLetal": "Extreme Lethal"
+    },
+    
+    "RadiationSources": {
+      "BackgroundRadiation": "Background Radiation",
+      "ContaminatedWater": "Contaminated Water",
+      "RadioactiveMaterials": "Radioactive Materials",
+      "ReactorLeak": "Reactor Leak",
+      "NuclearFallout": "Nuclear Fallout",
+      "ReactorCore": "Reactor Core",
+      "CustomExposure": "Custom Exposure",
+      "MedicalTreatment": "Medical treatment"
+    },
+    
+    "CurrentLevel": "Current Level",
+    "ExposureHistory": "Recent Exposures",
+    "RadiationZones": "Radiation Zones",
+    "CreateZone": "Create Zone",
+    "DeleteZone": "Delete Zone",
+    
+    "ZoneName": "Zone Name",
+    "ZoneLevel": "Radiation Level",
+    "ZoneRadius": "Radius (pixels)",
+    "ZoneCoordinates": "Coordinates",
+    "ZoneDescription": "Description",
+    
+    "BackgroundRadiation": "Background Radiation",
+    "ApplyBackground": "Apply to All Characters",
+    "NoCharacters": "No characters with radiation tracking found",
+    "NoZones": "No radiation zones in current scene",
+    
+    "CustomAmount": "Custom Amount",
+    "SourceDescription": "Source Description",
+    "OptionalDescription": "Optional description",
+    
+    "Notifications": {
+      "RadiationAdded": "Radiation exposure added",
+      "RadiationReduced": "Radiation reduced",
+      "RadiationCleared": "Radiation cleared",
+      "ZoneCreated": "Radiation zone created",
+      "ZoneDeleted": "Radiation zone deleted",
+      "BackgroundApplied": "Background radiation applied",
+      "CharactersNotFound": "No characters with radiation tracking found",
+      "ActorNotFound": "Actor not found",
+      "SceneRequired": "No active scene to create radiation zone",
+      "ZoneNotFound": "Radiation zone not found",
+      "CharacterOnly": "Radiation can only be applied to character actors"
+    },
+    
+    "Dialog": {
+      "ExposeCharacter": "Expose Character to Radiation",
+      "CreateRadiationZone": "Create Radiation Zone",
+      "ConfirmClearRadiation": "Clear all radiation exposure from this character?",
+      "ConfirmDeleteZone": "Delete this radiation zone?",
+      "ConfirmApplyBackground": "Apply background radiation to all characters?",
+      "Expose": "Expose",
+      "Reduce": "Reduce",
+      "Create": "Create",
+      "Delete": "Delete",
+      "Clear": "Clear",
+      "Apply": "Apply",
+      "Cancel": "Cancel"
+    }
+  }
+}

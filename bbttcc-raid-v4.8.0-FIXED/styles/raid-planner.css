@@ -1,0 +1,464 @@
+/**
+ * BBTTCC Raid Planner Styles v4.8.0 - FIXED
+ * Professional styling for raid planning interface
+ */
+
+.bbttcc-raid-planner {
+    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    background: #f8f9fa;
+    min-height: 100%;
+}
+
+.bbttcc-raid-planner .window-content {
+    background: #ffffff;
+    padding: 0;
+}
+
+/* Header */
+.planner-header {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 3px solid #a93226;
+}
+
+.planner-header h2 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.faction-strength {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* Content Layout */
+.planner-content {
+    padding: 20px;
+    display: grid;
+    gap: 30px;
+}
+
+/* Plan Section */
+.plan-section {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.plan-section h3 {
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e74c3c;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.form-group select,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+    outline: none;
+}
+
+.raid-type-info,
+.objective-info {
+    margin-top: 5px;
+    color: #6c757d;
+    font-style: italic;
+    font-size: 12px;
+}
+
+/* Force Commitment */
+.force-commitment {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.force-commitment label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    display: block;
+    font-size: 16px;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.force-slider {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: #ddd;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.force-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e74c3c;
+    cursor: pointer;
+    border: 2px solid #c0392b;
+}
+
+.force-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #e74c3c;
+    cursor: pointer;
+    border: 2px solid #c0392b;
+}
+
+#force-percentage {
+    font-weight: bold;
+    font-size: 18px;
+    color: #e74c3c;
+    min-width: 50px;
+    text-align: center;
+}
+
+.force-preview {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 15px;
+}
+
+.force-breakdown {
+    display: grid;
+    gap: 8px;
+}
+
+.force-breakdown > div {
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.force-breakdown > div:nth-child(2) {
+    font-weight: 600;
+    color: #e74c3c;
+}
+
+.plan-btn {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
+}
+
+.plan-btn:hover {
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+/* Raids Section */
+.raids-section {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.raids-section h3 {
+    color: #2c3e50;
+    margin: 0 0 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f39c12;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.raids-list {
+    display: grid;
+    gap: 15px;
+}
+
+.raid-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.raid-card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-color: #f39c12;
+}
+
+.raid-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.raid-header h4 {
+    color: #2c3e50;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.raid-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.execute-raid,
+.cancel-raid {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.execute-raid {
+    background: #27ae60;
+    color: white;
+}
+
+.execute-raid:hover {
+    background: #229954;
+}
+
+.cancel-raid {
+    background: #e74c3c;
+    color: white;
+}
+
+.cancel-raid:hover {
+    background: #c0392b;
+}
+
+.raid-details {
+    display: grid;
+    gap: 10px;
+}
+
+.raid-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.raid-type {
+    background: #3498db;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.raid-objective {
+    background: #f39c12;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.raid-forces {
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.raid-forces strong {
+    color: #e74c3c;
+}
+
+.raid-description p {
+    color: #6c757d;
+    font-style: italic;
+    margin: 0;
+    font-size: 14px;
+}
+
+.raid-planned {
+    font-size: 12px;
+    color: #6c757d;
+    padding-top: 10px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+    background: #f8f9fa;
+    border: 1px dashed #dee2e6;
+    border-radius: 8px;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+/* Chat Styles for Raid Results */
+.bbttcc-raid-result {
+    background: #f8f9fa;
+    border: 2px solid #e74c3c;
+    border-radius: 8px;
+    padding: 15px;
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+.bbttcc-raid-result h4 {
+    color: #2c3e50;
+    margin: 0 0 15px 0;
+    font-size: 18px;
+}
+
+.raid-details,
+.combat-results,
+.casualties,
+.results {
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 6px;
+}
+
+.combat-results .rolls {
+    display: grid;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.outcome {
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.outcome.success {
+    background: #d5f4e6;
+    color: #27ae60;
+    border: 2px solid #27ae60;
+}
+
+.outcome.failure {
+    background: #fadbd8;
+    color: #e74c3c;
+    border: 2px solid #e74c3c;
+}
+
+.casualties > div,
+.results > div {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .raid-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .raid-actions {
+        justify-content: center;
+    }
+    
+    .raid-info {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .slider-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .planner-content {
+        padding: 15px;
+    }
+    
+    .plan-section,
+    .raids-section {
+        padding: 15px;
+    }
+    
+    .raid-card {
+        padding: 15px;
+    }
+}
