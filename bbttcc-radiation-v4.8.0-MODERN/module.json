@@ -1,0 +1,41 @@
+{
+  "id": "bbttcc-radiation",
+  "title": "BBTTCC Radiation v4.8.0 - MODERN",
+  "description": "Modern radiation tracking and environmental hazard system for FoundryVTT v13+ with proper async/await patterns",
+  "version": "4.8.0",
+  "compatibility": {
+    "minimum": "13.0",
+    "verified": "13.348"
+  },
+  "authors": [
+    {
+      "name": "BBTTCC Dev Team",
+      "flags": {}
+    }
+  ],
+  "systems": ["dnd5e"],
+  "esmodules": [
+    "scripts/bbttcc-radiation.js"
+  ],
+  "styles": [
+    "css/radiation-styles.css"
+  ],
+  "templates": [
+    "templates/radiation-tracker.html",
+    "templates/radiation-zone.html"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "MIT",
+  "readme": "README.md",
+  "bugs": "",
+  "changelog": ""
+}
