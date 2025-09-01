@@ -1,0 +1,42 @@
+{
+  "id": "bbttcc-radiation",
+  "title": "BBTTCC Radiation v4.8.1-ENHANCED",
+  "description": "Enhanced radiation tracking and environmental hazard system for FoundryVTT v13+ with production-ready error handling and modern patterns",
+  "version": "4.8.1-ENHANCED",
+  "compatibility": {
+    "minimum": "13.0.0",
+    "verified": "13.348",
+    "maximum": "15"
+  },
+  "authors": [
+    {
+      "name": "BBTTCC Dev Team",
+      "flags": {}
+    }
+  ],
+  "systems": ["dnd5e"],
+  "esmodules": [
+    "scripts/bbttcc-radiation.js"
+  ],
+  "styles": [
+    "css/radiation-styles.css"
+  ],
+  "templates": [
+    "templates/radiation-tracker.html",
+    "templates/radiation-zone.html"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "MIT",
+  "readme": "README.md",
+  "bugs": "",
+  "changelog": ""
+}

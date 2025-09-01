@@ -1,0 +1,68 @@
+{
+  "BBTTCC": {
+    "TerritoryControl": "Territory Control",
+    "TerritoryManager": "Territory Manager",
+    "ClaimTerritory": "Claim Territory",
+    "ContestTerritory": "Contest Territory",
+    "TransferTerritory": "Transfer Territory",
+    "DeleteTerritory": "Delete Territory",
+    
+    "TerritoryTypes": {
+      "Settlement": "Settlement",
+      "Fortress": "Fortress",
+      "Mine": "Mine",
+      "Farm": "Farm",
+      "Port": "Port"
+    },
+    
+    "TerritorySizes": {
+      "Small": "Small",
+      "Medium": "Medium", 
+      "Large": "Large",
+      "Capital": "Capital"
+    },
+    
+    "TerritoryName": "Territory Name",
+    "ControllingFaction": "Controlling Faction",
+    "TerritoryType": "Territory Type",
+    "TerritorySize": "Territory Size",
+    "TerritoryDescription": "Territory Description",
+    "Coordinates": "Coordinates",
+    "Resources": "Resources",
+    "ClaimedDate": "Claimed",
+    
+    "ResourceTypes": {
+      "Food": "Food",
+      "Materials": "Materials",
+      "Trade": "Trade",
+      "Military": "Military"
+    },
+    
+    "NoTerritoriesInScene": "No territories claimed in this scene yet.",
+    "SelectFaction": "Select Faction",
+    "SelectChallenger": "Select Challenging Faction",
+    "SelectNewOwner": "Select New Owner",
+    
+    "Notifications": {
+      "TerritoryClaimed": "Territory claimed successfully",
+      "TerritoryContested": "Territory contested",
+      "TerritoryTransferred": "Territory transferred",
+      "TerritoryDeleted": "Territory deleted",
+      "TerritoryClaimFailed": "Failed to claim territory",
+      "TerritoryContestFailed": "Failed to contest territory",
+      "TerritoryNotFound": "Territory not found",
+      "FactionRequired": "Faction selection required",
+      "NameRequired": "Territory name required"
+    },
+    
+    "Dialog": {
+      "ConfirmDelete": "Are you sure you want to delete this territory?",
+      "ConfirmTransfer": "Are you sure you want to transfer this territory?",
+      "ContestTitle": "Contest Territory",
+      "TransferTitle": "Transfer Territory",
+      "Contest": "Contest",
+      "Transfer": "Transfer",
+      "Cancel": "Cancel"
+    }
+  }
+}

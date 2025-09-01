@@ -1,0 +1,171 @@
+{
+  "BBTTCC": {
+    "Radiation": {
+      "Title": "BBTTCC Radiation Tracker",
+      "ZoneConfig": "Radiation Zone Configuration",
+      "RadiationTracker": "Radiation Tracker",
+      "OpenTracker": "Open Radiation Tracker",
+      "OpenZoneConfig": "Configure Radiation Zone",
+      
+      "RadiationLevels": {
+        "safe": "Safe",
+        "low": "Low", 
+        "moderate": "Moderate",
+        "high": "High",
+        "severe": "Severe",
+        "lethal": "Lethal"
+      },
+      
+      "ProtectionTypes": {
+        "none": "None",
+        "basic": "Basic Clothing",
+        "enhanced": "Enhanced Gear", 
+        "hazmat": "Hazmat Suit",
+        "powered": "Powered Suit",
+        "shielded": "Radiation Shielding"
+      },
+      
+      "ZoneTypes": {
+        "background": "Background Radiation",
+        "urban": "Urban Decay",
+        "industrial": "Industrial Site",
+        "military": "Military Installation", 
+        "reactor": "Reactor Zone",
+        "ground_zero": "Ground Zero",
+        "hot_zone": "Hot Zone"
+      },
+      
+      "Status": {
+        "level": "Radiation Level",
+        "exposure": "Total Exposure",
+        "effectiveLevel": "Effective Level",
+        "protection": "Protection",
+        "lastUpdate": "Last Update",
+        "contaminated": "Contaminated",
+        "clean": "Clean"
+      },
+      
+      "Labels": {
+        "currentStatus": "Current Status",
+        "currentEnvironment": "Current Environment",
+        "manualControls": "Manual Controls",
+        "currentEffects": "Current Effects",
+        "radiationLevels": "Radiation Levels",
+        "information": "Information",
+        "zoneConfiguration": "Zone Configuration",
+        "effectsPreview": "Effects Preview",
+        "batchOperations": "Batch Operations",
+        "scene": "Scene",
+        "zoneType": "Zone Type",
+        "customIntensity": "Custom Intensity",
+        "exposureRate": "Exposure Rate",
+        "timeToModerate": "Time to Moderate",
+        "timeToHigh": "Time to High", 
+        "timeToLethal": "Time to Lethal",
+        "protectionRequired": "Protection Required"
+      },
+      
+      "Buttons": {
+        "adjustExposure": "Adjust Exposure",
+        "setProtection": "Set Protection",
+        "update": "Update",
+        "removeEffects": "Remove Effects",
+        "resetAll": "Reset All",
+        "applyZone": "Apply Zone Configuration",
+        "resetZone": "Reset to Background",
+        "previewEffects": "Preview Token Effects",
+        "resetAllRadiation": "Reset All Radiation",
+        "applyProtectionToAll": "Apply Protection to All"
+      },
+      
+      "Hints": {
+        "zoneType": "Select the type of radiation environment",
+        "customIntensity": "Override the default intensity for this zone type",
+        "overrideProtection": "Override protection percentage",
+        "afterProtection": "(After protection)",
+        "beforeProtection": "(Before protection)",
+        "singleCycle": "This preview shows the effect of one tracking cycle. Actual accumulation happens over time.",
+        "batchOperations": "Apply operations to all tokens in this scene"
+      },
+      
+      "Messages": {
+        "radiationUpdated": "{name} radiation: {change} (Level: {level})",
+        "protectionSet": "{name} protection set to {type} ({value}%)",
+        "radiationReset": "{name} radiation data reset",
+        "effectsRemoved": "Removed {count} radiation effects from {name}",
+        "radiationDataUpdated": "{name} radiation data updated",
+        "sceneRadiationUpdated": "Scene radiation set to: {type} (Intensity: {intensity})",
+        "sceneRadiationReset": "Radiation zone reset for {scene}",
+        "zoneConfigurationApplied": "Radiation zone updated for {scene}",
+        "noRadiationEffects": "No radiation effects to remove",
+        "noTokensFound": "No tokens found in this scene",
+        "protectionApplied": "Applied protection to {count} tokens",
+        "tokensProcessed": "Successfully processed {count} tokens",
+        "validTokenRequired": "Valid token required",
+        "noSceneAvailable": "No scene available",
+        "invalidZoneType": "Invalid zone type",
+        "invalidProtectionType": "Invalid protection type"
+      },
+      
+      "Confirmations": {
+        "resetRadiation": "Are you sure you want to reset all radiation data for {name}? This will remove all exposure and effects.",
+        "resetZone": "Are you sure you want to reset the radiation zone for {scene} to background levels?",
+        "resetAllRadiation": "Reset radiation data for all {count} tokens in this scene?",
+        "applyProtection": "Apply protection to all tokens in this scene?"
+      },
+      
+      "Effects": {
+        "radiationSicknessMild": "Mild Radiation Sickness",
+        "radiationSicknessModerate": "Moderate Radiation Sickness", 
+        "radiationSicknessSevere": "Severe Radiation Sickness",
+        "radiationFatigue": "Radiation Fatigue",
+        "exhaustionLevel1": "Exhaustion Level 1",
+        "exhaustionLevel2": "Exhaustion Level 2", 
+        "exhaustionLevel3": "Exhaustion Level 3",
+        "radiationPoisoning": "Radiation Poisoning",
+        "radiationPoisoningSevere": "Severe Radiation Poisoning",
+        "vulnerabilityPoison": "Vulnerability to Poison",
+        "partialParalysis": "Partial Paralysis"
+      },
+      
+      "Descriptions": {
+        "safe": "No radiation effects",
+        "low": "Mild discomfort, no mechanical effects",
+        "moderate": "Constitution saves required, fatigue possible", 
+        "high": "Ongoing damage, exhaustion levels",
+        "severe": "Serious ongoing damage, multiple exhaustion",
+        "lethal": "Life-threatening, rapid deterioration",
+        
+        "background": "Natural background radiation",
+        "urban": "Post-apocalyptic urban environment",
+        "industrial": "Contaminated industrial areas",
+        "military": "Former military installations", 
+        "reactor": "Nuclear facility areas",
+        "groundZero": "Direct bomb impact sites",
+        "hotZone": "Extreme contamination areas",
+        
+        "none": "No protection",
+        "basic": "Minimal protection from light exposure",
+        "enhanced": "Specialized clothing and equipment",
+        "hazmat": "Professional radiation protection", 
+        "powered": "Advanced powered protection system",
+        "shielded": "Heavy shielding and isolation"
+      },
+      
+      "Tips": {
+        "protectionTypes": "Protection Types:",
+        "radiationAccumulation": "Radiation Accumulation:",
+        "radiationAccumulationDesc": "Radiation exposure accumulates over time based on the environmental intensity and your protection level. Higher intensity areas cause faster accumulation. Protection reduces the effective exposure rate.",
+        "naturalDecay": "Natural Decay:",
+        "naturalDecayDesc": "Radiation levels naturally decrease over time when in safe environments (background radiation or lower).",
+        "zoneIntensities": "Zone Intensities:",
+        "tips": "Tips:",
+        "higherIntensity": "Higher intensity zones cause faster radiation accumulation",
+        "protectionReduces": "Protection reduces effective exposure but doesn't eliminate it entirely", 
+        "backgroundDecay": "Background and Urban zones allow natural radiation decay over time",
+        "industrialProtection": "Industrial and higher zones require active protection",
+        "monitorTokens": "Monitor tokens regularly in high-radiation environments"
+      }
+    }
+  }
+}
