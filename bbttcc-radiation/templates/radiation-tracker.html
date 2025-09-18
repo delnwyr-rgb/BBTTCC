@@ -1,0 +1,223 @@
+{{!-- BBTTCC Radiation Tracker Template --}}
+{{#if error}}
+<div class="error-message">
+    <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+    <p>{{error}}</p>
+</div>
+{{else}}
+
+<div class="radiation-tracker-content">
+    
+    {{!-- Token Information --}}
+    <div class="token-header">
+        <div class="token-info">
+            <h3>{{token.name}}</h3>
+            <p class="actor-type">{{actor.type}} - {{actor.system.details.race}}</p>
+        </div>
+        <div class="radiation-status {{radiationData.radiationLevel.key}}">
+            <div class="level-indicator" style="background-color: {{radiationData.radiationLevel.color}};">
+                <i class="fas fa-radiation"></i>
+                <span class="level-name">{{radiationData.radiationLevel.name}}</span>
+            </div>
+            <div class="level-percentage">
+                {{radiationData.level}} / 100%
+            </div>
+        </div>
+    </div>
+    
+    {{!-- Current Status --}}
+    <div class="status-section">
+        <h4>Current Status</h4>
+        <div class="status-grid">
+            <div class="status-item">
+                <label>Radiation Level:</label>
+                <span class="status-value {{radiationData.radiationLevel.key}}" style="color: {{radiationData.radiationLevel.color}};">
+                    {{radiationData.radiationLevel.name}} ({{radiationData.level}}%)
+                </span>
+            </div>
+            
+            <div class="status-item">
+                <label>Total Exposure:</label>
+                <span class="status-value">{{radiationData.exposure}} / {{radiationData.threshold}}</span>
+            </div>
+            
+            <div class="status-item">
+                <label>Effective Level:</label>
+                <span class="status-value">{{radiationData.effectiveLevel}}%</span>
+                <small class="hint">(After protection)</small>
+            </div>
+            
+            <div class="status-item">
+                <label>Protection:</label>
+                <span class="status-value">{{radiationData.protection}}%</span>
+                <small class="hint">{{radiationData.protectionInfo.name}}</small>
+            </div>
+            
+            <div class="status-item">
+                <label>Last Update:</label>
+                <span class="status-value">
+                    {{#if radiationData.lastUpdate}}
+                        {{formatDate radiationData.lastUpdate}}
+                    {{else}}
+                        Never
+                    {{/if}}
+                </span>
+            </div>
+            
+            <div class="status-item">
+                <label>Contaminated:</label>
+                <span class="status-value {{#if radiationData.isContaminated}}contaminated{{else}}clean{{/if}}">
+                    {{#if radiationData.isContaminated}}Yes{{else}}No{{/if}}
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    {{!-- Current Environment --}}
+    <div class="environment-section">
+        <h4>Current Environment</h4>
+        <div class="environment-info">
+            <div class="scene-radiation">
+                <label>Scene:</label>
+                <span class="scene-name">{{sceneRadiation.description}}</span>
+                <span class="intensity">Intensity: {{sceneRadiation.intensity}}</span>
+            </div>
+            
+            <div class="exposure-rate">
+                <label>Exposure Rate:</label>
+                <span class="rate-value">~{{math sceneRadiation.intensity "*" 0.1 precision=2}} per update</span>
+                <small class="hint">(Before protection)</small>
+            </div>
+        </div>
+    </div>
+    
+    {{!-- Manual Controls (GM Only) --}}
+    {{#if isGM}}
+    <div class="controls-section">
+        <h4>Manual Controls</h4>
+        
+        {{!-- Exposure Adjustment --}}
+        <div class="control-group">
+            <label>Adjust Exposure:</label>
+            <div class="exposure-controls">
+                <button type="button" class="exposure-adjust severe" data-adjustment="-10">-10</button>
+                <button type="button" class="exposure-adjust moderate" data-adjustment="-5">-5</button>
+                <button type="button" class="exposure-adjust minor" data-adjustment="-1">-1</button>
+                <button type="button" class="exposure-adjust minor" data-adjustment="1">+1</button>
+                <button type="button" class="exposure-adjust moderate" data-adjustment="5">+5</button>
+                <button type="button" class="exposure-adjust severe" data-adjustment="10">+10</button>
+            </div>
+        </div>
+        
+        {{!-- Protection Settings --}}
+        <div class="control-group">
+            <label for="protection-type">Protection Type:</label>
+            <select id="protection-type" name="protection-type">
+                {{#each protectionTypes as |typeData typeKey|}}
+                <option value="{{typeKey}}" {{#if (eq ../radiationData.protectionType typeKey)}}selected{{/if}}>
+                    {{typeData.name}} ({{typeData.protection}}%)
+                </option>
+                {{/each}}
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label for="custom-protection">Custom Protection (%):</label>
+            <input type="number" id="custom-protection" name="custom-protection" min="0" max="100" 
+                   value="{{radiationData.protection}}" placeholder="0-100%">
+            <small class="hint">Override protection percentage</small>
+        </div>
+        
+        {{!-- Action Buttons --}}
+        <div class="action-buttons">
+            <button type="button" id="manual-update" class="update-button">
+                <i class="fas fa-sync-alt"></i> Update
+            </button>
+            
+            <button type="button" id="remove-effects" class="remove-effects-button">
+                <i class="fas fa-eraser"></i> Remove Effects
+            </button>
+            
+            <button type="button" id="reset-radiation" class="reset-button">
+                <i class="fas fa-undo"></i> Reset All
+            </button>
+        </div>
+    </div>
+    {{/if}}
+    
+    {{!-- Effects Display --}}
+    {{#if radiationData.radiationLevel.effects}}
+    <div class="effects-section">
+        <h4>Current Effects</h4>
+        <div class="effects-list">
+            <div class="effect-description">
+                <p><strong>{{radiationData.radiationLevel.description}}</strong></p>
+                
+                {{#if radiationData.radiationLevel.effects}}
+                <ul class="effect-list">
+                    {{#each radiationData.radiationLevel.effects as |effectId|}}
+                    <li class="effect-item">
+                        <i class="fas fa-dot-circle"></i>
+                        {{#if (eq effectId "radiation_sickness_mild")}}Mild Radiation Sickness
+                        {{else if (eq effectId "radiation_sickness_moderate")}}Moderate Radiation Sickness (-5 HP max)
+                        {{else if (eq effectId "radiation_sickness_severe")}}Severe Radiation Sickness (-10 HP max, -2 Con saves)
+                        {{else if (eq effectId "fatigue")}}Radiation Fatigue (-5 ft movement)
+                        {{else if (eq effectId "exhaustion_1")}}Exhaustion Level 1
+                        {{else if (eq effectId "exhaustion_2")}}Exhaustion Level 2
+                        {{else if (eq effectId "exhaustion_3")}}Exhaustion Level 3
+                        {{else if (eq effectId "radiation_poisoning")}}Radiation Poisoning
+                        {{else if (eq effectId "radiation_poisoning_severe")}}Severe Radiation Poisoning
+                        {{else if (eq effectId "vulnerability_poison")}}Vulnerability to Poison
+                        {{else if (eq effectId "paralysis_partial")}}Partial Paralysis
+                        {{else}}{{effectId}}{{/if}}
+                    </li>
+                    {{/each}}
+                </ul>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    {{/if}}
+    
+    {{!-- Radiation Level Chart --}}
+    <div class="chart-section">
+        <h4>Radiation Levels</h4>
+        <div class="radiation-chart">
+            {{#each radiationLevels as |levelData levelKey|}}
+            <div class="chart-level {{#if (eq ../radiationData.radiationLevel.key levelKey)}}current{{/if}}">
+                <div class="level-bar" style="background-color: {{levelData.color}};">
+                    <span class="level-range">{{levelData.range.[0]}}-{{levelData.range.[1]}}%</span>
+                </div>
+                <div class="level-info">
+                    <strong>{{levelData.name}}</strong>
+                    <small>{{levelData.description}}</small>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    
+    {{!-- Tips and Information --}}
+    <div class="info-section">
+        <h4>Information</h4>
+        <div class="info-content">
+            <h5>Protection Types:</h5>
+            <ul class="info-list">
+                {{#each protectionTypes as |typeData typeKey|}}
+                <li><strong>{{typeData.name}}:</strong> {{typeData.protection}}% - {{typeData.description}}</li>
+                {{/each}}
+            </ul>
+            
+            <h5>Radiation Accumulation:</h5>
+            <p>Radiation exposure accumulates over time based on the environmental intensity and your protection level. Higher intensity areas cause faster accumulation. Protection reduces the effective exposure rate.</p>
+            
+            {{#if (setting "bbttcc-radiation" "enableRadiationDecay")}}
+            <h5>Natural Decay:</h5>
+            <p>Radiation levels naturally decrease over time when in safe environments (background radiation or lower).</p>
+            {{/if}}
+        </div>
+    </div>
+    
+</div>
+
+{{/if}}
