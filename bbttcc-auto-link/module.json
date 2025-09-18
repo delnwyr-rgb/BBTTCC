@@ -1,0 +1,45 @@
+{
+  "id": "bbttcc-auto-link",
+  "title": "BBTTCC Auto-Link",
+  "description": "Automatically links BBTTCC character creation options to faction Organization Points",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "BBTTCC Integration Team"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "bbttcc-factions",
+      "type": "module",
+      "compatibility": {}
+    },
+    {
+      "id": "bbttcc-territory",
+      "type": "module",
+      "compatibility": {}
+    },
+    {
+      "id": "bbttcc-character-options",
+      "type": "module",
+      "compatibility": {}
+    }
+  ],
+  "esmodules": [
+    "scripts/bbttcc-auto-link.js"
+  ],
+  "styles": [],
+  "packs": [],
+  "languages": [],
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "MIT",
+  "readme": "",
+  "bugs": "",
+  "changelog": ""
+}
