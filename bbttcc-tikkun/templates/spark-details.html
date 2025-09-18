@@ -1,0 +1,244 @@
+<div class="spark-details-dialog">
+    <div class="spark-header">
+        <div class="spark-title">
+            <h3>{{spark.name}}</h3>
+            <div class="spark-meta">
+                <span class="sephirah">{{spark.sephirah}}</span>
+                <span class="spark-type">{{spark.type}}</span>
+                <span class="spark-status {{spark.status}}">{{spark.status}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="spark-content">
+        <div class="description-section">
+            <h4>Divine Nature</h4>
+            <p>{{spark.description}}</p>
+            
+            {{#if spark.assignmentReason}}
+            <div class="assignment-info">
+                <h4>Path Assigned</h4>
+                <p><strong>Reason:</strong> {{spark.assignmentReason}}</p>
+                {{#if spark.thematicTension}}
+                <p><strong>Growth Path:</strong> {{spark.thematicTension}}</p>
+                {{/if}}
+            </div>
+            {{/if}}
+        </div>
+
+        {{#if questHint}}
+        <div class="quest-hint">
+            <h4>🔮 Divine Guidance</h4>
+            <p><em>"{{questHint}}"</em></p>
+        </div>
+        {{/if}}
+
+        {{#if spark.quest_log.length}}
+        <div class="quest-history">
+            <h4>Quest History</h4>
+            <div class="log-entries">
+                {{#each spark.quest_log}}
+                <div class="log-entry">
+                    <div class="entry-timestamp">{{timestamp}}</div>
+                    <div class="entry-text">{{entry}}</div>
+                    {{#if status}}
+                    <div class="entry-status">Status: {{status}}</div>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if (eq spark.status "corrupted")}}
+        <div class="corruption-details">
+            <h4>⚠️ Corruption Details</h4>
+            {{#if spark.corruptionDetails}}
+            <div class="corruption-info">
+                <p><strong>Corruption Cause:</strong> {{spark.corruptionDetails.reason}}</p>
+                <p><strong>Effect:</strong> {{spark.corruptionDetails.effect}}</p>
+                <div class="purification-quest">
+                    <h5>Path to Purification:</h5>
+                    <p>{{spark.corruptionDetails.purificationQuest}}</p>
+                </div>
+                {{#if spark.corruptionDetails.corruptedTimestamp}}
+                <p><small>Corrupted: {{spark.corruptionDetails.corruptedTimestamp}}</small></p>
+                {{/if}}
+            </div>
+            {{/if}}
+        </div>
+        {{/if}}
+
+        {{#if (eq spark.status "gathered")}}
+        <div class="gathering-celebration">
+            <h4>✨ Light Gathered!</h4>
+            <p>This divine spark has been successfully integrated into your being.</p>
+            {{#if spark.gatheredTimestamp}}
+            <p><small>Gathered: {{spark.gatheredTimestamp}}</small></p>
+            {{/if}}
+        </div>
+        {{/if}}
+
+        <!-- Spark-specific quest conditions (for GM reference) -->
+        {{#if canEdit}}
+        <div class="gm-reference">
+            <h4>GM Reference</h4>
+            <div class="quest-conditions">
+                <h5>Gathering Conditions (Examples):</h5>
+                <ul>
+                    {{#ifEquals spark.id "sparkOfMercy_Chesed"}}
+                    <li>Justice/Reformation scenario outcome</li>
+                    <li>Alliance/Cooperation diplomatic success</li> 
+                    <li>Compassionate governance of territories</li>
+                    {{/ifEquals}}
+                    
+                    {{#ifEquals spark.id "sparkOfSeverity_Gevurah"}}
+                    <li>Justice/Reformation with disciplined action</li>
+                    <li>Righteous combat victory</li>
+                    <li>Establishing fair but firm law</li>
+                    {{/ifEquals}}
+                    
+                    {{#ifEquals spark.id "sparkOfTruth_Tiferet"}}
+                    <li>Honest diplomatic resolution</li>
+                    <li>Revealing important truth</li>
+                    <li>Uniting opposing factions</li>
+                    {{/ifEquals}}
+                    
+                    {{#ifEquals spark.id "sparkOfUnderstanding_Binah"}}
+                    <li>Asset Retrieval of ancient knowledge</li>
+                    <li>Sharing wisdom with others</li>
+                    <li>Solving complex mysteries</li>
+                    {{/ifEquals}}
+                    
+                    {{#ifEquals spark.id "sparkOfVictory_Netzach"}}
+                    <li>Heroic victory in siege</li>
+                    <li>Liberation of oppressed territory</li>
+                    <li>Enduring through great hardship</li>
+                    {{/ifEquals}}
+                </ul>
+                
+                <h5>Corruption Risks:</h5>
+                <ul>
+                    {{#ifEquals spark.id "sparkOfMercy_Chesed"}}
+                    <li>Retribution/Subjugation outcomes</li>
+                    <li>Unnecessary violence or cruelty</li>
+                    <li>Betraying allies for gain</li>
+                    {{/ifEquals}}
+                    
+                    {{#ifEquals spark.id "sparkOfSeverity_Gevurah"}}
+                    <li>Chaotic or undisciplined actions</li>
+                    <li>Excessive violence beyond necessity</li>
+                    <li>Abandoning justice for convenience</li>
+                    {{/ifEquals}}
+                    
+                    {{#ifEquals spark.id "sparkOfTruth_Tiferet"}}
+                    <li>Deception or betrayal</li>
+                    <li>Spreading discord or lies</li>
+                    <li>Breaking sacred oaths</li>
+                    {{/ifEquals}}
+                </ul>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+<style>
+.spark-details-dialog {
+    font-family: "Signika", sans-serif;
+}
+
+.spark-header {
+    border-bottom: 2px solid #5a5a5a;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.spark-meta {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.spark-meta span {
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #f0f0f0;
+    font-weight: bold;
+}
+
+.spark-status.gathered {
+    background: #d4edda;
+    color: #155724;
+}
+
+.spark-status.corrupted {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.spark-status.active {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.quest-hint {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.corruption-details {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.gathering-celebration {
+    background: #d1ecf1;
+    border: 1px solid #bee5eb;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.log-entries {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.log-entry {
+    border-left: 3px solid #5a5a5a;
+    padding: 8px 12px;
+    margin: 8px 0;
+    background: #f8f9fa;
+}
+
+.entry-timestamp {
+    font-size: 0.8em;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.gm-reference {
+    background: #e9ecef;
+    border: 1px solid #dee2e6;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+.quest-conditions ul {
+    margin: 5px 0;
+    padding-left: 20px;
+}
+
+.quest-conditions li {
+    margin: 3px 0;
+}
+</style>
