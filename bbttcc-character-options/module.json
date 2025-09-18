@@ -1,0 +1,78 @@
+{
+  "type": "module",
+  "id": "bbttcc-character-options",
+  "title": "BBTTCC Character Options v4.8.1-ENHANCED",
+  "description": "Character archetypes, crew types, occult associations, political affiliations, and enlightenment options for the BBTTCC Strategic Warfare Suite. Provides comprehensive character customization with faction bonuses and strategic benefits.",
+  "version": "4.8.1-ENHANCED",
+  "authors": [
+    {
+      "name": "BBTTCC Team",
+      "discord": "bbttcc"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13.0.0",
+    "verified": "13.348",
+    "maximum": "15"
+  },
+  "systems": [
+    "dnd5e"
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "5.0.0",
+          "verified": "5.1.2"
+        }
+      }
+    ],
+    "requires": [
+      {
+        "id": "bbttcc-factions",
+        "type": "module",
+        "compatibility": {
+          "minimum": "4.8.1"
+        }
+      }
+    ],
+    "recommends": [
+      {
+        "id": "bbttcc-territory",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-raid",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-radiation",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-tikkun",
+        "type": "module"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/bbttcc-character-options.js"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "socket": false,
+  "manifest": "https://raw.githubusercontent.com/bbttcc/foundryvtt-modules/main/bbttcc-character-options/module.json",
+  "download": "https://github.com/bbttcc/foundryvtt-modules/releases/download/v4.8.1-ENHANCED/bbttcc-character-options.zip",
+  "url": "https://github.com/bbttcc/foundryvtt-modules",
+  "license": "MIT",
+  "readme": "README.md",
+  "bugs": "https://github.com/bbttcc/foundryvtt-modules/issues",
+  "changelog": "CHANGELOG.md"
+}
