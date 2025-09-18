@@ -1,0 +1,43 @@
+{
+  "type": "module",
+  "id": "bbttcc-raid",
+  "title": "BBTTCC Raid v4.8.1-ENHANCED",
+  "description": "Modern raid management system for FoundryVTT v13+ with proper async/await patterns",
+  "version": "4.8.1-ENHANCED",
+  "compatibility": {
+    "minimum": "13.0.0",
+    "verified": "13.348",
+    "maximum": "15"
+  },
+  "authors": [
+    {
+      "name": "BBTTCC Dev Team",
+      "flags": {}
+    }
+  ],
+  "systems": ["dnd5e"],
+  "esmodules": [
+    "scripts/bbttcc-raid.js",
+    "scripts/raid-planner.js"
+  ],
+  "styles": [
+    "css/raid-styles.css"
+  ],
+  "templates": [
+    "templates/raid-planner.html"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "url": "",
+  "manifest": "",
+  "download": "",
+  "license": "MIT",
+  "readme": "README.md",
+  "bugs": "",
+  "changelog": ""
+}
