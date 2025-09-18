@@ -1,0 +1,180 @@
+{
+  "name": "Marcus 'Territory Commander' Kane",
+  "level": 5,
+  "class": "Fighter",
+  "subclass": "Battle Master",
+  "background": "Noble (Variant: Knight)",
+  "race": "Human (Variant)",
+  "bbttccEnhancements": {
+    "territoryAffiliation": "Iron Dominion Faction",
+    "territoryRole": "Commander",
+    "territorySpecializations": [
+      "Strategic Planning",
+      "Resource Management",
+      "Border Defense",
+      "Settlement Expansion"
+    ],
+    "territoryAuthority": {
+      "level": "High",
+      "canClaimTerritory": true,
+      "canManageFactionTerritories": true,
+      "canDeclareWar": false,
+      "canNegotiateTreaties": true
+    },
+    "territoryExperience": {
+      "territoriesManaged": 8,
+      "successfulDefenses": 5,
+      "conqueredTerritories": 3,
+      "lostTerritories": 1,
+      "yearsInCommand": 4
+    },
+    "territoryResourceBonus": {
+      "goldGeneration": 25,
+      "populationGrowth": 15,
+      "defenseRating": 30,
+      "tradeEfficiency": 20
+    },
+    "tikkunSparks": {
+      "conceptual": 1,
+      "emotional": 3,
+      "physical": 2,
+      "total": 6
+    },
+    "radiationExposure": {
+      "level": "Moderate",
+      "effects": [
+        "Enhanced Leadership",
+        "Tactical Awareness",
+        "Minor Precognition"
+      ],
+      "resistance": 25
+    },
+    "raidExperience": {
+      "participated": 12,
+      "victories": 9,
+      "specializations": [
+        "Command & Control",
+        "Heavy Assault",
+        "Strategic Objectives"
+      ]
+    }
+  },
+  "stats": {
+    "str": 16,
+    "dex": 13,
+    "con": 15,
+    "int": 14,
+    "wis": 12,
+    "cha": 16
+  },
+  "hitPoints": {
+    "max": 42,
+    "current": 42
+  },
+  "armorClass": 18,
+  "proficiencyBonus": 3,
+  "specialAbilities": [
+    {
+      "name": "Territory Claim",
+      "description": "Can initiate territory claiming rituals. Gain advantage on Persuasion and Intimidation checks when dealing with territory disputes.",
+      "uses": "3/long rest"
+    },
+    {
+      "name": "Strategic Command",
+      "description": "Grant allies within 30ft bonus to initiative rolls equal to Charisma modifier. Can command territory defense structures remotely.",
+      "uses": "Passive"
+    },
+    {
+      "name": "Resource Optimization",
+      "description": "Increase resource generation of controlled territories by 25%. Can identify optimal locations for new settlements.",
+      "uses": "Passive"
+    },
+    {
+      "name": "Battle Master Maneuvers",
+      "description": "Knows 5 maneuvers: Commander's Strike, Tactical Assessment, Rally, Menacing Attack, Goading Attack",
+      "uses": "4 superiority dice/short rest"
+    }
+  ],
+  "territoryManagementSkills": {
+    "Economics": 17,
+    "Military Strategy": 19,
+    "Diplomacy": 16,
+    "Engineering": 14,
+    "Logistics": 18
+  },
+  "equipment": [
+    "Plate Armor (AC 18)",
+    "Longsword +1 (Territory Forged)",
+    "Shield with Faction Crest",
+    "Heavy Crossbow",
+    "20 Crossbow Bolts",
+    "BBTTCC Command Badge (Adamantine)",
+    "Territory Survey Tools",
+    "Portable Command Tent",
+    "Strategic Maps Collection",
+    "Faction Communication Crystal",
+    "Tikkun Resonance Amplifier (Advanced)",
+    "Radiation Monitor (Military Grade)",
+    "Noble's Traveling Kit",
+    "Signet Ring of Authority",
+    "500 GP Territory Development Fund"
+  ],
+  "spellsAndManeuvers": {
+    "maneuvers": [
+      "Commander's Strike",
+      "Tactical Assessment", 
+      "Rally",
+      "Menacing Attack",
+      "Goading Attack"
+    ],
+    "superiorityDice": 4,
+    "diceSize": "d8"
+  },
+  "factionStanding": {
+    "currentFaction": "Iron Dominion Faction",
+    "rank": "Territory Commander",
+    "loyalty": 85,
+    "achievements": [
+      "Defender of the Northern Border",
+      "Founder of New Haven Settlement",
+      "Victor of the Three Rivers Campaign",
+      "Master of Resource Networks"
+    ],
+    "knownFactions": [
+      {
+        "name": "Steel Brotherhood",
+        "relationship": "Allied",
+        "standing": 60
+      },
+      {
+        "name": "Wasteland Nomads",
+        "relationship": "Neutral",
+        "standing": 35
+      },
+      {
+        "name": "Tech Cult Remnants",
+        "relationship": "Hostile",
+        "standing": -25
+      }
+    ]
+  },
+  "backstory": "Marcus Kane was born into nobility before the Great Collapse, but emerged as a true leader in the post-apocalyptic world. His tactical genius and natural charisma made him invaluable to the Iron Dominion Faction. As a Territory Commander, he's responsible for managing multiple settlements and defense networks across the faction's holdings. His exposure to Tikkun energy has enhanced his strategic thinking and given him an almost supernatural ability to predict enemy movements. He's known for turning small outposts into thriving settlements and has never lost a territory under his direct command.",
+  "personalityTraits": [
+    "I always plan three moves ahead in any situation",
+    "I believe in leading from the front, but thinking from above"
+  ],
+  "ideals": [
+    "Order: A well-organized territory is a strong territory",
+    "Growth: Every settlement should strive to become something greater"
+  ],
+  "bonds": [
+    "The Iron Dominion Faction gave me purpose after the collapse",
+    "Every settlement under my command is like family to me"
+  ],
+  "flaws": [
+    "I sometimes sacrifice individual needs for the greater strategic picture",
+    "I have trouble trusting other faction's territorial claims"
+  ],
+  "created": "2025-09-09T21:15:00.000Z",
+  "createdBy": "BBTTCC Territory Module v4.8.1-ENHANCED"
+}

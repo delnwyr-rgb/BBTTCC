@@ -1,0 +1,206 @@
+{
+  "id": "iron-dominion-faction",
+  "name": "Iron Dominion Faction",
+  "type": "faction",
+  "description": "A militaristic faction focused on territorial expansion and resource control in the post-apocalyptic world.",
+  "bbttccFactionData": {
+    "isFaction": true,
+    "factionType": "Military Expansionist",
+    "foundedYear": "Post-Collapse Year 15",
+    "primaryGoals": [
+      "Territorial Expansion",
+      "Resource Monopolization", 
+      "Military Supremacy",
+      "Infrastructure Development"
+    ],
+    "territoryManagement": {
+      "totalTerritories": 12,
+      "activeTerritories": [
+        "iron-stronghold-alpha",
+        "mining-district-beta", 
+        "agricultural-zone-gamma",
+        "border-outpost-delta",
+        "trade-hub-epsilon"
+      ],
+      "territorialClaims": [
+        {
+          "name": "Iron Stronghold Alpha",
+          "type": "fortress",
+          "size": "large",
+          "coordinates": { "x": 100, "y": 150 },
+          "established": "Post-Collapse Year 18",
+          "status": "fully_controlled",
+          "garrison": 200,
+          "resources": {
+            "defense": 400,
+            "troops": 200,
+            "gold": 150
+          }
+        },
+        {
+          "name": "Mining District Beta",
+          "type": "mine",
+          "size": "medium", 
+          "coordinates": { "x": 125, "y": 175 },
+          "established": "Post-Collapse Year 19",
+          "status": "fully_controlled",
+          "workers": 150,
+          "resources": {
+            "ore": 300,
+            "gold": 225,
+            "workers": 150
+          }
+        },
+        {
+          "name": "Agricultural Zone Gamma",
+          "type": "farm",
+          "size": "large",
+          "coordinates": { "x": 75, "y": 125 },
+          "established": "Post-Collapse Year 20",
+          "status": "fully_controlled",
+          "population": 300,
+          "resources": {
+            "food": 500,
+            "population": 300,
+            "gold": 100
+          }
+        }
+      ],
+      "disputedTerritories": [
+        {
+          "name": "Contested Valley",
+          "disputedWith": ["Steel Brotherhood", "Wasteland Nomads"],
+          "claimStrength": 65,
+          "strategicValue": "High"
+        }
+      ],
+      "expansionTargets": [
+        "Northern Oil Fields",
+        "Eastern Tech Ruins",
+        "Southern Trade Routes"
+      ]
+    },
+    "leadership": {
+      "supreme_commander": "Marcus 'Territory Commander' Kane",
+      "military_council": [
+        "General Sarah 'Iron Fist' Rodriguez",
+        "Admiral Tech-Priest Kowalski", 
+        "Marshal Border-Guard Thompson"
+      ],
+      "territorial_governors": [
+        {
+          "name": "Governor Elena Vasquez",
+          "territory": "Iron Stronghold Alpha",
+          "specialization": "Defense Coordination"
+        },
+        {
+          "name": "Overseer Mining-Boss Chen",
+          "territory": "Mining District Beta",
+          "specialization": "Resource Extraction"
+        },
+        {
+          "name": "Coordinator Farm-Master Williams",
+          "territory": "Agricultural Zone Gamma", 
+          "specialization": "Food Production"
+        }
+      ]
+    },
+    "resources": {
+      "treasury": 50000,
+      "military_strength": 2500,
+      "population": 8500,
+      "influence_points": 750,
+      "research_capacity": 200,
+      "monthly_income": {
+        "gold": 2500,
+        "materials": 1500,
+        "food": 3000,
+        "influence": 100
+      },
+      "strategic_reserves": {
+        "weapons": 500,
+        "ammunition": 10000,
+        "medical_supplies": 200,
+        "fuel": 5000
+      }
+    },
+    "diplomacy": {
+      "allies": [
+        {
+          "name": "Steel Brotherhood",
+          "relationship_level": 75,
+          "treaty_type": "Military Alliance",
+          "signed": "Post-Collapse Year 21"
+        }
+      ],
+      "neutral": [
+        {
+          "name": "Wasteland Nomads", 
+          "relationship_level": 35,
+          "last_contact": "Post-Collapse Year 22"
+        },
+        {
+          "name": "Tech Scavenger Guild",
+          "relationship_level": 50,
+          "trade_agreements": ["Resource Exchange Pact"]
+        }
+      ],
+      "enemies": [
+        {
+          "name": "Tech Cult Remnants",
+          "relationship_level": -25,
+          "conflict_status": "Cold War",
+          "last_conflict": "Post-Collapse Year 21"
+        },
+        {
+          "name": "Raider Coalition",
+          "relationship_level": -60,
+          "conflict_status": "Active Hostilities",
+          "border_skirmishes": 15
+        }
+      ]
+    },
+    "technology": {
+      "tech_level": "Industrial-Military",
+      "specializations": [
+        "Weapons Manufacturing",
+        "Fortification Engineering", 
+        "Resource Processing",
+        "Communication Networks"
+      ],
+      "research_projects": [
+        "Advanced Territory Sensors",
+        "Automated Defense Systems",
+        "Resource Optimization Algorithms"
+      ]
+    },
+    "culture": {
+      "core_values": [
+        "Strength Through Unity",
+        "Territory is Destiny",
+        "Honor in Service",
+        "Progress Through Order"
+      ],
+      "traditions": [
+        "Annual Territory Day Celebration",
+        "Promotion Through Merit",
+        "Memorial Day for Fallen Defenders"
+      ],
+      "symbols": {
+        "flag": "Iron Fist on Blue Field",
+        "motto": "Strength, Honor, Territory",
+        "colors": ["Steel Blue", "Iron Gray", "Gold"]
+      }
+    }
+  },
+  "stats": {
+    "size": "Large Organization",
+    "influence": 750,
+    "military": 2500,
+    "economy": 8500,
+    "technology": 200,
+    "diplomacy": 150
+  },
+  "created": "2025-09-09T21:20:00.000Z",
+  "createdBy": "BBTTCC Territory Module v4.8.1-ENHANCED"
+}

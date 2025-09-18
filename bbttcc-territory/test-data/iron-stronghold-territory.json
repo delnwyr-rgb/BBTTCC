@@ -1,0 +1,251 @@
+{
+  "id": "iron-stronghold-alpha-territory",
+  "name": "Iron Stronghold Alpha",
+  "description": "Primary fortress and command center of the Iron Dominion Faction, featuring advanced defensive systems and strategic command facilities.",
+  "type": "fortress",
+  "size": "large",
+  "status": "claimed",
+  "coordinates": {
+    "x": 100,
+    "y": 150,
+    "hex": {
+      "q": 5,
+      "r": -3,
+      "s": -2
+    }
+  },
+  "factionAssociations": {
+    "claimedBy": "iron-dominion-faction",
+    "claimedAt": "2025-09-09T21:25:00.000Z",
+    "claimStrength": 100,
+    "governance": {
+      "governor": "Governor Elena Vasquez",
+      "governorId": "elena-vasquez-001", 
+      "appointedBy": "Marcus 'Territory Commander' Kane",
+      "appointmentDate": "2025-01-15T12:00:00.000Z",
+      "authority": "Full Administrative Control"
+    },
+    "militaryCommand": {
+      "garrison_commander": "Colonel Steel-Heart Morrison",
+      "commanderId": "morrison-steel-001",
+      "garrison_strength": 200,
+      "defense_rating": 95,
+      "patrol_schedule": "24/7 Active",
+      "alert_level": "Standard"
+    },
+    "alliances": [
+      {
+        "faction": "Steel Brotherhood", 
+        "type": "Military Cooperation",
+        "access_level": "Friendly Visiting Rights",
+        "shared_resources": ["Intelligence", "Repairs"]
+      }
+    ],
+    "contested_claims": [],
+    "territorial_disputes": {
+      "active": false,
+      "historical": [
+        {
+          "challenger": "Raider Coalition",
+          "date": "2024-08-15T10:30:00.000Z",
+          "outcome": "Successfully Defended",
+          "casualties": {
+            "defenders": 12,
+            "attackers": 45
+          }
+        }
+      ]
+    }
+  },
+  "resources": {
+    "primary": {
+      "defense": 400,
+      "troops": 200,
+      "gold": 150
+    },
+    "secondary": {
+      "influence": 100,
+      "equipment": 250,
+      "supplies": 180
+    },
+    "generation_rates": {
+      "gold_per_month": 150,
+      "influence_per_month": 25,
+      "troop_recruitment": 15,
+      "equipment_production": 20
+    },
+    "resource_modifiers": {
+      "size_bonus": 2.0,
+      "type_bonus": 1.5,
+      "faction_bonus": 1.25,
+      "commander_bonus": 1.15
+    }
+  },
+  "infrastructure": {
+    "buildings": [
+      {
+        "name": "Command Center",
+        "type": "administrative",
+        "level": 3,
+        "capacity": 50,
+        "functionality": ["Strategic Planning", "Communications Hub"]
+      },
+      {
+        "name": "Fortress Walls",
+        "type": "defensive",
+        "level": 4,
+        "durability": 500,
+        "defensive_bonus": 50
+      },
+      {
+        "name": "Barracks Complex",
+        "type": "military",
+        "level": 3,
+        "capacity": 200,
+        "training_bonus": 25
+      },
+      {
+        "name": "Armory",
+        "type": "storage",
+        "level": 3,
+        "storage_capacity": 1000,
+        "equipment_bonus": 30
+      },
+      {
+        "name": "Communication Tower",
+        "type": "utility", 
+        "level": 2,
+        "range": "200km",
+        "coordination_bonus": 20
+      }
+    ],
+    "roads": [
+      {
+        "to": "Mining District Beta",
+        "quality": "Excellent",
+        "travel_time": "4 hours",
+        "security_level": "High"
+      },
+      {
+        "to": "Agricultural Zone Gamma",
+        "quality": "Good", 
+        "travel_time": "6 hours",
+        "security_level": "Medium"
+      }
+    ],
+    "utilities": {
+      "power": "Advanced Generator",
+      "water": "Deep Well + Purification",
+      "communications": "Long Range Radio Network",
+      "medical": "Full Medical Facility"
+    }
+  },
+  "population": {
+    "total": 450,
+    "breakdown": {
+      "military": 200,
+      "administrative": 25,
+      "technical": 50,
+      "support": 125,
+      "civilian": 50
+    },
+    "morale": 85,
+    "loyalty": 90,
+    "recruitment_capacity": 20
+  },
+  "defenses": {
+    "walls": {
+      "material": "Reinforced Concrete + Steel",
+      "height": "8 meters",
+      "thickness": "2 meters", 
+      "defensive_value": 100
+    },
+    "weapons": [
+      {
+        "type": "Heavy Machine Gun Nests",
+        "quantity": 8,
+        "coverage": "360 degrees",
+        "range": "800m"
+      },
+      {
+        "type": "Anti-Vehicle Cannons",
+        "quantity": 4,
+        "range": "2km",
+        "armor_penetration": "High"
+      },
+      {
+        "type": "Mortar Positions",
+        "quantity": 2,
+        "range": "5km",
+        "area_effect": "High"
+      }
+    ],
+    "sensors": [
+      "Perimeter Motion Detectors",
+      "Radar System",
+      "Thermal Imaging Network",
+      "Ground Vibration Sensors"
+    ],
+    "alert_systems": {
+      "early_warning": "15 minute advance notice",
+      "communication": "Instant network notification",
+      "response_time": "3 minutes to battle stations"
+    }
+  },
+  "strategic_importance": {
+    "control_rating": "Critical",
+    "resource_value": 95,
+    "defensive_position": "Excellent",
+    "logistical_hub": "Primary",
+    "symbolic_value": "Maximum"
+  },
+  "history": {
+    "established": "Post-Collapse Year 18",
+    "major_events": [
+      {
+        "date": "2024-03-10T09:00:00.000Z",
+        "event": "Construction Completed",
+        "details": "Primary fortress construction finished ahead of schedule"
+      },
+      {
+        "date": "2024-05-20T14:30:00.000Z", 
+        "event": "First Major Defense",
+        "details": "Successfully repelled Raider Coalition assault"
+      },
+      {
+        "date": "2024-08-15T10:30:00.000Z",
+        "event": "Second Defense Victory",
+        "details": "Decisive victory against coordinated raider attack"
+      },
+      {
+        "date": "2025-01-01T00:00:00.000Z",
+        "event": "New Year Expansion",
+        "details": "Added communication tower and upgraded armory"
+      }
+    ],
+    "expansion_timeline": [
+      {
+        "phase": "Phase 1: Foundation",
+        "completed": "2024-03-10T09:00:00.000Z",
+        "description": "Basic walls and command center"
+      },
+      {
+        "phase": "Phase 2: Military",
+        "completed": "2024-06-01T12:00:00.000Z", 
+        "description": "Barracks, armory, and defensive weapons"
+      },
+      {
+        "phase": "Phase 3: Advanced",
+        "completed": "2025-01-01T00:00:00.000Z",
+        "description": "Communication systems and sensor network"
+      },
+      {
+        "phase": "Phase 4: Expansion",
+        "planned": "2025-12-01T00:00:00.000Z",
+        "description": "Additional housing and industrial capacity"
+      }
+    ]
+  },
+  "created": "2025-09-09T21:25:00.000Z",
+  "createdBy": "BBTTCC Territory Module v4.8.1-ENHANCED"
+}

@@ -1,0 +1,58 @@
+{
+  "id": "test-territory-001",
+  "name": "Test Territory",
+  "description": "A test territory created by the AI agent",
+  "owner": "Test Faction",
+  "hexes": [
+    {
+      "q": 0,
+      "r": 0,
+      "s": 0,
+      "resources": [
+        "water",
+        "food"
+      ],
+      "value": 10
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "s": 0,
+      "resources": [
+        "minerals"
+      ],
+      "value": 8
+    },
+    {
+      "q": 0,
+      "r": 1,
+      "s": -1,
+      "resources": [
+        "shelter"
+      ],
+      "value": 12
+    },
+    {
+      "q": -1,
+      "r": 0,
+      "s": 1,
+      "resources": [
+        "energy"
+      ],
+      "value": 15
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "s": 0,
+      "resources": [
+        "food",
+        "minerals"
+      ],
+      "value": 18
+    }
+  ],
+  "totalValue": 63,
+  "created": "2025-09-09T20:40:07.996Z",
+  "createdBy": "AI Agent"
+}

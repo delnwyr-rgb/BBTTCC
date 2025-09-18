@@ -1,0 +1,62 @@
+{
+  "name": "Zara the Seeker",
+  "level": 5,
+  "class": "Sorcerer",
+  "subclass": "Wild Magic",
+  "background": "Outlander",
+  "race": "Human (Variant)",
+  "bbttccEnhancements": {
+    "territoryAffiliation": "AI Test Faction",
+    "tikkunSparks": {
+      "conceptual": 2,
+      "emotional": 1,
+      "physical": 1,
+      "total": 4
+    },
+    "radiationExposure": {
+      "level": "Low",
+      "effects": [
+        "Enhanced Intuition"
+      ],
+      "resistance": 10
+    },
+    "raidExperience": {
+      "participated": 3,
+      "victories": 2,
+      "specializations": [
+        "Reconnaissance",
+        "Arcane Support"
+      ]
+    }
+  },
+  "stats": {
+    "str": 10,
+    "dex": 14,
+    "con": 13,
+    "int": 12,
+    "wis": 15,
+    "cha": 18
+  },
+  "hitPoints": {
+    "max": 34,
+    "current": 34
+  },
+  "spellSlots": {
+    "level1": 4,
+    "level2": 3,
+    "level3": 2
+  },
+  "proficiencyBonus": 3,
+  "equipment": [
+    "Quarterstaff",
+    "Arcane Focus (Crystal)",
+    "Explorer's Pack",
+    "Leather Armor",
+    "BBTTCC Faction Badge",
+    "Tikkun Resonance Detector",
+    "Radiation Monitor (Basic)"
+  ],
+  "backstory": "A wild magic sorcerer who discovered their powers during a raid on an ancient facility. Now seeks to understand the connection between magic and the world's fractured reality.",
+  "created": "2025-09-09T20:40:08.000Z",
+  "createdBy": "AI Agent"
+}
