@@ -1,0 +1,203 @@
+<form class="{{cssClass}} bbttcc-faction-sheet" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+        <div class="header-fields">
+            <h1 class="charname">
+                <input name="name" type="text" value="{{actor.name}}" placeholder="Faction Name"/>
+            </h1>
+            <div class="faction-info">
+                <div class="faction-status">
+                    <label>Status:</label>
+                    <span class="status-value">{{powerLevel}}</span>
+                </div>
+                <div class="power-level">
+                    <label>Total OPs:</label>
+                    <span class="power-value">{{totalOPs}} / {{maxTotalOPs}}</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="ops">Organization Points</a>
+        <a class="item" data-tab="territories">Territories</a>
+        <a class="item" data-tab="warfare">Warfare</a>
+        <a class="item" data-tab="details">Details</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+
+        {{!-- Organization Points Tab --}}
+        <div class="tab ops" data-group="primary" data-tab="ops">
+            <div class="ops-section">
+                <h3>Organization Points</h3>
+                <div class="ops-grid">
+                    {{#each ops as |op type|}}
+                    <div class="op-row">
+                        <div class="op-label">
+                            <label>{{lookup ../opsLabels type}}</label>
+                        </div>
+                        <div class="op-controls">
+                            <button type="button" class="op-adjust" data-op="{{type}}" data-adjustment="-1" title="Decrease">-</button>
+                            <div class="op-value">
+                                <input type="number" value="{{op.value}}" min="0" max="{{op.max}}" readonly />
+                                <span class="op-max">/ {{op.max}}</span>
+                            </div>
+                            <button type="button" class="op-adjust" data-op="{{type}}" data-adjustment="1" title="Increase">+</button>
+                            <button type="button" class="op-roll" data-op="{{type}}" title="Roll Check">
+                                <i class="fas fa-dice-d20"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+                
+                <div class="op-summary">
+                    <div class="total-ops">
+                        <strong>Total OPs: {{totalOPs}} / {{maxTotalOPs}} ({{powerLevel}})</strong>
+                    </div>
+                    <button type="button" class="roll-d20" title="Roll d20">
+                        <i class="fas fa-dice-d20"></i> Roll d20
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Territories Tab --}}
+        <div class="tab territories" data-group="primary" data-tab="territories">
+            <div class="territories-section">
+                <h3>Controlled Territories</h3>
+                <div class="territory-list">
+                    {{#if territories}}
+                        {{#each territories as |territory|}}
+                        <div class="territory-item">
+                            <div class="territory-info">
+                                <h4>{{territory.name}}</h4>
+                                <div class="territory-details">
+                                    <span class="territory-type">{{territory.type}}</span>
+                                    <span class="territory-size">{{territory.size}}</span>
+                                    {{#if territory.resources}}
+                                        <div class="territory-resources">
+                                            {{#each territory.resources as |amount resource|}}
+                                                <span class="resource">{{resource}}: {{amount}}</span>
+                                            {{/each}}
+                                        </div>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    {{else}}
+                        <p class="no-territories">No territories controlled. Use the Territory module to claim territories.</p>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+
+        {{!-- Warfare Tab --}}
+        <div class="tab warfare" data-group="primary" data-tab="warfare">
+            <div class="warfare-section">
+                <h3>War Log</h3>
+                <div class="war-log">
+                    <div class="war-log-controls">
+                        <button type="button" class="war-log-add">
+                            <i class="fas fa-plus"></i> Add Entry
+                        </button>
+                    </div>
+                    <div class="war-log-entries">
+                        {{#if warLog}}
+                            {{#each warLog as |entry|}}
+                            <div class="war-log-entry">
+                                <div class="entry-header">
+                                    <h4>{{entry.title}}</h4>
+                                    <div class="entry-meta">
+                                        <span class="entry-type">{{entry.type}}</span>
+                                        <span class="entry-date">{{entry.date}}</span>
+                                        <button type="button" class="war-log-delete" data-entry-id="{{entry.id}}" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <p class="entry-description">{{entry.description}}</p>
+                            </div>
+                            {{/each}}
+                        {{else}}
+                            <p class="no-entries">No war log entries. Add your first event using the button above.</p>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <h3>Bases</h3>
+                <div class="bases-section">
+                    <div class="bases-controls">
+                        <button type="button" class="base-add">
+                            <i class="fas fa-plus"></i> Add Base
+                        </button>
+                    </div>
+                    <div class="bases-list">
+                        {{#if bases}}
+                            {{#each bases as |base|}}
+                            <div class="base-item">
+                                <div class="base-info">
+                                    <h4>{{base.name}}</h4>
+                                    <span class="base-type">{{base.type}}</span>
+                                    <p class="base-description">{{base.description}}</p>
+                                </div>
+                                <button type="button" class="base-delete" data-base-id="{{base.id}}" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            {{/each}}
+                        {{else}}
+                            <p class="no-bases">No bases established. Add your first base using the button above.</p>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Details Tab --}}
+        <div class="tab details" data-group="primary" data-tab="details">
+            <div class="details-section">
+                <h3>Faction Details</h3>
+                
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea name="system.details.biography.value" rows="6" placeholder="Describe this faction...">{{actor.system.details.biography.value}}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Type:</label>
+                    <select name="system.details.type.value">
+                        <option value="faction" {{#eq actor.system.details.type.value "faction"}}selected{{/eq}}>Faction</option>
+                        <option value="guild" {{#eq actor.system.details.type.value "guild"}}selected{{/eq}}>Guild</option>
+                        <option value="corporation" {{#eq actor.system.details.type.value "corporation"}}selected{{/eq}}>Corporation</option>
+                        <option value="military" {{#eq actor.system.details.type.value "military"}}selected{{/eq}}>Military Unit</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Alignment:</label>
+                    <select name="system.details.alignment">
+                        <option value="lawful-good">Lawful Good</option>
+                        <option value="neutral-good">Neutral Good</option>
+                        <option value="chaotic-good">Chaotic Good</option>
+                        <option value="lawful-neutral">Lawful Neutral</option>
+                        <option value="neutral">Neutral</option>
+                        <option value="chaotic-neutral">Chaotic Neutral</option>
+                        <option value="lawful-evil">Lawful Evil</option>
+                        <option value="neutral-evil">Neutral Evil</option>
+                        <option value="chaotic-evil">Chaotic Evil</option>
+                    </select>
+                </div>
+                
+                <div class="faction-version">
+                    <small>BBTTCC Factions v{{bbttccVersion}} - MODERN</small>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</form>

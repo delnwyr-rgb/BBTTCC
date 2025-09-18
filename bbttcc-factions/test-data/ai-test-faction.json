@@ -1,0 +1,20 @@
+{
+  "id": "ai-test-faction-001",
+  "name": "AI Test Faction",
+  "description": "A test faction created by the AI agent for testing purposes",
+  "territories": [
+    "test-territory-001"
+  ],
+  "members": [],
+  "resources": {
+    "water": 25,
+    "food": 30,
+    "minerals": 15,
+    "shelter": 20,
+    "energy": 18
+  },
+  "totalPower": 108,
+  "relationships": {},
+  "created": "2025-09-09T20:40:08.000Z",
+  "createdBy": "AI Agent"
+}

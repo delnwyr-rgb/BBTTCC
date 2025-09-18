@@ -1,0 +1,71 @@
+{
+  "type": "module",
+  "id": "bbttcc-factions",
+  "title": "BBTTCC Factions v4.8.1-ENHANCED",
+  "description": "Strategic faction management for FoundryVTT using enhanced v13+ patterns with best practices from successful modules. Complete Organization Points system with professional UI, diagnostics, and cross-module compatibility. Part of the BBTTCC Strategic Warfare Suite.",
+  "version": "4.8.1-ENHANCED",
+  "authors": [
+    {
+      "name": "BBTTCC Team",
+      "discord": "bbttcc"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13.0.0",
+    "verified": "13.348",
+    "maximum": "15"
+  },
+  "systems": [
+    "dnd5e"
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "5.0.0",
+          "verified": "5.1.2"
+        }
+      }
+    ],
+    "requires": [],
+    "recommends": [
+      {
+        "id": "bbttcc-territory",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-raid",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-radiation",
+        "type": "module"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/bbttcc-factions.js",
+    "scripts/faction-sheet.js",
+    "scripts/faction-actor.js"
+  ],
+  "styles": [
+    "styles/faction-sheet.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "socket": false,
+  "manifest": "https://raw.githubusercontent.com/bbttcc/foundryvtt-modules/main/bbttcc-factions/module.json",
+  "download": "https://github.com/bbttcc/foundryvtt-modules/releases/download/v4.8.1-ENHANCED/bbttcc-factions.zip",
+  "url": "https://github.com/bbttcc/foundryvtt-modules",
+  "license": "MIT",
+  "readme": "README.md",
+  "bugs": "https://github.com/bbttcc/foundryvtt-modules/issues",
+  "changelog": "CHANGELOG.md"
+}
