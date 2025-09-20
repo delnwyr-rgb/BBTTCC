@@ -18,6 +18,9 @@ class BBTTCCAutoLink {
             // Wait for required modules to be ready
             await this.waitForDependencies();
 
+            // Initialize character tab system
+            await this.initializeCharacterTabs();
+
             // Setup hooks
             this.setupHooks();
 
@@ -50,6 +53,14 @@ class BBTTCCAutoLink {
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         console.log(`${this.MODULE_ID} | All dependencies ready`);
+    }
+
+    /**
+     * Initialize Foundry v13 character tab system
+     */
+    static async initializeCharacterTabs() {
+        console.log(`${this.MODULE_ID} | Character tab system handled by bbttcc-foundry-v13-tabs.js`);
+        console.log(`${this.MODULE_ID} | Tab system will initialize on Foundry ready hook`);
     }
 
     /**
@@ -246,11 +257,14 @@ class BBTTCCAutoLink {
             return;
         }
 
-        // Get current faction OPs structure
-        const currentOPs = faction.getFlag("bbttcc-factions", "organizationPoints") || {
-            violence: 0, diplomacy: 0, economy: 0, intrigue: 0,
-            logistics: 0, culture: 0, faith: 0, softpower: 0, nonlethal: 0
-        };
+        // Get current faction OPs structure - use only the complex ops structure
+        const currentComplexOPs = faction.getFlag("bbttcc-factions", "ops") || {};
+
+        // Convert complex structure to simple for calculations
+        const currentOPs = {};
+        Object.entries(currentComplexOPs).forEach(([key, op]) => {
+            currentOPs[key] = op?.value || 0;
+        });
 
         // Get member contributions for tracking
         const memberContributions = faction.getFlag("bbttcc-factions", "memberContributions") || {};
@@ -270,18 +284,17 @@ class BBTTCCAutoLink {
             }
         });
 
-        // Create complex OP structure for faction sheets
-        const complexOPs = {};
+        // Create updated complex OP structure for faction sheets
+        const updatedComplexOPs = {};
         Object.entries(currentOPs).forEach(([opType, value]) => {
-            complexOPs[opType] = {
+            updatedComplexOPs[opType] = {
                 value: value,
-                max: 10  // Standard max value for faction sheets
+                max: currentComplexOPs[opType]?.max || 10  // Preserve existing max values
             };
         });
 
-        // Update faction with dual data structures
-        await faction.setFlag("bbttcc-factions", "organizationPoints", currentOPs);
-        await faction.setFlag("bbttcc-factions", "ops", complexOPs);
+        // Update faction with ONLY the complex ops structure (no more dual system)
+        await faction.setFlag("bbttcc-factions", "ops", updatedComplexOPs);
         await faction.setFlag("bbttcc-factions", "memberContributions", {
             ...memberContributions,
             [character.id]: characterOPs
@@ -376,39 +389,27 @@ class BBTTCCAutoLink {
     }
 
     /**
-     * Sync simple and complex OP data structures
+     * Sync data structures - now only validates the single ops structure
      */
     static async syncDataStructures(faction) {
-        console.log(`${this.MODULE_ID} | Syncing data structures for ${faction.name}`);
+        console.log(`${this.MODULE_ID} | Validating data structure for ${faction.name}`);
 
-        // Get the simple structure (source of truth from our calculations)
-        const organizationPoints = faction.getFlag("bbttcc-factions", "organizationPoints");
-        if (!organizationPoints) {
-            console.log(`${this.MODULE_ID} | No organizationPoints found for ${faction.name}`);
+        // Get the ops structure (now the only source of truth)
+        const ops = faction.getFlag("bbttcc-factions", "ops");
+        if (!ops) {
+            console.log(`${this.MODULE_ID} | No ops structure found for ${faction.name}`);
             return;
         }
 
-        // Create the complex structure from simple structure
-        const syncedComplexOPs = {};
-        Object.entries(organizationPoints).forEach(([opType, value]) => {
-            syncedComplexOPs[opType] = {
-                value: value,
-                max: 10  // Standard max value
-            };
-        });
+        // Calculate total for reporting
+        const total = Object.values(ops).reduce((sum, op) => sum + (op?.value || 0), 0);
+        console.log(`${this.MODULE_ID} | Validated ops structure with ${total} total OPs`);
 
-        // Verify totals match
-        const simpleTotal = Object.values(organizationPoints).reduce((sum, val) => sum + Math.abs(val), 0);
-        const complexTotal = Object.values(syncedComplexOPs).reduce((total, op) => total + (op?.value || 0), 0);
-
-        console.log(`${this.MODULE_ID} | Data sync - Simple: ${simpleTotal}, Complex: ${complexTotal}`);
-
-        if (simpleTotal === complexTotal) {
-            // Update the complex structure to match
-            await faction.setFlag("bbttcc-factions", "ops", syncedComplexOPs);
-            console.log(`${this.MODULE_ID} | Synced complex 'ops' structure with ${complexTotal} total OPs`);
-        } else {
-            console.error(`${this.MODULE_ID} | Data sync mismatch: ${simpleTotal} vs ${complexTotal}`);
+        // Remove any lingering organizationPoints structure
+        const organizationPoints = faction.getFlag("bbttcc-factions", "organizationPoints");
+        if (organizationPoints) {
+            console.log(`${this.MODULE_ID} | Removing obsolete organizationPoints structure`);
+            await faction.unsetFlag("bbttcc-factions", "organizationPoints");
         }
     }
 

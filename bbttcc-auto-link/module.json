@@ -15,31 +15,23 @@
   "dependencies": [
     {
       "id": "bbttcc-factions",
-      "type": "module",
-      "compatibility": {}
+      "type": "module"
     },
     {
       "id": "bbttcc-territory",
-      "type": "module",
-      "compatibility": {}
+      "type": "module"
     },
     {
       "id": "bbttcc-character-options",
-      "type": "module",
-      "compatibility": {}
+      "type": "module"
     }
   ],
-  "esmodules": [
-    "scripts/bbttcc-auto-link.js"
+  "type": "module",
+  "scripts": [
+    "scripts/bbttcc-community-standard.js",
   ],
   "styles": [],
   "packs": [],
   "languages": [],
-  "url": "",
-  "manifest": "",
-  "download": "",
-  "license": "MIT",
-  "readme": "",
-  "bugs": "",
-  "changelog": ""
+  "license": "MIT"
 }
