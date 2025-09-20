@@ -226,11 +226,6 @@ class BBTTCCFactionsModule {
                     createdAt: new Date().toISOString(),
                     createdBy: game.user.id,
                     ops: foundry.utils.deepClone(DEFAULT_OPS_STRUCTURE),
-                    organizationPoints: {
-                        violence: 0, diplomacy: 0, economy: 0, intrigue: 0,
-                        logistics: 0, culture: 0, faith: 0,
-                        softPower: 0, nonLethal: 0
-                    },
                     warLog: [],
                     territories: [],
                     bases: []
@@ -446,11 +441,6 @@ async function createFactionModern(factionData = {}) {
                     createdAt: new Date().toISOString(),
                     createdBy: game.user.id,
                     ops: foundry.utils.deepClone(DEFAULT_OPS_STRUCTURE),
-                    organizationPoints: {
-                        violence: 0, diplomacy: 0, economy: 0, intrigue: 0,
-                        logistics: 0, culture: 0, faith: 0,
-                        softPower: 0, nonLethal: 0
-                    },
                     warLog: [],
                     territories: [],
                     bases: []
@@ -491,30 +481,18 @@ async function createFactionModern(factionData = {}) {
         
         // Verify faction was created properly
         const verifyOps = faction.getFlag(moduleId, 'ops');
-        const verifySimpleOps = faction.getFlag(moduleId, 'organizationPoints');
 
         if (!verifyOps || Object.keys(verifyOps).length === 0) {
-            console.warn(`${moduleId} | Complex OPs missing after creation, fixing...`);
+            console.warn(`${moduleId} | OPs missing after creation, fixing...`);
             await faction.setFlag(moduleId, 'ops', foundry.utils.deepClone(DEFAULT_OPS_STRUCTURE));
-        }
-
-        if (!verifySimpleOps) {
-            console.warn(`${moduleId} | Simple OPs missing after creation, fixing...`);
-            await faction.setFlag(moduleId, 'organizationPoints', {
-                violence: 0, diplomacy: 0, economy: 0, intrigue: 0,
-                logistics: 0, culture: 0, faith: 0,
-                softPower: 0, nonLethal: 0
-            });
         }
         
         const endTime = performance.now();
         console.log(`${moduleId} | Faction created successfully in ${(endTime - startTime).toFixed(2)}ms:`, {
             name: faction.name,
             id: faction.id,
-            hasComplexOps: !!faction.getFlag(moduleId, 'ops'),
-            hasSimpleOps: !!faction.getFlag(moduleId, 'organizationPoints'),
-            complexOpsCount: Object.keys(faction.getFlag(moduleId, 'ops') || {}).length,
-            simpleOpsCount: Object.keys(faction.getFlag(moduleId, 'organizationPoints') || {}).length
+            hasOps: !!faction.getFlag(moduleId, 'ops'),
+            opsCount: Object.keys(faction.getFlag(moduleId, 'ops') || {}).length
         });
         
         // Success notification
