@@ -39,10 +39,10 @@ if (window.BBTTCC_TERRITORY_LOADED) {
         // Add CSS animations for BBTTCC tabs
         addBBTTCCTabCSS();
 
-        // Auto-add tabs to existing BBTTCC characters
-        setTimeout(() => {
-            autoAddTabsToExistingCharacters();
-        }, 3000);
+        // DISABLED: Auto-add tabs now handled by bbttcc-community-standard module
+        // setTimeout(() => {
+        //     autoAddTabsToExistingCharacters();
+        // }, 3000);
 
         console.log('✅ BBTTCC Territory: Complete initialization finished!');
         ui.notifications.success("🎮 BBTTCC Territory System Active!");
@@ -836,29 +836,7 @@ if (window.BBTTCC_TERRITORY_LOADED) {
                     await manager.render(true);
                     ui.notifications.info("🎲 Complete D&D 5e advancement - BBTTCC integration active!");
 
-                    // Automatically add BBTTCC tab to the newly created character
-                    setTimeout(() => {
-                        try {
-                            console.log("🎯 Auto-adding BBTTCC tab to newly created character...");
-
-                            // Find the newly created character's sheet using our integrated system
-                            const newCharacterSheet = findCharacterSheet(actor);
-
-                            if (newCharacterSheet) {
-                                console.log("✅ Found new character sheet, adding BBTTCC tab...");
-                                const success = addBBTTCCTabToSheet(newCharacterSheet);
-                                if (success) {
-                                    ui.notifications.success("🎯 BBTTCC Profile tab automatically added!");
-                                } else {
-                                    console.log("⚠️ Failed to add tab to new character, will be added when sheet reopens");
-                                }
-                            } else {
-                                console.log("⚠️ Character sheet not found, will be added when opened");
-                            }
-                        } catch (error) {
-                            console.warn("⚠️ Auto-tab addition failed:", error);
-                        }
-                    }, 2000); // Wait 2 seconds for character sheet to render
+                    // BBTTCC tab will be automatically added by renderActorSheet hook when user opens the sheet
 
                     this.close();
 
