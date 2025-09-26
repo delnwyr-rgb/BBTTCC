@@ -1,0 +1,55 @@
+{{!-- bbttcc-territory/templates/territory-dashboard.hbs --}}
+<section class="p-2">
+  <nav class="tabs mb-2" style="display:flex; gap:.5rem;">
+    <a class="tab {{#if (eq activeTab "dashboard")}}active{{/if}}" data-tab="dashboard">
+      <i class="fa-solid fa-gauge"></i> Dashboard
+    </a>
+    <a class="tab {{#if (eq activeTab "claim")}}active{{/if}}" data-tab="claim">
+      <i class="fa-solid fa-flag"></i> Claim
+    </a>
+  </nav>
+
+  {{#if (eq activeTab "dashboard")}}
+    <div class="form-group">
+      <label>Scene</label>
+      <div class="form-fields">
+        <span>{{sceneName}}</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Existing Territory Hexes</label>
+      <div class="form-fields">
+        <span>{{hexCount}}</span>
+      </div>
+    </div>
+
+    <hr/>
+
+    <div class="form-group">
+      <label>Create Hex (radius)</label>
+      <div class="form-fields">
+        <input type="number" name="hexRadius" value="{{sampleRadius}}" min="20" step="5"/>
+        <button type="button" class="button" data-action="create-hex">
+          <i class="fa-solid fa-draw-polygon"></i> Create Hex
+        </button>
+      </div>
+    </div>
+  {{/if}}
+
+  {{#if (eq activeTab "claim")}}
+    <p class="notes">This is the start of the modern Claim flow UI. Click below to trigger the (placeholder) action.</p>
+    <button type="button" class="button" data-action="claim">
+      <i class="fa-solid fa-flag"></i> Claim Territory
+    </button>
+  {{/if}}
+</section>
+
+<style>
+  .bbttcc-territory-dashboard .tabs .tab.active {
+    font-weight: 600;
+    text-decoration: underline;
+  }
+  .bbttcc-territory-dashboard .form-group { margin-bottom: .75rem; }
+  .bbttcc-territory-dashboard .form-fields { display: flex; gap: .5rem; align-items: center; }
+</style>

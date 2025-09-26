@@ -1,0 +1,21 @@
+{
+  "id": "bbttcc-raid",
+  "title": "BBTTCC Raid",
+  "description": "Raid management system for the BBTTCC Suite.",
+  "version": "5.0.0",
+  "authors": [{"name": "BBTTCC Team"}],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "relationships": {
+    "systems": [{"id": "dnd5e", "type": "system"}],
+    "requires": [{"id": "bbttcc-factions", "type": "module"}]
+  },
+  "esmodules": [
+    "scripts/module.js"
+  ],
+  "templates": [
+    "templates/raid-planner.html"
+  ]
+}

@@ -1,0 +1,163 @@
+<div class="bbttcc-tikkun-tab">
+    <!-- Header Section -->
+    <div class="constellation-header">
+        <h2>
+            <i class="fas fa-star-of-david"></i> 
+            The Great Work: Tikkun Olam
+        </h2>
+        <p class="constellation-subtitle">
+            "Gather the scattered Sparks of Light to repair the shattered world"
+        </p>
+    </div>
+
+    <!-- Progress Overview -->
+    <div class="constellation-progress">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{completionPercentage}}%"></div>
+            <span class="progress-text">{{completionPercentage}}% Complete</span>
+        </div>
+        
+        <div class="progress-stats">
+            <div class="stat">
+                <i class="fas fa-star"></i>
+                <span class="stat-value">{{sparks.length}}</span>
+                <span class="stat-label">Total Sparks</span>
+            </div>
+            <div class="stat gathered">
+                <i class="fas fa-check"></i>
+                <span class="stat-value">
+                    {{#each sparks}}
+                        {{#ifEquals status "gathered"}}1{{else}}0{{/ifEquals}}
+                    {{/each}}
+                </span>
+                <span class="stat-label">Gathered</span>
+            </div>
+            {{#if corruptedCount}}
+            <div class="stat corrupted">
+                <i class="fas fa-skull"></i>
+                <span class="stat-value">{{corruptedCount}}</span>
+                <span class="stat-label">Corrupted</span>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+
+    <!-- Constellation Visualization -->
+    <div class="constellation-map">
+        <h3>Sacred Constellation</h3>
+        <div class="spark-grid">
+            {{#each sparks}}
+            <div class="spark-container" data-spark-id="{{id}}">
+                <div class="spark-icon {{status}}" 
+                     data-spark-id="{{id}}" 
+                     data-tooltip="{{name}} ({{sephirah}}) - {{status}}">
+                    <span class="spark-status-icon">{{lookup ../statusIcons status}}</span>
+                    <span class="spark-type-icon">{{lookup ../typeIcons type}}</span>
+                </div>
+                <div class="spark-label">
+                    <strong>{{name}}</strong>
+                    <small>{{sephirah}}</small>
+                </div>
+                
+                {{#if (eq status "corrupted")}}
+                <div class="corruption-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Requires Purification
+                </div>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+    <!-- Quest Log Section -->
+    <div class="quest-log-section">
+        <h3>Recent Progress</h3>
+        <div class="quest-log">
+            {{#each sparks}}
+                {{#if quest_log.length}}
+                <div class="quest-entry">
+                    <h4>{{name}}</h4>
+                    <div class="quest-entries">
+                        {{#each quest_log}}
+                        <div class="log-entry">
+                            <span class="timestamp">{{timestamp}}</span>
+                            <span class="entry">{{entry}}</span>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                {{/if}}
+            {{/each}}
+        </div>
+    </div>
+
+    <!-- GM Controls -->
+    {{#if @root.isGM}}
+    <div class="gm-controls">
+        <h3>Game Master Controls</h3>
+        <div class="control-buttons">
+            <button type="button" class="repair-constellation-btn">
+                <i class="fas fa-wrench"></i> Repair Data
+            </button>
+            <button type="button" class="export-constellation-btn">
+                <i class="fas fa-download"></i> Export Constellation
+            </button>
+        </div>
+        
+        <div class="spark-management">
+            {{#each sparks}}
+            <div class="spark-control" data-spark-id="{{id}}">
+                <strong>{{name}}</strong>
+                <div class="status-buttons">
+                    {{#unless (eq status "required")}}
+                        <button class="spark-status-btn mini" data-spark-id="{{id}}" data-status="required" title="Reset to Required">⚫</button>
+                    {{/unless}}
+                    {{#unless (eq status "identified")}}
+                        <button class="spark-status-btn mini" data-spark-id="{{id}}" data-status="identified" title="Mark as Identified">🔍</button>
+                    {{/unless}}
+                    {{#unless (eq status "active")}}
+                        <button class="spark-status-btn mini" data-spark-id="{{id}}" data-status="active" title="Activate Quest">✨</button>
+                    {{/unless}}
+                    {{#unless (eq status "gathered")}}
+                        <button class="spark-status-btn mini" data-spark-id="{{id}}" data-status="gathered" title="Mark as Gathered">🌟</button>
+                    {{/unless}}
+                    {{#unless (eq status "corrupted")}}
+                        <button class="corrupt-spark-btn mini" data-spark-id="{{id}}" title="Corrupt Spark">💀</button>
+                    {{/unless}}
+                </div>
+                <button class="generate-hint-btn mini" data-spark-id="{{id}}" title="Generate Quest Hint">
+                    <i class="fas fa-lightbulb"></i>
+                </button>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    {{/if}}
+
+    <!-- Final Ritual Status -->
+    {{#if isComplete}}
+    <div class="final-ritual-ready">
+        <div class="ritual-announcement">
+            <h2><i class="fas fa-crown"></i> The Great Work Awaits!</h2>
+            <p>All Sparks have been gathered. The party is ready for the Final Ritual to repair the shattered Sephira and achieve Tikkun Olam!</p>
+            <p><em>"When the last light is gathered, the Ego-Dragon shall rise for the ultimate confrontation..."</em></p>
+        </div>
+    </div>
+    {{/if}}
+</div>
+
+<script>
+// Helper functions for templates
+Handlebars.registerHelper('ifEquals', function(a, b, options) {
+    return (a === b) ? options.fn(this) : options.inverse(this);
+});
+
+Handlebars.registerHelper('lookup', function(obj, key) {
+    return obj && obj[key];
+});
+
+Handlebars.registerHelper('eq', function(a, b) {
+    return a === b;
+});
+</script>

@@ -1,0 +1,11 @@
+{
+  "id": "bbttcc-core",
+  "title": "BBTTCC Core",
+  "description": "Core registry for BBTTCC modules.",
+  "version": "1.0.0",
+  "compatibility": { "minimum": "12", "verified": "13" },
+  "authors": [{ "name": "BBTTCC" }],
+  "esmodules": ["scripts/module.js"],
+  "packs": [],
+  "socket": false
+}

@@ -1,0 +1,10 @@
+{
+  "id": "bbttcc-character-options",
+  "title": "BBTTCC Character Options",
+  "description": "Enhanced character sheet tab for BBTTCC.",
+  "version": "1.0.0",
+  "compatibility": { "minimum": "12", "verified": "13" },
+  "authors": [{ "name": "BBTTCC" }],
+  "esmodules": ["scripts/module.js"],
+  "relationships": { "requires": [{ "id": "bbttcc-core", "type": "module" }] }
+}

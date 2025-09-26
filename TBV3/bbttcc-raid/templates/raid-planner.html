@@ -1,0 +1,341 @@
+{{!-- BBTTCC Raid Planner Template --}}
+<form id="raid-planner-form" autocomplete="off">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="basics">
+            <i class="fas fa-info-circle"></i> Basics
+        </a>
+        <a class="item" data-tab="resources">
+            <i class="fas fa-coins"></i> Resources
+        </a>
+        <a class="item" data-tab="participants">
+            <i class="fas fa-users"></i> Participants
+        </a>
+        <a class="item" data-tab="timeline">
+            <i class="fas fa-clock"></i> Timeline
+        </a>
+        {{#if isEditing}}
+        <a class="item" data-tab="execution">
+            <i class="fas fa-play"></i> Execution
+        </a>
+        {{/if}}
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="content">
+        
+        {{!-- Basics Tab --}}
+        <div class="tab" data-tab="basics">
+            <div class="form-group">
+                <label for="raid-name">Raid Name *</label>
+                <input type="text" id="raid-name" name="raid-name" value="{{raidData.name}}" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="raid-type">Raid Type *</label>
+                    <select id="raid-type" name="raid-type" required>
+                        {{#each raidTypes as |typeName typeKey|}}
+                        <option value="{{typeKey}}" {{#if (eq ../raidData.type typeKey)}}selected{{/if}}>
+                            {{typeName}}
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="raid-difficulty">Difficulty</label>
+                    <select id="raid-difficulty" name="raid-difficulty">
+                        {{#each raidDifficulties as |diffData diffKey|}}
+                        <option value="{{diffKey}}" {{#if (eq ../raidData.difficulty diffKey)}}selected{{/if}}>
+                            {{diffData.name}} ({{diffData.modifier}})
+                        </option>
+                        {{/each}}
+                    </select>
+                    <button type="button" id="auto-calc-difficulty" class="auto-calc-btn">
+                        <i class="fas fa-calculator"></i> Auto
+                    </button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="raid-target">Target</label>
+                <input type="text" id="raid-target" name="raid-target" value="{{raidData.target}}" placeholder="What or where is being raided...">
+            </div>
+            
+            <div class="form-group">
+                <label for="raid-description">Description</label>
+                <textarea id="raid-description" name="raid-description" rows="3" placeholder="Detailed raid description...">{{raidData.description}}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Objectives *</label>
+                <div class="objectives-list">
+                    {{#each raidData.objectives as |objective|}}
+                    <div class="objective-item">
+                        <input type="text" class="objective-input" value="{{objective}}">
+                        <button type="button" class="remove-objective">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    {{else}}
+                    <div class="objective-item">
+                        <input type="text" class="objective-input" placeholder="Enter objective...">
+                        <button type="button" class="remove-objective">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    {{/each}}
+                </div>
+                <button type="button" class="add-objective">
+                    <i class="fas fa-plus"></i> Add Objective
+                </button>
+            </div>
+        </div>
+        
+        {{!-- Resources Tab --}}
+        <div class="tab" data-tab="resources">
+            <h3>Resource Allocation</h3>
+            <p class="hint">Assign Organization Points to support the raid</p>
+            
+            <div class="resources-grid">
+                <div class="resource-item">
+                    <label for="resource-violence">
+                        <i class="fas fa-sword"></i> Violence
+                    </label>
+                    <div class="resource-controls">
+                        <button type="button" class="resource-adjust" data-resource="violence" data-adjustment="-5">-5</button>
+                        <button type="button" class="resource-adjust" data-resource="violence" data-adjustment="-1">-1</button>
+                        <input type="number" id="resource-violence" name="resource-violence" class="resource-input" value="{{raidData.resources.violence}}" min="0">
+                        <button type="button" class="resource-adjust" data-resource="violence" data-adjustment="1">+1</button>
+                        <button type="button" class="resource-adjust" data-resource="violence" data-adjustment="5">+5</button>
+                    </div>
+                </div>
+                
+                <div class="resource-item">
+                    <label for="resource-nonlethal">
+                        <i class="fas fa-hand-paper"></i> Non-Lethal
+                    </label>
+                    <div class="resource-controls">
+                        <button type="button" class="resource-adjust" data-resource="nonlethal" data-adjustment="-5">-5</button>
+                        <button type="button" class="resource-adjust" data-resource="nonlethal" data-adjustment="-1">-1</button>
+                        <input type="number" id="resource-nonlethal" name="resource-nonlethal" class="resource-input" value="{{raidData.resources.nonLethal}}" min="0">
+                        <button type="button" class="resource-adjust" data-resource="nonlethal" data-adjustment="1">+1</button>
+                        <button type="button" class="resource-adjust" data-resource="nonlethal" data-adjustment="5">+5</button>
+                    </div>
+                </div>
+                
+                <div class="resource-item">
+                    <label for="resource-intrigue">
+                        <i class="fas fa-eye"></i> Intrigue
+                    </label>
+                    <div class="resource-controls">
+                        <button type="button" class="resource-adjust" data-resource="intrigue" data-adjustment="-5">-5</button>
+                        <button type="button" class="resource-adjust" data-resource="intrigue" data-adjustment="-1">-1</button>
+                        <input type="number" id="resource-intrigue" name="resource-intrigue" class="resource-input" value="{{raidData.resources.intrigue}}" min="0">
+                        <button type="button" class="resource-adjust" data-resource="intrigue" data-adjustment="1">+1</button>
+                        <button type="button" class="resource-adjust" data-resource="intrigue" data-adjustment="5">+5</button>
+                    </div>
+                </div>
+                
+                <div class="resource-item">
+                    <label for="resource-economy">
+                        <i class="fas fa-coins"></i> Economy
+                    </label>
+                    <div class="resource-controls">
+                        <button type="button" class="resource-adjust" data-resource="economy" data-adjustment="-5">-5</button>
+                        <button type="button" class="resource-adjust" data-resource="economy" data-adjustment="-1">-1</button>
+                        <input type="number" id="resource-economy" name="resource-economy" class="resource-input" value="{{raidData.resources.economy}}" min="0">
+                        <button type="button" class="resource-adjust" data-resource="economy" data-adjustment="1">+1</button>
+                        <button type="button" class="resource-adjust" data-resource="economy" data-adjustment="5">+5</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="resource-summary">
+                <h4>Resource Summary</h4>
+                <div class="summary-item">
+                    <span>Total Resources:</span>
+                    <span id="total-resources">{{add raidData.resources.violence raidData.resources.nonLethal raidData.resources.intrigue raidData.resources.economy}}</span>
+                </div>
+            </div>
+        </div>
+        
+        {{!-- Participants Tab --}}
+        <div class="tab" data-tab="participants">
+            <h3>Participating Factions</h3>
+            <p class="hint">Select which factions will participate in this raid</p>
+            
+            <div class="form-group">
+                <label for="raid-participants">Participants *</label>
+                <select id="raid-participants" name="raid-participants" multiple size="8">
+                    {{#each factions as |faction|}}
+                    <option value="{{faction.id}}" {{#if (includes ../raidData.participants faction.id)}}selected{{/if}}>
+                        {{faction.name}}
+                        {{#if faction.flags.bbttcc-factions.ops}}
+                        (Total OPs: {{add faction.flags.bbttcc-factions.ops.violence faction.flags.bbttcc-factions.ops.nonLethal faction.flags.bbttcc-factions.ops.intrigue faction.flags.bbttcc-factions.ops.economy faction.flags.bbttcc-factions.ops.softPower faction.flags.bbttcc-factions.ops.diplomacy}})
+                        {{/if}}
+                    </option>
+                    {{else}}
+                    <option disabled>No factions available</option>
+                    {{/each}}
+                </select>
+                <p class="hint">Hold Ctrl/Cmd to select multiple factions</p>
+            </div>
+            
+            {{#if raidData.participants}}
+            <div class="participants-summary">
+                <h4>Selected Participants ({{raidData.participants.length}})</h4>
+                <ul>
+                    {{#each raidData.participants as |participantId|}}
+                    {{#each ../factions as |faction|}}
+                    {{#if (eq faction.id participantId)}}
+                    <li>{{faction.name}}</li>
+                    {{/if}}
+                    {{/each}}
+                    {{/each}}
+                </ul>
+            </div>
+            {{/if}}
+        </div>
+        
+        {{!-- Timeline Tab --}}
+        <div class="tab" data-tab="timeline">
+            <h3>Raid Timeline</h3>
+            <p class="hint">Plan the phases of your raid (times in hours)</p>
+            
+            <div class="timeline-grid">
+                <div class="timeline-item">
+                    <label for="timeline-preparation">
+                        <i class="fas fa-cog"></i> Preparation Phase
+                    </label>
+                    <div class="timeline-controls">
+                        <input type="number" id="timeline-preparation" name="timeline-preparation" value="{{raidData.timeline.preparation}}" min="1" max="168">
+                        <span class="unit">hours</span>
+                    </div>
+                    <p class="phase-description">Time to gather intelligence, position assets, and prepare</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <label for="timeline-execution">
+                        <i class="fas fa-play"></i> Execution Phase
+                    </label>
+                    <div class="timeline-controls">
+                        <input type="number" id="timeline-execution" name="timeline-execution" value="{{raidData.timeline.execution}}" min="1" max="48">
+                        <span class="unit">hours</span>
+                    </div>
+                    <p class="phase-description">Active raid duration</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <label for="timeline-extraction">
+                        <i class="fas fa-running"></i> Extraction Phase
+                    </label>
+                    <div class="timeline-controls">
+                        <input type="number" id="timeline-extraction" name="timeline-extraction" value="{{raidData.timeline.extraction}}" min="1" max="24">
+                        <span class="unit">hours</span>
+                    </div>
+                    <p class="phase-description">Withdraw and secure gains</p>
+                </div>
+            </div>
+            
+            <div class="timeline-summary">
+                <h4>Total Duration</h4>
+                <p><strong>{{add raidData.timeline.preparation raidData.timeline.execution raidData.timeline.extraction}} hours</strong> 
+                ({{math (add raidData.timeline.preparation raidData.timeline.execution raidData.timeline.extraction) "/" 24 precision=1}} days)</p>
+            </div>
+        </div>
+        
+        {{!-- Execution Tab (only if editing) --}}
+        {{#if isEditing}}
+        <div class="tab" data-tab="execution">
+            <h3>Raid Execution</h3>
+            
+            {{#if (eq raidData.status "planning")}}
+            <div class="execution-ready">
+                <p>This raid is ready for execution.</p>
+                
+                <div class="raid-validation">
+                    <h4>Pre-flight Check</h4>
+                    <ul class="validation-list">
+                        <li class="{{#if raidData.name}}valid{{else}}invalid{{/if}}">
+                            <i class="fas {{#if raidData.name}}fa-check{{else}}fa-times{{/if}}"></i>
+                            Raid name specified
+                        </li>
+                        <li class="{{#if raidData.objectives}}valid{{else}}invalid{{/if}}">
+                            <i class="fas {{#if raidData.objectives}}fa-check{{else}}fa-times{{/if}}"></i>
+                            Objectives defined ({{raidData.objectives.length}})
+                        </li>
+                        <li class="{{#if raidData.participants}}valid{{else}}invalid{{/if}}">
+                            <i class="fas {{#if raidData.participants}}fa-check{{else}}fa-times{{/if}}"></i>
+                            Participants assigned ({{raidData.participants.length}})
+                        </li>
+                        <li class="{{#if (gt (add raidData.resources.violence raidData.resources.nonLethal raidData.resources.intrigue raidData.resources.economy) 0)}}valid{{else}}invalid{{/if}}">
+                            <i class="fas {{#if (gt (add raidData.resources.violence raidData.resources.nonLethal raidData.resources.intrigue raidData.resources.economy) 0)}}fa-check{{else}}fa-times{{/if}}"></i>
+                            Resources allocated
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="execution-warning">
+                    <p><i class="fas fa-exclamation-triangle"></i> <strong>Warning:</strong> Executing this raid will determine outcomes and cannot be undone.</p>
+                </div>
+                
+                <button type="button" id="execute-raid" class="execute-button">
+                    <i class="fas fa-play"></i> Execute Raid
+                </button>
+            </div>
+            
+            {{else if (eq raidData.status "completed")}}
+            <div class="execution-completed">
+                <h4>Raid Completed</h4>
+                <p>This raid was executed on {{raidData.executedAt}}.</p>
+                
+                {{#if raidData.outcome}}
+                <div class="outcome-summary {{#if raidData.outcome.success}}success{{else}}failure{{/if}}">
+                    <h5>{{#if raidData.outcome.success}}Success{{else}}Failure{{/if}} ({{raidData.outcome.severity}})</h5>
+                    <p>{{raidData.outcome.description}}</p>
+                    
+                    {{#if raidData.outcome.rewards}}
+                    <h6>Rewards:</h6>
+                    <ul>
+                        {{#each raidData.outcome.rewards as |reward|}}
+                        <li>{{reward.description}}</li>
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                    
+                    {{#if raidData.outcome.consequences}}
+                    <h6>Consequences:</h6>
+                    <ul>
+                        {{#each raidData.outcome.consequences as |consequence|}}
+                        <li>{{consequence.description}}</li>
+                        {{/each}}
+                    </ul>
+                    {{/if}}
+                </div>
+                {{/if}}
+            </div>
+            {{/if}}
+        </div>
+        {{/if}}
+    </section>
+    
+    {{!-- Footer Buttons --}}
+    <footer class="sheet-footer">
+        <div class="button-group">
+            <button type="button" id="save-raid" class="save-button">
+                <i class="fas fa-save"></i> 
+                {{#if isEditing}}Update Raid{{else}}Create Raid{{/if}}
+            </button>
+            
+            {{#if isEditing}}
+            <button type="button" id="delete-raid" class="delete-button">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+            {{/if}}
+        </div>
+    </footer>
+    
+</form>

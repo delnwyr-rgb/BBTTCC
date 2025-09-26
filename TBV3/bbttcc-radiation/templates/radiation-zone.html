@@ -1,0 +1,209 @@
+{{!-- BBTTCC Radiation Zone Configuration Template --}}
+{{#if error}}
+<div class="error-message">
+    <h3><i class="fas fa-exclamation-triangle"></i> Error</h3>
+    <p>{{error}}</p>
+</div>
+{{else}}
+
+<form class="radiation-zone-config" autocomplete="off">
+    
+    {{!-- Scene Information --}}
+    <div class="scene-header">
+        <h3>{{scene.name}}</h3>
+        <div class="scene-stats">
+            <span class="stat"><i class="fas fa-users"></i> {{tokenCount}} tokens</span>
+            <span class="stat"><i class="fas fa-radiation"></i> {{affectedTokens}} affected</span>
+        </div>
+    </div>
+    
+    {{!-- Current Zone Status --}}
+    <div class="current-zone-section">
+        <h4>Current Zone</h4>
+        <div class="zone-status">
+            <div class="zone-info">
+                <div class="zone-type">
+                    <strong>Type:</strong> {{currentZone.description}}
+                </div>
+                <div class="zone-intensity">
+                    <strong>Intensity:</strong> {{currentZone.intensity}}
+                </div>
+                {{#if currentZone.setAt}}
+                <div class="zone-timestamp">
+                    <strong>Last Updated:</strong> {{formatDate currentZone.setAt}}
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    
+    {{!-- Zone Configuration --}}
+    <div class="zone-config-section">
+        <h4>Zone Configuration</h4>
+        
+        <div class="form-group">
+            <label for="zone-type">Zone Type:</label>
+            <select id="zone-type" name="zone-type" required>
+                {{#each zoneTypes as |zoneData zoneKey|}}
+                <option value="{{zoneKey}}" {{#if (eq ../currentZone.type zoneKey)}}selected{{/if}}>
+                    {{zoneData.name}} (Intensity: {{zoneData.intensity}})
+                </option>
+                {{/each}}
+            </select>
+            <small class="hint">Select the type of radiation environment</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="custom-intensity">Custom Intensity:</label>
+            <input type="number" id="custom-intensity" name="custom-intensity" 
+                   min="0" max="100" value="{{currentZone.intensity}}" 
+                   placeholder="0-100">
+            <small class="hint">Override the default intensity for this zone type</small>
+        </div>
+        
+        <div class="zone-description">
+            <h5>Zone Type Descriptions:</h5>
+            <div class="zone-types-list">
+                {{#each zoneTypes as |zoneData zoneKey|}}
+                <div class="zone-type-item">
+                    <strong>{{zoneData.name}} ({{zoneData.intensity}}):</strong> {{zoneData.description}}
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    
+    {{!-- Effects Preview --}}
+    {{#if previewData}}
+    <div class="preview-section">
+        <h4>Effects Preview</h4>
+        <div class="preview-grid">
+            <div class="preview-item">
+                <label>Exposure Rate:</label>
+                <span class="preview-value">{{previewData.totalExposure}} per minute</span>
+            </div>
+            
+            <div class="preview-item">
+                <label>Time to Moderate:</label>
+                <span class="preview-value">
+                    {{#if previewData.estimatedTime.toModerate}}
+                        {{previewData.estimatedTime.toModerate}} minutes
+                    {{else}}
+                        Safe
+                    {{/if}}
+                </span>
+            </div>
+            
+            <div class="preview-item">
+                <label>Time to High:</label>
+                <span class="preview-value">
+                    {{#if previewData.estimatedTime.toHigh}}
+                        {{previewData.estimatedTime.toHigh}} minutes
+                    {{else}}
+                        Safe
+                    {{/if}}
+                </span>
+            </div>
+            
+            <div class="preview-item">
+                <label>Time to Lethal:</label>
+                <span class="preview-value">
+                    {{#if previewData.estimatedTime.toLethal}}
+                        {{previewData.estimatedTime.toLethal}} minutes
+                    {{else}}
+                        Safe
+                    {{/if}}
+                </span>
+            </div>
+            
+            <div class="preview-item">
+                <label>Protection Required:</label>
+                <span class="preview-value">{{previewData.protectionRequired}}%</span>
+            </div>
+        </div>
+        
+        <button type="button" id="preview-effects" class="preview-button">
+            <i class="fas fa-eye"></i> Preview Token Effects
+        </button>
+    </div>
+    {{/if}}
+    
+    {{!-- Action Buttons --}}
+    {{#if isGM}}
+    <div class="action-section">
+        <div class="primary-actions">
+            <button type="button" id="apply-zone" class="apply-button">
+                <i class="fas fa-check"></i> Apply Zone Configuration
+            </button>
+            
+            <button type="button" id="reset-zone" class="reset-button">
+                <i class="fas fa-undo"></i> Reset to Background
+            </button>
+        </div>
+    </div>
+    
+    {{!-- Batch Operations --}}
+    <div class="batch-section">
+        <h4>Batch Operations</h4>
+        <p class="batch-description">Apply operations to all tokens in this scene:</p>
+        
+        <div class="batch-buttons">
+            <button type="button" class="batch-operation reset-all-button" data-operation="reset-all">
+                <i class="fas fa-trash-restore"></i> Reset All Radiation
+            </button>
+            
+            <button type="button" class="batch-operation protection-button" data-operation="apply-protection">
+                <i class="fas fa-shield-alt"></i> Apply Protection to All
+            </button>
+        </div>
+    </div>
+    {{/if}}
+    
+    {{!-- Information and Tips --}}
+    <div class="info-section">
+        <h4>Radiation Zone Information</h4>
+        
+        <div class="info-content">
+            <h5>Zone Intensities:</h5>
+            <div class="intensity-chart">
+                {{#each zoneTypes as |zoneData zoneKey|}}
+                <div class="intensity-item {{#if (eq ../currentZone.type zoneKey)}}current{{/if}}">
+                    <div class="intensity-bar">
+                        <div class="intensity-fill" style="width: {{math zoneData.intensity "%" 80 "*" 100}}%;"></div>
+                        <span class="intensity-value">{{zoneData.intensity}}</span>
+                    </div>
+                    <div class="intensity-label">
+                        <strong>{{zoneData.name}}</strong>
+                        <small>{{zoneData.description}}</small>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            
+            <h5>Radiation Levels:</h5>
+            <div class="levels-reference">
+                {{#each radiationLevels as |levelData levelKey|}}
+                <div class="level-reference-item">
+                    <div class="level-color" style="background-color: {{levelData.color}};"></div>
+                    <div class="level-details">
+                        <strong>{{levelData.name}} ({{levelData.range.[0]}}-{{levelData.range.[1]}}%):</strong>
+                        {{levelData.description}}
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            
+            <h5>Tips:</h5>
+            <ul class="tips-list">
+                <li>Higher intensity zones cause faster radiation accumulation</li>
+                <li>Protection reduces effective exposure but doesn't eliminate it entirely</li>
+                <li>Background and Urban zones allow natural radiation decay over time</li>
+                <li>Industrial and higher zones require active protection</li>
+                <li>Monitor tokens regularly in high-radiation environments</li>
+            </ul>
+        </div>
+    </div>
+    
+</form>
+
+{{/if}}

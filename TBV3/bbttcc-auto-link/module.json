@@ -1,0 +1,36 @@
+{
+  "id": "bbttcc-auto-link",
+  "title": "BBTTCC Auto-Link & Enhanced Sheet",
+  "description": "Automatically applies an enhanced character sheet with a BBTTCC tab to qualifying actors.",
+  "version": "5.0.0",
+  "authors": [
+    {
+      "name": "BBTTCC Team"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system"
+      }
+    ],
+    "requires": [
+      {
+        "id": "bbttcc-factions",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-territory",
+        "type": "module"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/module.js"
+  ]
+}

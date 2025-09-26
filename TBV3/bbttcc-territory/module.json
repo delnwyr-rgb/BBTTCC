@@ -1,0 +1,12 @@
+{
+  "id": "bbttcc-territory",
+  "title": "BBTTCC Territory",
+  "description": "Territory controls and dashboard.",
+  "version": "1.0.0",
+  "compatibility": { "minimum": "12", "verified": "13" },
+  "authors": [{ "name": "BBTTCC" }],
+  "esmodules": ["scripts/module.js"],
+  "relationships": {
+    "requires": [{ "id": "bbttcc-core", "type": "module" }]
+  }
+}
