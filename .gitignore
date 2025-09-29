@@ -1,0 +1,23 @@
+# Ignore everything by default
+*
+
+# Keep git internals
+!.gitignore
+!.gitattributes
+
+# Track only our BBTTCC modules
+!bbttcc-auto-link/**
+!bbttcc-character-options/**
+!bbttcc-core/**
+!bbttcc-factions/**
+!bbttcc-radiation/**
+!bbttcc-raid/**
+!bbttcc-territory/**
+!bbttcc-tikkun/**
+
+# Keep monorepo docs if you add them
+!README.md
+!CHANGELOG.md
+
+# macOS junk
+.DS_Store
