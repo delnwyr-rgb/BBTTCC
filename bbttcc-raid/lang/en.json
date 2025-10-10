@@ -1,0 +1,152 @@
+{
+  "BBTTCC": {
+    "Raid": {
+      "Title": "BBTTCC Raid Manager",
+      "CreateRaid": "Create Raid",
+      "EditRaid": "Edit Raid",
+      "ExecuteRaid": "Execute Raid",
+      "DeleteRaid": "Delete Raid",
+      "PlanRaid": "Plan Raid",
+      
+      "RaidTypes": {
+        "assault": "Direct Military Attack",
+        "infiltration": "Stealth Operation", 
+        "sabotage": "Disruption Mission",
+        "heist": "Resource Acquisition",
+        "rescue": "Extraction Mission",
+        "reconnaissance": "Information Gathering"
+      },
+      
+      "Difficulties": {
+        "trivial": "Trivial",
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard",
+        "extreme": "Extreme"
+      },
+      
+      "Status": {
+        "planning": "Planning",
+        "prepared": "Prepared", 
+        "executing": "Executing",
+        "completed": "Completed",
+        "failed": "Failed"
+      },
+      
+      "Resources": {
+        "violence": "Violence",
+        "nonLethal": "Non-Lethal", 
+        "intrigue": "Intrigue",
+        "economy": "Economy",
+        "total": "Total Resources"
+      },
+      
+      "Timeline": {
+        "preparation": "Preparation Phase",
+        "execution": "Execution Phase",
+        "extraction": "Extraction Phase",
+        "total": "Total Duration"
+      },
+      
+      "Labels": {
+        "name": "Raid Name",
+        "type": "Raid Type",
+        "target": "Target",
+        "description": "Description",
+        "objectives": "Objectives",
+        "participants": "Participants",
+        "difficulty": "Difficulty",
+        "resources": "Resources",
+        "timeline": "Timeline",
+        "rewards": "Rewards",
+        "risks": "Risks",
+        "outcome": "Outcome",
+        "status": "Status"
+      },
+      
+      "Hints": {
+        "name": "Enter a name for this raid",
+        "target": "What or where is being raided",
+        "description": "Detailed raid description",
+        "objectives": "What needs to be accomplished",
+        "participants": "Select participating factions",
+        "resources": "Assign Organization Points to support the raid",
+        "timeline": "Plan the phases of your raid (times in hours)",
+        "multiSelect": "Hold Ctrl/Cmd to select multiple factions"
+      },
+      
+      "Buttons": {
+        "addObjective": "Add Objective",
+        "removeObjective": "Remove",
+        "autoCalcDifficulty": "Auto-Calculate",
+        "createRaid": "Create Raid",
+        "updateRaid": "Update Raid",
+        "executeRaid": "Execute Raid",
+        "deleteRaid": "Delete Raid",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
+      
+      "Messages": {
+        "created": "Raid '{name}' created successfully",
+        "updated": "Raid '{name}' updated successfully", 
+        "executed": "Raid '{name}' executed - {result}",
+        "deleted": "Raid '{name}' deleted successfully",
+        "nameRequired": "Raid name is required",
+        "objectivesRequired": "At least one objective is required",
+        "participantsRequired": "At least one participant is required",
+        "resourcesRequired": "Some resources are required for the raid",
+        "raidNotFound": "Raid not found",
+        "executionWarning": "Executing this raid will determine outcomes and cannot be undone",
+        "deleteConfirm": "Are you sure you want to delete the raid '{name}'?",
+        "executeConfirm": "Are you sure you want to execute the raid '{name}'?"
+      },
+      
+      "Validation": {
+        "nameSpecified": "Raid name specified",
+        "objectivesDefined": "Objectives defined",
+        "participantsAssigned": "Participants assigned", 
+        "resourcesAllocated": "Resources allocated",
+        "readyForExecution": "Ready for execution",
+        "validationFailed": "Raid validation failed"
+      },
+      
+      "Outcomes": {
+        "success": "Success",
+        "failure": "Failure",
+        "critical": "Critical Success",
+        "major": "Major Success", 
+        "minor": "Minor Success",
+        "catastrophic": "Catastrophic Failure",
+        "severity": "Severity",
+        "roll": "Roll",
+        "needed": "Needed",
+        "rewards": "Rewards",
+        "consequences": "Consequences"
+      },
+      
+      "Phases": {
+        "preparation": {
+          "name": "Preparation Phase",
+          "description": "Time to gather intelligence, position assets, and prepare"
+        },
+        "execution": {
+          "name": "Execution Phase", 
+          "description": "Active raid duration"
+        },
+        "extraction": {
+          "name": "Extraction Phase",
+          "description": "Withdraw and secure gains"
+        }
+      },
+      
+      "Tabs": {
+        "basics": "Basics",
+        "resources": "Resources",
+        "participants": "Participants", 
+        "timeline": "Timeline",
+        "execution": "Execution"
+      }
+    }
+  }
+}

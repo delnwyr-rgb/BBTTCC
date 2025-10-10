@@ -1,0 +1,15 @@
+*
+!.gitignore
+!/module.json
+!/lang/
+!/lang/*.json
+!/styles/
+!/styles/*.css
+!/scripts/
+!/scripts/*.js
+!/apps/
+!/apps/*.js
+!/templates/
+!/templates/*.hbs
+!/templates/*.html
+.DS_Store

@@ -5,14 +5,22 @@
 !.gitignore
 !.gitattributes
 
-# Allow all BBTTCC module directories (and their contents)
+# Allow each BBTTCC module (dir + contents)
+!bbttcc-auto-link/
 !bbttcc-auto-link/**
+!bbttcc-character-options/
 !bbttcc-character-options/**
+!bbttcc-core/
 !bbttcc-core/**
+!bbttcc-factions/
 !bbttcc-factions/**
+!bbttcc-radiation/
 !bbttcc-radiation/**
+!bbttcc-raid/
 !bbttcc-raid/**
+!bbttcc-territory/
 !bbttcc-territory/**
+!bbttcc-tikkun/
 !bbttcc-tikkun/**
 
 # Allow root docs if added later

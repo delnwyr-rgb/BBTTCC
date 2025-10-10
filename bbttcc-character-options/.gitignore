@@ -1,0 +1,13 @@
+*
+!.gitignore
+!/module.json
+!/README.md
+!/CHANGELOG.md
+!/lang/
+!/lang/*.json
+!/scripts/
+!/scripts/*.js
+!/packs/
+!/packs/*.db
+!/packs/*/
+.DS_Store

@@ -1,0 +1,136 @@
+<section class="bbttcc-territory">
+  <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;">
+    <h2 class="flex0">{{localize "BBTTCC.Dashboard.Title"}} – {{sceneName}}</h2>
+
+    <button class="flex0" data-action="refresh" title="Refresh the list">
+      <i class="fas fa-sync"></i> Refresh
+    </button>
+
+    {{#if adoptionCount}}
+    <button class="flex0" data-action="adopt-hexes" title="Flag plain 6-gon drawings as territory hexes">
+      <i class="fas fa-plus-square"></i> Adopt {{adoptionCount}} Hexes
+    </button>
+    {{/if}}
+
+    <span class="flex1"></span>
+    <small class="flex0">Only hexes actually placed in this Scene are shown.</small>
+  </header>
+
+  <table class="bbttcc-table">
+    <thead>
+      <tr>
+        <th style="width:10rem;">Name</th>
+        <th>Owner</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Size</th>
+        <th>Population</th>
+        <th>Capital</th>
+        <th>Food</th>
+        <th>Materials</th>
+        <th>Trade</th>
+        <th>Military</th>
+        <th>Knowledge</th>
+        <th>X,Y</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each rows}}
+      <tr>
+        <td>
+          <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{name}}">
+            {{#if name}}{{name}}{{else}}<em>(unnamed)</em>{{/if}}
+          </div>
+        </td>
+
+        <td>
+          <select data-edit="factionId" data-id="{{id}}">
+            {{!-- Always show an explicit Unclaimed as the first option --}}
+            <option value="">{{localize "BBTTCC.Common.Unclaimed"}}</option>
+            {{#if ../ownerList}}
+              {{#each ../ownerList}}
+                <option value="{{id}}" {{#if (bbttcc_eq id ../ownerId)}}selected{{/if}}>{{name}}</option>
+              {{/each}}
+            {{/if}}
+          </select>
+        </td>
+
+        <td>
+          <select data-edit="status" data-id="{{id}}">
+            <option value="unclaimed" {{#if (bbttcc_eq status "unclaimed")}}selected{{/if}}>Unclaimed</option>
+            <option value="claimed"   {{#if (bbttcc_eq status "claimed")}}selected{{/if}}>Claimed</option>
+            <option value="contested" {{#if (bbttcc_eq status "contested")}}selected{{/if}}>Contested</option>
+            <option value="scorched"  {{#if (bbttcc_eq status "scorched")}}selected{{/if}}>Scorched</option>
+          </select>
+        </td>
+
+        <td>
+          <select data-edit="type" data-id="{{id}}">
+            <option value="settlement" {{#if (bbttcc_eq type "settlement")}}selected{{/if}}>Settlement</option>
+            <option value="fortress"   {{#if (bbttcc_eq type "fortress")}}selected{{/if}}>Fortress</option>
+            <option value="mine"       {{#if (bbttcc_eq type "mine")}}selected{{/if}}>Mine</option>
+            <option value="farm"       {{#if (bbttcc_eq type "farm")}}selected{{/if}}>Farm</option>
+            <option value="port"       {{#if (bbttcc_eq type "port")}}selected{{/if}}>Port</option>
+            <option value="factory"    {{#if (bbttcc_eq type "factory")}}selected{{/if}}>Factory</option>
+            <option value="research"   {{#if (bbttcc_eq type "research")}}selected{{/if}}>Research Facility</option>
+            <option value="temple"     {{#if (bbttcc_eq type "temple")}}selected{{/if}}>Temple</option>
+            <option value="wasteland"  {{#if (bbttcc_eq type "wasteland")}}selected{{/if}}>Wasteland</option>
+            <option value="ruins"      {{#if (bbttcc_eq type "ruins")}}selected{{/if}}>Ruins</option>
+          </select>
+        </td>
+
+        <td>
+          <select data-edit="size" data-id="{{id}}">
+            <option value="small"    {{#if (bbttcc_eq size "small")}}selected{{/if}}>Small</option>
+            <option value="standard" {{#if (bbttcc_eq size "standard")}}selected{{/if}}>Standard</option>
+            <option value="large"    {{#if (bbttcc_eq size "large")}}selected{{/if}}>Large</option>
+          </select>
+        </td>
+
+        <td>
+          <select data-edit="population" data-id="{{id}}">
+            <option value="low"    {{#if (bbttcc_eq population "low")}}selected{{/if}}>Low</option>
+            <option value="medium" {{#if (bbttcc_eq population "medium")}}selected{{/if}}>Medium</option>
+            <option value="high"   {{#if (bbttcc_eq population "high")}}selected{{/if}}>High</option>
+          </select>
+        </td>
+
+        <td class="center">
+          <input type="checkbox" data-edit="capital" data-id="{{id}}" {{#if capital}}checked{{/if}}/>
+        </td>
+
+        <!-- Resources -->
+        <td><input type="number" data-edit="resources.food"      data-id="{{id}}" value="{{resources.food}}"      style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.materials" data-id="{{id}}" value="{{resources.materials}}" style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.trade"     data-id="{{id}}" value="{{resources.trade}}"     style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.military"  data-id="{{id}}" value="{{resources.military}}"  style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.knowledge" data-id="{{id}}" value="{{resources.knowledge}}" style="width:4rem;" /></td>
+
+        <td><code>{{x}}, {{y}}</code></td>
+        <td><small>{{createdAt}}</small></td>
+
+        <td>
+          <div class="flexrow" style="gap:.25rem; justify-content:flex-end;">
+            <button data-action="focus" data-id="{{id}}" title="{{localize 'BBTTCC.Common.Focus'}}">
+              <i class="fas fa-crosshairs"></i> {{localize "BBTTCC.Common.Focus"}}
+            </button>
+            <button data-action="edit" data-id="{{id}}" data-uuid="{{uuid}}" title="Edit this hex">
+              <i class="fas fa-flag"></i> Edit
+            </button>
+            <button data-action="delete" data-id="{{id}}" data-uuid="{{uuid}}" title="Delete this hex">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+      {{/each}}
+
+      {{#unless rows.length}}
+      <tr><td colspan="15" class="center"><em>No territory hexes on this Scene yet.</em></td></tr>
+      {{/unless}}
+    </tbody>
+  </table>
+</section>

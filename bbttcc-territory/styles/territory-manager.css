@@ -1,0 +1,61 @@
+/* modules/bbttcc-territory/styles/territory-manager.css */
+
+/* App window content: allow scrolling */
+#bbttcc-territory-dashboard .window-content {
+  overflow: hidden;            /* let the body section manage scroll */
+  padding: 0.75rem;
+}
+
+/* The main section in the dashboard (our table wrapper) can scroll */
+#bbttcc-territory-dashboard section.bbttcc-territory {
+  display: block;
+  max-height: calc(100% - 72px);   /* header area + a bit of padding */
+  overflow: auto;
+  padding-bottom: 0.25rem;
+}
+
+/* Table polish (works with Foundry themes) */
+#bbttcc-territory-dashboard .bbttcc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+#bbttcc-territory-dashboard .bbttcc-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(0,0,0,0.15);
+  backdrop-filter: blur(2px);
+}
+
+/* Cells */
+#bbttcc-territory-dashboard .bbttcc-table th,
+#bbttcc-territory-dashboard .bbttcc-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  vertical-align: middle;
+}
+
+#bbttcc-territory-dashboard .bbttcc-table td.center {
+  text-align: center;
+}
+
+/* Compact inputs so more columns fit */
+#bbttcc-territory-dashboard input[type="number"] {
+  width: 4.25rem;
+  text-align: right;
+}
+
+/* Owner/status/type/selects look consistent */
+#bbttcc-territory-dashboard select {
+  max-width: 10rem;
+}
+
+/* Optional: make the app body a hair darker so the sticky header reads well */
+.theme-dark #bbttcc-territory-dashboard .bbttcc-table thead th {
+  background: rgba(255,255,255,0.06);
+}
+.theme-light #bbttcc-territory-dashboard .bbttcc-table thead th {
+  background: rgba(0,0,0,0.06);
+}

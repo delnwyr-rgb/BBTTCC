@@ -1,0 +1,17 @@
+{
+  "id": "bbttcc-radiation",
+  "title": "BBTTCC Radiation",
+  "description": "Radiation tracking and environmental hazard system.",
+  "version": "5.0.0",
+  "authors": [{"name": "BBTTCC Team"}],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "relationships": {
+    "systems": [{"id": "dnd5e", "type": "system"}]
+  },
+  "esmodules": [
+    "scripts/module.js"
+  ]
+}

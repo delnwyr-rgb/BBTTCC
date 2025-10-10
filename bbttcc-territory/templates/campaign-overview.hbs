@@ -1,0 +1,59 @@
+{{!-- modules/bbttcc-territory/templates/campaign-overview.hbs --}}
+<section class="bbttcc-campaign-overview">
+  <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;">
+    <h2 class="flex0">Campaign Overview</h2>
+    <span class="flex1"></span>
+    <small class="flex0" style="opacity:.8;">Read-only summary across all scenes</small>
+  </header>
+
+  <table class="bbttcc-table" style="width:100%;">
+    <thead>
+      <tr>
+        <th style="text-align:left;">Faction</th>
+        <th style="width:8rem;">Power</th>
+        <th style="width:6rem;">Hexes</th>
+        <th style="width:20rem;">Scenes</th>
+        <th style="width:20rem;">Resources (per turn)</th>
+        <th style="width:7rem;">Open</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each rows}}
+      <tr>
+        <td>
+          {{#if hasActor}}
+            <strong>{{factionName}}</strong>
+          {{else}}
+            <em>{{factionName}}</em>
+          {{/if}}
+        </td>
+        <td>{{powerLabel}} <small style="opacity:.65;">({{powerTotal}})</small></td>
+        <td class="center">{{hexCount}}</td>
+        <td>
+          {{#if scenes.length}}
+            {{#each scenes}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+          {{else}}
+            —
+          {{/if}}
+        </td>
+        <td>
+          Food {{resources.food}} •
+          Materials {{resources.materials}} •
+          Trade {{resources.trade}} •
+          Military {{resources.military}} •
+          Knowledge {{resources.knowledge}}
+        </td>
+        <td class="center">
+          {{#if hasActor}}
+            <button data-open-faction="{{factionId}}" title="Open faction sheet"><i class="fas fa-user"></i> Open</button>
+          {{else}} — {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+
+      {{#unless rows.length}}
+        <tr><td colspan="6" class="center"><em>No BBTTCC territory found in the world.</em></td></tr>
+      {{/unless}}
+    </tbody>
+  </table>
+</section>

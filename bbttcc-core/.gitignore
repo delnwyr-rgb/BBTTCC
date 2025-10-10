@@ -1,0 +1,6 @@
+*
+!.gitignore
+!/module.json
+!/scripts/
+!/scripts/*.js
+.DS_Store

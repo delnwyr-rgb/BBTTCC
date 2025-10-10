@@ -1,0 +1,7 @@
+*
+!.gitignore
+!/module.json
+!/README.md
+!/scripts/
+!/scripts/*.js
+.DS_Store

@@ -1,0 +1,24 @@
+{
+  "id": "bbttcc-territory",
+  "title": "BBTTCC Territory",
+  "description": "Hex management tools for BBTTCC.",
+  "version": "0.9.1",
+  "compatibility": { "minimum": "13", "verified": "13" },
+  "authors": [{ "name": "Shattered Lens Studios" }],
+  "esmodules": [
+    "scripts/main.js",
+    "apps/dashboard-app.js",
+    "apps/campaign-overview-app.js",
+    "scripts/overview-button.js"
+  ],
+  "styles": ["styles/territory-manager.css"],
+  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
+  "packs": [],
+  "relationships": {
+    "systems": [{ "id": "dnd5e" }],
+    "requires": []
+  },
+  "url": "",
+  "manifest": "",
+  "download": ""
+}

@@ -1,0 +1,87 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Faction Name"/></h1>
+            <div class="grid grid-2col">
+                <div class="resource">
+                    <label class="resource-label">Power Level</label>
+                    <input type="text" readonly value="{{system.factionData.powerLevel}}"/>
+                </div>
+                <div class="resource">
+                    <label class="resource-label">Total OPs</label>
+                    <input type="text" readonly value="{{system.factionData.totalOPs}} / {{system.factionData.maxTotalOPs}}"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="ops">OPs</a>
+        <a class="item" data-tab="details">Details</a>
+        <a class="item" data-tab="description">Description</a>
+    </nav>
+
+    <section class="sheet-body">
+        <div class="tab" data-tab="ops">
+            <h3 class="box-header">Organization Points (OPs)</h3>
+            <div class="op-grid">
+                {{#each system.ops as |op key|}}
+                <div class="op-item">
+                    <label class="op-label">{{op.label}}</label>
+                    <div class="op-values">
+                        <input type="text" name="flags.bbttcc-factions.ops.{{key}}.value" value="{{op.value}}" data-dtype="Number"/>
+                        <span>/</span>
+                        <input type="text" name="flags.bbttcc-factions.ops.{{key}}.max" value="{{op.max}}" data-dtype="Number"/>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+        <div class="tab" data-tab="details">
+            <p>Details about leadership, territories, and roster will go here.</p>
+        </div>
+
+        <div class="tab" data-tab="description">
+            {{editor enrichedBiography target="system.details.biography.value" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+
+    <style>
+        .op-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+        .op-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+        .op-label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .op-values {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .op-values input {
+            width: 40px;
+            text-align: center;
+        }
+        .box-header {
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</form>
