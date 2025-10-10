@@ -1,7 +1,11 @@
+# Ignore everything by default
 *
+
+# Keep the Git internals
 !.gitignore
 !.gitattributes
 
+# Allow all BBTTCC module directories (and their contents)
 !bbttcc-auto-link/**
 !bbttcc-character-options/**
 !bbttcc-core/**
@@ -11,7 +15,9 @@
 !bbttcc-territory/**
 !bbttcc-tikkun/**
 
+# Allow root docs if added later
 !README.md
 !CHANGELOG.md
 
+# macOS junk
 .DS_Store
