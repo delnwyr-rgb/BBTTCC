@@ -1,6 +1,8 @@
 *
 !.gitignore
 !/module.json
+!/README.md
+!/CHANGELOG.md
 !/lang/
 !/lang/*.json
 !/styles/
@@ -12,4 +14,11 @@
 !/templates/
 !/templates/*.hbs
 !/templates/*.html
+!/macros/
+!/macros/*.js
+!/css/
+!/css/*.css
+!/packs/
+!/packs/*.db
+!/packs/*/
 .DS_Store

@@ -1,99 +1,140 @@
-// modules/bbttcc-auto-link/scripts/module.js
-// v0.7.2 — Call the Character Wizard directly (no dynamic import)
-// • Keeps the DOM-native "Create Character (BBTTCC)" button
-// • Leaves the safe auto-linking behavior intact
-// • Assumes "scripts/character-wizard.js" is listed in module.json esmodules
+// =========================================================================
+// == BBTTCC Auto-Link & Enhanced Sheet - V3.0 - Faction Deconfliction
+// =========================================================================
+console.log('🌟 bbttcc-auto-link | Final consolidated module loading...');
 
-const MOD = "bbttcc-auto-link";
-const LOG = (...a) => console.log(`[${MOD}]`, ...a);
-const WARN = (...a) => console.warn(`[${MOD}]`, ...a);
+class BBTTCCSheetManager {
+    static MODULE_ID = 'bbttcc-auto-link';
 
-// --- Qualifiers -------------------------------------------------------------
-function isCharacter(a) { return String(a?.type ?? "").toLowerCase() === "character"; }
+    static hasBBTTCCData(actor) {
+        return actor.getFlag('bbttcc-territory', 'bbttccCharacter') === true;
+    }
 
-/** Qualifies if the actor has the BBTTCC character flag namespace enabled */
-function qualifiesForBBTTCC(a) {
-  try {
-    const fx = a.flags?.["bbttcc-character-options"];
-    return !!fx && (fx.enabled !== false);
-  } catch { return false; }
+    static getBBTTCCDataForActor(actor) {
+        if (!this.hasBBTTCCData(actor)) return { enabled: false };
+        const territoryFaction = actor.getFlag('bbttcc-territory', 'faction');
+        return { enabled: true, territoryFaction: territoryFaction || 'Unknown' };
+    }
+
+    static setupHooks() {
+        Hooks.on('createActor', (actor) => {
+            if (actor.type === 'character') {
+                setTimeout(() => this.checkForDataAndApplySheet(actor), 500);
+            }
+        });
+        Hooks.on('createItem', (item) => {
+            if (item.parent?.type === 'character') {
+                setTimeout(() => this.checkForDataAndApplySheet(item.parent), 500);
+            }
+        });
+    }
+
+    static applyToExistingBBTTCCCharacters() {
+        const actorsToProcess = game.actors.filter(a => this.hasBBTTCCData(a));
+        console.log(`[${this.MODULE_ID}] | Found ${actorsToProcess.length} actors with BBTTCC data flag.`);
+
+        for (const actor of actorsToProcess) {
+            this.ensureEnhancedSheet(actor);
+        }
+    }
+    
+    static ensureEnhancedSheet(actor) {
+        console.log(`[${this.MODULE_ID}] | > Checking actor: ${actor.name} (Type: ${actor.type})`);
+
+        // --- FIX START: Add robust checks to prevent applying to factions ---
+        if (actor.getFlag('bbttcc-factions', 'isFaction')) {
+            console.log(`[${this.MODULE_ID}] | ---> SKIPPING ${actor.name}, it is a faction.`);
+            return;
+        }
+        if (actor.type !== 'character') {
+            console.log(`[${this.MODULE_ID}] | ---> SKIPPING ${actor.name}, it is not a 'character' type actor.`);
+            return;
+        }
+        // --- FIX END ---
+        
+        console.log(`[${this.MODULE_ID}] | ---> QUALIFIES. Applying Enhanced Sheet to ${actor.name}.`);
+        const currentSheet = actor.getFlag("core", "sheetClass");
+        if (currentSheet !== "dnd5e.BBTTCCEnhancedCharacterSheet") {
+            actor.setFlag("core", "sheetClass", "dnd5e.BBTTCCEnhancedCharacterSheet");
+            if (actor.sheet?.rendered) {
+                actor.sheet.close().then(() => actor.sheet.render(true));
+            }
+        }
+    }
+
+    static checkForDataAndApplySheet(actor) {
+        if (this.hasBBTTCCData(actor)) {
+            this.ensureEnhancedSheet(actor);
+        }
+    }
 }
 
-/** Preferred custom sheet class id (if/when you register one) */
-function preferredSheetClassId() {
-  // Example: return "bbttcc-character-sheet.BBTTCCCharacterSheet";
-  return undefined; // keep system default for now; our sidepanel injects the BBTTCC card
+class BBTTCCEnhancedCharacterSheet extends dnd5e.applications.actor.CharacterActorSheet {
+    
+    static get defaultOptions() {
+        return foundry.utils.mergeObject(super.defaultOptions, {
+            classes: ["dnd5e", "sheet", "actor", "character", "bbttcc-enhanced"],
+            width: 800,
+            height: 700,
+            tabs: [{ navSelector: ".tabs", contentSelector: ".sheet-body", initial: "attributes" }]
+        });
+    }
+
+    async getData(options) {
+        const context = await super.getData(options);
+        context.bbttcc = BBTTCCSheetManager.getBBTTCCDataForActor(this.actor);
+        return context;
+    }
+
+    activateListeners(html) {
+        super.activateListeners(html);
+        if (this.isEditable) {
+            this._addBBTTCCTab(html);
+        }
+    }
+
+    _addBBTTCCTab(html) {
+        const bbttccData = BBTTCCSheetManager.getBBTTCCDataForActor(this.actor);
+        if (!bbttccData.enabled) return;
+
+        const nav = html.find('nav.tabs');
+        const body = html.find('section.sheet-body');
+
+        if (nav.find('[data-tab="bbttcc-profile"]').length > 0) return;
+
+        nav.append('<a class="item" data-tab="bbttcc-profile"><i class="fas fa-star" style="color: #ffd700;"></i> BBTTCC</a>');
+        
+        const tabContent = `
+            <div class="tab" data-tab="bbttcc-profile">
+                <h2>BBTTCC Strategic Profile</h2>
+                <p><strong>Faction:</strong> ${bbttccData.territoryFaction}</p>
+            </div>
+        `;
+        body.append(tabContent);
+    }
 }
 
-// --- Apply preferred sheet if needed ----------------------------------------
-async function applyEnhancedSheetIfNeeded(a) {
-  if (!isCharacter(a) || !qualifiesForBBTTCC(a)) return;
-  const preferred = preferredSheetClassId();
-  if (!preferred) return;
-  const current = a.getFlag("core", "sheetClass") || foundry.utils.getProperty(a, "flags.core.sheetClass");
-  if (current === preferred) return;
-  await a.update({ "flags.core.sheetClass": preferred });
-}
-
-// --- Actor Directory: header buttons (DOM-native) ---------------------------
-function injectButtons(html) {
-  const root = html instanceof HTMLElement ? html : (html?.[0] instanceof HTMLElement ? html[0] : null);
-  if (!root) return;
-
-  const header = root.querySelector(".directory-header .header-actions") || root.querySelector(".header-actions");
-  if (!header) return;
-
-  // Create Character (BBTTCC) — open wizard directly (no dynamic import)
-  if (!header.querySelector("[data-bbttcc-create-character]")) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.dataset.bbttccCreateCharacter = "1";
-    btn.innerHTML = `<i class="fas fa-user-plus"></i> Create Character (BBTTCC)`;
-    btn.title = "Open BBTTCC Character Creation Wizard";
-    btn.addEventListener("click", async () => {
-      try {
-        const open = game.bbttcc?.api?.autoLink?.openCharacterWizard;
-        if (typeof open === "function") return void open();
-        // Helpful diagnostics
-        WARN("Character Wizard API not found. Check module.json esmodules and file paths.");
-        ui.notifications?.error?.("BBTTCC Character Wizard not available (API missing).");
-      } catch (e) {
-        WARN("Could not open BBTTCC Character Wizard", e);
-        ui.notifications?.error?.("BBTTCC Character Wizard not available.");
-      }
-    });
-    header.appendChild(btn);
-  }
-}
-
-// --- Hooks ------------------------------------------------------------------
-Hooks.once("init", () => {
-  console.log(`🌟 ${MOD} | Safe loader starting...`);
+Hooks.once('init', () => {
+    console.log(`🌟 ${BBTTCCSheetManager.MODULE_ID} | INIT Hook | Registering enhanced character sheet...`);
+    foundry.applications.apps.DocumentSheetConfig.registerSheet(
+        dnd5e.documents.Actor5e, 
+        "dnd5e", 
+        BBTTCCEnhancedCharacterSheet, 
+        {
+            types: ["character"],
+            makeDefault: false,
+            label: "BBTTCC Enhanced Sheet"
+        }
+    );
 });
 
-Hooks.on("renderActorDirectory", (app, html) => injectButtons(html));
-
-Hooks.once("ready", async () => {
-  console.log(`🌟 ${MOD} | READY Hook | Applying sheet to existing characters...`);
-
-  const actors = game.actors?.contents ?? [];
-  let count = 0;
-  for (const a of actors) {
-    if (!isCharacter(a)) continue;
-    if (!qualifiesForBBTTCC(a)) continue;
-    await applyEnhancedSheetIfNeeded(a);
-    count++;
-  }
-
-  LOG(`Found ${count} actors with BBTTCC data flag.`);
-
-  // Expose a tiny API for other modules/macros
-  game.bbttcc = game.bbttcc ?? { api: {} };
-  game.bbttcc.api = game.bbttcc.api ?? {};
-  game.bbttcc.api.autoLink = game.bbttcc.api.autoLink ?? {};
-  Object.assign(game.bbttcc.api.autoLink, {
-    applyEnhancedSheetIfNeeded,
-    qualifiesForBBTTCC
-  });
-  LOG("| API exposed for other modules");
+Hooks.once('ready', () => {
+    console.log(`🌟 ${BBTTCCSheetManager.MODULE_ID} | READY Hook | Applying sheet to existing characters...`);
+    BBTTCCSheetManager.applyToExistingBBTTCCCharacters();
+    BBTTCCSheetManager.setupHooks();
+    
+    game.modules.get(BBTTCCSheetManager.MODULE_ID).api = {
+        // API can be exposed here if needed later
+    };
+    console.log(`🌟 ${BBTTCCSheetManager.MODULE_ID} | API exposed for other modules`);
 });

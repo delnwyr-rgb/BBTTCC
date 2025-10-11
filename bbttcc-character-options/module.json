@@ -1,22 +1,18 @@
 {
   "id": "bbttcc-character-options",
   "title": "BBTTCC Character Options",
-  "description": "Archetypes, affiliations, and OP computation for BBTTCC characters.",
-  "version": "1.1.0",
-  "compatibility": { "minimum": "11", "verified": "13" },
-  "relationships": {
-    "systems": [{ "id": "dnd5e", "type": "system" }]
+  "description": "Character archetypes, crew types, etc. for the BBTTCC Suite.",
+  "version": "5.0.0",
+  "authors": [{"name": "BBTTCC Team"}],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
   },
-  "esmodules": ["scripts/module.js"],
-  "languages": [
-    { "lang": "en", "name": "English", "path": "lang/en.json" }
-  ],
-  "packs": [
-    { "label": "Character Archetypes", "name": "character-archetypes", "path": "packs/character-archetypes/character-archetypes.db", "type": "Item" },
-    { "label": "Crew Types", "name": "crew-types", "path": "packs/crew-types/crew-types.db", "type": "Item" },
-    { "label": "Enlightenment Levels", "name": "enlightenment-levels", "path": "packs/enlightenment-levels/enlightenment-levels.db", "type": "Item" },
-    { "label": "Occult Associations", "name": "occult-associations", "path": "packs/occult-associations/occult-associations.db", "type": "Item" },
-    { "label": "Political Affiliations", "name": "political-affiliations", "path": "packs/political-affiliations/political-affiliations.db", "type": "Item" },
-    { "label": "Sephirothic Alignments", "name": "sephirothic-alignments", "path": "packs/sephirothic-alignments/sephirothic-alignments.db", "type": "Item" }
+  "relationships": {
+    "systems": [{"id": "dnd5e", "type": "system"}],
+    "requires": [{"id": "bbttcc-factions", "type": "module"}]
+  },
+  "esmodules": [
+    "scripts/module.js"
   ]
 }

@@ -1,10 +1,12 @@
 {
   "id": "bbttcc-factions",
-  "title": "BBTTCC Factions",
+  "title": "BBTTCC Factions & GUI",
   "description": "Handles faction data, sheets, and API for the BBTTCC system.",
   "version": "5.0.0",
   "authors": [
-    { "name": "BBTTCC Team" }
+    {
+      "name": "BBTTCC Team"
+    }
   ],
   "compatibility": {
     "minimum": "11",
@@ -12,20 +14,18 @@
   },
   "relationships": {
     "systems": [
-      { "id": "dnd5e", "type": "system" }
+      {
+        "id": "dnd5e",
+        "type": "system"
+      }
     ]
   },
   "esmodules": [
     "scripts/module.js"
   ],
-  "styles": [
-    "styles/faction-sheet.css"
-  ],
-  "languages": [
-    {
-      "lang": "en",
-      "name": "English",
-      "path": "lang/en.json"
-    }
+  "styles": [],
+  "templates": [
+    "templates/faction-sheet.html",
+    "templates/dashboard.html"
   ]
 }
