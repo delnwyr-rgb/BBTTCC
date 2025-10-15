@@ -1,32 +1,30 @@
 {
   "id": "bbttcc-territory",
   "title": "BBTTCC Territory",
-  "description": "Handles territory management and scene controls for the BBTTCC system.",
-  "version": "5.0.0",
-  "authors": [
-    {
-      "name": "BBTTCC Team"
-    }
-  ],
-  "compatibility": {
-    "minimum": "11",
-    "verified": "13"
-  },
+  "description": "Hex management tools, dashboard, and campaign overview for BBTTCC.",
+  "version": "0.9.12",
+  "compatibility": { "minimum": "13", "verified": "13" },
+  "authors": [{ "name": "Shattered Lens Studios" }],
   "relationships": {
-    "systems": [
-      {
-        "id": "dnd5e",
-        "type": "system"
-      }
-    ],
-    "requires": [
-      {
-        "id": "bbttcc-factions",
-        "type": "module"
-      }
-    ]
+    "systems": [{ "id": "dnd5e" }],
+    "requires": []
   },
   "esmodules": [
-    "scripts/module.js"
-  ]
+    "scripts/main.js",
+    "apps/dashboard-app.js",
+    "apps/campaign-overview-app.js",
+    "scripts/overview-button.js",
+    "scripts/turn-driver.js",
+    "scripts/zz-click-to-edit.js"
+  ],
+  "styles": [
+    "styles/territory-manager.css"
+  ],
+  "languages": [
+    { "lang": "en", "name": "English", "path": "lang/en.json" }
+  ],
+  "packs": [],
+  "url": "",
+  "manifest": "",
+  "download": ""
 }
