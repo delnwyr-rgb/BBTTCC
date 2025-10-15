@@ -1,0 +1,99 @@
+{{!-- modules/bbttcc-auto-link/templates/character-wizard.hbs --}}
+<section class="bbttcc-character-wizard" style="padding:.5rem;">
+  <form>
+    <fieldset style="border:1px solid #666; border-radius:8px; padding:.6rem; margin-bottom:.75rem;">
+      <legend style="padding:0 .25rem;">Basics</legend>
+
+      <div class="form-group" style="margin-bottom:.5rem;">
+        <label style="display:block; font-weight:600;">Name</label>
+        <input type="text" name="name" value="{{defaults.name}}" />
+      </div>
+
+      <div class="form-group" style="margin-bottom:.5rem;">
+        <label style="display:block; font-weight:600;">Faction</label>
+        <select name="factionId">
+          <option value="">(None)</option>
+          {{#each factions}}<option value="{{id}}">{{name}}</option>{{/each}}
+        </select>
+        <p class="hint" style="opacity:.75; margin:.25rem 0 0;">Links the character to a Faction so roster contributions appear.</p>
+      </div>
+    </fieldset>
+
+    <fieldset style="border:1px solid #666; border-radius:8px; padding:.6rem; margin-bottom:.75rem;">
+      <legend style="padding:0 .25rem;">D&D5E Choices</legend>
+      <div class="form-group" style="margin-bottom:.5rem;">
+        <label style="display:block; font-weight:600;">Species (paste UUID)</label>
+        <input type="text" name="speciesUuid" value="{{defaults.speciesUuid}}" placeholder="Compendium.dnd-players-handbook.origins.Item.XXXXX or world UUID" />
+      </div>
+      <div class="form-group">
+        <label style="display:block; font-weight:600;">Class (paste UUID)</label>
+        <input type="text" name="classUuid" value="{{defaults.classUuid}}" placeholder="Compendium.dnd-players-handbook.classes.Item.YYYYY or world UUID" />
+      </div>
+      <p class="hint" style="opacity:.75; margin:.25rem 0 0;">
+        Tip: Right-click a compendium entry and choose “Copy Document UUID”, then paste here.
+      </p>
+    </fieldset>
+
+    <fieldset style="border:1px solid #666; border-radius:8px; padding:.6rem;">
+      <legend style="padding:0 .25rem;">BBTTCC Options</legend>
+
+      <div class="grid" style="display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:.5rem;">
+        <div class="form-group">
+          <label>Archetype</label>
+          <select name="archetypeId">
+            <option value="">(None)</option>
+            {{#each defaults.lists.archetype}}<option value="{{id}}">{{name}}</option>{{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Crew Type</label>
+          <select name="crewId">
+            <option value="">(None)</option>
+            {{#each defaults.lists.crew}}<option value="{{id}}">{{name}}</option>{{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Sephirotic Alignment</label>
+          <select name="sephirotId">
+            <option value="">(None)</option>
+            {{#each defaults.lists.sephirot}}<option value="{{id}}">{{name}}</option>{{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Political Affiliation</label>
+          <select name="politicalId">
+            <option value="">(None)</option>
+            {{#each defaults.lists.political}}<option value="{{id}}">{{name}}</option>{{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Occult Association</label>
+          <select name="occultId">
+            <option value="">(None)</option>
+            {{#each defaults.lists.occult}}<option value="{{id}}">{{name}}</option>{{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Enlightenment Level</label>
+          <select name="enlightId">
+            <option value="">(None)</option>
+            {{#each defaults.lists.enlight}}<option value="{{id}}">{{name}}</option>{{/each}}
+          </select>
+        </div>
+      </div>
+
+      <p class="hint" style="opacity:.75; margin:.25rem 0 0;">
+        These pull directly from your BBTTCC packs. Their item flags already contain the official OP bonuses, so your Faction rosters will reflect selections immediately.
+      </p>
+    </fieldset>
+
+    <div class="flexrow" style="gap:.5rem; justify-content:flex-end; margin-top:.75rem;">
+      <button type="button" data-action="create"><i class="fas fa-magic"></i> Create Character</button>
+    </div>
+  </form>
+</section>
