@@ -1,0 +1,237 @@
+<section class="bbttcc-raid-console vstack" style="gap:.5rem; padding:.5rem;">
+  <!-- Header -->
+  <header class="flexrow" style="gap:.5rem; align-items:center;">
+    <label class="flex0">Attacker</label>
+    <select class="flex2" data-id="attacker">
+      {{#each attackerOptions}}
+        <option value="{{this.id}}" {{#if (eq ../vm.attackerId this.id)}}selected{{/if}}>{{this.name}}</option>
+      {{/each}}
+    </select>
+
+    <span class="flex1"></span>
+
+    <div class="btnset flex0" style="display:flex; gap:.25rem;">
+      <button data-id="mode-assault"  class="btn">{{#if (eq vm.mode "assault")}}●{{else}}○{{/if}} Assault</button>
+      <button data-id="mode-infil"    class="btn">{{#if (eq vm.mode "infiltration")}}●{{else}}○{{/if}} Infiltration</button>
+    </div>
+
+    <label class="flex0" style="margin-left:.5rem;">Diff</label>
+    <select class="flex0" data-id="difficulty">
+      {{#each difficulties}}
+        <option value="{{this.key}}" {{#if (eq ../vm.difficulty this.key)}}selected{{/if}}>{{this.label}}</option>
+      {{/each}}
+    </select>
+
+    <button class="btn flex0" data-id="pick-hex" title="Pick target hex on canvas">Pick Hex</button>
+    <button class="btn flex0" data-id="add-round">Add Round</button>
+    <button class="btn flex0" data-id="reset">Reset</button>
+
+    <label class="flex0" style="margin-left:.5rem;">
+      <input type="checkbox" data-id="logWar" {{#if vm.logWar}}checked{{/if}}> Log Attacker
+    </label>
+    <label class="flex0">
+      <input type="checkbox" data-id="logDef" {{#if vm.includeDefender}}checked{{/if}}> Log Defender
+    </label>
+  </header>
+
+  <!-- Target line -->
+  <div class="flexrow" style="gap:.5rem; align-items:center;">
+    <label class="flex0">Target</label>
+    <div class="flex2"><strong>{{default vm.targetName "—"}}</strong></div>
+    <span class="flex1"></span>
+    <small class="flex0">Round Key: {{upper currentBank.cat}}</small>
+  </div>
+
+  <!-- NEW: Top DC block -->
+  {{#if currentBank.topDC}}
+  <div class="flexrow" style="gap:.75rem; align-items:center; opacity:.9;">
+    <small class="flex0">
+      <b>Base DC:</b> {{currentBank.topDC.base}}
+      • <b>Defender staged bonus:</b> +{{currentBank.topDC.defProjBonus}}
+      • <b>Projected DC:</b> <span style="font-weight:700;">{{currentBank.topDC.projected}}</span>
+    </small>
+  </div>
+  {{/if}}
+
+  <!-- Turn Bank panel -->
+  <section class="bbttcc-bank grid" style="grid-template-columns: 1fr 1fr; gap:.5rem;">
+    <div class="card" style="padding:.5rem;">
+      <h4 style="margin:0 0 .25rem 0;">Attacker Bank — {{default currentBank.attackerName "(none)"}}</h4>
+      {{#if currentBank.attacker}}
+      <table class="bbttcc-table" style="width:100%;">
+        <thead><tr>
+          <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
+        </tr></thead>
+        <tbody><tr class="center">
+          <td><b>{{currentBank.attacker.violence}}</b></td>
+          <td>{{currentBank.attacker.nonlethal}}</td>
+          <td><b>{{currentBank.attacker.intrigue}}</b></td>
+          <td>{{currentBank.attacker.economy}}</td>
+          <td>{{currentBank.attacker.softpower}}</td>
+          <td>{{currentBank.attacker.diplomacy}}</td>
+          <td>{{currentBank.attacker.logistics}}</td>
+          <td>{{currentBank.attacker.culture}}</td>
+          <td>{{currentBank.attacker.faith}}</td>
+        </tr></tbody>
+      </table>
+      {{else}}<em>No attacker selected.</em>{{/if}}
+    </div>
+
+    <div class="card" style="padding:.5rem;">
+      <h4 style="margin:0 0 .25rem 0;">Defender Bank — {{default currentBank.defenderName "(none)"}}</h4>
+      {{#if currentBank.hasDef}}
+      <table class="bbttcc-table" style="width:100%;">
+        <thead><tr>
+          <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
+        </tr></thead>
+        <tbody><tr class="center">
+          <td><b>{{currentBank.defender.violence}}</b></td>
+          <td>{{currentBank.defender.nonlethal}}</td>
+          <td><b>{{currentBank.defender.intrigue}}</b></td>
+          <td>{{currentBank.defender.economy}}</td>
+          <td>{{currentBank.defender.softpower}}</td>
+          <td>{{currentBank.defender.diplomacy}}</td>
+          <td>{{currentBank.defender.logistics}}</td>
+          <td>{{currentBank.defender.culture}}</td>
+          <td>{{currentBank.defender.faith}}</td>
+        </tr></tbody>
+      </table>
+      {{else}}<em>No defender (unclaimed hex).</em>{{/if}}
+    </div>
+  </section>
+
+  <!-- Rounds -->
+  <section class="bbttcc-rounds">
+    <table class="bbttcc-table" style="width:100%;">
+      <thead>
+        <tr>
+          <th style="text-align:left;">Round</th>
+          <th>Mode</th>
+          <th>Att +Key</th>
+          <th>Target</th>
+          <th>Roll</th>
+          <th>DC</th>
+          <th>Outcome</th>
+          <th class="center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#if hasRounds}}
+          {{#each vm.rounds as |r idx|}}
+            <tr data-idx="{{idx}}">
+              <td style="text-align:left;"><strong>#{{add idx 1}}</strong></td>
+              <td class="center">{{#if (eq r.mode "infiltration")}}Infiltration{{else}}Assault{{/if}}</td>
+              <td class="center">+{{r.attBonus}} <small>({{upper r.key}})</small></td>
+              <td class="center">{{r.targetName}}</td>
+              <td class="center">{{#if r.roll}}<code>{{r.roll.result}}</code> = <b>{{r.total}}</b>{{else}}—{{/if}}</td>
+              <td class="center">
+                {{#if r.dcFinal}}
+                  <b>{{r.dcFinal}}</b><br/><small>Final</small>
+                {{else if r.view.dcProjected}}
+                  <b>{{r.view.dcProjected}}</b><br/><small>Projected</small>
+                {{else}}
+                  {{r.DC}}
+                {{/if}}
+              </td>
+              <td class="center">{{default r.outcome "—"}}</td>
+              <td class="center">
+                <button class="btn" data-act="post">Post</button>
+                <button class="btn" data-act="copy">Copy</button>
+                <button class="btn" data-act="manage">{{#if r.open}}Close Manage{{else}}Manage{{/if}}</button>
+                <button class="btn" data-act="del">✕</button>
+              </td>
+            </tr>
+
+            {{#if r.open}}
+            <tr data-idx="{{idx}}">
+              <td colspan="8">
+                <div class="flexrow" style="gap:1rem;">
+                  <!-- Manage -->
+                  <div class="flex2 card" style="padding:.5rem;">
+                    <h4 style="margin:0 0 .25rem 0;">Manage Spend — Key: {{upper r.view.cat}}</h4>
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap:.5rem;">
+                      <div>
+                        <h5 style="margin:.25rem 0;">Attacker — {{r.view.attackerName}}</h5>
+                        <p style="margin:.25rem 0;">
+                          Bank: <b>{{lookup r.view.bankAtt r.view.cat}}</b> •
+                          Staged: <b>{{default (lookup r.view.staged.att r.view.cat) 0}}</b> •
+                          Remaining: <b>{{r.view.remainA}}</b>
+                        </p>
+                        <div class="btnset" style="display:flex; gap:.25rem;">
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="-1">−1</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+1">+1</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+5">+5</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
+                        </div>
+                      </div>
+
+                      {{#if r.view.hasDef}}
+                      <div>
+                        <h5 style="margin:.25rem 0;">Defender — {{r.view.defenderName}}</h5>
+                        <p style="margin:.25rem 0;">
+                          Bank: <b>{{lookup r.view.bankDef r.view.cat}}</b> •
+                          Staged: <b>{{default (lookup r.view.staged.def r.view.cat) 0}}</b> •
+                          Remaining: <b>{{r.view.remainD}}</b>
+                        </p>
+                        <div class="btnset" style="display:flex; gap:.25rem;">
+                          <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="-1">−1</button>
+                          <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+1">+1</button>
+                          <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+5">+5</button>
+                          <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
+                        </div>
+                      </div>
+                      {{/if}}
+                    </div>
+
+                    <div style="margin-top:.5rem;">
+                      <small>
+                        Base DC: <b>{{r.DC}}</b>
+                        {{#if r.view.dcProjected}}
+                          • Defender staged bonus: <b>+{{r.view.defProjBonus}}</b>
+                          • <i>Projected DC</i>: <b>{{r.view.dcProjected}}</b>
+                        {{/if}}
+                        {{#if r.dcFinal}}
+                          • <i>Final DC</i>: <b>{{r.dcFinal}}</b>
+                        {{/if}}
+                      </small>
+                    </div>
+
+                    <!-- ✨ Maneuvers container (script will populate per round/mode) -->
+                    <div class="bbttcc-mans-cell" style="margin-top:.5rem;"></div>
+
+                    <div class="flexrow" style="gap:.5rem; margin-top:.5rem;">
+                      <button class="btn" data-manage-act="commit">Commit (Roll)</button>
+                      <button class="btn" data-manage-act="cancel">Cancel</button>
+                      <button class="btn" data-manage-act="close">Close</button>
+                      <!-- Difficulty ± controls -->
+                      <div class="flex1"></div>
+                      <div class="btnset" style="display:flex; gap:.25rem;">
+                        <button class="btn" data-manage-act="diff" data-delta="-5">Diff −5</button>
+                        <button class="btn" data-manage-act="diff" data-delta="-1">−1</button>
+                        <button class="btn" data-manage-act="diff" data-delta="+1">+1</button>
+                        <button class="btn" data-manage-act="diff" data-delta="+5">+5</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Quick reference -->
+                  <div class="flex1 card" style="padding:.5rem;">
+                    <h4 style="margin:0 0 .25rem 0;">Round Details</h4>
+                    <p style="margin:.25rem 0;"><b>Attacker:</b> {{r.attackerName}}</p>
+                    <p style="margin:.25rem 0;"><b>Target:</b> {{r.targetName}}</p>
+                    <p style="margin:.25rem 0;"><b>Base Bonus:</b> +{{r.attBonus}} • <b>Base DC:</b> {{r.DC}}</p>
+                    <p style="margin:.25rem 0;"><i>Attack bonus on commit</i> will be <b>+ceil(attacker_staged/2)</b>.</p>
+                    <p style="margin:.25rem 0;"><i>DC increase on commit</i> will be <b>+ceil(defender_staged/2)</b>.</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {{/if}}
+          {{/each}}
+        {{else}}
+          <tr><td colspan="8" class="center"><em>No rounds yet — select Attacker, Pick a Hex, then Add Round.</em></td></tr>
+        {{/if}}
+      </tbody>
+    </table>
+  </section>
+</section>

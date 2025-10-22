@@ -1,0 +1,155 @@
+<style>
+  .bbttcc-hex-config { padding: 4px; }
+  .bbttcc-hex-config .form-group { margin-bottom: .55rem; }
+  .bbttcc-hex-config label { display:block; font-weight:600; margin-bottom:.2rem; }
+  .bbttcc-hex-config input[type="text"],
+  .bbttcc-hex-config input[type="number"],
+  .bbttcc-hex-config select,
+  .bbttcc-hex-config textarea { width:100%; box-sizing:border-box; }
+  .bbttcc-hex-config textarea { min-height: 72px; resize: vertical; }
+  .bbttcc-hex-config .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; max-width: 100%; }
+  .bbttcc-hex-config fieldset { border:1px solid #666; border-radius:6px; padding:.6rem; min-width:0; }
+  .bbttcc-hex-config legend { padding:0 .25rem; opacity:.9; }
+  .bbttcc-hex-config .hint { margin:.25rem 0 0; font-size:.85em; opacity:.8; }
+  .bbttcc-hex-config .row { display:flex; align-items:center; gap:.5rem; }
+  .bbttcc-hex-config .checkbox { display:flex; align-items:center; gap:.4rem; }
+  .bbttcc-hex-config .checkbox + .checkbox { margin-top:.15rem; }
+  /* Hide any host sheet footer that some wrappers inject */
+  .bbttcc-hex-config + .sheet-footer { display:none !important; }
+</style>
+
+<section class="bbttcc-hex-config">
+  <header class="flexrow" style="gap:.75rem; align-items:center; margin-bottom:.75rem;">
+    <h2 class="flex1">BBTTCC Hex Configuration</h2>
+    {{#if createdAt}}<small class="flex0" title="Created">{{createdAt}}</small>{{/if}}
+  </header>
+
+  <section class="grid">
+    <!-- LEFT COLUMN -->
+    <div class="col" style="min-width:0;">
+
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="{{#if namePath}}{{namePath}}{{else}}name{{/if}}" value="{{name}}">
+      </div>
+
+      <div class="form-group">
+        <label>Owner</label>
+        <select name="{{#if ownerPath}}{{ownerPath}}{{else}}factionId{{/if}}">
+          <option value="">Unclaimed</option>
+          {{#each ownerList}}
+            <option value="{{id}}" {{#if (bbttcc_eq ../ownerId id)}}selected{{/if}}>{{name}}</option>
+          {{/each}}
+        </select>
+        <p class="hint">Choose a Faction to claim this hex, or leave Unclaimed.</p>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <select name="{{#if statusPath}}{{statusPath}}{{else}}status{{/if}}">
+          <option value="unclaimed" {{#if (bbttcc_eq status "unclaimed")}}selected{{/if}}>Unclaimed</option>
+          <option value="claimed"   {{#if (bbttcc_eq status "claimed")}}selected{{/if}}>Claimed</option>
+          <option value="contested" {{#if (bbttcc_eq status "contested")}}selected{{/if}}>Contested</option>
+          <option value="occupied"  {{#if (bbttcc_eq status "occupied")}}selected{{/if}}>Occupied</option>
+          <option value="liberated" {{#if (bbttcc_eq status "liberated")}}selected{{/if}}>Liberated</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Type</label>
+        <select name="{{#if typePath}}{{typePath}}{{else}}type{{/if}}">
+          <option value="settlement" {{#if (bbttcc_eq type "settlement")}}selected{{/if}}>Settlement</option>
+          <option value="fortress"   {{#if (bbttcc_eq type "fortress")}}selected{{/if}}>Fortress</option>
+          <option value="mine"       {{#if (bbttcc_eq type "mine")}}selected{{/if}}>Mine</option>
+          <option value="farm"       {{#if (bbttcc_eq type "farm")}}selected{{/if}}>Farm</option>
+          <option value="port"       {{#if (bbttcc_eq type "port")}}selected{{/if}}>Port</option>
+          <option value="factory"    {{#if (bbttcc_eq type "factory")}}selected{{/if}}>Factory</option>
+          <option value="research"   {{#if (bbttcc_eq type "research")}}selected{{/if}}>Research Facility</option>
+          <option value="temple"     {{#if (bbttcc_eq type "temple")}}selected{{/if}}>Temple</option>
+          <option value="wasteland"  {{#if (bbttcc_eq type "wasteland")}}selected{{/if}}>Wasteland</option>
+          <option value="ruins"      {{#if (bbttcc_eq type "ruins")}}selected{{/if}}>Ruins</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Size</label>
+        <select name="{{#if sizePath}}{{sizePath}}{{else}}size{{/if}}">
+          <option value="outpost"     {{#if (bbttcc_eq size "outpost")}}selected{{/if}}     {{#if (bbttcc_eq size "small")}}selected{{/if}}>Outpost (×0.5)</option>
+          <option value="village"     {{#if (bbttcc_eq size "village")}}selected{{/if}}>Village (×0.75)</option>
+          <option value="town"        {{#if (bbttcc_eq size "town")}}selected{{/if}}        {{#if (bbttcc_eq size "standard")}}selected{{/if}}>Town (×1.0)</option>
+          <option value="city"        {{#if (bbttcc_eq size "city")}}selected{{/if}}>City (×1.5)</option>
+          <option value="metropolis"  {{#if (bbttcc_eq size "metropolis")}}selected{{/if}}  {{#if (bbttcc_eq size "large")}}selected{{/if}}>Metropolis (×2.0)</option>
+          <option value="megalopolis" {{#if (bbttcc_eq size "megalopolis")}}selected{{/if}}>Megalopolis (×3.0)</option>
+        </select>
+        <p class="hint">Size affects resource multiplier (0.5× → 3.0×) and contributes to Defense at larger tiers.</p>
+      </div>
+
+      <div class="form-group">
+        <label>Population</label>
+        <select name="{{#if populationPath}}{{populationPath}}{{else}}population{{/if}}">
+          <option value="low"    {{#if (bbttcc_eq population "low")}}selected{{/if}}>Low</option>
+          <option value="medium" {{#if (bbttcc_eq population "medium")}}selected{{/if}}>Medium</option>
+          <option value="high"   {{#if (bbttcc_eq population "high")}}selected{{/if}}>High</option>
+        </select>
+        <p class="hint">Cosmetic for now; does not affect current calculations.</p>
+      </div>
+
+      <div class="form-group row">
+        <label style="margin:0;">Capital</label>
+        <input type="checkbox" name="{{#if capitalPath}}{{capitalPath}}{{else}}capital{{/if}}" {{#if capital}}checked{{/if}}>
+      </div>
+
+      <div class="form-group">
+        <label>Alignment (Sephirot)</label>
+        <select name="{{#if sephirotPath}}{{sephirotPath}}{{else}}sephirotUuid{{/if}}">
+          <option value="">Neutral</option>
+          {{#each sephirotList}}
+            <option value="{{uuid}}" {{#if (bbttcc_eq ../sephirotUuid uuid)}}selected{{/if}}>{{name}}</option>
+          {{/each}}
+        </select>
+        <p class="hint">Choose a Sephirot; its bonuses apply automatically (some also grant Defense/Tech).</p>
+      </div>
+
+      <div class="form-group">
+        <label>Notes</label>
+        <textarea name="{{#if notesPath}}{{notesPath}}{{else}}notes{{/if}}" placeholder="Optional GM notes stored on the hex.">{{notes}}</textarea>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="col" style="min-width:0;">
+
+      <fieldset style="margin-bottom:.75rem;">
+        <legend>Modifiers</legend>
+
+        <!-- Full engine-supported list -->
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Well-Maintained"        {{#if (bbttcc_contains modifiers "Well-Maintained")}}checked{{/if}}> <span>Well-Maintained</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Fortified"               {{#if (bbttcc_contains modifiers "Fortified")}}checked{{/if}}> <span>Fortified</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Strategic Position"      {{#if (bbttcc_contains modifiers "Strategic Position")}}checked{{/if}}> <span>Strategic Position</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Hidden Resources"        {{#if (bbttcc_contains modifiers "Hidden Resources")}}checked{{/if}}> <span>Hidden Resources</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Loyal Population"        {{#if (bbttcc_contains modifiers "Loyal Population")}}checked{{/if}}> <span>Loyal Population</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Trade Hub"               {{#if (bbttcc_contains modifiers "Trade Hub")}}checked{{/if}}> <span>Trade Hub</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Contaminated"            {{#if (bbttcc_contains modifiers "Contaminated")}}checked{{/if}}> <span>Contaminated</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Damaged Infrastructure"  {{#if (bbttcc_contains modifiers "Damaged Infrastructure")}}checked{{/if}}> <span>Damaged Infrastructure</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Hostile Population"      {{#if (bbttcc_contains modifiers "Hostile Population")}}checked{{/if}}> <span>Hostile Population</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Supply Line Vulnerable"  {{#if (bbttcc_contains modifiers "Supply Line Vulnerable")}}checked{{/if}}> <span>Supply Line Vulnerable</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Difficult Terrain"       {{#if (bbttcc_contains modifiers "Difficult Terrain")}}checked{{/if}}> <span>Difficult Terrain</span></label>
+        <label class="checkbox"><input type="checkbox" name="modifiers" value="Radiation Zone"          {{#if (bbttcc_contains modifiers "Radiation Zone")}}checked{{/if}}> <span>Radiation Zone</span></label>
+
+        <p class="hint">These affect yields (and sometimes Defense/flags). They match the math used by Campaign Overview and the Turn Driver.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Resources (per turn)</legend>
+        <div class="form-group"><label>Food</label>      <input type="number" name="resources.food" value="{{resources.food}}"      min="0" step="1"></div>
+        <div class="form-group"><label>Materials</label> <input type="number" name="resources.materials" value="{{resources.materials}}" min="0" step="1"></div>
+        <div class="form-group"><label>Trade</label>     <input type="number" name="resources.trade" value="{{resources.trade}}"     min="0" step="1"></div>
+        <div class="form-group"><label>Military</label>  <input type="number" name="resources.military" value="{{resources.military}}" min="0" step="1"></div>
+        <div class="form-group"><label>Knowledge</label> <input type="number" name="resources.knowledge" value="{{resources.knowledge}}" min="0" step="1"></div>
+        <p class="hint">Leave all five at <strong>0</strong> to let the system compute effective yields from <em>Type × Size</em> plus Alignment & Modifiers (Population not used yet). This matches the Overview and Turn math.</p>
+      </fieldset>
+
+    </div>
+  </section>
+</section>
