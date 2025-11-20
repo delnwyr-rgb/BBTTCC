@@ -2,7 +2,7 @@
   "id": "bbttcc-territory",
   "title": "BBTTCC Territory",
   "description": "Hex management tools, dashboard, and campaign overview for BBTTCC.",
-  "version": "0.9.12",
+  "version": "1.3.16",
   "compatibility": { "minimum": "13", "verified": "13" },
   "authors": [{ "name": "Shattered Lens Studios" }],
   "relationships": {
@@ -15,7 +15,22 @@
     "apps/campaign-overview-app.js",
     "scripts/overview-button.js",
     "scripts/turn-driver.js",
+    "scripts/territory-unitybonus.enhancer.js",
     "scripts/zz-click-to-edit.js"
+  ],
+  "scripts": [
+    "scripts/api.travel.js",
+    "scripts/bbttcc-travel-summary.enhancer.js",
+    "scripts/encounters.js",
+    "scripts/hex-terrain.selector.enhancer.js",
+    "scripts/api.turn.processRequests.js",
+    "scripts/bbttcc-hex-conditions.enhancer.js",
+    "scripts/advance-turn.tracks.js",
+    "scripts/resolutions.js",
+    "scripts/resolution-engine.js",
+    "scripts/territory-garrison-upkeep.enhancer.js",
+    "scripts/territory-integration.enhancer.js",
+    "scripts/turn-requests.enhancer.js"
   ],
   "styles": [
     "styles/territory-manager.css"

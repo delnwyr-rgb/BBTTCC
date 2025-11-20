@@ -26,6 +26,33 @@ function asDate(ts) {
   try { return ts ? new Date(ts).toLocaleString() : ""; } catch { return ""; }
 }
 
+function clampProgress(v) {
+  v = Number.isFinite(v) ? Number(v) : 0;
+  if (v < 0) v = 0;
+  if (v > 6) v = 6;
+  return Math.round(v);
+}
+
+function stageKeyFromProgress(progress) {
+  const p = clampProgress(progress);
+  if (p >= 6) return "integrated";
+  if (p === 5) return "settled";
+  if (p >= 3) return "developing";
+  if (p >= 1) return "outpost";
+  return "wild";
+}
+
+function stageLabelFromKey(key) {
+  const map = {
+    wild: "Untouched Wilderness",
+    outpost: "Foothold / Outpost",
+    developing: "Developing Territory",
+    settled: "Settled Province",
+    integrated: "Integrated Heartland"
+  };
+  return map[key] || "—";
+}
+
 /* ---------- toast + scroll utilities ---------- */
 function ensureToastStyles() {
   if (document.getElementById("bbttcc-toast-style")) return;
@@ -81,14 +108,25 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       if (!isHexDrawing(dr)) continue;
 
       const f = dr.flags?.[MOD] ?? {};
+
+      // Integration: clamp and derive stage
+      const integ = f.integration ?? {};
+      const rawProg = Number.isFinite(integ.progress) ? integ.progress : 0;
+      const integrationProgress = clampProgress(rawProg);
+      const integrationStageKey = stageKeyFromProgress(integrationProgress);
+      const integrationStageLabel = stageLabelFromKey(integrationStageKey);
+
+      // Normalize legacy "claimed" → "occupied"
+      let status = f.status ?? "unclaimed";
+      if (status === "claimed") status = "occupied";
+
       rows.push({
         id: dr.id,
         uuid: dr.uuid,
         name: f.name ?? dr.text ?? "",
         ownerId: f.factionId ?? "",
-        status: f.status ?? "unclaimed",
+        status,
         type: f.type ?? "settlement",
-        // ✅ canonical default size (aligns with editor/create)
         size: f.size ?? "town",
         population: f.population ?? "medium",
         capital: !!f.capital,
@@ -99,6 +137,12 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
           military:   Number(f.resources?.military ?? 0),
           knowledge:  Number(f.resources?.knowledge ?? 0),
         },
+        // Integration display fields
+        integrationProgress,
+        integrationMax: 6,
+        integrationStageKey,
+        integrationStageLabel,
+
         x: Math.round(dr.x), y: Math.round(dr.y),
         createdAt: asDate(f.createdAt ?? 0)
       });
@@ -190,10 +234,9 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
           [`flags.${MOD}.kind`]: "territory-hex",
           [`flags.${MOD}.name`]: dr.text || "Hex",
           [`flags.${MOD}.status`]: "unclaimed",
-          [`flags.${MOD}.type`]: "settlement",
-          // ✅ canonical default size
-          [`flags.${MOD}.size`]: "town",
-          [`flags.${MOD}.population`]: "medium",
+          [`flags.${MOD}.type`]: "wilderness",
+          [`flags.${MOD}.size`]: "outpost",
+          [`flags.${MOD}.population`]: "uninhabited",
           [`flags.${MOD}.capital`]: false,
           [`flags.${MOD}.resources`]: { food:0, materials:0, trade:0, military:0, knowledge:0 },
           [`flags.${MOD}.createdAt`]: Date.now()
@@ -280,18 +323,37 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       const id   = el.dataset.id;
       if (!path || !id) return;
 
+      const scene = canvas?.scene;
+      const dr = scene?.drawings?.get(id);
+      const f  = dr?.flags?.[MOD] ?? {};
+
       let value;
       if (el.type === "checkbox") value = el.checked;
       else if (el.type === "number") value = Number(el.value ?? 0);
       else value = el.value;
 
-      const scene = canvas?.scene;
       const update = { _id: id, [`flags.${MOD}.${path}`]: value };
+
+      // Owner/Status sanity:
+      // - If a faction is chosen while status is "unclaimed", promote to "occupied".
+      // - If status is set to "unclaimed" while an owner exists, clear the owner.
+      if (path === "factionId") {
+        const newOwner = String(value ?? "");
+        const curStatus = f.status === "claimed" ? "occupied" : (f.status ?? "unclaimed");
+        if (newOwner && curStatus === "unclaimed") {
+          update[`flags.${MOD}.status`] = "occupied";
+        }
+      } else if (path === "status") {
+        const newStatus = String(value ?? "unclaimed");
+        const curOwner = f.factionId ?? "";
+        if (newStatus === "unclaimed" && curOwner) {
+          update[`flags.${MOD}.factionId`] = "";
+        }
+      }
+
       // group resources.* under an object, preserving siblings
       if (path.startsWith("resources.")) {
         const [_, key] = path.split(".");
-        const dr = scene?.drawings?.get(id);
-        const f  = dr?.flags?.[MOD] ?? {};
         update[`flags.${MOD}.resources`] = {
           food:       Number(key === "food"      ? value : f.resources?.food      ?? 0),
           materials:  Number(key === "materials" ? value : f.resources?.materials ?? 0),

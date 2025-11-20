@@ -2,22 +2,57 @@
   "id": "bbttcc-raid",
   "title": "BBTTCC Raid",
   "description": "Raid management system for the BBTTCC Suite.",
-  "version": "5.0.5",
+  "version": "1.3.14.2",
   "authors": [{ "name": "BBTTCC Team" }],
   "compatibility": { "minimum": "11", "verified": "13" },
-
   "relationships": {
     "systems": [{ "id": "dnd5e", "type": "system" }],
     "requires": [{ "id": "bbttcc-factions", "type": "module" }]
   },
-
   "esmodules": [
-    "scripts/module.js",
-    "scripts/raid-maneuvers.js"
+    "scripts/compat-bridge.js",
+    "scripts/raid-maneuvers.js",
+    "scripts/module.raid-console.js",
+    "scripts/raid-victory.enhancer.js",
+    "scripts/raid-morale.enhancer.js",
+    "scripts/planned-loyalty.enhancer.js",
+    "scripts/raid-console.breakdown.safety-shim.js",
+    "scripts/raid-roundflags.enhancer.js",
+    "scripts/raid-optransfer.enhancer.js",
+    "scripts/raid-console.tooltip.enhancer.js",
+    "scripts/raid-post2turn.enhancer.js",
+    "scripts/hex-travel.js",
+    "scripts/hex-travel-mode.js",
+    "scripts/bbttcc-travel-console.js",
+    "scripts/planner-standard-activities.enhancer.js",
+    "scripts/raid-contested-takeover.enhancer.js",
+    "scripts/queue-drawings.consumer.enhancer.js",
+    "scripts/effects-fortify.enhancer.js",
+    "scripts/effects-minor-repair.enhancer.js",
+    "scripts/effects-establish-supply-line.enhancer.js",
+    "scripts/effects-establish-trade-route.enhancer.js",
+    "scripts/effects-reconstruction-drive.enhancer.js",
+    "scripts/effects-gather-intel.enhancer.js",
+    "scripts/effects-secure-perimeter.enhancer.js",
+    "scripts/effects-supply-depot.enhancer.js",
+    "scripts/effects-defuse-tensions.enhancer.js",
+    "scripts/effects-patrol-routes.enhancer.js",
+    "scripts/effects-supply-cache.enhancer.js",
+    "scripts/effects-infrastructure-expansion.enhancer.js",
+    "scripts/effects-policy-reforms.enhancer.js",
+    "scripts/effects-develop-infrastructure-std.enhancer.js",
+    "scripts/effects-loyalty-program.enhancer.js",
+    "scripts/effects-propaganda-campaign.enhancer.js",
+    "scripts/effects-diplomatic-mission.enhancer.js",
+    "scripts/effects-cultural-festival.enhancer.js",
+    "scripts/effects-mass-mobilization.enhancer.js",
+    "scripts/effects-alignment-shift.enhancer.js",
+    "scripts/effects-wilderness.enhancer.js",
+    "scripts/effects-integration-activities.enhancer.js",
+    "scripts/bbttcc-travel-visuals.js",
+    "scripts/module.raid-planner.js"
   ],
-
-  "templates": [
-    "templates/raid-planner.html",
-    "templates/raid-console.hbs"
+  "styles": [
+    "css/raid-styles.css"
   ]
 }

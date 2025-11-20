@@ -25,6 +25,7 @@
         <th>Type</th>
         <th>Size</th>
         <th>Population</th>
+        <th>Integration</th>
         <th>Capital</th>
         <th>Food</th>
         <th>Materials</th>
@@ -60,9 +61,9 @@
         <td>
           <select data-edit="status" data-id="{{id}}">
             <option value="unclaimed" {{#if (bbttcc_eq status "unclaimed")}}selected{{/if}}>Unclaimed</option>
-            <option value="claimed"   {{#if (bbttcc_eq status "claimed")}}selected{{/if}}>Claimed</option>
             <option value="contested" {{#if (bbttcc_eq status "contested")}}selected{{/if}}>Contested</option>
             <option value="occupied"  {{#if (bbttcc_eq status "occupied")}}selected{{/if}}>Occupied</option>
+            <option value="liberated" {{#if (bbttcc_eq status "liberated")}}selected{{/if}}>Liberated</option>
           </select>
         </td>
 
@@ -76,6 +77,7 @@
             <option value="factory"    {{#if (bbttcc_eq type "factory")}}selected{{/if}}>Factory</option>
             <option value="research"   {{#if (bbttcc_eq type "research")}}selected{{/if}}>Research Facility</option>
             <option value="temple"     {{#if (bbttcc_eq type "temple")}}selected{{/if}}>Temple</option>
+            <option value="wilderness" {{#if (bbttcc_eq type "wilderness")}}selected{{/if}}>Wilderness</option>
             <option value="wasteland"  {{#if (bbttcc_eq type "wasteland")}}selected{{/if}}>Wasteland</option>
             <option value="ruins"      {{#if (bbttcc_eq type "ruins")}}selected{{/if}}>Ruins</option>
           </select>
@@ -83,7 +85,6 @@
 
         <td>
           <select data-edit="size" data-id="{{id}}">
-            <!-- New ladder with legacy-compat selection -->
             <option value="outpost"     {{#if (bbttcc_eq size "outpost")}}selected{{/if}}     {{#if (bbttcc_eq size "small")}}selected{{/if}}>Outpost (×0.5)</option>
             <option value="village"     {{#if (bbttcc_eq size "village")}}selected{{/if}}>Village (×0.75)</option>
             <option value="town"        {{#if (bbttcc_eq size "town")}}selected{{/if}}        {{#if (bbttcc_eq size "standard")}}selected{{/if}}>Town (×1.0)</option>
@@ -95,10 +96,20 @@
 
         <td>
           <select data-edit="population" data-id="{{id}}">
+            <option value="uninhabited" {{#if (bbttcc_eq population "uninhabited")}}selected{{/if}}>Uninhabited (0)</option>
             <option value="low"    {{#if (bbttcc_eq population "low")}}selected{{/if}}>Low</option>
             <option value="medium" {{#if (bbttcc_eq population "medium")}}selected{{/if}}>Medium</option>
             <option value="high"   {{#if (bbttcc_eq population "high")}}selected{{/if}}>High</option>
           </select>
+        </td>
+
+        <td>
+          <div style="white-space:nowrap;">
+            <strong>{{integrationProgress}} / {{integrationMax}}</strong><br/>
+            <small style="opacity:.8;">
+              {{#if integrationStageLabel}}{{integrationStageLabel}}{{else}}—{{/if}}
+            </small>
+          </div>
         </td>
 
         <td class="center">
@@ -132,7 +143,7 @@
       {{/each}}
 
       {{#unless rows.length}}
-      <tr><td colspan="15" class="center"><em>No territory hexes on this Scene yet.</em></td></tr>
+      <tr><td colspan="16" class="center"><em>No territory hexes on this Scene yet.</em></td></tr>
       {{/unless}}
     </tbody>
   </table>

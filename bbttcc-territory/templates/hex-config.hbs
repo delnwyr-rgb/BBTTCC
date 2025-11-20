@@ -14,7 +14,6 @@
   .bbttcc-hex-config .row { display:flex; align-items:center; gap:.5rem; }
   .bbttcc-hex-config .checkbox { display:flex; align-items:center; gap:.4rem; }
   .bbttcc-hex-config .checkbox + .checkbox { margin-top:.15rem; }
-  /* Hide any host sheet footer that some wrappers inject */
   .bbttcc-hex-config + .sheet-footer { display:none !important; }
 </style>
 
@@ -48,7 +47,6 @@
         <label>Status</label>
         <select name="{{#if statusPath}}{{statusPath}}{{else}}status{{/if}}">
           <option value="unclaimed" {{#if (bbttcc_eq status "unclaimed")}}selected{{/if}}>Unclaimed</option>
-          <option value="claimed"   {{#if (bbttcc_eq status "claimed")}}selected{{/if}}>Claimed</option>
           <option value="contested" {{#if (bbttcc_eq status "contested")}}selected{{/if}}>Contested</option>
           <option value="occupied"  {{#if (bbttcc_eq status "occupied")}}selected{{/if}}>Occupied</option>
           <option value="liberated" {{#if (bbttcc_eq status "liberated")}}selected{{/if}}>Liberated</option>
@@ -66,6 +64,7 @@
           <option value="factory"    {{#if (bbttcc_eq type "factory")}}selected{{/if}}>Factory</option>
           <option value="research"   {{#if (bbttcc_eq type "research")}}selected{{/if}}>Research Facility</option>
           <option value="temple"     {{#if (bbttcc_eq type "temple")}}selected{{/if}}>Temple</option>
+          <option value="wilderness" {{#if (bbttcc_eq type "wilderness")}}selected{{/if}}>Wilderness</option>
           <option value="wasteland"  {{#if (bbttcc_eq type "wasteland")}}selected{{/if}}>Wasteland</option>
           <option value="ruins"      {{#if (bbttcc_eq type "ruins")}}selected{{/if}}>Ruins</option>
         </select>
@@ -87,11 +86,31 @@
       <div class="form-group">
         <label>Population</label>
         <select name="{{#if populationPath}}{{populationPath}}{{else}}population{{/if}}">
+          <option value="uninhabited" {{#if (bbttcc_eq population "uninhabited")}}selected{{/if}}>Uninhabited (0)</option>
           <option value="low"    {{#if (bbttcc_eq population "low")}}selected{{/if}}>Low</option>
           <option value="medium" {{#if (bbttcc_eq population "medium")}}selected{{/if}}>Medium</option>
           <option value="high"   {{#if (bbttcc_eq population "high")}}selected{{/if}}>High</option>
         </select>
         <p class="hint">Cosmetic for now; does not affect current calculations.</p>
+      </div>
+
+      <!-- NEW: Integration display -->
+      <div class="form-group">
+        <label>Integration</label>
+        <div class="row" style="align-items:baseline; gap:.5rem;">
+          <div class="flex0">
+            <strong>{{integrationProgress}} / {{integrationMax}}</strong>
+          </div>
+          <div class="flex1">
+            <small style="opacity:.85;">
+              {{#if integrationStageLabel}}{{integrationStageLabel}}{{else}}—{{/if}}
+            </small>
+          </div>
+        </div>
+        <p class="hint">
+          Tracks how far this hex has progressed from untouched wilderness to a fully integrated province.
+          Advanced via raids, resolution outcomes, and strategic activities.
+        </p>
       </div>
 
       <div class="form-group row">
@@ -123,7 +142,6 @@
       <fieldset style="margin-bottom:.75rem;">
         <legend>Modifiers</legend>
 
-        <!-- Full engine-supported list -->
         <label class="checkbox"><input type="checkbox" name="modifiers" value="Well-Maintained"        {{#if (bbttcc_contains modifiers "Well-Maintained")}}checked{{/if}}> <span>Well-Maintained</span></label>
         <label class="checkbox"><input type="checkbox" name="modifiers" value="Fortified"               {{#if (bbttcc_contains modifiers "Fortified")}}checked{{/if}}> <span>Fortified</span></label>
         <label class="checkbox"><input type="checkbox" name="modifiers" value="Strategic Position"      {{#if (bbttcc_contains modifiers "Strategic Position")}}checked{{/if}}> <span>Strategic Position</span></label>

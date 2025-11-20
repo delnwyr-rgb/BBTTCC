@@ -1,359 +1,418 @@
-/* modules/bbttcc-territory/scripts/turn-driver.js
- * BBTTCC — Strategic Turn drivers (v13-safe)
- * - advanceTurn({apply, sceneId})       → Resources/Technology/Defense → Turn Bank (as you already use)
- * - advanceOPRegen({apply, sceneId})    → Resources→OP pipeline → Faction OP Bank (dual-layer economy)
- *
- * Notes:
- * • OP pipeline uses the deterministic mapping from the Gap Analysis (Food/Materials/Trade/Military/Knowledge → 9 OP buckets),
- *   then applies size/status/modifiers/alignment at the hex layer, floors totals, and persists per-hex fractional remainders.  :contentReference[oaicite:2]{index=2}
- * • OPs are deposited to flags["bbttcc-factions"].opBank (same store the Raid Console reads & spends).                   :contentReference[oaicite:3]{index=3} :contentReference[oaicite:4]{index=4}
- */
+// BBTTCC Territory — Turn Driver
+// Pipeline: (0) Promote post.pending → turn.pending (Apply only)
+// → (1) Planned Raids (Dry=preview, Apply=commit per faction via compat)
+// → (2) delegate advanceTurn → (3) OP Regen (proportional, Apply only)
+// → (3.5) Normalize queued shape (nextRound → nextTurn)
+// → (4) Apply queued turn.pending (Apply only)
+// → (5) Hard cleanup
 
-const TERR_MOD = "bbttcc-territory";
-const FCT_MOD  = "bbttcc-factions";
-const TAG      = "[bbttcc-territory/turn-driver]";
+const NS = "[bbttcc-turn]";
+const log  = (...a)=>console.log(NS, ...a);
+const warn = (...a)=>console.warn(NS, ...a);
 
-const log  = (...a) => console.log(TAG, ...a);
-const warn = (...a) => console.warn(TAG, ...a);
+const MOD_FACTIONS  = "bbttcc-factions";
+const MOD_TERRITORY = "bbttcc-territory";
 
-/* ------------------------------------------------------------------
-   Shared: faction helpers
-------------------------------------------------------------------- */
-function isFactionActor(a) {
-  if (!a) return false;
+/* -------------------------------- helpers -------------------------------- */
+function isFactionActor(a){
   try {
-    if (a.getFlag?.(FCT_MOD, "isFaction") === true) return true;
-    const t = (foundry.utils.getProperty(a, "system.details.type.value") ?? "").toString().toLowerCase();
+    if (!a) return false;
+    if (a.getFlag?.(MOD_FACTIONS,"isFaction") === true) return true;
+    const t = (a.system?.details?.type?.value ?? "").toString().toLowerCase();
     if (t === "faction") return true;
     const cls = a.getFlag?.("core","sheetClass") ?? a?.flags?.core?.sheetClass;
     return String(cls||"").includes("BBTTCCFactionSheet");
   } catch { return false; }
 }
-function listFactions() { return (game.actors?.contents ?? []).filter(isFactionActor); }
+function allFactions(){ return (game.actors?.contents ?? []).filter(isFactionActor); }
+function getFlag(a, path, dflt){ try { return foundry.utils.getProperty(a.flags, path) ?? dflt; } catch { return dflt; } }
+function clone(x){ return foundry.utils.deepClone(x); }
 
-/* ------------------------------------------------------------------
-   Effective hex math (same kernels you’re using elsewhere)
-   (We bring in the same tables so math is consistent across apps.)   :contentReference[oaicite:5]{index=5}
-------------------------------------------------------------------- */
-const SIZE_TABLE = {
-  outpost:{ mult:0.50, defense:0 },
-  village:{ mult:0.75, defense:1 },
-  town:{ mult:1.00, defense:1 },
-  city:{ mult:1.50, defense:2 },
-  metropolis:{ mult:2.00, defense:3 },
-  megalopolis:{ mult:3.00, defense:4 }
-};
-const SIZE_ALIAS = { small:"outpost", standard:"town", large:"metropolis" };
-
-const MODS = {
-  "Well-Maintained": { multAll:+0.25, defense:+1, loyalty:+1 },
-  "Fortified": { defense:+3 },
-  "Strategic Position": { multAll:+0.10 },
-  "Hidden Resources": {},
-  "Loyal Population": { multAll:+0.15, loyalty:+2 },
-  "Trade Hub": { multPer:{ trade:+0.50 }, diplomacy:+2 },
-  "Contaminated": { multAll:-0.50, flags:{ radiation:true } },
-  "Damaged Infrastructure": { multAll:-0.25 },
-  "Hostile Population": { multAll:-0.25, loyalty:-2 },
-  "Supply Line Vulnerable": { multAll:-0.10 },
-  "Difficult Terrain": { multAll:-0.10, defense:+1 },
-  "Radiation Zone": { multAll:-0.75, flags:{ radiation:true, radiationZone:true } }
-};
-
-const SEPHIROT = {
-  keter:    { addPer:{ all:+1 }, tech:+1 },
-  chokmah:  { addPer:{ knowledge:+2, trade:+2 } },
-  binah:    { addPer:{ knowledge:+2, trade:+2 } },
-  chesed:   { diplomacy:+3, loyalty:+3 },
-  gevurah:  { addPer:{ military:+3 }, defense:+1 },
-  tiferet:  { diplomacy:+2, loyalty:+2 },
-  netzach:  { addPer:{ military:+2 }, loyalty:+2 },
-  hod:      { addPer:{ knowledge:+2, trade:+2 } },
-  yesod:    { addPer:{ trade:+2 }, diplomacy:+2 },
-  malkuth:  { addPer:{ trade:+4 } }
-};
-
-function normalizeSizeKey(sizeRaw) {
-  if (!sizeRaw) return "town";
-  let k = String(sizeRaw).toLowerCase().trim();
-  if (SIZE_ALIAS[k]) k = SIZE_ALIAS[k];
-  return SIZE_TABLE[k] ? k : "town";
-}
-function calcBaseByType(type) {
-  const base = { food:0, materials:0, trade:0, military:0, knowledge:0 };
-  switch ((type ?? "").toLowerCase()) {
-    case "farm":       base.food = 20; base.trade = 5; break;
-    case "mine":       base.materials = 20; base.trade = 5; break;
-    case "settlement": base.trade = 10; base.military = 5; break;
-    case "fortress":   base.military = 20; break;
-    case "port":       base.trade = 15; base.food = 5; break;
-    case "factory":    base.materials = 15; base.military = 5; break;
-    case "research":   base.knowledge = 20; break;
-    case "temple":     base.knowledge = 10; base.trade = 5; break;
-    case "ruins":      base.materials = 5; break;
-  }
-  return base;
+function zeroRes(){ return { food:0, materials:0, trade:0, military:0, knowledge:0, technology:0, defense:0 }; }
+function zeroOps(){ return { violence:0, nonlethal:0, intrigue:0, economy:0, softpower:0, diplomacy:0, logistics:0, culture:0, faith:0 }; }
+function addOps(a,b){ const out = foundry.utils.deepClone(a); for (const k of Object.keys(b)) out[k] = (out[k]||0) + (b[k]||0); return out; }
+function fmtOpsRow(ops){
+  const keys = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+  return keys.filter(k => (ops[k]||0) > 0).map(k => `<b>${(ops[k]||0)}</b> ${k}`).join(" • ") || "—";
 }
 
-const HR_KEYS = ["food","materials","trade","military","knowledge"];
-function stablePickResourceForHiddenResources(id) {
-  const s = String(id || ""); let h = 0;
-  for (let i=0;i<s.length;i++) h = (h + s.charCodeAt(i)) % 9973;
-  return HR_KEYS[h % HR_KEYS.length];
-}
+/* ------------------------------- defaults -------------------------------- */
+const DEFAULT_REGEN_MAP = {
+  food:"logistics", materials:"economy", trade:"diplomacy",
+  military:"violence", knowledge:"intrigue", technology:"economy"
+};
+const DEFAULT_FACTORS = { food:1, materials:1, trade:1, military:1, knowledge:1, technology:1 };
 
-/** Return effective per-turn resource pips (food/materials/trade/military/knowledge) + tech & defenseBonus. */
-async function effHexWithAll(d) {
-  const tf = d.flags?.[TERR_MOD] ?? {};
-  const sizeKey = normalizeSizeKey(tf.size);
-  const { mult, defense: sizeDefense } = SIZE_TABLE[sizeKey];
-
-  const stored = {
-    food: Number(tf.resources?.food ?? 0),
-    materials: Number(tf.resources?.materials ?? 0),
-    trade: Number(tf.resources?.trade ?? 0),
-    military: Number(tf.resources?.military ?? 0),
-    knowledge: Number(tf.resources?.knowledge ?? 0)
-  };
-  const auto = Object.values(stored).every(n => n === 0);
-  const base = auto ? calcBaseByType(tf.type ?? "settlement") : stored;
-
-  // multiplicative/additive via modifiers
-  let factorAll = 1.0; const factorPer = { food:1, materials:1, trade:1, military:1, knowledge:1 };
-  const addPer  = { food:0, materials:0, trade:0, military:0, knowledge:0 };
-  let defense = sizeDefense;
-
-  if (Array.isArray(tf.modifiers)) {
-    for (const m of tf.modifiers) {
-      const spec = MODS[m]; if (!spec) continue;
-      if (typeof spec.multAll === "number") factorAll *= (1 + spec.multAll);
-      if (spec.multPer) for (const k of Object.keys(spec.multPer)) factorPer[k] *= (1 + Number(spec.multPer[k]||0));
-      if (spec.addPer)  for (const k of Object.keys(spec.addPer))  addPer[k]   += Number(spec.addPer[k]||0);
-      if (typeof spec.defense === "number") defense += Number(spec.defense || 0);
-      if (m === "Hidden Resources") addPer[stablePickResourceForHiddenResources(d.id || d.uuid || "")] += 1;
+/* --------------------------------- TERRITORY → STOCKPILE FALLBACK ---------------------------------- */
+/** Sum per-hex resources for a faction from drawings/tiles across all scenes.
+ * Uses flags saved by Territory Hex Editor (resources: food, materials, trade, military, knowledge). */
+function deriveStockpileFromOwnedHexes(factionId){
+  const sum = { food:0, materials:0, trade:0, military:0, knowledge:0, technology:0 };
+  try {
+    for (const sc of game.scenes ?? []) {
+      // Drawings
+      for (const d of sc.drawings ?? []) {
+        const tf = d.flags?.[MOD_TERRITORY]; if (!tf) continue;
+        const owner = tf.factionId || tf.ownerId || "";
+        if (owner !== factionId) continue;
+        const r = tf.resources || {};
+        sum.food      += Number(r.food      || 0);
+        sum.materials += Number(r.materials || 0);
+        sum.trade     += Number(r.trade     || 0);
+        sum.military  += Number(r.military  || 0);
+        sum.knowledge += Number(r.knowledge || 0);
+      }
+      // Tiles (just in case we have any hexes as tiles)
+      for (const t of sc.tiles ?? []) {
+        const tf = t.flags?.[MOD_TERRITORY]; if (!tf) continue;
+        const owner = tf.factionId || tf.ownerId || "";
+        if (owner !== factionId) continue;
+        const r = tf.resources || {};
+        sum.food      += Number(r.food      || 0);
+        sum.materials += Number(r.materials || 0);
+        sum.trade     += Number(r.trade     || 0);
+        sum.military  += Number(r.military  || 0);
+        sum.knowledge += Number(r.knowledge || 0);
+      }
     }
+  } catch (e) { warn("deriveStockpileFromOwnedHexes failed", e); }
+  return sum;
+}
+
+/** Returns true if all stockpile values are zero/empty. */
+function isEmptyStockpile(stock) {
+  const keys = ["food","materials","trade","military","knowledge","technology"];
+  return keys.every(k => !Number(stock?.[k]||0));
+}
+
+/* --------------------------------- math ---------------------------------- */
+function computeOpsFromStockpile(stockpile, regenMap, factors){
+  const delta = zeroOps();
+  for (const [res, amtRaw] of Object.entries(stockpile||{})) {
+    const amt = Number(amtRaw||0); if (!amt || amt <= 0) continue;
+    const key = regenMap[res]; if (!key) continue;
+    const fac = Number(factors?.[res] ?? 1); if (!(fac > 0)) continue;
+    const gained = Math.floor(amt * fac);
+    if (gained > 0) delta[key] = (delta[key]||0) + gained;
+  }
+  return delta;
+}
+
+/* ------------------------------- OP regen -------------------------------- */
+async function advanceOPRegen({ apply=false, factionId=null } = {}){
+  const targets = factionId ? [game.actors.get(factionId)].filter(Boolean) : allFactions();
+  const results = [];
+
+  for (const A of targets) {
+    try {
+      // 1) Read bank + existing stock
+      const opBank  = clone(getFlag(A, `${MOD_FACTIONS}.opBank`,    zeroOps()));
+      let   stock   = clone(getFlag(A, `${MOD_FACTIONS}.stockpile`, zeroRes()));
+
+      // 2) Fallback: derive stockpile from owned hexes if empty
+      if (isEmptyStockpile(stock)) {
+        const derived = deriveStockpileFromOwnedHexes(A.id);
+        // Write the derived stockpile so future turns don't have to rebuild it
+        stock = derived;
+        try { await A.update({ [`flags.${MOD_FACTIONS}.stockpile`]: stock }); } catch {}
+      }
+
+      // 3) Regen parameters (allow per-faction overrides)
+      const map     = { ...DEFAULT_REGEN_MAP, ...(getFlag(A, `${MOD_FACTIONS}.opRegenMap`, {})||{}) };
+      const factors = { ...DEFAULT_FACTORS,  ...(getFlag(A, `${MOD_FACTIONS}.opRegenFactors`, {})||{}) };
+
+      // 4) Compute OP delta
+      const opsDelta = computeOpsFromStockpile(stock, map, factors);
+      const totalGained = Object.values(opsDelta).reduce((a,b)=>a+b,0);
+
+      const row = { factionId: A.id, factionName: A.name, gained: totalGained, opsDelta, applied:false };
+      results.push(row);
+
+      if (apply && totalGained > 0) {
+        // proportional burn-down of stockpile (simple floor-based consume)
+        const newStock = clone(stock);
+        for (const [res, amtRaw] of Object.entries(stock||{})) {
+          const amt = Number(amtRaw||0); if (!amt || amt <= 0) continue;
+          const key = map[res]; if (!key) continue;
+          const fac = Number(factors?.[res] ?? 1); if (!(fac > 0)) continue;
+          const gainedRes = Math.floor(amt * fac); if (gainedRes <= 0) continue;
+          const consumed = Math.min(amt, Math.ceil(gainedRes / fac));
+          newStock[res] = Math.max(0, amt - consumed);
+        }
+
+        const newBank = addOps(opBank, opsDelta);
+        await A.update({ [`flags.${MOD_FACTIONS}.opBank`]: newBank, [`flags.${MOD_FACTIONS}.stockpile`]: newStock });
+
+        const warLogs = clone(getFlag(A, `${MOD_FACTIONS}.warLogs`, [])) || [];
+        warLogs.push({ type:"commit", date:(new Date()).toLocaleString(), summary:`OP Regen: ${fmtOpsRow(opsDelta)}` });
+        await A.update({ [`flags.${MOD_FACTIONS}.warLogs`]: warLogs });
+
+        await ChatMessage.create({
+          content: `<p><b>${foundry.utils.escapeHTML(A.name)}</b> — <i>Advance OP (Apply)</i><br/>Gained: ${fmtOpsRow(opsDelta)}</p>`,
+          whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
+          speaker: { alias: "BBTTCC Turn Driver" }
+        });
+
+        row.applied = true;
+      }
+
+    } catch (e) { warn("advanceOPRegen failed for faction:", A?.name, e); }
   }
 
-  // apply
-  const sized = {}; for (const k of Object.keys(base)) sized[k] = Number(base[k]) * mult * factorAll * factorPer[k];
-  for (const k of Object.keys(addPer)) sized[k] = Number(sized[k]) + Number(addPer[k]||0);
-
-  // sephirot
-  let tech = 0;
-  const seKey = (tf.sephirotKey || "").toLowerCase().trim() || await (async () => {
-    if (!tf.sephirotUuid) return "";
-    try { const it = await fromUuid(tf.sephirotUuid); return (it?.name ?? "").toLowerCase().replace(/[^\p{L}]+/gu,""); }
-    catch { return ""; }
-  })();
-  const se = SEPHIROT[seKey];
-  if (se && se.addPer) {
-    if (se.addPer.all) for (const k of Object.keys(sized)) if (k in sized) sized[k] = Number(sized[k]) + Number(se.addPer.all||0);
-    for (const k of Object.keys(se.addPer)) if (k !== "all" && k in sized) sized[k] = Number(sized[k]) + Number(se.addPer[k]||0);
+  if (!apply) {
+    const lines = results.map(r => `<li><b>${foundry.utils.escapeHTML(r.factionName)}</b>: ${fmtOpsRow(r.opsDelta)}</li>`).join("") || "<li>—</li>";
+    await ChatMessage.create({
+      content: `<p><i>Advance OP (Dry)</i> — projected gains:</p><ul>${lines}</ul>`,
+      whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
+      speaker: { alias: "BBTTCC Turn Driver" }
+    });
   }
-  if (se && typeof se.defense === "number") defense += Number(se.defense||0);
-  if ((tf.type ?? "") === "research") tech += 2;
-  // final round
-  const eff = {}; for (const k of Object.keys(sized)) eff[k] = Math.round(sized[k]);
-  return { ...eff, technology: Math.round(Number(eff.knowledge||0) + tech), defenseBonus: defense };
+
+  return { changed: apply && results.some(r=>r.applied), rows: results };
 }
 
-/* ------------------------------------------------------------------
-   Hex→OP mapping (Gap Analysis v1)
-   Food:    +0.5 Economy, +0.5 Culture
-   Materials:+0.75 Economy, +0.25 Logistics
-   Trade:   +0.5 Economy, +0.5 Diplomacy
-   Military:+0.5 Violence, +0.5 Non-Lethal
-   Knowledge:+0.5 Intrigue, +0.25 Faith, +0.25 Soft Power         :contentReference[oaicite:6]{index=6}
-------------------------------------------------------------------- */
-const RES_TO_OP = {
-  economy:   { food:0.5, materials:0.75, trade:0.5, military:0.0, knowledge:0.0 },
-  violence:  { food:0.0, materials:0.0,  trade:0.0, military:0.5, knowledge:0.0 },
-  nonlethal: { food:0.0, materials:0.0,  trade:0.0, military:0.5, knowledge:0.0 },
-  diplomacy: { food:0.0, materials:0.0,  trade:0.5, military:0.0, knowledge:0.0 },
-  softpower: { food:0.0, materials:0.0,  trade:0.0, military:0.0, knowledge:0.25 },
-  intrigue:  { food:0.0, materials:0.0,  trade:0.0, military:0.0, knowledge:0.5 },
-  logistics: { food:0.0, materials:0.25, trade:0.0, military:0.0, knowledge:0.0 },
-  culture:   { food:0.5, materials:0.0,  trade:0.0, military:0.0, knowledge:0.0 },
-  faith:     { food:0.0, materials:0.0,  trade:0.0, military:0.0, knowledge:0.25 }
-};
-
-/* Carry fractional remainders per hex between turns (on the hex) */
-function _getFrac(d) {
-  const f = d.getFlag(TERR_MOD, "opFrac") || {};
-  return { ...{economy:0,violence:0,nonlethal:0,intrigue:0,softpower:0,diplomacy:0,logistics:0,culture:0,faith:0}, ...f };
-}
-async function _setFrac(d, frac) { await d.setFlag(TERR_MOD, "opFrac", frac); }
-
-/* ------------------------------------------------------------------
-   Scanner: collect all owned hexes and compute OP outputs
-------------------------------------------------------------------- */
-function isHexDrawing(d) {
-  const tf = d.flags?.[TERR_MOD] ?? {};
-  const poly = d.shape?.type === "p" && Array.isArray(d.shape?.points) && d.shape.points.length >= 10;
-  return tf.isHex === true || tf.kind === "territory-hex" || poly;
-}
-function ownedByFaction(d, faction) {
-  const tf = d.flags?.[TERR_MOD] ?? {};
-  const id = tf.factionId ?? tf.ownerId;
-  const nm = tf.faction ?? tf.ownerName;
-  return (id && id === faction.id) || (!!nm && String(nm).trim() === String(faction.name).trim());
-}
-
-/** Compute per-faction OP regen totals (with frac carry). */
-async function collectOPByFaction({ sceneId=null } = {}) {
-  const scenes = sceneId ? [game.scenes.get(sceneId)].filter(Boolean) : (game.scenes?.contents ?? []);
-  const out = new Map(); // factionId -> { name, ops:{...}, hexes:[], scenes:Set<string> }
-
-  const factions = listFactions();
-  const byId = new Map(factions.map(f => [f.id, f]));
-
-  for (const sc of scenes) {
-    for (const d of sc.drawings?.contents ?? []) {
-      if (!isHexDrawing(d)) continue;
-      const tf = d.flags?.[TERR_MOD] ?? {};
-      let ownerId = tf.factionId ?? tf.ownerId; let fac = ownerId ? byId.get(ownerId) : null;
-      if (!fac) {
-        const nm = tf.faction ?? tf.ownerName;
-        if (nm) fac = factions.find(f => String(f.name).trim() === String(nm).trim());
-        if (fac) ownerId = fac.id;
-      }
-      if (!fac) continue;
-
-      const eff = await effHexWithAll(d); // {food,materials,trade,military,knowledge, technology, defenseBonus}
-      // Map resources → OP (floats)
-      const floats = { economy:0,violence:0,nonlethal:0,intrigue:0,softpower:0,diplomacy:0,logistics:0,culture:0,faith:0 };
-      for (const op of Object.keys(floats)) {
-        const weights = RES_TO_OP[op] || {};
-        let sum = 0;
-        sum += (weights.food||0)     * Number(eff.food||0);
-        sum += (weights.materials||0)* Number(eff.materials||0);
-        sum += (weights.trade||0)    * Number(eff.trade||0);
-        sum += (weights.military||0) * Number(eff.military||0);
-        sum += (weights.knowledge||0)* Number(eff.knowledge||0);
-        floats[op] = sum;
-      }
-
-      // add & carry fractional remainders per hex
-      const prevFrac = _getFrac(d);
-      const totalsInt = {};
-      const nextFrac  = {};
-      for (const op of Object.keys(floats)) {
-        const acc = Number(floats[op]) + Number(prevFrac[op]||0);
-        totalsInt[op] = Math.floor(acc);
-        nextFrac[op]  = acc - totalsInt[op];
-      }
-      await _setFrac(d, nextFrac);
-
-      // push into out map
-      if (!out.has(ownerId)) out.set(ownerId, {
-        factionId: ownerId,
-        name: fac.name,
-        ops: { economy:0,violence:0,nonlethal:0,intrigue:0,softpower:0,diplomacy:0,logistics:0,culture:0,faith:0 },
-        hexes:[], scenes:new Set()
-      });
-      const row = out.get(ownerId);
-      row.hexes.push({ id:d.id, name: tf.name || d.text || "Hex", ops: totalsInt });
-      row.scenes.add(sc.name);
-      for (const op of Object.keys(row.ops)) row.ops[op] += Number(totalsInt[op]||0);
+/* ------------------------- warLog migration (sing→pl) -------------------- */
+async function migrateWarLogPluralIfNeeded(A){
+  try {
+    const flags = clone(A.flags?.[MOD_FACTIONS] ?? {});
+    const singular = Array.isArray(flags.warLog) ? flags.warLog : null;
+    const plural   = Array.isArray(flags.warLogs) ? flags.warLogs : [];
+    if (!singular || !singular.length) return false;
+    const byKey = new Map();
+    for (const e of [...plural, ...singular]) {
+      const k = `${e?.ts ?? ""}|${(e?.activity||e?.activityKey||"").toLowerCase()}|${(e?.type||"").toLowerCase()}`;
+      byKey.set(k, e);
     }
+    const merged = [...byKey.values()];
+    await A.update({ [`flags.${MOD_FACTIONS}.warLogs`]: merged });
+    return true;
+  } catch (e) { warn("migrateWarLogPluralIfNeeded failed for", A?.name, e); return false; }
+}
+
+/* ---------------------- (0) Promote post → turn (Apply) ------------------ */
+function _mergeObjects(target={}, src={}){
+  const out = clone(target);
+  for (const [k,v] of Object.entries(src||{})) {
+    if (Array.isArray(v)) out[k] = [...(out[k]||[]), ...v];
+    else if (v && typeof v === "object") out[k] = _mergeObjects(out[k]||{}, v);
+    else out[k] = v;
   }
-  for (const v of out.values()) v.scenes = [...v.scenes];
   return out;
 }
 
-/* ------------------------------------------------------------------
-   OP Regeneration (dry/apply)
-------------------------------------------------------------------- */
-async function advanceOPRegen({ apply=false, sceneId=null } = {}) {
-  const byFaction = await collectOPByFaction({ sceneId });
-  if (!byFaction || byFaction.size === 0) {
-    ui.notifications?.warn?.("No claimed BBTTCC hexes found to regenerate OPs.");
-    return { changed:false, rows:[] };
-  }
-  const rows = [];
+async function promotePostToTurn(){
+  const updates = [];
 
-  for (const data of byFaction.values()) {
-    const actor = game.actors.get(data.factionId);
-    if (!actor) continue;
-    rows.push({ factionId:data.factionId, factionName:data.name, scenes:data.scenes, ops:data.ops });
-
-    if (apply) {
-      // deposit into opBank (not capped; this is the spend bank used by raids)  :contentReference[oaicite:7]{index=7}
-      const flags = foundry.utils.duplicate(actor.flags?.[FCT_MOD] ?? {});
-      const bank  = foundry.utils.duplicate(flags.opBank ?? {
-        violence:0, nonlethal:0, intrigue:0, economy:0, softpower:0, diplomacy:0, logistics:0, culture:0, faith:0
-      });
-      for (const k of Object.keys(bank)) bank[k] = Number(bank[k]||0) + Number(data.ops[k]||0);
-
-      const warLogs = Array.isArray(flags.warLogs) ? flags.warLogs : [];
-      warLogs.push({
-        ts: Date.now(),
-        type: "turn-op",
-        scenes: data.scenes,
-        gained: { ...data.ops },
-        summary: `Regenerated OPs: Viol ${bank.violence} NL ${bank.nonlethal} Intr ${bank.intrigue} Eco ${bank.economy} Soft ${bank.softpower} Dip ${bank.diplomacy} Log ${bank.logistics} Cult ${bank.culture} Faith ${bank.faith}`
-      });
-
-      await actor.update({ [`flags.${FCT_MOD}.opBank`]: bank, [`flags.${FCT_MOD}.warLogs`]: warLogs });
+  // Factions
+  for (const F of allFactions()) {
+    const flags = clone(F.flags?.[MOD_FACTIONS] ?? {});
+    const post  = clone(flags.post?.pending ?? {});
+    if (Object.keys(post).length) {
+      const turn = clone(flags.turn?.pending ?? {});
+      const merged = _mergeObjects(turn, post);
+      updates.push(F.update({
+        [`flags.${MOD_FACTIONS}.turn.pending`]: merged,
+        [`flags.${MOD_FACTIONS}.post.pending`]: {}
+      }));
     }
   }
 
-  // Chat card
-  const lines = rows.map(r => {
-    const o = r.ops;
-    const gains = `Viol ${o.violence} • NL ${o.nonlethal} • Intr ${o.intrigue} • Eco ${o.economy} • Soft ${o.softpower} • Dip ${o.diplomacy} • Log ${o.logistics} • Cult ${o.culture} • Faith ${o.faith}`;
-    const scs = r.scenes.length ? r.scenes.join(", ") : "—";
-    return `<tr>
-      <td style="white-space:nowrap;"><strong>${foundry.utils.escapeHTML(r.factionName)}</strong></td>
-      <td>${foundry.utils.escapeHTML(scs)}</td>
-      <td>${gains}</td>
-    </tr>`;
-  }).join("");
+  // Hexes (scan all scenes' drawings for bbttcc-territory flags)
+  for (const sc of game.scenes ?? []) {
+    const drawings = sc.drawings ?? [];
+    for (const d of drawings) {
+      const tf = d.flags?.[MOD_TERRITORY];
+      if (!tf) continue;
+      const post = clone(tf.post?.pending ?? {});
+      if (!Object.keys(post).length) continue;
+      const turn = clone(tf.turn?.pending ?? {});
+      const merged = _mergeObjects(turn, post);
+      const pathTurn = `flags.${MOD_TERRITORY}.turn.pending`;
+      const pathPost = `flags.${MOD_TERRITORY}.post.pending`;
+      updates.push(d.update({ [pathTurn]: merged, [pathPost]: {} }, { parent: sc }));
+    }
+  }
 
-  const hdr = apply ? "<strong>OP Regeneration Applied</strong>" : "<strong>OP Regeneration (Dry-Run)</strong>";
-  const html = `<div class="bbttcc-opregen-summary">
-    <p>${hdr}</p>
-    <table class="bbttcc-table" style="width:100%;">
-      <thead><tr><th>Faction</th><th style="width:30%;">Scenes</th><th>Gains</th></tr></thead>
-      <tbody>${lines}</tbody>
-    </table>
-  </div>`;
-  ChatMessage.create({ content: html, speaker: { alias: "BBTTCC — Territory" }, whisper: game.users.filter(u=>u.isGM).map(u=>u.id) });
-
-  return { changed: !!apply, rows };
+  if (updates.length) await Promise.allSettled(updates);
+  return { changed: updates.length > 0 };
 }
 
-/* ------------------------------------------------------------------
-   Resources → Turn Bank driver (existing feature you’re using)
-   (kept for completeness so this file is the canonical turn driver)
-------------------------------------------------------------------- */
-async function advanceTurn({ apply=false, sceneId=null } = {}) {
-  // Reuse your existing implementation here if you already installed it earlier.
-  // (This stub just calls the version you registered previously, if present.)
-  const api = game.bbttcc?.api?.territory;
-  if (api && api._delegateAdvanceTurn) return api._delegateAdvanceTurn({ apply, sceneId });
-  // If no delegate is present, do a no-op dry card.
-  return { changed:false, rows:[] };
+/* --------------------------- (1) Planned raids --------------------------- */
+// DRY = preview from warLogs; APPLY = call compat per faction with factionId
+async function plannedRaidsStep({ apply=false } = {}){
+  const raid = game.bbttcc?.api?.raid;
+  if (!raid) return { changed:false, rows:[] };
+
+  const FXS = allFactions();
+  await Promise.all(FXS.map(A => migrateWarLogPluralIfNeeded(A)));
+
+  if (apply && typeof raid.consumePlanned === "function") {
+    let changed = false;
+    const rows = [];
+    for (const F of FXS) {
+      try {
+        const res = await raid.consumePlanned({ factionId: F.id, apply:true });
+        if (res?.changed || res?.applied || res?.didWork || res?.count) changed = true;
+        if (Array.isArray(res?.rows)) rows.push(...res.rows);
+      } catch (e) { warn("consumePlanned error for", F?.name, e); }
+    }
+    return { changed, rows };
+  }
+
+  // DRY preview
+  const rows = [];
+  let any = false;
+  const EFFECTS = (raid && raid.EFFECTS) || {};
+  const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+  const canAfford = (bank={}, cost={}) => OP_KEYS.every(k => Number(bank[k]||0) >= Number(cost[k]||0));
+
+  for (const F of FXS) {
+    const flags = F.flags?.[MOD_FACTIONS] || {};
+    const bank  = flags.opBank || {};
+    const logs  = Array.isArray(flags.warLogs) ? flags.warLogs : [];
+    const planned = logs.filter(e => String(e?.type).toLowerCase() === "planned");
+    if (!planned.length) continue;
+
+    for (const e of planned) {
+      const key = String(e.activity || e.activityKey || "").toLowerCase();
+      const spec = EFFECTS[key];
+      const label = spec?.label || (key ? key.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()) : "(unknown)");
+      const cost = spec?.cost || {};
+      const afford = canAfford(bank, cost);
+      rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford });
+      any = true;
+    }
+  }
+
+  const fmt = (c)=>OP_KEYS.filter(k=>(c[k]||0)>0).map(k=>`${c[k]} ${k}`).join(", ")||"—";
+  await ChatMessage.create({
+    content: any
+      ? `<p><i>Planned Activities (Dry Preview)</i></p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)} ${r.canAfford?"":"<em>(cannot afford)</em>"}</li>`).join("")}</ul>`
+      : `<p><i>Planned Activities (Dry Preview)</i>: none queued.</p>`,
+    whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
+    speaker: { alias: "BBTTCC Turn Driver" }
+  });
+
+  return { changed:false, rows };
 }
 
-/* ------------------------------------------------------------------
-   API registration
-------------------------------------------------------------------- */
-function ensureNS() {
+/* -------- (3.5) Normalize queued shapes: nextRound → nextTurn (Apply) ---- */
+async function normalizePendingShapes(){
+  const updates = [];
+  for (const F of allFactions()) {
+    const flags = clone(F.flags?.[MOD_FACTIONS] ?? {});
+    const turn  = clone(flags.turn?.pending ?? {});
+    if (turn.nextRound && typeof turn.nextRound === "object") {
+      const nt = clone(turn.nextTurn ?? {});
+      const merged = _mergeObjects(nt, turn.nextRound);
+      turn.nextTurn = merged;
+      delete turn.nextRound;
+      updates.push(F.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: turn }));
+    }
+  }
+  if (updates.length) await Promise.allSettled(updates);
+  return { changed: updates.length > 0 };
+}
+
+/* -------------------- (4) consume queued turn.pending -------------------- */
+async function applyQueuedPostEffects(){
+  const raid = game.bbttcc?.api?.raid;
+  if (!raid?.consumeQueuedTurnEffects) return { changed:false, rows:[] };
+  let changed = false;
+  for (const F of allFactions()) {
+    try {
+      const res = await raid.consumeQueuedTurnEffects({ factionId: F.id });
+      if (res?.changed || res?.appliedAt) changed = true;
+    } catch (e) { warn("consumeQueuedTurnEffects error for", F?.name, e); }
+  }
+  return { changed, rows:[] };
+}
+
+/* ------------------------- (5) hard cleanup (Apply) ---------------------- */
+async function hardCleanupQueued(){
+  const updates = [];
+  for (const F of allFactions()) {
+    updates.push(F.update({
+      [`flags.${MOD_FACTIONS}.post.pending`]: {},
+      [`flags.${MOD_FACTIONS}.turn.pending`]: {}
+    }));
+  }
+  for (const sc of game.scenes ?? []) {
+    const drawings = sc.drawings ?? [];
+    for (const d of drawings) {
+      if (!d.flags?.[MOD_TERRITORY]) continue;
+      updates.push(d.update({
+        [`flags.${MOD_TERRITORY}.turn.pending`]: {},
+        [`flags.${MOD_TERRITORY}.post.pending`]: {}
+      }, { parent: sc }));
+    }
+  }
+  if (updates.length) await Promise.allSettled(updates);
+  return { cleared: updates.length > 0 };
+}
+
+/* ----------------------------- driver wrapper ---------------------------- */
+function installDriver(){
   game.bbttcc ??= { api:{} };
   game.bbttcc.api ??= {};
   game.bbttcc.api.territory ??= {};
+
+  const terr = game.bbttcc.api.territory;
+
+  if (typeof terr.advanceTurn === "function" && terr.advanceTurn !== driverAdvanceTurn) {
+    terr._delegateAdvanceTurn = terr.advanceTurn;
+  }
+
+  terr.advanceTurn     = driverAdvanceTurn;
+  terr.advanceOPRegen  = advanceOPRegen;
+
+  log("Turn Driver: promote post→turn, planned raids, delegate, auto-regen (+hex fallback), normalize queued, queued-consume, hard cleanup.");
 }
 
-Hooks.once("ready", () => {
-  ensureNS();
-  // Keep any previously registered advanceTurn as a delegate if it exists,
-  // then expose both drivers canonically from here.
-  if (typeof game.bbttcc.api.territory.advanceTurn === "function") {
-    game.bbttcc.api.territory._delegateAdvanceTurn = game.bbttcc.api.territory.advanceTurn;
+async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
+  if (window._bbttccTurnLock) {
+    console.warn("[bbttcc-turn] AdvanceTurn skipped — another Turn is already running.");
+    return { changed:false, skipped:true };
   }
-  game.bbttcc.api.territory.advanceTurn   = advanceTurn;
-  game.bbttcc.api.territory.advanceOPRegen = advanceOPRegen;
+  window._bbttccTurnLock = true;
+  Hooks.callAll("bbttcc:advanceTurn:begin");
 
-  log("Turn Drivers registered: advanceTurn(resources) + advanceOPRegen(OP).");
-});
+  try {
+    const terr = game.bbttcc?.api?.territory ?? {};
+    let promoted = { changed:false };
+    if (apply) promoted = await promotePostToTurn();
+    const planned = await plannedRaidsStep({ apply });
+    let base = { changed:false, rows:[] };
+    if (typeof terr._delegateAdvanceTurn === "function") {
+      base = (await terr._delegateAdvanceTurn({ apply, sceneId })) ?? base;
+    }
+    let regen = { changed:false, rows:[] };
+    if (apply) regen = await advanceOPRegen({ apply:true });
+    let normalized = { changed:false };
+    if (apply) normalized = await normalizePendingShapes();
+    let queued = { changed:false, rows:[] };
+    if (apply) queued = await applyQueuedPostEffects();
+    if (apply) await hardCleanupQueued();
+
+    return {
+      changed: !!(promoted.changed || planned.changed || base.changed || regen.changed || normalized.changed || queued.changed),
+      rows:    [...(planned.rows||[]), ...(base.rows||[]), ...(regen.rows||[]), ...(queued.rows||[])]
+    };
+  } finally {
+    window._bbttccTurnLock = false;
+    Hooks.callAll("bbttcc:advanceTurn:end");
+  }
+}
+
+
+/* ---------------------------- hook install ------------------------------- */
+Hooks.once("init", installDriver);
+if (game?.ready) installDriver();
+Hooks.once("ready", installDriver);
+Hooks.on("canvasReady", installDriver);
+
+/* ------------------------ console helpers -------------------------------- */
+game.bbttcc ??= { api:{} };
+game.bbttcc.api ??= {};
+game.bbttcc.api.turn ??= game.bbttcc.api.turn || {};
+game.bbttcc.api.turn.executeOPRegen = advanceOPRegen;

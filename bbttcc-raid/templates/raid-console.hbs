@@ -10,10 +10,12 @@
 
     <span class="flex1"></span>
 
-    <div class="btnset flex0" style="display:flex; gap:.25rem;">
-      <button data-id="mode-assault"  class="btn">{{#if (eq vm.mode "assault")}}●{{else}}○{{/if}} Assault</button>
-      <button data-id="mode-infil"    class="btn">{{#if (eq vm.mode "infiltration")}}●{{else}}○{{/if}} Infiltration</button>
-    </div>
+    <label class="flex0">Activity</label>
+    <select class="flex1" data-id="activity">
+      {{#each activityOptions}}
+        <option value="{{this.key}}" {{#if (eq ../vm.activityKey this.key)}}selected{{/if}}>{{this.label}}</option>
+      {{/each}}
+    </select>
 
     <label class="flex0" style="margin-left:.5rem;">Diff</label>
     <select class="flex0" data-id="difficulty">
@@ -39,21 +41,31 @@
     <label class="flex0">Target</label>
     <div class="flex2"><strong>{{default vm.targetName "—"}}</strong></div>
     <span class="flex1"></span>
-    <small class="flex0">Round Key: {{upper currentBank.cat}}</small>
+    <small class="flex0">Primary Key: <b>{{upper (default currentBank.cat "")}}</b></small>
   </div>
 
-  <!-- NEW: Top DC block -->
+  <!-- Top DC block with breakdown -->
   {{#if currentBank.topDC}}
   <div class="flexrow" style="gap:.75rem; align-items:center; opacity:.9;">
     <small class="flex0">
-      <b>Base DC:</b> {{currentBank.topDC.base}}
-      • <b>Defender staged bonus:</b> +{{currentBank.topDC.defProjBonus}}
-      • <b>Projected DC:</b> <span style="font-weight:700;">{{currentBank.topDC.projected}}</span>
+      <b>Base DC:</b> {{default currentBank.topDC.base 0}}
+      {{#if currentBank.topDC.defProjBonus}} • <b>Defender staged bonus:</b> +{{currentBank.topDC.defProjBonus}}{{/if}}
+      {{#if currentBank.topDC.diff}} • <b>Diff:</b> +{{currentBank.topDC.diff}}{{/if}}
+      {{#if currentBank.topDC.facDef}} • <b>Faction:</b> +{{currentBank.topDC.facDef}}{{/if}}
+      {{#if currentBank.topDC.nextB}} • <b>Next-Raid:</b> +{{currentBank.topDC.nextB}}{{/if}}
+      {{#if currentBank.topDC.projected}}
+        • <b>Projected DC:</b>
+          <span {{#if currentBank.topDC.breakdown}}title="{{currentBank.topDC.breakdown}}"{{/if}} style="font-weight:700;">{{currentBank.topDC.projected}}</span>
+          {{#if currentBank.topDC.breakdown}}<span class="bbttcc-tip" data-tip="{{currentBank.topDC.breakdown}}" aria-label="DC breakdown">ⓘ</span>{{/if}}
+      {{/if}}
+      {{#if currentBank.topDC.breakdown}}
+        <br/><em style="opacity:.8;">{{currentBank.topDC.breakdown}}</em>
+      {{/if}}
     </small>
   </div>
   {{/if}}
 
-  <!-- Turn Bank panel -->
+  <!-- Turn Bank panel (unchanged) -->
   <section class="bbttcc-bank grid" style="grid-template-columns: 1fr 1fr; gap:.5rem;">
     <div class="card" style="padding:.5rem;">
       <h4 style="margin:0 0 .25rem 0;">Attacker Bank — {{default currentBank.attackerName "(none)"}}</h4>
@@ -106,7 +118,7 @@
       <thead>
         <tr>
           <th style="text-align:left;">Round</th>
-          <th>Mode</th>
+          <th>Activity</th>
           <th>Att +Key</th>
           <th>Target</th>
           <th>Roll</th>
@@ -120,17 +132,21 @@
           {{#each vm.rounds as |r idx|}}
             <tr data-idx="{{idx}}">
               <td style="text-align:left;"><strong>#{{add idx 1}}</strong></td>
-              <td class="center">{{#if (eq r.mode "infiltration")}}Infiltration{{else}}Assault{{/if}}</td>
+              <td class="center">{{r.activityLabel}}</td>
               <td class="center">+{{r.attBonus}} <small>({{upper r.key}})</small></td>
               <td class="center">{{r.targetName}}</td>
               <td class="center">{{#if r.roll}}<code>{{r.roll.result}}</code> = <b>{{r.total}}</b>{{else}}—{{/if}}</td>
               <td class="center">
                 {{#if r.dcFinal}}
                   <b>{{r.dcFinal}}</b><br/><small>Final</small>
-                {{else if r.view.dcProjected}}
-                  <b>{{r.view.dcProjected}}</b><br/><small>Projected</small>
                 {{else}}
-                  {{r.DC}}
+                  {{#if r.view.dcProjected}}
+                    <b {{#if r.view.breakdown}}title="{{r.view.breakdown}}"{{/if}}>{{r.view.dcProjected}}</b>
+                    {{#if r.view.breakdown}}<span class="bbttcc-tip" data-tip="{{r.view.breakdown}}" aria-label="DC breakdown">ⓘ</span>{{/if}}
+                    <br/><small>Projected</small>
+                  {{else}}
+                    {{r.DC}}
+                  {{/if}}
                 {{/if}}
               </td>
               <td class="center">{{default r.outcome "—"}}</td>
@@ -186,24 +202,30 @@
                     <div style="margin-top:.5rem;">
                       <small>
                         Base DC: <b>{{r.DC}}</b>
+                        {{#if r.view.defProjBonus}} • Defender staged bonus: <b>+{{r.view.defProjBonus}}</b>{{/if}}
+                        {{#if r.view.diff}} • Diff: <b>+{{r.view.diff}}</b>{{/if}}
+                        {{#if r.view.facDef}} • Faction: <b>+{{r.view.facDef}}</b>{{/if}}
+                        {{#if r.view.nextB}} • Next-Raid: <b>+{{r.view.nextB}}</b>{{/if}}
                         {{#if r.view.dcProjected}}
-                          • Defender staged bonus: <b>+{{r.view.defProjBonus}}</b>
-                          • <i>Projected DC</i>: <b>{{r.view.dcProjected}}</b>
+                          • <i>Projected DC</i>: <b {{#if r.view.breakdown}}title="{{r.view.breakdown}}"{{/if}}>{{r.view.dcProjected}}</b>
+                          {{#if r.view.breakdown}}<span class="bbttcc-tip" data-tip="{{r.view.breakdown}}" aria-label="DC breakdown">ⓘ</span>{{/if}}
                         {{/if}}
                         {{#if r.dcFinal}}
                           • <i>Final DC</i>: <b>{{r.dcFinal}}</b>
                         {{/if}}
                       </small>
+                      {{#if r.view.breakdown}}
+                      <div><em style="opacity:.8;">{{r.view.breakdown}}</em></div>
+                      {{/if}}
                     </div>
 
-                    <!-- ✨ Maneuvers container (script will populate per round/mode) -->
+                    <!-- Maneuvers container -->
                     <div class="bbttcc-mans-cell" style="margin-top:.5rem;"></div>
 
                     <div class="flexrow" style="gap:.5rem; margin-top:.5rem;">
                       <button class="btn" data-manage-act="commit">Commit (Roll)</button>
                       <button class="btn" data-manage-act="cancel">Cancel</button>
                       <button class="btn" data-manage-act="close">Close</button>
-                      <!-- Difficulty ± controls -->
                       <div class="flex1"></div>
                       <div class="btnset" style="display:flex; gap:.25rem;">
                         <button class="btn" data-manage-act="diff" data-delta="-5">Diff −5</button>
@@ -214,9 +236,9 @@
                     </div>
                   </div>
 
-                  <!-- Quick reference -->
                   <div class="flex1 card" style="padding:.5rem;">
                     <h4 style="margin:0 0 .25rem 0;">Round Details</h4>
+                    <p style="margin:.25rem 0;"><b>Activity:</b> {{r.activityLabel}} • <b>Primary Key:</b> {{upper r.view.cat}}</p>
                     <p style="margin:.25rem 0;"><b>Attacker:</b> {{r.attackerName}}</p>
                     <p style="margin:.25rem 0;"><b>Target:</b> {{r.targetName}}</p>
                     <p style="margin:.25rem 0;"><b>Base Bonus:</b> +{{r.attBonus}} • <b>Base DC:</b> {{r.DC}}</p>
@@ -229,7 +251,7 @@
             {{/if}}
           {{/each}}
         {{else}}
-          <tr><td colspan="8" class="center"><em>No rounds yet — select Attacker, Pick a Hex, then Add Round.</em></td></tr>
+          <tr><td colspan="8" class="center"><em>No rounds yet — select Attacker, pick a Hex, choose Activity, then Add Round.</em></td></tr>
         {{/if}}
       </tbody>
     </table>
