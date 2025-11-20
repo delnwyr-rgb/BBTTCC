@@ -686,6 +686,74 @@ class BBTTCCFactionSheet extends ActorSheet {
         const cell = rpanel.querySelector(`[data-rp-val="${key}"]`);
         if (cell) cell.textContent = String(next);
       });
+
+      // --- Victory/Unity strip below the status row ---
+      try {
+        const header = host.querySelector(".sheet-header");
+        if (header) {
+          let vrow = header.querySelector("#bbttcc-victory-strip");
+          const unityVal = clamp0(Number(this.actor.getFlag(MODULE_ID,"unity") ?? ((this.actor.getFlag(MODULE_ID,"victory")||{}).unity ?? 0)));
+          const unityPct = Math.max(0, Math.min(100, Math.round(unityVal)));
+
+          const badges = (((this.actor.getFlag(MODULE_ID,"victory")||{}).badges) || []).filter(Boolean);
+
+          if (!vrow) {
+            vrow = document.createElement("div");
+            vrow.id = "bbttcc-victory-strip";
+            vrow.className = "flexrow";
+            vrow.style.gap = ".75rem";
+            vrow.style.alignItems = "center";
+            vrow.style.marginTop = ".35rem";
+            header.appendChild(vrow);
+          }
+          vrow.replaceChildren();
+
+          const left = document.createElement("div");
+          left.className = "flex1";
+
+          const label = document.createElement("div");
+          label.style.fontSize = "12px";
+          label.style.fontWeight = "600";
+          label.textContent = "Unity";
+
+          const meterWrap = document.createElement("div");
+          meterWrap.className = "bbttcc-meter";
+          const fill = document.createElement("div");
+          fill.className = "bbttcc-meter-fill";
+          fill.style.width = `${unityPct}%`;
+          meterWrap.appendChild(fill);
+
+          const caption = document.createElement("small");
+          caption.style.opacity = ".85";
+          caption.textContent = `${unityPct}%`;
+
+          left.appendChild(label);
+          left.appendChild(meterWrap);
+          left.appendChild(caption);
+
+          const right = document.createElement("div");
+          right.className = "flex0";
+          right.style.display = "flex";
+          right.style.flexWrap = "wrap";
+          right.style.gap = "6px";
+          const toBadge = (txt) => {
+            const span = document.createElement("span");
+            span.className = "bbttcc-badge unity";
+            span.textContent = txt;
+            return span;
+          };
+          if (badges.length) badges.forEach(b=> right.appendChild(toBadge(String(b))));
+          else {
+            const hint = document.createElement("small");
+            hint.style.opacity = ".6";
+            hint.textContent = "No victory badges yet";
+            right.appendChild(hint);
+          }
+
+          vrow.appendChild(left);
+          vrow.appendChild(right);
+        }
+      } catch (e) { /* non-blocking */ }
     } catch (e) { warn("Header build error", e); }
   }
 

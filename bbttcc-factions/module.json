@@ -1,31 +1,29 @@
 {
   "id": "bbttcc-factions",
   "title": "BBTTCC Factions",
-  "description": "Handles faction data, sheets, and API for the BBTTCC system.",
-  "version": "5.0.0",
-  "authors": [
-    { "name": "BBTTCC Team" }
-  ],
-  "compatibility": {
-    "minimum": "11",
-    "verified": "13"
-  },
+  "description": "Factions, OP economy, meters, and war logs for BBTTCC.",
+  "version": "1.3.16",
+  "compatibility": { "minimum": "13", "verified": "13" },
+  "authors": [{ "name": "Shattered Lens Studios" }],
   "relationships": {
-    "systems": [
-      { "id": "dnd5e", "type": "system" }
-    ]
+    "systems": [{ "id": "dnd5e" }],
+    "requires": []
   },
   "esmodules": [
     "scripts/module.js"
   ],
-  "styles": [
-    "styles/faction-sheet.css"
+  "scripts": [
+    "scripts/faction-meters.enhancer.js",
+    "scripts/faction-health-display.js",
+    "scripts/bbttcc-victory.enhancer.js",
+    "scripts/vp-engine.js",
+    "scripts/turn-extensions.enhancer.js"
   ],
   "languages": [
-    {
-      "lang": "en",
-      "name": "English",
-      "path": "lang/en.json"
-    }
-  ]
+    { "lang": "en", "name": "English", "path": "lang/en.json" }
+  ],
+  "packs": [],
+  "url": "",
+  "manifest": "",
+  "download": ""
 }

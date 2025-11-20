@@ -23,6 +23,42 @@
 
   <section class="bbttcc-faction-body flexcol" style="gap:1rem;">
 
+    {{!-- ===================== FACTION HEALTH ===================== --}}
+    <fieldset style="border:1px solid #666; border-radius:8px; padding:.5rem;">
+      <legend style="padding:0 .25rem;">Faction Health</legend>
+      <div class="flexrow" style="justify-content:space-between; flex-wrap:wrap; font-size:12px; color:#222;">
+
+        <div>
+          <strong style="color:#1e90ff;">Victory:</strong>
+          <span class="bbttcc-meter">{{fx.victory.vp}}</span> / 25
+        </div>
+
+        <div>
+          <strong style="color:#20b2aa;">Unity:</strong>
+          <span class="bbttcc-meter">{{fx.victory.unity}}%</span>
+        </div>
+
+        <div>
+          <strong style="color:#daa520;">Morale:</strong>
+          <span class="bbttcc-meter">{{fx.mods.morale}}%</span>
+        </div>
+
+        <div>
+          <strong style="color:#228b22;">Loyalty:</strong>
+          <span class="bbttcc-meter">{{fx.mods.loyalty}}%</span>
+        </div>
+
+        <div>
+          <strong style="color:#b22222;">Darkness:</strong>
+          <span class="bbttcc-meter">{{fx.darkness.global}}</span>
+        </div>
+
+      </div>
+      <p class="hint" style="opacity:.6; margin:.25rem 0 0;">
+        Updates automatically each turn. Colors shift with thresholds in future versions.
+      </p>
+    </fieldset>
+
     {{!-- ===================== TERRITORY ROLL-UP (ALL SCENES) ===================== --}}
     {{#if fx.territoryTotals}}
     <fieldset style="border:1px solid #666; border-radius:8px; padding:.6rem;">
