@@ -50,6 +50,8 @@
     "scripts/effects-wilderness.enhancer.js",
     "scripts/effects-integration-activities.enhancer.js",
     "scripts/bbttcc-travel-visuals.js",
+    "scripts/raid-infiltration.alarm.enhancer.js",
+    "scripts/raid-courtly.influence.enhancer.js",
     "scripts/module.raid-planner.js"
   ],
   "styles": [

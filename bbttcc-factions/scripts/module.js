@@ -16,20 +16,93 @@ const clamp0 = (v) => Math.max(0, Number(v ?? 0) || 0);
 function isFactionActor(a) {
   if (!a) return false;
   try {
-    if (a.getFlag?.(MODULE_ID, "isFaction") === true) return true;
-    const t = String(foundry.utils.getProperty(a, "system.details.type.value") ?? "").toLowerCase();
-    return t === "faction";
-  } catch { return false; }
+    if (a.getFlag?.(MODULE_ID, "isFaction")) return true;
+    const typ = foundry.utils.getProperty(a, "system.details.type.value");
+    if (typ === "faction") return true;
+  } catch (e) {}
+  return false;
 }
-function isCharacter(a) { return String(a?.type ?? "").toLowerCase() === "character"; }
+function isCharacter(a) {
+  return a?.type === "character" || foundry.utils.getProperty(a, "type") === "character";
+}
+function getFlag(doc, path, fallback) {
+  try { return doc.getFlag?.(MODULE_ID, path) ?? fallback; } catch { return fallback; }
+}
+function setFlag(doc, path, value) {
+  try { return doc.setFlag?.(MODULE_ID, path, value); } catch { return null; }
+}
+function delFlag(doc, path) {
+  try { return doc.unsetFlag?.(MODULE_ID, path); } catch { return null; }
+}
+function deepClone(obj) { return foundry.utils.duplicate(obj ?? {}); }
+function zeroOps() {
+  return {
+    violence:0, nonlethal:0, intrigue:0, economy:0,
+    softpower:0, diplomacy:0, logistics:0, culture:0, faith:0
+  };
+}
+function zeroRes() {
+  return {
+    food:0, materials:0, trade:0, military:0, knowledge:0, technology:0
+  };
+}
+function allFactions() {
+  return game.actors?.contents?.filter?.(isFactionActor) ?? [];
+}
+function gmIds() {
+  return game.users?.filter(u => u.isGM).map(u => u.id) ?? [];
+}
 
-async function ensureFactionHints(a) {
-  try {
-    if (isFactionActor(a) && a.getFlag(MODULE_ID, "isFaction") !== true) await a.setFlag(MODULE_ID, "isFaction", true);
-    if (a.system?.details?.type?.value !== "faction") await a.update({ "system.details.type.value": "faction" });
-  } catch (e) { warn("ensureFactionHints failed", e); }
+/** list all faction actors (used in ready hook) */
+function listFactionActors() {
+  return allFactions();
 }
-function listFactionActors() { return game.actors.contents.filter(isFactionActor); }
+
+/** ownership helper for hex drawings */
+function _ownedByFaction(drawing, faction) {
+  const f = drawing.flags?.[TER_MOD] ?? {};
+  const ownerId = f.factionId || f.ownerId;
+  const ownerName = f.faction ?? f.ownerName;
+  return (ownerId && ownerId === faction.id) ||
+         (!!ownerName && String(ownerName).trim() === String(faction.name).trim());
+}
+
+/** ensure faction hints/flags/type are consistent */
+async function ensureFactionHints(actor) {
+  try {
+    if (!actor) return;
+
+    const typePath = "system.details.type.value";
+    const isFac = isFactionActor(actor);
+    const updates = {};
+
+    if (isFac) {
+      if (!actor.getFlag(MODULE_ID, "isFaction")) {
+        updates[`flags.${MODULE_ID}.isFaction`] = true;
+      }
+      const curType = foundry.utils.getProperty(actor, typePath);
+      if (curType !== "faction") {
+        updates[typePath] = "faction";
+      }
+    } else {
+      if (actor.getFlag(MODULE_ID, "isFaction")) {
+        updates[`flags.${MODULE_ID}.isFaction`] = null;
+      }
+    }
+
+    if (Object.keys(updates).length) {
+      await actor.update(updates);
+    }
+  } catch (e) {
+    warn("ensureFactionHints", e);
+  }
+}
+
+/* ---------------- OP display helpers ---------------- */
+function fmtOpsRow(ops){
+  const keys = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+  return keys.filter(k => (ops[k]||0) > 0).map(k => `<b>${(ops[k]||0)}</b> ${k}`).join(" • ") || "—";
+}
 
 /* ---------------- Power bands ---------------- */
 const POWER_BANDS = [
@@ -47,6 +120,7 @@ function computePowerKey(totalOPs) {
 /* ===================================================================
    EFFECTIVE HEX CALC (defense included)
    =================================================================== */
+
 const SIZE_TABLE = {
   outpost:     { mult: 0.50, defense: 0 },
   village:     { mult: 0.75, defense: 1 },
@@ -85,6 +159,33 @@ const SEPHIROT = {
   malkuth:  { addPer:{ trade:+4 } }
 };
 
+/* ---------------- Integration → efficiency multipliers ---------------- */
+
+const INTEGRATION_STAGE_MULT = {
+  wild:       1.00,
+  outpost:    1.00,
+  developing: 1.05,
+  settled:    1.10,
+  integrated: 1.20
+};
+
+function integrationStageKeyFromProgress(progressRaw) {
+  let p = Math.round(Number(progressRaw ?? 0) || 0);
+  if (p < 0) p = 0;
+  if (p >= 6) return "integrated";
+  if (p === 5) return "settled";
+  if (p >= 3) return "developing";
+  if (p >= 1) return "outpost";
+  return "wild";
+}
+
+function integrationMultFromFlags(integrationFlags) {
+  const progress = integrationFlags?.progress ?? 0;
+  const stageKey = integrationStageKeyFromProgress(progress);
+  const mult = INTEGRATION_STAGE_MULT[stageKey] ?? 1.0;
+  return { mult, stageKey };
+}
+
 function normalizeSizeKey(sizeRaw) {
   if (!sizeRaw) return "town";
   let k = String(sizeRaw).toLowerCase().trim();
@@ -122,7 +223,7 @@ async function resolveSephirotKeyFromFlags(f) {
   catch { return ""; }
 }
 
-/** Apply size + modifiers + sephirot; return effective outputs & side-effects. */
+/** Apply size + modifiers + sephirot + integration; return effective outputs & side-effects. */
 async function effHexWithAll(dr) {
   const f = dr.flags?.[TER_MOD] ?? {};
 
@@ -143,10 +244,11 @@ async function effHexWithAll(dr) {
   let factorAll = 1.0;
   const factorPer = { food:1, materials:1, trade:1, military:1, knowledge:1 };
   const addPer    = { food:0, materials:0, trade:0, military:0, knowledge:0 };
-  let defense = sizeDefense;
+  let defense     = Number(sizeDefense || 0);
 
-  if (Array.isArray(f.modifiers)) {
-    for (const m of f.modifiers) {
+  const mods = Array.isArray(f.modifiers) ? f.modifiers : [];
+  if (mods.length) {
+    for (const m of mods) {
       const spec = MODS[m]; if (!spec) continue;
       if (typeof spec.multAll === "number") factorAll *= (1 + spec.multAll);
       if (spec.multPer) for (const k of Object.keys(spec.multPer)) factorPer[k] *= (1 + Number(spec.multPer[k]||0));
@@ -167,10 +269,25 @@ async function effHexWithAll(dr) {
   const sephKey = await resolveSephirotKeyFromFlags(f);
   const se = SEPHIROT[sephKey];
   if (se && se.addPer) {
-    if (se.addPer.all) for (const k of ["food","materials","trade","military","knowledge"]) eff[k] = Number(eff[k]) + Number(se.addPer.all);
-    for (const k of Object.keys(se.addPer)) if (k !== "all") eff[k] = Number(eff[k]) + Number(se.addPer[k] || 0);
+    if (typeof se.addPer.all === "number") {
+      for (const k of ["food","materials","trade","military","knowledge"]) {
+        eff[k] = Number(eff[k] ?? 0) + Number(se.addPer.all || 0);
+      }
+    }
+    for (const [k, v] of Object.entries(se.addPer)) {
+      if (k === "all") continue;
+      eff[k] = Number(eff[k] ?? 0) + Number(v || 0);
+    }
   }
   if (se && typeof se.defense === "number") defense += Number(se.defense || 0);
+
+  // Integration efficiency multiplier
+  const { mult: integMult } = integrationMultFromFlags(f.integration ?? {});
+  if (integMult !== 1) {
+    for (const k of Object.keys(eff)) {
+      eff[k] = Number(eff[k] ?? 0) * integMult;
+    }
+  }
 
   for (const k of Object.keys(eff)) eff[k] = Math.round(eff[k]);
 
@@ -180,14 +297,9 @@ async function effHexWithAll(dr) {
   return { ...eff, technology, defenseBonus: defense };
 }
 
-/* ---------- Territory collectors ---------- */
-function _ownedByFaction(d, faction) {
-  const f = d.flags?.[TER_MOD] ?? {};
-  const ownerId = f.factionId ?? f.ownerId;
-  const ownerName = f.faction ?? f.ownerName;
-  return (ownerId && ownerId === faction.id) ||
-         (!!ownerName && String(ownerName).trim() === String(faction.name).trim());
-}
+/* ===================================================================
+   COLLECT EFFECTIVE HEXES FOR A FACTION
+   =================================================================== */
 
 async function _collectTerritoryForScope(faction, scope /* "scene" | "all" */) {
   const res = zRes();
@@ -213,7 +325,12 @@ async function _collectTerritoryForScope(faction, scope /* "scene" | "all" */) {
   }
 
   if (count === 0) return null;
-  return { count, resources: res, names, defenseTotal: defense };
+  return { count, resources: res, names, defenseTotal: defense };;
+
+// Expose for console-based testing
+if (globalThis && !globalThis._collectTerritoryForScope) {
+  globalThis._collectTerritoryForScope = _collectTerritoryForScope;
+}
 }
 
 /* ---------- Roster / OPs ---------- */
@@ -233,9 +350,9 @@ function _normalizeOps(obj = {}) {
 function _characterBelongsToFaction(char, faction) {
   const byId = char.getFlag?.(MODULE_ID, "factionId");
   if (byId) return byId === faction.id;
-  const legacyName = char?.flags?.[TER_MOD]?.faction;
-  if (!legacyName) return false;
-  return String(legacyName).trim() === String(faction.name).trim();
+  const byName = char.getFlag?.(MODULE_ID, "factionName");
+  if (byName) return String(byName).trim() === String(faction.name).trim();
+  return false;
 }
 
 /* ---------- Commit Turn helpers (resources) ---------- */
@@ -340,14 +457,14 @@ function fmtOPRow(op = {}) {
 /* ---------- NEW: Raid Plan helpers ---------- */
 const RP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
 const RP_LABEL = {
-  violence:"Viol", nonlethal:"NonL", intrigue:"Intr", economy:"Econ", softpower:"Soft", diplomacy:"Dip", logistics:"Log", culture:"Cult", faith:"Faith"
+  violence:"Viol", nonlethal:"NonL", intrigue:"Intr", economy:"Econ",
+  softpower:"Soft", diplomacy:"Dip", logistics:"Log", culture:"Cult", faith:"Faith"
 };
 function _raidPlanFromFlags(actor) {
   const rp = foundry.utils.duplicate(actor.getFlag(MODULE_ID, "raidPlan") || {});
   for (const k of RP_KEYS) if (typeof rp[k] !== "number") rp[k] = 0;
   return rp;
 }
-// IMPORTANT: do not re-render the sheet; update a single flag path
 async function _saveRaidPlanKey(actor, key, value) {
   value = clamp0(Number(value||0));
   await actor.update({ [`flags.${MODULE_ID}.raidPlan.${key}`]: value }, { render: false });
@@ -448,7 +565,6 @@ class BBTTCCFactionSheet extends ActorSheet {
     };
   }
 
-  /* ---------- ROLL BINDING + header build ---------- */
   activateListeners(html) {
     super.activateListeners(html);
     const host = html?.[0] instanceof HTMLElement ? html[0] : (html instanceof HTMLElement ? html : this.element);
@@ -467,13 +583,11 @@ class BBTTCCFactionSheet extends ActorSheet {
       });
     });
 
-    /* ---------- Header row build: buttons, strips, OP Bank, Raid Plan ---------- */
     try {
       const headerRows = host.querySelectorAll(".sheet-header .flexrow");
       const targetRow = headerRows?.[1] || host.querySelector(".sheet-header");
       if (!targetRow) return;
 
-      // --- Left-side: control buttons ---
       let ctrls = targetRow.querySelector("#bbttcc-faction-ctrls");
       if (!ctrls) {
         ctrls = document.createElement("div");
@@ -501,7 +615,6 @@ class BBTTCCFactionSheet extends ActorSheet {
         return b;
       };
 
-      // Buttons (Advance Turn, Advance OP, Commit)
       ctrls.appendChild(mkBtn("Advance Turn (Dry)", "Preview per-turn resource yield", { act:"turn", apply:"0" }));
       ctrls.appendChild(mkBtn("Advance Turn (Apply)", "Deposit per-turn resources into Turn Bank", { act:"turn", apply:"1" }));
       ctrls.appendChild(mkBtn("Advance OP (Dry)", "Preview OP regeneration from resources", { act:"op", apply:"0" }));
@@ -533,7 +646,6 @@ class BBTTCCFactionSheet extends ActorSheet {
         }
       });
 
-      // --- Center: Bank / Stockpile strips ---
       let strips = targetRow.querySelector("#bbttcc-faction-strips");
       if (!strips) {
         strips = document.createElement("div");
@@ -561,7 +673,6 @@ class BBTTCCFactionSheet extends ActorSheet {
       strips.appendChild(mkLine("Bank", this.actor.getFlag(MODULE_ID,"turnBank")  || _zeros()));
       strips.appendChild(mkLine("Stockpile", this.actor.getFlag(MODULE_ID,"stockpile") || _zeros()));
 
-      // --- Right: OP Bank mini-panel ---
       let opbar = targetRow.querySelector("#bbttcc-opbank-strip");
       if (!opbar) {
         opbar = document.createElement("div");
@@ -582,7 +693,6 @@ class BBTTCCFactionSheet extends ActorSheet {
       opbar.appendChild(opTitle);
       opbar.appendChild(opTblWrap.firstElementChild);
 
-      // --- Far Right: Raid Plan compact grid ---
       let rpanel = targetRow.querySelector("#bbttcc-raidplan-strip");
       if (!rpanel) {
         rpanel = document.createElement("div");
@@ -598,14 +708,12 @@ class BBTTCCFactionSheet extends ActorSheet {
       }
       const plan = _raidPlanFromFlags(this.actor);
 
-      // Title
       rpanel.replaceChildren();
       const rtitle = document.createElement("div");
       rtitle.style.fontSize = "12px"; rtitle.style.fontWeight = "600";
       rtitle.textContent = "Raid Plan (Player Staging)";
       rpanel.appendChild(rtitle);
 
-      // Table
       const tbl = document.createElement("table");
       tbl.className = "bbttcc-table";
       tbl.style.width = "auto";
@@ -623,7 +731,6 @@ class BBTTCCFactionSheet extends ActorSheet {
 
       const tbody = document.createElement("tbody");
 
-      // Values row
       const trv = document.createElement("tr"); trv.className = "center";
       for (const k of RP_KEYS) {
         const td = document.createElement("td");
@@ -633,7 +740,6 @@ class BBTTCCFactionSheet extends ActorSheet {
       }
       tbody.appendChild(trv);
 
-      // Buttons row — as flex to avoid overlap/clipping
       const tra = document.createElement("tr"); tra.className = "center";
       for (const k of RP_KEYS) {
         const td = document.createElement("td");
@@ -671,7 +777,6 @@ class BBTTCCFactionSheet extends ActorSheet {
       tbl.appendChild(tbody);
       rpanel.appendChild(tbl);
 
-      // Single delegated listener that survives value updates (no re-render)
       rpanel.addEventListener("click", async (ev) => {
         const btn = ev.target.closest?.("button"); if (!btn) return;
         const act = btn.dataset.act; const key = btn.dataset.key;
@@ -687,73 +792,6 @@ class BBTTCCFactionSheet extends ActorSheet {
         if (cell) cell.textContent = String(next);
       });
 
-      // --- Victory/Unity strip below the status row ---
-      try {
-        const header = host.querySelector(".sheet-header");
-        if (header) {
-          let vrow = header.querySelector("#bbttcc-victory-strip");
-          const unityVal = clamp0(Number(this.actor.getFlag(MODULE_ID,"unity") ?? ((this.actor.getFlag(MODULE_ID,"victory")||{}).unity ?? 0)));
-          const unityPct = Math.max(0, Math.min(100, Math.round(unityVal)));
-
-          const badges = (((this.actor.getFlag(MODULE_ID,"victory")||{}).badges) || []).filter(Boolean);
-
-          if (!vrow) {
-            vrow = document.createElement("div");
-            vrow.id = "bbttcc-victory-strip";
-            vrow.className = "flexrow";
-            vrow.style.gap = ".75rem";
-            vrow.style.alignItems = "center";
-            vrow.style.marginTop = ".35rem";
-            header.appendChild(vrow);
-          }
-          vrow.replaceChildren();
-
-          const left = document.createElement("div");
-          left.className = "flex1";
-
-          const label = document.createElement("div");
-          label.style.fontSize = "12px";
-          label.style.fontWeight = "600";
-          label.textContent = "Unity";
-
-          const meterWrap = document.createElement("div");
-          meterWrap.className = "bbttcc-meter";
-          const fill = document.createElement("div");
-          fill.className = "bbttcc-meter-fill";
-          fill.style.width = `${unityPct}%`;
-          meterWrap.appendChild(fill);
-
-          const caption = document.createElement("small");
-          caption.style.opacity = ".85";
-          caption.textContent = `${unityPct}%`;
-
-          left.appendChild(label);
-          left.appendChild(meterWrap);
-          left.appendChild(caption);
-
-          const right = document.createElement("div");
-          right.className = "flex0";
-          right.style.display = "flex";
-          right.style.flexWrap = "wrap";
-          right.style.gap = "6px";
-          const toBadge = (txt) => {
-            const span = document.createElement("span");
-            span.className = "bbttcc-badge unity";
-            span.textContent = txt;
-            return span;
-          };
-          if (badges.length) badges.forEach(b=> right.appendChild(toBadge(String(b))));
-          else {
-            const hint = document.createElement("small");
-            hint.style.opacity = ".6";
-            hint.textContent = "No victory badges yet";
-            right.appendChild(hint);
-          }
-
-          vrow.appendChild(left);
-          vrow.appendChild(right);
-        }
-      } catch (e) { /* non-blocking */ }
     } catch (e) { warn("Header build error", e); }
   }
 
@@ -824,7 +862,7 @@ Hooks.once("ready", async () => {
     try {
       await ensureFactionHints(a);
       const cur = a.getFlag("core","sheetClass") || foundry.utils.getProperty(a,"flags.core.sheetClass");
-      if (cur !== SHEET_ID) await a.update({ "flags.core.sheetClass": SHEET_ID });
+      if (isFactionActor(a) && cur !== SHEET_ID) await a.update({ "flags.core.sheetClass": SHEET_ID });
     } catch (e) { warn("ready assignment", e); }
   }
   log("ready — faction sheet assignment pass complete");
