@@ -3,18 +3,27 @@
   "title": "BBTTCC Tikkun: The Great Work",
   "description": "The Sparks of Light system for spiritual victory conditions.",
   "version": "13.1.16",
-  "authors": [{"name": "BBTTCC Team"}],
+  "authors": [
+    { "name": "BBTTCC Team" }
+  ],
   "compatibility": {
     "minimum": "11",
     "verified": "13"
   },
   "relationships": {
-    "systems": [{"id": "dnd5e", "type": "system"}]
+    "systems": [
+      { "id": "dnd5e", "type": "system" }
+    ]
   },
   "esmodules": [
     "scripts/module.js",
     "scripts/api.tikkun.js",
     "scripts/tikkun-hotfix.js",
-    "scripts/tikkun-sparks.enhancer.js"
+    "scripts/tikkun-sparks.enhancer.js",
+    "scripts/tikkun-ritual.enhancer.js",
+    "scripts/tikkun-sheet.enhancer.js"
+  ],
+  "styles": [
+    "styles/tikkun-styles.css"
   ]
 }

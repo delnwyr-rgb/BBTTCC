@@ -47,7 +47,7 @@ const SEPHIROT = {
   malkuth:  { addPer:{ trade:+4 } }
 };
 
-/* ========= Helpers (from your working app) ========= */
+/* ========= Helpers ========= */
 function calcBaseByType(type) {
   const base = { food:0, materials:0, trade:0, military:0, knowledge:0 };
   switch ((type ?? "").toLowerCase()) {
@@ -162,10 +162,8 @@ async function effHexWithAll(dr) {
     if (typeof se.diplomacy === "number") diplomacy += se.diplomacy;
   }
 
-  // Round per resource
   for (const k of Object.keys(eff)) eff[k] = Math.round(eff[k]);
 
-  // Technology after everything else
   let technology = Number(eff.knowledge || 0);
   if ((f.type ?? "") === "research") technology += 2;
   if (se?.tech) technology += Number(se.tech||0);
@@ -216,7 +214,7 @@ function characterBelongsToFaction(char, faction) {
   return String(legacyName).trim() === String(faction.name).trim();
 }
 
-/* ========= Expanded Status bands (match faction sheet) ========= */
+/* ========= Status bands (Power Levels) ========= */
 const STATUS_BANDS = [
   { key: "Emerging",    min: 0,   max: 99 },
   { key: "Growing",     min: 100, max: 199 },
@@ -233,13 +231,11 @@ function bandFor(total) {
 function computeFactionTotalOPs(faction) {
   const KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
 
-  // Value side (stored on faction flags)
   const opsFlags = foundry.utils.duplicate(faction.getFlag(FACTIONS_MOD, "ops") || {});
   const value = normalizeOps(Object.fromEntries(
     KEYS.map(k => [k, Number(opsFlags?.[k]?.value ?? 0)])
   ));
 
-  // Roster side (character flags or calculatedOPs)
   const contribTotals = { violence:0, nonlethal:0, intrigue:0, economy:0, softpower:0, diplomacy:0, logistics:0, culture:0, faith:0 };
   for (const a of game.actors.contents) {
     if (!isCharacter(a)) continue;
@@ -253,9 +249,56 @@ function computeFactionTotalOPs(faction) {
     for (const k of KEYS) contribTotals[k] += Number(cc[k] || 0);
   }
 
-  // Sum per category: value + contrib
   const total = KEYS.reduce((sum, k) => sum + (Number(value[k] || 0) + Number(contribTotals[k] || 0)), 0);
   return Math.max(0, Number(total) || 0);
+}
+
+/* ========= Faction Health reader (shared semantics with faction sheet) ========= */
+function readHealthFlags(actor) {
+  const victory  = actor.getFlag(FACTIONS_MOD, "victory")  || {};
+  const darkness = actor.getFlag(FACTIONS_MOD, "darkness") || {};
+  const morale   = actor.getFlag(FACTIONS_MOD, "morale");
+  const loyalty  = actor.getFlag(FACTIONS_MOD, "loyalty");
+
+  return {
+    vp: Number(victory.vp ?? 0),
+    unity: Number(victory.unity ?? 0),
+    morale: Number(morale ?? 0),
+    loyalty: Number(loyalty ?? 0),
+    darkness: (typeof darkness.global === "number")
+      ? darkness.global
+      : (typeof darkness === "number" ? darkness : 0)
+  };
+}
+
+/* ========= Great Work (Tikkun) helpers ========= */
+const SPARK_THRESHOLD = 3;
+function readGreatWorkDisplay(faction) {
+  const api = game.bbttcc?.api?.tikkun;
+  if (!api || typeof api.getGreatWorkState !== "function") {
+    return { sparks: "—", status: "—", title: "" };
+  }
+  try {
+    const st = api.getGreatWorkState(faction.id, { sparkThreshold: SPARK_THRESHOLD });
+    const integrated = Number(st.integratedCount || 0);
+    const sparksStr = `${integrated}/${SPARK_THRESHOLD}`;
+
+    let status = "Not Ready";
+    if (st.ready) status = "Ready";
+    else if (integrated > 0 || (st.metrics && (st.metrics.unity > 0 || st.metrics.vp > 0))) {
+      status = "Approaching";
+    }
+
+    const reasons = Array.isArray(st.reasons) ? st.reasons.filter(Boolean) : [];
+    const title = st.ready
+      ? "All Great Work conditions satisfied."
+      : (reasons.length ? reasons.join("; ") : "Conditions not yet met.");
+
+    return { sparks: sparksStr, status, title };
+  } catch (e) {
+    warn("readGreatWorkDisplay failed", e);
+    return { sparks: "—", status: "—", title: "" };
+  }
 }
 
 /* ================= Campaign Overview App (AppV2 + HBS) ================= */
@@ -273,7 +316,7 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
   async _preparePartContext(partId, context) {
     if (partId !== "body") return context;
 
-    /* 1) Collect factions robustly (as in your previous app) */
+    /* 1) Collect factions robustly */
     let factions = (game.actors?.contents ?? []).filter(isFactionActor);
     if (!factions.length) {
       factions = (game.actors?.contents ?? []).filter(a => {
@@ -282,7 +325,7 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
       });
     }
 
-    /* 2) Pre-scan all hexes across scenes (unchanged) */
+    /* 2) Pre-scan all hexes across scenes */
     const allDrawings = [];
     for (const sc of game.scenes?.contents ?? []) {
       for (const dr of sc.drawings?.contents ?? []) {
@@ -294,7 +337,6 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
     /* 3) Build rows */
     const rows = [];
     for (const fa of factions) {
-      // Territory sums (still shown in Resources/Defense columns)
       const res = zRes();
       const scenesSet = new Map();
       let hexCount = 0;
@@ -317,7 +359,6 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
       }
       if (looksLikeTechnocrat(fa)) res.technology = Math.round(res.technology * 1.15);
 
-      // NEW: Status from OPs (Value + Roster)
       const totalOPs = computeFactionTotalOPs(fa);
       const statusKey = bandFor(totalOPs);
       const statusLabel = game.i18n?.localize?.(`BBTTCC.PowerLevels.${statusKey}`) || statusKey;
@@ -327,10 +368,9 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
         factionName: fa.name,
         factionId: fa.id,
 
-        // Keep both for template compatibility
-        powerLabel: statusLabel,     // textual label
-        powerTotal: totalOPs,        // numeric total
-        power: statusLabel,          // extra alias many templates use
+        powerLabel: statusLabel,
+        powerTotal: totalOPs,
+        power: statusLabel,
 
         hexCount,
         defenseTotal, loyaltyTotal, diplomacyTotal,
@@ -340,7 +380,7 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
       });
     }
 
-    /* Unclaimed row preserved (resources only; no Status) */
+    /* Unclaimed row (no faction health or GW) */
     const unclaimed = zRes();
     const unScenes = new Map();
     let unHex = 0, unDefense = 0, unLoyalty = 0, unDiplomacy = 0;
@@ -381,41 +421,39 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
     return { rows };
   }
 
-  /* After render:
-     1) Rename header "Power" → "Status"
-     2) Replace cells in that column to show the textual Status label (powerLabel),
-        even if the template is currently rendering a number. */
   async _onRender(ctx, opts) {
     await super._onRender(ctx, opts);
     const root = this.element;
     if (!(root instanceof HTMLElement)) return;
 
-    // 1) Header rename
-    const label = game.i18n?.localize?.("BBTTCC.Labels.Status") || "Status";
+    // -----------------------------------------------------------------------
+    // 1) Rename "Power" header → "Status"
+    // -----------------------------------------------------------------------
+    const statusLabel = game.i18n?.localize?.("BBTTCC.Labels.Status") || "Status";
     const thData = root.querySelector("th[data-col='power']");
-    if (thData) thData.textContent = label;
+    if (thData) thData.textContent = statusLabel;
     else {
       const headers = [...root.querySelectorAll("thead th")];
       const h = headers.find(el => String(el.textContent || "").trim().toLowerCase() === "power");
-      if (h) h.textContent = label;
+      if (h) h.textContent = statusLabel;
     }
 
-    // 2) Cell substitution
+    // -----------------------------------------------------------------------
+    // 2) Substitute Status cell contents using up-to-date OP bands
+    // -----------------------------------------------------------------------
+    let headers = [...root.querySelectorAll("thead th")];
+    let colIdx = headers.findIndex(el => /^(power|status)$/i.test(String(el.textContent || "").trim()));
+    if (colIdx < 0) {
+      colIdx = headers.findIndex(el => (el.getAttribute("data-col") || "").toLowerCase() === "power");
+    }
+
     try {
-      // Find index of the Power/Status column
-      const headers = [...root.querySelectorAll("thead th")];
-      let colIdx = headers.findIndex(el => /^(power|status)$/i.test(String(el.textContent || "").trim()));
-      if (colIdx < 0) {
-        // fallback to data-col attribute
-        colIdx = headers.findIndex(el => (el.getAttribute("data-col") || "").toLowerCase() === "power");
-      }
       if (colIdx >= 0) {
         const rows = [...root.querySelectorAll("tbody tr")];
         for (const tr of rows) {
           const cells = [...tr.children];
           const td = cells[colIdx];
           if (!td) continue;
-          // Prefer data-status-label if template provides it; otherwise use text fallback from next sibling buttons
           const openBtn = tr.querySelector("[data-open-faction]");
           const actorId = openBtn?.getAttribute?.("data-open-faction") || "";
           const faction = actorId && game.actors?.get(actorId);
@@ -432,7 +470,88 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
       warn("Status cell substitution failed", e);
     }
 
-    // Keep your “Open” button wiring from the working app
+    // -----------------------------------------------------------------------
+    // 3) Inject Faction Health + Great Work columns
+    // -----------------------------------------------------------------------
+    try {
+      const table = root.querySelector("table");
+      if (!table) throw new Error("Overview table not found.");
+
+      // Clean up any prior injection on re-render
+      const oldHealthThs = table.querySelectorAll("th[data-bbttcc-health]");
+      oldHealthThs.forEach(th => th.remove());
+      const oldHealthTds = table.querySelectorAll("td[data-bbttcc-health]");
+      oldHealthTds.forEach(td => td.remove());
+
+      const headRow = table.querySelector("thead tr");
+      if (!headRow) throw new Error("Header row not found.");
+
+      const HEALTH_COLS = [
+        { key: "vp",      label: "VP" },
+        { key: "unity",   label: "Unity" },
+        { key: "morale",  label: "Morale" },
+        { key: "loyalty", label: "Loyalty" },
+        { key: "dark",    label: "Darkness" },
+        { key: "sparks",  label: "Sparks" },
+        { key: "gw",      label: "Great Work" }
+      ];
+
+      // Append new header cells
+      for (const col of HEALTH_COLS) {
+        const th = document.createElement("th");
+        th.dataset.bbttccHealth = "1";
+        th.textContent = col.label;
+        th.style.whiteSpace = "nowrap";
+        headRow.appendChild(th);
+      }
+
+      const bodyRows = [...table.querySelectorAll("tbody tr")];
+      for (const tr of bodyRows) {
+        const openBtn = tr.querySelector("[data-open-faction]");
+        const actorId = openBtn?.getAttribute?.("data-open-faction") || "";
+        const faction = actorId && game.actors?.get(actorId);
+
+        let vals = {
+          vp: "—", unity: "—", morale: "—", loyalty: "—", dark: "—",
+          sparks: "—", gw: "—"
+        };
+        let gwState = null;
+
+        if (faction) {
+          const h = readHealthFlags(faction);
+          vals.vp      = String(h.vp ?? 0);
+          vals.unity   = `${Number(h.unity ?? 0)}%`;
+          vals.morale  = `${Number(h.morale ?? 0)}%`;
+          vals.loyalty = `${Number(h.loyalty ?? 0)}%`;
+          vals.dark    = String(h.darkness ?? 0);
+
+          gwState = readGreatWorkDisplay(faction);
+          if (gwState) {
+            vals.sparks = gwState.sparks;
+            vals.gw     = gwState.status;
+          }
+        }
+
+        for (const col of HEALTH_COLS) {
+          const td = document.createElement("td");
+          td.dataset.bbttccHealth = "1";
+          td.style.textAlign = "center";
+          td.textContent = vals[col.key];
+
+          if (col.key === "gw" && gwState && gwState.title) {
+            td.title = gwState.title;
+          }
+
+          tr.appendChild(td);
+        }
+      }
+    } catch (e) {
+      warn("Health + Great Work column injection failed", e);
+    }
+
+    // -----------------------------------------------------------------------
+    // 4) Click handler for "open faction" buttons (unchanged)
+    // -----------------------------------------------------------------------
     if (this._evAbort) { try { this._evAbort.abort(); } catch {} }
     this._evAbort = new AbortController();
     const sig = this._evAbort.signal;
@@ -455,7 +574,7 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
   }
 }
 
-/* Publish ctor + opener (same as your working app) */
+/* Publish ctor + opener */
 globalThis.BBTTCC_CampaignOverviewCtor = BBTTCC_CampaignOverview;
 Hooks.once("ready", () => {
   try {

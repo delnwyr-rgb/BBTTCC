@@ -515,6 +515,92 @@
   }
 
   // ===========================================================================
+  // INTEGRATION → POPULATION MODIFIERS
+  // ===========================================================================
+  // Automatic population improvement from Integration progress:
+  //  - progress >= 3: remove Hostile Population
+  //  - progress >= 5: add Loyal Population
+  //  - progress >= 6: Loyal Population is "sticky" — if something removes it,
+  //    this pass will restore it each turn.
+  //
+  // We support both the old snake_case modifiers (hostile_population/loyal_population)
+  // and the newer Title Case variants used by Garrison Upkeep and hex math.
+
+  function normalizePopModifiers(mods) {
+    const out = Array.isArray(mods) ? mods.slice() : [];
+    // Collapse snake_case into Title Case for Hostile/Loyal.
+    const hasHostileSnake = out.includes("hostile_population");
+    const hasHostileTitle = out.includes("Hostile Population");
+    const hasLoyalSnake   = out.includes("loyal_population");
+    const hasLoyalTitle   = out.includes("Loyal Population");
+
+    // remove snake_case variants; we'll keep only Title Case going forward
+    const filtered = out.filter(m => m !== "hostile_population" && m !== "loyal_population");
+
+    // ensure we don't duplicate when both existed
+    if (hasHostileSnake && !hasHostileTitle) filtered.push("Hostile Population");
+    if (hasLoyalSnake   && !hasLoyalTitle)   filtered.push("Loyal Population");
+
+    return filtered;
+  }
+
+  async function doIntegrationPopulationShift() {
+    const gm = gmIds();
+    const lines = [];
+    const updates = [];
+
+    for (const sc of game.scenes ?? []) {
+      for (const d of sc.drawings ?? []) {
+        const tf = d.flags?.[MODT]; if (!tf) continue;
+        const integ = tf.integration;
+        const prog = Number(integ?.progress ?? 0);
+        if (!prog || prog <= 0) continue;
+
+        let mods = normalizePopModifiers(tf.modifiers);
+        let changed = false;
+
+        // progress >= 3 → remove Hostile Population
+        if (prog >= 3) {
+          const beforeLen = mods.length;
+          mods = mods.filter(m => m !== "Hostile Population");
+          if (mods.length !== beforeLen) changed = true;
+        }
+
+        // progress >= 5 → ensure Loyal Population present
+        if (prog >= 5) {
+          if (!mods.includes("Loyal Population")) {
+            mods.push("Loyal Population");
+            changed = true;
+          }
+        }
+
+        // progress >= 6 → Loyal Population is sticky; if something removed it,
+        // the above block already re-added it. No extra logic needed beyond
+        // ensuring it's present every turn at this threshold.
+        if (!changed) continue;
+
+        const hexName = d.name ?? d.text ?? d.id;
+        updates.push(
+          d.update({ [`flags.${MODT}.modifiers`]: mods }, { parent: sc })
+        );
+        lines.push(
+          `• <b>${foundry.utils.escapeHTML(hexName)}</b>: Integration ${prog}/6 `
+          + `→ population mood adjusted (${mods.join(", ")||"no modifiers"})`
+        );
+      }
+    }
+
+    if (updates.length) await Promise.allSettled(updates);
+    if (lines.length) {
+      await ChatMessage.create({
+        content: `<p><b>Integration Population Update</b></p>${lines.join("<br/>")}`,
+        whisper: gm,
+        speaker: { alias: "BBTTCC Integration" }
+      }).catch(() => {});
+    }
+  }
+
+  // ===========================================================================
   // UNITY RECOMPUTE (Spark + aligned hexes)
   // ===========================================================================
 
@@ -600,6 +686,7 @@
         await doDarknessMorale();
         await doLoyaltyPhase1();
         await doLoyaltyPhase2();
+        await doIntegrationPopulationShift();
         await doUnityRecompute();   // Unity % used by Victory enhancer on faction side
       } catch (e) {
         console.warn(TAG, "AdvanceTurn track pass failed:", e);
