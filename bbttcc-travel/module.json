@@ -1,0 +1,77 @@
+{
+  "id": "bbttcc-travel",
+  "title": "BBTTCC Travel Engine",
+  "description": "Unified Travel Planner, Travel Arc Engine, radiation-aware movement, hazard prediction, random encounters, away-team battles, and overworld navigation for BBTTCC.",
+  "version": "1.4.0",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13",
+    "maximum": "13"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios",
+      "url": "https://shatteredlensstudios.com"
+    }
+  ],
+  "esmodules": [],
+  "scripts": [
+    "scripts/travel.arc.engine.js",
+    "scripts/bbttcc-travel-console.js",
+    "scripts/bbttcc-travel-visuals.js",
+    "scripts/api.travel.js",
+    "scripts/bbttcc-travel-summary.enhancer.js",
+    "scripts/bbttcc-travel-pill-kill.enhancer.js",
+    "scripts/hex-travel-mode.js",
+    "scripts/hex-travel.js"
+  ],
+  "styles": [
+    "styles/travel.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "packs": [],
+  "relationships": {
+    "requires": [
+      {
+        "id": "bbttcc-core",
+        "type": "module",
+        "compatibility": {
+          "verified": "1"
+        }
+      },
+      {
+        "id": "bbttcc-encounters",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-raid",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-territory",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-radiation",
+        "type": "module"
+      }
+    ]
+  },
+  "scripts-preload": [],
+  "flags": {
+    "bbttcc-travel": {
+      "initialized": true
+    }
+  },
+  "url": "https://github.com/delnwyr-rgb/BBTTCC",
+  "manifest": "modules/bbttcc-travel/module.json",
+  "download": "",
+  "license": "LICENSE.txt",
+  "readme": "README.md"
+}

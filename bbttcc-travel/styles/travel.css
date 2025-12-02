@@ -1,0 +1,187 @@
+/* --------------------------------------------------------- */
+/* BBTTCC Travel Module — Hex Chrome Styles                  */
+/* File: modules/bbttcc-travel/styles/travel.css             */
+/* --------------------------------------------------------- */
+
+/* 
+  We assume a Hex Chrome wrapper like .bbttcc-hexchrome exists.
+  We lean on its CSS variables when available, with safe fallbacks.
+*/
+
+.bbttcc-hexchrome .bbttcc-travel {
+  --travel-accent:      var(--bbttcc-hexchrome-accent, #4cf5ff);
+  --travel-accent-soft: var(--bbttcc-hexchrome-accent-soft, rgba(76, 245, 255, 0.18));
+  --travel-bg:          var(--bbttcc-hexchrome-panel-bg, rgba(3, 10, 30, 0.92));
+  --travel-border:      var(--bbttcc-hexchrome-panel-border, rgba(115, 179, 255, 0.35));
+  --travel-text-main:   var(--bbttcc-hexchrome-text, #e5f1ff);
+  --travel-text-muted:  var(--bbttcc-hexchrome-text-muted, #9fb3d9);
+
+  --travel-hazard:      var(--bbttcc-hexchrome-danger, #ff7b7b);
+  --travel-monster:     var(--bbttcc-hexchrome-magenta, #ff7bff);
+  --travel-rare:        var(--bbttcc-hexchrome-amber, #ffd97a);
+  --travel-boss:        var(--bbttcc-hexchrome-boss, #ff4b4b);
+
+  --travel-pill-bg:     var(--bbttcc-hexchrome-pill-bg, rgba(76, 245, 255, 0.12));
+  --travel-pill-border: var(--bbttcc-hexchrome-pill-border, rgba(157, 217, 255, 0.6));
+
+  --travel-radius:      var(--bbttcc-hexchrome-radius, 8px);
+  --travel-shadow-soft: 0 0 18px rgba(17, 145, 255, 0.25);
+}
+
+/* --------------------------------------------------------- */
+/* Travel Console / Panels                                   */
+/* --------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-travel .travel-panel {
+  background: linear-gradient(
+    135deg,
+    rgba(3, 10, 30, 0.96),
+    rgba(10, 24, 55, 0.96)
+  );
+  border: 1px solid var(--travel-border);
+  border-radius: var(--travel-radius);
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  box-shadow: var(--travel-shadow-soft);
+  color: var(--travel-text-main);
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--travel-accent);
+  margin-bottom: 4px;
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-title::before {
+  content: "";
+  width: 6px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--travel-accent);
+  box-shadow: 0 0 12px rgba(76, 245, 255, 0.7);
+}
+
+/* --------------------------------------------------------- */
+/* Arc Engine Prediction Rows                                */
+/* --------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-travel .travel-prediction-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 3px 4px;
+  margin: 1px 0;
+  border-bottom: 1px solid rgba(115, 179, 255, 0.18);
+  font-size: 0.85rem;
+  color: var(--travel-text-muted);
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-prediction-row:last-child {
+  border-bottom: none;
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-prediction-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-prediction-label .icon {
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+/* Category colors */
+.bbttcc-hexchrome .bbttcc-travel .travel-hazard {
+  color: var(--travel-hazard);
+  font-weight: 600;
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-monster {
+  color: var(--travel-monster);
+  font-weight: 600;
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-rare {
+  color: var(--travel-rare);
+  font-weight: 600;
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-boss {
+  color: var(--travel-boss);
+  font-weight: 700;
+  text-shadow:
+    0 0 8px rgba(255, 75, 75, 0.6),
+    0 0 20px rgba(255, 75, 75, 0.3);
+}
+
+/* --------------------------------------------------------- */
+/* Hex Travel Mode Indicators                                */
+/* --------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-travel .hex-travel-active {
+  outline: 2px solid var(--travel-accent);
+  outline-offset: -2px;
+  box-shadow:
+    0 0 8px rgba(76, 245, 255, 0.95),
+    0 0 20px rgba(17, 145, 255, 0.55);
+}
+
+.bbttcc-hexchrome .bbttcc-travel .hex-travel-hover {
+  background: radial-gradient(
+    circle at center,
+    rgba(76, 245, 255, 0.22),
+    transparent 65%
+  );
+}
+
+/* --------------------------------------------------------- */
+/* Travel Pills & Kill Pills                                 */
+/* --------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-travel .travel-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--travel-pill-bg);
+  border: 1px solid var(--travel-pill-border);
+  font-size: 0.7rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--travel-text-main);
+  margin-right: 4px;
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-pill.kill {
+  background: rgba(255, 123, 123, 0.18);
+  border-color: rgba(255, 123, 123, 0.6);
+  color: #ffd6d6;
+}
+
+.bbttcc-hexchrome .bbttcc-travel .travel-pill .icon {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* --------------------------------------------------------- */
+/* Debug Tools Overlay                                       */
+/* --------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-travel .travel-debug {
+  margin-top: 4px;
+  font-size: 0.7rem;
+  color: var(--travel-text-muted);
+  opacity: 0.9;
+  border-top: 1px dashed rgba(115, 179, 255, 0.25);
+  padding-top: 3px;
+}
