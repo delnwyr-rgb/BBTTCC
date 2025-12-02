@@ -1,8 +1,11 @@
-/* BBTTCC Raid — v1.3.14
+/* BBTTCC Raid — v1.3.16
  * Features:
  *  - Auto-queue: carry forward last round's Att/Def maneuvers into the new round.
  *  - Stateful maneuvers: Manage panel checkboxes read/write round.mansSelected / mansSelectedDef.
  *  - Live DC projection: defender maneuver +DC is reflected inline immediately.
+ *  - OP preview wiring (parity):
+ *      • Attacker Manage panel calls game.bbttcc.api.op.preview for staged spend.
+ *      • Defender Manage panel calls the same preview for defender spend.
  *
  * Other behavior (commit path, war logs, OP spend) unchanged.
  */
@@ -10,11 +13,12 @@
 const RAID_ID = "bbttcc-raid";
 const TERR_ID = "bbttcc-territory";
 const FCT_ID  = "bbttcc-factions";
-const TAG = "[bbttcc-raid v1.3.14 dyn-mans]";
+const TAG = "[bbttcc-raid v1.3.16 hexchrome-op-preview]";
 
 const log  = (...a)=>console.log(TAG, ...a);
 const warn = (...a)=>console.warn(TAG, ...a);
 
+// --- Handlebars Helpers -----------------------------------------------------
 Hooks.once("init", () => {
   try {
     const H = globalThis.Handlebars; if (!H) return;
@@ -26,12 +30,14 @@ Hooks.once("init", () => {
   } catch {}
 });
 
+// --- Constants & small helpers ---------------------------------------------
 const RAID_DIFFICULTIES = {
   easy:    { name:"Easy",    modifier:-2 },
   normal:  { name:"Normal",  modifier: 0 },
   hard:    { name:"Hard",    modifier: 2 },
   extreme: { name:"Extreme", modifier: 5 }
 };
+
 const OP_KEYS  = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
 
 // Defender maneuver DC bonuses (mirrors compat PRE_ROLL)
@@ -56,13 +62,16 @@ function isFaction(a){
     return String(cls||"").includes("BBTTCCFactionSheet");
   } catch { return false; }
 }
+
 function categoryTotal(faction, key) {
   key = key.toLowerCase();
   const opsFlags = foundry.utils.duplicate(faction.getFlag(FCT_ID,"ops") || {});
   const base = Number(opsFlags?.[key]?.value ?? 0);
   return base;
 }
+
 function _zeroOps(){ const b={}; for (const k of OP_KEYS) b[k]=0; return b; }
+
 function getOPBank(actor){
   const flags = foundry.utils.duplicate(actor?.flags?.[FCT_ID] ?? {});
   const b = flags.opBank || {};
@@ -70,6 +79,7 @@ function getOPBank(actor){
   return b;
 }
 
+// --- Hex helpers ------------------------------------------------------------
 function isHexDrawing(d) {
   const doc = d?.document ?? d;
   const f = doc?.flags?.[TERR_ID] ?? {};
@@ -79,6 +89,7 @@ function isHexDrawing(d) {
   const n = Array.isArray(sh?.points) ? sh.points.length : 0;
   return sh?.type === "p" && n >= 10;
 }
+
 async function pickTargetHex({ prompt="Click a BBTTCC hex…" } = {}) {
   if (!canvas?.ready) { ui.notifications?.error?.("Canvas not ready."); return null; }
   const note = ui.notifications?.info?.(prompt, {permanent:true});
@@ -92,7 +103,8 @@ async function pickTargetHex({ prompt="Click a BBTTCC hex…" } = {}) {
         for (let i = list.length - 1; i >= 0; i--) {
           const p = list[i]; if (!isHexDrawing(p)) continue;
           const local = p.toLocal(new PIXI.Point(pt.x, pt.y));
-          if (p.hitArea?.contains?.(local.x, local.y)) return resolve({ drawing: p.document, uuid: p.document.uuid, flags: foundry.utils.duplicate(p.document.flags?.[TERR_ID] ?? {}) });
+          if (p.hitArea?.contains?.(local.x, local.y))
+            return resolve({ drawing: p.document, uuid: p.document.uuid, flags: foundry.utils.duplicate(p.document.flags?.[TERR_ID] ?? {}) });
           const sh = p.document.shape;
           if (sh?.type === "p" && Array.isArray(sh.points) && new PIXI.Polygon(sh.points).contains(local.x, local.y))
             return resolve({ drawing: p.document, uuid: p.document.uuid, flags: foundry.utils.duplicate(p.document.flags?.[TERR_ID] ?? {}) });
@@ -106,7 +118,7 @@ async function pickTargetHex({ prompt="Click a BBTTCC hex…" } = {}) {
   return res;
 }
 
-/** Raid TYPES (assault/infiltration/...) */
+// --- Raid activity + EFFECTS helpers ----------------------------------------
 function getRaidTypes(){
   try {
     const api = game.bbttcc?.api?.raid;
@@ -119,12 +131,12 @@ function getRaidTypes(){
     { key:"infiltration", label:"Infiltration", primaryKey:"intrigue"  }
   ];
 }
+
 function primaryKeyFor(activityKey){
   const act = getRaidTypes().find(a=>a.key===activityKey);
   return act?.primaryKey || "violence";
 }
 
-/* EFFECTS-derived helpers (labels/costs for maneuvers) */
 function _effectsMans() {
   const EFFECTS = (game.bbttcc?.api?.raid?.EFFECTS) || {};
   const out = {};
@@ -138,14 +150,15 @@ function _effectsMans() {
 /** Heuristic: derive a dominant OP key from a cost object (used to auto-slot new maneuvers) */
 function _dominantOp(cost){
   if (!cost || typeof cost!=="object") return null;
-  const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+  const OPK = OP_KEYS;
   let best=null, bestV=-Infinity;
-  for (const k of OP_KEYS){
+  for (const k of OPK){
     const v = Number(cost?.[k]||0);
     if (v>bestV){ bestV=v; best=k; }
   }
   return (bestV>0)?best:null;
 }
+
 function lcKeysCost(cost){
   const op={}, stock={};
   if (!cost) return {op, stock};
@@ -161,6 +174,7 @@ function lcKeysCost(cost){
   return {op, stock};
 }
 
+// curated + dynamic maneuver lists
 const _MAN_KEYS_BY_TYPE = {
   assault: ["suppressive_fire","rally_the_line","patch_the_breach","saboteurs_edge","command_overdrive","echo_strike_protocol","quantum_shield","overclock_the_golems","ego_breaker","qliphothic_gambit","moral_high_ground","counter_propaganda_wave","logistical_surge","sephirotic_intervention"],
   infiltration: ["smoke_and_mirrors","saboteurs_edge","psychic_disruption","reality_hack","overclock_the_golems","flash_bargain","spy_network"],
@@ -174,27 +188,22 @@ const _MAN_KEYS_BY_TYPE = {
   any: ["supply_surge","divine_favor"]
 };
 
-
 function _mansForType(type){
   const eff = _effectsMans();
   let ext = {};
   try { ext = (game.bbttcc?.api?.raid?.getManeuvers?.(type)) || {}; } catch {}
 
-  // Start from the curated map (legacy) + any ext overrides from API
   const keys = (_MAN_KEYS_BY_TYPE[type] || _MAN_KEYS_BY_TYPE.any || []).slice();
   const res = {};
   const add = (k)=>{
     if (!k || res[k]) return;
     const e = eff[k], x = ext[k];
-    if (!e && !x) return; // skip unknown keys
+    if (!e && !x) return;
     res[k] = { key:k, label:(e?.label||x?.label||k), cost:(e?.cost||x?.cost||{}), benefit:(e?.benefit||x?.benefit||{}) };
   };
   keys.forEach(add); Object.keys(ext).forEach(add);
 
-  // === Drift killer ===
-  // Pull in any EFFECTS-kind maneuvers not listed above that *likely* apply to this activity:
-  // 1) If EFFECT spec exposes raidTypes=['assault', ...] or 'any', use that directly.
-  // 2) Else, include when the maneuver's dominant OP matches the activity's primaryKey.
+  // pull in EFFECTS-based matches by raidTypes or dominant OP
   const pKey = primaryKeyFor(type);
   for (const [k,e] of Object.entries(eff)){
     if (res[k]) continue;
@@ -203,34 +212,30 @@ function _mansForType(type){
     if (applies) add(k);
   }
 
-  // If still empty (unknown activity), fall back to "all maneuvers"
+  // if still empty, just expose all maneuvers
   if (!Object.keys(res).length){
     for (const k of Object.keys(eff)) add(k);
   }
   return res;
 }
 
-
 function _mansForTypeDefense(typeKey){
-  // start with any specific defense listing
   const defKey = `${typeKey}_defense`;
   const def = _mansForType(defKey);
   const base = _mansForType(typeKey);
 
-  // If EFFECTS exposes defenderAccess, prefer those for defense set
   const eff = _effectsMans();
   const defenseAdds = {};
   for (const [k,e] of Object.entries(eff)){
     if (e?.defenderAccess === true){ defenseAdds[k]=true; }
   }
-  // Merge: explicit defense -> base activity -> defenderAccess additions
+
   const out = { ...def, ...base };
   for (const k of Object.keys(defenseAdds)){ if (!out[k]) out[k] = eff[k]; }
-
   return out;
 }
 
-
+// --- Core math helpers ------------------------------------------------------
 async function computeDryRun(attacker, { activityKey="assault", difficulty="normal" } = {}, baseDC) {
   const key = primaryKeyFor(activityKey);
   const attBonus = categoryTotal(attacker, key);
@@ -264,6 +269,7 @@ function buildRaidWarLog(side, round, { ts, dateStr, oppName, totalFinal=0, dcFi
   };
 }
 
+// --- AppV2 wiring -----------------------------------------------------------
 const _appApi = foundry?.applications?.api || {};
 const AppV2   = _appApi.ApplicationV2 || Application;
 const HBM     = _appApi.HandlebarsApplicationMixin || ((Base)=>class extends Base{});
@@ -285,7 +291,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
   _mansForActivity(key){ return _mansForType(key); }
   _mansForDefense(key){ return _mansForTypeDefense(key); }
 
-  /** Render Manage panel and wire live behavior */
+  /** Render Manage panel and wire live behavior (attacker + defender preview) */
   _renderManeuversInto(tr, round){
     try {
       const host = tr.querySelector(".bbttcc-mans-cell"); if (!host) return;
@@ -321,7 +327,8 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
           const m = map[k];
           const id = `m-${side}-${round.roundId}-${k}`;
           const checked = (side==="def" ? round.mansSelectedDef : round.mansSelected).includes(k);
-          const lbl = document.createElement("label"); lbl.style.display="flex"; lbl.style.alignItems="center"; lbl.style.gap=".25rem";
+          const lbl = document.createElement("label");
+          lbl.style.display="flex"; lbl.style.alignItems="center"; lbl.style.gap=".25rem";
           lbl.innerHTML = `<input type="checkbox" ${checked?"checked":""} data-maneuver="${k}" data-side="${side}" id="${id}"><span title="${m?.label||k}">${m?.label||k}</span>${mkCost(m?.cost)}`;
           grid.appendChild(lbl);
         }
@@ -335,10 +342,17 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       wrap.appendChild(fsA);
       wrap.appendChild(fsD);
 
-      const projBox = document.createElement("div"); projBox.className = "bbttcc-proj-spend"; projBox.style.marginTop=".35rem"; projBox.style.gridColumn="1 / span 2";
+      const projBox = document.createElement("div");
+      projBox.className = "bbttcc-proj-spend";
+      projBox.style.marginTop=".35rem";
+      projBox.style.gridColumn="1 / span 2";
       projBox.innerHTML = `
         <small><i>Projected OP Spend (Att):</i> <b><span data-proj-att></span></b></small>
-        <br/><small style="opacity:.85;"><i>Defender OP Spend:</i> <b><span data-proj-def></span></b></small>`;
+        <br/><small style="opacity:.85;"><i>Defender OP Spend:</i> <b><span data-proj-def></span></b></small>
+        <br/><small style="opacity:.85;"><i>Attacker Bank After (Preview):</i> <b><span data-op-after-att></span></b></small>
+        <br/><small style="opacity:.85;"><i>Defender Bank After (Preview):</i> <b><span data-op-after-def></span></b></small>
+        <br/><small style="opacity:.85; color:#f97373;" data-op-error-att></small>
+        <br/><small style="opacity:.85; color:#f97373;" data-op-error-def></small>`;
       host.appendChild(wrap);
       host.appendChild(projBox);
 
@@ -348,7 +362,11 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
         inline.style.marginTop=".25rem";
         inline.innerHTML = `
           <small><i>Projected OP Spend (Att):</i> <b><span data-proj-inline></span></b></small>
-          <br/><small style="opacity:.85;"><i>Defender OP Spend:</i> <b><span data-proj-inline-def></span></b></small>`;
+          <br/><small style="opacity:.85;"><i>Defender OP Spend:</i> <b><span data-proj-inline-def></span></b></small>
+          <br/><small style="opacity:.75;"><i>Attacker Bank After (Preview):</i> <b><span data-op-after-inline></span></b></small>
+          <br/><small style="opacity:.75;"><i>Defender Bank After (Preview):</i> <b><span data-op-after-inline-def></span></b></small>
+          <br/><small style="opacity:.78; color:#f97373;" data-op-error-inline></small>
+          <br/><small style="opacity:.78; color:#f97373;" data-op-error-inline-def></small>`;
         dcHost.appendChild(inline);
       }
 
@@ -369,8 +387,179 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
         return null;
       };
 
+      // --- Preview helpers ---------------------------------------------------
+      const firePreviewAtt = async (sumA) => {
+        const previewApi = game.bbttcc?.api?.op?.preview;
+        const tgtAfterMain   = host.querySelector("[data-op-after-att]");
+        const tgtErrMain     = host.querySelector("[data-op-error-att]");
+        const tgtAfterInline = tr.parentElement?.querySelector("[data-op-after-inline]");
+        const tgtErrInline   = tr.parentElement?.querySelector("[data-op-error-inline]");
+
+        const clear = () => {
+          if (tgtAfterMain)   tgtAfterMain.textContent   = "";
+          if (tgtAfterInline) tgtAfterInline.textContent = "";
+          if (tgtErrMain)     tgtErrMain.textContent     = "";
+          if (tgtErrInline)   tgtErrInline.textContent   = "";
+        };
+
+        try {
+          if (typeof previewApi !== "function") {
+            clear();
+            return;
+          }
+
+          const entries = Object.entries(sumA || {}).filter(([_,v]) => Number(v||0) > 0);
+          if (!entries.length) {
+            clear();
+            return;
+          }
+
+          const attacker = await getActorByIdOrUuid(round.attackerId);
+          if (!attacker) {
+            clear();
+            return;
+          }
+
+          const deltas = {};
+          for (const [k,v] of entries) {
+            const n = Number(v||0); if (!n) continue;
+            deltas[String(k).toLowerCase()] = -Math.abs(n);
+          }
+          if (!Object.keys(deltas).length) {
+            clear();
+            return;
+          }
+
+          const res = await previewApi(attacker.id, deltas, "raid-manage");
+          const before = res?.before || {};
+          const after  = res?.after  || {};
+
+          const parts = [];
+          for (const k of OP_KEYS) {
+            const bRaw = before[k];
+            const aRaw = after[k];
+            if (bRaw === undefined && aRaw === undefined) continue;
+            const b = Number(bRaw ?? NaN);
+            const a = Number(aRaw ?? NaN);
+            if (!Number.isFinite(b) || !Number.isFinite(a)) continue;
+            if (b === a) continue;
+            const diff = a - b;
+            parts.push(`${k}:${a} (${diff>=0?"+":""}${diff})`);
+          }
+
+          const afterStr = parts.length ? parts.join(", ") : "—";
+          if (tgtAfterMain)   tgtAfterMain.textContent   = afterStr;
+          if (tgtAfterInline) tgtAfterInline.textContent = afterStr;
+
+          let errStr = "";
+          const shortageParts = [];
+          for (const k of OP_KEYS) {
+            const aRaw = after[k];
+            if (aRaw === undefined) continue;
+            const a = Number(aRaw||0);
+            if (a < 0) shortageParts.push(`${k} short ${Math.abs(a)}`);
+          }
+          if (shortageParts.length) {
+            errStr = `Not enough OP (Attacker): ${shortageParts.join(", ")}`;
+          } else if (res && res.ok === false) {
+            errStr = "Not enough OP (Attacker) for this spend.";
+          }
+
+          if (tgtErrMain)   tgtErrMain.textContent   = errStr;
+          if (tgtErrInline) tgtErrInline.textContent = errStr;
+        } catch (e) {
+          warn("OP preview (attacker) failed in Raid Console", e);
+          clear();
+        }
+      };
+
+      const firePreviewDef = async (sumD) => {
+        const previewApi = game.bbttcc?.api?.op?.preview;
+        const tgtAfterMain   = host.querySelector("[data-op-after-def]");
+        const tgtErrMain     = host.querySelector("[data-op-error-def]");
+        const tgtAfterInline = tr.parentElement?.querySelector("[data-op-after-inline-def]");
+        const tgtErrInline   = tr.parentElement?.querySelector("[data-op-error-inline-def]");
+
+        const clear = () => {
+          if (tgtAfterMain)   tgtAfterMain.textContent   = "";
+          if (tgtAfterInline) tgtAfterInline.textContent = "";
+          if (tgtErrMain)     tgtErrMain.textContent     = "";
+          if (tgtErrInline)   tgtErrInline.textContent   = "";
+        };
+
+        try {
+          if (typeof previewApi !== "function") {
+            clear();
+            return;
+          }
+
+          const entries = Object.entries(sumD || {}).filter(([_,v]) => Number(v||0) > 0);
+          if (!entries.length) {
+            clear();
+            return;
+          }
+
+          const defender = await getDefenderActorFromRound(round);
+          if (!defender) {
+            clear();
+            return;
+          }
+
+          const deltas = {};
+          for (const [k,v] of entries) {
+            const n = Number(v||0); if (!n) continue;
+            deltas[String(k).toLowerCase()] = -Math.abs(n);
+          }
+          if (!Object.keys(deltas).length) {
+            clear();
+            return;
+          }
+
+          const res = await previewApi(defender.id, deltas, "raid-manage");
+          const before = res?.before || {};
+          const after  = res?.after  || {};
+
+          const parts = [];
+          for (const k of OP_KEYS) {
+            const bRaw = before[k];
+            const aRaw = after[k];
+            if (bRaw === undefined && aRaw === undefined) continue;
+            const b = Number(bRaw ?? NaN);
+            const a = Number(aRaw ?? NaN);
+            if (!Number.isFinite(b) || !Number.isFinite(a)) continue;
+            if (b === a) continue;
+            const diff = a - b;
+            parts.push(`${k}:${a} (${diff>=0?"+":""}${diff})`);
+          }
+
+          const afterStr = parts.length ? parts.join(", ") : "—";
+          if (tgtAfterMain)   tgtAfterMain.textContent   = afterStr;
+          if (tgtAfterInline) tgtAfterInline.textContent = afterStr;
+
+          let errStr = "";
+          const shortageParts = [];
+          for (const k of OP_KEYS) {
+            const aRaw = after[k];
+            if (aRaw === undefined) continue;
+            const a = Number(aRaw||0);
+            if (a < 0) shortageParts.push(`${k} short ${Math.abs(a)}`);
+          }
+          if (shortageParts.length) {
+            errStr = `Not enough OP (Defender): ${shortageParts.join(", ")}`;
+          } else if (res && res.ok === false) {
+            errStr = "Not enough OP (Defender) for this spend.";
+          }
+
+          if (tgtErrMain)   tgtErrMain.textContent   = errStr;
+          if (tgtErrInline) tgtErrInline.textContent = errStr;
+        } catch (e) {
+          warn("OP preview (defender) failed in Raid Console", e);
+          clear();
+        }
+      };
+
       const recalc = ()=>{
-        // 1) OP projections (existing)
+        // 1) OP projections
         const sumA = {}, sumD = {};
         const cat = round.view?.cat || primaryKeyFor(round.activityKey);
 
@@ -394,7 +583,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
         const tgtA2 = tr.parentElement?.querySelector("[data-proj-inline]");     if (tgtA2) tgtA2.textContent = textForSpend(sumA);
         const tgtD2 = tr.parentElement?.querySelector("[data-proj-inline-def]"); if (tgtD2) tgtD2.textContent = textForSpend(sumD);
 
-        // 2) NEW: live defender +DC projection
+        // 2) live defender +DC projection
         let defBonusDC = 0;
         host.querySelectorAll('.mans-wrap input[type="checkbox"][data-side="def"]:checked')
           .forEach(cb => { const k = String(cb.dataset.maneuver||"").toLowerCase(); defBonusDC += Number(DEFENDER_DC_MAP[k]||0); });
@@ -419,6 +608,10 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
           }
           holder.textContent = `Projected: ${projDC}`;
         }
+
+        // 3) OP preview for both sides
+        firePreviewAtt(sumA);
+        firePreviewDef(sumD);
       };
 
       // Delegate: changes update round.mansSelected / mansSelectedDef + recalc
@@ -443,7 +636,6 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
   }
 
   _collectMans(idx){
-    // Now returns the round's stored selections (fallback to DOM if needed)
     const r = this.vm.rounds[idx] || {};
     if (Array.isArray(r.mansSelected) || Array.isArray(r.mansSelectedDef)) {
       return { att: (r.mansSelected||[]).slice(), def: (r.mansSelectedDef||[]).slice() };
@@ -510,14 +702,14 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       defenderName: defender?.name || "(none)",
       hasDef: !!defender,
       topDC: target && defender ? {
-      base: baseTop,
-      defProjBonus: bonusTop,
-      diff: diffTop,
-      facDef: facDefTop,
-      nextB: nextBTop,
-      projected: projTop,
-      breakdown: `Base ${baseTop} + Staged/2 ${bonusTop}${diffTop?` + Diff ${diffTop}`:""}${facDefTop?` + Faction ${facDefTop}`:""}${nextBTop?` + Next-Raid ${nextBTop}`:""} = ${projTop}`
-    } : null
+        base: baseTop,
+        defProjBonus: bonusTop,
+        diff: diffTop,
+        facDef: facDefTop,
+        nextB: nextBTop,
+        projected: projTop,
+        breakdown: `Base ${baseTop} + Staged/2 ${bonusTop}${diffTop?` + Diff ${diffTop}`:""}${facDefTop?` + Faction ${facDefTop}`:""}${nextBTop?` + Next-Raid ${nextBTop}`:""} = ${projTop}`
+      } : null
     };
 
     for (const r of this.vm.rounds) {
@@ -562,7 +754,14 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
   }
 
   _onRender() {
-    try { const el = this.element; if (!this.__centered){ el.style.left="calc(50% - 490px)"; el.style.top="72px"; this.__centered=true; } } catch {}
+    try {
+      const el = this.element;
+      if (!this.__centered){
+        el.style.left="calc(50% - 490px)";
+        el.style.top="72px";
+        this.__centered=true;
+      }
+    } catch {}
     this._bindUI();
     for (let i=0;i<(this.vm.rounds||[]).length;i++){
       const r = this.vm.rounds[i]; if (!r.open) continue;
@@ -614,8 +813,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
         difficulty:this.vm.difficulty, ...comp,
         open:true, roundId:randid(), local:true, localStaged:{ att:{}, def:{} },
         diffOffset: 0,
-        // NEW: seed arrays so render will check boxes immediately
-        mansSelected:    [],
+        mansSelected: [],
         mansSelectedDef: []
       };
 
@@ -639,9 +837,14 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       this.render();
     });
 
-    $root.on("click.bbttccRaid","[data-id='reset']", (ev)=>{ ev.preventDefault(); if (!confirm("Clear all rounds in this console?")) return; this.vm.rounds = []; this.render(); });
+    $root.on("click.bbttccRaid","[data-id='reset']", (ev)=>{
+      ev.preventDefault();
+      if (!confirm("Clear all rounds in this console?")) return;
+      this.vm.rounds = [];
+      this.render();
+    });
 
-    // Header/table actions (manage/post/del/commit)
+    // Header/table actions
     $root.on("click.bbttccRaid","[data-act]", async (ev)=>{
       ev.preventDefault();
       const btn = ev.currentTarget;
@@ -655,7 +858,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       if (act === "commit") { return this._commitRound(idx); }
     });
 
-    // Manage row actions (close/cancel/diff/stage/commit)
+    // Manage row actions
     $root.on("click.bbttccRaid","[data-manage-act]", async (ev)=>{
       ev.preventDefault();
       const btn = ev.currentTarget;
@@ -677,11 +880,21 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
     const d = Number(delta||0);
     r.localStaged ||= { att:{}, def:{} };
     const bucket = r.localStaged[who] ||= {};
-    const actor = await getActorByIdOrUuid(who==="att" ? r.attackerId : (()=>{ const t=r.targetUuid?fromUuidSync?.(r.targetUuid):null; return t?.flags?.[TERR_ID]?.factionId||""; })());
+    const actor = await getActorByIdOrUuid(
+      who==="att"
+        ? r.attackerId
+        : (async ()=>{
+            const t = r.targetUuid ? await fromUuid(r.targetUuid) : null;
+            return t?.flags?.[TERR_ID]?.factionId || "";
+          })()
+    );
     const bank  = actor ? getOPBank(actor) : _zeroOps();
     const stagedAlready = Number(bucket[key]||0);
     const remain = Number(bank[key]||0) - stagedAlready;
-    if (d>0 && remain<=0) { ui.notifications?.warn?.(`${who==="att"?"Attacker":"Defender"} has no ${key} left in OP Turn Bank.`); return; }
+    if (d>0 && remain<=0) {
+      ui.notifications?.warn?.(`${who==="att"?"Attacker":"Defender"} has no ${key} left in OP Turn Bank.`);
+      return;
+    }
     bucket[key] = Math.max(0, stagedAlready + d);
     return this.render();
   }
@@ -719,11 +932,9 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
 
     const baseBonus = categoryTotal(attacker, r.view?.cat || primaryKeyFor(r.activityKey));
 
-    // gather maneuvers (from stored arrays)
     const listA = Array.isArray(r.mansSelected)    ? r.mansSelected.slice()    : [];
     const listD = Array.isArray(r.mansSelectedDef) ? r.mansSelectedDef.slice() : [];
 
-    // resolver (always call)
     const resolver = game.bbttcc?.api?.raid?.resolveRoundWithManeuvers;
     let res = null;
     if (resolver) {
@@ -740,7 +951,6 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       } catch (e) { warn("resolver failed; local fallback", e); res=null; }
     }
 
-    // compute costs (for fallback spend & log line)
     const EFFECTS = (game.bbttcc?.api?.raid?.EFFECTS) || {};
     const cat = r.view?.cat || primaryKeyFor(r.activityKey);
     const manOpA = {}; const manOpD = {};
@@ -757,12 +967,10 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       if (defender) await _applyOPDeltaDual(defender, _negate(manOpD));
     }
 
-    // totals
     let totalFinal, dcFinal, rollUsed;
     if (res && res.totalFinal!=null && res.dcFinal!=null) {
       totalFinal = res.totalFinal; dcFinal = res.dcFinal; rollUsed = res.roll;
     } else {
-      r.meta = r.meta || {};
       const sBonus = Math.ceil((Number(stagedA)||0)/2);
       const dBonus = Math.ceil((Number(stagedD)||0)/2);
       const r1 = new Roll("1d20 + @b + @s", { b: baseBonus, s: sBonus }); await r1.evaluate();
@@ -771,7 +979,6 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       dcFinal = Number(r.DC||10) + dBonus + Number(r.diffOffset||0);
     }
 
-    // Post-round effects (unchanged)
     try {
       const post = game.bbttcc?.api?.raid?.applyPostRoundEffects;
       if (typeof post === "function") {
@@ -807,16 +1014,23 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
   }
 }
 
+// --- Toolbar + API binding --------------------------------------------------
 function bindAPI() {
   const mod = game.modules.get(RAID_ID); if (!mod) return;
   let _console = null;
   async function openConsole() { if (!_console) _console = new BBTTCC_RaidConsole(); await _console.render(true, { focus: true }); return _console; }
   const api = { pickTargetHex, openRaidConsole:openConsole, openConsole };
   mod.api = Object.assign(mod.api || {}, api);
-  try { game.bbttcc ??= { api:{} }; game.bbttcc.api ??= {}; game.bbttcc.api.raid ??= {}; Object.assign(game.bbttcc.api.raid, api); }
+  try {
+    game.bbttcc ??= { api:{} };
+    game.bbttcc.api ??= {};
+    game.bbttcc.api.raid ??= {};
+    Object.assign(game.bbttcc.api.raid, api);
+  }
   catch(e){ warn("bind game.bbttcc.api.raid", e); }
-  log("API ready (v1.3.13).");
+  log("API ready (v1.3.16).");
 }
+
 function attachRaidButtonToToolbar() {
   try {
     const el = document.getElementById("bbttcc-toolbar");
@@ -836,27 +1050,58 @@ function attachRaidButtonToToolbar() {
           const open = game?.bbttcc?.api?.raid?.openConsole || game.modules.get(RAID_ID)?.api?.openRaidConsole || globalThis.BBTTCC_OpenRaidConsole;
           if (typeof open !== "function") return ui.notifications?.warn?.("BBTTCC Raid Console is not available.");
           await open();
-        } catch (e) { console.error(TAG, "Toolbar Raid button failed", e); ui.notifications?.error?.("Could not open Raid Console — see console."); }
+        } catch (e) {
+          console.error(TAG, "Toolbar Raid button failed", e);
+          ui.notifications?.error?.("Could not open Raid Console — see console.");
+        }
       });
       el.__bbttccRaidClickBound = true;
     }
     return true;
   } catch (e) { warn("attachRaidButtonToToolbar error", e); return false; }
 }
+
 function watchToolbar() {
   if (attachRaidButtonToToolbar()) return;
-  const obs = new MutationObserver(() => { if (attachRaidButtonToToolbar()) obs.disconnect(); });
+  const obs = new MutationObserver(() => {
+    if (attachRaidButtonToToolbar()) obs.disconnect();
+  });
   obs.observe(document.body, { childList: true, subtree: true });
   globalThis.__bbttccRaidToolbarObserver = obs;
 }
-function bindWithRetries() { bindAPI(); setTimeout(bindAPI,0); setTimeout(bindAPI,50); setTimeout(bindAPI,250); setTimeout(bindAPI,1000); }
+
+function bindWithRetries() {
+  bindAPI();
+  setTimeout(bindAPI,0);
+  setTimeout(bindAPI,50);
+  setTimeout(bindAPI,250);
+  setTimeout(bindAPI,1000);
+}
+
 Hooks.once("ready", () => { bindWithRetries(); watchToolbar(); });
 
+// --- Shared helpers ---------------------------------------------------------
 async function getActorByIdOrUuid(maybeIdOrUuid) {
   const s = String(maybeIdOrUuid ?? ""); if (!s) return null;
-  try { if (s.startsWith("Actor.")) return await fromUuid(s); return game.actors.get(s) ?? null; }
-  catch (e) { warn("getActorByIdOrUuid error", e); return null; }
+  try {
+    if (s.startsWith("Actor.")) return await fromUuid(s);
+    return game.actors.get(s) ?? null;
+  } catch (e) { warn("getActorByIdOrUuid error", e); return null; }
 }
+
+async function getDefenderActorFromRound(round){
+  try {
+    const tUuid = round?.targetUuid;
+    if (!tUuid) return null;
+    const target = await fromUuid(tUuid);
+    const defId  = target?.flags?.[TERR_ID]?.factionId || "";
+    return defId ? (game.actors.get(defId) ?? null) : null;
+  } catch (e) {
+    warn("getDefenderActorFromRound error", e);
+    return null;
+  }
+}
+
 async function appendWarLog(actor, entry){
   try {
     if (!actor) return;
@@ -894,7 +1139,7 @@ async function _applyOPDeltaDual(actor, lowerSigned){
   log("OP updated for", actor.name, { opBank: nextBank, pools: nextPools });
 }
 
-/* === BBTTCC Raid Console API export shim (v1.3.13) ======================== */
+// --- API export shim (unchanged external surface) ---------------------------
 Hooks.once("ready", () => {
   try {
     const mod = game.modules.get(RAID_ID);
@@ -917,9 +1162,8 @@ Hooks.once("ready", () => {
       raid.openRaidConsole = raid.openConsole;
     }
 
-    console.log("[bbttcc-raid] API shim ready (v1.3.13). openConsole available:", typeof raid.openConsole);
+    console.log("[bbttcc-raid] API shim ready (v1.3.16). openConsole available:", typeof raid.openConsole);
   } catch (err) {
     console.error("[bbttcc-raid] API export shim failed:", err);
   }
 });
-/* ========================================================================== */

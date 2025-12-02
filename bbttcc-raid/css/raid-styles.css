@@ -1,150 +1,336 @@
-/**
- * BBTTCC Raid v4.8.0 — Styles (Planner + Console)
- * - Keeps existing .bbttcc-raid-planner rules (yours)
- * - Adds .bbttcc-raid-console rules so the console gets skinned too
- */
+/* BBTTCC — Raid Console Hex Chrome Skin */
 
-/* =========================
-   RAID PLANNER (existing)
-   ========================= */
-.bbttcc-raid-planner {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  border: 2px solid #5e0000;
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-}
-.bbttcc-raid-planner .window-header {
-  background: linear-gradient(90deg, #8B0000 0%, #B22222 50%, #8B0000 100%);
-  border-bottom: 2px solid #5e0000;
-  color: #fff;
-}
-.bbttcc-raid-planner .window-title { font-weight: bold; font-size: 1.1em; }
-.bbttcc-raid-planner .sheet-tabs { background: #333; border-bottom: 2px solid #5e0000; margin-bottom: 0; }
-/* …keep the rest of your planner rules here unchanged… */
+/* Root + window content */
 
-/* =========================
-   RAID CONSOLE (new)
-   ========================= */
 .bbttcc-raid-console {
-  --bb-pad: .5rem;
-  --bb-gap: .5rem;
-  --bb-bg: #1a1a1a;
-  --bb-panel: #222;
-  --bb-border: #3a3a3a;
-  --bb-accent: #B22222;
-  --bb-accent-2: #8B0000;
-  --bb-text: #e7e7e7;
-
-  color: var(--bb-text);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #e5e7eb;
 }
-.bbttcc-raid-console .btn,
-.bbttcc-raid-console button,
-.bbttcc-raid-console .button {
-  background: linear-gradient(180deg, #2a2a2a, #1f1f1f);
-  border: 1px solid #444;
-  color: #fff;
-  padding: .25rem .5rem;
-  border-radius: .4rem;
+
+.bbttcc-raid-console .window-content {
+  padding: 0.6rem 0.8rem 0.8rem;
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(56,189,248,0.18), transparent 55%),
+    radial-gradient(circle at 0 100%, rgba(147,51,234,0.18), transparent 60%),
+    linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+  border-radius: 0.9rem;
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.95),
+    0 18px 32px rgba(15,23,42,0.9);
+  box-sizing: border-box;
+}
+
+/* Header bar */
+
+.bbttcc-raid-console > .vstack > header.flexrow {
+  margin-bottom: 0.4rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.75rem;
+  background:
+    linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
+  border: 1px solid rgba(59,130,246,0.8);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 0 18px rgba(59,130,246,0.45);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bbttcc-raid-console > .vstack > header.flexrow label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #cbd5f5;
+}
+
+/* Identity strip */
+
+.bbttcc-raid-console .bbttcc-raid-ident {
+  margin-bottom: 0.25rem;
+}
+
+/* Header selects / inputs / buttons */
+
+.bbttcc-raid-console select,
+.bbttcc-raid-console input[type="text"] {
+  background-color: rgba(15,23,42,0.9);
+  border-radius: 0.4rem;
+  border: 1px solid rgba(31,41,55,0.95);
+  color: #e5e7eb;
+  padding: 0.2rem 0.4rem;
+  font-size: 12px;
+}
+
+.bbttcc-raid-console select:focus,
+.bbttcc-raid-console input[type="text"]:focus {
+  outline: none;
+  border-color: rgba(59,130,246,0.9);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+}
+
+/* Generic button styling */
+
+.bbttcc-raid-console .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.9);
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
+    linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
+  color: #e5e7eb;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   cursor: pointer;
-}
-.bbttcc-raid-console .btn:hover,
-.bbttcc-raid-console button:hover,
-.bbttcc-raid-console .button:hover {
-  border-color: var(--bb-accent);
-  box-shadow: 0 0 0 2px rgba(178,34,34,.2) inset;
+  white-space: nowrap;
 }
 
-.bbttcc-raid-console h4,
-.bbttcc-raid-console h5 {
-  margin: 0 0 .25rem 0;
-  font-weight: 700;
-  letter-spacing: .02em;
-  color: #f2f2f2;
+.bbttcc-raid-console .btn:hover {
+  filter: brightness(1.06);
 }
 
-/* Header row */
-.bbttcc-raid-console header.flexrow {
-  background: linear-gradient(90deg, var(--bb-accent-2), var(--bb-accent));
-  color: #fff;
-  padding: .35rem .5rem;
-  border-radius: .5rem;
-  margin-bottom: .5rem;
-}
-.bbttcc-raid-console header.flexrow label { font-weight: 700; }
+/* Emphasize key actions */
 
-/* DC breakdown line */
+.bbttcc-raid-console .btn[data-id="add-round"],
+.bbttcc-raid-console .btn[data-manage-act="commit"],
+.bbttcc-raid-console .btn[data-act="post"] {
+  border-color: rgba(59,130,246,0.95);
+  background:
+    radial-gradient(circle at 0 0, rgba(56,189,248,0.5), transparent 55%),
+    linear-gradient(135deg, rgba(79,70,229,0.98), rgba(14,165,233,0.98));
+}
+
+.bbttcc-raid-console .btn[data-act="del"],
+.bbttcc-raid-console .btn[data-manage-act="cancel"] {
+  border-color: rgba(220,38,38,0.85);
+  background:
+    radial-gradient(circle at 0 0, rgba(220,38,38,0.4), transparent 55%),
+    linear-gradient(135deg, rgba(127,29,29,0.98), rgba(15,23,42,0.98));
+}
+
+/* Target + primary key line */
+
+.bbttcc-raid-console > .vstack > div.flexrow label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #cbd5f5;
+}
+
+/* Top DC block */
+
+.bbttcc-raid-console > .vstack > div.flexrow small {
+  font-size: 10px;
+}
+
 .bbttcc-raid-console .bbttcc-tip {
-  display: inline-block;
-  margin-left: .25rem;
-  border-radius: 1rem;
-  width: 1rem; height: 1rem;
-  line-height: 1rem;
-  text-align: center;
-  font-size: .8em;
-  background: #444; color: #fff;
-  cursor: help;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.2rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.9);
+  font-size: 9px;
+  background: rgba(15,23,42,0.95);
 }
 
 /* Bank cards */
-.bbttcc-raid-console .card {
-  background: var(--bb-panel);
-  border: 1px solid var(--bb-border);
-  border-radius: .5rem;
+
+.bbttcc-raid-console .bbttcc-bank {
+  margin-top: 0.25rem;
 }
+
+.bbttcc-raid-console .bbttcc-bank .card {
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.7rem;
+  background:
+    radial-gradient(circle at 0 0, rgba(30,64,175,0.24), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.24), transparent 55%),
+    linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,1));
+  border: 1px solid rgba(30,64,175,0.9);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 8px 18px rgba(15,23,42,0.9);
+}
+
+.bbttcc-raid-console .bbttcc-bank h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+/* Bank tables */
+
 .bbttcc-raid-console .bbttcc-table {
-  width: 100%;
   border-collapse: collapse;
+  width: 100%;
+  font-size: 11px;
 }
-.bbttcc-raid-console .bbttcc-table th,
-.bbttcc-raid-console .bbttcc-table td {
-  border: 1px solid var(--bb-border);
-  padding: .35rem;
+
+.bbttcc-raid-console .bbttcc-bank .bbttcc-table thead {
+  background: linear-gradient(90deg, rgba(15,23,42,0.96), rgba(30,64,175,0.96));
 }
-.bbttcc-raid-console .bbttcc-table thead th {
-  background: #2a2a2a;
-  font-weight: 700;
+
+.bbttcc-raid-console .bbttcc-bank .bbttcc-table th {
+  padding: 0.15rem 0.3rem;
+  text-align: center;
+  font-weight: 600;
+  color: #cbd5f5;
+  border-bottom: 1px solid rgba(30,64,175,0.95);
+}
+
+.bbttcc-raid-console .bbttcc-bank .bbttcc-table td {
+  padding: 0.2rem 0.3rem;
+  text-align: center;
+  border-top: 1px solid rgba(15,23,42,0.9);
+}
+
+.bbttcc-raid-console .bbttcc-bank .bbttcc-table tbody tr {
+  background-color: rgba(15,23,42,0.98);
 }
 
 /* Rounds table */
-.bbttcc-raid-console .bbttcc-rounds .bbttcc-table thead th {
-  background: #262626;
-}
-.bbttcc-raid-console .bbttcc-rounds .center { text-align: center; }
 
-/* Manage panel */
+.bbttcc-raid-console .bbttcc-rounds {
+  margin-top: 0.5rem;
+}
+
+.bbttcc-raid-console .bbttcc-rounds .bbttcc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.bbttcc-raid-console .bbttcc-rounds thead {
+  background: linear-gradient(90deg, rgba(15,23,42,0.96), rgba(30,64,175,0.96));
+}
+
+.bbttcc-raid-console .bbttcc-rounds thead th {
+  padding: 0.25rem 0.4rem;
+  text-align: center;
+  font-weight: 600;
+  color: #cbd5f5;
+  border-bottom: 1px solid rgba(30,64,175,0.95);
+}
+
+.bbttcc-raid-console .bbttcc-rounds tbody td {
+  padding: 0.25rem 0.4rem;
+  border-top: 1px solid rgba(31,41,55,0.95);
+}
+
+/* Simple zebra striping when enhancer isn't active */
+
+.bbttcc-raid-console .bbttcc-rounds tbody tr:nth-child(odd) {
+  background-color: rgba(15,23,42,0.96);
+}
+
+.bbttcc-raid-console .bbttcc-rounds tbody tr:nth-child(even) {
+  background-color: rgba(15,23,42,0.94);
+}
+
+.bbttcc-raid-console .bbttcc-rounds td.center,
+.bbttcc-raid-console .bbttcc-rounds th.center {
+  text-align: center;
+}
+
+/* Round manage card */
+
+.bbttcc-raid-console .bbttcc-rounds .card {
+  padding: 0.5rem;
+  border-radius: 0.7rem;
+  background:
+    radial-gradient(circle at 0 0, rgba(30,64,175,0.24), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.24), transparent 55%),
+    linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,1));
+  border: 1px solid rgba(30,64,175,0.9);
+}
+
+/* Maneuvers cell + projections */
+
 .bbttcc-raid-console .bbttcc-mans-cell {
-  background: #1f1f1f;
-  border: 1px dashed var(--bb-border);
-  border-radius: .4rem;
-  padding: .4rem;
-}
-.bbttcc-raid-console .btnset { display: flex; gap: .25rem; }
-
-/* Badges */
-.bbttcc-raid-console .badge {
-  display: inline-block;
-  padding: .15rem .4rem;
-  border-radius: .5rem;
-  font-weight: 700;
-}
-.bbttcc-raid-console .badge--ok    { background: #065f46; color: #fff; }
-.bbttcc-raid-console .badge--warn  { background: #7c2d12; color: #fff; }
-.bbttcc-raid-console .badge--info  { background: #1e3a8a; color: #fff; }
-
-/* Small helpers */
-.bbttcc-raid-console code {
-  background: #000;
-  color: #c7e9ff;
-  padding: 0 .25rem;
-  border-radius: .25rem;
+  margin-top: 0.45rem;
+  padding-top: 0.3rem;
+  border-top: 1px solid rgba(30,64,175,0.7);
 }
 
-/* Inputs/selects in header */
-.bbttcc-raid-console select,
-.bbttcc-raid-console input[type="checkbox"] {
-  background: #121212;
-  color: #eee;
-  border: 1px solid #333;
-  border-radius: .35rem;
-  padding: .2rem .35rem;
+.bbttcc-raid-console fieldset.bbttcc-mans {
+  border-radius: 0.55rem;
+  border: 1px solid rgba(148,163,184,0.7);
+  padding: 0.35rem 0.4rem 0.4rem;
+  margin: 0;
+}
+
+.bbttcc-raid-console fieldset.bbttcc-mans legend {
+  padding: 0 0.3rem;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #cbd5f5;
+}
+
+.bbttcc-raid-console .bbttcc-mans label {
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.bbttcc-raid-console .bbttcc-proj-spend {
+  font-size: 10px;
+}
+
+/* Tag + cost line from UI enhancer */
+
+.bbttcc-raid-console .bbttcc-tag {
+  padding: 1px 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.9);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bbttcc-raid-console .bbttcc-m-cost {
+  font-size: 10px;
+}
+
+/* Pills / identity badges */
+
+.bbttcc-raid-console .bbttcc-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.08rem 0.6rem;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 1px solid rgba(148,163,184,0.8);
+  background: rgba(15,23,42,0.95);
+}
+
+.bbttcc-raid-console .bbttcc-pill-primary {
+  border-color: rgba(59,130,246,0.95);
+  background:
+    radial-gradient(circle at 0 0, rgba(59,130,246,0.5), transparent 55%),
+    rgba(15,23,42,0.96);
+}
+
+.bbttcc-raid-console .bbttcc-pill-gold {
+  border-color: rgba(234,179,8,0.9);
+  background:
+    radial-gradient(circle at 0 0, rgba(234,179,8,0.5), transparent 55%),
+    rgba(15,23,42,0.96);
+}
+
+/* Helper */
+
+.bbttcc-raid-console .center {
+  text-align: center;
 }

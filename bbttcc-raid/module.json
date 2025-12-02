@@ -21,9 +21,6 @@
     "scripts/raid-optransfer.enhancer.js",
     "scripts/raid-console.tooltip.enhancer.js",
     "scripts/raid-post2turn.enhancer.js",
-    "scripts/hex-travel.js",
-    "scripts/hex-travel-mode.js",
-    "scripts/bbttcc-travel-console.js",
     "scripts/planner-standard-activities.enhancer.js",
     "scripts/raid-contested-takeover.enhancer.js",
     "scripts/queue-drawings.consumer.enhancer.js",
@@ -49,9 +46,12 @@
     "scripts/effects-alignment-shift.enhancer.js",
     "scripts/effects-wilderness.enhancer.js",
     "scripts/effects-integration-activities.enhancer.js",
-    "scripts/bbttcc-travel-visuals.js",
     "scripts/raid-infiltration.alarm.enhancer.js",
     "scripts/raid-courtly.influence.enhancer.js",
+    "scripts/bbttcc-raid-effects-loader.enhancer.js",
+    "scripts/bbttcc-raid-maneuvers-loader.enhancer.js",
+    "scripts/bbttcc-raid-console-ui.enhancer.js",
+    "scripts/raid-planner-mode.enhancer.js",
     "scripts/module.raid-planner.js"
   ],
   "styles": [

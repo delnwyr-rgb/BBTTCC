@@ -36,12 +36,29 @@
     </label>
   </header>
 
-  <!-- Target line -->
-  <div class="flexrow" style="gap:.5rem; align-items:center;">
-    <label class="flex0">Target</label>
-    <div class="flex2"><strong>{{default vm.targetName "—"}}</strong></div>
+  <!-- Target & Primary Key identity strip -->
+  <div class="bbttcc-raid-ident flexrow" style="gap:.5rem; align-items:center;">
+    <div class="flex2">
+      <span class="bbttcc-pill bbttcc-pill-primary">
+        Target:
+        {{#if vm.targetName}}
+          {{default vm.targetName "—"}}
+        {{else}}
+          —
+        {{/if}}
+      </span>
+    </div>
     <span class="flex1"></span>
-    <small class="flex0">Primary Key: <b>{{upper (default currentBank.cat "")}}</b></small>
+    <div class="flex0">
+      <span class="bbttcc-pill bbttcc-pill-gold">
+        Primary Key:
+        {{#if currentBank.cat}}
+          {{upper (default currentBank.cat "")}}
+        {{else}}
+          —
+        {{/if}}
+      </span>
+    </div>
   </div>
 
   <!-- Top DC block with breakdown -->

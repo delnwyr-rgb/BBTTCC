@@ -1,0 +1,716 @@
+[
+  {
+    "name": "Harvest Season [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "economy": 1
+        },
+        "effects": {
+          "text": "+1 Economy regen next turn."
+        }
+      }
+    }
+  },
+  {
+    "name": "Recon Sweep [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "intrigue": 1
+        },
+        "effects": {
+          "text": "Reveal alignment of 1 adjacent Hex."
+        }
+      }
+    }
+  },
+  {
+    "name": "Ration Distribution [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "softPower": 1
+        },
+        "effects": {
+          "text": "+1 Loyalty to one controlled Hex."
+        }
+      }
+    }
+  },
+  {
+    "name": "Minor Repair [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "economy": 1,
+          "materials": 1
+        },
+        "effects": {
+          "text": "Remove 'Damaged Infrastructure'."
+        }
+      }
+    }
+  },
+  {
+    "name": "Local Festival [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "culture": 1,
+          "faith": 1
+        },
+        "effects": {
+          "text": "+1 Empathy Meter."
+        }
+      }
+    }
+  },
+  {
+    "name": "Charity Drive [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "faith": 1,
+          "softPower": 1
+        },
+        "effects": {
+          "text": "Reduce regional Darkness \u22121."
+        }
+      }
+    }
+  },
+  {
+    "name": "Border Patrol [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "violence": 1,
+          "nonLethal": 1
+        },
+        "effects": {
+          "text": "Prevent Infiltration attempts next turn."
+        }
+      }
+    }
+  },
+  {
+    "name": "Civic Audit [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "intrigue": 1,
+          "economy": 1
+        },
+        "effects": {
+          "text": "Detect corruption; restore Loyalty +1."
+        }
+      }
+    }
+  },
+  {
+    "name": "Training Parade [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "softPower": 1,
+          "violence": 1
+        },
+        "effects": {
+          "text": "+1 Morale for next Raid."
+        }
+      }
+    }
+  },
+  {
+    "name": "Pilgrimage Route [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "faith": 1,
+          "diplomacy": 1
+        },
+        "effects": {
+          "text": "+1 Faith regen; Loyalty +1 to Hex."
+        }
+      }
+    }
+  },
+  {
+    "name": "Smuggling Network [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "intrigue": 3
+        },
+        "effects": {
+          "text": "Establish 1 Trade Route (+1 Diplomacy regen)."
+        }
+      }
+    }
+  },
+  {
+    "name": "Training Drills [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "violence": 3,
+          "nonLethal": 2
+        },
+        "effects": {
+          "text": "Increase Violence cap +1 for 2 turns."
+        }
+      }
+    }
+  },
+  {
+    "name": "Reconstruction Drive [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "economy": 2,
+          "softPower": 2
+        },
+        "effects": {
+          "text": "Upgrade Hex status to 'Claimed'."
+        }
+      }
+    }
+  },
+  {
+    "name": "Cultural Exchange [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "diplomacy": 2,
+          "softPower": 2
+        },
+        "effects": {
+          "text": "Share Alignment bonus between Hexes."
+        }
+      }
+    }
+  },
+  {
+    "name": "Spy Insertion [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "intrigue": 2,
+          "diplomacy": 1
+        },
+        "effects": {
+          "text": "Reveal enemy OP pools next turn."
+        }
+      }
+    }
+  },
+  {
+    "name": "Justice Tribunal [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "softPower": 2,
+          "faith": 1
+        },
+        "effects": {
+          "text": "Remove 1 Darkness; Empathy +1."
+        }
+      }
+    }
+  },
+  {
+    "name": "Peace Accords [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "diplomacy": 3
+        },
+        "effects": {
+          "text": "Prevent enemy Raids for 2 turns on both sides."
+        }
+      }
+    }
+  },
+  {
+    "name": "Propaganda Tour [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "softPower": 2,
+          "economy": 1
+        },
+        "effects": {
+          "text": "Spread Loyalty +1 across 2 Hexes."
+        }
+      }
+    }
+  },
+  {
+    "name": "Courtly Intrigue Council [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "intrigue": 3,
+          "diplomacy": 2
+        },
+        "effects": {
+          "text": "Initiate social combat; gain intel on enemy plans."
+        }
+      }
+    }
+  },
+  {
+    "name": "Resource Expropriation [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "economy": 3,
+          "violence": 2
+        },
+        "effects": {
+          "text": "Steal +2 Economy from enemy; Darkness +1."
+        }
+      }
+    }
+  },
+  {
+    "name": "Terraforming Project [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "economy": 4,
+          "faith": 4
+        },
+        "effects": {
+          "text": "Cleanse 1 Corrupted Hex."
+        }
+      }
+    }
+  },
+  {
+    "name": "Alliance Summit [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "diplomacy": 3,
+          "softPower": 3
+        },
+        "effects": {
+          "text": "Merge resources for 1 Strategic Turn."
+        }
+      }
+    }
+  },
+  {
+    "name": "Industrial Revolution [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "economy": 4
+        },
+        "effects": {
+          "text": "Double Economy output for 2 turns."
+        }
+      }
+    }
+  },
+  {
+    "name": "Psych-Ops Broadcast [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "softPower": 3,
+          "intrigue": 3
+        },
+        "effects": {
+          "text": "\u22122 Loyalty to enemy Hex."
+        }
+      }
+    }
+  },
+  {
+    "name": "Purification Rite [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "faith": 3,
+          "softPower": 2
+        },
+        "effects": {
+          "text": "Reduce Darkness Track \u22122."
+        }
+      }
+    }
+  },
+  {
+    "name": "Crisis Summit [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "diplomacy": 3,
+          "faith": 2
+        },
+        "effects": {
+          "text": "Prevent Morale loss globally for 1 turn."
+        }
+      }
+    }
+  },
+  {
+    "name": "Dark Harvest [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "economy": 4,
+          "faith": 2
+        },
+        "effects": {
+          "text": "Convert Darkness to +2 Economy; Empathy \u22121."
+        }
+      }
+    }
+  },
+  {
+    "name": "Siege Logistics Overhaul [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "economy": 3,
+          "violence": 2
+        },
+        "effects": {
+          "text": "Reduce Siege costs by 25%."
+        }
+      }
+    }
+  },
+  {
+    "name": "Inquisition Mandate [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "faith": 4,
+          "intrigue": 2
+        },
+        "effects": {
+          "text": "Expose Qliphothic assets; Darkness \u22121."
+        }
+      }
+    }
+  },
+  {
+    "name": "Sanctum Expansion [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "faith": 3,
+          "economy": 3
+        },
+        "effects": {
+          "text": "Create permanent 'Blessed Ground' in Hex (\u22121 Darkness regen)."
+        }
+      }
+    }
+  },
+  {
+    "name": "Great Work Ritual [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "faith": 10,
+          "culture": 5
+        },
+        "effects": {
+          "text": "Trigger Tikkun Phase C for one Spark."
+        }
+      }
+    }
+  },
+  {
+    "name": "Mass Mobilization [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "violence": 6,
+          "economy": 6
+        },
+        "effects": {
+          "text": "+25% OP generation next turn, then \u221225%."
+        }
+      }
+    }
+  },
+  {
+    "name": "Enlightenment Congress [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "faith": 5,
+          "diplomacy": 5
+        },
+        "effects": {
+          "text": "Raise Enlightenment for all PCs by 1."
+        }
+      }
+    }
+  },
+  {
+    "name": "Project Eden [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "economy": 10,
+          "softPower": 5
+        },
+        "effects": {
+          "text": "Create 'Garden City' Hex aligned to Tiferet."
+        }
+      }
+    }
+  },
+  {
+    "name": "Apocalyptic Weapon Test [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "violence": 8,
+          "intrigue": 4
+        },
+        "effects": {
+          "text": "Destroy enemy Hex; Darkness +3."
+        }
+      }
+    }
+  },
+  {
+    "name": "Judgment of Light [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "faith": 6,
+          "violence": 6
+        },
+        "effects": {
+          "text": "Purify enemy Hex without destruction."
+        }
+      }
+    }
+  },
+  {
+    "name": "Dragon\u2019s Parley [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "diplomacy": 8,
+          "faith": 5
+        },
+        "effects": {
+          "text": "Negotiate with Ego-Dragon fragment; if successful, Darkness \u22123."
+        }
+      }
+    }
+  },
+  {
+    "name": "The Final Weave [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "faith": 10,
+          "softPower": 10
+        },
+        "effects": {
+          "text": "Merge five purified Sparks into Final Ritual."
+        }
+      }
+    }
+  },
+  {
+    "name": "World Reformation Council [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "diplomacy": 8,
+          "economy": 6
+        },
+        "effects": {
+          "text": "Permanently raise global Empathy Meter +2."
+        }
+      }
+    }
+  },
+  {
+    "name": "Oblivion Protocol [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "intrigue": 8,
+          "faith": 8
+        },
+        "effects": {
+          "text": "Collapse Qliphothic gate; resets Darkness Track to 0."
+        }
+      }
+    }
+  }
+]

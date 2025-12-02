@@ -1,0 +1,921 @@
+[
+  {
+    "name": "Suppressive Fire [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "violence": 2
+        },
+        "effects": {
+          "text": "Force enemy reroll lowest d20 this round."
+        },
+        "raidTypes": [
+          "Assault",
+          "Occupation"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Smoke and Mirrors [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "intrigue": 1,
+          "softPower": 1
+        },
+        "effects": {
+          "text": "Reduce Alarm Level by 1."
+        },
+        "raidTypes": [
+          "Infiltration",
+          "Espionage",
+          "Propaganda"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Rally the Line [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "softPower": 1
+        },
+        "effects": {
+          "text": "+1 to next attack/defense for allies."
+        },
+        "raidTypes": [
+          "Assault",
+          "Liberation",
+          "Occupation"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Patch the Breach [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "nonLethal": 1,
+          "economy": 1
+        },
+        "effects": {
+          "text": "Restore 1 Structure Point."
+        },
+        "raidTypes": [
+          "Assault (defense)",
+          "Occupation (defense)"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Flash Bargain [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "diplomacy": 1
+        },
+        "effects": {
+          "text": "Borrow +1 enemy OP for this round."
+        },
+        "raidTypes": [
+          "Liberation",
+          "Propaganda",
+          "Espionage"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Radiant Rally [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "softPower": 1
+        },
+        "effects": {
+          "text": "Boost ally morale; Darkness \u22121 on success."
+        },
+        "raidTypes": [
+          "Liberation",
+          "Siege"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Supply Overrun [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "economy": 1,
+          "violence": 1
+        },
+        "effects": {
+          "text": "Capture enemy supplies; gain +1 Economy next round."
+        },
+        "raidTypes": [
+          "Assault",
+          "Siege"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Flash Interdict [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "intrigue": 1
+        },
+        "effects": {
+          "text": "Cancel enemy Rally/Propaganda maneuver."
+        },
+        "raidTypes": [
+          "Espionage",
+          "Propaganda"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Prayer in the Smoke [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "faith": 1
+        },
+        "effects": {
+          "text": "Allies gain advantage vs Fear; Darkness \u22121 regionally."
+        },
+        "raidTypes": [
+          "Ritual/Tikkun",
+          "Liberation"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Last-Stand Banner [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 1,
+        "rarity": "common",
+        "opCosts": {
+          "violence": 2,
+          "faith": 1
+        },
+        "effects": {
+          "text": "Defenders ignore first Structure loss this round."
+        },
+        "raidTypes": [
+          "Siege (defense)",
+          "Occupation"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Saboteur\u2019s Edge [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "intrigue": 3
+        },
+        "effects": {
+          "text": "Ignore one Fortified modifier this turn."
+        },
+        "raidTypes": [
+          "Infiltration",
+          "Espionage",
+          "Assault (pre-siege)"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Bless the Fallen [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "faith": 2
+        },
+        "effects": {
+          "text": "Negate first casualty this round."
+        },
+        "raidTypes": [
+          "Assault",
+          "Liberation",
+          "Ritual/Tikkun"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Logistical Surge [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "economy": 2,
+          "logistics": 1
+        },
+        "effects": {
+          "text": "Repeat last round\u2019s maneuver at no cost."
+        },
+        "raidTypes": [
+          "Assault",
+          "Blockade",
+          "Occupation"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Command Overdrive [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "violence": 3
+        },
+        "effects": {
+          "text": "Gain initiative for next round."
+        },
+        "raidTypes": [
+          "Assault",
+          "Occupation",
+          "Liberation"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Psychic Disruption [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "intrigue": 2,
+          "faith": 1
+        },
+        "effects": {
+          "text": "Opponents roll at Disadvantage this round."
+        },
+        "raidTypes": [
+          "Espionage",
+          "Infiltration",
+          "Ritual/Tikkun"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Faithful Intervention [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "faith": 2,
+          "softPower": 1
+        },
+        "effects": {
+          "text": "Remove 1 Darkness; cancel Qliphothic effects."
+        },
+        "raidTypes": [
+          "Ritual/Tikkun",
+          "Liberation"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Tactical Overwatch [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "violence": 2,
+          "intrigue": 1
+        },
+        "effects": {
+          "text": "Reroll one attack die per ally within range."
+        },
+        "raidTypes": [
+          "Assault",
+          "Siege"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Signal Hijack [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "intrigue": 3
+        },
+        "effects": {
+          "text": "Enemy communications fail; their Alarm Level +2."
+        },
+        "raidTypes": [
+          "Infiltration",
+          "Espionage"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Empathic Surge [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "softPower": 2,
+          "faith": 1
+        },
+        "effects": {
+          "text": "Empathy Meter +1 after round; heal morale."
+        },
+        "raidTypes": [
+          "Liberation",
+          "Propaganda"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Industrial Sabotage [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 2,
+        "rarity": "rare",
+        "opCosts": {
+          "economy": 3
+        },
+        "effects": {
+          "text": "Target loses 1 Economy OP per turn for 3 turns."
+        },
+        "raidTypes": [
+          "Blockade",
+          "Occupation"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Echo Strike Protocol [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "violence": 4,
+          "intrigue": 1
+        },
+        "effects": {
+          "text": "Apply attack effect twice vs different targets."
+        },
+        "raidTypes": [
+          "Assault",
+          "Liberation"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Moral High Ground [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "softPower": 3
+        },
+        "effects": {
+          "text": "+2 to Empathy Meter after victory."
+        },
+        "raidTypes": [
+          "Liberation",
+          "Propaganda",
+          "Ritual/Tikkun"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Quantum Shield [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "economy": 3,
+          "faith": 2
+        },
+        "effects": {
+          "text": "Reduce incoming damage by half for one round."
+        },
+        "raidTypes": [
+          "Assault (defense)",
+          "Occupation",
+          "Ritual/Tikkun"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Overclock the Golems [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "economy": 2,
+          "violence": 2
+        },
+        "effects": {
+          "text": "+3 attack for one construct; loses 1 HP."
+        },
+        "raidTypes": [
+          "Assault",
+          "Blockade",
+          "Espionage (sabotage mech)"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Counter-Propaganda Wave [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "softPower": 3,
+          "intrigue": 2
+        },
+        "effects": {
+          "text": "Cancel enemy Soft Power effect this round."
+        },
+        "raidTypes": [
+          "Propaganda",
+          "Liberation",
+          "Occupation"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Radiant Retaliation [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "faith": 3,
+          "violence": 2
+        },
+        "effects": {
+          "text": "Convert enemy Darkness gain to \u22121 for you."
+        },
+        "raidTypes": [
+          "Ritual/Tikkun",
+          "Liberation"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Chrono-Loop Command [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "intrigue": 4,
+          "economy": 2
+        },
+        "effects": {
+          "text": "Rerun a failed roll this round; if used twice, Darkness +1."
+        },
+        "raidTypes": [
+          "Espionage",
+          "Infiltration"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Siege Breaker Volley [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "violence": 4,
+          "logistics": 1
+        },
+        "effects": {
+          "text": "Remove 'Fortified' tag from target."
+        },
+        "raidTypes": [
+          "Siege",
+          "Assault"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Harmonic Chant [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "faith": 3,
+          "softPower": 2
+        },
+        "effects": {
+          "text": "Allies gain Advantage; Darkness \u22121."
+        },
+        "raidTypes": [
+          "Ritual/Tikkun",
+          "Liberation"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Defender\u2019s Reversal [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 3,
+        "rarity": "very rare",
+        "opCosts": {
+          "intrigue": 3,
+          "nonLethal": 2
+        },
+        "effects": {
+          "text": "Reflect first enemy maneuver used this round."
+        },
+        "raidTypes": [
+          "Occupation (defense)",
+          "Siege"
+        ],
+        "defenderAccess": "Yes"
+      }
+    }
+  },
+  {
+    "name": "Sephirotic Intervention [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "faith": 5,
+          "softPower": 5
+        },
+        "effects": {
+          "text": "Auto-win one opposed roll; Darkness \u22121."
+        },
+        "raidTypes": [
+          "Ritual/Tikkun",
+          "Liberation"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Ego Breaker [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "violence": 6
+        },
+        "effects": {
+          "text": "Reduce enemy leader\u2019s OP cap by 3 permanently."
+        },
+        "raidTypes": [
+          "Assault",
+          "Occupation"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Reality Hack [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "intrigue": 5,
+          "economy": 3
+        },
+        "effects": {
+          "text": "Re-run last round as if it never occurred."
+        },
+        "raidTypes": [
+          "Espionage",
+          "Infiltration",
+          "Ritual/Tikkun"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Unity Surge [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "diplomacy": 5,
+          "softPower": 5
+        },
+        "effects": {
+          "text": "All allies gain +2 to every OP next round."
+        },
+        "raidTypes": [
+          "Liberation",
+          "Propaganda",
+          "Ritual/Tikkun"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Qliphothic Gambit [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "violence": 6
+        },
+        "effects": {
+          "text": "+6 to Violence roll; Darkness +2."
+        },
+        "raidTypes": [
+          "Assault",
+          "Ritual/Tikkun (corrupt variant)"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Temporal Armistice [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "diplomacy": 6,
+          "faith": 4
+        },
+        "effects": {
+          "text": "End combat for 1 round; Darkness \u22122 if enemy accepts."
+        },
+        "raidTypes": [
+          "Courtly Intrigue",
+          "Ritual/Tikkun"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Void-Signal Collapse [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "intrigue": 6,
+          "faith": 3
+        },
+        "effects": {
+          "text": "Nullify all maneuvers this round; Darkness +1."
+        },
+        "raidTypes": [
+          "Espionage",
+          "Siege"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Crown of Mercy [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "faith": 6,
+          "softPower": 6
+        },
+        "effects": {
+          "text": "Instantly purify a Corrupted Spark; requires Victory context."
+        },
+        "raidTypes": [
+          "Ritual/Tikkun"
+        ],
+        "defenderAccess": "Conditional"
+      }
+    }
+  },
+  {
+    "name": "Engine of Absolution [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "economy": 6,
+          "faith": 5
+        },
+        "effects": {
+          "text": "Restore 1 destroyed Hex to GenPop status."
+        },
+        "raidTypes": [
+          "Liberation",
+          "Occupation (after)"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  },
+  {
+    "name": "Ego-Dragon Echo [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "maneuver",
+        "tier": 4,
+        "rarity": "legendary",
+        "opCosts": {
+          "violence": 5,
+          "intrigue": 5
+        },
+        "effects": {
+          "text": "Summon Ego-Dragon fragment; +4 attack, double Darkness risk."
+        },
+        "raidTypes": [
+          "Ritual/Tikkun",
+          "Corruption"
+        ],
+        "defenderAccess": "No"
+      }
+    }
+  }
+]
