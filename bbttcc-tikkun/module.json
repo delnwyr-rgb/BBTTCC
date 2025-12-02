@@ -20,10 +20,12 @@
     "scripts/api.tikkun.js",
     "scripts/tikkun-hotfix.js",
     "scripts/tikkun-sparks.enhancer.js",
+    "scripts/tikkun-sheet.enhancer.js",
     "scripts/tikkun-ritual.enhancer.js",
-    "scripts/tikkun-sheet.enhancer.js"
+    "scripts/tikkun-ritual-console.js"
   ],
   "styles": [
-    "styles/tikkun-styles.css"
+    "styles/tikkun-styles.css",
+    "styles/ritual-console.css"
   ]
 }

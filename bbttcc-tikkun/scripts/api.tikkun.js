@@ -1,10 +1,15 @@
 console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
-/* bbttcc-tikkun/api.tikkun.js — Great Work Core API (C1)
+/* bbttcc-tikkun/api.tikkun.js — Great Work Core API (C1 + Phase A.1)
  *
  * Provides:
  *  - Actor-level Spark storage and constellation helpers
  *  - Simple phase markers: identify / acquire / integrate / corrupt
  *  - Faction-level Great Work readiness evaluation
+ *
+ * Spark counting (Phase A.1):
+ *  - Faction spark count is the MAX of:
+ *      • faction-level sparks (flags.bbttcc-factions.*)
+ *      • sum of integrated sparks on all characters belonging to that faction
  *
  * Compatible with:
  *  - tikkun-hotfix.js (only fills in missing functions)
@@ -212,6 +217,34 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     };
   }
 
+  /** Phase A.1 — aggregate integrated sparks from all characters of this faction. */
+  function aggregateCharacterSparksForFaction(fid) {
+    const factionId = String(fid || "");
+    if (!factionId || !game.actors) return 0;
+    let count = 0;
+
+    try {
+      for (const A of game.actors.contents ?? []) {
+        if (String(A.type || "").toLowerCase() !== "character") continue;
+
+        // Basic belonging: by bbttcc-factions.factionId flag (primary)
+        const fFlag = A.getFlag(MODF, "factionId");
+        if (!fFlag || String(fFlag) !== factionId) continue;
+
+        const sparkMap = _getSparkMap(A);
+        for (const s of Object.values(sparkMap)) {
+          if (s && (s.integrated || String(s.status || "").toLowerCase() === "integrated")) {
+            count++;
+          }
+        }
+      }
+    } catch (e) {
+      console.warn(TAG, "aggregateCharacterSparksForFaction failed for", factionId, e);
+    }
+
+    return count;
+  }
+
   function getGreatWorkState(factionId, {
     sparkThreshold = 3,
     vpThreshold    = 10,
@@ -226,7 +259,11 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 
     const sparkCountByMap = Object.values(sparks.map).reduce((a, b) => a + Number(b || 0), 0);
     const sparkCountByArr = sparks.array.reduce((a, e) => a + Number(e?.count || 0), 0);
-    const sparkCount      = Math.max(sparkCountByMap, sparkCountByArr);
+
+    // NEW: character-side sparks
+    const charSparkCount  = aggregateCharacterSparksForFaction(F.id);
+
+    const sparkCount      = Math.max(sparkCountByMap, sparkCountByArr, charSparkCount);
 
     const integratedKeys   = Object.keys(sparks.integrated || {});
     const integratedCount  = integratedKeys.length;
@@ -304,7 +341,6 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
     }
   }
 
-  // Ensure we install on ready (after other hooks), and also immediately if game is already ready.
   Hooks.once("ready", installAPI);
   try { if (game?.ready) installAPI(); } catch {}
 
