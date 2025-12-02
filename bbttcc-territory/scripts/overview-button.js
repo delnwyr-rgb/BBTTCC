@@ -66,39 +66,199 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
     width:560, height:"auto", resizable:true,
     classes:["bbttcc","bbttcc-relations"]
   };
+
   constructor(actor, options={}) {
     super(options);
     this.actor = actor;
     this._rels  = getRelationsMap(actor);
   }
+
   async _renderHTML(){
     const factions=(game.actors?.contents??[])
       .filter(a=>isFactionActor(a)&&a.id!==this.actor.id)
       .sort((a,b)=>a.name.localeCompare(b.name));
+
     const rows=factions.map(fa=>{
       const cur=this._rels[fa.id]??"neutral";
       const opts=REL_STATUSES.map(s=>`<option value="${s.value}" ${s.value===cur?"selected":""}>${s.label}</option>`).join("");
       return `<tr>
         <td title="${foundry.utils.escapeHTML(fa.name)}"><strong>${foundry.utils.escapeHTML(fa.name)}</strong></td>
-        <td class="center"><select data-target="${fa.id}">${opts}</select></td>
+        <td class="center bbttcc-rel-status"><select data-target="${fa.id}">${opts}</select></td>
         <td><small data-hint-for="${fa.id}" style="opacity:.75;">${foundry.utils.escapeHTML(hintForRel(cur))}</small></td>
       </tr>`;
     }).join("");
 
-    return `<section style="padding:.5rem;">
-      <p class="notes" style="opacity:.8;margin:0 0 .5rem;">
-        Set how <strong>${foundry.utils.escapeHTML(this.actor.name)}</strong> relates to other factions.
-      </p>
-      <table class="bbttcc-table" style="width:100%;">
-        <thead><tr><th>Faction</th><th style="width:9rem;">Status</th><th>Effect</th></tr></thead>
-        <tbody id="rels-body">${rows || `<tr><td colspan="3"><em>No other factions exist yet.</em></td></tr>`}</tbody>
-      </table>
-      <footer class="flexrow" style="gap:.5rem;justify-content:flex-end;margin-top:.75rem;">
-        <button type="button" data-action="cancel"><i class="fas fa-times"></i> Cancel</button>
-        <button type="button" data-action="save" class="default"><i class="fas fa-save"></i> Save</button>
-      </footer>
+    return `<section class="bbttcc-relations-shell" style="padding:.75rem;">
+      <style>
+        .bbttcc-relations .window-content {
+          background: radial-gradient(circle at top left, rgba(59,130,246,0.25), transparent 55%),
+                      radial-gradient(circle at bottom right, rgba(14,165,233,0.25), transparent 55%),
+                      #020617;
+          padding: 0.75rem;
+        }
+        .bbttcc-relations .bbttcc-rel-card {
+          background:
+            radial-gradient(circle at top left, rgba(59,130,246,0.20), transparent 60%),
+            radial-gradient(circle at bottom right, rgba(34,197,94,0.16), transparent 60%),
+            rgba(15,23,42,0.96);
+          border-radius: 12px;
+          border: 1px solid rgba(148,163,184,0.7);
+          box-shadow:
+            0 0 0 1px rgba(15,23,42,0.9),
+            0 18px 40px rgba(15,23,42,0.95);
+          padding: 0.75rem 0.9rem 0.85rem;
+          color: #e5e7eb;
+        }
+        .bbttcc-relations .bbttcc-rel-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 0.75rem;
+          margin-bottom: 0.5rem;
+        }
+        .bbttcc-relations .bbttcc-rel-title {
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+          color: #e5e7eb;
+        }
+        .bbttcc-relations .bbttcc-rel-subtitle {
+          margin: 0.15rem 0 0;
+          font-size: 0.8rem;
+          opacity: 0.85;
+        }
+        .bbttcc-relations .bbttcc-rel-subtitle strong {
+          color: #38bdf8;
+        }
+        .bbttcc-relations .bbttcc-rel-table-wrapper {
+          margin-top: 0.5rem;
+          border-radius: 8px;
+          overflow: hidden;
+          border: 1px solid rgba(51,65,85,0.9);
+          background: rgba(15,23,42,0.9);
+        }
+        .bbttcc-relations .bbttcc-table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: 0.8rem;
+        }
+        .bbttcc-relations .bbttcc-table thead {
+          background: linear-gradient(to right, #020617, #020617, #0b1120);
+          color: #c7d2fe;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          font-size: 0.7rem;
+        }
+        .bbttcc-relations .bbttcc-table th,
+        .bbttcc-relations .bbttcc-table td {
+          padding: 0.4rem 0.55rem;
+          border-bottom: 1px solid rgba(30,64,175,0.35);
+        }
+        .bbttcc-relations .bbttcc-table th {
+          font-weight: 600;
+        }
+        .bbttcc-relations .bbttcc-table tbody tr:nth-child(odd) {
+          background: rgba(15,23,42,0.98);
+        }
+        .bbttcc-relations .bbttcc-table tbody tr:nth-child(even) {
+          background: rgba(15,23,42,0.88);
+        }
+        .bbttcc-relations .bbttcc-table tbody tr:hover {
+          background: rgba(37,99,235,0.25);
+        }
+        .bbttcc-relations .bbttcc-rel-status {
+          min-width: 8rem;
+        }
+        .bbttcc-relations select[data-target] {
+          width: 100%;
+          border-radius: 999px;
+          border: 1px solid rgba(148,163,184,0.7);
+          background: rgba(15,23,42,0.95);
+          color: #e5e7eb;
+          padding: 0.15rem 0.6rem;
+          font-size: 0.8rem;
+          appearance: none;
+        }
+        .bbttcc-relations select[data-target]:focus {
+          outline: none;
+          border-color: #38bdf8;
+          box-shadow: 0 0 0 1px rgba(56,189,248,0.7);
+          background: rgba(15,23,42,1);
+        }
+        .bbttcc-relations small[data-hint-for] {
+          font-size: 0.75rem;
+        }
+        .bbttcc-relations footer.bbttcc-rel-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.5rem;
+          margin-top: 0.75rem;
+        }
+        .bbttcc-relations footer.bbttcc-rel-footer button {
+          border-radius: 999px;
+          border: 1px solid rgba(148,163,184,0.65);
+          background: rgba(15,23,42,0.98);
+          color: #e5e7eb;
+          padding: 0.3rem 0.8rem;
+          font-size: 0.8rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          cursor: pointer;
+        }
+        .bbttcc-relations footer.bbttcc-rel-footer button.default {
+          border-color: #38bdf8;
+          background: linear-gradient(135deg, #0ea5e9, #22c55e);
+          color: #020617;
+          font-weight: 600;
+        }
+        .bbttcc-relations footer.bbttcc-rel-footer button.default:disabled {
+          opacity: 0.7;
+          cursor: default;
+        }
+      </style>
+
+      <div class="bbttcc-rel-card">
+        <header class="bbttcc-rel-header">
+          <div>
+            <h2 class="bbttcc-rel-title">Faction Relationships</h2>
+            <p class="bbttcc-rel-subtitle">
+              Set how <strong>${foundry.utils.escapeHTML(this.actor.name)}</strong> relates to other factions. These
+              standings inform diplomacy, AI posture, and encounter framing.
+            </p>
+          </div>
+        </header>
+
+        <div class="bbttcc-rel-table-wrapper">
+          <table class="bbttcc-table">
+            <thead>
+              <tr>
+                <th>Faction</th>
+                <th style="width:9rem;">Status</th>
+                <th>Effect</th>
+              </tr>
+            </thead>
+            <tbody id="rels-body">
+              ${rows || `<tr><td colspan="3"><em>No other factions exist yet.</em></td></tr>`}
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="bbttcc-rel-footer">
+          <button type="button" data-action="cancel">
+            <i class="fas fa-times"></i>
+            <span>Cancel</span>
+          </button>
+          <button type="button" data-action="save" class="default">
+            <i class="fas fa-save"></i>
+            <span>Save</span>
+          </button>
+        </footer>
+      </div>
     </section>`;
   }
+
   async _replaceHTML(a,b){
     let element=a, html=b;
     if (typeof a==="string" && (b instanceof HTMLElement || (b && b[0]))) { element=b; html=a; }

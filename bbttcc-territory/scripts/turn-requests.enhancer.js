@@ -1,6 +1,11 @@
 /* modules/bbttcc-territory/scripts/turn-requests.enhancer.js
  * BBTTCC — Auto Process Requests on Advance Turn (Apply)
  * Adds a re-entrancy guard to prevent infinite recursion.
+ *
+ * Behavior:
+ *   - If args.factionId / actorId / attackerId is provided, process requests
+ *     just for that faction.
+ *   - Otherwise, process ALL pending requests (global pass).
  */
 (() => {
   const TAG = "[bbttcc-turn/auto-requests]";
@@ -14,21 +19,34 @@
     if (!terr || typeof terr.advanceTurn !== "function") {
       return warn("territory.advanceTurn not found; enhancer idle.");
     }
+    if (!turn || typeof turn.processRequests !== "function") {
+      return warn("turn.processRequests not found; enhancer idle.");
+    }
+
     const orig = terr.advanceTurn.bind(terr);
 
     terr.advanceTurn = async function advanceTurn_withRequests(args = {}){
-      // prevent recursion
+      // Prevent recursion if something inside processRequests triggers advanceTurn again
       if (_isRunning) return orig(args);
+
       const res = await orig(args);
+
       try {
-        if (args?.apply && turn?.processRequests && !_isRunning) {
+        if (args?.apply && !_isRunning) {
           _isRunning = true;
+
           const factionId = args.factionId || args.actorId || args.attackerId || null;
+
           if (factionId) {
+            // Per-faction mode: process only this faction’s requests
             const out = await turn.processRequests({ factionId, apply: true });
-            log("Processed queued requests after Advance Turn:", out);
+            log("Processed queued requests after Advance Turn (per faction):", out);
           } else {
-            warn("No factionId provided to advanceTurn; skipping processRequests.");
+            // Global mode: no factionId was provided (e.g. Turn Driver from toolbar).
+            // Let processRequests decide how to scan and consume all pending requests.
+            log("No factionId provided to advanceTurn; processing ALL pending requests.");
+            const out = await turn.processRequests({ apply: true });
+            log("Processed queued requests after Advance Turn (global):", out);
           }
         }
       } catch (e) {
@@ -36,6 +54,7 @@
       } finally {
         _isRunning = false;
       }
+
       return res;
     };
 

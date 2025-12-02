@@ -410,6 +410,7 @@ function buildHexData({ x,y }){
     x:origin.x, y:origin.y,
     fillAlpha:v.fillAlpha, fillColor:v.fillColor, strokeColor:v.strokeColor, strokeAlpha:v.strokeAlpha, strokeWidth:v.strokeWidth,
     text:"Hex",
+    fontSize: 12,
     flags:{ [MOD]:{
       isHex:true, kind:"territory-hex", name:"Hex",
       status:"unclaimed", type:"settlement", size:"town",
@@ -521,4 +522,14 @@ Hooks.once("ready", ()=>{
   };
   game.bbttcc.api.territory.openHexConfig = (uuid)=> openHexEditorByUuid(uuid);
   game.bbttcc.api.territory.claim        = (uuid)=> openHexEditorByUuid(uuid);
+});
+
+Hooks.on("canvasReady", () => {
+  // Re-ensure the BBTTCC toolbar exists whenever a new scene is drawn.
+  // If it's already there, ensureToolbar() does nothing.
+  try {
+    ensureToolbar();
+  } catch (e) {
+    console.warn("[bbttcc-territory] ensureToolbar on canvasReady failed", e);
+  }
 });

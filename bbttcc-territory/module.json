@@ -16,11 +16,10 @@
     "scripts/overview-button.js",
     "scripts/turn-driver.js",
     "scripts/territory-unitybonus.enhancer.js",
+    "scripts/bbttcc-toolbar-augment.enhancer.js",
     "scripts/zz-click-to-edit.js"
   ],
   "scripts": [
-    "scripts/api.travel.js",
-    "scripts/bbttcc-travel-summary.enhancer.js",
     "scripts/encounters.js",
     "scripts/hex-terrain.selector.enhancer.js",
     "scripts/api.turn.processRequests.js",
@@ -30,6 +29,11 @@
     "scripts/resolution-engine.js",
     "scripts/territory-garrison-upkeep.enhancer.js",
     "scripts/territory-integration.enhancer.js",
+    "scripts/territory-build-units.enhancer.js",
+    "scripts/effects-build-units.enhancer.js",
+    "scripts/hex-config-build-units.enhancer.js",
+    "scripts/bbttcc-hex-sheet.enhancer.js",
+    "scripts/bbttcc-dashboard-hexsheet.enhancer.js",
     "scripts/turn-requests.enhancer.js"
   ],
   "styles": [

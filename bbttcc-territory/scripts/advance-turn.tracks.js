@@ -1,17 +1,21 @@
 // modules/bbttcc-territory/scripts/advance-turn.tracks.js
-// BBTTCC — Advance Turn Tracks Wrapper (Radiation, Cleanup, Darkness, Morale, Loyalty, Unity)
+// BBTTCC — Advance Turn Tracks Wrapper
 //
 // This wrapper runs AFTER the base territory.advanceTurn({apply:true}) logic.
 // It handles:
 //  - Radiation decay + spread
 //  - Cleanup (Purified hexes clear Radiated/Contaminated + Darkness bonus drop)
 //  - Cleanup aura (Purified hex cleans neighbors)
+//  - Radiation bleed-off for factions resting in Purified hexes
 //  - Darkness track from Radiated hexes
 //  - Darkness thresholds (4/7/10) narrative pings
 //  - Darkness → Morale pressure
 //  - Loyalty drift + OP stability (Phase 1)
 //  - Loyalty unrest + Defense DC modifiers (Phase 2)
+//  - Integration → Population modifiers
 //  - Unity recompute (Spark + aligned hexes)
+//  - Build Units from Materials pips (per faction, per turn)
+//  - Trade Routes → Logistics OP (adjacency-based, active scene)
 //
 // Victory VP gain, resistance, and badges are handled by
 //   bbttcc-factions/scripts/bbttcc-victory.enhancer.js
@@ -253,6 +257,63 @@
         content: `<p><b>Cleanup Aura</b></p>${lines.join("<br/>")}`,
         whisper: gm,
         speaker: { alias: "BBTTCC Cleanup" }
+      }).catch(() => {});
+    }
+  }
+
+  // ===========================================================================
+  // RADIATION BLEED-OFF: PURIFIED HEXES → FACTION RP
+  // ===========================================================================
+
+  async function doRadiationBleedPurifiedActors() {
+    const rad = game.bbttcc?.api?.radiation;
+    if (!rad || typeof rad.get !== "function" || typeof rad.set !== "function") {
+      return; // Radiation module not active
+    }
+
+    const facs = facActors();
+    const gm   = gmIds();
+    const lines = [];
+
+    // Pre-scan scenes & hexes: all Purified hexes, once
+    const allHexes = [];
+    for (const sc of game.scenes ?? []) {
+      for (const d of sc.drawings ?? []) {
+        const tf = d.flags?.[MODT];
+        if (!tf) continue;
+        const conds = Array.isArray(tf.conditions) ? tf.conditions : [];
+        if (!conds.includes("Purified")) continue;
+        allHexes.push({ doc: d, tf, conds });
+      }
+    }
+    if (!allHexes.length) return;
+
+    for (const A of facs) {
+      let purifiedCount = 0;
+      for (const { tf } of allHexes) {
+        const owner = tf.factionId || tf.ownerId;
+        if (String(owner) === String(A.id)) purifiedCount++;
+      }
+      if (!purifiedCount) continue;
+
+      const before = rad.get(A);
+      if (!before || before <= 0) continue;
+
+      const drop  = Math.min(before, purifiedCount);
+      const after = await rad.set(A.id, before - drop);
+
+      lines.push(
+        `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Radiation cleansed `
+        + `−${drop} (from ${before} → ${after}) `
+        + `via ${purifiedCount} Purified hex${purifiedCount>1?"es":""}`
+      );
+    }
+
+    if (lines.length) {
+      await ChatMessage.create({
+        content: `<p><b>Radiation Cleansing (Purified Hexes)</b></p>${lines.join("<br/>")}`,
+        whisper: gm,
+        speaker: { alias: "BBTTCC Radiation" }
       }).catch(() => {});
     }
   }
@@ -517,27 +578,16 @@
   // ===========================================================================
   // INTEGRATION → POPULATION MODIFIERS
   // ===========================================================================
-  // Automatic population improvement from Integration progress:
-  //  - progress >= 3: remove Hostile Population
-  //  - progress >= 5: add Loyal Population
-  //  - progress >= 6: Loyal Population is "sticky" — if something removes it,
-  //    this pass will restore it each turn.
-  //
-  // We support both the old snake_case modifiers (hostile_population/loyal_population)
-  // and the newer Title Case variants used by Garrison Upkeep and hex math.
 
   function normalizePopModifiers(mods) {
     const out = Array.isArray(mods) ? mods.slice() : [];
-    // Collapse snake_case into Title Case for Hostile/Loyal.
     const hasHostileSnake = out.includes("hostile_population");
     const hasHostileTitle = out.includes("Hostile Population");
     const hasLoyalSnake   = out.includes("loyal_population");
     const hasLoyalTitle   = out.includes("Loyal Population");
 
-    // remove snake_case variants; we'll keep only Title Case going forward
     const filtered = out.filter(m => m !== "hostile_population" && m !== "loyal_population");
 
-    // ensure we don't duplicate when both existed
     if (hasHostileSnake && !hasHostileTitle) filtered.push("Hostile Population");
     if (hasLoyalSnake   && !hasLoyalTitle)   filtered.push("Loyal Population");
 
@@ -559,14 +609,12 @@
         let mods = normalizePopModifiers(tf.modifiers);
         let changed = false;
 
-        // progress >= 3 → remove Hostile Population
         if (prog >= 3) {
           const beforeLen = mods.length;
           mods = mods.filter(m => m !== "Hostile Population");
           if (mods.length !== beforeLen) changed = true;
         }
 
-        // progress >= 5 → ensure Loyal Population present
         if (prog >= 5) {
           if (!mods.includes("Loyal Population")) {
             mods.push("Loyal Population");
@@ -574,9 +622,6 @@
           }
         }
 
-        // progress >= 6 → Loyal Population is sticky; if something removed it,
-        // the above block already re-added it. No extra logic needed beyond
-        // ensuring it's present every turn at this threshold.
         if (!changed) continue;
 
         const hexName = d.name ?? d.text ?? d.id;
@@ -655,6 +700,162 @@
   }
 
   // ===========================================================================
+  // BUILD UNITS FROM MATERIALS PIPS
+  // ===========================================================================
+
+  async function doBuildUnitsFromMaterials() {
+    const facs = facActors();
+    if (!facs.length) return;
+
+    // Tally Materials pips per faction from owned hexes
+    const matsByFaction = new Map();
+    for (const sc of game.scenes ?? []) {
+      for (const d of sc.drawings ?? []) {
+        const tf = d.flags?.[MODT];
+        if (!tf) continue;
+        const owner = tf.factionId || tf.ownerId;
+        if (!owner) continue;
+        const resources = tf.resources || {};
+        const mats = Number(resources.materials || 0);
+        if (!mats) continue;
+        const cur = matsByFaction.get(owner) || 0;
+        matsByFaction.set(owner, cur + mats);
+      }
+    }
+
+    if (!matsByFaction.size) return;
+
+    const gm = gmIds();
+    const lines = [];
+
+    for (const [fid, totalMats] of matsByFaction.entries()) {
+      const A = game.actors.get(fid);
+      if (!A) continue;
+
+      const gain = Math.floor(totalMats / 2); // every 2 Materials pips → 1 BU
+      if (!gain) continue;
+
+      const before = Number(A.getFlag(MODF, "buildUnits") ?? 0);
+      const after  = before + gain;
+
+      const flags = foundry.utils.duplicate(A.flags?.[MODF] || {});
+      flags.buildUnits = after;
+
+      const warLogs = Array.isArray(flags.warLogs) ? flags.warLogs : [];
+      warLogs.push({
+        ts: Date.now(),
+        type: "buildUnits",
+        summary: `Build Units +${gain} (from ${totalMats} Materials pips)`
+      });
+      flags.warLogs = warLogs;
+
+      await A.update({ [`flags.${MODF}`]: flags });
+
+      lines.push(
+        `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Build Units +${gain} `
+        + `(now ${after}; Materials pips: ${totalMats})`
+      );
+    }
+
+    if (lines.length && gm.length) {
+      await ChatMessage.create({
+        content: `<p><b>Build Units Generated</b></p>${lines.join("<br/>")}`,
+        whisper: gm,
+        speaker: { alias: "BBTTCC Economy" }
+      }).catch(()=>{});
+    }
+  }
+
+  // ===========================================================================
+  // TRADE ROUTES → LOGISTICS OP (ADJACENCY-BASED, ACTIVE SCENE)
+  // ===========================================================================
+
+  function isTradeHubHex(tf) {
+    const mods = Array.isArray(tf.modifiers) ? tf.modifiers : [];
+    const type = String(tf.type || "").toLowerCase();
+    // Port or Trade Hub hex
+    if (mods.includes("Trade Hub")) return true;
+    if (type.includes("port")) return true;
+    return false;
+  }
+
+  async function doTradeRouteLogisticsBonus() {
+    const scene = canvas?.scene;
+    const placeables = canvas?.drawings?.placeables ?? [];
+    if (!scene || !placeables.length) return;
+
+    const byFactionRoutes = new Map(); // factionId -> Set of "idA|idB"
+
+    for (const hub of placeables) {
+      const tfHub = hub.document.flags?.[MODT];
+      if (!tfHub) continue;
+      const owner = tfHub.factionId || tfHub.ownerId;
+      if (!owner) continue;
+      if (!isTradeHubHex(tfHub)) continue;
+
+      const neighbors = neighborsDrawings(hub, placeables);
+      for (const n of neighbors) {
+        const tfN = n.document.flags?.[MODT];
+        if (!tfN) continue;
+        const ownerN = tfN.factionId || tfN.ownerId;
+        if (String(ownerN) !== String(owner)) continue;
+
+        const status = String(tfN.status || "").toLowerCase();
+        if (status === "unclaimed") continue; // only working routes on held territory
+
+        const key = [hub.id, n.id].sort().join("|");
+        const set = byFactionRoutes.get(owner) || new Set();
+        set.add(key);
+        byFactionRoutes.set(owner, set);
+      }
+    }
+
+    if (!byFactionRoutes.size) return;
+
+    const gm = gmIds();
+    const lines = [];
+
+    for (const [fid, set] of byFactionRoutes.entries()) {
+      const A = game.actors.get(fid);
+      if (!A) continue;
+
+      const routeCount = set.size;
+      const bonus = Math.floor(routeCount / 2); // every 2 routes → +1 Logistics OP
+      if (!bonus) continue;
+
+      const flags = foundry.utils.duplicate(A.flags?.[MODF] || {});
+      const bank  = flags.opBank || {};
+      const before = Number(bank.logistics || 0);
+      const after  = before + bonus;
+      bank.logistics = after;
+      flags.opBank   = bank;
+
+      const warLogs = Array.isArray(flags.warLogs) ? flags.warLogs : [];
+      warLogs.push({
+        ts: Date.now(),
+        type: "logisticsRoute",
+        summary: `Trade Routes: ${routeCount} → Logistics +${bonus}`
+      });
+      flags.warLogs = warLogs;
+
+      await A.update({ [`flags.${MODF}`]: flags });
+
+      lines.push(
+        `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Trade Routes ${routeCount} `
+        + `→ Logistics OP +${bonus} (now ${after})`
+      );
+    }
+
+    if (lines.length && gm.length) {
+      await ChatMessage.create({
+        content: `<p><b>Trade Route Logistics Bonus</b></p>${lines.join("<br/>")}`,
+        whisper: gm,
+        speaker: { alias: "BBTTCC Economy" }
+      }).catch(()=>{});
+    }
+  }
+
+  // ===========================================================================
   // WRAPPER INSTALL
   // ===========================================================================
 
@@ -681,13 +882,16 @@
         await doRadiationDecayAndSpread();
         await doCleanupPurified();
         await doCleanupAura();
+        await doRadiationBleedPurifiedActors();
         await doDarknessTrack();
         await doDarknessThresholds();
         await doDarknessMorale();
         await doLoyaltyPhase1();
         await doLoyaltyPhase2();
         await doIntegrationPopulationShift();
-        await doUnityRecompute();   // Unity % used by Victory enhancer on faction side
+        await doUnityRecompute();
+        await doBuildUnitsFromMaterials();
+        await doTradeRouteLogisticsBonus();
       } catch (e) {
         console.warn(TAG, "AdvanceTurn track pass failed:", e);
       }

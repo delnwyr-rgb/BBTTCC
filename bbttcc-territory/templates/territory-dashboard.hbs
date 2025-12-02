@@ -1,4 +1,195 @@
 <section class="bbttcc-territory">
+  <style>
+    /* Hex Chrome Territory Dashboard skin */
+
+    .bbttcc-territory .window-content {
+      padding: 0.7rem 0.9rem 0.9rem;
+      background:
+        radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at 0 100%, rgba(147,51,234,0.18), transparent 60%),
+        linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+      border-radius: 0.9rem;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.95),
+        0 18px 32px rgba(15,23,42,0.9);
+      box-sizing: border-box;
+      color: #e5e7eb;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 12px;
+    }
+
+    .bbttcc-territory header.flexrow {
+      padding: 0.45rem 0.6rem 0.5rem;
+      border-radius: 0.75rem;
+      background:
+        linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
+      border: 1px solid rgba(59,130,246,0.8);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.9),
+        0 0 18px rgba(59,130,246,0.45);
+      margin-bottom: 0.5rem;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .bbttcc-territory header.flexrow h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .bbttcc-territory header.flexrow small {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .bbttcc-territory header.flexrow button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      background:
+        radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
+        linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
+      color: #e5e7eb;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .bbttcc-territory header.flexrow button:hover {
+      filter: brightness(1.06);
+    }
+
+    /* Table shell */
+
+    .bbttcc-territory .bbttcc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      border-radius: 0.8rem;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.95),
+        0 12px 22px rgba(15,23,42,0.9);
+    }
+
+    .bbttcc-territory .bbttcc-table thead {
+      background:
+        linear-gradient(90deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
+    }
+
+    .bbttcc-territory .bbttcc-table thead th {
+      padding: 0.3rem 0.45rem;
+      text-align: center;
+      font-weight: 600;
+      color: #cbd5f5;
+      border-bottom: 1px solid rgba(30,64,175,0.95);
+      white-space: nowrap;
+    }
+
+    .bbttcc-territory .bbttcc-table thead th:first-child {
+      text-align: left;
+    }
+
+    .bbttcc-territory .bbttcc-table tbody tr:nth-child(odd) {
+      background-color: rgba(15,23,42,0.97);
+    }
+
+    .bbttcc-territory .bbttcc-table tbody tr:nth-child(even) {
+      background-color: rgba(15,23,42,0.95);
+    }
+
+    .bbttcc-territory .bbttcc-table tbody td {
+      padding: 0.3rem 0.45rem;
+      border-top: 1px solid rgba(31,41,55,0.95);
+      vertical-align: middle;
+    }
+
+    .bbttcc-territory .bbttcc-table tbody td.center {
+      text-align: center;
+    }
+
+    /* Inputs / selects in rows */
+
+    .bbttcc-territory .bbttcc-table select,
+    .bbttcc-territory .bbttcc-table input[type="number"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.18rem 0.3rem;
+      border-radius: 0.35rem;
+      border: 1px solid rgba(55,65,81,0.95);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 11px;
+    }
+
+    .bbttcc-territory .bbttcc-table select:focus,
+    .bbttcc-territory .bbttcc-table input[type="number"]:focus {
+      outline: none;
+      border-color: rgba(59,130,246,0.9);
+      box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+    }
+
+    .bbttcc-territory .bbttcc-table input[type="checkbox"] {
+      transform: scale(1.1);
+    }
+
+    /* Integration cell */
+
+    .bbttcc-territory td[data-col="integration"] strong {
+      font-weight: 700;
+    }
+
+    .bbttcc-territory td[data-col="integration"] small {
+      opacity: 0.8;
+      font-size: 10px;
+    }
+
+    /* Actions buttons */
+
+    .bbttcc-territory td:last-child .flexrow button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      background:
+        radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
+        linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
+      color: #e5e7eb;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .bbttcc-territory td:last-child .flexrow button[data-action="delete"] {
+      border-color: rgba(220,38,38,0.9);
+      background:
+        radial-gradient(circle at 0 0, rgba(220,38,38,0.45), transparent 55%),
+        linear-gradient(135deg, rgba(127,29,29,0.98), rgba(15,23,42,0.98));
+    }
+
+    .bbttcc-territory td:last-child .flexrow button:hover {
+      filter: brightness(1.06);
+    }
+
+    /* “No hexes” row */
+
+    .bbttcc-territory tbody em {
+      opacity: 0.78;
+    }
+  </style>
+
   <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;">
     <h2 class="flex0">{{localize "BBTTCC.Dashboard.Title"}} – {{sceneName}}</h2>
 
@@ -103,10 +294,10 @@
           </select>
         </td>
 
-        <td>
+        <td data-col="integration">
           <div style="white-space:nowrap;">
             <strong>{{integrationProgress}} / {{integrationMax}}</strong><br/>
-            <small style="opacity:.8;">
+            <small>
               {{#if integrationStageLabel}}{{integrationStageLabel}}{{else}}—{{/if}}
             </small>
           </div>

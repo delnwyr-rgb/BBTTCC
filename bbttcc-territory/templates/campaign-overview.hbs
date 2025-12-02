@@ -1,15 +1,190 @@
 <section class="bbttcc-campaign-overview">
+  <style>
+    /* Hex Chrome frame for Campaign Overview */
+
+    .bbttcc-overview .window-content {
+      padding: 0.7rem 0.9rem 0.9rem;
+      background:
+        radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at 0 100%, rgba(147,51,234,0.18), transparent 60%),
+        linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+      border-radius: 0.9rem;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.95),
+        0 18px 32px rgba(15,23,42,0.9);
+      box-sizing: border-box;
+      color: #e5e7eb;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 12px;
+    }
+
+    .bbttcc-campaign-overview h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .bbttcc-campaign-overview header.flexrow {
+      padding: 0.45rem 0.6rem 0.5rem;
+      border-radius: 0.75rem;
+      background:
+        linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
+      border: 1px solid rgba(59,130,246,0.8);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.9),
+        0 0 18px rgba(59,130,246,0.45);
+      margin-bottom: 0.5rem;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .bbttcc-campaign-overview header.flexrow small {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    /* Table shell */
+
+    .bbttcc-campaign-overview .bbttcc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      border-radius: 0.8rem;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.95),
+        0 12px 22px rgba(15,23,42,0.9);
+    }
+
+    .bbttcc-campaign-overview .bbttcc-table thead {
+      background:
+        linear-gradient(90deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
+    }
+
+    .bbttcc-campaign-overview .bbttcc-table thead th {
+      padding: 0.3rem 0.5rem;
+      text-align: center;
+      font-weight: 600;
+      color: #cbd5f5;
+      border-bottom: 1px solid rgba(30,64,175,0.95);
+      white-space: nowrap;
+    }
+
+    .bbttcc-campaign-overview .bbttcc-table thead th:first-child {
+      text-align: left;
+    }
+
+    .bbttcc-campaign-overview .bbttcc-table tbody tr:nth-child(odd) {
+      background-color: rgba(15,23,42,0.97);
+    }
+
+    .bbttcc-campaign-overview .bbttcc-table tbody tr:nth-child(even) {
+      background-color: rgba(15,23,42,0.95);
+    }
+
+    .bbttcc-campaign-overview .bbttcc-table tbody td {
+      padding: 0.3rem 0.5rem;
+      border-top: 1px solid rgba(31,41,55,0.95);
+      vertical-align: middle;
+    }
+
+    .bbttcc-campaign-overview .bbttcc-table tbody td.center {
+      text-align: center;
+    }
+
+    /* Faction name column */
+
+    .bbttcc-campaign-overview td:first-child strong {
+      font-weight: 700;
+    }
+
+    .bbttcc-campaign-overview td:first-child em {
+      opacity: 0.85;
+    }
+
+    /* Chip / pill styles for status + flags */
+
+    .bbttcc-campaign-overview .bbttcc-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.06rem 0.55rem;
+      border-radius: 999px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      border: 1px solid rgba(148,163,184,0.8);
+      background: rgba(15,23,42,0.96);
+      color: #e5e7eb;
+    }
+
+    .bbttcc-campaign-overview .bbttcc-pill-primary {
+      border-color: rgba(59,130,246,0.95);
+      background:
+        radial-gradient(circle at 0 0, rgba(59,130,246,0.5), transparent 55%),
+        rgba(15,23,42,0.96);
+    }
+
+    .bbttcc-campaign-overview .bbttcc-pill-warning {
+      border-color: rgba(234,179,8,0.95);
+      background:
+        radial-gradient(circle at 0 0, rgba(234,179,8,0.45), transparent 55%),
+        rgba(15,23,42,0.96);
+      color: #fef9c3;
+    }
+
+    .bbttcc-campaign-overview .bbttcc-pill-danger {
+      border-color: rgba(220,38,38,0.95);
+      background:
+        radial-gradient(circle at 0 0, rgba(220,38,38,0.45), transparent 55%),
+        rgba(15,23,42,0.96);
+      color: #fee2e2;
+    }
+
+    /* Open button */
+
+    .bbttcc-campaign-overview button[data-open-faction] {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(59,130,246,0.95);
+      background:
+        radial-gradient(circle at 0 0, rgba(56,189,248,0.5), transparent 55%),
+        linear-gradient(135deg, rgba(79,70,229,0.98), rgba(14,165,233,0.98));
+      color: #f9fafb;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .bbttcc-campaign-overview button[data-open-faction]:hover {
+      filter: brightness(1.06);
+    }
+
+    /* “No data” row */
+
+    .bbttcc-campaign-overview tbody em {
+      opacity: 0.78;
+    }
+  </style>
+
   <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;">
     <h2 class="flex0">Campaign Overview</h2>
     <span class="flex1"></span>
-    <small class="flex0" style="opacity:.8;">Read-only summary across all scenes</small>
+    <small class="flex0">Read-only summary across all scenes</small>
   </header>
 
   <table class="bbttcc-table" style="width:100%;">
     <thead>
       <tr>
         <th style="text-align:left;">Faction</th>
-        <th style="width:8rem;">Power</th>
+        <th style="width:8rem;" data-col="power">Status</th>
         <th style="width:6rem;">Hexes</th>
         <th style="width:20rem;">Scenes</th>
         <th style="width:20rem;">Resources (per turn)</th>
@@ -29,7 +204,14 @@
           {{/if}}
         </td>
 
-        <td>{{powerLabel}} <small style="opacity:.65;">({{powerTotal}})</small></td>
+        <td class="center" data-col="power">
+          {{#if hasActor}}
+            <span class="bbttcc-pill bbttcc-pill-primary">{{powerLabel}}</span>
+          {{else}}
+            <span class="bbttcc-pill">{{powerLabel}}</span>
+          {{/if}}
+        </td>
+
         <td class="center">{{hexCount}}</td>
 
         <td>
