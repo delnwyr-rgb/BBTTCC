@@ -1,0 +1,29 @@
+{
+  "id": "bbttcc-aae",
+  "title": "BBTTCC Adaptive Adversary Engine",
+  "description": "Adaptive Moral Profile Engine and strategic guidance for BBTTCC factions.",
+  "version": "1.0.0",
+  "type": "module",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios"
+    },
+    {
+      "name": "ChatGPT"
+    }
+  ],
+  "url": "https://example.com/bbttcc-aae",
+  "esmodules": [
+    "scripts/module.js"
+  ],
+  "scripts": [],
+  "styles": [],
+  "packs": [],
+  "system": [
+    "dnd5e"
+  ]
+}
