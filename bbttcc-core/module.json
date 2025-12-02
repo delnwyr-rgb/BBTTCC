@@ -2,10 +2,13 @@
   "id": "bbttcc-core",
   "title": "BBTTCC Core",
   "description": "Core registry for BBTTCC modules.",
-  "version": "1.0.0",
+  "version": "13.1.16",
   "compatibility": { "minimum": "12", "verified": "13" },
   "authors": [{ "name": "BBTTCC" }],
-  "esmodules": ["scripts/module.js"],
+  "esmodules": [
+    "scripts/module.js",
+    "scripts/bbttcc-ui-cleanup.enhancer.js"
+],
   "packs": [],
   "socket": false
 }
