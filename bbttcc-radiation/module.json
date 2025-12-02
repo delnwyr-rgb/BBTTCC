@@ -2,16 +2,27 @@
   "id": "bbttcc-radiation",
   "title": "BBTTCC Radiation",
   "description": "Radiation tracking and environmental hazard system.",
-  "version": "5.0.0",
-  "authors": [{"name": "BBTTCC Team"}],
+  "version": "13.1.16",
+  "authors": [{ "name": "BBTTCC Team" }],
   "compatibility": {
     "minimum": "11",
     "verified": "13"
   },
   "relationships": {
-    "systems": [{"id": "dnd5e", "type": "system"}]
+    "systems": [{ "id": "dnd5e", "type": "system" }]
   },
   "esmodules": [
-    "scripts/module.js"
+    "scripts/module.js",
+    "scripts/bbttcc-radiation-travel.enhancer.js",
+    "scripts/bbttcc-radiation-zone.enhancer.js",
+    "scripts/bbttcc-radiation-mutations.enhancer.js",
+    "scripts/radiation-turn.enhancer.js",
+    "scripts/api.radiation.js"
+  ],
+  "styles": [
+    "styles/radiation-styles.css"
+  ],
+  "languages": [
+    { "lang": "en", "name": "English", "path": "lang/en.json" }
   ]
 }
