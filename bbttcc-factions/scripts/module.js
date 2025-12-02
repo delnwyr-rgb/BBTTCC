@@ -325,7 +325,7 @@ async function _collectTerritoryForScope(faction, scope /* "scene" | "all" */) {
   }
 
   if (count === 0) return null;
-  return { count, resources: res, names, defenseTotal: defense };;
+  return { count, resources: res, names, defenseTotal: defense };
 
 // Expose for console-based testing
 if (globalThis && !globalThis._collectTerritoryForScope) {
@@ -510,7 +510,7 @@ class BBTTCCFactionSheet extends ActorSheet {
       });
     }
 
-    const sumTotal = Object.values(totals).reduce((s,v)=>s+(Number(v)||0),0);
+    const sumTotal = Object.values(totals).reduce((s,v)=>s+(Number(v)||0), 0);
     return { roster, totals, sumTotal };
   }
 
@@ -620,11 +620,23 @@ class BBTTCCFactionSheet extends ActorSheet {
       ctrls.appendChild(mkBtn("Advance OP (Dry)", "Preview OP regeneration from resources", { act:"op", apply:"0" }));
       ctrls.appendChild(mkBtn("Advance OP (Apply)", "Deposit OPs into OP Bank", { act:"op", apply:"1" }));
       ctrls.appendChild(mkBtn("Commit Turn", "Move Turn Bank to Stockpile", { act:"commit" }));
+      // NEW: Ritual button
+      ctrls.appendChild(mkBtn("Ritual", "Open Final Ritual Console", { act:"ritual" }));
 
       ctrls.addEventListener("click", async (ev) => {
         const btn = ev.target.closest("button"); if (!btn) return;
         const act = btn.dataset.act;
         try {
+          if (act === "ritual") {
+            const tApi = game.bbttcc?.api?.tikkun;
+            if (!tApi || typeof tApi.openRitualConsole !== "function") {
+              ui.notifications?.warn?.("Final Ritual console unavailable.");
+              return;
+            }
+            tApi.openRitualConsole({ factionId: this.actor.id });
+            return;
+          }
+
           if (act === "commit") {
             await commitTurnBank(this.actor);
             return;

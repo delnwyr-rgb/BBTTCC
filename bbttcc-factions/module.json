@@ -2,7 +2,7 @@
   "id": "bbttcc-factions",
   "title": "BBTTCC Factions",
   "description": "Factions, OP economy, meters, and war logs for BBTTCC.",
-  "version": "1.3.16",
+  "version": "1.3.17",
   "compatibility": { "minimum": "13", "verified": "13" },
   "authors": [{ "name": "Shattered Lens Studios" }],
   "relationships": {
@@ -10,14 +10,21 @@
     "requires": []
   },
   "esmodules": [
-    "scripts/module.js"
+    "scripts/module.js",
+    "scripts/op-engine.js"
   ],
   "scripts": [
     "scripts/faction-meters.enhancer.js",
     "scripts/faction-health-display.js",
     "scripts/bbttcc-victory.enhancer.js",
     "scripts/vp-engine.js",
+    "scripts/faction-header-cleanup.enhancer.js",
+    "scripts/faction-overview-dashboard.enhancer.js",
+    "scripts/faction-section-skin.enhancer.js",
     "scripts/turn-extensions.enhancer.js"
+  ],
+  "styles": [
+    "styles/faction-sheet.css"
   ],
   "languages": [
     { "lang": "en", "name": "English", "path": "lang/en.json" }
