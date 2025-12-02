@@ -2,21 +2,38 @@
   "id": "bbttcc-auto-link",
   "title": "BBTTCC Auto-Link",
   "description": "Applies BBTTCC enhancements to characters and provides a guided BBTTCC character creation flow.",
-  "version": "0.7.1",
-  "compatibility": { "minimum": "13", "verified": "13" },
-  "authors": [{ "name": "Shattered Lens Studios" }],
+  "version": "0.8.2",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios"
+    }
+  ],
   "esmodules": [
     "scripts/module.js",
     "scripts/sidepanel.js",
     "scripts/character-wizard.js"
   ],
-  "styles": [],
+  "styles": [
+    "styles/character-sheet.css"
+  ],
   "languages": [
-    { "lang": "en", "name": "English", "path": "lang/en.json" }
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
   ],
   "packs": [],
   "relationships": {
-    "systems": [{ "id": "dnd5e" }],
+    "systems": [
+      {
+        "id": "dnd5e"
+      }
+    ],
     "requires": []
   },
   "url": "",

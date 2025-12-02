@@ -1,0 +1,175 @@
+<section class="bbttcc-tab-inner">
+  <header class="bbttcc-tab-header">
+    <h2 class="bbttcc-tab-title">BBTTCC Identity</h2>
+    <p class="bbttcc-tab-subtitle">
+      One character, one truth: Faction, radiation, sparks, enlightenment, and raid XP for this hero.
+    </p>
+  </header>
+
+  <div class="bbttcc-grid">
+    <!-- Faction card -->
+    <section class="bbttcc-card">
+      <h3 class="bbttcc-card-title">Faction</h3>
+
+      <p class="bbttcc-card-main">
+        {{#if bbttcc.factionName}}
+          <span class="bbttcc-pill bbttcc-pill-primary">
+            {{bbttcc.factionName}}
+          </span>
+        {{else}}
+          <span class="bbttcc-muted">(None linked)</span>
+        {{/if}}
+      </p>
+
+      {{#if bbttcc.factionId}}
+        <p class="bbttcc-card-meta">
+          Faction Id:
+          <code>{{bbttcc.factionId}}</code>
+        </p>
+      {{/if}}
+
+      {{#if isGM}}
+        <div class="bbttcc-field bbttcc-field-inline">
+          <label for="bbttcc-faction-select">Linked Faction</label>
+          <select id="bbttcc-faction-select" data-bbttcc="factionId">
+            <option value="">(None)</option>
+            {{#each bbttcc.factions}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="bbttcc-card-actions">
+          <button type="button" data-bbttcc-action="open-faction" class="bbttcc-button-link">
+            <i class="fas fa-users"></i>
+            Open Faction Sheet
+          </button>
+        </div>
+
+        <p class="bbttcc-card-meta bbttcc-muted">
+          GMs can link or change the character's Faction here. Opening the Faction sheet uses the current linked Faction.
+        </p>
+      {{/if}}
+    </section>
+
+    <!-- Radiation & Sparks card -->
+    <section class="bbttcc-card">
+      <h3 class="bbttcc-card-title">Radiation &amp; Sparks</h3>
+
+      <dl class="bbttcc-metrics">
+        <div class="bbttcc-metric">
+          <dt>Radiation Points</dt>
+          <dd>{{bbttcc.radiationPoints}}</dd>
+        </div>
+        <div class="bbttcc-metric">
+          <dt>Tikkun Sparks</dt>
+          <dd>{{bbttcc.tikkunSparks}}</dd>
+        </div>
+        <div class="bbttcc-metric">
+          <dt>Raid Experience</dt>
+          <dd>{{bbttcc.raidXP}}</dd>
+        </div>
+      </dl>
+
+      {{#if isGM}}
+        <div class="bbttcc-field-group">
+          <div class="bbttcc-field">
+            <label for="bbttcc-radiation-input">Radiation (RP)</label>
+            <input
+              id="bbttcc-radiation-input"
+              type="number"
+              data-bbttcc="radiation"
+              value="{{bbttcc.radiationPoints}}"
+              min="0"
+            />
+          </div>
+
+          <div class="bbttcc-field">
+            <label for="bbttcc-sparks-input">Tikkun Sparks</label>
+            <input
+              id="bbttcc-sparks-input"
+              type="number"
+              data-bbttcc-readonly="sparks"
+              value="{{bbttcc.tikkunSparks}}"
+              min="0"
+              readonly
+            />
+            <p class="bbttcc-hint">
+              Managed by the Tikkun / Great Work console. This field reflects integrated sparks only.
+            </p>
+          </div>
+
+          <div class="bbttcc-field">
+            <label for="bbttcc-raidxp-input">Raid Experience</label>
+            <input
+              id="bbttcc-raidxp-input"
+              type="number"
+              data-bbttcc="raid"
+              value="{{bbttcc.raidXP}}"
+              min="0"
+            />
+          </div>
+        </div>
+      {{/if}}
+
+      <p class="bbttcc-card-meta bbttcc-muted">
+        For full Radiation and Great Work controls, use the dedicated icons / tabs on the right-hand sheet panel.
+      </p>
+    </section>
+
+    <!-- Enlightenment card -->
+    <section class="bbttcc-card">
+      <h3 class="bbttcc-card-title">Enlightenment</h3>
+
+      {{#if bbttcc.enlightenment.display}}
+        <p class="bbttcc-card-main">
+          <span class="bbttcc-pill bbttcc-pill-gold">
+            {{bbttcc.enlightenment.display}}
+          </span>
+        </p>
+        <p class="bbttcc-card-meta">
+          Level key: <code>{{bbttcc.enlightenment.level}}</code>
+        </p>
+      {{else}}
+        <p class="bbttcc-card-main bbttcc-muted">
+          No enlightenment level set.
+        </p>
+      {{/if}}
+
+      {{#if isGM}}
+        <div class="bbttcc-field">
+          <label for="bbttcc-enlight-select">Enlightenment Level</label>
+          <select id="bbttcc-enlight-select" data-bbttcc="enlightenment-level">
+            {{#each bbttcc.enlightenmentLevels}}
+              <option value="{{key}}">{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <p class="bbttcc-card-meta bbttcc-muted">
+          Changing this will also update the character's Enlightenment feat and OP bonuses.
+        </p>
+      {{/if}}
+    </section>
+  </div>
+
+  <footer class="bbttcc-tab-footer">
+    {{#if isGM}}
+      <div class="bbttcc-footer-actions">
+        <button type="button" data-bbttcc-action="save" class="bbttcc-button-primary">
+          <i class="fas fa-save"></i>
+          Save BBTTCC Identity
+        </button>
+        <button type="button" data-bbttcc-action="recalc" class="bbttcc-button-secondary">
+          <i class="fas fa-calculator"></i>
+          Recalc OPs
+        </button>
+      </div>
+    {{/if}}
+
+    <p class="bbttcc-muted">
+      The BBTTCC tab is your single source of truth for this character's metaphysics.
+      Radiation and Sparks editing live in their dedicated consoles; this tab provides
+      a quick, at-a-glance summary plus core identity edits.
+    </p>
+  </footer>
+</section>

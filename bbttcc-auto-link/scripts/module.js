@@ -2,10 +2,17 @@
 // v0.8.1 — Actors Directory header buttons:
 //   • Create Character (BBTTCC) — opens the BBTTCC Character Wizard
 // (Removed: extra Create Faction button to avoid duplicates)
+//
+// v0.9.0 — Character Sheet integration:
+//   • Registers BBTTCC Character Sheet (extends default 5E character sheet)
+//   • Exposes preferred sheet id for future auto-application
 
 const MOD = "bbttcc-auto-link";
 const LOG = (...a) => console.log(`[${MOD}]`, ...a);
 const WARN = (...a) => console.warn(`[${MOD}]`, ...a);
+
+// Import the sheet registration helpers
+import { registerBBTTCCCharacterSheet, getBBTTCCCharacterSheetId } from "./character-sheet.js";
 
 /* ---------------------------------------
    Helpers (left in place for future use)
@@ -16,21 +23,36 @@ function qualifiesForBBTTCC(a) {
   try {
     const fx = a.flags?.["bbttcc-character-options"];
     return !!fx && (fx.enabled !== false);
-  } catch { return false; }
+  } catch {
+    return false;
+  }
 }
 
+/**
+ * Returns the preferred sheetClass id for BBTTCC characters, if any.
+ * This currently reads from CONFIG, which is populated by the sheet
+ * registration in character-sheet.js.
+ */
 function preferredSheetClassId() {
-  // If you later register a custom character sheet, return its id here.
-  return undefined;
+  // If you later want to auto-apply the BBTTCC sheet to qualifying characters,
+  // you can use this helper and call applyEnhancedSheetIfNeeded(actor).
+  return getBBTTCCCharacterSheetId();
 }
 
 async function applyEnhancedSheetIfNeeded(a) {
   if (!isCharacter(a) || !qualifiesForBBTTCC(a)) return;
   const preferred = preferredSheetClassId();
   if (!preferred) return;
+
   const current = a.getFlag("core", "sheetClass") || foundry.utils.getProperty(a, "flags.core.sheetClass");
   if (current === preferred) return;
-  await a.update({ "flags.core.sheetClass": preferred });
+
+  try {
+    await a.update({ "flags.core.sheetClass": preferred });
+    LOG("Applied BBTTCC Character Sheet to actor", { actor: a.name, id: a.id, sheet: preferred });
+  } catch (err) {
+    WARN("Failed to apply BBTTCC Character Sheet to actor", a, err);
+  }
 }
 
 /* ---------------------------------------
@@ -73,6 +95,8 @@ function injectButtons(html) {
 ----------------------------------------*/
 Hooks.once("init", () => {
   console.log(`🌟 ${MOD} | Safe loader starting...`);
+  // NOTE: We do NOT register the character sheet here, because at init
+  // CONFIG.Actor.sheetClasses.character is not yet populated by dnd5e.
 });
 
 Hooks.on("renderActorDirectory", (app, html) => injectButtons(html));
@@ -85,4 +109,16 @@ Hooks.on("renderSidebarTab", (app, html) => {
 
 Hooks.once("ready", async () => {
   console.log(`🌟 ${MOD} | READY Hook`);
+
+  // At this point the dnd5e system has fully registered its sheets,
+  // so CONFIG.Actor.sheetClasses.character should be populated.
+  try {
+    registerBBTTCCCharacterSheet();
+  } catch (err) {
+    WARN("Error during BBTTCC Character Sheet registration in READY", err);
+  }
+
+  // NOTE: We are NOT auto-applying the BBTTCC sheet yet (Option 8A).
+  // When you're ready, we can add logic here to call applyEnhancedSheetIfNeeded(actor)
+  // for qualifying actors, or run a one-time migration.
 });

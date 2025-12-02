@@ -1,0 +1,513 @@
+/* BBTTCC — Character Sheet styling (Hex Chrome Edition, Phase 1+)
+ * Frame + BBTTCC tab card layout + Character Wizard.
+ */
+
+/* ---------- GLOBAL SHEET FRAME ---------- */
+
+.bbttcc-character-sheet {
+  padding: 0.6rem 0.9rem 0.9rem;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #e5e7eb;
+  font-size: 12px;
+}
+
+/* Match the Faction / Travel / Raid console vibe inside the window */
+.bbttcc .window-content .bbttcc-character-sheet {
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(251,113,133,0.18), transparent 55%),
+    radial-gradient(circle at 0 100%, rgba(56,189,248,0.18), transparent 60%),
+    linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+}
+
+/* Fall back if the global .bbttcc wrapper isn't present */
+.bbttcc-character-sheet {
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(251,113,133,0.18), transparent 55%),
+    radial-gradient(circle at 0 100%, rgba(56,189,248,0.18), transparent 60%),
+    linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+}
+
+/* Subtle inner border + rounding */
+.bbttcc-character-sheet {
+  border-radius: 0.8rem;
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.95),
+    0 16px 30px rgba(15,23,42,0.9);
+  box-sizing: border-box;
+}
+
+/* ---------- HEADER BAND ---------- */
+
+.bbttcc-character-sheet header.sheet-header {
+  padding: 0.4rem 0.6rem 0.5rem;
+  margin-bottom: 0.4rem;
+  border-radius: 0.6rem;
+  background:
+    linear-gradient(135deg, rgba(15,23,42,0.96), rgba(30,64,175,0.96));
+  border: 1px solid rgba(59,130,246,0.55);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 0 18px rgba(59,130,246,0.35);
+}
+
+/* Character name / summary area */
+.bbttcc-character-sheet header.sheet-header .char-name,
+.bbttcc-character-sheet header.sheet-header .character-name,
+.bbttcc-character-sheet header.sheet-header h1 {
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #e5e7eb;
+  text-shadow: 0 0 6px rgba(15,23,42,0.9);
+}
+
+/* Header stats / badges */
+.bbttcc-character-sheet header.sheet-header .header-details,
+.bbttcc-character-sheet header.sheet-header .summary {
+  gap: 0.4rem;
+}
+
+.bbttcc-character-sheet header.sheet-header .summary .value,
+.bbttcc-character-sheet header.sheet-header .summary .label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- SIDEBAR (ABILITY SCORES / BASIC INFO) ---------- */
+
+.bbttcc-character-sheet .sheet-sidebar {
+  border-radius: 0.75rem;
+  padding: 0.4rem 0.45rem 0.5rem;
+  background:
+    radial-gradient(circle at 0 0, rgba(248,250,252,0.02), transparent 60%),
+    linear-gradient(180deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+  border: 1px solid rgba(15,23,42,0.9);
+  box-shadow: 0 0 0 1px rgba(15,23,42,0.85);
+}
+
+/* Ability score orbits */
+.bbttcc-character-sheet .ability-scores,
+.bbttcc-character-sheet .ability-scores-grid {
+  gap: 0.25rem;
+}
+
+.bbttcc-character-sheet .ability,
+.bbttcc-character-sheet .ability-score {
+  border-radius: 0.55rem;
+  border: 1px solid rgba(30,64,175,0.75);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(59,130,246,0.45), transparent 60%),
+    linear-gradient(180deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.95),
+    0 6px 14px rgba(8,47,73,0.85);
+}
+
+/* Ability labels & numbers */
+.bbttcc-character-sheet .ability .ability-name,
+.bbttcc-character-sheet .ability .label,
+.bbttcc-character-sheet .ability-score .ability-name {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.bbttcc-character-sheet .ability .score,
+.bbttcc-character-sheet .ability-score .score {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+/* ---------- MAIN BODY / TABS ---------- */
+
+.bbttcc-character-sheet .sheet-body {
+  border-radius: 0.75rem;
+  padding: 0.45rem 0.55rem 0.55rem;
+  background:
+    radial-gradient(circle at 100% 0, rgba(129,140,248,0.14), transparent 60%),
+    linear-gradient(180deg, rgba(15,23,42,0.96), rgba(15,23,42,0.99));
+  border: 1px solid rgba(15,23,42,0.95);
+  box-shadow: 0 0 0 1px rgba(15,23,42,0.9);
+}
+
+/* Tab strip */
+.bbttcc-character-sheet nav.sheet-tabs,
+.bbttcc-character-sheet .tabs {
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(30,64,175,0.85);
+}
+
+.bbttcc-character-sheet nav.sheet-tabs .item,
+.bbttcc-character-sheet .tabs .item {
+  position: relative;
+  padding: 0.16rem 0.7rem;
+  margin-right: 0.1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(15,23,42,0.92);
+  border: 1px solid rgba(15,23,42,0.95);
+  color: #9ca3af;
+  opacity: 0.85;
+}
+
+.bbttcc-character-sheet nav.sheet-tabs .item.active,
+.bbttcc-character-sheet .tabs .item.active {
+  background:
+    linear-gradient(135deg, rgba(30,64,175,0.95), rgba(147,51,234,0.95));
+  border-color: rgba(59,130,246,0.9);
+  color: #e5e7eb;
+  opacity: 1;
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.95),
+    0 0 14px rgba(59,130,246,0.5);
+}
+
+/* Tables / lists inside the body */
+.bbttcc-character-sheet table,
+.bbttcc-character-sheet .inventory-list,
+.bbttcc-character-sheet .items-list {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: radial-gradient(circle at 0 0, rgba(15,23,42,0.98), rgba(15,23,42,1));
+}
+
+.bbttcc-character-sheet thead,
+.bbttcc-character-sheet .items-list .items-header {
+  background: linear-gradient(90deg, rgba(15,23,42,0.98), rgba(30,64,175,0.96));
+  border-bottom: 1px solid rgba(30,64,175,0.95);
+}
+
+.bbttcc-character-sheet tbody tr:nth-child(odd),
+.bbttcc-character-sheet .items-list .item:nth-child(odd) {
+  background-color: rgba(15,23,42,0.98);
+}
+
+.bbttcc-character-sheet tbody tr:nth-child(even),
+.bbttcc-character-sheet .items-list .item:nth-child(even) {
+  background-color: rgba(15,23,42,0.96);
+}
+
+/* Text inside tables / lists */
+.bbttcc-character-sheet table td,
+.bbttcc-character-sheet table th,
+.bbttcc-character-sheet .items-list .item-name {
+  font-size: 11px;
+}
+
+/* ---------- MISC SMALL TOUCHES ---------- */
+
+.bbttcc-character-sheet input,
+.bbttcc-character-sheet select,
+.bbttcc-character-sheet textarea {
+  background-color: rgba(15,23,42,0.92);
+  border-radius: 0.35rem;
+  border: 1px solid rgba(31,41,55,0.95);
+  color: #e5e7eb;
+}
+
+.bbttcc-character-sheet input:focus,
+.bbttcc-character-sheet select:focus,
+.bbttcc-character-sheet textarea:focus {
+  outline: none;
+  border-color: rgba(59,130,246,0.9);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+}
+
+.bbttcc-character-sheet .resource,
+.bbttcc-character-sheet .hp,
+.bbttcc-character-sheet .hit-points,
+.bbttcc-character-sheet .hitdice,
+.bbttcc-character-sheet .movement {
+  border-radius: 0.45rem;
+  background:
+    radial-gradient(circle at 100% 0, rgba(248,113,113,0.35), transparent 60%),
+    linear-gradient(180deg, rgba(15,23,42,0.96), rgba(15,23,42,0.99));
+  border: 1px solid rgba(127,29,29,0.9);
+}
+
+/* ---------- BBTTCC TAB: IDENTITY CARDS ---------- */
+
+.bbttcc-character-sheet .bbttcc-tab-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.2rem 0.1rem 0.1rem;
+}
+
+.bbttcc-character-sheet .bbttcc-tab-header {
+  margin-bottom: 0.25rem;
+}
+
+.bbttcc-character-sheet .bbttcc-tab-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  color: #e5e7eb;
+  margin: 0 0 0.15rem;
+}
+
+.bbttcc-character-sheet .bbttcc-tab-subtitle {
+  margin: 0;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.bbttcc-character-sheet .bbttcc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.6rem;
+}
+
+.bbttcc-character-sheet .bbttcc-card {
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.7rem;
+  background:
+    radial-gradient(circle at 0 0, rgba(30,64,175,0.22), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.2), transparent 55%),
+    linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,1));
+  border: 1px solid rgba(30,64,175,0.85);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 8px 18px rgba(15,23,42,0.9);
+}
+
+.bbttcc-character-sheet .bbttcc-card-title {
+  margin: 0 0 0.35rem;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+.bbttcc-character-sheet .bbttcc-card-main {
+  margin: 0 0 0.25rem;
+  font-size: 12px;
+}
+
+.bbttcc-character-sheet .bbttcc-card-meta {
+  margin: 0.1rem 0 0;
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+.bbttcc-character-sheet .bbttcc-metrics {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.bbttcc-character-sheet .bbttcc-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.bbttcc-character-sheet .bbttcc-metric dt {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.bbttcc-character-sheet .bbttcc-metric dd {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+/* Pills / badges */
+
+.bbttcc-character-sheet .bbttcc-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 1px solid rgba(148,163,184,0.6);
+  background: rgba(15,23,42,0.95);
+}
+
+.bbttcc-character-sheet .bbttcc-pill-primary {
+  border-color: rgba(59,130,246,0.9);
+  background:
+    radial-gradient(circle at 0 0, rgba(59,130,246,0.4), transparent 55%),
+    rgba(15,23,42,0.96);
+}
+
+.bbttcc-character-sheet .bbttcc-pill-gold {
+  border-color: rgba(234,179,8,0.9);
+  background:
+    radial-gradient(circle at 0 0, rgba(234,179,8,0.5), transparent 55%),
+    rgba(15,23,42,0.96);
+}
+
+/* Footer */
+
+.bbttcc-character-sheet .bbttcc-tab-footer {
+  margin-top: 0.25rem;
+  font-size: 10px;
+}
+
+.bbttcc-character-sheet .bbttcc-muted {
+  opacity: 0.72;
+}
+
+/* ---------- BBTTCC CHARACTER WIZARD ---------- */
+
+.bbttcc-character-wizard {
+  padding: 0.75rem 0.9rem 0.9rem;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #e5e7eb;
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(251,113,133,0.18), transparent 55%),
+    radial-gradient(circle at 0 100%, rgba(56,189,248,0.18), transparent 60%),
+    linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+  border-radius: 0.85rem;
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.95),
+    0 18px 32px rgba(15,23,42,0.9);
+  box-sizing: border-box;
+}
+
+.bbttcc-wizard-header {
+  margin-bottom: 0.6rem;
+}
+
+.bbttcc-wizard-title {
+  margin: 0 0 0.2rem;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+}
+
+.bbttcc-wizard-subtitle {
+  margin: 0;
+  font-size: 11px;
+  color: #cbd5f5;
+}
+
+.bbttcc-wizard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.bbttcc-wizard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.6rem;
+}
+
+.bbttcc-wizard-card {
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.7rem;
+  background:
+    radial-gradient(circle at 0 0, rgba(30,64,175,0.24), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.24), transparent 55%),
+    linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,1));
+  border: 1px solid rgba(30,64,175,0.9);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 8px 20px rgba(15,23,42,0.95);
+}
+
+.bbttcc-wizard-card-wide {
+  grid-column: 1 / -1;
+}
+
+.bbttcc-wizard-card-title {
+  margin: 0 0 0.35rem;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+.bbttcc-wizard-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.4rem;
+}
+
+/* Fields */
+
+.bbttcc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.3rem;
+}
+
+.bbttcc-field label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #cbd5f5;
+}
+
+.bbttcc-field input,
+.bbttcc-field select,
+.bbttcc-field textarea {
+  padding: 0.25rem 0.35rem;
+  font-size: 12px;
+}
+
+.bbttcc-hint {
+  margin: 0.15rem 0 0;
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+/* Footer / create button */
+
+.bbttcc-wizard-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.3rem;
+}
+
+.bbttcc-wizard-create {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  border-radius: 999px;
+  border: 1px solid rgba(59,130,246,0.9);
+  background:
+    radial-gradient(circle at 0 0, rgba(59,130,246,0.45), transparent 55%),
+    linear-gradient(135deg, rgba(30,64,175,0.96), rgba(147,51,234,0.96));
+  color: #e5e7eb;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.95),
+    0 8px 20px rgba(15,23,42,0.95);
+}
+
+.bbttcc-wizard-create:hover {
+  filter: brightness(1.05);
+}
+
+.bbttcc-wizard-create i {
+  font-size: 11px;
+}
