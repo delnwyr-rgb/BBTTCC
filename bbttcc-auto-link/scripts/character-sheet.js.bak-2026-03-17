@@ -186,42 +186,6 @@ function isCosmicLinguist(actor) {
   }
 }
 
-
-function isTitanbound(actor) {
-  try {
-    const items = actor?.items?.contents ?? actor?.items ?? [];
-    return items.some(it => String(it?.type) === "class" && String(it?.system?.identifier || "") === "titanbound");
-  } catch {
-    return false;
-  }
-}
-
-function getTitanboundDie(level) {
-  const lvl = Math.max(1, Number(level) || 1);
-  if (lvl >= 17) return "d12";
-  if (lvl >= 11) return "d10";
-  if (lvl >= 5) return "d8";
-  return "d6";
-}
-
-function getTitanboundState(actor) {
-  const enabled = isTitanbound(actor);
-  if (!enabled) return { enabled: false, dice: 0, maxDice: 0, die: "d6", stress: 0 };
-
-  const level = _bbttccGetClassLevel(actor, "titanbound");
-  const maxDice = Math.max(1, Number(_bbttccGet(actor, "system.abilities.con.mod", 0)) || 0);
-  const dice = Math.max(0, Number(actor?.getFlag?.(MOD, "titanbound.frameDice") ?? 0) || 0);
-  const stress = Math.max(0, Number(actor?.getFlag?.(MOD, "titanbound.stress") ?? 0) || 0);
-
-  return {
-    enabled: true,
-    dice: Math.min(dice, maxDice),
-    maxDice,
-    die: getTitanboundDie(level),
-    stress
-  };
-}
-
 function getEsotericApi() {
   return game.modules?.get(ESOTERIC_MAGIC_SCOPE)?.api || null;
 }
@@ -1281,10 +1245,7 @@ async function buildIdentityOptions() {
   ]);
 
   // Helper: true if a name looks like a tiered option, e.g. "(Tier 2)"
-  const isTierName = (entry) => {
-    const name = String(entry?.name || "").trim();
-    return /(?:\(\s*Tier\s+\d+\s*\)|[—-]\s*Tier\s+\d+)$/i.test(name);
-  };
+  const isTierName = (entry) => /\(Tier\s+\d+\)/i.test(entry?.name || "");
 
   // Only show BASE archetype items in the dropdown, e.g. "Archetype: Warlord"
   const archetypeBase = archetypeAll.filter(entry => !isTierName(entry));
@@ -1449,201 +1410,6 @@ function getRoot(html) {
   return null;
 }
 
-/* ---------------------------------------
- * BBTTCC Native Sheet Curation Layer
- * ------------------------------------ */
-
-function isBBTTCCActor(actor) {
-  try {
-    if (!actor) return false;
-
-    // You can tighten this later if needed
-    return (
-      actor.type === "character" ||
-      actor.type === "npc"
-    );
-  } catch {
-    return false;
-  }
-}
-
-function isBBTTCCItemFromElement(el) {
-  try {
-    const text = (el.textContent || "").toLowerCase();
-
-    // Strong signals
-    if (text.includes("bbttcc")) return true;
-
-    // Known BBTTCC content hints
-    if (text.includes("echo diver")) return true;
-    if (text.includes("pactkeeper")) return true;
-    if (text.includes("furrykin")) return true;
-
-    return false;
-  } catch {
-    return false;
-  }
-}
-
-function applyBBTTCCSheetCuration(app, root) {
-  try {
-    const actor = app?.actor ?? app?.object;
-    if (!isBBTTCCActor(actor) || !root) return;
-
-    /* ---------------------------------------
-     * 1. Hide ONLY stock Background controls
-     * ------------------------------------ */
-
-    const hideIfBackgroundControl = (el) => {
-      try {
-        if (!el || el.dataset?.bbttccHiddenBg === "1") return false;
-
-        const text = String(el.textContent || "").toLowerCase().replace(/\s+/g, " ").trim();
-        const html = String(el.innerHTML || "").toLowerCase();
-
-        // Strong signals that this is an actual background advancement/control row,
-        // not the whole Details tab.
-        const mentionsBackground = text.includes("background");
-        const looksInteractive =
-          /button|select|dropdown|compendium browser|choose|replace|remove|item-control|advancement/.test(html) ||
-          el.querySelector("button, select, a, .item-control, [data-action], [data-tooltip]");
-
-        if (!mentionsBackground || !looksInteractive) return false;
-
-        // Never hide the main tab containers / bodies / sheet wrappers.
-        if (
-          el.matches?.(".tab, .sheet-body, .sheet-content, .tab-body, main, form") ||
-          el.querySelector?.(".traits, .details, .inventory, .favorites")
-        ) {
-          return false;
-        }
-
-        el.style.display = "none";
-        el.dataset.bbttccHiddenBg = "1";
-        return true;
-      } catch {
-        return false;
-      }
-    };
-
-    const hideBackgroundButtons = () => {
-      try {
-        // Only inspect likely clickable/control elements — no "*" sweep.
-        root.querySelectorAll("button, a, [data-action], .item, .entry, .trait").forEach(el => {
-          try {
-            if (!el || el.dataset?.bbttccHiddenBgButton === "1") return;
-
-            const text = String(el.textContent || "").toLowerCase().replace(/\s+/g, " ").trim();
-            if (!text) return;
-
-            const isAddBackground =
-              text === "add background" ||
-              text === "background" ||
-              text.startsWith("add background");
-
-            if (!isAddBackground) return;
-
-            // Never hide giant structural containers.
-            if (
-              el.matches?.("main, form, .sheet-body, .sheet-content, .tab, .tab-body, .window-content") ||
-              el.querySelector?.(".details, .traits, .inventory, .favorites, .skills")
-            ) {
-              return;
-            }
-
-            // Prefer the button/tile itself, then a very small wrapper.
-            const box =
-              el.closest("button") ||
-              el.closest("a") ||
-              el.closest("[data-action]") ||
-              el.closest(".item") ||
-              el.closest(".entry") ||
-              el.closest(".trait") ||
-              el;
-
-            box.style.display = "none";
-            box.style.pointerEvents = "none";
-            box.dataset.bbttccHiddenBgButton = "1";
-          } catch {/* ignore */}
-        });
-      } catch {/* ignore */}
-    };   
-
-    /* ---------------------------------------
-     * 2. Observe and filter pickers
-     * ------------------------------------ */
-
-    if (root.__bbttccObserverAttached) return;
-    root.__bbttccObserverAttached = true;
-
-    const observerScope = root.closest?.(".window-app, .application") || root;
-
-    const filterChooserEntries = () => {
-      try {
-        observerScope.querySelectorAll(".directory-item, .item, li").forEach(el => {
-          try {
-            if (!observerScope.contains(el)) return;
-
-            const text = (el.textContent || "").toLowerCase().replace(/\s+/g, " ").trim();
-            if (!text) return;
-
-            const isSpeciesEntry = text.includes("species");
-            const isClassEntry = text.includes("class");
-            const isBackgroundEntry = text.includes("background");
-
-            // Only touch actual chooser entries inside this sheet/window scope.
-            if (!isSpeciesEntry && !isClassEntry && !isBackgroundEntry) return;
-
-            // Always suppress background choices for BBTTCC
-            if (isBackgroundEntry) {
-              el.style.display = "none";
-              return;
-            }
-
-            // Keep BBTTCC entries, hide vanilla ones
-            if (!isBBTTCCItemFromElement(el)) {
-              el.style.display = "none";
-            }
-          } catch {/* ignore */}
-        });
-      } catch {/* ignore */}
-    };
-
-    filterChooserEntries();
-
-    const observer = new MutationObserver(() => {
-      try {
-        filterChooserEntries();
-
-        // Also hide any newly-rendered background control rows on the sheet itself
-        root.querySelectorAll([
-          ".advancement",
-          ".form-group",
-          ".form-group--standard",
-          ".resource",
-          ".items-header",
-          ".items-section",
-          ".item",
-          ".trait",
-          ".entry"
-        ].join(", ")).forEach(hideIfBackgroundControl);
-
-        hideBackgroundButtons();
-      } catch {/* ignore */}
-    });
-
-    observer.observe(observerScope, {
-      childList: true,
-      subtree: true
-    });
-
-    root.__bbttccObserver = observer;
-
-  } catch (err) {
-    WARN("BBTTCC curation failed", err);
-  }
-}
-
 function factionsList() {
   return (game.actors?.contents ?? [])
     .filter(a =>
@@ -1798,21 +1564,6 @@ async function syncEnlightenmentItem(actor, levelKey) {
 
 function pickOptionItem(actor, categoryAliases) {
   const items = actor.items?.contents ?? actor.items ?? [];
-
-  const isTierItem = (it) => {
-    const s = String(it?.name || "").trim();
-    return /\(Tier\s+\d+\)/i.test(s) || /[—-]\s*Tier\s+\d+$/i.test(s);
-  };
-
-  // Prefer BASE item (no Tier in name)
-  const base = items.find(it => {
-    const cat = it.getFlag?.("bbttcc-character-options", "category");
-    return categoryAliases.includes(cat) && !isTierItem(it);
-  });
-
-  if (base) return base;
-
-  // Fallback (legacy actors): return anything
   return items.find(it => {
     const cat = it.getFlag?.("bbttcc-character-options", "category");
     return categoryAliases.includes(cat);
@@ -1821,62 +1572,6 @@ function pickOptionItem(actor, categoryAliases) {
 
 function pickSephirotItem(actor) {
   return pickOptionItem(actor, IDENTITY_SLOTS.sephirothicAlignment.categories);
-}
-
-function matchesIdentityFamilyItem(it, slotKey, cfg) {
-  const name = String(it?.name || "");
-  const ident = String(it?.system?.identifier || "");
-  const cat = String(it?.getFlag?.("bbttcc-character-options", "category") || "");
-
-  if (cfg?.categories?.includes(cat)) return true;
-
-  if (slotKey === "archetype") {
-    if (/^Archetype:/i.test(name)) return true;
-    if (ident.startsWith("archetype-")) return true;
-    return false;
-  }
-
-  if (slotKey === "crew") {
-    if (/^Crew Type:/i.test(name)) return true;
-    if (ident.startsWith("crew-")) return true;
-    return false;
-  }
-
-  if (slotKey === "occult") {
-    if (/^Occult Association:/i.test(name)) return true;
-    if (
-      ident.startsWith("occult-") ||
-      ident.startsWith("occult_association-") ||
-      ident.startsWith("occult-association-")
-    ) return true;
-    return false;
-  }
-
-  if (slotKey === "sephirothicAlignment") {
-    if (/^Alignment:/i.test(name)) return true;
-    if (ident.startsWith("alignment-")) return true;
-    return false;
-  }
-
-  return false;
-}
-
-async function deleteIdentityFamilyItems(actor, slotKey, cfg) {
-  const items = actor.items?.contents ?? actor.items ?? [];
-  const toDelete = items
-    .filter(it => matchesIdentityFamilyItem(it, slotKey, cfg))
-    .map(it => it.id);
-
-  if (toDelete.length) {
-    LOG("BBTTCC Identity — deleting identity family items", {
-      slotKey,
-      actor: actor.name,
-      ids: toDelete
-    });
-    await actor.deleteEmbeddedDocuments("Item", toDelete);
-  }
-
-  return toDelete;
 }
 
 /** Extra-tough delete for Sephirotic Alignment spam. */
@@ -2047,196 +1742,45 @@ async function applyIdentitySlotChange(actor, slotKey, newKey) {
   const { pack, categories } = cfg;
   const patch = {};
 
-  // Delete ALL items in this identity family, not only category-perfect matches.
+  // Delete existing items for this slot
   if (slotKey === "sephirothicAlignment") {
     await deleteSephirotItems(actor);
   } else {
-    await deleteIdentityFamilyItems(actor, slotKey, cfg);
+    const items = actor.items?.contents ?? actor.items ?? [];
+    const toDelete = items
+      .filter(it => {
+        const cat = it.getFlag?.("bbttcc-character-options", "category");
+        return categories.includes(cat);
+      })
+      .map(it => it.id);
+    if (toDelete.length) {
+      LOG("BBTTCC Identity — deleting items for slot", slotKey, { actor: actor.name, ids: toDelete });
+      await actor.deleteEmbeddedDocuments("Item", toDelete);
+    }
   }
 
   if (!newKey) {
-    patch[slotKey] = { key: null, id: null, pack: null, category: categories[0], optionKey: null, identifier: "" };
+    patch[slotKey] = { key: null, pack: null, category: categories[0] };
     return patch;
   }
 
   const p = game.packs.get(pack);
-  if (!p) {
-    WARN("applyIdentitySlotChange — pack not found", slotKey, pack);
-    patch[slotKey] = { key: newKey, id: newKey, pack, category: categories[0] };
-    return patch;
-  }
-
-  const doc = await p.getDocument(newKey).catch((e) => {
-    WARN("applyIdentitySlotChange — pack getDocument failed", slotKey, newKey, e);
-    return null;
-  });
-
-  if (!doc) {
-    patch[slotKey] = { key: newKey, id: newKey, pack, category: categories[0] };
-    return patch;
-  }
-
-  LOG("BBTTCC Identity — adding item for slot", {
-    slotKey,
-    actor: actor.name,
-    item: doc.name,
-    id: doc.id
-  });
-
-  await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
-
-  const opt =
-    doc.getFlag?.("bbttcc-character-options", "option") ||
-    {};
-
-  patch[slotKey] = {
-    key: doc.id,
-    id: doc.id,
-    pack,
-    category: categories[0],
-    optionKey: String(opt.key || "").trim() || null,
-    identifier: String(doc.system?.identifier || "").trim(),
-    name: String(doc.name || "")
-  };
-
-  return patch;
-}
-
-async function syncLegacyIdentityMirror(actor, slotKey, patch) {
-  const slotData = patch?.[slotKey] || null;
-
-  const mirrorKeyMap = {
-    archetype: "archetype",
-    crew: "crew",
-    occult: "occult",
-    sephirothicAlignment: "sephirot"
-  };
-
-  const mirrorKey = mirrorKeyMap[slotKey];
-  if (!mirrorKey) return;
-
-  if (!slotData || !slotData.key) {
-    try {
-      await actor.unsetFlag("bbttcc-character-options", mirrorKey);
-    } catch (_e) {
-      await actor.setFlag("bbttcc-character-options", mirrorKey, null);
-    }
-    return;
-  }
-
-  await actor.setFlag("bbttcc-character-options", mirrorKey, {
-    pack: slotData.pack || null,
-    id: slotData.id || slotData.key || null,
-    key: slotData.optionKey || null,
-    name: slotData.name || "",
-    identifier: slotData.identifier || "",
-    category: slotData.category || null
-  });
-}
-
-
-async function reconcileIdentityFromSection(actor, section) {
-  const idApi = game.bbttcc?.api?.identity;
-  const currentFlags = await getIdentityFlagsSafe(actor);
-  const nextFlags = foundry.utils.deepClone(currentFlags || {});
-
-  const desired = {
-    archetype: String(section.querySelector("[data-bbttcc-identity='archetype']")?.value || "").trim(),
-    crew: String(section.querySelector("[data-bbttcc-identity='crew']")?.value || "").trim(),
-    occult: String(section.querySelector("[data-bbttcc-identity='occult']")?.value || "").trim(),
-    sephirothicAlignment: String(section.querySelector("[data-bbttcc-identity='sephirothicAlignment']")?.value || "").trim()
-  };
-
-  // Remove all family items first so base items cannot drift/stick across edits.
-  await deleteIdentityFamilyItems(actor, "archetype", IDENTITY_SLOTS.archetype);
-  await deleteIdentityFamilyItems(actor, "crew", IDENTITY_SLOTS.crew);
-  await deleteIdentityFamilyItems(actor, "occult", IDENTITY_SLOTS.occult);
-  await deleteSephirotItems(actor);
-
-  for (const slotKey of ["archetype", "crew", "occult", "sephirothicAlignment"]) {
-    const cfg = IDENTITY_SLOTS[slotKey];
-    const newKey = desired[slotKey];
-
-    if (!newKey) {
-      nextFlags[slotKey] = {
-        key: null,
-        id: null,
-        pack: null,
-        category: cfg.categories[0],
-        optionKey: null,
-        identifier: "",
-        name: ""
-      };
-      await syncLegacyIdentityMirror(actor, slotKey, { [slotKey]: null });
-      continue;
-    }
-
-    const p = game.packs.get(cfg.pack);
-    if (!p) {
-      WARN("reconcileIdentityFromSection — pack not found", slotKey, cfg.pack);
-      nextFlags[slotKey] = {
-        key: newKey,
-        id: newKey,
-        pack: cfg.pack,
-        category: cfg.categories[0],
-        optionKey: null,
-        identifier: "",
-        name: ""
-      };
-      await syncLegacyIdentityMirror(actor, slotKey, { [slotKey]: nextFlags[slotKey] });
-      continue;
-    }
-
+  if (p) {
     const doc = await p.getDocument(newKey).catch((e) => {
-      WARN("reconcileIdentityFromSection — getDocument failed", slotKey, newKey, e);
+      WARN("applyIdentitySlotChange — pack getDocument failed", slotKey, newKey, e);
       return null;
     });
-
-    if (!doc) {
-      nextFlags[slotKey] = {
-        key: newKey,
-        id: newKey,
-        pack: cfg.pack,
-        category: cfg.categories[0],
-        optionKey: null,
-        identifier: "",
-        name: ""
-      };
-      await syncLegacyIdentityMirror(actor, slotKey, { [slotKey]: nextFlags[slotKey] });
-      continue;
-    }
-
-    await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
-    const opt = doc.getFlag?.("bbttcc-character-options", "option") || {};
-
-    nextFlags[slotKey] = {
-      key: doc.id,
-      id: doc.id,
-      pack: cfg.pack,
-      category: cfg.categories[0],
-      optionKey: String(opt.key || "").trim() || null,
-      identifier: String(doc.system?.identifier || "").trim(),
-      name: String(doc.name || "")
-    };
-
-    await syncLegacyIdentityMirror(actor, slotKey, { [slotKey]: nextFlags[slotKey] });
-  }
-
-  if (idApi?.setIdentityFlags) {
-    await idApi.setIdentityFlags(actor.id, nextFlags);
-    try {
-      await idApi.syncOptionTiers?.(actor.id, { silent: true });
-    } catch (e) {
-      WARN("reconcileIdentityFromSection — syncOptionTiers failed", e);
+    if (doc) {
+      LOG("BBTTCC Identity — adding item for slot", slotKey, { actor: actor.name, item: doc.name, id: doc.id });
+      await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
     }
   } else {
-    await actor.setFlag("bbttcc-character-options", "identity", nextFlags);
+    WARN("applyIdentitySlotChange — pack not found", slotKey, pack);
   }
 
-  await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
-  return nextFlags;
+  patch[slotKey] = { key: newKey, pack, category: categories[0] };
+  return patch;
 }
-
 
 /* ---------------------------------------
  * Persistence helpers
@@ -2356,17 +1900,6 @@ async function ensureBBTTCCTab(app, root) {
             strain: Number(st.strain) || 0
           };
         })(),
-        titanbound: (() => {
-          const st = getTitanboundState(actor) || {};
-          return {
-            enabled: !!st.enabled,
-            dice: Number(st.dice) || 0,
-            maxDice: Number(st.maxDice) || 0,
-            die: String(st.die || "d6"),
-            stress: Number(st.stress) || 0
-          };
-        })(),
-
 
         enlightenment: {
           level: enlightenmentFlag.level ?? "unawakened",
@@ -2522,17 +2055,24 @@ function wireBBTTCCTabEvents(app, section) {
   setSelectValue("sephirothicAlignment");
 
   // Live identity change handlers
+  const idApi = game.bbttcc?.api?.identity;
+
   const attachIdentityChange = (slot) => {
     if (!canEditIdentityOptions) return;
     const sel = section.querySelector(`[data-bbttcc-identity='${slot}']`);
-    if (!sel) return;
+    if (!sel || !idApi?.setIdentityFlags) return;
 
     sel.addEventListener("change", async (ev) => {
       const newKey = String(ev.currentTarget.value ?? "").trim();
       LOG("BBTTCC Identity Change — slot", { slot, newKey, actor: actor.name });
 
       try {
-        await reconcileIdentityFromSection(actor, section);
+        const patch = await applyIdentitySlotChange(actor, slot, newKey);
+        if (patch) {
+          await idApi.setIdentityFlags(actor.id, patch);
+          await idApi.syncOptionTiers?.(actor.id, { silent: true });
+        }
+        await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
         app.render(false);
       } catch (e) {
         WARN("BBTTCC Identity Change — error", slot, e);
@@ -2675,42 +2215,6 @@ function wireBBTTCCTabEvents(app, section) {
     });
   }
 
-  // Titanbound (Frame Dice / Structural Stress) — GM test controls
-  const titanWrap = section.querySelector("[data-bbttcc-titanbound='1']");
-  if (titanWrap) {
-    const bind = (action, fn) => {
-      const b = titanWrap.querySelector(`[data-bbttcc-action='${action}']`);
-      if (!b) return;
-      b.addEventListener("click", async (ev) => {
-        ev.preventDefault();
-        try { await fn(); app.render(false); } catch (e) { WARN("Titanbound action failed", action, e); }
-      });
-    };
-
-    bind("titanbound-add-die", async () => {
-      if (!isTitanbound(actor)) return;
-      const st = getTitanboundState(actor);
-      const next = Math.min((Number(st.dice) || 0) + 1, Number(st.maxDice) || 1);
-      await actor.setFlag(MOD, "titanbound.frameDice", next);
-    });
-
-    bind("titanbound-clear-dice", async () => {
-      if (!isTitanbound(actor)) return;
-      await actor.setFlag(MOD, "titanbound.frameDice", 0);
-    });
-
-    bind("titanbound-add-stress", async () => {
-      if (!isTitanbound(actor)) return;
-      const st = getTitanboundState(actor);
-      await actor.setFlag(MOD, "titanbound.stress", (Number(st.stress) || 0) + 1);
-    });
-
-    bind("titanbound-clear-stress", async () => {
-      if (!isTitanbound(actor)) return;
-      await actor.setFlag(MOD, "titanbound.stress", 0);
-    });
-  }
-
   // BBTTCC Class Resources — wire UI buttons (dice pools + pushback)
   try { _bbttccWireResourceCardEvents(app, section); } catch (_eResWire) {}
 
@@ -2779,7 +2283,6 @@ async function enhanceBBTTCCSheet(app, html) {
       // Ensure Esoteric Magic feats route through dnd5e.useItem (dialog-safe)
       patchEsotericDisplayCardRoutingOnce();
       await ensureBBTTCCTab(app, root);
-	  applyBBTTCCSheetCuration(app, root);
 
       // Safety net: some other enhancers (or the tab controller) may re-render / rebuild tabs
       // immediately after this hook fires. Re-ensure once on a short delay.

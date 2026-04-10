@@ -1,82 +1,65 @@
 // modules/bbttcc-auto-link/scripts/module.js
-// v0.8.1 — Actors Directory header buttons:
-//   • Create Character (BBTTCC) — opens the BBTTCC Character Wizard
-// (Removed: extra Create Faction button to avoid duplicates)
+// v0.8.2 — Actors Directory header button restore (Create Character BBTTCC)
+// Goal: keep the Create Character button resilient even if other files change.
 //
-// v0.9.0 — Character Sheet integration:
-//   • Registers BBTTCC Character Sheet (extends default 5E character sheet)
-//   • Exposes preferred sheet id for future auto-application
+// Key change vs prior:
+// - NO top-level imports (avoid module load abort if another file has a syntax error).
+// - Character sheet registration is attempted via dynamic import in READY and is non-fatal.
 
 const MOD = "bbttcc-auto-link";
-const LOG = (...a) => console.log(`[${MOD}]`, ...a);
+const LOG  = (...a) => console.log(`[${MOD}]`, ...a);
 const WARN = (...a) => console.warn(`[${MOD}]`, ...a);
 
-// Import the sheet registration helpers
-import { registerBBTTCCCharacterSheet, getBBTTCCCharacterSheetId } from "./character-sheet.js";
-
-/* ---------------------------------------
-   Helpers (left in place for future use)
-----------------------------------------*/
-function isCharacter(a) { return String(a?.type ?? "").toLowerCase() === "character"; }
-
-function qualifiesForBBTTCC(a) {
-  try {
-    const fx = a.flags?.["bbttcc-character-options"];
-    return !!fx && (fx.enabled !== false);
-  } catch {
-    return false;
-  }
+function getRoot(html) {
+  if (html instanceof HTMLElement) return html;
+  if (html && html[0] instanceof HTMLElement) return html[0];
+  return null;
 }
 
-/**
- * Returns the preferred sheetClass id for BBTTCC characters, if any.
- * This currently reads from CONFIG, which is populated by the sheet
- * registration in character-sheet.js.
- */
-function preferredSheetClassId() {
-  // If you later want to auto-apply the BBTTCC sheet to qualifying characters,
-  // you can use this helper and call applyEnhancedSheetIfNeeded(actor).
-  return getBBTTCCCharacterSheetId();
+function findActorDirHeader(root) {
+  // Foundry themes vary. Try a few stable selectors.
+  return (
+    root.querySelector(".directory-header .header-actions") ||
+    root.querySelector(".directory-header .action-buttons") ||
+    root.querySelector(".directory-header")?.querySelector(".header-actions") ||
+    root.querySelector(".header-actions") ||
+    root.querySelector(".action-buttons")
+  );
 }
 
-async function applyEnhancedSheetIfNeeded(a) {
-  if (!isCharacter(a) || !qualifiesForBBTTCC(a)) return;
-  const preferred = preferredSheetClassId();
-  if (!preferred) return;
-
-  const current = a.getFlag("core", "sheetClass") || foundry.utils.getProperty(a, "flags.core.sheetClass");
-  if (current === preferred) return;
-
-  try {
-    await a.update({ "flags.core.sheetClass": preferred });
-    LOG("Applied BBTTCC Character Sheet to actor", { actor: a.name, id: a.id, sheet: preferred });
-  } catch (err) {
-    WARN("Failed to apply BBTTCC Character Sheet to actor", a, err);
-  }
-}
-
-/* ---------------------------------------
-   Actors Directory header injection
-----------------------------------------*/
 function injectButtons(html) {
-  const root = html instanceof HTMLElement ? html : (html?.[0] instanceof HTMLElement ? html[0] : null);
+  const root = getRoot(html);
   if (!root) return;
 
-  const header = root.querySelector(".directory-header .header-actions") || root.querySelector(".header-actions");
+  const header = findActorDirHeader(root);
   if (!header) return;
 
-  // --- Create Character (BBTTCC) ---
+  // Create Character (BBTTCC)
   if (!header.querySelector("[data-bbttcc-create-character]")) {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.dataset.bbttccCreateCharacter = "1";
+    btn.dataset.bbttccCreateCharacter = "1"; // data-bbttcc-create-character
     const label = game.i18n?.localize?.("BBTTCC.AutoLink.CreateCharacter") || "Create Character (BBTTCC)";
     btn.innerHTML = `<i class="fas fa-user-plus"></i> ${label}`;
     btn.title = "Open BBTTCC Character Creation Wizard";
+
     btn.addEventListener("click", async () => {
       try {
+        // Primary path: API exposed by character-wizard.js
         const open = game.bbttcc?.api?.autoLink?.openCharacterWizard;
         if (typeof open === "function") return void open();
+
+        // Fallback: attempt to dynamically import the wizard script (in case api didn't load yet)
+        try {
+          await import("./character-wizard.js");
+        } catch (e) {
+          // ignore; we'll error below if API still missing
+          WARN("Dynamic import ./character-wizard.js failed", e);
+        }
+
+        const open2 = game.bbttcc?.api?.autoLink?.openCharacterWizard;
+        if (typeof open2 === "function") return void open2();
+
         WARN("Character Wizard API not found. Check module.json esmodules and file paths.");
         ui.notifications?.error?.("BBTTCC Character Wizard not available (API missing).");
       } catch (e) {
@@ -84,19 +67,18 @@ function injectButtons(html) {
         ui.notifications?.error?.("BBTTCC Character Wizard not available.");
       }
     });
-    header.appendChild(btn);
-  }
 
-  // (Intentionally no Create Faction button here — provided by bbttcc-factions module)
+    header.appendChild(btn);
+    LOG("Injected Actors Directory button: Create Character (BBTTCC)");
+  }
 }
 
 /* ---------------------------------------
    Hooks
 ----------------------------------------*/
+
 Hooks.once("init", () => {
-  console.log(`🌟 ${MOD} | Safe loader starting...`);
-  // NOTE: We do NOT register the character sheet here, because at init
-  // CONFIG.Actor.sheetClasses.character is not yet populated by dnd5e.
+  LOG("init");
 });
 
 Hooks.on("renderActorDirectory", (app, html) => injectButtons(html));
@@ -108,17 +90,24 @@ Hooks.on("renderSidebarTab", (app, html) => {
 });
 
 Hooks.once("ready", async () => {
-  console.log(`🌟 ${MOD} | READY Hook`);
+  LOG("ready");
 
-  // At this point the dnd5e system has fully registered its sheets,
-  // so CONFIG.Actor.sheetClasses.character should be populated.
+  // Ensure the button exists even if the directory was rendered before hooks attached.
   try {
-    registerBBTTCCCharacterSheet();
-  } catch (err) {
-    WARN("Error during BBTTCC Character Sheet registration in READY", err);
+    const el = ui?.actors?.element;
+    if (el) injectButtons(el);
+  } catch (e) {
+    WARN("Late injectButtons failed", e);
   }
 
-  // NOTE: We are NOT auto-applying the BBTTCC sheet yet (Option 8A).
-  // When you're ready, we can add logic here to call applyEnhancedSheetIfNeeded(actor)
-  // for qualifying actors, or run a one-time migration.
+  // Register BBTTCC Character Sheet (non-fatal)
+  try {
+    const mod = await import("./character-sheet.js");
+    if (mod?.registerBBTTCCCharacterSheet) {
+      mod.registerBBTTCCCharacterSheet();
+      LOG("Registered BBTTCC Character/NPC sheets (dynamic import).");
+    }
+  } catch (err) {
+    WARN("Character sheet registration failed (non-fatal).", err);
+  }
 });

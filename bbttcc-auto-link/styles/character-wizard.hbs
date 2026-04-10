@@ -1,0 +1,159 @@
+<section class="bbttcc-character-wizard">
+  <header class="bbttcc-wizard-header">
+    <h1 class="bbttcc-wizard-title">BBTTCC Character Wizard</h1>
+    <p class="bbttcc-wizard-subtitle">
+      Guided setup for a new hero of the Hex — create the actor shell, wire native D&amp;D 5E ancestry/class,
+      and persist BBTTCC identity values directly onto the finished sheet.
+    </p>
+  </header>
+
+  <form class="bbttcc-wizard-form">
+    <div class="bbttcc-wizard-grid">
+      <!-- BASICS -->
+      <section class="bbttcc-wizard-card">
+        <h2 class="bbttcc-wizard-card-title">Basics</h2>
+
+        <div class="bbttcc-field">
+          <label for="bbttcc-wizard-name">Name</label>
+          <input
+            id="bbttcc-wizard-name"
+            type="text"
+            name="name"
+            value="{{defaults.name}}"
+            placeholder="Character name"
+          />
+        </div>
+
+        <div class="bbttcc-field">
+          <label for="bbttcc-wizard-faction">Faction</label>
+          <select id="bbttcc-wizard-faction" name="factionId">
+            <option value="">(None)</option>
+            {{#each factions}}
+              <option value="{{id}}">{{name}}</option>
+            {{/each}}
+          </select>
+          <p class="bbttcc-hint">
+            Links the character to a Faction so roster contributions and OP impact appear correctly.
+          </p>
+        </div>
+      </section>
+
+      <!-- D&D5E CHOICES -->
+      <section class="bbttcc-wizard-card">
+        <h2 class="bbttcc-wizard-card-title">D&amp;D 5E Choices</h2>
+
+        <div class="bbttcc-field">
+          <label for="bbttcc-wizard-species">Ancestry / Species UUID</label>
+          <input
+            id="bbttcc-wizard-species"
+            type="text"
+            name="speciesUuid"
+            value="{{defaults.speciesUuid}}"
+            placeholder="Compendium...Item.XXXXX or Actor/Item UUID"
+          />
+        </div>
+
+        <div class="bbttcc-field">
+          <label for="bbttcc-wizard-class">Class UUID</label>
+          <input
+            id="bbttcc-wizard-class"
+            type="text"
+            name="classUuid"
+            value="{{defaults.classUuid}}"
+            placeholder="Compendium...Item.YYYYY or Actor/Item UUID"
+          />
+        </div>
+
+        <p class="bbttcc-hint">
+          The wizard now uses these UUIDs to run the native dnd5e advancement/drop workflow after the actor shell is created.
+        </p>
+
+        <p class="bbttcc-hint">
+          Tip: Right-click a compendium entry and choose “Copy Document UUID”, then paste here.
+        </p>
+      </section>
+
+      <!-- BBTTCC OPTIONS -->
+      <section class="bbttcc-wizard-card bbttcc-wizard-card-wide">
+        <h2 class="bbttcc-wizard-card-title">BBTTCC Options</h2>
+
+        <div class="bbttcc-wizard-options-grid">
+          <div class="bbttcc-field">
+            <label for="bbttcc-wizard-archetype">Archetype</label>
+            <select id="bbttcc-wizard-archetype" name="archetypeId">
+              <option value="">(None)</option>
+              {{#each defaults.lists.archetype}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="bbttcc-field">
+            <label for="bbttcc-wizard-crew">Crew Type</label>
+            <select id="bbttcc-wizard-crew" name="crewId">
+              <option value="">(None)</option>
+              {{#each defaults.lists.crew}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="bbttcc-field">
+            <label for="bbttcc-wizard-sephirot">Sephirotic Alignment</label>
+            <select id="bbttcc-wizard-sephirot" name="sephirotId">
+              <option value="">(None)</option>
+              {{#each defaults.lists.sephirot}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="bbttcc-field">
+            <label for="bbttcc-wizard-political">Political Philosophy</label>
+            <select id="bbttcc-wizard-political" name="politicalId">
+              <option value="">(None)</option>
+              {{#each defaults.lists.political}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+            <p class="bbttcc-hint">
+              AAE Canon. Drives ideological alignment feedback and political pressure.
+            </p>
+          </div>
+
+          <div class="bbttcc-field">
+            <label for="bbttcc-wizard-occult">Occult Association</label>
+            <select id="bbttcc-wizard-occult" name="occultId">
+              <option value="">(None)</option>
+              {{#each defaults.lists.occult}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="bbttcc-field">
+            <label for="bbttcc-wizard-enlight">Enlightenment Level</label>
+            <select id="bbttcc-wizard-enlight" name="enlightId">
+              <option value="">(None)</option>
+              {{#each defaults.lists.enlight}}
+                <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+
+        <p class="bbttcc-hint">
+          Archetype / Crew / Occult / Sephirot / Enlightenment are now persisted as canonical BBTTCC identity values on the actor,
+          while Political Philosophy remains stored as AAE identity state.
+        </p>
+      </section>
+    </div>
+
+    <footer class="bbttcc-wizard-footer">
+      <button type="button" data-action="create" class="bbttcc-wizard-create">
+        <i class="fas fa-magic"></i>
+        Create Character
+      </button>
+    </footer>
+  </form>
+</section>

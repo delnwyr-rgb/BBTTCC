@@ -1,152 +1,278 @@
-<section class="bbttcc-character-wizard">
-  <header class="bbttcc-wizard-header">
-    <h1 class="bbttcc-wizard-title">BBTTCC Character Wizard</h1>
-    <p class="bbttcc-wizard-subtitle">
-      Guided setup for a new hero of the Hex — link them to a Faction, wire in D&amp;D 5E options,
-      and assign BBTTCC identity tags.
-    </p>
-  </header>
-
-  <form class="bbttcc-wizard-form">
-    <div class="bbttcc-wizard-grid">
-      <!-- BASICS -->
-      <section class="bbttcc-wizard-card">
-        <h2 class="bbttcc-wizard-card-title">Basics</h2>
-
-        <div class="bbttcc-field">
-          <label for="bbttcc-wizard-name">Name</label>
-          <input
-            id="bbttcc-wizard-name"
-            type="text"
-            name="name"
-            value="{{defaults.name}}"
-            placeholder="Character name"
-          />
-        </div>
-
-        <div class="bbttcc-field">
-          <label for="bbttcc-wizard-faction">Faction</label>
-          <select id="bbttcc-wizard-faction" name="factionId">
-            <option value="">(None)</option>
-            {{#each factions}}
-              <option value="{{id}}">{{name}}</option>
-            {{/each}}
-          </select>
-          <p class="bbttcc-hint">
-            Links the character to a Faction so roster contributions and OP impact appear correctly.
-          </p>
-        </div>
-      </section>
-
-      <!-- D&D5E CHOICES -->
-      <section class="bbttcc-wizard-card">
-        <h2 class="bbttcc-wizard-card-title">D&amp;D 5E Choices</h2>
-
-        <div class="bbttcc-field">
-          <label for="bbttcc-wizard-species">Species (paste UUID)</label>
-          <input
-            id="bbttcc-wizard-species"
-            type="text"
-            name="speciesUuid"
-            value="{{defaults.speciesUuid}}"
-            placeholder="Compendium.dnd-players-handbook.origins.Item.XXXXX or world UUID"
-          />
-        </div>
-
-        <div class="bbttcc-field">
-          <label for="bbttcc-wizard-class">Class (paste UUID)</label>
-          <input
-            id="bbttcc-wizard-class"
-            type="text"
-            name="classUuid"
-            value="{{defaults.classUuid}}"
-            placeholder="Compendium.dnd-players-handbook.classes.Item.YYYYY or world UUID"
-          />
-        </div>
-
-        <p class="bbttcc-hint">
-          Tip: Right-click a compendium entry and choose “Copy Document UUID”, then paste here.
+<section class="bbttcc-cw">
+  <header class="bbttcc-cw__header">
+    <div class="bbttcc-cw__title-row">
+      <div>
+        <h1 class="bbttcc-cw__title">BBTTCC Character Wizard</h1>
+        <p class="bbttcc-cw__subtitle">
+          Guided, fullscreen character creation with live option previews, embedded sorting, and locked base-stat assignment.
         </p>
-      </section>
+      </div>
 
-      <!-- BBTTCC OPTIONS -->
-      <section class="bbttcc-wizard-card bbttcc-wizard-card-wide">
-        <h2 class="bbttcc-wizard-card-title">BBTTCC Options</h2>
-
-        <div class="bbttcc-wizard-options-grid">
-          <div class="bbttcc-field">
-            <label for="bbttcc-wizard-archetype">Archetype</label>
-            <select id="bbttcc-wizard-archetype" name="archetypeId">
-              <option value="">(None)</option>
-              {{#each defaults.lists.archetype}}
-                <option value="{{id}}">{{name}}</option>
-              {{/each}}
-            </select>
-          </div>
-
-          <div class="bbttcc-field">
-            <label for="bbttcc-wizard-crew">Crew Type</label>
-            <select id="bbttcc-wizard-crew" name="crewId">
-              <option value="">(None)</option>
-              {{#each defaults.lists.crew}}
-                <option value="{{id}}">{{name}}</option>
-              {{/each}}
-            </select>
-          </div>
-
-          <div class="bbttcc-field">
-            <label for="bbttcc-wizard-sephirot">Sephirotic Alignment</label>
-            <select id="bbttcc-wizard-sephirot" name="sephirotId">
-              <option value="">(None)</option>
-              {{#each defaults.lists.sephirot}}
-                <option value="{{id}}">{{name}}</option>
-              {{/each}}
-            </select>
-          </div>
-
-          <div class="bbttcc-field">
-            <label for="bbttcc-wizard-political">Political Affiliation</label>
-            <select id="bbttcc-wizard-political" name="politicalId">
-              <option value="">(None)</option>
-              {{#each defaults.lists.political}}
-                <option value="{{id}}">{{name}}</option>
-              {{/each}}
-            </select>
-          </div>
-
-          <div class="bbttcc-field">
-            <label for="bbttcc-wizard-occult">Occult Association</label>
-            <select id="bbttcc-wizard-occult" name="occultId">
-              <option value="">(None)</option>
-              {{#each defaults.lists.occult}}
-                <option value="{{id}}">{{name}}</option>
-              {{/each}}
-            </select>
-          </div>
-
-          <div class="bbttcc-field">
-            <label for="bbttcc-wizard-enlight">Enlightenment Level</label>
-            <select id="bbttcc-wizard-enlight" name="enlightId">
-              <option value="">(None)</option>
-              {{#each defaults.lists.enlight}}
-                <option value="{{id}}">{{name}}</option>
-              {{/each}}
-            </select>
-          </div>
-        </div>
-
-        <p class="bbttcc-hint">
-          These pull directly from your BBTTCC packs. Their item flags already contain the official OP bonuses,
-          so Faction rosters and OP summaries will reflect selections automatically.
-        </p>
-      </section>
+      <div class="bbttcc-cw__meta">
+        <div class="bbttcc-cw__pill">Walled Creation Environment</div>
+        {{#if hasCreatedActor}}
+          <div class="bbttcc-cw__pill">Created: {{createdActorName}}</div>
+        {{/if}}
+      </div>
     </div>
 
-    <footer class="bbttcc-wizard-footer">
-      <button type="button" data-action="create" class="bbttcc-wizard-create">
-        <i class="fas fa-magic"></i>
-        Create Character
-      </button>
-    </footer>
-  </form>
+    <div class="bbttcc-cw__tabs">
+      {{#each tabs}}
+        <button
+          type="button"
+          class="bbttcc-cw__tab {{#if active}}is-active{{/if}} {{#if complete}}is-complete{{/if}}"
+          data-action="switchTab"
+          data-tab="{{key}}"
+        >
+          {{label}}
+        </button>
+      {{/each}}
+    </div>
+  </header>
+
+  <div class="bbttcc-cw__body">
+    <div class="bbttcc-cw__left">
+      <section class="bbttcc-cw__card">
+        <div class="bbttcc-cw__card-head">
+          <h2 class="bbttcc-cw__card-title">Character Basics</h2>
+          <p class="bbttcc-cw__card-subtitle">These persist across the whole guided workflow.</p>
+        </div>
+
+        <div class="bbttcc-cw__card-body">
+          <div class="bbttcc-cw__basics">
+            <div class="bbttcc-cw__field">
+              <label for="bbttcc-cw-name">Name</label>
+              <input id="bbttcc-cw-name" type="text" name="name" value="{{wizardName}}" placeholder="Character name" />
+            </div>
+
+            <div class="bbttcc-cw__field">
+              <label for="bbttcc-cw-faction">Faction</label>
+              <select id="bbttcc-cw-faction" name="factionId">
+                <option value="">(None)</option>
+                {{#each factions}}
+                  <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {{#if isSortingTab}}
+        <section class="bbttcc-cw__card bbttcc-cw__card--gold">
+          <div class="bbttcc-cw__card-head">
+            <h2 class="bbttcc-cw__card-title">Sorting Engine</h2>
+            <p class="bbttcc-cw__card-subtitle">{{sortingProgressLabel}}</p>
+          </div>
+
+          <div class="bbttcc-cw__card-body">
+            {{#if sortingHasResult}}
+              <div class="bbttcc-cw__empty">
+                The Sorting Engine has produced a full identity stack. Use it to pre-populate the wizard, or reset and answer again.
+              </div>
+            {{else}}
+              {{#if sortingQuestion}}
+                <p class="bbttcc-cw__sorting-prompt">{{sortingQuestion.prompt}}</p>
+                <div class="bbttcc-cw__sorting-answers">
+                  {{#each sortingAnswers}}
+                    <button
+                      type="button"
+                      class="bbttcc-cw__sorting-answer {{#if selected}}is-active{{/if}}"
+                      data-action="sortingPick"
+                      data-key="{{key}}"
+                    >
+                      <span class="bbttcc-cw__sorting-answer-key">{{key}}.</span>
+                      <span>{{text}}</span>
+                    </button>
+                  {{/each}}
+                </div>
+              {{else}}
+                <div class="bbttcc-cw__empty">Loading Sorting Engine…</div>
+              {{/if}}
+            {{/if}}
+          </div>
+        </section>
+      {{/if}}
+
+      {{#if isChoiceTab}}
+        <section class="bbttcc-cw__card bbttcc-cw__card--gold">
+          <div class="bbttcc-cw__card-head">
+            <h2 class="bbttcc-cw__card-title">{{activeChoiceTitle}}</h2>
+            <p class="bbttcc-cw__card-subtitle">Click once to preview. Click the same tile again, or use the footer button, to lock in the selection.</p>
+          </div>
+
+          <div class="bbttcc-cw__card-body" style="padding:0;">
+            <div class="bbttcc-cw__choice-grid">
+              {{#each activeItems}}
+                <button
+                  type="button"
+                  class="bbttcc-cw__choice {{#if focused}}is-focused{{/if}} {{#if selected}}is-selected{{/if}}"
+                  data-action="focusChoice"
+                  data-tab="{{../activeTab}}"
+                  data-choice-id="{{id}}"
+                  title="Preview {{name}}"
+                >
+                  {{#if img}}
+                    <img class="bbttcc-cw__choice-img" src="{{img}}" alt="{{name}}" />
+                  {{/if}}
+                  <div class="bbttcc-cw__choice-name">{{name}}</div>
+                  {{#if source}}
+                    <div class="bbttcc-cw__choice-source">{{source}}</div>
+                  {{/if}}
+                </button>
+              {{/each}}
+            </div>
+          </div>
+        </section>
+      {{/if}}
+
+      {{#if showBaseStats}}
+        <section class="bbttcc-cw__card bbttcc-cw__card--gold">
+          <div class="bbttcc-cw__card-head">
+            <h2 class="bbttcc-cw__card-title">Base Stats</h2>
+            <p class="bbttcc-cw__card-subtitle">Assign the standard array exactly once: 15 / 14 / 13 / 12 / 10 / 8.</p>
+          </div>
+          <div class="bbttcc-cw__card-body">
+            <div class="bbttcc-cw__hint" style="margin-bottom:12px;">
+              These values are stored on the actor first. After that, the wizard applies ancestry, class, identity, and finally archetype ability bonuses.
+            </div>
+
+            <div style="margin-bottom:14px;">
+              {{#each baseStatsRemaining}}
+                <span class="bbttcc-cw__array-chip">{{this}}</span>
+              {{/each}}
+              {{#if baseStatsComplete}}
+                <span class="bbttcc-cw__badge"><strong>All values assigned</strong></span>
+              {{/if}}
+            </div>
+
+            <div class="bbttcc-cw__stats-grid">
+              {{#each baseStatsRows}}
+                <div class="bbttcc-cw__stat-row">
+                  <div>
+                    <div class="bbttcc-cw__stat-label">{{label}}</div>
+                    <div class="bbttcc-cw__hint">{{key}}</div>
+                  </div>
+                  <div class="bbttcc-cw__field" style="margin:0;">
+                    <select data-bbttcc-stat="{{key}}">
+                      <option value="">(Choose)</option>
+                      {{#each options}}
+                        <option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>
+                      {{/each}}
+                    </select>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+
+            {{#if baseStatsError}}
+              <p class="bbttcc-cw__error" style="margin-top:14px;">{{baseStatsError}}</p>
+            {{/if}}
+          </div>
+        </section>
+      {{/if}}
+
+      {{#if isReviewTab}}
+        <section class="bbttcc-cw__card">
+          <div class="bbttcc-cw__card-head">
+            <h2 class="bbttcc-cw__card-title">Creation Pipeline</h2>
+            <p class="bbttcc-cw__card-subtitle">The wizard now handles the whole sequence internally, in one deterministic pass.</p>
+          </div>
+          <div class="bbttcc-cw__card-body">
+            <div class="bbttcc-cw__empty">
+              Base stats are stored first. Then ancestry. Then class. Then identity flags and items. Then archetype bonuses. Then tier sync and actor recalc. The final sheet only opens if you ask for it.
+            </div>
+          </div>
+        </section>
+      {{/if}}
+    </div>
+
+    <div class="bbttcc-cw__right">
+      <section class="bbttcc-cw__card bbttcc-cw__card--gold bbttcc-cw__preview">
+        <div class="bbttcc-cw__card-body">
+          <div class="bbttcc-cw__preview-head">
+            <div>
+              <h2 class="bbttcc-cw__preview-title">{{preview.title}}</h2>
+              {{#if preview.quote}}
+                <p class="bbttcc-cw__preview-quote">“{{preview.quote}}”</p>
+              {{/if}}
+              {{#if preview.kicker}}
+                <div class="bbttcc-cw__preview-kicker">{{preview.kicker}}</div>
+              {{/if}}
+
+              <div class="bbttcc-cw__mini-grid">
+                <div class="bbttcc-cw__mini">
+                  <div class="bbttcc-cw__mini-label">Source</div>
+                  <div class="bbttcc-cw__mini-value">{{preview.meta.source}}</div>
+                </div>
+                <div class="bbttcc-cw__mini">
+                  <div class="bbttcc-cw__mini-label">Type</div>
+                  <div class="bbttcc-cw__mini-value">{{preview.meta.type}}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bbttcc-cw__preview-img-wrap">
+              {{#if preview.image}}
+                <img class="bbttcc-cw__preview-img" src="{{preview.image}}" alt="{{preview.title}}" />
+              {{else}}
+                <div class="bbttcc-cw__empty">No image</div>
+              {{/if}}
+            </div>
+          </div>
+
+          <div class="bbttcc-cw__preview-body">{{{preview.body}}}</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="bbttcc-cw__footer">
+    <div class="bbttcc-cw__footer-note">
+      {{#if isSortingTab}}
+        Use Sorting to pre-populate the wizard, then refine anything by hand.
+      {{else if showBaseStats}}
+        This step is required before final creation.
+      {{else}}
+        This wizard remains the primary creation surface until you exit or finish.
+      {{/if}}
+    </div>
+
+    <div class="bbttcc-cw__actions">
+      {{#if isSortingTab}}
+        <button type="button" class="bbttcc-cw__btn" data-action="sortingReset">Reset</button>
+        <button type="button" class="bbttcc-cw__btn" data-action="sortingPrev" {{#unless sortingCanGoBack}}disabled{{/unless}}>Back</button>
+        <button type="button" class="bbttcc-cw__btn bbttcc-cw__btn--primary" data-action="sortingNext">
+          {{#if sortingAtEnd}}Reveal Result{{else}}Next{{/if}}
+        </button>
+        {{#if sortingHasResult}}
+          <button type="button" class="bbttcc-cw__btn bbttcc-cw__btn--primary" data-action="sortingUse">Use Sorting Result</button>
+        {{/if}}
+      {{/if}}
+
+      {{#if isChoiceTab}}
+        <button type="button" class="bbttcc-cw__btn" data-action="chooseChoice" data-tab="{{activeTab}}" data-choice-id="{{focusedChoiceId}}">Choose Focused Option</button>
+      {{/if}}
+
+      {{#if showBaseStats}}
+        <button type="button" class="bbttcc-cw__btn" data-action="switchTab" data-tab="review">Go To Review</button>
+      {{/if}}
+
+      {{#if isReviewTab}}
+        {{#if hasCreatedActor}}
+          {{#if stageAwaitingIdentity}}
+            <button type="button" class="bbttcc-cw__btn bbttcc-cw__btn--primary" data-action="createCharacter">Apply BBTTCC Identity</button>
+          {{/if}}
+          {{#if stageAwaitingClass}}
+            <button type="button" class="bbttcc-cw__btn bbttcc-cw__btn--primary" data-action="createCharacter">Continue Class Setup</button>
+          {{/if}}
+          {{#if stageComplete}}
+            <button type="button" class="bbttcc-cw__btn" data-action="openActor">Open Finished Character</button>
+          {{/if}}
+        {{else}}
+          <button type="button" class="bbttcc-cw__btn bbttcc-cw__btn--primary" data-action="createCharacter" {{#unless readyToCreate}}disabled{{/unless}}>Create Character</button>
+        {{/if}}
+      {{/if}}
+    </div>
+  </footer>
 </section>

@@ -9,22 +9,22 @@
   <div class="bbttcc-grid">
     <!-- Faction card -->
     <section class="bbttcc-card">
-      <h3 class="bbttcc-card-title">Faction</h3>
+      <h3 class="bbttcc-card-title">
+        <i class="fas fa-flag"></i>
+        Faction
+      </h3>
 
       <p class="bbttcc-card-main">
         {{#if bbttcc.factionName}}
-          <span class="bbttcc-pill bbttcc-pill-primary">
-            {{bbttcc.factionName}}
-          </span>
+          <b>{{bbttcc.factionName}}</b>
         {{else}}
-          <span class="bbttcc-muted">(None linked)</span>
+          <span class="bbttcc-muted">No faction linked</span>
         {{/if}}
       </p>
 
-      {{#if bbttcc.factionId}}
-        <p class="bbttcc-card-meta">
-          Faction Id:
-          <code>{{bbttcc.factionId}}</code>
+      {{#if isGM}}
+        <p class="bbttcc-card-meta bbttcc-muted">
+          Faction ID: <code>{{bbttcc.factionId}}</code>
         </p>
       {{/if}}
 
@@ -32,7 +32,7 @@
         <div class="bbttcc-field bbttcc-field-inline">
           <label for="bbttcc-faction-select">Linked Faction</label>
           <select id="bbttcc-faction-select" data-bbttcc="factionId">
-            <option value="">(None)</option>
+            <option value="">—</option>
             {{#each bbttcc.factions}}
               <option value="{{id}}">{{name}}</option>
             {{/each}}
@@ -40,94 +40,88 @@
         </div>
 
         <div class="bbttcc-card-actions">
-          <button type="button" data-bbttcc-action="open-faction" class="bbttcc-button-link">
-            <i class="fas fa-users"></i>
+          <button type="button" class="bbttcc-button-link" data-bbttcc-action="open-faction">
+            <i class="fas fa-external-link-alt"></i>
             Open Faction Sheet
           </button>
         </div>
-
-        <p class="bbttcc-card-meta bbttcc-muted">
-          GMs can link or change the character's Faction here. Opening the Faction sheet uses the current linked Faction.
-        </p>
+      {{else}}
+        <div class="bbttcc-card-actions">
+          <button type="button" class="bbttcc-button-link" data-bbttcc-action="open-faction">
+            <i class="fas fa-external-link-alt"></i>
+            Open Faction Sheet
+          </button>
+        </div>
       {{/if}}
     </section>
 
-    <!-- Radiation & Sparks card -->
+    <!-- Radiation card -->
     <section class="bbttcc-card">
-      <h3 class="bbttcc-card-title">Radiation &amp; Sparks</h3>
+      <h3 class="bbttcc-card-title">
+        <i class="fas fa-radiation"></i>
+        Radiation
+      </h3>
 
-      <dl class="bbttcc-metrics">
-        <div class="bbttcc-metric">
-          <dt>Radiation Points</dt>
-          <dd>{{bbttcc.radiationPoints}}</dd>
-        </div>
-        <div class="bbttcc-metric">
-          <dt>Tikkun Sparks</dt>
-          <dd>{{bbttcc.tikkunSparks}}</dd>
-        </div>
-        <div class="bbttcc-metric">
-          <dt>Raid Experience</dt>
-          <dd>{{bbttcc.raidXP}}</dd>
-        </div>
-      </dl>
+      <p class="bbttcc-card-main">
+        <b>{{bbttcc.radiationPoints}}</b>
+        <span class="bbttcc-muted">points</span>
+      </p>
 
       {{#if isGM}}
-        <div class="bbttcc-field-group">
-          <div class="bbttcc-field">
-            <label for="bbttcc-radiation-input">Radiation (RP)</label>
-            <input
-              id="bbttcc-radiation-input"
-              type="number"
-              data-bbttcc="radiation"
-              value="{{bbttcc.radiationPoints}}"
-              min="0"
-            />
-          </div>
-
-          <div class="bbttcc-field">
-            <label for="bbttcc-sparks-input">Tikkun Sparks</label>
-            <input
-              id="bbttcc-sparks-input"
-              type="number"
-              data-bbttcc-readonly="sparks"
-              value="{{bbttcc.tikkunSparks}}"
-              min="0"
-              readonly
-            />
-            <p class="bbttcc-hint">
-              Managed by the Tikkun / Great Work console. This field reflects integrated sparks only.
-            </p>
-          </div>
-
-          <div class="bbttcc-field">
-            <label for="bbttcc-raidxp-input">Raid Experience</label>
-            <input
-              id="bbttcc-raidxp-input"
-              type="number"
-              data-bbttcc="raid"
-              value="{{bbttcc.raidXP}}"
-              min="0"
-            />
-          </div>
+        <div class="bbttcc-field">
+          <label for="bbttcc-radiation-input">Radiation Points</label>
+          <input
+            id="bbttcc-radiation-input"
+            type="number"
+            min="0"
+            step="1"
+            data-bbttcc="radiation"
+            value="{{bbttcc.radiationPoints}}"
+          />
         </div>
       {{/if}}
+    </section>
+
+    <!-- Sparks card -->
+    <section class="bbttcc-card">
+      <h3 class="bbttcc-card-title">
+        <i class="fas fa-sparkles"></i>
+        Sparks
+      </h3>
+
+      <p class="bbttcc-card-main">
+        <b>{{bbttcc.tikkunSparks}}</b>
+        <span class="bbttcc-muted">integrated</span>
+      </p>
+
+      <div class="bbttcc-field">
+        <label for="bbttcc-sparks-readonly">Sparks (read-only)</label>
+        <input
+          id="bbttcc-sparks-readonly"
+          type="number"
+          data-bbttcc-readonly="sparks"
+          readonly
+          value="{{bbttcc.tikkunSparks}}"
+        />
+      </div>
 
       <p class="bbttcc-card-meta bbttcc-muted">
-        For full Radiation and Great Work controls, use the dedicated icons / tabs on the right-hand sheet panel.
+        Sparks are managed via the Tikkun engine.
       </p>
     </section>
 
     <!-- Enlightenment card -->
     <section class="bbttcc-card">
-      <h3 class="bbttcc-card-title">Enlightenment</h3>
+      <h3 class="bbttcc-card-title">
+        <i class="fas fa-eye"></i>
+        Enlightenment
+      </h3>
 
       {{#if bbttcc.enlightenment.display}}
         <p class="bbttcc-card-main">
-          <span class="bbttcc-pill bbttcc-pill-gold">
-            {{bbttcc.enlightenment.display}}
-          </span>
+          <b>{{bbttcc.enlightenment.display}}</b>
         </p>
-        <p class="bbttcc-card-meta">
+        <p class="bbttcc-card-meta bbttcc-muted">
           Level key: <code>{{bbttcc.enlightenment.level}}</code>
         </p>
       {{else}}
@@ -136,7 +130,7 @@
         </p>
       {{/if}}
 
-      {{#if isGM}}
+      {{#if bbttcc.canEditIdentityOptions}}
         <div class="bbttcc-field">
           <label for="bbttcc-enlight-select">Enlightenment Level</label>
           <select id="bbttcc-enlight-select" data-bbttcc="enlightenment-level">
@@ -150,26 +144,299 @@
         </p>
       {{/if}}
     </section>
-  </div>
 
-  <footer class="bbttcc-tab-footer">
-    {{#if isGM}}
-      <div class="bbttcc-footer-actions">
-        <button type="button" data-bbttcc-action="save" class="bbttcc-button-primary">
-          <i class="fas fa-save"></i>
-          Save BBTTCC Identity
+    <!-- Tiered Options -->
+    <section class="bbttcc-card bbttcc-card-wide">
+      <h3 class="bbttcc-card-title">
+        <i class="fas fa-layer-group"></i>
+        Character Options
+      </h3>
+
+      <div class="bbttcc-list bbttcc-list-two">
+        <div class="bbttcc-list-row">
+          <dt>Archetype</dt>
+          <dd>
+            {{bbttcc.identity.display.archetype.label}}
+            {{#if bbttcc.canEditIdentityOptions}}
+              <div class="bbttcc-field bbttcc-field-inline bbttcc-field-tight">
+                <label class="bbttcc-inline-label">Set Archetype</label>
+                <select data-bbttcc-identity="archetype">
+                  <option value="">(No change)</option>
+                  {{#each bbttcc.identityOptions.archetype.list}}
+                    <option value="{{id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            {{/if}}
+          </dd>
+        </div>
+
+        <div class="bbttcc-list-row">
+          <dt>Crew Type</dt>
+          <dd>
+            {{bbttcc.identity.display.crew.label}}
+            {{#if bbttcc.canEditIdentityOptions}}
+              <div class="bbttcc-field bbttcc-field-inline bbttcc-field-tight">
+                <label class="bbttcc-inline-label">Set Crew</label>
+                <select data-bbttcc-identity="crew">
+                  <option value="">(No change)</option>
+                  {{#each bbttcc.identityOptions.crew.list}}
+                    <option value="{{id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            {{/if}}
+          </dd>
+        </div>
+
+        <div class="bbttcc-list-row">
+          <dt>Occult Association</dt>
+          <dd>
+            {{bbttcc.identity.display.occult.label}}
+            {{#if bbttcc.canEditIdentityOptions}}
+              <div class="bbttcc-field bbttcc-field-inline bbttcc-field-tight">
+                <label class="bbttcc-inline-label">Set Occult</label>
+                <select data-bbttcc-identity="occult">
+                  <option value="">(No change)</option>
+                  {{#each bbttcc.identityOptions.occult.list}}
+                    <option value="{{id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            {{/if}}
+          </dd>
+        </div>
+
+        <div class="bbttcc-list-row">
+          <dt>Political Philosophy</dt>
+          <dd>
+            {{bbttcc.identity.display.political.label}}
+            {{#if isGM}}
+              <div class="bbttcc-field bbttcc-field-inline bbttcc-field-tight">
+                <label class="bbttcc-inline-label">Set Political</label>
+                <select data-bbttcc-identity="political">
+                  <option value="">(No change)</option>
+                  {{#each bbttcc.identityOptions.political.list}}
+                    <option value="{{id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            {{/if}}
+            {{#if bbttcc.identity.display.political.happiness}}
+              <div class="bbttcc-card-meta bbttcc-muted">
+                <div><b>Happiness:</b> {{bbttcc.identity.display.political.happiness}}</div>
+                <div><b>Suffering:</b> {{bbttcc.identity.display.political.suffering}}</div>
+              </div>
+            {{/if}}
+          </dd>
+        </div>
+
+        <div class="bbttcc-list-row">
+          <dt>Sephirotic Alignment</dt>
+          <dd>
+            {{bbttcc.identity.display.sephirothicAlignment.label}}
+            {{#if bbttcc.canEditIdentityOptions}}
+              <div class="bbttcc-field bbttcc-field-inline bbttcc-field-tight">
+                <label class="bbttcc-inline-label">Set Alignment</label>
+                <select data-bbttcc-identity="sephirothicAlignment">
+                  <option value="">(No change)</option>
+                  {{#each bbttcc.identityOptions.sephirothicAlignment.list}}
+                    <option value="{{id}}">{{name}}</option>
+                  {{/each}}
+                </select>
+              </div>
+            {{/if}}
+          </dd>
+        </div>
+      </div>
+
+      <div class="bbttcc-card-actions">
+        <button type="button" class="bbttcc-button-link" data-bbttcc-action="recalc">
+          <i class="fas fa-bolt"></i>
+          Recalc OP
         </button>
-        <button type="button" data-bbttcc-action="recalc" class="bbttcc-button-secondary">
-          <i class="fas fa-calculator"></i>
-          Recalc OPs
+
+        <button type="button" class="bbttcc-button-link" data-bbttcc-action="save">
+          <i class="fas fa-save"></i>
+          Save
         </button>
       </div>
+
+      <p class="bbttcc-card-meta bbttcc-muted">
+        Character Options update live when changed (in Edit mode). Save persists faction/radiation/raid XP.
+      </p>
+    </section>
+
+    <!-- Raid XP card -->
+    <section class="bbttcc-card">
+      <h3 class="bbttcc-card-title">
+        <i class="fas fa-skull-crossbones"></i>
+        Raid XP
+      </h3>
+
+      <p class="bbttcc-card-main">
+        <b>{{bbttcc.raidXP}}</b>
+      </p>
+
+      {{#if isGM}}
+        <div class="bbttcc-field">
+          <label for="bbttcc-raid-input">Raid XP</label>
+          <input
+            id="bbttcc-raid-input"
+            type="number"
+            min="0"
+            step="1"
+            data-bbttcc="raid"
+            value="{{bbttcc.raidXP}}"
+          />
+        </div>
+      {{/if}}
+    </section>
+
+    <!-- Blood Debt (GM-only) -->
+    <section class="bbttcc-card bbttcc-card-wide">
+      <h3 class="bbttcc-card-title">
+        <i class="fas fa-tint"></i>
+        Blood Debt
+      </h3>
+
+      <p class="bbttcc-card-main">
+        <b>{{bbttcc.bloodDebt.value}}</b>
+      </p>
+
+      {{#if isGM}}
+        <div class="bbttcc-field bbttcc-field-inline">
+          <label>Delta</label>
+          <input type="number" step="1" value="1" data-bbttcc-blooddebt="delta" />
+        </div>
+
+        <div class="bbttcc-field bbttcc-field-inline">
+          <label>Source</label>
+          <select data-bbttcc-blooddebt="source">
+            <option value="other">Other</option>
+            <option value="death">Death</option>
+            <option value="transference">Transference</option>
+            <option value="pact">Pact</option>
+            <option value="great_work">Great Work</option>
+            <option value="atonement">Atonement</option>
+          </select>
+        </div>
+
+        <div class="bbttcc-field">
+          <label>Note</label>
+          <input type="text" data-bbttcc-blooddebt="note" placeholder="(optional)" />
+        </div>
+
+        <div class="bbttcc-card-actions">
+          <button type="button" class="bbttcc-button-link" data-bbttcc-action="blooddebt-add">
+            <i class="fas fa-plus"></i> Add
+          </button>
+          <button type="button" class="bbttcc-button-link" data-bbttcc-action="blooddebt-reduce">
+            <i class="fas fa-minus"></i> Reduce
+          </button>
+          <button type="button" class="bbttcc-button-link" data-bbttcc-action="blooddebt-declare-death">
+            <i class="fas fa-skull"></i> Declare Death (+2)
+          </button>
+          <button type="button" class="bbttcc-button-link" data-bbttcc-action="blooddebt-reset">
+            <i class="fas fa-undo"></i> Reset
+          </button>
+        </div>
+
+        {{#if bbttcc.bloodDebt.ledger.length}}
+          <hr />
+          <div class="bbttcc-muted" style="margin-bottom:6px;"><b>Recent</b></div>
+          <div class="bbttcc-rows">
+            {{#each bbttcc.bloodDebt.ledger}}
+              <div class="bbttcc-row">
+                <div><b>{{deltaLabel}}</b> — {{sourceLabel}}</div>
+                <div class="bbttcc-muted">{{when}}{{#if note}} • {{note}}{{/if}}</div>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+      {{else}}
+        {{#if bbttcc.bloodDebt.ledger.length}}
+          <hr />
+          <div class="bbttcc-muted" style="margin-bottom:6px;"><b>Recent</b></div>
+          <div class="bbttcc-rows">
+            {{#each bbttcc.bloodDebt.ledger}}
+              <div class="bbttcc-row">
+                <div><b>{{deltaLabel}}</b> — {{sourceLabel}}</div>
+                <div class="bbttcc-muted">{{when}}{{#if note}} • {{note}}{{/if}}</div>
+              </div>
+            {{/each}}
+          </div>
+        {{/if}}
+      {{/if}}
+    </section>
+
+    <!-- Esoteric Magic (Cosmic Linguist) -->
+    {{#if bbttcc.esoteric.enabled}}
+      <section class="bbttcc-card bbttcc-card-wide" data-bbttcc-esoteric="1">
+        <h3 class="bbttcc-card-title">
+          <i class="fas fa-book"></i>
+          Esoteric Magic
+        </h3>
+
+        <p class="bbttcc-card-main">
+          Resonance: <b>{{bbttcc.esoteric.dice}}</b>/<b>{{bbttcc.esoteric.maxDice}}</b> ({{bbttcc.esoteric.die}}) •
+          Strain: <b>{{bbttcc.esoteric.strain}}</b>
+        </p>
+
+        {{#if isGM}}
+          <div class="bbttcc-card-actions">
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="esoteric-add-die">
+              <i class="fas fa-plus"></i> +Die
+            </button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="esoteric-clear-dice">
+              <i class="fas fa-eraser"></i> Clear Dice
+            </button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="esoteric-add-strain">
+              <i class="fas fa-plus"></i> +Strain
+            </button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="esoteric-clear-strain">
+              <i class="fas fa-eraser"></i> Clear Strain
+            </button>
+          </div>
+        {{/if}}
+      </section>
     {{/if}}
 
-    <p class="bbttcc-muted">
-      The BBTTCC tab is your single source of truth for this character's metaphysics.
-      Radiation and Sparks editing live in their dedicated consoles; this tab provides
-      a quick, at-a-glance summary plus core identity edits.
-    </p>
-  </footer>
+
+    <!-- Titan Frame (Titanbound) -->
+    {{#if bbttcc.titanbound.enabled}}
+      <section class="bbttcc-card bbttcc-card-wide" data-bbttcc-titanbound="1">
+        <h3 class="bbttcc-card-title">
+          <i class="fas fa-shield-alt"></i>
+          Titan Frame
+        </h3>
+
+        <p class="bbttcc-card-main">
+          Frame Dice: <b>{{bbttcc.titanbound.dice}}</b>/<b>{{bbttcc.titanbound.maxDice}}</b> ({{bbttcc.titanbound.die}}) •
+          Structural Stress: <b>{{bbttcc.titanbound.stress}}</b>
+        </p>
+
+        <p class="bbttcc-card-meta bbttcc-muted">
+          Titanbound store pressure as Frame Dice and risk backlash through Structural Stress.
+        </p>
+
+        {{#if isGM}}
+          <div class="bbttcc-card-actions">
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="titanbound-add-die">
+              <i class="fas fa-plus"></i> +Die
+            </button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="titanbound-clear-dice">
+              <i class="fas fa-eraser"></i> Clear Dice
+            </button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="titanbound-add-stress">
+              <i class="fas fa-plus"></i> +Stress
+            </button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="titanbound-clear-stress">
+              <i class="fas fa-eraser"></i> Clear Stress
+            </button>
+          </div>
+        {{/if}}
+      </section>
+    {{/if}}
+  </div>
 </section>

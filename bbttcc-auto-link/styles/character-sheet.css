@@ -233,6 +233,25 @@
   border: 1px solid rgba(127,29,29,0.9);
 }
 
+/* ---------- BBTTCC TAB VISIBILITY OVERRIDE ---------- */
+/*
+  BBTTCC is an injected “metaphysical layer”, not a native dnd5e2 tab.
+  The dnd5e2 vertical-tabs controller may hide non-registered tabs when other sheets open.
+  We only force visibility when BBTTCC is the active tab (dnd5e2 adds .tab-bbttcc on the sheet root).
+*/
+.application.sheet.dnd5e2.bbttcc-character-sheet.tab-bbttcc .tab[data-tab="bbttcc"] {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.application.sheet.dnd5e2.bbttcc-character-sheet.tab-bbttcc
+.tab[data-tab="bbttcc"] .bbttcc-tab-inner {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
 /* ---------- BBTTCC TAB: IDENTITY CARDS ---------- */
 
 .bbttcc-character-sheet .bbttcc-tab-inner {
@@ -510,4 +529,100 @@
 
 .bbttcc-wizard-create i {
   font-size: 11px;
+}
+
+
+/* ---------- ESOTERIC MAGIC PANEL ---------- */
+
+.bbttcc-character-sheet .bbttcc-card-esoteric .bbttcc-metrics {
+  margin-top: 0.25rem;
+}
+
+.bbttcc-character-sheet .bbttcc-esoteric-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.bbttcc-character-sheet .bbttcc-esoteric-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(59,130,246,0.75);
+  background: rgba(15,23,42,0.92);
+  color: #e5e7eb;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.bbttcc-character-sheet .bbttcc-esoteric-actions button:hover {
+  filter: brightness(1.05);
+}
+
+/* ---------- BLOOD DEBT PANEL ---------- */
+
+.bbttcc-character-sheet .bbttcc-card-blooddebt .bbttcc-blooddebt-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+  margin-bottom: 0.35rem;
+}
+
+.bbttcc-character-sheet .bbttcc-card-blooddebt .bbttcc-big-number {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  margin-top: 0.1rem;
+}
+
+.bbttcc-character-sheet .bbttcc-card-blooddebt .bbttcc-blooddebt-blurb {
+  flex: 1;
+  font-size: 10px;
+  line-height: 1.2;
+  margin-top: 0.2rem;
+}
+
+.bbttcc-character-sheet .bbttcc-blooddebt-controls {
+  margin-top: 0.35rem;
+}
+
+.bbttcc-character-sheet .bbttcc-blooddebt-controls .bbttcc-blooddebt-note {
+  grid-column: 1 / -1;
+}
+
+.bbttcc-character-sheet .bbttcc-blooddebt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.bbttcc-character-sheet .bbttcc-button-link.bbttcc-danger,
+.bbttcc-character-sheet .bbttcc-card-blooddebt .bbttcc-danger {
+  color: #fca5a5;
+}
+
+.bbttcc-character-sheet .bbttcc-blooddebt-ledger {
+  margin-top: 0.4rem;
+}
+
+.bbttcc-character-sheet .bbttcc-blooddebt-ledger-title {
+  margin-bottom: 0.15rem;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.bbttcc-character-sheet .bbttcc-ledger {
+  margin: 0.2rem 0 0;
+  padding-left: 1.1rem;
+  font-size: 10px;
+}
+
+.bbttcc-character-sheet .bbttcc-ledger li {
+  margin: 0.1rem 0;
 }
