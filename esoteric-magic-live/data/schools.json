@@ -1,0 +1,75 @@
+{
+  "abjuration": {
+    "tarot": "The Emperor (IV)",
+    "sephirah": "Chesed",
+    "astro": "Jupiter",
+    "day": "thursday",
+    "bonuses": {
+      "dawn":      { "label": "+1 to dispel/counterspell",      "value": 1 },
+      "equinox":   { "label": "+1 round duration",            "value": 0 }
+    }
+  },
+  "conjuration": {
+    "tarot": "The Magician (I)",
+    "sephirah": "Yesod",
+    "astro": "Mercury",
+    "day": "wednesday",
+    "bonuses": {
+      "dusk": { "label": "+1 temporary HP", "value": 1 }
+    }
+  },
+  "divination": {
+    "tarot": "The High Priestess (II)",
+    "sephirah": "Chokhmah",
+    "astro": "Moon",
+    "day": "monday",
+    "bonuses": {
+      "dawn": { "label": "advantage on Insight/Perception", "value": 0 }
+    }
+  },
+  "enchantment": {
+    "tarot": "The Lovers (VI)",
+    "sephirah": "Netzach",
+    "astro": "Venus",
+    "day": "friday",
+    "bonuses": {
+      "dusk": { "label": "target save disadvantage", "value": 0 }
+    }
+  },
+  "evocation": {
+    "tarot": "The Tower (XVI)",
+    "sephirah": "Gevurah",
+    "astro": "Mars",
+    "day": "tuesday",
+    "bonuses": {
+      "noon": { "label": "+1 damage per die", "value": 0 }
+    }
+  },
+  "illusion": {
+    "tarot": "The Moon (XVIII)",
+    "sephirah": "Hod",
+    "astro": "Mercury",
+    "day": "wednesday",
+    "bonuses": {
+      "midnight": { "label": "+1 to disbelieve DC", "value": 0 }
+    }
+  },
+  "necromancy": {
+    "tarot": "Death (XIII)",
+    "sephirah": "Binah",
+    "astro": "Saturn",
+    "day": "saturday",
+    "bonuses": {
+      "midnight": { "label": "+1 attack/save for undead", "value": 0 }
+    }
+  },
+  "transmutation": {
+    "tarot": "Temperance (XIV)",
+    "sephirah": "Malkuth",
+    "astro": "Sun",
+    "day": "sunday",
+    "bonuses": {
+      "dawn": { "label": "+50% duration", "value": 0 }
+    }
+  }
+}

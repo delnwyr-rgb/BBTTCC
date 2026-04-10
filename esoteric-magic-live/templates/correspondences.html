@@ -1,0 +1,26 @@
+<aside class="esoteric-panel">
+  <h2>{{localize "ESOTERIC.CorrespondenceTitle"}}</h2>
+
+  <table aria-label="Esoteric Magic Correspondence Table">
+    <thead>
+      <tr>
+        <th>School</th>
+        <th>Tarot</th>
+        <th>Sephirah</th>
+        <th>Astrological</th>
+        <th>Day</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each schools as |data school|}}
+        <tr>
+          <td>{{school}}</td>
+          <td>{{data.tarot}}</td>
+          <td>{{data.sephirah}}</td>
+          <td>{{data.astro}}</td>
+          <td>{{capitalize data.day}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</aside>

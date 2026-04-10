@@ -1,0 +1,38 @@
+<section id="bbttcc-esoteric-correspondences" class="bbttcc-esoteric-correspondences">
+  <header class="bbttcc-esoteric-correspondences__head">
+    <div>
+      <div class="bbttcc-esoteric-correspondences__title">Esoteric Correspondences</div>
+      <div class="bbttcc-muted" style="opacity:.85; font-size:.9rem;">
+        Watch: <b>{{watchLabel}}</b> ({{slot}}, {{watchIndex}} / {{watchCount}}, turn {{turn}})
+        · Influence key: <b>{{influenceKey}}</b>
+      </div>
+    </div>
+  </header>
+
+  <div class="bbttcc-esoteric-correspondences__tableWrap">
+    <table class="bbttcc-esoteric-table">
+      <thead>
+        <tr>
+          <th>School</th>
+          <th>Sephirah</th>
+          <th>Tarot</th>
+          <th>Astro</th>
+          <th>Day</th>
+          <th>Influence</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rows}}
+          <tr class="{{#if favored}}bbttcc-esoteric-favored{{/if}}">
+            <td><b>{{school}}</b></td>
+            <td>{{sephirah}}</td>
+            <td>{{tarot}}</td>
+            <td>{{astro}}</td>
+            <td>{{day}}</td>
+            <td>{{influence}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</section>

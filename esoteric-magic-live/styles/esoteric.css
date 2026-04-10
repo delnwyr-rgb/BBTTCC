@@ -1,0 +1,105 @@
+/* esoteric.css (BBTTCC / HexChrome) */
+
+/* Legacy base styles (kept for compatibility) */
+.esoteric.sheet {
+  background: rgba(30, 30, 30, 0.95);
+  color: white;
+  padding: 1em;
+  font-family: "Signika", sans-serif;
+}
+
+.esoteric h2 {
+  border-bottom: 1px solid #888;
+  margin-bottom: 0.5em;
+}
+
+.esoteric table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.esoteric th, .esoteric td {
+  border: 1px solid #555;
+  padding: 0.5em;
+  text-align: center;
+}
+
+.esoteric th {
+  background-color: #444;
+}
+
+.esoteric td {
+  background-color: #222;
+}
+
+/* ------------------------------------------------------------
+   HexChrome: Correspondences App (ApplicationV2)
+------------------------------------------------------------ */
+
+.bbttcc-esoteric-correspondences-app {
+  padding: 0.75rem;
+}
+
+.bbttcc-esoteric-correspondences__title {
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+}
+
+.bbttcc-esoteric-correspondences__tableWrap {
+  margin-top: .5rem;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  overflow: auto;
+  height: calc(100% - 3.25rem);
+  background: rgba(0,0,0,.20);
+}
+
+.bbttcc-esoteric-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bbttcc-esoteric-table thead th {
+  position: sticky;
+  top: 0;
+  background: rgba(10, 35, 90, 0.85);
+  backdrop-filter: blur(2px);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  padding: .45rem .6rem;
+  text-align: left;
+  font-weight: 700;
+}
+
+.bbttcc-esoteric-table td {
+  padding: .45rem .6rem;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.bbttcc-esoteric-table tbody tr:nth-child(even) {
+  background: rgba(255,255,255,.04);
+}
+
+.bbttcc-esoteric-favored {
+  outline: 1px solid rgba(255, 210, 120, 0.25);
+  background: rgba(255, 210, 120, 0.08);
+}
+
+/* Patch: AppV2 window-content has padding/overflow disabled by the app; apply layout to the section. */
+.bbttcc-esoteric-correspondences{
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bbttcc-esoteric-correspondences__head{
+  flex: 0 0 auto;
+}
+
+.bbttcc-esoteric-correspondences__tableWrap{
+  flex: 1 1 auto;
+  height: auto;
+}
