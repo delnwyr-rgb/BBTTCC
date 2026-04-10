@@ -1,0 +1,1074 @@
+/* --------------------------------------------------------- */
+/* BBTTCC Campaign Builder — Hex Chrome Styles               */
+/* File: modules/bbttcc-campaign/styles/campaign-builder.css */
+/* --------------------------------------------------------- */
+
+/* 
+  We assume the Campaign Builder app uses classes like:
+    .bbttcc-campaign-builder-root
+    .bbttcc-campaign-sidebar
+    .bbttcc-campaign-main
+    .bbttcc-table-beats
+  and that the Application has classes:
+    ["bbttcc-campaign-builder","bbttcc-hexchrome"]
+*/
+
+.bbttcc-hexchrome.bbttcc-campaign-builder,
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor {
+  --cb-accent:        var(--bbttcc-hexchrome-accent, #4cf5ff);
+  --cb-accent-soft:   var(--bbttcc-hexchrome-accent-soft, rgba(76, 245, 255, 0.18));
+  --cb-bg:            var(--bbttcc-hexchrome-panel-bg, rgba(3, 10, 30, 0.98));
+  --cb-bg-soft:       var(--bbttcc-hexchrome-panel-bg-soft, rgba(10, 24, 55, 0.96));
+  --cb-border:        var(--bbttcc-hexchrome-panel-border, rgba(115, 179, 255, 0.45));
+  --cb-border-strong: var(--bbttcc-hexchrome-panel-border-strong, rgba(59, 130, 246, 0.9));
+  --cb-text-main:     var(--bbttcc-hexchrome-text, #e5f1ff);
+  --cb-text-muted:    var(--bbttcc-hexchrome-text-muted, #9fb3d9);
+  --cb-danger:        var(--bbttcc-hexchrome-danger, #ff7b7b);
+  --cb-pill-bg:       var(--bbttcc-hexchrome-pill-bg, rgba(76, 245, 255, 0.12));
+  --cb-pill-border:   var(--bbttcc-hexchrome-pill-border, rgba(157, 217, 255, 0.6));
+  --cb-radius:        var(--bbttcc-hexchrome-radius, 8px);
+  --cb-shadow-soft:   0 0 18px rgba(17, 145, 255, 0.25);
+}
+
+/* Window chrome ------------------------------------------------------------ */
+
+.bbttcc-hexchrome.bbttcc-campaign-builder .window-header,
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor .window-header {
+  background: linear-gradient(90deg, #020617, #020617 30%, #0b1120 80%);
+  border-bottom: 1px solid var(--cb-border-strong);
+}
+
+.bbttcc-hexchrome.bbttcc-campaign-builder .window-header .window-title,
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor .window-header .window-title {
+  font-family: "Roboto Condensed", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #e5f7ff;
+}
+
+.bbttcc-hexchrome.bbttcc-campaign-builder .window-content,
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor .window-content {
+  padding: 0.6rem 0.7rem 0.7rem;
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.26), transparent 58%),
+    radial-gradient(circle at 100% 0, rgba(56,189,248,0.22), transparent 55%),
+    radial-gradient(circle at 0 100%, rgba(147,51,234,0.22), transparent 60%),
+    linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
+  color: var(--cb-text-main);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  box-sizing: border-box;
+}
+
+/* Root layout -------------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-campaign-builder-root {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  min-height: 360px;
+}
+
+/* Sidebar ------------------------------------------------------------------ */
+
+.bbttcc-hexchrome .bbttcc-campaign-sidebar {
+  background:
+    radial-gradient(circle at 0 0, rgba(59,130,246,0.22), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(30,64,175,0.22), transparent 55%),
+    linear-gradient(165deg, rgba(3,10,30,0.98), rgba(3,10,30,0.96));
+  border-radius: var(--cb-radius);
+  border: 1px solid var(--cb-border);
+  box-shadow:
+    0 0 0 1px rgba(2,6,23,0.9),
+    0 12px 26px rgba(2,6,23,0.9);
+  padding: 0.5rem 0.55rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  box-sizing: border-box;
+  overflow: auto;
+  min-height: 0;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-header {
+  margin-bottom: 0.2rem;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-title {
+  margin: 0 0 0.1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #f3fbff;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-subtitle {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--cb-text-muted);
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-sidebar-actions {
+  margin: 0.5rem 0 0.5rem;
+}
+
+/* Sidebar list ------------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-campaign-list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  margin-top: 0.15rem;
+  padding-right: 0.15rem;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-list li {
+  margin-bottom: 0.3rem;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-list-item {
+  width: 100%;
+  text-align: left;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(15,23,42,0.98));
+  color: var(--cb-text-main);
+  cursor: pointer;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-list li.is-selected .bbttcc-campaign-list-item {
+  border-color: var(--cb-border-strong);
+  box-shadow: 0 0 0 1px rgba(148,163,184,0.45);
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-list li.is-selected .bbttcc-campaign-list-title {
+  color: var(--cb-accent);
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-list-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-list-id {
+  font-size: 0.7rem;
+  color: var(--cb-text-muted);
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-list-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  margin-top: 0.1rem;
+}
+
+/* Main panel --------------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-campaign-main {
+  flex: 1 1 auto;
+  background:
+    radial-gradient(circle at 0 0, rgba(56,189,248,0.25), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(129,140,248,0.22), transparent 60%),
+    linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,0.98));
+  border-radius: var(--cb-radius);
+  border: 1px solid var(--cb-border);
+  box-shadow:
+    0 0 0 1px rgba(2,6,23,0.9),
+    0 16px 32px rgba(2,6,23,0.95);
+  padding: 0.6rem 0.7rem 0.65rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-header {
+  margin-bottom: 0.4rem;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-header h3 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #e5f1ff;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-id {
+  margin: 0.1rem 0 0;
+  font-size: 0.7rem;
+  color: var(--cb-text-muted);
+}
+
+/* Details section ---------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-campaign-main-meta {
+  margin-bottom: 0.5rem;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-meta h4 {
+  margin: 0 0 0.3rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cb-accent);
+}
+
+.bbttcc-hexchrome .bbttcc-form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr);
+  gap: 0.35rem 0.5rem;
+}
+
+.bbttcc-hexchrome .bbttcc-form-grid .form-group label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: #cbd5f5;
+  margin-bottom: 0.15rem;
+}
+
+.bbttcc-hexchrome .bbttcc-form-grid input[type="text"],
+.bbttcc-hexchrome .bbttcc-form-grid textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(3,10,30,0.95);
+  border-radius: 6px;
+  border: 1px solid rgba(55,65,81,0.9);
+  padding: 0.2rem 0.4rem;
+  font-size: 0.8rem;
+  color: var(--cb-text-main);
+}
+
+.bbttcc-hexchrome .bbttcc-form-grid textarea {
+  resize: vertical;
+}
+
+/* Meta actions ------------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-campaign-meta-actions {
+  margin-top: 0.4rem;
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+/* Beats header ------------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-campaign-main-beats {
+  margin-top: 0.5rem;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bbttcc-hexchrome .bbttcc-beats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.bbttcc-hexchrome .bbttcc-beats-header h4 {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cb-accent);
+}
+
+/* Beats table -------------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+
+.bbttcc-hexchrome .bbttcc-table thead th {
+  padding: 0.18rem 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  text-align: left;
+  color: var(--cb-text-muted);
+  border-bottom: 1px solid rgba(148,163,184,0.4);
+}
+
+.bbttcc-hexchrome .bbttcc-table tbody td {
+  padding: 0.15rem 0.35rem;
+  border-bottom: 1px solid rgba(30,64,175,0.6);
+}
+
+.bbttcc-hexchrome .bbttcc-table tbody tr:nth-child(odd) {
+  background-color: rgba(15,23,42,0.75);
+}
+
+.bbttcc-hexchrome .bbttcc-table tbody tr:nth-child(even) {
+  background-color: rgba(15,23,42,0.9);
+}
+
+.bbttcc-hexchrome .bbttcc-table-beats code {
+  font-family: "Roboto Mono", ui-monospace, monospace;
+  font-size: 0.72rem;
+}
+
+/* Buttons & link-buttons ----------------------------------------------------*/
+
+.bbttcc-hexchrome .bbttcc-btn,
+.bbttcc-hexchrome .bbttcc-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.8);
+  background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(12,20,38,0.98));
+  color: var(--cb-text-main);
+  font-size: 0.76rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bbttcc-hexchrome .bbttcc-btn-primary {
+  border-color: var(--cb-border-strong);
+  background:
+    radial-gradient(circle at 0 0, rgba(76,245,255,0.4), transparent 55%),
+    linear-gradient(135deg, #0ea5e9, #4f46e5);
+  color: #f9fafb;
+  font-weight: 600;
+}
+
+.bbttcc-hexchrome .bbttcc-btn:hover,
+.bbttcc-hexchrome .bbttcc-btn-primary:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 0 12px rgba(56,189,248,0.45);
+}
+
+.bbttcc-hexchrome .bbttcc-link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--cb-text-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.bbttcc-hexchrome .bbttcc-link-button:hover {
+  text-decoration: underline;
+}
+
+.bbttcc-hexchrome .bbttcc-link-button.text-danger {
+  color: var(--cb-danger);
+}
+
+/* Inline separators --------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-inline-separator {
+  opacity: 0.55;
+  font-size: 0.75rem;
+}
+
+/* Empty states -------------------------------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-campaign-builder-empty,
+.bbttcc-hexchrome .bbttcc-campaign-builder-empty-main {
+  padding: 0.75rem;
+  border-radius: var(--cb-radius);
+  border: 1px dashed rgba(148,163,184,0.7);
+  background: rgba(15,23,42,0.8);
+  text-align: center;
+}
+
+.bbttcc-hexchrome .bbttcc-muted {
+  color: var(--cb-text-muted);
+}
+
+/* Scene picker / actor picker tables ---------------------------------------- */
+
+.bbttcc-hexchrome .bbttcc-table-scenes,
+.bbttcc-hexchrome .bbttcc-table-actors {
+  margin-top: 0.5rem;
+}
+
+/* Beat Editor specific layout ------------------------------------------------*/
+
+.bbttcc-hexchrome .bbttcc-beat-editor-header h2 {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cb-accent);
+  border-bottom: 1px solid rgba(148,163,184,0.45);
+  padding-bottom: 0.25rem;
+}
+
+.bbttcc-hexchrome .bbttcc-beat-section {
+  margin-bottom: 0.55rem;
+  padding: 0.45rem 0.6rem 0.6rem;
+  border-radius: var(--cb-radius);
+  border: 1px solid rgba(45,64,120,0.85);
+  background:
+    radial-gradient(circle at 0 0, rgba(37,99,235,0.18), transparent 60%),
+    linear-gradient(165deg, rgba(3,10,30,0.97), rgba(7,16,35,0.98));
+  box-shadow:
+    0 0 0 1px rgba(2,6,23,0.9),
+    0 12px 24px rgba(15,23,42,0.95);
+}
+
+.bbttcc-hexchrome .bbttcc-beat-section h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cb-accent);
+}
+
+.bbttcc-hexchrome .bbttcc-beat-section .form-group {
+  margin-bottom: 0.35rem;
+}
+
+.bbttcc-hexchrome .bbttcc-beat-section label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #cbd5f5;
+  margin-bottom: 0.12rem;
+}
+
+.bbttcc-hexchrome .bbttcc-beat-section input[type="text"],
+.bbttcc-hexchrome .bbttcc-beat-section input[type="number"],
+.bbttcc-hexchrome .bbttcc-beat-section textarea,
+.bbttcc-hexchrome .bbttcc-beat-section select {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(3,10,30,0.95);
+  border-radius: 6px;
+  border: 1px solid rgba(55,65,81,0.9);
+  padding: 0.18rem 0.38rem;
+  font-size: 0.78rem;
+  color: var(--cb-text-main);
+}
+
+.bbttcc-hexchrome .bbttcc-beat-section textarea {
+  resize: vertical;
+  min-height: 2.1rem;
+}
+
+.bbttcc-hexchrome .bbttcc-beat-section .bbttcc-muted {
+  font-size: 0.7rem;
+  color: var(--cb-text-muted);
+}
+
+.bbttcc-hexchrome .bbttcc-beat-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+/* ============================
+   Beat Editor Tabs + HexChrome
+   ============================ */
+
+.bbttcc-hexchrome .bbttcc-beat-tabs {
+  display: flex;
+  gap: 0.35rem;
+  margin: 0.35rem 0 0.65rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(30, 64, 175, 0.75);
+}
+
+.bbttcc-hexchrome .bbttcc-tab {
+  border: 1px solid rgba(15, 23, 42, 0.95);
+  background: rgba(15, 23, 42, 0.92);
+  color: rgba(226, 232, 240, 0.75);
+  padding: 0.25rem 0.8rem;
+  border-radius: 0.75rem;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.bbttcc-hexchrome .bbttcc-tab.is-active {
+  background: linear-gradient(135deg, rgba(30, 64, 175, 0.95), rgba(147, 51, 234, 0.95));
+  border-color: rgba(59, 130, 246, 0.9);
+  color: #e5e7eb;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.45);
+}
+
+.bbttcc-hexchrome .bbttcc-tab-panel.is-hidden {
+  display: none;
+}
+
+/* Chips */
+.bbttcc-hexchrome .bbttcc-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 10px;
+}
+
+.bbttcc-hexchrome .bbttcc-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.18);
+}
+
+.bbttcc-hexchrome .bbttcc-chip-x {
+  border: none;
+  background: transparent;
+  color: rgba(226, 232, 240, 0.7);
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.bbttcc-hexchrome .bbttcc-chip-x:hover {
+  color: rgba(255, 123, 123, 0.95);
+}
+
+/* Text areas */
+.bbttcc-hexchrome .bbttcc-textarea-lg {
+  min-height: 180px;
+  resize: vertical;
+}
+
+.bbttcc-hexchrome .bbttcc-textarea-md {
+  resize: vertical;
+}
+
+/* Scene link box */
+.bbttcc-hexchrome .bbttcc-scene-linkbox {
+  border-radius: 0.9rem;
+  border: 1px solid rgba(30, 64, 175, 0.75);
+  background: radial-gradient(circle at 0 0, rgba(59, 130, 246, 0.18), transparent 60%),
+              rgba(15, 23, 42, 0.92);
+  padding: 12px;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9), 0 12px 22px rgba(15, 23, 42, 0.9);
+}
+
+.bbttcc-hexchrome .bbttcc-scene-title {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e5f1ff;
+  margin-bottom: 6px;
+}
+
+.bbttcc-hexchrome .bbttcc-scene-meta code {
+  font-size: 11px;
+  color: rgba(159, 179, 217, 0.95);
+}
+
+/* Tag picker modal */
+.bbttcc-tag-picker-root {
+  padding: 10px;
+}
+
+.bbttcc-tag-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.bbttcc-tag-picker-item {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+  align-items: start;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.75);
+  padding: 10px;
+}
+
+.bbttcc-tag-picker-label {
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.bbttcc-tag-picker-code {
+  grid-column: 2;
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.bbttcc-tag-picker-footer {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* --------------------------------------------------------- */
+/* Beat Editor – Injection tab layout safety (AAE tags)      */
+/* --------------------------------------------------------- */
+
+/* Allow injection grids to wrap instead of overlapping */
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor .bbttcc-tab-panel[data-tab="injection"] .bbttcc-form-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+/* Let the Pick Tags / Advanced buttons wrap cleanly */
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor .bbttcc-inline-group.bbttcc-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Ensure political tag textarea never overflows */
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor textarea[name="politicalTags"] {
+  max-width: 100%;
+}
+
+
+/* ==========================================================
+   Beat Reorder UX (inline buttons + index)
+   ========================================================== */
+
+.bbttcc-hexchrome .bbttcc-actions-inline-reorder{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bbttcc-hexchrome .bbttcc-reorder-inline{
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(72, 114, 168, 0.55);
+  background: rgba(6, 14, 26, 0.55);
+}
+
+.bbttcc-hexchrome .bbttcc-btn-ico{
+  padding: 0.15rem 0.35rem;
+  min-width: 1.8rem;
+}
+
+.bbttcc-hexchrome .bbttcc-input-xs{
+  height: 24px;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
+.bbttcc-hexchrome .bbttcc-reorder-index{
+  width: 64px;
+  text-align: center;
+}
+
+
+/* Main tabs (Campaign Builder) */
+.bbttcc-hexchrome .bbttcc-main-tabs{
+  display:flex;
+  gap: 0.5rem;
+  align-items:center;
+  flex-wrap:wrap;
+  margin: 0.4rem 0 0.6rem;
+}
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabbtn{
+  padding: 0.28rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.55);
+  background: rgba(15,23,42,0.65);
+  color: var(--cb-text-main);
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabbtn.is-active{
+  border-color: var(--cb-border-strong);
+  background: linear-gradient(135deg, rgba(30,64,175,0.55), rgba(15,23,42,0.75));
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.25);
+}
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabspacer{
+  flex: 1 1 auto;
+}
+
+
+/* Beats scroll container: show many beats without shrinking the whole app */
+.bbttcc-hexchrome [data-role="beats-scroll"]{
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,0.25);
+  background: rgba(2,6,23,0.18);
+}
+
+/* Keep header sticky within beats list */
+.bbttcc-hexchrome [data-role="beats-scroll"] thead th{
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(3,10,30,0.96);
+}
+
+/* Generic hidden utility used by main-tab panels */
+.bbttcc-hexchrome .is-hidden { display: none !important; }
+
+/* Main tabs chip styling override (avoid huge full-width bars) */
+.bbttcc-hexchrome .bbttcc-main-tabs{
+  display:flex;
+  gap: 0.5rem;
+  align-items:center;
+  flex-wrap:wrap;
+  margin: 0.6rem 0 0.4rem;
+}
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabbtn{
+  width: auto !important;
+  flex: 0 0 auto !important;
+}
+
+/* Campaign header as a normal card (same width as everything else) */
+.bbttcc-hexchrome .bbttcc-campaign-main-header{
+  border-radius: 14px;
+  border: 1px solid rgba(148,163,184,0.25);
+  background: rgba(2,6,23,0.22);
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+/* ==========================================================
+   Campaign Builder – Header Card Normalization
+   ========================================================== */
+
+/* Make the campaign header behave like a regular card */
+.bbttcc-hexchrome .bbttcc-campaign-main-header{
+  display: block;
+  max-width: 100%;
+  margin: 0 0 12px 0;
+  padding: 10px 14px 12px;
+  border-radius: 14px;
+
+  background:
+    radial-gradient(circle at 0 0, rgba(59,130,246,0.18), transparent 60%),
+    linear-gradient(165deg, rgba(3,10,30,0.96), rgba(7,16,35,0.98));
+
+  border: 1px solid rgba(148,163,184,0.35);
+  box-shadow:
+    0 0 0 1px rgba(2,6,23,0.85),
+    0 10px 22px rgba(15,23,42,0.85);
+}
+
+/* Compress the header rows so it doesn't feel tall */
+.bbttcc-hexchrome .bbttcc-campaign-main-header .bbttcc-row{
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-header h3{
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+/* Pull tabs closer to the header content */
+.bbttcc-hexchrome .bbttcc-main-tabs{
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+/* Ensure tabs never stretch full width */
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabbtn{
+  display: inline-flex;
+  width: auto;
+  padding: 0.25rem 0.85rem;
+}
+
+/* ==========================================================
+   Campaign Builder – Kill the Vertical Slab
+   (force header compact, content owns the height)
+   ========================================================== */
+
+/* Make main panel a two-zone layout: header (auto) + content (fills) */
+.bbttcc-hexchrome .bbttcc-campaign-main{
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+}
+
+/* The first child in main is the header card — keep it compact */
+.bbttcc-hexchrome .bbttcc-campaign-main > *:first-child{
+  flex: 0 0 auto !important;
+}
+
+/* Everything after header is the working area — it should scroll, not stretch header */
+.bbttcc-hexchrome .bbttcc-campaign-main > *:not(:first-child){
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: auto !important;
+}
+
+/* Extra safety: ensure header doesn't accidentally become a scroll container */
+.bbttcc-hexchrome .bbttcc-campaign-main-header{
+  overflow: visible !important;
+}
+/* ==========================================================
+   Campaign Builder – Header card should be FULL WIDTH
+   ========================================================== */
+
+.bbttcc-hexchrome .bbttcc-campaign-main{
+  align-items: stretch !important; /* ensure children can fill */
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-header{
+  width: 100% !important;
+  max-width: none !important;
+  align-self: stretch !important;
+  box-sizing: border-box !important;
+}
+
+/* If any internal flex rows are forcing narrow widths, ensure they also fill */
+.bbttcc-hexchrome .bbttcc-campaign-main-header .bbttcc-row{
+  width: 100% !important;
+}
+/* ==========================================================
+   Campaign Builder – Header width hard-fix
+   (override any "row" utility shrink behavior)
+   ========================================================== */
+
+.bbttcc-hexchrome .bbttcc-campaign-main-header{
+  width: 100% !important;
+  display: block !important;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-header > .bbttcc-row,
+.bbttcc-hexchrome .bbttcc-campaign-main-header > .bbttcc-main-tabs{
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* If bbttcc-row is inline-flex somewhere, force it to flex */
+.bbttcc-hexchrome .bbttcc-campaign-main-header > .bbttcc-row{
+  display: flex !important;
+}
+
+/* Ensure the left title block can grow and the right button block doesn’t force wrap */
+.bbttcc-hexchrome .bbttcc-campaign-main-header > .bbttcc-row > div:first-child{
+  flex: 1 1 auto !important;
+  min-width: 240px;
+}
+.bbttcc-hexchrome .bbttcc-campaign-main-header > .bbttcc-row > .bbttcc-row-gap-sm{
+  flex: 0 0 auto !important;
+  white-space: nowrap;
+}
+
+/* ==========================================================
+   Campaign Builder – Layout contract (fix floating bottom card)
+   ========================================================== */
+
+#bbttcc-campaign-builder .bbttcc-campaign-builder-root{
+  height: 100%;
+  min-height: 0;
+}
+
+#bbttcc-campaign-builder .bbttcc-campaign-layout{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+  align-items: stretch;
+}
+
+#bbttcc-campaign-builder .bbttcc-campaign-sidebar{
+  height: 100%;
+  min-height: 0;
+}
+
+#bbttcc-campaign-builder .bbttcc-campaign-main{
+  height: 100%;
+  min-height: 0;
+  overflow: hidden; /* tab panels scroll internally */
+}
+
+/* active tab panel scrolls */
+#bbttcc-campaign-builder .bbttcc-campaign-main > section[data-main-tab]:not(.is-hidden){
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+
+
+/* ==========================================================
+   Quests (chips + table)
+   ========================================================== */
+
+.bbttcc-hexchrome .bbttcc-chip-quest{
+  margin-left: 8px;
+  border-color: rgba(76,245,255,0.35);
+  background: rgba(76,245,255,0.10);
+  color: rgba(229,241,255,0.92);
+  font-weight: 700;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.bbttcc-hexchrome .bbttcc-chip-queststatus{
+  border-color: rgba(148,163,184,0.35);
+  background: rgba(148,163,184,0.12);
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  font-size: 0.7rem;
+  padding: 0.12rem 0.55rem;
+}
+
+.bbttcc-hexchrome .bbttcc-table-quests td{
+  vertical-align: top;
+}
+
+/* Final header polish after removing the old top CTA */
+.bbttcc-hexchrome .bbttcc-campaign-main-header > .bbttcc-row{
+  align-items: flex-start !important;
+  margin-bottom: 8px;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-header > .bbttcc-row > div:first-child{
+  max-width: 100%;
+}
+
+.bbttcc-hexchrome .bbttcc-campaign-main-id{
+  opacity: .9;
+  margin-top: 4px;
+}
+
+/* ==========================================================
+   Quest Editor – Description Contrast Fix
+   ========================================================== */
+
+.bbttcc-hexchrome-dialog textarea,
+.bbttcc-choice-roll-dialog textarea,
+.bbttcc-hexchrome textarea {
+  background: rgba(3, 10, 30, 0.96) !important;
+  color: #e5f1ff !important;
+  border: 1px solid rgba(148,163,184,0.45) !important;
+}
+
+.bbttcc-hexchrome-dialog textarea::placeholder {
+  color: rgba(159,179,217,0.6);
+}
+
+/* ==========================================================
+   Beat Runtime Dialogs – scrollable body + accessible choices
+   ========================================================== */
+
+.bbttcc-choice-roll-dialog,
+.bbttcc-hexchrome-dialog {
+  --bbttcc-dialog-max-h: 92vh;
+}
+
+.bbttcc-choice-roll-dialog .window-content,
+.bbttcc-hexchrome-dialog .window-content {
+  max-height: var(--bbttcc-dialog-max-h);
+  overflow: hidden !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bbttcc-choice-roll-dialog form,
+.bbttcc-hexchrome-dialog form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.bbttcc-choice-roll-dialog .dialog-content,
+.bbttcc-hexchrome-dialog .dialog-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-campaign-dialog,
+.bbttcc-hexchrome-dialog .bbttcc-campaign-dialog,
+.bbttcc-choice-roll-dialog .bbttcc-player-facing-dialog,
+.bbttcc-hexchrome-dialog .bbttcc-player-facing-dialog {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.bbttcc-choice-roll-dialog .dialog-buttons,
+.bbttcc-hexchrome-dialog .dialog-buttons {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(148,163,184,0.22);
+  background: rgba(3,10,30,0.96);
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+}
+
+.bbttcc-choice-roll-dialog .dialog-buttons button,
+.bbttcc-hexchrome-dialog .dialog-buttons button {
+  flex: 1 1 220px;
+  min-width: 180px;
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+}
+
+.bbttcc-choice-roll-dialog .dialog-buttons button.disabled,
+.bbttcc-hexchrome-dialog .dialog-buttons button.disabled {
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+/* Player mirror uses read-only footer labels; keep them from dominating the dialog */
+.bbttcc-choice-roll-dialog .bbttcc-player-facing-dialog + .dialog-buttons button,
+.bbttcc-hexchrome-dialog .bbttcc-player-facing-dialog + .dialog-buttons button {
+  flex: 1 1 160px;
+}

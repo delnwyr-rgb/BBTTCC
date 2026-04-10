@@ -1,0 +1,706 @@
+{{!-- FULL REPLACEMENT — Campaign Beat Editor Template (adds Quest authoring UI) --}}
+<form class="bbttcc-beat-editor-form">
+  <header class="bbttcc-beat-editor-header">
+    <h2>Edit Beat</h2>
+    <div class="bbttcc-muted">
+      <code>{{beat.id}}</code>
+      <span class="bbttcc-inline-separator">·</span>
+      <span>{{beat.type}}</span>
+      <span class="bbttcc-inline-separator">·</span>
+      <span>{{beat.timeScale}}</span>
+    </div>
+  </header>
+
+  {{!-- Tabs --}}
+  <nav class="bbttcc-tabs bbttcc-beat-tabs">
+    <button type="button" class="bbttcc-tab {{#if (eq activeTab "core")}}is-active{{/if}}" data-action="tab" data-tab="core">Core</button>
+    <button type="button" class="bbttcc-tab {{#if (eq activeTab "injection")}}is-active{{/if}}" data-action="tab" data-tab="injection">Injection</button>
+    <button type="button" class="bbttcc-tab {{#if (eq activeTab "scene")}}is-active{{/if}}" data-action="tab" data-tab="scene">Scene</button>
+    <button type="button" class="bbttcc-tab {{#if (eq activeTab "choices")}}is-active{{/if}}" data-action="tab" data-tab="choices">Choices</button>
+    <button type="button" class="bbttcc-tab {{#if (eq activeTab "effects")}}is-active{{/if}}" data-action="tab" data-tab="effects">World Effects</button>
+  </nav>
+
+  {{!-- CORE TAB --}}
+  <section class="bbttcc-tab-panel {{#unless (eq activeTab "core")}}is-hidden{{/unless}}" data-tab="core">
+    <section class="bbttcc-beat-section">
+      <h3>Basic Info</h3>
+      <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+        <div class="form-group">
+          <label>Beat ID</label>
+          <input type="text" name="id" value="{{beat.id}}" />
+        </div>
+        <div class="form-group">
+          <label>Label</label>
+          <input type="text" name="label" value="{{beat.label}}" />
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select name="type">
+            {{#each beatTypes as |t|}}
+              <option value="{{t}}" {{#if (eq t ../beat.type)}}selected{{/if}}>{{t}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Time Points (override)</label>
+          <input type="number" name="timePoints" value="{{beat.timePoints}}" min="0" step="1"
+                 placeholder="(blank = use timeScale default)" />
+          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+            If set, this overrides the timeScale mapping for Strategic Turn progression.
+          </p>
+        </div>
+        <div class="form-group">
+          <label>Time Scale</label>
+          <select name="timeScale">
+            {{#each timeScales as |ts|}}
+              <option value="{{ts}}" {{#if (eq ts ../beat.timeScale)}}selected{{/if}}>{{ts}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        {{!-- Player-facing mirror toggle --}}
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label class="checkbox">
+            <input type="checkbox" name="playerFacing" {{#if beat.playerFacing}}checked{{/if}}>
+            Player-Facing (Read-Only Mirror)
+          </label>
+          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+            If enabled, players will see this beat’s description + choices during execution, but only the GM can make selections.
+          </p>
+        </div>
+
+
+        {{!-- Quest linkage --}}
+        <div class="form-group">
+          <label>Quest</label>
+          <select name="questId">
+            <option value="" {{#unless beat.questId}}selected{{/unless}}>(None)</option>
+            {{#each questOptions as |q|}}
+              <option value="{{q.id}}" {{#if (eq q.id ../beat.questId)}}selected{{/if}}>
+                {{q.name}} ({{q.status}})
+              </option>
+            {{/each}}
+          </select>
+          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+            Links this beat to a questline for filtering + completion.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>Quest Step (optional)</label>
+          <input type="number" name="questStep" value="{{beat.questStep}}" min="0" step="1" placeholder="e.g. 2" />
+          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+            Ordering hint only — does not change runtime behavior.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>Quest Role (optional)</label>
+          <select name="questRole">
+            <option value="" {{#unless beat.questRole}}selected{{/unless}}>(None)</option>
+            <option value="start" {{#if (eq beat.questRole "start")}}selected{{/if}}>start</option>
+            <option value="core" {{#if (eq beat.questRole "core")}}selected{{/if}}>core</option>
+            <option value="optional" {{#if (eq beat.questRole "optional")}}selected{{/if}}>optional</option>
+            <option value="resolution" {{#if (eq beat.questRole "resolution")}}selected{{/if}}>resolution</option>
+          </select>
+          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+            UI label only (start/core/optional/resolution).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {{!-- ENCOUNTER FIELDS (only shown when type=encounter) --}}
+    {{#if (eq beat.type "encounter")}}
+      <section class="bbttcc-beat-section">
+        <h3>Encounter</h3>
+        <div class="bbttcc-form-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+          <div class="form-group">
+            <label>Encounter Key</label>
+            <input type="text" name="encounter-key" value="{{beat.encounter.key}}" placeholder="e.g. demo_gloomgill_raid" />
+          </div>
+          <div class="form-group">
+            <label>Tier</label>
+            <input type="number" name="encounter-tier" value="{{beat.encounter.tier}}" min="0" step="1" placeholder="e.g. 3" />
+          </div>
+          <div class="form-group">
+            <label>Actor Name</label>
+            <input type="text" name="encounter-actor-name" value="{{beat.encounter.actorName}}" placeholder="e.g. Gloomgill the Accountable" />
+          </div>
+        </div>
+        <p class="bbttcc-muted">
+          Stored on <code>beat.encounter</code>. Runtime can use <code>key</code> + <code>tier</code> for encounter routing / scaling.
+        </p>
+      </section>
+    {{/if}}
+
+    <section class="bbttcc-beat-section">
+      <h3>Description</h3>
+      <div class="form-group">
+        <label>Beat Description</label>
+        <textarea name="description"
+          class="bbttcc-textarea-lg"
+          rows="8"
+          placeholder="Narrate what’s happening in this beat.">{{beat.description}}</textarea>
+        <p class="bbttcc-muted">Freeform narrative text. Safe to store on every beat for GM reference.</p>
+      </div>
+    </section>
+  </section>
+
+  {{!-- INJECTION TAB --}}
+  <section class="bbttcc-tab-panel {{#unless (eq activeTab "injection")}}is-hidden{{/unless}}" data-tab="injection">
+    <section class="bbttcc-beat-section">
+      <h3>Injection</h3>
+
+      <div class="form-group">
+        <label>Tags</label>
+        {{#if tagChips.length}}
+          <div class="bbttcc-chip-row">
+            {{#each tagChips as |t|}}
+              <span class="bbttcc-tag-chip">
+                <code>{{t}}</code>
+                <button type="button" class="bbttcc-chip-x" data-action="remove-tag" data-tag="{{t}}" title="Remove tag">✕</button>
+              </span>
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="bbttcc-muted">No tags selected.</p>
+        {{/if}}
+
+        <div class="bbttcc-inline-group bbttcc-inline-actions">
+          <button type="button" class="bbttcc-btn" data-action="pick-tags">Pick Tags…</button>
+        </div>
+
+        <input type="hidden" name="tags" value="{{beat.tags}}" />
+
+        {{!-- Political Tags (AAE) --}}
+        <div class="bbttcc-field">
+          <label>Political Tags (AAE)</label>
+          <div class="bbttcc-tag-row" style="display:flex; flex-wrap:wrap; gap:.35rem; align-items:center;">
+            {{#each politicalTagChips}}
+              <a class="bbttcc-tag-chip" href="#"
+                 data-action="remove-political-tag"
+                 data-tag="{{this}}"
+                 style="display:inline-flex; gap:.35rem; align-items:center; padding:.15rem .45rem; border-radius:999px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06);">
+                <span>{{this}}</span>
+                <span style="opacity:.7;">✕</span>
+              </a>
+            {{/each}}
+            <button type="button" class="button"
+              data-action="pick-political-tags"
+              style="padding:.2rem .55rem; border-radius:10px;">
+              Pick Political Tags…
+            </button>
+          </div>
+
+          {{!-- keep a form field so save() continues to work --}}
+          <input type="hidden" name="politicalTags" value="{{beat.politicalTags}}"/>
+          <p class="hint" style="margin:.25rem 0 0;">
+            These feed AAE drift + consequences after world effects resolve.
+          </p>
+        </div>
+      </div> {{!-- ✅ closes the Tags form-group --}}
+
+      <div class="bbttcc-form-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+        <div class="form-group">
+          <label>Once Per Hex</label>
+          <select name="inject-once-per-hex">
+            <option value="false" {{#unless inject.oncePerHex}}selected{{/unless}}>No</option>
+            <option value="true" {{#if inject.oncePerHex}}selected{{/if}}>Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Cooldown (Turns)</label>
+          <input type="number" name="inject-cooldown-turns" value="{{inject.cooldownTurns}}" min="0" />
+        </div>
+        <div class="form-group">
+          <label>Repeatable</label>
+          <select name="inject-repeatable">
+            <option value="true" {{#if inject.repeatable}}selected{{/if}}>Yes</option>
+            <option value="false" {{#unless inject.repeatable}}selected{{/unless}}>No</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Governance</label>
+        <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+          <div class="form-group">
+            <label>Prompt GM</label>
+            <select name="inject-prompt-gm">
+              <option value="inherit" {{#if (eq inject.promptGM "inherit")}}selected{{/if}}>Inherit</option>
+              <option value="true" {{#if (eq inject.promptGM true)}}selected{{/if}}>Yes</option>
+              <option value="false" {{#if (eq inject.promptGM false)}}selected{{/if}}>No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Fallback on Decline</label>
+            <select name="inject-fallback-on-decline">
+              <option value="inherit" {{#if (eq inject.fallbackOnDecline "inherit")}}selected{{/if}}>Inherit</option>
+              <option value="true" {{#if (eq inject.fallbackOnDecline true)}}selected{{/if}}>Yes</option>
+              <option value="false" {{#if (eq inject.fallbackOnDecline false)}}selected{{/if}}>No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Allow Multi</label>
+            <select name="inject-allow-multi">
+              <option value="inherit" {{#if (eq inject.allowMulti "inherit")}}selected{{/if}}>Inherit</option>
+              <option value="true" {{#if (eq inject.allowMulti true)}}selected{{/if}}>Yes</option>
+              <option value="false" {{#if (eq inject.allowMulti false)}}selected{{/if}}>No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Global Once Per Hex</label>
+            <select name="inject-once-per-hex-global">
+              <option value="inherit" {{#if (eq inject.oncePerHexGlobal "inherit")}}selected{{/if}}>Inherit</option>
+              <option value="true" {{#if (eq inject.oncePerHexGlobal true)}}selected{{/if}}>Yes</option>
+              <option value="false" {{#if (eq inject.oncePerHexGlobal false)}}selected{{/if}}>No</option>
+            </select>
+          </div>
+        </div>
+        <p class="bbttcc-muted">
+          Stored on the beat for GUI authoring. Engine behavior is unchanged unless the injector reads them.
+        </p>
+      </div>
+    </section>
+  </section>
+
+  {{!-- SCENE TAB --}}
+  <section class="bbttcc-tab-panel {{#unless (eq activeTab "scene")}}is-hidden{{/unless}}" data-tab="scene">
+    <section class="bbttcc-beat-section">
+      <h3>Scene</h3>
+
+      {{!-- Standard linked scene (legacy / non-cinematic) --}}
+      <div class="form-group">
+        <label>Linked Scene</label>
+        <div class="bbttcc-scene-linkbox">
+          <div class="bbttcc-scene-title">
+            🎬 {{#if sceneName}}{{sceneName}}{{else}}No scene linked{{/if}}
+          </div>
+          <div class="bbttcc-scene-meta">
+            <code>{{beat.sceneId}}</code>
+          </div>
+          <div class="bbttcc-inline-group bbttcc-inline-actions">
+            <button type="button" class="bbttcc-btn" data-action="pick-scene">Pick Scene…</button>
+            {{#if beat.sceneId}}
+              <button type="button" class="bbttcc-btn" data-action="activate-scene">Activate</button>
+              <button type="button" class="bbttcc-btn" data-action="clear-scene">Clear</button>
+            {{/if}}
+          </div>
+        </div>
+        <input type="hidden" name="sceneId" value="{{beat.sceneId}}" />
+      </div>
+
+      {{!-- CINEMATIC (timed scene chain) --}}
+      {{#if (eq beat.type "cinematic")}}
+        <div class="form-group" style="margin-top:14px;">
+          <label>Cinematic</label>
+
+          <div class="bbttcc-scene-linkbox" style="padding:12px;">
+            <div class="bbttcc-muted" style="margin-bottom:8px;">
+              A cinematic beat: activate a <b>Start Scene</b>, wait for <b>Duration</b>, then activate a <b>Next Scene</b>.
+              Use this for Gloomgill “Success” / “Failure” cutscenes that bounce the table back into the fight scene.
+            </div>
+
+            <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div class="form-group">
+                <label style="display:flex; align-items:center; gap:.5rem;">
+                  <input type="checkbox" name="cinematic-enabled" {{#if beat.cinematic.enabled}}checked{{/if}} />
+                  <span>Enable Cinematic</span>
+                </label>
+                <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+                  Stored on <code>beat.cinematic.enabled</code>. Type <code>cinematic</code> will run this chain.
+                </p>
+              </div>
+
+              <div class="form-group">
+                <label>Duration (ms)</label>
+                <input type="number" name="cinematic-duration-ms" value="{{beat.cinematic.durationMs}}" min="0" step="250" placeholder="e.g. 12000" />
+                <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+                  How long to hold the Start Scene before advancing.
+                </p>
+              </div>
+            </div>
+
+            <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top:10px;">
+              <div class="form-group">
+                <label>Start Scene</label>
+                <div class="bbttcc-scene-linkbox">
+                  <div class="bbttcc-scene-title">
+                    🎞️ {{#if cinematicStartName}}{{cinematicStartName}}{{else}}No start scene linked{{/if}}
+                  </div>
+                  <div class="bbttcc-scene-meta">
+                    <code>{{beat.cinematic.startSceneId}}</code>
+                  </div>
+                  <div class="bbttcc-inline-group bbttcc-inline-actions">
+                    <button type="button" class="bbttcc-btn" data-action="pick-cinematic-start">Pick Start…</button>
+                    {{#if beat.cinematic.startSceneId}}
+                      <button type="button" class="bbttcc-btn" data-action="activate-cinematic-start">Activate</button>
+                      <button type="button" class="bbttcc-btn" data-action="clear-cinematic-start">Clear</button>
+                    {{/if}}
+                  </div>
+                </div>
+                <input type="hidden" name="cinematic-start-scene-id" value="{{beat.cinematic.startSceneId}}" />
+              </div>
+
+              <div class="form-group">
+                <label>Next Scene</label>
+                <div class="bbttcc-scene-linkbox">
+                  <div class="bbttcc-scene-title">
+                    🎬 {{#if cinematicNextName}}{{cinematicNextName}}{{else}}No next scene linked{{/if}}
+                  </div>
+                  <div class="bbttcc-scene-meta">
+                    <code>{{beat.cinematic.nextSceneId}}</code>
+                  </div>
+                  <div class="bbttcc-inline-group bbttcc-inline-actions">
+                    <button type="button" class="bbttcc-btn" data-action="pick-cinematic-next">Pick Next…</button>
+                    {{#if beat.cinematic.nextSceneId}}
+                      <button type="button" class="bbttcc-btn" data-action="activate-cinematic-next">Activate</button>
+                      <button type="button" class="bbttcc-btn" data-action="clear-cinematic-next">Clear</button>
+                    {{/if}}
+                  </div>
+                </div>
+                <input type="hidden" name="cinematic-next-scene-id" value="{{beat.cinematic.nextSceneId}}" />
+              </div>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+    </section>
+
+    {{!-- JOURNAL (auto-open on run) --}}
+    <section class="bbttcc-beat-section">
+      <h3>Journal</h3>
+      <div class="form-group">
+        <label>Auto-Open Journal Entry</label>
+        <div style="display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:.25rem 0 .5rem;">
+          <label class="bbttcc-check" style="display:inline-flex; gap:.45rem; align-items:center;">
+            <input type="checkbox" name="journal-enabled" {{#if beat.journal.enabled}}checked{{/if}} />
+            <span>Auto-open on Beat run</span>
+          </label>
+          <label class="bbttcc-check" style="display:inline-flex; gap:.45rem; align-items:center;">
+            <input type="checkbox" name="journal-force" {{#if beat.journal.force}}checked{{/if}} />
+            <span>Force open (GM)</span>
+          </label>
+        </div>
+
+        <div class="bbttcc-scene-linkbox">
+          <div class="bbttcc-scene-title">
+            📓 {{#if journalName}}{{journalName}}{{else}}No journal linked{{/if}}
+          </div>
+          <div class="bbttcc-scene-meta">
+            <code>{{beat.journal.entryId}}</code>
+          </div>
+          <div class="bbttcc-inline-group bbttcc-inline-actions">
+            <button type="button" class="bbttcc-btn" data-action="pick-journal">Pick Journal…</button>
+            {{#if beat.journal.entryId}}
+              <button type="button" class="bbttcc-btn" data-action="open-journal-now">Open</button>
+              <button type="button" class="bbttcc-btn" data-action="clear-journal">Clear</button>
+            {{/if}}
+          </div>
+        </div>
+
+        <input type="hidden" name="journal-entry-id" value="{{beat.journal.entryId}}" />
+        <p class="bbttcc-muted" style="margin-top:.4rem;">
+          Stored on <code>beat.journal</code>. When enabled, the runner can auto-open this Journal Entry for viewers.
+        </p>
+      </div>
+    </section>
+
+    <section class="bbttcc-beat-section">
+      <h3>Actors</h3>
+      <div class="form-group">
+        <label>Actors (UUID list)</label>
+        {{#if beat.actors.length}}
+          {{#each beat.actors as |auuid index|}}
+            <div class="bbttcc-actor-row">
+              <input type="text" name="actor-uuid" value="{{auuid}}" />
+              <button type="button" class="bbttcc-link-button text-danger" data-action="remove-actor" data-index="{{index}}">Remove</button>
+            </div>
+          {{/each}}
+        {{else}}
+          <p class="bbttcc-muted">No actors attached yet.</p>
+        {{/if}}
+        <button type="button" class="bbttcc-btn" data-action="add-actor">+ Add Actor…</button>
+      </div>
+    </section>
+  </section>
+
+  {{!-- CHOICES TAB --}}
+  <section class="bbttcc-tab-panel {{#unless (eq activeTab "choices")}}is-hidden{{/unless}}" data-tab="choices">
+    <section class="bbttcc-beat-section">
+      <h3>Choices</h3>
+      {{#if hasChoices}}
+        {{#each beat.choices as |ch index|}}
+          <div class="bbttcc-choice-row" style="border:1px solid rgba(255,255,255,0.10); border-radius:10px; padding:10px; margin-bottom:10px;">
+            <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+              <div class="form-group">
+                <label>Choice Label (button)</label>
+                <input type="text" name="choice-label" value="{{ch.label}}" placeholder="e.g. Ask about the vault door" />
+              </div>
+              <div class="form-group">
+                <label>Next Beat (success / route)</label>
+                {{#if ../beatIdOptions.length}}
+                  <select name="choice-next">
+                    <option value="">(None)</option>
+                    {{#each ../beatIdOptions as |bopt|}}
+                      <option value="{{bopt.id}}" {{#if (eq bopt.id ch.next)}}selected{{/if}}>
+                        {{bopt.label}} ({{bopt.id}})
+                      </option>
+                    {{/each}}
+                  </select>
+                {{else}}
+                  <input type="text" name="choice-next" value="{{ch.next}}" placeholder="beat id" />
+                {{/if}}
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Choice Description (shown under the button list)</label>
+              <textarea name="choice-desc" rows="3" placeholder="Optional: what this choice means / asks / risks.">{{ch.description}}</textarea>
+            </div>
+
+            <div class="bbttcc-form-grid" style="grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;">
+              <div class="form-group">
+                <label>Check Stat (optional)</label>
+                {{#if ../skillStatOptions.length}}
+                  <select name="choice-check-stat">
+                    <option value="">(No check)</option>
+                    {{#each ../skillStatOptions as |opt|}}
+                      <option value="{{opt.key}}" {{#if (eq opt.key ch.checkStat)}}selected{{/if}}>
+                        {{opt.label}} ({{opt.key}})
+                      </option>
+                    {{/each}}
+                  </select>
+                {{else}}
+                  <input type="text" name="choice-check-stat" value="{{ch.checkStat}}" />
+                {{/if}}
+              </div>
+
+              <div class="form-group">
+                <label>DC</label>
+                <input type="number" name="choice-check-dc" value="{{ch.checkDC}}" placeholder="0" />
+              </div>
+
+              <div class="form-group" style="grid-column: span 2;">
+                <label>Failure Beat (optional)</label>
+                {{#if ../beatIdOptions.length}}
+                  <select name="choice-fail-next">
+                    <option value="">(Fallback: Beat Failure Outcome)</option>
+                    {{#each ../beatIdOptions as |bopt|}}
+                      <option value="{{bopt.id}}" {{#if (eq bopt.id ch.failNext)}}selected{{/if}}>
+                        {{bopt.label}} ({{bopt.id}})
+                      </option>
+                    {{/each}}
+                  </select>
+                {{else}}
+                  <input type="text" name="choice-fail-next" value="{{ch.failNext}}" placeholder="beat id" />
+                {{/if}}
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:10px;">
+              <div style="display:flex; gap:6px; align-items:center;">
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="move-choice-up" data-index="{{index}}" title="Move up">▲</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="move-choice-down" data-index="{{index}}" title="Move down">▼</button>
+              </div>
+              <button type="button" class="bbttcc-link-button text-danger" data-action="remove-choice" data-index="{{index}}">
+                Remove Choice
+              </button>
+            </div>
+          </div>
+        {{/each}}
+      {{else}}
+        <p class="bbttcc-muted">No choices configured. Add rows to create dialog options or branching decision points.</p>
+      {{/if}}
+
+      <button type="button" class="bbttcc-btn" data-action="add-choice">+ Add Choice</button>
+    </section>
+  </section>
+
+  {{!-- WORLD EFFECTS TAB --}}
+  <section class="bbttcc-tab-panel {{#unless (eq activeTab "effects")}}is-hidden{{/unless}}" data-tab="effects">
+    <section class="bbttcc-beat-section">
+      <h3>World Effects</h3>
+
+      <div class="form-group">
+        <label>Territory Outcome</label>
+        <select name="world-territory-outcome">
+          {{#each territoryOutcomeOptions as |opt|}}
+            <option value="{{opt.id}}" {{#if (eq opt.id ../worldEffects.territoryOutcome)}}selected{{/if}}>{{opt.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Faction Effects</label>
+        {{#if worldEffects.factionEffects.length}}
+          {{#each worldEffects.factionEffects as |fx index|}}
+            <div class="bbttcc-world-faction-row">
+              <label>Faction Id</label>
+              <input type="text" name="world-faction-id" value="{{fx.factionId}}" />
+              <label>Morale Δ</label>
+              <input type="number" name="world-faction-morale" value="{{fx.moraleDelta}}" />
+              <label>Loyalty Δ</label>
+              <input type="number" name="world-faction-loyalty" value="{{fx.loyaltyDelta}}" />
+              <label>Unity Δ</label>
+              <input type="number" name="world-faction-unity" value="{{fx.unityDelta}}" />
+              <label>Darkness Δ</label>
+              <input type="number" name="world-faction-darkness" value="{{fx.darknessDelta}}" />
+              <button type="button" class="bbttcc-link-button text-danger" data-action="remove-faction-effect" data-index="{{index}}">Remove</button>
+            </div>
+          {{/each}}
+        {{else}}
+          <p class="bbttcc-muted">No faction effects configured.</p>
+        {{/if}}
+        <button type="button" class="bbttcc-btn" data-action="add-faction-effect">+ Add Faction Effect</button>
+      </div>
+
+      <div class="form-group">
+        <label>Radiation Delta (RP)</label>
+        <input type="number" name="world-radiation-delta" value="{{worldEffects.radiationDelta}}" placeholder="0" />
+      </div>
+
+      <div class="form-group">
+        <label>Spark</label>
+        <select name="world-spark-key">
+          {{#each sparkKeyOptions as |opt|}}
+            <option value="{{opt.id}}" {{#if (eq opt.id ../worldEffects.sparkKey)}}selected{{/if}}>{{opt.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Turn Requests</label>
+        {{#if worldEffects.turnRequests.length}}
+          {{#each worldEffects.turnRequests as |req index|}}
+            <div class="bbttcc-world-request-row" style="display:flex; flex-wrap:wrap; gap:.5rem; align-items:flex-end; margin-bottom:.5rem; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:10px;">
+              <div class="form-group" style="min-width:12rem;">
+                <label>Request Key</label>
+                <input type="text" name="world-request-key" value="{{req.key}}" placeholder="e.g. clearRockslide" />
+              </div>
+
+              <div class="form-group" style="min-width:10rem;">
+                <label>Mode</label>
+                <select name="world-request-mode">
+                  <option value="" {{#unless req.value.mode}}selected{{/unless}}>(none)</option>
+                  <option value="set" {{#if (eq req.value.mode "set")}}selected{{/if}}>set</option>
+                  <option value="add" {{#if (eq req.value.mode "add")}}selected{{/if}}>add</option>
+                  <option value="remove" {{#if (eq req.value.mode "remove")}}selected{{/if}}>remove</option>
+                  <option value="clear" {{#if (eq req.value.mode "clear")}}selected{{/if}}>clear</option>
+                </select>
+              </div>
+
+              <div class="form-group" style="flex:1; min-width:14rem;">
+                <label>Target</label>
+                <select name="world-request-target">
+                  {{#each @root.requestTargetOptions as |opt|}}
+                    <option value="{{opt.id}}" {{#if (eq opt.id req.value.target)}}selected{{/if}}>{{opt.label}}</option>
+                  {{/each}}
+                </select>
+              </div>
+
+              <div class="form-group" style="min-width:8rem;">
+                <label>Amount</label>
+                <input type="number" name="world-request-amount" value="{{req.value.amount}}" placeholder="0" />
+              </div>
+
+              <div class="form-group" style="flex:1; min-width:16rem;">
+                <label>Note</label>
+                <input type="text" name="world-request-note" value="{{req.value.note}}" placeholder="Optional note / receipt" />
+              </div>
+
+              <button type="button" class="bbttcc-link-button text-danger" data-action="remove-turn-request" data-index="{{index}}">
+                Remove
+              </button>
+            </div>
+          {{/each}}
+        {{else}}
+          <p class="bbttcc-muted">No turn requests configured.</p>
+        {{/if}}
+       <button type="button" class="bbttcc-btn" data-action="add-turn-request">+ Add Turn Request</button>
+        <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+          Structured turn requests only. No raw JSON needed.
+        </p>
+      </div>
+
+      
+<div class="form-group">
+  <label>Quest Effects</label>
+  {{#if worldEffects.questEffects.length}}
+    {{#each worldEffects.questEffects as |qfx index|}}
+      <div class="bbttcc-world-questfx-row" style="display:flex; flex-wrap:wrap; gap:.5rem; align-items:flex-end; margin-bottom:.5rem; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:10px;">
+        <div class="form-group" style="min-width:10rem;">
+          <label>Action</label>
+          <select name="world-questfx-action">
+            <option value="accept" {{#if (eq qfx.action "accept")}}selected{{/if}}>Accept</option>
+            <option value="complete" {{#if (eq qfx.action "complete")}}selected{{/if}}>Complete</option>
+            <option value="beat" {{#if (eq qfx.action "beat")}}selected{{/if}}>Beat Mark</option>
+            <option value="note" {{#if (eq qfx.action "note")}}selected{{/if}}>Note</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="flex:1; min-width:16rem;">
+          <label>Quest</label>
+          <select name="world-questfx-questId">
+            <option value="">(Pick quest)</option>
+            {{#each @root.questOptions as |q|}}
+              <option value="{{q.id}}" {{#if (eq q.id qfx.questId)}}selected{{/if}}>
+                {{q.name}} ({{q.status}})
+              </option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="form-group" style="flex:1; min-width:14rem;">
+          <label>Beat (optional)</label>
+          <select name="world-questfx-beatId">
+            <option value="">(None)</option>
+            {{#each @root.beatIdOptions as |bopt|}}
+              <option value="{{bopt.id}}" {{#if (eq bopt.id qfx.beatId)}}selected{{/if}}>
+                {{bopt.label}} ({{bopt.id}})
+              </option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="form-group" style="min-width:10rem;">
+          <label>State</label>
+          <select name="world-questfx-state">
+            <option value="" {{#unless qfx.state}}selected{{/unless}}>(none)</option>
+            <option value="seen" {{#if (eq qfx.state "seen")}}selected{{/if}}>seen</option>
+            <option value="completed" {{#if (eq qfx.state "completed")}}selected{{/if}}>completed</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="flex:1; min-width:16rem;">
+          <label>Note (optional)</label>
+          <input type="text" name="world-questfx-text" value="{{qfx.text}}" placeholder="Short receipt / note for the quest log" />
+        </div>
+
+        <button type="button" class="bbttcc-link-button text-danger" data-action="remove-quest-effect" data-index="{{index}}">
+          Remove
+        </button>
+      </div>
+    {{/each}}
+  {{else}}
+    <p class="bbttcc-muted">No quest effects configured.</p>
+  {{/if}}
+  <button type="button" class="bbttcc-btn" data-action="add-quest-effect">+ Add Quest Effect</button>
+  <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+    Quest effects update the party’s Quest Log (Faction). Use <code>Complete</code> to close a questline from an outcome beat.
+  </p>
+</div>
+
+<div class="form-group">
+        <label>War Log Note</label>
+        <textarea name="world-warlog" rows="4" placeholder="Optional note to append to the War Log for this beat.">{{worldEffects.warLog}}</textarea>
+      </div>
+    </section>
+  </section>
+
+  <footer class="bbttcc-beat-footer">
+    <button type="submit" class="bbttcc-btn-primary" data-action="save-beat">Save</button>
+    <button type="button" class="bbttcc-btn" data-action="cancel">Cancel</button>
+  </footer>
+</form>

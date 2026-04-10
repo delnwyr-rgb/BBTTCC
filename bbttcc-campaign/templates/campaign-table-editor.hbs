@@ -1,0 +1,143 @@
+<form class="bbttcc-table-editor-form">
+
+  <header class="bbttcc-beat-editor-header">
+    <h2>Edit Encounter Table</h2>
+    <div class="bbttcc-muted">
+      <code>{{table.id}}</code>
+      <span class="bbttcc-inline-separator">.</span>
+      <span>{{table.scope}}</span>
+    </div>
+  </header>
+
+  <nav class="bbttcc-tabs bbttcc-beat-tabs">
+    <button type="button" class="bbttcc-tab {{#if (eq activeTab "core")}}is-active{{/if}}" data-action="tab" data-tab="core">Core</button>
+    <button type="button" class="bbttcc-tab {{#if (eq activeTab "entries")}}is-active{{/if}}" data-action="tab" data-tab="entries">Entries</button>
+  </nav>
+
+  <section class="bbttcc-tab-panel {{#unless (eq activeTab "core")}}is-hidden{{/unless}}">
+    <section class="bbttcc-beat-section">
+      <h3>Basic Info</h3>
+
+      <div class="bbttcc-form-grid bbttcc-form-grid-2">
+        <div class="form-group">
+          <label>Table ID</label>
+          <input type="text" name="id" value="{{table.id}}" />
+        </div>
+
+        <div class="form-group">
+          <label>Label</label>
+          <input type="text" name="label" value="{{table.label}}" />
+        </div>
+
+        <div class="form-group">
+          <label>Scope</label>
+          <select name="scope">
+            {{#each scopes as |s|}}
+              <option value="{{s}}" {{#if (eq s ../table.scope)}}selected{{/if}}>{{s}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tags (space-separated)</label>
+          <input type="text" name="tags" value="{{tagsRaw}}" placeholder="e.g. travel road locals" />
+        </div>
+      </div>
+
+      <p class="bbttcc-muted">
+        Tables select beats. Beats run normally (dialogs, cinematics, encounters, world mutation).
+      </p>
+    </section>
+  </section>
+
+  <section class="bbttcc-tab-panel {{#unless (eq activeTab "entries")}}is-hidden{{/unless}}">
+    <section class="bbttcc-beat-section">
+      <h3>Entries</h3>
+
+      <div class="bbttcc-hidden" data-beats-by-campaign="{{beatsByCampaign}}"></div>
+
+      {{#if entries.length}}
+        <table class="bbttcc-table bbttcc-table-beats bbttcc-table-compact">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Campaign</th>
+              <th>Beat</th>
+              <th>Weight</th>
+              <th>Terrain</th>
+              <th>Tier</th>
+              <th>Required Tag</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each entries as |e index|}}
+              <tr>
+                <td>{{add index 1}}</td>
+
+                <td>
+                  <select name="entry-campaign-id">
+                    <option value="">(Pick campaign)</option>
+                    {{#each ../campaigns as |c|}}
+                      <option value="{{c.id}}" {{#if (eq c.id e.campaignId)}}selected{{/if}}>{{c.label}}</option>
+                    {{/each}}
+                  </select>
+                </td>
+
+                <td>
+                  <select name="entry-beat-id">
+                    {{#if e.beatId}}
+                      <option value="{{e.beatId}}" selected>{{e.beatId}}</option>
+                    {{else}}
+                      <option value="" selected>(Pick beat)</option>
+                    {{/if}}
+                  </select>
+                  <div class="bbttcc-muted" data-role="beat-preview">&nbsp;</div>
+                </td>
+
+                <td>
+                  <input type="number" name="entry-weight" value="{{e.weight}}" min="0" data-role="entry-weight" />
+                </td>
+
+                <td>
+                  <select name="entry-terrain" data-current="{{e.terrain}}"></select>
+                </td>
+
+                <td>
+                  <select name="entry-tier" data-current="{{e.tier}}"></select>
+                </td>
+
+                <td>
+                  <select name="entry-required-tag" data-current="{{e.requiredTag}}"></select>
+                </td>
+
+                <td>
+                  <button type="button" class="bbttcc-link-button text-danger" data-action="remove-entry" data-index="{{index}}">Remove</button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      {{else}}
+        <p class="bbttcc-muted">No entries yet. Add a row and point it at a beat.</p>
+      {{/if}}
+
+      <div class="bbttcc-row bbttcc-row-gap-sm">
+        <button type="button" class="bbttcc-btn" data-action="add-entry">+ Add Entry</button>
+        <button type="button" class="bbttcc-btn" data-action="preview-roll">Preview Roll</button>
+        <button type="button" class="bbttcc-btn" data-action="normalize-weights">Normalize Weights</button>
+      </div>
+
+      <hr class="bbttcc-divider" />
+      <p class="bbttcc-muted">
+        Entry filters are now structured. Use Terrain, Tier, and Required Tag to control when a row is eligible.
+      </p>
+    </section>
+  </section>
+
+  <footer class="bbttcc-beat-footer">
+    <button type="submit" class="bbttcc-btn-primary" data-action="save-table">Save</button>
+    <button type="button" class="bbttcc-btn" data-action="cancel">Cancel</button>
+  </footer>
+
+</form>

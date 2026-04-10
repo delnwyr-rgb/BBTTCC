@@ -1,0 +1,32 @@
+<section class="bbttcc-tag-picker-root">
+  <header class="bbttcc-tag-picker-header">
+    <h2>Select Tags</h2>
+    <p class="bbttcc-muted">
+      Pick tags used for injection scoring, gating, and grouping. (No engine changes — just authoring.)
+    </p>
+  </header>
+
+  {{#if tags.length}}
+    <div class="bbttcc-tag-picker-grid">
+      {{#each tags as |t|}}
+        <label class="bbttcc-tag-picker-item" title="{{t.hint}}">
+          <input type="checkbox"
+                 data-action="toggle"
+                 data-tag="{{t.key}}"
+                 {{#if (lookup ../selectedMap t.key)}}checked{{/if}} />
+          <span class="bbttcc-tag-picker-label">{{t.label}}</span>
+          <code class="bbttcc-tag-picker-code">{{t.key}}</code>
+        </label>
+      {{/each}}
+    </div>
+  {{else}}
+    <p class="bbttcc-muted">No tag catalog provided.</p>
+  {{/if}}
+
+  <footer class="bbttcc-tag-picker-footer">
+    <button type="button" class="bbttcc-btn" data-action="clear">Clear</button>
+    <div style="flex: 1;"></div>
+    <button type="button" class="bbttcc-btn" data-action="cancel">Cancel</button>
+    <button type="button" class="bbttcc-btn-primary" data-action="save">Save</button>
+  </footer>
+</section>

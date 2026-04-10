@@ -1,0 +1,42 @@
+<section class="bbttcc-actor-picker-root">
+  <header class="bbttcc-actor-picker-header">
+    <h2>Select an Actor</h2>
+    <p class="bbttcc-muted">
+      Pick an actor to attach to this beat. You can add multiple actors one by one.
+    </p>
+  </header>
+
+  {{#if actors.length}}
+    <table class="bbttcc-table bbttcc-table-actors">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>UUID</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each actors as |act|}}
+          <tr>
+            <td>{{act.name}}</td>
+            <td>{{act.type}}</td>
+            <td><code>{{act.uuid}}</code></td>
+            <td>
+              <button type="button"
+                      class="bbttcc-btn"
+                      data-action="choose-actor"
+                      data-uuid="{{act.uuid}}">
+                Use
+              </button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p class="bbttcc-muted">
+      No actors are available in this world.
+    </p>
+  {{/if}}
+</section>

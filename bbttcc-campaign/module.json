@@ -1,0 +1,73 @@
+{
+  "id": "bbttcc-campaign",
+  "title": "BBTTCC Campaign Builder",
+  "description": "Campaign authoring engine for BBTTCC: multi-beat adventures, branching flows, scene/actor integration, and beat-level triggers for Encounters, Raid, Resolution, and Territory systems.",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios + ChatGPT",
+      "url": "",
+      "email": ""
+    }
+  ],
+  "url": "",
+  "license": "MIT",
+  "esmodules": [
+    "scripts/module.js",
+    "scripts/world-mutation-engine.js",
+    "scripts/campaign-toolbar-button.js",
+    "scripts/story-console-bridge.js"
+  ],
+  "styles": [
+    "styles/campaign-builder.css",
+    "styles/bbttcc-campaign-polish.css",
+    "styles/bbttcc-campaign-contrast-hotfix.css",
+    "styles/bbttcc-campaign-builder-pass3.css",
+    "styles/bbttcc-campaign-story-bridge.css"
+  ],
+  "relationships": {
+    "templates": [
+      "templates"
+    ]
+  },
+  "dependencies": [
+    {
+      "id": "bbttcc-core",
+      "type": "module"
+    },
+    {
+      "id": "bbttcc-encounters",
+      "type": "module"
+    },
+    {
+      "id": "bbttcc-raid",
+      "type": "module"
+    },
+    {
+      "id": "bbttcc-territory",
+      "type": "module"
+    },
+    {
+      "id": "bbttcc-factions",
+      "type": "module"
+    },
+    {
+      "id": "bbttcc-travel",
+      "type": "module"
+    },
+    {
+      "id": "bbttcc-tikkun",
+      "type": "module"
+    }
+  ],
+  "flags": {
+    "bbttcc": {
+      "role": "campaigns",
+      "isCore": false
+    }
+  }
+}
