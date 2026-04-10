@@ -1,0 +1,26 @@
+{
+  "id": "bbttcc-market",
+  "title": "BBTTCC Market",
+  "description": "Procurement console for purchasing gear, rigs, facilities, hex assets, and upgrades using Faction Economy OP. Includes drag/drop catalog editor.",
+  "version": "0.2.2",
+  "authors": [
+    {
+      "name": "BBTTCC"
+    }
+  ],
+  "minimumCoreVersion": "11",
+  "compatibleCoreVersion": "13",
+  "esmodules": [
+    "scripts/market.js"
+  ],
+  "styles": [
+    "styles/market.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+<section class="bbttcc-market-root">
+  {{#unless apiReady}}
+    <div class="bbttcc-market-empty">
+      <h2>BBTTCC Market</h2>
+      <p class="bbttcc-muted">Market API not ready.</p>
+    </div>
+  {{else}}
+    <header class="bbttcc-market-head">
+      <div>
+        <div class="bbttcc-market-title">BBTTCC Market</div>
+        <div class="bbttcc-muted">Procurement console: spend faction Economy OP to buy gear, rigs, facilities, and hex assets.</div>
+      </div>
+      <div class="bbttcc-market-actions">
+        {{#if isGM}}
+        <button type="button" class="bbttcc-button" data-action="manage">
+          <i class="fas fa-gear"></i> Manage Catalogs
+        </button>
+        {{/if}}
+      </div>
+    </header>
+
+    <section class="bbttcc-market-grid">
+      <section class="bbttcc-card">
+        <header class="bbttcc-card-header">
+          <h2>Context</h2>
+          <p>Pick vendor, buyer, and (optionally) a delivery hex.</p>
+        </header>
+
+        <div class="bbttcc-card-body">
+          <div class="field">
+            <label>Vendor</label>
+            <select name="vendorId" data-role="vendor">
+              {{#each vendors}}
+                <option value="{{id}}" {{#if selected}}selected{{/if}}>{{displayName}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Buyer Faction</label>
+            <select name="factionId" data-role="faction">
+              <option value="">(Select)</option>
+              {{#each factions}}
+                <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+              {{/each}}
+            </select>
+            <small>Economy OP is spent from this faction.</small>
+          </div>
+
+          <div class="field">
+            <label>Buyer Character (for gear)</label>
+            <select name="characterId" data-role="character">
+              <option value="">(Optional)</option>
+              {{#each characters}}
+                <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+              {{/each}}
+            </select>
+            <small>Gear deliveries go to this character's inventory.</small>
+          </div>
+
+          <div class="field">
+            <label>Delivery Hex UUID (for facilities/hex assets)</label>
+            <input type="text" name="hexUuid" data-role="hexUuid" value="{{hexUuid}}" placeholder="Scene.<id>.Drawing.<id> or Drawing UUID"/>
+            <small>If empty, facility/hex purchases will be blocked (by design).</small>
+          </div>
+
+          <div class="field">
+            <label>Notes (receipt)</label>
+            <input type="text" name="note" data-role="note" value="{{note}}" placeholder="Optional…"/>
+          </div>
+        </div>
+      </section>
+
+      <section class="bbttcc-card bbttcc-market-catalog">
+        <header class="bbttcc-card-header">
+          <h2>Catalog</h2>
+          <p>{{vendorName}}</p>
+          {{#if vendorStatusLine}}<p class="bbttcc-muted">{{vendorStatusLine}}</p>{{/if}}
+        </header>
+
+        <div class="bbttcc-card-body">
+          <div class="bbttcc-market-filters">
+            <input type="text" data-role="q" value="{{q}}" placeholder="Search…"/>
+            <select data-role="kind">
+              <option value="">All kinds</option>
+              <option value="gear">Gear</option>
+              <option value="rig">Rig</option>
+              <option value="facility">Facility</option>
+              <option value="hex_asset">Hex Asset</option>
+              <option value="rig_upgrade">Rig Upgrade</option>
+              <option value="facility_upgrade">Facility Upgrade</option>
+            </select>
+          </div>
+
+          <div class="bbttcc-market-list">
+            {{#each entries}}
+              <article class="bbttcc-market-item" data-entry-id="{{id}}">
+                {{#if img}}
+                  <img class="bbttcc-market-item__img" src="{{img}}" alt=""/>
+                {{else}}
+                  <div class="bbttcc-market-item__img bbttcc-market-item__img--empty"></div>
+                {{/if}}
+                <div class="bbttcc-market-item__main">
+                  <div class="bbttcc-market-item__name">
+                    {{#if canOpen}}
+                      <a href="#" class="bbttcc-market-item__link" data-action="openDoc" data-uuid="{{docUuid}}" title="Open item sheet">{{name}}</a>
+                    {{else}}
+                      {{name}}
+                    {{/if}}
+                  </div>
+                  <div class="bbttcc-muted">{{kindLabel}} · Cost: <b>{{costLabel}}</b>{{#if buCost}} · BU: <b>{{buCost}}</b>{{/if}}</div>
+                  {{#if blurb}}<div class="bbttcc-muted">{{blurb}}</div>{{/if}}
+                </div>
+                <div class="bbttcc-market-item__btns">
+                  <button type="button" class="bbttcc-button primary" data-action="buy">Buy</button>
+                </div>
+              </article>
+            {{/each}}
+            {{#unless entries.length}}
+              <p class="bbttcc-muted">No matching entries.</p>
+            {{/unless}}
+          </div>
+        </div>
+      </section>
+    </section>
+  {{/unless}}
+</section>

@@ -1,0 +1,121 @@
+<section class="bbttcc-market-editor">
+  <header class="bbttcc-market-editor__head">
+    <div>
+      <div class="bbttcc-market-title">Catalogs</div>
+      <div class="bbttcc-muted">Drag & drop Items or Folders from the sidebar/compendiums into the drop zone below.</div>
+    </div>
+    <div class="bbttcc-market-editor__actions">
+      <button type="button" class="bbttcc-button" data-action="vendor-add"><i class="fas fa-plus"></i> Vendor</button>
+      <button type="button" class="bbttcc-button" data-action="entry-add"><i class="fas fa-plus"></i> Entry</button>
+      <button type="button" class="bbttcc-button danger" data-action="vendor-del" title="Delete the selected market"><i class="fas fa-trash"></i> Delete Market</button>
+      <button type="button" class="bbttcc-button primary" data-action="save"><i class="fas fa-save"></i> Save</button>
+    </div>
+  </header>
+
+  <section class="bbttcc-market-editor__grid">
+    <section class="bbttcc-card">
+      <header class="bbttcc-card-header">
+        <h2>Vendors</h2>
+        <p>Select a vendor to edit its catalog entries.</p>
+      </header>
+      <div class="bbttcc-card-body">
+        <div class="field">
+          <label>Vendor</label>
+          <select data-role="vendor">
+            {{#each vendors}}
+              <option value="{{id}}" {{#if selected}}selected{{/if}}>{{displayName}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+<div class="field">
+  <label>Active</label>
+  <label class="bbttcc-checkline">
+    <input type="checkbox" data-role="vendorActive" {{#if vendor.active}}checked{{/if}}/>
+    <span>Visible to players</span>
+  </label>
+</div>
+
+        <div class="field">
+          <label>Name</label>
+          <input type="text" data-role="vendorName" value="{{vendor.name}}"/>
+        </div>
+
+        <div class="field">
+          <label>Blurb</label>
+          <input type="text" data-role="vendorBlurb" value="{{vendor.blurb}}"/>
+        </div>
+
+        <div class="field">
+          <label>Tags (comma)</label>
+          <input type="text" data-role="vendorTags" value="{{vendor.tagsRaw}}"/>
+        </div>
+      </div>
+    </section>
+
+    <section class="bbttcc-card">
+      <header class="bbttcc-card-header">
+        <h2>Entries</h2>
+        <p>Edit entries or drop items/folders to import.</p>
+      </header>
+
+      <div class="bbttcc-card-body">
+        <div class="bbttcc-market-drop" data-role="dropzone">
+          <div class="bbttcc-market-drop__title">Drop Items or Folders here</div>
+          <div class="bbttcc-muted">Item drops become <b>Gear</b> entries with the item UUID prefilled.</div>
+        </div>
+
+        <div class="bbttcc-market-editor__list">
+          {{#each entries}}
+            <article class="bbttcc-market-editor__row" data-entry-id="{{id}}">
+              <div class="row2">
+                <div class="field">
+                  <label>Name</label>
+                  <input type="text" data-k="name" value="{{name}}"/>
+                </div>
+                <div class="field">
+                  <label>Kind</label>
+                  <select data-k="kind">
+                    <option value="gear" {{#if isGear}}selected{{/if}}>gear</option>
+                    <option value="rig" {{#if isRig}}selected{{/if}}>rig</option>
+                    <option value="facility" {{#if isFacility}}selected{{/if}}>facility</option>
+                    <option value="hex_asset" {{#if isHexAsset}}selected{{/if}}>hex_asset</option>
+                    <option value="rig_upgrade" {{#if isRigUpgrade}}selected{{/if}}>rig_upgrade</option>
+                    <option value="facility_upgrade" {{#if isFacilityUpgrade}}selected{{/if}}>facility_upgrade</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row2">
+                <div class="field">
+                  <label>Economy OP Cost</label>
+                  <input type="number" data-k="cost.economy" value="{{econ}}"/>
+                </div>
+                <div class="field">
+                  <label>BU Cost (optional)</label>
+                  <input type="number" data-k="buCost" value="{{buCost}}"/>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Blurb</label>
+                <input type="text" data-k="blurb" value="{{blurb}}"/>
+              </div>
+
+              <div class="field">
+                <label>UUID (gear) / Patch JSON (rig/facility/upgrades)</label>
+                <textarea rows="2" data-k="payload">{{payload}}</textarea>
+                <small>For gear: UUID. For rig/facility: JSON. For upgrades: JSON patch.</small>
+              </div>
+
+              <div class="bbttcc-market-editor__rowActions">
+                <button type="button" class="bbttcc-button" data-action="dup"><i class="fas fa-copy"></i></button>
+                <button type="button" class="bbttcc-button" data-action="del"><i class="fas fa-trash"></i></button>
+              </div>
+            </article>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+  </section>
+</section>
