@@ -17,7 +17,10 @@
           "Assault",
           "Occupation"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 1,
+        "availability": "learned",
+        "unlockKey": "suppressive_fire"
       }
     }
   },
@@ -41,7 +44,10 @@
           "Espionage",
           "Propaganda"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 1,
+        "availability": "standard",
+        "unlockKey": "smoke_and_mirrors"
       }
     }
   },
@@ -64,7 +70,10 @@
           "Liberation",
           "Occupation"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 1,
+        "availability": "standard",
+        "unlockKey": "rally_the_line"
       }
     }
   },
@@ -87,7 +96,10 @@
           "Assault (defense)",
           "Occupation (defense)"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 1,
+        "availability": "learned",
+        "unlockKey": "patch_the_breach"
       }
     }
   },
@@ -110,7 +122,10 @@
           "Propaganda",
           "Espionage"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 1,
+        "availability": "standard",
+        "unlockKey": "flash_bargain"
       }
     }
   },
@@ -126,13 +141,16 @@
           "softPower": 1
         },
         "effects": {
-          "text": "Boost ally morale; Darkness \u22121 on success."
+          "text": "Boost ally morale; Darkness −1 on success."
         },
         "raidTypes": [
           "Liberation",
           "Siege"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 1,
+        "availability": "standard",
+        "unlockKey": "radiant_rally"
       }
     }
   },
@@ -155,7 +173,10 @@
           "Assault",
           "Siege"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 1,
+        "availability": "standard",
+        "unlockKey": "supply_overrun"
       }
     }
   },
@@ -177,7 +198,10 @@
           "Espionage",
           "Propaganda"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 1,
+        "availability": "learned",
+        "unlockKey": "flash_interdict"
       }
     }
   },
@@ -193,13 +217,16 @@
           "faith": 1
         },
         "effects": {
-          "text": "Allies gain advantage vs Fear; Darkness \u22121 regionally."
+          "text": "Allies gain advantage vs Fear; Darkness −1 regionally."
         },
         "raidTypes": [
           "Ritual/Tikkun",
           "Liberation"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 1,
+        "availability": "standard",
+        "unlockKey": "prayer_in_the_smoke"
       }
     }
   },
@@ -222,12 +249,15 @@
           "Siege (defense)",
           "Occupation"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 1,
+        "availability": "learned",
+        "unlockKey": "last_stand_banner"
       }
     }
   },
   {
-    "name": "Saboteur\u2019s Edge [T2]",
+    "name": "Saboteur’s Edge [T2]",
     "type": "feat",
     "flags": {
       "bbttcc": {
@@ -245,7 +275,10 @@
           "Espionage",
           "Assault (pre-siege)"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "saboteur_s_edge"
       }
     }
   },
@@ -268,7 +301,10 @@
           "Liberation",
           "Ritual/Tikkun"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "bless_the_fallen"
       }
     }
   },
@@ -285,14 +321,17 @@
           "logistics": 1
         },
         "effects": {
-          "text": "Repeat last round\u2019s maneuver at no cost."
+          "text": "Repeat last round’s maneuver at no cost."
         },
         "raidTypes": [
           "Assault",
           "Blockade",
           "Occupation"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "logistical_surge"
       }
     }
   },
@@ -315,7 +354,10 @@
           "Occupation",
           "Liberation"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "command_overdrive"
       }
     }
   },
@@ -339,7 +381,10 @@
           "Infiltration",
           "Ritual/Tikkun"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "psychic_disruption"
       }
     }
   },
@@ -362,7 +407,10 @@
           "Ritual/Tikkun",
           "Liberation"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "faithful_intervention"
       }
     }
   },
@@ -385,7 +433,10 @@
           "Assault",
           "Siege"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "tactical_overwatch"
       }
     }
   },
@@ -407,7 +458,10 @@
           "Infiltration",
           "Espionage"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "signal_hijack"
       }
     }
   },
@@ -430,7 +484,10 @@
           "Liberation",
           "Propaganda"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "empathic_surge"
       }
     }
   },
@@ -452,7 +509,10 @@
           "Blockade",
           "Occupation"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 2,
+        "availability": "learned",
+        "unlockKey": "industrial_sabotage"
       }
     }
   },
@@ -475,7 +535,10 @@
           "Assault",
           "Liberation"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "echo_strike_protocol"
       }
     }
   },
@@ -498,7 +561,10 @@
           "Propaganda",
           "Ritual/Tikkun"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "moral_high_ground"
       }
     }
   },
@@ -522,7 +588,10 @@
           "Occupation",
           "Ritual/Tikkun"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "quantum_shield"
       }
     }
   },
@@ -546,7 +615,10 @@
           "Blockade",
           "Espionage (sabotage mech)"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "overclock_the_golems"
       }
     }
   },
@@ -570,7 +642,10 @@
           "Liberation",
           "Occupation"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "counter_propaganda_wave"
       }
     }
   },
@@ -587,13 +662,16 @@
           "violence": 2
         },
         "effects": {
-          "text": "Convert enemy Darkness gain to \u22121 for you."
+          "text": "Convert enemy Darkness gain to −1 for you."
         },
         "raidTypes": [
           "Ritual/Tikkun",
           "Liberation"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "radiant_retaliation"
       }
     }
   },
@@ -616,7 +694,10 @@
           "Espionage",
           "Infiltration"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "chrono_loop_command"
       }
     }
   },
@@ -639,7 +720,10 @@
           "Siege",
           "Assault"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "siege_breaker_volley"
       }
     }
   },
@@ -656,18 +740,21 @@
           "softPower": 2
         },
         "effects": {
-          "text": "Allies gain Advantage; Darkness \u22121."
+          "text": "Allies gain Advantage; Darkness −1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
           "Liberation"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "harmonic_chant"
       }
     }
   },
   {
-    "name": "Defender\u2019s Reversal [T3]",
+    "name": "Defender’s Reversal [T3]",
     "type": "feat",
     "flags": {
       "bbttcc": {
@@ -685,7 +772,10 @@
           "Occupation (defense)",
           "Siege"
         ],
-        "defenderAccess": "Yes"
+        "defenderAccess": "Yes",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "defender_s_reversal"
       }
     }
   },
@@ -702,13 +792,16 @@
           "softPower": 5
         },
         "effects": {
-          "text": "Auto-win one opposed roll; Darkness \u22121."
+          "text": "Auto-win one opposed roll; Darkness −1."
         },
         "raidTypes": [
           "Ritual/Tikkun",
           "Liberation"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "sephirotic_intervention"
       }
     }
   },
@@ -724,13 +817,16 @@
           "violence": 6
         },
         "effects": {
-          "text": "Reduce enemy leader\u2019s OP cap by 3 permanently."
+          "text": "Reduce enemy leader’s OP cap by 3 permanently."
         },
         "raidTypes": [
           "Assault",
           "Occupation"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "ego_breaker"
       }
     }
   },
@@ -754,7 +850,10 @@
           "Infiltration",
           "Ritual/Tikkun"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "reality_hack"
       }
     }
   },
@@ -778,7 +877,10 @@
           "Propaganda",
           "Ritual/Tikkun"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "unity_surge"
       }
     }
   },
@@ -800,7 +902,10 @@
           "Assault",
           "Ritual/Tikkun (corrupt variant)"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "qliphothic_gambit"
       }
     }
   },
@@ -817,13 +922,16 @@
           "faith": 4
         },
         "effects": {
-          "text": "End combat for 1 round; Darkness \u22122 if enemy accepts."
+          "text": "End combat for 1 round; Darkness −2 if enemy accepts."
         },
         "raidTypes": [
           "Courtly Intrigue",
           "Ritual/Tikkun"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "temporal_armistice"
       }
     }
   },
@@ -846,7 +954,10 @@
           "Espionage",
           "Siege"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "void_signal_collapse"
       }
     }
   },
@@ -868,7 +979,10 @@
         "raidTypes": [
           "Ritual/Tikkun"
         ],
-        "defenderAccess": "Conditional"
+        "defenderAccess": "Conditional",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "crown_of_mercy"
       }
     }
   },
@@ -891,7 +1005,10 @@
           "Liberation",
           "Occupation (after)"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "engine_of_absolution"
       }
     }
   },
@@ -914,7 +1031,10 @@
           "Ritual/Tikkun",
           "Corruption"
         ],
-        "defenderAccess": "No"
+        "defenderAccess": "No",
+        "minFactionTier": 3,
+        "availability": "learned",
+        "unlockKey": "ego_dragon_echo"
       }
     }
   }

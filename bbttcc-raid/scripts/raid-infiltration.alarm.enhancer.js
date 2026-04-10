@@ -32,6 +32,38 @@
   const dup   = (x)=>foundry.utils.duplicate(x||{});
   const gmIds = () => game.users?.filter(u=>u.isGM).map(u=>u.id) ?? [];
 
+  function getFX() {
+    return game?.bbttcc?.api?.fx || null;
+  }
+
+  async function playRollFX(ctx = {}) {
+    try {
+      const fx = getFX();
+      if (!fx || typeof fx.playRolls !== "function") return;
+      await fx.playRolls({
+        raidType: "infiltration",
+        label: "Infiltration Clash",
+        attackerName: ctx.attackerName,
+        defenderName: ctx.defenderName,
+        attackerTotal: ctx.attackerTotal,
+        defenderTotal: ctx.defenderTotal,
+        margin: ctx.margin
+      });
+    } catch (_e) {}
+  }
+
+  async function playAlarmFX(ctx = {}) {
+    try {
+      const fx = getFX();
+      if (!fx || typeof fx.playScenarioShift !== "function") return;
+      await fx.playScenarioShift("infiltration_alarm", {
+        raidType: "infiltration",
+        outcome: `Alarm ${ctx.before} → ${ctx.after} — ${ctx.band}`
+      }, { raidType: "infiltration" });
+    } catch (_e) {}
+  }
+
+
   function bandFromAlarm(alarm) {
     const a = Number(alarm||0);
     if (a <= 1) return "quiet";
@@ -121,8 +153,8 @@
         const atkBonus = Math.ceil(atkSpend / 2);
         const defBonus = Math.ceil(defSpend / 2) + Math.max(0, Math.floor(state.difficulty));
 
-        const atkRoll = await (new Roll("1d20 + @b", { b: atkBonus })).evaluate({ async: true });
-        const defRoll = await (new Roll("1d20 + @b", { b: defBonus })).evaluate({ async: true });
+        const atkRoll = await (new Roll("1d20 + @b", { b: atkBonus })).evaluate();
+        const defRoll = await (new Roll("1d20 + @b", { b: defBonus })).evaluate();
 
         const atkTotal = atkRoll.total ?? 0;
         const defTotal = defRoll.total ?? 0;
@@ -166,6 +198,15 @@
         };
         state.history.push(entry);
 
+        await playRollFX({
+          attackerName: A.name,
+          defenderName: D.name,
+          attackerTotal: atkTotal,
+          defenderTotal: defTotal,
+          margin
+        });
+        await playAlarmFX({ before: beforeAlarm, after: afterAlarm, band: bandFromAlarm(afterAlarm) });
+
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
           `Rolls: Attacker ${atkTotal} vs Defender ${defTotal} (margin ${margin >=0 ? "+"+margin : margin})`,
@@ -195,6 +236,8 @@
         state.alarm = Math.max(0, state.alarm - 1);
         state._flashbackUsedThisRound = true;
 
+        await playAlarmFX({ before, after: state.alarm, band: bandFromAlarm(state.alarm) });
+
         const lines = [
           `<b>Flashback:</b> ${foundry.utils.escapeHTML(A.name)} spends ${spend} Intrigue OP to reduce Alarm ${before} → ${state.alarm}.`,
         ];
@@ -202,6 +245,36 @@
         await sendChat(lines, { title: `${label}: Flashback` });
 
         return { ...state };
+      }
+
+      async function applyEffects(effects = []) {
+        effects = Array.isArray(effects) ? effects : [];
+        if (!effects.length) return getState();
+        let before = state.alarm;
+        let changed = false;
+        for (const e of effects) {
+          const t = String(e?.type || "").trim();
+          if (t === "alarmDelta") {
+            const d = Number(e?.delta || 0) || 0;
+            if (!d) continue;
+            const next = clamp(state.alarm + d, 0, state.alarmMax);
+            if (next !== state.alarm) { state.alarm = next; changed = true; }
+          }
+        }
+        if (changed) {
+          const after = state.alarm;
+          const lines = [`<b>Maneuver Effects:</b> Alarm ${before} → ${after} (${bandFromAlarm(after)})`];
+          await sendChat(lines, { title: `${label}: Effects` });
+        }
+        return getState();
+      }
+
+      async function reset({ alarm = 0 } = {}) {
+        const a = clamp(Number(alarm || 0), 0, state.alarmMax);
+        state.alarm = a;
+        state.outcome = (a >= state.alarmMax) ? "lockdown" : "ongoing";
+        state._flashbackUsedThisRound = false;
+        return getState();
       }
 
       function getState() {
@@ -213,7 +286,7 @@
         }
       }
 
-      const apiObj = { step, flashback, getState };
+      const apiObj = { step, flashback, applyEffects, reset, getState };
 
       // Convenience handle for GM: last infiltration scenario
       raidApi._lastInfiltration = apiObj;

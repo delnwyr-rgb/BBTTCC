@@ -1,7 +1,7 @@
 <section class="bbttcc-raid-console vstack" style="gap:.5rem; padding:.5rem;">
   <!-- Header -->
   <header class="flexrow" style="gap:.5rem; align-items:center;">
-    {{#if isGM}}
+    {{#if @root.isGM}}
       <label class="flex0">Attacker</label>
       <select class="flex2" data-id="attacker">
         {{#each attackerOptions}}
@@ -75,7 +75,7 @@
     </div>
   </div>
 
-  {{#if isGM}}
+  {{#if @root.isGM}}
     <!-- Top DC block with breakdown (GM only) -->
     {{#if currentBank.topDC}}
     <div class="flexrow" style="gap:.75rem; align-items:center; opacity:.9;">
@@ -228,9 +228,9 @@
           <th>Activity</th>
           <th>+Key</th>
           <th>Target</th>
-          <th>{{#if isGM}}Roll{{else}}Status{{/if}}</th>
-          <th>{{#if isGM}}DC{{else}}—{{/if}}</th>
-          <th>{{#if isGM}}Outcome{{else}}—{{/if}}</th>
+          <th>{{#if @root.isGM}}Roll{{else}}Status{{/if}}</th>
+          <th>{{#if @root.isGM}}DC{{else}}—{{/if}}</th>
+          <th>{{#if @root.isGM}}Outcome{{else}}—{{/if}}</th>
           <th class="center">Actions</th>
         </tr>
       </thead>
@@ -243,7 +243,7 @@
               <td class="center">+{{r.attBonus}} <small>({{upper r.key}})</small></td>
               <td class="center">{{r.targetName}}</td>
 
-              {{#if ../isGM}}
+              {{#if @root.isGM}}
                 <td class="center">{{#if r.roll}}<code>{{r.roll.result}}</code> = <b>{{r.total}}</b>{{else}}—{{/if}}</td>
                 <td class="center">
                   {{#if r.dcFinal}}
@@ -261,14 +261,18 @@
                 <td class="center">{{default r.outcome "—"}}</td>
               {{else}}
                 <td class="center">
-                  {{#if r.committed}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if (eq r.open false)}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if r.dcFinal}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if r.total}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}<span style="opacity:.8;">Draft</span>{{/if}}{{/if}}{{/if}}{{/if}}
+                  {{#if r.playerSubmitted}}
+                    <span style="opacity:.9;"><b>Submitted</b></span>
+                  {{else}}
+                    <span style="opacity:.8;">Draft</span>
+                  {{/if}}
                 </td>
                 <td class="center">—</td>
                 <td class="center">—</td>
               {{/if}}
 
               <td class="center">
-                {{#if ../isGM}}
+                {{#if @root.isGM}}
                   <button class="btn" data-act="post">Post</button>
                   <button class="btn" data-act="copy">Copy</button>
                   <button class="btn" data-act="manage">{{#if r.open}}Close Manage{{else}}Manage{{/if}}</button>
@@ -285,11 +289,11 @@
                 <div class="flexrow" style="gap:1rem;">
                   <!-- Manage -->
                   <div class="flex2 card" style="padding:.5rem;">
-                    <h4 style="margin:0 0 .25rem 0;">{{#if ../isGM}}Manage Spend{{else}}Your Commitments{{/if}} — Key: {{upper r.view.cat}}</h4>
+                    <h4 style="margin:0 0 .25rem 0;">{{#if @root.isGM}}Manage Spend{{else}}Your Commitments{{/if}} — Key: {{upper r.view.cat}}</h4>
 
-                    <div class="grid" style="grid-template-columns: {{#if ../isGM}}1fr 1fr{{else}}1fr{{/if}}; gap:.5rem;">
+                    <div class="grid" style="grid-template-columns: {{#if @root.isGM}}1fr 1fr{{else}}1fr{{/if}}; gap:.5rem;">
                       <div>
-                        <h5 style="margin:.25rem 0;">{{#if ../isGM}}Attacker{{else}}Your Faction{{/if}} — {{r.view.attackerName}}</h5>
+                        <h5 style="margin:.25rem 0;">{{#if @root.isGM}}Attacker{{else}}Your Faction{{/if}} — {{r.view.attackerName}}</h5>
                         <p style="margin:.25rem 0;">
                           Bank: <b>{{lookup r.view.bankAtt r.view.cat}}</b> •
                           Staged: <b>{{default (lookup r.view.staged.att r.view.cat) 0}}</b> •
@@ -303,7 +307,7 @@
                         </div>
                       </div>
 
-                      {{#if ../isGM}}
+                      {{#if @root.isGM}}
                         {{#if r.view.hasDef}}
                         <div>
                           <h5 style="margin:.25rem 0;">Defender — {{r.view.defenderName}}</h5>
@@ -323,7 +327,7 @@
                       {{/if}}
                     </div>
 
-                    {{#if ../isGM}}
+                    {{#if @root.isGM}}
                       <div style="margin-top:.5rem;">
                         <small>
                           Base DC: <b>{{r.DC}}</b>
@@ -353,7 +357,7 @@
                     <div class="bbttcc-mans-cell" style="margin-top:.5rem;"></div>
 
                     <div class="flexrow" style="gap:.5rem; margin-top:.5rem;">
-                      {{#if ../isGM}}
+                      {{#if @root.isGM}}
                         <button class="btn" data-manage-act="commit">Commit (Roll)</button>
                         <button class="btn" data-manage-act="cancel">Cancel</button>
                         <button class="btn" data-manage-act="close">Close</button>
@@ -365,7 +369,8 @@
                           <button class="btn" data-manage-act="diff" data-delta="+5">+5</button>
                         </div>
                       {{else}}
-                                                <button class="btn" data-manage-act="close">Close</button>
+                        <button class="btn" data-manage-act="submit">Send To GM</button>
+                        <button class="btn" data-manage-act="close">Close</button>
                         <div class="flex1"></div>
                         <small style="opacity:.8; align-self:center;">GM resolves.</small>
                       {{/if}}
@@ -373,11 +378,11 @@
                   </div>
 
                   <div class="flex1 card" style="padding:.5rem;">
-                    <h4 style="margin:0 0 .25rem 0;">{{#if ../isGM}}Round Details{{else}}Details{{/if}}</h4>
+                    <h4 style="margin:0 0 .25rem 0;">{{#if @root.isGM}}Round Details{{else}}Details{{/if}}</h4>
                     <p style="margin:.25rem 0;"><b>Activity:</b> {{r.activityLabel}} • <b>Primary Key:</b> {{upper r.view.cat}}</p>
                     <p style="margin:.25rem 0;"><b>Your Faction:</b> {{r.attackerName}}</p>
                     <p style="margin:.25rem 0;"><b>Target:</b> {{r.targetName}}</p>
-                    {{#if ../isGM}}
+                    {{#if @root.isGM}}
                       <p style="margin:.25rem 0;"><b>Base Bonus:</b> +{{r.attBonus}} • <b>Base DC:</b> {{r.DC}}</p>
                       <p style="margin:.25rem 0;"><i>Attack bonus on commit</i> will be <b>+ceil(attacker_staged/2)</b>.</p>
                       <p style="margin:.25rem 0;"><i>DC increase on commit</i> will be <b>+ceil(defender_staged/2)</b>.</p>
@@ -392,10 +397,10 @@
             {{/if}}
           {{/each}}
         {{else}}
-          {{#if isGM}}
+          {{#if @root.isGM}}
             <tr><td colspan="8" class="center"><em>No rounds yet — select Attacker, pick a Target, choose Activity, then Add Round.</em></td></tr>
           {{else}}
-            <tr><td colspan="8" class="center"><em>No active rounds yet. The GM will set up the exchange; then you’ll stage + pick maneuvers until the GM resolves the round.</em></td></tr>
+            <tr><td colspan="8" class="center"><em>No active rounds yet. The GM will set up the exchange; then you’ll stage + pick maneuvers and “Send To GM”.</em></td></tr>
           {{/if}}
         {{/if}}
       </tbody>

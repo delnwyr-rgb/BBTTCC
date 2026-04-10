@@ -1,0 +1,226 @@
+<form class="bbttcc-boss-config-form" autocomplete="off" style="height:100%; display:flex; flex-direction:column; min-height:0;">
+  <div class="bbttcc-boss-scroll" style="flex:1; overflow:auto; min-height:0; padding-right:.25rem;">
+  <section class="bbttcc-facility-grid">
+
+    {{!-- LEFT COLUMN: Identity --}}
+    <section class="bbttcc-card">
+      <header class="bbttcc-card-header" style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+        <div>
+          <h2>Boss Builder</h2>
+          <p class="bbttcc-muted">Creature raid targets. Stored in a world setting and registered into the boss registry on load.</p>
+        </div>
+
+        <div style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+          <select name="ui.selectedKey" data-role="boss-picker" style="max-width:22rem;">
+            {{#each bossOptions}}
+              <option value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.label}} ({{this.key}})</option>
+            {{/each}}
+          </select>
+
+          <select name="ui.templateKey" data-role="template-picker" style="max-width:16rem;">
+            <option value="">Template…</option>
+            {{#each templateOptions}}
+              <option value="{{this.key}}">{{this.label}}</option>
+            {{/each}}
+          </select>
+
+          <button type="button" class="bbttcc-button preset" data-action="template-apply">
+            <i class="fas fa-magic"></i>
+            <span>Apply Template</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="bbttcc-card-body grid-2col">
+        <div class="field full">
+          <label>Template Notes</label>
+          <div class="bbttcc-muted" data-role="template-desc" style="min-height:1.2rem;"></div>
+        </div>
+
+        <div class="field full">
+          <label>Boss Key</label>
+          <input type="text" name="boss.key" value="{{boss.key}}" placeholder="unique_key">
+          <small>Unique ID used by Raid Console creature picker.</small>
+        </div>
+
+        <div class="field full">
+          <label>Label</label>
+          <input type="text" name="boss.label" value="{{boss.label}}" placeholder="Boss Name">
+        </div>
+
+        <div class="field">
+          <label>Mode</label>
+          <select name="boss.mode">
+            <option value="hybrid" {{#if (eq boss.mode "hybrid")}}selected{{/if}}>hybrid</option>
+            <option value="violence" {{#if (eq boss.mode "violence")}}selected{{/if}}>violence</option>
+            <option value="intrigue" {{#if (eq boss.mode "intrigue")}}selected{{/if}}>intrigue</option>
+            <option value="softpower" {{#if (eq boss.mode "softpower")}}selected{{/if}}>softpower</option>
+            <option value="custom" {{#if (eq boss.mode "custom")}}selected{{/if}}>custom</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Morale Hits (Legacy)</label>
+          <input type="number" name="boss.moraleHits" value="{{boss.moraleHits}}" min="0" max="99">
+          <small>Legacy support; primary ladder is hitTrack + damageStep.</small>
+        </div>
+
+        <div class="field full">
+          <label>Tags (comma-separated)</label>
+          <input type="text" name="boss.tags" value="{{boss.tags}}" placeholder="qliphothic, megafauna">
+        </div>
+      </div>
+    </section>
+
+    {{!-- RIGHT COLUMN: Ladder --}}
+    <section class="bbttcc-card">
+      <header class="bbttcc-card-header">
+        <h2>Damage Ladder</h2>
+        <p>Rig/facility style stepped damage. Boss state persists via <code>bbttcc-raid.bossState</code> world setting.</p>
+      </header>
+
+      <div class="bbttcc-card-body">
+        <div class="field full">
+          <label>Hit Track (comma-separated)</label>
+          <input type="text" name="boss.hitTrack" value="{{boss.hitTrack}}" placeholder="shaken, wounded, broken, banished">
+        </div>
+
+        <div class="field full">
+          <label>Stats (JSON)</label>
+          <textarea name="boss.statsRaw" rows="6" data-role="stats-json" spellcheck="false">{{boss.statsRaw}}</textarea>
+          <small>Optional. Freeform. Useful for future AI + OP drain logic.</small>
+        </div>
+      </div>
+    </section>
+
+    {{!-- FULL WIDTH: Behaviors --}}
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header" style="display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;">
+        <div>
+          <h2>Behaviors</h2>
+          <p>Array of behavior objects. Schema v1 supports <code>phase</code>, <code>when</code>, <code>effects.worldEffects</code>, and <code>endRaid</code>.</p>
+        </div>
+
+        <div style="display:flex; gap:.5rem; align-items:flex-start; flex-wrap:wrap; justify-content:flex-end;">
+          <div style="display:flex; flex-direction:column; gap:.25rem; min-width:16rem;">
+            <select name="ui.powerKey" data-role="power-picker" style="max-width:20rem;">
+              <option value="">Add Boss Power…</option>
+              {{#each powerOptions}}
+                <option value="{{this.key}}">{{this.label}}</option>
+              {{/each}}
+            </select>
+            <div class="bbttcc-muted" data-role="power-desc" style="min-height:1.2rem;"></div>
+          </div>
+
+          <button type="button" class="bbttcc-button" data-action="power-add" style="margin-top:.05rem;">
+            <i class="fas fa-plus"></i>
+            <span>Add</span>
+          </button>
+
+          <div style="display:flex; flex-direction:column; gap:.25rem; min-width:16rem;">
+            <select name="ui.packKey" data-role="pack-picker" style="max-width:20rem;">
+              <option value="">Power Pack…</option>
+              {{#each packOptions}}
+                <option value="{{this.key}}">{{this.label}}</option>
+              {{/each}}
+            </select>
+            <div class="bbttcc-muted" data-role="pack-desc" style="min-height:1.2rem;"></div>
+          </div>
+
+          <button type="button" class="bbttcc-button" data-action="pack-apply" style="margin-top:.05rem;">
+            <i class="fas fa-layer-group"></i>
+            <span>Apply Pack</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="bbttcc-card-body">
+
+        <div class="field full">
+          <label>Applied Powers (Preview)</label>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:.5rem; margin-top:.25rem;">
+            <small class="bbttcc-muted">Click a chip to inspect. Use ✕ to remove. Normalize maps legacy behaviors into powers.</small>
+            <button type="button" class="bbttcc-button" data-action="normalize" style="white-space:nowrap;">
+              <i class="fas fa-wand-magic-sparkles"></i>
+              <span>Normalize</span>
+            </button>
+          </div>
+          <div data-role="powers-preview" style="display:flex; flex-wrap:wrap; gap:.35rem; align-items:center;"></div>
+          <small data-role="powers-preview-note" class="bbttcc-muted"></small>
+        </div>
+
+        <div class="field full">
+          <label>Behaviors (JSON Array)</label>
+          <textarea name="boss.behaviorsRaw" rows="12" data-role="behaviors-json" spellcheck="false">{{boss.behaviorsRaw}}</textarea>
+          <small>Tip: keep it simple. Drive world effects; let the Raid Console handle the ladder.</small>
+        </div>
+      </div>
+    </section>
+
+    {{!-- FULL WIDTH: Persistent State --}}
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header">
+        <h2>Persistent State</h2>
+        <p>Current stored damage state for this boss in this world.</p>
+      </header>
+
+      <div class="bbttcc-card-body grid-2col">
+        <div class="field">
+          <label>Damage Step</label>
+          <input type="text" value="{{state.damageStep}}" disabled>
+        </div>
+
+        <div class="field">
+          <label>Damage State</label>
+          <input type="text" value="{{state.damageState}}" disabled>
+        </div>
+
+        <div class="field full">
+          <label>Hit Track (Stored)</label>
+          <input type="text" value="{{state.hitTrack}}" disabled>
+        </div>
+
+        <div class="field full">
+          <label>Updated</label>
+          <input type="text" value="{{state.updated}}" disabled>
+        </div>
+
+        <div class="field full">
+          <button type="button" class="bbttcc-button" data-action="state-reset">
+            <i class="fas fa-undo"></i>
+            <span>Reset Stored State (this boss)</span>
+          </button>
+          <small>Resets damageStep to 0 for this boss only.</small>
+        </div>
+      </div>
+    </section>
+  </section>
+</div>
+
+  <footer class="bbttcc-footer" style="display:flex;justify-content:flex-end;gap:.5rem;flex-wrap:wrap;" style="position:sticky; bottom:0; z-index:5; background:rgba(2,6,23,.92); border-top:1px solid rgba(148,163,184,.18); padding-top:.5rem; padding-bottom:.5rem;">
+    <button type="button" class="bbttcc-button" data-action="new">
+      <i class="fas fa-plus"></i>
+      <span>New</span>
+    </button>
+
+    <button type="button" class="bbttcc-button" data-action="import">
+      <i class="fas fa-file-import"></i>
+      <span>Import JSON</span>
+    </button>
+
+    <button type="button" class="bbttcc-button" data-action="export">
+      <i class="fas fa-file-export"></i>
+      <span>Export JSON</span>
+    </button>
+
+    <button type="button" class="bbttcc-button" data-action="delete">
+      <i class="fas fa-trash"></i>
+      <span>Delete</span>
+    </button>
+
+    <button type="button" class="bbttcc-button primary" data-action="save">
+      <i class="fas fa-save"></i>
+      <span>Save Boss</span>
+    </button>
+  </footer>
+</form>

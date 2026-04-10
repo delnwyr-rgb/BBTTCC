@@ -47,6 +47,38 @@
   const dup   = (x)=>foundry.utils.duplicate(x||{});
   const gmIds = () => game.users?.filter(u=>u.isGM).map(u=>u.id) ?? [];
 
+  function getFX() {
+    return game?.bbttcc?.api?.fx || null;
+  }
+
+  async function playRollFX(ctx = {}) {
+    try {
+      const fx = getFX();
+      if (!fx || typeof fx.playRolls !== "function") return;
+      await fx.playRolls({
+        raidType: "courtly",
+        label: "Courtly Exchange",
+        attackerName: ctx.attackerName,
+        defenderName: ctx.defenderName,
+        attackerTotal: ctx.attackerTotal,
+        defenderTotal: ctx.defenderTotal,
+        margin: ctx.margin
+      });
+    } catch (_e) {}
+  }
+
+  async function playInfluenceFX(ctx = {}) {
+    try {
+      const fx = getFX();
+      if (!fx || typeof fx.playScenarioShift !== "function") return;
+      await fx.playScenarioShift("courtly_exchange", {
+        raidType: "courtly",
+        outcome: `Influence ${ctx.beforeA}/${ctx.beforeD} → ${ctx.afterA}/${ctx.afterD}`
+      }, { raidType: "courtly" });
+    } catch (_e) {}
+  }
+
+
   async function adjustOpBank(actor, key, delta, scenarioLabel="Courtly Intrigue") {
     if (!actor || !key || !delta) return;
     const flags = dup(actor.flags?.[MODF] || {});
@@ -296,6 +328,15 @@
           note
         };
         state.history.push(histEntry);
+
+        await playRollFX({
+          attackerName: A.name,
+          defenderName: D.name,
+          attackerTotal: atkTotal,
+          defenderTotal: defTotal,
+          margin
+        });
+        await playInfluenceFX({ beforeA, beforeD, afterA: state.influenceA, afterD: state.influenceD });
 
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,

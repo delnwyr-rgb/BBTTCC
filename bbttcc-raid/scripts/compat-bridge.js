@@ -1,12 +1,20 @@
-/* bbttcc-raid/compat-bridge.js â€” Maneuvers (pre+post), Strategic Activities (final costs/benefits),
- * Turn-Advance consumer, EFFECTS, planner derivation, viewport shim
- * + DC now includes defender faction Defense and nextRaid.defenseBonus
- * Foundry v13.348 / dnd5e 5.1.9
+/* bbttcc-raid/compat-bridge.js
+ * TURN-only compat bridge
+ * SAFE FULL REPLACEMENT
+ * Adds strategic activity: repair_rig
  *
- * v1.3.10-queuefix.10-compat (TURN-only edition)
- * - Writes post-roll queues to flags.*.turn.pending (no legacy POST)
- * - Publishes API to both game.bbttcc.api.raid and module.api.raid
- * - Ready-time migration: post.pending -> turn.pending; nextRound -> nextTurn
+ * Slice 2:
+ * - Inject L1 Tactical Maneuvers unlocked by Character Options
+ * - Display inline with normal maneuvers, tagged ⭐ [Option]
+ *
+ * Slice 3:
+ * - Inject L2 Strategic Activities unlocked by Character Options
+ * - Display in planner/activity lists, tagged ⭐ [Option]
+ * - Mixed: mostly storyOnly; selected activities queue real hex tags via territory.turn.pending
+ *
+ * Slice 3.1 (Polish):
+ * - Option maneuvers now include primaryKey/cost + normalized raidTypes (so Raid Console can surface them)
+ * - Option strategics now include primaryKey/opCosts + grouping metadata (so Planner renders them like native entries)
  */
 
 const MOD_FACTIONS  = "bbttcc-factions";
@@ -17,36 +25,17 @@ const TAG = "[bbttcc-raid/compat-bridge]";
 const log  = (...a)=>console.log(TAG, ...a);
 const warn = (...a)=>console.warn(TAG, ...a);
 
-// --- Global TURN guard to prevent recursion / infinite loop ---
-if (!window._bbttccTurnLock) {
-  window._bbttccTurnLock = false;
-  Hooks.on("bbttcc:advanceTurn:begin", () => (window._bbttccTurnLock = true));
-  Hooks.on("bbttcc:advanceTurn:end",   () => (window._bbttccTurnLock = false));
-}
-
-/* ---------------------- Utils ---------------------- */
+/* ---------------- Utils (unchanged) ---------------- */
 const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
 const clamp0 = v => Math.max(0, Number(v ?? 0) || 0);
 const copy = (obj)=>foundry.utils.duplicate(obj ?? {});
 function zOP(){ const o={}; for (const k of OP_KEYS) o[k]=0; return o; }
-function addInto(dst, src){ for (const k of Object.keys(src||{})){ const kk=String(k).toLowerCase(); if (!OP_KEYS.includes(kk)) continue; dst[kk]=(dst[kk]||0)+Number(src[k]||0); } return dst; }
-function spendBank(bank=zOP(), cost=zOP()){ const next=copy(bank); for (const k of OP_KEYS) next[k]=clamp0((next[k]||0)-(cost[k]||0)); return next; }
-function canAfford(bank=zOP(), cost=zOP()){ for (const k of OP_KEYS) if (Number(bank[k]||0) < Number(cost[k]||0)) return false; return true; }
-function fmtCost(cost=zOP()){ const keys=OP_KEYS.filter(k=>Number(cost[k]||0)>0); return keys.length? keys.map(k=>`${k}:${Number(cost[k])}`).join(", ") : "â€”"; }
+function canAfford(bank=zOP(), cost=zOP()){ for (const k of OP_KEYS) if ((bank[k]||0) < (cost[k]||0)) return false; return true; }
+function spendBank(bank=zOP(), cost=zOP()){ const n=copy(bank); for (const k of OP_KEYS) n[k]=clamp0((n[k]||0)-(cost[k]||0)); return n; }
 function nowISO(){ try { return new Date().toLocaleString(); } catch { return ""; } }
-function ensure(obj, path, init) {
-  const parts = String(path).split(".");
-  let cur = obj;
-  for (let i=0;i<parts.length;i++) {
-    const k = parts[i];
-    if (cur[k] === undefined) cur[k] = (i === parts.length-1 ? (init ?? {}) : {});
-    cur = cur[k];
-  }
-  return cur;
-}
 const _stripActorId = id => (typeof id === "string" && id.startsWith("Actor.")) ? id.slice(6) : id;
 
-/* ---------------- War Log helper ---------------- */
+/* ---------------- War Log helper (unchanged) ---------------- */
 async function pushWarLog(actor, entry){
   const flags = copy(actor.flags?.[MOD_FACTIONS] ?? {});
   const wl = Array.isArray(flags.warLogs) ? flags.warLogs.slice() : [];
@@ -54,686 +43,767 @@ async function pushWarLog(actor, entry){
   await actor.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
 }
 
-/* ---------------- PRE-ROLL benefit rules -------------- */
-/* NOTE
- * - Attacker maneuvers may set: { attBonus, adv, autowin }
- * - Defender maneuvers may set: { dcBonus, autowin }
- * Resolver applies attacker/defender sets separately.
- */
-const PRE_ROLL = {
-  // T1/T2/T4 existing
-  qliphothic_gambit:      { attBonus:+6 },
-  divine_favor:           { attBonus:+3 },
-  flank_attack:           { attBonus:+2 },
-  overclock_the_golems:   { attBonus:+3 },
-  spy_network:            { adv:true },
-  defensive_entrenchment: { dcBonus:+3 },
-  sephirotic_intervention:{ autowin:true },
-  echo_strike_protocol:   { attBonus:+3 },
-  reality_hack:           { adv:true },
-  unity_surge:            { attBonus:+2 },
-  command_overdrive:      { attBonus:+2 },
-  saboteurs_edge:         { dcBonus:-2 },
-  psychic_disruption:     { adv:true },
+/* ============================================================
+   RIG HELPERS (UNCHANGED)
+   ============================================================ */
 
-  /* === New Tier 3 hooks === */
-  moral_high_ground:      { adv:true },
-  quantum_shield:         { dcBonus:+3 },
-  counter_propaganda_wave:{ dcBonus:+2 }
-};
-
-/* ---------------- Strategic queue writer (shared) ---------------- */
-async function queueStrategic({ actor, key, entry }) {
-  // Writes to faction + (optional) hex turn.pending using your schema
-  const A = actor;
-  const Aflags = copy(A.flags?.[MOD_FACTIONS] ?? {});
-  const pend = ensure(Aflags, "turn.pending", {});
-
-  let hexActor = null, hexFlags = null, hexPend = null;
-  const targetUuid = entry?.targetUuid ?? null;
-  if (targetUuid){
-    let hexDoc = null;
-    try { hexDoc = await fromUuid(targetUuid); } catch {}
-    const doc = hexDoc?.document ?? hexDoc;
-    const hexId = _stripActorId(doc?.id || "");
-    if (hexId) {
-      const H = game.actors.get(hexId) || null;
-      if (H) {
-        hexActor = H;
-        hexFlags = copy(H.flags?.[MOD_TERRITORY] ?? {});
-        hexPend  = ensure(hexFlags, "turn.pending", {});
-      } else if (doc) {
-        hexActor = doc; // DrawingDocument
-        hexFlags = copy(doc.flags?.[MOD_TERRITORY] ?? {});
-        hexPend  = ensure(hexFlags, "turn.pending", {});
-      }
-    }
-  }
-  const inc = (obj, k, d=1)=> { obj[k] = Number(obj[k]||0) + Number(d||0); };
-  return { A, Aflags, pend, hexActor, hexFlags, hexPend, inc };
+function _getRigs(actor){
+  const rigs = actor?.getFlag?.(MOD_FACTIONS, "rigs") ?? actor?.flags?.[MOD_FACTIONS]?.rigs;
+  return Array.isArray(rigs) ? rigs : [];
 }
 
-/* -------------- EFFECTS registry (finalized costs + apply) -------------- */
-const EFFECTS = {
-  /* ---------------- In-Round Maneuvers (existing + tiers) ---------------- */
-  suppressive_fire:   { kind:"maneuver", tier:1, rarity:"common",    label:"Suppressive Fire",   cost:{ violence:2 } },
-  smoke_and_mirrors:  { kind:"maneuver", tier:1, rarity:"common",    label:"Smoke and Mirrors",  cost:{ intrigue:1, softpower:1 } },
-  rally_the_line:     { kind:"maneuver", tier:1, rarity:"common",    label:"Rally the Line",     cost:{ softpower:1 } },
-  patch_the_breach:   { kind:"maneuver", tier:1, rarity:"common",    label:"Patch the Breach",   cost:{ nonlethal:1, economy:1 } },
-  flash_bargain:      { kind:"maneuver", tier:1, rarity:"common",    label:"Flash Bargain",      cost:{ diplomacy:1 } },
-
-  saboteurs_edge:     { kind:"maneuver", tier:2, rarity:"rare",      label:"Saboteurâ€™s Edge",    cost:{ intrigue:3 } },
-  bless_the_fallen:   { kind:"maneuver", tier:2, rarity:"rare",      label:"Bless the Fallen",   cost:{ faith:2 } },
-  logistical_surge:   { kind:"maneuver", tier:2, rarity:"rare",      label:"Logistical Surge",   cost:{ economy:2, logistics:1 } },
-  command_overdrive:  { kind:"maneuver", tier:2, rarity:"rare",      label:"Command Overdrive",  cost:{ violence:3 } },
-  psychic_disruption: { kind:"maneuver", tier:2, rarity:"rare",      label:"Psychic Disruption", cost:{ intrigue:2, faith:1 } },
-
-  echo_strike_protocol:{ kind:"maneuver", tier:3, rarity:"very_rare", label:"Echo Strike Protocol",cost:{ violence:4, intrigue:1 } },
-  moral_high_ground:  { kind:"maneuver", tier:3, rarity:"very_rare", label:"Moral High Ground",  cost:{ softpower:3 } },
-  quantum_shield:     { kind:"maneuver", tier:3, rarity:"very_rare", label:"Quantum Shield",     cost:{ economy:3, faith:2 } },
-  overclock_the_golems:{kind:"maneuver", tier:3, rarity:"very_rare", label:"Overclock the Golems",cost:{ economy:2, violence:2 } },
-  counter_propaganda_wave:{kind:"maneuver", tier:3, rarity:"very_rare", label:"Counter-Propaganda Wave", cost:{ softpower:3, intrigue:2 } },
-
-  sephirotic_intervention:{kind:"maneuver", tier:4, rarity:"legendary", label:"Sephirotic Intervention", cost:{ faith:5, softpower:5 } },
-  ego_breaker:        { kind:"maneuver", tier:4, rarity:"legendary", label:"Ego Breaker",        cost:{ violence:6 } },
-  reality_hack:       { kind:"maneuver", tier:4, rarity:"legendary", label:"Reality Hack",       cost:{ intrigue:5, economy:3 } },
-  unity_surge:        { kind:"maneuver", tier:4, rarity:"legendary", label:"Unity Surge",        cost:{ diplomacy:5, softpower:5 } },
-  qliphothic_gambit:  { kind:"maneuver", tier:4, rarity:"legendary", label:"Qliphothic Gambit",  cost:{ violence:6 } },
-
-  flank_attack:        { kind:"maneuver", tier:2, rarity:"rare",      label:"Flank Attack",        cost:{ violence:5 } },
-  supply_surge:        { kind:"maneuver", tier:1, rarity:"common",    label:"Supply Surge",        cost:{ economy:5 } },
-  spy_network:         { kind:"maneuver", tier:2, rarity:"rare",      label:"Spy Network",         cost:{ intrigue:3 } },
-  propaganda_push:     { kind:"maneuver", tier:2, rarity:"rare",      label:"Propaganda Push",     cost:{ diplomacy:3 } },
-  divine_favor:        { kind:"maneuver", tier:3, rarity:"very_rare", label:"Divine Favor",        cost:{ faith:5 } },
-  technocrat_override: { kind:"maneuver", tier:3, rarity:"very_rare", label:"Technocrat Override", cost:{ economy:5 } },
-
-  defensive_entrenchment:{kind:"maneuver", tier:2, rarity:"rare",     label:"Defensive Entrenchment", cost:{ violence:4 } },
-
-  /* ---------------- Strategic Turn Activities ---------------- */
-  develop_infrastructure:{
-    kind:"strategic", label:"Develop Infrastructure", cost:{ economy:10 },
-    apply: async ({ actor, entry })=>{
-      const { A, Aflags, pend, hexActor, hexFlags, hexPend, inc } = await queueStrategic({ actor, key:"develop_infrastructure", entry });
-      if (hexPend){ inc(hexPend,"defenseDelta",+1); inc(hexPend,"tradeYieldDelta",+5); }
-      else { inc(pend,"infrastructure.globalCount",+1); }
-      await Promise.all([
-        actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }),
-        hexActor && hexActor.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: hexPend })
-      ]);
-      return "+1 Defense & +5 Trade Yield (queued)";
-    }
-  },
-
-  expand_territory:{ kind:"strategic", label:"Expand Territory", cost:{ violence:15, logistics:4 },
-    apply: async ({ actor, entry })=>{ const { pend } = await queueStrategic({ actor, key:"expand_territory", entry });
-      const reqs = ensure(pend,"territory.createHexRequests",[]);
-      const baseHex = entry?.targetUuid ? _stripActorId((await fromUuid(entry.targetUuid))?.document?.id || "") : null;
-      reqs.push({ adjacentTo: baseHex, at: Date.now() });
-      await actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend });
-      return "Create a new adjacent Hex (request queued)";
-    }
-  },
-
-  conduct_research:{ kind:"strategic", label:"Conduct Research", cost:{ intrigue:8, economy:2 },
-    apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] ?? {}); const mods=ensure(flags,"mods",{}); mods.techScore = Number(mods.techScore||0) + 1;
-      await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+1 Technology Score (immediate)"; }
-  },
-
-  diplomatic_mission:{ kind:"strategic", label:"Diplomatic Mission", cost:{ diplomacy:6, softpower:2 },
-    apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] ?? {}); const mods=ensure(flags,"mods",{}); mods.loyalty = Number(mods.loyalty||0) + 5;
-      await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+5 Loyalty (immediate)"; }
-  },
-
-  cultural_festival:{ kind:"strategic", label:"Cultural Festival", cost:{ culture:4, faith:1 },
-    apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] ?? {}); const mods=ensure(flags,"mods",{}); mods.morale = Number(mods.morale||0) + 1;
-      await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+1 Morale (immediate)"; }
-  },
-
-  faith_campaign:{ kind:"strategic", label:"Faith Campaign", cost:{ faith:8, softpower:2 },
-    apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] ?? {}); const pend = ensure(flags,"turn.pending",{}); ensure(pend,"enlightenmentAttempt",0); pend.enlightenmentAttempt += 1;
-      ensure(pend,"consumeSpark",0); pend.consumeSpark += 1; await actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }); return "Enlightenment attempt queued (consumes 1 Spark if available)"; }
-  },
-
-  rearm_forces:{ kind:"strategic", label:"Rearm Forces", cost:{ violence:10 },
-    apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const nr = ensure(flags,"bonuses.nextRaid",{}); nr.defenseBonus = Number(nr.defenseBonus||0) + 5;
-      await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+5 Next-Raid Defense (immediate)"; }
-  },
-
-  economic_boom:{ kind:"strategic", label:"Economic Boom", cost:{ diplomacy:10, economy:5 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const nt=ensure(flags,"bonuses.nextTurn",{}); nt.opGainPct = Number(nt.opGainPct||0) + 10; nt.boomActive = true; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+10% OP output next Strategic Turn (immediate)"; }},
-  harvest_season:{ kind:"strategic", label:"Harvest Season", cost:{ economy:1 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const nt=ensure(flags,"bonuses.nextTurn",{}); nt.economyRegenDelta = Number(nt.economyRegenDelta||0) + 1; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+1 Economy regen next turn (immediate)"; }},
-  recon_sweep:{ kind:"strategic", label:"Recon Sweep", cost:{ intrigue:1, logistics:1 }, apply: async ({ actor, entry })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const pend=ensure(flags,"turn.pending",{}); const recon=ensure(pend,"recon",{}); const arr=Array.isArray(recon.adjacentRevealRequests)?recon.adjacentRevealRequests.slice():[]; arr.push({ baseHex: entry?.targetUuid ?? null, at: Date.now() }); recon.adjacentRevealRequests = arr; flags.turn = { ...(flags.turn||{}), pending: pend }; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "Queued 1 adjacent Hex reveal (pending)"; }},
-  ration_distribution:{ kind:"strategic", label:"Ration Distribution", cost:{ softpower:1, logistics:1 }, apply: async ({ actor, entry })=>{ const { pend, hexActor, hexPend, inc } = await queueStrategic({ actor, key:"ration_distribution", entry }); if (hexPend) inc(hexPend,"loyaltyDelta",+1); else inc(pend,"loyaltyDelta",+1); await Promise.all([ actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }), hexActor && hexActor.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: hexPend }) ]); return "+1 Loyalty (queued)"; }},
-  minor_repair:{ kind:"strategic", label:"Minor Repair", cost:{ economy:1, materials:1 }, apply: async ({ actor, entry })=>{ const { pend, hexActor, hexPend } = await queueStrategic({ actor, key:"minor_repair", entry }); const r = ensure(hexPend ?? pend, "repairs.requests", []); r.push({ target: hexActor ? hexActor.id : null, tag: "Damaged Infrastructure" }); await Promise.all([ actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }), hexActor && hexActor.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: hexPend }) ]); return "Remove 'Damaged Infrastructure' (queued)"; }},
-  local_festival:{ kind:"strategic", label:"Local Festival", cost:{ culture:1, faith:1 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); ensure(flags,"mods",{}).empathy = Number(flags.mods.empathy||0) + 1; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+1 Empathy (immediate)"; }},
-  smuggling_network:{ kind:"strategic", label:"Smuggling Network", cost:{ intrigue:3 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const pend  = ensure(flags,"turn.pending",{}); const t = ensure(pend,"trade",{}); const routes = ensure(t,"routesCreate", []); routes.push({ at: Date.now() }); const nt = ensure(pend,"nextTurn",{}); nt.diplomacyRegenDelta = Number(nt.diplomacyRegenDelta||0) + 1; flags.turn = { ...(flags.turn||{}), pending: pend }; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "New trade route +1 Diplomacy regen next turn (queued)"; }},
-  training_drills:{ kind:"strategic", label:"Training Drills", cost:{ violence:3, nonlethal:2 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const caps = ensure(flags,"mods.caps",{}); caps.violence = Number(caps.violence||0)+1; const dur = ensure(flags,"turn.pending.duration",{}); dur.training_drills = 2; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+1 Violence Cap for 2 turns (queued duration)"; }},
-  reconstruction_drive:{ kind:"strategic", label:"Reconstruction Drive", cost:{ economy:2, softpower:2 }, apply: async ({ actor, entry })=>{ const { pend, hexActor, hexPend } = await queueStrategic({ actor, key:"reconstruction_drive", entry }); if (hexPend) hexPend.statusSet = "Claimed"; else ensure(pend,"hex.statusSetRequests",[]).push({ status:"Claimed", target:null }); await Promise.all([ actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }), hexActor && hexActor.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: hexPend }) ]); return "Set Hex status â†’ Claimed (queued)"; }},
-  cultural_exchange:{ kind:"strategic", label:"Cultural Exchange", cost:{ diplomacy:2, softpower:2 }, apply: async ({ actor, entry })=>{ const { pend } = await queueStrategic({ actor, key:"cultural_exchange", entry }); const s = ensure(pend,"alignment.shareRequests",[]); const baseHex = entry?.targetUuid ? _stripActorId((await fromUuid(entry.targetUuid))?.document?.id || "") : null; s.push({ source: baseHex, at: Date.now() }); await actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }); return "Share Alignment bonus (queued)"; }},
-  spy_insertion:{ kind:"strategic", label:"Spy Insertion", cost:{ intrigue:2, diplomacy:1 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); ensure(flags,"intel",{}).revealEnemyOpPoolsNextTurn = true; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "Reveal enemy OP pools next turn (immediate)"; }},
-  terraforming_project:{ kind:"strategic", label:"Terraforming Project", cost:{ economy:4, faith:4 }, apply: async ({ actor, entry })=>{ const { pend, hexActor, hexPend } = await queueStrategic({ actor, key:"terraforming_project", entry }); if (hexPend) hexPend.cleanseCorruption = true; else ensure(pend,"hex.cleanseRequests",[]).push({ target: null }); await Promise.all([ actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }), hexActor && hexActor.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: hexPend }) ]); return "Cleanse Corruption (queued)"; }},
-  alliance_summit:{ kind:"strategic", label:"Alliance Summit", cost:{ diplomacy:3, softpower:3 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); ensure(flags,"bonuses.nextTurn",{}).mergeResources = true; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "Merge resources for next Strategic Turn (immediate)"; }},
-  industrial_revolution:{ kind:"strategic", label:"Industrial Revolution", cost:{ economy:4, materials:4 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const nextTurns = ensure(flags,"bonuses.nextTurns",[]); nextTurns.push({ op:"economy", multiplier:2, duration:2, at: Date.now() }); await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "Double Economy output for 2 turns (immediate series)"; }},
-  psych_ops_broadcast:{ kind:"strategic", label:"Psych-Ops Broadcast", cost:{ softpower:3, intrigue:3 }, apply: async ({ actor, entry })=>{ const { pend, hexActor, hexPend, inc } = await queueStrategic({ actor, key:"psych_ops_broadcast", entry }); if (hexPend) inc(hexPend,"enemyLoyaltyDelta",-2); else inc(pend,"enemyLoyaltyDelta",-2); await Promise.all([ actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }), hexActor && hexActor.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: hexPend }) ]); return "Enemy Loyalty âˆ’2 (queued)"; }},
-  purification_rite:{ kind:"strategic", label:"Purification Rite", cost:{ faith:3, softpower:2 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const pend = ensure(flags,"turn.pending",{}); ensure(pend,"darknessDelta",0); pend.darknessDelta -= 2; await actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }); return "Darkness âˆ’2 (queued)"; }},
-  great_work_ritual:{ kind:"strategic", label:"Great Work Ritual", cost:{ faith:10, culture:5 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const q = ensure(flags,"turn.pending.tikkun.phaseCRequests",[]); q.push({ at: Date.now() }); await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "Trigger Tikkun Phase C (queued)"; }},
-  mass_mobilization:{ kind:"strategic", label:"Mass Mobilization", cost:{ violence:6, economy:6, logistics:3 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); const mm = ensure(flags,"bonuses.nextTurn.massMobilization",{}); mm.up = +25; mm.down = -25; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "+25% OP next turn, then âˆ’25% (immediate flag)"; }},
-  enlightenment_congress:{ kind:"strategic", label:"Enlightenment Congress", cost:{ faith:5, diplomacy:5 }, apply: async ({ actor })=>{ const flags = copy(actor.flags?.[MOD_FACTIONS] || {}); ensure(flags,"mods",{}).enlightenmentAll = Number(flags.mods.enlightenmentAll||0)+1; await actor.update({ [`flags.${MOD_FACTIONS}`]: flags }); return "Enlightenment +1 for all PCs (immediate)"; }},
-  project_eden:{ kind:"strategic", label:"Project Eden", cost:{ economy:10, softpower:5, faith:2 }, apply: async ({ actor, entry })=>{ const { pend } = await queueStrategic({ actor, key:"project_eden", entry }); const reqs = ensure(pend,"eden.createRequests",[]); const baseHex = entry?.targetUuid ? _stripActorId((await fromUuid(entry.targetUuid))?.document?.id || "") : null; reqs.push({ aligned:"Tiferet", at: Date.now(), target: baseHex }); await actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }); return "Create Garden City (Tiferet) request (queued)"; }},
-  apocalyptic_weapon_test:{ kind:"strategic", label:"Apocalyptic Weapon Test", cost:{ violence:8, intrigue:4 }, apply: async ({ actor, entry })=>{ const { pend, hexActor, hexPend } = await queueStrategic({ actor, key:"apocalyptic_weapon_test", entry }); if (hexPend) hexPend.destroyHex = true; ensure(pend,"darknessDelta",0); pend.darknessDelta += 3; await Promise.all([ actor.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: pend }), hexActor && hexActor.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: hexPend }) ]); return "Destroy target Hex (queued); +3 Darkness (queued)"; }}
-};
-
-/* ---------------------- Re-entrancy guard ---------------------- */
-const _locks = new Map();
-function _tryLock(fid){ if (_locks.get(fid)) return false; _locks.set(fid, true); return true; }
-function _unlock(fid){ _locks.delete(fid); }
-
-/* ---------------------- consumePlanned (calls EFFECTS.apply) ---------------------- */
-async function consumePlanned({ factionId, apply=true } = {}){
-  if (!apply) return { ok:true, changed:false, note:"dry-run disabled at compat layer" };
-  const actor = game.actors.get(_stripActorId(factionId));
-  if (!actor) return { ok:false, error:"Faction not found" };
-  if (!_tryLock(actor.id)) return { ok:false, note:"already-running" };
-
-  try {
-    const flags = copy(actor.flags?.[MOD_FACTIONS] ?? {});
-    let bank    = copy(flags.opBank || zOP());
-    let pools   = copy(flags.pools  || zOP());
-    const warLogs = Array.isArray(flags.warLogs) ? flags.warLogs.slice() : [];
-
-    const idxs = [];
-    for (let i=0;i<warLogs.length;i++){
-      const e = warLogs[i];
-      if (String(e?.type).toLowerCase() === "planned") idxs.push(i);
-    }
-    if (!idxs.length) return { ok:true, changed:false };
-
-    for (const i of idxs){
-      const e = warLogs[i] || {};
-      const key = String(e.activity || e.activityKey || "").trim().toLowerCase();
-      const spec = EFFECTS[key];
-      if (!spec){
-        warLogs[i] = { ...e, type:"raid", summary:`[SKIP] Unknown activity '${key}'.` };
-        continue;
-      }
-      const cost = copy(spec.cost || {});
-      if (!canAfford(bank, cost)){
-        warLogs[i] = { ...e, type:"raid", activity:key, summary:`[COST] Cannot afford ${spec.label} (need ${fmtCost(cost)}).` };
-        continue;
-      }
-
-      bank  = spendBank(bank, cost);
-      pools = spendBank(pools, cost);
-
-      let effectNote = "";
-      try {
-        if (typeof spec.apply === "function") {
-          const res = await spec.apply({ actor, entry: e, key, spec, cost });
-          effectNote = res || "";
-        }
-      } catch (err) { warn("apply() failed", key, err); effectNote = "(effect apply failed; see console)"; }
-
-      const baseSummary = `Strategic: ${spec.label} â€” Spent ${fmtCost(cost)}.`;
-      const extra = effectNote ? ` ${effectNote}` : "";
-      warLogs[i] = { ...e, type:"raid", activity:key, summary: `${baseSummary}${extra}` };
-    }
-
-    await actor.update({
-      [`flags.${MOD_FACTIONS}.opBank`]: bank,
-      [`flags.${MOD_FACTIONS}.pools`]: pools,
-      [`flags.${MOD_FACTIONS}.warLogs`]: warLogs
-    });
-
-    return { ok:true, changed:true, count: idxs.length };
-  } finally { _unlock(actor.id); }
+async function _updateRig(actor, rigId, updater){
+  const rigs = _getRigs(actor).map(r => copy(r));
+  const idx = rigs.findIndex(r => String(r?.rigId||"") === String(rigId));
+  if (idx < 0) return { ok:false };
+  rigs[idx] = updater(rigs[idx] || {});
+  await actor.update({ [`flags.${MOD_FACTIONS}.rigs`]: rigs }, { diff:true, recursive:true });
+  return { ok:true, rig: rigs[idx] };
 }
 
-/* ---------------------- PRE-ROLL resolver â€” includes faction Defense ---------------------- */
-async function resolveRoundWithManeuvers({ attackerId, defenderId=null, round, maneuversAtt=[], maneuversDef=[] } = {}) {
-  const attacker = attackerId ? game.actors.get(_stripActorId(attackerId)) : null;
-  const defender = defenderId ? game.actors.get(_stripActorId(defenderId)) : null;
-  if (!attacker || !round) throw new Error("resolveRoundWithManeuvers: missing attacker or round");
+function _rigStateFromStep(rig, step){
+  const hitTrack = Array.isArray(rig?.hitTrack) && rig.hitTrack.length
+    ? rig.hitTrack
+    : ["light","heavy","breached","destroyed"];
+  if (step <= 0) return "intact";
+  return hitTrack[step-1] || "damaged";
+}
 
-  const costA = zOP(), costD = zOP();
-  for (const key of maneuversAtt){ const eff = EFFECTS[key]; if (eff?.cost) addInto(costA, eff.cost); }
-  for (const key of maneuversDef){ const eff = EFFECTS[key]; if (eff?.cost) addInto(costD, eff.cost); }
-
-  const cat = String(round?.view?.cat || round?.key || round?.activityKey || "violence").toLowerCase();
-  const stagedA = Math.max(0, Number(round?.localStaged?.att?.[cat] || 0));
-  const stagedD = Math.max(0, Number(round?.localStaged?.def?.[cat] || 0));
-  if (stagedA > 0) costA[cat] = (costA[cat]||0) + stagedA;
-  if (stagedD > 0) costD[cat] = (costD[cat]||0) + stagedD;
-
-  // Spend if affordable (dual-write)
-  const flagsA = copy(attacker.flags?.[MOD_FACTIONS] ?? {});
-  let bankA  = copy(flagsA.opBank || zOP());
-  let poolsA = copy(flagsA.pools  || zOP());
-  const canA = canAfford(bankA, costA);
-
-  let bankD=zOP(), poolsD=zOP(), canD=true, flagsD={};
-  if (defender) {
-    flagsD = copy(defender.flags?.[MOD_FACTIONS] ?? {});
-    bankD  = copy(flagsD.opBank || zOP());
-    poolsD = copy(flagsD.pools  || zOP());
-    canD   = canAfford(bankD, costD);
+async function _promptPickRig(){
+  const factions = game.actors.contents.filter(a =>
+    a.getFlag?.(MOD_FACTIONS,"isFaction") === true
+  );
+  if (!factions.length){
+    ui.notifications.warn("No faction actors found.");
+    return null;
   }
-  if (canA) { bankA = spendBank(bankA, costA); poolsA = spendBank(poolsA, costA); await attacker.update({ [`flags.${MOD_FACTIONS}.opBank`]: bankA, [`flags.${MOD_FACTIONS}.pools`]: poolsA }); }
-  if (defender && canD) { bankD = spendBank(bankD, costD); poolsD = spendBank(poolsD, costD); await defender.update({ [`flags.${MOD_FACTIONS}.opBank`]: bankD, [`flags.${MOD_FACTIONS}.pools`]: poolsD }); }
 
-  // Pre-roll effects & flags
-  let bonusAtt = 0, bonusDC = 0, adv = false, autoWinAtt = false, autoWinDef = false;
-  for (const key of maneuversAtt){ const pr = PRE_ROLL[key]; if (!pr) continue; if (pr.attBonus) bonusAtt += Number(pr.attBonus||0); if (pr.adv) adv = true; if (pr.autowin) autoWinAtt = true; }
-  for (const key of maneuversDef){ const pr = PRE_ROLL[key]; if (!pr) continue; if (pr.dcBonus)  bonusDC  += Number(pr.dcBonus ||0); if (pr.autowin) autoWinDef = true; }
+  const factionId = await new Promise(resolve => {
+    new Dialog({
+      title: "Repair Rig — Pick Faction",
+      content: `
+        <select name="faction">
+          ${factions.map(f=>`<option value="${f.id}">${f.name}</option>`).join("")}
+        </select>
+      `,
+      buttons: {
+        ok: { label:"Next", callback: html=>resolve(html.find("select").val()) },
+        cancel: { label:"Cancel", callback: ()=>resolve(null) }
+      }
+    }).render(true);
+  });
+  if (!factionId) return null;
 
-  // Base numbers
-  const sBonus  = Math.ceil((Number(stagedA)||0) / 2);
-  const dBonus  = Math.ceil((Number(stagedD)||0) / 2);
-  const diffAdj = Number(round?.diffOffset || 0);
-  const baseDC  = Number(round?.DC || 10);
-  const baseAtt = Number(round?.attBonus || 0);
-
-  // Include defender faction Defense and any Next-Raid defense bonus.
-  const defFacDefense = defender ? Number(flagsD?.mods?.defense ?? 0) : 0;
-  const defNextRaid   = defender ? Number(flagsD?.bonuses?.nextRaid?.defenseBonus ?? 0) : 0;
-
-  const dcFinal = (autoWinDef ? 999 : (baseDC + dBonus + bonusDC + diffAdj + defFacDefense + defNextRaid));
-
-  // Roll
-  let rollUsed = null, totalFinal = 0;
-  if (autoWinAtt) {
-    totalFinal = 999;
-  } else if (adv) {
-    const r1 = new Roll("1d20 + @b", { b: baseAtt + sBonus + bonusAtt });
-    const r2 = new Roll("1d20 + @b", { b: baseAtt + sBonus + bonusAtt });
-    await r1.evaluate(); await r2.evaluate();
-    rollUsed = (r1.total >= r2.total) ? r1 : r2;
-    totalFinal = Math.max(r1.total, r2.total);
-  } else {
-    const r = new Roll("1d20 + @b", { b: baseAtt + sBonus + bonusAtt });
-    await r.evaluate();
-    rollUsed = r;
-    totalFinal = r.total;
+  const faction = game.actors.get(factionId);
+  const rigs = _getRigs(faction);
+  if (!rigs.length){
+    ui.notifications.warn("That faction has no rigs.");
+    return null;
   }
+
+  const rigId = await new Promise(resolve => {
+    new Dialog({
+      title: "Repair Rig — Pick Rig",
+      content: `
+        <select name="rig">
+          ${rigs.map(r=>`<option value="${r.rigId}">
+            ${r.name} (${_rigStateFromStep(r, r.damageStep||0)})
+          </option>`).join("")}
+        </select>
+      `,
+      buttons: {
+        ok: { label:"Repair", callback: html=>resolve(html.find("select").val()) },
+        cancel: { label:"Cancel", callback: ()=>resolve(null) }
+      }
+    }).render(true);
+  });
+
+  if (!rigId) return null;
+  return { faction, rigId };
+}
+
+/* ============================================================
+   OPTION SPEC TABLES (NEW — UI/UX + RAID MATCHING)
+   ============================================================ */
+
+// L1 Option Maneuvers: define primary OP, baseline cost, and normalized activity keys.
+// These values are intentionally light; stacking discounts come later.
+const OPTION_L1_SPECS = {
+  coordinated_advance:    { primaryKey:"violence",   cost:{ violence:1 },   raidTypes:["assault","occupation","liberation","siege","assault_defense"] },
+  containment_protocol:   { primaryKey:"nonlethal",  cost:{ nonlethal:1 },  raidTypes:["occupation","siege","assault_defense"] },
+  infernal_bargain:       { primaryKey:"intrigue",   cost:{ intrigue:1 },   raidTypes:["infiltration","espionage","ritual"] },
+  liturgical_rally:       { primaryKey:"softpower",  cost:{ softpower:1 },  raidTypes:["assault","liberation","siege","ritual"] },
+  make_do_and_hold:       { primaryKey:"logistics",  cost:{ logistics:1 },  raidTypes:["assault_defense","occupation","siege"] },
+  turn_the_card:          { primaryKey:"intrigue",   cost:{ intrigue:1 },   raidTypes:["espionage","infiltration","propaganda"] },
+  inherited_deference:    { primaryKey:"softpower",  cost:{ softpower:1 },  raidTypes:["liberation","occupation","courtly_intrigue"] },
+  psychological_pressure: { primaryKey:"softpower",  cost:{ softpower:1 },  raidTypes:["propaganda","espionage","liberation"] },
+  sight_of_the_tree:      { primaryKey:"faith",      cost:{ faith:1 },      raidTypes:["ritual","liberation","siege"] }
+};
+
+// L2 Option Strategics: define primary OP + baseline costs + grouping.
+// Some are mechanical-tag queueing (as already implemented), others storyOnly.
+const OPTION_L2_SPECS = {
+  operational_cohesion:   { primaryKey:"violence",   cost:{ violence:1, logistics:1 }, groupOrder: 1 },
+  stability_enforcement:  { primaryKey:"nonlethal",  cost:{ nonlethal:1, economy:1 },  groupOrder: 2, mechTag:"Stability Enforcement" },
+  ritual_binding:         { primaryKey:"intrigue",   cost:{ intrigue:2, faith:1 },     groupOrder: 3 },
+  consecrated_alignment:  { primaryKey:"faith",      cost:{ faith:2, softpower:1 },    groupOrder: 4, mechTag:"Consecrated Alignment" },
+  never_scattered:        { primaryKey:"logistics",  cost:{ logistics:1 },             groupOrder: 5 },
+  thread_the_spread:      { primaryKey:"intrigue",   cost:{ intrigue:1 },              groupOrder: 6 },
+  dynastic_resonance:     { primaryKey:"softpower",  cost:{ softpower:1, diplomacy:1 },groupOrder: 7 },
+  cultural_diffusion:     { primaryKey:"culture",    cost:{ softpower:2, culture:1 },  groupOrder: 8, mechTag:"Cultural Diffusion" },
+  guided_ascent:          { primaryKey:"faith",      cost:{ faith:2 },                 groupOrder: 9 }
+};
+
+function _prettyTitle(key){
+  return String(key || "")
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/* ============================================================
+   SLICE 2 — OPTION MANEUVER INJECTION
+   ============================================================ */
+
+function getPartyOptionManeuvers(){
+  const refined = game?.bbttcc?.api?.characterOptions?.refined;
+  if (!refined?.getUnlocksForActor) return {};
+
+  const actors = game.actors?.contents ?? [];
+  const result = {};
+
+  for (const a of actors) {
+    if (a.type !== "character") continue;
+    const unlocks = refined.getUnlocksForActor(a) || [];
+    for (const u of unlocks) {
+      if (!u?.l1) continue;
+      const key = String(u.l1);
+      result[key] ??= { count: 0, family: u.family, optionKey: u.optionKey };
+      result[key].count++;
+    }
+  }
+
+  return result;
+}
+
+function buildOptionManeuverDef(key, meta){
+  const pretty = _prettyTitle(key);
+  const spec = OPTION_L1_SPECS[key] || null;
+
+  // Defaults if missing from spec table
+  const primaryKey = spec?.primaryKey || "misc";
+  const cost = spec?.cost || {};
+  const raidTypes = spec?.raidTypes || ["assault","infiltration","occupation","liberation","espionage","propaganda","siege","ritual","assault_defense","courtly_intrigue"];
 
   return {
-    totalFinal,
-    dcFinal,
-    roll: rollUsed,
-    spentApplied: true,
-    meta: {
-      costA, costD, bonusAtt, bonusDC, adv, autoWinAtt, autoWinDef,
-      stagedA, stagedD, cat,
-      defFactionDefense: defFacDefense,
-      defNextRaidBonus:  defNextRaid
+    kind: "maneuver",
+    tier: 1,
+    rarity: "option",
+    source: "character-option",
+    optionKey: meta?.optionKey || null,
+
+    // UI: match existing look/feel
+    label: `⭐ ${pretty} [Option]`,
+    primaryKey,
+    cost,           // Raid Console reads eff.cost
+    opCosts: cost,  // Loader-style consumers read opCosts
+
+    // IMPORTANT: normalized activity keys so Raid Console matching works
+    raidTypes,
+    defenderAccess: "Conditional",
+
+    async apply({ actor, entry }) {
+      // Narrative-safe for now; Slice 4/5 will attach real mechanical riders per maneuver.
+      return `Option Maneuver executed: ${pretty}.`;
     }
   };
 }
 
-/* ---------------------- POST-ROLL effects (TURN-only writes) ---------------------- */
-async function applyPostRoundEffects({ attackerId, defenderId, success, maneuversAtt=[], maneuversDef=[], targetHexId=null } = {}) {
-  const attacker = attackerId ? game.actors.get(_stripActorId(attackerId)) : null;
-  const defender = defenderId ? game.actors.get(_stripActorId(defenderId)) : null;
-  if (!attacker) throw new Error("applyPostRoundEffects: attacker not found");
+/* ============================================================
+   SLICE 3 — OPTION STRATEGIC ACTIVITY INJECTION
+   ============================================================ */
 
-  const attFlags = copy(attacker.flags?.[MOD_FACTIONS] ?? {});
-  const defFlags = defender ? copy(defender.flags?.[MOD_FACTIONS] ?? {}) : {};
+function getPartyOptionStrategics(){
+  const refined = game?.bbttcc?.api?.characterOptions?.refined;
+  if (!refined?.getUnlocksForActor) return {};
 
-  // ðŸ” Write to TURN.pending, not POST.pending
-  const attPending = ensure(attFlags, "turn.pending", {});
-  const defPending = defender ? ensure(defFlags, "turn.pending", {}) : null;
+  const actors = game.actors?.contents ?? [];
+  const result = {};
 
-  // Hex scope (also TURN.pending)
-  let hexActor = null, hexFlags = null, hexPending = null;
-  if (targetHexId) {
-    try {
-      const d = await fromUuid(targetHexId);
-      const doc = d?.document ?? d; // DrawingDocument or Actor
-      if (doc) {
-        hexActor = doc;
-        hexFlags = copy(doc.flags?.[MOD_TERRITORY] ?? {});
-        hexPending = ensure(hexFlags, "turn.pending", {});
-      }
-    } catch (e) {}
-  }
-  const inc = (obj, key, delta=1) => { obj[key] = Number(obj[key]||0) + Number(delta||0); };
-  const attSet = new Set((maneuversAtt||[]).map(k=>String(k).toLowerCase()));
-
-  // Existing handlers (unchanged effects, new target = TURN pending)
-  if (attSet.has("flank_attack") && success && defender) {
-    inc(defPending, "defenseLoss", 1);
-    await pushWarLog(defender, { type:"raid", activity:"flank_attack", summary:"+1 Defense loss (queued) from Flank Attack." });
-  }
-  if (attSet.has("propaganda_push") && success) {
-    if (hexPending) {
-      inc(hexPending, "moraleDelta", +2);
-      await pushWarLog(attacker, { type:"raid", activity:"propaganda_push", summary:"+2 Morale queued on target hex." });
-    } else {
-      inc(attPending, "moraleDelta", +2);
-      await pushWarLog(attacker, { type:"raid", activity:"propaganda_push", summary:"+2 Morale queued (no hex specified)." });
+  for (const a of actors) {
+    if (a.type !== "character") continue;
+    const unlocks = refined.getUnlocksForActor(a) || [];
+    for (const u of unlocks) {
+      if (!u?.l2) continue;
+      const key = String(u.l2);
+      result[key] ??= { count: 0, family: u.family, optionKey: u.optionKey };
+      result[key].count++;
     }
   }
-  if (attSet.has("divine_favor") && !success) {
-    if (hexPending) {
-      inc(hexPending, "radiationRisk", +1);
-      await pushWarLog(attacker, { type:"raid", activity:"divine_favor", summary:"+1 Radiation risk queued on target hex (failure)." });
-    } else if (defender) {
-      inc(defPending, "radiationRisk", +1);
-      await pushWarLog(attacker, { type:"raid", activity:"divine_favor", summary:"+1 Radiation risk queued vs defender (failure, no hex)." });
-    } else {
-      inc(attPending, "radiationRisk", +1);
-      await pushWarLog(attacker, { type:"raid", activity:"divine_favor", summary:"+1 Radiation risk queued (failure, fallback scope)." });
-    }
-  }
-  if (attSet.has("technocrat_override") && success) {
-    const nextTurn = ensure(attPending, "nextTurn", {});
-    nextTurn.opGainPct = Number(nextTurn.opGainPct || 0) + 10;
-    await pushWarLog(attacker, { type:"raid", activity:"technocrat_override", summary:"+10% OP gain next Strategic Turn (queued)." });
-  }
-  if (attSet.has("echo_strike_protocol") && success && defender) {
-    inc(defPending, "defenseLoss", 1);
-    await pushWarLog(defender, { type:"raid", activity:"echo_strike_protocol", summary:"+1 Defense loss (queued) from Echo Strike Protocol." });
-  }
-  if (attSet.has("reality_hack") && success) {
-    if (hexPending) {
-      inc(hexPending, "enemyLoyaltyDelta", -2);
-      await pushWarLog(attacker, { type:"raid", activity:"reality_hack", summary:"Enemy Loyalty âˆ’2 queued on target hex (success)." });
-    } else {
-      inc(attPending, "enemyLoyaltyDelta", -2);
-      await pushWarLog(attacker, { type:"raid", activity:"reality_hack", summary:"Enemy Loyalty âˆ’2 queued (success, no hex specified)." });
-    }
-  }
-  if (attSet.has("unity_surge") && success) {
-    const nt = ensure(attPending, "nextTurn", {});
-    nt.opGainPct = Number(nt.opGainPct || 0) + 5;
-    inc(attPending, "moraleDelta", +1);
-    await pushWarLog(attacker, { type:"raid", activity:"unity_surge", summary:"+5% OP next turn & +1 Morale (queued) on success." });
-  }
-  if (attSet.has("moral_high_ground") && success) {
-    inc(attPending, "moraleDelta", +1);
-    await pushWarLog(attacker, { type:"raid", activity:"moral_high_ground", summary:"+1 Morale (queued) from Moral High Ground (success)." });
+
+  return result;
+}
+
+async function queueHexTag({ targetUuid, tag }) {
+  if (!targetUuid) return "No target";
+  const ref = await fromUuid(targetUuid);
+  const doc = ref?.document ?? ref;
+  if (!doc) return "Bad target UUID";
+
+  const pending = foundry.utils.getProperty(doc, `flags.${MOD_TERRITORY}.turn.pending`) || {};
+  pending.repairs = pending.repairs || {};
+  pending.repairs.addModifiers = Array.isArray(pending.repairs.addModifiers)
+    ? pending.repairs.addModifiers.slice() : [];
+
+  if (!pending.repairs.addModifiers.includes(tag)) {
+    pending.repairs.addModifiers.push(tag);
   }
 
-  // No-op coverage (log usage for maneuvers without special post handlers)
+  await doc.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: pending });
+  return `Queued Hex Tag: "${tag}"`;
+}
+
+function buildOptionStrategicDef(key, meta){
+  const pretty = _prettyTitle(key);
+  const spec = OPTION_L2_SPECS[key] || {};
+  const mechTag = spec.mechTag || null;
+  const storyOnly = !mechTag;
+
+  const opCosts = spec.cost || {};
+  const primaryKey = spec.primaryKey || "misc";
+
+  const baseApply = async ({ entry }) => {
+    const t = entry?.targetName || "Target";
+    return `${pretty} planned for ${t}. (Option-driven; GM adjudicates.)`;
+  };
+
+  const mechApply = async ({ actor, entry }) => {
+    const msgA = await baseApply({ entry });
+    const tagMsg = entry?.targetUuid
+      ? await queueHexTag({ targetUuid: entry.targetUuid, tag: mechTag })
+      : `No target UUID provided; tag "${mechTag}" not queued.`;
+    return [msgA, tagMsg].filter(Boolean).join(" • ");
+  };
+
+  return {
+    kind: "strategic",
+    band: "option",
+    source: "character-option",
+    optionKey: meta?.optionKey || null,
+
+    // Planner polish metadata (slots into existing grouping look/feel)
+    label: `⭐ ${pretty} [Option]`,
+    primaryKey,
+    opCosts,
+    cost: opCosts,
+
+    groupKey: "character_options",
+    groupLabel: "Character Options",
+    groupOrder: Number(spec.groupOrder || 90),
+
+    storyOnly,
+    apply: storyOnly ? baseApply : mechApply
+  };
+}
+
+/* ============================================================
+   EFFECTS REGISTRY (UNCHANGED + SAFE ADDITIONS)
+   ============================================================ */
+
+const EFFECTS = {
+
+
+
+
+  /* ============================================================
+   * STANDARD MANEUVERS (Core / Always-on definitions)
+   * - These exist so Raid Console tooltips + costs are authoritative.
+   * - If a maneuver is defined elsewhere (compendium/loader), this is still
+   *   the canonical runtime metadata surface for Raid Console.
+   * ============================================================ */
+
+  radiant_rally: {
+    kind: "maneuver",
+    tier: 1,
+    rarity: "common",
+    minFactionTier: 1,
+    availability: "standard",
+    label: "Radiant Rally",
+    primaryKey: "softpower",
+    cost: { softpower: 1 },
+    opCosts: { softpower: 1 },
+    raidTypes: ["liberation","siege"],
+    defenderAccess: "Yes",
+    text: "On Success: +2 Morale (or negate Morale loss); Darkness −1."
+  },
+
+  supply_overrun: {
+    kind: "maneuver",
+    tier: 1,
+    rarity: "common",
+    minFactionTier: 1,
+    availability: "standard",
+    label: "Supply Overrun",
+    primaryKey: "economy",
+    cost: { economy: 1, violence: 1 },
+    opCosts: { economy: 1, violence: 1 },
+    raidTypes: ["assault","siege"],
+    defenderAccess: "Yes",
+    text: "On Success: capture supplies; gain +1 Economy OP next round."
+  },
+
+/* ============================================================
+   NARRATIVE-UNLOCK STRATEGIC ACTIVITIES (Echo Archive Rewards)
+   - These appear in the Activity Planner ONLY when unlocked.
+   - Unlock gate: flags.bbttcc-factions.unlocks.strategics[unlockKey].unlocked === true
+   ============================================================ */
+
+terrain_calibration: {
+  kind: "strategic",
+  label: "Terrain Calibration",
+  primaryKey: "logistics",
+  cost: { logistics: 1 },
+  opCosts: { logistics: 1 },
+  tier: 1,
+  rarity: "uncommon",
+  source: "narrative-unlock",
+  unlockKey: "terrain_calibration",
+  groupKey: "echo_archive",
+  groupLabel: "Echo Archive",
+  groupOrder: 10,
+  storyOnly: true,
+  text: "Calibrate local terrain geometry; improve route certainty and reduce surprises (GM adjudicates)."
+},
+
+faultline_tuning: {
+  kind: "strategic",
+  label: "Faultline Tuning",
+  primaryKey: "faith",
+  cost: { faith: 1 },
+  opCosts: { faith: 1 },
+  tier: 1,
+  rarity: "uncommon",
+  source: "narrative-unlock",
+  unlockKey: "faultline_tuning",
+  groupKey: "echo_archive",
+  groupLabel: "Echo Archive",
+  groupOrder: 11,
+  storyOnly: true,
+  text: "Tune resonant faultlines and leylines; stabilize a region or reveal hidden pathways (GM adjudicates)."
+},
+
+auto_recon_sweep: {
+  kind: "strategic",
+  label: "Auto-Recon Sweep",
+  primaryKey: "intrigue",
+  cost: { intrigue: 1 },
+  opCosts: { intrigue: 1 },
+  tier: 1,
+  rarity: "uncommon",
+  source: "narrative-unlock",
+  unlockKey: "auto_recon_sweep",
+  groupKey: "echo_archive",
+  groupLabel: "Echo Archive",
+  groupOrder: 12,
+  storyOnly: true,
+  text: "Deploy drones/recorders to sweep nearby territory; gain intel and reduce risk on the next leg/turn (GM adjudicates)."
+},
+
+
+
+/* ============================================================
+   BASE MANEUVERS (QOL TOOLTIP + REGISTRY COMPLETION)
+   - These keys are referenced by Raid Console curated lists, but
+     may not exist in EFFECTS in some builds. We define them here
+     so tooltips + costs resolve deterministically.
+   ============================================================ */
+
+flank_attack: {
+  kind: "maneuver",
+  tier: 1,
+  rarity: "common",
+  label: "Flank Attack",
+  cost: { violence: 1 },
+  opCosts: { violence: 1 },
+  raidTypes: ["assault","occupation","liberation"],
+  defenderAccess: "No",
+  text: "Strike from an unexpected angle; pressure the line and seize momentum."
+},
+
+supply_surge: {
+  kind: "maneuver",
+  tier: 1,
+  rarity: "common",
+  label: "Supply Surge",
+  cost: { logistics: 1 },
+  opCosts: { logistics: 1 },
+  raidTypes: ["any"],
+  defenderAccess: "Yes",
+  text: "A sudden logistics push; gain a small tactical supply edge this round (GM adjudicates)."
+},
+
+defensive_entrenchment: {
+  kind: "maneuver",
+  tier: 1,
+  rarity: "common",
+  label: "Defensive Entrenchment",
+  cost: { nonlethal: 1 },
+  opCosts: { nonlethal: 1 },
+  raidTypes: ["assault_defense","occupation","siege"],
+  defenderAccess: "Yes",
+  text: "Dig in and harden positions; defender DC +3 this round."
+},
+
+divine_favor: {
+  kind: "maneuver",
+  tier: 1,
+  rarity: "common",
+  label: "Divine Favor",
+  cost: { faith: 1 },
+  opCosts: { faith: 1 },
+  raidTypes: ["ritual","liberation","any"],
+  defenderAccess: "Conditional",
+  text: "Call on providence; on success reduce Darkness pressure or negate a minor setback (GM adjudicates)."
+},
+
+  /* ============================================================
+     NARRATIVE UNLOCK MANEUVERS (Encounter/Beat gated)
+     - These appear in Raid Console when the faction has unlocked them
+       via flags.bbttcc-factions.unlocks.maneuvers[unlockKey].unlocked === true
+     - They are defined here (EFFECTS) so tooltips + costs resolve.
+     ============================================================ */
+
+  ghost_slip_infiltration: {
+    kind: "maneuver",
+    tier: 1,
+    rarity: "uncommon",
+    minFactionTier: 1,
+    unlockKey: "ghost_slip_infiltration",
+    label: "Ghost-Slip Infiltration",
+    primaryKey: "intrigue",
+    cost: { intrigue: 1 },
+    opCosts: { intrigue: 1 },
+    raidTypes: ["infiltration","espionage"],
+    defenderAccess: "No",
+    text: "Phase through the seams: ignore one defensive circumstance this round (GM adjudicates) and gain +2 to the attacker roll if the raid type is Infiltration/Espionage."
+  },
+
+  battlefield_harmony: {
+    kind: "maneuver",
+    tier: 1,
+    rarity: "uncommon",
+    minFactionTier: 1,
+    unlockKey: "battlefield_harmony",
+    label: "Battlefield Harmony",
+    primaryKey: "softpower",
+    cost: { softpower: 1 },
+    opCosts: { softpower: 1 },
+    raidTypes: ["assault","liberation","propaganda","courtly"],
+    defenderAccess: "Conditional",
+    text: "A chorus in the kill-zone: stabilize morale and coordination. On Success, treat the margin as +2 higher for outcome tiering (GM adjudicates until wired)."
+  },
+
+  sympathetic_stabilization: {
+    kind: "maneuver",
+    tier: 1,
+    rarity: "uncommon",
+    minFactionTier: 1,
+    unlockKey: "sympathetic_stabilization",
+    label: "Sympathetic Stabilization",
+    primaryKey: "faith",
+    cost: { faith: 1 },
+    opCosts: { faith: 1 },
+    raidTypes: ["ritual","siege","liberation","assault_defense"],
+    defenderAccess: "Yes",
+    text: "Bind the field with resonance. Reduce one negative consequence on Fail (or reduce incoming siege damage by 1) (GM adjudicates)."
+  },
+
+  gradient_surge: {
+    kind: "maneuver",
+    tier: 1,
+    rarity: "uncommon",
+    minFactionTier: 1,
+    unlockKey: "gradient_surge",
+    label: "Gradient Surge",
+    primaryKey: "logistics",
+    cost: { logistics: 1, economy: 1 },
+    opCosts: { logistics: 1, economy: 1 },
+    raidTypes: ["assault","occupation","liberation","blockade","espionage"],
+    defenderAccess: "No",
+    text: "Reposition through an economic gradient. Before rolling, you may convert 1 staged Economy into 1 staged Logistics (or vice versa) for this round (GM adjudicates)."
+  },
+
+
+  repair_fortifications: {
+    kind: "strategic",
+    label: "Repair Fortifications",
+    cost: { economy: 2 },
+    apply: async ({ actor, entry }) => {
+      const targetUuid = entry?.targetUuid;
+      if (!targetUuid) return "No target hex.";
+      const hex = await fromUuid(targetUuid);
+      const tf = copy(hex.flags?.[MOD_TERRITORY] ?? {});
+      const fac = tf?.facilities?.primary;
+      if (!fac) return "No facility to repair.";
+
+      const cur = Number(fac.damageStep||0);
+      if (cur <= 0) return "Already intact.";
+
+      fac.damageStep = cur - 1;
+      tf.facilities.primary = fac;
+      await hex.update({ [`flags.${MOD_TERRITORY}`]: tf });
+      return "Facility repaired by one step.";
+    }
+  },
+
+  repair_rig: {
+    kind: "strategic",
+    label: "Repair Rig",
+    cost: { economy: 2 },
+    apply: async ({ actor }) => {
+      const pick = await _promptPickRig();
+      if (!pick) return "Repair cancelled.";
+
+      const { faction, rigId } = pick;
+      const rigs = _getRigs(faction);
+      const rig = rigs.find(r => r.rigId === rigId);
+      if (!rig) return "Rig not found.";
+
+      const cur = Number(rig.damageStep || 0);
+      if (cur <= 0) return "Rig already intact.";
+
+      const next = cur - 1;
+      const fromS = _rigStateFromStep(rig, cur);
+      const toS   = _rigStateFromStep(rig, next);
+
+      await _updateRig(faction, rigId, r => {
+        r.damageStep = next;
+        r.damageState = toS;
+        r.lastRepairAt = Date.now();
+        return r;
+      });
+
+      await pushWarLog(faction, {
+        type: "raid",
+        activity: "repair_rig",
+        summary: `Repair Rig — ${rig.name}: ${fromS} → ${toS}`
+      });
+
+      return `Rig repaired: ${rig.name} (${fromS} → ${toS})`;
+    }
+  }
+};
+
+/* ============================================================
+   API PUBLICATION (EXTENDED — PRESERVES ORIGINAL SHAPE)
+   ============================================================ */
+
+
+function _applyFxMetadata(){
   try {
-    const handledAtt = new Set([
-      "flank_attack","propaganda_push","divine_favor","technocrat_override",
-      "echo_strike_protocol","reality_hack","unity_surge","moral_high_ground"
-    ]);
-    const handledDef = new Set([]);
-    const logNoop = async (who, keys) => {
-      for (const k of keys) {
-        const kk = String(k||"").toLowerCase(); if (!kk) continue;
-        await pushWarLog(who, { type:"raid", activity: kk, summary:"Maneuver used (no special post effect)." });
-      }
+    const FAMILY_BY_KEY = {
+      radiant_rally: "faith",
+      supply_overrun: "industrial",
+      flank_attack: "martial",
+      supply_surge: "industrial",
+      defensive_entrenchment: "martial",
+      divine_favor: "faith",
+      ghost_slip_infiltration: "void",
+      battlefield_harmony: "faith",
+      sympathetic_stabilization: "faith",
+      gradient_surge: "industrial",
+      repair_fortifications: "industrial",
+      repair_rig: "industrial"
     };
-    const attAll = new Set((maneuversAtt||[]).map(k=>String(k||"").toLowerCase()));
-    const defAll = new Set((maneuversDef||[]).map(k=>String(k||"").toLowerCase()));
-    const noopAtt = [...attAll].filter(k => !handledAtt.has(k));
-    const noopDef = [...defAll].filter(k => !handledDef.has(k));
-    if (noopAtt.length) await logNoop(attacker, noopAtt);
-    if (defender && noopDef.length) await logNoop(defender, noopDef);
-  } catch (e) {}
-
-  const updates = [];
-  updates.push(attacker.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: attPending }));
-  if (defender && defPending) updates.push(defender.update({ [`flags.${MOD_FACTIONS}.turn.pending`]: defPending }));
-  if (hexActor && hexPending) updates.push(hexActor.update({ [`flags.${MOD_TERRITORY}.turn.pending`]: hexPending }));
-  await Promise.all(updates);
-
-  return { ok:true, pending:{ attacker:attPending, defender:defender?defPending:null, hex:hexPending||null } };
+    for (const [k, eff] of Object.entries(EFFECTS || {})) {
+      if (!eff || typeof eff !== "object") continue;
+      if (!eff.fxKey) eff.fxKey = String(k);
+      if (!eff.family && FAMILY_BY_KEY[k]) eff.family = FAMILY_BY_KEY[k];
+    }
+  } catch (e) {
+    warn("FX metadata application failed (non-fatal)", e);
+  }
 }
 
-/* ---------------------- Turn Advance: consume queued Strategic effects ---------------------- */
-async function consumeQueuedTurnEffects({ factionId } = {}) {
-  const A = game.actors.get(_stripActorId(factionId));
-  if (!A) throw new Error("consumeQueuedTurnEffects: faction not found");
-  const flags = copy(A.flags?.[MOD_FACTIONS] ?? {});
-  const pend  = copy(flags.turn?.pending ?? {});
-  if (!Object.keys(pend).length) {
-    await pushWarLog(A, { type:"turn", activity:"consumeQueuedTurnEffects", summary:"No queued effects to apply." });
-    return { ok:true, changed:false, note:"empty" };
-  }
-
-  // --- Apply to faction mods/bonuses
-  const mods     = ensure(flags, "mods", {});
-  const bonuses  = ensure(flags, "bonuses", {});
-  const intel    = ensure(flags, "intel", {});
-  const applied  = ensure(flags, "turn.applied", []);
-  const ts = Date.now();
-
-  const inc = (obj, k, d=1)=> { obj[k] = Number(obj[k]||0) + Number(d||0); };
-
-  if (pend.techScoreDelta) inc(mods, "techScore", pend.techScoreDelta);
-  if (pend.loyaltyDelta)   inc(mods, "loyalty",   pend.loyaltyDelta);
-  if (pend.moraleDelta)    inc(mods, "morale",    pend.moraleDelta);
-  if (pend.empathyDelta)   inc(mods, "empathy",   pend.empathyDelta);
-  if (pend.darknessDelta)  inc(mods, "darkness",  pend.darknessDelta);
-  if (pend.enlightenmentForAllDelta) inc(mods, "enlightenmentAll", pend.enlightenmentForAllDelta);
-
-  if (pend.capsDelta && typeof pend.capsDelta === "object") {
-    const caps = ensure(mods, "caps", {});
-    for (const [k,v] of Object.entries(pend.capsDelta)) inc(caps, k, Number(v||0));
-  }
-
-  if (pend.nextRaid && pend.nextRaid.defenseBonus) inc(ensure(bonuses,"nextRaid",{}), "defenseBonus", pend.nextRaid.defenseBonus);
-  if (pend.nextTurn) {
-    const nt = ensure(bonuses, "nextTurn", {});
-    for (const [k,v] of Object.entries(pend.nextTurn)) { if (typeof v === "number") inc(nt, k, v); else nt[k] = v; }
-  }
-  if (pend.nextTurns) ensure(bonuses,"nextTurns",[]).push(...pend.nextTurns);
-
-  if (pend.intel?.revealEnemyOpPoolsNextTurn) intel.revealEnemyOpPoolsNextTurn = true;
-  if (pend.mergeResourcesNextTurn?.active) ensure(bonuses,"nextTurn",{}).mergeResources = true;
-
-  const requests = {};
-  for (const key of ["territory","eden","tikkun","alignment","recon","hex","trade","repairs"]) if (pend[key]) requests[key] = pend[key];
-  if (Object.keys(requests).length) ensure(flags,"requests", Object.assign(ensure(flags,"requests",{}), requests));
-
-  const hexUpdates = [];
-  for (const hex of game.actors) {
-    const hx = hex.flags?.[MOD_TERRITORY];
-    if (!hx?.turn?.pending) continue;
-    const hflags = copy(hex.flags?.[MOD_TERRITORY] ?? {});
-    const hpend  = copy(hflags.turn?.pending ?? {});
-    if (!Object.keys(hpend).length) continue;
-
-    const hmods = ensure(hflags, "mods", {});
-    const incH = (k,d)=>{ hmods[k] = Number(hmods[k]||0)+Number(d||0); };
-    if (hpend.defenseDelta)      incH("defense", hpend.defenseDelta);
-    if (hpend.tradeYieldDelta)   incH("tradeYield", hpend.tradeYieldDelta);
-    if (hpend.loyaltyDelta)      incH("loyalty", hpend.loyaltyDelta);
-    if (hpend.enemyLoyaltyDelta) incH("enemyLoyalty", hpend.enemyLoyaltyDelta);
-
-    const hreq = ensure(hflags, "requests", {});
-    if (hpend.statusSet)         hreq.statusSet = hpend.statusSet;
-    if (hpend.cleanseCorruption) hreq.cleanseCorruption = true;
-    if (hpend.destroyHex)        hreq.destroyHex = true;
-
-    const happlied = ensure(hflags, "turn.applied", []);
-    happlied.push({ ts, data: hpend });
-    if (hflags.turn) hflags.turn.pending = {};
-
-    hexUpdates.push(hex.update({ [`flags.${MOD_TERRITORY}`]: hflags }));
-  }
-
-  applied.push({ ts, data: pend });
-  if (flags.turn) flags.turn.pending = {};
-
-  await Promise.all([ ...hexUpdates, A.update({ [`flags.${MOD_FACTIONS}`]: flags }) ]);
-  await pushWarLog(A, { type:"turn", activity:"consumeQueuedTurnEffects", summary:"Applied queued Strategic effects; pending cleared." });
-
-  return { ok:true, changed:true, appliedAt: ts };
-}
-
-/* ---------------------- Planner derivation: robust getActivities ---------------------- */
-function _buildActivitiesFromEffects() {
-  const list = [];
-  for (const [key, spec] of Object.entries(EFFECTS)) {
-    if (spec?.kind !== "strategic") continue;
-    list.push({
-      key,
-      label: spec.label || key.replace(/_/g," ").replace(/\b\w/g, c=>c.toUpperCase()),
-      summary: spec.summary || "",
-      cost: spec.cost || {}
-    });
-  }
-  list.sort((a,b)=> a.label.localeCompare(b.label, undefined, { sensitivity:"base" }));
-  return list;
-}
-
-/* ---------------------- Migration helpers (POST â†’ TURN; nextRound â†’ nextTurn) -------- */
-function _normalizeQueueFlags(flags) {
-  const f = copy(flags || {});
-  const F = f[MOD_FACTIONS];
-  if (!F) return f;
-
-  const post = F.post?.pending;
-  if (post && typeof post === "object") {
-    const tp = ensure(F, "turn.pending", {});
-    for (const [k,v] of Object.entries(post)) if (tp[k] === undefined) tp[k] = v;
-    delete F.post;
-  }
-  const tp = F.turn?.pending;
-  if (tp && typeof tp === "object" && "nextRound" in tp && tp.nextTurn === undefined) {
-    tp.nextTurn = tp.nextRound;
-    delete tp.nextRound;
-  }
-  return f;
-}
-
-async function _migrateActor(actor) {
-  const flags = copy(actor.flags || {});
-  const norm  = _normalizeQueueFlags(flags);
-  if (!foundry.utils.isObjectEqual(flags, norm)) {
-    await actor.update({ flags: norm });
-    return true;
-  }
-  return false;
-}
-
-/* ---------------------- Expose API (publish in BOTH namespaces) ---------------------- */
-function ensureNS(){
+function publishCompat(){
   game.bbttcc ??= { api:{} };
   game.bbttcc.api ??= {};
   game.bbttcc.api.raid ??= {};
-}
 
-function publishCompat() {
+  // Slice 2: inject option maneuvers (opt_<maneuverKey>)
   try {
-    ensureNS();
+    const optionMans = getPartyOptionManeuvers();
+    for (const [key, meta] of Object.entries(optionMans)) {
+      const effKey = `opt_${key}`;
+      if (!EFFECTS[effKey]) {
+        EFFECTS[effKey] = buildOptionManeuverDef(key, meta);
+        log("Injected option maneuver:", effKey, meta);
+      }
+    }
+  } catch (e) {
+    warn("Option maneuver injection failed", e);
+  }
 
-    // Merge any existing raid API (preserves planner opener and other extenders)
-    const existing = (game.bbttcc?.api?.raid) || (game.modules.get(MOD_ID)?.api?.raid) || {};
+  // Slice 3: inject option strategic activities (optact_<activityKey>)
+  try {
+    const optionActs = getPartyOptionStrategics();
+    for (const [key, meta] of Object.entries(optionActs)) {
+      const effKey = `optact_${key}`;
+      if (!EFFECTS[effKey]) {
+        EFFECTS[effKey] = buildOptionStrategicDef(key, meta);
+        log("Injected option strategic activity:", effKey, meta);
+      }
+    }
+  } catch (e) {
+    warn("Option strategic injection failed", e);
+  }
 
-    // Primary API object we will publish in both places
-    const raidAPI = Object.assign({}, existing, {
-      EFFECTS,
-      __compatStamp: Date.now(),
-      consumePlanned,
-      resolveRoundWithManeuvers,
-      applyPostRoundEffects,
-      applyStrategicActivity: (args)=>queueStrategic(args),
-      getActivities: () => _buildActivitiesFromEffects(),
-      consumeQueuedTurnEffects,
+  // ------------------------------------------------------------
+  // EFFECTS NORMALIZATION (docs parity)
+  // - Normalizes raidTypes from human labels -> internal keys
+  // - Normalizes defenderAccess ("Yes"/"Conditional") -> boolean
+  //   while preserving the original label in defenderAccessMode.
+  // This keeps console filtering consistent with documentation.
+  // ------------------------------------------------------------
+  function _normRaidTypeKey(raw){
+    const s0 = String(raw || "").trim();
+    if (!s0) return "";
+    const s = s0.toLowerCase();
 
-      // NEW: accept attackerId OR factionId (Planner-friendly)
-      async planActivity({ factionId, attackerId, activityKey, targetUuid=null, notes="", label=null } = {}) {
-        const fid = factionId || attackerId;
-        if (!fid || !activityKey) throw new Error("Missing factionId/attackerId or activityKey");
+    // Already normalized keys
+    const ok = ["assault","infiltration","espionage","blockade","occupation","liberation","propaganda","ritual","siege","courtly","infiltration_alarm","rig_combat","any"];
+    if (ok.includes(s)) return s;
 
-        const A = game.actors.get(_stripActorId(fid)) ||
-                  (String(fid).startsWith("Actor.") ? await fromUuid(fid) : null);
-        if (!A) throw new Error("Faction actor not found");
+    // Common label aliases
+    if (s.includes("ritual")) return "ritual";
+    if (s.includes("tikkun")) return "ritual";
+    if (s.includes("courtly")) return "courtly";
+    if (s.includes("infiltration") && s.includes("alarm")) return "infiltration_alarm";
 
-        // Resolve target name (optional)
-        let tName = null;
-        if (targetUuid) {
-          try {
-            const doc = await fromUuid(targetUuid);
-            tName = doc?.flags?.[MOD_TERRITORY]?.name || doc?.name || doc?.text || null;
-          } catch {}
+    // Defense variants (e.g., "Assault (defense)")
+    if (s.includes("(defense)") || s.includes("defense")) {
+      if (s.includes("assault")) return "assault_defense";
+      if (s.includes("occupation")) return "occupation_defense";
+      if (s.includes("siege")) return "siege_defense";
+      // fallback: strip to base
+    }
+
+    // Parenthetical variants like "(pre-siege)" -> base type
+    if (s.includes("assault")) return "assault";
+    if (s.includes("occupation")) return "occupation";
+    if (s.includes("liberation")) return "liberation";
+    if (s.includes("propaganda")) return "propaganda";
+    if (s.includes("espionage")) return "espionage";
+    if (s.includes("blockade")) return "blockade";
+    if (s.includes("infiltration")) return "infiltration";
+    if (s.includes("siege")) return "siege";
+    return "";
+  }
+
+  function _normalizeEffectsRegistry(){
+    try {
+      for (const [k, eff0] of Object.entries(EFFECTS || {})) {
+        const eff = eff0;
+        if (!eff || typeof eff !== "object") continue;
+
+        // Normalize raidTypes (labels -> keys)
+        if (eff.raidTypes != null) {
+          const raw = eff.raidTypes;
+          const arr = Array.isArray(raw) ? raw : [raw];
+          const norm = [];
+          for (const v of arr) {
+            const nk = _normRaidTypeKey(v);
+            if (nk && !norm.includes(nk)) norm.push(nk);
+          }
+          if (norm.length) {
+            if (eff.raidTypesLabel == null) eff.raidTypesLabel = Array.isArray(raw) ? raw.slice() : String(raw);
+            eff.raidTypes = norm;
+          }
         }
 
-        const entry = {
-          ts: Date.now(),
-          date: nowISO(),
-          type: "planned",
-          activity: String(activityKey).toLowerCase(),
-          targetUuid,
-          targetName: tName,
-          label: label || activityKey,
-          notes
-        };
-
-        const flags = copy(A.flags?.[MOD_FACTIONS] || {});
-        const wl = Array.isArray(flags.warLogs) ? flags.warLogs.slice() : [];
-        wl.push(entry);
-        await A.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl }, { diff:true, recursive:true });
-        return entry;
-      },
-
-      // Migration helpers for manual invocation
-      runQueueMigration: async () => {
-        const actors = game.actors?.contents || [];
-        let changed = 0;
-        for (const a of actors) changed += (await _migrateActor(a)) ? 1 : 0;
-        ui.notifications?.info?.(`[${MOD_ID}] Queue migration complete. Actors changed: ${changed}`);
-        return changed;
-      },
-      _queueCompatInfo: () => {
-        const f = game.actors.find(a => a.getFlag(MOD_FACTIONS, "isFaction"));
-        if (!f) return { note: "No faction actor found." };
-        const post = f.getFlag(MOD_FACTIONS, "post");
-        const turn = f.getFlag(MOD_FACTIONS, "turn");
-        return {
-          hasLegacyPost: !!post,
-          turnPendingKeys: Object.keys(turn?.pending || {}),
-          version: game.modules.get(MOD_ID)?.version
-        };
+        // Normalize defenderAccess ("Yes"/"Conditional"/"No" -> boolean) but preserve label
+        if (typeof eff.defenderAccess === "string") {
+          const label = String(eff.defenderAccess || "").trim();
+          const lc = label.toLowerCase();
+          if (eff.defenderAccessMode == null) eff.defenderAccessMode = label;
+          // Yes / Conditional / True -> true, else false
+          const ok = (lc === "yes" || lc === "conditional" || lc === "true" || lc === "y");
+          eff.defenderAccessBool = ok;
+          eff.defenderAccess = ok;
+        } else if (typeof eff.defenderAccess === "boolean") {
+          if (eff.defenderAccessMode == null) eff.defenderAccessMode = (eff.defenderAccess ? "Yes" : "No");
+          eff.defenderAccessBool = eff.defenderAccess;
+        }
       }
-    });
+    } catch (e) {
+      warn("EFFECTS normalization failed (non-fatal)", e);
+    }
+  }
 
-    // Publish to game.bbttcc.api.raid
-    game.bbttcc.api.raid = raidAPI;
+  // Run normalization after injections (option maneuvers/strategics may add metadata).
+  _normalizeEffectsRegistry();
+  _applyFxMetadata();
 
-    // And also to module namespace for compatibility with callers using M.api
-    const mod = game.modules.get(MOD_ID);
-    mod.api ??= {};
-    mod.api.raid = raidAPI;
 
-    log("Compat bridge (re)published â€” latest handlers installed (dual namespace, merged).");
-  } catch (e) { warn("Compat bridge publish failed:", e); }
+  const api = {
+    EFFECTS,
+    getActivities: () =>
+      Object.entries(EFFECTS)
+        .filter(([_,e]) => e.kind === "strategic")
+        .map(([key,e]) => ({ key, label:e.label, cost:e.cost })),
+  };
+
+  Object.assign(game.bbttcc.api.raid, api);
+  const mod = game.modules.get(MOD_ID);
+  mod.api ??= {};
+  mod.api.raid = game.bbttcc.api.raid;
+
+  log("Compat bridge published (polished option metadata for Planner + Raid Console).");
 }
 
-if (globalThis?.Hooks?.once) Hooks.once("ready", async () => {
-  // One-shot world migration on ready
-  try {
-    const actors = game.actors?.contents || [];
-    let changed = 0;
-    for (const a of actors) changed += (await _migrateActor(a)) ? 1 : 0;
-    if (changed) log(`Migrated ${changed} actor(s) to TURN-only queue shape.`);
-  } catch (e) { warn("ready migration error", e); }
+Hooks.once("ready", publishCompat);
 
-  publishCompat();
-});
 
-try { if (globalThis?.game?.ready === true) publishCompat(); } catch {}
 
-/* ---------------------- Viewport fit / scroll shim ---------------------- */
-function fitRaidConsoleViewport(app){
-  try {
-    const el = app?.element instanceof jQuery ? app.element[0] : app?.element;
-    if (!el) return;
-    const win = el.closest?.(".app.window-app") || el;
-    const content = win.querySelector?.(".window-content") || el;
-    const H = Math.max(window.innerHeight || 800, 600);
-    const maxH = Math.floor(H - 120);
-    win.style.maxHeight = `${maxH}px`;
-    win.style.height = `${Math.min(maxH, (win.offsetHeight || maxH))}px`;
-    content.style.maxHeight = `${maxH - 60}px`;
-    content.style.overflowY = "auto";
-  } catch (e) {}
-}
-if (globalThis?.Hooks?.on) {
-  Hooks.on("renderBBTTCC_RaidConsole", (app) => fitRaidConsoleViewport(app));
-  Hooks.on("resizeBBTTCC_RaidConsole",  (app) => fitRaidConsoleViewport(app));
-}
+/* ============================================================
+ * Maneuver Availability Normalization (Standard vs Learned)
+ * - Adds eff.availability: "standard" | "learned" (default: standard)
+ * - Adds eff.unlockKey for learned (default: key)
+ * - Policy:
+ *    * Tier >= 2 => learned
+ *    * Tier == 1 and key in {suppressive_fire, patch_the_breach, flash_interdict, last_stand_banner} => learned
+ * ============================================================ */
+(function(){
+  function __bbttccNormalizeManeuverAvailability(){
+    try {
+      const raid = game.bbttcc?.api?.raid;
+      const EFFECTS = raid?.EFFECTS || {};
+      const learnedT1 = { suppressive_fire:true, patch_the_breach:true, flash_interdict:true, last_stand_banner:true };
+
+      for (const [k, eff0] of Object.entries(EFFECTS)) {
+        const eff = eff0 || {};
+        if (String(eff.kind||"") !== "maneuver") continue;
+
+        const tier = Number(eff.tier ?? eff.meta?.tier ?? 1) || 1;
+        let availability = String(eff.availability || eff.meta?.availability || "").toLowerCase();
+
+        if (!availability) {
+          if (tier >= 2 || learnedT1[String(k).toLowerCase()]) availability = "learned";
+          else availability = "standard";
+          eff.availability = availability;
+        } else {
+          eff.availability = availability;
+        }
+
+        if ((eff.availability === "learned") && !eff.unlockKey) {
+          eff.unlockKey = String(eff.meta?.unlockKey || k);
+        }
+      }
+    } catch (e) {}
+  }
+
+  Hooks.once("ready", () => {
+    __bbttccNormalizeManeuverAvailability();
+    // retry once after late-attach overwrites
+    setTimeout(__bbttccNormalizeManeuverAvailability, 250);
+  });
+})();

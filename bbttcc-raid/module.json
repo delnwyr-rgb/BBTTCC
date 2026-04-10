@@ -3,16 +3,46 @@
   "title": "BBTTCC Raid",
   "description": "Raid management system for the BBTTCC Suite.",
   "version": "1.3.14.2",
-  "authors": [{ "name": "BBTTCC Team" }],
-  "compatibility": { "minimum": "11", "verified": "13" },
+  "authors": [
+    {
+      "name": "BBTTCC Team"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
   "relationships": {
-    "systems": [{ "id": "dnd5e", "type": "system" }],
-    "requires": [{ "id": "bbttcc-factions", "type": "module" }]
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system"
+      }
+    ],
+    "requires": [
+      {
+        "id": "bbttcc-factions",
+        "type": "module"
+      }
+    ]
   },
   "esmodules": [
     "scripts/compat-bridge.js",
+    "scripts/bbttcc-agent-api.js",
     "scripts/raid-maneuvers.js",
     "scripts/module.raid-console.js",
+    "scripts/strategic-throughput.js",
+    "scripts/boss/bossRegistry.js",
+    "scripts/boss/applyBehaviors.js",
+    "scripts/boss/boss-behaviors.console-hook.enhancer.js",
+    "scripts/boss/boss-behaviors.hook.enhancer.js",
+	"scripts/boss/boss-creature-doctrine.ui.enhancer.js",
+    "scripts/boss/boss-templates.js",
+    "scripts/boss/boss-powers.js",
+    "scripts/boss/boss-config-app.js",
+    "scripts/boss/bosses.gloomgill.js",
+    "scripts/targets/resolveTarget.js",
+    "scripts/ui/bbttcc-tooltip-resolver.js",
     "scripts/raid-victory.enhancer.js",
     "scripts/raid-morale.enhancer.js",
     "scripts/planned-loyalty.enhancer.js",
@@ -52,7 +82,9 @@
     "scripts/bbttcc-raid-maneuvers-loader.enhancer.js",
     "scripts/bbttcc-raid-console-ui.enhancer.js",
     "scripts/raid-planner-mode.enhancer.js",
-    "scripts/module.raid-planner.js"
+    "scripts/bbttcc-raid.consumePlanned.shim.js",
+    "scripts/module.raid-planner.js",
+    "scripts/raid-resolveRaidRound.throughput.enhancer.js"
   ],
   "styles": [
     "css/raid-styles.css"

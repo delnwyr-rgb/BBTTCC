@@ -8,6 +8,61 @@
   color: #e5e7eb;
 }
 
+
+
+
+/* Force browser-level resizing fallback on the outer window as well as Foundry's handle */
+.window-app.bbttcc-raid-console,
+.application.bbttcc-raid-console,
+.bbttcc-raid-console.application {
+  resize: both;
+  overflow: hidden !important;
+  min-width: 760px;
+  min-height: 520px;
+}
+
+/* Keep the content frame sized to the live window box */
+.window-app.bbttcc-raid-console .window-content,
+.application.bbttcc-raid-console .window-content,
+.bbttcc-raid-console .window-content {
+  height: calc(100% - 32px);
+  box-sizing: border-box;
+}
+
+/* --- Resizing / Scroll Safety (raid console) -------------------------------
+   Ensures resize handles aren't clipped and action buttons remain reachable. */
+.bbttcc-raid-console.application {
+  overflow: visible;              /* don't clip resize handles */
+}
+
+.bbttcc-raid-console .window-content {
+  overflow-y: auto;               /* allow scrolling when window is small */
+  max-height: calc(100% - 32px);  /* leave room for header/frame */
+}
+
+/* If Foundry wraps content differently in v13, cover both */
+.bbttcc-raid-console section.window-content {
+  overflow-y: auto;
+  max-height: calc(100% - 32px);
+}
+.bbttcc-raid-console .window-content {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bbttcc-raid-console .bbttcc-rounds {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.bbttcc-raid-console .bbttcc-mans-cell {
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
 .bbttcc-raid-console .window-content {
   padding: 0.6rem 0.8rem 0.8rem;
   background:
@@ -333,4 +388,327 @@
 
 .bbttcc-raid-console .center {
   text-align: center;
+}
+
+
+/* BBTTCC — Activity Planner Hex Chrome Skin */
+
+
+/* The planner app should include one of these classes on the Application:
+   - bbttcc-raid-planner (preferred)
+   - bbttcc-activity-planner (fallback)
+*/
+.bbttcc-raid-planner,
+.bbttcc-activity-planner {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  color: #e5e7eb;
+}
+
+/* Window chrome */
+.bbttcc-raid-planner .window-content,
+.bbttcc-activity-planner .window-content {
+  padding: 0.6rem 0.8rem 0.8rem;
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(56,189,248,0.18), transparent 55%),
+    radial-gradient(circle at 0 100%, rgba(147,51,234,0.18), transparent 60%),
+    linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+  border-radius: 0.9rem;
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.95),
+    0 18px 32px rgba(15,23,42,0.9);
+  box-sizing: border-box;
+}
+
+/* Label style */
+.bbttcc-raid-planner label,
+.bbttcc-activity-planner label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #cbd5f5;
+}
+
+/* Inputs */
+.bbttcc-raid-planner select,
+.bbttcc-raid-planner input[type="text"],
+.bbttcc-raid-planner textarea,
+.bbttcc-activity-planner select,
+.bbttcc-activity-planner input[type="text"],
+.bbttcc-activity-planner textarea {
+  background-color: rgba(15,23,42,0.9);
+  border-radius: 0.45rem;
+  border: 1px solid rgba(31,41,55,0.95);
+  color: #e5e7eb;
+  padding: 0.25rem 0.45rem;
+  font-size: 12px;
+}
+
+.bbttcc-raid-planner select:focus,
+.bbttcc-raid-planner input[type="text"]:focus,
+.bbttcc-raid-planner textarea:focus,
+.bbttcc-activity-planner select:focus,
+.bbttcc-activity-planner input[type="text"]:focus,
+.bbttcc-activity-planner textarea:focus {
+  outline: none;
+  border-color: rgba(59,130,246,0.9);
+  box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+}
+
+/* Category chips */
+.bbttcc-raid-planner .bbttcc-chip,
+.bbttcc-raid-planner .chip,
+.bbttcc-activity-planner .bbttcc-chip,
+.bbttcc-activity-planner .chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.75);
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.25), transparent 55%),
+    linear-gradient(135deg, rgba(30,64,175,0.75), rgba(15,23,42,0.96));
+  color: #e5e7eb;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.bbttcc-raid-planner .bbttcc-chip.active,
+.bbttcc-raid-planner .chip.active,
+.bbttcc-activity-planner .bbttcc-chip.active,
+.bbttcc-activity-planner .chip.active {
+  border-color: rgba(59,130,246,0.95);
+  background:
+    radial-gradient(circle at 0 0, rgba(56,189,248,0.45), transparent 55%),
+    linear-gradient(135deg, rgba(79,70,229,0.96), rgba(14,165,233,0.96));
+}
+
+/* Activity list container */
+.bbttcc-raid-planner .bbttcc-acts,
+.bbttcc-raid-planner .acts,
+.bbttcc-activity-planner .bbttcc-acts,
+.bbttcc-activity-planner .acts {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(30,64,175,0.65);
+  background:
+    radial-gradient(circle at 0 0, rgba(30,64,175,0.18), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.18), transparent 55%),
+    rgba(15,23,42,0.88);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.85),
+    0 10px 18px rgba(15,23,42,0.75);
+  overflow: hidden;
+}
+
+/* Group headers */
+.bbttcc-raid-planner .bbttcc-group,
+.bbttcc-raid-planner .group,
+.bbttcc-activity-planner .bbttcc-group,
+.bbttcc-activity-planner .group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.35rem 0.55rem;
+  background: linear-gradient(90deg, rgba(15,23,42,0.96), rgba(30,64,175,0.78));
+  border-bottom: 1px solid rgba(30,64,175,0.65);
+  color: #cbd5f5;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  user-select: none;
+}
+
+.bbttcc-raid-planner .bbttcc-group:hover,
+.bbttcc-raid-planner .group:hover,
+.bbttcc-activity-planner .bbttcc-group:hover,
+.bbttcc-activity-planner .group:hover {
+  filter: brightness(1.05);
+}
+
+/* Activity rows */
+.bbttcc-raid-planner [data-act],
+.bbttcc-activity-planner [data-act] {
+  padding: 0.4rem 0.55rem;
+  border-top: 1px solid rgba(31,41,55,0.85);
+  background-color: rgba(15,23,42,0.94);
+}
+
+.bbttcc-raid-planner [data-act]:nth-child(even),
+.bbttcc-activity-planner [data-act]:nth-child(even) {
+  background-color: rgba(15,23,42,0.90);
+}
+
+.bbttcc-raid-planner [data-act].selected,
+.bbttcc-activity-planner [data-act].selected {
+  outline: 1px solid rgba(56,189,248,0.75);
+  box-shadow: 0 0 0 1px rgba(56,189,248,0.35) inset;
+}
+
+/* Bottom action buttons */
+.bbttcc-raid-planner button,
+.bbttcc-activity-planner button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.22rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.9);
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
+    linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
+  color: #e5e7eb;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bbttcc-raid-planner button:hover,
+.bbttcc-activity-planner button:hover {
+  filter: brightness(1.06);
+}
+
+.bbttcc-raid-planner button.primary,
+.bbttcc-raid-planner button[data-act="plan"],
+.bbttcc-activity-planner button.primary,
+.bbttcc-activity-planner button[data-act="plan"] {
+  border-color: rgba(59,130,246,0.95);
+  background:
+    radial-gradient(circle at 0 0, rgba(56,189,248,0.5), transparent 55%),
+    linear-gradient(135deg, rgba(79,70,229,0.98), rgba(14,165,233,0.98));
+}
+
+/* Prevent Foundry light theme from forcing black text inside planner */
+.bbttcc-raid-planner *,
+.bbttcc-activity-planner * {
+  color: inherit;
+}
+
+/* ===============================
+   Rig / Raid Round Log Scrolling
+   =============================== */
+
+.bbttcc-raid-manage-round {
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh; /* keep dialog on screen */
+}
+
+.bbttcc-raid-round-log,
+.bbttcc-raid-round-history {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* Optional: nicer scrollbar, consistent with Hex Chrome */
+.bbttcc-raid-round-log::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bbttcc-raid-round-log::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+}
+
+/* BBTTCC — OP Gating Chips (Campaign Dialog) */
+.bbttcc-choice-roll-dialog .bbttcc-op-chips {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-op-chip {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid rgba(148,163,184,0.55);
+  background: rgba(0,0,0,0.28);
+  cursor: default;
+  white-space: nowrap;
+  line-height: 1.15;
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-op-chip.ok {
+  border-color: rgba(63,163,77,0.85);
+  color: #b6f2c2;
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-op-chip.empty {
+  border-color: rgba(220,38,38,0.75);
+  color: #f2b6b6;
+  opacity: 0.9;
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-op-chip.focus {
+  box-shadow: 0 0 0 1px rgba(56,189,248,0.40) inset;
+  border-color: rgba(56,189,248,0.75);
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-op-chip.desperate {
+  border-color: rgba(234,179,8,0.85);
+  color: #ffe29a;
+  background: rgba(90,60,0,0.38);
+}
+
+/* Roll button gating states */
+.bbttcc-choice-roll-dialog .dialog-buttons button.bbttcc-roll-blocked {
+  opacity: 0.55;
+  filter: saturate(0.8);
+}
+
+.bbttcc-choice-roll-dialog .dialog-buttons button.bbttcc-roll-desperate {
+  border-color: rgba(234,179,8,0.9) !important;
+  box-shadow: 0 0 0 1px rgba(234,179,8,0.35) inset;
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-muted {
+  opacity: 0.8;
+  font-size: 12px;
+}
+
+
+/* Sacrifice button (Campaign dialog) */
+.bbttcc-choice-roll-dialog .bbttcc-sacrifice-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(220,38,38,0.55);
+  background: rgba(220,38,38,0.12);
+  color: #ffd1d1;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+.bbttcc-choice-roll-dialog .bbttcc-sacrifice-btn:hover{
+  border-color: rgba(220,38,38,0.85);
+  background: rgba(220,38,38,0.18);
+}
+
+
+/* Faction backing controls (Campaign dialog) */
+.bbttcc-choice-roll-dialog .bbttcc-support-row button.bbttcc-support-inc,
+.bbttcc-choice-roll-dialog .bbttcc-support-row button.bbttcc-support-dec{
+  width: 26px;
+  height: 22px;
+  border-radius: 8px;
+  border: 1px solid rgba(148,163,184,0.55);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+  line-height: 1;
+  font-weight: 800;
+}
+.bbttcc-choice-roll-dialog .bbttcc-support-row button:disabled{
+  opacity: 0.45;
+  cursor: default;
 }
