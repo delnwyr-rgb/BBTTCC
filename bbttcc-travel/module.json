@@ -14,14 +14,20 @@
       "url": "https://shatteredlensstudios.com"
     }
   ],
-  "esmodules": [],
+  "esmodules": [
+    "scripts/travel.weather.registry.js",
+    "scripts/travel.weather.helpers.js",
+    "scripts/travel.weather.engine.js",
+    "scripts/travel.arc.engine.js"
+  ],
+
   "scripts": [
-    "scripts/travel.arc.engine.js",
     "scripts/bbttcc-travel-console.js",
     "scripts/bbttcc-travel-visuals.js",
     "scripts/api.travel.js",
     "scripts/bbttcc-travel-summary.enhancer.js",
     "scripts/bbttcc-travel-pill-kill.enhancer.js",
+    "scripts/bbttcc-weather-tick.enhancer.js",
     "scripts/hex-travel-mode.js",
     "scripts/hex-travel.js"
   ],

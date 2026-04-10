@@ -1,377 +1,604 @@
-/* bbttcc-travel/scripts/api.travel.js
- * Hex Movement MVP (Terrain cost + Encounter wiring + War Log)
- * Foundry v13.348 / dnd5e 5.1.9
- *
- * Publishes game.bbttcc.api.travel:
- *   - travelHex({ factionId, hexFrom, hexTo }) -> { ok, cost, encounter:{triggered,tier,result}, summary }
- *   - previewTravelHex({ factionId, hexFrom, hexTo }) -> same as travelHex but NO OP SPEND / NO WAR LOG
- *   - rollEncounter(tier) -> { tier, key, label }
- * Emits hooks: 'bbttcc:beforeTravel', 'bbttcc:afterTravel' for crew/feature modifiers.
- */
+// modules/bbttcc-travel/scripts/api.travel.js
+// Canonical travel wrapper + Hex Entry Beat (Option A)
+//
+// FIXED 2026-02-25:
+// - Remove duplicated helper implementations that shadow each other
+// - Use a single, deterministic Campaign Travel Table picker
+// - Preserve "fail closed" Active Campaign (starred) behavior
+// - Preserve Hex Enter Beat deferral + dedupe + console double-emit guard
 
 (() => {
-  const MOD_FACTIONS  = "bbttcc-factions";
-  const MOD_TERRITORY = "bbttcc-territory";
-  const TAG  = "[bbttcc-travel]";
-  const log  = (...a)=>console.log(TAG, ...a);
-  const warn = (...a)=>console.warn(TAG, ...a);
+  const TAG  = "[bbttcc-travel/api]";
+  const log  = (...a) => console.log(TAG, ...a);
+  const warn = (...a) => console.warn(TAG, ...a);
 
-  // ---------------- Utils ----------------
-  const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+  // ---------------------------------------------------------------------------
+  // Settings helpers
+  // ---------------------------------------------------------------------------
 
-  const nowISO = ()=> new Date().toISOString();
-
-  function copy(x){
-    return x && typeof x === "object" ? foundry.utils.deepClone(x) : x;
+  function safeGetSetting(ns, key, fallback) {
+    try { return game.settings.get(ns, key); } catch (_e) { return fallback; }
   }
 
-  function zOP(){
-    const o = {};
-    for (const k of OP_KEYS) o[k] = 0;
-    return o;
+  async function safeSetSetting(ns, key, value) {
+    try { return await game.settings.set(ns, key, value); } catch (_e) { return null; }
   }
 
-  function canAfford(bank, cost){
-    bank = bank || zOP();
-    cost = cost || zOP();
-    for (const k of OP_KEYS) {
-      const have = Number(bank[k] || 0);
-      const need = Number(cost[k] || 0);
-      if (have < need) return false;
+  // ---------------------------------------------------------------------------
+  // Campaign store
+  // ---------------------------------------------------------------------------
+
+  function normalizeCampaignStore(raw) {
+    if (!raw) return { map: {}, list: [] };
+    if (Array.isArray(raw)) {
+      const list = raw.filter(Boolean);
+      const map = Object.fromEntries(list.filter(c => c && c.id).map(c => [c.id, c]));
+      return { map, list };
     }
+    if (typeof raw === "object") {
+      const map = raw;
+      const list = Object.values(map).filter(Boolean);
+      return { map, list };
+    }
+    return { map: {}, list: [] };
+  }
+
+  function getCampaignStore() {
+    const raw = safeGetSetting("bbttcc-campaign", "campaigns", null);
+    return normalizeCampaignStore(raw);
+  }
+
+  // ✅ Source of truth: bbttcc-campaign’s Active Campaign (the UI star)
+  async function getActiveCampaignIdStarred() {
+    const store = getCampaignStore();
+
+    // Prefer API
+    let id = null;
+    try {
+      const api = game.bbttcc && game.bbttcc.api ? game.bbttcc.api.campaign : null;
+      if (api && typeof api.getActiveCampaignId === "function") {
+        id = String(api.getActiveCampaignId() || "").trim() || null;
+      }
+    } catch (_e) {}
+
+    // Fallback: direct setting
+    if (!id) {
+      id = String(safeGetSetting("bbttcc-campaign", "activeCampaignId", "") || "").trim() || null;
+    }
+
+    if (!id) return null;
+
+    // Validate against this world’s campaign store (fail closed)
+    if (!store.map || !store.map[id]) {
+      warn("Active campaign id is set, but not found in store. (Fail closed)", {
+        activeId: id,
+        known: (store.list || []).map(c => c && c.id).filter(Boolean)
+      });
+      return null;
+    }
+
+    // Sync injector key so existing injector machinery stays aligned
+    await safeSetSetting("bbttcc-core", "campaignInjectorActiveCampaignId", id);
+
+    return id;
+  }
+
+  function getCampaignById(campaignId) {
+    const store = getCampaignStore();
+    return (store.map && store.map[campaignId]) ? store.map[campaignId] : null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Encounter enrichment helpers
+  // ---------------------------------------------------------------------------
+
+  function clampTier(t) {
+    const n = Number(t || 1);
+    return Number.isFinite(n) ? Math.max(1, Math.min(4, n)) : 1;
+  }
+
+  function normKey(v, fallback) {
+    const s = String(v || "").trim().toLowerCase();
+    return s || (fallback ? String(fallback).trim().toLowerCase() : "");
+  }
+
+  function normalizeEncounterShape(enc) {
+    if (!enc || typeof enc !== "object") return null;
+    const tier = clampTier(enc.tier != null ? enc.tier : (enc.result && enc.result.tier) ? enc.result.tier : 1);
+    const key = (enc.key != null ? enc.key : (enc.result ? enc.result.key : null)) || null;
+    const label = (enc.label != null ? enc.label : (enc.result ? enc.result.label : null)) || key || null;
+
+    // Preserve extended fields (beatId, campaignId, meta, category) used by downstream Trigger Manager.
+    const out = Object.assign({}, enc);
+    out.triggered = !!enc.triggered;
+    out.tier = tier;
+    out.key = key;
+    out.label = label;
+    out.result = { key, label, tier };
+    return out;
+  }
+
+  function buildStepCtxFromTravelResult(result) {
+    const terrain = String((result && (result.terrainKey || result.terrain)) || "plains");
+    return {
+      terrain,
+      hasRoad: false,
+      regionHeat: Number((result && result.regionHeat) || 0) || 0,
+      darkness: Number((result && result.darkness) || 0) || 0,
+      stepsOnRoute: Number((result && result.stepsOnRoute) || 1) || 1
+    };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Campaign travel table selection (roll-only)
+  // - Uses bbttcc-campaign encounterTables setting (Table Editor)
+  // - Picks entry by weight WITHOUT executing a beat
+  // - Supports travel_<terrain>_tN, travel_<terrain>_tierN, travel_generic_tN
+  // ---------------------------------------------------------------------------
+
+  function safeGetEncounterTablesSetting() {
+    try { return game.settings.get("bbttcc-campaign", "encounterTables") || {}; }
+    catch (_e) { return {}; }
+  }
+
+  function resolveTravelTableId(tables, terrainKey, tier) {
+    const t = clampTier(tier);
+    const terr = normKey(terrainKey, "generic");
+    const candidates = [
+      `travel_${terr}_t${t}`,
+      `travel_${terr}_tier${t}`,
+      `travel_generic_t${t}`
+    ];
+    for (let i = 0; i < candidates.length; i++) {
+      const id = candidates[i];
+      if (tables && tables[id]) return id;
+    }
+    return null;
+  }
+
+  function parseConditions(raw) {
+    if (!raw) return null;
+    if (typeof raw === "object") return raw;
+    if (typeof raw !== "string") return null;
+    const s = String(raw).trim();
+    if (!s) return null;
+    try { return JSON.parse(s); } catch (_e) { return null; }
+  }
+
+  function passesTravelConditions(ent, terrainKey) {
+    const condRaw = ent ? ent.conditions : null;
+    const cond = parseConditions(condRaw) || (typeof condRaw === "object" ? condRaw : null);
+    if (!cond) return true;
+
+    const terr = normKey(terrainKey, "");
+
+    // Authoring supports:
+    // - conditions.terrains = ["plains","ruins",...]
+    // - conditions.terrain  = "plains"
+    if (Array.isArray(cond.terrains) && cond.terrains.length) {
+      const ok = cond.terrains.map(t => normKey(t, "")).includes(terr);
+      if (!ok) return false;
+    }
+    if (cond.terrain) {
+      const ok2 = normKey(cond.terrain, "") === terr;
+      if (!ok2) return false;
+    }
+
     return true;
   }
 
-  function spendBank(bank, cost){
-    bank = copy(bank || zOP());
-    cost = cost || zOP();
-    for (const k of OP_KEYS) {
-      const need = Number(cost[k] || 0);
-      if (!need) continue;
-      bank[k] = Number(bank[k] || 0) - need;
-      if (bank[k] < 0) bank[k] = 0;
+  function weightedPick(entries) {
+    const list = Array.isArray(entries) ? entries : [];
+    if (!list.length) return null;
+
+    let total = 0;
+    const weights = [];
+    for (let i = 0; i < list.length; i++) {
+      const w = Number(list[i] && list[i].weight);
+      const ww = (Number.isFinite(w) && w > 0) ? w : 1;
+      total += ww;
+      weights.push(ww);
     }
-    return bank;
+    if (total <= 0) return null;
+
+    let r = Math.random() * total;
+    for (let i = 0; i < list.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return list[i];
+    }
+    return list[list.length - 1] || null;
   }
 
-  async function _getActor(factionId){
-    if (!factionId) return null;
-    const id = _stripActorId(factionId);
-    const byId = game.actors.get(id);
-    if (byId) return byId;
-    const byName = game.actors.find(a => a.name === factionId);
-    if (byName) return byName;
+  function getBeatFromCampaignStore(campaignId, beatId) {
+    const c = getCampaignById(campaignId);
+    if (!c) return null;
+
+    const beatsRaw = c.beats;
+
+    // object-map (current)
+    if (beatsRaw && typeof beatsRaw === "object" && !Array.isArray(beatsRaw)) {
+      return beatsRaw[beatId] || null;
+    }
+
+    // array (legacy)
+    if (Array.isArray(beatsRaw)) {
+      const bid = String(beatId || "");
+      return beatsRaw.find(b => b && String(b.id || "") === bid) || null;
+    }
+
+    return null;
+  }
+
+  function pickEncounterFromCampaignTables({ campaignId, terrainKey, tier }) {
+    const tables = safeGetEncounterTablesSetting();
+    const tableId = resolveTravelTableId(tables, terrainKey, tier);
+    if (!tableId) return { ok: false, reason: "table_not_found", candidates: { terrainKey, tier } };
+
+    const table = tables ? tables[tableId] : null;
+    if (!table) return { ok: false, reason: "table_not_found", tableId };
+
+    const entries = Array.isArray(table.entries) ? table.entries : [];
+    if (!entries.length) return { ok: false, reason: "no_entries", tableId };
+
+    const eligible = entries.filter(ent => ent && passesTravelConditions(ent, terrainKey));
+    if (!eligible.length) return { ok: false, reason: "no_eligible", tableId };
+
+    const pick = weightedPick(eligible);
+    if (!pick) return { ok: false, reason: "roll_failed", tableId };
+
+    const cid = String(pick.campaignId || campaignId || "").trim() || null;
+    const bid = String(pick.beatId || "").trim() || null;
+    if (!cid || !bid) return { ok: false, reason: "bad_entry", tableId, pick };
+
+    const beat = getBeatFromCampaignStore(cid, bid);
+    if (!beat) return { ok: false, reason: "beat_not_found", tableId, campaignId: cid, beatId: bid };
+
+    const encounterKey = (beat && beat.encounter && beat.encounter.key) ? beat.encounter.key :
+      (bid.indexOf("enc_") === 0 ? bid.slice(4) : bid);
+
+    const label = (beat && (beat.title || beat.label || beat.name)) || encounterKey || bid;
+
+    return {
+      ok: true,
+      tableId,
+      campaignId: cid,
+      beatId: bid,
+      encounterKey: encounterKey || bid,
+      label
+    };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Idle / terminal deferral helpers
+  // ---------------------------------------------------------------------------
+
+  function isCombatActive() { return !!(game.combat && game.combat.started); }
+
+  function hasBBTTCCModalOpen() {
     try {
-      if (factionId.startsWith("Actor.") && fromUuid) {
-        const doc = await fromUuid(factionId);
-        if (doc && doc instanceof Actor) return doc;
+      const sel = [
+        ".bbttcc-encounter",".bbttcc-encounter-dialog",
+        ".bbttcc-scenario",".bbttcc-scenario-dialog",
+        ".bbttcc-outcome",".bbttcc-outcome-dialog"
+      ].join(",");
+      if (document.querySelector(sel)) return true;
+
+      const wins = Object.values(ui.windows || {});
+      for (const w of wins) {
+        const title = String((w && (w.title || (w.options && w.options.title))) || "").toLowerCase();
+        const cls = String((w && w.constructor && w.constructor.name) || "").toLowerCase();
+        if (title.includes("encounter") || title.includes("outcome") || title.includes("scenario")) return true;
+        if (cls.includes("encounter") || cls.includes("outcome") || cls.includes("scenario")) return true;
+      }
+    } catch (_e) {}
+    return false;
+  }
+
+  async function waitForIdle({ homeSceneUuid, timeoutMs = 45000 } = {}) {
+    const started = Date.now();
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+    while (true) {
+      if ((Date.now() - started) > timeoutMs) return { ok: false, why: "timeout" };
+      const onHome = !homeSceneUuid || (canvas && canvas.scene && canvas.scene.uuid === homeSceneUuid);
+      if (onHome && !hasBBTTCCModalOpen() && !isCombatActive()) return { ok: true };
+      await sleep(250);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Hex Entry Beat
+  // ---------------------------------------------------------------------------
+
+  function readHexOnEnterBeatIdFromDrawing(toDrawing) {
+    try {
+      const doc = toDrawing && toDrawing.document ? toDrawing.document : toDrawing;
+      const tf = (doc && doc.getFlag) ? (doc.getFlag("bbttcc-territory") || {}) : (doc && doc.flags ? (doc.flags["bbttcc-territory"] || {}) : {});
+      const beatId = tf && tf.campaign ? (tf.campaign.onEnterBeatId || "") : "";
+      return String(beatId || "").trim() || null;
+    } catch (_e) { return null; }
+  }
+
+  function readCampaignOverrideOnEnterBeatId(campaign, hexUuid) {
+    try {
+      const ov = (campaign && (campaign.hexOverrides || (campaign.overrides && campaign.overrides.hex))) || null;
+      const rec = ov ? (ov[hexUuid] || null) : null;
+      const beatId = rec ? (rec.onEnterBeatId || rec.beatId || null) : null;
+      return String(beatId || "").trim() || null;
+    } catch (_e) { return null; }
+  }
+
+  const _recent = new Map();
+  function dkey(campaignId, beatId, hexUuid, factionId) { return [campaignId || "", beatId || "", hexUuid || "", factionId || ""].join("|"); }
+  function seen(key, ms) {
+    const now = Date.now();
+    const t = _recent.get(key) || 0;
+    const windowMs = (ms != null) ? ms : 5000;
+    if (t && (now - t) < windowMs) return true;
+    _recent.set(key, now);
+    for (const [k, v] of _recent.entries()) if ((now - v) > 20000) _recent.delete(k);
+    return false;
+  }
+
+  async function runHexEnterBeatNow(result, opts) {
+    const injector = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaigns ? game.bbttcc.api.campaigns.injector : null;
+    if (!injector) { warn("Hex enter skipped: injector missing"); return; }
+
+    const ctx = (result && result.context) ? result.context : {};
+    const to = ctx ? ctx.to : null;
+    const hexUuid = (to && to.document && to.document.uuid) || (to && to.uuid) || (result && result.hexUuid) || null;
+    if (!hexUuid) { warn("Hex enter skipped: no hexUuid"); return; }
+
+    const campaignId = await getActiveCampaignIdStarred();
+    if (!campaignId) { warn("Hex enter skipped: no STARRED active campaign"); return; }
+
+    const campaign = getCampaignById(campaignId);
+    if (!campaign) { warn("Hex enter skipped: campaign not found", campaignId); return; }
+
+    const beatId =
+      readCampaignOverrideOnEnterBeatId(campaign, hexUuid) ||
+      readHexOnEnterBeatIdFromDrawing(to) ||
+      null;
+
+    if (!beatId) { log("Hex enter: no beat configured", { hexUuid, campaignId }); return; }
+
+    const factionId = (ctx && ctx.factionId) || (opts && opts.factionId) || null;
+    const key = dkey(campaignId, beatId, hexUuid, factionId);
+    if (seen(key, 5000)) { log("Hex enter: dedupe skip", { beatId, hexUuid }); return; }
+
+    const terrFlags = (to && to.document && to.document.getFlag) ? (to.document.getFlag("bbttcc-territory") || {}) :
+      (to && to.document && to.document.flags) ? (to.document.flags["bbttcc-territory"] || {}) : {};
+
+    const terrain = String((terrFlags && (terrFlags.terrainType || terrFlags.terrain)) || (ctx && ctx.terrainKey) || "wilderness").toLowerCase();
+
+    const enterCtx = {
+      source: "hex_entry",
+      trigger: "hex_enter",
+      factionId: factionId,
+      hexUuid: hexUuid,
+      terrain: terrain,
+      encounter: (result && result.encounter && result.encounter.triggered) ? result.encounter : null
+    };
+
+    log("Hex enter: resolved beat", { campaignId, beatId, hexUuid, terrain });
+
+    // Prefer injector path (gated)
+    if (typeof injector.maybeRunBeatById === "function") {
+      const res = await injector.maybeRunBeatById({
+        campaignId: campaignId,
+        beatId: beatId,
+        triggerType: "hex_enter",
+        ctx: enterCtx,
+        defaults: { oncePerHex: true }
+      });
+      log("Hex enter: maybeRunBeatById →", res);
+      return;
+    }
+
+    // Fallback direct runBeat
+    const runBeat =
+      (game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign && game.bbttcc.api.campaign.runBeat) ||
+      (game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaigns && game.bbttcc.api.campaigns.runBeat) ||
+      null;
+
+    if (typeof runBeat === "function") {
+      await runBeat(campaignId, beatId);
+      log("Hex enter: ran via direct runBeat", { campaignId, beatId });
+      return;
+    }
+
+    warn("Hex enter skipped: no runBeat available");
+  }
+
+  async function maybeRunHexEnterBeatDeferred(result, opts) {
+    const homeSceneUuid = (canvas && canvas.scene) ? canvas.scene.uuid : null;
+    const hasEncounter = !!(result && result.encounter && result.encounter.triggered);
+
+    if (!hasEncounter) {
+      setTimeout(() => { runHexEnterBeatNow(result, opts).catch(e => warn("Hex enter failed:", e)); }, 0);
+      return;
+    }
+
+    log("Hex enter: deferring until idle…", { homeSceneUuid, encounter: (result && result.encounter && (result.encounter.key || true)) });
+
+    setTimeout(async () => {
+      const idle = await waitForIdle({ homeSceneUuid, timeoutMs: 45000 });
+      if (!idle.ok) warn("Hex enter: idle wait failed (best effort)", idle);
+      try { await runHexEnterBeatNow(result, opts); } catch (e) { warn("Hex enter failed:", e); }
+    }, 250);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Canonical wrapper: travelHex
+  // ---------------------------------------------------------------------------
+
+  async function travelHex(opts) {
+    opts = opts || {};
+    const api = game.bbttcc ? game.bbttcc.api : null;
+
+    const coreFn =
+      (api && api.travel && typeof api.travel.__coreTravel === "function" && api.travel.__coreTravel !== travelHex) ? api.travel.__coreTravel :
+      (api && typeof api.__coreTravelHex === "function" && api.__coreTravelHex !== travelHex) ? api.__coreTravelHex :
+      null;
+
+    if (typeof coreFn !== "function") {
+      warn("travelHex wrapper: core travelHex not ready");
+      return { ok: false, error: "core-travel-not-ready", opts: opts };
+    }
+
+    let result;
+    try {
+      result = await coreFn(opts);
+    } catch (e) {
+      warn("travelHex wrapper: core threw", e);
+      return { ok: false, error: "core-travel-error", exception: e, opts: opts };
+    }
+
+    // Thread caller intent through for downstream listeners / UI
+    try {
+      if (result && typeof result === "object") {
+        if (opts && opts.source != null && result.source == null) result.source = opts.source;
+        if (opts && opts.encounterPolicy != null) result.encounterPolicy = String(opts.encounterPolicy);
+        if (opts && opts.costMult != null) result.costMult = Number(opts.costMult);
+        if (opts && opts.costAdd != null) result.costAdd = opts.costAdd;
+        if (opts && opts.costSet != null) result.costSet = opts.costSet;
+      }
+    } catch (_e) {}
+
+    // Time Points (Strategic Turn meter)
+    try {
+      const world = api ? api.world : null;
+      const ok = !!(result && result.ok);
+      const tpRaw = (opts && (opts.timePoints != null ? opts.timePoints :
+        (opts.timePointsPerLeg != null ? opts.timePointsPerLeg :
+          (opts.travelUnits != null ? opts.travelUnits : opts.time)))) || 0;
+
+      const tp = Number(tpRaw || 0);
+      if (ok && world && typeof world.addTime === "function" && tp > 0) {
+        const note = `Travel ${String(opts.hexFrom || "")}→${String(opts.hexTo || "")}`;
+        await world.addTime(tp, { source: "travel", note: note });
       }
     } catch (e) {
-      warn("Error resolving actor from uuid", e);
+      warn("Time add failed (non-blocking)", e);
     }
-    return null;
-  }
 
-  async function _resolveHex(idOrUuid){
-    if (!idOrUuid) return null;
-    if (typeof idOrUuid === "string" && idOrUuid.startsWith("Scene.")) {
-      try {
-        const d = await fromUuid(idOrUuid);
-        return d;
-      } catch (e) {
-        warn("resolveHex fromUuid error", e);
-        return null;
+    // Encounter enrichment (campaign tables)
+    // If core travel reports an encounter trigger, pick a specific encounter beat from the active campaign's travel tables.
+    try {
+      const enc = result ? result.encounter : null;
+      if (enc && enc.triggered) {
+        const hasKey = !!(enc.key || (enc.result && enc.result.key));
+        const tier = clampTier((enc.tier != null ? enc.tier : (result ? result.terrainTier : null)) || 1);
+
+        if (!hasKey) {
+          const campaignId = await getActiveCampaignIdStarred();
+          if (!campaignId) {
+            warn("Encounter enrichment skipped: no STARRED active campaign");
+          } else {
+            const terrainKey = String(
+              (result && result.context && result.context.terrainKey) ||
+              (result && result.terrainKey) ||
+              (result && result.context && result.context.terrain) ||
+              (result && result.terrain) ||
+              "plains"
+            );
+
+            const pick = pickEncounterFromCampaignTables({ campaignId, terrainKey, tier });
+
+            if (pick && pick.ok) {
+              result.encounter = {
+                triggered: true,
+                tier: tier,
+                key: pick.encounterKey || pick.beatId,
+                beatId: pick.beatId,
+                campaignId: pick.campaignId,
+                label: pick.label,
+                beatId: pick.beatId,
+                campaignId: pick.campaignId,
+                meta: {
+                  tableId: pick.tableId,
+                  terrainKey: normKey(terrainKey, "plains"),
+                  stepCtx: buildStepCtxFromTravelResult(result)
+                },
+                result: {
+                  key: pick.encounterKey || pick.beatId,
+                  label: pick.label,
+                  tier: tier
+                }
+              };
+              log("Enriched encounter (campaign tables):", result.encounter);
+            } else {
+              warn("Encounter enrichment failed (no campaign table pick)", {
+                campaignId: campaignId,
+                terrainKey: terrainKey,
+                tier: tier,
+                pick: pick
+              });
+            }
+          }
+        }
+
+        result.encounter = normalizeEncounterShape(result.encounter) || result.encounter;
+        // NOTE: Wrapper does not emit bbttcc:afterTravel. Travel Console is the single emitter.
       }
+    } catch (e) {
+      warn("Encounter enrichment failed (non-blocking)", e);
     }
-    const sc = canvas?.scene;
-    if (!sc) return null;
-    const hitDrawing = sc.drawings?.get(idOrUuid);
-    if (hitDrawing) return hitDrawing;
-    const hitTile = sc.tiles?.get(idOrUuid);
-    if (hitTile) return hitTile;
-    if (typeof idOrUuid === "string") {
-      try {
-        const d = await fromUuid(idOrUuid);
-        return d;
-      } catch (e) {
-        warn("resolveHex fromUuid fallback error", e);
-      }
-    }
-    return null;
+
+    // Hex entry beat (terminal)
+    await maybeRunHexEnterBeatDeferred(result, opts);
+    return result;
   }
 
-  function _normalizeTerrainKey(flags){
-    const t = String(flags?.terrain?.key || flags?.terrainKey || flags?.terrainType || "").trim().toLowerCase();
-    if (!t) return "";
-    if (t.includes("plain")||t.includes("grass")) return "plains";
-    if (t.includes("forest")||t.includes("jungle")) return "forest";
-    if (t.includes("mount")||t.includes("highland")) return "mountains";
-    if (t.includes("canyon")||t.includes("badland")) return "canyon";
-    if (t.includes("swamp")||t.includes("mire")) return "swamp";
-    if (t.includes("desert")||t.includes("ash")) return "desert";
-    if (t.includes("river")||t.includes("lake")) return "river";
-    if (t.includes("sea")||t.includes("ocean")) return "ocean";
-    if (t.includes("ruin")||t.includes("urban")||t.includes("wreck")) return "ruins";
-    if (t.includes("waste")||t.includes("radiation")||t.includes("zone")) return "wasteland";
-    return t;
-  }
+  // ---------------------------------------------------------------------------
+  // Publisher + drift guard
+  // ---------------------------------------------------------------------------
 
-  // API hook surfaces
-  function _applyPreTravelHooks(ctx){
-    try { Hooks.callAll("bbttcc:beforeTravel", ctx); } catch (e) { warn("beforeTravel hook error", e); }
-  }
+  function publishAPI() {
+    game.bbttcc = game.bbttcc || { api: {} };
+    game.bbttcc.api = game.bbttcc.api || {};
+    game.bbttcc.api.travel = game.bbttcc.api.travel || {};
 
-  function _applyPostTravelHooks(ctx){
-    try { Hooks.callAll("bbttcc:afterTravel", ctx); } catch (e) { warn("afterTravel hook error", e); }
-  }
+    const api = game.bbttcc.api;
 
-  // ---------------- Default encounter table (can be overridden) ----------------
-  const _DEFAULT_ENCOUNTERS = {
-    1: [ { key:"broken_bridge",   label:"Broken Bridge (hazard)" },
-         { key:"scout_signs",     label:"Scout Signs / Tracks (intel)" } ],
-    2: [ { key:"bandit_ambush",   label:"Bandit Ambush (combat)" },
-         { key:"acid_bog",        label:"Acid Bog (hazard)" } ],
-    3: [ { key:"rockslide",       label:"Rockslide / Leviathan Wake (hazard)" },
-         { key:"raider_raze",     label:"Raider Raze Team (combat)" } ],
-    4: [ { key:"qliphotic_whorl", label:"Qliphotic Whorl (corruption)" },
-         { key:"apex_predator",   label:"Apex Predator / War-Machine (combat)" } ],
-  };
+    const existingCore =
+      (api.travel && typeof api.travel.__coreTravel === "function" && api.travel.__coreTravel !== travelHex) ? api.travel.__coreTravel :
+      (typeof api.travelHex === "function" && api.travelHex !== travelHex) ? api.travelHex :
+      null;
 
-  function _encounterTables(){
-    const ext = game.bbttcc?.api?.travel?.__encounters;
-    if (ext && typeof ext.rollEncounter === "function") return ext;
-    return {
-      rollEncounter: (tier=1) => {
-        const list = _DEFAULT_ENCOUNTERS[Number(tier)||1] || _DEFAULT_ENCOUNTERS[1];
-        const pick = list[Math.floor(Math.random()*list.length)] || { key:"unknown", label:"Unknown" };
-        return Object.assign({ tier }, pick);
-      }
-    };
-  }
+    if (existingCore && typeof api.travel.__coreTravel !== "function") api.travel.__coreTravel = existingCore;
+    api.__coreTravelHex = api.travel.__coreTravel || existingCore || api.__coreTravelHex || null;
 
-  // ---------------- Terrain costs & encounter chances ----------------
-  // Keys should match your hex flags: flags["bbttcc-territory"].terrain.key / terrainType.
-  const TERRAIN = {
-    plains:    { label:"Plains / Grasslands",       cost:{ economy:1 },               chance:10, tier:1 },
-    forest:    { label:"Forest / Jungle",           cost:{ economy:1, intrigue:1 },   chance:20, tier:2 },
-    mountains: { label:"Mountains / Highlands",     cost:{ economy:2, logistics:1 },  chance:30, tier:3 },
-    canyon:    { label:"Canyons / Badlands",        cost:{ economy:1, violence:1 },   chance:20, tier:2 },
-    swamp:     { label:"Swamp / Mire",              cost:{ economy:2, nonlethal:1 },  chance:30, tier:3 },
-    desert:    { label:"Desert / Ash Wastes",       cost:{ economy:2 },               chance:20, tier:2 },
-    river:     { label:"River / Lake",              cost:{ economy:1, logistics:1 },  chance:10, tier:1 },
-    ocean:     { label:"Sea / Ocean",               cost:{ economy:3, logistics:2 },  chance:35, tier:3 },
-    ruins:     { label:"Ruins / Urban",             cost:{ economy:1, intrigue:1 },   chance:30, tier:3 },
-    wasteland: { label:"Wasteland / Radiation",     cost:{ economy:1, faith:1 },      chance:40, tier:4 },
-  };
+    api.travelHex = travelHex;
+    api.travel.travelHex = travelHex;
 
-  // ---------------- Small helpers ----------------
-  function _ensure(obj, path, init){
-    const parts = String(path).split(".");
-    let cur = obj;
-    for (let i=0;i<parts.length;i++) {
-      const k = parts[i];
-      if (cur[k] === undefined) cur[k] = (i === parts.length-1 ? (init ?? {}) : {});
-      cur = cur[k];
-    }
-    return cur;
-  }
-  const _stripActorId = id => (typeof id === "string" && id.startsWith("Actor.")) ? id.slice(6) : id;
-
-  async function pushWarLog(actor, entry){
-    const flags = copy(actor.flags?.[MOD_FACTIONS] ?? {});
-    const wl = Array.isArray(flags.warLogs) ? flags.warLogs.slice() : [];
-    wl.push({ ts: Date.now(), date: nowISO(), ...entry });
-    await actor.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
-  }
-
-// ---------------- Core travel (mutating) ----------------
-async function travelHex({ factionId, hexFrom, hexTo } = {}){
-
-  const A = await _getActor(factionId);
-  if (!A) throw new Error("travelHex: faction not found");
-
-  const fromObj = hexFrom ? await _resolveHex(hexFrom) : null;
-  const toObj   = hexTo   ? await _resolveHex(hexTo)   : null;
-
-  const fromFlags = copy((fromObj?.document ?? fromObj)?.flags?.[MOD_TERRITORY] ?? {});
-  const toFlags   = copy((toObj  ?.document ?? toObj  )?.flags?.[MOD_TERRITORY] ?? {});
-
-  const tKey = _normalizeTerrainKey(toFlags) || "plains";
-  const terr = TERRAIN[tKey] || TERRAIN.plains;
-
-  const cost   = copy(terr.cost || {});
-  let   chance = Number(terr.chance || 0);
-  const tier   = Number(terr.tier || 1);
-
-  const ctx = {
-    actor: A,
-    from: { obj: fromObj, flags: fromFlags },
-    to:   { obj: toObj,   flags: toFlags, terrainKey: tKey, terrain: terr },
-    cost, chance, tier,
-    notes: []
-  };
-
-  _applyPreTravelHooks(ctx); // crew/extenders may adjust cost/chance/tier/notes
-
-  // Spend OPs from Turn Bank + Pools
-  const flags = copy(A.flags?.[MOD_FACTIONS] ?? {});
-  let bank    = copy(flags.opBank || zOP());
-  let pools   = copy(flags.pools  || zOP());
-
-  if (!canAfford(bank, cost)) {
-    ui.notifications?.warn?.("Not enough OP in Turn Bank to travel.");
-    const summary = `Travel failed (insufficient OP) — need ${Object.entries(cost).map(([k,v])=>`${k}:${v}`).join(", ")}`;
-    await pushWarLog(A, { type:"travel", summary, from:"Unknown From", to:"Unknown To" });
-    return { ok:false, cost, encounter:{ triggered:false, tier:null, result:null }, summary };
-  }
-
-  bank  = spendBank(bank, cost);
-  pools = spendBank(pools, cost);
-  await A.update({
-    [`flags.${MOD_FACTIONS}.opBank`]:  bank,
-    [`flags.${MOD_FACTIONS}.pools`]:  pools
-  });
-
-  // Roll for encounter
-  const rolled    = Math.floor(Math.random()*100)+1;
-  const triggered = rolled <= Number(chance||0);
-  const roller    = _encounterTables();
-  const encObj    = triggered ? roller.rollEncounter(ctx.tier)
-                              : { tier:null, key:null, label:"Safe travel" };
-
-  const fromName =
-    fromFlags?.name ||
-    fromObj?.document?.text ||
-    fromObj?.document?.name ||
-    "Unknown From";
-
-  const toName =
-    toFlags?.name ||
-    toObj?.document?.text ||
-    toObj?.document?.name ||
-    "Unknown To";
-
-  const costStr = Object.entries(cost).map(([k,v])=>`${k}:${v}`).join(", ");
-
-  const encStr = triggered
-    ? `Encounter (Tier ${encObj.tier}): ${encObj.label}`
-    : "No encounter";
-
-  const summary =
-    `Traveled ${fromName} → ${toName} • Spent ${costStr} ` +
-    `• Roll ${rolled}/${chance}% • ${encStr}`;
-
-  // IMPORTANT: wrap encounter to include triggered + result, like the return format
-  const encounterCtx = { triggered, tier: encObj.tier, result: encObj };
-
-  _applyPostTravelHooks({
-    source: "travel",
-    ...ctx,
-    rolled,
-    encounter: encounterCtx,
-    summary
-  });
-
-  await pushWarLog(A, {
-    type: "travel",
-    summary,
-    from: fromName,
-    to:   toName,
-    cost,
-    rolled,
-    chance,
-    encounter: encObj   // warLog keeps simple result; fine for history
-  });
-
-  log(summary);
-
-  return {
-    ok: true,
-    cost,
-    encounter: encounterCtx,
-    summary
-  };
-}
-
-  // ---------------- Preview travel (non-mutating) ----------------
-  async function previewTravelHex({ factionId, hexFrom, hexTo } = {}){
-    const A = await _getActor(factionId);
-    if (!A) throw new Error("previewTravelHex: faction not found");
-
-    const fromObj = hexFrom ? await _resolveHex(hexFrom) : null;
-    const toObj   = hexTo   ? await _resolveHex(hexTo)   : null;
-
-    const fromFlags = copy((fromObj?.document ?? fromObj)?.flags?.[MOD_TERRITORY] ?? {});
-    const toFlags   = copy((toObj  ?.document ?? toObj  )?.flags?.[MOD_TERRITORY] ?? {});
-
-    const tKey = _normalizeTerrainKey(toFlags) || "plains";
-    const terr = TERRAIN[tKey] || TERRAIN.plains;
-
-    const cost = copy(terr.cost || {});
-    let   chance = Number(terr.chance || 0);
-    const tier   = Number(terr.tier || 1);
-
-    const ctx = {
-      actor: A,
-      from: { obj: fromObj, flags: fromFlags },
-      to:   { obj: toObj,   flags: toFlags, terrainKey: tKey, terrain: terr },
-      cost, chance, tier,
-      notes: []
-    };
-
-    // Let beforeTravel hooks adjust cost/chance/tier/notes, but do not spend OP or write logs.
-    _applyPreTravelHooks(ctx);
-
-    chance = Number(ctx.chance ?? chance);
-
-    // Roll for encounter, but do not mutate any world state.
-    const rolled    = Math.floor(Math.random()*100)+1;
-    const triggered = rolled <= Number(chance || 0);
-    const roller    = _encounterTables();
-    const encObj    = triggered ? roller.rollEncounter(ctx.tier) : { tier:null, key:null, label:"Safe travel" };
-
-    const fromName =
-      fromFlags?.name ||
-      fromObj?.document?.text ||
-      fromObj?.document?.name ||
-      "Unknown From";
-
-    const toName =
-      toFlags?.name ||
-      toObj?.document?.text ||
-      toObj?.document?.name ||
-      "Unknown To";
-
-    const costStr = Object.entries(cost).map(([k,v])=>`${k}:${v}`).join(", ");
-    const encStr  = triggered ? `Encounter (Tier ${encObj.tier}): ${encObj.label}` : "No encounter";
-    const summary = `PREVIEW: Travel ${fromName} → ${toName} • Would spend ${costStr} • Roll ${rolled}/${chance}% • ${encStr}`;
-
-    // Fire post-travel hooks in preview mode so listeners (like encounter preview) can respond.
-    _applyPostTravelHooks({ ...ctx, rolled, encounter: encObj, summary, preview:true });
-
-    log(summary);
-    return { ok:true, preview:true, cost, encounter:{ triggered, tier:encObj.tier, result:encObj }, summary };
-  }
-
-  // ---------------- Publish API ----------------
-  function ensureNS(){
-    game.bbttcc ??= { api:{} };
-    game.bbttcc.api ??= {};
-  }
-
-  function publish(){
-    ensureNS();
-    const existing = game.bbttcc.api.travel || {};
-    const api = Object.assign({}, existing, {
-      travelHex,
-      previewTravelHex,
-      rollEncounter: (tier)=>_encounterTables().rollEncounter(tier),
-      __terrain: TERRAIN
+    log("Installed canonical travel wrapper.", {
+      hasCore: (api.travel && typeof api.travel.__coreTravel === "function"),
+      coreName: (api.travel && api.travel.__coreTravel) ? (api.travel.__coreTravel.name || "anonymous") : null
     });
-    game.bbttcc.api.travel = api;
-    log("Travel API published on game.bbttcc.api.travel");
   }
 
-  if (globalThis?.Hooks?.once) Hooks.once("ready", publish);
-  try { if (globalThis?.game?.ready === true) publish(); } catch {}
+  function installDriftGuard() {
+    let ticks = 0;
+    const MAX = 40;
+    const id = setInterval(() => {
+      ticks++;
+      try {
+        const api = game.bbttcc ? game.bbttcc.api : null;
+        if (!api) return;
+        const curA = api.travelHex;
+        const curB = api.travel ? api.travel.travelHex : null;
+        if (curA !== travelHex || curB !== travelHex) {
+          warn("Detected travelHex overwrite; reasserting wrapper.", {
+            curA: curA ? (curA.name || "anonymous") : null,
+            curB: curB ? (curB.name || "anonymous") : null
+          });
+          publishAPI();
+        }
+      } catch (_e) {}
+      if (ticks >= MAX) clearInterval(id);
+    }, 250);
+  }
+
+  Hooks.once("ready", () => { publishAPI(); installDriftGuard(); });
+  try { if (game && game.ready) { publishAPI(); installDriftGuard(); } } catch (_e) {}
 })();
