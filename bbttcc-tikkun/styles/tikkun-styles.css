@@ -1,5 +1,23 @@
 /* BBTTCC Tikkun: The Great Work - Styling */
 
+/* Overlay container: in-flow, below tab strip, never covers tabs */
+.bbttcc-tikkun-overlay {
+  margin-top: 0.35rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Tikkun tab should behave like a UI control, not a hyperlink */
+a.item[data-tab="bbttcc-tikkun"] {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+a.item[data-tab="bbttcc-tikkun"]:hover {
+  text-decoration: none;
+}
+
+
 /* Main Tab Container */
 .bbttcc-tikkun-tab {
     font-family: "Signika", sans-serif;
