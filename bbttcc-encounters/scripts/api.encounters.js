@@ -10,6 +10,7 @@
   // ---------------------------------------------------------------------------
 
   const ENCOUNTER_SCENARIOS = {
+    // Original P0 travel encounters
     bandit_ambush:       "travel_bandit_ambush_t2",
     broken_bridge:       "travel_broken_bridge_t1",
     minor_radiation:     "travel_minor_radiation_t2",
@@ -20,10 +21,45 @@
     acid_bog:            "travel_acid_bog_t2",
     spark_echo:          "travel_spark_echo_t2",
     faction_parley:      "travel_faction_parley_t2",
-    border_incident:     "travel_border_incident_t2"
-  };
+    border_incident:     "travel_border_incident_t2",
 
-  const SCENARIOS = {
+    // NEW: Travel Arc / Fiat Engine encounters
+    weather_front:               "travel_weather_front_t3",
+    supply_shortage:             "travel_supply_shortage_t2",
+    wilderness_push:             "travel_wilderness_push_t3",
+    trade_convoy:                "travel_trade_convoy_t2",
+    mutant_wildlife_t2:          "travel_mutant_wildlife_t2",
+    mutant_wildlife_t3:          "travel_mutant_wildlife_t3",
+    qlipothic_shambler_t2:       "travel_qlipothic_shambler_t2",
+    geometry_serpent_t3:         "travel_geometry_serpent_t3",
+    slippage_wraith_t3:          "travel_slippage_wraith_t3",
+    qliphotic_whorl_t4:          "travel_qliphotic_whorl_t4",
+    apex_predator_t4:            "travel_apex_predator_t4",
+    border_incident_remote:      "travel_border_incident_remote_t2",
+    faction_parley_roaming:      "travel_faction_parley_roaming_t2",
+    spark_echo_rare:             "travel_spark_echo_rare_t3",
+    scout_signs:                 "travel_scout_signs_t1",
+    scout_signs_valuable:        "travel_scout_signs_valuable_t1",
+    desenitarius_maarg:          "travel_desenitarius_maarg_t4",
+    raider_raze_team:            "travel_raider_raze_team_t3",
+  
+    apex_predator:         "travel_apex_predator_t4",
+    qliphotic_whorl:       "travel_qliphotic_whorl_t4",
+    geometry_serpent:      "travel_geometry_serpent_t3",
+    slippage_wraith:       "travel_slippage_wraith_t3",
+    qlipothic_shambler:    "travel_qlipothic_shambler_t2",
+};
+
+  
+  // ---------------------------------------------------------------------------
+  // External Scenario Registry (Campaign Builder / other modules)
+  // ---------------------------------------------------------------------------
+
+  // External scenarios registered at runtime (e.g., from Campaign Builder)
+  const EXTERNAL_SCENARIOS = Object.create(null);
+  const EXTERNAL_META = Object.create(null);
+
+const SCENARIOS = {
     // -----------------------------------------------------------------------
     // Travel / Hostile / Hybrid — Bandit Ambush
     // -----------------------------------------------------------------------
@@ -40,7 +76,7 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.7cjvoeJmEVLcAXFz",
+          uuid: "Scene.QCx22OiX6AM0bodJ",
           name: "Bandit Ambush",
           role: "main"
         }
@@ -62,7 +98,7 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.UHi9NAZHOr4x4es3",
+          uuid: "Scene.GTs0K70hOOHD3cFt",
           name: "Broken Bridge",
           role: "main"
         }
@@ -84,7 +120,7 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.xYT1kma16MZFeYUj",
+          uuid: "Scene.J1hcE6SjQiHox1UM",
           name: "Minor Radiation Pocket",
           role: "main"
         }
@@ -106,7 +142,7 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.oh87Klqtd7Dazg4Z",
+          uuid: "Scene.Z29kqXWCjTjS6boB",
           name: "Hidden Vault",
           role: "main"
         }
@@ -127,18 +163,18 @@
       tikkunTie: "Yesod",
 
       // Always return to the main campaign map after Vault Depths.
-      returnSceneUuid: "Scene.H1OYnNI7COeUaLQ9",
+      returnSceneUuid: "Scene.ToOORAjL0BYljIth",
 
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.oh87Klqtd7Dazg4Z",
+          uuid: "Scene.txTee8er5R1FBFbL",
           name: "Hidden Vault Approach",
           role: "approach"
         },
         {
           kind: "scene",
-          uuid: "Scene.OYAdJLNrjY0sJU1s",
+          uuid: "Scene.OoUCH9pK6KrKbwbl",
           name: "Hidden Vault - Lower Level",
           role: "main"
         }
@@ -160,21 +196,14 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.2jKJt5eGiUv3Lc7o", // pre
-          name: "Rockslide pre",
-          role: "pre",
-          autoAdvanceMs: 8000
-        },
-        {
-          kind: "scene",
-          uuid: "Scene.Bbh7NqF5aQQpRTa9", // transition
-          name: "Rockslide Transition",
+          uuid: "Scene.ftPsLtpmnuk8gTE2", // transition
+          name: "Rock Slide Cinematics",
           role: "cutscene",
-          autoAdvanceMs: 8000
+          autoAdvanceMs: 16000
         },
         {
           kind: "scene",
-          uuid: "Scene.DCRs7HM0AhS1pIZn", // post
+          uuid: "Scene.FW4US9vyQHvZd6Zq", // post
           name: "Rockslide post",
           role: "post"
         }
@@ -196,7 +225,7 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.fagDdBPDriWOXZDa",
+          uuid: "Scene.FW4US9vyQHvZd6Zq",
           name: "Acid Bog",
           role: "main"
         }
@@ -218,7 +247,7 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.rt3LfedhKVWhUIzi",
+          uuid: "Scene.Rgddw2DDDlXpXmkY",
           name: "Spark Echo Zone",
           role: "main"
         }
@@ -240,7 +269,7 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.shtKzIf0S0hE9IHH",
+          uuid: "Scene.dXbunN4zoSjndUhv",
           name: "Faction Parley",
           role: "main"
         }
@@ -262,8 +291,52 @@
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.cjwVS4f2P2ldSink",
+          uuid: "Scene.y7VWxjXQ0eSk1c1r",
           name: "Border Incident",
+          role: "main"
+        }
+      ]
+    },
+
+    // -----------------------------------------------------------------------
+    // Travel / Recon / Narrative — Scout Signs
+    // -----------------------------------------------------------------------
+    travel_scout_signs_t1: {
+      key: "travel_scout_signs_t1",
+      label: "Scout Signs",
+      type: "travel",
+      category: "travel",
+      subcategory: "recon",
+      scale: "macro",
+      tableTier: 1,
+      tikkunTie: "Netzach",
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.xXw00PVDKGt5TwHm",
+          name: "Scout Signs",
+          role: "main"
+        }
+      ]
+    },
+
+    // -----------------------------------------------------------------------
+    // Travel / Recon / Narrative — Scout Signs (Valuable)
+    // -----------------------------------------------------------------------
+    travel_scout_signs_valuable_t1: {
+      key: "travel_scout_signs_valuable_t1",
+      label: "Scout Signs (Valuable)",
+      type: "travel",
+      category: "travel",
+      subcategory: "recon",
+      scale: "macro",
+      tableTier: 1,
+      tikkunTie: "Netzach",
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.iS8n46hr33HPc1Nu",
+          name: "Scout Signs (Valuable)",
           role: "main"
         }
       ]
@@ -283,13 +356,329 @@
       tikkunTie: "Hod",
 
       // Return to Campaign Map after this scenario.
-      returnSceneUuid: "Scene.H1OYnNI7COeUaLQ9",
+      returnSceneUuid: "Scene.ToOORAjL0BYljIth",
 
       steps: [
         {
           kind: "scene",
-          uuid: "Scene.Rnq0zQIGegDjLScF",
+          uuid: "Scene.EfQaQcxetUSQbjZY",
           name: "Rail Yard Takeover",
+          role: "main"
+        }
+      ]
+    },
+
+    // -----------------------------------------------------------------------
+    // NEW TRAVEL ARC / FIAT SCENARIOS
+    // -----------------------------------------------------------------------
+
+    // Travel / Hazard — Weather Front (Tier 3)
+    travel_weather_front_t3: {
+      key: "travel_weather_front_t3",
+      label: "Weather Front (Tier 3)",
+      type: "travel",
+      category: "travel",
+      subcategory: "hazard",
+      scale: "macro",
+      tableTier: 3,
+      tikkunTie: "Yesod",
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.Efn18gJZoeXqS0KD",
+          name: "Weather Front",
+          role: "main"
+        }
+      ]
+    },
+
+    // Supply Shortage (narrative)
+    travel_supply_shortage_t2: {
+      key: "travel_supply_shortage_t2",
+      label: "Supply Shortage (Tier 2)",
+      type: "travel",
+      category: "travel",
+      subcategory: "narrative",
+      scale: "macro",
+      tableTier: 2,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.5EN2EA3nKK0Cmsoe",
+          name: "Supply Shortage",
+          role: "main"
+        }
+      ]
+    },
+
+    // Wilderness Push (hazard)
+    travel_wilderness_push_t3: {
+      key: "travel_wilderness_push_t3",
+      label: "Wilderness Push (Tier 3)",
+      type: "travel",
+      category: "travel",
+      subcategory: "hazard",
+      scale: "macro",
+      tableTier: 3,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.5EN2EA3nKK0Cmsoe",
+          name: "Wilderness Push",
+          role: "main"
+        }
+      ]
+    },
+
+    // Trade Convoy (social/factional)
+    travel_trade_convoy_t2: {
+      key: "travel_trade_convoy_t2",
+      label: "Trade Convoy (Tier 2)",
+      type: "travel",
+      category: "social",
+      subcategory: "factional",
+      scale: "hybrid",
+      tableTier: 2,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.chfy7Tg8UgyxNXMs",
+          name: "Trade Convoy",
+          role: "main"
+        }
+      ]
+    },
+
+    // Mutant Wildlife T2
+    travel_mutant_wildlife_t2: {
+      key: "travel_mutant_wildlife_t2",
+      label: "Mutant Wildlife (Tier 2)",
+      type: "travel",
+      category: "travel",
+      subcategory: "combat",
+      scale: "hybrid",
+      tableTier: 2,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.FsmAszf4kPTkDGia",
+          name: "Mutant Wildlife (T2)",
+          role: "main"
+        }
+      ]
+    },
+
+    // Mutant Wildlife T3
+    travel_mutant_wildlife_t3: {
+      key: "travel_mutant_wildlife_t3",
+      label: "Mutant Apex Wildlife (Tier 3)",
+      type: "travel",
+      category: "travel",
+      subcategory: "combat",
+      scale: "hybrid",
+      tableTier: 3,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.1d8vlsPgGTFPDgj1",
+          name: "Mutant Wildlife (T3)",
+          role: "main"
+        }
+      ]
+    },
+
+    // Qlipothic Shambler
+    travel_qlipothic_shambler_t2: {
+      key: "travel_qlipothic_shambler_t2",
+      label: "Qlipothic Shambler (Tier 2)",
+      type: "travel",
+      category: "travel",
+      subcategory: "combat",
+      scale: "hybrid",
+      tableTier: 2,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.pTb1WmtpBXjs8uE2",
+          name: "Qlipothic Shambler",
+          role: "main"
+        }
+      ]
+    },
+
+    // Geometry Serpent
+    travel_geometry_serpent_t3: {
+      key: "travel_geometry_serpent_t3",
+      label: "Geometry Serpent (Tier 3)",
+      type: "travel",
+      category: "travel",
+      subcategory: "hazard",
+      scale: "macro",
+      tableTier: 3,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.taGuNFFKD4vjRnvV",
+          name: "Geometry Serpent",
+          role: "main"
+        }
+      ]
+    },
+
+    // Slippage Wraith
+    travel_slippage_wraith_t3: {
+      key: "travel_slippage_wraith_t3",
+      label: "Slippage Wraith (Tier 3)",
+      type: "travel",
+      category: "travel",
+      subcategory: "combat",
+      scale: "hybrid",
+      tableTier: 3,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.vGQONVRmHylobYQG",
+          name: "Slippage Wraith",
+          role: "main"
+        }
+      ]
+    },
+
+    // Qliphotic Whorl
+    travel_qliphotic_whorl_t4: {
+      key: "travel_qliphotic_whorl_t4",
+      label: "Qliphotic Whorl (Tier 4)",
+      type: "travel",
+      category: "travel",
+      subcategory: "mystic",
+      scale: "macro",
+      tableTier: 4,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.hvlDRo88BeUvm0C2",
+          name: "Qliphotic Whorl",
+          role: "main"
+        }
+      ]
+    },
+
+    // Apex Predator
+    travel_apex_predator_t4: {
+      key: "travel_apex_predator_t4",
+      label: "Apex Predator (Tier 4)",
+      type: "travel",
+      category: "travel",
+      subcategory: "combat",
+      scale: "hybrid",
+      tableTier: 4,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.vQpd0FRyazX3HmOq",
+          name: "Apex Predator",
+          role: "main"
+        }
+      ]
+    },
+
+    // Border Incident (Remote variant)
+    travel_border_incident_remote_t2: {
+      key: "travel_border_incident_remote_t2",
+      label: "Border Incident (Remote, Tier 2)",
+      type: "travel",
+      category: "social",
+      subcategory: "conflict",
+      scale: "macro",
+      tableTier: 2,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.MwZ4c42W6dZHoKVz",
+          name: "Border Incident Remote",
+          role: "main"
+        }
+      ]
+    },
+
+    // Roaming Faction Parley
+    travel_faction_parley_roaming_t2: {
+      key: "travel_faction_parley_roaming_t2",
+      label: "Roaming Faction Parley (Tier 2)",
+      type: "travel",
+      category: "social",
+      subcategory: "diplomacy",
+      scale: "macro",
+      tableTier: 2,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.pAEUaUAorUlsUdDQ",
+          name: "Roaming Parley",
+          role: "main"
+        }
+      ]
+    },
+
+    // Spark Echo Rare
+    travel_spark_echo_rare_t3: {
+      key: "travel_spark_echo_rare_t3",
+      label: "Spark Echo (Rare, Tier 3)",
+      type: "travel",
+      category: "weird",
+      subcategory: "tikkun",
+      scale: "hybrid",
+      tableTier: 3,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.jcLvxMfj26vD5K1T",
+          name: "Spark Echo (Rare)",
+          role: "main"
+        }
+      ]
+    },
+
+    // Desenitarius Maarg — Worldboss
+    travel_desenitarius_maarg_t4: {
+      key: "travel_desenitarius_maarg_t4",
+      label: "Desenitarius Maarg (Worldboss, Tier 4)",
+      type: "travel",
+      category: "travel",
+      subcategory: "worldboss",
+      scale: "macro",
+      tableTier: 4,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.J3Nn4iz8vuYkog70",
+          name: "Desenitarius Maarg Cinematics",
+          role: "cutscene",
+          autoAdvanceMs: 8000
+        },
+        {
+          kind: "scene",
+          uuid: "Scene.54g6NWPQyfAXLB3B",
+          name: "Desenitarius Maarg",
+          role: "post"
+        }
+      ]
+    },
+
+    // Raider Raze Team
+    travel_raider_raze_team_t3: {
+      key: "travel_raider_raze_team_t3",
+      label: "Raider Raze Team (Tier 3)",
+      type: "travel",
+      category: "travel",
+      subcategory: "combat",
+      scale: "hybrid",
+      tableTier: 3,
+      steps: [
+        {
+          kind: "scene",
+          uuid: "Scene.3mVDGYDZIwHe8CR1",
+          name: "Raider Raze Team",
           role: "main"
         }
       ]
@@ -302,15 +691,18 @@
 
   function getScenario(scenarioKey) {
     if (!scenarioKey) return null;
-    return SCENARIOS[scenarioKey] ?? null;
+    return SCENARIOS[scenarioKey] ?? EXTERNAL_SCENARIOS[scenarioKey] ?? null;
   }
 
   function listScenarios() {
-    return Object.values(SCENARIOS).map(s => ({ ...s }));
+    const core = Object.values(SCENARIOS).map(s => ({ ...s, _source: "core" }));
+    const ext  = Object.values(EXTERNAL_SCENARIOS).map(s => ({ ...s, _source: EXTERNAL_META[s.key]?.source || "external" }));
+    return [...core, ...ext];
   }
 
-  function getScenarioKeyForEncounter(encKey) {
-    return encKey ? ENCOUNTER_SCENARIOS[encKey] ?? null : null;
+
+  function getScenarioKeyForEncounter(k) {
+    return k ? ENCOUNTER_SCENARIOS[k] ?? null : null;
   }
 
   function resolveSceneFromStep(step) {
@@ -407,8 +799,6 @@
       return;
     }
 
-    // Allow scenarios to define a default return-to scene,
-    // with ctx able to override it if desired.
     const enrichedCtx = {
       ...ctx,
       returnSceneUuid:
@@ -423,10 +813,17 @@
   }
 
   async function launchForEncounterKey(encKey, ctx = {}) {
-    const scenarioKey = getScenarioKeyForEncounter(encKey);
+    // Prefer explicit mapping, but tolerate encounter keys that are *already* scenario keys
+    // (e.g. campaign-authored encounters registered into the external scenario registry).
+    let scenarioKey = getScenarioKeyForEncounter(encKey);
     if (!scenarioKey) {
-      warn("launchForEncounterKey: no scenario mapping for encounter key", encKey);
-      return;
+      // If a scenario exists under the same key, use it directly.
+      const s = getScenario(encKey);
+      if (s) scenarioKey = encKey;
+      else {
+        warn("launchForEncounterKey: no scenario mapping for encounter key", encKey);
+        return;
+      }
     }
     await launchScenario(scenarioKey, ctx);
   }
@@ -444,38 +841,32 @@
       return;
     }
 
-    let scenario = getScenario(key);
-    let scenarioKey = key;
-    let encKey = null;
+    let scenarioKey = String(key).trim();
+    let scenario = getScenario(scenarioKey);
 
+    // If not a scenario, treat as an encounter key and map it
     if (!scenario) {
-      const scenKeyFromEnc = getScenarioKeyForEncounter(key);
+      const scenKeyFromEnc = getScenarioKeyForEncounter(scenarioKey);
       if (!scenKeyFromEnc) {
-        ui.notifications?.warn?.(`encounters.testFire: no scenario or encounter mapping for "${key}"`);
+        ui.notifications?.warn?.(`encounters.testFire: no scenario or encounter mapping for "${scenarioKey}"`);
         return;
       }
       scenarioKey = scenKeyFromEnc;
-      encKey = key;
       scenario = getScenario(scenarioKey);
-    }
-
-    if (!scenario) {
-      ui.notifications?.warn?.(`encounters.testFire: scenario "${scenarioKey}" not defined`);
-      return;
+      if (!scenario) {
+        ui.notifications?.warn?.(`encounters.testFire: mapped scenario "${scenarioKey}" not found`);
+        return;
+      }
     }
 
     const ctx = {
-      ...opts,
-      source: opts.source || "manual-testFire",
-      encounter: {
-        triggered: true,
-        key: encKey,
-        tier: scenario.tableTier,
-        result: {
-          key: encKey,
-          label: scenario.label,
-          tier: scenario.tableTier
-        }
+      ...opts.ctx,
+      source: opts.source || "encounters.testFire",
+      encounter: opts.encounter || null,
+      scenario: {
+        key: scenarioKey,
+        label: scenario.label,
+        tier: scenario.tableTier
       }
     };
 
@@ -483,24 +874,221 @@
     await launchScenario(scenarioKey, ctx);
   }
 
-  function publishAPI() {
+  // ---------------------------------------------------------------------------
+  // External registry API
+  // ---------------------------------------------------------------------------
+
+  function hasScenario(key) {
+    return !!getScenario(key);
+  }
+
+  function registerScenario(scenario, opts = {}) {
+    const key = String(scenario?.key || "").trim();
+    if (!key) {
+      warn("registerScenario: scenario.key required");
+      return false;
+    }
+
+    const source = String(opts.source || "external").trim();
+    const force = !!opts.force;
+
+    // Don't overwrite core scenarios unless force is true
+    if (!force && SCENARIOS[key]) {
+      warn("registerScenario: refusing to overwrite core scenario", key);
+      return false;
+    }
+
+    EXTERNAL_SCENARIOS[key] = { ...scenario, key };
+    EXTERNAL_META[key] = { source, ts: Date.now() };
+    return true;
+  }
+
+  function unregisterScenario(key, opts = {}) {
+    key = String(key || "").trim();
+    if (!key) return false;
+
+    if (!EXTERNAL_SCENARIOS[key]) return false;
+
+    const wantSource = opts.source ? String(opts.source).trim() : null;
+    const metaSource = EXTERNAL_META[key]?.source ?? null;
+
+    if (wantSource && metaSource && wantSource !== metaSource) {
+      warn("unregisterScenario: source mismatch; refusing", { key, wantSource, metaSource });
+      return false;
+    }
+
+    delete EXTERNAL_SCENARIOS[key];
+    delete EXTERNAL_META[key];
+    return true;
+  }
+
+  function clearExternalScenarios(opts = {}) {
+    const wantSource = opts.source ? String(opts.source).trim() : null;
+
+    for (const key of Object.keys(EXTERNAL_SCENARIOS)) {
+      const metaSource = EXTERNAL_META[key]?.source ?? null;
+      if (!wantSource || wantSource === metaSource) {
+        delete EXTERNAL_SCENARIOS[key];
+        delete EXTERNAL_META[key];
+      }
+    }
+  }
+
+  function normalizeSceneUuid(u) {
+  u = String(u || "").trim();
+  if (!u) return null;
+  return u.startsWith("Scene.") ? u : `Scene.${u}`;
+}
+
+
+function registerCampaignBeatScenario(campaignId, beat) {
+  if (!campaignId || !beat) return false;
+
+  const beatId = String(beat.id || "").trim();
+  const key =
+    String(beat?.encounter?.key || beat?.encounterKey || beat?.scenarioKey || beatId || "").trim();
+
+  if (!key) {
+    warn("registerCampaignBeatScenario: missing key (beat.encounter.key or beat.id)", beat);
+    return false;
+  }
+
+  const source = `campaign:${campaignId}`;
+
+  // Scene reference helpers
+  const _pickSceneUuid = (raw) => {
+    const u = normalizeSceneUuid(raw);
+    return u || null;
+  };
+
+  // Cinematic support ---------------------------------------------------------
+  // A cinematic beat is a two-scene chain:
+  //  - activate "start" scene
+  //  - wait autoAdvanceMs
+  //  - activate "next" scene
+  //
+  // Authoring can be either:
+  //  - beat.type === "cinematic"
+  //  - OR beat.cinematic.enabled === true
+  //
+  // Stored fields (Beat Editor):
+  //  beat.cinematic = { enabled, startSceneId, durationMs, nextSceneId }
+  const isCinematic =
+    String(beat.type || "").trim() === "cinematic" ||
+    !!(beat.cinematic && beat.cinematic.enabled);
+
+  const cinematic = beat.cinematic || {};
+  const durationMsRaw =
+    (cinematic.durationMs != null ? cinematic.durationMs : beat.autoAdvanceMs);
+  const durationMs =
+    Math.max(0, Math.floor(Number(durationMsRaw || 0))) || 0;
+
+  // For backwards-compat, tolerate existing "scene_transition" shape where:
+  //  beat.sceneId is the start scene, and beat.outcomes.success is used as nextSceneId (scene uuid/id)
+  const legacyStartRaw = beat.sceneUuid || beat.sceneId || beat.scene || beat.sceneID || null;
+  const legacyNextRaw =
+    (beat.outcomes && (beat.outcomes.success || beat.outcomes.next)) ||
+    beat.nextSceneId || beat.nextSceneUuid || null;
+
+  const startSceneUuid = isCinematic
+    ? _pickSceneUuid(cinematic.startSceneId || legacyStartRaw)
+    : _pickSceneUuid(legacyStartRaw);
+
+  const nextSceneUuid = isCinematic
+    ? _pickSceneUuid(cinematic.nextSceneId || legacyNextRaw)
+    : null;
+
+  // Steps: show beat description first (if any), then activate the scene(s).
+  const steps = [];
+  const descHtml = String(beat.description || beat.desc || beat.text || "").trim();
+  if (descHtml) {
+    steps.push({
+      kind: "text",
+      title: beat.label || beat.name || key,
+      html: descHtml,
+      role: "briefing"
+    });
+  }
+
+  if (isCinematic) {
+    if (startSceneUuid) {
+      const step = {
+        kind: "scene",
+        uuid: startSceneUuid,
+        name: beat.label || beat.name || key,
+        role: "cutscene"
+      };
+      if (durationMs > 0) step.autoAdvanceMs = durationMs;
+      steps.push(step);
+    }
+    if (nextSceneUuid) {
+      steps.push({
+        kind: "scene",
+        uuid: nextSceneUuid,
+        name: beat.label || beat.name || key,
+        role: "post"
+      });
+    }
+  } else {
+    if (startSceneUuid) {
+      steps.push({
+        kind: "scene",
+        uuid: startSceneUuid,
+        name: beat.label || beat.name || key,
+        role: "main"
+      });
+    }
+  }
+
+  const scenario = {
+    key,
+    label: beat.label || beat.name || key,
+    type: isCinematic ? "cinematic" : "campaign",
+    tableTier: beat?.encounter?.tier ?? beat?.tier ?? null,
+    steps,
+    campaignId,
+    beatId,
+    // return scene (if beat sets it, it wins; else scenario runner may use map return)
+    returnSceneUuid:
+      beat.returnSceneUuid ??
+      beat.returnToSceneUuid ??
+      beat.returnScene ??
+      null,
+    spawn: {
+      mode: "center",
+      actors: Array.isArray(beat.actors) ? beat.actors.slice() : [],
+      spawnedBy: source
+    }
+  };
+
+  return registerScenario(scenario, { source, force: true });
+}
+
+
+function publishAPI(
+) {
     game.bbttcc ??= { api: {} };
     game.bbttcc.api ??= {};
 
     const existing = game.bbttcc.api.encounters || {};
 
+    // Merge into existing API, DO NOT touch _launcher/_spawner here.
     game.bbttcc.api.encounters = {
       ...existing,
       getScenario,
       listScenarios,
       getSceneConfig,
       listMappings,
+      getScenarioKeyForEncounter,
       launchFromEncounterCtx,
       launchForEncounterKey,
       launchScenario,
       testFire,
-      _launcher: existing._launcher || null,
-      _spawner: existing._spawner || null
+      hasScenario,
+      registerScenario,
+      unregisterScenario,
+      clearExternalScenarios,
+      registerCampaignBeatScenario
     };
 
     log("Encounter API published on game.bbttcc.api.encounters");

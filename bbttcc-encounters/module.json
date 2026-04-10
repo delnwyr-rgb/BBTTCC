@@ -16,20 +16,17 @@
   ],
   "url": "",
   "license": "MIT",
+
   "esmodules": [
-    "scripts/api.encounters.js",
-    "scripts/encounter.archetypes.js",
-    "scripts/scene.launcher.js",
-    "scripts/trigger.manager.js",
-    "scripts/spawner.interface.js", 
-    "scripts/encounter.outcomes.js",   
     "scripts/module.js"
   ],
+
   "dependencies": [
     { "id": "bbttcc-territory", "type": "module" },
     { "id": "bbttcc-factions",  "type": "module" },
     { "id": "bbttcc-travel",    "type": "module" }
   ],
+
   "flags": {
     "bbttcc": {
       "isCore": false,
