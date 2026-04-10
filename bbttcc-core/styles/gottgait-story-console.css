@@ -1,0 +1,372 @@
+/* GOTTGAIT Story Console — Hex Chrome Skin
+   Applies to the V2 Story Console window only. */
+
+.bbttcc.gottgait-console .window-header {
+  background: linear-gradient(90deg, #0a1018, #111c29);
+  border-bottom: 1px solid #19c0ff;
+}
+
+.bbttcc.gottgait-console .window-header .window-title {
+  font-family: "Roboto Condensed", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e5f7ff;
+}
+
+/* Root container ----------------------------------------------------------- */
+
+.bbttcc.gottgait-console .gottgait-console-root {
+  box-sizing: border-box;
+  padding: 0.75rem 0.75rem 0.5rem;
+  background: radial-gradient(circle at top left, #182332 0%, #05080d 55%, #020306 100%);
+  color: #e3edf7;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Header ------------------------------------------------------------------- */
+
+.bbttcc.gottgait-console .gottgait-console-header {
+  border-left: 3px solid #19c0ff;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, rgba(13, 35, 57, 0.8), rgba(6, 13, 25, 0.95));
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+}
+
+.bbttcc.gottgait-console .gottgait-console-header h2 {
+  margin: 0 0 0.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #f3fbff;
+}
+
+.bbttcc.gottgait-console .gottgait-console-subtitle {
+  margin: 0 0 0.15rem;
+  font-size: 0.8rem;
+  color: #9dd8ff;
+}
+
+.bbttcc.gottgait-console .gottgait-console-subtitle strong {
+  color: #ffeb9c;
+}
+
+.bbttcc.gottgait-console .gottgait-console-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #8aa0bc;
+}
+
+
+
+/* Filters ------------------------------------------------------------------ */
+
+.bbttcc.gottgait-console .gottgait-console-filters{
+  margin-top: 0.4rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.bbttcc.gottgait-console .gottgait-filter{
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 160px;
+}
+
+.bbttcc.gottgait-console .gottgait-filter label{
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9dd8ff;
+}
+
+.bbttcc.gottgait-console .gottgait-filter select{
+  width: 100%;
+}
+/* Body layout -------------------------------------------------------------- */
+
+.bbttcc.gottgait-console .gottgait-console-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: stretch;
+}
+
+/* Left side: groups -------------------------------------------------------- */
+
+.bbttcc.gottgait-console .gottgait-console-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.bbttcc.gottgait-console .gottgait-group {
+  padding: 0.45rem 0.6rem 0.5rem;
+  background: radial-gradient(circle at top left, rgba(20, 38, 58, 0.65), rgba(7, 12, 21, 0.95));
+  border-radius: 0.6rem;
+  border: 1px solid rgba(40, 78, 118, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.65),
+    0 0 18px rgba(2, 12, 24, 0.9);
+}
+
+.bbttcc.gottgait-console .gottgait-group-title {
+  margin: 0 0 0.15rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #f5fbff;
+}
+
+.bbttcc.gottgait-console .gottgait-group-desc {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  color: #9fb3cc;
+}
+
+/* Beat list ---------------------------------------------------------------- */
+
+.bbttcc.gottgait-console .gottgait-beat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bbttcc.gottgait-console .gottgait-beat-row {
+  margin: 0;
+  padding: 0;
+}
+
+/* Beat buttons: Hex Chrome pill style ------------------------------------- */
+
+.bbttcc.gottgait-console .gottgait-beat-button {
+  width: 100%;
+  text-align: left;
+  padding: 0.22rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(54, 111, 169, 0.95);
+  background: linear-gradient(90deg, rgba(4, 16, 28, 0.95), rgba(16, 40, 62, 0.98));
+  color: #e7f3ff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(1, 5, 11, 0.8),
+    0 0 8px rgba(11, 144, 230, 0.25);
+  transition:
+    border-color 120ms ease-out,
+    box-shadow 120ms ease-out,
+    transform 80ms ease-out,
+    background 120ms ease-out;
+}
+
+.bbttcc.gottgait-console .gottgait-beat-button::before {
+  content: "▶";
+  font-size: 0.75rem;
+  color: #19c0ff;
+  transform: translateY(0.5px);
+}
+
+.bbttcc.gottgait-console .gottgait-beat-button:hover {
+  border-color: #35e0ff;
+  background: linear-gradient(90deg, rgba(9, 33, 56, 0.98), rgba(24, 69, 102, 0.98));
+  box-shadow:
+    0 0 0 1px rgba(2, 12, 24, 0.9),
+    0 0 14px rgba(27, 208, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+.bbttcc.gottgait-console .gottgait-beat-button:active {
+  transform: translateY(0);
+  box-shadow:
+    0 0 0 1px rgba(2, 12, 24, 0.9),
+    0 0 4px rgba(27, 208, 255, 0.35);
+}
+
+/* Right side: log ---------------------------------------------------------- */
+
+.bbttcc.gottgait-console .gottgait-console-log {
+  padding: 0.45rem 0.55rem;
+  background: radial-gradient(circle at top right, rgba(6, 18, 34, 0.9), rgba(3, 8, 18, 0.98));
+  border-radius: 0.6rem;
+  border: 1px solid rgba(36, 74, 118, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 0 18px rgba(1, 8, 16, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.bbttcc.gottgait-console .gottgait-console-log h3 {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #e8f4ff;
+}
+
+.bbttcc.gottgait-console .gottgait-log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 8.5rem;
+  overflow-y: auto;
+}
+
+.bbttcc.gottgait-console .gottgait-log-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.4rem;
+  align-items: baseline;
+  padding: 0.2rem 0.15rem;
+  border-bottom: 1px solid rgba(28, 54, 86, 0.6);
+}
+
+.bbttcc.gottgait-console .gottgait-log-row:last-child {
+  border-bottom: none;
+}
+
+.bbttcc.gottgait-console .gottgait-log-time {
+  font-size: 0.7rem;
+  color: #6f8398;
+}
+
+.bbttcc.gottgait-console .gottgait-log-message {
+  font-size: 0.78rem;
+  color: #cad7e8;
+}
+
+.bbttcc.gottgait-console .gottgait-log-empty {
+  margin: 0.3rem 0 0;
+  font-size: 0.75rem;
+  color: #7f93aa;
+}
+
+/* Make the Story Console scrollable if content is tall */
+.bbttcc.gottgait-console .window-content {
+  max-height: calc(100vh - 140px); /* leave room for header & margins */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Ensure root fills the available content area nicely */
+.bbttcc.gottgait-console .gottgait-console-root {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive: narrow console stacks log under groups ----------------------- */
+
+@media (max-width: 720px) {
+  .bbttcc.gottgait-console .gottgait-console-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bbttcc.gottgait-console .gottgait-console-log {
+    margin-top: 0.5rem;
+  }
+}
+
+/* ==========================================================
+   Resizable window fix (append-only)
+   - Ensures the console stretches to the window height
+   - Keeps scrolling inside the two columns
+   ========================================================== */
+
+.bbttcc.gottgait-console .window-content {
+  /* Remove max-height clamps that fight resize handles */
+  max-height: none !important;
+
+  /* Let content fill the window */
+  height: 100% !important;
+
+  /* Critical: allow inner flex/grid children to shrink/scroll */
+  min-height: 0 !important;
+
+  /* Prefer scroll inside panels instead of the whole window-content */
+  overflow: hidden !important;
+}
+
+/* Root fills the window-content area */
+.bbttcc.gottgait-console .gottgait-console-root {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header stays fixed; body grows/shrinks */
+.bbttcc.gottgait-console .gottgait-console-header {
+  flex: 0 0 auto;
+}
+
+.bbttcc.gottgait-console .gottgait-console-body {
+  flex: 1 1 auto;
+  min-height: 0; /* critical for scroll regions */
+}
+
+/* Make both columns scroll internally */
+.bbttcc.gottgait-console .gottgait-console-groups,
+.bbttcc.gottgait-console .gottgait-console-log {
+  min-height: 0;
+  overflow: auto;
+}
+
+
+
+/* ================================
+   BBTTCC RESIZE PATCH (Story Console)
+   - Ensures the window is resizable in Foundry v13 ApplicationV2
+   - Keeps scrolling inside the two columns
+   ================================ */
+
+.bbttcc.gottgait-console.window-app {
+  min-width: 720px;
+  min-height: 520px;
+}
+
+.bbttcc.gottgait-console .window-content{
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important; /* allow handle + inner scroll areas */
+}
+
+.bbttcc.gottgait-console .gottgait-console-root{
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.bbttcc.gottgait-console .gottgait-console-body{
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bbttcc.gottgait-console .gottgait-console-groups,
+.bbttcc.gottgait-console .gottgait-console-log{
+  min-height: 0;
+  overflow: auto;
+}
+
+/* If any prior rules set max-height clamps, kill them for this app. */
+.bbttcc.gottgait-console .window-content{
+  max-height: none !important;
+}

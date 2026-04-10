@@ -1,0 +1,53 @@
+<div class="gottgait-console-root">
+
+  <header class="gottgait-console-header">
+    <h2>Mal’s GOTTGAIT Story Console</h2>
+    <p class="gottgait-console-subtitle">
+      Current Stage: <strong>{{stage}}</strong>
+    </p>
+
+<div class="gottgait-console-filters">
+  <div class="gottgait-filter">
+    <label>Quest</label>
+    <select name="filterQuest">
+      {{selectOptions questOptions selected=filters.questId}}
+    </select>
+  </div>
+
+  <div class="gottgait-filter">
+    <label>Turn</label>
+    <select name="filterTurn">
+      {{selectOptions turnOptions selected=filters.turn}}
+    </select>
+  </div>
+</div>
+
+    <p class="gottgait-console-hint">
+      <em>“Press buttons, ruin timelines, look confident.” — Mal</em>
+    </p>
+  </header>
+
+  <div class="gottgait-console-body">
+    <div class="gottgait-console-groups">
+      {{#each groups as |group|}}
+        <section class="gottgait-group">
+          <h3 class="gottgait-group-title">{{group.label}}</h3>
+          <p class="gottgait-group-desc">{{group.description}}</p>
+
+          <ul class="gottgait-beat-list">
+            {{#each group.beats as |beat|}}
+              <li class="gottgait-beat-row">
+                <button type="button"
+                        class="gottgait-beat-button"
+                        data-action="beat"
+                        data-beat="{{beat.key}}">
+                  {{beat.label}}
+                </button>
+              </li>
+            {{/each}}
+          </ul>
+        </section>
+      {{/each}}
+    </div>  </div>
+
+</div>

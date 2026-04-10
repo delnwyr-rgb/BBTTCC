@@ -7,8 +7,20 @@
   "authors": [{ "name": "BBTTCC" }],
   "esmodules": [
     "scripts/module.js",
-    "scripts/bbttcc-ui-cleanup.enhancer.js"
-],
+    "scripts/story.gottgait.js",
+    "scripts/gottgait-story-console.js",
+    "scripts/bbttcc-ui-cleanup.enhancer.js",
+    "scripts/api.gm.js",
+    "scripts/bbttcc-story-button.enhancer.js",
+    "scripts/bbttcc-bridge.js"
+  ],
+  "templates": [
+    "templates/gottgait-story-console.hbs"
+  ],
+  "styles": [
+    "styles/gottgait-story-console.css",
+    "styles/bbttcc-bridge.css"
+  ],
   "packs": [],
   "socket": false
 }
