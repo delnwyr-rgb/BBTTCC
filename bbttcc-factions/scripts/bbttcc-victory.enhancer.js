@@ -1,3 +1,13 @@
+/*
+ * Reviewed during faction-sheet refactor.
+ * This file is retained intentionally.
+ *
+ * Reason:
+ * - It computes and applies Victory progression during turn advance.
+ * - It does not inject faction-sheet UI or retained header elements.
+ * - No structural patch needed for the new Overview / Activities / Assets / Relationships / War Logs layout.
+ */
+
 /* bbttcc-factions/scripts/bbttcc-victory.enhancer.js
  *
  * Unified Victory enhancer:

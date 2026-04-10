@@ -1,7 +1,8 @@
 // modules/bbttcc-factions/scripts/faction-overview-dashboard.enhancer.js
 // BBTTCC — Faction Overview Dashboard (Hex Chrome cards)
 //
-// Adds a dark, neon-edged dashboard row to the Overview tab:
+// Adds a dark, neon-edged dashboard row to the Overview tab when the
+// sheet does not already provide a native summary target.
 // Victory, Unity, Morale, Loyalty, Darkness cards with mini-meters.
 //
 // Non-invasive: does not change templates or sheet registration.
@@ -139,15 +140,27 @@
   }
 
   function readHealthFlags(actor) {
-    const victory  = actor.getFlag(MODF, "victory")  || {};
-    const darkness = actor.getFlag(MODF, "darkness") || {};
-    const morale   = actor.getFlag(MODF, "morale");
-    const loyalty  = actor.getFlag(MODF, "loyalty");
+    // Robust flag reader:
+    // Some legacy enhancers accidentally nested values under flags.bbttcc-factions.bbttcc-factions.*
+    const root = actor?.flags?.[MODF] ?? {};
+    const nested = (root && typeof root === "object") ? (root[MODF] ?? null) : null;
 
-    const moraleHome  = actor.getFlag(MODF, "moraleHome");
-    const loyaltyHome = actor.getFlag(MODF, "loyaltyHome");
+    const pick = (k, fallback) => {
+      if (root && Object.prototype.hasOwnProperty.call(root, k) && root[k] !== undefined) return root[k];
+      if (nested && Object.prototype.hasOwnProperty.call(nested, k) && nested[k] !== undefined) return nested[k];
+      const v = actor?.getFlag?.(MODF, k);
+      return (v === undefined) ? fallback : v;
+    };
 
-    const darkVal = (typeof darkness.global === "number")
+    const victory  = pick("victory", {})  || {};
+    const darkness = pick("darkness", {}) || {};
+    const morale   = pick("morale", 0);
+    const loyalty  = pick("loyalty", 0);
+
+    const moraleHome  = pick("moraleHome", null);
+    const loyaltyHome = pick("loyaltyHome", null);
+
+    const darkVal = (typeof darkness?.global === "number")
       ? darkness.global
       : (typeof darkness === "number" ? darkness : 0);
 
@@ -275,17 +288,26 @@
       // Only add once per render instance.
       if (overview.querySelector("[data-bbttcc-fdash]")) return;
 
+      // Prefer stable native summary targets if the template now provides one.
+      // If the Overview tab already contains an explicit native summary block,
+      // do not add a second competing dashboard row.
+      if (overview.querySelector("[data-bbttcc-native-overview-summary]")) return;
+
       const vals = readHealthFlags(actor);
 
-      // Insert dashboard before the first fieldset (Faction Health).
+      const target = overview.querySelector("[data-bbttcc-overview-dashboard-anchor]");
       const firstFieldset = overview.querySelector("fieldset");
       const wrapper = document.createElement("div");
       wrapper.innerHTML = buildDashboardHTML(vals);
+      const dash = wrapper.firstElementChild;
+      if (!dash) return;
 
-      if (firstFieldset && firstFieldset.parentElement) {
-        firstFieldset.parentElement.insertBefore(wrapper.firstElementChild, firstFieldset);
+      if (target && target.parentElement) {
+        target.parentElement.insertBefore(dash, target);
+      } else if (firstFieldset && firstFieldset.parentElement) {
+        firstFieldset.parentElement.insertBefore(dash, firstFieldset);
       } else {
-        overview.prepend(wrapper.firstElementChild);
+        overview.prepend(dash);
       }
 
     } catch (e) {

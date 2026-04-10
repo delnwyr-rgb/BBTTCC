@@ -22,7 +22,7 @@
 /* Header layout tweaks */
 .bbttcc-faction-sheet .sheet-header {
   border-radius: 0.75rem;
-  padding: 0.5rem 0.7rem 0.6rem;
+  padding: 0.45rem 0.6rem 0.5rem;
   background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,175,0.85));
   box-shadow: 0 12px 20px rgba(0,0,0,0.6);
   color: #f9fafb;
@@ -52,7 +52,7 @@
   margin-top: 0.7rem;
 }
 
-/* ---------- TABS (Overview / Ops & Roster / War Logs) ---------- */
+/* ---------- TABS (Overview / Activities / Assets / Relationships / War Logs) ---------- */
 
 .bbttcc-faction-sheet .bbttcc-tabs {
   margin-top: 0.55rem;
@@ -87,6 +87,88 @@
   opacity: 1;
 }
 
+
+
+/* ---------- TAB PANES / PAGE LAYOUT ---------- */
+
+.bbttcc-faction-sheet .bbttcc-tab {
+  display: none;
+}
+
+.bbttcc-faction-sheet .bbttcc-tab.is-active {
+  display: block;
+}
+
+.bbttcc-faction-sheet .bbttcc-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="overview"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="activities"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="assets"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="relationships"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="war"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="warlogs"],
+.bbttcc-faction-sheet .bbttcc-tab-overview,
+.bbttcc-faction-sheet .bbttcc-tab-activities,
+.bbttcc-faction-sheet .bbttcc-tab-assets,
+.bbttcc-faction-sheet .bbttcc-tab-relationships,
+.bbttcc-faction-sheet .bbttcc-tab-war,
+.bbttcc-faction-sheet .bbttcc-tab-warlogs {
+  min-height: 0;
+}
+
+.bbttcc-faction-sheet .bbttcc-section-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.bbttcc-faction-sheet .bbttcc-card-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.bbttcc-faction-sheet .bbttcc-card-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.bbttcc-faction-sheet .bbttcc-actions-row,
+.bbttcc-faction-sheet .bbttcc-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="war"] fieldset,
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="warlogs"] fieldset,
+.bbttcc-faction-sheet .bbttcc-tab-war fieldset,
+.bbttcc-faction-sheet .bbttcc-tab-warlogs fieldset {
+  min-height: 22rem;
+}
+
+.bbttcc-faction-sheet .bbttcc-warlog-scroll,
+.bbttcc-faction-sheet [data-warlog-scroll],
+.bbttcc-faction-sheet .bbttcc-warlogs-scroll {
+  max-height: 60vh;
+  min-height: 22rem;
+  overflow: auto;
+  padding-right: 0.2rem;
+}
+
+@media (max-width: 980px) {
+  .bbttcc-faction-sheet .bbttcc-card-grid-2,
+  .bbttcc-faction-sheet .bbttcc-card-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- GENERIC CARD FIELDSETS ---------- */
 
 .bbttcc-faction-sheet fieldset {
@@ -119,7 +201,7 @@
 /* ---------- TABLES: CONSOLE GRID STYLE ---------- */
 
 .bbttcc-faction-sheet .bbttcc-table {
-  border-collapse: separate; /* keep cell padding visible */
+  border-collapse: separate;
   border-spacing: 0;
   width: 100%;
   background: rgba(15,23,42,0.96);
@@ -187,7 +269,7 @@
   border-color: rgba(59,130,246,0.95);
 }
 
-/* ---------- HEADER MINI-CARDS (OP Bank / Raid Planner) ---------- */
+/* ---------- HEADER MINI-CARDS (legacy retained-header support) ---------- */
 
 #bbttcc-opbank-strip,
 #bbttcc-raidplan-strip {
@@ -202,7 +284,6 @@
   min-height: 54px;
 }
 
-/* Titles inside the mini-cards */
 #bbttcc-opbank-strip > div:first-child,
 #bbttcc-raidplan-strip > div:first-child {
   font-size: 11px;
@@ -214,7 +295,6 @@
   color: #bfdbfe;
 }
 
-/* Tables inside the mini-cards */
 #bbttcc-opbank-strip .bbttcc-table,
 #bbttcc-raidplan-strip .bbttcc-table {
   background: rgba(15,23,42,0.95);
@@ -232,7 +312,7 @@
   font-size: 11px;
 }
 
-/* ---------- VICTORY / UNITY HEADER STRIP ---------- */
+/* ---------- VICTORY / UNITY HEADER STRIP (legacy retained-header support) ---------- */
 
 #bbttcc-victory-strip {
   margin-top: 0.45rem;
@@ -262,7 +342,6 @@
   color: #a5f3fc;
 }
 
-/* Unity meter */
 #bbttcc-victory-strip .bbttcc-meter {
   position: relative;
   height: 6px;
@@ -280,7 +359,6 @@
   transition: width 0.25s ease-out;
 }
 
-/* Generic badge fallback */
 .bbttcc-badge {
   padding: .1rem .4rem;
   border-radius: .5rem;
@@ -291,7 +369,6 @@
 
 /* ---------- SECTION CARD THEMES (A-3) ---------- */
 
-/* Base class applied to all themed fieldsets */
 .bbttcc-faction-sheet fieldset.bbttcc-card {
   position: relative;
 }
@@ -304,9 +381,39 @@
     0 10px 20px rgba(37,99,235,0.65);
   background: radial-gradient(circle at top, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
 }
+.bbttcc-faction-sheet fieldset.bbttcc-card-health legend { color: #bfdbfe; }
 
-.bbttcc-faction-sheet fieldset.bbttcc-card-health legend {
-  color: #bfdbfe;
+/* Rigs — electric gold / hazard industrial */
+.bbttcc-faction-sheet fieldset.bbttcc-card-rigs {
+  border-color: rgba(250,204,21,1);
+  box-shadow:
+    0 0 0 1px rgba(161,98,7,0.92),
+    0 10px 20px rgba(250,204,21,0.40);
+  background: radial-gradient(circle at top, rgba(66,32,6,0.92), rgba(15,23,42,0.98));
+}
+.bbttcc-faction-sheet fieldset.bbttcc-card-rigs legend { color: #fde68a; }
+
+/* Rigs: make Add Rig button feel like a console action */
+.bbttcc-faction-sheet fieldset.bbttcc-card-rigs [data-rig-act="add"] {
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(250,204,21,0.95);
+  background: rgba(15,23,42,0.85);
+  color: #fde68a;
+  box-shadow: 0 0 8px rgba(250,204,21,0.35);
+}
+.bbttcc-faction-sheet fieldset.bbttcc-card-rigs [data-rig-act="add"]:hover {
+  background: rgba(161,98,7,0.35);
+  border-color: rgba(253,224,71,1);
+  color: #fff7ed;
+}
+
+/* Rigs: pills tighter */
+.bbttcc-faction-sheet fieldset.bbttcc-card-rigs .bbttcc-rig-pill {
+  background: rgba(250,204,21,0.12);
+  border-color: rgba(250,204,21,0.28);
 }
 
 /* Territory Roll-up — teal/green geo card */
@@ -317,10 +424,7 @@
     0 10px 20px rgba(16,185,129,0.65);
   background: radial-gradient(circle at top, rgba(6,78,59,0.85), rgba(15,23,42,0.98));
 }
-
-.bbttcc-faction-sheet fieldset.bbttcc-card-territory legend {
-  color: #a7f3d0;
-}
+.bbttcc-faction-sheet fieldset.bbttcc-card-territory legend { color: #a7f3d0; }
 
 /* Territory — This Scene — slightly lighter teal */
 .bbttcc-faction-sheet fieldset.bbttcc-card-territory-scene {
@@ -330,10 +434,7 @@
     0 10px 20px rgba(34,197,94,0.65);
   background: radial-gradient(circle at top, rgba(5,46,22,0.9), rgba(15,23,42,0.98));
 }
-
-.bbttcc-faction-sheet fieldset.bbttcc-card-territory-scene legend {
-  color: #bbf7d0;
-}
+.bbttcc-faction-sheet fieldset.bbttcc-card-territory-scene legend { color: #bbf7d0; }
 
 /* Organization Points — purple/blue operations card */
 .bbttcc-faction-sheet fieldset.bbttcc-card-ops {
@@ -343,10 +444,7 @@
     0 10px 20px rgba(168,85,247,0.7);
   background: radial-gradient(circle at top left, rgba(76,29,149,0.9), rgba(15,23,42,0.98));
 }
-
-.bbttcc-faction-sheet fieldset.bbttcc-card-ops legend {
-  color: #e9d5ff;
-}
+.bbttcc-faction-sheet fieldset.bbttcc-card-ops legend { color: #e9d5ff; }
 
 /* Roster — cyan personnel card */
 .bbttcc-faction-sheet fieldset.bbttcc-card-roster {
@@ -356,10 +454,7 @@
     0 10px 20px rgba(34,211,238,0.72);
   background: radial-gradient(circle at top, rgba(8,47,73,0.94), rgba(15,23,42,0.98));
 }
-
-.bbttcc-faction-sheet fieldset.bbttcc-card-roster legend {
-  color: #a5f3fc;
-}
+.bbttcc-faction-sheet fieldset.bbttcc-card-roster legend { color: #a5f3fc; }
 
 /* War Logs — amber/red conflict card */
 .bbttcc-faction-sheet fieldset.bbttcc-card-warlogs {
@@ -369,7 +464,518 @@
     0 10px 20px rgba(249,115,22,0.72);
   background: radial-gradient(circle at top, rgba(67,20,7,0.93), rgba(15,23,42,0.98));
 }
+.bbttcc-faction-sheet fieldset.bbttcc-card-warlogs legend { color: #fed7aa; }
 
-.bbttcc-faction-sheet fieldset.bbttcc-card-warlogs legend {
-  color: #fed7aa;
+/* Next Turn Queue — purple/teal planning card */
+.bbttcc-faction-sheet fieldset.bbttcc-card-planned {
+  border-color: rgba(168,85,247,1);
+  box-shadow:
+    0 0 0 1px rgba(88,28,135,0.92),
+    0 10px 20px rgba(168,85,247,0.35);
+  background: radial-gradient(circle at top, rgba(55,48,163,0.45), rgba(15,23,42,0.98));
+}
+.bbttcc-faction-sheet fieldset.bbttcc-card-planned legend { color: #e9d5ff; }
+
+/* =============================== */
+/* Faction Creation Wizard – Readability */
+/* =============================== */
+
+.bbttcc-faction-wizard {
+  background: linear-gradient(180deg, #f3f4f6, #e5e7eb);
+  color: #0f172a;
+}
+
+.bbttcc-faction-wizard .wizard-step {
+  background: #020617;
+  color: #e5e7eb;
+  border: 1px solid rgba(148,163,184,0.25);
+}
+
+.bbttcc-faction-wizard label {
+  color: #c7d2fe;
+}
+
+.bbttcc-faction-wizard input,
+.bbttcc-faction-wizard select {
+  background: #f8fafc;
+  color: #020617;
+  border: 1px solid #94a3b8;
+}
+
+.bbttcc-faction-wizard input::placeholder {
+  color: #64748b;
+}
+
+.bbttcc-faction-wizard button[data-action] {
+  background: linear-gradient(180deg, #2563eb, #1e40af);
+  color: #f8fafc;
+}
+
+
+
+
+/* GM Manual Edit — crimson control card (GM-only, requires bbttcc-core.gmEditMode) */
+.bbttcc-faction-sheet fieldset.bbttcc-card-gmedit {
+  border-color: rgba(239,68,68,1);
+  box-shadow:
+    0 0 0 1px rgba(127,29,29,0.92),
+    0 10px 20px rgba(239,68,68,0.35);
+  background: radial-gradient(circle at top, rgba(69,10,10,0.70), rgba(15,23,42,0.98));
+}
+.bbttcc-faction-sheet fieldset.bbttcc-card-gmedit legend { color: #fecaca; }
+.bbttcc-faction-sheet fieldset.bbttcc-card-gmedit .bbttcc-muted { opacity: 0.85; }
+.bbttcc-faction-sheet fieldset.bbttcc-card-gmedit input[type="number"],
+.bbttcc-faction-sheet fieldset.bbttcc-card-gmedit input[type="text"] {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(148,163,184,0.35);
+  color: #e5e7eb;
+}
+.bbttcc-faction-sheet fieldset.bbttcc-card-gmedit .bbttcc-gm-actions {
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  margin-top:.5rem;
+}
+.bbttcc-faction-sheet fieldset.bbttcc-card-gmedit .bbttcc-gm-actions .button {
+  font-weight:700;
+  border-color: rgba(239,68,68,0.75);
+}
+.bbttcc-faction-sheet fieldset.bbttcc-card-gmedit .bbttcc-gm-actions .button:hover {
+  background: rgba(239,68,68,0.25);
+  border-color: rgba(248,113,113,0.95);
+}
+
+/* -------------------------------------------------------------------------
+ * Campaign Choice / Roll Dialog (Hex Chrome skin)
+ *
+ * NOTE: These styles are intentionally narrow so we don't reskin every Foundry
+ * dialog. Apply one of these classes to your dialog's "classes" array:
+ *  - bbttcc-hexchrome-dialog
+ *  - bbttcc-choice-roll-dialog
+ * ------------------------------------------------------------------------- */
+
+.bbttcc-hexchrome-dialog .window-content,
+.bbttcc-choice-roll-dialog .window-content {
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(56,189,248,0.14), transparent 60%),
+    radial-gradient(circle at 50% 100%, rgba(79,70,229,0.18), transparent 60%),
+    #020617;
+  color: #e5e7eb;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.bbttcc-hexchrome-dialog .dialog-content,
+.bbttcc-choice-roll-dialog .dialog-content {
+  padding: 10px 12px;
+}
+
+.bbttcc-hexchrome-dialog h2,
+.bbttcc-choice-roll-dialog h2,
+.bbttcc-hexchrome-dialog h3,
+.bbttcc-choice-roll-dialog h3 {
+  margin: 0 0 6px 0;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #bfdbfe;
+}
+
+.bbttcc-hexchrome-dialog .bbttcc-muted,
+.bbttcc-choice-roll-dialog .bbttcc-muted {
+  opacity: 0.8;
+}
+
+.bbttcc-choice-roll-dialog input[type="text"],
+.bbttcc-choice-roll-dialog input[type="number"],
+.bbttcc-choice-roll-dialog select,
+.bbttcc-hexchrome-dialog input[type="text"],
+.bbttcc-hexchrome-dialog input[type="number"],
+.bbttcc-hexchrome-dialog select {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(148,163,184,0.35);
+  border-radius: 10px;
+  color: #e5e7eb;
+  padding: 6px 8px;
+}
+
+.bbttcc-choice-roll-dialog .dialog-buttons button,
+.bbttcc-hexchrome-dialog .dialog-buttons button {
+  border-radius: 999px;
+  border: 1px solid rgba(59,130,246,0.9);
+  background: rgba(15,23,42,0.85);
+  color: #f9fafb;
+  font-weight: 700;
+}
+
+.bbttcc-choice-roll-dialog .dialog-buttons button:hover,
+.bbttcc-hexchrome-dialog .dialog-buttons button:hover {
+  background: rgba(30,64,175,0.85);
+  border-color: rgba(96,165,250,0.95);
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-choice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-choice-card {
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,0.22);
+  background: rgba(15,23,42,0.35);
+}
+
+.bbttcc-choice-roll-dialog .bbttcc-choice-card:hover {
+  border-color: rgba(96,165,250,0.55);
+  background: rgba(30,64,175,0.25);
+}
+
+
+/* =============================== */
+/* Header Console Grid (legacy retained-header support) */
+/* =============================== */
+
+.bbttcc-faction-sheet img.bbttcc-faction-crest.profile {
+  width: 112px !important;
+  height: 112px !important;
+  object-fit: cover;
+  border-radius: 14px !important;
+  box-shadow: 0 0 0 1px rgba(15,23,42,0.85), 0 14px 26px rgba(0,0,0,0.6);
+}
+
+.bbttcc-faction-sheet .bbttcc-faction-name input {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  padding: 0;
+}
+
+.bbttcc-faction-sheet .bbttcc-header-card {
+  border-radius: 0.85rem;
+  border: 1px solid rgba(30,64,175,0.9);
+  background:
+    radial-gradient(circle at 0 0, rgba(30,64,175,0.22), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.18), transparent 55%),
+    rgba(15,23,42,0.96);
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.9),
+    0 10px 18px rgba(0,0,0,0.65);
+  padding: 10px 12px;
+  color: #e5e7eb;
+}
+
+.bbttcc-faction-sheet .bbttcc-header-card-title-row{
+  display:flex;
+  gap:.75rem;
+  align-items:baseline;
+  justify-content:space-between;
+  margin-bottom: .4rem;
+}
+
+.bbttcc-faction-sheet .bbttcc-header-card-title{
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: #bfdbfe;
+}
+
+.bbttcc-faction-sheet .bbttcc-opbank-table th{
+  font-size: 11px !important;
+  padding: 6px 8px !important;
+}
+
+.bbttcc-faction-sheet .bbttcc-opbank-table td{
+  font-size: 14px !important;
+  padding: 10px 8px !important;
+}
+
+.bbttcc-faction-sheet .bbttcc-header-card-actions{
+  margin-top: .55rem;
+  display:flex;
+  justify-content:flex-end;
+}
+
+.bbttcc-faction-sheet .bbttcc-pill-btn{
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  border: 1px solid rgba(59,130,246,0.95);
+  background: linear-gradient(135deg, rgba(30,64,175,0.95), rgba(14,165,233,0.85));
+  color: #f8fafc;
+  box-shadow: 0 0 0 1px rgba(15,23,42,0.95), 0 10px 18px rgba(0,0,0,0.55);
+}
+
+.bbttcc-faction-sheet .bbttcc-pill-btn:hover{
+  background: linear-gradient(135deg, rgba(37,99,235,0.95), rgba(34,197,94,0.70));
+  border-color: rgba(96,165,250,0.98);
+}
+
+.bbttcc-faction-sheet .bbttcc-header-lines{
+  display:flex;
+  flex-direction:column;
+  gap:.25rem;
+  margin-top:.15rem;
+}
+
+.bbttcc-faction-sheet .bbttcc-mono{
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 11px;
+  opacity: 0.95;
+}
+
+@media (max-width: 980px){
+  .bbttcc-faction-sheet .bbttcc-header-grid-3{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* Advisor dialog — Hex Chrome skin */
+.bbttcc-advisor-dialog{
+  display:flex;
+  flex-direction:column;
+  gap:.85rem;
+  color:#e5e7eb;
+}
+
+.bbttcc-advisor-dialog .window-content,
+.dialog.bbttcc-advisor-dialog .window-content{
+  background:
+    radial-gradient(circle at 0 0, rgba(148,163,184,0.14), transparent 55%),
+    radial-gradient(circle at 100% 0, rgba(56,189,248,0.10), transparent 60%),
+    radial-gradient(circle at 50% 100%, rgba(79,70,229,0.16), transparent 60%),
+    #020617;
+}
+
+.bbttcc-advisor-hero{
+  padding:1rem 1.05rem;
+  border:1px solid rgba(59,130,246,0.45);
+  border-radius:16px;
+  background:
+    radial-gradient(circle at top left, rgba(30,64,175,0.24), transparent 55%),
+    linear-gradient(180deg, rgba(15,23,42,0.96), rgba(15,23,42,0.90));
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.95),
+    0 10px 24px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(147,197,253,0.08);
+}
+
+.bbttcc-advisor-eyebrow{
+  font-size:.78rem;
+  text-transform:uppercase;
+  letter-spacing:.10em;
+  color:#60a5fa;
+  font-weight:800;
+}
+
+.bbttcc-advisor-headline{
+  margin-top:.2rem;
+  font-size:1.35rem;
+  font-weight:800;
+  line-height:1.15;
+  color:#eaf2ff;
+  text-shadow:0 0 14px rgba(59,130,246,0.18);
+}
+
+.bbttcc-advisor-subline{
+  margin-top:.25rem;
+  color:#cbd5e1;
+  font-weight:600;
+}
+
+.bbttcc-advisor-section{
+  padding:.85rem .95rem;
+  border:1px solid rgba(59,130,246,0.26);
+  border-radius:14px;
+  background:
+    linear-gradient(180deg, rgba(2,6,23,0.96), rgba(10,16,38,0.96));
+  box-shadow:
+    0 0 0 1px rgba(15,23,42,0.92),
+    0 10px 20px rgba(0,0,0,0.48);
+  color:#e5e7eb;
+}
+
+.bbttcc-advisor-section h3{
+  margin:0 0 .5rem 0;
+  padding-bottom:.28rem;
+  font-size:1rem;
+  font-weight:800;
+  color:#eaf2ff;
+  border-bottom:1px solid rgba(248,113,113,0.65);
+}
+
+.bbttcc-advisor-copy{
+  color:#f8fafc;
+  line-height:1.55;
+  font-size:.98rem;
+  font-weight:600;
+}
+
+.bbttcc-advisor-section.overall,
+.bbttcc-advisor-section.strategic{
+  border-color:rgba(59,130,246,0.42);
+  background:
+    radial-gradient(circle at top left, rgba(30,64,175,0.18), transparent 55%),
+    linear-gradient(180deg, rgba(2,6,23,0.97), rgba(12,22,48,0.97));
+}
+
+.bbttcc-advisor-section.travel{
+  border-color:rgba(34,211,238,0.36);
+  background:
+    radial-gradient(circle at top left, rgba(8,145,178,0.18), transparent 55%),
+    linear-gradient(180deg, rgba(2,6,23,0.97), rgba(8,26,52,0.97));
+}
+.bbttcc-advisor-section.travel h3{
+  border-bottom-color:rgba(56,189,248,0.7);
+}
+
+.bbttcc-advisor-section.raid{
+  border-color:rgba(248,113,113,0.36);
+  background:
+    radial-gradient(circle at top left, rgba(127,29,29,0.20), transparent 55%),
+    linear-gradient(180deg, rgba(2,6,23,0.97), rgba(36,8,16,0.97));
+}
+.bbttcc-advisor-section.raid h3{
+  border-bottom-color:rgba(248,113,113,0.75);
+}
+
+.bbttcc-advisor-section.why-not{
+  border-color:rgba(148,163,184,0.26);
+  background:
+    radial-gradient(circle at top left, rgba(100,116,139,0.14), transparent 55%),
+    linear-gradient(180deg, rgba(9,14,30,0.98), rgba(2,6,23,0.98));
+}
+.bbttcc-advisor-section.why-not h3{
+  border-bottom-color:rgba(148,163,184,0.6);
+}
+
+.bbttcc-advisor-why{
+  margin:.15rem 0 0 1.1rem;
+  padding:0;
+  color:#e5e7eb;
+}
+
+.bbttcc-advisor-why li{
+  margin:.3rem 0;
+  line-height:1.45;
+  color:#f1f5f9;
+}
+
+.bbttcc-advisor-section.overall .bbttcc-advisor-copy,
+.bbttcc-advisor-section.strategic .bbttcc-advisor-copy,
+.bbttcc-advisor-section.travel .bbttcc-advisor-copy,
+.bbttcc-advisor-section.raid .bbttcc-advisor-copy,
+.bbttcc-advisor-section.why-not .bbttcc-advisor-copy{
+  color:#f8fafc;
+}
+
+.bbttcc-advisor-dialog .dialog-buttons button,
+.bbttcc-advisor-dialog button{
+  border-radius:999px;
+  border:1px solid rgba(59,130,246,0.92);
+  background:linear-gradient(135deg, rgba(30,64,175,0.95), rgba(14,165,233,0.82));
+  color:#f8fafc;
+  font-weight:800;
+  box-shadow:0 0 0 1px rgba(15,23,42,0.92), 0 8px 18px rgba(0,0,0,0.45);
+}
+
+.bbttcc-advisor-dialog .dialog-buttons button:hover,
+.bbttcc-advisor-dialog button:hover{
+  background:linear-gradient(135deg, rgba(37,99,235,0.96), rgba(6,182,212,0.82));
+  border-color:rgba(147,197,253,0.98);
+}
+
+
+/* ---------- TOP IDENTITY ROW / LIGHTWEIGHT HEADER ---------- */
+
+.bbttcc-faction-sheet .sheet-header,
+.bbttcc-faction-sheet .bbttcc-identity-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.bbttcc-faction-sheet .bbttcc-identity-row > * {
+  min-width: 0;
+}
+
+
+/* ---------- TAB STRIP + BODY STABILITY (wireframe alignment) ---------- */
+
+.bbttcc-faction-sheet {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.bbttcc-faction-sheet .sheet-header {
+  flex: 0 0 auto;
+}
+
+.bbttcc-faction-sheet .bbttcc-faction-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bbttcc-faction-sheet .bbttcc-tabs {
+  flex: 0 0 auto;
+  align-self: flex-start;
+}
+
+.bbttcc-faction-sheet .bbttcc-tabs .item {
+  min-width: 8.5rem;
+  min-height: 2.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.bbttcc-faction-sheet .bbttcc-tab {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bbttcc-faction-sheet .bbttcc-tab.is-active {
+  display: block;
+}
+
+.bbttcc-faction-sheet .bbttcc-tab > .bbttcc-tab-stack,
+.bbttcc-faction-sheet .bbttcc-tab > .bbttcc-section-stack {
+  min-height: 0;
+}
+
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="overview"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="activities"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="assets"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="relationships"],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="warlogs"] {
+  padding-bottom: 0.4rem;
+}
+
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="warlogs"] .bbttcc-warlog-scroll,
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="warlogs"] [data-warlog-scroll],
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="warlogs"] .bbttcc-warlogs-scroll {
+  max-height: none;
+  min-height: 22rem;
+}
+
+/* Keep any spare sheet height below the content rather than inside the tab strip area. */
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="overview"] fieldset:last-child,
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="activities"] fieldset:last-child,
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="assets"] fieldset:last-child,
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="relationships"] fieldset:last-child,
+.bbttcc-faction-sheet .bbttcc-tab[data-tab="warlogs"] fieldset:last-child {
+  margin-bottom: 0;
 }

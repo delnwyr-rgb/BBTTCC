@@ -1,72 +1,71 @@
 {{!-- bbttcc-factions/templates/faction-sheet.hbs --}}
 <form class="bbttcc-faction-sheet flexcol">
-  <header class="sheet-header flexcol" style="gap:.5rem; margin-bottom:.5rem;">
-    <div class="flexrow" style="align-items:center; gap:1rem;">
-      <img class="profile" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" width="64" height="64" style="border-radius:8px; cursor:pointer;"/>
-      <h1 class="charname" style="margin:0; flex:1;">
-        <input name="name" type="text" value="{{actor.name}}" />
-      </h1>
-    </div>
+  <style>
+    .bbttcc-tabs { display:flex; gap:0.4rem; margin-top:0.2rem; margin-bottom:0.8rem; font-size:0.8rem; flex-wrap:wrap; }
+    .bbttcc-tabs .item { cursor:pointer; user-select:none; }
+    .bbttcc-tab { display:none; }
+    .bbttcc-tab.is-active { display:block; }
+    .bbttcc-warlogs-scroll { max-height:560px; overflow-y:auto; border-radius:8px; }
 
-    <div class="flexrow" style="gap:1rem; justify-content:space-between; align-items:center;">
-      <div class="flexrow" style="gap:.5rem; align-items:center;">
-        <strong>{{localize "BBTTCC.Labels.Status"}}:</strong>
-        <span class="badge" style="padding:.15rem .5rem; border-radius:.5rem; background:#243b55; color:white;">
-          {{fx.powerLevelLabel}}
-        </span>
-      </div>
-      <div>
-        <strong>{{localize "BBTTCC.Labels.TotalOPs"}}:</strong> {{fx.totalOPs}} / {{fx.maxOPs}}
-      </div>
-    </div>
+    .bbttcc-faction-overview-shell { display:flex; flex-direction:column; gap:1rem; }
+    .bbttcc-overview-hero { display:flex; flex-direction:column; gap:.9rem; }
+    .bbttcc-overview-opbank { margin-top:.15rem; }
+    .bbttcc-overview-summary-chip {
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      padding:.4rem .75rem;
+      border-radius:14px;
+      background:rgba(18,30,62,0.72);
+      border:1px solid rgba(255,255,255,0.08);
+      box-shadow:0 6px 22px rgba(0,0,0,.24);
+      min-width:170px;
+    }
+    .bbttcc-overview-summary-chip .bbttcc-meter { flex:1; min-width:48px; }
+    .bbttcc-tab-grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.8rem; }
+    .bbttcc-tab-stack { display:flex; flex-direction:column; gap:1rem; }
 
-    {{!-- Victory / Unity header strip --}}
-    <div id="bbttcc-victory-strip" class="flexrow" style="gap:.75rem; align-items:center; font-size:12px;">
-      <div class="flexrow" style="gap:.5rem; align-items:center;">
-        <span class="bbttcc-badge" title="Victory Points">
-          VP: <span data-role="vp">0</span>
-        </span>
-        <span class="bbttcc-badge unity" data-role="badge-label" style="display:none;"></span>
-      </div>
-      <div class="flexrow" style="flex:1; align-items:center; gap:.5rem;">
-        <span style="font-weight:600;">Unity</span>
-        <div class="bbttcc-meter" style="flex:1;">
-          <div class="bbttcc-meter-fill"></div>
-        </div>
-        <span style="min-width:3rem; text-align:right;" data-role="unity-text">0%</span>
-      </div>
-    </div>
+    @media (max-width: 900px) {
+      .bbttcc-tab-grid-2 { grid-template-columns:1fr; }
+    }
 
-    {{!-- Simple tab styling (tabs themselves are Hex Chrome via CSS) --}}
-    <style>
-      .bbttcc-tabs {
-        display:flex;
-        gap:0.4rem;
-        margin-top:0.6rem;
-        margin-bottom:0.4rem;
-        font-size:0.8rem;
-      }
-      .bbttcc-tabs .item {
-        cursor:pointer;
-        user-select:none;
-      }
-      .bbttcc-tab {
-        display:none;
-      }
-      .bbttcc-tab.is-active {
-        display:block;
-      }
-      .bbttcc-warlogs-scroll {
-        max-height:260px;
-        overflow-y:auto;
-        border-radius:4px;
-      }
-    </style>
+    .bbttcc-rigs .bbttcc-rig-actions { display:flex; gap:.25rem; justify-content:center; flex-wrap:wrap; }
+    .bbttcc-rigs .bbttcc-rig-actions .button { padding:.15rem .4rem; line-height:1.1; }
+    .bbttcc-rigs .bbttcc-rig-pill {
+      display:inline-block;
+      padding:.1rem .4rem;
+      border-radius:.5rem;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.10);
+      font-size:11px;
+      white-space:nowrap;
+      margin-right:.25rem;
+    }
+    .bbttcc-rigs .bbttcc-rig-pill.good { background:rgba(34,197,94,0.12); border-color:rgba(34,197,94,0.25); }
+    .bbttcc-rigs .bbttcc-rig-pill.warn { background:rgba(234,179,8,0.12); border-color:rgba(234,179,8,0.25); }
+    .bbttcc-rigs .bbttcc-rig-pill.bad  { background:rgba(239,68,68,0.12); border-color:rgba(239,68,68,0.25); }
+    .bbttcc-rigs .bbttcc-rig-bonuses { margin-top:.25rem; opacity:.85; font-size:12px; }
 
+    .bbttcc-warlogs td, .bbttcc-warlogs th { white-space:nowrap; }
+    .bbttcc-warlogs .summary { white-space:normal; }
+    .bbttcc-badge.turn   { background:#1e3a8a; color:#fff; }
+    .bbttcc-badge.commit { background:#065f46; color:#fff; }
+    .bbttcc-badge.raid   { background:#7c2d12; color:#fff; }
+
+    .bbttcc-outcome.win       { color:#2e8b57; font-weight:700; }
+    .bbttcc-outcome.loss      { color:#b22222; font-weight:700; }
+    .bbttcc-outcome.stalemate { color:#666; }
+
+    .bbttcc-relationships-placeholder .button { min-width:10rem; }
+  </style>
+
+  <header class="sheet-header flexcol bbttcc-faction-header" style="gap:.35rem; margin-bottom:.35rem;">
     <nav class="bbttcc-tabs" data-group="main">
       <a class="item is-active" data-tab="overview">Overview</a>
-      <a class="item" data-tab="ops">Ops &amp; Roster</a>
-      <a class="item" data-tab="war">War Logs</a>
+      <a class="item" data-tab="activities">Activities</a>
+      <a class="item" data-tab="assets">Assets</a>
+      <a class="item" data-tab="relationships">Relationships</a>
+      <a class="item" data-tab="warlogs">War Logs</a>
     </nav>
   </header>
 
@@ -74,229 +73,804 @@
 
     {{!-- ===================== TAB: OVERVIEW ===================== --}}
     <section class="bbttcc-tab bbttcc-tab-overview is-active" data-tab="overview">
-      {{!-- Faction Health --}}
-      <fieldset class="bbttcc-card bbttcc-card-health">
-        <legend>Faction Health</legend>
-        <div class="flexrow" style="justify-content:space-between; flex-wrap:wrap; font-size:12px; color:#e5e7eb;">
+      <div class="bbttcc-faction-overview-shell">
 
-          <div>
-            <strong style="color:#1e90ff;">Victory:</strong>
-            <span class="bbttcc-meter">{{fx.victory.vp}}</span> / 25
+        <section class="bbttcc-overview-hero">
+          <fieldset class="bbttcc-card bbttcc-card-overview-hero">
+            <div class="flexrow bbttcc-header-identity" style="align-items:center; gap:1rem;">
+              <img class="profile bbttcc-faction-crest"
+                   src="{{actor.img}}"
+                   data-edit="img"
+                   title="{{actor.name}}"
+                   width="112"
+                   height="112"
+                   style="border-radius:14px; cursor:pointer;"/>
+
+              <div class="flexcol" style="flex:1; gap:.65rem;">
+                <h1 class="charname bbttcc-faction-name" style="margin:0;">
+                  <input name="name" type="text" value="{{actor.name}}" />
+                </h1>
+
+                <div class="flexrow bbttcc-header-meta" style="gap:1rem; align-items:center; flex-wrap:wrap;">
+                  <div class="flexrow" style="gap:.5rem; align-items:center;">
+                    <strong>{{localize "BBTTCC.Labels.Status"}}:</strong>
+                    <span class="badge bbttcc-status-badge" style="padding:.15rem .5rem; border-radius:.5rem; background:#243b55; color:white;">
+                      {{fx.powerLevelLabel}}
+                    </span>
+                  </div>
+
+                  <div class="bbttcc-totalops">
+                    <strong>{{localize "BBTTCC.Labels.TotalOPs"}}:</strong> {{fx.totalOPs}} / {{fx.maxOPs}}
+                  </div>
+
+                  <div class="bbttcc-overview-summary-chip">
+                    <span style="font-weight:700;">VP: {{fx.victory.vp}}</span>
+                    <span style="font-weight:700;">Unity</span>
+                    <div class="bbttcc-meter"><div class="bbttcc-meter-fill" style="width: {{fx.victory.unity}}%;"></div></div>
+                    <span>{{fx.victory.unity}}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="bbttcc-card bbttcc-header-card bbttcc-header-card-opbank bbttcc-overview-opbank">
+            <legend>OP Bank</legend>
+            <div class="bbttcc-muted" style="font-size:11px; margin-bottom:.4rem;">Bank totals only (roster influences rolls + access).</div>
+
+            <table class="bbttcc-table bbttcc-opbank-table" style="width:100%;">
+              <thead><tr>
+                <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
+              </tr></thead>
+              <tbody><tr class="center">
+                <td><b>{{fx.opBank.violence}}</b></td>
+                <td>{{fx.opBank.nonlethal}}</td>
+                <td><b>{{fx.opBank.intrigue}}</b></td>
+                <td>{{fx.opBank.economy}}</td>
+                <td>{{fx.opBank.softpower}}</td>
+                <td>{{fx.opBank.diplomacy}}</td>
+                <td>{{fx.opBank.logistics}}</td>
+                <td>{{fx.opBank.culture}}</td>
+                <td>{{fx.opBank.faith}}</td>
+              </tr></tbody>
+            </table>
+          </fieldset>
+        </section>
+
+        <div data-bbttcc-overview-dashboard-anchor="1"></div>
+
+        <fieldset class="bbttcc-card bbttcc-card-health">
+          <legend>Faction Health</legend>
+          <div class="flexrow" style="justify-content:space-between; flex-wrap:wrap; font-size:12px; color:#e5e7eb;">
+            <div><strong style="color:#1e90ff;">Victory:</strong> <span class="bbttcc-meter">{{fx.victory.vp}}</span> / 25</div>
+            <div><strong style="color:#20b2aa;">Unity:</strong> <span class="bbttcc-meter">{{fx.victory.unity}}%</span></div>
+            <div><strong style="color:#daa520;">Morale:</strong> <span class="bbttcc-meter">{{fx.mods.morale}}%</span></div>
+            <div><strong style="color:#228b22;">Loyalty:</strong> <span class="bbttcc-meter">{{fx.mods.loyalty}}%</span></div>
+            <div><strong style="color:#b22222;">Darkness:</strong> <span class="bbttcc-meter">{{fx.darkness.global}}</span></div>
           </div>
-
-          <div>
-            <strong style="color:#20b2aa;">Unity:</strong>
-            <span class="bbttcc-meter">{{fx.victory.unity}}%</span>
-          </div>
-
-          <div>
-            <strong style="color:#daa520;">Morale:</strong>
-            <span class="bbttcc-meter">{{fx.mods.morale}}%</span>
-          </div>
-
-          <div>
-            <strong style="color:#228b22;">Loyalty:</strong>
-            <span class="bbttcc-meter">{{fx.mods.loyalty}}%</span>
-          </div>
-
-          <div>
-            <strong style="color:#b22222;">Darkness:</strong>
-            <span class="bbttcc-meter">{{fx.darkness.global}}</span>
-          </div>
-
-        </div>
-        <p class="hint" style="margin:.25rem 0 0;">
-          Updates automatically each turn. Colors shift with thresholds in future versions.
-        </p>
-      </fieldset>
-
-      {{!-- Territory Roll-up (all scenes) --}}
-      {{#if fx.territoryTotals}}
-      <fieldset class="bbttcc-card bbttcc-card-territory">
-        <legend>BBTTCC — Territory Roll-up</legend>
-        <div class="flexrow" style="gap:1rem; align-items:center;">
-          <div><strong>Owned Hexes:</strong> {{fx.territoryTotals.count}}</div>
-          <div><strong>Resources (per turn):</strong>
-            Food {{fx.territoryTotals.resources.food}} •
-            Materials {{fx.territoryTotals.resources.materials}} •
-            Trade {{fx.territoryTotals.resources.trade}} •
-            Military {{fx.territoryTotals.resources.military}} •
-            Knowledge {{fx.territoryTotals.resources.knowledge}} •
-            Technology {{fx.territoryTotals.resources.technology}}
-          </div>
-        </div>
-        <div style="margin-top:.25rem;">
-          <strong>Defense:</strong> {{fx.territoryTotals.defenseTotal}}
-        </div>
-      </fieldset>
-      {{/if}}
-
-      {{!-- Territory: This Scene --}}
-      {{#if fx.territoryThisScene}}
-      <fieldset class="bbttcc-card bbttcc-card-territory-scene">
-        <legend>Territory — This Scene</legend>
-        <div class="flexrow" style="gap:1rem; align-items:center;">
-          <div><strong>Owned Hexes:</strong> {{fx.territoryThisScene.count}}</div>
-          <div><strong>Resources (per turn):</strong>
-            Food {{fx.territoryThisScene.resources.food}} •
-            Materials {{fx.territoryThisScene.resources.materials}} •
-            Trade {{fx.territoryThisScene.resources.trade}} •
-            Military {{fx.territoryThisScene.resources.military}} •
-            Knowledge {{fx.territoryThisScene.resources.knowledge}}
-          </div>
-        </div>
-        {{#if fx.territoryThisScene.names.length}}
-          <p class="hint" style="margin-top:.25rem;">
-            Hexes: {{#each fx.territoryThisScene.names}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
-          </p>
-        {{/if}}
-      </fieldset>
-      {{/if}}
-    </section>
-
-    {{!-- ===================== TAB: OPS & ROSTER ===================== --}}
-    <section class="bbttcc-tab bbttcc-tab-ops" data-tab="ops">
-      {{!-- OP Budget --}}
-      <fieldset class="bbttcc-card bbttcc-card-ops">
-        <legend>{{localize "BBTTCC.Labels.OrganizationPoints"}}</legend>
-
-        <div class="form-group" style="margin-bottom:.5rem;">
-          <label style="font-weight:600; display:block;">Max OPs</label>
-          <input type="number" name="fx.maxOPs" value="{{fx.maxOPs}}" min="0" step="1" style="width:8rem;" />
           <p class="hint" style="margin:.25rem 0 0;">
-            Overall budget (informational). Per-category caps are not enforced.
+            Updates automatically each turn. Colors shift with thresholds in future versions.
           </p>
-        </div>
+        </fieldset>
 
-        <table class="bbttcc-table">
-          <thead>
-            <tr>
-              <th style="text-align:left;">Category</th>
-              <th style="width:10rem;">Value</th>
-              <th style="width:9rem;">Roster</th>
-              <th style="width:8rem;">Total</th>
-              <th style="width:9rem;">Roll</th>
-              <th style="width:8rem;">Adjust</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each fx.ops}}
-            <tr>
-              <td><label for="fx.ops.{{key}}.value">{{label}}</label></td>
+        <fieldset class="bbttcc-card bbttcc-card-ops">
+          <legend>{{localize "BBTTCC.Labels.OrganizationPoints"}}</legend>
 
-              <td>
-                <input id="fx.ops.{{key}}.value" name="fx.ops.{{key}}.value" type="number" value="{{value}}" min="0" step="1" style="width:6rem;" />
-              </td>
+          <div class="form-group" style="margin-bottom:.5rem;">
+            <label style="font-weight:600; display:block;">Max OPs</label>
+            <input type="number" name="fx.maxOPs" value="{{fx.maxOPs}}" min="0" step="1" style="width:8rem;" />
+            <p class="hint" style="margin:.25rem 0 0;">
+              Overall budget (informational). Per-category caps are not enforced.
+            </p>
+          </div>
 
-              <td class="center">
-                {{#if contrib}}<span title="Sum of roster contributions">+{{contrib}}</span>{{else}}—{{/if}}
-              </td>
+          <table class="bbttcc-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;">Category</th>
+                <th style="width:10rem;">Value</th>
+                <th style="width:9rem;">Roster</th>
+                <th style="width:8rem;">Total</th>
+                <th style="width:9rem;">Roll</th>
+                <th style="width:8rem;">Adjust</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each fx.ops}}
+              <tr>
+                <td><label for="fx.ops.{{key}}.value">{{label}}</label></td>
+                <td><input id="fx.ops.{{key}}.value" name="fx.ops.{{key}}.value" type="number" value="{{value}}" min="0" step="1" style="width:6rem;" /></td>
+                <td class="center">{{#if contrib}}<span title="Sum of roster contributions">+{{contrib}}</span>{{else}}—{{/if}}</td>
+                <td class="center"><strong>{{total}}</strong></td>
+                <td class="center">
+                  <button type="button" class="button" data-op-roll="{{key}}" title="Roll 1d20 + (Value + Roster)">
+                    <i class="fas fa-dice-d20"></i> d20
+                  </button>
+                </td>
+                <td class="center">
+                  <div class="flexrow" style="gap:.25rem; justify-content:center;">
+                    <a class="button" data-op-dec="{{key}}" title="Decrease"><i class="fas fa-minus"></i></a>
+                    <a class="button" data-op-inc="{{key}}" title="Increase"><i class="fas fa-plus"></i></a>
+                  </div>
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </fieldset>
 
-              <td class="center"><strong>{{total}}</strong></td>
+        <fieldset class="bbttcc-card bbttcc-card-politics">
+          <legend>Political Pressure</legend>
 
-              <td class="center">
-                <button type="button" class="button" data-op-roll="{{key}}" title="Roll 1d20 + (Value + Roster)">
-                  <i class="fas fa-dice-d20"></i> d20
-                </button>
-              </td>
+          {{#if fx.politicalPressure}}
+            <div class="flexrow" style="justify-content:space-between; flex-wrap:wrap; gap:.75rem; align-items:center;">
+              <div>
+                <strong>Center:</strong>
+                <span class="bbttcc-pill bbttcc-pill-primary" style="margin-left:.35rem;">
+                  {{fx.politicalPressure.centerLabel}}
+                </span>
+                {{#if fx.politicalPressure.overrideKey}}
+                  <span class="bbttcc-pill" style="margin-left:.35rem; background:rgba(250,204,21,0.12); border:1px solid rgba(250,204,21,0.35);">
+                    GM Override
+                  </span>
+                {{else}}
+                  {{#if fx.politicalPressure.pluralityPct}}
+                    <span class="bbttcc-pill" style="margin-left:.35rem; opacity:.85;">
+                      Plurality {{fx.politicalPressure.pluralityPct}}%
+                    </span>
+                  {{/if}}
+                {{/if}}
+              </div>
 
-              <td class="center">
-                <div class="flexrow" style="gap:.25rem; justify-content:center;">
-                  <a class="button" data-op-dec="{{key}}" title="Decrease"><i class="fas fa-minus"></i></a>
-                  <a class="button" data-op-inc="{{key}}" title="Increase"><i class="fas fa-plus"></i></a>
+              <div>
+                <strong>State:</strong>
+                <span class="bbttcc-pill" style="margin-left:.35rem;">
+                  {{fx.politicalPressure.severityState}}
+                </span>
+                <span class="bbttcc-pill" style="margin-left:.35rem;">
+                  Drift {{fx.politicalPressure.driftScore}}
+                </span>
+              </div>
+            </div>
+
+            <div style="margin-top:.5rem;">
+              <div class="bbttcc-meter" style="height:8px;">
+                {{#if fx.politicalPressure.driftPct}}
+                  <div class="bbttcc-meter-fill" style="width: {{fx.politicalPressure.driftPct}}%; opacity:.9;"></div>
+                {{else}}
+                  <div class="bbttcc-meter-fill" style="width: 50%; opacity:.20;"></div>
+                {{/if}}
+              </div>
+              <p class="hint" style="margin:.25rem 0 0;">
+                Stable ≤ 15 • Strained ≤ 35 • Fractured ≤ 65 • Rupturing ≥ 66
+              </p>
+            </div>
+
+            <div style="margin-top:.6rem;">
+              {{#if fx.politicalPressure.dist.length}}
+                <table class="bbttcc-table">
+                  <thead>
+                    <tr>
+                      <th style="text-align:left;">Philosophy</th>
+                      <th style="width:6rem;">Count</th>
+                      <th style="width:6rem;">%</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each fx.politicalPressure.dist}}
+                    <tr>
+                      <td style="text-align:left;">{{label}}</td>
+                      <td class="center">{{count}}</td>
+                      <td class="center">{{pct}}%</td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+                <p class="hint" style="margin:.35rem 0 0;">
+                  Showing characters with a declared Political Philosophy.
+                  Total counted: {{fx.politicalPressure.totalWithPhilosophy}}.
+                </p>
+              {{else}}
+                <em style="opacity:.75;">No roster members have a Political Philosophy set yet.</em>
+              {{/if}}
+            </div>
+
+            {{#if fx.politicalPressure.lastImpacts.length}}
+              <div style="margin-top:.6rem;">
+                <strong>Recent:</strong>
+                <ul style="margin:.35rem 0 0 1rem; padding:0;">
+                  {{#each fx.politicalPressure.lastImpacts}}
+                    <li style="margin:.15rem 0; opacity:.9;">{{this}}</li>
+                  {{/each}}
+                </ul>
+              </div>
+            {{/if}}
+
+            {{#if isGM}}
+              <hr style="margin:.6rem 0; border:none; border-top:1px solid rgba(255,255,255,0.08);" />
+
+              <div class="flexrow" style="gap:.75rem; align-items:flex-end; flex-wrap:wrap;">
+                <div class="bbttcc-field" style="min-width:260px;">
+                  <label>Override Center (optional)</label>
+                  <select data-pol-override>
+                    <option value="">(None — use plurality)</option>
+                    <option value="marxist"           {{#if (bbttcc_eq fx.politicalPressure.overrideKey "marxist")}}selected{{/if}}>Marxist / Communist</option>
+                    <option value="liberal"           {{#if (bbttcc_eq fx.politicalPressure.overrideKey "liberal")}}selected{{/if}}>Liberal</option>
+                    <option value="social_democratic" {{#if (bbttcc_eq fx.politicalPressure.overrideKey "social_democratic")}}selected{{/if}}>Social Democratic</option>
+                    <option value="libertarian"       {{#if (bbttcc_eq fx.politicalPressure.overrideKey "libertarian")}}selected{{/if}}>Libertarian</option>
+                    <option value="authoritarian"     {{#if (bbttcc_eq fx.politicalPressure.overrideKey "authoritarian")}}selected{{/if}}>Authoritarian / Statist</option>
+                    <option value="theocratic"        {{#if (bbttcc_eq fx.politicalPressure.overrideKey "theocratic")}}selected{{/if}}>Theocratic</option>
+                    <option value="fascist"           {{#if (bbttcc_eq fx.politicalPressure.overrideKey "fascist")}}selected{{/if}}>Fascist</option>
+                    <option value="anarchist"         {{#if (bbttcc_eq fx.politicalPressure.overrideKey "anarchist")}}selected{{/if}}>Anarchist</option>
+                  </select>
                 </div>
-              </td>
-            </tr>
-            {{/each}}
-          </tbody>
-        </table>
-      </fieldset>
 
-      {{!-- Roster --}}
-      <fieldset class="bbttcc-card bbttcc-card-roster">
-        <legend>Roster</legend>
-
-        {{#if fx.roster.length}}
-        <table class="bbttcc-table">
-          <thead>
-            <tr>
-              <th style="text-align:left;">Character</th>
-              <th>Violence</th>
-              <th>Non-Lethal</th>
-              <th>Intrigue</th>
-              <th>Economy</th>
-              <th>Softpower</th>
-              <th>Diplomacy</th>
-              <th>Logistics</th>
-              <th>Culture</th>
-              <th>Faith</th>
-              <th>Total</th>
-              <th>Open</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#each fx.roster}}
-            <tr>
-              <td>
-                <div class="flexrow" style="align-items:center; gap:.5rem;">
-                  <img src="{{img}}" width="24" height="24" style="border-radius:4px;"/> <span>{{name}}</span>
+                <div class="flexrow" style="gap:.35rem; align-items:center;">
+                  <button type="button" class="button" data-pol-act="drift" data-pol-delta="-20">-20</button>
+                  <button type="button" class="button" data-pol-act="drift" data-pol-delta="-5">-5</button>
+                  <button type="button" class="button" data-pol-act="drift" data-pol-delta="5">+5</button>
+                  <button type="button" class="button" data-pol-act="drift" data-pol-delta="20">+20</button>
+                  <button type="button" class="button" data-pol-act="reset">Reset</button>
                 </div>
-              </td>
-              <td class="center">{{violence}}</td>
-              <td class="center">{{nonlethal}}</td>
-              <td class="center">{{intrigue}}</td>
-              <td class="center">{{economy}}</td>
-              <td class="center">{{softpower}}</td>
-              <td class="center">{{diplomacy}}</td>
-              <td class="center">{{logistics}}</td>
-              <td class="center">{{culture}}</td>
-              <td class="center">{{faith}}</td>
-              <td class="center"><strong>{{total}}</strong></td>
-              <td class="center">
-                <a class="button" data-open-actor="{{id}}" title="Open character"><i class="fas fa-user"></i></a>
-              </td>
-            </tr>
-            {{/each}}
-            <tr>
-              <td style="text-align:right;"><strong>Roster Totals</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.violence}}</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.nonlethal}}</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.intrigue}}</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.economy}}</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.softpower}}</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.diplomacy}}</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.logistics}}</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.culture}}</strong></td>
-              <td class="center"><strong>{{fx.rosterTotals.faith}}</strong></td>
-              <td class="center"><strong>{{fx.rosterGrandTotal}}</strong></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-        {{else}}
-          <em style="opacity:.7;">No linked characters yet.</em>
+              </div>
+
+              <p class="hint" style="margin:.35rem 0 0;">
+                Override affects center philosophy only. Drift is a continuum (-100..+100). Reset sets drift to 0 and state to stable.
+              </p>
+            {{/if}}
+          {{else}}
+            <em style="opacity:.75;">Political Pressure unavailable (AAE not loaded).</em>
+          {{/if}}
+        </fieldset>
+
+        {{#if isGM}}
+        {{#if gmEditMode}}
+        <fieldset class="bbttcc-card bbttcc-card-gmedit">
+          <legend>GM Manual Edit</legend>
+
+          <p class="hint bbttcc-muted" style="margin:.25rem 0 .5rem;">
+            Directly edits canonical faction flags (OP Bank + key tracks). Use sparingly. Add an optional audit note (war log type: <code>gm_adjustment</code>).
+          </p>
+
+          <div class="flexrow" style="gap:.5rem; justify-content:space-between; align-items:flex-end; flex-wrap:wrap;">
+            <div class="bbttcc-muted">
+              Faction ID: <code>{{actor.id}}</code>
+            </div>
+            <div class="bbttcc-gm-actions" style="margin:0;">
+              <button type="button" class="button" data-gm-act="copyId" title="Copy Faction ID">
+                <i class="fas fa-copy"></i> Copy ID
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-top:.5rem;">
+            <strong style="display:block; margin-bottom:.25rem;">OP Bank</strong>
+            <table class="bbttcc-table">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">Category</th>
+                  <th style="width:10rem;">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="text-align:left;">Violence</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.violence}}" data-gm-op="violence" style="width:7rem;"/></td></tr>
+                <tr><td style="text-align:left;">Non-Lethal</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.nonlethal}}" data-gm-op="nonlethal" style="width:7rem;"/></td></tr>
+                <tr><td style="text-align:left;">Intrigue</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.intrigue}}" data-gm-op="intrigue" style="width:7rem;"/></td></tr>
+                <tr><td style="text-align:left;">Economy</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.economy}}" data-gm-op="economy" style="width:7rem;"/></td></tr>
+                <tr><td style="text-align:left;">Softpower</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.softpower}}" data-gm-op="softpower" style="width:7rem;"/></td></tr>
+                <tr><td style="text-align:left;">Diplomacy</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.diplomacy}}" data-gm-op="diplomacy" style="width:7rem;"/></td></tr>
+                <tr><td style="text-align:left;">Logistics</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.logistics}}" data-gm-op="logistics" style="width:7rem;"/></td></tr>
+                <tr><td style="text-align:left;">Culture</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.culture}}" data-gm-op="culture" style="width:7rem;"/></td></tr>
+                <tr><td style="text-align:left;">Faith</td><td class="center"><input type="number" min="0" step="1" value="{{fx.opBank.faith}}" data-gm-op="faith" style="width:7rem;"/></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="margin-top:.65rem;">
+            <strong style="display:block; margin-bottom:.25rem;">Tracks</strong>
+            <div class="flexrow" style="gap:.75rem; flex-wrap:wrap; align-items:flex-end;">
+              <div class="bbttcc-field" style="min-width:140px;">
+                <label>Morale</label>
+                <input type="number" min="0" step="1" value="{{fx.mods.morale}}" data-gm-track="morale"/>
+              </div>
+              <div class="bbttcc-field" style="min-width:140px;">
+                <label>Loyalty</label>
+                <input type="number" min="0" step="1" value="{{fx.mods.loyalty}}" data-gm-track="loyalty"/>
+              </div>
+              <div class="bbttcc-field" style="min-width:140px;">
+                <label>Darkness</label>
+                <input type="number" min="0" step="1" value="{{fx.darkness.global}}" data-gm-track="darkness"/>
+              </div>
+              <div class="bbttcc-field" style="min-width:140px;">
+                <label>Victory (VP)</label>
+                <input type="number" min="0" step="1" value="{{fx.victory.vp}}" data-gm-victory="vp"/>
+              </div>
+              <div class="bbttcc-field" style="min-width:140px;">
+                <label>Unity (%)</label>
+                <input type="number" min="0" step="1" value="{{fx.victory.unity}}" data-gm-victory="unity"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="bbttcc-field" style="margin-top:.65rem;">
+            <label>Audit Note (optional)</label>
+            <input type="text" placeholder="e.g., GM adjustment: post-session reconciliation" data-gm-note />
+          </div>
+
+          <div class="bbttcc-gm-actions">
+            <button type="button" class="button" data-gm-act="clear" title="Discard changes and reload values">
+              <i class="fas fa-undo"></i> Clear
+            </button>
+            <button type="button" class="button" data-gm-act="apply" title="Apply GM edits to faction flags">
+              <i class="fas fa-check"></i> Apply
+            </button>
+          </div>
+        </fieldset>
         {{/if}}
-        <p class="hint" style="margin:.5rem 0 0;">
-          Character contributions are informational; per-category totals = Value + Roster.
-        </p>
-      </fieldset>
+        {{/if}}
+      </div>
     </section>
 
-    {{!-- ===================== TAB: WAR LOGS ===================== --}}
-    <section class="bbttcc-tab bbttcc-tab-war" data-tab="war">
+    <section class="bbttcc-tab bbttcc-tab-activities" data-tab="activities">
+      <div class="bbttcc-tab-stack">
+
+        <div class="bbttcc-tab-grid-2">
+          <div class="bbttcc-header-card bbttcc-header-card-action">
+            <div class="bbttcc-header-card-title">Raid</div>
+            <div class="bbttcc-muted" style="margin-top:.15rem;">
+              Stage commitments and select maneuvers. GM resolves the round.
+            </div>
+            <div class="bbttcc-header-card-actions">
+              <button type="button" class="button bbttcc-pill-btn" data-open-raid-console>
+                <i class="fas fa-crosshairs"></i> Open Raid
+              </button>
+            </div>
+          </div>
+
+          <div class="bbttcc-header-card bbttcc-header-card-action">
+            <div class="bbttcc-header-card-title">Ritual</div>
+            <div class="bbttcc-muted" style="margin-top:.15rem;">
+              Open the Final Ritual Console (Tikkun).
+            </div>
+            <div class="bbttcc-header-card-actions">
+              <button type="button" class="button bbttcc-pill-btn" data-open-ritual>
+                <i class="fas fa-magic"></i> Open Ritual
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <fieldset class="bbttcc-card bbttcc-card-actions">
+          <legend>Faction Actions</legend>
+          <div class="flexrow" style="gap:.5rem; justify-content:flex-end; flex-wrap:wrap;">
+            <button type="button" class="button" data-open-advisor>
+              <i class="fas fa-compass"></i> Open Advisor
+            </button>
+            <button type="button" class="button" data-open-activity-planner>
+              <i class="fas fa-clipboard-list"></i> Open Planner
+            </button>
+          </div>
+          <p class="hint" style="margin:.35rem 0 0;">
+            Opens the Advisor for faction-scoped recommendations, or the Planner locked to this faction.
+          </p>
+        </fieldset>
+
+        <fieldset class="bbttcc-card bbttcc-card-planned">
+          <legend>Next Turn Queue</legend>
+
+          {{#if fx.plannedActions.length}}
+            <div class="flexrow" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem;">
+              <div class="bbttcc-muted">
+                {{fx.plannedActions.length}} action{{#unless (bbttcc_eq fx.plannedActions.length 1)}}s{{/unless}} queued for the next Advance Turn.
+              </div>
+              <div class="flexrow" style="gap:.35rem; justify-content:flex-end;">
+                <button type="button" class="button" data-planned-act="clear" title="Remove all planned actions before execution">
+                  <i class="fas fa-trash"></i> Clear All
+                </button>
+              </div>
+            </div>
+
+            <table class="bbttcc-table" style="margin-top:.5rem;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">Action</th>
+                  <th style="width:12rem;">Cost</th>
+                  <th style="text-align:left;">Target</th>
+                  <th style="text-align:left;">Notes</th>
+                  <th style="width:7rem;">Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each fx.plannedActions}}
+                  <tr>
+                    <td style="text-align:left;">
+                      <strong>{{label}}</strong>
+                      {{#unless canAfford}}
+                        <div class="bbttcc-muted" style="margin-top:.15rem; color: rgba(251,146,60,0.95);">
+                          <i class="fas fa-exclamation-triangle"></i> Cannot afford
+                        </div>
+                      {{/unless}}
+                    </td>
+                    <td class="center">{{costLine}}</td>
+                    <td style="text-align:left;">{{targetName}}</td>
+                    <td style="text-align:left;">{{#if notes}}{{notes}}{{else}}<span class="bbttcc-muted">—</span>{{/if}}</td>
+                    <td class="center">
+                      <button type="button" class="button" data-planned-act="remove" data-ts="{{ts}}" title="Remove this action before execution">
+                        <i class="fas fa-times"></i> Remove
+                      </button>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+
+            <p class="hint" style="margin:.35rem 0 0;">
+              These are the strategic actions currently on deck. They will execute when the GM runs <b>Advance Turn (Apply)</b>.
+            </p>
+          {{else}}
+            <div class="bbttcc-muted">
+              No planned actions queued. Use <b>Open Planner</b> to stage strategic activities.
+            </div>
+          {{/if}}
+        </fieldset>
+
+        <fieldset class="bbttcc-card bbttcc-card-quests">
+          <legend>Quest Log</legend>
+
+          <div class="flexrow" style="justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem;">
+            <div class="bbttcc-muted">
+              Active {{fx.questLog.active.length}} • Completed {{fx.questLog.completed.length}}
+            </div>
+
+            <button type="button" class="button" data-open-quest-log>
+              Open Quest Log
+            </button>
+          </div>
+
+          <p class="hint" style="margin:.35rem 0 0;">
+            The full log lives in its own window (recommended — it can get long).
+          </p>
+        </fieldset>
+
+        <fieldset class="bbttcc-card bbttcc-card-ops">
+          <legend style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
+            <span>Maneuvers</span>
+            {{#if isGM}}
+              <span style="display:flex; gap:.35rem;">
+                <button type="button" class="bbttcc-pill-btn" data-doctrine-act="add" data-kind="maneuver" style="padding:4px 10px; font-size:11px;">Add</button>
+              </span>
+            {{/if}}
+          </legend>
+
+          <div class="bbttcc-doctrine-dropzone" data-doctrine-drop="1" data-kind="maneuver" style="padding:.15rem 0;">
+            {{#if fx.doctrine.maneuvers.length}}
+            <table class="bbttcc-table">
+              <tbody>
+                {{#each fx.doctrine.maneuvers as |it|}}
+                <tr class="bbttcc-doctrine-row" data-item-id="{{it.id}}" data-kind="maneuver" data-key="{{it.key}}" draggable="{{../isGM}}">
+                  <td style="width:28px;">
+                    {{#if it.img}}<img src="{{it.img}}" style="width:22px; height:22px; border-radius:6px; object-fit:cover;"/>{{/if}}
+                  </td>
+                  <td>
+                    <a href="#" class="bbttcc-doctrine-name" data-doctrine-act="open" data-item-id="{{it.id}}" data-kind="{{it.kind}}" data-key="{{it.key}}" style="font-weight:800; text-decoration:none; color:inherit;">{{it.name}}</a>
+                  </td>
+                  {{#if ../isGM}}
+                  <td class="center" style="width:44px;">
+                    <a class="button" href="#" data-doctrine-act="remove" data-item-id="{{it.id}}" title="Remove"><i class="fas fa-trash"></i></a>
+                  </td>
+                  {{/if}}
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            {{else}}
+              <p class="hint" style="margin:.35rem 0 0;">No maneuvers granted yet.</p>
+            {{/if}}
+            {{#if isGM}}
+              <p class="hint" style="margin:.35rem 0 0;">GM: drag a doctrine item here to grant it. Drag rows to copy their Item UUID payload.</p>
+            {{/if}}
+          </div>
+        </fieldset>
+
+        <fieldset class="bbttcc-card bbttcc-card-ops">
+          <legend style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
+            <span>Strategic Activities</span>
+            {{#if isGM}}
+              <span style="display:flex; gap:.35rem;">
+                <button type="button" class="bbttcc-pill-btn" data-doctrine-act="add" data-kind="strategic" style="padding:4px 10px; font-size:11px;">Add</button>
+              </span>
+            {{/if}}
+          </legend>
+
+          <div class="bbttcc-doctrine-dropzone" data-doctrine-drop="1" data-kind="strategic" style="padding:.15rem 0;">
+            {{#if fx.doctrine.strategics.length}}
+            <table class="bbttcc-table">
+              <tbody>
+                {{#each fx.doctrine.strategics as |it|}}
+                <tr class="bbttcc-doctrine-row" data-item-id="{{it.id}}" data-kind="strategic" data-key="{{it.key}}" draggable="{{../isGM}}">
+                  <td style="width:28px;">
+                    {{#if it.img}}<img src="{{it.img}}" style="width:22px; height:22px; border-radius:6px; object-fit:cover;"/>{{/if}}
+                  </td>
+                  <td>
+                    <a href="#" class="bbttcc-doctrine-name" data-doctrine-act="open" data-item-id="{{it.id}}" data-kind="{{it.kind}}" data-key="{{it.key}}" style="font-weight:800; text-decoration:none; color:inherit;">{{it.name}}</a>
+                  </td>
+                  {{#if ../isGM}}
+                  <td class="center" style="width:44px;">
+                    <a class="button" href="#" data-doctrine-act="remove" data-item-id="{{it.id}}" title="Remove"><i class="fas fa-trash"></i></a>
+                  </td>
+                  {{/if}}
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            {{else}}
+              <p class="hint" style="margin:.35rem 0 0;">No strategic activities granted yet.</p>
+            {{/if}}
+            {{#if isGM}}
+              <p class="hint" style="margin:.35rem 0 0;">GM: drag a doctrine item here to grant it. Drag rows to copy their Item UUID payload.</p>
+            {{/if}}
+          </div>
+        </fieldset>
+
+      </div>
+    </section>
+
+    <section class="bbttcc-tab bbttcc-tab-assets" data-tab="assets">
+      <div class="bbttcc-tab-stack">
+
+        <div data-bbttcc-assets-anchor="1"></div>
+
+        <fieldset class="bbttcc-card bbttcc-card-rigs bbttcc-rigs">
+          <legend>Rigs (Mobile Infrastructure)</legend>
+
+          <div class="flexrow" style="align-items:center; justify-content:flex-end; gap:.5rem; margin-top:.25rem; margin-bottom:.5rem;">
+            <button type="button" class="button" data-rig-act="add" title="Add a new Rig">
+              <i class="fas fa-plus"></i> Add Rig
+            </button>
+          </div>
+
+          {{#if fx.rigs.length}}
+            <table class="bbttcc-table">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">Rig</th>
+                  <th style="width:8rem;">Type</th>
+                  <th style="width:8rem;">Status</th>
+                  <th style="width:7rem;">HP</th>
+                  <th style="width:14rem;">Passive</th>
+                  <th style="width:12rem;">Tags</th>
+                  <th style="width:18rem;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each fx.rigs}}
+                  <tr data-rig-id="{{rigId}}">
+                    <td style="text-align:left;">
+                      <strong>{{name}}</strong><br/>
+                      <small style="opacity:.7;">{{rigId}}</small>
+                    </td>
+                    <td class="center">{{type}}</td>
+                    <td class="center"><span class="bbttcc-rig-pill">{{damageState}}</span></td>
+                    <td class="center">{{hitTrack.current}} / {{hitTrack.max}}</td>
+
+                    <td>
+                      {{#if passiveCount}}
+                        {{#if (bbttcc_eq effPct 100)}}
+                          <span class="bbttcc-rig-pill good" title="Effectiveness (damage-scaled)">{{effPct}}%</span>
+                        {{else}}
+                          {{#if (bbttcc_eq effPct 0)}}
+                            <span class="bbttcc-rig-pill bad" title="Effectiveness (damage-scaled)">{{effPct}}%</span>
+                          {{else}}
+                            <span class="bbttcc-rig-pill warn" title="Effectiveness (damage-scaled)">{{effPct}}%</span>
+                          {{/if}}
+                        {{/if}}
+                        <span class="bbttcc-rig-pill" title="Passive bonuses">{{passiveCount}} bonuses</span>
+                        {{#if passiveSummary}}
+                          <div class="bbttcc-rig-bonuses">{{passiveSummary}}</div>
+                        {{/if}}
+                      {{else}}
+                        <span style="opacity:.6;">—</span>
+                      {{/if}}
+                    </td>
+
+                    <td>
+                      {{#if mobilityTags.length}}
+                        {{#each mobilityTags}}<span class="bbttcc-rig-pill">{{this}}</span>{{/each}}
+                      {{else}}
+                        <span style="opacity:.6;">—</span>
+                      {{/if}}
+                    </td>
+                    <td class="center">
+                      <div class="bbttcc-rig-actions">
+                        <button type="button" class="button" data-rig-act="bonuses" title="Manage passive rig bonuses"><i class="fas fa-sliders-h"></i> Bonuses</button>
+                        <button type="button" class="button" data-rig-act="dmgDown" title="Decrease damage (heal 1 step)"><i class="fas fa-minus"></i> Dmg</button>
+                        <button type="button" class="button" data-rig-act="dmgUp" title="Increase damage (1 step)"><i class="fas fa-plus"></i> Dmg</button>
+                        <button type="button" class="button" data-rig-act="delete" title="Delete rig"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <p class="hint" style="margin:.5rem 0 0;">
+              Rigs are faction-attached facilities: damage states, repair loops, raid targeting — and now passive travel-ready bonuses.
+            </p>
+          {{else}}
+            <em style="opacity:.7;">No rigs yet. Add one to start building mobile infrastructure.</em>
+          {{/if}}
+        </fieldset>
+
+        {{#if fx.territoryTotals}}
+        <fieldset class="bbttcc-card bbttcc-card-territory">
+          <legend>BBTTCC — Territory Roll-up</legend>
+          <div class="flexrow" style="gap:1rem; align-items:center; flex-wrap:wrap;">
+            <div><strong>Owned Hexes:</strong> {{fx.territoryTotals.count}}</div>
+            <div><strong>Resources (per turn):</strong>
+              Food {{fx.territoryTotals.resources.food}} •
+              Materials {{fx.territoryTotals.resources.materials}} •
+              Trade {{fx.territoryTotals.resources.trade}} •
+              Military {{fx.territoryTotals.resources.military}} •
+              Knowledge {{fx.territoryTotals.resources.knowledge}} •
+              Technology {{fx.territoryTotals.resources.technology}}
+            </div>
+          </div>
+          <div style="margin-top:.25rem;"><strong>Defense:</strong> {{fx.territoryTotals.defenseTotal}}</div>
+        </fieldset>
+        {{/if}}
+
+        {{#if fx.territoryThisScene}}
+        <fieldset class="bbttcc-card bbttcc-card-territory-scene">
+          <legend>Territory — This Scene</legend>
+          <div class="flexrow" style="gap:1rem; align-items:center; flex-wrap:wrap;">
+            <div><strong>Owned Hexes:</strong> {{fx.territoryThisScene.count}}</div>
+            <div><strong>Resources (per turn):</strong>
+              Food {{fx.territoryThisScene.resources.food}} •
+              Materials {{fx.territoryThisScene.resources.materials}} •
+              Trade {{fx.territoryThisScene.resources.trade}} •
+              Military {{fx.territoryThisScene.resources.military}} •
+              Knowledge {{fx.territoryThisScene.resources.knowledge}}
+            </div>
+          </div>
+          {{#if fx.territoryThisScene.names.length}}
+            <p class="hint" style="margin-top:.25rem;">
+              Hexes: {{#each fx.territoryThisScene.names}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}
+            </p>
+          {{/if}}
+        </fieldset>
+        {{/if}}
+
+        {{#if fx.ownedHexesAll.length}}
+        <fieldset class="bbttcc-card bbttcc-card-owned-hexes">
+          <legend>Owned Hexes</legend>
+
+          <p class="hint" style="margin:.25rem 0 .5rem;">
+            Open any owned hex to view details. (Editing remains GM-only.)
+          </p>
+
+          <table class="bbttcc-table" style="width:100%;">
+            <thead>
+              <tr>
+                <th style="text-align:left;">Hex</th>
+                <th style="width:10rem;">Scene</th>
+                <th style="width:7rem;">Type</th>
+                <th style="width:4.5rem;">Int</th>
+                <th style="width:6rem;">Status</th>
+                <th style="width:7.5rem;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each fx.ownedHexesAll}}
+                <tr>
+                  <td style="text-align:left;">
+                    {{#if capital}}<span class="bbttcc-pill" style="margin-right:.35rem;">Capital</span>{{/if}}
+                    <b>{{name}}</b>
+                    <div class="bbttcc-muted" style="font-size:11px;">{{size}}</div>
+                  </td>
+                  <td>{{sceneName}}</td>
+                  <td>{{type}}</td>
+                  <td>{{integrationProgress}}/6</td>
+                  <td>{{status}}</td>
+                  <td class="center">
+                    <button type="button" class="button" data-open-hex-sheet data-hex-uuid="{{uuid}}">
+                      <i class="fas fa-map"></i> Open
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </fieldset>
+        {{/if}}
+      </div>
+    </section>
+
+    <section class="bbttcc-tab bbttcc-tab-relationships" data-tab="relationships">
+      <div class="bbttcc-tab-stack">
+
+        <fieldset class="bbttcc-card bbttcc-card-roster">
+          <legend>Roster</legend>
+
+          {{#if fx.roster.length}}
+          <table class="bbttcc-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;">Character</th>
+                <th>Violence</th>
+                <th>Non-Lethal</th>
+                <th>Intrigue</th>
+                <th>Economy</th>
+                <th>Softpower</th>
+                <th>Diplomacy</th>
+                <th>Logistics</th>
+                <th>Culture</th>
+                <th>Faith</th>
+                <th>Total</th>
+                <th>Open</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each fx.roster}}
+              <tr>
+                <td>
+                  <div class="flexrow" style="align-items:center; gap:.5rem;">
+                    <img src="{{img}}" width="24" height="24" style="border-radius:4px;"/> <span>{{name}}</span>
+                  </div>
+                </td>
+                <td class="center">{{violence}}</td>
+                <td class="center">{{nonlethal}}</td>
+                <td class="center">{{intrigue}}</td>
+                <td class="center">{{economy}}</td>
+                <td class="center">{{softpower}}</td>
+                <td class="center">{{diplomacy}}</td>
+                <td class="center">{{logistics}}</td>
+                <td class="center">{{culture}}</td>
+                <td class="center">{{faith}}</td>
+                <td class="center"><strong>{{total}}</strong></td>
+                <td class="center"><a class="button" data-open-actor="{{id}}" title="Open character"><i class="fas fa-user"></i></a></td>
+              </tr>
+              {{/each}}
+              <tr>
+                <td style="text-align:right;"><strong>Roster Totals</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.violence}}</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.nonlethal}}</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.intrigue}}</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.economy}}</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.softpower}}</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.diplomacy}}</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.logistics}}</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.culture}}</strong></td>
+                <td class="center"><strong>{{fx.rosterTotals.faith}}</strong></td>
+                <td class="center"><strong>{{fx.rosterGrandTotal}}</strong></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          {{else}}
+            <em style="opacity:.7;">No linked characters yet.</em>
+          {{/if}}
+          <p class="hint" style="margin:.5rem 0 0;">
+            Character contributions are informational; per-category totals = Value + Roster.
+          </p>
+        </fieldset>
+
+        <fieldset class="bbttcc-card bbttcc-card-relationships-placeholder bbttcc-relationships-placeholder">
+          <legend>Hex Relationships</legend>
+          <div class="flexrow" style="justify-content:space-between; align-items:center; gap:.75rem; flex-wrap:wrap;">
+            <div class="bbttcc-muted">
+              Relationship editing can live here as faction-to-hex and internal social links expand.
+            </div>
+            <button type="button" class="button" disabled>
+              <i class="fas fa-link"></i> Edit
+            </button>
+          </div>
+        </fieldset>
+
+      </div>
+    </section>
+
+    <section class="bbttcc-tab bbttcc-tab-warlogs" data-tab="warlogs">
       <fieldset class="bbttcc-card bbttcc-card-warlogs">
         <legend>War Logs</legend>
-
-        <style>
-          .bbttcc-badge.turn   { background:#1e3a8a; color:#fff; }     /* blue */
-          .bbttcc-badge.commit { background:#065f46; color:#fff; }     /* green */
-          .bbttcc-badge.raid   { background:#7c2d12; color:#fff; }     /* brown/red */
-          .bbttcc-outcome.win       { color:#2e8b57; font-weight:700; }
-          .bbttcc-outcome.loss      { color:#b22222; font-weight:700; }
-          .bbttcc-outcome.stalemate { color:#666; }
-          .bbttcc-warlogs td, .bbttcc-warlogs th { white-space:nowrap; }
-          .bbttcc-warlogs .summary { white-space:normal; }
-        </style>
 
         {{#if fx.warLogs.length}}
         <div class="bbttcc-warlogs-scroll">
@@ -315,7 +889,6 @@
               <tr>
                 <td><small>{{#if date}}{{date}}{{else}}{{ts}}{{/if}}</small></td>
                 <td>
-                  {{!-- Type badge --}}
                   {{#if (bbttcc_eq type "turn")}}   <span class="bbttcc-badge turn">Turn</span>{{/if}}
                   {{#if (bbttcc_eq type "commit")}} <span class="bbttcc-badge commit">Commit</span>{{/if}}
                   {{#if (bbttcc_eq type "raid")}}   <span class="bbttcc-badge raid">Raid</span>{{/if}}

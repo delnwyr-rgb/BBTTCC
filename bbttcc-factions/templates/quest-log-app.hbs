@@ -1,0 +1,157 @@
+{{!-- modules/bbttcc-factions/templates/quest-log-app.hbs --}}
+<section class="bbttcc-quest-log-root">
+  {{#if faction}}
+    <header class="bbttcc-quest-log__head">
+      <div class="bbttcc-quest-log__title">
+        Quest Log — <span class="bbttcc-quest-log__faction">{{faction.name}}</span>
+      </div>
+
+      <div class="bbttcc-quest-log__meta">
+        <span class="bbttcc-pill bbttcc-pill-primary">Active {{counts.active}}</span>
+        <span class="bbttcc-pill">Completed {{counts.completed}}</span>
+        <span class="bbttcc-pill">Archived {{counts.archived}}</span>
+      </div>
+
+      <div class="bbttcc-quest-log__controls">
+        <input type="text" placeholder="Search quests…" value="{{search}}" data-ql-search />
+      </div>
+    </header>
+
+    <nav class="bbttcc-quest-log__tabs">
+      {{#each tabs}}
+        <a class="bbttcc-quest-log__tab {{#if (bbttcc_eq ../tab key)}}is-active{{/if}}"
+           data-ql-tab="{{key}}">
+          {{label}}
+        </a>
+      {{/each}}
+    </nav>
+
+    <div class="bbttcc-quest-log__body">
+      <aside class="bbttcc-quest-log__list">
+        {{#if rows.length}}
+          {{#each rows}}
+            <div class="bbttcc-quest-row {{#if (bbttcc_eq ../selected.questId questId)}}is-selected{{/if}}"
+                 data-ql-select="{{questId}}">
+              <div class="bbttcc-quest-row__top">
+                <div class="bbttcc-quest-row__name">{{name}}</div>
+                <div class="bbttcc-quest-row__badges">
+                  <span class="bbttcc-pill mini">{{status}}</span>
+                  <span class="bbttcc-pill mini">Step {{questStep}}</span>
+                </div>
+              </div>
+              <div class="bbttcc-quest-row__sub">
+                <code class="bbttcc-muted">{{questId}}</code>
+              </div>
+            </div>
+          {{/each}}
+        {{else}}
+          <div class="bbttcc-muted" style="padding:.5rem;">
+            No quests in this view.
+          </div>
+        {{/if}}
+      </aside>
+
+      <main class="bbttcc-quest-log__detail">
+        {{#if selected}}
+          <div class="bbttcc-quest-detail__head">
+            <div>
+              <div class="bbttcc-quest-detail__name">{{selected.name}}</div>
+              <div class="bbttcc-muted">
+                <code>{{selected.questId}}</code>
+                · <span class="bbttcc-pill mini">{{selected.status}}</span>
+                · <span class="bbttcc-pill mini">Step {{selected.questStep}}</span>
+              </div>
+            </div>
+            <div class="bbttcc-quest-detail__actions">
+              <button type="button" class="button" data-ql-act="note" data-quest-id="{{selected.questId}}">
+                Notes
+              </button>
+
+              {{#if isGM}}
+                {{#if (bbttcc_eq selected.status "active")}}
+                  <button type="button" class="button" data-ql-act="complete" data-quest-id="{{selected.questId}}">
+                    Complete
+                  </button>
+                  <button type="button" class="button" data-ql-act="archive" data-quest-id="{{selected.questId}}">
+                    Archive
+                  </button>
+                  <button type="button" class="button" data-ql-act="reset" data-quest-id="{{selected.questId}}" title="Clear progress and restart at Step 1">
+                    Reset
+                  </button>
+                {{/if}}
+
+                {{#if (bbttcc_eq selected.status "completed")}}
+                  <button type="button" class="button" data-ql-act="reactivate" data-quest-id="{{selected.questId}}">
+                    Reactivate
+                  </button>
+                  <button type="button" class="button" data-ql-act="archive" data-quest-id="{{selected.questId}}">
+                    Archive
+                  </button>
+                  <button type="button" class="button" data-ql-act="reset" data-quest-id="{{selected.questId}}">
+                    Reset
+                  </button>
+                {{/if}}
+
+                {{#if (bbttcc_eq selected.status "archived")}}
+                  <button type="button" class="button" data-ql-act="reactivate" data-quest-id="{{selected.questId}}">
+                    Reactivate
+                  </button>
+                  <button type="button" class="button" data-ql-act="reset" data-quest-id="{{selected.questId}}">
+                    Reset
+                  </button>
+                {{/if}}
+              {{/if}}
+            </div>
+          </div>
+
+          {{#if selected.description}}
+            <div class="bbttcc-quest-detail__desc">
+              {{selected.description}}
+            </div>
+          {{else}}
+            <div class="bbttcc-muted" style="margin-top:.35rem;">
+              No description in quest registry.
+            </div>
+          {{/if}}
+
+          <div class="bbttcc-quest-detail__grid">
+            <div class="bbttcc-quest-detail__card">
+              <div class="bbttcc-quest-detail__label">Accepted</div>
+              <div>{{tsLabel selected.acceptedTs}}</div>
+            </div>
+            <div class="bbttcc-quest-detail__card">
+              <div class="bbttcc-quest-detail__label">Completed</div>
+              <div>{{tsLabel selected.completedTs}}</div>
+            </div>
+            <div class="bbttcc-quest-detail__card">
+              <div class="bbttcc-quest-detail__label">Archived</div>
+              <div>{{tsLabel selected.archivedTs}}</div>
+            </div>
+            <div class="bbttcc-quest-detail__card">
+              <div class="bbttcc-quest-detail__label">Progress</div>
+              <div>
+                <span class="bbttcc-pill mini">{{selected.seenCount}} seen</span>
+                <span class="bbttcc-pill mini">{{selected.completedCount}} done</span>
+              </div>
+            </div>
+          </div>
+
+          {{#if selected.notes}}
+            <div class="bbttcc-quest-detail__notes">
+              <div class="bbttcc-quest-detail__label">Notes</div>
+              <div style="white-space:pre-wrap; opacity:.95;">{{selected.notes}}</div>
+            </div>
+          {{else}}
+            <div class="bbttcc-muted" style="margin-top:.6rem;">
+              No notes yet.
+            </div>
+          {{/if}}
+        {{else}}
+          <div class="bbttcc-muted">Select a quest.</div>
+        {{/if}}
+      </main>
+    </div>
+  {{else}}
+    <div class="bbttcc-muted">Quest Log: faction not found.</div>
+  {{/if}}
+</section>

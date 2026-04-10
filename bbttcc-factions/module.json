@@ -11,7 +11,8 @@
   },
   "esmodules": [
     "scripts/module.js",
-    "scripts/op-engine.js"
+    "scripts/op-engine.js",
+    "scripts/quest-log-app.js"
   ],
   "scripts": [
     "scripts/faction-meters.enhancer.js",
@@ -21,16 +22,18 @@
     "scripts/faction-header-cleanup.enhancer.js",
     "scripts/faction-overview-dashboard.enhancer.js",
     "scripts/faction-section-skin.enhancer.js",
+    "scripts/faction-pressure.enhancer.js",
+    "scripts/faction-tier-assets-ui.enhancer.js",
+    "scripts/faction-tier-victorygate.enhancer.js",
     "scripts/turn-extensions.enhancer.js"
   ],
   "styles": [
-    "styles/faction-sheet.css"
+    "styles/rig-config.css",
+    "styles/faction-sheet.css",
+    "styles/quest-log.css"
   ],
   "languages": [
     { "lang": "en", "name": "English", "path": "lang/en.json" }
   ],
-  "packs": [],
-  "url": "",
-  "manifest": "",
-  "download": ""
+  "packs": []
 }

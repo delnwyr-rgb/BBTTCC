@@ -1,3 +1,4 @@
+/* REVIEW NOTE: Turn extensions are retained as engine logic; patched here only to correct victory flag read-path during the sheet cleanup review pass. */
 // bbttcc-factions/scripts/turn-extensions.enhancer.js
 // Post-turn enhancer for Unity, Morale/Loyalty trend, and Darkness nudge.
 // Spark-gated Victory/Unity sync added.
@@ -71,7 +72,7 @@ if (UR?.any && hasMercy) {
   for (const [k, v] of Object.entries(UR.ops || {})) {
     if (v > 0) nb[k] = Number(nb[k] || 0) + Number(v);
   }
-  updates[`${MODF}.opBank`] = nb; any = true;
+  updates["opBank"] = nb; any = true;
   war.push({
     type: "turn",
     date: (new Date()).toLocaleString(),
@@ -81,35 +82,35 @@ if (UR?.any && hasMercy) {
 
 // Victory + Unity sync (spark-gated)
 try {
-  const victory = foundry.utils.duplicate(get(A, `${MODF}.victory`, {}) || {});
+  const victory = foundry.utils.duplicate(get(A, `flags.${MODF}.victory`, {}) || {});
   victory.vp = Number(victory.vp || 0);
   victory.unity = (hasMercy && UR?.any)
     ? Math.min(100, Math.round((UR.count || 0) * 10))
     : 0;
-  updates[`${MODF}.victory`] = victory;
+  updates["victory"] = victory;
 } catch (e) {
   console.warn(TAG, "Victory/Unity update failed:", e);
 }
 
       // TREND
-      const mHome=Number(get(A,`${MODF}.moraleHome`,50));
-      const mStep=Number(get(A,`${MODF}.moraleStep`,1));
-      const lHome=Number(get(A,`${MODF}.loyaltyHome`,50));
-      const lStep=Number(get(A,`${MODF}.loyaltyStep`,1));
-      const mCur=Number(get(A,`${MODF}.morale`,0))||0;
-      const lCur=Number(get(A,`${MODF}.loyalty`,0))||0;
+      const mHome=Number(get(A,`flags.${MODF}.moraleHome`,50));
+      const mStep=Number(get(A,`flags.${MODF}.moraleStep`,1));
+      const lHome=Number(get(A,`flags.${MODF}.loyaltyHome`,50));
+      const lStep=Number(get(A,`flags.${MODF}.loyaltyStep`,1));
+      const mCur=Number(get(A,`flags.${MODF}.morale`,0))||0;
+      const lCur=Number(get(A,`flags.${MODF}.loyalty`,0))||0;
       const mNext=clamp(trendNext(mCur,mHome,mStep),0,100);
       const lNext=clamp(trendNext(lCur,lHome,lStep),0,100);
-      if(mNext!==mCur){updates[`${MODF}.morale`]=mNext;any=true;}
-      if(lNext!==lCur){updates[`${MODF}.loyalty`]=lNext;any=true;}
+      if(mNext!==mCur){updates["morale"]=mNext;any=true;}
+      if(lNext!==lCur){updates["loyalty"]=lNext;any=true;}
       if(mNext!==mCur||lNext!==lCur)
         war.push({type:"turn",date:(new Date()).toLocaleString(),
           summary:`Trend: Morale→${mNext}% • Loyalty→${lNext}%`});
 
       // DARKNESS (Transcendent)
-      const lvl=String(get(A,`${MODF}.enlightenmentLevel`,"")).toLowerCase();
+      const lvl=String(get(A,`flags.${MODF}.enlightenmentLevel`,"")).toLowerCase();
       if(lvl==="transcendent"||lvl==="5"){
-        const box=get(A,`${MODF}.darkness`,{})||{};
+        const box=get(A,`flags.${MODF}.darkness`,{})||{};
         const next=foundry.utils.deepClone(box);const changed=[];
         for(const[k,v]of Object.entries(box)){
           if(k==="global")continue;
@@ -117,7 +118,7 @@ try {
           if(after!==v){next[k]=after;changed.push(`${k}:${after}`);}
         }
         if(changed.length){
-          updates[`${MODF}.darkness`]=next;any=true;
+          updates["darkness"]=next;any=true;
           war.push({type:"turn",date:(new Date()).toLocaleString(),
             summary:`Darkness −1 each region (Transcendent): ${changed.join(", ")}`});
         }

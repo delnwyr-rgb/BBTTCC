@@ -1,131 +1,93 @@
 // modules/bbttcc-factions/scripts/faction-health-display.js
-// BBTTCC — Faction Health + Tabs (render hook)
+// BBTTCC — Faction Health display sync (render hook)
 //
-// - Reads real faction flags (victory, unity, morale, loyalty, darkness)
-//   and overwrites the "Faction Health" meters after render.
-// - Updates the Victory / Unity header strip in #bbttcc-victory-strip.
-// - Wires simple tab behavior for .bbttcc-tabs / .bbttcc-tab.
+// Focused responsibility:
+// - Reads canonical faction health flags
+// - Syncs the visible "Faction Health" fieldset on the Overview tab
+//
+// Intentionally NOT owned here:
+// - legacy Victory / Unity retained-header strip updates
+// - tab wiring / tab activation
+//
+// The sheet template + module.js own tab structure and activation.
 
 (() => {
   const MODF = "bbttcc-factions";
   const TAG  = "[bbttcc-faction-health]";
 
   function readHealthFlags(actor) {
-    const victory  = actor.getFlag(MODF, "victory")  || {};
-    const darkness = actor.getFlag(MODF, "darkness") || {};
-    const morale   = actor.getFlag(MODF, "morale");
-    const loyalty  = actor.getFlag(MODF, "loyalty");
+    const root = (actor && actor.flags && actor.flags[MODF]) || {};
+    const nested = (root && typeof root === "object") ? (root[MODF] || null) : null;
+
+    const pick = (k, fallback) => {
+      if (root && Object.prototype.hasOwnProperty.call(root, k) && root[k] !== undefined) return root[k];
+      if (nested && Object.prototype.hasOwnProperty.call(nested, k) && nested[k] !== undefined) return nested[k];
+      const v = actor && actor.getFlag ? actor.getFlag(MODF, k) : undefined;
+      return (v === undefined) ? fallback : v;
+    };
+
+    const victory  = pick("victory", {}) || {};
+    const darkness = pick("darkness", {}) || {};
+    const morale   = pick("morale", 0);
+    const loyalty  = pick("loyalty", 0);
+
+    let darknessValue = 0;
+    if (darkness && typeof darkness === "object" && typeof darkness.global === "number") {
+      darknessValue = darkness.global;
+    } else if (typeof darkness === "number") {
+      darknessValue = darkness;
+    }
 
     return {
-      vp: Number(victory.vp ?? 0),
-      unity: Number(victory.unity ?? 0),
-      morale: Number(morale ?? 0),
-      loyalty: Number(loyalty ?? 0),
-      darkness: (typeof darkness.global === "number")
-        ? darkness.global
-        : (typeof darkness === "number" ? darkness : 0),
-      badgeLabel: victory.badgeLabel ?? (victory.badge?.label ?? null)
+      vp: Number(victory && victory.vp !== undefined ? victory.vp : 0),
+      unity: Number(victory && victory.unity !== undefined ? victory.unity : 0),
+      morale: Number(morale || 0),
+      loyalty: Number(loyalty || 0),
+      darkness: Number(darknessValue || 0)
     };
   }
 
-  function initTabs(root) {
-    const nav  = root.querySelector(".bbttcc-tabs");
-    const body = root.querySelector(".bbttcc-faction-body");
-    if (!nav || !body) return;
-    if (nav.dataset.bbttccTabsInit === "1") return; // already wired
-    nav.dataset.bbttccTabsInit = "1";
+  function findFactionHealthFieldset(root) {
+    if (!root) return null;
+    const fieldsets = Array.from(root.querySelectorAll("fieldset"));
+    return fieldsets.find(f => {
+      const legend = f.querySelector("legend");
+      const text = ((legend && legend.textContent) || "").trim().toLowerCase();
+      return text === "faction health";
+    }) || null;
+  }
 
-    const links = Array.from(nav.querySelectorAll(".item[data-tab]"));
-    const panels = Array.from(body.querySelectorAll(".bbttcc-tab[data-tab]"));
+  function syncFactionHealthFieldset(root, vals) {
+    const fs = findFactionHealthFieldset(root);
+    if (!fs) {
+      console.debug(TAG, "Faction Health fieldset not found on sheet.");
+      return;
+    }
 
-    const activate = (tabKey) => {
-      if (!tabKey) return;
-      links.forEach(l => {
-        const active = l.dataset.tab === tabKey;
-        l.classList.toggle("is-active", active);
-      });
-      panels.forEach(p => {
-        const active = p.dataset.tab === tabKey;
-        p.classList.toggle("is-active", active);
-      });
-    };
+    const meters = fs.querySelectorAll(".bbttcc-meter");
+    if (!meters || !meters.length) return;
 
-    links.forEach(link => {
-      link.addEventListener("click", ev => {
-        ev.preventDefault();
-        activate(link.dataset.tab);
-      });
-    });
-
-    // Initial activation from any link already marked active, or first link
-    const initial = links.find(l => l.classList.contains("is-active")) || links[0];
-    if (initial) activate(initial.dataset.tab);
+    if (meters[0]) meters[0].textContent = String(vals.vp);
+    if (meters[1]) meters[1].textContent = String(vals.unity) + "%";
+    if (meters[2]) meters[2].textContent = String(vals.morale) + "%";
+    if (meters[3]) meters[3].textContent = String(vals.loyalty) + "%";
+    if (meters[4]) meters[4].textContent = String(vals.darkness);
   }
 
   Hooks.on("renderBBTTCCFactionSheet", (app, html /*, data */) => {
     try {
-      const actor = app.actor;
+      const actor = app && app.actor;
       if (!actor) return;
 
-      const root = html[0];
+      const root = html && html[0];
       if (!root) return;
 
       const vals = readHealthFlags(actor);
-
-      // Faction Health fieldset
-      const fieldsets = root.querySelectorAll("fieldset");
-      const fs = Array.from(fieldsets).find(f =>
-        (f.querySelector("legend")?.textContent || "")
-          .trim()
-          .toLowerCase() === "faction health"
-      );
-      if (fs) {
-        const meters = fs.querySelectorAll(".bbttcc-meter");
-        if (meters?.length) {
-          if (meters[0]) meters[0].textContent = String(vals.vp);
-          if (meters[1]) meters[1].textContent = `${vals.unity}%`;
-          if (meters[2]) meters[2].textContent = `${vals.morale}%`;
-          if (meters[3]) meters[3].textContent = `${vals.loyalty}%`;
-          if (meters[4]) meters[4].textContent = String(vals.darkness);
-        }
-      } else {
-        console.debug(TAG, "Faction Health fieldset not found on sheet.");
-      }
-
-      // Victory / Unity header strip
-      const vStrip = root.querySelector("#bbttcc-victory-strip");
-      if (vStrip) {
-        const vpNode        = vStrip.querySelector('[data-role="vp"]');
-        const unityTextNode = vStrip.querySelector('[data-role="unity-text"]');
-        const unityFillNode = vStrip.querySelector(".bbttcc-meter-fill");
-        const badgeNode     = vStrip.querySelector('[data-role="badge-label"]');
-
-        if (vpNode) vpNode.textContent = String(vals.vp);
-        if (unityTextNode) unityTextNode.textContent = `${vals.unity}%`;
-        if (unityFillNode) {
-          const u = Number.isFinite(vals.unity) ? vals.unity : 0;
-          const pct = Math.max(0, Math.min(100, u));
-          unityFillNode.style.width = `${pct}%`;
-        }
-
-        if (badgeNode) {
-          if (vals.badgeLabel) {
-            badgeNode.textContent = vals.badgeLabel;
-            badgeNode.style.display = "";
-          } else {
-            badgeNode.textContent = "";
-            badgeNode.style.display = "none";
-          }
-        }
-      }
-
-      // Tabs
-      initTabs(root);
-
+      syncFactionHealthFieldset(root, vals);
     } catch (e) {
       console.warn(TAG, "render hook error:", e);
     }
   });
 
-  console.log(TAG, "Faction Health + Tabs render hook installed.");
+  console.log(TAG, "Faction Health display render hook installed.");
 })();
