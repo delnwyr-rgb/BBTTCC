@@ -241,7 +241,7 @@ class BBTTCCRadiationModule {
       if (!nav.length) nav = $html.find(".tabs[data-group='primary']").first();
       if (!nav.length) return;
 
-      // Find window-content, like Tikkun
+      // Find window-content
       const content = $html.find(".window-content").first();
       if (!content.length) return;
 
@@ -253,11 +253,19 @@ class BBTTCCRadiationModule {
       content.find("[data-bbttcc-radiation-overlay]").remove();
       nav.find(`a.item[data-tab='${this.TAB_ID}']`).remove();
 
-      // Nav button (right after Tikkun if present)
+      // Nav button with proper v13 tab semantics
       const label  = "Radiation";
       const radBtn = $(
-        `<a class="item" data-tab="${this.TAB_ID}"><i class="fas fa-radiation"></i> ${label}</a>`
+        `<a class="item"
+            data-tab="${this.TAB_ID}"
+            data-group="primary"
+            data-action="tab"
+            aria-label="${label}">
+           <i class="fas fa-radiation"></i> ${label}
+         </a>`
       );
+
+      // place after Tikkun if present, else append
       const tikBtn = nav.find("[data-tab='bbttcc-tikkun']").last();
       if (tikBtn.length) tikBtn.after(radBtn);
       else nav.append(radBtn);
@@ -281,7 +289,8 @@ class BBTTCCRadiationModule {
       const actorId = actor.id;
 
       // Wire controls
-      overlay.on("click", "[data-rad-delta]", async (ev) => {
+      overlay.off("click.bbttcc-radiation");
+      overlay.on("click.bbttcc-radiation", "[data-rad-delta]", async (ev) => {
         ev.preventDefault();
         const delta = Number(ev.currentTarget.dataset.radDelta || 0);
         try {
@@ -293,7 +302,7 @@ class BBTTCCRadiationModule {
         }
       });
 
-      overlay.on("click", "[data-rad-set]", async (ev) => {
+      overlay.on("click.bbttcc-radiation", "[data-rad-set]", async (ev) => {
         ev.preventDefault();
         const input = overlay.find("input[name='bbttcc-radiation-set']");
         const val = Number(input.val() || 0);
@@ -310,7 +319,7 @@ class BBTTCCRadiationModule {
         }
       });
 
-      overlay.on("click", "[data-rad-clear]", async (ev) => {
+      overlay.on("click.bbttcc-radiation", "[data-rad-clear]", async (ev) => {
         ev.preventDefault();
         try {
           await radApi.set(actorId, 0);
@@ -321,13 +330,23 @@ class BBTTCCRadiationModule {
         }
       });
 
-      // Nav click handler: show/hide overlay like Tikkun
-      nav.off("click.bbttcc-radiation");
-      nav.on("click.bbttcc-radiation", "a.item[data-tab]", (ev) => {
-        const clickedTab = ev.currentTarget.dataset.tab;
-        const isRad = clickedTab === this.TAB_ID;
-        if (isRad) overlay.show();
-        else overlay.hide();
+      // -------------------------------------------------------------------
+      // Tab behavior
+      // -------------------------------------------------------------------
+
+      // Show overlay only when clicking the Radiation tab
+      nav.off("click.bbttcc-radiation-show", `a.item[data-tab='${this.TAB_ID}']`);
+      nav.on("click.bbttcc-radiation-show", `a.item[data-tab='${this.TAB_ID}']`, () => {
+        try { overlay.show(); } catch {}
+      });
+
+      // IMPORTANT: hide only on REAL tab clicks (v13 semantics)
+      nav.off("click.bbttcc-radiation-hide", "a.item[data-action='tab'][data-group='primary']");
+      nav.on("click.bbttcc-radiation-hide", "a.item[data-action='tab'][data-group='primary']", (ev) => {
+        try {
+          const clickedTab = String(ev.currentTarget?.dataset?.tab || "");
+          if (clickedTab && clickedTab !== this.TAB_ID) overlay.hide();
+        } catch {}
       });
 
       console.log(

@@ -299,51 +299,84 @@
   }
 
   function drawZoneOverlay() {
+  try {
+    // Remove any existing overlay first
+    removeZoneOverlay();
+
+    const sc = canvas.scene;
+    if (!sc) return;
+
+    // --- Safe read of "show overlay" setting -------------------------------
+    let show = true;
     try {
-      removeZoneOverlay();
-      const sc = canvas.scene;
-      if (!sc) return;
-
-      const show = game.settings?.get(MOD_SCN, "showZoneOverlay") ?? true;
-      if (!show) return;
-
-      const zone = getZoneForScene(sc);
-      if (!zone || normalizeIntensity(zone.intensity) === "none") return;
-
-      const layer = canvas.foreground || canvas.stage;
-      const g = new PIXI.Graphics();
-      g.name = "bbttcc-radiation-zone-overlay";
-
-      // Intensity → alpha mapping
-      const intens = normalizeIntensity(zone.intensity);
-      let alpha = 0.12;
-      if (intens === "moderate") alpha = 0.18;
-      if (intens === "high")     alpha = 0.24;
-      if (intens === "storm")    alpha = 0.32;
-
-      const col = PIXI.utils.string2hex(zone.color || "#A3E635");
-
-      // Simple full-scene overlay for now; radius reserved for future falloff
-      const w = canvas.dimensions.width;
-      const h = canvas.dimensions.height;
-
-      g.beginFill(col, alpha);
-      g.drawRect(0, 0, w, h);
-      g.endFill();
-
-      // subtle noise stripes
-      g.lineStyle(1, col, alpha * 0.6);
-      for (let y = 0; y < h; y += 64) {
-        g.moveTo(0, y);
-        g.lineTo(w, y + 32);
-      }
-
-      layer.addChild(g);
-      console.log(TAG, "Zone overlay drawn:", intens, "on scene", sc.name);
+      // If settings are registered, respect them
+      show = game.settings.get(MOD_SCN, "showZoneOverlay");
     } catch (e) {
-      console.warn(TAG, "drawZoneOverlay failed", e);
+      // If setting isn't registered yet, default to "true" and keep going
+      // so we never crash drawZoneOverlay.
+      show = true;
     }
+
+    if (!show) return;
+
+    const zone = getZoneForScene(sc);
+    if (!zone || normalizeIntensity(zone.intensity) === "none") return;
+
+    const layer = canvas.foreground || canvas.stage;
+    if (!layer) return;
+
+    const NAME = "bbttcc-radiation-zone-overlay";
+
+    // Create overlay graphic
+    const g = new PIXI.Graphics();
+    g.name = NAME;
+
+    // Make sure it NEVER eats clicks
+    g.interactive = false;
+    g.interactiveChildren = false;
+    // v10+ event model
+    g.eventMode = "none";
+
+    // Intensity → alpha mapping  (slightly stronger for visibility)
+    const intens = normalizeIntensity(zone.intensity);
+    let alpha = 0.18;
+    if (intens === "moderate") alpha = 0.24;
+    if (intens === "high")     alpha = 0.32;
+    if (intens === "storm")    alpha = 0.40;
+
+    const col = PIXI.utils.string2hex(zone.color || "#22C55E");
+
+    // Simple full-scene overlay for now; radius reserved for future falloff
+    const w = canvas.dimensions.width;
+    const h = canvas.dimensions.height;
+
+    g.beginFill(col, alpha);
+    g.drawRect(0, 0, w, h);
+    g.endFill();
+
+    // subtle noise stripes
+    g.lineStyle(1, col, alpha * 0.6);
+    for (let y = 0; y < h; y += 64) {
+      g.moveTo(0, y);
+      g.lineTo(w, y + 32);
+    }
+
+    layer.addChild(g);
+
+    console.log(
+      TAG,
+      "Zone overlay drawn:",
+      intens,
+      "on scene",
+      sc.name,
+      "alpha",
+      alpha
+    );
+  } catch (e) {
+    console.warn("[bbttcc-radiation/zone] drawZoneOverlay failed", e);
   }
+}
+
 
   // ---------------------------------------------------------------------------
   // Settings & Hook Wiring
@@ -369,9 +402,12 @@
       type: Boolean,
       default: true
     });
+
+    // 🔹 Register canvasReady early so we don't miss the first render
+    Hooks.on("canvasReady", drawZoneOverlay);
   });
 
-  Hooks.once("ready", () => {
+    Hooks.once("ready", () => {
     publishAPI();
 
     // Zone-based exposure on travel
@@ -379,9 +415,6 @@
 
     // Zone drift after advance turn (driver emits begin/end hooks)
     Hooks.on("bbttcc:advanceTurn:end", handleAdvanceTurnEnd);
-
-    // Draw overlay when canvas comes up
-    Hooks.on("canvasReady", drawZoneOverlay);
 
     // Redraw overlay if active scene's flags change
     Hooks.on("updateScene", (scene, diff) => {
@@ -392,6 +425,11 @@
     });
 
     console.log(TAG, "Radiation Zone Enhancer ready.");
+
+    // If the canvas is already up by the time ready fires, draw once now.
+    if (canvas?.scene) {
+      drawZoneOverlay();
+    }
   });
 
 })();
