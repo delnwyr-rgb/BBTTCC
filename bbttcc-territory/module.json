@@ -31,9 +31,10 @@
     "scripts/territory-integration.enhancer.js",
     "scripts/territory-build-units.enhancer.js",
     "scripts/effects-build-units.enhancer.js",
-    "scripts/hex-config-build-units.enhancer.js",
     "scripts/bbttcc-hex-sheet.enhancer.js",
     "scripts/bbttcc-dashboard-hexsheet.enhancer.js",
+    "scripts/bbttcc-facility-turn-effects.enhancer.js",
+    "scripts/bbttcc-territory.center-hex-labels.enhancer.js",
     "scripts/turn-requests.enhancer.js"
   ],
   "styles": [

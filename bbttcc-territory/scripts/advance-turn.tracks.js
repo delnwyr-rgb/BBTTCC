@@ -30,6 +30,81 @@
   const gmIds = () => game.users.filter(u => u.isGM).map(u => u.id) ?? [];
   const facActors = () => (game.actors?.contents ?? []).filter(a => a.getFlag?.(MODF,"isFaction"));
 
+  function isSephirothic(tf){
+    const k = String(
+      tf?.sephirotKey ||
+      tf?.sephirotName ||
+      tf?.sephirotUuid || ""
+    ).toLowerCase();
+    return ["keter","chokhmah","binah","chesed","gevurah","tiferet","netzach","hod","yesod","malkuth"].includes(k);
+  }
+
+  // --- Flag canonicalization ---
+  // Some legacy pipelines accidentally store track data under:
+  //   flags.bbttcc-factions["bbttcc-factions"].{morale,loyalty,victory}
+  // Canonical is:
+  //   flags.bbttcc-factions.{morale,loyalty,victory}
+  async function normalizeFactionFlags(A){
+    const f = A?.flags?.[MODF] || {};
+    const nested = f?.[MODF];
+    if (!nested || typeof nested !== "object") return false;
+
+    const updates = {};
+    if (f.morale === undefined && nested.morale !== undefined) updates[`flags.${MODF}.morale`] = Number(nested.morale);
+    if (f.loyalty === undefined && nested.loyalty !== undefined) updates[`flags.${MODF}.loyalty`] = Number(nested.loyalty);
+    if (f.victory === undefined && nested.victory !== undefined) updates[`flags.${MODF}.victory`] = nested.victory;
+
+    // Remove the nested container to prevent future drift
+    updates[`flags.${MODF}.${MODF}`] = null;
+
+    if (!Object.keys(updates).length) return false;
+    await A.update(updates);
+    return true;
+  }
+
+  // --- Trend (Morale/Loyalty) warLog reconciliation ---
+  // Some legacy turn pipelines write a fixed "Trend: Morale→1% • Loyalty→1%" summary
+  // even when the underlying flags did not change (e.g., due to rounding).
+  // This pass rewrites (or appends) a Trend entry based on actual stored deltas.
+  async function reconcileTrendWarLog(A, beforeMorale, beforeLoyalty) {
+    try {
+      if (!A) return;
+      const afterMorale = Number(A.getFlag(MODF, "morale") ?? 0);
+      const afterLoyalty = Number(A.getFlag(MODF, "loyalty") ?? 0);
+      const dm = afterMorale - Number(beforeMorale ?? 0);
+      const dl = afterLoyalty - Number(beforeLoyalty ?? 0);
+
+      const wl = Array.isArray(A.getFlag(MODF, "warLogs")) ? A.getFlag(MODF, "warLogs").slice() : [];
+      const now = Date.now();
+      const date = (new Date(now)).toLocaleString();
+      const summary = `Trend: Morale→${dm}% • Loyalty→${dl}%`;
+
+      // Find most recent Trend entry near "now" and rewrite it; otherwise append a new one.
+      let idx = -1;
+      for (let i = wl.length - 1; i >= 0; i--) {
+        const e = wl[i] || {};
+        const s = String(e.summary || "");
+        if (!s.includes("Trend:")) continue;
+
+        const ts = Number(e.ts || 0);
+        // prefer entries created in the last 5 minutes, otherwise just take the last Trend
+        if (idx === -1) idx = i;
+        if (ts && (now - ts) < 5 * 60 * 1000) { idx = i; break; }
+        break;
+      }
+
+      if (idx >= 0) {
+        wl[idx] = { ...wl[idx], ts: wl[idx].ts ?? now, date: wl[idx].date ?? date, type: wl[idx].type || "turn", summary };
+      } else {
+        wl.push({ ts: now, date, type: "turn", activity: "trend", summary });
+      }
+
+      await A.update({ [`flags.${MODF}.warLogs`]: wl });
+    } catch (e) {
+      console.warn(TAG, "Trend reconcile failed", e);
+    }
+  }
+
   // ===========================================================================
   // RADIATION DECAY + SPREAD
   // ===========================================================================
@@ -469,12 +544,12 @@
       else if (L > 70) bonus = +5;
 
       if (drift !== 0 || bonus !== 0) {
-        const flags = foundry.utils.duplicate(A.flags?.[MODF] || {});
-        flags.loyalty = L;
-        const nt = flags.bonuses?.nextTurn ?? {};
-        nt.opGainPct = Number(nt.opGainPct || 0) + bonus;
-        flags.bonuses = { ...(flags.bonuses || {}), nextTurn: nt };
-        updates.push(A.update({ [`flags.${MODF}`]: flags }));
+        const curNT = (A.getFlag(MODF, "bonuses") || {}).nextTurn || {};
+        const nextPct = Number(curNT.opGainPct || 0) + bonus;
+        updates.push(A.update({
+          [`flags.${MODF}.loyalty`]: L,
+          [`flags.${MODF}.bonuses.nextTurn.opGainPct`]: nextPct
+        }));
 
         lines.push(
           `• <b>${foundry.utils.escapeHTML(A.name)}</b>: `
@@ -554,11 +629,11 @@
       else if (L > 70) dcBonus = +1;
 
       if (dcBonus !== 0) {
-        const flags = foundry.utils.deepClone(A.flags?.[MODF] || {});
-        const nt = flags.bonuses?.nextTurn ?? {};
-        nt.defenseDC = Number(nt.defenseDC || 0) + dcBonus;
-        flags.bonuses = { ...(flags.bonuses || {}), nextTurn: nt };
-        updates.push(A.update({ [`flags.${MODF}`]: flags }));
+        const curNT = (A.getFlag(MODF, "bonuses") || {}).nextTurn || {};
+        const nextDC = Number(curNT.defenseDC || 0) + dcBonus;
+        updates.push(A.update({
+          [`flags.${MODF}.bonuses.nextTurn.defenseDC`]: nextDC
+        }));
         lines.push(
           `• ${A.name}: Defense DC ${dcBonus>0?"+":""}${dcBonus} next raid (Loyalty ${L})`
         );
@@ -738,18 +813,12 @@
       const before = Number(A.getFlag(MODF, "buildUnits") ?? 0);
       const after  = before + gain;
 
-      const flags = foundry.utils.duplicate(A.flags?.[MODF] || {});
-      flags.buildUnits = after;
-
-      const warLogs = Array.isArray(flags.warLogs) ? flags.warLogs : [];
-      warLogs.push({
-        ts: Date.now(),
-        type: "buildUnits",
-        summary: `Build Units +${gain} (from ${totalMats} Materials pips)`
+      const warLogs = Array.isArray(A.getFlag(MODF,"warLogs")) ? A.getFlag(MODF,"warLogs").slice() : [];
+      warLogs.push({ ts: Date.now(), type: "buildUnits", summary: `Build Units +${gain} (from ${totalMats} Materials pips)` });
+      await A.update({
+        [`flags.${MODF}.buildUnits`]: after,
+        [`flags.${MODF}.warLogs`]: warLogs
       });
-      flags.warLogs = warLogs;
-
-      await A.update({ [`flags.${MODF}`]: flags });
 
       lines.push(
         `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Build Units +${gain} `
@@ -823,22 +892,16 @@
       const bonus = Math.floor(routeCount / 2); // every 2 routes → +1 Logistics OP
       if (!bonus) continue;
 
-      const flags = foundry.utils.duplicate(A.flags?.[MODF] || {});
-      const bank  = flags.opBank || {};
+      const bank = foundry.utils.duplicate(A.getFlag(MODF,"opBank") || {});
       const before = Number(bank.logistics || 0);
-      const after  = before + bonus;
+      const after = before + bonus;
       bank.logistics = after;
-      flags.opBank   = bank;
-
-      const warLogs = Array.isArray(flags.warLogs) ? flags.warLogs : [];
-      warLogs.push({
-        ts: Date.now(),
-        type: "logisticsRoute",
-        summary: `Trade Routes: ${routeCount} → Logistics +${bonus}`
+      const warLogs = Array.isArray(A.getFlag(MODF,"warLogs")) ? A.getFlag(MODF,"warLogs").slice() : [];
+      warLogs.push({ ts: Date.now(), type: "logisticsRoute", summary: `Trade Routes: ${routeCount} → Logistics +${bonus}` });
+      await A.update({
+        [`flags.${MODF}.opBank`]: bank,
+        [`flags.${MODF}.warLogs`]: warLogs
       });
-      flags.warLogs = warLogs;
-
-      await A.update({ [`flags.${MODF}`]: flags });
 
       lines.push(
         `• <b>${foundry.utils.escapeHTML(A.name)}</b>: Trade Routes ${routeCount} `
@@ -853,6 +916,46 @@
         speaker: { alias: "BBTTCC Economy" }
       }).catch(()=>{});
     }
+  }
+
+  // ===========================================================================
+  // LEYLINES: PURITY DRIFT (Darkness ↔ Sephirotic alignment)
+  // ===========================================================================
+
+  async function doLeylinePurityDrift() {
+    const draws = canvas?.drawings?.placeables ?? [];
+    if (!draws.length) return;
+
+    const updates = [];
+
+    for (const o of draws) {
+      const d  = o.document;
+      const tf = d.flags?.[MODT];
+      if (!tf?.leylines) continue;
+
+      const ley = foundry.utils.deepClone(tf.leylines);
+      let purity = Number(ley.purity || 0);
+
+      const fid = tf.factionId || tf.ownerId;
+      const fac = fid ? game.actors.get(fid) : null;
+      const darkBox = fac?.getFlag?.(MODF, "darkness") || {};
+      const darkness = Number(darkBox.global ?? 0);
+
+      // Darkness corrupts the grid
+      if (darkness >= 7 && purity > -5) purity -= 1;
+
+      // Sephirotic alignment heals (only when low darkness)
+      else if (darkness <= 3 && isSephirothic(tf) && purity < 5) purity += 1;
+
+      if (purity !== Number(ley.purity || 0)) {
+        ley.purity = purity;
+        updates.push(
+          d.update({ [`flags.${MODT}.leylines`]: ley }, { parent: d.parent })
+        );
+      }
+    }
+
+    if (updates.length) await Promise.allSettled(updates);
   }
 
   // ===========================================================================
@@ -879,11 +982,26 @@
       if (!args?.apply) return res;
 
       try {
+        // Canonicalize any legacy nested track flags before applying track logic.
+        for (const A of facActors()) { try { await normalizeFactionFlags(A); } catch {} }
+
+        // Snapshot morale/loyalty BEFORE this track pass (for truthful Trend logs)
+        const __bbttccTrendBefore = new Map();
+        for (const A of facActors()) {
+          try {
+            __bbttccTrendBefore.set(String(A.id), {
+              morale: Number(A.getFlag(MODF, "morale") ?? 0),
+              loyalty: Number(A.getFlag(MODF, "loyalty") ?? 0)
+            });
+          } catch {}
+        }
+
         await doRadiationDecayAndSpread();
         await doCleanupPurified();
         await doCleanupAura();
         await doRadiationBleedPurifiedActors();
         await doDarknessTrack();
+        await doLeylinePurityDrift();
         await doDarknessThresholds();
         await doDarknessMorale();
         await doLoyaltyPhase1();
@@ -892,6 +1010,13 @@
         await doUnityRecompute();
         await doBuildUnitsFromMaterials();
         await doTradeRouteLogisticsBonus();
+
+        // Reconcile the per-turn Trend warLog entry based on actual deltas
+        for (const A of facActors()) {
+          const b = __bbttccTrendBefore.get(String(A.id)) || { morale: 0, loyalty: 0 };
+          await reconcileTrendWarLog(A, b.morale, b.loyalty);
+        }
+
       } catch (e) {
         console.warn(TAG, "AdvanceTurn track pass failed:", e);
       }

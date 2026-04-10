@@ -1,138 +1,337 @@
-// modules/bbttcc-territory/scripts/effects-build-units.enhancer.js
-// BBTTCC — Build Units integration for Strategic Activities
+// modules/bbttcc-territory/scripts/hex-config-build-units.enhancer.js
+// BBTTCC — Hex Config Build Unit Buttons
 //
-// Wraps certain raid/strategic EFFECTS so that when they apply
-// (fortify, repair, build asset / infrastructure), they automatically
-// spend Build Units via
-//   game.bbttcc.api.territory.buildUnits.spendForAction(...)
+// Adds three buttons to the BBTTCC Hex Configuration UI:
+//   - "Fortify Hex (BU)"
+//   - "Repair Hex (BU)"
+//   - "Build Asset (BU)" (placeholder)
 //
-// This file does NOT change your existing EFFECTS implementations;
-// it only decorates matching entries based on their activity keys.
+// Each button spends Build Units from the owning faction via
+// game.bbttcc.api.territory.buildUnits.spendForAction(...)
+// and then re-renders the config window.
 
 (() => {
-  const TAG = "[bbttcc-territory/effects-build-units]";
+  const MOD_T = "bbttcc-territory";
+  const TAG   = "[bbttcc-hex-config/BU]";
 
-  // ---------------------------------------------------------------------------
-  // Map activity keys → BU action
-  //
-  // Feel free to tweak this list later. These keys come directly from:
-  //   Object.keys(game.bbttcc.api.raid.EFFECTS)
-  // and we group them by what they *do* in-fiction.
-  // ---------------------------------------------------------------------------
-  const ACTIVITY_BU_ACTION = {
-    // --- Fortification / Defense -------------------------------------------
-    fortify_hex: "fortify",
-    secure_perimeter: "fortify",
 
-    // --- Repairs / cleanup / fixing infrastructure -------------------------
-    minor_repair: "repair",
-    reconstruction_drive: "repair",
 
-    // --- Infrastructure & construction (treated as "asset" for now) -------
-    develop_infrastructure: "asset",
-    develop_infrastructure_std: "asset",
-    infrastructure_expansion: "asset",
-    develop_outpost_stability: "asset",
-    upgrade_outpost_settlement: "asset",
-    establish_outpost: "asset",
+function gmEditEnabled() {
+  try { return !!(game.user && game.user.isGM) && !!game.settings.get("bbttcc-core","gmEditMode"); }
+  catch (e) { return false; }
+}
 
-    // Founding hard sites (assume BU-heavy)
-    found_site_farm: "asset",
-    found_site_mine: "asset",
-    found_site_port: "asset",
-    found_site_temple: "asset",
-    found_site_research: "asset",
-    found_site_fortress: "asset"
-  };
+function htmlEscape(s){
+  return String(s==null?"":s)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
 
-  function guessHexUuid(ctx) {
-    return (
-      ctx?.hexUuid ||
-      ctx?.targetHexUuid ||
-      ctx?.drawingUuid ||
-      ctx?.hexId ||
-      ctx?.hex?.uuid ||
-      null
-    );
+function numOrBlank(v){
+  if (v === null || typeof v === "undefined") return "";
+  const n = Number(v);
+  return Number.isFinite(n) ? String(n) : "";
+}
+  const log  = (...a) => console.log(TAG, ...a);
+  const warn = (...a) => console.warn(TAG, ...a);
+
+  function getBUApi() {
+    return game.bbttcc?.api?.territory?.buildUnits || null;
   }
 
-  function guessFactionId(ctx) {
-    return (
-      ctx?.factionId ||
-      ctx?.attackerId ||
-      ctx?.ownerId ||
-      ctx?.actorId ||
-      null
-    );
-  }
+  // Try hard to resolve the DrawingDocument being edited.
+  async function resolveHexDocument(app) {
+    // 1) If the app is bound to a document or object already:
+    const maybe = app?.document || app?.object || app?.actor || null;
+    if (maybe?.document) return maybe.document;
+    if (maybe?.update && maybe?.id) return maybe; // looks like a Document
 
-  function installWrappers() {
-    const raid = game.bbttcc?.api?.raid;
-    const buApi = game.bbttcc?.api?.territory?.buildUnits;
-
-    if (!raid || !raid.EFFECTS) {
-      console.warn(TAG, "raid.EFFECTS not found; BU effect wrapper idle.");
-      return;
-    }
-    if (!buApi || typeof buApi.spendForAction !== "function") {
-      console.warn(TAG, "buildUnits.spendForAction not available; BU effect wrapper idle.");
-      return;
+    // 2) Try from UUID if present
+    const uuid = app?.object?.uuid || app?.document?.uuid || app?.options?.uuid || null;
+    if (uuid) {
+      try {
+        const d = await fromUuid(uuid);
+        const doc = d?.document ?? d;
+        if (doc?.update) return doc;
+      } catch (e) {}
     }
 
-    const effects = raid.EFFECTS;
-    let wrappedCount = 0;
-
-    for (const [key, spec] of Object.entries(effects)) {
-      const actionKey = ACTIVITY_BU_ACTION[key];
-      if (!actionKey) continue;                 // not a BU-linked activity
-      if (!spec || typeof spec.apply !== "function") continue;
-      if (spec.__bbttccBUWrapped) continue;     // already wrapped
-
-      const baseApply = spec.apply;
-
-      spec.apply = async function wrappedEffectApply(ctx = {}) {
-        // Run the original effect first.
-        const result = await baseApply.call(this, ctx).catch(e => {
-          console.warn(TAG, "Base EFFECT apply failed for", key, e);
-          throw e;
+    // 3) Fallback: match by name field in the form.
+    try {
+      const el = app?.element instanceof jQuery ? app.element[0] : app?.element;
+      const root = el?.querySelector?.(".bbttcc-hex-config");
+      const nameInput = root?.querySelector?.("input[name='name']");
+      const nm = nameInput?.value?.trim();
+      if (nm) {
+        const hit = (canvas.drawings?.placeables || []).find(p => {
+          const n = p?.document?.text || p?.document?.name;
+          return String(n || "").trim() === nm;
         });
+        return hit?.document ?? null;
+      }
+    } catch (e) {}
 
-        try {
-          const hexUuid   = guessHexUuid(ctx);
-          const factionId = guessFactionId(ctx);
-          if (!hexUuid || !factionId) {
-            // Not enough info to spend BUs; skip quietly.
-            return result;
-          }
+    return null;
+  }
 
-          const note = `Activity: ${key}`;
-          await buApi.spendForAction({
-            factionId,
-            hexUuid,
-            action: actionKey,
-            note
-          });
-        } catch (e) {
-          console.warn(TAG, "BU spending for activity", key, "failed:", e);
+  function injectButtons(app, html) {
+    const buApi = getBUApi();
+    if (!buApi || typeof buApi.spendForAction !== "function") {
+      return;
+    }
+
+    const el = html instanceof jQuery ? html[0] : html;
+    if (!el) return;
+
+    const root = el.querySelector(".bbttcc-hex-config");
+    if (!root) return; // not our app
+
+    // Avoid double-inject
+    if (root.querySelector("[data-bbttcc='bu-buttons']")) return;
+
+    // Find a reasonable insertion point (after modifiers heading if possible)
+    let modifiersBlock = root.querySelector(".form-group[data-bbttcc='modifiers']") ||
+                         root.querySelector(".modifiers") ||
+                         root.querySelector(".modifiers-section");
+
+    const row = document.createElement("div");
+    row.className = "form-group";
+    row.setAttribute("data-bbttcc", "bu-buttons");
+    row.innerHTML = `
+      <label>Build Units (Engineering)</label>
+      <div class="bbttcc-bu-button-row" style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+        <button type="button" data-bu-action="fortify" class="bbttcc-btn bu-btn-fortify">
+          Fortify Hex (BU)
+        </button>
+        <button type="button" data-bu-action="repair" class="bbttcc-btn bu-btn-repair">
+          Repair Hex (BU)
+        </button>
+        <button type="button" data-bu-action="asset" class="bbttcc-btn bu-btn-asset">
+          Build Asset (BU)
+        </button>
+      </div>
+      <p class="hint">
+        Spend Build Units from the owning faction to reinforce or repair this hex.
+        Costs are defined in BBTTCC Territory settings.
+      </p>
+    `;
+
+    if (modifiersBlock && modifiersBlock.parentElement) {
+      modifiersBlock.parentElement.insertBefore(row, modifiersBlock.nextSibling);
+    } else {
+      root.appendChild(row);
+    }
+
+    // Wire click handlers
+    row.addEventListener("click", async (ev) => {
+      const btn = ev.target?.closest?.("button[data-bu-action]");
+      if (!btn) return;
+      ev.preventDefault();
+
+      const action = btn.getAttribute("data-bu-action");
+      try {
+        const hexDoc = await resolveHexDocument(app);
+        if (!hexDoc) {
+          ui.notifications?.warn?.("Build Units: Could not resolve hex document for this editor.");
+          return;
+        }
+        const tf = hexDoc.flags?.[MOD_T] || {};
+        const factionId = tf.factionId || tf.ownerId || null;
+        if (!factionId) {
+          ui.notifications?.warn?.("Build Units: This hex is not currently owned by a faction.");
+          return;
         }
 
-        return result;
-      };
+        const note = `Hex Config button: ${action}`;
+        const res = await buApi.spendForAction({
+          factionId,
+          hexUuid: hexDoc.uuid,
+          action,
+          note
+        });
 
-      spec.__bbttccBUWrapped = true;
-      wrappedCount++;
-    }
 
-    if (wrappedCount) {
-      console.log(TAG, `Wrapped ${wrappedCount} EFFECTS for BU spending.`);
-    } else {
-      console.log(TAG, "No matching EFFECTS to wrap (check ACTIVITY_BU_ACTION keys).");
+
+// ---------------- GM: Manual Edit (Phase 2) ----------------
+try {
+  if (gmEditEnabled() && !root.querySelector("[data-bbttcc='gm-edit-panel']")) {
+    const doc = await resolveHexDocument(app);
+    if (doc && doc.uuid) {
+      const tf = doc.getFlag ? (doc.getFlag(MOD_T, "") || null) : null;
+      const flags = (doc.flags && doc.flags[MOD_T]) ? doc.flags[MOD_T] : {};
+      const travel = flags.travel || {};
+      const dev = flags.development || {};
+      const integ = flags.integration || {};
+      const alarm = flags.alarm || {};
+      const camp = flags.campaign || {};
+
+      const wrap = document.createElement("fieldset");
+      wrap.setAttribute("data-bbttcc", "gm-edit-panel");
+      wrap.style.marginTop = "0.75rem";
+      wrap.innerHTML = `
+        <legend>GM: Manual Edit</legend>
+
+        <div class="form-group">
+          <label>Hex UUID</label>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="text" readonly value="${htmlEscape(doc.uuid)}" style="flex:1;">
+            <button type="button" class="bbttcc-btn" data-gm-action="copy-uuid">Copy</button>
+          </div>
+          <p class="hint">This panel is GM-only and only appears when GM Edit Mode is enabled (bbttcc-core).</p>
+        </div>
+
+        <div class="form-group">
+          <label>Travel Units Override</label>
+          <input type="number" min="0" max="99" step="1" name="gm.travel.unitsOverride" value="${htmlEscape(numOrBlank(travel.unitsOverride))}">
+          <p class="hint">Blank = no change. Clear removes override.</p>
+        </div>
+
+        <div class="form-group">
+          <label>Development Stage</label>
+          <input type="number" min="0" max="6" step="1" name="gm.development.stage" value="${htmlEscape(numOrBlank(dev.stage != null ? dev.stage : integ.progress))}">
+          <p class="hint">Writes development.stage and integration.progress (0–6).</p>
+        </div>
+
+        <div class="form-group row" style="align-items:center;">
+          <label style="margin:0;">Development Locked</label>
+          <input type="checkbox" name="gm.development.locked" ${(dev.locked === true || integ.locked === true) ? "checked" : ""}>
+        </div>
+
+        <div class="form-group">
+          <label>Alarm</label>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="number" min="0" max="99" step="1" name="gm.alarm.value" value="${htmlEscape(numOrBlank(alarm.value))}" style="flex:1;">
+            <label class="checkbox" style="display:flex; gap:0.35rem; align-items:center; margin:0;">
+              <input type="checkbox" name="gm.alarm.locked" ${(alarm.locked === true) ? "checked" : ""}>
+              <span>Lock</span>
+            </label>
+          </div>
+          <p class="hint">Blank = no change.</p>
+        </div>
+
+        <div class="form-group">
+          <label>On-Enter Beat ID</label>
+          <input type="text" name="gm.campaign.onEnterBeatId" value="${htmlEscape(camp.onEnterBeatId || "")}" placeholder="e.g. enc_hidden_ruins">
+        </div>
+
+        <div class="form-group">
+          <label>GM Note (audit)</label>
+          <input type="text" name="gm.note" value="" placeholder="Why are we changing reality?">
+        </div>
+
+        <div class="form-group" style="display:flex; gap:0.5rem; justify-content:flex-end;">
+          <button type="button" class="bbttcc-btn" data-gm-action="clear">Clear Overrides</button>
+          <button type="button" class="bbttcc-btn" data-gm-action="apply">Apply</button>
+        </div>
+      `;
+      root.appendChild(wrap);
+
+      function q(sel){ return wrap.querySelector(sel); }
+      function val(name){
+        const el = q(`[name="${name}"]`);
+        return el ? (el.value || "") : "";
+      }
+      function checked(name){
+        const el = q(`[name="${name}"]`);
+        return !!(el && el.checked);
+      }
+
+      wrap.addEventListener("click", async (ev2) => {
+        const btn = ev2.target && ev2.target.closest ? ev2.target.closest("button[data-gm-action]") : null;
+        if (!btn) return;
+        ev2.preventDefault();
+        const action = btn.getAttribute("data-gm-action");
+
+        if (action === "copy-uuid") {
+          try {
+            await navigator.clipboard.writeText(doc.uuid);
+            ui.notifications?.info?.("Copied Hex UUID to clipboard.");
+          } catch (e) {
+            console.warn(TAG, "copy uuid failed", e);
+            ui.notifications?.warn?.("Could not copy UUID (see console).");
+          }
+          return;
+        }
+
+        const api = game.bbttcc && game.bbttcc.api && game.bbttcc.api.gm;
+        if (!api || typeof api.setHex !== "function") {
+          ui.notifications?.error?.("GM API not available (bbttcc-core Phase 1 missing).");
+          return;
+        }
+
+        const note = String(val("gm.note") || "").trim();
+
+        if (action === "clear") {
+          await api.setHex({
+            hexUuid: doc.uuid,
+            patch: {
+              travel: { unitsOverride: null },
+              development: { stage: null, locked: null },
+              alarm: { value: null, locked: null },
+              campaign: { onEnterBeatId: null }
+            },
+            note: note || "Clear hex overrides"
+          });
+          app.render(true);
+          return;
+        }
+
+        if (action === "apply") {
+          const patch = {};
+          const uo = val("gm.travel.unitsOverride").trim();
+          if (uo !== "") patch.travel = Object.assign(patch.travel || {}, { unitsOverride: Number(uo) });
+
+          const st = val("gm.development.stage").trim();
+          patch.development = patch.development || {};
+          if (st !== "") patch.development.stage = Number(st);
+          patch.development.locked = checked("gm.development.locked");
+
+          const av = val("gm.alarm.value").trim();
+          patch.alarm = patch.alarm || {};
+          if (av !== "") patch.alarm.value = Number(av);
+          patch.alarm.locked = checked("gm.alarm.locked");
+
+          const beat = val("gm.campaign.onEnterBeatId").trim();
+          if (beat !== "") patch.campaign = Object.assign(patch.campaign || {}, { onEnterBeatId: beat });
+
+          await api.setHex({ hexUuid: doc.uuid, patch: patch, note: note || "GM edit hex" });
+          app.render(true);
+        }
+      });
     }
   }
+} catch (e) {
+  console.warn(TAG, "GM panel inject failed", e);
+}
+        if (res?.ok) {
+          // Re-render the app so modifiers & flags refresh
+          app.render(false);
+        }
+      } catch (e) {
+        warn("BU button handler failed:", e);
+        ui.notifications?.error?.("Build Units action failed — see console.");
+      }
+    });
 
-  Hooks.once("ready", installWrappers);
-  try {
-    if (game?.ready) installWrappers();
-  } catch {}
+    log("Injected Build Unit buttons into Hex Config.");
+  }
+
+  function install() {
+    Hooks.on("renderApplication", (app, html) => {
+      try {
+        injectButtons(app, html);
+      } catch (e) {
+        warn("renderApplication handler failed:", e);
+      }
+    });
+
+    console.log(TAG, "Hex Config BU enhancer installed.");
+  }
+
+  Hooks.once("ready", install);
+  try { if (game?.ready) install(); } catch {}
 
 })();

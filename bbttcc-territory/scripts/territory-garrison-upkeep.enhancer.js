@@ -1,26 +1,18 @@
 // modules/bbttcc-territory/scripts/territory-garrison-upkeep.enhancer.js
 // BBTTCC — Garrison & Upkeep Engine (Phase-based, type-aware)
 //
-// This enhancer wraps territory.advanceTurn AFTER your normal world loops
-// (radiation, darkness, morale, loyalty, unity, etc.) and:
+// FULL REPLACEMENT — patched to normalize legacy/resource-style upkeep buckets
+// into canonical faction OP bank keys before spending.
 //
-// - For each owned hex with an integration record (or contested/occupied status),
-//   computes a per-turn upkeep OP vector based on:
-//     • Hex type (fortress, port, temple, farm, mine, research, settlement, ruins)
-//     • Phase: occupation / short_integration / full_integration
-//     • Outcome (justice_reformation, liberation, best_friends_integration,
-//                retribution_subjugation, salt_the_earth, etc.)
-//     • integration.spec.garrisonEase / integrationCostMult
-//     • Size (outpost, village, town, city, metropolis, megalopolis)
-//     • Status (contested, occupied, claimed, scorched, etc.)
-//     • Modifiers (Hostile/Loyal Population, Well-Maintained, Fortified, Trade Hub,
-//                  Damaged Infrastructure, Radiation Zone, Logistics Hub, Supply Line, etc.)
-//     • Conditions (Radiated, Purified, Unstable, etc.)
+// Key fix:
+//   military -> violence
+//   knowledge -> intrigue
+//   trade -> diplomacy
+//   food -> logistics
+//   materials -> economy
 //
-// - Spends appropriate OP buckets from faction opBank
-// - On partial/unpaid upkeep, queues penalties for faction + hex
-// - On fully paid upkeep in integrated phases, adds Morale and Loyalty bonuses
-// - Writes a brief War Log entry and GM whisper card
+// This keeps the upkeep tables expressive while ensuring live runtime spends from
+// the real opBank schema used by bbttcc-factions/op-engine.js.
 
 (() => {
   const TAG  = "[bbttcc-territory/garrison-upkeep]";
@@ -107,6 +99,38 @@
   const HOSTILITY_MULT = 1.25;
   const LOYALTY_MULT   = 0.85;
 
+  // Legacy/resource-style buckets → canonical faction OP bank keys
+  const OP_BUCKET_ALIAS = {
+    military:  "violence",
+    violence:  "violence",
+    nonlethal: "nonlethal",
+    non_lethal:"nonlethal",
+    intrigue:  "intrigue",
+    knowledge: "intrigue",
+    economy:   "economy",
+    materials: "economy",
+    softpower: "softpower",
+    soft_power:"softpower",
+    diplomacy: "diplomacy",
+    trade:     "diplomacy",
+    logistics: "logistics",
+    food:      "logistics",
+    culture:   "culture",
+    faith:     "faith"
+  };
+
+  const CANONICAL_OP_KEYS = new Set([
+    "violence",
+    "nonlethal",
+    "intrigue",
+    "economy",
+    "softpower",
+    "diplomacy",
+    "logistics",
+    "culture",
+    "faith"
+  ]);
+
   // ------------------------------
   // Small helpers
   // ------------------------------
@@ -126,6 +150,28 @@
       out[k] = N(out[k] || 0) + N(v);
     }
     return out;
+  }
+
+  function normalizeBucketName(bucket) {
+    const k = String(bucket || "").trim().toLowerCase();
+    return OP_BUCKET_ALIAS[k] || k;
+  }
+
+  function normalizeCostVector(vec) {
+    const out = {};
+    for (const [rawKey, rawVal] of Object.entries(vec || {})) {
+      const v = N(rawVal);
+      if (v <= 0) continue;
+      const key = normalizeBucketName(rawKey);
+      out[key] = N(out[key] || 0) + v;
+    }
+    return out;
+  }
+
+  function bankHasKnownShape(bank) {
+    const keys = Object.keys(bank || {});
+    if (!keys.length) return true;
+    return keys.some(k => CANONICAL_OP_KEYS.has(String(k).toLowerCase()));
   }
 
   // ------------------------------
@@ -265,6 +311,10 @@
     let bank      = clone(fFlags.opBank || {});
     let fTurnPending = clone(fFlags.turn?.pending || {});
 
+    if (!bankHasKnownShape(bank)) {
+      console.warn(TAG, `Faction ${A.name} has unexpected opBank shape; upkeep normalization may be incomplete.`, bank);
+    }
+
     const warLogs = fFlags.warLogs ?? [];
     const logLines = [];
     let anyUnpaidGlobal = false;
@@ -285,7 +335,8 @@
       if (!integ) continue;
 
       const { vec, phase, outcomeKey } = computeHexUpkeep(tf, integ);
-      const cost = roundVector(vec);
+      const rawCost = roundVector(vec);
+      const cost = normalizeCostVector(rawCost);
 
       const hexName = d.text ?? d.name ?? tf.name ?? d.id;
       if (!Object.keys(cost).length) {
@@ -296,7 +347,7 @@
       let unpaidBuckets = {};
       let hasUnpaid = false;
 
-      // pay per bucket from opBank
+      // pay per normalized bucket from opBank
       for (const [bucket, needRaw] of Object.entries(cost)) {
         let need = N(needRaw);
         if (need <= 0) continue;
@@ -307,7 +358,7 @@
         } else {
           bank[bucket] = 0;
           const deficit = need - have;
-          unpaidBuckets[bucket] = (unpaidBuckets[bucket] || 0) + (need - have);
+          unpaidBuckets[bucket] = (unpaidBuckets[bucket] || 0) + deficit;
           hasUnpaid = true;
         }
       }

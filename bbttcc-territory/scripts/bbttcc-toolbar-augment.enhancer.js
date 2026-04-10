@@ -1,18 +1,5 @@
 // modules/bbttcc-territory/scripts/bbttcc-toolbar-augment.enhancer.js
-// BBTTCC Hex Chrome HUD toolbar augment (stable version)
-//
-// Responsibilities:
-// - Ensure the BBTTCC toolbar (#bbttcc-toolbar) has:
-//     • Overview button (from overview-button.js)
-//     • Travel Console button
-//     • Turn Driver button (advances the strategic turn)
-//     • Raid / Plan buttons (added by raid module; we leave those alone)
-// - Remove legacy top-right travel pills created by older modules:
-//     • <div id="bbttcc-travel-console-btn">Open Travel Console</div>
-//       (from bbttcc-travel-console.js)
-//     • <div id="bbttcc-travel-mode-btn">Open Travel Planner</div>
-//       (from hex-travel-mode.js)
-// - Re-run safely whenever the canvas / scene controls redraw.
+// BBTTCC Hex Chrome HUD toolbar augment — top control bar edition
 
 (() => {
   const TAG = "[bbttcc-ui/toolbar-augment]";
@@ -31,19 +18,30 @@
     }
   }
 
+  function getToolbarRoot() {
+    return document.getElementById("bbttcc-toolbar")
+      || document.querySelector("[data-bbttcc-toolbar]")
+      || document.querySelector(".bbttcc-toolbar");
+  }
+
+  function getMainRow(toolbar) {
+    return toolbar?.querySelector(".bbttcc-toolbar-main")
+      || toolbar?.querySelector(".row")
+      || toolbar;
+  }
+
   function ensureButton(toolbar, { id, label, icon, onClick }) {
     if (!toolbar) return;
     let btn = toolbar.querySelector(`#${id}`);
     if (btn) return;
 
-    const row = toolbar.querySelector(".row") || toolbar;
+    const row = getMainRow(toolbar);
 
     btn = document.createElement("button");
     btn.id = id;
     btn.type = "button";
     btn.className = "bbttcc-btn";
-    btn.style.marginLeft = "4px";
-    btn.innerHTML = `<i class="fas fa-${icon}"></i> ${label}`;
+    btn.innerHTML = `<i class="fas fa-${icon}"></i><span>${label}</span>`;
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
@@ -60,24 +58,16 @@
 
   function augmentToolbar() {
     try {
-      const toolbar = document.getElementById("bbttcc-toolbar");
-      // Even if toolbar isn't there yet, still remove legacy pills.
+      const toolbar = getToolbarRoot();
       killLegacyTravelPills();
       if (!toolbar) return;
 
-      // Make sure Overview dedup still works: if multiple, keep the first.
       const overviewButtons = toolbar.querySelectorAll("#bbttcc-overview-btn");
       if (overviewButtons.length > 1) {
-        const keep = overviewButtons[0];
-        for (let i = 1; i < overviewButtons.length; i++) {
-          overviewButtons[i].remove();
-        }
+        for (let i = 1; i < overviewButtons.length; i++) overviewButtons[i].remove();
         log(`Removed ${overviewButtons.length - 1} duplicate Overview button(s).`);
       }
 
-      // Travel Console button — uses the V1 travel console app we still like.
-      // The console app is created in bbttcc-travel-console.js:
-      //   Hooks.once("ready", () => { game.bbttcc.ui.travelConsole = new BBTTCC_TravelConsole(); ... })
       const bbttccUi = game.bbttcc?.ui || {};
       if (bbttccUi.travelConsole) {
         ensureButton(toolbar, {
@@ -88,8 +78,6 @@
         });
       }
 
-      // Turn Driver button — actually advance the strategic turn.
-      // Uses game.bbttcc.api.territory.advanceTurn({ apply, sceneId }).
       const terrApi = game.bbttcc?.api?.territory;
       if (terrApi) {
         ensureButton(toolbar, {
@@ -105,7 +93,6 @@
 
               const sceneId = canvas?.scene?.id || null;
 
-              // Dialog.confirm expects yes/no as FUNCTIONS, not strings.
               const ok = await Dialog.confirm({
                 title: "Advance Turn",
                 content: "<p>Advance the strategic turn now? This will apply all pending effects.</p>",
@@ -131,17 +118,14 @@
         });
       }
 
-      // Finally, make sure legacy pills are gone (in case they were created after we started)
       killLegacyTravelPills();
-
-      log("BBTTCC HUD toolbar augmented (Travel Console + Turn Driver).");
+      log("BBTTCC control bar augmented (Travel Console + Turn Driver).");
     } catch (e) {
       warn("augmentToolbar error", e);
     }
   }
 
   function refresh() {
-    // Run after other ready/canvas hooks so their UI has a chance to spawn.
     setTimeout(augmentToolbar, 0);
   }
 

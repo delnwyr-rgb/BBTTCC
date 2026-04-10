@@ -1,524 +1,421 @@
 // modules/bbttcc-territory/scripts/bbttcc-hex-sheet.enhancer.js
-// BBTTCC — Hex Sheet 3.0 (4X Strategy Tile View, read-only)
-//
-// Provides a "nice" sheet for a Territory Hex (drawing or tile) with:
-// - Left 1/3 art panel
-// - Right 2/3 data: summary, resources, modifiers, tracks
-// - Integration / Radiation / Darkness tracks as hex pips
-// - Gold/Sapphire chips for modifiers
-//
-// Does NOT replace the existing Hex Config UI; it's a display layer only.
+// BBTTCC — Hex Sheet 3.4 (syntax-safe AppV2; no optional chaining / nullish / spread)
 //
 // API: game.bbttcc.api.territory.openHexSheet(hexUuid)
-// Example:
-//   game.bbttcc.api.territory.openHexSheet("Scene.XYZ.SceneId.Drawing.ABC");
+//
+// Notes:
+// - Full replacement. Fixes prior bad-token insertion that caused parse failure.
+// - GM edit UI for Hex Configuration lives in hex-config enhancers; this sheet remains a read/inspect surface.
 
 (() => {
   const MOD_T = "bbttcc-territory";
   const TAG   = "[bbttcc-hex-sheet]";
 
-  const App2 = foundry?.applications?.api?.ApplicationV2 || Application;
+  const api = (foundry && foundry.applications && foundry.applications.api) ? foundry.applications.api : null;
+  const ApplicationV2 = api ? api.ApplicationV2 : null;
+  const HandlebarsApplicationMixin = api ? api.HandlebarsApplicationMixin : null;
+
+  function log()  { console.log.apply(console, [TAG].concat([].slice.call(arguments))); }
+  function warn() { console.warn.apply(console, [TAG].concat([].slice.call(arguments))); }
 
   function ensureNS() {
-    game.bbttcc ??= { api:{} };
-    game.bbttcc.api ??= game.bbttcc.api || {};
-    game.bbttcc.api.territory ??= game.bbttcc.api.territory || {};
+    if (!game.bbttcc) game.bbttcc = { api: {} };
+    if (!game.bbttcc.api) game.bbttcc.api = {};
+    if (!game.bbttcc.api.territory) game.bbttcc.api.territory = {};
+    if (!game.bbttcc.apps) game.bbttcc.apps = {};
+    if (!game.bbttcc.apps.hexSheets) game.bbttcc.apps.hexSheets = {};
   }
 
-  const OP_ICON = {
-    economy:    "💰",
-    intrigue:   "🕵",
-    faith:      "🌞",
-    logistics:  "📦",
-    culture:    "🎨",
-    violence:   "⚔",
-    nonlethal:  "🛡",
-    diplomacy:  "🕊",
-    softpower:  "🎭",
-    softPower:  "🎭",
-    materials:  "⛏"
-  };
+  async function resolveHexDoc(uuid) {
+    if (!uuid) return null;
+    const raw = String(uuid);
+    const parts = raw.split(".");
 
-  const RES_LABEL = {
-    economy:    "Economy",
-    intrigue:   "Intrigue",
-    faith:      "Faith",
-    logistics:  "Logistics",
-    culture:    "Culture",
-    violence:   "Violence",
-    nonlethal:  "Non-Lethal",
-    diplomacy:  "Diplomacy",
-    softpower:  "Soft Power",
-    softPower:  "Soft Power",
-    materials:  "Materials"
-  };
+    if (parts[0] === "Scene" && parts.length >= 4) {
+      const sc = (game.scenes && game.scenes.get) ? game.scenes.get(parts[1]) : null;
+      if (sc) {
+        if (parts[2] === "Drawing") return (sc.drawings && sc.drawings.get) ? (sc.drawings.get(parts[3]) || null) : null;
+        if (parts[2] === "Tile")    return (sc.tiles && sc.tiles.get) ? (sc.tiles.get(parts[3]) || null) : null;
+      }
+    }
 
-  const HEX_GLYPH = "⬢"; // hexagon-like glyph
+    const scenes = game.scenes ? Array.from(game.scenes) : [];
+    for (let si = 0; si < scenes.length; si++) {
+      const sc = scenes[si];
+      const drawings = (sc && sc.drawings && sc.drawings.contents) ? sc.drawings.contents : [];
+      for (let i=0;i<drawings.length;i++) if (drawings[i] && drawings[i].uuid === raw) return drawings[i];
+      const tiles = (sc && sc.tiles && sc.tiles.contents) ? sc.tiles.contents : [];
+      for (let j=0;j<tiles.length;j++) if (tiles[j] && tiles[j].uuid === raw) return tiles[j];
+    }
+    return null;
+  }
 
-  class BBTTCC_HexSheet extends App2 {
-    static get defaultOptions() {
-      return {
-        id: "bbttcc-hex-sheet",
-        title: "BBTTCC — Hex Sheet",
+  function pips(value, max) {
+    const v = Math.max(0, Math.min(max, Number(value || 0)));
+    let s = "";
+    for (let i=0;i<max;i++) s += (i < v) ? "⬢" : "◌";
+    return s;
+  }
+
+  function _safeHexSheetId(hexUuid){
+    try {
+      var raw = String(hexUuid || '');
+      // Prefer the tail id (Drawing/Tile id) for shorter window ids.
+      var parts = raw.split('.');
+      var tail = parts.length ? parts[parts.length - 1] : raw;
+      tail = String(tail).replace(/[^A-Za-z0-9_-]/g, '_');
+      if (!tail) tail = raw.replace(/[^A-Za-z0-9_-]/g, '_');
+      if (tail.length > 48) tail = tail.slice(0, 48);
+      return 'bbttcc-hex-sheet-' + tail;
+    } catch (_e) {
+      return 'bbttcc-hex-sheet-' + String(Date.now());
+    }
+  }
+
+  function _readWorldTurn() {
+    try {
+      const w = game && game.bbttcc && game.bbttcc.api ? game.bbttcc.api.world : null;
+      if (w && typeof w.getState === "function") {
+        const st = w.getState() || {};
+        const t = Number(st.turn || 0);
+        if (Number.isFinite(t) && t >= 0) return Math.floor(t);
+      }
+    } catch (e) {}
+    return 0;
+  }
+
+  function _classifyModifier(mod, curTurn) {
+    const enabled = (mod && mod.enabled !== false);
+    const exp = Number(mod && mod.expiresTurn ? mod.expiresTurn : 0) || 0;
+    const expired = (exp > 0 && curTurn > 0 && curTurn >= exp);
+    return { enabled, expired, exp };
+  }
+
+  if (!ApplicationV2 || !HandlebarsApplicationMixin) {
+    warn("Foundry ApplicationV2 APIs not available; Hex Sheet cannot install.");
+    return;
+  }
+
+  class BBTTCC_HexSheet extends HandlebarsApplicationMixin(ApplicationV2) {
+    static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+      foundry.utils.deepClone(super.DEFAULT_OPTIONS || {}),
+      {
+        id: "bbttcc-hex-sheet-base",
         classes: ["bbttcc","bbttcc-hex-sheet"],
-        width: 960,
-        height: 600,
-        resizable: true,
-        minimizable: true,
-        positionOrtho: true
-      };
-    }
-
-    static PARTS = { body: { template: null } };
-
-    constructor(hexUuid, options={}) {
-      super(options);
-      this.hexUuid = hexUuid;
-    }
-
-    /** Resolve the hex document WITHOUT using fromUuid, to avoid socket/uuid issues. */
-    async _getHexDoc() {
-      if (!this.hexUuid) return null;
-      const raw = String(this.hexUuid);
-
-      // Case 1: Scene.{sceneId}.Drawing.{drawingId} or .Tile.{tileId}
-      const parts = raw.split(".");
-      if (parts[0] === "Scene" && parts.length >= 4) {
-        const sceneId    = parts[1];
-        const collection = parts[2];
-        const docId      = parts[3];
-        const sc         = game.scenes?.get(sceneId);
-        if (sc) {
-          if (collection === "Drawing" && sc.drawings) {
-            const d = sc.drawings.get(docId);
-            if (d) return d;
-          }
-          if (collection === "Tile" && sc.tiles) {
-            const t = sc.tiles.get(docId);
-            if (t) return t;
-          }
+        position: { width: 960, height: 600 },
+        window: {
+          title: "BBTTCC — Hex Sheet",
+          resizable: true,
+          controls: [],
+          icon: ""
         }
-      }
+      },
+      { inplace: false }
+    );
 
-      // Case 2: Full UUID match on any drawing/tile in any scene
+    static PARTS = {
+      body: { template: "modules/" + MOD_T + "/templates/hex-sheet.hbs" }
+    };
+
+    constructor(hexUuid, options) {
+      super(options || {});
+      this.hexUuid = String(hexUuid || "");
       try {
-        for (const sc of game.scenes || []) {
-          for (const d of sc.drawings?.contents || []) {
-            if (d.uuid === raw) return d;
-          }
-          for (const t of sc.tiles?.contents || []) {
-            if (t.uuid === raw) return t;
-          }
+        // Ensure this window never collides with Territory Dashboard or other apps.
+        this.options.id = _safeHexSheetId(this.hexUuid);
+        if (this.options.window && this.options.window.title) {
+          // keep existing title
+        } else {
+          if (!this.options.window) this.options.window = {};
+          this.options.window.title = 'BBTTCC — Hex Sheet';
         }
-      } catch (e) {
-        console.warn(TAG, "Scene scan failed while looking for hex uuid", raw, e);
-      }
+      } catch (_eId) {}
+      this._hexDoc = null;
+      this._abort = null;
 
-      console.warn(TAG, "Unable to resolve hex for uuid", raw);
-      return null;
+      try {
+        if (!this.options.window) this.options.window = {};
+        if (!Array.isArray(this.options.window.controls)) this.options.window.controls = [];
+        if (this.options.window.icon == null) this.options.window.icon = "";
+      } catch (e) {}
     }
 
-    async _renderInner() {
-      const wrap = document.createElement("section");
-      wrap.className = "bbttcc-hex-sheet";
-      wrap.style.display = "flex";
-      wrap.style.flexDirection = "row";
-      wrap.style.height = "100%";
-      wrap.style.background = "linear-gradient(135deg, #020617, #020617 40%, #020617 100%)";
-      wrap.style.color = "#e5e7eb";
-      wrap.style.fontFamily = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+    async _preparePartContext(partId, context) {
+      if (partId !== "body") return context;
 
-      const doc = await this._getHexDoc();
+      this._hexDoc = await resolveHexDoc(this.hexUuid);
+      const doc = this._hexDoc;
+
       if (!doc) {
-        const msg = document.createElement("div");
-        msg.style.margin = "12px";
-        msg.style.fontSize = "0.9rem";
-        msg.textContent = "Could not resolve hex for UUID: " + this.hexUuid;
-        wrap.appendChild(msg);
-        return wrap;
+        return Object.assign({}, context, {
+          name: "(missing hex)",
+          size: "",
+          type: "",
+          status: "missing",
+          ownerName: "—",
+          facilitySummary: "None",
+          hasResources: false,
+          resourcesList: [],
+          integrationProgress: 0,
+          integrationPips: pips(0,6),
+          radiation: 0,
+          radiationPips: pips(0,6),
+          darkness: 0,
+          darknessPips: pips(0,6),
+          notes: "Could not resolve hex for UUID: " + this.hexUuid
+        });
       }
 
-      const tf  = doc?.flags?.[MOD_T] || {};
-      const name        = tf.name       || doc?.text || doc?.name || "Unnamed Hex";
-      const ownerId     = tf.factionId  || tf.ownerId || "";
-      const status      = tf.status     || "Unclaimed";
-      const terrain     = tf.terrain    || tf.terrainKey || "Unknown Terrain";
-      const type        = tf.type       || "Standard";
-      const size        = tf.size       || tf.sizeKey || "";
-      const population  = tf.population || tf.popKey  || "";
-      const alignment   = tf.sephirahKey || tf.alignment || "";
-      const conditions  = Array.isArray(tf.conditions) ? tf.conditions : [];
-      const modifiers   = Array.isArray(tf.modifiers) ? tf.modifiers : [];
-      const resources   = tf.resources || {};
-      const integration = tf.integration || {};
-      const integProg   = Number(integration.progress ?? 0);
-      const integStage  = integration.stageLabel || integration.stage || "";
-      const notes       = tf.notes || tf.note || "";
+      const tf = (doc.flags && doc.flags[MOD_T]) ? doc.flags[MOD_T] : {};
 
-      const modsObj     = tf.mods || {};
-      const radiation   = Number(modsObj.radiation || 0);
-      const darkness    = Number(modsObj.darkness  || 0);
-
-      const owner = ownerId ? game.actors.get(ownerId) : null;
-
-      /* LEFT PANEL — ART / SUMMARY */
-      const left = document.createElement("div");
-      left.className = "bbttcc-hex-sheet-left";
-      left.style.flex = "0 0 32%";
-      left.style.display = "flex";
-      left.style.flexDirection = "column";
-      left.style.padding = "10px 12px";
-      left.style.boxSizing = "border-box";
-      left.style.borderRight = "1px solid rgba(148,163,184,0.6)";
-
-      const art = document.createElement("div");
-      art.style.flex = "0 0 220px";
-      art.style.borderRadius = "12px";
-      art.style.border = "1px solid rgba(148,163,184,0.9)";
-      art.style.boxShadow = "0 10px 30px rgba(15,23,42,0.9)";
-      art.style.background = "radial-gradient(circle at top, #22c55e33, #0f172a 60%, #020617 100%)";
-      art.style.display = "flex";
-      art.style.flexDirection = "column";
-      art.style.justifyContent = "space-between";
-      art.style.padding = "10px 12px";
-
-      const artTitle = document.createElement("div");
-      artTitle.style.fontSize = "1.05rem";
-      artTitle.style.fontWeight = "700";
-      artTitle.style.letterSpacing = "0.06em";
-      artTitle.style.textTransform = "uppercase";
-      artTitle.textContent = name;
-
-      const artSub = document.createElement("div");
-      artSub.style.fontSize = "0.8rem";
-      artSub.style.opacity = "0.85";
-      artSub.textContent = `${terrain} • ${type || "Hex"}`;
-
-      const artBadge = document.createElement("div");
-      artBadge.style.alignSelf = "flex-end";
-      artBadge.style.fontSize = "0.8rem";
-      artBadge.style.padding = "4px 8px";
-      artBadge.style.borderRadius = "999px";
-      artBadge.style.border = "1px solid rgba(251,191,36,0.9)";
-      artBadge.style.background = "rgba(15,23,42,0.9)";
-      artBadge.style.color = "#facc15";
-      artBadge.style.display = "inline-flex";
-      artBadge.style.alignItems = "center";
-      artBadge.style.gap = "4px";
-      artBadge.innerHTML = `⬢ <span>${status}</span>`;
-
-      art.appendChild(artTitle);
-      art.appendChild(artSub);
-      art.appendChild(artBadge);
-      left.appendChild(art);
-
-      // Owner / alignment
-      const ownerBlock = document.createElement("div");
-      ownerBlock.style.marginTop = "12px";
-      ownerBlock.style.padding = "8px 10px";
-      ownerBlock.style.borderRadius = "8px";
-      ownerBlock.style.background = "rgba(15,23,42,0.9)";
-      ownerBlock.style.border = "1px solid rgba(55,65,81,0.9)";
-
-      const ownerLabel = document.createElement("div");
-      ownerLabel.style.fontSize = "0.8rem";
-      ownerLabel.style.opacity = "0.85";
-      ownerLabel.textContent = "Owner";
-
-      const ownerName = document.createElement("div");
-      ownerName.style.fontSize = "0.95rem";
-      ownerName.style.fontWeight = "600";
-      ownerName.textContent = owner?.name || "Unclaimed";
-
-      const alignRow = document.createElement("div");
-      alignRow.style.marginTop = "4px";
-      alignRow.style.fontSize = "0.8rem";
-      alignRow.style.display = "flex";
-      alignRow.style.justifyContent = "space-between";
-      alignRow.style.opacity = "0.9";
-      alignRow.innerHTML = `
-        <span><strong>Size:</strong> ${size || "—"}</span>
-        <span><strong>Population:</strong> ${population || "—"}</span>
-      `;
-
-      const alignRow2 = document.createElement("div");
-      alignRow2.style.marginTop = "2px";
-      alignRow2.style.fontSize = "0.8rem";
-      alignRow2.style.opacity = "0.9";
-      alignRow2.innerHTML = `<strong>Alignment:</strong> ${alignment || "—"}`;
-
-      ownerBlock.appendChild(ownerLabel);
-      ownerBlock.appendChild(ownerName);
-      ownerBlock.appendChild(alignRow);
-      ownerBlock.appendChild(alignRow2);
-      left.appendChild(ownerBlock);
-
-      // Conditions
-      if (conditions && conditions.length) {
-        const condBlock = document.createElement("div");
-        condBlock.style.marginTop = "10px";
-        condBlock.style.fontSize = "0.8rem";
-        condBlock.innerHTML = `<div style="opacity:.85; margin-bottom:2px;">Conditions</div>`;
-        const row = document.createElement("div");
-        row.style.display = "flex";
-        row.style.flexWrap = "wrap";
-        row.style.gap = "4px";
-
-        for (const c of conditions) {
-          const chip = document.createElement("span");
-          chip.textContent = c;
-          chip.style.padding = "2px 6px";
-          chip.style.borderRadius = "999px";
-          chip.style.fontSize = "0.75rem";
-          chip.style.border = "1px solid rgba(251,191,36,0.9)";
-          chip.style.background =
-            c === "Radiated" ? "rgba(248,113,113,0.12)" :
-            c === "Purified" ? "rgba(59,130,246,0.12)" :
-            "rgba(30,64,175,0.15)";
-          chip.style.color = "#fef9c3";
-          row.appendChild(chip);
-        }
-
-        condBlock.appendChild(row);
-        left.appendChild(condBlock);
+      // World Modifiers (persistent GM-only effects)
+      try {
+        const arr = (tf && Array.isArray(tf.worldModifiers)) ? tf.worldModifiers : [];
+        this._worldModifiers = arr.slice();
+      } catch (e) {
+        this._worldModifiers = [];
       }
+      const ownerId = tf.factionId || "";
+      const owner = ownerId ? ((game.actors && game.actors.get) ? game.actors.get(ownerId) : null) : null;
 
-      /* RIGHT PANEL — DATA */
-      const right = document.createElement("div");
-      right.className = "bbttcc-hex-sheet-right";
-      right.style.flex = "1 1 auto";
-      right.style.display = "flex";
-      right.style.flexDirection = "column";
-      right.style.padding = "10px 12px";
-      right.style.boxSizing = "border-box";
+      const resources = tf.resources || {};
+      const keys = Object.keys(resources || {});
+      const resourcesList = keys.map(function (k) { return { label: k, value: resources[k] }; });
 
-      // Resources
-      const resSection = document.createElement("section");
-      resSection.style.borderRadius = "8px";
-      resSection.style.border = "1px solid rgba(55,65,81,0.9)";
-      resSection.style.background = "rgba(15,23,42,0.9)";
-      resSection.style.padding = "6px 8px";
-      resSection.style.marginBottom = "8px";
+      const integ = tf.integration || {};
+      const integProg = Number((typeof integ.progress !== "undefined") ? integ.progress : 0);
 
-      const resHeader = document.createElement("div");
-      resHeader.style.fontSize = "0.85rem";
-      resHeader.style.fontWeight = "600";
-      resHeader.style.borderBottom = "1px solid rgba(75,85,99,0.9)";
-      resHeader.style.paddingBottom = "2px";
-      resHeader.style.marginBottom = "4px";
-      resHeader.textContent = "Resources / Yields (per Strategic Turn)";
-      resSection.appendChild(resHeader);
+      const mods = tf.mods || {};
+      const rad = Number(mods.radiation || 0);
+      const dark = Number(mods.darkness || 0);
 
-      const resGrid = document.createElement("div");
-      resGrid.style.display = "grid";
-      resGrid.style.gridTemplateColumns = "repeat(3, minmax(0,1fr))";
-      resGrid.style.gap = "4px 10px";
+      const fac = (tf.facilities && tf.facilities.primary) ? tf.facilities.primary : {};
+      const facType = (fac && fac.facilityType) ? fac.facilityType : "";
+      const facilitySummary = facType ? (String(facType).charAt(0).toUpperCase() + String(facType).slice(1)) : "None";
 
-      const resKeys = Object.keys(resources || {});
-      if (!resKeys.length) {
-        const msg = document.createElement("div");
-        msg.style.fontSize = "0.8rem";
-        msg.style.opacity = "0.8";
-        msg.textContent = "No resource pips configured for this hex.";
-        resSection.appendChild(msg);
-      } else {
-        for (const k of resKeys) {
-          const v = Number(resources[k] || 0);
-          const lbl = RES_LABEL[k] || k;
-          const icon = OP_ICON[k] || "⬡";
-
-          const row = document.createElement("div");
-          row.style.fontSize = "0.8rem";
-          row.style.display = "flex";
-          row.style.alignItems = "center";
-          row.style.gap = "4px";
-
-          const labelSpan = document.createElement("span");
-          labelSpan.style.minWidth = "100px";
-          labelSpan.textContent = `${icon} ${lbl}`;
-
-          const pipsSpan = document.createElement("span");
-          pipsSpan.style.letterSpacing = "1px";
-          pipsSpan.style.fontSize = "0.85rem";
-
-          if (v <= 6) pipsSpan.textContent = "●".repeat(v);
-          else        pipsSpan.textContent = `●×${v}`;
-
-          row.appendChild(labelSpan);
-          row.appendChild(pipsSpan);
-          resGrid.appendChild(row);
-        }
-        resSection.appendChild(resGrid);
-      }
-
-      right.appendChild(resSection);
-
-      // Modifiers
-      const modsSection = document.createElement("section");
-      modsSection.style.borderRadius = "8px";
-      modsSection.style.border = "1px solid rgba(55,65,81,0.9)";
-      modsSection.style.background = "rgba(15,23,42,0.9)";
-      modsSection.style.padding = "6px 8px";
-      modsSection.style.marginBottom = "8px";
-
-      const modsHeader = document.createElement("div");
-      modsHeader.style.fontSize = "0.85rem";
-      modsHeader.style.fontWeight = "600";
-      modsHeader.style.borderBottom = "1px solid rgba(75,85,99,0.9)";
-      modsHeader.style.paddingBottom = "2px";
-      modsHeader.style.marginBottom = "4px";
-      modsHeader.textContent = "Modifiers & Tags";
-      modsSection.appendChild(modsHeader);
-
-      const modsGrid = document.createElement("div");
-      modsGrid.style.display = "flex";
-      modsGrid.style.flexWrap = "wrap";
-      modsGrid.style.gap = "4px";
-
-      if (!modifiers || !modifiers.length) {
-        const msg = document.createElement("div");
-        msg.style.fontSize = "0.8rem";
-        msg.style.opacity = "0.8";
-        msg.textContent = "No modifiers applied.";
-        modsSection.appendChild(msg);
-      } else {
-        for (const m of modifiers) {
-          const chip = document.createElement("span");
-          chip.textContent = m;
-          chip.style.fontSize = "0.75rem";
-          chip.style.padding = "2px 6px";
-          chip.style.borderRadius = "999px";
-          chip.style.border = "1px solid rgba(251,191,36,0.9)"; // gold
-          chip.style.background = "rgba(30,64,175,0.35)";       // sapphire-ish
-          chip.style.color = "#fef9c3";
-          chip.style.whiteSpace = "nowrap";
-          modsGrid.appendChild(chip);
-        }
-        modsSection.appendChild(modsGrid);
-      }
-
-      right.appendChild(modsSection);
-
-      // Tracks
-      const tracksSection = document.createElement("section");
-      tracksSection.style.borderRadius = "8px";
-      tracksSection.style.border = "1px solid rgba(55,65,81,0.9)";
-      tracksSection.style.background = "rgba(15,23,42,0.9)";
-      tracksSection.style.padding = "6px 8px";
-      tracksSection.style.marginBottom = "8px";
-
-      const tracksHeader = document.createElement("div");
-      tracksHeader.style.fontSize = "0.85rem";
-      tracksHeader.style.fontWeight = "600";
-      tracksHeader.style.borderBottom = "1px solid rgba(75,85,99,0.9)";
-      tracksHeader.style.paddingBottom = "2px";
-      tracksHeader.style.marginBottom = "4px";
-      tracksHeader.textContent = "Tracks & State";
-      tracksSection.appendChild(tracksHeader);
-
-      const makeTrackRow = (label, value, max, color) => {
-        const row = document.createElement("div");
-        row.style.display = "flex";
-        row.style.alignItems = "center";
-        row.style.justifyContent = "space-between";
-        row.style.fontSize = "0.8rem";
-        row.style.marginBottom = "2px";
-
-        const l = document.createElement("span");
-        l.textContent = label;
-
-        const pips = document.createElement("span");
-        pips.style.letterSpacing = "2px";
-        pips.style.fontSize = "0.9rem";
-        pips.style.color = color;
-
-        const val = Math.max(0, Math.min(max, Number(value || 0)));
-        let str = "";
-        for (let i=0;i<max;i++) {
-          str += (i < val) ? HEX_GLYPH : "◌";
-        }
-        pips.textContent = str;
-
-        row.appendChild(l);
-        row.appendChild(pips);
-        return row;
-      };
-
-      tracksSection.appendChild(
-        makeTrackRow(`Integration (${integProg}/6${integStage?` – ${integStage}`:""})`, integProg, 6, "#22c55e")
-      );
-      tracksSection.appendChild(
-        makeTrackRow(`Radiation (${radiation})`, radiation, 6, "#f97316")
-      );
-      tracksSection.appendChild(
-        makeTrackRow(`Local Darkness (${darkness})`, darkness, 6, "#a855f7")
-      );
-
-      right.appendChild(tracksSection);
-
-      // Notes
-      const notesSection = document.createElement("section");
-      notesSection.style.borderRadius = "8px";
-      notesSection.style.border = "1px solid rgba(55,65,81,0.9)";
-      notesSection.style.background = "rgba(15,23,42,0.9)";
-      notesSection.style.padding = "6px 8px";
-
-      const notesHeader = document.createElement("div");
-      notesHeader.style.fontSize = "0.85rem";
-      notesHeader.style.fontWeight = "600";
-      notesHeader.style.borderBottom = "1px solid rgba(75,85,99,0.9)";
-      notesHeader.style.paddingBottom = "2px";
-      notesHeader.style.marginBottom = "4px";
-      notesHeader.textContent = "GM Notes (Hex)";
-      notesSection.appendChild(notesHeader);
-
-      const notesBody = document.createElement("div");
-      notesBody.style.fontSize = "0.8rem";
-      notesBody.style.opacity = notes ? "0.95" : "0.6";
-      notesBody.style.whiteSpace = "pre-wrap";
-      notesBody.style.maxHeight = "120px";
-      notesBody.style.overflowY = "auto";
-      notesBody.textContent = notes || "No notes stored on this hex.";
-      notesSection.appendChild(notesBody);
-
-      right.appendChild(notesSection);
-
-      wrap.appendChild(left);
-      wrap.appendChild(right);
-
-      return wrap;
+      return Object.assign({}, context, {
+        name: tf.name || doc.text || doc.name || "(unnamed hex)",
+        size: tf.size || "outpost",
+        type: tf.type || "wilderness",
+        status: tf.status || "unclaimed",
+        ownerName: (owner && owner.name) ? owner.name : "Unclaimed",
+        facilitySummary: facilitySummary,
+        hasResources: !!keys.length,
+        resourcesList: resourcesList,
+        integrationProgress: integProg,
+        integrationPips: pips(integProg,6),
+        radiation: rad,
+        radiationPips: pips(rad,6),
+        darkness: dark,
+        darknessPips: pips(dark,6),
+        notes: tf.notes || tf.note || "No notes stored on this hex."
+      });
     }
 
-    async _renderHTML() {
-      const html = await this._renderInner();
-      return { html, parts:{ body: html } };
+    async _onRender(ctx, opts) {
+      await super._onRender(ctx, opts);
+
+      let root = null;
+      // AppV2-safe: never querySelector by id (ids can collide across apps).
+      if (this.form && this.form instanceof HTMLElement) root = this.form;
+      if (!root) {
+        try {
+          // Foundry sometimes stores the root on this.element (jQuery-ish) or as HTMLElement.
+          const el = this.element && this.element[0] ? this.element[0] : this.element;
+          if (el && el instanceof HTMLElement) root = el;
+        } catch (e) {}
+      }
+      if (!root) return;
+
+      if (this._abort) { try { this._abort.abort(); } catch (e) {} }
+      this._abort = new AbortController();
+      const sig = this._abort.signal;
+
+      root.addEventListener("click", (ev) => {
+        let btn = null;
+        try {
+          btn = (ev.target && ev.target.closest) ? ev.target.closest('[data-action="open-facilities"]') : null;
+        } catch (e) { btn = null; }
+        if (!btn) return;
+        ev.preventDefault(); ev.stopPropagation();
+
+        const FacConsole = (game.bbttcc && game.bbttcc.apps) ? game.bbttcc.apps.FacilityConsole : null;
+        if (!FacConsole) {
+          if (ui && ui.notifications && ui.notifications.warn) ui.notifications.warn("Facility Console not available.");
+          return;
+        }
+        new FacConsole({ hexUuid: this.hexUuid }).render({ force: true, focus: true });
+      }, { capture:true, signal: sig });
+
+      // GM-only: Active Effects chips under Tracks & State
+      try {
+        if (!game.user || !game.user.isGM) {
+          // skip (player view)
+        } else {
+        const doc = this._hexDoc;
+        if (!doc) {
+          // skip (no doc)
+        } else {
+
+        const curTurn = _readWorldTurn();
+        const mods = Array.isArray(this._worldModifiers) ? this._worldModifiers : [];
+
+        // Find the Tracks & State card by its header text
+        const cards = root.querySelectorAll('.bbttcc-hex-card');
+        let tracksCard = null;
+        for (let i = 0; i < cards.length; i++) {
+          const c = cards[i];
+          const h = c ? c.querySelector('div') : null;
+          const txt = h ? String(h.textContent || "").trim() : "";
+          if (txt === "Tracks & State") { tracksCard = c; break; }
+        }
+        if (!tracksCard) {
+          // No matching card (template changed). Skip chips.
+          return;
+        }
+
+        // Remove prior injected block
+        const prev = tracksCard.querySelector('[data-bbttcc-worldmods="1"]');
+        if (prev) prev.remove();
+
+        const box = document.createElement('div');
+        box.setAttribute('data-bbttcc-worldmods', '1');
+        box.style.marginTop = '10px';
+        box.style.paddingTop = '8px';
+        box.style.borderTop = '1px solid rgba(148,163,184,0.18)';
+
+        const head = document.createElement('div');
+        head.textContent = 'Active Effects';
+        head.style.fontWeight = '800';
+        head.style.marginBottom = '6px';
+        box.appendChild(head);
+
+        const wrap = document.createElement('div');
+        wrap.style.display = 'flex';
+        wrap.style.flexWrap = 'wrap';
+        wrap.style.gap = '6px';
+        box.appendChild(wrap);
+
+        if (!mods.length) {
+          const none = document.createElement('div');
+          none.textContent = 'None.';
+          none.style.opacity = '0.75';
+          none.style.fontSize = '12px';
+          wrap.appendChild(none);
+        } else {
+          for (let i = 0; i < mods.length; i++) {
+            const m = mods[i];
+            if (!m || typeof m !== 'object') continue;
+            const key = String(m.key || '').trim();
+            if (!key) continue;
+
+            const st = _classifyModifier(m, curTurn);
+
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.setAttribute('data-action', 'toggle-world-mod');
+            chip.setAttribute('data-mod-key', key);
+            chip.className = 'bbttcc-pill';
+            chip.style.cursor = 'pointer';
+            chip.style.borderColor = 'rgba(59,130,246,0.75)';
+            chip.style.color = '#93c5fd';
+            chip.style.background = 'rgba(2,6,23,0.25)';
+            chip.style.userSelect = 'none';
+
+            let label = String(m.label || key);
+            if (st.expired) label += ' (expired)';
+            else if (st.exp > 0) label += ' (to T' + String(st.exp) + ')';
+            chip.textContent = label;
+
+            if (!st.enabled) chip.style.opacity = '0.45';
+            else if (st.expired) chip.style.opacity = '0.55';
+
+            wrap.appendChild(chip);
+          }
+        }
+
+        tracksCard.appendChild(box);
+
+        // Toggle handler
+        box.addEventListener('click', async (ev2) => {
+          const btn = (ev2.target && ev2.target.closest) ? ev2.target.closest('[data-action="toggle-world-mod"][data-mod-key]') : null;
+          if (!btn) return;
+          ev2.preventDefault(); ev2.stopPropagation();
+
+          const key = String(btn.getAttribute('data-mod-key') || '').trim();
+          if (!key) return;
+
+          try {
+            const MOD_T2 = MOD_T;
+            const tf2 = (doc.flags && doc.flags[MOD_T2]) ? foundry.utils.deepClone(doc.flags[MOD_T2]) : {};
+            const arr2 = Array.isArray(tf2.worldModifiers) ? tf2.worldModifiers.slice() : [];
+            let touched = false;
+            for (let j = 0; j < arr2.length; j++) {
+              const cur = arr2[j];
+              if (!cur || typeof cur !== 'object') continue;
+              if (String(cur.key || '') !== key) continue;
+              cur.enabled = !(cur.enabled !== false);
+              arr2[j] = cur;
+              touched = true;
+              break;
+            }
+            if (!touched) return;
+            tf2.worldModifiers = arr2;
+            await doc.update({ ['flags.' + MOD_T2]: tf2 }, { parent: doc.parent });
+            this.render({ force: true });
+          } catch (eToggle) {
+            warn('toggle world modifier failed', eToggle);
+          }
+        }, { capture: true, signal: sig });
+        }
+        }
+      } catch (eMods) {
+        // non-fatal
+      }
     }
 
-    async _replaceHTML(result) {
-      const node = result?.html ?? result;
-      if (node) this.element.replaceChildren(node);
-      return this.element;
+    async close(options) {
+      try {
+        const key = this.hexUuid;
+        if (game.bbttcc && game.bbttcc.apps && game.bbttcc.apps.hexSheets && game.bbttcc.apps.hexSheets[key] === this) {
+          delete game.bbttcc.apps.hexSheets[key];
+        }
+      } catch (e) {}
+
+      try {
+        if (Object.getOwnPropertyDescriptor(globalThis, "__bbttcc_dashboard")) delete globalThis.__bbttcc_dashboard;
+        if (Object.getOwnPropertyDescriptor(globalThis, "__bbttcc_dashboard_opening")) delete globalThis.__bbttcc_dashboard_opening;
+        if (Object.getOwnPropertyDescriptor(globalThis, "__bbttcc_dashboardOpening")) delete globalThis.__bbttcc_dashboardOpening;
+        if (Object.getOwnPropertyDescriptor(globalThis, "__bbttcc_dashboard_lock")) delete globalThis.__bbttcc_dashboard_lock;
+        if (Object.getOwnPropertyDescriptor(globalThis, "__bbttcc_dashboardLock")) delete globalThis.__bbttcc_dashboardLock;
+      } catch (e) {}
+
+      return super.close(options);
     }
   }
 
-  Hooks.once("ready", () => {
+  Hooks.once("ready", function () {
     ensureNS();
-    game.bbttcc.api.territory.openHexSheet = (hexUuid) => {
-      if (!hexUuid) {
-        ui.notifications?.warn?.("openHexSheet: hexUuid required.");
-        return null;
-      }
-      try {
-        const app = new BBTTCC_HexSheet(hexUuid);
-        app.render(true, { focus:true });
-        return app;
-      } catch (e) {
-        console.warn(TAG, "openHexSheet failed:", e);
-        ui.notifications?.error?.("Failed to open Hex Sheet (see console).");
-        return null;
-      }
-    };
-    console.log(TAG, "Hex Sheet 3.0 enhancer installed. Use game.bbttcc.api.territory.openHexSheet(uuid).");
-  });
 
+    game.bbttcc.api.territory.openHexSheet = function (hexUuid) {
+      if (!hexUuid) {
+        if (ui && ui.notifications && ui.notifications.warn) ui.notifications.warn("openHexSheet: hexUuid required.");
+        return null;
+      }
+      const key = String(hexUuid);
+
+      const existing = game.bbttcc.apps.hexSheets[key];
+      if (existing) {
+        existing.render({ force: true, focus: true });
+        return existing;
+      }
+
+      const app = new BBTTCC_HexSheet(key);
+      game.bbttcc.apps.hexSheets[key] = app;
+      app.render({ force: true, focus: true });
+      return app;
+    };
+
+    log("Hex Sheet 3.4 installed (syntax-safe).");
+  });
 })();

@@ -1,0 +1,299 @@
+<section class="bbttcc-hex-sheet-root" id="bbttcc-hex-sheet">
+  <style>
+    .bbttcc-hex-sheet-root{
+      height:100%;
+      box-sizing:border-box;
+      padding:10px;
+      color:#e5e7eb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 0 0, rgba(148,163,184,0.14), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(56,189,248,0.14), transparent 55%),
+        radial-gradient(circle at 0 100%, rgba(147,51,234,0.14), transparent 60%),
+        linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+      border-radius:12px;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-layout{
+      height:100%;
+      display:grid;
+      grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+      gap:10px;
+      min-height:0;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-hex-card{
+      background: rgba(15,23,42,0.92);
+      border:1px solid rgba(55,65,81,0.9);
+      border-radius:12px;
+      padding:10px;
+      box-shadow: 0 0 0 1px rgba(15,23,42,0.65), 0 14px 24px rgba(15,23,42,0.6);
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-hex-title{
+      font-size:1.05rem;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-muted{ opacity:.82; }
+
+    .bbttcc-hex-sheet-root .bbttcc-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:2px 10px;
+      border-radius:999px;
+      border:1px solid rgba(251,191,36,0.9);
+      color:#facc15;
+      font-size:.75rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      background: rgba(15,23,42,0.7);
+      white-space:nowrap;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-pill-soft{
+      border-color: rgba(148,163,184,0.55);
+      color:#e5e7eb;
+      background: rgba(2,6,23,0.25);
+      font-size:.72rem;
+      letter-spacing:.10em;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-pill-danger{
+      border-color: rgba(248,113,113,0.65);
+      color:#fecaca;
+      background: rgba(127,29,29,0.18);
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-pill-good{
+      border-color: rgba(34,197,94,0.65);
+      color:#bbf7d0;
+      background: rgba(20,83,45,0.18);
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:.85rem;
+      min-width:0;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-btn{
+      cursor:pointer;
+      border-radius:999px;
+      border:1px solid rgba(56,189,248,0.9);
+      background: linear-gradient(135deg, rgba(15,23,42,1), rgba(30,64,175,0.95));
+      color:#e5e7eb;
+      padding:4px 10px;
+      font-size:.75rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-btn:active{ transform: translateY(1px); }
+
+    .bbttcc-hex-sheet-root .bbttcc-btn-small{
+      padding:2px 8px;
+      font-size:.72rem;
+      letter-spacing:.10em;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-btn-danger{
+      border-color: rgba(248,113,113,0.65);
+      background: linear-gradient(135deg, rgba(15,23,42,1), rgba(127,29,29,0.95));
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-btn-good{
+      border-color: rgba(34,197,94,0.65);
+      background: linear-gradient(135deg, rgba(15,23,42,1), rgba(20,83,45,0.95));
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-pane{
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-pane-scroll{
+      min-height:0;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding-right:4px;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:6px 12px;
+      font-size:.85rem;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-track{
+      letter-spacing:2px;
+      font-size:.95rem;
+      white-space:nowrap;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-chiprow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      align-items:center;
+    }
+
+    .bbttcc-hex-sheet-root .bbttcc-hr{
+      border:none;
+      border-top:1px solid rgba(148,163,184,0.18);
+      margin:8px 0 6px;
+    }
+
+    @media (max-width: 860px){
+      .bbttcc-hex-sheet-root .bbttcc-layout{ grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <div class="bbttcc-layout">
+
+    <aside class="bbttcc-pane bbttcc-hex-card">
+      <div class="bbttcc-row" style="align-items:baseline;">
+        <div style="min-width:0;">
+          <div class="bbttcc-hex-title">{{name}}</div>
+          <div class="bbttcc-muted">{{size}} {{type}}</div>
+        </div>
+        <div><span class="bbttcc-pill">⬢ {{status}}</span></div>
+      </div>
+
+      <div class="bbttcc-pane-scroll">
+        <div class="bbttcc-hex-card" style="padding:8px 10px;">
+          <div class="bbttcc-muted" style="font-size:.8rem;">Owner</div>
+          <div style="font-weight:700;">{{ownerName}}</div>
+        </div>
+
+        <div class="bbttcc-hex-card" style="padding:8px 10px;">
+          <div class="bbttcc-muted" style="font-size:.8rem;">Facilities</div>
+          <div class="bbttcc-row" style="margin-top:6px;">
+            <span style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{facilitySummary}}</span>
+            <button type="button" class="bbttcc-btn" data-action="open-facilities">Open Builder</button>
+          </div>
+        </div>
+
+        <div class="bbttcc-hex-card" style="padding:8px 10px;">
+          <div style="font-weight:800; margin-bottom:6px;">Tracks &amp; State</div>
+
+          <div class="bbttcc-row">
+            <span>Integration ({{integrationProgress}}/6)</span>
+            <span class="bbttcc-track" style="color:#22c55e;">{{integrationPips}}</span>
+          </div>
+
+          <div class="bbttcc-row">
+            <span>Radiation ({{radiation}})</span>
+            <span class="bbttcc-track" style="color:#f97316;">{{radiationPips}}</span>
+          </div>
+
+          <div class="bbttcc-row">
+            <span>Local Darkness ({{darkness}})</span>
+            <span class="bbttcc-track" style="color:#a855f7;">{{darknessPips}}</span>
+          </div>
+        </div>
+
+        <div class="bbttcc-hex-card" style="padding:8px 10px;" data-bbttcc-pressure="1">
+          <div class="bbttcc-row" style="margin-bottom:6px;">
+            <div style="font-weight:800;">Pressure &amp; Conditions</div>
+            {{#if isGM}}
+              <span class="bbttcc-pill bbttcc-pill-soft">GM</span>
+            {{/if}}
+          </div>
+
+          <div class="bbttcc-row">
+            <span>Radiation Tier</span>
+            <span class="bbttcc-pill bbttcc-pill-soft">{{radiationTier}}</span>
+          </div>
+
+          <div class="bbttcc-row" style="margin-top:6px;">
+            <span>Conditions</span>
+            <span class="bbttcc-muted" style="font-size:.82rem;">{{conditionsCount}}</span>
+          </div>
+
+          {{#if hasConditions}}
+            <div class="bbttcc-chiprow" style="margin-top:6px;">
+              {{#each conditions}}
+                <span class="bbttcc-pill bbttcc-pill-soft">{{this}}</span>
+              {{/each}}
+            </div>
+          {{else}}
+            <div class="bbttcc-muted" style="margin-top:6px;">No persistent conditions.</div>
+          {{/if}}
+
+          {{#if isGM}}
+            <hr class="bbttcc-hr"/>
+
+            <div class="bbttcc-muted" style="font-size:.78rem; margin-bottom:6px;">GM Controls</div>
+
+            <div class="bbttcc-row" style="align-items:center;">
+              <span>Radiation</span>
+              <div class="bbttcc-chiprow" style="justify-content:flex-end;">
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="-5">-5</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="-1">-1</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="1">+1</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="5">+5</button>
+              </div>
+            </div>
+
+            <div class="bbttcc-row" style="align-items:center; margin-top:6px;">
+              <span>Darkness</span>
+              <div class="bbttcc-chiprow" style="justify-content:flex-end;">
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-dark" data-delta="-1">-1</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-dark" data-delta="1">+1</button>
+              </div>
+            </div>
+
+            <div class="bbttcc-chiprow" style="margin-top:8px;">
+              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond" data-cond="Radiated">Toggle Radiated</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond" data-cond="Contaminated">Toggle Contaminated</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small bbttcc-btn-good" data-action="hex-cond" data-cond="Purified">Toggle Purified</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small bbttcc-btn-danger" data-action="hex-cond" data-cond="Corrupted">Toggle Corrupted</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond-clear">Clear All</button>
+            </div>
+
+            <div class="bbttcc-muted" style="font-size:.75rem; margin-top:6px;">
+              These controls edit <b>flags.bbttcc-territory.mods</b> and <b>flags.bbttcc-territory.conditions</b> directly.
+            </div>
+          {{/if}}
+        </div>
+
+      </div>
+    </aside>
+
+    <main class="bbttcc-pane bbttcc-hex-card">
+      <div class="bbttcc-pane-scroll">
+        <div class="bbttcc-hex-card">
+          <div style="font-weight:800; margin-bottom:6px;">Resources / Yields</div>
+          {{#if hasResources}}
+            <div class="bbttcc-grid">
+              {{#each resourcesList}}
+                <div class="bbttcc-row"><span>{{label}}</span><strong>{{value}}</strong></div>
+              {{/each}}
+            </div>
+          {{else}}
+            <div class="bbttcc-muted">No explicit resources recorded.</div>
+          {{/if}}
+        </div>
+
+        <div class="bbttcc-hex-card">
+          <div style="font-weight:800; margin-bottom:6px;">GM Notes</div>
+          <div class="bbttcc-muted" style="white-space:pre-wrap;">{{notes}}</div>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</section>

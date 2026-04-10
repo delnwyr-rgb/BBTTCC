@@ -276,6 +276,7 @@
 
         <td>
           <select data-edit="size" data-id="{{id}}">
+            <option value="none"       {{#if (bbttcc_eq size "none")}}selected{{/if}}>None (×0.0)</option>
             <option value="outpost"     {{#if (bbttcc_eq size "outpost")}}selected{{/if}}     {{#if (bbttcc_eq size "small")}}selected{{/if}}>Outpost (×0.5)</option>
             <option value="village"     {{#if (bbttcc_eq size "village")}}selected{{/if}}>Village (×0.75)</option>
             <option value="town"        {{#if (bbttcc_eq size "town")}}selected{{/if}}        {{#if (bbttcc_eq size "standard")}}selected{{/if}}>Town (×1.0)</option>

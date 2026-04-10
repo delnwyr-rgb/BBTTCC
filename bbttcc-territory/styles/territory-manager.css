@@ -59,3 +59,449 @@
 .theme-light #bbttcc-territory-dashboard .bbttcc-table thead th {
   background: rgba(0,0,0,0.06);
 }
+
+/* =========================================
+   BBTTCC Top Control Bar — Hexchrome HUD
+========================================= */
+
+#bbttcc-toolbar.bbttcc-control-bar-wrap,
+.bbttcc-control-bar-wrap {
+  position: fixed !important;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: min(1120px, calc(100vw - 140px));
+  pointer-events: none;
+}
+
+#bbttcc-toolbar .bbttcc-control-bar,
+.bbttcc-control-bar {
+  pointer-events: auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(120, 210, 255, 0.30);
+  background:
+    linear-gradient(180deg, rgba(8, 18, 30, 0.92), rgba(4, 10, 20, 0.88));
+  box-shadow:
+    0 10px 36px rgba(0, 0, 0, 0.38),
+    inset 0 0 0 1px rgba(255,255,255,0.03),
+    0 0 24px rgba(0, 180, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-left,
+#bbttcc-toolbar .bbttcc-toolbar-right,
+#bbttcc-toolbar .bbttcc-toolbar-center {
+  display: flex;
+  align-items: center;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-center {
+  min-width: 0;
+  justify-content: center;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  color: #f8fafc;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(120, 210, 255, 0.20);
+  background: linear-gradient(180deg, rgba(18, 36, 56, 0.88), rgba(10, 20, 34, 0.92));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-brand i {
+  color: #9ad9ff;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-main,
+#bbttcc-toolbar .bbttcc-toolbar-secondary,
+#bbttcc-toolbar .bbttcc-toolbar-utility {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-center {
+  flex-direction: column;
+  gap: 8px;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-secondary:empty {
+  display: none;
+}
+
+#bbttcc-toolbar .bbttcc-btn,
+#bbttcc-toolbar a.bbttcc-btn,
+#bbttcc-toolbar button.bbttcc-btn,
+#bbttcc-toolbar a.btn,
+#bbttcc-toolbar button.btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(120, 210, 255, 0.24);
+  background:
+    linear-gradient(180deg, rgba(25, 40, 58, 0.96), rgba(14, 22, 34, 0.98));
+  color: #f8fafc !important;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.02),
+    0 2px 10px rgba(0,0,0,0.18);
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#bbttcc-toolbar .bbttcc-btn:hover,
+#bbttcc-toolbar a.bbttcc-btn:hover,
+#bbttcc-toolbar button.bbttcc-btn:hover,
+#bbttcc-toolbar a.btn:hover,
+#bbttcc-toolbar button.btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(120, 210, 255, 0.55);
+  background:
+    linear-gradient(180deg, rgba(30, 52, 78, 0.98), rgba(16, 28, 42, 1));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.03),
+    0 6px 16px rgba(0,0,0,0.28),
+    0 0 18px rgba(0, 190, 255, 0.12);
+}
+
+#bbttcc-toolbar .bbttcc-btn:active,
+#bbttcc-toolbar a.bbttcc-btn:active,
+#bbttcc-toolbar button.bbttcc-btn:active,
+#bbttcc-toolbar a.btn:active,
+#bbttcc-toolbar button.btn:active {
+  transform: translateY(0);
+}
+
+#bbttcc-toolbar .bbttcc-btn i,
+#bbttcc-toolbar a.bbttcc-btn i,
+#bbttcc-toolbar button.bbttcc-btn i,
+#bbttcc-toolbar a.btn i,
+#bbttcc-toolbar button.btn i {
+  color: #9ad9ff;
+}
+
+#bbttcc-toolbar .bbttcc-btn-icon {
+  min-width: 38px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#bbttcc-toolbar .bbttcc-btn-icon span {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  #bbttcc-toolbar.bbttcc-control-bar-wrap,
+  .bbttcc-control-bar-wrap {
+    width: min(980px, calc(100vw - 72px));
+  }
+
+  #bbttcc-toolbar .bbttcc-control-bar,
+  .bbttcc-control-bar {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  #bbttcc-toolbar .bbttcc-toolbar-left,
+  #bbttcc-toolbar .bbttcc-toolbar-center,
+  #bbttcc-toolbar .bbttcc-toolbar-right {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 760px) {
+  #bbttcc-toolbar.bbttcc-control-bar-wrap,
+  .bbttcc-control-bar-wrap {
+    width: calc(100vw - 28px);
+    top: 8px;
+  }
+
+  #bbttcc-toolbar .bbttcc-control-bar,
+  .bbttcc-control-bar {
+    padding: 8px 10px;
+    border-radius: 14px;
+  }
+
+  #bbttcc-toolbar .bbttcc-btn,
+  #bbttcc-toolbar a.bbttcc-btn,
+  #bbttcc-toolbar button.bbttcc-btn,
+  #bbttcc-toolbar a.btn,
+  #bbttcc-toolbar button.btn {
+    min-height: 34px;
+    padding: 7px 10px;
+    font-size: 0.92rem;
+  }
+}
+/* =========================================
+   BBTTCC Top Control Bar — single-row pass
+========================================= */
+
+/* Keep the HUD above canvas, but below Foundry app windows */
+#bbttcc-toolbar.bbttcc-control-bar-wrap,
+.bbttcc-control-bar-wrap {
+  z-index: 45 !important;
+  top: 10px;
+  width: calc(100vw - 300px);
+  max-width: 1600px;
+}
+
+/* Single-row layout */
+#bbttcc-toolbar .bbttcc-control-bar,
+.bbttcc-control-bar {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: nowrap;
+  padding: 10px 14px;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-left,
+#bbttcc-toolbar .bbttcc-toolbar-center,
+#bbttcc-toolbar .bbttcc-toolbar-right {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-left {
+  flex: 0 0 auto;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-center {
+  flex: 1 1 auto;
+  justify-content: center;
+  min-width: 0;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-right {
+  flex: 0 0 auto;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-center {
+  flex-direction: row !important;
+  gap: 10px;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  max-width: 100%;
+  padding-bottom: 2px;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-secondary {
+  display: none !important;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-main::-webkit-scrollbar {
+  height: 8px;
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-main::-webkit-scrollbar-thumb {
+  background: rgba(120, 210, 255, 0.22);
+  border-radius: 999px;
+}
+
+#bbttcc-toolbar .bbttcc-btn {
+  flex: 0 0 auto;
+}
+
+/* Keep open Foundry windows above the bar */
+.application,
+.app,
+.window-app {
+  z-index: 100 !important;
+}
+
+/* On narrower screens, still keep a single-row scroller instead of wrapping */
+@media (max-width: 1100px) {
+  #bbttcc-toolbar.bbttcc-control-bar-wrap,
+  .bbttcc-control-bar-wrap {
+    width: calc(100vw - 48px);
+  }
+
+  #bbttcc-toolbar .bbttcc-control-bar,
+  .bbttcc-control-bar {
+    gap: 10px;
+    padding: 8px 10px;
+  }
+
+  #bbttcc-toolbar .bbttcc-toolbar-brand {
+    padding: 8px 10px;
+  }
+}
+/* =========================================
+   BBTTCC Hexchrome Gold Accent Layer
+========================================= */
+
+/* --- GOLD COLOR TOKENS --- */
+:root {
+  --bbttcc-gold: #d4af37;
+  --bbttcc-gold-soft: rgba(212, 175, 55, 0.45);
+  --bbttcc-gold-faint: rgba(212, 175, 55, 0.18);
+  --bbttcc-gold-glow: rgba(255, 215, 120, 0.35);
+}
+
+/* --- CONTROL BAR GOLD EDGE --- */
+#bbttcc-toolbar .bbttcc-control-bar,
+.bbttcc-control-bar {
+  border: 1px solid rgba(120, 210, 255, 0.25);
+  position: relative;
+}
+
+/* glowing gold frame overlay */
+#bbttcc-toolbar .bbttcc-control-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  pointer-events: none;
+  border: 1px solid var(--bbttcc-gold-faint);
+  box-shadow:
+    0 0 18px var(--bbttcc-gold-soft),
+    inset 0 0 12px rgba(255, 215, 120, 0.06);
+  opacity: 0.55;
+}
+
+/* subtle animated shimmer */
+#bbttcc-toolbar .bbttcc-control-bar::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 18px;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 215, 120, 0.12) 50%,
+    transparent 70%
+  );
+  background-size: 200% 200%;
+  animation: bbttcc-gold-shimmer 6s linear infinite;
+  opacity: 0.35;
+}
+
+@keyframes bbttcc-gold-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* --- BUTTON GOLD EDGE + GLOW --- */
+#bbttcc-toolbar .bbttcc-btn {
+  position: relative;
+  border: 1px solid rgba(120, 210, 255, 0.25);
+}
+
+/* gold outline layer */
+#bbttcc-toolbar .bbttcc-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  border: 1px solid var(--bbttcc-gold-faint);
+  opacity: 0.45;
+  transition: opacity 120ms ease, box-shadow 120ms ease;
+}
+
+/* hover: gold ignition */
+#bbttcc-toolbar .bbttcc-btn:hover::before {
+  opacity: 0.9;
+  box-shadow:
+    0 0 12px var(--bbttcc-gold-glow),
+    0 0 24px rgba(255, 215, 120, 0.15);
+}
+
+/* hover: button energy ramp */
+#bbttcc-toolbar .bbttcc-btn:hover {
+  border-color: rgba(255, 215, 120, 0.7);
+  background:
+    linear-gradient(180deg, rgba(42, 64, 92, 0.98), rgba(18, 30, 46, 1));
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.28),
+    0 0 20px rgba(255, 215, 120, 0.18);
+}
+
+/* --- ICON GOLD SHIFT ON HOVER --- */
+#bbttcc-toolbar .bbttcc-btn:hover i {
+  color: #ffd76a;
+  text-shadow: 0 0 8px rgba(255, 215, 120, 0.45);
+}
+
+/* --- ACTIVE CLICK FEEDBACK --- */
+#bbttcc-toolbar .bbttcc-btn:active {
+  box-shadow:
+    inset 0 0 10px rgba(255, 215, 120, 0.18),
+    0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* --- BRAND PANEL GOLD ACCENT --- */
+#bbttcc-toolbar .bbttcc-toolbar-brand {
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow:
+    0 0 14px rgba(255, 215, 120, 0.15),
+    inset 0 0 6px rgba(255, 215, 120, 0.08);
+}
+
+#bbttcc-toolbar .bbttcc-toolbar-brand i {
+  color: #ffd76a;
+}
+/* =========================================
+   BBTTCC Territory Windows — Hex Chrome Pass
+========================================= */
+
+#bbttcc-hex-config .window-content,
+#bbttcc-hex-sheet .window-content,
+#bbttcc-territory-dashboard .window-content {
+  background:
+    radial-gradient(circle at top, rgba(40, 83, 124, 0.12), transparent 38%),
+    linear-gradient(180deg, rgba(9, 16, 28, 0.97), rgba(5, 10, 18, 0.98));
+}
+
+#bbttcc-hex-config fieldset,
+#bbttcc-hex-sheet .bbttcc-card,
+#bbttcc-territory-dashboard .bbttcc-table {
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.02),
+    0 0 0 1px rgba(120, 210, 255, 0.08),
+    0 8px 24px rgba(0,0,0,0.18);
+}
+
+#bbttcc-hex-config legend,
+#bbttcc-hex-sheet .window-title,
+#bbttcc-territory-dashboard .window-title {
+  color: #f7e39a;
+  text-shadow: 0 0 10px rgba(255, 215, 120, 0.12);
+}
