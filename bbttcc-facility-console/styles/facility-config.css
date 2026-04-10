@@ -1,0 +1,307 @@
+/* modules/bbttcc-facility-gui/styles/facility-config.css */
+
+.bbttcc-facility-config .window-header {
+  background: linear-gradient(90deg, #050814 0%, #111827 40%, #1f2937 100%);
+  color: #e5e7eb;
+  border-bottom: 1px solid #1f2937;
+}
+
+.bbttcc-facility-config .window-header .window-title {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 11px;
+}
+
+.bbttcc-facility-config .window-content {
+  background: radial-gradient(circle at top, #020617 0, #020617 40%, #020617 100%);
+  padding: 0.75rem 0.75rem 0.9rem;
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  overflow-y: auto;
+}
+
+.bbttcc-facility-config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bbttcc-facility-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+/* allow full-width cards */
+.bbttcc-card.span-2 {
+  grid-column: 1 / 3;
+}
+
+.bbttcc-card {
+  background: rgba(15, 23, 42, 0.96);
+  border-radius: 0.75rem;
+  border: 1px solid #1f2937;
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.9),
+    0 10px 25px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.bbttcc-card-header {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+  background: linear-gradient(90deg, #020617 0%, #020617 35%, #0b1120 100%);
+}
+
+.bbttcc-card-header h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #dbeafe;
+}
+
+.bbttcc-card-header p {
+  margin: 0.1rem 0 0;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.bbttcc-card-body {
+  padding: 0.5rem 0.75rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.bbttcc-card-body.grid-2col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.4rem 0.6rem;
+}
+
+.bbttcc-card-body.grid-3col {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem 0.6rem;
+}
+
+.bbttcc-card-body .field.full {
+  grid-column: 1 / -1;
+}
+
+.bbttcc-card-body .field.toggle {
+  display: flex;
+  align-items: center;
+  grid-column: 1 / -1;
+}
+
+.bbttcc-card-body .field label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  margin-bottom: 0.15rem;
+}
+
+.bbttcc-card-body .field small {
+  display: block;
+  font-size: 10px;
+  color: #6b7280;
+  margin-top: 0.15rem;
+}
+
+.bbttcc-card-body input[type="text"],
+.bbttcc-card-body input[type="number"],
+.bbttcc-card-body select,
+.bbttcc-card-body textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 0.4rem;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  padding: 0.25rem 0.35rem;
+  color: #e5e7eb;
+  font-size: 12px;
+}
+
+.bbttcc-card-body input[type="text"]:focus,
+.bbttcc-card-body input[type="number"]:focus,
+.bbttcc-card-body select:focus,
+.bbttcc-card-body textarea:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+}
+
+.bbttcc-card-body textarea {
+  resize: vertical;
+  min-height: 2.4rem;
+}
+
+/* footer */
+.bbttcc-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.25rem;
+}
+
+.bbttcc-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 12px;
+  padding: 0.25rem 0.85rem;
+  cursor: pointer;
+  transition:
+    background 120ms ease-out,
+    transform 80ms ease-out,
+    box-shadow 120ms ease-out,
+    border-color 120ms ease-out;
+}
+
+.bbttcc-button.primary {
+  background: radial-gradient(circle at 0 0, #0ea5e9 0, #1d4ed8 40%, #020617 100%);
+  color: #e5e7eb;
+  border-color: rgba(56, 189, 248, 0.8);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 1),
+    0 0 14px rgba(56, 189, 248, 0.5);
+}
+
+.bbttcc-button.primary:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 1),
+    0 0 18px rgba(56, 189, 248, 0.8);
+}
+
+.bbttcc-button.primary:active {
+  transform: translateY(0);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 1),
+    0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+/* header button on the native item sheet */
+a.bbttcc-facility-button {
+  border-radius: 999px;
+  padding: 0 0.5rem;
+  font-size: 11px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(37, 99, 235, 0.9);
+  color: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+a.bbttcc-facility-button:hover {
+  background: rgba(30, 64, 175, 0.95);
+  border-color: #38bdf8;
+}
+
+
+.bbttcc-button.secondary {
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  border-color: rgba(71, 85, 105, 0.95);
+}
+
+.bbttcc-inline-picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.bbttcc-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+}
+
+.bbttcc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #e5e7eb;
+  font-size: 11px;
+}
+
+.bbttcc-pill button {
+  background: transparent;
+  border: 0;
+  color: #cbd5e1;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.bbttcc-upgrades-list,
+.bbttcc-turn-effects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.bbttcc-facility-upgrade-row,
+.bbttcc-facility-turn-effect-row {
+  border: 1px solid rgba(31, 41, 55, 0.95);
+  border-radius: 0.65rem;
+  padding: 0.55rem;
+  background: rgba(2, 6, 23, 0.65);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.bbttcc-inline-grid {
+  display: grid;
+  gap: 0.45rem 0.6rem;
+}
+
+.bbttcc-grid-upgrade-top {
+  grid-template-columns: 1.1fr 1.6fr 0.6fr 0.8fr;
+}
+
+.bbttcc-grid-upgrade-costs {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.bbttcc-grid-effect-top {
+  grid-template-columns: 1fr 1fr;
+}
+
+.bbttcc-grid-effect-costs {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bbttcc-row-actions-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  align-items: end;
+}
+
+.bbttcc-row-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.bbttcc-empty-note {
+  margin: 0;
+  font-size: 11px;
+  color: #94a3b8;
+}

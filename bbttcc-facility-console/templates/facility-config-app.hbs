@@ -1,0 +1,272 @@
+{{!-- modules/bbttcc-facility-console/templates/facility-config-app.hbs --}}
+
+<form class="bbttcc-facility-config-form" autocomplete="off">
+  <section class="bbttcc-facility-grid">
+
+    <section class="bbttcc-card">
+      <header class="bbttcc-card-header" style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+        <div>
+          <h2>Facility Identity</h2>
+          {{#if hex}}
+            <p>{{hex.name}}</p>
+          {{/if}}
+        </div>
+        <button type="button" class="bbttcc-button preset">
+          <i class="fas fa-magic"></i>
+          <span>Apply Template</span>
+        </button>
+      </header>
+      <div class="bbttcc-card-body grid-2col">
+        <div class="field">
+          <label>Facility Type</label>
+          <select name="flags.bbttcc-facility.facilityType">
+            <option value="bunker" {{#if isBunker}}selected{{/if}}>Bunker</option>
+            <option value="tower" {{#if isTower}}selected{{/if}}>Tower</option>
+            <option value="castle" {{#if isCastle}}selected{{/if}}>Castle</option>
+            <option value="custom" {{#unless (or isBunker (or isTower isCastle))}}selected{{/unless}}>Custom</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Tier</label>
+          <input type="number" name="flags.bbttcc-facility.tier" value="{{bbttcc.tier}}" min="0" max="10">
+        </div>
+
+        <div class="field">
+          <label>Size</label>
+          <select name="flags.bbttcc-facility.size">
+            <option value="small" {{#if (eq bbttcc.size "small")}}selected{{/if}}>Small / Cramped</option>
+            <option value="medium" {{#if (eq bbttcc.size "medium")}}selected{{/if}}>Medium</option>
+            <option value="large" {{#if (eq bbttcc.size "large")}}selected{{/if}}>Large</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Structure Defense Rating (SDR)</label>
+          <input type="number" name="flags.bbttcc-facility.structureDefenseRating" value="{{bbttcc.structureDefenseRating}}" min="0" max="10">
+        </div>
+
+        <div class="field full">
+          <label>Damage Ladder</label>
+          <input type="hidden" name="flags.bbttcc-facility.hitTrack" value="{{hitTrackCsv}}">
+          <div class="bbttcc-inline-picker">
+            <select name="bbttcc.ui.hitTrackPicker">
+              <option value="">Add damage state...</option>
+              {{#each availableHitTrackOptions}}
+                <option value="{{this.key}}">{{this.label}}</option>
+              {{/each}}
+            </select>
+            <button type="button" class="bbttcc-button secondary" data-action="add-hit-track">+ Add</button>
+          </div>
+          <div class="bbttcc-chip-row bbttcc-hit-track-selected">
+            {{#each selectedHitTrack}}
+              <span class="bbttcc-pill bbttcc-hit-track-chip" data-key="{{this.key}}">{{this.label}} <button type="button" data-action="remove-hit-track" data-key="{{this.key}}">×</button></span>
+            {{/each}}
+          </div>
+          <small>Stepped raid damage track used by facility siege logic.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="bbttcc-card">
+      <header class="bbttcc-card-header">
+        <h2>OP Modifiers</h2>
+        <p>How this facility interacts with the OP economy.</p>
+      </header>
+      <div class="bbttcc-card-body grid-3col">
+        <div class="field"><label>Violence Defense</label><input type="number" name="flags.bbttcc-facility.opModifiers.violenceDefense" value="{{bbttcc.opModifiers.violenceDefense}}"></div>
+        <div class="field"><label>Faith Defense</label><input type="number" name="flags.bbttcc-facility.opModifiers.faithDefense" value="{{bbttcc.opModifiers.faithDefense}}"></div>
+        <div class="field"><label>Intrigue Defense</label><input type="number" name="flags.bbttcc-facility.opModifiers.intrigueDefense" value="{{bbttcc.opModifiers.intrigueDefense}}"></div>
+        <div class="field"><label>Logistics Defense</label><input type="number" name="flags.bbttcc-facility.opModifiers.logisticsDefense" value="{{bbttcc.opModifiers.logisticsDefense}}"></div>
+        <div class="field"><label>Soft Power Defense</label><input type="number" name="flags.bbttcc-facility.opModifiers.softPowerDefense" value="{{bbttcc.opModifiers.softPowerDefense}}"></div>
+        <div class="field"><label>Economy Bonus</label><input type="number" name="flags.bbttcc-facility.opModifiers.economyBonus" value="{{bbttcc.opModifiers.economyBonus}}"></div>
+        <div class="field"><label>Logistics Bonus</label><input type="number" name="flags.bbttcc-facility.opModifiers.logisticsBonus" value="{{bbttcc.opModifiers.logisticsBonus}}"></div>
+        <div class="field"><label>Unity Bonus</label><input type="number" name="flags.bbttcc-facility.opModifiers.unityBonus" value="{{bbttcc.opModifiers.unityBonus}}"></div>
+        <div class="field"><label>Morale Bonus</label><input type="number" name="flags.bbttcc-facility.opModifiers.moraleBonus" value="{{bbttcc.opModifiers.moraleBonus}}"></div>
+        <div class="field"><label>Loyalty Bonus</label><input type="number" name="flags.bbttcc-facility.opModifiers.loyaltyBonus" value="{{bbttcc.opModifiers.loyaltyBonus}}"></div>
+      </div>
+    </section>
+
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header">
+        <h2>Raid Bonuses</h2>
+        <p>How this facility affects raid math.</p>
+      </header>
+      <div class="bbttcc-card-body grid-3col">
+        <div class="field"><label>Defender DC Bonus</label><input type="number" name="flags.bbttcc-facility.raidBonuses.defenderDcBonus" value="{{bbttcc.raidBonuses.defenderDcBonus}}"></div>
+        <div class="field"><label>Attacker Extra OP (Violence)</label><input type="number" name="flags.bbttcc-facility.raidBonuses.attackerExtraOpCost.violence" value="{{bbttcc.raidBonuses.attackerExtraOpCost.violence}}"></div>
+        <div class="field"><label>Attacker Extra OP (Logistics)</label><input type="number" name="flags.bbttcc-facility.raidBonuses.attackerExtraOpCost.logistics" value="{{bbttcc.raidBonuses.attackerExtraOpCost.logistics}}"></div>
+        <div class="field"><label>Max Defender Units</label><input type="number" name="flags.bbttcc-facility.raidBonuses.maxDefenderUnits" value="{{bbttcc.raidBonuses.maxDefenderUnits}}"></div>
+        <div class="field full"><label>Raid Notes</label><textarea name="flags.bbttcc-facility.raidBonuses.notes" rows="2">{{bbttcc.raidBonuses.notes}}</textarea></div>
+      </div>
+    </section>
+
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header">
+        <h2>Travel & Hazards</h2>
+      </header>
+      <div class="bbttcc-card-body grid-2col">
+        <div class="field">
+          <label>Encounter Tier Adjust</label>
+          <input type="number" name="flags.bbttcc-facility.travelEncounterEffects.encounterTierAdjust" value="{{bbttcc.travelEncounterEffects.encounterTierAdjust}}">
+          <small>Positive increases danger, negative reduces.</small>
+        </div>
+        <div class="field">
+          <label>Hazard Mitigation</label>
+          <input type="hidden" name="flags.bbttcc-facility.travelEncounterEffects.hazardMitigation" value="{{bbttcc.travelEncounterEffects.hazardMitigation}}">
+          <div class="bbttcc-inline-picker">
+            <select name="bbttcc.ui.hazardPicker">
+              <option value="">Add mitigation tag...</option>
+              {{#each availableHazardOptions}}
+                <option value="{{this.key}}">{{this.label}}</option>
+              {{/each}}
+            </select>
+            <button type="button" class="bbttcc-button secondary" data-action="add-hazard">+ Add</button>
+          </div>
+          <div class="bbttcc-chip-row bbttcc-hazard-selected">
+            {{#each selectedHazardMitigation}}
+              <span class="bbttcc-pill bbttcc-hazard-chip" data-key="{{this.key}}">{{this.label}} <button type="button" data-action="remove-hazard" data-key="{{this.key}}">×</button></span>
+            {{/each}}
+          </div>
+        </div>
+        <div class="field full"><label>Travel Effect Description</label><textarea name="flags.bbttcc-facility.travelEncounterEffects.description" rows="2">{{bbttcc.travelEncounterEffects.description}}</textarea></div>
+        <div class="field"><label>Radiation</label><input type="number" name="flags.bbttcc-facility.hazards.radiation" value="{{bbttcc.hazards.radiation}}" min="0" max="10"></div>
+        <div class="field"><label>Corruption</label><input type="number" name="flags.bbttcc-facility.hazards.corruption" value="{{bbttcc.hazards.corruption}}" min="0" max="10"></div>
+        <div class="field"><label>Instability</label><input type="number" name="flags.bbttcc-facility.hazards.instability" value="{{bbttcc.hazards.instability}}" min="0" max="10"></div>
+        <div class="field full"><label>Hazard Notes</label><textarea name="flags.bbttcc-facility.hazards.notes" rows="2">{{bbttcc.hazards.notes}}</textarea></div>
+      </div>
+    </section>
+
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header"><h2>Territory Integration</h2></header>
+      <div class="bbttcc-card-body grid-2col">
+        <div class="field"><label>Scene ID</label><input type="text" name="flags.bbttcc-facility.hexBinding.sceneId" value="{{bbttcc.hexBinding.sceneId}}"></div>
+        <div class="field"><label>Hex UUID</label><input type="text" name="flags.bbttcc-facility.hexBinding.hexUuid" value="{{bbttcc.hexBinding.hexUuid}}"></div>
+        <div class="field"><label>Territory ID</label><input type="text" name="flags.bbttcc-facility.hexBinding.territoryId" value="{{bbttcc.hexBinding.territoryId}}"></div>
+        <div class="field full"><label>Binding Notes</label><textarea name="flags.bbttcc-facility.hexBinding.notes" rows="2">{{bbttcc.hexBinding.notes}}</textarea></div>
+        <div class="field toggle"><label><input type="checkbox" name="flags.bbttcc-facility.integration.autoApplyRaidBonuses" {{#if bbttcc.integration.autoApplyRaidBonuses}}checked{{/if}}> Auto-apply raid bonuses</label></div>
+        <div class="field toggle"><label><input type="checkbox" name="flags.bbttcc-facility.integration.autoApplyTurnEffects" {{#if bbttcc.integration.autoApplyTurnEffects}}checked{{/if}}> Auto-apply turn effects</label></div>
+      </div>
+    </section>
+
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header">
+        <h2>Upgrades</h2>
+        <p>Structured upgrade authoring with JSON kept synced behind the scenes.</p>
+      </header>
+      <div class="bbttcc-card-body">
+        <input type="hidden" name="flags.bbttcc-facility.integration.upgradesRaw" value="{{bbttcc.integration.upgradesRaw}}">
+        <div class="bbttcc-inline-picker">
+          <select name="bbttcc.ui.upgradePreset">
+            <option value="">Add upgrade preset...</option>
+            {{#each upgradePresetOptions}}
+              <option value="{{this.key}}">{{this.label}}</option>
+            {{/each}}
+          </select>
+          <button type="button" class="bbttcc-button secondary" data-action="add-upgrade">+ Add</button>
+        </div>
+        <div class="bbttcc-upgrades-list">
+          {{#each upgrades}}
+            <article class="bbttcc-facility-upgrade-row">
+              <div class="bbttcc-inline-grid bbttcc-grid-upgrade-top">
+                <div class="field"><label>Key</label><input type="text" data-field="key" value="{{this.key}}"></div>
+                <div class="field"><label>Name</label><input type="text" data-field="name" value="{{this.name}}"></div>
+                <div class="field"><label>Tier</label><input type="number" min="0" data-field="tier" value="{{this.tier}}"></div>
+                <div class="field"><label>SDR Bonus</label><input type="number" data-field="structureDefenseRatingBonus" value="{{this.structureDefenseRatingBonus}}"></div>
+              </div>
+              <div class="bbttcc-inline-grid bbttcc-grid-upgrade-costs">
+                <div class="field"><label>Violence</label><input type="number" data-field="costViolence" value="{{this.opCost.violence}}"></div>
+                <div class="field"><label>Economy</label><input type="number" data-field="costEconomy" value="{{this.opCost.economy}}"></div>
+                <div class="field"><label>Logistics</label><input type="number" data-field="costLogistics" value="{{this.opCost.logistics}}"></div>
+                <div class="field"><label>Intrigue</label><input type="number" data-field="costIntrigue" value="{{this.opCost.intrigue}}"></div>
+                <div class="field"><label>Faith</label><input type="number" data-field="costFaith" value="{{this.opCost.faith}}"></div>
+                <div class="field"><label>Soft Power</label><input type="number" data-field="costSoftpower" value="{{this.opCost.softpower}}"></div>
+              </div>
+              <div class="bbttcc-row-actions-grid">
+                <div class="field full"><label>Description</label><textarea data-field="description" rows="2">{{this.description}}</textarea></div>
+                <div class="bbttcc-row-actions"><button type="button" class="bbttcc-button secondary" data-action="remove-upgrade">Remove</button></div>
+              </div>
+            </article>
+          {{/each}}
+        </div>
+        <p class="bbttcc-empty-note">No upgrades configured yet. Add one from the preset picker above.</p>
+      </div>
+    </section>
+
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header">
+        <h2>Turn Effects</h2>
+        <p>Structured per-turn effects instead of raw JSON authoring.</p>
+      </header>
+      <div class="bbttcc-card-body">
+        <input type="hidden" name="flags.bbttcc-facility.integration.turnEffectsRaw" value="{{bbttcc.integration.turnEffectsRaw}}">
+        <div class="bbttcc-inline-picker">
+          <select name="bbttcc.ui.turnEffectPreset">
+            <option value="">Add turn effect preset...</option>
+            {{#each turnEffectPresetOptions}}
+              <option value="{{this.key}}">{{this.label}}</option>
+            {{/each}}
+          </select>
+          <button type="button" class="bbttcc-button secondary" data-action="add-turn-effect">+ Add</button>
+        </div>
+        <div class="bbttcc-turn-effects-list">
+          {{#each turnEffects}}
+            <article class="bbttcc-facility-turn-effect-row">
+              <div class="bbttcc-inline-grid bbttcc-grid-effect-top">
+                <div class="field"><label>Key</label><input type="text" data-field="key" value="{{this.key}}"></div>
+                <div class="field"><label>Name</label><input type="text" data-field="name" value="{{this.name}}"></div>
+              </div>
+              <div class="field full"><label>Description</label><textarea data-field="description" rows="2">{{this.description}}</textarea></div>
+              <div class="bbttcc-inline-grid bbttcc-grid-effect-costs">
+                <div class="field"><label>Violence</label><input type="number" data-field="violence" value="{{this.opDelta.violence}}"></div>
+                <div class="field"><label>Nonlethal</label><input type="number" data-field="nonlethal" value="{{this.opDelta.nonlethal}}"></div>
+                <div class="field"><label>Intrigue</label><input type="number" data-field="intrigue" value="{{this.opDelta.intrigue}}"></div>
+                <div class="field"><label>Economy</label><input type="number" data-field="economy" value="{{this.opDelta.economy}}"></div>
+                <div class="field"><label>Soft Power</label><input type="number" data-field="softpower" value="{{this.opDelta.softpower}}"></div>
+                <div class="field"><label>Diplomacy</label><input type="number" data-field="diplomacy" value="{{this.opDelta.diplomacy}}"></div>
+                <div class="field"><label>Logistics</label><input type="number" data-field="logistics" value="{{this.opDelta.logistics}}"></div>
+                <div class="field"><label>Culture</label><input type="number" data-field="culture" value="{{this.opDelta.culture}}"></div>
+                <div class="field"><label>Faith</label><input type="number" data-field="faith" value="{{this.opDelta.faith}}"></div>
+              </div>
+              <div class="bbttcc-row-actions"><button type="button" class="bbttcc-button secondary" data-action="remove-turn-effect">Remove</button></div>
+            </article>
+          {{/each}}
+        </div>
+        <p class="bbttcc-empty-note">No turn effects configured yet. Add one from the preset picker above.</p>
+      </div>
+    </section>
+
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header">
+        <h2>Resolution Hooks</h2>
+        <p>Choose live outcomes without hand-editing JSON.</p>
+      </header>
+      <div class="bbttcc-card-body grid-2col">
+        <input type="hidden" name="flags.bbttcc-facility.integration.resolutionHooksRaw" value="{{bbttcc.integration.resolutionHooksRaw}}">
+        <div class="field">
+          <label>On Destroyed Outcome</label>
+          <select name="bbttcc.ui.onDestroyedOutcome">
+            {{#each destroyedOutcomeOptions}}
+              <option value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="field">
+          <label>On Captured Outcome</label>
+          <select name="bbttcc.ui.onCapturedOutcome">
+            {{#each capturedOutcomeOptions}}
+              <option value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <footer class="bbttcc-footer">
+    <button type="button" class="bbttcc-button primary">
+      <i class="fas fa-save"></i>
+      <span>Save Facility Config</span>
+    </button>
+  </footer>
+</form>

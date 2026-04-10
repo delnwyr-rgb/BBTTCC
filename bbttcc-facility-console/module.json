@@ -1,0 +1,38 @@
+{
+  "id": "bbttcc-facility-console",
+  "title": "BBTTCC Facility Console",
+  "description": "Hex-attached facility builder for BBTTCC. Provides a HexChrome UI to configure bunkers, towers, castles, and custom facilities directly on territory hexes.",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "BBTTCC Development",
+      "email": "",
+      "url": ""
+    }
+  ],
+  "esmodules": [
+    "scripts/facility-console.js"
+  ],
+  "scripts": [],
+  "styles": [
+    "styles/facility-config.css"
+  ],
+  "languages": [],
+  "packs": [],
+  "relationships": {
+    "requires": [
+      {
+        "id": "bbttcc-territory",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-core",
+        "type": "module"
+      }
+    ]
+  },
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13"
+  }
+}
