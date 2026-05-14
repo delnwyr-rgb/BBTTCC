@@ -432,10 +432,29 @@
             <div style="display:flex; align-items:center; gap:6px;">
               <span class="bbttcc-pill bbttcc-pill-soft" data-tooltip="Total strategic raid bonus from Holdings stationed at this hex." style="color:#fbbf24;">+{{holdings.totalBonus}}</span>
               {{#if isGM}}
+                {{#if holdings.hasAny}}
+                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-deploy" title="Spawn Holdings as tokens on the bound battle scene (Phase 5).">🎯 Deploy</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-recall" title="Remove this hex's deployed Holdings tokens from the bound battle scene." style="opacity:.85;">↩ Recall</button>
+                {{/if}}
                 <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-add" title="Station a rig, boss, or facility at this hex">＋ Station</button>
               {{/if}}
             </div>
           </div>
+
+          {{!-- Holdings Phase D — neglect / abandonment surface --}}
+          {{#if holdings.isNeglected}}
+            <div class="bbttcc-row bbttcc-holdings-neglect" data-tooltip="Garrison upkeep was unpaid last turn. If the hex stays unpaid for {{holdings.neglectThreshold}} total turns, stationed Holdings defect." style="margin-bottom:6px; padding:5px 8px; border-radius:6px; border:1px solid rgba(217,119,6,0.5); background:rgba(217,119,6,0.1);">
+              <span style="color:#d97706; font-weight:700;">⚠ Neglected</span>
+              <span style="margin-left:auto; color:#fbbf24;">{{holdings.neglectTurns}}/{{holdings.neglectThreshold}} unpaid</span>
+            </div>
+          {{else if holdings.abandonedRecent}}
+            <div class="bbttcc-row bbttcc-holdings-abandoned" data-tooltip="Holdings defected from this hex due to unpaid garrison upkeep. Re-station via ＋ Station." style="margin-bottom:6px; padding:5px 8px; border-radius:6px; border:1px solid rgba(185,28,28,0.5); background:rgba(185,28,28,0.12);">
+              <span style="color:#fca5a5; font-weight:700;">💔 Recently abandoned</span>
+              {{#if holdings.lastAbandonedCount}}
+                <span style="margin-left:auto; color:#fca5a5; font-size:.78rem;">{{holdings.lastAbandonedCount}} unit(s) lost</span>
+              {{/if}}
+            </div>
+          {{/if}}
 
           {{#if holdings.hasAny}}
             {{#if holdings.bosses.length}}

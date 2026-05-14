@@ -195,6 +195,120 @@
     };
   }
 
+  // ─── Holdings Phase C (2026-05-14) ────────────────────────────────────
+  // Tactical deployment — spawn the rigs/bosses/facilities stationed at a
+  // hex as tokens on the hex's currently bound battle scene. Tokens are
+  // `actorLink:true` so the damage path from `_applyDamageToActor` writes
+  // back to the canonical actor doc; per the Damage Tracking Unification
+  // sprint shipped earlier today, integrity is the single source of truth
+  // so persistent damage carries across rounds and scene transitions.
+  // Phase 5 (multi-scene orchestrator) already binds scenes to hexes; we
+  // resolve the deployment target by:
+  //   1. canvas.scene if it's in the hex's bound list (GM is looking at it)
+  //   2. else hex.flags["bbttcc-raid"].battleScenes[currentSceneIdx]
+  //   3. else error toast — bind a scene via Phase 5's BATTLE SCENES panel.
+  function _hldResolveSceneForDeploy(hexDoc) {
+    if (!hexDoc) return null;
+    const raid = (hexDoc.flags && hexDoc.flags["bbttcc-raid"]) ? hexDoc.flags["bbttcc-raid"] : {};
+    const list = Array.isArray(raid.battleScenes) ? raid.battleScenes : [];
+    const cur  = Math.max(0, Number(raid.currentSceneIdx || 0));
+    const active = (typeof canvas !== "undefined") ? canvas?.scene : null;
+    if (active && list.some(e => e && e.sceneId === active.id)) return active;
+    const entry = list[cur] || list[0];
+    if (entry?.sceneId) {
+      const sc = game.scenes?.get?.(entry.sceneId);
+      if (sc) return sc;
+    }
+    return null;
+  }
+
+  async function _hldDeployToScene(hexDoc, opts) {
+    opts = opts || {};
+    if (!hexDoc) return { ok: false, error: "no hex" };
+    let scene = null;
+    if (opts.sceneId) scene = game.scenes?.get?.(opts.sceneId) || null;
+    if (!scene) scene = _hldResolveSceneForDeploy(hexDoc);
+    if (!scene) return { ok: false, error: "no bound battle scene" };
+
+    const rows = _hldReadHoldings(hexDoc).filter(r => r && r.kind !== "missing" && r.actor);
+    if (!rows.length) return { ok: false, error: "no Holdings to deploy" };
+
+    // De-dup: skip actors that already have a deployment-tagged token on the scene.
+    const sceneTokens = (scene.tokens && scene.tokens.contents) ? scene.tokens.contents : [];
+    const alreadyByActor = new Set();
+    for (const t of sceneTokens) {
+      const tag = t?.flags?.[MOD_T]?.holdingDeployment;
+      if (tag?.hexId === hexDoc.id && tag?.actorId) alreadyByActor.add(String(tag.actorId));
+    }
+
+    // Grid-aligned layout near scene center, 4-wide rows with 2-cell stride.
+    const gridSize = Number(scene.grid?.size ?? scene.gridSize ?? 100);
+    const sw = Number(scene.width || 4000);
+    const sh = Number(scene.height || 3000);
+    const cx = Math.round((sw / 2) / gridSize) * gridSize;
+    const cy = Math.round((sh / 2) / gridSize) * gridSize;
+    const cols = 4;
+    const stride = gridSize * 2;
+
+    const tokenData = [];
+    const skipped = [];
+    let placed = 0;
+    for (const r of rows) {
+      const actor = r.actor;
+      if (!actor) continue;
+      if (!opts.force && alreadyByActor.has(actor.id)) { skipped.push(actor.name); continue; }
+      const col = placed % cols;
+      const row = Math.floor(placed / cols);
+      const x = cx + (col - Math.floor(cols / 2)) * stride;
+      const y = cy + row * stride;
+      let proto;
+      try { proto = await actor.getTokenDocument({ x, y }); }
+      catch (e) { warn("getTokenDocument failed", actor.name, e); continue; }
+      const data = (proto && typeof proto.toObject === "function") ? proto.toObject() : foundry.utils.deepClone(proto);
+      data.x = x;
+      data.y = y;
+      data.actorLink = true;
+      data.hidden = false;
+      data.flags = data.flags || {};
+      data.flags[MOD_T] = Object.assign({}, data.flags[MOD_T] || {}, {
+        holdingDeployment: {
+          hexId: hexDoc.id,
+          hexUuid: hexDoc.uuid || null,
+          actorId: actor.id,
+          kind: r.kind,
+          deployedAt: Date.now()
+        }
+      });
+      tokenData.push(data);
+      placed++;
+    }
+    if (!tokenData.length) return { ok: true, created: 0, skipped, scene };
+
+    let created = [];
+    try {
+      created = await scene.createEmbeddedDocuments("Token", tokenData);
+    } catch (e) { warn("token create failed", e); return { ok: false, error: "createDocuments failed" }; }
+    return { ok: true, created: created?.length || 0, skipped, scene };
+  }
+
+  async function _hldRecallFromScene(hexDoc, opts) {
+    opts = opts || {};
+    if (!hexDoc) return { ok: false, error: "no hex" };
+    let scene = null;
+    if (opts.sceneId) scene = game.scenes?.get?.(opts.sceneId) || null;
+    if (!scene) scene = _hldResolveSceneForDeploy(hexDoc);
+    if (!scene) return { ok: false, error: "no bound battle scene" };
+    const toDelete = [];
+    for (const t of (scene.tokens?.contents || [])) {
+      const tag = t?.flags?.[MOD_T]?.holdingDeployment;
+      if (tag?.hexId === hexDoc.id) toDelete.push(t.id);
+    }
+    if (!toDelete.length) return { ok: true, removed: 0, scene };
+    try { await scene.deleteEmbeddedDocuments("Token", toDelete); }
+    catch (e) { warn("token delete failed", e); return { ok: false, error: "deleteEmbeddedDocuments failed" }; }
+    return { ok: true, removed: toDelete.length, scene };
+  }
+
   // Expose for Phase B (raid console will read these to compute defender DC)
   // and downstream consumers. Done in TWO places for safety:
   //   1. At script-load (here) — covers consumers that read at init time
@@ -205,6 +319,9 @@
     bonusForActor: _hldBonusForActor,
     readHoldings: _hldReadHoldings,
     computeBonuses: _hldComputeBonuses,
+    resolveSceneForDeploy: _hldResolveSceneForDeploy,
+    deployToScene: _hldDeployToScene,
+    recallFromScene: _hldRecallFromScene,
     RIG_BONUS: _HLD_RIG_BONUS,
     BOSS_BONUS: _HLD_BOSS_BONUS,
     RIG_CAP: _HLD_RIG_CAP,
@@ -521,9 +638,17 @@
       } : { active: false };
 
       // Holdings Phase A — compute strategic bonuses + grouped lists for the panel.
+      // Phase D — surface garrison-neglect state alongside the bonus summary.
       let holdingsView = null;
       try {
         const ho = _hldComputeBonuses(doc);
+        const _negFlag = (tf && tf.holdingsNeglect && typeof tf.holdingsNeglect === "object") ? tf.holdingsNeglect : {};
+        const _negTurns = Math.max(0, Number(_negFlag.turns || 0));
+        const _negThreshold = 3;  // mirrors _HLD_NEGLECT_THRESHOLD in garrison-upkeep.enhancer.js
+        const _abandonedAt = Number(_negFlag.abandonedAt || 0);
+        // Treat the abandonment badge as "recent" within ~30 days; after that
+        // it fades from the surface but remains in the flag for audit.
+        const _abandonedRecent = (_abandonedAt > 0) && ((Date.now() - _abandonedAt) < (30 * 24 * 3600 * 1000));
         const rigsList       = ho.rows.filter(r => r.kind === "rig");
         const bossesList     = ho.rows.filter(r => r.kind === "boss");
         const facilitiesList = ho.rows.filter(r => r.kind === "facility");
@@ -548,9 +673,14 @@
           doctrineKeys: ho.doctrineKeys,
           hasAny: ho.rows.length > 0,
           rigsCapped:       ho.rows.reduce((s, r) => s + (r.kind === "rig" ? Number(r.bonus || 0) : 0), 0) > _HLD_RIG_CAP,
-          facilitiesCapped: ho.rows.reduce((s, r) => s + (r.kind === "facility" ? Number(r.bonus || 0) : 0), 0) > _HLD_FACILITY_CAP
+          facilitiesCapped: ho.rows.reduce((s, r) => s + (r.kind === "facility" ? Number(r.bonus || 0) : 0), 0) > _HLD_FACILITY_CAP,
+          neglectTurns: _negTurns,
+          neglectThreshold: _negThreshold,
+          isNeglected: _negTurns > 0,
+          abandonedRecent: _abandonedRecent,
+          lastAbandonedCount: Number(_negFlag.lastAbandonedCount || 0)
         };
-      } catch (e) { warn("holdings compute failed", e); holdingsView = { rigs:[], bosses:[], facilities:[], missing:[], totalBonus:0, hasAny:false }; }
+      } catch (e) { warn("holdings compute failed", e); holdingsView = { rigs:[], bosses:[], facilities:[], missing:[], totalBonus:0, hasAny:false, neglectTurns:0, neglectThreshold:3, isNeglected:false, abandonedRecent:false, lastAbandonedCount:0 }; }
 
       return Object.assign({}, context, {
         name: tf.name || doc.text || doc.name || "(unnamed hex)",
@@ -979,6 +1109,64 @@
           });
           this.render({ force: false });
         } catch (eU) { warn("holdings: remove failed", eU); ui.notifications?.error("Failed to remove Holding — see console."); }
+      }, { capture:true, signal: sig });
+
+      // Holdings Phase C (2026-05-14) — Deploy stationed Holdings as tokens
+      // on the hex's bound battle scene. Tokens are actorLink:true so the
+      // unified integrity damage path persists across rounds and scene
+      // transitions. Resolution prefers canvas.scene (if bound to THIS hex),
+      // else falls back to the hex's current bound scene per Phase 5.
+      root.addEventListener("click", async (ev) => {
+        let btn = null;
+        try { btn = ev.target?.closest?.('[data-action="holdings-deploy"]'); } catch (_e) { btn = null; }
+        if (!btn) return;
+        ev.preventDefault(); ev.stopPropagation();
+        if (!game.user?.isGM) return;
+        const hexDoc = this._hexDoc;
+        if (!hexDoc) return;
+        try {
+          btn.disabled = true;
+          const r = await _hldDeployToScene(hexDoc);
+          if (!r.ok) {
+            if (r.error === "no bound battle scene") {
+              ui.notifications?.warn("No bound battle scene. Bind one via the ⚔ Battle Scenes panel first.");
+            } else if (r.error === "no Holdings to deploy") {
+              ui.notifications?.warn("No Holdings stationed at this hex to deploy.");
+            } else {
+              ui.notifications?.error(`Deploy failed: ${r.error}`);
+            }
+            return;
+          }
+          const parts = [];
+          parts.push(`Deployed ${r.created} Holding${r.created === 1 ? "" : "s"} to "${r.scene?.name || "scene"}".`);
+          if (r.skipped?.length) parts.push(`Skipped ${r.skipped.length} already-present (${r.skipped.slice(0,3).join(", ")}${r.skipped.length>3?"…":""}).`);
+          ui.notifications?.info(parts.join(" "));
+        } catch (eD) { warn("holdings: deploy failed", eD); ui.notifications?.error("Deploy failed — see console."); }
+        finally { try { btn.disabled = false; } catch(_e){} }
+      }, { capture:true, signal: sig });
+
+      // Holdings Phase C — Recall deployed tokens (those tagged with this
+      // hex's holdingDeployment flag) from the bound battle scene.
+      root.addEventListener("click", async (ev) => {
+        let btn = null;
+        try { btn = ev.target?.closest?.('[data-action="holdings-recall"]'); } catch (_e) { btn = null; }
+        if (!btn) return;
+        ev.preventDefault(); ev.stopPropagation();
+        if (!game.user?.isGM) return;
+        const hexDoc = this._hexDoc;
+        if (!hexDoc) return;
+        try {
+          btn.disabled = true;
+          const r = await _hldRecallFromScene(hexDoc);
+          if (!r.ok) {
+            if (r.error === "no bound battle scene") ui.notifications?.warn("No bound battle scene to recall from.");
+            else ui.notifications?.error(`Recall failed: ${r.error}`);
+            return;
+          }
+          if (!r.removed) ui.notifications?.info("No deployed Holdings to recall.");
+          else ui.notifications?.info(`Recalled ${r.removed} Holding token${r.removed === 1 ? "" : "s"} from "${r.scene?.name || "scene"}".`);
+        } catch (eR) { warn("holdings: recall failed", eR); ui.notifications?.error("Recall failed — see console."); }
+        finally { try { btn.disabled = false; } catch(_e){} }
       }, { capture:true, signal: sig });
 
       // Build Units (Engineering) — Fortify / Repair / Asset.

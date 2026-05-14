@@ -19,6 +19,15 @@
   const MODT = "bbttcc-territory";
   const MODF = "bbttcc-factions";
 
+  // Holdings Phase D (2026-05-14) — Garrison-Holdings coupling.
+  // After this many consecutive unpaid-upkeep turns on a hex that has
+  // stationed Holdings, the Holdings abandon the hex (rigIds + bossIds
+  // cleared). Counter lives at flags.bbttcc-territory.holdingsNeglect.turns
+  // and resets to 0 when a fully-paid upkeep is processed. Sibling flag
+  // (not under `holdings`) so Phase A's Station/Remove whole-object
+  // writes can't accidentally clobber it.
+  const _HLD_NEGLECT_THRESHOLD = 3;
+
   // ------------------------------
   // Canonical upkeep tables
   // ------------------------------
@@ -326,6 +335,12 @@
     let loyaltyShortCount = 0;
     let loyaltyFullCount  = 0;
 
+    // Phase D — aggregate counters so the GM chat card can show a top-line
+    // Holdings-attrition status next to the existing morale/loyalty pills.
+    let neglectedHexCount = 0;
+    let abandonedHexCount = 0;
+    let abandonedUnitsTotal = 0;
+
     // helper to record a hex update
     const hexUpdates = [];
 
@@ -409,6 +424,79 @@
         // Faction-level penalties (morale)
         fTurnPending.moraleDelta = N(fTurnPending.moraleDelta || 0) - 1;
       }
+
+      // Holdings Phase D — neglect tracking + abandonment.
+      // Uses targeted update paths so it composes with the penalty write
+      // above (Foundry merges adjacent dot-paths into the same Document
+      // update). Sibling flag `holdingsNeglect` survives any future Phase A
+      // whole-object holdings writes.
+      try {
+        const holdingsFlag = (tf.holdings && typeof tf.holdings === "object") ? tf.holdings : {};
+        const rigIds  = Array.isArray(holdingsFlag.rigIds)  ? holdingsFlag.rigIds  : [];
+        const bossIds = Array.isArray(holdingsFlag.bossIds) ? holdingsFlag.bossIds : [];
+        const hasHoldings = (rigIds.length + bossIds.length) > 0;
+        const neglectFlag = (tf.holdingsNeglect && typeof tf.holdingsNeglect === "object") ? tf.holdingsNeglect : {};
+        const prevTurns = N(neglectFlag.turns || 0);
+
+        let neglectPatch = null;
+        let holdingsPatch = null;
+
+        if (hasUnpaid && hasHoldings) {
+          const nextTurns = prevTurns + 1;
+          if (nextTurns >= _HLD_NEGLECT_THRESHOLD) {
+            // Abandonment — clear the rosters, retire the neglect counter,
+            // stamp abandonedAt so the hex sheet badge can show recency.
+            const totalLost = rigIds.length + bossIds.length;
+            neglectPatch = {
+              turns: 0,
+              lastUnpaidAt: Date.now(),
+              abandonedAt: Date.now(),
+              lastAbandonedCount: totalLost
+            };
+            holdingsPatch = Object.assign({}, holdingsFlag, {
+              rigIds: [],
+              bossIds: [],
+              lastUpdated: Date.now()
+            });
+            logLines.push(`• ${hexName}: 💔 HOLDINGS ABANDONED — ${totalLost} unit${totalLost===1?"":"s"} defected after ${_HLD_NEGLECT_THRESHOLD} unpaid upkeep turn${_HLD_NEGLECT_THRESHOLD===1?"":"s"}.`);
+            abandonedHexCount++;
+            abandonedUnitsTotal += totalLost;
+            // Knock morale once more for the loss
+            fTurnPending.moraleDelta = N(fTurnPending.moraleDelta || 0) - 1;
+          } else {
+            neglectPatch = {
+              turns: nextTurns,
+              lastUnpaidAt: Date.now()
+            };
+            logLines.push(`• ${hexName}: ⚠ Holdings neglected (${nextTurns}/${_HLD_NEGLECT_THRESHOLD}) — pay next turn or units defect.`);
+            neglectedHexCount++;
+          }
+        } else if (!hasUnpaid && prevTurns > 0) {
+          // Upkeep is paid: reset the neglect streak. Preserve abandonedAt
+          // for audit history; only zero the counter.
+          neglectPatch = { turns: 0 };
+          logLines.push(`• ${hexName}: Holdings neglect cleared (was ${prevTurns}).`);
+        }
+
+        if (neglectPatch || holdingsPatch) {
+          // Merge strategy: if a penalty-branch entry already exists for
+          // this hex it carries `data["flags.${MODT}"] = newTf` (whole
+          // namespace). Mutate newTf directly so the document.update sees
+          // one coherent block. Otherwise add a fresh entry using targeted
+          // dot-paths so we don't stomp other Phase A/B keys.
+          let entry = hexUpdates.find(u => u.id === d.id);
+          const wholeKey = `flags.${MODT}`;
+          if (entry && entry.data && entry.data[wholeKey] && typeof entry.data[wholeKey] === "object") {
+            const nt = entry.data[wholeKey];
+            if (neglectPatch)  nt.holdingsNeglect = Object.assign({}, nt.holdingsNeglect || neglectFlag || {}, neglectPatch);
+            if (holdingsPatch) nt.holdings        = holdingsPatch;
+          } else {
+            if (!entry) { entry = { id: d.id, data: {} }; hexUpdates.push(entry); }
+            if (neglectPatch)  entry.data[`flags.${MODT}.holdingsNeglect`] = Object.assign({}, neglectFlag || {}, neglectPatch);
+            if (holdingsPatch) entry.data[`flags.${MODT}.holdings`]        = holdingsPatch;
+          }
+        }
+      } catch (eHD) { console.warn(TAG, "Holdings Phase D pass failed for hex", hexName, eHD); }
     }
 
     // Integration-based morale bonus:
@@ -465,7 +553,10 @@
         summary: logLines.join(" | "),
         unpaid: anyUnpaidGlobal,
         moraleBonus,
-        loyaltyBonus
+        loyaltyBonus,
+        holdingsNeglected: neglectedHexCount,
+        holdingsAbandonedHexes: abandonedHexCount,
+        holdingsAbandonedUnits: abandonedUnitsTotal
       };
       warLogs.push(entry);
       await A.setFlag(MODF, "warLogs", warLogs);
@@ -476,6 +567,8 @@
           <p><b>Garrison Upkeep — ${foundry.utils.escapeHTML(A.name)}</b></p>
           <p>${logLines.join("<br/>")}</p>
           ${anyUnpaidGlobal ? `<p style="color:#b91c1c;"><b>Unpaid upkeep detected.</b> Morale/Loyalty penalties queued.</p>` : ""}
+          ${neglectedHexCount > 0 ? `<p style="color:#d97706;"><b>⚠ Holdings neglected:</b> ${neglectedHexCount} hex${neglectedHexCount===1?"":"es"} — pay upkeep next turn or units defect.</p>` : ""}
+          ${abandonedHexCount > 0 ? `<p style="color:#b91c1c;"><b>💔 Holdings abandoned:</b> ${abandonedUnitsTotal} unit${abandonedUnitsTotal===1?"":"s"} defected from ${abandonedHexCount} hex${abandonedHexCount===1?"":"es"}.</p>` : ""}
           ${moraleBonus > 0 ? `<p style="color:#15803d;"><b>Integration morale bonus:</b> +${moraleBonus} Morale</p>` : ""}
           ${loyaltyBonus > 0 ? `<p style="color:#15803d;"><b>Integration loyalty bonus:</b> +${loyaltyBonus} Loyalty</p>` : ""}
         `;
