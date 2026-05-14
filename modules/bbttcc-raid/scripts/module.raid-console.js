@@ -5310,6 +5310,20 @@ try {
           }
         } catch (eIntDmg) { warn("[raid-console] boss integrity damage failed", eIntDmg); }
 
+        // P.1 (2026-05-14) — Live State Rounds tile auto-increment.
+        // The bossState→actor mirror handler that previously bumped
+        // raidStats.rounds was retired in Damage Tracking Unification, so
+        // the boss-sheet Rounds tile was no longer ticking. Increment
+        // here at commit so it stays live. Runs every committed round
+        // (not gated on dmg > 0) — rounds count rounds-fought.
+        try {
+          const bossActorR = game.actors?.get(bossKey);
+          if (bossActorR && bossActorR.type === "boss") {
+            const curRounds = Number(bossActorR.system?.raidStats?.rounds || 0);
+            await bossActorR.update({ "system.raidStats.rounds": curRounds + 1 });
+          }
+        } catch (eRounds) { warn("[raid-console] boss rounds increment failed", eRounds); }
+
 
         // Update display names to include current boss damageState badge
         try {
