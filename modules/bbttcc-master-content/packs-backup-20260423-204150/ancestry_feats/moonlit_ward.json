@@ -1,0 +1,73 @@
+{
+  "name": "Oldenborn (Lumenwrought): Moonlit Ward",
+  "type": "feat",
+  "img": "art/bbttcc_button_icon_moon_rainbow_3.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Lumenwrought)</em> at level 5; now available as an optional ancestry feat.</p><p><em>“You can make a lie feel tired.”</em></p>\n        <p><strong>Moonlit Ward (tier [TODO(pb-call)]/a Soma Break).</strong> When you or an ally within 30 feet would be charmed or Shaken, you can use your reaction to grant reroll the lowest die on the defense checks [TODO(adv-call)]. On a success, the aggressor feels the weight of being seen (they have roll 3d10 keep lowest 2 on their next attack) [TODO(adv-call)].</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "oldenborn-lumenwrought-moonlit_ward",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "moonlit_ward",
+      "lineage": "Lumenwrought",
+      "tierLevel": 5,
+      "version": "1.0.0",
+      "family": "oldenborn",
+      "heritage": "Lumenwrought",
+      "normalizedFrom": "Oldenborn (Lumenwrought)"
+    }
+  },
+  "effects": [],
+  "folder": "w57jySX7QASliVOB",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.ROiGlNlLLKmQFCeE",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1773192856451,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "ROiGlNlLLKmQFCeE",
+  "_srcfile": "fvtt-Item-oldenborn-(lumenwrought)_-moonlit-ward-ROiGlNlLLKmQFCeE.json"
+}

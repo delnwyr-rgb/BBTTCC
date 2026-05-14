@@ -1,0 +1,125 @@
+{
+  "name": "Sephirotic Scion",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion4.png",
+  "system": {
+    "advancement": [
+      {
+        "_id": "A1B2C3D4E5F6G7H8",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium Sephirotic Scion.",
+        "value": {}
+      },
+      {
+        "_id": "GVzRyiqd3E7gdka8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.CBbxY2PqvDYxL57J",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Sephirotic Scion Core: The Higher Register",
+        "hint": "Gain the Sephirotic Scion Core traits at character creation."
+      },
+      {
+        "_id": "O1P2Q3R4S5T6U7V8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.RSFo3eFMgQWaV7G0",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Scion: Strategic Hooks",
+        "hint": "Grants OP bonuses and Sephirotic-alignment hooks used by BBTTCC faction and world systems."
+      }
+    ],
+    "description": {
+      "value": "<p><strong>Normalized BBTTCC ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><hr /><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Ability Scores.</strong> Your background determines your ability score increases; Sephirotic Scion does not grant any ability score bonuses.</li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p><p class=\"ft-heritages-line\"><strong>Heritages:</strong> Cherubic, Ophanic, Seraphic.</p>",
+      "chat": ""
+    },
+    "identifier": "sephirotic_scion",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": "",
+      "custom": "BBTTCC",
+      "license": ""
+    },
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": ""
+    },
+    "type": {
+      "value": "humanoid",
+      "subtype": "Sephirotic Scion",
+      "custom": ""
+    }
+  },
+  "effects": [],
+  "folder": "trEZkuiOvBOEiK5H",
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "ancestryKey": "sephirotic_scion",
+      "version": "1.0.0",
+      "date": "2025-12-08",
+      "normalizedFrom": "Sephirotic Scion"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.bek3Rltvxjf6gKIH",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192867016,
+    "modifiedTime": 1773192867016,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "bek3Rltvxjf6gKIH",
+  "_srcfile": "fvtt-Item-sephirotic-scion-bek3Rltvxjf6gKIH.json"
+}

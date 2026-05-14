@@ -1,0 +1,117 @@
+{
+  "_id": "RWAuuqy8LInVCgvJ",
+  "name": "Cryptidkin (Furrykin): Wildframe & Instinct",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Cryptidkin_Furrykin_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“Your body is built for a world that bites back. So is your patience.”</em></p>\n<p><strong>Wildframe.</strong> Add your tier [TODO(pb-call)] to Body check made to resist Stress.</p>\n<p><strong>Keen Sense.</strong> Choose one at character creation: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You have reroll the lowest die on Soul (Perception (Mind) (Mind) (Mind)) checks [TODO(adv-call)] that rely on that sense.</p>\n<p><strong>Frame Choice.</strong> Choose one narrative frame at character creation; it is permanent.</p>\n<ul><li><strong>Predator.</strong> Your unarmed strikes (bite or claws) deal 1d6 instead of 1d4 and count as natural weapons.</li><li><strong>Forager.</strong> You gain a skill rank in the Athletics (Violence) (Violence) (Body) skill. If you already have it, you may choose another skill from the Cryptidkin list (GM adjudicates).</li><li><strong>Brute.</strong> You count as one size larger for the purposes of carrying capacity, push, drag, lift, shove, and grapple.</li></ul>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": {},
+    "identifier": "cryptidkin-furrykin-wildframe-instinct",
+    "requirements": "Cryptidkin (Furrykin)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [
+    {
+      "_id": "695abefdcf98a080",
+      "name": "Wildframe & Instinct: Athletics +1",
+      "img": "icons/creatures/abilities/paw-print-orange.webp",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "system.skills.athletics.value",
+          "value": 1,
+          "type": "add",
+          "priority": 10
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": 0,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": 0,
+        "startTurn": 0
+      },
+      "description": "Passive: Wildframe & Instinct: Athletics +1",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "fourththing": {
+          "passiveAuthored": true,
+          "sprint": "passive-ae-2026-04-28"
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": null
+      }
+    }
+  ],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "cryptidkin",
+      "feature": "wildframe_instinct",
+      "lineage": "Furrykin",
+      "tierLevel": 0,
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    }
+  },
+  "folder": "f95fcfa18822c4e3",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1776543000000,
+    "modifiedTime": 1776543000000,
+    "lastModifiedBy": "BBTTCCANCv2APPLY"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!RWAuuqy8LInVCgvJ"
+}

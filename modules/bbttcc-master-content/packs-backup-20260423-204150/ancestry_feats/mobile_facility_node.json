@@ -1,0 +1,73 @@
+{
+  "name": "Circuitborn (Salvage Line): Mobile Facility Node",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_2.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Salvage Line)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You are a workshop that learned to walk.”</em></p>\n        <p><strong>Mobile Facility Node (1/a Soma Break).</strong> Over 1 minute, deploy a temporary station (a glowing fold-out altar of tools) that lasts 10 minutes. While active, you and allies within 10 feet have reroll the lowest die on crafting, repairing, and disabling devices [TODO(adv-call)]. In BBTTCC strategic play, your faction may treat one <em>Repair Rig</em> or <em>Repair Facility</em> activity as costing 1 less OP once per Turn (GM / system).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "circuitborn-salvage-mobile_facility",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Circuitborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "mobile_facility",
+      "chassis": "Salvage Line",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "circuitborn",
+      "heritage": "Salvage",
+      "normalizedFrom": "Circuitborn (Salvage Line)"
+    }
+  },
+  "effects": [],
+  "folder": "w94bOnHAEh29yiBU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.i85jwGIgGXU6Vz8F",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192837574,
+    "modifiedTime": 1773192837574,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "i85jwGIgGXU6Vz8F",
+  "_srcfile": "fvtt-Item-circuitborn-(salvage-line)_-mobile-facility-node-i85jwGIgGXU6Vz8F.json"
+}

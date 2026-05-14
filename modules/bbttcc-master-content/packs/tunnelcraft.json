@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Mustelid): Tunnelcraft",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tunnel_2.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Mustelid)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“You know where the earth is soft, even when it looks like stone.”</em></p>\n        <p><strong>Tunnelcraft.</strong> You ignore difficult terrain in caves, tunnels, rubble, and ruins. In BBTTCC travel, your party treats one ‘blocked’ route segment as ‘passable’ once per Turn if you lead (GM/system).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-mustelid-tunnelcraft",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "tunnelcraft",
+      "clade": "Mustelid",
+      "tierLevel": 11,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Mustelid",
+      "normalizedFrom": "Furrykin (Mustelid)"
+    }
+  },
+  "effects": [],
+  "folder": "LjjawKCcw5V0JpZI",
+  "_stats": {
+    "compendiumSource": "Item.4oya2lLiOluzplZ1",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.4oya2lLiOluzplZ1",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "4oya2lLiOluzplZ1",
+  "_srcfile": "fvtt-Item-furrykin-(mustelid)_-tunnelcraft-4oya2lLiOluzplZ1.json"
+}

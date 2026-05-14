@@ -1,0 +1,73 @@
+{
+  "name": "Oldenborn (Ember-Touched): Phoenix Oath",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_phoenix.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Ember-Touched)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“If you die, you will be furious about it.”</em></p>\n        <p><strong>Phoenix Oath (1/Long Rest).</strong> When you would drop to 0 hit points, you instead drop to 1 hit point and erupt in a controlled blaze. Each hostile creature within 10 feet takes fire damage equal to 2d6 + your proficiency bonus, and you immediately end one condition affecting you (charmed, frightened, or restrained).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "oldenborn-embertouched-phoenix_oath",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "phoenix_oath",
+      "lineage": "Ember-Touched",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "oldenborn",
+      "heritage": "Ember-Touched",
+      "normalizedFrom": "Oldenborn (Ember-Touched)"
+    }
+  },
+  "effects": [],
+  "folder": "bqL9mPFfXmoU5936",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.xK3tO8j3vxe2pgaz",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1773192856451,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "xK3tO8j3vxe2pgaz",
+  "_srcfile": "fvtt-Item-oldenborn-(ember-touched)_-phoenix-oath-xK3tO8j3vxe2pgaz.json"
+}

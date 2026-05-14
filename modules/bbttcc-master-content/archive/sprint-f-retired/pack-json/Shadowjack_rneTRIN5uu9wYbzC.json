@@ -1,0 +1,359 @@
+{
+  "name": "Shadowjack",
+  "type": "class",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/Shadowjack.png",
+  "system": {
+    "identifier": "shadowjack",
+    "description": {
+      "value": "<h1 data-start=\"666\" data-end=\"681\">🕶 SHADOWJACK</h1><p data-start=\"683\" data-end=\"736\"><em data-start=\"683\" data-end=\"736\">“You are not invisible.<br data-start=\"707\" data-end=\"710\" />You are unaccounted for.”</em></p><h3 data-start=\"738\" data-end=\"757\">Primary Ability</h3><p data-start=\"758\" data-end=\"771\"><strong data-start=\"758\" data-end=\"771\">Dexterity</strong></p><h3 data-start=\"773\" data-end=\"781\">Role</h3><p data-start=\"782\" data-end=\"837\">Infiltrator • System invalidator • High-agency operator</p><p data-start=\"839\" data-end=\"912\">Shadowjacks do not overpower defenses.<br data-start=\"877\" data-end=\"880\" />They <strong data-start=\"885\" data-end=\"911\">invalidate assumptions</strong>.</p><p data-start=\"914\" data-end=\"1053\">Locks, wards, patrol routes, social barriers, and magical protections are not walls — they are stories people tell themselves about safety.</p><p data-start=\"1055\" data-end=\"1089\">Shadowjacks ask only one question:</p><p data-start=\"1091\" data-end=\"1122\"><strong data-start=\"1091\" data-end=\"1122\">“Who forgot to imagine me?”</strong></p><hr data-start=\"1124\" data-end=\"1127\" /><h2 data-start=\"1129\" data-end=\"1159\">Class Fantasy (Plain Truth)</h2><p data-start=\"1161\" data-end=\"1181\">Shadowjacks convert:</p><ul data-start=\"1182\" data-end=\"1245\"><li data-start=\"1182\" data-end=\"1198\"><p data-start=\"1184\" data-end=\"1198\">Bold intrusion</p></li><li data-start=\"1199\" data-end=\"1219\"><p data-start=\"1201\" data-end=\"1219\">Clever positioning</p></li><li data-start=\"1220\" data-end=\"1234\"><p data-start=\"1222\" data-end=\"1234\">Misdirection</p></li><li data-start=\"1235\" data-end=\"1245\"><p data-start=\"1237\" data-end=\"1245\">Audacity</p></li></ul><p data-start=\"1247\" data-end=\"1278\">…into <strong data-start=\"1253\" data-end=\"1277\">operational leverage</strong>.</p><p data-start=\"1280\" data-end=\"1298\">They thrive where:</p><ul data-start=\"1299\" data-end=\"1372\"><li data-start=\"1299\" data-end=\"1320\"><p data-start=\"1301\" data-end=\"1320\">Security is layered</p></li><li data-start=\"1321\" data-end=\"1343\"><p data-start=\"1323\" data-end=\"1343\">Attention is limited</p></li><li data-start=\"1344\" data-end=\"1372\"><p data-start=\"1346\" data-end=\"1372\">Mistakes have consequences</p></li></ul><p data-start=\"1374\" data-end=\"1426\">Shadowjacks are strongest <strong data-start=\"1400\" data-end=\"1425\">before the net closes</strong>.</p><hr data-start=\"1428\" data-end=\"1431\" /><h2 data-start=\"1433\" data-end=\"1476\">🗝 Core Class Feature — Access (Level 1)</h2><p data-start=\"1478\" data-end=\"1536\">Shadowjacks operate on a unique resource: <strong data-start=\"1520\" data-end=\"1535\">Access Dice</strong>.</p><p data-start=\"1538\" data-end=\"1608\">Access represents <strong data-start=\"1556\" data-end=\"1607\">temporary advantage stolen from the environment</strong>:</p><ul data-start=\"1609\" data-end=\"1695\"><li data-start=\"1609\" data-end=\"1622\"><p data-start=\"1611\" data-end=\"1622\">Blind spots</p></li><li data-start=\"1623\" data-end=\"1641\"><p data-start=\"1625\" data-end=\"1641\">Unsecured routes</p></li><li data-start=\"1642\" data-end=\"1661\"><p data-start=\"1644\" data-end=\"1661\">Miscommunications</p></li><li data-start=\"1662\" data-end=\"1695\"><p data-start=\"1664\" data-end=\"1695\">Moments where no one is looking</p></li></ul><h3 data-start=\"1697\" data-end=\"1712\">Access Dice</h3><ul data-start=\"1713\" data-end=\"1887\"><li data-start=\"1713\" data-end=\"1730\"><p data-start=\"1715\" data-end=\"1730\">Start as <strong data-start=\"1724\" data-end=\"1730\">d6</strong></p></li><li data-start=\"1731\" data-end=\"1812\"><p data-start=\"1733\" data-end=\"1745\">Increase at:</p><ul data-start=\"1748\" data-end=\"1812\"><li data-start=\"1748\" data-end=\"1766\"><p data-start=\"1750\" data-end=\"1766\"><strong data-start=\"1750\" data-end=\"1766\">Level 5 → d8</strong></p></li><li data-start=\"1769\" data-end=\"1789\"><p data-start=\"1771\" data-end=\"1789\"><strong data-start=\"1771\" data-end=\"1789\">Level 11 → d10</strong></p></li><li data-start=\"1792\" data-end=\"1812\"><p data-start=\"1794\" data-end=\"1812\"><strong data-start=\"1794\" data-end=\"1812\">Level 17 → d12</strong></p></li></ul></li><li data-start=\"1813\" data-end=\"1887\"><p data-start=\"1815\" data-end=\"1887\">Maximum stored Access Dice =<br data-start=\"1843\" data-end=\"1846\" /><strong data-start=\"1848\" data-end=\"1887\">your Dexterity modifier (minimum 1)</strong></p></li></ul><p data-start=\"1889\" data-end=\"1961\">Access is momentum.<br data-start=\"1908\" data-end=\"1911\" />It rewards initiative and audacity — not patience.</p><hr data-start=\"1963\" data-end=\"1966\" /><h2 data-start=\"1968\" data-end=\"1990\">Gaining Access Dice</h2><p data-start=\"1992\" data-end=\"2059\">You gain <strong data-start=\"2001\" data-end=\"2017\">1 Access Die</strong> when <strong data-start=\"2023\" data-end=\"2034\">any one</strong> of the following occurs:</p><ul data-start=\"2061\" data-end=\"2332\"><li data-start=\"2061\" data-end=\"2151\"><p data-start=\"2063\" data-end=\"2112\">You successfully bypass a <strong data-start=\"2089\" data-end=\"2112\">meaningful obstacle</strong></p><ul data-start=\"2115\" data-end=\"2151\"><li data-start=\"2115\" data-end=\"2121\"><p data-start=\"2117\" data-end=\"2121\">Lock</p></li><li data-start=\"2124\" data-end=\"2130\"><p data-start=\"2126\" data-end=\"2130\">Ward</p></li><li data-start=\"2133\" data-end=\"2140\"><p data-start=\"2135\" data-end=\"2140\">Guard</p></li><li data-start=\"2143\" data-end=\"2151\"><p data-start=\"2145\" data-end=\"2151\">System</p></li></ul></li><li data-start=\"2152\" data-end=\"2200\"><p data-start=\"2154\" data-end=\"2200\">You begin your turn <strong data-start=\"2174\" data-end=\"2200\">unseen or undiscovered</strong></p></li><li data-start=\"2201\" data-end=\"2268\"><p data-start=\"2203\" data-end=\"2268\">You exploit an enemy’s blind spot, distraction, or overcommitment</p></li><li data-start=\"2269\" data-end=\"2332\"><p data-start=\"2271\" data-end=\"2332\">You succeed on a <strong data-start=\"2288\" data-end=\"2332\">high-risk infiltration or deception play</strong></p></li></ul><p data-start=\"2334\" data-end=\"2395\">⚠️ <strong data-start=\"2337\" data-end=\"2347\">Limit:</strong><br data-start=\"2347\" data-end=\"2350\" />You may gain <strong data-start=\"2363\" data-end=\"2394\">only 1 Access Die per round</strong>.</p><p data-start=\"2397\" data-end=\"2435\">Access comes fast.<br data-start=\"2415\" data-end=\"2418\" />It leaves faster.</p><hr data-start=\"2437\" data-end=\"2440\" /><h2 data-start=\"2442\" data-end=\"2465\">Spending Access Dice</h2><p data-start=\"2467\" data-end=\"2496\">You may spend Access Dice to:</p><ul data-start=\"2498\" data-end=\"2757\"><li data-start=\"2498\" data-end=\"2549\"><p data-start=\"2500\" data-end=\"2549\">Bypass simple locks or barriers <strong data-start=\"2532\" data-end=\"2549\">without tools</strong></p></li><li data-start=\"2550\" data-end=\"2588\"><p data-start=\"2552\" data-end=\"2588\">Reduce or avoid <strong data-start=\"2568\" data-end=\"2588\">alarm escalation</strong></p></li><li data-start=\"2589\" data-end=\"2639\"><p data-start=\"2591\" data-end=\"2639\">Create a temporary <strong data-start=\"2610\" data-end=\"2628\">backdoor route</strong> for allies</p></li><li data-start=\"2640\" data-end=\"2695\"><p data-start=\"2642\" data-end=\"2695\">Force security systems to <strong data-start=\"2668\" data-end=\"2695\">misreport your presence</strong></p></li><li data-start=\"2696\" data-end=\"2757\"><p data-start=\"2698\" data-end=\"2757\">Slip past reactions, zones of control, or detection effects</p></li></ul><p data-start=\"2759\" data-end=\"2787\">Access is meant to be spent.</p><p data-start=\"2789\" data-end=\"2831\">Hoarding it is how Shadowjacks get caught.</p><hr data-start=\"2833\" data-end=\"2836\" /><h2 data-start=\"2838\" data-end=\"2866\">⚠ Pushback System — Trace</h2><p data-start=\"2868\" data-end=\"2899\">Shadowjacks leave fingerprints.</p><p data-start=\"2901\" data-end=\"2945\">Sometimes literal.<br data-start=\"2919\" data-end=\"2922\" />Sometimes metaphysical.</p><p data-start=\"2947\" data-end=\"3045\"><strong data-start=\"2947\" data-end=\"2956\">Trace</strong> represents <strong data-start=\"2968\" data-end=\"2988\">system awareness</strong> — the moment defenses realize <em data-start=\"3019\" data-end=\"3037\">someone like you</em> exists.</p><h3 data-start=\"3047\" data-end=\"3071\">You Gain Trace When:</h3><ul data-start=\"3072\" data-end=\"3228\"><li data-start=\"3072\" data-end=\"3103\"><p data-start=\"3074\" data-end=\"3103\">An infiltration attempt fails</p></li><li data-start=\"3104\" data-end=\"3140\"><p data-start=\"3106\" data-end=\"3140\">You are seen while spending Access</p></li><li data-start=\"3141\" data-end=\"3182\"><p data-start=\"3143\" data-end=\"3182\">You trigger alarms, wards, or attention</p></li><li data-start=\"3183\" data-end=\"3228\"><p data-start=\"3185\" data-end=\"3228\">You overextend beyond plausible deniability</p></li></ul><hr data-start=\"3230\" data-end=\"3233\" /><h2 data-start=\"3235\" data-end=\"3272\">Trace Thresholds (How Trace Works)</h2><p data-start=\"3274\" data-end=\"3315\">As Trace accumulates, the world tightens.</p><h3 data-start=\"3317\" data-end=\"3333\">Trace States</h3><ul data-start=\"3335\" data-end=\"3606\"><li data-start=\"3335\" data-end=\"3388\"><p data-start=\"3337\" data-end=\"3347\"><strong data-start=\"3337\" data-end=\"3347\">Pinged</strong></p><ul data-start=\"3350\" data-end=\"3388\"><li data-start=\"3350\" data-end=\"3388\"><p data-start=\"3352\" data-end=\"3388\">Enemies gain advantage to detect you</p></li></ul></li><li data-start=\"3390\" data-end=\"3468\"><p data-start=\"3392\" data-end=\"3403\"><strong data-start=\"3392\" data-end=\"3403\">Flagged</strong></p><ul data-start=\"3406\" data-end=\"3468\"><li data-start=\"3406\" data-end=\"3436\"><p data-start=\"3408\" data-end=\"3436\">Reinforcements arrive faster</p></li><li data-start=\"3439\" data-end=\"3468\"><p data-start=\"3441\" data-end=\"3468\">Locks and scrutiny increase</p></li></ul></li><li data-start=\"3470\" data-end=\"3548\"><p data-start=\"3472\" data-end=\"3489\"><strong data-start=\"3472\" data-end=\"3489\">Burned Routes</strong></p><ul data-start=\"3492\" data-end=\"3548\"><li data-start=\"3492\" data-end=\"3505\"><p data-start=\"3494\" data-end=\"3505\">Exits close</p></li><li data-start=\"3508\" data-end=\"3527\"><p data-start=\"3510\" data-end=\"3527\">Safe paths vanish</p></li><li data-start=\"3530\" data-end=\"3548\"><p data-start=\"3532\" data-end=\"3548\">Security hardens</p></li></ul></li><li data-start=\"3550\" data-end=\"3606\"><p data-start=\"3552\" data-end=\"3567\"><strong data-start=\"3552\" data-end=\"3567\">Compromised</strong></p><ul data-start=\"3570\" data-end=\"3606\"><li data-start=\"3570\" data-end=\"3606\"><p data-start=\"3572\" data-end=\"3606\">You are actively hunted or cut off</p></li></ul></li></ul><p data-start=\"3608\" data-end=\"3632\">Trace clears <strong data-start=\"3621\" data-end=\"3631\">slowly</strong>:</p><ul data-start=\"3633\" data-end=\"3678\"><li data-start=\"3633\" data-end=\"3643\"><p data-start=\"3635\" data-end=\"3643\">Downtime</p></li><li data-start=\"3644\" data-end=\"3657\"><p data-start=\"3646\" data-end=\"3657\">Clever play</p></li><li data-start=\"3658\" data-end=\"3678\"><p data-start=\"3660\" data-end=\"3678\">Subclass abilities</p></li></ul><p data-start=\"3680\" data-end=\"3725\">Shadowjacks do not die because they are weak.</p><p data-start=\"3727\" data-end=\"3765\">They die because they stayed too long.</p><hr data-start=\"3767\" data-end=\"3770\" /><h2 data-start=\"3772\" data-end=\"3816\">🧠 How Shadowjacks Play (Player Guidance)</h2><p data-start=\"3818\" data-end=\"3872\">Shadowjacks are <strong data-start=\"3834\" data-end=\"3860\">high-agency, high-risk</strong> characters.</p><p data-start=\"3874\" data-end=\"3886\">They reward:</p><ul data-start=\"3887\" data-end=\"3922\"><li data-start=\"3887\" data-end=\"3901\"><p data-start=\"3889\" data-end=\"3901\">Decisiveness</p></li><li data-start=\"3902\" data-end=\"3914\"><p data-start=\"3904\" data-end=\"3914\">Creativity</p></li><li data-start=\"3915\" data-end=\"3922\"><p data-start=\"3917\" data-end=\"3922\">Nerve</p></li></ul><p data-start=\"3924\" data-end=\"3936\">They punish:</p><ul data-start=\"3937\" data-end=\"3982\"><li data-start=\"3937\" data-end=\"3949\"><p data-start=\"3939\" data-end=\"3949\">Hesitation</p></li><li data-start=\"3950\" data-end=\"3964\"><p data-start=\"3952\" data-end=\"3964\">Overplanning</p></li><li data-start=\"3965\" data-end=\"3982\"><p data-start=\"3967\" data-end=\"3982\">Playing it safe</p></li></ul><p data-start=\"3984\" data-end=\"4045\">If Titanbound are inevitable<br data-start=\"4012\" data-end=\"4015\" />and Aurablades are emotional</p><p data-start=\"4047\" data-end=\"4081\">Shadowjacks are <strong data-start=\"4063\" data-end=\"4080\">opportunistic</strong>.</p><hr /><p><strong>BBTTCC Resource Actions:</strong> This patched class JSON grants Features-tab resource display/action items at level 1 for the runtime resource-action engine.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "startingEquipment": [],
+    "levels": 1,
+    "advancement": {
+      "CNlZf5q5kp3jouif": {
+        "_id": "CNlZf5q5kp3jouif",
+        "type": "HitPoints",
+        "configuration": {},
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "WXECqnrVWdlX7AFL": {
+        "_id": "WXECqnrVWdlX7AFL",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.eMtoLophNt05lcSX",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 1,
+        "title": "Shadowjack Core Features",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "YI4attcsEcMaq1RN": {
+        "_id": "YI4attcsEcMaq1RN",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
+      },
+      "MsJI6degcCEpbRQ0": {
+        "_id": "MsJI6degcCEpbRQ0",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 4,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "dyanrSNHVJ2KS4NB": {
+        "_id": "dyanrSNHVJ2KS4NB",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 8,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "ZUsGVxKAdqJdocSC": {
+        "_id": "ZUsGVxKAdqJdocSC",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 12,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "ubJsHma4LqzJQ48D": {
+        "_id": "ubJsHma4LqzJQ48D",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 16,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "fJUo5oZl1nsqzEvo": {
+        "_id": "fJUo5oZl1nsqzEvo",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 19,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "yq8kjT3ZX79EJfQw": {
+        "_id": "yq8kjT3ZX79EJfQw",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "saves:dex",
+            "saves:int"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Saving Throw Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "FM3NJ9GMyREVUaiY": {
+        "_id": "FM3NJ9GMyREVUaiY",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [],
+          "choices": [
+            {
+              "count": 3,
+              "pool": [
+                "skills:acr",
+                "skills:ste",
+                "skills:slt",
+                "skills:inv",
+                "skills:dec",
+                "skills:ins",
+                "skills:prc",
+                "skills:ath"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Skill Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "uAJZVw7Ta5Z86r7R": {
+        "_id": "uAJZVw7Ta5Z86r7R",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "Oq5UmHYdw8Ol8DeX": {
+        "_id": "Oq5UmHYdw8Ol8DeX",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim",
+            "weapon:handcrossbow",
+            "weapon:rapier",
+            "weapon:shortsword"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "RsrcActSjL1R4t5y": {
+        "_id": "RsrcActSjL1R4t5y",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.8Kh9VSiIQemRojty",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.JIbsn8UagltsaZKm",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.9WIbEK6R4McYDDW4",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 1,
+        "title": "BBTTCC Resource Actions",
+        "value": {},
+        "hint": "Grants the Features-tab resource display and action items for the BBTTCC class-resource engine.",
+        "flags": {
+          "bbttcc": {
+            "resourceSuite": true,
+            "classId": "shadowjack"
+          }
+        }
+      }
+    },
+    "spellcasting": {
+      "progression": "none",
+      "ability": "",
+      "preparation": {
+        "formula": ""
+      }
+    },
+    "primaryAbility": {
+      "value": [
+        "dex"
+      ],
+      "all": false
+    },
+    "hd": {
+      "denomination": "d8",
+      "spent": 0,
+      "additional": ""
+    },
+    "properties": [],
+    "wealth": ""
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "primary": "dex"
+    }
+  },
+  "folder": "NKYauezLEQB9mrVJ",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1776189047719,
+    "modifiedTime": 1776189047894,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "rneTRIN5uu9wYbzC",
+  "sort": 100000,
+  "_key": "!items!rneTRIN5uu9wYbzC"
+}

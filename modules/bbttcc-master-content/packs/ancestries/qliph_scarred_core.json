@@ -1,0 +1,80 @@
+{
+  "name": "Qliph-Scarred Core: What Walked Out",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Qliph_Scarred_Core.png",
+  "system": {
+    "category": "ancestry",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Heritages v1.1 — Cores",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Ancestry Core (v1.1, RFI-native).</strong> Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item's ItemGrant advancement.</p><p><em>&ldquo;You walked out of a place that should have unmade you. The hollows never closed. The world can feel the pressure leaking out.&rdquo;</em></p><h3>Qliph-Scarred Core Traits</h3><ul><li><strong>Shadow Resilience.</strong> You <strong>resist qliphothic</strong> damage. Reroll-lowest on Body checks against drain, wither, and corruption effects.</li><li><strong>Qliphothic Saturation.</strong> 1/scene, reroll a failed Soul check — but the scene's Darkness-gain count goes up by 1. The scar pays for what the scar saves.</li><li><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to. After 24 hours, all deferred needs hit at once.</li><li><strong>Shadow-Wake.</strong> Qliphothic-attuned creatures sense you at 60 ft and know you've been marked. They may not know how to read the mark.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Qliphothic Saturation</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [],
+    "identifier": "qliph_scarred_core",
+    "requirements": "Qliph-Scarred",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestryCore",
+      "family": "qliph_scarred",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "kind": "ancestryCore",
+      "family": "qliph_scarred",
+      "grants": {
+        "resistances": [
+          {
+            "type": "qliphothic"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1-cores",
+      "uuid": "Item.8tR9NvqX4X69JIEb",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11CORES"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "8tR9NvqX4X69JIEb"
+}

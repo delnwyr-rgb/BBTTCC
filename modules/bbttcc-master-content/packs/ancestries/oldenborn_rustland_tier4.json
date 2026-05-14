@@ -1,0 +1,32 @@
+{
+  "_id": "8c35a9eb2b010654",
+  "name": "Oldenborn (Rustland Scavenger): Salvage King",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborn_RustlandScavenger_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“If it isn’t nailed down, you can sell it. If it <em>is</em> nailed down, you can sell the nails.”</em></p>\n<p><strong>Salvage King (1/Scene).</strong> When the party is in any ruin, junkyard, scrap field, abandoned facility, or wrecked vehicle, you may declare that one specific reasonable object exists somewhere within sight or one room over. The GM may set a brief search time (no more than 10 minutes), require a minor cost (a clue traded, an enemy tipped off, a bit of light revealing your position), or rule the object is in worse condition than hoped — but the object exists if it could plausibly be there.</p>\n<p><strong>Junk-Heart.</strong> You have reroll the lowest die on defense checks [TODO(adv-call)] against effects that would charm, frighten, or sicken you in a setting full of debris, refuse, or industrial decay. Other people see the squalor; you see the layout.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "oldenborn-rustland-salvage-king",
+    "requirements": "Oldenborn (Rustland Scavenger)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 17 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "oldenborn", "feature": "salvage_king", "lineage": "Rustland Scavenger", "tierLevel": 17, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "5PPxNybRn7zD0k0G",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!8c35a9eb2b010654"
+}

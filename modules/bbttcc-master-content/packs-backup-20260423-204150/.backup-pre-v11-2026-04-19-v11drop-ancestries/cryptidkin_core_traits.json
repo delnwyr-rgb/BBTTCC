@@ -1,0 +1,36 @@
+{
+  "_id": "CKCORETRAITPLACE",
+  "name": "Cryptidkin: Folklore & Frame",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Cryptidkin_Folklore_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“You are not an animal that learned to talk. You are a story the world made into a person because it needed you in the room.”</em></p>\n<p><strong>Folklore Presence.</strong> Once per a Soma Break, when you first meet a community, you may decide whether the rumors about you arrived first. If yes, gain reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) (Presence) (Presence) checks [TODO(adv-call)] with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it.</p>\n<p><strong>Wasteland Adapted.</strong> You have reroll the lowest die on defense checks [TODO(adv-call)] against disease and environmental poison. You can subsist on rations that would sicken most humans (spoiled meat, swamp water, mushroom flesh).</p>\n<p><strong>Survivor’s Instinct.</strong> When you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress. Once per a Soma Break.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "cryptidkin-folklore-frame",
+    "requirements": "Cryptidkin",
+    "prerequisites": { "items": [], "repeatable": false, "level": null },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "cryptidkin", "feature": "folklore_frame", "family": "cryptidkin", "tierLevel": 0, "version": "2.0.0", "date": "2026-04-18" }
+  },
+  "folder": "f95fcfa18822c4e3",
+  "_stats": {
+    "compendiumSource": null, "duplicateSource": null, "exportSource": null,
+    "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5",
+    "createdTime": 1776543000000, "modifiedTime": 1776543000000, "lastModifiedBy": "BBTTCCANCv2APPLY"
+  },
+  "ownership": { "default": 0 },
+  "_key": "!items!CKCORETRAITPLACE"
+}

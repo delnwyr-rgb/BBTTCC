@@ -1,0 +1,56 @@
+# BBTTCC mono-repo — lives at FoundryVTT/Data/
+# Default-deny: only the fourththing system and bbttcc-* modules are versioned.
+# Other Foundry content (worlds, music, art, third-party modules, other systems)
+# stays local-only and is never sent to GitHub.
+
+# Root-level default deny + allowlist
+/*
+!/.gitignore
+!/.gitattributes
+!/.github/
+!/README.md
+!/LICENSE
+
+# Allowlist the fourththing system
+!/systems/
+/systems/*
+!/systems/fourththing/
+
+# Allowlist all bbttcc-* modules
+!/modules/
+/modules/*
+!/modules/bbttcc-aae/
+!/modules/bbttcc-auto-link/
+!/modules/bbttcc-campaign/
+!/modules/bbttcc-character-options/
+!/modules/bbttcc-core/
+!/modules/bbttcc-encounters/
+!/modules/bbttcc-facility-console/
+!/modules/bbttcc-factions/
+!/modules/bbttcc-fx-integration/
+!/modules/bbttcc-market/
+!/modules/bbttcc-master-content/
+!/modules/bbttcc-radiation/
+!/modules/bbttcc-raid/
+!/modules/bbttcc-sorting-engine/
+!/modules/bbttcc-territory/
+!/modules/bbttcc-tikkun/
+!/modules/bbttcc-travel/
+!/modules/bbttcc-world/
+
+# Within allowed packages, exclude OS junk and secrets
+**/.DS_Store
+**/Thumbs.db
+**/node_modules/
+**/.env
+**/.env.*
+
+# Exclude redundant local snapshots (zip/tar archives and backup dirs)
+**/*.zip
+**/*.tar
+**/*.tar.gz
+**/*.tgz
+**/.backup-*/
+**/packs-backup-*/
+**/items.bak-*/
+**/items-broken-*/

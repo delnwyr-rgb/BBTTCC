@@ -1,0 +1,121 @@
+{
+  "name": "Oldenborn (Sky-Threaded): Stormskin",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_invisible_1.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Sky-Threaded)</em> at level 5; now available as an optional ancestry feat.</p><p><em>“Lightning likes you. It thinks you’re funny.”</em></p>\n        <p><strong>Stormskin.</strong> You have resistance to energy damage (lightning), and you can’t be deafened by thunder.</p>\n        <p><strong>Pressure Sense.</strong> You always know when dangerous weather is imminent in your region (minutes to hours), even indoors.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "oldenborn-skythreaded-stormskin",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "stormskin",
+      "lineage": "Sky-Threaded",
+      "tierLevel": 5,
+      "version": "1.0.0",
+      "family": "oldenborn",
+      "heritage": "Sky-Threaded",
+      "normalizedFrom": "Oldenborn (Sky-Threaded)"
+    }
+  },
+  "effects": [
+    {
+      "_id": "f8846fb9d8cd4570",
+      "name": "Sky-Threaded: Lightning Resistance",
+      "img": "icons/magic/air/wind-stream-blue.webp",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "system.traits.dr.value",
+          "mode": 2,
+          "value": "lightning",
+          "priority": 10
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": 0,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": 0,
+        "startTurn": 0
+      },
+      "description": "Lightning resistance automated.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      }
+    }
+  ],
+  "folder": "9PmheoJhUgbLp2kg",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.91nLznNLmZq2o38x",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1773192856451,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "91nLznNLmZq2o38x",
+  "_srcfile": "fvtt-Item-oldenborn-(sky-threaded)_-stormskin-91nLznNLmZq2o38x.json"
+}

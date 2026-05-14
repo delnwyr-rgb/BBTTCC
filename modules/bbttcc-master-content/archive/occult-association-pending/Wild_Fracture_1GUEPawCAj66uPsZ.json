@@ -1,0 +1,147 @@
+{
+  "name": "Wild Fracture",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_computer_4.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“You are the version of magic that never agreed to be polite.”</em></p><p><strong>Chaos Origin:</strong> Wild Fracture</p><p>Some Chaos Magicians learn to shape the leak. You become the leak’s favorite direction.</p><p>Wild Fracture is raw surgecraft: battlefield punctuation, lucky refunds, dangerous echoes, and the kind of spellcasting that makes the GM blink twice.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "identifier": "wild_fracture",
+    "classIdentifier": "chaos_magician",
+    "advancement": {
+      "ayQKmjMr0RVvmUSX": {
+        "_id": "ayQKmjMr0RVvmUSX",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ysWVjcPYJpVc7KVA",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "title": "Surge Table",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "sN2ruhw5tqLJJKjs": {
+        "_id": "sN2ruhw5tqLJJKjs",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.mLvw8uhMObfGpr5f",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "title": "Surge Rider",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "vwrppBjXYYz5lnJS": {
+        "_id": "vwrppBjXYYz5lnJS",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Z5Tajz5YEejplYLU",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "title": "Fracture Bloom",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "RrJUTbYQ6qXfWZft": {
+        "_id": "RrJUTbYQ6qXfWZft",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.fVuWB4EZ6bOtbhYl",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "title": "Unstable Conduit",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "G33VNctVShWmohUb": {
+        "_id": "G33VNctVShWmohUb",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.JnO3Og7EZ8LrrO7U",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "title": "Cataclysmic Rewrite",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      }
+    },
+    "spellcasting": {
+      "progression": "full",
+      "ability": "cha",
+      "preparation": {
+        "formula": ""
+      }
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "chaosMagicianSubclass": "wild_fracture"
+    }
+  },
+  "effects": [],
+  "folder": "Ft6BcR2UIPhHtfTN",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191289098,
+    "modifiedTime": 1775063073851,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "1GUEPawCAj66uPsZ",
+  "sort": 275000,
+  "_key": "!items!1GUEPawCAj66uPsZ"
+}

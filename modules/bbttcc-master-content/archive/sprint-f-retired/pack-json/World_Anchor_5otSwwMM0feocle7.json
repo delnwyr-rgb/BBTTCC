@@ -1,0 +1,147 @@
+{
+  "name": "World Anchor",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_titanbound_5.png",
+  "system": {
+    "identifier": "titanbound_world_anchor",
+    "description": {
+      "value": "<h2 data-start=\"7413\" data-end=\"7430\">WORLD ANCHOR</h2><p data-start=\"7431\" data-end=\"7444\"><em data-start=\"7431\" data-end=\"7444\">“No. Stay.”</em></p><h3 data-start=\"7446\" data-end=\"7466\">Subclass Fantasy</h3><p data-start=\"7467\" data-end=\"7502\">World Anchors do not chase enemies.</p><p data-start=\"7504\" data-end=\"7542\">They remove the <strong data-start=\"7520\" data-end=\"7541\">concept of escape</strong>.</p><p data-start=\"7544\" data-end=\"7636\">Reality behaves differently near them —<br data-start=\"7583\" data-end=\"7586\" />paths close, gates stutter, and leylines hesitate.</p><p>World Anchors are:</p><ul data-start=\"10009\" data-end=\"10096\"><li data-start=\"10009\" data-end=\"10027\"><p data-start=\"10011\" data-end=\"10027\">Escape deniers</p></li><li data-start=\"10028\" data-end=\"10044\"><p data-start=\"10030\" data-end=\"10044\">Gate killers</p></li><li data-start=\"10045\" data-end=\"10096\"><p data-start=\"10047\" data-end=\"10096\">The reason clever enemies suddenly look worried</p></li></ul><p data-start=\"10098\" data-end=\"10144\">Leylines don’t fear them.<br data-start=\"10123\" data-end=\"10126\" />Leylines hesitate.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "classIdentifier": "titanbound",
+    "advancement": {
+      "r4x4SGhSxVHLqV7r": {
+        "_id": "r4x4SGhSxVHLqV7r",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.5sm86KjiynUWEkYD",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "title": "Anchor Point",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "pjgv4NedC4fXVMh4": {
+        "_id": "pjgv4NedC4fXVMh4",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.TbBDJef7L50PpfiB",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "title": "Inertial Suppression",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "tFfUvZEjrzKpogy7": {
+        "_id": "tFfUvZEjrzKpogy7",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.nfu103PjCG8617cQ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "title": "Reality Weight",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "cPaQiJIBL65PAeu2": {
+        "_id": "cPaQiJIBL65PAeu2",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.cs4jnrbXaikrPuZg",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "title": "You Will Go No Farther",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "Ok9Qw2OmezP0Dmvi": {
+        "_id": "Ok9Qw2OmezP0Dmvi",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.98qL1lW3QgzFtnUB",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "title": "Pin the World",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "subclass": true
+    }
+  },
+  "folder": "5rgSYU52MurBbXyu",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773192275516,
+    "modifiedTime": 1775063080628,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "5otSwwMM0feocle7",
+  "sort": 275000,
+  "_key": "!items!5otSwwMM0feocle7"
+}

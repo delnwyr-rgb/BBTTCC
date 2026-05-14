@@ -1,0 +1,83 @@
+{
+  "id": "fourththing",
+  "title": "Roll for Initiation (Bad Eden Core Rules)",
+  "description": "Core ruleset for Bad Eden: Roll for Initiation. Steward-first play, manifestation, hex-scale decisions, Tikkun, Darkness, and Radiation.",
+  "version": "0.6.0",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios",
+      "url": "https://shatteredlensstudios.com"
+    }
+  ],
+  "esmodules": [
+    "ft-translation.js",
+    "manifestation-discipline.js",
+    "ft-class-automation.js",
+    "ft-progression.js",
+    "bbttcc-bridge.js",
+    "rfi-items.js",
+    "rfi-pricing.js",
+    "rfi-crafting.js",
+    "rfi-harvest.js",
+    "ae-keys-registry.js",
+    "ae-key-picker.enhancer.js",
+    "module.js"
+  ],
+  "scripts": [],
+  "styles": [
+    "styles/fourththing.css"
+  ],
+  "packs": [
+    {
+      "name": "starter-manifestations",
+      "label": "RFI Starter Manifestations",
+      "path": "packs/starter-manifestations",
+      "type": "Item",
+      "system": "fourththing",
+      "private": false,
+      "flags": {
+        "fourththing": {
+          "deck": "rfi-v1.0",
+          "description": "Nine starter manifestations from the RFI deck — teach players how to think in Manifestation before they build their own."
+        }
+      }
+    }
+  ],
+  "actorTypes": [
+    "character",
+    "npc",
+    "rig",
+    "boss"
+  ],
+  "itemTypes": [
+    "power",
+    "weapon",
+    "armor",
+    "gear",
+    "feature",
+    "feat",
+    "class",
+    "subclass",
+    "race",
+    "spark"
+  ],
+  "grid": {
+    "units": "m",
+    "distance": 1
+  },
+  "initiative": {
+    "formula": "2d10x10 + @attributes.intrigue.value + @derived.initiative.bonus",
+    "decimals": 0
+  },
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ]
+}

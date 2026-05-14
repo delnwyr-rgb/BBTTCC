@@ -1,0 +1,103 @@
+{
+  "name": "Menhirkin Heritage: Igneous",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Menhirkin_Igneous.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Menhirkin heritage: Igneous.</p><p><em>“Some stone was born yelling.”</em></p><p><strong>Menhirkin (Igneous).</strong> You are new rock. The Shattering was your birthday. The land that stood up and began answering chose you because it wanted a mouth that remembered being molten. You run hot, you cool slow, and you are, structurally, still furious about something.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Violence</strong> in fiction and through Tier powers.</li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You have advantage on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> You have advantage on Body checks against exhaustion, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 10 feet of you know you are there even if they cannot see you; you have disadvantage on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><h3>Igneous Traits</h3><ul><li><strong>Heat Memory.</strong> When you take energy damage with the fire flavor, you may bank that damage. Before your next Soma Break, you may spend the banked heat as a bonus action to add +1d10 exploding energy damage (flavor: fire) to your next weapon attack, unarmed strike, or grapple that connects.</li><li><strong>Molten Bearing.</strong> You count fire, smoke, ash, and heated terrain as normal ground for the purposes of difficult terrain and footing. Contact with your bare skin singes paper and warms metal.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Violence OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Volcanic / Thermal / Industrial-Furnace</em> hexes, your faction's heat-based or smelting operations cost 1 fewer OP (minimum 0).</li><li><strong>Forge-Ready.</strong> Once per Strategic Turn, your faction may reroll one failed crafting or weapons-salvage check. The heat remembers the work.</li></ul><p><strong>Note.</strong> This heritage grants its Tier I feat via ItemGrant with a placeholder UUID (TDAzTMQwQQlQyoi5). After import, run the wiring macro to bind real UUIDs.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "79f3a0c21d32e737",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.TDAzTMQwQQlQyoi5",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Igneous Tier I",
+        "hint": "Gain your Igneous Tier I feat."
+      }
+    ],
+    "identifier": "menhirkin_igneous_heritage",
+    "requirements": "Menhirkin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "menhirkin",
+      "lineage": "Igneous",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "violence": 2,
+        "nonlethal": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "fire"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "ktaQ2YC0RiklPjfR",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.mL93g5CgA2LbacFT",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "mL93g5CgA2LbacFT"
+}

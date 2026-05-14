@@ -1,0 +1,156 @@
+{
+  "name": "Route of the Blackchannel (BBTTCC)",
+  "type": "subclass",
+  "img": "Art/BBTTCC%20Button%20Icons/BBTTCC_button_icon_quantum_computer_2.png",
+  "system": {
+    "advancement": {
+      "BC00000000000001": {
+        "_id": "BC00000000000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.wS88Ks6eP61ZYVMY",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.A9p7PNgECQ3gUBHZ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "value": {},
+        "title": "Blackchannel & Packet Slip",
+        "hint": "",
+        "flags": {}
+      },
+      "BC00000000000002": {
+        "_id": "BC00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.PsyVQYlvrq9X4zyN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "value": {},
+        "title": "Quiet Handoff",
+        "hint": "",
+        "flags": {}
+      },
+      "BC00000000000003": {
+        "_id": "BC00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.SOnfofmGgoQhcyLf",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "value": {},
+        "title": "Countertrace",
+        "hint": "",
+        "flags": {}
+      },
+      "BC00000000000004": {
+        "_id": "BC00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.fSvOyUasmFHcTGLN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "value": {},
+        "title": "Courier's Parity",
+        "hint": "",
+        "flags": {}
+      },
+      "BC00000000000005": {
+        "_id": "BC00000000000005",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.hO3TzEAZ6Ptn9vsk",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 18,
+        "value": {},
+        "title": "Blackchannel Broadcast",
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "description": {
+      "value": "<p><em>Courier of whispers, riding the dark bandwidth.</em></p><h3>Level 3: Blackchannel (BBTTCC)</h3><p>During a Courtly Intrigue, Infiltration, or similar social-stealth scenario you are leading, you may spend 1 Intrigue OP to open a Blackchannel relay for 10 minutes. While active, you and allies along your route can send bonus-action whisper-messages (6 words or fewer) audible only across the relay, and the first Deception or Stealth check you make in that scene gains a +2 bonus.</p><h3>Level 3: Packet Slip</h3><p>When you take the Disengage action, you may also attempt to Hide as part of the same action if you are at least lightly obscured.</p><h3>Level 6: Quiet Handoff</h3><p>When you hand an item to an ally, that ally gains a +PB bonus to their next Sleight of Hand or Stealth check made within 1 minute. This effect applies once per ally per minute.</p><h3>Level 10: Countertrace</h3><p>PB/long rest: when a magical surveillance effect targets you or passes through your space, you can use your reaction to force the caster to make a spellcasting ability check against your Courier DC (8 + PB + Dex or Wis). On a failure, you are invisible to that effect for 1 minute.</p><h3>Level 14: Courier’s Parity</h3><p>Once per long rest, you may duplicate a Tiny or smaller nonmagical object you hold; the duplicate lasts 1 hour and is indistinguishable from the original except by strong divination.</p><h3>Level 18: Blackchannel Broadcast</h3><p>Once per long rest, as an action, you open a full Broadcast for 1 minute: you and allies within 60 ft have advantage on Stealth checks and Dexterity saves, can hop 10 ft as part of movement without provoking opportunity attacks, enemies within 60 ft have disadvantage on Perception checks to detect you, and magical surveillance entering the area must succeed on a spellcasting ability check vs your Courier DC or fail to perceive anything. Completing a major infiltration/subterfuge objective under this effect may grant your faction +1 Intrigue OP and +1 Soft Power OP.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_phantom_route_blackchannel",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "BBTTCC Originals"
+    },
+    "classIdentifier": "phantomcourier",
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "folder": "bzLmIdgzyeq2F0Z6",
+  "flags": {
+    "bbttcc-fixed": {
+      "originalIdentifier": "bbttcc-phantom-route-blackchannel",
+      "normalizedIdentifier": "bbttcc_phantom_route_blackchannel"
+    },
+    "bbttcc": {
+      "subclass": true,
+      "subclassKey": "bbttcc_phantom_route_blackchannel"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1765398557968,
+    "modifiedTime": 1775063143172,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "niAvjCoHc1DpUdJS",
+  "sort": 200000,
+  "_key": "!items!niAvjCoHc1DpUdJS"
+}

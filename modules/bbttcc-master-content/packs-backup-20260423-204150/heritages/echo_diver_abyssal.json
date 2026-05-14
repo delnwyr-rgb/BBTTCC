@@ -1,0 +1,108 @@
+{
+  "name": "Echo-Diver Heritage: Abyssal",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver_Abyssal.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Abyssal.</p><p><em>“The deep remembers everything. You’re how it talks about it.”</em></p><p><strong>Echo-Diver (Abyssal).</strong> Your time-sense tilts backward. You don’t predict; you remember, hard, and through things that shouldn’t remember, and sometimes on behalf of things that no longer can. Abyssal Echo-Divers are the ones who find the last note in the last pocket of the last body, and know whose handwriting it was without being told.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Echo-Diver).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Soul</strong> in fiction and through Tier powers.</li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 10 feet would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 5 feet. If this moves the target out of the attack's range or line, the attack misses.</li><li><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You have advantage on Body checks against suffocation, starvation, dehydration, and extreme temperature.</li><li><strong>Vault Sight.</strong> You have low-light vision out to 60 feet. You have advantage on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</li><li><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</li></ul><h3>Abyssal Traits</h3><ul><li><strong>Deep-Current Resistance.</strong> You have resistance to energy damage with the cold flavor, kinetic damage with the thunder flavor, and psychic damage. The abyss has already tried all three on you. You filed a report.</li><li><strong>Still Water.</strong> You have advantage on Soul (Insight) checks and on defense checks against becoming shaken. You have already been more afraid than this, in a place with no surface.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Faith OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Deep / Submerged / Sunken / Archive</em> hexes, your faction's recon and investigation operations gain +2 on the success check.</li><li><strong>Retrocognitive Read.</strong> Once per Strategic Turn, you may ask the GM what the last major event was in a hex your faction does not control. Useful for reading an adjacent territory before you step into it.</li></ul><p><strong>Note.</strong> This heritage grants its Tier I feat via ItemGrant with a placeholder UUID (Bg1PTabXXLoAlGnY). After import, run the wiring macro to bind real UUIDs.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "e686691276c89dc0",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Bg1PTabXXLoAlGnY",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Abyssal Tier I",
+        "hint": "Gain your Abyssal Tier I feat."
+      }
+    ],
+    "identifier": "echo_diver_abyssal_heritage",
+    "requirements": "Echo-Diver",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Abyssal",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "intrigue": 2,
+        "faith": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "cold"
+          },
+          {
+            "type": "kinetic",
+            "flavor": "thunder"
+          },
+          "psychic"
+        ]
+      }
+    }
+  },
+  "folder": "uXn4VQNRFHHYYbag",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.6C4TjG04YUwSGg9k",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "6C4TjG04YUwSGg9k"
+}

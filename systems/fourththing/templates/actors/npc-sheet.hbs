@@ -1,0 +1,468 @@
+<div class="ft-sheet ft-npc-sheet flexcol">
+
+  <header class="ft-header ft-npc-header flexrow">
+
+    <div class="ft-identity ft-npc-identity flexcol">
+      <div class="ft-portrait" data-action="ftEditPortrait" data-tooltip="Click to change portrait">
+        <img src="{{actor.img}}" data-tooltip="{{actor.name}}"/>
+        <div class="ft-portrait-overlay">📷</div>
+      </div>
+      <div class="ft-name">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Name"/>
+      </div>
+
+      {{#if bbttcc.identity.cls}}
+      <div class="ft-meta-pill ft-id-class"><span class="ft-meta-label">Path</span><span class="ft-meta-val">{{bbttcc.identity.cls}}</span></div>
+      {{/if}}
+      {{#if bbttcc.identity.subclass}}
+      <div class="ft-meta-pill ft-id-subclass"><span class="ft-meta-label">Doctrine</span><span class="ft-meta-val">{{bbttcc.identity.subclass}}</span></div>
+      {{/if}}
+      {{#if bbttcc.identity.ancestry}}
+      <div class="ft-meta-pill ft-id-ancestry"><span class="ft-meta-label">Ancestry</span><span class="ft-meta-val">{{bbttcc.identity.ancestry}}</span></div>
+      {{/if}}
+      {{#if bbttcc.identity.heritage}}
+      <div class="ft-meta-pill ft-id-heritage"><span class="ft-meta-label">Heritage</span><span class="ft-meta-val">{{bbttcc.identity.heritage}}</span></div>
+      {{/if}}
+      {{#if bbttcc.faction}}
+      <div class="ft-meta-pill ft-id-faction" data-tooltip="Linked faction. Faction OP shown below.">
+        <span class="ft-meta-label">Faction</span>
+        <span class="ft-meta-val">{{bbttcc.faction.name}}</span>
+        <button type="button" data-action="ftBBTTCCFaction" class="ft-faction-link-mini" data-tooltip="Open faction sheet">→</button>
+      </div>
+      {{/if}}
+
+      <div class="ft-npc-meta-grid">
+        <div class="ft-meta">
+          <label data-tooltip="Role label — e.g. Brute, Striker, Lurker, Boss. Free-text for GM organization.">Role</label>
+          <input type="text" name="system.role" value="{{system.role}}" placeholder="e.g. Brute, Striker, Lurker"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Tier — drives Clarity max baseline (T1 5 / T2 7 / T3 10 / T4 14) and class scaling.">Tier</label>
+          <select name="system.details.tier">
+            {{#each tierOptions as |opt|}}
+            <option value="{{opt.value}}" {{#if opt.selected}}selected{{/if}}>{{opt.label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Initiation — class-leveling step. Drives integrity per level + Bulwark/Courier pool size.">Level</label>
+          <input type="number" name="system.details.level" value="{{details.level}}" min="1" max="20"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Linked faction. Pick any faction in the world — PC factions, antagonists, or this NPC's own group. Empty = unaligned.">Faction</label>
+          <select name="system.faction.id" class="ft-npc-faction-select">
+            <option value="">— Unaligned —</option>
+            {{#each bbttcc.edit.factions as |faction|}}
+            <option value="{{faction.id}}" {{#if (eq ../bbttcc.edit.currentFactionId faction.id)}}selected{{/if}}>{{faction.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+
+      <div class="ft-level-display">
+        <span class="ft-level-num">Initiation {{details.level}}</span>
+        <span class="ft-tier-badge">Tier {{details.tier}}</span>
+      </div>
+    </div>
+
+    <div class="ft-attributes ft-npc-attributes flexcol">
+      <h2 data-tooltip="Faculties — the six attributes. Same ladder as stewards: bare 2d10x10 + value for opposed checks.">Faculties</h2>
+      <div class="ft-attr-grid">
+        {{#each attributeRows as |a|}}
+        <div class="ft-attr">
+          <label>{{a.label}}</label>
+          <input type="number" name="system.attributes.{{a.key}}.value" value="{{a.value}}" min="0" max="10"/>
+          <button type="button" class="ft-attr-roll" data-action="ftRoll" data-attribute="{{a.key}}" data-label="{{a.label}} Test" data-tooltip="2d10x10 + {{a.label}}">⚀</button>
+        </div>
+        {{/each}}
+      </div>
+
+      <h2 data-tooltip="Derived pools — your two damage tracks. Refill on Soma Break.">Derived</h2>
+      <div class="ft-derived flexrow">
+        <div class="ft-stat" data-tooltip="Integrity — physical body track.">
+          <label>Integrity</label>
+          <input type="number" name="system.derived.integrity.value" value="{{system.derived.integrity.value}}" min="0" max="{{system.derived.integrity.max}}"/>
+          <span class="ft-stat-max">/ <input type="number" name="system.derived.integrity.max" value="{{system.derived.integrity.max}}" min="1" class="ft-stat-max-input"/></span>
+        </div>
+        <div class="ft-stat" data-tooltip="Stress — mental/spiritual track.">
+          <label>Stress</label>
+          <input type="number" name="system.derived.stress.value" value="{{system.derived.stress.value}}" min="0" max="{{system.derived.stress.max}}"/>
+          <span class="ft-stat-max">/ <input type="number" name="system.derived.stress.max" value="{{system.derived.stress.max}}" min="1" class="ft-stat-max-input"/></span>
+        </div>
+      </div>
+
+      <div class="ft-defenses flexrow">
+        <div class="ft-def-stat" data-tooltip="Guard — physical defense (Violence + Body + armor).">
+          <label>Guard</label>
+          <input type="number" name="system.derived.guard.value" value="{{system.derived.guard.value}}" min="0"/>
+          <button type="button" data-action="ftDefenseRoll" data-defense="guard" class="ft-def-roll" data-tooltip="Guard check">⚀</button>
+        </div>
+        <div class="ft-def-stat" data-tooltip="Evasion — agility defense (Intrigue + Body + armor).">
+          <label>Evasion</label>
+          <input type="number" name="system.derived.evasion.value" value="{{system.derived.evasion.value}}" min="0"/>
+          <button type="button" data-action="ftDefenseRoll" data-defense="evasion" class="ft-def-roll" data-tooltip="Evasion check">⚀</button>
+        </div>
+        <div class="ft-def-stat" data-tooltip="Resolve — willpower defense (Presence + Soul + armor).">
+          <label>Resolve</label>
+          <input type="number" name="system.derived.resolve.value" value="{{system.derived.resolve.value}}" min="0"/>
+          <button type="button" data-action="ftDefenseRoll" data-defense="resolve" class="ft-def-roll" data-tooltip="Resolve check">⚀</button>
+        </div>
+      </div>
+
+      <div class="ft-def-chips">
+        {{#each defenseTypes as |t|}}
+          {{#if t.derivedImmune}}<span class="ft-chip ft-chip-immune" data-tooltip="Immune to {{t.label}}">⦿ {{t.label}}</span>{{else if t.derivedResist}}<span class="ft-chip ft-chip-resist" data-tooltip="Resist {{t.label}}">◑ {{t.label}}</span>{{/if}}
+          {{#each t.immuneFlavors as |flv|}}<span class="ft-chip ft-chip-immune ft-chip-flavor">⦿ {{../t.label}} ({{flv}})</span>{{/each}}
+          {{#each t.resistFlavors as |flv|}}<span class="ft-chip ft-chip-resist ft-chip-flavor">◑ {{../t.label}} ({{flv}})</span>{{/each}}
+          {{#if t.derivedVuln}}<span class="ft-chip ft-chip-vuln" data-tooltip="Vulnerable to {{t.label}}">▲ {{t.label}}</span>{{/if}}
+          {{#each t.vulnFlavors as |flv|}}<span class="ft-chip ft-chip-vuln ft-chip-flavor">▲ {{../t.label}} ({{flv}})</span>{{/each}}
+        {{/each}}
+        {{#each condImmunityList as |c|}}{{#if c.derivedImmune}}<span class="ft-chip ft-chip-cond-immune">✦ {{c.label}}</span>{{/if}}{{/each}}
+      </div>
+
+      {{#if bulwarkPools}}
+      <div class="ft-bulwark-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
+        {{#if bulwarkPools.merged}}
+        <span class="ft-chip ft-chip-inev" data-tooltip="Bulwark — Inevitability Dice (Cataclyst capstone)." style="background:#2d1f3a;color:#dac8ff;border:1px solid #6a3a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;">⬢ Inevitability {{bulwarkPools.inev.current}}/{{bulwarkPools.inev.max}}</span>
+        <button type="button" data-action="ftBulwarkInevAdjust" data-delta="-1" data-tooltip="Spend 1 Inevitability" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#3a1a3a;color:#dac8ff;border:1px solid #6a3a8a;border-radius:3px;cursor:pointer">−1</button>
+        <button type="button" data-action="ftBulwarkInevAdjust" data-delta="1"  data-tooltip="Recover 1 Inevitability" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#2a3a3a;color:#c8ffea;border:1px solid #3a8a6a;border-radius:3px;cursor:pointer">+1</button>
+        {{else}}
+        <span class="ft-chip ft-chip-frame" data-tooltip="Bulwark — Frame Dice (persistence)." style="background:#22324a;color:#c8d8ff;border:1px solid #3a5b8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;">◧ Frame {{bulwarkPools.frame.current}}/{{bulwarkPools.frame.max}}</span>
+        <button type="button" data-action="ftBulwarkInevAdjust" data-pool="frame" data-delta="-1" data-tooltip="Quick-adjust: spend 1 Frame Die (no purpose dialog)" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#1a2a3a;color:#c8d8ff;border:1px solid #3a5b8a;border-radius:3px;cursor:pointer">−</button>
+        <button type="button" data-action="ftBulwarkInevAdjust" data-pool="frame" data-delta="1"  data-tooltip="Quick-adjust: recover 1 Frame Die" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#2a3a4a;color:#c8d8ff;border:1px solid #3a5b8a;border-radius:3px;cursor:pointer">+</button>
+        <span class="ft-chip ft-chip-ruin"  data-tooltip="Bulwark — Ruin Charges (inevitability)." style="background:#3a1a1a;color:#ffd2c8;border:1px solid #8a3a3a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;">◨ Ruin {{bulwarkPools.ruin.current}}/{{bulwarkPools.ruin.max}}</span>
+        <button type="button" data-action="ftBulwarkInevAdjust" data-pool="ruin"  data-delta="-1" data-tooltip="Quick-adjust: spend 1 Ruin Charge (no purpose dialog)" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#3a1a1a;color:#ffd2c8;border:1px solid #8a3a3a;border-radius:3px;cursor:pointer">−</button>
+        <button type="button" data-action="ftBulwarkInevAdjust" data-pool="ruin"  data-delta="1"  data-tooltip="Quick-adjust: recover 1 Ruin Charge" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#4a2a2a;color:#ffd2c8;border:1px solid #8a3a3a;border-radius:3px;cursor:pointer">+</button>
+        {{/if}}
+      </div>
+      {{#if activePools.bulwark}}
+      <div class="ft-bulwark-actions" style="margin-top:0.3rem;display:flex;gap:0.3rem;flex-wrap:wrap;align-items:center;">
+        <span style="font-size:0.7rem;opacity:0.7;letter-spacing:0.04em;margin-right:0.2rem;">SPEND →</span>
+        <button type="button" data-action="ftClassAction" data-handler="bulwark_spend_frame" data-tooltip="Open the Frame Die purpose dialog (Absorb / Anchor / Push)." style="padding:0.15rem 0.55rem;font-size:0.78rem;background:#22324a;color:#c8d8ff;border:1px solid #3a5b8a;border-radius:3px;cursor:pointer;font-weight:600;">◧ Frame…</button>
+        <button type="button" data-action="ftClassAction" data-handler="bulwark_ruin" data-tooltip="Open the Ruin Charge purpose dialog (Catastrophic Entry / Siege Cost Reduction / Shockwave Footing / Ruin to Renewal)." style="padding:0.15rem 0.55rem;font-size:0.78rem;background:#3a1a1a;color:#ffd2c8;border:1px solid #8a3a3a;border-radius:3px;cursor:pointer;font-weight:600;">◨ Ruin…</button>
+        <button type="button" data-action="ftClassAction" data-handler="bulwark_stance" data-tooltip="Set Bulwark stance (Advance / Anchor / None)." style="padding:0.15rem 0.55rem;font-size:0.78rem;background:#2d1f3a;color:#dac8ff;border:1px solid #6a3a8a;border-radius:3px;cursor:pointer;font-weight:600;">⬢ Stance…</button>
+      </div>
+      {{/if}}
+      {{/if}}
+
+      {{#if shadowCourierState}}
+      <div class="ft-courier-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
+        <span class="ft-chip ft-chip-pace" data-tooltip="Shadow Courier — Pace pool." style="background:#1f2d3a;color:#c8e0ff;border:1px solid #3a6a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">◌ Pace
+          <input type="number" name="system.resources.pace.current" value="{{shadowCourierState.pace.current}}" min="0" max="{{shadowCourierState.pace.max}}" style="width:32px;background:transparent;color:inherit;border:1px solid #3a6a8a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;"/>
+          / {{shadowCourierState.pace.max}}
+        </span>
+        {{#if shadowCourierState.package.carried}}
+        <button type="button" data-action="ftCourierPackageEdit" class="ft-chip ft-chip-package" data-tooltip="Package: {{shadowCourierState.package.type}}{{#if shadowCourierState.package.id}} ({{shadowCourierState.package.id}}){{/if}}" style="background:#2a1f3a;color:#dac8ff;border:1px solid #6a3a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">◯ Package: {{shadowCourierState.package.type}}{{#if shadowCourierState.package.id}} — {{shadowCourierState.package.id}}{{/if}}</button>
+        <button type="button" data-action="ftCourierPackageDeliver" data-tooltip="Deliver Package" style="padding:0.05rem 0.45rem;font-size:0.78rem;background:#1a3a1a;color:#c8ffd2;border:1px solid #3a8a3a;border-radius:3px;cursor:pointer">✦ Deliver</button>
+        {{else}}
+        <button type="button" data-action="ftCourierPackageEdit" class="ft-chip ft-chip-package" data-tooltip="Package slot empty. Click to designate." style="background:#1a1a1f;color:#9098a8;border:1px solid #4a4a55;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;font-style:italic;cursor:pointer;">◯ Package: empty</button>
+        {{/if}}
+      </div>
+      {{/if}}
+    </div>
+
+    <div class="ft-magic-panel flexcol">
+      <h2 data-tooltip="Manifestation panel — Clarity gates the cast, Sephirah colors it, Noise tracks Chaos-mode residue. NPCs cast manifestations the same as stewards.">Manifestations</h2>
+      <div class="ft-magic-row" data-tooltip="Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=5). Max scales with Tier (5/7/10/14). +5 if classed as a TCC (Wyrdlens Adept, Cosmic Linguist, Dreamwalker, Pactkeeper).">
+        <label>Clarity</label>
+        <div class="ft-clarity-track">
+          {{#each magic.clarityPips as |pip|}}
+          <span class="ft-pip {{#if pip.filled}}on{{/if}}"></span>
+          {{/each}}
+        </div>
+        <input type="number" name="system.magic.clarity.value" value="{{magic.clarity.value}}" min="0" max="{{magic.clarity.max}}" class="ft-pip-input"/>
+      </div>
+      <div class="ft-magic-row" data-tooltip="Noise — metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool. Hermetic and Ascendant generate 0 Noise.">
+        <label>Noise</label>
+        <span class="ft-noise-bar">
+          <span class="ft-noise-fill {{ftNoiseClass magic.noise.value}}" style="width: {{magic.noisePercent}}%"></span>
+        </span>
+        <input type="number" name="system.magic.noise.value" value="{{magic.noise.value}}" min="0" max="10" class="ft-noise-input {{ftNoiseClass magic.noise.value}}"/>
+      </div>
+      <div class="ft-magic-row ft-seph-row" data-tooltip="Sephirah — active Tree of Life sphere. Shapes manifestation flavor and damage alignment.">
+        <label>Sephirah</label>
+        <select name="system.magic.sephirah" class="ft-seph-select" style="border-color: {{ftSephColor magic.sephirah}}44">
+          {{#each SEPHIROTH as |seph key|}}
+          <option value="{{key}}" {{#if (eq ../magic.sephirah key)}}selected{{/if}}>{{seph.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="ft-seph-domain">{{ftSephDomain magic.sephirah}}</div>
+      <div class="ft-magic-actions">
+        <button type="button" data-action="ftMisfire" class="ft-misfire-btn" data-tooltip="Roll a Misfire — clamped to NPC tier.">⚡ Misfire</button>
+        {{#if actorIsTCC}}
+        <button type="button" data-action="ftFiat" class="ft-misfire-btn" data-tooltip="Trad Caster Class — speak a free Fiat (T0). Must begin with &quot;Let there be …&quot;.">✦ Fiat</button>
+        {{/if}}
+      </div>
+      {{#if bbttcc.faction.op}}
+      <div class="ft-faction-op-snapshot" style="margin-top:0.5rem;padding:0.4rem;background:#1a1f2a;border:1px solid #3a4a6a;border-radius:4px;font-size:0.75rem;color:#c8d8ff;" data-tooltip="Linked-faction OP snapshot. Manifestations with an OP cost commit from this bank when invoked.">
+        <div style="font-weight:bold;margin-bottom:0.2rem;">Faction OP — {{bbttcc.faction.name}}</div>
+        {{#if bbttcc.faction.op.violence}}<span style="margin-right:0.5rem;">⚔ {{bbttcc.faction.op.violence}}</span>{{/if}}
+        {{#if bbttcc.faction.op.intrigue}}<span style="margin-right:0.5rem;">⌥ {{bbttcc.faction.op.intrigue}}</span>{{/if}}
+        {{#if bbttcc.faction.op.economy}}<span style="margin-right:0.5rem;">⚖ {{bbttcc.faction.op.economy}}</span>{{/if}}
+        {{#if bbttcc.faction.op.diplomacy}}<span style="margin-right:0.5rem;">☮ {{bbttcc.faction.op.diplomacy}}</span>{{/if}}
+        {{#if bbttcc.faction.op.softPower}}<span style="margin-right:0.5rem;">♥ {{bbttcc.faction.op.softPower}}</span>{{/if}}
+        {{#if bbttcc.faction.op.nonlethal}}<span style="margin-right:0.5rem;">✋ {{bbttcc.faction.op.nonlethal}}</span>{{/if}}
+      </div>
+      {{/if}}
+    </div>
+  </header>
+
+  <section class="ft-npc-toolbar flexrow">
+    <button type="button" class="ft-npc-tool" data-action="ftNpcSurgeInit" data-tooltip="2d10x10 + Intrigue + init bonus"><i class="fas fa-bolt"></i> Surge Init</button>
+    <div class="ft-action-economy">
+      <button type="button" class="ft-econ-chip {{#if actionEconomy.actionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="actionUsed">Action</button>
+      <button type="button" class="ft-econ-chip {{#if actionEconomy.bonusUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="bonusUsed">Bonus</button>
+      <button type="button" class="ft-econ-chip {{#if actionEconomy.reactionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="reactionUsed">Reaction</button>
+      <button type="button" class="ft-npc-tool" data-action="ftNewTurn" data-tooltip="Reset action economy">↻ New Turn</button>
+    </div>
+    <div class="ft-rest-controls">
+      <button type="button" class="ft-npc-tool" data-action="ftSceneBreak" data-tooltip="Scene Break — clear scene-scoped resources">Scene</button>
+      <button type="button" class="ft-npc-tool" data-action="ftSomaBreak" data-tooltip="Soma Break — full reset">Soma</button>
+    </div>
+    <div class="ft-progress-controls">
+      <button type="button" class="ft-npc-tool" data-action="ftLevelUp" data-tooltip="Advance Initiation — bumps level by 1, applies attribute bump, fires path-feature auto-grants for the new level.">▲ Advance Initiation</button>
+    </div>
+    <button type="button" data-action="ftToggleEditMode" class="ft-edit-mode-btn" data-tooltip="Toggle edit mode — exposes raw rank inputs and other normally-locked fields for direct editing.">✎ Edit</button>
+  </section>
+
+  <section class="ft-npc-body">
+    {{#if hasStrikes}}
+    <div class="ft-npc-section">
+      <div class="ft-section-header"><h3>Strikes</h3><span class="ft-mini-count">{{strikeRows.length}}</span></div>
+      <div class="ft-item-list">
+        {{#each strikeRows as |s|}}
+        <div class="ft-item-row" data-item-id="{{s.id}}">
+          <div class="ft-item-summary">
+            <img src="{{s.img}}" class="ft-item-art" alt="{{s.name}}"/>
+            <span class="ft-item-name">{{s.name}}</span>
+            {{#if s.formula}}<span class="ft-item-meta">{{s.formula}} {{s.type}}</span>{{/if}}
+            {{#if s.category}}<span class="ft-item-meta">{{s.category}}</span>{{/if}}
+            <div class="ft-item-controls">
+              <button type="button" data-action="ftWeaponRoll" data-item-id="{{s.id}}" class="ft-roll-btn">Strike</button>
+              <button type="button" data-action="ftItemEdit"   data-item-id="{{s.id}}" class="ft-item-edit">⚙</button>
+              <button type="button" data-action="ftItemDelete" data-item-id="{{s.id}}" class="ft-power-delete">✕</button>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    <div class="ft-npc-section">
+      <div class="ft-section-header ft-manifest-header">
+        <div>
+          <h3>Manifestations &amp; Features</h3>
+          {{#if hasManifestations}}<span class="ft-mini-count">{{manifestRows.length}}</span>{{/if}}
+        </div>
+        <div class="ft-header-actions">
+          <button type="button" data-action="ftManifestCreate" class="ft-add-btn" data-tooltip="Open the Manifestation Engine to author a custom NPC ability (breath weapon, aura, signature attack…).">+ Add Feature</button>
+          <details class="ft-header-overflow">
+            <summary class="ft-add-btn ft-add-btn-subtle">⋯</summary>
+            <div class="ft-header-overflow-menu">
+              {{#if actorIsTCC}}<button type="button" data-action="ftPowerCreate"  class="ft-add-btn" data-tooltip="Working preset — instant cast (TCC only).">Working</button>{{/if}}
+              <button type="button" data-action="ftWeaponCreate" class="ft-add-btn" data-tooltip="Form preset — Stable manifestation with a Strike attack profile.">Form</button>
+              <button type="button" data-action="ftManifestCreate" data-starter="ritual" class="ft-add-btn" data-tooltip="Ritual preset — Ongoing/scene-bound manifestation.">Ritual</button>
+              <button type="button" data-action="ftManifestCreate" data-starter="stable" class="ft-add-btn" data-tooltip="Stable preset — bound manifestation that persists across turns.">Stable</button>
+            </div>
+          </details>
+        </div>
+      </div>
+      {{#if hasManifestations}}
+      <div class="ft-item-list">
+        {{#each manifestRows as |m|}}
+        <details class="ft-item-row" data-item-id="{{m.id}}">
+          <summary class="ft-item-summary">
+            <img src="{{m.img}}" class="ft-item-art" alt="{{m.name}}"/>
+            <span class="ft-item-name">{{m.name}}</span>
+            <span class="ft-manifest-chip ft-tier-pill ft-tier-{{m.tier}}">{{m.tierLabel}}</span>
+            <span class="ft-manifest-chip">{{m.stabilityLabel}}</span>
+            <span class="ft-item-meta">{{m.costLabel}}</span>
+            <div class="ft-item-controls">
+              {{#if m.isForm}}
+              <button type="button" data-action="ftWeaponRoll" data-item-id="{{m.id}}" class="ft-roll-btn">Strike</button>
+              <button type="button" data-action="ftCast"       data-item-id="{{m.id}}" class="ft-roll-btn ft-roll-btn-subtle">Invoke</button>
+              {{else}}
+              <button type="button" data-action="ftCastPower"  data-item-id="{{m.id}}" class="ft-roll-btn">{{m.actionLabel}}</button>
+              {{/if}}
+              <button type="button" data-action="ftItemEdit"   data-item-id="{{m.id}}" class="ft-item-edit">⚙</button>
+              <button type="button" data-action="ftItemDelete" data-item-id="{{m.id}}" class="ft-power-delete">✕</button>
+            </div>
+          </summary>
+          <div class="ft-manifest-detail">
+            {{#if m.signature}}<div class="ft-manifest-signature">Signature: {{m.signature}}</div>{{/if}}
+            {{#if m.desc}}<div class="ft-item-desc">{{m.desc}}</div>{{/if}}
+          </div>
+        </details>
+        {{/each}}
+      </div>
+      {{else}}
+      <p class="ft-hint" style="margin:0.5rem 0;font-size:0.78rem;opacity:0.6;font-style:italic">No manifestations yet — use <em>+ Add Feature</em> to author one with the Manifestation Engine.</p>
+      {{/if}}
+    </div>
+
+    {{#if hasClassIdentity}}
+    <div class="ft-npc-section">
+      <div class="ft-section-header"><h3>Path &amp; Doctrine</h3><span class="ft-mini-count">{{classRows.length}}</span></div>
+      <div class="ft-item-list">
+        {{#each classRows as |c|}}
+        <div class="ft-item-row" data-item-id="{{c.id}}">
+          <div class="ft-item-summary">
+            <img src="{{c.img}}" class="ft-item-art" alt="{{c.name}}"/>
+            <span class="ft-item-name">{{c.name}}</span>
+            <span class="ft-item-meta">{{c.typeLabel}}</span>
+            {{#if c.identifier}}<span class="ft-item-meta" style="opacity:0.6">{{c.identifier}}</span>{{/if}}
+            <div class="ft-item-controls">
+              <button type="button" data-action="ftItemEdit"   data-item-id="{{c.id}}" class="ft-item-edit">⚙</button>
+              <button type="button" data-action="ftItemDelete" data-item-id="{{c.id}}" class="ft-power-delete">✕</button>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      <div class="ft-class-tip" style="margin-top:0.3rem;padding:0.4rem;background:#1a1a1f;border:1px dashed #3a3a4a;border-radius:4px;font-size:0.72rem;color:#a8a8b8;font-style:italic;display:flex;flex-direction:column;gap:0.35rem;">
+        <span>Drag a Path / Doctrine / Ancestry / Heritage from the compendium — auto-grants its tier-1 principles + grants on drop. <b>▲ Advance Initiation</b> applies subsequent levels.</span>
+        <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+          <button type="button" class="ft-add-btn ft-add-btn-subtle" data-action="ftApplyPathFeatures" data-tooltip="Re-pull every Path / Doctrine principle the creature is eligible for at its current level. Idempotent (skips owned).">⊕ Apply Path Features</button>
+          <button type="button" class="ft-add-btn ft-add-btn-subtle" data-action="ftGrantSkillRanks" data-tooltip="Auto-grant aptitude rank 1 for any aptitudes named in path principles.">⊕ Grant Aptitudes</button>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{#if hasFeatures}}
+    <div class="ft-npc-section">
+      <div class="ft-section-header"><h3>Features &amp; Traits</h3><span class="ft-mini-count">{{featureRows.length}}</span></div>
+      <div class="ft-item-list">
+        {{#each featureRows as |f|}}
+        <details class="ft-item-row" data-item-id="{{f.id}}">
+          <summary class="ft-item-summary">
+            <img src="{{f.img}}" class="ft-item-art" alt="{{f.name}}"/>
+            <span class="ft-item-name">{{f.name}}</span>
+            <span class="ft-item-meta">{{f.type}}</span>
+            <div class="ft-item-controls">
+              {{#if f.hasActiveAbility}}
+              <button type="button" data-action="ftUseFeature" data-item-id="{{f.id}}" class="ft-roll-btn" data-tooltip="Activate / invoke this feature">▶ Use</button>
+              {{/if}}
+              <button type="button" data-action="ftItemEdit"   data-item-id="{{f.id}}" class="ft-item-edit">⚙</button>
+              <button type="button" data-action="ftItemDelete" data-item-id="{{f.id}}" class="ft-power-delete">✕</button>
+            </div>
+          </summary>
+          {{#if f.desc}}
+          <div class="ft-item-desc">{{{f.desc}}}</div>
+          {{/if}}
+        </details>
+        {{/each}}
+      </div>
+    </div>
+    {{/if}}
+
+    {{!-- Aptitudes — folded by default since the 23-row ladder is heavy.
+         Pip clicks set rank; rank input visible only in edit mode. --}}
+    <details class="ft-npc-section ft-npc-aptitudes-fold">
+      <summary><div class="ft-section-header"><h3 style="display:inline">Aptitudes</h3><span style="font-size:0.72rem;opacity:0.6;font-style:italic;margin-left:0.5rem">click pips to set rank</span></div></summary>
+      <div class="ft-skills-grid">
+        <div class="ft-skills-header">
+          <span class="ft-skill-col ft-skill-col-name"  data-tooltip="Aptitude name and current rank label.">Aptitude</span>
+          <span class="ft-skill-col ft-skill-col-attr"  data-tooltip="Faculty this aptitude keys off.">Faculty</span>
+          <span class="ft-skill-col ft-skill-col-rank"  data-tooltip="Trained rank (0–5).">Rank</span>
+          <span class="ft-skill-col ft-skill-col-ae"    data-tooltip="Active-effect bonus from items.">AE</span>
+          <span class="ft-skill-col ft-skill-col-total" data-tooltip="Total bonus added to the 2d10x10 roll.">Total</span>
+          <span class="ft-skill-col ft-skill-col-action"></span>
+        </div>
+        {{#each enrichedSkills as |skill|}}
+        <div class="ft-skill-row" data-skill="{{skill.key}}" data-tooltip="{{skill.breakdown}}">
+          <div class="ft-skill-col ft-skill-col-name">
+            <span class="ft-skill-name">{{skill.label}}</span>
+            <span class="ft-skill-rank-label" style="color:{{skill.rankData.color}}" data-tooltip="{{skill.rankData.label}}">{{skill.rankData.label}}</span>
+          </div>
+          <div class="ft-skill-col ft-skill-col-attr">
+            <span class="ft-skill-attr-name">{{ftCap skill.attribute}}</span>
+            <span class="ft-skill-col-val">+{{skill.attrBonus}}</span>
+          </div>
+          <div class="ft-skill-col ft-skill-col-rank">
+            <div class="ft-skill-rank-pips">
+              {{#each skill.pips as |pip|}}
+              <span class="ft-rank-pip {{#if pip.filled}}filled{{/if}}"
+                    data-action="ftSetSkillRank"
+                    data-target-rank="{{pip.idx}}"
+                    data-tooltip="Click to set rank {{pip.idx}}{{#if pip.filled}} · click filled pip again to decrement{{/if}}"
+                    {{#if pip.filled}}style="background:{{pip.color}};border-color:{{pip.color}}"{{/if}}></span>
+              {{/each}}
+            </div>
+            <span class="ft-skill-col-val">+{{skill.rankData.bonus}}</span>
+            <input type="number" name="system.skills.{{skill.key}}.value"
+                   value="{{skill.rank}}" min="0" max="5"
+                   class="ft-skill-rank-input ft-edit-only" data-tooltip="Edit rank directly (edit mode)"/>
+          </div>
+          <div class="ft-skill-col ft-skill-col-ae">
+            {{#if skill.aeBonus}}<span class="ft-skill-col-val ft-skill-ae-bonus">+{{skill.aeBonus}}</span>{{else}}<span class="ft-skill-col-val ft-skill-col-empty">—</span>{{/if}}
+          </div>
+          <div class="ft-skill-col ft-skill-col-total">
+            <span class="ft-skill-total-num">+{{skill.totalBonus}}</span>
+          </div>
+          <div class="ft-skill-col ft-skill-col-action">
+            <button type="button" data-action="ftSkillRoll" data-skill="{{skill.key}}" data-attribute="{{skill.attribute}}" class="ft-skill-roll-btn">Roll</button>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </details>
+
+    {{!-- Inventory — gear, armor, mundane (non-manifested) weapons. Crafted
+         items show in the Manifestations section instead. --}}
+    <div class="ft-npc-section">
+      <div class="ft-section-header ft-inventory-header">
+        <h3>Inventory</h3>
+        {{#if hasInventory}}<span class="ft-mini-count">{{gear.length}}</span>{{/if}}
+        <div class="ft-inv-tools" style="margin-left:auto;display:flex;gap:0.4rem">
+          <button type="button" class="ft-add-btn ft-add-btn-subtle" data-action="ftGather" data-tooltip="Gather materials from harvest nodes in this scene">🜨 Gather</button>
+          <button type="button" class="ft-add-btn ft-add-btn-subtle" data-action="ftForge"  data-tooltip="Open the Forge — craft items from materials">⚒ Forge</button>
+        </div>
+      </div>
+      {{> "systems/fourththing/templates/partials/inventory-list.hbs" items=gear}}
+    </div>
+
+    <div class="ft-npc-section">
+      <div class="ft-section-header"><h3>Conditions</h3>{{#if hasActiveConditions}}<span class="ft-mini-count">{{activeConditions.length}}</span>{{/if}}</div>
+      <div class="ft-condition-grid">
+        {{#each conditionList as |c|}}
+        <button type="button" class="ft-condition-chip {{#if c.active}}active{{/if}}" data-action="ftConditionToggle" data-condition="{{c.key}}" data-tooltip="{{c.desc}}" style="{{#if c.active}}border-color:{{c.color}};color:{{c.color}};{{/if}}">{{c.label}}</button>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="ft-npc-section">
+      <div class="ft-section-header"><h3>GM Notes</h3></div>
+      <textarea name="system.notes" rows="6" placeholder="Behaviors, motivations, hooks, encounter notes…">{{system.notes}}</textarea>
+      <div class="ft-npc-tags">
+        <label>Tags</label>
+        <input type="text" name="system.tags" value="{{system.tags}}" placeholder="e.g. elite, qliphothic, faction-npc"/>
+      </div>
+    </div>
+
+    <details class="ft-npc-section ft-def-editor-fold">
+      <summary><h3 style="display:inline">Defense / Condition Immunity Editor</h3></summary>
+      <label class="ft-def-editor-label">Resist / immune (cycle)</label>
+      <div class="ft-def-chips ft-def-chips-edit">
+        {{#each defenseTypes as |t|}}
+          <button type="button" class="ft-chip ft-chip-edit {{#if t.baseImmune}}ft-chip-immune{{else if t.baseResist}}ft-chip-resist{{else}}ft-chip-none{{/if}}" data-action="ftDefenseCycle" data-type="{{t.key}}" data-tooltip="{{t.label}}">{{#if t.baseImmune}}⦿{{else if t.baseResist}}◑{{else}}○{{/if}} {{t.label}}</button>
+        {{/each}}
+      </div>
+      <label class="ft-def-editor-label">Vulnerable (toggle)</label>
+      <div class="ft-def-chips ft-def-chips-edit">
+        {{#each defenseTypes as |t|}}
+          <button type="button" class="ft-chip ft-chip-edit {{#if t.baseVuln}}ft-chip-vuln{{else}}ft-chip-none{{/if}}" data-action="ftVulnToggle" data-type="{{t.key}}">{{#if t.baseVuln}}▲{{else}}○{{/if}} {{t.label}}</button>
+        {{/each}}
+      </div>
+      <label class="ft-def-editor-label">Condition immune (toggle)</label>
+      <div class="ft-def-chips ft-def-chips-edit">
+        {{#each condImmunityList as |c|}}
+          <button type="button" class="ft-chip ft-chip-edit {{#if c.baseImmune}}ft-chip-cond-immune{{else}}ft-chip-none{{/if}}" data-action="ftCondImmuneToggle" data-condition="{{c.key}}">{{#if c.baseImmune}}✦{{else}}○{{/if}} {{c.label}}</button>
+        {{/each}}
+      </div>
+    </details>
+
+  </section>
+</div>

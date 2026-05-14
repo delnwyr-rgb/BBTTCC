@@ -1,0 +1,32 @@
+{
+  "id": "bbttcc-world",
+  "title": "BBTTCC World",
+  "description": "World-state spine + GM God Panel (World State Manual Edit) for BBTTCC.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Shattered Lens Studios"
+    }
+  ],
+
+  "esmodules": [
+    "scripts/api.world.js",
+    "scripts/module.js",
+    "apps/world-gm-panel.js"
+  ],
+
+  "styles": [
+    "styles/world-gm-panel.css"
+  ],
+
+  "packs": [],
+
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+
+  "relationships": {
+    "requires": []
+  }
+}

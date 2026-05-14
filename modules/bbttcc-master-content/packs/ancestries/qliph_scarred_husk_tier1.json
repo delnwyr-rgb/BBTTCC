@@ -1,0 +1,84 @@
+{
+  "name": "Qliph-Scarred (Husk): The Quiet Inside",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/QliphScarred_Husk.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“They looked for you in all the usual places. None of them were the right shape.”</em></p><p><strong>The Quiet Inside (1/Short Rest; recharges on Soma Break).</strong> As a reaction when you are targeted by a divination, mind-reading, or truth-detection effect, you may force the caster to roll their effect against your Resolve instead of its normal save DC. On a failure, the effect returns nothing — no partial information, no awareness that a target was present. On a success, you take 1 point of Stress from the pressure of the probe.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "qliph_scarred_husk_tier1",
+    "requirements": "Qliph-Scarred (Husk)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "qliph_scarred",
+      "feature": "the_quiet_inside",
+      "lineage": "Husk",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          "psychic"
+        ]
+      }
+    }
+  },
+  "folder": "XGBBcvgCXDYh3J9D",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.rihmlgn3MViwQFlG",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "rihmlgn3MViwQFlG"
+}

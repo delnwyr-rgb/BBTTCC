@@ -1,0 +1,44 @@
+{
+  "name": "Path of the Siege Ascendant (BBTTCC)",
+  "type": "subclass",
+  "img": "icons/environment/settlement/wall-fortified.webp",
+  "system": {
+    "description": {
+      "value": "\n<p><em>You are the instrument; the city is the drum.</em></p>\n<h3>Level 3: Siege Ascendant (BBTTCC)</h3>\n<p>Start of a Siege round you lead: first Maneuver costs <strong>\u22121 OP</strong> (min 1).</p>\n<h3>Level 3: Ramrunner Stance</h3>\n<p>Advantage to shove/push heavy objects; resist being moved while braced.</p>\n<h3>Level 6: Echo Breach</h3>\n<p>Once/round on structure hit, a second weak point takes force = PB.</p>\n<h3>Level 10: Overhang Sense</h3>\n<p>Pinpoint unstable surfaces; allies have advantage to avoid falling debris you call out.</p>\n<h3>Level 14: Momentum of Ruin</h3>\n<p>On breach success, allies within 30 ft gain temp HP = your level and advantage on next attack.</p>\n",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "classIdentifier": "breaker",
+    "identifier": "bbttcc-breaker-siegeascendant",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "13.348",
+    "systemId": "dnd5e",
+    "systemVersion": "5.1.9",
+    "createdTime": 1762723298105,
+    "modifiedTime": 1762723298105,
+    "lastModifiedBy": "chatgpt-bbttcc",
+    "exportSource": {
+      "worldId": "bunker-busters",
+      "uuid": "Item.df3a5b9310f44f48",
+      "coreVersion": "13.348",
+      "systemId": "dnd5e",
+      "systemVersion": "5.1.9"
+    }
+  },
+  "ownership": {
+    "default": 0
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "name": "Human Heritage: Cro-Magnon",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Human_Cro_Magnon_1.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Human heritage: Cro-Magnon.</p><p><em>“Humanity is the species that keeps walking even when the map says stop.”</em></p><p><strong>Human (Cro-Magnon).</strong> You are not a fantasy human. You are the cognitive, symbolic, cooperative inheritance of the lineage that first painted ancestors on cave walls, buried its dead with flowers, and traded ochre across a continent it had no map for.</p><p>Where Neanderthal is <em>strength</em> and Florensis is <em>reach</em>, Cro-Magnon is <em>pattern</em>. Language, ritual, coalition. You are the human branch that kept explaining things until the explanation started working.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Human).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Human does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind or Presence</strong> in fiction and through Tier powers.</li></ul><h3>Human Core: Stubborn Spark</h3><p>At character creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Cro-Magnon Traits</h3><ul><li><strong>Symbol Fluency.</strong> You know one additional language at creation. You can identify the emotional intent of any spoken or written communication in a language you know with a successful Presence (Empathy) or Soul (Insight) check; on a success, the GM tells you what the speaker actually meant, even if the words were not it.</li><li><strong>Coalition Instinct.</strong> When you use the Help action on an ally's check and they succeed, the ally also recovers 1 point of Stress. The fiction matters: name the thing you said or did, even if it's wordless.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Soft Power OP</strong> and <strong>+1 Intrigue OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Settlement / Market / Council</em> hexes, your faction's recruitment, diplomacy, and propaganda operations cost 1 fewer OP (minimum 0).</li><li><strong>Coalition Call.</strong> Once per Strategic Turn, your faction may convert up to 1 Violence OP and 1 Economy OP into 2 Soft Power OP, representing a coalition-building action: a speech, a shared meal, a joint ritual. The swap is narrated, not just accounted.</li></ul>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "829b00fea9b4037f",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.wa4moiDUPi0pBh10",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Cro-Magnon Tier I",
+        "hint": "Gain your Cro-Magnon Tier I feat."
+      }
+    ],
+    "identifier": "human_cro_magnon_heritage",
+    "requirements": "Human",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "human",
+      "lineage": "Cro-Magnon",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "softpower": 2,
+        "intrigue": 1
+      }
+    },
+    "fourththing": {}
+  },
+  "folder": "XtVszfKGXh1D3T29",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.hcromagn0h1tage8",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "hcromagn0h1tage8"
+}

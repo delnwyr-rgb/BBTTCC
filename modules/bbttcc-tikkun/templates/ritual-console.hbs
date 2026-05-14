@@ -1,0 +1,153 @@
+{{!-- modules/bbttcc-tikkun/templates/ritual-console.hbs --}}
+<div class="bbttcc-tikkun-tab bbttcc-ritual-root">
+  {{#if error}}
+    <section class="bbttcc-ritual-section">
+      <h2>Error</h2>
+      <p>{{error}}</p>
+    </section>
+  {{else}}
+    <section class="constellation-header">
+      <h2><i class="fa-solid fa-star-of-david"></i> Final Ritual — {{faction.name}}</h2>
+      <p>Sparks of Light, assembled across timelines and hearts.</p>
+      {{#if gw}}
+        {{#if gw.ready}}
+          <p><strong>Great Work Status:</strong> <span style="color:#facc15;">READY — Conditions met.</span></p>
+        {{else}}
+          <p><strong>Great Work Status:</strong> <span style="color:#f97316;">Not fully ready.</span></p>
+          {{#if gw.reasons.length}}
+            <p style="font-size:0.9em; opacity:0.85;">
+              <i>Remaining obstacles:</i>
+              {{#each gw.reasons}}
+                <br/>• {{this}}
+              {{/each}}
+            </p>
+          {{/if}}
+        {{/if}}
+      {{/if}}
+    </section>
+
+    <section class="constellation-progress">
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: {{metrics.progressPct}}%;"></div>
+        <div class="progress-text">
+          {{metrics.sparks}} / {{metrics.sparkThreshold}} Sparks Integrated
+        </div>
+      </div>
+      <div class="progress-stats">
+        <div class="stat">
+          <i class="fa-solid fa-sun"></i>
+          <span class="stat-value">{{metrics.sparks}}</span>
+          <span class="stat-label">Integrated Sparks</span>
+        </div>
+        <div class="stat">
+          <i class="fa-regular fa-moon"></i>
+          <span class="stat-value">{{metrics.unity}}%</span>
+          <span class="stat-label">Unity</span>
+        </div>
+        <div class="stat">
+          <i class="fa-solid fa-trophy"></i>
+          <span class="stat-value">{{metrics.vp}}</span>
+          <span class="stat-label">Victory VP</span>
+        </div>
+        <div class="stat">
+          <i class="fa-solid fa-skull"></i>
+          <span class="stat-value">{{metrics.darkness}}</span>
+          <span class="stat-label">Darkness</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="bbttcc-ritual-section">
+      {{#if isComplete}}
+        <h3>Ritual Outcome</h3>
+        {{#if isSuccess}}
+          <p><strong>Success!</strong> The Great Work is complete. The Lens shines with transcendent light.</p>
+          <p>Ritual Score: <b>{{ritual.ritualScore}}</b></p>
+          <p>Darkness: {{ritual.darknessStart}} → {{ritual.darknessNow}}</p>
+        {{else}}
+          <p><strong>The ritual faltered.</strong> The Great Work remains unfinished.</p>
+          <p>Ritual Score: <b>{{ritual.ritualScore}}</b></p>
+          <p>Darkness: {{ritual.darknessStart}} → {{ritual.darknessNow}}</p>
+        {{/if}}
+        <p style="margin-top:1rem;">
+          <button type="button" class="bbttcc-btn" data-action="restart">Begin New Ritual</button>
+          <button type="button" class="bbttcc-btn bbttcc-btn-secondary" data-action="close">Close</button>
+        </p>
+      {{else}}
+        <h3>Current Round</h3>
+        <p>
+          Round <b>{{add ritual.round 1}}</b> —
+          <b>{{nextRound.label}}</b> (Target DC {{nextRound.dc}})
+        </p>
+        <form data-ritual-form>
+          <div class="bbttcc-grid bbttcc-grid-cols-3 bbttcc-gap-md">
+            <div class="bbttcc-field">
+              <label>Faith OP to Spend</label>
+              <input type="number" name="spendFaith" min="0" class="bbttcc-input" />
+            </div>
+            <div class="bbttcc-field">
+              <label>Culture / Soft Power OP</label>
+              <input type="number" name="spendCulture" min="0" class="bbttcc-input" />
+            </div>
+            <div class="bbttcc-field">
+              <label>Diplomacy OP</label>
+              <input type="number" name="spendDiplomacy" min="0" class="bbttcc-input" />
+            </div>
+          </div>
+          <div class="bbttcc-grid bbttcc-grid-cols-2 bbttcc-gap-md" style="margin-top:0.75rem;">
+            <div class="bbttcc-field">
+              <label>Leader's Ritual Skill Bonus (Arcana/Religion/etc.)</label>
+              <input type="number" name="skillBonus" class="bbttcc-input" />
+            </div>
+            <div class="bbttcc-field">
+              <label>GM / Narrative Note</label>
+              <input type="text" name="note" class="bbttcc-input" placeholder="What are they sacrificing? Who joins the chant?" />
+            </div>
+          </div>
+          <div style="margin-top:1rem; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <strong>Ritual Score:</strong> {{ritual.ritualScore}} / 3
+              &nbsp; • &nbsp;
+              <strong>Corruption:</strong> {{ritual.corruption}}
+              &nbsp; • &nbsp;
+              <strong>Darkness:</strong> {{metrics.darkness}}
+            </div>
+            <div>
+              <button type="button" class="bbttcc-btn" data-action="advance">
+                {{#if ritual.round}}Advance to Round {{add ritual.round 1}}{{else}}Begin Ritual{{/if}}
+              </button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-secondary" data-action="close">Close</button>
+            </div>
+          </div>
+        </form>
+      {{/if}}
+    </section>
+
+    <section class="bbttcc-ritual-section">
+      <h3>Ritual Log</h3>
+      {{#if ritual.history.length}}
+        {{#each ritual.history as |r|}}
+          <div class="ritual-log-entry">
+            <h4>Round {{r.round}} — {{r.phaseLabel}}</h4>
+            <p>
+              Roll: <b>{{r.total}}</b> vs DC {{r.dc}} (margin {{#if (gt r.margin -1)}}+{{/if}}{{r.margin}})
+              — <b>{{#if r.success}}Success{{else}}Complication{{/if}}</b>
+            </p>
+            <p>
+              Spent: 
+              {{#if r.spendFaith}}Faith {{r.spendFaith}} {{/if}}
+              {{#if r.spendCulture}}&nbsp;Culture {{r.spendCulture}}{{/if}}
+              {{#if r.spendDiplomacy}}&nbsp;Diplomacy {{r.spendDiplomacy}}{{/if}}
+            </p>
+            <p style="font-size:0.9em; opacity:0.85;">
+              Corruption: {{r.corruptionAfter}} • Darkness: {{../ritual.darknessStart}} → {{r.darknessAfter}}
+              {{#if r.note}}<br/><i>{{r.note}}</i>{{/if}}
+            </p>
+          </div>
+        {{/each}}
+      {{else}}
+        <p><em>No ritual rounds have been performed yet. When you advance the ritual, they will appear here.</em></p>
+      {{/if}}
+    </section>
+  {{/if}}
+</div>

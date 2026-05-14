@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Felid): King of Alleys",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_climb.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Felid)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“Cities were made for you. Ruins too.”</em></p>\n        <p><strong>King of Alleys (1/a Soma Break).</strong> For 10 minutes, you gain a climbing speed equal to your walking speed, and you ignore difficult terrain in urban ruins. In BBTTCC travel, once per Turn you may reduce an Intrigue travel cost by 1 if your route passes through ruins (GM/system).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-felid-king_of_alleys",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "king_of_alleys",
+      "clade": "Felid",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Felid",
+      "normalizedFrom": "Furrykin (Felid)"
+    }
+  },
+  "effects": [],
+  "folder": "DKGWgx2nvx81wC8t",
+  "_stats": {
+    "compendiumSource": "Item.IYvdgHaRXmU4Wo8I",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.IYvdgHaRXmU4Wo8I",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "IYvdgHaRXmU4Wo8I",
+  "_srcfile": "fvtt-Item-furrykin-(felid)_-king-of-alleys-IYvdgHaRXmU4Wo8I.json"
+}

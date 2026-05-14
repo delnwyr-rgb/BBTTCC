@@ -1,0 +1,89 @@
+/* modules/bbttcc-tikkun/styles/ritual-console.css */
+/* Lightweight styling to make the ritual console match your BBTTCC/Tikkun aesthetic. */
+
+.bbttcc-ritual-console .window-content {
+  background: #020617;
+  color: #e5e7eb;
+  padding: 0;
+}
+
+.bbttcc-ritual-root {
+  padding: 1rem 1.25rem 1.5rem;
+}
+
+.bbttcc-ritual-section {
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 0.5rem;
+  padding: 1rem 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.bbttcc-ritual-section h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.bbttcc-ritual-section p {
+  margin: 0.25rem 0;
+}
+
+.bbttcc-ritual-console .bbttcc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  padding: 0.4rem 0.9rem;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #facc15, #eab308);
+  color: #111827;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.bbttcc-ritual-console .bbttcc-btn:hover {
+  filter: brightness(1.05);
+}
+
+.bbttcc-ritual-console .bbttcc-btn.bbttcc-btn-secondary {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.8);
+  color: #e5e7eb;
+}
+
+.bbttcc-ritual-console .bbttcc-input {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.6);
+  color: #e5e7eb;
+}
+
+.bbttcc-ritual-console .bbttcc-input:focus {
+  outline: 2px solid #facc15;
+  border-color: #facc15;
+}
+
+.bbttcc-ritual-console .bbttcc-grid {
+  display: grid;
+}
+
+.bbttcc-ritual-console .bbttcc-grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bbttcc-ritual-console .bbttcc-grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.bbttcc-ritual-console .bbttcc-gap-md {
+  gap: 0.75rem;
+}
+
+.bbttcc-ritual-console .ritual-log-entry {
+  border-left: 3px solid rgba(248, 250, 252, 0.4);
+  padding-left: 0.75rem;
+  margin-bottom: 0.5rem;
+}

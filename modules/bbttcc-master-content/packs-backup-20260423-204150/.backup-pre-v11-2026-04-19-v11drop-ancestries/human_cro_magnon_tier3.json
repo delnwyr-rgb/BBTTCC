@@ -1,0 +1,32 @@
+{
+  "_id": "537b995f4fc84220",
+  "name": "Human (Cro-Magnon): Pattern-Mind",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Human_Cro_Magnon_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“The first time anyone drew an antelope on a wall, they were already two thoughts ahead of the antelope.”</em></p>\n<p><strong>Pattern-Mind (1/a Soma Break).</strong> You can spend 1 minute observing a situation — a battle line, a marketplace, a council, a storm system, a faction’s public posture — and then ask the GM one of:</p>\n<ul><li>“What is the actual goal here?”</li><li>“What is being deliberately hidden?”</li><li>“Who is about to break first?”</li></ul>\n<p>The GM gives you at least one true answer. They may colour it; they may not lie about it.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "human-cro-magnon-pattern-mind",
+    "requirements": "Human (Cro-Magnon)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 11 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "human", "feature": "pattern_mind", "lineage": "Cro-Magnon", "tierLevel": 11, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "byroU26YSQP4OQUn",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!537b995f4fc84220"
+}

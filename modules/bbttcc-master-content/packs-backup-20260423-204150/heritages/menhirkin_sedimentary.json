@@ -1,0 +1,94 @@
+{
+  "name": "Menhirkin Heritage: Sedimentary",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Menhirkin_Sedimentary.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Menhirkin heritage: Sedimentary.</p><p><em>“The old stones remember what the new ones are pretending to be.”</em></p><p><strong>Menhirkin (Sedimentary).</strong> You are laid-down stone. Every year of every century of every epoch stacked on top of the year before, pressed into a single body. Other Menhirkin are events. You are a record. The ground under the bunker may be a grandparent to other Menhirkin. It’s your diary.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Menhirkin does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind</strong> in fiction and through Tier powers.</li></ul><h3>Menhirkin Core: The Land Stood Up</h3><p><em>Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. You have advantage on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> Once per scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> You have advantage on Body checks against exhaustion, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 10 feet of you know you are there even if they cannot see you; you have disadvantage on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><h3>Sedimentary Traits</h3><ul><li><strong>Old Layer Resilience.</strong> At creation, pick one damage type: poison, qliphothic, or energy with a single flavor of your choice. You have resistance to that damage. The land under you is old. Old land has outlasted a lot.</li><li><strong>Layer Reading.</strong> You can touch any worked surface older than a century and tell, without a check, its approximate age, the most recent meaningful thing that happened there, and whether anyone you can currently see has also touched it.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Economy OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Ruins / Archaeological / Old-Record</em> hexes, the first archival or recon operation your faction runs per Turn costs 1 fewer OP.</li><li><strong>Strata Witness.</strong> Once per Strategic Turn, while on a hex with recorded history, your faction may ask the GM one true thing about a past faction that held it. Useful on a contested claim.</li></ul><p><strong>Note.</strong> This heritage grants its Tier I feat via ItemGrant with a placeholder UUID (Anlv3wpYLJzW2lPq). After import, run the wiring macro to bind real UUIDs.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "5d039d7de99061bc",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Anlv3wpYLJzW2lPq",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Sedimentary Tier I",
+        "hint": "Gain your Sedimentary Tier I feat."
+      }
+    ],
+    "identifier": "menhirkin_sedimentary_heritage",
+    "requirements": "Menhirkin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "menhirkin",
+      "lineage": "Sedimentary",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "intrigue": 2,
+        "economy": 1
+      }
+    },
+    "fourththing": {}
+  },
+  "folder": "ktaQ2YC0RiklPjfR",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.lDtIgDEtDzilN1Ae",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "lDtIgDEtDzilN1Ae"
+}

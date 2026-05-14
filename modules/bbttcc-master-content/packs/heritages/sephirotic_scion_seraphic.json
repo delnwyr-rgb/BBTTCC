@@ -1,0 +1,104 @@
+{
+  "name": "Sephirotic Scion Heritage: Seraphic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/SephiroticScion_Seraphic.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Sephirotic Scion heritage: Seraphic.</p><p><em>“What the Seraphim did to the wicked was sing them clean. Try not to be wicked around one.”</em></p><p><strong>Sephirotic Scion (Seraphic).</strong> Your blood runs burning. The Seraphim are six-winged fire — the order closest to the throne, the order whose job is purification. You don’t run hot in the Igneous Menhirkin sense; you run hot in the moral sense. Things around you either align or combust. There is not a middle option.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic Scion).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Sephirotic Scion does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Presence</strong> in fiction and through Tier powers.</li></ul><h3>Sephirotic Scion Core: The Higher Register</h3><p><em>Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Sephirotic Physiology.</strong> You have resistance to sephirotic damage. Your blood runs a little bright under the right light; you do not technically age while on consecrated ground.</li><li><strong>Sefirot Attunement.</strong> At creation, pick one sephirah (player choice). Once per scene, you can invoke its register and gain a +1 rank bonus to one check that falls clearly within that sephirah's domain.</li><li><strong>Holy Conduit.</strong> Spells, rituals, and other sephirotic-register effects that target you or pass through your space treat their effective caster-attribute as +1 for the duration of that effect. Works on allies and on you; does not work on qliphothic-register effects.</li><li><strong>Light of Harmony.</strong> When two or more creatures within 30 feet of you are in active, explicit agreement (stated aloud), they each gain 1 temporary Integrity. This refreshes when a new agreement is reached between different creatures.</li></ul><h3>Seraphic Traits</h3><ul><li><strong>Coal-Song.</strong> You know a minor manifestation that produces a single point of sephirotic damage at close range (flavor: holy fire). Your channel for it is Presence.</li><li><strong>Unburning.</strong> You have resistance to energy damage with the fire flavor, and to sephirotic damage. What you are is not flammable to itself.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Faith OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Consecrated / Pyre-Marked / Witnessed</em> hexes, your faction's cleansing, judgment, and pyre operations cost 1 fewer OP.</li><li><strong>Burning Witness.</strong> Once per Strategic Turn, when your faction confronts a rival faction in open negotiation, the rival must commit to one truth they would have preferred to conceal. The flame is close to the throne; lying hurts.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Sefirot Attunement</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Free (declare before roll) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Invoke your chosen sephirah for +1 rank bonus on a check clearly in its domain.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "5b31beade294aa1e",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.Q7mL51Eam3PiWmF4",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Seraphic Tier I",
+        "hint": "Gain your Seraphic Tier I feat."
+      }
+    ],
+    "identifier": "sephirotic_scion_seraphic_heritage",
+    "requirements": "Sephirotic Scion",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "sephirotic_scion",
+      "lineage": "Seraphic",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "faith": 2,
+        "violence": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "fire"
+          },
+          "sephirotic"
+        ]
+      }
+    }
+  },
+  "folder": "trEZkuiOvBOEiK5H",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.Lk2uVTVkzWJEUG9l",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "Lk2uVTVkzWJEUG9l"
+}

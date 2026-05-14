@@ -1,0 +1,97 @@
+{
+  "name": "Menhirkin Heritage: Metamorphic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Menhirkin_Metamorphic.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Heritage (RFI v1.0).</strong> Ported to Roll for Initiation: 7-damage-type canon, Soma Break, Tier-based scaling, reroll-lowest. Replaces the D&amp;D5E heritage draft dated 2026-04-19 00:10.</p><p><em>&ldquo;What you are now is not what you were. The pressure was the point.&rdquo;</em></p><p><strong>Menhirkin (Metamorphic).</strong> Land buried, squeezed, heated, and returned harder. Every Metamorphic has a before-self. You are not going back.</p><h3>Heritage Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Menhirkin).</li><li><strong>Size.</strong> Medium. Speed: normal.</li><li><strong>Pressure Remade.</strong> At each Soma Break, the day picks one: <strong>+1 Guard</strong>, <strong>+1 Evasion</strong>, or <strong>+1 Resolve</strong>. Roll 1d3 at dawn (1 Guard, 2 Evasion, 3 Resolve), or announce your choice if the GM allows. The bonus holds until your next Soma Break. Ask the GM to apply it on your sheet (any editable defense field).</li><li><strong>Unbreakable Core.</strong> Reroll the lowest die on Resolve checks against forced transformation or being reshaped against your will.</li><li><strong>Signature.</strong> You gain <em>The Thing You Were</em> at character creation.</li></ul><p class=\"note\"><strong>Engine note.</strong> Where this heritage grants a damage-type resistance, it is applied by the fourththing defense engine via <code>flags.fourththing.grants</code>. Narrative immunities (sleep, forced movement, cold iron) are descriptive only until the Phase 3 condition-and-flavor engine ships.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "QPKo0cwx5q7D5UdO",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.MENMETAMORPHTR1P",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "The Thing You Were",
+        "hint": "Gain the Menhirkin (Metamorphic) signature feat: The Thing You Were."
+      }
+    ],
+    "identifier": "menhirkin_metamorphic_heritage",
+    "requirements": "Menhirkin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "menhirkin",
+      "lineage": "Metamorphic",
+      "version": "1.0.0-rfi",
+      "date": "2026-04-19",
+      "normalizedFrom": "new-v1.0",
+      "refactorNotes": "RFI Phase 2 port: 7-damage-type canon, Soma Break, Tier, reroll-lowest, attribute-defense DCs."
+    },
+    "fourththing": {
+      "kind": "heritage",
+      "family": "menhirkin",
+      "lineage": "Metamorphic",
+      "grants": {
+        "resistances": [],
+        "immunities": []
+      }
+    }
+  },
+  "folder": "ktaQ2YC0RiklPjfR",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.gzRZ1kheoofY1CJk",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "gzRZ1kheoofY1CJk"
+}

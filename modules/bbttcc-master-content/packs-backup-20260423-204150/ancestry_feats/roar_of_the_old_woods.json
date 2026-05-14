@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Ursid): Roar of the Old Woods",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_bear_roar_2.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Ursid)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“The room remembers who owns it.”</em></p>\n        <p><strong>Roar of the Old Woods (tier [TODO(pb-call)]/a Soma Break).</strong> As an action, force hostile creatures within 10 feet to make a Soul check or become Shaken for 1 round. On a success, they still have roll 3d10 keep lowest 2 on their next attack [TODO(adv-call)].</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-ursid-roar_old_woods",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "roar_old_woods",
+      "clade": "Ursid",
+      "tierLevel": 11,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Ursid",
+      "normalizedFrom": "Furrykin (Ursid)"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": "Item.3q2YGbVn20eiClro",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.3q2YGbVn20eiClro",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "3q2YGbVn20eiClro",
+  "_srcfile": "fvtt-Item-furrykin-(ursid)_-roar-of-the-old-woods-3q2YGbVn20eiClro.json"
+}

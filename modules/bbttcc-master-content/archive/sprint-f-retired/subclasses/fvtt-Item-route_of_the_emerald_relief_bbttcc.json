@@ -1,0 +1,44 @@
+{
+  "name": "Route of the Emerald Relief (BBTTCC)",
+  "type": "subclass",
+  "img": "icons/skills/movement/feet-winged-boots-flying.webp",
+  "system": {
+    "description": {
+      "value": "\n<p><em>Greenways of mercy; supply lines that heal.</em></p>\n<h3>Level 3: Relief Run (BBTTCC)</h3>\n<p>Start travel to a low\u2011loyalty GenPop Hex: spend <strong>1 Soft Power OP</strong> to reduce unrest by one step on arrival and gain advantage on the first Parley check.</p>\n<h3>Level 3: Field Medic</h3>\n<p>Proficiency in Medicine; bonus\u2011action stabilize + temp HP = PB (1/creature/long).</p>\n<h3>Level 6: Safe Convoy</h3>\n<p>Adjacent allies resist opportunity attack damage while you move.</p>\n<h3>Level 10: Decoy Column</h3>\n<p>1/short rest: enemy group Investigation vs your DC or pursue a false route for 1 min.</p>\n<h3>Level 14: Green Net</h3>\n<p>1/long rest: 30\u2011ft path grants allies +10 ft and advantage vs fear for 1 minute.</p>\n",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "classIdentifier": "phantom_courier",
+    "identifier": "bbttcc-phantom-route-emerald",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "13.348",
+    "systemId": "dnd5e",
+    "systemVersion": "5.1.9",
+    "createdTime": 1762724671457,
+    "modifiedTime": 1762724671457,
+    "lastModifiedBy": "chatgpt-bbttcc",
+    "exportSource": {
+      "worldId": "bunker-busters",
+      "uuid": "Item.02ef046dffa04970",
+      "coreVersion": "13.348",
+      "systemId": "dnd5e",
+      "systemVersion": "5.1.9"
+    }
+  },
+  "ownership": {
+    "default": 0
+  }
+}

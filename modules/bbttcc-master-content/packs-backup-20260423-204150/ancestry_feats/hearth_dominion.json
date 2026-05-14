@@ -1,0 +1,73 @@
+{
+  "name": "Oldenborn (Ember-Touched): Hearth Dominion",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_camp.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Ember-Touched)</em> at level 5; now available as an optional ancestry feat.</p><p><em>“You can make a campfire feel like a cathedral.”</em></p>\n        <p><strong>Hearth Dominion (1/a Soma Break).</strong> Over 1 minute, you sanctify a fire or heat-source. Allies who rest within 30 feet regain an extra Hit Die, and they have reroll the lowest die on saves against fear until their next a Soma Break [TODO(adv-call)].</p>\n        <p><strong>BBTTCC Hook.</strong> Once per Turn, your faction may treat a single “Shelter / Rest” travel step as if the weather were one tier gentler (handled by the Weather engine / GM).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "oldenborn-embertouched-hearth_dominion",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "hearth_dominion",
+      "lineage": "Ember-Touched",
+      "tierLevel": 5,
+      "version": "1.0.0",
+      "family": "oldenborn",
+      "heritage": "Ember-Touched",
+      "normalizedFrom": "Oldenborn (Ember-Touched)"
+    }
+  },
+  "effects": [],
+  "folder": "bqL9mPFfXmoU5936",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.BSmEtJI2RMRzz8d7",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1773192856451,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "BSmEtJI2RMRzz8d7",
+  "_srcfile": "fvtt-Item-oldenborn-(ember-touched)_-hearth-dominion-BSmEtJI2RMRzz8d7.json"
+}

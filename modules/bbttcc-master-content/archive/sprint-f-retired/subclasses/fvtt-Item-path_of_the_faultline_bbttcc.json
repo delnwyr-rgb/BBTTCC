@@ -1,0 +1,44 @@
+{
+  "name": "Path of the Faultline (BBTTCC)",
+  "type": "subclass",
+  "img": "icons/skills/melee/strike-hammer-bash-orange.webp",
+  "system": {
+    "description": {
+      "value": "\n<p><em>You see the load-bearing myths and put your shoulder to them.</em></p>\n<h3>Level 3: OP Shear (BBTTCC)</h3>\n<p>When a structure/vehicle fails a check you influence, your faction may convert <strong>1 Economy OP \u2192 1 Violence OP</strong> (once/round).</p>\n<h3>Level 3: Find the Fault</h3>\n<p>Bonus action mark: the next allied attack against a chosen object/barricade deals +PB damage.</p>\n<h3>Level 6: Controlled Collapse</h3>\n<p>Redirect debris to avoid collateral; if civilians would have been harmed, reduce regional <strong>Darkness \u22121</strong> (1/long rest).</p>\n<h3>Level 10: Breach Rhythm</h3>\n<p>After you damage a fortification, allies within 10 ft gain +2 AC vs. ranged attacks from that direction until your next turn.</p>\n<h3>Level 14: Pancake the Span</h3>\n<p>Once per siege round, set the DC of one allied breach action to 10 + PB (before rolling).</p>\n",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "classIdentifier": "breaker",
+    "identifier": "bbttcc-breaker-faultline",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "13.348",
+    "systemId": "dnd5e",
+    "systemVersion": "5.1.9",
+    "createdTime": 1762723298105,
+    "modifiedTime": 1762723298105,
+    "lastModifiedBy": "chatgpt-bbttcc",
+    "exportSource": {
+      "worldId": "bunker-busters",
+      "uuid": "Item.064eeeeb3fdb4fe6",
+      "coreVersion": "13.348",
+      "systemId": "dnd5e",
+      "systemVersion": "5.1.9"
+    }
+  },
+  "ownership": {
+    "default": 0
+  }
+}

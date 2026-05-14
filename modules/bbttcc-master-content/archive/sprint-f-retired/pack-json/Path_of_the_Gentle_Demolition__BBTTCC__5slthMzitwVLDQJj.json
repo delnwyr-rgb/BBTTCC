@@ -1,0 +1,156 @@
+{
+  "name": "Path of the Gentle Demolition (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_globe_2.png",
+  "system": {
+    "advancement": {
+      "GD00000000000001": {
+        "_id": "GD00000000000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.9ap8CCMDGaQZSeiA",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.WJu39h5T8Y60RgRq",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "value": {},
+        "title": "Non-Lethal Blast & Patient Charges",
+        "hint": "",
+        "flags": {}
+      },
+      "GD00000000000002": {
+        "_id": "GD00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.l0ZS6Rvihv93T4nD",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "value": {},
+        "title": "Shock Net",
+        "hint": "",
+        "flags": {}
+      },
+      "GD00000000000003": {
+        "_id": "GD00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.nH4qLFOTEXMHLc4l",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "value": {},
+        "title": "Rescue Lane",
+        "hint": "",
+        "flags": {}
+      },
+      "GD00000000000004": {
+        "_id": "GD00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.3gNZfv3LZqNHEnEW",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "value": {},
+        "title": "Silence the Boom",
+        "hint": "",
+        "flags": {}
+      },
+      "GD00000000000005": {
+        "_id": "GD00000000000005",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.lX3qZ2fWFndaBID2",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "value": {},
+        "title": "Peacekeeper's Detonation",
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "description": {
+      "value": "<p><em>Demolition as mercy — remove the blade, not the patient.</em></p><h3>Level 3: Non-Lethal Blast (BBTTCC)</h3><p>When you set or trigger an explosive to subdue sentients rather than kill, you can treat the blast as non-lethal damage. If this non-lethal blast directly results in the safe capture, incapacitation, or surrender of hostile forces, your faction gains +1 Non-Lethal OP for the next Strategic Turn (once per scenario).</p><h3>Level 3: Patient Charges</h3><p>You gain advantage on checks to plant or arm charges unnoticed (Stealth, Sleight of Hand, tool checks) and advantage on checks to shape a blast to avoid harming designated non-combatants, hostages, or fragile structures.</p><h3>Level 6: Shock Net</h3><p>When you detonate a charge that throws debris or concussive scatter, you may trigger Shock Net. Creatures you choose within 10 ft of the blast’s fringe must make a Dex save (DC = 8 + PB + Str or Int mod). On a failure, a creature is Restrained by debris or entanglement until the end of its next turn.</p><h3>Level 10: Rescue Lane</h3><p>When your demolition, breach, or displacement creates a clear passable gap, you may declare a Rescue Lane. Until the end of your turn, allies moving through that opening gain +10 ft movement and do not provoke opportunity attacks.</p><h3>Level 14: Silence the Boom</h3><p>Once per long rest, when you detonate a charge, the explosion is silent beyond 60 ft and does not trigger sound-based alarms or surveillance outside that radius. Creatures within 60 ft hear only a muffled pulse.</p><h3>Level 18: Peacekeeper’s Detonation</h3><p>Once per long rest, when you detonate a charge to end a conflict, extract civilians, or disable a war engine, you may invoke Peacekeeper’s Detonation. The explosion deals no lethal damage to creatures: all affected creatures instead take non-lethal damage and are knocked prone on a failed Dex save (DC = 8 + PB + Str or Int mod). Structures, cover, and engines take double damage. Allies within 30 ft gain advantage on their next attack or skill check to secure the extraction or end the fight. If this detonation prevents a massacre or ends the battle cleanly, your faction gains +1 Soft Power OP and +1 Diplomacy OP and reduces an appropriate Despair/Darkness track by 1.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_breaker_gentledemolition",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "BBTTCC Originals"
+    },
+    "classIdentifier": "breaker",
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "folder": "pRdSDZzDXe2qGCCC",
+  "flags": {
+    "bbttcc-fixed": {
+      "originalIdentifier": "bbttcc-breaker-gentledemolition",
+      "normalizedIdentifier": "bbttcc_breaker_gentledemolition"
+    },
+    "bbttcc": {
+      "subclass": true,
+      "subclassKey": "bbttcc_breaker_gentledemolition"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191171956,
+    "modifiedTime": 1775063080812,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "5slthMzitwVLDQJj",
+  "sort": 400000,
+  "_key": "!items!5slthMzitwVLDQJj"
+}

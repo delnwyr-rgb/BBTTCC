@@ -1,0 +1,31 @@
+{
+  "_comment": "BBTTCC Auto-Link — minimal i18n (safe to expand later)",
+  "BBTTCC": {
+    "AutoLink": {
+      "CreateCharacter": "Create Character (BBTTCC)",
+      "Wizard": {
+        "Title": "Create BBTTCC Character",
+        "Basics": "Basics",
+        "Faction": "Faction",
+        "DnD5E": "D&D5E Choices",
+        "SpeciesUUID": "Species (paste UUID)",
+        "ClassUUID": "Class (paste UUID)",
+        "Options": "BBTTCC Options",
+        "Archetype": "Archetype",
+        "Crew": "Crew Type",
+        "Sephirot": "Sephirotic Alignment",
+        "Political": "Political Affiliation",
+        "Occult": "Occult Association",
+        "Enlightenment": "Enlightenment Level",
+        "Create": "Create Character"
+      },
+      "Sidepanel": {
+        "Title": "BBTTCC",
+        "Radiation": "Radiation",
+        "Sparks": "Tikkun Sparks",
+        "RaidXP": "Raid XP",
+        "Save": "Save BBTTCC"
+      }
+    }
+  }
+}

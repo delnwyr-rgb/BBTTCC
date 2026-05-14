@@ -1,0 +1,51 @@
+# Ignore everything by default
+*
+
+# Keep the Git internals
+!.gitignore
+!.gitattributes
+
+# Allow each BBTTCC module (dir + contents)
+!bbttcc-aae/
+!bbttcc-aae/**
+!bbttcc-auto-link/
+!bbttcc-auto-link/**
+!bbttcc-campaign/
+!bbttcc-campaign/**
+!bbttcc-character-options/
+!bbttcc-character-options/**
+!bbttcc-core/
+!bbttcc-core/**
+!bbttcc-encounters/
+!bbttcc-encounters/**
+!bbttcc-facility-console/
+!bbttcc-facility-console/**
+!bbttcc-factions/
+!bbttcc-factions/**
+!bbttcc-fx-integration/
+!bbttcc-fx-integration/**
+!bbttcc-market/
+!bbttcc-market/**
+!bbttcc-master-content/
+!bbttcc-master-content/**
+!bbttcc-radiation/
+!bbttcc-radiation/**
+!bbttcc-raid/
+!bbttcc-raid/**
+!bbttcc-sorting-engine/
+!bbttcc-sorting-engine/**
+!bbttcc-territory/
+!bbttcc-territory/**
+!bbttcc-tikkun/
+!bbttcc-tikkun/**
+!bbttcc-travel/
+!bbttcc-travel/**
+!bbttcc-world/
+!bbttcc-world/**
+
+# Allow root docs if added later
+!README.md
+!CHANGELOG.md
+
+# macOS junk
+.DS_Store

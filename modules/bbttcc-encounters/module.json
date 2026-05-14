@@ -1,0 +1,38 @@
+{
+  "id": "bbttcc-encounters",
+  "title": "BBTTCC Encounter Engine",
+  "description": "Scene Trigger & Encounter Engine for BBTTCC: travel, hex-entry, raid outcomes, and GM test-fire.",
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios + ChatGPT",
+      "url": "",
+      "email": ""
+    }
+  ],
+  "url": "",
+  "license": "MIT",
+
+  "esmodules": [
+    "scripts/module.js"
+  ],
+
+  "relationships": {
+    "requires": [
+      { "id": "bbttcc-territory", "type": "module" },
+      { "id": "bbttcc-factions",  "type": "module" },
+      { "id": "bbttcc-travel",    "type": "module" }
+    ]
+  },
+
+  "flags": {
+    "bbttcc": {
+      "isCore": false,
+      "role": "encounters"
+    }
+  }
+}

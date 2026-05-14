@@ -1,0 +1,73 @@
+{
+  "name": "Human (Erectus): Trail-Sovereign",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wave_2.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Human (Erectus)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“You turn chaos into a route.”</em></p>\n        <p><strong>Trail-Sovereign.</strong> You have advantage on Survival and Athletics checks during chases, escapes, or travel hazards. Once per long rest, you can grant your party advantage on a travel-related group check by calling the pace.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "human-erectus-trail_sovereign",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "trail_sovereign",
+      "lineage": "Erectus",
+      "tierLevel": 11,
+      "version": "1.0.0",
+      "family": "human",
+      "heritage": "Erectus",
+      "normalizedFrom": "Human (Erectus)"
+    }
+  },
+  "effects": [],
+  "folder": "oVjR0cF1XBbhTdfP",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.gtBajH2eeE5ml0ag",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192844645,
+    "modifiedTime": 1773192844645,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "gtBajH2eeE5ml0ag",
+  "_srcfile": "fvtt-Item-human-(erectus)_-trail-sovereign-gtBajH2eeE5ml0ag.json"
+}

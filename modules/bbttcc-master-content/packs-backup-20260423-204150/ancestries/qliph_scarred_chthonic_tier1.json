@@ -1,0 +1,78 @@
+{
+  "name": "Qliph-Scarred (Chthonic): What the Deep Dark Taught You",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/QliphScarred_Chthonic.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“There are ways to move that the sun never got to review.”</em></p><p><strong>What the Deep Dark Taught You (1/Soma Break).</strong> As a bonus action, sink partially into shadow, earth, or stone. For up to 1 minute you gain the following while sunken:</p><ul><li>Advantage on Intrigue (Stealth) checks.</li><li>Difficult terrain costs you no extra movement.</li><li>You can move through spaces one foot wide.</li><li>Resistance to qliphothic damage.</li></ul><p>The effect ends early if you are fully submerged in running water or take sephirotic damage.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "qliph_scarred_chthonic_tier1",
+    "requirements": "Qliph-Scarred (Chthonic)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "qliph_scarred",
+      "feature": "what_the_deep_dark_taught_you",
+      "lineage": "Chthonic",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {}
+  },
+  "folder": "XGBBcvgCXDYh3J9D",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.PL8ziBJUUMdeiFN0",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "PL8ziBJUUMdeiFN0"
+}

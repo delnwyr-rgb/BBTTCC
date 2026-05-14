@@ -1,0 +1,74 @@
+{
+  "name": "Echo-Diver Core: Half-Second Inheritance",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Echo_Diver_Core.png",
+  "system": {
+    "category": "ancestry",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Heritages v1.1 — Cores",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Ancestry Core (v1.1, RFI-native).</strong> Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item's ItemGrant advancement.</p><p><em>&ldquo;The lions are gone. The wolves are gone. The kings are gone. We're still here. Think about what that means.&rdquo;</em></p><h3>Echo-Diver Core Traits</h3><ul><li><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. 1/scene, when you or an ally within 10 ft would be hit by an attack you can see, shift 5 ft as a reaction. If that moves them out of range or line of sight, the attack misses.</li><li><strong>Niche Survivor.</strong> You need half the food, water, and air of a Medium creature. Reroll-lowest on Body checks against suffocation, starvation, dehydration, and extreme temperature.</li><li><strong>Vault Sight.</strong> Low-light vision to 60 ft. Reroll-lowest on Perception checks for unstable structure, traps, and Spark residue.</li><li><strong>Rat Inheritance.</strong> You can squeeze through 1-ft gaps without speed penalty. You can hold stillness that should not work; the GM will notice when it matters.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Temporal Flinch</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Reaction &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">When an attack would hit you or an ally within 10 ft, shift them 5 ft. If that breaks range/LoS, the attack misses.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [],
+    "identifier": "echo_diver_core",
+    "requirements": "Echo-Diver",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestryCore",
+      "family": "echo_diver",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "kind": "ancestryCore",
+      "family": "echo_diver",
+      "grants": {}
+    }
+  },
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1-cores",
+      "uuid": "Item.nwrNGGcXK4BiamPn",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11CORES"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "nwrNGGcXK4BiamPn"
+}

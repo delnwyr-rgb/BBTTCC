@@ -1,0 +1,32 @@
+{
+  "_id": "582af683e7b8496a",
+  "name": "Cryptidkin (Furrykin): Apex Den",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Cryptidkin_Furrykin_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“The land knows whose teeth marks live here.”</em></p>\n<p><strong>Apex Den.</strong> You can spend 10 minutes claiming a 30-foot-radius area as your den. Until you take a Soma Break or claim a new den, while you are within that area:</p>\n<ul><li>You have reroll the lowest die on initiative rolls [TODO(adv-call)].</li><li>The first time you hit a creature in your den each round, the attack deals an additional 1d6 damage of the weapon’s type.</li><li>You always know if any Medium or larger creature crosses the boundary while you are inside.</li></ul>\n<p>You can have only one den at a time.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "cryptidkin-furrykin-apex-den",
+    "requirements": "Cryptidkin (Furrykin)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 11 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "cryptidkin", "feature": "apex_den", "lineage": "Furrykin", "tierLevel": 11, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "f95fcfa18822c4e3",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!582af683e7b8496a"
+}

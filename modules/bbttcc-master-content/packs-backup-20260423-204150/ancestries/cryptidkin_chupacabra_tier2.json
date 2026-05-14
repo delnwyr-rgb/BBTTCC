@@ -1,0 +1,32 @@
+{
+  "_id": "9f91c29387cacedd",
+  "name": "Cryptidkin (Chupacabra): Blood Scent",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Cryptidkin_Chupacabra_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“The wound speaks first. The body is just punctuation.”</em></p>\n<p><strong>Blood Scent.</strong> You have reroll the lowest die on Soul (Perception (Mind) (Mind) (Mind)) and Soul (Athletics (Violence) (Violence) (Body)) checks [TODO(adv-call)] made to track creatures that are wounded, Shaken, or have been involved in violence within the last hour.</p>\n<p><strong>Predator Focus.</strong> Your passive Perception (Mind) (Mind) (Mind) increases by +2 when detecting injured or bleeding creatures.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "cryptidkin-chupacabra-blood-scent",
+    "requirements": "Cryptidkin (Chupacabra)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 5 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "cryptidkin", "feature": "blood_scent", "lineage": "Chupacabra", "tierLevel": 5, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "f95fcfa18822c4e3",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!9f91c29387cacedd"
+}

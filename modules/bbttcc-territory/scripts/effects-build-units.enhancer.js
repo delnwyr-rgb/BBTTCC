@@ -1,0 +1,388 @@
+// modules/bbttcc-territory/scripts/hex-config-build-units.enhancer.js
+// BBTTCC — Hex Config Build Unit Buttons
+//
+// Adds three buttons to the BBTTCC Hex Configuration UI:
+//   - "Fortify Hex (BU)"
+//   - "Repair Hex (BU)"
+//   - "Build Asset (BU)" (placeholder)
+//
+// Each button spends Build Units from the owning faction via
+// game.bbttcc.api.territory.buildUnits.spendForAction(...)
+// and then re-renders the config window.
+
+(() => {
+  const MOD_T = "bbttcc-territory";
+  const TAG   = "[bbttcc-hex-config/BU]";
+
+
+
+function gmEditEnabled() {
+  try { return !!(game.user && game.user.isGM) && !!game.settings.get("bbttcc-core","gmEditMode"); }
+  catch (e) { return false; }
+}
+
+function htmlEscape(s){
+  return String(s==null?"":s)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function numOrBlank(v){
+  if (v === null || typeof v === "undefined") return "";
+  const n = Number(v);
+  return Number.isFinite(n) ? String(n) : "";
+}
+  const log  = (...a) => console.log(TAG, ...a);
+  const warn = (...a) => console.warn(TAG, ...a);
+
+  function getBUApi() {
+    return game.bbttcc?.api?.territory?.buildUnits || null;
+  }
+
+  // Try hard to resolve the DrawingDocument being edited.
+  async function resolveHexDocument(app) {
+    // 1) If the app is bound to a document or object already:
+    const maybe = app?.document || app?.object || app?.actor || null;
+    if (maybe?.document) return maybe.document;
+    if (maybe?.update && maybe?.id) return maybe; // looks like a Document
+
+    // 2) Try from UUID if present
+    const uuid = app?.object?.uuid || app?.document?.uuid || app?.options?.uuid || null;
+    if (uuid) {
+      try {
+        const d = await fromUuid(uuid);
+        const doc = d?.document ?? d;
+        if (doc?.update) return doc;
+      } catch (e) {}
+    }
+
+    // 3) Fallback: match by name field in the form.
+    try {
+      const el = app?.element instanceof jQuery ? app.element[0] : app?.element;
+      const root = el?.querySelector?.(".bbttcc-hex-config");
+      const nameInput = root?.querySelector?.("input[name='name']");
+      const nm = nameInput?.value?.trim();
+      if (nm) {
+        const hit = (canvas.drawings?.placeables || []).find(p => {
+          const n = p?.document?.text || p?.document?.name;
+          return String(n || "").trim() === nm;
+        });
+        return hit?.document ?? null;
+      }
+    } catch (e) {}
+
+    return null;
+  }
+
+  async function injectButtons(app, html) {
+    // BU surface migrated 2026-05-09 to Hex Sheet → Overview tab (player-accessible).
+    // Foundry's drawing-config (Hex Editor) is GM-only, so the BU buttons here
+    // were unreachable for players. Single canonical surface now lives in
+    // bbttcc-hex-sheet.enhancer.js + templates/hex-sheet.hbs.
+    return;
+
+    /* eslint-disable no-unreachable */
+    const buApi = getBUApi();
+    if (!buApi || typeof buApi.spendForAction !== "function") {
+      return;
+    }
+
+    const el = html instanceof jQuery ? html[0] : html;
+    if (!el) return;
+
+    const root = el.querySelector(".bbttcc-hex-config");
+    if (!root) return; // not our app
+
+    // Avoid double-inject
+    if (root.querySelector("[data-bbttcc='bu-buttons']")) return;
+
+    // Resolve owning faction + read live BU balance for the panel header / button gating.
+    let balance = null;
+    let factionName = null;
+    try {
+      const hexDoc0 = await resolveHexDocument(app);
+      const tf0 = hexDoc0?.flags?.[MOD_T] || {};
+      const fid = tf0.factionId || tf0.ownerId || null;
+      if (fid) {
+        const A = game.actors?.get(fid);
+        if (A) {
+          balance = Math.max(0, Math.floor(Number(A.getFlag("bbttcc-factions", "buildUnits") ?? 0) || 0));
+          factionName = A.name;
+        }
+      }
+    } catch (_e) {}
+
+    // Live costs (world settings, defaults match territory-build-units.enhancer.js).
+    const cFort = Math.max(0, Number(game.settings.get(MOD_T, "buildUnitCostFortify") ?? 2) || 0);
+    const cRep  = Math.max(0, Number(game.settings.get(MOD_T, "buildUnitCostRepair") ?? 1) || 0);
+    const cAss  = Math.max(0, Number(game.settings.get(MOD_T, "buildUnitCostAsset") ?? 3) || 0);
+
+    const noOwner = balance === null;
+    const balText = noOwner ? "—" : String(balance);
+    const balTip  = noOwner
+      ? "No owning faction set on this hex; balance is unavailable."
+      : `Owning faction: ${factionName} · Build Units available: ${balance}`;
+    const dis = (cost) => (noOwner || balance < cost);
+    const tip = (cost, label) => {
+      if (noOwner) return "No owning faction set on this hex.";
+      if (balance < cost) return `Need ${cost} BU; you have ${balance}.`;
+      return `${label} — spends ${cost} BU.`;
+    };
+
+    // Find a reasonable insertion point (after modifiers heading if possible)
+    let modifiersBlock = root.querySelector(".form-group[data-bbttcc='modifiers']") ||
+                         root.querySelector(".modifiers") ||
+                         root.querySelector(".modifiers-section");
+
+    const row = document.createElement("div");
+    row.className = "form-group";
+    row.setAttribute("data-bbttcc", "bu-buttons");
+    row.innerHTML = `
+      <label style="display:flex; align-items:center; justify-content:space-between; gap:.6rem;">
+        <span>Build Units (Engineering)</span>
+        <span class="bbttcc-bu-balance" data-tooltip="${htmlEscape(balTip)}"
+              style="display:inline-flex; align-items:center; gap:.3rem; padding:.1rem .5rem; border:1px solid rgba(232,200,74,.45); border-radius:10px; font-size:11px; color:#e8c84a; background:rgba(232,200,74,.08); white-space:nowrap;">
+          <i class="fas fa-hammer" style="font-size:10px; opacity:.85;"></i>
+          BU: <b>${htmlEscape(balText)}</b>
+        </span>
+      </label>
+      <div class="bbttcc-bu-button-row" style="display:flex; gap:0.35rem; flex-wrap:wrap;">
+        <button type="button" data-bu-action="fortify" class="bbttcc-btn bu-btn-fortify"
+                ${dis(cFort) ? "disabled" : ""} data-tooltip="${htmlEscape(tip(cFort, "Fortify Hex"))}">
+          Fortify Hex — ${cFort} BU
+        </button>
+        <button type="button" data-bu-action="repair" class="bbttcc-btn bu-btn-repair"
+                ${dis(cRep) ? "disabled" : ""} data-tooltip="${htmlEscape(tip(cRep, "Repair Hex"))}">
+          Repair Hex — ${cRep} BU
+        </button>
+        <button type="button" data-bu-action="asset" class="bbttcc-btn bu-btn-asset"
+                ${dis(cAss) ? "disabled" : ""} data-tooltip="${htmlEscape(tip(cAss, "Build Asset"))}">
+          Build Asset — ${cAss} BU
+        </button>
+      </div>
+      <p class="hint">
+        ${noOwner
+          ? "This hex has no owning faction; assign one before spending BU."
+          : "Spends Build Units from the owning faction. Generated end-of-turn from owned-hex Materials pips (every 2 pips → 1 BU)."}
+      </p>
+    `;
+
+    if (modifiersBlock && modifiersBlock.parentElement) {
+      modifiersBlock.parentElement.insertBefore(row, modifiersBlock.nextSibling);
+    } else {
+      root.appendChild(row);
+    }
+
+    // Wire click handlers
+    row.addEventListener("click", async (ev) => {
+      const btn = ev.target?.closest?.("button[data-bu-action]");
+      if (!btn) return;
+      ev.preventDefault();
+
+      const action = btn.getAttribute("data-bu-action");
+      try {
+        const hexDoc = await resolveHexDocument(app);
+        if (!hexDoc) {
+          ui.notifications?.warn?.("Build Units: Could not resolve hex document for this editor.");
+          return;
+        }
+        const tf = hexDoc.flags?.[MOD_T] || {};
+        const factionId = tf.factionId || tf.ownerId || null;
+        if (!factionId) {
+          ui.notifications?.warn?.("Build Units: This hex is not currently owned by a faction.");
+          return;
+        }
+
+        const note = `Hex Config button: ${action}`;
+        const res = await buApi.spendForAction({
+          factionId,
+          hexUuid: hexDoc.uuid,
+          action,
+          note
+        });
+
+
+
+// ---------------- GM: Manual Edit (Phase 2) ----------------
+try {
+  if (gmEditEnabled() && !root.querySelector("[data-bbttcc='gm-edit-panel']")) {
+    const doc = await resolveHexDocument(app);
+    if (doc && doc.uuid) {
+      const tf = doc.getFlag ? (doc.getFlag(MOD_T, "") || null) : null;
+      const flags = (doc.flags && doc.flags[MOD_T]) ? doc.flags[MOD_T] : {};
+      const travel = flags.travel || {};
+      const dev = flags.development || {};
+      const integ = flags.integration || {};
+      const alarm = flags.alarm || {};
+      const camp = flags.campaign || {};
+
+      const wrap = document.createElement("fieldset");
+      wrap.setAttribute("data-bbttcc", "gm-edit-panel");
+      wrap.style.marginTop = "0.75rem";
+      wrap.innerHTML = `
+        <legend>GM: Manual Edit</legend>
+
+        <div class="form-group">
+          <label>Hex UUID</label>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="text" readonly value="${htmlEscape(doc.uuid)}" style="flex:1;">
+            <button type="button" class="bbttcc-btn" data-gm-action="copy-uuid">Copy</button>
+          </div>
+          <p class="hint">This panel is GM-only and only appears when GM Edit Mode is enabled (bbttcc-core).</p>
+        </div>
+
+        <div class="form-group">
+          <label>Travel Units Override</label>
+          <input type="number" min="0" max="99" step="1" name="gm.travel.unitsOverride" value="${htmlEscape(numOrBlank(travel.unitsOverride))}">
+          <p class="hint">Blank = no change. Clear removes override.</p>
+        </div>
+
+        <div class="form-group">
+          <label>Development Stage</label>
+          <input type="number" min="0" max="6" step="1" name="gm.development.stage" value="${htmlEscape(numOrBlank(dev.stage != null ? dev.stage : integ.progress))}">
+          <p class="hint">Writes development.stage and integration.progress (0–6).</p>
+        </div>
+
+        <div class="form-group row" style="align-items:center;">
+          <label style="margin:0;">Development Locked</label>
+          <input type="checkbox" name="gm.development.locked" ${(dev.locked === true || integ.locked === true) ? "checked" : ""}>
+        </div>
+
+        <div class="form-group">
+          <label>Alarm</label>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="number" min="0" max="99" step="1" name="gm.alarm.value" value="${htmlEscape(numOrBlank(alarm.value))}" style="flex:1;">
+            <label class="checkbox" style="display:flex; gap:0.35rem; align-items:center; margin:0;">
+              <input type="checkbox" name="gm.alarm.locked" ${(alarm.locked === true) ? "checked" : ""}>
+              <span>Lock</span>
+            </label>
+          </div>
+          <p class="hint">Blank = no change.</p>
+        </div>
+
+        <div class="form-group">
+          <label>On-Enter Beat ID</label>
+          <input type="text" name="gm.campaign.onEnterBeatId" value="${htmlEscape(camp.onEnterBeatId || "")}" placeholder="e.g. enc_hidden_ruins">
+        </div>
+
+        <div class="form-group">
+          <label>GM Note (audit)</label>
+          <input type="text" name="gm.note" value="" placeholder="Why are we changing reality?">
+        </div>
+
+        <div class="form-group" style="display:flex; gap:0.5rem; justify-content:flex-end;">
+          <button type="button" class="bbttcc-btn" data-gm-action="clear">Clear Overrides</button>
+          <button type="button" class="bbttcc-btn" data-gm-action="apply">Apply</button>
+        </div>
+      `;
+      root.appendChild(wrap);
+
+      function q(sel){ return wrap.querySelector(sel); }
+      function val(name){
+        const el = q(`[name="${name}"]`);
+        return el ? (el.value || "") : "";
+      }
+      function checked(name){
+        const el = q(`[name="${name}"]`);
+        return !!(el && el.checked);
+      }
+
+      wrap.addEventListener("click", async (ev2) => {
+        const btn = ev2.target && ev2.target.closest ? ev2.target.closest("button[data-gm-action]") : null;
+        if (!btn) return;
+        ev2.preventDefault();
+        const action = btn.getAttribute("data-gm-action");
+
+        if (action === "copy-uuid") {
+          try {
+            await navigator.clipboard.writeText(doc.uuid);
+            ui.notifications?.info?.("Copied Hex UUID to clipboard.");
+          } catch (e) {
+            console.warn(TAG, "copy uuid failed", e);
+            ui.notifications?.warn?.("Could not copy UUID (see console).");
+          }
+          return;
+        }
+
+        const api = game.bbttcc && game.bbttcc.api && game.bbttcc.api.gm;
+        if (!api || typeof api.setHex !== "function") {
+          ui.notifications?.error?.("GM API not available (bbttcc-core Phase 1 missing).");
+          return;
+        }
+
+        const note = String(val("gm.note") || "").trim();
+
+        if (action === "clear") {
+          await api.setHex({
+            hexUuid: doc.uuid,
+            patch: {
+              travel: { unitsOverride: null },
+              development: { stage: null, locked: null },
+              alarm: { value: null, locked: null },
+              campaign: { onEnterBeatId: null }
+            },
+            note: note || "Clear hex overrides"
+          });
+          app.render(true);
+          return;
+        }
+
+        if (action === "apply") {
+          const patch = {};
+          const uo = val("gm.travel.unitsOverride").trim();
+          if (uo !== "") patch.travel = Object.assign(patch.travel || {}, { unitsOverride: Number(uo) });
+
+          const st = val("gm.development.stage").trim();
+          patch.development = patch.development || {};
+          if (st !== "") patch.development.stage = Number(st);
+          patch.development.locked = checked("gm.development.locked");
+
+          const av = val("gm.alarm.value").trim();
+          patch.alarm = patch.alarm || {};
+          if (av !== "") patch.alarm.value = Number(av);
+          patch.alarm.locked = checked("gm.alarm.locked");
+
+          const beat = val("gm.campaign.onEnterBeatId").trim();
+          if (beat !== "") patch.campaign = Object.assign(patch.campaign || {}, { onEnterBeatId: beat });
+
+          await api.setHex({ hexUuid: doc.uuid, patch: patch, note: note || "GM edit hex" });
+          app.render(true);
+        }
+      });
+    }
+  }
+} catch (e) {
+  console.warn(TAG, "GM panel inject failed", e);
+}
+        if (res?.ok) {
+          // Re-render the app so modifiers & flags refresh
+          app.render(false);
+        }
+      } catch (e) {
+        warn("BU button handler failed:", e);
+        ui.notifications?.error?.("Build Units action failed — see console.");
+      }
+    });
+
+    log("Injected Build Unit buttons into Hex Config.");
+  }
+
+  function install() {
+    Hooks.on("renderApplication", (app, html) => {
+      try {
+        injectButtons(app, html);
+      } catch (e) {
+        warn("renderApplication handler failed:", e);
+      }
+    });
+
+    console.log(TAG, "Hex Config BU enhancer installed.");
+  }
+
+  Hooks.once("ready", install);
+  try { if (game?.ready) install(); } catch {}
+
+})();

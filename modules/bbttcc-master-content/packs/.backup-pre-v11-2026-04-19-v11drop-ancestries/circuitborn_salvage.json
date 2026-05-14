@@ -1,0 +1,88 @@
+{
+  "_id": "aaeb1e93d19a9197",
+  "name": "Circuitborn Heritage: Salvage",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Circuitborn_Salvage_1.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Circuitborn Line.</strong> The salvage-recursive. Built from the parts of older Circuitborn that didn’t make it. You carry their last instructions in your firmware.</p><p><em>“Nothing in this world is wasted. Some of it is just waiting to be re-purposed.”</em></p><p><strong>Salvage.</strong> You are a sentient chassis built around the principle of <em>recovery</em>. Broken things speak to you. So do broken people, when they don’t know they’re doing it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Construct-Living).</li><li><strong>Chassis Lean.</strong> Your chassis is built around <strong>BOD</strong>—expressed primarily through Tier powers.</li><li><strong>Scrap Memory.</strong> You can identify the original purpose of any handheld broken object you touch (1/a Soma Break, GM adjudicates depth of detail).</li></ul>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "cbsalvageadv0001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.IpH5YnkELogyOyQw",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Salvage Tier I",
+        "hint": "Gain your Salvage Line Tier I power (Built-In Tools)."
+      }
+    ],
+    "identifier": "circuitborn_salvage_heritage",
+    "requirements": "Circuitborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {},
+    "category": "heritage",
+    "tags": [],
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "circuitborn",
+      "lineage": "Salvage",
+      "version": "2.0.0",
+      "date": "2026-04-18"
+    }
+  },
+  "folder": "3H6h9q66XbEDFtAN",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1776541800000,
+    "modifiedTime": 1776541800000,
+    "lastModifiedBy": "BBTTCCANCv2APPLY"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!aaeb1e93d19a9197"
+}

@@ -1,0 +1,100 @@
+{
+  "name": "Qliph-Scarred Heritage: Husk",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/QliphScarred_Husk.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Husk.</p><p><em>“What the void took, it didn’t replace. That’s the feature, not the bug.”</em></p><p><strong>Qliph-Scarred (Husk).</strong> Your scar is a hollow. Something was removed from you in a place that should have unmade you, and it never got put back. People who try to read you feel the draft. Spells that look inside find less to grab. You walked out emptier, and in this world, emptier can mean harder to kill.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind</strong> in fiction and through Tier powers.</li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You have advantage on Body checks against effects that would drain, wither, or corrupt your body.</li><li><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</li><li><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate exhaustion-class consequence.</li><li><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 60 feet and know you have been marked. They may not know how to read the mark.</li></ul><h3>Husk Traits</h3><ul><li><strong>Hollow Core.</strong> You have resistance to psychic damage. Creatures attempting to read your thoughts, detect your lies, or determine your emotional state do so at disadvantage. Divination-register effects that would reveal information about you have a 50% chance to return nothing — just the hollow echo of the question.</li><li><strong>No Weight Inside.</strong> You do not need to eat or drink, though you still may. The void is not demanding, once you learn to carry it.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Non-Lethal OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Empty / Abandoned / Liminal</em> hexes, your faction's infiltration and passage operations cost 1 fewer OP.</li><li><strong>Nothing to Grab.</strong> Once per Strategic Turn, when a rival faction attempts a divination, intelligence, or surveillance operation targeting your faction, you may force them to reroll that check. They find less than they expected.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Qliphothic Saturation</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "f7892d5069f69569",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.rihmlgn3MViwQFlG",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Husk Tier I",
+        "hint": "Gain your Husk Tier I feat."
+      }
+    ],
+    "identifier": "qliph_scarred_husk_heritage",
+    "requirements": "Qliph-Scarred",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "qliph_scarred",
+      "lineage": "Husk",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "intrigue": 2,
+        "nonlethal": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          "psychic"
+        ]
+      }
+    }
+  },
+  "folder": "XGBBcvgCXDYh3J9D",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.iDcPvxKbW6YAD9NF",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "iDcPvxKbW6YAD9NF"
+}

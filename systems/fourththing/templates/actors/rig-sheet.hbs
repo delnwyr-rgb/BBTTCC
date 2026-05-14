@@ -1,0 +1,489 @@
+<div class="ft-sheet ft-rig-sheet bbttcc-sheet bbttcc-rig-sheet flexcol{{#if gmEdit}} ft-edit-mode{{/if}}">
+
+  <header class="ft-header ft-rig-header flexrow">
+
+    <div class="ft-identity ft-rig-identity flexcol">
+      <div class="ft-portrait" data-action="ftEditPortrait" data-tooltip="Click to change portrait">
+        <img src="{{actor.img}}" data-tooltip="{{actor.name}}"/>
+        <div class="ft-portrait-overlay">📷</div>
+      </div>
+      <div class="ft-name">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Rig Name"/>
+      </div>
+
+      <div class="ft-meta-pill ft-id-mobility" data-tooltip="Mobility axis: stationary (no move) / mobile (deployable) / hybrid (both).">
+        <span class="ft-meta-label">Mobility</span>
+        <select name="system.identity.mobility" class="ft-select-pill">
+          <option value="stationary"{{#if (eq identity.mobility "stationary")}} selected{{/if}}>Stationary</option>
+          <option value="mobile"{{#if (eq identity.mobility "mobile")}} selected{{/if}}>Mobile</option>
+          <option value="hybrid"{{#if (eq identity.mobility "hybrid")}} selected{{/if}}>Hybrid</option>
+        </select>
+      </div>
+
+      <div class="ft-meta-pill ft-id-state" data-tooltip="parked = at rest (100% output) · deployed = on a scene (50% output) · destroyed = wreck (0%).">
+        <span class="ft-meta-label">State</span>
+        <select name="system.identity.state" class="ft-select-pill">
+          <option value="parked"{{#if (eq identity.state "parked")}} selected{{/if}}>Parked</option>
+          {{#unless isStationary}}
+          <option value="deployed"{{#if (eq identity.state "deployed")}} selected{{/if}}>Deployed</option>
+          {{/unless}}
+          <option value="destroyed"{{#if (eq identity.state "destroyed")}} selected{{/if}}>Destroyed</option>
+        </select>
+      </div>
+
+      {{#if owner}}
+      <div class="ft-meta-pill ft-id-faction" data-tooltip="Faction owner. Click to clear.">
+        <span class="ft-meta-label">Owner</span>
+        <span class="ft-meta-val">{{owner.name}}</span>
+        <button type="button" class="ft-mini-btn" data-action="ftRigOwnerClear" data-tooltip="Clear faction owner">×</button>
+      </div>
+      {{else}}
+      <button type="button" class="ft-meta-pill ft-id-faction-empty" data-action="ftRigOwnerPick" data-tooltip="Pick the faction that owns this rig (or drop a faction actor anywhere on this sheet)." data-rig-owner-drop>
+        <span class="ft-meta-label">Owner</span><span class="ft-meta-val">— pick faction —</span>
+      </button>
+      {{/if}}
+    </div>
+
+    {{!-- Stat block — polish pass (2026-05-12): boxed-tile grid mirroring the
+         Boss/NPC visual language. Integrity tile spans both columns with its
+         bar + Deploy/Recall action row. Three small tiles below: Tier/Bracket,
+         Crew (filled/total), Output % (color-coded by state). Edit Mode button
+         retired (was a no-op on this template; GM Edit tab is the canonical
+         gate). --}}
+    <div class="ft-rig-summary ft-rig-stat-grid">
+
+      <div class="ft-rig-stat-tile ft-rig-stat-integrity ft-stat-span-2" data-tooltip="Integrity = rig's structural health. 0 → destroyed.">
+        <div class="ft-rig-stat-label">Integrity</div>
+        <div class="ft-rig-stat-row">
+          <button type="button" class="ft-mini-btn" data-action="ftRigIntegrityAdjust" data-delta="-1" data-tooltip="-1 integrity">−</button>
+          <span class="ft-rig-stat-val">{{integrity.value}}</span>
+          <span class="ft-rig-stat-sep">/</span>
+          <span class="ft-rig-stat-max">{{integrity.max}}</span>
+          <button type="button" class="ft-mini-btn" data-action="ftRigIntegrityAdjust" data-delta="1" data-tooltip="+1 integrity">+</button>
+          {{#if isMobile}}
+            {{#if isParked}}
+            <button type="button" class="ft-action-btn ft-rig-stat-cta" data-action="ftRigDeploy" data-tooltip="Spawn a token for this rig on the current scene.">Deploy</button>
+            {{/if}}
+            {{#if isDeployed}}
+            <button type="button" class="ft-action-btn ft-rig-stat-cta" data-action="ftRigRecall" data-tooltip="Remove the rig token and return to parked.">Recall</button>
+            {{/if}}
+          {{/if}}
+        </div>
+        <div class="ft-integrity-bar ft-rig-integrity-bar">
+          <div class="ft-integrity-fill" style="width: {{integrityPct}}%"></div>
+        </div>
+      </div>
+
+      <div class="ft-rig-stat-tile ft-rig-stat-tier" data-tooltip="Tier (1–4) · Bracket (personal / light / medium / heavy / siege). Frame sets these.">
+        <div class="ft-rig-stat-label">Tier · Bracket</div>
+        <div class="ft-rig-stat-row">
+          <span class="ft-rig-stat-val ft-rig-stat-val-text">T{{integrity.tier}}</span>
+          <span class="ft-rig-stat-sep">·</span>
+          <span class="ft-rig-stat-max">{{integrity.bracket}}</span>
+        </div>
+      </div>
+
+      <div class="ft-rig-stat-tile ft-rig-stat-crew" data-tooltip="Crew seated / total capacity across all roles.">
+        <div class="ft-rig-stat-label">Crew</div>
+        <div class="ft-rig-stat-row">
+          <span class="ft-rig-stat-val">{{crewFilledTotal}}</span>
+          <span class="ft-rig-stat-sep">/</span>
+          <span class="ft-rig-stat-max">{{crewCapacityTotal}}</span>
+        </div>
+      </div>
+
+      <div class="ft-rig-stat-tile ft-rig-stat-output ft-rig-stat-output--{{identity.state}}" data-tooltip="Output throughput. Parked 100% · Deployed 50% · Destroyed 0%.">
+        <div class="ft-rig-stat-label">Output</div>
+        <div class="ft-rig-stat-row">
+          <span class="ft-rig-stat-val">{{outputPct}}<span class="ft-rig-stat-sep">%</span></span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="ft-tabs-bar">
+    <nav class="ft-tabs" data-group="primary">
+      {{#each tabs as |t|}}{{#if t.visible}}<a class="item{{#if t.active}} active{{/if}}" data-tab="{{t.id}}">{{t.label}}</a>{{/if}}{{/each}}
+    </nav>
+  </div>
+
+  <div class="ft-body">
+
+    {{!-- IDENTITY TAB --------------------------------------------------- --}}
+    <div class="tab identity{{#if (eq activeTab "identity")}} active{{/if}}" data-tab="identity">
+      {{!-- Mobility + State readonly fields retired (2026-05-12) — they
+           duplicated the header pills exactly. Keep authored fields here. --}}
+      <section class="ft-rig-identity-grid">
+        <div class="ft-meta">
+          <label data-tooltip="Free-text archetype tag (e.g. war-rig, sail-barge, drilling-rig, garrison). Frame items override.">Archetype</label>
+          <input type="text" name="system.identity.archetype" value="{{identity.archetype}}" placeholder="war-rig, sail-barge, garrison…"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Hex this rig is bound to (when parked at a hex or docked-hybrid).">Bound Hex</label>
+          <input type="text" name="system.identity.binding.hexId" value="{{identity.binding.hexId}}" placeholder="(unset)"/>
+        </div>
+        {{#if identity.binding.sceneId}}
+        <div class="ft-meta">
+          <label data-tooltip="Currently deployed to scene.">Deployed Scene</label>
+          <span class="ft-readonly">{{identity.binding.sceneId}}</span>
+        </div>
+        {{/if}}
+      </section>
+    </div>
+
+    {{!-- CREW TAB ------------------------------------------------------- --}}
+    <div class="tab crew{{#if (eq activeTab "crew")}} active{{/if}}" data-tab="crew">
+      {{!-- Crew Capacity — polish pass (2026-05-12): per-role boxed tiles
+           showing filled/max, with role-specific dim/full states. Frame sets
+           the max; tile renders "—" when the role isn't supported by frame. --}}
+      <section class="ft-rig-crew-capacity">
+        <div class="ft-block-title">Crew Capacity <span class="ft-block-hint">(frame-defined max; seated count from the slots below)</span></div>
+        <div class="ft-rig-crew-tile-grid">
+          {{#each crewByRole as |r|}}
+          <div class="ft-rig-crew-tile ft-rig-crew-tile--{{r.role}}{{#unless r.supported}} ft-rig-crew-tile--unsupported{{/unless}}{{#if r.empty}} ft-rig-crew-tile--empty{{/if}}{{#if r.fullySeated}} ft-rig-crew-tile--full{{/if}}"
+               data-tooltip="{{r.label}} — {{#if r.supported}}{{r.filled}} seated of {{r.max}} max (min {{r.min}}){{else}}not supported by current frame{{/if}}">
+            <div class="ft-rig-crew-tile-role">{{r.label}}</div>
+            <div class="ft-rig-crew-tile-count">
+              {{#if r.supported}}
+              <span class="ft-rig-crew-tile-filled">{{r.filled}}</span><span class="ft-rig-stat-sep">/</span><span class="ft-rig-crew-tile-max">{{r.max}}</span>
+              {{else}}
+              <span class="ft-rig-crew-tile-unsupported">—</span>
+              {{/if}}
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </section>
+
+      <section class="ft-rig-crew-slots">
+        <div class="ft-block-title">Crew Slots <span class="ft-block-hint">(drop a steward / NPC actor onto a slot to assign)</span></div>
+        {{#if crew.slots.length}}
+        <div class="ft-crew-slot-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.5rem;margin-top:0.4rem;">
+          {{#each crew.slots as |slot|}}
+          <div class="ft-crew-slot ft-crew-slot--{{slot.role}}{{#unless slot.actor}} ft-crew-slot--empty{{/unless}}" data-rig-crew-slot="{{slot.idx}}" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:0.3rem;padding:0.5rem 0.4rem;background:rgba(20,20,28,0.5);border:1px solid #444;border-radius:6px;min-height:130px;">
+            <div class="ft-crew-slot-role" style="font-size:0.7rem;letter-spacing:0.06em;text-transform:uppercase;color:#d4a35f;font-weight:600;">{{slot.role}}</div>
+            {{#if slot.actor}}
+            <div class="ft-crew-slot-actor" data-action="ftRigCrewOpenSheet" data-tooltip="Open this crew member's sheet" style="display:flex;flex-direction:column;align-items:center;gap:0.25rem;cursor:pointer;flex:1 1 auto;justify-content:center;">
+              <img src="{{slot.actor.img}}" class="ft-crew-slot-img" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:2px solid #d4a35f;background:#0a0a0f;"/>
+              <span class="ft-crew-slot-name" style="font-size:0.78rem;text-align:center;color:#ffd28a;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{slot.actor.name}}</span>
+            </div>
+            <button type="button" class="ft-mini-btn" data-action="ftRigCrewDisembark" data-tooltip="Disembark this crew member" style="position:absolute;top:4px;right:4px;width:18px;height:18px;padding:0;background:rgba(235,87,87,0.15);border:1px solid #888;color:#ccc;border-radius:3px;cursor:pointer;font-size:0.7rem;line-height:1;">×</button>
+            {{else}}
+            <div class="ft-crew-slot-drop" style="flex:1 1 auto;display:flex;align-items:center;justify-content:center;text-align:center;font-size:0.72rem;color:#666;font-style:italic;padding:0.5rem;">Drop steward here</div>
+            {{/if}}
+          </div>
+          {{/each}}
+        </div>
+        {{else}}
+        <div class="ft-crew-empty" style="margin-top:0.4rem;font-size:0.78rem;color:#888;font-style:italic;">No crew slots authored yet. Drop a steward / NPC actor anywhere on this sheet to add one.</div>
+        {{/if}}
+      </section>
+
+      <section class="ft-rig-crew-actions-stub">
+        <div class="ft-block-title">Frame-Defined Actions</div>
+        <div class="ft-block-hint"><em>Phase 5</em> — once a frame is equipped, each role's available actions surface here and on the player HUD.</div>
+      </section>
+    </div>
+
+    {{!-- COMBAT TAB ----------------------------------------------------- --}}
+    <div class="tab combat{{#if (eq activeTab "combat")}} active{{/if}}" data-tab="combat">
+      {{!-- Contact Defenses (B11.A — 2026-05-12). Guard/Evasion/Resolve trio
+           derived from frame bracket + tier. Read-only; bracket changes via
+           equipping a different frame item or GM-editing integrity.bracket. --}}
+      <section class="ft-rig-contact-defenses">
+        <div class="ft-block-title">Contact Defenses
+          <span class="ft-block-hint" data-tooltip="Guard/Evasion/Resolve = bracket base + tier. Equip a different frame item or edit the bracket to change.">{{defenseDerived.formulaHint}}</span>
+        </div>
+        <div class="ft-rig-summary ft-rig-stat-grid">
+          <div class="ft-rig-stat-tile" data-tooltip="Guard — attack DC for melee, ramming, point-blank fire. High for Heavy / Siege brackets.">
+            <div class="ft-rig-stat-label">Guard</div>
+            <div class="ft-rig-stat-row">
+              <span class="ft-rig-stat-val ft-rig-stat-val-text">{{defenseDerived.guard}}</span>
+            </div>
+          </div>
+          <div class="ft-rig-stat-tile" data-tooltip="Evasion — attack DC for area, precision, and ranged fire at distance. High for Personal / Light brackets.">
+            <div class="ft-rig-stat-label">Evasion</div>
+            <div class="ft-rig-stat-row">
+              <span class="ft-rig-stat-val ft-rig-stat-val-text">{{defenseDerived.evasion}}</span>
+            </div>
+          </div>
+          <div class="ft-rig-stat-tile" data-tooltip="Resolve — DC for EMP, demoralize, command-override effects. Flat across brackets, tier-scaled.">
+            <div class="ft-rig-stat-label">Resolve</div>
+            <div class="ft-rig-stat-row">
+              <span class="ft-rig-stat-val ft-rig-stat-val-text">{{defenseDerived.resolve}}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ft-rig-defenses">
+        <div class="ft-block-title">Defenses <span class="ft-block-hint">(click Defense to cycle none → resist → immune; Vuln toggles independently)</span></div>
+        <table class="ft-defense-table">
+          <thead>
+            <tr><th>Damage Type</th><th>Defense</th><th>Vulnerable</th></tr>
+          </thead>
+          <tbody>
+            {{#each defenseRows as |row|}}
+            <tr>
+              <td class="ft-def-type">{{row.label}}</td>
+              <td class="ft-def-cell ft-def-cell--{{row.cycleState}}" data-action="ftDefenseCycle" data-type="{{row.key}}" data-tooltip="Click to cycle: none → resist → immune → none">
+                {{#if row.isImmune}}Immune{{else}}{{#if row.isResist}}Resist{{else}}—{{/if}}{{/if}}
+              </td>
+              <td class="ft-def-cell{{#if row.isVuln}} active{{/if}}" data-action="ftVulnToggle" data-type="{{row.key}}" data-tooltip="Toggle vulnerability to {{row.label}}">
+                {{#if row.isVuln}}✓ Vulnerable{{else}}—{{/if}}
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </section>
+
+      {{!-- Equipped Weapons — polish pass (2026-05-12): same row pattern as
+           Gear tab for consistency. Header shows slot used/max from frame. --}}
+      <section class="ft-rig-weapons ft-rig-gear-section">
+        <div class="ft-block-title">
+          Equipped Weapons
+          <span class="ft-rig-slot-cap{{#if gear.slotOverage.weapon}} ft-rig-slot-cap--over{{/if}}"
+                data-tooltip="Weapon slots used / frame max{{#if gear.slotOverage.weapon}} — over capacity!{{/if}}">
+            {{gear.slotUsage.weapon.used}}/{{gear.slotUsage.weapon.max}}
+          </span>
+        </div>
+        {{#if gear.weapons.length}}
+        <div class="ft-rig-gear-row-list">
+          {{#each gear.weapons as |w|}}
+          <div class="ft-rig-gear-row ft-rig-gear-row--weapon" data-item-id="{{w.id}}">
+            <img src="{{w.img}}" class="ft-rig-gear-row-img" alt=""/>
+            {{#if w.tier}}<span class="ft-manifest-chip ft-tier-pill ft-tier-{{w.tier}} ft-rig-gear-tier">T{{w.tier}}</span>{{/if}}
+            <span class="ft-rig-gear-row-name">{{w.name}}</span>
+            {{#if w.damage}}<span class="ft-rig-gear-stat ft-rig-gear-stat--dmg" data-tooltip="Damage formula">⚔ {{w.damage}}{{#if w.damageType}} <em>{{w.damageType}}</em>{{/if}}</span>{{/if}}
+            {{#if w.range}}<span class="ft-rig-gear-stat ft-rig-gear-stat--range" data-tooltip="Range (short/long)">⌖ {{w.range}}</span>{{/if}}
+            <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemEdit" data-tooltip="Open weapon item">✎</button>
+            <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemDelete" data-tooltip="Unequip / delete">×</button>
+          </div>
+          {{/each}}
+        </div>
+        {{else}}
+        <div class="ft-rig-gear-empty">Drop a <code>rig-weapon</code> item onto the sheet to equip.</div>
+        {{/if}}
+      </section>
+    </div>
+
+    {{!-- GEAR TAB --— Polish pass (2026-05-12): Frame becomes a hero tile
+         exposing rigFrame stats (bracket, base integrity, slot caps, allowed
+         mobility) inline. Systems/Outputs/Unsorted use a richer row pattern
+         (tier badge + subtype-specific stat chips + edit/delete). Section
+         headers carry used/max slot-cap pills, red-flagged on overage. --}}
+    <div class="tab gear{{#if (eq activeTab "gear")}} active{{/if}}" data-tab="gear">
+
+      <section class="ft-rig-gear-section ft-rig-gear-frame">
+        <div class="ft-block-title">
+          Frame <span class="ft-block-hint">defines bracket, integrity, slot counts, travel, action menu</span>
+        </div>
+        {{#if gear.frameRow}}
+        <div class="ft-rig-frame-hero" data-item-id="{{gear.frameRow.id}}">
+          <img src="{{gear.frameRow.img}}" class="ft-rig-frame-hero-img" alt=""/>
+          <div class="ft-rig-frame-hero-body">
+            <div class="ft-rig-frame-hero-name-row">
+              <span class="ft-rig-frame-hero-name">{{gear.frameRow.name}}</span>
+              <span class="ft-manifest-chip ft-rig-frame-bracket" data-tooltip="Frame bracket — personal · light · medium · heavy · siege">{{gear.frameRow.bracket}}</span>
+              <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemEdit" data-tooltip="Open frame item">✎</button>
+              <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemDelete" data-tooltip="Unequip frame">×</button>
+            </div>
+            <div class="ft-rig-frame-hero-stats">
+              {{#if gear.frameRow.has}}
+              <span class="ft-rig-frame-stat" data-tooltip="Base integrity contributed by frame">🛡 {{gear.frameRow.baseIntegrity}}{{#if gear.frameRow.tierStep}} <small>(+{{gear.frameRow.tierStep}}/T)</small>{{/if}}</span>
+              <span class="ft-rig-frame-slot-caps">
+                <span class="ft-rig-frame-slot-cap" data-tooltip="Weapon slot capacity">⚔ {{gear.frameRow.slotCaps.weapon}}</span>
+                <span class="ft-rig-frame-slot-cap" data-tooltip="System slot capacity">⚙ {{gear.frameRow.slotCaps.system}}</span>
+                <span class="ft-rig-frame-slot-cap" data-tooltip="Output slot capacity">⚡ {{gear.frameRow.slotCaps.output}}</span>
+              </span>
+              {{#if gear.frameRow.mobilityAllowed.length}}
+              <span class="ft-rig-frame-mobility">
+                {{#each gear.frameRow.mobilityAllowed as |m|}}<span class="ft-rig-frame-mobility-chip" data-tooltip="Frame supports {{m}} mobility">{{m}}</span>{{/each}}
+              </span>
+              {{/if}}
+              {{else}}
+              <span class="ft-rig-frame-stat-unsourced" data-tooltip="This frame item is missing `flags.fourththing.rigFrame.*` — open the item and re-stamp from the catalog macro.">⚠ no rigFrame flags</span>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        {{else}}
+        <div class="ft-rig-gear-empty ft-rig-gear-empty--frame">
+          <span class="ft-rig-gear-empty-icon">🛡</span>
+          <span class="ft-rig-gear-empty-label">No frame equipped</span>
+          <span class="ft-rig-gear-empty-hint">Drop a <code>rig-frame</code> item onto the sheet to unlock slot capacity + Deploy.</span>
+        </div>
+        {{/if}}
+      </section>
+
+      <section class="ft-rig-gear-section ft-rig-gear-systems">
+        <div class="ft-block-title">
+          Systems
+          <span class="ft-rig-slot-cap{{#if gear.slotOverage.system}} ft-rig-slot-cap--over{{/if}}"
+                data-tooltip="System slots used / frame max{{#if gear.slotOverage.system}} — over capacity!{{/if}}">
+            {{gear.slotUsage.system.used}}/{{gear.slotUsage.system.max}}
+          </span>
+          <span class="ft-block-hint">sensors · shields · comms · repair bays</span>
+        </div>
+        {{#if gear.systems.length}}
+        <div class="ft-rig-gear-row-list">
+          {{#each gear.systems as |s|}}
+          <div class="ft-rig-gear-row ft-rig-gear-row--system" data-item-id="{{s.id}}">
+            <img src="{{s.img}}" class="ft-rig-gear-row-img" alt=""/>
+            {{#if s.tier}}<span class="ft-manifest-chip ft-tier-pill ft-tier-{{s.tier}} ft-rig-gear-tier">T{{s.tier}}</span>{{/if}}
+            <span class="ft-rig-gear-row-name">{{s.name}}</span>
+            <span class="ft-rig-gear-chip ft-rig-gear-chip--{{#if s.passive}}passive{{else}}active{{/if}}" data-tooltip="{{#if s.passive}}Passive — always on{{else}}Active — must be triggered by crew{{/if}}">{{#if s.passive}}passive{{else}}active{{/if}}</span>
+            <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemEdit" data-tooltip="Open system item">✎</button>
+            <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemDelete" data-tooltip="Unequip">×</button>
+          </div>
+          {{/each}}
+        </div>
+        {{else}}
+        <div class="ft-rig-gear-empty">Drop a <code>rig-system</code> item onto the sheet.</div>
+        {{/if}}
+      </section>
+
+      <section class="ft-rig-gear-section ft-rig-gear-outputs">
+        <div class="ft-block-title">
+          Output Modules
+          <span class="ft-rig-slot-cap{{#if gear.slotOverage.output}} ft-rig-slot-cap--over{{/if}}"
+                data-tooltip="Output slots used / frame max{{#if gear.slotOverage.output}} — over capacity!{{/if}}">
+            {{gear.slotUsage.output.used}}/{{gear.slotUsage.output.max}}
+          </span>
+          <span class="ft-block-hint">per-turn yield producers — see Output tab</span>
+        </div>
+        {{#if gear.outputs.length}}
+        <div class="ft-rig-gear-row-list">
+          {{#each gear.outputs as |o|}}
+          <div class="ft-rig-gear-row ft-rig-gear-row--output" data-item-id="{{o.id}}">
+            <img src="{{o.img}}" class="ft-rig-gear-row-img" alt=""/>
+            {{#if o.tier}}<span class="ft-manifest-chip ft-tier-pill ft-tier-{{o.tier}} ft-rig-gear-tier">T{{o.tier}}</span>{{/if}}
+            <span class="ft-rig-gear-row-name">{{o.name}}</span>
+            {{#if o.yieldEntries.length}}
+            <span class="ft-rig-gear-yields" data-tooltip="Per-turn yield while parked (100%). Halved when mobile-deployed.">
+              {{#each o.yieldEntries as |y|}}<span class="ft-rig-gear-yield-chip">+{{y.value}} {{y.key}}</span>{{/each}}
+            </span>
+            {{/if}}
+            {{#if o.mobileLegal}}<span class="ft-rig-gear-chip ft-rig-gear-chip--mobile" data-tooltip="Produces at 50% while the rig is deployed (mobile rigs only). Without this, output → 0% when deployed.">mobile-legal</span>{{/if}}
+            <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemEdit" data-tooltip="Open output module">✎</button>
+            <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemDelete" data-tooltip="Unequip">×</button>
+          </div>
+          {{/each}}
+        </div>
+        {{else}}
+        <div class="ft-rig-gear-empty">Drop an <code>output-module</code> item to start producing.</div>
+        {{/if}}
+      </section>
+
+      {{#if gear.unsorted.length}}
+      <section class="ft-rig-gear-section ft-rig-gear-unsorted">
+        <div class="ft-block-title">
+          Needs Sorting <span class="ft-rig-slot-cap ft-rig-slot-cap--info">({{gear.unsorted.length}})</span>
+          <span class="ft-block-hint">items without a <code>rigGear.subtype</code> flag — re-stamp from the catalog macro to sort</span>
+        </div>
+        <div class="ft-rig-gear-row-list">
+          {{#each gear.unsorted as |u|}}
+          <div class="ft-rig-gear-row ft-rig-gear-row--unsorted" data-item-id="{{u.id}}">
+            <img src="{{u.img}}" class="ft-rig-gear-row-img" alt=""/>
+            <span class="ft-rig-gear-row-name">{{u.name}}</span>
+            <span class="ft-rig-gear-chip ft-rig-gear-chip--type">{{u.type}}</span>
+            <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemEdit" data-tooltip="Open item">✎</button>
+            <button type="button" class="ft-mini-btn ft-rig-gear-btn" data-action="ftItemDelete" data-tooltip="Remove">×</button>
+          </div>
+          {{/each}}
+        </div>
+      </section>
+      {{/if}}
+    </div>
+
+    {{!-- OUTPUT TAB ----------------------------------------------------- --}}
+    <div class="tab output{{#if (eq activeTab "output")}} active{{/if}}" data-tab="output">
+      <section class="ft-rig-output-summary">
+        <div class="ft-block-title">Output <span class="ft-output-pct" data-tooltip="100% parked · 50% deployed · 0% destroyed">({{outputPct}}%)</span></div>
+        {{#if gear.outputs.length}}
+        <div class="ft-rig-output-modules">
+          {{#each gear.outputs as |o|}}
+          <div class="ft-rig-output-row">
+            <img src="{{o.img}}" class="ft-rig-item-img"/>
+            <span class="ft-rig-item-name">{{o.name}}</span>
+          </div>
+          {{/each}}
+        </div>
+        <div class="ft-rig-output-hint">Per-turn yields are read from each module's flag data and applied to the faction owner during turn-tick (Phase 6 wiring).</div>
+        {{else}}
+        <div class="ft-rig-item-empty">No output modules installed. Drop an `output-module` item to start producing.</div>
+        {{/if}}
+      </section>
+    </div>
+
+    {{!-- TRAVEL TAB ----------------------------------------------------- --}}
+    <div class="tab travel{{#if (eq activeTab "travel")}} active{{/if}}" data-tab="travel">
+      <section class="ft-rig-travel-grid">
+        <div class="ft-meta">
+          <label data-tooltip="Hexes per session/turn while deployed.">Speed</label>
+          <input type="number" data-ft-rig-edit="system.travel.speed" value="{{travel.speed}}" min="0"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Maximum travel distance per session before refuel.">Range</label>
+          <input type="number" data-ft-rig-edit="system.travel.range" value="{{travel.range}}" min="0"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Mitigates travel hazards (existing rig hazard logic).">Hazard Resist</label>
+          <input type="number" data-ft-rig-edit="system.travel.hazardResist" value="{{travel.hazardResist}}" min="0"/>
+        </div>
+      </section>
+      <section class="ft-rig-travel-hint">
+        <em>Phase 6</em> — travel log + hex-binding picker land with the migration sprint.
+      </section>
+    </div>
+
+    {{!-- GM EDIT TAB ---------------------------------------------------- --}}
+    {{#if gmEdit}}
+    <div class="tab gmedit{{#if (eq activeTab "gmedit")}} active{{/if}}" data-tab="gmedit">
+      <section class="ft-rig-gm-grid">
+        <div class="ft-block-title">GM Manual Overrides</div>
+        <div class="ft-meta">
+          <label data-tooltip="Direct integrity max — frame-derived value can be overridden here.">Integrity Max</label>
+          <input type="number" data-ft-rig-edit="system.integrity.max" value="{{integrity.max}}" min="0"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Direct integrity value.">Integrity Current</label>
+          <input type="number" data-ft-rig-edit="system.integrity.value" value="{{integrity.value}}" min="0"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Tier 1–4 (RFI canon).">Tier</label>
+          <input type="number" data-ft-rig-edit="system.integrity.tier" value="{{integrity.tier}}" min="1" max="4"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Bracket — light / medium / heavy / siege. Frame normally sets this.">Bracket</label>
+          <select data-ft-rig-edit="system.integrity.bracket">
+            <option value="personal"{{#if (eq integrity.bracket "personal")}} selected{{/if}}>Personal (speeder/bike)</option>
+            <option value="light"{{#if (eq integrity.bracket "light")}} selected{{/if}}>Light (scout/skiff)</option>
+            <option value="medium"{{#if (eq integrity.bracket "medium")}} selected{{/if}}>Medium (barge/hauler)</option>
+            <option value="heavy"{{#if (eq integrity.bracket "heavy")}} selected{{/if}}>Heavy (war rig/garrison)</option>
+            <option value="siege"{{#if (eq integrity.bracket "siege")}} selected{{/if}}>Siege (forge/fortress)</option>
+          </select>
+        </div>
+        <div class="ft-meta">
+          <label>Crew Pilot Min</label><input type="number" data-ft-rig-edit="system.crew.capacity.pilot.min"    value="{{crew.capacity.pilot.min}}"    min="0"/>
+        </div>
+        <div class="ft-meta">
+          <label>Crew Pilot Max</label><input type="number" data-ft-rig-edit="system.crew.capacity.pilot.max"    value="{{crew.capacity.pilot.max}}"    min="0"/>
+        </div>
+        <div class="ft-meta">
+          <label>Gunner Max</label><input type="number" data-ft-rig-edit="system.crew.capacity.gunner.max"   value="{{crew.capacity.gunner.max}}"   min="0"/>
+        </div>
+        <div class="ft-meta">
+          <label>Engineer Max</label><input type="number" data-ft-rig-edit="system.crew.capacity.engineer.max" value="{{crew.capacity.engineer.max}}" min="0"/>
+        </div>
+        <div class="ft-meta">
+          <label>Crew Max</label><input type="number" data-ft-rig-edit="system.crew.capacity.crew.max"     value="{{crew.capacity.crew.max}}"     min="0"/>
+        </div>
+      </section>
+    </div>
+    {{/if}}
+
+  </div>
+</div>

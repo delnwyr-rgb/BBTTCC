@@ -1,0 +1,17 @@
+{
+  "id": "bbttcc-sorting-engine",
+  "title": "BBTTCC Sorting Engine",
+  "version": "1.0.0",
+  "esmodules": [
+    "scripts/bbttcc-sorting-engine-v2.js",
+    "scripts/bbttcc-sorting-engine-wizard-v2.js"
+  ],
+  "scripts": [
+    "scripts/bbttcc-sorting-engine.phase1.js",
+    "scripts/wizard-step0-sorting.js"
+  ],
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13"
+  }
+}

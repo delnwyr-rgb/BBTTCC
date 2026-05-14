@@ -1,0 +1,983 @@
+{
+  "version": "1.0",
+  "title": "BBTTCC Sorting Engine",
+  "traits": [
+    "violence",
+    "diplomacy",
+    "intrigue",
+    "economy",
+    "logistics",
+    "faith",
+    "culture",
+    "nonlethal",
+    "mobility",
+    "foresight",
+    "ritual",
+    "control",
+    "freedom",
+    "justice",
+    "unity",
+    "ambition",
+    "risk",
+    "mercy",
+    "stability",
+    "truth",
+    "survival",
+    "corruption",
+    "binah_signal",
+    "chesed_signal",
+    "hod_signal",
+    "netzach_signal",
+    "tiphareth_signal"
+  ],
+  "questions": [
+    {
+      "id": 1,
+      "prompt": "A threat emerges in one of your hexes. What do you do first?",
+      "answers": {
+        "A": {
+          "text": "Hit it hard and fast before it spreads.",
+          "tags": {
+            "violence": 2,
+            "ambition": 1,
+            "control": 1
+          }
+        },
+        "B": {
+          "text": "Lock it down and protect the civilians.",
+          "tags": {
+            "stability": 1,
+            "nonlethal": 1,
+            "unity": 1,
+            "logistics": 2
+          }
+        },
+        "C": {
+          "text": "Investigate quietly before committing force.",
+          "tags": {
+            "intrigue": 2,
+            "foresight": 1,
+            "mobility": 1
+          }
+        },
+        "D": {
+          "text": "Open a channel and see whether conflict can be redirected.",
+          "tags": {
+            "diplomacy": 2,
+            "mercy": 1,
+            "justice": 1
+          }
+        },
+        "E": {
+          "text": "Study it. If you understand it, you can use it.",
+          "tags": {
+            "ritual": 1,
+            "truth": 1,
+            "risk": 1,
+            "corruption": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Your faction is running low on resources.",
+      "answers": {
+        "A": {
+          "text": "Take what you need from whoever has it.",
+          "tags": {
+            "violence": 1,
+            "survival": 2,
+            "ambition": 1
+          }
+        },
+        "B": {
+          "text": "Redistribute what you have fairly.",
+          "tags": {
+            "justice": 2,
+            "unity": 1,
+            "mercy": 1,
+            "nonlethal": 1
+          }
+        },
+        "C": {
+          "text": "Optimize systems and reduce waste.",
+          "tags": {
+            "economy": 2,
+            "logistics": 2,
+            "stability": 1
+          }
+        },
+        "D": {
+          "text": "Trade, negotiate, and build new agreements.",
+          "tags": {
+            "diplomacy": 2,
+            "culture": 1,
+            "freedom": 1,
+            "economy": 1
+          }
+        },
+        "E": {
+          "text": "Convert one thing into another. Scarcity is just bad technique.",
+          "tags": {
+            "ritual": 1,
+            "economy": 1,
+            "faith": 1,
+            "truth": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "prompt": "A rival faction spreads misinformation about you.",
+      "answers": {
+        "A": {
+          "text": "Ruin their credibility permanently.",
+          "tags": {
+            "violence": 1,
+            "control": 1,
+            "ambition": 1
+          }
+        },
+        "B": {
+          "text": "Answer with public truth and receipts.",
+          "tags": {
+            "justice": 2,
+            "truth": 1,
+            "diplomacy": 1
+          }
+        },
+        "C": {
+          "text": "Undermine them quietly through leverage.",
+          "tags": {
+            "intrigue": 2,
+            "control": 1
+          }
+        },
+        "D": {
+          "text": "Reframe the story so their lie cannot survive.",
+          "tags": {
+            "culture": 2,
+            "diplomacy": 1,
+            "hod_signal": 1
+          }
+        },
+        "E": {
+          "text": "Ignore them and prepare the field for when reality catches up.",
+          "tags": {
+            "foresight": 1,
+            "stability": 1,
+            "logistics": 1,
+            "truth": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "prompt": "You are offered power, but it comes from a dangerous source.",
+      "answers": {
+        "A": {
+          "text": "Take it. Power belongs to whoever can carry it.",
+          "tags": {
+            "ambition": 2,
+            "control": 1,
+            "corruption": 1
+          }
+        },
+        "B": {
+          "text": "Refuse it. Some lines matter.",
+          "tags": {
+            "justice": 1,
+            "faith": 2,
+            "mercy": 1
+          }
+        },
+        "C": {
+          "text": "Take it with safeguards and clear limits.",
+          "tags": {
+            "binah_signal": 2,
+            "stability": 1,
+            "control": 1,
+            "nonlethal": 1
+          }
+        },
+        "D": {
+          "text": "Study it until you understand the risk.",
+          "tags": {
+            "truth": 1,
+            "ritual": 1,
+            "foresight": 1,
+            "risk": 1
+          }
+        },
+        "E": {
+          "text": "Use it carefully. Dangerous things are still tools.",
+          "tags": {
+            "risk": 2,
+            "ritual": 1,
+            "corruption": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "prompt": "Your faction is divided internally.",
+      "answers": {
+        "A": {
+          "text": "Force unity before disagreement becomes weakness.",
+          "tags": {
+            "control": 2,
+            "unity": 1,
+            "ambition": 1
+          }
+        },
+        "B": {
+          "text": "Find consensus, even if it takes time.",
+          "tags": {
+            "justice": 1,
+            "diplomacy": 2,
+            "mercy": 1
+          }
+        },
+        "C": {
+          "text": "Let groups self-organize. Central control is the real threat.",
+          "tags": {
+            "freedom": 2,
+            "culture": 1,
+            "risk": 1
+          }
+        },
+        "D": {
+          "text": "Mediate around shared values and common purpose.",
+          "tags": {
+            "unity": 2,
+            "faith": 1,
+            "tiphareth_signal": 1,
+            "mercy": 1
+          }
+        },
+        "E": {
+          "text": "Identify the hidden fracture and solve that instead.",
+          "tags": {
+            "intrigue": 1,
+            "foresight": 1,
+            "truth": 1,
+            "diplomacy": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "prompt": "You are planning a raid.",
+      "answers": {
+        "A": {
+          "text": "Overwhelm them.",
+          "tags": {
+            "violence": 2,
+            "ambition": 1
+          }
+        },
+        "B": {
+          "text": "Coordinate the team until the battlefield becomes predictable.",
+          "tags": {
+            "unity": 2,
+            "stability": 1,
+            "logistics": 1,
+            "nonlethal": 1
+          }
+        },
+        "C": {
+          "text": "Infiltrate, sabotage, destabilize.",
+          "tags": {
+            "intrigue": 2,
+            "mobility": 1,
+            "risk": 1
+          }
+        },
+        "D": {
+          "text": "Avoid the fight if a better outcome exists.",
+          "tags": {
+            "diplomacy": 2,
+            "nonlethal": 1,
+            "mercy": 1,
+            "mobility": 1
+          }
+        },
+        "E": {
+          "text": "Alter the conditions so the battle is decided before it starts.",
+          "tags": {
+            "foresight": 1,
+            "ritual": 1,
+            "logistics": 1,
+            "truth": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "prompt": "Darkness begins to rise across your territory.",
+      "answers": {
+        "A": {
+          "text": "Weaponize it before someone else does.",
+          "tags": {
+            "corruption": 2,
+            "ambition": 1,
+            "violence": 1
+          }
+        },
+        "B": {
+          "text": "Purify it.",
+          "tags": {
+            "faith": 2,
+            "justice": 1,
+            "mercy": 1
+          }
+        },
+        "C": {
+          "text": "Contain it and keep it from spreading.",
+          "tags": {
+            "stability": 1,
+            "control": 1,
+            "nonlethal": 1,
+            "logistics": 1
+          }
+        },
+        "D": {
+          "text": "Understand it before acting.",
+          "tags": {
+            "truth": 1,
+            "ritual": 1,
+            "foresight": 1,
+            "faith": 1
+          }
+        },
+        "E": {
+          "text": "Convert it into leverage without letting it own you.",
+          "tags": {
+            "ritual": 2,
+            "risk": 1,
+            "corruption": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "prompt": "What matters most?",
+      "answers": {
+        "A": {
+          "text": "Strength",
+          "tags": {
+            "ambition": 2,
+            "violence": 1
+          }
+        },
+        "B": {
+          "text": "Justice",
+          "tags": {
+            "justice": 2,
+            "mercy": 1
+          }
+        },
+        "C": {
+          "text": "Freedom",
+          "tags": {
+            "freedom": 2,
+            "culture": 1,
+            "mobility": 1
+          }
+        },
+        "D": {
+          "text": "Endurance",
+          "tags": {
+            "stability": 1,
+            "survival": 1,
+            "logistics": 1
+          }
+        },
+        "E": {
+          "text": "Understanding",
+          "tags": {
+            "truth": 1,
+            "foresight": 1,
+            "intrigue": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "prompt": "What kind of leader do people become around you?",
+      "answers": {
+        "A": {
+          "text": "Sharper. Harder. More effective.",
+          "tags": {
+            "violence": 1,
+            "ambition": 2
+          }
+        },
+        "B": {
+          "text": "Safer. Seen. Protected.",
+          "tags": {
+            "mercy": 2,
+            "justice": 1,
+            "unity": 1,
+            "nonlethal": 1
+          }
+        },
+        "C": {
+          "text": "Stranger. Smarter. Less predictable.",
+          "tags": {
+            "intrigue": 1,
+            "truth": 1,
+            "ritual": 1,
+            "risk": 1
+          }
+        },
+        "D": {
+          "text": "More coordinated. More purposeful.",
+          "tags": {
+            "unity": 1,
+            "logistics": 2,
+            "stability": 1,
+            "economy": 1,
+            "nonlethal": 1
+          }
+        },
+        "E": {
+          "text": "More willing to believe in something larger.",
+          "tags": {
+            "faith": 1,
+            "culture": 1,
+            "diplomacy": 1,
+            "unity": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "prompt": "Which failure scares you most?",
+      "answers": {
+        "A": {
+          "text": "Becoming weak",
+          "tags": {
+            "ambition": 1,
+            "violence": 1,
+            "netzach_signal": 1
+          }
+        },
+        "B": {
+          "text": "Becoming cruel",
+          "tags": {
+            "mercy": 1,
+            "chesed_signal": 1,
+            "justice": 1
+          }
+        },
+        "C": {
+          "text": "Becoming controlled",
+          "tags": {
+            "freedom": 2,
+            "risk": 1
+          }
+        },
+        "D": {
+          "text": "Becoming irrelevant",
+          "tags": {
+            "culture": 1,
+            "ambition": 1,
+            "hod_signal": 1
+          }
+        },
+        "E": {
+          "text": "Becoming false",
+          "tags": {
+            "truth": 1,
+            "faith": 1,
+            "binah_signal": 1,
+            "justice": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "prompt": "A Hex begins to fail in ways your maps cannot explain. What do you trust first?",
+      "answers": {
+        "A": {
+          "text": "The land is speaking. Listen before you act.",
+          "tags": {
+            "survival": 2,
+            "culture": 1,
+            "netzach_signal": 1
+          }
+        },
+        "B": {
+          "text": "Something corrupt is inside the system. Cut it out.",
+          "tags": {
+            "faith": 1,
+            "justice": 1,
+            "stability": 1,
+            "nonlethal": 1
+          }
+        },
+        "C": {
+          "text": "This is a pattern failure. Identify the hidden structure.",
+          "tags": {
+            "truth": 1,
+            "control": 1,
+            "logistics": 1,
+            "binah_signal": 1
+          }
+        },
+        "D": {
+          "text": "If it can be understood, it can be used.",
+          "tags": {
+            "ritual": 1,
+            "risk": 1,
+            "corruption": 1,
+            "truth": 1,
+            "economy": 1
+          }
+        },
+        "E": {
+          "text": "Adapt to the failure. Survival matters more than purity.",
+          "tags": {
+            "survival": 2,
+            "risk": 1,
+            "corruption": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 12,
+      "prompt": "You are warned that something bad is coming, but no one agrees what it is.",
+      "answers": {
+        "A": {
+          "text": "Prepare for multiple futures and watch for the earliest sign.",
+          "tags": {
+            "foresight": 1,
+            "truth": 1,
+            "stability": 1
+          }
+        },
+        "B": {
+          "text": "Force the situation into a shape you can control.",
+          "tags": {
+            "control": 2,
+            "ambition": 1,
+            "risk": 1
+          }
+        },
+        "C": {
+          "text": "Ask what the omens are trying to tell you.",
+          "tags": {
+            "faith": 1,
+            "ritual": 1,
+            "truth": 1
+          }
+        },
+        "D": {
+          "text": "Strengthen the people and systems most likely to take the hit.",
+          "tags": {
+            "unity": 1,
+            "logistics": 2,
+            "stability": 1
+          }
+        },
+        "E": {
+          "text": "Move lightly and keep your options open until the pattern reveals itself.",
+          "tags": {
+            "mobility": 1,
+            "foresight": 1,
+            "risk": 1,
+            "mercy": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "prompt": "A source of corruption is still useful. What do you do with it?",
+      "answers": {
+        "A": {
+          "text": "Destroy it. Some tools cost too much to keep.",
+          "tags": {
+            "faith": 2,
+            "justice": 1,
+            "mercy": 1
+          }
+        },
+        "B": {
+          "text": "Contain it under strict rules and watch it constantly.",
+          "tags": {
+            "control": 2,
+            "stability": 1,
+            "binah_signal": 1,
+            "nonlethal": 1
+          }
+        },
+        "C": {
+          "text": "Use it carefully. Dangerous things are still tools.",
+          "tags": {
+            "risk": 2,
+            "corruption": 1,
+            "ritual": 1
+          }
+        },
+        "D": {
+          "text": "Redirect it into something the world can survive.",
+          "tags": {
+            "survival": 1,
+            "truth": 1,
+            "netzach_signal": 1,
+            "ritual": 1,
+            "economy": 1
+          }
+        },
+        "E": {
+          "text": "Change yourself until the danger is survivable.",
+          "tags": {
+            "survival": 2,
+            "corruption": 1,
+            "risk": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "prompt": "Your route leads through brutal terrain and worsening weather. What is your instinct?",
+      "answers": {
+        "A": {
+          "text": "Read the land and move with it, not against it.",
+          "tags": {
+            "survival": 2,
+            "mobility": 1,
+            "netzach_signal": 1
+          }
+        },
+        "B": {
+          "text": "Endure it. Hardship is just another condition to survive.",
+          "tags": {
+            "survival": 2,
+            "stability": 1,
+            "risk": 1
+          }
+        },
+        "C": {
+          "text": "Exploit the terrain. If it is dangerous, make it dangerous for everyone else too.",
+          "tags": {
+            "control": 1,
+            "logistics": 2,
+            "ambition": 1
+          }
+        },
+        "D": {
+          "text": "Find the hidden path no one else noticed.",
+          "tags": {
+            "mobility": 2,
+            "foresight": 1,
+            "intrigue": 1
+          }
+        },
+        "E": {
+          "text": "Break the route into staged movements, caches, and fallback points.",
+          "tags": {
+            "logistics": 2,
+            "stability": 1,
+            "mobility": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 15,
+      "prompt": "What does survival really mean to you?",
+      "answers": {
+        "A": {
+          "text": "Preserve what is good, even if it costs you.",
+          "tags": {
+            "mercy": 1,
+            "faith": 1,
+            "justice": 2
+          }
+        },
+        "B": {
+          "text": "Adapt. If the old form dies, become something that can live.",
+          "tags": {
+            "survival": 2,
+            "risk": 1,
+            "corruption": 1
+          }
+        },
+        "C": {
+          "text": "Stay in relationship with the world long enough to hear what it needs.",
+          "tags": {
+            "survival": 1,
+            "truth": 1,
+            "culture": 1,
+            "netzach_signal": 1
+          }
+        },
+        "D": {
+          "text": "See the fracture before it becomes the collapse.",
+          "tags": {
+            "foresight": 1,
+            "truth": 1,
+            "intrigue": 1,
+            "mobility": 1
+          }
+        },
+        "E": {
+          "text": "Ensure your people endure, even if the method is ugly.",
+          "tags": {
+            "stability": 1,
+            "control": 1,
+            "survival": 1,
+            "ambition": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "prompt": "A system is failing, but no one agrees why. What do you trust most?",
+      "answers": {
+        "A": {
+          "text": "The pattern beneath the failure.",
+          "tags": {
+            "truth": 1,
+            "control": 1,
+            "intrigue": 1,
+            "binah_signal": 1
+          }
+        },
+        "B": {
+          "text": "The damage it is causing right now.",
+          "tags": {
+            "survival": 2,
+            "stability": 1
+          }
+        },
+        "C": {
+          "text": "The way people are reacting to it.",
+          "tags": {
+            "culture": 2,
+            "diplomacy": 1
+          }
+        },
+        "D": {
+          "text": "The feeling that something deeper is about to happen.",
+          "tags": {
+            "foresight": 1,
+            "faith": 1,
+            "risk": 1
+          }
+        },
+        "E": {
+          "text": "The fact that it can still be used.",
+          "tags": {
+            "corruption": 1,
+            "risk": 1,
+            "ritual": 1,
+            "ambition": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "prompt": "You are given a glimpse of a future where your faction wins—but at a terrible cost.",
+      "answers": {
+        "A": {
+          "text": "Prevent that future at all costs.",
+          "tags": {
+            "mercy": 2,
+            "justice": 1,
+            "faith": 1
+          }
+        },
+        "B": {
+          "text": "Accept it. Victory always has a cost.",
+          "tags": {
+            "ambition": 2,
+            "control": 1,
+            "risk": 1
+          }
+        },
+        "C": {
+          "text": "Look for a third path no one has seen yet.",
+          "tags": {
+            "truth": 1,
+            "foresight": 1,
+            "intrigue": 1,
+            "tiphareth_signal": 1
+          }
+        },
+        "D": {
+          "text": "Change your people so they can survive that cost.",
+          "tags": {
+            "survival": 2,
+            "corruption": 1,
+            "risk": 1
+          }
+        },
+        "E": {
+          "text": "Let the future shift. You don't trust a single outcome.",
+          "tags": {
+            "freedom": 2,
+            "risk": 1,
+            "mobility": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 18,
+      "prompt": "A powerful entity offers to help your faction—but demands recognition in return.",
+      "answers": {
+        "A": {
+          "text": "Bind it carefully. Power is leverage.",
+          "tags": {
+            "corruption": 2,
+            "ritual": 1,
+            "control": 1
+          }
+        },
+        "B": {
+          "text": "Refuse it. Nothing that demands worship is worth the cost.",
+          "tags": {
+            "faith": 2,
+            "justice": 1,
+            "mercy": 1
+          }
+        },
+        "C": {
+          "text": "Study it until you understand its nature.",
+          "tags": {
+            "truth": 1,
+            "foresight": 1,
+            "ritual": 1
+          }
+        },
+        "D": {
+          "text": "Work with it, but on equal terms.",
+          "tags": {
+            "diplomacy": 2,
+            "culture": 1,
+            "economy": 1
+          }
+        },
+        "E": {
+          "text": "Let it go. The world should stand without it.",
+          "tags": {
+            "faith": 1,
+            "nonlethal": 1,
+            "tiphareth_signal": 1,
+            "freedom": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 19,
+      "prompt": "Your people begin to change under pressure. They are becoming something new.",
+      "answers": {
+        "A": {
+          "text": "Guide the change. Evolution is survival.",
+          "tags": {
+            "survival": 2,
+            "risk": 1,
+            "corruption": 1
+          }
+        },
+        "B": {
+          "text": "Stop it before they lose themselves.",
+          "tags": {
+            "faith": 2,
+            "stability": 1,
+            "justice": 1
+          }
+        },
+        "C": {
+          "text": "Understand what they are becoming first.",
+          "tags": {
+            "truth": 1,
+            "foresight": 1,
+            "intrigue": 1
+          }
+        },
+        "D": {
+          "text": "Let them choose what they become.",
+          "tags": {
+            "freedom": 2,
+            "culture": 1
+          }
+        },
+        "E": {
+          "text": "Shape the change into something useful.",
+          "tags": {
+            "ambition": 1,
+            "ritual": 1,
+            "control": 1,
+            "corruption": 1
+          }
+        }
+      }
+    },
+    {
+      "id": 20,
+      "prompt": "At the end of all things, what matters most?",
+      "answers": {
+        "A": {
+          "text": "That something survives.",
+          "tags": {
+            "survival": 2,
+            "stability": 1
+          }
+        },
+        "B": {
+          "text": "That what survives is just.",
+          "tags": {
+            "justice": 2,
+            "mercy": 1
+          }
+        },
+        "C": {
+          "text": "That the truth is known.",
+          "tags": {
+            "truth": 1,
+            "faith": 1,
+            "culture": 1
+          }
+        },
+        "D": {
+          "text": "That the world becomes something better.",
+          "tags": {
+            "unity": 2,
+            "culture": 1,
+            "tiphareth_signal": 1,
+            "mercy": 1
+          }
+        },
+        "E": {
+          "text": "That the outcome was chosen, not stumbled into.",
+          "tags": {
+            "control": 1,
+            "foresight": 1,
+            "ambition": 1,
+            "logistics": 1
+          }
+        }
+      }
+    }
+  ]
+}

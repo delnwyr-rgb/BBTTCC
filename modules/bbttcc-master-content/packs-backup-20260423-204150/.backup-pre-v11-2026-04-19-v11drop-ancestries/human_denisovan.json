@@ -1,0 +1,90 @@
+{
+  "_id": "TjBhlDjlMKL60wbo",
+  "name": "Human Heritage: Denisovan",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Human_Denisovan_1.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Human (Denisovan)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Humanity is the species that keeps walking even when the map says ‘stop.’”</em></p><p><strong>Human (Denisovan).</strong> You are not a fantasy human. You are the rebooted inheritance of an older lineage resurfacing after Yesod’s fall—ancient adaptations, forgotten instincts, and survival strategies given room to matter again. You remember mountains that no longer exist. Gravity listens to you when you ask it to.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Lineage Lean.</strong> Your lineage leans toward <strong>BOD</strong>—expressed through Tier powers.</li></ul><h3>Core: Stubborn Spark</h3><p>At creation you gain <strong>Stubborn Spark</strong> (Adaptive, Tenacious, Lineage Memory) from the Human species root.</p><h3>Denisovan Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17):</p><ul><li><strong>Tier I — High-Altitude Blood.</strong> reroll the lowest die on saves vs [TODO(adv-call)]. poison and environmental suffocation; hold breath 10 min; Stone-Sense tremorsense 10 ft on stone or packed earth.</li><li><strong>Tier II — Stone-Singer.</strong> Mason’s tool skill rank. 1/a Soma Break reinforce a structure or barrier.</li><li><strong>Tier III — Ancient Logic.</strong> reroll the lowest die on Investigation (Mind) (Mind) (Mind) and Occult (Mind) checks [TODO(adv-call)] involving structures, mechanisms, or ruins; share the insight to grant an ally advantage once per scene.</li><li><strong>Tier IV — Peak-Anchor.</strong> 1/a Soma Break reaction to negate forced movement or teleportation within 30 ft; aggressor takes psychic backlash equal to your tier [TODO(pb-call)].</li></ul>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "14833a501be64719",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.FeRlU9VFJ5Yvhfnw",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Denisovan Tier I",
+        "hint": "Gain your Denisovan Tier I lineage power (High-Altitude Blood)."
+      }
+    ],
+    "identifier": "human_denisovan_heritage",
+    "requirements": "Human",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "human",
+      "lineage": "Denisovan",
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "normalizedFrom": "Human (Denisovan) [race/species]",
+      "tierGrantPattern": "all-tiers",
+      "note": "Denisovan is the first heritage in the pack to grant all 4 Tiers at levels 0/5/11/17 via advancements. Other heritages currently only grant Tier I and rely on a separate wiring hook for higher Tiers. Flag for future consistency pass."
+    }
+  },
+  "folder": "X8GnIzoaCFwLQbGU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.TjBhlDjlMKL60wbo",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1776540642443,
+    "modifiedTime": 1744977600000,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_key": "!items!TjBhlDjlMKL60wbo"
+}

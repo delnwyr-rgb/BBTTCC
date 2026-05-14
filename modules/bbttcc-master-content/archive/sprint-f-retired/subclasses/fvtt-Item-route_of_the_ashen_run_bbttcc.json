@@ -1,0 +1,44 @@
+{
+  "name": "Route of the Ashen Run (BBTTCC)",
+  "type": "subclass",
+  "img": "icons/environment/wilderness/canyon-sand-wind.webp",
+  "system": {
+    "description": {
+      "value": "\n<p><em>Run the ashways where maps burn out.</em></p>\n<h3>Level 3: Ashway Sprint (BBTTCC)</h3>\n<p>Lead travel in Wasteland/Desert: reduce <strong>Logistics</strong> OP by 1 once per travel; you + PB allies gain +10 ft for 1 hour.</p>\n<h3>Level 3: Ghost Stamp</h3>\n<p>Bonus action cache mark; allies starting within 5 ft can Dash as bonus action this turn (PB/long rest).</p>\n<h3>Level 6: Dust Veil</h3>\n<p>Move 20 ft on your turn \u2192 ranged attacks vs you at disadvantage until next turn.</p>\n<h3>Level 10: Wake of Routes</h3>\n<p>Spaces you crossed this round ignore difficult terrain for followers until their turn ends.</p>\n<h3>Level 14: Dead Drop</h3>\n<p>1/long rest: deliver a Tiny item to a tagged cache within 600 ft as a bonus action if a continuous route exists.</p>\n",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "classIdentifier": "phantom_courier",
+    "identifier": "bbttcc-phantom-route-ashen",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "13.348",
+    "systemId": "dnd5e",
+    "systemVersion": "5.1.9",
+    "createdTime": 1762724671457,
+    "modifiedTime": 1762724671457,
+    "lastModifiedBy": "chatgpt-bbttcc",
+    "exportSource": {
+      "worldId": "bunker-busters",
+      "uuid": "Item.f5e208a5fa404091",
+      "coreVersion": "13.348",
+      "systemId": "dnd5e",
+      "systemVersion": "5.1.9"
+    }
+  },
+  "ownership": {
+    "default": 0
+  }
+}

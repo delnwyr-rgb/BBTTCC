@@ -1,0 +1,132 @@
+{
+  "name": "Human (Denisovan): High-Altitude Blood",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icon_blood_drop.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You remember mountains that no longer exist.”</em></p>\n        <p><strong>High-Altitude Blood.</strong> You have reroll the lowest die on defense checks [TODO(adv-call)] against poison and environmental suffocation. You can hold your breath for 10 minutes.</p>\n        <p><strong>Stone-Sense.</strong> You gain tremorsense 10 feet while standing on stone or packed earth.</p>",
+      "chat": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": {},
+    "identifier": "human-denisovan-high_altitude",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": ""
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "human",
+      "feature": "high_altitude",
+      "lineage": "Denisovan",
+      "tierLevel": 0,
+      "version": "1.0.0"
+    },
+    "bbttcc-character-options": {
+      "option": {}
+    }
+  },
+  "effects": [
+    {
+      "_id": "522ee792b7604b02",
+      "name": "Denisovan: Poison Resistance",
+      "img": "icons/skills/trades/mining-pickaxe-stone.webp",
+      "type": "base",
+      "system": {
+        "changes": [
+          {
+            "key": "system.traits.dr.value",
+            "value": "poison",
+            "priority": 10,
+            "type": "add",
+            "phase": "initial"
+          }
+        ]
+      },
+      "disabled": false,
+      "duration": {
+        "value": null,
+        "units": "seconds",
+        "expiry": null,
+        "expired": false
+      },
+      "description": "Safe automation: poison resistance.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "14.360",
+        "systemId": "fourththing",
+        "systemVersion": "0.6.0",
+        "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+        "createdTime": 1776540642443,
+        "modifiedTime": 1776540642443
+      },
+      "start": {
+        "combat": null,
+        "round": 0,
+        "time": 0,
+        "turn": 0,
+        "combatant": null,
+        "initiative": null
+      },
+      "showIcon": 1,
+      "folder": null
+    }
+  ],
+  "folder": "YEloYY4YXYyWatRb",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "fourth-thing-sandbox",
+      "uuid": "Item.FeRlU9VFJ5Yvhfnw",
+      "coreVersion": "14.360",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "14.360",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776540642443,
+    "modifiedTime": 1776540642444,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt"
+  },
+  "ownership": {
+    "default": 0
+  }
+}

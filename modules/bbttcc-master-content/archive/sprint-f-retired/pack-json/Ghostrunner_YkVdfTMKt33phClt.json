@@ -1,0 +1,147 @@
+{
+  "name": "Ghostrunner",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_ghostly_runner_1.png",
+  "system": {
+    "identifier": "shadowjack_ghostrunner",
+    "description": {
+      "value": "<h2 data-start=\"4330\" data-end=\"4357\">🏃 SHADOWJACK SUBCLASS</h2><h2 data-start=\"4358\" data-end=\"4374\">GHOSTRUNNER</h2><p data-start=\"4375\" data-end=\"4413\"><em data-start=\"4375\" data-end=\"4413\">“I was never where you think I was.”</em></p><h3 data-start=\"4415\" data-end=\"4435\">Subclass Fantasy</h3><p data-start=\"4436\" data-end=\"4489\">Ghostrunners specialize in <strong data-start=\"4463\" data-end=\"4488\">escape under pressure</strong>.</p><p data-start=\"4491\" data-end=\"4597\">Where other Shadowjacks infiltrate carefully, Ghostrunners infiltrate fast — and survive the consequences.</p><p data-start=\"4599\" data-end=\"4644\">They turn <strong data-start=\"4609\" data-end=\"4627\">pursuit itself</strong> into a resource.</p><p>Ghostrunners are:</p><ul data-start=\"6651\" data-end=\"6719\"><li data-start=\"6651\" data-end=\"6667\"><p data-start=\"6653\" data-end=\"6667\">Escape artists</p></li><li data-start=\"6668\" data-end=\"6686\"><p data-start=\"6670\" data-end=\"6686\">Pursuit breakers</p></li><li data-start=\"6687\" data-end=\"6719\"><p data-start=\"6689\" data-end=\"6719\">The reason ambushes fail twice</p></li></ul><p data-start=\"6721\" data-end=\"6784\">They are not subtle forever.<br data-start=\"6749\" data-end=\"6752\" />They are gone before it matters.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "classIdentifier": "shadowjack",
+    "advancement": {
+      "ZIul4OZbFf4iMr0U": {
+        "_id": "ZIul4OZbFf4iMr0U",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.j4uCorH17kM0acld",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "title": "Phase Stride",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "y3XflFps3QBfavir": {
+        "_id": "y3XflFps3QBfavir",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.6uKBYn45fxrimyg5",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "title": "No Footprints",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "9Vf0u7rmrEKHOVgw": {
+        "_id": "9Vf0u7rmrEKHOVgw",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.55w6aIqdSxKFtFE7",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "title": "Ghost Exit",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "u1n72r5UyjI3OCHW": {
+        "_id": "u1n72r5UyjI3OCHW",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.4KJ2o3usFAcPEN1v",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "title": "Stolen Distance",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "DG8WaP8C2kiMlStu": {
+        "_id": "DG8WaP8C2kiMlStu",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.FPcQNTMc5eC1xU4R",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "title": "Vanish Clause",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "subclass": true
+    }
+  },
+  "folder": "IthJXILk4XkmhUrU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773192015531,
+    "modifiedTime": 1775063121650,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "YkVdfTMKt33phClt",
+  "sort": 137500,
+  "_key": "!items!YkVdfTMKt33phClt"
+}

@@ -1,0 +1,4441 @@
+// Fourth Thing — ft-class-automation.js  v0.1.0
+// Sprint D: Class Automation — resource pools, dialogs, feature click router
+//
+// Covers all 9 classes:
+//   Active pools:  Titanbound (Frame Dice + Stress), Aurablade (Burn + Aura), Shadowjack (Access Dice)
+
+import {
+  setMode,
+  toggleMode,
+  isModeActive,
+  summarizeDiscipline
+} from "./manifestation-discipline.js";
+//   State tracks:  Breaker (Ruin), Dreamwalker (Resonance), Soul-Smith (Forge)
+//   Passive:       Harmony Marshal, Phantom Courier, Wyrdlens Adept
+
+// ─── Constants ────────────────────────────────────────────────────────────────
+
+export const AURA_STATES = {
+  none:    { label: "None",    color: "#78909c", desc: "No active aura" },
+  fury:    { label: "Fury",    color: "#c03030", desc: "Aggressive — strike first, strike hard" },
+  resolve: { label: "Resolve", color: "#4a90d9", desc: "Defensive — absorb, protect, endure" },
+  mercy:   { label: "Mercy",   color: "#27ae60", desc: "Restorative — heal, cleanse, sustain" },
+  dread:   { label: "Dread",   color: "#9b59b6", desc: "Psychic — fear, shadow, displacement" }
+};
+
+export const BURN_BANDS = [
+  { min: 0, max: 1, label: "Controlled", color: "#27ae60", desc: "Stable. Full options available." },
+  { min: 2, max: 3, label: "Engaged",    color: "#f2c94c", desc: "+1 damage. Stabilize costs are higher." },
+  { min: 4, max: 99, label: "Overheated", color: "#eb5757", desc: "+2 damage. Risk backlash at end of turn." }
+];
+
+export function getBurnBand(burn) {
+  return BURN_BANDS.find(b => burn >= b.min && burn <= b.max) ?? BURN_BANDS[2];
+}
+
+// ─── Feature identifier → handler map ────────────────────────────────────────
+// Maps BBTTCC feature identifier strings to automation handler keys.
+// Checked against item.system.identifier (lowercase, underscored).
+
+export const FEATURE_ROUTER = {
+  // Titanbound (LEGACY — retired in Sprint F; dispatches to Bulwark Frame Dice)
+  "titanbound_spend_frame_die":    "bulwark_spend_frame",
+  "titanbound_titan_frame":        "bulwark_frame_pool",
+  "titanbound_structural_stress":  "bulwark_frame_pool",
+  // Aurablade
+  "aurablade_action":              "aurablade_action",
+  "aurablade_burn_state":          "aurablade_burn",
+  "aurablade_change_aura":         "aurablade_change_aura",
+  "aurablade_stabilize_burn":      "aurablade_stabilize",
+  // Shadowjack (LEGACY — retired in Sprint F; dispatches to Shadow Courier Access)
+  "shadowjack_spend_access_die":   "shadow_courier_spend_access",
+  "shadowjack_access_pool":        "shadow_courier_access_pool",
+  // Breaker (LEGACY — retired in Sprint F; dispatches to Bulwark Ruin)
+  "breaker_ruin_charge":           "bulwark_ruin",
+  "breaker_catastrophic_entry":    "bulwark_ruin",
+  "breaker_certified_structural":  "bulwark_ruin",
+  "breaker_siege_cost":            "bulwark_ruin",
+  "breaker_shockwave":             "bulwark_ruin",
+  "breaker_ruin_to_renewal":       "bulwark_ruin",
+  // Dreamwalker
+  "dreamwalker_resonance":         "dreamwalker_resonance",
+  "dreamwalker_spark_detection":   "dreamwalker_resonance",
+  "dreamwalker_commune":           "dreamwalker_resonance",
+  // Dream Echo Reservoir (L13) — pool display + spend-1d6 dialog
+  "dream-echo-reservoir":          "dream_echo_reservoir",
+  "dream_echo_reservoir":          "dream_echo_reservoir",
+  "dream_echo_reservoir_spend":    "dream_echo_reservoir_spend",
+  // Dreamwalker per-Soma-Break feats — generic activator (clones AE to actor)
+  "dream-thread-tuning":           "dw_feat_activate",
+  "dream-rite":                    "dw_feat_activate",
+  "omen-thread-weaving":           "dw_feat_activate",
+  "mnemonic-spillway":             "dw_feat_activate",
+  "waking-dreamfield":             "dw_feat_activate",
+  "ascension-layer":               "dw_feat_activate",
+  "fractal-self":                  "dw_feat_activate",
+  "apotheosis-of-the-oneiric":     "dw_feat_activate",
+  // Soul-Smith
+  "soul_smith_relic":              "soul_smith_forge",
+  "soulsmith_relic":               "soul_smith_forge",
+  "soul_smith_forge":              "soul_smith_forge",
+  "soul_smith_repair":             "soul_smith_forge",
+  // Passive classes — show info dialog
+  "harmony_marshal_core":          "passive_info",
+  "harmony_marshal_tier":          "passive_info",
+  "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
+  "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
+  "wyrdlens_adept_core":           "passive_info",
+  "wyrdlens_adept_tier":           "passive_info",
+
+  // === SPRINT F NEW CLASSES ===
+  // Bulwark — merged Titanbound + Breaker with L1 subclass polarity
+  "bulwark_spend_frame":           "bulwark_spend_frame",
+  "bulwark_frame_pool":            "bulwark_frame_pool",
+  "bulwark_ruin":                  "bulwark_ruin",
+  "bulwark_stance_dance":          "bulwark_stance",       // Cataclyst L5
+  "bulwark_core":                  "passive_info",
+  "bulwark_tier":                  "passive_info",
+  // Shadow Courier — merged Shadowjack + Phantom Courier with Package mechanic
+  "shadow_courier_spend_access":   "shadow_courier_spend_access",
+  "shadow_courier_access_pool":    "shadow_courier_access_pool",
+  "shadow_courier_package":        "shadow_courier_package",
+  "shadow_courier_crossing":       "shadow_courier_crossing",
+  "shadow_courier_core":           "shadow_courier_passive",
+  "shadow_courier_tier":           "shadow_courier_passive",
+  // Cosmic Linguist — Editorial Authority + Annotation
+  "cosmic_linguist_authority":     "cosmic_linguist_authority",
+  "cosmic_linguist_annotation":    "cosmic_linguist_annotation",
+  "cosmic_linguist_core":          "passive_info",
+  "cosmic_linguist_tier":          "passive_info",
+  // Pactkeeper — Leverage + Binding Clause + Civic Charge canonical pool
+  "pactkeeper_leverage":           "pactkeeper_leverage",
+  "pactkeeper_binding_clause":     "pactkeeper_binding_clause",
+  "pactkeeper_precedent":          "pactkeeper_precedent",
+  "pactkeeper_civic_charge":       "pactkeeper_civic_charge",
+  "pactkeeper_spend_civic_charge": "pactkeeper_spend_civic_charge",
+  "pactkeeper_administrative_pressure": "pactkeeper_administrative_pressure",
+  "pactkeeper_bind_subject":       "pactkeeper_bind_subject",
+  // Generic counter/dispel — any actor's feat with this identifier routes here.
+  "counter_manifestation":         "counter_manifestation",
+  "dispel_manifestation":          "counter_manifestation",
+  "pactkeeper_core":               "passive_info",
+  "pactkeeper_core_features":      "passive_info",
+  "pactkeeper_tier":                "passive_info",
+  // Caster Discipline pilot 2026-04-27
+  "cl_mode_sentence":              "cl_mode_sentence",
+  "wl_mode_refraction":            "wl_mode_refraction",
+  "dw_mode_walking_lane":          "dw_mode_walking_lane",
+  "pk_mode_sealed_pact":           "pk_mode_sealed_pact",
+  "cl_word_that_was":              "cl_word_that_was",
+  "wl_tikkun_sight":               "wl_tikkun_sight",
+  "dw_shared_dream":               "dw_shared_dream",
+  "pk_ledger_day":                 "pk_ledger_day",
+  "cl_discipline_passive":         "passive_info",
+  "wl_discipline_passive":         "passive_info",
+  "dw_discipline_passive":         "passive_info",
+  "pk_discipline_passive":         "passive_info",
+
+  // === Buried per-use abilities — Phase 1: Ancestry cores (2026-04-27) ===
+  "menhirkin_core":                 "menhirkin_hex_recognition",
+  "echo_diver_core":                "echo_diver_temporal_flinch",
+  "sephirotic_scion_core":          "scion_sefirot_attunement",
+  "qliph_scarred_core":             "qliph_qliphothic_saturation",
+
+  // === Buried per-use — Phase 2: Heritage-unique + ancestry feats (2026-04-27) ===
+  // Igneous overrides the menhirkin_hex_recognition route with a picker that
+  // exposes BOTH Hex Recognition (from core) AND Heat Memory (heritage).
+  "menhirkin_igneous_heritage":          "menhirkin_igneous_picker",
+  "oldenborn_rustland_scavenger_heritage": "oldenborn_rustland_patch",
+  "furrykin-felid-predator_patience":      "furrykin_predator_patience",
+  "oldenborn-embertouched-phoenix_oath":   "oldenborn_phoenix_oath",
+  "oldenborn-embertouched-hearth_dominion": "oldenborn_hearth_dominion",
+  "oldenborn-embertouched-sun_scar":        "oldenborn_sun_scar",
+
+  // === Buried per-use — Phase 3: Species multi-ability pickers (2026-04-27) ===
+  "circuitborn":                            "circuitborn_abilities_picker",
+  "human":                                  "human_abilities_picker",
+  "stormborn_nomad":                        "stormborn_ward_of_the_gale",
+};
+
+// Also match by name fragment (fallback for identifier mismatches)
+export const NAME_ROUTER = [
+  // === LEGACY (pre-Sprint-F) entries remain for backward compat ===
+  // Titanbound → dispatches to Bulwark handlers
+  ["Spend Frame Die",            "bulwark_spend_frame"],
+  ["Titan Frame",                "bulwark_frame_pool"],
+  ["Structural Stress",          "bulwark_frame_pool"],
+  // Aurablade
+  ["Aurablade Action",           "aurablade_action"],
+  ["Burn State",                 "aurablade_burn"],
+  ["Change Aura",                "aurablade_change_aura"],
+  ["Stabilize Burn",             "aurablade_stabilize"],
+  // Shadowjack → dispatches to Shadow Courier handlers
+  ["Spend Access Die",           "shadow_courier_spend_access"],
+  ["Access Pool",                "shadow_courier_access_pool"],
+  // Breaker → dispatches to Bulwark handlers
+  ["Catastrophic Entry",         "bulwark_ruin"],
+  ["Certified Structural",       "bulwark_ruin"],
+  ["Siege Cost",                 "bulwark_ruin"],
+  ["Shockwave Footing",          "bulwark_ruin"],
+  ["Ruin to Renewal",            "bulwark_ruin"],
+  ["Breaker's Eye",              "bulwark_ruin"],
+  ["Breaker: Living",            "bulwark_ruin"],
+  ["Breaker: Reinforced",        "bulwark_ruin"],
+  // Dreamwalker
+  ["Dream Relay",                "dreamwalker_resonance"],
+  ["Spark Detection",            "dreamwalker_resonance"],
+  ["Dreamwalker: Commune",       "dreamwalker_resonance"],
+  ["Oneiric",                    "dreamwalker_resonance"],
+  // Soul-Smith
+  ["Relic of Rebirth",           "soul_smith_forge"],
+  ["Soul-Smith: Tier",           "soul_smith_forge"],
+  ["Atonement",                  "soul_smith_forge"],
+  // Passive — core class items
+  ["Harmony Marshal: Tier",      "passive_info"],
+  ["Harmony Marshal: Core",      "passive_info"],
+  ["Phantom Courier: Tier",      "shadow_courier_passive"],  // legacy
+  ["Phantom Courier: Core",      "shadow_courier_passive"],  // legacy
+  ["Wyrdlens Adept: Tier",       "passive_info"],
+  ["Wyrdlens Adept: Core",       "passive_info"],
+  ["Phantom Network",            "shadow_courier_passive"],  // legacy
+  ["Silver Tongue Protocol",     "passive_info"],
+  ["Peacekeeper",                "passive_info"],
+
+  // === SPRINT F NEW CLASSES ===
+  // Bulwark
+  ["Bulwark: Core",              "passive_info"],
+  ["Bulwark: Tier",              "passive_info"],
+  ["Kinetic Inversion",          "bulwark_frame_pool"],     // Avalanche L1
+  ["Inverted Foundation",        "bulwark_frame_pool"],     // Mountain L1
+  ["The Exchange",               "bulwark_stance"],         // Cataclyst L1
+  ["Stance Dance",               "bulwark_stance"],         // Cataclyst L5
+  ["Shockwave Arrival",          "bulwark_ruin"],           // Avalanche L5
+  ["Denial",                     "bulwark_frame_pool"],     // Mountain L5
+  // Shadow Courier
+  ["Shadow Courier: Core",       "shadow_courier_passive"],
+  ["Shadow Courier: Tier",       "shadow_courier_passive"],
+  ["The Crossing",               "shadow_courier_crossing"],
+  ["The Tongue That Does Not Lie", "shadow_courier_package"],  // Wayfarer L1
+  ["The Crossing, Weaponized",   "shadow_courier_package"],    // Black Stair L1
+  ["The Weight You Carry",       "shadow_courier_package"],    // Last Mile L1
+  ["Preceding Rumor",            "shadow_courier_passive"],
+  ["The Threshold Is A Lie",     "shadow_courier_crossing"],
+  ["The Arms That Carry",        "shadow_courier_passive"],
+  // Cosmic Linguist
+  ["Cosmic Linguist: Core",      "passive_info"],
+  ["Cosmic Linguist: Tier",      "passive_info"],
+  ["Editorial Authority",        "cosmic_linguist_authority"],
+  ["The Margin",                 "cosmic_linguist_annotation"],  // Annotator L1
+  ["Declared Likeness",          "cosmic_linguist_annotation"],  // Metaphor Apostle L1
+  ["The First Strike",           "cosmic_linguist_annotation"],  // Redactor L1
+  ["Annotation",                 "cosmic_linguist_annotation"],
+  // Pactkeeper
+  ["Pactkeeper: Core",           "passive_info"],
+  ["Pactkeeper: Tier",           "passive_info"],
+  ["Leverage",                   "pactkeeper_leverage"],
+  ["Binding Clause",             "pactkeeper_binding_clause"],
+  ["Precedent",                  "pactkeeper_precedent"],
+  ["Read The Ledger",            "pactkeeper_precedent"],         // Archivist L1
+  ["The Examination",            "pactkeeper_leverage"],          // Auditor L1
+  ["The Protected Clause",       "pactkeeper_leverage"],          // Steward L1
+
+  // === Buried per-use — Ancestry cores (name fallback for FEATURE_ROUTER) ===
+  ["Menhirkin Core",                  "menhirkin_hex_recognition"],
+  ["Echo-Diver Core",                 "echo_diver_temporal_flinch"],
+  ["Sephirotic Scion Core",           "scion_sefirot_attunement"],
+  ["Qliph-Scarred Core",              "qliph_qliphothic_saturation"],
+
+  // === Phase 2 specific routes — MUST come before the prefix matches below
+  // because routeFeature walks top-to-bottom and stops on first .includes().
+  ["Menhirkin Heritage: Igneous",            "menhirkin_igneous_picker"],
+  ["Oldenborn Heritage: Rustland Scavenger", "oldenborn_rustland_patch"],
+  ["Furrykin (Felid): Predator Patience",    "furrykin_predator_patience"],
+  ["Oldenborn (Ember-Touched): Phoenix Oath", "oldenborn_phoenix_oath"],
+  ["Oldenborn (Ember-Touched): Hearth Dominion", "oldenborn_hearth_dominion"],
+  ["Oldenborn (Ember-Touched): Sun-Scar",    "oldenborn_sun_scar"],
+
+  // === Phase 3 species pickers (FEATURE_ROUTER takes precedence; these are
+  // belt-and-suspenders fallbacks for items missing system.identifier). ===
+  ["Stormborn Nomad",                        "stormborn_ward_of_the_gale"],
+
+  // === Buried per-use — Heritage prefix fallbacks (share core ability) ===
+  ["Menhirkin Heritage:",             "menhirkin_hex_recognition"],
+  ["Echo-Diver Heritage:",            "echo_diver_temporal_flinch"],
+  ["Sephirotic Scion Heritage:",      "scion_sefirot_attunement"],
+  ["Qliph-Scarred Heritage:",         "qliph_qliphothic_saturation"],
+];
+
+export function routeFeature(item) {
+  const identifier = item.system?.identifier ?? "";
+  const name       = item.name ?? "";
+  if (FEATURE_ROUTER[identifier]) return FEATURE_ROUTER[identifier];
+  for (const [fragment, handler] of NAME_ROUTER) {
+    if (name.includes(fragment)) return handler;
+  }
+  return null;
+}
+
+// Every routed handler opens a player-facing dialog (per-use picker, info
+// summary, or active ability) — clicking ▶ always does something useful for
+// any item with a route. Treat "actionable" as "has any route at all".
+export function isActionableFeature(item) {
+  return routeFeature(item) !== null;
+}
+
+// ─── Resource helpers ─────────────────────────────────────────────────────────
+
+export function getResources(actor) {
+  const rawSys = actor.system?.system ?? actor.system;
+  return rawSys?.resources ?? {};
+}
+
+export async function setResource(actor, path, value) {
+  await actor.update({ [`system.resources.${path}`]: value });
+}
+
+// Phase B 2026-05-07 — read a system.resources.{name} pool with one-shot
+// migration from a legacy actor.flags.fourththing.{flagName} pool. Returns
+// { current, max }. Side effect on first call after migration: writes the
+// system path and unsets the legacy flag — subsequent calls see the system
+// value directly. Used by clAuthority + pactLeverage dialogs to honor
+// existing world state instead of resetting players to zero.
+async function _ftReadPoolWithLegacyMigration(actor, { resourceName, legacyFlag, defaultMax = 5 }) {
+  const rawSys = actor.system?.system ?? actor.system;
+  const sysVal = rawSys?.resources?.[resourceName] ?? null;
+  const cur = Number(sysVal?.current ?? 0);
+  const max = Number(sysVal?.max ?? 0);
+  if (max > 0) return { current: cur, max };
+
+  const legacy = actor.getFlag("fourththing", legacyFlag);
+  if (legacy && (Number(legacy.current ?? 0) > 0 || Number(legacy.max ?? 0) > 0)) {
+    const lc = Number(legacy.current ?? 0);
+    const lm = Number(legacy.max ?? defaultMax);
+    try {
+      await actor.update({
+        [`system.resources.${resourceName}.current`]: lc,
+        [`system.resources.${resourceName}.max`]:     lm
+      });
+      await actor.unsetFlag("fourththing", legacyFlag);
+    } catch (e) { console.warn(`[ft] legacy ${legacyFlag} migration failed`, e); }
+    return { current: lc, max: lm };
+  }
+  return { current: cur, max: max || defaultMax };
+}
+
+// Detect which class resource pools are active by checking for class items
+export function detectActivePools(actor) {
+  const items = Array.from(actor.items ?? []);
+  // Match by identifier, not display name. Substring-on-name was activating the
+  // wrong pools on innocent overlap (e.g. "Siegebreaker Frame" ancestry feat
+  // would flip the Breaker pool on for a non-Breaker actor). Class items use
+  // exact identifier; discipline feats use `<slug>_*` prefixed identifiers.
+  const hasClass = (slug) => {
+    const norm = String(slug).toLowerCase().replace(/[\s-]/g, "_");
+    return items.some(i => {
+      if (i.type !== "class" && i.type !== "feat") return false;
+      const id = String(i.system?.identifier ?? "").toLowerCase().replace(/-/g, "_");
+      if (!id) return false;
+      return id === norm || id.startsWith(norm + "_");
+    });
+  };
+  return {
+    // Active pools (show resource UI in Combat tab)
+    titanbound:  hasClass("titanbound"),
+    aurablade:   hasClass("aurablade"),
+    shadowjack:  hasClass("shadowjack"),
+    // breaker retired — Bulwark replaced it. Ruin Charges live on the Bulwark
+    // resource panel; the standalone Breaker panel was deleted from the sheet.
+    dreamwalker: hasClass("dreamwalker"),
+    soulSmith:   hasClass("soul-smith") || hasClass("soul smith"),
+    // Sprint F active pools
+    bulwark:         hasClass("bulwark"),
+    shadowCourier:   hasClass("shadow courier"),
+    cosmicLinguist:  hasClass("cosmic linguist"),
+    pactkeeper:      hasClass("pactkeeper"),
+    // Passive (feature ▶ Use shows info dialog only)
+    harmonyMarshal:  hasClass("harmony marshal"),
+    phantomCourier:  hasClass("phantom courier"),
+    wyrdlensAdept:   hasClass("wyrdlens adept"),
+  };
+}
+
+// ─── Titanbound dialogs ───────────────────────────────────────────────────────
+
+export async function openFrameDiePool(actor) {
+  const res = getResources(actor);
+  const cur = res.frameDice?.current ?? 0;
+  const max = res.frameDice?.max ?? 3;
+  const stress = res.stress?.current ?? 0;
+  const stressMax = res.stress?.max ?? 5;
+
+  new Dialog({
+    title: "Titan Frame — Frame Dice",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats">
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Frame Dice</span>
+          <span class="ft-prev-val" style="color:#4a90d9">${cur} / ${max}</span>
+        </span>
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Stress</span>
+          <span class="ft-prev-val" style="color:${stress >= 4 ? '#eb5757' : stress >= 3 ? '#f2994a' : '#f0f4ff'}">${stress} / ${stressMax}</span>
+        </span>
+      </div>
+      <div class="ft-cast-grid" style="margin-top:0.5rem">
+        <div class="ft-cast-field"><label>Set Frame Dice</label>
+          <input type="number" name="frameDice" value="${cur}" min="0" max="${max}"/></div>
+        <div class="ft-cast-field"><label>Set Structural Stress</label>
+          <input type="number" name="stress" value="${stress}" min="0" max="${stressMax}"/></div>
+        <div class="ft-cast-field"><label>Max Frame Dice</label>
+          <input type="number" name="maxFrameDice" value="${max}" min="1" max="10"/></div>
+      </div>
+    </div>`,
+    buttons: {
+      save: { label: "Save", callback: async (html) => {
+        const newCur = parseInt(html.find("[name='frameDice']").val())    || 0;
+        const newStr = parseInt(html.find("[name='stress']").val())        || 0;
+        const newMax = parseInt(html.find("[name='maxFrameDice']").val())  || max;
+        await actor.update({
+          "system.resources.frameDice.current": Math.min(newCur, newMax),
+          "system.resources.frameDice.max": newMax,
+          "system.resources.stress.current": Math.min(newStr, stressMax),
+        });
+      }},
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+export async function openSpendFrameDie(actor) {
+  const res = getResources(actor);
+  const cur = res.frameDice?.current ?? 0;
+
+  if (cur <= 0) {
+    return ui.notifications.warn(`${actor.name}: No Frame Dice remaining.`);
+  }
+
+  const stress = res.stress?.current ?? 0;
+  const stressMax = res.stress?.max ?? 5;
+
+  new Dialog({
+    title: "Spend Frame Die",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Frame Dice</span>
+          <span class="ft-prev-val ft-clarity">${cur} remaining</span>
+        </span>
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Stress</span>
+          <span class="ft-prev-val">${stress}/${stressMax}</span>
+        </span>
+      </div>
+      <div class="ft-cast-field" style="margin-bottom:0.6rem">
+        <label>Choose action</label>
+        <select name="action">
+          <option value="reduce_damage">Reduce damage taken (roll 1d6, subtract from hit)</option>
+          <option value="knockback">Add knockback (push target up to 10 ft)</option>
+          <option value="topple">Add topple (Topple DC: 10 + Violence mod)</option>
+          <option value="brace">Brace / resist forced movement (immune until your next turn)</option>
+          <option value="terrain">Ignore difficult terrain (until end of turn)</option>
+        </select>
+      </div>
+      <div class="ft-cast-field">
+        <label>Add Structural Stress? (optional)</label>
+        <select name="addStress">
+          <option value="0">No</option>
+          <option value="1">+1 Stress (store the impact)</option>
+        </select>
+      </div>
+    </div>`,
+    buttons: {
+      spend: {
+        icon: "<i class='fas fa-dice'></i>",
+        label: "Spend Die",
+        callback: async (html) => {
+          const action = html.find("[name='action']").val();
+          const addStr = parseInt(html.find("[name='addStress']").val()) || 0;
+          const newCur = Math.max(0, cur - 1);
+          const newStr = Math.min(stressMax, stress + addStr);
+          await actor.update({
+            "system.resources.frameDice.current": newCur,
+            "system.resources.stress.current": newStr,
+          });
+          const labels = {
+            reduce_damage: "Reduce Damage — rolling 1d6 to subtract from the hit",
+            knockback: "Knockback — push target up to 10 ft",
+            topple: "Topple — target must beat your Topple DC",
+            brace: "Brace — immune to forced movement until your next turn",
+            terrain: "Terrain Ignore — difficult terrain has no effect this turn"
+          };
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll ft-attack-roll">
+              <div class="ft-roll-header">
+                <span class="ft-roll-name">⬡ Frame Die Spent</span>
+                <span class="ft-defense-pill">${newCur}/${res.frameDice?.max ?? 3} remaining</span>
+              </div>
+              <p style="margin:0.3rem 0;font-size:0.82rem;opacity:0.8">${labels[action]}</p>
+              ${addStr ? `<p style="margin:0;font-size:0.75rem;color:#f2994a">+1 Structural Stress (now ${newStr}/${stressMax})</p>` : ""}
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "spend"
+  }).render(true);
+}
+
+// ─── Aurablade dialogs ────────────────────────────────────────────────────────
+
+export async function openBurnState(actor) {
+  const res  = getResources(actor);
+  const burn = res.burn?.current ?? 0;
+  const aura = res.aura?.state   ?? "none";
+  const band = getBurnBand(burn);
+
+  new Dialog({
+    title: "Aurablade — Burn & Aura",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.75rem">
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Burn</span>
+          <span class="ft-prev-val" style="color:${band.color}">${burn}/8</span>
+        </span>
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Band</span>
+          <span class="ft-prev-val" style="color:${band.color}">${band.label}</span>
+        </span>
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Aura</span>
+          <span class="ft-prev-val" style="color:${AURA_STATES[aura]?.color ?? '#888'}">${AURA_STATES[aura]?.label ?? aura}</span>
+        </span>
+      </div>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Burn (0–8)</label>
+          <input type="number" name="burn" value="${burn}" min="0" max="8"/></div>
+        <div class="ft-cast-field"><label>Aura State</label>
+          <select name="aura">
+            ${Object.entries(AURA_STATES).map(([k,v]) =>
+              `<option value="${k}" ${k === aura ? "selected" : ""}>${v.label}</option>`
+            ).join("")}
+          </select>
+        </div>
+      </div>
+      <p style="font-size:0.75rem;opacity:0.55;margin:0.5rem 0 0">${band.desc}</p>
+    </div>`,
+    buttons: {
+      save: { label: "Save", callback: async (html) => {
+        const newBurn = parseInt(html.find("[name='burn']").val()) || 0;
+        const newAura = html.find("[name='aura']").val();
+        await actor.update({
+          "system.resources.burn.current": Math.min(8, Math.max(0, newBurn)),
+          "system.resources.aura.state":   newAura,
+        });
+      }},
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+export async function openChangeAura(actor) {
+  const res  = getResources(actor);
+  const aura = res.aura?.state   ?? "none";
+  const burn = res.burn?.current ?? 0;
+
+  new Dialog({
+    title: "Change Aura",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.8rem;opacity:0.7;margin:0 0 0.6rem">
+        Changing aura costs <b>+1 Burn</b> (current: ${burn}/8).
+      </p>
+      <div class="ft-conditions-grid" style="grid-template-columns:1fr 1fr">
+        ${Object.entries(AURA_STATES).filter(([k]) => k !== "none").map(([k,v]) => `
+          <label style="display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.5rem;
+            border:1.5px solid ${k === aura ? v.color : 'rgba(255,255,255,0.12)'};
+            border-radius:5px;cursor:pointer;background:${k === aura ? v.color + '18' : 'rgba(255,255,255,0.03)'}">
+            <input type="radio" name="aura" value="${k}" ${k === aura ? "checked" : ""}
+              style="accent-color:${v.color}"/>
+            <span style="color:${v.color};font-weight:600;font-size:0.8rem">${v.label}</span>
+            <span style="font-size:0.7rem;opacity:0.55">${v.desc}</span>
+          </label>`).join("")}
+      </div>
+    </div>`,
+    buttons: {
+      change: {
+        label: "Switch Aura (+1 Burn)",
+        callback: async (html) => {
+          const newAura = html.find("[name='aura']:checked").val() ?? aura;
+          const newBurn = Math.min(8, burn + (newAura !== aura ? 1 : 0));
+          await actor.update({
+            "system.resources.aura.state":   newAura,
+            "system.resources.burn.current": newBurn,
+          });
+          // Sync conditional AEs for new aura state
+          if (typeof syncAuraEffects === "function") {
+            await syncAuraEffects(actor, newAura);
+          } else if (game.fourththing?._syncAuraEffects) {
+            await game.fourththing._syncAuraEffects(actor, newAura);
+          }
+          const av = AURA_STATES[newAura];
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header">
+                <span class="ft-roll-name">Aura: ${av?.label}</span>
+                <span class="ft-seph-pill" style="background:${av?.color}22;border-color:${av?.color}88;color:${av?.color}">Burn ${newBurn}/8</span>
+              </div>
+              <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.7">${av?.desc}</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "change"
+  }).render(true);
+}
+
+export async function openAurabladeAction(actor) {
+  const res  = getResources(actor);
+  const burn = res.burn?.current ?? 0;
+  const aura = res.aura?.state   ?? "fury";
+  const band = getBurnBand(burn);
+  const av   = AURA_STATES[aura] ?? AURA_STATES.fury;
+
+  // Build available actions based on aura + burn band
+  const ACTIONS = {
+    fury: [
+      { id: "strike",          label: "Strike",            burnCost: 1, desc: "Deal Violence damage + Burn bonus", always: true },
+      { id: "overload_strike", label: "Overload Strike",   burnCost: 2, desc: "+2d6 bonus damage, risk backlash",  overheated: true },
+      { id: "press",           label: "Press the Assault", burnCost: 1, desc: "Move then attack; target is Staggered on hit", always: true },
+    ],
+    resolve: [
+      { id: "brace",      label: "Brace",       burnCost: 1, desc: "Halve next incoming hit this round", always: true },
+      { id: "shield_ally",label: "Shield Ally", burnCost: 1, desc: "Redirect one attack from adjacent ally to you", always: true },
+      { id: "fortress",   label: "Fortress Mode", burnCost: 2, desc: "Immune to Staggered until your next turn", engaged: true },
+    ],
+    mercy: [
+      { id: "cleanse",   label: "Cleanse",         burnCost: 1, desc: "Remove one condition (not Scarred) from self or ally", always: true },
+      { id: "restore",   label: "Restore",          burnCost: 1, desc: "Target recovers 1d6 + Soul Stress",               always: true },
+      { id: "wave",      label: "Mercy Wave",       burnCost: 2, desc: "All allies within Near: clear Shaken condition",  engaged: true },
+    ],
+    dread: [
+      { id: "terror",    label: "Terror Strike",    burnCost: 1, desc: "On hit, target gains Shaken",                    always: true },
+      { id: "shadow",    label: "Shadow Step",      burnCost: 1, desc: "Teleport to unoccupied space within Near range", always: true },
+      { id: "nightmare", label: "Nightmare Pulse",  burnCost: 2, desc: "All enemies within Near: Resolve DC 14 or Shaken", overheated: true },
+    ]
+  };
+
+  const available = (ACTIONS[aura] ?? []).filter(a =>
+    a.always ||
+    (a.overheated && band.label === "Overheated") ||
+    (a.engaged && band.label !== "Controlled")
+  );
+
+  const opts = available.map(a =>
+    `<option value="${a.id}" data-cost="${a.burnCost}">${a.label} (${a.burnCost} Burn) — ${a.desc}</option>`
+  ).join("");
+
+  new Dialog({
+    title: `Aurablade Action — ${av.label}`,
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Aura</span>
+          <span class="ft-prev-val" style="color:${av.color}">${av.label}</span>
+        </span>
+        <span class="ft-prev-stat">
+          <span class="ft-prev-label">Burn</span>
+          <span class="ft-prev-val" style="color:${band.color}">${burn} (${band.label})</span>
+        </span>
+      </div>
+      <div class="ft-cast-field">
+        <label>Available actions</label>
+        <select name="action">${opts}</select>
+      </div>
+    </div>`,
+    buttons: {
+      act: {
+        icon: "<i class='fas fa-bolt'></i>",
+        label: "Use Action",
+        callback: async (html) => {
+          const sel = html.find("[name='action'] option:selected");
+          const actionId  = html.find("[name='action']").val();
+          const burnCost  = parseInt(sel.data("cost")) || 1;
+          const newBurn   = Math.min(8, burn + burnCost);
+          const newBand   = getBurnBand(newBurn);
+          const action    = available.find(a => a.id === actionId);
+          await actor.update({ "system.resources.burn.current": newBurn });
+
+          let backlashNote = "";
+          if (newBand.label === "Overheated" && band.label !== "Overheated") {
+            backlashNote = `<p style="color:#eb5757;font-size:0.75rem;margin:0.2rem 0 0">⚠ Now Overheated — risk backlash at end of turn!</p>`;
+          }
+
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll ft-attack-roll">
+              <div class="ft-roll-header">
+                <span class="ft-roll-name">Aurablade: ${action?.label}</span>
+                <span class="ft-seph-pill" style="background:${av.color}22;border-color:${av.color}88;color:${av.color}">${av.label}</span>
+              </div>
+              <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.8">${action?.desc}</p>
+              <p style="margin:0;font-size:0.75rem;color:${newBand.color}">Burn: ${burn} → ${newBurn} (${newBand.label})</p>
+              ${backlashNote}
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "act"
+  }).render(true);
+}
+
+export async function openStabilizeBurn(actor) {
+  const res  = getResources(actor);
+  const burn = res.burn?.current ?? 0;
+  const band = getBurnBand(burn);
+
+  if (burn <= 0) {
+    return ui.notifications.info(`${actor.name}: Burn is already at 0.`);
+  }
+
+  const options = [
+    { id: "meditate", label: "Meditate (action)",      reduce: 2, req: "any",         desc: "Spend your action to reduce Burn by 2" },
+    { id: "rest",     label: "Brief rest (5 min)",     reduce: burn,req: "any",       desc: "Clear all Burn on a brief rest" },
+    { id: "accept",   label: "Accept backlash",        reduce: 3,  req: "overheated", desc: "Take 1d6 Stress to reduce Burn by 3" },
+  ].filter(o => o.req === "any" || (o.req === "overheated" && band.label === "Overheated"));
+
+  const opts = options.map(o =>
+    `<option value="${o.id}" data-reduce="${o.reduce}">${o.label} (−${Math.min(o.reduce, burn)} Burn) — ${o.desc}</option>`
+  ).join("");
+
+  new Dialog({
+    title: "Stabilize Burn",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Current Burn</span>
+          <span class="ft-prev-val" style="color:${band.color}">${burn} (${band.label})</span></span>
+      </div>
+      <div class="ft-cast-field">
+        <label>Stabilization method</label>
+        <select name="method">${opts}</select>
+      </div>
+    </div>`,
+    buttons: {
+      stabilize: {
+        label: "Stabilize",
+        callback: async (html) => {
+          const sel    = html.find("[name='method'] option:selected");
+          const reduce = parseInt(sel.data("reduce")) || 1;
+          const method = html.find("[name='method']").val();
+          const newBurn = Math.max(0, burn - reduce);
+          const updates = { "system.resources.burn.current": newBurn };
+          // Backlash costs Stress
+          if (method === "accept") {
+            const rawSys = actor.system?.system ?? actor.system;
+            const curStr = rawSys?.derived?.stress?.value ?? 10;
+            const roll = new Roll("1d6");
+            await roll.evaluate();
+            updates["system.derived.stress.value"] = Math.max(0, curStr - roll.total);
+          }
+          await actor.update(updates);
+          ui.notifications.info(`${actor.name}: Burn reduced to ${newBurn}.`);
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "stabilize"
+  }).render(true);
+}
+
+// ─── Shadowjack dialogs ───────────────────────────────────────────────────────
+
+export async function openAccessPool(actor) {
+  const res = getResources(actor);
+  const cur = res.accessDice?.current ?? 0;
+  const max = res.accessDice?.max ?? 3;
+
+  new Dialog({
+    title: "Access Dice Pool",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.5rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Access Dice</span>
+          <span class="ft-prev-val ft-clarity">${cur} / ${max}</span></span>
+      </div>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Current dice</label>
+          <input type="number" name="cur" value="${cur}" min="0" max="${max}"/></div>
+        <div class="ft-cast-field"><label>Max dice</label>
+          <input type="number" name="max" value="${max}" min="1" max="10"/></div>
+      </div>
+    </div>`,
+    buttons: {
+      save: { label: "Save", callback: async (html) => {
+        const newCur = parseInt(html.find("[name='cur']").val()) || 0;
+        const newMax = parseInt(html.find("[name='max']").val()) || max;
+        await actor.update({
+          "system.resources.accessDice.current": Math.min(newCur, newMax),
+          "system.resources.accessDice.max": newMax,
+        });
+      }},
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+export async function openSpendAccessDie(actor) {
+  const res = getResources(actor);
+  const cur = res.accessDice?.current ?? 0;
+  const max = res.accessDice?.max ?? 3;
+
+  if (cur <= 0) {
+    return ui.notifications.warn(`${actor.name}: No Access Dice remaining.`);
+  }
+
+  new Dialog({
+    title: "Spend Access Die",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Access Dice</span>
+          <span class="ft-prev-val ft-clarity">${cur}/${max}</span></span>
+      </div>
+      <div class="ft-cast-field">
+        <label>Choose action</label>
+        <select name="action">
+          <option value="bypass">Bypass — ignore a simple lock, barrier, or alarm (no roll)</option>
+          <option value="misdirect">Misdirect — force one enemy to lose track of you until next turn</option>
+          <option value="breach">Time Breach — take an action out of initiative order (once per round)</option>
+          <option value="vanish">Vanish — become unseen until you attack or are hit</option>
+          <option value="plant">Plant Evidence — create a false trail; Intrigue vs Investigation DC 15</option>
+        </select>
+      </div>
+    </div>`,
+    buttons: {
+      spend: {
+        icon: "<i class='fas fa-key'></i>",
+        label: "Spend Die",
+        callback: async (html) => {
+          const action = html.find("[name='action']").val();
+          const newCur = Math.max(0, cur - 1);
+          await actor.update({ "system.resources.accessDice.current": newCur });
+          const labels = {
+            bypass: "Bypass — ignoring lock, barrier, or alarm",
+            misdirect: "Misdirect — target loses track of you",
+            breach: "Time Breach — acting out of initiative order",
+            vanish: "Vanish — unseen until you act aggressively",
+            plant: "Plant Evidence — rolling Intrigue vs DC 15"
+          };
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll ft-attack-roll">
+              <div class="ft-roll-header">
+                <span class="ft-roll-name">🗝 Access Die Spent</span>
+                <span class="ft-defense-pill">${newCur}/${max} remaining</span>
+              </div>
+              <p style="margin:0.2rem 0;font-size:0.82rem;opacity:0.8">${labels[action]}</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "spend"
+  }).render(true);
+}
+
+// ─── Breaker dialogs ─────────────────────────────────────────────────────────
+
+export async function openBreakerRuin(actor) {
+  const res      = getResources(actor);
+  const ruin     = res.ruinCharges?.current ?? 0;
+  const ruinMax  = res.ruinCharges?.max     ?? 3;
+  const rawSys   = actor.system?.system ?? actor.system;
+  const violence = rawSys?.attributes?.violence?.value ?? 2;
+
+  new Dialog({
+    title: "Breaker — Ruin Charges",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Ruin Charges</span>
+          <span class="ft-prev-val" style="color:#c03030">${ruin} / ${ruinMax}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Violence OP Cap</span>
+          <span class="ft-prev-val">+3 bonus</span></span>
+      </div>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Ruin charges</label>
+          <input type="number" name="ruin" value="${ruin}" min="0" max="${ruinMax}"/></div>
+        <div class="ft-cast-field"><label>Max charges</label>
+          <input type="number" name="ruinMax" value="${ruinMax}" min="1" max="10"/></div>
+      </div>
+      <div class="ft-cast-field" style="margin-top:0.5rem">
+        <label>Spend ruin charge for</label>
+        <select name="action">
+          <option value="none">— Just update charges —</option>
+          <option value="entry">Catastrophic Entry (ignore structure resistance)</option>
+          <option value="siege">Siege Cost Reduction (−1 Violence OP this Siege)</option>
+          <option value="shockwave">Shockwave Footing (resist knockback, push adjacent)</option>
+          <option value="renewal">Ruin to Renewal (purify fortification, Faith/Economy DC 15)</option>
+        </select>
+      </div>
+    </div>`,
+    buttons: {
+      save: {
+        label: "Apply",
+        callback: async (html) => {
+          const newRuin    = parseInt(html.find("[name='ruin']").val())    || 0;
+          const newMax     = parseInt(html.find("[name='ruinMax']").val()) || ruinMax;
+          const action     = html.find("[name='action']").val();
+          const spendOne   = action !== "none";
+          const finalRuin  = spendOne ? Math.max(0, newRuin - 1) : newRuin;
+          await actor.update({
+            "system.resources.ruinCharges.current": Math.min(finalRuin, newMax),
+            "system.resources.ruinCharges.max":     newMax,
+          });
+          if (spendOne) {
+            const labels = {
+              entry:     "Catastrophic Entry — structure resistance ignored",
+              siege:     "Siege Cost Reduced — −1 Violence OP this Siege",
+              shockwave: "Shockwave Footing — knockback resisted; adjacent pushed",
+              renewal:   "Ruin to Renewal — attempting purification (Faith/Economy DC 15)"
+            };
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll">
+                <div class="ft-roll-header"><span class="ft-roll-name">⚒ Breaker: ${labels[action]?.split(' — ')[0]}</span></div>
+                <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">${labels[action]}</p>
+                <p style="margin:0;font-size:0.72rem;opacity:0.5">Ruin Charges: ${finalRuin}/${newMax}</p>
+              </div>`
+            });
+          }
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+// ─── Dreamwalker dialogs ──────────────────────────────────────────────────────
+
+export async function openDreamwalkerResonance(actor) {
+  const res         = getResources(actor);
+  const resonant    = res.dreamResonance?.active  ?? false;
+  const insightUsed = res.dreamResonance?.insightUsed ?? false;
+  const hexSeph     = res.dreamResonance?.hexSephirah ?? "";
+  const rawSys      = actor.system?.system ?? actor.system;
+  const actorSeph   = rawSys?.magic?.sephirah ?? "tiferet";
+
+  new Dialog({
+    title: "Dreamwalker — Resonance",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Resonance</span>
+          <span class="ft-prev-val" style="color:${resonant ? '#a0b4ff' : '#888'}">${resonant ? "Active" : "None"}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Insight</span>
+          <span class="ft-prev-val" style="color:${insightUsed ? '#888' : '#e8c84a'}">${insightUsed ? "Used" : "Available"}</span></span>
+      </div>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Hex Sephirah resonance</label>
+          <input type="text" name="hexSeph" value="${hexSeph}" placeholder="e.g. tiferet"/></div>
+      </div>
+      <div class="ft-cast-field" style="margin-top:0.5rem">
+        <label>Action</label>
+        <select name="action">
+          <option value="none">— Update state only —</option>
+          <option value="detect">Detect Spark resonance (passive — note hex sephirah above)</option>
+          <option value="insight" ${insightUsed ? 'disabled' : ''}>Commune with Great Work (1/rest — GM insight)</option>
+          <option value="reset_insight">Reset insight use (after rest)</option>
+        </select>
+      </div>
+      <div class="ft-cast-field" style="margin-top:0.3rem">
+        <label><input type="checkbox" name="resonant" ${resonant ? 'checked' : ''}/> Resonance active this hex</label>
+      </div>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Apply",
+        callback: async (html) => {
+          const action       = html.find("[name='action']").val();
+          const newResonant  = html.find("[name='resonant']").is(":checked");
+          const newHexSeph   = html.find("[name='hexSeph']").val().trim();
+          const newInsight   = action === "reset_insight" ? false
+                             : action === "insight"       ? true
+                             : insightUsed;
+          await actor.update({
+            "system.resources.dreamResonance.active":      newResonant,
+            "system.resources.dreamResonance.insightUsed": newInsight,
+            "system.resources.dreamResonance.hexSephirah": newHexSeph,
+          });
+          if (action === "insight") {
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll">
+                <div class="ft-roll-header"><span class="ft-roll-name">◎ Dreamwalker: Commune</span></div>
+                <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">Communing with the Great Work for insight. GM — provide a hint relating to active Spark quests.</p>
+              </div>`
+            });
+          }
+          if (action === "detect" && newHexSeph) {
+            const matches = newHexSeph === actorSeph;
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll">
+                <div class="ft-roll-header"><span class="ft-roll-name">◎ Spark Detection: ${newHexSeph}</span></div>
+                <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">${matches ? "✦ Resonance detected — your Sephirah matches this hex." : "No resonance — hex Sephirah differs from yours."}</p>
+              </div>`
+            });
+          }
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+// Phase C 2026-05-07 — Dreamwalker Dream-Cache deploy.
+// Reads system.resources.dreamCache; if a manifestation is banked, empties
+// the cache and casts the item via castManifestation with freeClarity:true.
+// Wired into FEATURE_ROUTER as `dreamwalker_deploy_cache`; the Deploy button
+// on the sheet's Cache chip routes here.
+export async function openDreamwalkerDeployCache(actor) {
+  const rawSys = actor.system?.system ?? actor.system;
+  const cache  = rawSys?.resources?.dreamCache ?? {};
+  if (!cache.banked) {
+    return ui.notifications?.warn(`${actor.name}: Dream-Cache is empty.`);
+  }
+  const item = actor.items?.get?.(cache.itemId);
+  if (!item) {
+    await actor.update({
+      "system.resources.dreamCache.banked": false,
+      "system.resources.dreamCache.name":   "",
+      "system.resources.dreamCache.tier":   0,
+      "system.resources.dreamCache.itemId": ""
+    });
+    return ui.notifications?.warn(`${actor.name}: Dream-Cache item missing (deleted since banking). Cache emptied.`);
+  }
+  const sys = item.system ?? {};
+  const intent  = sys.intent   ?? "presence";
+  const channel = sys.channel  ?? "soul";
+  const seph    = sys.sephirah ?? rawSys?.magic?.sephirah ?? "tiferet";
+
+  // Empty the cache atomically before the cast so a failed re-cast doesn't
+  // leave a phantom "deployed but still banked" state.
+  await actor.update({
+    "system.resources.dreamCache.banked": false,
+    "system.resources.dreamCache.name":   "",
+    "system.resources.dreamCache.tier":   0,
+    "system.resources.dreamCache.itemId": ""
+  });
+
+  // Re-fire the cast. castManifestation lives on game.fourththing — the
+  // Dreamwalker class always carries the function via the system load.
+  const cast = game.fourththing?.castManifestation;
+  if (typeof cast === "function") {
+    return cast(actor, item, { intent, channel, sephirah: seph, label: item.name, freeClarity: true });
+  }
+  ui.notifications?.warn(`${actor.name}: cast pipeline unavailable — manifestation deploy aborted.`);
+}
+
+// Dreamwalker — Generic per-Soma-Break feat activator. Each of the 8
+// toggleable Dreamwalker feats (Dream-Thread Tuning, Dream Rite, Omen-Thread
+// Weaving, Mnemonic Spillway, Waking Dreamfield, Ascension Layer, Fractal
+// Self, Apotheosis of the Oneiric) ships with one or more `disabled:true,
+// transfer:false` AEs sitting on the item. This handler:
+//   1. Surveys the item's effects.
+//   2. Single-effect → activates immediately. Multi-effect → mode picker.
+//   3. Removes any prior active clones of this feat from the actor.
+//   4. Clones the chosen effect to the actor as a live AE (disabled:false,
+//      transfer:false, start.time = now so duration counts down naturally).
+//   5. Decrements the item's per-Soma-Break uses (already reset by somaBreak).
+//   6. Posts a chat card.
+// Re-clicking the feat re-toggles (deletes prior clone, creates a new one
+// IF uses still available). To end early, delete the AE off the actor.
+export async function openDreamwalkerFeatActivate(actor, item) {
+  if (!actor || !item) return;
+  const max   = Number(item.system?.uses?.max)   || 1;
+  const spent = Number(item.system?.uses?.spent) || 0;
+  const remaining = Math.max(0, max - spent);
+
+  // Effects on the item — only the disabled-on-item ones are togglable
+  // (transfer:true effects are passive and already applied on grant).
+  const effects = (item.effects ?? []).filter(e => e.transfer === false || e.disabled === true);
+  if (!effects.length) {
+    return ui.notifications?.warn(`${item.name}: no togglable effect found on this feat.`);
+  }
+
+  // Existing actor-side clones of this feat → for status display.
+  const priorClones = (actor.effects ?? []).filter(e => e.flags?.fourththing?.dwFeatItemId === item.id);
+
+  // Single-effect: skip the picker, prompt confirm.
+  if (effects.length === 1) {
+    if (priorClones.length) {
+      const ok = await Dialog.confirm({
+        title:   item.name,
+        content: `<p style="font-size:0.85rem">${_ftEscape(item.name)} is currently active. Re-toggle (deactivates the current effect)?</p>`
+      });
+      if (!ok) return;
+      await actor.deleteEmbeddedDocuments("ActiveEffect", priorClones.map(e => e.id));
+      return ui.notifications?.info(`${item.name} deactivated.`);
+    }
+    if (remaining < 1) return ui.notifications?.warn(`${actor.name}: ${item.name} already used this Soma Break (${spent}/${max}).`);
+    return _ftDwApplyFeatEffect(actor, item, effects[0]);
+  }
+
+  // Multi-effect: radio picker.
+  const opts = effects.map((e, i) => `<label style="display:block;margin:0.3rem 0;cursor:pointer;padding:0.3rem;border:1px solid #3a8a8a44;border-radius:3px">
+    <input type="radio" name="effIdx" value="${i}" ${i===0?"checked":""} style="margin-right:0.4rem"/>
+    <strong style="color:#a0d8d4">${_ftEscape(e.name)}</strong>
+  </label>`).join("");
+  const status = remaining < 1
+    ? `<p style="color:#ff8a8a;font-size:0.78rem;margin:0.3rem 0">Already used this Soma Break (${spent}/${max}). Pick to re-toggle current.</p>`
+    : `<p style="font-size:0.78rem;opacity:0.7;margin:0.3rem 0">Uses left: ${remaining}/${max}</p>`;
+  const priorNote = priorClones.length
+    ? `<p style="font-size:0.74rem;color:#a0d4ff;margin:0.2rem 0">Currently active: <em>${priorClones.map(c => _ftEscape(c.name)).join(", ")}</em>. Activating a new mode replaces it.</p>`
+    : "";
+  new Dialog({
+    title: `${item.name} — pick mode`,
+    content: `<div class="ft-cast-dialog">${status}${priorNote}${opts}</div>`,
+    buttons: {
+      apply: {
+        label: "Activate",
+        callback: async (html) => {
+          if (remaining < 1 && !priorClones.length) {
+            return ui.notifications?.warn(`${actor.name}: ${item.name} already used this Soma Break.`);
+          }
+          const idx = parseInt(html.find("[name='effIdx']:checked").val()) || 0;
+          await _ftDwApplyFeatEffect(actor, item, effects[idx]);
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+async function _ftDwApplyFeatEffect(actor, item, effect) {
+  // Sweep prior clones of this feat — re-toggle replaces, doesn't stack.
+  const prior = (actor.effects ?? []).filter(e => e.flags?.fourththing?.dwFeatItemId === item.id);
+  if (prior.length) {
+    try { await actor.deleteEmbeddedDocuments("ActiveEffect", prior.map(e => e.id)); }
+    catch (_) { /* permission edge — fall through */ }
+  }
+
+  // Clone the effect to the actor with disabled:false + start.time so
+  // Foundry's duration tracker counts down from now.
+  const effObj = effect.toObject ? effect.toObject() : foundry.utils.deepClone(effect);
+  delete effObj._id;
+  delete effObj._key;
+  effObj.disabled = false;
+  effObj.transfer = false;
+  effObj.origin   = item.uuid;
+  effObj.start    = { time: game.time?.worldTime ?? 0 };
+  effObj.flags = effObj.flags ?? {};
+  effObj.flags.fourththing = effObj.flags.fourththing ?? {};
+  effObj.flags.fourththing.dwFeatItemId = item.id;
+  effObj.flags.fourththing.dwFeatMode   = effect.name;
+
+  try { await actor.createEmbeddedDocuments("ActiveEffect", [effObj]); }
+  catch (e) { console.warn("Roll for Initiation | DW feat activate failed", e); return; }
+
+  // Decrement per-Soma-Break uses (existing somaBreak action resets all
+  // item uses to 0, so the cap refreshes naturally on rest).
+  const max   = Number(item.system?.uses?.max)   || 1;
+  const spent = Number(item.system?.uses?.spent) || 0;
+  if (max > 0) {
+    try { await item.update({ "system.uses.spent": Math.min(max, spent + 1) }); }
+    catch (_) { /* permission edge — silent */ }
+  }
+
+  // Compose chat card. Duration handling: Foundry counts down by world time
+  // from start.time + duration.value (seconds); when expired the AE auto-
+  // disables on the next tick. For most DW feats this is 600s = 10 minutes.
+  const durSecs = Number(effect.duration?.value) || 0;
+  const durNote = durSecs > 0 ? `Duration: ${Math.round(durSecs / 60)} min (auto-expires).` : "Active until Soma Break or manual deactivation.";
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:#3a8a8a">
+      <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0d8d4">◐ ${_ftEscape(item.name)} — ${_ftEscape(effect.name)}</span></div>
+      <p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.85">${durNote}</p>
+    </div>`
+  });
+}
+
+// Dreamwalker — Dream Echo Reservoir (L13 feature, compendium tAsGXgZrgFdpNyVi).
+// Display + manual edit dialog. Echo Dice are d6, max 2, gained 1/Soma Break.
+export async function openDreamwalkerEchoReservoir(actor) {
+  const rawSys = actor.system?.system ?? actor.system;
+  const ed = rawSys?.resources?.echoDice ?? { dice: 0, maxDice: 2 };
+  new Dialog({
+    title: "Dreamwalker — Dream Echo Reservoir",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Echo Dice</span>
+          <span class="ft-prev-val" style="color:#a0d8d4">${ed.dice} / ${ed.maxDice} d6</span></span>
+      </div>
+      <p style="font-size:0.72rem;opacity:0.6;margin:0.4rem 0">
+        Bottled fragments of unrealized possibility. Gain 1 die per Soma Break (auto, capped at ${ed.maxDice}). Spend modes: Self-Resonance · Shared Echo · World-Tuning.
+      </p>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Current dice</label>
+          <input type="number" name="dice" value="${ed.dice}" min="0" max="${ed.maxDice}"/></div>
+      </div>
+    </div>`,
+    buttons: {
+      save: {
+        label: "Apply Manual Edit",
+        callback: async (html) => {
+          const dice = Math.max(0, Math.min(ed.maxDice, parseInt(html.find("[name='dice']").val()) || 0));
+          await actor.update({ "system.resources.echoDice.dice": dice });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+// Dreamwalker — Spend Echo Die: rolls 1d6, prompts for one of three spend
+// modes (Self-Resonance / Shared Echo / World-Tuning), debits one die on
+// confirm. Per canonical L13 Dream Echo Reservoir feature.
+export async function openDreamwalkerSpendEchoDie(actor) {
+  const rawSys = actor.system?.system ?? actor.system;
+  const ed = rawSys?.resources?.echoDice ?? { dice: 0, maxDice: 2 };
+  if (ed.dice < 1) {
+    return ui.notifications?.warn(`${actor.name}: no Echo Dice to spend (${ed.dice}/${ed.maxDice} d6).`);
+  }
+  const roll = new Roll("1d6");
+  await roll.evaluate();
+  const rolled = roll.total;
+  new Dialog({
+    title: `Dreamwalker — Spend Echo Die (rolled ${rolled} on d6)`,
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Roll</span>
+          <span class="ft-prev-val" style="color:#a0d8d4;font-weight:700">${rolled}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Pool after spend</span>
+          <span class="ft-prev-val">${ed.dice - 1} / ${ed.maxDice} d6</span></span>
+      </div>
+      <div class="ft-cast-field">
+        <label>Spend mode</label>
+        <select name="mode">
+          <option value="self">Self-Resonance — +${rolled} to your failed attribute check / attack roll / defense check (after seeing the roll)</option>
+          <option value="shared">Shared Echo — +${rolled} to an ally's failed attribute / defense check (within 30 ft)</option>
+          <option value="world">World-Tuning — -${rolled} to an environmental DC against you (Travel hazard, Slippage shift, Qliphothic anomaly, etc.)</option>
+        </select>
+      </div>
+      <div class="ft-cast-field">
+        <label>Target / context (narrative)</label>
+        <input type="text" name="ctx" placeholder="e.g., 'failed Stealth roll vs Hex 7 hazard'"/>
+      </div>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Spend",
+        callback: async (html) => {
+          const mode = html.find("[name='mode']").val();
+          const ctx  = html.find("[name='ctx']").val()?.trim() || "(unspecified)";
+          await actor.update({ "system.resources.echoDice.dice": Math.max(0, ed.dice - 1) });
+          const labels = {
+            self:   { icon: "◐", title: "Self-Resonance", body: `+<b>${rolled}</b> to your failed check (after seeing the roll).` },
+            shared: { icon: "◑", title: "Shared Echo",    body: `+<b>${rolled}</b> to an ally's failed check (within 30 ft).` },
+            world:  { icon: "◒", title: "World-Tuning",   body: `-<b>${rolled}</b> to an environmental DC against you (hazard / shift / anomaly).` }
+          };
+          const lbl = labels[mode] ?? labels.self;
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#3a8a8a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0d8d4">${lbl.icon} Echo Die — ${lbl.title}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.82rem">${lbl.body}</p>
+              <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85"><b>Context:</b> ${_ftEscape(ctx)}</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.55">Pool now ${Math.max(0, ed.dice - 1)}/${ed.maxDice} d6.</p>
+            </div>`,
+            rolls: [roll]
+          });
+        }
+      },
+      cancel: { label: "Cancel (refund die)" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+// ─── Soul-Smith dialogs ───────────────────────────────────────────────────────
+
+export async function openSoulSmithForge(actor) {
+  const res       = getResources(actor);
+  const relicUsed = res.forgeCharge?.relicUsed ?? false;
+  const sparks    = res.forgeCharge?.sparksRepaired ?? 0;
+
+  new Dialog({
+    title: "Soul-Smith — Forge Charge",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Relic of Rebirth</span>
+          <span class="ft-prev-val" style="color:${relicUsed ? '#888' : '#e8c84a'}">${relicUsed ? "Used (Soma Break)" : "Available"}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Sparks Repaired</span>
+          <span class="ft-prev-val">${sparks}</span></span>
+      </div>
+      <div class="ft-cast-field" style="margin-top:0.3rem">
+        <label>Action</label>
+        <select name="action">
+          <option value="none">— Update state only —</option>
+          <option value="relic" ${relicUsed ? 'disabled' : ''}>Create Relic of Rebirth (1/Soma Break — restore corrupted region)</option>
+          <option value="repair">Repair Spark (Economy OPs — purify Corrupted Spark)</option>
+          <option value="hex_repair">Hex Repair (Economy OPs — repair hex structure)</option>
+          <option value="reset">Reset after Soma Break</option>
+        </select>
+      </div>
+      <div class="ft-cast-field" style="margin-top:0.3rem">
+        <input type="number" name="sparks" value="${sparks}" min="0" style="width:60px"/>
+        <label> total Sparks repaired this arc</label>
+      </div>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Apply",
+        callback: async (html) => {
+          const action      = html.find("[name='action']").val();
+          const newSparks   = parseInt(html.find("[name='sparks']").val()) || sparks;
+          const newRelicUsed = action === "relic"  ? true
+                             : action === "reset"  ? false
+                             : relicUsed;
+          const finalSparks  = action === "repair" ? sparks + 1
+                             : action === "reset"  ? 0
+                             : newSparks;
+          await actor.update({
+            "system.resources.forgeCharge.relicUsed":     newRelicUsed,
+            "system.resources.forgeCharge.sparksRepaired": finalSparks,
+          });
+          const labels = {
+            relic:      "Relic of Rebirth created — corrupted region targeted for restoration",
+            repair:     "Spark Repaired — Corrupted Spark cleansed via atonement crafting",
+            hex_repair: "Hex Repair initiated — Economy OPs spent, structure restoration begun",
+            reset:      "Forge charge reset after Soma Break"
+          };
+          if (action !== "none") {
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll">
+                <div class="ft-roll-header"><span class="ft-roll-name">⚒ Soul-Smith: ${labels[action]?.split(' — ')[0]}</span></div>
+                <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">${labels[action]}</p>
+              </div>`
+            });
+          }
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ═══ SPRINT F — NEW CLASS HANDLERS ══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// All new-class dialogs follow the same pattern as existing class dialogs:
+// compute current resource state, render a Dialog with adjustable inputs
+// and optional "spend for X" dropdown, update on Apply, post a ChatMessage.
+//
+// Balance numbers in each handler are [TBD:balance] — these are MVP stubs.
+// Phase 3c balance pass will revisit.
+
+// ─── Bulwark dialogs ──────────────────────────────────────────────────────────
+// Bulwark uses existing resources.frameDice and resources.ruinCharges
+// (already defined in template.json). Handlers are adaptations of the
+// existing Titanbound + Breaker handlers, merged.
+
+export async function openBulwarkFramePool(actor) {
+  const res = getResources(actor);
+  const frame    = res.frameDice?.current ?? 0;
+  const frameMax = res.frameDice?.max ?? 3;
+  const ruin     = res.ruinCharges?.current ?? 0;
+  const ruinMax  = res.ruinCharges?.max ?? 3;
+
+  new Dialog({
+    title: "Bulwark — Frame Dice",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Frame Dice</span>
+          <span class="ft-prev-val" style="color:#4a90d9">${frame} / ${frameMax}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Ruin Charges</span>
+          <span class="ft-prev-val" style="color:#c03030">${ruin} / ${ruinMax}</span></span>
+      </div>
+      <p style="font-size:0.72rem;opacity:0.55;margin:0 0 0.5rem">
+        Frame = persistence. Ruin = inevitability. Subclass determines which generates which.
+      </p>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Frame dice</label>
+          <input type="number" name="frame" value="${frame}" min="0" max="${frameMax}"/></div>
+        <div class="ft-cast-field"><label>Max frame</label>
+          <input type="number" name="frameMax" value="${frameMax}" min="1" max="10"/></div>
+      </div>
+    </div>`,
+    buttons: {
+      save: {
+        label: "Apply",
+        callback: async (html) => {
+          const newFrame = parseInt(html.find("[name='frame']").val()) || 0;
+          const newMax   = parseInt(html.find("[name='frameMax']").val()) || frameMax;
+          await actor.update({
+            "system.resources.frameDice.current": Math.min(newFrame, newMax),
+            "system.resources.frameDice.max":     newMax,
+          });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+export async function openBulwarkSpendFrame(actor) {
+  const res = getResources(actor);
+  const frame = res.frameDice?.current ?? 0;
+  if (frame <= 0) return ui.notifications.warn(`${actor.name}: No Frame Dice available.`);
+
+  new Dialog({
+    title: "Bulwark — Spend Frame Die",
+    content: `<div class="ft-cast-dialog">
+      <p style="margin:0 0 0.5rem;font-size:0.8rem">Spending 1 of ${frame} Frame Dice.</p>
+      <div class="ft-cast-field">
+        <label>Purpose</label>
+        <select name="purpose">
+          <option value="absorb">Absorb — convert damage to Frame die roll</option>
+          <option value="anchor">Anchor — refuse forced movement or condition</option>
+          <option value="push">Push — add die to Strength check to move/break</option>
+        </select>
+      </div>
+    </div>`,
+    buttons: {
+      spend: {
+        label: "Spend",
+        callback: async (html) => {
+          const purpose = html.find("[name='purpose']").val();
+          const roll = new Roll("1d8");
+          await roll.evaluate();
+          await actor.update({ "system.resources.frameDice.current": frame - 1 });
+          const labels = {
+            absorb: "Absorbed",
+            anchor: "Anchored",
+            push:   "Pushed"
+          };
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header">
+                <span class="ft-roll-name">⛰ Bulwark: ${labels[purpose]}</span>
+                <span class="ft-defense-pill">${roll.total}</span>
+              </div>
+              <p style="margin:0;font-size:0.75rem;opacity:0.6">Frame remaining: ${frame - 1}</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "spend"
+  }).render(true);
+}
+
+export async function openBulwarkRuin(actor) {
+  // ALIAS / SUPERSET of existing openBreakerRuin.
+  // Reuses the Breaker ruin dialog — mechanic is identical, just re-labeled.
+  return openBreakerRuin(actor);
+}
+
+export async function openBulwarkStance(actor) {
+  // Cataclyst L5 "Stance Dance" — toggle between Advance and Anchor.
+  const currentStance = actor.getFlag("fourththing", "bulwarkStance") ?? "none";
+  new Dialog({
+    title: "Bulwark — Stance (Cataclyst)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.8rem;margin:0 0 0.4rem">Current stance: <b>${currentStance}</b></p>
+      <div class="ft-cast-field">
+        <label>Set stance</label>
+        <select name="stance">
+          <option value="advance">Advance — Ruin spends -1 cost, +10 movement</option>
+          <option value="anchor">Anchor — Frame spends +1d4, cannot be moved</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+    </div>`,
+    buttons: {
+      set: {
+        label: "Set",
+        callback: async (html) => {
+          const stance = html.find("[name='stance']").val();
+          await actor.setFlag("fourththing", "bulwarkStance", stance);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">⛰ Bulwark Stance: ${stance}</span></div>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "set"
+  }).render(true);
+}
+
+// ─── Shadow Courier dialogs ──────────────────────────────────────────────────
+
+// openShadowCourierAccessPool / openShadowCourierSpendAccess removed 2026-05-05
+// — Shadow Courier now runs on Pace, not Access Dice. Access Dice remains
+// active only for the legacy Shadowjack class. Pace edits inline via the
+// resource panel input; no dedicated spend/pool dialog needed.
+
+export async function openShadowCourierPackage(actor) {
+  const pkg = actor.getFlag("fourththing", "scPackage") ?? { type: "none", note: "" };
+
+  new Dialog({
+    title: "Shadow Courier — Package",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.72rem;opacity:0.55;margin:0 0 0.4rem">
+        What you're carrying this scene. Subclass determines your default.
+      </p>
+      <div class="ft-cast-field">
+        <label>Package type</label>
+        <select name="pkgType">
+          <option value="none" ${pkg.type==="none"?"selected":""}>None</option>
+          <option value="message" ${pkg.type==="message"?"selected":""}>Message (Wayfarer default)</option>
+          <option value="blade" ${pkg.type==="blade"?"selected":""}>Blade (Black Stair)</option>
+          <option value="key" ${pkg.type==="key"?"selected":""}>Key (Black Stair)</option>
+          <option value="soul" ${pkg.type==="soul"?"selected":""}>Soul (Last Mile default)</option>
+        </select>
+      </div>
+      <div class="ft-cast-field">
+        <label>Package notes</label>
+        <input type="text" name="pkgNote" value="${pkg.note ?? ""}" placeholder="From / To / Contents"/>
+      </div>
+    </div>`,
+    buttons: {
+      set: {
+        label: "Apply",
+        callback: async (html) => {
+          const type = html.find("[name='pkgType']").val();
+          const note = html.find("[name='pkgNote']").val();
+          await actor.setFlag("fourththing", "scPackage", { type, note });
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">⬛ Shadow Courier: ${type}</span></div>
+              ${note ? `<p style="margin:0.2rem 0;font-size:0.75rem;opacity:0.7">${note}</p>` : ""}
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "set"
+  }).render(true);
+}
+
+export async function openShadowCourierCrossing(actor) {
+  const res = getResources(actor);
+  const access = res.accessDice?.current ?? 0;
+
+  new Dialog({
+    title: "Shadow Courier — The Crossing",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.8rem;margin:0 0 0.4rem">
+        Declare a threshold: door, wall, ward, alarmed perimeter, hex boundary.
+      </p>
+      <p style="font-size:0.72rem;opacity:0.55">
+        Access dice available: <b style="color:#9b59b6">${access}</b>
+      </p>
+      <div class="ft-cast-field">
+        <label>Threshold description</label>
+        <input type="text" name="threshold" placeholder="e.g., warded gate of the manor"/>
+      </div>
+    </div>`,
+    buttons: {
+      cross: {
+        label: "Cross",
+        callback: async (html) => {
+          const threshold = html.find("[name='threshold']").val() || "threshold";
+          if (access > 0) {
+            await actor.update({ "system.resources.accessDice.current": access - 1 });
+          }
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">⬛ Shadow Courier: The Crossing</span></div>
+              <p style="margin:0.2rem 0;font-size:0.8rem">Crossed: ${threshold}</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.5">Access remaining: ${Math.max(0, access - 1)}</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "cross"
+  }).render(true);
+}
+
+export async function openShadowCourierPassive(actor, item) {
+  const pkg = actor.getFlag("fourththing", "scPackage") ?? { type: "none", note: "" };
+  const name = item?.name ?? "Shadow Courier";
+  const desc = item?.system?.description?.value ?? "";
+
+  new Dialog({
+    title: name,
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Current Package</span>
+          <span class="ft-prev-val" style="color:#9b59b6">${pkg.type}</span></span>
+      </div>
+      ${pkg.note ? `<p style="font-size:0.75rem;opacity:0.65;margin:0.4rem 0">${pkg.note}</p>` : ""}
+      ${desc ? `<div class="ft-item-desc" style="margin-top:0.5rem;max-height:300px;overflow-y:auto">${desc}</div>` : ""}
+    </div>`,
+    buttons: { close: { label: "Close" } },
+    default: "close"
+  }).render(true);
+}
+
+// ─── Cosmic Linguist dialogs ─────────────────────────────────────────────────
+
+export async function openCosmicLinguistAuthority(actor) {
+  const auth = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "clAuthority", legacyFlag: "clAuthority", defaultMax: 5 });
+
+  new Dialog({
+    title: "Cosmic Linguist — Editorial Authority",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Authority</span>
+          <span class="ft-prev-val" style="color:#e8c84a">${auth.current} / ${auth.max}</span></span>
+      </div>
+      <p style="font-size:0.72rem;opacity:0.55;margin:0.4rem 0">
+        Gained by listening, correcting error, being cited. Spent on Annotations.
+        Max scales with Steward tier (5/6/7/8) — sheet chip auto-recomputes.
+      </p>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Current</label>
+          <input type="number" name="current" value="${auth.current}" min="0" max="${auth.max}"/></div>
+      </div>
+    </div>`,
+    buttons: {
+      save: {
+        label: "Apply",
+        callback: async (html) => {
+          const current = parseInt(html.find("[name='current']").val()) || 0;
+          await actor.update({ "system.resources.clAuthority.current": Math.min(current, auth.max) });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+// Cosmic Linguist — Compose Edit. Subclass-gated router (Phase D 2026-05-08).
+// Each CL subclass owns ONE Edit type via its L1 feature:
+//   • Annotator (The Margin) → Annotation — grant reroll-lowest to a target's next check
+//   • Metaphor Apostle (Declared Likeness) → Metaphor — swap target's defense for one round
+//   • Redactor (The First Strike) → Redaction — strip a condition AE from a target
+// Multi-subclass / no subclass → fall back to the legacy buffet picker.
+export async function openCosmicLinguistAnnotation(actor) {
+  const subclassIds = (actor.items ?? [])
+    .filter(it => it.type === "subclass")
+    .map(it => String(it.system?.identifier ?? "").toLowerCase());
+  const isAnnotator = subclassIds.some(id => id.includes("annotator"));
+  const isMetaphor  = subclassIds.some(id => id.includes("metaphor-apostle") || id.includes("metaphor_apostle"));
+  const isRedactor  = subclassIds.some(id => id.includes("redactor"));
+  const subclassCount = (isAnnotator ? 1 : 0) + (isMetaphor ? 1 : 0) + (isRedactor ? 1 : 0);
+
+  // Single CL subclass → route directly to that Edit.
+  if (subclassCount === 1) {
+    if (isAnnotator) return _openCLAnnotation(actor);
+    if (isMetaphor)  return _openCLMetaphor(actor);
+    if (isRedactor)  return _openCLRedaction(actor);
+  }
+  // Zero or multi → buffet (legacy behavior, narrative-only chat card).
+  return _openCLEditBuffet(actor);
+}
+
+async function _openCLAnnotation(actor) {
+  const auth = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "clAuthority", legacyFlag: "clAuthority", defaultMax: 5 });
+  const targetTokens = Array.from(game.user?.targets ?? []);
+  const target = targetTokens[0]?.actor ?? null;
+  const targetName = target?.name ?? "(no target — select a token first)";
+  const cost = 2;
+
+  new Dialog({
+    title: "Annotator — Annotation",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.72rem;opacity:0.6;margin:0 0 0.3rem">
+        Footnote a target's situation — they may <b>reroll the lowest die</b> on their next attribute / save / attack check (auto-applies via the reroll engine).
+      </p>
+      <div class="ft-preview-stats" style="margin:0.3rem 0">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Authority</span><span class="ft-prev-val" style="color:#e8c84a">${auth.current}/${auth.max}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Cost</span><span class="ft-prev-val">${cost}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Target</span><span class="ft-prev-val" style="color:${target ? "#a0d4ff" : "#ff8a8a"}">${_ftEscape(targetName)}</span></span>
+      </div>
+      <div class="ft-cast-field">
+        <label>Footnote text (narrative)</label>
+        <input type="text" name="note" placeholder="e.g., 'Wait — the wind is wrong.'"/>
+      </div>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Annotate",
+        callback: async (html) => {
+          if (!target) return ui.notifications?.warn("Annotation requires a target — select a token first.");
+          if (auth.current < cost) return ui.notifications?.warn(`${actor.name}: Not enough Editorial Authority (need ${cost}).`);
+          const note = html.find("[name='note']").val()?.trim() || "";
+          await actor.update({ "system.resources.clAuthority.current": auth.current - cost });
+
+          // Increment target's pending-reroll counter. The reroll engine
+          // (collectRerolls) reads this flag in addition to item-based grants.
+          const cur = Number(target.flags?.fourththing?.annotationPending) || 0;
+          await target.update({ "flags.fourththing.annotationPending": cur + 1 });
+
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#5a3a8a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#c8c8ff">📎 Annotation — ${_ftEscape(actor.name)} → ${_ftEscape(target.name)}</span></div>
+              ${note ? `<p style="margin:0.3rem 0;font-size:0.82rem"><em>"${_ftEscape(note)}"</em></p>` : ""}
+              <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85"><b>${_ftEscape(target.name)}</b> may reroll the lowest die on their next attribute / save / attack check (auto-applies via reroll engine; pending count: ${cur + 1}).</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.55">Authority spent: ${cost} (${auth.current - cost}/${auth.max} remaining)</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+async function _openCLMetaphor(actor) {
+  const auth = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "clAuthority", legacyFlag: "clAuthority", defaultMax: 5 });
+  const targetTokens = Array.from(game.user?.targets ?? []);
+  const target = targetTokens[0]?.actor ?? null;
+  const targetName = target?.name ?? "(no target — select a token first)";
+  const cost = 3;
+
+  new Dialog({
+    title: "Metaphor Apostle — Metaphor",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.72rem;opacity:0.6;margin:0 0 0.3rem">
+        Declare "X is Y" — swap a target's defense for one round. The chosen "from" defense is overridden by the chosen "to" defense's value.
+      </p>
+      <div class="ft-preview-stats" style="margin:0.3rem 0">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Authority</span><span class="ft-prev-val" style="color:#e8c84a">${auth.current}/${auth.max}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Cost</span><span class="ft-prev-val">${cost}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Target</span><span class="ft-prev-val" style="color:${target ? "#a0d4ff" : "#ff8a8a"}">${_ftEscape(targetName)}</span></span>
+      </div>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Replace defense</label>
+          <select name="from">
+            <option value="guard">Guard</option>
+            <option value="evasion">Evasion</option>
+            <option value="resolve">Resolve</option>
+          </select></div>
+        <div class="ft-cast-field"><label>...with this defense's value</label>
+          <select name="to">
+            <option value="guard">Guard</option>
+            <option value="evasion">Evasion</option>
+            <option value="resolve" selected>Resolve</option>
+          </select></div>
+      </div>
+      <div class="ft-cast-field">
+        <label>Metaphor declared (narrative)</label>
+        <input type="text" name="note" placeholder="e.g., 'The wall is a curtain.'"/>
+      </div>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Declare",
+        callback: async (html) => {
+          if (!target) return ui.notifications?.warn("Metaphor requires a target — select a token first.");
+          if (auth.current < cost) return ui.notifications?.warn(`${actor.name}: Not enough Editorial Authority (need ${cost}).`);
+          const from = html.find("[name='from']").val();
+          const to   = html.find("[name='to']").val();
+          const note = html.find("[name='note']").val()?.trim() || "";
+          if (from === to) return ui.notifications?.warn("Metaphor must replace one defense with a DIFFERENT one.");
+
+          const tSys = target.system?.system ?? target.system ?? {};
+          const toValue = Number(tSys?.derived?.defenses?.[to]?.value ?? tSys?.defenses?.[to]?.value) || 0;
+          if (toValue <= 0) return ui.notifications?.warn(`Could not read target's ${to} defense value.`);
+
+          await actor.update({ "system.resources.clAuthority.current": auth.current - cost });
+
+          // Push an AE to the target that overrides the "from" defense with the
+          // "to" value. Mode 5 (OVERRIDE) replaces the value entirely.
+          // Duration: 1 round (Foundry's combat tracker auto-expires).
+          const aeData = {
+            name: `Metaphor: ${_ftCap(from)} is ${_ftCap(to)}`,
+            img:  "icons/svg/upgrade.svg",
+            origin: actor.uuid,
+            duration: { rounds: 1 },
+            disabled: false,
+            transfer: false,
+            changes: [
+              { key: `system.derived.defenses.${from}.value`, value: String(toValue), mode: 5, priority: 100 }
+            ],
+            flags: { fourththing: { metaphorFromUuid: actor.uuid, metaphorSwap: { from, to, value: toValue } } }
+          };
+          try { await target.createEmbeddedDocuments("ActiveEffect", [aeData]); }
+          catch (e) { console.warn("CL Metaphor AE apply failed", e); }
+
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#5a3a8a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#c8c8ff">🔁 Metaphor — ${_ftEscape(actor.name)} → ${_ftEscape(target.name)}</span></div>
+              ${note ? `<p style="margin:0.3rem 0;font-size:0.82rem"><em>"${_ftEscape(note)}"</em></p>` : ""}
+              <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85"><b>${_ftEscape(target.name)}</b>'s ${_ftCap(from)} becomes ${toValue} (matching ${_ftCap(to)}) for one round.</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.55">Authority spent: ${cost} (${auth.current - cost}/${auth.max} remaining)</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+async function _openCLRedaction(actor) {
+  const auth = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "clAuthority", legacyFlag: "clAuthority", defaultMax: 5 });
+  const targetTokens = Array.from(game.user?.targets ?? []);
+  const target = targetTokens[0]?.actor ?? null;
+  if (!target) {
+    return ui.notifications?.warn("Redaction requires a target — select a token first.");
+  }
+  const cost = 4;
+
+  // List target's active condition / effect AEs that aren't the actor's own
+  // permanent grants (filter by `disabled === false` and prefer those with
+  // a clear duration or condition flag).
+  const eligibleEffects = (target.effects ?? []).filter(e => !e.disabled);
+  if (!eligibleEffects.length) {
+    return ui.notifications?.warn(`${target.name}: no active conditions / effects to redact.`);
+  }
+  const opts = eligibleEffects.map((e, i) => `<label style="display:block;margin:0.25rem 0;padding:0.25rem;border:1px solid #5a3a8a44;border-radius:3px;cursor:pointer">
+    <input type="radio" name="effIdx" value="${i}" ${i===0?"checked":""}/>
+    <strong>${_ftEscape(e.name)}</strong>
+    ${e.duration?.rounds ? `<span style="opacity:0.6">(${e.duration.rounds}r left)</span>` : ""}
+  </label>`).join("");
+
+  new Dialog({
+    title: "Redactor — Redaction",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.72rem;opacity:0.6;margin:0 0 0.3rem">
+        Strip an active condition or effect from a target. The chosen effect is removed permanently.
+      </p>
+      <div class="ft-preview-stats" style="margin:0.3rem 0">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Authority</span><span class="ft-prev-val" style="color:#e8c84a">${auth.current}/${auth.max}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Cost</span><span class="ft-prev-val">${cost}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Target</span><span class="ft-prev-val" style="color:#a0d4ff">${_ftEscape(target.name)}</span></span>
+      </div>
+      <div class="ft-cast-field">
+        <label>Pick effect to redact</label>
+        <div style="margin-top:0.3rem">${opts}</div>
+      </div>
+      <div class="ft-cast-field">
+        <label>Redaction declared (narrative)</label>
+        <input type="text" name="note" placeholder="e.g., 'That fire was never lit.'"/>
+      </div>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Redact",
+        callback: async (html) => {
+          if (auth.current < cost) return ui.notifications?.warn(`${actor.name}: Not enough Editorial Authority (need ${cost}).`);
+          const idx = parseInt(html.find("[name='effIdx']:checked").val()) || 0;
+          const eff = eligibleEffects[idx];
+          if (!eff) return ui.notifications?.warn("No effect selected.");
+          const note = html.find("[name='note']").val()?.trim() || "";
+          const removedName = eff.name;
+
+          await actor.update({ "system.resources.clAuthority.current": auth.current - cost });
+          try { await target.deleteEmbeddedDocuments("ActiveEffect", [eff.id]); }
+          catch (e) { console.warn("CL Redaction delete failed", e); }
+
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#5a3a8a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#c8c8ff">▬ Redaction — ${_ftEscape(actor.name)} → ${_ftEscape(target.name)}</span></div>
+              ${note ? `<p style="margin:0.3rem 0;font-size:0.82rem"><em>"${_ftEscape(note)}"</em></p>` : ""}
+              <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85"><strong>${_ftEscape(removedName)}</strong> stripped from ${_ftEscape(target.name)}.</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.55">Authority spent: ${cost} (${auth.current - cost}/${auth.max} remaining)</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+// Buffet fallback — used when the actor has no CL subclass yet, or holds
+// multiple via cross-classing. Narrative-only chat card; no engine effect.
+async function _openCLEditBuffet(actor) {
+  const auth = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "clAuthority", legacyFlag: "clAuthority", defaultMax: 5 });
+  new Dialog({
+    title: "Cosmic Linguist — Compose Edit (no subclass)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.72rem;opacity:0.6;margin:0 0 0.4rem">
+        No CL subclass detected (or cross-classed). Pick an Edit type narratively — engine hooks fire only when a single CL subclass is present.
+      </p>
+      <p style="font-size:0.72rem;opacity:0.55">Authority: <b>${auth.current}</b> / ${auth.max}</p>
+      <div class="ft-cast-field">
+        <label>Edit type</label>
+        <select name="editType">
+          <option value="annotation">📎 Annotation — footnote (narrative)</option>
+          <option value="metaphor">🔁 Metaphor — declare X is Y (narrative)</option>
+          <option value="redaction">▬ Redaction — strip a tag (narrative)</option>
+        </select>
+      </div>
+      <div class="ft-cast-field">
+        <label>Edit text</label>
+        <input type="text" name="text" placeholder="e.g., 'the king is just'"/>
+      </div>
+      <div class="ft-cast-field">
+        <label>Cost (Authority)</label>
+        <input type="number" name="cost" value="2" min="1" max="10"/>
+      </div>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Apply Edit",
+        callback: async (html) => {
+          const editType = html.find("[name='editType']").val();
+          const text     = html.find("[name='text']").val() || "(unspecified)";
+          const cost     = parseInt(html.find("[name='cost']").val()) || 2;
+          if (auth.current < cost) return ui.notifications?.warn(`${actor.name}: Not enough Editorial Authority (need ${cost}).`);
+          await actor.update({ "system.resources.clAuthority.current": auth.current - cost });
+          const typeLabels = { annotation: "📎 Annotation", metaphor: "🔁 Metaphor", redaction: "▬ Redaction" };
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">${typeLabels[editType]}: ${_ftEscape(text)}</span></div>
+              <p style="margin:0;font-size:0.72rem;opacity:0.5">Authority spent: ${cost} (${auth.current - cost}/${auth.max} remaining)</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+function _ftCap(s) { return String(s ?? "").charAt(0).toUpperCase() + String(s ?? "").slice(1); }
+
+// ─── Pactkeeper dialogs ──────────────────────────────────────────────────────
+
+export async function openPactkeeperLeverage(actor) {
+  const lev = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "pactLeverage", legacyFlag: "pkLeverage", defaultMax: 5 });
+
+  new Dialog({
+    title: "Pactkeeper — Leverage",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Leverage</span>
+          <span class="ft-prev-val" style="color:#78909c">${lev.current} / ${lev.max}</span></span>
+      </div>
+      <p style="font-size:0.72rem;opacity:0.55;margin:0.4rem 0">
+        Gained by witnessing agreements, doing tracked favors, uncovering precedent.
+        Max scales with Steward tier (5/6/7/8) — sheet chip auto-recomputes.
+      </p>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Current</label>
+          <input type="number" name="current" value="${lev.current}" min="0" max="${lev.max}"/></div>
+      </div>
+    </div>`,
+    buttons: {
+      save: {
+        label: "Apply",
+        callback: async (html) => {
+          const current = parseInt(html.find("[name='current']").val()) || 0;
+          await actor.update({ "system.resources.pactLeverage.current": Math.min(current, lev.max) });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+export async function openPactkeeperBindingClause(actor) {
+  const lev = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "pactLeverage", legacyFlag: "pkLeverage", defaultMax: 5 });
+
+  new Dialog({
+    title: "Pactkeeper — Binding Clause",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.72rem;opacity:0.55;margin:0 0 0.4rem">
+        Introduce a clause into an agreement. Breaker pays the penalty.
+      </p>
+      <p style="font-size:0.72rem;opacity:0.55">
+        Leverage: <b>${lev.current}</b> / ${lev.max}
+      </p>
+      <div class="ft-cast-field">
+        <label>Agreement being bound</label>
+        <input type="text" name="agreement" placeholder="e.g., truce with the warlord"/>
+      </div>
+      <div class="ft-cast-field">
+        <label>Clause text</label>
+        <input type="text" name="clause" placeholder="e.g., neither party escalates within 30 days"/>
+      </div>
+      <div class="ft-cast-field">
+        <label>Penalty on break</label>
+        <input type="text" name="penalty" placeholder="e.g., 2d6 psychic damage, -1 Morale OP"/>
+      </div>
+      <div class="ft-cast-field">
+        <label>Leverage cost</label>
+        <input type="number" name="cost" value="3" min="1" max="15"/>
+      </div>
+    </div>`,
+    buttons: {
+      bind: {
+        label: "Bind",
+        callback: async (html) => {
+          const agr     = html.find("[name='agreement']").val() || "(unnamed agreement)";
+          const clause  = html.find("[name='clause']").val() || "";
+          const penalty = html.find("[name='penalty']").val() || "";
+          const cost    = parseInt(html.find("[name='cost']").val()) || 3;
+          if (lev.current < cost) {
+            return ui.notifications.warn(`${actor.name}: Not enough Leverage (need ${cost}).`);
+          }
+          await actor.update({ "system.resources.pactLeverage.current": lev.current - cost });
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">§ Binding Clause: ${agr}</span></div>
+              <p style="margin:0.2rem 0;font-size:0.8rem"><em>Clause:</em> ${clause}</p>
+              <p style="margin:0.1rem 0;font-size:0.75rem;opacity:0.75"><em>Break penalty:</em> ${penalty}</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.5">Leverage spent: ${cost} (${lev.current - cost}/${lev.max} remaining)</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "bind"
+  }).render(true);
+}
+
+// Tiny HTML escape — local to avoid a cross-module import of module.js's
+// ftEscapeHtml. Safe for single-line user-supplied strings (titles, contexts).
+function _ftEscape(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+// Counter / dispel a target's active manifestation (Phase D 2026-05-08, v1).
+// Roll: 2d10x10 + max(intent, mind) attribute vs DC = (entry.tier × 2 + 10)
+// + entry.stabilizeBonus. Tier baseline matches cast DC: T1 12 / T2 14 / T3 16
+// / T4 18, plus any CL Resonance "Stabilize" channel allocation from cast time.
+// On success the entry is removed from the target's activeManifestations.
+// Action cost: action. Generic — not class-gated for v1; any actor with a
+// feat carrying identifier "counter_manifestation" routes here.
+export async function openCounterManifestation(actor) {
+  const targetTokens = Array.from(game.user?.targets ?? []);
+  const target = targetTokens[0]?.actor ?? null;
+  if (!target) return ui.notifications?.warn("Counter requires a target — select an enemy token first.");
+  const entries = target.getFlag?.("fourththing", "activeManifestations") ?? [];
+  const eligible = entries.filter(e => ["sustained", "bound", "enduring"].includes(e.stability));
+  if (!eligible.length) return ui.notifications?.warn(`${target.name}: no active manifestations to counter.`);
+
+  const opts = eligible.map((e, i) => {
+    const dc = (Number(e.tier) || 1) * 2 + 10 + (Number(e.stabilizeBonus) || 0);
+    const stabNote = e.stabilizeBonus > 0 ? ` <span style="color:#c8c8ff">(+${e.stabilizeBonus} stabilize)</span>` : "";
+    return `<label style="display:block;margin:0.25rem 0;padding:0.3rem;border:1px solid #5a3a8a44;border-radius:3px;cursor:pointer">
+      <input type="radio" name="entryIdx" value="${i}" ${i===0?"checked":""}/>
+      <strong>${_ftEscape(e.itemName)}</strong> (T${e.tier}, ${_ftEscape(e.stability)}) — DC ${dc}${stabNote}
+    </label>`;
+  }).join("");
+
+  const rawSys = actor.system?.system ?? actor.system ?? {};
+  const intentVal = Number(rawSys?.attributes?.intent?.value ?? rawSys?.attributes?.mind?.value) || 0;
+  const mindVal   = Number(rawSys?.attributes?.mind?.value)   || 0;
+  const bestAttr  = mindVal >= intentVal ? "mind" : "intrigue";
+  const bestVal   = Math.max(intentVal, mindVal);
+
+  new Dialog({
+    title: "Counter / Dispel — pick target manifestation",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;opacity:0.8;margin:0 0 0.3rem">
+        Roll <b>2d10x10 + ${bestVal}</b> (${_ftCap(bestAttr)}) vs the chosen entry's DC. Success drops the entry from <b>${_ftEscape(target.name)}</b>'s active manifestations.
+      </p>
+      <div class="ft-cast-field">${opts}</div>
+    </div>`,
+    buttons: {
+      roll: {
+        label: "Roll Counter",
+        callback: async (html) => {
+          const idx = parseInt(html.find("[name='entryIdx']:checked").val()) || 0;
+          const entry = eligible[idx];
+          if (!entry) return ui.notifications?.warn("No entry selected.");
+          const dc = (Number(entry.tier) || 1) * 2 + 10 + (Number(entry.stabilizeBonus) || 0);
+          const formula = `2d10x10 + ${bestVal}`;
+          const roll = new Roll(formula);
+          await roll.evaluate();
+          const success = roll.total >= dc;
+
+          // Surge banking on explosions (caster is the active roller).
+          const dieResults = roll.dice?.[0]?.results ?? [];
+          const explosions = Math.max(0, dieResults.length - 2);
+          if (explosions > 0) {
+            try {
+              const cur = Number(rawSys?.resources?.surge?.value) || 0;
+              await actor.update({ "system.resources.surge.value": cur + explosions });
+            } catch (_) {}
+          }
+
+          // On success — remove the entry from target's flag.
+          if (success) {
+            const survivors = entries.filter(e => e.instanceId !== entry.instanceId);
+            try { await target.setFlag("fourththing", "activeManifestations", survivors); }
+            catch (e) { console.warn("Counter: target update failed", e); }
+          }
+
+          const surgeNote = explosions > 0 ? ` <span style="color:#e8c84a;font-weight:600">+${explosions} Surge banked</span>` : "";
+          await roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flavor: `<div class="fourththing-roll" style="border-color:${success ? "#5fb35f" : "#c45f5f"}">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:${success ? "#5fb35f" : "#c45f5f"}">${success ? "✦ Counter SUCCESS" : "✗ Counter FAILED"} — ${_ftEscape(actor.name)} → ${_ftEscape(target.name)}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.82rem">Targeting <b>${_ftEscape(entry.itemName)}</b> (T${entry.tier}, DC ${dc}).${surgeNote}</p>
+              <p style="margin:0;font-size:0.78rem;opacity:0.85">${success ? `Manifestation dropped from ${_ftEscape(target.name)}'s active list.` : `Manifestation holds. ${_ftEscape(target.name)}'s working still binding.`}</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "roll"
+  }).render(true);
+}
+
+// Pactkeeper — Bind / unbind / show pact subject. The pact subject is the
+// creature, object, or place "bargained-with" per The Bargain canon. New
+// sustained manifestations cast targeting the bound subject get free upkeep
+// (up to concurrencyBonus from passive + Sealed Pact stance).
+export async function openPactkeeperBindSubject(actor) {
+  const cur = actor.flags?.fourththing?.pactSubject ?? null;
+  const targeted = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+
+  const lines = [];
+  if (cur?.uuid) {
+    lines.push(`<p style="margin:0.3rem 0;font-size:0.82rem"><b>Currently bound:</b> ${_ftEscape(cur.name ?? "(unnamed)")}</p>`);
+  } else {
+    lines.push(`<p style="margin:0.3rem 0;font-size:0.82rem;opacity:0.7">No pact subject bound.</p>`);
+  }
+  if (targeted) {
+    lines.push(`<p style="margin:0.3rem 0;font-size:0.82rem;color:#a0d4ff"><b>Targeted:</b> ${_ftEscape(targeted.name)} — ready to bind.</p>`);
+  } else {
+    lines.push(`<p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.6">Tip: select a token first, then re-open this to bind it.</p>`);
+  }
+
+  const buttons = {};
+  if (targeted) {
+    buttons.bind = {
+      label: cur?.uuid ? "Replace bound subject" : "Bind targeted",
+      callback: async () => {
+        await actor.setFlag("fourththing", "pactSubject", { uuid: targeted.uuid, name: targeted.name, ts: Date.now() });
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll" style="border-color:#3a8a5a">
+            <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0d8b8">🔗 Pact bound — ${_ftEscape(actor.name)} ↔ ${_ftEscape(targeted.name)}</span></div>
+            <p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.85">Sustained manifestations cast on this subject will draw free upkeep (capped by concurrencyBonus).</p>
+          </div>`
+        });
+      }
+    };
+  }
+  if (cur?.uuid) {
+    buttons.unbind = {
+      label: "Unbind",
+      callback: async () => {
+        await actor.unsetFlag("fourththing", "pactSubject");
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll" style="border-color:#5a5a5a">
+            <div class="ft-roll-header"><span class="ft-roll-name" style="color:#888">🔓 Pact released — ${_ftEscape(actor.name)}</span></div>
+            <p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.85">Subject ${_ftEscape(cur.name ?? "(unknown)")} no longer bound. Existing pact-bound manifestations keep their flag until upkeep drops them.</p>
+          </div>`
+        });
+      }
+    };
+  }
+  buttons.close = { label: "Close" };
+
+  new Dialog({
+    title: "Pactkeeper — Pact Subject",
+    content: `<div class="ft-cast-dialog">${lines.join("")}</div>`,
+    buttons,
+    default: targeted ? "bind" : "close"
+  }).render(true);
+}
+
+// Pactkeeper — Civic Charge dice pool (canonical class resource per Core
+// Features compendium item v2PteOnTErjsVZ66). Display + manual gain/spend.
+export async function openPactkeeperCivicCharge(actor) {
+  const rawSys = actor.system?.system ?? actor.system;
+  const cc = rawSys?.resources?.civicCharge ?? { dice: 0, maxDice: 1, dieSize: "d6" };
+  const gainedThisRound = actor.getFlag("fourththing", "pkChargeGainedThisRound") === true;
+  new Dialog({
+    title: "Pactkeeper — Civic Charge",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Civic Charge</span>
+          <span class="ft-prev-val" style="color:#d4b8e8">${cc.dice} / ${cc.maxDice} ${cc.dieSize}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">This round</span>
+          <span class="ft-prev-val" style="color:${gainedThisRound ? "#888" : "#a0d4ff"}">${gainedThisRound ? "Gained (limit hit)" : "May still gain"}</span></span>
+      </div>
+      <p style="font-size:0.72rem;opacity:0.6;margin:0.4rem 0">
+        Earn 1 die when you stabilize a volatile situation, resolve without violence,
+        enforce a Contract or Precedent, complete a closure ritual, or cast in esoteric
+        alignment. Limit: 1/round. Die size scales by level (L1-4 d6, L5+ d8, L11+ d10, L17+ d12).
+      </p>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Current dice</label>
+          <input type="number" name="dice" value="${cc.dice}" min="0" max="${cc.maxDice}"/></div>
+      </div>
+    </div>`,
+    buttons: {
+      gain: {
+        label: gainedThisRound ? "(round limit hit)" : "+1 Die (mark earned)",
+        callback: async () => {
+          if (gainedThisRound) return;
+          const newDice = Math.min(cc.maxDice, cc.dice + 1);
+          await actor.update({ "system.resources.civicCharge.dice": newDice });
+          await actor.setFlag("fourththing", "pkChargeGainedThisRound", true);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#6a4a8a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#d4b8e8">🗂 Civic Charge gained — ${actor.name}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.85">Now ${newDice}/${cc.maxDice} ${cc.dieSize}. (Earn through stabilizing, non-violence, enforcement, closure, or aligned cast.)</p>
+            </div>`
+          });
+        }
+      },
+      save: {
+        label: "Apply Manual Edit",
+        callback: async (html) => {
+          const dice = Math.max(0, Math.min(cc.maxDice, parseInt(html.find("[name='dice']").val()) || 0));
+          await actor.update({ "system.resources.civicCharge.dice": dice });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+// Pactkeeper — Spend Civic Charge: rolls a die, presents the 5 spend modes
+// (Stabilization / Authority Boost / Enforcement / Containment / Closure),
+// debits the die on confirm. Per canonical Core Features (v2PteOnTErjsVZ66).
+export async function openPactkeeperSpendCivicCharge(actor) {
+  const rawSys = actor.system?.system ?? actor.system;
+  const cc = rawSys?.resources?.civicCharge ?? { dice: 0, maxDice: 1, dieSize: "d6" };
+  if (cc.dice < 1) {
+    return ui.notifications?.warn(`${actor.name}: no Civic Charge dice to spend (${cc.dice}/${cc.maxDice} ${cc.dieSize}).`);
+  }
+  // Roll the die FIRST so the dialog shows the result; player picks a mode.
+  const roll = new Roll(`1${cc.dieSize}`);
+  await roll.evaluate();
+  const rolled = roll.total;
+  new Dialog({
+    title: `Pactkeeper — Spend Civic Charge (rolled ${rolled} on ${cc.dieSize})`,
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Roll</span>
+          <span class="ft-prev-val" style="color:#d4b8e8;font-weight:700">${rolled}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Pool after spend</span>
+          <span class="ft-prev-val">${cc.dice - 1} / ${cc.maxDice} ${cc.dieSize}</span></span>
+      </div>
+      <div class="ft-cast-field">
+        <label>Spend mode</label>
+        <select name="mode">
+          <option value="stabilization">Stabilization — reduce incoming damage / panic / corruption / fallout by ${rolled}</option>
+          <option value="authority">Authority Boost — +${rolled} to a manifestation DC, contested roll, or enforcement</option>
+          <option value="enforcement">Enforcement — force a reroll vs Contract or Precedent (target takes worse)</option>
+          <option value="containment">Containment — convert a catastrophic outcome into a controlled one</option>
+          <option value="closure">Closure — end an ongoing effect cleanly instead of explosively</option>
+        </select>
+      </div>
+      <div class="ft-cast-field">
+        <label>Target / context (narrative)</label>
+        <input type="text" name="ctx" placeholder="e.g., 'reduce panic in Hex 12 by ${rolled}'"/>
+      </div>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Spend",
+        callback: async (html) => {
+          const mode = html.find("[name='mode']").val();
+          const ctx  = html.find("[name='ctx']").val()?.trim() || "(unspecified)";
+          await actor.update({ "system.resources.civicCharge.dice": Math.max(0, cc.dice - 1) });
+          const labels = {
+            stabilization: { icon: "⚖", title: "Stabilization", body: `Reduces incoming damage / panic / corruption / fallout by <b>${rolled}</b>.` },
+            authority:     { icon: "📜", title: "Authority Boost", body: `+<b>${rolled}</b> to a manifestation DC, contested roll, or enforcement check.` },
+            enforcement:   { icon: "🔒", title: "Enforcement",    body: `Force a reroll vs the bound Contract or Precedent — target takes the worse result. (Roll = <b>${rolled}</b>.)` },
+            containment:   { icon: "▣", title: "Containment",     body: `Convert a catastrophic outcome into a controlled one. (Roll = <b>${rolled}</b>.)` },
+            closure:       { icon: "✦", title: "Closure",         body: `End an ongoing effect cleanly instead of explosively. (Roll = <b>${rolled}</b>.)` }
+          };
+          const lbl = labels[mode] ?? labels.stabilization;
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#6a4a8a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#d4b8e8">${lbl.icon} Civic Charge — ${lbl.title}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.82rem">${lbl.body}</p>
+              <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85"><b>Context:</b> ${_ftEscape(ctx)}</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.55">Pool now ${Math.max(0, cc.dice - 1)}/${cc.maxDice} ${cc.dieSize}.</p>
+            </div>`,
+            rolls: [roll]
+          });
+        }
+      },
+      cancel: {
+        label: "Cancel (refund die)",
+        callback: () => {
+          // No debit happened; the rolled value is just ignored.
+        }
+      }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+// Pactkeeper — Administrative Pressure track. Display + clear/edit dialog.
+export async function openPactkeeperPressure(actor) {
+  const rawSys = actor.system?.system ?? actor.system;
+  const ap = rawSys?.resources?.administrativePressure ?? { value: 0, max: 10 };
+  const v = Number(ap.value) || 0;
+  const band = v >= 6 ? "High" : v >= 3 ? "Moderate" : v >= 1 ? "Low" : "Clear";
+  new Dialog({
+    title: "Pactkeeper — Administrative Pressure",
+    content: `<div class="ft-cast-dialog">
+      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Pressure</span>
+          <span class="ft-prev-val" style="color:#ffc8a0">${v} (${band})</span></span>
+      </div>
+      <p style="font-size:0.72rem;opacity:0.6;margin:0.4rem 0">
+        Bands: 1-2 Low (NPCs question authority) · 3-5 Moderate (enforcement costs rise) · 6+ High (mandates contested, Auditors intervene). Clear via downtime, proper closure, or delegation.
+      </p>
+      <div class="ft-cast-grid">
+        <div class="ft-cast-field"><label>Current points</label>
+          <input type="number" name="value" value="${v}" min="0" max="${ap.max}"/></div>
+      </div>
+    </div>`,
+    buttons: {
+      add: {
+        label: "+1 (gain)",
+        callback: async () => {
+          await actor.update({ "system.resources.administrativePressure.value": Math.min(ap.max, v + 1) });
+        }
+      },
+      save: {
+        label: "Apply Manual Edit",
+        callback: async (html) => {
+          const value = Math.max(0, Math.min(ap.max, parseInt(html.find("[name='value']").val()) || 0));
+          await actor.update({ "system.resources.administrativePressure.value": value });
+        }
+      },
+      clear: {
+        label: "Clear (downtime)",
+        callback: async () => {
+          await actor.update({ "system.resources.administrativePressure.value": 0 });
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#8a5a3a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#ffc8a0">⚖ Administrative Pressure cleared — ${actor.name}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.78rem;opacity:0.85">Mandate restored via downtime / proper closure / delegation.</p>
+            </div>`
+          });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "save"
+  }).render(true);
+}
+
+export async function openPactkeeperPrecedent(actor) {
+  const used = actor.getFlag("fourththing", "pkPrecedentUsed") ?? false;
+
+  new Dialog({
+    title: "Pactkeeper — Precedent",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.72rem;opacity:0.55;margin:0 0 0.4rem">
+        Invoke a past event as binding precedent for the current ruling.
+        Once per session — GM adjudicates fit.
+      </p>
+      ${used ? '<p style="color:#eb5757;font-size:0.8rem">Already used this session.</p>' : ""}
+      <div class="ft-cast-field">
+        <label>Precedent cited</label>
+        <input type="text" name="precedent" placeholder="e.g., the Treaty of Binah, signed by the Third Council"/>
+      </div>
+      <div class="ft-cast-field">
+        <label>Current situation</label>
+        <input type="text" name="situation" placeholder="e.g., the border dispute in Hex 12"/>
+      </div>
+      <div class="ft-cast-field">
+        <label>Implied ruling</label>
+        <input type="text" name="ruling" placeholder="e.g., neutral arbitration by a Sephirotic alignment"/>
+      </div>
+    </div>`,
+    buttons: {
+      invoke: {
+        label: used ? "(used — close)" : "Invoke",
+        callback: async (html) => {
+          if (used) return;
+          const prec      = html.find("[name='precedent']").val() || "(unnamed precedent)";
+          const situation = html.find("[name='situation']").val() || "";
+          const ruling    = html.find("[name='ruling']").val() || "";
+          await actor.setFlag("fourththing", "pkPrecedentUsed", true);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">§ Precedent Invoked</span></div>
+              <p style="margin:0.2rem 0;font-size:0.8rem"><em>Precedent:</em> ${prec}</p>
+              <p style="margin:0.1rem 0;font-size:0.75rem"><em>Applied to:</em> ${situation}</p>
+              <p style="margin:0.1rem 0;font-size:0.75rem"><em>Ruling:</em> ${ruling}</p>
+              <p style="margin:0.3rem 0 0;font-size:0.7rem;opacity:0.5">GM adjudicates. Resets on Soma Break / new session.</p>
+            </div>`
+          });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "invoke"
+  }).render(true);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// End Sprint F new handlers
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ─── Passive class info dialogs ───────────────────────────────────────────────
+// Harmony Marshal, Phantom Courier, Wyrdlens Adept: no resource pools,
+// but clicking their core features shows a summary of their active passive bonuses.
+
+export async function openPassiveClassInfo(actor, item) {
+  const name = item?.name ?? "Path Principle";
+  const desc = item?.system?.description?.value ?? "";
+  const rawSys   = actor.system?.system ?? actor.system;
+  const attrs    = rawSys?.attributes   ?? {};
+
+  // Build context-specific bonus summary
+  const lowerName = name.toLowerCase();
+  let bonusSummary = "";
+
+  if (lowerName.includes("harmony") || lowerName.includes("marshal")) {
+    const presence = attrs.presence?.value ?? 2;
+    bonusSummary = `<div class="ft-preview-stats">
+      <span class="ft-prev-stat"><span class="ft-prev-label">Soft Power</span><span class="ft-prev-val">+10% generation</span></span>
+      <span class="ft-prev-stat"><span class="ft-prev-label">Presence</span><span class="ft-prev-val">${presence}</span></span>
+    </div>
+    <p style="font-size:0.75rem;opacity:0.6;margin:0.4rem 0">Tier 2: Spend 1 Soft Power → remove 1 Attrition point faction-wide.</p>`;
+  } else if (lowerName.includes("phantom") || lowerName.includes("courier")) {
+    const intrigue = attrs.intrigue?.value ?? 2;
+    bonusSummary = `<div class="ft-preview-stats">
+      <span class="ft-prev-stat"><span class="ft-prev-label">Intrigue</span><span class="ft-prev-val">${intrigue}</span></span>
+      <span class="ft-prev-stat"><span class="ft-prev-label">Terrain</span><span class="ft-prev-val">Ignore 1st hazard/turn</span></span>
+    </div>
+    <p style="font-size:0.75rem;opacity:0.6;margin:0.4rem 0">Tier 2: Complete Infiltration scenario → refund 1 Intrigue OP.</p>`;
+  } else if (lowerName.includes("wyrdlens") || lowerName.includes("adept")) {
+    const mind = attrs.mind?.value ?? 2;
+    bonusSummary = `<div class="ft-preview-stats">
+      <span class="ft-prev-stat"><span class="ft-prev-label">Mind</span><span class="ft-prev-val">${mind}</span></span>
+      <span class="ft-prev-stat"><span class="ft-prev-label">Tikkun ID</span><span class="ft-prev-val">½ Intrigue OP cost</span></span>
+    </div>
+    <p style="font-size:0.75rem;opacity:0.6;margin:0.4rem 0">Tier 3: 1/Soma Break — auto-succeed one Spark-related lore check.</p>`;
+  }
+
+  new Dialog({
+    title: name,
+    content: `<div class="ft-cast-dialog">
+      ${bonusSummary}
+      ${desc ? `<div class="ft-item-desc" style="margin-top:0.5rem;max-height:300px;overflow-y:auto">${desc}</div>` : ""}
+    </div>`,
+    buttons: { close: { label: "Close" } },
+    default: "close"
+  }).render(true);
+}
+
+// ─── Caster Discipline Pilot — Signature Mode toggles + T4 abilities ────────
+// (2026-04-27 — pilot. Each Mode is a stance flag the engine consults at cast/
+// upkeep/misfire time via manifestation-discipline.js. Tier-4 abilities are
+// 1/Soma Break dialogs gated by an actor flag the player resets manually on
+// Soma Break.)
+
+// Generic Signature Mode dialog factory.
+async function _openSignatureMode(actor, key, label, summaryHtml) {
+  const on = isModeActive(actor, key);
+  const disc = summarizeDiscipline(actor);
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Stance: <b>${on ? "ON" : "OFF"}</b></p>
+      ${summaryHtml ? `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-bottom:0.4rem">${summaryHtml}</div>` : ""}
+      <p style="font-size:0.7rem;opacity:0.65;margin:0">Active discipline: <i>${disc || "(no shifts)"}</i></p>
+    </div>`,
+    buttons: {
+      toggle: {
+        label: on ? "Drop stance" : "Take stance",
+        callback: () => toggleMode(actor, key, { label })
+      },
+      close: { label: "Cancel" }
+    },
+    default: "toggle"
+  }).render(true);
+}
+
+export async function openCosmicLinguistMode(actor) {
+  return _openSignatureMode(actor, "clSentence", "Cosmic Linguist — The Sentence",
+    "While held: every sustained manifestation treats its primary target as bound by name. Pays ongoing upkeep against your Clarity (pilot: GM-set per scene).");
+}
+
+export async function openWyrdlensMode(actor) {
+  return _openSignatureMode(actor, "wlRefraction", "Wyrdlens Adept — Refraction",
+    "While held: declare your manifestation last in the round, after seeing what allies and enemies commit to. Pays ongoing upkeep (pilot: GM-set).");
+}
+
+export async function openDreamwalkerMode(actor) {
+  return _openSignatureMode(actor, "dwWalkingLane", "Dreamwalker — The Walking Lane",
+    "While held: sustained manifestations reach into adjacent realms — ignore one band of cover or distance for one effect per round. Pays ongoing upkeep (pilot: GM-set).");
+}
+
+export async function openPactkeeperMode(actor) {
+  return _openSignatureMode(actor, "pkSealedPact", "Pactkeeper — Sealed Pact",
+    "While the Seal holds: concurrent-manifestation cap +2; cannot voluntarily drop a manifestation sustained on a pact-bound subject. Pays ongoing upkeep (pilot: GM-set).");
+}
+
+// Generic 1/Soma Break ability dialog. Tracks 'used' state on actor flag;
+// player clears it manually on Soma Break (or via the Reset button). Flag
+// namespace stays as `disciplineUsed` for backward compatibility with
+// existing actor data from before the Soma Break canon unification.
+async function _openSomaBreakAbility(actor, key, label, body, onUse) {
+  const used = Boolean(actor.getFlag("fourththing", `disciplineUsed.${key}`));
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${used ? "SPENT — refresh on Soma Break" : "AVAILABLE"}</b></p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      use: {
+        label: "Use",
+        callback: async () => {
+          if (used) {
+            ui.notifications.warn(`${label}: already spent — reset on Soma Break.`);
+            return;
+          }
+          await actor.setFlag("fourththing", `disciplineUsed.${key}`, true);
+          if (typeof onUse === "function") await onUse(actor);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label}</span></div>
+              <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+            </div>`
+          });
+        }
+      },
+      reset: {
+        label: "Reset (Soma Break)",
+        callback: () => actor.setFlag("fourththing", `disciplineUsed.${key}`, false)
+      },
+      close: { label: "Close" }
+    },
+    default: "use"
+  }).render(true);
+}
+
+export async function openCosmicLinguistWordThatWas(actor) {
+  return _openSomaBreakAbility(actor, "clWordThatWas", "Word That Was",
+    "Retroactively re-narrate one of your misfires as if the manifestation had succeeded at one tier lower than the one you spent for. Pay the lower tier's base upkeep instead.");
+}
+
+// Generic tier-uses-per-Soma-Break dialog. Tracks `spent` count on
+// `flags.fourththing.disciplineSpent.<key>` (number); resets to 0 on Soma
+// Break (auto-reset wired in module.js somaBreak action) or via the in-dialog
+// Reset button. Max uses = actor.system.details.tier (1–4). Authored to
+// support PB/Long Rest abilities like Noosphere Hook (2026-04-29).
+async function _openTierUsesPerSomaBreak(actor, key, label, body, onUse) {
+  const tier      = Math.max(1, Number(actor.system?.details?.tier ?? 1));
+  const maxUses   = tier;
+  const spent     = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0);
+  const remaining = Math.max(0, maxUses - spent);
+
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${remaining} / ${maxUses} uses remaining</b> (refresh on Soma Break)</p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      use: {
+        label: "Use (-1)",
+        callback: async () => {
+          if (remaining <= 0) {
+            ui.notifications.warn(`${label}: out of uses — refresh on Soma Break.`);
+            return;
+          }
+          await actor.setFlag("fourththing", `disciplineSpent.${key}`, spent + 1);
+          if (typeof onUse === "function") await onUse(actor);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label}</span></div>
+              <p style="font-size:0.78rem;opacity:0.85">Use ${spent + 1} / ${maxUses}</p>
+              <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+            </div>`
+          });
+        }
+      },
+      reset: {
+        label: "Reset (Soma Break)",
+        callback: () => actor.setFlag("fourththing", `disciplineSpent.${key}`, 0)
+      },
+      close: { label: "Close" }
+    },
+    default: "use"
+  }).render(true);
+}
+
+// Generic 1/scene ability dialog. Tracks 'used' state on actor flag under
+// `fourththing.scenePerUse.<key>`; player clears it on scene change (or via the
+// Reset button). Same shape as _openSomaBreakAbility but a separate flag
+// namespace so a Soma Break doesn't reset scene abilities and vice versa.
+async function _openPerSceneAbility(actor, key, label, body, onUse) {
+  const used = Boolean(actor.getFlag("fourththing", `scenePerUse.${key}`));
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${used ? "SPENT — refresh on new scene" : "AVAILABLE"}</b></p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      use: {
+        label: "Use",
+        callback: async () => {
+          if (used) {
+            ui.notifications.warn(`${label}: already spent — reset on new scene.`);
+            return;
+          }
+          await actor.setFlag("fourththing", `scenePerUse.${key}`, true);
+          if (typeof onUse === "function") await onUse(actor);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label}</span></div>
+              <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+            </div>`
+          });
+        }
+      },
+      reset: {
+        label: "Reset (New Scene)",
+        callback: () => actor.setFlag("fourththing", `scenePerUse.${key}`, false)
+      },
+      close: { label: "Close" }
+    },
+    default: "use"
+  }).render(true);
+}
+
+// ─── Buried per-use abilities — Phase 1: Ancestry cores (2026-04-27) ──────────
+
+export async function openMenhirkinHexRecognition(actor) {
+  return _openPerSceneAbility(actor, "menhirkinHexRecognition",
+    "Hex Recognition (Menhirkin Core)",
+    "While on a natural surface you are directly touching, whisper a single question about the place. The GM answers with one true thing the land knows.");
+}
+
+export async function openEchoDiverTemporalFlinch(actor) {
+  return _openPerSceneAbility(actor, "echoDiverTemporalFlinch",
+    "Temporal Flinch (Echo-Diver Core)",
+    "Reaction. When you or an ally within 10 ft would be hit by an attack you can see, shift them 5 ft. If that moves them out of range or line of sight, the attack misses.");
+}
+
+export async function openSephirotScionAttunement(actor) {
+  return _openPerSceneAbility(actor, "scionSefirotAttunement",
+    "Sefirot Attunement (Sephirotic Scion Core)",
+    "Invoke your chosen sephirah's register for +1 rank bonus on a check clearly in its domain. (Pick the sephirah at character creation; the bonus is on top of normal rank.)");
+}
+
+export async function openQliphScarredSaturation(actor) {
+  return _openPerSceneAbility(actor, "qliphScarredSaturation",
+    "Qliphothic Saturation (Qliph-Scarred Core)",
+    "Reroll a failed Soul check — but the scene's Darkness-gain count goes up by 1. The scar pays for what the scar saves. (GM: tick scene Darkness on use.)");
+}
+
+// ─── Buried per-use abilities — Phase 2 helpers (2026-04-27) ──────────────
+
+// Pure information dialog for trigger-based abilities with no daily cap.
+// Used for things like Sun-Scar (fires whenever you succeed a save) where
+// there's nothing to track — players just need to remember the ability exists.
+async function _openInfoOnlyAbility(actor, label, body) {
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>PASSIVE TRIGGER — fires on the trigger condition, no daily cap</b></p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      announce: {
+        label: "Announce in Chat",
+        callback: () => {
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label}</span></div>
+              <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+            </div>`
+          });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "close"
+  }).render(true);
+}
+
+// Two-stage bank/spend ability dialog (for Heat Memory: bank fire damage you
+// take, then later spend it as a bonus action for +1d10 fire on next attack).
+// State stored as a number under `fourththing.bankSpend.<key>`.
+async function _openBankSpendAbility(actor, key, label, body, opts = {}) {
+  const banked = Number(actor.getFlag("fourththing", `bankSpend.${key}`) ?? 0);
+  const bankLabel  = opts.bankLabel  ?? "Bank +1";
+  const spendLabel = opts.spendLabel ?? "Spend";
+  const max        = opts.max        ?? 99;
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Banked: <b>${banked}</b></p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      bank: {
+        label: bankLabel,
+        callback: async () => {
+          const next = Math.min(max, banked + 1);
+          await actor.setFlag("fourththing", `bankSpend.${key}`, next);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">✶ ${label} — Banked (${next} stored)</span></div></div>`
+          });
+        }
+      },
+      spend: {
+        label: spendLabel,
+        callback: async () => {
+          if (banked <= 0) {
+            ui.notifications.warn(`${label}: nothing banked to spend.`);
+            return;
+          }
+          await actor.setFlag("fourththing", `bankSpend.${key}`, banked - 1);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label} — Spent (${banked - 1} remaining)</span></div>
+              <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+            </div>`
+          });
+        }
+      },
+      reset: {
+        label: "Reset (Soma Break)",
+        callback: () => actor.setFlag("fourththing", `bankSpend.${key}`, 0)
+      },
+      close: { label: "Close" }
+    },
+    default: "spend"
+  }).render(true);
+}
+
+// ─── Phase 2 handlers ─────────────────────────────────────────────────────────
+
+// Menhirkin Igneous: picker exposing both Hex Recognition (from core) and
+// Heat Memory (heritage-unique). Each row links to its own dialog.
+export async function openMenhirkinIgneousPicker(actor) {
+  const hexUsed = Boolean(actor.getFlag("fourththing", "scenePerUse.menhirkinHexRecognition"));
+  const heatBanked = Number(actor.getFlag("fourththing", "bankSpend.menhirkinIgneousHeat") ?? 0);
+  new Dialog({
+    title: "Menhirkin (Igneous) — Per-Use Abilities",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.5rem;opacity:0.85">Pick which per-use ability to invoke. Each tracks its own state.</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem">
+        <div style="border:1px solid #6a8caa;border-radius:0.3rem;padding:0.45rem 0.6rem">
+          <div style="font-size:0.85rem"><strong>Hex Recognition</strong> <span style="opacity:0.7;font-size:0.75rem">(Menhirkin Core, 1/scene, Action)</span></div>
+          <div style="font-size:0.78rem;opacity:0.85">Status: <b>${hexUsed ? "SPENT — refresh on new scene" : "AVAILABLE"}</b></div>
+        </div>
+        <div style="border:1px solid #c08e6a;border-radius:0.3rem;padding:0.45rem 0.6rem">
+          <div style="font-size:0.85rem"><strong>Heat Memory</strong> <span style="opacity:0.7;font-size:0.75rem">(Igneous heritage, bank/spend, 1/SB)</span></div>
+          <div style="font-size:0.78rem;opacity:0.85">Banked heat: <b>${heatBanked}</b></div>
+        </div>
+      </div>
+    </div>`,
+    buttons: {
+      hex:  { label: "Hex Recognition…", callback: () => openMenhirkinHexRecognition(actor) },
+      heat: { label: "Heat Memory…",     callback: () => openMenhirkinIgneousHeatMemory(actor) },
+      close: { label: "Close" }
+    },
+    default: "close"
+  }).render(true);
+}
+
+export async function openMenhirkinIgneousHeatMemory(actor) {
+  return _openBankSpendAbility(actor, "menhirkinIgneousHeat",
+    "Heat Memory (Menhirkin Igneous)",
+    "Bank fire damage you take, then spend banked heat as a bonus action to add +1d10 exploding energy damage (fire) to your next weapon attack, unarmed strike, or grapple that connects. All banked heat clears on Soma Break.",
+    { bankLabel: "Bank Fire Damage (+1)", spendLabel: "Spend (Bonus Action, +1d10 fire)" });
+}
+
+export async function openOldenbornRustlandPatch(actor) {
+  return _openSomaBreakAbility(actor, "oldenbornRustlandPatch",
+    "Patch & Repurpose (Oldenborn Rustland Scavenger)",
+    "1/Soma Break: while taking a Soma Break in a ruin or wreckage hex, recover one expended consumable (bandage, filter, torch, ration) by scavenging.");
+}
+
+export async function openFurrykinPredatorPatience(actor) {
+  return _openSomaBreakAbility(actor, "furrykinPredatorPatience",
+    "Predator Patience (Furrykin: Felid)",
+    "1/Soma Break: treat a failed attack roll as a hit. Describe the perfect timing.");
+}
+
+export async function openOldenbornPhoenixOath(actor) {
+  return _openSomaBreakAbility(actor, "oldenbornPhoenixOath",
+    "Phoenix Oath (Oldenborn: Ember-Touched)",
+    "1/Soma Break, when you would drop to 0 HP: instead drop to 1 HP and erupt in a controlled blaze. Each hostile creature within 10 ft takes 2d6 + PB fire damage, and you immediately end one condition affecting you (charmed, frightened, or restrained).");
+}
+
+export async function openOldenbornHearthDominion(actor) {
+  return _openSomaBreakAbility(actor, "oldenbornHearthDominion",
+    "Hearth Dominion (Oldenborn: Ember-Touched)",
+    "1/Soma Break, over 1 minute, sanctify a fire or heat-source. Allies who rest within 30 ft regain an extra Hit Die and have advantage on saves vs. fear until their next Soma Break.");
+}
+
+export async function openOldenbornSunScar(actor) {
+  return _openInfoOnlyAbility(actor,
+    "Sun-Scar (Oldenborn: Ember-Touched)",
+    "Passive trigger — when you succeed on a saving throw, you may deal psychic damage equal to your proficiency bonus to a creature within 10 ft (your aura flares). No daily cap; player choice on each save success.");
+}
+
+// ─── Phase 3 — Species multi-ability pickers (2026-04-27) ─────────────────────
+
+export async function openCircuitbornAbilities(actor) {
+  const arUsed = Boolean(actor.getFlag("fourththing", "disciplineUsed.circuitbornAttentionResonance"));
+  new Dialog({
+    title: "Circuitborn — Per-Use Abilities",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.5rem;opacity:0.85">Circuitborn carry two per-use powers. Each tracks its own state.</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem">
+        <div style="border:1px solid #6a8caa;border-radius:0.3rem;padding:0.45rem 0.6rem">
+          <div style="font-size:0.85rem"><strong>Attention Resonance</strong> <span style="opacity:0.7;font-size:0.75rem">(1/Soma Break, GM-triggered)</span></div>
+          <div style="font-size:0.78rem;opacity:0.85">Status: <b>${arUsed ? "SPENT — refresh on Soma Break" : "AVAILABLE"}</b></div>
+        </div>
+        <div style="border:1px solid #c08e6a;border-radius:0.3rem;padding:0.45rem 0.6rem">
+          <div style="font-size:0.85rem"><strong>Glitch-Surge</strong> <span style="opacity:0.7;font-size:0.75rem">(passive — fires when you drop to 0 HP)</span></div>
+          <div style="font-size:0.78rem;opacity:0.85">Status: <b>passive trigger, no tracking</b></div>
+        </div>
+      </div>
+    </div>`,
+    buttons: {
+      ar: { label: "Attention Resonance…", callback: () => openCircuitbornAttentionResonance(actor) },
+      gs: { label: "Glitch-Surge…",        callback: () => openCircuitbornGlitchSurge(actor) },
+      close: { label: "Close" }
+    },
+    default: "close"
+  }).render(true);
+}
+
+export async function openCircuitbornAttentionResonance(actor) {
+  return _openSomaBreakAbility(actor, "circuitbornAttentionResonance",
+    "Attention Resonance (Circuitborn)",
+    "1/Soma Break: when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), choose either (a) regain one spent BBTTCC OP from a category you used this scene, or (b) regain HP equal to your proficiency bonus.");
+}
+
+export async function openCircuitbornGlitchSurge(actor) {
+  return _openInfoOnlyAbility(actor,
+    "Glitch-Surge (Circuitborn)",
+    "Passive trigger — when you drop to 0 HP, you may emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In BBTTCC play, this is a perfect excuse for weird narrative consequences. (GM-adjudicated; no daily cap.)");
+}
+
+export async function openHumanAbilities(actor) {
+  const adaptiveUsed = Boolean(actor.getFlag("fourththing", "disciplineUsed.humanAdaptive"));
+  new Dialog({
+    title: "Human — Per-Use Abilities",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.5rem;opacity:0.85">Humans carry two per-use powers. Each tracks its own cadence.</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem">
+        <div style="border:1px solid #6a8caa;border-radius:0.3rem;padding:0.45rem 0.6rem">
+          <div style="font-size:0.85rem"><strong>Adaptive</strong> <span style="opacity:0.7;font-size:0.75rem">(1/Soma Break, on failed save)</span></div>
+          <div style="font-size:0.78rem;opacity:0.85">Status: <b>${adaptiveUsed ? "SPENT — refresh on Soma Break" : "AVAILABLE"}</b></div>
+        </div>
+        <div style="border:1px solid #c08e6a;border-radius:0.3rem;padding:0.45rem 0.6rem">
+          <div style="font-size:0.85rem"><strong>Tenacious</strong> <span style="opacity:0.7;font-size:0.75rem">(1/round while at 1 HP, declare before roll)</span></div>
+          <div style="font-size:0.78rem;opacity:0.85">Status: <b>conditional — only available at 1 HP</b></div>
+        </div>
+      </div>
+    </div>`,
+    buttons: {
+      adaptive:  { label: "Adaptive…",  callback: () => openHumanAdaptive(actor) },
+      tenacious: { label: "Tenacious…", callback: () => openHumanTenacious(actor) },
+      close: { label: "Close" }
+    },
+    default: "close"
+  }).render(true);
+}
+
+export async function openHumanAdaptive(actor) {
+  return _openSomaBreakAbility(actor, "humanAdaptive",
+    "Adaptive (Human)",
+    "1/Soma Break: when you fail a saving throw, choose to succeed instead.");
+}
+
+export async function openHumanTenacious(actor) {
+  return _openInfoOnlyAbility(actor,
+    "Tenacious (Human)",
+    "Conditional trigger — while you have exactly 1 HP, you have advantage on one check of your choice each round. Declare which check before rolling. (No tracking flag — only available when at 1 HP.)");
+}
+
+export async function openStormbornWardOfTheGale(actor) {
+  return _openSomaBreakAbility(actor, "stormbornWardOfTheGale",
+    "Ward of the Gale (Stormborn Nomad)",
+    "1/Soma Break: when you would take environmental damage (storm, heat, hazard, etc.), use your reaction to reduce that damage to half until the start of your next turn.");
+}
+
+// ─── Phase 4 — Character Options (Archetypes / Crews / Occult) (2026-04-27) ───
+
+// Generic per-cadence dialog. Same shape as _openSomaBreakAbility but the
+// reset label is parameterized so we can reuse for 1/scenario, 1/strategic
+// turn, 1/Soma Break, etc. Flag namespace is also configurable so different
+// cadences don't stomp on each other.
+async function _openPerCadenceAbility(actor, key, label, body, opts = {}) {
+  const ns          = opts.flagNamespace ?? "perCadence";
+  const cadenceText = opts.cadenceText   ?? "this cadence";
+  const resetLabel  = opts.resetLabel    ?? "Reset";
+  const used = Boolean(actor.getFlag("fourththing", `${ns}.${key}`));
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${used ? `SPENT — refresh ${cadenceText}` : "AVAILABLE"}</b></p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      use: {
+        label: "Use",
+        callback: async () => {
+          if (used) {
+            ui.notifications.warn(`${label}: already spent — reset ${cadenceText}.`);
+            return;
+          }
+          await actor.setFlag("fourththing", `${ns}.${key}`, true);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label}</span></div>
+              <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+            </div>`
+          });
+        }
+      },
+      reset: {
+        label: resetLabel,
+        callback: () => actor.setFlag("fourththing", `${ns}.${key}`, false)
+      },
+      close: { label: "Close" }
+    },
+    default: "use"
+  }).render(true);
+}
+
+// Data-driven dispatch table for character-options items. Each entry maps
+// item.system.identifier → { type, label, body }. The route name
+// "char_opt_lookup" funnels to a single handler that does the lookup.
+//
+// `type` values:
+//   - "scene"          → _openPerSceneAbility (player resets on scene change)
+//   - "soma-break"     → _openSomaBreakAbility (player resets on Soma Break)
+//   - "strategic-turn" → _openPerCadenceAbility (faction-cadence)
+//   - "scenario"       → _openPerCadenceAbility (campaign-cadence)
+//   - "info"           → _openInfoOnlyAbility (passive trigger, no tracking)
+//
+// Travel Engine v2 metadata (Phase B+C+E3, 2026-05-10/11):
+//   - `travel: true`           → surfaces in the Travel Console's Vanguard
+//                                 Abilities panel.
+//   - `mitigates: [...tags]`   → the ability negates / reduces the listed
+//                                 hazard tags. Cross-referenced against weather
+//                                 archetype `tags` and (future) terrain tags.
+//   - `vanguardMasks: [...tags]` → the ability obscures the stack from the
+//                                 listed detection aspects. Narrative today
+//                                 (GM arbitrates); future Phase E3+ may wire
+//                                 per-aspect detection mechanics.
+// Canonical mitigation tags:
+//   "weather"     — any weather (catch-all, matches every WEATHER_ARCHETYPES tag)
+//   "fog"         — memory_fog and similar
+//   "storm"       — qliphoth_storm and other storm archetypes
+//   "toxic"       — dustfront, contaminated weather
+//   "ley"         — ley_updraft / leyline disturbance
+//   "qliphothic"  — qliphothic-tagged weather, corrupted-terrain effects
+//   "terrain"     — terrain hazards / difficult-terrain penalties
+//   "radiation"   — RP-delta hazards
+//   "encounter"   — meta: reroll/manipulate the encounter roll itself
+// Canonical vanguardMasks tags:
+//   "identity"    — names, faces, factional affiliation, magical signatures
+//   "scry"        — remote viewing / clairvoyance / crystal-ball lookups
+//   "divination"  — wards, alarms, future-sight, oracular sweeps
+//   "tracks"      — physical trail / footprints / scent
+//   "sound"       — silent passage
+//   "sight"       — visual concealment / camouflage / shadow
+//   "thermal"     — heat / aura / energetic-signature detection
+//
+export const CHAR_OPT_ABILITIES = {
+  // ── Archetypes (9) ────────────────────────────────────────────────────────
+  "archetype-wheel-of-fortune-t2": {
+    type: "strategic-turn",
+    label: "Wheel of Fortune — Tilt the Table (Tier 2)",
+    body: "Strategic: Once per strategic turn, after any random table roll, encounter roll, or variable-outcome result is revealed, your faction may shift the result one step up or down the table, if a legal adjacent result exists."
+  },
+  "archetype-wheel-of-fortune-t3": {
+    type: "soma-break",
+    label: "Wheel of Fortune — Treat as 10 (Tier 3)",
+    body: "Tactical: Once per Soma Break, when you miss with an attack or fail an ability check, treat the roll as a 10 before modifiers."
+  },
+  "archetype-wheel-of-fortune-t4": {
+    type: "strategic-turn", travel: true, mitigates: ["encounter"],
+    label: "Wheel of Fortune — Force the Reroll (Tier 4)",
+    body: "Strategic: Once per strategic turn, after an outcome is revealed on a raid, campaign beat, travel encounter, or crisis table, your faction may force a reroll OR choose between the rolled outcome and the rerolled one."
+  },
+  "archetype-moon-t3": {
+    type: "soma-break",
+    label: "The Moon — Detect Thoughts (Tier 3)",
+    body: "Tactical: Once per Soma Break, cast Detect Thoughts without expending Clarity. (You also have permanent advantage on saves vs. being charmed — no cap.)"
+  },
+  "archetype-hanged-man-t3": {
+    type: "soma-break",
+    label: "The Hanged Man — Reroll Failed Save (Tier 3)",
+    body: "Tactical: Once per Soma Break, when you fail a saving throw against being charmed, frightened, or restrained, immediately reroll it."
+  },
+  "archetype-hanged-man-t4": {
+    type: "strategic-turn",
+    label: "The Hanged Man — Sacrifice Refund (Tier 4)",
+    body: "Strategic: Once per strategic turn, after a failed raid, intrigue action, or diplomatic action, your faction may immediately regain 1 spent OP of the type used and apply +1 to its next related strategic roll."
+  },
+  "archetype-temperance-t2": {
+    type: "info",
+    label: "Temperance — Overflow Retention (Tier 2)",
+    body: "Strategic (passive, fires each turn): Retain 1 overflow OP per turn that would otherwise be lost. No daily cap; auto-applies — this card is a reminder of the rule."
+  },
+  "archetype-star-t3": {
+    type: "soma-break",
+    label: "The Star — Hopebringer Aura (Tier 3)",
+    body: "Tactical: Once per Soma Break during a major scene or encounter, allies within earshot who can see or hear you have advantage on saving throws against being frightened."
+  },
+  "archetype-sun-t3": {
+    type: "soma-break",
+    label: "The Sun — Beacon Aura (Tier 3)",
+    body: "Tactical: Once per Soma Break during a major scene or encounter, allies within earshot who can see or hear you have advantage on saving throws against being frightened or charmed."
+  },
+
+  // ── Crews (3) ─────────────────────────────────────────────────────────────
+  "crew-storm-wardens-t2": {
+    type: "strategic-turn", travel: true, mitigates: ["weather"],
+    label: "Storm Wardens — Weather Veto (Tier 2)",
+    body: "Strategic: Once per strategic turn, your faction can suppress, blunt, or redirect a weather-based hazard affecting a local route, hex, or operation."
+  },
+  "crew-gridbreakers-t3": {
+    type: "strategic-turn",
+    label: "Gridbreakers — Reactivate Dormant Asset (Tier 3)",
+    body: "Strategic: Once per strategic turn, temporarily reactivate a dormant urban asset, granting a short-lived but meaningful local benefit."
+  },
+  "crew-cultural-ambassadors-t4": {
+    type: "strategic-turn",
+    label: "Cultural Ambassadors — Soft Annex (Tier 4)",
+    body: "Strategic: Once per strategic turn, attempt to shift the alignment of an adjacent neutral Hex toward your faction's political affiliation without spending OPs."
+  },
+
+  // ── Occult Associations (27) ──────────────────────────────────────────────
+  "occult-association-kabbalist-t1": {
+    type: "soma-break",
+    label: "Kabbalist — Sense the Leak (Tier 1)",
+    body: "Tactical: Once per Soma Break, cast Detect Evil and Good (flavored as sephirothic flow / qliphothic pressure). Hex Read on entry is passive; +3 Soft Power OP rolls is passive."
+  },
+  "occult-association-kabbalist-t3": {
+    type: "scenario",
+    label: "Kabbalist — Read the Rot (Tier 3)",
+    body: "Strategic: Once per Scenario involving Qliphothic forces or corrupted Hex conditions, gain Advantage on one relevant Strategic Roll, chosen when you roll."
+  },
+  "occult-association-shaman-t1": {
+    type: "strategic-turn", travel: true,
+    label: "Shaman — Hex Attunement (Tier 1)",
+    body: "Strategic: Once per Strategic Turn, gain +1 to one relevant travel, terrain, or wilderness-facing OP roll. (Hex Attunement on entry is passive.)"
+  },
+  "occult-association-shaman-t2": {
+    type: "strategic-turn", travel: true, mitigates: ["weather", "terrain"],
+    label: "Shaman — Read the Path (Tier 2)",
+    body: "Strategic: Once per Strategic Turn when your faction faces travel hazard, severe weather, or terrain difficulty: reduce one weather/terrain complication by one step OR gain Advantage on one travel/wilderness Strategic Roll."
+  },
+  "occult-association-shaman-t3": {
+    type: "scenario", travel: true, mitigates: ["terrain", "qliphothic", "ley"],
+    label: "Shaman — Spirit-Walk (Tier 3)",
+    body: "Strategic: Once per Scenario involving corrupted terrain, distressed leyline flow, unnatural weather, or spirit unrest: gain Advantage on one relevant Strategic Roll, OR negate one terrain- / corruption-based penalty for that Scene or operation."
+  },
+  "occult-association-shaman-t4": {
+    type: "strategic-turn", travel: true, mitigates: ["weather", "terrain", "ley", "qliphothic"],
+    label: "Shaman — Stabilize the Hex (Tier 4)",
+    body: "Strategic: Once per Strategic Turn, target one Hex your faction occupies/traverses/affects: temporarily stabilize a distressed leyline or hostile environmental state for one Scenario or operation, OR reduce a corruption/weather/terrain pressure by one significant step."
+  },
+  "occult-association-tarot-mage-t1": {
+    type: "soma-break",
+    label: "Tarot Mage — Draw the Line (Tier 1, Tactical)",
+    body: "Tactical: Once per Soma Break, before making an ability check, draw the line of fate early and gain Advantage on that check. (Strategic +2 Intrigue/turn is a separate Strategic Turn cadence — see the Strategic side.)"
+  },
+  "occult-association-tarot-mage-t2": {
+    type: "scenario",
+    label: "Tarot Mage — Tilt the Draw (Tier 2)",
+    body: "Strategic: Once per Scenario, after a key faction check is rolled but before consequences fully resolve, tilt the draw and add +2 to the result, OR reduce the severity of one failed narrative consequence by one step (GM adjudicated)."
+  },
+  "occult-association-tarot-mage-t3": {
+    type: "soma-break",
+    label: "Tarot Mage — Foretelling Roll (Tier 3, Tactical)",
+    body: "Tactical: When you finish a Soma Break, roll a d20 and record the number. Once per Soma Break, replace any attack roll, save, or ability check (yours or a creature you can see) with this foretelling roll, declared before the roll."
+  },
+  "occult-association-tarot-mage-t4": {
+    type: "scenario",
+    label: "Tarot Mage — Force the Reroll (Tier 4)",
+    body: "Strategic: During Enemy Faction Turns (Phase 3), spend 5 Intrigue OP to force the GM to reroll one NPC faction's strategic action outcome and take the new result. Use sparingly — backlash, omen debt, hostile synchronicity guaranteed."
+  },
+  "occult-association-alchemist-t1": {
+    type: "strategic-turn",
+    label: "Alchemist — Production Reliability (Tier 1)",
+    body: "Strategic: Once per Strategic Turn, when your faction spends Economy OP on production, infrastructure, or supply stabilization, reduce that spend by 1 (minimum 1)."
+  },
+  "occult-association-alchemist-t2": {
+    type: "strategic-turn",
+    label: "Alchemist — Propaganda Distillate (Tier 2)",
+    body: "Strategic: Once per Strategic Turn, convert 3 Economy OP → 3 Soft Power OP, OR 3 Soft Power OP → 3 Economy OP. Does not count as OP generation. Leaves narrative residue."
+  },
+  "occult-association-alchemist-t4": {
+    type: "strategic-turn",
+    label: "Alchemist — Elixir of Fortitude (Tier 4)",
+    body: "Strategic: Once per Strategic Turn, spend 5 Economy OP. Choose one OP category (Violence/Non-Lethal/Intrigue/Soft Power/Diplomacy): that category gains +3 OP for the duration of one Scenario. Unspent bonus OP is lost when scenario ends."
+  },
+  "occult-association-goetic-summoner-t3": {
+    type: "strategic-turn",
+    label: "Goetic Summoner — Binding Posture (Tier 3)",
+    body: "Strategic: Once per Strategic Turn before a Scenario begins, declare a Binding Posture: gain +3 to a single Intrigue OP roll made during that Scenario. (If you fail a key check, GM may introduce a binding-tied complication.)"
+  },
+  "occult-association-goetic-summoner-t4": {
+    type: "scenario",
+    label: "Goetic Summoner — Major Binding (Tier 4)",
+    body: "Strategic: After your faction defeats a major Qliphothic entity in a Scenario, attempt to bind it: spend 10 Intrigue OP and make a GM-adjudicated Strategic Roll. Success: bound asset granting +5 to Violence or Intrigue OP rolls while bound. Failure: entity escapes with a grudge."
+  },
+  "occult-association-prophet-oracle-t1": {
+    type: "soma-break",
+    label: "Prophet/Oracle — Omen Question (Tier 1, Tactical)",
+    body: "Tactical: Once per Soma Break, ask the GM one focused omen-question about an immediate situation, route, or known danger. Answer is truthful but limited / symbolic / pressure-based."
+  },
+  "occult-association-prophet-oracle-t2": {
+    type: "scenario",
+    label: "Prophet/Oracle — Bias the Arrival (Tier 2)",
+    body: "Strategic: Once per Scenario, when an encounter, complication, or emerging situation is about to be introduced, ask the GM to bias it toward one broad category: warning / negotiation / hazard / omen / hostile contact / opportunity."
+  },
+  "occult-association-prophet-oracle-t3": {
+    type: "soma-break",
+    label: "Prophet/Oracle — Foreseen Failure (Tier 3, Tactical)",
+    body: "Tactical: Once per Soma Break, before a roll is made, declare a creature/ally/visible event-thread and grant Advantage on one attack, save, or check tied to avoiding a meaningful failure."
+  },
+  "occult-association-prophet-oracle-t4": {
+    type: "strategic-turn",
+    label: "Prophet/Oracle — Major Foresight (Tier 4)",
+    body: "Strategic: Once per Strategic Turn, ask the GM one major foresight question about an impending threat, faction move, complication, or fracture point. Answer is truthful, possibly symbolic / partial / framed as pressure. (Tier 4 also unlocks 1/Scenario unusually-accurate prep — track separately.)"
+  },
+  "occult-association-exorcist-t2": {
+    type: "strategic-turn",
+    label: "Exorcist — Reduce Darkness (Tier 2)",
+    body: "Strategic: Once per Strategic Turn, reduce Darkness or corruption pressure in a Hex by one step, OR remove one minor corruption effect from a scenario."
+  },
+  "occult-association-exorcist-t3": {
+    type: "scenario",
+    label: "Exorcist — Negate Corruption (Tier 3)",
+    body: "Strategic: Once per Scenario, negate one corruption-based penalty or hostile effect. (Permanent advantage on rolls involving purification / stabilization / resisting Darkness is passive.)"
+  },
+  "occult-association-exorcist-t4": {
+    type: "strategic-turn",
+    label: "Exorcist — Major Purge (Tier 4)",
+    body: "Strategic: Once per Strategic Turn, fully purge a major corruption event, Qliphothic effect, or Darkness spike, OR negate a major hostile environmental / metaphysical threat."
+  },
+  "occult-association-biomancer-t1": {
+    type: "strategic-turn",
+    label: "Biomancer — Reduce Survival Penalty (Tier 1)",
+    body: "Strategic: Once per Strategic Turn, reduce one survival, hazard, or casualty-related penalty by one step. (Permanent advantage vs. poison/disease/environmental hazards is passive.)"
+  },
+  "occult-association-biomancer-t2": {
+    type: "scenario",
+    label: "Biomancer — Casualty Conversion (Tier 2)",
+    body: "Strategic: Once per Scenario, reduce casualty severity for your faction by one step, OR convert a catastrophic loss into a contained loss with consequences."
+  },
+  "occult-association-biomancer-t4": {
+    type: "strategic-turn",
+    label: "Biomancer — Negate Crisis (Tier 4)",
+    body: "Strategic: Once per Strategic Turn, negate a major environmental, casualty, or biological crisis affecting your faction, OR convert a lethal condition into a survivable but transformed state."
+  },
+  "occult-association-gnostic-t3": {
+    type: "scenario",
+    label: "Gnostic — Ignore Deception (Tier 3)",
+    body: "Strategic: Once per Scenario, your faction may automatically ignore a single deception-based complication without spending OPs. (Permanent immunity to magical charm + advantage on Insight to detect deception is passive.)"
+  },
+  "occult-association-rosicrucian-t3": {
+    type: "strategic-turn",
+    label: "Rosicrucian — Bypass Bureaucracy (Tier 3)",
+    body: "Strategic: Once per Strategic Turn, negate a single 'lost time' complication caused by bureaucracy, checkpoints, or local authorities during a Diplomacy-forward operation. (Securing safe shelter/cover/passage in GenPop hexes is passive — no OP spend.)"
+  },
+
+  // ── Phase 6: Ancestry core trait abilities (2026-04-27) ───────────────────
+  // Items whose description text already references 1/Soma Break powers but
+  // had no per-use picker wired. Adds the ▶ button + consumption tracking.
+  "cryptidkin-folklore-frame": {
+    label: "Cryptidkin: Folklore & Frame",
+    abilities: [
+      { key: "folklorePresence", type: "soma-break", level: 1,
+        label: "Folklore Presence",
+        body: "1/Soma Break, when you first meet a community, decide whether the rumors about you arrived first. If yes, reroll the lowest die on your first Diplomacy (Presence) or Intimidation (Presence) check with anyone in that community (your choice which skill, declared when you roll). The rumor is not always flattering — the GM gets to colour it." },
+      { key: "survivorsInstinct", type: "soma-break", level: 1,
+        label: "Survivor's Instinct",
+        body: "1/Soma Break, when you would drop to 0 Integrity, you may instead drop to 1 Integrity and gain one level of Stress." }
+    ]
+  },
+
+  // ── Action-economy surfacing pass 2026-05-04 ──────────────────────────────
+  // Heritage card with [TODO(adv-call)] marker — Bulwark Frame is the reaction
+  // surfaced on the Circuitborn Exo-Knight heritage trait. Inferrer auto-tags
+  // actionCost from the "use your reaction" body text. Shield Projector is a
+  // separate Tier I item granted via this heritage's ItemGrant (UUID
+  // 25sAhPJM2icg1WWH); add its identifier here once verified live.
+  "circuitborn_exo_knight_heritage": {
+    type: "soma-break", level: 1,
+    label: "Exo-Knight: Bulwark Frame (1/Soma Break)",
+    body: "Reaction — when an ally within 5 ft of you is hit by an attack, impose roll 3d10 keep lowest 2 on the attack roll."
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Circuitborn ancestry feats (2026-04-29) ─────
+  // Pilot batch from the buried-per-use survey. Identifiers verified in
+  // bbttcc-master-content.ancestry-feats. All `1/Soma Break` except Noosphere
+  // Hook which uses the new `soma-break-tier` mechanic (tier-many uses).
+  "circuitborn-exo-bulwark_protocol": {
+    type: "soma-break", level: 11,
+    label: "Bulwark Protocol (1/Soma Break)",
+    body: "For 1 minute, allies within 10 feet gain +1 Guard and reroll the lowest die on defense checks against being moved or knocked prone. You must remain conscious."
+  },
+  "circuitborn-exo-siegebreaker_frame": {
+    type: "soma-break", level: 17,
+    label: "Siegebreaker Frame (1/Soma Break)",
+    body: "For 1 minute, your attacks ignore resistance to kinetic damage, and you deal double damage to objects and structures. Strategic: your faction treats one Facility target as if its defense tier were 1 lower for a single Raid round (GM / system)."
+  },
+  "circuitborn-parallax-ghost_in_wires": {
+    type: "soma-break", level: 11,
+    label: "Ghost-In-The-Wires (1/Soma Break)",
+    body: "For 10 minutes, you can interface with nearby mechanisms and simple electronics at 30 feet (doors, lights, locks, speakers). Not mind control — remote sabotage and mischief."
+  },
+  "circuitborn-parallax-perfect_misdirection": {
+    type: "soma-break", level: 17,
+    label: "Perfect Misdirection (1/Soma Break)",
+    body: "For 1 minute, hostile creatures must roll 3d10 keep lowest 2 on attacks against you unless they succeed a Soul check at the start of their turn (DC 8 + tier + Intrigue). Once per minute you may force a ranged attack to miss by 'editing the frame.'"
+  },
+  "circuitborn-salvage-mobile_facility": {
+    type: "soma-break", level: 17,
+    label: "Mobile Facility Node (1/Soma Break)",
+    body: "Over 1 minute, deploy a temporary station (a glowing fold-out altar of tools) that lasts 10 minutes. While active, you and allies within 10 feet reroll the lowest die on crafting, repairing, and disabling devices. Strategic: your faction may treat one Repair Rig or Repair Facility activity as costing 1 less OP once per Turn (GM / system)."
+  },
+  "circuitborn-salvage-patch_logic": {
+    type: "soma-break", level: 11,
+    label: "Patch-Logic Field (1/Soma Break)",
+    body: "For 1 minute, allies within 10 feet reduce damage from hazards (fire, acid, falling debris, radiation bursts) by your tier (minimum 1)."
+  },
+  "circuitborn-salvage-scrap_alchemy": {
+    type: "soma-break", level: 5,
+    label: "Scrap Alchemy (1/Soma Break)",
+    body: "Over 10 minutes, convert junk into a useful component. Choose one: ammunition, a simple tool, a small explosive charge (nonlethal), or a single-use OP chit worth +1 Economy or +1 Logistics for this scene."
+  },
+  "circuitborn-synapse-cognition_crown": {
+    type: "soma-break", level: 17,
+    label: "Cognition Crown (1/Soma Break)",
+    body: "For 1 minute, you gain resistance to psychic damage and reroll the lowest die on all Mind and Soul checks. Once during the minute you may convert a failed check into a success by 'recompiling' (describe the glitch)."
+  },
+  "circuitborn-synapse-noosphere_hook": {
+    type: "soma-break-tier", level: 11,
+    label: "Noosphere Hook (tier uses / Soma Break)",
+    body: "As an action, lock onto a creature, location, or faction you have observed. For 10 minutes, you know the general direction to it and reroll the lowest die on checks to track it (including digital/social tracking)."
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Cryptidkin ancestry feats (2026-04-29) ──────
+  // Batch 2 from the buried-per-use survey. Identifiers verified in
+  // bbttcc-master-content.ancestries. All `1/Soma Break`. Tier→Level: T1=L5,
+  // T2=L5, T4=L17 (per pilot canon). Crossroads Hare carries TWO independent
+  // 1/Soma Break uses, surfaced via the multi-ability picker.
+  "cryptidkin-chupacabra-blood-drinker": {
+    label: "Cryptidkin (Chupacabra): Blood-Drinker",
+    abilities: [
+      { key: "bloodDrinker", type: "soma-break", level: 5,
+        label: "Blood-Drinker (1/Soma Break)",
+        body: "When you hit a creature with a melee attack, you may bite. Deal 1d6 + Body modifier qliphothic damage on top of the attack's normal damage, and gain temporary Integrity equal to the qliphothic damage dealt." },
+      { key: "hexSense", type: "scene", level: 5,
+        label: "Hex-Sense (1/Scene)",
+        body: "GM-narrative. You can smell magical residue the way most people smell rain. When something supernatural has happened in a place within the last 24 hours, the GM tells you so — and roughly what colour it was." }
+    ]
+  },
+  "cryptidkin-chupacabra-skittering-night-feeder": {
+    label: "Cryptidkin (Chupacabra): Skittering Night-Feeder",
+    abilities: [
+      { key: "firstStrike", type: "soma-break", level: 17,
+        label: "First Strike (1/Soma Break)",
+        body: "When you hit a creature that is surprised, unconscious, restrained, or isolated from its allies, the strike deals an additional 1d6 damage of the weapon's type." },
+      { key: "skitteringHorror", type: "info", level: 17,
+        label: "Skittering Horror (passive)",
+        body: "Climb speed equals walk speed (auto-applied via system.derived.movement). Reroll the lowest die on Stealth (Intrigue) checks made in darkness, ruins, or confined environments — auto-fires; honor-system gate on environment. (Engine note surfaces in chat.)" },
+      { key: "nightFeeder", type: "info", level: 17,
+        label: "Night-Feeder (passive)",
+        body: "Reroll the lowest die on the first attack roll you make against a creature that is surprised, unconscious, restrained, or isolated from its allies — auto-fires on attack rolls; honor-system gate on target state. (Engine note surfaces in chat.)" }
+    ]
+  },
+  "cryptidkin-furrykin-folklore-echo": {
+    type: "soma-break", level: 17,
+    label: "Folklore Echo (1/Soma Break)",
+    body: "Bonus action — for 1 minute or until ended, you become a story. Reroll the lowest die on Stealth (Intrigue) and Intimidation (Presence). Creatures that haven't seen you act before roll 3d10 keep lowest 2 on attacks against you. You can move through any space larger than Tiny without provoking opportunity attacks. Witness descriptions of you stay vague — the rumor takes priority over the witness."
+  },
+  "cryptidkin-furrykin-pack-tongue": {
+    label: "Cryptidkin (Furrykin): Pack Tongue",
+    abilities: [
+      { key: "packTongue", type: "soma-break", level: 5,
+        label: "Pack Tongue (1/Soma Break)",
+        body: "Bonus action — choose one ally within 30 feet who can see or hear you. They reroll the lowest die on the next Diplomacy, Intimidation, Stealth, or Empathy check they make before the start of your next turn." },
+      { key: "denSign", type: "info", level: 5,
+        label: "Den-Sign (passive)",
+        body: "GM-narrative. You can leave a small mark — scent, claw notch, fur knot — that other Furrykin and most beasts will recognize. When you spend 10 minutes searching an area, the GM tells you what kind of marks have already been left there." }
+    ]
+  },
+  "cryptidkin-jackalope-cant-catch-me": {
+    label: "Cryptidkin (Jackalope): Can't Catch Me",
+    abilities: [
+      { key: "cantCatchMe", type: "soma-break", level: 5,
+        label: "Can't Catch Me (1/Soma Break)",
+        body: "Bonus action — take the Dash or Disengage action." },
+      { key: "lightFooted", type: "info", level: 5,
+        label: "Light-Footed (passive)",
+        body: "Difficult terrain caused by undergrowth, brush, snow drifts, or scrap-strewn ground does not slow you. You can move along narrow ledges, fences, branches, or rooftops at full speed without making a check unless they are actively crumbling." }
+    ]
+  },
+  "cryptidkin-jackalope-crossroads-hare": {
+    label: "Cryptidkin (Jackalope): Crossroads Hare",
+    abilities: [
+      { key: "vanish", type: "soma-break", level: 17,
+        label: "Crossroads Hare (Vanish)",
+        body: "1/Soma Break, when you would be reduced to 0 Integrity, you may instead vanish into the place between places. At the start of your next turn, you reappear in any unoccupied space within 1 mile that you have personally visited and clearly remember, with 1 Integrity and one level of Stress. You leave behind a single recognizable token at the spot you vanished from — a horn, a tuft of fur, a footprint that wasn't there before." },
+      { key: "rumorRunsFaster", type: "soma-break", level: 17,
+        label: "The Rumor Runs Faster",
+        body: "1/Soma Break, spend 1 minute of focused Clarity hold to ask the GM what one nearby community is currently afraid of. The answer is at least one truth." }
+    ]
+  },
+  "cryptidkin-jackalope-startle-reflex": {
+    type: "soma-break", level: 5,
+    label: "Startle Reflex (1/Soma Break)",
+    body: "Reaction when you are targeted by an attack roll or fail an Intrigue check — move up to 10 feet without provoking opportunity attacks. (Horns of Bad Luck — your natural unarmed strike — is granted as a manifestation when you take the Jackalope heritage.)"
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Echo-Diver ancestry (2026-04-29) ────────────
+  // Batch 3. T1 → L5 per Cryptidkin canon. The species root is a 4-slot
+  // picker (1 active per-use + 3 info passives — matched by passive flags +
+  // condition-immunity grant + initiative bonus on Empyrean tier1).
+  "echo_diver": {
+    label: "Echo-Diver: Time-Sense",
+    abilities: [
+      { key: "temporalFlinch", type: "soma-break", level: 5,
+        label: "Temporal Flinch (1/Soma Break)",
+        body: "Reaction when you or a creature within 10 feet of you would be hit by an attack you can see — move yourself or that creature 5 feet. If this moves the target out of the attack's range or line, the attack misses." },
+      { key: "nicheSurvivor", type: "info", level: 5,
+        label: "Niche Survivor (passive)",
+        body: "You need roughly half the food, water, and air a comparable Medium creature needs. Reroll the lowest die on Body checks against suffocation, starvation, dehydration, or extreme temperature (auto-fires). You can squeeze through gaps and hold stillness that shouldn't work, and you know it." },
+      { key: "vaultSight", type: "info", level: 5,
+        label: "Vault Sight (passive)",
+        body: "Darkvision 60 feet. Reroll the lowest die on Perception checks to notice unstable structure, active traps, trigger plates, load-bearing failures, or Spark / chronoflux residue (auto-fires; honor-system gate on the qualifying targets)." },
+      { key: "cannotBeSurprised", type: "info", level: 5,
+        label: "Cannot Be Surprised (passive)",
+        body: "While conscious, you are immune to the Surprised condition. (Surfaces as an Immunity pill on your defenses block.)" }
+    ]
+  },
+  "echo_diver_abyssal_tier1": {
+    type: "soma-break", level: 5,
+    label: "Tide Recall (1/Soma Break)",
+    body: "Touch a surface, creature, or object. The GM tells you one true thing from its recent past. The lookback window scales with your tier — Tier 1: last 24 hours · Tier 2: last week · Tier 3: last year · Tier 4: anything that ever happened to it. The GM may colour the answer; they may not lie."
+  },
+  "echo_diver_empyrean_tier1": {
+    label: "Echo-Diver (Empyrean): Stormread",
+    abilities: [
+      { key: "stormread", type: "soma-break", level: 5,
+        label: "Stormread (1/Soma Break)",
+        body: "Bonus action — deliver a warning to one willing ally within 30 feet who can hear and understand you. That ally may immediately use their reaction to move up to half their speed without provoking reaction strikes." },
+      { key: "stormreadInitiative", type: "info", level: 5,
+        label: "Stormread Initiative (passive +2)",
+        body: "Flat +2 bonus to initiative — auto-applied via system.derived.initiative.bonus (Phase 4 passive engine)." }
+    ]
+  },
+  "echo_diver_tellurian_tier1": {
+    label: "Echo-Diver (Tellurian): Stone Patience",
+    abilities: [
+      { key: "stonePatience", type: "soma-break", level: 5,
+        label: "Stone Patience (1/Soma Break)",
+        body: "Bonus action — anchor yourself until the start of your next turn. You cannot be moved against your will, knocked Prone, or made Shaken. Forced-movement effects targeting you fail cleanly; the aggressor knows it." },
+      { key: "objectSense", type: "info", level: 5,
+        label: "Object Sense (passive)",
+        body: "You passively know, without rolling, the approximate age and structural integrity of any object you touch." }
+    ]
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Sephirotic Scion ancestry (2026-04-29) ──────
+  // Batch 4. T1 → L5 per Cryptidkin canon. 3 Tier-I feats; species root is
+  // narrative-only (no mechanical per-use slots, skipped).
+  "sephirotic_scion_cherubic_tier1": {
+    type: "soma-break", level: 5,
+    label: "The Gate Knows You (1/Soma Break)",
+    body: "Reaction — when a creature you can see within 30 feet attempts to open, close, lock, unlock, cross, or pass through a door, gate, threshold, ley-line gate, or named boundary, the target rolls 3d10 keep lowest 2 on any check or defense check related to that crossing. The boundary listens to you."
+  },
+  "sephirotic_scion_ophanic_tier1": {
+    type: "soma-break", level: 5,
+    label: "The Wheel Never Stops (1/Soma Break)",
+    body: "When you move at least 10 feet on your turn, as a bonus action take either one weapon attack OR the Dash action. Additional uses per Soma Break cost 1 Surge each (player-managed via Surge controls)."
+  },
+  "sephirotic_scion_seraphic_tier1": {
+    type: "soma-break", level: 5,
+    label: "Cleansing Breath (1/Soma Break)",
+    body: "Action — exhale a 15-foot cone of radiant fire. Each creature in the cone makes an Intrigue check vs. your Resolve. On a failure, take 2d10 exploding sephirotic damage (flavor: holy fire); half on a success. Tier scaling: 3d10 at Tier 2, 4d10 at Tier 3, 5d10 at Tier 4."
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Qliph-Scarred ancestry (2026-04-29) ─────────
+  // Batch 5. T1 → L5 per Cryptidkin canon. 3 Tier-I feats; species root is
+  // narrative-only (skipped). All three are single-slot soma-break per-uses.
+  "qliph_scarred_chthonic_tier1": {
+    type: "soma-break", level: 5,
+    label: "What the Deep Dark Taught You (1/Soma Break)",
+    body: "Bonus action — sink partially into shadow, earth, or stone. For up to 1 minute, while sunken you gain: reroll lowest on Stealth (Intrigue) checks · difficult terrain costs no extra movement · you can move through spaces 1 ft wide · resistance to qliphothic damage. The effect ends early if you are fully submerged in running water or take sephirotic damage."
+  },
+  "qliph_scarred_diabolic_tier1": {
+    type: "soma-break", level: 5,
+    label: "What's Inside You (1/Soma Break)",
+    body: "Action — let the splinter speak. Choose one humanoid you can see within 30 feet who can hear and understand a language you know. They make a Soul check vs. your Resolve. On a failure, they are Calmed by you for 1 minute, or until they take damage or witness you attack them or someone they consider an ally. On a success, they know someone else briefly spoke through your mouth and can describe it to others — they are probably going to tell their friends."
+  },
+  "qliph_scarred_husk_tier1": {
+    type: "soma-break", level: 5,
+    label: "The Quiet Inside (1/Soma Break)",
+    body: "Reaction — when you are targeted by a divination, mind-reading, or truth-detection effect, force the caster to roll their effect against your Resolve instead of its normal save DC. On a failure, the effect returns nothing — no partial information, no awareness that a target was present. On a success, you take 1 point of Stress from the pressure of the probe."
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Menhirkin ancestry (2026-04-29) ─────────────
+  // Batch 6. T1 → L5. 3 Tier-I feats + species root (4-slot picker).
+  // Phase 4 reroll grants stamped on the species root for Stonebound.
+  "menhirkin_igneous_tier1": {
+    type: "soma-break", level: 5,
+    label: "Magma Memory (1/Soma Break)",
+    body: "Reaction when you take energy damage (any flavor) from a single source — bank a portion of the heat. Until your next Soma Break, spend the banked heat as a bonus action to add +2d10 exploding energy damage (flavor: fire) to your next weapon attack or unarmed strike that hits. While the heat is held, reroll the lowest die on Body checks against environmental cold."
+  },
+  "menhirkin_metamorphic_tier1": {
+    label: "Menhirkin (Metamorphic): The Thing You Were",
+    abilities: [
+      { key: "softer", type: "scene", level: 5,
+        label: "Softer (1/Scene)",
+        body: "Bonus action — until the end of your next turn, your movement increases by 10 ft and you reroll the lowest die on Intrigue checks to squeeze or slip past. (Each option of The Thing You Were refreshes on Soma Break — you cannot pick the same option twice before a Soma Break.)" },
+      { key: "older", type: "scene", level: 5,
+        label: "Older (1/Scene)",
+        body: "Bonus action — until the end of your next turn, gain low-light vision 60 ft if you don't already have it, or +30 ft if you do. (Each option refreshes on Soma Break.)" },
+      { key: "wetter", type: "scene", level: 5,
+        label: "Wetter (1/Scene)",
+        body: "Bonus action — until the end of your next turn, you become immune to the Burning and Prone conditions, and difficult terrain does not slow you. (Each option refreshes on Soma Break.)" }
+    ]
+  },
+  "menhirkin_sedimentary_tier1": {
+    type: "soma-break", level: 5,
+    label: "Read the Strata (1/Soma Break)",
+    body: "Spend 10 minutes with a structure, ruin, battlefield, or natural formation older than a century. The GM answers two true questions about it — one about how it was built or formed, and one about the last decade of its occupation or use. Separate from the ancestry's Hex Recognition; they do not share a pool."
+  },
+  "menhirkin": {
+    label: "Menhirkin: Hex-Giant",
+    abilities: [
+      { key: "landMemory", type: "soma-break", level: 5,
+        label: "Land Memory (1/Soma Break)",
+        body: "Lay a hand on any surface older than you and ask it what has happened there. The GM answers with one true thing the land remembers." },
+      { key: "livingRampart", type: "soma-break", level: 5,
+        label: "Living Rampart (1/Soma Break)",
+        body: "Reaction — when a creature you can see targets an ally adjacent to you with an attack, you interpose bulk and bad life choices: the attacker rolls 3d10 keep lowest 2 on that attack roll." },
+      { key: "sentientLand", type: "strategic-turn", level: 5,
+        label: "Sentient Land (1/Strategic Turn)",
+        body: "While standing on a hex your faction controls, consult the hex itself about a pending decision. The GM provides a one-sentence answer from the land's perspective (not the faction's). It is always honest. It is rarely comforting." },
+      { key: "heartstone", type: "info", level: 5,
+        label: "Heartstone (passive)",
+        body: "A fragment of your home hex is literally inside you. While in any hex your faction controls or has claimed: reroll the lowest die on Body checks (auto-fires via reroll grant), and you cannot be forcibly removed from the hex against your will (teleportation, banishment, forced march) without first being reduced to 0 Integrity." }
+    ]
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Human ancestry (2026-04-29) ─────────────────
+  // Batch 7. Levels taken from "Formerly granted at level X" prose where present;
+  // tier→L5/L11/L17 otherwise. Trail-Sovereign carries a 2-slot picker (passive
+  // Athletics reroll + 1/Soma Break group reroll). Other items single-slot.
+  "human_cro_magnon_tier1": {
+    label: "Human (Cro-Magnon): Coalition Tongue",
+    abilities: [
+      { key: "coalitionTongue", type: "soma-break", level: 5,
+        label: "Coalition Tongue (1/Soma Break)",
+        body: "Bonus action — choose one ally within 30 ft who can hear and understand you. Their next attack roll, skill check, or defense check before the start of your next turn is made at +1 rank (max rank 5). Name the thing you said, even if it was wordless." },
+      { key: "symbolicMemory", type: "info", level: 5,
+        label: "Symbolic Memory (passive)",
+        body: "After spending 10 minutes in any inhabited or formerly-inhabited space, you may ask the GM one of: Who lived here? What did they fear? What did they leave? The answer is at least one truth, even if the GM colours it." }
+    ]
+  },
+  "human-cro-magnon-pattern-mind": {
+    type: "soma-break", level: 11,
+    label: "Pattern-Mind (1/Soma Break)",
+    body: "Spend 1 minute observing a situation — a battle line, a marketplace, a council, a storm system, a faction's public posture — then ask the GM one of: 'What is the actual goal here?' · 'What is being deliberately hidden?' · 'Who is about to break first?' The GM gives at least one true answer. They may colour it; they may not lie about it."
+  },
+  "human-cro-magnon-first-fire": {
+    type: "soma-break", level: 17,
+    label: "First Fire (1/Soma Break)",
+    body: "Spend 10 minutes building a coalition fire — a real one, not a metaphor. While it burns and creatures shelter within 30 ft (up to 1 hour, longer if tended): friendly creatures reroll the lowest die on defense checks against being Shaken or Stressed; after a Soma Break taken at the fire, each friendly creature present gains a single banked reroll-lowest they may spend on any check before the next Soma Break. The first time a hostile creature crosses within 30 ft, every friend there knows it. Counts as a defensible camp narratively."
+  },
+  "human-denisovan-peak_anchor": {
+    type: "soma-break", level: 17,
+    label: "Peak-Anchor (1/Soma Break)",
+    body: "Reaction — when you or an ally within 30 ft would be moved or teleported against your will, negate it. The effect fails, and the aggressor takes psychic backlash equal to your tier."
+  },
+  "human-erectus-first_fire": {
+    label: "Human (Erectus): First Fire",
+    abilities: [
+      { key: "firstFire", type: "soma-break", level: 17,
+        label: "First Fire — You Were Never Supposed to Stop (1/Soma Break)",
+        body: "When you would drop to 0 Integrity, instead drop to 1 Integrity and gain temporary Integrity equal to twice your tier. Allies who can see you reroll the lowest die on their next defense check (because you refuse to quit and it's fucking inspiring)." }
+    ]
+  },
+  "human-erectus-trail_sovereign": {
+    label: "Human (Erectus): Trail-Sovereign",
+    abilities: [
+      { key: "trailSovereign", type: "soma-break", level: 11,
+        label: "Trail-Sovereign — Call the Pace (1/Soma Break)",
+        body: "Grant your party a reroll-lowest on a travel-related group check by calling the pace." },
+      { key: "trailSovereignPassive", type: "info", level: 11,
+        label: "Trail-Sovereign (passive)",
+        body: "Reroll the lowest die on Athletics (Body and Violence) checks during chases, escapes, or travel hazards (auto-fires via reroll grant)." }
+    ]
+  },
+  "human-florensis-living_folklore": {
+    type: "soma-break", level: 17,
+    label: "Living Folklore (1/Soma Break)",
+    body: "For 1 minute, you cannot be targeted by opportunity attacks; once per turn you can force an enemy's attack to miss you (reaction) by 'being somewhere else in the story.'"
+  },
+  "human-neanderthal-old_hunt": {
+    type: "soma-break", level: 17,
+    label: "Old Hunt (1/Soma Break)",
+    body: "Choose a target you can see and mark them for 1 hour. You always know the direction to them, and once per turn you deal +tier damage to them when you hit."
+  },
+  "human-neanderthal-protective_instinct": {
+    type: "soma-break-tier", level: 5,
+    label: "Protective Instinct (tier uses / Soma Break)",
+    body: "Reaction — when an ally within 10 ft is hit, reduce the damage by 1d6 + your tier."
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Oldenborn ancestry (2026-04-29) ─────────────
+  // Batch 8 — 14 items. Levels: tier1→L5, tier2→L5, tier3→L11, tier4→L17 per
+  // the "Formerly granted at level X" prose where present. Reroll passives
+  // are stamped via the Phase 4 flag macro; dispatcher carries primary actives.
+  "oldenborn-earthbound-mountain_stance": {
+    type: "soma-break-tier", level: 11,
+    label: "Mountain Stance (tier uses / Soma Break)",
+    body: "Bonus action — enter a stance for 1 minute. While in the stance: reroll the lowest die on Violence checks; creatures provoke opportunity attacks from you even when they Disengage."
+  },
+  "oldenborn-earthbound-world_anchor": {
+    type: "soma-break", level: 17,
+    label: "World-Anchor (1/Soma Break)",
+    body: "Reaction — when you or an ally within 30 ft would be teleported, displaced, banished, or forcibly moved by magical/metaphysical effect, anchor them. Effect fails; attacker takes psychic backlash = your tier."
+  },
+  "oldenborn-lumenwrought-moonlit_ward": {
+    type: "soma-break-tier", level: 5,
+    label: "Moonlit Ward (tier uses / Soma Break)",
+    body: "Reaction — when you or an ally within 30 ft would be Charmed or Shaken, grant them reroll-lowest on the defense check. On a success, the aggressor rolls 3d10 keep lowest 2 on their next attack."
+  },
+  "oldenborn-lumenwrought-sovereign_mask": {
+    type: "soma-break", level: 11, travel: true, vanguardMasks: ["identity", "scry"],
+    label: "Sovereign Mask (1/Soma Break)",
+    body: "Over 1 minute, assume a mythic persona (King, Trickster, Saint, Monster, etc.). For 10 minutes, gain a skill rank in Diplomacy (Presence), Stealth (Intrigue), and Intimidation (Presence) — or mastery if already proficient. You cannot be magically identified or scryed while masked."
+  },
+  "oldenborn-lumenwrought-mythic_recollection": {
+    type: "soma-break", level: 17,
+    label: "Mythic Recollection (1/Soma Break)",
+    body: "For 1 minute, you become painfully real. Gain resistance to all damage except force; hostile creatures within 10 ft roll 3d10 keep lowest 2 on defense checks against your manifestations and abilities (caught in your gravity of meaning)."
+  },
+  "oldenborn-rustland-patch-repurpose": {
+    type: "soma-break", level: 5,
+    label: "Patch & Repurpose (1/Soma Break)",
+    body: "During a Soma Break, spend 10 min on a single broken/low-charge item (weapon, tool, power cell, vehicle component, armour). Restore it to one more use, scene, or day. The GM rules how it dies for real after."
+  },
+  "oldenborn-rustland-salvage-king": {
+    type: "scene", level: 17,
+    label: "Salvage King (1/Scene)",
+    body: "When the party is in any ruin, junkyard, scrap field, abandoned facility, or wrecked vehicle, declare that one specific reasonable object exists somewhere within sight or one room over. GM may set a brief search time, require a minor cost, or rule the object is in worse condition."
+  },
+  "oldenborn_rustland_scavenger_tier1": {
+    type: "soma-break", level: 5,
+    label: "Scavenger's Eye (1/Soma Break)",
+    body: "Spend 10 min in a ruin, junkyard, or wreckage site. Find one specific reasonable item. GM may gate exotic items behind a Mind check. Passive Toxic Lung Filters: reroll-lowest on defense vs inhaled toxins/smoke/industrial residue (auto-fires); function up to 1 hour in atmospheres that would hospitalize a normal Medium creature."
+  },
+  "oldenborn-skythreaded-jetstream_traverse": {
+    type: "soma-break", level: 11,
+    label: "Jetstream Traverse (1/Soma Break)",
+    body: "For 10 minutes, gain a flying speed equal to your walking speed; you must end your turn on solid ground (or fall normally). When this ends, you are not harmed by the fall from the last 10 ft."
+  },
+  "oldenborn-skythreaded-weather_crown": {
+    type: "soma-break", level: 17, travel: true, mitigates: ["weather"],
+    label: "Weather Crown (1/Soma Break)",
+    body: "Over 1 minute, call a localized weather effect in a 60-ft radius for 10 minutes (fog, wind, rain, or clear). The effect is real and interacts with fire, ranged attacks, and travel checks. BBTTCC: 1/Turn your faction may re-roll a Weather event affecting your hex."
+  },
+  "oldenborn-stormborn-ward-of-the-gale": {
+    type: "soma-break", level: 5,
+    label: "Ward of the Gale (1/Soma Break)",
+    body: "Reaction — when you take damage from a visible attack, hazard, or effect, wrap yourself in whirling air and reduce that damage by half until the start of your next turn (apply resistance first, then halve the remainder)."
+  },
+  "oldenborn-stormborn-skywalker": {
+    type: "soma-break", level: 17,
+    label: "Skywalker (1/Soma Break)",
+    body: "Action — call the wind to hold you up. For 1 minute, walk on air, ash, falling rain, or any equivalent surface as if it were solid ground. Move at your normal walking speed in any direction including straight up. Falling damage negated for the duration. Ends early if you fall unconscious or dismiss it."
+  },
+  "oldenborn_stormborn_nomad_tier1": {
+    type: "soma-break", level: 5,
+    label: "Wind-Read (1/Soma Break)",
+    body: "Reaction — when you would take energy damage (lightning or cold flavor) or kinetic damage (thunder flavor), halve it. The wind shifts as you do. Passive Weatherwise: always know upcoming weather for the next 12 hours within 1 mile (even underground); reroll-lowest on defense checks vs weather effects."
+  },
+  "oldenborn_stormborn_nomad_heritage": {
+    type: "soma-break", level: 5,
+    label: "Stormborn Nomad Heritage (1/Soma Break)",
+    body: "Heritage-level signature: see Wind-Read on the Stormborn Nomad Tier-I feat for the active reaction. The heritage container surfaces here so the per-use is reachable from the heritage card directly."
+  },
+
+  // ── D&D-vocab scrub Phase 3 — Furrykin ancestry (2026-04-29) ──────────────
+  // Batch 9 (final). 11 items across Felid / Leporid / Mustelid / Ursid /
+  // Vulpin lines. Levels per "Formerly granted at level X" prose.
+  "furrykin-felid-king_of_alleys": {
+    type: "soma-break", level: 17,
+    label: "King of Alleys (1/Soma Break)",
+    body: "For 10 minutes, gain a climbing speed equal to your walking speed and ignore difficult terrain in urban ruins. BBTTCC: 1/Turn, reduce an Intrigue travel cost by 1 if your route passes through ruins."
+  },
+  "furrykin-felid-nine_lives": {
+    type: "soma-break", level: 5,
+    label: "Nine Lives Logic (1/Soma Break)",
+    body: "When you would drop to 0 Integrity, instead drop to 1 Integrity and immediately Disengage as a reaction."
+  },
+  "furrykin-leporid-impossible_escape": {
+    type: "soma-break", level: 17,
+    label: "Impossible Escape (1/Soma Break)",
+    body: "When you fail an Intrigue check, you may choose to succeed instead. Also, once per minute you may phase through a nonmagical barrier you could plausibly squeeze through."
+  },
+  "furrykin-leporid-panic_geometry": {
+    type: "soma-break-tier", level: 5,
+    label: "Panic Geometry (tier uses / Soma Break)",
+    body: "Reaction — when a creature moves adjacent to you, move up to half your speed without provoking opportunity attacks."
+  },
+  "furrykin-mustelid-dig_in": {
+    type: "soma-break-tier", level: 5,
+    label: "Dig-In (tier uses / Soma Break)",
+    body: "Bonus action — gain temporary Integrity equal to your tier + Body modifier; you cannot be knocked Prone until the start of your next turn."
+  },
+  "furrykin-mustelid-relentless_bite": {
+    type: "soma-break", level: 17,
+    label: "Relentless Bite (1/Soma Break)",
+    body: "For 1 minute, once per turn when you hit a creature, reduce their speed to 0 until the start of their next turn (Violence check vs DC 8 + tier + Body resists)."
+  },
+  "furrykin-ursid-apex_shelter": {
+    type: "soma-break", level: 17,
+    label: "Apex Shelter (1/Soma Break)",
+    body: "For 1 minute, allies within 10 ft gain +1 Guard and reroll the lowest die on defense checks against being moved or knocked Prone. You must remain conscious."
+  },
+  "furrykin-ursid-hibernate_pain": {
+    type: "soma-break", level: 5,
+    label: "Hibernate the Pain (1/Soma Break)",
+    body: "Bonus action — gain resistance to kinetic damage for 1 minute. When this ends, gain one level of Stress."
+  },
+  "furrykin-ursid-roar_old_woods": {
+    type: "soma-break-tier", level: 11,
+    label: "Roar of the Old Woods (tier uses / Soma Break)",
+    body: "Action — force hostile creatures within 10 ft to make a Soul check or become Shaken for 1 round. On a success, they still roll 3d10 keep lowest 2 on their next attack."
+  },
+  "furrykin-vulpin-fable_shadow": {
+    type: "soma-break", level: 17,
+    label: "Fable-Shadow (1/Soma Break)",
+    body: "For 1 minute, hostile creatures roll 3d10 keep lowest 2 on attacks against you unless they succeed a Soul check at the start of their turn (DC 8 + tier + Intrigue). Once per turn, force one attack to miss you (reaction) by 'changing the story.'"
+  },
+  "furrykin-vulpin-scent_secrets": {
+    type: "soma-break", level: 11,
+    label: "Scent of Secrets (1/Soma Break)",
+    body: "For 10 minutes, reroll the lowest die on Insight (Soul), Investigation (Mind), and Perception (Mind) checks to detect deception, hidden compartments, secret doors, or concealed items."
+  },
+
+  // ── Phase 5: RFI-class subclasses (2026-04-27) ────────────────────────────
+  // Identifiers verified live in bbttcc-master-content.classes pack 2026-04-27.
+  // Soul Smith forges (3)
+  "bbttcc-soul-smith-smith-bound-light": {
+    type: "soma-break", level: 14,
+    label: "Forge of Bound Light — Pattern of Mercy (L14)",
+    body: "1/Soma Break after a successful Parley: convert 1 Economy → 1 Soft Power OP."
+  },
+  "bbttcc-soul-smith-smith-spark-reclaimer": {
+    type: "soma-break", level: 14,
+    label: "Forge of the Spark Reclaimer — Clean Extraction (L14)",
+    body: "1/Soma Break, negate a Darkness tick caused by a salvage or demolition you orchestrated."
+  },
+  "bbttcc-soul-smith-smith-victory": {
+    label: "Forge of Victory",
+    abilities: [
+      { key: "standardOfWill", type: "scene",     level: 3,  label: "Standard of Will (L3)",
+        body: "Action: raise a standard. Allies within 15 ft gain +1 vs. fear. At scene end → +1 Unity/VP. (1/scene.)" },
+      { key: "victoryForge",   type: "soma-break", level: 14, label: "Victory Forge (L14)",
+        body: "1/Soma Break after a peaceful objective: convert 1 Intrigue → 1 Diplomacy OR 1 Soft Power OP." }
+    ]
+  },
+
+  // Dreamwalker trances (3)
+  "bbttcc-dreamwalker-quiet-sun": {
+    label: "Trance of the Quiet Sun",
+    abilities: [
+      { key: "somnolentPeace", type: "scene",     level: 3,  label: "Somnolent Peace (L3)",
+        body: "1/scene, turn a lethal blow into unconsciousness at 1 HP." },
+      { key: "daybreak",       type: "soma-break", level: 14, label: "Daybreak (L14)",
+        body: "1/Soma Break, after a no-fatalities victory you led: Darkness −1 and +1 Diplomacy OP." }
+    ]
+  },
+  "bbttcc-dreamwalker-sapphire-gate": {
+    label: "Trance of the Sapphire Gate",
+    abilities: [
+      { key: "lucidStep",          type: "info",      level: 3,  label: "Lucid Step (L3) — Spend 1 Soft Power OP",
+        body: "Spend 1 Soft Power OP to learn if the next Spark lead is Conceptual, Vestigial, or Animate. No daily cap; OP-cost only." },
+      { key: "sapphireConduction", type: "soma-break", level: 14, label: "Sapphire Conduction (L14)",
+        body: "1/Soma Break, after a Spark step succeeds: Darkness −1." }
+    ]
+  },
+  "bbttcc-dreamwalker-thousand-faces": {
+    label: "Trance of the Thousand Faces",
+    abilities: [
+      { key: "personaCache",  type: "info",        level: 3,  label: "Persona Cache (L3) — Spend 1 Soft Power OP",
+        body: "Maintain PB personas. In Courtly Intrigue, spend 1 Soft Power OP to switch personas and gain Advantage on your next Deception or Persuasion check. No daily cap; OP-cost only." },
+      { key: "borrowedVoice", type: "soma-break",  level: 10, label: "Borrowed Voice (L10)",
+        body: "1/Soma Break, mimic a voice you've heard for up to 1 minute." }
+    ]
+  },
+
+  // Wyrdlens refractions (3)
+  "bbttcc-wyrdlens-adept-foresight": {
+    type: "strategic-turn", level: 3,
+    label: "Refraction of Foresight — Force Enemy Reroll (L3)",
+    body: "Strategic: Once per Strategic Turn, spend 1 Intrigue OP to force an enemy strategic reroll."
+  },
+  "bbttcc-wyrdlens-adept-mercy": {
+    label: "Refraction of Mercy",
+    abilities: [
+      { key: "mercyRefraction",  type: "scene",     level: 3,  label: "Mercy Refraction (L3)",
+        body: "1/scene, convert a lethal hit you witness into non-lethal. If it forces surrender, +1 Diplomacy OP." },
+      { key: "sephiroticBloom",  type: "soma-break", level: 14, label: "Sephirothic Bloom (L14)",
+        body: "1/Soma Break, after a non-lethal victory you led: Darkness −1 and shift Hex one step toward a beneficial Sephirah." }
+    ]
+  },
+  "bbttcc-wyrdlens-adept-truth": {
+    label: "Refraction of Truth",
+    abilities: [
+      { key: "truthRefraction", type: "info",      level: 3,  label: "Truth Refraction (L3) — Spend 1 Intrigue OP",
+        body: "Spend 1 Intrigue OP to treat one Spark Identification roll ≤9 as a 10 this Turn. No daily cap; OP-cost only." },
+      { key: "unshatter",       type: "soma-break", level: 14, label: "Unshatter (L14)",
+        body: "1/Soma Break, purify a Corrupted Spark step via short penance: Darkness −1." }
+    ]
+  },
+
+  // Harmony Marshal mandates (3)
+  "bbttcc-harmony-marshal-marshal-accord": {
+    label: "Mandate of Accord",
+    abilities: [
+      { key: "accordEngine",  type: "info",      level: 3,  label: "Accord Engine (L3) — Spend 1 Diplomacy OP",
+        body: "During Parley, spend 1 Diplomacy OP to treat an opposing roll of 9 or lower as a 10 if the outcome moves toward peace. No daily cap; OP-cost only." },
+      { key: "unityCadence",  type: "scene",     level: 6,  label: "Unity Cadence (L6)",
+        body: "1/scene, end a scene you lead with zero fatalities → +1 Unity/VP." },
+      { key: "resonantTruce", type: "soma-break", level: 10, label: "Resonant Truce (L10)",
+        body: "1/Soma Break, for 1 minute: enemies in 15 ft have disadvantage to attack non-hostiles; advantage on saves to end fear/charm." }
+    ]
+  },
+  "bbttcc-harmony-marshal-marshal-overwatch": {
+    type: "soma-break", level: 6,
+    label: "Mandate of Overwatch — Counter-Discord (L6)",
+    body: "1/Soma Break, reaction to cancel a deceit-based reroll/disadvantage within 60 ft."
+  },
+  "bbttcc-harmony-marshal-marshal-resolve": {
+    type: "scene", level: 14,
+    label: "Mandate of Resolve — Steel & Velvet (L14)",
+    body: "1/scene, after averting a rout into stalemate: gain +1 Soft Power OP and +1 Diplomacy OP."
+  },
+
+  // (Phantom Courier and Breaker subclass items don't exist in the live
+  // bbttcc-master-content.classes pack 2026-04-27 — Sprint F retirement
+  // removed them. Skipping those 5 entries.)
+
+  // ── Surfacing pass 2026-05-04 (action-economy v1) ─────────────────────────
+  // 51 unique identifiers from the audit-action-economy-gaps macro run.
+  // Body-text inferrer classifies action cost; cadence/level set per item.
+  // Heritage / class / subclass parent cards are tagged `info` (narrative —
+  // active mechanics live on linked Tier I / feat items).
+
+  // Heritage parent cards (narrative — no per-use)
+  "echo_diver_abyssal_heritage":    { type: "info", label: "Echo-Diver Heritage: Abyssal", body: "Your time-sense tilts backward. You don't predict; you remember. (Heritage card — active per-uses live on the Abyssal Tier-I feat: Tide Recall.)" },
+  "echo_diver_empyrean_heritage":   { type: "info", label: "Echo-Diver Heritage: Empyrean", body: "Your time-sense tilts forward. You feel weather before it arrives. (Heritage card — active per-uses live on the Empyrean Tier-I feat: Stormread.)" },
+  "echo_diver_tellurian_heritage":  { type: "info", label: "Echo-Diver Heritage: Tellurian", body: "Your time-sense tilts toward the unchanging. (Heritage card — active per-uses live on the Tellurian Tier-I feat: Stone Patience.)" },
+  "cosmic_linguist":                { type: "info", label: "Cosmic Linguist (Class)", body: "Trad Caster Class. Manifestation as accurate sentence. (Class card — active mechanics live on Initiation feats and Mode/Authority/Annotation/Word-That-Was per-uses.)" },
+  "bbttcc-aurablade-blood-hymn":    { type: "info", label: "Aurablade — Blood Hymn", body: "Subclass card. Wound = prayer. Active mechanics live on Blood Hymn feature feats (Final Crescendo etc.)." },
+  "bbttcc-aurablade-stillheart":    { type: "info", label: "Aurablade — Stillheart", body: "Subclass card. Calm = discipline. Active mechanics live on Stillheart feature feats (Emotional Lock etc.)." },
+  "bbttcc-pactkeeper-archivist-of-precedent": { type: "info", label: "Pactkeeper — Archivist of Precedent", body: "Subclass card. Historical enforcement. Active mechanics live on Archivist Initiation feats." },
+  "bbttcc-shadow-courier-courier-last-mile":  { type: "info", label: "Shadow Courier — Route of the Last Mile", body: "Subclass card. Psychopomp drift. Active mechanics live on Last Mile feats (Quiet Voyage etc.)." },
+
+  // Active per-uses (cadence + level as inferred from body cues)
+  "human-cro-magnon-coalition-tongue": {
+    type: "soma-break", level: 5,
+    label: "Human (Cro-Magnon): Coalition Tongue (1/Soma Break)",
+    body: "Bonus action — choose one ally within 30 ft who can hear and understand you. Their next attack roll, attribute check, or defense check before the start of your next turn is made at +1 rank (max rank 5)."
+  },
+  "human-florensis-little_mighty": {
+    type: "info",
+    label: "Human (Florensis): Little But Mighty (passive)",
+    body: "You may choose to be Small. No penalties for using Medium-sized weapons. Hide In Plain Sight is a conditional reaction — auto-fires when you take the Hide action behind a creature larger than yourself."
+  },
+  "circuitborn-exo-shield_projector": {
+    type: "soma-break-tier", level: 1,
+    label: "Circuitborn (Exo-Knight Line): Shield Projector (tier/Soma Break)",
+    body: "Reaction — when a creature you can see within 30 feet is hit, project a barrier. Reduce the damage by 1d6 + your tier."
+  },
+  "archetype-chariot-t3": {
+    type: "info", level: 11,
+    label: "Archetype: The Chariot (Squad Leader) — Tier 3",
+    body: "Tactical: you can use the Help action as a bonus action during combat (target = allied NPC or squadmate). Strategic: 1/Siege or Bunker operation, may pre-position one ally squad. (Auto-passive per-turn use; no debit.)"
+  },
+  "oldenborn-tideborne-floodgate_self": {
+    type: "soma-break", level: 5,
+    label: "Oldenborn (Tideborne): Floodgate of Self (1/Soma Break)",
+    body: "Bonus action — enter a state for 1 minute. Resistance to psychic damage; when you deal damage you may push the target 5 ft."
+  },
+  "menhirkin-living-rampart": {
+    type: "soma-break", level: 5,
+    label: "Menhirkin: Living Rampart (1/Soma Break)",
+    body: "Reaction — when a creature you can see targets an ally adjacent to you with an attack, interpose bulk and bad life choices: the attacker rolls 3d10 keep lowest 2 on the attack."
+  },
+  "oldenborn-stormborn-weatherwise": {
+    type: "info",
+    label: "Oldenborn (Stormborn Nomad): Weatherwise (passive)",
+    body: "Always know the upcoming weather for the next 12 hours within 1 mile, even underground. Reroll the lowest die on saving throws against weather effects (auto-fires)."
+  },
+  "circuitborn-synapse-memory_print": {
+    type: "soma-break", level: 5,
+    label: "Circuitborn (Synapse Line): Memory-Print (1/Soma Break)",
+    body: "Bonus action — replay a scene fragment to an ally, granting reroll-lowest on one Investigation, History, or Insight check."
+  },
+  "oldenborn-tideborne-undertow_grip": {
+    type: "soma-break-tier", level: 1,
+    label: "Oldenborn (Tideborne): Undertow Grip (tier/Soma Break)",
+    body: "Reaction — when a creature within 10 feet moves willingly, use your reaction to slow them; their speed becomes 0 until the end of the turn."
+  },
+  "circuitborn-parallax-light_bend": {
+    type: "soma-break-tier", level: 1,
+    label: "Circuitborn (Parallax Line): Light-Bend Cloak (tier/Soma Break)",
+    body: "Bonus action — become lightly obscured until the start of your next turn. Your first attack from this state has advantage."
+  },
+  "apotheosis-of-the-oneiric": {
+    type: "info", level: 20,
+    label: "Apotheosis of the Oneiric (Capstone, passive)",
+    body: "You shed the last barrier between waking and dreaming. Limitless Tuning: use Dream-Thread Tuning any number of times. Sovereign-of-narrative passive."
+  },
+  "cl_init6_translation": {
+    type: "scene", level: 6,
+    label: "Cosmic Linguist: Initiation 6 — Translation (1/scene)",
+    body: "Reaction — when an ally completes a manifestation within Reach, transcribe it into your idiom. Until end of next round, you carry their effect at your tier cap."
+  },
+  "emissary-of-the-great-accord": {
+    type: "soma-break",
+    label: "Emissary of the Great Accord (1/Soma Break)",
+    body: "Once per Soma Break, when a scene involving multiple factions or hostile forces reaches its tipping point, declare an Accord pause. All hostilities pause for 1 minute or until violated."
+  },
+  "negotiated-advantage": {
+    type: "soma-break",
+    label: "Negotiated Advantage (1/Soma Break)",
+    body: "Reaction — when a creature you can see within 30 feet makes an attack roll or attribute check against you or an ally, you may force them to roll 3d10 keep lowest 2."
+  },
+  "bulwark_cataclyst_l9_decide_the_weather": {
+    type: "scene", level: 9,
+    label: "Cataclyst L9: Decide The Weather (1/scene)",
+    body: "Action — spend 2 Frame Dice and 2 Ruin Charges. Choose Wall (raise a wall of force, 30×10 ft) or Storm (15-ft radius lightning strike, exploding 2d10)."
+  },
+  "bulwark_mountain_l5_denial": {
+    type: "soma-break-tier", level: 5,
+    label: "Mountain L5: Denial (tier/Soma Break)",
+    body: "Reaction — when a creature within 5 feet attempts to move past you, spend 1 Frame Die to stop them; they must make a Body check vs your Resolve or their movement is wasted."
+  },
+  "rallying-words": {
+    type: "soma-break",
+    label: "Rallying Words (1/Soma Break)",
+    body: "Bonus action — choose one creature other than yourself within 30 feet who can see or hear you. That creature gains temporary Integrity equal to your tier and rerolls the lowest die on its next attack."
+  },
+  "bloodhymn_final_crescendo": {
+    type: "soma-break", level: 18,
+    label: "Blood Hymn: Final Crescendo (1/Soma Break, L18)",
+    body: "Bonus action — immediately enter Burn 4. For the rest of the turn: all attacks deal maximum damage; you may cleave through every creature in reach."
+  },
+  "waking-dreamfield": {
+    type: "soma-break",
+    label: "Waking Dreamfield (1/Soma Break)",
+    body: "Bonus action — enter a waking dreamstate for 1 minute. +1 bonus to Soul and Presence checks; you reroll the lowest die on attacks against dream-affected creatures."
+  },
+  "pulse-of-the-forge": {
+    type: "soma-break",
+    label: "Pulse of the Forge (1/Soma Break)",
+    body: "Action — release a wave of stabilizing heat in a 15-foot radius. Allies in the radius gain temporary Integrity equal to your tier and reroll the lowest die on the next defense check."
+  },
+  "unbroken-line": {
+    type: "soma-break",
+    label: "Unbroken Line (1/Soma Break)",
+    body: "Reaction — when an ally you can see within 30 feet is reduced to 0 Integrity but not killed outright, shout them back into formation. That ally instead drops to 1 Integrity."
+  },
+  "ascension-layer": {
+    type: "info",
+    label: "Ascension Layer (passive)",
+    body: "Ascension Aura: while pursuing an active Spark quest or working a Great Work objective, you and allies within 30 ft reroll the lowest die on Spark-related checks (auto-fires)."
+  },
+  "probability-threading": {
+    type: "soma-break",
+    label: "Probability Threading (1/Soma Break)",
+    body: "Reaction — when you or a creature you can see within 30 feet makes an attack roll, attribute check, or defense check, force a reroll of the lowest die."
+  },
+  "shadow_courier_blackstair_l17_stair_that_does_not_end": {
+    type: "scenario", level: 17,
+    label: "Black Stair L17: The Stair That Does Not End (1/session)",
+    body: "Action — step through any door, arch, gate, or marked threshold and arrive at any other threshold you have personally crossed in this campaign."
+  },
+  "shadow_courier_tier2_the_crossing": {
+    type: "scene", travel: true, vanguardMasks: ["divination"], mitigates: ["terrain"],
+    label: "Shadow Courier — Tier 2: The Crossing (1/scene)",
+    body: "Action — declare a single threshold within reach (door, wall, ward, alarm, divination). The membrane chooses you instead: pass through or bypass it cleanly."
+  },
+  "shadow_courier_tier4_unfound_route": {
+    type: "scenario", level: 17, travel: true,
+    label: "Shadow Courier — Tier 4: Unfound Route (1/session)",
+    body: "Action — name two thresholds you have personally crossed earlier in this campaign and link them. For 1 minute, the route exists and may be travelled by anyone in your party."
+  },
+  "shadow_courier_lastmile_l13_quiet_voyage": {
+    type: "scene", level: 13,
+    label: "Last Mile L13: The Quiet Voyage (1/scene)",
+    body: "Action — while carrying a Soul, become temporarily insubstantial for up to your Initiation tier rounds. You can move through creatures and solid objects and cannot be targeted by attacks."
+  },
+  "wyrdlens-refraction-foresight-convergence-horizon": {
+    type: "soma-break",
+    label: "Convergence Horizon (1/Soma Break)",
+    body: "Action — unfold a Convergence Horizon for 1 minute. Whenever a creature within 30 feet of you makes an attack roll, attribute check, or defense check, you may force it to be rerolled at advantage or disadvantage (your choice)."
+  },
+  "shared-dreamwork": {
+    type: "soma-break",
+    label: "Shared Dreamwork (1/Soma Break)",
+    body: "Action — choose one willing creature within 30 feet. For 10 minutes you share a dreamspace: each may use the other's Insight or Empathy ranks for one check."
+  },
+  "shared-burden-harness": {
+    type: "soma-break",
+    label: "Shared Burden Harness (1/Soma Break)",
+    body: "Reaction — when a creature you can see within 30 feet takes damage, take some of that damage onto yourself. Reduce their damage by your tier + Body modifier; you take that amount."
+  },
+  "stillheart_emotional_lock": {
+    type: "soma-break", level: 14,
+    label: "Stillheart: Emotional Lock (1/Soma Break, L14)",
+    body: "Bonus action — freeze your current Burn level. It cannot increase or decrease until the end of your next turn. Your Aura cannot be forcibly changed during this period."
+  },
+  "coordinated-advance": {
+    type: "soma-break",
+    label: "Coordinated Advance (1/Soma Break)",
+    body: "When you hit a creature with a weapon attack OR succeed on a key social check, choose one ally who can see or hear you within 30 feet. That ally may use their reaction to move up to half their speed without provoking opportunity attacks."
+  },
+  "auditor_forensic_audit": {
+    type: "soma-break", level: 3,
+    label: "Auditor: Forensic Audit (1/Soma Break)",
+    body: "Action — mark a target Out of Compliance for this scene. While Out of Compliance, the target rolls 3d10 keep lowest 2 on attribute checks against you and your allies."
+  },
+  "dreamwalker-sapphire-blue-meridian": {
+    type: "soma-break",
+    label: "Blue Meridian (1/Soma Break)",
+    body: "Action — open the Blue Meridian for 1 minute. You may teleport up to 30 feet as part of any movement or bonus action; you may pass through walls less than 5 feet thick."
+  },
+
+  // bbttcc-master-content.items feats (combat-pack)
+  "bbttcc_feat_pressure_transference": {
+    type: "soma-break",
+    label: "Pressure Transference (1/Soma Break)",
+    body: "Reaction — when you would take damage, give an ally within 10 ft reroll-lowest on their next roll before the end of their next turn (you still take the damage; the trade is the boon, not avoidance)."
+  },
+  "bbttcc_feat_threatening_silence": {
+    type: "soma-break",
+    label: "Threatening Silence (1/Soma Break)",
+    body: "Bonus action — choose one creature that can see you within 30 ft. That creature rolls 3d10 keep lowest 2 on its next attack roll before the end of its next turn."
+  },
+  "bbttcc_feat_combat_intuition": {
+    type: "info",
+    label: "Combat Intuition (per-turn auto)",
+    body: "Reaction — once per turn, when a creature within 5 feet of you misses an attack, make a melee weapon attack against it. (Auto per-turn — no debit; reaction slot still consumed.)"
+  },
+  "bbttcc_feat_last_ritual": {
+    type: "soma-break",
+    label: "Penultimate Rites — Last Ritual (1/Soma Break)",
+    body: "Reaction — when a creature you can reach drops to 0 Integrity, stabilize it. It also gains temporary Integrity equal to your tier."
+  },
+  "bbttcc_feat_environmental_opportunist": {
+    type: "info",
+    label: "Environmental Opportunist (per-turn auto)",
+    body: "Reaction — once per turn, when an enemy enters or leaves difficult terrain within your reach, make a melee attack against it. (Auto per-turn — no Soma Break debit; reaction slot still consumed.)"
+  },
+  "bbttcc_feat_backline_commander": {
+    type: "soma-break",
+    label: "Backline Commander (1/Soma Break)",
+    body: "Bonus action — choose one ally who can see or hear you within 30 feet. That ally may immediately move up to 10 feet without provoking opportunity attacks."
+  },
+  "bbttcc_feat_spark_sense": {
+    type: "soma-break",
+    label: "Spark Sense (1/Soma Break)",
+    body: "Action — focus on the unseen and learn one of: location of nearest active Spark / type and tier of nearest manifested form / surface emotional state of one creature you can see."
+  },
+  "bbttcc_feat_adaptive_defense": {
+    type: "soma-break",
+    label: "Adaptive Defense (1/Soma Break)",
+    body: "Reaction — when you are hit by an attack you can see, reduce the damage by an amount equal to your skill rank bonus + your Violence modifier."
+  },
+  "bbttcc_feat_unbroken_guard": {
+    type: "soma-break",
+    label: "Unbroken Guard (1/Soma Break)",
+    body: "Reaction — when a creature within 5 feet of you targets an ally with an attack, the attacker rolls 3d10 keep lowest 2 on that attack and you reduce the damage by your tier."
+  },
+};
+
+// Compute character level from actor data, tolerating both fourththing and
+// dnd5e shapes. Returns at least 1 even on missing data.
+//   • fourththing: system.details.level is a plain number (e.g. 3)
+//   • dnd5e:       system.details.level.value is the level
+//   • last resort: sum of class-item system.levels
+function _getActorLevel(actor) {
+  const detRaw = actor?.system?.details?.level;
+  if (typeof detRaw === "number" && detRaw > 0) return detRaw;
+  const detVal = Number(detRaw?.value);
+  if (Number.isFinite(detVal) && detVal > 0) return detVal;
+  let sum = 0;
+  for (const item of actor?.items ?? []) {
+    if (item.type === "class") sum += Number(item.system?.levels ?? 0);
+  }
+  return sum > 0 ? sum : 1;
+}
+
+// Resolve the level requirement for an ability:
+//   1. ab.level (explicit on sub-ability)
+//   2. spec.level (explicit on top-level spec)
+//   3. -t1/-t2/-t3/-t4 identifier suffix → 1 / 5 / 11 / 17
+//   4. fallback: 1 (always available)
+function _levelForAbility(id, spec, ab) {
+  if (Number.isFinite(ab?.level)) return ab.level;
+  if (Number.isFinite(spec?.level)) return spec.level;
+  const m = (id ?? "").match(/-t([1-4])$/);
+  if (m) return ({ "1": 1, "2": 5, "3": 11, "4": 17 })[m[1]];
+  return 1;
+}
+
+// Body-text classifier — infers actionCost from the first words of `ab.body`
+// when no explicit override is set. Designed for the CHAR_OPT_ABILITIES corpus
+// where bodies usually open with "Reaction —", "Bonus action —", "Action —",
+// or include "as a reaction" / "use your reaction" mid-sentence.
+function _inferActionCostFromBody(body) {
+  if (!body) return undefined;
+  const s = String(body).trim();
+  // Lead-token forms first — most reliable.
+  if (/^reaction\s*[—\-:]/i.test(s))     return "reaction";
+  if (/^bonus action\s*[—\-:]/i.test(s)) return "bonus";
+  if (/^action\s*[—\-:]/i.test(s))       return "action";
+  // Reaction-when prefixes.
+  if (/^reaction\s+when\b/i.test(s))     return "reaction";
+  // Mid-sentence forms.
+  if (/\b(as a reaction|use your reaction|use a reaction)\b/i.test(s))         return "reaction";
+  if (/\b(as a bonus action|use a bonus action|use your bonus action)\b/i.test(s)) return "bonus";
+  if (/\b(as an action|use an action|use your action)\b/i.test(s))             return "action";
+  return undefined;
+}
+
+// Per-turn action-economy gate. Returns true if the ability may fire (and
+// debits the pool); false if it should abort. `cost` is one of:
+//   "action" | "bonus" | "reaction" | "movement" | "free" | undefined
+// Strategic-cadence abilities (strategic-turn, scenario, info) are out-of-combat
+// and never gated. Movement is soft-warn only — it still fires.
+async function _checkAndDebitActionEconomy(actor, ab) {
+  let cost = ab?.actionCost;
+  // Body-text inference (only when no explicit override).
+  if (cost === undefined) cost = _inferActionCostFromBody(ab?.body);
+  if (!cost || cost === "free" || cost === "none") return true;
+
+  // Out-of-combat abilities don't touch the per-turn pool.
+  const cadence = ab?.type;
+  if (cadence === "strategic-turn" || cadence === "scenario" || cadence === "info") return true;
+
+  // No active combat → don't gate. (Free play / narrative use.)
+  if (!game.combat?.combatants?.find(c => c.actor?.id === actor.id)) return true;
+
+  const sys = actor.system?.system ?? actor.system;
+  const a   = sys?.actions ?? {};
+
+  if (cost === "action") {
+    if (a.actionUsed) {
+      ui.notifications?.warn(`${ab.label}: action already used this turn.`);
+      return false;
+    }
+    await actor.update({ "system.actions.actionUsed": true });
+    return true;
+  }
+  if (cost === "bonus") {
+    if (a.bonusUsed) {
+      ui.notifications?.warn(`${ab.label}: bonus action already used this turn.`);
+      return false;
+    }
+    await actor.update({ "system.actions.bonusUsed": true });
+    return true;
+  }
+  if (cost === "reaction") {
+    if (a.reactionUsed) {
+      ui.notifications?.warn(`${ab.label}: reaction already used (refreshes at start of your turn).`);
+      return false;
+    }
+    await actor.update({ "system.actions.reactionUsed": true });
+    return true;
+  }
+  if (cost === "movement") {
+    // Movement is tracked in feet on the token-update path. Firing a "movement"
+    // ability is a flavor tag — no debit here, but log a small toast for clarity.
+    ui.notifications?.info(`${ab.label}: counts as movement (track feet on the token side).`);
+    return true;
+  }
+  return true;
+}
+
+// Internal: dispatch a single ability spec to the right helper.
+// `key` is the flag-tracking key (composed of identifier[.subkey] for multi-ability).
+// `requiredLevel` is enforced — if actor is below, a warning fires and the
+// dialog does not open.
+async function _dispatchSingleAbility(actor, ab, key, requiredLevel) {
+  if (Number.isFinite(requiredLevel) && requiredLevel > 1) {
+    const charLevel = _getActorLevel(actor);
+    if (charLevel < requiredLevel) {
+      ui.notifications.warn(`${ab.label}: locked — requires character level ${requiredLevel} (currently ${charLevel}).`);
+      return null;
+    }
+  }
+  // Per-turn action-economy gate. Aborts with a toast if the appropriate slot
+  // is already spent. Strategic-cadence and out-of-combat use bypass the gate.
+  const allowed = await _checkAndDebitActionEconomy(actor, ab);
+  if (!allowed) return null;
+  switch (ab.type) {
+    case "scene":
+      return _openPerSceneAbility(actor, key, ab.label, ab.body);
+    case "soma-break":
+      return _openSomaBreakAbility(actor, key, ab.label, ab.body);
+    case "soma-break-tier":
+      return _openTierUsesPerSomaBreak(actor, key, ab.label, ab.body);
+    case "strategic-turn":
+      return _openPerCadenceAbility(actor, key, ab.label, ab.body, {
+        flagNamespace: "strategicTurn",
+        cadenceText: "on new Strategic Turn",
+        resetLabel: "Reset (New Strategic Turn)"
+      });
+    case "scenario":
+      return _openPerCadenceAbility(actor, key, ab.label, ab.body, {
+        flagNamespace: "scenario",
+        cadenceText: "at scenario end",
+        resetLabel: "Reset (New Scenario)"
+      });
+    case "info":
+      return _openInfoOnlyAbility(actor, ab.label, ab.body);
+    default:
+      ui.notifications.error(`Unknown per-use type: ${ab.type}`);
+      return null;
+  }
+}
+
+// Generic multi-ability picker for subclass-style items that carry several
+// per-use abilities at different levels. Locked rows are shown but greyed.
+async function _openSubclassPicker(actor, title, abilities, idPrefix) {
+  const charLevel = _getActorLevel(actor);
+
+  const statusFor = (ab, i) => {
+    const key = `${idPrefix}.${ab.key ?? i}`;
+    let used = false;
+    if (ab.type === "scene")          used = Boolean(actor.getFlag("fourththing", `scenePerUse.${key}`));
+    else if (ab.type === "soma-break") used = Boolean(actor.getFlag("fourththing", `disciplineUsed.${key}`));
+    else if (ab.type === "strategic-turn") used = Boolean(actor.getFlag("fourththing", `strategicTurn.${key}`));
+    else if (ab.type === "scenario")  used = Boolean(actor.getFlag("fourththing", `scenario.${key}`));
+    return ab.type === "info"
+      ? `<b>passive trigger / OP-cost — no tracking</b>`
+      : `<b>${used ? "SPENT" : "AVAILABLE"}</b>`;
+  };
+
+  const cadenceLabel = (ab) => ({
+    "scene": "1/scene",
+    "soma-break": "1/Soma Break",
+    "strategic-turn": "1/Strategic Turn",
+    "scenario": "1/Scenario",
+    "info": "passive / OP-cost"
+  })[ab.type] ?? "";
+
+  const rows = abilities.map((ab, i) => {
+    const reqLevel = _levelForAbility(idPrefix, null, ab);
+    const locked = charLevel < reqLevel;
+    const lockBadge = locked
+      ? `<span style="margin-left:0.35rem;padding:0.05rem 0.35rem;border-radius:0.2rem;background:rgba(120,40,40,0.55);color:#fbcaca;font-size:0.7rem;letter-spacing:0.04em;text-transform:uppercase">🔒 Lvl ${reqLevel}</span>`
+      : "";
+    const rowOpacity = locked ? "opacity:0.45" : "";
+    return `
+    <div style="margin-top:0.35rem;padding:0.45rem 0.6rem;background:rgba(60,40,75,0.32);border-radius:0.25rem;${rowOpacity}">
+      <div style="font-size:0.85rem"><strong>${ab.label}</strong> <span style="opacity:0.7;font-size:0.74rem">(${cadenceLabel(ab)})</span>${lockBadge}</div>
+      <div style="font-size:0.78rem;opacity:0.86;margin-top:0.15rem">${ab.body}</div>
+      <div style="font-size:0.78rem;opacity:0.85;margin-top:0.2rem">Status: ${locked ? `<b>LOCKED — unlocks at level ${reqLevel}</b>` : statusFor(ab, i)}</div>
+    </div>`;
+  }).join("");
+
+  const buttons = {};
+  abilities.forEach((ab, i) => {
+    const reqLevel = _levelForAbility(idPrefix, null, ab);
+    if (charLevel < reqLevel) return; // omit locked rows from buttons
+    const key = `${idPrefix}.${ab.key ?? i}`;
+    buttons[`use_${i}`] = {
+      label: `${ab.label}…`,
+      callback: () => _dispatchSingleAbility(actor, ab, key, reqLevel)
+    };
+  });
+  buttons.close = { label: "Close" };
+
+  new Dialog({
+    title,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.5rem;opacity:0.85">${title} — pick which per-use ability to invoke. Each tracks its own state. Locked rows unlock at the listed level.</p>
+      ${rows}
+    </div>`,
+    buttons,
+    default: "close"
+  }).render(true);
+}
+
+export async function openCharOptAbility(actor, item) {
+  const id = item?.system?.identifier ?? "";
+  const spec = CHAR_OPT_ABILITIES[id];
+  if (!spec) {
+    ui.notifications.warn(`No per-use spec found for identifier: ${id}`);
+    return null;
+  }
+  // Multi-ability subclass: show picker (handles locking internally)
+  if (Array.isArray(spec.abilities) && spec.abilities.length) {
+    return _openSubclassPicker(actor, spec.label ?? item.name, spec.abilities, id);
+  }
+  // Single ability: enforce level requirement before opening dialog
+  const requiredLevel = _levelForAbility(id, spec, spec);
+  return _dispatchSingleAbility(actor, spec, id, requiredLevel);
+}
+
+// Identifier → "char_opt_lookup" sentinel (one entry per item, populated below).
+// Kept separate so it's clear which pack/category each id belongs to.
+const CHAR_OPT_ROUTE = "char_opt_lookup";
+for (const id of Object.keys(CHAR_OPT_ABILITIES)) {
+  FEATURE_ROUTER[id] = CHAR_OPT_ROUTE;
+}
+
+export async function openWyrdlensTikkunSight(actor) {
+  return _openSomaBreakAbility(actor, "wlTikkunSight", "Tikkun Sight",
+    "Treat one of your misfires as if it had landed at base tier, and convert the Surge it would have spent into Clarity instead. (Nonviolent-scene rider: also wipes the Corruption tick the gather would have caused.)");
+}
+
+export async function openDreamwalkerSharedDream(actor) {
+  return _openSomaBreakAbility(actor, "dwSharedDream", "Shared Dream",
+    "Allies who Soma Break in your presence regain Clarity equal to half your tier (round up). 1/Soma Break you may explicitly invoke this to grant the bonus retroactively to the just-completed Soma Break.");
+}
+
+export async function openPactkeeperLedgerDay(actor) {
+  return _openSomaBreakAbility(actor, "pkLedgerDay", "Ledger Day",
+    "Transfer one of your sustained manifestations to a willing ally — they pick up upkeep from their Clarity from that point on. The pact moves with the paper, not the person who originally signed.");
+}
+
+// ─── Legacy handler → actionCost map ──────────────────────────────────────────
+// Action costs for the pre-CHAR_OPT_ABILITIES handlers below. CHAR_OPT entries
+// declare `actionCost` directly on the spec; legacy ones resolve through this
+// table. Omit any handler that's a passive/info card or out-of-combat use.
+const LEGACY_ACTION_COST = {
+  // Aurablade
+  "aurablade_action":           "action",      // melee strike
+  "aurablade_burn":             "bonus",       // ignite/extinguish
+  "aurablade_change_aura":      "bonus",
+  "aurablade_stabilize":        "bonus",
+  // Titanbound / Bulwark / Shadowjack — frame/access spends are bonus by canon
+  "titanbound_spend":           "bonus",
+  "bulwark_spend_frame":        "bonus",
+  "bulwark_stance":             "bonus",
+  "shadowjack_spend":           "bonus",
+  "shadow_courier_spend_access":"bonus",
+  // Cosmic Linguist / Wyrdlens / Dreamwalker / Pactkeeper
+  "cosmic_linguist_authority":  "action",
+  "cosmic_linguist_annotation": "bonus",
+  "pactkeeper_leverage":        "bonus",
+  "pactkeeper_binding_clause":  "action",
+  "dreamwalker_resonance":      "bonus",
+  // Mode toggles — bonus action stance switch
+  "cl_mode_sentence":           "bonus",
+  "wl_mode_refraction":         "bonus",
+  "dw_mode_walking_lane":       "bonus",
+  "pk_mode_sealed_pact":        "bonus",
+  // Soul Smith / Shadow Courier package use
+  "soul_smith_forge":           "action",
+  "shadow_courier_package":     "action",
+  "shadow_courier_crossing":    "action",
+  // Phase 1 ancestry cores — single-fire reactions / soma-break
+  "scion_sefirot_attunement":   "reaction",
+  "echo_diver_temporal_flinch": "reaction",
+  // Phase 2 — heritage uniques (most are "as a bonus" / "as a reaction" by body)
+  "menhirkin_igneous_picker":   "reaction",
+  "oldenborn_phoenix_oath":     "reaction",
+  "oldenborn_sun_scar":         "action",
+  "furrykin_predator_patience": "bonus",
+  // Phase 3 — multi-pickers and stormborn ward
+  "stormborn_ward_of_the_gale": "reaction",
+  // Pools / passives / info → no gate (return free)
+  "titanbound_pool":            "free",
+  "bulwark_frame_pool":         "free",
+  "shadowjack_pool":            "free",
+  "shadow_courier_access_pool": "free",
+  "breaker_ruin":               "free",
+  "bulwark_ruin":               "free",
+  "passive_info":               "free",
+  "dreamwalker_deploy_cache":   "free",
+  "pactkeeper_civic_charge":            "free",
+  "pactkeeper_administrative_pressure": "free",
+  "pactkeeper_spend_civic_charge":      "bonus",
+  "pactkeeper_bind_subject":            "free",
+  "counter_manifestation":              "action",
+  "dream_echo_reservoir":               "free",
+  "dream_echo_reservoir_spend":         "reaction",
+  "dw_feat_activate":                   "free",
+  "shadow_courier_passive":     "free",
+  "menhirkin_hex_recognition":  "free",
+  "qliph_qliphothic_saturation":"free",
+  "oldenborn_rustland_patch":   "free",
+  "oldenborn_hearth_dominion":  "free",
+  "circuitborn_abilities_picker":"free", // multi-picker — gates fire on inner pick
+  "human_abilities_picker":     "free",
+  "cl_word_that_was":           "action",
+  "wl_tikkun_sight":            "free",     // narrative refund
+  "dw_shared_dream":            "free",     // post-Soma-Break
+  "pk_ledger_day":              "free",     // narrative transfer
+};
+
+// ─── Main dispatch function ───────────────────────────────────────────────────
+
+export async function dispatchFeatureAction(actor, item) {
+  const handler = routeFeature(item);
+  if (!handler) return null; // not an automated feature
+
+  // Per-turn action-economy gate for legacy (non-CHAR_OPT) handlers. CHAR_OPT
+  // entries gate inside _dispatchSingleAbility; this catches everything else.
+  if (handler !== "char_opt_lookup") {
+    const cost = item?.flags?.fourththing?.actionCost ?? LEGACY_ACTION_COST[handler];
+    if (cost) {
+      const allowed = await _checkAndDebitActionEconomy(actor, {
+        label: item?.name ?? handler,
+        actionCost: cost
+      });
+      if (!allowed) return null;
+    }
+  }
+
+  switch (handler) {
+    // === Legacy Titanbound/Shadowjack/Breaker handlers (kept) ===
+    case "titanbound_spend":       return openSpendFrameDie(actor);
+    case "titanbound_pool":        return openFrameDiePool(actor);
+    case "titanbound_stress":      return openFrameDiePool(actor);
+    case "shadowjack_spend":       return openSpendAccessDie(actor);
+    case "shadowjack_pool":        return openAccessPool(actor);
+    case "breaker_ruin":           return openBreakerRuin(actor);
+    // === Existing classes ===
+    case "aurablade_action":       return openAurabladeAction(actor);
+    case "aurablade_burn":         return openBurnState(actor);
+    case "aurablade_change_aura":  return openChangeAura(actor);
+    case "aurablade_stabilize":    return openStabilizeBurn(actor);
+    case "dreamwalker_resonance":  return openDreamwalkerResonance(actor);
+    case "dreamwalker_deploy_cache": return openDreamwalkerDeployCache(actor);
+    case "dream_echo_reservoir":       return openDreamwalkerEchoReservoir(actor);
+    case "dream_echo_reservoir_spend": return openDreamwalkerSpendEchoDie(actor);
+    case "dw_feat_activate":           return openDreamwalkerFeatActivate(actor, item);
+    case "soul_smith_forge":       return openSoulSmithForge(actor);
+    // === Passive / info dialogs ===
+    case "passive_info":           return openPassiveClassInfo(actor, item);
+    case "shadow_courier_passive": return openShadowCourierPassive(actor, item);
+    // === SPRINT F: NEW CLASSES ===
+    // Bulwark
+    case "bulwark_spend_frame":    return openBulwarkSpendFrame(actor);
+    case "bulwark_frame_pool":     return openBulwarkFramePool(actor);
+    case "bulwark_ruin":           return openBulwarkRuin(actor);
+    case "bulwark_stance":         return openBulwarkStance(actor);
+    // Shadow Courier (Pace pool replaces legacy Access Dice — no spend/pool dialogs)
+    case "shadow_courier_package":      return openShadowCourierPackage(actor);
+    case "shadow_courier_crossing":     return openShadowCourierCrossing(actor);
+    // Cosmic Linguist
+    case "cosmic_linguist_authority":   return openCosmicLinguistAuthority(actor);
+    case "cosmic_linguist_annotation":  return openCosmicLinguistAnnotation(actor);
+    // Pactkeeper
+    case "pactkeeper_leverage":         return openPactkeeperLeverage(actor);
+    case "pactkeeper_binding_clause":   return openPactkeeperBindingClause(actor);
+    case "pactkeeper_precedent":        return openPactkeeperPrecedent(actor);
+    case "pactkeeper_civic_charge":     return openPactkeeperCivicCharge(actor);
+    case "pactkeeper_spend_civic_charge": return openPactkeeperSpendCivicCharge(actor);
+    case "pactkeeper_administrative_pressure": return openPactkeeperPressure(actor);
+    case "pactkeeper_bind_subject":     return openPactkeeperBindSubject(actor);
+    case "counter_manifestation":       return openCounterManifestation(actor);
+    // === Caster Discipline pilot 2026-04-27 ===
+    case "cl_mode_sentence":            return openCosmicLinguistMode(actor);
+    case "wl_mode_refraction":          return openWyrdlensMode(actor);
+    case "dw_mode_walking_lane":        return openDreamwalkerMode(actor);
+    case "pk_mode_sealed_pact":         return openPactkeeperMode(actor);
+    case "cl_word_that_was":            return openCosmicLinguistWordThatWas(actor);
+    case "wl_tikkun_sight":             return openWyrdlensTikkunSight(actor);
+    case "dw_shared_dream":             return openDreamwalkerSharedDream(actor);
+    case "pk_ledger_day":               return openPactkeeperLedgerDay(actor);
+    // === End Sprint F ===
+
+    // === Buried per-use abilities — Phase 1: Ancestry cores (2026-04-27) ===
+    case "menhirkin_hex_recognition":   return openMenhirkinHexRecognition(actor);
+    case "echo_diver_temporal_flinch":  return openEchoDiverTemporalFlinch(actor);
+    case "scion_sefirot_attunement":    return openSephirotScionAttunement(actor);
+    case "qliph_qliphothic_saturation": return openQliphScarredSaturation(actor);
+
+    // === Phase 2: Heritage-unique + ancestry feats (2026-04-27) ===
+    case "menhirkin_igneous_picker":    return openMenhirkinIgneousPicker(actor);
+    case "oldenborn_rustland_patch":    return openOldenbornRustlandPatch(actor);
+    case "furrykin_predator_patience":  return openFurrykinPredatorPatience(actor);
+    case "oldenborn_phoenix_oath":      return openOldenbornPhoenixOath(actor);
+    case "oldenborn_hearth_dominion":   return openOldenbornHearthDominion(actor);
+    case "oldenborn_sun_scar":          return openOldenbornSunScar(actor);
+
+    // === Phase 3: Species multi-ability pickers (2026-04-27) ===
+    case "circuitborn_abilities_picker": return openCircuitbornAbilities(actor);
+    case "human_abilities_picker":       return openHumanAbilities(actor);
+    case "stormborn_ward_of_the_gale":   return openStormbornWardOfTheGale(actor);
+
+    // === Phase 4: Character options (data-driven via CHAR_OPT_ABILITIES) ===
+    case "char_opt_lookup":              return openCharOptAbility(actor, item);
+
+    default:                       return null;
+  }
+}

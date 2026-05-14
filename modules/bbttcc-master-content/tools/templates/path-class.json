@@ -1,0 +1,18 @@
+{
+  "name": "<Path Name>",
+  "type": "class",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "<path_id>",
+    "description": {
+      "value": "<p>Two-paragraph pitch: who this path is, what it does that no other path does, and the resource pool it brings online at L1.</p>",
+      "chat": ""
+    },
+    "levels": 20,
+    "hd": { "denomination": "d8", "spent": 0, "additional": "" },
+    "primaryAbility": { "value": ["violence"], "all": false },
+    "advancement": {}
+  },
+  "effects": [],
+  "flags": { "bbttcc": { "kind": "path" } }
+}

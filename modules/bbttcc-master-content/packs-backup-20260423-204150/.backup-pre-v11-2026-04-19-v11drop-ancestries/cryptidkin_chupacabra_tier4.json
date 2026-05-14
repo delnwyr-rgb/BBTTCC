@@ -1,0 +1,32 @@
+{
+  "_id": "fd3175ce8237dfc8",
+  "name": "Cryptidkin (Chupacabra): Skittering Night-Feeder",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Cryptidkin_Chupacabra_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“By the time anyone says your name out loud, you’re already three farms over.”</em></p>\n<p><strong>Skittering Horror.</strong> You gain a climbing speed equal to your walking speed. You have reroll the lowest die on Intrigue (Stealth (Intrigue) (Intrigue) (Intrigue)) checks [TODO(adv-call)] made in darkness, ruins, or confined environments such as bunkers, farmsteads, or dense structures.</p>\n<p><strong>Night-Feeder.</strong> When you attack a creature that is surprised, unconscious, restrained, or isolated from its allies, you have reroll the lowest die on the first attack roll you make against it this turn [TODO(adv-call)].</p>\n<p><strong>First Strike (1/a Soma Break).</strong> When you hit a creature meeting any of those conditions, the strike deals an additional 1d6 damage of the weapon’s type.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "cryptidkin-chupacabra-skittering-night-feeder",
+    "requirements": "Cryptidkin (Chupacabra)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 17 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "cryptidkin", "feature": "skittering_night_feeder", "lineage": "Chupacabra", "tierLevel": 17, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "f95fcfa18822c4e3",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!fd3175ce8237dfc8"
+}

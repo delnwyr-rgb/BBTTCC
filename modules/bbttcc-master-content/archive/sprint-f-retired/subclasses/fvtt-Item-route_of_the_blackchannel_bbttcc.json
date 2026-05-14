@@ -1,0 +1,44 @@
+{
+  "name": "Route of the Blackchannel (BBTTCC)",
+  "type": "subclass",
+  "img": "icons/skills/stealth/shadow-stealthy.webp",
+  "system": {
+    "description": {
+      "value": "\n<p><em>Courier of whispers, riding the dark bandwidth.</em></p>\n<h3>Level 3: Blackchannel (BBTTCC)</h3>\n<p>During Courtly Intrigue/Infiltration, spend <strong>1 Intrigue OP</strong> to open a relay: bonus\u2011action short messages along your route for 10 minutes.</p>\n<h3>Level 3: Packet Slip</h3>\n<p>Disengage lets you Hide if lightly obscured.</p>\n<h3>Level 6: Quiet Handoff</h3>\n<p>Passing an item grants the ally +PB to next Sleight or Stealth within 1 minute.</p>\n<h3>Level 10: Countertrace</h3>\n<p>Reaction: against magical surveillance, force caster check vs your DC; on fail, you\u2019re invisible to that effect for 1 minute (PB/long).</p>\n<h3>Level 14: Courier\u2019s Parity</h3>\n<p>1/long rest duplicate a Tiny item for 1 hour (mundane indistinguishable).</p>\n",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "classIdentifier": "phantom_courier",
+    "identifier": "bbttcc-phantom-route-blackchannel",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "13.348",
+    "systemId": "dnd5e",
+    "systemVersion": "5.1.9",
+    "createdTime": 1762724671457,
+    "modifiedTime": 1762724671457,
+    "lastModifiedBy": "chatgpt-bbttcc",
+    "exportSource": {
+      "worldId": "bunker-busters",
+      "uuid": "Item.4306e5fa67be40aa",
+      "coreVersion": "13.348",
+      "systemId": "dnd5e",
+      "systemVersion": "5.1.9"
+    }
+  },
+  "ownership": {
+    "default": 0
+  }
+}

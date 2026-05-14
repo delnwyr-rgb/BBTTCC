@@ -1,0 +1,282 @@
+{{!-- modules/bbttcc-raid/templates/travel-console.hbs --}}
+<div class="bbttcc-travel-root">
+  <style>
+    .bbttcc-travel-console .window-content {
+      background: #e5e7eb;
+      padding: 0;
+    }
+    .bbttcc-travel-root {
+      padding: 0.75rem 0.9rem 1rem;
+      font-family: Helvetica, Arial, sans-serif;
+      color: #0f172a;
+    }
+    .bbttcc-travel-grid {
+      display: grid;
+      grid-template-columns: 2.2fr 1.4fr;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+    .tc-panel {
+      background: rgba(248,250,252,0.98);
+      border-radius: 0.6rem;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.25);
+      padding: 0.75rem 0.85rem 0.95rem;
+    }
+    .tc-panel-header {
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+    }
+    .tc-sub {
+      font-size: 0.78rem;
+      opacity: 0.8;
+    }
+    .bbttcc-travel-field {
+      margin-top: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .bbttcc-travel-field label {
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .bbttcc-travel-select,
+    .bbttcc-travel-button {
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.4rem;
+      border: 1px solid rgba(15,23,42,0.35);
+      font-size: 0.85rem;
+    }
+    .bbttcc-travel-button {
+      background: linear-gradient(135deg, #e5e7eb, #f9fafb);
+      cursor: pointer;
+      border-color: rgba(148,163,184,1);
+    }
+    .bbttcc-travel-button:hover {
+      filter: brightness(1.03);
+    }
+    .bbttcc-travel-actions {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .rp-legs {
+      margin-top: 0.55rem;
+      max-height: 240px;
+      overflow: auto;
+      border-radius: 0.5rem;
+      border: 1px solid rgba(148,163,184,0.8);
+      background: rgba(248,250,252,0.96);
+    }
+    .rp-leg-row {
+      display: flex;
+      gap: 0.45rem;
+      align-items: center;
+      padding: 0.25rem 0.55rem;
+      border-bottom: 1px solid rgba(148,163,184,0.4);
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .rp-leg-row:last-child {
+      border-bottom: none;
+    }
+    .rp-leg-row:hover {
+      background: rgba(191,219,254,0.25);
+    }
+    .rp-leg-idx {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      width: 1.2rem;
+      text-align: right;
+    }
+    .rp-leg-main {
+      flex: 1;
+    }
+    .rp-leg-terrain {
+      opacity: 0.75;
+    }
+    .rp-leg-cost {
+      font-size: 0.78rem;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+    .rp-leg-remove {
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      background: rgba(248,250,252,0.96);
+      cursor: pointer;
+      font-size: 0.7rem;
+    }
+    .rp-leg-remove:hover {
+      background: rgba(248,113,113,0.15);
+      border-color: rgba(220,38,38,0.85);
+    }
+    .rp-hazard {
+      margin-left: 0.35rem;
+      font-size: 0.72rem;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #f97316;
+      color: #f97316;
+      background: #020617;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .rp-hazard[data-type="radiation"] {
+      border-color: #b91c1c;
+      color: #fecaca;
+      background: #111827;
+    }
+    .rp-hazard[data-type="unstable"] {
+      border-color: #4b5563;
+      color: #e5e7eb;
+      background: #020617;
+    }
+    .tc-summary-chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      border: 1px solid rgba(148,163,184,0.9);
+      background: rgba(248,250,252,0.96);
+    }
+    .tc-summary-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+      margin-top: 0.4rem;
+    }
+    .tc-summary-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .rp-out {
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
+      background: rgba(15,23,42,0.96);
+      color: #f9fafb;
+      border-radius: 0.4rem;
+      padding: 0.3rem 0.5rem;
+      border: 1px solid rgba(30,64,175,0.85);
+    }
+    .bbttcc-travel-console .rad-tier-none   { background: rgba(248,250,252,0.96); border-color: rgba(148,163,184,0.9); color:#0f172a; }
+    .bbttcc-travel-console .rad-tier-low    { background: rgba(22,163,74,0.12);  border-color: rgba(22,163,74,0.9);  color:#166534; }
+    .bbttcc-travel-console .rad-tier-moderate{background: rgba(234,179,8,0.16);  border-color: rgba(202,138,4,0.95); color:#854d0e; }
+    .bbttcc-travel-console .rad-tier-high   { background: rgba(249,115,22,0.16); border-color: rgba(234,88,12,0.95); color:#9a3412; }
+    .bbttcc-travel-console .rad-tier-extreme{ background: rgba(220,38,38,0.18);  border-color: rgba(185,28,28,0.98); color:#7f1d1d; }
+    .tc-right-buttons {
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.4rem;
+      margin-top:0.6rem;
+    }
+    .tc-right-buttons .bbttcc-travel-button.primary {
+      background: linear-gradient(135deg,#4f46e5,#0ea5e9);
+      color:#f9fafb;
+      border-color:rgba(59,130,246,0.95);
+    }
+    .tc-right-buttons .bbttcc-travel-button.primary:hover {
+      filter:brightness(1.05);
+    }
+  </style>
+
+  <div class="bbttcc-travel-grid">
+    {{!-- LEFT: Route Builder --}}
+    <section class="tc-panel tc-left">
+      <div class="tc-panel-header">Travel Route Builder</div>
+      <div class="tc-sub">Plan legs between hexes, then execute via the faction’s OP pool.</div>
+
+      <div class="bbttcc-travel-field">
+        <label>Faction</label>
+        <select data-role="faction" class="bbttcc-travel-select">
+          {{#each factions}}
+            <option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="bbttcc-travel-field" style="margin-top:0.6rem;">
+        <label>Route Planner</label>
+        <div class="bbttcc-travel-actions">
+          <select data-role="rp-from" class="bbttcc-travel-select">
+            <option value="">[From]</option>
+            {{#each hexOptions}}
+              <option value="{{uuid}}">{{label}}</option>
+            {{/each}}
+          </select>
+          <span>→</span>
+          <select data-role="rp-to" class="bbttcc-travel-select">
+            <option value="">[To]</option>
+            {{#each hexOptions}}
+              <option value="{{uuid}}">{{label}}</option>
+            {{/each}}
+          </select>
+          <button type="button" data-action="add-leg" class="bbttcc-travel-button">Add Leg</button>
+          <button type="button" data-action="clear-legs" class="bbttcc-travel-button">Clear</button>
+        </div>
+      </div>
+
+      <div class="rp-legs">
+        {{#if legs.length}}
+          {{#each legs}}
+            <div class="rp-leg-row" data-index="{{index}}" data-hex-to="{{toUuid}}">
+              <span class="rp-leg-idx">{{add index 1}}.</span>
+              <div class="rp-leg-main">
+                <div>{{fromLabel}} → {{toLabel}}</div>
+                <div class="rp-leg-terrain">
+                  [{{terrLabel}}]
+                  {{#if hazardLabel}}
+                    <span class="rp-hazard" data-type="{{hazardType}}">
+                      <span>{{hazardIcon}}</span><span>{{hazardLabel}}</span>
+                    </span>
+                  {{/if}}
+                </div>
+              </div>
+              <div class="rp-leg-cost">{{costStr}}</div>
+              <button type="button" class="rp-leg-remove" data-action="del-leg" data-index="{{index}}">✕</button>
+            </div>
+          {{/each}}
+        {{else}}
+          <div style="padding:0.5rem;font-size:0.82rem;opacity:0.8;">No legs added yet. Pick From/To hexes and click <b>Add Leg</b>.</div>
+        {{/if}}
+      </div>
+    </section>
+
+    {{!-- RIGHT: Summary & Actions --}}
+    <section class="tc-panel tc-right">
+      <div class="tc-panel-header">Route Summary</div>
+      <div class="tc-sub">OP costs, environmental hazards, and projected radiation exposure.</div>
+
+      <div class="bbttcc-travel-field">
+        <div class="tc-summary-label">Organization Points</div>
+        <div class="tc-summary-row">
+          <span class="tc-summary-chip rp-est">{{opSummary}}</span>
+        </div>
+      </div>
+
+      <div class="bbttcc-travel-field">
+        <div class="tc-summary-label">Radiation Exposure</div>
+        <div class="tc-summary-row">
+          <span class="tc-summary-chip rp-rad {{radSummary.tierClass}}">{{radSummary.text}}</span>
+        </div>
+      </div>
+
+      <div class="tc-right-buttons">
+        <button type="button" data-action="reverse-route" class="bbttcc-travel-button">
+          ⤵ Reverse Route
+        </button>
+        <button type="button" data-action="exec-route" class="bbttcc-travel-button primary">
+          ▶ Execute Route
+        </button>
+      </div>
+
+      <div class="rp-out"></div>
+    </section>
+  </div>
+</div>

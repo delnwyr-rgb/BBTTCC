@@ -1,0 +1,105 @@
+{
+  "_id": "407b094b88ec55b6",
+  "name": "Circuitborn",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/CircuitBorn_Exo_Knight.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Circuitborn.</strong> Normalized BBTTCC ancestry root.</p><p>Select one heritage separately when building the character: <strong>Exo-Knight, Parallax, Salvage, Synapse</strong>.</p><p>This root grants the shared Circuitborn core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“You are not a robot. You are a decision the world keeps making about itself.”</em></p>\n<p><strong>Firmware of Identity.</strong> You do not eat, drink, or sleep. You enter <em>maintenance trance</em> when you rest. You have advantage on saving throws against poison and disease, and you are immune to magical sleep.</p>\n<p><strong>Attention Resonance.</strong> Once per long rest, when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), you may regain either (a) one spent BBTTCC OP (a category you used this scene) or (b) hit points equal to your proficiency bonus.</p>\n<p><strong>Informational Matrix Sense.</strong> You can feel active networks: radio, signal, ritual, rumor. You have advantage on checks to identify surveillance, hidden speakers, encoded messages, or noospheric “attention traps.”</p>\n<p><strong>Glitch-Surge.</strong> When you drop to 0 hit points, you can choose to emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In BBTTCC play, this is a perfect excuse for weird consequences.</p><p class=\"ft-heritages-line\"><strong>Heritages:</strong> Exo-Knight, Parallax, Salvage, Synapse.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "bfdd373703c14008",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium.",
+        "value": {}
+      },
+      {
+        "_id": "c1b2c1968c23a2ea",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.ZFMAv1wCEo1TeCrC",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Firmware of Identity",
+        "hint": "Gain the core Circuitborn ancestry traits."
+      }
+    ],
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": "Informational Matrix Sense (networks, signal, rumor)."
+    },
+    "type": {
+      "value": "humanoid",
+      "custom": "",
+      "subtype": "Circuitborn"
+    },
+    "identifier": "circuitborn"
+  },
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "family": "circuitborn",
+      "version": "1.0.0",
+      "date": "2026-01-06"
+    }
+  },
+  "effects": [],
+  "folder": "saIDpsOswuy7lMo1",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-normalized-ancestries",
+      "uuid": "Item.407b094b88ec55b6",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192837574,
+    "modifiedTime": 1773192837574,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  }
+}

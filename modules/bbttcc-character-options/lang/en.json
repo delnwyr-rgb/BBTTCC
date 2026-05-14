@@ -1,0 +1,41 @@
+{
+  "BBTTCC": {
+    "CharacterOptions": {
+      "ModuleName": "BBTTCC Character Options",
+      "ModuleDescription": "Character customization options for the BBTTCC Strategic Warfare Suite",
+      
+      "Settings": {
+        "AutoApplyBonuses": {
+          "Name": "Auto-Apply OP Bonuses",
+          "Hint": "Automatically apply Organization Point bonuses from character options to linked factions"
+        },
+        "ShowTooltips": {
+          "Name": "Show Enhanced Tooltips",
+          "Hint": "Display detailed tooltips for character options explaining their strategic benefits"
+        }
+      },
+      
+      "Categories": {
+        "Archetypes": "Character Archetypes",
+        "CrewTypes": "Crew Types", 
+        "OccultAssociations": "Occult Associations",
+        "PoliticalAffiliations": "Political Affiliations",
+        "EnlightenmentLevels": "Enlightenment Levels",
+        "SephirothicAlignments": "Sephirothic Alignments"
+      },
+      
+      "Notifications": {
+        "PacksLoaded": "BBTTCC Character Options packs loaded successfully",
+        "BonusApplied": "Applied {bonus} to faction {factionName}",
+        "NoFactionLinked": "No faction linked to this character",
+        "InvalidBonus": "Invalid bonus configuration in character option"
+      },
+      
+      "Errors": {
+        "PackNotFound": "Character options pack not found: {pack}",
+        "InvalidItem": "Invalid character option item: {item}",
+        "FactionModuleRequired": "BBTTCC Factions module is required but not available"
+      }
+    }
+  }
+}

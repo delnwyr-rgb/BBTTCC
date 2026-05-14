@@ -1,0 +1,44 @@
+{
+  "name": "Path of the Gentle Demolition (BBTTCC)",
+  "type": "subclass",
+  "img": "icons/tools/hand/bomb-detonator.webp",
+  "system": {
+    "description": {
+      "value": "\n<p><em>Demolition as mercy \u2014 remove the blade, not the patient.</em></p>\n<h3>Level 3: Non-Lethal Blast (BBTTCC)</h3>\n<p>Explosives can be set to subdue sentients; success grants **+1 Non-Lethal OP** (once/scenario).</p>\n<h3>Level 3: Patient Charges</h3>\n<p>Advantage to plant charges unnoticed or shape a blast to protect non-combatants.</p>\n<h3>Level 6: Shock Net</h3>\n<p>Fringe creatures Dex save or restrained in debris until end of next turn.</p>\n<h3>Level 10: Rescue Lane</h3>\n<p>Create an opening: allies passing through gain +10 ft and ignore OAs this turn.</p>\n<h3>Level 14: Silence the Boom</h3>\n<p>1/long rest, demolition is silent beyond 60 ft and doesn\u2019t trigger sound alarms.</p>\n",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "revision": 1,
+      "rules": "2025"
+    },
+    "classIdentifier": "breaker",
+    "identifier": "bbttcc-breaker-gentledemolition",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "flags": {},
+  "_stats": {
+    "coreVersion": "13.348",
+    "systemId": "dnd5e",
+    "systemVersion": "5.1.9",
+    "createdTime": 1762723298105,
+    "modifiedTime": 1762723298105,
+    "lastModifiedBy": "chatgpt-bbttcc",
+    "exportSource": {
+      "worldId": "bunker-busters",
+      "uuid": "Item.09414218571347df",
+      "coreVersion": "13.348",
+      "systemId": "dnd5e",
+      "systemVersion": "5.1.9"
+    }
+  },
+  "ownership": {
+    "default": 0
+  }
+}

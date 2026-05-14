@@ -1,0 +1,32 @@
+{
+  "_id": "2be957953e0afa45",
+  "name": "Human (Cro-Magnon): First Fire",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Human_Cro_Magnon_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“The first thing worth defending was the circle of people who decided, against all sense, to keep each other warm through the night.”</em></p>\n<p><strong>First Fire (1/a Soma Break).</strong> You can spend 10 minutes building a coalition fire — a real one, not a metaphor. While the fire burns and creatures shelter within 30 feet of it (up to 1 hour, or longer if you tend it):</p>\n<ul><li>Friendly creatures have reroll the lowest die on defense checks [TODO(adv-call)] against being Shaken or exhausted.</li><li>Friendly creatures regain 1 extra Integrity per Hit Die spent during a Soma Break taken at the fire.</li><li>The first time any hostile creature crosses within 30 feet of the fire, every friendly creature there knows it.</li></ul>\n<p>The fire counts as a defensible camp for narrative purposes — a place that NPCs will hesitate to violate without cause.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "human-cro-magnon-first-fire",
+    "requirements": "Human (Cro-Magnon)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 17 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "human", "feature": "first_fire", "lineage": "Cro-Magnon", "tierLevel": 17, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "byroU26YSQP4OQUn",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!2be957953e0afa45"
+}

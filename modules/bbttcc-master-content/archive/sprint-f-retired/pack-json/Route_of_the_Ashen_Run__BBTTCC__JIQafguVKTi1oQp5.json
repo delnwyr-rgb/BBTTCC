@@ -1,0 +1,156 @@
+{
+  "name": "Route of the Ashen Run (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_mystic_runner_1.png",
+  "system": {
+    "advancement": {
+      "AR00000000000001": {
+        "_id": "AR00000000000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.T0wrjsSU7pmzFSOb",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.26seQCMXNFrUuUfV",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 3,
+        "title": "Ashway Sprint & Ghost Stamp",
+        "hint": "",
+        "flags": {}
+      },
+      "AR00000000000002": {
+        "_id": "AR00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.XqrDS47HADt0govF",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 6,
+        "title": "Dust Veil",
+        "hint": "",
+        "flags": {}
+      },
+      "AR00000000000003": {
+        "_id": "AR00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.K4R1AY6PDxglVutB",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 10,
+        "title": "Wake of Routes",
+        "hint": "",
+        "flags": {}
+      },
+      "AR00000000000004": {
+        "_id": "AR00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.oRTm7MHbdk62lOTq",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 14,
+        "title": "Dead Drop",
+        "hint": "",
+        "flags": {}
+      },
+      "AR00000000000005": {
+        "_id": "AR00000000000005",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.VQsy5HGqFJpnvvpe",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 18,
+        "title": "Ashen Run Apex",
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "description": {
+      "value": "<p><em>Run the ashways where maps burn out.</em></p><h3>Level 3: Ashway Sprint (BBTTCC)</h3><p>When you lead travel through Wasteland or Desert hexes, you may reduce the Logistics OP cost of that hex crossing by 1 (minimum 1) once per travel action. In addition, you and up to PB allies gain +10 ft movement speed for 1 hour after the travel begins, ending early if you or they stop traveling for more than 1 minute.</p><h3>Level 3: Ghost Stamp</h3><p>As a bonus action, place a Ghost Stamp at your feet. Until the start of your next turn, allies that start their turn within 5 ft of the stamp may use a bonus action to Dash. Uses per long rest = your proficiency bonus.</p><h3>Level 6: Dust Veil</h3><p>If you move at least 20 ft on your turn, ranged attacks against you have disadvantage until the start of your next turn.</p><h3>Level 10: Wake of Routes</h3><p>Spaces you moved through this turn count as not difficult terrain for your allies until the start of your next turn.</p><h3>Level 14: Dead Drop</h3><p>Once per long rest, as a bonus action, you can deliver a Tiny or smaller item to a Ghost Stamp, Courier Cache, or marked drop-site within 600 ft, so long as a continuous traversable route (no solid barriers) exists between you and it. The item appears harmlessly at that cache.</p><h3>Level 18: Ashen Run Apex</h3><p>Once per long rest, as a bonus action, you enter an apex courier trance for 1 minute: your speed increases by 20 ft; you ignore difficult terrain; you have advantage on Dexterity saves; you can move through creature spaces without provoking opportunity attacks; and the first time each round you move at least 20 ft, one creature you passed within 5 ft must save (Dex, DC = 8 + PB + Dex mod) or be knocked prone. Completing a major courier/rescue/delivery under this effect may grant +1 Intrigue OP and +1 Unity as legends spread of your run.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_phantom_route_ashen",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "BBTTCC Originals"
+    },
+    "classIdentifier": "phantomcourier",
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "folder": "F26lISlW3p8NsWzQ",
+  "flags": {
+    "bbttcc-fixed": {
+      "originalIdentifier": "bbttcc-phantom-route-ashen",
+      "normalizedIdentifier": "bbttcc_phantom_route_ashen"
+    },
+    "bbttcc": {
+      "subclass": true,
+      "subclassKey": "bbttcc_phantom_route_ashen"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1765397882349,
+    "modifiedTime": 1775063098705,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "JIQafguVKTi1oQp5",
+  "sort": 225000,
+  "_key": "!items!JIQafguVKTi1oQp5"
+}

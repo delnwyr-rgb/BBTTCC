@@ -1,0 +1,121 @@
+{
+  "BBTTCC": {
+    "ModuleName": "BBTTCC Factions",
+    "ModuleTitle": "BBTTCC Strategic Warfare Suite - Factions",
+    "OPs": {
+      "Violence": "Violence",
+      "NonLethal": "Non-Lethal",
+      "Intrigue": "Intrigue",
+      "Economy": "Economy",
+      "SoftPower": "Soft Power",
+      "Diplomacy": "Diplomacy",
+      "Logistics": "Logistics",
+      "Culture": "Culture",
+      "Faith": "Faith"
+    },
+    "FactionTypes": {
+      "Faction": "Faction",
+      "Guild": "Guild",
+      "Corporation": "Corporation",
+      "Military": "Military Unit",
+      "Organization": "Organization",
+      "Cult": "Cult"
+    },
+    "PowerLevels": {
+      "Emerging": "Emerging",
+      "Growing": "Growing", 
+      "Established": "Established",
+      "Powerful": "Powerful",
+      "Dominant": "Dominant"
+    },
+    "BaseTypes": {
+      "Bunker": "Bunker",
+      "Outpost": "Outpost",
+      "Headquarters": "Headquarters",
+      "SafeHouse": "Safe House",
+      "Command": "Command Center",
+      "Research": "Research Facility"
+    },
+    "Sheets": {
+      "FactionSheet": "BBTTCC Faction Sheet - MODERN"
+    },
+    "Settings": {
+      "EnableMacroIntegration": {
+        "Name": "Enable Macro Integration",
+        "Hint": "Allow macros to create and manage factions"
+      },
+      "DebugMode": {
+        "Name": "Debug Mode",
+        "Hint": "Enable detailed debug logging"
+      }
+    },
+    "Dialogs": {
+      "CreateFaction": "Create BBTTCC Faction",
+      "FactionName": "Faction Name",
+      "FactionDescription": "Description",
+      "FactionType": "Type",
+      "CreateButton": "Create Faction",
+      "CancelButton": "Cancel"
+    },
+    "Notifications": {
+      "FactionCreated": "Faction \"{name}\" created successfully!",
+      "FactionUpdated": "Faction updated successfully!",
+      "InvalidFactionData": "Invalid faction data provided",
+      "ModuleNotReady": "BBTTCC Factions module is not ready",
+      "GMOnly": "Only GMs can create factions",
+      "GameNotReady": "Game is still initializing. Please wait."
+    },
+    "Actions": {
+      "RollOP": "Roll {op} Check",
+      "AddWarLogEntry": "Add War Log Entry",
+      "DeleteWarLogEntry": "Delete War Log Entry", 
+      "AddBase": "Add Base",
+      "DeleteBase": "Delete Base",
+      "ViewTerritories": "View Territories",
+      "ManageRelationships": "Manage Relationships"
+    },
+    "Labels": {
+      "OrganizationPoints": "Organization Points",
+      "TotalOPs": "Total OPs",
+      "PowerLevel": "Power Level",
+      "Status": "Status",
+      "Territories": "Territories",
+      "WarLog": "War Log",
+      "Bases": "Bases",
+      "Details": "Details",
+      "Relationships": "Relationships",
+      "Biography": "Biography",
+      "Alignment": "Alignment"
+    },
+    "Placeholders": {
+      "FactionName": "Enter faction name...",
+      "FactionDescription": "Brief description of the faction...",
+      "WarLogTitle": "Event title...",
+      "WarLogDescription": "Description of the event...",
+      "BaseName": "Base name...",
+      "BaseDescription": "Description of the base..."
+    },
+    "WarLog": {
+      "Types": {
+        "territory_gained": "Territory Gained",
+        "territory_lost": "Territory Lost",
+        "battle": "Battle",
+        "negotiation": "Negotiation",
+        "alliance": "Alliance Formed",
+        "betrayal": "Betrayal",
+        "victory": "Victory",
+        "defeat": "Defeat"
+      }
+    },
+    "Errors": {
+      "FactionNotFound": "Faction not found",
+      "InvalidOPType": "Invalid Organization Point type",
+      "InsufficientPermissions": "Insufficient permissions",
+      "ModuleNotInstalled": "BBTTCC Factions module not installed",
+      "SystemIncompatible": "System not compatible with BBTTCC modules",
+      "AsyncOperationFailed": "Asynchronous operation failed",
+      "TimeoutError": "Operation timed out",
+      "ValidationError": "Data validation failed"
+    }
+  }
+}

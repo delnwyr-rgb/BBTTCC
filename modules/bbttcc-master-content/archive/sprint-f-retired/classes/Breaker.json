@@ -1,0 +1,17 @@
+{
+  "name": "Breaker",
+  "type": "class",
+  "system": {
+    "description": {
+      "value": "<p><strong>Primary Ability:</strong> Strength</p><p>Siege-born demolisher who channels ruin into righteous reclamation.</p><h3>Class Features</h3><ul><li><strong>Tier 1:</strong> Gain proficiency in Athletics & Mason\u2019s Tools. Ignore nonmagical structure resistance. +3 Violence OP cap.</li><li><strong>Tier 2:</strong> When initiating a Siege, spend 1 less Violence OP.</li><li><strong>Tier 3:</strong> Ruin to Renewal \u2014 when you destroy a fortification, you may attempt a Faith or Economy check (DC 15) to purify the ground.</li><li><strong>Tier 4:</strong> Architect of Endings \u2014 Violence Attrition penalties halved for your faction.</li></ul>"
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "primary": "strength",
+      "opBonus": {
+        "violence": 3
+      }
+    }
+  }
+}

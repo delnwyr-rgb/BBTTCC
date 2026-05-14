@@ -1,0 +1,93 @@
+{
+  "id": "bbttcc-master-content",
+  "title": "BBTTCC Master Content",
+  "description": "Core BBTTCC content: ancestries, classes, subclasses, sample NPCs, plus placeholders for items and vehicles.",
+  "version": "13.1.16",
+  "authors": [
+    {
+      "name": "BBTTCC Team"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system"
+      },
+      {
+        "id": "fourththing",
+        "type": "system",
+        "compatibility": {
+          "verified": "14"
+        }
+      }
+    ]
+  },
+  "packs": [
+    {
+      "type": "Item",
+      "name": "ancestries",
+      "label": "BBTTCC Ancestries",
+      "path": "packs/ancestries",
+      "system": "fourththing"
+    },
+    {
+      "type": "Item",
+      "name": "classes",
+      "label": "BBTTCC Classes",
+      "path": "packs/classes",
+      "system": "fourththing"
+    },
+    {
+      "type": "Item",
+      "name": "subclasses",
+      "label": "BBTTCC Subclasses",
+      "path": "packs/subclasses",
+      "system": "fourththing"
+    },
+    {
+      "type": "Item",
+      "name": "items",
+      "label": "BBTTCC Items",
+      "path": "packs/items",
+      "system": "fourththing"
+    },
+    {
+      "type": "Actor",
+      "name": "vehicles",
+      "label": "BBTTCC Vehicles",
+      "path": "packs/vehicles",
+      "system": "fourththing"
+    },
+    {
+      "type": "Actor",
+      "name": "npcs",
+      "label": "BBTTCC NPC Pack v1",
+      "path": "packs/npcs",
+      "system": "fourththing"
+    },
+    {
+      "type": "Item",
+      "name": "doctrines",
+      "label": "BBTTCC Doctrines",
+      "path": "packs/doctrines",
+      "system": "fourththing"
+    },
+    {
+      "type": "JournalEntry",
+      "name": "documentation",
+      "label": "BBTTCC Documentation",
+      "path": "packs/documentation"
+    },
+    {
+      "type": "Scene",
+      "name": "scenes",
+      "label": "BBTTCC Scenes",
+      "path": "packs/scenes"
+    }
+  ]
+}

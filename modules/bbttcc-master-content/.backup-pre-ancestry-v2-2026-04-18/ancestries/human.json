@@ -1,0 +1,105 @@
+{
+  "_id": "a3057e55a2fc1026",
+  "name": "Human",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Human_Erectus_3.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Human.</strong> Normalized BBTTCC ancestry root.</p><p>Select one heritage separately when building the character: <strong>Erectus, Florensis, Neanderthal</strong>.</p><p>This root grants the shared Human core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cHumanity is not special. It\u2019s just stubborn enough to keep moving when reality begs it to stop.\u201d</em></p>\n<p><strong>Adaptive.</strong> Once per long rest, when you fail a saving throw, you can choose to succeed instead.</p>\n<p><strong>Tenacious.</strong> While you have 1 hit point, you have advantage on one check of your choice each round (declare before rolling).</p>\n<p><strong>Lineage Memory.</strong> Choose one human lineage (Neanderthal, Denisovan, Florensis, Erectus). Your lineage grants Tier powers as you level.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "36a73edc22fe4dab",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium.",
+        "value": {}
+      },
+      {
+        "_id": "1d8d99cab1380a3c",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.eOgUueAWGLEsQpTR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stubborn Spark",
+        "hint": "Gain the core Human ancestry traits."
+      }
+    ],
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": "Lineage Memory (ancient human adaptations)."
+    },
+    "type": {
+      "value": "humanoid",
+      "custom": "",
+      "subtype": "Human"
+    },
+    "identifier": "human"
+  },
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "family": "human",
+      "version": "1.0.0",
+      "date": "2026-01-06"
+    }
+  },
+  "effects": [],
+  "folder": "MOZWmjywvOhkw2LM",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-normalized-ancestries",
+      "uuid": "Item.a3057e55a2fc1026",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192844645,
+    "modifiedTime": 1773192844645,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  }
+}

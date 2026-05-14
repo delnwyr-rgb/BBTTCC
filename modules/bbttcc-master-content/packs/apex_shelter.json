@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Ursid): Apex Shelter",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_4.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Ursid)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“Your body is a fortification.”</em></p>\n        <p><strong>Apex Shelter (1/Long Rest).</strong> For 1 minute, allies within 10 feet gain +1 AC and advantage on saves against being moved or knocked prone. You must remain conscious.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-ursid-apex_shelter",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "apex_shelter",
+      "clade": "Ursid",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Ursid",
+      "normalizedFrom": "Furrykin (Ursid)"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": "Item.z9J1jeHBcWB3tH0f",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.z9J1jeHBcWB3tH0f",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "z9J1jeHBcWB3tH0f",
+  "_srcfile": "fvtt-Item-furrykin-(ursid)_-apex-shelter-z9J1jeHBcWB3tH0f.json"
+}

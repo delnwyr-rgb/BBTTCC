@@ -1,0 +1,2092 @@
+{
+  "$comment": "BBTTCC Sorting Engine v2 — Full Spec (Option A: pure Sorting Engine, NOT picker wizard). Approved 2026-04-23. Quiz content from sorting_engine_v2_quiz_draft_v0.md (no edits). REPLACES the picker-era draft schema (schemaVersion 1) with quiz/answer/trait schema (schemaVersion 2). DO NOT deploy until resolver module + wizard are reworked to match — schema change is breaking.",
+  "version": "2.0.0-draft-3",
+  "schemaVersion": 2,
+  "approach": "sorting-engine",
+  "issuedDate": "2026-04-23",
+  "status": "draft",
+  "supersedes": "1.0.0 (pre-RFI; same trait→quiz approach, new vocabulary)",
+  "malVoiceApproved": "2026-04-23",
+  "quizContentApproved": "2026-04-23",
+  "sourceArtifacts": {
+    "roadmap": "~/Downloads/BBTTCC_Roadmap_GapAnalysis_v3.1.docx (§7)",
+    "sprintDoc": "~/Downloads/CURRENT_SPRINT.md",
+    "plainEnglishDraft": "~/Downloads/sorting_engine_v2_questions_draft_v1.md",
+    "malVoiceDraft": "~/Downloads/sorting_engine_v2_questions_draft_v2.md",
+    "quizDraft": "~/Downloads/sorting_engine_v2_quiz_draft_v0.md"
+  },
+  "designerDecisions": {
+    "_comment": "Consolidated record of every designer call shaping this spec. Future sessions read this block first.",
+    "2026-04-22_sheetSprintClosed": "Option B (DOM injection) affirmed live; v3.0 native-HBS sprint was fiction. Sorting Engine v2 opens directly.",
+    "2026-04-22_keterOrientationProse": "Each station gets a 2-3 sentence sefirah orientation, Mal-voiced.",
+    "2026-04-22_chokhmahSparkDropped": "Spark resonance was a v3.0 fabrication. Removed from Chokhmah.",
+    "2026-04-22_yesodSelfAlignment": "Picking Yesod at Yesod is just one of 10. No special meaning.",
+    "2026-04-22_chokhmahBinahFilter": "UI layer only.",
+    "2026-04-22_pillarReadoutInScope": "Approved. Pillar tags now live on quiz answers (revised from sub-options).",
+    "2026-04-22_noMigration": "v1 characters will be eliminated. No migration UX needed.",
+    "2026-04-22_yesodMockSeparate": "Yesod UX still designer-driven; now applies to quiz-form Yesod.",
+    "2026-04-23_malVoiceApproved": "Draft v2 (orientations + questions) approved as-is.",
+    "2026-04-23_optionAPivot": "LOCKED Option A: pure Sorting Engine (quiz → suggested build), NOT picker wizard. v1's quiz architecture preserved with new trait vocabulary and Tree-organized question distribution. Existing character-wizard.js is the override surface after the descent's suggestion.",
+    "2026-04-23_quizContentApproved": "20 Mal-voiced questions × 4 trait-tagged answers approved as-is, no edits.",
+    "2026-04-23_traitVocabularyV2": "29 traits — 18 core + 10 sefirot signals + 'service'. Service was used in approved answers but not declared in the vocabulary section of the draft; preserved here as a 19th core trait (orientation-toward-duty; distinct from 'sacrifice' which is giving-of-self).",
+    "2026-04-23_chokhmahOneAncestry": "v1 sorting engine and live wizard both store ONE ancestry pick (speciesUuid). The 'two ancestries braid into you' question still asks the player about their bloodline, but the resolver outputs a single best-fit species. Multi-pick was a v3.0 fabrication.",
+    "2026-04-23_canonicalContentLock": "User confirmed canonical content via Foundry-UI screenshots 2026-04-23. Sorting Engine considers ONLY: 9 paths (Aurablade, Bulwark, Cosmic Linguist, Dreamwalker, Harmony Marshal, Pactkeeper, Shadow Courier, Soul-Smith, Wyrdlens Adept), 8 ancestries (Circuitborn, Cryptidkin, Echo-Diver, Human, Menhirkin, Oldenborn, Qliph-Scarred, Sephirotic Scion), 27 doctrines (3 per path), 27 unique heritages across 8 ancestries. D&D5e classes are EXPLICITLY EXCLUDED from sorting engine consideration. The 74-subclass + 18-classIdentifier finding from packs.zip was stale source material — the live Foundry compendium is the canonical truth.",
+    "2026-04-23_terminologyCollisionDocumented": "BBTTCC RFI 'doctrines' = subclasses (in `subclasses` pack). Bad Eden 'doctrines' = strategic actions (in `doctrines` pack). Documented in feedback memory; future sessions warned at load time.",
+    "2026-04-23_subclassesPackEmpty": "The bbttcc-master-content.subclasses pack is EMPTY (0-byte LevelDB). Subclasses live in `bbttcc-master-content.classes` alongside their parent class items, organized by folder. Wizard SE_PACK_KEYS.doctrine updated to point at the classes pack. Name-based lookup works — doctrine names ('Path of the Mountain', 'Trance of the Quiet Sun', etc.) are unique vs. class names ('Bulwark', 'Aurablade', etc.).",
+    "2026-04-23_archetypesCanonTarot": "Archetypes are the 22 Major Arcana (per Foundry-UI screenshot 2026-04-23). Replaces the legacy 6-archetype list. Trait weights authored from traditional tarot symbolism. Minor Arcana inclusion TBD per designer — could be 22 (Major only), 78 (Major + Minor), or some other configuration.",
+    "2026-04-23_crewCanonExpanded": "Crew types expanded from 6 to 12 per Foundry-UI screenshot 2026-04-23. Renamed two existing entries to match pack names exactly (Covert-Ops Cell→Covert Ops Cell, Survivors Militia→Survivors/Militia). Added: Abyssal Cartographer, Ashbound Survivors, Gridbreaker, Ironbound Ascendants, Storm Wardens, Verdant Stalkers.",
+    "2026-04-23_occultCanonExpanded": "Occult associations expanded from 6 to 10 per Foundry-UI screenshot 2026-04-23. Existing 6 names match pack. Added: Biomancer, Exorcist/Purifier, Prophet/Oracle, Shaman."
+  },
+  "traits": [
+    {
+      "name": "violence",
+      "category": "action",
+      "desc": "Direct force; physical or coercive confrontation."
+    },
+    {
+      "name": "stealth",
+      "category": "action",
+      "desc": "Indirection; moving unseen; the second entrance."
+    },
+    {
+      "name": "speech",
+      "category": "action",
+      "desc": "Persuasion, negotiation, oath; words as power."
+    },
+    {
+      "name": "study",
+      "category": "action",
+      "desc": "Knowledge-before-action; the scholar's patience."
+    },
+    {
+      "name": "kinship",
+      "category": "social",
+      "desc": "Chosen family; crew-first loyalty."
+    },
+    {
+      "name": "hierarchy",
+      "category": "social",
+      "desc": "Structure-respect; oaths up and down a chain."
+    },
+    {
+      "name": "independence",
+      "category": "social",
+      "desc": "Lone walker; solvency without belonging."
+    },
+    {
+      "name": "sacrifice",
+      "category": "social",
+      "desc": "Giving of self; the willingness to be spent."
+    },
+    {
+      "name": "service",
+      "category": "social",
+      "desc": "Orientation-toward-duty; being-in-service-of (distinct from sacrifice's giving-of-self — service is about who/what you answer to)."
+    },
+    {
+      "name": "compassion",
+      "category": "tone",
+      "desc": "Reflexive mercy; open-hand default."
+    },
+    {
+      "name": "severity",
+      "category": "tone",
+      "desc": "Reflexive discipline; closed-fist default."
+    },
+    {
+      "name": "sorrow",
+      "category": "tone",
+      "desc": "Carrying grief; familiar with loss."
+    },
+    {
+      "name": "dread",
+      "category": "tone",
+      "desc": "Familiar with darkness; unshaken by it."
+    },
+    {
+      "name": "risk",
+      "category": "disposition",
+      "desc": "Willing to bet; moves first."
+    },
+    {
+      "name": "ambition",
+      "category": "disposition",
+      "desc": "Drive toward more; power/influence hunger."
+    },
+    {
+      "name": "mercy",
+      "category": "disposition",
+      "desc": "Active kindness; giving-without-asking."
+    },
+    {
+      "name": "discipline",
+      "category": "disposition",
+      "desc": "Restraint-as-strength; pruning."
+    },
+    {
+      "name": "faith",
+      "category": "mystic",
+      "desc": "Trust in the pattern beneath the pattern."
+    },
+    {
+      "name": "ritual",
+      "category": "mystic",
+      "desc": "Form as power; the rehearsed gesture."
+    },
+    {
+      "name": "keter_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Cosmic calling; pre-incarnation pull."
+    },
+    {
+      "name": "chokhmah_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Primordial flash; body-as-first-draft."
+    },
+    {
+      "name": "binah_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Forming womb; cultural shaping."
+    },
+    {
+      "name": "chesed_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Overflowing mercy; chosen kinship."
+    },
+    {
+      "name": "gevurah_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Disciplined cutting; pruning."
+    },
+    {
+      "name": "tiphareth_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Balancing heart; harmonizing principle."
+    },
+    {
+      "name": "netzach_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Enduring fire; cause-driven persistence."
+    },
+    {
+      "name": "hod_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Humbled intellect; surrender to mystery."
+    },
+    {
+      "name": "yesod_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Foundational anchor; gravitational center."
+    },
+    {
+      "name": "malkuth_signal",
+      "category": "sefirot_signal",
+      "weightInAlignmentResolver": 2,
+      "desc": "Incarnate presence; manifest world."
+    }
+  ],
+  "pillarReadout": {
+    "_comment": "Diagnostic chip shown after step 8 (Hod resolves). Also seeds the AAE drift engine. SAME tally drives both — one computation. Numeric counts hidden from player.",
+    "firesAfterStep": 8,
+    "consumedBy": "bbttcc-aae drift engine",
+    "actorFlagPath": "flags.bbttcc-sorting-engine.pillarTally",
+    "flagShape": {
+      "mercy": "integer",
+      "severity": "integer",
+      "neutral": "integer"
+    },
+    "aaeDriftSeed": {
+      "contractVersion": 1,
+      "consumerFn": "readSortingEnginePillarTally"
+    },
+    "classification": {
+      "balancedWithin": 1,
+      "tiltThreshold": 2,
+      "labels": {
+        "balanced": "Balanced",
+        "tiltingMercy": "Tilting Mercy",
+        "tiltingSeverity": "Tilting Severity"
+      },
+      "showNumericCounts": false
+    }
+  },
+  "pillarTagScheme": {
+    "_comment": "REVISED for Option A: pillar tags live on quiz ANSWERS now, not pickable sub-options. Each answer at sefirah N defaults to N's pillar contribution; per-answer override via explicit pillarTag field on the answer.",
+    "defaultsBySefirahPillar": {
+      "mercy": "mercy",
+      "severity": "severity",
+      "middle": "neutral"
+    },
+    "validValues": [
+      "mercy",
+      "severity",
+      "neutral"
+    ],
+    "computation": "Sum each answered question's contribution. Side-pillar sefirot answers default to that pillar; middle-pillar sefirot answers default to neutral. An answer may carry an explicit pillarTag override for narrative exceptions."
+  },
+  "yesodUxMock": {
+    "_comment": "Designer deliverable. NOTE: under Option A, Yesod presents 2 quiz questions (not a sefirah picker). The 'bloom-all-ten' moment — if preserved — could be visualized DURING those 2 questions (the Tree visualization brightens all sefirot momentarily as the player answers). Still designer-driven.",
+    "status": "pending — design now applies to quiz-form Yesod, not picker",
+    "blocks": [
+      "wizard-rework-yesod-presentation"
+    ]
+  },
+  "resolverOrder": [
+    "resolveAlignment",
+    "resolveAncestry",
+    "resolveOccult",
+    "resolvePhilosophy",
+    "resolveArchetype",
+    "resolveCrew",
+    "resolveClass",
+    "resolveDoctrine"
+  ],
+  "_resolverOrderNote": "Alignment fires first — its result feeds ancestry + occult bonus logic per v1 pattern (alignmentBonuses block below).",
+  "resolverWeights": {
+    "_comment": "Per-output-option trait weight maps. Designer-tunable. Resolver picks highest-scoring option per category. Score = sum over (trait_in_player_pool × weight_for_this_option). Sefirot signal traits get a ×2 multiplier in resolveAlignment via the trait declaration's weightInAlignmentResolver field — other resolvers treat them as normal.",
+    "archetype": {
+      "_comment": "22 Major Arcana — canonical archetypes per Foundry compendium 2026-04-23. Replaces the legacy 6-archetype list (Hierophant/Mayor/Squad Leader/Wizard Scholar/Warlord/Ancient Blood). Minor Arcana inclusion TBD per designer. Trait weights drawn from traditional tarot symbolism + Mal Voice / BBTTCC sensibility — first pass, designer-tunable.",
+      "The Fool": {
+        "risk": 2,
+        "independence": 2,
+        "faith": 1,
+        "ambition": 1,
+        "keter_signal": 1
+      },
+      "The Magician": {
+        "speech": 2,
+        "study": 1,
+        "ambition": 2,
+        "ritual": 1,
+        "hod_signal": 1
+      },
+      "The High Priestess": {
+        "study": 2,
+        "faith": 2,
+        "stealth": 1,
+        "hod_signal": 2,
+        "binah_signal": 1
+      },
+      "The Empress": {
+        "compassion": 2,
+        "kinship": 2,
+        "mercy": 1,
+        "chesed_signal": 2,
+        "binah_signal": 1
+      },
+      "The Emperor": {
+        "hierarchy": 2,
+        "severity": 1,
+        "discipline": 2,
+        "gevurah_signal": 1,
+        "ambition": 1
+      },
+      "The Hierophant": {
+        "faith": 2,
+        "ritual": 2,
+        "hierarchy": 1,
+        "speech": 1,
+        "tiphareth_signal": 1
+      },
+      "The Lovers": {
+        "kinship": 2,
+        "compassion": 1,
+        "speech": 1,
+        "tiphareth_signal": 1,
+        "chesed_signal": 1
+      },
+      "The Chariot": {
+        "discipline": 2,
+        "ambition": 2,
+        "hierarchy": 1,
+        "violence": 1,
+        "netzach_signal": 1
+      },
+      "Strength": {
+        "compassion": 2,
+        "discipline": 1,
+        "mercy": 2,
+        "gevurah_signal": 1,
+        "chesed_signal": 1
+      },
+      "The Hermit": {
+        "study": 2,
+        "independence": 2,
+        "faith": 1,
+        "hod_signal": 1,
+        "yesod_signal": 1
+      },
+      "The Wheel of Fortune": {
+        "risk": 2,
+        "faith": 1,
+        "independence": 1,
+        "ambition": 1,
+        "chokhmah_signal": 1
+      },
+      "Justice": {
+        "speech": 2,
+        "severity": 1,
+        "hierarchy": 1,
+        "mercy": 1,
+        "tiphareth_signal": 1,
+        "discipline": 1
+      },
+      "The Hanged Man": {
+        "sacrifice": 2,
+        "faith": 1,
+        "sorrow": 1,
+        "hod_signal": 1,
+        "discipline": 1
+      },
+      "Death": {
+        "severity": 2,
+        "sorrow": 2,
+        "faith": 1,
+        "gevurah_signal": 1,
+        "discipline": 1
+      },
+      "Temperance": {
+        "discipline": 2,
+        "compassion": 1,
+        "ritual": 1,
+        "tiphareth_signal": 2,
+        "mercy": 1
+      },
+      "The Devil": {
+        "ambition": 2,
+        "dread": 1,
+        "severity": 1,
+        "hierarchy": 1,
+        "violence": 1
+      },
+      "The Tower": {
+        "violence": 2,
+        "risk": 2,
+        "severity": 1,
+        "gevurah_signal": 1,
+        "ambition": 1
+      },
+      "The Star": {
+        "faith": 2,
+        "compassion": 2,
+        "mercy": 1,
+        "netzach_signal": 1,
+        "chesed_signal": 1
+      },
+      "The Moon": {
+        "stealth": 2,
+        "dread": 1,
+        "faith": 1,
+        "sorrow": 1,
+        "yesod_signal": 1,
+        "hod_signal": 1
+      },
+      "The Sun": {
+        "compassion": 2,
+        "speech": 1,
+        "kinship": 1,
+        "tiphareth_signal": 2,
+        "faith": 1
+      },
+      "Judgment": {
+        "faith": 2,
+        "sacrifice": 1,
+        "speech": 1,
+        "keter_signal": 2,
+        "severity": 1
+      },
+      "The World": {
+        "discipline": 2,
+        "ritual": 1,
+        "faith": 1,
+        "malkuth_signal": 2,
+        "tiphareth_signal": 1
+      }
+    },
+    "crew": {
+      "_comment": "12 canonical crew types per Foundry compendium 2026-04-23. Two existing entries renamed (Covert-Ops Cell→Covert Ops Cell, Survivors Militia→Survivors/Militia) to match pack item names. 6 new types added with first-pass trait weights — designer-tunable.",
+      "Abyssal Cartographer": {
+        "stealth": 1,
+        "study": 2,
+        "dread": 1,
+        "faith": 1,
+        "hod_signal": 1,
+        "independence": 1
+      },
+      "Ashbound Survivors": {
+        "kinship": 2,
+        "dread": 1,
+        "sorrow": 2,
+        "discipline": 1,
+        "netzach_signal": 1
+      },
+      "Covert Ops Cell": {
+        "stealth": 2,
+        "discipline": 1,
+        "independence": 1,
+        "speech": 1
+      },
+      "Cultural Ambassadors": {
+        "speech": 2,
+        "compassion": 1,
+        "kinship": 1,
+        "study": 1
+      },
+      "Diplomatic Envoys": {
+        "speech": 2,
+        "discipline": 1,
+        "hierarchy": 1,
+        "mercy": 1
+      },
+      "Gridbreaker": {
+        "stealth": 2,
+        "ambition": 1,
+        "independence": 1,
+        "risk": 2,
+        "severity": 1
+      },
+      "Ironbound Ascendants": {
+        "discipline": 2,
+        "hierarchy": 2,
+        "ambition": 1,
+        "faith": 1,
+        "gevurah_signal": 1
+      },
+      "Mercenary Band": {
+        "violence": 2,
+        "ambition": 1,
+        "independence": 1,
+        "risk": 1
+      },
+      "Peacekeeper Corps": {
+        "discipline": 2,
+        "hierarchy": 1,
+        "mercy": 2,
+        "compassion": 1
+      },
+      "Storm Wardens": {
+        "violence": 1,
+        "discipline": 1,
+        "sacrifice": 2,
+        "kinship": 1,
+        "severity": 1,
+        "netzach_signal": 1
+      },
+      "Survivors/Militia": {
+        "violence": 1,
+        "kinship": 2,
+        "dread": 1,
+        "sorrow": 1
+      },
+      "Verdant Stalkers": {
+        "stealth": 2,
+        "study": 1,
+        "independence": 2,
+        "mercy": 1,
+        "malkuth_signal": 1
+      }
+    },
+    "class": {
+      "_comment": "9 BBTTCC RFI canonical paths — confirmed via Foundry-UI screenshots 2026-04-23. D&D5e classes EXPLICITLY EXCLUDED from sorting engine consideration. Identifiers (lowercase, snake_case) match the live BBTTCC Classes pack.",
+      "Aurablade": {
+        "violence": 2,
+        "ritual": 2,
+        "ambition": 1,
+        "kinship": 1,
+        "_variableAuraBased": "Aurablade trait weight is differentiated per doctrine (Blood Hymn = fury, Stillheart = resolve, Void Edge = dread). See doctrine map."
+      },
+      "Bulwark": {
+        "discipline": 1,
+        "severity": 1,
+        "sacrifice": 2,
+        "gevurah_signal": 1,
+        "malkuth_signal": 1,
+        "hierarchy": 1
+      },
+      "Cosmic Linguist": {
+        "study": 2,
+        "faith": 1,
+        "ritual": 1,
+        "hod_signal": 2,
+        "binah_signal": 1
+      },
+      "Dreamwalker": {
+        "study": 2,
+        "stealth": 1,
+        "faith": 1,
+        "hod_signal": 2
+      },
+      "Harmony Marshal": {
+        "speech": 2,
+        "hierarchy": 1,
+        "mercy": 1,
+        "tiphareth_signal": 2,
+        "kinship": 1,
+        "ritual": 1
+      },
+      "Pactkeeper": {
+        "faith": 1,
+        "ritual": 2,
+        "hierarchy": 2,
+        "speech": 1,
+        "tiphareth_signal": 1
+      },
+      "Shadow Courier": {
+        "stealth": 2,
+        "independence": 1,
+        "discipline": 1,
+        "malkuth_signal": 1,
+        "kinship": 1
+      },
+      "Soul-Smith": {
+        "study": 1,
+        "ritual": 2,
+        "compassion": 2,
+        "chesed_signal": 1
+      },
+      "Wyrdlens Adept": {
+        "study": 2,
+        "faith": 2,
+        "independence": 1,
+        "binah_signal": 1
+      }
+    },
+    "ancestry": {
+      "_comment": "Resolves to 1 species per v1 pattern. v2 wizard UI shows 8 species roots — recommend resolver only scores those 8 to avoid suggesting a hidden item.",
+      "Circuitborn": {
+        "study": 2,
+        "discipline": 1,
+        "independence": 1
+      },
+      "Cryptidkin": {
+        "independence": 2,
+        "stealth": 2,
+        "dread": 1
+      },
+      "Echo-Diver": {
+        "sorrow": 2,
+        "faith": 1,
+        "study": 2,
+        "binah_signal": 1
+      },
+      "Human": {
+        "speech": 1,
+        "compassion": 1,
+        "kinship": 1,
+        "ambition": 1,
+        "independence": 1,
+        "study": 1
+      },
+      "Menhirkin": {
+        "faith": 1,
+        "kinship": 1,
+        "discipline": 1,
+        "yesod_signal": 1,
+        "sacrifice": 1
+      },
+      "Oldenborn": {
+        "dread": 1,
+        "kinship": 2,
+        "sorrow": 2
+      },
+      "Qliph-Scarred": {
+        "dread": 2,
+        "severity": 1,
+        "sorrow": 2
+      },
+      "Sephirotic Scion": {
+        "faith": 2,
+        "ritual": 1,
+        "tiphareth_signal": 2
+      }
+    },
+    "philosophy": {
+      "Marxist/Communist": {
+        "kinship": 2,
+        "ambition": 1,
+        "speech": 1,
+        "sacrifice": 1,
+        "compassion": 1
+      },
+      "Liberal": {
+        "speech": 2,
+        "mercy": 1,
+        "study": 1,
+        "compassion": 1,
+        "ambition": 1
+      },
+      "Social Democratic": {
+        "mercy": 2,
+        "compassion": 2,
+        "kinship": 1,
+        "speech": 1
+      },
+      "Libertarian": {
+        "independence": 2,
+        "risk": 2,
+        "ambition": 1
+      },
+      "Authoritarian/Statist": {
+        "hierarchy": 2,
+        "severity": 2,
+        "discipline": 1
+      },
+      "Theocratic": {
+        "faith": 2,
+        "ritual": 2,
+        "hierarchy": 1
+      },
+      "Fascist": {
+        "hierarchy": 2,
+        "violence": 2,
+        "severity": 2
+      },
+      "Anarchist": {
+        "independence": 2,
+        "risk": 1,
+        "ambition": 1,
+        "speech": 1,
+        "sacrifice": 1
+      }
+    },
+    "occult": {
+      "_comment": "10 canonical occult associations per Foundry compendium 2026-04-23. 6 existing names match pack; 4 new (Biomancer, Exorcist/Purifier, Prophet/Oracle, Shaman) added with first-pass trait weights.",
+      "Alchemist": {
+        "study": 2,
+        "ritual": 2,
+        "discipline": 1
+      },
+      "Biomancer": {
+        "study": 2,
+        "ritual": 1,
+        "compassion": 1,
+        "malkuth_signal": 1,
+        "chesed_signal": 1
+      },
+      "Exorcist/Purifier": {
+        "faith": 2,
+        "ritual": 2,
+        "gevurah_signal": 1,
+        "sacrifice": 1
+      },
+      "Gnostic": {
+        "study": 2,
+        "faith": 2,
+        "independence": 1
+      },
+      "Goetic Summoner": {
+        "ritual": 2,
+        "dread": 2,
+        "ambition": 1
+      },
+      "Kabbalist": {
+        "study": 2,
+        "faith": 1,
+        "tiphareth_signal": 2
+      },
+      "Prophet/Oracle": {
+        "faith": 2,
+        "sorrow": 1,
+        "study": 1,
+        "hod_signal": 2,
+        "sacrifice": 1
+      },
+      "Rosicrucian": {
+        "ritual": 2,
+        "faith": 1,
+        "kinship": 1
+      },
+      "Shaman": {
+        "ritual": 2,
+        "kinship": 1,
+        "sorrow": 1,
+        "malkuth_signal": 1,
+        "faith": 1
+      },
+      "Tarot Mage": {
+        "faith": 1,
+        "ritual": 2,
+        "ambition": 1
+      }
+    },
+    "alignment": {
+      "_comment": "Sephirotic Alignment resolved by highest sefirot signal. Sefirot signals already get a ×2 multiplier in this resolver via the trait declaration's weightInAlignmentResolver field, so this map is essentially identity — signal totals win directly.",
+      "Keter": {
+        "keter_signal": 2,
+        "ambition": 1
+      },
+      "Chokhmah": {
+        "chokhmah_signal": 1,
+        "study": 1
+      },
+      "Binah": {
+        "binah_signal": 1,
+        "sorrow": 1
+      },
+      "Chesed": {
+        "chesed_signal": 1,
+        "compassion": 1
+      },
+      "Gevurah": {
+        "gevurah_signal": 1,
+        "dread": 1
+      },
+      "Tiphareth": {
+        "tiphareth_signal": 1,
+        "ritual": 1
+      },
+      "Netzach": {
+        "netzach_signal": 1,
+        "kinship": 1,
+        "ambition": 1
+      },
+      "Hod": {
+        "hod_signal": 1,
+        "study": 1
+      },
+      "Yesod": {
+        "yesod_signal": 1,
+        "ritual": 1
+      },
+      "Malkuth": {
+        "malkuth_signal": 1
+      }
+    },
+    "doctrine": {
+      "_comment": "27 canonical doctrines (RFI subclasses) — 3 per path. Source: live BBTTCC Subclasses pack confirmed via Foundry UI 2026-04-23. NOT the Bad Eden 'doctrines' pack (terminology collision documented in feedback memory). Class→doctrine grouping below is INFERRED from doctrine names (Path→Bulwark, Trance→Dreamwalker, etc.) — designer to verify before final ship.",
+      "_inferredMappingNote": "Most groupings are obvious by naming pattern. Three are inferences worth confirming: Metaphor Apostle (placed under Pactkeeper as oath-bearer; could plausibly be Cosmic Linguist), the three Aurablade doctrines (mapped to aura modes — Blood Hymn=fury, Stillheart=resolve, Void Edge=dread, no mercy-aura subclass), and the three Pactkeeper doctrines as a set.",
+      "_traitWeightNote": "Trait weights inherit from parent class with mild per-doctrine differentiation. First-pass weights — designer-tunable.",
+      "Aurablade": {
+        "Blood Hymn": {
+          "violence": 2,
+          "ritual": 2,
+          "severity": 1,
+          "_auraMode": "fury"
+        },
+        "Stillheart": {
+          "discipline": 2,
+          "ritual": 1,
+          "compassion": 1,
+          "_auraMode": "resolve"
+        },
+        "Void Edge": {
+          "stealth": 1,
+          "ritual": 2,
+          "dread": 2,
+          "_auraMode": "dread"
+        }
+      },
+      "Bulwark": {
+        "Path of the Avalanche": {
+          "discipline": 1,
+          "violence": 2,
+          "risk": 1,
+          "gevurah_signal": 1
+        },
+        "Path of the Cataclyst": {
+          "ambition": 2,
+          "severity": 1,
+          "violence": 1,
+          "gevurah_signal": 1
+        },
+        "Path of the Mountain": {
+          "discipline": 2,
+          "sacrifice": 2,
+          "faith": 1,
+          "yesod_signal": 1
+        }
+      },
+      "Cosmic Linguist": {
+        "Annotator": {
+          "study": 2,
+          "speech": 1,
+          "compassion": 1,
+          "hod_signal": 1
+        },
+        "Auditor": {
+          "study": 2,
+          "discipline": 1,
+          "severity": 1,
+          "hod_signal": 1
+        },
+        "Redactor": {
+          "study": 2,
+          "stealth": 1,
+          "discipline": 1,
+          "hod_signal": 1
+        }
+      },
+      "Dreamwalker": {
+        "Trance of the Quiet Sun": {
+          "study": 1,
+          "compassion": 2,
+          "faith": 1,
+          "hod_signal": 1
+        },
+        "Trance of the Sapphire Gate": {
+          "study": 2,
+          "faith": 2,
+          "stealth": 1,
+          "hod_signal": 1
+        },
+        "Trance of the Thousand Faces": {
+          "stealth": 2,
+          "speech": 1,
+          "independence": 1,
+          "hod_signal": 1
+        }
+      },
+      "Harmony Marshal": {
+        "Mandate of Accord": {
+          "speech": 2,
+          "compassion": 1,
+          "kinship": 1,
+          "tiphareth_signal": 1
+        },
+        "Mandate of Overwatch": {
+          "study": 2,
+          "discipline": 1,
+          "hierarchy": 1,
+          "tiphareth_signal": 1
+        },
+        "Mandate of Resolve": {
+          "discipline": 2,
+          "severity": 1,
+          "hierarchy": 1,
+          "tiphareth_signal": 1
+        }
+      },
+      "Pactkeeper": {
+        "Archivist of Precedent": {
+          "study": 2,
+          "ritual": 2,
+          "hierarchy": 1,
+          "tiphareth_signal": 1
+        },
+        "Metaphor Apostle": {
+          "speech": 2,
+          "faith": 2,
+          "ritual": 1,
+          "tiphareth_signal": 1
+        },
+        "Steward of Living Communities": {
+          "kinship": 2,
+          "compassion": 1,
+          "service": 2,
+          "chesed_signal": 1
+        }
+      },
+      "Shadow Courier": {
+        "Route of the Black Stair": {
+          "stealth": 2,
+          "dread": 1,
+          "independence": 1,
+          "malkuth_signal": 1
+        },
+        "Route of the Last Mile": {
+          "discipline": 2,
+          "sacrifice": 1,
+          "stealth": 1,
+          "malkuth_signal": 1
+        },
+        "Route of the Wayfarer Tongue": {
+          "speech": 2,
+          "stealth": 1,
+          "kinship": 1,
+          "malkuth_signal": 1
+        }
+      },
+      "Soul-Smith": {
+        "Forge of Bound Light": {
+          "ritual": 2,
+          "compassion": 2,
+          "discipline": 1,
+          "chesed_signal": 1
+        },
+        "Forge of the Spark Reclaimer": {
+          "ritual": 2,
+          "sorrow": 1,
+          "study": 1,
+          "chesed_signal": 1
+        },
+        "Forge of Victory": {
+          "ritual": 1,
+          "ambition": 2,
+          "kinship": 1,
+          "netzach_signal": 1
+        }
+      },
+      "Wyrdlens Adept": {
+        "Refraction of Foresight": {
+          "study": 2,
+          "faith": 1,
+          "stealth": 1,
+          "binah_signal": 1
+        },
+        "Refraction of Mercy": {
+          "study": 1,
+          "compassion": 2,
+          "mercy": 1,
+          "binah_signal": 1
+        },
+        "Refraction of Truth": {
+          "study": 2,
+          "faith": 1,
+          "severity": 1,
+          "binah_signal": 1
+        }
+      }
+    }
+  },
+  "alignmentBonuses": {
+    "_comment": "After resolveAlignment fires, these bonuses apply during ancestry / occult resolution. Matches v1 pattern.",
+    "occult.Kabbalist": [
+      {
+        "ifAlignmentIn": [
+          "Tiphareth",
+          "Binah",
+          "Keter"
+        ],
+        "bonus": 2
+      }
+    ],
+    "ancestry.Sephirotic Scion": [
+      {
+        "ifAlignmentIn": [
+          "Tiphareth",
+          "Binah",
+          "Keter"
+        ],
+        "bonus": 3
+      }
+    ]
+  },
+  "stations": [
+    {
+      "index": 1,
+      "sefirah": {
+        "hebrew": "Keter",
+        "english": "Crown"
+      },
+      "pillar": "middle",
+      "station": "Archetype",
+      "outputCategory": "archetype",
+      "outputResolvedBy": "resolveArchetype",
+      "outputIsExplicit": false,
+      "orientation": "Keter is the Crown — the place the soul came from before it was a soul. You don't reach for Keter. It reached for you, back when you had no hands. It remembers why.",
+      "questions": [
+        {
+          "id": "K1",
+          "axis": "metaphysical frame",
+          "prompt": "Before the flesh, before the name — the call came. What shape did it have?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "A summons. Someone needed something done and you were the one who showed up.",
+              "tags": {
+                "hierarchy": 2,
+                "service": 1,
+                "keter_signal": 2,
+                "speech": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "A debt. Something was owed. You got sent to pay it.",
+              "tags": {
+                "sacrifice": 2,
+                "sorrow": 1,
+                "faith": 1,
+                "keter_signal": 2
+              }
+            },
+            {
+              "key": "C",
+              "text": "A hunger. There was a thing you had to do and nothing else would satisfy you.",
+              "tags": {
+                "ambition": 2,
+                "risk": 1,
+                "independence": 1,
+                "keter_signal": 2
+              }
+            },
+            {
+              "key": "D",
+              "text": "A door left open. You walked through it and the door closed behind.",
+              "tags": {
+                "faith": 2,
+                "stealth": 1,
+                "dread": 1,
+                "keter_signal": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "K2",
+          "axis": "lived consequence",
+          "prompt": "You could have refused. You didn't. What happened when the call reached you?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "You said yes before you understood what you were saying yes to.",
+              "tags": {
+                "risk": 2,
+                "compassion": 1,
+                "violence": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "You argued. You tried to negotiate terms. You came anyway.",
+              "tags": {
+                "speech": 2,
+                "independence": 1,
+                "severity": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "You grieved. Something was being asked that cost more than it should have.",
+              "tags": {
+                "sorrow": 2,
+                "sacrifice": 1,
+                "faith": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "You studied it. You wanted to know the rules of what you were agreeing to.",
+              "tags": {
+                "study": 2,
+                "discipline": 1,
+                "faith": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "sefirah": {
+        "hebrew": "Chokhmah",
+        "english": "Wisdom"
+      },
+      "pillar": "mercy",
+      "station": "Ancestries",
+      "outputCategory": "ancestry",
+      "outputResolvedBy": "resolveAncestry",
+      "outputIsExplicit": false,
+      "orientation": "Chokhmah is the flash, not the knowledge. The primordial yes, before the yes is understood. Your body gets its first draft here — pulled out of bloodlines that remember what your body has already forgotten.",
+      "questions": [
+        {
+          "id": "C1",
+          "axis": "metaphysical frame",
+          "prompt": "Knowing is older than knowledge. When a knowing arrives in you, where does it come from?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Your hands know before your head does. You reach without thinking.",
+              "tags": {
+                "violence": 1,
+                "risk": 1,
+                "chokhmah_signal": 2,
+                "independence": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "A pattern snaps into place all at once. Suddenly the whole shape is visible.",
+              "tags": {
+                "study": 2,
+                "chokhmah_signal": 2,
+                "service": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Someone's face tells you. You read skin and weather and tone better than text.",
+              "tags": {
+                "speech": 1,
+                "compassion": 2,
+                "chokhmah_signal": 2
+              }
+            },
+            {
+              "key": "D",
+              "text": "The place tells you. You feel the room before you walk into it.",
+              "tags": {
+                "stealth": 2,
+                "chokhmah_signal": 2,
+                "dread": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "C2",
+          "axis": "lived consequence",
+          "prompt": "Your body remembers things your mind hasn't been told. What does it remember best?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Weather, geography, the road. Your feet find their way in terrain you've never seen.",
+              "tags": {
+                "stealth": 2,
+                "independence": 1,
+                "malkuth_signal": 1,
+                "dread": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "How to hold a weapon. The weight, the grip, the swing — it's already in you.",
+              "tags": {
+                "violence": 2,
+                "risk": 1,
+                "gevurah_signal": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Ritual — a gesture, a posture, a phrase. It surfaces without your choosing.",
+              "tags": {
+                "ritual": 2,
+                "faith": 1,
+                "binah_signal": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "Silence. How to sit in a room and not fill it. How to wait.",
+              "tags": {
+                "discipline": 2,
+                "sorrow": 1,
+                "yesod_signal": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "sefirah": {
+        "hebrew": "Binah",
+        "english": "Understanding"
+      },
+      "pillar": "severity",
+      "station": "Heritages",
+      "outputCategory": "heritage",
+      "outputResolvedBy": "player_pick_filtered_by_ancestry",
+      "outputIsExplicit": true,
+      "_resolverNote": "Per designer 2026-04-23 (Option B): engine does NOT resolve heritage. Binah's quiz still feeds the trait pool like every other sefirah, but the station's OUTPUT is an explicit player pick at the suggested-build review screen — heritage dropdown filtered by the resolved ancestry's family. Every canonical ancestry now has heritages (27 total across 8 ancestries) so no skip-condition needed.",
+      "_explicitPickShape": "Player picks one heritage from the heritages whose family matches the resolver's ancestry output.",
+      "orientation": "Understanding — the womb that receives the flash of Chokhmah and gives it structure. Binah is where the undifferentiated becomes differentiated, where seed becomes shape. Your body has roots; Binah is where a people's language, lessons, and ways poured into that body to make it a spirit you recognize.",
+      "questions": [
+        {
+          "id": "B1",
+          "axis": "metaphysical frame",
+          "prompt": "Your spirit was shaped by hands. What were those hands like?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Strict. Every rule meant. Every rule enforced. You knew where the edges were.",
+              "tags": {
+                "severity": 2,
+                "discipline": 1,
+                "hierarchy": 1,
+                "binah_signal": 2
+              }
+            },
+            {
+              "key": "B",
+              "text": "Warm. Loud. Overflowing. You never had to wonder if you were wanted.",
+              "tags": {
+                "compassion": 2,
+                "kinship": 2,
+                "binah_signal": 2
+              }
+            },
+            {
+              "key": "C",
+              "text": "Distant. You raised yourself around the edges of people too busy to see you.",
+              "tags": {
+                "independence": 2,
+                "sorrow": 1,
+                "stealth": 1,
+                "binah_signal": 2
+              }
+            },
+            {
+              "key": "D",
+              "text": "Chaotic. You learned to read rooms because the mood changed fast.",
+              "tags": {
+                "stealth": 1,
+                "speech": 1,
+                "dread": 1,
+                "binah_signal": 2,
+                "risk": 1,
+                "violence": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "B2",
+          "axis": "lived consequence",
+          "prompt": "Whatever raised you left something inside that you can't easily put down. What is it?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Discipline. A habit of cutting your own excess before someone else does.",
+              "tags": {
+                "discipline": 2,
+                "severity": 1,
+                "gevurah_signal": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Suspicion. You assume the worst about why people are being nice.",
+              "tags": {
+                "dread": 2,
+                "independence": 2,
+                "stealth": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "A faith. Something larger that you pray or curse at in bad moments.",
+              "tags": {
+                "faith": 2,
+                "ritual": 1,
+                "tiphareth_signal": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "A grief. Something old that rides quiet in your chest until something stirs it.",
+              "tags": {
+                "sorrow": 2,
+                "sacrifice": 1,
+                "hod_signal": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "sefirah": {
+        "hebrew": "Chesed",
+        "english": "Mercy"
+      },
+      "pillar": "mercy",
+      "station": "Awesome Crew",
+      "outputCategory": "crew",
+      "outputResolvedBy": "resolveCrew",
+      "outputIsExplicit": false,
+      "orientation": "Chesed is the hand that keeps giving — Mercy, unbound. Its failure mode is generosity that drowns. This is where you stop counting kin by blood and start counting by choice.",
+      "questions": [
+        {
+          "id": "Ch1",
+          "axis": "metaphysical frame",
+          "prompt": "A stranger asks you for help. No story attached. What's your default?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "You give, then sort it out later. The help first. The questions never.",
+              "tags": {
+                "compassion": 2,
+                "sacrifice": 1,
+                "chesed_signal": 2,
+                "mercy": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "You invite them in. Strangers become kin fast in your circle.",
+              "tags": {
+                "kinship": 2,
+                "speech": 1,
+                "chesed_signal": 2
+              }
+            },
+            {
+              "key": "C",
+              "text": "You assess first. A moment's read, then a decision. Help the right ones.",
+              "tags": {
+                "study": 1,
+                "discipline": 1,
+                "chesed_signal": 1,
+                "mercy": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "You decline. Not from cruelty — from a knowledge that you can't save everyone.",
+              "tags": {
+                "independence": 2,
+                "severity": 1,
+                "sorrow": 1,
+                "chesed_signal": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "Ch2",
+          "axis": "lived consequence",
+          "prompt": "Something breaks. Fast. Who's the first person you reach for?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Your crew. You built a circle for exactly this reason.",
+              "tags": {
+                "kinship": 2,
+                "speech": 1,
+                "chesed_signal": 2
+              }
+            },
+            {
+              "key": "B",
+              "text": "Nobody. You handle your own emergencies. You always have.",
+              "tags": {
+                "independence": 2,
+                "risk": 1,
+                "severity": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Your elder. Someone higher up the chain whose judgment you trust.",
+              "tags": {
+                "hierarchy": 2,
+                "chesed_signal": 1,
+                "severity": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "A stranger. You go to whoever's closest and you figure it out together.",
+              "tags": {
+                "risk": 2,
+                "compassion": 1,
+                "chesed_signal": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "sefirah": {
+        "hebrew": "Gevurah",
+        "english": "Severity"
+      },
+      "pillar": "severity",
+      "station": "Path",
+      "outputCategory": "class",
+      "outputResolvedBy": "resolveClass",
+      "outputIsExplicit": false,
+      "orientation": "Gevurah is the fist that cuts — Severity, unbound. Its failure mode is pruning to the root. Every shape you could take falls away here except one. That one becomes your Path.",
+      "questions": [
+        {
+          "id": "G1",
+          "axis": "metaphysical frame",
+          "prompt": "Something has to be cut. What's the first thing you're willing to cut from yourself?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Your own comfort. You prune your softness before anyone can call it weakness.",
+              "tags": {
+                "discipline": 2,
+                "severity": 2,
+                "gevurah_signal": 2,
+                "ambition": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Your mercy. You learned early that kindness at the wrong moment costs more.",
+              "tags": {
+                "severity": 2,
+                "gevurah_signal": 2,
+                "sorrow": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Your past. Whatever happened, happened. You don't carry it in your grip anymore.",
+              "tags": {
+                "discipline": 1,
+                "independence": 2,
+                "gevurah_signal": 1,
+                "sorrow": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "Your dependencies. You'd rather lose people than owe them.",
+              "tags": {
+                "independence": 2,
+                "severity": 1,
+                "gevurah_signal": 1,
+                "ambition": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "G2",
+          "axis": "lived consequence",
+          "prompt": "Your discipline has a source. When you trace the line back, what's at the end of it?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Fear. Something bad will happen if you go slack. You know this precisely.",
+              "tags": {
+                "dread": 2,
+                "discipline": 1,
+                "gevurah_signal": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Honor. A promise made — to yourself, to the dead, to a principle — that you keep.",
+              "tags": {
+                "faith": 2,
+                "discipline": 1,
+                "hierarchy": 1,
+                "gevurah_signal": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Necessity. Nothing high-minded about it. Discipline works. Undiscipline doesn't.",
+              "tags": {
+                "discipline": 2,
+                "study": 1,
+                "severity": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "Love. You're holding yourself sharp for someone who needs you intact.",
+              "tags": {
+                "sacrifice": 2,
+                "kinship": 1,
+                "mercy": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "sefirah": {
+        "hebrew": "Tiphareth",
+        "english": "Beauty"
+      },
+      "pillar": "middle",
+      "station": "Doctrines",
+      "outputCategory": "doctrine",
+      "outputResolvedBy": "resolveDoctrine",
+      "outputIsExplicit": false,
+      "_resolverNote": "Doctrine filtered by resolved Path (classIdentifier match). Weights TBD pending doctrine pack inventory (Task #16).",
+      "orientation": "Tiphareth sits at the center of the Tree. This is where the open hand and the closed fist have to share a heart without killing each other. One teaching holds that balance for you. That's your Doctrine.",
+      "questions": [
+        {
+          "id": "T1",
+          "axis": "metaphysical frame",
+          "prompt": "Two things that are both true. They contradict. Which way do you lean?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Toward mercy. When in doubt, the open hand.",
+              "tags": {
+                "compassion": 2,
+                "mercy": 2,
+                "tiphareth_signal": 1,
+                "chesed_signal": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Toward severity. Someone has to hold the line. Usually it's you.",
+              "tags": {
+                "severity": 2,
+                "discipline": 1,
+                "tiphareth_signal": 1,
+                "gevurah_signal": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Toward precedent. What did you do last time it was like this? Do that again.",
+              "tags": {
+                "ritual": 2,
+                "hierarchy": 1,
+                "faith": 1,
+                "tiphareth_signal": 2
+              }
+            },
+            {
+              "key": "D",
+              "text": "Toward the unplanned. Rules exist to be broken on the day rules are wrong.",
+              "tags": {
+                "risk": 2,
+                "independence": 1,
+                "tiphareth_signal": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "T2",
+          "axis": "lived consequence",
+          "prompt": "Under pressure, you return to a teaching. Not a rule — a teaching. What shape does it take?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "A person. A specific voice in your head. Dead or alive, their counsel arrives.",
+              "tags": {
+                "kinship": 2,
+                "tiphareth_signal": 2,
+                "sorrow": 1,
+                "compassion": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "A text. A line you've memorized. You say it under your breath before hard things.",
+              "tags": {
+                "study": 2,
+                "ritual": 1,
+                "tiphareth_signal": 2,
+                "mercy": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "A practice. A body thing. You breathe, or posture, or move a specific way.",
+              "tags": {
+                "ritual": 2,
+                "discipline": 1,
+                "tiphareth_signal": 2
+              }
+            },
+            {
+              "key": "D",
+              "text": "A place. You picture it. It's always the same place. Your bearing returns.",
+              "tags": {
+                "faith": 1,
+                "yesod_signal": 2,
+                "tiphareth_signal": 1,
+                "malkuth_signal": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "sefirah": {
+        "hebrew": "Netzach",
+        "english": "Endurance"
+      },
+      "pillar": "mercy",
+      "station": "Political Philosophy",
+      "outputCategory": "philosophy",
+      "outputResolvedBy": "resolvePhilosophy",
+      "outputIsExplicit": false,
+      "orientation": "Netzach is the fire that refuses to go out. Victory through not stopping. The will that outlasts what tried to break it. Here you name the cause that won't let you sit back down.",
+      "questions": [
+        {
+          "id": "N1",
+          "axis": "metaphysical frame",
+          "prompt": "Something in you refuses to stop. What is the refusal about?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Justice. Someone, somewhere, is owed something they aren't getting.",
+              "tags": {
+                "speech": 2,
+                "severity": 1,
+                "netzach_signal": 2,
+                "mercy": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Your people. The cause is a set of faces. You'd burn a world before they did.",
+              "tags": {
+                "kinship": 2,
+                "violence": 1,
+                "sacrifice": 1,
+                "netzach_signal": 2
+              }
+            },
+            {
+              "key": "C",
+              "text": "A place. A patch of ground you know by its smell. You protect that.",
+              "tags": {
+                "discipline": 1,
+                "netzach_signal": 2,
+                "malkuth_signal": 1,
+                "service": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "A memory. Something that was supposed to be. You're still making the world into it.",
+              "tags": {
+                "sorrow": 2,
+                "ambition": 1,
+                "netzach_signal": 2,
+                "dread": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "N2",
+          "axis": "lived consequence",
+          "prompt": "When walking is the hardest thing — what keeps you walking?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Anger, in small controlled portions. Banked, not spent. The heat outlasts the storm.",
+              "tags": {
+                "severity": 2,
+                "discipline": 1,
+                "netzach_signal": 1,
+                "violence": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Hope. Real hope, bruised but functioning. You still believe the work matters.",
+              "tags": {
+                "faith": 2,
+                "compassion": 1,
+                "netzach_signal": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Habit. You've been doing this so long the question of stopping isn't available.",
+              "tags": {
+                "discipline": 2,
+                "ritual": 1,
+                "netzach_signal": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "A promise. You told someone you would. That alone is enough.",
+              "tags": {
+                "sacrifice": 2,
+                "kinship": 1,
+                "mercy": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "sefirah": {
+        "hebrew": "Hod",
+        "english": "Splendor"
+      },
+      "pillar": "severity",
+      "station": "Occult Association",
+      "outputCategory": "occult",
+      "outputResolvedBy": "resolveOccult",
+      "outputIsExplicit": false,
+      "orientation": "Hod is the intellect that meets its own limit. Study that ends in awe. Reason that bends the knee. The scholar on their face. Here you name the tradition that has been studying you right back.",
+      "_pillarReadoutFiresAfterThisStation": true,
+      "questions": [
+        {
+          "id": "H1",
+          "axis": "metaphysical frame",
+          "prompt": "Some doors only open if you kneel first. Which door are you willing to kneel for?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Knowledge. The kind that can't be taken — only given. You'd bend anything to learn it.",
+              "tags": {
+                "study": 2,
+                "hod_signal": 2,
+                "ritual": 1,
+                "ambition": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Power. Actual operative power, not the performance of it. You'd kneel and mean it.",
+              "tags": {
+                "ambition": 2,
+                "hierarchy": 1,
+                "hod_signal": 1,
+                "ritual": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Belonging. The door into a body of people who see each other. You'd kneel for that.",
+              "tags": {
+                "kinship": 2,
+                "sacrifice": 1,
+                "hod_signal": 1,
+                "compassion": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "Release. You'd kneel to lay something down. Grief, maybe. A debt. A name.",
+              "tags": {
+                "sorrow": 2,
+                "sacrifice": 1,
+                "hod_signal": 2,
+                "dread": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "H2",
+          "axis": "lived consequence",
+          "prompt": "You suspect something true that you can't yet prove. Which of these is most yours?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "That the world is patterned and the pattern has a name you don't yet know.",
+              "tags": {
+                "faith": 2,
+                "study": 1,
+                "hod_signal": 2,
+                "ritual": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "That you can become something other than what you are. The door is there if you find it.",
+              "tags": {
+                "ambition": 2,
+                "hod_signal": 1,
+                "independence": 1,
+                "violence": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "That the dead speak and some of us can hear them. Some of us do hear them.",
+              "tags": {
+                "sorrow": 2,
+                "hod_signal": 2,
+                "dread": 2
+              }
+            },
+            {
+              "key": "D",
+              "text": "That the future is already written and the writing can be read by the right eye.",
+              "tags": {
+                "study": 2,
+                "hod_signal": 2,
+                "stealth": 1,
+                "mercy": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "sefirah": {
+        "hebrew": "Yesod",
+        "english": "Foundation"
+      },
+      "pillar": "middle",
+      "station": "Sephirotic Alignment",
+      "outputCategory": "alignment",
+      "outputResolvedBy": "resolveAlignment",
+      "outputIsExplicit": false,
+      "_uxNote": "Yesod's quiz answers contribute heavy sefirot signals — the highest signal across all 20 questions wins the alignment. Mock-side: still designer-decision whether to keep the bloom-all-ten visualization during the questions or drop it now that this isn't a picker.",
+      "orientation": "Yesod is the funnel. Everything above has to pass through here before it touches earth. This is where the descent stops. Look back at the Tree you've been walking. Which sefirah is the one you actually live on — not the one you'd like to.",
+      "questions": [
+        {
+          "id": "Y1",
+          "axis": "metaphysical frame",
+          "prompt": "Picture your own gravitational center. An image arrives — a shape. What is it?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "A sun. Warm. Generative. What you give radiates outward without subtracting.",
+              "tags": {
+                "compassion": 2,
+                "tiphareth_signal": 2,
+                "yesod_signal": 2,
+                "mercy": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "A root. Deep. Quiet. Older than you. It holds whether or not you remember it.",
+              "tags": {
+                "discipline": 1,
+                "faith": 2,
+                "malkuth_signal": 2,
+                "yesod_signal": 2
+              }
+            },
+            {
+              "key": "C",
+              "text": "A blade. Precise. Useful. Not decorative. It cuts what needs cutting and rests clean.",
+              "tags": {
+                "severity": 2,
+                "gevurah_signal": 2,
+                "yesod_signal": 2,
+                "violence": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "A mirror. Reflective. It holds what's shown to it. It knows itself by what it reflects.",
+              "tags": {
+                "study": 2,
+                "binah_signal": 2,
+                "yesod_signal": 2,
+                "stealth": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "Y2",
+          "axis": "lived consequence",
+          "prompt": "Your foundation has stayed. Something keeps it from shaking apart. What does?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "People. Specific people whose presence makes the ground feel solid.",
+              "tags": {
+                "kinship": 2,
+                "chesed_signal": 1,
+                "yesod_signal": 2,
+                "compassion": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Place. A piece of geography — a room, a road, a body of water. You anchor there.",
+              "tags": {
+                "faith": 1,
+                "malkuth_signal": 2,
+                "yesod_signal": 2,
+                "discipline": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Practice. A daily thing. A movement or a phrase or a breath. The practice holds.",
+              "tags": {
+                "ritual": 2,
+                "discipline": 1,
+                "yesod_signal": 2,
+                "netzach_signal": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "Silence. A quiet you return to. When it goes away you feel the shake. When it's back, steady.",
+              "tags": {
+                "independence": 2,
+                "study": 1,
+                "yesod_signal": 2,
+                "binah_signal": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "sefirah": {
+        "hebrew": "Malkuth",
+        "english": "Kingdom"
+      },
+      "pillar": "middle",
+      "station": "Faculties",
+      "outputCategory": "faculties",
+      "outputResolvedBy": "explicit_allocation",
+      "outputIsExplicit": true,
+      "_explicitNote": "Quiz answers feed the trait pool like any other sefirah. The station's OUTPUT is explicit player allocation — distribute starting array [5,4,3,3,2,2] across the 6 RFI faculties. Engine does NOT resolve the allocation, but does use Malkuth's quiz answers to suggest a distribution shape (front-loaded body? balanced? front-loaded mind?) on the suggested-build review screen.",
+      "explicitAllocationShape": {
+        "startingArray": [
+          5,
+          4,
+          3,
+          3,
+          2,
+          2
+        ],
+        "faculties": [
+          "violence",
+          "intrigue",
+          "presence",
+          "body",
+          "mind",
+          "soul"
+        ],
+        "rule": "each value used exactly once"
+      },
+      "orientation": "Malkuth is where the soul hits the ground. Kingdom. Presence. Everything above becomes flesh here. Body that walks, hand that grips, voice that lives in dirt and bread and heartbeat. Descent ends. Life begins.",
+      "questions": [
+        {
+          "id": "M1",
+          "axis": "metaphysical frame",
+          "prompt": "Your soul walks into a room. How does the room know it's there?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Through your body. You take up the space. People feel the weight.",
+              "tags": {
+                "violence": 2,
+                "ambition": 1,
+                "malkuth_signal": 2,
+                "hierarchy": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Through your voice. You speak and rooms settle. Or scatter. Either way, the voice did it.",
+              "tags": {
+                "speech": 2,
+                "malkuth_signal": 2,
+                "kinship": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Through your presence. Not loud. Not quiet. A steady weather that people register late.",
+              "tags": {
+                "discipline": 2,
+                "faith": 1,
+                "malkuth_signal": 2,
+                "stealth": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "Through your stillness. You're the one not moving. Rooms organize around your stillness.",
+              "tags": {
+                "stealth": 2,
+                "independence": 1,
+                "malkuth_signal": 2,
+                "yesod_signal": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "M2",
+          "axis": "lived consequence",
+          "prompt": "When you have enough — actually enough — what does it feel like? What's present?",
+          "answers": [
+            {
+              "key": "A",
+              "text": "Bread on the table. Food you didn't have to earn twice over. A full plate, quietly.",
+              "tags": {
+                "compassion": 1,
+                "malkuth_signal": 2,
+                "kinship": 1,
+                "chesed_signal": 1
+              }
+            },
+            {
+              "key": "B",
+              "text": "Company. People in the room with you. Not doing anything. Just there.",
+              "tags": {
+                "kinship": 2,
+                "malkuth_signal": 2,
+                "compassion": 1
+              }
+            },
+            {
+              "key": "C",
+              "text": "Quiet. The absence of obligation for an hour. The phone silent. Nobody needing anything.",
+              "tags": {
+                "independence": 2,
+                "malkuth_signal": 2,
+                "yesod_signal": 1
+              }
+            },
+            {
+              "key": "D",
+              "text": "A task that matters. Your hands full, the work worth doing, the day's shape already visible.",
+              "tags": {
+                "discipline": 2,
+                "ambition": 1,
+                "malkuth_signal": 2,
+                "ritual": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "openAuthoringTasks": {
+    "doctrineResolverWeights": {
+      "description": "First-pass weights authored 2026-04-23 from canonical 27-doctrine list confirmed via Foundry-UI screenshots. UNBLOCKED. Designer review pending: (a) verify class→doctrine mapping (especially Metaphor Apostle: Pactkeeper vs Cosmic Linguist), (b) tune per-doctrine trait differentiation. Weights are first-pass only.",
+      "assignedTo": "designer (verification + tuning)"
+    },
+    "yesodUxMockDecision": {
+      "description": "Decide whether bloom-all-ten visualization survives Option A (now wraps quiz, not picker). Designer-driven.",
+      "assignedTo": "designer"
+    },
+    "answerCountExpansion": {
+      "description": "Any question wanting 5 answers (vs. current 4) — add option, tag traits.",
+      "assignedTo": "designer (optional polish)"
+    },
+    "perAnswerPillarOverrides": {
+      "description": "Optional. Per-answer pillarTag overrides for narrative exceptions to sefirah default.",
+      "assignedTo": "designer (optional polish)"
+    }
+  },
+  "engineeringBacklog": {
+    "step3Spec": "DONE — this file (draft 3, Option A schema).",
+    "step4Resolvers": "Rewrite per-category resolvers consuming the trait pool. v1 logic ported with new vocabulary. Implements scoreQuiz + 7 resolvers.",
+    "step5WizardRework": "Rewrite wizard: per-station pickers replaced with per-station quiz blocks (2 questions × 4 answers). Final step replaced with 'Your descent suggests…' suggested-build review screen. Tree visualization preserved.",
+    "step6Deploy": "Coordinated deploy of spec + resolvers + wizard. PAUSE for user confirmation — schema change is breaking.",
+    "step7Smoke": "Re-run layer-1 (node) + layer-2 (Foundry console) + layer-3 (UI walk) tests against new schema."
+  },
+  "notInScope": {
+    "_comment": "Explicit deferrals.",
+    "22PathSigilGeneration": "v2.1 or v3 — kabbalistic sigil per character via traditional paths.",
+    "choiceRoutedDescent": "v3 — currently descent order is fixed.",
+    "respecFlow": "Own sprint (TODO(identity-swap)).",
+    "featAcquisitionSystem": "Own sprint, see Roadmap §10.",
+    "usersGuideV2": "Deferred until Sorting Engine v2 ships."
+  }
+}

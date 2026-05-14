@@ -1,0 +1,36 @@
+{
+  "_id": "HCROMAGNONTIERI0",
+  "name": "Human (Cro-Magnon): Coalition Tongue",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Human_Cro_Magnon_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“The first thing worth defending was a circle of people who had decided, against all sense, to defend each other.”</em></p>\n<p><strong>Coalition Tongue (1/a Soma Break).</strong> As a bonus action, choose one ally within 30 feet who can hear and understand you. They have reroll the lowest die on the next attack roll, attribute checks [TODO(adv-call)], or defense check they make before the start of your next turn. The fiction matters: name the thing you said, even if it’s wordless.</p>\n<p><strong>Symbolic Memory.</strong> You can read intent from a place. After spending 10 minutes in any inhabited or formerly-inhabited space, you can ask the GM one of: <em>Who lived here? What did they fear? What did they leave?</em> The answer is at least one truth, even if the GM colours it.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "human-cro-magnon-coalition-tongue",
+    "requirements": "Human (Cro-Magnon)",
+    "prerequisites": { "items": [], "repeatable": false, "level": null },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "human", "feature": "coalition_tongue", "lineage": "Cro-Magnon", "tierLevel": 0, "version": "2.0.0", "date": "2026-04-18" }
+  },
+  "folder": "byroU26YSQP4OQUn",
+  "_stats": {
+    "compendiumSource": null, "duplicateSource": null, "exportSource": null,
+    "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5",
+    "createdTime": 1776543000000, "modifiedTime": 1776543000000, "lastModifiedBy": "BBTTCCANCv2APPLY"
+  },
+  "ownership": { "default": 0 },
+  "_key": "!items!HCROMAGNONTIERI0"
+}

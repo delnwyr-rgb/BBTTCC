@@ -1,0 +1,147 @@
+{
+  "name": "Qliphothic Mirror",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“The mirror shows you what you could become. Then it offers to help.”</em></p><p><strong>Chaos Origin:</strong> Qliphothic Mirror</p><p>You channel the shadow-side of the fracture: entropy with a personality, dreamstuff that learned to bite.</p><p>Qliphothic Mirrors specialize in reflection harm, damage exchange, high-risk power bargains, and a late-game ability to force failed outcomes at personal cost.</p><p><strong>Table Safety:</strong> This subclass is about consequence, not cruelty. Keep it dramatic and consensual.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "identifier": "qliphothic_mirror",
+    "classIdentifier": "chaos_magician",
+    "advancement": {
+      "Kx5olDN5wVZUqnDW": {
+        "_id": "Kx5olDN5wVZUqnDW",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.R0UlJn4DcpPUKMgH",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "title": "Shadow Reflection",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "94nHV6Y2TPbzg465": {
+        "_id": "94nHV6Y2TPbzg465",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.1Or7yZfSTWeynsIl",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "title": "Entropy Exchange",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "WoT7atPd2mmQ3fUi": {
+        "_id": "WoT7atPd2mmQ3fUi",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.psJznVbyIVHneQqX",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "title": "Mirrorwalk",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "zkuuXfROPunDdaFc": {
+        "_id": "zkuuXfROPunDdaFc",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.nTbUw2Nz8WG5TlJJ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "title": "Darkness Bargain",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "lr0AtK0TDUJmQ7iy": {
+        "_id": "lr0AtK0TDUJmQ7iy",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Hmx8X2HH1x50cMpZ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "title": "Mirror of Ruin",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      }
+    },
+    "spellcasting": {
+      "progression": "full",
+      "ability": "cha",
+      "preparation": {
+        "formula": ""
+      }
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "chaosMagicianSubclass": "qliphothic_mirror"
+    }
+  },
+  "effects": [],
+  "folder": "yybrtgL3Yq3tttiJ",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191262447,
+    "modifiedTime": 1775063101327,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "L5QTVf7kclKfk6rm",
+  "sort": 450000,
+  "_key": "!items!L5QTVf7kclKfk6rm"
+}

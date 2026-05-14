@@ -1,0 +1,147 @@
+{
+  "name": "Black ICE",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_black_ice.png",
+  "system": {
+    "identifier": "shadowjack_black_ice",
+    "description": {
+      "value": "<blockquote data-start=\"534\" data-end=\"572\"><p data-start=\"536\" data-end=\"572\"><em data-start=\"536\" data-end=\"572\">“Nice spell. Shame if it crashed.”</em></p></blockquote><p data-start=\"574\" data-end=\"857\">Black ICE operatives specialize in <strong data-start=\"609\" data-end=\"630\">counter-intrusion</strong>, <strong data-start=\"632\" data-end=\"654\">trap weaponization</strong>, and <strong data-start=\"660\" data-end=\"721\">punishing anyone who tries to move unseen or unchallenged</strong>. Where others slip past defenses, you make detection itself dangerous—turning wards, sensors, and security systems into active weapons.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "classIdentifier": "shadowjack",
+    "advancement": {
+      "XdkL2suWpHEtR7Kf": {
+        "_id": "XdkL2suWpHEtR7Kf",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.SXOD7ArV6yCBKRUZ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "title": "Counter-Intrusion",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "UAvONCM5r4k5Vfan": {
+        "_id": "UAvONCM5r4k5Vfan",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Xl2mEgYVqgTDQ8ga",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "title": "Brick Protocol",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "faWZfnIXXBbUZfl4": {
+        "_id": "faWZfnIXXBbUZfl4",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.H9ajU1QrrQHXY0bF",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "title": "False Positive",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "C5V6x8i2LGzdffF0": {
+        "_id": "C5V6x8i2LGzdffF0",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.6KXm1gmdx6KvxW24",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "title": "Cold Read",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "WXmltYFA14PYqY0D": {
+        "_id": "WXmltYFA14PYqY0D",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.aCBbPLb11t5Vy6bo",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "title": "Hard Lock",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "subclass": true
+    }
+  },
+  "folder": "AH7oyvT86VzzhEFm",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191998314,
+    "modifiedTime": 1775063075740,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "2WYFFC5ctKPXCg01",
+  "sort": 250000,
+  "_key": "!items!2WYFFC5ctKPXCg01"
+}

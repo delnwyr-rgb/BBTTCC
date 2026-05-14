@@ -1,0 +1,54 @@
+{
+  "_id": "qq4I8w6uU6CSSS46",
+  "name": "Spark of Wisdom (Vestigial)",
+  "type": "spark",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "category": "spark",
+    "sephirah": "chokmah",
+    "kind": "vestigial",
+    "alignedMethods": [
+      "intrigue",
+      "soul",
+      "logistics"
+    ],
+    "misalignedMethods": [
+      "violence",
+      "siege"
+    ],
+    "repair": {
+      "materialKey": "anchorstone",
+      "materialAmount": 1,
+      "opCost": {
+        "pool": "logistics",
+        "amount": 3
+      },
+      "ritualDC": 15
+    },
+    "source": "BBTTCC Tikkun v1.0",
+    "tags": [
+      "chokmah",
+      "vestigial",
+      "spark"
+    ],
+    "description": {
+      "value": "<p><em>Echo-form. Lives in a place or object that remembers what was done there.</em></p>\n<p><strong>Sephirah:</strong> Chokmah — Founding insight.</p>\n<p><strong>Aligned methods:</strong> intrigue, soul, logistics. <strong>Misaligned (causes Corruption):</strong> violence, siege.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc-tikkun": {
+      "sparkVersion": "1.0.0",
+      "identifier": "spark_chokmah_vestigial"
+    }
+  },
+  "_stats": {
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": null
+  },
+  "_key": "!items!qq4I8w6uU6CSSS46"
+}

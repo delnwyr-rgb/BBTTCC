@@ -1,0 +1,77 @@
+{
+  "name": "Menhirkin (Metamorphic): The Thing You Were",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heritage.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Heritage Signature (RFI v1.0).</strong></p><p><em>&ldquo;You remember the shape you held before the pressure.&rdquo;</em></p><p><strong>The Thing You Were.</strong> 1/Soma Break, as an action: for the rest of the scene, when you take <strong>kinetic</strong> or <strong>energy</strong> damage, reduce it by your <strong>Tier</strong> (applied before any resistance or immunity, floor at zero). The cost: you answer one question, truthfully, about what you used to be before metamorphosis. Only the GM hears it.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "menhirkin-metamorphic-the_thing_you_were",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Menhirkin (Metamorphic)",
+    "type": {
+      "value": "",
+      "subtype": "heritageSignature"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "heritageSignature",
+      "feature": "the_thing_you_were",
+      "family": "menhirkin",
+      "lineage": "Metamorphic",
+      "version": "1.0.0-rfi"
+    },
+    "fourththing": {
+      "kind": "heritageSignature",
+      "feature": "the_thing_you_were",
+      "family": "menhirkin",
+      "lineage": "Metamorphic"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.MENMETAMORPHTR1P",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "MENMETAMORPHTR1P"
+}

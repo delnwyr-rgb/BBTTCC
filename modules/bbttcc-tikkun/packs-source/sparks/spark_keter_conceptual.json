@@ -1,0 +1,54 @@
+{
+  "_id": "mmYwGeu26Cga2oU4",
+  "name": "Spark of Unity (Conceptual)",
+  "type": "spark",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "category": "spark",
+    "sephirah": "keter",
+    "kind": "conceptual",
+    "alignedMethods": [
+      "faith",
+      "soul",
+      "diplomacy"
+    ],
+    "misalignedMethods": [
+      "violence",
+      "nonlethal"
+    ],
+    "repair": {
+      "materialKey": "vow-resin",
+      "materialAmount": 1,
+      "opCost": {
+        "pool": "soul",
+        "amount": 2
+      },
+      "ritualDC": 18
+    },
+    "source": "BBTTCC Tikkun v1.0",
+    "tags": [
+      "keter",
+      "conceptual",
+      "spark"
+    ],
+    "description": {
+      "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Keter — Unity / nondual force.</p>\n<p><strong>Aligned methods:</strong> faith, soul, diplomacy. <strong>Misaligned (causes Corruption):</strong> violence, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc-tikkun": {
+      "sparkVersion": "1.0.0",
+      "identifier": "spark_keter_conceptual"
+    }
+  },
+  "_stats": {
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": null
+  },
+  "_key": "!items!mmYwGeu26Cga2oU4"
+}

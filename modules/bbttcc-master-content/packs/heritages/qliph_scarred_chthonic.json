@@ -1,0 +1,94 @@
+{
+  "name": "Qliph-Scarred Heritage: Chthonic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/QliphScarred_Chthonic.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Chthonic.</p><p><em>“There is a place older than Hell. You remember being there. It remembers you back.”</em></p><p><strong>Qliph-Scarred (Chthonic).</strong> Your scar is a root. The unmaking that almost took you went down, not sideways — into strata of reality older than the gods that eventually got around to naming them. You walked out up through something that shouldn’t have had a staircase. Parts of that staircase are still in your legs.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You have advantage on Body checks against effects that would drain, wither, or corrupt your body.</li><li><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</li><li><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate exhaustion-class consequence.</li><li><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 60 feet and know you have been marked. They may not know how to read the mark.</li></ul><h3>Chthonic Traits</h3><ul><li><strong>Old-Dark Vision.</strong> You have low-light vision to 60 feet, and in darkness you see in color rather than greyscale. You have been in a dark older than eyes, and it taught you how.</li><li><strong>Root-Bound.</strong> Once per Soma Break, you may spend 10 minutes in physical contact with uncut earth or unworked stone. Until your next Soma Break, you gain a +1 rank bonus on all Body checks. The depth is lending you some of itself.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Violence OP</strong> and <strong>+1 Faith OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Underground / Sunken / Primordial</em> hexes, your faction's excavation, exhumation, and deep-passage operations cost 1 fewer OP.</li><li><strong>Downward Witness.</strong> Once per Strategic Turn, you may consult the depth beneath any hex your faction occupies. The GM answers one question about what lies structurally or historically below the surface. The depth does not lie; the depth is also not always relevant.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Qliphothic Saturation</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Free &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Reroll a failed Soul check. Cost: scene's Darkness-gain count goes up by 1.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "6c5aa51c8a90c6a8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.PL8ziBJUUMdeiFN0",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Chthonic Tier I",
+        "hint": "Gain your Chthonic Tier I feat."
+      }
+    ],
+    "identifier": "qliph_scarred_chthonic_heritage",
+    "requirements": "Qliph-Scarred",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "qliph_scarred",
+      "lineage": "Chthonic",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "violence": 2,
+        "faith": 1
+      }
+    },
+    "fourththing": {}
+  },
+  "folder": "XGBBcvgCXDYh3J9D",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.60MZEDvlJZr1oZPg",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "60MZEDvlJZr1oZPg"
+}

@@ -1,0 +1,78 @@
+{
+  "id": "bbttcc-territory",
+  "title": "BBTTCC Territory",
+  "description": "Hex management tools, dashboard, and campaign overview for BBTTCC.",
+  "version": "1.3.16",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios"
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e"
+      },
+      {
+        "id": "fourththing",
+        "type": "system",
+        "compatibility": {
+          "verified": "14"
+        }
+      }
+    ],
+    "requires": []
+  },
+  "esmodules": [
+    "scripts/main.js",
+    "apps/dashboard-app.js",
+    "apps/campaign-overview-app.js",
+    "scripts/overview-button.js",
+    "scripts/turn-driver.js",
+    "scripts/territory-unitybonus.enhancer.js",
+    "scripts/bbttcc-toolbar-augment.enhancer.js",
+    "scripts/player-hud.enhancer.js",
+    "scripts/zz-click-to-edit.js"
+  ],
+  "scripts": [
+    "scripts/encounters.js",
+    "scripts/hex-terrain.selector.enhancer.js",
+    "scripts/api.turn.processRequests.js",
+    "scripts/bbttcc-hex-conditions.enhancer.js",
+    "scripts/advance-turn.tracks.js",
+    "scripts/resolutions.js",
+    "scripts/resolution-engine.js",
+    "scripts/territory-garrison-upkeep.enhancer.js",
+    "scripts/territory-integration.enhancer.js",
+    "scripts/territory-build-units.enhancer.js",
+    "scripts/effects-build-units.enhancer.js",
+    "scripts/bbttcc-hex-sheet.enhancer.js",
+    "scripts/bbttcc-dashboard-hexsheet.enhancer.js",
+    "scripts/bbttcc-facility-turn-effects.enhancer.js",
+    "scripts/bbttcc-territory.center-hex-labels.enhancer.js",
+    "scripts/turn-requests.enhancer.js",
+    "scripts/hex-fog.layer.js",
+    "scripts/hex-resource-nodes.enhancer.js",
+    "scripts/quest-links.api.js",
+    "scripts/ae-keys-registry.bridge.js",
+    "scripts/bbttcc-gate-beat-listener.js"
+  ],
+  "styles": [
+    "styles/territory-manager.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "packs": [],
+  "url": "",
+  "manifest": "",
+  "download": ""
+}

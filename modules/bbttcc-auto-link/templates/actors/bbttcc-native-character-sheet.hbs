@@ -1,0 +1,62 @@
+<form class="{{cssClass}} dnd5e2 sheet actor character-sheet flexcol bbttcc-character-sheet" autocomplete="off" data-bbttcc-native="1">
+  {{> "systems/dnd5e/templates/actors/character-header.hbs"}}
+  <section class="sheet-body">
+    {{> "systems/dnd5e/templates/actors/character-sidebar.hbs"}}
+
+    <section class="main-content">
+      {{> "systems/dnd5e/templates/actors/character-ability-scores.hbs"}}
+
+      <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item active" data-action="tab" data-group="primary" data-tab="details">Details</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="inventory">Inventory</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="features">Features</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="spells">Spells</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="effects">Effects</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="biography">Biography</a>
+        <a class="item" data-action="tab" data-group="primary" data-tab="bastion">Bastion</a>
+      </nav>
+
+
+      <section class="bbttcc-quickbar" data-bbttcc-quickbar="1" data-bbttcc-debug="quickbar-character">
+        <div class="bbttcc-quickbar-card">
+          <div class="bbttcc-quickbar-title">BBTTCC</div>
+          <div class="bbttcc-quickbar-subtitle">Faction, character options, and pop-out trackers.</div>
+          <div class="bbttcc-quickbar-grid">
+            <div class="bbttcc-field bbttcc-field-tight">
+              <label>Faction</label>
+              <select data-bbttcc="factionId">
+                <option value="">—</option>
+                {{#each bbttcc.factions}}
+                  <option value="{{id}}">{{name}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="bbttcc-quickbar-actions">
+              <button type="button" class="bbttcc-button-link" data-bbttcc-action="open-faction"><i class="fas fa-flag"></i> Faction</button>
+              <button type="button" class="bbttcc-button-link" data-bbttcc-action="open-bridge"><i class="fas fa-exchange-alt"></i> Bridge</button>
+              <button type="button" class="bbttcc-button-link" data-bbttcc-open="radiation"><i class="fas fa-radiation"></i> Radiation</button>
+              <button type="button" class="bbttcc-button-link" data-bbttcc-open="greatwork"><i class="fas fa-sparkles"></i> Tikkun</button>
+            </div>
+            <div class="bbttcc-quickbar-actions bbttcc-quickbar-options">
+              <button type="button" class="bbttcc-button-link" data-bbttcc-choose="archetype">Archetype</button>
+              <button type="button" class="bbttcc-button-link" data-bbttcc-choose="crew">Crew Type</button>
+              <button type="button" class="bbttcc-button-link" data-bbttcc-choose="occult">Occult</button>
+              <button type="button" class="bbttcc-button-link" data-bbttcc-choose="political">Philosophy</button>
+              <button type="button" class="bbttcc-button-link" data-bbttcc-choose="sephirothicAlignment">Sephirotic</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="tab-body">
+        {{> "systems/dnd5e/templates/actors/tabs/character-details.hbs" tab=(hash id="details" group="primary" cssClass="active")}}
+        {{> "systems/dnd5e/templates/actors/tabs/character-inventory.hbs" tab=(hash id="inventory" group="primary" cssClass="")}}
+        {{> "systems/dnd5e/templates/actors/tabs/character-features.hbs" tab=(hash id="features" group="primary" cssClass="")}}
+        {{> "systems/dnd5e/templates/actors/tabs/creature-spells.hbs" tab=(hash id="spells" group="primary" cssClass="")}}
+        {{> "systems/dnd5e/templates/actors/tabs/actor-effects.hbs" tab=(hash id="effects" group="primary" cssClass="")}}
+        {{> "systems/dnd5e/templates/actors/tabs/character-biography.hbs" tab=(hash id="biography" group="primary" cssClass="")}}
+        {{> "systems/dnd5e/templates/actors/tabs/character-bastion.hbs" tab=(hash id="bastion" group="primary" cssClass="")}}
+      </section>
+    </section>
+  </section>
+</form>

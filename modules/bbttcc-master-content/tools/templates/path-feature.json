@@ -1,0 +1,28 @@
+{
+  "name": "<Path> — Tier N: <Feature Name>",
+  "type": "feat",
+  "img": "icons/svg/mountain.svg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "<Authoring book/version>",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Flavor sentence.</em></p><p><strong>On gaining <Path> Initiation N you receive:</strong></p><ul><li>Mechanical clause 1.</li><li>Mechanical clause 2.</li></ul>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "<path>_tierN_<slug>",
+    "requirements": "<Path> Initiation N",
+    "prerequisites": { "items": [], "repeatable": false, "level": 1 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": { "bbttcc": { "kind": "classfeat" } }
+}

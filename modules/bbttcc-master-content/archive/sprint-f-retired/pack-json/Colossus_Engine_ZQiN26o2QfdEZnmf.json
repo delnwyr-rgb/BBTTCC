@@ -1,0 +1,147 @@
+{
+  "name": "Colossus Engine",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_armor_1.png",
+  "system": {
+    "identifier": "titanbound_colossus_engine",
+    "description": {
+      "value": "<h2 data-start=\"695\" data-end=\"715\">COLOSSUS ENGINE</h2><p data-start=\"716\" data-end=\"783\"><em data-start=\"716\" data-end=\"783\">“If it was meant to stand forever, it would have asked me first.”</em></p><p data-start=\"806\" data-end=\"915\">Colossus Engines are Titanbound who understand the battlefield as a structure — and structures can be broken.</p><p data-start=\"917\" data-end=\"1054\">They are not faster than enemies.<br data-start=\"950\" data-end=\"953\" />They are not smarter than enemies.<br data-start=\"987\" data-end=\"990\" />They apply force at the correct <strong data-start=\"1022\" data-end=\"1042\">structural point</strong> — and wait.</p><p data-start=\"1056\" data-end=\"1106\">Where others deal damage, you advance <strong data-start=\"1094\" data-end=\"1105\">failure</strong>.</p><p data-start=\"4230\" data-end=\"4251\">Colossus Engines are:</p><ul data-start=\"4252\" data-end=\"4326\"><li data-start=\"4252\" data-end=\"4270\"><p data-start=\"4254\" data-end=\"4270\">Siege-breakers</p></li><li data-start=\"4271\" data-end=\"4287\"><p data-start=\"4273\" data-end=\"4287\">Boss-solvers</p></li><li data-start=\"4288\" data-end=\"4326\"><p data-start=\"4290\" data-end=\"4326\">The answer when nothing else works</p></li></ul><p data-start=\"4328\" data-end=\"4389\">They are not subtle.<br data-start=\"4348\" data-end=\"4351\" />The world remembers where they walked.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "classIdentifier": "titanbound",
+    "advancement": {
+      "B9WDJoUwx0sakdVh": {
+        "_id": "B9WDJoUwx0sakdVh",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.cDLZBqTRCNhrHeWd",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "title": "Siege Frame",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "NPlZPgK5hukOs5Ji": {
+        "_id": "NPlZPgK5hukOs5Ji",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.pgP0aOeMl1ednjJ2",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "title": "Immovable Mass",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "LgKaRVsPEH7m2Xt0": {
+        "_id": "LgKaRVsPEH7m2Xt0",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.qIGJjEyePxeojjyh",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "title": "Urban Collapse Doctrine",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "noRdG3H87QnuMI2c": {
+        "_id": "noRdG3H87QnuMI2c",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.VGshIujPZG3sl7iD",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "title": "Inevitable Advance",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "bag35jzykA5GhvGW": {
+        "_id": "bag35jzykA5GhvGW",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.az1tT7RVb8dxK4H9",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "title": "End the Argument",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "subclass": true
+    }
+  },
+  "folder": "UV2dvdaF0DKxzuiu",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773192254182,
+    "modifiedTime": 1775063122647,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "ZQiN26o2QfdEZnmf",
+  "sort": 175000,
+  "_key": "!items!ZQiN26o2QfdEZnmf"
+}

@@ -1,0 +1,156 @@
+{
+  "name": "Path of the Faultline (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_earthquake_1.png",
+  "system": {
+    "advancement": {
+      "PF00000000000001": {
+        "_id": "PF00000000000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.UCuHGQWB8AKjCOSn",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.pZfbwzDCCsNP8SVe",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "value": {},
+        "title": "OP Shear & Find the Fault",
+        "hint": "",
+        "flags": {}
+      },
+      "PF00000000000002": {
+        "_id": "PF00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.mZHf8bFaZhaX7UNh",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "value": {},
+        "title": "Controlled Collapse",
+        "hint": "",
+        "flags": {}
+      },
+      "PF00000000000003": {
+        "_id": "PF00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.L8iMkYAgqoIsR1px",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "value": {},
+        "title": "Breach Rhythm",
+        "hint": "",
+        "flags": {}
+      },
+      "PF00000000000004": {
+        "_id": "PF00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.bdsLAAbY6R75klAR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "value": {},
+        "title": "Pancake the Span",
+        "hint": "",
+        "flags": {}
+      },
+      "PF00000000000005": {
+        "_id": "PF00000000000005",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ua90DBHqypSpBpbe",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "value": {},
+        "title": "Faultline Cataclysm",
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "description": {
+      "value": "<p><em>You can hear where things want to break.</em></p><h3>Level 3: OP Shear (BBTTCC)</h3><p>When a structure, vehicle, or fortification fails a check or save you directly influenced (attack, Athletics, tool check, etc.), you may trigger an OP shear. Once per round, when this happens, your faction may convert 1 Economy OP into 1 Violence OP for the current or next Strategic Turn.</p><h3>Level 3: Find the Fault</h3><p>Bonus action: study and mark a visible object, barricade, or structural element within 30 ft. The next allied attack that hits that target before the start of your next turn deals extra damage equal to your proficiency bonus.</p><h3>Level 6: Controlled Collapse</h3><p>When you cause or significantly contribute to the collapse/demolition of a structure that could harm allies or civilians, you may declare a Controlled Collapse: allies and civilians in the affected area have advantage on saves vs damage or being knocked prone from that collapse. Once per long rest, if this prevents serious civilian harm, you may reduce an appropriate regional Darkness track by 1.</p><h3>Level 10: Breach Rhythm</h3><p>When you deal damage to a fortification, barricade, or defensive structure, until the start of your next turn allies within 10 ft of you gain a +2 bonus to AC against ranged attacks coming from that direction.</p><h3>Level 14: Pancake the Span</h3><p>During a siege round or structured breach, once per round when an ally attempts a breach action (demolition, sabotage, sapping, etc.) against a fortification you’ve inspected or struck this scene, you may set the DC for that action to 10 + your proficiency bonus instead of the usual DC.</p><h3>Level 18: Faultline Cataclysm</h3><p>Once per long rest, when you make a weapon attack or demolition check against a structure, fortification, or massive vehicle, you may declare a Faultline Cataclysm before rolling. The attack automatically hits (or the check automatically succeeds) as if you had rolled a 20 on the d20 (not a crit unless your feature says so), the structure takes maximum damage from the attack/effect, and any resulting collapse may be treated as a Controlled Collapse at your option (even if already used). For the rest of the scene, allies have advantage on checks to move through, over, or exploit the breach. If this collapses a key enemy fortification/bridge/symbol of oppression, your faction gains +1 Violence OP and +1 Soft Power OP and you may mark a lasting morale/propaganda shift.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_breaker_faultline",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "BBTTCC Originals"
+    },
+    "classIdentifier": "breaker",
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "folder": "nJxKtpVUUJQGR50v",
+  "flags": {
+    "bbttcc-fixed": {
+      "originalIdentifier": "bbttcc-breaker-path-faultline",
+      "normalizedIdentifier": "bbttcc_breaker_faultline"
+    },
+    "bbttcc": {
+      "subclass": true,
+      "subclassKey": "bbttcc_breaker_faultline"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191162449,
+    "modifiedTime": 1775063119782,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "XYaxmLS79Y5PfP9M",
+  "sort": 178125,
+  "_key": "!items!XYaxmLS79Y5PfP9M"
+}

@@ -1,0 +1,87 @@
+{
+  "name": "Oldenborn (Rustland Scavenger): Toxic Lung Filters",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RustlandScavenger2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You breathe what kills them.”</em></p><p><strong>Toxic Lung Filters.</strong> You have advantage on defense checks against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</p><p><strong>Scavenger's Eye (1/Short Rest; recharges on Soma Break).</strong> Spend 10 minutes in a ruin, junkyard, or wreckage site. You find one specific reasonable item that an attentive scavenger could plausibly have located there. The GM may gate exotic items behind a Mind (Investigation) check.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn_rustland_scavenger_tier1",
+    "requirements": "Oldenborn (Rustland Scavenger)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "toxic_lung_filters",
+      "lineage": "Rustland Scavenger",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "poison",
+            "flavor": "inhaled"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "7fnxyCtrYl8KlYbp",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.su4m5LZVhWGBX6MF",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "su4m5LZVhWGBX6MF"
+}

@@ -1,0 +1,177 @@
+{
+  "name": "Stormborn Nomad",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/StormbornNomad2.png",
+  "system": {
+    "advancement": [
+      {
+        "_id": "JQPXS0dfkukAhdRj",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium Stormborn Nomad.",
+        "value": {}
+      },
+      {
+        "_id": "STORMADV00000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.QBioiHJ2FkGqTYGi",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stormborn: Weatherwise",
+        "hint": "Gain the Stormborn: Weatherwise feature."
+      },
+      {
+        "_id": "STORMADV00000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.qUJnYb3QQtVY6je0",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stormborn: Ward of the Gale",
+        "hint": "Gain the Stormborn: Ward of the Gale feature."
+      },
+      {
+        "_id": "STORMADV00000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.2R8IKF5HbRfzz1wm",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stormborn: Nomad Networks",
+        "hint": "Gain the Stormborn: Nomad Networks feature."
+      },
+      {
+        "_id": "STORMADV00000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.QYXYNwULDEVtpZF2",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stormborn: Strategic Hooks",
+        "hint": "Grants OP edges, terrain synergy, and Purifying Rites hooks."
+      }
+    ],
+    "description": {
+      "value": "<p><strong>Normalized BBTTCC ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Species (BBTTCC).</strong> Forged by ash squalls and monsoon flats, Stormborn wander where others won\u2019t. They read skies, ride fronts, and shelter a caravan like a moving city.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Stormborn).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Weatherwise.</strong> You gain proficiency with the <em>Survival</em> skill. You ignore nonmagical difficult terrain caused by weather (such as mud from heavy rain, shallow snow, or high winds).</li><li><strong>Ward of the Gale.</strong> Once per long rest, when you would take environmental damage (such as from a storm, heat, or similar hazard), you can use your reaction to reduce that damage to half until the start of your next turn.</li><li><strong>Nomad Networks.</strong> You learn one additional language of your choice and have advantage on ability checks to locate water, shelter, or safe passage in <em>Desert / Ash Wastes</em> or <em>Swamp / Mire</em> hexes.</li><li><strong>Ability Scores.</strong> Your Archetype determines your ability score increases; Stormborn Nomad does not grant any ability score bonuses.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><p><em>\u201cYou are the difference between \u2018we crossed the wastes\u2019 and \u2018someone found the bones later.\u2019\u201d</em></p><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Non-Lethal OP</strong> and <strong>+1 Faith OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Desert / Ash Wastes</em> or <em>Swamp / Mire</em> hexes, your traveling party ignores the first <strong>hazard</strong> triggered per Strategic Turn.</li><li><strong>Purifying Rites.</strong> Once per Strategic Turn, you may perform a 10-minute rite. If the group succeeds on a DC 15 group check (as set by the GM), you reduce regional <strong>Darkness by 1</strong>; this costs <strong>1 Faith OP</strong>.</li></ul>",
+      "chat": ""
+    },
+    "identifier": "stormborn_nomad",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": "",
+      "custom": "BBTTCC",
+      "license": ""
+    },
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": ""
+    },
+    "type": {
+      "value": "humanoid",
+      "subtype": "Stormborn Nomad",
+      "custom": ""
+    }
+  },
+  "effects": [],
+  "folder": "vRWQzcz2IBwqyhsN",
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "opEffects": {
+        "nonLethal": 2,
+        "faith": 1
+      },
+      "terrainSynergy": [
+        "Desert / Ash Wastes",
+        "Swamp / Mire"
+      ],
+      "preventHazardOncePerTurn": true,
+      "darknessRite": {
+        "cost": {
+          "faith": 1
+        },
+        "dc": 15,
+        "delta": -1,
+        "scope": "regional"
+      },
+      "version": "1.0.0",
+      "date": "2025-11-08",
+      "normalizedFrom": "Stormborn Nomad"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.nKHhfdL3U98tJj6r",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192872324,
+    "modifiedTime": 1773192872324,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "nKHhfdL3U98tJj6r",
+  "_srcfile": "fvtt-Item-stormborn-nomad-nKHhfdL3U98tJj6r.json"
+}

@@ -1,0 +1,99 @@
+{
+  "name": "Echo-Diver Heritage: Abyssal",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Echo-Diver_Abyssal.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Heritage (RFI v1.0).</strong> Ported to Roll for Initiation: 7-damage-type canon, Soma Break, Tier-based scaling, reroll-lowest. Replaces the D&amp;D5E heritage draft dated 2026-04-19 00:10.</p><p><em>&ldquo;The deep remembers everything. You&rsquo;re how it talks about it.&rdquo;</em></p><p><strong>Echo-Diver (Abyssal).</strong> You tune to the deep register. Where other Echo-Divers hear a half-second ahead, you hear a half-second behind &mdash; the settled time, the truth after everyone agrees what happened.</p><h3>Heritage Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Echo-Diver).</li><li><strong>Size.</strong> Medium. Speed: normal.</li><li><strong>Deep-Current Resistance.</strong> You <strong>resist psychic</strong> damage.</li><li><strong>Tide Recall (retrocognition).</strong> 1/Soma Break, touch a surface, creature, or object. The GM tells you one true thing from its recent past. Window: 24h at Tier 1, 1 week at Tier 2, 1 year at Tier 3, any time at Tier 4.</li><li><strong>Still Water.</strong> Reroll the lowest die on Insight checks, and on checks to resist the <strong>shaken</strong> condition.</li><li><strong>Signature.</strong> You gain <em>Tide Recall</em> at character creation.</li></ul><p class=\"note\"><strong>Engine note.</strong> Where this heritage grants a damage-type resistance, it is applied by the fourththing defense engine via <code>flags.fourththing.grants</code>. Narrative immunities (sleep, forced movement, cold iron) are descriptive only until the Phase 3 condition-and-flavor engine ships.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "qBCYxUHy0TmYKZbs",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.EDABYSSALTIER1PL",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Tide Recall",
+        "hint": "Gain the Echo-Diver (Abyssal) signature feat: Tide Recall."
+      }
+    ],
+    "identifier": "echo_diver_abyssal_heritage",
+    "requirements": "Echo-Diver",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Abyssal",
+      "version": "1.0.0-rfi",
+      "date": "2026-04-19",
+      "normalizedFrom": "new-v1.0",
+      "refactorNotes": "RFI Phase 2 port: 7-damage-type canon, Soma Break, Tier, reroll-lowest, attribute-defense DCs."
+    },
+    "fourththing": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Abyssal",
+      "grants": {
+        "resistances": [
+          "psychic"
+        ],
+        "immunities": []
+      }
+    }
+  },
+  "folder": "ktaQ2YC0RiklPjfR",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.x9xeEz9g4PAjwRMf",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "x9xeEz9g4PAjwRMf"
+}

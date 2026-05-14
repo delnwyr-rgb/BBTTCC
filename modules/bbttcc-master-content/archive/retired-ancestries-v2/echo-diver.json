@@ -1,0 +1,34 @@
+{
+  "name": "Echo-Diver",
+  "type": "feat",
+  "img": "icons/skills/movement/swimming-man.webp",
+  "system": {
+    "description": {
+      "value": "\n**Ancestry (BBTTCC).** Amphibious folk adapted to flooded vaults and abyssal silos. \nTheir lungs and nerves hum with the song of old reactors and deep currents.\n\n**Traits**\n- **Ability Scores.** +2 Dexterity, +1 Intelligence\n- **Size.** Medium; **Speed.** 30 ft; **Swim Speed.** 30 ft; **Amphibious.**\n- **Pressure Acclimation.** Resist cold damage; ignore penalties from high pressure and most contaminated water (still harmful if radioactive).\n- **Vault Sight.** Darkvision 60 ft; advantage to detect hidden doors/pressure seals.\n- **Diver\u2019s Kit.** Proficiency with *Vehicles (water)* or *Navigator\u2019s Tools* (your choice).\n\n**Strategic Hooks (Foundry/BBTTCC)**\n- **OP Edge.** Your faction gains **+2 Intrigue OP** and **+1 Economy OP** at campaign start.\n- **Waterway Network.** In *River/Lake* or *Sea/Ocean* hexes, reduce **Logistics** cost by **1** per travel action.\n- **Spark Resonance.** When a Vestigial Spark is hidden below water or in a pressurized site, your party gains **Advantage on Identification** checks for that Spark.\n"
+    },
+    "source": "BBTTCC",
+    "activation": {
+      "type": "",
+      "cost": 0
+    },
+    "requirements": "Character Creation"
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestry",
+      "opEffects": {
+        "intrigue": 2,
+        "economy": 1
+      },
+      "logisticsDiscountWaterHex": 1,
+      "sparkIdAdvantageUnderwater": true,
+      "terrainSynergy": [
+        "River / Lake",
+        "Sea / Ocean"
+      ],
+      "version": "1.0.0",
+      "date": "2025-11-08"
+    }
+  },
+  "_id": "eeA17ANjG6ISRZmv"
+}

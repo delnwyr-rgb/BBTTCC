@@ -1,0 +1,35 @@
+{
+  "name": "Qliph-Scarred",
+  "type": "feat",
+  "img": "icons/magic/unholy/hand-claw-glow-pink.webp",
+  "system": {
+    "description": {
+      "value": "\n**Ancestry (BBTTCC).** Touched by the Shells, the Qliph\u2011Scarred channel dangerous power. \nThey are terrifying in a crisis\u2014if they keep the darkness from spilling over.\n\n**Traits**\n- **Ability Scores.** +2 Strength, +1 Charisma\n- **Size.** Medium; **Speed.** 30 ft.\n- **Shadow Resilience.** Resistance to necrotic damage.\n- **Menace.** Proficiency with *Intimidation*.\n- **Perilous Boon.** When you reduce a creature to 0 HP, gain temporary HP = proficiency bonus; if you do so twice in a combat, you must succeed on a DC 12 Wisdom save or suffer disadvantage on your next social check this scene (echoes of cruelty).\n\n**Strategic Hooks (Foundry/BBTTCC)**\n- **OP Edge.** Your faction gains **+2 Violence OP** and **+1 Intrigue OP** at campaign start; **Empathy \u22121**.\n- **Dark Whisper.** Once per Strategic Turn, you may add **+2** to a Violence opposed roll; then **Darkness +1 (regional)**.\n- **Tikkun Risk.** If your party corrupts a Spark, increase **global Darkness +1** instead of +0 (minimum +1).\n"
+    },
+    "source": "BBTTCC",
+    "activation": {
+      "type": "",
+      "cost": 0
+    },
+    "requirements": "Character Creation"
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestry",
+      "opEffects": {
+        "violence": 2,
+        "intrigue": 1
+      },
+      "empathyDelta": -1,
+      "violenceBoostWithDarkness": {
+        "bonus": 2,
+        "darknessDelta": 1,
+        "scope": "regional"
+      },
+      "corruptedSparkDarknessGlobal": 1,
+      "version": "1.0.0",
+      "date": "2025-11-08"
+    }
+  },
+  "_id": "ik68USJ78qib3ckv"
+}

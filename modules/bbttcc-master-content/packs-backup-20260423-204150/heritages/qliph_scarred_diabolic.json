@@ -1,0 +1,94 @@
+{
+  "name": "Qliph-Scarred Heritage: Diabolic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/QliphScarred_Diabolic.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Qliph-Scarred heritage: Diabolic.</p><p><em>“Something fell into you and it’s still awake in there.”</em></p><p><strong>Qliph-Scarred (Diabolic).</strong> Your scar is a splinter. Something with a will of its own got into you when you walked out of that place, and you didn’t kick it out so much as you negotiated with it. The tongue in your mouth is not always yours. The advice you give is not always what you meant to say. It is, however, useful.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Qliph-Scarred does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Presence</strong> in fiction and through Tier powers.</li></ul><h3>Qliph-Scarred Core: What Walked Out</h3><p><em>Shared across all Qliph-Scarred heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Shadow Resilience.</strong> You have resistance to qliphothic damage. You have advantage on Body checks against effects that would drain, wither, or corrupt your body.</li><li><strong>Qliphothic Saturation.</strong> Once per scene, when you fail a Soul check, you may reroll it — but your scene's Darkness-gain count increases by 1. The scar pays for what the scar saves.</li><li><strong>Hunger Mask.</strong> You can suppress a bodily need (hunger, thirst, sleep, breath) for up to 24 hours by deciding to; you do not suffer its penalties during that window. At the end of the 24 hours, all deferred needs strike you at once, each as a separate exhaustion-class consequence.</li><li><strong>Shadow-Wake.</strong> Creatures with qliphothic attunement (demons, corrupt sephirot, Radiation-warped entities) can sense you at 60 feet and know you have been marked. They may not know how to read the mark.</li></ul><h3>Diabolic Traits</h3><ul><li><strong>Splinter Tongue.</strong> You know Infernal as a bonus language. You have advantage on Presence checks to persuade, deceive, or intimidate creatures who are already lying to themselves — the splinter knows its audience.</li><li><strong>Cold Iron Cost.</strong> You take 1 extra point of damage from any weapon forged of cold iron or blessed against fiends. The splinter does not like those things, and you share a body with the splinter.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Presence OP</strong> and <strong>+1 Violence OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Black Market / Cult / Corrupted-Territory</em> hexes, your faction's negotiation and recruitment operations gain +2 on the success check.</li><li><strong>Splinter Network.</strong> Once per Strategic Turn, when a rival faction has a member who is secretly compromised (GM determines), you may learn that such a person exists. You do not learn who. You learn they exist.</li></ul><p><strong>Note.</strong> This heritage grants its Tier I feat via ItemGrant with a placeholder UUID (NkkulzmL9DJQXfuR). After import, run the wiring macro to bind real UUIDs.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "34984219b1ec554b",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.NkkulzmL9DJQXfuR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Diabolic Tier I",
+        "hint": "Gain your Diabolic Tier I feat."
+      }
+    ],
+    "identifier": "qliph_scarred_diabolic_heritage",
+    "requirements": "Qliph-Scarred",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "qliph_scarred",
+      "lineage": "Diabolic",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "presence": 2,
+        "violence": 1
+      }
+    },
+    "fourththing": {}
+  },
+  "folder": "XGBBcvgCXDYh3J9D",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.vgjf6l5eVpI5yl9l",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "vgjf6l5eVpI5yl9l"
+}

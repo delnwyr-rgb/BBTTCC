@@ -1,0 +1,770 @@
+{
+  "name": "Phantom Courier",
+  "type": "class",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/PhantomCourier2.png",
+  "system": {
+    "advancement": {
+      "PC00000000000001": {
+        "_id": "PC00000000000001",
+        "type": "HitPoints",
+        "configuration": {},
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000002": {
+        "_id": "PC00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.fyUl6435ir2KO2aX",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ugNxVpGlIsmzaGBl",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Phase-Slip Initiate & Ghoststep Reflexes",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000003": {
+        "_id": "PC00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Y7SyMfXZFl9SRO3A",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.iY8nyCPltMdaejEu",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 2,
+        "title": "Shadow Route Sense & Dead Drop Specialist",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000004": {
+        "_id": "PC00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.iOXKaejXdozYTbg5",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ZfT5l6hw1WbvXR00",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 3,
+        "title": "Between-the-Moments & Courier's Dash",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000005": {
+        "_id": "PC00000000000005",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 4,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000006": {
+        "_id": "PC00000000000006",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.38Gw25HKQHCWM4WR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 4,
+        "title": "Slipstream Step",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000007": {
+        "_id": "PC00000000000007",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.bzSwLUPLVpChqZPY",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.s6r5kc9IBljUWjne",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 5,
+        "title": "Operation Ghost Dividend & Vanish on the Wire",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000008": {
+        "_id": "PC00000000000008",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.zzR7WxiPzeVYfc8K",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 6,
+        "title": "Ghost-Walker's Balance",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000009": {
+        "_id": "PC00000000000009",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 6,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000010": {
+        "_id": "PC00000000000010",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.5YCWylXNqXWdpx76",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.B3EfZol7ifmxWIPr",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 7,
+        "title": "Trace Erasure & Route Encryption",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000011": {
+        "_id": "PC00000000000011",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.BLINKSTEP_FEINT_UUID",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 8,
+        "title": "Blinkstep Feint",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000012": {
+        "_id": "PC00000000000012",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 8,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000013": {
+        "_id": "PC00000000000013",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.DBjgSP44PVKpxWci",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.XDIzfUyoLxUL3YPS",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 9,
+        "title": "Signal in the Static & Phantom Network Liaison",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000014": {
+        "_id": "PC00000000000014",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 10,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000015": {
+        "_id": "PC00000000000015",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.ZlOMqBewUPHCf7YM",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.oSQLgaVRnsHIaCDc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Evasive Echo & Momentum Shear",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000016": {
+        "_id": "PC00000000000016",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 12,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000017": {
+        "_id": "PC00000000000017",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.FVXF3oxOOfNxdzVY",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 12,
+        "title": "Quantum Breadcrumbs",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000018": {
+        "_id": "PC00000000000018",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.D3BtAf4pZ62BdvyB",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 13,
+        "title": "Courier's Resilience",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000019": {
+        "_id": "PC00000000000019",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 14,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000020": {
+        "_id": "PC00000000000020",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.2aJ9CRPV7a66yMTx",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 15,
+        "title": "Horizon Thread",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000021": {
+        "_id": "PC00000000000021",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 16,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000022": {
+        "_id": "PC00000000000022",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.WpzLSWKhUju2K5YU",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.mlGDuGha5Ww8QFZ9",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 17,
+        "title": "Dimensional Flicker & Ghostline Anchor",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000023": {
+        "_id": "PC00000000000023",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.8sLgt9JCQdTxX67X",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.3IU7FQdjpRlKsxBc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 18,
+        "title": "Entangled Lifeline & Route Sever Paradox",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000024": {
+        "_id": "PC00000000000024",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 19,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000025": {
+        "_id": "PC00000000000025",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.uNHnRHKZ6Ha4Io4F",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 20,
+        "title": "The Message Always Arrives",
+        "flags": {},
+        "hint": ""
+      },
+      "PC00000000000026": {
+        "_id": "PC00000000000026",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
+      },
+      "PC00000000000027": {
+        "_id": "PC00000000000027",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "saves:dex",
+            "saves:int"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Saving Throw Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "PC00000000000028": {
+        "_id": "PC00000000000028",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "skills:ste",
+            "skills:acr"
+          ],
+          "choices": [
+            {
+              "count": 2,
+              "pool": [
+                "skills:prc",
+                "skills:ins",
+                "skills:ath",
+                "skills:sur"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Skill Proficiencies",
+        "hint": "Gain Stealth and Acrobatics automatically, then choose two from Perception, Insight, Athletics, and Survival.",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "PC00000000000029": {
+        "_id": "PC00000000000029",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim",
+            "weapon:mar"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "PC00000000000030": {
+        "_id": "PC00000000000030",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "PC00000000000031": {
+        "_id": "PC00000000000031",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Saving Throw Proficiencies",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      "PC00000000000032": {
+        "_id": "PC00000000000032",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      "PC00000000000033": {
+        "_id": "PC00000000000033",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      }
+    },
+    "description": {
+      "value": "<p><strong>Primary Ability:</strong> Dexterity</p><p><em>“If reality needs a signature to let hope through the checkpoint, you’re the one who forges it.”</em></p><p>Phantom Couriers are quantum-phase messengers who slip between the edges of timelines to deliver what must arrive. They aren’t just fast—they are <em>misaligned</em> with cause-and-effect in ways that make interception a suggestion instead of a rule.</p><p>On the tactical map, a Phantom Courier is a hyper-mobile skirmisher and route-runner: stitching the battlefield together, baiting attacks into empty air, and getting critical things out of danger. On the strategic layer, they’re the reason Intrigue operations finish with everybody saying, “Wait, <em>how</em> did that get here?”</p><hr /><h3>Class Features by Tier (BBTTCC Overlay)</h3><ul><li><p><strong>Tier 1 — Phase-Slip Initiate.</strong><br />You gain proficiency in <em>Stealth</em> and <em>Acrobatics</em>. When you travel with a party, the <strong>first terrain hazard each segment is ignored</strong> as long as you are conscious and actively running the route.</p></li><li><p><strong>Tier 2 — Operation Ghost Dividend.</strong><br />When you successfully complete an <em>Infiltration</em> scenario where you personally participated, your faction <strong>refunds 1 Intrigue OP</strong> that was spent on that operation (minimum 0).</p></li><li><p><strong>Tier 3 — Evasive Echo.</strong><br />You gain an <em>Evasion</em>-style benefit: succeeding on a Dexterity save vs half damage means <strong>no damage</strong>, and a failed save means <strong>half damage</strong>. You exist at several slightly different coordinates when danger hits.</p></li><li><p><strong>Tier 4 — Dimensional Flicker.</strong><br />Once you’re fully online, you can use a <strong>bonus action each turn</strong> to <strong>teleport up to 30 feet</strong> to a space you can see, without provoking opportunity attacks. You don’t run through battlefields—you redraw your outline.</p></li></ul><hr /><h3>Phantom Courier Progression (Highlights)</h3><ul><li><strong>1st Level:</strong> Phase-Slip Initiate, Ghoststep Reflexes.</li><li><strong>2nd Level:</strong> Shadow Route Sense, Dead Drop Specialist.</li><li><strong>3rd Level:</strong> Between-the-Moments, Courier’s Dash.</li><li><strong>5th Level:</strong> Operation Ghost Dividend, Vanish on the Wire.</li><li><strong>6th–7th Levels:</strong> Ghost-Walker’s Balance, Trace Erasure, Route Encryption.</li><li><strong>8th–10th Levels:</strong> Blinkstep Feint, Signal in the Static, Phantom Network Liaison.</li><li><strong>11th–14th Levels:</strong> Evasive Echo, Momentum Shear, Quantum Breadcrumbs, Courier’s Resilience, Horizon Thread.</li><li><strong>17th–18th Levels:</strong> Dimensional Flicker, Ghostline Anchor, Entangled Lifeline, Route Sever Paradox.</li><li><strong>20th Level:</strong> The Message Always Arrives.</li></ul><p>Phantom Couriers shine wherever routes are dangerous, information is fragile, and survival hinges on whether someone can get there <em>in time</em>—or slightly before time notices them arriving.</p>",
+      "chat": ""
+    },
+    "identifier": "phantomcourier",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "BBTTCC"
+    },
+    "startingEquipment": [],
+    "hd": {
+      "additional": "",
+      "denomination": "d8",
+      "spent": 0
+    },
+    "levels": 1,
+    "primaryAbility": {
+      "value": [
+        "dex"
+      ],
+      "all": false
+    },
+    "properties": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    },
+    "wealth": ""
+  },
+  "effects": [],
+  "folder": "JaOnwkL5YcJqf3Gb",
+  "flags": {
+    "bbttcc": {
+      "primary": "dexterity",
+      "opBonus": {
+        "intrigue": 3
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1765264729594,
+    "modifiedTime": 1775063135640,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "i1nHLERomaiEWGuc",
+  "sort": 100000,
+  "_key": "!items!i1nHLERomaiEWGuc"
+}

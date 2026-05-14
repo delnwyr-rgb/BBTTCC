@@ -1,0 +1,156 @@
+{
+  "name": "Path of the Siege Ascendant (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_siege_8.png",
+  "system": {
+    "advancement": {
+      "SA00000000000001": {
+        "_id": "SA00000000000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.D0cZ8QeTXIqZ9iEF",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.V19YaPX1lUh6xPXG",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "value": {},
+        "title": "Siege Ascendant & Ramrunner Stance",
+        "hint": "",
+        "flags": {}
+      },
+      "SA00000000000002": {
+        "_id": "SA00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.VjsktnifnHRgioso",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "value": {},
+        "title": "Echo Breach",
+        "hint": "",
+        "flags": {}
+      },
+      "SA00000000000003": {
+        "_id": "SA00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.y8I0xEIl4CdEr2dI",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "value": {},
+        "title": "Overhang Sense",
+        "hint": "",
+        "flags": {}
+      },
+      "SA00000000000004": {
+        "_id": "SA00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.o9os88uvuFeCZDY9",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "value": {},
+        "title": "Momentum of Ruin",
+        "hint": "",
+        "flags": {}
+      },
+      "SA00000000000005": {
+        "_id": "SA00000000000005",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.3UKy0yOY6GISgbkP",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "value": {},
+        "title": "Crown of the Siege",
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "description": {
+      "value": "<p><em>You are not just attacking the city—you are conducting it.</em></p><h3>Level 3: Siege Ascendant (BBTTCC)</h3><p>At the start of a Siege round or structured assault you are clearly leading, the first Maneuver your faction executes that round (Violence, Intrigue, or Logistics-based) has its OP cost reduced by 1 (minimum 1).</p><h3>Level 3: Ramrunner Stance</h3><p>You have advantage on checks to shove or push heavy objects (barricades, doors, siege implements, engines). When you Ready to brace in place, you have advantage on checks and saves to resist being pushed, pulled, or knocked prone until your next turn.</p><h3>Level 6: Echo Breach</h3><p>Once per round when you hit a structure (wall, gate, tower, hull, etc.) with a melee attack or demolition effect, you may deal extra damage equal to your proficiency bonus to a second weak point within 5 ft of the original impact.</p><h3>Level 10: Overhang Sense</h3><p>You have advantage on Perception or Investigation checks to spot loose masonry, unstable balconies, murder holes, and similar hazards. When you call out a hazard you’ve identified, allies within 30 ft gain advantage on saving throws to avoid falling debris or collapse from that hazard for 1 minute.</p><h3>Level 14: Momentum of Ruin</h3><p>Once per scene, when a breach attempt against a structure or fortification you’ve contributed to this scene succeeds, you may invoke Momentum of Ruin. Allies of your choice within 30 ft gain temporary hit points equal to your Breaker level and advantage on their next attack roll before the end of their next turn.</p><h3>Level 18: Crown of the Siege</h3><p>Once per long rest, when a Siege round begins and you are clearly in command, you may invoke Crown of the Siege. For that round, the first two Maneuvers your faction executes each have their OP cost reduced by 1 (minimum 1). Allied units within 30 ft gain advantage on morale checks and saves vs fear until the end of the round. If a decisive breach or surrender occurs during this round, your faction gains +1 Violence OP and +1 Unity OP for the next Strategic Turn.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_breaker_siegeascendant",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "BBTTCC Originals"
+    },
+    "classIdentifier": "breaker",
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "folder": "u6WBujwdAAiUbJ2d",
+  "flags": {
+    "bbttcc-fixed": {
+      "originalIdentifier": "bbttcc-breaker-siegeascendant",
+      "normalizedIdentifier": "bbttcc_breaker_siegeascendant"
+    },
+    "bbttcc": {
+      "subclass": true,
+      "subclassKey": "bbttcc_breaker_siege_ascendant"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773192439237,
+    "modifiedTime": 1775063118267,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Wgu8uKIGBn6uKCt4",
+  "sort": 237500,
+  "_key": "!items!Wgu8uKIGBn6uKCt4"
+}

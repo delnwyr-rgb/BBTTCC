@@ -1,0 +1,54 @@
+{
+  "_id": "4A4oY4UwKaW448SI",
+  "name": "Spark of Severity (Animate)",
+  "type": "spark",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "spark",
+    "sephirah": "gevurah",
+    "kind": "animate",
+    "alignedMethods": [
+      "violence",
+      "siege"
+    ],
+    "misalignedMethods": [
+      "softpower",
+      "diplomacy",
+      "nonlethal"
+    ],
+    "repair": {
+      "materialKey": "freshwater-pearl",
+      "materialAmount": 1,
+      "opCost": {
+        "pool": "faith",
+        "amount": 4
+      },
+      "ritualDC": 13
+    },
+    "source": "BBTTCC Tikkun v1.0",
+    "tags": [
+      "gevurah",
+      "animate",
+      "spark"
+    ],
+    "description": {
+      "value": "<p><em>Living-form. Lives in a creature, a person, or the rite they keep.</em></p>\n<p><strong>Sephirah:</strong> Gevurah — Judgment, precision force.</p>\n<p><strong>Aligned methods:</strong> violence, siege. <strong>Misaligned (causes Corruption):</strong> softpower, diplomacy, nonlethal.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc-tikkun": {
+      "sparkVersion": "1.0.0",
+      "identifier": "spark_gevurah_animate"
+    }
+  },
+  "_stats": {
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": null
+  },
+  "_key": "!items!4A4oY4UwKaW448SI"
+}

@@ -1,0 +1,77 @@
+{
+  "name": "Echo-Diver (Empyrean): Stormread",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heritage.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Heritage Signature (RFI v1.0).</strong></p><p><em>&ldquo;Something is about to happen. You already leaned away.&rdquo;</em></p><p><strong>Stormread.</strong> 1/scene, as a reaction on any attack roll targeting you or an ally within 30 ft: the attacker rerolls their highest die and takes the lower result. The lightning came through you already &mdash; you only had to stand where it had not yet struck.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "echo_diver-empyrean-stormread",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Echo-Diver (Empyrean)",
+    "type": {
+      "value": "",
+      "subtype": "heritageSignature"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "heritageSignature",
+      "feature": "stormread",
+      "family": "echo_diver",
+      "lineage": "Empyrean",
+      "version": "1.0.0-rfi"
+    },
+    "fourththing": {
+      "kind": "heritageSignature",
+      "feature": "stormread",
+      "family": "echo_diver",
+      "lineage": "Empyrean"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.EDEMPYREANTR1PLC",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "EDEMPYREANTR1PLC"
+}

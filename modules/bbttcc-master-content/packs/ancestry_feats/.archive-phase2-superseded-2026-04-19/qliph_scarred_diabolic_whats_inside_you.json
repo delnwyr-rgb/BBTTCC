@@ -1,0 +1,77 @@
+{
+  "name": "Qliph-Scarred (Diabolic): What's Inside You",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heritage.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Heritage Signature (RFI v1.0).</strong></p><p><em>&ldquo;It gets an opinion. You host it. You do not obey it.&rdquo;</em></p><p><strong>What&rsquo;s Inside You.</strong> 1/Soma Break, as an action: a humanoid within 30 ft who has lied (to you, to themselves, or to a third party) in the current scene must make a Resolve save (<strong>DC = 10 + your Presence + Soul</strong>) or be <strong>calmed</strong> by you for one minute. On a success they feel something brush past their teeth and know, briefly, that someone else tried to speak through your mouth.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "qliph_scarred-diabolic-whats_inside_you",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Qliph-Scarred (Diabolic)",
+    "type": {
+      "value": "",
+      "subtype": "heritageSignature"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "heritageSignature",
+      "feature": "whats_inside_you",
+      "family": "qliph_scarred",
+      "lineage": "Diabolic",
+      "version": "1.0.0-rfi"
+    },
+    "fourththing": {
+      "kind": "heritageSignature",
+      "feature": "whats_inside_you",
+      "family": "qliph_scarred",
+      "lineage": "Diabolic"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.QLDIABOLICTIER1P",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "QLDIABOLICTIER1P"
+}

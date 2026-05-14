@@ -1,0 +1,97 @@
+{
+  "name": "Sephirotic Scion Heritage: Ophanic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Sephirotic_Scion_Ophanic.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Heritage (RFI v1.0).</strong> Ported to Roll for Initiation: 7-damage-type canon, Soma Break, Tier-based scaling, reroll-lowest. Replaces the D&amp;D5E heritage draft dated 2026-04-19 00:10.</p><p><em>&ldquo;The wheels were full of eyes. You never stop turning. You never stop seeing.&rdquo;</em></p><p><strong>Sephirotic Scion (Ophanic).</strong> Order: turning, seeing. Motion and sight are the same thing to you.</p><h3>Heritage Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic).</li><li><strong>Size.</strong> Medium. Speed: normal.</li><li><strong>Wheel-and-Eye.</strong> When you move at least 10 ft on your turn, gain <strong>reroll-lowest</strong> on Perception checks involving motion, pattern, or change over time until the start of your next turn.</li><li><strong>Never Still.</strong> See your signature feat, <em>The Wheel Never Stops</em>.</li><li><strong>Concentric Sight.</strong> You do not grant positional advantage from side or rear arcs if your table uses flanking. Where flanking is not in play, enemies within 5 ft of you cannot gain the <em>help</em> bonus from a second attacker.</li><li><strong>Signature.</strong> You gain <em>The Wheel Never Stops</em> at character creation.</li></ul><p class=\"note\"><strong>Engine note.</strong> Where this heritage grants a damage-type resistance, it is applied by the fourththing defense engine via <code>flags.fourththing.grants</code>. Narrative immunities (sleep, forced movement, cold iron) are descriptive only until the Phase 3 condition-and-flavor engine ships.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "VqKccAnTMxmzq8wm",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SSOPHANICTIER1PL",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "The Wheel Never Stops",
+        "hint": "Gain the Sephirotic Scion (Ophanic) signature feat: The Wheel Never Stops."
+      }
+    ],
+    "identifier": "sephirotic_scion_ophanic_heritage",
+    "requirements": "Sephirotic Scion",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "sephirotic_scion",
+      "lineage": "Ophanic",
+      "version": "1.0.0-rfi",
+      "date": "2026-04-19",
+      "normalizedFrom": "new-v1.0",
+      "refactorNotes": "RFI Phase 2 port: 7-damage-type canon, Soma Break, Tier, reroll-lowest, attribute-defense DCs."
+    },
+    "fourththing": {
+      "kind": "heritage",
+      "family": "sephirotic_scion",
+      "lineage": "Ophanic",
+      "grants": {
+        "resistances": [],
+        "immunities": []
+      }
+    }
+  },
+  "folder": "ktaQ2YC0RiklPjfR",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.FAbV8Vy8ybOzuJvV",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "FAbV8Vy8ybOzuJvV"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "<Doctrine> L<N>: <Feature Name>",
+  "type": "feat",
+  "img": "icons/svg/wing.svg",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "<Authoring book/version>",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>Flavor sentence.</em></p><p><strong>Mode/Mood/Drift line.</strong></p><p>Mechanical body.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "<path>_<doctrine>_l0<N>_<slug>",
+    "requirements": "<Doctrine> Doctrine, Level <N>",
+    "prerequisites": { "items": [], "repeatable": false, "level": 1 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": { "bbttcc": { "kind": "doctrinefeat" } }
+}

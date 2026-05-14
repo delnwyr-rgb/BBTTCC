@@ -1,0 +1,73 @@
+{
+  "name": "Circuitborn (Salvage Line): Scrap Alchemy",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bottle_5.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Salvage Line)</em> at level 5; now available as an optional ancestry feat.</p><p><em>“Trash is only trash if you don’t understand it.”</em></p>\n        <p><strong>Scrap Alchemy (1/a Soma Break).</strong> Over 10 minutes, convert junk into a useful component. Choose one: ammunition, a simple tool, a small explosive charge (nonlethal), or a single-use OP chit worth +1 Economy or +1 Logistics for this scene.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "circuitborn-salvage-scrap_alchemy",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Circuitborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "scrap_alchemy",
+      "chassis": "Salvage Line",
+      "tierLevel": 5,
+      "version": "1.0.0",
+      "family": "circuitborn",
+      "heritage": "Salvage",
+      "normalizedFrom": "Circuitborn (Salvage Line)"
+    }
+  },
+  "effects": [],
+  "folder": "w94bOnHAEh29yiBU",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.lxVADdPpm3lbBmA6",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192837574,
+    "modifiedTime": 1773192837574,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "lxVADdPpm3lbBmA6",
+  "_srcfile": "fvtt-Item-circuitborn-(salvage-line)_-scrap-alchemy-lxVADdPpm3lbBmA6.json"
+}

@@ -1,0 +1,80 @@
+{
+  "name": "Sephirotic Scion Core: The Higher Register",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Sephirotic_Scion_Core.png",
+  "system": {
+    "category": "ancestry",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Heritages v1.1 — Cores",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Ancestry Core (v1.1, RFI-native).</strong> Shared across all Sephirotic Scion heritages. Granted at character creation via the base ancestry item's ItemGrant advancement.</p><p><em>&ldquo;Your blood remembers the higher spheres. Prayers sometimes answer themselves. The moral architecture feels like the weather report.&rdquo;</em></p><h3>Sephirotic Scion Core Traits</h3><ul><li><strong>Sephirotic Physiology.</strong> You <strong>resist sephirotic</strong> damage. Your blood runs a little bright under the right light. You do not technically age on consecrated ground.</li><li><strong>Sefirot Attunement.</strong> Pick one sephirah at creation. 1/scene, invoke its register for +1 rank bonus on a check clearly in its domain.</li><li><strong>Holy Conduit.</strong> Sephirotic-register effects passing through you treat effective caster-attribute as +1. Applies to you and to allies; not to qliphothic-register effects.</li><li><strong>Light of Harmony.</strong> When two or more creatures within 30 ft are in active explicit agreement, each gains 1 temporary Integrity. Refreshes on each new agreement reached.</li></ul>",
+      "chat": ""
+    },
+    "advancement": [],
+    "identifier": "sephirotic_scion_core",
+    "requirements": "Sephirotic Scion",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestryCore",
+      "family": "sephirotic_scion",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "kind": "ancestryCore",
+      "family": "sephirotic_scion",
+      "grants": {
+        "resistances": [
+          {
+            "type": "sephirotic"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1-cores",
+      "uuid": "Item.CBbxY2PqvDYxL57J",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11CORES"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "CBbxY2PqvDYxL57J"
+}

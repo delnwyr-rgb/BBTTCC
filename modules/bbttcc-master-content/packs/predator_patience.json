@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Felid): Predator Patience",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_3.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Felid)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“You can wait out a problem until it becomes a mistake.”</em></p>\n        <p><strong>Predator Patience.</strong> You have advantage on Perception and Insight checks while hidden or observing quietly. Once per long rest, you may treat a failed attack roll as a hit (describe the perfect timing).</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"predatorPatience\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #c08e6a;border-radius:0.35rem;background:rgba(95,65,45,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#e8b890;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Predator Patience</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/long rest &nbsp;·&nbsp; <strong>Action:</strong> Free (on failed attack roll) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">Treat a failed attack roll as a hit. Describe the perfect timing.</div>\n</div>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-felid-predator_patience",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "predator_patience",
+      "clade": "Felid",
+      "tierLevel": 11,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Felid",
+      "normalizedFrom": "Furrykin (Felid)"
+    }
+  },
+  "effects": [],
+  "folder": "DKGWgx2nvx81wC8t",
+  "_stats": {
+    "compendiumSource": "Item.syDqbf1EBuKFeLuy",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.syDqbf1EBuKFeLuy",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "syDqbf1EBuKFeLuy",
+  "_srcfile": "fvtt-Item-furrykin-(felid)_-predator-patience-syDqbf1EBuKFeLuy.json"
+}

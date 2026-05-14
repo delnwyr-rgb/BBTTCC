@@ -1,0 +1,5882 @@
+/* ── Fourth Thing System CSS  v0.2.0 ──────────────────────────────────────── */
+/* Sprint A additions at bottom                                                 */
+
+/* ── BBTTCC Display webfont (HexChrome) ─────────────────────────────────────── */
+@font-face {
+  font-family: "BBTTCC Display";
+  src: url("../fonts/bbttcc-display/BBTTCC-Display.woff2") format("woff2"),
+       url("../fonts/bbttcc-display/BBTTCC-Display.woff")  format("woff"),
+       url("../fonts/bbttcc-display/BBTTCC-Display.ttf")   format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* HexChrome everywhere on the Fourth Thing character sheet and level-up
+ * dialog. Face only — color / size / weight stay whatever each rule below
+ * (or any sheet rule elsewhere) declares. The gold/blue glow selectors
+ * below layer on top of this for the label tier. */
+/* BBTTCC Display temporarily disabled — Steward sheet + cast dialog
+ * inherit the Foundry default content font until the typeface is tweaked. */
+.ft-sheet,
+.ft-sheet *,
+.ft-cast-dialog,
+.ft-cast-dialog * {
+  font-family: var(--font-primary, system-ui, sans-serif) !important;
+}
+.bbttcc-display {
+  font-family: var(--font-primary, sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ffcf5c;
+  text-shadow:
+    0 0 3px rgba(255, 210, 120, 0.9),
+    0 0 9px rgba(220, 150, 40, 0.55),
+    0 0 20px rgba(180, 95, 15, 0.3);
+}
+
+/* BBTTCC Display applied to branded sheet labels. Scoped to .ft-sheet and
+ * the fourththing level-up dialog so it never bleeds into journal content,
+ * item sheets, or user-entered values (which may contain lowercase glyphs
+ * not covered by the display font). Only the uppercased LABELS are re-faced;
+ * VALUE text keeps its default font.
+ *
+ * Two tones for rhythm: STRUCTURAL labels (tabs, section headings) run in the
+ * warm amber; DATA-ADJACENT labels (attr/stat/magic-row/meta/id/cast-prev)
+ * cool to a soft blue. */
+.ft-sheet .ft-attributes h2,
+.ft-sheet .ft-magic-panel h2,
+.ft-sheet .ft-tabs a.item,
+.ft-sheet .ft-attr label,
+.ft-sheet .ft-stat label,
+.ft-sheet .ft-def-stat label,
+.ft-sheet .ft-magic-row label,
+.ft-sheet .ft-meta-label,
+.ft-sheet .ft-id-label,
+.ft-sheet .ft-principle-group-head h3,
+.ft-cast-dialog .ft-prev-label {
+  /* BBTTCC Display temporarily disabled — using default content font. */
+  font-family: var(--font-primary, sans-serif);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffcf5c;
+  text-shadow:
+    0 0 2px rgba(255, 210, 120, 0.85),
+    0 0 7px rgba(220, 150, 40, 0.45);
+}
+
+/* Blue variant — data labels cool off for contrast against the amber heads.
+ * Deep royal #1c3a9d anchors the outer halo so the soft-blue core rides on
+ * a richer, saturated base tone. */
+.ft-sheet .ft-attr label,
+.ft-sheet .ft-stat label,
+.ft-sheet .ft-def-stat label,
+.ft-sheet .ft-magic-row label,
+.ft-sheet .ft-meta-label,
+.ft-sheet .ft-id-label,
+.ft-cast-dialog .ft-prev-label {
+  color: #bcd3ff;
+  text-shadow:
+    0 0 2px rgba(200, 220, 255, 0.85),
+    0 0 7px rgba(120, 160, 255, 0.45),
+    0 0 18px rgba(28, 58, 157, 0.6);
+}
+
+/* ── Base sheet ────────────────────────────────────────────────────────────── */
+
+.ft-sheet {
+  font-family: var(--font-primary, "IBM Plex Sans", system-ui, sans-serif);
+  padding: 0.5rem;
+  color: #f0f4ff;
+  background: radial-gradient(circle at top, #141a33 0, #050712 60%);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.ft-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 0.5rem;
+  min-height: 0;
+}
+
+.ft-header {
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 0.5rem;
+}
+
+.ft-identity {
+  flex: 0 0 300px;
+  gap: 0.5rem;
+}
+
+.ft-portrait img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(232,200,74,0.08);
+}
+
+.ft-name input {
+  width: 100%;
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 0.2rem 0.4rem;
+  color: #f0f4ff;
+}
+
+.ft-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.ft-meta label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+.ft-meta input {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 0.15rem 0.3rem;
+  font-size: 0.8rem;
+  color: #f0f4ff;
+}
+
+/* ── Attributes ─────────────────────────────────────────────────────────────── */
+
+.ft-attributes {
+  flex: 1 1 auto;
+  padding: 0 0.5rem;
+}
+
+.ft-attributes h2 {
+  margin: 0.15rem 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c0d4ff;
+  opacity: 0.8;
+}
+
+.ft-attr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.ft-attr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ft-attr label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.ft-attr input {
+  width: 44px;
+  text-align: center;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #f0f4ff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.1rem;
+  border-radius: 3px;
+}
+
+/* ── Derived ─────────────────────────────────────────────────────────────────── */
+
+.ft-derived {
+  gap: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.ft-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-direction: column;
+}
+
+.ft-stat label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.ft-stat input {
+  width: 44px;
+  text-align: center;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #f0f4ff;
+  font-size: 1rem;
+  padding: 0.1rem;
+  border-radius: 3px;
+}
+
+.ft-stat-max {
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+.ft-defenses { gap: 0.8rem; }
+
+.ft-def-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ft-def-stat label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.ft-def-stat span {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #c8d8ff;
+}
+
+.ft-def-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+  min-height: 1.3rem;
+}
+
+.ft-def-chips .ft-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(15,23,42,0.55);
+  color: #e5e7eb;
+}
+
+.ft-def-chips .ft-chip-resist {
+  border-color: rgba(59,130,246,0.6);
+  background: rgba(30,64,175,0.28);
+}
+
+.ft-def-chips .ft-chip-immune {
+  border-color: rgba(168,85,247,0.75);
+  background: rgba(126,34,206,0.35);
+  color: #f5e6ff;
+}
+
+.ft-def-chips .ft-chip-vuln {
+  border-color: rgba(248,113,113,0.7);
+  background: rgba(185,28,28,0.32);
+  color: #fecaca;
+}
+
+.ft-def-chips .ft-chip-cond-immune {
+  border-color: rgba(250,204,21,0.7);
+  background: rgba(161,98,7,0.32);
+  color: #fef9c3;
+}
+
+.ft-def-chips .ft-chip-flavor {
+  font-style: italic;
+  opacity: 0.92;
+}
+
+.ft-def-editor {
+  display: none;
+  margin-top: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  border: 1px dashed rgba(255,255,255,0.18);
+  border-radius: 0.4rem;
+  background: rgba(0,0,0,0.18);
+}
+
+/* Character sheet: defense editor now lives in a popout dialog. The NPC
+   sheet still renders it inline (no edit-mode toggle), so the block below
+   is left intact — only the `.ft-edit-mode` reveal is preserved. */
+.ft-sheet.ft-edit-mode .ft-def-editor { display: block; }
+
+/* "⚙ Defenses" button in the read-only chip row — opens the popout editor. */
+.ft-def-manage-btn {
+  margin-left: 0.35rem;
+  padding: 0.12rem 0.45rem;
+  font-size: 0.7rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.55);
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.ft-def-manage-btn:hover {
+  background: rgba(232,200,74,0.12);
+  border-color: rgba(232,200,74,0.4);
+  color: #e8c84a;
+}
+
+/* Popout dialog body — reuses `.ft-def-chips-edit` / `.ft-chip` styling. */
+.ft-def-dialog .ft-def-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.2rem 0;
+}
+.ft-def-dialog .ft-def-chips-edit {
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+
+/* NPC sheet: the defense editor is always visible — NPCs are GM-authored and
+   the sheet has no edit-mode toggle. */
+.ft-def-editor.ft-def-editor-npc { display: block; }
+
+.ft-def-editor-label {
+  display: block;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+  margin-bottom: 0.3rem;
+}
+
+.ft-def-chips-edit .ft-chip-edit {
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter 0.15s ease;
+}
+
+.ft-def-chips-edit .ft-chip-edit:hover { filter: brightness(1.2); }
+
+.ft-def-chips-edit .ft-chip-none {
+  opacity: 0.5;
+  background: rgba(15,23,42,0.35);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.ft-def-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.62rem;
+  opacity: 0.55;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────────────── */
+
+.ft-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-top: 0.25rem;
+}
+
+.ft-tabs .item {
+  padding: 0.2rem 0.7rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+
+.ft-tabs .item:hover { opacity: 0.85; }
+.ft-tabs .item.active {
+  opacity: 1;
+  border-color: rgba(160,180,255,0.3);
+  background: rgba(160,180,255,0.08);
+  color: #c0d4ff;
+}
+
+/* Steward (Main) tab — visually distinct anchor at the head of the bar */
+.ft-tabs .item[data-tab="core"] {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.25rem 0.95rem;
+  letter-spacing: 0.08em;
+}
+.ft-tabs .item[data-tab="core"].active {
+  background: rgba(160,180,255,0.14);
+}
+
+.ft-sheet .tab { display: none; }
+.ft-sheet .tab.active { display: block; }
+
+/* ── Skills ──────────────────────────────────────────────────────────────────── */
+
+.ft-skills {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.ft-skills th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+  padding: 0.2rem 0.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.ft-skills td {
+  padding: 0.2rem 0.4rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.ft-skills input[type="number"] {
+  width: 44px;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #f0f4ff;
+  padding: 0.1rem;
+  border-radius: 3px;
+}
+
+.ft-skills button {
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+  background: rgba(160,180,255,0.1);
+  border: 1px solid rgba(160,180,255,0.25);
+  color: #a0b4ff;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.ft-skills button:hover { background: rgba(160,180,255,0.2); }
+
+.ft-skill-attr { opacity: 0.55; font-size: 0.78rem; }
+
+/* ── Core tab ────────────────────────────────────────────────────────────────── */
+
+.ft-core { gap: 1rem; }
+.ft-core-left { flex: 1; gap: 0.6rem; min-width: 0; }
+
+.ft-core h3, .ft-core-left h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #c0d4ff;
+  opacity: 0.7;
+  margin: 0.4rem 0 0.2rem;
+}
+
+.ft-quick-rolls { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.ft-quick-rolls button {
+  padding: 0.25rem 0.5rem;
+  background: rgba(160,180,255,0.08);
+  border: 1px solid rgba(160,180,255,0.2);
+  color: #a0b4ff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.ft-quick-rolls button:hover { background: rgba(160,180,255,0.18); }
+
+.ft-rad, .ft-dark { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; }
+.ft-rad label, .ft-dark label { opacity: 0.6; font-size: 0.72rem; }
+
+.ft-rad input, .ft-dark input {
+  width: 50px;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #f0f4ff;
+  padding: 0.1rem;
+  border-radius: 3px;
+}
+
+.ft-rad-thresholds { font-size: 0.7rem; opacity: 0.45; }
+.ft-out-of { opacity: 0.45; font-size: 0.8rem; }
+
+.ft-core-right textarea {
+  width: 100%;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #f0f4ff;
+  font-size: 0.85rem;
+  padding: 0.4rem;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+/* ── Tikkun ──────────────────────────────────────────────────────────────────── */
+
+.ft-tikkun { gap: 0.6rem; padding: 0.5rem 0; }
+
+.ft-enlightenment {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ft-enlightenment label { opacity: 0.65; font-size: 0.8rem; }
+
+.ft-enlightenment select {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #f0f4ff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* ── Helpers ─────────────────────────────────────────────────────────────────── */
+
+.ft-hint {
+  opacity: 0.45;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+.ft-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.ft-section-header h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #c0d4ff;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SPRINT A — Magic Engine Styles
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Magic panel (sheet header) ──────────────────────────────────────────────── */
+
+.ft-magic-panel {
+  flex: 0 0 185px;
+  gap: 0.35rem;
+  padding-left: 0.5rem;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+
+.ft-magic-panel h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c0d4ff;
+  opacity: 0.8;
+  margin: 0 0 0.15rem;
+}
+
+.ft-magic-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.ft-magic-row label {
+  flex: 0 0 52px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+/* Clarity pips */
+.ft-clarity-track {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+}
+
+.ft-pip {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(160,200,255,0.4);
+  background: rgba(0,0,0,0.3);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.ft-pip.on {
+  background: rgba(140,180,255,0.75);
+  border-color: rgba(160,200,255,0.9);
+  box-shadow: 0 0 4px rgba(140,180,255,0.5);
+}
+
+.ft-pip-input {
+  width: 34px;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #f0f4ff;
+  font-size: 0.8rem;
+  padding: 0.1rem;
+  border-radius: 3px;
+}
+
+/* Noise bar + input */
+.ft-noise-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.ft-noise-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s, background 0.3s;
+}
+
+.ft-noise-input {
+  width: 34px;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #f0f4ff;
+  font-size: 0.8rem;
+  padding: 0.1rem;
+  border-radius: 3px;
+}
+
+/* Noise severity classes */
+.noise-ok       { color: #6fcf97 !important; }
+.noise-mid      { color: #f2c94c !important; }
+.noise-high     { color: #f2994a !important; }
+.noise-critical { color: #eb5757 !important; }
+
+.ft-noise-fill.noise-ok       { background: #6fcf97; }
+.ft-noise-fill.noise-mid      { background: #f2c94c; }
+.ft-noise-fill.noise-high     { background: #f2994a; }
+.ft-noise-fill.noise-critical { background: #eb5757; }
+
+/* Sephirah selector */
+.ft-seph-row { margin-top: 0.1rem; }
+
+.ft-seph-select {
+  flex: 1;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #f0f4ff;
+  font-size: 0.78rem;
+  padding: 0.15rem 0.3rem;
+  border-radius: 3px;
+  transition: border-color 0.2s;
+}
+
+.ft-seph-domain {
+  font-size: 0.65rem;
+  opacity: 0.4;
+  padding-left: 52px;
+  font-style: italic;
+  margin-top: -0.1rem;
+}
+
+.ft-magic-actions { margin-top: 0.4rem; }
+
+.ft-misfire-btn {
+  padding: 0.25rem 0.6rem;
+  background: rgba(242,153,74,0.12);
+  border: 1px solid rgba(242,153,74,0.35);
+  color: #f2994a;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 4px;
+  width: 100%;
+  transition: background 0.15s;
+}
+
+.ft-misfire-btn:hover { background: rgba(242,153,74,0.22); }
+
+/* ── Powers tab ───────────────────────────────────────────────────────────────── */
+
+.ft-add-btn {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  background: rgba(160,180,255,0.08);
+  border: 1px solid rgba(160,180,255,0.25);
+  color: #a0b4ff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.ft-add-btn:hover { background: rgba(160,180,255,0.18); }
+
+.ft-powers-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.ft-power-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ft-power-main {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ft-power-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #d8e4ff;
+}
+
+.ft-power-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+
+.ft-badge {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  border: 1px solid;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Intent badge colors */
+.intent-violence { background: rgba(192,48,48,0.15);  border-color: rgba(192,48,48,0.5);  color: #e07070; }
+.intent-intrigue { background: rgba(84,110,122,0.15); border-color: rgba(84,110,122,0.5); color: #90aab8; }
+.intent-presence { background: rgba(74,144,217,0.15); border-color: rgba(74,144,217,0.5); color: #7ab4e8; }
+
+/* Channel badge colors */
+.channel-body    { background: rgba(39,174,96,0.15);  border-color: rgba(39,174,96,0.5);  color: #6fcf97; }
+.channel-mind    { background: rgba(212,160,23,0.15); border-color: rgba(212,160,23,0.5); color: #e8c84a; }
+.channel-soul    { background: rgba(155,89,182,0.15); border-color: rgba(155,89,182,0.5); color: #c39bd3; }
+
+/* Mode badge */
+.mode-hermetic  { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); }
+.mode-chaos     { background: rgba(235,87,87,0.1);    border-color: rgba(235,87,87,0.4);   color: #f48a8a; }
+.mode-ascendant { background: rgba(176,190,197,0.1);  border-color: rgba(176,190,197,0.4); color: #b0bec5; }
+
+.ft-seph-badge-sm {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  border: 1px solid;
+  font-weight: 500;
+  text-transform: capitalize;
+  letter-spacing: 0.03em;
+  background: rgba(255,255,255,0.04);
+  white-space: nowrap;
+}
+
+.ft-power-effect {
+  font-size: 0.8rem;
+  opacity: 0.65;
+  margin: 0;
+  padding-left: 0.1rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.ft-power-damage {
+  font-size: 0.75rem;
+  color: #e07070;
+  opacity: 0.8;
+}
+
+.ft-power-controls {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+}
+
+.ft-cast-btn {
+  padding: 0.2rem 0.7rem;
+  background: rgba(140,180,255,0.12);
+  border: 1px solid rgba(140,180,255,0.35);
+  color: #a0c0ff;
+  font-size: 0.78rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.ft-cast-btn:hover { background: rgba(140,180,255,0.25); }
+
+.ft-item-edit, .ft-power-delete {
+  padding: 0.2rem 0.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.5);
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.ft-item-edit:hover  { background: rgba(255,255,255,0.1); color: #f0f4ff; }
+.ft-power-delete:hover { background: rgba(235,87,87,0.15); color: #f48a8a; border-color: rgba(235,87,87,0.4); }
+
+.ft-empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  opacity: 0.45;
+  font-size: 0.85rem;
+}
+
+/* ── Cast dialog ──────────────────────────────────────────────────────────────── */
+
+.ft-cast-dialog { font-size: 0.85rem; padding: 0.5rem 0; }
+
+.ft-cast-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.ft-cast-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ft-cast-field label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.65;
+}
+
+.ft-cast-field select,
+.ft-cast-field input[type="number"] {
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #f0f4ff;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.ft-cast-preview {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 0.6rem;
+}
+
+.ft-preview-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.ft-prev-stat { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; }
+
+.ft-prev-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.55;
+}
+
+.ft-prev-val {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #c0d4ff;
+}
+
+.ft-prev-val.ft-clarity { color: #8cb4ff; }
+.ft-prev-val.ft-align   { color: #e8c84a; }
+
+.ft-preview-formula {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  line-height: 1.6;
+  margin-bottom: 0.35rem;
+}
+
+.ft-preview-formula em { opacity: 0.6; font-style: normal; }
+
+.ft-preview-note {
+  font-size: 0.7rem;
+  opacity: 0.4;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ── Magic roll chat card ─────────────────────────────────────────────────────── */
+
+.fourththing-roll {
+  font-family: var(--font-primary, system-ui, sans-serif);
+  font-size: 0.85rem;
+  color: #e8ecff;
+  background: rgba(5,7,18,0.85);
+  border: 1px solid rgba(160,180,255,0.15);
+  border-radius: 6px;
+  padding: 0.6rem 0.7rem;
+  line-height: 1.5;
+}
+
+.ft-magic-roll { border-color: rgba(155,89,182,0.3); }
+
+.ft-roll-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.ft-roll-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #d0e0ff;
+}
+
+.ft-seph-pill {
+  font-size: 0.68rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid;
+  font-weight: 500;
+  text-transform: capitalize;
+  background: rgba(255,255,255,0.04);
+}
+
+.ft-roll-tags {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.35rem;
+}
+
+.ft-tag {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  border: 1px solid;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.ft-formula-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.ft-dice-group { display: flex; gap: 3px; }
+
+.ft-die {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.ft-die.ft-die-high {
+  background: rgba(111,207,151,0.2);
+  border-color: rgba(111,207,151,0.5);
+  color: #6fcf97;
+}
+
+.ft-die.ft-die-low {
+  background: rgba(235,87,87,0.15);
+  border-color: rgba(235,87,87,0.4);
+  color: #f48a8a;
+}
+
+.ft-formula-parts { display: flex; gap: 0.25rem; flex-wrap: wrap; align-items: center; }
+
+.ft-fp {
+  font-size: 0.78rem;
+  padding: 0.05rem 0.35rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 3px;
+  opacity: 0.75;
+}
+
+.ft-fp.ft-clarity { color: #8cb4ff; }
+.ft-fp.ft-align   { color: #e8c84a; }
+.ft-fp.ft-noise   { color: #f2994a; }
+
+/* Skill-roll dice breakdown chip — used to show base + exploded values when
+ * a 10 explodes (caster pilot QOL 2026-04-27). */
+.ft-dice-pip {
+  display: inline-block;
+  padding: 0.05rem 0.35rem;
+  margin: 0 0.05rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 3px;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ft-result-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  margin-top: 0.2rem;
+}
+
+.ft-success { background: rgba(111,207,151,0.1); border: 1px solid rgba(111,207,151,0.3); }
+.ft-failure { background: rgba(235,87,87,0.08);  border: 1px solid rgba(235,87,87,0.25); }
+
+.ft-total {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.ft-success .ft-total { color: #6fcf97; }
+.ft-failure .ft-total { color: #f48a8a; }
+
+.ft-vs-dc {
+  font-size: 0.75rem;
+  opacity: 0.55;
+  flex: 1;
+}
+
+.ft-outcome {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.ft-success .ft-outcome { color: #6fcf97; }
+.ft-failure .ft-outcome { color: #f48a8a; }
+
+/* Misfire box */
+.ft-misfire-box {
+  margin-top: 0.4rem;
+  padding: 0.45rem 0.55rem;
+  background: rgba(242,153,74,0.1);
+  border: 1px solid rgba(242,153,74,0.35);
+  border-radius: 4px;
+}
+
+.ft-misfire-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #f2c94c;
+  margin-bottom: 0.2rem;
+}
+
+.ft-misfire-desc {
+  font-size: 0.78rem;
+  opacity: 0.75;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Power item sheet ─────────────────────────────────────────────────────────── */
+
+.ft-item-sheet {
+  font-family: var(--font-primary, "IBM Plex Sans", system-ui, sans-serif);
+  color: #f0f4ff;
+  background: radial-gradient(circle at top, #141a33 0, #050712 70%);
+  padding: 0.5rem;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.ft-item-header {
+  gap: 0.6rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 0.5rem;
+}
+
+.ft-item-portrait { cursor: pointer; flex: 0 0 auto; }
+.ft-item-portrait img {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(232,200,74,0.08);
+  object-fit: cover;
+  transition: border-color 0.15s, filter 0.15s, transform 0.15s;
+}
+.ft-item-portrait:hover img {
+  border-color: rgba(232,200,74,0.6);
+  filter: brightness(1.12);
+  transform: scale(1.01);
+}
+
+.ft-item-name-block { flex: 1; gap: 0.3rem; }
+
+.ft-item-name-block input {
+  width: 100%;
+  font-size: 1.05rem;
+  font-weight: 600;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #f0f4ff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+}
+
+.ft-item-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+
+.ft-item-body { padding: 0.25rem 0; }
+
+.ft-power-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.ft-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ft-field label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+.ft-field select,
+.ft-field input[type="number"],
+.ft-field input[type="text"] {
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #f0f4ff;
+  padding: 0.2rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+}
+
+.ft-field-full {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.ft-field-full label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+.ft-hint-label {
+  font-size: 0.65rem;
+  opacity: 0.45;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.ft-field-full input[type="text"],
+.ft-field-full textarea {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #f0f4ff;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.83rem;
+  resize: vertical;
+}
+
+.ft-formula-preview-box {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ft-formula-preview-box .ft-prev-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.5;
+}
+
+.ft-formula-preview-box code {
+  font-size: 0.82rem;
+  color: #c0d4ff;
+  background: rgba(0,0,0,0.3);
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+}
+
+.ft-prev-align-note {
+  font-size: 0.72rem;
+  opacity: 0.5;
+  font-style: italic;
+}
+
+
+/* ── Foundry V14 chat scroll fix ─────────────────────────────────────────────
+   V14 flex layout lets #chat and .chat-scroll expand to full content height.
+   min-height: 0 allows flex children to shrink below content size.          */
+#chat,
+.chat-scroll {
+  min-height: 0 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SPRINT B — Combat Engine Styles
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Combat sections ─────────────────────────────────────────────────────────── */
+
+.ft-combat-section {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.ft-combat-section:last-child { border-bottom: none; }
+
+.ft-combat-section h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #c0d4ff;
+  opacity: 0.7;
+  margin: 0 0 0.5rem;
+}
+
+/* ── Action economy ──────────────────────────────────────────────────────────── */
+
+.ft-new-turn-btn {
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  background: rgba(160,180,255,0.08);
+  border: 1px solid rgba(160,180,255,0.25);
+  color: #a0b4ff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.ft-new-turn-btn:hover { background: rgba(160,180,255,0.18); }
+
+.ft-action-track {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ── Movement bar + mode chips (Phase 2) ────────────────────────────────── */
+.ft-move-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
+.ft-move-meter {
+  position: relative;
+  flex: 1;
+  height: 1.4rem;
+  background: rgba(160,180,255,0.06);
+  border: 1px solid rgba(160,180,255,0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ft-move-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, rgba(74,144,217,0.45) 0%, rgba(74,144,217,0.7) 100%);
+  transition: width 0.18s ease-out;
+}
+
+.ft-move-meter.ft-move-over .ft-move-fill {
+  background: linear-gradient(90deg, rgba(232,138,138,0.55) 0%, rgba(232,138,138,0.85) 100%);
+}
+
+.ft-move-label {
+  position: relative;
+  z-index: 1;
+  display: block;
+  text-align: center;
+  font-size: 0.78rem;
+  line-height: 1.4rem;
+  color: #e8eefc;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+.ft-move-rem      { opacity: 0.7; margin-left: 0.3rem; }
+.ft-move-over-tag { color: #facc15; font-weight: 600; margin-left: 0.3rem; }
+
+.ft-move-adjust {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.78rem;
+  background: rgba(160,180,255,0.05);
+  border: 1px solid rgba(160,180,255,0.18);
+  color: #cdd9ff;
+  cursor: pointer;
+  border-radius: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ft-move-adjust:hover {
+  background: rgba(160,180,255,0.15);
+  border-color: rgba(160,180,255,0.4);
+  color: #fff;
+}
+
+.ft-move-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
+}
+
+.ft-move-mode {
+  padding: 0.18rem 0.5rem;
+  font-size: 0.74rem;
+  background: rgba(160,180,255,0.05);
+  border: 1px solid rgba(160,180,255,0.18);
+  color: #cdd9ff;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Combat Actions panel (Phase 1: Dash/Disengage/Hold/Aid/Hide/Dodge) ──── */
+.ft-combat-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+}
+
+.ft-combat-action-btn {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.78rem;
+  background: rgba(160,180,255,0.05);
+  border: 1px solid rgba(160,180,255,0.18);
+  color: #cdd9ff;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: center;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.ft-combat-action-btn:hover {
+  background: rgba(160,180,255,0.18);
+  border-color: rgba(160,180,255,0.45);
+  color: #ffffff;
+}
+
+.ft-combat-action-btn.active {
+  background: rgba(232,200,74,0.15);
+  border-color: rgba(232,200,74,0.55);
+  color: #facc15;
+}
+
+.ft-action-pip {
+  flex: 1;
+  padding: 0.4rem 0.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.18);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.ft-action-pip .ft-ap-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+.ft-action-pip.used {
+  background: rgba(235,87,87,0.12);
+  border-color: rgba(235,87,87,0.4);
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.ft-action-pip:hover:not(.used) { background: rgba(255,255,255,0.1); }
+
+/* ── Weapons list ─────────────────────────────────────────────────────────────── */
+
+.ft-weapons-list { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.ft-weapon-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 0.45rem 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ft-weapon-main {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.ft-weapon-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #d8e4ff;
+  min-width: 80px;
+}
+
+.ft-weapon-dmg {
+  font-size: 0.8rem;
+  color: #e07070;
+  font-family: monospace;
+}
+
+.ft-dmg-type-badge {
+  font-size: 0.62rem;
+  padding: 0.08rem 0.4rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.04);
+  text-transform: capitalize;
+}
+
+.ft-strike-btn {
+  padding: 0.2rem 0.7rem;
+  background: rgba(192,48,48,0.12);
+  border: 1px solid rgba(192,48,48,0.4);
+  color: #e07070;
+  font-size: 0.78rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.15s;
+}
+
+.ft-strike-btn:hover { background: rgba(192,48,48,0.25); }
+
+/* ── Conditions grid ─────────────────────────────────────────────────────────── */
+
+.ft-conditions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.35rem;
+}
+
+.ft-condition-btn {
+  padding: 0.3rem 0.4rem;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.45);
+  font-size: 0.72rem;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  transition: all 0.15s;
+  text-transform: capitalize;
+}
+
+.ft-condition-btn:hover { background: rgba(255,255,255,0.09); color: #f0f4ff; }
+
+.ft-condition-btn.active {
+  font-weight: 600;
+}
+
+/* ── Attack chat card ─────────────────────────────────────────────────────────── */
+
+.ft-attack-roll { border-color: rgba(192,48,48,0.3); }
+
+.ft-defense-pill {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(192,48,48,0.4);
+  color: #e07070;
+  background: rgba(192,48,48,0.08);
+}
+
+.ft-skill-tag {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6);
+}
+
+.ft-dmg-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+  padding: 0.3rem 0.4rem;
+  background: rgba(192,48,48,0.07);
+  border: 1px solid rgba(192,48,48,0.2);
+  border-radius: 4px;
+  flex-wrap: wrap;
+}
+
+.ft-dmg-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  opacity: 0.5;
+  letter-spacing: 0.05em;
+}
+
+.ft-dmg-formula {
+  font-family: monospace;
+  font-size: 0.82rem;
+  color: #e07070;
+  flex: 1;
+}
+
+.ft-dmg-type {
+  font-size: 0.68rem;
+  opacity: 0.6;
+}
+
+.ft-apply-dmg-btn {
+  padding: 0.15rem 0.55rem;
+  background: rgba(192,48,48,0.15);
+  border: 1px solid rgba(192,48,48,0.4);
+  color: #e07070;
+  font-size: 0.72rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.ft-apply-dmg-btn:hover:not(:disabled) { background: rgba(192,48,48,0.3); }
+.ft-apply-dmg-btn:disabled { cursor: default; }
+
+.ft-condition-applied {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.ft-condition-desc {
+  font-size: 0.78rem;
+  opacity: 0.65;
+  margin: 0.2rem 0 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SPRINT C — BBTTCC Bridge Styles
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Tikkun tab layout ────────────────────────────────────────────────────── */
+
+.ft-tikkun-layout {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 1rem;
+  padding-top: 0.25rem;
+}
+
+.ft-tikkun-main { display: flex; flex-direction: column; gap: 0; }
+
+.ft-enlightenment-track {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ft-enlightenment-select {
+  flex: 1;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #f0f4ff;
+  padding: 0.3rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.ft-ep-badge {
+  font-size: 0.72rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  background: rgba(160,180,255,0.12);
+  border: 1px solid rgba(160,180,255,0.3);
+  color: #a0b4ff;
+}
+
+.ft-taint-badge {
+  font-size: 0.72rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  background: rgba(155,89,182,0.12);
+  border: 1px solid rgba(155,89,182,0.35);
+  color: #c39bd3;
+}
+
+/* ── Sparks list ─────────────────────────────────────────────────────────── */
+
+.ft-sparks-list { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.ft-spark-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.4rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 4px;
+}
+
+.ft-spark-name { flex: 1; font-size: 0.82rem; color: #d8e4ff; }
+
+.ft-spark-seph {
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.ft-spark-status {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  width: 16px;
+  text-align: center;
+}
+
+.ft-spark-status.complete { color: #e8c84a; opacity: 1; }
+
+/* ── BBTTCC quickbar panel ───────────────────────────────────────────────── */
+
+.ft-bbttcc-quickbar {
+  border-left: 1px solid rgba(255,255,255,0.07);
+  padding-left: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ft-bbttcc-quickbar h3 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c0d4ff;
+  opacity: 0.65;
+  margin: 0 0 0.1rem;
+}
+
+.ft-bbttcc-quickbar h4 {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  opacity: 0.45;
+  margin: 0.3rem 0 0.2rem;
+}
+
+.ft-bbttcc-btn-group { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.ft-bbttcc-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.ft-bridge-btn {
+  background: rgba(74,144,217,0.1);
+  border-color: rgba(74,144,217,0.35);
+  color: #7ab4e8;
+}
+.ft-bridge-btn:hover { background: rgba(74,144,217,0.22); }
+
+.ft-tikkun-btn {
+  background: rgba(232,200,74,0.1);
+  border-color: rgba(232,200,74,0.35);
+  color: #e8c84a;
+}
+.ft-tikkun-btn:hover { background: rgba(232,200,74,0.2); }
+
+.ft-rad-btn {
+  background: rgba(242,153,74,0.1);
+  border-color: rgba(242,153,74,0.35);
+  color: #f2994a;
+}
+.ft-rad-btn:hover { background: rgba(242,153,74,0.2); }
+
+/* ── Faction live data ───────────────────────────────────────────────────── */
+
+.ft-faction-live {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 5px;
+  padding: 0.4rem 0.5rem;
+}
+
+.ft-faction-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.3rem;
+}
+
+.ft-faction-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #d8e4ff;
+}
+
+.ft-faction-link-btn {
+  background: none;
+  border: none;
+  color: #a0b4ff;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0;
+  opacity: 0.7;
+}
+.ft-faction-link-btn:hover { opacity: 1; }
+
+.ft-faction-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.2rem;
+}
+
+.ft-fstat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ft-fstat-label {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  opacity: 0.45;
+  letter-spacing: 0.04em;
+}
+
+.ft-fstat-val {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c0d4ff;
+}
+
+/* ── Terrain live display ────────────────────────────────────────────────── */
+
+.ft-terrain-live {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.4rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+}
+
+.ft-terrain-icon { opacity: 0.5; }
+
+.ft-terrain-name {
+  flex: 1;
+  text-transform: capitalize;
+  color: #c0d4ff;
+  opacity: 0.8;
+}
+
+.ft-terrain-bonus {
+  font-size: 0.65rem;
+  padding: 0.08rem 0.35rem;
+  border-radius: 8px;
+  background: rgba(232,200,74,0.12);
+  border: 1px solid rgba(232,200,74,0.3);
+  color: #e8c84a;
+}
+
+.ft-terrain-noise {
+  font-size: 0.65rem;
+  padding: 0.08rem 0.35rem;
+  border-radius: 8px;
+  background: rgba(242,153,74,0.12);
+  border: 1px solid rgba(242,153,74,0.3);
+  color: #f2994a;
+}
+
+/* ── Identity chooser buttons ────────────────────────────────────────────── */
+
+.ft-identity-choosers { display: flex; flex-direction: column; gap: 0.2rem; }
+
+.ft-identity-btn {
+  padding: 0.22rem 0.45rem;
+  font-size: 0.72rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: left;
+  transition: all 0.12s;
+}
+.ft-identity-btn:hover {
+  background: rgba(160,180,255,0.12);
+  border-color: rgba(160,180,255,0.3);
+  color: #a0b4ff;
+}
+
+/* ── Terrain pill in chat cards ──────────────────────────────────────────── */
+
+.ft-terrain-pill {
+  font-size: 0.65rem;
+  padding: 0.08rem 0.4rem;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  margin-left: 0.25rem;
+}
+
+/* ── Sheet window scroll (AppV2 V14) ─────────────────────────────────────────
+   AppV2 window-content must be a flex column with min-height:0 so the
+   .ft-body can scroll rather than expanding the window indefinitely.      */
+.fourththing.sheet .window-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* ── Identity panel (Core tab, Sprint C) ─────────────────────────────────── */
+
+.ft-identity-panel {
+  margin-bottom: 0.75rem;
+}
+
+.ft-stat-sync-btn {
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  margin-bottom: 0.5rem;
+  background: rgba(232,200,74,0.12);
+  border: 1px solid rgba(232,200,74,0.4);
+  color: #e8c84a;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.ft-stat-sync-btn:hover { background: rgba(232,200,74,0.22); }
+
+.ft-identity-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ft-id-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  border-left: 2px solid;
+  background: rgba(255,255,255,0.03);
+}
+
+.ft-id-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.5;
+  flex: 0 0 62px;
+}
+
+.ft-id-val {
+  font-size: 0.8rem;
+  color: #d8e4ff;
+  font-weight: 500;
+}
+
+.ft-id-class      { border-color: #4a90d9; }
+.ft-id-ancestry   { border-color: #27ae60; }
+.ft-id-archetype  { border-color: #e8c84a; }
+.ft-id-crew       { border-color: #9b59b6; }
+.ft-id-occult     { border-color: #c03030; }
+.ft-id-philosophy { border-color: #546e7a; }
+.ft-id-sephirotic { border-color: #b0bec5; }
+
+/* ── Apply class button ──────────────────────────────────────────────────── */
+.ft-apply-class-btn {
+  width: 100%;
+  padding: 0.3rem 0.5rem;
+  margin-bottom: 0.4rem;
+  background: rgba(74,144,217,0.12);
+  border: 1px solid rgba(74,144,217,0.4);
+  color: #7ab4e8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.ft-apply-class-btn:hover { background: rgba(74,144,217,0.22); }
+
+/* ── Features tab ────────────────────────────────────────────────────────── */
+.ft-features-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.ft-feature-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 0.5rem 0.6rem;
+}
+
+.ft-feature-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.ft-feature-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #d8e4ff;
+  flex: 1;
+}
+
+.ft-feature-cat-badge {
+  font-size: 0.62rem;
+  padding: 0.08rem 0.4rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.04);
+  text-transform: capitalize;
+}
+
+.ft-feature-desc {
+  font-size: 0.78rem;
+  opacity: 0.65;
+  line-height: 1.5;
+  margin: 0.2rem 0 0.3rem;
+}
+
+/* ── Feature description rich text ──────────────────────────────────────── */
+.ft-feature-desc { font-size: 0.8rem; opacity: 0.72; line-height: 1.6; margin: 0.25rem 0 0.3rem; }
+.ft-feature-desc p  { margin: 0 0 0.4rem; }
+.ft-feature-desc h3 { font-size: 0.78rem; font-weight: 600; color: #c0d4ff; margin: 0.4rem 0 0.2rem; }
+.ft-feature-desc ul { margin: 0.2rem 0 0.4rem 1rem; padding: 0; }
+.ft-feature-desc li { margin-bottom: 0.15rem; }
+.ft-feature-desc strong { color: #d8e4ff; font-weight: 600; }
+.ft-feature-desc em { opacity: 0.75; }
+
+/* ── Sprint D: ASI button + feature improvements ────────────────────────── */
+.ft-asi-btn {
+  padding: 0.18rem 0.45rem;
+  background: rgba(232,200,74,0.1);
+  border: 1px solid rgba(232,200,74,0.35);
+  color: #e8c84a;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  transition: background 0.15s;
+}
+.ft-asi-btn:hover { background: rgba(232,200,74,0.22); }
+
+.ft-asi-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.ft-asi-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #e8c84a;
+  text-transform: capitalize;
+  min-width: 100px;
+}
+.ft-asi-current { font-size: 0.8rem; opacity: 0.65; }
+
+/* ── Sprint D: Class resource panels ─────────────────────────────────────── */
+
+.ft-resource-panel h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #c0d4ff;
+  opacity: 0.75;
+  margin: 0 0 0.4rem;
+}
+
+.ft-resource-tag {
+  font-size: 0.6rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 400;
+}
+
+.ft-resource-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.ft-resource-count {
+  font-size: 0.75rem;
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+.ft-resource-controls {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.ft-res-btn {
+  padding: 0.2rem 0.55rem;
+  font-size: 0.72rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.ft-res-btn:hover {
+  background: rgba(160,180,255,0.15);
+  border-color: rgba(160,180,255,0.35);
+  color: #a0b4ff;
+}
+.ft-res-btn-sm { padding: 0.2rem 0.35rem; }
+
+/* ── Frame Die pips ─────────────────────────────────────────────────────── */
+
+.ft-die-pips { display: flex; gap: 0.25rem; }
+
+.ft-die-pip {
+  font-size: 1rem;
+  opacity: 0.2;
+  color: #4a90d9;
+  transition: opacity 0.15s;
+  line-height: 1;
+}
+.ft-die-pip.active { opacity: 1; }
+
+/* ── Structural stress track ────────────────────────────────────────────── */
+
+.ft-stress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+}
+
+.ft-stress-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  opacity: 0.45;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.ft-stress-track { display: flex; gap: 0.2rem; }
+
+.ft-stress-pip {
+  font-size: 0.75rem;
+  opacity: 0.18;
+  color: #f2994a;
+  line-height: 1;
+}
+.ft-stress-pip.filled { opacity: 1; }
+
+/* ── Burn track ─────────────────────────────────────────────────────────── */
+
+.ft-burn-track { display: flex; gap: 0.15rem; }
+
+.ft-burn-pip {
+  font-size: 1.05rem;
+  opacity: 0.18;
+  color: #888;
+  line-height: 1;
+  transition: all 0.1s;
+}
+.ft-burn-pip.lit { opacity: 1; }
+.ft-burn-pip.lit.Controlled { color: #27ae60; }
+.ft-burn-pip.lit.Engaged    { color: #f2c94c; }
+.ft-burn-pip.lit.Overheated { color: #eb5757; }
+
+/* ── Aura display ───────────────────────────────────────────────────────── */
+
+.ft-aura-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.ft-aura-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.12rem 0.5rem;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.ft-aura-desc {
+  font-size: 0.72rem;
+  opacity: 0.5;
+  flex: 1;
+}
+
+/* ── Access dice pips (Shadowjack) ──────────────────────────────────────── */
+
+/* Reuses .ft-die-pip but with purple */
+.ft-resource-panel:has(.ft-resource-tag) .ft-die-pip { color: #9b59b6; }
+
+/* ── Use Feature button ─────────────────────────────────────────────────── */
+
+.ft-use-feature-btn {
+  padding: 0.18rem 0.55rem;
+  background: rgba(74,144,217,0.12);
+  border: 1px solid rgba(74,144,217,0.35);
+  color: #7ab4e8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.ft-use-feature-btn:hover { background: rgba(74,144,217,0.24); }
+
+/* ── Sprint D UX refresh ─────────────────────────────────────────────────── */
+
+/* Portrait clickable overlay */
+.ft-portrait { position: relative; cursor: pointer; }
+.ft-portrait-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.55);
+  font-size: 1.4rem;
+  opacity: 0;
+  border-radius: 4px;
+  transition: opacity 0.15s;
+}
+.ft-portrait:hover .ft-portrait-overlay { opacity: 1; }
+
+/* Header identity pills (replace free-text fields) */
+.ft-meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.18rem 0.4rem;
+  border-radius: 4px;
+  border-left: 2px solid;
+  background: rgba(255,255,255,0.03);
+  margin-bottom: 0.15rem;
+  font-size: 0.78rem;
+}
+.ft-meta-pill .ft-meta-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  opacity: 0.45;
+  letter-spacing: 0.05em;
+  flex: 0 0 52px;
+}
+.ft-meta-pill .ft-meta-val { color: #d8e4ff; font-weight: 500; flex: 1; }
+.ft-meta-pill.ft-id-class     { border-color: #4a90d9; }
+.ft-meta-pill.ft-id-ancestry  { border-color: #27ae60; }
+.ft-meta-pill.ft-id-faction   { border-color: #9b59b6; }
+.ft-faction-link-mini {
+  background: none; border: none; color: #a0b4ff;
+  cursor: pointer; font-size: 0.75rem; padding: 0; margin-left: auto;
+}
+
+/* Core BBTTCC buttons row */
+.ft-core-bbttcc {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+.ft-core-bbttcc .ft-bbttcc-btn {
+  flex: 1;
+  padding: 0.25rem 0.3rem;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+/* Radiation display-only */
+.ft-rad-display {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.35rem 0;
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+.ft-rad-label { opacity: 0.5; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.ft-rad-val   { font-weight: 600; color: #f2994a; }
+.ft-rad-thresholds { font-size: 0.65rem; opacity: 0.45; }
+
+/* Collapsed item rows — all tabs use the same <details> pattern */
+.ft-item-list { display: flex; flex-direction: column; gap: 0.2rem; }
+
+.ft-item-row {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.ft-item-row[open] { border-color: rgba(255,255,255,0.14); }
+
+.ft-item-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.32rem 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.ft-item-summary::-webkit-details-marker { display: none; }
+.ft-item-summary::before {
+  content: "▶";
+  font-size: 0.55rem;
+  opacity: 0.3;
+  transition: transform 0.15s;
+  flex-shrink: 0;
+}
+.ft-item-row[open] > .ft-item-summary::before { transform: rotate(90deg); opacity: 0.6; }
+
+.ft-item-art {
+  width: 24px; height: 24px;
+  border-radius: 3px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.ft-item-name { flex: 1; font-size: 0.82rem; font-weight: 500; color: #d8e4ff; }
+
+.ft-item-meta {
+  font-size: 0.68rem;
+  opacity: 0.45;
+  white-space: nowrap;
+}
+
+.ft-item-type-pill {
+  font-size: 0.6rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.04);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+.ft-type-class     { border-color: rgba(74,144,217,0.4);  color: #7ab4e8; }
+.ft-type-race      { border-color: rgba(39,174,96,0.4);   color: #6fcf97; }
+.ft-type-feat      { border-color: rgba(232,200,74,0.3);  color: #e8c84a; }
+.ft-type-subclass  { border-color: rgba(155,89,182,0.35); color: #c39bd3; }
+.ft-type-feature   { border-color: rgba(255,255,255,0.12);color: rgba(255,255,255,0.4); }
+
+.ft-item-controls {
+  display: flex;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.ft-item-desc {
+  padding: 0.4rem 0.6rem 0.5rem 2rem;
+  font-size: 0.78rem;
+  opacity: 0.72;
+  line-height: 1.6;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.ft-item-desc p  { margin: 0 0 0.35rem; }
+.ft-item-desc h1,.ft-item-desc h2,.ft-item-desc h3 { font-size: 0.82rem; font-weight: 600; color: #c0d4ff; margin: 0.4rem 0 0.2rem; }
+.ft-item-desc ul { margin: 0.2rem 0 0.35rem 1rem; padding: 0; }
+.ft-item-desc li { margin-bottom: 0.15rem; }
+.ft-item-desc strong { color: #d8e4ff; }
+.ft-item-desc em { opacity: 0.7; }
+
+.ft-use-sm {
+  padding: 0.15rem 0.35rem;
+  font-size: 0.68rem;
+  background: rgba(74,144,217,0.1);
+  border: 1px solid rgba(74,144,217,0.3);
+  color: #7ab4e8;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.ft-use-sm:hover { background: rgba(74,144,217,0.22); }
+
+/* ── Breaker ruin pip color ──────────────────────────────────────────────── */
+.ft-die-pip--ruin { color: #c03030; }
+
+/* ── Sprint E: Level display ──────────────────────────────────────────────── */
+.ft-level-display {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  flex-wrap: wrap;
+}
+.ft-level-num {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #c0d4ff;
+}
+.ft-tier-badge {
+  font-size: 0.62rem;
+  padding: 0.06rem 0.4rem;
+  border-radius: 8px;
+  background: rgba(160,180,255,0.12);
+  border: 1px solid rgba(160,180,255,0.3);
+  color: #a0b4ff;
+  font-weight: 700;
+}
+.ft-sp-badge {
+  font-size: 0.6rem;
+  padding: 0.06rem 0.35rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: default;
+}
+.ft-sp-stat  { background: rgba(74,144,217,0.12); border: 1px solid rgba(74,144,217,0.3); color: #7ab4e8; }
+.ft-sp-skill { background: rgba(39,174,96,0.12); border: 1px solid rgba(39,174,96,0.3); color: #6fcf97; cursor: pointer; }
+.ft-sp-skill:hover { background: rgba(39,174,96,0.22); }
+
+/* ── Level up + skill grant buttons ─────────────────────────────────────────  */
+.ft-level-actions {
+  display: flex;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+.ft-level-up-btn {
+  flex: 1;
+  padding: 0.28rem 0.5rem;
+  background: rgba(232,200,74,0.12);
+  border: 1px solid rgba(232,200,74,0.4);
+  color: #e8c84a;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.ft-level-up-btn:hover { background: rgba(232,200,74,0.22); }
+.ft-grant-skills-btn {
+  padding: 0.28rem 0.5rem;
+  background: rgba(39,174,96,0.1);
+  border: 1px solid rgba(39,174,96,0.3);
+  color: #6fcf97;
+  font-size: 0.72rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.ft-grant-skills-btn:hover { background: rgba(39,174,96,0.2); }
+
+/* ── Skills tab with rank pips ───────────────────────────────────────────── */
+.ft-skills-grid { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.ft-skills-header,
+.ft-skill-row {
+  display: grid;
+  grid-template-columns:
+    minmax(140px, 1.6fr)   /* name + rank label */
+    minmax(92px, 0.9fr)    /* attr name + bonus */
+    minmax(150px, 1.25fr)  /* rank pips + bonus */
+    minmax(44px, 0.4fr)    /* AE */
+    minmax(56px, 0.6fr)    /* total */
+    auto;                  /* roll */
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.35rem 0.55rem;
+}
+
+.ft-skills-header {
+  padding: 0 0.55rem 0.22rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 0.1rem;
+}
+.ft-skills-header .ft-skill-col {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.55;
+  color: #c0d4ff;
+}
+.ft-skills-header .ft-skill-col-ae,
+.ft-skills-header .ft-skill-col-total { text-align: center; }
+
+.ft-skill-row {
+  border-radius: 4px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.ft-skill-row:hover { background: rgba(255,255,255,0.04); }
+
+.ft-skill-col-name {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  min-width: 0;
+}
+.ft-skill-col-attr {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  min-width: 0;
+}
+.ft-skill-col-rank {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ft-skill-col-ae,
+.ft-skill-col-total {
+  text-align: center;
+}
+.ft-skill-col-action { text-align: right; }
+
+.ft-skill-name { font-size: 0.86rem; color: #d8e4ff; }
+.ft-skill-rank-label {
+  font-size: 0.58rem;
+  font-weight: 500;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.ft-skill-attr-name {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.62;
+  color: #a0b4ff;
+}
+.ft-skill-col-val {
+  font-size: 0.82rem;
+  color: #c0d4ff;
+  opacity: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.ft-skill-col-empty { opacity: 0.3; }
+.ft-skill-ae-bonus {
+  font-size: 0.72rem;
+  color: #6fcf97;
+  padding: 0.04rem 0.35rem;
+  background: rgba(39,174,96,0.1);
+  border: 1px solid rgba(39,174,96,0.28);
+  border-radius: 6px;
+  opacity: 1;
+}
+.ft-skill-total-num {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #c0d4ff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.ft-skill-roll-btn { white-space: nowrap; }
+
+.ft-skill-rank-pips { display: flex; gap: 0.2rem; flex-shrink: 0; }
+.ft-rank-pip {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: transparent;
+  transition: all 0.1s;
+  cursor: pointer;
+}
+.ft-rank-pip:hover {
+  border-color: rgba(232,200,74,0.85);
+  box-shadow: 0 0 4px rgba(232,200,74,0.55);
+  transform: scale(1.15);
+}
+.ft-rank-pip.filled { border-color: transparent; }
+
+.ft-skill-pts-btn {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.5rem;
+  background: rgba(39,174,96,0.12);
+  border: 1px solid rgba(39,174,96,0.3);
+  color: #6fcf97;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+@media (max-width: 720px) {
+  .ft-skills-header { display: none; }
+  .ft-skill-row {
+    grid-template-columns:
+      minmax(120px, 1fr)
+      minmax(140px, 1fr)
+      auto
+      auto;
+    grid-template-areas:
+      "name  rank  total action"
+      "attr  ae    .     .     ";
+    row-gap: 0.2rem;
+  }
+  .ft-skill-col-name   { grid-area: name; }
+  .ft-skill-col-attr   { grid-area: attr; }
+  .ft-skill-col-rank   { grid-area: rank; }
+  .ft-skill-col-ae     { grid-area: ae; text-align: left; }
+  .ft-skill-col-total  { grid-area: total; }
+  .ft-skill-col-action { grid-area: action; }
+}
+
+/* ── Effects tab ─────────────────────────────────────────────────────────── */
+.ft-effects-list { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.ft-effect-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px;
+}
+.ft-effect-disabled { opacity: 0.4; border-style: dashed; }
+
+.ft-effect-icon {
+  width: 28px; height: 28px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.ft-effect-info { flex: 1; }
+.ft-effect-name { font-size: 0.82rem; font-weight: 600; color: #d8e4ff; display: block; }
+.ft-effect-source { font-size: 0.65rem; opacity: 0.45; display: block; margin-bottom: 0.2rem; }
+.ft-effect-changes { display: flex; flex-wrap: wrap; gap: 0.2rem; margin-top: 0.2rem; }
+.ft-change-tag {
+  font-size: 0.62rem;
+  padding: 0.04rem 0.35rem;
+  background: rgba(160,180,255,0.08);
+  border: 1px solid rgba(160,180,255,0.2);
+  color: #a0b4ff;
+  border-radius: 8px;
+  font-family: monospace;
+}
+.ft-effect-controls { display: flex; gap: 0.25rem; flex-shrink: 0; align-items: flex-start; }
+.ft-effect-toggle { font-size: 0.68rem; }
+
+/* ── Edit mode toggle ─────────────────────────────────────────────────────── */
+.ft-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.ft-tabs-bar .ft-tabs { flex: 1; }
+
+.ft-edit-mode-btn {
+  flex-shrink: 0;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.7rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.45);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.ft-edit-mode-btn:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+.ft-edit-mode-btn.ft-edit-active {
+  background: rgba(232,200,74,0.15);
+  border-color: rgba(232,200,74,0.4);
+  color: #e8c84a;
+}
+
+/* Elements only visible in edit mode */
+.ft-edit-only { display: none !important; }
+.ft-sheet.ft-edit-mode .ft-edit-only { display: flex !important; }
+
+/* Elements hidden in edit mode */
+.ft-sheet.ft-edit-mode .ft-view-only { display: none !important; }
+
+/* ── Boss sheet polish (2026-05-11) ────────────────────────────────────── */
+
+/* Horizontal row of id pills under the boss name. */
+.ft-boss-sheet .ft-boss-id-pills {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+}
+.ft-boss-sheet .ft-boss-id-pill {
+  flex: 1 1 0;
+  min-width: 0;
+  margin-bottom: 0;
+  padding: 0.18rem 0.35rem;
+}
+.ft-boss-sheet .ft-boss-id-pill .ft-meta-label {
+  flex: 0 0 auto;
+  margin-right: 0.25rem;
+}
+.ft-boss-sheet .ft-boss-id-pill input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  color: #d8e4ff;
+  font-size: 0.78rem;
+  padding: 0;
+}
+.ft-boss-sheet .ft-boss-id-pill .ft-meta-val {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Manifestation library rows — small thumbnail + remove button. */
+.ft-boss-sheet .ft-boss-manifest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.ft-boss-sheet .ft-boss-manifest-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.4rem;
+  background: rgba(255,255,255,0.025);
+  border-radius: 4px;
+}
+.ft-boss-sheet .ft-boss-manifest-img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(232,200,74,0.35);
+  flex: 0 0 32px;
+}
+.ft-boss-sheet .ft-boss-manifest-row .ft-rig-item-name {
+  flex: 1 1 auto;
+  font-weight: 500;
+  color: #f0e8d0;
+}
+.ft-boss-sheet .ft-boss-manifest-uuid {
+  flex: 0 0 auto;
+  font-size: 0.65rem;
+  opacity: 0.45;
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ft-boss-sheet .ft-boss-manifest-remove {
+  flex: 0 0 auto;
+}
+/* Cast button on each library row — invokes the manifestation through the
+   shared castManifestation engine. Surge-amber styling to match the boss
+   sheet's overall warm-gold palette. */
+.ft-boss-sheet .ft-boss-manifest-cast {
+  flex: 0 0 auto;
+  background: linear-gradient(180deg, rgba(232,200,74,0.18), rgba(232,200,74,0.08));
+  border: 1px solid rgba(232,200,74,0.45);
+  color: #f0e8a8;
+  font-weight: 600;
+  padding: 0.18rem 0.55rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.ft-boss-sheet .ft-boss-manifest-cast:hover {
+  background: linear-gradient(180deg, rgba(232,200,74,0.32), rgba(232,200,74,0.18));
+  border-color: rgba(232,200,74,0.7);
+}
+/* Tier badge on each row — uses the existing ft-tier-pill base; tighten the
+   layout so the badge doesn't push the name. */
+.ft-boss-sheet .ft-boss-manifest-tier {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  padding: 0.1rem 0.35rem;
+}
+/* Tag chips strip — comma-separated archetype tags shown after the name. */
+.ft-boss-sheet .ft-boss-manifest-tags {
+  flex: 0 1 auto;
+  display: inline-flex;
+  gap: 0.2rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  max-width: 14rem;
+}
+.ft-boss-sheet .ft-tag-chip {
+  display: inline-block;
+  font-size: 0.65rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 8px;
+  background: rgba(160,200,216,0.12);
+  border: 1px solid rgba(160,200,216,0.3);
+  color: #c8e0f0;
+  white-space: nowrap;
+  text-transform: lowercase;
+}
+.ft-boss-sheet .ft-tag-chip-more {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.55);
+  border-color: rgba(255,255,255,0.18);
+}
+/* Over-tier dimmed state — the library still allows out-of-reach entries
+   (GM may have curated them for later phases) but renders them muted so the
+   GM can scan at a glance. */
+.ft-boss-sheet .ft-boss-manifest-over {
+  opacity: 0.6;
+}
+.ft-boss-sheet .ft-boss-manifest-over .ft-boss-manifest-tier {
+  outline: 1px dashed rgba(255,138,138,0.6);
+}
+/* Identity tab — let the new archetypeTags input span two grid cells so the
+   placeholder isn't cramped. Coexists with the existing ft-boss-identity-grid. */
+.ft-boss-sheet .ft-boss-identity-grid .ft-meta.ft-meta-span-2 {
+  grid-column: span 2;
+}
+
+/* ── Boss Sheet Slice 3 (2026-05-11) — Powers tab rebuild ─────────────── */
+
+/* Browse-catalog disclosure block. Quiet by default; expands inline. */
+.ft-boss-sheet .ft-boss-power-catalog {
+  margin-top: 0.5rem;
+  border-top: 1px dashed rgba(255,255,255,0.1);
+  padding-top: 0.4rem;
+}
+.ft-boss-sheet .ft-boss-power-catalog > summary {
+  cursor: pointer;
+  font-size: 0.78rem;
+  opacity: 0.72;
+  padding: 0.15rem 0;
+  user-select: none;
+}
+.ft-boss-sheet .ft-boss-power-catalog > summary:hover { opacity: 1; }
+.ft-boss-sheet .ft-boss-power-phase {
+  margin-top: 0.45rem;
+}
+.ft-boss-sheet .ft-boss-power-phase-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(232,200,74,0.78);
+  border-bottom: 1px solid rgba(232,200,74,0.18);
+  padding-bottom: 0.15rem;
+  margin-bottom: 0.25rem;
+}
+.ft-boss-sheet .ft-boss-power-phase-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ft-boss-sheet .ft-boss-power-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: baseline;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.78rem;
+}
+.ft-boss-sheet .ft-boss-power-name {
+  font-weight: 600;
+  color: #f0e8d0;
+}
+.ft-boss-sheet .ft-boss-power-when {
+  font-size: 0.7rem;
+  opacity: 0.72;
+  color: #a0c8d8;
+}
+.ft-boss-sheet .ft-boss-power-effects {
+  font-size: 0.7rem;
+  opacity: 0.72;
+  color: #a0d8a0;
+}
+.ft-boss-sheet .ft-boss-power-end {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #ff8a8a;
+  background: rgba(255,138,138,0.1);
+  padding: 0 0.35rem;
+  border-radius: 3px;
+  border: 1px solid rgba(255,138,138,0.3);
+}
+
+/* Maneuver pills — Slice 3 enriches each pill with a tier badge + label.
+   Unresolved keys (typo / module unloaded) render with a warn marker. */
+.ft-boss-sheet .ft-maneuver-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.ft-boss-sheet .ft-maneuver-pill .ft-maneuver-tier {
+  font-size: 0.65rem;
+  padding: 0.05rem 0.3rem;
+  margin: 0;
+}
+.ft-boss-sheet .ft-maneuver-pill-unresolved {
+  outline: 1px dashed rgba(255,138,138,0.5);
+}
+.ft-boss-sheet .ft-maneuver-warn {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  line-height: 1rem;
+  text-align: center;
+  border-radius: 50%;
+  background: rgba(255,138,138,0.18);
+  color: #ff8a8a;
+  font-weight: 700;
+  font-size: 0.72rem;
+  border: 1px solid rgba(255,138,138,0.4);
+}
+
+/* ── Boss header — boxed stat tiles (2026-05-12) ──────────────────────── */
+.ft-boss-sheet .ft-boss-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  flex: 1;
+  align-content: start;
+  padding: 0.2rem;
+}
+.ft-boss-sheet .ft-boss-stat-tile {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.22);
+  border-radius: 6px;
+  padding: 0.4rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.ft-boss-sheet .ft-boss-stat-tile.ft-stat-span-2 {
+  grid-column: span 2;
+}
+.ft-boss-sheet .ft-boss-stat-label {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.ft-boss-sheet .ft-boss-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.ft-boss-sheet .ft-boss-stat-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  min-width: 1.5rem;
+  text-align: center;
+}
+.ft-boss-sheet .ft-boss-stat-val-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #e8c84a;
+  letter-spacing: 0.02em;
+  flex: 1 1 auto;
+  text-align: left;
+  min-width: 0;
+}
+.ft-boss-sheet .ft-boss-stat-sep {
+  color: #475569;
+  font-size: 0.95rem;
+}
+.ft-boss-sheet .ft-boss-stat-max {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+.ft-boss-sheet .ft-boss-stat-empty {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+.ft-boss-sheet .ft-surge-spend {
+  cursor: pointer;
+  text-decoration: underline dotted rgba(232,200,74,0.4);
+  color: #e8c84a;
+}
+.ft-boss-sheet .ft-surge-spend:hover {
+  color: #ffe88a;
+  text-decoration-color: rgba(255,232,138,0.8);
+}
+/* Integrity bar — lives inside the integrity tile, full-width across the
+   spanning row. */
+.ft-boss-sheet .ft-integrity-bar.ft-boss-integrity-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(148,163,184,0.18);
+}
+.ft-boss-sheet .ft-integrity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6b1f1f, #d04545 70%, #ff7070);
+  transition: width 0.25s ease;
+}
+
+/* ── Boss manifestation picker — clickable row list (2026-05-12) ──────── */
+/* Replaces the broken native <select size="10"> rendering inside DialogV2. */
+.ft-boss-pick-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.ft-boss-pick-dialog .ft-boss-pick-row-list {
+  max-height: 22rem;
+  overflow-y: auto;
+  border: 1px solid rgba(148,163,184,0.22);
+  border-radius: 6px;
+  background: rgba(0,0,0,0.25);
+  padding: 0.3rem;
+}
+.ft-boss-pick-dialog .ft-boss-pick-group + .ft-boss-pick-group {
+  margin-top: 0.4rem;
+  border-top: 1px dashed rgba(148,163,184,0.15);
+  padding-top: 0.4rem;
+}
+.ft-boss-pick-dialog .ft-boss-pick-group-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #e8c84a;
+  margin-bottom: 0.2rem;
+  padding-left: 0.2rem;
+}
+.ft-boss-pick-dialog .ft-boss-pick-group-count {
+  color: #94a3b8;
+  font-weight: 400;
+}
+.ft-boss-pick-dialog .ft-boss-pick-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.02);
+  margin: 0.15rem 0;
+}
+.ft-boss-pick-dialog .ft-boss-pick-row:hover {
+  background: rgba(232,200,74,0.06);
+}
+.ft-boss-pick-dialog .ft-boss-pick-row-img {
+  width: 28px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 3px;
+  border: 1px solid rgba(232,200,74,0.3);
+  flex: 0 0 28px;
+}
+.ft-boss-pick-dialog .ft-boss-pick-row-tier {
+  font-size: 0.65rem;
+  padding: 0.05rem 0.35rem;
+  flex: 0 0 auto;
+  margin: 0;
+}
+.ft-boss-pick-dialog .ft-boss-pick-row-name {
+  flex: 1 1 auto;
+  font-weight: 500;
+  color: #f0e8d0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ft-boss-pick-dialog .ft-boss-pick-row-tags {
+  flex: 0 1 auto;
+  display: inline-flex;
+  gap: 0.2rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  max-width: 10rem;
+}
+.ft-boss-pick-dialog .ft-tag-chip {
+  display: inline-block;
+  font-size: 0.62rem;
+  padding: 0.05rem 0.3rem;
+  border-radius: 8px;
+  background: rgba(160,200,216,0.12);
+  border: 1px solid rgba(160,200,216,0.3);
+  color: #c8e0f0;
+  white-space: nowrap;
+  text-transform: lowercase;
+}
+.ft-boss-pick-dialog .ft-tag-chip-more {
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.55);
+  border-color: rgba(255,255,255,0.18);
+}
+.ft-boss-pick-dialog .ft-boss-pick-add {
+  flex: 0 0 auto;
+  background: linear-gradient(180deg, rgba(232,200,74,0.2), rgba(232,200,74,0.08));
+  border: 1px solid rgba(232,200,74,0.45);
+  color: #f0e8a8;
+  font-weight: 600;
+  padding: 0.18rem 0.6rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ft-boss-pick-dialog .ft-boss-pick-add:hover {
+  background: linear-gradient(180deg, rgba(232,200,74,0.36), rgba(232,200,74,0.18));
+}
+.ft-boss-pick-dialog .ft-boss-pick-add:disabled {
+  background: rgba(80,160,80,0.15);
+  border-color: rgba(80,160,80,0.45);
+  color: #c0e8c0;
+  cursor: default;
+  opacity: 0.85;
+}
+.ft-boss-pick-dialog .ft-boss-pick-empty {
+  padding: 1.2rem;
+  text-align: center;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Edit mode resource inputs */
+.ft-resource-edit {
+  align-items: center;
+  gap: 0.2rem;
+  margin-left: auto;
+}
+.ft-resource-edit input {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(232,200,74,0.4);
+  color: #e8c84a;
+  border-radius: 3px;
+  padding: 0.1rem 0.2rem;
+  text-align: center;
+  font-size: 0.78rem;
+}
+
+/* Edit mode highlight on the sheet */
+.ft-sheet.ft-edit-mode .ft-skill-rank-input {
+  display: inline-block !important;
+  width: 36px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(232,200,74,0.3);
+  color: #e8c84a;
+  border-radius: 3px;
+  text-align: center;
+  font-size: 0.75rem;
+  padding: 0.1rem;
+}
+.ft-skill-rank-input { display: none; }
+
+
+/* ── Manifestation Engine pass ───────────────────────────────────────────── */
+.ft-header-actions {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ft-mini-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.65rem;
+  height: 1.65rem;
+  padding: 0 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.05);
+  color: #dbe4ff;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.ft-manifest-header {
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.ft-manifest-guide,
+.ft-manifest-sheet-guide,
+.ft-manifest-dialog-guide {
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.8rem;
+}
+
+.ft-manifest-guide-head,
+.ft-manifest-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.35rem;
+}
+
+.ft-manifest-guide-domain,
+.ft-manifest-dialog-domain {
+  font-size: 0.78rem;
+  opacity: 0.78;
+}
+
+.ft-manifest-guide-body,
+.ft-manifest-dialog-prompts,
+.ft-manifest-dialog-list {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ft-manifest-guide-prompt,
+.ft-manifest-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.ft-manifest-section {
+  margin-top: 1rem;
+}
+
+.ft-manifest-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-top: 0.45rem;
+}
+
+.ft-manifest-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.ft-manifest-signature {
+  font-size: 0.76rem;
+  opacity: 0.76;
+  font-style: italic;
+}
+
+.ft-manifest-sheet-guide .ft-prev-label,
+.ft-manifest-dialog-title {
+  font-weight: 700;
+  color: #e8eefb;
+}
+
+.ft-cast-grid .ft-cast-span-2 {
+  grid-column: 1 / -1;
+}
+
+.ft-manifest-dialog .ft-cast-grid {
+  align-items: start;
+}
+
+.ft-manifest-dialog textarea,
+.ft-manifest-dialog input,
+.ft-manifest-dialog select {
+  width: 100%;
+}
+
+
+/* ── Echo Assets / Faction-scope Crew + Occult ───────────────────────────── */
+.ft-faction-echoes {
+  margin: 0.95rem 0 0;
+  padding: 0.85rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid rgba(96, 165, 250, 0.18);
+  background: rgba(15, 23, 42, 0.26);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+.ft-faction-echoes-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.ft-faction-echoes-head h3 {
+  margin: 0;
+}
+.ft-faction-echoes-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  align-items: center;
+}
+.ft-faction-echoes-meta .ft-id-badge {
+  padding: 0.18rem 0.5rem;
+  border-left: none;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(255,255,255,0.035);
+  gap: 0.35rem;
+}
+.ft-faction-echoes-meta .ft-id-label {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.ft-faction-echoes-meta .ft-id-val {
+  white-space: nowrap;
+  font-weight: 600;
+}
+.ft-faction-echoes-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.ft-echo-btn { white-space: nowrap; }
+.ft-faction-echoes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+@media (min-width: 760px) {
+  .ft-faction-echoes-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.ft-faction-echoes-card {
+  padding: 0.7rem;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.24);
+}
+.ft-faction-echoes-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  margin-bottom: 0.45rem;
+}
+.ft-echo-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.ft-echo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(30, 41, 59, 0.42);
+  font-size: 0.74rem;
+  line-height: 1.1;
+}
+.ft-echo-chip.active {
+  border-color: rgba(96, 165, 250, 0.45);
+  background: rgba(30, 64, 175, 0.22);
+}
+.ft-echo-chip.reserve {
+  border-style: dashed;
+  opacity: 0.92;
+}
+.ft-echo-chip.occult {
+  border-color: rgba(167, 139, 250, 0.38);
+  background: rgba(91, 33, 182, 0.18);
+}
+.ft-echo-chip.empty {
+  opacity: 0.58;
+  font-style: italic;
+}
+.ft-echo-note,
+.ft-echo-dialog-note,
+.ft-echo-dialog-foot {
+  font-size: 0.74rem;
+  line-height: 1.45;
+  opacity: 0.8;
+}
+.ft-echo-note {
+  margin: 0.55rem 0 0.7rem;
+}
+.ft-echo-warning .ft-id-val {
+  color: #fca5a5;
+}
+.ft-echo-override .ft-id-val {
+  color: #fcd34d;
+}
+.ft-echo-dialog-warning {
+  margin: 0 0 0.75rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid rgba(248, 113, 113, 0.45);
+  background: rgba(127, 29, 29, 0.18);
+  color: #fecaca;
+  font-size: 0.75rem;
+}
+.ft-echo-dialog-foot {
+  margin: 0.65rem 0 0;
+}
+@media (max-width: 820px) {
+  .ft-faction-echoes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+.ft-sheet.ft-edit-mode .ft-edit-only.ft-identity-edit-panel { display: block !important; }
+.ft-identity-edit-panel {
+  margin-top: 0.8rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 14px;
+  border: 1px solid rgba(232,200,74,0.18);
+  background: linear-gradient(180deg, rgba(10,16,34,0.92), rgba(8,12,26,0.88));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), 0 10px 26px rgba(0,0,0,0.18);
+}
+.ft-identity-edit-panel h3 {
+  margin: 0 0 0.65rem;
+  font-size: 0.9rem;
+  color: #e8c84a;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.ft-identity-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem 0.8rem;
+}
+.ft-identity-edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  min-width: 0;
+}
+.ft-identity-edit-field label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(226,233,255,0.68);
+}
+.ft-identity-edit-field select {
+  width: 100%;
+  background: rgba(0,0,0,0.28);
+  color: #e8eefc;
+  border: 1px solid rgba(232,200,74,0.28);
+  border-radius: 8px;
+  padding: 0.36rem 0.5rem;
+  min-height: 2.15rem;
+}
+.ft-identity-edit-note {
+  margin: 0.7rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: rgba(226,233,255,0.64);
+}
+@media (max-width: 900px) {
+  .ft-identity-edit-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Principles tab — grouped sections ──────────────────────────────────── */
+.ft-principle-group {
+  margin-bottom: 1.1rem;
+}
+.ft-principle-group:last-child { margin-bottom: 0; }
+.ft-principle-group-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.1rem 0.35rem;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+.ft-principle-group-head h3 {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #c0d4ff;
+  opacity: 0.85;
+}
+.ft-principle-group--path     .ft-principle-group-head { border-bottom-color: rgba(74, 144, 217, 0.42); }
+.ft-principle-group--path     .ft-principle-group-head h3 { color: #7ab4e8; }
+.ft-principle-group--ancestry .ft-principle-group-head { border-bottom-color: rgba(39, 174, 96, 0.42); }
+.ft-principle-group--ancestry .ft-principle-group-head h3 { color: #6fcf97; }
+.ft-principle-group--identity .ft-principle-group-head { border-bottom-color: rgba(232, 200, 74, 0.42); }
+.ft-principle-group--identity .ft-principle-group-head h3 { color: #e8c84a; }
+.ft-principle-group--other    .ft-principle-group-head { border-bottom-color: rgba(148, 163, 184, 0.32); }
+.ft-principle-group--other    .ft-principle-group-head h3 { color: #c0d4ff; }
+
+/* ── Feature item sheet (feat / feature / class / subclass / race) ─────────── */
+.ft-feature-sheet .ft-feature-kind-badge {
+  background: rgba(160,180,255,0.1);
+  border: 1px solid rgba(160,180,255,0.35);
+  color: #a0b4ff;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.ft-feature-sheet .ft-feature-category-badge {
+  background: rgba(232,200,74,0.08);
+  border: 1px solid rgba(232,200,74,0.35);
+  color: #e8c84a;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.ft-feature-sheet .ft-feature-ident-badge {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(240,244,255,0.75);
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+.ft-feature-sheet .ft-feature-meta {
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+.ft-feature-sheet .ft-feature-meta .ft-field {
+  flex: 1 1 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.ft-feature-sheet .ft-feature-meta label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c0d4ff;
+  opacity: 0.85;
+}
+.ft-feature-sheet .ft-feature-description { margin-top: 0.5rem; }
+.ft-feature-sheet .ft-feature-description > label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c0d4ff;
+  opacity: 0.85;
+  margin-bottom: 0.3rem;
+}
+.ft-feature-sheet .ft-prose-description {
+  display: block;
+  min-height: 220px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  padding: 0.4rem 0.6rem;
+  color: #f0f4ff;
+}
+.ft-feature-sheet .ft-prose-description .editor-content,
+.ft-feature-sheet .ft-prose-description .ProseMirror {
+  color: #f0f4ff;
+  min-height: 180px;
+}
+.ft-feature-sheet .ft-prose-description .ProseMirror p,
+.ft-feature-sheet .ft-prose-description .ProseMirror li,
+.ft-feature-sheet .ft-prose-description .ProseMirror td,
+.ft-feature-sheet .ft-prose-description .ProseMirror th,
+.ft-feature-sheet .ft-prose-description .editor-content p,
+.ft-feature-sheet .ft-prose-description .editor-content li { color: #f0f4ff; }
+.ft-feature-sheet .ft-prose-description a { color: #a0c0ff; }
+.ft-feature-sheet .ft-prose-description h1,
+.ft-feature-sheet .ft-prose-description h2,
+.ft-feature-sheet .ft-prose-description h3,
+.ft-feature-sheet .ft-prose-description h4 { color: #e8ecff; }
+.ft-feature-sheet .ft-feature-tag-row {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+
+.ft-feature-sheet .ft-feature-description-view {
+  background: rgba(0,0,0,0.32);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  color: #f0f4ff;
+  line-height: 1.5;
+  font-size: 0.86rem;
+  min-height: 80px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.ft-feature-sheet .ft-feature-description-view p,
+.ft-feature-sheet .ft-feature-description-view li,
+.ft-feature-sheet .ft-feature-description-view td,
+.ft-feature-sheet .ft-feature-description-view th { color: #f0f4ff; }
+.ft-feature-sheet .ft-feature-description-view a { color: #a0c0ff; }
+.ft-feature-sheet .ft-feature-description-view h1,
+.ft-feature-sheet .ft-feature-description-view h2,
+.ft-feature-sheet .ft-feature-description-view h3,
+.ft-feature-sheet .ft-feature-description-view h4 { color: #e8ecff; margin: 0.4rem 0 0.2rem; }
+.ft-feature-sheet .ft-feature-description-view ul,
+.ft-feature-sheet .ft-feature-description-view ol { padding-left: 1.4rem; }
+.ft-feature-sheet .ft-feature-description-view hr { border-color: rgba(255,255,255,0.12); }
+.ft-feature-sheet .ft-feature-description-view strong { color: #e8ecff; }
+.ft-feature-sheet .ft-feature-description-view em { color: #c0d4ff; }
+.ft-feature-sheet .ft-feature-description-empty { opacity: 0.55; }
+
+.ft-feature-sheet .ft-feature-description-editor {
+  margin-top: 0.5rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  padding: 0.4rem 0.6rem;
+  background: rgba(255,255,255,0.02);
+}
+.ft-feature-sheet .ft-feature-description-editor > summary {
+  cursor: pointer;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #c0d4ff;
+  opacity: 0.78;
+  list-style: revert;
+}
+.ft-feature-sheet .ft-feature-description-editor[open] > summary { margin-bottom: 0.4rem; }
+
+/* ── Manifestation coach / cost box / chat meta ──────────────────────────── */
+.ft-manifest-coach {
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  margin: 0 0 0.8rem;
+  background: rgba(255,255,255,0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ft-manifest-coach-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ft-manifest-coach-chip,
+.ft-manifest-cost-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  font-size: 0.72rem;
+  line-height: 1.2;
+}
+
+.ft-manifest-coach-chip.frame {
+  border-color: rgba(232, 200, 74, 0.32);
+  color: #e8c84a;
+}
+
+.ft-manifest-coach-chip.lens {
+  border-color: rgba(74, 144, 217, 0.28);
+  color: #9ec8ff;
+}
+
+.ft-manifest-coach-chip.doctrine {
+  border-color: rgba(155, 89, 182, 0.28);
+  color: #d2a6e8;
+}
+
+.ft-manifest-third {
+  font-size: 0.76rem;
+  opacity: 0.82;
+}
+
+/* Inline manifestation glossary (caster pilot 2026-04-27). Collapsed by
+ * default; expands to 5 short knob definitions. */
+.ft-manifest-glossary > summary {
+  list-style: none;
+  user-select: none;
+}
+.ft-manifest-glossary > summary::-webkit-details-marker { display: none; }
+.ft-manifest-glossary > summary::before {
+  content: "▸ ";
+  display: inline-block;
+  transition: transform 120ms ease;
+}
+.ft-manifest-glossary[open] > summary::before { content: "▾ "; }
+.ft-manifest-glossary-row {
+  margin: 0.15rem 0;
+}
+.ft-manifest-glossary-row b {
+  color: #f4d27a;
+  margin-right: 0.2rem;
+}
+
+.ft-manifest-costbox {
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  padding: 0.65rem 0.75rem;
+  margin-top: 0.7rem;
+  background: rgba(255,255,255,0.03);
+}
+
+.ft-manifest-costbox.blocked {
+  border-color: rgba(235, 87, 87, 0.35);
+  background: rgba(235, 87, 87, 0.08);
+}
+
+.ft-manifest-cost-toggle {
+  margin-top: 0.45rem;
+  cursor: pointer;
+}
+
+.ft-manifest-cost-toggle input {
+  margin: 0;
+}
+
+.ft-manifest-chat-meta {
+  margin-top: 0.5rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.76rem;
+  opacity: 0.82;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.ft-manifest-mode-badge {
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+}
+
+.ft-manifest-sheet-section {
+  margin-top: 1rem;
+  padding-top: 0.2rem;
+}
+
+.ft-manifest-sheet-section .ft-prev-align-note,
+.ft-manifest-dialog-copy {
+  margin: 0.3rem 0 0.65rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  opacity: 0.82;
+}
+
+.ft-manifest-dialog-section {
+  margin: 0.25rem 0 0.6rem;
+}
+
+/* ── Manifestation tab v2 (tier-aware, cleaned) ──────────────────────────── */
+
+.ft-tier-pill {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.05rem 0.4rem;
+}
+.ft-tier-pill.ft-tier-1 { background: rgba(120,144,156,0.22); border-color: rgba(120,144,156,0.55); color: #b0bec5; }
+.ft-tier-pill.ft-tier-2 { background: rgba(74,144,217,0.22);  border-color: rgba(74,144,217,0.55);  color: #82b8e8; }
+.ft-tier-pill.ft-tier-3 { background: rgba(232,200,74,0.22);  border-color: rgba(232,200,74,0.55);  color: #e8c84a; }
+.ft-tier-pill.ft-tier-4 { background: rgba(192,48,48,0.24);   border-color: rgba(192,48,48,0.60);   color: #e88282; }
+
+.ft-footprint {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.ft-cast-header-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.ft-manifest-active-strip {
+  margin: 0.5rem 0 0.8rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid rgba(232,200,74,0.28);
+  background: rgba(232,200,74,0.06);
+  border-radius: 6px;
+}
+.ft-manifest-active-strip .ft-section-header { gap: 0.5rem; }
+.ft-manifest-active-strip .ft-section-header h4 {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.ft-item-row--active {
+  padding: 0.25rem 0.35rem;
+  border-bottom: 1px dashed rgba(255,255,255,0.08);
+}
+.ft-item-row--active:last-child { border-bottom: none; }
+
+.ft-manifest-guidance {
+  margin: 0.4rem 0 0.8rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 0 0.55rem;
+}
+.ft-manifest-guidance[open] { padding-bottom: 0.55rem; }
+.ft-manifest-guidance-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+  cursor: pointer;
+  font-size: 0.8rem;
+  opacity: 0.75;
+  list-style: none;
+}
+.ft-manifest-guidance-head::-webkit-details-marker { display: none; }
+.ft-manifest-guidance-head::before {
+  content: "▸";
+  display: inline-block;
+  transition: transform 0.15s ease;
+}
+.ft-manifest-guidance[open] .ft-manifest-guidance-head::before {
+  transform: rotate(90deg);
+}
+
+.ft-header-overflow {
+  position: relative;
+  display: inline-block;
+}
+.ft-header-overflow > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.ft-header-overflow > summary::-webkit-details-marker { display: none; }
+.ft-header-overflow-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.4rem;
+  background: rgba(10,10,16,0.96);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  z-index: 5;
+  min-width: 9rem;
+}
+
+.ft-add-btn-subtle,
+.ft-roll-btn-subtle {
+  background: transparent !important;
+  border-color: rgba(255,255,255,0.18) !important;
+  color: rgba(255,255,255,0.7);
+  font-weight: 500;
+}
+
+/* Cast dialog: mode picker + reach row */
+.ft-mode-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.15rem;
+}
+.ft-mode-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+.ft-mode-opt input[type="radio"] { margin-top: 0.2rem; }
+.ft-mode-opt b { margin-right: 0.3rem; }
+.ft-mode-opt span { opacity: 0.78; }
+.ft-mode-opt input[type="radio"]:checked ~ b {
+  color: #e8c84a;
+}
+.ft-mode-opt input[type="radio"]:disabled ~ * { opacity: 0.45; }
+
+.ft-reach-block {
+  border: 1px solid rgba(232,200,74,0.3);
+  background: rgba(232,200,74,0.05);
+  border-radius: 4px;
+  padding: 0.4rem 0.55rem;
+}
+.ft-reach-block.ft-reach-fail {
+  border-color: rgba(192,48,48,0.4);
+  background: rgba(192,48,48,0.06);
+}
+
+/* ── Manifestation Wizard window — resizable + scrollable + readable inputs ─ */
+.ft-manifestation-wizard-window .window-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.6rem;
+  overflow: hidden; /* outer pane fixes; inner scrolls */
+}
+.ft-manifestation-wizard-window .dialog-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.4rem;
+  /* room for the sticky button row at the bottom */
+  margin-bottom: 0.4rem;
+}
+.ft-manifestation-wizard-window .dialog-buttons {
+  flex: 0 0 auto;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  background: inherit;
+}
+.ft-manifestation-wizard-window .ft-cast-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem 0.7rem;
+}
+.ft-manifestation-wizard-window .ft-cast-field {
+  min-width: 0; /* allow inputs to shrink inside the grid cell */
+}
+.ft-manifestation-wizard-window .ft-cast-field.ft-cast-span-2 {
+  grid-column: span 2;
+}
+.ft-manifestation-wizard-window .ft-cast-field input[type="text"],
+.ft-manifestation-wizard-window .ft-cast-field input[type="number"],
+.ft-manifestation-wizard-window .ft-cast-field select,
+.ft-manifestation-wizard-window .ft-cast-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 1.8rem;
+}
+.ft-manifestation-wizard-window .ft-cast-field textarea {
+  min-height: 3.4rem;
+  resize: vertical;
+}
+.ft-manifestation-wizard-window .ft-cast-field label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.78;
+  margin-bottom: 0.2rem;
+}
+
+/* ── Chat-card contrast safety net ──────────────────────────────────────── */
+/* Chat cards render on a dark backdrop. Any inline text using legacy dark
+   reds (#8b0000, #c03030) gets lifted to a readable coral. Targets BOTH
+   already-posted cards (via attribute selectors) and any future card that
+   slips through. */
+.fourththing-roll [style*="#8b0000"],
+.chat-message .fourththing-roll [style*="#8b0000"] {
+  color: #ff7373 !important;
+}
+.fourththing-roll [style*="#c03030"],
+.chat-message .fourththing-roll [style*="#c03030"] {
+  color: #ff8a8a !important;
+}
+.fourththing-roll [style*="rgba(139,0,0"] {
+  background: rgba(255,138,138,0.14) !important;
+  border-color: rgba(255,138,138,0.55) !important;
+}
+
+/* Default: ensure chat cards always render light-on-dark when rendered
+   inside Foundry's chat panel (some themes flip the page background). */
+.chat-message .fourththing-roll {
+  color: #e8e8ec;
+}
+.chat-message .fourththing-roll p,
+.chat-message .fourththing-roll div,
+.chat-message .fourththing-roll span {
+  color: inherit;
+}
+
+/* ── RFI Inventory Tab ──────────────────────────────────────────────────── */
+.ft-inventory {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.ft-inv-empty {
+  color: rgba(220,220,230,0.5);
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+.ft-inv-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.6rem;
+  background: rgba(20,24,36,0.35);
+  border-left: 3px solid rgba(255,255,255,0.06);
+  border-radius: 3px;
+  font-size: 0.86rem;
+  transition: background 100ms ease;
+}
+.ft-inv-row:hover { background: rgba(20,24,36,0.55); }
+.ft-inv-row.is-equipped { border-left-color: #d4a35f; background: rgba(48,40,24,0.45); }
+.ft-inv-img {
+  width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 3px; flex: 0 0 28px; background: rgba(0,0,0,0.3);
+}
+.ft-inv-tier {
+  flex: 0 0 auto;
+  display: inline-block;
+  padding: 0.04rem 0.4rem;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: #0d1018;
+}
+.ft-inv-tier-I   { background: #7aa9d4; }
+.ft-inv-tier-II  { background: #5fb35f; }
+.ft-inv-tier-III { background: #d4a35f; }
+.ft-inv-tier-IV  { background: #d46a6a; }
+.ft-inv-name {
+  flex: 1 1 auto;
+  font-weight: 600;
+  color: #e6e6ec;
+  cursor: pointer;
+  text-decoration: none;
+}
+.ft-inv-name:hover { color: #ffd28a; text-decoration: underline; }
+.ft-inv-qty {
+  flex: 0 0 auto;
+  color: #d4a35f;
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+.ft-inv-stat {
+  flex: 0 0 auto;
+  color: rgba(216,216,223,0.78);
+  font-size: 0.8rem;
+}
+.ft-inv-sig {
+  flex: 0 0 auto;
+  color: #cfd6e0;
+  font-style: italic;
+  font-size: 0.78rem;
+  opacity: 0.86;
+}
+.ft-inv-origin {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  text-transform: lowercase;
+  opacity: 0.55;
+  font-style: italic;
+}
+.ft-inv-actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+.ft-inv-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 26px; height: 26px;
+  padding: 0 0.4rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: #d8d8df;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.ft-inv-btn:hover { background: rgba(255,255,255,0.10); color: #ffd28a; }
+.ft-inv-equip.on { color: #d4a35f; border-color: rgba(212,163,95,0.6); background: rgba(212,163,95,0.12); }
+.ft-inv-del:hover { color: #f1bcbc; border-color: rgba(212,106,106,0.6); background: rgba(212,106,106,0.12); }
+.ft-inv-use {
+  min-width: 50px;
+  font-size: 0.78rem;
+  color: #b8e3b8;
+  border-color: rgba(95,179,95,0.5);
+  background: rgba(95,179,95,0.10);
+  letter-spacing: 0.04em;
+}
+.ft-inv-use:hover { color: #d4f1c8; background: rgba(95,179,95,0.22); }
+.ft-inventory-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.ft-forge-btn {
+  background: rgba(212,163,95,0.12);
+  border: 1px solid rgba(212,163,95,0.50);
+  color: #ffd28a; padding: 0.3rem 0.7rem; border-radius: 3px; cursor: pointer;
+  font-size: 0.86rem; letter-spacing: 0.06em;
+}
+.ft-forge-btn:hover { background: rgba(212,163,95,0.22); color: #ffe8b8; }
+.ft-inv-tools { display: flex; gap: 0.4rem; }
+
+/* ── Hex Sheet (bbttcc-territory) layout overrides ────────────────────────
+   The hex sheet's title row has no flex gap, so long hex names (e.g.
+   BARRENPLAINS) overlap the status pill. Force a gap and prevent the
+   pill from shrinking; allow the name to truncate gracefully if needed. */
+.bbttcc-hex-sheet-root .bbttcc-row {
+  gap: 0.6rem;
+}
+.bbttcc-hex-sheet-root .bbttcc-row > div:first-child {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.bbttcc-hex-sheet-root .bbttcc-hex-title {
+  white-space: normal;          /* allow wrap so long hex names fit fully */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  letter-spacing: 0.08em;       /* tighten slightly so names fit on one line when possible */
+  line-height: 1.15;
+}
+.bbttcc-hex-sheet-root .bbttcc-pill {
+  flex-shrink: 0;
+}
+.ft-forge-dialog .forge-inv-row {
+  padding: 0.4rem 0; margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+.ft-forge-dialog .forge-inv-pill {
+  display: inline-block; padding: 0.05rem 0.45rem; margin: 0.1rem;
+  background: rgba(255,255,255,0.06); border-radius: 3px; font-size: 0.78rem;
+}
+.ft-forge-dialog .forge-table {
+  width: 100%; border-collapse: collapse; font-size: 0.84rem;
+}
+.ft-forge-dialog .forge-table th,
+.ft-forge-dialog .forge-table td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  vertical-align: middle;
+}
+.ft-forge-dialog .forge-row-low { opacity: 0.55; }
+.ft-forge-dialog .forge-tier {
+  display: inline-block; padding: 0.04rem 0.4rem; border-radius: 3px;
+  color: #0d1018; font-weight: 700; font-size: 0.7rem;
+}
+.ft-forge-dialog .forge-name a { color: #e6e6ec; text-decoration: none; cursor: pointer; }
+.ft-forge-dialog .forge-name a:hover { color: #ffd28a; text-decoration: underline; }
+.ft-forge-dialog .forge-dc { font-size: 0.78rem; color: rgba(220,220,230,0.78); text-align: center; }
+.ft-forge-dialog .forge-skill { color: rgba(220,220,230,0.55); font-style: italic; }
+.ft-forge-dialog .forge-mat {
+  display: inline-block; padding: 0.04rem 0.35rem; margin: 0.05rem;
+  background: rgba(255,255,255,0.06); border-radius: 3px;
+  font-family: "Courier New", monospace; font-size: 0.74rem;
+}
+.ft-forge-dialog .forge-mat-low { color: #f1bcbc; background: rgba(212,106,106,0.15); }
+.ft-forge-dialog .forge-mat-ok  { color: #b8e3b8; background: rgba(95,179,95,0.15); }
+.ft-forge-dialog .forge-craft-btn {
+  background: rgba(212,163,95,0.16); border: 1px solid rgba(212,163,95,0.50);
+  color: #ffd28a; padding: 0.25rem 0.65rem; border-radius: 3px; cursor: pointer;
+  font-size: 0.8rem;
+}
+.ft-forge-dialog .forge-craft-btn:hover:not(:disabled) { background: rgba(212,163,95,0.28); color: #ffe8b8; }
+.ft-forge-dialog .forge-craft-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── RFI Item Strip ─────────────────────────────────────────────────────── */
+.rfi-item-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.45rem 0.6rem;
+  margin: 0 0 0.4rem 0;
+  background: linear-gradient(90deg, rgba(20,24,36,0.55), rgba(20,24,36,0.25));
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  font-size: 0.78rem;
+  color: #d8d8df;
+}
+.rfi-item-strip .rfi-strip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.rfi-item-strip .rfi-strip-tier {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 0.74rem;
+  color: #0d1018;
+  letter-spacing: 0.04em;
+}
+.rfi-item-strip .rfi-strip-frame {
+  text-transform: capitalize;
+  opacity: 0.92;
+}
+.rfi-item-strip .rfi-strip-pip {
+  letter-spacing: 0.08em;
+  font-family: "Courier New", monospace;
+  color: #d4a35f;
+  opacity: 0.85;
+}
+.rfi-item-strip .rfi-strip-reach,
+.rfi-item-strip .rfi-strip-upkeep {
+  opacity: 0.72;
+}
+.rfi-item-strip .rfi-strip-bound {
+  text-transform: lowercase;
+  padding: 0.02rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  background: rgba(255,255,255,0.06);
+}
+.rfi-item-strip .rfi-strip-bound.rfi-bound-attuned   { background: rgba(95,179,95,0.20); color: #b8e3b8; }
+.rfi-item-strip .rfi-strip-bound.rfi-bound-soulbound { background: rgba(212,106,106,0.22); color: #f1bcbc; }
+.rfi-item-strip .rfi-strip-origin {
+  text-transform: lowercase;
+  opacity: 0.72;
+  font-style: italic;
+}
+.rfi-item-strip .rfi-strip-sig {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: #cfd6e0;
+  opacity: 0.86;
+}
+.rfi-item-strip .rfi-strip-lore {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.84rem;
+  color: #d8d8df;
+  line-height: 1.45;
+}
+.rfi-item-strip .rfi-strip-lore p { margin: 0 0 0.4rem 0; }
+.rfi-item-strip .rfi-strip-lore p:last-child { margin-bottom: 0; }
+.rfi-item-strip .rfi-strip-harmonized-row { margin-top: 0.3rem; }
+.rfi-item-strip .rfi-strip-harmonized {
+  display: inline-block; padding: 0.06rem 0.5rem; border-radius: 3px;
+  font-size: 0.74rem; letter-spacing: 0.08em; font-weight: 700;
+}
+.rfi-item-strip .rfi-strip-harmonized.rfi-harm-on  { color: #ffd28a; background: rgba(212,163,95,0.18); border: 1px solid rgba(212,163,95,0.55); }
+.rfi-item-strip .rfi-strip-harmonized.rfi-harm-off { color: rgba(220,220,230,0.55); background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.18); font-weight: 400; letter-spacing: 0.04em; }
+
+/* ── Manifestation sheet: Display vs Edit mode ──────────────────────────── */
+.ft-manifest-mode-toggle {
+  margin-left: auto;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.6);
+  background: rgba(15,23,42,0.85);
+  color: #e2e8f0;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.ft-manifest-mode-toggle:hover {
+  border-color: #38bdf8;
+  background: rgba(15,23,42,1);
+  color: #38bdf8;
+}
+.ft-manifest-display-name {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  color: #f1f5f9;
+}
+.ft-manifest-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.ft-manifest-display .ft-manifest-display-section {
+  background: rgba(15,23,42,0.55);
+  border: 1px solid rgba(148,163,184,0.18);
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+}
+.ft-manifest-display .ft-manifest-display-section p {
+  margin: 0.1rem 0 0;
+  white-space: pre-wrap;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+.ft-manifest-display .ft-manifest-display-section .ft-prev-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.ft-manifest-display .ft-manifest-display-flavor {
+  border-style: dashed;
+  background: rgba(15,23,42,0.35);
+  color: #cbd5e1;
+}
+
+/* ── NPC sheet ────────────────────────────────────────────────────────────── */
+/* Make every layer between the window frame and our template root flex/grow
+   so the body can `overflow-y: auto`. AppV2 in V14 wraps the template in a
+   <form class="window-content">; without these rules the form has natural
+   height and the body never gets a constrained box to scroll inside. */
+.fourththing.sheet.npc .window-content,
+.fourththing.sheet.npc > form {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  height: 100%;
+  min-height: 0;
+}
+.ft-npc-sheet {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #e2e8f0;
+  background: linear-gradient(160deg, rgba(15,23,42,0.96), rgba(15,23,42,0.94));
+  padding: 0.6rem;
+  gap: 0.65rem;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.ft-npc-sheet .ft-npc-header { flex: 0 0 auto; }
+.ft-npc-sheet .ft-npc-toolbar { flex: 0 0 auto; }
+.ft-npc-sheet .ft-npc-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding-right: 4px;
+}
+.ft-npc-sheet .ft-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.4rem 0 0.3rem;
+}
+.ft-npc-sheet .ft-section-header h2,
+.ft-npc-sheet .ft-section-header h3 {
+  margin: 0;
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+  color: #e2e8f0;
+  border: none;
+}
+.ft-npc-sheet .ft-mini-count {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: #94a3b8;
+  background: rgba(148,163,184,0.15);
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+}
+
+.ft-npc-sheet .ft-npc-header {
+  gap: 0.65rem;
+  align-items: stretch;
+}
+.ft-npc-sheet .ft-npc-identity {
+  flex: 0 0 220px;
+  gap: 0.4rem;
+  background: rgba(2,6,23,0.5);
+  border: 1px solid rgba(148,163,184,0.2);
+  border-radius: 10px;
+  padding: 0.55rem;
+}
+.ft-npc-sheet .ft-portrait img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(148,163,184,0.25);
+}
+.ft-npc-sheet .ft-name input {
+  font-size: 1rem;
+  font-weight: 700;
+  background: rgba(15,23,42,0.6);
+  color: #e2e8f0;
+  border: 1px solid rgba(148,163,184,0.3);
+  border-radius: 6px;
+  padding: 0.25rem 0.45rem;
+  width: 100%;
+}
+.ft-npc-sheet .ft-npc-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem;
+}
+.ft-npc-sheet .ft-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.ft-npc-sheet .ft-meta label {
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.ft-npc-sheet .ft-meta input,
+.ft-npc-sheet .ft-meta select {
+  font-size: 0.82rem;
+  background: rgba(15,23,42,0.7);
+  color: #e2e8f0;
+  border: 1px solid rgba(148,163,184,0.3);
+  border-radius: 5px;
+  padding: 0.18rem 0.4rem;
+}
+
+.ft-npc-sheet .ft-npc-attributes {
+  flex: 1 1 auto;
+  background: rgba(2,6,23,0.5);
+  border: 1px solid rgba(148,163,184,0.2);
+  border-radius: 10px;
+  padding: 0.55rem;
+  gap: 0.3rem;
+}
+.ft-npc-sheet .ft-attr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+}
+.ft-npc-sheet .ft-attr {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.2);
+  border-radius: 6px;
+  padding: 0.3rem 0.4rem;
+  gap: 0.18rem;
+  position: relative;
+}
+.ft-npc-sheet .ft-attr label {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.ft-npc-sheet .ft-attr input {
+  font-size: 0.95rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: #f1f5f9;
+  text-align: center;
+}
+.ft-npc-sheet .ft-attr-roll {
+  position: absolute;
+  top: 0.18rem;
+  right: 0.18rem;
+  font-size: 0.7rem;
+  border: none;
+  background: transparent;
+  color: #38bdf8;
+  cursor: pointer;
+}
+.ft-npc-sheet .ft-attr-roll:hover { color: #facc15; }
+
+/* Steward sheet uses inline-flow layout — no absolute positioning. Sit beside
+ * the value input. Mirrors .ft-def-roll styling for consistency. */
+.fourththing.sheet.actor .ft-attr-roll {
+  background: transparent;
+  border: none;
+  color: #38bdf8;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0 0.2rem;
+  margin-left: 0.25rem;
+}
+.fourththing.sheet.actor .ft-attr-roll:hover { color: #facc15; }
+
+.ft-npc-sheet .ft-derived,
+.ft-npc-sheet .ft-defenses {
+  gap: 0.4rem;
+}
+.ft-npc-sheet .ft-stat,
+.ft-npc-sheet .ft-def-stat {
+  flex: 1;
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.2);
+  border-radius: 6px;
+  padding: 0.25rem 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+}
+.ft-npc-sheet .ft-stat label,
+.ft-npc-sheet .ft-def-stat label {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.ft-npc-sheet .ft-stat input,
+.ft-npc-sheet .ft-def-stat input {
+  width: 3rem;
+  background: transparent;
+  border: none;
+  color: #e2e8f0;
+  font-weight: 700;
+  text-align: right;
+}
+.ft-npc-sheet .ft-stat-max-input {
+  width: 2.6rem !important;
+  font-size: 0.72rem !important;
+  color: #94a3b8 !important;
+  text-align: left !important;
+}
+.ft-npc-sheet .ft-def-roll,
+.fourththing.sheet.actor .ft-def-roll {
+  background: transparent;
+  border: none;
+  color: #38bdf8;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0 0.2rem;
+  margin-left: 0.25rem;
+}
+.ft-npc-sheet .ft-def-roll:hover,
+.fourththing.sheet.actor .ft-def-roll:hover { color: #facc15; }
+
+.ft-npc-sheet .ft-def-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.3rem;
+}
+.ft-npc-sheet .ft-chip {
+  font-size: 0.7rem;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.4);
+  background: rgba(15,23,42,0.6);
+  color: #cbd5e1;
+}
+.ft-npc-sheet .ft-chip-immune     { border-color: #facc15; color: #facc15; }
+.ft-npc-sheet .ft-chip-resist     { border-color: #38bdf8; color: #38bdf8; }
+.ft-npc-sheet .ft-chip-vuln       { border-color: #f87171; color: #f87171; }
+.ft-npc-sheet .ft-chip-cond-immune{ border-color: #a78bfa; color: #a78bfa; }
+.ft-npc-sheet .ft-chip-flavor     { font-style: italic; opacity: 0.85; }
+.ft-npc-sheet .ft-chip-edit       { cursor: pointer; }
+.ft-npc-sheet .ft-chip-none       { color: #475569; border-color: rgba(71,85,105,0.5); }
+
+.ft-npc-sheet .ft-tier-pill {
+  font-size: 0.7rem;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(56,189,248,0.25), rgba(168,85,247,0.25));
+  border: 1px solid rgba(168,85,247,0.55);
+  color: #f1f5f9;
+  letter-spacing: 0.1em;
+  margin-left: auto;
+}
+.ft-npc-sheet .ft-tier-pill.ft-tier-1 { border-color: rgba(56,189,248,0.55); }
+.ft-npc-sheet .ft-tier-pill.ft-tier-2 { border-color: rgba(34,197,94,0.55); }
+.ft-npc-sheet .ft-tier-pill.ft-tier-3 { border-color: rgba(250,204,21,0.55); }
+.ft-npc-sheet .ft-tier-pill.ft-tier-4 { border-color: rgba(248,113,113,0.65); background: linear-gradient(135deg, rgba(248,113,113,0.25), rgba(168,85,247,0.25)); }
+
+.ft-npc-sheet .ft-npc-toolbar {
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(2,6,23,0.45);
+  border: 1px solid rgba(148,163,184,0.2);
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem;
+  flex-wrap: wrap;
+}
+.ft-npc-sheet .ft-npc-tool,
+.ft-npc-sheet .ft-econ-chip {
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  background: rgba(15,23,42,0.7);
+  color: #e2e8f0;
+  border: 1px solid rgba(148,163,184,0.4);
+  border-radius: 999px;
+  padding: 0.18rem 0.7rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.ft-npc-sheet .ft-npc-tool:hover,
+.ft-npc-sheet .ft-econ-chip:hover { border-color: #38bdf8; color: #38bdf8; }
+.ft-npc-sheet .ft-econ-chip.used  { background: rgba(248,113,113,0.18); border-color: #f87171; color: #fecaca; text-decoration: line-through; }
+.ft-npc-sheet .ft-action-economy { display: inline-flex; gap: 0.3rem; align-items: center; }
+.ft-npc-sheet .ft-rest-controls  { margin-left: auto; display: inline-flex; gap: 0.3rem; }
+
+.ft-npc-sheet .ft-npc-section {
+  background: rgba(2,6,23,0.45);
+  border: 1px solid rgba(148,163,184,0.18);
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+}
+.ft-npc-sheet .ft-item-list { display: flex; flex-direction: column; gap: 0.3rem; }
+.ft-npc-sheet .ft-item-row {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.2);
+  border-radius: 6px;
+}
+.ft-npc-sheet .ft-item-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.45rem;
+}
+.ft-npc-sheet .ft-item-art {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(148,163,184,0.2);
+  object-fit: cover;
+}
+.ft-npc-sheet .ft-item-name { font-weight: 600; flex: 1; }
+.ft-npc-sheet .ft-item-meta { font-size: 0.72rem; color: #94a3b8; }
+.ft-npc-sheet .ft-item-controls { display: inline-flex; gap: 0.25rem; }
+.ft-npc-sheet .ft-roll-btn,
+.ft-npc-sheet .ft-item-edit,
+.ft-npc-sheet .ft-power-delete {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  border: 1px solid rgba(148,163,184,0.4);
+  background: rgba(15,23,42,0.85);
+  color: #e2e8f0;
+  cursor: pointer;
+}
+.ft-npc-sheet .ft-roll-btn:hover { border-color: #38bdf8; color: #38bdf8; }
+.ft-npc-sheet .ft-roll-btn-subtle { opacity: 0.75; }
+.ft-npc-sheet .ft-power-delete:hover { border-color: #f87171; color: #f87171; }
+.ft-npc-sheet .ft-manifest-detail {
+  padding: 0.3rem 0.6rem 0.5rem;
+  border-top: 1px solid rgba(148,163,184,0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.ft-npc-sheet .ft-manifest-signature {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+.ft-npc-sheet .ft-condition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+  gap: 0.25rem;
+}
+.ft-npc-sheet .ft-condition-chip {
+  font-size: 0.72rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.35);
+  background: rgba(15,23,42,0.7);
+  color: #cbd5e1;
+  cursor: pointer;
+  text-align: left;
+}
+.ft-npc-sheet .ft-condition-chip.active { font-weight: 700; }
+.ft-npc-sheet textarea[name="system.notes"] {
+  width: 100%;
+  background: rgba(15,23,42,0.7);
+  color: #e2e8f0;
+  border: 1px solid rgba(148,163,184,0.3);
+  border-radius: 6px;
+  padding: 0.4rem 0.55rem;
+  font-size: 0.84rem;
+  resize: vertical;
+}
+.ft-npc-sheet .ft-npc-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.ft-npc-sheet .ft-npc-tags label {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.ft-npc-sheet .ft-npc-tags input {
+  flex: 1;
+  font-size: 0.78rem;
+  background: rgba(15,23,42,0.7);
+  color: #e2e8f0;
+  border: 1px solid rgba(148,163,184,0.3);
+  border-radius: 4px;
+  padding: 0.18rem 0.45rem;
+}
+.ft-npc-sheet .ft-def-editor-fold[open] summary { margin-bottom: 0.4rem; }
+.ft-npc-sheet .ft-def-editor-label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin: 0.4rem 0 0.2rem;
+}
+.ft-npc-sheet .ft-def-chips-edit { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+
+/* ── Manifestation Wizard V2 — Phase 3 occult treatment ─────────────────── */
+/* Deep purple-black grimoire, gold filigree, alchemical sigils, fade-in
+   transitions. Stays inside the Foundry Dialog window — chrome is left as-is
+   to avoid fighting the framework, but the window-content is fully owned. */
+
+.ft-manifest-wizard-v2-window .window-content,
+.ft-manifest-wizard-v2-window .dialog-content {
+  /* Deep grimoire backdrop with subtle radial halo + parchment grain. */
+  background:
+    radial-gradient(ellipse at top, rgba(120, 90, 200, 0.18) 0%, rgba(20, 12, 40, 0.0) 55%),
+    radial-gradient(ellipse at bottom, rgba(232, 200, 74, 0.06) 0%, rgba(20, 12, 40, 0.0) 60%),
+    repeating-linear-gradient(115deg, rgba(232, 200, 74, 0.012) 0 2px, transparent 2px 6px),
+    linear-gradient(180deg, #100822 0%, #0c0418 100%);
+  color: #e8d4f5;
+  overflow: auto;
+  padding: 0.5rem 0.6rem 0.6rem;
+  border: 1px solid rgba(232, 200, 74, 0.18);
+  box-shadow: inset 0 0 32px rgba(120, 90, 200, 0.1);
+}
+.ft-manifest-wizard-v2-window .dialog-buttons {
+  background: rgba(20, 12, 40, 0.6);
+  border-top: 1px solid rgba(232, 200, 74, 0.2);
+  padding: 0.35rem;
+}
+.ft-manifest-wizard-v2-window .dialog-buttons button {
+  background: rgba(232, 200, 74, 0.06);
+  border: 1px solid rgba(232, 200, 74, 0.28);
+  color: #c8b462;
+  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+}
+.ft-manifest-wizard-v2-window .dialog-buttons button:hover {
+  background: rgba(232, 200, 74, 0.14);
+  color: #e8c84a;
+  text-shadow: 0 0 6px rgba(232, 200, 74, 0.45);
+}
+
+.ft-wiz-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  font-size: 0.84rem;
+  font-family: "Bookerly", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+/* ─── Banner: illuminated step number + sigil + label ─────────────────── */
+.ft-wiz-v2-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "glyph eyebrow"
+    "glyph title";
+  gap: 0.05rem 0.8rem;
+  align-items: center;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid rgba(232, 200, 74, 0.45);
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at left, rgba(232, 200, 74, 0.12) 0%, rgba(120, 90, 200, 0.04) 70%),
+    linear-gradient(180deg, rgba(20, 12, 40, 0.55), rgba(8, 4, 20, 0.85));
+  box-shadow:
+    inset 0 0 0 1px rgba(232, 200, 74, 0.08),
+    inset 0 0 18px rgba(232, 200, 74, 0.05),
+    0 1px 0 rgba(232, 200, 74, 0.12);
+}
+.ft-wiz-v2-banner-glyph {
+  grid-area: glyph;
+  font-size: 2.2rem;
+  line-height: 1;
+  color: #e8c84a;
+  text-shadow:
+    0 0 8px rgba(232, 200, 74, 0.7),
+    0 0 16px rgba(232, 200, 74, 0.35);
+  padding: 0 0.35rem 0 0.1rem;
+  border-right: 1px solid rgba(232, 200, 74, 0.25);
+  filter: drop-shadow(0 0 1px rgba(255, 240, 200, 0.4));
+  animation: ftWizV2GlyphPulse 2.6s ease-in-out infinite;
+}
+.ft-wiz-v2-banner-eyebrow {
+  grid-area: eyebrow;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(232, 200, 74, 0.65);
+  font-family: "Trajan Pro", "Cinzel", "Optima", sans-serif;
+}
+.ft-wiz-v2-banner-title {
+  grid-area: title;
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+  color: #f0e0a0;
+  font-variant: small-caps;
+  font-family: "Trajan Pro", "Cinzel", "Optima", "Palatino Linotype", serif;
+  text-shadow: 0 0 12px rgba(232, 200, 74, 0.25);
+}
+@keyframes ftWizV2GlyphPulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(232, 200, 74, 0.7), 0 0 16px rgba(232, 200, 74, 0.35); }
+  50%      { text-shadow: 0 0 12px rgba(232, 200, 74, 0.95), 0 0 22px rgba(232, 200, 74, 0.55); }
+}
+
+/* ─── Stepper: sigil row with connecting filigree lines ──────────────── */
+.ft-wiz-v2-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.15rem;
+  padding: 0.35rem 0.4rem;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(120, 90, 200, 0.08), rgba(20, 12, 40, 0.5), rgba(120, 90, 200, 0.08));
+  border-top: 1px solid rgba(232, 200, 74, 0.15);
+  border-bottom: 1px solid rgba(232, 200, 74, 0.15);
+}
+.ft-wiz-v2-step-pip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  flex: 0 0 auto;
+  position: relative;
+  cursor: default;
+  transition: transform 200ms ease-out;
+}
+.ft-wiz-v2-step-sigil {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.05rem;
+  background: radial-gradient(circle at center, rgba(20, 12, 40, 0.95) 0%, rgba(8, 4, 20, 1) 100%);
+  border: 1px solid rgba(232, 200, 74, 0.3);
+  color: rgba(232, 200, 74, 0.45);
+  transition: all 250ms ease-out;
+}
+.ft-wiz-v2-step-pip.active .ft-wiz-v2-step-sigil {
+  background: radial-gradient(circle at center, rgba(232, 200, 74, 0.32) 0%, rgba(120, 90, 200, 0.12) 65%, rgba(8, 4, 20, 1) 100%);
+  border: 1px solid rgba(232, 200, 74, 0.85);
+  color: #fff3c4;
+  box-shadow:
+    0 0 0 2px rgba(232, 200, 74, 0.18),
+    0 0 14px rgba(232, 200, 74, 0.55),
+    inset 0 0 8px rgba(255, 240, 200, 0.25);
+  transform: scale(1.12);
+  text-shadow: 0 0 6px rgba(255, 240, 200, 0.7);
+}
+.ft-wiz-v2-step-pip.done .ft-wiz-v2-step-sigil {
+  background: radial-gradient(circle at center, rgba(95, 179, 95, 0.18) 0%, rgba(20, 12, 40, 0.85) 100%);
+  border: 1px solid rgba(95, 179, 95, 0.55);
+  color: rgba(155, 212, 155, 0.95);
+}
+.ft-wiz-v2-step-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  color: #c8b462;
+  font-family: "Trajan Pro", "Cinzel", "Optima", sans-serif;
+}
+.ft-wiz-v2-step-pip.active .ft-wiz-v2-step-label {
+  opacity: 1;
+  color: #f0e0a0;
+}
+.ft-wiz-v2-step-pip.done .ft-wiz-v2-step-label {
+  opacity: 0.7;
+  color: rgba(155, 212, 155, 0.85);
+}
+.ft-wiz-v2-step-link {
+  flex: 1;
+  height: 1px;
+  margin: 0 -0.1rem;
+  background: linear-gradient(90deg, rgba(232, 200, 74, 0.0), rgba(232, 200, 74, 0.25), rgba(232, 200, 74, 0.0));
+  align-self: flex-start;
+  margin-top: 1rem; /* center vertically with the sigil circle */
+  transition: background 350ms ease;
+}
+.ft-wiz-v2-step-link.done {
+  background: linear-gradient(90deg, rgba(95, 179, 95, 0.0), rgba(95, 179, 95, 0.6), rgba(95, 179, 95, 0.0));
+  box-shadow: 0 0 4px rgba(95, 179, 95, 0.3);
+}
+
+/* ─── Live preview chip ───────────────────────────────────────────────── */
+.ft-wiz-v2-preview {
+  position: relative;
+  padding: 0.45rem 0.7rem 0.45rem 1.6rem;
+  border: 1px solid rgba(120, 90, 200, 0.45);
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, rgba(120, 90, 200, 0.12), rgba(232, 200, 74, 0.06)),
+    rgba(20, 12, 40, 0.6);
+  font-size: 0.82rem;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: #e8d4f5;
+  min-height: 1.4rem;
+  box-shadow: inset 0 0 12px rgba(120, 90, 200, 0.1);
+}
+.ft-wiz-v2-preview::before {
+  content: "❖";
+  position: absolute;
+  left: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(232, 200, 74, 0.55);
+  font-style: normal;
+  font-size: 0.85rem;
+}
+
+/* ─── Step body — fades in on every render ────────────────────────────── */
+.ft-wiz-v2-body {
+  flex: 1;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid rgba(232, 200, 74, 0.18);
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at top right, rgba(120, 90, 200, 0.06) 0%, transparent 60%),
+    rgba(8, 4, 20, 0.55);
+  box-shadow: inset 0 0 18px rgba(120, 90, 200, 0.06);
+  animation: ftWizV2BodyFadeIn 280ms cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+@keyframes ftWizV2BodyFadeIn {
+  from { opacity: 0; transform: translateY(8px); filter: blur(2px); }
+  to   { opacity: 1; transform: translateY(0);   filter: blur(0);   }
+}
+
+.ft-wiz-v2-coach {
+  margin: 0 0 0.7rem;
+  font-size: 0.84rem;
+  color: rgba(232, 220, 200, 0.78);
+  font-style: italic;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+  border-left: 2px solid rgba(232, 200, 74, 0.35);
+  padding-left: 0.6rem;
+}
+
+/* ─── Cascade & error notes ───────────────────────────────────────────── */
+.ft-wiz-v2-cascade-note {
+  font-size: 0.74rem;
+  color: rgba(155, 212, 155, 0.95);
+  min-height: 0;
+  padding: 0;
+  font-family: inherit;
+}
+.ft-wiz-v2-cascade-note:not(:empty) {
+  padding: 0.35rem 0.55rem;
+  border-left: 2px solid rgba(95, 179, 95, 0.55);
+  background: rgba(95, 179, 95, 0.06);
+  border-radius: 0 2px 2px 0;
+}
+.ft-wiz-v2-errors {
+  min-height: 1.1rem;
+  font-size: 0.78rem;
+  color: #ff8a8a;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.ft-wiz-v2-errors:not(:empty) {
+  padding: 0.3rem 0.5rem;
+  border-left: 2px solid rgba(255, 138, 138, 0.55);
+  background: rgba(255, 138, 138, 0.06);
+  border-radius: 0 2px 2px 0;
+}
+
+/* ─── Form fields — parchment-tinted ─────────────────────────────────── */
+.ft-wiz-v2 .ft-cast-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem 0.7rem;
+  margin-bottom: 0.4rem;
+}
+.ft-wiz-v2 .ft-cast-field { display: flex; flex-direction: column; gap: 0.22rem; }
+.ft-wiz-v2 .ft-cast-field.ft-cast-span-2 { grid-column: span 2; }
+.ft-wiz-v2 .ft-cast-field label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(232, 200, 74, 0.7);
+  font-family: "Trajan Pro", "Cinzel", "Optima", sans-serif;
+  font-style: normal;
+}
+.ft-wiz-v2 .ft-cast-field input,
+.ft-wiz-v2 .ft-cast-field select,
+.ft-wiz-v2 .ft-cast-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 1.8rem;
+  background: rgba(232, 200, 74, 0.04);
+  border: 1px solid rgba(232, 200, 74, 0.25);
+  color: #f0e0c8;
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 2px;
+  transition: border-color 180ms, box-shadow 180ms, background 180ms;
+}
+.ft-wiz-v2 .ft-cast-field input:focus,
+.ft-wiz-v2 .ft-cast-field select:focus,
+.ft-wiz-v2 .ft-cast-field textarea:focus {
+  outline: none;
+  border-color: rgba(232, 200, 74, 0.65);
+  background: rgba(232, 200, 74, 0.08);
+  box-shadow: 0 0 8px rgba(232, 200, 74, 0.25), inset 0 0 4px rgba(120, 90, 200, 0.12);
+}
+.ft-wiz-v2 .ft-cast-field select option {
+  background: #1a0e30;
+  color: #f0e0c8;
+}
+.ft-wiz-v2 .ft-cast-field input[type="checkbox"] {
+  width: auto;
+  min-height: 0;
+}
+.ft-wiz-v2-warn {
+  padding: 0.35rem 0.55rem;
+  border-left: 2px solid rgba(232, 200, 74, 0.55);
+  background: rgba(232, 200, 74, 0.06);
+  border-radius: 0 2px 2px 0;
+}
+
+/* ─── Sub-section headers within a step body ──────────────────────────── */
+.ft-wiz-v2-subhead {
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(232, 200, 74, 0.75);
+  font-family: "Trajan Pro", "Cinzel", "Optima", sans-serif;
+  border-bottom: 1px solid rgba(232, 200, 74, 0.18);
+  padding-bottom: 0.2rem;
+  margin: 0.3rem 0 0.4rem;
+}
+
+/* ─── Condition checkbox chip grid (Step 4 — Effect) ──────────────────── */
+.ft-wiz-v2-cond-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.3rem 0.4rem;
+}
+.ft-wiz-v2-cond-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid rgba(232, 200, 74, 0.2);
+  border-radius: 2px;
+  background: rgba(20, 12, 40, 0.5);
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: all 180ms ease;
+}
+.ft-wiz-v2-cond-chip:hover {
+  background: rgba(232, 200, 74, 0.06);
+  border-color: rgba(232, 200, 74, 0.45);
+}
+.ft-wiz-v2-cond-chip:has(input:checked) {
+  background: rgba(232, 200, 74, 0.1);
+  box-shadow: inset 0 0 8px rgba(232, 200, 74, 0.15);
+}
+.ft-wiz-v2-cond-chip input[type="checkbox"] {
+  width: auto;
+  min-height: 0;
+  margin: 0;
+}
+.ft-wiz-v2-cond-dot {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  box-shadow: 0 0 4px currentColor;
+  flex-shrink: 0;
+}
+.ft-wiz-v2-cond-label {
+  letter-spacing: 0.04em;
+  color: #f0e0c8;
+}
+.ft-wiz-v2-cond-chip:has(input:checked) .ft-wiz-v2-cond-label {
+  color: #fff3c4;
+  text-shadow: 0 0 4px rgba(255, 240, 200, 0.4);
+}
+
+/* ─── Nav buttons — hex-stamped seals ─────────────────────────────────── */
+.ft-wiz-v2-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(232, 200, 74, 0.18);
+  margin-top: 0.2rem;
+}
+.ft-wiz-v2-nav button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: "Trajan Pro", "Cinzel", "Optima", sans-serif;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 200ms ease-out;
+  background: linear-gradient(180deg, rgba(232, 200, 74, 0.1), rgba(232, 200, 74, 0.04));
+  border: 1px solid rgba(232, 200, 74, 0.4);
+  color: #c8b462;
+  box-shadow: inset 0 0 8px rgba(232, 200, 74, 0.05);
+}
+.ft-wiz-v2-nav button:hover:not([disabled]) {
+  background: linear-gradient(180deg, rgba(232, 200, 74, 0.18), rgba(232, 200, 74, 0.08));
+  border-color: rgba(232, 200, 74, 0.7);
+  color: #f0e0a0;
+  box-shadow:
+    0 0 12px rgba(232, 200, 74, 0.3),
+    inset 0 0 8px rgba(232, 200, 74, 0.15);
+  text-shadow: 0 0 4px rgba(232, 200, 74, 0.5);
+}
+.ft-wiz-v2-nav button[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: grayscale(0.6);
+}
+.ft-wiz-v2-btn-glyph {
+  font-size: 1rem;
+  line-height: 1;
+  color: rgba(232, 200, 74, 0.85);
+}
+.ft-wiz-v2-nav .ft-wiz-v2-finish {
+  background: linear-gradient(180deg, rgba(232, 200, 74, 0.22), rgba(120, 90, 200, 0.1));
+  border: 1px solid rgba(232, 200, 74, 0.7);
+  color: #f0e0a0;
+  font-weight: 600;
+  padding: 0.55rem 1.4rem;
+  letter-spacing: 0.18em;
+  box-shadow:
+    0 0 16px rgba(232, 200, 74, 0.25),
+    inset 0 0 12px rgba(232, 200, 74, 0.1);
+  animation: ftWizV2FinishGlow 2.4s ease-in-out infinite;
+}
+.ft-wiz-v2-nav .ft-wiz-v2-finish:hover {
+  background: linear-gradient(180deg, rgba(232, 200, 74, 0.32), rgba(120, 90, 200, 0.18));
+  border-color: rgba(255, 240, 200, 0.85);
+  color: #fff3c4;
+  box-shadow:
+    0 0 22px rgba(232, 200, 74, 0.55),
+    inset 0 0 14px rgba(232, 200, 74, 0.2);
+}
+@keyframes ftWizV2FinishGlow {
+  0%, 100% { box-shadow: 0 0 16px rgba(232, 200, 74, 0.25), inset 0 0 12px rgba(232, 200, 74, 0.1); }
+  50%      { box-shadow: 0 0 22px rgba(232, 200, 74, 0.45), inset 0 0 14px rgba(232, 200, 74, 0.2); }
+}
+.ft-wiz-v2-nav .ft-wiz-v2-finish .ft-wiz-v2-btn-glyph {
+  color: #fff3c4;
+  text-shadow: 0 0 6px rgba(255, 240, 200, 0.7);
+}
+
+/* ─── Review summary card on Step 7 ───────────────────────────────────── */
+.ft-wiz-v2-summary {
+  margin-top: 0.7rem !important;
+  padding: 0.7rem 0.8rem !important;
+  border: 1px solid rgba(232, 200, 74, 0.45) !important;
+  border-radius: 3px !important;
+  background:
+    radial-gradient(ellipse at center, rgba(232, 200, 74, 0.08) 0%, rgba(120, 90, 200, 0.04) 70%),
+    rgba(20, 12, 40, 0.7) !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(232, 200, 74, 0.08),
+    inset 0 0 22px rgba(120, 90, 200, 0.08),
+    0 1px 0 rgba(232, 200, 74, 0.1);
+  font-family: inherit;
+}
+.ft-wiz-v2-summary > div:first-child {
+  letter-spacing: 0.16em !important;
+  font-size: 0.75rem !important;
+  color: rgba(232, 200, 74, 0.85) !important;
+  margin-bottom: 0.4rem !important;
+  text-transform: uppercase;
+  font-family: "Trajan Pro", "Cinzel", "Optima", sans-serif;
+  border-bottom: 1px solid rgba(232, 200, 74, 0.2);
+  padding-bottom: 0.3rem;
+}
+
+/* ── Rig + Boss sheet polish (Phase 8, 2026-05-10) ─────────────────────────
+   HexChrome cascades automatically via `bbttcc-*` class selector from
+   bbttcc-bridge.css. These rules tighten spacing/typography on the rig +
+   boss sheets so the tabbed body reads as panels, not raw form rows. */
+.bbttcc-rig-sheet .ft-body,
+.bbttcc-boss-sheet .ft-body {
+  padding: 0.5rem 0.75rem;
+}
+.bbttcc-rig-sheet .bbttcc-panel,
+.bbttcc-boss-sheet .bbttcc-panel {
+  margin: 0 0 0.8rem 0;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(232, 200, 74, 0.18);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(20, 26, 51, 0.55), rgba(20, 26, 51, 0.25));
+}
+.bbttcc-rig-sheet .bbttcc-section-divider,
+.bbttcc-boss-sheet .bbttcc-section-divider {
+  border: none;
+  height: 1px;
+  margin: 0.4rem 0 0.8rem 0;
+  background: linear-gradient(90deg, transparent, rgba(232, 200, 74, 0.35), transparent);
+}
+.bbttcc-rig-sheet .bbttcc-panel .ft-block-title,
+.bbttcc-boss-sheet .bbttcc-panel .ft-block-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  color: rgba(232, 200, 74, 0.95);
+  margin: 0 0 0.4rem 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+.bbttcc-rig-sheet .bbttcc-panel .ft-block-hint,
+.bbttcc-boss-sheet .bbttcc-panel .ft-block-hint {
+  font-size: 0.78rem;
+  opacity: 0.6;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.bbttcc-rig-sheet .ft-block-action,
+.bbttcc-boss-sheet .ft-block-action {
+  margin-left: auto;
+  font-size: 0.78rem;
+  padding: 2px 8px;
+}
+.bbttcc-rig-sheet .bbttcc-collapse-block,
+.bbttcc-boss-sheet .bbttcc-collapse-block {
+  margin: 0.8rem 0 0.4rem 0;
+  padding: 0.4rem 0.6rem;
+  border: 1px dashed rgba(232, 200, 74, 0.25);
+  border-radius: 4px;
+  background: rgba(20, 26, 51, 0.35);
+}
+.bbttcc-rig-sheet .bbttcc-collapse-block summary,
+.bbttcc-boss-sheet .bbttcc-collapse-block summary {
+  cursor: pointer;
+  opacity: 0.85;
+  padding: 0.2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.bbttcc-rig-sheet .bbttcc-collapse-block .ft-block-title-inline,
+.bbttcc-boss-sheet .bbttcc-collapse-block .ft-block-title-inline {
+  font-weight: 700;
+  color: rgba(232, 200, 74, 0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+}
+.bbttcc-rig-sheet .bbttcc-collapse-block textarea,
+.bbttcc-boss-sheet .bbttcc-collapse-block textarea {
+  margin-top: 0.4rem;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  color: #f0f4ff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  padding: 0.4rem;
+}
+.bbttcc-boss-sheet .ft-behavior-phase-select {
+  background: rgba(0, 0, 0, 0.4);
+  color: #f0f4ff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+  padding: 0.1rem 0.25rem;
+  font-size: 0.8rem;
+}
+.bbttcc-boss-sheet .ft-action-btn[disabled],
+.bbttcc-rig-sheet .ft-action-btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+/* ── RFI Pricing strip (Phase 1) ───────────────────────────────────────────
+   Promoted from inline-style to here so the rules are loaded once at boot
+   and apply consistently across re-renders. !important guards against the
+   FT custom sheet's flex layout collapsing the strip width. */
+.rfi-pricing-strip {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  margin: 0.5em 0 0.6em 0 !important;
+  padding: 0.55rem 0.75rem !important;
+  border: 1px solid rgba(232, 200, 74, 0.45) !important;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(74, 91, 120, 0.18), rgba(20, 26, 51, 0.28)) !important;
+  font-size: 0.86rem;
+  position: relative;
+  z-index: 5;
+  flex: 0 0 auto;
+  align-self: stretch;
+  color: #f0f4ff;
+}
+.rfi-pricing-strip .rfi-pricing-row {
+  display: flex !important;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.rfi-pricing-strip .rfi-pricing-label {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(232, 200, 74, 0.85);
+  text-transform: uppercase;
+  font-size: 0.74rem;
+}
+.rfi-pricing-strip .rfi-pricing-marks-input {
+  width: 5.5em;
+  text-align: right;
+  background: rgba(0, 0, 0, 0.4);
+  color: #f0f4ff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+  padding: 0.15rem 0.35rem;
+}
+.rfi-pricing-strip .rfi-pricing-pool-select {
+  min-width: 9em;
+  background: rgba(0, 0, 0, 0.4);
+  color: #f0f4ff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+  padding: 0.15rem 0.3rem;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.rfi-pricing-strip .rfi-pricing-split-btn {
+  font-size: 0.82rem;
+  padding: 0.15rem 0.7rem;
+  cursor: pointer;
+  background: rgba(232, 200, 74, 0.15);
+  color: #f0f4ff;
+  border: 1px solid rgba(232, 200, 74, 0.45);
+  border-radius: 3px;
+}
+.rfi-pricing-strip .rfi-pricing-split-btn:hover {
+  background: rgba(232, 200, 74, 0.28);
+}
+.rfi-pricing-strip .rfi-pricing-saleback {
+  opacity: 0.75;
+  font-size: 0.85rem;
+}
+.rfi-pricing-strip .rfi-pricing-override {
+  background: #d4a35f;
+  color: #1a1a1a;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.rfi-pricing-strip .rfi-pricing-tech {
+  background: #6a4ad4;
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.74rem;
+}
+.rfi-pricing-strip .rfi-pricing-unstamped {
+  background: #555;
+  color: #ddd;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 0.74rem;
+  font-style: italic;
+}
+.rfi-pricing-strip .rfi-pricing-split-summary {
+  margin-top: 0.35rem;
+  opacity: 0.85;
+  font-size: 0.85rem;
+}
+.rfi-pricing-strip .rfi-pricing-notes {
+  margin-top: 0.3rem;
+  opacity: 0.55;
+  font-size: 0.76rem;
+  font-style: italic;
+}
+
+/* ── Rig sheet polish (2026-05-12) — header stat tile grid + crew tiles ──
+   Mirrors the Boss sheet boxed-tile pattern. Replaces the previously
+   style-free ft-rig-summary flexcol stack. */
+.ft-rig-sheet .ft-rig-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.4rem;
+  flex: 1;
+  align-content: start;
+  padding: 0.2rem;
+}
+.ft-rig-sheet .ft-rig-stat-tile {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.22);
+  border-radius: 6px;
+  padding: 0.4rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.ft-rig-sheet .ft-rig-stat-tile.ft-stat-span-2 {
+  grid-column: span 3;
+}
+.ft-rig-sheet .ft-rig-stat-label {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.ft-rig-sheet .ft-rig-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+.ft-rig-sheet .ft-rig-stat-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  min-width: 1.5rem;
+  text-align: center;
+}
+.ft-rig-sheet .ft-rig-stat-val-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #e8c84a;
+  letter-spacing: 0.02em;
+}
+.ft-rig-sheet .ft-rig-stat-sep {
+  color: #475569;
+  font-size: 0.95rem;
+}
+.ft-rig-sheet .ft-rig-stat-max {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.ft-rig-sheet .ft-rig-stat-cta {
+  margin-left: auto;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+}
+/* Integrity tile bar — full-width across span-3 row. */
+.ft-rig-sheet .ft-integrity-bar.ft-rig-integrity-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(148,163,184,0.18);
+  margin-top: 0.15rem;
+}
+.ft-rig-sheet .ft-rig-integrity-bar .ft-integrity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3a4a6a, #5a8ad8 70%, #88c8ff);
+  transition: width 0.25s ease;
+}
+/* Output tile — color band by operational state.
+   Parked = green (full throughput), Deployed = amber (half), Destroyed = red. */
+.ft-rig-sheet .ft-rig-stat-output--parked .ft-rig-stat-val {
+  color: #6ee7b7;
+}
+.ft-rig-sheet .ft-rig-stat-output--deployed .ft-rig-stat-val {
+  color: #fbbf24;
+}
+.ft-rig-sheet .ft-rig-stat-output--destroyed .ft-rig-stat-val {
+  color: #ff8a8a;
+}
+.ft-rig-sheet .ft-rig-stat-output--destroyed {
+  opacity: 0.7;
+}
+
+/* Crew Capacity tiles — one per role, dim when no slots seated. */
+.ft-rig-sheet .ft-rig-crew-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.45rem;
+  margin-top: 0.3rem;
+}
+.ft-rig-sheet .ft-rig-crew-tile {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.22);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.ft-rig-sheet .ft-rig-crew-tile-role {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.ft-rig-sheet .ft-rig-crew-tile-count {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  display: flex;
+  gap: 0.25rem;
+  align-items: baseline;
+}
+.ft-rig-sheet .ft-rig-crew-tile-max {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+.ft-rig-sheet .ft-rig-crew-tile-unsupported {
+  color: #475569;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.ft-rig-sheet .ft-rig-crew-tile--empty .ft-rig-crew-tile-filled {
+  color: #64748b;
+}
+.ft-rig-sheet .ft-rig-crew-tile--unsupported {
+  opacity: 0.45;
+  border-style: dashed;
+}
+.ft-rig-sheet .ft-rig-crew-tile--full {
+  border-color: rgba(110,231,183,0.45);
+  background: linear-gradient(180deg, rgba(110,231,183,0.06), rgba(15,23,42,0.6));
+}
+.ft-rig-sheet .ft-rig-crew-tile--full .ft-rig-crew-tile-filled {
+  color: #6ee7b7;
+}
+
+/* ── Rig Gear tab polish (2026-05-12) — Frame hero tile + richer rows ──── */
+
+.ft-rig-sheet .ft-rig-gear-section {
+  margin-bottom: 0.7rem;
+}
+.ft-rig-sheet .ft-rig-gear-section .ft-block-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+/* Section header slot-cap pill: used/max. Red bg when over capacity. */
+.ft-rig-sheet .ft-rig-slot-cap {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(148,163,184,0.14);
+  color: #cbd5e1;
+  border: 1px solid rgba(148,163,184,0.3);
+}
+.ft-rig-sheet .ft-rig-slot-cap--over {
+  background: rgba(255,138,138,0.16);
+  color: #ff8a8a;
+  border-color: rgba(255,138,138,0.5);
+}
+.ft-rig-sheet .ft-rig-slot-cap--info {
+  background: rgba(232,200,74,0.12);
+  color: #e8c84a;
+  border-color: rgba(232,200,74,0.32);
+}
+
+/* ── Frame hero tile ────────────────────────────────────────────────────── */
+.ft-rig-sheet .ft-rig-frame-hero {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.55rem 0.7rem;
+  background: linear-gradient(135deg, rgba(232,200,74,0.08), rgba(15,23,42,0.65));
+  border: 1px solid rgba(232,200,74,0.36);
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(232,200,74,0.06) inset;
+}
+.ft-rig-sheet .ft-rig-frame-hero-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(232,200,74,0.45);
+  flex: 0 0 56px;
+}
+.ft-rig-sheet .ft-rig-frame-hero-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+.ft-rig-sheet .ft-rig-frame-hero-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+.ft-rig-sheet .ft-rig-frame-hero-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #f0e8d0;
+}
+.ft-rig-sheet .ft-rig-frame-bracket {
+  font-size: 0.7rem;
+  text-transform: capitalize;
+  padding: 0.1rem 0.45rem;
+  background: rgba(232,200,74,0.18);
+  color: #f0e8a8;
+  border: 1px solid rgba(232,200,74,0.4);
+  border-radius: 10px;
+}
+.ft-rig-sheet .ft-rig-frame-hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.78rem;
+  flex-wrap: wrap;
+  color: #cbd5e1;
+}
+.ft-rig-sheet .ft-rig-frame-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+.ft-rig-sheet .ft-rig-frame-stat small {
+  opacity: 0.6;
+  font-size: 0.7rem;
+}
+.ft-rig-sheet .ft-rig-frame-slot-caps {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.1rem 0.5rem;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(148,163,184,0.18);
+  border-radius: 6px;
+}
+.ft-rig-sheet .ft-rig-frame-slot-cap {
+  font-size: 0.74rem;
+  color: #cbd5e1;
+}
+.ft-rig-sheet .ft-rig-frame-mobility {
+  display: inline-flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+.ft-rig-sheet .ft-rig-frame-mobility-chip {
+  font-size: 0.66rem;
+  text-transform: lowercase;
+  padding: 0.05rem 0.4rem;
+  background: rgba(160,200,216,0.14);
+  color: #c8e0f0;
+  border: 1px solid rgba(160,200,216,0.3);
+  border-radius: 10px;
+}
+.ft-rig-sheet .ft-rig-frame-stat-unsourced {
+  color: #ff8a8a;
+  font-size: 0.76rem;
+  font-style: italic;
+}
+
+/* ── Gear / weapon rows ─────────────────────────────────────────────────── */
+.ft-rig-sheet .ft-rig-gear-row-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: 0.35rem;
+}
+.ft-rig-sheet .ft-rig-gear-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.5rem;
+  background: rgba(15,23,42,0.55);
+  border: 1px solid rgba(148,163,184,0.16);
+  border-left: 3px solid rgba(148,163,184,0.32);
+  border-radius: 5px;
+}
+.ft-rig-sheet .ft-rig-gear-row:hover {
+  background: rgba(15,23,42,0.78);
+}
+/* Subtype-specific left-edge accent — Mad Max color palette across types. */
+.ft-rig-sheet .ft-rig-gear-row--weapon   { border-left-color: #c0563a; }
+.ft-rig-sheet .ft-rig-gear-row--system   { border-left-color: #5a8ad8; }
+.ft-rig-sheet .ft-rig-gear-row--output   { border-left-color: #6ee7b7; }
+.ft-rig-sheet .ft-rig-gear-row--unsorted { border-left-color: #94a3b8; border-style: dashed; }
+
+.ft-rig-sheet .ft-rig-gear-row-img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(148,163,184,0.3);
+  flex: 0 0 36px;
+}
+.ft-rig-sheet .ft-rig-gear-tier {
+  font-size: 0.66rem;
+  padding: 0.1rem 0.4rem;
+  flex: 0 0 auto;
+  margin: 0;
+}
+.ft-rig-sheet .ft-rig-gear-row-name {
+  flex: 1 1 auto;
+  font-weight: 500;
+  color: #f0e8d0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ft-rig-sheet .ft-rig-gear-stat {
+  font-size: 0.74rem;
+  color: #cbd5e1;
+  padding: 0.08rem 0.4rem;
+  background: rgba(0,0,0,0.28);
+  border-radius: 4px;
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: baseline;
+  white-space: nowrap;
+}
+.ft-rig-sheet .ft-rig-gear-stat em {
+  font-style: normal;
+  opacity: 0.6;
+  font-size: 0.7rem;
+  text-transform: lowercase;
+}
+.ft-rig-sheet .ft-rig-gear-stat--dmg   { color: #ffc8b8; }
+.ft-rig-sheet .ft-rig-gear-stat--range { color: #c8e0f0; }
+
+.ft-rig-sheet .ft-rig-gear-chip {
+  font-size: 0.66rem;
+  text-transform: lowercase;
+  padding: 0.05rem 0.4rem;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.ft-rig-sheet .ft-rig-gear-chip--passive {
+  background: rgba(160,200,216,0.14);
+  color: #c8e0f0;
+  border: 1px solid rgba(160,200,216,0.3);
+}
+.ft-rig-sheet .ft-rig-gear-chip--active {
+  background: rgba(232,200,74,0.16);
+  color: #f0e8a8;
+  border: 1px solid rgba(232,200,74,0.32);
+}
+.ft-rig-sheet .ft-rig-gear-chip--mobile {
+  background: rgba(110,231,183,0.14);
+  color: #6ee7b7;
+  border: 1px solid rgba(110,231,183,0.34);
+}
+.ft-rig-sheet .ft-rig-gear-chip--type {
+  background: rgba(148,163,184,0.14);
+  color: #cbd5e1;
+  border: 1px solid rgba(148,163,184,0.32);
+  font-style: italic;
+}
+
+/* Yield chips for output modules — sit between name and edit buttons. */
+.ft-rig-sheet .ft-rig-gear-yields {
+  display: inline-flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+.ft-rig-sheet .ft-rig-gear-yield-chip {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.45rem;
+  background: rgba(110,231,183,0.12);
+  color: #6ee7b7;
+  border: 1px solid rgba(110,231,183,0.32);
+  border-radius: 10px;
+  white-space: nowrap;
+  text-transform: lowercase;
+  font-weight: 600;
+}
+
+.ft-rig-sheet .ft-rig-gear-btn {
+  flex: 0 0 auto;
+}
+
+/* ── Empty states — dashed drop-target affordance ─────────────────────── */
+.ft-rig-sheet .ft-rig-gear-empty {
+  padding: 0.7rem 0.9rem;
+  border: 1px dashed rgba(148,163,184,0.32);
+  border-radius: 5px;
+  background: rgba(0,0,0,0.18);
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-style: italic;
+}
+.ft-rig-sheet .ft-rig-gear-empty code {
+  font-style: normal;
+  font-size: 0.78rem;
+  color: #e8c84a;
+  background: rgba(0,0,0,0.4);
+  padding: 0.05rem 0.3rem;
+  border-radius: 3px;
+}
+.ft-rig-sheet .ft-rig-gear-empty--frame {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-style: normal;
+}
+.ft-rig-sheet .ft-rig-gear-empty-icon {
+  font-size: 1.4rem;
+  opacity: 0.6;
+}
+.ft-rig-sheet .ft-rig-gear-empty-label {
+  font-weight: 600;
+  color: #cbd5e1;
+}
+.ft-rig-sheet .ft-rig-gear-empty-hint {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  flex: 1 1 auto;
+}
+
+/* ── Boss Sheet Slice 4 (2026-05-12) — Raid Profile / GM Edit polish ──── */
+
+/* OP Economy 9-key tiles — pulled out of the bare .ft-op-grid into a proper
+   boxed-tile grid matching the rest of the sheet's visual language. */
+.ft-boss-sheet .ft-boss-op-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.ft-boss-sheet .ft-boss-op-tile {
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.22);
+  border-radius: 6px;
+  padding: 0.35rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.ft-boss-sheet .ft-boss-op-tile-label {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.ft-boss-sheet .ft-boss-op-tile-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(148,163,184,0.18);
+  color: #e2e8f0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: left;
+  padding: 0.1rem 0;
+  width: 100%;
+}
+.ft-boss-sheet .ft-boss-op-tile-input:focus {
+  outline: none;
+  border-bottom-color: rgba(232,200,74,0.5);
+}
+
+/* Live Raid State tiles — read-only, sit at top of GM Edit tab. Slate
+   palette with subtle blue accent to signal "live engine state, not editable". */
+.ft-boss-sheet .ft-boss-live-state-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.ft-boss-sheet .ft-boss-live-tile {
+  background: linear-gradient(180deg, rgba(58,138,216,0.08), rgba(15,23,42,0.65));
+  border: 1px solid rgba(90,138,216,0.32);
+  border-radius: 6px;
+  padding: 0.45rem 0.55rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+.ft-boss-sheet .ft-boss-live-label {
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 600;
+}
+.ft-boss-sheet .ft-boss-live-val {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #c8e0f0;
+  line-height: 1.1;
+}

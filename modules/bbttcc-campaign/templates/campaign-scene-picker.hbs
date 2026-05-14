@@ -1,0 +1,40 @@
+<section class="bbttcc-scene-picker-root">
+  <header class="bbttcc-scene-picker-header">
+    <h2>Select a Scene</h2>
+    <p class="bbttcc-muted">
+      Pick a scene to link to this beat. You can always change it later.
+    </p>
+  </header>
+
+  {{#if scenes.length}}
+    <table class="bbttcc-table bbttcc-table-scenes">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>UUID</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each scenes as |scn|}}
+          <tr>
+            <td>{{scn.name}}</td>
+            <td><code>{{scn.uuid}}</code></td>
+            <td>
+              <button type="button"
+                      class="bbttcc-btn"
+                      data-action="choose-scene"
+                      data-uuid="{{scn.uuid}}">
+                Use
+              </button>
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p class="bbttcc-muted">
+      No scenes are available in this world.
+    </p>
+  {{/if}}
+</section>

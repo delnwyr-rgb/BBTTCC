@@ -1,0 +1,660 @@
+{
+  "name": "Breaker",
+  "type": "class",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Breaker1.png",
+  "system": {
+    "advancement": {
+      "Je5XyZJWzXR6rcRs": {
+        "_id": "Je5XyZJWzXR6rcRs",
+        "type": "HitPoints",
+        "configuration": {},
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "qSjjIW8ipMvEE2GP": {
+        "_id": "qSjjIW8ipMvEE2GP",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.3uNWc3kHk3u2OLuQ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Breaker's Core Features",
+        "flags": {},
+        "hint": ""
+      },
+      "jt0L8ZEeErUFM2C1": {
+        "_id": "jt0L8ZEeErUFM2C1",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.6HaSfdZkRcmTyYmB",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 2,
+        "title": "Rubble Runner",
+        "flags": {},
+        "hint": ""
+      },
+      "PDB65Hz3Z0WtW6hD": {
+        "_id": "PDB65Hz3Z0WtW6hD",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Tv7ZBSyOIb2AOIKP",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 3,
+        "title": "Demolition Plan",
+        "flags": {},
+        "hint": ""
+      },
+      "EUHlMzvpKDtazTT6": {
+        "_id": "EUHlMzvpKDtazTT6",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.KRhuUni4wzJA3ISB",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.R22WToOJo9m3Sxbo",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 5,
+        "title": "Extra Attack & Siege Cost Accountant",
+        "flags": {},
+        "hint": ""
+      },
+      "KvLsnjfPjedVUoSN": {
+        "_id": "KvLsnjfPjedVUoSN",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.GTNMnEZdV1bIcuXT",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 6,
+        "title": "Breaker's Eye",
+        "flags": {},
+        "hint": ""
+      },
+      "gYPzq7TLWRwt81UH": {
+        "_id": "gYPzq7TLWRwt81UH",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Vd3CdJsURhAZDfo6",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 7,
+        "title": "Shockwave Footing",
+        "flags": {},
+        "hint": ""
+      },
+      "fXpi2qOEHgHfxUaC": {
+        "_id": "fXpi2qOEHgHfxUaC",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.I2zeLOkO7QjdtpGE",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 9,
+        "title": "Reinforced Psyche",
+        "flags": {},
+        "hint": ""
+      },
+      "lRIz3t4BVzdFhEq7": {
+        "_id": "lRIz3t4BVzdFhEq7",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.WCqjuLoIhxpnNwBl",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 10,
+        "title": "Improved Living Rampart",
+        "flags": {},
+        "hint": ""
+      },
+      "RWG5HVkHW6uOm0cQ": {
+        "_id": "RWG5HVkHW6uOm0cQ",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.JIPMTjL5MICXTkWB",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Ruin to Renewal",
+        "flags": {},
+        "hint": ""
+      },
+      "YEw2pcckrzCZe4YA": {
+        "_id": "YEw2pcckrzCZe4YA",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.XZj1qSuGDm1p3L1H",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 13,
+        "title": "Catastrophic Entry",
+        "flags": {},
+        "hint": ""
+      },
+      "UHLy2jPEHqhkFyVB": {
+        "_id": "UHLy2jPEHqhkFyVB",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.CRoV1t6LxIgGXkIN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 15,
+        "title": "Fortress of One",
+        "flags": {},
+        "hint": ""
+      },
+      "GjYakAu0plcuXKOn": {
+        "_id": "GjYakAu0plcuXKOn",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Cx2h2eEPUdiwl8wd",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 17,
+        "title": "Architect of Endings",
+        "flags": {},
+        "hint": ""
+      },
+      "rkRp98xxJ2RdSWro": {
+        "_id": "rkRp98xxJ2RdSWro",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.1BO40JKZrUYw6Wjy",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 18,
+        "title": "Siege Engine Whisperer",
+        "flags": {},
+        "hint": ""
+      },
+      "2Bd8GqqpYxRRx3y8": {
+        "_id": "2Bd8GqqpYxRRx3y8",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.i3dwIJzJMSi0dnyN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 20,
+        "title": "Living Demolition",
+        "flags": {},
+        "hint": ""
+      },
+      "b8wksBNI12HbCvy2": {
+        "_id": "b8wksBNI12HbCvy2",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 4,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "1cY1wAxwzsTlsieq": {
+        "_id": "1cY1wAxwzsTlsieq",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 8,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "cXmxEfF4g9VCjR0l": {
+        "_id": "cXmxEfF4g9VCjR0l",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 12,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "X3EHR7qH9WODyoHd": {
+        "_id": "X3EHR7qH9WODyoHd",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 16,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "v3yXQ0gSTo7RF5Vn": {
+        "_id": "v3yXQ0gSTo7RF5Vn",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 19,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "YGxgq4j6rciK7l5N": {
+        "_id": "YGxgq4j6rciK7l5N",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
+      },
+      "o3OKm1MVhtL1ZIIz": {
+        "_id": "o3OKm1MVhtL1ZIIz",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "saves:str",
+            "saves:con"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Saving Throw Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "aKZkHc9zHfV0iGxJ": {
+        "_id": "aKZkHc9zHfV0iGxJ",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "skills:ath"
+          ],
+          "choices": [
+            {
+              "count": 2,
+              "pool": [
+                "skills:itm",
+                "skills:ins",
+                "skills:prc",
+                "skills:sur"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Skill Proficiencies",
+        "hint": "Gain Athletics automatically, then choose two from Intimidation, Insight, Perception, Survival.",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "hK17RQadRRGZs06O": {
+        "_id": "hK17RQadRRGZs06O",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim",
+            "weapon:mar"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "m9tpw0gZGDj6oLJx": {
+        "_id": "m9tpw0gZGDj6oLJx",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt",
+            "armor:med",
+            "armor:hvy",
+            "armor:shl"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "HpcBa7sIT8JjS2qY": {
+        "_id": "HpcBa7sIT8JjS2qY",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:mar"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      "pxIC2dGopXMXNYwd": {
+        "_id": "pxIC2dGopXMXNYwd",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt",
+            "armor:med",
+            "armor:shl"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "secondary",
+        "flags": {}
+      },
+      "LxIldDq6D7HhXl1v": {
+        "_id": "LxIldDq6D7HhXl1v",
+        "type": "ItemChoice",
+        "configuration": {
+          "choices": {
+            "1": {
+              "count": 1,
+              "replacement": true
+            }
+          },
+          "allowDrops": true,
+          "type": "feat",
+          "pool": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.nxRmrkOJCJQYz6gXe"
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.SHMfrtbf8uxwVaTZ"
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.IjZYVmEGpYqHQTi1"
+            }
+          ],
+          "spell": null,
+          "restriction": {
+            "type": "feat",
+            "subtype": "fightingStyle",
+            "list": []
+          }
+        },
+        "value": {
+          "added": {},
+          "replaced": {}
+        },
+        "title": "Fighting Style (Breaker)",
+        "hint": "Choose one Breaker fighting style at 1st level.",
+        "flags": {}
+      }
+    },
+    "description": {
+      "value": "<p><em>“Some people break things by accident. You do it on the paperwork <strong>and</strong> the map on purpose.”</em></p><p><strong>Primary Ability:</strong> Strength</p><p><strong>Role:</strong> Siege-born demolisher who turns walls, dogmas, and bad ideas into usable rubble.</p><p>Breakers are the shock-corps of the Great Work: armored saints of structural failure. Where they walk, bastions crack, bunkers remember they were once caves, and the world’s worst architecture finally gets the performance review it deserves.</p><h3>Class Features by Tier</h3><p><em>(These are BBTTCC “tiers” that sit on top of normal level-by-level class progression.)</em></p><ul><li><p><strong>Tier 1 — Certified Structural Menace.</strong><br />You gain proficiency in <em>Athletics</em> and <em>Mason’s Tools</em>. When you damage or attempt to destroy nonmagical structures, you ignore any resistance they might have to your damage. Your faction’s <strong>Violence OP cap increases by 3</strong> as Command starts budgeting for “Breaker-class solutions.”</p></li><li><p><strong>Tier 2 — Siege Cost Accountant.</strong><br />When your faction initiates a <em>Siege</em> operation, the Violence OP cost for that activity is reduced by <strong>1</strong> (minimum 0), as long as you are present in the operation or clearly responsible for the plan on paper.</p></li><li><p><strong>Tier 3 — Ruin to Renewal.</strong><br />When you destroy a fortification, barricade, or other significant defensive structure, you can attempt to turn the moment of collapse into an act of reclamation. Make either a Faith-based or Economy-based ability check (your choice) against DC 15, keyed to your GM’s preferred skill (such as Religion, Insight, Persuasion, or tools that fit the scene). On a success, the ground and people around the ruin shift toward healing: lingering badness is purified, a hex status improves, or your faction gains a small narrative boon as appropriate.</p></li><li><p><strong>Tier 4 — Architect of Endings.</strong><br />Your faction has learned to ride the shockwaves you create. <strong>Violence Attrition penalties are halved</strong> for your faction (rounding in your favor) for conflicts and operations in which you participate, representing smarter de-escalation, cleaner victories, and fewer “oops, we toppled the entire province” incidents.</p></li></ul>",
+      "chat": ""
+    },
+    "identifier": "breaker",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "custom": "BBTTCC"
+    },
+    "startingEquipment": [],
+    "hd": {
+      "additional": "",
+      "denomination": "d12",
+      "spent": 0
+    },
+    "levels": 1,
+    "primaryAbility": {
+      "value": [
+        "str"
+      ],
+      "all": false
+    },
+    "properties": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    },
+    "wealth": ""
+  },
+  "effects": [],
+  "folder": "Er4NLHWXt1PVGBdX",
+  "flags": {
+    "bbttcc": {
+      "primary": "strength",
+      "opBonus": {
+        "violence": 3
+      }
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191139751,
+    "modifiedTime": 1775063114014,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "UHHEsSex7j7skTtU",
+  "sort": 100000,
+  "_key": "!items!UHHEsSex7j7skTtU"
+}

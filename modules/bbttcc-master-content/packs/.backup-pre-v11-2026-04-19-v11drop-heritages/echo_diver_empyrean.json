@@ -1,0 +1,97 @@
+{
+  "name": "Echo-Diver Heritage: Empyrean",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Echo-Diver_Empyrean.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Heritage (RFI v1.0).</strong> Ported to Roll for Initiation: 7-damage-type canon, Soma Break, Tier-based scaling, reroll-lowest. Replaces the D&amp;D5E heritage draft dated 2026-04-19 00:10.</p><p><em>&ldquo;Something is about to happen. Move.&rdquo;</em></p><p><strong>Echo-Diver (Empyrean).</strong> You tune to the upper airs &mdash; storm-forecast, lightning-warning, the lean of a thing before it falls.</p><h3>Heritage Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Echo-Diver).</li><li><strong>Size.</strong> Medium. Speed: normal.</li><li><strong>Stormread (precognition).</strong> Add your <strong>Tier</strong> to all Initiative rolls.</li><li><strong>Lightning-Ally.</strong> 1/Soma Break, when you roll initiative, one willing ally within 30 ft may use their reaction immediately to move up to half their movement without provoking opportunity strikes.</li><li><strong>Weathered.</strong> Reroll the lowest die on Perception checks that rely on hearing or air currents.</li><li><strong>Signature.</strong> You gain <em>Stormread</em> at character creation.</li></ul><p class=\"note\"><strong>Engine note.</strong> Where this heritage grants a damage-type resistance, it is applied by the fourththing defense engine via <code>flags.fourththing.grants</code>. Narrative immunities (sleep, forced movement, cold iron) are descriptive only until the Phase 3 condition-and-flavor engine ships.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "JWDdTWksH0aD4DLf",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.EDEMPYREANTR1PLC",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stormread",
+        "hint": "Gain the Echo-Diver (Empyrean) signature feat: Stormread."
+      }
+    ],
+    "identifier": "echo_diver_empyrean_heritage",
+    "requirements": "Echo-Diver",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Empyrean",
+      "version": "1.0.0-rfi",
+      "date": "2026-04-19",
+      "normalizedFrom": "new-v1.0",
+      "refactorNotes": "RFI Phase 2 port: 7-damage-type canon, Soma Break, Tier, reroll-lowest, attribute-defense DCs."
+    },
+    "fourththing": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Empyrean",
+      "grants": {
+        "resistances": [],
+        "immunities": []
+      }
+    }
+  },
+  "folder": "ktaQ2YC0RiklPjfR",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.5M02XPqIL29B29ms",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "5M02XPqIL29B29ms"
+}

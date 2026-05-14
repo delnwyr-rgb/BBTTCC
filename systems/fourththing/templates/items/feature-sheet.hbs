@@ -1,0 +1,85 @@
+<div class="ft-sheet ft-item-sheet ft-feature-sheet flexcol">
+
+  <header class="ft-item-header flexrow">
+    <div class="ft-item-portrait" data-action="ftEditItemImg" title="Click to change image">
+      <img src="{{item.img}}" alt="{{item.name}}"/>
+    </div>
+    <div class="ft-item-name-block flexcol">
+      <input name="name" type="text" value="{{item.name}}" placeholder="{{typeLabel}} Name"/>
+      {{#if rfiSignature}}
+        <div class="ft-feature-signature"><em>{{rfiSignature}}</em></div>
+      {{/if}}
+      <div class="ft-item-badges">
+        <span class="ft-badge ft-feature-kind-badge">{{typeLabel}}</span>
+        {{#if system.category}}
+          <span class="ft-badge ft-feature-category-badge">{{categoryLabel}}</span>
+        {{/if}}
+        {{#if system.identifier}}
+          <span class="ft-badge ft-feature-ident-badge" title="Identifier">{{system.identifier}}</span>
+        {{/if}}
+        {{#if system.classIdentifier}}
+          <span class="ft-badge ft-feature-ident-badge" title="Path Identifier">{{system.classIdentifier}}</span>
+        {{/if}}
+        {{#each rfiBadges as |b|}}
+          <span class="ft-badge ft-feature-rfi-badge">{{b}}</span>
+        {{/each}}
+      </div>
+    </div>
+  </header>
+
+  <section class="ft-item-body">
+
+    <div class="ft-feature-meta flexrow">
+      <div class="ft-field">
+        <label>Category</label>
+        <input type="text" name="system.category" value="{{system.category}}" placeholder="principle / technique / path / doctrine / ancestry"/>
+      </div>
+      <div class="ft-field">
+        <label>Source</label>
+        <input type="text" name="system.source" value="{{system.source}}" placeholder="e.g. Core, Homebrew"/>
+      </div>
+      {{#if hasIdentifier}}
+      <div class="ft-field">
+        <label>Identifier</label>
+        <input type="text" name="system.identifier" value="{{system.identifier}}" placeholder="machine key"/>
+      </div>
+      {{/if}}
+      {{#if hasClassIdentifier}}
+      <div class="ft-field">
+        <label>Path Identifier</label>
+        <input type="text" name="system.classIdentifier" value="{{system.classIdentifier}}" placeholder="parent path"/>
+      </div>
+      {{/if}}
+    </div>
+
+    <div class="ft-field-full ft-feature-description">
+      <label>Description</label>
+      <div class="ft-feature-description-view">
+        {{#if enrichedDescription}}
+          {{{enrichedDescription}}}
+        {{else}}
+          <p class="ft-feature-description-empty"><em>No description.</em></p>
+        {{/if}}
+      </div>
+      {{#if isEditable}}
+      <details class="ft-feature-description-editor">
+        <summary>Edit description</summary>
+        <prose-mirror name="system.description.value" value="{{system.description.value}}" class="ft-prose-description"></prose-mirror>
+      </details>
+      {{/if}}
+    </div>
+
+    {{#if tagList.length}}
+    <div class="ft-feature-tag-row">
+      <span class="ft-prev-label">Tags</span>
+      {{#each tagList as |tag|}}
+        <span class="ft-manifest-chip">{{tag}}</span>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    {{> "systems/fourththing/templates/partials/item-effects.hbs"}}
+
+  </section>
+
+</div>

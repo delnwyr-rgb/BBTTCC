@@ -1,0 +1,78 @@
+{
+  "name": "Menhirkin (Metamorphic): The Thing You Were",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Menhirkin_Metamorphic.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“The first shape was softer. The second shape remembers.”</em></p><p><strong>The Thing You Were (1/Scene).</strong> As a bonus action, briefly re-surface a trait of your pre-pressure self. Pick one effect; it lasts until the end of your next turn:</p><ul><li><em>Softer</em>: your movement increases by 10 feet and you have advantage on Intrigue checks to squeeze or slip past.</li><li><em>Older</em>: you gain low-light vision 60 feet if you don't already have it, or +30 feet if you do.</li><li><em>Wetter</em>: you become immune to the <em>burning</em> and <em>prone</em> conditions, and difficult terrain does not slow you.</li></ul><p>You cannot pick the same option twice before a Soma Break.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "menhirkin_metamorphic_tier1",
+    "requirements": "Menhirkin (Metamorphic)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "menhirkin",
+      "feature": "the_thing_you_were",
+      "lineage": "Metamorphic",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {}
+  },
+  "folder": "ktaQ2YC0RiklPjfR",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.Y1FZ3Z6RzVQK0YLJ",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "Y1FZ3Z6RzVQK0YLJ"
+}

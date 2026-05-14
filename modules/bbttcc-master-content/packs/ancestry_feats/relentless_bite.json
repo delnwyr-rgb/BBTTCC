@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Mustelid): Relentless Bite",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bite_animal_3.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Mustelid)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You latch onto a problem and refuse to become a footnote.”</em></p>\n        <p><strong>Relentless Bite (1/a Soma Break).</strong> For 1 minute, once per turn when you hit a creature, you can reduce their speed to 0 until the start of their next turn (Violence save resists; DC = 8 + tier [TODO(pb-call)] + Con).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-mustelid-relentless_bite",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "relentless_bite",
+      "clade": "Mustelid",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Mustelid",
+      "normalizedFrom": "Furrykin (Mustelid)"
+    }
+  },
+  "effects": [],
+  "folder": "LjjawKCcw5V0JpZI",
+  "_stats": {
+    "compendiumSource": "Item.UbL9jbCBunI6vYVd",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.UbL9jbCBunI6vYVd",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "UbL9jbCBunI6vYVd",
+  "_srcfile": "fvtt-Item-furrykin-(mustelid)_-relentless-bite-UbL9jbCBunI6vYVd.json"
+}

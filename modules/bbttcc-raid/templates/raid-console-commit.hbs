@@ -1,0 +1,408 @@
+<section class="bbttcc-raid-console vstack" style="gap:.5rem; padding:.5rem;">
+  <!-- Header -->
+  <header class="flexrow" style="gap:.5rem; align-items:center;">
+    {{#if false}}
+      <label class="flex0">Attacker</label>
+      <select class="flex2" data-id="attacker">
+        {{#each attackerOptions}}
+          <option value="{{this.id}}" {{#if (eq ../vm.attackerId this.id)}}selected{{/if}}>{{this.name}}</option>
+        {{/each}}
+      </select>
+
+      <span class="flex1"></span>
+
+      <label class="flex0">Activity</label>
+      <select class="flex1" data-id="activity">
+        {{#each activityOptions}}
+          <option value="{{this.key}}" {{#if (eq ../vm.activityKey this.key)}}selected{{/if}}>{{this.label}}</option>
+        {{/each}}
+      </select>
+
+      <label class="flex0" style="margin-left:.5rem;">Diff</label>
+      <select class="flex0" data-id="difficulty">
+        {{#each difficulties}}
+          <option value="{{this.key}}" {{#if (eq ../vm.difficulty this.key)}}selected{{/if}}>{{this.label}}</option>
+        {{/each}}
+      </select>
+
+      <button class="btn flex0" data-id="pick-hex" title="Pick target on canvas">Pick Target</button>
+      <button class="btn flex0" data-id="add-round">Add Round</button>
+      <button class="btn flex0" data-id="reset">Reset</button>
+
+      <label class="flex0" style="margin-left:.5rem;">
+        <input type="checkbox" data-id="logWar" {{#if vm.logWar}}checked{{/if}}> Log Attacker
+      </label>
+      <label class="flex0">
+        <input type="checkbox" data-id="logDef" {{#if vm.includeDefender}}checked{{/if}}> Log Defender
+      </label>
+    {{else}}
+      <div class="flex1">
+        <div style="font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.9;">Raid Commitments</div>
+        <div style="font-size:.85rem; opacity:.85;">
+          Your Faction: <b>{{default currentBank.attackerName "(none)"}}</b>
+          {{#if vm.activityKey}} • Mode: <b>{{default vm.activityKey "—"}}</b>{{/if}}
+          {{#if vm.targetName}} • Target: <b>{{default vm.targetName "—"}}</b>{{/if}}
+        </div>
+      </div>
+      <div class="flex0" style="opacity:.8; font-size:.85rem;">
+        Waiting for GM to set round type and resolve.
+      </div>
+    {{/if}}
+  </header>
+
+  <!-- Target & Primary Key identity strip -->
+  <div class="bbttcc-raid-ident flexrow" style="gap:.5rem; align-items:center;">
+    <div class="flex2">
+      <span class="bbttcc-pill bbttcc-pill-primary">
+        Target:
+        {{#if vm.targetName}}
+          {{default vm.targetName "—"}}
+        {{else}}
+          —
+        {{/if}}
+      </span>
+    </div>
+    <span class="flex1"></span>
+    <div class="flex0">
+      <span class="bbttcc-pill bbttcc-pill-gold">
+        Primary Key:
+        {{#if currentBank.cat}}
+          {{upper (default currentBank.cat "")}}
+        {{else}}
+          —
+        {{/if}}
+      </span>
+    </div>
+  </div>
+
+  {{#if false}}
+    <!-- Top DC block with breakdown (GM only) -->
+    {{#if currentBank.topDC}}
+    <div class="flexrow" style="gap:.75rem; align-items:center; opacity:.9;">
+      <small class="flex0">
+        <b>Base DC:</b> {{default currentBank.topDC.base 0}}
+        {{#if currentBank.topDC.defProjBonus}} • <b>Defender staged bonus:</b> +{{currentBank.topDC.defProjBonus}}{{/if}}
+        {{#if currentBank.topDC.diff}} • <b>Diff:</b> +{{currentBank.topDC.diff}}{{/if}}
+        {{#if currentBank.topDC.facDef}} • <b>Faction:</b> +{{currentBank.topDC.facDef}}{{/if}}
+        {{#if currentBank.topDC.nextB}} • <b>Next-Raid:</b> +{{currentBank.topDC.nextB}}{{/if}}
+        {{#if currentBank.topDC.projected}}
+          • <b>Projected DC:</b>
+            <span {{#if currentBank.topDC.breakdown}}title="{{currentBank.topDC.breakdown}}"{{/if}} style="font-weight:700;">{{currentBank.topDC.projected}}</span>
+            {{#if currentBank.topDC.breakdown}}<span class="bbttcc-tip" data-tip="{{currentBank.topDC.breakdown}}" aria-label="DC breakdown">ⓘ</span>{{/if}}
+        {{/if}}
+        {{#if currentBank.topDC.breakdown}}
+          <br/><em style="opacity:.8;">{{currentBank.topDC.breakdown}}</em>
+        {{/if}}
+      </small>
+    </div>
+    {{/if}}
+
+    {{#if facilityStatus}}
+    <section class="bbttcc-facility-status"
+             style="margin-top:.5rem; padding:.5rem .75rem; border:1px solid rgba(148,163,184,.4); border-radius:8px; background:rgba(2,6,23,.6);">
+      <h4 style="margin:0 0 .25rem 0; font-size:.9rem; letter-spacing:.05em;">
+        Facility Status
+      </h4>
+
+      <div style="font-size:.85rem;">
+        <b>{{facilityStatus.name}}</b>
+        {{#if facilityStatus.tier}}
+          <span style="opacity:.75;">(Tier {{facilityStatus.tier}}{{#if facilityStatus.size}}, {{upper facilityStatus.size}}{{/if}})</span>
+        {{/if}}
+      </div>
+
+      <div style="margin-top:.15rem; font-size:.85rem;">
+        Status:
+        <b>{{upper facilityStatus.damageState}}</b>
+        <span style="opacity:.75;">
+          ({{facilityStatus.damageStep}} / {{facilityStatus.maxStep}})
+        </span>
+      </div>
+
+      <ul style="margin:.35rem 0 0 .75rem; padding:0; font-size:.8rem;">
+        <li>
+          Defender DC Bonus:
+          <b>+{{facilityStatus.defenderDcBonus}}</b>
+        </li>
+
+        {{#if facilityStatus.maxDefenderUnits}}
+          <li>
+            Max Defenders:
+            <b>{{facilityStatus.maxDefenderUnits}}</b>
+          </li>
+        {{/if}}
+
+        {{#if facilityStatus.attackerExtraOpCost}}
+          <li>
+            Attacker Surcharge:
+            {{#each facilityStatus.attackerExtraOpCost}}
+              {{#if this}}
+                <b>+{{this}} {{upper @key}}</b>
+              {{/if}}
+            {{/each}}
+          </li>
+        {{/if}}
+      </ul>
+    </section>
+    {{/if}}
+
+    <!-- Turn Bank panel (GM sees both) -->
+    <section class="bbttcc-bank grid" style="grid-template-columns: 1fr 1fr; gap:.5rem;">
+      <div class="card" style="padding:.5rem;">
+        <h4 style="margin:0 0 .25rem 0;">Attacker Bank — {{default currentBank.attackerName "(none)"}}</h4>
+        {{#if currentBank.attacker}}
+        <table class="bbttcc-table" style="width:100%;">
+          <thead><tr>
+            <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
+          </tr></thead>
+          <tbody><tr class="center">
+            <td><b>{{currentBank.attacker.violence}}</b></td>
+            <td>{{currentBank.attacker.nonlethal}}</td>
+            <td><b>{{currentBank.attacker.intrigue}}</b></td>
+            <td>{{currentBank.attacker.economy}}</td>
+            <td>{{currentBank.attacker.softpower}}</td>
+            <td>{{currentBank.attacker.diplomacy}}</td>
+            <td>{{currentBank.attacker.logistics}}</td>
+            <td>{{currentBank.attacker.culture}}</td>
+            <td>{{currentBank.attacker.faith}}</td>
+          </tr></tbody>
+        </table>
+        {{else}}<em>No attacker selected.</em>{{/if}}
+      </div>
+
+      <div class="card" style="padding:.5rem;">
+        <h4 style="margin:0 0 .25rem 0;">Defender Bank — {{default currentBank.defenderName "(none)"}}</h4>
+        {{#if currentBank.hasDef}}
+        <table class="bbttcc-table" style="width:100%;">
+          <thead><tr>
+            <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
+          </tr></thead>
+          <tbody><tr class="center">
+            <td><b>{{currentBank.defender.violence}}</b></td>
+            <td>{{currentBank.defender.nonlethal}}</td>
+            <td><b>{{currentBank.defender.intrigue}}</b></td>
+            <td>{{currentBank.defender.economy}}</td>
+            <td>{{currentBank.defender.softpower}}</td>
+            <td>{{currentBank.defender.diplomacy}}</td>
+            <td>{{currentBank.defender.logistics}}</td>
+            <td>{{currentBank.defender.culture}}</td>
+            <td>{{currentBank.defender.faith}}</td>
+          </tr></tbody>
+        </table>
+        {{else}}<em>No defender (unclaimed hex).</em>{{/if}}
+      </div>
+    </section>
+  {{else}}
+    <!-- Player view bank panel (only your bank) -->
+    <section class="bbttcc-bank" style="margin-top:.25rem;">
+      <div class="card" style="padding:.5rem;">
+        <h4 style="margin:0 0 .25rem 0;">Your Bank — {{default currentBank.attackerName "(none)"}}</h4>
+        {{#if currentBank.attacker}}
+        <table class="bbttcc-table" style="width:100%;">
+          <thead><tr>
+            <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
+          </tr></thead>
+          <tbody><tr class="center">
+            <td><b>{{currentBank.attacker.violence}}</b></td>
+            <td>{{currentBank.attacker.nonlethal}}</td>
+            <td><b>{{currentBank.attacker.intrigue}}</b></td>
+            <td>{{currentBank.attacker.economy}}</td>
+            <td>{{currentBank.attacker.softpower}}</td>
+            <td>{{currentBank.attacker.diplomacy}}</td>
+            <td>{{currentBank.attacker.logistics}}</td>
+            <td>{{currentBank.attacker.culture}}</td>
+            <td>{{currentBank.attacker.faith}}</td>
+          </tr></tbody>
+        </table>
+        {{else}}<em>No faction selected.</em>{{/if}}
+      </div>
+    </section>
+  {{/if}}
+
+  <!-- Rounds -->
+  <section class="bbttcc-rounds">
+    <table class="bbttcc-table" style="width:100%;">
+      <thead>
+        <tr>
+          <th style="text-align:left;">Round</th>
+          <th>Activity</th>
+          <th>+Key</th>
+          <th>Target</th>
+          <th>{{#if isGM}}Roll{{else}}Status{{/if}}</th>
+          <th>{{#if isGM}}DC{{else}}—{{/if}}</th>
+          <th>{{#if isGM}}Outcome{{else}}—{{/if}}</th>
+          <th class="center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#if hasRounds}}
+          {{#each vm.rounds as |r idx|}}
+            <tr data-idx="{{idx}}">
+              <td style="text-align:left;"><strong>#{{add idx 1}}</strong></td>
+              <td class="center">{{default r.activityLabel (default r.activityKey "—")}}</td>
+              <td class="center">+{{default r.attBonus 0}} <small>({{upper (default r.key "")}})</small></td>
+              <td class="center">{{default r.targetName "—"}}</td>
+
+              {{#if isGM}}
+                <td class="center">{{#if r.roll}}<code>{{r.roll.result}}</code> = <b>{{r.total}}</b>{{else}}—{{/if}}</td>
+                <td class="center">
+                  {{#if r.dcFinal}}
+                    {{#if r.meta.dcBreakdown}}
+                      <b data-tooltip="DC {{r.dcFinal}} = Defender roll {{r.meta.dcBreakdown.defRollText}} | bonus +{{r.meta.dcBreakdown.defBonus}} (HexDef {{r.meta.dcBreakdown.hexBase}} · Holdings +{{r.meta.dcBreakdown.holdings}} · Roster +{{r.meta.dcBreakdown.roster}} · Stage +{{r.meta.dcBreakdown.stage}} · DiffAdj {{r.meta.dcBreakdown.diffAdj}} · DiffOffset {{r.meta.dcBreakdown.diffOffset}} · DefExtra {{r.meta.dcBreakdown.defExtra}} · DefMan +{{r.meta.dcBreakdown.defManBonus}})">{{r.dcFinal}}</b>
+                    {{else}}
+                      <b>{{r.dcFinal}}</b>
+                    {{/if}}
+                    <br/><small>Final</small>
+                  {{else}}
+                    {{#if r.view.dcProjected}}
+                      <b {{#if r.view.breakdown}}title="{{r.view.breakdown}}"{{/if}}>{{r.view.dcProjected}}</b>
+                      {{#if r.view.breakdown}}<span class="bbttcc-tip" data-tip="{{r.view.breakdown}}" aria-label="DC breakdown">ⓘ</span>{{/if}}
+                      <br/><small>Projected</small>
+                    {{else}}
+                      {{r.DC}}
+                    {{/if}}
+                  {{/if}}
+                </td>
+                <td class="center">{{default r.outcome "—"}}</td>
+              {{else}}
+                <td class="center">
+                  {{#if r.committed}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if (eq r.open false)}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if r.dcFinal}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}{{#if r.total}}<span style="opacity:.9;"><b>Resolved</b></span>{{else}}<span style="opacity:.8;">Draft</span>{{/if}}{{/if}}{{/if}}{{/if}}
+                </td>
+                <td class="center">—</td>
+                <td class="center">—</td>
+              {{/if}}
+
+              <td class="center">
+                {{#if isGM}}
+                  <button class="btn" data-act="post">Post</button>
+                  <button class="btn" data-act="copy">Copy</button>
+                  <button class="btn" data-act="manage">Manage</button>
+                  <button class="btn" data-act="del">✕</button>
+                {{else}}
+                  <button class="btn" data-act="manage">Open</button>
+                {{/if}}
+              </td>
+            </tr>
+
+                        <tr data-idx="{{idx}}" data-manage-idx="{{idx}}" class="bbttcc-commit-manage-row" style="display:none;">
+              <td colspan="8">
+                <div class="bbttcc-commit-manage-slot" data-manage-slot="{{idx}}"></div>
+                <div class="flexrow" style="gap:1rem;">
+                  <!-- Manage -->
+                  <div class="flex2 card" style="padding:.5rem;">
+                    <h4 style="margin:0 0 .25rem 0;">{{#if isGM}}Manage Spend{{else}}Your Commitments{{/if}} — Key: {{upper r.view.cat}}</h4>
+
+                    <div class="grid" style="grid-template-columns: {{#if isGM}}1fr 1fr{{else}}1fr{{/if}}; gap:.5rem;">
+                      <div>
+                        <h5 style="margin:.25rem 0;">{{#if isGM}}Attacker{{else}}Your Faction{{/if}} — {{r.view.attackerName}}</h5>
+                        <p style="margin:.25rem 0;">
+                          Bank: <b>{{lookup r.view.bankAtt r.view.cat}}</b> •
+                          Staged: <b>{{default (lookup r.view.staged.att r.view.cat) 0}}</b> •
+                          Remaining: <b>{{r.view.remainA}}</b>
+                        </p>
+                        <div class="btnset" style="display:flex; gap:.25rem;">
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="-1">−1</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+1">+1</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+5">+5</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
+                        </div>
+                      </div>
+
+                      {{#if isGM}}
+                        {{#if r.view.hasDef}}
+                        <div>
+                          <h5 style="margin:.25rem 0;">Defender — {{r.view.defenderName}}</h5>
+                          <p style="margin:.25rem 0;">
+                            Bank: <b>{{lookup r.view.bankDef r.view.cat}}</b> •
+                            Staged: <b>{{default (lookup r.view.staged.def r.view.cat) 0}}</b> •
+                            Remaining: <b>{{r.view.remainD}}</b>
+                          </p>
+                          <div class="btnset" style="display:flex; gap:.25rem;">
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="-1">−1</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+1">+1</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+5">+5</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
+                          </div>
+                        </div>
+                        {{/if}}
+                      {{/if}}
+                    </div>
+
+                    {{#if isGM}}
+                      <div style="margin-top:.5rem;">
+                        <small>
+                          Base DC: <b>{{r.DC}}</b>
+                          {{#if r.view.defProjBonus}} • Defender staged bonus: <b>+{{r.view.defProjBonus}}</b>{{/if}}
+                          {{#if r.view.diff}} • Diff: <b>+{{r.view.diff}}</b>{{/if}}
+                          {{#if r.view.facDef}} • Faction: <b>+{{r.view.facDef}}</b>{{/if}}
+                          {{#if r.view.nextB}} • Next-Raid: <b>+{{r.view.nextB}}</b>{{/if}}
+                          {{#if r.view.dcProjected}}
+                            • <i>Projected DC</i>: <b {{#if r.view.breakdown}}title="{{r.view.breakdown}}"{{/if}}>{{r.view.dcProjected}}</b>
+                            {{#if r.view.breakdown}}<span class="bbttcc-tip" data-tip="{{r.view.breakdown}}" aria-label="DC breakdown">ⓘ</span>{{/if}}
+                          {{/if}}
+                          {{#if r.dcFinal}}
+                            • <i>Final DC</i>: <b>{{r.dcFinal}}</b>
+                          {{/if}}
+                        </small>
+                        {{#if r.view.breakdown}}
+                        <div><em style="opacity:.8;">{{r.view.breakdown}}</em></div>
+                        {{/if}}
+                      </div>
+                    {{else}}
+                      <div style="margin-top:.5rem; opacity:.85;">
+                        <small><em>Hidden info:</em> enemy staged points, defender bank, and resolution math are GM-only.</small>
+                      </div>
+                    {{/if}}
+
+                    <!-- Maneuvers container -->
+                    <div class="bbttcc-mans-cell" style="margin-top:.5rem;"></div>
+
+                    <div class="flexrow" style="gap:.5rem; margin-top:.5rem;">
+                      {{#if isGM}}
+                        <button class="btn" data-manage-act="commit">Commit (Roll)</button>
+                        <button class="btn" data-manage-act="cancel">Cancel</button>
+                        <button class="btn" data-manage-act="close">Close</button>
+                        <div class="flex1"></div>
+                        <div class="btnset" style="display:flex; gap:.25rem;">
+                          <button class="btn" data-manage-act="diff" data-delta="-5">Diff −5</button>
+                          <button class="btn" data-manage-act="diff" data-delta="-1">−1</button>
+                          <button class="btn" data-manage-act="diff" data-delta="+1">+1</button>
+                          <button class="btn" data-manage-act="diff" data-delta="+5">+5</button>
+                        </div>
+                      {{else}}
+                                                <button class="btn" data-manage-act="close">Close</button>
+                        <div class="flex1"></div>
+                        <small style="opacity:.8; align-self:center;">GM resolves.</small>
+                      {{/if}}
+                    </div>
+                  </div>
+
+                  <div class="flex1 card" style="padding:.5rem;">
+                    <h4 style="margin:0 0 .25rem 0;">{{#if isGM}}Round Details{{else}}Details{{/if}}</h4>
+                    <p style="margin:.25rem 0;"><b>Activity:</b> {{default r.activityLabel (default r.activityKey "—")}} • <b>Primary Key:</b> {{upper r.view.cat}}</p>
+                    <p style="margin:.25rem 0;"><b>Your Faction:</b> {{r.attackerName}}</p>
+                    <p style="margin:.25rem 0;"><b>Target:</b> {{r.targetName}}</p>
+                    {{#if isGM}}
+                      <p style="margin:.25rem 0;"><b>Base Bonus:</b> +{{r.attBonus}} • <b>Base DC:</b> {{r.DC}}</p>
+                      <p style="margin:.25rem 0;"><i>Attack bonus on commit</i> will be <b>+ceil(attacker_staged/2)</b>.</p>
+                      <p style="margin:.25rem 0;"><i>DC increase on commit</i> will be <b>+ceil(defender_staged/2)</b>.</p>
+                    {{else}}
+                      <p style="margin:.25rem 0;"><i>Your staged spend</i> informs your side’s commitment.</p>
+                      <p style="margin:.25rem 0;"><i>Enemy info</i> and final outcome are GM-only.</p>
+                    {{/if}}
+                  </div>
+                </div>
+              </td>
+            </tr>
+{{/each}}
+        {{else}}
+          {{#if isGM}}
+            <tr><td colspan="8" class="center"><em>No rounds yet — select Attacker, pick a Target, choose Activity, then Add Round.</em></td></tr>
+          {{else}}
+            <tr><td colspan="8" class="center"><em>No active rounds yet. The GM will set up the exchange; then you’ll stage + pick maneuvers until the GM resolves the round.</em></td></tr>
+          {{/if}}
+        {{/if}}
+      </tbody>
+    </table>
+  </section>
+</section>

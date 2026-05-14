@@ -1,0 +1,47 @@
+{{!-- modules/bbttcc-factions/templates/rig-config-app.hbs --}}
+{{!-- RETIRED 2026-05-08 — replaced by Rig actor sheet in fourththing system. --}}
+{{!-- Original 219-line form preserved at rig-config-app.hbs.legacy-2026-05-08 --}}
+
+<form class="bbttcc-rig-config-shim" autocomplete="off" style="height:100%;display:flex;flex-direction:column;min-height:0;padding:1rem;">
+  <div class="bbttcc-card" style="padding:1rem;border:1px solid #d4a35f;background:rgba(212,163,95,0.08);border-radius:6px;">
+
+    <h2 style="margin-top:0;color:#ffd28a;">Rig Config — Retired</h2>
+
+    <p style="line-height:1.5;">
+      This authoring UI was retired in the
+      <strong>2026-05-07 Rig &amp; Boss Modernization Sprint</strong>.
+      Rigs and facilities are now first-class <strong>Actor</strong>s in the
+      <code>fourththing</code> system — with tabbed sheets, real gear catalog,
+      crew piloting, deployable tokens, and mobility-coded visuals.
+    </p>
+
+    <p style="line-height:1.5;color:#bbb;font-size:0.85rem;">
+      Existing legacy rig data on this faction (<code>flags.bbttcc-factions.rigs[]</code>)
+      is preserved read-only as audit. The buttons below open the new authoring path.
+    </p>
+
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;">
+      <button type="button" class="bbttcc-button primary" data-ft-shim-action="create-rig" style="padding:.5rem .9rem;">
+        <i class="fas fa-plus"></i>&nbsp;Create New Rig Actor
+      </button>
+      <button type="button" class="bbttcc-button" data-ft-shim-action="open-actors-rigs" style="padding:.5rem .9rem;">
+        <i class="fas fa-list"></i>&nbsp;Open Actors Directory
+      </button>
+      <button type="button" class="bbttcc-button" data-ft-shim-action="show-legacy" style="padding:.5rem .9rem;">
+        <i class="fas fa-archive"></i>&nbsp;Show Legacy Audit Data
+      </button>
+    </div>
+
+    <details style="margin-top:1rem;">
+      <summary style="cursor:pointer;color:#d4a35f;">What changed?</summary>
+      <ul style="line-height:1.6;color:#ccc;font-size:0.85rem;">
+        <li><strong>Rig actor type</strong> — unified with <code>mobility: stationary | mobile | hybrid</code>. A stationary rig <em>is</em> a facility.</li>
+        <li><strong>Crew piloting</strong> — board/disembark via token HUD, pilot/gunner/engineer/crew slots, frame-defined actions per role.</li>
+        <li><strong>Real gear catalog</strong> — frames, weapons, systems, output modules drag onto the rig from <code>bbttcc-master-content.items</code>.</li>
+        <li><strong>Mad Max/Jabba canon</strong> — War Rigs, Sail Barges, Forge Facilities, Garrisons, personal speeders + bikes.</li>
+        <li><strong>Token visual canon</strong> — mobility-coded corner brackets, boarded count badge, deploy/recall to scene.</li>
+      </ul>
+    </details>
+
+  </div>
+</form>

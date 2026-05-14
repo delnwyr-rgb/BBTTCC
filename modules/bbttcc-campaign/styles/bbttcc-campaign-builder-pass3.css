@@ -1,0 +1,119 @@
+/* BBTTCC Campaign Builder UI Polish — Pass 3
+ * - Beats toolbar (filters)
+ * - Sticky table header wrapper
+ * - Action clustering + overflow menu
+ */
+
+.bbttcc-campaign-builder .bbttcc-beats-header-polish {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.bbttcc-campaign-builder .bbttcc-beats-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.bbttcc-campaign-builder .bbttcc-beats-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bbttcc-campaign-builder .bbttcc-beats-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bbttcc-campaign-builder .bbttcc-input-sm,
+.bbttcc-campaign-builder .bbttcc-select-sm {
+  height: 30px;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.bbttcc-campaign-builder .bbttcc-table-wrap-sticky {
+  max-height: 320px;
+  overflow: auto;
+  border-radius: 12px;
+}
+
+.bbttcc-campaign-builder .bbttcc-table-wrap-sticky thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.bbttcc-campaign-builder .bbttcc-col-actions {
+  width: 210px;
+}
+
+.bbttcc-campaign-builder .bbttcc-actions-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bbttcc-campaign-builder .bbttcc-btn-xs {
+  padding: 2px 8px;
+  height: 26px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.bbttcc-campaign-builder .bbttcc-actions-menu {
+  position: relative;
+}
+
+.bbttcc-campaign-builder .bbttcc-actions-menu > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 10px;
+  user-select: none;
+}
+
+.bbttcc-campaign-builder .bbttcc-actions-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.bbttcc-campaign-builder .bbttcc-actions-menu[open] > summary {
+  opacity: 0.9;
+}
+
+.bbttcc-campaign-builder .bbttcc-actions-menu-pop {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  min-width: 150px;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  background: rgba(20, 22, 28, 0.98);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 5;
+}
+
+.bbttcc-campaign-builder .bbttcc-actions-menu-pop .bbttcc-link-button {
+  text-align: left;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.bbttcc-campaign-builder .bbttcc-chip-type {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  opacity: 0.95;
+}

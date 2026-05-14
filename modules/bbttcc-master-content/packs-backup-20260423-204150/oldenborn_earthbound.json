@@ -1,0 +1,88 @@
+{
+  "name": "Oldenborn Heritage: Earthbound",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_Earthbound_2.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Oldenborn (Earthbound)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Earthbound).</strong> You are a diminished god-fragment, an ancestor-spirit, a genius loci clawing back into embodiment. Folk might call you an elf, a dwarf, a sylph, a goblin—because mortals label what scares them. But you know the truth: you are a place-soul wearing legs.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Fey).</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Ability Scores.</strong> Oldenborn does not grant fixed ability score bonuses; your background handles increases. Your lineage leans toward <strong>CON</strong> in fiction and mechanics via Tier powers.</li></ul><h3>Oldenborn Core</h3><p>At character creation, you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered).</p><h3>Earthbound Tier Powers</h3><p>You gain your Tier I power at creation, then additional Tier powers as you level (5/11/17). These are granted as features and are intentionally light on automation—BBTTCC loves table truth more than rules-lawyering.</p><p><strong>Important:</strong> This species JSON ships with <em>placeholder UUIDs</em> in its ItemGrant advancements. After you import the feat JSONs, you’ll swap these to real UUIDs (or run a wiring macro). This mirrors your existing BBTTCC ancestry workflow.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "403da93fc825495a",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.NcdtEpyIccITrdWC",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Earthbound Tier I",
+        "hint": "Gain your Earthbound Tier I power."
+      }
+    ],
+    "identifier": "oldenborn_earthbound_heritage",
+    "requirements": "Oldenborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "oldenborn",
+      "lineage": "Earthbound",
+      "version": "1.0.0",
+      "date": "2026-01-06",
+      "normalizedFrom": "species"
+    }
+  },
+  "folder": "HhpjDHfff6x5Likf",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.ExCdKw5rxD2O7sEN",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1773192856451,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "ExCdKw5rxD2O7sEN",
+  "_srcfile": "fvtt-Item-oldenborn-(earthbound)-ExCdKw5rxD2O7sEN.json"
+}

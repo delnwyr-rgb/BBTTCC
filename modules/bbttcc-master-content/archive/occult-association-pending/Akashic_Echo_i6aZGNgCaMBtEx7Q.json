@@ -1,0 +1,147 @@
+{
+  "name": "Akashic Echo",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wave_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“Your magic is the sound of the universe flipping back three pages and saying, ‘Actually…’”</em></p><p><strong>Chaos Origin:</strong> Akashic Echo</p><p>You draw power from the Akashic layer—the Great Storehouse of Images, the record of every story that ever mattered enough to leave an imprint.</p><p>Akashic Echo specializes in repetition, reroutes, palimpsests, and retcons: magic that feels like déjà vu, second drafts, and the world correcting itself mid-sentence.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "identifier": "akashic_echo",
+    "classIdentifier": "chaos_magician",
+    "advancement": {
+      "mk3cGYP0iGGxhQ4G": {
+        "_id": "mk3cGYP0iGGxhQ4G",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.cDfO4QzVs8gCv2DP",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "title": "Echo Index",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "JwT5Hq6I4de5dwE5": {
+        "_id": "JwT5Hq6I4de5dwE5",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.nQGwf5wxhffD1dSX",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "title": "Fated Reroute",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "Ppl0drcdrnPHCf0j": {
+        "_id": "Ppl0drcdrnPHCf0j",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Imu8Lc8mDsocxh1B",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "title": "Memory Palimpsest",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "7rBXT5MwGuse94ec": {
+        "_id": "7rBXT5MwGuse94ec",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.DiBjOMb23PTjACVA",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "title": "Retcon Step",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "sxe184pTmR90R7CL": {
+        "_id": "sxe184pTmR90R7CL",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.3JOHyhz2n6zM0M02",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 17,
+        "title": "Archive Break",
+        "value": {},
+        "flags": {},
+        "hint": ""
+      }
+    },
+    "spellcasting": {
+      "progression": "full",
+      "ability": "cha",
+      "preparation": {
+        "formula": ""
+      }
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "chaosMagicianSubclass": "akashic_echo"
+    }
+  },
+  "effects": [],
+  "folder": "AMiH4fOG6ZYfJ68j",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191239585,
+    "modifiedTime": 1775063136034,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "i6aZGNgCaMBtEx7Q",
+  "sort": 325000,
+  "_key": "!items!i6aZGNgCaMBtEx7Q"
+}

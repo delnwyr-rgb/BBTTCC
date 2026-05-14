@@ -1,0 +1,77 @@
+{
+  "name": "Qliph-Scarred (Chthonic): What the Deep Dark Taught You",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heritage.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Heritage Signature (RFI v1.0).</strong></p><p><em>&ldquo;Underworld Passage.&rdquo;</em></p><p><strong>What the Deep Dark Taught You.</strong> 1/Soma Break, as a bonus action: sink partway into shadow, stone, or earth for up to one minute. While sunken: <strong>reroll-lowest</strong> on Stealth; ignore extra movement cost from difficult terrain; fit through gaps as small as one foot across; you take half qliphothic damage (narrative &mdash; GM enforces, no engine grant). The passage ends early if you are submerged in running water or take sephirotic damage.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "qliph_scarred-chthonic-what_the_deep_dark_taught_you",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Qliph-Scarred (Chthonic)",
+    "type": {
+      "value": "",
+      "subtype": "heritageSignature"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "heritageSignature",
+      "feature": "what_the_deep_dark_taught_you",
+      "family": "qliph_scarred",
+      "lineage": "Chthonic",
+      "version": "1.0.0-rfi"
+    },
+    "fourththing": {
+      "kind": "heritageSignature",
+      "feature": "what_the_deep_dark_taught_you",
+      "family": "qliph_scarred",
+      "lineage": "Chthonic"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.QLCHTHONICTR1PLC",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "QLCHTHONICTR1PLC"
+}

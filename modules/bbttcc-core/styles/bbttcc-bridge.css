@@ -1,0 +1,31 @@
+/* Optional CSS stub for BBTTCC Bridge. Most styling comes from your Hex Chrome CSS. */
+
+/* ── HexChrome — global font for the BBTTCC / RFI / Bad Eden stack ─────────── */
+/* Registers the BBTTCC Display face once for the whole ecosystem and applies
+ * it to any element under a BBTTCC-scoped container. Colors, sizes, weights,
+ * glow, spacing etc. remain whatever each module's own stylesheet declares —
+ * we only swap the typeface. !important is used so this wins regardless of
+ * module load order. Weight range 100–900 means any `font-weight: X` value
+ * anywhere in the ecosystem will still resolve to this face instead of
+ * falling back to system-ui. */
+@font-face {
+  font-family: "BBTTCC Display";
+  src: url("../fonts/bbttcc-display/BBTTCC-Display.woff2") format("woff2"),
+       url("../fonts/bbttcc-display/BBTTCC-Display.woff")  format("woff"),
+       url("../fonts/bbttcc-display/BBTTCC-Display.ttf")   format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* BBTTCC Display globally disabled while the typeface is being tweaked.
+ * The @font-face above stays registered so the font is still selectable in
+ * journals/scene text via Foundry's font picker, but the BBTTCC ecosystem
+ * UI now falls back to Foundry's default content font.
+ * To re-enable across all BBTTCC interfaces, restore the rule below. */
+/*
+[class*="bbttcc-"],
+[class*="bbttcc-"] * {
+  font-family: "BBTTCC Display", system-ui, "Helvetica Neue", Arial, sans-serif !important;
+}
+*/

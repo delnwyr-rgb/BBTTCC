@@ -1,0 +1,906 @@
+{
+  "generatedAt": "2026-04-25T21:54:46.805Z",
+  "source": "/Users/gamingaccount/Desktop/Desktop - Mac mini/Shattered Lens Studios/BBTTCC4TAssets/BBTTCC Character Options JSONS",
+  "paths": {
+    "Breaker": {
+      "kind": "class",
+      "label": "Breaker",
+      "parents": [
+        "Breaker"
+      ],
+      "levels": {
+        "Breaker: Architect of Endings": 17,
+        "Breaker: Breaker’s Eye": 6,
+        "Breaker: Catastrophic Entry": 13,
+        "Breaker: Certified Structural Menace": 1,
+        "Breaker: Demolition Plan": 3,
+        "Breaker: Fortress of One": 15,
+        "Breaker: Improved Living Rampart": 10,
+        "Breaker: Living Demolition": 20,
+        "Breaker: Reinforced Psyche": 9,
+        "Breaker: Rubble Runner": 2,
+        "Breaker: Ruin to Renewal": 11,
+        "Breaker: Shockwave Footing": 7,
+        "Breaker: Siege Cost Accountant": 5,
+        "Breaker: Siege Engine Whisperer": 18,
+        "Breaker: Extra Attack": 5
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 15,
+        "unresolved": 3,
+        "samples": [
+          {
+            "file": "Breaker Style- Breach Stance.json",
+            "name": "Breaker Style: Breach Stance"
+          },
+          {
+            "file": "Breaker Style- Iron Bulwark.json",
+            "name": "Breaker Style: Iron Bulwark"
+          },
+          {
+            "file": "Breaker Style- Piledriver.json",
+            "name": "Breaker Style: Piledriver"
+          }
+        ]
+      }
+    },
+    "Dreamwalker": {
+      "kind": "class",
+      "label": "Dreamwalker",
+      "parents": [
+        "Dreamwalker"
+      ],
+      "levels": {
+        "Dream-Sense": 1,
+        "Apotheosis of the Oneiric": 20,
+        "Ascension Layer": 17,
+        "Dream Echo Reservoir": 13,
+        "Dream Rite": 5,
+        "Dream Stability": 6,
+        "Dreamer’s Poise": 9,
+        "Fractal Self": 18,
+        "Mnemonic Spillway": 14,
+        "Omen-Thread Weaving": 10,
+        "Symbolic Cartography": 7,
+        "Vision of the Great Work": 11,
+        "Waking Dreamfield": 15,
+        "Initiate of the Great Work": 1
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 14,
+        "unresolved": 4,
+        "samples": [
+          {
+            "file": "Dreamwalker – Dream-Thread Tuning.json",
+            "name": "Dream-Thread Tuning"
+          },
+          {
+            "file": "Lucid Step.json",
+            "name": "Lucid Step"
+          },
+          {
+            "file": "Oneiric Pulse.json",
+            "name": "Oneiric Pulse"
+          },
+          {
+            "file": "Shared Dreamwork.json",
+            "name": "Shared Dreamwork"
+          }
+        ]
+      }
+    },
+    "Harmony Marshall": {
+      "kind": "class",
+      "label": "Harmony Marshall",
+      "parents": [
+        "Harmony Marshal",
+        "Harmony Marshal"
+      ],
+      "levels": {
+        "Harmony Marshal: Tier 1 — Harmony Initiate": 1,
+        "Harmony Marshal: Tier 2 — Attrition Easer": 6,
+        "Harmony Marshal: Tier 3 — Loyalty Steward": 11,
+        "Harmony Marshal: Tier 4 — Unity Conductor": 16
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 4,
+        "unresolved": 13,
+        "samples": [
+          {
+            "file": "Coordinated Advance.json",
+            "name": "Coordinated Advance"
+          },
+          {
+            "file": "Crisis Mediator.json",
+            "name": "Crisis Mediator"
+          },
+          {
+            "file": "Diplomatic Immunity.json",
+            "name": "Diplomatic Immunity"
+          },
+          {
+            "file": "Emissary of the Great Accord (Capstone).json",
+            "name": "Emissary of the Great Accord"
+          },
+          {
+            "file": "Extra Attack (Harmony Marshal).json",
+            "name": "Extra Attack (Harmony Marshal)"
+          }
+        ]
+      }
+    },
+    "Phantom Courier": {
+      "kind": "class",
+      "label": "Phantom Courier",
+      "parents": [
+        "Phantom Courier"
+      ],
+      "levels": {
+        "Phantom Courier: Tier 1 — Phase-Slip Initiate": 1,
+        "Phantom Courier: Tier 2 — Operation Ghost Dividend": 6,
+        "Phantom Courier: Tier 3 — Evasive Echo": 11,
+        "Phantom Courier: Tier 4 — Dimensional Flicker": 16
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 4,
+        "unresolved": 21,
+        "samples": [
+          {
+            "file": "Between-the-Moments.json",
+            "name": "Between-the-Moments"
+          },
+          {
+            "file": "Blinkstep Feint.json",
+            "name": "Blinkstep Feint"
+          },
+          {
+            "file": "Courier’s Dash.json",
+            "name": "Courier's Dash"
+          },
+          {
+            "file": "Courier’s Resilience.json",
+            "name": "Courier's Resilience"
+          },
+          {
+            "file": "Dead Drop Specialist.json",
+            "name": "Dead Drop Specialist"
+          }
+        ]
+      }
+    },
+    "Soul Smith": {
+      "kind": "class",
+      "label": "Soul Smith",
+      "parents": [
+        "Soul-Smith"
+      ],
+      "levels": {
+        "Soul-Smith: Tier 1 — Sanctified Forge Initiate": 1,
+        "Soul-Smith: Tier 2 — Atonement Crucible": 6,
+        "Soul-Smith: Tier 3 — Furnace of Renewal": 11,
+        "Soul-Smith: Tier 4 — Relic of Rebirth": 16
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 4,
+        "unresolved": 21,
+        "samples": [
+          {
+            "file": "Alloy of Trust.json",
+            "name": "Alloy of Trust"
+          },
+          {
+            "file": "Anvil of Refuge.json",
+            "name": "Anvil of Refuge"
+          },
+          {
+            "file": "Bastion-Shell Plating.json",
+            "name": "Bastion-Shell Plating"
+          },
+          {
+            "file": "Ember of Restoration.json",
+            "name": "Ember of Restoration"
+          },
+          {
+            "file": "Forge-Blessed Tools.json",
+            "name": "Forge-Blessed Tools"
+          }
+        ]
+      }
+    },
+    "Wyrdlens Adept": {
+      "kind": "class",
+      "label": "Wyrdlens Adept",
+      "parents": [
+        "Wyrdlens Adept"
+      ],
+      "levels": {
+        "Wyrdlens Adept: Tier 1 — Shattered Algorithm Initiate": 1,
+        "Wyrdlens Adept: Tier 2 — Identification Overclock": 6,
+        "Wyrdlens Adept: Tier 4 — Nonviolent Spark Harvest": 16
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 3,
+        "unresolved": 22,
+        "samples": [
+          {
+            "file": "Anomaly Backtrace.json",
+            "name": "Anomaly Backtrace"
+          },
+          {
+            "file": "Archivist of the Fracture.json",
+            "name": "Archivist of the Fracture"
+          },
+          {
+            "file": "Causal Spine Trace.json",
+            "name": "Causal Spine Trace"
+          },
+          {
+            "file": "Cognitive Sandbox.json",
+            "name": "Cognitive Sandbox"
+          },
+          {
+            "file": "Error Budget Accounting.json",
+            "name": "Error Budget Accounting"
+          }
+        ]
+      }
+    },
+    "cosmic_linguist": {
+      "kind": "class",
+      "label": "cosmic_linguist",
+      "parents": [
+        "Annotator (BBTTCC)",
+        "Cosmic Linguist",
+        "Metaphor Apostle (BBTTCC)",
+        "Syntax Warden (BBTTCC)",
+        "The Redactor (BBTTCC)"
+      ],
+      "levels": {},
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 0,
+        "unresolved": 28,
+        "samples": [
+          {
+            "file": "fvtt-Item-annotator_-circle-discipline-zoepU5NLs3DyKtiY.json",
+            "name": "Annotator: Circle Discipline"
+          },
+          {
+            "file": "fvtt-Item-annotator_-correspondence-mastery-rOs07Ok3ScQGoJWQ.json",
+            "name": "Annotator: Correspondence Mastery"
+          },
+          {
+            "file": "fvtt-Item-annotator_-great-work-rite-xZKRZBpccpSzMPau.json",
+            "name": "Annotator: Great Work Rite"
+          },
+          {
+            "file": "fvtt-Item-annotator_-ritual-annotation-aIw8v94NHWDQqs3H.json",
+            "name": "Annotator: Ritual Annotation"
+          },
+          {
+            "file": "fvtt-Item-annotator_-ritual-upgrade-J28PETcHFnsTrO4Y.json",
+            "name": "Annotator: Ritual Upgrade"
+          }
+        ]
+      }
+    }
+  },
+  "doctrines": {
+    "Path of the Faultline": {
+      "kind": "doctrine",
+      "label": "Path of the Faultline",
+      "parents": [
+        "Path of the Faultline (BBTTCC)"
+      ],
+      "levels": {
+        "OP Shear (BBTTCC)": 3
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 1,
+        "unresolved": 5,
+        "samples": [
+          {
+            "file": " Level 3 — Find the Fault.json",
+            "name": "Find the Fault"
+          },
+          {
+            "file": "🌉 Level 14 — Pancake the Span.json",
+            "name": "Pancake the Span"
+          },
+          {
+            "file": "🌋 Level 18 — Faultline Cataclysm (Capstone).json",
+            "name": "Faultline Cataclysm"
+          },
+          {
+            "file": "🛡️ Level 10 — Breach Rhythm.json",
+            "name": "Breach Rhythm"
+          },
+          {
+            "file": "🧱 Level 6 — Controlled Collapse.json",
+            "name": "Controlled Collapse"
+          }
+        ]
+      }
+    },
+    "Pth of the Gentle Demolition": {
+      "kind": "doctrine",
+      "label": "Pth of the Gentle Demolition",
+      "parents": [
+        "Path of the Gentle Demolition (BBTTCC)"
+      ],
+      "levels": {},
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 0,
+        "unresolved": 6,
+        "samples": [
+          {
+            "file": "💚💣 Level 18 — Peacekeeper’s Detonation (Capstone).json",
+            "name": "Peacekeeper's Detonation"
+          },
+          {
+            "file": "💥 Level 3 — Non-Lethal Blast (BBTTCC).json",
+            "name": "Non-Lethal Blast (BBTTCC)"
+          },
+          {
+            "file": "🕸️ Level 6 — Shock Net.json",
+            "name": "Shock Net"
+          },
+          {
+            "file": "🛟 Level 10 — Rescue Lane.json",
+            "name": "Rescue Lane"
+          },
+          {
+            "file": "🤫 Level 14 — Silence the Boom.json",
+            "name": "Silence the Boom"
+          }
+        ]
+      }
+    },
+    "Pth of the Siege Ascendant": {
+      "kind": "doctrine",
+      "label": "Pth of the Siege Ascendant",
+      "parents": [
+        "Path of the Siege Ascendant (BBTTCC)"
+      ],
+      "levels": {},
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 0,
+        "unresolved": 6,
+        "samples": [
+          {
+            "file": "🌀 Level 14 — Momentum of Ruin.json",
+            "name": "Momentum of Ruin"
+          },
+          {
+            "file": "🐏 Level 3 — Ramrunner Stance.json",
+            "name": "Ramrunner Stance"
+          },
+          {
+            "file": "👑💥 Level 18 — Crown of the Siege (Capstone).json",
+            "name": "Crown of the Siege"
+          },
+          {
+            "file": "💥 Level 3 — Siege Ascendant (BBTTCC).json",
+            "name": "Siege Ascendant (BBTTCC)"
+          },
+          {
+            "file": "🧱 Level 6 — Echo Breach.json",
+            "name": "Echo Breach"
+          }
+        ]
+      }
+    },
+    "Trance of the Quiet Sun": {
+      "kind": "doctrine",
+      "label": "Trance of the Quiet Sun",
+      "parents": [
+        "Trance of the Quiet Sun (BBTTCC)"
+      ],
+      "levels": {
+        "Quiet March": 10,
+        "Daybreak": 14,
+        "Solar Stillpoint": 18,
+        "Somnolent Peace (BBTTCC)": 3,
+        "Stillness Between": 3,
+        "Lull the Riot": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Trance of the Sapphire Gate": {
+      "kind": "doctrine",
+      "label": "Trance of the Sapphire Gate",
+      "parents": [
+        "Trance of the Sapphire Gate (BBTTCC)"
+      ],
+      "levels": {
+        "Bright Hypnopomp": 10,
+        "Sapphire Conduction": 14,
+        "Blue Meridian": 18,
+        "Gate Anchor": 3,
+        "Lucid Step (BBTTCC)": 3,
+        "Dream Relay": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Trance of the Thousand Faces": {
+      "kind": "doctrine",
+      "label": "Trance of the Thousand Faces",
+      "parents": [
+        "Trance of the Thousand Faces (BBTTCC)"
+      ],
+      "levels": {
+        "Borrowed Voice": 10,
+        "Mask of Accord": 14,
+        "Thousandfold Echo": 18,
+        "Mirror Read": 3,
+        "Persona Cache (BBTTCC)": 3,
+        "Crowd Current": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Strategos": {
+      "kind": "doctrine",
+      "label": "Strategos",
+      "parents": [
+        "Strategos (BBTTCC)"
+      ],
+      "levels": {
+        "Strategos: Battlefield Logistics": 7,
+        "Strategos: Coordinated Assault": 10,
+        "Strategos: Rallying Cry": 3,
+        "Strategos: Rapid Deployment": 15,
+        "Strategos: Strategic Maneuver": 3,
+        "Strategos: Unstoppable Force": 18
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Mandate of Accord": {
+      "kind": "doctrine",
+      "label": "Mandate of Accord",
+      "parents": [
+        "Mandate of Accord (BBTTCC)"
+      ],
+      "levels": {
+        "Resonant Truce": 10,
+        "Treatywave": 14,
+        "Accord Mandala": 18,
+        "Accord Engine (BBTTCC)": 3,
+        "Conductor's Beat": 3,
+        "Unity Cadence": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Mandate of Overwatch": {
+      "kind": "doctrine",
+      "label": "Mandate of Overwatch",
+      "parents": [
+        "Mandate of Overwatch (BBTTCC)"
+      ],
+      "levels": {
+        "Rally Net": 10,
+        "Chorus of the People": 14,
+        "Sentinel Protocol": 18,
+        "Overwatch (BBTTCC)": 3,
+        "Signal Boost": 3,
+        "Counter-Discord": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Mandate of Resolve": {
+      "kind": "doctrine",
+      "label": "Mandate of Resolve",
+      "parents": [
+        "Mandate of Resolve (BBTTCC)"
+      ],
+      "levels": {
+        "Calm Push": 10,
+        "Steel & Velvet": 14,
+        "Unbreakable Front": 18,
+        "Measured Command": 3,
+        "Rally the Quiet (BBTTCC)": 3,
+        "Hold the Line": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Route of the Ashen Run": {
+      "kind": "doctrine",
+      "label": "Route of the Ashen Run",
+      "parents": [
+        "Route of the Ashen Run (BBTTCC)"
+      ],
+      "levels": {
+        "Wake of Routes": 10,
+        "Dead Drop": 14,
+        "Ashen Run Apex": 18,
+        "Ashway Sprint (BBTTCC)": 3,
+        "Ghost Stamp": 3,
+        "Dust Veil": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Route of the Blackchannel": {
+      "kind": "doctrine",
+      "label": "Route of the Blackchannel",
+      "parents": [
+        "Route of the Blackchannel (BBTTCC)"
+      ],
+      "levels": {
+        "Countertrace": 10,
+        "Courier's Parity": 14,
+        "Blackchannel Broadcast": 18,
+        "Blackchannel (BBTTCC)": 3,
+        "Packet Slip": 3,
+        "Quiet Handoff": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Route of the Emerald Relief": {
+      "kind": "doctrine",
+      "label": "Route of the Emerald Relief",
+      "parents": [
+        "Route of the Emerald Relief (BBTTCC)"
+      ],
+      "levels": {
+        "Decoy Column": 10,
+        "Green Net": 14,
+        "Emerald Lifeline": 18,
+        "Field Medic": 3,
+        "Relief Run (BBTTCC)": 3,
+        "Safe Convoy": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Forge of Bound Light": {
+      "kind": "doctrine",
+      "label": "Forge of Bound Light",
+      "parents": [
+        "Forge of Bound Light (BBTTCC)"
+      ],
+      "levels": {},
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 0,
+        "unresolved": 7,
+        "samples": [
+          {
+            "file": "Bound Light.json",
+            "name": "Bound Light (BBTTCC)"
+          },
+          {
+            "file": "Forge Blessing.json",
+            "name": "Forge Blessing"
+          },
+          {
+            "file": "Gentle Edges.json",
+            "name": "Gentle Edges"
+          },
+          {
+            "file": "Hearthfield.json",
+            "name": "Hearthfield"
+          },
+          {
+            "file": "Luminous Intercession.json",
+            "name": "Luminous Intercession"
+          }
+        ]
+      }
+    },
+    "Forge of Victory": {
+      "kind": "doctrine",
+      "label": "Forge of Victory",
+      "parents": [
+        "Forge of Victory (BBTTCC)"
+      ],
+      "levels": {},
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 0,
+        "unresolved": 6,
+        "samples": [
+          {
+            "file": "Banner of the Final Push.json",
+            "name": "Banner of the Final Push"
+          },
+          {
+            "file": "Marchwork.json",
+            "name": "Marchwork"
+          },
+          {
+            "file": "Rally Stitch.json",
+            "name": "Rally Stitch"
+          },
+          {
+            "file": "Standard of Will.json",
+            "name": "Standard of Will (BBTTCC)"
+          },
+          {
+            "file": "Triumph Weave.json",
+            "name": "Triumph Weave"
+          }
+        ]
+      }
+    },
+    "Forge of the Spark Reclaimer": {
+      "kind": "doctrine",
+      "label": "Forge of the Spark Reclaimer",
+      "parents": [
+        "Forge of the Spark Reclaimer (BBTTCC)"
+      ],
+      "levels": {},
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 0,
+        "unresolved": 7,
+        "samples": [
+          {
+            "file": "Clean Extraction.json",
+            "name": "Clean Extraction"
+          },
+          {
+            "file": "Echo Temper.json",
+            "name": "Echo Temper"
+          },
+          {
+            "file": "Overcharge Cycle.json",
+            "name": "Overcharge Cycle"
+          },
+          {
+            "file": "Residual Charge.json",
+            "name": "Residual Charge"
+          },
+          {
+            "file": "Reverse-Anvil.json",
+            "name": "Reverse-Anvil"
+          }
+        ]
+      }
+    },
+    "Refraction of Foresight": {
+      "kind": "doctrine",
+      "label": "Refraction of Foresight",
+      "parents": [
+        "Refraction of Foresight (BBTTCC)"
+      ],
+      "levels": {
+        "Split Beam": 10,
+        "Perfect Angle": 14,
+        "Convergence Horizon": 18,
+        "Foresight Refraction (BBTTCC)": 3,
+        "Lens Ledger": 3,
+        "Parallax Step": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Refraction of Mercy": {
+      "kind": "doctrine",
+      "label": "Refraction of Mercy",
+      "parents": [
+        "Refraction of Mercy (BBTTCC)"
+      ],
+      "levels": {
+        "Soft Focus": 10,
+        "Sephirothic Bloom": 14,
+        "Covenant Prism": 18,
+        "Gentle Pivot": 3,
+        "Mercy Refraction (BBTTCC)": 3,
+        "Kind Light": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    },
+    "Refraction of Truth": {
+      "kind": "doctrine",
+      "label": "Refraction of Truth",
+      "parents": [
+        "Refraction of Truth (BBTTCC)"
+      ],
+      "levels": {
+        "Prism Ledger": 10,
+        "Unshatter": 14,
+        "Truth Horizon": 18,
+        "Researcher's Eye": 3,
+        "Truth Refraction (BBTTCC)": 3,
+        "Clear the Signal": 6
+      },
+      "stats": {
+        "fromAdvancement": 0,
+        "fromFilename": 6,
+        "unresolved": 0,
+        "samples": []
+      }
+    }
+  },
+  "globalLevels": {
+    "Breaker: Architect of Endings": 17,
+    "Breaker: Breaker’s Eye": 6,
+    "Breaker: Catastrophic Entry": 13,
+    "Breaker: Certified Structural Menace": 1,
+    "Breaker: Demolition Plan": 3,
+    "Breaker: Fortress of One": 15,
+    "Breaker: Improved Living Rampart": 10,
+    "Breaker: Living Demolition": 20,
+    "Breaker: Reinforced Psyche": 9,
+    "Breaker: Rubble Runner": 2,
+    "Breaker: Ruin to Renewal": 11,
+    "Breaker: Shockwave Footing": 7,
+    "Breaker: Siege Cost Accountant": 5,
+    "Breaker: Siege Engine Whisperer": 18,
+    "Breaker: Extra Attack": 5,
+    "Dream-Sense": 1,
+    "Apotheosis of the Oneiric": 20,
+    "Ascension Layer": 17,
+    "Dream Echo Reservoir": 13,
+    "Dream Rite": 5,
+    "Dream Stability": 6,
+    "Dreamer’s Poise": 9,
+    "Fractal Self": 18,
+    "Mnemonic Spillway": 14,
+    "Omen-Thread Weaving": 10,
+    "Symbolic Cartography": 7,
+    "Vision of the Great Work": 11,
+    "Waking Dreamfield": 15,
+    "Initiate of the Great Work": 1,
+    "Harmony Marshal: Tier 1 — Harmony Initiate": 1,
+    "Harmony Marshal: Tier 2 — Attrition Easer": 6,
+    "Harmony Marshal: Tier 3 — Loyalty Steward": 11,
+    "Harmony Marshal: Tier 4 — Unity Conductor": 16,
+    "Phantom Courier: Tier 1 — Phase-Slip Initiate": 1,
+    "Phantom Courier: Tier 2 — Operation Ghost Dividend": 6,
+    "Phantom Courier: Tier 3 — Evasive Echo": 11,
+    "Phantom Courier: Tier 4 — Dimensional Flicker": 16,
+    "Soul-Smith: Tier 1 — Sanctified Forge Initiate": 1,
+    "Soul-Smith: Tier 2 — Atonement Crucible": 6,
+    "Soul-Smith: Tier 3 — Furnace of Renewal": 11,
+    "Soul-Smith: Tier 4 — Relic of Rebirth": 16,
+    "Wyrdlens Adept: Tier 1 — Shattered Algorithm Initiate": 1,
+    "Wyrdlens Adept: Tier 2 — Identification Overclock": 6,
+    "Wyrdlens Adept: Tier 4 — Nonviolent Spark Harvest": 16,
+    "OP Shear (BBTTCC)": 3,
+    "Quiet March": 10,
+    "Daybreak": 14,
+    "Solar Stillpoint": 18,
+    "Somnolent Peace (BBTTCC)": 3,
+    "Stillness Between": 3,
+    "Lull the Riot": 6,
+    "Bright Hypnopomp": 10,
+    "Sapphire Conduction": 14,
+    "Blue Meridian": 18,
+    "Gate Anchor": 3,
+    "Lucid Step (BBTTCC)": 3,
+    "Dream Relay": 6,
+    "Borrowed Voice": 10,
+    "Mask of Accord": 14,
+    "Thousandfold Echo": 18,
+    "Mirror Read": 3,
+    "Persona Cache (BBTTCC)": 3,
+    "Crowd Current": 6,
+    "Strategos: Battlefield Logistics": 7,
+    "Strategos: Coordinated Assault": 10,
+    "Strategos: Rallying Cry": 3,
+    "Strategos: Rapid Deployment": 15,
+    "Strategos: Strategic Maneuver": 3,
+    "Strategos: Unstoppable Force": 18,
+    "Resonant Truce": 10,
+    "Treatywave": 14,
+    "Accord Mandala": 18,
+    "Accord Engine (BBTTCC)": 3,
+    "Conductor's Beat": 3,
+    "Unity Cadence": 6,
+    "Rally Net": 10,
+    "Chorus of the People": 14,
+    "Sentinel Protocol": 18,
+    "Overwatch (BBTTCC)": 3,
+    "Signal Boost": 3,
+    "Counter-Discord": 6,
+    "Calm Push": 10,
+    "Steel & Velvet": 14,
+    "Unbreakable Front": 18,
+    "Measured Command": 3,
+    "Rally the Quiet (BBTTCC)": 3,
+    "Hold the Line": 6,
+    "Wake of Routes": 10,
+    "Dead Drop": 14,
+    "Ashen Run Apex": 18,
+    "Ashway Sprint (BBTTCC)": 3,
+    "Ghost Stamp": 3,
+    "Dust Veil": 6,
+    "Countertrace": 10,
+    "Courier's Parity": 14,
+    "Blackchannel Broadcast": 18,
+    "Blackchannel (BBTTCC)": 3,
+    "Packet Slip": 3,
+    "Quiet Handoff": 6,
+    "Decoy Column": 10,
+    "Green Net": 14,
+    "Emerald Lifeline": 18,
+    "Field Medic": 3,
+    "Relief Run (BBTTCC)": 3,
+    "Safe Convoy": 6,
+    "Split Beam": 10,
+    "Perfect Angle": 14,
+    "Convergence Horizon": 18,
+    "Foresight Refraction (BBTTCC)": 3,
+    "Lens Ledger": 3,
+    "Parallax Step": 6,
+    "Soft Focus": 10,
+    "Sephirothic Bloom": 14,
+    "Covenant Prism": 18,
+    "Gentle Pivot": 3,
+    "Mercy Refraction (BBTTCC)": 3,
+    "Kind Light": 6,
+    "Prism Ledger": 10,
+    "Unshatter": 14,
+    "Truth Horizon": 18,
+    "Researcher's Eye": 3,
+    "Truth Refraction (BBTTCC)": 3,
+    "Clear the Signal": 6
+  }
+}

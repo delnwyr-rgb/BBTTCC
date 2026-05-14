@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Mustelid): Living Tree Root",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_cave_2.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Mustelid)</em> at level 5; now available as an optional ancestry feat.</p><p><em>“Badgers don’t retreat. They relocate the fight.”</em></p>\n        <p><strong>Dig-In (tier [TODO(pb-call)]/a Soma Break).</strong> As a bonus action, you gain temporary Integrity equal to your tier [TODO(pb-call)] + your Body modifier, and you can’t be knocked prone until the start of your next turn.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-mustelid-dig_in",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "dig_in",
+      "clade": "Mustelid",
+      "tierLevel": 5,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Mustelid",
+      "normalizedFrom": "Furrykin (Mustelid)"
+    }
+  },
+  "effects": [],
+  "folder": "LjjawKCcw5V0JpZI",
+  "_stats": {
+    "compendiumSource": "Item.fX8uqWb04SGdTi8L",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.fX8uqWb04SGdTi8L",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "fX8uqWb04SGdTi8L",
+  "_srcfile": "fvtt-Item-furrykin-(mustelid)_-living-tree-root-fX8uqWb04SGdTi8L.json"
+}

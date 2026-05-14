@@ -1,0 +1,147 @@
+{
+  "_id": "9IXWOmzr3qvRawVd",
+  "name": "Street Prophet",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_people_2.png",
+  "system": {
+    "identifier": "shadowjack_street_prophet",
+    "description": {
+      "value": "<blockquote data-start=\"966\" data-end=\"1004\"><p data-start=\"968\" data-end=\"1004\"><em data-start=\"968\" data-end=\"1004\">“The city told me where you’d be.”</em></p></blockquote><p data-start=\"1006\" data-end=\"1274\">Street Prophets are <strong data-start=\"1026\" data-end=\"1061\">social infiltration specialists</strong>, attuned to the living pulse of neighborhoods, crowds, and informal power. Where others rely on stealth or force, you weaponize <strong data-start=\"1190\" data-end=\"1225\">attention, belief, and movement</strong>—turning rumor into Access and people into cover.</p><p data-start=\"1276\" data-end=\"1321\">You don’t fight the city.<br data-start=\"1301\" data-end=\"1304\" />You listen to it.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "classIdentifier": "shadowjack",
+    "advancement": {
+      "5hR109exnH6gIDST": {
+        "_id": "5hR109exnH6gIDST",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.spy7373xu4Gt43hZ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "title": "Rumor Key",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "IN1oBvuuSLkQv9eV": {
+        "_id": "IN1oBvuuSLkQv9eV",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.URIYX4xni4Xjdmqg",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "title": "Maskcraft",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "cxywZjYdKhsHMxj6": {
+        "_id": "cxywZjYdKhsHMxj6",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.dIWLbxfkUuIZafV1",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "title": "Mobility Network",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "Q80GNLdmdTL28fhZ": {
+        "_id": "Q80GNLdmdTL28fhZ",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.bgfVPWkZvqsKI7k6",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "title": "Crowd Control",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "s1DpJPQlYjhu8UzM": {
+        "_id": "s1DpJPQlYjhu8UzM",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.wcPQEK5Ju5epkZwR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 18,
+        "title": "City Edict",
+        "value": {},
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "subclass": true
+    }
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "folder": "KgY85GXL78pfoSl3",
+  "sort": 100000,
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1767935929509,
+    "modifiedTime": 1775063084483,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!items!9IXWOmzr3qvRawVd"
+}

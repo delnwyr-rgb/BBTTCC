@@ -1,0 +1,32 @@
+{
+  "_id": "ef5d5bc15e34ea25",
+  "name": "Oldenborn (Stormborn Nomad): Skywalker",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborn_StormbornNomad_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“The sky was the first road. You remember that road in the bones of your feet.”</em></p>\n<p><strong>Skywalker (1/a Soma Break).</strong> As an action, you can call the wind to hold you up. For 1 minute, you can walk on air, ash, falling rain, or any equivalent surface as if it were solid ground. You may move at your normal walking speed in any direction, including straight up; falling damage is negated for the duration. The effect ends early if you fall unconscious or end it as a free action.</p>\n<p><strong>Always-Hand.</strong> You always know which way is true north and how many hours of daylight remain.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "oldenborn-stormborn-skywalker",
+    "requirements": "Oldenborn (Stormborn Nomad)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 17 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "oldenborn", "feature": "skywalker", "lineage": "Stormborn Nomad", "tierLevel": 17, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "5PPxNybRn7zD0k0G",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!ef5d5bc15e34ea25"
+}

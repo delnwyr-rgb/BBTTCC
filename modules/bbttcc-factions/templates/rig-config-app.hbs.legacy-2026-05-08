@@ -1,0 +1,219 @@
+{{!-- modules/bbttcc-factions/templates/rig-config-app.hbs --}}
+
+<form class="bbttcc-rig-config-form" autocomplete="off">
+  <section class="bbttcc-facility-grid">
+
+    {{!-- LEFT COLUMN: Identity & Core Stats --}}
+    <section class="bbttcc-card">
+      <header class="bbttcc-card-header" style="display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+        <div>
+          <h2>Rig Identity</h2>
+          {{#if actor}}
+            <p>{{actor.name}}</p>
+          {{/if}}
+        </div>
+
+        <div style="display:flex; gap:.5rem; align-items:center;">
+          <select name="rig.presetKey" style="max-width:12rem;">
+            {{#each presetKeys}}
+              <option value="{{this}}">{{this}}</option>
+            {{/each}}
+          </select>
+
+          <button type="button" class="bbttcc-button preset">
+            <i class="fas fa-magic"></i>
+            <span>Apply Template</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="bbttcc-card-body grid-2col">
+        <div class="field full">
+          <label>Rig Name</label>
+          <input type="text" name="rig.name" value="{{rig.name}}">
+        </div>
+
+        <div class="field">
+          <label>Rig Type</label>
+          <select name="rig.type">
+            <option value="war-rig" {{#if (eq rig.type "war-rig")}}selected{{/if}}>war-rig</option>
+            <option value="support-rig" {{#if (eq rig.type "support-rig")}}selected{{/if}}>support-rig</option>
+            <option value="scout-rig" {{#if (eq rig.type "scout-rig")}}selected{{/if}}>scout-rig</option>
+            <option value="custom" {{#if (eq rig.type "custom")}}selected{{/if}}>custom</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>HP Max</label>
+          <input type="number" name="rig.hitMax" value="{{rig.hitTrack.max}}" min="1" max="999">
+        </div>
+
+        <div class="field">
+          <label>Raid Defense</label>
+          <input type="number" name="rig.raidDefense" value="{{rig.raidBonuses.defense}}" min="0" max="99">
+        </div>
+
+        <div class="field">
+          <label>Damage State</label>
+          <input type="text" value="{{rig.damageState}} ({{rig.effPct}}%)" disabled>
+          <small>Damage is driven by the raid ladder; repair reduces damageStep.</small>
+        </div>
+
+        <div class="field full">
+          <label>Mobility Tags (comma-separated)</label>
+          <input type="text" name="rig.mobilityTags" value="{{rig.mobilityTags}}">
+          <small>Examples: tracked, armored, recon, logistics, amphibious</small>
+        </div>
+      </div>
+    </section>
+
+    {{!-- RIGHT COLUMN: Passive Bonuses (GUI) --}}
+    <section class="bbttcc-card">
+      <header class="bbttcc-card-header">
+        <h2>Passive Bonuses</h2>
+        <p>Pick from presets, then tweak. Phase 2 travel consumes these with damage scaling.</p>
+      </header>
+
+      <div class="bbttcc-card-body">
+        <div class="field full" style="display:flex; gap:.5rem; align-items:end;">
+          <div style="flex:1;">
+            <label>Add Passive Bonus</label>
+            <select name="rig.passivePresetKey" style="width:100%;">
+              {{#each passivePresetKeys}}
+                <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div style="flex:0;">
+            <label>&nbsp;</label>
+            <button type="button" class="bbttcc-button" data-action="passive-add">
+              <i class="fas fa-plus"></i>
+              <span>Add</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label>Configured Bonuses</label>
+          <div data-role="passive-list" style="display:flex; flex-direction:column; gap:.5rem;"></div>
+          <small>Tip: keep these small + declarative. Keys/labels are shown in the faction sheet summary.</small>
+        </div>
+
+        <textarea name="rig.passiveBonusesRaw" rows="10" style="display:none;">{{passiveBonusesRaw}}</textarea>
+        <textarea name="rig.passiveBonusesRawAdvanced" rows="10" data-role="passive-json-advanced" style="display:none;">{{passiveBonusesRaw}}</textarea>
+
+        <small>Passive bonus storage stays synced behind the scenes for import/export safety.</small>
+      </div>
+    </section>
+
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header">
+        <h2>Rig Combat Profile</h2>
+        <p>Native raid-facing rig identity: role, power, signature, systems, and OP cap pressure.</p>
+      </header>
+
+      <div class="bbttcc-card-body grid-3col" data-role="rig-combat-box">
+        <div class="field">
+          <label>Combat Role</label>
+          <select name="rig.combat.role">
+            {{#each combatRoleOptions}}
+              <option value="{{this}}" {{#if (eq ../combat.role this)}}selected{{/if}}>{{this}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Combat Power</label>
+          <input type="number" name="rig.combat.power" value="{{combat.power}}" min="0" max="99">
+        </div>
+
+        <div class="field">
+          <label>Signature</label>
+          <select name="rig.combat.signature">
+            <option value="">—</option>
+            {{#each combatSignatureOptions}}
+              <option value="{{this}}" {{#if (eq ../combat.signature this)}}selected{{/if}}>{{this}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="field full">
+          <label>Systems</label>
+          <input type="hidden" name="rig.combat.systemsCsv" value="{{combatSystemsCsv}}">
+          <div class="bbttcc-rig-inline-add">
+            <select name="rig.combat.systemAdd">
+              <option value="">Select system…</option>
+              {{#each combatSystemOptions}}
+                <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
+            <button type="button" class="bbttcc-button" data-action="combat-system-add"><i class="fas fa-plus"></i> Add</button>
+          </div>
+          <small>Choose from currently wired rig systems.</small>
+          <div class="bbttcc-rig-chipbar" data-role="combat-systems-list"></div>
+          <small data-role="combat-systems-empty">No combat systems selected yet.</small>
+        </div>
+
+        <div class="field full">
+          <label>Combat Notes</label>
+          <input type="text" name="rig.combat.notes" value="{{combat.notes}}">
+        </div>
+
+        <div class="field full">
+          <label>Cap Mods</label>
+          <div class="bbttcc-rig-capmods-grid">
+            {{#each capModKeys}}
+              <div class="field">
+                <label>{{this}}</label>
+                <input type="number" name="rig.combat.capMods.{{this}}" value="{{lookup ../combat.capMods this}}" min="0" max="99">
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bbttcc-card span-2">
+      <header class="bbttcc-card-header">
+        <h2>Rig Turn Effects</h2>
+        <p>Structured per-turn effects instead of raw JSON authoring.</p>
+      </header>
+
+      <div class="bbttcc-card-body grid-2col">
+        <div class="field full" style="display:flex; gap:.5rem; align-items:end;">
+          <div style="flex:1;">
+            <label>Add Turn Effect</label>
+            <select name="rig.turnPresetKey" style="width:100%;">
+              {{#each turnPresetKeys}}
+                <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div style="flex:0;">
+            <label>&nbsp;</label>
+            <button type="button" class="bbttcc-button" data-action="turn-add">
+              <i class="fas fa-plus"></i>
+              <span>Add</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label>Configured Turn Effects</label>
+          <div data-role="turn-list" style="display:flex; flex-direction:column; gap:.5rem;"></div>
+          <small>Kept intentionally declarative so future turn-driver wiring stays alpha-safe.</small>
+        </div>
+
+        <textarea name="rig.turnEffectsRaw" rows="6" style="display:none;">{{turnEffectsRaw}}</textarea>
+      </div>
+    </section>
+
+  </section>
+
+  <footer class="bbttcc-footer">
+    <button type="button" class="bbttcc-button primary">
+      <i class="fas fa-save"></i>
+      <span>Save Rig Config</span>
+    </button>
+  </footer>
+</form>

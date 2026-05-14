@@ -1,0 +1,133 @@
+{
+  "name": "Oldenborn (Lumenwrought): Sovereign Mask",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_goddess.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Lumenwrought)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“You put on a story, and the world agrees.”</em></p>\n        <p><strong>Sovereign Mask (1/a Soma Break).</strong> Over 1 minute, assume a mythic persona (King, Trickster, Saint, Monster, etc.). For 10 minutes, you gain a skill rank in Diplomacy (Presence), Stealth (Intrigue) (Intrigue) (Presence), and Intimidation (Presence) (Presence) (or mastery if already proficient), and you can’t be magically compelled to speak against your will.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "oldenborn-lumenwrought-sovereign_mask",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "sovereign_mask",
+      "lineage": "Lumenwrought",
+      "tierLevel": 11,
+      "version": "1.0.0",
+      "family": "oldenborn",
+      "heritage": "Lumenwrought",
+      "normalizedFrom": "Oldenborn (Lumenwrought)"
+    }
+  },
+  "effects": [
+    {
+      "_id": "deffebd5550f4ede",
+      "name": "Lumenwrought: Social Mastery (+1 to Diplomacy (Presence)/Stealth (Intrigue) (Intrigue) (Presence)/Intimidation (Presence) (Presence))",
+      "img": "icons/magic/light/orb-beam-green.webp",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "system.skills.per.bonuses.check",
+          "mode": 2,
+          "value": "+1",
+          "priority": 10
+        },
+        {
+          "key": "system.skills.dec.bonuses.check",
+          "mode": 2,
+          "value": "+1",
+          "priority": 10
+        },
+        {
+          "key": "system.skills.itm.bonuses.check",
+          "mode": 2,
+          "value": "+1",
+          "priority": 10
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": 0,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": 0,
+        "startTurn": 0
+      },
+      "description": "Represents mythic presence. Full skill rank changes are table-facing.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      }
+    }
+  ],
+  "folder": "w57jySX7QASliVOB",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.P0WhuDZSzGhlfdua",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1773192856451,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "P0WhuDZSzGhlfdua",
+  "_srcfile": "fvtt-Item-oldenborn-(lumenwrought)_-sovereign-mask-P0WhuDZSzGhlfdua.json"
+}

@@ -1,0 +1,87 @@
+{
+  "name": "Furrykin Heritage: Mustelid",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Brennan.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Heritage.</strong> This item preserves the original UUID for <em>Furrykin (Mustelid)</em> while converting it from a lineage-species into a heritage.</p><p><em>“Talking animals? Sure. But you’re not a joke. You’re a survival story with teeth.”</em></p><p><strong>Furrykin (Mustelid).</strong> The Shattering didn’t uplift you. It removed the last excuses. You were always people; the world just finally admitted it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid.</li><li><strong>Size.</strong> Medium.</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Clade Lean.</strong> Your clade leans toward <strong>BOD</strong>—expressed through Tier powers.</li></ul><h3>Core: Wildframe &amp; Instinct</h3><p>At creation you gain <strong>Wildframe &amp; Instinct</strong> (Wildframe, Keen Sense, Clade Instinct, Pack/Trouble Magnet).</p><h3>Mustelid Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17).</p><p><strong>Note:</strong> This species uses placeholder ItemGrant UUIDs. Run the Furrykin wiring macro after you store feats/species in compendiums.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "6598b8c4363941ba",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.5HmdTvIM1Lj34a1J",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Mustelid Tier I",
+        "hint": "Gain your Mustelid Tier I clade power."
+      }
+    ],
+    "identifier": "furrykin_mustelid_heritage",
+    "requirements": "Furrykin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "furrykin",
+      "version": "1.0.0",
+      "date": "2026-01-06",
+      "normalizedFrom": "species"
+    }
+  },
+  "folder": "ffjs4XpapBRNmFbM",
+  "_stats": {
+    "compendiumSource": "Item.Ldo6jKiPSWWT8RkF",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.Ldo6jKiPSWWT8RkF",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "Ldo6jKiPSWWT8RkF",
+  "_srcfile": "fvtt-Item-furrykin-(mustelid)-Ldo6jKiPSWWT8RkF.json"
+}

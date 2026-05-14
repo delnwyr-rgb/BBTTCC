@@ -1,0 +1,151 @@
+{
+  "_id": "qp11lbBYB5L7HG5D",
+  "name": "Decommissioner (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_decomm_book_10.png",
+  "system": {
+    "identifier": "bbttcc_pactkeeper_decommissioner",
+    "classIdentifier": "pactkeeper",
+    "description": {
+      "value": "<h2 data-start=\"4234\" data-end=\"4253\">⚫ Decommissioner</h2><blockquote data-start=\"4255\" data-end=\"4327\"><p data-start=\"4257\" data-end=\"4327\"><em data-start=\"4257\" data-end=\"4327\">“Some things don’t need to be destroyed.<br data-start=\"4298\" data-end=\"4301\" />They need to be retired.”</em></p></blockquote><p data-start=\"4329\" data-end=\"4382\">Decommissioners handle the endings no one else wants.</p><p data-start=\"4384\" data-end=\"4623\">They specialize in curses that keep coming back, mandates that outlived their usefulness, immortals who forgot why they existed, and systems that refuse to shut down cleanly. A Decommissioner does not explode problems. They <strong data-start=\"4608\" data-end=\"4622\">close them</strong>.</p><p data-start=\"4625\" data-end=\"4885\">Their magic is quiet, final, and deeply unsettling. Regeneration fails around them. Loops unravel. Hauntings lose their rhythm. When a Decommissioner finishes their work, nothing dramatic remains—only the sudden absence of something that used to refuse to die.</p><p data-start=\"4887\" data-end=\"4962\">They are the reason the Long Quiet exists.<br data-start=\"4929\" data-end=\"4932\" />And the reason it stays quiet.</p><h2 data-start=\"4061\" data-end=\"4080\">⚫ DECOMMISSIONER</h2><p data-start=\"4082\" data-end=\"4192\"><strong data-start=\"4082\" data-end=\"4099\">Primary Axis:</strong> Ending effects<br data-start=\"4114\" data-end=\"4117\" /><strong data-start=\"4117\" data-end=\"4136\">Secondary Axis:</strong> Precedent retirement<br data-start=\"4157\" data-end=\"4160\" /><strong data-start=\"4160\" data-end=\"4176\">Risk Vector:</strong> Vacuum creation</p><hr data-start=\"4194\" data-end=\"4197\" /><h3 data-start=\"4199\" data-end=\"4220\">⏳ End-of-Term Tag</h3><p data-start=\"4221\" data-end=\"4270\">Decommissioners can mark targets <strong data-start=\"4254\" data-end=\"4269\">End-of-Term</strong>.</p><p data-start=\"4272\" data-end=\"4293\">Against such targets:</p><ul data-start=\"4294\" data-end=\"4403\"><li data-start=\"4294\" data-end=\"4341\"><p data-start=\"4296\" data-end=\"4341\">Removal and banishment effects gain advantage</p></li><li data-start=\"4342\" data-end=\"4375\"><p data-start=\"4344\" data-end=\"4375\">Regeneration and recursion fail</p></li><li data-start=\"4376\" data-end=\"4403\"><p data-start=\"4378\" data-end=\"4403\">Reattachment is prevented</p></li></ul><hr data-start=\"4405\" data-end=\"4408\" /><h3 data-start=\"4410\" data-end=\"4455\">🔚 Spending Civic Charge (Decommissioner)</h3><p data-start=\"4456\" data-end=\"4486\">You may spend Civic Charge to:</p><ul data-start=\"4488\" data-end=\"4714\"><li data-start=\"4488\" data-end=\"4556\"><p data-start=\"4490\" data-end=\"4556\"><strong data-start=\"4490\" data-end=\"4506\">Break Loops:</strong><br data-start=\"4506\" data-end=\"4509\" />End repeating events without undoing history.</p></li><li data-start=\"4557\" data-end=\"4628\"><p data-start=\"4559\" data-end=\"4628\"><strong data-start=\"4559\" data-end=\"4579\">Enforce Closure:</strong><br data-start=\"4579\" data-end=\"4582\" />Prevent recurrence permanently within scope.</p></li><li data-start=\"4629\" data-end=\"4714\"><p data-start=\"4631\" data-end=\"4714\"><strong data-start=\"4631\" data-end=\"4651\">Retire Mandates:</strong><br data-start=\"4651\" data-end=\"4654\" />Dissolve a role, curse, or obligation into the Long Quiet.</p></li></ul><hr data-start=\"4716\" data-end=\"4719\" /><h3 data-start=\"4721\" data-end=\"4752\">⚠ Pushback (Decommissioner)</h3><p data-start=\"4753\" data-end=\"4783\">Ending things creates absence.</p><p data-start=\"4785\" data-end=\"4806\">High Pressure causes:</p><ul data-start=\"4807\" data-end=\"4859\"><li data-start=\"4807\" data-end=\"4822\"><p data-start=\"4809\" data-end=\"4822\">Power vacuums</p></li><li data-start=\"4823\" data-end=\"4841\"><p data-start=\"4825\" data-end=\"4841\">Secondary crises</p></li><li data-start=\"4842\" data-end=\"4859\"><p data-start=\"4844\" data-end=\"4859\">Grief responses</p></li></ul><p data-start=\"4861\" data-end=\"4908\">Decommissioners trade chaos later for pain now.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "advancement": {
+      "5IGUeohCNFPdXNug": {
+        "_id": "5IGUeohCNFPdXNug",
+        "type": "ItemGrant",
+        "level": 3,
+        "title": "End-of-Term Notice & Closure Contract",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.dszCU1uYEAWfBDOY",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.tERHYvmAqdH0ReXM",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "514lyU3atZybT9TO": {
+        "_id": "514lyU3atZybT9TO",
+        "type": "ItemGrant",
+        "level": 6,
+        "title": "Finality Aura",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.XJsJQ20CcYLRj4Dz",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "HYmQnNPV5vjQOF7n": {
+        "_id": "HYmQnNPV5vjQOF7n",
+        "type": "ItemGrant",
+        "level": 10,
+        "title": "Sever the Loop",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.4sHautBJgCF3klNv",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "p7MuvoZQJMVKzc0t": {
+        "_id": "p7MuvoZQJMVKzc0t",
+        "type": "ItemGrant",
+        "level": 14,
+        "title": "Permanent Redaction",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.TySMWygrHXw5rgdI",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "R8UlClx3PVEMgZ2S": {
+        "_id": "R8UlClx3PVEMgZ2S",
+        "type": "ItemGrant",
+        "level": 18,
+        "title": "Retire the Office",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.bFdRJIIWUaAETCXM",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "subclass": true
+    }
+  },
+  "ownership": {
+    "default": 0,
+    "DHBK2UGr58xKXzxK": 3
+  },
+  "folder": "y4Cae67bMab70k5y",
+  "sort": 100000,
+  "_stats": {
+    "compendiumSource": "Item.qp11lbBYB5L7HG5D",
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1767931864117,
+    "modifiedTime": 1775063147645,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "_key": "!items!qp11lbBYB5L7HG5D"
+}

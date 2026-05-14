@@ -1,0 +1,77 @@
+{
+  "name": "Echo-Diver (Abyssal): Tide Recall",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heritage.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Heritage Signature (RFI v1.0).</strong></p><p><em>&ldquo;The deep remembers. You&rsquo;re how it talks.&rdquo;</em></p><p><strong>Tide Recall.</strong> 1/Soma Break: touch a thing &mdash; surface, object, creature. The GM gives you one true detail from its recent past (see your heritage window). You may spend <strong>1 Surge</strong> to push the window one tier beyond your current (e.g. at Tier 1 you see 24h; with a Surge, one week). You cannot push beyond Tier 4&rsquo;s &ldquo;any time.&rdquo;</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "echo_diver-abyssal-tide_recall",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Echo-Diver (Abyssal)",
+    "type": {
+      "value": "",
+      "subtype": "heritageSignature"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "heritageSignature",
+      "feature": "tide_recall",
+      "family": "echo_diver",
+      "lineage": "Abyssal",
+      "version": "1.0.0-rfi"
+    },
+    "fourththing": {
+      "kind": "heritageSignature",
+      "feature": "tide_recall",
+      "family": "echo_diver",
+      "lineage": "Abyssal"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.EDABYSSALTIER1PL",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "EDABYSSALTIER1PL"
+}

@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Leporid): Moon-Nerve",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_moon.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Leporid)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“You can hear danger before it happens.”</em></p>\n        <p><strong>Moon-Nerve.</strong> You have reroll the lowest die on Intrigue checks [TODO(adv-call)], and you cannot be surprised while conscious.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-leporid-moon_nerve",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "moon_nerve",
+      "clade": "Leporid",
+      "tierLevel": 11,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Leporid",
+      "normalizedFrom": "Furrykin (Leporid)"
+    }
+  },
+  "effects": [],
+  "folder": "JOpucgrEanUp9Afj",
+  "_stats": {
+    "compendiumSource": "Item.qFHFFwxbz0Fhojgd",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.qFHFFwxbz0Fhojgd",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "qFHFFwxbz0Fhojgd",
+  "_srcfile": "fvtt-Item-furrykin-(leporid)_-moon-nerve-qFHFFwxbz0Fhojgd.json"
+}

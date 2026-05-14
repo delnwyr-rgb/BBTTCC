@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Vulpin): Fable-Shadow",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stealth_1.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Vulpin)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You become the story that slips between lanternlight.”</em></p>\n        <p><strong>Fable-Shadow (1/a Soma Break).</strong> For 1 minute, hostile creatures have roll 3d10 keep lowest 2 on attacks against you unless they succeed a Soul save at the start of their turn (DC = 8 + tier [TODO(pb-call)] + Dex) [TODO(adv-call)]. Once per turn, you may force one attack to miss you (reaction) by ‘changing the story beat.’</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-vulpin-fable_shadow",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "fable_shadow",
+      "clade": "Vulpin",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Vulpin",
+      "normalizedFrom": "Furrykin (Vulpin)"
+    }
+  },
+  "effects": [],
+  "folder": "ziuNX1WqQboEgUzh",
+  "_stats": {
+    "compendiumSource": "Item.q4t5bm2cD9VYRykd",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.q4t5bm2cD9VYRykd",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "q4t5bm2cD9VYRykd",
+  "_srcfile": "fvtt-Item-furrykin-(vulpin)_-fable-shadow-q4t5bm2cD9VYRykd.json"
+}

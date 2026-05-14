@@ -1,0 +1,808 @@
+{
+  "Actor": {
+    "types": [
+      "character",
+      "npc",
+      "rig",
+      "boss"
+    ],
+    "character": {
+      "biography": {
+        "concept": "",
+        "notes": ""
+      },
+      "details": {
+        "level": 1,
+        "xp": 0,
+        "statPoints": 0,
+        "skillPoints": 0,
+        "tier": 1
+      },
+      "attributes": {
+        "violence": {
+          "value": 2
+        },
+        "intrigue": {
+          "value": 2
+        },
+        "presence": {
+          "value": 2
+        },
+        "body": {
+          "value": 2
+        },
+        "mind": {
+          "value": 2
+        },
+        "soul": {
+          "value": 2
+        }
+      },
+      "skills": {
+        "brawl": {
+          "attribute": "violence",
+          "label": "Brawl",
+          "value": 0
+        },
+        "melee": {
+          "attribute": "violence",
+          "label": "Melee",
+          "value": 0
+        },
+        "firearms": {
+          "attribute": "violence",
+          "label": "Firearms",
+          "value": 0
+        },
+        "athletics": {
+          "attribute": "violence",
+          "label": "Athletics",
+          "value": 0
+        },
+        "stealth": {
+          "attribute": "intrigue",
+          "label": "Stealth",
+          "value": 0
+        },
+        "hacking": {
+          "attribute": "intrigue",
+          "label": "Hacking",
+          "value": 0
+        },
+        "tinkering": {
+          "attribute": "intrigue",
+          "label": "Tinkering",
+          "value": 0
+        },
+        "streetwise": {
+          "attribute": "intrigue",
+          "label": "Streetwise",
+          "value": 0
+        },
+        "diplomacy": {
+          "attribute": "presence",
+          "label": "Diplomacy",
+          "value": 0
+        },
+        "intimidation": {
+          "attribute": "presence",
+          "label": "Intimidation",
+          "value": 0
+        },
+        "empathy": {
+          "attribute": "presence",
+          "label": "Empathy",
+          "value": 0
+        },
+        "performance": {
+          "attribute": "presence",
+          "label": "Performance",
+          "value": 0
+        },
+        "perception": {
+          "attribute": "mind",
+          "label": "Perception",
+          "value": 0
+        },
+        "investigation": {
+          "attribute": "mind",
+          "label": "Investigation",
+          "value": 0
+        },
+        "lore": {
+          "attribute": "mind",
+          "label": "Lore",
+          "value": 0
+        },
+        "occult": {
+          "attribute": "mind",
+          "label": "Occult",
+          "value": 0
+        },
+        "faith": {
+          "attribute": "soul",
+          "label": "Faith",
+          "value": 0
+        },
+        "meditation": {
+          "attribute": "soul",
+          "label": "Meditation",
+          "value": 0
+        },
+        "ritual": {
+          "attribute": "soul",
+          "label": "Ritual",
+          "value": 0
+        },
+        "insight": {
+          "attribute": "soul",
+          "label": "Insight",
+          "value": 0
+        },
+        "plating": {
+          "attribute": "body",
+          "label": "Plating",
+          "value": 0
+        },
+        "weave": {
+          "attribute": "intrigue",
+          "label": "Weave",
+          "value": 0
+        },
+        "warding": {
+          "attribute": "soul",
+          "label": "Warding",
+          "value": 0
+        }
+      },
+      "derived": {
+        "integrity": {
+          "value": 16,
+          "max": 16
+        },
+        "stress": {
+          "value": 16,
+          "max": 16
+        },
+        "guard": {
+          "value": 14
+        },
+        "evasion": {
+          "value": 14
+        },
+        "resolve": {
+          "value": 14
+        }
+      },
+      "magic": {
+        "clarity": {
+          "value": 3,
+          "max": 5
+        },
+        "noise": {
+          "value": 0,
+          "max": 10
+        },
+        "sephirah": "tiferet"
+      },
+      "resources": {
+        "frameDice": {
+          "current": 0,
+          "max": 3
+        },
+        "stress": {
+          "current": 0,
+          "max": 5
+        },
+        "burn": {
+          "current": 0,
+          "max": 8
+        },
+        "aura": {
+          "state": "none"
+        },
+        "accessDice": {
+          "current": 0,
+          "max": 3
+        },
+        "ruinCharges": {
+          "current": 3,
+          "max": 3
+        },
+        "dreamResonance": {
+          "active": false,
+          "insightUsed": false,
+          "hexSephirah": ""
+        },
+        "forgeCharge": {
+          "relicUsed": false,
+          "sparksRepaired": 0
+        },
+        "surge": {
+          "value": 0,
+          "max": 10,
+          "sceneResetAt": null
+        },
+        "pace": {
+          "current": 0,
+          "max": 0
+        },
+        "package": {
+          "type": "",
+          "id": "",
+          "carried": false
+        }
+      },
+      "conditions": {
+        "staggered": false,
+        "scarred": false,
+        "calmed": false,
+        "blinded": false,
+        "prone": false,
+        "shaken": false,
+        "burning": false,
+        "restrained": false,
+        "charmed": false,
+        "compelled": false,
+        "dying": false
+      },
+      "lastStand": {
+        "active": false,
+        "successes": 0,
+        "failures": 0,
+        "ledger": []
+      },
+      "actions": {
+        "actionUsed": false,
+        "bonusUsed": false,
+        "reactionUsed": false,
+        "movementUsedFt": 0,
+        "movementBudgetFt": 30
+      },
+      "defenses": {
+        "resistances": [],
+        "immunities": [],
+        "vulnerabilities": []
+      },
+      "conditionImmunities": [],
+      "radiation": {
+        "rp": 0,
+        "thresholds": {
+          "minor": 25,
+          "major": 50,
+          "severe": 75
+        }
+      },
+      "darkness": {
+        "value": 0,
+        "taint": 0,
+        "fragments": []
+      },
+      "tikkun": {
+        "stage": "sleeper",
+        "sparks": {}
+      },
+      "faction": {
+        "id": null,
+        "loyalty": 0
+      },
+      "bloodDebt": {
+        "value": 0,
+        "ledger": []
+      },
+      "tags": []
+    },
+    "npc": {
+      "role": "",
+      "tier": 1,
+      "factionId": "",
+      "notes": "",
+      "details": {
+        "level": 1,
+        "tier": 1,
+        "statPoints": 0,
+        "skillPoints": 0
+      },
+      "faction": {
+        "id": null,
+        "loyalty": 0
+      },
+      "attributes": {
+        "violence": {
+          "value": 1
+        },
+        "intrigue": {
+          "value": 1
+        },
+        "presence": {
+          "value": 1
+        },
+        "body": {
+          "value": 1
+        },
+        "mind": {
+          "value": 1
+        },
+        "soul": {
+          "value": 1
+        }
+      },
+      "skills": {},
+      "derived": {
+        "integrity": {
+          "value": 10,
+          "max": 10
+        },
+        "stress": {
+          "value": 8,
+          "max": 8
+        },
+        "guard": {
+          "value": 11
+        },
+        "evasion": {
+          "value": 11
+        },
+        "resolve": {
+          "value": 11
+        }
+      },
+      "magic": {
+        "clarity": {
+          "value": 2,
+          "max": 5
+        },
+        "noise": {
+          "value": 0,
+          "max": 10
+        },
+        "sephirah": "malkuth"
+      },
+      "resources": {
+        "frameDice": {
+          "current": 0,
+          "max": 0
+        },
+        "ruinCharges": {
+          "current": 0,
+          "max": 0
+        },
+        "pace": {
+          "current": 0,
+          "max": 0
+        },
+        "package": {
+          "type": "",
+          "id": "",
+          "carried": false
+        },
+        "burn": {
+          "current": 0,
+          "max": 8
+        },
+        "aura": {
+          "state": "none"
+        },
+        "accessDice": {
+          "current": 0,
+          "max": 3
+        },
+        "surge": {
+          "value": 0,
+          "max": 10,
+          "sceneResetAt": null
+        },
+        "dreamResonance": {
+          "active": false,
+          "insightUsed": false,
+          "hexSephirah": ""
+        },
+        "forgeCharge": {
+          "relicUsed": false,
+          "sparksRepaired": 0
+        }
+      },
+      "conditions": {
+        "staggered": false,
+        "scarred": false,
+        "calmed": false,
+        "blinded": false,
+        "prone": false,
+        "shaken": false,
+        "burning": false,
+        "restrained": false,
+        "charmed": false,
+        "compelled": false,
+        "dying": false
+      },
+      "actions": {
+        "actionUsed": false,
+        "bonusUsed": false,
+        "reactionUsed": false,
+        "movementUsedFt": 0,
+        "movementBudgetFt": 30
+      },
+      "defenses": {
+        "resistances": [],
+        "immunities": [],
+        "vulnerabilities": []
+      },
+      "conditionImmunities": [],
+      "tags": [],
+      "radiation": {
+        "rp": 0,
+        "thresholds": {
+          "minor": 25,
+          "major": 50,
+          "severe": 75
+        }
+      },
+      "darkness": {
+        "value": 0,
+        "taint": 0,
+        "fragments": []
+      }
+    },
+    "rig": {
+      "identity": {
+        "mobility": "mobile",
+        "state": "parked",
+        "factionOwnerId": "",
+        "archetype": "",
+        "binding": {
+          "hexId": "",
+          "sceneId": "",
+          "tokenId": ""
+        }
+      },
+      "crew": {
+        "slots": [],
+        "capacity": {
+          "pilot":    { "min": 1, "max": 1 },
+          "gunner":   { "min": 0, "max": 2 },
+          "engineer": { "min": 0, "max": 1 },
+          "crew":     { "min": 0, "max": 4 }
+        },
+        "crewMin": 1,
+        "crewMax": 8
+      },
+      "integrity": {
+        "value": 30,
+        "max": 30,
+        "tier": 1,
+        "bracket": "medium"
+      },
+      "derived": {
+        "guard":   { "value": 13 },
+        "evasion": { "value": 12 },
+        "resolve": { "value": 11 }
+      },
+      "defenses": {
+        "resistances": [],
+        "immunities": [],
+        "vulnerabilities": []
+      },
+      "conditionImmunities": [],
+      "output": {
+        "modules": [],
+        "basePerTurn": {}
+      },
+      "travel": {
+        "speed": 1,
+        "range": 5,
+        "hazardResist": 0
+      },
+      "tags": []
+    },
+    "boss": {
+      "identity": {
+        "archetype": "",
+        "archetypeTags": [],
+        "factionId": "",
+        "portraitVariants": []
+      },
+      "phases": {
+        "ladder": [],
+        "currentPhase": 0
+      },
+      "integrity": {
+        "value": 60,
+        "max": 60,
+        "tier": 1,
+        "bracket": "heavy"
+      },
+      "defenses": {
+        "resistances": [],
+        "immunities": [],
+        "vulnerabilities": []
+      },
+      "conditionImmunities": [],
+      "manifestations": {
+        "library": [],
+        "surge": {
+          "current": 0,
+          "max": 6,
+          "exploded": 0
+        },
+        "momentum": 0
+      },
+      "doctrine": {
+        "slot": "",
+        "maneuverKeys": []
+      },
+      "powers": {
+        "powers": [],
+        "cooldowns": {}
+      },
+      "behaviors": {
+        "behaviors": [],
+        "triggerState": {}
+      },
+      "raidStats": {
+        "rounds": 0,
+        "morale": 3,
+        "infiltration": 0,
+        "alarm": 0
+      },
+      "raidProfile": {
+        "key": "",
+        "mode": "hybrid",
+        "moraleHits": 4,
+        "hitTrack": "",
+        "tagsRaw": "",
+        "opStats": {
+          "violence": 0,
+          "nonlethal": 0,
+          "intrigue": 0,
+          "economy": 0,
+          "softpower": 0,
+          "diplomacy": 0,
+          "logistics": 0,
+          "culture": 0,
+          "faith": 0
+        },
+        "behaviorsRaw": "[]"
+      },
+      "tags": []
+    }
+  },
+  "Item": {
+    "types": [
+      "weapon",
+      "armor",
+      "power",
+      "gear",
+      "feature",
+      "feat",
+      "class",
+      "subclass",
+      "race",
+      "species",
+      "spark"
+    ],
+    "weapon": {
+      "category": "melee",
+      "intent": "violence",
+      "skill": "melee",
+      "damage": {
+        "formula": "2d6",
+        "attribute": "violence",
+        "type": "kinetic",
+        "damageFlavor": "",
+        "track": "integrity"
+      },
+      "range": {
+        "short": 1,
+        "long": 1
+      },
+      "tags": [],
+      "effect": "",
+      "flavor": "",
+      "manifestation": {
+        "tier": 1,
+        "family": "form",
+        "concept": "",
+        "form": "weapon",
+        "function": "harm",
+        "stability": "bound",
+        "interactionModel": "weapon",
+        "costType": "none",
+        "costValue": 0,
+        "costText": "",
+        "duration": "scene",
+        "durationText": "",
+        "triggerText": "",
+        "scale": "personal",
+        "targetText": "",
+        "rangeAreaText": "",
+        "maintenanceCost": "",
+        "riskText": "",
+        "pathResonance": "",
+        "fictionalPermission": "",
+        "gmCalibration": "",
+        "mechanicalHook": "",
+        "signature": "",
+        "thirdThing": "",
+        "opCost": {
+          "pool": "",
+          "value": 0
+        }
+      }
+    },
+    "armor": {
+      "guardBonus": 0,
+      "evasionBonus": 0,
+      "resolveBonus": 0,
+      "resistances": [],
+      "armorSkill": "weave",
+      "equipped": true,
+      "tags": [],
+      "category": "armor",
+      "source": "",
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    },
+    "power": {
+      "intent": "presence",
+      "channel": "soul",
+      "sephirah": "tiferet",
+      "mode": "hermetic",
+      "clarityRequired": 1,
+      "noiseGain": 0,
+      "activation": "action",
+      "target": "single",
+      "range": "near",
+      "damage": "",
+      "damageType": "energy",
+      "damageFlavor": "",
+      "damageRoll": {
+        "op": "none",
+        "number": 0,
+        "die": "d6",
+        "attribute": "",
+        "type": "kinetic",
+        "flavor": "",
+        "track": "integrity"
+      },
+      "effect": "",
+      "tags": [],
+      "category": "manifestation",
+      "flavor": "",
+      "manifestation": {
+        "tier": 1,
+        "family": "working",
+        "concept": "",
+        "form": "sigil",
+        "function": "transform",
+        "stability": "instant",
+        "interactionModel": "event",
+        "costType": "clarity",
+        "costValue": 1,
+        "costText": "",
+        "duration": "instant",
+        "durationText": "",
+        "triggerText": "",
+        "scale": "personal",
+        "targetText": "",
+        "rangeAreaText": "",
+        "maintenanceCost": "",
+        "riskText": "",
+        "pathResonance": "",
+        "fictionalPermission": "",
+        "gmCalibration": "",
+        "mechanicalHook": "",
+        "signature": "",
+        "thirdThing": "",
+        "opCost": {
+          "pool": "",
+          "value": 0
+        },
+        "area": {
+          "shape": "none",
+          "size": 0
+        },
+        "activation": {
+          "type": "action",
+          "consumePool": true
+        },
+        "save": {
+          "enabled": false,
+          "defense": "evasion",
+          "attribute": "",
+          "dcMode": "derived",
+          "dcFixed": 15
+        }
+      }
+    },
+    "gear": {
+      "slot": "misc",
+      "tags": [],
+      "category": "gear",
+      "source": "",
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    },
+    "feature": {
+      "category": "principle",
+      "source": "",
+      "tags": [],
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    },
+    "feat": {
+      "category": "technique",
+      "source": "",
+      "tags": [],
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    },
+    "class": {
+      "category": "path",
+      "identifier": "",
+      "source": "",
+      "tags": [],
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    },
+    "subclass": {
+      "category": "doctrine",
+      "classIdentifier": "",
+      "source": "",
+      "tags": [],
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    },
+    "race": {
+      "category": "ancestry",
+      "source": "",
+      "tags": [],
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    },
+    "species": {
+      "category": "ancestry",
+      "source": "",
+      "tags": [],
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    },
+    "spark": {
+      "category": "spark",
+      "sephirah": "",
+      "kind": "conceptual",
+      "alignedMethods": [],
+      "misalignedMethods": [],
+      "repair": {
+        "materialKey": "",
+        "materialAmount": 1,
+        "opCost": {
+          "pool": "",
+          "amount": 0
+        },
+        "ritualDC": 15
+      },
+      "source": "",
+      "tags": [],
+      "description": {
+        "value": "",
+        "chat": ""
+      }
+    }
+  }
+}

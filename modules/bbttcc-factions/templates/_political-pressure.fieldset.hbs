@@ -1,0 +1,110 @@
+{{!-- Political Pressure (AAE) --}}
+<fieldset class="bbttcc-card bbttcc-card-politics">
+  <legend>Political Pressure</legend>
+
+  <div class="flexrow" style="gap:1rem; justify-content:space-between; align-items:flex-start; flex-wrap:wrap;">
+    <div>
+      <div style="font-size:12px; opacity:.85;">Center Philosophy</div>
+      <div style="margin-top:.15rem;">
+        {{#if fx.politicalPressure.centerKey}}
+          <span class="bbttcc-pill bbttcc-pill-primary">{{fx.politicalPressure.centerLabel}}</span>
+          {{#if fx.politicalPressure.overrideKey}}
+            <span class="bbttcc-pill" style="margin-left:.35rem; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);">GM Override</span>
+          {{else}}
+            <span class="bbttcc-pill" style="margin-left:.35rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);">
+              Plurality {{fx.politicalPressure.pluralityPct}}%
+            </span>
+          {{/if}}
+        {{else}}
+          <span class="bbttcc-muted">(No roster philosophy set)</span>
+        {{/if}}
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:12px; opacity:.85;">Drift State</div>
+      <div style="margin-top:.15rem; display:flex; gap:.4rem; align-items:center;">
+        <span class="bbttcc-pill" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);">
+          {{fx.politicalPressure.severityState}}
+        </span>
+        <span class="bbttcc-pill" style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);">
+          Drift {{fx.politicalPressure.driftScore}}
+        </span>
+      </div>
+
+      <div class="bbttcc-meter" style="margin-top:.35rem; width:220px;">
+        <div class="bbttcc-meter-fill" style="width: {{bbttcc_abs fx.politicalPressure.driftScore}}%;"></div>
+      </div>
+      <div style="font-size:11px; opacity:.7; margin-top:.15rem;">
+        Range: -100…+100 (0 = aligned)
+      </div>
+    </div>
+  </div>
+
+  {{#if fx.politicalPressure.dist.length}}
+    <div style="margin-top:.6rem;">
+      <div style="font-size:12px; font-weight:600; margin-bottom:.25rem;">Roster Distribution (philosophy)</div>
+      <table class="bbttcc-table" style="width:auto;">
+        <thead>
+          <tr>
+            <th style="text-align:left;">Philosophy</th>
+            <th style="width:6rem;">Count</th>
+            <th style="width:6rem;">%</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each fx.politicalPressure.dist}}
+            <tr>
+              <td style="text-align:left;">{{label}}</td>
+              <td class="center">{{count}}</td>
+              <td class="center">{{pct}}%</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{/if}}
+
+  {{#if fx.politicalPressure.lastImpacts.length}}
+    <div style="margin-top:.6rem;">
+      <div style="font-size:12px; font-weight:600; margin-bottom:.25rem;">Recent Political Impacts</div>
+      <ul style="margin:.25rem 0 0 1.2rem; padding:0; font-size:12px; opacity:.9;">
+        {{#each fx.politicalPressure.lastImpacts}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
+
+  {{#if isGM}}
+    <hr style="border:none; border-top:1px solid rgba(255,255,255,0.10); margin:.75rem 0;"/>
+
+    <div class="flexrow" style="gap:.75rem; align-items:flex-end; flex-wrap:wrap;">
+      <div class="bbttcc-field" style="min-width:260px;">
+        <label>GM Override (Center Philosophy)</label>
+        <select data-pol-override="1">
+          <option value="">(Roster plurality)</option>
+          {{#each fx.politicalPressure.dist}}
+            <option value="{{key}}">{{label}}</option>
+          {{/each}}
+        </select>
+        <p class="hint" style="margin:.25rem 0 0;">Override is stored on the faction as AAE identity state.</p>
+      </div>
+
+      <div class="bbttcc-field">
+        <label>Adjust Drift</label>
+        <div class="flexrow" style="gap:.25rem; flex-wrap:wrap;">
+          <button type="button" class="button" data-pol-act="drift" data-pol-delta="-20">-20</button>
+          <button type="button" class="button" data-pol-act="drift" data-pol-delta="-5">-5</button>
+          <button type="button" class="button" data-pol-act="drift" data-pol-delta="+5">+5</button>
+          <button type="button" class="button" data-pol-act="drift" data-pol-delta="+20">+20</button>
+          <button type="button" class="button" data-pol-act="reset">Reset</button>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+
+  <p class="hint" style="margin:.5rem 0 0;">
+    Center defaults to roster plurality. Drift events trigger when sustained dissonance pushes the faction toward rupturing.
+  </p>
+</fieldset>

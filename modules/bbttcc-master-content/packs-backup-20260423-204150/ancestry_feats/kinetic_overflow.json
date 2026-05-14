@@ -1,0 +1,73 @@
+{
+  "name": "Circuitborn (Exo-Knight Line): Kinetic Overflow",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_wall_cut.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Exo-Knight Line)</em> at level 5; now available as an optional ancestry feat.</p><p><em>“Unused force becomes stored anger.”</em></p>\n        <p><strong>Kinetic Overflow.</strong> When you spend BBTTCC OP on Violence during a scene, you may bank one point of <em>Overflow</em> (max tier [TODO(pb-call)]). When you hit with a weapon attack, you can spend 1 Overflow to deal +1d6 kinetic damage (force).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "circuitborn-exo-kinetic_overflow",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Circuitborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "kinetic_overflow",
+      "chassis": "Exo-Knight Line",
+      "tierLevel": 5,
+      "version": "1.0.0",
+      "family": "circuitborn",
+      "heritage": "Exo-Knight",
+      "normalizedFrom": "Circuitborn (Exo-Knight Line)"
+    }
+  },
+  "effects": [],
+  "folder": "o4q4wKEdhkBfOl3w",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.F60GNP8S50IlxNEb",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192837574,
+    "modifiedTime": 1773192837574,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "F60GNP8S50IlxNEb",
+  "_srcfile": "fvtt-Item-circuitborn-(exo-knight-line)_-kinetic-overflow-F60GNP8S50IlxNEb.json"
+}

@@ -1,0 +1,60 @@
+{
+  "id": "bbttcc-tikkun",
+  "title": "BBTTCC Tikkun: The Great Work",
+  "description": "The Sparks of Light system for spiritual victory conditions.",
+  "version": "13.1.16",
+  "authors": [
+    {
+      "name": "BBTTCC Team"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system"
+      },
+      {
+        "id": "fourththing",
+        "type": "system",
+        "compatibility": {
+          "verified": "14"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/module.js",
+    "scripts/api.tikkun.js",
+    "scripts/tikkun-hotfix.js",
+    "scripts/tikkun-sparks.enhancer.js",
+    "scripts/tikkun-sheet.enhancer.js",
+    "scripts/tikkun-ritual.enhancer.js",
+    "scripts/tikkun-ritual-console.js",
+    "scripts/tikkun-beat-listener.enhancer.js",
+    "scripts/tikkun-repair.enhancer.js"
+  ],
+  "styles": [
+    "styles/tikkun-styles.css",
+    "styles/ritual-console.css"
+  ],
+  "packs": [
+    {
+      "name": "sparks",
+      "label": "Tikkun Sparks",
+      "path": "packs/sparks",
+      "type": "Item",
+      "system": "fourththing",
+      "private": false,
+      "flags": {
+        "bbttcc-tikkun": {
+          "purpose": "Authored sparks for the Great Work — 10 sephirot × 3 kinds (conceptual / vestigial / animate). Phase A of B3 Tikkun revisit (project_tikkun_revisit_plan_2026_05_09.md)."
+        }
+      }
+    }
+  ]
+}

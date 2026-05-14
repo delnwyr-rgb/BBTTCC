@@ -1,0 +1,108 @@
+{
+  "name": "Echo-Diver Heritage: Empyrean",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver_Empyrean.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Empyrean.</p><p><em>“Something is about to happen. Move.”</em></p><p><strong>Echo-Diver (Empyrean).</strong> Your time-sense tilts forward. You feel weather before it arrives — not the storm outside, the storm of events. Empyrean Echo-Divers are the ones who always get out of the room five seconds before the bad thing, and can never quite explain how.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Echo-Diver).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Intrigue</strong> in fiction and through Tier powers.</li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 10 feet would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 5 feet. If this moves the target out of the attack's range or line, the attack misses.</li><li><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You have advantage on Body checks against suffocation, starvation, dehydration, and extreme temperature.</li><li><strong>Vault Sight.</strong> You have low-light vision out to 60 feet. You have advantage on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</li><li><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</li></ul><h3>Empyrean Traits</h3><ul><li><strong>Stratospheric Resistance.</strong> You have resistance to energy damage with the lightning flavor, kinetic damage with the thunder flavor, and psychic damage. The sky takes its swing at you constantly. It misses.</li><li><strong>Weathered.</strong> You have advantage on Mind (Perception) checks that rely on hearing or air currents. You always know which way the wind is blowing. Always.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Intrigue OP</strong> and <strong>+1 Soft Power OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Open Sky / Plateau / High-Altitude</em> hexes, your faction gains +1 initiative on all conflicts resolved in those hexes.</li><li><strong>Storm Warning.</strong> Once per Strategic Turn, when the GM reveals an incoming hazard or attack on your faction, you may force the GM to disclose one additional detail about it. You saw it coming.</li></ul><p><strong>Note.</strong> This heritage grants its Tier I feat via ItemGrant with a placeholder UUID (rSeuOb0ns3zbEGT6). After import, run the wiring macro to bind real UUIDs.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "e1de72736ee05d97",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.rSeuOb0ns3zbEGT6",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Empyrean Tier I",
+        "hint": "Gain your Empyrean Tier I feat."
+      }
+    ],
+    "identifier": "echo_diver_empyrean_heritage",
+    "requirements": "Echo-Diver",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Empyrean",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "intrigue": 2,
+        "softpower": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "lightning"
+          },
+          {
+            "type": "kinetic",
+            "flavor": "thunder"
+          },
+          "psychic"
+        ]
+      }
+    }
+  },
+  "folder": "uXn4VQNRFHHYYbag",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.Uryua7cj6XkhMzgl",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "Uryua7cj6XkhMzgl"
+}

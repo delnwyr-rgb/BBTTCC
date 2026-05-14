@@ -1,0 +1,94 @@
+{
+  "name": "Oldenborn Heritage: Stormborn Nomad",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/StormbornNomad2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Oldenborn heritage: Stormborn Nomad.</p><p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Stormborn Nomad).</strong> Your place-soul is a weather front. You are the caravan memory of every tribe that crossed the ash squalls and came out the other side. When you walk, the wind remembers that you used to be the reason it had a name.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Oldenborn).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body or Soul</strong> in fiction and through Tier powers.</li></ul><h3>Oldenborn Core: Old Memory, Old Flesh</h3><p>At character creation you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered) from the Oldenborn species root.</p><h3>Stormborn Nomad Traits</h3><ul><li><strong>Weatherwise.</strong> You are skilled in Athletics (Body). You ignore difficult terrain caused by weather (mud, shallow snow, high winds, ash drifts).</li><li><strong>Ward of the Gale.</strong> Once per Soma Break, when you would take damage from an environmental source (storm, heat, cold, falling debris, pressure change), you may use your reaction to reduce that damage to half until the start of your next turn.</li><li><strong>Nomad Networks.</strong> You know one additional language. You have advantage on Presence and Soul checks to locate water, shelter, or safe passage in Desert, Ash Wastes, Swamp, or Mire hexes.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Non-Lethal OP</strong> and <strong>+1 Faith OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Desert / Ash Wastes / Swamp / Mire</em> hexes, your traveling party ignores the first hazard triggered per Strategic Turn in that terrain.</li><li><strong>Purifying Rite.</strong> Once per Strategic Turn, your faction may perform a 10-minute rite. If the group succeeds on a DC 15 group check (GM-set), you reduce regional Darkness by 1, at a cost of 1 Faith OP.</li></ul><p><strong>Note.</strong> This heritage grants its Tier I feat via ItemGrant with a placeholder UUID (4k4E7fkJnZ76JACZ). After import, run the wiring macro to bind real UUIDs.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "236ebf2cc07dd141",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.4k4E7fkJnZ76JACZ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Stormborn Nomad Tier I",
+        "hint": "Gain your Stormborn Nomad Tier I feat."
+      }
+    ],
+    "identifier": "oldenborn_stormborn_nomad_heritage",
+    "requirements": "Oldenborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "oldenborn",
+      "lineage": "Stormborn Nomad",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "nonlethal": 2,
+        "faith": 1
+      }
+    },
+    "fourththing": {}
+  },
+  "folder": "tOhJngjYdqMlM2Xz",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.nKHhfdL3U98tJj6r",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "nKHhfdL3U98tJj6r"
+}

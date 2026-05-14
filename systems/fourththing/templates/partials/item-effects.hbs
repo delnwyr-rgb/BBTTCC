@@ -1,0 +1,62 @@
+{{!-- Active Effects authoring section for fourththing item sheets.
+     Used by power-sheet.hbs, weapon-sheet.hbs, feature-sheet.hbs.
+     Renders item.effects as a list with Add/Edit/Delete/Toggle controls.
+     Edit/Delete buttons gated on isEditable (GM or item owner).
+     Wired to action handlers in module.js: ftAddItemEffect, ftEditItemEffect,
+     ftDeleteItemEffect, ftToggleItemEffect. --}}
+
+<details class="ft-item-effects-section" {{#if effectsSectionOpen}}open{{/if}}>
+  <summary class="ft-item-effects-summary">
+    <span class="ft-prev-label" style="font-weight:700;">Active Effects ({{itemEffects.length}})</span>{{#if itemEffectGroups.length}}<span style="font-size:0.72rem;opacity:0.6;margin-left:8px;">grouped by category</span>{{/if}}
+    <span class="ft-prev-align-note" style="font-weight:400;opacity:0.75;">Mechanical overrides — attribute / skill / discipline / manifestation knobs. Searchable typeahead in the change-key field.</span>
+  </summary>
+
+  {{#if isEditable}}
+  <div class="ft-section-header" style="display:flex;justify-content:flex-end;padding:6px 0;">
+    <button type="button" data-action="ftAddItemEffect" class="ft-add-btn">+ Add Effect</button>
+  </div>
+  {{/if}}
+
+  {{#if itemEffectGroups.length}}
+  <div class="ft-effects-list">
+    {{#each itemEffectGroups as |group|}}
+      <div class="ft-effect-group-header" style="margin:8px 0 4px 0;padding:3px 8px;font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#94a3b8;border-left:3px solid rgba(56,189,248,0.55);background:rgba(15,23,42,0.45);border-radius:0 6px 6px 0;">{{group.category}} <span style="opacity:0.55;font-weight:500;">({{group.effects.length}})</span></div>
+      {{#each group.effects as |effect|}}
+      <div class="ft-effect-row {{#if effect.disabled}}ft-effect-disabled{{/if}}" data-effect-id="{{effect.id}}" style="display:grid;grid-template-columns:32px 1fr auto;gap:8px;align-items:center;padding:6px 8px;border:1px solid rgba(55,65,81,0.6);border-radius:8px;background:rgba(15,23,42,0.55);margin-bottom:4px;">
+        <img src="{{effect.icon}}" class="ft-effect-icon" style="width:32px;height:32px;border-radius:4px;border:1px solid rgba(55,65,81,0.8);"/>
+        <div class="ft-effect-info">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="ft-effect-name" style="font-weight:700;">{{effect.name}}</span>
+            {{#if effect.disabled}}<span style="opacity:0.6;font-size:0.75rem;">(disabled)</span>{{/if}}
+          </div>
+          {{#if effect.changeTags.length}}
+          <div class="ft-effect-changes" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:3px;">
+            {{#each effect.changeTags as |c|}}
+            <span class="ft-change-tag" style="font-size:0.72rem;padding:1px 6px;background:rgba(56,189,248,0.12);border:1px solid rgba(56,189,248,0.35);border-radius:3px;color:#bae6fd;" title="{{c.full}}">{{c.text}}</span>
+            {{/each}}
+          </div>
+          {{else}}
+          <div style="font-size:0.72rem;opacity:0.6;margin-top:2px;">No changes — empty effect.</div>
+          {{/if}}
+        </div>
+        <div class="ft-effect-controls" style="display:flex;gap:4px;">
+          {{#if ../../isEditable}}
+            <button type="button" data-action="ftEditItemEffect" data-effect-id="{{effect.id}}" class="ft-res-btn" title="Edit Effect (opens AE config with key typeahead)">✎</button>
+            <button type="button" data-action="ftToggleItemEffect" data-effect-id="{{effect.id}}" class="ft-res-btn" title="{{#if effect.disabled}}Enable{{else}}Disable{{/if}}">{{#if effect.disabled}}▶{{else}}⏸{{/if}}</button>
+            <button type="button" data-action="ftDeleteItemEffect" data-effect-id="{{effect.id}}" class="ft-power-delete" title="Delete Effect">✕</button>
+          {{/if}}
+        </div>
+      </div>
+      {{/each}}
+    {{/each}}
+  </div>
+  {{else}}
+  <div class="ft-empty-state" style="padding:8px;font-size:0.85rem;opacity:0.7;">
+    {{#if isEditable}}
+      No effects on this item. Click <strong>+ Add Effect</strong> to create one — the change-key field has a searchable typeahead for every fourththing AE knob.
+    {{else}}
+      No active effects.
+    {{/if}}
+  </div>
+  {{/if}}
+</details>

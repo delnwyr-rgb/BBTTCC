@@ -1,0 +1,99 @@
+{
+  "name": "Sephirotic Scion Heritage: Seraphic",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Sephirotic_Scion_Seraphic.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Heritage (RFI v1.0).</strong> Ported to Roll for Initiation: 7-damage-type canon, Soma Break, Tier-based scaling, reroll-lowest. Replaces the D&amp;D5E heritage draft dated 2026-04-19 00:10.</p><p><em>&ldquo;What the Seraphim did to the wicked was sing them clean. Try not to be wicked around one.&rdquo;</em></p><p><strong>Sephirotic Scion (Seraphic).</strong> Order: burning. Fire in your hands is not metaphor.</p><h3>Heritage Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic).</li><li><strong>Size.</strong> Medium. Speed: normal.</li><li><strong>Unburning.</strong> You <strong>resist sephirotic</strong> damage.</li><li><strong>Coal-Song.</strong> You know a minor Manifestation of radiant fire &mdash; see your signature feat for the dice pool and scaling.</li><li><strong>Signature.</strong> You gain <em>Cleansing Breath</em> at character creation.</li></ul><p class=\"note\"><strong>Engine note.</strong> Where this heritage grants a damage-type resistance, it is applied by the fourththing defense engine via <code>flags.fourththing.grants</code>. Narrative immunities (sleep, forced movement, cold iron) are descriptive only until the Phase 3 condition-and-flavor engine ships.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "ATCPU0oiApkWSPH2",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.SSSERAPHICTIER1P",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Cleansing Breath",
+        "hint": "Gain the Sephirotic Scion (Seraphic) signature feat: Cleansing Breath."
+      }
+    ],
+    "identifier": "sephirotic_scion_seraphic_heritage",
+    "requirements": "Sephirotic Scion",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "sephirotic_scion",
+      "lineage": "Seraphic",
+      "version": "1.0.0-rfi",
+      "date": "2026-04-19",
+      "normalizedFrom": "new-v1.0",
+      "refactorNotes": "RFI Phase 2 port: 7-damage-type canon, Soma Break, Tier, reroll-lowest, attribute-defense DCs."
+    },
+    "fourththing": {
+      "kind": "heritage",
+      "family": "sephirotic_scion",
+      "lineage": "Seraphic",
+      "grants": {
+        "resistances": [
+          "sephirotic"
+        ],
+        "immunities": []
+      }
+    }
+  },
+  "folder": "ktaQ2YC0RiklPjfR",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.4SIsRTXvmp7b9e7t",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "4SIsRTXvmp7b9e7t"
+}

@@ -1,0 +1,78 @@
+{
+  "name": "Oldenborn (Stormborn Nomad): Weatherwise",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/StormbornNomad2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“The sky is a language. You were the first to learn the punctuation.”</em></p><p><strong>Weatherwise.</strong> You always know the upcoming weather for the next 12 hours within 1 mile, even underground. You have advantage on defense checks against weather effects (extreme cold, extreme heat, wind, storm).</p><p><strong>Wind-Read (1/Short Rest; recharges on Soma Break).</strong> When you would take energy damage with the lightning or cold flavor, or kinetic damage with the thunder flavor, you may use your reaction to halve it. The wind shifts as you do.</p><p><strong>Ash-Walker.</strong> You ignore difficult terrain caused by snow, ash, dust, sand, or shifting earth.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "oldenborn_stormborn_nomad_tier1",
+    "requirements": "Oldenborn (Stormborn Nomad)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "oldenborn",
+      "feature": "weatherwise",
+      "lineage": "Stormborn Nomad",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {}
+  },
+  "folder": "tOhJngjYdqMlM2Xz",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.4k4E7fkJnZ76JACZ",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "4k4E7fkJnZ76JACZ"
+}

@@ -1,0 +1,151 @@
+{
+  "name": "Syntax Warden (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_punctuation_2.png",
+  "system": {
+    "identifier": "bbttcc_cosmic_linguist_syntax_warden",
+    "classIdentifier": "cosmic_linguist",
+    "description": {
+      "value": "<h2 data-start=\"6413\" data-end=\"6432\">🟦 Syntax Warden</h2><blockquote data-start=\"6434\" data-end=\"6454\"><p data-start=\"6436\" data-end=\"6454\"><em data-start=\"6436\" data-end=\"6454\">“No exceptions.”</em></p></blockquote><p data-start=\"6456\" data-end=\"6502\">Syntax Wardens enforce the grammar of reality.</p><p data-start=\"6504\" data-end=\"6720\">They bind spells with clauses, establish hard rules, and punish repeated violations like syntax errors in an unforgiving language. Where others counter magic with force, Syntax Wardens counter it with <strong data-start=\"6705\" data-end=\"6719\">invalidity</strong>.</p><p data-start=\"6722\" data-end=\"6806\">Their wards don’t shimmer—they declare.<br data-start=\"6761\" data-end=\"6764\" />“No teleport.”<br data-start=\"6778\" data-end=\"6781\" />“No lies.”<br data-start=\"6791\" data-end=\"6794\" />“No escape.”</p><p data-start=\"6808\" data-end=\"6848\">And the universe, reluctantly, complies.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC Originals",
+      "rules": "2026",
+      "revision": 1
+    },
+    "advancement": {
+      "X2odWjk4ezux2IDj": {
+        "_id": "X2odWjk4ezux2IDj",
+        "type": "ItemGrant",
+        "level": 3,
+        "title": "Constraint Grammar & Warden’s Counter",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Ece0VWfL2FaPOaRY",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.MlSJNhVbewisOVGc",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "XRfhiI3sCCqo99ql": {
+        "_id": "XRfhiI3sCCqo99ql",
+        "type": "ItemGrant",
+        "level": 6,
+        "title": "No-Exception Ward",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.c45kcY0lFpLtaUnx",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "WzL1HFKbB7E4VODg": {
+        "_id": "WzL1HFKbB7E4VODg",
+        "type": "ItemGrant",
+        "level": 10,
+        "title": "Parse Error",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.jWUG8lHKxhdVio20",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "G1ugU9ipE54kON5w": {
+        "_id": "G1ugU9ipE54kON5w",
+        "type": "ItemGrant",
+        "level": 14,
+        "title": "Seal the Sentence",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Ea1NCdxntIvr8TIW",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      },
+      "OOnYBdwMjpSdiz05": {
+        "_id": "OOnYBdwMjpSdiz05",
+        "type": "ItemGrant",
+        "level": 17,
+        "title": "Absolute Syntax",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Zf2pWmQlmJN8bXQC",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "subclass": true
+    }
+  },
+  "folder": "uTDKceTzwZhsIpqw",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191519915,
+    "modifiedTime": 1775063134460,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "goypvGnpwE5IlwNI",
+  "sort": 262500,
+  "_key": "!items!goypvGnpwE5IlwNI"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "bbttcc-core",
+  "title": "BBTTCC Core",
+  "description": "Core registry for BBTTCC modules.",
+  "version": "13.1.16",
+  "compatibility": { "minimum": "12", "verified": "14" },
+  "authors": [{ "name": "BBTTCC" }],
+  "esmodules": [
+    "scripts/window-defaults.enhancer.js",
+    "scripts/module.js",
+    "scripts/story.gottgait.js",
+    "scripts/gottgait-story-console.js",
+    "scripts/bbttcc-ui-cleanup.enhancer.js",
+    "scripts/api.gm.js",
+    "scripts/bbttcc-story-button.enhancer.js",
+    "scripts/bbttcc-bridge.js"
+  ],
+  "styles": [
+    "styles/gottgait-story-console.css",
+    "styles/bbttcc-bridge.css"
+  ],
+  "packs": []
+}

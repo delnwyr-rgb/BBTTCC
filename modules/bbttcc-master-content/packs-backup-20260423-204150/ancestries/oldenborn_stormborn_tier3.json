@@ -1,0 +1,32 @@
+{
+  "_id": "c8e05fa8cdd314a8",
+  "name": "Oldenborn (Stormborn Nomad): Nomad Networks",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborn_StormbornNomad_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“You never really travel alone. Caravan chains, sky-routes, migrant camps — the map of where help <em>should</em> be is already in your head.”</em></p>\n<p><strong>Nomad Networks.</strong> You have reroll the lowest die on Presence and Soul checks [TODO(adv-call)] made to find shelter, guides, supplies, or black-market contacts along major travel routes, in caravan towns, or in any inhabited Desert / Ash Wastes / Swamp / Mire hex.</p>\n<p><strong>Route-Sense.</strong> When you spend at least 1 hour in a settlement of any size, the GM tells you one true thing about a route in or out of that settlement that an outsider would not know.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "oldenborn-stormborn-nomad-networks",
+    "requirements": "Oldenborn (Stormborn Nomad)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 11 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "oldenborn", "feature": "nomad_networks", "lineage": "Stormborn Nomad", "tierLevel": 11, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "5PPxNybRn7zD0k0G",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!c8e05fa8cdd314a8"
+}

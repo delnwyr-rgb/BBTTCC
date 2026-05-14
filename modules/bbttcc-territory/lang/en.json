@@ -1,0 +1,25 @@
+{
+  "BBTTCC.Territory.Faction": "Faction",
+  "BBTTCC.Territory.ClaimHex": "Claim Hex",
+  "BBTTCC.Territory.NoHexSelected": "No hex selected.",
+  "BBTTCC.Territory.Unclaimed": "Unclaimed",
+
+  "BBTTCC.Common.Claim": "Claim",
+  "BBTTCC.Common.Cancel": "Cancel",
+  "BBTTCC.Common.Release": "Release",
+  "BBTTCC.Common.Focus": "Focus",
+  "BBTTCC.Common.Unclaimed": "Unclaimed",
+
+  "BBTTCC.Dashboard.Title": "BBTTCC Territory Dashboard",
+  "BBTTCC.Dashboard.Scene": "Scene",
+  "BBTTCC.Dashboard.HexCount": "Hexes",
+  "BBTTCC.Dashboard.CreateHex": "Create Hex at Center",
+  "BBTTCC.Dashboard.Hexes": "Territory Hexes",
+  "BBTTCC.Dashboard.Owner": "Owner",
+  "BBTTCC.Dashboard.Type": "Type",
+  "BBTTCC.Dashboard.Size": "Size",
+  "BBTTCC.Dashboard.Pop": "Population",
+  "BBTTCC.Dashboard.Capital": "Capital",
+
+  "BBTTCC.HexConfig.Title": "BBTTCC Hex Configuration"
+}

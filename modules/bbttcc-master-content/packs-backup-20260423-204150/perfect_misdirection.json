@@ -1,0 +1,73 @@
+{
+  "name": "Circuitborn (Parallax Line): Perfect Misdirection",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_dimensional_5.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Parallax Line)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“Everyone is looking at the wrong thing. On purpose.”</em></p>\n        <p><strong>Perfect Misdirection (1/Long Rest).</strong> For 1 minute, hostile creatures have disadvantage on attacks against you unless they succeed a Wisdom save at the start of their turn (DC = 8 + PB + Dex). Also, once per minute you may force a ranged attack to miss by “editing the frame.”</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "circuitborn-parallax-perfect_misdirection",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Circuitborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "perfect_misdirection",
+      "chassis": "Parallax Line",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "circuitborn",
+      "heritage": "Parallax",
+      "normalizedFrom": "Circuitborn (Parallax Line)"
+    }
+  },
+  "effects": [],
+  "folder": "JfUyTYUxwU9OSbA0",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.yz0MrmlP9KhjhCQi",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192837574,
+    "modifiedTime": 1773192837574,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "yz0MrmlP9KhjhCQi",
+  "_srcfile": "fvtt-Item-circuitborn-(parallax-line)_-perfect-misdirection-yz0MrmlP9KhjhCQi.json"
+}

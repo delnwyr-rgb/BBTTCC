@@ -1,0 +1,74 @@
+/* BBTTCC Campaign Builder – UI Contrast Patch
+ * Purpose: improve readability on dark themes (avoid deep red-on-black).
+ * Include this CSS AFTER your Hex Chrome / bbttcc base styles.
+ */
+
+/* Base text */
+.bbttcc-campaign-builder-root,
+.bbttcc-campaign-table-editor {
+  color: rgba(235, 235, 235, 0.92);
+}
+
+.bbttcc-campaign-builder-root .bbttcc-muted,
+.bbttcc-campaign-table-editor .bbttcc-muted {
+  color: rgba(210, 210, 210, 0.85);
+}
+
+/* Inputs */
+.bbttcc-campaign-builder-root input,
+.bbttcc-campaign-builder-root textarea,
+.bbttcc-campaign-builder-root select,
+.bbttcc-campaign-table-editor input,
+.bbttcc-campaign-table-editor textarea,
+.bbttcc-campaign-table-editor select {
+  color: rgba(245, 245, 245, 0.95);
+}
+
+/* Code badges (this is usually the "deep red" culprit on black) */
+.bbttcc-campaign-builder-root code,
+.bbttcc-campaign-table-editor code {
+  color: rgba(235, 235, 235, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  padding: 1px 6px;
+}
+
+/* Link buttons */
+.bbttcc-campaign-builder-root .bbttcc-link-button,
+.bbttcc-campaign-table-editor .bbttcc-link-button {
+  color: rgba(235, 235, 235, 0.92);
+}
+
+.bbttcc-campaign-builder-root .bbttcc-link-button:hover,
+.bbttcc-campaign-table-editor .bbttcc-link-button:hover {
+  text-decoration: underline;
+}
+
+/* Keep danger links readable, not near-black */
+.bbttcc-campaign-builder-root .bbttcc-link-button.text-danger,
+.bbttcc-campaign-table-editor .bbttcc-link-button.text-danger {
+  color: rgba(255, 120, 120, 0.95);
+}
+
+/* Table header + zebra contrast */
+.bbttcc-campaign-builder-root .bbttcc-table thead th,
+.bbttcc-campaign-table-editor .bbttcc-table thead th {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.bbttcc-campaign-builder-root .bbttcc-table tbody tr:nth-child(even),
+.bbttcc-campaign-table-editor .bbttcc-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Focus ring */
+.bbttcc-campaign-builder-root input:focus,
+.bbttcc-campaign-builder-root textarea:focus,
+.bbttcc-campaign-builder-root select:focus,
+.bbttcc-campaign-table-editor input:focus,
+.bbttcc-campaign-table-editor textarea:focus,
+.bbttcc-campaign-table-editor select:focus {
+  outline: 2px solid rgba(120, 180, 255, 0.55);
+  outline-offset: 1px;
+}

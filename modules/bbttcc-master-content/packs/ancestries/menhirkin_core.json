@@ -1,0 +1,74 @@
+{
+  "name": "Menhirkin Core: The Land Stood Up",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Menhirkin_Core.png",
+  "system": {
+    "category": "ancestry",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 1,
+      "book": "Heritages v1.1 — Cores",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>Ancestry Core (v1.1, RFI-native).</strong> Shared across all Menhirkin heritages. Granted at character creation via the base ancestry item's ItemGrant advancement.</p><p><em>&ldquo;The land is not scenery. The land is a person. You are the version of it that finally stood up and walked over to complain.&rdquo;</em></p><h3>Menhirkin Core Traits</h3><ul><li><strong>Stone Soul.</strong> You count as Large for carry, shove, and grapple despite your Medium frame. Reroll-lowest on checks to resist being forcibly moved.</li><li><strong>Hex Recognition.</strong> 1/scene, while you are on a natural surface you are directly touching, you may whisper a single question about the place. The GM answers with one true thing the land knows.</li><li><strong>Slow to Wear.</strong> Reroll-lowest on Body checks against exhaustion, long-duration physical wear, forced marches, climate exposure, and sustained labor. You do not tire the way softer things tire.</li><li><strong>Heavy Presence.</strong> Your weight and settledness are perceptible. Creatures within 10 ft of you know you are there even if they cannot see you; you have disadvantage on Intrigue (Stealth) checks unless you are on or in stone.</li></ul><div data-ft-per-use=\"1\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #6a8caa;border-radius:0.35rem;background:rgba(55,75,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#a8c4e0;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Hex Recognition</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Action &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">On a natural surface you're touching, whisper a question — GM answers with one true thing the land knows.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [],
+    "identifier": "menhirkin_core",
+    "requirements": "Menhirkin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestryCore",
+      "family": "menhirkin",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "kind": "ancestryCore",
+      "family": "menhirkin",
+      "grants": {}
+    }
+  },
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1-cores",
+      "uuid": "Item.7kH3xU2kPkLufnd4",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11CORES"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "7kH3xU2kPkLufnd4"
+}

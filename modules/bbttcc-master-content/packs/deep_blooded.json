@@ -1,0 +1,121 @@
+{
+  "name": "Oldenborn (Earthbound): Deep-Blooded",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_stone_sphere.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Earthbound)</em> at level 5; now available as an optional ancestry feat.</p><p><em>“You were built for caves, collapse, and consequences.”</em></p>\n        <p><strong>Deep-Blooded.</strong> You have advantage on saving throws against poison and environmental exhaustion. You can’t be surprised by structural failure (collapsing ceilings, buckling catwalks) unless you are unconscious.</p>\n        <p><strong>Worksite Authority.</strong> You gain proficiency with mason’s tools or carpenter’s tools. If you already have both, you gain expertise with one.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "oldenborn-earthbound-deep_blooded",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "deep_blooded",
+      "lineage": "Earthbound",
+      "tierLevel": 5,
+      "version": "1.0.0",
+      "family": "oldenborn",
+      "heritage": "Earthbound",
+      "normalizedFrom": "Oldenborn (Earthbound)"
+    }
+  },
+  "effects": [
+    {
+      "_id": "773a14c965db4379",
+      "name": "Earthbound: Deep-Blooded (Poison Resist)",
+      "img": "icons/magic/earth/stone-skin.webp",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "system.traits.dr.value",
+          "mode": 2,
+          "value": "poison",
+          "priority": 10
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": 0,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": 0,
+        "startTurn": 0
+      },
+      "description": "Automation covers poison resistance; other benefits are table-facing.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      }
+    }
+  ],
+  "folder": "JHxSPSRslbz4mGci",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.bwb2U6eXyuF97LeP",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1773192856451,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "bwb2U6eXyuF97LeP",
+  "_srcfile": "fvtt-Item-oldenborn-(earthbound)_-deep-blooded-bwb2U6eXyuF97LeP.json"
+}

@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Ursid): Hibernate The Pain",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_sleep.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Ursid)</em> at level 5; now available as an optional ancestry feat.</p><p><em>“You go quiet. You don’t go down.”</em></p>\n        <p><strong>Hibernate The Pain (1/Long Rest).</strong> As a bonus action, you gain resistance to bludgeoning, piercing, and slashing damage for 1 minute. When this ends, you gain one level of exhaustion.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-ursid-hibernate_pain",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 5
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "hibernate_pain",
+      "clade": "Ursid",
+      "tierLevel": 5,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Ursid",
+      "normalizedFrom": "Furrykin (Ursid)"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": "Item.eVeE6NZzFFmPdcUq",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.eVeE6NZzFFmPdcUq",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "eVeE6NZzFFmPdcUq",
+  "_srcfile": "fvtt-Item-furrykin-(ursid)_-hibernate-the-pain-eVeE6NZzFFmPdcUq.json"
+}

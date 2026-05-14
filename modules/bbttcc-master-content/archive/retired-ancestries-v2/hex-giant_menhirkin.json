@@ -1,0 +1,30 @@
+{
+  "name": "Hex-Giant (Menhirkin)",
+  "type": "feat",
+  "img": "icons/creatures/magical/construct-stone.webp",
+  "system": {
+    "description": {
+      "value": "\n**Ancestry (BBTTCC).** Towering descendants of bunker\u2011era gene\u2011rigs and standing\u2011stone cults, Menhirkin are living bulwarks.\n\n**Traits**\n- **Ability Scores.** +2 Strength, +1 Constitution\n- **Size.** Medium (count as Large for carrying capacity and shove/grapple); **Speed.** 30 ft.\n- **Living Rampart.** Proficiency with *Athletics*. As a reaction when adjacent to an ally, impose disadvantage on one attack against that ally (1/short rest).\n- **Stonebound.** You have advantage on checks to resist forced movement and to build/fortify structures.\n\n**Strategic Hooks (Foundry/BBTTCC)**\n- **OP Edge.** Your faction gains **+2 Non\u2011Lethal OP** and **+1 Violence OP** at campaign start.\n- **Fortify Hex.** First *Patch the Breach* or structure\u2011repair per Siege each turn costs **1 fewer OP** (min 0).\n- **Logistics Frame.** Your raids treat **Logistics cost \u22121** once per Turn (moving siege materials efficiently).\n"
+    },
+    "source": "BBTTCC",
+    "activation": {
+      "type": "",
+      "cost": 0
+    },
+    "requirements": "Character Creation"
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestry",
+      "opEffects": {
+        "nonLethal": 2,
+        "violence": 1
+      },
+      "siegeRepairDiscount": 1,
+      "logisticsDiscountPerTurn": 1,
+      "version": "1.0.0",
+      "date": "2025-11-08"
+    }
+  },
+  "_id": "mJh91oDMWDwzfq6L"
+}

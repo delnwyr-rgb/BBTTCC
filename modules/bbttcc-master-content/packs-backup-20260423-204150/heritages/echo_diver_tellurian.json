@@ -1,0 +1,104 @@
+{
+  "name": "Echo-Diver Heritage: Tellurian",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver_Tellurian.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Echo-Diver heritage: Tellurian.</p><p><em>“Stone doesn’t hurry. You don’t either.”</em></p><p><strong>Echo-Diver (Tellurian).</strong> Your time-sense tilts toward the unchanging. You see what endures. In a room about to collapse, you are the one who can tell which beam will hold. Tellurian Echo-Divers outlast the world by refusing, at a very deep level, to be in a hurry about it.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Echo-Diver).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Echo-Diver does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Body</strong> in fiction and through Tier powers.</li></ul><h3>Echo-Diver Core: Half-Second Inheritance</h3><p><em>Shared across all Echo-Diver heritages. Granted at character creation via the base ancestry item.</em></p><ul><li><strong>Temporal Flinch.</strong> You cannot be surprised while conscious. Once per scene, when you or an ally within 10 feet would be hit by an attack you can see, you can use your reaction to shift yourself or that ally 5 feet. If this moves the target out of the attack's range or line, the attack misses.</li><li><strong>Niche Survivor.</strong> You need roughly half the food, water, and air that a comparable Medium creature needs. You have advantage on Body checks against suffocation, starvation, dehydration, and extreme temperature.</li><li><strong>Vault Sight.</strong> You have low-light vision out to 60 feet. You have advantage on Mind (Perception) checks to notice unstable structure, active traps, trigger plates, load-bearing failure, and temporal or Spark residue.</li><li><strong>Rat Inheritance.</strong> You can squeeze through spaces at least one foot wide without halving your movement, and you can hold stillness that shouldn't work.</li></ul><h3>Tellurian Traits</h3><ul><li><strong>Bedrock Resistance.</strong> You have resistance to energy damage with the fire flavor, poison damage, and kinetic damage with a single chosen flavor at creation (bludgeoning, piercing, or slashing). The mountain has been set on fire, poisoned, and hit with very large rocks. It is still the mountain.</li><li><strong>Slow Blood.</strong> You have advantage on Body checks to maintain concentration on a power or manifestation. You do not age naturally while conscious.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Body OP</strong> and <strong>+1 Logistics OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Bedrock / Mountain / Stone-Founded</em> hexes, your faction's defensive emplacements gain +1 on their defense track.</li><li><strong>Patience Tax.</strong> Once per Strategic Turn, your faction may declare a single long-held position and gain +2 on any check to hold that position this Turn. The stone does not have plans; it has presence.</li></ul><p><strong>Note.</strong> This heritage grants its Tier I feat via ItemGrant with a placeholder UUID (RNekCunRSsT7fuGU). After import, run the wiring macro to bind real UUIDs.</p>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "0e8a230e9c1652b9",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.RNekCunRSsT7fuGU",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Tellurian Tier I",
+        "hint": "Gain your Tellurian Tier I feat."
+      }
+    ],
+    "identifier": "echo_diver_tellurian_heritage",
+    "requirements": "Echo-Diver",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "echo_diver",
+      "lineage": "Tellurian",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "body": 2,
+        "logistics": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "fire"
+          },
+          "poison"
+        ]
+      }
+    }
+  },
+  "folder": "uXn4VQNRFHHYYbag",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.I63j6iSiB7jWsmmt",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "I63j6iSiB7jWsmmt"
+}

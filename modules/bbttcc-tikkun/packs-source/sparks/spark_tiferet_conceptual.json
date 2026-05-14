@@ -1,0 +1,53 @@
+{
+  "_id": "MO6QYGcGgaackA2Q",
+  "name": "Spark of Harmony (Conceptual)",
+  "type": "spark",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "category": "spark",
+    "sephirah": "tiferet",
+    "kind": "conceptual",
+    "alignedMethods": [
+      "diplomacy",
+      "softpower",
+      "faith"
+    ],
+    "misalignedMethods": [
+      "violence"
+    ],
+    "repair": {
+      "materialKey": "vow-resin",
+      "materialAmount": 1,
+      "opCost": {
+        "pool": "soul",
+        "amount": 2
+      },
+      "ritualDC": 18
+    },
+    "source": "BBTTCC Tikkun v1.0",
+    "tags": [
+      "tiferet",
+      "conceptual",
+      "spark"
+    ],
+    "description": {
+      "value": "<p><em>Idea-form. Lives in unwritten doctrine, half-remembered song, the shape of a vow.</em></p>\n<p><strong>Sephirah:</strong> Tiferet — Balance, integration.</p>\n<p><strong>Aligned methods:</strong> diplomacy, softpower, faith. <strong>Misaligned (causes Corruption):</strong> violence.</p>\n<p><em>GM hint:</em> When a quest beat resolves with a method tagged in <code>aligned</code>, the spark gathers cleanly. A method in <code>misaligned</code> still gathers it but flags it Corrupted — a repair ritual is required before it's eligible for faction integration.</p>",
+      "chat": ""
+    }
+  },
+  "flags": {
+    "bbttcc-tikkun": {
+      "sparkVersion": "1.0.0",
+      "identifier": "spark_tiferet_conceptual"
+    }
+  },
+  "_stats": {
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 0,
+    "modifiedTime": 0,
+    "lastModifiedBy": null
+  },
+  "_key": "!items!MO6QYGcGgaackA2Q"
+}

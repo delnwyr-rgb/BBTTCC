@@ -1,0 +1,51 @@
+<div class="ft-inventory">
+  {{#if items.length}}
+    {{#each items as |row|}}
+      <div class="ft-inv-row{{#if row.isEquipped}} is-equipped{{/if}}" data-item-id="{{row.id}}">
+        <img class="ft-inv-img" src="{{row.img}}" alt="" />
+
+        {{#if row.tier}}
+          <span class="ft-inv-tier ft-inv-tier-{{row.tier}}" title="Tier {{row.tier}}">T{{row.tier}}</span>
+        {{/if}}
+
+        <a class="ft-inv-name" data-action="ftItemEdit" title="Open item sheet">{{row.name}}</a>
+
+        {{#if row.qty}}
+          <span class="ft-inv-qty" title="Quantity">×{{row.qty}}</span>
+        {{/if}}
+
+        {{#if row.stat}}
+          <span class="ft-inv-stat">{{row.stat}}</span>
+        {{/if}}
+
+        {{#if row.signature}}
+          <span class="ft-inv-sig" title="Signature">⟡ {{row.signature}}</span>
+        {{/if}}
+
+        {{#if row.origin}}
+          <span class="ft-inv-origin" title="Origin">{{row.origin}}</span>
+        {{/if}}
+
+        <div class="ft-inv-actions">
+          {{#if row.isConsumable}}
+            <button type="button" class="ft-inv-btn ft-inv-use"
+                    data-action="ftConsume"
+                    title="Use{{#if row.charges}} ({{row.charges}} left){{/if}}">
+              Use{{#if row.charges}} ({{row.charges}}){{/if}}
+            </button>
+          {{else}}
+            <button type="button" class="ft-inv-btn ft-inv-equip{{#if row.isEquipped}} on{{/if}}"
+                    data-action="ftItemEquip"
+                    title="{{#if row.isEquipped}}Equipped — click to stow{{else}}Stowed — click to equip{{/if}}">
+              {{#if row.isEquipped}}◆{{else}}◇{{/if}}
+            </button>
+          {{/if}}
+          <button type="button" class="ft-inv-btn" data-action="ftItemEdit" title="Edit">⚙</button>
+          <button type="button" class="ft-inv-btn ft-inv-del" data-action="ftItemDelete" title="Delete">✕</button>
+        </div>
+      </div>
+    {{/each}}
+  {{else}}
+    <p class="ft-inv-empty">No inventory yet. Drag items from a compendium onto the sheet.</p>
+  {{/if}}
+</div>

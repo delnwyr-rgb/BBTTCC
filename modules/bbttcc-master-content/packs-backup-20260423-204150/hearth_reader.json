@@ -1,0 +1,121 @@
+{
+  "name": "Human (Neanderthal): Hearth-Reader",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_camp.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Human (Neanderthal)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“You read a room the way others read a map.”</em></p>\n        <p><strong>Hearth-Reader.</strong> You have advantage on Insight checks, and you can’t be surprised by social betrayal if you have spoken to the betrayer for at least 1 minute (GM adjudicates).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "human-neanderthal-hearth_reader",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 11
+    },
+    "properties": [],
+    "requirements": "Human",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "hearth_reader",
+      "lineage": "Neanderthal",
+      "tierLevel": 11,
+      "version": "1.0.0",
+      "family": "human",
+      "heritage": "Neanderthal",
+      "normalizedFrom": "Human (Neanderthal)"
+    }
+  },
+  "effects": [
+    {
+      "_id": "6fa7808881de4c20",
+      "name": "Neanderthal: Insight +1",
+      "img": "icons/skills/melee/unarmed-punch-fist.webp",
+      "type": "base",
+      "system": {},
+      "changes": [
+        {
+          "key": "system.skills.ins.bonuses.check",
+          "mode": 2,
+          "value": "+1",
+          "priority": 10
+        }
+      ],
+      "disabled": false,
+      "duration": {
+        "startTime": 0,
+        "seconds": null,
+        "combat": null,
+        "rounds": null,
+        "turns": null,
+        "startRound": 0,
+        "startTurn": 0
+      },
+      "description": "Small automation: +1 Insight checks.",
+      "origin": null,
+      "tint": "#ffffff",
+      "transfer": true,
+      "statuses": [],
+      "sort": 0,
+      "flags": {
+        "dnd5e": {
+          "riders": {
+            "statuses": []
+          }
+        }
+      },
+      "_stats": {
+        "compendiumSource": null,
+        "duplicateSource": null,
+        "exportSource": null,
+        "coreVersion": "13.351",
+        "systemId": "dnd5e",
+        "systemVersion": "5.2.5",
+        "lastModifiedBy": null
+      }
+    }
+  ],
+  "folder": "FUEBJfH6dHBLSlAC",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.N3xt88POaGL1U9AZ",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192844645,
+    "modifiedTime": 1773192844645,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "N3xt88POaGL1U9AZ",
+  "_srcfile": "fvtt-Item-human-(neanderthal)_-hearth-reader-N3xt88POaGL1U9AZ.json"
+}

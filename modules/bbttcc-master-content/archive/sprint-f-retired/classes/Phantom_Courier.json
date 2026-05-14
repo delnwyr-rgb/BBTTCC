@@ -1,0 +1,17 @@
+{
+  "name": "Phantom Courier",
+  "type": "class",
+  "system": {
+    "description": {
+      "value": "<p><strong>Primary Ability:</strong> Dexterity</p><p>Quantum-phase messenger who slips between timelines to deliver hope.</p><ul><li><strong>Tier 1:</strong> Proficiency in Stealth & Acrobatics. Ignore first terrain hazard each turn.</li><li><strong>Tier 2:</strong> When completing an Infiltration scenario, refund 1 Intrigue OP.</li><li><strong>Tier 3:</strong> Evasion feature (half damage on failed Dex saves).</li><li><strong>Tier 4:</strong> Once per turn, teleport 30 ft as a bonus action (dimensional flicker).</li></ul>"
+    }
+  },
+  "flags": {
+    "bbttcc": {
+      "primary": "dexterity",
+      "opBonus": {
+        "intrigue": 3
+      }
+    }
+  }
+}

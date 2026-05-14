@@ -1,0 +1,92 @@
+{
+  "name": "Echo-Diver (Abyssal): Tide Recall",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver_Abyssal.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“The last thing anyone thinks before they drown stays in the water with them. You can hear it.”</em></p><p><strong>Tide Recall (1/Short Rest; recharges on Soma Break).</strong> Touch a surface, creature, or object. The GM tells you one true thing from its recent past. The window of what counts as recent scales with your character tier:</p><ul><li>Tier 1 — the last 24 hours.</li><li>Tier 2 — the last week.</li><li>Tier 3 — the last year.</li><li>Tier 4 — anything that ever happened to it.</li></ul><p>The GM may colour the answer; they may not lie.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "echo_diver_abyssal_tier1",
+    "requirements": "Echo-Diver (Abyssal)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "echo_diver",
+      "feature": "tide_recall",
+      "lineage": "Abyssal",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "cold"
+          },
+          {
+            "type": "kinetic",
+            "flavor": "thunder"
+          },
+          "psychic"
+        ]
+      }
+    }
+  },
+  "folder": "uXn4VQNRFHHYYbag",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.Bg1PTabXXLoAlGnY",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "Bg1PTabXXLoAlGnY"
+}

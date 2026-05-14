@@ -1,0 +1,246 @@
+{
+  "_comment": "BBTTCC Raid \u2014 Full seed balance file (pre/post knobs). Remove any entries you don't want to override.",
+  "_updated": "2025-11-01T01:34:49.628596Z",
+  "maneuvers": {
+    "suppressive_fire": {
+      "cost": {
+        "violence": 2
+      },
+      "pre": {
+        "adv": true
+      }
+    },
+    "smoke_and_mirrors": {
+      "cost": {
+        "intrigue": 1,
+        "softpower": 1
+      },
+      "post": {
+        "alarmOnUse": -1
+      }
+    },
+    "rally_the_line": {
+      "cost": {
+        "softpower": 1
+      }
+    },
+    "patch_the_breach": {
+      "cost": {
+        "nonlethal": 1,
+        "economy": 1
+      },
+      "post": {
+        "queueRepairOnUse": true
+      }
+    },
+    "flash_bargain": {
+      "cost": {
+        "diplomacy": 1
+      },
+      "post": {
+        "transferOpOnSuccess": 1
+      }
+    },
+    "saboteurs_edge": {
+      "cost": {
+        "intrigue": 3
+      },
+      "pre": {
+        "dcBonus": -2
+      }
+    },
+    "bless_the_fallen": {
+      "cost": {
+        "faith": 2
+      },
+      "post": {
+        "casualtyShieldOnUse": 1
+      }
+    },
+    "logistical_surge": {
+      "cost": {
+        "economy": 2,
+        "logistics": 1
+      },
+      "post": {
+        "nextRoundRepeatFree": true
+      }
+    },
+    "command_overdrive": {
+      "cost": {
+        "violence": 3
+      },
+      "pre": {
+        "attBonus": 2
+      },
+      "post": {
+        "initiativeAdvNextRound": true
+      }
+    },
+    "psychic_disruption": {
+      "cost": {
+        "intrigue": 2,
+        "faith": 1
+      },
+      "pre": {
+        "adv": true
+      }
+    },
+    "defensive_entrenchment": {
+      "cost": {
+        "violence": 4
+      },
+      "pre": {
+        "dcBonusDefender": 3
+      }
+    },
+    "flank_attack": {
+      "cost": {
+        "violence": 5
+      },
+      "pre": {
+        "attBonus": 2
+      }
+    },
+    "spy_network": {
+      "cost": {
+        "intrigue": 3
+      },
+      "pre": {
+        "adv": true
+      }
+    },
+    "propaganda_push": {
+      "cost": {
+        "diplomacy": 3
+      },
+      "post": {
+        "moraleOnSuccess": 2
+      }
+    },
+    "echo_strike_protocol": {
+      "cost": {
+        "violence": 4,
+        "intrigue": 1
+      },
+      "pre": {
+        "attBonus": 3
+      }
+    },
+    "moral_high_ground": {
+      "cost": {
+        "softpower": 3
+      },
+      "pre": {
+        "adv": true
+      },
+      "post": {
+        "moraleOnSuccess": 1
+      }
+    },
+    "quantum_shield": {
+      "cost": {
+        "economy": 3,
+        "faith": 2
+      }
+    },
+    "overclock_the_golems": {
+      "cost": {
+        "economy": 2,
+        "violence": 2
+      },
+      "pre": {
+        "attBonus": 3
+      }
+    },
+    "counter_propaganda_wave": {
+      "cost": {
+        "softpower": 3,
+        "intrigue": 2
+      },
+      "pre": {
+        "dcBonusDefender": 2
+      }
+    },
+    "divine_favor": {
+      "cost": {
+        "faith": 5
+      },
+      "pre": {
+        "attBonus": 3
+      },
+      "post": {
+        "radiationOnFail": 1
+      }
+    },
+    "technocrat_override": {
+      "cost": {
+        "economy": 5
+      },
+      "post": {
+        "nextTurnOpGainPctOnSuccess": 10
+      }
+    },
+    "sephirotic_intervention": {
+      "cost": {
+        "faith": 5,
+        "softpower": 5
+      },
+      "pre": {
+        "autowin": true
+      },
+      "post": {
+        "darknessOnUse": -1
+      }
+    },
+    "ego_breaker": {
+      "cost": {
+        "violence": 6
+      },
+      "post": {
+        "enemyCapViolenceDeltaOnSuccess": -3
+      }
+    },
+    "reality_hack": {
+      "cost": {
+        "intrigue": 5,
+        "economy": 3
+      },
+      "pre": {
+        "adv": true
+      },
+      "post": {
+        "enemyLoyaltyDeltaOnSuccess": -2
+      }
+    },
+    "unity_surge": {
+      "cost": {
+        "diplomacy": 5,
+        "softpower": 5
+      },
+      "pre": {
+        "attBonus": 2
+      },
+      "post": {
+        "nextTurnOpGainPctOnSuccess": 5,
+        "moraleOnSuccess": 1
+      }
+    },
+    "qliphothic_gambit": {
+      "cost": {
+        "violence": 6
+      },
+      "pre": {
+        "attBonus": 6
+      },
+      "post": {
+        "darknessOnUse": 2
+      }
+    },
+    "supply_surge": {
+      "cost": {
+        "economy": 5
+      }
+    }
+  }
+}

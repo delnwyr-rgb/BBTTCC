@@ -1,0 +1,156 @@
+{
+  "name": "Route of the Emerald Relief (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_road_1.png",
+  "system": {
+    "advancement": {
+      "ER00000000000001": {
+        "_id": "ER00000000000001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.cVP9N3bb6jypNkPN",
+              "optional": false
+            },
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.eeZ5Um9ZmdCzrfHP",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 3,
+        "value": {},
+        "title": "Relief Run & Field Medic",
+        "hint": "",
+        "flags": {}
+      },
+      "ER00000000000002": {
+        "_id": "ER00000000000002",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.Lg5dGTB3Q9XixtaJ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 6,
+        "value": {},
+        "title": "Safe Convoy",
+        "hint": "",
+        "flags": {}
+      },
+      "ER00000000000003": {
+        "_id": "ER00000000000003",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.sc7eAAACjYYTpEF6",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 10,
+        "value": {},
+        "title": "Decoy Column",
+        "hint": "",
+        "flags": {}
+      },
+      "ER00000000000004": {
+        "_id": "ER00000000000004",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.PZoAVlHC4O7zGbtB",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 14,
+        "value": {},
+        "title": "Green Net",
+        "hint": "",
+        "flags": {}
+      },
+      "ER00000000000005": {
+        "_id": "ER00000000000005",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.CN4oQPYfBtOLJkUk",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "level": 18,
+        "value": {},
+        "title": "Emerald Lifeline",
+        "hint": "",
+        "flags": {}
+      }
+    },
+    "description": {
+      "value": "<p><em>Greenways of mercy; supply lines that heal.</em></p><h3>Level 3: Relief Run (BBTTCC)</h3><p>When you lead travel whose primary destination is a low-loyalty GenPop Hex, you may spend 1 Soft Power OP to flag it as a Relief Run. On arrival, unrest (or a similar negative sentiment track) in that hex is reduced by one step (GM adjudicates), and in the first Parley/negotiation scene there this Strategic Turn, you (or your designated face) have advantage on the first Parley-related check.</p><h3>Level 3: Field Medic</h3><p>You gain proficiency in Medicine (if you don’t already have it). In addition, you can attempt to stabilize a dying creature as a bonus action instead of an action; on success, they also gain temp HP equal to your PB (once per creature per long rest).</p><h3>Level 6: Safe Convoy</h3><p>When you move on your turn, any ally who is adjacent to you (within 5 ft) at any point during that movement gains resistance to damage from opportunity attacks triggered by their own movement until the start of your next turn.</p><h3>Level 10: Decoy Column</h3><p>Once per short rest, when an enemy group attempts to track or follow your party via Investigation, Survival, or similar, you can force a check against your Courier DC (8 + PB + Dex or Wis). On a failure, they commit to a false route for a short time, pursuing decoys instead of your true path.</p><h3>Level 14: Green Net</h3><p>Once per long rest, as an action, you trace a 30 ft Emerald Relief path. For 1 minute, allies moving along this path gain +10 ft speed and advantage on saves against being frightened.</p><h3>Level 18: Emerald Lifeline</h3><p>Once per long rest, as an action, you invoke the Emerald Lifeline for 1 minute: you and allies within 30 ft gain resistance to damage from travel/encounter hazards (environmental effects, traps, AOEs, opportunity attacks), and whenever an ally in the aura is healed, they regain extra HP equal to your PB. If you successfully escort civilians, supplies, or wounded units to safety during this effect without losing any escorted targets, your faction gains +1 Unity OP and +1 Soft Power OP, and may reduce an appropriate Attrition/Despair track by 1.</p>",
+      "chat": ""
+    },
+    "identifier": "bbttcc_phantom_route_emerald_relief",
+    "source": {
+      "revision": 1,
+      "rules": "2025",
+      "custom": "BBTTCC Originals"
+    },
+    "classIdentifier": "phantomcourier",
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {
+        "formula": ""
+      },
+      "ability": ""
+    }
+  },
+  "effects": [],
+  "folder": "E7I6Ya3pOWYvnrWe",
+  "flags": {
+    "bbttcc-fixed": {
+      "originalIdentifier": "bbttcc-phantom-route-emerald-relief",
+      "normalizedIdentifier": "bbttcc_phantom_route_emerald_relief"
+    },
+    "bbttcc": {
+      "subclass": true,
+      "subclassKey": "bbttcc_phantom_route_emerald_relief"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1765399262292,
+    "modifiedTime": 1775063116868,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "4Bs2J1tHpG4PGQHY": 3
+  },
+  "_id": "W11qu3gnyvapoZ2S",
+  "sort": 175000,
+  "_key": "!items!W11qu3gnyvapoZ2S"
+}

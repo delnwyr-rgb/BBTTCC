@@ -1,0 +1,32 @@
+{
+  "_id": "cab60ae6bea30238",
+  "name": "Cryptidkin (Chupacabra): Hex Drinker",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Cryptidkin_Chupacabra_1.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“When something dies near you, you remember what it was for.”</em></p>\n<p><strong>Hex Drinker.</strong> When a creature you can see within 30 feet drops to 0 Integrity, you may choose one of:</p>\n<ul><li>Gain temporary Integrity equal to your tier [TODO(pb-call)], or</li><li>Gain reroll the lowest die on your next attack roll or attribute checks [TODO(adv-call)] made before the end of your next turn.</li></ul>\n<p>You can use this feature a number of times equal to your tier [TODO(pb-call)], regaining all expended uses on a Soma Break.</p>",
+      "chat": ""
+    },
+    "source": { "custom": "BBTTCC", "rules": "2024", "revision": 2, "book": "", "license": "" },
+    "advancement": {},
+    "identifier": "cryptidkin-chupacabra-hex-drinker",
+    "requirements": "Cryptidkin (Chupacabra)",
+    "prerequisites": { "items": [], "repeatable": false, "level": 11 },
+    "uses": { "spent": 0, "recovery": [], "max": "" },
+    "activities": {},
+    "category": "feature",
+    "tags": [],
+    "type": { "value": "", "subtype": "" },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": { "originType": "feat" },
+    "bbttcc": { "kind": "cryptidkin", "feature": "hex_drinker", "lineage": "Chupacabra", "tierLevel": 11, "version": "2.0.0", "date": "2026-04-19" }
+  },
+  "folder": "f95fcfa18822c4e3",
+  "_stats": { "compendiumSource": null, "duplicateSource": null, "exportSource": null, "coreVersion": "13.351", "systemId": "dnd5e", "systemVersion": "5.2.5", "createdTime": 1776600000000, "modifiedTime": 1776600000000, "lastModifiedBy": "BBTTCCANCv2APPLY" },
+  "ownership": { "default": 0 },
+  "_key": "!items!cab60ae6bea30238"
+}

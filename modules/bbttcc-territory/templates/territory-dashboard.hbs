@@ -1,0 +1,507 @@
+<section class="bbttcc-territory">
+  <style>
+    /* Hex Chrome Territory Dashboard skin */
+
+    .bbttcc-territory .window-content {
+      padding: 0.7rem 0.9rem 0.9rem;
+      background:
+        radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(56,189,248,0.18), transparent 55%),
+        radial-gradient(circle at 0 100%, rgba(147,51,234,0.18), transparent 60%),
+        linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+      border-radius: 0.9rem;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.95),
+        0 18px 32px rgba(15,23,42,0.9);
+      box-sizing: border-box;
+      color: #e5e7eb;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 12px;
+    }
+
+    .bbttcc-territory header.flexrow {
+      padding: 0.45rem 0.6rem 0.5rem;
+      border-radius: 0.75rem;
+      background:
+        linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
+      border: 1px solid rgba(59,130,246,0.8);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.9),
+        0 0 18px rgba(59,130,246,0.45);
+      margin-bottom: 0.5rem;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .bbttcc-territory header.flexrow h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .bbttcc-territory header.flexrow small {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .bbttcc-territory header.flexrow button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      background:
+        radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
+        linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
+      color: #e5e7eb;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .bbttcc-territory header.flexrow button:hover {
+      filter: brightness(1.06);
+    }
+
+    /* Table shell */
+
+    .bbttcc-territory .bbttcc-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      border-radius: 0.8rem;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.95),
+        0 12px 22px rgba(15,23,42,0.9);
+    }
+
+    .bbttcc-territory .bbttcc-table thead {
+      background:
+        linear-gradient(90deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
+    }
+
+    .bbttcc-territory .bbttcc-table thead th {
+      padding: 0.3rem 0.45rem;
+      text-align: center;
+      font-weight: 600;
+      color: #cbd5f5;
+      border-bottom: 1px solid rgba(30,64,175,0.95);
+      white-space: nowrap;
+    }
+
+    .bbttcc-territory .bbttcc-table thead th:first-child {
+      text-align: left;
+    }
+
+    .bbttcc-territory .bbttcc-table tbody tr:nth-child(odd) {
+      background-color: rgba(15,23,42,0.97);
+    }
+
+    .bbttcc-territory .bbttcc-table tbody tr:nth-child(even) {
+      background-color: rgba(15,23,42,0.95);
+    }
+
+    .bbttcc-territory .bbttcc-table tbody td {
+      padding: 0.3rem 0.45rem;
+      border-top: 1px solid rgba(31,41,55,0.95);
+      vertical-align: middle;
+    }
+
+    .bbttcc-territory .bbttcc-table tbody td.center {
+      text-align: center;
+    }
+
+    /* Inputs / selects in rows */
+
+    .bbttcc-territory .bbttcc-table select,
+    .bbttcc-territory .bbttcc-table input[type="number"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.18rem 0.3rem;
+      border-radius: 0.35rem;
+      border: 1px solid rgba(55,65,81,0.95);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 11px;
+    }
+
+    .bbttcc-territory .bbttcc-table select:focus,
+    .bbttcc-territory .bbttcc-table input[type="number"]:focus {
+      outline: none;
+      border-color: rgba(59,130,246,0.9);
+      box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+    }
+
+    .bbttcc-territory .bbttcc-table input[type="checkbox"] {
+      transform: scale(1.1);
+    }
+
+    /* Integration cell */
+
+    .bbttcc-territory td[data-col="integration"] strong {
+      font-weight: 700;
+    }
+
+    .bbttcc-territory td[data-col="integration"] small {
+      opacity: 0.8;
+      font-size: 10px;
+    }
+
+    /* Actions buttons */
+
+    .bbttcc-territory td:last-child .flexrow button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      background:
+        radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
+        linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
+      color: #e5e7eb;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .bbttcc-territory td:last-child .flexrow button[data-action="delete"] {
+      border-color: rgba(220,38,38,0.9);
+      background:
+        radial-gradient(circle at 0 0, rgba(220,38,38,0.45), transparent 55%),
+        linear-gradient(135deg, rgba(127,29,29,0.98), rgba(15,23,42,0.98));
+    }
+
+    .bbttcc-territory td:last-child .flexrow button:hover {
+      filter: brightness(1.06);
+    }
+
+    /* “No hexes” row */
+
+    .bbttcc-territory tbody em {
+      opacity: 0.78;
+    }
+
+    /* Filter bar */
+
+    .bbttcc-territory .bbttcc-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      padding: 0.4rem 0.55rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.7rem;
+      background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,175,0.55));
+      border: 1px solid rgba(59,130,246,0.5);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.8),
+        0 0 12px rgba(59,130,246,0.25);
+      align-items: center;
+    }
+
+    .bbttcc-territory .bbttcc-filters label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #cbd5f5;
+      opacity: 0.8;
+      margin-right: 0.15rem;
+    }
+
+    .bbttcc-territory .bbttcc-filters input[type="search"],
+    .bbttcc-territory .bbttcc-filters select {
+      padding: 0.18rem 0.35rem;
+      border-radius: 0.35rem;
+      border: 1px solid rgba(55,65,81,0.95);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 11px;
+    }
+
+    .bbttcc-territory .bbttcc-filters input[type="search"] {
+      min-width: 10rem;
+    }
+
+    .bbttcc-territory .bbttcc-filters input[type="search"]:focus,
+    .bbttcc-territory .bbttcc-filters select:focus {
+      outline: none;
+      border-color: rgba(59,130,246,0.9);
+      box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+    }
+
+    .bbttcc-territory .bbttcc-filters button[data-action="clear-filters"] {
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.9);
+      background: linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
+      color: #e5e7eb;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .bbttcc-territory .bbttcc-filters button[data-action="clear-filters"]:hover {
+      filter: brightness(1.06);
+    }
+
+    .bbttcc-territory .bbttcc-filter-count {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      color: #cbd5f5;
+      opacity: 0.85;
+      margin-left: auto;
+    }
+  </style>
+
+  <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;">
+    <h2 class="flex0">{{localize "BBTTCC.Dashboard.Title"}} – {{sceneName}}</h2>
+
+    <button class="flex0" data-action="refresh" title="Refresh the list">
+      <i class="fas fa-sync"></i> Refresh
+    </button>
+
+    <button class="flex0" data-action="open-travel-console" title="Plan a travel route across the hex map">
+      <i class="fas fa-route"></i> Plan Travel
+    </button>
+
+    {{#if adoptionCount}}
+    <button class="flex0" data-action="adopt-hexes" title="Flag plain 6-gon drawings as territory hexes">
+      <i class="fas fa-plus-square"></i> Adopt {{adoptionCount}} Hexes
+    </button>
+    {{/if}}
+
+    <span class="flex1"></span>
+    <small class="flex0">Only hexes actually placed in this Scene are shown.</small>
+  </header>
+
+  <div class="bbttcc-filters">
+    <input type="search" data-filter="name" placeholder="Search name…" autocomplete="off" />
+
+    <select data-filter="owner" title="Filter by owner">
+      <option value="">All owners</option>
+      <option value="__unclaimed__">(Unclaimed)</option>
+      {{#each ownerList}}
+        <option value="{{id}}">{{name}}</option>
+      {{/each}}
+    </select>
+
+    <select data-filter="status" title="Filter by status">
+      <option value="">All statuses</option>
+      <option value="unclaimed">Unclaimed</option>
+      <option value="contested">Contested</option>
+      <option value="occupied">Occupied</option>
+      <option value="liberated">Liberated</option>
+    </select>
+
+    <select data-filter="type" title="Filter by type">
+      <option value="">All types</option>
+      <option value="settlement">Settlement</option>
+      <option value="fortress">Fortress</option>
+      <option value="mine">Mine</option>
+      <option value="farm">Farm</option>
+      <option value="port">Port</option>
+      <option value="factory">Factory</option>
+      <option value="research">Research Facility</option>
+      <option value="temple">Temple</option>
+      <option value="wilderness">Wilderness</option>
+      <option value="wasteland">Wasteland</option>
+      <option value="ruins">Ruins</option>
+    </select>
+
+    <select data-filter="size" title="Filter by size">
+      <option value="">All sizes</option>
+      <option value="none">None</option>
+      <option value="outpost">Outpost</option>
+      <option value="village">Village</option>
+      <option value="town">Town</option>
+      <option value="city">City</option>
+      <option value="metropolis">Metropolis</option>
+      <option value="megalopolis">Megalopolis</option>
+    </select>
+
+    <select data-filter="population" title="Filter by population">
+      <option value="">All populations</option>
+      <option value="uninhabited">Uninhabited</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+
+    <select data-filter="capital" title="Filter by capital flag">
+      <option value="">Capital: All</option>
+      <option value="yes">Capital</option>
+      <option value="no">Non-capital</option>
+    </select>
+
+    <select data-filter="integrationStage" title="Filter by integration stage">
+      <option value="">All stages</option>
+      <option value="wild">Untouched Wilderness</option>
+      <option value="outpost">Foothold / Outpost</option>
+      <option value="developing">Developing Territory</option>
+      <option value="settled">Settled Province</option>
+      <option value="integrated">Integrated Heartland</option>
+    </select>
+
+    <button type="button" data-action="clear-filters" title="Clear all filters">
+      <i class="fas fa-times"></i> Clear
+    </button>
+
+    <span class="bbttcc-filter-count" data-role="filter-count"></span>
+  </div>
+
+  <table class="bbttcc-table">
+    <thead>
+      <tr>
+        <th style="width:10rem;">Name</th>
+        <th>Owner</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Size</th>
+        <th>Population</th>
+        <th>Integration</th>
+        <th>Capital</th>
+        <th>Food</th>
+        <th>Materials</th>
+        <th>Trade</th>
+        <th>Military</th>
+        <th>Knowledge</th>
+        <th>X,Y</th>
+        <th>Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {{#each rows}}
+      <tr class="bbttcc-hex-row"
+          data-name="{{name}}"
+          data-owner="{{ownerId}}"
+          data-status="{{status}}"
+          data-type="{{type}}"
+          data-size="{{size}}"
+          data-population="{{population}}"
+          data-capital="{{#if capital}}yes{{else}}no{{/if}}"
+          data-integration-stage="{{integrationStageKey}}">
+        <td>
+          <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{name}}">
+            {{#if name}}{{name}}{{else}}<em>(unnamed)</em>{{/if}}
+          </div>
+        </td>
+
+        <td>
+          <select data-edit="factionId" data-id="{{id}}">
+            <option value="">{{localize "BBTTCC.Common.Unclaimed"}}</option>
+            {{#if ../ownerList}}
+              {{#each ../ownerList}}
+                <option value="{{id}}" {{#if (bbttcc_eq id ../ownerId)}}selected{{/if}}>{{name}}</option>
+              {{/each}}
+            {{/if}}
+          </select>
+        </td>
+
+        <td>
+          <select data-edit="status" data-id="{{id}}">
+            <option value="unclaimed" {{#if (bbttcc_eq status "unclaimed")}}selected{{/if}}>Unclaimed</option>
+            <option value="contested" {{#if (bbttcc_eq status "contested")}}selected{{/if}}>Contested</option>
+            <option value="occupied"  {{#if (bbttcc_eq status "occupied")}}selected{{/if}}>Occupied</option>
+            <option value="liberated" {{#if (bbttcc_eq status "liberated")}}selected{{/if}}>Liberated</option>
+          </select>
+        </td>
+
+        <td>
+          <select data-edit="type" data-id="{{id}}">
+            <option value="settlement" {{#if (bbttcc_eq type "settlement")}}selected{{/if}}>Settlement</option>
+            <option value="fortress"   {{#if (bbttcc_eq type "fortress")}}selected{{/if}}>Fortress</option>
+            <option value="mine"       {{#if (bbttcc_eq type "mine")}}selected{{/if}}>Mine</option>
+            <option value="farm"       {{#if (bbttcc_eq type "farm")}}selected{{/if}}>Farm</option>
+            <option value="port"       {{#if (bbttcc_eq type "port")}}selected{{/if}}>Port</option>
+            <option value="factory"    {{#if (bbttcc_eq type "factory")}}selected{{/if}}>Factory</option>
+            <option value="research"   {{#if (bbttcc_eq type "research")}}selected{{/if}}>Research Facility</option>
+            <option value="temple"     {{#if (bbttcc_eq type "temple")}}selected{{/if}}>Temple</option>
+            <option value="wilderness" {{#if (bbttcc_eq type "wilderness")}}selected{{/if}}>Wilderness</option>
+            <option value="wasteland"  {{#if (bbttcc_eq type "wasteland")}}selected{{/if}}>Wasteland</option>
+            <option value="ruins"      {{#if (bbttcc_eq type "ruins")}}selected{{/if}}>Ruins</option>
+          </select>
+        </td>
+
+        <td>
+          <select data-edit="size" data-id="{{id}}">
+            <option value="none"       {{#if (bbttcc_eq size "none")}}selected{{/if}}>None (×0.0)</option>
+            <option value="outpost"     {{#if (bbttcc_eq size "outpost")}}selected{{/if}}     {{#if (bbttcc_eq size "small")}}selected{{/if}}>Outpost (×0.5)</option>
+            <option value="village"     {{#if (bbttcc_eq size "village")}}selected{{/if}}>Village (×0.75)</option>
+            <option value="town"        {{#if (bbttcc_eq size "town")}}selected{{/if}}        {{#if (bbttcc_eq size "standard")}}selected{{/if}}>Town (×1.0)</option>
+            <option value="city"        {{#if (bbttcc_eq size "city")}}selected{{/if}}>City (×1.5)</option>
+            <option value="metropolis"  {{#if (bbttcc_eq size "metropolis")}}selected{{/if}}  {{#if (bbttcc_eq size "large")}}selected{{/if}}>Metropolis (×2.0)</option>
+            <option value="megalopolis" {{#if (bbttcc_eq size "megalopolis")}}selected{{/if}}>Megalopolis (×3.0)</option>
+          </select>
+        </td>
+
+        <td>
+          <select data-edit="population" data-id="{{id}}">
+            <option value="uninhabited" {{#if (bbttcc_eq population "uninhabited")}}selected{{/if}}>Uninhabited (0)</option>
+            <option value="low"    {{#if (bbttcc_eq population "low")}}selected{{/if}}>Low</option>
+            <option value="medium" {{#if (bbttcc_eq population "medium")}}selected{{/if}}>Medium</option>
+            <option value="high"   {{#if (bbttcc_eq population "high")}}selected{{/if}}>High</option>
+          </select>
+        </td>
+
+        <td data-col="integration">
+          <div style="white-space:nowrap;">
+            <strong>{{integrationProgress}} / {{integrationMax}}</strong><br/>
+            <small>
+              {{#if integrationStageLabel}}{{integrationStageLabel}}{{else}}—{{/if}}
+            </small>
+          </div>
+        </td>
+
+        <td class="center">
+          <input type="checkbox" data-edit="capital" data-id="{{id}}" {{#if capital}}checked{{/if}}/>
+        </td>
+
+        <!-- Resources -->
+        <td><input type="number" data-edit="resources.food"      data-id="{{id}}" value="{{resources.food}}"      style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.materials" data-id="{{id}}" value="{{resources.materials}}" style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.trade"     data-id="{{id}}" value="{{resources.trade}}"     style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.military"  data-id="{{id}}" value="{{resources.military}}"  style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.knowledge" data-id="{{id}}" value="{{resources.knowledge}}" style="width:4rem;" /></td>
+
+        <td><code>{{x}}, {{y}}</code></td>
+        <td><small>{{createdAt}}</small></td>
+
+        <td>
+          <div class="flexrow" style="gap:.25rem; justify-content:flex-end;">
+            <button data-action="focus" data-id="{{id}}" title="{{localize 'BBTTCC.Common.Focus'}}">
+              <i class="fas fa-crosshairs"></i> {{localize "BBTTCC.Common.Focus"}}
+            </button>
+            <button data-action="edit" data-id="{{id}}" data-uuid="{{uuid}}" title="Edit this hex">
+              <i class="fas fa-flag"></i> Edit
+            </button>
+            <button data-action="delete" data-id="{{id}}" data-uuid="{{uuid}}" title="Delete this hex">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+      {{/each}}
+
+      {{#if rows.length}}
+      <tr class="bbttcc-no-matches" style="display:none;">
+        <td colspan="16" class="center"><em>No hexes match the current filters.</em></td>
+      </tr>
+      {{/if}}
+
+      {{#unless rows.length}}
+      <tr><td colspan="16" class="center"><em>No territory hexes on this Scene yet.</em></td></tr>
+      {{/unless}}
+    </tbody>
+  </table>
+</section>

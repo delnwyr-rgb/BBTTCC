@@ -1,0 +1,73 @@
+{
+  "name": "Furrykin (Leporid): Impossible Escape",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_escape.png.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Leporid)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You were never where the trap expected.”</em></p>\n        <p><strong>Impossible Escape (1/a Soma Break).</strong> When you fail a Intrigue check, you may choose to succeed instead. Also, once per minute you may phase through a nonmagical barrier you could plausibly squeeze through (GM adjudicates).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "furrykin-leporid-impossible_escape",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Furrykin",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "impossible_escape",
+      "clade": "Leporid",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "furrykin",
+      "heritage": "Leporid",
+      "normalizedFrom": "Furrykin (Leporid)"
+    }
+  },
+  "effects": [],
+  "folder": "JOpucgrEanUp9Afj",
+  "_stats": {
+    "compendiumSource": "Item.TJvHeo39iZi6B25a",
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.TJvHeo39iZi6B25a",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1773192841996,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "TJvHeo39iZi6B25a",
+  "_srcfile": "fvtt-Item-furrykin-(leporid)_-impossible-escape-TJvHeo39iZi6B25a.json"
+}

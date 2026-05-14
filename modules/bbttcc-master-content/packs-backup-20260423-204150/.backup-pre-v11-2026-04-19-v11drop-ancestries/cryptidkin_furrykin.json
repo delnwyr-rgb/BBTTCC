@@ -1,0 +1,94 @@
+{
+  "_id": "a2b5906bad32ad4c",
+  "name": "Cryptidkin Heritage: Furrykin",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RayCat.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Cryptidkin Subspecies.</strong> This heritage preserves the original UUID for <em>Furrykin</em> while converting it from a species-root with five sub-clades into a single flexible Cryptidkin subspecies.</p><p><em>\u201cYou are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.\u201d</em></p><p><strong>Furrykin.</strong> You are anything fur-bearing the world decided to make people out of. Talking badger, cunning fox, stoic bear, watchful rabbit, the uncle-shaped thing the trappers call Bigfoot\u2014all valid. Size and frame are flexible; the instinct is not.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Cryptidkin).</li><li><strong>Size.</strong> Small or Medium (choose at creation; Medium Furrykin can describe themselves as \u201clarge and shaggy\u201d without mechanical change\u2014Bigfoot-scale creatures still move and fight at Medium).</li><li><strong>Speed.</strong> 30 feet.</li><li><strong>Subspecies Lean.</strong> No fixed stat lean. Your frame is your business\u2014the Tier powers adapt to how you play it.</li></ul><h3>Core: Folklore &amp; Frame</h3><p>At creation you gain <strong>Folklore &amp; Frame</strong> (Folklore Presence, Wasteland Adapted, Survivor\u2019s Instinct).</p><h3>Wildframe &amp; Instinct (Furrykin Extras)</h3><ul><li><strong>Wildframe.</strong> Your body is built for a world that bites back. You already have advantage on saving throws against disease and environmental poison (from Wasteland Adapted); as Furrykin, you also add your proficiency bonus to any Constitution save to resist exhaustion.</li><li><strong>Keen Sense.</strong> Choose one: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You have advantage on Perception checks relying on that sense.</li><li><strong>Frame Choice.</strong> Choose one narrative frame at creation: <em>Predator</em> (bite or claws count as unarmed strikes that deal 1d6 instead of 1d4), <em>Forager</em> (proficiency in Survival), or <em>Brute</em> (count as one size larger for carrying, shoving, and grappling).</li></ul><h3>Furrykin Tier Powers</h3><p>You gain Tier I at creation, then Tier II (5), Tier III (11), Tier IV (17). Tier powers previously split across Felid / Leporid / Mustelid / Ursid / Vulpin are unified; choose flavor at the table without mechanical separation.</p><p><strong>Note:</strong> This heritage uses placeholder ItemGrant UUIDs for Tier I. Run the Cryptidkin wiring macro after you store feats/species in compendiums.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 2,
+      "book": "",
+      "license": ""
+    },
+    "advancement": [
+      {
+        "_id": "ckfurrykinadv001",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.RWAuuqy8LInVCgvJ",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Furrykin Tier I",
+        "hint": "Gain your Furrykin Tier I subspecies power (maps to legacy Wildframe & Instinct grant)."
+      }
+    ],
+    "identifier": "cryptidkin_furrykin_heritage",
+    "requirements": "Cryptidkin",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "cryptidkin",
+      "lineage": "Furrykin",
+      "version": "2.0.0",
+      "date": "2026-04-18",
+      "normalizedFrom": "Furrykin [species + 5 clade heritages consolidated]",
+      "consolidatedFrom": [
+        "furrykin_felid",
+        "furrykin_leporid",
+        "furrykin_mustelid",
+        "furrykin_ursid",
+        "furrykin_vulpin"
+      ]
+    }
+  },
+  "folder": "",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-ancestry-v2",
+      "uuid": "Item.a2b5906bad32ad4c",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1744977600000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  }
+}

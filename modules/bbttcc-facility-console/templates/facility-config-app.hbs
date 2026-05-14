@@ -1,0 +1,47 @@
+{{!-- modules/bbttcc-facility-console/templates/facility-config-app.hbs --}}
+{{!-- RETIRED 2026-05-08 — replaced by Rig actor sheet (mobility=stationary). --}}
+{{!-- Original 272-line form preserved at facility-config-app.hbs.legacy-2026-05-08 --}}
+
+<form class="bbttcc-facility-config-shim" autocomplete="off" style="height:100%;display:flex;flex-direction:column;min-height:0;padding:1rem;">
+  <div class="bbttcc-card" style="padding:1rem;border:1px solid #d4a35f;background:rgba(212,163,95,0.08);border-radius:6px;">
+
+    <h2 style="margin-top:0;color:#ffd28a;">Facility Config — Retired</h2>
+
+    <p style="line-height:1.5;">
+      Facilities were unified with rigs in the
+      <strong>2026-05-07 Rig &amp; Boss Modernization Sprint</strong>.
+      A facility is now a <strong>stationary Rig actor</strong> — same authoring
+      sheet, same gear catalog, same defense engine, just with
+      <code>mobility: "stationary"</code> and a hex binding.
+    </p>
+
+    <p style="line-height:1.5;color:#bbb;font-size:0.85rem;">
+      Existing legacy facility data is preserved read-only as audit. The buttons below
+      open the new authoring path.
+    </p>
+
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;">
+      <button type="button" class="bbttcc-button primary" data-ft-shim-action="create-facility" style="padding:.5rem .9rem;">
+        <i class="fas fa-plus"></i>&nbsp;Create New Facility (Stationary Rig)
+      </button>
+      <button type="button" class="bbttcc-button" data-ft-shim-action="open-actors-rigs" style="padding:.5rem .9rem;">
+        <i class="fas fa-list"></i>&nbsp;Open Actors Directory
+      </button>
+      <button type="button" class="bbttcc-button" data-ft-shim-action="show-legacy" style="padding:.5rem .9rem;">
+        <i class="fas fa-archive"></i>&nbsp;Show Legacy Audit Data
+      </button>
+    </div>
+
+    <details style="margin-top:1rem;">
+      <summary style="cursor:pointer;color:#d4a35f;">Why unified?</summary>
+      <p style="line-height:1.6;color:#ccc;font-size:0.85rem;">
+        A facility <em>is</em> a rig that doesn't move. Mobile rigs become stationary
+        when they park; hybrid rigs (sail barges, mobile facilities) toggle between modes.
+        Authoring them as one type means a <strong>Mounted Forge</strong> output module
+        works identically on a Forge Facility (full output) or a War Rig deployed
+        to a scene (50% output during deployment). One catalog, infinite flavor.
+      </p>
+    </details>
+
+  </div>
+</form>

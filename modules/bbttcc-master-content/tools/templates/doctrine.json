@@ -1,0 +1,16 @@
+{
+  "name": "<Doctrine Name>",
+  "type": "subclass",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "<doctrine_id>",
+    "classIdentifier": "<parent_path_id>",
+    "description": {
+      "value": "<p>What this doctrine emphasizes — the stance/route/path metaphor that frames its 5 features.</p>",
+      "chat": ""
+    },
+    "advancement": {}
+  },
+  "effects": [],
+  "flags": { "bbttcc": { "kind": "doctrine" } }
+}

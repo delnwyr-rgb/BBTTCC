@@ -1,0 +1,88 @@
+{
+  "name": "Echo-Diver (Tellurian): Stone Patience",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/EchoDiver_Tellurian.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><em>“You are harder to move than most people are willing to try for.”</em></p><p><strong>Stone Patience.</strong> You passively know, without rolling, the approximate age and structural integrity of any object you touch. Additionally, once per Soma Break, as a bonus action, you may anchor yourself: until the start of your next turn, you cannot be moved against your will, knocked prone, or made shaken. Forced movement effects targeting you fail cleanly; the aggressor knows it.</p>",
+      "chat": ""
+    },
+    "advancement": {},
+    "identifier": "echo_diver_tellurian_tier1",
+    "requirements": "Echo-Diver (Tellurian)",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [
+        {
+          "period": "sr",
+          "type": "recoverAll",
+          "formula": ""
+        }
+      ],
+      "max": "1"
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "feat"
+    },
+    "bbttcc": {
+      "kind": "echo_diver",
+      "feature": "stone_patience",
+      "lineage": "Tellurian",
+      "tierLevel": 1,
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "energy",
+            "flavor": "fire"
+          },
+          "poison"
+        ]
+      }
+    }
+  },
+  "folder": "uXn4VQNRFHHYYbag",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.RNekCunRSsT7fuGU",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "RNekCunRSsT7fuGU"
+}

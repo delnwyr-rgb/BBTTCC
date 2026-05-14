@@ -1,0 +1,73 @@
+{
+  "name": "Oldenborn (Earthbound): World-Anchor",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_asteroid.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Earthbound)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“Reality tries to slide. You say: no.”</em></p>\n        <p><strong>World-Anchor (1/a Soma Break).</strong> When you or an ally you can see within 30 feet would be teleported, displaced, banished, or forcibly moved by a magical or metaphysical effect, you can use your reaction to anchor them. The effect fails, and the attacker takes psychic backlash equal to your tier [TODO(pb-call)].</p>\n        <p><strong>BBTTCC Hook.</strong> In strategic play, your faction treats Slippage in your current hex as one step less severe for 1 Turn (handled by BBTTCC flags / GM).</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "oldenborn-earthbound-world_anchor",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": 17
+    },
+    "properties": [],
+    "requirements": "Oldenborn",
+    "type": {
+      "value": "",
+      "subtype": "ancestryFeat"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "ancestryFeat",
+      "feature": "world_anchor",
+      "lineage": "Earthbound",
+      "tierLevel": 17,
+      "version": "1.0.0",
+      "family": "oldenborn",
+      "heritage": "Earthbound",
+      "normalizedFrom": "Oldenborn (Earthbound)"
+    }
+  },
+  "effects": [],
+  "folder": "JHxSPSRslbz4mGci",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.7B1T4uP9SSMf34Pj",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192856451,
+    "modifiedTime": 1773192856451,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "7B1T4uP9SSMf34Pj",
+  "_srcfile": "fvtt-Item-oldenborn-(earthbound)_-world-anchor-7B1T4uP9SSMf34Pj.json"
+}

@@ -1,0 +1,2338 @@
+// modules/bbttcc-auto-link/scripts/character-sheet.js
+// BBTTCC Character & NPC Sheet registration + render enhancements.
+//
+// Hex Chrome BBTTCC Identity tab with inline editing.
+// - Registers custom sheets that extend the default 5E character and NPC sheets.
+// - Adds Hex Chrome root class on render.
+// - Injects a BBTTCC tab that can read & write core BBTTCC identity fields.
+// - Sparks/Tikkun is read-only here and sourced from the Tikkun API.
+// - Enlightenment picker drives a single Enlightenment item + OP recalcs.
+// - Tiered Options Identity:
+//   • Reads bbttcc-character-options.identity via game.bbttcc.api.identity.getIdentityFlags
+//   • AUTO-BACKFILLS identity flags for legacy actors based on current items
+//   • Derives display labels for Archetype/Crew/Occult/Political/Sephirot/Enlightenment
+//   • GM editing controls: identity dropdowns update items + flags immediately on change
+//   • Exposes game.bbttcc.api.autoLink.inspectIdentity(actorId) for debugging.
+
+const MOD  = "bbttcc-auto-link";
+const AAE_SCOPE = "bbttcc-aae";
+const LOG  = (...a) => console.log(`[${MOD}]`, ...a);
+const WARN = (...a) => console.warn(`[${MOD}]`, ...a);
+
+/* BBTTCC TAB HEALER (multi-sheet) */
+/* BBTTCC TAB HEALER (multi-sheet)
+ * When other sheets (notably faction sheets) open, Foundry's tab controllers can rebuild DOM and
+ * leave the BBTTCC tab body empty on already-open character sheets. This healer keeps a registry
+ * of processed character sheet roots and re-ensures their BBTTCC tab after ANY actor sheet render.
+ *
+ * Design goals:
+ * - No render loops (no app.render calls)
+ * - Debounced refresh (single pass per tick)
+ */
+const __BBTTCC_TAB_HEAL = globalThis.__BBTTCC_TAB_HEAL || (globalThis.__BBTTCC_TAB_HEAL = {
+  sheets: {},   // appId -> { app, root }
+  timer: null
+});
+
+function _bbttccRegisterSheet(app, root) {
+  try {
+    if (!app || !root) return;
+    const id = String(app.appId ?? app._appId ?? app.id ?? Math.random());
+    __BBTTCC_TAB_HEAL.sheets[id] = { app, root };
+  } catch {/* ignore */}
+}
+
+function _bbttccScheduleHeal() {
+  try {
+    if (__BBTTCC_TAB_HEAL.timer) return;
+    __BBTTCC_TAB_HEAL.timer = setTimeout(async () => {
+      __BBTTCC_TAB_HEAL.timer = null;
+      try {
+        const entries = Object.values(__BBTTCC_TAB_HEAL.sheets || {});
+        for (const ent of entries) {
+          try {
+            const app = ent?.app;
+            const root = ent?.root;
+            if (!app || !root) continue;
+            if (!root.isConnected) continue;
+
+            const actor = app.actor ?? app.object;
+            if (!actor) continue;
+            if (!(actor.type === "character" || actor.type === "npc")) continue;
+            if (actor.getFlag?.("bbttcc-factions", "isFaction")) continue;
+
+            await ensureBBTTCCTab(app, root);
+          } catch {/* ignore */}
+        }
+      } catch (e) {
+        WARN("BBTTCC tab healer failed", e);
+      }
+    }, 0);
+  } catch {/* ignore */}
+}
+
+
+/* ---------------------------------------
+ * Blood Debt (Identity tab) — manual GM authoring + ledger
+ * Canonical storage:
+ *   flags.bbttcc.identity.bloodDebt = { value:Number, ledger:Array }
+ * Legacy mirror (optional):
+ *   flags.bbttcc.bloodDebt = Number
+ * ------------------------------------ */
+
+function getBloodDebtModel(actor) {
+  try {
+    const f = actor?.flags ?? {};
+    const v1 = f?.bbttcc?.identity?.bloodDebt;
+    if (v1 && typeof v1 === "object") {
+      return {
+        value: Number(v1.value ?? 0) || 0,
+        ledger: Array.isArray(v1.ledger) ? v1.ledger : []
+      };
+    }
+
+    // Legacy fallbacks (keep tolerant; worlds drift)
+    const legacy =
+      Number(f?.bbttcc?.bloodDebt ?? f?.["bbttcc-core"]?.bloodDebt ?? f?.bbttcc?.blood_debt ?? 0) || 0;
+
+    return { value: legacy, ledger: [] };
+  } catch {
+    return { value: 0, ledger: [] };
+  }
+}
+
+function labelForBloodDebtSource(key) {
+  const k = String(key || "other");
+  if (k === "death") return "Death";
+  if (k === "transference") return "Transference";
+  if (k === "pact") return "Pact";
+  if (k === "great_work") return "Great Work";
+  if (k === "atonement") return "Atonement";
+  return "Other";
+}
+
+function formatBloodDebtLedgerEntry(e) {
+  const ts = Number(e?.ts) || 0;
+  const delta = Number(e?.delta) || 0;
+  const when = ts ? new Date(ts).toLocaleString() : "—";
+  return {
+    ts,
+    delta,
+    deltaLabel: (delta > 0 ? `+${delta}` : `${delta}`),
+    source: String(e?.source || "other"),
+    sourceLabel: labelForBloodDebtSource(e?.source),
+    note: String(e?.note || "").trim(),
+    gmId: e?.gmId || null,
+    gmName: String(e?.gmName || "GM"),
+    when
+  };
+}
+
+async function applyBloodDebtDelta(actor, { delta, source = "other", note = "" } = {}) {
+  delta = Number(delta || 0);
+  if (!delta) return null;
+
+  const model = getBloodDebtModel(actor);
+  const cur = Number(model.value || 0) || 0;
+  const next = Math.max(0, cur + delta);
+
+  const gm = game.user;
+  const entry = {
+    ts: Date.now(),
+    delta,
+    source: String(source || "other"),
+    note: String(note || "").trim(),
+    gmId: gm?.id || null,
+    gmName: gm?.name || "GM"
+  };
+
+  const ledger = [entry].concat(model.ledger || []).slice(0, 20);
+
+  // Canonical write + legacy mirror for compatibility (safe to remove later)
+  await actor.update({
+    "flags.bbttcc.identity.bloodDebt": { value: next, ledger },
+    "flags.bbttcc.bloodDebt": next
+  });
+
+  return { value: next, entry };
+}
+
+function isPlain(o) {
+  return o && typeof o === "object" && !Array.isArray(o);
+}
+
+// Esoteric Magic (Cosmic Linguist) integration
+const ESOTERIC_MAGIC_SCOPE = "esoteric-magic";
+const ESOTERIC_FEAT_IDS = new Set([
+  "redactor_semantic_redaction",
+  "redactor_persistent_deletion",
+  "redactor_name_stripping",
+  "redactor_redline_the_draft",
+  "redactor_total_redaction",
+  "syntax_wardens_counter",
+  "syntax_constraint_grammar",
+  "syntax_no_exception_ward",
+  "syntax_parse_error",
+  "syntax_seal_the_sentence",
+  "syntax_absolute_syntax"
+]);
+
+function isCosmicLinguist(actor) {
+  try {
+    const items = actor?.items?.contents ?? actor?.items ?? [];
+    return items.some(it => String(it?.type) === "class" && String(it?.system?.identifier || "") === "cosmic_linguist");
+  } catch {
+    return false;
+  }
+}
+
+function getEsotericApi() {
+  return game.modules?.get(ESOTERIC_MAGIC_SCOPE)?.api || null;
+}
+
+function getEsotericState(actor) {
+  const api = getEsotericApi();
+  if (api?.getResonanceState) {
+    try {
+      return api.getResonanceState(actor);
+    } catch (e) {
+      WARN("Esoteric getResonanceState failed", e);
+    }
+  }
+  const raw = actor?.flags?.[ESOTERIC_MAGIC_SCOPE]?.resonance || {};
+  return {
+    dice: Number(raw.dice) || 0,
+    maxDice: Number(raw.maxDice) || 0,
+    die: String(raw.die || "d6"),
+    strain: Number(raw.strain) || 0,
+    bySephirah: raw.bySephirah || {},
+    lastGain: raw.lastGain || { combatRound: null, ts: 0 }
+  };
+}
+
+async function setEsotericState(actor, patch) {
+  const current = getEsotericState(actor);
+  const next = foundry.utils.mergeObject(foundry.utils.deepClone(current), patch || {}, { inplace: false, overwrite: true });
+  await actor.setFlag(ESOTERIC_MAGIC_SCOPE, "resonance", next);
+  return next;
+}
+
+function patchEsotericDisplayCardRoutingOnce() {
+  const KEY = "__bbttcc_esoteric_displaycard_patch_v1";
+  if (globalThis[KEY]) return;
+
+  const ItemCls = CONFIG?.Item?.documentClass;
+  const proto = ItemCls?.prototype;
+  if (!proto) return;
+
+  const fnName = (typeof proto.displayCard === "function") ? "displayCard" : (typeof proto._displayCard === "function") ? "_displayCard" : null;
+  if (!fnName) return;
+
+  const original = proto[fnName];
+  proto[fnName] = async function(...args) {
+    try {
+      const item = this;
+      if (item && String(item.type) === "feat") {
+        const ident = String(item.system?.identifier || item.flags?.bbttcc?.identifier || "");
+        if (ESOTERIC_FEAT_IDS.has(ident) && item.parent) {
+          // Important: schedule so Dialogs render after the click pipeline completes.
+          setTimeout(() => {
+            try {
+              Hooks.callAll("dnd5e.useItem", item, {}, {});
+            } catch (e) {
+              WARN("Esoteric scheduled useItem failed", e);
+            }
+          }, 0);
+          return null;
+        }
+      }
+    } catch (e) {
+      WARN("Esoteric displayCard patch failed", e);
+    }
+    return original.apply(this, args);
+  };
+
+  globalThis[KEY] = { fnName };
+  LOG("Esoteric Magic routing patched", { fnName });
+}
+
+
+
+/* ---------------------------------------
+ * BBTTCC Class Resources (Dice Pools + Pushback) — v1
+ *
+ * Goal:
+ * - Provide first-class sheet UI for class-specific dice pools (single pool, scaling die)
+ * - Provide pushback tracks (Trace / Pressure / Structural Stress / Burn, etc.)
+ * - Option C: auto-spend + auto-roll + pushback tick on native dnd5e item use
+ *
+ * Canonical storage (Actor flags):
+ *   flags.bbttcc.resources.pools.<key> = {
+ *     dice: Number, maxDice: Number, die: "d6|d8|d10|d12",
+ *     limitPerRound: Number, lastGain: { combatRound:Number|null, ts:Number }
+ *   }
+ *   flags.bbttcc.resources.tracks.<key> = { value:Number, ts:Number }
+ *
+ * Item metadata (preferred, authorable):
+ *   item.flags.bbttcc.resourceCost = { pool:"access", dice:1, roll:true }
+ *   item.flags.bbttcc.pushback     = { track:"trace", on:"use|fail|success", amount:1 }
+ *
+ * Heuristic fallback (for legacy items without flags):
+ * - Parses item description text for "Spend X Access Dice" and "Gain +Y Trace" style phrasing.
+ * ------------------------------------ */
+
+const BBTTCC_RESOURCES_KEY = "resources";
+
+const BBTTCC_RESOURCES_SCOPE = MOD; // store resources under an active module scope
+
+const BBTTCC_CLASS_RESOURCES = [
+  // Shadowjack
+  {
+    classId: "shadowjack",
+    pools: [
+      { key: "access", label: "Access Dice", ability: "dex", limitPerRound: 1, progression: { 1:"d6", 5:"d8", 11:"d10", 17:"d12" } }
+    ],
+    tracks: [
+      { key: "trace", label: "Trace", bands: [
+        { min: 0, label: "Clear" },
+        { min: 1, label: "Pinged" },
+        { min: 2, label: "Flagged" },
+        { min: 3, label: "Burned Routes" },
+        { min: 4, label: "Compromised" }
+      ]}
+    ]
+  },
+
+  // Pactkeeper (Civic Charge + Administrative Pressure)
+  {
+    classId: "pactkeeper",
+    pools: [
+      { key: "civic", label: "Civic Charge", ability: "wis", limitPerRound: 1, progression: { 1:"d6", 5:"d8", 11:"d10", 17:"d12" } }
+    ],
+    tracks: [
+      { key: "pressure", label: "Administrative Pressure", bands: [
+        { min: 0, label: "Clear" },
+        { min: 1, label: "Low" },
+        { min: 4, label: "Moderate" },
+        { min: 7, label: "High" }
+      ]}
+    ]
+  },
+
+  // Graveward (Frame Dice + Structural Stress) — included because your sample feat uses it.
+  {
+    classId: "graveward",
+    pools: [
+      { key: "frame", label: "Frame Dice", ability: "con", limitPerRound: 1, progression: { 1:"d6", 5:"d8", 11:"d10", 17:"d12" } }
+    ],
+    tracks: [
+      { key: "stress", label: "Structural Stress", bands: [
+        { min: 0, label: "Stable" },
+        { min: 2, label: "Strained" },
+        { min: 4, label: "Cracked" },
+        { min: 6, label: "Failing" }
+      ]}
+    ]
+  },
+
+  // Aurablade (Burn track). Note: Burn is described as a state track (not a die pool) in your class text.
+  {
+    classId: "aurablade",
+    pools: [],
+    tracks: [
+      { key: "burn", label: "Burn", bands: [
+        { min: 0, label: "Controlled (0–1)" },
+        { min: 2, label: "Engaged (2–3)" },
+        { min: 4, label: "Overheated (4+)" }
+      ]}
+    ]
+  }
+];
+
+function _bbttccGet(obj, path, fallback) {
+  try { return foundry.utils.getProperty(obj, path) ?? fallback; } catch { return fallback; }
+}
+function _bbttccClone(x) {
+  try { return foundry.utils.deepClone(x || {}); } catch { return JSON.parse(JSON.stringify(x || {})); }
+}
+function _bbttccStripHtml(s) {
+  try {
+    const tmp = document.createElement("div");
+    tmp.innerHTML = String(s || "");
+    return (tmp.textContent || tmp.innerText || "").trim();
+  } catch {
+    return String(s || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  }
+}
+
+function _bbttccHasClass(actor, classId) {
+  try {
+    const items = actor?.items?.contents ?? actor?.items ?? [];
+    return items.some(it => String(it?.type) === "class" && String(it?.system?.identifier || "") === String(classId));
+  } catch { return false; }
+}
+
+function _bbttccGetClassLevel(actor, classId) {
+  try {
+    // dnd5e v5+ commonly provides actor.system.classes.<id>.levels
+    const fromSys = Number(_bbttccGet(actor, `system.classes.${classId}.levels`, null));
+    if (Number.isFinite(fromSys) && fromSys > 0) return Math.floor(fromSys);
+
+    // Some worlds expose actor.classes map
+    const fromMap = Number(_bbttccGet(actor, `classes.${classId}.levels`, null));
+    if (Number.isFinite(fromMap) && fromMap > 0) return Math.floor(fromMap);
+
+    // Fallback: look for embedded class item with system.levels
+    const items = actor?.items?.contents ?? actor?.items ?? [];
+    const cls = items.find(it => String(it?.type) === "class" && String(it?.system?.identifier || "") === String(classId));
+    const lvl = Number(cls?.system?.levels ?? 0);
+    return (Number.isFinite(lvl) && lvl > 0) ? Math.floor(lvl) : 0;
+  } catch { return 0; }
+}
+
+function _bbttccDieForLevel(level, progression) {
+  const L = Math.max(0, Math.floor(Number(level || 0) || 0));
+  const prog = progression && typeof progression === "object" ? progression : { 1:"d6", 5:"d8", 11:"d10", 17:"d12" };
+  let best = "d6";
+  for (const [k, die] of Object.entries(prog)) {
+    const at = Math.floor(Number(k || 0) || 0);
+    if (at > 0 && L >= at) best = String(die || best);
+  }
+  return best;
+}
+
+function _bbttccActorResources(actor) {
+  const raw = actor?.getFlag?.(BBTTCC_RESOURCES_SCOPE, BBTTCC_RESOURCES_KEY)
+    || actor?.flags?.[BBTTCC_RESOURCES_SCOPE]?.[BBTTCC_RESOURCES_KEY]
+    || actor?.flags?.bbttcc?.[BBTTCC_RESOURCES_KEY]
+    || {};
+  const base = (raw && typeof raw === "object") ? _bbttccClone(raw) : {};
+  base.pools  = (base.pools  && typeof base.pools  === "object") ? base.pools  : {};
+  base.tracks = (base.tracks && typeof base.tracks === "object") ? base.tracks : {};
+  return base;
+}
+
+async function _bbttccSetActorResources(actor, patch) {
+  const current = _bbttccActorResources(actor);
+  const next = foundry.utils.mergeObject(_bbttccClone(current), patch || {}, { inplace: false, overwrite: true });
+  await actor.setFlag(BBTTCC_RESOURCES_SCOPE, BBTTCC_RESOURCES_KEY, next);
+  return next;
+}
+
+function _bbttccCurrentCombatRound() {
+  try {
+    const c = game.combat;
+    if (!c) return null;
+    const r = Number(c.round || 0);
+    if (Number.isFinite(r) && r > 0) return Math.floor(r);
+  } catch {}
+  return null;
+}
+
+function _bbttccPoolState(actor, poolSpec) {
+  const res = _bbttccActorResources(actor);
+  const key = String(poolSpec?.key || "").trim();
+  const cur = res.pools[key] && typeof res.pools[key] === "object" ? _bbttccClone(res.pools[key]) : {};
+  const classLevel = _bbttccGetClassLevel(actor, poolSpec.classId);
+  const die = _bbttccDieForLevel(classLevel, poolSpec.progression);
+
+  let maxDice = 1;
+  try {
+    const abil = String(poolSpec.ability || "").trim().toLowerCase();
+    const mod = Number(_bbttccGet(actor, `system.abilities.${abil}.mod`, 0) || 0);
+    maxDice = Math.max(1, mod);
+  } catch {}
+
+  const out = {
+    key,
+    label: String(poolSpec.label || key),
+    die,
+    dice: Math.max(0, Math.floor(Number(cur.dice || 0) || 0)),
+    maxDice,
+    limitPerRound: Math.max(0, Math.floor(Number(poolSpec.limitPerRound ?? cur.limitPerRound ?? 0) || 0)),
+    lastGain: cur.lastGain && typeof cur.lastGain === "object" ? cur.lastGain : { combatRound: null, ts: 0 }
+  };
+
+  // Clamp
+  out.dice = Math.min(out.dice, out.maxDice);
+
+  return out;
+}
+
+function _bbttccTrackState(actor, trackSpec) {
+  const res = _bbttccActorResources(actor);
+  const key = String(trackSpec?.key || "").trim();
+  const cur = res.tracks[key] && typeof res.tracks[key] === "object" ? _bbttccClone(res.tracks[key]) : {};
+  const value = Math.max(0, Math.floor(Number(cur.value || 0) || 0));
+
+  // pick band label
+  let band = null;
+  const bands = Array.isArray(trackSpec?.bands) ? trackSpec.bands : [];
+  for (const b of bands) {
+    if (!b) continue;
+    const min = Math.floor(Number(b.min || 0) || 0);
+    if (value >= min) band = b;
+  }
+
+  return {
+    key,
+    label: String(trackSpec.label || key),
+    value,
+    bandLabel: band ? String(band.label || "") : ""
+  };
+}
+
+async function _bbttccGainPoolDice(actor, poolSpec, n) {
+  n = Math.max(0, Math.floor(Number(n || 0) || 0));
+  if (!n) return null;
+
+  const st = _bbttccPoolState(actor, poolSpec);
+  const round = _bbttccCurrentCombatRound();
+  const limit = st.limitPerRound || 0;
+
+  // Enforce "gain only 1 per round" style limiter (if enabled and in combat)
+  if (limit > 0 && round != null) {
+    const lastR = Number(st.lastGain?.combatRound ?? null);
+    if (Number.isFinite(lastR) && lastR === round) {
+      ui.notifications?.warn?.(`${st.label}: already gained this round.`);
+      return st;
+    }
+  }
+
+  const nextDice = Math.min(st.maxDice, st.dice + n);
+  const patch = {
+    pools: {
+      [st.key]: {
+        dice: nextDice,
+        maxDice: st.maxDice,
+        die: st.die,
+        limitPerRound: st.limitPerRound,
+        lastGain: { combatRound: (round != null ? round : null), ts: Date.now() }
+      }
+    }
+  };
+  await _bbttccSetActorResources(actor, patch);
+  return _bbttccPoolState(actor, poolSpec);
+}
+
+async function _bbttccSpendPoolDice(actor, poolSpec, n) {
+  n = Math.max(0, Math.floor(Number(n || 0) || 0));
+  if (!n) return null;
+
+  const st = _bbttccPoolState(actor, poolSpec);
+  if (st.dice < n) {
+    ui.notifications?.warn?.(`${st.label}: not enough dice (${st.dice}/${st.maxDice}).`);
+    return st;
+  }
+
+  const nextDice = Math.max(0, st.dice - n);
+  const patch = { pools: { [st.key]: { dice: nextDice, maxDice: st.maxDice, die: st.die, limitPerRound: st.limitPerRound, lastGain: st.lastGain } } };
+  await _bbttccSetActorResources(actor, patch);
+  return _bbttccPoolState(actor, poolSpec);
+}
+
+async function _bbttccAdjustTrack(actor, trackSpec, delta) {
+  delta = Math.floor(Number(delta || 0) || 0);
+  if (!delta) return null;
+  const st = _bbttccTrackState(actor, trackSpec);
+  const next = Math.max(0, st.value + delta);
+  const patch = { tracks: { [st.key]: { value: next, ts: Date.now() } } };
+  await _bbttccSetActorResources(actor, patch);
+  return _bbttccTrackState(actor, trackSpec);
+}
+
+
+// ---- Aurablade Burn helpers (Burn is both resource access + pushback) ----
+function _bbttccAdvanceCombatTurn(combat, turns) {
+  try {
+    turns = Math.max(0, Math.floor(Number(turns || 0) || 0));
+    const total = combat?.turns?.length || 0;
+    let round = Number(combat?.round || 0) || 0;
+    let turn = Number(combat?.turn || 0) || 0;
+    if (!total) return { round, turn };
+    let t = turn + turns;
+    while (t >= total) { t -= total; round += 1; }
+    return { round, turn: t };
+  } catch { return { round: (combat?.round || 0), turn: (combat?.turn || 0) }; }
+}
+
+async function _bbttccSetBurn(actor, value) {
+  const spec = _bbttccFindTrackSpec(actor, "burn");
+  if (!spec) return null;
+  const res = _bbttccActorResources(actor);
+  const cur = res.tracks?.burn && typeof res.tracks.burn === "object" ? _bbttccClone(res.tracks.burn) : {};
+  const meta = cur.meta && typeof cur.meta === "object" ? _bbttccClone(cur.meta) : {};
+  const v = Math.max(0, Math.floor(Number(value || 0) || 0));
+  await _bbttccSetActorResources(actor, { tracks: { burn: { value: v, ts: Date.now(), meta } } });
+  return _bbttccTrackState(actor, spec);
+}
+
+async function _bbttccLockBurn(actor, turns) {
+  const spec = _bbttccFindTrackSpec(actor, "burn");
+  if (!spec) return null;
+  const combat = game?.combat;
+  if (!combat) return null;
+  const until = _bbttccAdvanceCombatTurn(combat, turns);
+  const res = _bbttccActorResources(actor);
+  const cur = res.tracks?.burn && typeof res.tracks.burn === "object" ? _bbttccClone(res.tracks.burn) : {};
+  const meta = cur.meta && typeof cur.meta === "object" ? _bbttccClone(cur.meta) : {};
+  meta.lock = { combatId: combat.id, untilRound: until.round, untilTurn: until.turn, ts: Date.now() };
+  await _bbttccSetActorResources(actor, { tracks: { burn: { value: Math.max(0, Math.floor(Number(cur.value || 0) || 0)), ts: Date.now(), meta } } });
+  return _bbttccTrackState(actor, spec);
+}
+
+async function _bbttccScheduleBurnDelta(actor, rounds, delta) {
+  delta = Math.floor(Number(delta || 0) || 0);
+  if (!delta) return null;
+  const combat = game?.combat;
+  if (!combat) return null;
+  const res = _bbttccActorResources(actor);
+  const cur = res.tracks?.burn && typeof res.tracks.burn === "object" ? _bbttccClone(res.tracks.burn) : {};
+  const meta = cur.meta && typeof cur.meta === "object" ? _bbttccClone(cur.meta) : {};
+  const timers = Array.isArray(meta.timers) ? meta.timers.slice() : [];
+
+  // "end of next round" is approximated as: apply at start of round+2 (turn 0).
+  const atRound = (Number(combat.round || 0) || 0) + Math.max(1, Math.floor(Number(rounds || 1) || 1)) + 1;
+  timers.push({ type: "delta", combatId: combat.id, atRound, atTurn: 0, delta, ts: Date.now() });
+  meta.timers = timers;
+
+  await _bbttccSetActorResources(actor, { tracks: { burn: { value: Math.max(0, Math.floor(Number(cur.value || 0) || 0)), ts: Date.now(), meta } } });
+  return true;
+}
+
+async function _bbttccScheduleBurnSetEndOfTurn(actor, value) {
+  const combat = game?.combat;
+  if (!combat) return null;
+  const res = _bbttccActorResources(actor);
+  const cur = res.tracks?.burn && typeof res.tracks.burn === "object" ? _bbttccClone(res.tracks.burn) : {};
+  const meta = cur.meta && typeof cur.meta === "object" ? _bbttccClone(cur.meta) : {};
+  const timers = Array.isArray(meta.timers) ? meta.timers.slice() : [];
+  const next = _bbttccAdvanceCombatTurn(combat, 1);
+  timers.push({ type: "set", combatId: combat.id, atRound: next.round, atTurn: next.turn, set: Math.max(0, Math.floor(Number(value || 0) || 0)), ts: Date.now() });
+  meta.timers = timers;
+  await _bbttccSetActorResources(actor, { tracks: { burn: { value: Math.max(0, Math.floor(Number(cur.value || 0) || 0)), ts: Date.now(), meta } } });
+  return true;
+}
+
+
+async function _bbttccRollDie(die) {
+  const d = String(die || "d6").trim().toLowerCase();
+  const formula = "1" + (d.startsWith("d") ? d : ("d" + d.replace(/\D+/g, "")));
+  const roll = await (new Roll(formula)).evaluate({ async: true });
+  return roll;
+}
+
+// Preferred metadata format (authorable flags)
+function _bbttccReadItemMeta(item) {
+  try {
+    const cost = _bbttccGet(item, "flags.bbttcc.resourceCost", null);
+    const pb   = _bbttccGet(item, "flags.bbttcc.pushback", null);
+    const burn = _bbttccGet(item, "flags.bbttcc.burn", null);
+
+    const meta = {};
+    if (cost && typeof cost === "object") {
+      meta.resourceCost = {
+        pool: String(cost.pool || "").trim(),
+        dice: Math.max(0, Math.floor(Number(cost.dice || 0) || 0)),
+        roll: (cost.roll !== false)
+      };
+    }
+    if (pb && typeof pb === "object") {
+      meta.pushback = {
+        track: String(pb.track || "").trim(),
+        on: String(pb.on || "use").trim().toLowerCase(),
+        amount: Math.floor(Number(pb.amount || 0) || 0)
+      };
+    }
+
+    
+if (burn && typeof burn === "object") {
+  const b = {};
+  if (burn.min != null) b.min = Math.max(0, Math.floor(Number(burn.min || 0) || 0));
+  if (burn.delta != null) b.delta = Math.floor(Number(burn.delta || 0) || 0);
+  if (burn.set != null) b.set = Math.max(0, Math.floor(Number(burn.set || 0) || 0));
+  if (burn.lockTurns != null) b.lockTurns = Math.max(0, Math.floor(Number(burn.lockTurns || 0) || 0));
+  if (burn.range && typeof burn.range === "object") {
+    b.range = { min: Math.max(0, Math.floor(Number(burn.range.min || 0) || 0)), max: Math.max(0, Math.floor(Number(burn.range.max || 0) || 0)) };
+  }
+  if (burn.delayed && typeof burn.delayed === "object") {
+    b.delayed = { rounds: Math.max(0, Math.floor(Number(burn.delayed.rounds || 0) || 0)), delta: Math.floor(Number(burn.delayed.delta || 0) || 0) };
+  }
+  if (burn.after && typeof burn.after === "object") {
+    b.after = { when: String(burn.after.when || "endOfTurn"), set: Math.max(0, Math.floor(Number(burn.after.set || 0) || 0)) };
+  }
+  meta.burn = b;
+}
+
+    if (meta.resourceCost || meta.pushback || meta.burn) return meta;
+  } catch {}
+  return null;
+}
+
+// Heuristic legacy parsing fallback (kept intentionally narrow & safe)
+function _bbttccInferItemMetaFromText(item) {
+  try {
+    const txt = _bbttccStripHtml(_bbttccGet(item, "system.description.value", "")) || "";
+    if (!txt) return null;
+
+    const pools = [
+      { key: "access",  rx: /\baccess\s+dice?\b/i },
+      { key: "civic",   rx: /\bcivic\s+charge\s+dice?\b/i },
+      { key: "frame",   rx: /\bframe\s+die(?:s)?\b/i }
+    ];
+    const tracks = [
+      { key: "trace",   rx: /\btrace\b/i },
+      { key: "pressure",rx: /\bpressure\b/i },
+      { key: "stress",  rx: /\bstructural\s+stress\b/i },
+      { key: "burn",    rx: /\bburn\b/i }
+    ];
+
+    // Spend X <Pool> Dice
+    let resourceCost = null;
+    const spendMatch = txt.match(/\bspend\s+(\d+)\s+([a-z\s]+?)\s+(?:die|dice)\b/i);
+    if (spendMatch) {
+      const n = Math.max(0, Math.floor(Number(spendMatch[1] || 0) || 0));
+      const name = String(spendMatch[2] || "");
+      const p = pools.find(p => p.rx.test(name));
+      if (p && n) resourceCost = { pool: p.key, dice: n, roll: true };
+    }
+
+    // Gain +X <Track> (very common phrasing: "Gain +1 Trace")
+    let pushback = null;
+    const gainMatch = txt.match(/\b(?:gain|add|adds)\s+\+?(\d+)\s+([a-z\s]+)\b/i);
+    if (gainMatch) {
+      const n = Math.floor(Number(gainMatch[1] || 0) || 0);
+      const name = String(gainMatch[2] || "");
+      const t = tracks.find(t => t.rx.test(name));
+      if (t && n) pushback = { track: t.key, on: "use", amount: n };
+    }
+
+    if (!resourceCost && !pushback) return null;
+    
+
+// Burn (Aurablade special): Burn is both resource access + pushback.
+// We infer:
+// - burnReq: "Burn 3+" / "Burn 1–3"
+// - burnSet: "enter Burn 4" / "Burn drops to 0"
+// - burnDelta: "gain +1 Burn" (handled by pushback matcher as well, but we prefer explicit burn meta)
+let burn = null;
+
+// Requirement: Burn X+
+const burnReqPlus = txt.match(/\bBurn\s+(\d+)\s*\+\b/i);
+if (burnReqPlus) {
+  burn = burn || {};
+  burn.min = Math.max(0, Math.floor(Number(burnReqPlus[1] || 0) || 0));
+}
+
+// Requirement: Burn A–B / Burn A-B
+const burnReqRange = txt.match(/\bBurn\s+(\d+)\s*[–\-]\s*(\d+)\b/i);
+if (burnReqRange) {
+  burn = burn || {};
+  burn.range = {
+    min: Math.max(0, Math.floor(Number(burnReqRange[1] || 0) || 0)),
+    max: Math.max(0, Math.floor(Number(burnReqRange[2] || 0) || 0))
+  };
+}
+
+// Set: "enter Burn X" / "immediately enter Burn X"
+const burnEnter = txt.match(/\b(?:enter|entering)\s+Burn\s+(\d+)\b/i);
+if (burnEnter) {
+  burn = burn || {};
+  burn.set = Math.max(0, Math.floor(Number(burnEnter[1] || 0) || 0));
+}
+
+// Set: "Burn drops to 0"
+const burnDrop = txt.match(/\bBurn\s+drops\s+to\s+(\d+)\b/i);
+if (burnDrop) {
+  burn = burn || {};
+  const v = Math.max(0, Math.floor(Number(burnDrop[1] || 0) || 0));
+
+  // If the text also contains "enter Burn X" (e.g., Final Crescendo), treat drop as an end-of-turn aftermath.
+  if (typeof burn.set === "number" && burn.set !== v) {
+    burn.after = { when: "endOfTurn", set: v };
+  } else {
+    burn.set = v;
+  }
+}
+
+// Freeze: "freeze your current Burn level ... until the start of your next turn"
+if (/\bfreeze\s+your\s+current\s+Burn\s+level\b/i.test(txt) && /until\s+the\s+start\s+of\s+your\s+next\s+turn\b/i.test(txt)) {
+  burn = burn || {};
+  burn.lockTurns = 1;
+}
+
+// Delayed: "Burn drops to 0" + "gain 2 Burn at the end of next round"
+const delayedBurn = txt.match(/\bgain\s+(\d+)\s+Burn\s+at\s+the\s+end\s+of\s+next\s+round\b/i);
+if (delayedBurn) {
+  burn = burn || {};
+  burn.delayed = { rounds: 1, delta: Math.max(0, Math.floor(Number(delayedBurn[1] || 0) || 0)) };
+}
+return { resourceCost, pushback, burn };
+  } catch {}
+  return null;
+}
+
+function _bbttccGetActiveResourceSpec(actor) {
+  // Return only the class resource specs that apply to this actor.
+  const specs = [];
+  for (const cls of BBTTCC_CLASS_RESOURCES) {
+    if (!cls || !cls.classId) continue;
+    if (!_bbttccHasClass(actor, cls.classId)) continue;
+
+    const pools = (cls.pools || []).map(p => Object.assign({}, p, { classId: cls.classId }));
+    const tracks = (cls.tracks || []).map(t => Object.assign({}, t, { classId: cls.classId }));
+    specs.push({ classId: cls.classId, pools, tracks });
+  }
+  return specs;
+}
+
+function _bbttccRenderResourceCard(section, actor) {
+  const specs = _bbttccGetActiveResourceSpec(actor);
+  if (!specs.length) return;
+
+  // Build HTML
+  const wrap = document.createElement("div");
+  wrap.className = "bbttcc-card bbttcc-resource-card";
+  wrap.innerHTML = `
+    <div class="bbttcc-card-header">
+      <div class="bbttcc-card-title">Class Resources</div>
+      <div class="bbttcc-card-subtitle">Dice pools + pushback tracks</div>
+    </div>
+    <div class="bbttcc-card-body" data-bbttcc-resources="1"></div>
+  `;
+
+  const body = wrap.querySelector("[data-bbttcc-resources='1']");
+  const rows = [];
+
+  for (const cls of specs) {
+    for (const p of (cls.pools || [])) {
+      const st = _bbttccPoolState(actor, p);
+      rows.push(`
+        <div class="bbttcc-resource-row" data-bbttcc-pool="${st.key}">
+          <div class="bbttcc-resource-main">
+            <div class="bbttcc-resource-name">${st.label}</div>
+            <div class="bbttcc-resource-meta">Die: <b>${st.die}</b> • Dice: <b>${st.dice}</b>/<b>${st.maxDice}</b></div>
+          </div>
+          <div class="bbttcc-resource-actions">
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="pool-gain" data-pool="${st.key}">+ Gain</button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="pool-spend" data-pool="${st.key}">– Spend</button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="pool-spendroll" data-pool="${st.key}">Spend &amp; Roll</button>
+          </div>
+        </div>
+      `);
+    }
+    for (const t of (cls.tracks || [])) {
+      const st = _bbttccTrackState(actor, t);
+      rows.push(`
+        <div class="bbttcc-resource-row" data-bbttcc-track="${st.key}">
+          <div class="bbttcc-resource-main">
+            <div class="bbttcc-resource-name">${st.label}</div>
+            <div class="bbttcc-resource-meta">Value: <b>${st.value}</b>${st.bandLabel ? ` • <span class="bbttcc-chip">${st.bandLabel}</span>` : ""}</div>
+          </div>
+          <div class="bbttcc-resource-actions">
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="track-add" data-track="${st.key}">+1</button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="track-sub" data-track="${st.key}">-1</button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-action="track-clear" data-track="${st.key}">Clear</button>
+          </div>
+        </div>
+      `);
+    }
+  }
+
+  body.innerHTML = rows.join("");
+
+  // Insert near top of BBTTCC tab body (after existing action bar if present)
+  const target = section.querySelector(".bbttcc-card")?.parentElement || section;
+  target.appendChild(wrap);
+}
+
+function _bbttccFindPoolSpec(actor, poolKey) {
+  const specs = _bbttccGetActiveResourceSpec(actor);
+  for (const cls of specs) {
+    for (const p of (cls.pools || [])) if (String(p.key) === String(poolKey)) return p;
+  }
+  return null;
+}
+function _bbttccFindTrackSpec(actor, trackKey) {
+  const specs = _bbttccGetActiveResourceSpec(actor);
+  for (const cls of specs) {
+    for (const t of (cls.tracks || [])) if (String(t.key) === String(trackKey)) return t;
+  }
+  return null;
+}
+
+function _bbttccWireResourceCardEvents(app, section) {
+  const actor = app?.actor ?? app?.object;
+  if (!actor) return;
+
+  const root = section.querySelector(".bbttcc-resource-card");
+  if (!root) return;
+
+  const bind = (sel, fn) => {
+    const els = root.querySelectorAll(sel);
+    els.forEach(el => el.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      try { await fn(ev); app.render(false); } catch (e) { WARN("Resource action failed", e); }
+    }));
+  };
+
+  bind("[data-bbttcc-action='pool-gain']", async (ev) => {
+    const key = String(ev.currentTarget.dataset.pool || "");
+    const spec = _bbttccFindPoolSpec(actor, key);
+    if (!spec) return;
+    await _bbttccGainPoolDice(actor, spec, 1);
+  });
+
+  bind("[data-bbttcc-action='pool-spend']", async (ev) => {
+    const key = String(ev.currentTarget.dataset.pool || "");
+    const spec = _bbttccFindPoolSpec(actor, key);
+    if (!spec) return;
+    await _bbttccSpendPoolDice(actor, spec, 1);
+  });
+
+  bind("[data-bbttcc-action='pool-spendroll']", async (ev) => {
+    const key = String(ev.currentTarget.dataset.pool || "");
+    const spec = _bbttccFindPoolSpec(actor, key);
+    if (!spec) return;
+    const st = await _bbttccSpendPoolDice(actor, spec, 1);
+    if (!st) return;
+    const roll = await _bbttccRollDie(st.die);
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: actor }),
+      flavor: `${st.label} — Spend & Roll (${st.die})`
+    });
+  });
+
+  bind("[data-bbttcc-action='track-add']", async (ev) => {
+    const key = String(ev.currentTarget.dataset.track || "");
+    const spec = _bbttccFindTrackSpec(actor, key);
+    if (!spec) return;
+    await _bbttccAdjustTrack(actor, spec, +1);
+  });
+
+  bind("[data-bbttcc-action='track-sub']", async (ev) => {
+    const key = String(ev.currentTarget.dataset.track || "");
+    const spec = _bbttccFindTrackSpec(actor, key);
+    if (!spec) return;
+    await _bbttccAdjustTrack(actor, spec, -1);
+  });
+
+  bind("[data-bbttcc-action='track-clear']", async (ev) => {
+    const key = String(ev.currentTarget.dataset.track || "");
+    const spec = _bbttccFindTrackSpec(actor, key);
+    if (!spec) return;
+    const patch = { tracks: { [key]: { value: 0, ts: Date.now() } } };
+    await _bbttccSetActorResources(actor, patch);
+  });
+}
+
+// Option C: Hook native item use and auto-spend/roll/tick.
+function _bbttccInstallUseItemHookOnce() {
+  const KEY = "__bbttcc_class_resources_useItemHook_v1";
+  if (globalThis[KEY]) return;
+
+  Hooks.on("dnd5e.useItem", async (item, config, options) => {
+    try {
+      // Guard against re-entry / synthetic calls
+      if (options && options.__bbttccSkipResources) return;
+
+      const actor = item?.parent;
+      if (!actor || !(actor instanceof Actor)) return;
+      if (actor.getFlag?.("bbttcc-factions", "isFaction")) return;
+
+      // Only process actors that actually have one of our supported class specs
+      const specs = _bbttccGetActiveResourceSpec(actor);
+      if (!specs.length) return;
+
+      // Determine meta (flags preferred; heuristic fallback allowed)
+      const meta = _bbttccReadItemMeta(item) || _bbttccInferItemMetaFromText(item);
+      if (!meta || (!meta.resourceCost && !meta.pushback && !meta.burn)) return;
+
+      // If pushback is conditional on success/fail we can’t reliably know here for all item types,
+      // so v1 supports: on="use" only (others are ignored until we have a consistent result hook).
+      const pb = meta.pushback;
+      if (pb && pb.on && pb.on !== "use") {
+        // ignore non-use in v1 (safe)
+      }
+
+      // Spend + Roll
+      let spendRoll = null;
+
+      if (meta.resourceCost) {
+        const poolKey = String(meta.resourceCost.pool || "");
+        const poolSpec = _bbttccFindPoolSpec(actor, poolKey);
+        if (!poolSpec) return;
+
+        // Ensure die/max are current (state computation does this)
+        const st = _bbttccPoolState(actor, poolSpec);
+        const n = Math.max(0, Math.floor(Number(meta.resourceCost.dice || 0) || 0));
+        if (n <= 0) return;
+
+        if (st.dice < n) {
+          ui.notifications?.warn?.(`${st.label}: not enough dice to use ${item.name}.`);
+          return;
+        }
+
+        const afterSpend = await _bbttccSpendPoolDice(actor, poolSpec, n);
+        if (meta.resourceCost.roll !== false) {
+          spendRoll = await _bbttccRollDie(afterSpend.die);
+          // Post a clean BBTTCC message (small + readable), *in addition* to the native dnd5e card.
+          await spendRoll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor: actor }),
+            flavor: `${item.name} — spent ${n} ${afterSpend.label} (${afterSpend.die})`
+          }, { __bbttccSkipResources: true });
+        }
+      }
+
+      // Pushback tick
+      if (pb && pb.amount) {
+        const trackKey = String(pb.track || "");
+        const trackSpec = _bbttccFindTrackSpec(actor, trackKey);
+        if (trackSpec) {
+          await _bbttccAdjustTrack(actor, trackSpec, pb.amount);
+        }
+      }
+
+
+
+// Aurablade Burn (Burn = resource access + pushback)
+if (meta.burn) {
+  const burnSpec = _bbttccFindTrackSpec(actor, "burn");
+  if (burnSpec) {
+    const burnState = _bbttccTrackState(actor, burnSpec);
+    const burnVal = burnState.value;
+
+    // Gate warnings (we cannot reliably cancel the native item workflow here, so we warn loudly)
+    if (typeof meta.burn.min === "number" && burnVal < meta.burn.min) {
+      ui?.notifications?.warn?.(`${item.name}: requires Burn ${meta.burn.min}+ (current ${burnVal}).`);
+    }
+    if (meta.burn.range && typeof meta.burn.range.min === "number" && typeof meta.burn.range.max === "number") {
+      const a = meta.burn.range.min, b = meta.burn.range.max;
+      if (burnVal < a || burnVal > b) ui?.notifications?.warn?.(`${item.name}: requires Burn ${a}–${b} (current ${burnVal}).`);
+    }
+
+    // Respect temporary Burn lock (e.g., Emotional Lock)
+    const lock = _bbttccGet(burnState, "meta.lock", null);
+    const isLocked = lock && lock.combatId && game?.combat && lock.combatId === game.combat.id
+      && typeof lock.untilRound === "number" && typeof lock.untilTurn === "number"
+      && (game.combat.round < lock.untilRound || (game.combat.round === lock.untilRound && game.combat.turn < lock.untilTurn));
+
+    if (!isLocked) {
+      // Apply Burn set/delta
+      if (typeof meta.burn.set === "number") {
+        await _bbttccSetBurn(actor, meta.burn.set);
+      } else if (typeof meta.burn.delta === "number" && meta.burn.delta) {
+        await _bbttccAdjustTrack(actor, burnSpec, Math.floor(Number(meta.burn.delta || 0) || 0));
+      } else if (meta.pushback && meta.pushback.track === "burn" && meta.pushback.amount) {
+        // already handled by pushback tick above
+      }
+
+      // Apply 1-turn lock if requested
+      if (meta.burn.lockTurns && game?.combat) {
+        await _bbttccLockBurn(actor, meta.burn.lockTurns);
+      }
+
+      
+
+// End-of-turn aftermath (e.g., Final Crescendo: enter Burn 4, then Burn drops to 0)
+if (meta.burn.after && meta.burn.after.when === "endOfTurn" && typeof meta.burn.after.set === "number" && game?.combat) {
+  await _bbttccScheduleBurnSetEndOfTurn(actor, meta.burn.after.set);
+}
+// Schedule delayed Burn delta
+      if (meta.burn.delayed && game?.combat) {
+        const d = meta.burn.delayed;
+        await _bbttccScheduleBurnDelta(actor, d.rounds || 1, d.delta || 0);
+      }
+    } else {
+      ui?.notifications?.info?.(`${item.name}: Burn is currently locked and cannot be changed until next turn.`);
+    }
+  }
+}
+    } catch (e) {
+      WARN("BBTTCC class resource useItem hook failed", e);
+    }
+  });
+
+  globalThis[KEY] = true;
+
+
+// Combat ticker: process Burn timers + lock expiry (Aurablade)
+Hooks.on("updateCombat", async (combat, changed) => {
+  try {
+    if (!combat || !("round" in changed || "turn" in changed)) return;
+    // Only relevant in an active combat
+    const r = Number(combat.round || 0) || 0;
+    const t = Number(combat.turn || 0) || 0;
+
+    for (const c of (combat.combatants || [])) {
+      const a = c?.actor;
+      if (!a) continue;
+      const burnSpec = _bbttccFindTrackSpec(a, "burn");
+      if (!burnSpec) continue;
+
+      const res = _bbttccActorResources(a);
+      const cur = res.tracks?.burn && typeof res.tracks.burn === "object" ? _bbttccClone(res.tracks.burn) : null;
+      if (!cur) continue;
+      const meta = cur.meta && typeof cur.meta === "object" ? _bbttccClone(cur.meta) : {};
+      const timers = Array.isArray(meta.timers) ? meta.timers.slice() : [];
+      if (!timers.length && !meta.lock) continue;
+
+      let did = false;
+      const remaining = [];
+      for (const tm of timers) {
+        if (!tm || tm.combatId !== combat.id) { remaining.push(tm); continue; }
+        if (Number(tm.atRound || 0) === r && Number(tm.atTurn || 0) === t) {
+          if (tm.type === "delta" && tm.delta) {
+            await _bbttccAdjustTrack(a, burnSpec, Math.floor(Number(tm.delta || 0) || 0));
+            did = true;
+          } else if (tm.type === "set" && typeof tm.set === "number") {
+            await _bbttccSetBurn(a, tm.set);
+            did = true;
+          }
+        } else {
+          remaining.push(tm);
+        }
+      }
+      meta.timers = remaining;
+
+      // Lock expiry
+      if (meta.lock && meta.lock.combatId === combat.id) {
+        const untilR = Number(meta.lock.untilRound || 0) || 0;
+        const untilT = Number(meta.lock.untilTurn || 0) || 0;
+        if (r > untilR || (r === untilR && t >= untilT)) {
+          delete meta.lock;
+          did = true;
+        }
+      }
+
+      if (did) {
+        const nextVal = Math.max(0, Math.floor(Number((a.getFlag?.(BBTTCC_RESOURCES_SCOPE, BBTTCC_RESOURCES_KEY)?.tracks?.burn?.value) || cur.value || 0) || 0));
+        await _bbttccSetActorResources(a, { tracks: { burn: { value: nextVal, ts: Date.now(), meta } } });
+      }
+    }
+  } catch (e) { WARN("BBTTCC Burn timers failed", e); }
+});
+
+  LOG("BBTTCC class resources: dnd5e.useItem hook installed");
+}
+/* ---------------------------------------
+ * Pack & category mappings for identity families
+ * ------------------------------------ */
+
+const PACK_KEYS = {
+  archetype:   "bbttcc-character-options.character-archetypes",
+  crew:        "bbttcc-character-options.crew-types",
+  sephirot:    "bbttcc-character-options.sephirothic-alignments",
+  // political philosophy uses AAE canon registry (flags), not a pack
+  occult:      "bbttcc-character-options.occult-associations"
+};
+/* ---------------------------------------
+ * AAE Political Philosophy (Canon) — v1
+ * Stored on actor: actor.getFlag(AAE_SCOPE, "politicalPhilosophy")
+ * ------------------------------------ */
+
+const AAE_POLITICAL_PHILOSOPHIES = [
+  {
+    key: "marxist",
+    label: "Marxist / Communist",
+    happiness: "Collective emancipation; non-alienated work",
+    suffering: "Exploitation and alienation"
+  },
+  {
+    key: "liberal",
+    label: "Liberal",
+    happiness: "Protected rights; consent and autonomy",
+    suffering: "Rights violations and coercion"
+  },
+  {
+    key: "social_democratic",
+    label: "Social Democratic",
+    happiness: "Dignity through welfare and harm reduction",
+    suffering: "Preventable poverty and neglect"
+  },
+  {
+    key: "libertarian",
+    label: "Libertarian",
+    happiness: "Voluntary exchange; minimal coercion",
+    suffering: "Interference and forced compliance"
+  },
+  {
+    key: "authoritarian",
+    label: "Authoritarian / Statist",
+    happiness: "Order, safety, and predictability",
+    suffering: "Chaos and fragmentation"
+  },
+  {
+    key: "theocratic",
+    label: "Theocratic",
+    happiness: "Alignment with sacred moral order",
+    suffering: "Corruption, heresy, profanation"
+  },
+  {
+    key: "fascist",
+    label: "Fascist",
+    happiness: "Mythic unity, strength, dominance",
+    suffering: "Weakness, dissent, pluralism"
+  },
+  {
+    key: "anarchist",
+    label: "Anarchist",
+    happiness: "Mutual aid; no imposed hierarchy",
+    suffering: "Domination and coercive authority"
+  }
+];
+
+function listPoliticalPhilosophyOptions() {
+  return AAE_POLITICAL_PHILOSOPHIES.map(p => ({ id: p.key, name: p.label }));
+}
+
+function getPoliticalPhilosophyDef(key) {
+  return AAE_POLITICAL_PHILOSOPHIES.find(p => p.key === String(key)) ?? null;
+}
+
+function labelForPoliticalPhilosophy(key) {
+  return getPoliticalPhilosophyDef(key)?.label ?? "—";
+}
+
+
+const IDENTITY_SLOTS = {
+  archetype: {
+    pack: PACK_KEYS.archetype,
+    categories: ["character-archetypes", "archetype", "archetypes", "bbttcc-archetype"]
+  },
+  crew: {
+    pack: PACK_KEYS.crew,
+    categories: ["crew-types", "crew", "crews", "bbttcc-crew"]
+  },
+  occult: {
+    pack: PACK_KEYS.occult,
+    categories: ["occult-associations", "occult", "bbttcc-occult"]
+  },
+  political: {
+    pack: null,
+    categories: ["political-philosophy", "political", "politics", "bbttcc-political"]
+  },
+  sephirothicAlignment: {
+    pack: PACK_KEYS.sephirot,
+    categories: ["sephirothic-alignments", "alignment", "alignments", "bbttcc-alignment"]
+  }
+};
+
+async function indexPack(key) {
+  const pack = game.packs.get(key);
+  if (!pack) return [];
+  const idx = await pack.getIndex({ fields: ["name", "type"] });
+
+  const rows = idx.filter(e =>
+    e.type === "feat"   ||
+    e.type === "feat5e" ||
+    e.type === "featv2" ||
+    e.type === "featV2" ||
+    e.type === "feat-5e"
+  );
+
+  rows.sort((A, B) => A.name.localeCompare(B.name));
+  return rows.map(({ _id, name }) => ({ id: _id, name }));
+}
+
+async function buildIdentityOptions() {
+  const [archetypeAll, crewAll, sephirot, politicalAll, occultAll] = await Promise.all([
+    indexPack(PACK_KEYS.archetype),
+    indexPack(PACK_KEYS.crew),
+    indexPack(PACK_KEYS.sephirot),
+    Promise.resolve(listPoliticalPhilosophyOptions()),
+    indexPack(PACK_KEYS.occult)
+  ]);
+
+  // Helper: true if a name looks like a tiered option, e.g. "(Tier 2)"
+  const isTierName = (entry) => /\(Tier\s+\d+\)/i.test(entry?.name || "");
+
+  // Only show BASE archetype items in the dropdown, e.g. "Archetype: Warlord"
+  const archetypeBase = archetypeAll.filter(entry => !isTierName(entry));
+
+  // Only show BASE crew types (no "(Tier X)" entries)
+  const crewBase = crewAll.filter(entry => !isTierName(entry));
+
+  // Future-proof: only base occult / political entries once tiers exist for them
+  const politicalBase = politicalAll.filter(entry => !isTierName(entry));
+  const occultBase    = occultAll.filter(entry => !isTierName(entry));
+
+  return {
+    archetype: {
+      pack: PACK_KEYS.archetype,
+      list: archetypeBase
+    },
+    crew: {
+      pack: PACK_KEYS.crew,
+      list: crewBase
+    },
+    sephirothicAlignment: {
+      pack: PACK_KEYS.sephirot,
+      list: sephirot
+    },
+    political: {
+      pack: null,
+      list: politicalBase
+    },
+    occult: {
+      pack: PACK_KEYS.occult,
+      list: occultBase
+    }
+  };
+}
+
+/* ---------------------------------------
+ * Locate base 5E character & NPC sheets
+ * ------------------------------------ */
+
+function findBaseCharacterSheet() {
+  try {
+    const charSheets = CONFIG?.Actor?.sheetClasses?.character;
+    if (!charSheets) return null;
+
+    for (const [id, entry] of Object.entries(charSheets)) {
+      if (entry?.cls && entry.default) return { id, cls: entry.cls };
+    }
+
+    for (const [id, entry] of Object.entries(charSheets)) {
+      if (!entry?.cls) continue;
+      const name = entry.cls.name || "";
+      if (id.includes("dnd5e") || id.includes("CharacterActorSheet") || name.includes("CharacterActorSheet")) {
+        return { id, cls: entry.cls };
+      }
+    }
+
+    const [firstId, firstEntry] = Object.entries(charSheets)[0] || [];
+    if (firstId && firstEntry?.cls) return { id: firstId, cls: firstEntry.cls };
+
+    return null;
+  } catch (err) {
+    WARN("Error while locating base character sheet", err);
+    return null;
+  }
+}
+
+function findBaseNPCSheet() {
+  try {
+    const npcSheets = CONFIG?.Actor?.sheetClasses?.npc;
+    if (!npcSheets) return null;
+
+    for (const [id, entry] of Object.entries(npcSheets)) {
+      if (entry?.cls && entry.default) return { id, cls: entry.cls };
+    }
+
+    for (const [id, entry] of Object.entries(npcSheets)) {
+      if (!entry?.cls) continue;
+      const name = entry.cls.name || "";
+      if (id.includes("dnd5e") || id.toLowerCase().includes("npc") || name.toLowerCase().includes("npc")) {
+        return { id: id, cls: entry.cls };
+      }
+    }
+
+    const [firstId, firstEntry] = Object.entries(npcSheets)[0] || [];
+    if (firstId && firstEntry?.cls) return { id: firstId, cls: firstEntry.cls };
+
+    return null;
+  } catch (err) {
+    WARN("Error while locating base NPC sheet", err);
+    return null;
+  }
+}
+
+/* ---------------------------------------
+ * Sheet registration
+ * ------------------------------------ */
+
+export function registerBBTTCCCharacterSheet() {
+  const baseChar = findBaseCharacterSheet();
+  const baseNPC  = findBaseNPCSheet();
+
+  if (!baseChar?.cls) {
+    WARN("Could not locate a base character sheet; BBTTCC Character Sheet will not be registered.");
+  } else {
+    class BBTTCCCharacterSheet extends baseChar.cls {}
+
+    const sheetId = `${MOD}.BBTTCCCharacterSheet`;
+
+    Actors.registerSheet(MOD, BBTTCCCharacterSheet, {
+      types: ["character"],
+      makeDefault: false,
+      label: "BBTTCC Character Sheet"
+    });
+
+    CONFIG.BBTTCC ??= {};
+    CONFIG.BBTTCC.autoLink ??= {};
+    CONFIG.BBTTCC.autoLink.characterSheetId = sheetId;
+
+    LOG("Registered BBTTCC Character Sheet", {
+      sheetId,
+      baseSheetId: baseChar.id,
+      baseClass: baseChar.cls.name
+    });
+  }
+
+  if (!baseNPC?.cls) {
+    WARN("Could not locate a base NPC sheet; BBTTCC NPC Sheet will not be registered.");
+  } else {
+    class BBTTCCNPCSheet extends baseNPC.cls {}
+
+    const npcSheetId = `${MOD}.BBTTCCNPCSheet`;
+
+    Actors.registerSheet(MOD, BBTTCCNPCSheet, {
+      types: ["npc"],
+      makeDefault: false,
+      label: "BBTTCC NPC Sheet"
+    });
+
+    CONFIG.BBTTCC ??= {};
+    CONFIG.BBTTCC.autoLink ??= {};
+    CONFIG.BBTTCC.autoLink.npcSheetId = npcSheetId;
+
+    LOG("Registered BBTTCC NPC Sheet", {
+      sheetId: npcSheetId,
+      baseSheetId: baseNPC.id,
+      baseClass: baseNPC.cls.name
+    });
+  }
+}
+
+export function getBBTTCCCharacterSheetId() {
+  return foundry.utils.getProperty(CONFIG, "BBTTCC.autoLink.characterSheetId");
+}
+
+/* ---------------------------------------
+ * Shared helpers
+ * ------------------------------------ */
+
+function getRoot(html) {
+  if (html instanceof HTMLElement) return html;
+  if (html && html[0] instanceof HTMLElement) return html[0];
+  return null;
+}
+
+function factionsList() {
+  return (game.actors?.contents ?? [])
+    .filter(a =>
+      a.getFlag?.("bbttcc-factions", "isFaction") === true ||
+      String(a.system?.details?.type?.value ?? "").toLowerCase() === "faction"
+    )
+    .map(a => ({ id: a.id, name: a.name }))
+    .sort((A, B) => A.name.localeCompare(B.name));
+}
+
+function resolveFactionForActor(actor) {
+  const byId = actor.getFlag?.("bbttcc-factions", "factionId");
+  if (byId && game.actors.get(byId)) {
+    return { id: byId, name: game.actors.get(byId).name };
+  }
+
+  const legacyName = actor.flags?.["bbttcc-territory"]?.faction;
+  if (legacyName) {
+    const match = factionsList().find(f => f.name === legacyName);
+    if (match) return { id: match.id, name: match.name };
+    return { id: "", name: legacyName };
+  }
+
+  return { id: "", name: "" };
+}
+
+function normalizeTikkunSparks(actor) {
+  const tApi = game.bbttcc?.api?.tikkun;
+
+  try {
+    if (tApi?.getAllSparks) {
+      const map    = tApi.getAllSparks(actor.id ?? actor) || {};
+      const sparks = Object.values(map);
+      if (!sparks.length) return 0;
+
+      const integrated = sparks.filter(s => s?.integrated).length;
+      return integrated;
+    }
+  } catch (e) {
+    WARN("normalizeTikkunSparks via Tikkun API failed", e);
+  }
+
+  const raw = actor?.getFlag?.("bbttcc-tikkun", "sparks") ?? 0;
+  if (raw == null) return 0;
+
+  try {
+    if (typeof raw === "object") {
+      if (typeof raw.integrated === "number") return raw.integrated;
+      if (typeof raw.total === "number") return raw.total;
+      return 0;
+    }
+  } catch {/* ignore */}
+
+  if (typeof raw === "number" || typeof raw === "string") {
+    return Number(raw) || 0;
+  }
+
+  return 0;
+}
+
+/* ---------------------------------------
+ * Enlightenment model
+ * ------------------------------------ */
+
+const ENLIGHTENMENT = [
+  { key: "unawakened",    label: "Unawakened" },
+  { key: "awakening",     label: "Awakening" },
+  { key: "seeking",       label: "Seeking" },
+  { key: "wisdom",        label: "Wisdom" },
+  { key: "understanding", label: "Understanding" },
+  { key: "enlightened",   label: "Enlightened" },
+  { key: "qliphothic",    label: "Qliphothic" }
+];
+
+const labelForEnlight = (k) =>
+  ENLIGHTENMENT.find(x => x.key === String(k))?.label ?? "Unawakened";
+
+const ENLIGHTENMENT_ITEM_DATA = {
+  unawakened: {
+    name: "Enlightenment: Unawakened",
+    type: "feat",
+    img: "systems/dnd5e/icons/svg/items/feature.svg",
+    flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { economy: 1 } } }
+  },
+  awakening: {
+    name: "Enlightenment: Awakening",
+    type: "feat",
+    img: "systems/dnd5e/icons/svg/items/feature.svg",
+    flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { intrigue: 1, softpower: 1 } } }
+  },
+  seeking: {
+    name: "Enlightenment: Seeking",
+    type: "feat",
+    img: "systems/dnd5e/icons/svg/items/feature.svg",
+    flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { intrigue: 1, softpower: 2 } } }
+  },
+  wisdom: {
+    name: "Enlightenment: Wisdom",
+    type: "feat",
+    img: "systems/dnd5e/icons/svg/items/feature.svg",
+    flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { diplomacy: 1, intrigue: 1, softpower: 1 } } }
+  },
+  understanding: {
+    name: "Enlightenment: Understanding",
+    type: "feat",
+    img: "systems/dnd5e/icons/svg/items/feature.svg",
+    flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { softpower: 2, diplomacy: 1 } } }
+  },
+  enlightened: {
+    name: "Enlightenment: Enlightened",
+    type: "feat",
+    img: "systems/dnd5e/icons/svg/items/feature.svg",
+    flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { diplomacy: 3, softpower: 2 } } }
+  },
+  qliphothic: {
+    name: "Enlightenment: Qliphothic",
+    type: "feat",
+    img: "systems/dnd5e/icons/svg/items/feature.svg",
+    flags: { "bbttcc-character-options": { category: "enlightenment-levels", bonuses: { violence: 2, intrigue: 2 } } }
+  }
+};
+
+async function syncEnlightenmentItem(actor, levelKey) {
+  const items = actor.items?.filter(
+    it => it.getFlag?.("bbttcc-character-options", "category") === "enlightenment-levels"
+  ) ?? [];
+  const toDelete = items.map(it => it.id);
+  if (toDelete.length) await actor.deleteEmbeddedDocuments("Item", toDelete);
+
+  const src = ENLIGHTENMENT_ITEM_DATA[levelKey];
+  if (!src) return;
+
+  const worldSrc = game.items?.find(
+    i =>
+      i.name === src.name &&
+      i.getFlag?.("bbttcc-character-options", "category") === "enlightenment-levels"
+  );
+
+  const createData = worldSrc ? worldSrc.toObject() : foundry.utils.deepClone(src);
+  foundry.utils.setProperty(
+    createData,
+    'flags["bbttcc-character-options"].category',
+    "enlightenment-levels"
+  );
+
+  await actor.createEmbeddedDocuments("Item", [createData]);
+}
+
+/* ---------------------------------------
+ * Identity helpers
+ * ------------------------------------ */
+
+function pickOptionItem(actor, categoryAliases) {
+  const items = actor.items?.contents ?? actor.items ?? [];
+  return items.find(it => {
+    const cat = it.getFlag?.("bbttcc-character-options", "category");
+    return categoryAliases.includes(cat);
+  }) ?? null;
+}
+
+function pickSephirotItem(actor) {
+  return pickOptionItem(actor, IDENTITY_SLOTS.sephirothicAlignment.categories);
+}
+
+/** Extra-tough delete for Sephirotic Alignment spam. */
+async function deleteSephirotItems(actor) {
+  const items = actor.items?.contents ?? actor.items ?? [];
+  const toDelete = items.filter(it => {
+    const name  = String(it.name ?? "");
+    const ident = String(it.system?.identifier ?? "");
+    const cat   = it.getFlag?.("bbttcc-character-options", "category");
+    return (
+      IDENTITY_SLOTS.sephirothicAlignment.categories.includes(cat) ||
+      /^alignment\b/i.test(name) ||
+      ident.startsWith("alignment-")
+    );
+  }).map(it => it.id);
+
+  if (toDelete.length) {
+    LOG("BBTTCC Identity — deleting Sephirot items", { actor: actor.name, ids: toDelete });
+    await actor.deleteEmbeddedDocuments("Item", toDelete);
+  }
+}
+
+async function backfillIdentityFlagsFromItems(actor, identityFlags) {
+  try {
+    const idApi = game.bbttcc?.api?.identity;
+    if (!idApi?.setIdentityFlags) return identityFlags;
+
+    const next = foundry.utils.deepClone(identityFlags ?? {});
+    const partial = {};
+
+    const archetypeItem = pickOptionItem(actor, IDENTITY_SLOTS.archetype.categories);
+    const crewItem      = pickOptionItem(actor, IDENTITY_SLOTS.crew.categories);
+    const politicalItem = null; // political philosophy is stored as an AAE flag
+    const occultItem    = pickOptionItem(actor, IDENTITY_SLOTS.occult.categories);
+    const enlightItem   = pickOptionItem(actor, ["enlightenment-levels"]);
+    const sephItem      = pickSephirotItem(actor);
+
+    const ensure = (slot, item, slotCfg) => {
+      if (!item) return;
+      const current = next[slot];
+      if (current && current.key) return;
+      const itemId = item.id ?? item._id ?? null;
+      if (!itemId) return;
+
+      partial[slot] = {
+        key: itemId,
+        pack: current?.pack ?? null,
+        category: slotCfg.categories[0]
+      };
+    };
+
+    ensure("archetype",   archetypeItem, IDENTITY_SLOTS.archetype);
+    ensure("crew",        crewItem,      IDENTITY_SLOTS.crew);
+    ensure("sephirothicAlignment", sephItem, IDENTITY_SLOTS.sephirothicAlignment);
+    ensure("occult",      occultItem,    IDENTITY_SLOTS.occult);
+    ensure("enlightenment", enlightItem, { categories: ["enlightenment-levels"] });
+
+    if (!Object.keys(partial).length) return identityFlags;
+
+    const merged = foundry.utils.mergeObject(next, partial, { inplace: false, overwrite: true });
+    await idApi.setIdentityFlags(actor.id ?? actor, merged);
+    return merged;
+  } catch (e) {
+    WARN("backfillIdentityFlagsFromItems error", e);
+    return identityFlags;
+  }
+}
+
+async function getIdentityFlagsSafe(actor) {
+  try {
+    const idApi = game.bbttcc?.api?.identity;
+    if (!idApi?.getIdentityFlags) return {};
+    const raw = idApi.getIdentityFlags(actor.id ?? actor) || {};
+    const base = isPlain(raw) ? raw : {};
+    return await backfillIdentityFlagsFromItems(actor, base);
+  } catch (e) {
+    WARN("getIdentityFlagsSafe error", e);
+    return {};
+  }
+}
+
+function buildIdentityDisplay(actor, identityFlags = {}) {
+  const labelFromItem = (item, fallback) =>
+    item ? String(item.name ?? fallback) : fallback;
+
+  const archetypeItem = pickOptionItem(actor, IDENTITY_SLOTS.archetype.categories);
+  const crewItem      = pickOptionItem(actor, IDENTITY_SLOTS.crew.categories);
+  const politicalItem = pickOptionItem(actor, IDENTITY_SLOTS.political.categories);
+  const occultItem    = pickOptionItem(actor, IDENTITY_SLOTS.occult.categories);
+  const enlightItem   = pickOptionItem(actor, ["enlightenment-levels"]);
+  const sephItem      = pickSephirotItem(actor);
+
+  return {
+    archetype: {
+      label: labelFromItem(archetypeItem, "—"),
+      itemId: archetypeItem?._id ?? archetypeItem?.id ?? null,
+      category: IDENTITY_SLOTS.archetype.categories[0],
+      key:  identityFlags.archetype?.key ?? null,
+      pack: identityFlags.archetype?.pack ?? null
+    },
+    crew: {
+      label: labelFromItem(crewItem, "—"),
+      itemId: crewItem?._id ?? crewItem?.id ?? null,
+      category: IDENTITY_SLOTS.crew.categories[0],
+      key:  identityFlags.crew?.key ?? null,
+      pack: identityFlags.crew?.pack ?? null
+    },
+    sephirothicAlignment: {
+      label: labelFromItem(sephItem, "—"),
+      itemId: sephItem?._id ?? sephItem?.id ?? null,
+      category: IDENTITY_SLOTS.sephirothicAlignment.categories[0],
+      key:  identityFlags.sephirothicAlignment?.key ?? null,
+      pack: identityFlags.sephirothicAlignment?.pack ?? null
+    },
+    political: (() => {
+      const polKey = actor.getFlag?.(AAE_SCOPE, "politicalPhilosophy") || null;
+      const polDef = AAE_POLITICAL_PHILOSOPHIES.find(p => p.key === String(polKey)) || null;
+      return {
+        label: polDef?.label ?? "—",
+        happiness: polDef?.happiness ?? "",
+        suffering: polDef?.suffering ?? "",
+        itemId: null,
+        category: IDENTITY_SLOTS.political.categories[0],
+        key:  identityFlags.political?.key ?? null,
+        pack: identityFlags.political?.pack ?? null
+      };
+    })(),
+    occult: {
+      label: labelFromItem(occultItem, "—"),
+      itemId: occultItem?._id ?? occultItem?.id ?? null,
+      category: IDENTITY_SLOTS.occult.categories[0],
+      key:  identityFlags.occult?.key ?? null,
+      pack: identityFlags.occult?.pack ?? null
+    },
+    enlightenment: {
+      label: labelFromItem(
+        enlightItem,
+        labelForEnlight(
+          (actor.getFlag?.("bbttcc-character-options", "enlightenment")?.level) ?? "unawakened"
+        )
+      ),
+      itemId: enlightItem?._id ?? enlightItem?.id ?? null,
+      category: "enlightenment-levels",
+      key:  identityFlags.enlightenment?.key ?? null,
+      pack: identityFlags.enlightenment?.pack ?? null
+    }
+  };
+}
+
+/**
+ * Apply a change for a single identity slot (archetype/crew/…).
+ * Called directly from the dropdown change handler.
+ */
+async function applyIdentitySlotChange(actor, slotKey, newKey) {
+  // Special case: Political Philosophy is AAE flag-based identity, not an embedded item.
+  if (slotKey === "political") {
+    const polKey = String(newKey ?? "").trim();
+    await actor.setFlag(AAE_SCOPE, "politicalPhilosophy", polKey || null);
+    return { political: { key: polKey || null, pack: null, category: "political-philosophy" } };
+  }
+
+  const cfg = IDENTITY_SLOTS[slotKey];
+  if (!cfg) {
+    WARN("applyIdentitySlotChange — unknown slot", slotKey);
+    return null;
+  }
+
+  const { pack, categories } = cfg;
+  const patch = {};
+
+  // Delete existing items for this slot
+  if (slotKey === "sephirothicAlignment") {
+    await deleteSephirotItems(actor);
+  } else {
+    const items = actor.items?.contents ?? actor.items ?? [];
+    const toDelete = items
+      .filter(it => {
+        const cat = it.getFlag?.("bbttcc-character-options", "category");
+        return categories.includes(cat);
+      })
+      .map(it => it.id);
+    if (toDelete.length) {
+      LOG("BBTTCC Identity — deleting items for slot", slotKey, { actor: actor.name, ids: toDelete });
+      await actor.deleteEmbeddedDocuments("Item", toDelete);
+    }
+  }
+
+  if (!newKey) {
+    patch[slotKey] = { key: null, pack: null, category: categories[0] };
+    return patch;
+  }
+
+  const p = game.packs.get(pack);
+  if (p) {
+    const doc = await p.getDocument(newKey).catch((e) => {
+      WARN("applyIdentitySlotChange — pack getDocument failed", slotKey, newKey, e);
+      return null;
+    });
+    if (doc) {
+      LOG("BBTTCC Identity — adding item for slot", slotKey, { actor: actor.name, item: doc.name, id: doc.id });
+      await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+    }
+  } else {
+    WARN("applyIdentitySlotChange — pack not found", slotKey, pack);
+  }
+
+  patch[slotKey] = { key: newKey, pack, category: categories[0] };
+  return patch;
+}
+
+/* ---------------------------------------
+ * Persistence helpers
+ * ------------------------------------ */
+
+async function persistFaction(actor, factionId) {
+  const name = factionId ? (game.actors.get(factionId)?.name || "") : "";
+  await actor.setFlag("bbttcc-factions", "factionId", factionId || null);
+  await actor.setFlag("bbttcc-territory", "faction", name || "");
+}
+
+/* ---------------------------------------
+ * BBTTCC Identity tab
+ * ------------------------------------ */
+
+async function ensureBBTTCCTab(app, root) {
+  const actor = app?.actor ?? app?.object;
+  if (!actor) return;
+
+  // Prefer Foundry v13 primary tab semantics (same strategy as Tikkun/Radiation enhancers)
+  const nav =
+    root.querySelector(".sheet-tabs[data-group='primary']") ||
+    root.querySelector(".tabs[data-group='primary']") ||
+    root.querySelector("nav.sheet-tabs") ||
+    root.querySelector("nav.tabs") ||
+    root.querySelector(".tabs");
+
+  const body =
+    root.querySelector(".tab-body[data-group='primary']") ||
+    root.querySelector(".tab-body[data-container-id]") ||
+    root.querySelector(".tab-body") ||
+    root.querySelector(".sheet-body") ||
+    root.querySelector(".sheet-content") ||
+    root;
+
+  if (!nav || !body) { WARN('BBTTCC tab injection: missing nav/body', { ctor: app?.constructor?.name, hasNav: !!nav, hasBody: !!body }); return; }
+
+  const exampleItem =
+    nav.querySelector("a.item[data-action='tab'][data-group='primary'][data-tab]") ||
+    nav.querySelector("a.item[data-tab]") ||
+    nav.querySelector(".item[data-tab]") ||
+    nav.querySelector(".item");
+
+  const group  = (exampleItem?.dataset?.group || nav.dataset?.group || "primary");
+  const action = (exampleItem?.dataset?.action || "tab");
+
+  let navItem = nav.querySelector("[data-tab='bbttcc']");
+  if (!navItem) {
+    navItem = document.createElement(exampleItem?.tagName?.toLowerCase() || "a");
+    navItem.classList.add("item");
+    navItem.dataset.tab = "bbttcc";
+    navItem.textContent = "BBTTCC";
+    if (group) navItem.dataset.group = group;
+    if (action) navItem.dataset.action = action;
+    nav.appendChild(navItem);
+  }
+
+  let section = body.querySelector(".tab[data-tab='bbttcc']");
+  if (!section) {
+    section = document.createElement("section");
+    section.classList.add("tab", "bbttcc-tab");
+    section.dataset.tab = "bbttcc";
+    if (group) section.dataset.group = group;
+    body.appendChild(section);
+  }
+
+  try {
+    const actor = app.actor ?? app.object;
+    const resolvedFaction = resolveFactionForActor(actor);
+    const radPoints = actor?.getFlag?.("bbttcc-radiation", "points");
+    const radRP     = actor?.getFlag?.("bbttcc-radiation", "rp");
+
+    const enlightenmentFlag =
+      actor?.getFlag?.("bbttcc-character-options", "enlightenment") ?? {};
+
+    const identityFlags   = await getIdentityFlagsSafe(actor);
+    const identityDisplay = buildIdentityDisplay(actor, identityFlags);
+    const identityOptions = await buildIdentityOptions();
+
+    const isGM = game.user?.isGM ?? false;
+    const isEditable = !!(app && (app.isEditable || app?.options?.editable));
+    const isOwner = !!(actor && actor.isOwner);
+    const canEditIdentityOptions = !!isEditable && (isGM || isOwner);
+
+    const context = {
+      actor,
+      system: actor?.system,
+      isGM,
+      bbttcc: {
+        canEditIdentityOptions,
+
+        factionName: resolvedFaction.name,
+        factionId: resolvedFaction.id,
+        factions: factionsList(),
+
+        radiationPoints: radPoints ?? radRP ?? 0,
+        tikkunSparks: normalizeTikkunSparks(actor),
+        raidXP: actor?.getFlag?.("bbttcc-raid", "experience") ?? 0,
+
+
+        bloodDebt: (() => {
+          const bd = getBloodDebtModel(actor);
+          const ledger = (bd.ledger || []).slice(0, 10).map(formatBloodDebtLedgerEntry);
+          return { value: Number(bd.value) || 0, ledger };
+        })(),
+        // Esoteric Magic (Cosmic Linguist)
+        esoteric: (() => {
+          const enabled = !!game.modules?.get(ESOTERIC_MAGIC_SCOPE)?.active;
+          const isLinguist = enabled && isCosmicLinguist(actor);
+          if (!isLinguist) return { enabled: false };
+          const st = getEsotericState(actor) || {};
+          return {
+            enabled: true,
+            dice: Number(st.dice) || 0,
+            maxDice: Number(st.maxDice) || 0,
+            die: String(st.die || "d6"),
+            strain: Number(st.strain) || 0
+          };
+        })(),
+
+        enlightenment: {
+          level: enlightenmentFlag.level ?? "unawakened",
+          display: enlightenmentFlag.display ?? labelForEnlight(enlightenmentFlag.level ?? "unawakened")
+        },
+
+        enlightenmentLevels: ENLIGHTENMENT,
+
+        identity: {
+          flags: identityFlags,
+          display: identityDisplay
+        },
+
+        identityOptions
+      }
+    };
+
+    const inner = await foundry.applications.handlebars.renderTemplate(
+      "modules/bbttcc-auto-link/templates/actors/bbttcc-tab.hbs",
+      context
+    );
+    section.innerHTML = inner;
+
+    // Inject a Bridge launcher into the BBTTCC tab (Character sheet) — uses the same pattern as Open Faction Sheet.
+    try {
+      const actions = section.querySelector('.bbttcc-card .bbttcc-card-actions');
+      if (actions && !actions.querySelector('[data-bbttcc-action="open-bridge"]')) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'bbttcc-button-link';
+        b.setAttribute('data-bbttcc-action', 'open-bridge');
+        b.innerHTML = '<i class="fas fa-exchange-alt"></i> Open Bridge';
+        actions.appendChild(b);
+      }
+    } catch (_eB) {}
+
+
+    // BBTTCC Class Resources (dice pools + pushback) — inject UI + ensure useItem hook is active
+    try {
+      _bbttccInstallUseItemHookOnce();
+      _bbttccRenderResourceCard(section, actor);
+    } catch (eR) { /* non-fatal */ }
+
+    wireBBTTCCTabEvents(app, section);
+  } catch (err) {
+    WARN("Failed to render BBTTCC tab template; falling back to placeholder.", err);
+    section.innerHTML = `<div class="bbttcc-tab-placeholder">
+      <p style="margin:0;">BBTTCC identity panel failed to load.</p>
+    </div>`;
+  }
+}
+
+/* ---------------------------------------
+ * Save & wiring for the tab
+ * ------------------------------------ */
+
+async function saveFromTab(actor, root) {
+  const newFactionId = root.querySelector("[data-bbttcc='factionId']")?.value || "";
+  const newRad   = Number(root.querySelector("[data-bbttcc='radiation']")?.value ?? 0);
+  const newRaid  = Number(root.querySelector("[data-bbttcc='raid']")?.value ?? 0);
+
+  const lvlKey  = String(root.querySelector("[data-bbttcc='enlightenment-level']")?.value ?? "unawakened");
+  const display = labelForEnlight(lvlKey);
+
+  await persistFaction(actor, newFactionId);
+
+  await actor.setFlag("bbttcc-radiation", "points", newRad);
+  await actor.setFlag("bbttcc-radiation", "rp", newRad);
+
+  await actor.setFlag("bbttcc-raid", "experience", newRaid);
+  await actor.setFlag("bbttcc-character-options", "enlightenment", { level: lvlKey, display });
+
+  await syncEnlightenmentItem(actor, lvlKey);
+
+  // Identity is handled live via dropdown change handlers now.
+
+  await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
+  Hooks.callAll("bbttcc:enlightenmentChanged", { actorId: actor.id, level: lvlKey, display });
+
+  ui.notifications?.info?.("BBTTCC values saved.");
+}
+
+function wireBBTTCCTabEvents(app, section) {
+  const actor = app.actor ?? app.object;
+  if (!actor) return;
+
+
+  const isGM = game.user?.isGM ?? false;
+  const isEditable = !!(app && (app.isEditable || app?.options?.editable));
+  const isOwner = !!actor.isOwner;
+  const canEditIdentityOptions = !!isEditable && (isGM || isOwner);
+
+  const factionSelect = section.querySelector("[data-bbttcc='factionId']");
+  if (factionSelect) {
+    factionSelect.value = actor.getFlag("bbttcc-factions", "factionId") || "";
+  }
+
+  const enlightSelect = section.querySelector("[data-bbttcc='enlightenment-level']");
+  if (enlightSelect) {
+    const current = actor.getFlag("bbttcc-character-options", "enlightenment")?.level || "unawakened";
+    enlightSelect.value = current;
+
+    // If the sheet is in Edit mode for an owner (or GM), let Enlightenment update live.
+    if (canEditIdentityOptions) {
+      enlightSelect.addEventListener("change", async (ev) => {
+        const lvlKey = String(ev.currentTarget.value ?? "unawakened").trim() || "unawakened";
+        const display = labelForEnlight(lvlKey);
+        try {
+          await actor.setFlag("bbttcc-character-options", "enlightenment", { level: lvlKey, display });
+          await syncEnlightenmentItem(actor, lvlKey);
+          await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
+          Hooks.callAll("bbttcc:enlightenmentChanged", { actorId: actor.id, level: lvlKey, display });
+          app.render(false);
+        } catch (e) {
+          WARN("BBTTCC Enlightenment Change — error", e);
+        }
+      });
+    }
+  }
+
+  const radInput = section.querySelector("[data-bbttcc='radiation']");
+  if (radInput) {
+    const radPoints = actor.getFlag("bbttcc-radiation", "points");
+    const radRP     = actor.getFlag("bbttcc-radiation", "rp");
+    radInput.value = radPoints ?? radRP ?? 0;
+  }
+
+  const sparksInput = section.querySelector("[data-bbttcc-readonly='sparks']");
+  if (sparksInput) {
+    sparksInput.value = normalizeTikkunSparks(actor);
+  }
+
+  const raidInput = section.querySelector("[data-bbttcc='raid']");
+  if (raidInput) {
+    raidInput.value = actor.getFlag("bbttcc-raid", "experience") ?? 0;
+  }
+
+  // Preselect identity dropdowns from flags
+  const identityRaw = actor.getFlag("bbttcc-character-options", "identity") || {};
+  const setSelectValue = (slot) => {
+    const sel = section.querySelector(`[data-bbttcc-identity='${slot}']`);
+    if (!sel) return;
+    const key = identityRaw?.[slot]?.key;
+    if (key) sel.value = key;
+  };
+
+  setSelectValue("archetype");
+  setSelectValue("crew");
+  setSelectValue("occult");
+  // political philosophy is stored on AAE flags
+  const polSel = section.querySelector(`[data-bbttcc-identity='political']`);
+  if (polSel) polSel.value = actor.getFlag(AAE_SCOPE, "politicalPhilosophy") || "";
+  setSelectValue("sephirothicAlignment");
+
+  // Live identity change handlers
+  const idApi = game.bbttcc?.api?.identity;
+
+  const attachIdentityChange = (slot) => {
+    if (!canEditIdentityOptions) return;
+    const sel = section.querySelector(`[data-bbttcc-identity='${slot}']`);
+    if (!sel || !idApi?.setIdentityFlags) return;
+
+    sel.addEventListener("change", async (ev) => {
+      const newKey = String(ev.currentTarget.value ?? "").trim();
+      LOG("BBTTCC Identity Change — slot", { slot, newKey, actor: actor.name });
+
+      try {
+        const patch = await applyIdentitySlotChange(actor, slot, newKey);
+        if (patch) {
+          await idApi.setIdentityFlags(actor.id, patch);
+          await idApi.syncOptionTiers?.(actor.id, { silent: true });
+        }
+        await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
+        app.render(false);
+      } catch (e) {
+        WARN("BBTTCC Identity Change — error", slot, e);
+      }
+    });
+  };
+
+  attachIdentityChange("archetype");
+  attachIdentityChange("crew");
+  attachIdentityChange("occult");
+  // Political Philosophy change handler (AAE flag based) — GM only.
+  const polSelect = section.querySelector(`[data-bbttcc-identity='political']`);
+  if (polSelect && isGM) {
+    polSelect.addEventListener("change", async (ev) => {
+      const newKey = String(ev.currentTarget.value ?? "").trim();
+      LOG("BBTTCC Political Philosophy Change", { newKey, actor: actor.name });
+      try {
+        await actor.setFlag(AAE_SCOPE, "politicalPhilosophy", newKey || null);
+        await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
+        app.render(false);
+      } catch (e) {
+        WARN("BBTTCC Political Philosophy Change — error", e);
+      }
+    });
+  }
+  attachIdentityChange("sephirothicAlignment");
+
+  const saveBtn = section.querySelector("[data-bbttcc-action='save']");
+  if (saveBtn) {
+    saveBtn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      await saveFromTab(actor, section);
+      app.render(false);
+    });
+  }
+
+  const recalcBtn = section.querySelector("[data-bbttcc-action='recalc']");
+  if (recalcBtn) {
+    recalcBtn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
+      ui.notifications?.info?.("BBTTCC OPs recalculated.");
+    });
+
+
+  /* ---------------------------------------
+   * Blood Debt — GM-only controls (manual)
+   * ------------------------------------ */
+  const bdGet = () => {
+    const deltaRaw = section.querySelector("[data-bbttcc-blooddebt='delta']")?.value;
+    const source   = section.querySelector("[data-bbttcc-blooddebt='source']")?.value || "other";
+    const note     = section.querySelector("[data-bbttcc-blooddebt='note']")?.value || "";
+    const delta    = Number(deltaRaw || 0) || 0;
+    return { delta, source, note };
+  };
+
+  const bindBD = (action, fn) => {
+    const b = section.querySelector(`[data-bbttcc-action='${action}']`);
+    if (!b) return;
+    b.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      try { await fn(); app.render(false); } catch (e) { WARN("Blood Debt action failed", action, e); }
+    });
+  };
+
+  if (game.user?.isGM) {
+    bindBD("blooddebt-add", async () => {
+      const f = bdGet();
+      const d = Math.abs(f.delta || 0) || 1;
+      await applyBloodDebtDelta(actor, { delta: d, source: f.source, note: f.note });
+      ui.notifications?.info?.(`Blood Debt +${d} applied.`);
+    });
+
+    bindBD("blooddebt-reduce", async () => {
+      const f = bdGet();
+      const d = Math.abs(f.delta || 0) || 1;
+      await applyBloodDebtDelta(actor, { delta: -d, source: f.source, note: f.note });
+      ui.notifications?.info?.(`Blood Debt -${d} applied.`);
+    });
+
+    bindBD("blooddebt-declare-death", async () => {
+      // Standard baseline: +2, source=death
+      const note = section.querySelector("[data-bbttcc-blooddebt='note']")?.value || "";
+      await applyBloodDebtDelta(actor, { delta: 2, source: "death", note });
+      ui.notifications?.info?.("Death declared. Blood Debt +2 applied.");
+    });
+
+    bindBD("blooddebt-reset", async () => {
+      const ok = await Dialog.confirm({
+        title: "Reset Blood Debt?",
+        content: `<p>This will set Blood Debt to <b>0</b> and clear the ledger for <b>${actor.name}</b>.</p>`
+      });
+      if (!ok) return;
+
+      await actor.update({
+        "flags.bbttcc.identity.bloodDebt": { value: 0, ledger: [] },
+        "flags.bbttcc.bloodDebt": 0
+      });
+      ui.notifications?.info?.("Blood Debt reset.");
+    });
+  }
+
+  }
+
+
+
+  // Esoteric Magic (Cosmic Linguist) — GM test controls
+  const esWrap = section.querySelector("[data-bbttcc-esoteric='1']");
+  if (esWrap && game.modules?.get(ESOTERIC_MAGIC_SCOPE)?.active) {
+    const bind = (action, fn) => {
+      const b = esWrap.querySelector(`[data-bbttcc-action='${action}']`);
+      if (!b) return;
+      b.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        try { await fn(); app.render(false); } catch (e) { WARN("Esoteric action failed", action, e); }
+      });
+    };
+
+    bind("esoteric-add-die", async () => {
+      if (!isCosmicLinguist(actor)) return;
+      const st = getEsotericState(actor);
+      const next = Math.min((Number(st.dice) || 0) + 1, Number(st.maxDice) || 0 || 1);
+      await setEsotericState(actor, { dice: next });
+    });
+
+    bind("esoteric-clear-dice", async () => {
+      if (!isCosmicLinguist(actor)) return;
+      await setEsotericState(actor, { dice: 0 });
+    });
+
+    bind("esoteric-add-strain", async () => {
+      if (!isCosmicLinguist(actor)) return;
+      const st = getEsotericState(actor);
+      await setEsotericState(actor, { strain: (Number(st.strain) || 0) + 1 });
+    });
+
+    bind("esoteric-clear-strain", async () => {
+      if (!isCosmicLinguist(actor)) return;
+      await setEsotericState(actor, { strain: 0 });
+    });
+  }
+
+  // BBTTCC Class Resources — wire UI buttons (dice pools + pushback)
+  try { _bbttccWireResourceCardEvents(app, section); } catch (_eResWire) {}
+
+  const openBridgeBtn = section.querySelector("[data-bbttcc-action='open-bridge']");
+  if (openBridgeBtn) {
+    openBridgeBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      try {
+        const api = game.bbttcc && game.bbttcc.api ? game.bbttcc.api : null;
+        const bridge = api ? api.bridge : null;
+        if (bridge && typeof bridge.open === "function") bridge.open(actor.id);
+        else ui.notifications?.warn?.("Bridge API not available.");
+      } catch (e) {
+        WARN("Open Bridge failed", e);
+      }
+    });
+  }
+
+  const openFactionBtn = section.querySelector("[data-bbttcc-action='open-faction']");
+  if (openFactionBtn) {
+    openFactionBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+
+      const factionId = actor.getFlag("bbttcc-factions", "factionId") || "";
+      if (!factionId) {
+        return ui.notifications?.warn?.("No faction linked for this character yet.");
+      }
+
+      const faction = game.actors.get(factionId);
+      if (!faction) {
+        return ui.notifications?.warn?.("Linked faction actor not found.");
+      }
+
+      faction.sheet?.render(true, { focus: true });
+    });
+  }
+}
+
+/* ---------------------------------------
+ * Hooks: render BBTTCC sheets
+ * ------------------------------------ */
+
+async function enhanceBBTTCCSheet(app, html) {
+  try {
+    const actor = app?.actor ?? app?.object;
+    if (!actor) return;
+
+    // Only PCs/NPCs; faction actors do not receive the BBTTCC tab here.
+    const isPC = (actor.type === "character" || actor.type === "npc");
+
+    const root = getRoot(html);
+    if (!root) return;
+
+    // Register character/npc non-faction sheets for healer refreshes.
+    try {
+      if (isPC && !actor.getFlag?.("bbttcc-factions", "isFaction")) {
+        _bbttccRegisterSheet(app, root);
+      }
+    } catch {/* ignore */}
+
+    // Any actor sheet render can destabilize existing tab DOM. Heal other open character sheets on next tick.
+    _bbttccScheduleHeal();
+
+    root.classList.add("bbttcc-character-sheet");
+    if (isPC && !actor.getFlag?.("bbttcc-factions", "isFaction")) {
+      // Ensure Esoteric Magic feats route through dnd5e.useItem (dialog-safe)
+      patchEsotericDisplayCardRoutingOnce();
+      await ensureBBTTCCTab(app, root);
+
+      // Safety net: some other enhancers (or the tab controller) may re-render / rebuild tabs
+      // immediately after this hook fires. Re-ensure once on a short delay.
+      setTimeout(async () => {
+        try {
+          const liveRoot = getRoot(app.element);
+          if (!liveRoot) return;
+          liveRoot.classList.add("bbttcc-character-sheet");
+          await ensureBBTTCCTab(app, liveRoot);
+        } catch (e) {
+          WARN("Post-render re-ensure failed", e);
+        }
+      }, 50);
+    }
+
+  } catch (err) {
+    WARN("Failed during BBTTCC sheet enhancement", err);
+  }
+}
+
+Hooks.on("renderBBTTCCCharacterSheet", enhanceBBTTCCSheet);
+Hooks.on("renderBBTTCCNPCSheet", enhanceBBTTCCSheet);
+
+// Also enhance the *base* 5e sheets, in case a character is opened with a non-BBTTCC sheetClass.
+// This is the common path when opening actors indirectly (e.g., from the Faction Sheet roster).
+Hooks.on("renderActorSheet", enhanceBBTTCCSheet);
+Hooks.on("renderActorSheet5eCharacter", enhanceBBTTCCSheet);
+Hooks.on("renderCharacterActorSheet", enhanceBBTTCCSheet);
+Hooks.on("renderActorSheet5eNPC", enhanceBBTTCCSheet);
+
+/* ---------------------------------------
+ * Ready hook: inspectIdentity debug helper
+ * ------------------------------------ */
+
+Hooks.once("ready", () => {
+  try {
+    game.bbttcc = game.bbttcc ?? { api: {} };
+    game.bbttcc.api = game.bbttcc.api ?? {};
+    game.bbttcc.api.autoLink = game.bbttcc.api.autoLink ?? {};
+
+    game.bbttcc.api.autoLink.inspectIdentity = async (actorOrId) => {
+      const actor = typeof actorOrId === "string" ? game.actors.get(actorOrId) : actorOrId;
+      if (!actor) return null;
+      const flags   = await getIdentityFlagsSafe(actor);
+      const display = buildIdentityDisplay(actor, flags);
+      return { flags, display };
+    };
+
+    LOG("autoLink.inspectIdentity API ready (Identity Integration + live editing).");
+  } catch (err) {
+    WARN("Failed to expose inspectIdentity API", err);
+  }
+});

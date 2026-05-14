@@ -1,0 +1,77 @@
+{
+  "name": "Sephirotic Scion (Seraphic): Cleansing Breath",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_heritage.png",
+  "system": {
+    "description": {
+      "value": "<p><strong>Heritage Signature (RFI v1.0).</strong></p><p><em>&ldquo;Fire in your hands is not metaphor.&rdquo;</em></p><p><strong>Cleansing Breath.</strong> 1/Soma Break, as an action: exhale a 15-ft cone of radiant fire. Each creature in the cone makes an <strong>Evasion</strong> save (<strong>DC = 10 + your Presence + Soul</strong>); on failure they take <strong>2d10 sephirotic</strong> damage, half on success. The die pool scales with Tier: +1d10 at Tier 2, +2d10 at Tier 3, +3d10 at Tier 4. Exploding dice apply normally and bank Surge per RFI convention.</p>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "rfi-1.0",
+      "revision": 1,
+      "book": "",
+      "license": ""
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "advancement": [],
+    "identifier": "sephirotic_scion-seraphic-cleansing_breath",
+    "crewed": false,
+    "enchant": {},
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "properties": [],
+    "requirements": "Sephirotic Scion (Seraphic)",
+    "type": {
+      "value": "",
+      "subtype": "heritageSignature"
+    },
+    "activities": {}
+  },
+  "flags": {
+    "bbttcc": {
+      "kind": "heritageSignature",
+      "feature": "cleansing_breath",
+      "family": "sephirotic_scion",
+      "lineage": "Seraphic",
+      "version": "1.0.0-rfi"
+    },
+    "fourththing": {
+      "kind": "heritageSignature",
+      "feature": "cleansing_breath",
+      "family": "sephirotic_scion",
+      "lineage": "Seraphic"
+    }
+  },
+  "effects": [],
+  "folder": "6V1At5seZ3anlMh6",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "rfi-heritage-phase2",
+      "uuid": "Item.SSSERAPHICTIER1P",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "1.0.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "1.0.0",
+    "createdTime": 1773192841996,
+    "modifiedTime": 1776000000000,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "SSSERAPHICTIER1P"
+}

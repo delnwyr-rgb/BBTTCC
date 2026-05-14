@@ -1,0 +1,103 @@
+{
+  "name": "Oldenborn Heritage: Rustland Scavenger",
+  "type": "feat",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RustlandScavenger2.png",
+  "system": {
+    "category": "technique",
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "RFI-native",
+      "revision": 3,
+      "book": "Heritages v1.1",
+      "license": ""
+    },
+    "tags": [],
+    "description": {
+      "value": "<p><strong>BBTTCC Heritage (v1.1, RFI-native).</strong> Oldenborn heritage: Rustland Scavenger.</p><p><em>“Yesod fell. The world remembered old names. You answered.”</em></p><p><strong>Oldenborn (Rustland Scavenger).</strong> Your place-soul is a dead city that refused to finish dying. You are the genius loci of collapsed transit hubs, rebar graveyards, and the smell of old oil. Every ruin you walk into recognizes you on arrival and, quietly, offers you what’s left.</p><h3>Traits</h3><ul><li><strong>Creature Type.</strong> Humanoid (Oldenborn).</li><li><strong>Size.</strong> Medium.</li><li><strong>Movement.</strong> 30 feet walking.</li><li><strong>Lineage Lean.</strong> Oldenborn does not grant fixed attribute bonuses; your background handles increases. Your heritage leans toward <strong>Mind or Intrigue</strong> in fiction and through Tier powers.</li></ul><h3>Oldenborn Core: Old Memory, Old Flesh</h3><p>At character creation you gain <strong>Old Memory, Old Flesh</strong> (Dream-Flesh, Old Paths, Veil-Sight, You Are Remembered) from the Oldenborn species root.</p><h3>Rustland Scavenger Traits</h3><ul><li><strong>Toxic Lung Filters.</strong> You have advantage on defense checks against inhaled toxins, smoke, and industrial residue. You can function for up to 1 hour in atmospheres that would hospitalize a normal Medium creature.</li><li><strong>Urban Scrounger.</strong> You are skilled in Investigation (Mind). You can always tell, without a check, which structure in a ruin is load-bearing, which doorway is the real exit, and which pile of junk has something useful in it.</li><li><strong>Patch & Repurpose.</strong> Once per Soma Break, during a short rest spent in a ruin or wreckage hex, you may recover one expended consumable (bandage, filter, torch, ration) by scavenging.</li><li><strong>Ruin-Sense.</strong> You read marketplaces, ruins, and hex politics at a glance and can always tell what the last three meaningful events were in a trade hub.</li></ul><h3>Strategic Hooks (Foundry / BBTTCC)</h3><ul><li><strong>OP Edge.</strong> Your faction gains <strong>+2 Economy OP</strong> and <strong>+1 Intrigue OP</strong> at campaign start.</li><li><strong>Hex Synergy.</strong> In <em>Ruins / Urban Wreckage</em> hexes, your faction's travel Intrigue costs are reduced by 1 (minimum 0) in that terrain.</li><li><strong>Salvage Windfall.</strong> Once per Strategic Turn, your faction may perform an extra Salvage action in a controlled Ruins hex without consuming its action slot.</li></ul><div data-ft-per-use=\"1\" data-ft-per-use-key=\"patchRepurpose\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #c08e6a;border-radius:0.35rem;background:rgba(95,65,45,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#e8b890;margin-bottom:0.25rem\">⟁ Per-Use Ability — <strong>Patch & Repurpose</strong></div>\n  <div style=\"font-size:0.86rem;opacity:0.92;line-height:1.4\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (during short rest) &nbsp;·&nbsp; <strong>Use:</strong> Click this feature on your sheet to invoke.</div>\n  <div style=\"font-size:0.82rem;opacity:0.85;margin-top:0.3rem\">During a short rest in a ruin/wreckage hex, recover one expended consumable (bandage, filter, torch, ration) by scavenging.</div>\n</div>",
+      "chat": ""
+    },
+    "advancement": [
+      {
+        "_id": "97f9060ff51e962a",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.su4m5LZVhWGBX6MF",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Rustland Scavenger Tier I",
+        "hint": "Gain your Rustland Scavenger Tier I feat."
+      }
+    ],
+    "identifier": "oldenborn_rustland_scavenger_heritage",
+    "requirements": "Oldenborn",
+    "prerequisites": {
+      "items": [],
+      "repeatable": false,
+      "level": null
+    },
+    "uses": {
+      "spent": 0,
+      "recovery": [],
+      "max": ""
+    },
+    "activities": {}
+  },
+  "effects": [],
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "heritage",
+      "family": "oldenborn",
+      "lineage": "Rustland Scavenger",
+      "version": "1.1.0",
+      "date": "2026-04-19",
+      "rfiNative": true,
+      "opEffects": {
+        "economy": 2,
+        "intrigue": 1
+      }
+    },
+    "fourththing": {
+      "grants": {
+        "resistances": [
+          {
+            "type": "poison",
+            "flavor": "inhaled"
+          }
+        ]
+      }
+    }
+  },
+  "folder": "7fnxyCtrYl8KlYbp",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "bbttcc-heritages-v1.1",
+      "uuid": "Item.bILvIQnnHx5eVzYb",
+      "coreVersion": "13.351",
+      "systemId": "fourththing",
+      "systemVersion": "0.6.0"
+    },
+    "coreVersion": "13.351",
+    "systemId": "fourththing",
+    "systemVersion": "0.6.0",
+    "createdTime": 1776778000000,
+    "modifiedTime": 1776778000000,
+    "lastModifiedBy": "HERITAGESV11PASS"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "bILvIQnnHx5eVzYb"
+}

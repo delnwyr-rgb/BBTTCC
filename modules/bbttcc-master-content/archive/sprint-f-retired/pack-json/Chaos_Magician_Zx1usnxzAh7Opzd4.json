@@ -1,0 +1,516 @@
+{
+  "name": "Chaos Magician",
+  "type": "class",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/New%20Classes/chaos_magician_hero.png",
+  "system": {
+    "description": {
+      "value": "<p><em>“Some people study magic. You are what happens when magic studies <strong>people</strong>.”</em></p><p><strong>Primary Ability:</strong> Charisma</p><p><strong>Role:</strong> Innate reality-bender who channels unstable dreamstuff straight through the Yesod–Malkuth fracture.</p><p>Chaos Magicians are living anomalies: walking probability leaks. Their casting is not a formula—it’s a persuasive event. A Chaos Magician doesn’t ask the universe for permission. They remind it that consent is complicated.</p><h3>Class Features by Tier (BBTTCC Overlay)</h3><ul><li><strong>Tier 1 — Fracture-Born.</strong> You carry the fracture inside you. Chaos surges. Small boons. Reality flinches.</li><li><strong>Tier 2 — Probability Editor.</strong> You pressure outcomes by spending Chaos Points.</li><li><strong>Tier 3 — Reality Bleed.</strong> Your victories can seal or widen the tear—Darkness and boons spill accordingly.</li><li><strong>Tier 4 — Living Paradox.</strong> Once per long rest you cast as a contradiction: maximum output, chosen surge.</li></ul>",
+      "chat": ""
+    },
+    "source": {
+      "custom": "BBTTCC",
+      "rules": "2024",
+      "revision": 1
+    },
+    "startingEquipment": [],
+    "identifier": "chaos_magician",
+    "levels": 1,
+    "advancement": {
+      "ZMGfzCPb7cUJOFKl": {
+        "_id": "ZMGfzCPb7cUJOFKl",
+        "type": "HitPoints",
+        "configuration": {},
+        "value": {},
+        "flags": {},
+        "hint": ""
+      },
+      "tP3UEPtHER5M4Pqa": {
+        "_id": "tP3UEPtHER5M4Pqa",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.2TunJFORtLvNKntC",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Innate Spellcasting",
+        "flags": {},
+        "hint": ""
+      },
+      "Y4AiH0oXVSKNpJOY": {
+        "_id": "Y4AiH0oXVSKNpJOY",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.U3yCiI7bKp2E6smM",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 1,
+        "title": "Fracture-Born",
+        "flags": {},
+        "hint": ""
+      },
+      "grantChaosPoints": {
+        "_id": "grantChaosPoints",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.oXOnGzbVV0CKzMrY",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 2,
+        "title": "Chaos Points",
+        "flags": {},
+        "hint": ""
+      },
+      "UFmc2RDvJequMphM": {
+        "_id": "UFmc2RDvJequMphM",
+        "type": "Subclass",
+        "configuration": {},
+        "value": {
+          "document": null,
+          "uuid": null
+        },
+        "level": 3,
+        "title": "",
+        "hint": "",
+        "flags": {}
+      },
+      "Qt2AgTRkLYp4aGqW": {
+        "_id": "Qt2AgTRkLYp4aGqW",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.tzpq925Wr5qJZ1JC",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 3,
+        "title": "Chaos Edits",
+        "flags": {},
+        "hint": ""
+      },
+      "jy8S3kFTArHM3x1t": {
+        "_id": "jy8S3kFTArHM3x1t",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 4,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "szFOmp3PI8aqTvuQ": {
+        "_id": "szFOmp3PI8aqTvuQ",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 8,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "x81EZbvd0fgqR6Ph": {
+        "_id": "x81EZbvd0fgqR6Ph",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 12,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "0hc7eetFFa2W64mL": {
+        "_id": "0hc7eetFFa2W64mL",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 16,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "NdP5LBxzWHlfEZC0": {
+        "_id": "NdP5LBxzWHlfEZC0",
+        "type": "AbilityScoreImprovement",
+        "configuration": {
+          "points": 2,
+          "fixed": {
+            "str": 0,
+            "dex": 0,
+            "con": 0,
+            "int": 0,
+            "wis": 0,
+            "cha": 0
+          },
+          "cap": 2,
+          "locked": [],
+          "recommendation": null
+        },
+        "value": {
+          "type": "asi"
+        },
+        "level": 19,
+        "title": "",
+        "flags": {},
+        "hint": ""
+      },
+      "K71TQDPRgvw8WXdL": {
+        "_id": "K71TQDPRgvw8WXdL",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.TUi67rgdO7OoT1bj",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 5,
+        "title": "Probability Editor",
+        "flags": {},
+        "hint": ""
+      },
+      "4wJmDvPajtQQg0x2": {
+        "_id": "4wJmDvPajtQQg0x2",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.zZ9EkR99leZCNfRq",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 6,
+        "title": "Surge Control",
+        "flags": {},
+        "hint": ""
+      },
+      "fIfZCoYEfd1ZdTDV": {
+        "_id": "fIfZCoYEfd1ZdTDV",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.88IA6ZRjxPi4tRXx",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 10,
+        "title": "Entropic Ward",
+        "flags": {},
+        "hint": ""
+      },
+      "La5RMiiFbvWBXGH2": {
+        "_id": "La5RMiiFbvWBXGH2",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.d6C4ewCfoTzQBV1x",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 11,
+        "title": "Reality Bleed",
+        "flags": {},
+        "hint": ""
+      },
+      "grantParadoxStep": {
+        "_id": "grantParadoxStep",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.qqzOxYDpBHvOFQHN",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 14,
+        "title": "Paradox Step",
+        "flags": {},
+        "hint": ""
+      },
+      "0NWtlKIiB6gE10Vg": {
+        "_id": "0NWtlKIiB6gE10Vg",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.sSnfTsvk3guf3rf7",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 17,
+        "title": "Living Paradox",
+        "flags": {},
+        "hint": ""
+      },
+      "PYSbCkNgn4JjR8Xy": {
+        "_id": "PYSbCkNgn4JjR8Xy",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.classes.Item.AmthlpkhuNRCBoMk",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 20,
+        "title": "Arcane Apotheosis",
+        "flags": {},
+        "hint": ""
+      },
+      "TGYu4KqJHEznZd1F": {
+        "_id": "TGYu4KqJHEznZd1F",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "saves:con",
+            "saves:cha"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Saving Throw Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "i2EmMURbfxJKLhrO": {
+        "_id": "i2EmMURbfxJKLhrO",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [],
+          "choices": [
+            {
+              "count": 2,
+              "pool": [
+                "skills:arc",
+                "skills:dec",
+                "skills:ins",
+                "skills:itm",
+                "skills:per",
+                "skills:rel",
+                "skills:prs"
+              ]
+            }
+          ]
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Skill Proficiencies",
+        "hint": "Choose two from Arcana, Deception, Insight, Intimidation, Perception, Persuasion, Religion.",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "ZzEwN68LAPP5s59q": {
+        "_id": "ZzEwN68LAPP5s59q",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "weapon:sim"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Weapon Proficiencies",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      },
+      "uQllT1YXnRAuT3Hw": {
+        "_id": "uQllT1YXnRAuT3Hw",
+        "type": "Trait",
+        "configuration": {
+          "mode": "default",
+          "allowReplacements": false,
+          "grants": [
+            "armor:lgt"
+          ],
+          "choices": []
+        },
+        "value": {
+          "chosen": []
+        },
+        "level": 1,
+        "title": "Armor Training",
+        "hint": "",
+        "classRestriction": "primary",
+        "flags": {}
+      }
+    },
+    "spellcasting": {
+      "progression": "full",
+      "ability": "cha",
+      "preparation": {
+        "formula": ""
+      }
+    },
+    "wealth": "",
+    "primaryAbility": {
+      "value": [
+        "cha"
+      ],
+      "all": false
+    },
+    "hd": {
+      "denomination": "d6",
+      "spent": 0,
+      "additional": ""
+    },
+    "properties": []
+  },
+  "effects": [],
+  "flags": {
+    "bbttcc": {
+      "primary": "charisma",
+      "opBonus": {
+        "intrigue": 1
+      }
+    }
+  },
+  "folder": "yBYHFZaqVkTc6Fj5",
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null,
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.3.0",
+    "createdTime": 1773191228706,
+    "modifiedTime": 1775063123765,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0,
+    "vmUfDuSYUIe7V5uB": 3
+  },
+  "_id": "Zx1usnxzAh7Opzd4",
+  "sort": 100000,
+  "_key": "!items!Zx1usnxzAh7Opzd4"
+}

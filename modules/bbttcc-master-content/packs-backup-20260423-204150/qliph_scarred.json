@@ -1,0 +1,125 @@
+{
+  "name": "Qliph-Scarred",
+  "type": "species",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Qliph-Scarred4.png",
+  "system": {
+    "advancement": [
+      {
+        "_id": "QLSIZ00000000001",
+        "type": "Size",
+        "configuration": {
+          "sizes": [
+            "med"
+          ]
+        },
+        "level": 0,
+        "title": "",
+        "hint": "Medium Qliph-Scarred.",
+        "value": {}
+      },
+      {
+        "_id": "LRCiJXTs8yq01PHa",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.8tR9NvqX4X69JIEb",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Qliph-Scarred Core: What Walked Out",
+        "hint": "Gain the Qliph-Scarred Core traits at character creation."
+      },
+      {
+        "_id": "QLSCAR0000000005",
+        "type": "ItemGrant",
+        "configuration": {
+          "items": [
+            {
+              "uuid": "Compendium.bbttcc-master-content.ancestries.Item.mR9NWoHtGedgxDyR",
+              "optional": false
+            }
+          ],
+          "optional": false,
+          "spell": null
+        },
+        "value": {},
+        "level": 0,
+        "title": "Strategic Hooks (Qliph-Scarred)",
+        "hint": "Grants OP and corruption hooks used by BBTTCC faction and world systems."
+      }
+    ],
+    "description": {
+      "value": "<p><strong>Normalized BBTTCC ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Qliph-Scarred.</strong> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><hr /><p><em><strong>Qliph-Scarred Traits</strong></em></p><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Ability Scores.</strong> Your background determines your ability score increases; Qliph-Scarred does not grant any ability score bonuses.</li></ul><p>Your Qliph-Scarred heritage grants you additional features through advancements (Item Grants) added during character creation.</p><p class=\"ft-heritages-line\"><strong>Heritages:</strong> Husk, Diabolic, Chthonic.</p>",
+      "chat": ""
+    },
+    "identifier": "qliph_scarred",
+    "source": {
+      "revision": 1,
+      "rules": "2024",
+      "book": "",
+      "custom": "BBTTCC",
+      "license": ""
+    },
+    "movement": {
+      "walk": "30",
+      "units": null,
+      "hover": false,
+      "ignoredDifficultTerrain": []
+    },
+    "senses": {
+      "darkvision": null,
+      "blindsight": null,
+      "tremorsense": null,
+      "truesight": null,
+      "units": null,
+      "special": ""
+    },
+    "type": {
+      "value": "humanoid",
+      "subtype": "Qliph-Scarred",
+      "custom": ""
+    }
+  },
+  "effects": [],
+  "folder": "XGBBcvgCXDYh3J9D",
+  "flags": {
+    "dnd5e": {
+      "originType": "species"
+    },
+    "bbttcc": {
+      "kind": "ancestry",
+      "ancestryKey": "qliph_scarred",
+      "version": "1.0.0",
+      "date": "2025-12-08",
+      "normalizedFrom": "Qliph-Scarred"
+    }
+  },
+  "_stats": {
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": {
+      "worldId": "the-gotgait-files",
+      "uuid": "Item.5LZVU2UEIDG0ci6a",
+      "coreVersion": "13.351",
+      "systemId": "dnd5e",
+      "systemVersion": "5.2.5"
+    },
+    "coreVersion": "13.351",
+    "systemId": "dnd5e",
+    "systemVersion": "5.2.5",
+    "createdTime": 1773192860237,
+    "modifiedTime": 1773192860237,
+    "lastModifiedBy": "vmUfDuSYUIe7V5uB"
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "5LZVU2UEIDG0ci6a",
+  "_srcfile": "fvtt-Item-qliph-scarred-5LZVU2UEIDG0ci6a.json"
+}
