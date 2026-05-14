@@ -1,0 +1,59 @@
+name: Release packages on tag
+
+# When you push a tag like `v1.0.0` (or `v0.1.0-beta`), this workflow zips up
+# the fourththing system and every bbttcc-* module, then attaches all zips
+# to a GitHub release. The release notes are auto-generated from commits/PRs
+# since the previous tag.
+#
+# To cut a release:
+#   git tag v1.0.0
+#   git push origin v1.0.0
+#
+# Pre-releases (tag contains a dash, e.g. v1.0.0-beta) are marked as such.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build zips
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+
+          # System zip
+          if [ -d systems/fourththing ]; then
+            (cd systems && zip -qr "../dist/fourththing.zip" fourththing)
+            echo "Built dist/fourththing.zip ($(du -h dist/fourththing.zip | cut -f1))"
+          fi
+
+          # Module zips — one per bbttcc-*
+          for d in modules/bbttcc-*; do
+            [ -d "$d" ] || continue
+            name=$(basename "$d")
+            (cd modules && zip -qr "../dist/${name}.zip" "$name")
+            echo "Built dist/${name}.zip ($(du -h "dist/${name}.zip" | cut -f1))"
+          done
+
+          ls -lh dist/
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
