@@ -1032,7 +1032,12 @@ const _FT_COMBAT_VFX_PRESETS = {
   explosion: { color: 0xff9a3c, ringWidth: 6, maxRadiusMult: 1.8, durationMs: 900 },
   repair:    { color: 0xa6e22e, ringWidth: 3, maxRadiusMult: 0.8, durationMs: 600 },
   collision: { color: 0xffcd3c, ringWidth: 5, maxRadiusMult: 1.1, durationMs: 600 },
-  sweep:     { color: 0xc1a3ff, ringWidth: 4, maxRadiusMult: 1.4, durationMs: 720 }
+  sweep:     { color: 0xc1a3ff, ringWidth: 4, maxRadiusMult: 1.4, durationMs: 720 },
+  // S3a.4: Infiltration / stealth palette — muted teals + amber escalation
+  stealthPing:    { color: 0x2dd4bf, ringWidth: 2, maxRadiusMult: 0.7, durationMs: 520 },
+  detectionPing:  { color: 0xfbbf24, ringWidth: 3, maxRadiusMult: 1.0, durationMs: 640 },
+  alarmWave:      { color: 0xef4444, ringWidth: 5, maxRadiusMult: 2.4, durationMs: 1100 },
+  progressPulse:  { color: 0x14b8a6, ringWidth: 3, maxRadiusMult: 0.9, durationMs: 560 }
 };
 
 function _ftPlaceableForActor(actor) {

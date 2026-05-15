@@ -2697,9 +2697,14 @@ _renderScenarioHUD(host, round){
       row.appendChild(aLabel);
 
       const bar = this._mkBar(alarm, alarmMax, { w: 140 });
-      // use red-ish when near lockdown
-      if (alarmMax && alarm >= alarmMax) bar.wrap.firstChild.style.background = "rgba(248, 113, 113, 0.7)";
-      else if (alarmMax && alarm >= alarmMax - 1) bar.wrap.firstChild.style.background = "rgba(245, 158, 11, 0.75)";
+      // use red-ish when near lockdown + S3a.4 pulse animation
+      if (alarmMax && alarm >= alarmMax) {
+        bar.wrap.firstChild.style.background = "rgba(248, 113, 113, 0.7)";
+        bar.wrap.classList.add("bbttcc-alarm-pulse-danger");
+      } else if (alarmMax && alarm >= alarmMax - 1) {
+        bar.wrap.firstChild.style.background = "rgba(245, 158, 11, 0.75)";
+        bar.wrap.classList.add("bbttcc-alarm-pulse-warn");
+      }
 
       row.appendChild(bar.wrap);
 

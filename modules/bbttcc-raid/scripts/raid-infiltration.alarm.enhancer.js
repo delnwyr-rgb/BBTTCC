@@ -221,12 +221,16 @@
 
       async function _onOutcomeResolved(outcome) {
         await sendOutcomeCard(outcome);
+        // S3a.4: emit outcome hook BEFORE the flip dialog so VFX is in flight
+        try { Hooks.callAll("bbttcc:infiltration:outcomeResolved", { scenario: getState(), outcome, attackerId: A.id, defenderId: D.id }); } catch (_) {}
         if (outcome === "detected") await promptFlipDialog();
       }
       // ---------------------------------------------------------------------
 
       async function step({ spendIntrigue = 2, spendNonlethal = 2, note = "" } = {}) {
         if (state.outcome !== "ongoing") return { ...state, note: "scenario already resolved" };
+
+        const _stepBeforeAlarm = state.alarm; // S3a.4: VFX hook baseline
 
         state.round += 1;
         state._flashbackUsedThisRound = false;
@@ -323,6 +327,13 @@
         if (note) lines.push(foundry.utils.escapeHTML(note));
 
         await sendChat(lines, { title: `${label}: Round ${state.round}` });
+
+        // S3a.4: emit alarm-change hook if step (incl. discovery tick) moved the meter
+        try {
+          if (state.alarm !== _stepBeforeAlarm) {
+            Hooks.callAll("bbttcc:infiltration:alarmChanged", { scenario: getState(), before: _stepBeforeAlarm, after: state.alarm, delta: state.alarm - _stepBeforeAlarm, attackerId: A.id, defenderId: D.id });
+          }
+        } catch (_) {}
 
         // S3a.1: resolve outcome after round commits, fire card + flip dialog as needed
         _resolveOutcome();
@@ -450,6 +461,11 @@
             if (progressChanged) parts.push(`Progress ${beforeProgress} → ${state.progress}/${state.progressMax}`);
           }
           await sendChat([parts.join("<br/>")], { title: `${label}: Effects` });
+          // S3a.4: emit canvas-VFX hooks for meter changes
+          try {
+            if (alarmChanged)    Hooks.callAll("bbttcc:infiltration:alarmChanged",    { scenario: getState(), before: beforeAlarm,    after: state.alarm,    delta: state.alarm    - beforeAlarm,    attackerId: A.id, defenderId: D.id });
+            if (progressChanged) Hooks.callAll("bbttcc:infiltration:progressChanged", { scenario: getState(), before: beforeProgress, after: state.progress, delta: state.progress - beforeProgress, attackerId: A.id, defenderId: D.id });
+          } catch (_) {}
           // Resolve outcome (force "detected" wins over meter-driven resolution)
           if (state.outcome === "ongoing") {
             if (forceDetected) state.outcome = "detected";
