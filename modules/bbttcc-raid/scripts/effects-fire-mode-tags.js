@@ -98,9 +98,17 @@ function applyFireModeTags() {
 }
 
 Hooks.once("ready", () => {
-  // compat-bridge publishes EFFECTS on its own Hooks.once("ready"). Defer slightly so
-  // its publish runs first (hook order is registration order — we register after).
+  // Multi-pass deferred apply (2026-05-15 fix for load-order gap):
+  //   - Pass 1 (microtask): tags keys in compat-bridge's static EFFECTS (~11 maneuvers).
+  //   - Pass 2 (300ms): tags keys injected by bbttcc-raid-maneuvers-loader from
+  //     data/bbttcc_maneuvers_v1_4.json (~40 more), whose setTimeout(..., 150) fires
+  //     AFTER our microtask.
+  //   - Pass 3 (1500ms): safety net for any late attachers.
+  // applyFireModeTags is idempotent (`if (eff.fireMode) continue;`) so re-passes
+  // only fill gaps — they don't clobber already-tagged entries.
   Promise.resolve().then(applyFireModeTags);
+  setTimeout(applyFireModeTags, 300);
+  setTimeout(applyFireModeTags, 1500);
 });
 
 export { FIRE_MODE_TAGS, applyFireModeTags };

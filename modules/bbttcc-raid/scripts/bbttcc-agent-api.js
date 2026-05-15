@@ -205,7 +205,7 @@
    *   meta?: { source:"throughput", maneuverKey:string, preview:true }
    * }
    *
-   * ---- roundEffects.type (30) ----
+   * ---- roundEffects.type (30 legacy strategic-abstract) ----
    * advantage
    * allyAttackReroll
    * armistice
@@ -236,6 +236,26 @@
    * summonEntity
    * tacticalEdge
    * unitSelfDamage
+   *
+   * ---- roundEffects.type (6 NEW battle-scene substrate, Sprint 1 2026-05-14) ----
+   * spawnSceneToken     — drop a token on the bound battle scene
+   *                       { actorUuid, sceneId?, x?, y?, hidden?, factionId? }
+   * damageSceneTokens   — AOE damage via fourththing._applyDamageToActor
+   *                       { scope:"enemies"|"allies"|"all", factionId, damage,
+   *                         damageType?, sceneId?, originTokenId?, radiusGrid? }
+   * buffSceneTokens     — ActiveEffect onto scoped tokens' actors
+   *                       { scope, factionId, ae:{...}, durationRounds?, sceneId? }
+   * healSceneTokens     — restore integrity on scoped tokens' actors
+   *                       { scope, factionId, amount, sceneId? }
+   * playCanvasVfx       — Phase 2 VFX bridge (emits "bbttcc:raid:canvasVfx")
+   *                       { kind, sceneId?, originTokenId?, targetTokenId?, color? }
+   * tokenVisibility     — hide or reveal a token (stealth/reveal interrupts)
+   *                       { mode:"hide"|"reveal", tokenId, sceneId?, rounds? }
+   *
+   * The 6 new verbs are applied at FIRE-TIME (anytime fires) via the hook
+   * subscriber in `raid-scene-intents.enhancer.js`. Commit-time application
+   * for pre-roll / post-commit fires lands in a future sprint. GM-only;
+   * strategic-map scenes (flag fourththing.strategicMap) are skipped.
    *
    * ---- scenarioEffects.type (3) ----
    * alarmDelta

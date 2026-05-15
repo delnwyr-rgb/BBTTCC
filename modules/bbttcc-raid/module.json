@@ -92,7 +92,10 @@
     "scripts/raid-planner-mode.enhancer.js",
     "scripts/bbttcc-raid.consumePlanned.shim.js",
     "scripts/module.raid-planner.js",
-    "scripts/raid-resolveRaidRound.throughput.enhancer.js"
+    "scripts/raid-resolveRaidRound.throughput.enhancer.js",
+    "scripts/raid-scene-intents.enhancer.js",
+    "scripts/raid-anytime-budget.enhancer.js",
+    "scripts/maneuvers-sprint2-content.enhancer.js"
   ],
   "styles": [
     "css/raid-styles.css"

@@ -1724,6 +1724,18 @@ function manDefLabel(key) {
 async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre = null, app = null) {
   if (!r || !key) return false;
   if (_rcWasManFired(r, side, key)) return false;
+  // S2 anytime budget guard (2026-05-14, MANEUVER_CATALOG_SPEC §3): tier-scoped fire cap.
+  try {
+    const _budget = game.bbttcc?.api?.raid?.anytimeBudget;
+    if (_budget?.canFire) {
+      const _fid = (String(side) === "att" ? r?.attackerId : r?.defenderId) || null;
+      const _check = _budget.canFire(key, { factionId: _fid, sceneId: canvas?.scene?.id, raidId: r?.raidId });
+      if (_check && _check.ok === false) {
+        ui.notifications?.warn(`Anytime budget exhausted (${_check.scope}) — ${key} cannot fire again this ${String(_check.scope || "").replace("per-", "")}.`);
+        return false;
+      }
+    }
+  } catch (_eBudget) {}
   const attacker = attackerPre || (r.attackerId ? await getActorByIdOrUuid(r.attackerId).catch(()=>null) : null);
   const defender = defenderPre || await _rcResolveDefenderForFire(r);
   const manDef = (game.bbttcc?.api?.raid?.EFFECTS || {})[String(key)] || { label: key };
