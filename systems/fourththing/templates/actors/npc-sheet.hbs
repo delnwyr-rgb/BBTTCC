@@ -214,6 +214,9 @@
       <button type="button" class="ft-econ-chip {{#if actionEconomy.actionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="actionUsed">Action</button>
       <button type="button" class="ft-econ-chip {{#if actionEconomy.bonusUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="bonusUsed">Bonus</button>
       <button type="button" class="ft-econ-chip {{#if actionEconomy.reactionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="reactionUsed">Reaction</button>
+      {{#if ftFlags.bonusActionAvailable}}
+      <button type="button" data-action="ftActAgain" class="ft-econ-chip ft-act-again" data-tooltip="Both base dice rolled 10 — take a full bonus action this turn.">⚡ Act Again</button>
+      {{/if}}
       <button type="button" class="ft-npc-tool" data-action="ftNewTurn" data-tooltip="Reset action economy">↻ New Turn</button>
     </div>
     <div class="ft-rest-controls">
@@ -225,6 +228,43 @@
     </div>
     <button type="button" data-action="ftToggleEditMode" class="ft-edit-mode-btn" data-tooltip="Toggle edit mode — exposes raw rank inputs and other normally-locked fields for direct editing.">✎ Edit</button>
   </section>
+
+  {{!-- NPC Parity Sprint A (2026-05-14) — Move + Combat Actions + Surge.
+        Mirrors the character sheet's Action Economy / Combat Actions /
+        Surge surfaces with NPC-compact density. All four data-actions
+        dispatch via the existing handler registry. --}}
+  <section class="ft-npc-combat-strip flexrow" style="gap:0.6rem; padding:0.3rem 0.6rem; align-items:center; flex-wrap:wrap; border-top:1px solid rgba(120,120,120,0.18); border-bottom:1px solid rgba(120,120,120,0.18);">
+    <div class="ft-move-row" data-tooltip="Movement budget for this turn. Auto-debits when the token moves; resets on New Turn. Dash adds walk speed to the budget." style="display:flex; align-items:center; gap:.3rem; flex:1 1 auto; min-width:200px;">
+      <div class="ft-move-meter {{#if actionEconomy.movementOver}}ft-move-over{{/if}}" style="position:relative; flex:1 1 auto; min-width:120px; height:1.4rem; border:1px solid rgba(120,120,120,0.4); border-radius:3px; background:rgba(0,0,0,0.2); overflow:hidden;">
+        <div class="ft-move-fill" style="width:{{actionEconomy.movementPct}}%; height:100%; background:rgba(166,226,46,0.25);"></div>
+        <span class="ft-move-label" style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; gap:.25rem;">
+          Move: <b>{{actionEconomy.movementUsedFt}}</b> / {{actionEconomy.movementBudgetFt}} ft
+          {{#if actionEconomy.movementOver}}<span class="ft-move-over-tag" style="color:#ef4444;">over</span>{{else}}<span class="ft-move-rem" style="opacity:.6;">({{actionEconomy.movementRemainingFt}} left)</span>{{/if}}
+        </span>
+      </div>
+      <button type="button" data-action="ftMoveAdjust" data-delta="-5" class="ft-npc-tool" data-tooltip="Refund 5 ft (manual correction).">−5</button>
+      <button type="button" data-action="ftMoveAdjust" data-delta="5"  class="ft-npc-tool" data-tooltip="Spend 5 ft (manual narrative move).">+5</button>
+    </div>
+
+    <div class="ft-combat-actions" style="display:flex; gap:.2rem; flex-wrap:wrap;">
+      <button type="button" data-action="ftCombatAction" data-combat-action="dash"      class="ft-npc-tool" data-tooltip="Spend your action to add your walk speed to your movement budget for this turn.">🏃 Dash</button>
+      <button type="button" data-action="ftCombatAction" data-combat-action="disengage" class="ft-npc-tool {{#if ftFlags.combat.disengaged}}used{{/if}}" data-tooltip="Your movement does not provoke attacks of opportunity until end of turn.">🚶 Disengage</button>
+      <button type="button" data-action="ftCombatAction" data-combat-action="dodge"     class="ft-npc-tool {{#if ftFlags.combat.dodging}}used{{/if}}"    data-tooltip="+2 to Guard, Evasion, and Resolve until your next turn.">🛡 Dodge</button>
+      <button type="button" data-action="ftCombatAction" data-combat-action="hold"      class="ft-npc-tool {{#if ftFlags.combat.holding}}used{{/if}}"    data-tooltip="Set a trigger condition. Your action becomes a reaction you can fire when the trigger fires.">⏳ Hold</button>
+      <button type="button" data-action="ftCombatAction" data-combat-action="aid"       class="ft-npc-tool" data-tooltip="Aid a targeted ally — they gain a banked reroll-lowest on their next roll this scene.">🤝 Aid</button>
+      <button type="button" data-action="ftCombatAction" data-combat-action="hide"      class="ft-npc-tool {{#if ftFlags.combat.hidden}}used{{/if}}"     data-tooltip="Roll Stealth (Intrigue). On a high roll vs. observers' Perception, you become hidden.">🌑 Hide</button>
+    </div>
+
+    <div class="ft-npc-surge" style="display:flex; align-items:center; gap:.3rem; padding-left:.5rem; border-left:1px solid rgba(120,120,120,0.3);" data-tooltip="Surge — banked when base dice roll 10s. Resets to 0 on Soma Break.">
+      <span style="font-size:0.78rem; letter-spacing:.04em;">✦ Surge</span>
+      <span class="ft-npc-surge-count" style="font-weight:700;">{{resources.surge.value}} / {{resources.surge.max}}</span>
+      <button type="button" data-action="ftSurgeSpend" class="ft-npc-tool" data-tooltip="Spend banked Surge.">Spend</button>
+    </div>
+  </section>
+
+  {{#if ftFlags.combat.holding.trigger}}
+  <p class="ft-hint" style="margin:0.2rem 0.6rem; font-size:0.78rem; color:#a0d4ff;">⏳ Holding for: <em>{{ftFlags.combat.holding.trigger}}</em></p>
+  {{/if}}
 
   <section class="ft-npc-body">
     {{#if hasStrikes}}

@@ -11152,6 +11152,14 @@ Hooks.once("init", function () {
         ftUseFeature:          FourthThingCharacterSheet._onFtUseFeature,
         ftGather:              FourthThingCharacterSheet._onFtGather,
         ftForge:               FourthThingCharacterSheet._onFtForge,
+        // NPC Parity Sprint A (2026-05-14) — combat-economy actions.
+        // All four read this.actor + target dataset only, so the character
+        // sheet's statics drop in cleanly. Templates surface them in the
+        // new ft-npc-combat-strip below the toolbar.
+        ftCombatAction:        FourthThingCharacterSheet._onFtCombatAction,
+        ftMoveAdjust:          FourthThingCharacterSheet._onFtMoveAdjust,
+        ftActAgain:            FourthThingCharacterSheet._onFtActAgain,
+        ftSurgeSpend:          FourthThingCharacterSheet._onFtSurgeSpend,
         // Legacy NPC-only roll handlers retained for back-compat with any
         // saved macros / external callers; new sheet uses ftRoll/ftDefenseRoll.
         ftNpcAttrRoll:         FourthThingNPCSheet._onFtNpcAttrRoll,
@@ -11625,18 +11633,36 @@ Hooks.once("init", function () {
         isTCC: actorIsTCC,
         actionEconomy: (() => {
           const a         = sysData.actions ?? {};
-          const walkFt    = Number(sysData?.derived?.movement?.walk) || 30;
+          const mv        = sysData?.derived?.movement ?? {};
+          const walkFt    = Number(mv.walk) || 30;
           const movUsed   = Number(a.movementUsedFt)   || 0;
           const movBudget = Number(a.movementBudgetFt) || walkFt;
+          const movRem    = Math.max(0, movBudget - movUsed);
+          const movPct    = (movBudget > 0)
+            ? Math.min(100, Math.round((movUsed / movBudget) * 100))
+            : 0;
           return {
             actionUsed:        a.actionUsed   ?? false,
             bonusUsed:         a.bonusUsed    ?? false,
             reactionUsed:      a.reactionUsed ?? false,
             movementUsedFt:    movUsed,
             movementBudgetFt:  movBudget,
-            movementOver:      movUsed > movBudget
+            movementRemainingFt: movRem,
+            movementPct:       movPct,
+            movementOver:      movUsed > movBudget,
+            speeds: {
+              walk:  Number(mv.walk)  || walkFt,
+              climb: Number(mv.climb) || 0,
+              swim:  Number(mv.swim)  || 0,
+              fly:   Number(mv.fly)   || 0
+            }
           };
         })(),
+        // NPC Parity Sprint A (2026-05-14) — top-level surfaces that the
+        // ftSurgeSpend / ftActAgain / ftCombatAction panels read. Mirrors
+        // character-sheet contracts so the same templates work cleanly.
+        resources: sysData?.resources ?? {},
+        ftFlags:   actor?.flags?.fourththing ?? {},
         isEditable: this.isEditable,
         isGM: !!game.user?.isGM,
       };
