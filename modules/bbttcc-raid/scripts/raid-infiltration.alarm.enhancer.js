@@ -419,6 +419,19 @@
             const note       = String(e?.note || "concealed body");
             state.pendingDiscoveries.push({ turnsRemaining: turns, alarmGain, note });
             verbLines.push(`🕯 Discovery timer set: <b>${esc(note)}</b> — +${alarmGain} alarm in ${turns} round(s)`);
+          } else if (t === "extendDiscovery") {
+            // S3a.3: mutate the most-recent pendingDiscovery — extend the timer,
+            // reduce the alarm spike. Powers the conceal_body → subdue chain.
+            const extraTurns      = Math.max(0, Math.floor(Number(e?.extraTurns      || 0)));
+            const alarmReduction  = Math.max(0, Math.floor(Number(e?.alarmReduction  || 0)));
+            if (state.pendingDiscoveries.length) {
+              const pd = state.pendingDiscoveries[state.pendingDiscoveries.length - 1];
+              pd.turnsRemaining += extraTurns;
+              pd.alarmGain = Math.max(0, pd.alarmGain - alarmReduction);
+              verbLines.push(`🕯 Concealed <b>${esc(pd.note)}</b> — +${extraTurns} turns, alarm spike -${alarmReduction} (now +${pd.alarmGain} in ${pd.turnsRemaining})`);
+            } else {
+              verbLines.push(`🕯 Concealment skipped: <i>no pending discovery to extend</i>`);
+            }
           } else if (t === "escalateToViolence") {
             // S3a.2: GM-fiat detection trigger (bypasses meter)
             verbLines.push(`⚠ <b>GM escalates to detected:</b> ${e?.reason ? esc(e.reason) : "GM escalation"}`);

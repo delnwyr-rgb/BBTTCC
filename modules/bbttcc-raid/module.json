@@ -95,7 +95,9 @@
     "scripts/raid-resolveRaidRound.throughput.enhancer.js",
     "scripts/raid-scene-intents.enhancer.js",
     "scripts/raid-anytime-budget.enhancer.js",
-    "scripts/maneuvers-sprint2-content.enhancer.js"
+    "scripts/maneuvers-sprint2-content.enhancer.js",
+    "scripts/maneuvers-sprint3a-content.enhancer.js",
+    "scripts/affiliation-op-table.enhancer.js"
   ],
   "styles": [
     "css/raid-styles.css"
