@@ -270,6 +270,32 @@
         on the relevant <class>State so only the actor's discipline shows.
         ftClassAction dispatcher is already wired (Sprint A); each button
         targets the canonical handler by name. --}}
+  {{#if cosmicLinguistState}}
+  <section class="ft-npc-class-panel ft-npc-cosmic-linguist" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.35rem; padding:0.35rem 0.6rem; border-bottom:1px solid rgba(120,120,120,0.18); background:rgba(90,58,138,0.06);">
+    <span style="font-weight:700; color:#c8c8ff; letter-spacing:.04em;">✦ Cosmic Linguist</span>
+
+    {{!-- Resonance Dice --}}
+    <span class="ft-chip ft-chip-resonance" data-tooltip="Resonance Dice — auto-gain 1 at turn start (cap = max). Spend at cast time: +1 Resolve DC · extra damage die · extend duration · impose 3d10kl2 on a defense · stabilize vs counter/dispel. Refills on Soma Break." style="background:#1f1f3a;color:#c8c8ff;border:1px solid #5a3a8a;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;">✦ Resonance
+      <input type="number" name="system.resources.resonanceDice.current" value="{{cosmicLinguistState.resonance.current}}" min="0" max="{{cosmicLinguistState.resonance.max}}" style="width:28px;background:transparent;color:inherit;border:1px solid #5a3a8a;border-radius:2px;text-align:center;font-size:0.76rem;padding:0;"/>
+      / {{cosmicLinguistState.resonance.max}}
+    </span>
+
+    {{!-- Strain (friction counter) --}}
+    <span class="ft-chip ft-chip-strain" data-tooltip="Strain — friction counter, ticks up on aggressive Resonance use (forcing contradiction / misaligned power). Resets to 0 on Soma Break. Soft cap 10." style="background:#3a1f1f;color:#ffc8c8;border:1px solid #8a3a3a;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;">⚡ Strain
+      <input type="number" name="system.resources.strain.value" value="{{cosmicLinguistState.strain.value}}" min="0" max="{{cosmicLinguistState.strain.max}}" style="width:28px;background:transparent;color:inherit;border:1px solid #8a3a3a;border-radius:2px;text-align:center;font-size:0.76rem;padding:0;"/>
+      / {{cosmicLinguistState.strain.max}}
+    </span>
+
+    {{!-- Editorial Authority + class buttons --}}
+    <span class="ft-chip ft-chip-authority" data-tooltip="Editorial Authority — narrative currency from listening / correcting error / being cited. Spent on Annotations (Authority dialog). Refills on Soma Break." style="background:#3a2f1a;color:#f5d97a;border:1px solid #8a6a2a;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;">📎 Authority
+      <input type="number" name="system.resources.clAuthority.current" value="{{cosmicLinguistState.authority.current}}" min="0" max="{{cosmicLinguistState.authority.max}}" style="width:28px;background:transparent;color:inherit;border:1px solid #8a6a2a;border-radius:2px;text-align:center;font-size:0.76rem;padding:0;"/>
+      / {{cosmicLinguistState.authority.max}}
+    </span>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="cosmic_linguist_authority"  data-tooltip="Roll the Editorial Authority pool.">Pool</button>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="cosmic_linguist_annotation" data-tooltip="Compose an Annotation — spend Authority to author an Edit (Annotation dialog).">Edit</button>
+  </section>
+  {{/if}}
+
   {{#if pactkeeperState}}
   <section class="ft-npc-class-panel ft-npc-pactkeeper" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.35rem; padding:0.35rem 0.6rem; border-bottom:1px solid rgba(120,120,120,0.18); background:rgba(58,106,90,0.06);">
     <span style="font-weight:700; color:#a0c8b8; letter-spacing:.04em;">§ Pactkeeper</span>

@@ -11500,6 +11500,25 @@ Hooks.once("init", function () {
         routeKey: _courierRouteKey
       } : null;
 
+      // NPC Parity Sprint B (2026-05-14) — Cosmic Linguist class panel state.
+      // Mirrors char-sheet builder; Resonance auto-gains 1/round, Strain
+      // ticks on aggressive spends, Authority is the older narrative pool.
+      const _clCls = classItems.find(i => i.type === "class" && i.system?.identifier === "cosmic_linguist");
+      const cosmicLinguistState = _clCls ? {
+        resonance: {
+          current: resources.resonanceDice?.current ?? 0,
+          max:     resources.resonanceDice?.max     ?? 0
+        },
+        strain: {
+          value: resources.strain?.value ?? 0,
+          max:   resources.strain?.max   ?? 10
+        },
+        authority: {
+          current: resources.clAuthority?.current ?? 0,
+          max:     resources.clAuthority?.max     ?? 0
+        }
+      } : null;
+
       // NPC Parity Sprint B (2026-05-14) — Pactkeeper class panel state.
       // Mirrors the character sheet's pactkeeperState builder so the same
       // dispatcher buttons (pactkeeper_leverage, _binding_clause, _precedent,
@@ -11662,6 +11681,7 @@ Hooks.once("init", function () {
         bbttcc,
         bulwarkPools,
         shadowCourierState,
+        cosmicLinguistState,
         pactkeeperState,
         // 2026-05-13 — surface active pools so the NPC sheet can render the
         // same Bulwark Spend/Ruin/Stance buttons the character sheet does.
