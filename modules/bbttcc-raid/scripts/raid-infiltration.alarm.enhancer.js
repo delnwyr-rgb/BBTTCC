@@ -145,6 +145,7 @@
         round: 0,
         outcome: "ongoing", // "ongoing" | "clean" | "messy" | "detected"
         flipResolution: null, // null | "violence" | "escape" | "negotiate" (S3a.1)
+        pendingDiscoveries: [], // S3a.2: [{turnsRemaining, alarmGain, note}]
         history: [],
         _flashbackUsedThisRound: false
       };
@@ -229,6 +230,31 @@
 
         state.round += 1;
         state._flashbackUsedThisRound = false;
+
+        // S3a.2: tick pending body-discovery timers BEFORE the round's opposed roll.
+        // Bodies left behind from earlier rounds may be found at round start;
+        // their alarm spike feeds into this round's resolution.
+        if (state.pendingDiscoveries.length) {
+          const stillPending = [];
+          for (const pd of state.pendingDiscoveries) {
+            pd.turnsRemaining -= 1;
+            if (pd.turnsRemaining <= 0) {
+              const before = state.alarm;
+              state.alarm = clamp(state.alarm + Number(pd.alarmGain || 1), 0, state.alarmMax);
+              const noteHtml = foundry.utils.escapeHTML(String(pd.note || "concealed body"));
+              await sendChat([`🕯 <b>Body discovered:</b> ${noteHtml} — Alarm ${before} → ${state.alarm} (${bandFromAlarm(state.alarm)})`], { title: `${label}: Body Discovery` });
+            } else {
+              stillPending.push(pd);
+            }
+          }
+          state.pendingDiscoveries = stillPending;
+          // If discovery alarm-capped us, resolve + return before the round even runs
+          _resolveOutcome();
+          if (state.outcome !== "ongoing") {
+            await _onOutcomeResolved(state.outcome);
+            return { ...state };
+          }
+        }
 
         const atkSpend = Math.max(0, Math.floor(Number(spendIntrigue||0)));
         const defSpend = Math.max(0, Math.floor(Number(spendNonlethal||0)));
@@ -340,6 +366,9 @@
         const beforeProgress = state.progress;
         let alarmChanged = false;
         let progressChanged = false;
+        const verbLines = [];          // S3a.2: per-verb chat lines (reasoned)
+        let forceDetected = false;     // S3a.2: escalateToViolence trigger
+        const esc = (s) => foundry.utils.escapeHTML(String(s || ""));
         for (const e of effects) {
           const t = String(e?.type || "").trim();
           if (t === "alarmDelta") {
@@ -352,16 +381,66 @@
             if (!d) continue;
             const next = clamp(state.progress + d, 0, state.progressMax);
             if (next !== state.progress) { state.progress = next; progressChanged = true; }
+          } else if (t === "alarmRise") {
+            // S3a.2: positive alarm change with reason context
+            const d = Math.abs(Number(e?.delta || 1)) || 1;
+            const next = clamp(state.alarm + d, 0, state.alarmMax);
+            if (next !== state.alarm) {
+              verbLines.push(`📈 Alarm <b>+${d}</b>${e?.reason ? ` — ${esc(e.reason)}` : ""}`);
+              state.alarm = next; alarmChanged = true;
+            }
+          } else if (t === "alarmDecay") {
+            // S3a.2: negative alarm change with reason context
+            const d = Math.abs(Number(e?.delta || 1)) || 1;
+            const next = clamp(state.alarm - d, 0, state.alarmMax);
+            if (next !== state.alarm) {
+              verbLines.push(`📉 Alarm <b>-${d}</b>${e?.reason ? ` — ${esc(e.reason)}` : ""}`);
+              state.alarm = next; alarmChanged = true;
+            }
+          } else if (t === "patrolTick") {
+            // S3a.2: round-start scan — exposed = max(0, patrols - hidden) → +alarm
+            const patrols = Math.max(0, Math.floor(Number(e?.patrols || 0)));
+            const hidden  = Math.max(0, Math.floor(Number(e?.hidden  || 0)));
+            const exposed = Math.max(0, patrols - hidden);
+            if (exposed > 0) {
+              const next = clamp(state.alarm + exposed, 0, state.alarmMax);
+              const actualGain = next - state.alarm;
+              if (actualGain > 0) {
+                verbLines.push(`👁 Patrol scan: ${patrols} patrol(s) · ${hidden} hidden · <b>+${actualGain} alarm</b>`);
+                state.alarm = next; alarmChanged = true;
+              }
+            } else if (patrols > 0) {
+              verbLines.push(`👁 Patrol scan: ${patrols} patrol(s) · ${hidden} hidden · <i>no exposure</i>`);
+            }
+          } else if (t === "bodyDiscovery") {
+            // S3a.2: register a deferred alarm spike (timer ticks in step())
+            const turns      = Math.max(1, Math.floor(Number(e?.turns      || 2)));
+            const alarmGain  = Math.max(1, Math.floor(Number(e?.alarmGain  || 2)));
+            const note       = String(e?.note || "concealed body");
+            state.pendingDiscoveries.push({ turnsRemaining: turns, alarmGain, note });
+            verbLines.push(`🕯 Discovery timer set: <b>${esc(note)}</b> — +${alarmGain} alarm in ${turns} round(s)`);
+          } else if (t === "escalateToViolence") {
+            // S3a.2: GM-fiat detection trigger (bypasses meter)
+            verbLines.push(`⚠ <b>GM escalates to detected:</b> ${e?.reason ? esc(e.reason) : "GM escalation"}`);
+            forceDetected = true;
           }
         }
-        if (alarmChanged || progressChanged) {
+        const anyChange = alarmChanged || progressChanged || verbLines.length || forceDetected;
+        if (anyChange) {
           const parts = [`<b>Maneuver Effects:</b>`];
-          if (alarmChanged)    parts.push(`Alarm ${beforeAlarm} → ${state.alarm} (${bandFromAlarm(state.alarm)})`);
-          if (progressChanged) parts.push(`Progress ${beforeProgress} → ${state.progress}/${state.progressMax}`);
+          if (verbLines.length) {
+            parts.push(...verbLines);
+            // Compact meter summary after per-verb lines so readers see final state
+            parts.push(`<small>Now — Alarm ${state.alarm}/${state.alarmMax} (${bandFromAlarm(state.alarm)}) · Progress ${state.progress}/${state.progressMax}</small>`);
+          } else {
+            if (alarmChanged)    parts.push(`Alarm ${beforeAlarm} → ${state.alarm} (${bandFromAlarm(state.alarm)})`);
+            if (progressChanged) parts.push(`Progress ${beforeProgress} → ${state.progress}/${state.progressMax}`);
+          }
           await sendChat([parts.join("<br/>")], { title: `${label}: Effects` });
-          // S3a.1: resolve outcome if any meter moved
+          // Resolve outcome (force "detected" wins over meter-driven resolution)
           if (state.outcome === "ongoing") {
-            _resolveOutcome();
+            if (forceDetected) state.outcome = "detected";
+            else _resolveOutcome();
             if (state.outcome !== "ongoing") await _onOutcomeResolved(state.outcome);
           }
         }
@@ -373,6 +452,7 @@
         state.progress = clamp(Number(progress || 0), 0, state.progressMax);
         state.outcome = "ongoing";
         state.flipResolution = null;
+        state.pendingDiscoveries = []; // S3a.2: clear any deferred discovery timers
         state._flashbackUsedThisRound = false;
         _resolveOutcome(); // re-derive if reset values are already at cap
         return getState();
