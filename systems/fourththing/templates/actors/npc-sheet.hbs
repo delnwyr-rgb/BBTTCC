@@ -229,6 +229,13 @@
     <div class="ft-progress-controls">
       <button type="button" class="ft-npc-tool" data-action="ftLevelUp" data-tooltip="Advance Initiation — bumps level by 1, applies attribute bump, fires path-feature auto-grants for the new level.">▲ Advance Initiation</button>
     </div>
+    {{!-- NPC Parity Sprint C (2026-05-14) — BBTTCC bridges + Add Effect. --}}
+    <div class="ft-bbttcc-bridges" style="display:flex; gap:0.25rem;">
+      <button type="button" data-action="ftBBTTCCBridge"    class="ft-npc-tool" data-tooltip="Open the BBTTCC Bridge — campaign-state actions (faction OP transfer, hex bond, scenario beats).">🜲 Bridge</button>
+      <button type="button" data-action="ftBBTTCCTikkun"    class="ft-npc-tool" data-tooltip="Open the Tikkun panel — Sparks ledger / repair ritual / deposit (B3 system).">✦ Tikkun</button>
+      <button type="button" data-action="ftBBTTCCRadiation" class="ft-npc-tool" data-tooltip="Open the Radiation track — exposure ledger + manifestation interactions.">☢ Rad</button>
+    </div>
+    <button type="button" data-action="ftAddEffect" class="ft-npc-tool" data-tooltip="Author a new Active Effect on this actor (V14 ActiveEffectConfig — GM-style edit).">+ Effect</button>
     <button type="button" data-action="ftToggleEditMode" class="ft-edit-mode-btn" data-tooltip="Toggle edit mode — exposes raw rank inputs and other normally-locked fields for direct editing.">✎ Edit</button>
   </section>
 
@@ -483,6 +490,36 @@
       </div>
       {{else}}
       <p class="ft-hint" style="margin:0.5rem 0;font-size:0.78rem;opacity:0.6;font-style:italic">No manifestations yet — use <em>+ Add Feature</em> to author one with the Manifestation Engine.</p>
+      {{/if}}
+
+      {{!-- NPC Parity Sprint C (2026-05-14) — Active manifestations strip.
+            Mirrors the char-sheet's "Active" sub-section under the
+            Manifestations list. End Scene charges upkeep; per-row ✕ drops
+            the active instance (not the item — different from ftItemDelete). --}}
+      {{#if activeManifestations.length}}
+      <div class="ft-manifest-active-strip" style="margin-top:0.4rem; padding-top:0.4rem; border-top:1px dashed rgba(120,120,120,0.25);">
+        <div class="ft-section-header" style="margin-bottom:0.25rem;">
+          <h4 style="margin:0; font-size:0.82rem; opacity:0.85;">Active</h4>
+          <span class="ft-mini-count">{{activeManifestations.length}}</span>
+          <button type="button" data-action="ftManifestEndScene" class="ft-npc-tool" data-tooltip="Charge Sustained upkeep — 1 Clarity × tier per active Sustained manifestation; drops those whose actor can't pay.">End Scene</button>
+        </div>
+        <div class="ft-item-list">
+          {{#each activeManifestations as |a|}}
+          <div class="ft-item-row ft-item-row--active" style="background:rgba(160,180,255,0.04);">
+            <div class="ft-item-summary">
+              <img src="{{a.img}}" class="ft-item-art" data-tooltip="{{a.name}}"/>
+              <span class="ft-item-name">{{a.name}}</span>
+              <span class="ft-manifest-chip ft-tier-pill ft-tier-{{a.tier}}">T{{a.tier}}</span>
+              <span class="ft-manifest-chip">{{a.stabilityLabel}}</span>
+              {{#if a.upkeepHint}}<span class="ft-item-meta">{{a.upkeepHint}}</span>{{/if}}
+              <div class="ft-item-controls">
+                <button type="button" data-action="ftManifestDrop" data-instance-id="{{a.instanceId}}" class="ft-power-delete" data-tooltip="Drop this active manifestation (clears instance + any sustained AEs).">✕</button>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
       {{/if}}
     </div>
 

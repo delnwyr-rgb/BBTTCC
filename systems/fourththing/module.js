@@ -10651,12 +10651,20 @@ Hooks.once("init", function () {
       const mod = game.fourththing._classAutomation;
       if (!mod) return ui.notifications.warn("Path automation module not loaded.");
       const DISPATCH = {
-        // Legacy
+        // ─── DEPRECATED 2026-05-14 (NPC Parity Sprint C cleanup) ─────────
+        // These dispatcher entries are kept for macro back-compat but are
+        // no longer referenced by any character / NPC sheet template:
+        //  · titanbound_spend / _pool — Titanbound class retired, replaced
+        //    by Bulwark; no items of titanbound class type exist.
+        //  · breaker_ruin — Breaker class retired, replaced by Bulwark.
+        // Verify zero call-site usage over the next campaign window before
+        // hard-removing in a future cleanup sprint.
         titanbound_spend:      (a) => mod.openSpendFrameDie(a),
         titanbound_pool:       (a) => mod.openFrameDiePool(a),
+        breaker_ruin:          (a) => mod.openBreakerRuin(a),
+        // ─── ACTIVE ─────────────────────────────────────────────────────
         shadowjack_spend:      (a) => mod.openSpendAccessDie(a),
         shadowjack_pool:       (a) => mod.openAccessPool(a),
-        breaker_ruin:          (a) => mod.openBreakerRuin(a),
         // Existing
         aurablade_action:      (a) => mod.openAurabladeAction(a),
         aurablade_change_aura: (a) => mod.openChangeAura(a),
@@ -10664,6 +10672,8 @@ Hooks.once("init", function () {
         aurablade_burn:        (a) => mod.openBurnState(a),
         dreamwalker_resonance:        (a) => mod.openDreamwalkerResonance(a),
         dreamwalker_deploy_cache:     (a) => mod.openDreamwalkerDeployCache(a),
+        // DEPRECATED 2026-05-14 — singular kept for macro BC; live key is
+        // dream_echo_reservoir_spend (plural — wired to Spend button).
         dream_echo_reservoir:         (a) => mod.openDreamwalkerEchoReservoir(a),
         dream_echo_reservoir_spend:   (a) => mod.openDreamwalkerSpendEchoDie(a),
         soul_smith_forge:      (a) => mod.openSoulSmithForge(a),
@@ -10683,10 +10693,16 @@ Hooks.once("init", function () {
         pactkeeper_leverage:                 (a) => mod.openPactkeeperLeverage(a),
         pactkeeper_binding_clause:           (a) => mod.openPactkeeperBindingClause(a),
         pactkeeper_precedent:                (a) => mod.openPactkeeperPrecedent(a),
+        // DEPRECATED 2026-05-14 — singular superseded by
+        // pactkeeper_spend_civic_charge (the live key on both sheets).
         pactkeeper_civic_charge:             (a) => mod.openPactkeeperCivicCharge(a),
         pactkeeper_spend_civic_charge:       (a) => mod.openPactkeeperSpendCivicCharge(a),
+        // DEPRECATED 2026-05-14 — no template surface; the chip is
+        // display-only and read-only edits flow via inline number input.
         pactkeeper_administrative_pressure:  (a) => mod.openPactkeeperPressure(a),
         pactkeeper_bind_subject:             (a) => mod.openPactkeeperBindSubject(a),
+        // DEPRECATED 2026-05-14 — no template surface; Counter is wired
+        // into the cast-time flow (compat-bridge), not surfaced as a button.
         counter_manifestation:               (a) => mod.openCounterManifestation(a),
       };
       const fn = DISPATCH[handler];
@@ -11160,6 +11176,12 @@ Hooks.once("init", function () {
         ftMoveAdjust:          FourthThingCharacterSheet._onFtMoveAdjust,
         ftActAgain:            FourthThingCharacterSheet._onFtActAgain,
         ftSurgeSpend:          FourthThingCharacterSheet._onFtSurgeSpend,
+        // NPC Parity Sprint C (2026-05-14) — MED/LOW cleanup actions.
+        // Both already exist as type-agnostic statics; just wire here.
+        // ftAddEffect → opens the V14 ActiveEffectConfig in author mode.
+        // ftBBTTCCTikkun → opens the Tikkun bridge panel for this actor.
+        ftAddEffect:           FourthThingCharacterSheet._onFtAddEffect,
+        ftBBTTCCTikkun:        FourthThingCharacterSheet._onFtBBTTCCTikkun,
         // Legacy NPC-only roll handlers retained for back-compat with any
         // saved macros / external callers; new sheet uses ftRoll/ftDefenseRoll.
         ftNpcAttrRoll:         FourthThingNPCSheet._onFtNpcAttrRoll,
@@ -11500,6 +11522,26 @@ Hooks.once("init", function () {
         routeKey: _courierRouteKey
       } : null;
 
+      // NPC Parity Sprint C (2026-05-14) — Active manifestation tracker.
+      // Mirrors char-sheet builder; resolves the activeManifestations flag
+      // array back to item info for the Active strip's End Scene + Drop
+      // controls. Surfaced under `activeManifestations` on the return.
+      const _activeMfRaw = actor.getFlag("fourththing", "activeManifestations") ?? [];
+      const activeManifestations = Array.isArray(_activeMfRaw) ? _activeMfRaw.map(e => {
+        const it = actor.items.get(e.itemId);
+        return {
+          ...e,
+          exists: !!it,
+          img:    it?.img ?? "icons/svg/mystery-man.svg",
+          name:   it?.name ?? e.itemName ?? "Lost Manifestation",
+          stabilityLabel: FT.MANIFESTATION_STABILITIES?.[e.stability]?.label ?? ftCap(e.stability ?? ""),
+          upkeepHint: e.stability === "sustained" ? `${e.tier} Clarity / scene`
+                    : e.stability === "bound"     ? `${e.tier} Clarity / Soma Break`
+                    : e.stability === "enduring"  ? `${e.tier} Clarity / Soma Break + OP tick`
+                    : ""
+        };
+      }) : [];
+
       // NPC Parity Sprint B (2026-05-14) — Dreamwalker class panel state.
       // Cache banks one manifestation between scenes; Echo Reservoir (L13+
       // feat) bottles 2 d6 per Soma Break for Self-Resonance / Shared Echo
@@ -11688,6 +11730,7 @@ Hooks.once("init", function () {
         attributeRows,
         manifestRows,
         hasManifestations: manifestRows.length > 0,
+        activeManifestations,
         manifestationGuide,
         strikeRows,
         hasStrikes: strikeRows.length > 0,
