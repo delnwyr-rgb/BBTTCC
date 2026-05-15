@@ -11500,6 +11500,24 @@ Hooks.once("init", function () {
         routeKey: _courierRouteKey
       } : null;
 
+      // NPC Parity Sprint B (2026-05-14) — Dreamwalker class panel state.
+      // Cache banks one manifestation between scenes; Echo Reservoir (L13+
+      // feat) bottles 2 d6 per Soma Break for Self-Resonance / Shared Echo
+      // / World-Tuning spends. Echo block is null when the feat isn't present.
+      const _dwCls = classItems.find(i => i.type === "class" && i.system?.identifier === "dreamwalker");
+      const _hasEchoFeat = _dwCls && items.some(i => i.type === "feat" && i.system?.identifier === "dream-echo-reservoir");
+      const dreamwalkerState = _dwCls ? {
+        cache: {
+          banked: resources.dreamCache?.banked === true,
+          name:   resources.dreamCache?.name   ?? "",
+          tier:   Number(resources.dreamCache?.tier ?? 0)
+        },
+        echo: _hasEchoFeat ? {
+          dice:    resources.echoDice?.dice    ?? 0,
+          maxDice: resources.echoDice?.maxDice ?? 2
+        } : null
+      } : null;
+
       // NPC Parity Sprint B (2026-05-14) — Aurablade class panel state.
       // No state object — character sheet uses `activePools.aurablade` as the
       // gate and consumes raw `resources.burn` + derived `burnBand/auraData`.
@@ -11692,6 +11710,7 @@ Hooks.once("init", function () {
         bulwarkPools,
         shadowCourierState,
         cosmicLinguistState,
+        dreamwalkerState,
         pactkeeperState,
         burnBand:  _abBurnBand,
         auraState: _abAuraState,
