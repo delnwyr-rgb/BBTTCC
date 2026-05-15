@@ -270,6 +270,30 @@
         on the relevant <class>State so only the actor's discipline shows.
         ftClassAction dispatcher is already wired (Sprint A); each button
         targets the canonical handler by name. --}}
+  {{#if activePools.aurablade}}
+  <section class="ft-npc-class-panel ft-npc-aurablade" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.35rem; padding:0.35rem 0.6rem; border-bottom:1px solid rgba(120,120,120,0.18); background:rgba(232,138,74,0.06);">
+    <span style="font-weight:700; color:#f5c47a; letter-spacing:.04em;">🔥 Aurablade</span>
+
+    {{!-- Burn track --}}
+    <span class="ft-chip ft-chip-burn" data-tooltip="Burn — 0-8 escalation track. 0-3 Controlled (stable), 4-6 Heated (penalties scale), 7-8 Critical (one missed beat from burnout). Cooled by Stabilize. Aurablade signature mechanic." style="background:rgba(232,138,74,0.08);border:1px solid {{burnBand.color}}88;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;color:{{burnBand.color}};">
+      <span class="ft-burn-track" style="display:inline-flex; gap:1px; letter-spacing:-0.05em;">
+        {{#each (times 8) as |n|}}<span style="color:{{#if (lte (add n 1) (or ../resources.burn.current 0))}}{{../burnBand.color}}{{else}}rgba(255,255,255,0.15){{/if}};">▰</span>{{/each}}
+      </span>
+      <input type="number" name="system.resources.burn.current" value="{{resources.burn.current}}" min="0" max="8" style="width:26px;background:transparent;color:inherit;border:1px solid {{burnBand.color}}55;border-radius:2px;text-align:center;font-size:0.76rem;padding:0;"/>
+      /8 {{burnBand.label}}
+    </span>
+
+    {{!-- Aura state --}}
+    <span class="ft-chip ft-chip-aura" data-tooltip="{{auraData.desc}}" style="background:{{auraData.color}}22;border:1px solid {{auraData.color}}88;color:{{auraData.color}};padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;">⚜ {{auraData.label}}</span>
+
+    {{!-- Class buttons --}}
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="aurablade_action"      data-tooltip="Aurablade signature attack — opens the action dialog (combo selection, burn cost preview, aura interactions).">Action</button>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="aurablade_change_aura" data-tooltip="Switch active Aura (Searing / Glacial / Voidwoven / etc.). Triggers aura-change effects.">Aura</button>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="aurablade_stabilize"  data-tooltip="Cool the Burn track (spend action + roll vs DC scaling with current Burn).">Stabilize</button>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="aurablade_burn"        data-tooltip="Open the raw Burn-state dialog — direct Burn adjustment + tier-specific options.">Burn</button>
+  </section>
+  {{/if}}
+
   {{#if cosmicLinguistState}}
   <section class="ft-npc-class-panel ft-npc-cosmic-linguist" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.35rem; padding:0.35rem 0.6rem; border-bottom:1px solid rgba(120,120,120,0.18); background:rgba(90,58,138,0.06);">
     <span style="font-weight:700; color:#c8c8ff; letter-spacing:.04em;">✦ Cosmic Linguist</span>

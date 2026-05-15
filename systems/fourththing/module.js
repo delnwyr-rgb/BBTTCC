@@ -11500,6 +11500,16 @@ Hooks.once("init", function () {
         routeKey: _courierRouteKey
       } : null;
 
+      // NPC Parity Sprint B (2026-05-14) — Aurablade class panel state.
+      // No state object — character sheet uses `activePools.aurablade` as the
+      // gate and consumes raw `resources.burn` + derived `burnBand/auraData`.
+      // Mirror that exactly. `getBurnBand` and `AURA_STATES` are module-level
+      // imports already in scope.
+      const _abBurn     = Number(resources.burn?.current ?? 0);
+      const _abBurnBand = (typeof getBurnBand === "function") ? getBurnBand(_abBurn) : { label: "Controlled", color: "#27ae60", desc: "Stable." };
+      const _abAuraState = resources.aura?.state ?? "none";
+      const _abAuraData  = (AURA_STATES ?? {})[_abAuraState] ?? { label: "None", color: "#78909c", desc: "" };
+
       // NPC Parity Sprint B (2026-05-14) — Cosmic Linguist class panel state.
       // Mirrors char-sheet builder; Resonance auto-gains 1/round, Strain
       // ticks on aggressive spends, Authority is the older narrative pool.
@@ -11683,6 +11693,9 @@ Hooks.once("init", function () {
         shadowCourierState,
         cosmicLinguistState,
         pactkeeperState,
+        burnBand:  _abBurnBand,
+        auraState: _abAuraState,
+        auraData:  _abAuraData,
         // 2026-05-13 — surface active pools so the NPC sheet can render the
         // same Bulwark Spend/Ruin/Stance buttons the character sheet does.
         activePools: (typeof detectActivePools === "function") ? detectActivePools(actor) : {},
