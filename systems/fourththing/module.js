@@ -11500,6 +11500,42 @@ Hooks.once("init", function () {
         routeKey: _courierRouteKey
       } : null;
 
+      // NPC Parity Sprint B (2026-05-14) — Pactkeeper class panel state.
+      // Mirrors the character sheet's pactkeeperState builder so the same
+      // dispatcher buttons (pactkeeper_leverage, _binding_clause, _precedent,
+      // _spend_civic_charge, _bind_subject) work cleanly on NPC Pactkeepers.
+      const _pkCls = classItems.find(i => i.type === "class" && i.system?.identifier === "pactkeeper");
+      const _pkPressureValue = Number(resources.administrativePressure?.value ?? 0);
+      const _pkPressureBand  = _pkPressureValue >= 6 ? "high"
+                            : _pkPressureValue >= 3 ? "moderate"
+                            : _pkPressureValue >= 1 ? "low"
+                            : "none";
+      const _pkPactSubject = actor.flags?.fourththing?.pactSubject ?? null;
+      const pactkeeperState = _pkCls ? {
+        leverage: {
+          current: resources.pactLeverage?.current ?? 0,
+          max:     resources.pactLeverage?.max     ?? 0
+        },
+        civicCharge: {
+          dice:    resources.civicCharge?.dice    ?? 0,
+          maxDice: resources.civicCharge?.maxDice ?? 1,
+          dieSize: resources.civicCharge?.dieSize ?? "d6"
+        },
+        pressure: {
+          value: _pkPressureValue,
+          max:   resources.administrativePressure?.max ?? 10,
+          band:  _pkPressureBand,
+          bandLabel: _pkPressureBand === "none" ? "Clear"
+                   : _pkPressureBand === "low"  ? "Low"
+                   : _pkPressureBand === "moderate" ? "Moderate"
+                   : "High"
+        },
+        pactSubject: _pkPactSubject?.uuid ? {
+          uuid: _pkPactSubject.uuid,
+          name: _pkPactSubject.name ?? "(unnamed)"
+        } : null
+      } : null;
+
       const actorIsTCC = isTCC(actor);
 
       const attributeRows = Object.entries(sysData.attributes ?? {}).map(([key, a]) => ({
@@ -11626,6 +11662,7 @@ Hooks.once("init", function () {
         bbttcc,
         bulwarkPools,
         shadowCourierState,
+        pactkeeperState,
         // 2026-05-13 — surface active pools so the NPC sheet can render the
         // same Bulwark Spend/Ruin/Stance buttons the character sheet does.
         activePools: (typeof detectActivePools === "function") ? detectActivePools(actor) : {},
