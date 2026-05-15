@@ -637,6 +637,17 @@ function rosterContribution(faction, key) {
 
     const v = Number(contrib?.[key] ?? contrib?.[key.replace("nonlethal","nonLethal")] ?? 0);
     if (Number.isFinite(v) && v) sum += v;
+
+    // 2026-05-15 — Affiliation contribution layer: sephirah / political / ancestry
+    // (static defaults) + archetype/crew/occult (per-item-flag overrides only).
+    // See affiliation-op-table.enhancer.js for table values.
+    try {
+      const affApi = globalThis.BBTTCC_AffiliationOP || game?.bbttcc?.api?.factions?.affiliationOP;
+      if (affApi?.contributionFor) {
+        const aff = Number(affApi.contributionFor(a, key));
+        if (Number.isFinite(aff) && aff) sum += aff;
+      }
+    } catch(_e){}
   }
   return sum;
 }
@@ -2701,11 +2712,43 @@ _renderScenarioHUD(host, round){
       const tone = (bandLabel === "LOCKDOWN") ? "bad" : (bandLabel === "ALERTED") ? "warn" : "default";
       row.appendChild(this._mkChip(bandLabel, { tone, title:"Alarm band" }));
 
-      // Outcome chip when resolved
+      // S3a.1: Progress meter (rendered only when scenario tracks progressMax)
+      const progressMax = st ? Number(st.progressMax || 0) : 0;
+      if (progressMax > 0) {
+        const progress = st ? Number(st.progress || 0) : 0;
+
+        const pLabel = document.createElement("span");
+        pLabel.textContent = "PROG";
+        pLabel.style.fontSize = "11px";
+        pLabel.style.opacity = ".85";
+        pLabel.style.fontWeight = "700";
+        pLabel.style.marginLeft = "6px";
+        row.appendChild(pLabel);
+
+        const pBar = this._mkBar(progress, progressMax, { w: 140 });
+        // Teal/cool palette for stealth progress — pops vs the alarm bar's amber/red
+        pBar.wrap.firstChild.style.background = (progress >= progressMax)
+          ? "rgba(45, 212, 191, 0.85)"
+          : "rgba(20, 184, 166, 0.65)";
+        row.appendChild(pBar.wrap);
+
+        const pTxt = document.createElement("span");
+        pTxt.textContent = `${progress}/${progressMax}`;
+        pTxt.style.fontSize = "11px";
+        pTxt.style.opacity = ".9";
+        row.appendChild(pTxt);
+      }
+
+      // Outcome chip when resolved (S3a.1: clean/messy/detected, plus legacy lockdown)
       const oc = st ? String(st.outcome || "") : "";
       if (oc && oc !== "ongoing") {
-        const label = (oc === "lockdown") ? "LOCKDOWN" : oc.toUpperCase();
-        row.appendChild(this._mkChip(label, { tone: (oc === "lockdown") ? "bad" : "default" }));
+        const meta = ({
+          clean:    { label: "🥷 CLEAN",    tone: "good" },
+          messy:    { label: "⚠ MESSY",     tone: "warn" },
+          detected: { label: "🚨 DETECTED", tone: "bad"  },
+          lockdown: { label: "LOCKDOWN",    tone: "bad"  }
+        })[oc] || { label: oc.toUpperCase(), tone: "default" };
+        row.appendChild(this._mkChip(meta.label, { tone: meta.tone }));
       }
     }
 
