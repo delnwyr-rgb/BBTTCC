@@ -141,6 +141,7 @@
         <button type="button" data-action="ftClassAction" data-handler="bulwark_spend_frame" data-tooltip="Open the Frame Die purpose dialog (Absorb / Anchor / Push)." style="padding:0.15rem 0.55rem;font-size:0.78rem;background:#22324a;color:#c8d8ff;border:1px solid #3a5b8a;border-radius:3px;cursor:pointer;font-weight:600;">◧ Frame…</button>
         <button type="button" data-action="ftClassAction" data-handler="bulwark_ruin" data-tooltip="Open the Ruin Charge purpose dialog (Catastrophic Entry / Siege Cost Reduction / Shockwave Footing / Ruin to Renewal)." style="padding:0.15rem 0.55rem;font-size:0.78rem;background:#3a1a1a;color:#ffd2c8;border:1px solid #8a3a3a;border-radius:3px;cursor:pointer;font-weight:600;">◨ Ruin…</button>
         <button type="button" data-action="ftClassAction" data-handler="bulwark_stance" data-tooltip="Set Bulwark stance (Advance / Anchor / None)." style="padding:0.15rem 0.55rem;font-size:0.78rem;background:#2d1f3a;color:#dac8ff;border:1px solid #6a3a8a;border-radius:3px;cursor:pointer;font-weight:600;">⬢ Stance…</button>
+        <button type="button" data-action="ftClassAction" data-handler="bulwark_frame_pool" data-tooltip="Configure Frame Dice pool — max / refresh policy / advanced ledger." style="padding:0.15rem 0.45rem;font-size:0.78rem;background:#1f2434;color:#a8b4cc;border:1px solid #3a5b8a;border-radius:3px;cursor:pointer;">⚙</button>
       </div>
       {{/if}}
       {{/if}}
@@ -157,6 +158,8 @@
         {{else}}
         <button type="button" data-action="ftCourierPackageEdit" class="ft-chip ft-chip-package" data-tooltip="Package slot empty. Click to designate." style="background:#1a1a1f;color:#9098a8;border:1px solid #4a4a55;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;font-style:italic;cursor:pointer;">◯ Package: empty</button>
         {{/if}}
+        <button type="button" data-action="ftClassAction" data-handler="shadow_courier_package"  data-tooltip="Open the Package doctrine dialog — designate / amend / publish a Package effect." style="padding:0.15rem 0.55rem;font-size:0.78rem;background:#2a1f3a;color:#dac8ff;border:1px solid #6a3a8a;border-radius:3px;cursor:pointer;font-weight:600;">Package…</button>
+        <button type="button" data-action="ftClassAction" data-handler="shadow_courier_crossing" data-tooltip="Spend a Crossing — Shadow Courier mobility doctrine (route-specific effect ladder)." style="padding:0.15rem 0.55rem;font-size:0.78rem;background:#1f2d3a;color:#c8e0ff;border:1px solid #3a6a8a;border-radius:3px;cursor:pointer;font-weight:600;">Crossing…</button>
       </div>
       {{/if}}
     </div>
@@ -270,6 +273,32 @@
         on the relevant <class>State so only the actor's discipline shows.
         ftClassAction dispatcher is already wired (Sprint A); each button
         targets the canonical handler by name. --}}
+  {{#if activePools.shadowjack}}
+  <section class="ft-npc-class-panel ft-npc-shadowjack" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.35rem; padding:0.35rem 0.6rem; border-bottom:1px solid rgba(120,120,120,0.18); background:rgba(58,90,138,0.06);">
+    <span style="font-weight:700; color:#a0c0e8; letter-spacing:.04em;">🗝 Shadowjack</span>
+
+    {{!-- Access Dice (pip track + counter) --}}
+    <span class="ft-chip ft-chip-access" data-tooltip="Access Dice — Shadowjack signature pool. Spent on tier-scaled break-in / forge-identity / unblock effects. Refills on Soma Break." style="background:rgba(58,90,138,0.08);border:1px solid rgba(160,192,232,0.5);color:#c8d8ff;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;">
+      <span style="display:inline-flex; gap:1px; letter-spacing:-0.05em;">{{#each (times (or resources.accessDice.max 3)) as |n|}}<span style="color:{{#if (lte (add n 1) (or ../resources.accessDice.current 0))}}#c8d8ff{{else}}rgba(255,255,255,0.18){{/if}};">◈</span>{{/each}}</span>
+      <input type="number" name="system.resources.accessDice.current" value="{{resources.accessDice.current}}" min="0" max="{{resources.accessDice.max}}" style="width:26px;background:transparent;color:inherit;border:1px solid #3a5b8a;border-radius:2px;text-align:center;font-size:0.76rem;padding:0;"/>
+      / {{resources.accessDice.max}}
+    </span>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="shadowjack_spend" data-tooltip="Spend an Access Die — choose tier-scaled effect (Crack / Disguise / Unblock / Forge-Identity).">Spend</button>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="shadowjack_pool"  data-tooltip="Configure the Access Dice pool — max / refresh / advanced ledger.">⚙</button>
+  </section>
+  {{/if}}
+
+  {{#if activePools.soulSmith}}
+  <section class="ft-npc-class-panel ft-npc-soul-smith" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.35rem; padding:0.35rem 0.6rem; border-bottom:1px solid rgba(120,120,120,0.18); background:rgba(138,106,42,0.06);">
+    <span style="font-weight:700; color:#e8c84a; letter-spacing:.04em;">⚒ Soul-Smith</span>
+
+    {{!-- Forge Charge: Relic Ready/Used + sparks repaired --}}
+    <span class="ft-chip ft-chip-relic" data-tooltip="Forge Charge — Soul-Smith capstone resource. Relic Ready: spend on a per-session Forge effect (artifact-tier reroll, save, or repair). Refills on Soma Break." style="background:{{#if resources.forgeCharge.relicUsed}}rgba(255,255,255,0.04){{else}}rgba(232,200,74,0.12){{/if}};border:1px solid {{#if resources.forgeCharge.relicUsed}}rgba(255,255,255,0.18){{else}}rgba(232,200,74,0.5){{/if}};color:{{#if resources.forgeCharge.relicUsed}}rgba(255,255,255,0.4){{else}}#e8c84a{{/if}};padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;display:inline-flex;align-items:center;gap:0.25rem;">⚒ Relic {{#if resources.forgeCharge.relicUsed}}Used{{else}}Ready{{/if}}</span>
+    <span class="ft-chip" data-tooltip="Sparks repaired this campaign — ritual repair ledger; informs Spark world-state via the Tikkun system." style="background:rgba(110,160,90,0.08);border:1px solid rgba(110,160,90,0.4);color:#a8d896;padding:0.18rem 0.4rem;border-radius:4px;font-size:0.76rem;">✦ {{resources.forgeCharge.sparksRepaired}} sparks repaired</span>
+    <button type="button" class="ft-npc-tool" data-action="ftClassAction" data-handler="soul_smith_forge" data-tooltip="Open the Forge dialog — spend Relic / repair Spark / craft signature artifact.">Forge</button>
+  </section>
+  {{/if}}
+
   {{#if dreamwalkerState}}
   <section class="ft-npc-class-panel ft-npc-dreamwalker" style="display:flex; flex-wrap:wrap; align-items:center; gap:0.35rem; padding:0.35rem 0.6rem; border-bottom:1px solid rgba(120,120,120,0.18); background:rgba(106,58,138,0.06);">
     <span style="font-weight:700; color:#c8a0ff; letter-spacing:.04em;">◎ Dreamwalker</span>
