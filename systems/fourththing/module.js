@@ -15730,7 +15730,15 @@ function _ftResolveRaidTargetActor(vm) {
   return null;
 }
 
-function _ftBuildRaidHudHtml(consoleVm) {
+function _ftBuildRaidHudHtml(consoleApp) {
+  // S3a.4.2 — Accept the console APP (not just vm) so we can read live
+  // scenario state from __infilScenario. Tolerate legacy callers that pass vm.
+  const consoleVm = (consoleApp && typeof consoleApp === "object" && "vm" in consoleApp) ? consoleApp.vm : consoleApp;
+  let infilState = null;
+  try {
+    const _app = (consoleApp && typeof consoleApp === "object" && "__infilScenario" in consoleApp) ? consoleApp : null;
+    if (_app?.__infilScenario?.getState) infilState = _app.__infilScenario.getState();
+  } catch (_) { /* noop */ }
   const rounds = Array.isArray(consoleVm?.rounds) ? consoleVm.rounds : [];
   const roundNo = rounds.length || 0;
   const lastRound = rounds[rounds.length - 1] ?? null;
@@ -15788,11 +15796,26 @@ function _ftBuildRaidHudHtml(consoleVm) {
 
   // Scenario meter — picks the right axis for the raid kind
   let meterHtml = "";
-  if (kind === "infiltration") {
-    const alarmMax = 5;
-    meterHtml = `<span title="Alarm" style="color:#eb5757">🚨 ${alarm}/${alarmMax}</span>`;
-    if (infilt) meterHtml += `<span style="opacity:.6;">·</span><span title="Infiltration" style="color:#7ec0ff">🥷 ${infilt}</span>`;
-  } else if (kind === "courtly") {
+  if (kind === "intrigue") {
+    // S3a.4.2 — Read live state from __infilScenario when present (single
+    // source of truth). Falls back to actor-flag reads for legacy sessions
+    // that don't yet have a scenario attached.
+    const aVal = infilState ? Number(infilState.alarm    || 0) : alarm;
+    const aMax = infilState ? Number(infilState.alarmMax || 5) : 5;
+    const pVal = infilState ? Number(infilState.progress    || 0) : 0;
+    const pMax = infilState ? Number(infilState.progressMax || 0) : 0;
+    const outcome = infilState?.outcome || "ongoing";
+    const alarmColor = aVal >= aMax ? "#ef4444" : (aVal >= aMax - 1 ? "#fbbf24" : "#9ca3af");
+    meterHtml = `<span title="Alarm" style="color:${alarmColor}">🚨 ${aVal}/${aMax}</span>`;
+    if (pMax > 0) {
+      const pColor = pVal >= pMax ? "#2dd4bf" : "#5eead4";
+      meterHtml += `<span style="opacity:.6;">·</span><span title="Progress" style="color:${pColor}">🥷 ${pVal}/${pMax}</span>`;
+    }
+    if (outcome && outcome !== "ongoing") {
+      const oMeta = ({ clean:["🥷 CLEAN","#2dd4bf"], messy:["⚠ MESSY","#fbbf24"], detected:["🚨 DETECTED","#ef4444"], lockdown:["🚨 LOCKDOWN","#ef4444"] })[outcome];
+      if (oMeta) meterHtml += `<span style="opacity:.6;">·</span><span style="color:${oMeta[1]};font-weight:bold;">${oMeta[0]}</span>`;
+    }
+  } else if (kind === "presence") {
     meterHtml = `<span title="Influence" style="color:#d4a35f">♕ ${alarm || infilt || 0}</span>`;
   } else {
     // assault / siege / generic raid → morale + integrity
@@ -15811,7 +15834,7 @@ function _ftBuildRaidHudHtml(consoleVm) {
     <span style="font-size:1rem;line-height:1;" title="${esc(kind)}">${preset.icon}</span>
     <strong style="color:${preset.color};">${esc(activityLabel)}</strong>
     <span style="opacity:.6;">·</span>
-    <span>Round <b>${roundNo || 1}</b></span>
+    <span>Round <b>${(kind === "intrigue" && infilState) ? Number(infilState.round || 0) : (roundNo || 1)}</b></span>
     ${phaseHasContent ? `<span style="opacity:.6;">·</span><span title="${targetType === "hex" ? "Battle scene progression" : "Boss phase"}">${esc(phaseLabel)}</span>` : ""}
     ${target ? `<span style="opacity:.6;">·</span><span style="opacity:.85;" title="Target">${esc(targetName)}</span>` : (consoleVm?.targetName ? `<span style="opacity:.6;">·</span><span style="opacity:.85;" title="Target">${esc(consoleVm.targetName)}</span>` : "")}
     ${meterHtml ? `<span style="opacity:.6;">·</span>${meterHtml}` : ""}
@@ -15874,7 +15897,7 @@ function _ftRenderRaidHud() {
         }
         return;
       }
-      const html = _ftBuildRaidHudHtml(console_.vm);
+      const html = _ftBuildRaidHudHtml(console_);
       if (!__ftRaidHudEl) {
         const tpl = document.createElement("div");
         tpl.innerHTML = html;
@@ -15922,6 +15945,12 @@ Hooks.on("renderApplicationV2", () => {
 
 Hooks.on("closeApplicationV2", () => _ftRenderRaidHud());
 Hooks.on("closeApplication",   () => _ftRenderRaidHud()); // V1 fallback
+
+// S3a.4.2 — re-render HUD when infiltration scenario state changes so the
+// alarm/progress meters update live without waiting for an AppV2 re-render.
+Hooks.on("bbttcc:infiltration:alarmChanged",    () => _ftRenderRaidHud());
+Hooks.on("bbttcc:infiltration:progressChanged", () => _ftRenderRaidHud());
+Hooks.on("bbttcc:infiltration:outcomeResolved", () => _ftRenderRaidHud());
 
 // 2026-05-13 — Belt-and-suspenders re-render on canvas ready and on a
 // short timer after world ready, since the raid console may register
