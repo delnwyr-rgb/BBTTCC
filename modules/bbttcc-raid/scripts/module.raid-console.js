@@ -2781,6 +2781,14 @@ _renderScenarioHUD(host, round){
   _renderStewardChipsInto(host, round) {
     try {
       if (!host || !round) return;
+      // S3a.5.1 — only attacker-side Stewards count. Includes any coalition
+      // support factions if defined on the raid console VM. Defender-side
+      // tokens on the same scene are excluded.
+      const allowedFactionIds = new Set();
+      if (this.vm?.attackerId) allowedFactionIds.add(String(this.vm.attackerId));
+      for (const sId of (this.vm?.supportFactionIds || [])) {
+        if (sId) allowedFactionIds.add(String(sId));
+      }
       const tokens = canvas?.scene?.tokens?.contents || [];
       const stewards = [];
       const seen = new Set();
@@ -2788,6 +2796,8 @@ _renderScenarioHUD(host, round){
         const actor = t.actor;
         if (!actor) continue;
         if (actor.type !== "character") continue;
+        const actorFactionId = String(actor.getFlag?.("bbttcc-factions", "factionId") || "");
+        if (!actorFactionId || !allowedFactionIds.has(actorFactionId)) continue;
         if (seen.has(actor.id)) continue;
         seen.add(actor.id);
         stewards.push({ id: actor.id, name: actor.name, img: actor.img });
@@ -2806,7 +2816,7 @@ _renderScenarioHUD(host, round){
       if (!stewards.length) {
         const empty = document.createElement("div");
         empty.style.cssText = "font-size:11px; color:#64748b; padding:.25rem 0;";
-        empty.textContent = "No Stewards detected on this scene. Drag character tokens onto the bound battle scene to enable contributions.";
+        empty.textContent = "No attacker-side Stewards on this scene. Drop character tokens with the attacker faction (or a coalition support faction) onto the bound battle scene to enable contributions.";
         wrap.appendChild(empty);
         host.appendChild(wrap);
         return;
@@ -4648,17 +4658,27 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           }
         } catch (e) { /* ignore flashback errors */ }
 
-        // S3a.5 — sum steward chip declarations into roll bias + exposure count
+        // S3a.5 — sum steward chip declarations into roll bias + exposure count.
+        // S3a.5.1 — only count attacker-side Stewards (matches the chip widget filter).
         let stewardBonus = 0;
         let exposedCount = 0;
         try {
           const chips = r.meta?.stewardChips || {};
+          const allowedFactionIds = new Set();
+          if (this.vm?.attackerId) allowedFactionIds.add(String(this.vm.attackerId));
+          for (const sId of (this.vm?.supportFactionIds || [])) {
+            if (sId) allowedFactionIds.add(String(sId));
+          }
           const stewardIds = new Set();
           for (const t of (canvas?.scene?.tokens?.contents || [])) {
-            if (t.actor?.type === "character") stewardIds.add(t.actor.id);
+            const a = t.actor;
+            if (!a || a.type !== "character") continue;
+            const fid = String(a.getFlag?.("bbttcc-factions", "factionId") || "");
+            if (!fid || !allowedFactionIds.has(fid)) continue;
+            stewardIds.add(a.id);
           }
           for (const [actorId, chip] of Object.entries(chips)) {
-            if (!stewardIds.has(actorId)) continue; // stale chip — actor not on current scene
+            if (!stewardIds.has(actorId)) continue; // stale chip — actor not eligible
             if (chip === "hid" || chip === "distracted" || chip === "scouted") stewardBonus += 1;
             else if (chip === "passed") exposedCount += 1;
           }
