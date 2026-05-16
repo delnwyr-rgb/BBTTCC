@@ -4405,31 +4405,50 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         }
 
         if (!this.__infilScenario || this.__infilScenarioAtt !== attacker.id || this.__infilScenarioDef !== defender.id) {
-          const init = await new Promise((resolve) => {
-            new Dialog({
-              title: "Infiltration (Alarm) — Initialize",
-              content: `
-                <form>
-                  <p class="hint">Difficulty adds to defender rolls. Alarm Max is the lockdown threshold.</p>
-                  <div class="form-group"><label>Difficulty</label><input type="number" name="difficulty" value="0" step="1"/></div>
-                  <div class="form-group"><label>Alarm Max</label><input type="number" name="alarmMax" value="5" min="1" step="1"/></div>
-                  <div class="form-group"><label>Label</label><input type="text" name="label" value="Infiltration"/></div>
-                </form>`,
-              buttons: {
-                ok: { label:"Start", callback:(html)=>{
-                  const f = html[0].querySelector("form");
-                  resolve({
-                    difficulty: Number(f.difficulty.value||0),
-                    alarmMax: Number(f.alarmMax.value||5),
-                    label: String(f.label.value||"Infiltration")
-                  });
-                }},
-                cancel: { label:"Cancel", callback:()=>resolve(null) }
-              },
-              default: "ok",
-              close: ()=>resolve(null)
-            }, { width: 520 }).render(true);
+          // S3a.4.3 — DialogV2 with inline-styled rows (legacy Dialog form-groups
+          // didn't render in V13). Adds the progressMax field for the S3a
+          // objective meter.
+          let init = null;
+          const dlg = new foundry.applications.api.DialogV2({
+            window: { title: "Infiltration (Alarm) — Initialize", resizable: false },
+            position: { width: 480 },
+            content: `<form style="display:flex; flex-direction:column; gap:.55rem; padding:8px 6px;">
+              <p style="font-size:12px; opacity:.8; margin:0 0 .25rem 0;">Difficulty adds to defender rolls. Alarm Max is the detection cap. Progress Max is the objective threshold (S3a).</p>
+              <div style="display:flex; align-items:center; gap:.5rem;">
+                <label style="flex: 0 0 140px; font-size:12px;">Difficulty</label>
+                <input type="number" name="difficulty" value="0" step="1" style="flex:1; padding:.25rem .4rem;"/>
+              </div>
+              <div style="display:flex; align-items:center; gap:.5rem;">
+                <label style="flex: 0 0 140px; font-size:12px;">Alarm Max</label>
+                <input type="number" name="alarmMax" value="5" min="1" step="1" style="flex:1; padding:.25rem .4rem;"/>
+              </div>
+              <div style="display:flex; align-items:center; gap:.5rem;">
+                <label style="flex: 0 0 140px; font-size:12px;">Progress Max</label>
+                <input type="number" name="progressMax" value="5" min="1" step="1" style="flex:1; padding:.25rem .4rem;"/>
+              </div>
+              <div style="display:flex; align-items:center; gap:.5rem;">
+                <label style="flex: 0 0 140px; font-size:12px;">Label</label>
+                <input type="text" name="label" value="Infiltration" style="flex:1; padding:.25rem .4rem;"/>
+              </div>
+            </form>`,
+            buttons: [
+              { action: "start", label: "Start", default: true, callback: (ev, btn, dialog) => {
+                const f = dialog.element.querySelector("form");
+                init = {
+                  difficulty:  Number(f.elements.difficulty.value  || 0),
+                  alarmMax:    Number(f.elements.alarmMax.value    || 5),
+                  progressMax: Number(f.elements.progressMax.value || 5),
+                  label:       String(f.elements.label.value       || "Infiltration")
+                };
+              }},
+              { action: "cancel", label: "Cancel", callback: () => { init = null; } }
+            ],
+            rejectClose: false
           });
+          try {
+            await dlg.render(true);
+            if (typeof dlg.wait === "function") await dlg.wait().catch(() => null);
+          } catch (_) { /* dialog dismissed */ }
           if (!init) return;
 
           try {
@@ -4438,6 +4457,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
               defenderId: defender.id,
               difficulty: init.difficulty,
               alarmMax: init.alarmMax,
+              progressMax: init.progressMax,
               label: init.label
             });
             this.__infilScenarioAtt = attacker.id;
