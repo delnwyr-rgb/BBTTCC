@@ -1335,6 +1335,14 @@ function getRaidTypes(){
   ];
 }
 
+// S3a.4.1: canonical "intrigue" (post Phase 4A taxonomy) AND legacy
+// "infiltration_alarm" both drive the Alarm scenario engine. Use this
+// helper everywhere instead of inline === checks.
+function _isInfilKey(k) {
+  const lk = String(k || "").toLowerCase();
+  return lk === "infiltration_alarm" || lk === "intrigue";
+}
+
 function primaryKeyFor(activityKey){
   // Look up directly in the full registry (canonical + legacy) so old
   // in-flight raid sessions still resolve to the right OP pool.
@@ -1698,7 +1706,7 @@ async function _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender)
       const scenarioEffects = bundle.scenarioEffects || [];
       if (scenarioEffects.length) {
         const mode = String(r.activityKey || "").toLowerCase();
-        if (mode === "infiltration_alarm" && app?.__infilScenario?.applyEffects) {
+        if (_isInfilKey(mode) && app?.__infilScenario?.applyEffects) {
           await app.__infilScenario.applyEffects(scenarioEffects);
           appliedScenario = true;
         } else if (mode === "courtly" && app?.__courtlyScenario?.applyEffects) {
@@ -2485,7 +2493,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
 _isScenarioRound(r){
   if (!r) return false;
   const k = String(r.activityKey || "").toLowerCase();
-  return (k === "courtly" || k === "infiltration_alarm");
+  return (k === "courtly" || _isInfilKey(k));
 }
 
 _bandLabel(band){
@@ -2582,7 +2590,7 @@ _renderScenarioHUD(host, round){
     // pull live state from the active scenario instance so the HUD shows the real round counter.
     if (!st) {
       try {
-        if (k === "infiltration_alarm" && this.__infilScenario && typeof this.__infilScenario.getState === "function") {
+        if (_isInfilKey(k) && this.__infilScenario && typeof this.__infilScenario.getState === "function") {
           const live = this.__infilScenario.getState();
           // Only adopt if it matches the attacker (safety)
           if (!round.attackerId || String(live?.attackerId || "") === String(round.attackerId || "")) {
@@ -2678,7 +2686,7 @@ _renderScenarioHUD(host, round){
       }
     }
 
-    if (k === "infiltration_alarm") {
+    if (_isInfilKey(k)) {
       row.appendChild(this._mkChip("INFILTRATION", { tone:"mode" }));
 
       const rNum = (st && st.round != null) ? Number(st.round) : (Array.isArray(st?.history) ? st.history.length : 0);
@@ -2782,7 +2790,7 @@ _renderScenarioHUD(host, round){
       }
 
       // Alarm mode keeps the scenario HUD, but ALSO allows maneuvers.
-      if (ak === "infiltration_alarm") {
+      if (_isInfilKey(ak)) {
         this._renderScenarioHUD(host, round);
       }
 
@@ -3603,7 +3611,7 @@ r.view = {
       if (!sel) return;
 
       // Scenario modes require a faction defender; disallow creature targets up front.
-      if ((this.vm.activityKey === "courtly" || this.vm.activityKey === "infiltration_alarm") && sel.type === "creature") {
+      if ((this.vm.activityKey === "courtly" || _isInfilKey(this.vm.activityKey)) && sel.type === "creature") {
         ui.notifications?.warn?.("Scenario modes cannot target creatures. Pick a hex/facility/rig defender target.");
         return;
       }
@@ -3744,7 +3752,7 @@ r.view = {
 
       // Scenario modes (Courtly / Alarm Infiltration) don't use the standard DC math preview.
       let comp = null;
-      if (act.key === "courtly" || act.key === "infiltration_alarm") {
+      if (act.key === "courtly" || _isInfilKey(act.key)) {
         comp = {
           key: act.primaryKey || primaryKeyFor(act.key),
           attBonus: Number(coalition.total || 0),
@@ -4219,7 +4227,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
     // Scenario Modes (Courtly Intrigue / Infiltration Alarm)
     // These bypass standard raid resolution and use the dedicated engines.
     // ---------------------------------------------------------------------
-    if (r && (r.activityKey === "courtly" || r.activityKey === "infiltration_alarm")) {
+    if (r && (r.activityKey === "courtly" || _isInfilKey(r.activityKey))) {
       // Scenario modes require a defender faction (no creature targets).
       if (r.targetType === "creature") {
         ui.notifications?.warn?.("Scenario modes require a defender faction. Creature targets are not valid here.");
@@ -4388,9 +4396,9 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
       }
 
       // ----------------------------------------------------------
-      // Infiltration (Alarm)
+      // Infiltration (Alarm) — driven by canonical "intrigue" or legacy "infiltration_alarm"
       // ----------------------------------------------------------
-      if (r.activityKey === "infiltration_alarm") {
+      if (_isInfilKey(r.activityKey)) {
         if (typeof raidApi.infiltration !== "function") {
           ui.notifications?.error?.("Infiltration engine not loaded. (raid-infiltration.alarm.enhancer.js)");
           return;
@@ -6967,7 +6975,7 @@ const __tier = (__tier0 !== "unknown") ? __tier0
     if (merged.scenarioEffects.length) {
       const mode = String(round.activityKey || "").toLowerCase();
       // Infiltration (Alarm)
-      if (mode === "infiltration_alarm" && app && app.__infilScenario && typeof app.__infilScenario.applyEffects === "function") {
+      if (_isInfilKey(mode) && app && app.__infilScenario && typeof app.__infilScenario.applyEffects === "function") {
         await app.__infilScenario.applyEffects(merged.scenarioEffects);
         appliedScenario = true;
       }
