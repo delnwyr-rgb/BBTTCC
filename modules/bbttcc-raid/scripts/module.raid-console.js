@@ -2769,6 +2769,110 @@ _renderScenarioHUD(host, round){
   } catch (e) { /* silent */ }
 }
 
+  /**
+   * S3a.5 — Steward Contribution Chips.
+   * Renders one row per Steward (character-type actor) with a token on the
+   * current canvas scene. Each row offers 4 chips: 🌑 Hid · 🎭 Distracted ·
+   * 🗝 Scouted · 🛌 Passed. Active chip declarations bias the end-of-round
+   * opposed roll (Hid/Distracted/Scouted = +1 attacker each; Passed or
+   * undeclared = exposed → +alarm penalty on defender win). State lives at
+   * round.meta.stewardChips keyed by actor id.
+   */
+  _renderStewardChipsInto(host, round) {
+    try {
+      if (!host || !round) return;
+      const tokens = canvas?.scene?.tokens?.contents || [];
+      const stewards = [];
+      const seen = new Set();
+      for (const t of tokens) {
+        const actor = t.actor;
+        if (!actor) continue;
+        if (actor.type !== "character") continue;
+        if (seen.has(actor.id)) continue;
+        seen.add(actor.id);
+        stewards.push({ id: actor.id, name: actor.name, img: actor.img });
+      }
+      const idx = this.vm?.rounds?.indexOf(round) ?? -1;
+
+      const wrap = document.createElement("div");
+      wrap.className = "bbttcc-steward-chips";
+      wrap.style.cssText = "display:flex; flex-direction:column; gap:.35rem; margin:.4rem 0 .6rem 0; padding:.5rem .65rem; border:1px solid rgba(125, 211, 252, 0.22); border-radius:8px; background:rgba(2, 6, 23, 0.32);";
+
+      const hdr = document.createElement("div");
+      hdr.style.cssText = "display:flex; align-items:baseline; gap:.55rem; font-size:11px; font-weight:700; letter-spacing:.04em; color:#7dd3fc; text-transform:uppercase;";
+      hdr.innerHTML = `Steward Actions <span style="font-size:10px; font-weight:400; color:#94a3b8; text-transform:none;">— self-report each Steward's scene action; biases the end-of-round roll</span>`;
+      wrap.appendChild(hdr);
+
+      if (!stewards.length) {
+        const empty = document.createElement("div");
+        empty.style.cssText = "font-size:11px; color:#64748b; padding:.25rem 0;";
+        empty.textContent = "No Stewards detected on this scene. Drag character tokens onto the bound battle scene to enable contributions.";
+        wrap.appendChild(empty);
+        host.appendChild(wrap);
+        return;
+      }
+
+      const chipDefs = [
+        { key:"hid",        label:"🌑 Hid",        title:"Stuck to shadow / cover — +1 attacker roll" },
+        { key:"distracted", label:"🎭 Distracted", title:"Pulled patrol attention — +1 attacker roll" },
+        { key:"scouted",    label:"🗝 Scouted",    title:"Found a route / asset — +1 attacker roll" },
+        { key:"passed",     label:"🛌 Passed",     title:"Did nothing stealthy — counts as exposed" }
+      ];
+      const chips = round.meta?.stewardChips || {};
+
+      for (const s of stewards) {
+        const sel = chips[s.id] || null;
+        const row = document.createElement("div");
+        row.style.cssText = "display:flex; align-items:center; gap:.5rem; flex-wrap:wrap;";
+
+        const portrait = document.createElement("img");
+        portrait.src = s.img || "icons/svg/mystery-man.svg";
+        portrait.style.cssText = "width:28px; height:28px; border-radius:50%; border:1px solid rgba(125, 211, 252, 0.4); object-fit:cover; flex:0 0 28px;";
+        portrait.title = s.name;
+        row.appendChild(portrait);
+
+        const name = document.createElement("span");
+        name.textContent = s.name;
+        name.style.cssText = "min-width:110px; max-width:160px; font-size:12px; color:#e2e8f0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;";
+        row.appendChild(name);
+
+        for (const cd of chipDefs) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.dataset.bbttccStewchip = cd.key;
+          btn.dataset.bbttccStewId   = s.id;
+          btn.dataset.bbttccRoundIdx = String(idx);
+          btn.title = cd.title;
+          btn.textContent = cd.label;
+          const active = sel === cd.key;
+          const isPassed = cd.key === "passed";
+          const borderColor = active ? (isPassed ? "#fbbf24" : "#2dd4bf") : "rgba(148, 163, 184, 0.3)";
+          const bgColor     = active ? (isPassed ? "rgba(251, 191, 36, 0.22)" : "rgba(45, 212, 191, 0.22)") : "rgba(15, 23, 42, 0.5)";
+          btn.style.cssText = `font-size:11px; padding:.18rem .55rem; border-radius:999px; cursor:pointer; border:1px solid ${borderColor}; background:${bgColor}; color:${active ? "#f1f5f9" : "#94a3b8"}; font-weight:${active ? "700" : "400"}; transition:all .12s ease;`;
+          row.appendChild(btn);
+        }
+        wrap.appendChild(row);
+      }
+
+      // Summary line — tally the bonuses + exposures
+      const declarations = Object.entries(chips).filter(([id]) => seen.has(id));
+      const activeCount  = declarations.filter(([, c]) => c === "hid" || c === "distracted" || c === "scouted").length;
+      const passedCount  = declarations.filter(([, c]) => c === "passed").length;
+      const undeclared   = Math.max(0, stewards.length - declarations.length);
+      const exposed      = passedCount + undeclared;
+      const exposurePenalty = Math.min(2, Math.ceil(exposed / 2));
+
+      const summary = document.createElement("div");
+      summary.style.cssText = "font-size:10.5px; color:#cbd5e1; margin-top:.35rem; padding-top:.35rem; border-top:1px dashed rgba(148, 163, 184, 0.2);";
+      summary.innerHTML = `<b>This round:</b> <span style="color:#2dd4bf;">${activeCount} active</span> (attacker roll +${activeCount}) · <span style="color:#fbbf24;">${exposed} exposed</span> (alarm rise +${exposurePenalty} on defender win)`;
+      wrap.appendChild(summary);
+
+      host.appendChild(wrap);
+    } catch (e) {
+      console.warn("[bbttcc-raid] _renderStewardChipsInto failed", e);
+    }
+  }
+
 
   /** Render Manage panel and wire live behavior (attacker + defender preview) */
   _renderManeuversInto(tr, round){
@@ -2792,6 +2896,9 @@ _renderScenarioHUD(host, round){
       // Alarm mode keeps the scenario HUD, but ALSO allows maneuvers.
       if (_isInfilKey(ak)) {
         this._renderScenarioHUD(host, round);
+        // S3a.5 — Steward Contribution Chips, one row per character-type
+        // token on the current canvas scene. Players declare per-round.
+        this._renderStewardChipsInto(host, round);
       }
 
       const mapAttRaw = this._mansForActivity(round.activityKey);
@@ -3937,6 +4044,25 @@ r.view = {
       this.render();
     });
 
+    // S3a.5 — Steward chip toggle. Clicking the active chip clears it back
+    // to undeclared. Clicking a different chip swaps the declaration.
+    $root.on("click.bbttccRaid","[data-bbttcc-stewchip]", (ev) => {
+      ev.preventDefault();
+      const btn = ev.currentTarget;
+      const chip = String(btn.dataset.bbttccStewchip || "");
+      const stewId = String(btn.dataset.bbttccStewId || "");
+      const idx = Number(btn.dataset.bbttccRoundIdx);
+      if (!chip || !stewId || !Number.isFinite(idx)) return;
+      const round = this.vm.rounds[idx];
+      if (!round) return;
+      round.meta ||= {};
+      round.meta.stewardChips ||= {};
+      if (round.meta.stewardChips[stewId] === chip) delete round.meta.stewardChips[stewId];
+      else round.meta.stewardChips[stewId] = chip;
+      this._queueSaveSession();
+      this.render();
+    });
+
     // Header/table actions
     $root.on("click.bbttccRaid","[data-act]", async (ev)=>{
       ev.preventDefault();
@@ -4522,8 +4648,26 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           }
         } catch (e) { /* ignore flashback errors */ }
 
+        // S3a.5 — sum steward chip declarations into roll bias + exposure count
+        let stewardBonus = 0;
+        let exposedCount = 0;
+        try {
+          const chips = r.meta?.stewardChips || {};
+          const stewardIds = new Set();
+          for (const t of (canvas?.scene?.tokens?.contents || [])) {
+            if (t.actor?.type === "character") stewardIds.add(t.actor.id);
+          }
+          for (const [actorId, chip] of Object.entries(chips)) {
+            if (!stewardIds.has(actorId)) continue; // stale chip — actor not on current scene
+            if (chip === "hid" || chip === "distracted" || chip === "scouted") stewardBonus += 1;
+            else if (chip === "passed") exposedCount += 1;
+          }
+          const declared = Object.keys(chips).filter(id => stewardIds.has(id)).length;
+          exposedCount += Math.max(0, stewardIds.size - declared);
+        } catch (_) { /* tolerate missing canvas */ }
+
         let st = null;
-        try { st = await this.__infilScenario.step({ spendIntrigue: stepArgs.spendIntrigue, spendNonlethal: stepArgs.spendNonlethal, note: stepArgs.note }); }
+        try { st = await this.__infilScenario.step({ spendIntrigue: stepArgs.spendIntrigue, spendNonlethal: stepArgs.spendNonlethal, note: stepArgs.note, stewardBonus, exposedCount }); }
         catch (e) { warn("infiltration step failed", e); ui.notifications?.error?.("Infiltration step failed — see console."); return; }
 
         const last = (st?.history && st.history.length) ? st.history[st.history.length-1] : null;

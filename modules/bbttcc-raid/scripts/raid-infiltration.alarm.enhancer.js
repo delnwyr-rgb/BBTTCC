@@ -227,7 +227,7 @@
       }
       // ---------------------------------------------------------------------
 
-      async function step({ spendIntrigue = 2, spendNonlethal = 2, note = "" } = {}) {
+      async function step({ spendIntrigue = 2, spendNonlethal = 2, note = "", stewardBonus = 0, exposedCount = 0 } = {}) {
         if (state.outcome !== "ongoing") return { ...state, note: "scenario already resolved" };
 
         const _stepBeforeAlarm = state.alarm; // S3a.4: VFX hook baseline
@@ -267,7 +267,9 @@
         if (atkSpend) await adjustOpBank(A, "intrigue", -atkSpend);
         if (defSpend) await adjustOpBank(D, "nonlethal", -defSpend);
 
-        const atkBonus = Math.ceil(atkSpend / 2);
+        // S3a.5: Steward chip declarations bias the attacker roll.
+        const stewBonus = Math.max(0, Math.floor(Number(stewardBonus || 0)));
+        const atkBonus = Math.ceil(atkSpend / 2) + stewBonus;
         const defBonus = Math.ceil(defSpend / 2) + Math.max(0, Math.floor(state.difficulty));
 
         const atkRoll = await (new Roll("2d10 + @b", { b: atkBonus })).evaluate();
@@ -285,10 +287,13 @@
         const beforeAlarm = state.alarm;
         let afterAlarm = beforeAlarm;
 
+        // S3a.5: Exposed stewards (declared "passed" or undeclared) amplify
+        // the alarm rise on defender win. ceil(exposed/2) capped at +2.
+        const exposureExtra = Math.min(2, Math.ceil(Math.max(0, Number(exposedCount || 0)) / 2));
         if (result === "defender") {
-          // Failure → raise alarm by 1 or 2 based on severity
+          // Failure → raise alarm by 1 or 2 based on severity, + exposure penalty
           const lossMargin = defTotal - atkTotal;
-          afterAlarm += (lossMargin >= 6 ? 2 : 1);
+          afterAlarm += (lossMargin >= 6 ? 2 : 1) + exposureExtra;
         }
 
         // Clamp to max
@@ -321,9 +326,10 @@
 
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
-          `Rolls: Attacker ${atkTotal} vs Defender ${defTotal} (margin ${margin >=0 ? "+"+margin : margin})`,
+          `Rolls: Attacker ${atkTotal}${stewBonus ? ` <span style="opacity:.7">(stewards +${stewBonus})</span>` : ""} vs Defender ${defTotal} (margin ${margin >=0 ? "+"+margin : margin})`,
           `Result: ${result.toUpperCase()} — Alarm ${beforeAlarm} → ${afterAlarm} (${bandFromAlarm(afterAlarm)})`
         ];
+        if (result === "defender" && exposureExtra > 0) lines.push(`<span style="opacity:.7;color:#fbbf24;">⚠ Exposed stewards (${exposedCount}) added +${exposureExtra} to the alarm rise.</span>`);
         if (note) lines.push(foundry.utils.escapeHTML(note));
 
         await sendChat(lines, { title: `${label}: Round ${state.round}` });
