@@ -149,8 +149,10 @@
 
   // ── Affiliation OP Table (faction OP-roll engine) ────────────────────
   rows.push(section("Faction OP-Roll Engine — Affiliation Table"));
-  const hasOpTable = !!(game.bbttcc?.api?.factions?.rosterContribution || game.bbttcc?.api?.raid?.affiliationOpTable);
-  rows.push(line("affiliation-op-table.enhancer", hasOpTable ? "✅ loaded" : "❌ NOT loaded", hasOpTable ? "" : "Should auto-load on world boot. Hard-reload first."));
+  const opApi = game.bbttcc?.api?.factions?.affiliationOP || globalThis.BBTTCC_AffiliationOP;
+  const hasOpTable = !!opApi;
+  const opFnCount = hasOpTable ? Object.keys(opApi).filter(k => typeof opApi[k] === "function").length : 0;
+  rows.push(line("affiliation-op-table.enhancer", hasOpTable ? `✅ loaded (${opFnCount} fns)` : "❌ NOT loaded", hasOpTable ? "" : "Should auto-load on world boot. Hard-reload first or check console for errors in <code>affiliation-op-table.enhancer.js</code>."));
 
   // ── Footer ──────────────────────────────────────────────────────────
   const verdictColor = summary.fail > 0 ? "#ef4444" : (summary.warn > 0 ? "#fbbf24" : "#2dd4bf");
