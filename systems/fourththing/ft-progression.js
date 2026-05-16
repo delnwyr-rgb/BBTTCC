@@ -1271,6 +1271,29 @@ const SKILL_PROFICIENCY_MAP = {
   "firearms":      "firearms",
   "brawl":         "brawl",
   "melee":         "melee",
+  "warding":       "warding",
+  "weave":         "weave",
+  "plating":       "plating",
+  "faith":         "faith",
+  // Tool/kit aliases (D&D vocab that the scrub macro hasn't rewritten yet).
+  // The strip below removes "'s tools" / "'s kit" / "'s supplies" suffixes
+  // and falls through to these singular-noun keys.
+  "thieves":       "tinkering",
+  "tinker":        "tinkering",
+  "smith":         "plating",
+  "mason":         "plating",
+  "leatherworker": "plating",
+  "weaver":        "weave",
+  "carpenter":     "plating",
+  "jeweler":       "tinkering",
+  "cartographer":  "lore",
+  "navigator":     "lore",
+  "herbalism":     "faith",
+  "alchemist":     "occult",
+  "calligrapher":  "lore",
+  "disguise":      "stealth",
+  "forgery":       "stealth",
+  "poisoner":      "stealth",
 };
 
 // Parse feature description HTML and extract skill proficiencies
@@ -1279,11 +1302,13 @@ export function extractSkillGrantsFromFeature(featureDesc) {
   const text = featureDesc.replace(/<[^>]+>/g, " ").toLowerCase();
   const grants = [];
 
-  // Match patterns like "proficiency in X and Y" or "gain proficiency in X"
+  // Match patterns like "proficiency in/with X and Y" or "gain proficiency in/with X".
+  // "with" covers D&D tool/kit phrasing ("proficient with Tinker's Tools") that
+  // the scrub macro may not have rewritten yet.
   const patterns = [
-    /profici(?:ency|ent) in ([^.<]+)/g,
+    /profici(?:ency|ent) (?:in|with) ([^.<]+)/g,
     /gain(?:s)? (?:a )?(?:skill rank|rank) in ([^.<]+)/g,
-    /trained in ([^.<]+)/g,
+    /trained (?:in|with) ([^.<]+)/g,
     /skill rank in ([^.<]+)/g,
   ];
 
@@ -1294,8 +1319,14 @@ export function extractSkillGrantsFromFeature(featureDesc) {
       // Split on "&", "and", ","
       const parts = raw.split(/[&,]|\band\b/).map(s => s.trim());
       for (const part of parts) {
-        // Clean up "mason's tools" etc — only care about skills
-        const normalized = part.replace(/['s].*tools?/i, "").replace(/\s+/g, " ").trim();
+        // Strip "'s tools / 's kit / 's supplies / kit / tools / supplies"
+        // suffixes so "tinker's tools" → "tinker" and falls through the
+        // SKILL_PROFICIENCY_MAP tool aliases below.
+        const normalized = part
+          .replace(/['’]s\b/i, "")
+          .replace(/\b(tools?|kit|supplies|set|instrument)\b/gi, "")
+          .replace(/\s+/g, " ")
+          .trim();
         for (const [keyword, ftSkill] of Object.entries(SKILL_PROFICIENCY_MAP)) {
           if (normalized.includes(keyword)) {
             if (!grants.includes(ftSkill)) grants.push(ftSkill);

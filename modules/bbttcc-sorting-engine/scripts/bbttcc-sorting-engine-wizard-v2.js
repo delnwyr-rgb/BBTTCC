@@ -763,28 +763,46 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   // Armor skills are excluded universally (granted by Path). All 20 remaining
   // aptitudes are offered; conflicts with class/heritage grants are resolved
   // at finalize (skipped picks are reported in chat). Class-known auto-grants
-  // (combat skill on T1 anchor) are surfaced as disabled options up-front so
-  // the player doesn't waste a pick — see _autoGrantedAptitudeKeys().
-  _autoGrantedAptitudeKeys() {
-    // Hardcoded mirror of master-content/tools/stamp-class-l1-aptitudes.macro.js
-    // PLAN — class name → combat skill key. Armor skills are universally
-    // excluded from picks already, so we only list combat here. Keep this map
-    // in sync if the stamp macro PLAN changes.
-    const CLASS_COMBAT = {
-      "Bulwark":          "melee",
-      "Aurablade":        "melee",
-      "Cosmic Linguist":  "brawl",
-      "Pactkeeper":       "brawl",
-      "Dreamwalker":      "brawl",
-      "Harmony Marshal":  "melee",
-      "Soul-Smith":       "melee",
-      "Wyrdlens Adept":   "brawl",
-      "Shadow Courier":   "brawl"
+  // are surfaced as disabled options up-front so the player doesn't waste a
+  // pick — see _autoGrantedAptitudeKeys().
+  //
+  // PLAN mirrors master-content/tools/stamp-class-l1-aptitudes.macro.js. Each
+  // class gets its armor skill + one or more combat skills. TCCs keep their
+  // single PLAN combat skill; non-TCCs get all three combat aptitudes
+  // (melee/brawl/firearms) — they're the front-line bodies and shouldn't have
+  // to choose. Keep the PLAN map and the TCC set in sync if either changes.
+  _classL1Plan() {
+    return {
+      "Bulwark":          { combat: "melee", armor: "plating" },
+      "Aurablade":        { combat: "melee", armor: "weave"   },
+      "Cosmic Linguist":  { combat: "brawl", armor: "weave"   },
+      "Pactkeeper":       { combat: "brawl", armor: "warding" },
+      "Dreamwalker":      { combat: "brawl", armor: "weave"   },
+      "Harmony Marshal":  { combat: "melee", armor: "warding" },
+      "Soul-Smith":       { combat: "melee", armor: "plating" },
+      "Wyrdlens Adept":   { combat: "brawl", armor: "weave"   },
+      "Shadow Courier":   { combat: "brawl", armor: "weave"   }
     };
-    const out = new Set();
-    const className = this._effective("class");
-    if (className && CLASS_COMBAT[className]) out.add(CLASS_COMBAT[className]);
-    return out;
+  }
+
+  _isTCCClass(className) {
+    // Mirrors FT_TCC_IDENTIFIERS in systems/fourththing/module.js.
+    return new Set([
+      "Cosmic Linguist", "Pactkeeper", "Dreamwalker", "Wyrdlens Adept"
+    ]).has(className);
+  }
+
+  _classL1Grants(className) {
+    const row = this._classL1Plan()[className];
+    if (!row) return [];
+    const grants = [row.armor];
+    if (this._isTCCClass(className)) grants.push(row.combat);
+    else grants.push("melee", "brawl", "firearms");
+    return Array.from(new Set(grants));
+  }
+
+  _autoGrantedAptitudeKeys() {
+    return new Set(this._classL1Grants(this._effective("class")));
   }
 
   _buildChargenAptitudesHtml() {
@@ -1254,18 +1272,34 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
         } catch (e) {
           WARN("pillar tally / lastDescent write failed (actor created successfully)", e);
         }
-        // Apply chargen aptitude picks (3 free L1 picks). Only land on rank-0
-        // skills so we never produce a rank-2 start; conflicts with class/heritage
-        // grants are reported in chat. Armor skills (plating/weave/warding) are
-        // GUI-excluded already, but we re-guard at apply time.
+        // Apply class L1 grants + chargen aptitude picks. Class L1 lands
+        // first so the picks see them as conflicts and skip cleanly. Only
+        // writes to rank-0 skills (idempotent — safe even if the AE-promotion
+        // path already fired). The explicit grant here is a safety net: in
+        // practice the stamped AEs on class T1 anchors don't always make it
+        // through import → promotion, so armor/combat aptitudes can go missing
+        // without this step.
         try {
           const ARMOR = new Set(["plating", "weave", "warding"]);
           const picks = (this._chargenAptitudes || []).filter(s => s && !ARMOR.has(s));
           const sys = created.system?.system ?? created.system ?? {};
           const skills = sys.skills ?? {};
+          const updates = {};
+
+          // 1) Class L1 (armor + combat — triple combat for non-TCCs)
+          const classApplied = [];
+          for (const k of this._classL1Grants(this._effective("class"))) {
+            const cur = Number(skills[k]?.value ?? 0);
+            if (cur > 0) continue;
+            updates[`system.skills.${k}.value`] = 1;
+            classApplied.push(k);
+            // Mirror into the local view so step 2 sees the grant as a conflict.
+            skills[k] = { ...(skills[k] || {}), value: 1 };
+          }
+
+          // 2) Chargen picks — rank-0 only, conflicts reported in chat
           const applied = [];
           const conflicted = [];
-          const updates = {};
           for (const k of picks) {
             const cur = Number(skills[k]?.value ?? 0);
             if (cur > 0) {
@@ -1274,9 +1308,14 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
             }
             updates[`system.skills.${k}.value`] = 1;
             applied.push(k);
+            skills[k] = { ...(skills[k] || {}), value: 1 };
           }
+
           if (Object.keys(updates).length) await created.update(updates);
-          if (applied.length || conflicted.length) {
+          if (classApplied.length || applied.length || conflicted.length) {
+            const classHtml = classApplied.length
+              ? `<p style="margin:0.2rem 0;color:#8fb9ff;font-size:0.82rem">Class L1 grants (rank 1): <b>${classApplied.join(", ")}</b></p>`
+              : "";
             const appliedHtml = applied.length
               ? `<p style="margin:0.2rem 0;color:#6fcf97;font-size:0.82rem">Applied at rank 1: <b>${applied.join(", ")}</b></p>`
               : "";
@@ -1287,7 +1326,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
               speaker: ChatMessage.getSpeaker({ actor: created }),
               content: `<div class="fourththing-roll">
                 <div class="ft-roll-header"><span class="ft-roll-name">⊕ Chargen Aptitudes — ${created.name}</span></div>
-                ${appliedHtml}${conflictHtml}
+                ${classHtml}${appliedHtml}${conflictHtml}
               </div>`
             });
           }
