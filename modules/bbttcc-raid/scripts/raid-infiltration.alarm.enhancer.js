@@ -93,13 +93,18 @@
     await actor.update({ [`flags.${MODF}`]: flags });
   }
 
-  async function sendChat(lines, {title="Infiltration Update"}={}) {
+  async function sendChat(lines, {title="Infiltration Update", rolls=null, whisper="gm"}={}) {
     if (!lines.length) return;
-    await ChatMessage.create({
+    const data = {
       content: `<p><b>${title}</b></p>${lines.join("<br/>")}`,
-      whisper: gmIds(),
       speaker: { alias: "BBTTCC Infiltration" }
-    }).catch(()=>{});
+    };
+    // S3a.5.2: GM-only by default for narrative cards; "public" for round
+    // summaries so players see the math + dice. Passing Roll objects in
+    // `rolls` triggers Dice So Nice automatically (no DSN = no-op).
+    if (whisper === "gm") data.whisper = gmIds();
+    if (Array.isArray(rolls) && rolls.length) data.rolls = rolls;
+    await ChatMessage.create(data).catch(()=>{});
   }
 
   function whenRaidReady(cb, tries=0) {
@@ -324,15 +329,35 @@
         });
         await playAlarmFX({ before: beforeAlarm, after: afterAlarm, band: bandFromAlarm(afterAlarm) });
 
+        // S3a.5.2 — breakdown components, so players can verify every input
+        // actually applied. Dice sums extracted from the Roll objects directly;
+        // OP/steward/difficulty bonuses are the same numbers fed to the roll.
+        const atkOpBonus = Math.ceil(atkSpend / 2);
+        const defOpBonus = Math.ceil(defSpend / 2);
+        const atkDiceSum = atkRoll?.dice?.[0]?.results?.reduce((s, r) => s + Number(r.result || 0), 0) ?? (atkTotal - atkBonus);
+        const defDiceSum = defRoll?.dice?.[0]?.results?.reduce((s, r) => s + Number(r.result || 0), 0) ?? (defTotal - defBonus);
+
+        const atkParts = [`${atkDiceSum} <small style="opacity:.7;">(2d10)</small>`];
+        if (atkOpBonus > 0) atkParts.push(`+ ${atkOpBonus} <small style="opacity:.7;">(Intrigue OP × ${atkSpend})</small>`);
+        if (stewBonus  > 0) atkParts.push(`+ ${stewBonus} <small style="opacity:.7;">(stewards × ${stewBonus})</small>`);
+
+        const defParts = [`${defDiceSum} <small style="opacity:.7;">(2d10)</small>`];
+        if (defOpBonus > 0) defParts.push(`+ ${defOpBonus} <small style="opacity:.7;">(Nonlethal OP × ${defSpend})</small>`);
+        if (Number(state.difficulty) > 0) defParts.push(`+ ${state.difficulty} <small style="opacity:.7;">(difficulty)</small>`);
+
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
-          `Rolls: Attacker ${atkTotal}${stewBonus ? ` <span style="opacity:.7">(stewards +${stewBonus})</span>` : ""} vs Defender ${defTotal} (margin ${margin >=0 ? "+"+margin : margin})`,
-          `Result: ${result.toUpperCase()} — Alarm ${beforeAlarm} → ${afterAlarm} (${bandFromAlarm(afterAlarm)})`
+          `🎲 Attacker: ${atkParts.join(" ")} = <b>${atkTotal}</b>`,
+          `🎲 Defender: ${defParts.join(" ")} = <b>${defTotal}</b>`,
+          `Margin: <b>${margin >= 0 ? "+" : ""}${margin}</b> — Result: <b>${result.toUpperCase()}</b>`,
+          `Alarm <b>${beforeAlarm}</b> → <b>${afterAlarm}</b> (${bandFromAlarm(afterAlarm)})`
         ];
         if (result === "defender" && exposureExtra > 0) lines.push(`<span style="opacity:.7;color:#fbbf24;">⚠ Exposed stewards (${exposedCount}) added +${exposureExtra} to the alarm rise.</span>`);
         if (note) lines.push(foundry.utils.escapeHTML(note));
 
-        await sendChat(lines, { title: `${label}: Round ${state.round}` });
+        // S3a.5.2 — pass Roll objects so Dice So Nice animates the 3D dice,
+        // and make the round summary PUBLIC so players see the math + dice.
+        await sendChat(lines, { title: `${label}: Round ${state.round}`, rolls: [atkRoll, defRoll], whisper: "public" });
 
         // S3a.4: emit alarm-change hook if step (incl. discovery tick) moved the meter
         try {
@@ -510,8 +535,24 @@
       console.log(TAG, "Infiltration scenario created:", {
         attacker: A.name,
         defender: D.name,
-        alarmMax: state.alarmMax
+        alarmMax: state.alarmMax,
+        progressMax: state.progressMax,
+        difficulty: state.difficulty
       });
+
+      // S3a.5.2 — Init card so the table sees the GM's chosen thresholds
+      // (Difficulty especially — otherwise it's silently baked into every
+      // defender roll with no visual confirmation).
+      try {
+        const diffPart = (Number(state.difficulty) > 0)
+          ? `<b>+${state.difficulty}</b> to every defender roll`
+          : `<i>none</i>`;
+        await sendChat([
+          `<b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
+          `Alarm Max: <b>${state.alarmMax}</b> · Progress Max: <b>${state.progressMax}</b> · Messy Threshold: <b>${state.messyThreshold}</b>`,
+          `Difficulty: ${diffPart}`
+        ], { title: `${label}: Scenario Initialized`, whisper: "public" });
+      } catch (_) { /* tolerate failure — init card is cosmetic */ }
 
       return apiObj;
     };
