@@ -910,3 +910,180 @@ form[data-bbttcc-root-shell-off="1"]::after {
   font-size: 9px;
   color: #e5e7eb;
 }
+
+/* ---------------------------------------------------------------------
+ * 2026-05-15 — Affiliations card
+ * Read-only summary of archetype/crew/occult/ancestry/sephirah/political
+ * with per-row OP-contribution pills + faction total.
+ * ------------------------------------------------------------------- */
+.bbttcc-character-sheet .bbttcc-affiliations-card {
+  margin: 0.4rem 0.5rem 0.6rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(148,163,184,0.25);
+  color: #e5e7eb;
+  font-size: 11px;
+}
+.bbttcc-character-sheet .bbttcc-aff-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+.bbttcc-character-sheet .bbttcc-aff-subtitle {
+  font-weight: 400;
+  font-size: 9px;
+  color: #94a3b8;
+}
+.bbttcc-character-sheet .bbttcc-aff-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+.bbttcc-character-sheet .bbttcc-aff-row {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr auto;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.18rem 0.3rem;
+  border-radius: 4px;
+  background: rgba(30,41,59,0.45);
+}
+.bbttcc-character-sheet .bbttcc-aff-row-label {
+  font-weight: 600;
+  color: #cbd5e1;
+}
+.bbttcc-character-sheet .bbttcc-aff-row-label i {
+  width: 12px;
+  margin-right: 0.25rem;
+  color: #94a3b8;
+}
+.bbttcc-character-sheet .bbttcc-aff-row-value {
+  color: #e5e7eb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bbttcc-character-sheet .bbttcc-aff-row-value em {
+  color: #64748b;
+  font-style: italic;
+}
+.bbttcc-character-sheet .bbttcc-aff-row-ops {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.18rem;
+  justify-content: flex-end;
+}
+.bbttcc-character-sheet .bbttcc-aff-pill {
+  display: inline-block;
+  padding: 0 0.32rem;
+  border-radius: 3px;
+  background: rgba(56,189,248,0.16);
+  border: 1px solid rgba(56,189,248,0.4);
+  font-size: 9px;
+  color: #e0f2fe;
+  white-space: nowrap;
+}
+.bbttcc-character-sheet .bbttcc-aff-pill-total {
+  background: rgba(168,85,247,0.18);
+  border-color: rgba(168,85,247,0.5);
+  color: #f3e8ff;
+  font-weight: 700;
+}
+.bbttcc-character-sheet .bbttcc-aff-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.45rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(148,163,184,0.25);
+  gap: 0.4rem;
+}
+.bbttcc-character-sheet .bbttcc-aff-total-label {
+  font-weight: 600;
+  color: #cbd5e1;
+}
+.bbttcc-character-sheet .bbttcc-aff-total-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.18rem;
+  justify-content: flex-end;
+}
+.bbttcc-character-sheet .bbttcc-aff-total-pills em {
+  color: #64748b;
+  font-style: italic;
+  font-size: 10px;
+}
+
+/* ---------------------------------------------------------------------
+ * 2026-05-15 — Boss sheet affiliations surface
+ * Boss is custom fourththing template (not dnd5e) — surface inserted
+ * after .ft-identity. Card itself reuses .bbttcc-affiliations-card rules.
+ * ------------------------------------------------------------------- */
+.bbttcc-boss-aff-wrap {
+  margin: 0.5rem 0.5rem 0.6rem;
+  padding: 0.4rem;
+  border-radius: 6px;
+  background: rgba(76,29,149,0.18);
+  border: 1px solid rgba(168,85,247,0.35);
+}
+.bbttcc-boss-aff-wrap .bbttcc-quickbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding: 0.2rem 0.3rem;
+}
+.bbttcc-boss-aff-wrap .bbttcc-button-link {
+  font-size: 10px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  background: rgba(15,23,42,0.6);
+  border: 1px solid rgba(168,85,247,0.35);
+  color: #f3e8ff;
+  cursor: pointer;
+}
+.bbttcc-boss-aff-wrap .bbttcc-button-link:hover {
+  background: rgba(76,29,149,0.4);
+  border-color: rgba(168,85,247,0.6);
+}
+.bbttcc-boss-aff-wrap .bbttcc-affiliations-card {
+  margin: 0.35rem 0 0;
+}
+
+/* ---------------------------------------------------------------------
+ * 2026-05-15 — ▶ Use button for actionable features (FEATURE_ROUTER bridge)
+ * Injected into BBTTCC-wrapped dnd5e item-list rows by
+ * _ftMountActionableUseButtons in character-sheet.js. Mirrors the
+ * fourththing native sheet's `.ft-use-sm` style.
+ * ------------------------------------------------------------------- */
+.bbttcc-ft-use-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 0.35rem;
+  padding: 0;
+  border: 1px solid rgba(56,189,248,0.6);
+  border-radius: 3px;
+  background: rgba(15,23,42,0.85);
+  color: #38bdf8;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  vertical-align: middle;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.bbttcc-ft-use-btn:hover {
+  background: rgba(56,189,248,0.22);
+  color: #f0f9ff;
+  border-color: rgba(56,189,248,0.9);
+}
+.bbttcc-ft-use-btn:active {
+  background: rgba(56,189,248,0.4);
+}

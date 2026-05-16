@@ -89,5 +89,8 @@
       "label": "BBTTCC Scenes",
       "path": "packs/scenes"
     }
+  ],
+  "esmodules": [
+    "scripts/np-ancestries-router.js"
   ]
 }

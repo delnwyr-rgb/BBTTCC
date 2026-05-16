@@ -2147,7 +2147,8 @@ const PACK_KEYS = {
   crew:        "bbttcc-character-options.crew-types",
   sephirot:    "bbttcc-character-options.sephirothic-alignments",
   // political philosophy uses AAE canon registry (flags), not a pack
-  occult:      "bbttcc-character-options.occult-associations"
+  occult:      "bbttcc-character-options.occult-associations",
+  ancestry:    "bbttcc-master-content.ancestries"
 };
 /* ---------------------------------------
  * AAE Political Philosophy (Canon) — v1
@@ -2238,33 +2239,40 @@ const IDENTITY_SLOTS = {
   sephirothicAlignment: {
     pack: PACK_KEYS.sephirot,
     categories: ["sephirothic-alignments", "alignment", "alignments", "bbttcc-alignment"]
+  },
+  ancestry: {
+    pack: PACK_KEYS.ancestry,
+    categories: ["ancestries", "ancestry", "species", "bbttcc-ancestry"],
+    // 2026-05-15 — Ancestry items are dnd5e/fourththing `species` type, not feat.
+    // indexPack accepts this via the extraTypes hint below.
+    extraTypes: ["species"]
   }
 };
 
-async function indexPack(key) {
+async function indexPack(key, extraTypes) {
   const pack = game.packs.get(key);
   if (!pack) return [];
   const idx = await pack.getIndex({ fields: ["name", "type"] });
 
-  const rows = idx.filter(e =>
-    e.type === "feat"   ||
-    e.type === "feat5e" ||
-    e.type === "featv2" ||
-    e.type === "featV2" ||
-    e.type === "feat-5e"
-  );
+  const allow = new Set(["feat", "feat5e", "featv2", "featV2", "feat-5e"]);
+  if (Array.isArray(extraTypes)) {
+    for (const t of extraTypes) if (t) allow.add(String(t));
+  }
+
+  const rows = idx.filter(e => allow.has(e.type));
 
   rows.sort((A, B) => A.name.localeCompare(B.name));
   return rows.map(({ _id, name }) => ({ id: _id, name }));
 }
 
 async function buildIdentityOptions() {
-  const [archetypeAll, crewAll, sephirot, politicalAll, occultAll] = await Promise.all([
+  const [archetypeAll, crewAll, sephirot, politicalAll, occultAll, ancestryAll] = await Promise.all([
     indexPack(PACK_KEYS.archetype),
     indexPack(PACK_KEYS.crew),
     indexPack(PACK_KEYS.sephirot),
     Promise.resolve(listPoliticalPhilosophyOptions()),
-    indexPack(PACK_KEYS.occult)
+    indexPack(PACK_KEYS.occult),
+    indexPack(PACK_KEYS.ancestry, IDENTITY_SLOTS.ancestry?.extraTypes)
   ]);
 
   // Helper: true if a name looks like a tiered option, e.g. "(Tier 2)"
@@ -2303,6 +2311,10 @@ async function buildIdentityOptions() {
     occult: {
       pack: PACK_KEYS.occult,
       list: occultBase
+    },
+    ancestry: {
+      pack: PACK_KEYS.ancestry,
+      list: ancestryAll.filter(entry => !isTierName(entry))
     }
   };
 }
@@ -2378,7 +2390,8 @@ async function openBBTTCCIdentityChooser(actor, app, slotKey) {
     crew: { label: "Crew Type", list: options.crew.list },
     occult: { label: "Occult Association", list: options.occult.list },
     sephirothicAlignment: { label: "Sephirotic Alignment", list: options.sephirothicAlignment.list },
-    political: { label: "Political Philosophy", list: options.political.list }
+    political: { label: "Political Philosophy", list: options.political.list },
+    ancestry: { label: "Ancestry", list: options.ancestry.list }
   };
   const cfg = map[slotKey];
   if (!cfg) return;
@@ -2522,6 +2535,7 @@ function _buildQuickbarHTML(actor) {
             <button type="button" class="bbttcc-button-link" data-bbttcc-choose="occult">Occult</button>
             <button type="button" class="bbttcc-button-link" data-bbttcc-choose="political">Philosophy</button>
             <button type="button" class="bbttcc-button-link" data-bbttcc-choose="sephirothicAlignment">Sephirotic</button>
+            <button type="button" class="bbttcc-button-link" data-bbttcc-choose="ancestry">Ancestry</button>
           </div>
           <div class="bbttcc-field bbttcc-field-tight">
             <label>Faction</label>
@@ -2832,6 +2846,23 @@ function hydrateNativeBBTTCCQuickbar(app, root) {
   _bbttccHealResourceGrants(actor)
     .catch(e => WARN("Resource grant heal failed", e))
     .finally(() => _bbttccMountSidebarResourceCard(app, root));
+
+  // 2026-05-15 — Mount the read-only Affiliations card directly under the quickbar
+  // so the OP-contribution breakdown is visible at a glance.
+  _ftMountAffiliationsCard(app, root);
+
+  // 2026-05-15 — Inject ▶ Use buttons next to items that match FEATURE_ROUTER /
+  // NAME_ROUTER. The native fourththing sheets render these via hbs templates,
+  // but BBTTCC-wrapped dnd5e sheets have no equivalent hook — this bridges
+  // the gap so NP ancestry abilities + class techniques get a clickable
+  // invoke surface on both PC and NPC BBTTCC sheets.
+  //
+  // Belt-and-suspenders: dnd5e v5 AppV2 sometimes re-renders the items
+  // partial after our initial hook fires, which would wipe the injected
+  // buttons. Re-mount after a short delay so the buttons survive.
+  _ftMountActionableUseButtons(app, root);
+  setTimeout(() => _ftMountActionableUseButtons(app, root), 100);
+  setTimeout(() => _ftMountActionableUseButtons(app, root), 500);
 }
 
 
@@ -3562,7 +3593,19 @@ async function applyIdentitySlotChange(actor, slotKey, newKey) {
     id: doc.id
   });
 
-  await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+  // 2026-05-15 — For ancestry, mirror the wizard's UUID-import cascade so the
+  // NPC receives the species' level-1 ItemGrants (size, traits, tier-I feats)
+  // rather than just the bare top-level species item. Other slots remain
+  // pure top-level embeds.
+  if (slotKey === "ancestry") {
+    const cascade = await _ftCollectAncestryGrants(doc);
+    if (cascade.length) {
+      try { await actor.createEmbeddedDocuments("Item", cascade); }
+      catch (e) { WARN("Ancestry cascade import failed", e); }
+    }
+  } else {
+    await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+  }
 
   const opt =
     doc.getFlag?.("bbttcc-character-options", "option") ||
@@ -4293,6 +4336,13 @@ async function enhanceBBTTCCSheet(app, html) {
       return;
     }
 
+    // 2026-05-15 — Boss sheet (fourththing) gets a slim Affiliations surface
+    // so bosses can author affiliations and contribute OP to their faction.
+    if (String(actor.type || "").toLowerCase() === "boss") {
+      _ftMountBossAffiliationsSurface(app, root);
+      return;
+    }
+
     if (isPC && !actor.getFlag?.("bbttcc-factions", "isFaction")) {
       // Ensure Esoteric Magic feats route through dnd5e.useItem (dialog-safe)
       patchEsotericDisplayCardRoutingOnce();
@@ -4318,6 +4368,317 @@ async function enhanceBBTTCCSheet(app, html) {
 
   } catch (err) {
     WARN("Failed during BBTTCC sheet enhancement", err);
+  }
+}
+
+/* ---------------------------------------
+ * 2026-05-15 — Affiliation card + ancestry cascade helpers
+ * Sprint: NPC affiliation integration. See affiliation-op-table.enhancer.js
+ * in bbttcc-raid for the OP-contribution engine these helpers feed.
+ * ------------------------------------ */
+
+/** Recursive ItemGrant cascade walker. Mirrors character-wizard.js:418
+ *  collectLevelOneGrants but RECURSES into granted items so two-layer
+ *  chains import in one drop. Common case: Echo-Diver species → Heritage
+ *  feat → tier features. Without recursion only the species + heritage
+ *  land; tier features are silently dropped.
+ *
+ *  Cycle detection via visited UUID set; depth cap as a safety belt.
+ */
+async function _ftCollectAncestryGrants(topDoc, _visited = null, _depth = 0, _MAX_DEPTH = 3) {
+  if (!topDoc) return [];
+  const visited = _visited || new Set();
+  if (topDoc.uuid && visited.has(topDoc.uuid)) return [];
+  if (topDoc.uuid) visited.add(topDoc.uuid);
+
+  const out = [];
+  const stamp = (obj, uuid) => {
+    try {
+      foundry.utils.setProperty(obj, "_stats.compendiumSource", uuid);
+      foundry.utils.setProperty(obj, "flags.core.sourceId", uuid);
+      foundry.utils.setProperty(obj, "flags.fourththing.principleSource", "ancestry");
+    } catch(_e){}
+  };
+  const top = topDoc.toObject();
+  stamp(top, topDoc.uuid);
+  out.push(top);
+
+  if (_depth >= _MAX_DEPTH) return out;
+
+  const advancement = topDoc.system?.advancement || {};
+  const advRows = Array.isArray(advancement) ? advancement : Object.values(advancement);
+  for (const adv of advRows) {
+    if (!adv || adv.type !== "ItemGrant") continue;
+    if ((adv.level ?? 0) > 1) continue;
+    const items = adv.configuration?.items || [];
+    for (const entry of items) {
+      try {
+        const granted = await fromUuid(entry.uuid);
+        if (!granted) continue;
+        // Recurse into the granted doc so heritage→tier-feat chains land.
+        const sub = await _ftCollectAncestryGrants(granted, visited, _depth + 1, _MAX_DEPTH);
+        out.push(...sub);
+      } catch (_err) { /* skip missing grants */ }
+    }
+  }
+
+  if (_depth > 0) return out;
+
+  // De-dup by (type, name) and strip _id so createEmbeddedDocuments mints fresh ones.
+  // Only the outermost call returns the cleaned set.
+  const seen = new Set();
+  const cleaned = [];
+  for (const obj of out) {
+    const key = String(obj.type || "") + "::" + String(obj.name || "");
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const c = foundry.utils.deepClone(obj);
+    delete c._id;
+    cleaned.push(c);
+  }
+  return cleaned;
+}
+
+/** Pretty label for an affiliation slot value. */
+function _ftAffLabel(slot) {
+  if (!slot || typeof slot !== "object") return "";
+  const raw = slot.name || slot.identifier || slot.optionKey || slot.key || "";
+  return String(raw).replace(/_/g, " ").replace(/\b\w/g, m => m.toUpperCase()).trim();
+}
+
+/** Render the read-only Affiliations card HTML for an actor. */
+function _ftBuildAffiliationsCardHTML(actor) {
+  // Canonical storage: actor.flags["bbttcc-character-options"].identity. Boss
+  // schema also has a free-text system.identity.archetype string; show that
+  // as fallback so every actor type renders consistently.
+  const charOptId = (actor.getFlag?.("bbttcc-character-options", "identity") || actor?.flags?.["bbttcc-character-options"]?.identity || {});
+  const sysId     = foundry.utils.getProperty(actor, "system.identity") || {};
+  const bossArchString = (typeof sysId.archetype === "string" && sysId.archetype.trim())
+    ? { key: sysId.archetype.trim(), name: sysId.archetype.trim() }
+    : null;
+  const identity = {
+    archetype:            charOptId.archetype            || bossArchString || sysId.archetype || null,
+    crew:                 charOptId.crew                 || sysId.crew     || null,
+    occult:               charOptId.occult               || sysId.occult   || null,
+    ancestry:             charOptId.ancestry             || sysId.ancestry || null,
+    sephirothicAlignment: charOptId.sephirothicAlignment || sysId.sephirothicAlignment || null
+  };
+  const polKey   = String(actor.getFlag?.(AAE_SCOPE, "politicalPhilosophy") ?? "") || "";
+  const polLabel = polKey ? labelForPoliticalPhilosophy(polKey) : "";
+
+  // OP contribution breakdown (engine API exposed by bbttcc-raid)
+  let parts = [], total = {};
+  try {
+    const api = globalThis.BBTTCC_AffiliationOP || game?.bbttcc?.api?.factions?.affiliationOP;
+    if (api?.contributionBreakdown) {
+      const br = api.contributionBreakdown(actor);
+      parts = br?.parts || [];
+      total = br?.total || {};
+    }
+  } catch (_e) {}
+
+  // Index parts by kind for fast lookup
+  const partByKind = {};
+  for (const p of parts) partByKind[p.kind] = p;
+
+  const fmtOps = (ops) => {
+    const entries = Object.entries(ops || {}).filter(([, v]) => Number(v));
+    if (!entries.length) return "<em>no OP contribution</em>";
+    return entries.map(([k, v]) => `<span class="bbttcc-aff-pill">${(v > 0 ? "+" : "") + v} ${k}</span>`).join(" ");
+  };
+
+  const row = (icon, label, slotLabel, kind, kindKey) => {
+    const part = partByKind[kind];
+    const opsHtml = part ? fmtOps(part.ops) : "";
+    const tip = part
+      ? `${kind}: ${kindKey || part.key}\nOPs: ${Object.entries(part.ops).filter(([,v]) => v).map(([k,v]) => (v > 0 ? "+" : "") + v + " " + k).join(", ") || "—"}\nSource: ${part.source}`
+      : "";
+    const tipAttr = tip ? ` data-tooltip="${foundry.utils.escapeHTML(tip)}"` : "";
+    return `<div class="bbttcc-aff-row"${tipAttr}>
+      <div class="bbttcc-aff-row-label"><i class="${icon}"></i> ${label}</div>
+      <div class="bbttcc-aff-row-value">${slotLabel ? foundry.utils.escapeHTML(slotLabel) : "<em>—</em>"}</div>
+      <div class="bbttcc-aff-row-ops">${opsHtml}</div>
+    </div>`;
+  };
+
+  const totalEntries = Object.entries(total).filter(([, v]) => Number(v));
+  const totalHtml = totalEntries.length
+    ? totalEntries.map(([k, v]) => `<span class="bbttcc-aff-pill bbttcc-aff-pill-total">${(v > 0 ? "+" : "") + v} ${k}</span>`).join(" ")
+    : `<em>no faction OP contribution</em>`;
+
+  return `<section class="bbttcc-affiliations-card" data-bbttcc-affiliations="1">
+    <div class="bbttcc-aff-title">Affiliations <span class="bbttcc-aff-subtitle">contributes to faction OP roll</span></div>
+    <div class="bbttcc-aff-rows">
+      ${row("fas fa-user-tag",  "Archetype",          _ftAffLabel(identity.archetype),            "archetype",  identity.archetype?.key)}
+      ${row("fas fa-users",     "Crew Type",          _ftAffLabel(identity.crew),                 "crew",       identity.crew?.key)}
+      ${row("fas fa-eye",       "Occult Association", _ftAffLabel(identity.occult),               "occult",     identity.occult?.key)}
+      ${row("fas fa-dna",       "Ancestry",           _ftAffLabel(identity.ancestry),             "ancestry",   identity.ancestry?.key)}
+      ${row("fas fa-star",      "Sephirotic Alignment", _ftAffLabel(identity.sephirothicAlignment), "sephirah", identity.sephirothicAlignment?.key)}
+      ${row("fas fa-landmark",  "Political Philosophy", polLabel,                                 "political",  polKey)}
+    </div>
+    <div class="bbttcc-aff-total">
+      <div class="bbttcc-aff-total-label">Total OP contribution</div>
+      <div class="bbttcc-aff-total-pills">${totalHtml}</div>
+    </div>
+  </section>`;
+}
+
+/** Build the chooser button row HTML used by the boss-sheet mount.
+ *  Mirrors the NPC quickbar's six chooser buttons (incl. ancestry).
+ */
+function _ftBuildBossAffChooserRowHTML() {
+  return `<div class="bbttcc-quickbar-actions bbttcc-quickbar-options" data-bbttcc-boss-chooser="1">
+    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="archetype">Archetype</button>
+    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="crew">Crew Type</button>
+    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="occult">Occult</button>
+    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="political">Philosophy</button>
+    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="sephirothicAlignment">Sephirotic</button>
+    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="ancestry">Ancestry</button>
+  </div>`;
+}
+
+/** Mount the Affiliations card + chooser row on a boss sheet.
+ *  Boss sheet is a custom fourththing template; we inject inside the body
+ *  area near the top so the surface is visible without tab switching.
+ */
+function _ftMountBossAffiliationsSurface(app, root) {
+  try {
+    const actor = app?.actor ?? app?.object;
+    if (!actor || !root) return;
+    if (String(actor.type || "").toLowerCase() !== "boss") return;
+
+    // Drop any prior surface (re-render path)
+    root.querySelectorAll("[data-bbttcc-boss-aff='1']").forEach(el => el.remove());
+
+    // Find a mount target — boss sheet has .ft-identity at top of sheet body
+    const mount =
+      root.querySelector(".ft-boss-identity") ||
+      root.querySelector(".ft-identity") ||
+      root.querySelector(".sheet-body") ||
+      root.querySelector("form") ||
+      root;
+    if (!mount) return;
+
+    const wrap = document.createElement("section");
+    wrap.dataset.bbttccBossAff = "1";
+    wrap.className = "bbttcc-boss-aff-wrap";
+    wrap.innerHTML = `
+      ${_ftBuildBossAffChooserRowHTML()}
+      ${_ftBuildAffiliationsCardHTML(actor)}
+    `;
+    // Insert directly after the identity block (or prepend to body fallback)
+    if (mount.parentNode && mount.classList?.contains("ft-identity")) {
+      mount.parentNode.insertBefore(wrap, mount.nextSibling);
+    } else {
+      mount.prepend(wrap);
+    }
+
+    // Wire chooser buttons
+    wrap.querySelectorAll("[data-bbttcc-choose]").forEach((btn) => {
+      btn.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        const slot = String(ev.currentTarget.dataset.bbttccChoose || "");
+        await openBBTTCCIdentityChooser(actor, app, slot);
+      });
+    });
+  } catch (e) {
+    WARN("Boss affiliations surface mount failed", e);
+  }
+}
+
+/** Mount or refresh the Affiliations card just below the BBTTCC quickbar. */
+function _ftMountAffiliationsCard(app, root) {
+  try {
+    const actor = app?.actor ?? app?.object;
+    if (!actor || !root) return;
+    if (!["character","npc"].includes(String(actor.type || "").toLowerCase())) return;
+
+    const quick = root.querySelector("[data-bbttcc-quickbar='1']") || root.querySelector("[data-bbttcc-console-quickbar='1']");
+    if (!quick) return;
+
+    // Drop any prior card so we re-render with fresh data
+    const existing = root.querySelector("[data-bbttcc-affiliations='1']");
+    if (existing) existing.remove();
+
+    const html = _ftBuildAffiliationsCardHTML(actor);
+    const frag = document.createRange().createContextualFragment(html);
+    quick.parentNode?.insertBefore(frag, quick.nextSibling);
+  } catch (e) {
+    WARN("Affiliations card mount failed", e);
+  }
+}
+
+/* ---------------------------------------
+ * 2026-05-15 — ▶ Use button bridge for BBTTCC-wrapped (dnd5e) sheets
+ *
+ * The fourththing native sheets render a ▶ Use button via their hbs templates
+ * (character-sheet.hbs:1228, npc-sheet.hbs:567) gated on isActionableFeature.
+ * BBTTCC uses dnd5e-wrapped sheets instead, which have NO equivalent hook,
+ * so items routed via FEATURE_ROUTER never get a clickable invoke surface.
+ *
+ * This injector scans the rendered item list for items where
+ * isActionableFeature(item) === true and injects a ▶ button next to the
+ * item name. Click → dispatchFeatureAction → opens the per-cadence dialog
+ * (per-scene / per-soma-break / per-soma-break-tier / info) from
+ * fourththing's ft-class-automation.js.
+ *
+ * Idempotent — drops any prior injection before adding fresh ones.
+ * ------------------------------------ */
+function _ftMountActionableUseButtons(app, root) {
+  try {
+    const actor = app?.actor ?? app?.object;
+    if (!actor || !root) return;
+    if (!["character","npc"].includes(String(actor.type || "").toLowerCase())) return;
+
+    const cls = game.fourththing?._classAutomation;
+    const isActionable = cls?.isActionableFeature;
+    const dispatch     = cls?.dispatchFeatureAction;
+    if (typeof isActionable !== "function" || typeof dispatch !== "function") return;
+
+    // Drop any prior injections so re-renders don't double-stamp.
+    root.querySelectorAll("[data-bbttcc-ft-use='1']").forEach(el => el.remove());
+
+    const items = actor.items?.contents ?? Array.from(actor.items ?? []);
+    let added = 0;
+    for (const item of items) {
+      let actionable = false;
+      try { actionable = !!isActionable(item); } catch(_e){}
+      if (!actionable) continue;
+
+      // dnd5e v5 item rows: <li class="item" data-item-id="...">
+      const row = root.querySelector(`[data-item-id="${item.id}"]`);
+      if (!row) continue;
+
+      // Pick an injection target — prefer the item name cell so the button
+      // sits next to the label. Fall back to the item-controls cell.
+      const mount =
+        row.querySelector(".item-name") ||
+        row.querySelector(".item-row .name") ||
+        row.querySelector(".item-controls") ||
+        row;
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.dataset.bbttccFtUse = "1";
+      btn.className = "bbttcc-ft-use-btn";
+      btn.title = "Activate / invoke this feature (Roll For Initiation)";
+      btn.innerHTML = "▶";
+      btn.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        try { await dispatch(actor, item); }
+        catch (e) { WARN("dispatchFeatureAction failed", item?.name, e); }
+      });
+
+      // Mount as first child of the name cell so it's visible at a glance.
+      if (mount.classList.contains("item-controls")) mount.prepend(btn);
+      else mount.insertBefore(btn, mount.firstChild);
+      added++;
+    }
+
+    if (added) LOG(`Mounted ${added} ▶ Use button(s) for actionable features on ${actor.name}.`);
+  } catch (e) {
+    WARN("Actionable Use button injection failed", e);
   }
 }
 

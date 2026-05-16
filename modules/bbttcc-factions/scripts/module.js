@@ -2354,6 +2354,11 @@ class BBTTCCFactionSheet extends ActorSheet {
     const roster = [];
     const rosterActors = [];
     const totals = { violence:0, nonlethal:0, intrigue:0, economy:0, softpower:0, diplomacy:0, logistics:0, culture:0, faith:0 };
+    const affTotals = { ...totals };
+
+    // 2026-05-15 — Affiliation OP contribution engine (NPC affiliation sprint).
+    // Resolved lazily per-actor; falls through cleanly if module not loaded.
+    const affApi = globalThis.BBTTCC_AffiliationOP || game?.bbttcc?.api?.factions?.affiliationOP || null;
 
     for (const a of game.actors.contents) {
       if (!isCharacter(a)) continue;
@@ -2366,17 +2371,44 @@ class BBTTCCFactionSheet extends ActorSheet {
       }
       for (const k in totals) totals[k] += Number(contrib[k] || 0);
 
+      // Per-NPC affiliation breakdown (sephirah/political/ancestry static defaults
+      // + archetype/crew/occult per-item-flag overrides). Fed into a separate
+      // "Aff" column on the roster table for transparency.
+      let affBreakdown = { total: {}, parts: [] };
+      try {
+        if (affApi?.contributionBreakdown) affBreakdown = affApi.contributionBreakdown(a) || affBreakdown;
+      } catch (_e) {}
+
+      const affPerKey = _normalizeOps(affBreakdown.total || {});
+      const affRowSum = Object.values(affPerKey).reduce((s,v)=>s+(Number(v)||0),0);
+      for (const k in affTotals) affTotals[k] += Number(affPerKey[k] || 0);
+
+      // Tooltip text — line-per-affiliation source.
+      const affTip = (affBreakdown.parts || [])
+        .map(p => {
+          const opStr = Object.entries(p.ops || {}).filter(([,v])=>Number(v))
+            .map(([k,v]) => (v>0?"+":"") + v + " " + k).join(", ") || "—";
+          return `${p.kind}: ${p.key} → ${opStr}`;
+        }).join("\n");
+
       rosterActors.push(a);
 
       roster.push({
         id: a.id, name: a.name, img: a.img,
-        total: Object.values(contrib).reduce((s,v)=>s+(Number(v)||0),0),
+        total: Object.values(contrib).reduce((s,v)=>s+(Number(v)||0),0) + affRowSum,
+        affTotal: affRowSum,
+        affTooltip: affTip || "No affiliations contribute to OP.",
+        affPerKey,
         ...contrib
       });
     }
 
-    const sumTotal = Object.values(totals).reduce((s,v)=>s+(Number(v)||0), 0);
-    return { roster, rosterActors, totals, sumTotal };
+    // Combined per-key totals (existing contribution + affiliation layer)
+    const combinedTotals = {};
+    for (const k of Object.keys(totals)) combinedTotals[k] = totals[k] + affTotals[k];
+    const sumTotal = Object.values(combinedTotals).reduce((s,v)=>s+(Number(v)||0), 0);
+
+    return { roster, rosterActors, totals: combinedTotals, affTotals, sumTotal };
   }
 
   async getData(opts) {

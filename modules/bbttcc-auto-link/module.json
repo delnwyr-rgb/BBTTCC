@@ -15,7 +15,9 @@
   "esmodules": [
     "scripts/module.js",
     "scripts/sidepanel.js",
-    "scripts/character-wizard.js"
+    "scripts/character-wizard.js",
+    "scripts/npc-builder.js",
+    "scripts/monster-builder.js"
   ],
   "styles": [
     "styles/character-sheet.css"

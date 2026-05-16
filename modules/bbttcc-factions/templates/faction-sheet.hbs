@@ -838,6 +838,7 @@
                 <th>Logistics</th>
                 <th>Culture</th>
                 <th>Faith</th>
+                <th data-tooltip="Static affiliation defaults (sephirah/political/ancestry) + per-item-flag overrides (archetype/crew/occult). Hover a row's Aff cell for the breakdown.">Aff</th>
                 <th>Total</th>
                 <th>Open</th>
               </tr>
@@ -859,6 +860,7 @@
                 <td class="center">{{logistics}}</td>
                 <td class="center">{{culture}}</td>
                 <td class="center">{{faith}}</td>
+                <td class="center bbttcc-aff-cell" data-tooltip="{{affTooltip}}"><em>{{affTotal}}</em></td>
                 <td class="center"><strong>{{total}}</strong></td>
                 <td class="center"><a class="button" data-open-actor="{{id}}" data-tooltip="Open character"><i class="fas fa-user"></i></a></td>
               </tr>
@@ -874,6 +876,7 @@
                 <td class="center"><strong>{{fx.rosterTotals.logistics}}</strong></td>
                 <td class="center"><strong>{{fx.rosterTotals.culture}}</strong></td>
                 <td class="center"><strong>{{fx.rosterTotals.faith}}</strong></td>
+                <td class="center"><em>—</em></td>
                 <td class="center"><strong>{{fx.rosterGrandTotal}}</strong></td>
                 <td></td>
               </tr>
