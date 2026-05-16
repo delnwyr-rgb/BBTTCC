@@ -4447,7 +4447,11 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           });
           try {
             await dlg.render(true);
+            // V13 DialogV2 instances don't expose .wait() — fall back to a render-state
+            // poll so we actually await user input (matches the canonical Coalition
+            // Support Factions picker pattern at line ~2437).
             if (typeof dlg.wait === "function") await dlg.wait().catch(() => null);
+            else await new Promise(r => { const t = () => dlg.rendered ? setTimeout(t, 100) : r(); t(); });
           } catch (_) { /* dialog dismissed */ }
           if (!init) return;
 
