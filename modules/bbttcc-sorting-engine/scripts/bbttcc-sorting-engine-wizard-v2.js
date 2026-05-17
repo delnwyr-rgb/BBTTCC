@@ -443,7 +443,15 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     if (!BBTTCCSortingEngineV2.isReady()) {
       return _errorHtml("Sorting Engine v2 spec not loaded. Check console.");
     }
-    if (this._phase === "review") return this._buildReviewHtml();
+    if (this._phase === "review") {
+      // Resolve aptitude grants from the current build (path/doctrine/ancestry/
+      // heritage/archetype/crew/occult) so the picker can grey out anything
+      // already provided. Cached by build-fingerprint, so the common no-op
+      // case (e.g. re-render after typing the name) is free.
+      try { await this._recomputeAutoGrants(); }
+      catch (e) { WARN("auto-grant precompute failed", e); }
+      return this._buildReviewHtml();
+    }
     return this._buildDescentHtml();
   }
 
@@ -641,7 +649,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
               </div>
               <div class="bbttcc-twv2-chargen-aptitudes">
                 <div class="bbttcc-twv2-section-title">Yesod — Aptitude Picks</div>
-                <p class="bbttcc-twv2-section-note">Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Weave, Warding) come from your Path. Picks granted at rank&nbsp;1; if a class or heritage already grants the skill, that pick is dropped at finalize.</p>
+                <p class="bbttcc-twv2-section-note">Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Weave, Warding) come from your Path. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.</p>
                 ${chargenAptitudesHtml}
               </div>
             </div>
@@ -764,7 +772,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   // aptitudes are offered; conflicts with class/heritage grants are resolved
   // at finalize (skipped picks are reported in chat). Class-known auto-grants
   // are surfaced as disabled options up-front so the player doesn't waste a
-  // pick — see _autoGrantedAptitudeKeys().
+  // pick — see _autoGrantedAptitudes() + _recomputeAutoGrants() below.
   //
   // PLAN mirrors master-content/tools/stamp-class-l1-aptitudes.macro.js. Each
   // class gets its armor skill + one or more combat skills. TCCs keep their
@@ -801,8 +809,81 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     return Array.from(new Set(grants));
   }
 
-  _autoGrantedAptitudeKeys() {
-    return new Set(this._classL1Grants(this._effective("class")));
+  // Map<aptitudeKey, sourceLabel> — populated by _recomputeAutoGrants() before
+  // each review render. Empty during descent or before first compute. Sources
+  // include: the class L1 plan (path), plus any item-description grants picked
+  // up by extractSkillGrantsFromFeature on the resolved pack docs for path /
+  // doctrine / ancestry / heritage / archetype / crew / occult.
+  _autoGrantedAptitudes() {
+    return this._grantedAptitudes instanceof Map ? this._grantedAptitudes : new Map();
+  }
+
+  // Recompute the auto-grant map by scanning pack-doc descriptions for each
+  // currently-selected build option. Cheap-cached against a fingerprint of the
+  // effective build, so identical inputs return instantly.
+  async _recomputeAutoGrants() {
+    if (!(this._grantedAptitudes instanceof Map)) this._grantedAptitudes = new Map();
+    const eff = {
+      path:      this._effective("path"),
+      doctrine:  this._effective("doctrine"),
+      ancestry:  this._effective("ancestry"),
+      heritage:  this._heritage || null,
+      archetype: this._effective("archetype"),
+      crew:      this._effective("crew"),
+      occult:    this._effective("occult")
+    };
+    const fp = JSON.stringify(eff);
+    if (this._autoGrantsFingerprint === fp) return this._grantedAptitudes;
+
+    const map = new Map();
+
+    // 1) Class L1 plan — explicit, since these grants come from stamped AEs
+    // that aren't part of the readable description text.
+    const cls = eff.path;
+    if (cls) {
+      for (const k of this._classL1Grants(cls)) {
+        if (!map.has(k)) map.set(k, `Class (${cls})`);
+      }
+    }
+
+    // 2) Description-text scan on each resolved pack doc.
+    const extract = game.fourththing?._progression?.extractSkillGrantsFromFeature;
+    if (typeof extract === "function") {
+      const SOURCE_LABEL = {
+        path:      "Path",
+        doctrine:  "Doctrine",
+        ancestry:  "Ancestry",
+        heritage:  "Heritage",
+        archetype: "Archetype",
+        crew:      "Awesome Crew",
+        occult:    "Occult Association"
+      };
+      const cats = ["path", "doctrine", "ancestry", "heritage", "archetype", "crew", "occult"];
+      for (const cat of cats) {
+        const name = eff[cat];
+        if (!name) continue;
+        try {
+          const idx = await _loadPackIndex(cat);
+          if (!idx) continue;
+          const norm = _normalizeOptionName(name);
+          const entry = idx.get(norm) || _fuzzyFindEntry(idx, norm);
+          if (!entry) continue;
+          const pack = game.packs?.get(entry.packKey);
+          const doc  = pack ? await pack.getDocument(entry.id) : null;
+          if (!doc) continue;
+          const desc = doc.system?.description?.value ?? "";
+          for (const k of extract(desc)) {
+            if (!map.has(k)) map.set(k, `${SOURCE_LABEL[cat]} (${name})`);
+          }
+        } catch (e) {
+          WARN(`auto-grant scan failed for ${cat}=${name}`, e);
+        }
+      }
+    }
+
+    this._autoGrantsFingerprint = fp;
+    this._grantedAptitudes = map;
+    return map;
   }
 
   _buildChargenAptitudesHtml() {
@@ -829,7 +910,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       ["insight",       "Insight (Soul)"]
     ];
     const slots = this._chargenAptitudes;
-    const autoGranted = this._autoGrantedAptitudeKeys();
+    const autoGranted = this._autoGrantedAptitudes();
     return `
       <div class="bbttcc-twv2-chargen-aptitude-grid">
         ${[0, 1, 2].map(i => {
@@ -839,14 +920,15 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
             APTITUDES
               .filter(([k]) => !usedElsewhere.includes(k))
               .map(([k, label]) => {
-                const isAuto = autoGranted.has(k);
+                const source = autoGranted.get(k);
+                const isAuto = !!source;
                 const isSelected = cur === k;
-                // Class auto-grants: render as disabled (greyed) so the player
-                // can't pick them. Selected-but-now-auto picks fall through
-                // here too — we keep them visible so the chat-finalize "pick
-                // dropped" message still has something to talk about, but mark
-                // them as redundant inline.
-                const labelOut = isAuto ? `${label} — granted by class` : label;
+                // Auto-grants from class/heritage/crew/occult/etc: render as
+                // disabled (greyed) so the player can't waste a pick. Selected-
+                // but-now-auto picks fall through here too — we keep them
+                // visible so the chat-finalize "pick dropped" message still
+                // has something to talk about, but mark them as redundant.
+                const labelOut = isAuto ? `${label} — granted by ${source}` : label;
                 const disabled = isAuto && !isSelected ? "disabled" : "";
                 return `<option value="${k}" ${isSelected ? "selected" : ""} ${disabled}>${labelOut}</option>`;
               })
@@ -1287,8 +1369,10 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           const updates = {};
 
           // 1) Class L1 (armor + combat — triple combat for non-TCCs)
+          // NOTE: build slot is "path", not "class" — _effective("class")
+          // silently returned null and skipped the whole loop pre-2026-05-17.
           const classApplied = [];
-          for (const k of this._classL1Grants(this._effective("class"))) {
+          for (const k of this._classL1Grants(this._effective("path"))) {
             const cur = Number(skills[k]?.value ?? 0);
             if (cur > 0) continue;
             updates[`system.skills.${k}.value`] = 1;
@@ -1320,7 +1404,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
               ? `<p style="margin:0.2rem 0;color:#6fcf97;font-size:0.82rem">Applied at rank 1: <b>${applied.join(", ")}</b></p>`
               : "";
             const conflictHtml = conflicted.length
-              ? `<p style="margin:0.2rem 0;color:#d4a35f;font-size:0.78rem">Already granted by class/heritage (pick dropped — re-spend a free aptitude point if you wish): ${conflicted.map(c => `${c.skill} (rank ${c.rank})`).join(", ")}</p>`
+              ? `<p style="margin:0.2rem 0;color:#d4a35f;font-size:0.78rem">Already granted by class/heritage/crew/occult (pick dropped — re-spend a free aptitude point if you wish): ${conflicted.map(c => `${c.skill} (rank ${c.rank})`).join(", ")}</p>`
               : "";
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor: created }),

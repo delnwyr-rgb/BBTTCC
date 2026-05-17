@@ -44,6 +44,7 @@ import {
   levelUp,
   openSpendSkillPoints,
   applySkillGrantsFromFeatures,
+  extractSkillGrantsFromFeature,
   promoteStampedAptitudeAEs,
   applyPathFeatures,
   syncAuraEffects,
@@ -5787,6 +5788,7 @@ Hooks.once("init", function () {
       deriveItemUnlockLevel,
       applyPathFeatures,
       applySkillGrantsFromFeatures,
+      extractSkillGrantsFromFeature,
       promoteStampedAptitudeAEs,
       levelUp
     },
