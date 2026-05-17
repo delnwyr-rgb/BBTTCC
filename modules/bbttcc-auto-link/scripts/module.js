@@ -1,6 +1,7 @@
 // modules/bbttcc-auto-link/scripts/module.js
-// v0.8.2 — Actors Directory header button restore (Create Character BBTTCC)
+// v0.8.3 — Actors Directory header button restore + 5 RFI builders.
 // Goal: keep the Create Character button resilient even if other files change.
+// 2026-05-17 — Boss + Rig thin shells replaced by full MCE-pattern builders.
 //
 // Key change vs prior:
 // - NO top-level imports (avoid module load abort if another file has a syntax error).
@@ -172,94 +173,60 @@ function injectButtons(html) {
   // Also make sure existing Monster button isn't tagged as a Create-Actor
   // target by the hider — add to the skip list.
 
-  // Create Boss (thin shell — name prompt → Actor.create with type:"boss").
-  // The fourththing system already has its own boss sheet at
-  // systems/fourththing/templates/actors/boss-sheet.hbs. Full Boss Builder
-  // dialog (templates, phase ladder authoring, manifestation seeding) ships
-  // in a follow-up sprint. This shell unblocks the kill-default-create flow.
+  // Create Boss (B13 Builder UI — MCE-pattern authoring dialog).
+  // See bbttcc-auto-link/scripts/boss-builder.js for the dialog + actor shape.
   if (!header.querySelector("[data-bbttcc-create-boss]")) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.dataset.bbttccCreateBoss = "1";
     btn.innerHTML = `<i class="fas fa-crown"></i> Create Boss`;
-    btn.title = "Create an RFI Boss actor (thin shell — full Boss Builder coming in a follow-up sprint)";
+    btn.title = "Create an RFI Boss actor (Crucible-style authoring dialog with starter chips and phase ladder).";
 
-    btn.addEventListener("click", () => _createSimpleActor("boss", "Boss"));
+    btn.addEventListener("click", async () => {
+      try {
+        const api = globalThis.BBTTCC_BossBuilder || game.bbttcc?.api?.bossBuilder;
+        if (typeof api?.open !== "function") {
+          WARN("Boss Builder not loaded.");
+          ui.notifications?.error?.("Boss Builder not available — check that bbttcc-auto-link/scripts/boss-builder.js loaded.");
+          return;
+        }
+        await api.open();
+      } catch (e) {
+        WARN("Could not open Boss Builder", e);
+        ui.notifications?.error?.("Boss Builder failed to open.");
+      }
+    });
 
     header.appendChild(btn);
     LOG("Injected Actors Directory button: Create Boss");
   }
 
-  // Create Rig (thin shell — name prompt → Actor.create with type:"rig").
-  // Full Rig Builder ships in the same follow-up sprint as Boss Builder.
+  // Create Rig (B13 Builder UI — MCE-pattern authoring dialog).
+  // See bbttcc-auto-link/scripts/rig-builder.js for the dialog + actor shape.
   if (!header.querySelector("[data-bbttcc-create-rig]")) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.dataset.bbttccCreateRig = "1";
     btn.innerHTML = `<i class="fas fa-cogs"></i> Create Rig`;
-    btn.title = "Create an RFI Rig actor (thin shell — full Rig Builder coming in a follow-up sprint)";
+    btn.title = "Create an RFI Rig actor (Frame-style authoring dialog with chassis chips and capacity grid).";
 
-    btn.addEventListener("click", () => _createSimpleActor("rig", "Rig"));
+    btn.addEventListener("click", async () => {
+      try {
+        const api = globalThis.BBTTCC_RigBuilder || game.bbttcc?.api?.rigBuilder;
+        if (typeof api?.open !== "function") {
+          WARN("Rig Builder not loaded.");
+          ui.notifications?.error?.("Rig Builder not available — check that bbttcc-auto-link/scripts/rig-builder.js loaded.");
+          return;
+        }
+        await api.open();
+      } catch (e) {
+        WARN("Could not open Rig Builder", e);
+        ui.notifications?.error?.("Rig Builder failed to open.");
+      }
+    });
 
     header.appendChild(btn);
     LOG("Injected Actors Directory button: Create Rig");
-  }
-}
-
-/* Thin actor-creation shell for Boss / Rig. Prompts for a name then mints
- * the actor with the system-native type so the corresponding fourththing
- * sheet (boss-sheet.hbs / rig-sheet.hbs) renders. Replaced by dedicated
- * builders in the Boss + Rig sprint follow-up.
- */
-async function _createSimpleActor(type, displayLabel) {
-  const result = await Dialog.wait({
-    title: `Create ${displayLabel}`,
-    content: `
-      <div style="display:flex; flex-direction:column; gap:0.5rem;">
-        <p style="margin:0; opacity:0.8; font-size:0.85rem;">
-          Quick-create an RFI ${displayLabel}. The full ${displayLabel} Builder
-          (with phase ladder, templates, manifestation seeding, etc.) ships
-          in a follow-up sprint.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:0.2rem;">
-          <label style="font-weight:600;">Name <span style="color:#f87171">*</span></label>
-          <input type="text" data-bbttcc-field="name" required autofocus
-                 placeholder="e.g. ${displayLabel === "Boss" ? "The Hollow Voice" : "Hex-Walker MK II"}"
-                 style="padding:0.35rem 0.5rem; border-radius:3px;"/>
-        </div>
-      </div>
-    `,
-    buttons: {
-      create: {
-        label: `Create ${displayLabel}`,
-        callback: (html) => {
-          const root = (html instanceof HTMLElement ? html : html[0]);
-          return { ok: true, name: root?.querySelector('[data-bbttcc-field="name"]')?.value ?? "" };
-        }
-      },
-      cancel: { label: "Cancel", callback: () => ({ ok: false }) }
-    },
-    default: "create"
-  });
-  if (!result?.ok) return null;
-  const name = String(result.name || "").trim();
-  if (!name) {
-    ui.notifications?.warn?.(`${displayLabel} needs a name.`);
-    return null;
-  }
-  try {
-    const actor = await Actor.create({
-      name,
-      type,
-      flags: { [MOD]: { entityKind: type, createdViaSimpleBuilder: true, createdAt: Date.now() } }
-    });
-    actor?.sheet?.render(true);
-    ui.notifications?.info?.(`Created RFI ${displayLabel}: ${actor?.name}`);
-    return actor;
-  } catch (err) {
-    console.error(`[${MOD}] Create ${displayLabel} failed`, err);
-    ui.notifications?.error?.(`Failed to create ${displayLabel}: ${err?.message || err}`);
-    return null;
   }
 }
 
