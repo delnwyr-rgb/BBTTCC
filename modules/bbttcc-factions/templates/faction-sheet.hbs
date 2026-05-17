@@ -656,15 +656,64 @@
         <div data-bbttcc-assets-anchor="1"></div>
 
         <fieldset class="bbttcc-card bbttcc-card-rigs bbttcc-rigs">
-          <legend>Rigs (Mobile Infrastructure)</legend>
+          <legend>Rigs (Affiliation Roster)</legend>
 
-          <div class="flexrow" style="align-items:center; justify-content:flex-end; gap:.5rem; margin-top:.25rem; margin-bottom:.5rem;">
-            <button type="button" class="button" data-rig-act="add" data-tooltip="Add a new Rig">
-              <i class="fas fa-plus"></i> Add Rig
-            </button>
-          </div>
+          {{!-- 2026-05-17 — B13.C cleanup. The "Add Rig" button (and the
+                retired RigConfig shim it opened) have been removed. Rig
+                authoring now lives in the Actor Directory "Create Rig"
+                button (MCE-pattern Rig Builder in bbttcc-auto-link). The
+                Affiliation Roster below lists first-class Rig actors that
+                have this faction set as their owner. --}}
+          {{#if fx.ownedRigs.length}}
+            <table class="bbttcc-table" style="margin-bottom:.6rem;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">Rig (Actor)</th>
+                  <th style="width:8rem;">Bracket</th>
+                  <th style="width:5rem;">Tier</th>
+                  <th style="width:8rem;">Mobility</th>
+                  <th style="width:8rem;">State</th>
+                  <th style="width:10rem;">Integrity</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each fx.ownedRigs}}
+                  <tr data-rig-actor-id="{{actorId}}" data-bbttcc-rig-row="1" style="cursor:pointer;" data-tooltip="Open rig sheet">
+                    <td style="text-align:left;">
+                      <strong>{{name}}</strong>
+                      {{#if archetype}}<br/><small style="opacity:.7;">{{archetype}}</small>{{/if}}
+                    </td>
+                    <td class="center"><span class="bbttcc-rig-pill">{{bracketLabel}}</span></td>
+                    <td class="center">{{tierRoman}}</td>
+                    <td class="center"><span class="bbttcc-rig-pill">{{mobility}}</span></td>
+                    <td class="center">
+                      {{#if (bbttcc_eq state "deployed")}}
+                        <span class="bbttcc-rig-pill good">deployed</span>
+                      {{else}}
+                        {{#if (bbttcc_eq state "destroyed")}}
+                          <span class="bbttcc-rig-pill bad">destroyed</span>
+                        {{else}}
+                          <span class="bbttcc-rig-pill">parked</span>
+                        {{/if}}
+                      {{/if}}
+                    </td>
+                    <td class="center">{{integrityValue}} / {{integrityMax}}</td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            <p class="hint" style="margin:.35rem 0 0;">
+              Rigs are first-class Actors. To create a new one, use <strong>Create Rig</strong> in the Actors Directory header. Set this faction as the Faction Owner on the rig's Identity tab to add it here.
+            </p>
+          {{else}}
+            <p style="opacity:.75; margin:.25rem 0 .6rem;">
+              No rigs affiliated with this faction yet. Use <strong>Create Rig</strong> in the Actors Directory header, then set this faction as the Faction Owner on the rig's Identity tab.
+            </p>
+          {{/if}}
 
           {{#if fx.rigs.length}}
+            <details style="margin-top:.6rem;">
+              <summary style="cursor:pointer; opacity:.7; font-size:.85rem;">Legacy rig data (audit only — retired 2026-05-07)</summary>
             <table class="bbttcc-table">
               <thead>
                 <tr>
@@ -728,10 +777,9 @@
               </tbody>
             </table>
             <p class="hint" style="margin:.5rem 0 0;">
-              Rigs are faction-attached facilities: damage states, repair loops, raid targeting, and passive travel-ready bonuses.
+              Legacy rig data preserved for audit. Mobile infrastructure is now first-class Rig actors above.
             </p>
-          {{else}}
-            <em style="opacity:.7;">No rigs yet. Add one to start building mobile infrastructure.</em>
+            </details>
           {{/if}}
         </fieldset>
 

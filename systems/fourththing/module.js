@@ -11869,7 +11869,8 @@ Hooks.once("init", function () {
         ftRigRecall:           FourthThingRigSheet._onFtRigRecall,
         ftRigCrewDisembark:    FourthThingRigSheet._onFtRigCrewDisembark,
         ftRigCrewOpenSheet:    FourthThingRigSheet._onFtRigCrewOpenSheet,
-        ftRigIntegrityAdjust:  FourthThingRigSheet._onFtRigIntegrityAdjust
+        ftRigIntegrityAdjust:  FourthThingRigSheet._onFtRigIntegrityAdjust,
+        ftRigDuplicate:        FourthThingRigSheet._onFtRigDuplicate
       },
       dragDrop: [{ dragSelector: "[data-item-id]", dropSelector: null }],
       form:     { submitOnChange: true, closeOnSubmit: false }
@@ -12429,6 +12430,25 @@ Hooks.once("init", function () {
       return this.actor.update({ "system.integrity.value": next });
     }
 
+    // B13.C — 2026-05-17. Opens the Rig Builder pre-filled with this
+    // rig's current state so the GM can tweak before creating a new
+    // actor. Doesn't modify the source rig.
+    static async _onFtRigDuplicate(_event, _target) {
+      try {
+        const api = globalThis.BBTTCC_RigBuilder
+                 ?? game.bbttcc?.api?.rigBuilder;
+        if (typeof api?.seedFromActor !== "function" || typeof api?.open !== "function") {
+          return ui.notifications?.warn?.("Rig Builder not available — cannot duplicate.");
+        }
+        const seed = api.seedFromActor(this.actor);
+        if (!seed) return ui.notifications?.warn?.("Could not build a duplicate seed for this rig.");
+        await api.open({ seed });
+      } catch (err) {
+        console.error("[fourththing] _onFtRigDuplicate failed", err);
+        ui.notifications?.error?.("Could not open the Rig Builder for duplication.");
+      }
+    }
+
     get title() { return this.actor?.name ?? "Rig"; }
   }
 
@@ -12475,7 +12495,9 @@ Hooks.once("init", function () {
         ftBossManifestCreate:  FourthThingBossSheet._onFtBossManifestCreate,
         ftBossManifestCast:    FourthThingBossSheet._onFtBossManifestCast,
         ftBossManifestRemove:  FourthThingBossSheet._onFtBossManifestRemove,
-        ftBossBehaviorPhaseSet: FourthThingBossSheet._onFtBossBehaviorPhaseSet
+        ftBossBehaviorPhaseSet: FourthThingBossSheet._onFtBossBehaviorPhaseSet,
+        // B13.C — 2026-05-17
+        ftBossDuplicate:       FourthThingBossSheet._onFtBossDuplicate
       },
       dragDrop: [{ dragSelector: "[data-item-id]", dropSelector: null }],
       form:     { submitOnChange: true, closeOnSubmit: false }
@@ -13636,6 +13658,25 @@ Hooks.once("init", function () {
       if (!Array.isArray(parsed) || !parsed[idx]) return;
       parsed[idx].phase = value;
       return this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
+    }
+
+    // B13.C — 2026-05-17. Opens the Boss Builder pre-filled with this
+    // boss's current state so the GM can tweak before creating a new
+    // actor. Doesn't modify the source boss.
+    static async _onFtBossDuplicate(_event, _target) {
+      try {
+        const api = globalThis.BBTTCC_BossBuilder
+                 ?? game.bbttcc?.api?.bossBuilder;
+        if (typeof api?.seedFromActor !== "function" || typeof api?.open !== "function") {
+          return ui.notifications?.warn?.("Boss Builder not available — cannot duplicate.");
+        }
+        const seed = api.seedFromActor(this.actor);
+        if (!seed) return ui.notifications?.warn?.("Could not build a duplicate seed for this boss.");
+        await api.open({ seed });
+      } catch (err) {
+        console.error("[fourththing] _onFtBossDuplicate failed", err);
+        ui.notifications?.error?.("Could not open the Boss Builder for duplication.");
+      }
     }
 
     get title() { return this.actor?.name ?? "Boss"; }

@@ -98,7 +98,41 @@ function _ladderPlaceholder() {
   ].join("\n");
 }
 
-export async function openBossBuilder() {
+/* Extract a field-level draft from a source Boss actor for duplicate flows.
+ * Returns null if the actor isn't a boss. The returned object matches the
+ * data-bbttcc-field keys the builder dialog uses, plus an `opStats` map and
+ * an explicit `name` that the caller can append " (Copy)" to.
+ */
+export function bossSeedFromActor(actor) {
+  if (!actor || actor.type !== "boss") return null;
+  const sys = actor.system?.system ?? actor.system ?? {};
+  const ident = sys.identity ?? {};
+  const integ = sys.integrity ?? {};
+  const defs  = sys.defenses ?? {};
+  const profile = sys.raidProfile ?? {};
+  const ladder = Array.isArray(sys.phases?.ladder) ? sys.phases.ladder : [];
+  const tagsArr = Array.isArray(sys.tags) ? sys.tags : [];
+  return {
+    name: `${actor.name} (Copy)`,
+    archetype: String(ident.archetype ?? ""),
+    factionId: String(ident.factionId ?? ""),
+    bracket: String(integ.bracket ?? "heavy"),
+    tier: Number(integ.tier ?? 1),
+    integrity: Number(integ.max ?? 60),
+    doctrine: String(sys.doctrine?.slot ?? ""),
+    mode: String(profile.mode ?? "hybrid"),
+    moraleHits: Number(profile.moraleHits ?? 4),
+    hitTrack: String(profile.hitTrack ?? ""),
+    resistances: (defs.resistances ?? []).join(", "),
+    immunities: (defs.immunities ?? []).join(", "),
+    vulnerabilities: (defs.vulnerabilities ?? []).join(", "),
+    tags: tagsArr.join(", "),
+    phaseLadder: ladder.map(p => p?.notes ? `${p.label} — ${p.notes}` : (p?.label ?? "")).filter(Boolean).join("\n"),
+    opStats: { ...(profile.opStats ?? {}) }
+  };
+}
+
+export async function openBossBuilder({ seed = null } = {}) {
   const factionOpts = _factionOptions();
   const starterChips = _starterChipsHTML();
   const tpls = _bossTemplates();
@@ -235,14 +269,18 @@ export async function openBossBuilder() {
   </p>
 </div>`;
 
+  const isDuplicate = !!seed;
+  const dialogTitle = isDuplicate ? "Duplicate RFI Boss" : "Create RFI Boss";
+  const buttonLabel = isDuplicate ? "Duplicate Boss" : "Create Boss";
+
   return new Promise((resolve) => {
     const dlg = new Dialog({
-      title: "Create RFI Boss",
+      title: dialogTitle,
       content,
       buttons: {
         create: {
           icon: "<i class='fas fa-crown'></i>",
-          label: "Create Boss",
+          label: buttonLabel,
           callback: async (html) => {
             const root = (html instanceof HTMLElement ? html : html[0]);
             const actor = await _commit(root, tpls);
@@ -255,7 +293,10 @@ export async function openBossBuilder() {
         }
       },
       default: "create",
-      render: (html) => _wireStarterChips(html, tpls)
+      render: (html) => {
+        _wireStarterChips(html, tpls);
+        if (seed) _applySeed(html, seed);
+      }
     }, {
       classes: ["fourththing", "ft-manifestation-wizard-window", "bbttcc-boss-builder-window"],
       width: 760,
@@ -264,6 +305,30 @@ export async function openBossBuilder() {
     });
     dlg.render(true);
   });
+}
+
+function _applySeed(html, seed) {
+  const root = (html instanceof HTMLElement ? html : html?.[0]);
+  if (!root || !seed) return;
+  const set = (name, val) => {
+    if (val == null) return;
+    const el = root.querySelector(`[data-bbttcc-field="${name}"]`);
+    if (el) el.value = val;
+  };
+  for (const k of [
+    "name", "archetype", "factionId", "bracket", "tier", "integrity",
+    "doctrine", "mode", "moraleHits", "hitTrack",
+    "resistances", "immunities", "vulnerabilities", "tags", "phaseLadder",
+    "concept", "signature", "gmNotes", "disposition"
+  ]) {
+    if (seed[k] !== undefined) set(k, seed[k]);
+  }
+  if (seed.opStats && typeof seed.opStats === "object") {
+    for (const k of OP_KEYS) {
+      const inp = root.querySelector(`[data-bbttcc-op="${k}"]`);
+      if (inp && seed.opStats[k] != null) inp.value = Number(seed.opStats[k]) || 0;
+    }
+  }
 }
 
 function _wireStarterChips(html, tpls) {
@@ -456,10 +521,11 @@ async function _commit(root, tpls) {
 function _install() {
   globalThis.BBTTCC_BossBuilder = globalThis.BBTTCC_BossBuilder || {};
   globalThis.BBTTCC_BossBuilder.open = openBossBuilder;
+  globalThis.BBTTCC_BossBuilder.seedFromActor = bossSeedFromActor;
   try {
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.api = game.bbttcc.api || {};
-    game.bbttcc.api.bossBuilder = { open: openBossBuilder };
+    game.bbttcc.api.bossBuilder = { open: openBossBuilder, seedFromActor: bossSeedFromActor };
   } catch (_e) {}
 }
 _install();

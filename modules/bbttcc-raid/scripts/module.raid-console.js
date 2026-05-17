@@ -6085,31 +6085,23 @@ function attachRaidButtonToToolbar() {
     btn.innerHTML = `<i class="fas fa-crosshairs"></i><span>Raid</span>`;
     targetRow.appendChild(btn);
 
-    const btnBoss = document.createElement("button");
-    btnBoss.className = "bbttcc-btn";
-    btnBoss.type = "button";
-    btnBoss.setAttribute("data-act","bosses");
-    btnBoss.innerHTML = `<i class="fas fa-dragon"></i><span>Bosses</span>`;
-    targetRow.appendChild(btnBoss);
+    // 2026-05-17 — Bosses toolbar button removed (B13.C cleanup). Boss
+    // authoring now lives in the Actor Directory "Create Boss" button
+    // (MCE-pattern Boss Builder in bbttcc-auto-link/scripts/boss-builder.js).
+    // Existing bosses are edited via their actor sheet.
 
     if (!el.__bbttccRaidClickBound) {
       el.addEventListener("click", async (ev) => {
         const a = ev.target.closest?.('[data-act]');
         if (!a) return;
         const act = a.getAttribute("data-act");
-        if (act !== "raid" && act !== "bosses") return;
+        if (act !== "raid") return;
 
         ev.preventDefault();
         try {
-          if (act === "raid") {
-            const open = game?.bbttcc?.api?.raid?.openConsole || game.modules.get(RAID_ID)?.api?.openRaidConsole || globalThis.BBTTCC_OpenRaidConsole;
-            if (typeof open !== "function") return ui.notifications?.warn?.("BBTTCC Raid Console is not available.");
-            await open();
-          } else {
-            const openB = game?.bbttcc?.api?.raid?.openBossBuilder || game.modules.get(RAID_ID)?.api?.openBossBuilder;
-            if (typeof openB !== "function") return ui.notifications?.warn?.("Boss Builder is not available.");
-            await openB();
-          }
+          const open = game?.bbttcc?.api?.raid?.openConsole || game.modules.get(RAID_ID)?.api?.openRaidConsole || globalThis.BBTTCC_OpenRaidConsole;
+          if (typeof open !== "function") return ui.notifications?.warn?.("BBTTCC Raid Console is not available.");
+          await open();
         } catch (e) {
           console.error(TAG, "Toolbar button failed", e);
           ui.notifications?.error?.("Could not open BBTTCC tool — see console.");

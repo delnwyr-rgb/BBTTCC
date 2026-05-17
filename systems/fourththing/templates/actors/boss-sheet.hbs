@@ -7,8 +7,13 @@
         <img src="{{actor.img}}" data-tooltip="{{actor.name}}"/>
         <div class="ft-portrait-overlay">📷</div>
       </div>
-      <div class="ft-name">
-        <input name="name" type="text" value="{{actor.name}}" placeholder="Boss Name"/>
+      <div class="ft-name flexrow" style="align-items:center; gap:0.4rem;">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Boss Name" style="flex:1 1 auto;"/>
+        <button type="button" class="ft-mini-btn ft-boss-duplicate" data-action="ftBossDuplicate"
+                data-tooltip="Open the Boss Builder pre-filled with this boss's current state."
+                style="white-space:nowrap;">
+          <i class="fas fa-copy"></i> Duplicate
+        </button>
       </div>
 
       <div class="ft-boss-id-pills flexrow">

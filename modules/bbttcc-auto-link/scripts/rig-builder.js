@@ -129,7 +129,45 @@ function _starterChipsHTML() {
     </button>`).join(" ");
 }
 
-export async function openRigBuilder() {
+/* Extract a field-level draft from a source Rig actor for duplicate flows.
+ * Returns null if the actor isn't a rig. The returned object matches the
+ * data-bbttcc-field keys the builder dialog uses, plus a `capacity` map of
+ * per-role {min, max} pairs.
+ */
+export function rigSeedFromActor(actor) {
+  if (!actor || actor.type !== "rig") return null;
+  const sys = actor.system?.system ?? actor.system ?? {};
+  const ident = sys.identity ?? {};
+  const integ = sys.integrity ?? {};
+  const defs  = sys.defenses ?? {};
+  const travel = sys.travel ?? {};
+  const cap = sys.crew?.capacity ?? {};
+  const tagsArr = Array.isArray(sys.tags) ? sys.tags : [];
+  return {
+    name: `${actor.name} (Copy)`,
+    archetype: String(ident.archetype ?? ""),
+    factionOwnerId: String(ident.factionOwnerId ?? ""),
+    bracket: String(integ.bracket ?? "medium"),
+    tier: Number(integ.tier ?? 1),
+    integrity: Number(integ.max ?? 30),
+    mobility: String(ident.mobility ?? "mobile"),
+    speed: Number(travel.speed ?? 3),
+    range: Number(travel.range ?? 10),
+    hazardResist: Number(travel.hazardResist ?? 0),
+    resistances: (defs.resistances ?? []).join(", "),
+    immunities: (defs.immunities ?? []).join(", "),
+    vulnerabilities: (defs.vulnerabilities ?? []).join(", "),
+    tags: tagsArr.join(", "),
+    capacity: {
+      pilot:    { min: Number(cap.pilot?.min ?? 0),    max: Number(cap.pilot?.max ?? 0) },
+      gunner:   { min: Number(cap.gunner?.min ?? 0),   max: Number(cap.gunner?.max ?? 0) },
+      engineer: { min: Number(cap.engineer?.min ?? 0), max: Number(cap.engineer?.max ?? 0) },
+      crew:     { min: Number(cap.crew?.min ?? 0),     max: Number(cap.crew?.max ?? 0) }
+    }
+  };
+}
+
+export async function openRigBuilder({ seed = null } = {}) {
   const factionOpts = _factionOptions();
   const starterChips = _starterChipsHTML();
 
@@ -263,14 +301,18 @@ export async function openRigBuilder() {
   </p>
 </div>`;
 
+  const isDuplicate = !!seed;
+  const dialogTitle = isDuplicate ? "Duplicate RFI Rig" : "Create RFI Rig";
+  const buttonLabel = isDuplicate ? "Duplicate Rig" : "Create Rig";
+
   return new Promise((resolve) => {
     const dlg = new Dialog({
-      title: "Create RFI Rig",
+      title: dialogTitle,
       content,
       buttons: {
         create: {
           icon: "<i class='fas fa-cogs'></i>",
-          label: "Create Rig",
+          label: buttonLabel,
           callback: async (html) => {
             const root = (html instanceof HTMLElement ? html : html[0]);
             const actor = await _commit(root);
@@ -283,7 +325,10 @@ export async function openRigBuilder() {
         }
       },
       default: "create",
-      render: (html) => _wireStarterChips(html)
+      render: (html) => {
+        _wireStarterChips(html);
+        if (seed) _applySeed(html, seed);
+      }
     }, {
       classes: ["fourththing", "ft-manifestation-wizard-window", "bbttcc-rig-builder-window"],
       width: 760,
@@ -292,6 +337,34 @@ export async function openRigBuilder() {
     });
     dlg.render(true);
   });
+}
+
+function _applySeed(html, seed) {
+  const root = (html instanceof HTMLElement ? html : html?.[0]);
+  if (!root || !seed) return;
+  const set = (name, val) => {
+    if (val == null) return;
+    const el = root.querySelector(`[data-bbttcc-field="${name}"]`);
+    if (el) el.value = val;
+  };
+  for (const k of [
+    "name", "archetype", "factionOwnerId", "bracket", "tier", "integrity",
+    "mobility", "speed", "range", "hazardResist",
+    "resistances", "immunities", "vulnerabilities", "tags",
+    "concept", "signature", "gmNotes", "disposition"
+  ]) {
+    if (seed[k] !== undefined) set(k, seed[k]);
+  }
+  if (seed.capacity && typeof seed.capacity === "object") {
+    for (const role of ["pilot", "gunner", "engineer", "crew"]) {
+      const c = seed.capacity[role];
+      if (!c) continue;
+      const minEl = root.querySelector(`[data-bbttcc-cap-min="${role}"]`);
+      const maxEl = root.querySelector(`[data-bbttcc-cap-max="${role}"]`);
+      if (minEl && c.min != null) minEl.value = Number(c.min) || 0;
+      if (maxEl && c.max != null) maxEl.value = Number(c.max) || 0;
+    }
+  }
 }
 
 function _wireStarterChips(html) {
@@ -456,10 +529,11 @@ async function _commit(root) {
 function _install() {
   globalThis.BBTTCC_RigBuilder = globalThis.BBTTCC_RigBuilder || {};
   globalThis.BBTTCC_RigBuilder.open = openRigBuilder;
+  globalThis.BBTTCC_RigBuilder.seedFromActor = rigSeedFromActor;
   try {
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.api = game.bbttcc.api || {};
-    game.bbttcc.api.rigBuilder = { open: openRigBuilder };
+    game.bbttcc.api.rigBuilder = { open: openRigBuilder, seedFromActor: rigSeedFromActor };
   } catch (_e) {}
 }
 _install();

@@ -2632,6 +2632,48 @@ const politicalPressure = {
       ? rigsRaw.map(r => normalizeRig(r, { ownerFactionId: this.actor.id }))
       : [];
 
+    // 2026-05-17 — B13.C affiliation roster. Lists first-class Rig actors
+    // whose system.identity.factionOwnerId points at this faction.
+    // Read-only; rig authoring lives in the Actor Directory "Create Rig"
+    // button. Bracket/mobility/state derive directly from rig.system.
+    const ownedRigs = (() => {
+      const factionId = this.actor.id;
+      const tierRomanMap = { 1: "I", 2: "II", 3: "III", 4: "IV" };
+      const bracketLabelMap = {
+        personal: "Personal", light: "Light", medium: "Medium",
+        heavy: "Heavy", siege: "Siege"
+      };
+      return (game.actors?.contents ?? [])
+        .filter(a => {
+          if (a?.type !== "rig") return false;
+          const owner = foundry.utils.getProperty(a, "system.identity.factionOwnerId")
+                    ?? foundry.utils.getProperty(a, "system.system.identity.factionOwnerId")
+                    ?? "";
+          return String(owner) === factionId;
+        })
+        .map(a => {
+          const sys = a.system?.system ?? a.system ?? {};
+          const integrity = sys?.integrity ?? {};
+          const identity = sys?.identity ?? {};
+          const bracket = String(integrity.bracket ?? "medium");
+          const tier = Number(integrity.tier ?? 1);
+          return {
+            actorId: a.id,
+            name: a.name,
+            archetype: String(identity.archetype ?? ""),
+            bracket,
+            bracketLabel: bracketLabelMap[bracket] ?? bracket,
+            tier,
+            tierRoman: tierRomanMap[tier] ?? String(tier),
+            mobility: String(identity.mobility ?? "mobile"),
+            state: String(identity.state ?? "parked"),
+            integrityValue: Number(integrity.value ?? 0),
+            integrityMax: Number(integrity.max ?? 0)
+          };
+        })
+        .sort((a, b) => a.name.localeCompare(b.name));
+    })();
+
 // -----------------------------------------------------------------
 // Doctrine (Maneuvers + Strategics)
 // - Embedded feats on the faction are entitlement wrappers.
@@ -2696,7 +2738,8 @@ const doctrine = await (async () => {
         raidPlan,
         plannedActions,
         doctrine,
-        rigs, // <-- primary template source
+        rigs, // <-- primary template source (legacy flag-based, audit-only)
+        ownedRigs, // <-- first-class Rig actors whose factionOwnerId is this faction
         politicalPressure,
         victory,
         mods: {
@@ -3515,7 +3558,19 @@ try {
       if (root && root instanceof HTMLElement && !rootEl.dataset.bbttccRigsBound) {
         rootEl.dataset.bbttccRigsBound = "1";
 
+        // 2026-05-17 — B13.C cleanup. Row-click on a first-class Rig actor
+        // row opens the rig's sheet. Affiliation roster is read-only here.
         rootEl.addEventListener("click", async (ev) => {
+          const rigRow = ev.target?.closest?.("[data-bbttcc-rig-row]");
+          if (rigRow) {
+            const actorId = rigRow.getAttribute("data-rig-actor-id");
+            if (!actorId) return;
+            ev.preventDefault();
+            ev.stopPropagation();
+            const rigActor = game.actors?.get(actorId);
+            rigActor?.sheet?.render(true);
+            return;
+          }
           const btn = ev.target?.closest?.("[data-rig-act]");
           if (!btn) return;
 
@@ -3529,20 +3584,10 @@ try {
           const api = game.bbttcc?.api?.factions;
           if (!api) return ui.notifications?.error?.("Factions API not available.");
 
+          // 2026-05-17 — B13.C cleanup. Legacy "add" action retired —
+          // rig authoring lives in the Actor Directory "Create Rig" button.
           if (act === "add") {
-            const api = game.bbttcc?.api?.factions;
-            const created = await api.addRig(this.actor.id, {
-              name: "New Rig",
-              type: "war-rig",
-              hitTrack: { max: 10, current: 10 },
-              damageStep: 0,
-              mobilityTags: [],
-              raidBonuses: { defense: 0 },
-              passiveBonuses: [],
-              turnEffectsRaw: []
-            });
-            await _openRigConsole({ actor: this.actor, rigId: created?.rigId });
-            this.render(false);
+            ui.notifications?.info?.("Create Rig is now in the Actors Directory header. Set this faction as the Faction Owner on the rig's Identity tab.");
             return;
           }
 

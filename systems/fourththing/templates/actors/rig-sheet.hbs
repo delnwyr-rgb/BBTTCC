@@ -7,8 +7,13 @@
         <img src="{{actor.img}}" data-tooltip="{{actor.name}}"/>
         <div class="ft-portrait-overlay">📷</div>
       </div>
-      <div class="ft-name">
-        <input name="name" type="text" value="{{actor.name}}" placeholder="Rig Name"/>
+      <div class="ft-name flexrow" style="align-items:center; gap:0.4rem;">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Rig Name" style="flex:1 1 auto;"/>
+        <button type="button" class="ft-mini-btn ft-rig-duplicate" data-action="ftRigDuplicate"
+                data-tooltip="Open the Rig Builder pre-filled with this rig's current state."
+                style="white-space:nowrap;">
+          <i class="fas fa-copy"></i> Duplicate
+        </button>
       </div>
 
       <div class="ft-meta-pill ft-id-mobility" data-tooltip="Mobility axis: stationary (no move) / mobile (deployable) / hybrid (both).">
