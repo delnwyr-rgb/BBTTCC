@@ -28,6 +28,7 @@
     "module.js"
   ],
   "scripts": [],
+  "socket": true,
   "styles": [
     "styles/fourththing.css"
   ],

@@ -15446,11 +15446,15 @@ function _ftPickHudSteward() {
   }
   // Diagnostic: list everything we could read but skipped (so we can see
   // why an apparently-boarded PC isn't getting picked up).
-  const visible = (game.actors ?? []).filter(a => (a.type === "character" || a.type === "npc") && canRead(a));
+  const allActors = (game.actors ?? []).filter(a => a.type === "character" || a.type === "npc");
+  const visible = allActors.filter(a => canRead(a));
   const boarded = visible.filter(a => a.getFlag?.("fourththing", "boardedRig")?.rigId);
-  console.log("[ft:hud] picker returned null. visible char/npc=", visible.map(a => a.name),
-              "of which boarded=", boarded.map(a => a.name),
-              "user.character=", game.user.character?.name ?? "(none)");
+  const ownChar = game.user.character;
+  console.log("[ft:hud] picker returned null.",
+              "\n  total char/npc actors in world=", allActors.map(a => `${a.name}{canRead:${canRead(a)},isOwner:${a.isOwner},boarded:${!!a.getFlag?.('fourththing','boardedRig')?.rigId}}`),
+              "\n  user.character=", ownChar ? `${ownChar.name}{canRead:${canRead(ownChar)},isOwner:${ownChar.isOwner},boarded:${!!ownChar.getFlag?.('fourththing','boardedRig')?.rigId}}` : "(none)",
+              "\n  visible (canRead=true)=", visible.map(a => a.name),
+              "\n  of which boarded=", boarded.map(a => a.name));
   return null;
 }
 
