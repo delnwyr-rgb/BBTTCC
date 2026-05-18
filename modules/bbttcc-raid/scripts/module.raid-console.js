@@ -1763,6 +1763,19 @@ async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre 
   _rcPlayManFireVfx(side, attacker, defender);
   await _rcRouteManFireFx(key, fireMode, r, app, manDef, attacker, defender, side);
 
+  // Broadcast VFX trigger to every other client so they replay the same
+  // animations locally. game.socket.emit only sends to other clients (not
+  // back to self), so no origin guard is needed.
+  try {
+    game.socket?.emit?.(`module.${RAID_ID}`, {
+      t: "raidVfx",
+      side: String(side || ""),
+      key: String(key || ""),
+      attackerId: attacker?.id || null,
+      defenderId: defender?.id || null
+    });
+  } catch (_eVfxEmit) {}
+
   // Surface C v2: anytime fires apply mechanical effects immediately so the
   // button feels like a real fire, not just narrative. Pre-roll / post-commit
   // fires let B2 apply their effects at commit time (their normal pipeline).
@@ -2349,17 +2362,21 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
     const payload = this._sessionPayload();
     payload.rev = Number(this.__sessionRev || 0);
 
-    try {
-      const a = await getActorByIdOrUuid(attackerId);
-      if (!a) return;
-
-      // Prefer direct write if permitted
-      await a.setFlag(RAID_ID, "raidSession", payload);
-    } catch(e){
-      // Fallback: ask GM to persist via socket
+    if (_rcIsGMUser()) {
       try {
-        game.socket?.emit?.(`module.${RAID_ID}`, { t:"raidSession", attackerId: attackerId, payload: payload });
-      } catch(_e2) {}
+        const a = await getActorByIdOrUuid(attackerId);
+        if (!a) return;
+        await a.setFlag(RAID_ID, "raidSession", payload);
+      } catch(e) {
+        warn("_saveSessionNow GM setFlag failed", e);
+      }
+    } else {
+      // Non-GM: skip the direct setFlag (Foundry surfaces a noisy permission
+      // toast before the catch fires). Hand the payload to the GM via the
+      // existing socket relay; GM-side listener in bindAPI() persists it.
+      try {
+        game.socket?.emit?.(`module.${RAID_ID}`, { t:"raidSession", attackerId, payload });
+      } catch(_e) {}
     }
   }
 
@@ -3556,6 +3573,9 @@ _renderScenarioHUD(host, round){
     context.playerFactionId = playerFaction?.id || null;
     context.playerFactionName = playerFaction?.name || null;
     context.leadAttackerName = leadAttackerName;
+    // Surface the "pending uncommitted staging" flag so the template can show
+    // the player a Commit Staging banner. GM never has pending state.
+    context.stagingDirty = !_rcIsGMUser() && !!this.__stagingDirty;
 
     // Pick the bank the player sees: their own when supporting, the lead's
     // when leading, the resolved attacker otherwise (GM view).
@@ -3671,6 +3691,29 @@ r.view = {
   defenderId: def?.id || "",
   coalition: coalitionRound,
   breakdown: `Att ${(attBaseRoll||0)} + ceil((StageA + Support)/2) ${Math.ceil((stagedA + stagedSupport)/2)} = ${attProj}  •  Def ${(defBaseRoll||0)} + Base ${baseDefense} + Staged/2 ${defProjBonus}${diffR?` + Diff ${diffR}`:""}${facDefTotal?` + Defense ${facDefTotal}`:""}${nextBR?` + Next-Raid ${nextBR}`:""} = ${defProj}`};
+
+      // Per-player staging context: which bucket the player can stage into
+      // (their own attacker or support row), with bank/staged/remain numbers
+      // for the cat. Template uses these to render a single per-player
+      // staging widget for non-GM users.
+      if (!_rcIsGMUser() && context.playerFactionId && context.playerRole) {
+        const pfid = String(context.playerFactionId);
+        const pfActor = game.actors?.get?.(pfid) || null;
+        const pfBank = pfActor ? getOPBank(pfActor) : _zeroOps();
+        let pfStaged;
+        if (context.playerRole === "attacker") {
+          pfStaged = Number(staged?.att?.[cat] || 0);
+          r.view.playerStageWho = "att";
+        } else {
+          pfStaged = Number(staged?.support?.[pfid]?.[cat] || 0);
+          r.view.playerStageWho = "support";
+        }
+        r.view.playerStageFactionId = pfid;
+        r.view.playerFactionName = pfActor?.name || "";
+        r.view.playerBankCat = Number(pfBank[cat] || 0);
+        r.view.playerStagedCat = pfStaged;
+        r.view.playerRemainCat = Math.max(0, r.view.playerBankCat - pfStaged);
+      }
     }
 
     return context;
@@ -4091,6 +4134,21 @@ r.view = {
       this.render();
     });
 
+    $root.on("click.bbttccRaid","[data-id='commit-staging']", async (ev)=>{
+      ev.preventDefault();
+      if (_rcIsGMUser()) return;
+      if (!this.__stagingDirty) return;
+      this.__stagingDirty = false;
+      try {
+        await this._saveSessionNow();
+        try { ui.notifications?.info?.("Staging committed — sent to GM."); } catch(_e) {}
+      } catch (e) {
+        console.warn(TAG, "commit-staging failed", e);
+        this.__stagingDirty = true;
+      }
+      this.render();
+    });
+
     $root.on("click.bbttccRaid","[data-id='end-raid']", async (ev)=>{
       ev.preventDefault();
       if (!_rcIsGMUser()) return;
@@ -4200,10 +4258,30 @@ r.view = {
   async _stageOP(idx, { who, key, delta, factionId }){
     const side = String(who || "").toLowerCase();
 
-    // Players may stage attacker OP only; defender/support staging is GM-only.
-    if (!_rcIsGMUser() && (side === "def" || side === "support")) {
-      try { ui.notifications?.warn?.("Only the GM can stage defender or support OP."); } catch(_e) {}
-      return;
+    // Permission gates for non-GM clicks:
+    //   - Defender staging is always GM-only.
+    //   - Support staging is allowed only when the player owns the supporter.
+    //   - Attacker staging is allowed only when the player owns the lead.
+    if (!_rcIsGMUser()) {
+      if (side === "def") {
+        try { ui.notifications?.warn?.("Only the GM can stage defender OP."); } catch(_e) {}
+        return;
+      }
+      if (side === "support") {
+        const sfid = String(factionId || "").trim();
+        const sfActor = sfid ? game.actors?.get?.(sfid) : null;
+        if (!sfActor?.isOwner) {
+          try { ui.notifications?.warn?.("You can only stage OP for factions you control."); } catch(_e) {}
+          return;
+        }
+      }
+      if (side === "att") {
+        const attActor = this.vm.attackerId ? game.actors?.get?.(String(this.vm.attackerId)) : null;
+        if (!attActor?.isOwner) {
+          try { ui.notifications?.warn?.("You don't control the lead attacker — only the GM can stage their OP."); } catch(_e) {}
+          return;
+        }
+      }
     }
 
     const r = this.vm.rounds[idx];
@@ -4268,7 +4346,14 @@ r.view = {
       if (!hasAny) delete r.localStaged.support[actorId];
     }
 
-    this._queueSaveSession();
+    if (_rcIsGMUser()) {
+      this._queueSaveSession();
+    } else {
+      // Non-GM: hold the staging locally — the player has to explicitly click
+      // "Commit Staging to GM" to ship it. Avoids spamming socket traffic on
+      // every +1/-1 click and makes player intent deliberate.
+      this.__stagingDirty = true;
+    }
     return this.render();
   }
   
@@ -4374,6 +4459,14 @@ async _postRoundCard(idx){
     // Player safety: only GMs can resolve (commit roll).
     if (!_rcIsGMUser()) {
       ui.notifications?.warn?.("Waiting for GM to resolve the round.");
+      return;
+    }
+
+    // Heads-up: a supporter player could have staged OP locally and not yet
+    // clicked "Commit Staging to GM" — that contribution won't be in the
+    // session. The GM client can't see remote pending state, so we just warn
+    // up front and let the GM decide.
+    if (!confirm("Resolve this round?\n\nAny supporter who staged but hasn't clicked 'Commit Staging to GM' yet will lose that contribution.")) {
       return;
     }
 
@@ -6194,14 +6287,29 @@ function bindAPI() {
       globalThis.__bbttccRaidSocketBound = true;
       game.socket?.on?.(`module.${RAID_ID}`, async (msg)=>{
         try {
-          if (!msg || msg.t !== "raidSession") return;
-          if (!_rcIsGMUser()) return; // only GM persists
-          const attackerId = String(msg.attackerId || "");
-          const payload = msg.payload;
-          if (!attackerId || !payload) return;
-          const a = await getActorByIdOrUuid(attackerId);
-          if (!a) return;
-          await a.setFlag(RAID_ID, "raidSession", payload);
+          if (!msg) return;
+          if (msg.t === "raidSession") {
+            if (!_rcIsGMUser()) return; // only GM persists session writes
+            const attackerId = String(msg.attackerId || "");
+            const payload = msg.payload;
+            if (!attackerId || !payload) return;
+            const a = await getActorByIdOrUuid(attackerId);
+            if (!a) return;
+            await a.setFlag(RAID_ID, "raidSession", payload);
+            return;
+          }
+          if (msg.t === "raidVfx") {
+            // Replay the maneuver fire VFX locally so every connected client
+            // sees the animation, not just the firing client. Foundry doesn't
+            // echo socket emits to the sender, so this only runs on remotes.
+            try {
+              const att = msg.attackerId ? game.actors?.get(msg.attackerId) : null;
+              const def = msg.defenderId ? game.actors?.get(msg.defenderId) : null;
+              _rcPlayManFireVfx(String(msg.side || ""), att, def);
+              _bbttccFxPlay(String(msg.key || ""), { side: msg.side, attacker: att, defender: def }, {});
+            } catch (_eVfxRecv) {}
+            return;
+          }
         } catch(_eS) {}
       });
     }

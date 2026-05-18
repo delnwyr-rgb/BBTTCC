@@ -58,6 +58,12 @@
           Waiting for GM to set round type and resolve.
         {{/if}}
       </div>
+      {{#if stagingDirty}}
+      <div class="flex0" style="display:flex; align-items:center; gap:.4rem; padding:.3rem .55rem; border-radius:8px; background:rgba(245,158,11,0.16); border:1px solid rgba(251,191,36,0.55); color:#fde68a;">
+        <span style="font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;">Pending</span>
+        <button class="btn" data-id="commit-staging" style="background:rgba(251,191,36,0.32); border:1px solid rgba(251,191,36,0.7); color:#fef3c7; padding:.18rem .55rem; border-radius:6px;" title="Send your staged OP to the GM. Until you click this, your contribution isn't part of the round.">Commit Staging to GM</button>
+      </div>
+      {{/if}}
     {{/if}}
   </header>
 
@@ -316,8 +322,9 @@
                     <h4 style="margin:0 0 .25rem 0;">{{#if ../isGM}}Manage Spend{{else}}Your Commitments{{/if}} — Key: {{upper r.view.cat}}</h4>
 
                     <div class="grid" style="grid-template-columns: {{#if ../isGM}}1fr 1fr{{else}}1fr{{/if}}; gap:.5rem;">
+                      {{#if ../isGM}}
                       <div>
-                        <h5 style="margin:.25rem 0;">{{#if ../isGM}}Attacker{{else}}Your Faction{{/if}} — {{r.view.attackerName}}</h5>
+                        <h5 style="margin:.25rem 0;">Attacker — {{r.view.attackerName}}</h5>
                         <p style="margin:.25rem 0;">
                           Bank: <b>{{lookup r.view.bankAtt r.view.cat}}</b> •
                           Staged: <b>{{default (lookup r.view.staged.att r.view.cat) 0}}</b> •
@@ -330,8 +337,6 @@
                           <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
                         </div>
                       </div>
-
-                      {{#if ../isGM}}
                         {{#if r.view.hasDef}}
                         <div>
                           <h5 style="margin:.25rem 0;">Defender — {{r.view.defenderName}}</h5>
@@ -348,6 +353,25 @@
                           </div>
                         </div>
                         {{/if}}
+                      {{else}}
+                      <div>
+                        <h5 style="margin:.25rem 0;">Your Faction — {{default r.view.playerFactionName "(none)"}}</h5>
+                        <p style="margin:.25rem 0;">
+                          Bank: <b>{{default r.view.playerBankCat 0}}</b> •
+                          Staged: <b>{{default r.view.playerStagedCat 0}}</b> •
+                          Remaining: <b>{{default r.view.playerRemainCat 0}}</b>
+                        </p>
+                        {{#if r.view.playerStageWho}}
+                        <div class="btnset" style="display:flex; gap:.25rem;">
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="-1" data-faction-id="{{r.view.playerStageFactionId}}">−1</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+1" data-faction-id="{{r.view.playerStageFactionId}}">+1</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+5" data-faction-id="{{r.view.playerStageFactionId}}">+5</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+10" data-faction-id="{{r.view.playerStageFactionId}}">+10</button>
+                        </div>
+                        {{else}}
+                        <p style="margin:.25rem 0;font-size:.78rem;opacity:.7;"><em>You're not in this raid — staging unavailable.</em></p>
+                        {{/if}}
+                      </div>
                       {{/if}}
                     </div>
 
