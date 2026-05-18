@@ -258,7 +258,7 @@
             {{#each phaseGroupedPowers as |g|}}
             <optgroup label="{{g.label}}">
               {{#each g.powers as |p|}}
-              <option value="{{p.key}}" title="{{p.description}}">{{p.label}}{{#if p.endRaid}} · END:{{p.endRaid}}{{/if}}</option>
+              <option value="{{p.key}}" title="{{p.description}}"{{#if p.installed}} disabled{{/if}}>{{#if p.installed}}✓ {{/if}}{{p.label}}{{#if p.installed}} (installed){{/if}}{{#if p.endRaid}} · END:{{p.endRaid}}{{/if}}</option>
               {{/each}}
             </optgroup>
             {{/each}}
@@ -269,7 +269,7 @@
           <select data-role="pack-picker">
             <option value="">— pick a power pack —</option>
             {{#each packOptions as |p|}}
-            <option value="{{p.key}}" title="{{p.description}}">{{p.label}} ({{p.count}})</option>
+            <option value="{{p.key}}" title="{{p.description}}"{{#if p.allInstalled}} disabled{{/if}}>{{#if p.allInstalled}}✓ {{/if}}{{p.label}} ({{p.installedCount}}/{{p.count}}{{#if p.allInstalled}} installed{{else}}{{#if p.installedCount}} installed{{/if}}{{/if}})</option>
             {{/each}}
           </select>
           <button type="button" class="ft-action-btn" data-action="ftBossPackApply">Apply Pack</button>
@@ -284,8 +284,8 @@
             <div class="ft-boss-power-phase-label">{{g.label}}</div>
             <ul class="ft-boss-power-phase-list">
               {{#each g.powers as |p|}}
-              <li class="ft-boss-power-row">
-                <span class="ft-boss-power-name">{{p.label}}</span>
+              <li class="ft-boss-power-row{{#if p.installed}} ft-boss-power-row--installed{{/if}}">
+                <span class="ft-boss-power-name">{{#if p.installed}}<span class="ft-boss-power-installed-mark" data-tooltip="Already installed on this boss">✓ </span>{{/if}}{{p.label}}</span>
                 {{#if p.whenSummary}}<small class="ft-boss-power-when" data-tooltip="trigger conditions">when: {{p.whenSummary}}</small>{{/if}}
                 {{#if p.effectsSummary}}<small class="ft-boss-power-effects" data-tooltip="world-effect output">→ {{p.effectsSummary}}</small>{{/if}}
                 {{#if p.endRaid}}<small class="ft-boss-power-end" data-tooltip="ends raid on trigger">END:{{p.endRaid}}</small>{{/if}}

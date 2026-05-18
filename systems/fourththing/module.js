@@ -12596,7 +12596,38 @@ Hooks.once("init", function () {
       // Bridge to bbttcc-raid registries (BOSS_TEMPLATES + BOSS_POWERS + BOSS_POWER_PACKS).
       const bossApi = game.bbttcc?.api?.raid ?? {};
       const templateOptions = (bossApi.bossTemplates ?? []).map(t => ({ key: t.key, label: t.label, description: t.description }));
-      const packOptions     = (bossApi.bossPowerPacks ?? []).map(p => ({ key: p.key, label: p.label, description: p.description, count: Array.isArray(p.powers) ? p.powers.length : 0 }));
+
+      // Compute the set of installed behavior IDs from raidProfile.behaviorsRaw
+      // so the picker dropdowns + catalog browser can mark which powers
+      // are already on this boss. Without this, GMs see all powers listed
+      // identically and hit "already present" dedupe warnings when adding.
+      // (2026-05-17 patch — user feedback: dedupe was reading as an error.)
+      const installedBehaviorIds = (() => {
+        const raw = sysData.raidProfile?.behaviorsRaw || "[]";
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch { parsed = []; }
+        if (!Array.isArray(parsed)) return new Set();
+        return new Set(parsed.map(b => String(b?.id ?? b?.key ?? "").trim()).filter(Boolean));
+      })();
+      const _powerInstalled = (powerKey) => {
+        const allPwrs = bossApi.bossPowers ?? [];
+        const p = allPwrs.find(x => x.key === powerKey);
+        const id = p?.behavior?.id ?? powerKey;
+        return installedBehaviorIds.has(String(id));
+      };
+
+      const packOptions = (bossApi.bossPowerPacks ?? []).map(p => {
+        const powers = Array.isArray(p.powers) ? p.powers : [];
+        const installedInPack = powers.filter(_powerInstalled).length;
+        return {
+          key: p.key,
+          label: p.label,
+          description: p.description,
+          count: powers.length,
+          installedCount: installedInPack,
+          allInstalled: powers.length > 0 && installedInPack === powers.length
+        };
+      });
 
       // Slice 3 (2026-05-11) — phase-grouped boss powers. The bossPowers
       // registry carries `behavior.phase` ("round_end" | "after_roll" |
@@ -12630,6 +12661,7 @@ Hooks.once("init", function () {
         const when    = p?.behavior?.when ?? null;
         const effects = p?.behavior?.effects?.worldEffects ?? null;
         const endRaid = p?.behavior?.endRaid?.outcome ?? "";
+        const id = p?.behavior?.id ?? p.key;
         return {
           key: p.key,
           label: p.label,
@@ -12637,7 +12669,8 @@ Hooks.once("init", function () {
           phase: p?.behavior?.phase ?? "any",
           whenSummary:    _summarizeWhen(when),
           effectsSummary: _summarizeWorldEffects(effects),
-          endRaid
+          endRaid,
+          installed: installedBehaviorIds.has(String(id))
         };
       };
       const allPowerRows = (bossApi.bossPowers ?? []).map(_powerRow);
@@ -13080,13 +13113,16 @@ Hooks.once("init", function () {
       let parsed = [];
       try { parsed = JSON.parse(sys.raidProfile?.behaviorsRaw || "[]"); } catch { parsed = []; }
       if (!Array.isArray(parsed)) parsed = [];
-      // Avoid dupes by id
+      // Avoid dupes by id. Clearer message — this is the expected outcome
+      // when the boss was created via a starter chip that already seeded a
+      // power pack (e.g. Qliphothic Auditor → Audit Pack → Audit Pressure).
       const id = power.behavior?.id ?? power.key;
       if (parsed.some(b => (b.id ?? b.key) === id)) {
-        ui.notifications?.warn(`Power ${power.label} already present.`);
+        ui.notifications?.info(`"${power.label}" is already installed on this boss — see the Behaviors tab.`);
         return;
       }
       parsed.push(foundry.utils.deepClone(power.behavior ?? { id, label: power.label }));
+      ui.notifications?.info(`Added power: ${power.label}.`);
       return this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
     }
 
@@ -13122,7 +13158,16 @@ Hooks.once("init", function () {
         added++;
       }
       await this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
-      ui.notifications?.info(`Applied pack ${pack.label}: ${added} new behaviors.`);
+      // Clearer message — if 0 were added, surface why (everything was
+      // already installed, e.g. from a starter-chip seed). If some were
+      // added, say how many of the pack's total powers landed.
+      if (added === 0) {
+        ui.notifications?.info(`"${pack.label}" — all ${powerKeys.length} powers were already installed. See the Behaviors tab.`);
+      } else if (added < powerKeys.length) {
+        ui.notifications?.info(`Applied "${pack.label}": ${added} new behavior(s) added (${powerKeys.length - added} already installed).`);
+      } else {
+        ui.notifications?.info(`Applied "${pack.label}": ${added} new behavior(s) added.`);
+      }
     }
 
     static async _onFtBossNormalize(event, target) {
