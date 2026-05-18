@@ -362,6 +362,12 @@ export async function openRigBuilder({ seed = null } = {}) {
     output modules, and station the rig as a Holding on a hex if it's a fixed
     deployment.
   </p>
+
+  <!-- Hidden field tracks which chassis chip the user picked. Reading
+       through the same data-bbttcc-field plumbing as the rest of the form
+       avoids the dataset/jQuery-wrap discrepancy that caused the loadout
+       seed to silently skip on first ship (2026-05-17 patch). -->
+  <input type="hidden" data-bbttcc-field="_starterKey" value=""/>
 </div>`;
 
   const isDuplicate = !!seed;
@@ -439,6 +445,11 @@ function _wireStarterChips(html) {
       const tpl = CHASSIS_STARTERS[idx];
       if (!tpl) return;
       // Track selected starter so _commit can pull its loadout for seeding.
+      // Write to BOTH a hidden input (read through the form harvest path)
+      // AND the root dataset (defense in depth). The hidden input is the
+      // canonical source; dataset is fallback for legacy callers.
+      const starterKeyEl = root.querySelector('[data-bbttcc-field="_starterKey"]');
+      if (starterKeyEl) starterKeyEl.value = String(tpl.key);
       root.dataset.bbttccSelectedStarter = String(tpl.key);
       const d = tpl.defaults;
       const set = (name, val) => {
@@ -591,15 +602,23 @@ async function _commit(root) {
   // bbttcc-master-content.items compendium by name, or synthesizes the
   // frame inline when the loadout declares a `frame` object instead of a
   // string. Failure is non-fatal — the rig still mints, just bare.
-  const selectedKey = String(root.dataset.bbttccSelectedStarter ?? "");
+  // Source of truth for the selected key is the _starterKey hidden input
+  // (read through the same form harvest as every other field); dataset
+  // is fallback for safety.
+  const selectedKey = String(read("_starterKey") || root.dataset.bbttccSelectedStarter || "");
   const chosen = CHASSIS_STARTERS.find(s => s.key === selectedKey);
   const loadout = chosen?.defaults?.loadout;
+  console.log("[bbttcc-auto-link/rig-builder] commit",
+    { actorId: actor?.id, selectedKey, hasLoadout: !!loadout,
+      loadoutKeys: loadout ? Object.keys(loadout) : [] });
   if (loadout) {
     try {
       await _seedLoadout(actor, loadout, { tier });
     } catch (e) {
       console.warn("[bbttcc-auto-link/rig-builder] Loadout seed failed (non-fatal):", e);
     }
+  } else if (selectedKey) {
+    console.warn(`[bbttcc-auto-link/rig-builder] Starter chip '${selectedKey}' had no loadout — rig minted bare.`);
   }
 
   actor.sheet?.render(true);
@@ -621,8 +640,12 @@ async function _commit(root) {
  */
 async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
   if (!actor || !loadout) return;
+  const TAG = "[bbttcc-auto-link/rig-builder/_seedLoadout]";
   const PACK_ID = "bbttcc-master-content.items";
   const pack = game.packs?.get?.(PACK_ID);
+  if (!pack && (typeof loadout.frame === "string" || loadout.weapons?.length || loadout.systems?.length)) {
+    console.warn(TAG, `Compendium pack '${PACK_ID}' not found — only synthetic frame (if any) will be created.`);
+  }
   const idx = pack ? await pack.getIndex() : null;
   const itemsToCreate = [];
 
@@ -635,7 +658,7 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
         const data = doc?.toObject?.();
         if (data) { delete data._id; itemsToCreate.push(data); }
       } else {
-        console.warn(`[bbttcc-auto-link/rig-builder] Frame not found in compendium: ${loadout.frame}`);
+        console.warn(TAG, `Frame not found in compendium: ${loadout.frame}`);
       }
     } else if (typeof loadout.frame === "object") {
       itemsToCreate.push(_buildSyntheticFrame(loadout.frame));
@@ -652,7 +675,7 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
     for (const name of namedItems) {
       const hit = idx.find(e => e.name === name);
       if (!hit) {
-        console.warn(`[bbttcc-auto-link/rig-builder] Loadout item not found: ${name}`);
+        console.warn(TAG, `Loadout item not found in compendium: ${name}`);
         continue;
       }
       const doc = await pack.getDocument(hit._id);
@@ -661,8 +684,13 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
     }
   }
 
+  console.log(TAG, "preparing to embed",
+    { count: itemsToCreate.length, names: itemsToCreate.map(i => i.name) });
+
   if (itemsToCreate.length) {
-    await actor.createEmbeddedDocuments("Item", itemsToCreate);
+    const created = await actor.createEmbeddedDocuments("Item", itemsToCreate);
+    console.log(TAG, "embedded",
+      { count: created?.length ?? 0, ids: (created ?? []).map(d => d.id) });
   }
 }
 
