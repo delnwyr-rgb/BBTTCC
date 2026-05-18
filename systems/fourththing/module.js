@@ -14705,6 +14705,23 @@ async function ftBoardRig(steward, rig, role = null) {
     return;
   }
 
+  // 2026-05-18 — Boarding mutates the rig actor (system.crew.slots),
+  // which requires OWNER on the rig. Players never own rigs by default,
+  // so relay to an active GM via the existing module.bbttcc-raid socket
+  // (same pattern as ftActivateBattleScene above). GM-side handler
+  // re-enters ftBoardRig with full perms.
+  if (!game.user?.isGM && !rig.isOwner) {
+    if (!game.users?.some?.(u => u.isGM && u.active)) {
+      ui.notifications?.warn("No GM is online to confirm boarding.");
+      return;
+    }
+    game.socket?.emit?.("module.bbttcc-raid", {
+      t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role
+    });
+    ui.notifications?.info(`Boarding request sent — ${steward.name} → ${rig.name}.`);
+    return;
+  }
+
   // Pick a slot — prefer requested role, else first empty, else push new
   const slots = foundry.utils.deepClone(rig.system?.crew?.slots ?? []);
   const cap   = rig.system?.crew?.capacity ?? {};
@@ -14809,6 +14826,20 @@ async function ftDisembarkSteward(steward) {
   const flag = steward.getFlag?.("fourththing", "boardedRig");
   if (!flag?.rigId) return;
   const rig = game.actors?.get(flag.rigId);
+
+  // 2026-05-18 — Same GM-relay reason as ftBoardRig: rig.update for the
+  // crew slot clear requires OWNER. Token un-hide is also GM-only.
+  if (!game.user?.isGM && rig && !rig.isOwner) {
+    if (!game.users?.some?.(u => u.isGM && u.active)) {
+      ui.notifications?.warn("No GM is online to confirm disembark.");
+      return;
+    }
+    game.socket?.emit?.("module.bbttcc-raid", {
+      t: "ft-disembarkSteward", stewardId: steward.id
+    });
+    ui.notifications?.info(`Disembark request sent — ${steward.name}.`);
+    return;
+  }
 
   // Clear slot on the rig
   if (rig) {
@@ -15431,7 +15462,6 @@ function _ftBuildCrewHudLinearHtml(actor, ctx) {
   };
 
   const sep = `<span style="opacity:.4;">·</span>`;
-  const userIsGm = !!game.user?.isGM;
 
   return `<div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;">
     <img src="${esc(rig.img)}" alt="" style="width:20px;height:20px;border-radius:3px;object-fit:cover;border:1px solid #888;"/>
@@ -15441,7 +15471,7 @@ function _ftBuildCrewHudLinearHtml(actor, ctx) {
     ${frameActions.length ? `${sep}${frameActions.map(actionBtn).join("")}` : ""}
     ${sep}
     <button type="button" class="ft-boarded-open-rig" style="padding:.15rem .5rem;font-size:0.72rem;">Open Rig</button>
-    ${userIsGm ? `<button type="button" class="ft-boarded-disembark" style="padding:.15rem .5rem;font-size:0.72rem;">Disembark</button>` : ""}
+    <button type="button" class="ft-boarded-disembark" style="padding:.15rem .5rem;font-size:0.72rem;">Disembark</button>
   </div>`;
 }
 
@@ -16658,17 +16688,35 @@ function _ftFindHexDrawingById(hexId) {
   return null;
 }
 
-// GM socket relay for player-triggered scene activation.
+// GM socket relay for player-triggered scene activation + boarding.
+// Only the first active GM handles each message to avoid double-mutation
+// in multi-GM tables.
 Hooks.once("ready", () => {
   if (!game.socket) return;
+  const _ftIsHandlingGm = () => {
+    if (!game.user?.isGM) return false;
+    const firstGm = game.users?.find?.(u => u.isGM && u.active);
+    return firstGm?.id === game.user.id;
+  };
   game.socket.on("module.bbttcc-raid", (msg) => {
-    if (msg?.t !== "ft-activateBattleScene" || !game.user?.isGM) return;
-    const scene = game.scenes?.get(msg.sceneId);
-    if (!scene) return;
-    const hex = msg.hexUuid ? foundry.utils.fromUuidSync(msg.hexUuid) : null;
-    scene.activate().then(() => {
-      if (hex) _ftSetHexCurrentSceneIdx(hex, Number(msg.idx) || 0);
-    });
+    if (!_ftIsHandlingGm()) return;
+    if (msg?.t === "ft-activateBattleScene") {
+      const scene = game.scenes?.get(msg.sceneId);
+      if (!scene) return;
+      const hex = msg.hexUuid ? foundry.utils.fromUuidSync(msg.hexUuid) : null;
+      scene.activate().then(() => {
+        if (hex) _ftSetHexCurrentSceneIdx(hex, Number(msg.idx) || 0);
+      });
+    } else if (msg?.t === "ft-boardRig") {
+      const steward = game.actors?.get(msg.stewardId);
+      const rig     = game.actors?.get(msg.rigId);
+      if (!steward || !rig) return;
+      ftBoardRig(steward, rig, msg.role || null);
+    } else if (msg?.t === "ft-disembarkSteward") {
+      const steward = game.actors?.get(msg.stewardId);
+      if (!steward) return;
+      ftDisembarkSteward(steward);
+    }
   });
 });
 
