@@ -16693,6 +16693,7 @@ function _ftFindHexDrawingById(hexId) {
 // trace where the relay chain breaks. Handle on any active GM; for
 // idempotent ops (scene activate) the duplicate is harmless. For
 // boarding we de-dupe with a recent-payload cache.
+console.log("[ft:relay] file-load mark reached at relay-block top");
 const __ftRelaySeen = new Map();
 function _ftRelaySeenRecently(key, windowMs = 3000) {
   const now = Date.now();
@@ -16701,53 +16702,67 @@ function _ftRelaySeenRecently(key, windowMs = 3000) {
   __ftRelaySeen.set(key, now);
   return false;
 }
-Hooks.once("ready", () => {
-  if (!game.socket) { console.warn("[ft:relay] no game.socket at ready"); return; }
-  console.log("[ft:relay] registering listeners — isGM=", !!game.user?.isGM, "userId=", game.user?.id);
-  const _ftRelayHandler = (channel) => (msg) => {
-    console.log(`[ft:relay] RECEIVED on ${channel}`, msg, "isGM=", !!game.user?.isGM, "userId=", game.user?.id);
-    if (msg?.t === "ft-relay-ping") {
-      console.log(`[ft:relay] PING from user ${msg.fromUserId} (${msg.fromName}) on ${channel}`);
-      return;
-    }
-    if (!game.user?.isGM) return;
-    if (msg?.t === "ft-activateBattleScene") {
-      if (_ftRelaySeenRecently(`activate:${msg.sceneId}:${msg.idx}`)) return;
-      const scene = game.scenes?.get(msg.sceneId);
-      if (!scene) return;
-      const hex = msg.hexUuid ? foundry.utils.fromUuidSync(msg.hexUuid) : null;
-      scene.activate().then(() => {
-        if (hex) _ftSetHexCurrentSceneIdx(hex, Number(msg.idx) || 0);
-      });
-    } else if (msg?.t === "ft-boardRig") {
-      if (_ftRelaySeenRecently(`board:${msg.stewardId}:${msg.rigId}`)) return;
-      const steward = game.actors?.get(msg.stewardId);
-      const rig     = game.actors?.get(msg.rigId);
-      if (!steward || !rig) { console.warn("[ft:relay] ft-boardRig missing actor(s)", msg); return; }
-      console.log("[ft:relay] handling ft-boardRig", steward.name, "→", rig.name);
-      ftBoardRig(steward, rig, msg.role || null);
-    } else if (msg?.t === "ft-disembarkSteward") {
-      if (_ftRelaySeenRecently(`disembark:${msg.stewardId}`)) return;
-      const steward = game.actors?.get(msg.stewardId);
-      if (!steward) { console.warn("[ft:relay] ft-disembarkSteward missing steward", msg); return; }
-      console.log("[ft:relay] handling ft-disembarkSteward", steward.name);
-      ftDisembarkSteward(steward);
+function _ftRelayHandler(channel) {
+  return (msg) => {
+    try {
+      console.log(`[ft:relay] RECEIVED on ${channel}`, msg, "isGM=", !!game.user?.isGM, "userId=", game.user?.id);
+      if (msg?.t === "ft-relay-ping") {
+        console.log(`[ft:relay] PING from user ${msg.fromUserId} (${msg.fromName}) on ${channel}`);
+        return;
+      }
+      if (!game.user?.isGM) return;
+      if (msg?.t === "ft-activateBattleScene") {
+        if (_ftRelaySeenRecently(`activate:${msg.sceneId}:${msg.idx}`)) return;
+        const scene = game.scenes?.get(msg.sceneId);
+        if (!scene) return;
+        const hex = msg.hexUuid ? foundry.utils.fromUuidSync(msg.hexUuid) : null;
+        scene.activate().then(() => {
+          if (hex) _ftSetHexCurrentSceneIdx(hex, Number(msg.idx) || 0);
+        });
+      } else if (msg?.t === "ft-boardRig") {
+        if (_ftRelaySeenRecently(`board:${msg.stewardId}:${msg.rigId}`)) return;
+        const steward = game.actors?.get(msg.stewardId);
+        const rig     = game.actors?.get(msg.rigId);
+        if (!steward || !rig) { console.warn("[ft:relay] ft-boardRig missing actor(s)", msg); return; }
+        console.log("[ft:relay] handling ft-boardRig", steward.name, "→", rig.name);
+        ftBoardRig(steward, rig, msg.role || null);
+      } else if (msg?.t === "ft-disembarkSteward") {
+        if (_ftRelaySeenRecently(`disembark:${msg.stewardId}`)) return;
+        const steward = game.actors?.get(msg.stewardId);
+        if (!steward) { console.warn("[ft:relay] ft-disembarkSteward missing steward", msg); return; }
+        console.log("[ft:relay] handling ft-disembarkSteward", steward.name);
+        ftDisembarkSteward(steward);
+      }
+    } catch (e) {
+      console.error("[ft:relay] handler threw", e);
     }
   };
-  // Listen on the canonical system channel (always valid for the active
-  // system) AND the legacy bbttcc-raid module channel (for prior emits
-  // from ftActivateBattleScene that haven't been migrated yet).
-  game.socket.on("system.fourththing", _ftRelayHandler("system.fourththing"));
-  game.socket.on("module.bbttcc-raid", _ftRelayHandler("module.bbttcc-raid"));
-
-  // Sanity ping so we can see end-to-end socket health on hard-reload.
-  // Each client emits once; other clients log the receipt.
-  setTimeout(() => {
-    const pingPayload = { t: "ft-relay-ping", fromUserId: game.user?.id, fromName: game.user?.name };
-    console.log("[ft:relay] emit ping on system.fourththing", pingPayload);
-    game.socket.emit("system.fourththing", pingPayload);
-  }, 500);
-});
+}
+function _ftRegisterRelayListeners(reason) {
+  try {
+    if (!game?.socket) { console.warn(`[ft:relay] (${reason}) no game.socket`); return; }
+    if (globalThis.__ftRelayRegistered) { console.log(`[ft:relay] (${reason}) already registered, skipping`); return; }
+    globalThis.__ftRelayRegistered = true;
+    console.log(`[ft:relay] (${reason}) registering listeners — isGM=`, !!game.user?.isGM, "userId=", game.user?.id);
+    game.socket.on("system.fourththing", _ftRelayHandler("system.fourththing"));
+    game.socket.on("module.bbttcc-raid", _ftRelayHandler("module.bbttcc-raid"));
+    setTimeout(() => {
+      const pingPayload = { t: "ft-relay-ping", fromUserId: game.user?.id, fromName: game.user?.name };
+      console.log("[ft:relay] emit ping on system.fourththing", pingPayload);
+      game.socket?.emit?.("system.fourththing", pingPayload);
+    }, 500);
+  } catch (e) {
+    console.error("[ft:relay] register threw", e);
+  }
+}
+// Register at file-load AND at ready (defensive: in case `ready` already
+// fired by the time this file was parsed, or in case Hooks.once silently
+// dropped this callback).
+if (typeof game !== "undefined" && game?.socket) {
+  _ftRegisterRelayListeners("file-load");
+}
+Hooks.on("ready", () => _ftRegisterRelayListeners("ready-hook-on"));
+Hooks.once("ready", () => _ftRegisterRelayListeners("ready-hook-once"));
 
 // Expose API for macros + other modules.
 Hooks.once("ready", () => {
