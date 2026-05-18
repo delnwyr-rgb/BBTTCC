@@ -27,7 +27,8 @@
 
       <button class="btn flex0" data-id="pick-hex" title="Pick target on canvas">Pick Target</button>
       <button class="btn flex0" data-id="add-round">Add Round</button>
-      <button class="btn flex0" data-id="reset">Reset</button>
+      <button class="btn flex0" data-id="reset" title="Clear rounds; keeps attacker, target, and supporters">Reset</button>
+      <button class="btn flex0" data-id="end-raid" title="End the raid: clears rounds, supporters, and target. Propagates to all players.">End Raid</button>
 
       <label class="flex0" style="margin-left:.5rem;">
         <input type="checkbox" data-id="logWar" {{#if vm.logWar}}checked{{/if}}> Log Attacker

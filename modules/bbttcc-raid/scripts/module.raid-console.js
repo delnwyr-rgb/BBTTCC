@@ -4051,6 +4051,27 @@ r.view = {
       ev.preventDefault();
       if (!confirm("Clear all rounds in this console?")) return;
       this.vm.rounds = [];
+      // Propagate the cleared rounds via the session flag so any open player
+      // consoles re-render via the updateActor hook below (bindAPI).
+      this._queueSaveSession();
+      this.render();
+    });
+
+    $root.on("click.bbttccRaid","[data-id='end-raid']", async (ev)=>{
+      ev.preventDefault();
+      if (!_rcIsGMUser()) return;
+      if (!confirm("End the raid? This clears rounds, supporters, and the target for every player.")) return;
+      this.vm.rounds = [];
+      this.vm.supportFactionIds = [];
+      this.vm.targetUuid = "";
+      this.vm.targetName = "—";
+      this.vm.targetType = "hex";
+      this.vm.defenderId = "";
+      this.vm.rigId = "";
+      this.vm.creatureId = "";
+      this.vm.sceneUuid = "";
+      this.vm.tokenUuid = "";
+      this._queueSaveSession();
       this.render();
     });
 
@@ -5962,6 +5983,42 @@ try {
 }
 
 // --- Toolbar + API binding --------------------------------------------------
+
+// Scan faction actors for the most-recently-touched raidSession that involves
+// any faction this user owns — either as primary attacker or in
+// supportFactionIds. Returns { attackerId } or null. Lets the player-side
+// toolbar button auto-jump into the GM's current raid instead of opening a
+// stale singleton view from a previous session.
+async function _findActiveRaidForUser() {
+  try {
+    const all = game.actors?.contents || [];
+    const myFactionIds = new Set(
+      all.filter(a => isFaction(a) && a.isOwner).map(a => String(a.id))
+    );
+    if (!myFactionIds.size) return null;
+
+    const candidates = [];
+    for (const a of all) {
+      if (!isFaction(a)) continue;
+      const s = a.getFlag?.(RAID_ID, "raidSession");
+      if (!s || typeof s !== "object") continue;
+      const attackerId = String(s.attackerId || a.id || "");
+      if (!attackerId) continue;
+      const supports = Array.isArray(s.supportFactionIds) ? s.supportFactionIds.map(String) : [];
+      const isAttacker = myFactionIds.has(attackerId);
+      const isSupport  = supports.some(id => myFactionIds.has(String(id)));
+      if (!isAttacker && !isSupport) continue;
+      candidates.push({ attackerId, rev: Number(s.rev || 0), ts: Number(s.ts || 0) });
+    }
+    if (!candidates.length) return null;
+    candidates.sort((a, b) => (b.rev - a.rev) || (b.ts - a.ts));
+    return candidates[0];
+  } catch (e) {
+    console.warn(TAG, "_findActiveRaidForUser failed", e);
+    return null;
+  }
+}
+
 function bindAPI() {
   const mod = game.modules.get(RAID_ID); if (!mod) return;
   let _console = null;
@@ -5970,14 +6027,30 @@ function bindAPI() {
     if (!_console) _console = new BBTTCC_RaidConsole();
     try { globalThis.__bbttccRaidOpenConsoles?.add?.(_console); } catch(_e) {}
     try {
-      if (options.factionId) _console.vm.attackerId = String(options.factionId);
-      // Player perspective: lock attacker selection to the opener faction.
-      try {
-        if (!_rcIsGMUser() && options.factionId) {
-          _console.vm.__lockAttackerId = String(options.factionId);
+      if (options.factionId) {
+        _console.vm.attackerId = String(options.factionId);
+        if (!_rcIsGMUser()) _console.vm.__lockAttackerId = String(options.factionId);
+      } else if (!_rcIsGMUser()) {
+        // Player opening from the toolbar (no explicit factionId). Kill any
+        // stale singleton state from a prior session and auto-jump to the
+        // current raid this user is in (as attacker or supporter). If no
+        // active raid involves them, leave the view blank rather than show a
+        // wrong/stale one.
+        const found = await _findActiveRaidForUser();
+        if (found?.attackerId) {
+          _console.vm.attackerId = String(found.attackerId);
+          _console.vm.__lockAttackerId = String(found.attackerId);
+        } else {
+          _console.vm.attackerId = "";
+          _console.vm.__lockAttackerId = "";
+          _console.vm.rounds = [];
+          _console.vm.supportFactionIds = [];
+          _console.vm.targetName = "—";
+          _console.vm.targetUuid = "";
         }
-      } catch(_e) {}
-
+        // Force the session-apply on the next render to pick up the new pointer.
+        _console.__sessionRev = 0;
+      }
     } catch (_e) {}
     await _console.render(true, { focus: true });
     return _console;
