@@ -765,7 +765,13 @@ async function _seedBossLoadout(actor, loadout) {
   // are synthesized via the fourththing system's createManifestationItemData
   // (same shape the Manifestation Wizard produces, so they render correctly
   // on the boss sheet's Manifest tab + are Cast-able via ftBossManifestCast).
+  //
+  // CRITICAL: the boss sheet renders manifestations from
+  // `system.manifestations.library` (UUID array), NOT from actor.items
+  // directly. After embedding, we must register the manifestation items'
+  // UUIDs in the library array or the sheet won't surface them.
   const itemsToCreate = [];
+  const manifestationItemIndices = new Set();  // indices in itemsToCreate that are manifestations
 
   // Augments (compendium lookup).
   const augmentNames = Array.isArray(loadout.augments) ? loadout.augments : [];
@@ -839,7 +845,10 @@ async function _seedBossLoadout(actor, loadout) {
             activation_block: { type: "action", consumePool: true }
           };
           const itemData = builder(actor, "power", values);
-          if (itemData) itemsToCreate.push(itemData);
+          if (itemData) {
+            manifestationItemIndices.add(itemsToCreate.length);
+            itemsToCreate.push(itemData);
+          }
         } catch (err) {
           console.warn(TAG, `Failed to synthesize manifestation '${spec?.name}':`, err);
         }
@@ -848,11 +857,29 @@ async function _seedBossLoadout(actor, loadout) {
   }
 
   console.log(TAG, "preparing to embed",
-    { count: itemsToCreate.length, names: itemsToCreate.map(i => i.name) });
+    { count: itemsToCreate.length, names: itemsToCreate.map(i => i.name),
+      manifestationCount: manifestationItemIndices.size });
+
   if (itemsToCreate.length) {
     const created = await actor.createEmbeddedDocuments("Item", itemsToCreate);
     console.log(TAG, "embedded",
       { count: created?.length ?? 0, ids: (created ?? []).map(d => d.id) });
+
+    // Register the manifestation items' UUIDs in system.manifestations.library
+    // — the boss sheet reads from there (NOT from actor.items directly), so
+    // skipping this leaves the manifestations orphaned to the Manifest tab.
+    const manifestationUuids = (created ?? [])
+      .filter((_, i) => manifestationItemIndices.has(i))
+      .map(doc => doc.uuid)
+      .filter(Boolean);
+    if (manifestationUuids.length) {
+      const sys = actor.system?.system ?? actor.system;
+      const currentLibrary = Array.isArray(sys?.manifestations?.library) ? sys.manifestations.library : [];
+      const nextLibrary = [...currentLibrary, ...manifestationUuids];
+      await actor.update({ "system.manifestations.library": nextLibrary });
+      console.log(TAG, "registered manifestation UUIDs in library",
+        { added: manifestationUuids.length, total: nextLibrary.length });
+    }
   }
 }
 
