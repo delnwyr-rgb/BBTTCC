@@ -4123,6 +4123,15 @@ r.view = {
       ui.notifications?.info?.(`Imported Raid Plan (${cat}): requested ${want} → staged ${staged} (bank ${avail}).`);
       this.vm.rounds.push(round);
       this._queueSaveSession();
+      // Broadcast the "Round Added" pill so player browsers play the banner
+      // too — the fx-integration bindUIDelegates click handler only fires on
+      // the GM client that clicked.
+      try {
+        const raidType = String(this.vm.activityKey || "");
+        game.socket?.emit?.(`module.${RAID_ID}`, {
+          t: "raidPill", key: "raid_outcome", label: "Round Added", raidType
+        });
+      } catch (_eRP) {}
       this.render();
     });
 
@@ -6105,14 +6114,17 @@ try {
     }
   }
 } catch (e) { warn("reality_hack clone failed (non-fatal)", e); }
-    // Broadcast the resolve-phase cinematic so player clients replay it. The
+    // Broadcast the resolve-phase cinematic AND the per-maneuver invoke /
+    // impact / resolve effects so player clients replay them. The
     // bbttcc-fx-integration playKey calls fire locally only; without this
     // socket relay, the end-of-raid VFX never reaches remote browsers. The
     // listener in bindAPI() handles the {t:"raidCinematic"} message.
     try {
       const outcome = String(r?.outcome || "Resolved");
       const raidType = String(r?.raidType || this.vm.activityKey || "");
-      const payload = { t: "raidCinematic", outcome, raidType };
+      const attackerKeys = Array.isArray(r?.mansSelected) ? r.mansSelected.slice() : [];
+      const defenderKeys = Array.isArray(r?.mansSelectedDef) ? r.mansSelectedDef.slice() : [];
+      const payload = { t: "raidCinematic", outcome, raidType, attackerKeys, defenderKeys };
       console.log(TAG, "raidCinematic EMIT", payload);
       game.socket?.emit?.(`module.${RAID_ID}`, payload);
     } catch (_eRC) {}
@@ -6313,9 +6325,10 @@ function bindAPI() {
             return;
           }
           if (msg.t === "raidCinematic") {
-            // Player-side replay of the end-of-raid cinematic. The fx-integration
+            // Player-side replay of the end-of-raid cinematic AND every
+            // selected maneuver's invoke/impact/resolve VFX. The fx-integration
             // module's playKey calls fire locally on the GM only; this socket
-            // hand-off lets every connected client play the resolve-phase VFX.
+            // hand-off lets every connected client play the full sequence.
             console.log(TAG, "raidCinematic RECV", msg);
             try {
               const fxApi = game.bbttcc?.api?.fx;
@@ -6323,18 +6336,50 @@ function bindAPI() {
                 console.warn(TAG, "raidCinematic — game.bbttcc.api.fx.playKey unavailable");
               } else {
                 const outcome = String(msg.outcome || "Resolved");
+                const raidType = String(msg.raidType || "");
                 const s = outcome.toLowerCase();
                 const kind = (s.includes("great") || s.includes("success") || s.includes("win")) ? "good"
                            : (s.includes("fail") || s.includes("loss") || s.includes("lockdown")) ? "bad"
                            : "info";
+                const attackerKeys = Array.isArray(msg.attackerKeys) ? msg.attackerKeys : [];
+                const defenderKeys = Array.isArray(msg.defenderKeys) ? msg.defenderKeys : [];
+                const allKeys = [...attackerKeys, ...defenderKeys];
+                // Per-maneuver invoke (matches fx-integration line 104-108 for att, 107-108 for def).
+                for (const key of attackerKeys) {
+                  await fxApi.playKey(String(key), { label: String(key).replace(/_/g, " "), raidType }, { phase: "invoke", banner: false, raidType });
+                }
+                for (const key of defenderKeys) {
+                  await fxApi.playKey(String(key), { label: String(key).replace(/_/g, " "), raidType }, { phase: "invoke", banner: false, raidType });
+                }
+                // Per-maneuver impact + resolve (matches lines 130-146).
+                for (const key of allKeys) {
+                  await fxApi.playKey(String(key), { outcome, raidType }, { phase: "impact", banner: false, raidType });
+                  await fxApi.playKey(String(key), { outcome, outcomeLabel: String(key).replace(/_/g, " "), raidType }, { phase: "resolve", banner: false, raidType });
+                }
+                // The big end-of-raid cinematic.
                 await fxApi.playKey("raid_outcome", {
                   outcome,
                   outcomeLabel: `Raid ${outcome}`,
                   kind,
-                  raidType: msg.raidType || ""
-                }, { phase: "resolve", raidType: msg.raidType || "" });
+                  raidType
+                }, { phase: "resolve", raidType });
               }
             } catch (eC) { console.warn(TAG, "raidCinematic replay threw", eC); }
+            return;
+          }
+          if (msg.t === "raidPill") {
+            // Lightweight banner pills (e.g. "Round Added") triggered by DOM
+            // clicks on the GM client — broadcast so players see the same
+            // header notice. Family/key default to "raid_outcome" invoke.
+            console.log(TAG, "raidPill RECV", msg);
+            try {
+              const fxApi = game.bbttcc?.api?.fx;
+              if (fxApi?.playKey) {
+                await fxApi.playKey(String(msg.key || "raid_outcome"),
+                  { label: String(msg.label || ""), raidType: String(msg.raidType || "") },
+                  { phase: "invoke", banner: true, raidType: String(msg.raidType || "") });
+              }
+            } catch (eP) { console.warn(TAG, "raidPill replay threw", eP); }
             return;
           }
           if (msg.t === "raidVfx") {
