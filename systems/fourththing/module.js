@@ -15425,15 +15425,32 @@ function _ftPickHudSteward() {
     return null;
   }
   // Player: token control is unreliable (boarded tokens are hidden, so
-  // the player can't re-select them once focus shifts). Scan owned
-  // actors directly. Prefer the assigned character when boarded.
+  // the player can't re-select them once focus shifts). Scan visible
+  // actors directly. We need OBSERVER+ (level 2) to read the boardedRig
+  // flag — OWNER isn't required because the actual mutations (fire,
+  // crew action) socket-relay to the GM when the player can't update.
+  // Prefer the assigned character.
+  const canRead = (a) => a?.testUserPermission?.(game.user, "OBSERVER") ?? false;
   const own = game.user.character;
-  if (own && own.isOwner && own.getFlag?.("fourththing", "boardedRig")?.rigId) return own;
+  if (own && canRead(own) && own.getFlag?.("fourththing", "boardedRig")?.rigId) {
+    console.log("[ft:hud] picked assigned character", own.name);
+    return own;
+  }
   for (const a of (game.actors ?? [])) {
     if (a.type !== "character" && a.type !== "npc") continue;
-    if (!a.isOwner) continue;
-    if (a.getFlag?.("fourththing", "boardedRig")?.rigId) return a;
+    if (!canRead(a)) continue;
+    if (a.getFlag?.("fourththing", "boardedRig")?.rigId) {
+      console.log("[ft:hud] picked observable boarded actor", a.name);
+      return a;
+    }
   }
+  // Diagnostic: list everything we could read but skipped (so we can see
+  // why an apparently-boarded PC isn't getting picked up).
+  const visible = (game.actors ?? []).filter(a => (a.type === "character" || a.type === "npc") && canRead(a));
+  const boarded = visible.filter(a => a.getFlag?.("fourththing", "boardedRig")?.rigId);
+  console.log("[ft:hud] picker returned null. visible char/npc=", visible.map(a => a.name),
+              "of which boarded=", boarded.map(a => a.name),
+              "user.character=", game.user.character?.name ?? "(none)");
   return null;
 }
 
