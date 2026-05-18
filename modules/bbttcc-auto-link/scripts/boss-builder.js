@@ -691,6 +691,35 @@ async function _commit(root, tpls) {
   return actor;
 }
 
+/* Parse a damage formula string like "2d6", "3d8", "4d10+2" into a damageRoll
+ * object matching the shape ftNormalizeDamageRoll expects:
+ *   { op, number, die, attribute, type, flavor, track }
+ * Empty/invalid formulas return an op:"none" roll (matches the system
+ * default for non-damaging manifestations). The "+N" bonus is not yet
+ * carried into the rolled-result side of the engine; we capture number+die
+ * which is the load-bearing pair for the cast handler.
+ */
+function _parseDamageFormula(formula, { type = "kinetic", track = "integrity", attribute = "presence", flavor = "" } = {}) {
+  const blank = {
+    op: "none", number: 0, die: "d6", attribute: "", type: "kinetic",
+    flavor: "", track: "integrity"
+  };
+  if (!formula || typeof formula !== "string") return blank;
+  const m = formula.trim().match(/^(\d+)\s*[dD]\s*(\d+)/);
+  if (!m) return blank;
+  const number = Math.max(0, Number(m[1]) || 0);
+  const dieN = Math.max(2, Number(m[2]) || 6);
+  return {
+    op: "damage",
+    number,
+    die: `d${dieN}`,
+    attribute,
+    type,
+    flavor,
+    track
+  };
+}
+
 /* Seed a freshly-minted boss with a power pack + augments per its template
  * loadout. Power packs come from `game.bbttcc.api.raid.bossPowerPacks`
  * (canonical BOSS_POWER_PACKS table) and write to system.raidProfile.
@@ -761,19 +790,35 @@ async function _seedBossLoadout(actor, loadout) {
   }
 
   // Manifestations (synthesized via fourththing system helper).
+  // Tier gets clamped to the boss's integrity.tier so the cast engine
+  // doesn't reject them at cast time (Out-of-Reach gate: reachBy > 1).
   const manifestationSpecs = Array.isArray(loadout.manifestations) ? loadout.manifestations : [];
   if (manifestationSpecs.length) {
     const builder = game?.fourththing?.createManifestationItemData;
     if (typeof builder !== "function") {
       console.warn(TAG, "game.fourththing.createManifestationItemData not exposed — manifestations skipped. Reload Foundry after system update.");
     } else {
+      const bossTier = Math.max(1, Math.min(4,
+        Number(actor.system?.system?.integrity?.tier ?? actor.system?.integrity?.tier ?? 1) || 1));
       for (const spec of manifestationSpecs) {
         try {
-          // Hand the helper a minimal values object. Defaults inside the
-          // helper fill the rest of the manifestation schema.
+          // Clamp manifestation tier to boss's tier — author may have
+          // specified a higher-tier ability for narrative reasons, but the
+          // cast engine rejects manTier > bossTier+1 as Out of Reach.
+          const specTier = Math.max(1, Math.min(4, Number(spec.tier ?? bossTier) || bossTier));
+          const tier = Math.min(specTier, bossTier);
+          // Parse damageFormula ("2d6", "3d8+2") into a damageRoll object.
+          // createManifestationItemData reads `damageRoll`, not damageFormula
+          // — the standalone formula was being silently dropped on first ship.
+          const damageRoll = _parseDamageFormula(spec.damageFormula, {
+            type: spec.damageType ?? "kinetic",
+            track: spec.damageTrack ?? "integrity",
+            attribute: spec.intent ?? "presence",
+            flavor: ""
+          });
           const values = {
             name: spec.name,
-            tier: Number(spec.tier ?? 2),
+            tier,
             intent: spec.intent ?? "presence",
             channel: spec.channel ?? "soul",
             sephirah: spec.sephirah ?? "tiferet",
@@ -782,9 +827,7 @@ async function _seedBossLoadout(actor, loadout) {
             function: spec.function ?? "harm",
             interactionModel: spec.interactionModel ?? "directed",
             mode: spec.mode ?? "hermetic",
-            damageFormula: spec.damageFormula ?? "",
-            damageType: spec.damageType ?? "kinetic",
-            damageTrack: spec.damageTrack ?? "integrity",
+            damageRoll,
             concept: spec.concept ?? "",
             effect: spec.effect ?? "",
             flavor: spec.flavor ?? "",
