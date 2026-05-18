@@ -50,6 +50,138 @@ const OP_LABELS = {
   faith:     "Faith"
 };
 
+// B13.D Phase E — 2026-05-17. Boss loadouts mirror the rig loadout pattern.
+// Each template-key (matching `game.bbttcc.api.raid.bossTemplates[].key`)
+// declares the powers + protections that should be embedded on the newly-
+// minted boss. The chip click prefills defenses into the visible form so
+// the GM can edit them; powerPack + augments are seeded post-create.
+//
+//   powerPack — BOSS_POWER_PACK key from game.bbttcc.api.raid.bossPowerPacks.
+//               Each pack's behaviors get applied to system.raidProfile.behaviorsRaw
+//               (same logic as boss-sheet's ftBossPackApply handler).
+//   augments  — BOSS_AUGMENT item names from the bbttcc-master-content.items
+//               compendium (Phase 2 Surge Burst, Wrath Resistance, Final Roar,
+//               Adaptive Defense, Eldritch Aura). Embedded via
+//               createEmbeddedDocuments so they surface as clickable items
+//               on the boss sheet's GM tab.
+//   defenses  — Comma-joined strings written to the form's resistance /
+//               immunity / vulnerability inputs at chip-click time so the GM
+//               sees + can edit before commit.
+const BOSS_LOADOUTS = {
+  qliphothic_auditor: {
+    powerPack: "audit_pack",
+    augments: ["Eldritch Aura"],
+    defenses: {
+      resistances: "social-shame, intrigue, manipulation",
+      immunities: "fear, charm",
+      vulnerabilities: "true-name"
+    },
+    manifestations: [
+      { name: "Audit Demand", tier: 2, intent: "intrigue", channel: "soul", sephirah: "binah",
+        damageFormula: "2d6", damageType: "psychic", damageTrack: "stress",
+        concept: "The ledger lifts a finger. The named one pays the asked-for debt — in clarity, in dignity, or in time.",
+        effect: "Target makes a Soul defense (DC 14) or takes 2d6 stress and answers one question truthfully.",
+        flavor: "Pages turn. The ink lifts off the paper and lands somewhere it shouldn't.",
+        tags: ["audit", "psychic", "social"] },
+      { name: "Cite Precedent", tier: 2, intent: "intrigue", channel: "mind", sephirah: "hod",
+        concept: "An older ruling supersedes the one in play. The boss claims its citation and the players' last move is undone.",
+        effect: "Cancels one player maneuver from this round. Single use until next phase.",
+        flavor: "A page in some other book closes audibly. The room remembers it never opened.",
+        tags: ["audit", "cancel", "phase-gated"] }
+    ]
+  },
+  megafauna_apex: {
+    powerPack: "finale_pack",
+    augments: ["Wrath Resistance", "Phase 2 Surge Burst"],
+    defenses: {
+      resistances: "kinetic, fire",
+      immunities: "",
+      vulnerabilities: "lightning, sonic"
+    },
+    manifestations: [
+      { name: "Charge", tier: 2, intent: "violence", channel: "body", sephirah: "geburah",
+        damageFormula: "3d8", damageType: "kinetic", damageTrack: "integrity",
+        concept: "Three tons of bone and weather move in a single line. Things in the way stop being in the way.",
+        effect: "Move up to triple speed in a straight line. First target hit takes 3d8 kinetic and is pushed back.",
+        flavor: "You hear it before you see it. By the time you see it, you should already be moving.",
+        tags: ["charge", "kinetic", "push"] },
+      { name: "Bellow", tier: 2, intent: "violence", channel: "soul", sephirah: "geburah",
+        damageFormula: "2d6", damageType: "sonic", damageTrack: "stress",
+        concept: "It roars. The roar is older than language. Hearing it is its own injury.",
+        effect: "All targets within Near range make a Soul defense (DC 13) or take 2d6 stress and lose their next bonus action.",
+        flavor: "Birds leave the trees three counties away.",
+        tags: ["aoe", "morale", "sonic"] }
+    ]
+  },
+  courtly_horror: {
+    powerPack: "courtly_spiral_pack",
+    augments: ["Adaptive Defense"],
+    defenses: {
+      resistances: "social, manipulation",
+      immunities: "charm",
+      vulnerabilities: "truth, exposure"
+    },
+    manifestations: [
+      { name: "Honeyed Insult", tier: 2, intent: "intrigue", channel: "mind", sephirah: "tiferet",
+        damageFormula: "2d6", damageType: "psychic", damageTrack: "stress",
+        concept: "A compliment with a hook in it. The target feels seen and that is the wound.",
+        effect: "Target makes a Mind defense (DC 14) or takes 2d6 stress and has disadvantage on their next social action.",
+        flavor: "Everyone laughs. Almost everyone laughs.",
+        tags: ["social", "insult", "stress"] },
+      { name: "Veiled Threat", tier: 3, intent: "intrigue", channel: "soul", sephirah: "geburah",
+        concept: "A perfectly polite sentence with a wire underneath it. The target understands what was promised.",
+        effect: "Target loses 1 Morale and gains a Compromised condition until end of scene.",
+        flavor: "Your tea is exactly the right temperature. Yours is not.",
+        tags: ["social", "morale", "condition"] }
+    ]
+  },
+  civic_idol: {
+    powerPack: "despair_pack",
+    augments: ["Eldritch Aura"],
+    defenses: {
+      resistances: "narrative, faith",
+      immunities: "argument",
+      vulnerabilities: "counter-narrative"
+    },
+    manifestations: [
+      { name: "Sermon", tier: 2, intent: "presence", channel: "soul", sephirah: "chesed",
+        damageFormula: "2d6", damageType: "radiant", damageTrack: "stress",
+        concept: "The idol speaks. Words land in the chest like coins in a fountain.",
+        effect: "All targets within Far range make a Soul defense (DC 14) or take 2d6 stress; faithful targets are exempt.",
+        flavor: "You agree before you hear what was said.",
+        tags: ["aoe", "morale", "narrative"] },
+      { name: "Excommunicate", tier: 3, intent: "presence", channel: "soul", sephirah: "binah",
+        concept: "The idol points. A single target is removed from the story it thought it was in.",
+        effect: "Target loses access to one faction OP track until end of scene (GM picks).",
+        flavor: "They are still standing here. Nobody sees them anymore.",
+        tags: ["social", "narrative", "single-target"] }
+    ]
+  },
+  feral_godling: {
+    powerPack: "finale_pack",
+    augments: ["Phase 2 Surge Burst", "Wrath Resistance", "Final Roar"],
+    defenses: {
+      resistances: "kinetic, qliphothic",
+      immunities: "",
+      vulnerabilities: "bound-true-name"
+    },
+    manifestations: [
+      { name: "Eruption", tier: 3, intent: "violence", channel: "body", sephirah: "geburah",
+        damageFormula: "4d8", damageType: "kinetic", damageTrack: "integrity",
+        concept: "Reality breaks for a moment around the godling. Things nearby experience the break as damage.",
+        effect: "Burst centered on the boss. All targets within Near make a Body defense (DC 15) or take 4d8 kinetic.",
+        flavor: "The ground forgets what shape it was. Then remembers a worse one.",
+        tags: ["aoe", "burst", "kinetic"] },
+      { name: "Unmake", tier: 4, intent: "violence", channel: "soul", sephirah: "binah",
+        damageFormula: "3d10", damageType: "qliphothic", damageTrack: "integrity",
+        concept: "The godling decides a thing was never there. Most things resist this. Some do not.",
+        effect: "Target makes a Soul defense (DC 16) or takes 3d10 qliphothic damage and gains Unmaking 1.",
+        flavor: "You think you were here. You cannot say why you thought that.",
+        tags: ["single-target", "qliphothic", "high-tier"] }
+    ]
+  }
+};
+
 function _esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, c => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -267,6 +399,12 @@ export async function openBossBuilder({ seed = null } = {}) {
     After creation: open the sheet to seed manifestations, refine the phase ladder,
     and station this boss as a Holding on a hex if it's a fixed encounter.
   </p>
+
+  <!-- Hidden field tracks which starter template the user picked. Read
+       through the same data-bbttcc-field plumbing as the rest of the form
+       to avoid dataset/jQuery-wrap discrepancies (see rig-builder.js for
+       the same pattern + history). -->
+  <input type="hidden" data-bbttcc-field="_templateKey" value=""/>
 </div>`;
 
   const isDuplicate = !!seed;
@@ -352,6 +490,18 @@ function _wireStarterChips(html, tpls) {
         const inp = root.querySelector(`[data-bbttcc-op="${k}"]`);
         if (inp) inp.value = Number(stats[k] ?? 0);
       }
+      // B13.D Phase E — 2026-05-17. Loadout-driven prefill for defenses +
+      // template key tracking. The _templateKey hidden input mirrors the
+      // rig builder's _starterKey pattern so the form-harvest path can
+      // recover the selection at commit time.
+      const loadout = BOSS_LOADOUTS[String(tpl.key)];
+      if (loadout) {
+        set("resistances",     loadout.defenses?.resistances     ?? "");
+        set("immunities",      loadout.defenses?.immunities      ?? "");
+        set("vulnerabilities", loadout.defenses?.vulnerabilities ?? "");
+      }
+      set("_templateKey", String(tpl.key));
+      root.dataset.bbttccSelectedTemplate = String(tpl.key);
       root.querySelectorAll("[data-bbttcc-starter]").forEach(b => {
         b.style.background = b === btn ? "rgba(200,62,62,0.22)" : "rgba(255,255,255,0.06)";
       });
@@ -513,9 +663,154 @@ async function _commit(root, tpls) {
   }
   if (!actor) return null;
 
+  // B13.D Phase E — 2026-05-17. Seed power pack + augments from the
+  // selected template's loadout. Defenses were already authored into the
+  // form (chip prefill) and persisted via Actor.create. Failure is non-
+  // fatal — the boss still mints, just without the loadout pieces.
+  const selectedTemplateKey = String(read("_templateKey") || root.dataset.bbttccSelectedTemplate || "");
+  const loadout = BOSS_LOADOUTS[selectedTemplateKey];
+  console.log("[bbttcc-auto-link/boss-builder] commit",
+    { actorId: actor?.id, selectedTemplateKey, hasLoadout: !!loadout,
+      loadoutKeys: loadout ? Object.keys(loadout) : [] });
+  if (loadout) {
+    try {
+      await _seedBossLoadout(actor, loadout);
+    } catch (e) {
+      console.warn("[bbttcc-auto-link/boss-builder] Loadout seed failed (non-fatal):", e);
+    }
+  }
+
   actor.sheet?.render(true);
-  ui.notifications?.info?.(`Created RFI Boss: ${actor.name} (tier ${tier}, ${bracketDef.label})`);
+  const loadoutHint = loadout
+    ? ` — seeded ${[loadout.powerPack ? `${loadout.powerPack} pack` : null,
+                    (loadout.augments?.length ? `${loadout.augments.length} augment(s)` : null),
+                    (loadout.manifestations?.length ? `${loadout.manifestations.length} manifestation(s)` : null)]
+                     .filter(Boolean).join(", ")}`
+    : "";
+  ui.notifications?.info?.(`Created RFI Boss: ${actor.name} (tier ${tier}, ${bracketDef.label})${loadoutHint}`);
   return actor;
+}
+
+/* Seed a freshly-minted boss with a power pack + augments per its template
+ * loadout. Power packs come from `game.bbttcc.api.raid.bossPowerPacks`
+ * (canonical BOSS_POWER_PACKS table) and write to system.raidProfile.
+ * behaviorsRaw — same shape boss-sheet's ftBossPackApply produces.
+ * Augments come from the bbttcc-master-content.items compendium by name.
+ * Defenses are NOT handled here; they're prefilled at chip-click time and
+ * authored through the form.
+ */
+async function _seedBossLoadout(actor, loadout) {
+  if (!actor || !loadout) return;
+  const TAG = "[bbttcc-auto-link/boss-builder/_seedBossLoadout]";
+
+  // --- Power pack: append behaviors to raidProfile.behaviorsRaw ---
+  if (loadout.powerPack) {
+    const packs = game?.bbttcc?.api?.raid?.bossPowerPacks ?? [];
+    const allPowers = game?.bbttcc?.api?.raid?.bossPowers ?? [];
+    const pack = packs.find(p => p.key === loadout.powerPack);
+    if (!pack) {
+      console.warn(TAG, `Power pack not found: ${loadout.powerPack} (is bbttcc-raid loaded?)`);
+    } else {
+      const powerKeys = Array.isArray(pack.powers) ? pack.powers : [];
+      const sys = actor.system?.system ?? actor.system;
+      let parsed;
+      try { parsed = JSON.parse(sys.raidProfile?.behaviorsRaw || "[]"); } catch { parsed = []; }
+      if (!Array.isArray(parsed)) parsed = [];
+      let added = 0;
+      for (const pk of powerKeys) {
+        const p = allPowers.find(x => x.key === pk);
+        if (!p) continue;
+        const id = p.behavior?.id ?? p.key;
+        if (parsed.some(b => (b.id ?? b.key) === id)) continue;
+        parsed.push(foundry.utils.deepClone(p.behavior ?? { id, label: p.label }));
+        added++;
+      }
+      await actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
+      console.log(TAG, "applied power pack",
+        { pack: pack.label, added, total: parsed.length });
+    }
+  }
+
+  // --- Augments + Manifestations: bulk-embed as items ---
+  // Augments come from the master-content compendium by name; manifestations
+  // are synthesized via the fourththing system's createManifestationItemData
+  // (same shape the Manifestation Wizard produces, so they render correctly
+  // on the boss sheet's Manifest tab + are Cast-able via ftBossManifestCast).
+  const itemsToCreate = [];
+
+  // Augments (compendium lookup).
+  const augmentNames = Array.isArray(loadout.augments) ? loadout.augments : [];
+  if (augmentNames.length) {
+    const PACK_ID = "bbttcc-master-content.items";
+    const pack = game.packs?.get?.(PACK_ID);
+    if (!pack) {
+      console.warn(TAG, `Compendium pack '${PACK_ID}' not found — augments will be skipped.`);
+    } else {
+      const idx = await pack.getIndex();
+      for (const name of augmentNames) {
+        const hit = idx.find(e => e.name === name);
+        if (!hit) {
+          console.warn(TAG, `Augment not found in compendium: ${name}`);
+          continue;
+        }
+        const doc = await pack.getDocument(hit._id);
+        const data = doc?.toObject?.();
+        if (data) { delete data._id; itemsToCreate.push(data); }
+      }
+    }
+  }
+
+  // Manifestations (synthesized via fourththing system helper).
+  const manifestationSpecs = Array.isArray(loadout.manifestations) ? loadout.manifestations : [];
+  if (manifestationSpecs.length) {
+    const builder = game?.fourththing?.createManifestationItemData;
+    if (typeof builder !== "function") {
+      console.warn(TAG, "game.fourththing.createManifestationItemData not exposed — manifestations skipped. Reload Foundry after system update.");
+    } else {
+      for (const spec of manifestationSpecs) {
+        try {
+          // Hand the helper a minimal values object. Defaults inside the
+          // helper fill the rest of the manifestation schema.
+          const values = {
+            name: spec.name,
+            tier: Number(spec.tier ?? 2),
+            intent: spec.intent ?? "presence",
+            channel: spec.channel ?? "soul",
+            sephirah: spec.sephirah ?? "tiferet",
+            stability: spec.stability ?? "sustained",
+            form: spec.form ?? "working",
+            function: spec.function ?? "harm",
+            interactionModel: spec.interactionModel ?? "directed",
+            mode: spec.mode ?? "hermetic",
+            damageFormula: spec.damageFormula ?? "",
+            damageType: spec.damageType ?? "kinetic",
+            damageTrack: spec.damageTrack ?? "integrity",
+            concept: spec.concept ?? "",
+            effect: spec.effect ?? "",
+            flavor: spec.flavor ?? "",
+            tags: Array.isArray(spec.tags) ? spec.tags : [],
+            costType: spec.costType ?? "clarity",
+            costValue: Number(spec.costValue ?? 1),
+            duration: spec.duration ?? "scene",
+            scale: spec.scale ?? "scene",
+            activation_block: { type: "action", consumePool: true }
+          };
+          const itemData = builder(actor, "power", values);
+          if (itemData) itemsToCreate.push(itemData);
+        } catch (err) {
+          console.warn(TAG, `Failed to synthesize manifestation '${spec?.name}':`, err);
+        }
+      }
+    }
+  }
+
+  console.log(TAG, "preparing to embed",
+    { count: itemsToCreate.length, names: itemsToCreate.map(i => i.name) });
+  if (itemsToCreate.length) {
+    const created = await actor.createEmbeddedDocuments("Item", itemsToCreate);
+    console.log(TAG, "embedded",
+      { count: created?.length ?? 0, ids: (created ?? []).map(d => d.id) });
+  }
 }
 
 function _install() {

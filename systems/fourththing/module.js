@@ -7138,6 +7138,13 @@ Hooks.once("init", function () {
   // Dreamwalker Dream-Cache Deploy in ft-class-automation needs to re-fire
   // a cast at no Clarity cost).
   game.fourththing.castManifestation = castManifestation;
+
+  // createManifestationItemData — exposed 2026-05-17 so the BBTTCC Boss
+  // Builder (bbttcc-auto-link/scripts/boss-builder.js) can synthesize
+  // template-appropriate manifestations as embedded items at boss-create
+  // time without having to replicate the schema. Same shape the wizard
+  // produces; safe to call with minimal `values` objects.
+  game.fourththing.createManifestationItemData = createManifestationItemData;
   game.fourththing.actions.somaBreak = async function (actor, { confirmed = false } = {}) {
     if (!actor) return;
 
