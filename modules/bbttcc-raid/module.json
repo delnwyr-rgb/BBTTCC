@@ -102,5 +102,6 @@
   ],
   "styles": [
     "css/raid-styles.css"
-  ]
+  ],
+  "socket": true
 }
