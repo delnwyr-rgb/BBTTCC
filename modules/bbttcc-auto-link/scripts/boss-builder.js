@@ -795,27 +795,47 @@ async function _seedBossLoadout(actor, loadout) {
     }
   }
 
-  // Manifestations (synthesized via fourththing system helper).
-  // Tier gets clamped to the boss's integrity.tier so the cast engine
-  // doesn't reject them at cast time (Out-of-Reach gate: reachBy > 1).
+  // Manifestations — prefer catalog over inline synthesis.
+  // For each spec, look up an item matching `spec.name` in the
+  // bbttcc-master-content.items compendium that's flagged as a
+  // bossManifestation. If found, embed a copy (canonical, edit-able per
+  // boss). If not found (catalog macro not run, or spec is bespoke),
+  // fall back to inline synthesis via game.fourththing.createManifestationItemData.
+  // Tier gets clamped to the boss's integrity.tier either way so the cast
+  // engine doesn't reject at cast time (Out-of-Reach gate: reachBy > 1).
   const manifestationSpecs = Array.isArray(loadout.manifestations) ? loadout.manifestations : [];
   if (manifestationSpecs.length) {
     const builder = game?.fourththing?.createManifestationItemData;
-    if (typeof builder !== "function") {
-      console.warn(TAG, "game.fourththing.createManifestationItemData not exposed — manifestations skipped. Reload Foundry after system update.");
-    } else {
-      const bossTier = Math.max(1, Math.min(4,
-        Number(actor.system?.system?.integrity?.tier ?? actor.system?.integrity?.tier ?? 1) || 1));
-      for (const spec of manifestationSpecs) {
+    const PACK_ID = "bbttcc-master-content.items";
+    const pack = game.packs?.get?.(PACK_ID);
+    const idx = pack ? await pack.getIndex() : null;
+    const bossTier = Math.max(1, Math.min(4,
+      Number(actor.system?.system?.integrity?.tier ?? actor.system?.integrity?.tier ?? 1) || 1));
+
+    for (const spec of manifestationSpecs) {
+      let itemData = null;
+
+      // Step 1: try to find a catalog item by name + bossManifestation flag.
+      if (idx) {
+        const hit = idx.find(e => e.name === spec.name);
+        if (hit) {
+          const doc = await pack.getDocument(hit._id);
+          const isBossMan = !!doc?.flags?.fourththing?.bossManifestation;
+          if (doc && isBossMan) {
+            itemData = doc.toObject();
+            delete itemData._id;
+            console.log(TAG, `Embedded from catalog: ${spec.name}`);
+          }
+        }
+      }
+
+      // Step 2: fall back to inline synthesis if catalog miss or no catalog.
+      if (!itemData) {
+        if (typeof builder !== "function") {
+          console.warn(TAG, `Manifestation '${spec.name}' skipped — no catalog entry and game.fourththing.createManifestationItemData unavailable. Run the boss-manifestation-catalog macro or reload Foundry.`);
+          continue;
+        }
         try {
-          // Clamp manifestation tier to boss's tier — author may have
-          // specified a higher-tier ability for narrative reasons, but the
-          // cast engine rejects manTier > bossTier+1 as Out of Reach.
-          const specTier = Math.max(1, Math.min(4, Number(spec.tier ?? bossTier) || bossTier));
-          const tier = Math.min(specTier, bossTier);
-          // Parse damageFormula ("2d6", "3d8+2") into a damageRoll object.
-          // createManifestationItemData reads `damageRoll`, not damageFormula
-          // — the standalone formula was being silently dropped on first ship.
           const damageRoll = _parseDamageFormula(spec.damageFormula, {
             type: spec.damageType ?? "kinetic",
             track: spec.damageTrack ?? "integrity",
@@ -824,7 +844,7 @@ async function _seedBossLoadout(actor, loadout) {
           });
           const values = {
             name: spec.name,
-            tier,
+            tier: Number(spec.tier ?? bossTier),
             intent: spec.intent ?? "presence",
             channel: spec.channel ?? "soul",
             sephirah: spec.sephirah ?? "tiferet",
@@ -844,14 +864,23 @@ async function _seedBossLoadout(actor, loadout) {
             scale: spec.scale ?? "scene",
             activation_block: { type: "action", consumePool: true }
           };
-          const itemData = builder(actor, "power", values);
-          if (itemData) {
-            manifestationItemIndices.add(itemsToCreate.length);
-            itemsToCreate.push(itemData);
-          }
+          itemData = builder(actor, "power", values);
+          if (itemData) console.log(TAG, `Synthesized inline (no catalog): ${spec.name}`);
         } catch (err) {
           console.warn(TAG, `Failed to synthesize manifestation '${spec?.name}':`, err);
+          continue;
         }
+      }
+
+      // Step 3: clamp the manifestation's tier to the boss's tier. Same
+      // logic regardless of whether the item came from catalog or inline.
+      if (itemData) {
+        const curTier = Math.max(1, Math.min(4,
+          Number(itemData?.system?.manifestation?.tier ?? bossTier) || bossTier));
+        const tier = Math.min(curTier, bossTier);
+        foundry.utils.setProperty(itemData, "system.manifestation.tier", tier);
+        manifestationItemIndices.add(itemsToCreate.length);
+        itemsToCreate.push(itemData);
       }
     }
   }
