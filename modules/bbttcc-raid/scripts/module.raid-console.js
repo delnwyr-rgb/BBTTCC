@@ -3526,10 +3526,44 @@ _renderScenarioHUD(host, round){
     }
 
     const coalitionTop = _rcCoalitionBonus(attacker, this.vm.supportFactionIds || [], catTop);
+
+    // Player perspective: figure out which faction in this raid the current
+    // user actually owns (lead attacker vs supporter) and surface that to the
+    // template so the header + bank panel read as "your faction" instead of
+    // the lead attacker's. GM view is unchanged.
+    let playerRole = null;          // "attacker" | "supporter" | null
+    let playerFaction = null;
+    let leadAttackerName = attacker?.name || "(none)";
+    if (!_rcIsGMUser()) {
+      try {
+        const all = game.actors?.contents || [];
+        const myOwned = all.filter(a => isFaction(a) && a.isOwner);
+        const myIds = new Set(myOwned.map(a => String(a.id)));
+        const attackerId = String(this.vm.attackerId || "");
+        if (attackerId && myIds.has(attackerId)) {
+          playerRole = "attacker";
+          playerFaction = attacker;
+        } else {
+          const sup = (this.vm.supportFactionIds || []).map(String).find(id => myIds.has(id));
+          if (sup) {
+            playerRole = "supporter";
+            playerFaction = game.actors?.get(sup) || null;
+          }
+        }
+      } catch(_eP) {}
+    }
+    context.playerRole = playerRole;
+    context.playerFactionId = playerFaction?.id || null;
+    context.playerFactionName = playerFaction?.name || null;
+    context.leadAttackerName = leadAttackerName;
+
+    // Pick the bank the player sees: their own when supporting, the lead's
+    // when leading, the resolved attacker otherwise (GM view).
+    const bankActor = (playerRole === "supporter" && playerFaction) ? playerFaction : attacker;
     context.currentBank = {
       cat: catTop,
-      attacker: attacker ? getOPBank(attacker) : null,
-      attackerName: attacker?.name || "(none)",
+      attacker: bankActor ? getOPBank(bankActor) : null,
+      attackerName: bankActor?.name || "(none)",
       defender: defender ? getOPBank(defender) : null,
       defenderName: defender?.name || "(none)",
       hasDef: !!defender,
@@ -5984,11 +6018,12 @@ try {
 
 // --- Toolbar + API binding --------------------------------------------------
 
-// Scan faction actors for the most-recently-touched raidSession that involves
-// any faction this user owns — either as primary attacker or in
-// supportFactionIds. Returns { attackerId } or null. Lets the player-side
-// toolbar button auto-jump into the GM's current raid instead of opening a
-// stale singleton view from a previous session.
+// Scan faction actors for an ACTIVE raidSession that involves any faction
+// this user owns — either as primary attacker or in supportFactionIds.
+// "Active" = has a target picked OR rounds logged OR supporters listed; a
+// session whose flag exists but is empty (post-End-Raid) is treated as
+// inactive and skipped so the player isn't trapped in a previous raid's
+// stale flag. Returns { attackerId } or null.
 async function _findActiveRaidForUser() {
   try {
     const all = game.actors?.contents || [];
@@ -6008,6 +6043,10 @@ async function _findActiveRaidForUser() {
       const isAttacker = myFactionIds.has(attackerId);
       const isSupport  = supports.some(id => myFactionIds.has(String(id)));
       if (!isAttacker && !isSupport) continue;
+      const hasTarget   = !!String(s.targetUuid || "").trim();
+      const hasRounds   = Array.isArray(s.rounds) && s.rounds.length > 0;
+      const hasSupports = supports.length > 0;
+      if (!hasTarget && !hasRounds && !hasSupports) continue; // empty/cleared
       candidates.push({ attackerId, rev: Number(s.rev || 0), ts: Number(s.ts || 0) });
     }
     if (!candidates.length) return null;
@@ -6124,12 +6163,45 @@ function bindAPI() {
           const attackerId = String(actor?.id || "");
           const set = globalThis.__bbttccRaidOpenConsoles;
           if (!set) return;
+
+          // If THIS client is a non-GM player whose owned faction just got
+          // added to this raid (as attacker or supporter), and their open
+          // console is pointed at a different (likely stale) attacker,
+          // re-route to the live raid before re-rendering.
+          let userInThisRaid = false;
+          let userIsAttacker = false;
+          try {
+            if (!_rcIsGMUser()) {
+              const sess = actor?.getFlag?.(RAID_ID, "raidSession");
+              if (sess && typeof sess === "object") {
+                const all = game.actors?.contents || [];
+                const myIds = new Set(all.filter(a => isFaction(a) && a.isOwner).map(a => String(a.id)));
+                const supports = Array.isArray(sess.supportFactionIds) ? sess.supportFactionIds.map(String) : [];
+                userIsAttacker = myIds.has(attackerId);
+                userInThisRaid = userIsAttacker || supports.some(id => myIds.has(String(id)));
+              }
+            }
+          } catch(_eRR) {}
+
           for (const app of Array.from(set)) {
             try {
               if (!app || !app.rendered) continue;
-              if (String(app.vm?.attackerId||"") !== attackerId) continue;
-              // Avoid immediate self-loop; still safe because rev check exists.
-              app.render(false);
+              const appAttacker = String(app.vm?.attackerId || "");
+              const matches = appAttacker === attackerId;
+              if (matches) {
+                // Direct match — existing path, hook re-renders for rev sync.
+                app.render(false);
+                continue;
+              }
+              if (userInThisRaid && !_rcIsGMUser()) {
+                // Player just got pulled into this raid via supports (or is
+                // now the attacker). Re-route the singleton console and
+                // force a fresh session apply.
+                app.vm.attackerId = attackerId;
+                app.vm.__lockAttackerId = attackerId;
+                app.__sessionRev = 0;
+                app.render(false);
+              }
             } catch(_eA) {}
           }
         } catch(_eU) {}

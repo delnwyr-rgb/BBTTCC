@@ -40,13 +40,23 @@
       <div class="flex1">
         <div style="font-weight:700; letter-spacing:.06em; text-transform:uppercase; opacity:.9;">Raid Commitments</div>
         <div style="font-size:.85rem; opacity:.85;">
-          Your Faction: <b>{{default currentBank.attackerName "(none)"}}</b>
+          Your Faction: <b>{{default playerFactionName currentBank.attackerName}}</b>
+          {{#if playerRole}}
+            <span style="display:inline-block; margin-left:.35rem; padding:.1rem .45rem; border-radius:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; {{#if (eq playerRole "attacker")}}background:rgba(220,38,38,0.22); border:1px solid rgba(248,113,113,0.55); color:#fecaca;{{else}}background:rgba(59,130,246,0.22); border:1px solid rgba(96,165,250,0.55); color:#bfdbfe;{{/if}}">
+              {{#if (eq playerRole "attacker")}}Lead Attacker{{else}}Supporter{{/if}}
+            </span>
+          {{/if}}
+          {{#if (eq playerRole "supporter")}} • Supporting: <b>{{leadAttackerName}}</b>{{/if}}
           {{#if vm.activityKey}} • Mode: <b>{{default vm.activityKey "—"}}</b>{{/if}}
           {{#if vm.targetName}} • Target: <b>{{default vm.targetName "—"}}</b>{{/if}}
         </div>
       </div>
       <div class="flex0" style="opacity:.8; font-size:.85rem;">
-        Waiting for GM to set round type and resolve.
+        {{#if playerRole}}
+          {{#if (eq playerRole "attacker")}}You lead this raid.{{else}}You are supporting this raid.{{/if}}
+        {{else}}
+          Waiting for GM to set round type and resolve.
+        {{/if}}
       </div>
     {{/if}}
   </header>
