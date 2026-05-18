@@ -42,7 +42,16 @@ const CHASSIS_STARTERS = [
     defaults: {
       bracket: "personal", mobility: "mobile", tier: 1,
       capacity: { pilot: [1,1], gunner: [0,0], engineer: [0,0], crew: [0,1] },
-      tags: "personal, mount, rider"
+      tags: "personal, mount, rider",
+      loadout: {
+        frame:   { synthName: "Personal Mount Frame", bracket: "personal", pilotMount: true, baseIntegrity: 12, tierStep: 4,
+                   mobilityAllowed: ["mobile"], slots: { weapon: 0, system: 1, output: 0 },
+                   capacity: { pilot: {min:1,max:1}, gunner: {min:0,max:0}, engineer: {min:0,max:0}, crew: {min:0,max:1} },
+                   actions: { pilot: ["steer","evasive","swerve"], gunner: [], engineer: [], crew: ["brace","hold-on"] },
+                   travel: { speed: 4, range: 8 } },
+        weapons: [],
+        systems: ["Sensor Suite"]
+      }
     }
   },
   {
@@ -52,7 +61,8 @@ const CHASSIS_STARTERS = [
     defaults: {
       bracket: "light", mobility: "mobile", tier: 1,
       capacity: { pilot: [1,1], gunner: [0,1], engineer: [0,0], crew: [0,2] },
-      tags: "scout, recon, fast"
+      tags: "scout, recon, fast",
+      loadout: { frame: "Light Skiff Frame", weapons: ["Twin Autocannons"], systems: ["Sensor Suite"] }
     }
   },
   {
@@ -62,7 +72,8 @@ const CHASSIS_STARTERS = [
     defaults: {
       bracket: "medium", mobility: "mobile", tier: 2,
       capacity: { pilot: [1,1], gunner: [0,2], engineer: [0,1], crew: [0,4] },
-      tags: "workhorse, line, hauler"
+      tags: "workhorse, line, hauler",
+      loadout: { frame: "Sail Barge Frame", weapons: ["Twin Autocannons"], systems: ["Repair Bay", "Comms Array"] }
     }
   },
   {
@@ -72,7 +83,8 @@ const CHASSIS_STARTERS = [
     defaults: {
       bracket: "heavy", mobility: "mobile", tier: 2,
       capacity: { pilot: [1,1], gunner: [1,3], engineer: [0,1], crew: [0,4] },
-      tags: "armored, line-breaker, heavy"
+      tags: "armored, line-breaker, heavy",
+      loadout: { frame: "War Rig Frame", weapons: ["Twin Autocannons", "Plasma Lance"], systems: ["Reinforced Plating", "Repair Bay"] }
     }
   },
   {
@@ -82,7 +94,8 @@ const CHASSIS_STARTERS = [
     defaults: {
       bracket: "siege", mobility: "mobile", tier: 3,
       capacity: { pilot: [1,2], gunner: [1,4], engineer: [1,2], crew: [2,8] },
-      tags: "siege, structural, terror"
+      tags: "siege, structural, terror",
+      loadout: { frame: "Forge Facility Frame", weapons: ["Mortar Battery"], systems: ["Reinforced Plating", "Sensor Suite"] }
     }
   },
   {
@@ -92,7 +105,57 @@ const CHASSIS_STARTERS = [
     defaults: {
       bracket: "medium", mobility: "stationary", tier: 2,
       capacity: { pilot: [0,1], gunner: [1,2], engineer: [0,1], crew: [0,2] },
-      tags: "emplacement, battery, fixed"
+      tags: "emplacement, battery, fixed",
+      loadout: { frame: "Garrison Fort Frame", weapons: ["Mortar Battery"], systems: ["Reinforced Plating", "Sensor Suite"] }
+    }
+  },
+  {
+    // B13.D Phase D — 2026-05-17. Avuncular Transport Rig: medium land
+    // chassis, primary role is transport across Bad Eden. Carries crew +
+    // cargo, has plating + light firepower for protection in transit.
+    // Designed as a faction starter rig.
+    key: "atr",
+    label: "Avuncular Transport Rig (ATR)",
+    description: "Medium land transport. Carries people and matériel across Bad Eden; armored enough to discourage trouble, armed enough to end it.",
+    defaults: {
+      bracket: "medium", mobility: "mobile", tier: 2,
+      capacity: { pilot: [1,1], gunner: [0,1], engineer: [0,1], crew: [2,6] },
+      tags: "transport, faction-starter, land, atr",
+      loadout: {
+        synthName: "ATR Transport Frame",
+        frame: { synthName: "ATR Transport Frame", bracket: "medium", baseIntegrity: 36, tierStep: 10,
+                 mobilityAllowed: ["mobile"], slots: { weapon: 1, system: 2, output: 1 },
+                 capacity: { pilot: {min:1,max:1}, gunner: {min:0,max:1}, engineer: {min:0,max:1}, crew: {min:2,max:6} },
+                 actions: { pilot: ["steer","hold-position","evasive","swerve"],
+                            gunner: ["fire-weapon","aimed-shot","suppression","reload"],
+                            engineer: ["repair","boost-system","vent-heat"],
+                            crew: ["operate-module","brace","signal","hold-on"] },
+                 travel: { speed: 3, range: 14 } },
+        weapons: ["Twin Autocannons"],
+        systems: ["Reinforced Plating", "Comms Array"]
+      }
+    }
+  },
+  {
+    // B13.D Phase D — 2026-05-17. Hexmobile: personal land transport,
+    // 2 riders, single pilot-mount weapon. The OTHER faction starter rig.
+    key: "hexmobile",
+    label: "Hexmobile",
+    description: "Personal land transport. Two riders, one weapon mounted at the pilot's hand. Bad Eden's signature scout-and-skirmish ride.",
+    defaults: {
+      bracket: "personal", mobility: "mobile", tier: 1,
+      capacity: { pilot: [1,1], gunner: [0,0], engineer: [0,0], crew: [0,1] },
+      tags: "hexmobile, faction-starter, personal, land",
+      loadout: {
+        frame: { synthName: "Hexmobile Frame", bracket: "personal", pilotMount: true, baseIntegrity: 14, tierStep: 4,
+                 mobilityAllowed: ["mobile"], slots: { weapon: 0, system: 1, output: 0 },
+                 capacity: { pilot: {min:1,max:1}, gunner: {min:0,max:0}, engineer: {min:0,max:0}, crew: {min:0,max:1} },
+                 actions: { pilot: ["steer","evasive","swerve","fire-weapon"], gunner: [], engineer: [],
+                            crew: ["brace","hold-on"] },
+                 travel: { speed: 5, range: 10 } },
+        weapons: ["Twin Autocannons"],
+        systems: ["Sensor Suite"]
+      }
     }
   }
 ];
@@ -375,6 +438,8 @@ function _wireStarterChips(html) {
       const idx = Number(btn.dataset.bbttccIdx);
       const tpl = CHASSIS_STARTERS[idx];
       if (!tpl) return;
+      // Track selected starter so _commit can pull its loadout for seeding.
+      root.dataset.bbttccSelectedStarter = String(tpl.key);
       const d = tpl.defaults;
       const set = (name, val) => {
         const el = root.querySelector(`[data-bbttcc-field="${name}"]`);
@@ -521,9 +586,120 @@ async function _commit(root) {
   }
   if (!actor) return null;
 
+  // B13.D Phase C — 2026-05-17. Seed embedded frame/weapons/systems from
+  // the selected starter chip's loadout (if any). Pulls from the
+  // bbttcc-master-content.items compendium by name, or synthesizes the
+  // frame inline when the loadout declares a `frame` object instead of a
+  // string. Failure is non-fatal — the rig still mints, just bare.
+  const selectedKey = String(root.dataset.bbttccSelectedStarter ?? "");
+  const chosen = CHASSIS_STARTERS.find(s => s.key === selectedKey);
+  const loadout = chosen?.defaults?.loadout;
+  if (loadout) {
+    try {
+      await _seedLoadout(actor, loadout, { tier });
+    } catch (e) {
+      console.warn("[bbttcc-auto-link/rig-builder] Loadout seed failed (non-fatal):", e);
+    }
+  }
+
   actor.sheet?.render(true);
-  ui.notifications?.info?.(`Created RFI Rig: ${actor.name} (tier ${tier}, ${bracketDef.label}, ${mobility})`);
+  const loadoutHint = loadout
+    ? ` — seeded ${[loadout.frame ? "frame" : null,
+                    (loadout.weapons?.length ? `${loadout.weapons.length} weapon(s)` : null),
+                    (loadout.systems?.length ? `${loadout.systems.length} system(s)` : null)]
+                     .filter(Boolean).join(", ")}`
+    : "";
+  ui.notifications?.info?.(`Created RFI Rig: ${actor.name} (tier ${tier}, ${bracketDef.label}, ${mobility})${loadoutHint}`);
   return actor;
+}
+
+/* Seed embedded frame + weapons + systems on a newly-minted rig from a
+ * chassis loadout. Looks up named items in the `bbttcc-master-content.items`
+ * compendium; if a `frame` field is an object (not a string), builds it
+ * synthetically inline (used for personal-bracket frames that aren't in the
+ * canonical 5-frame catalog, e.g. Hexmobile).
+ */
+async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
+  if (!actor || !loadout) return;
+  const PACK_ID = "bbttcc-master-content.items";
+  const pack = game.packs?.get?.(PACK_ID);
+  const idx = pack ? await pack.getIndex() : null;
+  const itemsToCreate = [];
+
+  // Frame: either a compendium name lookup, or a synthetic spec object.
+  if (loadout.frame) {
+    if (typeof loadout.frame === "string") {
+      const hit = idx?.find?.(e => e.name === loadout.frame);
+      if (hit) {
+        const doc = await pack.getDocument(hit._id);
+        const data = doc?.toObject?.();
+        if (data) { delete data._id; itemsToCreate.push(data); }
+      } else {
+        console.warn(`[bbttcc-auto-link/rig-builder] Frame not found in compendium: ${loadout.frame}`);
+      }
+    } else if (typeof loadout.frame === "object") {
+      itemsToCreate.push(_buildSyntheticFrame(loadout.frame));
+    }
+  }
+
+  // Weapons + systems — by-name lookup in compendium. Failure to find any
+  // single item is non-fatal; we just skip it.
+  const namedItems = [
+    ...(loadout.weapons ?? []),
+    ...(loadout.systems ?? [])
+  ];
+  if (namedItems.length && idx) {
+    for (const name of namedItems) {
+      const hit = idx.find(e => e.name === name);
+      if (!hit) {
+        console.warn(`[bbttcc-auto-link/rig-builder] Loadout item not found: ${name}`);
+        continue;
+      }
+      const doc = await pack.getDocument(hit._id);
+      const data = doc?.toObject?.();
+      if (data) { delete data._id; itemsToCreate.push(data); }
+    }
+  }
+
+  if (itemsToCreate.length) {
+    await actor.createEmbeddedDocuments("Item", itemsToCreate);
+  }
+}
+
+/* Build a synthetic rig-frame Item from an inline spec. Used when the
+ * loadout doesn't reference a canonical catalog frame (e.g. personal-bracket
+ * frames that don't exist in bbttcc-master-content yet). Stamps the same
+ * shape the catalog macro stamps: type:"gear" + flags.fourththing.rigGear +
+ * flags.fourththing.rigFrame.
+ */
+function _buildSyntheticFrame(spec) {
+  return {
+    name: spec.synthName ?? "Custom Frame",
+    type: "gear",
+    img: "icons/svg/oak.svg",
+    system: {
+      description: {
+        value: `<p>Synthetic frame authored by the Rig Builder. Bracket: ${spec.bracket ?? "—"}. ${spec.pilotMount ? "Pilot Mount enabled — one pilot-fired weapon." : ""}</p>`,
+        chat: ""
+      }
+    },
+    flags: {
+      fourththing: {
+        rigGear: { subtype: "rig-frame" },
+        rigFrame: {
+          bracket: spec.bracket ?? "medium",
+          baseIntegrity: Number(spec.baseIntegrity) || 30,
+          tierStep: Number(spec.tierStep) || 0,
+          pilotMount: !!spec.pilotMount,
+          mobilityAllowed: Array.isArray(spec.mobilityAllowed) ? spec.mobilityAllowed : ["mobile"],
+          slots: spec.slots ?? { weapon: 0, system: 0, output: 0 },
+          capacity: spec.capacity ?? {},
+          actions: spec.actions ?? {},
+          travel: spec.travel ?? { speed: 0, range: 0 }
+        }
+      }
+    }
+  };
 }
 
 function _install() {

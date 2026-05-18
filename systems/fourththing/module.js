@@ -11921,13 +11921,23 @@ Hooks.once("init", function () {
       // bracket / base integrity / slot caps / allowed mobility.
       const frameItem = bySubtype.frame[0] ?? null;
       const frameFlags = frameItem?.flags?.fourththing?.rigFrame ?? null;
+      // 2026-05-17 — Pilot Mount substrate (B13.D Phase A). Personal-bracket
+      // frames typically have slots.weapon = 0 but can still mount ONE weapon
+      // that the pilot fires (bikes, hexmobiles, etc.). The `pilotMount` flag
+      // adds +1 to the weapon slot cap; downstream fire path (line ~853) already
+      // routes pilot-fires when gunner.max === 0.
+      const _baseWeaponSlots = Number(frameFlags?.slots?.weapon ?? 0) || 0;
+      const _hasPilotMount   = !!frameFlags?.pilotMount;
       const frameRow = frameItem ? {
         id: frameItem.id, name: frameItem.name, img: frameItem.img,
         bracket: frameFlags?.bracket ?? integrity.bracket ?? "—",
         baseIntegrity: Number(frameFlags?.baseIntegrity) || 0,
         tierStep: Number(frameFlags?.tierStep) || 0,
+        pilotMount: _hasPilotMount,
         slotCaps: {
-          weapon: Number(frameFlags?.slots?.weapon ?? 0) || 0,
+          weapon: _baseWeaponSlots + (_hasPilotMount ? 1 : 0),
+          weaponBase: _baseWeaponSlots,
+          pilotMount: _hasPilotMount ? 1 : 0,
           system: Number(frameFlags?.slots?.system ?? 0) || 0,
           output: Number(frameFlags?.slots?.output ?? 0) || 0
         },

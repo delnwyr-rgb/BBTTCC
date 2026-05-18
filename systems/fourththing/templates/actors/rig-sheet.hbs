@@ -245,12 +245,23 @@
       </section>
 
       {{!-- Equipped Weapons — polish pass (2026-05-12): same row pattern as
-           Gear tab for consistency. Header shows slot used/max from frame. --}}
-      <section class="ft-rig-weapons ft-rig-gear-section">
+           Gear tab for consistency. Header shows slot used/max from frame.
+           2026-05-17: when the frame has pilotMount and no gunner-mount weapon
+           slots, the section relabels as "Pilot Mount" — a single weapon the
+           pilot fires directly (bikes, hexmobiles, etc.). --}}
+      <section class="ft-rig-weapons ft-rig-gear-section{{#if gear.frameRow.pilotMount}} ft-rig-weapons--pilot-mount{{/if}}">
         <div class="ft-block-title">
-          Equipped Weapons
+          {{#if gear.frameRow.pilotMount}}
+            {{#if (bbttcc_eq gear.slotUsage.weapon.weaponBase 0)}}
+              Pilot Mount <span class="ft-block-hint" data-tooltip="Personal-bracket rig: one weapon the pilot fires directly while driving.">· pilot fires</span>
+            {{else}}
+              Equipped Weapons <span class="ft-block-hint" data-tooltip="Includes one pilot-mount slot.">· +pilot mount</span>
+            {{/if}}
+          {{else}}
+            Equipped Weapons
+          {{/if}}
           <span class="ft-rig-slot-cap{{#if gear.slotOverage.weapon}} ft-rig-slot-cap--over{{/if}}"
-                data-tooltip="Weapon slots used / frame max{{#if gear.slotOverage.weapon}} — over capacity!{{/if}}">
+                data-tooltip="Weapon slots used / frame max{{#if gear.frameRow.pilotMount}} (incl. pilot mount){{/if}}{{#if gear.slotOverage.weapon}} — over capacity!{{/if}}">
             {{gear.slotUsage.weapon.used}}/{{gear.slotUsage.weapon.max}}
           </span>
         </div>
@@ -269,7 +280,17 @@
           {{/each}}
         </div>
         {{else}}
-        <div class="ft-rig-gear-empty">Drop a <code>rig-weapon</code> item onto the sheet to equip.</div>
+        <div class="ft-rig-gear-empty">
+          {{#if gear.frameRow.pilotMount}}
+            {{#if (bbttcc_eq gear.slotUsage.weapon.weaponBase 0)}}
+              Drop a <code>rig-weapon</code> item onto the sheet — the pilot will fire it.
+            {{else}}
+              Drop a <code>rig-weapon</code> item onto the sheet to equip.
+            {{/if}}
+          {{else}}
+            Drop a <code>rig-weapon</code> item onto the sheet to equip.
+          {{/if}}
+        </div>
         {{/if}}
       </section>
     </div>
