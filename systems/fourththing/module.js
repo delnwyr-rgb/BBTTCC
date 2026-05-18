@@ -14715,9 +14715,9 @@ async function ftBoardRig(steward, rig, role = null) {
       ui.notifications?.warn("No GM is online to confirm boarding.");
       return;
     }
-    game.socket?.emit?.("module.bbttcc-raid", {
-      t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role
-    });
+    const payload = { t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role };
+    console.log("[ft:relay] emit ft-boardRig", payload, "socket=", !!game.socket);
+    game.socket?.emit?.("module.bbttcc-raid", payload);
     ui.notifications?.info(`Boarding request sent — ${steward.name} → ${rig.name}.`);
     return;
   }
@@ -14834,9 +14834,9 @@ async function ftDisembarkSteward(steward) {
       ui.notifications?.warn("No GM is online to confirm disembark.");
       return;
     }
-    game.socket?.emit?.("module.bbttcc-raid", {
-      t: "ft-disembarkSteward", stewardId: steward.id
-    });
+    const payload = { t: "ft-disembarkSteward", stewardId: steward.id };
+    console.log("[ft:relay] emit ft-disembarkSteward", payload, "socket=", !!game.socket);
+    game.socket?.emit?.("module.bbttcc-raid", payload);
     ui.notifications?.info(`Disembark request sent — ${steward.name}.`);
     return;
   }
@@ -16689,18 +16689,26 @@ function _ftFindHexDrawingById(hexId) {
 }
 
 // GM socket relay for player-triggered scene activation + boarding.
-// Only the first active GM handles each message to avoid double-mutation
-// in multi-GM tables.
+// 2026-05-18 diagnostic — log every message on every client so we can
+// trace where the relay chain breaks. Handle on any active GM; for
+// idempotent ops (scene activate) the duplicate is harmless. For
+// boarding we de-dupe with a recent-payload cache.
+const __ftRelaySeen = new Map();
+function _ftRelaySeenRecently(key, windowMs = 3000) {
+  const now = Date.now();
+  for (const [k, t] of __ftRelaySeen) if (now - t > windowMs) __ftRelaySeen.delete(k);
+  if (__ftRelaySeen.has(key)) return true;
+  __ftRelaySeen.set(key, now);
+  return false;
+}
 Hooks.once("ready", () => {
-  if (!game.socket) return;
-  const _ftIsHandlingGm = () => {
-    if (!game.user?.isGM) return false;
-    const firstGm = game.users?.find?.(u => u.isGM && u.active);
-    return firstGm?.id === game.user.id;
-  };
+  if (!game.socket) { console.warn("[ft:relay] no game.socket at ready"); return; }
+  console.log("[ft:relay] registering listener on module.bbttcc-raid — isGM=", !!game.user?.isGM, "userId=", game.user?.id);
   game.socket.on("module.bbttcc-raid", (msg) => {
-    if (!_ftIsHandlingGm()) return;
+    console.log("[ft:relay] RECEIVED", msg, "isGM=", !!game.user?.isGM, "userId=", game.user?.id);
+    if (!game.user?.isGM) return;
     if (msg?.t === "ft-activateBattleScene") {
+      if (_ftRelaySeenRecently(`activate:${msg.sceneId}:${msg.idx}`)) return;
       const scene = game.scenes?.get(msg.sceneId);
       if (!scene) return;
       const hex = msg.hexUuid ? foundry.utils.fromUuidSync(msg.hexUuid) : null;
@@ -16708,13 +16716,17 @@ Hooks.once("ready", () => {
         if (hex) _ftSetHexCurrentSceneIdx(hex, Number(msg.idx) || 0);
       });
     } else if (msg?.t === "ft-boardRig") {
+      if (_ftRelaySeenRecently(`board:${msg.stewardId}:${msg.rigId}`)) return;
       const steward = game.actors?.get(msg.stewardId);
       const rig     = game.actors?.get(msg.rigId);
-      if (!steward || !rig) return;
+      if (!steward || !rig) { console.warn("[ft:relay] ft-boardRig missing actor(s)", msg); return; }
+      console.log("[ft:relay] handling ft-boardRig", steward.name, "→", rig.name);
       ftBoardRig(steward, rig, msg.role || null);
     } else if (msg?.t === "ft-disembarkSteward") {
+      if (_ftRelaySeenRecently(`disembark:${msg.stewardId}`)) return;
       const steward = game.actors?.get(msg.stewardId);
-      if (!steward) return;
+      if (!steward) { console.warn("[ft:relay] ft-disembarkSteward missing steward", msg); return; }
+      console.log("[ft:relay] handling ft-disembarkSteward", steward.name);
       ftDisembarkSteward(steward);
     }
   });
