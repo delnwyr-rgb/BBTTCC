@@ -14716,8 +14716,8 @@ async function ftBoardRig(steward, rig, role = null) {
       return;
     }
     const payload = { t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role };
-    console.log("[ft:relay] emit ft-boardRig", payload, "socket=", !!game.socket);
-    game.socket?.emit?.("module.bbttcc-raid", payload);
+    console.log("[ft:relay] emit ft-boardRig on system.fourththing", payload);
+    game.socket?.emit?.("system.fourththing", payload);
     ui.notifications?.info(`Boarding request sent — ${steward.name} → ${rig.name}.`);
     return;
   }
@@ -14835,8 +14835,8 @@ async function ftDisembarkSteward(steward) {
       return;
     }
     const payload = { t: "ft-disembarkSteward", stewardId: steward.id };
-    console.log("[ft:relay] emit ft-disembarkSteward", payload, "socket=", !!game.socket);
-    game.socket?.emit?.("module.bbttcc-raid", payload);
+    console.log("[ft:relay] emit ft-disembarkSteward on system.fourththing", payload);
+    game.socket?.emit?.("system.fourththing", payload);
     ui.notifications?.info(`Disembark request sent — ${steward.name}.`);
     return;
   }
@@ -16703,9 +16703,13 @@ function _ftRelaySeenRecently(key, windowMs = 3000) {
 }
 Hooks.once("ready", () => {
   if (!game.socket) { console.warn("[ft:relay] no game.socket at ready"); return; }
-  console.log("[ft:relay] registering listener on module.bbttcc-raid — isGM=", !!game.user?.isGM, "userId=", game.user?.id);
-  game.socket.on("module.bbttcc-raid", (msg) => {
-    console.log("[ft:relay] RECEIVED", msg, "isGM=", !!game.user?.isGM, "userId=", game.user?.id);
+  console.log("[ft:relay] registering listeners — isGM=", !!game.user?.isGM, "userId=", game.user?.id);
+  const _ftRelayHandler = (channel) => (msg) => {
+    console.log(`[ft:relay] RECEIVED on ${channel}`, msg, "isGM=", !!game.user?.isGM, "userId=", game.user?.id);
+    if (msg?.t === "ft-relay-ping") {
+      console.log(`[ft:relay] PING from user ${msg.fromUserId} (${msg.fromName}) on ${channel}`);
+      return;
+    }
     if (!game.user?.isGM) return;
     if (msg?.t === "ft-activateBattleScene") {
       if (_ftRelaySeenRecently(`activate:${msg.sceneId}:${msg.idx}`)) return;
@@ -16729,7 +16733,20 @@ Hooks.once("ready", () => {
       console.log("[ft:relay] handling ft-disembarkSteward", steward.name);
       ftDisembarkSteward(steward);
     }
-  });
+  };
+  // Listen on the canonical system channel (always valid for the active
+  // system) AND the legacy bbttcc-raid module channel (for prior emits
+  // from ftActivateBattleScene that haven't been migrated yet).
+  game.socket.on("system.fourththing", _ftRelayHandler("system.fourththing"));
+  game.socket.on("module.bbttcc-raid", _ftRelayHandler("module.bbttcc-raid"));
+
+  // Sanity ping so we can see end-to-end socket health on hard-reload.
+  // Each client emits once; other clients log the receipt.
+  setTimeout(() => {
+    const pingPayload = { t: "ft-relay-ping", fromUserId: game.user?.id, fromName: game.user?.name };
+    console.log("[ft:relay] emit ping on system.fourththing", pingPayload);
+    game.socket.emit("system.fourththing", pingPayload);
+  }, 500);
 });
 
 // Expose API for macros + other modules.
