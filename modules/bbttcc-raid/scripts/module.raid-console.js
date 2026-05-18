@@ -6018,6 +6018,52 @@ try {
 
 // --- Toolbar + API binding --------------------------------------------------
 
+// Look for an ACTIVE raid that this specific faction is currently in — as
+// either lead attacker (resume own raid) or supporter (join someone else's
+// raid). "Active" = target picked OR rounds logged OR supporters listed.
+// Returns { attackerId, isAttacker } or null. Used by openConsole when the
+// caller already knows which faction is opening (e.g. the faction-sheet
+// "Open Raid" button) so we can route to the right view instead of always
+// treating the faction as the lead.
+async function _findActiveRaidForFaction(factionId) {
+  if (!factionId) return null;
+  const fid = String(factionId);
+  try {
+    const all = game.actors?.contents || [];
+    const candidates = [];
+    for (const a of all) {
+      if (!isFaction(a)) continue;
+      const s = a.getFlag?.(RAID_ID, "raidSession");
+      if (!s || typeof s !== "object") continue;
+      const attackerId = String(s.attackerId || a.id || "");
+      if (!attackerId) continue;
+      const supports = Array.isArray(s.supportFactionIds) ? s.supportFactionIds.map(String) : [];
+      const isAttacker = attackerId === fid;
+      const isSupport  = supports.some(id => String(id) === fid);
+      if (!isAttacker && !isSupport) continue;
+      const hasTarget   = !!String(s.targetUuid || "").trim();
+      const hasRounds   = Array.isArray(s.rounds) && s.rounds.length > 0;
+      const hasSupports = supports.length > 0;
+      if (!hasTarget && !hasRounds && !hasSupports) continue;
+      candidates.push({
+        attackerId, isAttacker,
+        rev: Number(s.rev || 0), ts: Number(s.ts || 0)
+      });
+    }
+    if (!candidates.length) return null;
+    // Resume your own raid first; otherwise jump into the most-recent raid
+    // you're supporting.
+    candidates.sort((a, b) => {
+      if (a.isAttacker !== b.isAttacker) return a.isAttacker ? -1 : 1;
+      return (b.rev - a.rev) || (b.ts - a.ts);
+    });
+    return candidates[0];
+  } catch (e) {
+    console.warn(TAG, "_findActiveRaidForFaction failed", e);
+    return null;
+  }
+}
+
 // Scan faction actors for an ACTIVE raidSession that involves any faction
 // this user owns — either as primary attacker or in supportFactionIds.
 // "Active" = has a target picked OR rounds logged OR supporters listed; a
@@ -6067,8 +6113,17 @@ function bindAPI() {
     try { globalThis.__bbttccRaidOpenConsoles?.add?.(_console); } catch(_e) {}
     try {
       if (options.factionId) {
-        _console.vm.attackerId = String(options.factionId);
-        if (!_rcIsGMUser()) _console.vm.__lockAttackerId = String(options.factionId);
+        // Smart route: if this faction is already in an active raid, jump to
+        // it instead of treating the click as "lead a new raid." Supporting
+        // factions get routed to the lead's attackerId so their console
+        // joins the existing coalition; lead factions resume their own.
+        const found = await _findActiveRaidForFaction(options.factionId);
+        const route = (found?.attackerId && !found.isAttacker)
+          ? String(found.attackerId)          // joining as supporter
+          : String(options.factionId);        // leading (resume or fresh)
+        _console.vm.attackerId = route;
+        if (!_rcIsGMUser()) _console.vm.__lockAttackerId = route;
+        _console.__sessionRev = 0;             // always re-apply session on explicit open
       } else if (!_rcIsGMUser()) {
         // Player opening from the toolbar (no explicit factionId). Kill any
         // stale singleton state from a prior session and auto-jump to the
