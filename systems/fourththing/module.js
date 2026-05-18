@@ -14747,11 +14747,61 @@ async function ftBoardRig(steward, rig, role = null) {
     }
   }
 
+  // 2026-05-18 — Grant Observer on the rig to each user who owns this
+  // steward, so they can open the rig sheet from the Crew HUD. Idempotent:
+  // only promotes (never demotes), and only runs GM-side since rig
+  // ownership updates require GM permission.
+  if (game.user?.isGM) {
+    _ftGrantRigObserverToStewardOwners(rig, steward);
+  }
+
   // Refresh rig token (boarded count badge)
   _ftRefreshRigTokenBadge(rig);
 
   ui.notifications?.info(`${steward.name} boarded ${rig.name} as ${slots[idx].role}.`);
 }
+
+// Promote any user who OWNS a boarded steward to at least OBSERVER on
+// the rig they're crewing. No-op if they're already OBSERVER+.
+async function _ftGrantRigObserverToStewardOwners(rig, steward) {
+  if (!rig || !steward || !game.user?.isGM) return;
+  const OBS = CONST.DOCUMENT_OWNERSHIP_LEVELS?.OBSERVER ?? 2;
+  const OWN = CONST.DOCUMENT_OWNERSHIP_LEVELS?.OWNER    ?? 3;
+  const ownerIds = Object.entries(steward.ownership ?? {})
+    .filter(([uid, lvl]) => uid !== "default" && Number(lvl) >= OWN)
+    .map(([uid]) => uid)
+    .filter(uid => game.users?.get(uid) && !game.users.get(uid).isGM);
+  if (!ownerIds.length) return;
+  const next = foundry.utils.deepClone(rig.ownership ?? {});
+  let changed = false;
+  for (const uid of ownerIds) {
+    const cur = Number(next[uid] ?? next.default ?? 0);
+    if (cur < OBS) { next[uid] = OBS; changed = true; }
+  }
+  if (changed) {
+    try { await rig.update({ ownership: next }, { diff: false }); }
+    catch (e) { console.warn("[fourththing] grant Observer on rig failed", e); }
+  }
+}
+
+// Backfill: on GM ready, scan rigs and ensure every boarded steward's
+// owners hold at least Observer on the rig. Handles boardings made
+// before the 2026-05-18 fix.
+Hooks.once("ready", async () => {
+  if (!game.user?.isGM) return;
+  try {
+    for (const rig of (game.actors ?? [])) {
+      if (rig.type !== "rig") continue;
+      const slots = rig.system?.crew?.slots ?? [];
+      for (const slot of slots) {
+        if (!slot?.actorId) continue;
+        const steward = game.actors.get(slot.actorId);
+        if (!steward) continue;
+        await _ftGrantRigObserverToStewardOwners(rig, steward);
+      }
+    }
+  } catch (e) { console.warn("[fourththing] rig-Observer backfill failed", e); }
+});
 
 /** Disembark a steward from whatever rig they're on. */
 async function ftDisembarkSteward(steward) {
@@ -15155,6 +15205,13 @@ function _ftBindCrewControls(rootEl, actor, ctx, { onDisembark } = {}) {
 
   rootEl.querySelector(".ft-boarded-open-rig")?.addEventListener("click", (ev) => {
     ev.preventDefault();
+    const OBS = CONST.DOCUMENT_OWNERSHIP_LEVELS?.OBSERVER ?? 2;
+    const canView = rig.testUserPermission?.(game.user, OBS)
+                 ?? (rig.permission >= OBS);
+    if (!canView) {
+      ui.notifications?.warn(`${rig.name}: ask the GM to (re-)board you — rig permissions are out of sync.`);
+      return;
+    }
     rig.sheet?.render(true);
   });
   rootEl.querySelector(".ft-boarded-disembark")?.addEventListener("click", async (ev) => {
@@ -15322,19 +15379,70 @@ let __ftCrewHudRenderTimer = null;
 let __ftCrewHudActiveActorId = null;
 
 function _ftPickHudSteward() {
-  // Primary: first user-controlled token whose actor is boarded + owned.
-  const controlled = canvas?.tokens?.controlled ?? [];
-  for (const t of controlled) {
-    const a = t?.actor;
-    if (!a) continue;
+  if (!game.user) return null;
+  // GM: respect the controlled-token selection so the GM can switch
+  // between stewards. (Returning null when no boarded token is selected
+  // keeps the HUD out of the GM's way when they're working on the map.)
+  if (game.user.isGM) {
+    const controlled = canvas?.tokens?.controlled ?? [];
+    for (const t of controlled) {
+      const a = t?.actor;
+      if (!a) continue;
+      if (a.type !== "character" && a.type !== "npc") continue;
+      if (a.getFlag?.("fourththing", "boardedRig")?.rigId) return a;
+    }
+    return null;
+  }
+  // Player: token control is unreliable (boarded tokens are hidden, so
+  // the player can't re-select them once focus shifts). Scan owned
+  // actors directly. Prefer the assigned character when boarded.
+  const own = game.user.character;
+  if (own && own.isOwner && own.getFlag?.("fourththing", "boardedRig")?.rigId) return own;
+  for (const a of (game.actors ?? [])) {
     if (a.type !== "character" && a.type !== "npc") continue;
     if (!a.isOwner) continue;
     if (a.getFlag?.("fourththing", "boardedRig")?.rigId) return a;
   }
-  // Fallback: the user's assigned character if boarded.
-  const own = game.user?.character;
-  if (own && own.isOwner && own.getFlag?.("fourththing", "boardedRig")?.rigId) return own;
   return null;
+}
+
+// HUD-specific linear layout. Same classes/data-attrs as the block
+// banner so _ftBindCrewControls binds either layout identically.
+function _ftBuildCrewHudLinearHtml(actor, ctx) {
+  const { flag, rig, frameActions, rigWeapons } = ctx;
+  const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
+  const rigDestroyed = rig.system?.identity?.state === "destroyed";
+  const firedMap = actor?.flags?.fourththing?.combat?.rigWeaponsFiredThisRound ?? {};
+
+  const fireBtn = (w) => {
+    const blocked = rigDestroyed || !!firedMap[w.id];
+    const style = blocked
+      ? `disabled style="display:inline-flex;align-items:center;gap:.25rem;padding:.15rem .4rem;border:1px solid #888;background:rgba(0,0,0,0.2);color:#aaa;border-radius:3px;font-size:0.72rem;opacity:0.55;cursor:not-allowed;"`
+      : `style="display:inline-flex;align-items:center;gap:.25rem;padding:.15rem .4rem;border:1px solid #d4a35f;background:rgba(0,0,0,0.3);color:#ffd28a;border-radius:3px;font-size:0.72rem;cursor:pointer;"`;
+    const tip = blocked && !rigDestroyed ? `${esc(w.name)} — fired this round` : esc(w.system?.description?.value?.replace(/<[^>]+>/g, "")?.slice(0, 120) ?? w.name);
+    return `<button type="button" class="ft-rig-fire-btn" data-item-id="${esc(w.id)}" data-tooltip="${tip}" ${style}>
+      <img src="${esc(w.img)}" style="width:14px;height:14px;border-radius:2px;"/><span>${esc(w.name)}</span>
+    </button>`;
+  };
+
+  const actionBtn = (a) => {
+    const desc = _FT_CREW_ACTION_DESC[a] ?? "";
+    return `<button type="button" class="ft-crew-action-btn" data-action-id="${esc(a)}" data-tooltip="${esc(desc)}" style="padding:.15rem .4rem;border:1px solid #888;border-radius:3px;font-size:0.7rem;background:rgba(0,0,0,0.25);color:#fff;cursor:pointer;">${esc(a)}</button>`;
+  };
+
+  const sep = `<span style="opacity:.4;">·</span>`;
+  const userIsGm = !!game.user?.isGM;
+
+  return `<div style="display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;">
+    <img src="${esc(rig.img)}" alt="" style="width:20px;height:20px;border-radius:3px;object-fit:cover;border:1px solid #888;"/>
+    <span style="font-weight:600;">${esc(rig.name)}</span>
+    <span style="opacity:.85;font-size:0.75rem;">[${esc(flag.role)}]</span>
+    ${rigWeapons.length ? `${sep}${rigWeapons.map(fireBtn).join("")}` : ""}
+    ${frameActions.length ? `${sep}${frameActions.map(actionBtn).join("")}` : ""}
+    ${sep}
+    <button type="button" class="ft-boarded-open-rig" style="padding:.15rem .5rem;font-size:0.72rem;">Open Rig</button>
+    ${userIsGm ? `<button type="button" class="ft-boarded-disembark" style="padding:.15rem .5rem;font-size:0.72rem;">Disembark</button>` : ""}
+  </div>`;
 }
 
 function _ftPositionCrewHud() {
@@ -15377,12 +15485,12 @@ function _ftRenderCrewHud() {
         __ftCrewHudActiveActorId = null;
         return;
       }
-      const inner = _ftBuildCrewControlsHtml(actor, ctx);
+      const inner = _ftBuildCrewHudLinearHtml(actor, ctx);
       if (!__ftCrewHudEl) {
         __ftCrewHudEl = document.createElement("div");
         __ftCrewHudEl.id = "ft-crew-hud";
-        __ftCrewHudEl.className = "ft-crew-hud ft-boarded-banner";
-        __ftCrewHudEl.style.cssText = "position:fixed;z-index:120;display:flex;flex-direction:column;gap:.4rem;padding:.5rem .75rem;border:1px solid #d4a35f;background:rgba(20,20,28,0.92);color:#ffd28a;border-radius:6px;font-family:'Signika',sans-serif;font-size:0.85rem;box-shadow:0 4px 12px rgba(0,0,0,0.5);pointer-events:auto;backdrop-filter:blur(2px);max-width:min(720px,80vw);";
+        __ftCrewHudEl.className = "ft-crew-hud";
+        __ftCrewHudEl.style.cssText = "position:fixed;z-index:120;display:flex;align-items:center;padding:.35rem .6rem;border:1px solid #d4a35f;background:rgba(20,20,28,0.92);color:#ffd28a;border-radius:6px;font-family:'Signika',sans-serif;font-size:0.85rem;box-shadow:0 4px 12px rgba(0,0,0,0.5);pointer-events:auto;backdrop-filter:blur(2px);max-width:min(1200px,92vw);";
         document.body.appendChild(__ftCrewHudEl);
       }
       __ftCrewHudEl.innerHTML = inner;
