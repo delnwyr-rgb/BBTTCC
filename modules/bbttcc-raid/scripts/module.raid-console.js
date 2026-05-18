@@ -1767,14 +1767,16 @@ async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre 
   // animations locally. game.socket.emit only sends to other clients (not
   // back to self), so no origin guard is needed.
   try {
-    game.socket?.emit?.(`module.${RAID_ID}`, {
+    const _vfxPayload = {
       t: "raidVfx",
       side: String(side || ""),
       key: String(key || ""),
       attackerId: attacker?.id || null,
       defenderId: defender?.id || null
-    });
-  } catch (_eVfxEmit) {}
+    };
+    console.log(TAG, "raidVfx EMIT", _vfxPayload);
+    game.socket?.emit?.(`module.${RAID_ID}`, _vfxPayload);
+  } catch (_eVfxEmit) { console.warn(TAG, "raidVfx emit failed", _eVfxEmit); }
 
   // Surface C v2: anytime fires apply mechanical effects immediately so the
   // button feels like a real fire, not just narrative. Pre-roll / post-commit
@@ -6302,12 +6304,18 @@ function bindAPI() {
             // Replay the maneuver fire VFX locally so every connected client
             // sees the animation, not just the firing client. Foundry doesn't
             // echo socket emits to the sender, so this only runs on remotes.
+            console.log(TAG, "raidVfx RECV", msg);
             try {
               const att = msg.attackerId ? game.actors?.get(msg.attackerId) : null;
               const def = msg.defenderId ? game.actors?.get(msg.defenderId) : null;
-              _rcPlayManFireVfx(String(msg.side || ""), att, def);
-              _bbttccFxPlay(String(msg.key || ""), { side: msg.side, attacker: att, defender: def }, {});
-            } catch (_eVfxRecv) {}
+              if (!att && !def) {
+                console.warn(TAG, "raidVfx RECV — both actors null; player may not have access to either.", msg);
+              }
+              try { _rcPlayManFireVfx(String(msg.side || ""), att, def); }
+              catch (eA) { console.warn(TAG, "raidVfx _rcPlayManFireVfx threw", eA); }
+              try { await _bbttccFxPlay(String(msg.key || ""), { side: msg.side, attacker: att, defender: def }, {}); }
+              catch (eB) { console.warn(TAG, "raidVfx _bbttccFxPlay threw", eB); }
+            } catch (_eVfxRecv) { console.warn(TAG, "raidVfx handler threw", _eVfxRecv); }
             return;
           }
         } catch(_eS) {}
