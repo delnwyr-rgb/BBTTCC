@@ -6105,6 +6105,18 @@ try {
     }
   }
 } catch (e) { warn("reality_hack clone failed (non-fatal)", e); }
+    // Broadcast the resolve-phase cinematic so player clients replay it. The
+    // bbttcc-fx-integration playKey calls fire locally only; without this
+    // socket relay, the end-of-raid VFX never reaches remote browsers. The
+    // listener in bindAPI() handles the {t:"raidCinematic"} message.
+    try {
+      const outcome = String(r?.outcome || "Resolved");
+      const raidType = String(r?.raidType || this.vm.activityKey || "");
+      const payload = { t: "raidCinematic", outcome, raidType };
+      console.log(TAG, "raidCinematic EMIT", payload);
+      game.socket?.emit?.(`module.${RAID_ID}`, payload);
+    } catch (_eRC) {}
+
     // Ensure committed results propagate to the shared session (Commit Console reads this).
     try { await this._saveSessionNow(); } catch(_e) {}
     return this.render();
@@ -6298,6 +6310,31 @@ function bindAPI() {
             const a = await getActorByIdOrUuid(attackerId);
             if (!a) return;
             await a.setFlag(RAID_ID, "raidSession", payload);
+            return;
+          }
+          if (msg.t === "raidCinematic") {
+            // Player-side replay of the end-of-raid cinematic. The fx-integration
+            // module's playKey calls fire locally on the GM only; this socket
+            // hand-off lets every connected client play the resolve-phase VFX.
+            console.log(TAG, "raidCinematic RECV", msg);
+            try {
+              const fxApi = game.bbttcc?.api?.fx;
+              if (!fxApi?.playKey) {
+                console.warn(TAG, "raidCinematic — game.bbttcc.api.fx.playKey unavailable");
+              } else {
+                const outcome = String(msg.outcome || "Resolved");
+                const s = outcome.toLowerCase();
+                const kind = (s.includes("great") || s.includes("success") || s.includes("win")) ? "good"
+                           : (s.includes("fail") || s.includes("loss") || s.includes("lockdown")) ? "bad"
+                           : "info";
+                await fxApi.playKey("raid_outcome", {
+                  outcome,
+                  outcomeLabel: `Raid ${outcome}`,
+                  kind,
+                  raidType: msg.raidType || ""
+                }, { phase: "resolve", raidType: msg.raidType || "" });
+              }
+            } catch (eC) { console.warn(TAG, "raidCinematic replay threw", eC); }
             return;
           }
           if (msg.t === "raidVfx") {
