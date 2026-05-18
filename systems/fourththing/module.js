@@ -15053,6 +15053,162 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
   }
 }
 
+// 2026-05-18 — Crew-controls content + binders shared between the
+// character/NPC sheet banner (.ft-boarded-banner) and the floating
+// on-canvas Crew HUD (#ft-crew-hud). Single source of truth for the
+// boarded-rig UI so the two surfaces stay in lockstep.
+function _ftCollectCrewControlsContext(actor) {
+  if (!actor) return null;
+  const flag = actor.getFlag?.("fourththing", "boardedRig");
+  if (!flag?.rigId) return null;
+  const rig = game.actors?.get(flag.rigId);
+  if (!rig) return null;
+
+  // Frame-defined actions for this role
+  const frameItem = (rig.items ?? []).find(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-frame");
+  const frameActions = frameItem?.getFlag?.("fourththing", "rigFrame")?.actions?.[flag.role] ?? [];
+
+  // Rig weapons (only gunners + crew can fire — pilots/engineers focus elsewhere)
+  // 2026-05-13 — Gate on whether the rig has a Gunner role authored, not
+  // on bracket. If `capacity.gunner.max === 0`, no gunner role exists →
+  // the pilot IS the gunner. Naturally covers personal rigs (which have
+  // no gunner slot) AND any future frame with a single-seat config
+  // regardless of bracket.
+  const gunnerCap = Number(rig.system?.crew?.capacity?.gunner?.max
+                        ?? frameItem?.flags?.fourththing?.rigFrame?.capacity?.gunner?.max
+                        ?? 0);
+  const hasGunnerRole = gunnerCap > 0;
+  const canFireWeapons = hasGunnerRole
+    ? ((flag.role === "gunner") || (flag.role === "crew"))
+    : true; // No gunner role authored → any boarded role can fire.
+  const rigWeapons = canFireWeapons
+    ? (rig.items ?? []).filter(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-weapon")
+    : [];
+
+  return { flag, rig, frameItem, frameActions, rigWeapons };
+}
+
+function _ftBuildCrewControlsHtml(actor, ctx) {
+  const { flag, rig, frameActions, rigWeapons } = ctx;
+  const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
+
+  // 2026-05-13 — Per-WEAPON visual lockout. Each weapon disables
+  // independently based on whether it specifically fired this round.
+  // The rigDestroyed gate still blocks all weapons (rig is wreckage).
+  const rigDestroyed = rig.system?.identity?.state === "destroyed";
+  const firedMap = actor?.flags?.fourththing?.combat?.rigWeaponsFiredThisRound ?? {};
+  const weaponFired = (wId) => !!firedMap[wId];
+
+  const headerHTML = `
+    <div style="display:flex;align-items:center;gap:.5rem;">
+      <strong>BOARDED:</strong>
+      <img src="${esc(rig.img)}" alt="" style="width:24px;height:24px;border-radius:3px;object-fit:cover;border:1px solid #888;"/>
+      <span class="ft-boarded-rig-name" style="font-weight:600;">${esc(rig.name)}</span>
+      <span class="ft-boarded-role" style="opacity:.85;">[${esc(flag.role)}]</span>
+      <button type="button" class="ft-boarded-open-rig" style="margin-left:auto;font-size:0.75rem;padding:.15rem .5rem;">Open Rig</button>
+      <button type="button" class="ft-boarded-disembark" style="font-size:0.75rem;padding:.15rem .5rem;">Disembark</button>
+    </div>`;
+
+  const _styleFireOk  = `style="display:flex;align-items:center;gap:.3rem;padding:.2rem .4rem;border:1px solid #d4a35f;background:rgba(0,0,0,0.3);color:#ffd28a;border-radius:3px;cursor:pointer;font-size:0.75rem;"`;
+  const _styleFireOff = `disabled style="display:flex;align-items:center;gap:.3rem;padding:.2rem .4rem;border:1px solid #888;background:rgba(0,0,0,0.2);color:#aaa;border-radius:3px;cursor:not-allowed;font-size:0.75rem;opacity:0.55;"`;
+  const anyFired = Object.keys(firedMap || {}).length > 0;
+  const headerNote = rigDestroyed
+    ? ` · <span style="color:#ff9a6b">rig destroyed</span>`
+    : (anyFired ? ` · <span style="color:#ff9a6b">some weapons fired this round</span>` : "");
+  const weaponHTML = rigWeapons.length ? `
+    <div style="display:flex;flex-direction:column;gap:.2rem;border-top:1px solid rgba(212,163,95,0.3);padding-top:.3rem;">
+      <div style="font-size:0.7rem;letter-spacing:.05em;opacity:.85;">FIRE WEAPON · your combat skill + this weapon's stats${headerNote}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:.25rem;">
+        ${rigWeapons.map(w => {
+          const blocked = rigDestroyed || weaponFired(w.id);
+          const btnExtra = blocked ? _styleFireOff : _styleFireOk;
+          const tooltip = blocked && !rigDestroyed
+            ? `${esc(w.name)} — fired this round`
+            : esc(w.system?.description?.value?.replace(/<[^>]+>/g, "")?.slice(0, 120) ?? w.name);
+          return `
+          <button type="button" class="ft-rig-fire-btn" data-item-id="${esc(w.id)}" data-tooltip="${tooltip}" ${btnExtra}>
+            <img src="${esc(w.img)}" style="width:16px;height:16px;border-radius:2px;"/>
+            <span>${esc(w.name)}</span>
+          </button>`;
+        }).join("")}
+      </div>
+    </div>
+  ` : "";
+
+  const actionHTML = frameActions.length ? `
+    <div style="display:flex;flex-direction:column;gap:.2rem;border-top:1px solid rgba(212,163,95,0.3);padding-top:.3rem;">
+      <div style="font-size:0.7rem;letter-spacing:.05em;opacity:.85;">CREW ACTIONS · ${esc(flag.role)}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:.25rem;">
+        ${frameActions.map(a => {
+          const desc = _FT_CREW_ACTION_DESC[a] ?? "";
+          return `<button type="button" class="ft-crew-action-btn" data-action-id="${esc(a)}" data-tooltip="${esc(desc)}" style="padding:.15rem .4rem;border:1px solid #888;border-radius:3px;font-size:0.7rem;background:rgba(0,0,0,0.25);color:#fff;cursor:pointer;">${esc(a)}</button>`;
+        }).join("")}
+      </div>
+    </div>` : "";
+
+  return headerHTML + weaponHTML + actionHTML;
+}
+
+function _ftBindCrewControls(rootEl, actor, ctx, { onDisembark } = {}) {
+  const { rig, frameItem, flag } = ctx;
+  const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
+
+  rootEl.querySelector(".ft-boarded-open-rig")?.addEventListener("click", (ev) => {
+    ev.preventDefault();
+    rig.sheet?.render(true);
+  });
+  rootEl.querySelector(".ft-boarded-disembark")?.addEventListener("click", async (ev) => {
+    ev.preventDefault();
+    await ftDisembarkSteward(actor);
+    if (typeof onDisembark === "function") onDisembark();
+  });
+
+  // Wire rig-weapon fire buttons → ftRigWeaponFire (B11.C canonical API).
+  // The helper handles boarding/role/destroyed/per-round gate checks and
+  // delegates to ftOpenEngageDialog for the actual roll. Steward is the
+  // rolling actor; the rig-weapon item drives damage/range.
+  rootEl.querySelectorAll(".ft-rig-fire-btn").forEach(btn => {
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      if (btn.disabled) return;
+      const itemId = btn.dataset.itemId;
+      const item   = rig.items.get(itemId);
+      if (!item) { ui.notifications?.warn("Weapon item not found on rig."); return; }
+      if (typeof ftRigWeaponFire === "function") {
+        ftRigWeaponFire(actor, item);
+      } else if (typeof ftOpenEngageDialog === "function") {
+        ftOpenEngageDialog(actor, item);
+      } else {
+        ui.notifications?.warn("Engage dialog not available — fallback chat.");
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div><strong>${esc(actor.name)}</strong> fires <em>${esc(item.name)}</em> from <strong>${esc(rig.name)}</strong>.</div>`
+        });
+      }
+    });
+  });
+
+  // B12: route through the canonical crew-action dispatcher. Handles
+  // steer / hold-position / evasive / brace / ram / repair with real
+  // role + per-round + action-economy gates. Unknown actions still fall
+  // through to a stub chat from inside the dispatcher.
+  rootEl.querySelectorAll(".ft-crew-action-btn").forEach(btn => {
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      const actionId = btn.dataset.actionId;
+      if (typeof _ftHandleCrewAction === "function") {
+        _ftHandleCrewAction(actor, rig, actionId, frameItem);
+      } else {
+        const desc = _FT_CREW_ACTION_DESC[actionId] ?? "";
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div style="border-left:3px solid #d4a35f;padding-left:.5rem;"><strong>${esc(actor.name)}</strong> [${esc(flag.role)} · ${esc(rig.name)}]<br><strong>${esc(actionId)}</strong>${desc ? `<br><em>${esc(desc)}</em>` : ""}</div>`
+        });
+      }
+    });
+  });
+}
+
 Hooks.on("renderApplicationV2", (app, html) => {
   try {
     const actor = app?.actor;
@@ -15061,151 +15217,14 @@ Hooks.on("renderApplicationV2", (app, html) => {
     if (!root) return;
     if (root.querySelector(".ft-boarded-banner")) return;
 
-    const flag = actor.getFlag?.("fourththing", "boardedRig");
-    if (!flag?.rigId) return;
-    const rig = game.actors?.get(flag.rigId);
-    if (!rig) return;
+    const ctx = _ftCollectCrewControlsContext(actor);
+    if (!ctx) return;
 
-    // Frame-defined actions for this role
-    const frameItem = (rig.items ?? []).find(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-frame");
-    const frameActions = frameItem?.getFlag?.("fourththing", "rigFrame")?.actions?.[flag.role] ?? [];
-
-    // Rig weapons (only gunners + crew can fire — pilots/engineers focus elsewhere)
-    // 2026-05-13 — Refined: gate on whether the rig has a Gunner role
-    // authored, not on bracket. If `capacity.gunner.max === 0`, no gunner
-    // role exists → the pilot IS the gunner. Naturally covers personal
-    // rigs (which have no gunner slot) AND any future frame with a
-    // single-seat config regardless of bracket.
-    const gunnerCap = Number(rig.system?.crew?.capacity?.gunner?.max
-                          ?? frameItem?.flags?.fourththing?.rigFrame?.capacity?.gunner?.max
-                          ?? 0);
-    const hasGunnerRole = gunnerCap > 0;
-    const canFireWeapons = hasGunnerRole
-      ? ((flag.role === "gunner") || (flag.role === "crew"))
-      : true; // No gunner role authored → any boarded role can fire.
-    const rigWeapons = canFireWeapons
-      ? (rig.items ?? []).filter(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-weapon")
-      : [];
-
-    // 2026-05-13 — Per-WEAPON visual lockout. Each weapon disables
-    // independently based on whether it specifically fired this round.
-    // The rigDestroyed gate still blocks all weapons (rig is wreckage).
-    const rigDestroyed = rig.system?.identity?.state === "destroyed";
-    const firedMap = actor?.flags?.fourththing?.combat?.rigWeaponsFiredThisRound ?? {};
-    const weaponFired = (wId) => !!firedMap[wId];
-
-    const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
     const banner = document.createElement("div");
     banner.className = "ft-boarded-banner";
     banner.style.cssText = "padding:.5rem .75rem;margin:.25rem;border:1px solid #d4a35f;background:rgba(212,163,95,0.10);color:#ffd28a;border-radius:4px;font-size:0.85rem;display:flex;flex-direction:column;gap:.4rem;";
-
-    // Header row
-    const headerHTML = `
-      <div style="display:flex;align-items:center;gap:.5rem;">
-        <strong>BOARDED:</strong>
-        <img src="${esc(rig.img)}" alt="" style="width:24px;height:24px;border-radius:3px;object-fit:cover;border:1px solid #888;"/>
-        <span class="ft-boarded-rig-name" style="font-weight:600;">${esc(rig.name)}</span>
-        <span class="ft-boarded-role" style="opacity:.85;">[${esc(flag.role)}]</span>
-        <button type="button" class="ft-boarded-open-rig" style="margin-left:auto;font-size:0.75rem;padding:.15rem .5rem;">Open Rig</button>
-        <button type="button" class="ft-boarded-disembark" style="font-size:0.75rem;padding:.15rem .5rem;">Disembark</button>
-      </div>`;
-
-    // Rig-weapon fire row — per-weapon disable.
-    const _styleFireOk = `style="display:flex;align-items:center;gap:.3rem;padding:.2rem .4rem;border:1px solid #d4a35f;background:rgba(0,0,0,0.3);color:#ffd28a;border-radius:3px;cursor:pointer;font-size:0.75rem;"`;
-    const _styleFireOff = `disabled style="display:flex;align-items:center;gap:.3rem;padding:.2rem .4rem;border:1px solid #888;background:rgba(0,0,0,0.2);color:#aaa;border-radius:3px;cursor:not-allowed;font-size:0.75rem;opacity:0.55;"`;
-    const anyFired = Object.keys(firedMap || {}).length > 0;
-    const headerNote = rigDestroyed
-      ? ` · <span style="color:#ff9a6b">rig destroyed</span>`
-      : (anyFired ? ` · <span style="color:#ff9a6b">some weapons fired this round</span>` : "");
-    const weaponHTML = rigWeapons.length ? `
-      <div style="display:flex;flex-direction:column;gap:.2rem;border-top:1px solid rgba(212,163,95,0.3);padding-top:.3rem;">
-        <div style="font-size:0.7rem;letter-spacing:.05em;opacity:.85;">FIRE WEAPON · your combat skill + this weapon's stats${headerNote}</div>
-        <div style="display:flex;flex-wrap:wrap;gap:.25rem;">
-          ${rigWeapons.map(w => {
-            const blocked = rigDestroyed || weaponFired(w.id);
-            const btnExtra = blocked ? _styleFireOff : _styleFireOk;
-            const tooltip = blocked && !rigDestroyed
-              ? `${esc(w.name)} — fired this round`
-              : esc(w.system?.description?.value?.replace(/<[^>]+>/g, "")?.slice(0, 120) ?? w.name);
-            return `
-            <button type="button" class="ft-rig-fire-btn" data-item-id="${esc(w.id)}" data-tooltip="${tooltip}" ${btnExtra}>
-              <img src="${esc(w.img)}" style="width:16px;height:16px;border-radius:2px;"/>
-              <span>${esc(w.name)}</span>
-            </button>`;
-          }).join("")}
-        </div>
-      </div>
-    ` : "";
-
-    // Frame-defined action buttons
-    const actionHTML = frameActions.length ? `
-      <div style="display:flex;flex-direction:column;gap:.2rem;border-top:1px solid rgba(212,163,95,0.3);padding-top:.3rem;">
-        <div style="font-size:0.7rem;letter-spacing:.05em;opacity:.85;">CREW ACTIONS · ${esc(flag.role)}</div>
-        <div style="display:flex;flex-wrap:wrap;gap:.25rem;">
-          ${frameActions.map(a => {
-            const desc = _FT_CREW_ACTION_DESC[a] ?? "";
-            return `<button type="button" class="ft-crew-action-btn" data-action-id="${esc(a)}" data-tooltip="${esc(desc)}" style="padding:.15rem .4rem;border:1px solid #888;border-radius:3px;font-size:0.7rem;background:rgba(0,0,0,0.25);color:#fff;cursor:pointer;">${esc(a)}</button>`;
-          }).join("")}
-        </div>
-      </div>` : "";
-
-    banner.innerHTML = headerHTML + weaponHTML + actionHTML;
-
-    banner.querySelector(".ft-boarded-open-rig")?.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      rig.sheet?.render(true);
-    });
-    banner.querySelector(".ft-boarded-disembark")?.addEventListener("click", async (ev) => {
-      ev.preventDefault();
-      await ftDisembarkSteward(actor);
-      app.render(false);
-    });
-
-    // Wire rig-weapon fire buttons → ftRigWeaponFire (B11.C canonical API).
-    // The helper handles boarding/role/destroyed/per-round gate checks and
-    // delegates to ftOpenEngageDialog for the actual roll. Steward is the
-    // rolling actor; the rig-weapon item drives damage/range.
-    banner.querySelectorAll(".ft-rig-fire-btn").forEach(btn => {
-      btn.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        if (btn.disabled) return;
-        const itemId = btn.dataset.itemId;
-        const item   = rig.items.get(itemId);
-        if (!item) { ui.notifications?.warn("Weapon item not found on rig."); return; }
-        if (typeof ftRigWeaponFire === "function") {
-          ftRigWeaponFire(actor, item);
-        } else if (typeof ftOpenEngageDialog === "function") {
-          ftOpenEngageDialog(actor, item);
-        } else {
-          ui.notifications?.warn("Engage dialog not available — fallback chat.");
-          ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor }),
-            content: `<div><strong>${esc(actor.name)}</strong> fires <em>${esc(item.name)}</em> from <strong>${esc(rig.name)}</strong>.</div>`
-          });
-        }
-      });
-    });
-
-    // B12: route through the canonical crew-action dispatcher. Handles
-    // steer / hold-position / evasive / brace / ram / repair with real
-    // role + per-round + action-economy gates. Unknown actions still fall
-    // through to a stub chat from inside the dispatcher.
-    banner.querySelectorAll(".ft-crew-action-btn").forEach(btn => {
-      btn.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        const actionId = btn.dataset.actionId;
-        if (typeof _ftHandleCrewAction === "function") {
-          _ftHandleCrewAction(actor, rig, actionId, frameItem);
-        } else {
-          // Defensive fallback: dispatcher missing, post the legacy stub.
-          const desc = _FT_CREW_ACTION_DESC[actionId] ?? "";
-          ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor }),
-            content: `<div style="border-left:3px solid #d4a35f;padding-left:.5rem;"><strong>${esc(actor.name)}</strong> [${esc(flag.role)} · ${esc(rig.name)}]<br><strong>${esc(actionId)}</strong>${desc ? `<br><em>${esc(desc)}</em>` : ""}</div>`
-          });
-        }
-      });
-    });
+    banner.innerHTML = _ftBuildCrewControlsHtml(actor, ctx);
+    _ftBindCrewControls(banner, actor, ctx, { onDisembark: () => app.render(false) });
 
     const body = root.querySelector(".window-content") ?? root;
     body.insertBefore(banner, body.firstChild);
@@ -15290,6 +15309,113 @@ Hooks.on("renderTokenHUD", (hud, html, data) => {
     console.warn("Roll for Initiation | token HUD injection failed", e);
   }
 });
+
+// ─── Floating Crew Controls HUD ───────────────────────────────────────────
+// 2026-05-18 — When a user's controlled token is boarded on a rig, mirror
+// the .ft-boarded-banner contents onto a persistent on-canvas panel so
+// players don't need their character sheet open during engagements.
+// Mirrors the raid HUD pattern at _ftBuildRaidHudHtml/_ftRenderRaidHud.
+// Build + bind logic is shared with the sheet banner via
+// _ftBuildCrewControlsHtml / _ftBindCrewControls.
+let __ftCrewHudEl = null;
+let __ftCrewHudRenderTimer = null;
+let __ftCrewHudActiveActorId = null;
+
+function _ftPickHudSteward() {
+  // Primary: first user-controlled token whose actor is boarded + owned.
+  const controlled = canvas?.tokens?.controlled ?? [];
+  for (const t of controlled) {
+    const a = t?.actor;
+    if (!a) continue;
+    if (a.type !== "character" && a.type !== "npc") continue;
+    if (!a.isOwner) continue;
+    if (a.getFlag?.("fourththing", "boardedRig")?.rigId) return a;
+  }
+  // Fallback: the user's assigned character if boarded.
+  const own = game.user?.character;
+  if (own && own.isOwner && own.getFlag?.("fourththing", "boardedRig")?.rigId) return own;
+  return null;
+}
+
+function _ftPositionCrewHud() {
+  if (!__ftCrewHudEl) return;
+  let centerX = window.innerWidth / 2;
+  let bottomY = 80; // sensible default above hotbar
+  const board = document.getElementById("board");
+  if (board) {
+    const rect = board.getBoundingClientRect();
+    if (rect && rect.width > 0) centerX = rect.left + rect.width / 2;
+  }
+  // Sit just above the macro hotbar if present.
+  const hotbar = document.getElementById("hotbar") ?? document.querySelector("#ui-bottom #hotbar");
+  if (hotbar) {
+    const hb = hotbar.getBoundingClientRect();
+    if (hb && hb.top > 0) bottomY = Math.max(8, window.innerHeight - hb.top + 8);
+  }
+  __ftCrewHudEl.style.left = `${Math.round(centerX)}px`;
+  __ftCrewHudEl.style.bottom = `${bottomY}px`;
+  __ftCrewHudEl.style.transform = "translateX(-50%)";
+}
+
+function _ftRenderCrewHud() {
+  if (__ftCrewHudRenderTimer) {
+    clearTimeout(__ftCrewHudRenderTimer);
+    __ftCrewHudRenderTimer = null;
+  }
+  __ftCrewHudRenderTimer = setTimeout(() => {
+    __ftCrewHudRenderTimer = null;
+    try {
+      const actor = _ftPickHudSteward();
+      if (!actor) {
+        if (__ftCrewHudEl) { __ftCrewHudEl.remove(); __ftCrewHudEl = null; }
+        __ftCrewHudActiveActorId = null;
+        return;
+      }
+      const ctx = _ftCollectCrewControlsContext(actor);
+      if (!ctx) {
+        if (__ftCrewHudEl) { __ftCrewHudEl.remove(); __ftCrewHudEl = null; }
+        __ftCrewHudActiveActorId = null;
+        return;
+      }
+      const inner = _ftBuildCrewControlsHtml(actor, ctx);
+      if (!__ftCrewHudEl) {
+        __ftCrewHudEl = document.createElement("div");
+        __ftCrewHudEl.id = "ft-crew-hud";
+        __ftCrewHudEl.className = "ft-crew-hud ft-boarded-banner";
+        __ftCrewHudEl.style.cssText = "position:fixed;z-index:120;display:flex;flex-direction:column;gap:.4rem;padding:.5rem .75rem;border:1px solid #d4a35f;background:rgba(20,20,28,0.92);color:#ffd28a;border-radius:6px;font-family:'Signika',sans-serif;font-size:0.85rem;box-shadow:0 4px 12px rgba(0,0,0,0.5);pointer-events:auto;backdrop-filter:blur(2px);max-width:min(720px,80vw);";
+        document.body.appendChild(__ftCrewHudEl);
+      }
+      __ftCrewHudEl.innerHTML = inner;
+      _ftBindCrewControls(__ftCrewHudEl, actor, ctx);
+      __ftCrewHudActiveActorId = actor.id;
+      _ftPositionCrewHud();
+    } catch (e) {
+      console.warn("[fourththing] Crew HUD render failed", e);
+    }
+  }, 60);
+}
+
+// Lifecycle: render whenever token control, the steward's boardedRig
+// flag, the rig's combat state, or the rig's item list changes.
+Hooks.on("controlToken", () => _ftRenderCrewHud());
+Hooks.on("updateActor", (actor) => {
+  // Cheap relevance gate: only re-render if the change concerns the
+  // steward currently shown OR a rig that any boarded steward references.
+  if (!actor) return;
+  if (actor.id === __ftCrewHudActiveActorId) return _ftRenderCrewHud();
+  if (actor.type === "rig") {
+    const showing = __ftCrewHudActiveActorId ? game.actors?.get(__ftCrewHudActiveActorId) : null;
+    if (showing?.getFlag?.("fourththing", "boardedRig")?.rigId === actor.id) return _ftRenderCrewHud();
+  }
+  // Otherwise: still re-render if no HUD currently shown — the update
+  // might have just boarded somebody we now want to display.
+  if (!__ftCrewHudActiveActorId) _ftRenderCrewHud();
+});
+Hooks.on("createItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
+Hooks.on("deleteItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
+Hooks.on("updateItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
+Hooks.on("canvasReady", () => _ftRenderCrewHud());
+Hooks.once("ready", () => _ftRenderCrewHud());
 
 // Expose helpers for macros / external callers
 (() => {
