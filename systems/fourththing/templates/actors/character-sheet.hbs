@@ -803,31 +803,41 @@
         </p>
       </div>
 
-      {{!-- Weapons --}}
+      {{!-- Manifestations: Forms (Strike for weapon-likes / Manifest for everything else) and Workings (Invoke) --}}
       <div class="ft-combat-section">
         <div class="ft-section-header">
-          <h3>Manifestations that Stay</h3>
-          <button type="button" data-action="ftManifestCreate" data-starter="stable" class="ft-add-btn" data-tooltip="Open the Manifestation Engine pre-loaded for a Stable form.">✦ New Stable Form</button>
+          <h3>Manifestations</h3>
+          <button type="button" data-action="ftManifestCreate" class="ft-add-btn" data-tooltip="Open the Manifestation Engine.">✦ New Manifestation</button>
         </div>
-        {{#if weapons.length}}
+        {{#if manifestAll.length}}
         <div class="ft-item-list">
-          {{#each weapons as |weapon|}}
-          <details class="ft-item-row" data-item-id="{{weapon.id}}">
+          {{#each manifestAll as |m|}}
+          <details class="ft-item-row" data-item-id="{{m.id}}">
             <summary class="ft-item-summary">
-              <img src="{{weapon.img}}" class="ft-item-art" data-tooltip="{{weapon.name}}"/>
-              <span class="ft-item-name">{{weapon.name}}</span>
-              <span class="ft-item-meta">{{weapon.system.intent}} · {{weapon.system.skill}}</span>
+              <img src="{{m.img}}" class="ft-item-art" data-tooltip="{{m.name}}"/>
+              <span class="ft-item-name">{{m.name}}</span>
+              <span class="ft-manifest-chip ft-tier-pill ft-tier-{{m.tier}}" data-tooltip="{{m.tierFootprint}}">{{m.tierLabel}}</span>
+              <span class="ft-manifest-chip">{{m.stabilityLabel}}</span>
+              <span class="ft-item-meta">{{m.costLabel}}</span>
               <div class="ft-item-controls">
-                <button type="button" data-action="ftWeaponRoll" data-item-id="{{weapon.id}}" class="ft-roll-btn">Engage</button>
-                <button type="button" data-action="ftItemEdit"   class="ft-item-edit">⚙</button>
-                <button type="button" data-action="ftItemDelete" class="ft-power-delete">✕</button>
+                {{#if m.isForm}}
+                  {{#if m.isWeaponForm}}
+                  <button type="button" data-action="ftWeaponRoll" data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Attack roll with this Form">Strike</button>
+                  {{else}}
+                  <button type="button" data-action="ftCast" data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Manifest the Form (cast)">Manifest</button>
+                  {{/if}}
+                {{else}}
+                  <button type="button" data-action="ftCastPower" data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Cast this Working">{{m.actionLabel}}</button>
+                {{/if}}
+                <button type="button" data-action="ftItemEdit"   data-item-id="{{m.id}}" class="ft-item-edit">⚙</button>
+                <button type="button" data-action="ftItemDelete" data-item-id="{{m.id}}" class="ft-power-delete">✕</button>
               </div>
             </summary>
           </details>
           {{/each}}
         </div>
         {{else}}
-        <p class="ft-hint">No stable manifestations prepared.</p>
+        <p class="ft-hint">No manifestations prepared.</p>
         {{/if}}
       </div>
 
@@ -1176,8 +1186,12 @@
               <span class="ft-item-meta">{{m.costLabel}}</span>
               <div class="ft-item-controls">
                 {{#if m.isForm}}
-                <button type="button" data-action="ftCast"       data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Invoke the Form (Manifestation cast)">Invoke</button>
-                <button type="button" data-action="ftWeaponRoll" data-item-id="{{m.id}}" class="ft-roll-btn ft-roll-btn-subtle" data-tooltip="Attack roll with this Form">Strike</button>
+                  {{#if m.isWeaponForm}}
+                  <button type="button" data-action="ftCast"       data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Invoke the Form (Manifestation cast)">Invoke</button>
+                  <button type="button" data-action="ftWeaponRoll" data-item-id="{{m.id}}" class="ft-roll-btn ft-roll-btn-subtle" data-tooltip="Attack roll with this Form">Strike</button>
+                  {{else}}
+                  <button type="button" data-action="ftCast"       data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Manifest the Form (cast)">Manifest</button>
+                  {{/if}}
                 {{else}}
                 <button type="button" data-action="ftCastPower"  data-item-id="{{m.id}}" class="ft-roll-btn">{{m.actionLabel}}</button>
                 {{/if}}

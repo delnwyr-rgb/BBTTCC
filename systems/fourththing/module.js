@@ -2068,6 +2068,11 @@ function ftBuildManifestationRow(item, kind = "power") {
     stabilityLabel,
     isForm: modeLabel === "Form",
     isWorking: modeLabel === "Working",
+    // Strike is reserved for Forms whose interactionModel is `weapon`. Other
+    // Form shapes (companion, zone, structure, tool, worn, event) render a
+    // "Manifest" button that routes through the cast (ftCast) handler instead.
+    isWeaponForm: modeLabel === "Form" && mf.interactionModel === "weapon",
+    interactionModel: mf.interactionModel ?? (kind === "weapon" ? "weapon" : "event"),
     desc: mf.concept || system.effect || system.flavor || system.description?.value || "",
     signature: mf.signature || "",
     thirdThing: mf.thirdThing || ""

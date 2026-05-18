@@ -1,0 +1,44 @@
+{
+  "name": "Refraction of Foresight (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Human_Erectus_2.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "wyrdlens-adept",
+    "source": {
+      "custom": "BBTTCC Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>The fall is visible from here.</em></p>\n<p style='opacity:0.7;font-size:0.85em'>Mode: Predictive clarity / drift: Sideways</p>\n<h3>Level 1: The Anticipation</h3>\n<p>At the start of each combat or significant scene, you may spend 1 Lens Charge to gain a <strong>Foreseen Action</strong> — you and the GM narrate a specific event that is about to occur. You gain [TBD:balance — advantage or +5] on your first reaction to it. Alternatively, you may spend the Foreseen Action to grant an ally the same benefit. One Foreseen Action per a Soma Break.</p>\n<h3>Level 5: The Slowed Instant</h3>\n<p>Once per round, when an ally within [TBD:balance — 30 feet] is targeted by an attack, effect, or hostile action, you may spend 1 Lens Charge to <em>briefly slow the moment</em> — the ally may take a bonus reaction (dodge, parry, counter, reposition) before the action resolves.</p>\n<h3>Level 9: Read The Field</h3>\n<p>At the start of a round, spend 2 Lens Charges to <strong>Read The Field</strong> — the GM reveals, in broad terms, the intended actions of all hostile creatures in the scene for that round. This forecast is accurate at the moment of reading but can be changed by intervening actions.</p>\n<h3>Level 13: The Stopped Strike</h3>\n<p>Once per scene, when a creature within range takes an action, you may spend 3 Lens Charges as a reaction to <em>undo</em> the action before it resolves — the creature's action is wasted, their turn consumed, but no effect occurs. The creature is aware something just went wrong and may attempt a Soul save [TBD:balance DC] to retain their action; success lets them act normally but with keep-lowest.</p>\n<h3>Level 17: The Sequence Read (Capstone)</h3>\n<p>Once per session, declare <strong>The Reading</strong> — for the next [TBD:balance — 1 scene or encounter], you perceive the <em>immediate future</em> as a sequence, one round ahead of realtime. You take your turns knowing what is about to happen; allies gain [TBD:balance — significant tactical bonuses] when acting on your communicated predictions. At the end of The Reading, you are <em>disconnected</em> — for [TBD:balance — 1 hour], you feel separated from the present and suffer roll 3d10 keep lowest 2 on Perception (Mind) checks in the immediate moment.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wyrdlensForesight\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Abilities — <strong>Refraction of Foresight</strong></div>\n  <div style=\"font-size:0.84rem;opacity:0.9\">Click this subclass on your sheet to invoke. Each ability tracks its own cadence.</div>\n    <div style=\"margin-top:0.35rem;padding:0.4rem 0.55rem;background:rgba(60,40,75,0.32);border-radius:0.25rem\">\n      <div style=\"font-size:0.82rem\"><strong>Force Enemy Reroll</strong></div>\n      <div style=\"font-size:0.78rem;opacity:0.86;margin-top:0.15rem\"><strong>Recovery:</strong> 1/Strategic Turn (1 Intrigue OP) &nbsp;·&nbsp; <strong>Action:</strong> Strategic</div>\n      <div style=\"font-size:0.78rem;opacity:0.85;margin-top:0.15rem\">Spend 1 Intrigue OP to force an enemy strategic reroll.</div>\n    </div>\n</div>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-wyrdlens-adept-foresight",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "bfvmbtbYMd6cxsV2",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "NfMKzkJcqANXE2ph",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.360",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1777515324167,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  }
+}

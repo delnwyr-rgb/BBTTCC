@@ -1,0 +1,44 @@
+{
+  "name": "Refraction of Mercy (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_crown_of_mercy.jpeg",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "wyrdlens-adept",
+    "source": {
+      "custom": "BBTTCC Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>I see where the harm lands. I intervene first.</em></p>\n<p style='opacity:0.7;font-size:0.85em'>Mode: Soft correction / drift: Away</p>\n<h3>Level 1: The Soft Reading</h3>\n<p>When you perceive hostile intent in a creature (via the class's base perception abilities), you may spend 1 Lens Charge to <em>learn what they want</em> instead of just what they will do. The GM reveals the creature's underlying motivation. You may use this knowledge to attempt diplomatic or de-escalation actions with [TBD:balance — advantage and a Presence check bonus].</p>\n<h3>Level 5: The Prevented Blow</h3>\n<p>When an ally would take damage from a deliberate attack, you may spend 2 Lens Charges as a reaction to <em>insert</em> a preemptive action: a shove, a distraction, a prevention. The attack's damage is [TBD:balance — halved or reduced], and the attacker suffers no retaliation penalty.</p>\n<h3>Level 9: The Redirected Harm</h3>\n<p>When you perceive a harmful effect about to befall a living creature (trap, curse, ongoing manifestation), you may spend 3 Lens Charges to <em>redirect</em> the harm to a non-living target instead (a wall takes the blow, a window shatters instead of the body, the curse lands on an object you carry for the purpose). You may do this even for enemies.</p>\n<h3>Level 13: The Open Hand</h3>\n<p>Once per scene, when you are present at the moment a conflict might turn lethal, you may spend 5 Lens Charges to declare <strong>The Open Hand</strong> — all creatures in the scene are offered a genuine opportunity to disengage without penalty. Hostile creatures who accept lose no resources, face, or progress toward their goals for accepting. Those who refuse proceed normally.</p>\n<h3>Level 17: The Mercy That Arrives (Capstone)</h3>\n<p>Once per session, you may appear, unannounced and uninvited, at a scene of imminent mass harm — a battle about to escalate to a massacre, a political situation about to become a purge, a ritual about to consume its participants. The scene pauses. All parties in the scene are temporarily subject to The Open Hand with no cost to you. If the scene resolves without mass harm, [TBD:balance — significant Tikkun progress is generated, Darkness is reduced in the hex].</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wyrdlensMercy\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Abilities — <strong>Refraction of Mercy</strong></div>\n  <div style=\"font-size:0.84rem;opacity:0.9\">Click this subclass on your sheet to invoke. Each ability tracks its own cadence.</div>\n    <div style=\"margin-top:0.35rem;padding:0.4rem 0.55rem;background:rgba(60,40,75,0.32);border-radius:0.25rem\">\n      <div style=\"font-size:0.82rem\"><strong>Mercy Refraction (L3)</strong></div>\n      <div style=\"font-size:0.78rem;opacity:0.86;margin-top:0.15rem\"><strong>Recovery:</strong> 1/scene &nbsp;·&nbsp; <strong>Action:</strong> Reaction (on witnessed lethal hit)</div>\n      <div style=\"font-size:0.78rem;opacity:0.85;margin-top:0.15rem\">Convert a lethal hit you witness into non-lethal. If it forces surrender, +1 Diplomacy OP.</div>\n    </div>\n    <div style=\"margin-top:0.35rem;padding:0.4rem 0.55rem;background:rgba(60,40,75,0.32);border-radius:0.25rem\">\n      <div style=\"font-size:0.82rem\"><strong>Sephirothic Bloom (L14)</strong></div>\n      <div style=\"font-size:0.78rem;opacity:0.86;margin-top:0.15rem\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Free (after non-lethal victory)</div>\n      <div style=\"font-size:0.78rem;opacity:0.85;margin-top:0.15rem\">Darkness −1 and shift Hex one step toward a beneficial Sephirah.</div>\n    </div>\n</div>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-wyrdlens-adept-mercy",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "pKuSnWKpU0fVPuje",
+  "flags": {},
+  "ownership": {
+    "default": 0
+  },
+  "_id": "JWRyydS5vsVoZLzB",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.360",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1777515324023,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  }
+}

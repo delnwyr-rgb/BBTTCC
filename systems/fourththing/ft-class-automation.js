@@ -2517,10 +2517,34 @@ export async function openPactkeeperMode(actor) {
     "While the Seal holds: concurrent-manifestation cap +2; cannot voluntarily drop a manifestation sustained on a pact-bound subject. Pays ongoing upkeep (pilot: GM-set).");
 }
 
+// Factory for the Clarity-spend onUse callback used by the cadence helpers.
+// Reads `ab.clarityCost` (number). Returns null when there's no cost so helpers
+// short-circuit cleanly. The returned callback validates Clarity, deducts, and
+// returns either `false` (insufficient — helper should abort) or a string
+// (HTML fragment to append to the chat card showing the deduction).
+function _makeClaritySpendCallback(ab) {
+  const cost = Number(ab?.clarityCost ?? 0);
+  if (!Number.isFinite(cost) || cost <= 0) return null;
+  const label = ab?.label ?? "Ability";
+  return async (actor) => {
+    const have = Number(actor.system?.magic?.clarity?.value ?? 0);
+    if (have < cost) {
+      ui.notifications.warn(`${label}: insufficient Clarity (need ${cost}, have ${have}).`);
+      return false;
+    }
+    const next = have - cost;
+    await actor.update({ "system.magic.clarity.value": next });
+    return `<div style="font-size:0.78rem;opacity:0.85;margin-top:0.3rem">⟁ <strong>Clarity:</strong> ${have} → ${next} (−${cost})</div>`;
+  };
+}
+
 // Generic 1/Soma Break ability dialog. Tracks 'used' state on actor flag;
 // player clears it manually on Soma Break (or via the Reset button). Flag
 // namespace stays as `disciplineUsed` for backward compatibility with
 // existing actor data from before the Soma Break canon unification.
+//
+// `onUse` may return `false` to abort (no flag burn) or a string of HTML to
+// append to the chat card (used for Clarity-spend display).
 async function _openSomaBreakAbility(actor, key, label, body, onUse) {
   const used = Boolean(actor.getFlag("fourththing", `disciplineUsed.${key}`));
   new Dialog({
@@ -2537,13 +2561,19 @@ async function _openSomaBreakAbility(actor, key, label, body, onUse) {
             ui.notifications.warn(`${label}: already spent — reset on Soma Break.`);
             return;
           }
+          let extra = "";
+          if (typeof onUse === "function") {
+            const result = await onUse(actor);
+            if (result === false) return;
+            if (typeof result === "string") extra = result;
+          }
           await actor.setFlag("fourththing", `disciplineUsed.${key}`, true);
-          if (typeof onUse === "function") await onUse(actor);
           ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
             content: `<div class="fourththing-roll">
               <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label}</span></div>
               <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+              ${extra}
             </div>`
           });
         }
@@ -2630,13 +2660,19 @@ async function _openPerSceneAbility(actor, key, label, body, onUse) {
             ui.notifications.warn(`${label}: already spent — reset on new scene.`);
             return;
           }
+          let extra = "";
+          if (typeof onUse === "function") {
+            const result = await onUse(actor);
+            if (result === false) return;
+            if (typeof result === "string") extra = result;
+          }
           await actor.setFlag("fourththing", `scenePerUse.${key}`, true);
-          if (typeof onUse === "function") await onUse(actor);
           ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
             content: `<div class="fourththing-roll">
               <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label}</span></div>
               <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+              ${extra}
             </div>`
           });
         }
@@ -2644,6 +2680,43 @@ async function _openPerSceneAbility(actor, key, label, body, onUse) {
       reset: {
         label: "Reset (New Scene)",
         callback: () => actor.setFlag("fourththing", `scenePerUse.${key}`, false)
+      },
+      close: { label: "Close" }
+    },
+    default: "use"
+  }).render(true);
+}
+
+// Clarity-gated ability dialog. No per-rest/per-scene cap — the gate is the
+// actor's Clarity pool. `onUse` is normally a `_makeClaritySpendCallback`
+// result; returning `false` aborts the chat card, a string is appended.
+async function _openClarityOnlyAbility(actor, key, label, body, onUse) {
+  const cur = Number(actor.system?.magic?.clarity?.value ?? 0);
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>Clarity-gated — no per-rest cap. Current Clarity: ${cur}.</b></p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      use: {
+        label: "Use",
+        callback: async () => {
+          let extra = "";
+          if (typeof onUse === "function") {
+            const result = await onUse(actor);
+            if (result === false) return;
+            if (typeof result === "string") extra = result;
+          }
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll">
+              <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label}</span></div>
+              <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+              ${extra}
+            </div>`
+          });
+        }
       },
       close: { label: "Close" }
     },
@@ -3734,27 +3807,55 @@ export const CHAR_OPT_ABILITIES = {
     ]
   },
 
-  // Wyrdlens refractions (3)
+  // Wyrdlens refractions (3) — Lens Charge ladder consolidated onto Clarity
+  // 2026-05-18. Each ladder ability now carries a `clarityCost` field that
+  // the dispatcher deducts via _makeClaritySpendCallback.
   "bbttcc-wyrdlens-adept-foresight": {
-    type: "strategic-turn", level: 3,
-    label: "Refraction of Foresight — Force Enemy Reroll (L3)",
-    body: "Strategic: Once per Strategic Turn, spend 1 Intrigue OP to force an enemy strategic reroll."
+    label: "Refraction of Foresight",
+    abilities: [
+      { key: "anticipationL1",      type: "soma-break",   level: 1,  label: "The Anticipation (L1)",         clarityCost: 1,
+        body: "1/Soma Break — at the start of each combat or significant scene, spend 1 Clarity to gain a Foreseen Action: narrate a specific event about to occur. Advantage / +5 [TBD:balance] on your first reaction to it. May grant the Foreseen Action to an ally instead." },
+      { key: "forceEnemyReroll",    type: "strategic-turn", level: 3, label: "Force Enemy Reroll (L3)",
+        body: "Strategic: Once per Strategic Turn, spend 1 Intrigue OP to force an enemy strategic reroll." },
+      { key: "slowedInstantL5",     type: "clarity-only", level: 5,  label: "The Slowed Instant (L5)",       clarityCost: 1,
+        body: "Reaction (intent: 1/round) — when an ally within 30 ft is targeted by an attack, effect, or hostile action, spend 1 Clarity to briefly slow the moment: the ally may take a bonus reaction (dodge, parry, counter, reposition) before the action resolves." },
+      { key: "readTheFieldL9",      type: "clarity-only", level: 9,  label: "Read The Field (L9)",           clarityCost: 2,
+        body: "Start of a round — spend 2 Clarity to have the GM reveal, in broad terms, the intended actions of all hostile creatures in the scene this round. Accurate at moment of reading; can be changed by intervening actions." },
+      { key: "stoppedStrikeL13",    type: "scene",        level: 13, label: "The Stopped Strike (L13)",      clarityCost: 3,
+        body: "1/scene — reaction when a creature within range takes an action. Spend 3 Clarity to undo the action before it resolves; turn consumed but no effect. Target may attempt a Soul save [TBD:balance DC] to retain; success acts at keep-lowest." }
+    ]
   },
   "bbttcc-wyrdlens-adept-mercy": {
     label: "Refraction of Mercy",
     abilities: [
-      { key: "mercyRefraction",  type: "scene",     level: 3,  label: "Mercy Refraction (L3)",
+      { key: "softReadingL1",     type: "clarity-only", level: 1,  label: "The Soft Reading (L1)",         clarityCost: 1,
+        body: "Trigger — when you perceive hostile intent in a creature, spend 1 Clarity to learn what they want (motivation) instead of just what they will do. GM reveals the underlying motive. You may use this knowledge to attempt diplomatic / de-escalation actions with advantage and a Presence-check bonus [TBD:balance]." },
+      { key: "mercyRefraction",   type: "scene",        level: 3,  label: "Mercy Refraction (L3)",
         body: "1/scene, convert a lethal hit you witness into non-lethal. If it forces surrender, +1 Diplomacy OP." },
-      { key: "sephiroticBloom",  type: "soma-break", level: 14, label: "Sephirothic Bloom (L14)",
+      { key: "preventedBlowL5",   type: "clarity-only", level: 5,  label: "The Prevented Blow (L5)",       clarityCost: 2,
+        body: "Reaction — when an ally would take damage from a deliberate attack, spend 2 Clarity to insert a preemptive action (shove, distraction, prevention). The attack's damage is halved / reduced [TBD:balance]; the attacker suffers no retaliation penalty." },
+      { key: "redirectedHarmL9",  type: "clarity-only", level: 9,  label: "The Redirected Harm (L9)",      clarityCost: 3,
+        body: "Reaction — when you perceive a harmful effect about to befall a living creature (trap, curse, ongoing manifestation), spend 3 Clarity to redirect the harm to a non-living target (wall, window, object you carry). Works on enemies too." },
+      { key: "openHandL13",       type: "scene",        level: 13, label: "The Open Hand (L13)",           clarityCost: 5,
+        body: "1/scene — when you are present at the moment a conflict might turn lethal, spend 5 Clarity to declare The Open Hand: all creatures in the scene are offered a genuine chance to disengage without penalty. Acceptors lose no resources, face, or progress. Refusers proceed normally." },
+      { key: "sephiroticBloom",   type: "soma-break",   level: 14, label: "Sephirothic Bloom (L14)",
         body: "1/Soma Break, after a non-lethal victory you led: Darkness −1 and shift Hex one step toward a beneficial Sephirah." }
     ]
   },
   "bbttcc-wyrdlens-adept-truth": {
     label: "Refraction of Truth",
     abilities: [
-      { key: "truthRefraction", type: "info",      level: 3,  label: "Truth Refraction (L3) — Spend 1 Intrigue OP",
+      { key: "readingEyeL1",      type: "clarity-only", level: 1,  label: "The Reading Eye (L1)",                          clarityCost: 1,
+        body: "After focusing on a creature, object, location, or ongoing situation for 1 minute, spend 1 Clarity to perceive one concealed truth: a recent lie, hidden motive, secret identity, disguise, false document, or active Stealth. GM picks one if multiple apply." },
+      { key: "truthRefraction",   type: "info",         level: 3,  label: "Truth Refraction (L3) — Spend 1 Intrigue OP",
         body: "Spend 1 Intrigue OP to treat one Spark Identification roll ≤9 as a 10 this Turn. No daily cap; OP-cost only." },
-      { key: "unshatter",       type: "soma-break", level: 14, label: "Unshatter (L14)",
+      { key: "unconcealedWordL5", type: "clarity-only", level: 5,  label: "The Unconcealed Word (L5)",                     clarityCost: 1,
+        body: "Reaction — when a creature in your presence lies aloud, spend 1 Clarity to perceive the truth they are lying about. You know it; you do not automatically speak it. Other creatures do not perceive your use of this ability." },
+      { key: "forcedClarityL9",   type: "scene",        level: 9,  label: "The Forced Clarity (L9)",                       clarityCost: 3,
+        body: "1/scene — spend 3 Clarity to create a Zone of Clarity: a 30-ft radius around you for 1 minute. No creature in the zone may successfully lie, conceal, or obscure intentions through speech. Mental concealment (occluded thoughts, non-verbal Stealth) unaffected." },
+      { key: "exposureL13",       type: "scene",        level: 13, label: "The Exposure (L13)",                            clarityCost: 5,
+        body: "1/scene — spend 5 Clarity to publicly reveal one concealed truth about a creature, faction, or institution present in the scene. Revelation cannot be unspoken; mechanical consequences (Morale penalty, Political Drift shift, social cascade) appropriate to severity." },
+      { key: "unshatter",         type: "soma-break",   level: 14, label: "Unshatter (L14)",
         body: "1/Soma Break, purify a Corrupted Spark step via short penance: Darkness −1." }
     ]
   },
@@ -4142,11 +4243,15 @@ async function _dispatchSingleAbility(actor, ab, key, requiredLevel) {
   // is already spent. Strategic-cadence and out-of-combat use bypass the gate.
   const allowed = await _checkAndDebitActionEconomy(actor, ab);
   if (!allowed) return null;
+  // Clarity-spend callback (null when ab has no `clarityCost`). Threaded
+  // through the cadence helpers so the deduction happens atomically with the
+  // use-flag burn and shows up on the chat card.
+  const onUse = _makeClaritySpendCallback(ab);
   switch (ab.type) {
     case "scene":
-      return _openPerSceneAbility(actor, key, ab.label, ab.body);
+      return _openPerSceneAbility(actor, key, ab.label, ab.body, onUse);
     case "soma-break":
-      return _openSomaBreakAbility(actor, key, ab.label, ab.body);
+      return _openSomaBreakAbility(actor, key, ab.label, ab.body, onUse);
     case "soma-break-tier":
       return _openTierUsesPerSomaBreak(actor, key, ab.label, ab.body);
     case "strategic-turn":
@@ -4161,6 +4266,8 @@ async function _dispatchSingleAbility(actor, ab, key, requiredLevel) {
         cadenceText: "at scenario end",
         resetLabel: "Reset (New Scenario)"
       });
+    case "clarity-only":
+      return _openClarityOnlyAbility(actor, key, ab.label, ab.body, onUse);
     case "info":
       return _openInfoOnlyAbility(actor, ab.label, ab.body);
     default:
@@ -4181,9 +4288,13 @@ async function _openSubclassPicker(actor, title, abilities, idPrefix) {
     else if (ab.type === "soma-break") used = Boolean(actor.getFlag("fourththing", `disciplineUsed.${key}`));
     else if (ab.type === "strategic-turn") used = Boolean(actor.getFlag("fourththing", `strategicTurn.${key}`));
     else if (ab.type === "scenario")  used = Boolean(actor.getFlag("fourththing", `scenario.${key}`));
-    return ab.type === "info"
-      ? `<b>passive trigger / OP-cost — no tracking</b>`
-      : `<b>${used ? "SPENT" : "AVAILABLE"}</b>`;
+    const cost = Number(ab.clarityCost ?? 0);
+    const costTag = cost > 0 ? ` <span style="opacity:0.85">· <strong>${cost} Clarity</strong></span>` : "";
+    if (ab.type === "clarity-only") {
+      return `<b>${cost > 0 ? `${cost} Clarity per use` : "no cost"} — no per-rest cap</b>`;
+    }
+    if (ab.type === "info") return `<b>passive trigger / OP-cost — no tracking</b>`;
+    return `<b>${used ? "SPENT" : "AVAILABLE"}</b>${costTag}`;
   };
 
   const cadenceLabel = (ab) => ({
@@ -4191,6 +4302,7 @@ async function _openSubclassPicker(actor, title, abilities, idPrefix) {
     "soma-break": "1/Soma Break",
     "strategic-turn": "1/Strategic Turn",
     "scenario": "1/Scenario",
+    "clarity-only": "Clarity-gated",
     "info": "passive / OP-cost"
   })[ab.type] ?? "";
 

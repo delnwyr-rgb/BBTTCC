@@ -1,0 +1,48 @@
+{
+  "name": "Refraction of Truth (BBTTCC)",
+  "type": "subclass",
+  "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_1.png",
+  "system": {
+    "category": "doctrine",
+    "classIdentifier": "wyrdlens-adept",
+    "source": {
+      "custom": "BBTTCC Originals — Sprint F",
+      "revision": 1,
+      "rules": "2026"
+    },
+    "tags": [],
+    "description": {
+      "value": "<div data-ft-phase5-vocab-scrub=\"v1\" style=\"display:none\"></div>\n<p><em>I will not spare you what I see.</em></p>\n<p style='opacity:0.7;font-size:0.85em'>Mode: Exposure / drift: Toward</p>\n<h3>Level 1: The Reading Eye</h3>\n<p>When you focus on a creature, object, location, or ongoing situation for [TBD:balance — 1 minute], you may spend 1 Lens Charge to <em>perceive one concealed truth</em>: a lie recently told, a hidden motive, a secret identity, a disguise, a false document, an active Stealth. The GM reveals one such truth at their discretion if more than one applies.</p>\n<h3>Level 5: The Unconcealed Word</h3>\n<p>When a creature in your presence lies aloud, you may spend 1 Lens Charge as a reaction to perceive the <em>truth they are lying about</em>. You do not automatically speak the truth; you simply know it. Other creatures do not perceive your use of this ability.</p>\n<h3>Level 9: The Forced Clarity</h3>\n<p>Once per scene, you may spend 3 Lens Charges to create a <strong>Zone of Clarity</strong> — a 30-foot radius around you for [TBD:balance — 1 minute] in which no creature may successfully lie, conceal, or obscure their intentions through speech. Mental concealment (occluded thoughts, non-verbal Stealth) is unaffected.</p>\n<h3>Level 13: The Exposure</h3>\n<p>Once per scene, you may spend 5 Lens Charges to <em>publicly reveal</em> one concealed truth about a creature, faction, or institution present in the scene. The revelation is spoken aloud, cannot be unspoken, and carries mechanical consequences: the target suffers [TBD:balance — Morale penalty, Political Drift shift, social cascade] appropriate to the revelation's severity.</p>\n<h3>Level 17: The Book Written In The Open (Capstone)</h3>\n<p>Once per campaign, you may begin a <strong>Public Record</strong> — a formal, ongoing, written account of truths you have perceived over the campaign. The Record is physical (a book, a scroll, a chiseled inscription) and is <em>metaphysically protected</em> — it cannot be destroyed, suppressed, or privately revised. Each session from now on, you may add one truth to the Record. The Record becomes a setting fixture: factions consult it, enemies avoid being recorded in it, historians cite it.</p><div data-ft-per-use=\"1\" data-ft-per-use-key=\"wyrdlensTruth\" style=\"margin-top:0.7rem;padding:0.55rem 0.75rem;border:1px solid #b08acc;border-radius:0.35rem;background:rgba(70,55,95,0.18);\">\n  <div style=\"font-size:0.78rem;letter-spacing:0.04em;text-transform:uppercase;color:#d4b8e8;margin-bottom:0.25rem\">⟁ Per-Use Abilities — <strong>Refraction of Truth</strong></div>\n  <div style=\"font-size:0.84rem;opacity:0.9\">Click this subclass on your sheet to invoke. Each ability tracks its own cadence.</div>\n    <div style=\"margin-top:0.35rem;padding:0.4rem 0.55rem;background:rgba(60,40,75,0.32);border-radius:0.25rem\">\n      <div style=\"font-size:0.82rem\"><strong>Truth Refraction (L3)</strong></div>\n      <div style=\"font-size:0.78rem;opacity:0.86;margin-top:0.15rem\"><strong>Recovery:</strong> 1 Intrigue OP / use &nbsp;·&nbsp; <strong>Action:</strong> Free</div>\n      <div style=\"font-size:0.78rem;opacity:0.85;margin-top:0.15rem\">Spend 1 Intrigue OP to treat one Spark Identification roll ≤9 as 10 this Turn.</div>\n    </div>\n    <div style=\"margin-top:0.35rem;padding:0.4rem 0.55rem;background:rgba(60,40,75,0.32);border-radius:0.25rem\">\n      <div style=\"font-size:0.82rem\"><strong>Unshatter (L14)</strong></div>\n      <div style=\"font-size:0.78rem;opacity:0.86;margin-top:0.15rem\"><strong>Recovery:</strong> 1/Soma Break &nbsp;·&nbsp; <strong>Action:</strong> Action (short penance)</div>\n      <div style=\"font-size:0.78rem;opacity:0.85;margin-top:0.15rem\">Purify a Corrupted Spark step. Darkness −1.</div>\n    </div>\n</div>",
+      "chat": ""
+    },
+    "identifier": "bbttcc-wyrdlens-adept-truth",
+    "advancement": [],
+    "spellcasting": {
+      "progression": "none",
+      "preparation": {}
+    }
+  },
+  "effects": [],
+  "folder": "4SZvMbYoYLB4LZnj",
+  "flags": {
+    "fourththing": {
+      "vocabScrub": "2026-05-16"
+    }
+  },
+  "ownership": {
+    "default": 0
+  },
+  "_id": "nPPVJBMm9OCD0p6S",
+  "sort": 500000,
+  "_stats": {
+    "systemId": "fourththing",
+    "coreVersion": "14.361",
+    "createdTime": 1776459469162,
+    "modifiedTime": 1778970706937,
+    "lastModifiedBy": "PEWWUtMPC7h7WMIt",
+    "systemVersion": "0.6.0",
+    "compendiumSource": null,
+    "duplicateSource": null,
+    "exportSource": null
+  }
+}
