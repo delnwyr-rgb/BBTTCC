@@ -893,6 +893,17 @@ let BBTTCC_CAPITAL_OVERLAY_LAYER = null;
 function bbttccGetCapitalOverlayHost() {
   try {
     if (!canvas || !canvas.primary) return null;
+    // Scene swap rebuilds canvas.primary; the cached container then sits
+    // orphaned (parent=null or destroyed) and addChild calls into it never
+    // render. Drop the stale reference and build a fresh one.
+    const stale = BBTTCC_CAPITAL_OVERLAY_LAYER && (
+      BBTTCC_CAPITAL_OVERLAY_LAYER.destroyed ||
+      BBTTCC_CAPITAL_OVERLAY_LAYER.parent !== canvas.primary
+    );
+    if (stale) {
+      try { BBTTCC_CAPITAL_OVERLAY_LAYER.destroy({ children: true }); } catch (_e) {}
+      BBTTCC_CAPITAL_OVERLAY_LAYER = null;
+    }
     if (!BBTTCC_CAPITAL_OVERLAY_LAYER) {
       BBTTCC_CAPITAL_OVERLAY_LAYER = new PIXI.Container();
       BBTTCC_CAPITAL_OVERLAY_LAYER.sortableChildren = true;
@@ -3089,6 +3100,12 @@ Hooks.on("canvasReady", () => {
   } catch (e) {
     console.warn("[bbttcc-territory] capital overlay rebuild on canvasReady failed", e);
   }
+});
+
+// canvas.primary is torn down on scene swap; the next canvasReady will get
+// a fresh primary group, so forget the previous container reference.
+Hooks.on("canvasTearDown", () => {
+  BBTTCC_CAPITAL_OVERLAY_LAYER = null;
 });
 
 Hooks.on("updateDrawing", (doc) => {
