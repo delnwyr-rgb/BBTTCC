@@ -15597,32 +15597,65 @@ let __ftCrewHudActiveActorId = null;
 
 function _ftPickHudSteward() {
   if (!game.user) return null;
-  // GM: respect the controlled-token selection so the GM can switch
-  // between stewards. (Returning null when no boarded token is selected
-  // keeps the HUD out of the GM's way when they're working on the map.)
-  if (game.user.isGM) {
-    const controlled = canvas?.tokens?.controlled ?? [];
-    for (const t of controlled) {
-      const a = t?.actor;
-      if (!a) continue;
-      if (a.type !== "character" && a.type !== "npc") continue;
-      if (a.getFlag?.("fourththing", "boardedRig")?.rigId) return a;
+  const isSteward = (a) => a?.type === "character" || a?.type === "npc";
+  const isBoarded = (a) => !!a?.getFlag?.("fourththing", "boardedRig")?.rigId;
+  const canRead   = (a) => a?.testUserPermission?.(game.user, "OBSERVER") ?? false;
+  const stewardInRig = (rig) => {
+    // Pick a steward boarded on `rig` that the current user can see.
+    // Prefer one the user OWNS (their own seat), fall back to OBSERVER.
+    const slots = rig?.system?.crew?.slots ?? [];
+    let observed = null;
+    for (const slot of slots) {
+      if (!slot?.actorId) continue;
+      const s = game.actors?.get(slot.actorId);
+      if (!isSteward(s) || !isBoarded(s)) continue;
+      if (s.isOwner) return s;
+      if (!observed && canRead(s)) observed = s;
     }
-    return null;
+    return observed;
+  };
+
+  // 1. Controlled-token preference (GM and player). Selecting a boarded
+  //    steward shows that steward; selecting a rig shows a steward aboard.
+  const controlled = canvas?.tokens?.controlled ?? [];
+  for (const t of controlled) {
+    const a = t?.actor;
+    if (isSteward(a) && isBoarded(a) && canRead(a)) return a;
+    if (a?.type === "rig") {
+      const s = stewardInRig(a);
+      if (s) return s;
+    }
   }
-  // Player: token control is unreliable (boarded tokens are hidden, so
-  // the player can't re-select them once focus shifts). Scan visible
-  // actors directly. We need OBSERVER+ (level 2) to read the boardedRig
-  // flag — OWNER isn't required because the actual mutations (fire,
-  // crew action) socket-relay to the GM when the player can't update.
-  // Prefer the assigned character.
-  const canRead = (a) => a?.testUserPermission?.(game.user, "OBSERVER") ?? false;
+
+  // GM: no controlled boarded selection ⇒ no HUD (keep map work clean).
+  if (game.user.isGM) return null;
+
+  // 2. Player fallback: assigned character if boarded.
   const own = game.user.character;
-  if (own && canRead(own) && own.getFlag?.("fourththing", "boardedRig")?.rigId) return own;
+  if (own && canRead(own) && isBoarded(own)) return own;
+
+  // 3. Player fallback: any owned token on canvas whose actor is a
+  //    boarded steward (covers multi-token rig scenes where the player
+  //    drives stewards + rigs but hasn't selected them).
+  const placeables = canvas?.tokens?.placeables ?? [];
+  for (const t of placeables) {
+    const a = t?.actor;
+    if (a?.isOwner && isSteward(a) && isBoarded(a)) return a;
+  }
+
+  // 4. Player fallback: any owned rig on canvas ⇒ first owned steward in it.
+  for (const t of placeables) {
+    const a = t?.actor;
+    if (a?.type === "rig" && a.isOwner) {
+      const s = stewardInRig(a);
+      if (s) return s;
+    }
+  }
+
+  // 5. Player final fallback: any boarded steward visible to the user.
   for (const a of (game.actors ?? [])) {
-    if (a.type !== "character" && a.type !== "npc") continue;
-    if (!canRead(a)) continue;
-    if (a.getFlag?.("fourththing", "boardedRig")?.rigId) return a;
+    if (!isSteward(a) || !canRead(a)) continue;
+    if (isBoarded(a)) return a;
   }
   return null;
 }
@@ -15727,16 +15760,12 @@ function _ftRenderCrewHud() {
 // flag, the rig's combat state, or the rig's item list changes.
 Hooks.on("controlToken", () => _ftRenderCrewHud());
 Hooks.on("updateActor", (actor) => {
-  // Cheap relevance gate: only re-render if the change concerns the
-  // steward currently shown OR a rig that any boarded steward references.
   if (!actor) return;
   if (actor.id === __ftCrewHudActiveActorId) return _ftRenderCrewHud();
-  if (actor.type === "rig") {
-    const showing = __ftCrewHudActiveActorId ? game.actors?.get(__ftCrewHudActiveActorId) : null;
-    if (showing?.getFlag?.("fourththing", "boardedRig")?.rigId === actor.id) return _ftRenderCrewHud();
-  }
-  // Otherwise: still re-render if no HUD currently shown — the update
-  // might have just boarded somebody we now want to display.
+  // Any rig update may change which steward we should show (crew.slots
+  // mutation, ownership grant after a boarding, destroyed flip). The
+  // picker is debounced + cheap, so re-render unconditionally.
+  if (actor.type === "rig") return _ftRenderCrewHud();
   if (!__ftCrewHudActiveActorId) _ftRenderCrewHud();
 });
 Hooks.on("createItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
