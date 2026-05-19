@@ -6417,6 +6417,21 @@ function bindAPI() {
             } catch (_eVfxRecv) { console.warn(TAG, "raidVfx handler threw", _eVfxRecv); }
             return;
           }
+          if (msg.t === "infilHook") {
+            // GM-side bbttcc:infiltration:* hooks fire only locally because
+            // step()/applyEffects() runs on the GM's open raid console. The
+            // canvas-VFX bridge subscribes to those hooks in every client,
+            // so we just re-fire the hook here with the slim payload and the
+            // bridge plays its alarm/progress/outcome VFX on every player.
+            console.log(TAG, "infilHook RECV", msg);
+            try {
+              const hookName = String(msg.hook || "");
+              if (hookName.startsWith("bbttcc:infiltration:")) {
+                Hooks.callAll(hookName, msg.payload || {});
+              }
+            } catch (eI) { console.warn(TAG, "infilHook replay threw", eI); }
+            return;
+          }
         } catch(_eS) {}
       });
     }

@@ -32,6 +32,22 @@
   const dup   = (x)=>foundry.utils.duplicate(x||{});
   const gmIds = () => game.users?.filter(u=>u.isGM).map(u=>u.id) ?? [];
 
+  // Mirror the GM-side bbttcc:infiltration:* hook to remote clients so the
+  // canvas-VFX bridge fires for every player, not only the GM running step().
+  // The full scenario snapshot is dropped — canvas-vfx only reads scalar
+  // fields, and we don't want to balloon every socket frame.
+  function _emitInfilHookRelay(hookName, p) {
+    try {
+      if (!game?.socket?.emit) return;
+      const slim = {
+        before: p?.before, after: p?.after, delta: p?.delta,
+        outcome: p?.outcome,
+        attackerId: p?.attackerId, defenderId: p?.defenderId
+      };
+      game.socket.emit(`module.${MOD_R}`, { t: "infilHook", hook: hookName, payload: slim });
+    } catch (_e) { /* socket optional */ }
+  }
+
   function getFX() {
     return game?.bbttcc?.api?.fx || null;
   }
@@ -228,6 +244,7 @@
         await sendOutcomeCard(outcome);
         // S3a.4: emit outcome hook BEFORE the flip dialog so VFX is in flight
         try { Hooks.callAll("bbttcc:infiltration:outcomeResolved", { scenario: getState(), outcome, attackerId: A.id, defenderId: D.id }); } catch (_) {}
+        _emitInfilHookRelay("bbttcc:infiltration:outcomeResolved", { outcome, attackerId: A.id, defenderId: D.id });
         if (outcome === "detected") await promptFlipDialog();
       }
       // ---------------------------------------------------------------------
@@ -362,7 +379,9 @@
         // S3a.4: emit alarm-change hook if step (incl. discovery tick) moved the meter
         try {
           if (state.alarm !== _stepBeforeAlarm) {
-            Hooks.callAll("bbttcc:infiltration:alarmChanged", { scenario: getState(), before: _stepBeforeAlarm, after: state.alarm, delta: state.alarm - _stepBeforeAlarm, attackerId: A.id, defenderId: D.id });
+            const payload = { before: _stepBeforeAlarm, after: state.alarm, delta: state.alarm - _stepBeforeAlarm, attackerId: A.id, defenderId: D.id };
+            Hooks.callAll("bbttcc:infiltration:alarmChanged", { scenario: getState(), ...payload });
+            _emitInfilHookRelay("bbttcc:infiltration:alarmChanged", payload);
           }
         } catch (_) {}
 
@@ -494,8 +513,16 @@
           await sendChat([parts.join("<br/>")], { title: `${label}: Effects` });
           // S3a.4: emit canvas-VFX hooks for meter changes
           try {
-            if (alarmChanged)    Hooks.callAll("bbttcc:infiltration:alarmChanged",    { scenario: getState(), before: beforeAlarm,    after: state.alarm,    delta: state.alarm    - beforeAlarm,    attackerId: A.id, defenderId: D.id });
-            if (progressChanged) Hooks.callAll("bbttcc:infiltration:progressChanged", { scenario: getState(), before: beforeProgress, after: state.progress, delta: state.progress - beforeProgress, attackerId: A.id, defenderId: D.id });
+            if (alarmChanged) {
+              const ap = { before: beforeAlarm, after: state.alarm, delta: state.alarm - beforeAlarm, attackerId: A.id, defenderId: D.id };
+              Hooks.callAll("bbttcc:infiltration:alarmChanged", { scenario: getState(), ...ap });
+              _emitInfilHookRelay("bbttcc:infiltration:alarmChanged", ap);
+            }
+            if (progressChanged) {
+              const pp = { before: beforeProgress, after: state.progress, delta: state.progress - beforeProgress, attackerId: A.id, defenderId: D.id };
+              Hooks.callAll("bbttcc:infiltration:progressChanged", { scenario: getState(), ...pp });
+              _emitInfilHookRelay("bbttcc:infiltration:progressChanged", pp);
+            }
           } catch (_) {}
           // Resolve outcome (force "detected" wins over meter-driven resolution)
           if (state.outcome === "ongoing") {
