@@ -857,10 +857,13 @@ export function deriveItemUnlockLevel(item) {
   const desc = sys.description?.value ?? "";
 
   const tier = _scanMax([...structured, desc], _TIER_PATTERNS);
+  // requirements often carries "(6th level)" prose alongside description; the
+  // reducer's Math.max means a higher prose-derived gate self-heals a stale
+  // stamped level of 1 (Pactkeeper / Cosmic Linguist Initiation playtest bug).
   const level = [
     Number.isFinite(stampedLevel) && stampedLevel > 0 ? stampedLevel : null,
     _scanMax(structured, _LEVEL_PATTERNS),
-    _scanMax([desc], _DESC_LEVEL_PATTERNS)
+    _scanMax([desc, sys.requirements], _DESC_LEVEL_PATTERNS)
   ].reduce((a, b) => (b === null ? a : (a === null ? b : Math.max(a, b))), null);
 
   return { tier, level };
