@@ -15436,10 +15436,27 @@ Hooks.on("renderApplicationV2", (app, html) => {
     if (!actor || (actor.type !== "character" && actor.type !== "npc")) return;
     const root = html instanceof HTMLElement ? html : html?.[0];
     if (!root) return;
-    if (root.querySelector(".ft-boarded-banner")) return;
 
+    // 2026-05-19 — Refresh-on-render fix (playtest 2026-05-19 follow-up).
+    // V13 ApplicationV2 keeps `.window-content` across part-based re-renders,
+    // so a banner injected once persisted with stale "fired this round"
+    // button states even though the underlying flag was being cleared.
+    // Symptom: New Turn button on the sheet appeared to do nothing —
+    // the data WAS cleared, but the banner's disabled buttons remained.
+    // Fix: rebuild content + rebind handlers on every render. Drop banner
+    // entirely when the actor is no longer boarded.
+    const existing = root.querySelector(".ft-boarded-banner");
     const ctx = _ftCollectCrewControlsContext(actor);
-    if (!ctx) return;
+    if (!ctx) {
+      if (existing) existing.remove();
+      return;
+    }
+
+    if (existing) {
+      existing.innerHTML = _ftBuildCrewControlsHtml(actor, ctx);
+      _ftBindCrewControls(existing, actor, ctx, { onDisembark: () => app.render(false) });
+      return;
+    }
 
     const banner = document.createElement("div");
     banner.className = "ft-boarded-banner";
