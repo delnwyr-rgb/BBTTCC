@@ -14799,6 +14799,21 @@ Hooks.on("renderBBTTCC_HexSheet", (sheet, html, _ctx) => {
 // Action ROUTING through rig stats (attacks/defenses) is deferred to a
 // follow-up sprint — Phase 5 lands the state machine + UX surfacing only.
 
+/** Return every rig actor whose crew.slots references this steward id.
+ * Source-of-truth-by-slot used to repair orphan state when the actor's
+ * boardedRig flag and the rig's slot list drift apart (delete-replace
+ * token cycles, prior boardings that bypassed disembark, etc.). */
+function _ftFindRigsForSteward(stewardId) {
+  if (!stewardId) return [];
+  const out = [];
+  for (const rig of (game.actors ?? [])) {
+    if (rig?.type !== "rig") continue;
+    const slots = rig.system?.crew?.slots ?? [];
+    if (slots.some(s => s?.actorId === stewardId)) out.push(rig);
+  }
+  return out;
+}
+
 /**
  * Board a steward onto a rig.
  * @param {Actor} steward - character or npc actor
@@ -14825,6 +14840,25 @@ async function ftBoardRig(steward, rig, role = null) {
     game.socket?.emit?.("system.fourththing", { t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role });
     ui.notifications?.info(`Boarding request sent — ${steward.name} → ${rig.name}.`);
     return;
+  }
+
+  // 2026-05-19 — Auto-disembark from any prior rig the steward is on
+  // (different from the target `rig`). Prevents the same actor occupying
+  // crew slots on multiple rigs at once, which left orphan slots that
+  // couldn't be cleared via the disembark button (it only knew about
+  // the rig in the actor's flag). GM-side at this point.
+  for (const other of _ftFindRigsForSteward(steward.id)) {
+    if (other.id === rig.id) continue;
+    const otherSlots = foundry.utils.deepClone(other.system?.crew?.slots ?? []);
+    let changed = false;
+    for (const s of otherSlots) {
+      if (s?.actorId === steward.id) { s.actorId = ""; changed = true; }
+    }
+    if (changed) {
+      try { await other.update({ "system.crew.slots": otherSlots }); }
+      catch (e) { console.warn("[fourththing] board: prior-rig sweep failed", e); }
+      _ftRefreshRigTokenBadge(other);
+    }
   }
 
   // Pick a slot — prefer requested role, else first empty, else push new
@@ -14950,70 +14984,95 @@ Hooks.once("ready", async () => {
   } catch (e) { console.warn("[fourththing] rig-Observer backfill failed", e); }
 });
 
-/** Disembark a steward from whatever rig they're on. */
+/** Disembark a steward from every rig that currently references them
+ *  (via boardedRig flag, explicit rigId, OR a stale crew.slots entry).
+ *  2026-05-19 — Was a single-rig clear keyed on the actor flag; that
+ *  left orphan crew.slots on prior rigs after a delete-replace token
+ *  cycle or a boarding that bypassed disembark. Now sweeps all rigs. */
 async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
   if (!steward) return;
-  const flag  = steward.getFlag?.("fourththing", "boardedRig");
-  const rigId = flag?.rigId ?? explicitRigId ?? null;
-  if (!rigId) return;
-  const rig = game.actors?.get(rigId);
+  const flag = steward.getFlag?.("fourththing", "boardedRig");
 
-  // 2026-05-19 — Reliability fix (playtest 2026-05-18). Clear the
-  // steward's own boardedRig flag FIRST whenever we own the steward.
-  // The player always owns their PC, so this guarantees the sheet
-  // banner + HUD update locally even if the GM relay drops or the GM
-  // is offline. The rig-side slot mutation still goes via GM relay
-  // (rig.update requires OWNER on the rig).
+  // Build the universe of rigs we need to clear. Includes the actor's
+  // flag, any caller-supplied id, and every rig with a stale slot ref.
+  const candidateIds = new Set();
+  if (flag?.rigId) candidateIds.add(flag.rigId);
+  if (explicitRigId) candidateIds.add(explicitRigId);
+  for (const r of _ftFindRigsForSteward(steward.id)) candidateIds.add(r.id);
+  if (!candidateIds.size) {
+    // Final safety: if the actor flag is somehow set without a rigId,
+    // strip it. Otherwise nothing to do.
+    if (steward.isOwner && flag) {
+      try { await steward.unsetFlag("fourththing", "boardedRig"); } catch (_) {}
+    }
+    try { _ftRenderCrewHud(); } catch (_) {}
+    return;
+  }
+
+  // Player-side: clear own flag first so the sheet banner + HUD update
+  // locally even if the GM relay drops.
   if (steward.isOwner && flag?.rigId) {
     try { await steward.unsetFlag("fourththing", "boardedRig"); }
     catch (e) { console.warn("[fourththing] disembark: unsetFlag failed", e); }
   }
 
-  // GM-relay path: player can't update rig.system.crew.slots.
-  if (!game.user?.isGM && rig && !rig.isOwner) {
+  // Split candidates into rigs we can mutate locally vs. rigs that need
+  // GM relay (player non-owner of the rig).
+  const localRigs  = [];
+  const relayIds   = [];
+  for (const id of candidateIds) {
+    const r = game.actors?.get(id);
+    if (!r) continue;
+    if (game.user?.isGM || r.isOwner) localRigs.push(r);
+    else relayIds.push(id);
+  }
+
+  // GM-relay branch: emit one message per remote rig so the GM can sweep
+  // each. The GM-side handler re-enters ftDisembarkSteward with rigId.
+  if (!game.user?.isGM && relayIds.length) {
     if (!game.users?.some?.(u => u.isGM && u.active)) {
       ui.notifications?.warn(`No GM online — ${steward.name} disembarked locally; ask the GM to clear the rig's crew slot later.`);
     } else {
-      // Pass rigId explicitly so the GM handler can clean up even though
-      // we cleared the steward's flag a moment ago.
-      game.socket?.emit?.("system.fourththing", {
-        t: "ft-disembarkSteward",
-        stewardId: steward.id,
-        rigId
-      });
+      for (const rigId of relayIds) {
+        game.socket?.emit?.("system.fourththing", {
+          t: "ft-disembarkSteward",
+          stewardId: steward.id,
+          rigId
+        });
+      }
       ui.notifications?.info(`Disembark request sent — ${steward.name}.`);
     }
-    try { _ftRenderCrewHud(); } catch {}
-    return;
   }
 
-  // GM-side: clear slot on the rig (+ flag again as a safety, in case
-  // we got here via GM relay and the player-side clear above was a no-op).
-  if (rig) {
+  // Locally-mutable rigs: clear every slot referencing the steward.
+  const clearedRigs = [];
+  for (const rig of localRigs) {
     const slots = foundry.utils.deepClone(rig.system?.crew?.slots ?? []);
-    const idx = slots.findIndex(s => s.actorId === steward.id);
-    if (idx >= 0) {
-      slots[idx].actorId = "";
-      try { await rig.update({ "system.crew.slots": slots }); }
+    let changed = false;
+    for (const s of slots) {
+      if (s?.actorId === steward.id) { s.actorId = ""; changed = true; }
+    }
+    if (changed) {
+      try { await rig.update({ "system.crew.slots": slots }); clearedRigs.push(rig); }
       catch (e) { console.warn("[fourththing] disembark: rig.update failed", e); }
     }
   }
-  if (steward.getFlag?.("fourththing", "boardedRig")) {
+
+  // Final flag-strip safety (idempotent — covers GM-relay re-entry where
+  // the player already cleared it on their side).
+  if (steward.isOwner && steward.getFlag?.("fourththing", "boardedRig")) {
     try { await steward.unsetFlag("fourththing", "boardedRig"); }
     catch (e) { console.warn("[fourththing] disembark: GM-side unsetFlag failed", e); }
   }
+
+  // Restore the steward's tokens on the current scene (un-hide + sight).
   if (canvas?.scene) {
     const stewardTokens = canvas.scene.tokens.filter(t => t.actorId === steward.id);
     if (stewardTokens.length) {
-      // 2026-05-19 — Also restore sight settings we copied from the rig
-      // on board (see _ftSyncBoardedStewardToken). Clear our override
-      // flag so the next prepareDerivedData doesn't keep forcing rig sight.
       const updates = stewardTokens.map(t => {
         const ovr = t.getFlag?.("fourththing", "boardSightOverride");
         const u = { _id: t.id, hidden: false };
-        if (ovr?.priorSight) {
-          u.sight = ovr.priorSight;
-        }
+        if (ovr?.priorSight) u.sight = ovr.priorSight;
         u.flags = { fourththing: { "-=boardSightOverride": null } };
         return u;
       });
@@ -15022,19 +15081,21 @@ async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
     }
   }
 
-  if (rig) _ftRefreshRigTokenBadge(rig);
-  ui.notifications?.info(`${steward.name} disembarked${rig ? ` from ${rig.name}` : ""}.`);
-
-  // B12.C: chat-card polish on dismount. Gives the table visual feedback
-  // for the mounted→dismounted transition. Steward's action pool stays
-  // as-is (whatever was spent before bailing).
-  if (rig) {
+  // Per-rig badge refresh + chat card.
+  for (const rig of clearedRigs) {
+    _ftRefreshRigTokenBadge(rig);
     ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: steward }),
       content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#d4a35f">🚪 ${steward.name} disembarks from ${rig.name}</span></div>
         <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.8">Crew slot freed. Combat actions resume from steward HUD.</p></div>`
     });
   }
+  if (clearedRigs.length > 1) {
+    ui.notifications?.info(`${steward.name} disembarked from ${clearedRigs.length} rigs (orphan slots cleared).`);
+  } else if (clearedRigs.length === 1) {
+    ui.notifications?.info(`${steward.name} disembarked from ${clearedRigs[0].name}.`);
+  }
+  try { _ftRenderCrewHud(); } catch (_) {}
 }
 
 /** Force-refresh the boarded count badge on a rig's tokens. */
@@ -15320,7 +15381,21 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
 // boarded-rig UI so the two surfaces stay in lockstep.
 function _ftCollectCrewControlsContext(actor) {
   if (!actor) return null;
-  const flag = actor.getFlag?.("fourththing", "boardedRig");
+  let flag = actor.getFlag?.("fourththing", "boardedRig");
+  // 2026-05-19 — Orphan-state recovery. If the actor's flag is missing
+  // but a rig still claims them in crew.slots (delete-replace token
+  // cycle, prior boarding that bypassed disembark, multi-rig orphan),
+  // synthesize a flag-shaped context from the first slot match so the
+  // banner + HUD still render and the Disembark button surfaces. The
+  // disembark sweep clears every rig the steward is referenced by.
+  if (!flag?.rigId) {
+    const rigs = _ftFindRigsForSteward?.(actor.id) ?? [];
+    if (rigs.length) {
+      const r = rigs[0];
+      const slot = (r.system?.crew?.slots ?? []).find(s => s?.actorId === actor.id);
+      if (slot) flag = { rigId: r.id, role: slot.role ?? "crew", slotIdx: -1, _orphan: true };
+    }
+  }
   if (!flag?.rigId) return null;
   const rig = game.actors?.get(flag.rigId);
   if (!rig) return null;
@@ -15598,7 +15673,20 @@ let __ftCrewHudActiveActorId = null;
 function _ftPickHudSteward() {
   if (!game.user) return null;
   const isSteward = (a) => a?.type === "character" || a?.type === "npc";
-  const isBoarded = (a) => !!a?.getFlag?.("fourththing", "boardedRig")?.rigId;
+  // Build one set of steward ids referenced by any rig's crew.slots so
+  // the isBoarded check can fall back to slot membership when the actor
+  // flag is missing (orphan state). Single pass — picker stays cheap.
+  const slotStewardIds = new Set();
+  for (const rig of (game.actors ?? [])) {
+    if (rig?.type !== "rig") continue;
+    for (const s of (rig.system?.crew?.slots ?? [])) {
+      if (s?.actorId) slotStewardIds.add(s.actorId);
+    }
+  }
+  const isBoarded = (a) => {
+    if (a?.getFlag?.("fourththing", "boardedRig")?.rigId) return true;
+    return !!(a?.id && slotStewardIds.has(a.id));
+  };
   const canRead   = (a) => a?.testUserPermission?.(game.user, "OBSERVER") ?? false;
   const stewardInRig = (rig) => {
     // Pick a steward boarded on `rig` that the current user can see.
