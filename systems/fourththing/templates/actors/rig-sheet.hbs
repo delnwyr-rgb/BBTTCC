@@ -460,15 +460,17 @@
           <input type="number" data-ft-rig-edit="system.travel.hazardResist" value="{{travel.hazardResist}}" min="0"/>
         </div>
       </section>
-      {{!-- 2026-05-19 — Scene-combat tactical units. Derived from frame
-            travel speed; 1 hex = 30 ft = 6 tiles @ 5 ft/tile. --}}
+      {{!-- 2026-05-19 — Scene-combat tactical units. Hex + ft derived from
+            frame travel speed (1 hex = 30 ft). Tile count is scene-aware:
+            it reads the active scene's grid distance (5 ft, 25 ft, etc) so
+            a 25 ft/sq rig-combat map shows the right number. --}}
       <section class="ft-rig-travel-grid">
         <div class="ft-meta">
           <label data-tooltip="Tactical movement per round during scene combat (1 hex × 30 ft).">Speed (ft)</label>
           <input type="number" value="{{speedDerived.ft}}" readonly style="opacity:0.85"/>
         </div>
         <div class="ft-meta">
-          <label data-tooltip="Movement in 5-ft grid tiles (1 hex × 6 squares).">Speed (tiles)</label>
+          <label data-tooltip="Movement in grid squares at the active scene's grid distance ({{speedDerived.gridDist}} ft/sq).">Speed (sq @ {{speedDerived.gridDist}}ft)</label>
           <input type="number" value="{{speedDerived.tiles}}" readonly style="opacity:0.85"/>
         </div>
       </section>

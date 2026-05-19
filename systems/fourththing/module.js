@@ -8095,18 +8095,18 @@ Hooks.once("init", function () {
         sys.derived.defenses = sys.defenses ?? { resistances: [], immunities: [], vulnerabilities: [] };
 
         // 2026-05-19 — Surface rig speed in tactical units. Frame travel
-        // speed is authored in hexes; convert to ft/tiles for scene combat
-        // (1 hex = 30 ft = 6 squares @ 5 ft/sq). Playtest 2026-05-18: GM
-        // couldn't adjudicate scene-grid movement because rigs only carried
-        // hex speed. Frame lookup mirrors _ftHandleCrewAction's logic.
+        // speed is authored in hexes; convert to ft for scene combat
+        // (1 hex = 30 ft, the D&D 5e travel convention). Tile/square
+        // conversion is computed at sheet-render time from the active
+        // scene's grid distance, so a 5 ft/sq scene shows 6 tiles per hex
+        // and a 25 ft/sq scene shows ~1.2 — see rig + steward context-prep.
         const _frame = (this.items ?? []).find?.(it => it?.flags?.fourththing?.rigGear?.subtype === "rig-frame");
         const hexSpeed = Math.max(0, Number(
           _frame?.flags?.fourththing?.rigFrame?.travel?.speed ?? sys?.travel?.speed ?? 0
         ) || 0);
         sys.derived.speed = {
-          hex:   hexSpeed,
-          ft:    hexSpeed * 30,
-          tiles: hexSpeed * 6
+          hex: hexSpeed,
+          ft:  hexSpeed * 30
         };
         return;
       }
@@ -9632,6 +9632,11 @@ Hooks.once("init", function () {
           const movBudget = Number(actions.movementBudgetFt) || walkFt;
           const remaining = Math.max(0, movBudget - movUsed);
           const pct       = movBudget > 0 ? Math.min(100, (movUsed / movBudget) * 100) : 0;
+          // 2026-05-19 — Scene-aware square conversion. 25 ft/sq rig-combat
+          // scenes show 1 sq @ 25 ft/sq for a 30 ft walker; 5 ft/sq scenes
+          // show 6 sq. Falls back to 5 ft/sq if canvas isn't ready yet.
+          const gridDist = Number(canvas?.scene?.grid?.distance) || 5;
+          const sqRound = (v) => gridDist > 0 ? Math.round((Number(v) || 0) / gridDist * 10) / 10 : 0;
           return {
             actionUsed:           actions.actionUsed   ?? false,
             bonusUsed:            actions.bonusUsed    ?? false,
@@ -9641,11 +9646,21 @@ Hooks.once("init", function () {
             movementRemainingFt:  remaining,
             movementPct:          Math.round(pct),
             movementOver:         movUsed > movBudget,
+            gridDist,
+            movementUsedSq:       sqRound(movUsed),
+            movementBudgetSq:     sqRound(movBudget),
+            movementRemainingSq:  sqRound(remaining),
             speeds: {
               walk:  Number(mv.walk)  || 0,
               climb: Number(mv.climb) || 0,
               swim:  Number(mv.swim)  || 0,
               fly:   Number(mv.fly)   || 0
+            },
+            speedsSq: {
+              walk:  sqRound(mv.walk),
+              climb: sqRound(mv.climb),
+              swim:  sqRound(mv.swim),
+              fly:   sqRound(mv.fly)
             }
           };
         })(),
@@ -11861,6 +11876,9 @@ Hooks.once("init", function () {
           const movPct    = (movBudget > 0)
             ? Math.min(100, Math.round((movUsed / movBudget) * 100))
             : 0;
+          // 2026-05-19 — Scene-aware square conversion (parity with character sheet).
+          const gridDist = Number(canvas?.scene?.grid?.distance) || 5;
+          const sqRound = (v) => gridDist > 0 ? Math.round((Number(v) || 0) / gridDist * 10) / 10 : 0;
           return {
             actionUsed:        a.actionUsed   ?? false,
             bonusUsed:         a.bonusUsed    ?? false,
@@ -11870,11 +11888,21 @@ Hooks.once("init", function () {
             movementRemainingFt: movRem,
             movementPct:       movPct,
             movementOver:      movUsed > movBudget,
+            gridDist,
+            movementUsedSq:      sqRound(movUsed),
+            movementBudgetSq:    sqRound(movBudget),
+            movementRemainingSq: sqRound(movRem),
             speeds: {
               walk:  Number(mv.walk)  || walkFt,
               climb: Number(mv.climb) || 0,
               swim:  Number(mv.swim)  || 0,
               fly:   Number(mv.fly)   || 0
+            },
+            speedsSq: {
+              walk:  sqRound(mv.walk || walkFt),
+              climb: sqRound(mv.climb),
+              swim:  sqRound(mv.swim),
+              fly:   sqRound(mv.fly)
             }
           };
         })(),
@@ -12197,8 +12225,16 @@ Hooks.once("init", function () {
         defenseRows,
         output: sysData.output ?? { modules: [], basePerTurn: {} },
         travel: sysData.travel ?? { speed: 0, range: 0, hazardResist: 0 },
-        // 2026-05-19 — Derived tactical units for scene combat (1 hex = 30 ft = 6 tiles).
-        speedDerived: sysData.derived?.speed ?? { hex: 0, ft: 0, tiles: 0 },
+        // 2026-05-19 — Tactical units for scene combat. Hex + ft derive from
+        // frame travel speed (1 hex = 30 ft). Tile count is scene-aware:
+        // reads canvas.scene.grid.distance (5 / 25 / etc) and divides ft by
+        // it. Falls back to 5 if canvas is mid-load.
+        speedDerived: (() => {
+          const base = sysData.derived?.speed ?? { hex: 0, ft: 0 };
+          const gridDist = Number(canvas?.scene?.grid?.distance) || 5;
+          const tiles = gridDist > 0 ? Math.round((base.ft || 0) / gridDist * 10) / 10 : 0;
+          return { ...base, tiles, gridDist };
+        })(),
         crewByRole,
         crewCapacityTotal,
         crewFilledTotal,
@@ -15707,6 +15743,29 @@ Hooks.on("createItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCr
 Hooks.on("deleteItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("updateItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("canvasReady", () => _ftRenderCrewHud());
+
+// 2026-05-19 — When the active scene changes, open character/rig/npc
+// sheets need to re-render to pick up the new grid distance for the
+// squares-per-turn surface. Without this, the GM swaps from a 5 ft/sq
+// strategy scene to a 25 ft/sq rig-combat scene and the sheets keep
+// showing 6 sq/30 ft until manually closed-and-reopened. Covers both
+// the V13 ApplicationV2 registry and the legacy ui.windows map.
+Hooks.on("canvasReady", () => {
+  const seen = new Set();
+  const apps = [
+    ...Object.values(ui.windows ?? {}),
+    ...((foundry?.applications?.instances instanceof Map) ? Array.from(foundry.applications.instances.values()) : [])
+  ];
+  for (const app of apps) {
+    if (!app || seen.has(app)) continue;
+    seen.add(app);
+    const a = app?.actor;
+    if (!a) continue;
+    if (a.type === "character" || a.type === "npc" || a.type === "rig") {
+      try { app.render(false); } catch (e) { /* swallow */ }
+    }
+  }
+});
 Hooks.once("ready", () => _ftRenderCrewHud());
 
 // 2026-05-19 — When a rig token moves (or changes scene/elevation), drag

@@ -731,12 +731,16 @@
         </div>
 
         {{!-- Movement bar — auto-debits when this token moves while in combat
-             (see updateToken hook). +/- buttons handle narrative/GM corrections. --}}
-        <div class="ft-move-row" data-tooltip="Movement budget for this turn. Auto-debits when your token moves; resets on New Turn. Dash adds your walk speed to the budget.">
+             (see updateToken hook). +/- buttons handle narrative/GM corrections.
+             2026-05-19: squares-per-turn shown alongside ft, computed from
+             active scene's grid distance (so 25 ft/sq rig-combat scenes
+             read right too). --}}
+        <div class="ft-move-row" data-tooltip="Movement budget for this turn. Auto-debits when your token moves; resets on New Turn. Dash adds your walk speed to the budget. Squares shown at the active scene's grid distance ({{actionEconomy.gridDist}} ft/sq).">
           <div class="ft-move-meter {{#if actionEconomy.movementOver}}ft-move-over{{/if}}">
             <div class="ft-move-fill" style="width:{{actionEconomy.movementPct}}%"></div>
             <span class="ft-move-label">
               Move: <b>{{actionEconomy.movementUsedFt}}</b> / {{actionEconomy.movementBudgetFt}} ft
+              <span style="opacity:0.7;font-size:0.78em;">({{actionEconomy.movementUsedSq}}/{{actionEconomy.movementBudgetSq}} sq @ {{actionEconomy.gridDist}}ft)</span>
               {{#if actionEconomy.movementOver}}<span class="ft-move-over-tag">over</span>{{else}}<span class="ft-move-rem">({{actionEconomy.movementRemainingFt}} ft left)</span>{{/if}}
             </span>
           </div>
@@ -745,12 +749,12 @@
         </div>
 
         {{!-- Mode chips — surface every speed > 0. Walk always shows; climb/swim/fly
-             only when granted by ancestry/feat/AE. --}}
+             only when granted by ancestry/feat/AE. Each chip shows ft + sq @ active grid. --}}
         <div class="ft-move-modes">
-          <span class="ft-move-mode" data-tooltip="Walk speed — your default ground movement.">🚶 Walk {{actionEconomy.speeds.walk}} ft</span>
-          {{#if actionEconomy.speeds.climb}}<span class="ft-move-mode" data-tooltip="Climb speed — vertical surfaces with no roll.">🧗 Climb {{actionEconomy.speeds.climb}} ft</span>{{/if}}
-          {{#if actionEconomy.speeds.swim}}<span class="ft-move-mode" data-tooltip="Swim speed — through water without an Athletics check.">🏊 Swim {{actionEconomy.speeds.swim}} ft</span>{{/if}}
-          {{#if actionEconomy.speeds.fly}}<span class="ft-move-mode" data-tooltip="Fly speed — airborne movement.">✈ Fly {{actionEconomy.speeds.fly}} ft</span>{{/if}}
+          <span class="ft-move-mode" data-tooltip="Walk speed — your default ground movement ({{actionEconomy.speedsSq.walk}} squares @ {{actionEconomy.gridDist}} ft/sq).">🚶 Walk {{actionEconomy.speeds.walk}} ft <span style="opacity:0.65">({{actionEconomy.speedsSq.walk}} sq)</span></span>
+          {{#if actionEconomy.speeds.climb}}<span class="ft-move-mode" data-tooltip="Climb speed — vertical surfaces with no roll.">🧗 Climb {{actionEconomy.speeds.climb}} ft <span style="opacity:0.65">({{actionEconomy.speedsSq.climb}} sq)</span></span>{{/if}}
+          {{#if actionEconomy.speeds.swim}}<span class="ft-move-mode" data-tooltip="Swim speed — through water without an Athletics check.">🏊 Swim {{actionEconomy.speeds.swim}} ft <span style="opacity:0.65">({{actionEconomy.speedsSq.swim}} sq)</span></span>{{/if}}
+          {{#if actionEconomy.speeds.fly}}<span class="ft-move-mode" data-tooltip="Fly speed — airborne movement.">✈ Fly {{actionEconomy.speeds.fly}} ft <span style="opacity:0.65">({{actionEconomy.speedsSq.fly}} sq)</span></span>{{/if}}
         </div>
       </div>
 
