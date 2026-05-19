@@ -6131,6 +6131,23 @@ try {
 
     // Ensure committed results propagate to the shared session (Commit Console reads this).
     try { await this._saveSessionNow(); } catch(_e) {}
+
+    // 2026-05-19 — Emit roundCommit hook so consumers (fourththing's
+    // per-round combat flag clearer; rig fire-weapon gates) can reset
+    // per-round state. Playtest 2026-05-18: gunners had no way to refresh
+    // weapons after firing because they don't always click their sheet's
+    // "New Turn" button.
+    try {
+      Hooks.callAll("bbttcc:raid:roundCommit", {
+        round: r,
+        idx,
+        attackerId: r?.attackerId || null,
+        defenderId: r?.defenderId || null,
+        activityKey: r?.activityKey || this.vm?.activityKey || null,
+        outcome: r?.outcome || null
+      });
+    } catch (_eHook) {}
+
     return this.render();
   }
 }

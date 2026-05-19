@@ -803,6 +803,37 @@
         </p>
       </div>
 
+      {{!-- Mundane weapons: Hunting Rifle, Pressed Buckler, etc.
+            Surfaced here (2026-05-19) so players can fire non-manifestation
+            gear in combat. Strike routes through _onFtStrike →
+            ftOpenEngageDialog, which reads system.damage.formula/type. --}}
+      {{#if mundaneEngageWeapons.length}}
+      <div class="ft-combat-section">
+        <div class="ft-section-header">
+          <h3>Weapons</h3>
+        </div>
+        <div class="ft-item-list">
+          {{#each mundaneEngageWeapons as |w|}}
+          <details class="ft-item-row" data-item-id="{{w.id}}">
+            <summary class="ft-item-summary">
+              <img src="{{w.img}}" class="ft-item-art" data-tooltip="{{w.name}}"/>
+              <span class="ft-item-name">{{w.name}}</span>
+              {{#if w.damageLabel}}<span class="ft-manifest-chip" data-tooltip="Damage">{{w.damageLabel}}</span>{{/if}}
+              <span class="ft-manifest-chip" data-tooltip="Damage type">{{w.typeLabel}}</span>
+              {{#if w.rangeText}}<span class="ft-manifest-chip" data-tooltip="Range">{{w.rangeText}}</span>{{/if}}
+              <span class="ft-item-meta">{{w.intentLabel}} · {{w.skillLabel}}</span>
+              <div class="ft-item-controls">
+                <button type="button" data-action="ftWeaponRoll" data-item-id="{{w.id}}" class="ft-roll-btn" data-tooltip="Attack roll with this weapon">Strike</button>
+                <button type="button" data-action="ftItemEdit"   data-item-id="{{w.id}}" class="ft-item-edit">⚙</button>
+                <button type="button" data-action="ftItemDelete" data-item-id="{{w.id}}" class="ft-power-delete">✕</button>
+              </div>
+            </summary>
+          </details>
+          {{/each}}
+        </div>
+      </div>
+      {{/if}}
+
       {{!-- Manifestations: Forms (Strike for weapon-likes / Manifest for everything else) and Workings (Invoke) --}}
       <div class="ft-combat-section">
         <div class="ft-section-header">

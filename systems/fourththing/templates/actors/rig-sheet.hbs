@@ -448,7 +448,7 @@
     <div class="tab travel{{#if (eq activeTab "travel")}} active{{/if}}" data-tab="travel">
       <section class="ft-rig-travel-grid">
         <div class="ft-meta">
-          <label data-tooltip="Hexes per session/turn while deployed.">Speed</label>
+          <label data-tooltip="Hexes per session/turn while deployed.">Speed (hex)</label>
           <input type="number" data-ft-rig-edit="system.travel.speed" value="{{travel.speed}}" min="0"/>
         </div>
         <div class="ft-meta">
@@ -458,6 +458,18 @@
         <div class="ft-meta">
           <label data-tooltip="Mitigates travel hazards (existing rig hazard logic).">Hazard Resist</label>
           <input type="number" data-ft-rig-edit="system.travel.hazardResist" value="{{travel.hazardResist}}" min="0"/>
+        </div>
+      </section>
+      {{!-- 2026-05-19 — Scene-combat tactical units. Derived from frame
+            travel speed; 1 hex = 30 ft = 6 tiles @ 5 ft/tile. --}}
+      <section class="ft-rig-travel-grid">
+        <div class="ft-meta">
+          <label data-tooltip="Tactical movement per round during scene combat (1 hex × 30 ft).">Speed (ft)</label>
+          <input type="number" value="{{speedDerived.ft}}" readonly style="opacity:0.85"/>
+        </div>
+        <div class="ft-meta">
+          <label data-tooltip="Movement in 5-ft grid tiles (1 hex × 6 squares).">Speed (tiles)</label>
+          <input type="number" value="{{speedDerived.tiles}}" readonly style="opacity:0.85"/>
         </div>
       </section>
       <section class="ft-rig-travel-hint">

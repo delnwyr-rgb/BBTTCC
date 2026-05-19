@@ -5880,3 +5880,73 @@
   color: #c8e0f0;
   line-height: 1.1;
 }
+
+/* ── 2026-05-19 — Steward sheet compression ────────────────────────────────
+   Playtest 2026-05-18 feedback: header was eating ~60-70% of the sheet
+   when class-specific pool widgets stacked (Cosmic Linguist Resonance +
+   Strain + Authority, Pactkeeper Leverage + Civic + Pressure + Subject,
+   etc.). Body tabs were crammed into the bottom ~30% — virtually nothing
+   below was visible on default-sized open.
+
+   Strategy: cap header at ~42% of sheet height with internal scroll so
+   the body always gets at least 58%. Trim portrait. Reduce pool-widget
+   margins. Compress the boarded banner padding. */
+.ft-sheet .ft-header {
+  max-height: clamp(260px, 42%, 460px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 0.45rem;
+  padding-bottom: 0.3rem;
+}
+.ft-sheet .ft-identity {
+  flex: 0 0 220px;
+  gap: 0.3rem;
+}
+.ft-sheet .ft-portrait img {
+  max-width: 200px;
+  max-height: 200px;
+  margin: 0 auto;
+  display: block;
+}
+.ft-sheet .ft-attributes h2 {
+  margin: 0.05rem 0;
+}
+.ft-sheet .ft-derived,
+.ft-sheet .ft-defenses {
+  margin-bottom: 0.15rem;
+}
+.ft-sheet .ft-bulwark-pools,
+.ft-sheet .ft-courier-pools,
+.ft-sheet .ft-cl-pools,
+.ft-sheet .ft-wl-pools,
+.ft-sheet .ft-dw-pools,
+.ft-sheet .ft-pk-pools,
+.ft-sheet .ft-sig-mode-pills {
+  margin-top: 0.2rem !important;
+  gap: 0.25rem !important;
+}
+.ft-sheet .ft-meta-pill {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.35rem;
+}
+.ft-sheet .ft-level-display {
+  font-size: 0.74rem;
+}
+.ft-sheet .ft-magic-panel {
+  flex: 0 0 200px;
+}
+.ft-sheet .ft-magic-panel h2 {
+  margin: 0.05rem 0;
+}
+.ft-sheet .ft-magic-row {
+  margin: 0.15rem 0;
+}
+/* Sheet-injected boarded banner: collapse to a single tight row.
+   Single-row markup ships from _ftBuildCrewControlsHtml; this just
+   bounds padding/margin so the banner is ~32px instead of ~130px. */
+.ft-boarded-banner {
+  padding: 0.25rem 0.6rem !important;
+  margin: 0.15rem !important;
+  font-size: 0.78rem !important;
+  gap: 0.25rem !important;
+}

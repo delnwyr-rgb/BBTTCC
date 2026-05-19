@@ -344,6 +344,7 @@ const FT_SKILL_MASTER = [
   { key: "stealth",      attribute: "intrigue", label: "Stealth"       },
   { key: "hacking",      attribute: "intrigue", label: "Hacking"       },
   { key: "tinkering",    attribute: "intrigue", label: "Tinkering"     },
+  { key: "piloting",     attribute: "intrigue", label: "Piloting"      },
   { key: "streetwise",   attribute: "intrigue", label: "Streetwise"    },
   { key: "weave",        attribute: "intrigue", label: "Weave"         },
   { key: "diplomacy",    attribute: "presence", label: "Diplomacy"     },
@@ -895,9 +896,28 @@ function ftOpenEngageDialog(actor, item) {
 
   const intent  = item?.system?.intent   ?? "violence";
   const skill   = item?.system?.skill    ?? "melee";
-  const dmgF    = item?.system?.damage?.formula      ?? "";
-  const dmgT    = item?.system?.damage?.type         ?? "kinetic";
-  const dmgFlv  = item?.system?.damage?.damageFlavor ?? "";
+  let   dmgF    = item?.system?.damage?.formula      ?? "";
+  let   dmgT    = item?.system?.damage?.type         ?? "kinetic";
+  let   dmgFlv  = item?.system?.damage?.damageFlavor ?? "";
+
+  // 2026-05-19 — Power-type items (Form Manifestations routed through the
+  // Strike button via isWeaponForm) store damage on `system.damageRoll`
+  // (op/number/die/type/flavor/track), not the flat `system.damage` shape
+  // that mundane weapons use. Synthesize a formula string so the Apply
+  // Damage button surfaces on the chat card. Playtest 2026-05-18: "This
+  // Gun I Stole" rolled the attack fine but had no apply button because
+  // dmgF was empty.
+  if (!dmgF && item?.system?.damageRoll?.op === "damage") {
+    const dr = item.system.damageRoll;
+    const n = Math.max(0, Number(dr.number) || 0);
+    const d = String(dr.die || "");
+    if (n > 0 && d) {
+      dmgF = `${n}${d}`;
+      if (dr.type)   dmgT   = String(dr.type);
+      if (dr.flavor) dmgFlv = String(dr.flavor);
+    }
+  }
+
   const label   = item?.name ?? "Strike";
   const chatLabel = rig ? `${label} · ${rig.name}` : label;
 
@@ -8059,9 +8079,12 @@ Hooks.once("init", function () {
         // holds → +1 Guard; pilot evades → +2 Evasion; any crew braces →
         // +1 Guard. Cleared by pilot's _onFtNewTurn.
         const cmb = this.flags?.fourththing?.combat ?? {};
-        if (cmb.holding) sys.derived.guard.value   += 1;
-        if (cmb.evading) sys.derived.evasion.value += 2;
-        if (cmb.brace)   sys.derived.guard.value   += 1;
+        // 2026-05-19 — Bonuses now read from cmb.<action>Bonus when set
+        // (driver's Piloting rank stacks on top of base). Fallback to the
+        // pre-Piloting defaults so legacy flags still resolve.
+        if (cmb.holding) sys.derived.guard.value   += Number(cmb.holdingBonus ?? 1);
+        if (cmb.evading) sys.derived.evasion.value += Number(cmb.evadingBonus ?? 2);
+        if (cmb.brace)   sys.derived.guard.value   += Number(cmb.braceBonus   ?? 1);
         // B11.B mirror: canonical integrity + defenses surface through the
         // derived path so the unified _applyDamageToActor read flow Just
         // Works for rigs. Writes still target system.integrity.value (the
@@ -8070,6 +8093,21 @@ Hooks.once("init", function () {
         sys.derived.integrity.value = Number(sys.integrity.value) || 0;
         sys.derived.integrity.max   = Number(sys.integrity.max)   || 0;
         sys.derived.defenses = sys.defenses ?? { resistances: [], immunities: [], vulnerabilities: [] };
+
+        // 2026-05-19 — Surface rig speed in tactical units. Frame travel
+        // speed is authored in hexes; convert to ft/tiles for scene combat
+        // (1 hex = 30 ft = 6 squares @ 5 ft/sq). Playtest 2026-05-18: GM
+        // couldn't adjudicate scene-grid movement because rigs only carried
+        // hex speed. Frame lookup mirrors _ftHandleCrewAction's logic.
+        const _frame = (this.items ?? []).find?.(it => it?.flags?.fourththing?.rigGear?.subtype === "rig-frame");
+        const hexSpeed = Math.max(0, Number(
+          _frame?.flags?.fourththing?.rigFrame?.travel?.speed ?? sys?.travel?.speed ?? 0
+        ) || 0);
+        sys.derived.speed = {
+          hex:   hexSpeed,
+          ft:    hexSpeed * 30,
+          tiles: hexSpeed * 6
+        };
         return;
       }
 
@@ -9308,12 +9346,38 @@ Hooks.once("init", function () {
       const rawPowers = Array.from(actor.items).filter(i => i.type === "power");
       const rawWeapons = Array.from(actor.items).filter(i => i.type === "weapon");
       // Manifested weapons (origin: crafted) → Manifestations tab.
-      // Mundane/looted/vendor weapons → Inventory tab (joined into `gear` below).
+      // Mundane/looted/vendor weapons → Inventory tab (joined into `gear` below)
+      // AND Engagement tab (mundaneEngageWeapons below) so players can fire
+      // them mid-combat — regression caught in 2026-05-18 playtest.
       const manifestedWeapons = rawWeapons.filter(i => RfiItems.is.isManifestation(i));
       const mundaneWeapons    = rawWeapons.filter(i => !RfiItems.is.isManifestation(i));
       const manifestPowers = rawPowers.map(i => ftBuildManifestationRow(i, "power"));
       const manifestForms  = manifestedWeapons.map(i => ftBuildManifestationRow(i, "weapon"));
       const manifestationGuide = ftManifestationGuide(magic.sephirah);
+
+      // 2026-05-19 — Mundane-weapon rows for the Engagement tab. Lightweight
+      // shape (no manifestation chrome) — just enough for the Strike button
+      // to fire `_onFtStrike` → `ftOpenEngageDialog`, which already reads
+      // `system.damage.formula`/`system.damage.type` from weapon-type items.
+      const mundaneEngageWeapons = mundaneWeapons.map(it => {
+        const sys = it?.system ?? {};
+        const dmgF = String(sys?.damage?.formula ?? "").trim();
+        const dmgT = String(sys?.damage?.type ?? "kinetic");
+        const skill = String(sys?.skill ?? "melee");
+        const intent = String(sys?.intent ?? "violence");
+        const rangeText = sys?.range?.value ? `${sys.range.value}${sys.range.units ?? "ft"}` : "";
+        return {
+          id: it.id,
+          name: it.name,
+          img: it.img,
+          damageLabel: dmgF || "—",
+          typeLabel: ftCap(dmgT),
+          skillLabel: ftCap(skill),
+          intentLabel: ftCap(intent),
+          rangeText,
+          summary: [dmgF, ftCap(dmgT), rangeText].filter(Boolean).join(" · ")
+        };
+      }).sort((a, b) => String(a.name ?? "").localeCompare(String(b.name ?? "")));
 
       // Unified manifestation list (grouped by tier) replaces the legacy
       // Motion/Stay split in the cleaned-up tab. Stability chip tells the
@@ -9596,6 +9660,7 @@ Hooks.once("init", function () {
         manifestPowers,
         manifestForms,
         manifestAll,
+        mundaneEngageWeapons,
         activeManifestations,
         guidanceOpen,
         manifestationGuide,
@@ -10375,24 +10440,28 @@ Hooks.once("init", function () {
       // Clear per-turn combat flags (Dodge / Disengage / Hold + B11.C rig
       // weapon fire gate + B12 pilot/engineer gates). combat.hidden
       // persists across turns until the steward acts overtly.
+      // 2026-05-19 — Use `-=key` force-delete syntax. setFlag is a recursive
+      // merge under the hood, so passing a `next` object with deleted keys
+      // does NOT actually clear them. Confirmed bug: rigWeaponsFiredThisRound
+      // map survived every New Turn click during the 2026-05-18 playtest.
       const combat = this.actor.flags?.fourththing?.combat;
-      const hasPerTurnFlag = combat && (
+      if (combat && (
         combat.dodging || combat.disengaged || combat.holding ||
         combat.rigWeaponFiredThisRound || combat.rigWeaponsFiredThisRound ||
-        combat.pilotActionUsedThisRound || combat.engineerRepairedThisRound
-      );
-      if (hasPerTurnFlag) {
-        const next = { ...combat };
-        delete next.dodging;
-        delete next.disengaged;
-        delete next.holding;
-        delete next.rigWeaponFiredThisRound;        // legacy bool (BC)
-        delete next.rigWeaponsFiredThisRound;       // 2026-05-13 per-weapon map
-        delete next.lastFiredRigId;
-        delete next.lastFiredWeaponId;
-        delete next.pilotActionUsedThisRound;
-        delete next.engineerRepairedThisRound;
-        await this.actor.setFlag("fourththing", "combat", next);
+        combat.pilotActionUsedThisRound || combat.engineerRepairedThisRound ||
+        combat.lastFiredRigId || combat.lastFiredWeaponId
+      )) {
+        await this.actor.update({
+          "flags.fourththing.combat.-=dodging":                    null,
+          "flags.fourththing.combat.-=disengaged":                 null,
+          "flags.fourththing.combat.-=holding":                    null,
+          "flags.fourththing.combat.-=rigWeaponFiredThisRound":    null,  // legacy bool
+          "flags.fourththing.combat.-=rigWeaponsFiredThisRound":   null,  // per-weapon map
+          "flags.fourththing.combat.-=lastFiredRigId":             null,
+          "flags.fourththing.combat.-=lastFiredWeaponId":          null,
+          "flags.fourththing.combat.-=pilotActionUsedThisRound":   null,
+          "flags.fourththing.combat.-=engineerRepairedThisRound":  null
+        });
       }
 
       // B12: when this steward is the pilot of a rig, reset the rig's
@@ -10404,12 +10473,12 @@ Hooks.once("init", function () {
         const rig = game.actors?.get(boarded.rigId);
         const rigCmb = rig?.flags?.fourththing?.combat;
         if (rig && rigCmb && (rigCmb.holding || rigCmb.evading || rigCmb.brace || rigCmb.hexesMoved)) {
-          const nextRigCmb = { ...rigCmb };
-          delete nextRigCmb.holding;
-          delete nextRigCmb.evading;
-          delete nextRigCmb.brace;
-          delete nextRigCmb.hexesMoved;
-          await rig.setFlag("fourththing", "combat", nextRigCmb);
+          await rig.update({
+            "flags.fourththing.combat.-=holding":    null,
+            "flags.fourththing.combat.-=evading":    null,
+            "flags.fourththing.combat.-=brace":      null,
+            "flags.fourththing.combat.-=hexesMoved": null
+          });
         }
       }
       ui.notifications.info(`${this.actor.name}: actions reset for new turn.`);
@@ -12128,6 +12197,8 @@ Hooks.once("init", function () {
         defenseRows,
         output: sysData.output ?? { modules: [], basePerTurn: {} },
         travel: sysData.travel ?? { speed: 0, range: 0, hazardResist: 0 },
+        // 2026-05-19 — Derived tactical units for scene combat (1 hex = 30 ft = 6 tiles).
+        speedDerived: sysData.derived?.speed ?? { hex: 0, ft: 0, tiles: 0 },
         crewByRole,
         crewCapacityTotal,
         crewFilledTotal,
@@ -14753,12 +14824,37 @@ async function ftBoardRig(steward, rig, role = null) {
   // Stamp steward flag
   await steward.setFlag("fourththing", "boardedRig", { rigId: rig.id, role: slots[idx].role, slotIdx: idx });
 
-  // Hide steward's tokens on the current scene (so they appear "inside" the rig)
+  // Hide steward's tokens on the current scene (so they appear "inside" the rig).
+  // 2026-05-19 — Also move each steward token to the rig token's position
+  // and copy the rig's sight settings so the boarded player keeps vision
+  // from the rig. Hidden tokens still emit vision for their owner, but
+  // the vision originates from the token's position — without this sync
+  // a boarded non-owner player would see from wherever their PC token
+  // was sitting when they boarded (often outside the rig's vision range).
+  // Prior sight is captured on the token doc so disembark can restore it.
   if (canvas?.scene && game.user?.isGM) {
+    const rigTokenDoc = canvas.scene.tokens.find(t => t.actorId === rig.id) ?? null;
     const stewardTokens = canvas.scene.tokens.filter(t => t.actorId === steward.id);
     if (stewardTokens.length) {
-      const updates = stewardTokens.map(t => ({ _id: t.id, hidden: true }));
-      await canvas.scene.updateEmbeddedDocuments("Token", updates);
+      const rigSight = rigTokenDoc?.sight?.toObject?.() ?? rigTokenDoc?.sight ?? null;
+      const updates = stewardTokens.map(t => {
+        const u = { _id: t.id, hidden: true };
+        if (rigTokenDoc) {
+          u.x = rigTokenDoc.x;
+          u.y = rigTokenDoc.y;
+          if (rigTokenDoc.elevation != null) u.elevation = rigTokenDoc.elevation;
+        }
+        if (rigSight) {
+          // Capture prior sight so disembark can restore it. Use toObject
+          // shape so it round-trips cleanly through token update.
+          const priorSight = t.sight?.toObject?.() ?? t.sight ?? null;
+          u.sight = foundry.utils.deepClone(rigSight);
+          u.flags = { fourththing: { boardSightOverride: { priorSight, rigId: rig.id } } };
+        }
+        return u;
+      });
+      try { await canvas.scene.updateEmbeddedDocuments("Token", updates); }
+      catch (e) { console.warn("[fourththing] board: steward token sync failed", e); }
     }
   }
 
@@ -14819,41 +14915,74 @@ Hooks.once("ready", async () => {
 });
 
 /** Disembark a steward from whatever rig they're on. */
-async function ftDisembarkSteward(steward) {
+async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
   if (!steward) return;
-  const flag = steward.getFlag?.("fourththing", "boardedRig");
-  if (!flag?.rigId) return;
-  const rig = game.actors?.get(flag.rigId);
+  const flag  = steward.getFlag?.("fourththing", "boardedRig");
+  const rigId = flag?.rigId ?? explicitRigId ?? null;
+  if (!rigId) return;
+  const rig = game.actors?.get(rigId);
 
-  // 2026-05-18 — Same GM-relay reason as ftBoardRig: rig.update for the
-  // crew slot clear requires OWNER. Token un-hide is also GM-only.
+  // 2026-05-19 — Reliability fix (playtest 2026-05-18). Clear the
+  // steward's own boardedRig flag FIRST whenever we own the steward.
+  // The player always owns their PC, so this guarantees the sheet
+  // banner + HUD update locally even if the GM relay drops or the GM
+  // is offline. The rig-side slot mutation still goes via GM relay
+  // (rig.update requires OWNER on the rig).
+  if (steward.isOwner && flag?.rigId) {
+    try { await steward.unsetFlag("fourththing", "boardedRig"); }
+    catch (e) { console.warn("[fourththing] disembark: unsetFlag failed", e); }
+  }
+
+  // GM-relay path: player can't update rig.system.crew.slots.
   if (!game.user?.isGM && rig && !rig.isOwner) {
     if (!game.users?.some?.(u => u.isGM && u.active)) {
-      ui.notifications?.warn("No GM is online to confirm disembark.");
-      return;
+      ui.notifications?.warn(`No GM online — ${steward.name} disembarked locally; ask the GM to clear the rig's crew slot later.`);
+    } else {
+      // Pass rigId explicitly so the GM handler can clean up even though
+      // we cleared the steward's flag a moment ago.
+      game.socket?.emit?.("system.fourththing", {
+        t: "ft-disembarkSteward",
+        stewardId: steward.id,
+        rigId
+      });
+      ui.notifications?.info(`Disembark request sent — ${steward.name}.`);
     }
-    game.socket?.emit?.("system.fourththing", { t: "ft-disembarkSteward", stewardId: steward.id });
-    ui.notifications?.info(`Disembark request sent — ${steward.name}.`);
+    try { _ftRenderCrewHud(); } catch {}
     return;
   }
 
-  // Clear slot on the rig
+  // GM-side: clear slot on the rig (+ flag again as a safety, in case
+  // we got here via GM relay and the player-side clear above was a no-op).
   if (rig) {
     const slots = foundry.utils.deepClone(rig.system?.crew?.slots ?? []);
     const idx = slots.findIndex(s => s.actorId === steward.id);
     if (idx >= 0) {
       slots[idx].actorId = "";
-      await rig.update({ "system.crew.slots": slots });
+      try { await rig.update({ "system.crew.slots": slots }); }
+      catch (e) { console.warn("[fourththing] disembark: rig.update failed", e); }
     }
   }
-
-  // Clear flag, restore token visibility
-  await steward.unsetFlag("fourththing", "boardedRig");
-  if (canvas?.scene && game.user?.isGM) {
+  if (steward.getFlag?.("fourththing", "boardedRig")) {
+    try { await steward.unsetFlag("fourththing", "boardedRig"); }
+    catch (e) { console.warn("[fourththing] disembark: GM-side unsetFlag failed", e); }
+  }
+  if (canvas?.scene) {
     const stewardTokens = canvas.scene.tokens.filter(t => t.actorId === steward.id);
     if (stewardTokens.length) {
-      const updates = stewardTokens.map(t => ({ _id: t.id, hidden: false }));
-      await canvas.scene.updateEmbeddedDocuments("Token", updates);
+      // 2026-05-19 — Also restore sight settings we copied from the rig
+      // on board (see _ftSyncBoardedStewardToken). Clear our override
+      // flag so the next prepareDerivedData doesn't keep forcing rig sight.
+      const updates = stewardTokens.map(t => {
+        const ovr = t.getFlag?.("fourththing", "boardSightOverride");
+        const u = { _id: t.id, hidden: false };
+        if (ovr?.priorSight) {
+          u.sight = ovr.priorSight;
+        }
+        u.flags = { fourththing: { "-=boardSightOverride": null } };
+        return u;
+      });
+      try { await canvas.scene.updateEmbeddedDocuments("Token", updates); }
+      catch (e) { console.warn("[fourththing] disembark: token restore failed", e); }
     }
   }
 
@@ -14989,6 +15118,10 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
   const stCmb     = steward.flags?.fourththing?.combat ?? {};
   const stSys     = steward.system?.system ?? steward.system ?? {};
   const sysActs   = stSys?.actions ?? {};
+  // 2026-05-19 — Piloting rank powers driver actions. Mirrors how
+  // Tinkering powers repair. Intrigue faculty is the +mod baseline;
+  // skill rank scales the per-action bonus.
+  const piloting  = Number(stSys?.skills?.piloting?.value) || 0;
 
   const warn = (msg) => { ui.notifications?.warn(msg); return false; };
   const requirePilot    = () => role === "pilot"    || warn(`${steward.name}: only the Pilot can do that (role: ${role}).`);
@@ -15007,39 +15140,48 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
     case "steer": {
       if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
       const prevMoved = Number(cmb.hexesMoved) || 0;
-      await setRigCombat({ hexesMoved: prevMoved + speed });
+      // Piloting boost: one extra hex per 2 ranks (rounded down).
+      const pilotingHexBonus = Math.floor(piloting / 2);
+      const effHexes  = speed + pilotingHexBonus;
+      const ftSpeed   = effHexes * 30;
+      await setRigCombat({ hexesMoved: prevMoved + effHexes });
       await setPilotGate();
       await consumeAction();
+      const pilotingNote = pilotingHexBonus > 0
+        ? ` <span style="opacity:0.75">(base ${speed} + ${pilotingHexBonus} from Piloting ${piloting})</span>`
+        : "";
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#d4a35f">🎮 ${steward.name} steers ${rig.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem">Pilot action — rig may move up to <b>${speed} hex</b> this round (GM moves the token).</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem">Pilot action — rig may move up to <b>${effHexes} hex</b> (~<b>${ftSpeed} ft</b>) this round.${pilotingNote}</p></div>`
       });
       return;
     }
 
     case "hold-position": {
       if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
-      await setRigCombat({ holding: true });
+      const holdBonus = 1 + Math.floor(piloting / 3);
+      await setRigCombat({ holding: true, holdingBonus: holdBonus });
       await setPilotGate();
       await consumeAction();
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">🛡 ${rig.name} holds position</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem"><b>+1 Guard</b> until the next pilot turn (${steward.name}).</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>+${holdBonus} Guard</b> until the next pilot turn (${steward.name}).${holdBonus > 1 ? ` <span style="opacity:0.75">(Piloting ${piloting})</span>` : ""}</p></div>`
       });
       return;
     }
 
     case "evasive": {
       if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
-      await setRigCombat({ evading: true });
+      const evaBonus = 2 + piloting;
+      await setRigCombat({ evading: true, evadingBonus: evaBonus });
       await setPilotGate();
       await consumeAction();
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">💨 ${rig.name} evades</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem"><b>+2 Evasion</b> until the next pilot turn (${steward.name}).</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>+${evaBonus} Evasion</b> until the next pilot turn (${steward.name}).${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
       });
       return;
     }
@@ -15062,7 +15204,10 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
       const targetActor = targets[0]?.actor;
       if (!targetActor) { ui.notifications?.warn("Target a token first (the ram needs an objective)."); return; }
       const weight = FT_RIG_BRACKET_WEIGHT[bracket] || 3;
-      const dice   = Math.max(1, tier * weight);
+      const baseDice = Math.max(1, tier * weight);
+      // Piloting: +1 ram die per rank (caps with skill ladder, but
+      // unbounded here so high-tier pilots get noticeable scaling).
+      const dice   = baseDice + piloting;
       const roll   = new Roll(`${dice}d6`);
       await roll.evaluate();
       const dmgTarget = Math.max(1, Number(roll.total) || 1);
@@ -15080,10 +15225,13 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
       await setRigCombat({ hexesMoved: Math.max(Number(cmb.hexesMoved) || 0, speed) });
       await setPilotGate();
       await consumeAction();
+      const pilotingRamNote = piloting > 0
+        ? ` <span style="opacity:0.8">+ Piloting ${piloting}</span>`
+        : "";
       await roll.toMessage({
         speaker: cardSpeaker,
         flavor: `<div class="ft-roll-header"><span class="ft-roll-name" style="color:#eb5757">💥 ${rig.name} rams ${targetActor.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem"><b>${dice}d6</b> · ${bracket} ×${weight} × T${tier} → <b>${dmgTarget}</b> dmg (target) · <b>${dmgSelf}</b> feedback (self half)</p>
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>${dice}d6</b> · ${bracket} ×${weight} × T${tier}${pilotingRamNote} → <b>${dmgTarget}</b> dmg (target) · <b>${dmgSelf}</b> feedback (self half)</p>
           <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85">${descT}<br>${descS}</p>`
       });
       return;
@@ -15169,61 +15317,50 @@ function _ftBuildCrewControlsHtml(actor, ctx) {
   const { flag, rig, frameActions, rigWeapons } = ctx;
   const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
 
-  // 2026-05-13 — Per-WEAPON visual lockout. Each weapon disables
-  // independently based on whether it specifically fired this round.
-  // The rigDestroyed gate still blocks all weapons (rig is wreckage).
+  // 2026-05-19 — Single compact horizontal row (was three vertical sections
+  // taking ~130px). Playtest 2026-05-18: sheet body was crushed to ~30%
+  // of the window because the boarded banner ate the top of the sheet.
+  // Per-WEAPON visual lockout retained — disabled buttons signal "fired".
   const rigDestroyed = rig.system?.identity?.state === "destroyed";
   const firedMap = actor?.flags?.fourththing?.combat?.rigWeaponsFiredThisRound ?? {};
   const weaponFired = (wId) => !!firedMap[wId];
 
-  const headerHTML = `
-    <div style="display:flex;align-items:center;gap:.5rem;">
-      <strong>BOARDED:</strong>
-      <img src="${esc(rig.img)}" alt="" style="width:24px;height:24px;border-radius:3px;object-fit:cover;border:1px solid #888;"/>
-      <span class="ft-boarded-rig-name" style="font-weight:600;">${esc(rig.name)}</span>
-      <span class="ft-boarded-role" style="opacity:.85;">[${esc(flag.role)}]</span>
-      <button type="button" class="ft-boarded-open-rig" style="margin-left:auto;font-size:0.75rem;padding:.15rem .5rem;">Open Rig</button>
-      <button type="button" class="ft-boarded-disembark" style="font-size:0.75rem;padding:.15rem .5rem;">Disembark</button>
-    </div>`;
+  const _styleFireOk  = `style="display:inline-flex;align-items:center;gap:.25rem;padding:.1rem .35rem;border:1px solid #d4a35f;background:rgba(0,0,0,0.3);color:#ffd28a;border-radius:3px;cursor:pointer;font-size:0.72rem;"`;
+  const _styleFireOff = `disabled style="display:inline-flex;align-items:center;gap:.25rem;padding:.1rem .35rem;border:1px solid #888;background:rgba(0,0,0,0.2);color:#aaa;border-radius:3px;cursor:not-allowed;font-size:0.72rem;opacity:0.55;"`;
+  const _styleAct = `style="padding:.1rem .35rem;border:1px solid #888;border-radius:3px;font-size:0.7rem;background:rgba(0,0,0,0.25);color:#fff;cursor:pointer;"`;
 
-  const _styleFireOk  = `style="display:flex;align-items:center;gap:.3rem;padding:.2rem .4rem;border:1px solid #d4a35f;background:rgba(0,0,0,0.3);color:#ffd28a;border-radius:3px;cursor:pointer;font-size:0.75rem;"`;
-  const _styleFireOff = `disabled style="display:flex;align-items:center;gap:.3rem;padding:.2rem .4rem;border:1px solid #888;background:rgba(0,0,0,0.2);color:#aaa;border-radius:3px;cursor:not-allowed;font-size:0.75rem;opacity:0.55;"`;
-  const anyFired = Object.keys(firedMap || {}).length > 0;
-  const headerNote = rigDestroyed
-    ? ` · <span style="color:#ff9a6b">rig destroyed</span>`
-    : (anyFired ? ` · <span style="color:#ff9a6b">some weapons fired this round</span>` : "");
-  const weaponHTML = rigWeapons.length ? `
-    <div style="display:flex;flex-direction:column;gap:.2rem;border-top:1px solid rgba(212,163,95,0.3);padding-top:.3rem;">
-      <div style="font-size:0.7rem;letter-spacing:.05em;opacity:.85;">FIRE WEAPON · your combat skill + this weapon's stats${headerNote}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:.25rem;">
-        ${rigWeapons.map(w => {
-          const blocked = rigDestroyed || weaponFired(w.id);
-          const btnExtra = blocked ? _styleFireOff : _styleFireOk;
-          const tooltip = blocked && !rigDestroyed
-            ? `${esc(w.name)} — fired this round`
-            : esc(w.system?.description?.value?.replace(/<[^>]+>/g, "")?.slice(0, 120) ?? w.name);
-          return `
-          <button type="button" class="ft-rig-fire-btn" data-item-id="${esc(w.id)}" data-tooltip="${tooltip}" ${btnExtra}>
-            <img src="${esc(w.img)}" style="width:16px;height:16px;border-radius:2px;"/>
-            <span>${esc(w.name)}</span>
-          </button>`;
-        }).join("")}
-      </div>
-    </div>
-  ` : "";
+  const idChip = `<span style="display:inline-flex;align-items:center;gap:.3rem;">
+    <strong style="font-size:0.72rem;letter-spacing:.04em;">🚪 BOARDED</strong>
+    <img src="${esc(rig.img)}" alt="" style="width:18px;height:18px;border-radius:3px;object-fit:cover;border:1px solid #888;"/>
+    <span class="ft-boarded-rig-name" style="font-weight:600;font-size:0.78rem;">${esc(rig.name)}</span>
+    <span class="ft-boarded-role" style="opacity:.85;font-size:0.72rem;">[${esc(flag.role)}]</span>
+    ${rigDestroyed ? `<span style="color:#ff9a6b;font-size:0.7rem;">⚠ destroyed</span>` : ""}
+  </span>`;
 
-  const actionHTML = frameActions.length ? `
-    <div style="display:flex;flex-direction:column;gap:.2rem;border-top:1px solid rgba(212,163,95,0.3);padding-top:.3rem;">
-      <div style="font-size:0.7rem;letter-spacing:.05em;opacity:.85;">CREW ACTIONS · ${esc(flag.role)}</div>
-      <div style="display:flex;flex-wrap:wrap;gap:.25rem;">
-        ${frameActions.map(a => {
-          const desc = _FT_CREW_ACTION_DESC[a] ?? "";
-          return `<button type="button" class="ft-crew-action-btn" data-action-id="${esc(a)}" data-tooltip="${esc(desc)}" style="padding:.15rem .4rem;border:1px solid #888;border-radius:3px;font-size:0.7rem;background:rgba(0,0,0,0.25);color:#fff;cursor:pointer;">${esc(a)}</button>`;
-        }).join("")}
-      </div>
-    </div>` : "";
+  const weaponChips = rigWeapons.map(w => {
+    const blocked = rigDestroyed || weaponFired(w.id);
+    const btnExtra = blocked ? _styleFireOff : _styleFireOk;
+    const tooltip = blocked && !rigDestroyed
+      ? `${esc(w.name)} — fired this round`
+      : esc(w.system?.description?.value?.replace(/<[^>]+>/g, "")?.slice(0, 120) ?? w.name);
+    return `<button type="button" class="ft-rig-fire-btn" data-item-id="${esc(w.id)}" data-tooltip="${tooltip}" ${btnExtra}>
+      <img src="${esc(w.img)}" style="width:14px;height:14px;border-radius:2px;"/><span>${esc(w.name)}</span>
+    </button>`;
+  }).join("");
 
-  return headerHTML + weaponHTML + actionHTML;
+  const actionChips = frameActions.map(a => {
+    const desc = _FT_CREW_ACTION_DESC[a] ?? "";
+    return `<button type="button" class="ft-crew-action-btn" data-action-id="${esc(a)}" data-tooltip="${esc(desc)}" ${_styleAct}>${esc(a)}</button>`;
+  }).join("");
+
+  return `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;row-gap:.3rem;">
+    ${idChip}
+    ${weaponChips ? `<span style="opacity:.55;font-size:0.72rem;">·</span>${weaponChips}` : ""}
+    ${actionChips ? `<span style="opacity:.55;font-size:0.72rem;">·</span>${actionChips}` : ""}
+    <span style="flex:1 1 auto;"></span>
+    <button type="button" class="ft-boarded-open-rig" style="font-size:0.72rem;padding:.1rem .4rem;">Open Rig</button>
+    <button type="button" class="ft-boarded-disembark" style="font-size:0.72rem;padding:.1rem .4rem;">Disembark</button>
+  </div>`;
 }
 
 function _ftBindCrewControls(rootEl, actor, ctx, { onDisembark } = {}) {
@@ -15554,6 +15691,124 @@ Hooks.on("deleteItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCr
 Hooks.on("updateItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("canvasReady", () => _ftRenderCrewHud());
 Hooks.once("ready", () => _ftRenderCrewHud());
+
+// 2026-05-19 — When a rig token moves (or changes scene/elevation), drag
+// boarded stewards' hidden tokens with it so the boarded player's vision
+// stays anchored to the rig. Without this, the player sees the world
+// from wherever their PC was standing when they boarded. GM-only — only
+// the GM has permission to update other clients' tokens. Triggered by
+// any positional update to a rig-actor token.
+Hooks.on("updateToken", async (tokenDoc, change) => {
+  try {
+    if (!game.user?.isGM) return;
+    const isPositional = ("x" in change) || ("y" in change) || ("elevation" in change);
+    if (!isPositional) return;
+    const actor = tokenDoc?.actor;
+    if (!actor || actor.type !== "rig") return;
+
+    const scene = tokenDoc.parent;
+    if (!scene) return;
+
+    const slots = actor.system?.crew?.slots ?? [];
+    const stewardIds = new Set(slots.filter(s => s?.actorId).map(s => s.actorId));
+    if (!stewardIds.size) return;
+
+    const updates = [];
+    for (const t of scene.tokens) {
+      if (!stewardIds.has(t.actorId)) continue;
+      const u = { _id: t.id };
+      if ("x" in change) u.x = tokenDoc.x;
+      if ("y" in change) u.y = tokenDoc.y;
+      if ("elevation" in change && tokenDoc.elevation != null) u.elevation = tokenDoc.elevation;
+      updates.push(u);
+    }
+    if (updates.length) {
+      await scene.updateEmbeddedDocuments("Token", updates);
+    }
+  } catch (e) { console.warn("[fourththing] rig-move steward sync failed", e); }
+});
+
+// 2026-05-19 — Per-round combat-flag clear, shared between the steward
+// sheet's New Turn button, the raid-console round-commit hook, and the
+// Foundry combat tracker's updateCombat round advance. Force-deletes
+// flag keys via the `-=` syntax (setFlag merges, so plain deletes are
+// silent no-ops — playtest 2026-05-18 burn).
+async function _ftClearPerRoundCombatFlags(actor) {
+  if (!actor) return;
+  const c = actor.flags?.fourththing?.combat;
+  if (!c) return;
+  const hasAny = c.dodging || c.disengaged || c.holding ||
+                 c.rigWeaponFiredThisRound || c.rigWeaponsFiredThisRound ||
+                 c.lastFiredRigId || c.lastFiredWeaponId ||
+                 c.pilotActionUsedThisRound || c.engineerRepairedThisRound;
+  if (!hasAny) return;
+  try {
+    await actor.update({
+      "flags.fourththing.combat.-=dodging":                   null,
+      "flags.fourththing.combat.-=disengaged":                null,
+      "flags.fourththing.combat.-=holding":                   null,
+      "flags.fourththing.combat.-=rigWeaponFiredThisRound":   null,
+      "flags.fourththing.combat.-=rigWeaponsFiredThisRound":  null,
+      "flags.fourththing.combat.-=lastFiredRigId":            null,
+      "flags.fourththing.combat.-=lastFiredWeaponId":         null,
+      "flags.fourththing.combat.-=pilotActionUsedThisRound":  null,
+      "flags.fourththing.combat.-=engineerRepairedThisRound": null
+    });
+  } catch (e) { console.warn("[fourththing] clear per-round combat flags failed", e); }
+}
+
+async function _ftClearRigPerRoundFlags(rig) {
+  if (!rig) return;
+  const c = rig.flags?.fourththing?.combat;
+  if (!c) return;
+  if (!(c.holding || c.evading || c.brace || c.hexesMoved)) return;
+  try {
+    await rig.update({
+      "flags.fourththing.combat.-=holding":    null,
+      "flags.fourththing.combat.-=evading":    null,
+      "flags.fourththing.combat.-=brace":      null,
+      "flags.fourththing.combat.-=hexesMoved": null
+    });
+  } catch (e) { console.warn("[fourththing] clear rig per-round flags failed", e); }
+}
+
+// GM-side fan-out: clear per-round flags for every boarded steward on
+// every rig + the rigs themselves. Used by the raid round commit hook.
+async function _ftClearAllBoardedPerRoundFlags() {
+  if (!game.user?.isGM) return;
+  for (const rig of (game.actors ?? [])) {
+    if (rig.type !== "rig") continue;
+    const slots = rig.system?.crew?.slots ?? [];
+    let anyBoarded = false;
+    for (const slot of slots) {
+      if (!slot?.actorId) continue;
+      anyBoarded = true;
+      const steward = game.actors?.get(slot.actorId);
+      if (steward) await _ftClearPerRoundCombatFlags(steward);
+    }
+    if (anyBoarded) await _ftClearRigPerRoundFlags(rig);
+  }
+}
+
+// Listen for the raid-console round commit hook (emitted by
+// bbttcc-raid/scripts/module.raid-console.js at the end of _commitRound).
+Hooks.on("bbttcc:raid:roundCommit", () => {
+  _ftClearAllBoardedPerRoundFlags();
+});
+
+// Foundry combat tracker round advance: when the round number changes,
+// clear per-round flags on every combatant (and the rigs they're piloting).
+Hooks.on("updateCombat", async (combat, change) => {
+  if (!game.user?.isGM) return;
+  if (!("round" in (change ?? {}))) return;
+  if (Number(change.round) <= Number(combat.previous?.round ?? 0)) return;
+  for (const combatant of (combat.combatants ?? [])) {
+    const a = combatant?.actor;
+    if (!a) continue;
+    if (a.type === "rig") { await _ftClearRigPerRoundFlags(a); continue; }
+    if (a.type === "character" || a.type === "npc") await _ftClearPerRoundCombatFlags(a);
+  }
+});
 
 // Expose helpers for macros / external callers
 (() => {
@@ -16723,7 +16978,9 @@ function _ftRelayHandler(msg) {
       if (_ftRelaySeenRecently(`disembark:${msg.stewardId}`)) return;
       const steward = game.actors?.get(msg.stewardId);
       if (!steward) return;
-      ftDisembarkSteward(steward);
+      // 2026-05-19 — Player-side already unset the steward's boardedRig
+      // flag, so we need msg.rigId to still clean up the crew slot.
+      ftDisembarkSteward(steward, { rigId: msg.rigId || null });
     }
   } catch (e) {
     console.error("[ft:relay] handler threw", e);
