@@ -5464,6 +5464,7 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
                                 diceResults, damageFormula, damageType,
                                 damageFlavor = "",
                                 damageFacultyMod = 0, damageBaseFormula = "",
+                                damageRolledTotal = 0, damageDiceTooltip = "",
                                 explosionDice = [], surgeBanked = 0, doubleTen = false,
                                 costNote = "", signature = "", thirdThing = "" }) {
   const ic = FT.INTENT_COLORS[intent] ?? "#888";
@@ -5491,13 +5492,21 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
   const facultyTail = (damageFacultyMod && damageBaseFormula)
     ? ` <span style="opacity:0.7;font-size:0.78rem">(${damageBaseFormula} ${damageFacultyMod >= 0 ? "+" : "−"} ${Math.abs(damageFacultyMod)} ${ftCap(intent)})</span>`
     : "";
+  // 2026-05-20 — Show the rolled damage total + dice breakdown when pre-rolled.
+  // The Apply button uses the rolled integer as its formula so dice are locked
+  // in (target-side resist/vuln still apply via the multiplier inside
+  // _applyDamageToActor). Fallback to the unrolled formula for legacy callers.
+  const applyFormula = damageRolledTotal > 0 ? String(damageRolledTotal) : damageFormula;
+  const dmgFormulaDisplay = damageRolledTotal > 0
+    ? `<b style="color:#ffc878">${damageRolledTotal}</b> <span style="opacity:0.7">(${damageFormula}${damageDiceTooltip ? " " + damageDiceTooltip : ""})</span>${facultyTail}`
+    : `${damageFormula}${facultyTail}`;
   const dmgBlock = damageFormula ? `
     <div class="ft-dmg-row">
       <span class="ft-dmg-label">Damage</span>
-      <span class="ft-dmg-formula">${damageFormula}${facultyTail}</span>
+      <span class="ft-dmg-formula">${dmgFormulaDisplay}</span>
       <span class="ft-dmg-type ${damageType ?? ""}">${ftCap(damageType ?? "")}</span>
       <button class="ft-apply-dmg-btn"
-              data-formula="${damageFormula}"
+              data-formula="${applyFormula}"
               data-damage-type="${damageType ?? ""}"
               data-damage-flavor="${damageFlavor ?? ""}"
               data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}">
@@ -7163,6 +7172,23 @@ Hooks.once("init", function () {
       ? `${damageFormula} ${damageFacultyMod >= 0 ? "+" : "-"} ${Math.abs(damageFacultyMod)}`
       : (damageFormula || "");
 
+    // 2026-05-20 — Pre-roll damage on a hit so players see dice + total
+    // immediately instead of "?? damage" until the GM clicks Apply.
+    // The Apply button passes the rolled total verbatim (data-formula =
+    // rolled integer) so target-side resist/vuln still apply but the
+    // dice are locked. Miss = no roll, no surface.
+    let damageRolledTotal = 0;
+    let damageDiceTooltip = "";
+    if (success && finalDamageFormula) {
+      try {
+        const dmgRoll = new Roll(finalDamageFormula);
+        await dmgRoll.evaluate();
+        damageRolledTotal = Number(dmgRoll.total) || 0;
+        const dice = (dmgRoll.dice || []).flatMap(d => (d.results || []).map(r => r.result));
+        damageDiceTooltip = dice.length ? `[${dice.join(" · ")}]` : "";
+      } catch (e) { console.warn("[fourththing] pre-roll damage failed", e); }
+    }
+
     await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
       flavor:  buildAttackChatHTML({
@@ -7171,6 +7197,7 @@ Hooks.once("init", function () {
         explosionDice, surgeBanked: explosions, doubleTen,
         damageFormula: success ? finalDamageFormula : "",
         damageFacultyMod, damageBaseFormula: damageFormula,
+        damageRolledTotal, damageDiceTooltip,
         damageType, damageFlavor, costNote, signature, thirdThing
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
@@ -18552,7 +18579,24 @@ Hooks.once("ready", async () => {
     // unlinked tokens hold synthetic actorData; damage writes get lost on
     // the canvas while the base sheet stays full HP. Linked tokens
     // propagate writes cleanly to the base actor.
+    // 2026-05-20 — Also covers PCs. Playtest burn: GM double-clicked a
+    // canvas PC token (unlinked), dropped a manifestation onto the
+    // synthetic copy. Player never saw it. Then the player dropped the
+    // same manifestation from their sidebar sheet onto the world actor,
+    // and the GM saw two distinct copies (one synthetic, one world).
+    // PCs MUST be linked. NPC characters (entityKind === "npc") and
+    // monster type:"npc" actors are intentionally NOT auto-linked —
+    // they're allowed to hold per-instance state across multiple tokens.
     const _ftLinkableTypes = new Set(["boss", "rig"]);
+
+    function _ftIsPCActor(actor) {
+      if (actor?.type !== "character") return false;
+      const kind = actor?.flags?.["bbttcc-auto-link"]?.entityKind;
+      return !kind || kind === "pc";
+    }
+    function _ftShouldAutoLink(actor) {
+      return _ftLinkableTypes.has(actor?.type) || _ftIsPCActor(actor);
+    }
 
     async function _ftLinkExistingTokens() {
       try {
@@ -18560,7 +18604,7 @@ Hooks.once("ready", async () => {
         for (const scene of (game.scenes?.contents ?? [])) {
           const updates = [];
           for (const t of (scene.tokens?.contents ?? [])) {
-            if (_ftLinkableTypes.has(t.actor?.type) && !t.actorLink) {
+            if (_ftShouldAutoLink(t.actor) && !t.actorLink) {
               updates.push({ _id: t.id, actorLink: true });
             }
           }
@@ -18569,10 +18613,23 @@ Hooks.once("ready", async () => {
             relinked += updates.length;
           }
         }
-        if (relinked) console.log(`[fourththing] auto-link sweep: relinked ${relinked} deployed boss/rig token(s)`);
+        if (relinked) console.log(`[fourththing] auto-link sweep: relinked ${relinked} deployed boss/rig/PC token(s)`);
       } catch (e) {
         console.warn("[fourththing] auto-link sweep failed", e);
       }
+    }
+
+    // 2026-05-20 — Mirror the rig sweep for PCs. Sets prototypeToken.actorLink
+    // on every PC actor so newly placed tokens are linked by default.
+    function _ftEnsurePCsLinked() {
+      try {
+        for (const actor of (game.actors?.contents ?? [])) {
+          if (!_ftIsPCActor(actor)) continue;
+          if (actor.prototypeToken?.actorLink !== true) {
+            actor.update({ "prototypeToken.actorLink": true }).catch(() => {});
+          }
+        }
+      } catch (e) { console.warn("[fourththing] PC prototype-link sweep failed", e); }
     }
 
     // 2026-05-13 — Auto-link RIG actors' prototype tokens too (mirroring the
@@ -18594,7 +18651,7 @@ Hooks.once("ready", async () => {
     // canvas before the prototype-token auto-link sweep can take effect.
     Hooks.on("createToken", async (tokenDoc) => {
       try {
-        if (!_ftLinkableTypes.has(tokenDoc?.actor?.type)) return;
+        if (!_ftShouldAutoLink(tokenDoc?.actor)) return;
         if (tokenDoc.actorLink) return;
         await tokenDoc.update({ actorLink: true });
         console.log(`[fourththing] auto-linked new ${tokenDoc.actor.type} token: ${tokenDoc.name}`);
@@ -18611,6 +18668,7 @@ Hooks.once("ready", async () => {
     }
     console.log(`[fourththing] boss bridge: registered ${count} actor-type bosses with raid registry`);
     _ftEnsureRigsLinked();
+    _ftEnsurePCsLinked();
     _ftLinkExistingTokens();
 
     // Keep in sync on actor changes
