@@ -7052,6 +7052,17 @@ Hooks.once("init", function () {
       try { await actor.update({ "flags.fourththing.combat.-=signalBonus": null }); }
       catch (e) { /* non-owner — flag clears on next round commit */ }
     }
+    // 2026-05-19 — Suppression penalty. Gunner's suppression bonus action
+    // sets flags.fourththing.combat.suppressed on the target; subtract it
+    // from the attacker's next attack roll, then clear the flag + visual AE.
+    const suppression = Math.max(0, Number(actor.flags?.fourththing?.combat?.suppressed) || 0);
+    if (suppression > 0) {
+      try {
+        await actor.update({ "flags.fourththing.combat.-=suppressed": null });
+        const ae = (actor.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === "suppressed");
+        if (ae && actor.deleteEmbeddedDocuments) await actor.deleteEmbeddedDocuments("ActiveEffect", [ae.id]);
+      } catch (e) { /* non-owner — flag + AE clear on next round commit */ }
+    }
     // Aimed-shot bonus is passed in by callers that know they're firing a
     // rig weapon (consumed by ftOpenEngageDialog). Stays on the dial.
     const aimedMod = Math.max(0, Number(aimedShotBonus) || 0);
@@ -7077,7 +7088,7 @@ Hooks.once("init", function () {
       }
     }
     const flankMod  = Math.max(0, Number(flankBonus) || 0);
-    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod;
+    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression;
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; two
     // base 10s also flag "Act Again" so the sheet exposes the bonus action.
     const formula   = `2d10x10 + ${total_mod}`;
@@ -15657,7 +15668,7 @@ async function _ftSetRigHeat(rig, next) {
 //
 // Action economy is real here: steer/hold/evasive/ram/repair consume
 // the steward's `system.actions.actionUsed`; brace consumes bonusUsed.
-async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
+async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetIds = null } = {}) {
   if (!steward || !rig) return;
   if (rig.system?.identity?.state === "destroyed") {
     ui.notifications?.warn(`${rig.name} is destroyed.`);
@@ -15678,10 +15689,20 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
       stewardId: steward.id,
       rigId: rig.id,
       actionId,
-      frameItemId: frameItem?.id ?? null
+      frameItemId: frameItem?.id ?? null,
+      targetIds: targetIds ?? Array.from(game.user?.targets ?? []).map(t => t?.actor?.id).filter(Boolean)
     });
     return;
   }
+  // Resolve target actors: prefer explicit ids (from player-side capture
+  // or relay) over the local user.targets set (which would be the GM's
+  // selection on the relay path).
+  const _resolveTargetActors = () => {
+    if (Array.isArray(targetIds) && targetIds.length) {
+      return targetIds.map(id => game.actors?.get(id)).filter(Boolean);
+    }
+    return Array.from(game.user?.targets ?? []).map(t => t?.actor).filter(Boolean);
+  };
   // 2026-05-19 — Read role from crew.slots when the actor's boardedRig
   // flag is missing or pointing at a different rig (orphan-state recovery
   // — same pattern as ftRigWeaponFire + _ftCollectCrewControlsContext).
@@ -15855,8 +15876,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
     case "signal": {
       // Bonus action: pick a targeted ally; their next roll gets +1.
       if (!requireBonus()) return;
-      const targets = Array.from(game.user?.targets ?? []);
-      const target = targets[0]?.actor;
+      const target = _resolveTargetActors()[0];
       if (!target) { warn(`${steward.name}: target an ally token first.`); return; }
       if (target.id === steward.id) { warn(`${steward.name}: pick someone other than yourself.`); return; }
       await target.update({ "flags.fourththing.combat.signalBonus": 1 });
@@ -15865,6 +15885,39 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
         speaker: ChatMessage.getSpeaker({ actor: steward }),
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">📡 ${steward.name} signals ${target.name}</span></div>
           <p style="margin:0.2rem 0;font-size:0.82rem"><em>${target.name}</em>: <b>+1</b> on next roll.</p></div>`
+      });
+      return;
+    }
+
+    case "suppression": {
+      // Bonus action: pick a target; their next attack roll takes −2.
+      // Consumed in attackTest (clears flag + matching AE on resolve).
+      if (role !== "gunner" && role !== "crew") { warn(`${steward.name}: only gunners can suppress (role: ${role}).`); return; }
+      if (!requireBonus()) return;
+      const target = _resolveTargetActors()[0];
+      if (!target) { warn(`${steward.name}: target a token first.`); return; }
+      if (target.id === steward.id) { warn(`${steward.name}: cannot suppress yourself.`); return; }
+      await target.update({ "flags.fourththing.combat.suppressed": 2 });
+      // Visible AE on the target so the table sees the −2 looming.
+      try {
+        const existing = (target.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === "suppressed");
+        if (!existing && target.createEmbeddedDocuments) {
+          await target.createEmbeddedDocuments("ActiveEffect", [{
+            name: "Suppressed",
+            img: "icons/svg/down.svg",
+            icon: "icons/svg/down.svg",
+            description: `−2 to next attack (suppressed by ${steward.name}).`,
+            origin: steward.uuid,
+            duration: { rounds: 1 },
+            flags: { fourththing: { rigState: "suppressed" } }
+          }]);
+        }
+      } catch (e) { console.warn("[fourththing] suppression AE create failed", e); }
+      await consumeBonus();
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: steward }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#eb8757">🎯 ${steward.name} suppresses ${target.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem"><em>${target.name}</em>: <b>−2</b> on next attack roll.</p></div>`
       });
       return;
     }
@@ -16120,8 +16173,15 @@ function _ftBindCrewControls(rootEl, actor, ctx, { onDisembark } = {}) {
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
       const actionId = btn.dataset.actionId;
+      // 2026-05-19 — Capture the user's targeted actor ids at click time so
+      // target-using actions (signal / suppression / ram) survive the
+      // GM-relay round-trip. The relay handler runs on the GM client where
+      // game.user.targets is the GM's selection, not the player's.
+      const targetIds = Array.from(game.user?.targets ?? [])
+        .map(t => t?.actor?.id)
+        .filter(Boolean);
       if (typeof _ftHandleCrewAction === "function") {
-        _ftHandleCrewAction(actor, rig, actionId, frameItem);
+        _ftHandleCrewAction(actor, rig, actionId, frameItem, { targetIds });
       } else {
         const desc = _FT_CREW_ACTION_DESC[actionId] ?? "";
         ChatMessage.create({
@@ -16807,7 +16867,7 @@ async function _ftClearPerRoundCombatFlags(actor) {
                  c.rigWeaponFiredThisRound || c.rigWeaponsFiredThisRound ||
                  c.lastFiredRigId || c.lastFiredWeaponId ||
                  c.pilotActionUsedThisRound || c.engineerRepairedThisRound ||
-                 c.aimedShot || c.signalBonus || c.holdingOn ||
+                 c.aimedShot || c.signalBonus || c.holdingOn || c.suppressed ||
                  c.bonusManifestationUsedThisRound;
   if (!hasAny) return;
   try {
@@ -16825,9 +16885,16 @@ async function _ftClearPerRoundCombatFlags(actor) {
       "flags.fourththing.combat.-=aimedShot":                 null,
       "flags.fourththing.combat.-=signalBonus":               null,
       "flags.fourththing.combat.-=holdingOn":                 null,
+      "flags.fourththing.combat.-=suppressed":                null,
       // Action Economy canon §5 — Elite bonus mani once-per-round flag.
       "flags.fourththing.combat.-=bonusManifestationUsedThisRound": null
     });
+    // Round commit also clears the lingering Suppressed AE if it survived
+    // (e.g. the target never attacked, so attackTest never cleared it).
+    try {
+      const ae = (actor.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === "suppressed");
+      if (ae && actor.deleteEmbeddedDocuments) await actor.deleteEmbeddedDocuments("ActiveEffect", [ae.id]);
+    } catch (_) {}
   } catch (e) { console.warn("[fourththing] clear per-round combat flags failed", e); }
 }
 
@@ -18156,7 +18223,7 @@ function _ftRelayHandler(msg) {
       const rig     = game.actors?.get(msg.rigId);
       if (!steward || !rig) return;
       const frameItem = msg.frameItemId ? rig.items?.get(msg.frameItemId) : null;
-      _ftHandleCrewAction(steward, rig, msg.actionId, frameItem);
+      _ftHandleCrewAction(steward, rig, msg.actionId, frameItem, { targetIds: Array.isArray(msg.targetIds) ? msg.targetIds : null });
     } else if (msg?.t === "ft-applyDamage") {
       // 2026-05-19 — Players can't write to enemy rigs/bosses they don't
       // own. The chat-card Apply Damage button emits this message so the
