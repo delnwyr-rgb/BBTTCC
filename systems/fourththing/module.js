@@ -886,6 +886,16 @@ function ftOpenEngageDialog(actor, item) {
     ui.notifications?.warn(`${rig.name} is destroyed — its weapons can't fire.`);
     return;
   }
+  // 2026-05-19 — Heat gate. At max heat the rig overheats; weapons lock
+  // until the engineer vents at least 1 below max.
+  if (rig) {
+    const heat = _ftRigHeatValue(rig);
+    const heatMax = _ftRigHeatMax(rig);
+    if (heat >= heatMax) {
+      ui.notifications?.warn(`${rig.name} is overheated (${heat}/${heatMax}) — vent heat before firing again.`);
+      return;
+    }
+  }
   // 2026-05-13 — Per-weapon gate (was per-gunner). A gunner with multiple
   // rig weapons can fire each one once per round. Tracked in
   // `combat.rigWeaponsFiredThisRound[weaponId]`. Cleared on _onFtNewTurn.
@@ -961,6 +971,13 @@ function ftOpenEngageDialog(actor, item) {
           const targetActor  = targetTokens[0]?.actor ?? null;
           const flankBonus   = Number(html.find(".ft-cast-dialog").attr("data-ft-flank-bonus")) || 0;
 
+          // 2026-05-19 — Aimed-shot consumption. Set by the "aimed-shot"
+          // crew action; +2 to-hit and +2 damage on the next rig-weapon
+          // fire by this gunner. Cleared after the dialog resolves so
+          // dialog cancels don't burn it.
+          const aimedShotActive = rig && !!actor?.flags?.fourththing?.combat?.aimedShot;
+          const aimedShotBonus  = aimedShotActive ? 2 : 0;
+
           const result = await game.fourththing.rolls.attackTest(actor, {
             intent: selIntent, skill: selSkill,
             defense, defenseValue: defVal,
@@ -969,7 +986,8 @@ function ftOpenEngageDialog(actor, item) {
             signature: item?.system?.manifestation?.signature ?? "",
             thirdThing: item?.system?.manifestation?.thirdThing ?? "",
             target: targetActor, restraintReduction: restraint,
-            flankBonus
+            flankBonus,
+            aimedShotBonus
           });
 
           ftPlayAutoAnimation(actor, item, { hit: !!result?.success });
@@ -994,6 +1012,16 @@ function ftOpenEngageDialog(actor, item) {
               lastFiredRigId:    rig.id,
               lastFiredWeaponId: item.id
             });
+            // 2026-05-19 — Heat increment per fire (+1). Engineer's
+            // vent-heat (−2) or vent-button is the relief valve. At max
+            // heat, the Overheated AE is set in _ftSetRigHeat.
+            try { await _ftSetRigHeat(rig, _ftRigHeatValue(rig) + 1); }
+            catch (e) { console.warn("[fourththing] heat bump failed", e); }
+            // 2026-05-19 — Consume aimed-shot on fire (success or miss).
+            if (aimedShotActive) {
+              try { await actor.update({ "flags.fourththing.combat.-=aimedShot": null }); }
+              catch (e) { /* non-owner — round commit clears */ }
+            }
           }
 
           return result;
@@ -1235,13 +1263,27 @@ Hooks.on("bbttcc:rig:damaged", async ({ rig, amount } = {}) => {
   if (!crewIds.size) return;
   const crew = [...crewIds].map(id => game.actors?.get(id)).filter(Boolean);
   if (!crew.length) return;
+  // 2026-05-19 — Per-member hold-on reaction. If the steward burned a
+  // reaction to "hold on", subtract `tier` from their bleed amount
+  // (min 0), then clear the flag. Per-member, not per-rig.
+  const tier = Math.max(1, Math.min(4, Number(rig?.system?.integrity?.tier) || 1));
   const summaries = [];
   for (const member of crew) {
+    const holdingOn = !!member?.flags?.fourththing?.combat?.holdingOn;
+    const memberBleed = holdingOn ? Math.max(0, bleed - tier) : bleed;
     try {
-      const desc = await game.fourththing.rolls._applyDamageToActor(member, bleed, {
-        op: "damage", track: "integrity", damageType: "", damageFlavor: ""
-      });
-      if (desc) summaries.push(desc);
+      if (memberBleed > 0) {
+        const desc = await game.fourththing.rolls._applyDamageToActor(member, memberBleed, {
+          op: "damage", track: "integrity", damageType: "", damageFlavor: ""
+        });
+        if (desc) summaries.push(holdingOn ? `${desc} <em>(held on, −${tier})</em>` : desc);
+      } else if (holdingOn) {
+        summaries.push(`${member.name}: <em>held on — no damage</em>`);
+      }
+      if (holdingOn) {
+        try { await member.update({ "flags.fourththing.combat.-=holdingOn": null }); }
+        catch (_) { /* round commit will clear */ }
+      }
     } catch (e) {
       console.warn(`[fourththing] crew bleed-through: ${member.name}`, e);
     }
@@ -6903,11 +6945,24 @@ Hooks.once("init", function () {
     damageFlavor = "",
     costNote = "", signature = "", thirdThing = "",
     target = null, restraintReduction = 0,
-    flankBonus = 0
+    flankBonus = 0,
+    aimedShotBonus = 0
   } = {}) {
     const rawSys  = actor.system?.system ?? actor.system;
     const attrVal  = rawSys?.attributes?.[intent]?.value ?? 0;
     const skillVal = rawSys?.skills?.[skill]?.value      ?? 0;
+
+    // 2026-05-19 — Consume signal bonus on the attacker. Signaler (a crew
+    // member's bonus action) sets flags.fourththing.combat.signalBonus on
+    // the ally; the ally's next attack draws + clears it.
+    const signalBonus = Math.max(0, Number(actor.flags?.fourththing?.combat?.signalBonus) || 0);
+    if (signalBonus > 0) {
+      try { await actor.update({ "flags.fourththing.combat.-=signalBonus": null }); }
+      catch (e) { /* non-owner — flag clears on next round commit */ }
+    }
+    // Aimed-shot bonus is passed in by callers that know they're firing a
+    // rig weapon (consumed by ftOpenEngageDialog). Stays on the dial.
+    const aimedMod = Math.max(0, Number(aimedShotBonus) || 0);
 
     // Passive AE bonuses on intent attribute + skill (mode 2 = ADD).
     // Same pattern as attributeTest — the roll path used to bypass appliedEffects.
@@ -6930,7 +6985,7 @@ Hooks.once("init", function () {
       }
     }
     const flankMod  = Math.max(0, Number(flankBonus) || 0);
-    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod;
+    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod;
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; two
     // base 10s also flag "Act Again" so the sheet exposes the bonus action.
     const formula   = `2d10x10 + ${total_mod}`;
@@ -6980,7 +7035,7 @@ Hooks.once("init", function () {
     // adds to the damage roll on a hit. Skill is left out — proficiency drives
     // accuracy, raw faculty drives force. The +mod is baked straight into the
     // formula so the Apply button rolls the final number with no extra plumbing.
-    const damageFacultyMod = (Number(attrVal) || 0) + (Number(aeAttr) || 0);
+    const damageFacultyMod = (Number(attrVal) || 0) + (Number(aeAttr) || 0) + aimedMod;
     const finalDamageFormula = (damageFormula && damageFacultyMod !== 0)
       ? `${damageFormula} ${damageFacultyMod >= 0 ? "+" : "-"} ${Math.abs(damageFacultyMod)}`
       : (damageFormula || "");
@@ -10537,21 +10592,14 @@ Hooks.once("init", function () {
       }
 
       // B12: when this steward is the pilot of a rig, reset the rig's
-      // per-round combat state (holding / evading / brace / hexesMoved)
-      // at the start of the pilot's turn. Defense bumps in
-      // prepareDerivedData expire naturally once the flags clear.
+      // per-round combat state (holding / evading / brace / hexesMoved
+      // + boost-system + state AEs) at the start of the pilot's turn.
+      // Defense bumps in prepareDerivedData expire naturally once flags
+      // clear. Heat is intentionally NOT cleared — only vent-heat reduces.
       const boarded = this.actor.flags?.fourththing?.boardedRig;
       if (boarded?.rigId && boarded.role === "pilot") {
         const rig = game.actors?.get(boarded.rigId);
-        const rigCmb = rig?.flags?.fourththing?.combat;
-        if (rig && rigCmb && (rigCmb.holding || rigCmb.evading || rigCmb.brace || rigCmb.hexesMoved)) {
-          await rig.update({
-            "flags.fourththing.combat.-=holding":    null,
-            "flags.fourththing.combat.-=evading":    null,
-            "flags.fourththing.combat.-=brace":      null,
-            "flags.fourththing.combat.-=hexesMoved": null
-          });
-        }
+        if (rig) await _ftClearRigPerRoundFlags(rig);
       }
       ui.notifications.info(`${this.actor.name}: actions reset for new turn.`);
     }
@@ -12267,6 +12315,27 @@ Hooks.once("init", function () {
         formulaHint: `${_bracketLabel} bracket · T${_rigTier} (base + tier)`
       };
 
+      // 2026-05-19 — Combat-state pills + heat meter. Surfaces the
+      // per-round states (holding/evading/brace/boost-system) and the
+      // persistent heat meter so players can see at a glance what's
+      // active on the rig. Pills also render as Active Effects on the
+      // token nameplate via _ftEnsureRigStateAE.
+      const _rigCmb = this.actor.flags?.fourththing?.combat ?? {};
+      const _heatVal = Math.max(0, Number(_rigCmb.heat) || 0);
+      const _heatMax = Math.max(1, _rigTier * 2);
+      const combatStates = [];
+      if (_rigCmb.holding) combatStates.push({ key: "holding", label: "Holding Position", note: `+${_rigCmb.holdingBonus ?? 1} Guard`, color: "#7ec0ff" });
+      if (_rigCmb.evading) combatStates.push({ key: "evading", label: "Evading", note: `+${_rigCmb.evadingBonus ?? 2} Evasion`, color: "#7ec0ff" });
+      if (_rigCmb.brace)   combatStates.push({ key: "brace", label: "Braced", note: `+${_rigCmb.braceBonus ?? 1} Guard`, color: "#7ec0ff" });
+      if (_rigCmb.boostedSystemId) {
+        const sysItem = this.actor.items?.get(_rigCmb.boostedSystemId);
+        combatStates.push({ key: "boost", label: "System Enhanced", note: `${_rigCmb.boostedSystemName || sysItem?.name || "system"}: +1 tier`, color: "#e8c84a" });
+      }
+      const overheated = _heatVal >= _heatMax;
+      const heatPct = Math.round((_heatVal / _heatMax) * 100);
+      const heat = { value: _heatVal, max: _heatMax, pct: heatPct, overheated };
+      const showCombatSurface = combatStates.length > 0 || _heatVal > 0;
+
       return {
         actor,
         owner: owner ? { id: owner.id, name: owner.name, img: owner.img } : null,
@@ -12295,6 +12364,9 @@ Hooks.once("init", function () {
         crewByRole,
         crewCapacityTotal,
         crewFilledTotal,
+        combatStates,
+        heat,
+        showCombatSurface,
         tabs,
         activeTab,
         isMobile:     mobility !== "stationary",
@@ -15240,6 +15312,74 @@ const _FT_CREW_ACTION_DESC = {
   "hold-on":       "Reaction — reduce damage to self when the rig is hit."
 };
 
+// ─── Crew Action: Active Effect + Heat helpers (2026-05-19) ────────
+// AEs surface combat state on the token nameplate + sheet effects bar.
+// Identified by `flags.fourththing.rigState=<key>` for idempotent
+// create/clear without name collisions.
+const _FT_RIG_STATE_AE = {
+  holding:        { label: "Holding Position", icon: "icons/svg/shield.svg" },
+  evading:        { label: "Evading",          icon: "icons/svg/wing.svg" },
+  brace:          { label: "Braced",           icon: "icons/svg/anchor.svg" },
+  "boost-system": { label: "System Enhanced",  icon: "icons/svg/upgrade.svg" },
+  overheat:       { label: "Overheated",       icon: "icons/svg/fire.svg" }
+};
+
+async function _ftEnsureRigStateAE(rig, key, { extraDesc = "" } = {}) {
+  if (!rig?.createEmbeddedDocuments) return null;
+  const meta = _FT_RIG_STATE_AE[key];
+  if (!meta) return null;
+  const existing = (rig.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === key);
+  if (existing) return existing;
+  try {
+    const [created] = await rig.createEmbeddedDocuments("ActiveEffect", [{
+      name: meta.label,
+      img:  meta.icon,
+      icon: meta.icon, // V12 compat
+      description: extraDesc,
+      origin: rig.uuid,
+      duration: { rounds: 1 },
+      flags: { fourththing: { rigState: key } }
+    }]);
+    return created;
+  } catch (e) { console.warn("[fourththing] AE create failed", key, e); return null; }
+}
+
+async function _ftClearRigStateAE(rig, key) {
+  if (!rig?.deleteEmbeddedDocuments) return;
+  const existing = (rig.effects ?? []).find(e => e.getFlag?.("fourththing", "rigState") === key);
+  if (existing) {
+    try { await rig.deleteEmbeddedDocuments("ActiveEffect", [existing.id]); }
+    catch (e) { console.warn("[fourththing] AE delete failed", key, e); }
+  }
+}
+
+async function _ftClearAllRigStateAEs(rig) {
+  if (!rig?.deleteEmbeddedDocuments) return;
+  const ids = (rig.effects ?? []).filter(e => e.getFlag?.("fourththing", "rigState")).map(e => e.id);
+  if (!ids.length) return;
+  try { await rig.deleteEmbeddedDocuments("ActiveEffect", ids); }
+  catch (e) { console.warn("[fourththing] AE bulk delete failed", e); }
+}
+
+// Heat: stored at flags.fourththing.combat.heat (number). Max = tier × 2.
+// Each rig-weapon fire +1; vent-heat (engineer bonus) −2; cap at max creates
+// an Overheated AE that blocks weapon fire until vented below max.
+function _ftRigHeatMax(rig) {
+  const tier = Math.max(1, Math.min(4, Number(rig?.system?.integrity?.tier) || 1));
+  return tier * 2;
+}
+function _ftRigHeatValue(rig) {
+  return Math.max(0, Number(rig?.flags?.fourththing?.combat?.heat) || 0);
+}
+async function _ftSetRigHeat(rig, next) {
+  if (!rig) return;
+  const max = _ftRigHeatMax(rig);
+  const clamped = Math.max(0, Math.min(max, Math.floor(Number(next) || 0)));
+  await rig.update({ "flags.fourththing.combat.heat": clamped });
+  if (clamped >= max) await _ftEnsureRigStateAE(rig, "overheat", { extraDesc: `Heat ${clamped}/${max}. Cannot fire weapons until vented.` });
+  else                await _ftClearRigStateAE(rig, "overheat");
+}
+
 // B12: Crew action dispatcher (2026-05-12). Replaces the previous
 // chat-log stubs for the canonical movement + combat actions. Handles
 // steer / hold-position / evasive / ram / repair / brace; everything
@@ -15261,6 +15401,25 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
   if (!steward || !rig) return;
   if (rig.system?.identity?.state === "destroyed") {
     ui.notifications?.warn(`${rig.name} is destroyed.`);
+    return;
+  }
+  // 2026-05-19 — GM relay for player-initiated crew actions. Almost every
+  // action mutates the rig (setFlag on flags.fourththing.combat, AE create)
+  // which requires OWNER on the rig — players have OBSERVER from the
+  // boarding grant. Without this relay, all rig-state changes silently
+  // failed for player-driven crews. Same pattern as ftBoardRig.
+  if (!game.user?.isGM && !rig.isOwner) {
+    if (!game.users?.some?.(u => u.isGM && u.active)) {
+      ui.notifications?.warn(`No GM online — ${steward.name}'s action couldn't be executed.`);
+      return;
+    }
+    game.socket?.emit?.("system.fourththing", {
+      t: "ft-crewAction",
+      stewardId: steward.id,
+      rigId: rig.id,
+      actionId,
+      frameItemId: frameItem?.id ?? null
+    });
     return;
   }
   const flag      = steward.getFlag?.("fourththing", "boardedRig");
@@ -15318,6 +15477,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
       await setRigCombat({ holding: true, holdingBonus: holdBonus });
       await setPilotGate();
       await consumeAction();
+      await _ftEnsureRigStateAE(rig, "holding", { extraDesc: `+${holdBonus} Guard until next pilot turn.` });
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">🛡 ${rig.name} holds position</span></div>
@@ -15332,6 +15492,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
       await setRigCombat({ evading: true, evadingBonus: evaBonus });
       await setPilotGate();
       await consumeAction();
+      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${evaBonus} Evasion until next pilot turn.` });
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">💨 ${rig.name} evades</span></div>
@@ -15344,10 +15505,117 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
       if (!requireBonus()) return;
       await setRigCombat({ brace: true });
       await consumeBonus();
+      await _ftEnsureRigStateAE(rig, "brace", { extraDesc: "+1 Guard until next pilot turn." });
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">⚓ ${steward.name} braces ${rig.name}</span></div>
           <p style="margin:0.2rem 0;font-size:0.82rem"><b>+1 Guard</b> until the next pilot turn.</p></div>`
+      });
+      return;
+    }
+
+    case "vent-heat": {
+      if (!requireEngineer()) return;
+      if (!requireBonus()) return;
+      const cur = _ftRigHeatValue(rig);
+      const max = _ftRigHeatMax(rig);
+      if (cur <= 0) { warn(`${rig.name} has no heat to vent.`); return; }
+      const next = Math.max(0, cur - 2);
+      await _ftSetRigHeat(rig, next);
+      await consumeBonus();
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">🌬 ${steward.name} vents heat from ${rig.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Heat <b>${cur} → ${next}</b> / ${max}.${next >= max ? " Still overheated." : (cur >= max ? " <b>Weapons re-armed</b>." : "")}</p></div>`
+      });
+      return;
+    }
+
+    case "boost-system": {
+      if (!requireEngineer() || !requireBonus()) return;
+      // Pick a rig-system item to enhance for this round.
+      const systems = (rig.items ?? []).filter(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-system");
+      if (!systems.length) { warn(`${rig.name} has no rig-systems to enhance.`); return; }
+      const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
+      const opts = systems.map(s => `<option value="${esc(s.id)}">${esc(s.name)}</option>`).join("");
+      const picked = await new Promise(resolve => {
+        new Dialog({
+          title: "Enhance System",
+          content: `<p style="font-size:0.85rem">Pick a rig-system to enhance for this round (treated as +1 tier for any check / effect).</p>
+            <select name="systemId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
+          buttons: {
+            ok: { label: "Enhance", callback: (html) => resolve(html.find("[name=systemId]").val()) },
+            cancel: { label: "Cancel", callback: () => resolve(null) }
+          },
+          default: "ok",
+          close: () => resolve(null)
+        }).render(true);
+      });
+      if (!picked) return;
+      const sysItem = rig.items.get(picked);
+      if (!sysItem) return;
+      const round = game.combat?.round ?? 0;
+      await setRigCombat({ boostedSystemId: picked, boostedSystemName: sysItem.name, boostedUntilRound: round + 1 });
+      await consumeBonus();
+      await _ftEnsureRigStateAE(rig, "boost-system", { extraDesc: `${sysItem.name} treated as +1 tier until next round.` });
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">⚡ ${steward.name} enhances ${sysItem.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>+1 effective tier</b> on <em>${sysItem.name}</em> until next round.</p></div>`
+      });
+      return;
+    }
+
+    case "aimed-shot": {
+      // Gunner spends BOTH action and bonus; next rig-weapon fire gets
+      // +2 to attack and +2 to damage. Flag on the steward; consumed at
+      // fire-time in ftOpenEngageDialog.
+      if (role !== "gunner" && role !== "crew") { warn(`${steward.name}: only gunners can aim (role: ${role}).`); return; }
+      if (!requireAction() || !requireBonus()) return;
+      await steward.update({
+        "system.actions.actionUsed": true,
+        "system.actions.bonusUsed":  true,
+        "flags.fourththing.combat.aimedShot": true
+      });
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: steward }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c84a">🎯 ${steward.name} takes aim</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Next rig-weapon fire: <b>+2 to-hit</b>, <b>+2 damage</b>.</p></div>`
+      });
+      return;
+    }
+
+    case "signal": {
+      // Bonus action: pick a targeted ally; their next roll gets +1.
+      if (!requireBonus()) return;
+      const targets = Array.from(game.user?.targets ?? []);
+      const target = targets[0]?.actor;
+      if (!target) { warn(`${steward.name}: target an ally token first.`); return; }
+      if (target.id === steward.id) { warn(`${steward.name}: pick someone other than yourself.`); return; }
+      await target.update({ "flags.fourththing.combat.signalBonus": 1 });
+      await consumeBonus();
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: steward }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">📡 ${steward.name} signals ${target.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem"><em>${target.name}</em>: <b>+1</b> on next roll.</p></div>`
+      });
+      return;
+    }
+
+    case "hold-on": {
+      // Reaction: next time the rig takes damage and bleed-through hits
+      // this steward, reduce the bleed amount by `tier` (min 0). Flag on
+      // the steward; consumed by the crew bleed-through hook.
+      if (stCmb.holdingOn) { warn(`${steward.name}: already holding on this round.`); return; }
+      if (sysActs.reactionUsed) { warn(`${steward.name}: reaction already used this turn.`); return; }
+      await steward.update({
+        "system.actions.reactionUsed": true,
+        "flags.fourththing.combat.holdingOn": true
+      });
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: steward }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0d4ff">⚓ ${steward.name} holds on</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Next bleed-through reduced by <b>${tier}</b> (rig tier).</p></div>`
       });
       return;
     }
@@ -16125,7 +16393,8 @@ async function _ftClearPerRoundCombatFlags(actor) {
   const hasAny = c.dodging || c.disengaged || c.holding ||
                  c.rigWeaponFiredThisRound || c.rigWeaponsFiredThisRound ||
                  c.lastFiredRigId || c.lastFiredWeaponId ||
-                 c.pilotActionUsedThisRound || c.engineerRepairedThisRound;
+                 c.pilotActionUsedThisRound || c.engineerRepairedThisRound ||
+                 c.aimedShot || c.signalBonus || c.holdingOn;
   if (!hasAny) return;
   try {
     await actor.update({
@@ -16137,7 +16406,11 @@ async function _ftClearPerRoundCombatFlags(actor) {
       "flags.fourththing.combat.-=lastFiredRigId":            null,
       "flags.fourththing.combat.-=lastFiredWeaponId":         null,
       "flags.fourththing.combat.-=pilotActionUsedThisRound":  null,
-      "flags.fourththing.combat.-=engineerRepairedThisRound": null
+      "flags.fourththing.combat.-=engineerRepairedThisRound": null,
+      // 2026-05-19 — new crew-action flags
+      "flags.fourththing.combat.-=aimedShot":                 null,
+      "flags.fourththing.combat.-=signalBonus":               null,
+      "flags.fourththing.combat.-=holdingOn":                 null
     });
   } catch (e) { console.warn("[fourththing] clear per-round combat flags failed", e); }
 }
@@ -16146,15 +16419,30 @@ async function _ftClearRigPerRoundFlags(rig) {
   if (!rig) return;
   const c = rig.flags?.fourththing?.combat;
   if (!c) return;
-  if (!(c.holding || c.evading || c.brace || c.hexesMoved)) return;
+  const hasAny = c.holding || c.evading || c.brace || c.hexesMoved
+              || c.boostedSystemId || c.boostedSystemName || c.boostedUntilRound
+              || c.holdingBonus !== undefined || c.evadingBonus !== undefined || c.braceBonus !== undefined;
+  if (!hasAny) return;
   try {
     await rig.update({
-      "flags.fourththing.combat.-=holding":    null,
-      "flags.fourththing.combat.-=evading":    null,
-      "flags.fourththing.combat.-=brace":      null,
-      "flags.fourththing.combat.-=hexesMoved": null
+      "flags.fourththing.combat.-=holding":          null,
+      "flags.fourththing.combat.-=evading":          null,
+      "flags.fourththing.combat.-=brace":            null,
+      "flags.fourththing.combat.-=hexesMoved":       null,
+      "flags.fourththing.combat.-=holdingBonus":     null,
+      "flags.fourththing.combat.-=evadingBonus":     null,
+      "flags.fourththing.combat.-=braceBonus":       null,
+      "flags.fourththing.combat.-=boostedSystemId":  null,
+      "flags.fourththing.combat.-=boostedSystemName": null,
+      "flags.fourththing.combat.-=boostedUntilRound": null
+      // NOTE: heat is intentionally NOT cleared — persists across rounds,
+      // only reduced by vent-heat (engineer bonus action).
     });
   } catch (e) { console.warn("[fourththing] clear rig per-round flags failed", e); }
+  // Clear the per-round state AEs (overheat is heat-driven, leave it).
+  for (const key of ["holding", "evading", "brace", "boost-system"]) {
+    await _ftClearRigStateAE(rig, key);
+  }
 }
 
 // GM-side fan-out: clear per-round flags for every boarded steward on
@@ -17366,6 +17654,13 @@ function _ftRelayHandler(msg) {
       // 2026-05-19 — Player-side already unset the steward's boardedRig
       // flag, so we need msg.rigId to still clean up the crew slot.
       ftDisembarkSteward(steward, { rigId: msg.rigId || null });
+    } else if (msg?.t === "ft-crewAction") {
+      if (_ftRelaySeenRecently(`crewAction:${msg.stewardId}:${msg.rigId}:${msg.actionId}`)) return;
+      const steward = game.actors?.get(msg.stewardId);
+      const rig     = game.actors?.get(msg.rigId);
+      if (!steward || !rig) return;
+      const frameItem = msg.frameItemId ? rig.items?.get(msg.frameItemId) : null;
+      _ftHandleCrewAction(steward, rig, msg.actionId, frameItem);
     } else if (msg?.t === "ft-applyDamage") {
       // 2026-05-19 — Players can't write to enemy rigs/bosses they don't
       // own. The chat-card Apply Damage button emits this message so the
