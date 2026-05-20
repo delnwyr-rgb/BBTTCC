@@ -4397,7 +4397,7 @@ function _ftWizV2BuildPreview(state) {
   return bits.join(` <span style="opacity:0.4">·</span> `);
 }
 
-async function openManifestationWizardV2(actor, { kind = "power", starter = "", targetFolder = null } = {}) {
+async function openManifestationWizardV2(actor, { kind = "power", starter = "", targetFolder = null, targetPack = null } = {}) {
   // Mirror the non-TCC gate from the legacy wizard. Skipped for actor-less
   // GM authoring (targetFolder mode) — the GM can author any starter shape.
   if (actor && !isTCC(actor) && (starter === "ephemeral" || starter === "working")) {
@@ -4527,15 +4527,34 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
           }
           try {
             const itemData = createManifestationItemData(actor, wizardKind, state);
-            // Two-mode create: actor-embedded (default) vs world Item with
-            // optional targetFolder (GM library authoring path).
+            // Three-mode create:
+            //   1. actor → actor-embedded Item
+            //   2. no actor, targetPack set OR auto-resolves → compendium entry
+            //   3. no actor, no pack → world Item (with optional targetFolder)
+            // 2026-05-20 — Auto-default to the RFI Starter Manifestations pack
+            // when invoked with no actor + no explicit target. Previously the
+            // wizard always made a world Item; macros that expected pack saves
+            // silently went to the world directory.
             let created = null;
             if (actor) {
               const docs = await actor.createEmbeddedDocuments("Item", [itemData]);
               created = docs?.[0] ?? null;
             } else {
-              if (targetFolder?.id) itemData.folder = targetFolder.id;
-              created = await Item.create(itemData);
+              let _packId = targetPack || null;
+              if (!_packId && !targetFolder) {
+                const _starter = game.packs?.get("fourththing.starter-manifestations");
+                if (_starter && !_starter.locked) _packId = _starter.collection;
+                else if (_starter && _starter.locked) {
+                  ui.notifications?.warn(`RFI Starter Manifestations pack is locked — saving as world Item. Unlock the pack to save to compendium.`);
+                }
+              }
+              if (_packId) {
+                created = await Item.create(itemData, { pack: _packId });
+                ui.notifications?.info(`Saved "${created?.name ?? itemData.name}" to ${_packId}.`);
+              } else {
+                if (targetFolder?.id) itemData.folder = targetFolder.id;
+                created = await Item.create(itemData);
+              }
             }
             if (created) created.sheet.render(true);
             resolved = true;
