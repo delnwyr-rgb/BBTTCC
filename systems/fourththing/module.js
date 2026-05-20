@@ -17032,16 +17032,39 @@ Hooks.on("updateCombat", async (combat, change) => {
   if (!game.user?.isGM) return;
   if (!("round" in (change ?? {}))) return;
   if (Number(change.round) <= Number(combat.previous?.round ?? 0)) return;
+  // 2026-05-19 — Track which steward actors have already been cleared so a
+  // rig + its boarded gunner both as combatants don't double-clear.
+  const clearedStewardIds = new Set();
   for (const combatant of (combat.combatants ?? [])) {
     const a = combatant?.actor;
     if (!a) continue;
-    if (a.type === "rig")  { await _ftClearRigPerRoundFlags(a); continue; }
+    if (a.type === "rig")  {
+      await _ftClearRigPerRoundFlags(a);
+      // 2026-05-19 — Boarded stewards usually aren't combatants of their
+      // own; the rig is. Without this, rigWeaponsFiredThisRound (and the
+      // pilot/engineer gates, aimedShot, signalBonus, holdingOn,
+      // suppressed) persisted on every gunner past round advance.
+      const slots = a.system?.crew?.slots ?? [];
+      for (const slot of slots) {
+        if (!slot?.actorId || clearedStewardIds.has(slot.actorId)) continue;
+        const steward = game.actors?.get(slot.actorId);
+        if (steward) {
+          await _ftClearPerRoundCombatFlags(steward);
+          clearedStewardIds.add(slot.actorId);
+        }
+      }
+      continue;
+    }
     if (a.type === "boss") {
       await _ftRefillBossManifestationSlots(a);
       await _ftRefillBossLegendaryActions(a);
       continue;
     }
-    if (a.type === "character" || a.type === "npc") await _ftClearPerRoundCombatFlags(a);
+    if (a.type === "character" || a.type === "npc") {
+      if (clearedStewardIds.has(a.id)) continue;
+      await _ftClearPerRoundCombatFlags(a);
+      clearedStewardIds.add(a.id);
+    }
   }
 });
 
