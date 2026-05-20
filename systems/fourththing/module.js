@@ -10227,6 +10227,26 @@ Hooks.once("init", function () {
       this._bindInlineEditors();
       this._restoreEditMode();
       this._bindDragDrop();
+      this._ftSyncEditOnlyInputs();
+    }
+
+    // 2026-05-20 — Disable inputs/selects/textareas inside `.ft-edit-only`
+    // panels when the sheet is NOT in edit mode. Without this, the hidden
+    // (display:none) edit-mode duplicates submit their stale `value="…"`
+    // on every form change — clobbering the visible top-bar chip inputs.
+    // Symptom: Pace reverts to 0 on every manual edit because the engagement-
+    // tab edit-only twin at character-sheet.hbs:655 has the same
+    // `name="system.resources.pace.current"`. Same trap applies to other
+    // ft-edit-only resource inputs across the sheet.
+    _ftSyncEditOnlyInputs() {
+      try {
+        const root = this.element;
+        if (!root) return;
+        const sheet = root.querySelector(".ft-sheet");
+        const editMode = !!sheet?.classList?.contains?.("ft-edit-mode");
+        const fields = root.querySelectorAll(".ft-edit-only input, .ft-edit-only select, .ft-edit-only textarea");
+        for (const el of fields) el.disabled = !editMode;
+      } catch (e) { console.warn("[fourththing] _ftSyncEditOnlyInputs failed", e); }
     }
 
     // Wire compendium → sheet drops. Native DOM events, idempotent per element.
@@ -11118,6 +11138,10 @@ Hooks.once("init", function () {
       this._bbttccEditMode = active;
       target.textContent = active ? "✓ Editing" : "✎ Edit";
       target.classList.toggle("ft-edit-active", active);
+      // 2026-05-20 — Re-enable/disable ft-edit-only inputs in lockstep with
+      // the visual reveal. Without this, hidden duplicate-name inputs keep
+      // clobbering visible inputs on form-change submits.
+      try { this._ftSyncEditOnlyInputs?.(); } catch (_e) { /* noop */ }
       // AppV2 sized the outer frame for view-mode content; revealing edit-only
       // blocks (resource inputs, skill-rank inputs, identity grid) grows the
       // content substantially. Force a re-measure on the next frame so the

@@ -1546,8 +1546,11 @@ export async function openShadowCourierPackage(actor) {
 }
 
 export async function openShadowCourierCrossing(actor) {
-  const res = getResources(actor);
-  const access = res.accessDice?.current ?? 0;
+  // 2026-05-20 — Migrated from legacy accessDice to Pace.
+  const rawSys = actor.system?.system ?? actor.system;
+  const pace   = rawSys?.resources?.pace ?? { current: 0, max: 0 };
+  const cur    = Number(pace.current) || 0;
+  const max    = Number(pace.max) || 0;
 
   new Dialog({
     title: "Shadow Courier — The Crossing",
@@ -1556,7 +1559,7 @@ export async function openShadowCourierCrossing(actor) {
         Declare a threshold: door, wall, ward, alarmed perimeter, hex boundary.
       </p>
       <p style="font-size:0.72rem;opacity:0.55">
-        Access dice available: <b style="color:#9b59b6">${access}</b>
+        Pace available: <b style="color:#a0b8e8">${cur} / ${max}</b>
       </p>
       <div class="ft-cast-field">
         <label>Threshold description</label>
@@ -1568,15 +1571,15 @@ export async function openShadowCourierCrossing(actor) {
         label: "Cross",
         callback: async (html) => {
           const threshold = html.find("[name='threshold']").val() || "threshold";
-          if (access > 0) {
-            await actor.update({ "system.resources.accessDice.current": access - 1 });
+          if (cur > 0) {
+            await actor.update({ "system.resources.pace.current": Math.max(0, cur - 1) });
           }
           ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
             content: `<div class="fourththing-roll">
               <div class="ft-roll-header"><span class="ft-roll-name">⬛ Shadow Courier: The Crossing</span></div>
               <p style="margin:0.2rem 0;font-size:0.8rem">Crossed: ${threshold}</p>
-              <p style="margin:0;font-size:0.72rem;opacity:0.5">Access remaining: ${Math.max(0, access - 1)}</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.5">Pace remaining: ${Math.max(0, cur - 1)} / ${max}</p>
             </div>`
           });
         }
