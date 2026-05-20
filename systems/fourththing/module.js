@@ -16345,17 +16345,29 @@ function _ftMakeHudDraggable(el, opts = {}) {
     el.style.paddingRight = "32px"; // room for ctrl bar
     if (saved.collapsed) setCollapsed(true);
 
-    let dragging = false, sx = 0, sy = 0, ox = 0, oy = 0;
+    // 2026-05-19 — Drag uses a movement threshold so a true click on a
+    // child element (e.g. a manifest row, which isn't a <button>) still
+    // fires its click handler. Without this, pointer capture stole the
+    // gesture and the manifest's per-steward click was suppressed.
+    const DRAG_THRESHOLD_PX = 4;
+    let pointerDown = false, dragging = false;
+    let sx = 0, sy = 0, ox = 0, oy = 0, capturedId = null;
     el.addEventListener("pointerdown", (e) => {
       if (e.target.closest("button, a, input, select, textarea, .ft-hud-ctrl, .ft-hud-chip")) return;
       const r = el.getBoundingClientRect();
-      dragging = true;
+      pointerDown = true;
       sx = e.clientX; sy = e.clientY; ox = r.left; oy = r.top;
-      el.setPointerCapture?.(e.pointerId);
-      el.style.cursor = "grabbing";
+      capturedId = e.pointerId;
     });
     el.addEventListener("pointermove", (e) => {
-      if (!dragging) return;
+      if (!pointerDown) return;
+      if (!dragging) {
+        if (Math.abs(e.clientX - sx) < DRAG_THRESHOLD_PX
+         && Math.abs(e.clientY - sy) < DRAG_THRESHOLD_PX) return;
+        dragging = true;
+        el.setPointerCapture?.(capturedId);
+        el.style.cursor = "grabbing";
+      }
       const left = Math.max(0, Math.min(window.innerWidth - 40,  ox + e.clientX - sx));
       const top  = Math.max(0, Math.min(window.innerHeight - 20, oy + e.clientY - sy));
       el.style.left = left + "px";
@@ -16363,12 +16375,14 @@ function _ftMakeHudDraggable(el, opts = {}) {
       el.style.right = "auto"; el.style.bottom = "auto"; el.style.transform = "none";
     });
     const endDrag = (e) => {
-      if (!dragging) return;
-      dragging = false;
-      el.releasePointerCapture?.(e.pointerId);
-      el.style.cursor = "";
-      const r = el.getBoundingClientRect();
-      save({ ...load(), left: Math.round(r.left), top: Math.round(r.top) });
+      const wasDragging = dragging;
+      pointerDown = false; dragging = false;
+      if (wasDragging) {
+        el.releasePointerCapture?.(e.pointerId);
+        el.style.cursor = "";
+        const r = el.getBoundingClientRect();
+        save({ ...load(), left: Math.round(r.left), top: Math.round(r.top) });
+      }
     };
     el.addEventListener("pointerup",     endDrag);
     el.addEventListener("pointercancel", endDrag);
