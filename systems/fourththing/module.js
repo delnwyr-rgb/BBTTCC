@@ -7138,6 +7138,24 @@ Hooks.once("init", function () {
     for (const token of targets) {
       const actor = token.actor;
       if (!actor) continue;
+      // 2026-05-19 — Players don't own enemy rigs/bosses, so a direct
+      // actor.update() inside _applyDamageToActor would silently fail.
+      // Relay to an active GM via the existing system.fourththing socket
+      // (same pattern as ftBoardRig / ftDisembarkSteward). GM-side
+      // handler re-enters _applyDamageToActor with full perms.
+      if (!game.user.isGM && !actor.isOwner) {
+        if (!game.users?.some?.(u => u.isGM && u.active)) {
+          ui.notifications.warn(`No GM online — cannot apply damage to ${actor.name}.`);
+          continue;
+        }
+        game.socket?.emit?.("system.fourththing", {
+          t: "ft-applyDamage",
+          actorId: actor.id,
+          baseDmg, op, track, damageType, damageFlavor
+        });
+        ui.notifications.info(`${actor.name}: damage relayed to GM.`);
+        continue;
+      }
       const desc = await game.fourththing.rolls._applyDamageToActor(actor, baseDmg, {
         op, track, damageType, damageFlavor, perTargetMultiplier: 1
       });
@@ -15669,6 +15687,11 @@ Hooks.on("renderTokenHUD", (hud, html, data) => {
 let __ftCrewHudEl = null;
 let __ftCrewHudRenderTimer = null;
 let __ftCrewHudActiveActorId = null;
+// 2026-05-19 — Passenger-manifest click pins a steward as the active HUD
+// focus, overriding the controlled-token/owned-token picker logic. Lets
+// players run multiple boarded stewards without juggling token selection.
+// Cleared automatically when the pinned steward is no longer boarded.
+let __ftCrewHudPinnedId = null;
 
 function _ftPickHudSteward() {
   if (!game.user) return null;
@@ -15688,6 +15711,13 @@ function _ftPickHudSteward() {
     return !!(a?.id && slotStewardIds.has(a.id));
   };
   const canRead   = (a) => a?.testUserPermission?.(game.user, "OBSERVER") ?? false;
+
+  // 0. Passenger-manifest pinned steward wins over token selection.
+  if (__ftCrewHudPinnedId) {
+    const pinned = game.actors?.get(__ftCrewHudPinnedId);
+    if (pinned && isSteward(pinned) && isBoarded(pinned) && canRead(pinned)) return pinned;
+    __ftCrewHudPinnedId = null; // pin expired (disembarked / lost access)
+  }
   const stewardInRig = (rig) => {
     // Pick a steward boarded on `rig` that the current user can see.
     // Prefer one the user OWNS (their own seat), fall back to OBSERVER.
@@ -15831,7 +15861,11 @@ function _ftRenderCrewHud() {
         __ftCrewHudEl = document.createElement("div");
         __ftCrewHudEl.id = "ft-crew-hud";
         __ftCrewHudEl.className = "ft-crew-hud";
-        __ftCrewHudEl.style.cssText = "position:fixed;z-index:120;display:flex;align-items:center;padding:.35rem .6rem;border:1px solid #d4a35f;background:rgba(20,20,28,0.92);color:#ffd28a;border-radius:6px;font-family:'Signika',sans-serif;font-size:0.85rem;box-shadow:0 4px 12px rgba(0,0,0,0.5);pointer-events:auto;backdrop-filter:blur(2px);max-width:min(1200px,92vw);";
+        // 2026-05-19 — z-index 50 (was 120). Foundry V13 ApplicationV2
+        // windows use z-index 100+ when rendered (boosted on focus), so
+        // 120 sat ABOVE inactive sheets and obscured them. 50 keeps the
+        // HUD above the canvas + UI bars (z=30) but below any open sheet.
+        __ftCrewHudEl.style.cssText = "position:fixed;z-index:50;display:flex;align-items:center;padding:.35rem .6rem;border:1px solid #d4a35f;background:rgba(20,20,28,0.92);color:#ffd28a;border-radius:6px;font-family:'Signika',sans-serif;font-size:0.85rem;box-shadow:0 4px 12px rgba(0,0,0,0.5);pointer-events:auto;backdrop-filter:blur(2px);max-width:min(1200px,92vw);";
         document.body.appendChild(__ftCrewHudEl);
       }
       __ftCrewHudEl.innerHTML = inner;
@@ -15843,6 +15877,36 @@ function _ftRenderCrewHud() {
     }
   }, 60);
 }
+
+// 2026-05-19 — Vision-as-rig sync on token control. Selecting a boarded
+// steward token shouldn't revert vision to the steward's own sight; the
+// boardSightOverride flag remembers we want rig sight. If the token's
+// current sight has drifted away from the rig's (e.g. someone edited the
+// prototype, or the override never landed), force-reapply on control.
+// Owner-only (Foundry refuses the update otherwise) but that matches who
+// would have the token selected.
+Hooks.on("controlToken", async (token, controlled) => {
+  try {
+    if (!controlled || !token?.document) return;
+    const ovr = token.document.getFlag?.("fourththing", "boardSightOverride");
+    if (!ovr?.rigId) return;
+    const rig = game.actors?.get(ovr.rigId);
+    if (!rig) return;
+    const scene = token.document.parent ?? canvas.scene;
+    const rigToken = scene?.tokens.find(t => t.actorId === rig.id);
+    if (!rigToken) return;
+    const rigSight = rigToken.sight?.toObject?.() ?? rigToken.sight;
+    if (!rigSight) return;
+    const cur = token.document.sight?.toObject?.() ?? token.document.sight ?? {};
+    // Drift check: range is the cheapest reliable diff. Skip if equal.
+    if (Number(cur.range) === Number(rigSight.range)
+     && Number(cur.angle) === Number(rigSight.angle)) return;
+    if (!token.document.isOwner) return;
+    await token.document.update({ sight: foundry.utils.deepClone(rigSight) });
+  } catch (e) {
+    console.warn("[fourththing] controlToken sight resync failed", e);
+  }
+});
 
 // Lifecycle: render whenever token control, the steward's boardedRig
 // flag, the rig's combat state, or the rig's item list changes.
@@ -15860,6 +15924,95 @@ Hooks.on("createItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCr
 Hooks.on("deleteItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("updateItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("canvasReady", () => _ftRenderCrewHud());
+
+// ─── Passenger Manifest ──────────────────────────────────────────────
+// 2026-05-19 — Right-side vertical strip listing every boarded steward
+// the current user can see (OWNER or OBSERVER). Click a row → pins that
+// steward as the Crew HUD focus without forcing token selection. Solves
+// the "boarded tokens are hidden, can't be re-selected" UX problem and
+// makes multi-steward rig scenes navigable.
+let __ftManifestEl = null;
+let __ftManifestRenderTimer = null;
+
+function _ftCollectManifestEntries() {
+  if (!game.user) return [];
+  const out = [];
+  const canRead = (a) => a?.testUserPermission?.(game.user, "OBSERVER") ?? false;
+  for (const rig of (game.actors ?? [])) {
+    if (rig?.type !== "rig") continue;
+    const slots = rig.system?.crew?.slots ?? [];
+    for (const slot of slots) {
+      if (!slot?.actorId) continue;
+      const steward = game.actors?.get(slot.actorId);
+      if (!steward) continue;
+      if (!canRead(steward) && !canRead(rig)) continue;
+      out.push({ steward, rig, role: slot.role ?? "crew" });
+    }
+  }
+  return out;
+}
+
+function _ftRenderPassengerManifest() {
+  if (__ftManifestRenderTimer) {
+    clearTimeout(__ftManifestRenderTimer);
+    __ftManifestRenderTimer = null;
+  }
+  __ftManifestRenderTimer = setTimeout(() => {
+    __ftManifestRenderTimer = null;
+    try {
+      const entries = _ftCollectManifestEntries();
+      if (!entries.length) {
+        if (__ftManifestEl) { __ftManifestEl.remove(); __ftManifestEl = null; }
+        return;
+      }
+      if (!__ftManifestEl) {
+        __ftManifestEl = document.createElement("div");
+        __ftManifestEl.id = "ft-passenger-manifest";
+        // Pin to right edge below top UI; sidebar (#sidebar) covers right side,
+        // so offset by sidebar width (~340px when collapsed/expanded both clear).
+        __ftManifestEl.style.cssText = "position:fixed;top:70px;right:320px;z-index:50;display:flex;flex-direction:column;gap:4px;padding:6px;background:rgba(20,20,28,0.92);color:#ffd28a;border:1px solid #d4a35f;border-radius:6px;font-family:'Signika',sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.5);pointer-events:auto;backdrop-filter:blur(2px);max-width:220px;max-height:60vh;overflow-y:auto;";
+        document.body.appendChild(__ftManifestEl);
+      }
+      const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
+      const pinnedId = __ftCrewHudPinnedId || __ftCrewHudActiveActorId;
+      __ftManifestEl.innerHTML =
+        `<div style="font-weight:600;font-size:0.7rem;letter-spacing:.06em;opacity:0.85;text-align:center;border-bottom:1px solid #555;padding-bottom:3px;">PASSENGER MANIFEST</div>` +
+        entries.map(({ steward, rig, role }) => {
+          const isActive = steward.id === pinnedId;
+          const bg = isActive ? "rgba(212,163,95,0.18)" : "transparent";
+          const border = isActive ? "1px solid #d4a35f" : "1px solid transparent";
+          return `<div class="ft-manifest-row" data-steward-id="${esc(steward.id)}" data-tooltip="${esc(steward.name)} · ${esc(role)} aboard ${esc(rig.name)}" style="display:flex;align-items:center;gap:6px;padding:3px 4px;border-radius:3px;cursor:pointer;background:${bg};border:${border};">
+            <img src="${esc(steward.img)}" style="width:30px;height:30px;border-radius:3px;object-fit:cover;border:1px solid #888;flex:0 0 auto;"/>
+            <div style="flex:1 1 auto;min-width:0;display:flex;flex-direction:column;line-height:1.1;">
+              <span style="font-weight:600;font-size:0.76rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(steward.name)}</span>
+              <span style="opacity:0.7;font-size:0.66rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(role)} · ${esc(rig.name)}</span>
+            </div>
+          </div>`;
+        }).join("");
+      __ftManifestEl.querySelectorAll(".ft-manifest-row").forEach(row => {
+        row.addEventListener("click", () => {
+          const id = row.dataset.stewardId;
+          if (!id) return;
+          __ftCrewHudPinnedId = id;
+          _ftRenderCrewHud();
+          _ftRenderPassengerManifest();
+        });
+      });
+    } catch (e) {
+      console.warn("[fourththing] Passenger Manifest render failed", e);
+    }
+  }, 60);
+}
+
+// Manifest lifecycle: render on the same triggers as the Crew HUD plus
+// the manifest's own focus changes.
+Hooks.on("updateActor", (actor) => {
+  if (!actor) return;
+  if (actor.type === "rig") return _ftRenderPassengerManifest();
+  if (actor.getFlag?.("fourththing", "boardedRig")) return _ftRenderPassengerManifest();
+});
+Hooks.on("canvasReady", () => _ftRenderPassengerManifest());
+Hooks.once("ready", () => _ftRenderPassengerManifest());
 
 // 2026-05-19 — When the active scene changes, open character/rig/npc
 // sheets need to re-render to pick up the new grid distance for the
@@ -17174,6 +17327,22 @@ function _ftRelayHandler(msg) {
       // 2026-05-19 — Player-side already unset the steward's boardedRig
       // flag, so we need msg.rigId to still clean up the crew slot.
       ftDisembarkSteward(steward, { rigId: msg.rigId || null });
+    } else if (msg?.t === "ft-applyDamage") {
+      // 2026-05-19 — Players can't write to enemy rigs/bosses they don't
+      // own. The chat-card Apply Damage button emits this message so the
+      // GM applies on their behalf. Per-actor dedupe keyed by amount +
+      // type to allow legitimate multi-hit sequences without coalescing.
+      if (_ftRelaySeenRecently(`damage:${msg.actorId}:${msg.baseDmg}:${msg.damageType ?? ""}:${msg.damageFlavor ?? ""}`)) return;
+      const actor = game.actors?.get(msg.actorId);
+      if (!actor || !game.fourththing?.rolls?._applyDamageToActor) return;
+      game.fourththing.rolls._applyDamageToActor(actor, Number(msg.baseDmg) || 0, {
+        op: msg.op ?? "damage",
+        track: msg.track ?? "integrity",
+        damageType: msg.damageType ?? "",
+        damageFlavor: msg.damageFlavor ?? "",
+        perTargetMultiplier: 1
+      }).then(desc => { if (desc) ui.notifications.info(desc); })
+        .catch(e => console.warn("[fourththing] GM-relay damage apply failed", e));
     }
   } catch (e) {
     console.error("[ft:relay] handler threw", e);
