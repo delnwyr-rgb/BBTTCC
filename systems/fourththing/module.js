@@ -846,8 +846,21 @@ async function ftRigWeaponFire(steward, weapon) {
     return;
   }
   const rig = weapon.parent;
-  const boarded = steward.getFlag?.("fourththing", "boardedRig");
-  if (!boarded || boarded.rigId !== rig.id) {
+  // 2026-05-19 — Crew slots are the authoritative source of "is this steward
+  // aboard?" (see _ftCollectCrewControlsContext orphan recovery). Accept
+  // either the actor flag OR a matching crew.slots entry, deriving the role
+  // from whichever is set. Without this, a steward whose flag desynced from
+  // the rig's slot list (e.g. delete-replace token, race after boarding)
+  // hits a false "not boarded" warning even though the rig sheet shows them.
+  const boardedFlag = steward.getFlag?.("fourththing", "boardedRig");
+  let boardedRole = null;
+  if (boardedFlag?.rigId === rig.id) {
+    boardedRole = boardedFlag.role ?? null;
+  } else {
+    const slot = (rig?.system?.crew?.slots ?? []).find(s => s?.actorId === steward.id);
+    if (slot) boardedRole = slot.role ?? "crew";
+  }
+  if (!boardedRole) {
     ui.notifications?.warn(`${steward.name} is not boarded on ${rig.name}.`);
     return;
   }
@@ -861,10 +874,10 @@ async function ftRigWeaponFire(steward, weapon) {
                          ?? 0);
   const _hasGunnerRole = _gunnerCap > 0;
   const _allowFireForRole = _hasGunnerRole
-    ? (boarded.role === "gunner" || boarded.role === "crew")
+    ? (boardedRole === "gunner" || boardedRole === "crew")
     : true;
   if (!_allowFireForRole) {
-    ui.notifications?.warn(`${steward.name}: only Gunner or Crew can fire rig weapons (role: ${boarded.role}).`);
+    ui.notifications?.warn(`${steward.name}: only Gunner or Crew can fire rig weapons (role: ${boardedRole}).`);
     return;
   }
   return ftOpenEngageDialog(steward, weapon);
@@ -15669,8 +15682,15 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem) {
     });
     return;
   }
+  // 2026-05-19 — Read role from crew.slots when the actor's boardedRig
+  // flag is missing or pointing at a different rig (orphan-state recovery
+  // — same pattern as ftRigWeaponFire + _ftCollectCrewControlsContext).
   const flag      = steward.getFlag?.("fourththing", "boardedRig");
-  const role      = flag?.role ?? "crew";
+  let   role      = (flag?.rigId === rig.id) ? (flag.role ?? "crew") : null;
+  if (!role) {
+    const _slot = (rig?.system?.crew?.slots ?? []).find(s => s?.actorId === steward.id);
+    role = _slot?.role ?? "crew";
+  }
   const tier      = Math.max(1, Math.min(4, Number(rig.system?.integrity?.tier) || 1));
   const bracket   = ftRigBracketFor(rig);
   const speed     = Math.max(1, Number(frameItem?.flags?.fourththing?.rigFrame?.travel?.speed ?? rig.system?.travel?.speed) || 1);
