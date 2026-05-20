@@ -2739,6 +2739,95 @@ async function _openTierUsesPerSomaBreak(actor, key, label, body, onUse) {
   }).render(true);
 }
 
+// 2026-05-20 — Exo-Knight Shield Projector custom handler. The generic
+// `soma-break-tier` dialog (above) only debits a use counter; Shield
+// Projector ALSO has to roll 1d6+tier and heal the targeted ally's
+// Integrity. Uses the same `disciplineSpent.${key}` flag namespace as
+// the generic helper so SP shares the tier-uses-per-Soma-Break tracking,
+// just with an actual mechanical effect bolted on top.
+//
+// Target = the user's currently-targeted token (the ally being struck).
+// If the targeted actor isn't owned by this client (typical — Shield
+// Projector saves allies that the player doesn't own), the heal is
+// relayed to an active GM via the same `system.fourththing` socket
+// that applyDamageFromButton uses.
+async function _openShieldProjector(actor, key, label, body) {
+  const tier = Math.max(1, Number(actor.system?.details?.tier ?? 1));
+  const maxUses = tier;
+  const spent = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0);
+  const remaining = Math.max(0, maxUses - spent);
+
+  if (remaining <= 0) {
+    return ui.notifications.warn(`${label}: out of uses (${spent}/${maxUses}) — refresh on Soma Break.`);
+  }
+
+  const targets = Array.from(game.user?.targets ?? []);
+  const targetToken = targets[0] ?? null;
+  const targetActor = targetToken?.actor ?? null;
+  const targetInfo = targetActor
+    ? `<p style="font-size:0.78rem;margin:0 0 0.4rem">Target: <b>${_ftEscape(targetActor.name)}</b></p>`
+    : `<p style="font-size:0.78rem;color:#f5a04a;margin:0 0 0.4rem">⚠ No target selected — target the ally being struck before clicking Use.</p>`;
+
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${remaining} / ${maxUses} uses remaining</b> (refresh on Soma Break)</p>
+      ${targetInfo}
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Will roll <b>1d6 + ${tier}</b> and restore that many Integrity on the target (offsets the damage they just took).</p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      use: {
+        label: targetActor ? `Use → Shield ${_ftEscape(targetActor.name)}` : "Use (no target)",
+        callback: async () => {
+          if (!targetActor) {
+            ui.notifications.warn(`${label}: target an ally first, then click Use.`);
+            return;
+          }
+          const roll = new Roll(`1d6 + ${tier}`);
+          await roll.evaluate();
+          const heal = Math.max(0, Number(roll.total) || 0);
+
+          let desc = "";
+          try {
+            if (game.user.isGM || targetActor.isOwner) {
+              desc = await game.fourththing.rolls._applyDamageToActor(targetActor, heal, {
+                op: "heal", track: "integrity"
+              });
+            } else if (game.users?.some?.(u => u.isGM && u.active)) {
+              game.socket?.emit?.("system.fourththing", {
+                t: "ft-applyDamage",
+                actorId: targetActor.id,
+                baseDmg: heal, op: "heal", track: "integrity",
+                damageType: "", damageFlavor: ""
+              });
+              desc = `${targetActor.name}: heal relayed to GM (+${heal}).`;
+            } else {
+              ui.notifications.warn(`Shield Projector: no GM online to apply heal to ${targetActor.name}.`);
+            }
+          } catch (e) { console.warn("[shield-projector] heal apply failed", e); }
+
+          await actor.setFlag("fourththing", `disciplineSpent.${key}`, spent + 1);
+
+          await roll.toMessage({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            flavor: `<div class="fourththing-roll" style="border-color:#7ec0ff">
+              <div class="ft-roll-header">
+                <span class="ft-roll-name" style="color:#a0d4ff">🛡 Shield Projector — ${_ftEscape(actor.name)}</span>
+                <span class="ft-defense-pill">${remaining - 1} / ${maxUses} left</span>
+              </div>
+              <p style="margin:0.3rem 0;font-size:0.82rem">Projected barrier on <b>${_ftEscape(targetActor.name)}</b> — <b style="color:#a0d4ff">+${heal} Integrity</b> <span style="opacity:0.75">(1d6 + ${tier} tier)</span>.</p>
+              ${desc ? `<p style="margin:0;font-size:0.72rem;opacity:0.6">${_ftEscape(desc)}</p>` : ""}
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "use"
+  }).render(true);
+}
+
 // Generic 1/scene ability dialog. Tracks 'used' state on actor flag under
 // `fourththing.scenePerUse.<key>`; player clears it on scene change (or via the
 // Reset button). Same shape as _openSomaBreakAbility but a separate flag
@@ -4346,6 +4435,15 @@ async function _dispatchSingleAbility(actor, ab, key, requiredLevel) {
   // through the cadence helpers so the deduction happens atomically with the
   // use-flag burn and shows up on the chat card.
   const onUse = _makeClaritySpendCallback(ab);
+
+  // 2026-05-20 — Per-key custom handlers. Most abilities flow through the
+  // generic cadence dialogs below; abilities with mechanical effects that
+  // exceed "track a use counter" branch here. Currently: Exo-Knight Shield
+  // Projector (rolls 1d6+tier + heals targeted ally's Integrity).
+  if (key === "circuitborn-exo-shield_projector") {
+    return _openShieldProjector(actor, key, ab.label, ab.body);
+  }
+
   switch (ab.type) {
     case "scene":
       return _openPerSceneAbility(actor, key, ab.label, ab.body, onUse);
