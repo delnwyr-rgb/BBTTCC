@@ -8927,7 +8927,15 @@ Hooks.once("init", function () {
     const dy   = newY - tokenDoc.y;
     const distanceFt = Math.round((Math.hypot(dx, dy) / gridSize) * gridDist);
     if (distanceFt <= 0) return;
-    fireTriggers(actor, "on-move", { amount: distanceFt, scope: "self" })
+    // 2026-05-20 — Pass cumulative-per-turn movement alongside the delta so
+    // on-move triggers can predicate against "moved 30+ ft this turn"
+    // (Liminal Operator) rather than "made a single 30+ ft leap." Playtest
+    // confirmed: piecewise 1-sq moves never fired the Pace trigger because
+    // each delta was 5 ft. The 1/turn limit window keeps it idempotent.
+    const inCombat = !!game.combat?.combatants?.find(c => c.actor?.id === actor.id);
+    const curCumulative = inCombat ? (Number(actor.system?.actions?.movementUsedFt) || 0) : 0;
+    const nextCumulative = curCumulative + distanceFt;
+    fireTriggers(actor, "on-move", { amount: distanceFt, cumulativeFt: nextCumulative, inCombat, scope: "self" })
       .catch(err => console.error("fourththing | on-move trigger failed", err));
 
     // Movement budget accumulator — only debits while actor is in combat.

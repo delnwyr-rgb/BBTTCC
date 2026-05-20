@@ -651,11 +651,12 @@
             {{/each}}
           </div>
           <span class="ft-resource-count">{{resources.pace.current}} / {{resources.pace.max}}</span>
-          <div class="ft-edit-only ft-resource-edit">
-            <input type="number" name="system.resources.pace.current" value="{{resources.pace.current}}" min="0" max="{{resources.pace.max}}" style="width:40px" data-tooltip="Current"/>
-            <span style="opacity:0.4">/</span>
-            <input type="number" name="system.resources.pace.max" value="{{resources.pace.max}}" min="1" max="10" style="width:40px" data-tooltip="Max (auto-derived; manual override possible)"/>
-          </div>
+          {{!-- 2026-05-20 — Edit-only twin inputs removed. Two form fields
+               sharing `name="system.resources.pace.current"` (top-bar chip
+               at the sheet header + this hidden twin) caused a clobber: the
+               hidden twin's stale value="0" was submitted on every chip
+               change, reverting the edit. Edit the value via the top-bar
+               chip input + Spend button — those are the canonical surface. --}}
         </div>
         <div class="ft-resource-row">
           <span class="ft-aura-badge" style="background:rgba(155,89,182,0.15);border:1px solid rgba(155,89,182,0.5);color:#9b59b6">Package</span>

@@ -614,10 +614,16 @@ function _matchPredicate(t, payload) {
     const maxDie = Number(payload?.maxDie ?? 0);
     if (maxDie < p.dieMin) return false;
   }
-  // Damage amount threshold
+  // Damage/movement amount threshold. 2026-05-20 — also check cumulative
+  // (e.g. movementUsedFt this turn) so piecewise on-move events that don't
+  // individually clear the threshold can still fire when the per-turn total
+  // does. Used by Shadow Courier Liminal Operator ("move 30+ ft on your
+  // turn → +1 Pace"). The trigger's limit:{window:"turn", uses:1} stops it
+  // from firing multiple times in the same turn.
   if (Number.isFinite(p.amountMin)) {
     const amount = Number(payload?.amount ?? 0);
-    if (amount < p.amountMin) return false;
+    const cumulative = Number(payload?.cumulativeFt ?? 0);
+    if (Math.max(amount, cumulative) < p.amountMin) return false;
   }
   // Scope (self/ally/enemy of the trigger subject)
   if (p.scope && payload?.scope && p.scope !== payload.scope) return false;
