@@ -840,7 +840,10 @@
       </div>
       {{/if}}
 
-      {{!-- Manifestations: Forms (Strike for weapon-likes / Manifest for everything else) and Workings (Invoke) --}}
+      {{!-- Manifestations: Forms (Strike for weapon-likes / Manifest for everything else) and Workings (Invoke).
+           2026-05-20 — Expandable detail body mirrored from the Manifestations tab (powers) so the
+           player can read the full manifestation text (chips · desc · signature · third thing) without
+           tab-switching mid-combat. Buttons match the Manifestations tab (Invoke+Strike on isWeaponForm). --}}
       <div class="ft-combat-section">
         <div class="ft-section-header">
           <h3>Manifestations</h3>
@@ -859,17 +862,36 @@
               <div class="ft-item-controls">
                 {{#if m.isForm}}
                   {{#if m.isWeaponForm}}
-                  <button type="button" data-action="ftWeaponRoll" data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Attack roll with this Form">Strike</button>
+                  <button type="button" data-action="ftCast"       data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Invoke the Form (Manifestation cast)">Invoke</button>
+                  <button type="button" data-action="ftWeaponRoll" data-item-id="{{m.id}}" class="ft-roll-btn ft-roll-btn-subtle" data-tooltip="Attack roll with this Form">Strike</button>
                   {{else}}
-                  <button type="button" data-action="ftCast" data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Manifest the Form (cast)">Manifest</button>
+                  <button type="button" data-action="ftCast"       data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Manifest the Form (cast)">Manifest</button>
                   {{/if}}
                 {{else}}
-                  <button type="button" data-action="ftCastPower" data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Cast this Working">{{m.actionLabel}}</button>
+                  <button type="button" data-action="ftCastPower"  data-item-id="{{m.id}}" class="ft-roll-btn" data-tooltip="Cast this Working">{{m.actionLabel}}</button>
                 {{/if}}
                 <button type="button" data-action="ftItemEdit"   data-item-id="{{m.id}}" class="ft-item-edit">⚙</button>
                 <button type="button" data-action="ftItemDelete" data-item-id="{{m.id}}" class="ft-power-delete">✕</button>
               </div>
             </summary>
+            <div class="ft-manifest-detail">
+              {{#if m.chips.length}}
+              <div class="ft-manifest-chip-row">
+                {{#each m.chips as |chip|}}
+                <span class="ft-manifest-chip">{{chip}}</span>
+                {{/each}}
+              </div>
+              {{/if}}
+              {{#if m.desc}}
+              <div class="ft-item-desc">{{m.desc}}</div>
+              {{/if}}
+              {{#if m.signature}}
+              <div class="ft-manifest-signature">Signature: {{m.signature}}</div>
+              {{/if}}
+              {{#if m.thirdThing}}
+              <div class="ft-manifest-third">Third Thing: {{m.thirdThing}}</div>
+              {{/if}}
+            </div>
           </details>
           {{/each}}
         </div>
