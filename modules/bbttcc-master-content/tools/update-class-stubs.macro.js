@@ -88,7 +88,7 @@ const SHADOW_COURIER_HTML = `
 <ul>
   <li><strong>Initiation 1 — Liminal Operator.</strong> Skill rank +1 in Stealth (Intrigue) and Tinkering (Intrigue). +2 Intrigue OP cap, +2 Logistics OP cap. Pace + Package come online. Ignore the first detection-style roll an opponent attempts against you per encounter.</li>
   <li><strong>Initiation 6 — The Crossing.</strong> 1/scene signature move. Cross a threshold (door, wall, ward, alarm, hex boundary). Mundane barriers fail to register; magical wards take an Intrigue defense check vs DC 12 + ward source's tier × 2.</li>
-  <li><strong>Initiation 11 — Package Mastery.</strong> Your Route's signature Package gains a delivery bonus on top of the L1 effect (Wayfarer +1 Intrigue OP; Black Stair recover 1 Access Die; Last Mile −1 Darkness in recipient's hex).</li>
+  <li><strong>Initiation 11 — Package Mastery.</strong> Your Route's signature Package gains a delivery bonus on top of the L1 effect (Wayfarer +1 Intrigue OP; Black Stair recover 1 Pace; Last Mile −1 Darkness in recipient's hex).</li>
   <li><strong>Initiation 16 — Unfound Route.</strong> 1/session, travel between any two thresholds you have personally crossed before. Up to 4 allies. 1-hour subjective journey. Shares a 1/session pool with the Black Stair capstone.</li>
 </ul>
 <h3>Doctrines</h3>

@@ -170,8 +170,12 @@ export const NAME_ROUTER = [
   ["Change Aura",                "aurablade_change_aura"],
   ["Stabilize Burn",             "aurablade_stabilize"],
   // Shadowjack → dispatches to Shadow Courier handlers
+  // 2026-05-20: legacy aliases for any actor whose item still has the old
+  // name; new content authoring should use "Spend Pace" / "Pace Pool".
   ["Spend Access Die",           "shadow_courier_spend_access"],
   ["Access Pool",                "shadow_courier_access_pool"],
+  ["Spend Pace",                 "shadow_courier_spend_access"],
+  ["Pace Pool",                  "shadow_courier_access_pool"],
   // Breaker → dispatches to Bulwark handlers
   ["Catastrophic Entry",         "bulwark_ruin"],
   ["Certified Structural",       "bulwark_ruin"],
@@ -1580,6 +1584,98 @@ export async function openShadowCourierCrossing(actor) {
       cancel: { label: "Cancel" }
     },
     default: "cross"
+  }).render(true);
+}
+
+// 2026-05-20 — Pace spend dialog. Replaces the legacy Access-Dice
+// openShadowCourierAccessPool / openShadowCourierSpendAccess (removed
+// 2026-05-05 with a "no dialog needed" comment that was wrong — the
+// pool needs a spend surface for the mechanical effects to fire).
+//
+// Three universal modes (move / reroll / dodge) plus a route-specific
+// fourth read from the actor's bbttcc-shadow-courier-* subclass identifier.
+// Pattern mirrors openPactkeeperSpendCivicCharge but without the die roll
+// (Pace is a flat counter, not a die pool).
+export async function openShadowCourierSpendPace(actor) {
+  const rawSys = actor.system?.system ?? actor.system;
+  const pace   = rawSys?.resources?.pace ?? { current: 0, max: 0 };
+  const cur    = Number(pace.current) || 0;
+  const max    = Number(pace.max) || 0;
+  if (cur < 1) {
+    return ui.notifications?.warn(`${actor.name}: no Pace to spend (${cur}/${max}).`);
+  }
+
+  // Detect picked route from the actor's subclass item identifier.
+  const subclassItem = actor.items?.find?.(i =>
+    i.type === "subclass" && /^bbttcc-shadow-courier/.test(i.system?.identifier ?? "")
+  );
+  const subId = String(subclassItem?.system?.identifier ?? "");
+  let routeLabel = "";
+  let routeBody  = "";
+  if (/wayfarer-tongue/.test(subId)) {
+    routeLabel = "Wayfarer Tongue";
+    routeBody  = "+1 Intrigue OP added to a faction you're carrying for this scene.";
+  } else if (/black-stair/.test(subId)) {
+    routeLabel = "Black Stair";
+    routeBody  = "Take a shortcut — skip one hex of intervening terrain on a delivery this scene.";
+  } else if (/last-mile/.test(subId)) {
+    routeLabel = "Last Mile";
+    routeBody  = "−1 Darkness in the recipient's hex on a delivery this scene.";
+  }
+
+  const content = `<div class="ft-cast-dialog">
+    <div class="ft-preview-stats" style="margin-bottom:0.6rem">
+      <span class="ft-prev-stat"><span class="ft-prev-label">Pace before / after</span>
+        <span class="ft-prev-val" style="color:#a0b8e8;font-weight:700">${cur} → ${cur - 1} / ${max}</span></span>
+      ${routeLabel ? `<span class="ft-prev-stat"><span class="ft-prev-label">Route</span>
+        <span class="ft-prev-val">${_ftEscape(routeLabel)}</span></span>` : ""}
+    </div>
+    <div class="ft-cast-field">
+      <label>Spend mode</label>
+      <select name="mode">
+        <option value="move">+5 ft movement this turn</option>
+        <option value="reroll">Reroll a skill check (Stealth / Acrobatics / Streetwise / Intrigue)</option>
+        <option value="dodge">Ignore one reaction strike against you this turn</option>
+        ${routeLabel ? `<option value="route">${_ftEscape(routeLabel)} route — ${_ftEscape(routeBody)}</option>` : ""}
+      </select>
+    </div>
+    <div class="ft-cast-field">
+      <label>Context (narrative)</label>
+      <input type="text" name="ctx" placeholder="e.g., 'sprint over the gap' or 'reroll the lockpick'"/>
+    </div>
+  </div>`;
+
+  new Dialog({
+    title: `Shadow Courier — Spend Pace (${cur}/${max})`,
+    content,
+    buttons: {
+      apply: {
+        label: "Spend",
+        callback: async (html) => {
+          const mode = html.find("[name='mode']").val();
+          const ctx  = html.find("[name='ctx']").val()?.trim() || "";
+          await actor.update({ "system.resources.pace.current": Math.max(0, cur - 1) });
+          const labels = {
+            move:   { icon: "🏃", title: "+5 ft Movement",  body: "Add <b>+5 ft</b> to your movement this turn." },
+            reroll: { icon: "🎲", title: "Skill Reroll",     body: "Reroll a Stealth / Acrobatics / Streetwise / Intrigue check — take the new result." },
+            dodge:  { icon: "🛡", title: "Slip the Strike",  body: "Treat one triggered reaction strike against you this turn as if it didn't happen." },
+            route:  { icon: "✦", title: `${routeLabel} Route`, body: routeBody }
+          };
+          const lbl = labels[mode] ?? labels.move;
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#7a8fc8">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0b8e8">${lbl.icon} Pace Spent — ${lbl.title}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.82rem">${lbl.body}</p>
+              ${ctx ? `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85"><b>Context:</b> ${_ftEscape(ctx)}</p>` : ""}
+              <p style="margin:0;font-size:0.72rem;opacity:0.55">Pace now ${Math.max(0, cur - 1)} / ${max}.</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "apply"
   }).render(true);
 }
 
@@ -4503,6 +4599,8 @@ export async function dispatchFeatureAction(actor, item) {
     // Shadow Courier (Pace pool replaces legacy Access Dice — no spend/pool dialogs)
     case "shadow_courier_package":      return openShadowCourierPackage(actor);
     case "shadow_courier_crossing":     return openShadowCourierCrossing(actor);
+    case "shadow_courier_spend_access": return openShadowCourierSpendPace(actor);  // 2026-05-20: Pace spend (replaces legacy Access Dice)
+    case "shadow_courier_access_pool":  return openShadowCourierSpendPace(actor);  // legacy alias — same Pace dialog
     // Cosmic Linguist
     case "cosmic_linguist_authority":   return openCosmicLinguistAuthority(actor);
     case "cosmic_linguist_annotation":  return openCosmicLinguistAnnotation(actor);

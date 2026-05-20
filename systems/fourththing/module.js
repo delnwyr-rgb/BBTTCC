@@ -94,6 +94,7 @@ import {
   openShadowCourierPackage,
   openShadowCourierCrossing,
   openShadowCourierPassive,
+  openShadowCourierSpendPace,
   openCosmicLinguistAuthority,
   openCosmicLinguistAnnotation,
   openPactkeeperLeverage,
@@ -9404,7 +9405,8 @@ Hooks.once("init", function () {
         ftBulwarkInevAdjust:    FourthThingCharacterSheet._onFtBulwarkInevAdjust,
         // Shadow Courier Package management
         ftCourierPackageEdit:   FourthThingCharacterSheet._onFtCourierPackageEdit,
-        ftCourierPackageDeliver:FourthThingCharacterSheet._onFtCourierPackageDeliver
+        ftCourierPackageDeliver:FourthThingCharacterSheet._onFtCourierPackageDeliver,
+        ftCourierPaceSpend:     FourthThingCharacterSheet._onFtCourierPaceSpend
       },
       dragDrop: [{ dragSelector: "[data-item-id]", dropSelector: null }],
       form: { submitOnChange: true, closeOnSubmit: false }
@@ -11324,6 +11326,14 @@ Hooks.once("init", function () {
       dialog.render(true);
     }
 
+    // ── Shadow Courier — Spend Pace ─────────────────────────────────────────
+    // 2026-05-20. Sheet button next to the Pace chip; opens the spend dialog
+    // (canon: +5 ft move / skill reroll / ignore reaction strike / route-
+    // specific mode). Pool decrement + chat card emitted in the dialog.
+    static async _onFtCourierPaceSpend(event, target) {
+      return openShadowCourierSpendPace(this.actor);
+    }
+
     // ── Shadow Courier — Deliver Package ────────────────────────────────────
     // Refills Pace, clears Package, and posts a chat card with route-specific
     // delivery effects. Effects that touch on-actor state (Black Stair Access
@@ -11469,6 +11479,7 @@ Hooks.once("init", function () {
         ftBulwarkInevAdjust:   FourthThingCharacterSheet._onFtBulwarkInevAdjust,
         ftCourierPackageEdit:  FourthThingCharacterSheet._onFtCourierPackageEdit,
         ftCourierPackageDeliver: FourthThingCharacterSheet._onFtCourierPackageDeliver,
+        ftCourierPaceSpend:    FourthThingCharacterSheet._onFtCourierPaceSpend,
         // Class action dispatcher — drives Bulwark Spend Frame / Ruin /
         // Stance dialogs (and all other discipline-specific spend dialogs).
         // Type-agnostic: reads target.dataset.handler + calls openX(actor).

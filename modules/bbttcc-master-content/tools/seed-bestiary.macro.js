@@ -88,7 +88,7 @@
           package:     { type: "", id: "", carried: false },
           burn:        { current: 0, max: 8 },
           aura:        { state: "none" },
-          accessDice:  { current: 0, max: 3 },
+          // accessDice removed 2026-05-20 — replaced by `pace` (Shadow Courier canon)
           surge:       { value: 0, max: 10, sceneResetAt: null },
           dreamResonance: { active: false, insightUsed: false, hexSephirah: "" },
           forgeCharge: { relicUsed: false, sparksRepaired: 0 }

@@ -415,8 +415,35 @@ function stampCompendiumSource(obj, uuid) {
   foundry.utils.setProperty(obj, "flags.core.sourceId", uuid);
 }
 
-async function collectLevelOneGrants(topDoc, principleSource) {
+// 2026-05-20 — Route-aware filter for Shadow Courier ItemGrants. The SC
+// class item ships a level-1 ItemGrant that lists ALL three route L1
+// abilities (Wayfarer / Black Stair / Last Mile). Without filtering, every
+// new SC character got Black Stair L1 + Last Mile L1 + Wayfarer L1 stamped
+// regardless of doctrine pick — see playtest screenshot 2026-05-20. The
+// fix is code-side: when processing the class doc, drop any granted item
+// whose name starts with a different route's prefix than the picked
+// subclass identifier.
+//
+// `pickedSubclassUuid` arrives as the doctrine compendium UUID; we map it
+// to the route prefix that should be allowed through.
+function _ftRouteAllowedForSubclass(subclassUuid) {
+  const sId = String(subclassUuid || "");
+  if (/wayfarer-tongue/.test(sId)) return "Wayfarer";
+  if (/black-stair/.test(sId))     return "Black Stair";
+  if (/last-mile/.test(sId))       return "Last Mile";
+  return null;  // not a Shadow Courier path — no filtering
+}
+
+const _SC_ROUTE_PREFIXES = ["Wayfarer", "Black Stair", "Last Mile"];
+
+function _ftIsRouteSpecificItem(itemName) {
+  const n = String(itemName || "");
+  return _SC_ROUTE_PREFIXES.some(p => n.startsWith(p + " "));  // "Black Stair L1: …"
+}
+
+async function collectLevelOneGrants(topDoc, principleSource, opts = {}) {
   if (!topDoc) return [];
+  const allowedRoute = opts.allowedRoute ?? null;
   const out = [];
   const top = topDoc.toObject();
   foundry.utils.setProperty(top, "flags.fourththing.principleSource", principleSource);
@@ -434,6 +461,13 @@ async function collectLevelOneGrants(topDoc, principleSource) {
         const granted = await fromUuid(entry.uuid);
         if (!granted) continue;
         const obj = granted.toObject();
+        // 2026-05-20 — Shadow Courier route filter. If the caller passed an
+        // allowedRoute and this granted item is route-specific (name starts
+        // with "Wayfarer "/"Black Stair "/"Last Mile "), drop entries that
+        // don't match the picked route. Non-route items pass through.
+        if (allowedRoute && _ftIsRouteSpecificItem(granted.name)) {
+          if (!String(granted.name).startsWith(allowedRoute + " ")) continue;
+        }
         foundry.utils.setProperty(obj, "flags.fourththing.principleSource", principleSource);
         stampCompendiumSource(obj, granted.uuid ?? entry.uuid);
         out.push(obj);
@@ -473,14 +507,19 @@ async function importClassAncestrySubclass(actor, opts) {
       toImport.push(...await collectLevelOneGrants(heritageDoc, "ancestry"));
     } else warn("Missing heritage doc for uuid", heritageUuid);
   }
+  // 2026-05-20 — Compute Shadow Courier allowed-route ONCE up front so both
+  // the class and subclass grant passes can filter out cross-route items.
+  // For non-SC characters this is null and the filter no-ops.
+  const allowedRoute = _ftRouteAllowedForSubclass(subclassUuid);
+
   if (classUuid) {
     classDoc = await importByUUID(classUuid);
-    if (classDoc) toImport.push(...await collectLevelOneGrants(classDoc, "class"));
+    if (classDoc) toImport.push(...await collectLevelOneGrants(classDoc, "class", { allowedRoute }));
     else warn("Missing class doc for uuid", classUuid);
   }
   if (subclassUuid) {
     subclassDoc = await importByUUID(subclassUuid);
-    if (subclassDoc) toImport.push(...await collectLevelOneGrants(subclassDoc, "subclass"));
+    if (subclassDoc) toImport.push(...await collectLevelOneGrants(subclassDoc, "subclass", { allowedRoute }));
     else warn("Missing subclass doc for uuid", subclassUuid);
   }
 

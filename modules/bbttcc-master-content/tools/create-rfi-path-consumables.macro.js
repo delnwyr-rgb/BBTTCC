@@ -123,7 +123,7 @@ const CONSUMABLES = [
     lore: "<p>A laminated chit signed by no one in particular. While it's on you, the next threshold opens — and the courier's wallet fills back up with a carry's worth of breath.</p>",
     consume: {
       effects: [
-        { kind: "track", track: "accessDice", op: "add", delta: 1 },
+        { kind: "track", track: "pace",       op: "add", delta: 1 },
         { kind: "track", track: "stress",     op: "add", delta: 1 }
       ],
       decrement: true
@@ -148,7 +148,7 @@ const CONSUMABLES = [
     lore: "<p>A black-wax seal warmed in the palm and pressed to the tongue. The route opens — three crossings without trace, the courier's pack heavier with permission.</p>",
     consume: {
       effects: [
-        { kind: "track", track: "accessDice", op: "add",      delta: 2 },
+        { kind: "track", track: "pace",       op: "add",      delta: 2 },
         { kind: "track", track: "clarity",    op: "setMax" },
         { kind: "track", track: "noise",      op: "subtract", delta: 1 }
       ],
