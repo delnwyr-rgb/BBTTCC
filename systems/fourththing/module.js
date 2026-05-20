@@ -1217,6 +1217,45 @@ Hooks.on("bbttcc:rig:damaged", ({ rig, amount } = {}) => {
   try { ftPlayCombatVfx(rig, "impact"); } catch (e) { console.warn("[fourththing] impact VFX", e); }
 });
 
+// 2026-05-19 — Crew bleed-through rule. Every time a rig takes damage,
+// each boarded steward takes floor(damage / 2) untyped integrity damage.
+// Models concussive shock through the rig's armor. Untyped so crew
+// resist/immune/vuln tables are bypassed — same precedent as the
+// destruction cascade. Runs IN ADDITION to the destruction cascade on
+// the killing blow (rig destruction adds tier×2 ejection damage on top).
+// GM-only: avoids permission churn on player clients that don't own
+// crew, and prevents duplicate chat cards on multi-client tables.
+Hooks.on("bbttcc:rig:damaged", async ({ rig, amount } = {}) => {
+  if (!rig || !(amount > 0)) return;
+  if (!game.user?.isGM) return;
+  const bleed = Math.floor(Number(amount) / 2);
+  if (bleed <= 0) return;
+  const slots = rig.system?.crew?.slots ?? [];
+  const crewIds = new Set(slots.filter(s => s?.actorId).map(s => s.actorId));
+  if (!crewIds.size) return;
+  const crew = [...crewIds].map(id => game.actors?.get(id)).filter(Boolean);
+  if (!crew.length) return;
+  const summaries = [];
+  for (const member of crew) {
+    try {
+      const desc = await game.fourththing.rolls._applyDamageToActor(member, bleed, {
+        op: "damage", track: "integrity", damageType: "", damageFlavor: ""
+      });
+      if (desc) summaries.push(desc);
+    } catch (e) {
+      console.warn(`[fourththing] crew bleed-through: ${member.name}`, e);
+    }
+  }
+  if (!summaries.length) return;
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: rig }),
+    content: `<div class="fourththing-roll">
+      <div class="ft-roll-header"><span class="ft-roll-name" style="color:#eb8757">⚙ Crew shock in ${rig.name} — ${bleed} dmg each (½ of ${amount})</span></div>
+      <ul style="margin:0.25rem 0;padding-left:1.2rem;font-size:0.78rem">${summaries.map(s => `<li>${s}</li>`).join("")}</ul>
+    </div>`
+  });
+});
+
 Hooks.on("bbttcc:rig:destroyed", ({ rig } = {}) => {
   if (!rig) return;
   try { ftPlayCombatVfx(rig, "explosion"); } catch (e) { console.warn("[fourththing] explosion VFX", e); }
