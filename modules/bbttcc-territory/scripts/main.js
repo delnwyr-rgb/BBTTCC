@@ -2717,6 +2717,16 @@ function ensureToolbar(){
     row.appendChild(mk("campaign-overview", "list", "Overview"));
   }
 
+  // 2026-05-19 — Wire up drag + collapse via the shared HUD helper from
+  // systems/fourththing. The existing reset-pos button (Re-center) stays
+  // in place; skipReset:true so we don't double up.
+  try {
+    const mkDrag = globalThis._ftMakeHudDraggable;
+    if (typeof mkDrag === "function") {
+      mkDrag(el, { storageKey: "bbttcc-toolbar", collapsedLabel: "BBTTCC", skipReset: true });
+    }
+  } catch (e) { console.warn("[bbttcc-territory] toolbar drag wire-up failed", e); }
+
   return el;
 }
 
@@ -2751,6 +2761,12 @@ async function onAction(action){
       el.style.bottom = "";
       el.style.transform = "";
     }
+    // 2026-05-19 — Also wipe the saved drag position. Without this the
+    // next render re-applies the stored coordinates and re-center is a no-op.
+    try {
+      const uid = game?.user?.id || "anon";
+      localStorage.removeItem(`ft-hud-pos:${uid}:bbttcc-toolbar`);
+    } catch (_) {}
     return ui.notifications?.info?.("Control bar re-centered.");
   }
 

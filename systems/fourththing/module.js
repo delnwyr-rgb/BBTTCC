@@ -16247,6 +16247,136 @@ Hooks.on("renderTokenHUD", (hud, html, data) => {
   }
 });
 
+// ─── HUD ergonomics: drag + collapse + position persistence ──────────────
+// 2026-05-19 — Single helper applied to every HUD so they can be dragged,
+// collapsed to a chip, and have their position remembered per-user via
+// localStorage. Exposed on globalThis so other modules (notably the
+// territory toolbar) can wire themselves up with one call.
+//
+// Idempotent design: call after every innerHTML re-render. Old ctrl bar
+// is removed and re-appended each invocation; drag/state listeners are
+// wired once-per-element (via dataset.ftHudInit guard).
+function _ftMakeHudDraggable(el, opts = {}) {
+  if (!el) return;
+  const storageKey   = opts.storageKey   ?? "anon";
+  const collapsedLabel = opts.collapsedLabel ?? "•••";
+  const skipReset    = !!opts.skipReset;
+
+  const STORAGE = `ft-hud-pos:${(game?.user?.id) || "anon"}:${storageKey}`;
+  const load = () => { try { return JSON.parse(localStorage.getItem(STORAGE) || "null") || {}; } catch { return {}; } };
+  const save = (data) => { try { localStorage.setItem(STORAGE, JSON.stringify(data)); } catch (_) {} };
+
+  // 1) Build (or rebuild) the floating ctrl bar at the top-right of the HUD.
+  el.querySelectorAll(":scope > .ft-hud-ctrl").forEach(n => n.remove());
+  const ctrl = document.createElement("div");
+  ctrl.className = "ft-hud-ctrl";
+  ctrl.style.cssText = "position:absolute;top:1px;right:2px;display:flex;gap:2px;z-index:5;pointer-events:auto;";
+  const mkBtn = (label, title, fn) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = label;
+    b.title = title;
+    b.style.cssText = "padding:0 5px;font-size:0.72rem;line-height:1.2;height:15px;background:rgba(0,0,0,0.4);color:#ffd28a;border:1px solid #666;border-radius:3px;cursor:pointer;";
+    b.addEventListener("click", (e) => { e.stopPropagation(); e.preventDefault(); fn(e); });
+    b.addEventListener("pointerdown", (e) => e.stopPropagation()); // don't trigger drag
+    return b;
+  };
+
+  const isCollapsed = () => el.classList.contains("ft-hud-collapsed");
+  const setCollapsed = (c) => {
+    el.classList.toggle("ft-hud-collapsed", c);
+    let chip = el.querySelector(":scope > .ft-hud-chip");
+    // Hide every direct child except the chip + ctrl bar when collapsed.
+    Array.from(el.children).forEach(child => {
+      if (child === ctrl || child.classList?.contains("ft-hud-chip")) return;
+      child.style.display = c ? "none" : "";
+    });
+    if (c) {
+      if (!chip) {
+        chip = document.createElement("span");
+        chip.className = "ft-hud-chip";
+        chip.textContent = collapsedLabel;
+        chip.style.cssText = "font-size:0.78rem;color:#ffd28a;cursor:pointer;padding:1px 24px 1px 8px;display:inline-block;";
+        chip.addEventListener("click", () => setCollapsed(false));
+        el.insertBefore(chip, ctrl);
+      }
+    } else {
+      chip?.remove();
+    }
+    save({ ...load(), collapsed: c });
+    // Refresh ctrl-bar's collapse-button label.
+    const btnCollapse = ctrl.querySelector("[data-act=collapse]");
+    if (btnCollapse) { btnCollapse.textContent = c ? "+" : "–"; btnCollapse.title = c ? "Expand" : "Collapse"; }
+  };
+
+  const btnCollapse = mkBtn(isCollapsed() ? "+" : "–", isCollapsed() ? "Expand" : "Collapse", () => setCollapsed(!isCollapsed()));
+  btnCollapse.dataset.act = "collapse";
+  ctrl.appendChild(btnCollapse);
+  if (!skipReset) {
+    ctrl.appendChild(mkBtn("⟲", "Reset position", () => {
+      try { localStorage.removeItem(STORAGE); } catch (_) {}
+      el.style.left = "";
+      el.style.top = "";
+      el.style.right = "";
+      el.style.bottom = "";
+      el.style.transform = "";
+      if (isCollapsed()) setCollapsed(false);
+      ui.notifications?.info?.("HUD position reset.");
+    }));
+  }
+  el.appendChild(ctrl);
+
+  // 2) Re-apply saved position on every call. The HUDs' own default
+  //    positioners (e.g. _ftPositionCrewHud) run before us, so we need
+  //    to overwrite them with the user's saved drag position each render.
+  const saved = load();
+  if (saved.left != null && saved.top != null) {
+    el.style.left = saved.left + "px";
+    el.style.top  = saved.top  + "px";
+    el.style.right = "auto";
+    el.style.bottom = "auto";
+    el.style.transform = "none";
+  }
+
+  // 3) One-time wire-up: collapse-state restore + drag listeners.
+  if (el.dataset.ftHudInit !== "1") {
+    el.dataset.ftHudInit = "1";
+    el.style.position = el.style.position || "fixed";
+    el.style.paddingRight = "32px"; // room for ctrl bar
+    if (saved.collapsed) setCollapsed(true);
+
+    let dragging = false, sx = 0, sy = 0, ox = 0, oy = 0;
+    el.addEventListener("pointerdown", (e) => {
+      if (e.target.closest("button, a, input, select, textarea, .ft-hud-ctrl, .ft-hud-chip")) return;
+      const r = el.getBoundingClientRect();
+      dragging = true;
+      sx = e.clientX; sy = e.clientY; ox = r.left; oy = r.top;
+      el.setPointerCapture?.(e.pointerId);
+      el.style.cursor = "grabbing";
+    });
+    el.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const left = Math.max(0, Math.min(window.innerWidth - 40,  ox + e.clientX - sx));
+      const top  = Math.max(0, Math.min(window.innerHeight - 20, oy + e.clientY - sy));
+      el.style.left = left + "px";
+      el.style.top  = top  + "px";
+      el.style.right = "auto"; el.style.bottom = "auto"; el.style.transform = "none";
+    });
+    const endDrag = (e) => {
+      if (!dragging) return;
+      dragging = false;
+      el.releasePointerCapture?.(e.pointerId);
+      el.style.cursor = "";
+      const r = el.getBoundingClientRect();
+      save({ ...load(), left: Math.round(r.left), top: Math.round(r.top) });
+    };
+    el.addEventListener("pointerup",     endDrag);
+    el.addEventListener("pointercancel", endDrag);
+  }
+}
+// Expose for cross-module use (territory toolbar, future HUDs).
+globalThis._ftMakeHudDraggable = _ftMakeHudDraggable;
+
 // ─── Floating Crew Controls HUD ───────────────────────────────────────────
 // 2026-05-18 — When a user's controlled token is boarded on a rig, mirror
 // the .ft-boarded-banner contents onto a persistent on-canvas panel so
@@ -16442,6 +16572,7 @@ function _ftRenderCrewHud() {
       _ftBindCrewControls(__ftCrewHudEl, actor, ctx);
       __ftCrewHudActiveActorId = actor.id;
       _ftPositionCrewHud();
+      _ftMakeHudDraggable(__ftCrewHudEl, { storageKey: "crew-hud", collapsedLabel: "⚙ Crew" });
     } catch (e) {
       console.warn("[fourththing] Crew HUD render failed", e);
     }
@@ -16568,6 +16699,7 @@ function _ftRenderPassengerManifest() {
           _ftRenderPassengerManifest();
         });
       });
+      _ftMakeHudDraggable(__ftManifestEl, { storageKey: "manifest", collapsedLabel: "🚪 Manifest" });
     } catch (e) {
       console.warn("[fourththing] Passenger Manifest render failed", e);
     }
@@ -17571,6 +17703,7 @@ function _ftRenderRaidHud() {
           __ftRaidHudEl = null;
         }
       }, { once: true });
+      _ftMakeHudDraggable(__ftRaidHudEl, { storageKey: "raid-hud", collapsedLabel: "🎯 Raid" });
     } catch (e) {
       console.warn("[fourththing] Raid HUD render failed", e);
     }
