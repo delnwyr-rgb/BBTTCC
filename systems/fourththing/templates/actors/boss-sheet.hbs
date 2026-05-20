@@ -163,6 +163,62 @@
 
     {{!-- COMBAT TAB --}}
     <div class="tab combat{{#if (eq activeTab "combat")}} active{{/if}}" data-tab="combat">
+
+      {{!-- Action Economy canon §6.2 + §6.3 (Phase C 2026-05-19) — per-round combat resources --}}
+      <section class="ft-boss-combat-resources bbttcc-panel">
+        <div class="ft-block-title">
+          Round Resources <span class="ft-block-hint">(refill on round advance or via Refill below)</span>
+          <button type="button" class="ft-action-btn ft-block-action" data-action="ftBossLegendaryReset"
+                  data-tooltip="Manual refill — Manifestation Slots + Legendary Actions to max.">↻ Refill</button>
+        </div>
+        <div class="ft-boss-resource-row" style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;padding:0.4rem 0.6rem">
+          <div class="ft-boss-resource-tile" data-tooltip="Manifestation Slots — Tier-many casts per round. T1=1, T2=2, T3=3, T4=4."
+               style="display:flex;gap:0.4rem;align-items:center;padding:0.3rem 0.55rem;border:1px solid #6a4aa0;border-radius:6px;background:#1e1530">
+            <span style="font-size:1.1rem">✦</span>
+            <span style="font-size:0.78rem;opacity:0.9">Mani Slots</span>
+            <b style="color:#dac8ff">{{bossManifestationSlots.current}}/{{bossManifestationSlots.max}}</b>
+          </div>
+          <div class="ft-boss-resource-tile" data-tooltip="Legendary Actions — T3=1, T4=2 per round, spent between PC turns."
+               style="display:flex;gap:0.4rem;align-items:center;padding:0.3rem 0.55rem;border:1px solid #c8a0ff;border-radius:6px;background:#2a1a3e">
+            <span style="font-size:1.1rem">⚜</span>
+            <span style="font-size:0.78rem;opacity:0.9">Legendary</span>
+            {{#if bossLegendaryActions.enabled}}
+              <b style="color:#e8d8ff">{{bossLegendaryActions.current}}/{{bossLegendaryActions.max}}</b>
+              <button type="button" class="ft-mini-btn" data-action="ftBossLegendaryOpen"
+                      data-tooltip="Spend a Legendary Action — opens the picker with built-in + authored entries."
+                      {{#unless bossLegendaryActions.current}}disabled{{/unless}}>Spend</button>
+            {{else}}
+              <em style="opacity:0.7;font-size:0.78rem">T3+ only (current: T{{bossLegendaryActions.tier}})</em>
+            {{/if}}
+          </div>
+        </div>
+      </section>
+
+      {{#if bossLegendaryActions.enabled}}
+      <section class="ft-boss-legendary-menu bbttcc-panel">
+        <div class="ft-block-title">
+          Legendary Menu <span class="ft-block-hint">(authored extras — built-in Move/Strike/Cast always appear in the picker)</span>
+          <button type="button" class="ft-action-btn ft-block-action" data-action="ftBossLegendaryAuthor"
+                  data-tooltip="Add an authored Legendary entry (e.g. 'Aura Pulse', 'Summon Mook').">+ Add Entry</button>
+        </div>
+        {{#if bossLegendaryActions.menu.length}}
+        <div class="ft-rig-item-list">
+          {{#each bossLegendaryActions.menu as |entry idx|}}
+          <div class="ft-rig-item" style="display:flex;gap:0.5rem;align-items:center">
+            <span style="font-size:1.1rem">{{entry.icon}}</span>
+            <span class="ft-rig-item-name" style="min-width:8rem"><b>{{entry.label}}</b></span>
+            <span style="font-size:0.75rem;opacity:0.8;flex:1">{{entry.description}}</span>
+            <button type="button" class="ft-mini-btn" data-action="ftBossLegendaryRemove" data-idx="{{idx}}"
+                    data-tooltip="Remove entry">×</button>
+          </div>
+          {{/each}}
+        </div>
+        {{else}}
+        <div class="ft-rig-item-empty">No authored Legendary entries — built-in Move / Strike / Cast still appear in the picker.</div>
+        {{/if}}
+      </section>
+      {{/if}}
+
       <section class="ft-boss-defenses">
         <div class="ft-block-title">Defenses <span class="ft-block-hint">(click Defense to cycle none → resist → immune; Vuln toggles independently)</span></div>
         <table class="ft-defense-table">

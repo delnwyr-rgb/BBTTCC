@@ -870,7 +870,7 @@ async function ftRigWeaponFire(steward, weapon) {
   return ftOpenEngageDialog(steward, weapon);
 }
 
-function ftOpenEngageDialog(actor, item) {
+function ftOpenEngageDialog(actor, item, options = {}) {
   if (!actor || !item) return;
 
   // B11.C rig-weapon detection. When item is a rig-weapon owned by a rig,
@@ -881,6 +881,25 @@ function ftOpenEngageDialog(actor, item) {
   const rigSubtype = item?.flags?.fourththing?.rigGear?.subtype;
   const isRigWeapon = rigSubtype === "rig-weapon" && item?.parent?.type === "rig";
   const rig = isRigWeapon ? item.parent : null;
+
+  // Action Economy canon §2 + §4 (Phase A 2026-05-19). Strikes cost 1 Action
+  // for both personal and rig-weapon paths. The per-gunner-per-weapon flag
+  // (`rigWeaponsFiredThisRound[weaponId]`) is the secondary guard that
+  // prevents a single gunner from double-tapping the same weapon, which is
+  // how the canon rule "shots per weapon per round = n gunners" falls out
+  // naturally: each gunner spends their Action to fire ONE weapon, and
+  // multi-gunner crews can coordinate to put multiple shots on the same
+  // weapon. AoO/reaction callers pass `{ skipActionGate:true }` because
+  // they've already burned `reactionUsed` before invoking the engage flow.
+  // Boss actors with no `system.actions` slot are silently exempt; Phase B
+  // introduces their per-round Manifestation Slots + Legendary Actions.
+  if (!options.skipActionGate) {
+    const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
+    if (sysActs && sysActs.actionUsed) {
+      ui.notifications?.warn(`${actor.name}: action already used this turn.`);
+      return;
+    }
+  }
 
   if (rig && rig.system?.identity?.state === "destroyed") {
     ui.notifications?.warn(`${rig.name} is destroyed — its weapons can't fire.`);
@@ -995,6 +1014,20 @@ function ftOpenEngageDialog(actor, item) {
           if (applyCost && costAssessment) {
             const applied = await ftApplyManifestationCost(actor, costAssessment);
             if (applied.applied) ui.notifications?.info(`${actor.name}: ${applied.summary}.`);
+          }
+
+          // Action Economy canon §2 + §4 (Phase A 2026-05-19). Action debit
+          // for both personal and rig-weapon strikes: burn AFTER the roll
+          // resolves so dialog cancels don't consume the slot. Skipped for
+          // AoO/reaction (caller already burned reactionUsed) and for actors
+          // without a `system.actions` slot (bosses pre-Phase B). Rig-weapon
+          // path additionally maintains its per-gunner-per-weapon flag below.
+          if (!options.skipActionGate && result) {
+            const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
+            if (sysActs && !sysActs.actionUsed) {
+              try { await actor.update({ "system.actions.actionUsed": true }); }
+              catch (e) { console.warn("[fourththing] action-economy debit failed", e); }
+            }
           }
 
           // B11.C: burn the per-round gunner gate AFTER the roll resolves so
@@ -2698,15 +2731,40 @@ async function castManifestation(actor, item, {
   }
   if (reachBy <= 0) reachPath = "";
 
-  // Phase C — activation pool gate. If the manifestation declares
-  // `manifestation.activation.consumePool`, refuse the cast when the pool's
-  // already used. Marked spent after the cast resolves successfully.
+  // Activation pool gate. Original (Phase C 2026-05-XX) honored
+  // `manifestation.activation.consumePool` on the item. Extended by Action
+  // Economy canon Phase B (2026-05-19): bosses now spend per-round
+  // Manifestation Slots (canon §6.2) instead of system.actions; elites get
+  // a free bonus manifestation per round (canon §5).
   const POOL_KEY_FROM_TYPE = { action: "actionUsed", bonus: "bonusUsed", reaction: "reactionUsed" };
-  if (item && mf?.activation?.consumePool) {
+  const isElite = actor?.flags?.["bbttcc-auto-link"]?.eliteTier === true;
+  const bonusManiUsed = actor?.flags?.fourththing?.combat?.bonusManifestationUsedThisRound === true;
+  let _useEliteBonusMani = false;
+
+  if (actor?.type === "boss") {
+    // Canon §6.2 — Tier-many Manifestation Slots per round. Default-init
+    // when the flag is absent (first cast of an unseeded boss).
+    const slotsCur = actor?.flags?.fourththing?.bossManifestationSlots;
+    const slotsMax = Math.max(1, Math.min(4, Number(slotsCur?.max) || _ftCasterTier(actor)));
+    const current  = Number.isFinite(Number(slotsCur?.current))
+      ? Math.max(0, Number(slotsCur.current))
+      : slotsMax;
+    if (current <= 0) {
+      ui.notifications?.warn(`${actor.name}: Manifestation Slots exhausted (${slotsMax}/round; refills on round advance).`);
+      return false;
+    }
+  } else if (item && mf?.activation?.consumePool) {
     const poolKey = POOL_KEY_FROM_TYPE[mf.activation.type];
     if (poolKey && rawSys?.actions?.[poolKey]) {
-      ui.notifications?.warn(`${actor.name}: ${mf.activation.type} already used this turn.`);
-      return false;
+      // Canon §5 — Elite bonus manifestation. If an Action-type cast is
+      // blocked because actionUsed is already burned, an Elite may spend
+      // their once-per-round bonus mani instead.
+      if (poolKey === "actionUsed" && isElite && !bonusManiUsed) {
+        _useEliteBonusMani = true;
+      } else {
+        ui.notifications?.warn(`${actor.name}: ${mf.activation.type} already used this turn.`);
+        return false;
+      }
     }
   }
 
@@ -2806,9 +2864,30 @@ async function castManifestation(actor, item, {
   // the manifestation declares resolution.shape="attack" with a target.
   const castSuccess = result?.success !== false;
   if (item && castSuccess) {
-    if (mf?.activation?.consumePool) {
+    // Phase B 2026-05-19 — Action economy debit (boss slots / elite bonus
+    // mani / standard pool). Mirrors the pre-gate above.
+    if (actor?.type === "boss") {
+      const slotsCur = actor?.flags?.fourththing?.bossManifestationSlots;
+      const slotsMax = Math.max(1, Math.min(4, Number(slotsCur?.max) || _ftCasterTier(actor)));
+      const current  = Number.isFinite(Number(slotsCur?.current))
+        ? Math.max(0, Number(slotsCur.current))
+        : slotsMax;
+      try {
+        await actor.update({
+          "flags.fourththing.bossManifestationSlots": { max: slotsMax, current: Math.max(0, current - 1) }
+        });
+      } catch (e) { console.warn("[fourththing] boss manifestation-slot debit failed", e); }
+    } else if (mf?.activation?.consumePool) {
       const poolKey = POOL_KEY_FROM_TYPE[mf.activation.type];
-      if (poolKey) await actor.update({ [`system.actions.${poolKey}`]: true });
+      if (poolKey) {
+        if (_useEliteBonusMani) {
+          // Canon §5 — burn the elite's bonus mani instead of the action slot.
+          try { await actor.update({ "flags.fourththing.combat.bonusManifestationUsedThisRound": true }); }
+          catch (e) { console.warn("[fourththing] elite bonus-mani debit failed", e); }
+        } else {
+          await actor.update({ [`system.actions.${poolKey}`]: true });
+        }
+      }
     }
 
     // Resonance Channel debit + Strain bump (CL only — no-op when total=0).
@@ -12755,7 +12834,12 @@ Hooks.once("init", function () {
         ftBossManifestRemove:  FourthThingBossSheet._onFtBossManifestRemove,
         ftBossBehaviorPhaseSet: FourthThingBossSheet._onFtBossBehaviorPhaseSet,
         // B13.C — 2026-05-17
-        ftBossDuplicate:       FourthThingBossSheet._onFtBossDuplicate
+        ftBossDuplicate:       FourthThingBossSheet._onFtBossDuplicate,
+        // Action Economy canon §6.3 (Phase C 2026-05-19)
+        ftBossLegendaryOpen:   FourthThingBossSheet._onFtBossLegendaryOpen,
+        ftBossLegendaryAuthor: FourthThingBossSheet._onFtBossLegendaryAuthor,
+        ftBossLegendaryRemove: FourthThingBossSheet._onFtBossLegendaryRemove,
+        ftBossLegendaryReset:  FourthThingBossSheet._onFtBossLegendaryReset
       },
       dragDrop: [{ dragSelector: "[data-item-id]", dropSelector: null }],
       form:     { submitOnChange: true, closeOnSubmit: false }
@@ -13054,6 +13138,25 @@ Hooks.once("init", function () {
         defenseRows,
         manifestations,
         libraryItems,
+        // Action Economy canon §6.2 + §6.3 (Phase C 2026-05-19). Combat
+        // resource counters surfaced on the Combat tab. Lazy-init from
+        // current tier when flags are missing so a fresh boss shows
+        // full slots without waiting for the next round advance.
+        bossManifestationSlots: (() => {
+          const raw = actor?.flags?.fourththing?.bossManifestationSlots ?? {};
+          const tier = _ftCasterTier(actor);
+          const max = Math.max(1, Math.min(4, Number(raw.max) || tier));
+          const cur = Number.isFinite(Number(raw.current)) ? Math.max(0, Number(raw.current)) : max;
+          return { max, current: cur };
+        })(),
+        bossLegendaryActions: (() => {
+          const raw = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
+          const tier = _ftCasterTier(actor);
+          const max = _ftBossLegendaryMax(tier);
+          const cur = Number.isFinite(Number(raw.current)) ? Math.max(0, Math.min(max, Number(raw.current))) : max;
+          const menu = Array.isArray(raw.menu) ? raw.menu : [];
+          return { max, current: cur, menu, tier, enabled: max > 0 };
+        })(),
         doctrine,
         maneuverKeys,
         maneuverPills,
@@ -13963,6 +14066,164 @@ Hooks.once("init", function () {
       return this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
     }
 
+    // Action Economy canon §6.3 (Phase C 2026-05-19). Opens the Legendary
+    // Action picker — three built-in entries (Move / Strike / Cast a
+    // Manifestation) plus any authored menu entries on this boss. Each
+    // click debits 1 legendary slot and emits a chat card describing the
+    // action. Downstream resolution (the strike roll, the cast, the
+    // narrative move) is GM-driven from the card.
+    static async _onFtBossLegendaryOpen(event, _target) {
+      event?.preventDefault?.();
+      const actor = this.actor;
+      const tier  = _ftCasterTier(actor);
+      const max   = _ftBossLegendaryMax(tier);
+      if (max <= 0) {
+        return ui.notifications?.warn?.(`${actor.name} is T${tier} — Legendary Actions are T3+ only.`);
+      }
+      const flag = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
+      const current = Number.isFinite(Number(flag.current))
+        ? Math.max(0, Math.min(max, Number(flag.current)))
+        : max;
+      if (current <= 0) {
+        return ui.notifications?.warn?.(`${actor.name}: no Legendary Actions remaining this round.`);
+      }
+      const menu = Array.isArray(flag.menu) ? flag.menu : [];
+
+      const builtin = [
+        { id: "move",   icon: "🚶", label: "Move",                description: "Up to half speed." },
+        { id: "strike", icon: "⚔",  label: "Strike",              description: "1 weapon attack. Does NOT consume the boss's normal Action." },
+        { id: "cast",   icon: "✦",  label: "Cast a Manifestation", description: "Cast as legendary — counts against Manifestation Slots (§6.2)." }
+      ];
+      const all = [...builtin, ...menu];
+
+      const rows = all.map((e, i) => {
+        const isBuiltin = i < builtin.length;
+        const idx = isBuiltin ? -1 : (i - builtin.length);
+        return `<button type="button" class="ft-legend-pick" data-legend-id="${ftEscapeHtml(String(e.id || ""))}" data-legend-idx="${idx}" data-legend-builtin="${isBuiltin ? "1" : "0"}" style="display:block;width:100%;text-align:left;padding:0.45rem 0.6rem;margin:0.25rem 0;border:1px solid #888;border-radius:6px;background:#1a1a1a;color:#e0e0e0;cursor:pointer">
+          <span style="font-size:1.1rem">${ftEscapeHtml(e.icon || "⚜")}</span>
+          <b style="margin-left:0.4rem">${ftEscapeHtml(e.label || "(unnamed)")}</b>
+          ${e.description ? `<div style="font-size:0.75rem;opacity:0.85;margin-top:0.2rem">${ftEscapeHtml(e.description)}</div>` : ""}
+        </button>`;
+      }).join("");
+
+      const content = `
+        <div class="ft-cast-dialog ft-legendary-pick" style="display:flex;flex-direction:column;gap:0.3rem">
+          <div style="margin-bottom:0.4rem;font-size:0.85rem;opacity:0.9">
+            <b>${ftEscapeHtml(actor.name)}</b> — Legendary Actions <b>${current}/${max}</b> · T${tier}
+          </div>
+          <div class="ft-legend-list">${rows}</div>
+        </div>`;
+
+      const dialog = new Dialog({
+        title: `Legendary Action — ${actor.name}`,
+        content,
+        buttons: { cancel: { label: "Close" } },
+        default: "cancel",
+        render: (html) => {
+          const root = (html?.find ? html[0] : html);
+          (root?.querySelectorAll?.(".ft-legend-pick") ?? []).forEach(btn => {
+            btn.addEventListener("click", async () => {
+              if (btn.disabled) return;
+              btn.disabled = true;
+              const id = btn.dataset.legendId;
+              const isBuiltin = btn.dataset.legendBuiltin === "1";
+              const idx = isBuiltin ? -1 : Number(btn.dataset.legendIdx);
+              const live = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
+              const liveCur = Number.isFinite(Number(live.current)) ? Number(live.current) : max;
+              if (liveCur <= 0) {
+                ui.notifications?.warn?.(`${actor.name}: no Legendary Actions remaining.`);
+                return;
+              }
+              const liveMenu = Array.isArray(live.menu) ? live.menu : [];
+              await actor.update({
+                "flags.fourththing.bossLegendaryActions": {
+                  max,
+                  current: Math.max(0, liveCur - 1),
+                  menu: liveMenu
+                }
+              });
+              const entry = isBuiltin ? builtin.find(b => b.id === id) : liveMenu[idx];
+              await _ftPostBossLegendaryChat(actor, entry, { remaining: Math.max(0, liveCur - 1), max });
+              try { dialog.close(); } catch (_) { /* ignore */ }
+            });
+          });
+        }
+      }, { width: 460 }).render(true);
+    }
+
+    static async _onFtBossLegendaryAuthor(event, _target) {
+      event?.preventDefault?.();
+      const actor = this.actor;
+      const content = `
+        <form class="ft-cast-dialog" style="display:flex;flex-direction:column;gap:0.5rem">
+          <label style="display:flex;flex-direction:column;gap:0.2rem">
+            <span style="font-size:0.78rem">Label</span>
+            <input type="text" name="label" placeholder="e.g. Aura Pulse" style="background:#1a1a1a;color:#e0e0e0;border:1px solid #555;border-radius:4px;padding:0.3rem"/>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:0.2rem">
+            <span style="font-size:0.78rem">Icon (single emoji or symbol)</span>
+            <input type="text" name="icon" value="⚜" style="background:#1a1a1a;color:#e0e0e0;border:1px solid #555;border-radius:4px;padding:0.3rem;width:5rem"/>
+          </label>
+          <label style="display:flex;flex-direction:column;gap:0.2rem">
+            <span style="font-size:0.78rem">Description</span>
+            <textarea name="description" rows="4" placeholder="What happens when this legendary action fires — narrative + mechanics." style="background:#1a1a1a;color:#e0e0e0;border:1px solid #555;border-radius:4px;padding:0.3rem"></textarea>
+          </label>
+        </form>`;
+
+      new Dialog({
+        title: `Add Legendary Action — ${actor.name}`,
+        content,
+        buttons: {
+          add: {
+            label: "Add",
+            icon: "<i class='fas fa-plus'></i>",
+            callback: async (html) => {
+              const $h = html?.find ? html : $(html);
+              const label = String($h.find("[name=label]").val() || "").trim();
+              const icon  = String($h.find("[name=icon]").val()  || "⚜").trim();
+              const description = String($h.find("[name=description]").val() || "").trim();
+              if (!label) { ui.notifications?.warn?.("Label required."); return; }
+              const id = "auth_" + Math.random().toString(36).slice(2, 8);
+              const existing = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
+              const tier = _ftCasterTier(actor);
+              const max = _ftBossLegendaryMax(tier);
+              const current = Number.isFinite(Number(existing.current)) ? Number(existing.current) : max;
+              const menu = [...(Array.isArray(existing.menu) ? existing.menu : []), { id, icon, label, description }];
+              await actor.update({
+                "flags.fourththing.bossLegendaryActions": { max, current, menu }
+              });
+            }
+          },
+          cancel: { label: "Cancel" }
+        },
+        default: "add"
+      }, { width: 480 }).render(true);
+    }
+
+    static async _onFtBossLegendaryRemove(event, target) {
+      event?.preventDefault?.();
+      const idx = Number(target?.dataset?.idx);
+      if (!Number.isFinite(idx)) return;
+      const actor = this.actor;
+      const existing = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
+      const menu = (Array.isArray(existing.menu) ? [...existing.menu] : []);
+      if (idx < 0 || idx >= menu.length) return;
+      menu.splice(idx, 1);
+      const tier = _ftCasterTier(actor);
+      const max = _ftBossLegendaryMax(tier);
+      const current = Number.isFinite(Number(existing.current)) ? Number(existing.current) : max;
+      await actor.update({
+        "flags.fourththing.bossLegendaryActions": { max, current, menu }
+      });
+    }
+
+    static async _onFtBossLegendaryReset(event, _target) {
+      event?.preventDefault?.();
+      await _ftRefillBossLegendaryActions(this.actor);
+      await _ftRefillBossManifestationSlots(this.actor);
+      ui.notifications?.info?.(`${this.actor.name}: Legendary Actions + Manifestation Slots refilled.`);
+    }
+
     // B13.C — 2026-05-17. Opens the Boss Builder pre-filled with this
     // boss's current state so the GM can tweak before creating a new
     // actor. Doesn't modify the source boss.
@@ -14618,7 +14879,9 @@ Hooks.on(_chatHook, (message, html) => {
         await observer.update({ "system.actions.reactionUsed": true });
         const moverToken = mover.getActiveTokens?.()?.[0];
         if (moverToken) game.user.updateTokenTargets([moverToken.id]);
-        ftOpenEngageDialog(observer, item);
+        // skipActionGate: AoO debited reactionUsed above; the engage flow
+        // must not also debit actionUsed (Action Economy canon §3).
+        ftOpenEngageDialog(observer, item, { skipActionGate: true });
       } catch (err) {
         console.error("fourththing | AoO strike-button failed", err);
         btn.disabled = false;
@@ -16394,7 +16657,8 @@ async function _ftClearPerRoundCombatFlags(actor) {
                  c.rigWeaponFiredThisRound || c.rigWeaponsFiredThisRound ||
                  c.lastFiredRigId || c.lastFiredWeaponId ||
                  c.pilotActionUsedThisRound || c.engineerRepairedThisRound ||
-                 c.aimedShot || c.signalBonus || c.holdingOn;
+                 c.aimedShot || c.signalBonus || c.holdingOn ||
+                 c.bonusManifestationUsedThisRound;
   if (!hasAny) return;
   try {
     await actor.update({
@@ -16410,9 +16674,73 @@ async function _ftClearPerRoundCombatFlags(actor) {
       // 2026-05-19 — new crew-action flags
       "flags.fourththing.combat.-=aimedShot":                 null,
       "flags.fourththing.combat.-=signalBonus":               null,
-      "flags.fourththing.combat.-=holdingOn":                 null
+      "flags.fourththing.combat.-=holdingOn":                 null,
+      // Action Economy canon §5 — Elite bonus mani once-per-round flag.
+      "flags.fourththing.combat.-=bonusManifestationUsedThisRound": null
     });
   } catch (e) { console.warn("[fourththing] clear per-round combat flags failed", e); }
+}
+
+// Action Economy canon §6.2 (Phase B 2026-05-19). Refill a boss's
+// Manifestation Slots at round start. Tier-many casts per round
+// (T1=1...T4=4). Force-merge via setFlag — since `current` is the only
+// field that needs to update, we can safely write the whole object.
+async function _ftRefillBossManifestationSlots(actor) {
+  if (!actor || actor.type !== "boss") return;
+  const tier = _ftCasterTier(actor);
+  const max  = Math.max(1, Math.min(4, tier));
+  try {
+    await actor.update({
+      "flags.fourththing.bossManifestationSlots": { max, current: max }
+    });
+  } catch (e) { console.warn("[fourththing] boss manifestation-slot refill failed", e); }
+}
+
+// Action Economy canon §6.3 (Phase C 2026-05-19). Legendary Actions
+// per round derived from boss tier: T1/T2 = 0, T3 = 1, T4 = 2. Used
+// between PC turns; refilled on round start alongside Manifestation
+// Slots. Menu entries (authored per-boss) are preserved across refills;
+// only `current` is reset to `max`.
+function _ftBossLegendaryMax(tier) {
+  const t = Math.max(1, Math.min(4, Number(tier) || 1));
+  return t === 3 ? 1 : t === 4 ? 2 : 0;
+}
+
+async function _ftRefillBossLegendaryActions(actor) {
+  if (!actor || actor.type !== "boss") return;
+  const tier = _ftCasterTier(actor);
+  const max  = _ftBossLegendaryMax(tier);
+  const existing = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
+  const menu = Array.isArray(existing.menu) ? existing.menu : [];
+  try {
+    await actor.update({
+      "flags.fourththing.bossLegendaryActions": { max, current: max, menu }
+    });
+  } catch (e) { console.warn("[fourththing] boss legendary-action refill failed", e); }
+}
+
+// Phase C 2026-05-19 — Chat card emitter for a fired Legendary Action.
+// The picker dialog debits the slot and calls this; subsequent gameplay
+// (the actual strike/cast/move resolution) is GM-driven from here, since
+// each action's downstream effect varies per boss and authored entry.
+async function _ftPostBossLegendaryChat(actor, entry, { remaining, max }) {
+  const icon = entry?.icon || "⚜";
+  const label = entry?.label || "Legendary Action";
+  const description = entry?.description || "";
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:#c8a0ff">
+      <div class="ft-roll-header">
+        <span class="ft-roll-name" style="color:#c8a0ff">⚜ Legendary Action — ${ftEscapeHtml(actor.name)}</span>
+        <span class="ft-seph-pill" style="background:#3a2a4a;border-color:#7a5aa0;color:#dac8ff">${remaining}/${max} left</span>
+      </div>
+      <div style="margin-top:0.3rem;font-size:0.95rem">
+        <span style="font-size:1.1rem">${ftEscapeHtml(icon)}</span>
+        <b style="margin-left:0.3rem">${ftEscapeHtml(label)}</b>
+      </div>
+      ${description ? `<p style="margin:0.3rem 0 0;font-size:0.78rem;opacity:0.9">${ftEscapeHtml(description)}</p>` : ""}
+    </div>`
+  });
 }
 
 async function _ftClearRigPerRoundFlags(rig) {
@@ -16447,6 +16775,10 @@ async function _ftClearRigPerRoundFlags(rig) {
 
 // GM-side fan-out: clear per-round flags for every boarded steward on
 // every rig + the rigs themselves. Used by the raid round commit hook.
+// Action Economy canon §6.2 (Phase B 2026-05-19) — additionally refills
+// boss Manifestation Slots for every boss in the world. Bosses don't
+// need to be in a combat tracker to need a refill (raid scenes drive
+// most boss combat).
 async function _ftClearAllBoardedPerRoundFlags() {
   if (!game.user?.isGM) return;
   for (const rig of (game.actors ?? [])) {
@@ -16461,6 +16793,12 @@ async function _ftClearAllBoardedPerRoundFlags() {
     }
     if (anyBoarded) await _ftClearRigPerRoundFlags(rig);
   }
+  for (const a of (game.actors ?? [])) {
+    if (a.type === "boss") {
+      await _ftRefillBossManifestationSlots(a);
+      await _ftRefillBossLegendaryActions(a);
+    }
+  }
 }
 
 // Listen for the raid-console round commit hook (emitted by
@@ -16471,6 +16809,8 @@ Hooks.on("bbttcc:raid:roundCommit", () => {
 
 // Foundry combat tracker round advance: when the round number changes,
 // clear per-round flags on every combatant (and the rigs they're piloting).
+// Action Economy canon §6.2 (Phase B 2026-05-19) — additionally refills
+// boss Manifestation Slots on any boss combatant.
 Hooks.on("updateCombat", async (combat, change) => {
   if (!game.user?.isGM) return;
   if (!("round" in (change ?? {}))) return;
@@ -16478,7 +16818,12 @@ Hooks.on("updateCombat", async (combat, change) => {
   for (const combatant of (combat.combatants ?? [])) {
     const a = combatant?.actor;
     if (!a) continue;
-    if (a.type === "rig") { await _ftClearRigPerRoundFlags(a); continue; }
+    if (a.type === "rig")  { await _ftClearRigPerRoundFlags(a); continue; }
+    if (a.type === "boss") {
+      await _ftRefillBossManifestationSlots(a);
+      await _ftRefillBossLegendaryActions(a);
+      continue;
+    }
     if (a.type === "character" || a.type === "npc") await _ftClearPerRoundCombatFlags(a);
   }
 });
