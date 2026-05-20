@@ -17041,17 +17041,29 @@ Hooks.on("updateCombat", async (combat, change) => {
     if (a.type === "rig")  {
       await _ftClearRigPerRoundFlags(a);
       // 2026-05-19 — Boarded stewards usually aren't combatants of their
-      // own; the rig is. Without this, rigWeaponsFiredThisRound (and the
-      // pilot/engineer gates, aimedShot, signalBonus, holdingOn,
-      // suppressed) persisted on every gunner past round advance.
+      // own; the rig is. Without this, the per-round combat flags + the
+      // per-turn action economy (system.actions.actionUsed / bonusUsed /
+      // reactionUsed / movementUsedFt) persisted on every boarded steward
+      // past round advance — symptom: "already used turn" on Hard-Ass.
       const slots = a.system?.crew?.slots ?? [];
       for (const slot of slots) {
         if (!slot?.actorId || clearedStewardIds.has(slot.actorId)) continue;
         const steward = game.actors?.get(slot.actorId);
-        if (steward) {
-          await _ftClearPerRoundCombatFlags(steward);
-          clearedStewardIds.add(slot.actorId);
-        }
+        if (!steward) continue;
+        await _ftClearPerRoundCombatFlags(steward);
+        // Reset action economy mirroring _ftHandleTurnStart / _onFtNewTurn.
+        const _sys = steward.system?.system ?? steward.system;
+        const _walkFt = Number(_sys?.derived?.movement?.walk) || 30;
+        try {
+          await steward.update({
+            "system.actions.actionUsed":       false,
+            "system.actions.bonusUsed":        false,
+            "system.actions.reactionUsed":     false,
+            "system.actions.movementUsedFt":   0,
+            "system.actions.movementBudgetFt": _walkFt
+          });
+        } catch (e) { console.warn("[fourththing] steward action-economy reset failed", e); }
+        clearedStewardIds.add(slot.actorId);
       }
       continue;
     }
