@@ -14892,32 +14892,16 @@ Hooks.on(_chatHook, (message, html) => {
   root.querySelectorAll(".ft-apply-dmg-btn").forEach(btn => {
     btn.addEventListener("click", async () => {
       if (btn.disabled) return;
-      const formula = btn.dataset.formula;
-      const track   = btn.dataset.track ?? "integrity";
-      const targets = game.user.targets;
-
-      if (!targets.size) {
-        ui.notifications.warn("No tokens targeted. Target a token first, then click Apply.");
-        return;
+      // 2026-05-19 — Route through the canonical applyDamageFromButton.
+      // The previous inline implementation wrote to system.derived.<track>.value,
+      // which for rigs and bosses is a MIRROR re-seeded from system.integrity.value
+      // on every prepareDerivedData — so damage to a rig never actually landed.
+      // It also bypassed _applyDamageToActor (no defense math, no triggers, no
+      // GM-relay for non-owner targets). The canonical helper handles all of that.
+      if (typeof game?.fourththing?.rolls?.applyDamageFromButton === "function") {
+        return game.fourththing.rolls.applyDamageFromButton(btn);
       }
-
-      const roll = new Roll(formula);
-      await roll.evaluate();
-      const dmg = roll.total;
-
-      for (const token of targets) {
-        const actor = token.actor;
-        if (!actor) continue;
-        const rawSys = actor.system?.system ?? actor.system;
-        const cur    = rawSys?.derived?.[track]?.value ?? 0;
-        const newVal = Math.max(0, cur - dmg);
-        await actor.update({ [`system.derived.${track}.value`]: newVal });
-        ui.notifications.info(`${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})`);
-      }
-
-      btn.textContent   = `Applied −${dmg}`;
-      btn.disabled      = true;
-      btn.style.opacity = "0.5";
+      ui.notifications.warn("Damage handler unavailable — reload Foundry.");
     });
   });
 
