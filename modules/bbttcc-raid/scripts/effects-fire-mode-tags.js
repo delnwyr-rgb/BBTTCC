@@ -57,6 +57,20 @@ const FIRE_MODE_TAGS = {
   engine_of_absolution:     "anytime",
   temporal_armistice:       "anytime",
 
+  // ── courtly anytimes (12, Phase D) per COURTLY_INTRIGUE_SPEC.md §5
+  courtly_whispered_aside:  "anytime",
+  courtly_public_toast:     "anytime",
+  courtly_plant_a_doubt:    "anytime",
+  courtly_quote_old_law:    "anytime",
+  courtly_read_the_room:    "anytime",
+  courtly_stage_distraction:"anytime",
+  courtly_forged_letter:    "anytime",
+  courtly_sidle_closer:     "anytime",
+  courtly_eavesdrop:        "anytime",
+  courtly_call_question:    "anytime",
+  courtly_patrons_word:     "anytime",
+  courtly_mask_off:         "anytime",
+
   // ── post-commit (12): triggered by round outcome
   battlefield_harmony:      "post-commit",
   divine_favor:             "post-commit",

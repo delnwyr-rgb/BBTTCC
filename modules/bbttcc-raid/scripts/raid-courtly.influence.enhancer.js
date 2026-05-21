@@ -272,6 +272,18 @@
         let atkSpendInt = Math.max(0, Math.floor(Number(atkSpend||0)));
         let defSpendInt = Math.max(0, Math.floor(Number(defSpend||0)));
 
+        // Phase D — Call the Question: cap spending for `roundsRemaining` round(s).
+        if (state.spendLock?.roundsRemaining > 0) {
+          const cap = Number(state.spendLock.maxSpend ?? 0);
+          if (atkSpendInt > cap || defSpendInt > cap) {
+            await sendChat([`Spending lock active: capped at ${cap} OP per side this round.`], { title: `${label}: Spending Lock` });
+          }
+          atkSpendInt = Math.min(atkSpendInt, cap);
+          defSpendInt = Math.min(defSpendInt, cap);
+          state.spendLock.roundsRemaining -= 1;
+          if (state.spendLock.roundsRemaining <= 0) delete state.spendLock;
+        }
+
         // Spend OP from relevant pools
         if (atkKey && atkSpendInt) await adjustOpBank(A, atkKey, -atkSpendInt, label);
         if (defKey && defSpendInt) await adjustOpBank(D, defKey, -defSpendInt, label);
@@ -331,15 +343,30 @@
 
         // Phase C — Consume pendingMods queue (one-shot bonuses + reroll flags
         // queued by secret plays / Phase D anytimes).
+        // Phase D — Also consume `actionBonus` entries that match this
+        // round's chosen action; carry forward those whose filter didn't match.
         let forceAReroll = false, forceDReroll = false;
         const consumedMods = [];
+        const carriedMods = [];
         for (const mod of (state.pendingMods || [])) {
           if (mod.type === "bonus" && mod.side === "A") { atkBonus += Number(mod.value || 0); consumedMods.push(`atk ${mod.value > 0 ? "+" : ""}${mod.value} (${mod.source || "secret"})`); }
           else if (mod.type === "bonus" && mod.side === "D") { defBonus += Number(mod.value || 0); consumedMods.push(`def ${mod.value > 0 ? "+" : ""}${mod.value} (${mod.source || "secret"})`); }
           else if (mod.type === "forceReroll" && mod.side === "A") { forceAReroll = true; consumedMods.push(`atk forced reroll (${mod.source || "secret"})`); }
           else if (mod.type === "forceReroll" && mod.side === "D") { forceDReroll = true; consumedMods.push(`def forced reroll (${mod.source || "secret"})`); }
+          else if (mod.type === "actionBonus") {
+            const sideAct = mod.side === "A" ? atkAct : defAct;
+            const filter = Array.isArray(mod.actionFilter) ? mod.actionFilter : [];
+            if (filter.includes(sideAct)) {
+              if (mod.side === "A") atkBonus += Number(mod.value || 0);
+              else defBonus += Number(mod.value || 0);
+              consumedMods.push(`${mod.side} ${sideAct} ${mod.value > 0 ? "+" : ""}${mod.value} (${mod.source || "anytime"})`);
+            } else {
+              carriedMods.push(mod);  // wait for a matching action next round
+            }
+          }
+          else carriedMods.push(mod);
         }
-        state.pendingMods = [];
+        state.pendingMods = carriedMods;
 
         // Clear scandal markers; new ones may be set based on this round
         let nextScandalOnA = false;
@@ -648,7 +675,193 @@
         return true;
       }
 
-      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal };
+      // Phase D — extended effect queuers + content-driven dispatchers.
+      // queueActionBonus: bonus that lands ONLY if the side's next action
+      // matches one of `actionFilter`. Used by Public Toast (persuade only),
+      // Sidle Closer (persuade|inspire), Patron's Word (anything but
+      // intimidate). Consumed at step() bonus calc after action read.
+      function queueActionBonus(side, actionFilter, value, source = "anytime") {
+        const s = _normSide(side);
+        if (!s || !Number.isFinite(Number(value))) return false;
+        const filter = Array.isArray(actionFilter) ? actionFilter.slice() : [String(actionFilter || "")];
+        state.pendingMods.push({
+          side: s, type: "actionBonus",
+          actionFilter: filter, value: Math.floor(Number(value)),
+          source
+        });
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return true;
+      }
+
+      // Phase D — Stage a Distraction: opp discards a stolen secret if held.
+      async function discardSecret(side, filter = {}) {
+        const s = _normSide(side);
+        if (!s) return null;
+        const targetActor = s === "A" ? A : D;
+        const items = (targetActor.items?.contents || []).filter(i => {
+          const sec = i.flags?.[MOD_R]?.secret;
+          if (!sec) return false;
+          if (filter.acquisition && sec.acquisition !== filter.acquisition) return false;
+          return true;
+        });
+        if (items.length === 0) {
+          await sendChat([`${esc(targetActor.name)} holds no matching secret to discard.`], { title: `${label}: Discard` });
+          return null;
+        }
+        const target = items[Math.floor(Math.random() * items.length)];
+        await targetActor.deleteEmbeddedDocuments("Item", [target.id]);
+        await sendChat([`${esc(targetActor.name)} discards a secret: <b>${esc(target.name)}</b>`], { title: `${label}: Discard` });
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return target.name;
+      }
+
+      // Phase D — Call the Question: cap spending on next exchange.
+      function lockSpend(rounds = 1, maxSpend = 0) {
+        state.spendLock = { roundsRemaining: Math.max(1, Math.floor(Number(rounds) || 1)), maxSpend: Math.max(0, Math.floor(Number(maxSpend) || 0)) };
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return state.spendLock;
+      }
+
+      // Phase D — Draw a random secret from the bbttcc-master-content.courtly-secrets
+      // compendium and add it to the target actor (self/opp) via addSecret.
+      async function drawSecret(side, acquisition = "earned") {
+        const s = _normSide(side);
+        if (!s) return null;
+        const targetActor = s === "A" ? A : D;
+        const PACK_ID = "bbttcc-master-content.courtly-secrets";
+        const pack = game.packs?.get(PACK_ID);
+        if (!pack) { await sendChat([`Courtly secrets compendium not found (${PACK_ID}).`], { title: `${label}: Draw` }); return null; }
+        const docs = await pack.getDocuments();
+        if (!docs.length) { await sendChat([`Courtly secrets compendium is empty — run the seeder macro first.`], { title: `${label}: Draw` }); return null; }
+        const pick = docs[Math.floor(Math.random() * docs.length)];
+        const api = game.bbttcc?.api?.raid?.courtlySecrets;
+        if (!api?.addSecret) { await sendChat([`Secrets API missing.`], { title: `${label}: Draw` }); return null; }
+        const created = await api.addSecret(targetActor.id, pick, { acquisition });
+        if (created) {
+          await sendChat([`${esc(targetActor.name)} draws a ${esc(acquisition)} secret: <b>${esc(created.name)}</b>`], { title: `${label}: Draw` });
+        }
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return created;
+      }
+
+      // Phase D — Patron's Word: spend −1 favor on a courtier with favor >= 2
+      // toward self side, then queue a +3 bonus on next non-Intimidate action.
+      async function spendFavorAndBoost(side, opts = {}) {
+        const s = _normSide(side);
+        if (!s) return null;
+        const factionId = s === "A" ? state.attackerId : state.defenderId;
+        const minFavor = Number(opts.minFavor ?? 2);
+        // Find candidate courtiers with favor >= minFavor toward this side.
+        const candidates = (canvas?.tokens?.placeables || [])
+          .filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true && t.actor)
+          .filter(t => Number(t.actor.flags?.[MOD_R]?.courtFavor?.[factionId] ?? 0) >= minFavor);
+        if (!candidates.length) {
+          ui.notifications?.warn?.(`No courtier has favor ≥ ${minFavor} toward you. Cannot invoke Patron's Word.`);
+          return null;
+        }
+        const opts2 = candidates.map(t => `<option value="${esc(t.actor.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, factionId)})</option>`).join("");
+        const pick = await new Promise(resolve => {
+          new Dialog({
+            title: "Patron's Word",
+            content: `<form><p>Spend −1 favor with a patron (favor ≥ ${minFavor}) to call in their boon.</p><div class="form-group"><label>Patron</label><select name="cid">${opts2}</select></div></form>`,
+            buttons: {
+              ok: { label: "Invoke", callback: html => resolve(game.actors.get(html[0].querySelector("[name=cid]").value) || null) },
+              cancel: { label: "Cancel", callback: () => resolve(null) }
+            },
+            default: "ok",
+            close: () => resolve(null)
+          }, { width: 360 }).render(true);
+        });
+        if (!pick) return null;
+        await adjustFavor(pick.id, factionId, -1);
+        queueActionBonus(s, ["persuade", "inspire", "expose"], 3, `Patron's Word (${pick.name})`);
+        return pick;
+      }
+
+      function _favorOf(actor, factionId) {
+        return Number(actor?.flags?.[MOD_R]?.courtFavor?.[factionId] ?? 0);
+      }
+      function esc(x) { return foundry.utils.escapeHTML(String(x ?? "")); }
+
+      // Phase D — Generic scenarioEffects dispatcher called by the raid
+      // console after a maneuver fires. Default `side: "A"` matches the
+      // attacker-runs-the-console pattern; callers can override.
+      async function applyEffects(scenarioEffects, opts = {}) {
+        const selfSide = String(opts.side || "A").toUpperCase();
+        const oppSide  = selfSide === "A" ? "D" : "A";
+        const selfFactionId = selfSide === "A" ? state.attackerId : state.defenderId;
+        const oppFactionId  = selfSide === "A" ? state.defenderId : state.attackerId;
+        const resolveSide = (s) => {
+          const v = String(s || "self").toLowerCase();
+          if (v === "self" || v === "a" && selfSide === "A" || v === "d" && selfSide === "D") return selfSide;
+          if (v === "opp" || v === "opponent" || v === "a" && selfSide === "D" || v === "d" && selfSide === "A") return oppSide;
+          if (v === "either") return null; // caller handles picker
+          return _normSide(s) || selfSide;
+        };
+        const resolveFaction = (s) => resolveSide(s) === "A" ? state.attackerId : state.defenderId;
+        for (const eff of (Array.isArray(scenarioEffects) ? scenarioEffects : [])) {
+          const t = String(eff?.type || "");
+          try {
+            switch (t) {
+              case "suspicionRise":
+                await raiseSuspicion(eff.delta || 1, eff.reason || "anytime"); break;
+              case "suspicionFall":
+                await lowerSuspicion(eff.delta || 1, eff.reason || "anytime"); break;
+              case "queueRollMod":
+                queueRollMod(resolveSide(eff.side), eff.value, eff.source || "anytime"); break;
+              case "queueReroll":
+                queueReroll(resolveSide(eff.side), eff.source || "anytime"); break;
+              case "queueActionBonus":
+                queueActionBonus(resolveSide(eff.side), eff.actionFilter, eff.value, eff.source || "anytime"); break;
+              case "clearScandal":
+                await clearScandal(resolveSide(eff.side), eff.source || "anytime"); break;
+              case "favorShift": {
+                // Picker for chosen courtier; favor toward resolved faction.
+                const fid = resolveFaction(eff.side);
+                const tokens = (canvas?.tokens?.placeables || [])
+                  .filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true && t.actor);
+                if (!tokens.length) { ui.notifications?.warn?.("No tableau courtiers on this scene."); break; }
+                const opts2 = tokens.map(t => `<option value="${esc(t.actor.id)}">${esc(t.actor.name)} (favor ${_favorOf(t.actor, fid)})</option>`).join("");
+                const pick = await new Promise(resolve => {
+                  new Dialog({
+                    title: eff.title || "Adjust Favor",
+                    content: `<form><p>${esc(eff.prompt || `Choose courtier (favor ${eff.delta > 0 ? "+" : ""}${eff.delta} toward ${selfSide === "A" ? A.name : D.name})`)}.</p><div class="form-group"><label>Courtier</label><select name="cid">${opts2}</select></div></form>`,
+                    buttons: {
+                      ok: { label: "Choose", callback: html => resolve(game.actors.get(html[0].querySelector("[name=cid]").value) || null) },
+                      cancel: { label: "Cancel", callback: () => resolve(null) }
+                    },
+                    default: "ok",
+                    close: () => resolve(null)
+                  }, { width: 360 }).render(true);
+                });
+                if (pick) await adjustFavor(pick.id, fid, eff.delta || 1);
+                break;
+              }
+              case "discardSecret":
+                await discardSecret(resolveSide(eff.side), eff.filter || {}); break;
+              case "lockSpend":
+                lockSpend(eff.rounds || 1, eff.maxSpend ?? 0);
+                await sendChat([`Spending capped to ${eff.maxSpend ?? 0} OP per side for ${eff.rounds || 1} round(s) (Call the Question).`], { title: `${label}: Spending Lock` });
+                break;
+              case "drawSecret":
+                await drawSecret(resolveSide(eff.side), eff.acquisition || "earned"); break;
+              case "spendFavor":
+                await spendFavorAndBoost(selfSide, { minFavor: eff.minFavor ?? 2 }); break;
+              case "noteForGM":
+                await ChatMessage.create({ content: `<p><em>${esc(eff.text || "")}</em></p>`, whisper: gmIds(), speaker: { alias: "BBTTCC Courtly Intrigue" } }).catch(()=>{});
+                break;
+              case "phaseEStub":
+                ui.notifications?.warn?.(`${eff.maneuver || "This maneuver"} requires Phase E (Scandal Scars). Stubbed for now.`);
+                break;
+              default:
+                console.warn(TAG, "unknown scenarioEffect type:", t, eff);
+            }
+          } catch (e) { console.warn(TAG, "applyEffects handler failed", t, e); }
+        }
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+      }
+
+      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, spendFavorAndBoost, applyEffects };
 
       // Convenience for GM
       raidApi._lastCourtly = apiObj;
