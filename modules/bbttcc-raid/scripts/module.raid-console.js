@@ -6492,6 +6492,19 @@ function bindAPI() {
             } catch (eI) { console.warn(TAG, "infilHook replay threw", eI); }
             return;
           }
+          if (msg.t === "courtlyHook") {
+            // Phase F — Courtly VFX relay. Same pattern as infilHook:
+            // re-fire bbttcc:courtly:vfx locally so raid-courtly.vfx.js
+            // plays the visual effect on every connected client.
+            console.log(TAG, "courtlyHook RECV", msg);
+            try {
+              const hookName = String(msg.hook || "");
+              if (hookName.startsWith("bbttcc:courtly:")) {
+                Hooks.callAll(hookName, msg.payload || {});
+              }
+            } catch (eC) { console.warn(TAG, "courtlyHook replay threw", eC); }
+            return;
+          }
         } catch(_eS) {}
       });
     }

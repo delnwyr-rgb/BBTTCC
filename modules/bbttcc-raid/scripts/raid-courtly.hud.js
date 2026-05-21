@@ -34,6 +34,8 @@
   // ─── State ────────────────────────────────────────────────────────────────
   let _infEl = null, _rosEl = null, _secEl = null;
   let _renderTimer = null;
+  // Phase F polish — cached values for change-detection / value-flash.
+  let _lastInfA = null, _lastInfD = null, _lastSusp = null;
 
   // ─── Console / scenario discovery ─────────────────────────────────────────
   function _ftActiveCourtlyConsole() {
@@ -353,6 +355,21 @@
     if (_infEl) { try { _infEl.remove(); } catch (_) {} _infEl = null; }
     if (_rosEl) { try { _rosEl.remove(); } catch (_) {} _rosEl = null; }
     if (_secEl) { try { _secEl.remove(); } catch (_) {} _secEl = null; }
+    _lastInfA = _lastInfD = _lastSusp = null;
+  }
+
+  // Phase F polish — brief CSS flash on the Nth bar inside the Influence panel.
+  // 0 = attacker bar, 1 = defender bar, 2 = suspicion bar. Class defined in
+  // raid-courtly.vfx.js stylesheet.
+  function _flashBar(panelEl, idx) {
+    if (!panelEl) return;
+    const fills = panelEl.querySelectorAll(":scope div[style*='position:absolute']");
+    const fill = fills[idx];
+    if (!fill) return;
+    fill.classList.remove("ft-courtly-valueflash");
+    void fill.offsetWidth;
+    fill.classList.add("ft-courtly-valueflash");
+    setTimeout(() => fill.classList.remove("ft-courtly-valueflash"), 520);
   }
 
   function _renderAll() {
@@ -366,6 +383,17 @@
     // Influence panel (also drop-zone for Phase C secret drag-to-play)
     const infSlot = { get el() { return _infEl; }, set el(v) { _infEl = v; } };
     _swapPanel(infSlot, _buildInfluenceHtml(app, state), _bindInfluenceDropZone, "courtly:hud:influence", "⚜ Court");
+    // Phase F polish — value-change flash on bars when influence or suspicion shifts.
+    try {
+      const curA = Number(state.influenceA ?? 0);
+      const curD = Number(state.influenceD ?? 0);
+      const curS = Number(state.suspicion ?? 0);
+      const bars = _infEl?.querySelectorAll(":scope > div > div > div") || [];
+      if (_lastInfA !== null && curA !== _lastInfA) _flashBar(_infEl, 0);
+      if (_lastInfD !== null && curD !== _lastInfD) _flashBar(_infEl, 1);
+      if (_lastSusp !== null && curS !== _lastSusp) _flashBar(_infEl, 2);
+      _lastInfA = curA; _lastInfD = curD; _lastSusp = curS;
+    } catch (_) {}
 
     // Roster panel
     const rosSlot = { get el() { return _rosEl; }, set el(v) { _rosEl = v; } };

@@ -209,6 +209,23 @@
     }).catch(() => {});
     try { Hooks.callAll("bbttcc:courtly:state", { scenario, state: scenario.getState() }); } catch (_e) {}
 
+    // Phase F — broadcast secret-play VFX to all clients (chip pulse + chat).
+    try {
+      const evt = {
+        kind: "secret-play",
+        ts: Date.now(),
+        actorId: actor.id,
+        actorName: actor.name,
+        itemName: item.name,
+        acquisition: secretMeta.acquisition,
+        effectKey
+      };
+      Hooks.callAll("bbttcc:courtly:vfx", evt);
+      if (game?.socket?.emit) {
+        game.socket.emit(`module.${MOD_R}`, { t: "courtlyHook", hook: "bbttcc:courtly:vfx", payload: evt });
+      }
+    } catch (_e) {}
+
     return { ok: true, effect: effectKey, result };
   }
 

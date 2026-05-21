@@ -90,6 +90,7 @@
     "scripts/raid-courtly.faction-sheet.enhancer.js",
     "scripts/tableau.canvas.js",
     "scripts/raid-courtly.hud.js",
+    "scripts/raid-courtly.vfx.js",
     "scripts/bbttcc-raid-effects-loader.enhancer.js",
     "scripts/bbttcc-raid-maneuvers-loader.enhancer.js",
     "scripts/bbttcc-raid-console-ui.enhancer.js",

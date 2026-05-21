@@ -51,6 +51,21 @@
     return game?.bbttcc?.api?.fx || null;
   }
 
+  // Phase F — Multiplayer VFX relay. Fires the bbttcc:courtly:vfx hook
+  // locally + broadcasts the same event to other clients via socket so
+  // the VFX renderer (raid-courtly.vfx.js) plays the same effect on every
+  // connected player. Mirrors _emitInfilHookRelay from raid-infiltration.
+  // Manifest socket flag already set per [[foundry-v13-socket-manifest]].
+  function _emitCourtlyVfx(kind, payload = {}) {
+    const evt = { kind, ts: Date.now(), ...payload };
+    try { Hooks.callAll("bbttcc:courtly:vfx", evt); } catch (_e) {}
+    try {
+      if (game?.socket?.emit) {
+        game.socket.emit(`module.${MOD_R}`, { t: "courtlyHook", hook: "bbttcc:courtly:vfx", payload: evt });
+      }
+    } catch (_e) {}
+  }
+
   async function playRollFX(ctx = {}) {
     try {
       const fx = getFX();
@@ -593,6 +608,17 @@
         }
         state.suspicion = clamp(suspBefore + suspDelta, 0, 10);
 
+        // Phase F — VFX hooks for suspicion threshold crosses (broadcast to all clients).
+        if (state.suspicion >= 5 && suspBefore < 5) {
+          _emitCourtlyVfx("suspicion-threshold", { level: 5, before: suspBefore, after: state.suspicion });
+        }
+        if (state.suspicion >= 8 && suspBefore < 8) {
+          _emitCourtlyVfx("suspicion-threshold", { level: 8, before: suspBefore, after: state.suspicion });
+        }
+        if (state.suspicion >= 10 && suspBefore < 10) {
+          _emitCourtlyVfx("court-collapse", { suspicion: state.suspicion });
+        }
+
         // Phase C — Suspicion threshold reactions (spec §4.1).
         // Threshold 8 — neutral courtier defects to higher-influence side.
         if (state.suspicion >= 8 && suspBefore < 8) {
@@ -725,6 +751,14 @@
           // suspicion reset, courtier loss). Fires once.
           try { await _applyOutcomeMarks(); }
           catch (e) { console.warn(TAG, "_applyOutcomeMarks failed", e); }
+          // Phase F — broadcast outcome VFX to all clients.
+          _emitCourtlyVfx("outcome", {
+            outcome: state.outcome,
+            outcomeKind: state.outcomeKind,
+            winnerSide: outcomeWinner(state),
+            attackerName: A.name,
+            defenderName: D.name
+          });
         }
 
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
@@ -768,6 +802,8 @@
         cur[factionId] = after;
         await actor.update({ [`flags.${MOD_R}.courtFavor`]: cur });
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        // Phase F — broadcast favor VFX (floating +N/-N near courtier token)
+        _emitCourtlyVfx("favor", { actorId: actor.id, factionId, before, after, delta: after - before });
         return after;
       }
 
