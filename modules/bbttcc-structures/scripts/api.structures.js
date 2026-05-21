@@ -125,11 +125,17 @@ function _tierToNum(t) {
  * If family or tier are missing from a BOM entry, falls back to computeFamily()
  * and assumes Tier I — but real stamping should always pass denormalized values.
  *
+ * Resists/vulnerabilities use the canonical FT.DAMAGE_TYPES vocabulary
+ * (kinetic/energy/poison/psychic/sephirotic/qliphothic/radiation) plus
+ * optional flavor for flavor-modulated rules (e.g. stone vuln to
+ * kinetic:concussive).
+ *
  * @param {Array} bom
  * @returns {{
  *   platesMax: number,
  *   threshold: number,
- *   resists: string[],
+ *   resists: Object,                   damageType → best factor (lowest)
+ *   vulnerabilities: Object,           "type|flavor" key → entry
  *   loadBearing: boolean,
  *   breakdownByFamily: Object,
  *   totalUnits: number
@@ -138,15 +144,35 @@ function _tierToNum(t) {
 export function deriveBOM(bom) {
   if (!_FAMILIES) {
     console.warn(TAG, "deriveBOM called before tables loaded; returning empty");
-    return { platesMax: 0, threshold: 0, resists: [], loadBearing: false, breakdownByFamily: {}, totalUnits: 0 };
+    return { platesMax: 0, threshold: 0, resists: {}, vulnerabilities: {}, loadBearing: false, breakdownByFamily: {}, totalUnits: 0 };
   }
   const fams = _FAMILIES.families;
   let platesMax = 0;
   let weightedTierSum = 0;
   let totalUnits = 0;
-  const resistSet = new Set();
+  const resists = {};         // canonical type → best factor (lowest)
+  const vulnerabilities = {}; // "type|flavor" → entry
   const breakdown = {};
   let loadBearing = false;
+
+  const mergeResist = (entry) => {
+    if (!entry?.type) return;
+    const t = String(entry.type).toLowerCase();
+    const f = Number(entry.factor);
+    if (!Number.isFinite(f) || f >= 1) return;
+    if (resists[t] === undefined || f < resists[t]) resists[t] = f;
+  };
+  const mergeVuln = (entry) => {
+    if (!entry?.type) return;
+    const t = String(entry.type).toLowerCase();
+    const flv = entry.flavor ? String(entry.flavor).toLowerCase() : "";
+    const f = Number(entry.factor);
+    if (!Number.isFinite(f) || f <= 1) return;
+    const key = `${t}|${flv}`;
+    if (vulnerabilities[key] === undefined || f > vulnerabilities[key].factor) {
+      vulnerabilities[key] = { type: t, flavor: flv, factor: f };
+    }
+  };
 
   for (const row of (Array.isArray(bom) ? bom : [])) {
     const qty = Math.max(0, Number(row?.qty) || 0);
@@ -163,23 +189,19 @@ export function deriveBOM(bom) {
     weightedTierSum += qty * tierNum * (fam.threshWeight ?? 1);
     totalUnits += qty;
 
-    for (const r of (fam.nativeResists ?? [])) {
-      if (r === "typed-from-tags") {
-        // Resolve from material tags
-        const tags = Array.isArray(row.tagsCache) ? row.tagsCache : [];
-        for (const t of tags) {
-          const lower = String(t).toLowerCase();
-          if (lower.includes("hex-resist") || lower === "warded" || lower === "ward") resistSet.add("hex-resistant");
-          if (lower.includes("qliph"))   resistSet.add("qliphothic-resistant");
-          if (lower.includes("curse"))   resistSet.add("curse-resistant");
-          if (lower.includes("blessed")) resistSet.add("blessed");
+    // Native resists
+    for (const r of (fam.resists ?? [])) mergeResist(r);
+    // Vulnerabilities
+    for (const v of (fam.vulnerabilities ?? [])) mergeVuln(v);
+    // Tag-driven resists (ward family)
+    if (Array.isArray(fam.resistsFromTags)) {
+      const tags = (Array.isArray(row.tagsCache) ? row.tagsCache : []).map(t => String(t).toLowerCase());
+      for (const rule of fam.resistsFromTags) {
+        const needle = String(rule.tagMatch || "").toLowerCase();
+        if (!needle) continue;
+        if (tags.some(t => t.includes(needle))) {
+          mergeResist({ type: rule.type, factor: rule.factor });
         }
-      } else if (r === "quirk") {
-        // Salvage flavor — surfaced in Phase B+
-      } else if (r === "truth-affecting") {
-        resistSet.add("truth-affecting");
-      } else {
-        resistSet.add(r);
       }
     }
 
@@ -195,11 +217,40 @@ export function deriveBOM(bom) {
   return {
     platesMax,
     threshold: Number(threshold.toFixed(2)),
-    resists: Array.from(resistSet).sort(),
+    resists,
+    vulnerabilities,
     loadBearing,
     breakdownByFamily: breakdown,
     totalUnits
   };
+}
+
+/**
+ * Resolve an incoming damageType (which may be a legacy/colloquial alias like
+ * "fire" or "concussive") to its canonical FT.DAMAGE_TYPES key plus any
+ * implicit flavor inferred from the alias. Returns { type, flavor }.
+ *
+ * Preserves the caller's explicit damageFlavor if already set; only injects
+ * an alias-derived flavor when no flavor was declared.
+ */
+export function canonicalizeDamageType(damageType, damageFlavor = "") {
+  const aliases = _FAMILIES?._typeAliases ?? {};
+  const raw = String(damageType ?? "").toLowerCase();
+  const explicitFlavor = String(damageFlavor ?? "").toLowerCase();
+  if (!raw) return { type: "", flavor: explicitFlavor };
+  // Already canonical?
+  const CANON = new Set(["kinetic","energy","poison","psychic","sephirotic","qliphothic","radiation"]);
+  if (CANON.has(raw)) return { type: raw, flavor: explicitFlavor };
+  // Alias map
+  const ali = aliases[raw];
+  if (ali) {
+    return {
+      type: String(ali.type).toLowerCase(),
+      flavor: explicitFlavor || String(ali.asFlavor ?? raw).toLowerCase()
+    };
+  }
+  // Unknown — pass through as-is (won't match canonical resists but won't crash)
+  return { type: raw, flavor: explicitFlavor };
 }
 
 // ── BOM normalization ────────────────────────────────────────────────────────
@@ -307,6 +358,7 @@ export async function stampBOM(actor, rawBom, opts = {}) {
     plates: { current: currentPlates, max: derived.platesMax },
     threshold: derived.threshold,
     resists: derived.resists,
+    vulnerabilities: derived.vulnerabilities,
     loadBearing: derived.loadBearing,
     collapseProfile,
     history: actor.getFlag(FLAG_SCOPE, "history") ?? []
@@ -341,7 +393,8 @@ export function readState(actor) {
     state:        actor.getFlag(FLAG_SCOPE, "state") ?? "intact",
     plates:       actor.getFlag(FLAG_SCOPE, "plates") ?? { current: 0, max: 0 },
     threshold:    actor.getFlag(FLAG_SCOPE, "threshold") ?? 0,
-    resists:      actor.getFlag(FLAG_SCOPE, "resists") ?? [],
+    resists:      actor.getFlag(FLAG_SCOPE, "resists") ?? {},
+    vulnerabilities: actor.getFlag(FLAG_SCOPE, "vulnerabilities") ?? {},
     loadBearing:  !!actor.getFlag(FLAG_SCOPE, "loadBearing"),
     collapseProfile: actor.getFlag(FLAG_SCOPE, "collapseProfile") ?? null,
     history:      actor.getFlag(FLAG_SCOPE, "history") ?? []
@@ -362,6 +415,7 @@ function _installApi() {
       computeFamily,
       deriveBOM,
       stateFromPlates,
+      canonicalizeDamageType,
       // I/O
       lookupMaterial,
       normalizeBOM,

@@ -96,9 +96,23 @@ function _buildFullPanelHTML(actor, state) {
     `;
   }).join("");
 
-  const resistsHtml = (state.resists ?? []).length
-    ? state.resists.map(r => `<span class="bbttcc-st-resist-pill">${_esc(r)}</span>`).join("")
+  // Resists: support both legacy array shape and the new map shape (canonical
+  // damage type → best factor). Vulnerabilities stored as a map keyed by
+  // "type|flavor" for flavor-modulated rules.
+  const resistKeys = Array.isArray(state.resists)
+    ? state.resists.map(s => String(s))
+    : Object.keys(state.resists ?? {});
+  const resistsHtml = resistKeys.length
+    ? resistKeys.map(r => `<span class="bbttcc-st-resist-pill">${_esc(r)}</span>`).join("")
     : `<span class="bbttcc-st-resist-empty">— none —</span>`;
+
+  const vulnEntries = Object.values(state.vulnerabilities ?? {});
+  const vulnsHtml = vulnEntries.length
+    ? vulnEntries.map(v => {
+        const flavorPart = v.flavor ? `:${_esc(v.flavor)}` : "";
+        return `<span class="bbttcc-st-vuln-pill" data-tooltip="×${v.factor}">${_esc(v.type)}${flavorPart}</span>`;
+      }).join("")
+    : "";
 
   const lbBadge = state.loadBearing
     ? `<span class="bbttcc-st-lb-badge" data-tooltip="Sephirotic material present — Structure cannot pass to Razed while load-bearing">⚜ Load-bearing</span>`
@@ -128,6 +142,12 @@ function _buildFullPanelHTML(actor, state) {
           <span class="bbttcc-st-label">Resists</span>
           <span class="bbttcc-st-resists">${resistsHtml}</span>
         </div>
+        ${vulnsHtml ? `
+        <div class="bbttcc-st-resists-line">
+          <span class="bbttcc-st-label" style="color:#e08a3a">Vulns</span>
+          <span class="bbttcc-st-resists">${vulnsHtml}</span>
+        </div>
+        ` : ""}
       </div>
 
       <div class="bbttcc-st-bom-wrap">
@@ -163,20 +183,23 @@ function _buildFullPanelHTML(actor, state) {
       ${game.user?.isGM ? `
       <div class="bbttcc-st-gm-test" data-tooltip="GM-only · Phase B paper-test affordance">
         <span class="bbttcc-st-gm-label">⚒ GM TEST</span>
-        <input type="number" name="bbttccStDmg" min="1" value="10" class="bbttcc-st-gm-input"/>
-        <select name="bbttccStDmgType" class="bbttcc-st-gm-select">
+        <input type="number" name="bbttccStDmg" min="1" value="10" class="bbttcc-st-gm-input"
+               data-tooltip="Damage amount"/>
+        <select name="bbttccStDmgType" class="bbttcc-st-gm-select" data-tooltip="Canonical FT.DAMAGE_TYPES">
           <option value="">— type —</option>
           <option value="kinetic">kinetic</option>
-          <option value="piercing">piercing</option>
-          <option value="fire">fire</option>
-          <option value="hex">hex</option>
-          <option value="qliph">qliph</option>
-          <option value="curse">curse</option>
-          <option value="concussive">concussive</option>
+          <option value="energy">energy</option>
+          <option value="poison">poison</option>
+          <option value="psychic">psychic</option>
+          <option value="sephirotic">sephirotic</option>
+          <option value="qliphothic">qliphothic</option>
+          <option value="radiation">radiation</option>
         </select>
+        <input type="text" name="bbttccStDmgFlavor" class="bbttcc-st-gm-input" style="width:80px"
+               placeholder="flavor" data-tooltip="Optional flavor (e.g. concussive, fire, heat). Modulates family vulns."/>
         <button type="button" class="bbttcc-st-btn bbttcc-st-gm-apply" data-action="bbttccStApplyDamage">Apply Damage</button>
         <button type="button" class="bbttcc-st-btn bbttcc-st-btn-secondary" data-action="bbttccStFullRepair"
-                data-tooltip="Reset plates to max + restore all BOM qty (Phase B test reset)">Full Repair</button>
+                data-tooltip="Reset plates to max + restore all BOM qty + clear collapse-fired flag">Full Repair</button>
         <button type="button" class="bbttcc-st-btn bbttcc-st-btn-secondary" data-action="bbttccStClearCollapseFlag"
                 data-tooltip="Reset collapseFired flag so Collapse can re-trigger">Reset Collapse Flag</button>
       </div>
@@ -305,10 +328,12 @@ function _bindActions(root, actor, app) {
     btn.addEventListener("click", async (ev) => {
       ev.preventDefault();
       if (!game.user?.isGM) return;
-      const dmgInput  = root.querySelector(`[name="bbttccStDmg"]`);
-      const typeInput = root.querySelector(`[name="bbttccStDmgType"]`);
-      const amount = Math.max(1, parseInt(dmgInput?.value, 10) || 0);
+      const dmgInput    = root.querySelector(`[name="bbttccStDmg"]`);
+      const typeInput   = root.querySelector(`[name="bbttccStDmgType"]`);
+      const flavorInput = root.querySelector(`[name="bbttccStDmgFlavor"]`);
+      const amount  = Math.max(1, parseInt(dmgInput?.value, 10) || 0);
       const dmgType = typeInput?.value || "";
+      const dmgFlavor = (flavorInput?.value ?? "").trim();
       const fn = game.fourththing?.rolls?._applyDamageToActor;
       if (typeof fn !== "function") {
         ui.notifications?.error?.("_applyDamageToActor not available — fourththing system not ready.");
@@ -317,7 +342,7 @@ function _bindActions(root, actor, app) {
       try {
         const desc = await fn(actor, amount, {
           op: "damage", track: "integrity",
-          damageType: dmgType, damageFlavor: "",
+          damageType: dmgType, damageFlavor: dmgFlavor,
           perTargetMultiplier: 1
         });
         if (desc) ui.notifications?.info?.(desc);

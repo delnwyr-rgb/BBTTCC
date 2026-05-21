@@ -3,10 +3,12 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * Damage application for actors with hasStructure: true.
  *
- *   • computeStructureDamage(state, damage, sourceTags)
+ *   • computeStructureDamage(state, damage, { damageType, damageFlavor })
  *       Pure function. Returns the result of applying `damage` to the given
  *       Structure state, including chip queue walk + rubble jitter + state
- *       transition. Does not mutate. Phase B.1.
+ *       transition. Does not mutate. damageType is canonicalized through the
+ *       FT.DAMAGE_TYPES alias map (so "fire" → {type:"energy", flavor:"fire"}).
+ *       Phase B.1.
  *
  *   • applyStructureDamage(actor, damage, opts)
  *       Mutating. Calls compute, writes BOM/plates back to actor flags, posts
@@ -31,72 +33,51 @@ const FLAG_SCOPE = MOD_ID;
 
 /**
  * Apply structure resists/vulns to incoming damage. Returns the modified
- * damage and a list of tags that fired (for chat card).
+ * damage and the list of factor entries that fired (for chat card).
  *
- * Structure resists are family-derived. Standard resist tags:
- *   - kinetic, piercing       (Metal, Stone)
- *   - hex-resistant, blessed  (Ward, derived from material tags)
- *   - qliphothic-resistant    (Sephirotic, Ward with qliph tag)
- *   - curse-resistant         (Sephirotic, Ward with curse tag)
- *   - foundation              (Sephirotic — fictional; no direct dmg effect)
- *   - concussive-partial      (Wood — 25% reduction vs concussive)
+ * Uses the canonical FT.DAMAGE_TYPES vocabulary
+ * (kinetic/energy/poison/psychic/sephirotic/qliphothic/radiation). Incoming
+ * damageType is canonicalized first via canonicalizeDamageType (so legacy
+ * aliases like "fire"/"concussive" are folded into their canonical type plus
+ * implicit flavor).
  *
- * Vulnerabilities are family-declared in structural-families.json.
- *
- * For Phase B we apply: resists halve damage, vulnerabilities double, immunes
- * zero. Multiple matches stack multiplicatively (×0.5 × 0.5 = ×0.25). Tags
- * are normalized lowercase; partial-match strings allowed (e.g. "hex" matches
- * "hex-resistant").
+ * @param {number} damage
+ * @param {Object} resists           map: canonical type → best factor (lowest, <1.0)
+ * @param {Object} vulnerabilities   map: "type|flavor" → { type, flavor, factor }
+ * @param {string} damageType        canonicalized damage type
+ * @param {string} damageFlavor      flavor (free-text, optional)
  */
-function applyStructureResists(damage, resists = [], sourceTags = []) {
-  const tagsLower = sourceTags.map(t => String(t).toLowerCase()).filter(Boolean);
-  const resistSet = new Set(resists.map(r => String(r).toLowerCase()));
-
+function applyStructureResists(damage, resists, vulnerabilities, damageType, damageFlavor) {
+  const t = String(damageType ?? "").toLowerCase();
+  const flv = String(damageFlavor ?? "").toLowerCase();
   let mult = 1;
-  const firedTags = [];
+  const fired = [];
 
-  // Hard table of vulnerability tags by family (also surfaces via tag if the
-  // source declared it). Keeping this simple in Phase B: any sourceTag that
-  // matches a structure vulnerability doubles damage.
-  // Phase B: hardcoded heuristic; Phase C+ will load from structural-families.json
-  // via the API surface.
-  const VULN_MAP = {
-    "fire": ["wood", "cloth"],
-    "heat": ["metal"],
-    "holy": ["metal"],
-    "concussive": ["stone"]
-  };
-
-  for (const tag of tagsLower) {
-    // Resists
-    for (const r of resistSet) {
-      // Match if source tag IS the resist token OR a prefix/contains match
-      if (r === tag || r.includes(tag) || tag.includes(r.replace("-resistant", "").replace("-partial", ""))) {
-        // partial = 0.75; full = 0.5
-        const factor = r.endsWith("-partial") ? 0.75 : 0.5;
-        mult *= factor;
-        firedTags.push(`${r}×${factor}`);
-        break; // one resist match per source tag
-      }
+  if (t && resists && typeof resists === "object") {
+    const f = resists[t];
+    if (typeof f === "number" && f < 1) {
+      mult *= f;
+      fired.push(`resist ${t} ×${f}`);
     }
-    // Vulnerabilities — if source tag is a known vuln type AND structure has
-    // a family that's vulnerable. We approximate via the VULN_MAP. Phase C+
-    // can read from the live family table.
-    if (VULN_MAP[tag]) {
-      // Vulnerability: if structure's primary family matches, double.
-      // For Phase B we double if any of the listed families is "implied"
-      // by an existing resist (e.g. wood structure has "concussive-partial"
-      // resist → it's wood → fire doubles).
-      // Pragmatic: just check if no resist fires for this source tag AND
-      // the family is plausibly present. Defer real implementation to
-      // when the structure passes its family breakdown to this function.
+  }
+  if (t && vulnerabilities && typeof vulnerabilities === "object") {
+    for (const key of Object.keys(vulnerabilities)) {
+      const v = vulnerabilities[key];
+      if (!v || v.type !== t) continue;
+      // Match if vuln has no flavor (any flavor OK) OR flavor matches
+      if (v.flavor && v.flavor !== flv) continue;
+      const f = Number(v.factor);
+      if (!Number.isFinite(f) || f <= 1) continue;
+      mult *= f;
+      const flvNote = v.flavor ? `:${v.flavor}` : "";
+      fired.push(`vuln ${t}${flvNote} ×${f}`);
     }
   }
 
   return {
     effDmg: Math.max(0, Math.floor(damage * mult)),
     mult,
-    firedTags
+    firedTags: fired
   };
 }
 
@@ -183,7 +164,8 @@ function walkChipQueue(queue, targetChips) {
  *                                  (materialBOM, plates, threshold, resists, loadBearing)
  * @param {number} damage           incoming damage (post per-target mult)
  * @param {Object} opts
- *   - sourceTags: string[]         damage type/flavor tags from the source
+ *   - damageType: string           canonical or legacy alias (will be canonicalized)
+ *   - damageFlavor: string         free-text qualifier (e.g. "concussive", "fire")
  *   - jitterRoll: number           supply for deterministic testing; default rolls 1d4-1
  *   - FAMILIES: Object             family table from api.structures.FAMILIES
  *
@@ -201,11 +183,23 @@ function walkChipQueue(queue, targetChips) {
  * }
  */
 export function computeStructureDamage(state, damage, opts = {}) {
-  const FAMILIES = opts.FAMILIES ?? game.bbttcc?.api?.structures?.FAMILIES ?? {};
-  const sourceTags = opts.sourceTags ?? [];
+  const api = game.bbttcc?.api?.structures;
+  const FAMILIES = opts.FAMILIES ?? api?.FAMILIES ?? {};
 
-  // 1. Apply structure resists/vulns
-  const { effDmg, mult, firedTags } = applyStructureResists(damage, state.resists ?? [], sourceTags);
+  // 1. Canonicalize incoming damage type (folds legacy aliases like "fire" →
+  //    {type: "energy", flavor: "fire"}) — preserves explicit flavor if set.
+  const { type: damageType, flavor: damageFlavor } = api?.canonicalizeDamageType
+    ? api.canonicalizeDamageType(opts.damageType ?? "", opts.damageFlavor ?? "")
+    : { type: String(opts.damageType ?? "").toLowerCase(), flavor: String(opts.damageFlavor ?? "").toLowerCase() };
+
+  // 2. Apply structure resists/vulns
+  const { effDmg, mult, firedTags } = applyStructureResists(
+    damage,
+    state.resists ?? {},
+    state.vulnerabilities ?? {},
+    damageType,
+    damageFlavor
+  );
 
   // 2. Compare to threshold — chip-only or pierce
   const threshold = Number(state.threshold) || 0;
@@ -323,11 +317,27 @@ export async function applyStructureDamage(actor, damage, opts = {}) {
     return { description: null, integrityOverflow: damage, stateChanged: false };
   }
 
-  // Build sourceTags from damageType + damageFlavor (the fourththing convention)
-  const sourceTags = [opts.damageType, opts.damageFlavor].filter(Boolean);
+  // Auto-migrate legacy resist shapes. Phase B v0 stored resists as a string
+  // array; Phase B.9 stores them as a canonical-type → factor map plus a
+  // vulnerabilities map. If we encounter the legacy shape, re-derive from
+  // BOM transparently so existing stamped actors don't need a manual repair.
+  if (Array.isArray(state.resists) || !state.vulnerabilities) {
+    try {
+      const fresh = api.deriveBOM(state.materialBOM ?? []);
+      state.resists = fresh.resists ?? {};
+      state.vulnerabilities = fresh.vulnerabilities ?? {};
+    } catch (e) {
+      console.warn(TAG, "legacy resist migration failed; using empty maps", e);
+      state.resists = {};
+      state.vulnerabilities = {};
+    }
+  }
 
+  // Pass damageType + damageFlavor through to compute, which canonicalizes
+  // them via the API (so legacy aliases fold into canonical types + flavors).
   const result = computeStructureDamage(state, damage, {
-    sourceTags,
+    damageType: opts.damageType ?? "",
+    damageFlavor: opts.damageFlavor ?? "",
     FAMILIES: api.FAMILIES
   });
 

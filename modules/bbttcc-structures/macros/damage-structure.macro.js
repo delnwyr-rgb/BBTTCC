@@ -59,25 +59,42 @@
         </label>
 
         <label style="display:flex; flex-direction:column; gap:0.2rem;">
-          <span style="font-size:0.72rem; opacity:0.7">Damage type (source tag)</span>
+          <span style="font-size:0.72rem; opacity:0.7">Damage type (canonical FT.DAMAGE_TYPES)</span>
           <select name="dmgType">
             <option value="">— none —</option>
-            <option value="kinetic">kinetic (metal/stone resist)</option>
-            <option value="piercing">piercing (metal resist)</option>
-            <option value="concussive">concussive (stone vuln)</option>
-            <option value="fire">fire (wood/cloth vuln)</option>
-            <option value="heat">heat (metal vuln)</option>
-            <option value="hex">hex (ward resist)</option>
-            <option value="qliph">qliphothic (sephirotic resist)</option>
-            <option value="curse">curse (sephirotic resist)</option>
-            <option value="holy">holy (metal vuln)</option>
+            <option value="kinetic">kinetic (metal/stone/wood resist)</option>
+            <option value="energy">energy (heat/fire/electricity)</option>
+            <option value="poison">poison</option>
+            <option value="psychic">psychic (memetic resist)</option>
+            <option value="sephirotic">sephirotic (good-magic)</option>
+            <option value="qliphothic">qliphothic (ward/sephirotic resist)</option>
+            <option value="radiation">radiation</option>
           </select>
         </label>
 
         <label style="display:flex; flex-direction:column; gap:0.2rem;">
-          <span style="font-size:0.72rem; opacity:0.7">Optional damage flavor</span>
-          <input type="text" name="dmgFlavor" placeholder="(rarely needed)" />
+          <span style="font-size:0.72rem; opacity:0.7">Damage flavor (modulates vulns)</span>
+          <select name="dmgFlavor">
+            <option value="">— none —</option>
+            <option value="concussive">concussive (stone vuln when type=kinetic)</option>
+            <option value="fire">fire (wood/cloth vuln when type=energy)</option>
+            <option value="heat">heat (metal vuln when type=energy)</option>
+            <option value="ice">ice</option>
+            <option value="electricity">electricity</option>
+            <option value="piercing">piercing</option>
+            <option value="slashing">slashing</option>
+            <option value="bludgeoning">bludgeoning</option>
+            <option value="hex">hex</option>
+            <option value="curse">curse</option>
+            <option value="holy">holy</option>
+          </select>
         </label>
+
+        <p style="margin:0; font-size:0.66rem; opacity:0.55; font-style:italic; line-height:1.4">
+          Legacy aliases ("fire", "concussive", "holy", etc.) are auto-canonicalized to
+          their FT type + flavor at apply time — content authors don't have to rewrite
+          existing weapons.
+        </p>
 
         <label style="display:flex; flex-direction:column; gap:0.2rem;">
           <span style="font-size:0.72rem; opacity:0.7">Per-target multiplier</span>

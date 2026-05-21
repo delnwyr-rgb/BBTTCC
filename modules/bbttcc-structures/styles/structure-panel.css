@@ -120,6 +120,16 @@
   letter-spacing: 0.02em;
 }
 
+.bbttcc-st-vuln-pill {
+  background: rgba(192, 80, 60, 0.18);
+  border: 1px solid rgba(217, 128, 107, 0.35);
+  padding: 0.05rem 0.35rem;
+  border-radius: 2px;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: #e8a890;
+}
+
 .bbttcc-st-resist-empty {
   font-size: 0.7rem;
   opacity: 0.5;
