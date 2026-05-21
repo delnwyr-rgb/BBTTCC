@@ -199,7 +199,12 @@
       const inner = secrets.length === 0
         ? `<div style="padding:.3rem;color:#888;font-style:italic;font-size:0.74rem;">No secrets held.<br/><span style="font-size:0.68rem;">Earn via Read the Room, Eavesdrop.</span></div>`
         : secrets.map(i => {
-            const acq = String(i.flags?.[MOD_R]?.secret?.acquisition || "earned");
+            // "template" lands on the actor when an item is dragged via a
+            // path that bypasses addSecret (e.g. sidebar portrait drop).
+            // Display + treat as earned — only "stolen" carries a real
+            // mechanical consequence (suspicion +2 on play).
+            const rawAcq = String(i.flags?.[MOD_R]?.secret?.acquisition || "earned");
+            const acq = rawAcq === "template" ? "earned" : rawAcq;
             const acqColor = acq === "stolen" ? "#ff7a7a" : "#88cc55";
             return `<div class="ft-courtly-secret" data-item-id="${esc(i.id)}" data-actor-id="${esc(actor.id)}" draggable="true" title="${esc(i.name)} — drag onto Influence panel to play" style="display:flex;align-items:center;gap:.4rem;padding:.2rem .35rem;border:1px solid #444;border-radius:3px;cursor:grab;background:#15151c;">
               <img src="${esc(i.img || "icons/svg/book.svg")}" style="width:24px;height:24px;border-radius:2px;flex:0 0 auto;"/>
@@ -270,6 +275,11 @@
   }
 
   function _bindInfluenceDropZone(el) {
+    // Outer panel element persists across innerHTML re-renders, so guard
+    // against stacking duplicate dragover/drop listeners on every render
+    // tick (any bbttcc:courtly:state hook would otherwise add another).
+    if (el.dataset.ftCourtlyDropBound === "1") return;
+    el.dataset.ftCourtlyDropBound = "1";
     el.addEventListener("dragover", (e) => {
       if (e.dataTransfer?.types?.includes("application/bbttcc-courtly-secret")
        || e.dataTransfer?.types?.includes("text/plain")) {
