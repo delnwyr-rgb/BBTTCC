@@ -284,6 +284,22 @@ const FT = {
     burn:    { label: "Burn" },
     custom:  { label: "Custom" }
   },
+  // Phase F2 — Maintenance cost (ongoing upkeep). Authored as a structured
+  // dropdown so the engine + chat surface know exactly what gets ticked over
+  // time, instead of relying on free-text the GM has to interpret. "custom"
+  // falls back to the free-text override field (state.maintenanceCost), and
+  // "none" means the manifestation has no ongoing upkeep.
+  MAINTENANCE_COSTS: {
+    none:               { label: "None — no ongoing cost" },
+    "1-clarity-scene":  { label: "1 Clarity per scene" },
+    "2-clarity-scene":  { label: "2 Clarity per scene" },
+    "1-clarity-round":  { label: "1 Clarity per round" },
+    "1-stress-scene":   { label: "1 Stress per scene" },
+    "1-stress-round":   { label: "1 Stress per round" },
+    "1-noise-scene":    { label: "+1 Noise per scene" },
+    "1-burn-scene":     { label: "1 Burn per scene" },
+    custom:             { label: "Custom (see notes below)" }
+  },
   MANIFESTATION_SCALES: {
     personal: { label: "Personal" },
     scene:    { label: "Scene" },
@@ -1404,6 +1420,11 @@ function ftManifestationDefaults(kind = "power") {
     scale: "personal",
     targetText: "",
     rangeAreaText: "",
+    // Phase F2 — Structured maintenance cost. Dropdown selection from
+    // FT.MAINTENANCE_COSTS. "none" means no ongoing upkeep; "custom" defers
+    // to the free-text `maintenanceCost` field below (kept for backward-compat
+    // with existing items + the "(see notes below)" UX).
+    maintenanceKey: "none",
     maintenanceCost: "",
     riskText: "",
     pathResonance: "",
@@ -1483,6 +1504,12 @@ function ftManifestationDefaults(kind = "power") {
       carryConditions: false,
       carryEffects:    false
     },
+    // Phase F1 — Structured range for engine-side adjacency / distance check.
+    // Free-text rangeAreaText (above) stays the canonical flavor field; this
+    // numeric is used ONLY at cast time to warn the caster when the target is
+    // outside the manifestation's reach. 0 = no engine check (skip warning).
+    // Common presets: 5 (touch), 30 (short), 60 (medium), 120 (long).
+    rangeFt: 0,
     // Phase E — Conditional Damage. Extra damage rolls that fire when the
     // target's creature type matches. Up to three rows of
     // { vsType: <FT.CREATURE_TYPES key>, bonusFormula: "Xd6" }. Damage type
@@ -2998,6 +3025,34 @@ async function castManifestation(actor, item, {
     }
   }
 
+  // ── Phase F1 — Range / adjacency cast warning ───────────────────────────────
+  // Soft pre-cast check: if the manifestation has a structured rangeFt and a
+  // target was picked, compute the caster→target distance and prompt the
+  // caster to confirm if out of range. 0 = no engine check (skip silently).
+  // Tokens are required on the active scene for both sides; if either is
+  // missing we skip the check (can't measure something we can't see).
+  if (mf && Number(mf.rangeFt) > 0 && target && actor) {
+    const casterToken = actor.getActiveTokens?.()?.[0];
+    const targetToken = target.getActiveTokens?.()?.[0];
+    if (casterToken && targetToken) {
+      const dist = _ftDistanceBetweenTokens(casterToken, targetToken);
+      const allowed = Number(mf.rangeFt);
+      if (dist > allowed) {
+        const ok = await Dialog.confirm({
+          title: "Out of Range",
+          content: `<div style="display:flex;flex-direction:column;gap:0.4rem;padding:0.2rem 0;font-size:0.84rem">
+            <div>⚠ <b>${ftEscapeHtml(item?.name ?? "Manifestation")}</b> has an engine range of <b>${allowed} ft</b>, but <b>${ftEscapeHtml(target.name)}</b> is <b>${dist.toFixed(0)} ft</b> away.</div>
+            <div style="font-size:0.78rem;opacity:0.75">Cast anyway? (The fictional range often allows GM judgment; this is a soft check.)</div>
+          </div>`,
+          yes: () => true,
+          no:  () => false,
+          defaultYes: false
+        });
+        if (!ok) return false;
+      }
+    }
+  }
+
   // ── Dreamwalker — Bank to Dream-Cache (Phase C 2026-05-07) ────────────────
   // Short-circuits the cast: snapshot manifestation context onto
   // system.resources.dreamCache, skip Clarity payment + roll. Deploy from the
@@ -4084,6 +4139,11 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       targetText: values.targetText,
       rangeAreaText: values.rangeAreaText,
       maintenanceCost: values.maintenanceCost,
+      // Phase F2 — Structured maintenance key. Falls back to "none" when the
+      // wizard didn't surface the field (legacy callers / pre-F2 items).
+      maintenanceKey:  FT.MAINTENANCE_COSTS?.[String(values.maintenanceKey ?? "").toLowerCase()]
+                          ? String(values.maintenanceKey).toLowerCase()
+                          : (values.maintenanceKey === "" ? "" : "none"),
       riskText: values.riskText,
       pathResonance: values.pathResonance,
       fictionalPermission: values.fictionalPermission,
@@ -4107,7 +4167,9 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       // Phase D — Chain config. Normalize coerces enabled bool + clamps.
       chain: ftNormalizeChainConfig(values.chain ?? {}),
       // Phase E — Conditional damage rows. Empty rows / unknown vsType filtered.
-      conditionalDamage: ftNormalizeConditionalDamage(values.conditionalDamage ?? [])
+      conditionalDamage: ftNormalizeConditionalDamage(values.conditionalDamage ?? []),
+      // Phase F1 — Structured range (engine check). Clamp + non-negative.
+      rangeFt: Math.max(0, Math.min(999, Math.floor(Number(values.rangeFt) || 0)))
     },
     { inplace: false }
   );
@@ -4385,6 +4447,7 @@ function _ftWizV2RenderTargeting(state) {
     <div class="ft-cast-grid">
       <div class="ft-cast-field ft-cast-span-2"><label>Target / Reach</label>${_ftWizV2Txt("targetText", state.targetText, "One foe, a doorway, a circle around you...")}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Range / Area Notes</label>${_ftWizV2Txt("rangeAreaText", state.rangeAreaText, "Near, 3 / 6, the room, a carried object...")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="Engine-side range in feet for cast warnings. 0 = no check (free-text only). Common: 5 = touch / adjacent, 30 = short, 60 = medium, 120 = long.">Range (ft) — engine check <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Num("rangeFt", state.rangeFt ?? 0, { min: 0, max: 999 })}</div>
       <div class="ft-cast-field"><label>Area shape</label>${_ftWizV2Sel("area.shape", { none: "None", cone: "Cone", sphere: "Sphere", line: "Line", cube: "Cube", cylinder: "Cylinder" }, areaShape)}</div>
       <div class="ft-cast-field"><label>Area size (ft)</label>${_ftWizV2Num("area.size", state.area?.size, { min: 0, max: 120 })}</div>
     </div>
@@ -4583,6 +4646,17 @@ function _ftWizV2RenderResolution(state) {
 
 function _ftWizV2RenderCost(state) {
   const a = state.activation_block ?? {};
+  // Phase F2 — Maintenance cost is now a dropdown driven by FT.MAINTENANCE_COSTS.
+  // The free-text `maintenanceCost` field is preserved as a "custom notes"
+  // overlay — only visible when the key is "custom" (or when legacy items
+  // have text but no key set). That preserves authoring intent for the rare
+  // bespoke upkeep without breaking back-compat.
+  const mKey = state.maintenanceKey ?? "none";
+  const hasLegacyText = !state.maintenanceKey && state.maintenanceCost;
+  const showCustom = mKey === "custom" || hasLegacyText;
+  const customRow = showCustom
+    ? `<div class="ft-cast-field ft-cast-span-2"><label>Custom maintenance note</label>${_ftWizV2Txt("maintenanceCost", state.maintenanceCost, "e.g. 1 Burn the first scene, then 1 Clarity each scene after...")}</div>`
+    : "";
   return `
     <p class="ft-wiz-v2-coach">What does it cost, when do you spend that, and how long does it run?</p>
     <div class="ft-cast-grid">
@@ -4594,7 +4668,8 @@ function _ftWizV2RenderCost(state) {
       <div class="ft-cast-field"><label>Duration baseline</label>${_ftWizV2Sel("duration", FT.MANIFESTATION_DURATIONS, state.duration)}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Duration / Trigger</label>${_ftWizV2Txt("durationText", state.durationText, "Until dawn, for one exchange, while the vow is spoken...")}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Trigger</label>${_ftWizV2Txt("triggerText", state.triggerText, "When the bearer is touched by fear, when the threshold is crossed...")}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label>Maintenance cost</label>${_ftWizV2Txt("maintenanceCost", state.maintenanceCost, "Leave blank if it does not keep costing anything.")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label data-tooltip="Ongoing upkeep — what the manifestation costs each round/scene to stay running. Pick a structured option (engine-readable) or 'custom' to author your own.">Maintenance cost <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("maintenanceKey", FT.MAINTENANCE_COSTS, mKey)}</div>
+      ${customRow}
       <div class="ft-cast-field ft-cast-span-2"><label>Risk / fallout</label>${_ftWizV2Txt("riskText", state.riskText, "What can go wrong, fray, attract notice, or scar the caster?")}</div>
     </div>`;
 }
