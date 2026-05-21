@@ -51,6 +51,14 @@
     try {
       token.mesh.scale.set(1, 1);
       token.mesh.sort = 0;
+      if (token.border) {
+        token.border.scale.set(1, 1);
+        token.border.position.set(0, 0);
+      }
+      if (token.bars) {
+        token.bars.scale.set(1, 1);
+        token.bars.position.set(0, 0);
+      }
     } catch (_e) {}
   }
 
@@ -72,6 +80,23 @@
       const s = lerp(cfg.minScale, cfg.maxScale, tCurved);
 
       token.mesh.scale.set(s, s);
+
+      // Scale border + bars to match the visual, anchored to the mesh's
+      // visual center (which sits at the token's footprint center because
+      // mesh anchor is 0.5/0.5). Offset = footprint_size × (1-s)/2 so the
+      // shrunk graphic still hugs the visible token.
+      const w = Number(token.w || 0);
+      const h = Number(token.h || 0);
+      const ox = w * (1 - s) / 2;
+      const oy = h * (1 - s) / 2;
+      if (token.border) {
+        token.border.scale.set(s, s);
+        token.border.position.set(ox, oy);
+      }
+      if (token.bars) {
+        token.bars.scale.set(s, s);
+        token.bars.position.set(ox, oy);
+      }
 
       if (cfg.zSortByY) {
         token.mesh.sort = Math.round(y);
