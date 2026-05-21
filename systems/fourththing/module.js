@@ -3593,6 +3593,130 @@ function readManifestationWizardValues(html, kind = "power") {
   };
 }
 
+// ── Sheet → compendium export ──────────────────────────────────────────────
+// Player-driven path to grow a shared manifestation library: stewards author
+// on their sheet, then push a copy to a Compendium pack via the Library
+// button. The actor's original is untouched; only a clean snapshot is sent
+// to the pack. Used by FourthThingCharacterSheet._onFtManifestExport.
+
+// Enumerate compendium packs that hold Items, sorted with the starter
+// manifestations pack first (when present) so the default selection is
+// always the obvious choice. Includes locked packs so the picker can show
+// them dimmed/disabled with a hint to unlock.
+function ftListItemCompendiumPacks() {
+  const out = [];
+  for (const pack of (game.packs?.values?.() ?? [])) {
+    if (pack.metadata?.type !== "Item") continue;
+    out.push({
+      id:        pack.collection,
+      label:     pack.metadata.label ?? pack.collection,
+      locked:    !!pack.locked,
+      isDefault: pack.collection === "fourththing.starter-manifestations"
+    });
+  }
+  out.sort((a, b) => {
+    if (a.isDefault !== b.isDefault) return a.isDefault ? -1 : 1;
+    if (a.locked    !== b.locked)    return a.locked    ?  1 : -1;
+    return a.label.localeCompare(b.label);
+  });
+  return out;
+}
+
+// Strip per-actor / per-instance state from an item snapshot before it lands
+// in a compendium. createManifestationItemData already builds a clean shape,
+// but items can accumulate cast-runtime flags (active instances, equipped
+// markers, per-actor consumption counters) that we don't want shipped to the
+// library copy.
+function _ftCleanItemForCompendium(item) {
+  const src = item.toObject();
+  delete src._id;
+  delete src._stats;
+  delete src.ownership;
+  delete src.folder;
+  delete src.sort;
+  const ft = src.flags?.fourththing;
+  if (ft && typeof ft === "object") {
+    delete ft.equipped;
+    delete ft.activeManifestations;
+    delete ft.appliedManifestation;
+    if (ft.rfi?.item) delete ft.rfi.item.charges;
+  }
+  return src;
+}
+
+// Pick a target pack (modal), then create the cleaned snapshot in it. Returns
+// the created document or null if the user cancelled / a hard error fired.
+// Surfaces user-visible toasts for every terminal state so the player never
+// sees a silent failure.
+async function ftExportItemToCompendium(item) {
+  const packs = ftListItemCompendiumPacks();
+  if (!packs.length) {
+    ui.notifications?.error("No Item compendium packs available to export to.");
+    return null;
+  }
+  const unlocked = packs.filter(p => !p.locked);
+  if (!unlocked.length) {
+    ui.notifications?.error("No unlocked Item compendium packs. Right-click a pack in the Compendium tab → Toggle Lock to enable export.");
+    return null;
+  }
+  const defaultId = packs.find(p => p.isDefault && !p.locked)?.id ?? unlocked[0].id;
+  const opts = packs.map(p => {
+    const dis = p.locked ? " disabled" : "";
+    const tag = p.locked ? " (locked)" : "";
+    const sel = (!p.locked && p.id === defaultId) ? " selected" : "";
+    return `<option value="${p.id}"${sel}${dis}>${ftEscapeHtml(p.label)}${tag}</option>`;
+  }).join("");
+  const html = `
+    <div style="display:flex;flex-direction:column;gap:0.55rem;padding:0.25rem 0">
+      <div>Save a copy of <b>${ftEscapeHtml(item.name)}</b> to which library?</div>
+      <select name="packId" style="width:100%">${opts}</select>
+      <div style="font-size:0.75rem;opacity:0.7;line-height:1.4">The original on this character is untouched. Use this to grow a shared manifestation library — locked packs show with a tag and can't be picked.</div>
+    </div>`;
+  return new Promise((resolve) => {
+    new Dialog({
+      title: `Export to Library — ${item.name}`,
+      content: html,
+      buttons: {
+        save: {
+          label: "Save Copy",
+          callback: async (htmlEl) => {
+            const sel = (htmlEl[0] ?? htmlEl).querySelector?.("select[name='packId']")
+                     ?? htmlEl.find?.("select[name='packId']")?.[0];
+            const packId = sel?.value;
+            if (!packId) { resolve(null); return; }
+            resolve(await _ftDoExportToCompendium(item, packId));
+          }
+        },
+        cancel: { label: "Cancel", callback: () => resolve(null) }
+      },
+      default: "save",
+      close: () => resolve(null)
+    }).render(true);
+  });
+}
+
+async function _ftDoExportToCompendium(item, packId) {
+  const pack = game.packs?.get(packId);
+  if (!pack) {
+    ui.notifications?.error(`Pack not found: ${packId}`);
+    return null;
+  }
+  if (pack.locked) {
+    ui.notifications?.error(`Pack is locked: ${pack.metadata?.label ?? packId}`);
+    return null;
+  }
+  const src = _ftCleanItemForCompendium(item);
+  try {
+    const created = await Item.create(src, { pack: packId });
+    ui.notifications?.info(`Saved "${src.name}" to ${pack.metadata?.label ?? packId}.`);
+    return created;
+  } catch (err) {
+    console.error("[fourththing] Export to compendium failed", err);
+    ui.notifications?.error(`Export failed: ${err?.message ?? err}`);
+    return null;
+  }
+}
+
 function createManifestationItemData(actor, kind = "power", values = {}) {
   const tags = Array.from(new Set([
     ...(values.tags ?? []),
@@ -9435,6 +9559,7 @@ Hooks.once("init", function () {
         ftLesserManifest: FourthThingCharacterSheet._onFtLesserManifest,
         ftFiat:           FourthThingCharacterSheet._onFtFiat,
         ftManifestCreate: FourthThingCharacterSheet._onFtManifestCreate,
+        ftManifestExport: FourthThingCharacterSheet._onFtManifestExport,
         ftPowerCreate:    FourthThingCharacterSheet._onFtPowerCreate,
         ftManifestDrop:     FourthThingCharacterSheet._onFtManifestDrop,
         ftManifestEndScene: FourthThingCharacterSheet._onFtManifestEndScene,
@@ -10551,6 +10676,13 @@ Hooks.once("init", function () {
       const id   = target.closest("[data-item-id]")?.dataset.itemId;
       const item = id ? this.actor.items.get(id) : null;
       if (item) item.sheet.render(true);
+    }
+
+    static async _onFtManifestExport(event, target) {
+      const id   = target.closest("[data-item-id]")?.dataset.itemId;
+      const item = id ? this.actor.items.get(id) : null;
+      if (!item) return;
+      return ftExportItemToCompendium(item);
     }
 
     static async _onFtItemDelete(event, target) {

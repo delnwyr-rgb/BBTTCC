@@ -841,7 +841,7 @@
 
 .ft-cast-btn:hover { background: rgba(140,180,255,0.25); }
 
-.ft-item-edit, .ft-power-delete {
+.ft-item-edit, .ft-power-delete, .ft-item-export {
   padding: 0.2rem 0.5rem;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.12);
@@ -854,6 +854,7 @@
 
 .ft-item-edit:hover  { background: rgba(255,255,255,0.1); color: #f0f4ff; }
 .ft-power-delete:hover { background: rgba(235,87,87,0.15); color: #f48a8a; border-color: rgba(235,87,87,0.4); }
+.ft-item-export:hover { background: rgba(232,200,74,0.14); color: #f0e0a0; border-color: rgba(232,200,74,0.4); }
 
 .ft-empty-state {
   text-align: center;
