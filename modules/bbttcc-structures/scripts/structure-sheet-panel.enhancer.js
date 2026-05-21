@@ -169,27 +169,33 @@ function buildPanelHTML(actor) {
 
 // ── Injection ───────────────────────────────────────────────────────────────
 
-function _findInjectionTarget(html) {
-  // html is the rendered part for AppV2 sheets. For RigSheet / BossSheet
-  // (single-part) it's the whole sheet body. Inject into the identity tab.
-  const root = (html && html.length) ? html[0] : html;
-  if (!root || !root.querySelectorAll) return null;
+function _findInjectionTarget(appEl) {
+  // Always search the full window element (app.element) — the `html` param in
+  // AppV2 render hooks is the rendered PART content per
+  // [[appv2-render-hook-html-param]], which can be partial during the render
+  // lifecycle. Using app.element guarantees we see the fully-built DOM.
+  if (!appEl || !appEl.querySelector) return null;
   // Prefer identity tab pane
-  let host = root.querySelector(".tab.identity[data-tab='identity']")
-          || root.querySelector(".tab[data-tab='identity']");
+  let host = appEl.querySelector(".tab.identity[data-tab='identity']")
+          || appEl.querySelector(".tab[data-tab='identity']");
   if (host) return host;
   // Fallback: any tab pane that's currently active
-  host = root.querySelector(".tab.active");
+  host = appEl.querySelector(".tab.active");
   if (host) return host;
-  // Last resort — root
-  return root;
+  // Last resort: window-content body, NEVER the chrome
+  host = appEl.querySelector(".window-content");
+  return host || null;
 }
 
-function _removePriorPanel(host) {
-  host.querySelectorAll(`[${PANEL_MARKER}]`).forEach(el => el.remove());
+function _sweepPriorPanels(appEl) {
+  // Sweep the ENTIRE window. Earlier injections may have landed in the wrong
+  // place if a partial-render hook fired before the part DOM was complete;
+  // this guarantees we don't leave orphan panels in the chrome.
+  if (!appEl || !appEl.querySelectorAll) return;
+  appEl.querySelectorAll(`[${PANEL_MARKER}]`).forEach(el => el.remove());
 }
 
-function injectPanel(app, html) {
+function injectPanel(app /* html unused — we use app.element */) {
   try {
     const actor = app?.actor ?? app?.object;
     if (!actor) return;
@@ -198,10 +204,15 @@ function injectPanel(app, html) {
     // turn out to need it.
     if (!["rig", "boss"].includes(actor.type)) return;
 
-    const target = _findInjectionTarget(html);
-    if (!target) return;
+    const appEl = app.element;
+    if (!appEl) return;
 
-    _removePriorPanel(target);
+    // Always sweep ALL prior panels first — defensive against earlier
+    // misplaced injections from other hook paths.
+    _sweepPriorPanels(appEl);
+
+    const target = _findInjectionTarget(appEl);
+    if (!target) return;
 
     const wrap = document.createElement("div");
     wrap.className = "bbttcc-st-panel-wrap";
@@ -399,14 +410,21 @@ let _installed = false;
 function install() {
   if (_installed) return;
   _installed = true;
-  const handler = (app, html) => {
-    try { injectPanel(app, html); }
-    catch (e) { console.warn(TAG, "handler error", e); }
+  // Defer the injection one microtask so the part DOM is fully attached
+  // before we walk it. Some AppV2 versions fire the hook before the part
+  // wrapper is integrated into app.element.
+  const handler = (app) => {
+    queueMicrotask(() => {
+      try { injectPanel(app); }
+      catch (e) { console.warn(TAG, "handler error", e); }
+    });
   };
-  // Cover both sheet types directly + AppV2 catch-all
+  // ONLY hook the class-specific render hooks. The renderApplicationV2
+  // catch-all is too aggressive — it fires for dialogs and partial renders
+  // where the sheet DOM isn't fully assembled yet, causing orphan panels
+  // to land in the window chrome.
   Hooks.on("renderFourthThingRigSheet", handler);
   Hooks.on("renderFourthThingBossSheet", handler);
-  Hooks.on("renderApplicationV2", handler);
   console.log(TAG, "panel enhancer installed");
 }
 
