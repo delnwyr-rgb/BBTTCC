@@ -1464,6 +1464,24 @@ function ftManifestationDefaults(kind = "power") {
       // inherit the global saveAttribute (legacy behavior).
       saveAttributeOverrides: {}
     },
+    // Phase D — Chain (Secondary Targets). When `enabled`, after the primary
+    // target resolves and damage lands (damageMultiplier > 0), the cast path
+    // prompts the GM/caster with a dialog listing enemy tokens within `range`
+    // feet of the primary, closest-N pre-checked (where N = `count`). Each
+    // confirmed secondary takes its own roll of `damageFormula` (auto-applied,
+    // no per-target save) and optionally inherits the manifestation's
+    // conditions (`carryConditions`) and buffs/wards (`carryEffects`).
+    // damageType blank → inherits primary's damage type (so resist/immune
+    // computations on secondaries still find the right shadowing).
+    chain: {
+      enabled:         false,
+      count:           3,             // max secondaries
+      range:           30,            // feet from primary
+      damageFormula:   "1d6",         // separate dice for chain damage
+      damageType:      "",            // blank inherits primary's damageRoll.type
+      carryConditions: false,
+      carryEffects:    false
+    },
     // Phase C — Buffs & Wards. Active-effect-equivalent outcomes the
     // manifestation imparts to its targets on a successful resolution.
     // Authored in the wizard's Step 4; surfaced on the target as ONE
@@ -1516,6 +1534,203 @@ const FT_EFFECT_MOD_LABELS = Object.freeze({
   resolve:    "Resolve",
   initiative: "Initiative"
 });
+
+// Phase D — Chain (Secondary Targets).
+//
+// Distance between two tokens in scene feet. Uses center-to-center Euclidean
+// distance and the scene's grid distance unit. Sufficient for ranged chain
+// fall-off; diagonal-five-ten edge cases aren't material at this granularity.
+function _ftDistanceBetweenTokens(tokenA, tokenB) {
+  if (!tokenA || !tokenB) return Infinity;
+  const grid = canvas?.grid;
+  if (!grid) return Infinity;
+  const ax = tokenA.x + (tokenA.w ?? tokenA.width ?? 0) / 2;
+  const ay = tokenA.y + (tokenA.h ?? tokenA.height ?? 0) / 2;
+  const bx = tokenB.x + (tokenB.w ?? tokenB.width ?? 0) / 2;
+  const by = tokenB.y + (tokenB.h ?? tokenB.height ?? 0) / 2;
+  const px = Math.hypot(ax - bx, ay - by);
+  // grid.distance is the ft-per-square value (typically 5). grid.size is the
+  // pixel-width of one square. ft = pixels × (distance / size).
+  const ftPerPixel = (grid.distance ?? 5) / (grid.size ?? 100);
+  return px * ftPerPixel;
+}
+
+// Find candidate secondary-chain tokens within `rangeFt` of the primary's
+// token. Excludes the caster's own tokens and the primary itself; further
+// filters by hostile-ish disposition (NEUTRAL + HOSTILE — friendlies don't
+// chain by default). Returns an array of { token, actor, distance } sorted
+// by distance ascending so the picker preselects nearest-first.
+function _ftCollectChainCandidates(caster, primaryActor, rangeFt) {
+  const primaryToken = primaryActor?.getActiveTokens?.()?.[0];
+  if (!primaryToken) return [];
+  const casterIds = new Set((caster?.getActiveTokens?.() ?? []).map(t => t?.id).filter(Boolean));
+  const dispositions = CONST?.TOKEN_DISPOSITIONS ?? { HOSTILE: -1, NEUTRAL: 0, FRIENDLY: 1 };
+  const out = [];
+  for (const tok of (canvas?.tokens?.placeables ?? [])) {
+    if (!tok?.actor) continue;
+    if (tok.id === primaryToken.id) continue;
+    if (casterIds.has(tok.id)) continue;
+    if (tok.actor.id === caster?.id) continue;
+    if (tok.document?.disposition === dispositions.FRIENDLY) continue;
+    const dist = _ftDistanceBetweenTokens(primaryToken, tok);
+    if (dist > rangeFt) continue;
+    out.push({ token: tok, actor: tok.actor, distance: dist });
+  }
+  out.sort((a, b) => a.distance - b.distance);
+  return out;
+}
+
+// Dialog for picking which secondaries the chain lands on. Pre-checks the
+// nearest `maxCount`; lets the GM/caster uncheck or extend. Returns an array
+// of chosen Actor docs, or [] on cancel. Wraps Dialog so the picker can be
+// awaited inline.
+async function _ftPromptChainTargets(item, candidates, maxCount, rangeFt) {
+  if (!candidates.length) return [];
+  const rows = candidates.map((c, idx) => {
+    const checked = (idx < maxCount) ? " checked" : "";
+    const distStr = c.distance.toFixed(0);
+    return `<label style="display:flex;gap:0.5rem;align-items:center;padding:0.2rem 0;cursor:pointer">
+      <input type="checkbox" name="ftChainPick.${idx}" data-actor-id="${c.actor.id}"${checked}/>
+      <img src="${ftEscapeHtml(c.token.document?.texture?.src ?? c.actor.img ?? "icons/svg/mystery-man.svg")}" style="width:22px;height:22px;border-radius:3px"/>
+      <span style="flex:1">${ftEscapeHtml(c.actor.name)}</span>
+      <span style="opacity:0.6;font-size:0.78rem">${distStr} ft</span>
+    </label>`;
+  }).join("");
+  const content = `
+    <div style="display:flex;flex-direction:column;gap:0.35rem;padding:0.2rem 0">
+      <div style="font-size:0.82rem;opacity:0.85">Chain arc from <b>${ftEscapeHtml(item?.name ?? "manifestation")}</b> — pick up to <b>${maxCount}</b> secondary target${maxCount===1?"":"s"} within <b>${rangeFt} ft</b>. Nearest are pre-selected.</div>
+      <div style="max-height:50vh;overflow-y:auto;border:1px solid rgba(232,200,74,0.18);border-radius:3px;padding:0.3rem 0.5rem;margin-top:0.2rem">${rows}</div>
+    </div>`;
+  return new Promise((resolve) => {
+    new Dialog({
+      title: "Chain to Secondary Targets",
+      content,
+      buttons: {
+        fire: {
+          label: "Fire Chain",
+          callback: (htmlEl) => {
+            const root = htmlEl[0] ?? htmlEl;
+            const checked = Array.from(root.querySelectorAll("input[type='checkbox']:checked"));
+            const picked = [];
+            let n = 0;
+            for (const cb of checked) {
+              if (n >= maxCount) break;
+              const aid = cb.dataset.actorId;
+              const cand = candidates.find(c => c.actor.id === aid);
+              if (cand) { picked.push(cand.actor); n++; }
+            }
+            resolve(picked);
+          }
+        },
+        cancel: { label: "Skip Chain", callback: () => resolve([]) }
+      },
+      default: "fire",
+      close: () => resolve([])
+    }).render(true);
+  });
+}
+
+// Fire the chain. Called from the singular cast path AFTER primary damage +
+// states are applied. For each picked secondary: rolls the chain formula,
+// auto-applies via _applyDamageToActor (no per-target save), and (when
+// carryConditions / carryEffects flags are set on the manifestation's chain
+// config) calls applyManifestationStates with a tailored mf so conditions
+// + effects land on the secondary too. Posts a single summary chat card.
+async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc = 15 } = {}) {
+  const chain = mf?.chain ?? null;
+  if (!chain?.enabled) return;
+  const candidates = _ftCollectChainCandidates(caster, primary, Number(chain.range) || 30);
+  if (!candidates.length) {
+    ui.notifications?.info(`${item?.name ?? "Manifestation"} chain: no valid secondaries within ${chain.range} ft of ${primary.name}.`);
+    return;
+  }
+  const picked = await _ftPromptChainTargets(item, candidates, Math.max(1, Number(chain.count) || 3), chain.range);
+  if (!picked.length) return;
+
+  // Damage type inherits from the primary's damageRoll.type if blank.
+  const damageType  = chain.damageType || dr?.type || "kinetic";
+  const trackKey    = dr?.track ?? "integrity";
+  const damageFlav  = dr?.flavor ?? "";
+  const formula     = String(chain.damageFormula ?? "1d6").trim() || "1d6";
+  // Synthetic mf for the carry-* paths — only includes the parts we want
+  // applied on secondaries, so the cast resolver doesn't try to re-resolve
+  // them (no second attack roll, no second save).
+  const carryMf = {};
+  if (chain.carryConditions && mf?.appliedStates?.states?.length) carryMf.appliedStates = mf.appliedStates;
+  if (chain.carryEffects && mf?.appliedEffects && (mf.appliedEffects.modifiers?.length || mf.appliedEffects.resists?.length || mf.appliedEffects.immunes?.length)) {
+    carryMf.appliedEffects = mf.appliedEffects;
+  }
+
+  const summaries = [];
+  for (const secActor of picked) {
+    let rolled = null;
+    let rawTotal = 0;
+    try {
+      rolled = await new Roll(formula).evaluate({ async: true });
+      rawTotal = Number(rolled.total) || 0;
+    } catch (e) {
+      console.warn("Roll for Initiation | chain damage roll failed for", secActor.name, e);
+    }
+    let dmgDesc = `${secActor.name}: ${rawTotal} ${damageType}`;
+    if (rawTotal > 0) {
+      try {
+        const apply = await game.fourththing.rolls._applyDamageToActor(secActor, rawTotal, {
+          op:           "damage",
+          track:        trackKey,
+          damageType,
+          damageFlavor: damageFlav,
+          perTargetMultiplier: 1
+        });
+        if (apply) dmgDesc = apply;
+      } catch (e) {
+        console.warn("Roll for Initiation | chain _applyDamageToActor failed", secActor.name, e);
+      }
+    }
+    summaries.push({ name: secActor.name, formula, total: rawTotal, desc: dmgDesc, roll: rolled });
+    // Carry conditions / effects via applyManifestationStates with the synthetic mf.
+    if (Object.keys(carryMf).length) {
+      try {
+        await game.fourththing.applyManifestationStates(caster, secActor, item, carryMf, { castDc });
+      } catch (e) {
+        console.warn("Roll for Initiation | chain carry-states failed", secActor.name, e);
+      }
+    }
+  }
+
+  // Summary chat card — one entry per secondary with its rolled total.
+  const carryBits = [];
+  if (chain.carryConditions) carryBits.push("conditions");
+  if (chain.carryEffects)    carryBits.push("buffs/wards");
+  const carryNote = carryBits.length
+    ? `<p style="margin:0.2rem 0;font-size:0.74rem;opacity:0.7;font-style:italic">Carried to secondaries: ${carryBits.join(" + ")}.</p>`
+    : "";
+  const lines = summaries.map(s => `<li>${ftEscapeHtml(s.desc)} <span style="opacity:0.55;font-size:0.74rem">(${s.formula} → ${s.total})</span></li>`).join("");
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: caster }),
+    content: `<div class="fourththing-roll" style="border-color:#a878d8">
+      <div class="ft-roll-header"><span class="ft-roll-name">⚡ ${ftEscapeHtml(item?.name ?? "Manifestation")} — chain arc (${summaries.length} secondar${summaries.length===1?"y":"ies"})</span></div>
+      <ul style="margin:0.3rem 0;padding-left:1.2rem;font-size:0.82rem">${lines}</ul>
+      ${carryNote}
+    </div>`
+  });
+}
+
+// Phase D — normalize the chain config. Coerces numeric strings, clamps
+// ranges, validates damage type against FT.DAMAGE_TYPES, and force-bools
+// the toggles. Idempotent.
+function ftNormalizeChainConfig(raw) {
+  const out = { enabled: false, count: 3, range: 30, damageFormula: "1d6", damageType: "", carryConditions: false, carryEffects: false };
+  if (!raw || typeof raw !== "object") return out;
+  out.enabled         = raw.enabled === true;
+  out.count           = Math.max(1, Math.min(8, Math.floor(Number(raw.count) || 3)));
+  out.range           = Math.max(5, Math.min(120, Math.floor(Number(raw.range) || 30)));
+  out.damageFormula   = String(raw.damageFormula ?? "1d6").trim() || "1d6";
+  const dt            = String(raw.damageType ?? "").toLowerCase();
+  out.damageType      = (dt && FT.DAMAGE_TYPES?.[dt]) ? dt : "";
+  out.carryConditions = raw.carryConditions === true;
+  out.carryEffects    = raw.carryEffects === true;
+  return out;
+}
 
 // Normalize the wizard-harvested appliedEffects shape (which can have object
 // maps from checkbox grids + sparse modifier slots) to the canonical storage
@@ -3242,6 +3457,17 @@ async function castManifestation(actor, item, {
           console.warn("Roll for Initiation | applyManifestationStates failed", e);
         }
       }
+      // Phase D — Chain. Only fires after the primary actually lands
+      // (damageMultiplier > 0) and when the manifestation declares chain.
+      // AoE path skips chain entirely (the area template already targets a
+      // group; chain is for singular-cast burst).
+      if (target && damageMultiplier > 0 && mf?.chain?.enabled) {
+        try {
+          await _ftFireManifestationChain(actor, target, item, mf, dr, { castDc: targetSaveCastDc });
+        } catch (e) {
+          console.warn("Roll for Initiation | chain fire failed", e);
+        }
+      }
     }
     }  // close usePromptSave else
   }
@@ -3847,7 +4073,9 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       // Phase C — Buffs & Wards. Wizard harvests object-map shapes (checkbox
       // grids on resists/immunes, indexed slots on modifiers); normalize to
       // canonical arrays here so downstream consumers get a single shape.
-      appliedEffects: ftNormalizeAppliedEffects(values.appliedEffects ?? {})
+      appliedEffects: ftNormalizeAppliedEffects(values.appliedEffects ?? {}),
+      // Phase D — Chain config. Normalize coerces enabled bool + clamps.
+      chain: ftNormalizeChainConfig(values.chain ?? {})
     },
     { inplace: false }
   );
@@ -4111,6 +4339,15 @@ function _ftWizV2RenderForm(state, { actor }) {
 
 function _ftWizV2RenderTargeting(state) {
   const areaShape = state.area?.shape ?? "none";
+  const chain = state.chain ?? {};
+  const chainEnabled = chain.enabled === true;
+  const aoeActive = areaShape !== "none";
+  // Chain doesn't compose with AoE — AoE targets via template, chain targets
+  // via per-secondary pick. Surface a hint when both are configured rather
+  // than blocking the author (lets them turn one off explicitly).
+  const conflictNote = aoeActive && chainEnabled
+    ? `<p class="ft-wiz-v2-warn" style="color:#e8c84a;font-size:0.76rem;margin:0.3rem 0 0">⚠ Area shape and chain are both configured. The cast path runs AoE; chain is skipped when an Area template is placed.</p>`
+    : "";
   return `
     <p class="ft-wiz-v2-coach">Who or what does it touch, and across how much space?</p>
     <div class="ft-cast-grid">
@@ -4118,7 +4355,18 @@ function _ftWizV2RenderTargeting(state) {
       <div class="ft-cast-field ft-cast-span-2"><label>Range / Area Notes</label>${_ftWizV2Txt("rangeAreaText", state.rangeAreaText, "Near, 3 / 6, the room, a carried object...")}</div>
       <div class="ft-cast-field"><label>Area shape</label>${_ftWizV2Sel("area.shape", { none: "None", cone: "Cone", sphere: "Sphere", line: "Line", cube: "Cube", cylinder: "Cylinder" }, areaShape)}</div>
       <div class="ft-cast-field"><label>Area size (ft)</label>${_ftWizV2Num("area.size", state.area?.size, { min: 0, max: 120 })}</div>
-    </div>`;
+    </div>
+    <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Chain to Secondary Targets</div>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Chain-lightning pattern. After the primary target resolves, the cast prompts you to pick up to N additional enemies within range. Each secondary takes a separate roll of the chain formula (auto-applied — no per-target save). Inherits the primary's damage type unless overridden. Conditions and Buffs &amp; Wards can optionally carry to secondaries.</p>
+    <div class="ft-cast-grid">
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("chain.enabled", chainEnabled)}<span>Enable chain</span></label></div>
+      <div class="ft-cast-field"><label>Max secondaries</label>${_ftWizV2Num("chain.count", chain.count ?? 3, { min: 1, max: 8 })}</div>
+      <div class="ft-cast-field"><label>Range (ft from primary)</label>${_ftWizV2Num("chain.range", chain.range ?? 30, { min: 5, max: 120 })}</div>
+      <div class="ft-cast-field"><label>Chain damage formula</label>${_ftWizV2Txt("chain.damageFormula", chain.damageFormula ?? "1d6", "1d6")}</div>
+      <div class="ft-cast-field"><label>Chain damage type</label>${_ftWizV2Sel("chain.damageType", { "": "— inherit primary —", ...FT.DAMAGE_TYPES }, chain.damageType ?? "")}</div>
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("chain.carryConditions", chain.carryConditions === true)}<span>Conditions carry</span></label></div>
+      <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("chain.carryEffects", chain.carryEffects === true)}<span>Buffs &amp; Wards carry</span></label></div>
+    </div>${conflictNote}`;
 }
 
 function _ftWizV2RenderEffectPower(state) {
@@ -4402,12 +4650,35 @@ function _ftWizV2EffectsBudgetTier(eff) {
   return { tier, note: `${parts.join(", ")} (weight ${weight}) → T${tier}` };
 }
 
+// Phase D — Chain magnitude. Approximates expected total chain damage as
+// count × avg(formula). XdY parses literally; un-parseable falls back to a
+// flat number, then ~3 if neither matches. Brackets: ≤5→T1, ≤12→T2, ≤22→T3,
+// else T4 — enough headroom for "3 × 1d6" (≈10.5, T2) up through "5 × 2d8"
+// (≈45, T4).
+function _ftWizV2ChainBudgetTier(chain) {
+  if (!chain?.enabled) return { tier: 0, note: null };
+  const count = Math.max(1, Math.floor(Number(chain.count) || 3));
+  const formula = String(chain.damageFormula ?? "1d6");
+  const m = formula.match(/^\s*(\d+)\s*d\s*(\d+)\s*$/i);
+  const avgPerHit = m
+    ? Math.floor(Number(m[1])) * ((Number(m[2]) + 1) / 2)
+    : (Number(formula) || 3);
+  const total = count * avgPerHit;
+  let tier;
+  if      (total <= 5)  tier = 1;
+  else if (total <= 12) tier = 2;
+  else if (total <= 22) tier = 3;
+  else                  tier = 4;
+  return { tier, note: `chain ×${count} ${formula} (≈${total.toFixed(1)}) → T${tier}` };
+}
+
 function _ftWizV2SuggestTier(state) {
   const factors = [
     _ftWizV2DamageBudgetTier(state.damageRoll),
     _ftWizV2AreaBudgetTier(state.area),
     _ftWizV2StatesBudgetTier(state.appliedStates),
     _ftWizV2EffectsBudgetTier(state.appliedEffects),
+    _ftWizV2ChainBudgetTier(state.chain),
     _ftWizV2DcBudgetTier(state)
   ].filter(f => f.tier > 0);
   const tier = factors.length ? Math.max(...factors.map(f => f.tier)) : 1;
