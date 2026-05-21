@@ -1343,6 +1343,18 @@ function _isInfilKey(k) {
   return lk === "infiltration_alarm" || lk === "intrigue";
 }
 
+// Courtly Intrigue gate. True for the legacy "courtly" key OR for "presence"
+// when the active scene has tableau enabled — see COURTLY_INTRIGUE_SPEC.md §3
+// and project_courtly_intrigue_s2_design_memo_2026_05_20. Lets a Presence raid
+// run on a tableau scene route through the courtly engine + HUD without
+// promoting "courtly" back into the canonical three-faculty dropdown.
+function _isCourtlyKey(k) {
+  const lk = String(k || "").toLowerCase();
+  if (lk === "courtly") return true;
+  if (lk === "presence" && canvas?.scene?.flags?.["bbttcc-raid"]?.tableau?.enabled === true) return true;
+  return false;
+}
+
 function primaryKeyFor(activityKey){
   // Look up directly in the full registry (canonical + legacy) so old
   // in-flight raid sessions still resolve to the right OP pool.
@@ -1709,7 +1721,7 @@ async function _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender)
         if (_isInfilKey(mode) && app?.__infilScenario?.applyEffects) {
           await app.__infilScenario.applyEffects(scenarioEffects);
           appliedScenario = true;
-        } else if (mode === "courtly" && app?.__courtlyScenario?.applyEffects) {
+        } else if (_isCourtlyKey(mode) && app?.__courtlyScenario?.applyEffects) {
           await app.__courtlyScenario.applyEffects(scenarioEffects);
           appliedScenario = true;
         }
@@ -2512,7 +2524,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
 _isScenarioRound(r){
   if (!r) return false;
   const k = String(r.activityKey || "").toLowerCase();
-  return (k === "courtly" || _isInfilKey(k));
+  return (_isCourtlyKey(k) || _isInfilKey(k));
 }
 
 _bandLabel(band){
@@ -2616,7 +2628,7 @@ _renderScenarioHUD(host, round){
             st = live;
           }
         }
-        if (k === "courtly" && this.__courtlyScenario && typeof this.__courtlyScenario.getState === "function") {
+        if (_isCourtlyKey(k) && this.__courtlyScenario && typeof this.__courtlyScenario.getState === "function") {
           const live = this.__courtlyScenario.getState();
           if (!round.attackerId || String(live?.attackerId || "") === String(round.attackerId || "")) {
             st = live;
@@ -2639,7 +2651,7 @@ _renderScenarioHUD(host, round){
     row.style.border = "1px solid rgba(148, 163, 184, 0.20)";
     row.style.background = "linear-gradient(90deg, rgba(2, 6, 23, 0.35), rgba(30, 64, 175, 0.08))";
 
-    if (k === "courtly") {
+    if (_isCourtlyKey(k)) {
       row.appendChild(this._mkChip("COURTLY", { tone:"mode" }));
 
       const rNum = (st && st.round != null)
@@ -2920,6 +2932,14 @@ _renderScenarioHUD(host, round){
         tr.querySelectorAll('[data-manage-act="diff"]').forEach(b => b.style.display = "none");
         tr.querySelectorAll('[data-manage-act="stage"]').forEach(b => b.disabled = true);
         return;
+      }
+
+      // Presence-on-tableau (Option B): scenario HUD AND keep maneuvers
+      // (Propaganda Campaign, Diplomatic Mission, etc.). Different from
+      // legacy "courtly" key which was scenario-only.
+      if (_isCourtlyKey(ak)) {
+        this._renderScenarioHUD(host, round);
+        // fall through to maneuver render below
       }
 
       // Alarm mode keeps the scenario HUD, but ALSO allows maneuvers.
@@ -3807,7 +3827,7 @@ r.view = {
       if (!sel) return;
 
       // Scenario modes require a faction defender; disallow creature targets up front.
-      if ((this.vm.activityKey === "courtly" || _isInfilKey(this.vm.activityKey)) && sel.type === "creature") {
+      if ((_isCourtlyKey(this.vm.activityKey) || _isInfilKey(this.vm.activityKey)) && sel.type === "creature") {
         ui.notifications?.warn?.("Scenario modes cannot target creatures. Pick a hex/facility/rig defender target.");
         return;
       }
@@ -3948,7 +3968,7 @@ r.view = {
 
       // Scenario modes (Courtly / Alarm Infiltration) don't use the standard DC math preview.
       let comp = null;
-      if (act.key === "courtly" || _isInfilKey(act.key)) {
+      if (_isCourtlyKey(act.key) || _isInfilKey(act.key)) {
         comp = {
           key: act.primaryKey || primaryKeyFor(act.key),
           attBonus: Number(coalition.total || 0),
@@ -4522,7 +4542,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
     // Scenario Modes (Courtly Intrigue / Infiltration Alarm)
     // These bypass standard raid resolution and use the dedicated engines.
     // ---------------------------------------------------------------------
-    if (r && (r.activityKey === "courtly" || _isInfilKey(r.activityKey))) {
+    if (r && (_isCourtlyKey(r.activityKey) || _isInfilKey(r.activityKey))) {
       // Scenario modes require a defender faction (no creature targets).
       if (r.targetType === "creature") {
         ui.notifications?.warn?.("Scenario modes require a defender faction. Creature targets are not valid here.");
@@ -4545,7 +4565,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
       // ----------------------------------------------------------
       // Courtly Intrigue
       // ----------------------------------------------------------
-      if (r.activityKey === "courtly") {
+      if (_isCourtlyKey(r.activityKey)) {
         if (typeof raidApi.courtly !== "function") {
           ui.notifications?.error?.("Courtly engine not loaded. (raid-courtly.influence.enhancer.js)");
           return;
@@ -7630,7 +7650,7 @@ const __tier = (__tier0 !== "unknown") ? __tier0
         appliedScenario = true;
       }
       // Courtly Intrigue (if you later expose applyEffects)
-      if (mode === "courtly" && app && app.__courtlyScenario && typeof app.__courtlyScenario.applyEffects === "function") {
+      if (_isCourtlyKey(mode) && app && app.__courtlyScenario && typeof app.__courtlyScenario.applyEffects === "function") {
         await app.__courtlyScenario.applyEffects(merged.scenarioEffects);
         appliedScenario = true;
       }
