@@ -78,6 +78,13 @@
       "system": "fourththing"
     },
     {
+      "type": "Item",
+      "name": "courtly-secrets",
+      "label": "BBTTCC Courtly Secrets",
+      "path": "packs/courtly-secrets",
+      "system": "fourththing"
+    },
+    {
       "type": "JournalEntry",
       "name": "documentation",
       "label": "BBTTCC Documentation",

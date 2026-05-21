@@ -201,7 +201,7 @@
         : secrets.map(i => {
             const acq = String(i.flags?.[MOD_R]?.secret?.acquisition || "earned");
             const acqColor = acq === "stolen" ? "#ff7a7a" : "#88cc55";
-            return `<div class="ft-courtly-secret" data-item-id="${esc(i.id)}" data-actor-id="${esc(actor.id)}" draggable="true" title="${esc(i.system?.description?.value || i.name)}\n(Phase B: drag-to-play stub)" style="display:flex;align-items:center;gap:.4rem;padding:.2rem .35rem;border:1px solid #444;border-radius:3px;cursor:grab;background:#15151c;">
+            return `<div class="ft-courtly-secret" data-item-id="${esc(i.id)}" data-actor-id="${esc(actor.id)}" draggable="true" title="${esc(i.name)} — drag onto Influence panel to play" style="display:flex;align-items:center;gap:.4rem;padding:.2rem .35rem;border:1px solid #444;border-radius:3px;cursor:grab;background:#15151c;">
               <img src="${esc(i.img || "icons/svg/book.svg")}" style="width:24px;height:24px;border-radius:2px;flex:0 0 auto;"/>
               <div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.78rem;">${esc(i.name)}</div>
               <span style="font-size:0.66rem;color:${acqColor};border:1px solid ${acqColor};border-radius:6px;padding:0 5px;">${esc(acq)}</span>
@@ -236,6 +236,60 @@
         e.stopPropagation();
         await _openFavorDialog(pill.dataset.actorId, pill.dataset.side, state);
       });
+    });
+  }
+
+  // Phase C — drag-to-play: secret rows on Secrets panel are draggable;
+  // drop target is the Influence panel. Effect handlers prompt for any
+  // additional inputs (courtier picks etc.) via dialog inside the secrets API.
+  function _bindSecrets(el) {
+    el.querySelectorAll(".ft-courtly-secret").forEach(row => {
+      row.addEventListener("dragstart", (e) => {
+        try {
+          const payload = JSON.stringify({
+            actorId: row.dataset.actorId,
+            itemId: row.dataset.itemId,
+            kind: "courtly-secret"
+          });
+          e.dataTransfer.setData("text/plain", payload);
+          e.dataTransfer.setData("application/bbttcc-courtly-secret", payload);
+          e.dataTransfer.effectAllowed = "move";
+          row.style.opacity = "0.5";
+          // Highlight drop target while dragging
+          if (_infEl) {
+            _infEl.style.outline = `2px dashed ${VIOLET}`;
+            _infEl.style.outlineOffset = "4px";
+          }
+        } catch (err) { console.warn(TAG, "dragstart failed", err); }
+      });
+      row.addEventListener("dragend", () => {
+        row.style.opacity = "";
+        if (_infEl) { _infEl.style.outline = ""; _infEl.style.outlineOffset = ""; }
+      });
+    });
+  }
+
+  function _bindInfluenceDropZone(el) {
+    el.addEventListener("dragover", (e) => {
+      if (e.dataTransfer?.types?.includes("application/bbttcc-courtly-secret")
+       || e.dataTransfer?.types?.includes("text/plain")) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+      }
+    });
+    el.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      let payload = null;
+      try {
+        const raw = e.dataTransfer.getData("application/bbttcc-courtly-secret")
+                 || e.dataTransfer.getData("text/plain");
+        payload = JSON.parse(raw || "{}");
+      } catch (err) { return; }
+      if (payload?.kind !== "courtly-secret" || !payload.actorId || !payload.itemId) return;
+      const api = game.bbttcc?.api?.raid?.courtlySecrets;
+      if (!api?.playSecret) { ui.notifications?.error?.("Courtly secrets API not loaded."); return; }
+      try { await api.playSecret(payload.actorId, payload.itemId); }
+      catch (err) { console.warn(TAG, "playSecret failed", err); ui.notifications?.error?.("Play failed — see console."); }
     });
   }
 
@@ -299,19 +353,19 @@
     catch (e) { console.warn(TAG, "getState failed", e); return _teardownAll(); }
     if (!state) return _teardownAll();
 
-    // Influence panel
+    // Influence panel (also drop-zone for Phase C secret drag-to-play)
     const infSlot = { get el() { return _infEl; }, set el(v) { _infEl = v; } };
-    _swapPanel(infSlot, _buildInfluenceHtml(app, state), null, "courtly:hud:influence", "⚜ Court");
+    _swapPanel(infSlot, _buildInfluenceHtml(app, state), _bindInfluenceDropZone, "courtly:hud:influence", "⚜ Court");
 
     // Roster panel
     const rosSlot = { get el() { return _rosEl; }, set el(v) { _rosEl = v; } };
     _swapPanel(rosSlot, _buildRosterHtml(app, state), (el) => _bindRoster(el, state), "courtly:hud:roster", "⚜ Courtiers");
 
-    // Secrets panel — Phase B: holder-only (gm sees both)
+    // Secrets panel — Phase B: holder-only (gm sees both); Phase C: draggable
     const vc = _viewerCtx(state);
     if (vc) {
       const secSlot = { get el() { return _secEl; }, set el(v) { _secEl = v; } };
-      _swapPanel(secSlot, _buildSecretsHtml(app, state, vc), null, "courtly:hud:secrets", "⚜ Secrets");
+      _swapPanel(secSlot, _buildSecretsHtml(app, state, vc), _bindSecrets, "courtly:hud:secrets", "⚜ Secrets");
     } else if (_secEl) {
       try { _secEl.remove(); } catch (_) {}
       _secEl = null;
