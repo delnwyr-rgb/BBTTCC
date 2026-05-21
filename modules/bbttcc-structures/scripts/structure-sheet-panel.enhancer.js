@@ -167,12 +167,12 @@ function _buildFullPanelHTML(actor, state) {
       </div>
 
       <div class="bbttcc-st-actions">
-        <button type="button" class="bbttcc-st-btn" data-action="bbttccStHarden" disabled
-                data-tooltip="Append materials to BOM (Phase D)">Harden</button>
-        <button type="button" class="bbttcc-st-btn" data-action="bbttccStRepair" disabled
-                data-tooltip="Refill chipped Plates (Phase D)">Repair</button>
-        <button type="button" class="bbttcc-st-btn" data-action="bbttccStReclamation" disabled
-                data-tooltip="Bulwark Ruin to Renewal — recover BOM to stockpile (Phase C)">Reclamation</button>
+        <button type="button" class="bbttcc-st-btn" data-action="bbttccStHarden"
+                data-tooltip="Append materials from a faction stockpile to expand the BOM and grow Plates">Harden</button>
+        <button type="button" class="bbttcc-st-btn" data-action="bbttccStRepair"
+                data-tooltip="Refill chipped materials from a faction stockpile (same-material; cross-family substitution is Phase D+)">Repair</button>
+        <button type="button" class="bbttcc-st-btn" data-action="bbttccStReclamation"
+                data-tooltip="Open the Bulwark Ruin to Renewal flow on this Structure as the target">Reclamation</button>
         <button type="button" class="bbttcc-st-btn bbttcc-st-btn-secondary"
                 data-action="bbttccStRestamp"
                 data-tooltip="Re-stamp the BOM (resets Plates to max)">Re-stamp</button>
@@ -389,6 +389,317 @@ function _bindActions(root, actor, app) {
       ui.notifications?.info?.("Collapse-fired flag cleared.");
     });
   });
+
+  // ── Phase D handlers ───────────────────────────────────────────────────────
+
+  // Harden — open faction picker + material qty picker
+  root.querySelectorAll(`[data-action="bbttccStHarden"]`).forEach(btn => {
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      await _openHardenDialog(actor, () => app?.render?.(false));
+    });
+  });
+
+  // Repair — pick faction, repair chipped rows
+  root.querySelectorAll(`[data-action="bbttccStRepair"]`).forEach(btn => {
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      await _openRepairDialog(actor, () => app?.render?.(false));
+    });
+  });
+
+  // Reclamation — open the Phase C Ruin to Renewal flow, with this actor as
+  // the implied target. The Phase C handler accepts the Bulwark as caller;
+  // for the sheet button we treat the GM as the caller and let them pick
+  // which Bulwark and which faction.
+  root.querySelectorAll(`[data-action="bbttccStReclamation"]`).forEach(btn => {
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      await _openReclamationDialog(actor);
+    });
+  });
+}
+
+// ── Harden dialog ──────────────────────────────────────────────────────────
+
+async function _openHardenDialog(actor, onDone) {
+  const api = game.bbttcc?.api?.structures;
+  const stockApi = game.bbttcc?.api?.factions?.stockpile;
+  if (!api?.recipes?.harden || !stockApi) {
+    return ui.notifications?.error?.("Recipes API or Stockpile API not loaded.");
+  }
+
+  const factions = (game.actors?.contents ?? []).filter(a =>
+    a.type === "character" && a.getFlag("bbttcc-factions", "isFaction"));
+  if (!factions.length) return ui.notifications?.warn?.("No faction actors found.");
+
+  // Default to actor's affiliated faction if any
+  const sys = actor.system?.system ?? actor.system;
+  const ownerId = sys?.identity?.factionOwnerId;
+  const defaultFaction = ownerId ? game.actors?.get(ownerId) : factions[0];
+
+  const factionOptions = factions.map(f =>
+    `<option value="${f.id}" ${defaultFaction?.id === f.id ? "selected" : ""}>${foundry.utils.escapeHTML(f.name)}</option>`
+  ).join("");
+
+  // Render: list of materials in faction stockpile + qty picker
+  function _stockpileRowsHtml(faction) {
+    const list = stockApi.list?.(faction) ?? [];
+    if (!list.length) return `<p style="opacity:0.5; font-style:italic; margin:4px 0">Stockpile is empty.</p>`;
+    return `
+      <table style="width:100%; border-collapse:collapse; margin-top:4px;">
+        <thead><tr style="opacity:0.6; font-size:0.62rem">
+          <th style="text-align:left; padding:2px 6px">Material</th>
+          <th style="text-align:right; padding:2px 6px">In Stockpile</th>
+          <th style="text-align:right; padding:2px 6px">Add</th>
+        </tr></thead>
+        <tbody>
+          ${list.map(m => `
+            <tr>
+              <td style="padding:2px 6px; font-size:0.74rem">${foundry.utils.escapeHTML(m.name)} <span style="opacity:0.5; font-size:0.62rem">(${foundry.utils.escapeHTML(m.key)})</span></td>
+              <td style="padding:2px 6px; text-align:right; font-family:monospace; font-size:0.74rem">${m.qty}</td>
+              <td style="padding:2px 6px; text-align:right;">
+                <input type="number" name="add_${foundry.utils.escapeHTML(m.key)}" min="0" max="${m.qty}" value="0" style="width:60px; font-family:monospace; text-align:right;"/>
+              </td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+  }
+
+  const dialog = new Dialog({
+    title: `Harden — ${actor.name}`,
+    content: `
+      <div style="display:flex; flex-direction:column; gap:0.5rem; padding:0.4rem 0; min-width: 480px;">
+        <p style="margin:0; font-size:0.78rem">
+          Append materials to this Structure's BOM. Each unit added contributes
+          its family's plate value to both Plates Max AND Plates Current.
+        </p>
+        <label style="display:flex; flex-direction:column; gap:0.2rem;">
+          <span style="font-size:0.72rem; opacity:0.7">Pay from faction stockpile</span>
+          <select name="factionId">${factionOptions}</select>
+        </label>
+        <div id="bbttcc-harden-rows"></div>
+      </div>
+    `,
+    buttons: {
+      harden: {
+        label: "Harden",
+        callback: async (html) => {
+          const factionId = html.find("[name='factionId']").val();
+          const faction = game.actors.get(factionId);
+          if (!faction) return ui.notifications?.warn?.("Pick a faction.");
+          const list = stockApi.list?.(faction) ?? [];
+          const additions = [];
+          for (const m of list) {
+            const inp = html.find(`[name='add_${m.key}']`);
+            const qty = Math.max(0, parseInt(inp.val(), 10) || 0);
+            if (qty > 0) additions.push({ key: m.key, qty });
+          }
+          if (!additions.length) return ui.notifications?.warn?.("Pick at least one material to add.");
+          const res = await api.recipes.harden(actor, additions, faction);
+          if (!res.ok) {
+            const missingList = (res.missing ?? []).map(m => `${m.name} (need ${m.need}, have ${m.have})`).join(", ");
+            ui.notifications?.error?.(`${res.error}${missingList ? " — " + missingList : ""}`);
+            return;
+          }
+          ui.notifications?.info?.(`Hardened ${actor.name} (+${res.addedPlateValue} plates).`);
+          onDone?.();
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "harden",
+    render: (html) => {
+      const fSel = html.find("[name='factionId']");
+      const rowsHost = html.find("#bbttcc-harden-rows");
+      const update = () => {
+        const f = game.actors.get(fSel.val());
+        rowsHost.html(_stockpileRowsHtml(f));
+      };
+      fSel.on("change", update);
+      update();
+    }
+  });
+  dialog.render(true);
+}
+
+// ── Repair dialog ──────────────────────────────────────────────────────────
+
+async function _openRepairDialog(actor, onDone) {
+  const api = game.bbttcc?.api?.structures;
+  const stockApi = game.bbttcc?.api?.factions?.stockpile;
+  if (!api?.recipes?.repair || !stockApi) {
+    return ui.notifications?.error?.("Recipes API or Stockpile API not loaded.");
+  }
+
+  const bom = actor.getFlag("bbttcc-structures", "materialBOM") ?? [];
+  const chipped = bom.filter(r => {
+    const qty = Number(r.qty) || 0;
+    const orig = Number(r.originalQty) || qty;
+    return qty < orig;
+  });
+
+  if (!chipped.length) {
+    return ui.notifications?.info?.("Nothing to repair — BOM is at full qty.");
+  }
+
+  const factions = (game.actors?.contents ?? []).filter(a =>
+    a.type === "character" && a.getFlag("bbttcc-factions", "isFaction"));
+  if (!factions.length) return ui.notifications?.warn?.("No faction actors found.");
+
+  const sys = actor.system?.system ?? actor.system;
+  const ownerId = sys?.identity?.factionOwnerId;
+  const defaultFaction = ownerId ? game.actors?.get(ownerId) : factions[0];
+
+  const factionOptions = factions.map(f =>
+    `<option value="${f.id}" ${defaultFaction?.id === f.id ? "selected" : ""}>${foundry.utils.escapeHTML(f.name)}</option>`
+  ).join("");
+
+  function _chippedRowsHtml(faction) {
+    return `
+      <table style="width:100%; border-collapse:collapse; margin-top:4px;">
+        <thead><tr style="opacity:0.6; font-size:0.62rem">
+          <th style="text-align:left; padding:2px 6px">Material</th>
+          <th style="text-align:right; padding:2px 6px">Chipped</th>
+          <th style="text-align:right; padding:2px 6px">In Stockpile</th>
+          <th style="text-align:right; padding:2px 6px">Refill</th>
+        </tr></thead>
+        <tbody>
+          ${chipped.map(r => {
+            const qty = Number(r.qty) || 0;
+            const orig = Number(r.originalQty) || qty;
+            const need = orig - qty;
+            const have = stockApi.qty?.(faction, r.materialKey) ?? 0;
+            const max = Math.min(need, have);
+            return `<tr>
+              <td style="padding:2px 6px; font-size:0.74rem">${foundry.utils.escapeHTML(r.name ?? r.materialKey)}</td>
+              <td style="padding:2px 6px; text-align:right; font-family:monospace; font-size:0.74rem; color:#e08a3a">−${need}</td>
+              <td style="padding:2px 6px; text-align:right; font-family:monospace; font-size:0.74rem">${have}</td>
+              <td style="padding:2px 6px; text-align:right;">
+                <input type="number" name="repair_${foundry.utils.escapeHTML(r.materialKey)}" min="0" max="${max}" value="${max}" style="width:60px; font-family:monospace; text-align:right;"/>
+              </td>
+            </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    `;
+  }
+
+  const dialog = new Dialog({
+    title: `Repair — ${actor.name}`,
+    content: `
+      <div style="display:flex; flex-direction:column; gap:0.5rem; padding:0.4rem 0; min-width: 520px;">
+        <p style="margin:0; font-size:0.78rem">
+          Refill chipped BOM rows from faction stockpile. Same-material only.
+        </p>
+        <label style="display:flex; flex-direction:column; gap:0.2rem;">
+          <span style="font-size:0.72rem; opacity:0.7">Pay from faction stockpile</span>
+          <select name="factionId">${factionOptions}</select>
+        </label>
+        <div id="bbttcc-repair-rows"></div>
+      </div>
+    `,
+    buttons: {
+      repair: {
+        label: "Repair",
+        callback: async (html) => {
+          const factionId = html.find("[name='factionId']").val();
+          const faction = game.actors.get(factionId);
+          if (!faction) return ui.notifications?.warn?.("Pick a faction.");
+          const selective = {};
+          for (const r of chipped) {
+            const v = Math.max(0, parseInt(html.find(`[name='repair_${r.materialKey}']`).val(), 10) || 0);
+            if (v > 0) selective[r.materialKey] = v;
+          }
+          const res = await api.recipes.repair(actor, faction, { selective });
+          if (!res.ok) {
+            ui.notifications?.error?.(res.error ?? "Repair failed.");
+            return;
+          }
+          ui.notifications?.info?.(`Repaired ${actor.name} (+${res.addedPlateValue} plates → ${res.newPlatesCurrent}).`);
+          onDone?.();
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "repair",
+    render: (html) => {
+      const fSel = html.find("[name='factionId']");
+      const rowsHost = html.find("#bbttcc-repair-rows");
+      const update = () => {
+        const f = game.actors.get(fSel.val());
+        rowsHost.html(_chippedRowsHtml(f));
+      };
+      fSel.on("change", update);
+      update();
+    }
+  });
+  dialog.render(true);
+}
+
+// ── Reclamation: invoke Phase C Renewal handler ────────────────────────────
+
+async function _openReclamationDialog(actor) {
+  // Phase C provides game.bbttcc.api.structures.bulwark._onRenewal(actor)
+  // which expects the BULWARK as caller and prompts for target + faction. For
+  // the sheet button on a Structure, we pivot: we need a Bulwark caller.
+  // Simplest: prompt the GM to pick a Bulwark from the world, then invoke
+  // the Phase C handler.
+  const bulwark = game.bbttcc?.api?.structures?.bulwark;
+  if (!bulwark?._onRenewal) return ui.notifications?.error?.("Bulwark hookups not loaded.");
+
+  // Candidate Bulwark actors = characters whose class includes "bulwark"
+  // (looser match: any character with ruinCharges resource since Bulwark
+  // owns that resource per the system).
+  const candidates = (game.actors?.contents ?? []).filter(a => {
+    if (a.type !== "character") return false;
+    const sys = a.system?.system ?? a.system;
+    return !!sys?.resources?.ruinCharges;
+  });
+  if (!candidates.length) {
+    return ui.notifications?.warn?.("No Bulwark actors found (no character has Ruin Charges).");
+  }
+
+  const escName = foundry.utils.escapeHTML(actor.name);
+  const candidateOptions = candidates.map(c =>
+    `<option value="${c.id}">${foundry.utils.escapeHTML(c.name)}</option>`
+  ).join("");
+
+  new Dialog({
+    title: `Reclamation — ${actor.name}`,
+    content: `
+      <div style="display:flex; flex-direction:column; gap:0.5rem; padding:0.4rem 0; min-width: 380px;">
+        <p style="margin:0; font-size:0.78rem">
+          Invoke Bulwark Ruin to Renewal targeting <b>${escName}</b>. The Bulwark spends a Ruin Charge themselves; this just opens the follow-up dialog.
+        </p>
+        <label style="display:flex; flex-direction:column; gap:0.2rem;">
+          <span style="font-size:0.72rem; opacity:0.7">Bulwark caster</span>
+          <select name="bulwarkId">${candidateOptions}</select>
+        </label>
+        <p style="margin:0; font-size:0.68rem; opacity:0.55; font-style:italic">
+          Note: this convenience button does NOT charge a Ruin Charge — that
+          remains the Bulwark dialog's responsibility. Use this when the
+          Bulwark has already declared the spend in fiction and you want to
+          jump straight to the reclamation roll.
+        </p>
+      </div>
+    `,
+    buttons: {
+      go: {
+        label: "Open Reclamation",
+        callback: async (html) => {
+          const id = html.find("[name='bulwarkId']").val();
+          const caller = game.actors.get(id);
+          if (!caller) return ui.notifications?.warn?.("Pick a Bulwark.");
+          await bulwark._onRenewal(caller);
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "go"
+  }).render(true);
 }
 
 // ── Stamp picker (paper-test affordance) ─────────────────────────────────────

@@ -29,6 +29,7 @@
     "scripts/bulwark-hookups.js",
     "scripts/damage-wedge.js",
     "scripts/collapse.js",
+    "scripts/recipes.js",
     "scripts/structure-sheet-panel.enhancer.js"
   ],
   "styles": [

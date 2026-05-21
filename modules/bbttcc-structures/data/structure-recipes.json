@@ -1,0 +1,93 @@
+{
+  "_comment": "Phase D — 5 starter Structure recipes per STRUCTURE_DAMAGE_SPEC.md §7. Each recipe has a materialOf array (materialKey + qty) that the recipe engine consumes from a faction stockpile via game.bbttcc.api.factions.stockpile.adjust. footprintGrid drives token size. Special overrides: collapseProfile customization (e.g. Sept Bridge collapses at Damaged not Breached).",
+  "recipes": [
+    {
+      "id": "sept-wall",
+      "name": "Sept Wall (1 segment)",
+      "category": "fortifications",
+      "tierGate": 1,
+      "description": "Baseline mass fortification — quarried highland stone over an anchored foundation, blessed thread woven into the courses, a single yesodium course at the core. Holds when the sept does.",
+      "footprintGrid": { "w": 6, "h": 1 },
+      "tokenImg": "icons/svg/anvil.svg",
+      "facilityMode": true,
+      "materialOf": [
+        { "key": "mountain-stone", "qty": 12 },
+        { "key": "anchorstone",    "qty": 6  },
+        { "key": "blessed-thread", "qty": 4  },
+        { "key": "yesodium",       "qty": 1  }
+      ]
+    },
+    {
+      "id": "bunker-gate",
+      "name": "Bunker Gate",
+      "category": "fortifications",
+      "tierGate": 2,
+      "description": "Canonical fortress entry — scribed-steel gate leaves, hex-glyph plates pre-engraved along the seams, foundation cores at the threshold.",
+      "footprintGrid": { "w": 4, "h": 2 },
+      "tokenImg": "icons/svg/castle.svg",
+      "facilityMode": true,
+      "materialOf": [
+        { "key": "scribed-steel",   "qty": 10 },
+        { "key": "hex-glyph-plate", "qty": 4  },
+        { "key": "yesodium",        "qty": 2  }
+      ]
+    },
+    {
+      "id": "watchtower",
+      "name": "Watchtower",
+      "category": "fortifications",
+      "tierGate": 1,
+      "description": "Tall, sparse — ash-wood frame on mountain stone footings, hex-iron cleats anchoring the platform, a focusing lens at the top.",
+      "footprintGrid": { "w": 2, "h": 2 },
+      "tokenImg": "icons/svg/tower-flag.svg",
+      "facilityMode": true,
+      "materialOf": [
+        { "key": "ash-wood",        "qty": 8 },
+        { "key": "mountain-stone",  "qty": 4 },
+        { "key": "hex-iron-cleat",  "qty": 2 },
+        { "key": "focusing-lens",   "qty": 1 }
+      ],
+      "specialAbility": "detection+1",
+      "specialNote": "+1 detection rolls in the containing Hex"
+    },
+    {
+      "id": "glyph-ward-pylon",
+      "name": "Glyph-Ward Pylon",
+      "category": "fortifications",
+      "tierGate": 3,
+      "description": "A single dense column of hex-glyph plates around a sept tuning fork, with a tree-of-life shard at the apex. Radiates a faint warding field.",
+      "footprintGrid": { "w": 1, "h": 1 },
+      "tokenImg": "icons/svg/aura.svg",
+      "facilityMode": true,
+      "materialOf": [
+        { "key": "hex-glyph-plate",     "qty": 6 },
+        { "key": "sept-tuning-fork",    "qty": 2 },
+        { "key": "tree-of-life-shard",  "qty": 1 }
+      ],
+      "specialAbility": "ward-radiate+1",
+      "specialNote": "+1 ward resist to all adjacent Structures (stackable)"
+    },
+    {
+      "id": "sept-bridge",
+      "name": "Sept Bridge",
+      "category": "fortifications",
+      "tierGate": 1,
+      "description": "Stone deck over ash-wood lattice, cold-iron lacing, single foundation anchor at the midspan. Falls hard.",
+      "footprintGrid": { "w": 8, "h": 1 },
+      "tokenImg": "icons/svg/bridge.svg",
+      "facilityMode": true,
+      "collapseProfileOverride": {
+        "triggerState": "damaged",
+        "damageDice": "3d10",
+        "fallFt": 20
+      },
+      "materialOf": [
+        { "key": "mountain-stone", "qty": 8 },
+        { "key": "ash-wood",       "qty": 4 },
+        { "key": "cold-iron",      "qty": 3 },
+        { "key": "yesodium",       "qty": 1 }
+      ],
+      "specialNote": "Collapse fires at Damaged state — the ravine is the whole point"
+    }
+  ]
+}
