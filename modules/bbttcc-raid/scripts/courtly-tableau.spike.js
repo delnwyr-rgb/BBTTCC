@@ -129,6 +129,55 @@
     for (const tk of canvas.tokens.placeables) applyDepth(tk);
   }
 
+  // --- Canvas guide lines (visual feedback for frontY/backY) -------------
+
+  let _guides = null;
+
+  function drawGuides(scene) {
+    clearGuides();
+    if (!scene || !canvas?.scene || canvas.scene.id !== scene.id) return;
+    const cfg = scene.flags?.[MOD]?.tableau;
+    if (!cfg) return;
+    const front = Number(cfg.frontY ?? 0);
+    const back  = Number(cfg.backY  ?? 0);
+    const w     = canvas.dimensions?.width || 1920;
+
+    const root = new PIXI.Container();
+    root.zIndex = 99999;
+    root.eventMode = "none";
+
+    const g = new PIXI.Graphics();
+    g.lineStyle(4, 0xff5555, 0.85); // back (red)
+    g.moveTo(0, back);  g.lineTo(w, back);
+    g.lineStyle(4, 0x55ff55, 0.85); // front (green)
+    g.moveTo(0, front); g.lineTo(w, front);
+    root.addChild(g);
+
+    try {
+      const labelBase = { fontFamily: "Arial", fontSize: 22, stroke: 0x000000, strokeThickness: 4 };
+      const tFront = new PIXI.Text(`▲ FRONT — max scale  (Y=${front})`, { ...labelBase, fill: 0x55ff55 });
+      tFront.position.set(20, front - 32);
+      const tBack  = new PIXI.Text(`▼ BACK — min scale  (Y=${back})`,  { ...labelBase, fill: 0xff5555 });
+      tBack.position.set(20, back + 8);
+      root.addChild(tFront, tBack);
+    } catch (_e) {}
+
+    const parent = canvas.interface || canvas.controls || canvas.stage;
+    if (parent) {
+      parent.addChild(root);
+      parent.sortableChildren = true;
+      _guides = root;
+    }
+  }
+
+  function clearGuides() {
+    if (_guides) {
+      try { if (_guides.parent) _guides.parent.removeChild(_guides); } catch (_e) {}
+      try { _guides.destroy({ children: true }); } catch (_e) {}
+    }
+    _guides = null;
+  }
+
   // --- Hooks ---------------------------------------------------------------
 
   // refreshToken fires after Foundry's internal _refresh, so our mesh writes
@@ -138,11 +187,17 @@
   // Initial paint on scene load.
   Hooks.on("canvasReady", () => applyAll());
 
-  // Tableau config changes → recompute everyone.
+  // Tableau config changes → recompute everyone (and refresh guides if shown).
   Hooks.on("updateScene", (scene, changes) => {
     const touched = foundry.utils.getProperty(changes, `flags.${MOD}.tableau`);
-    if (touched !== undefined) applyAll();
+    if (touched !== undefined) {
+      applyAll();
+      if (_guides) drawGuides(scene);
+    }
   });
+
+  // Clear guides on scene swap so we don't orphan PIXI graphics.
+  Hooks.on("canvasTearDown", () => clearGuides());
 
   // Token flag flipped → recompute that token (and reset if turned off).
   Hooks.on("updateToken", (tokenDoc, changes) => {
@@ -189,7 +244,9 @@
         if (!doc?.update) return;
         await doc.update({ [`flags.${MOD}.tableauActor`]: !!on });
       },
-      applyAll
+      applyAll,
+      showGuides: (scene = canvas?.scene) => drawGuides(scene),
+      hideGuides: () => clearGuides()
     };
   }
 

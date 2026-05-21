@@ -86,16 +86,22 @@
         <hr style="margin:8px 0 6px;"/>
         <p style="margin:0 0 4px;"><b>Stage Zone</b> — Y bounds of the perspective region (in canvas px).</p>
 
+        <p class="hint" style="margin:4px 0;">
+          <span style="color:#5f5;">▲ green line</span> = front (max scale);
+          <span style="color:#f55;">▼ red line</span> = back (min scale).
+          Drag a token to where you want each line, then click "Set from selected".
+        </p>
+
         <div style="${rowStyle}">
           <label style="${labelStyle}">Front Y</label>
           <input type="number" name="frontY" value="${v0.frontY}" step="20" style="width:110px;"/>
-          <span class="hint" style="flex:1;">higher Y = closer to camera (full scale here)</span>
+          <button type="button" data-act="setFrontFromToken" style="white-space:nowrap;">Set from selected ▲</button>
         </div>
 
         <div style="${rowStyle}">
           <label style="${labelStyle}">Back Y</label>
           <input type="number" name="backY" value="${v0.backY}" step="20" style="width:110px;"/>
-          <span class="hint" style="flex:1;">lower Y = back wall (min scale here)</span>
+          <button type="button" data-act="setBackFromToken" style="white-space:nowrap;">Set from selected ▼</button>
         </div>
 
         <hr style="margin:8px 0 6px;"/>
@@ -118,7 +124,9 @@
     content,
     buttons: { close: { label: "Close" } },
     default: "close",
+    close: () => { try { api.hideGuides(); } catch (_e) {} },
     render: (html) => {
+      try { api.showGuides(scene); } catch (_e) {}
       const root     = html[0] || html;
       const form     = root.querySelector("form") || root;
       const statusEl = form.querySelector("[data-status]");
@@ -160,7 +168,27 @@
           const act = btn.dataset.act;
           const sel = canvas.tokens?.controlled || [];
 
-          if (act === "markSel") {
+          if (act === "setFrontFromToken") {
+            if (sel.length !== 1) return ui.notifications.warn("Select exactly one token to anchor Front Y.");
+            // Use the token's footprint center as the anchor so the line
+            // sits at the visual middle of the token, not its top-left.
+            const tk = sel[0];
+            const y = Math.round(Number(tk.document?.y ?? 0) + (tk.h || 0) / 2);
+            const input = form.querySelector('[name="frontY"]');
+            input.value = y;
+            updateLabels();
+            persist(readForm());
+            ui.notifications.info(`Front Y set to ${y} (token "${tk.name || tk.id}" center).`);
+          } else if (act === "setBackFromToken") {
+            if (sel.length !== 1) return ui.notifications.warn("Select exactly one token to anchor Back Y.");
+            const tk = sel[0];
+            const y = Math.round(Number(tk.document?.y ?? 0) + (tk.h || 0) / 2);
+            const input = form.querySelector('[name="backY"]');
+            input.value = y;
+            updateLabels();
+            persist(readForm());
+            ui.notifications.info(`Back Y set to ${y} (token "${tk.name || tk.id}" center).`);
+          } else if (act === "markSel") {
             if (!sel.length) return ui.notifications.warn("No tokens selected.");
             for (const tk of sel) await api.markActor(tk, true);
             ui.notifications.info(`Marked ${sel.length} as courtier.`);
