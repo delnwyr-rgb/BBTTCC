@@ -79,9 +79,12 @@
 
         <div style="${rowStyle}">
           <label style="${labelStyle}">Max scale</label>
-          <input type="range" name="maxScale" min="0.50" max="2.00" step="0.05" value="${v0.maxScale}" style="flex:1; min-width:0;"/>
+          <input type="range" name="maxScale" min="0.50" max="5.00" step="0.05" value="${v0.maxScale}" style="flex:1; min-width:0;"/>
           <span data-label="maxScale" style="${valStyle}">${fmt(v0.maxScale)}</span>
         </div>
+        <p class="hint" style="margin:-2px 0 4px 118px; font-size:0.85em;">
+          1.0 = native token size. Push higher for dramatic foreground figures.
+        </p>
 
         <hr style="margin:8px 0 6px;"/>
         <p style="margin:0 0 4px;"><b>Stage Zone</b> — Y bounds of the perspective region (in canvas px).</p>
