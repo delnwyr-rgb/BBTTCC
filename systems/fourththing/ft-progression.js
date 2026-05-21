@@ -1367,9 +1367,14 @@ export async function applySkillGrantsFromFeatures(actor) {
 
   if (Object.keys(updates).length > 0) {
     await actor.update(updates);
-    return granted;
   }
-  return [];
+  // 2026-05-20 — Defensive clamp. Several wizard playtest characters
+  // (A3G5 et al.) came out with `skill.value > 5` (one reported at 22).
+  // Source of the stacker is still unknown — the writers in this file
+  // never write above 5 — but the symptom is real. Sweep here after
+  // every grant pass so chargen exit is always ≤5.
+  await clampSkillRanksToCap(actor);
+  return granted;
 }
 
 // Promote stamped class-L1 / heritage aptitude AEs into source skill ranks.
@@ -1420,7 +1425,38 @@ export async function promoteStampedAptitudeAEs(actor) {
       await op.item.updateEmbeddedDocuments("ActiveEffect", [{ _id: op.effectId, disabled: true }]);
     } catch (e) { /* swallow — best-effort cleanup */ }
   }
+  // 2026-05-20 — Defensive clamp. The per-skill min(5, …) inside the loop
+  // protects against a single delta over 5, but doesn't catch source ranks
+  // that arrived corrupt (e.g. existing `system.skills.X.value:22`). Sweep
+  // after the promote pass to guarantee post-state ≤5 everywhere.
+  await clampSkillRanksToCap(actor);
   return promoted;
+}
+
+// 2026-05-20 — Defensive sweep: clamps every `system.skills.X.value` on the
+// actor to `cap` (default 5 = Legendary). Idempotent — no writes when
+// nothing's over cap. Returns array of `{ skill, from, to }` for chat
+// surfaces / debug. Wired into applySkillGrantsFromFeatures + promoteStamped-
+// AptitudeAEs so chargen exit + level-up paths can't leak above 5.
+// Standalone repair macro at bbttcc-master-content/tools.
+export async function clampSkillRanksToCap(actor, cap = 5) {
+  if (!actor) return [];
+  const rawSys  = actor.system?.system ?? actor.system;
+  const skills  = rawSys?.skills ?? {};
+  const updates = {};
+  const clamped = [];
+  for (const [key, skill] of Object.entries(skills)) {
+    const cur = Number(skill?.value ?? 0);
+    if (Number.isFinite(cur) && cur > cap) {
+      updates[`system.skills.${key}.value`] = cap;
+      clamped.push({ skill: key, from: cur, to: cap });
+    }
+  }
+  if (Object.keys(updates).length > 0) {
+    try { await actor.update(updates); }
+    catch (e) { console.warn("[fourththing] clampSkillRanksToCap update failed", e); }
+  }
+  return clamped;
 }
 
 // ─── Aurablade conditional AE management ─────────────────────────────────────
