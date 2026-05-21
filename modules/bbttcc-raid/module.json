@@ -87,6 +87,7 @@
     "scripts/raid-infiltration.alarm.enhancer.js",
     "scripts/raid-courtly.influence.enhancer.js",
     "scripts/raid-courtly.secrets.api.js",
+    "scripts/raid-courtly.faction-sheet.enhancer.js",
     "scripts/tableau.canvas.js",
     "scripts/raid-courtly.hud.js",
     "scripts/bbttcc-raid-effects-loader.enhancer.js",

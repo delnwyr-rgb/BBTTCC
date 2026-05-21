@@ -137,9 +137,11 @@
       key: "courtly_mask_off", label: "Mask Off", tier: 4, costBand: "heavy",
       cost: { violence: 1 },
       effectsText: "Burn a Scandal Scar → +2 to one Intimidate. Suspicion +2.",
-      description: "<p>You stop pretending the rumor was beneath you and weaponize it. <b>Burn one Scandal Scar from your faction → +2 to your next Intimidate this raid. +2 Suspicion.</b> <em>(Phase E coupling — Scandal Scars ship with Phase E; until then this maneuver warns and no-ops.)</em></p>",
+      description: "<p>You stop pretending the rumor was beneath you and weaponize it. <b>Burn one light Scandal Scar from your faction → +2 to your next Intimidate this raid. +2 Suspicion.</b></p>",
       effects: [
-        { type: "phaseEStub", maneuver: "Mask Off" }
+        { type: "burnScandalScar", side: "self" },
+        { type: "queueActionBonus", side: "self", actionFilter: ["intimidate"], value: 2, source: "Mask Off" },
+        { type: "suspicionRise", delta: 2, reason: "Mask Off" }
       ]
     }
   ];

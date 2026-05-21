@@ -176,21 +176,91 @@
     }
   }
 
-  // Spec §4.4 — outcome-driven rel-delta magnitudes mapped to the current
-  // 3-outcome Phase C simplification. Phase E will replace with the 5-outcome
-  // table when it ships Clean Triumph / Tarnished Victory / etc.
+  // Spec §4.4 — outcome-driven rel-delta magnitudes. Keyed by outcomeKind +
+  // winner side. Phase E replaces Phase C's 3-outcome simplification.
+  // For asymmetric outcomes (cleanTriumph / tarnishedVictory / publicHumiliation),
+  // "attacker"/"defender" suffix indicates which side IS the winner; the
+  // table entry's att2def / def2att stay attacker-centric so callers don't
+  // need to flip arguments based on who won.
   const REL_DELTA_TABLE = Object.freeze({
-    attackerWin: { att2def: -1, def2att: -2 }, // ≈ Clean Triumph
-    defenderWin: { att2def: +1, def2att: -2 }, // ≈ Public Humiliation of attacker
-    mutualRuin:  { att2def: -2, def2att: -2 }
+    // attacker wins
+    cleanTriumph_attacker:       { att2def: -1, def2att: -2 },
+    tarnishedVictory_attacker:   { att2def: -1, def2att: -1 },
+    publicHumiliation_attacker:  { att2def: -1, def2att: -3 }, // attacker won, defender publicly humiliated
+    // defender wins (mirrored)
+    cleanTriumph_defender:       { att2def: -2, def2att: -1 },
+    tarnishedVictory_defender:   { att2def: -1, def2att: -1 },
+    publicHumiliation_defender:  { att2def: +1, def2att: -2 }, // attacker publicly humiliated
+    // symmetric
+    stalemate:                   { att2def:  0, def2att:  0 },
+    mutualRuin:                  { att2def: -2, def2att: -2 }
   });
 
-  async function applyRelDeltas(A, D, outcome, label) {
-    const d = REL_DELTA_TABLE[outcome];
+  async function applyRelDeltas(A, D, outcomeKind, winner, label) {
+    if (!outcomeKind) return;
+    const key = outcomeKind === "stalemate" || outcomeKind === "mutualRuin"
+      ? outcomeKind
+      : `${outcomeKind}_${winner === "A" ? "attacker" : "defender"}`;
+    const d = REL_DELTA_TABLE[key];
     if (!d) return;
-    const reason = `${label || "Courtly Intrigue"}: ${outcome}`;
+    const reason = `${label || "Courtly Intrigue"}: ${outcomeKind}`;
     await shiftRelTier(A, D, d.att2def, reason);
     await shiftRelTier(D, A, d.def2att, reason);
+  }
+
+  // Phase E — outcome flavor detector. Maps damage-based win + suspicion +
+  // scandal state to one of the 5 outcomes per spec §6. Returns null if
+  // still ongoing.
+  function detectOutcomeKind(state) {
+    if (state.outcome === "ongoing") return null;
+    if (state.outcome === "stalemate") return "stalemate";
+    if (state.outcome === "mutualRuin") return "mutualRuin";
+    const winner = state.outcome === "attackerWin" ? "A" : "D";
+    const loser  = winner === "A" ? "D" : "A";
+    const loserScandal  = loser === "A" ? state.scandalOnA : state.scandalOnD;
+    const winnerScandal = winner === "A" ? state.scandalOnA : state.scandalOnD;
+    // Suspicion 10 collapse OR loser had scandal at end → Public Humiliation.
+    if (state.courtCollapsed || loserScandal) return "publicHumiliation";
+    // Winner had scandal at end OR suspicion ≥5 OR winner's influence ≤50% → Tarnished.
+    const winnerInf = winner === "A" ? state.influenceA : state.influenceD;
+    const winnerMax = winner === "A" ? state.maxA       : state.maxD;
+    const pct = winnerMax > 0 ? winnerInf / winnerMax : 0;
+    if (winnerScandal || state.suspicion >= 5 || pct <= 0.5) return "tarnishedVictory";
+    return "cleanTriumph";
+  }
+
+  function outcomeWinner(state) {
+    if (state.outcome === "attackerWin") return "A";
+    if (state.outcome === "defenderWin") return "D";
+    return null;
+  }
+
+  // Phase E — Scandal Scar writer. Pushes a scar entry to the actor's flag.
+  // Severity: "light" (-2 first roll next courtly raid; cleared by Clean
+  // Triumph) or "heavy" (-3 first + -1 second; persists until laundering or
+  // 3-session timeout — laundering is out of S.2 scope per spec §10).
+  async function writeScandalScar(actor, severity, sourceRaidId) {
+    if (!actor) return null;
+    const sev = (severity === "heavy") ? "heavy" : "light";
+    const scars = foundry.utils.duplicate(actor.flags?.["bbttcc-raid"]?.scandalScars || []);
+    scars.push({
+      severity: sev,
+      ts: Date.now(),
+      sourceRaidId: String(sourceRaidId || ""),
+      status: "pending"
+    });
+    await actor.update({ "flags.bbttcc-raid.scandalScars": scars });
+    return scars[scars.length - 1];
+  }
+
+  // Clear all light scars on the actor (Clean Triumph reward per spec §6).
+  async function clearLightScars(actor) {
+    if (!actor) return 0;
+    const scars = actor.flags?.["bbttcc-raid"]?.scandalScars || [];
+    const kept = scars.filter(s => s.severity !== "light");
+    if (kept.length === scars.length) return 0;
+    await actor.update({ "flags.bbttcc-raid.scandalScars": kept });
+    return scars.length - kept.length;
   }
 
   whenRaidReady((raidApi) => {
@@ -218,14 +288,33 @@
       if (defInitDip)  await adjustOpBank(D, "diplomacy", -defInitDip, label);
       if (defInitSoft) await adjustOpBank(D, "softpower", -defInitSoft, label);
 
+      let initInfluenceA = computeInfluenceHP({ baseCommitDip: atkInitDip, baseCommitSoft: atkInitSoft });
+      let initInfluenceD = computeInfluenceHP({ baseCommitDip: defInitDip, baseCommitSoft: defInitSoft });
+      // Phase E — Consume pending "Influence cap −N next courtly raid" mark
+      // (left by a prior Clean Triumph against this faction). Flag deleted
+      // after consume per [[foundry-setflag-recursive-merge]].
+      const aCapDelta = Number(A.flags?.["bbttcc-raid"]?.nextCourtlyInfluenceCapDelta || 0);
+      const dCapDelta = Number(D.flags?.["bbttcc-raid"]?.nextCourtlyInfluenceCapDelta || 0);
+      if (aCapDelta) {
+        initInfluenceA = Math.max(1, initInfluenceA + aCapDelta);
+        await A.update({ "flags.bbttcc-raid.-=nextCourtlyInfluenceCapDelta": null });
+      }
+      if (dCapDelta) {
+        initInfluenceD = Math.max(1, initInfluenceD + dCapDelta);
+        await D.update({ "flags.bbttcc-raid.-=nextCourtlyInfluenceCapDelta": null });
+      }
       const state = {
         attackerId: A.id,
         defenderId: D.id,
         label,
         round: 0,
-        outcome: "ongoing", // "ongoing" | "attackerWin" | "defenderWin" | "mutualRuin"
-        influenceA: computeInfluenceHP({ baseCommitDip: atkInitDip, baseCommitSoft: atkInitSoft }),
-        influenceD: computeInfluenceHP({ baseCommitDip: defInitDip, baseCommitSoft: defInitSoft }),
+        roundCap: 6,                   // Phase E — spec §8 resolution 5
+        outcome: "ongoing", // "ongoing" | "attackerWin" | "defenderWin" | "mutualRuin" | "stalemate"
+        outcomeKind: null,             // Phase E — one of "cleanTriumph"|"tarnishedVictory"|"stalemate"|"publicHumiliation"|"mutualRuin"
+        influenceA: initInfluenceA,
+        influenceD: initInfluenceD,
+        maxA: initInfluenceA,          // Phase E — captured for % calc in outcome detector
+        maxD: initInfluenceD,
         scandalOnA: false,
         scandalOnD: false,
         // Phase C — Suspicion / Court Bonus / collapse flag
@@ -233,12 +322,45 @@
         suspicionQuietStreak: 0,       // consecutive rounds with no expose/intimidate
         courtBonusA: 0,                // computed at step() entry from courtier favor
         courtBonusD: 0,
-        courtCollapsed: false,         // set when suspicion hits 10; Phase E refines outcome
-        // Phase C — Pending mods queue (consumed at next step() entry).
-        // Each entry: { side: "A"|"D", type: "bonus"|"forceReroll", value?, source }
+        courtCollapsed: false,         // set when suspicion hits 10
+        // Phase C/D — Pending mods queue.
+        // Schema: { side, type: "bonus"|"forceReroll"|"actionBonus", value?, source,
+        //          actionFilter? (D), fireOnRound? (E — gate to specific round) }
         pendingMods: [],
         history: []
       };
+
+      // Phase E — Consume pending Scandal Scars on both factions. Each scar
+      // queues a one-shot penalty mod that fires at a specific round, then
+      // gets marked status:"applied" on the actor. Light = -2 on round 1;
+      // heavy = -3 on round 1 + -1 on round 2.
+      async function _consumeScarsForSide(actor, side) {
+        const scars = foundry.utils.duplicate(actor.flags?.["bbttcc-raid"]?.scandalScars || []);
+        let mutated = false;
+        for (const scar of scars) {
+          if (scar.status !== "pending") continue;
+          if (scar.severity === "light") {
+            state.pendingMods.push({
+              side, type: "bonus", value: -2, source: `scar:light(${scar.sourceRaidId || "prior"})`,
+              fireOnRound: 1
+            });
+          } else if (scar.severity === "heavy") {
+            state.pendingMods.push({
+              side, type: "bonus", value: -3, source: `scar:heavy(${scar.sourceRaidId || "prior"})`,
+              fireOnRound: 1
+            });
+            state.pendingMods.push({
+              side, type: "bonus", value: -1, source: `scar:heavy(${scar.sourceRaidId || "prior"})`,
+              fireOnRound: 2
+            });
+          }
+          scar.status = "applied";
+          mutated = true;
+        }
+        if (mutated) await actor.update({ "flags.bbttcc-raid.scandalScars": scars });
+      }
+      await _consumeScarsForSide(A, "A");
+      await _consumeScarsForSide(D, "D");
 
       function presenceBonus(actor) {
         const flags = actor.flags?.[MODF] || {};
@@ -343,12 +465,21 @@
 
         // Phase C — Consume pendingMods queue (one-shot bonuses + reroll flags
         // queued by secret plays / Phase D anytimes).
-        // Phase D — Also consume `actionBonus` entries that match this
-        // round's chosen action; carry forward those whose filter didn't match.
+        // Phase D — `actionBonus` entries match-or-carry.
+        // Phase E — `fireOnRound` gates Scar penalties to a specific round
+        //           (heavy = round 1 + round 2 split). Mods with fireOnRound
+        //           set are skipped on non-matching rounds; carried forward.
         let forceAReroll = false, forceDReroll = false;
         const consumedMods = [];
         const carriedMods = [];
         for (const mod of (state.pendingMods || [])) {
+          // Round-gated mods (Scar penalties): skip + carry if not this round.
+          if (mod.fireOnRound != null && Number(mod.fireOnRound) !== state.round) {
+            // Once past the target round, drop it.
+            if (Number(mod.fireOnRound) < state.round) { /* expired — drop */ }
+            else carriedMods.push(mod);
+            continue;
+          }
           if (mod.type === "bonus" && mod.side === "A") { atkBonus += Number(mod.value || 0); consumedMods.push(`atk ${mod.value > 0 ? "+" : ""}${mod.value} (${mod.source || "secret"})`); }
           else if (mod.type === "bonus" && mod.side === "D") { defBonus += Number(mod.value || 0); consumedMods.push(`def ${mod.value > 0 ? "+" : ""}${mod.value} (${mod.source || "secret"})`); }
           else if (mod.type === "forceReroll" && mod.side === "A") { forceAReroll = true; consumedMods.push(`atk forced reroll (${mod.source || "secret"})`); }
@@ -501,6 +632,20 @@
         } else if (state.influenceA <= 0) {
           state.outcome = "defenderWin";
         }
+        // Phase E — Round cap (spec §8 resolution 5). If we hit the cap with
+        // no decisive outcome and both sides above 25% max, declare stalemate.
+        else if (state.round >= state.roundCap) {
+          const aPct = state.maxA > 0 ? state.influenceA / state.maxA : 0;
+          const dPct = state.maxD > 0 ? state.influenceD / state.maxD : 0;
+          if (aPct > 0.25 && dPct > 0.25) state.outcome = "stalemate";
+          else if (aPct < dPct) state.outcome = "defenderWin";
+          else if (dPct < aPct) state.outcome = "attackerWin";
+          else state.outcome = "stalemate";
+        }
+        // Phase E — Map damage-based outcome to flavored kind for marks.
+        if (state.outcome !== "ongoing" && !state.outcomeKind) {
+          state.outcomeKind = detectOutcomeKind(state);
+        }
 
         // Record new scandal flags
         state.scandalOnA = nextScandalOnA;
@@ -570,12 +715,16 @@
 
         await sendChat(lines, { title });
 
-        // Phase C — Rel-delta on outcome transition. Step() early-returns
+        // Phase C/E — Rel-delta on outcome transition. Step() early-returns
         // when state.outcome !== "ongoing" at entry, so any non-ongoing
         // outcome we see here IS this round's transition. Fires once.
         if (state.outcome !== "ongoing") {
-          try { await applyRelDeltas(A, D, state.outcome, label); }
+          try { await applyRelDeltas(A, D, state.outcomeKind, outcomeWinner(state), label); }
           catch (e) { console.warn(TAG, "applyRelDeltas failed", e); }
+          // Phase E — apply per-outcome marks (scars, favor gifts, secrets,
+          // suspicion reset, courtier loss). Fires once.
+          try { await _applyOutcomeMarks(); }
+          catch (e) { console.warn(TAG, "_applyOutcomeMarks failed", e); }
         }
 
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
@@ -850,6 +999,12 @@
               case "noteForGM":
                 await ChatMessage.create({ content: `<p><em>${esc(eff.text || "")}</em></p>`, whisper: gmIds(), speaker: { alias: "BBTTCC Courtly Intrigue" } }).catch(()=>{});
                 break;
+              case "burnScandalScar": {
+                const ok = await burnScandalScar(resolveSide(eff.side));
+                // If burn failed (no scar), suppress subsequent effects on this entry.
+                if (!ok) break;
+                break;
+              }
               case "phaseEStub":
                 ui.notifications?.warn?.(`${eff.maneuver || "This maneuver"} requires Phase E (Scandal Scars). Stubbed for now.`);
                 break;
@@ -861,7 +1016,126 @@
         try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
       }
 
-      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, spendFavorAndBoost, applyEffects };
+      // Phase E — Mask Off API. Burns a pending light scar on `side` and
+      // returns true if one was burned (lets the dispatcher decide whether
+      // to follow up with the bonus + suspicion rise).
+      async function burnScandalScar(side) {
+        const s = _normSide(side);
+        if (!s) return false;
+        const actor = s === "A" ? A : D;
+        const scars = foundry.utils.duplicate(actor.flags?.["bbttcc-raid"]?.scandalScars || []);
+        const lightIdx = scars.findIndex(x => x.severity === "light");
+        if (lightIdx < 0) {
+          ui.notifications?.warn?.(`${actor.name} has no Scandal Scar to burn.`);
+          return false;
+        }
+        scars.splice(lightIdx, 1);
+        await actor.update({ "flags.bbttcc-raid.scandalScars": scars });
+        await sendChat([`${esc(actor.name)} burns a Scandal Scar — Mask Off.`], { title: `${label}: Mask Off` });
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return true;
+      }
+
+      // Phase E — Per-outcome marks per spec §6. Called once after the
+      // outcome is determined; idempotent guard via state.marksApplied.
+      async function _applyOutcomeMarks() {
+        if (state.marksApplied) return;
+        state.marksApplied = true;
+        const winner = outcomeWinner(state); // "A"|"D"|null
+        const kind = state.outcomeKind;
+        const winActor = winner === "A" ? A : winner === "D" ? D : null;
+        const losActor = winner === "A" ? D : winner === "D" ? A : null;
+        const winFid   = winner === "A" ? state.attackerId : winner === "D" ? state.defenderId : null;
+        const raidId   = `${state.attackerId}::${state.defenderId}::${Date.now()}`;
+        const lines = [];
+
+        const courtierTokens = () => (canvas?.tokens?.placeables || [])
+          .filter(t => t.document?.flags?.["bbttcc-raid"]?.tableauActor === true && t.actor);
+
+        async function bumpFavor(targetActor, factionId, delta, cap = 3) {
+          const cur = foundry.utils.duplicate(targetActor.flags?.["bbttcc-raid"]?.courtFavor || {});
+          const before = Number(cur[factionId] ?? 0);
+          const after = Math.max(-3, Math.min(cap, before + delta));
+          if (after === before) return false;
+          cur[factionId] = after;
+          await targetActor.update({ "flags.bbttcc-raid.courtFavor": cur });
+          return true;
+        }
+
+        if (kind === "cleanTriumph" && winActor && winFid) {
+          // +1 favor with all on-tableau courtiers (cap +3 per courtier)
+          let bumped = 0;
+          for (const tk of courtierTokens()) {
+            if (await bumpFavor(tk.actor, winFid, +1, 3)) bumped++;
+          }
+          lines.push(`Clean Triumph — ${esc(winActor.name)} gains +1 favor with ${bumped} courtier(s).`);
+          // Loser: -1 Influence cap on next courtly raid (flag on the faction)
+          if (losActor) {
+            const flags = foundry.utils.duplicate(losActor.flags?.["bbttcc-raid"] || {});
+            flags.nextCourtlyInfluenceCapDelta = Math.min(-1, Number(flags.nextCourtlyInfluenceCapDelta || 0) - 1);
+            await losActor.update({ "flags.bbttcc-raid": flags });
+            lines.push(`${esc(losActor.name)} suffers −1 Influence cap on their next courtly raid.`);
+          }
+          // Clear winner's light scars (spec §4.1 lifecycle)
+          const cleared = await clearLightScars(winActor);
+          if (cleared > 0) lines.push(`${esc(winActor.name)} clears ${cleared} light Scandal Scar(s).`);
+        }
+        else if (kind === "tarnishedVictory" && winActor && winFid && losActor) {
+          // Winner: 1 Earned Secret + 1 Favor with 1 courtier (highest current favor)
+          await drawSecret(winner, "earned");
+          const cands = courtierTokens()
+            .map(t => ({ t, fav: Number(t.actor.flags?.["bbttcc-raid"]?.courtFavor?.[winFid] ?? 0) }))
+            .sort((a, b) => b.fav - a.fav);
+          if (cands.length > 0) {
+            await bumpFavor(cands[0].t.actor, winFid, +1, 3);
+            lines.push(`${esc(winActor.name)} earns the loyalty of <b>${esc(cands[0].t.actor.name)}</b> (+1 favor).`);
+          }
+          // Loser: light Scandal Scar
+          await writeScandalScar(losActor, "light", raidId);
+          lines.push(`${esc(losActor.name)} earns a Scandal Scar (light).`);
+        }
+        else if (kind === "stalemate") {
+          // Both: 1 Earned Secret each; suspicion resets to 3
+          await drawSecret("A", "earned");
+          await drawSecret("D", "earned");
+          state.suspicion = 3;
+          state.suspicionQuietStreak = 0;
+          lines.push("Stalemate — both factions draw an Earned secret. Suspicion resets to 3.");
+        }
+        else if (kind === "publicHumiliation" && winActor && winFid && losActor) {
+          // Loser: Scandal Scar (heavy) + Disgraced pip
+          await writeScandalScar(losActor, "heavy", raidId);
+          const flags = foundry.utils.duplicate(losActor.flags?.["bbttcc-raid"] || {});
+          flags.disgracedUntil = Date.now() + (3 * 7 * 24 * 60 * 60 * 1000); // ~3 weekly sessions
+          await losActor.update({ "flags.bbttcc-raid": flags });
+          lines.push(`${esc(losActor.name)} earns a Scandal Scar (HEAVY) — Disgraced.`);
+          // Winner: +1 favor on top 2 courtiers
+          const cands = courtierTokens()
+            .map(t => ({ t, fav: Number(t.actor.flags?.["bbttcc-raid"]?.courtFavor?.[winFid] ?? 0) }))
+            .sort((a, b) => b.fav - a.fav)
+            .slice(0, 2);
+          for (const { t } of cands) {
+            await bumpFavor(t.actor, winFid, +1, 3);
+          }
+          if (cands.length) lines.push(`${esc(winActor.name)} consolidates support among <b>${cands.map(c => esc(c.t.actor.name)).join(", ")}</b> (+1 favor each).`);
+        }
+        else if (kind === "mutualRuin") {
+          // Both: Scandal Scar (light); 2 courtiers retire (unflag)
+          await writeScandalScar(A, "light", raidId);
+          await writeScandalScar(D, "light", raidId);
+          const all = courtierTokens();
+          const shuf = all.slice().sort(() => Math.random() - 0.5).slice(0, 2);
+          for (const tk of shuf) {
+            await tk.document.update({ "flags.bbttcc-raid.tableauActor": false });
+          }
+          if (shuf.length) lines.push(`Mutual Ruin — <b>${shuf.map(t => esc(t.actor.name)).join(", ")}</b> retire from court in disgust.`);
+          lines.push("Both factions earn a Scandal Scar (light).");
+        }
+
+        if (lines.length) await sendChat(lines, { title: `${label}: ${kind || "Outcome"}` });
+      }
+
+      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, spendFavorAndBoost, applyEffects, burnScandalScar };
 
       // Convenience for GM
       raidApi._lastCourtly = apiObj;
