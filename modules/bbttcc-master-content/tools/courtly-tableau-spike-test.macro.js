@@ -46,61 +46,71 @@
 
   const fmt = (n, d = 2) => Number(n).toFixed(d);
 
+  // Layout rule (per memory: [[dialogv2-scroll-pattern]]): V13/14 dialogs
+  // ignore form-level flex/height and will inflate to fill the viewport. So
+  // the FORM is plain block; only per-row containers use flex; the whole
+  // thing sits inside an explicit max-height scroll wrapper.
+  const rowStyle = 'display:flex; align-items:center; gap:8px; margin:6px 0;';
+  const labelStyle = 'min-width:110px;';
+  const valStyle = 'min-width:40px; text-align:right; font-family:monospace;';
+
   const content = `
-    <form class="ft-tableau-form" style="display:flex; flex-direction:column; gap:8px;">
-      <p class="hint" style="margin:0;">
-        <b>${scene.name}</b> — scene area Y ∈ [${sy}, ${sy + sh}] (${sh}px tall)<br/>
-        Status: <span data-status>${v0.enabled ? "✅ ENABLED" : "⛔ disabled"}</span>
-      </p>
+    <div style="max-height:60vh; overflow-y:auto; padding-right:6px;">
+      <form class="ft-tableau-form">
+        <p class="hint" style="margin:0 0 8px;">
+          <b>${scene.name}</b> — scene area Y ∈ [${sy}, ${sy + sh}] (${sh}px tall)<br/>
+          Status: <span data-status>${v0.enabled ? "✅ ENABLED" : "⛔ disabled"}</span>
+        </p>
 
-      <hr style="margin:4px 0;"/>
-      <p style="margin:0;"><b>Depth Curve</b> — drag sliders to feel the perspective on this backdrop.</p>
+        <hr style="margin:6px 0;"/>
+        <p style="margin:0 0 4px;"><b>Depth Curve</b> — drag sliders to feel the perspective on this backdrop.</p>
 
-      <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-        <label style="min-width:110px;">Curve</label>
-        <input type="range" name="curve" min="0.5" max="3.5" step="0.1" value="${v0.curve}" style="flex:1;"/>
-        <span data-label="curve" style="min-width:40px; text-align:right; font-family:monospace;">${fmt(v0.curve, 1)}</span>
-      </div>
+        <div style="${rowStyle}">
+          <label style="${labelStyle}">Curve</label>
+          <input type="range" name="curve" min="0.5" max="3.5" step="0.1" value="${v0.curve}" style="flex:1; min-width:0;"/>
+          <span data-label="curve" style="${valStyle}">${fmt(v0.curve, 1)}</span>
+        </div>
 
-      <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-        <label style="min-width:110px;">Min scale</label>
-        <input type="range" name="minScale" min="0.05" max="1.00" step="0.05" value="${v0.minScale}" style="flex:1;"/>
-        <span data-label="minScale" style="min-width:40px; text-align:right; font-family:monospace;">${fmt(v0.minScale)}</span>
-      </div>
+        <div style="${rowStyle}">
+          <label style="${labelStyle}">Min scale</label>
+          <input type="range" name="minScale" min="0.05" max="1.00" step="0.05" value="${v0.minScale}" style="flex:1; min-width:0;"/>
+          <span data-label="minScale" style="${valStyle}">${fmt(v0.minScale)}</span>
+        </div>
 
-      <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-        <label style="min-width:110px;">Max scale</label>
-        <input type="range" name="maxScale" min="0.50" max="2.00" step="0.05" value="${v0.maxScale}" style="flex:1;"/>
-        <span data-label="maxScale" style="min-width:40px; text-align:right; font-family:monospace;">${fmt(v0.maxScale)}</span>
-      </div>
+        <div style="${rowStyle}">
+          <label style="${labelStyle}">Max scale</label>
+          <input type="range" name="maxScale" min="0.50" max="2.00" step="0.05" value="${v0.maxScale}" style="flex:1; min-width:0;"/>
+          <span data-label="maxScale" style="${valStyle}">${fmt(v0.maxScale)}</span>
+        </div>
 
-      <hr style="margin:4px 0;"/>
-      <p style="margin:0;"><b>Stage Zone</b> — Y bounds of the perspective region (in canvas px).</p>
+        <hr style="margin:8px 0 6px;"/>
+        <p style="margin:0 0 4px;"><b>Stage Zone</b> — Y bounds of the perspective region (in canvas px).</p>
 
-      <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-        <label style="min-width:110px;">Front Y</label>
-        <input type="number" name="frontY" value="${v0.frontY}" step="20" style="width:110px;"/>
-        <span class="hint" style="flex:1;">higher Y = closer to camera (full scale here)</span>
-      </div>
+        <div style="${rowStyle}">
+          <label style="${labelStyle}">Front Y</label>
+          <input type="number" name="frontY" value="${v0.frontY}" step="20" style="width:110px;"/>
+          <span class="hint" style="flex:1;">higher Y = closer to camera (full scale here)</span>
+        </div>
 
-      <div class="form-group" style="display:flex; align-items:center; gap:8px;">
-        <label style="min-width:110px;">Back Y</label>
-        <input type="number" name="backY" value="${v0.backY}" step="20" style="width:110px;"/>
-        <span class="hint" style="flex:1;">lower Y = back wall (min scale here)</span>
-      </div>
+        <div style="${rowStyle}">
+          <label style="${labelStyle}">Back Y</label>
+          <input type="number" name="backY" value="${v0.backY}" step="20" style="width:110px;"/>
+          <span class="hint" style="flex:1;">lower Y = back wall (min scale here)</span>
+        </div>
 
-      <hr style="margin:4px 0;"/>
-      <div style="display:flex; gap:6px; flex-wrap:wrap;">
-        <button type="button" data-act="markSel">Mark Selected as Courtier</button>
-        <button type="button" data-act="unmarkSel">Unmark Selected</button>
-        <button type="button" data-act="reset">Reset to Defaults</button>
-        <button type="button" data-act="disable" style="color:#c66;">Disable Tableau</button>
-      </div>
+        <hr style="margin:8px 0 6px;"/>
+        <div style="display:flex; gap:6px; flex-wrap:wrap; margin:6px 0;">
+          <button type="button" data-act="markSel">Mark Selected as Courtier</button>
+          <button type="button" data-act="unmarkSel">Unmark Selected</button>
+          <button type="button" data-act="reset">Reset to Defaults</button>
+          <button type="button" data-act="disable" style="color:#c66;">Disable Tableau</button>
+        </div>
 
-      <p class="hint" style="margin:4px 0 0;">
-        Sliders apply <b>LIVE</b> — drag and watch tokens resize. Settings persist per scene.
-      </p>
-    </form>
+        <p class="hint" style="margin:6px 0 0;">
+          Sliders apply <b>LIVE</b> — drag and watch tokens resize. Settings persist per scene.
+        </p>
+      </form>
+    </div>
   `;
 
   new Dialog({
