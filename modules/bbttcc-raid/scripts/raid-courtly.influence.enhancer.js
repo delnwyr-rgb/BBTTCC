@@ -369,6 +369,8 @@
 
         await sendChat(lines, { title });
 
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+
         return { ...state };
       }
 
@@ -387,6 +389,8 @@
         influenceA: state.influenceA,
         influenceD: state.influenceD
       });
+
+      try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
 
       return apiObj;
     };
