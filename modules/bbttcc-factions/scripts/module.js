@@ -3213,6 +3213,19 @@ try {
       const doc = await fromUuid(uuid).catch(()=>null);
       if (!doc) return ui.notifications?.warn?.("Could not resolve dropped item.");
 
+      // Courtly Intrigue secret — route to the courtly secrets API so the
+      // faction's HUD Secrets panel picks it up. Identified by the secret
+      // flag stamped at compendium-author time (effectKey enum).
+      const secretEffectKey = String(doc.flags?.["bbttcc-raid"]?.secret?.effectKey || "").trim();
+      if (secretEffectKey) {
+        const secretsApi = game.bbttcc?.api?.raid?.courtlySecrets;
+        if (!secretsApi?.addSecret) return ui.notifications?.warn?.("Courtly secrets API missing.");
+        const created = await secretsApi.addSecret(this.actor.id, doc, { acquisition: "earned" });
+        if (created) ui.notifications?.info?.(`Secret added to ${this.actor.name}: ${doc.name}`);
+        this.render(false);
+        return;
+      }
+
       const f = doc.flags?.bbttcc || {};
       const kind = String(f.kind || "").toLowerCase().trim();
       const key  = String(f.key  || "").toLowerCase().trim();
