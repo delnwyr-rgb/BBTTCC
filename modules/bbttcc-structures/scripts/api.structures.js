@@ -207,19 +207,27 @@ export function deriveBOM(bom) {
 /**
  * Take a raw BOM (possibly just materialKey + qty) and return a fully
  * denormalized BOM with family / tier / name / tagsCache filled from the
- * catalog. Async because it hits the items pack.
+ * catalog. Also records `originalQty` so the sheet panel + damage path can
+ * compute material depletion percent (Phase B). Async because it hits the
+ * items pack.
  */
 export async function normalizeBOM(rawBom) {
   const out = [];
   for (const row of (Array.isArray(rawBom) ? rawBom : [])) {
     if (!row?.materialKey || !(Number(row.qty) > 0)) continue;
+    const qty = Number(row.qty);
+    // Phase B: respect existing originalQty if caller passed one (allows
+    // re-stamp paths that want to preserve depletion baseline). Otherwise
+    // initialize to qty.
+    const originalQty = Number(row.originalQty) > 0 ? Number(row.originalQty) : qty;
     const cached = await lookupMaterial(row.materialKey);
     if (!cached) {
       // Still preserve the entry with best-effort defaults so the stamp doesn't
       // silently drop data; family resolves via heuristic on materialKey alone.
       out.push({
         materialKey: row.materialKey,
-        qty: Number(row.qty),
+        qty,
+        originalQty,
         family: row.family || computeFamily(row.materialKey, []),
         tier: row.tier || "I",
         name: row.name || row.materialKey,
@@ -229,7 +237,8 @@ export async function normalizeBOM(rawBom) {
     }
     out.push({
       materialKey: row.materialKey,
-      qty: Number(row.qty),
+      qty,
+      originalQty,
       family: cached.family,
       tier: cached.tier,
       name: cached.name,

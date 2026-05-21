@@ -72,20 +72,25 @@ function _buildFullPanelHTML(actor, state) {
     return "▰".repeat(filled) + "▱".repeat(10 - filled);
   })();
 
-  // BOM rows
+  // BOM rows — Phase B: bars show qty/originalQty for depletion visualization
   const bomRows = (state.materialBOM ?? []).map(row => {
     const fam = _famDef(row.family);
-    const qtyPct = 100; // Phase A — qty bars don't deplete because no chipping yet
+    const original = Math.max(1, Number(row.originalQty) || Number(row.qty) || 1);
+    const qty = Math.max(0, Number(row.qty) || 0);
+    const qtyPct = Math.max(0, Math.min(100, (qty / original) * 100));
     const isLB = row.family === "sephirotic";
+    const depleted = qty === 0;
+    const qtyDisplay = original === qty ? String(qty) : `${qty}/${original}`;
     return `
-      <tr class="bbttcc-st-bom-row ${isLB ? "bbttcc-st-bom-loadbearing" : ""}">
+      <tr class="bbttcc-st-bom-row ${isLB ? "bbttcc-st-bom-loadbearing" : ""} ${depleted ? "bbttcc-st-bom-depleted" : ""}">
         <td class="bbttcc-st-bom-bar">
-          <div class="bbttcc-st-qty-bar" style="--qty-pct:${qtyPct}%; --fam-color:${fam.color}"></div>
+          <div class="bbttcc-st-qty-bar" style="--qty-pct:${qtyPct}%; --fam-color:${fam.color}"
+               data-tooltip="${qty}/${original} remaining"></div>
         </td>
         <td class="bbttcc-st-bom-name">${_esc(row.name ?? row.materialKey)}</td>
         <td class="bbttcc-st-bom-family" style="color:${fam.color}">${fam.icon} ${_esc(fam.label)}</td>
         <td class="bbttcc-st-bom-tier">T${_esc(row.tier ?? "I")}</td>
-        <td class="bbttcc-st-bom-qty">${_esc(row.qty)}</td>
+        <td class="bbttcc-st-bom-qty">${qtyDisplay}</td>
         <td class="bbttcc-st-bom-lb">${isLB ? '<span class="bbttcc-st-lb-tag" data-tooltip="Load-bearing — Structure cannot be razed while this remains">LB</span>' : ""}</td>
       </tr>
     `;
@@ -155,6 +160,27 @@ function _buildFullPanelHTML(actor, state) {
                 data-action="bbttccStClear"
                 data-tooltip="Remove all Structure flags from this actor">Clear</button>
       </div>
+      ${game.user?.isGM ? `
+      <div class="bbttcc-st-gm-test" data-tooltip="GM-only · Phase B paper-test affordance">
+        <span class="bbttcc-st-gm-label">⚒ GM TEST</span>
+        <input type="number" name="bbttccStDmg" min="1" value="10" class="bbttcc-st-gm-input"/>
+        <select name="bbttccStDmgType" class="bbttcc-st-gm-select">
+          <option value="">— type —</option>
+          <option value="kinetic">kinetic</option>
+          <option value="piercing">piercing</option>
+          <option value="fire">fire</option>
+          <option value="hex">hex</option>
+          <option value="qliph">qliph</option>
+          <option value="curse">curse</option>
+          <option value="concussive">concussive</option>
+        </select>
+        <button type="button" class="bbttcc-st-btn bbttcc-st-gm-apply" data-action="bbttccStApplyDamage">Apply Damage</button>
+        <button type="button" class="bbttcc-st-btn bbttcc-st-btn-secondary" data-action="bbttccStFullRepair"
+                data-tooltip="Reset plates to max + restore all BOM qty (Phase B test reset)">Full Repair</button>
+        <button type="button" class="bbttcc-st-btn bbttcc-st-btn-secondary" data-action="bbttccStClearCollapseFlag"
+                data-tooltip="Reset collapseFired flag so Collapse can re-trigger">Reset Collapse Flag</button>
+      </div>
+      ` : ""}
     </section>
   `;
 }
@@ -268,6 +294,74 @@ function _bindActions(root, actor, app) {
       await api.clearStructure(actor);
       ui.notifications?.info?.("Structure flags cleared.");
       app?.render?.(false);
+    });
+  });
+
+  // ── Phase B GM affordances ────────────────────────────────────────────────
+
+  // Apply Damage — routes through _applyDamageToActor (which is wedged so the
+  // structure damage path fires; integrity overflow flows naturally).
+  root.querySelectorAll(`[data-action="bbttccStApplyDamage"]`).forEach(btn => {
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      if (!game.user?.isGM) return;
+      const dmgInput  = root.querySelector(`[name="bbttccStDmg"]`);
+      const typeInput = root.querySelector(`[name="bbttccStDmgType"]`);
+      const amount = Math.max(1, parseInt(dmgInput?.value, 10) || 0);
+      const dmgType = typeInput?.value || "";
+      const fn = game.fourththing?.rolls?._applyDamageToActor;
+      if (typeof fn !== "function") {
+        ui.notifications?.error?.("_applyDamageToActor not available — fourththing system not ready.");
+        return;
+      }
+      try {
+        const desc = await fn(actor, amount, {
+          op: "damage", track: "integrity",
+          damageType: dmgType, damageFlavor: "",
+          perTargetMultiplier: 1
+        });
+        if (desc) ui.notifications?.info?.(desc);
+      } catch (e) {
+        console.warn("[bbttcc-structures] apply-damage button failed", e);
+        ui.notifications?.error?.("Damage apply failed — see console.");
+      }
+      // Sheet re-renders automatically via Foundry's update hook; force a
+      // render in case the actor wasn't updated (no-op damage).
+      app?.render?.(false);
+    });
+  });
+
+  // Full Repair — restore plates to max, BOM qty back to originalQty.
+  root.querySelectorAll(`[data-action="bbttccStFullRepair"]`).forEach(btn => {
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      if (!game.user?.isGM) return;
+      const cur = api.readState(actor);
+      if (!cur) return;
+      // Re-stamp from the original BOM (using originalQty if present)
+      const rawBom = cur.materialBOM.map(r => ({
+        materialKey: r.materialKey,
+        qty: Number(r.originalQty) > 0 ? r.originalQty : r.qty
+      }));
+      await api.stampBOM(actor, rawBom, {
+        facilityMode: cur.facilityMode,
+        collapseProfile: cur.collapseProfile,
+        resetCurrentPlates: true
+      });
+      // Clear the collapse-fired one-shot so Collapse can re-trigger
+      await actor.unsetFlag("bbttcc-structures", "collapseFired");
+      ui.notifications?.info?.(`Full repair: BOM restored, plates → max, collapse flag cleared.`);
+      app?.render?.(false);
+    });
+  });
+
+  // Reset Collapse Flag — clears collapseFired without doing a full repair
+  root.querySelectorAll(`[data-action="bbttccStClearCollapseFlag"]`).forEach(btn => {
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      if (!game.user?.isGM) return;
+      await actor.unsetFlag("bbttcc-structures", "collapseFired");
+      ui.notifications?.info?.("Collapse-fired flag cleared.");
     });
   });
 }

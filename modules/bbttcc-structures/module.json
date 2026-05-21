@@ -26,6 +26,8 @@
   },
   "esmodules": [
     "scripts/api.structures.js",
+    "scripts/damage-wedge.js",
+    "scripts/collapse.js",
     "scripts/structure-sheet-panel.enhancer.js"
   ],
   "styles": [
