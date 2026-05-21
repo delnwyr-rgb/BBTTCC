@@ -1020,7 +1020,8 @@ function ftOpenEngageDialog(actor, item, options = {}) {
             thirdThing: item?.system?.manifestation?.thirdThing ?? "",
             target: targetActor, restraintReduction: restraint,
             flankBonus,
-            aimedShotBonus
+            aimedShotBonus,
+            itemUuid: item?.uuid ?? ""
           });
 
           ftPlayAutoAnimation(actor, item, { hit: !!result?.success });
@@ -1482,6 +1483,13 @@ function ftManifestationDefaults(kind = "power") {
       carryConditions: false,
       carryEffects:    false
     },
+    // Phase E — Conditional Damage. Extra damage rolls that fire when the
+    // target's creature type matches. Up to three rows of
+    // { vsType: <FT.CREATURE_TYPES key>, bonusFormula: "Xd6" }. Damage type
+    // and track inherit from the primary damage (so resist/immune shadowing
+    // computes once, on the combined type). Rolled at apply time inside
+    // applyDamageFromButton for BOTH manifestation and weapon cards.
+    conditionalDamage: [],
     // Phase C — Buffs & Wards. Active-effect-equivalent outcomes the
     // manifestation imparts to its targets on a successful resolution.
     // Authored in the wizard's Step 4; surfaced on the target as ONE
@@ -1713,6 +1721,27 @@ async function _ftFireManifestationChain(caster, primary, item, mf, dr, { castDc
       ${carryNote}
     </div>`
   });
+}
+
+// Phase E — normalize the conditionalDamage rows. Accepts either an array or
+// the wizard's indexed object-map shape (c0/c1/c2). Drops rows with empty
+// type, unknown type, or no formula. Caps at 4 rows. Idempotent.
+function ftNormalizeConditionalDamage(raw) {
+  const validTypes = new Set(Object.keys(FT.CREATURE_TYPES ?? {}));
+  const src = Array.isArray(raw)
+    ? raw
+    : (raw && typeof raw === "object" ? Object.values(raw) : []);
+  const out = [];
+  for (const row of src) {
+    if (!row || typeof row !== "object") continue;
+    const vsType = String(row.vsType ?? "").toLowerCase();
+    if (!validTypes.has(vsType)) continue;
+    const bonusFormula = String(row.bonusFormula ?? "").trim();
+    if (!bonusFormula) continue;
+    out.push({ vsType, bonusFormula });
+    if (out.length >= 4) break;
+  }
+  return out;
 }
 
 // Phase D — normalize the chain config. Coerces numeric strings, clamps
@@ -2288,7 +2317,8 @@ async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1 } = {
               data-damage-type="${dr.type}"
               data-damage-flavor="${dr.flavor ?? ""}"
               data-track="${trackKey}"
-              data-op="${dr.op}">
+              data-op="${dr.op}"
+              data-item-uuid="${ftEscapeHtml(item?.uuid ?? "")}">
         ${isHeal ? "Heal target" : "Apply to target"}
       </button>
     </div>
@@ -4075,7 +4105,9 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       // canonical arrays here so downstream consumers get a single shape.
       appliedEffects: ftNormalizeAppliedEffects(values.appliedEffects ?? {}),
       // Phase D — Chain config. Normalize coerces enabled bool + clamps.
-      chain: ftNormalizeChainConfig(values.chain ?? {})
+      chain: ftNormalizeChainConfig(values.chain ?? {}),
+      // Phase E — Conditional damage rows. Empty rows / unknown vsType filtered.
+      conditionalDamage: ftNormalizeConditionalDamage(values.conditionalDamage ?? [])
     },
     { inplace: false }
   );
@@ -4409,7 +4441,8 @@ function _ftWizV2RenderEffectPower(state) {
       <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("appliedStates.saveEachRound", ap.saveEachRound === true)}<span>Save each round to shake off</span></label></div>
       ${saveSubFields}
     </div>
-    ${_ftWizV2RenderEffectsBlock(state)}`;
+    ${_ftWizV2RenderEffectsBlock(state)}
+    ${_ftWizV2RenderConditionalDamageBlock(state)}`;
 }
 
 // Phase C — Buffs & Wards. Sub-section under Step 4 that authors numeric
@@ -4484,7 +4517,35 @@ function _ftWizV2RenderEffectWeapon(state) {
       <div class="ft-cast-field"><label>Track</label>${_ftWizV2Sel("damageTrack", { integrity: "Integrity", stress: "Stress", radiation: "Radiation" }, state.damageTrack ?? "integrity")}</div>
       <div class="ft-cast-field"><label>Short Range</label>${_ftWizV2Num("rangeShort", state.rangeShort ?? 1, { min: 0, max: 999 })}</div>
       <div class="ft-cast-field"><label>Long Range</label>${_ftWizV2Num("rangeLong", state.rangeLong ?? 1, { min: 0, max: 999 })}</div>
-    </div>`;
+    </div>
+    ${_ftWizV2RenderEffectsBlock(state)}
+    ${_ftWizV2RenderConditionalDamageBlock(state)}`;
+}
+
+// Phase E — Conditional Damage. Shared between power Step 4 and weapon Step 4.
+// Up to 3 rows of { vsType creature-type select, bonusFormula text }. The
+// bonus is rolled at apply time (inside applyDamageFromButton) when the
+// target's creature type matches. Damage type/track inherit from the primary
+// so resist/immune shadowing computes once on the combined hit.
+function _ftWizV2RenderConditionalDamageBlock(state) {
+  const rows = state.conditionalDamage ?? {};
+  // Coerce array → indexed object for stable wizard slots; harvest still works either way.
+  const rowMap = (rows && typeof rows === "object" && !Array.isArray(rows))
+    ? rows
+    : Object.fromEntries((Array.isArray(rows) ? rows : []).map((r, i) => [`c${i}`, r]));
+  const TYPE_OPTS = { "": "— none —", ...Object.fromEntries(Object.entries(FT.CREATURE_TYPES ?? {}).map(([k, v]) => [k, v?.label ?? ftCap(k)])) };
+  const rowHtml = (slot) => {
+    const r = rowMap[slot] ?? {};
+    return `
+      <div class="ft-cast-grid" style="grid-template-columns:1.4fr 1fr;gap:0.4rem;align-items:end;margin-bottom:0.25rem">
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">vs creature type</label>${_ftWizV2Sel(`conditionalDamage.${slot}.vsType`, TYPE_OPTS, r.vsType ?? "")}</div>
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Bonus formula</label>${_ftWizV2Txt(`conditionalDamage.${slot}.bonusFormula`, r.bonusFormula ?? "", "1d6")}</div>
+      </div>`;
+  };
+  return `
+    <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Conditional Damage <span style="font-weight:400;font-size:0.78rem;opacity:0.65">(vs creature type)</span></div>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Extra dice that roll when the target matches a creature type. Use for "+1d6 vs Undead", "+2d6 vs Outsider" style effects. Damage type and track inherit from the primary — the bonus stacks onto the same hit so resist/immune shadowing applies once. Set the target's creature type via <code>actor.flags.fourththing.creatureType</code> (string or array).</p>
+    ${rowHtml("c0")}${rowHtml("c1")}${rowHtml("c2")}`;
 }
 
 function _ftWizV2RenderResolution(state) {
@@ -4672,6 +4733,34 @@ function _ftWizV2ChainBudgetTier(chain) {
   return { tier, note: `chain ×${count} ${formula} (≈${total.toFixed(1)}) → T${tier}` };
 }
 
+// Phase E — Conditional damage magnitude. Each row contributes avg(formula)
+// halved (conditional only fires when type matches, so worth less than the
+// primary damage's full weight). Brackets ≤2→T1, ≤5→T2, ≤10→T3, else T4.
+function _ftWizV2ConditionalDamageBudgetTier(rows) {
+  const src = Array.isArray(rows)
+    ? rows
+    : (rows && typeof rows === "object" ? Object.values(rows) : []);
+  const validTypes = new Set(Object.keys(FT.CREATURE_TYPES ?? {}));
+  let total = 0;
+  let n = 0;
+  for (const r of src) {
+    if (!r?.vsType || !validTypes.has(String(r.vsType).toLowerCase())) continue;
+    const f = String(r.bonusFormula ?? "").trim();
+    if (!f) continue;
+    n++;
+    const m = f.match(/^\s*(\d+)\s*d\s*(\d+)\s*$/i);
+    const avg = m ? Math.floor(Number(m[1])) * ((Number(m[2]) + 1) / 2) : (Number(f) || 3);
+    total += avg * 0.5;  // conditional → half-weight vs primary
+  }
+  if (!n) return { tier: 0, note: null };
+  let tier;
+  if      (total <= 2)  tier = 1;
+  else if (total <= 5)  tier = 2;
+  else if (total <= 10) tier = 3;
+  else                  tier = 4;
+  return { tier, note: `${n} conditional row${n>1?"s":""} (weight ${total.toFixed(1)}) → T${tier}` };
+}
+
 function _ftWizV2SuggestTier(state) {
   const factors = [
     _ftWizV2DamageBudgetTier(state.damageRoll),
@@ -4679,6 +4768,7 @@ function _ftWizV2SuggestTier(state) {
     _ftWizV2StatesBudgetTier(state.appliedStates),
     _ftWizV2EffectsBudgetTier(state.appliedEffects),
     _ftWizV2ChainBudgetTier(state.chain),
+    _ftWizV2ConditionalDamageBudgetTier(state.conditionalDamage),
     _ftWizV2DcBudgetTier(state)
   ].filter(f => f.tier > 0);
   const tier = factors.length ? Math.max(...factors.map(f => f.tier)) : 1;
@@ -5022,6 +5112,9 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
   state.appliedEffects.modifiers = {};
   state.appliedEffects.resists   = {};
   state.appliedEffects.immunes   = {};
+  // Phase E — Conditional damage uses indexed object-map for indexed slots
+  // (c0/c1/c2); ftNormalizeConditionalDamage converts back to a clean array.
+  state.conditionalDamage = {};
   // Default icon — kind-appropriate fallback. Step 7 lets the author swap
   // via FilePicker (curated icon library at FT_ICON_LIBRARY_PATH).
   state.img = wizardKind === "weapon" ? "icons/svg/sword.svg" : "icons/svg/aura.svg";
@@ -5244,6 +5337,44 @@ FT.DAMAGE_TYPES = {
   qliphothic: { label: "Qliphothic", track: "stress"    },
   radiation:  { label: "Radiation",  track: "radiation" }
 };
+
+// Phase E — Creature types. Used by manifestation + weapon conditional damage
+// rows ("+Xd6 vs Outsider"). Stored on the target actor via
+// `flags.fourththing.creatureType` as either a single string or an array of
+// strings (an actor can match multiple, e.g. an infernal outsider). PCs default
+// to "humanoid" via the ftActorCreatureTypes helper if the flag is unset.
+FT.CREATURE_TYPES = {
+  humanoid:  { label: "Humanoid"  },
+  beast:     { label: "Beast"     },
+  undead:    { label: "Undead"    },
+  construct: { label: "Construct" },
+  elemental: { label: "Elemental" },
+  fae:       { label: "Fae"       },
+  outsider:  { label: "Outsider"  },
+  infernal:  { label: "Infernal"  },
+  celestial: { label: "Celestial" },
+  dragon:    { label: "Dragon"    },
+  eidolon:   { label: "Eidolon"   },
+  aberration:{ label: "Aberration"}
+};
+
+// Resolves an actor's creature type(s) for conditional-damage matching.
+// Accepts the flag as either a string (single type) or an array (multi-type
+// — a Dragon-blooded outsider is both "dragon" and "outsider"). Unknown
+// strings are filtered out. PC actors with no flag default to "humanoid".
+function ftActorCreatureTypes(actor) {
+  if (!actor) return [];
+  const raw = actor.flags?.fourththing?.creatureType ?? actor.flags?.fourththing?.creatureTypes ?? null;
+  const valid = new Set(Object.keys(FT.CREATURE_TYPES));
+  const out = new Set();
+  if (Array.isArray(raw)) {
+    for (const t of raw) { const k = String(t ?? "").toLowerCase(); if (valid.has(k)) out.add(k); }
+  } else if (typeof raw === "string" && raw) {
+    const k = raw.toLowerCase(); if (valid.has(k)) out.add(k);
+  }
+  if (!out.size && actor.type === "character") out.add("humanoid");
+  return [...out];
+}
 
 // ─── Armor skill rank scaling ─────────────────────────────────────────────────
 // Wearer's rank in the armor's declared armorSkill decides how much of the item's
@@ -6096,7 +6227,8 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
                                 damageFacultyMod = 0, damageBaseFormula = "",
                                 damageRolledTotal = 0, damageDiceTooltip = "",
                                 explosionDice = [], surgeBanked = 0, doubleTen = false,
-                                costNote = "", signature = "", thirdThing = "" }) {
+                                costNote = "", signature = "", thirdThing = "",
+                                itemUuid = "" }) {
   const ic = FT.INTENT_COLORS[intent] ?? "#888";
   const defData = FT.DEFENSES[defense] ?? { label: defense };
   const diceRow = diceResults.map(d =>
@@ -6139,7 +6271,8 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
               data-formula="${applyFormula}"
               data-damage-type="${damageType ?? ""}"
               data-damage-flavor="${damageFlavor ?? ""}"
-              data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}">
+              data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}"
+              data-item-uuid="${ftEscapeHtml(itemUuid ?? "")}">
         Apply to target
       </button>
     </div>` : "";
@@ -7697,7 +7830,8 @@ Hooks.once("init", function () {
     costNote = "", signature = "", thirdThing = "",
     target = null, restraintReduction = 0,
     flankBonus = 0,
-    aimedShotBonus = 0
+    aimedShotBonus = 0,
+    itemUuid = ""
   } = {}) {
     const rawSys  = actor.system?.system ?? actor.system;
     const attrVal  = rawSys?.attributes?.[intent]?.value ?? 0;
@@ -7828,7 +7962,8 @@ Hooks.once("init", function () {
         damageFormula: success ? finalDamageFormula : "",
         damageFacultyMod, damageBaseFormula: damageFormula,
         damageRolledTotal, damageDiceTooltip,
-        damageType, damageFlavor, costNote, signature, thirdThing
+        damageType, damageFlavor, costNote, signature, thirdThing,
+        itemUuid
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
         : "") + (aeContribs.length
@@ -7998,6 +8133,7 @@ Hooks.once("init", function () {
     const damageType   = String(btn.dataset.damageType   ?? "").toLowerCase();
     const damageFlavor = String(btn.dataset.damageFlavor ?? "").toLowerCase();
     const op           = String(btn.dataset.op ?? "damage").toLowerCase();
+    const itemUuid     = btn.dataset.itemUuid ?? "";
     const targets      = game.user.targets;
 
     if (!targets.size) {
@@ -8009,9 +8145,20 @@ Hooks.once("init", function () {
     await roll.evaluate();
     const baseDmg = roll.total;
 
+    // Phase E — source item lookup for conditional damage + weapon parity.
+    // Resolves itemUuid via Foundry's UUID resolver; null when the chat card
+    // predates the field or the item has been deleted since the cast/strike.
+    const sourceItem = itemUuid ? await (foundry.utils?.fromUuid ?? fromUuid)?.(itemUuid).catch(() => null) : null;
+    const sourceMf   = sourceItem?.system?.manifestation ?? null;
+    const cdRows     = Array.isArray(sourceMf?.conditionalDamage) ? sourceMf.conditionalDamage : [];
+    const isWeapon   = sourceItem?.type === "weapon";
+    const targetCount = targets.size;
+    let firstTarget = null;
+
     for (const token of targets) {
       const actor = token.actor;
       if (!actor) continue;
+      if (!firstTarget) firstTarget = actor;
       // 2026-05-19 — Players don't own enemy rigs/bosses, so a direct
       // actor.update() inside _applyDamageToActor would silently fail.
       // Relay to an active GM via the existing system.fourththing socket
@@ -8034,6 +8181,74 @@ Hooks.once("init", function () {
         op, track, damageType, damageFlavor, perTargetMultiplier: 1
       });
       if (desc) ui.notifications.info(desc);
+
+      // Phase E — conditional damage rows. After the primary hit lands,
+      // check the target's creature types vs each row's vsType. Matching
+      // rows roll their bonus formula and apply as a follow-up hit using
+      // the SAME damage type/track so resist/immune shadowing applies
+      // consistently. Single chat card per matching row keeps the trail
+      // visible without spamming when nothing matches.
+      if (cdRows.length && op === "damage") {
+        const tgtTypes = new Set(ftActorCreatureTypes(actor));
+        for (const row of cdRows) {
+          if (!tgtTypes.has(row.vsType)) continue;
+          try {
+            const bRoll = await new Roll(row.bonusFormula).evaluate({ async: true });
+            const bonusTotal = Math.max(0, Math.floor(Number(bRoll.total) || 0));
+            if (bonusTotal > 0) {
+              const bDesc = await game.fourththing.rolls._applyDamageToActor(actor, bonusTotal, {
+                op: "damage", track, damageType, damageFlavor, perTargetMultiplier: 1
+              });
+              const typeLabel = FT.CREATURE_TYPES[row.vsType]?.label ?? ftCap(row.vsType);
+              await ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({ actor: sourceItem?.parent ?? null }),
+                content: `<div class="fourththing-roll" style="border-color:#e8c84a">
+                  <div class="ft-roll-header"><span class="ft-roll-name">✦ ${ftEscapeHtml(sourceItem?.name ?? "Source")} — conditional bonus vs ${ftEscapeHtml(typeLabel)}</span></div>
+                  <p style="margin:0.2rem 0;font-size:0.82rem"><b>${ftEscapeHtml(row.bonusFormula)}</b> = ${bonusTotal} → ${ftEscapeHtml(bDesc || actor.name)}</p>
+                </div>`
+              });
+            }
+          } catch (e) {
+            console.warn("[fourththing] conditional damage roll failed", row, e);
+          }
+        }
+      }
+
+      // Phase E — weapon parity. Manifestation casts already fired
+      // applyManifestationStates + chain at cast time, so we only do it here
+      // for weapon strikes (item.type === "weapon"). Synthesizes a damageRoll
+      // shape for chain's damage-type inheritance.
+      if (isWeapon && sourceMf && sourceItem.parent) {
+        const caster = sourceItem.parent;
+        try {
+          const hasStates  = sourceMf.appliedStates?.states?.length;
+          const hasEffects = sourceMf.appliedEffects && (
+            sourceMf.appliedEffects.modifiers?.length ||
+            sourceMf.appliedEffects.resists?.length ||
+            sourceMf.appliedEffects.immunes?.length
+          );
+          if (hasStates || hasEffects) {
+            await game.fourththing.applyManifestationStates(caster, actor, sourceItem, sourceMf, { castDc: 15 });
+          }
+        } catch (e) {
+          console.warn("[fourththing] weapon states-on-apply failed", e);
+        }
+      }
+    }
+
+    // Phase E — chain fires ONCE per Apply, anchored to the first target. Only
+    // for weapons (manifestation cast path already fires chain) AND only when
+    // a single target is selected (multi-target Apply is ambiguous for chain).
+    if (isWeapon && sourceMf?.chain?.enabled && firstTarget && targetCount === 1) {
+      const caster = sourceItem.parent;
+      if (caster) {
+        try {
+          const dr = { type: damageType, track, flavor: damageFlavor };
+          await _ftFireManifestationChain(caster, firstTarget, sourceItem, sourceMf, dr, { castDc: 15 });
+        } catch (e) {
+          console.warn("[fourththing] weapon chain-on-apply failed", e);
+        }
+      }
     }
 
     btn.textContent   = `Applied`;
