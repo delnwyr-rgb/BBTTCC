@@ -22,8 +22,11 @@
     enabled: false,
     frontY: 800,
     backY:  200,
-    minScale: 0.40,
+    minScale: 0.25,
     maxScale: 1.00,
+    // Ease-in: closer-to-back shrinks fast, closer-to-front stays near full.
+    // 1.0 = linear; >1 = more aggressive falloff into the distance.
+    curve:    1.8,
     zSortByY: true
   });
 
@@ -61,8 +64,12 @@
 
       const y = Number(token.document?.y ?? 0);
       const range = (cfg.frontY - cfg.backY) || 1;
-      const t = clamp((y - cfg.backY) / range, 0, 1);
-      const s = lerp(cfg.minScale, cfg.maxScale, t);
+      const tRaw = clamp((y - cfg.backY) / range, 0, 1);
+      // Curve > 1 makes the back of the stage shrink fast while keeping
+      // front-of-stage near full size. Linear = 1.0.
+      const curveExp = Math.max(0.1, Number(cfg.curve ?? 1));
+      const tCurved = Math.pow(tRaw, curveExp);
+      const s = lerp(cfg.minScale, cfg.maxScale, tCurved);
 
       token.mesh.scale.set(s, s);
 

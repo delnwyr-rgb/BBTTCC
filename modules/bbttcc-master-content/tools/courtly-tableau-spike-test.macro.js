@@ -32,12 +32,20 @@
   }
 
   const cur = api.readConfig(scene);
-  const sh  = scene.dimensions?.sceneHeight ?? 1080;
+  // Absolute canvas coords. sceneY/sceneHeight from scene.dimensions account
+  // for padding so the depth zone covers the actual scene rectangle, not
+  // a window mis-offset by Foundry's padding inflation.
+  const dims = scene.dimensions || {};
+  const sy   = Number(dims.sceneY ?? 0);
+  const sh   = Number(dims.sceneHeight ?? 1080);
+  // Depth zone covers the upper 80% of the scene by default; bottom 10%
+  // of scene reserved as the "footlights" frame.
   const def = {
-    frontY: Number(cur.frontY ?? Math.round(sh * 0.85)),
-    backY:  Number(cur.backY  ?? Math.round(sh * 0.20)),
-    minScale: Number(cur.minScale ?? 0.40),
-    maxScale: Number(cur.maxScale ?? 1.00)
+    frontY:   Number(cur.frontY   ?? Math.round(sy + sh * 0.90)),
+    backY:    Number(cur.backY    ?? Math.round(sy + sh * 0.10)),
+    minScale: Number(cur.minScale ?? 0.25),
+    maxScale: Number(cur.maxScale ?? 1.00),
+    curve:    Number(cur.curve    ?? 1.8)
   };
   const selectedIds = canvas.tokens?.controlled?.map(t => t.id) ?? [];
   const selCount = selectedIds.length;
@@ -45,17 +53,19 @@
   const content = `
     <form>
       <p class="hint" style="margin-bottom:8px;">
-        <b>Tableau status:</b> ${cur.enabled ? "✅ ENABLED" : "⛔ disabled"} on <b>${scene.name}</b>.
-        Scene height: ${sh}px.
+        <b>Tableau status:</b> ${cur.enabled ? "✅ ENABLED" : "⛔ disabled"} on <b>${scene.name}</b>.<br/>
+        Scene area: Y ∈ [${sy}, ${sy + sh}] (${sh}px tall).
       </p>
       <div class="form-group"><label>Front Y (closest, scale ${def.maxScale})</label>
         <input type="number" name="frontY" value="${def.frontY}" step="10"/></div>
       <div class="form-group"><label>Back Y (farthest, scale ${def.minScale})</label>
         <input type="number" name="backY" value="${def.backY}" step="10"/></div>
-      <div class="form-group"><label>Min scale</label>
-        <input type="number" name="minScale" value="${def.minScale}" step="0.05" min="0.10" max="1.00"/></div>
-      <div class="form-group"><label>Max scale</label>
+      <div class="form-group"><label>Min scale (back wall)</label>
+        <input type="number" name="minScale" value="${def.minScale}" step="0.05" min="0.05" max="1.00"/></div>
+      <div class="form-group"><label>Max scale (foreground)</label>
         <input type="number" name="maxScale" value="${def.maxScale}" step="0.05" min="0.10" max="2.00"/></div>
+      <div class="form-group"><label>Curve (1.0 = linear, &gt;1 = aggressive falloff)</label>
+        <input type="number" name="curve" value="${def.curve}" step="0.1" min="0.2" max="4.0"/></div>
       <hr/>
       <p class="hint">Selected tokens: <b>${selCount}</b>. The "Mark Selected" buttons below will toggle
         <code>flags.bbttcc-raid.tableauActor</code> on each.</p>
@@ -74,7 +84,8 @@
             frontY:   Number(f.frontY.value),
             backY:    Number(f.backY.value),
             minScale: Number(f.minScale.value),
-            maxScale: Number(f.maxScale.value)
+            maxScale: Number(f.maxScale.value),
+            curve:    Number(f.curve.value)
           };
           const next = await api.enable(partial, scene);
           ChatMessage.create({
