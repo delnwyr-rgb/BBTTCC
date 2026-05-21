@@ -1,0 +1,381 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+ * bbttcc-structures · api.structures.js · Phase A
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Material-BOM-driven Structure damage track. This file owns:
+ *
+ *   • Loading data tables (structural-families.json + material-family-map.json)
+ *   • Pure derivation math (BOM → Plates max, Threshold, Resists, loadBearing)
+ *   • Stamping a BOM onto an actor (writes flags + caches derived values)
+ *   • Reading current Structure state
+ *
+ * Phase A scope: NO damage path. NO state transitions. NO Bulwark dispatch.
+ * Those land in Phase B+. This file is pure schema + math + stamp.
+ *
+ * Spec: bbttcc-structures/STRUCTURE_DAMAGE_SPEC.md
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+const MOD_ID = "bbttcc-structures";
+const TAG = `[${MOD_ID}]`;
+const FAMILIES_URL = `modules/${MOD_ID}/data/structural-families.json`;
+const FAMILY_MAP_URL = `modules/${MOD_ID}/data/material-family-map.json`;
+const FLAG_SCOPE = MOD_ID;
+
+let _FAMILIES = null;          // { families: {...}, stateThresholds: {...}, rubbleJitter: {...} }
+let _FAMILY_MAP = null;        // { materialKeyToFamily: {...}, _heuristicHints: {...} }
+let _PACK_ID_ITEMS = "bbttcc-master-content.items";
+
+// ── Data load ────────────────────────────────────────────────────────────────
+
+async function _loadTables() {
+  if (_FAMILIES && _FAMILY_MAP) return;
+  try {
+    const [famResp, mapResp] = await Promise.all([fetch(FAMILIES_URL), fetch(FAMILY_MAP_URL)]);
+    if (!famResp.ok) throw new Error(`families.json HTTP ${famResp.status}`);
+    if (!mapResp.ok) throw new Error(`material-family-map.json HTTP ${mapResp.status}`);
+    _FAMILIES = await famResp.json();
+    _FAMILY_MAP = await mapResp.json();
+  } catch (e) {
+    console.error(TAG, "Failed to load data tables", e);
+    throw e;
+  }
+}
+
+// ── Family resolution ────────────────────────────────────────────────────────
+
+/**
+ * Resolve a material to its structural family.
+ * Override map wins; if missing, fall back to tag-based heuristic; final
+ * fallback is the default family declared in the map.
+ *
+ * @param {string} materialKey   from item.flags.fourththing.rfi.item.materialKey
+ * @param {string[]} [tags]      from item.system.tags or .flags...rfi.item tags
+ * @returns {string} family name (matches a key in FAMILIES.families)
+ */
+export function computeFamily(materialKey, tags = []) {
+  if (!_FAMILY_MAP) {
+    console.warn(TAG, "computeFamily called before tables loaded — returning 'salvage'");
+    return "salvage";
+  }
+  const key = String(materialKey || "").toLowerCase();
+  const override = _FAMILY_MAP.materialKeyToFamily?.[key];
+  if (override) return override;
+
+  const tagSet = (Array.isArray(tags) ? tags : []).map(t => String(t).toLowerCase());
+  const hayKey = key;
+  const rules = _FAMILY_MAP._heuristicHints?.rules ?? [];
+  for (const rule of rules) {
+    const needle = String(rule.ifTag || "").toLowerCase();
+    if (!needle) continue;
+    if (tagSet.some(t => t.includes(needle))) return rule.family;
+    if (hayKey.includes(needle)) return rule.family;
+  }
+  return _FAMILY_MAP._heuristicHints?.defaultFamily ?? "salvage";
+}
+
+// ── Material catalog lookup ──────────────────────────────────────────────────
+
+/**
+ * Look up a material item in the BBTTCC items pack by materialKey.
+ * Async — searches the pack index then loads the doc.
+ *
+ * @returns {Promise<{name, materialKey, tier, family, tags, img}|null>}
+ */
+export async function lookupMaterial(materialKey) {
+  if (!materialKey) return null;
+  const pack = game.packs.get(_PACK_ID_ITEMS);
+  if (!pack) {
+    console.warn(TAG, "Items pack not found:", _PACK_ID_ITEMS);
+    return null;
+  }
+  const idx = await pack.getIndex({ fields: ["name", "flags.fourththing.rfi.item", "system.tags"] });
+  const want = String(materialKey).toLowerCase();
+  const hit = idx.find(e => {
+    const k = e.flags?.fourththing?.rfi?.item?.materialKey;
+    return String(k || "").toLowerCase() === want;
+  });
+  if (!hit) return null;
+  const doc = await pack.getDocument(hit._id);
+  const rfi = doc?.flags?.fourththing?.rfi?.item ?? {};
+  const tags = Array.isArray(doc?.system?.tags) ? doc.system.tags : [];
+  return {
+    name: doc?.name ?? materialKey,
+    materialKey,
+    tier: rfi.tier ?? "I",
+    family: computeFamily(materialKey, tags),
+    tags,
+    img: doc?.img ?? "icons/svg/mystery-man.svg"
+  };
+}
+
+// ── Tier helpers ─────────────────────────────────────────────────────────────
+
+const _TIER_NUM = { "I": 1, "II": 2, "III": 3, "IV": 4 };
+function _tierToNum(t) {
+  if (typeof t === "number") return t;
+  return _TIER_NUM[String(t || "I").toUpperCase()] ?? 1;
+}
+
+// ── Pure derivation ──────────────────────────────────────────────────────────
+
+/**
+ * Derive Structure stats from a BOM. Pure function. Does not mutate actor.
+ *
+ * BOM entry shape: { materialKey, qty, family, tier, name?, tagsCache? }
+ * If family or tier are missing from a BOM entry, falls back to computeFamily()
+ * and assumes Tier I — but real stamping should always pass denormalized values.
+ *
+ * @param {Array} bom
+ * @returns {{
+ *   platesMax: number,
+ *   threshold: number,
+ *   resists: string[],
+ *   loadBearing: boolean,
+ *   breakdownByFamily: Object,
+ *   totalUnits: number
+ * }}
+ */
+export function deriveBOM(bom) {
+  if (!_FAMILIES) {
+    console.warn(TAG, "deriveBOM called before tables loaded; returning empty");
+    return { platesMax: 0, threshold: 0, resists: [], loadBearing: false, breakdownByFamily: {}, totalUnits: 0 };
+  }
+  const fams = _FAMILIES.families;
+  let platesMax = 0;
+  let weightedTierSum = 0;
+  let totalUnits = 0;
+  const resistSet = new Set();
+  const breakdown = {};
+  let loadBearing = false;
+
+  for (const row of (Array.isArray(bom) ? bom : [])) {
+    const qty = Math.max(0, Number(row?.qty) || 0);
+    if (qty <= 0) continue;
+    const famKey = row.family || computeFamily(row.materialKey, row.tagsCache);
+    const fam = fams[famKey];
+    if (!fam) {
+      console.warn(TAG, `deriveBOM: unknown family '${famKey}' for material '${row.materialKey}' — skipping`);
+      continue;
+    }
+    const tierNum = _tierToNum(row.tier);
+
+    platesMax += qty * (fam.plateCoef ?? 1);
+    weightedTierSum += qty * tierNum * (fam.threshWeight ?? 1);
+    totalUnits += qty;
+
+    for (const r of (fam.nativeResists ?? [])) {
+      if (r === "typed-from-tags") {
+        // Resolve from material tags
+        const tags = Array.isArray(row.tagsCache) ? row.tagsCache : [];
+        for (const t of tags) {
+          const lower = String(t).toLowerCase();
+          if (lower.includes("hex-resist") || lower === "warded" || lower === "ward") resistSet.add("hex-resistant");
+          if (lower.includes("qliph"))   resistSet.add("qliphothic-resistant");
+          if (lower.includes("curse"))   resistSet.add("curse-resistant");
+          if (lower.includes("blessed")) resistSet.add("blessed");
+        }
+      } else if (r === "quirk") {
+        // Salvage flavor — surfaced in Phase B+
+      } else if (r === "truth-affecting") {
+        resistSet.add("truth-affecting");
+      } else {
+        resistSet.add(r);
+      }
+    }
+
+    if (fam.loadBearing) loadBearing = true;
+
+    breakdown[famKey] = breakdown[famKey] ?? { qty: 0, plates: 0 };
+    breakdown[famKey].qty += qty;
+    breakdown[famKey].plates += qty * (fam.plateCoef ?? 1);
+  }
+
+  const threshold = totalUnits > 0 ? (weightedTierSum / totalUnits) : 0;
+
+  return {
+    platesMax,
+    threshold: Number(threshold.toFixed(2)),
+    resists: Array.from(resistSet).sort(),
+    loadBearing,
+    breakdownByFamily: breakdown,
+    totalUnits
+  };
+}
+
+// ── BOM normalization ────────────────────────────────────────────────────────
+
+/**
+ * Take a raw BOM (possibly just materialKey + qty) and return a fully
+ * denormalized BOM with family / tier / name / tagsCache filled from the
+ * catalog. Async because it hits the items pack.
+ */
+export async function normalizeBOM(rawBom) {
+  const out = [];
+  for (const row of (Array.isArray(rawBom) ? rawBom : [])) {
+    if (!row?.materialKey || !(Number(row.qty) > 0)) continue;
+    const cached = await lookupMaterial(row.materialKey);
+    if (!cached) {
+      // Still preserve the entry with best-effort defaults so the stamp doesn't
+      // silently drop data; family resolves via heuristic on materialKey alone.
+      out.push({
+        materialKey: row.materialKey,
+        qty: Number(row.qty),
+        family: row.family || computeFamily(row.materialKey, []),
+        tier: row.tier || "I",
+        name: row.name || row.materialKey,
+        tagsCache: row.tagsCache || []
+      });
+      continue;
+    }
+    out.push({
+      materialKey: row.materialKey,
+      qty: Number(row.qty),
+      family: cached.family,
+      tier: cached.tier,
+      name: cached.name,
+      tagsCache: cached.tags
+    });
+  }
+  return out;
+}
+
+// ── State from plates ────────────────────────────────────────────────────────
+
+/**
+ * State = function(platesCurrent / platesMax, loadBearing).
+ * Razed requires platesPct < razed.platesMin AND no load-bearing material.
+ */
+export function stateFromPlates(platesCurrent, platesMax, loadBearing) {
+  if (!_FAMILIES) return "intact";
+  const thr = _FAMILIES.stateThresholds;
+  const pct = platesMax > 0 ? (platesCurrent / platesMax) : 1;
+  if (pct >= thr.intact.platesMin) return "intact";
+  if (pct >= thr.damaged.platesMin) return "damaged";
+  if (pct >= thr.breached.platesMin) return "breached";
+  if (loadBearing) return "breached"; // load-bearing lock — cannot reach razed
+  return "razed";
+}
+
+// ── Stamping ─────────────────────────────────────────────────────────────────
+
+/**
+ * Stamp a BOM onto an actor. Normalizes, derives, and writes flags.
+ *
+ * @param {Actor} actor
+ * @param {Array} rawBom              [{materialKey, qty}, ...]
+ * @param {Object} opts
+ *   - facilityMode (boolean)         Holdings Phase C scale
+ *   - collapseProfile (object)       override defaults
+ *   - resetCurrentPlates (boolean)   default true — fill current to new max
+ */
+export async function stampBOM(actor, rawBom, opts = {}) {
+  if (!actor) throw new Error("stampBOM: actor is required");
+  await _loadTables();
+
+  const bom = await normalizeBOM(rawBom);
+  const derived = deriveBOM(bom);
+
+  const existing = actor.getFlag(FLAG_SCOPE, "plates") ?? null;
+  const currentPlates = (opts.resetCurrentPlates === false && existing?.current != null)
+    ? Math.min(existing.current, derived.platesMax)
+    : derived.platesMax;
+
+  const state = stateFromPlates(currentPlates, derived.platesMax, derived.loadBearing);
+
+  const collapseProfile = opts.collapseProfile ?? {
+    fallFt: 10,
+    damageDice: "2d10",
+    nonlethal: true,
+    knockbackFt: 5,
+    triggerState: "breached"
+  };
+
+  const payload = {
+    hasStructure: true,
+    facilityMode: !!opts.facilityMode,
+    materialBOM: bom,
+    state,
+    plates: { current: currentPlates, max: derived.platesMax },
+    threshold: derived.threshold,
+    resists: derived.resists,
+    loadBearing: derived.loadBearing,
+    collapseProfile,
+    history: actor.getFlag(FLAG_SCOPE, "history") ?? []
+  };
+
+  await actor.update({ [`flags.${FLAG_SCOPE}`]: payload });
+  return { ...payload, breakdownByFamily: derived.breakdownByFamily };
+}
+
+/**
+ * Clear all Structure flags from an actor. Useful for paper-test cleanup.
+ */
+export async function clearStructure(actor) {
+  if (!actor) return;
+  await actor.update({ [`flags.-=${FLAG_SCOPE}`]: null });
+}
+
+// ── Reading ─────────────────────────────────────────────────────────────────
+
+/**
+ * Convenience getter for current Structure state.
+ * @returns {Object|null} the full flag payload, or null if actor has no Structure.
+ */
+export function readState(actor) {
+  if (!actor) return null;
+  const f = actor.getFlag?.(FLAG_SCOPE, "hasStructure");
+  if (!f) return null;
+  return {
+    hasStructure: true,
+    facilityMode: !!actor.getFlag(FLAG_SCOPE, "facilityMode"),
+    materialBOM:  actor.getFlag(FLAG_SCOPE, "materialBOM") ?? [],
+    state:        actor.getFlag(FLAG_SCOPE, "state") ?? "intact",
+    plates:       actor.getFlag(FLAG_SCOPE, "plates") ?? { current: 0, max: 0 },
+    threshold:    actor.getFlag(FLAG_SCOPE, "threshold") ?? 0,
+    resists:      actor.getFlag(FLAG_SCOPE, "resists") ?? [],
+    loadBearing:  !!actor.getFlag(FLAG_SCOPE, "loadBearing"),
+    collapseProfile: actor.getFlag(FLAG_SCOPE, "collapseProfile") ?? null,
+    history:      actor.getFlag(FLAG_SCOPE, "history") ?? []
+  };
+}
+
+// ── API install ─────────────────────────────────────────────────────────────
+// Per [[bbttcc-api-exposure-pattern]] memory: install at BOTH script-load AND
+// Hooks.once("ready") to defend against load-order clobber + browser cache
+// races. Tiny installer.
+
+function _installApi() {
+  try {
+    if (!game.bbttcc) game.bbttcc = { api: {} };
+    if (!game.bbttcc.api) game.bbttcc.api = {};
+    game.bbttcc.api.structures = {
+      // Pure functions
+      computeFamily,
+      deriveBOM,
+      stateFromPlates,
+      // I/O
+      lookupMaterial,
+      normalizeBOM,
+      // Mutating
+      stampBOM,
+      clearStructure,
+      // Reading
+      readState,
+      // Tables (live refs; immutable in practice — load once)
+      get FAMILIES() { return _FAMILIES?.families ?? {}; },
+      get FAMILY_MAP() { return _FAMILY_MAP?.materialKeyToFamily ?? {}; },
+      get STATE_THRESHOLDS() { return _FAMILIES?.stateThresholds ?? {}; },
+      get RUBBLE_JITTER() { return _FAMILIES?.rubbleJitter ?? { formula: "1d4-1", min: 0, max: 3 }; },
+      // Constants
+      FLAG_SCOPE,
+      MOD_ID,
+      VERSION: "0.1.0-phaseA"
+    };
+  } catch (e) {
+    console.warn(TAG, "API install failed", e);
+  }
+}
+
+_installApi();
+Hooks.once("init",  async () => { await _loadTables(); _installApi(); });
+Hooks.once("ready", async () => { await _loadTables(); _installApi(); console.log(TAG, "Phase A ready · v0.1.0"); });

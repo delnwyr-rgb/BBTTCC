@@ -1,0 +1,269 @@
+/* bbttcc-structures · Structure panel · Phase A */
+
+.bbttcc-st-panel-wrap {
+  display: block;
+  margin: 0.6rem 0 0.8rem 0;
+}
+
+.bbttcc-structures-panel {
+  border: 1px solid #4a4538;
+  background: linear-gradient(180deg, #1a1611 0%, #14110c 100%);
+  color: #cfc4a8;
+  padding: 0.6rem 0.7rem;
+  border-radius: 4px;
+  font-family: var(--font-primary, "Signika", sans-serif);
+}
+
+.bbttcc-st-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  border-bottom: 1px solid #3a3528;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.bbttcc-st-header h3 {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  color: #d9c47a;
+  border: none;
+  flex: 0 0 auto;
+}
+
+.bbttcc-st-state-pip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.bbttcc-st-empty-tag {
+  font-size: 0.7rem;
+  opacity: 0.55;
+  font-style: italic;
+}
+
+.bbttcc-st-lb-badge {
+  font-size: 0.7rem;
+  color: #d9b96b;
+  background: rgba(217, 185, 107, 0.08);
+  border: 1px solid rgba(217, 185, 107, 0.25);
+  padding: 0.08rem 0.4rem;
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+.bbttcc-st-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 0.8rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.78rem;
+}
+
+.bbttcc-st-summary > div {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bbttcc-st-resists-line {
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+}
+
+.bbttcc-st-label {
+  text-transform: uppercase;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  flex: 0 0 auto;
+}
+
+.bbttcc-st-plates-bar {
+  font-family: monospace;
+  letter-spacing: 0;
+  color: #b09a4a;
+  font-size: 0.85rem;
+}
+
+.bbttcc-st-plates-val {
+  font-size: 0.72rem;
+  opacity: 0.75;
+  font-family: monospace;
+}
+
+.bbttcc-st-threshold-val {
+  background: rgba(217, 185, 107, 0.12);
+  border: 1px solid rgba(217, 185, 107, 0.3);
+  padding: 0.05rem 0.4rem;
+  border-radius: 3px;
+  font-weight: 600;
+  color: #d9c47a;
+  font-family: monospace;
+}
+
+.bbttcc-st-resists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.bbttcc-st-resist-pill {
+  background: rgba(120, 100, 60, 0.18);
+  border: 1px solid rgba(217, 185, 107, 0.2);
+  padding: 0.05rem 0.35rem;
+  border-radius: 2px;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+}
+
+.bbttcc-st-resist-empty {
+  font-size: 0.7rem;
+  opacity: 0.5;
+  font-style: italic;
+}
+
+/* BOM grid */
+.bbttcc-st-bom-wrap {
+  border-top: 1px solid #2a2620;
+  padding-top: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.bbttcc-st-bom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.bbttcc-st-bom-table thead th {
+  font-weight: normal;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  text-align: left;
+  padding: 0.18rem 0.3rem;
+  border-bottom: 1px solid #2a2620;
+}
+
+.bbttcc-st-bom-table td {
+  padding: 0.18rem 0.3rem;
+  border-bottom: 1px dotted rgba(80, 70, 50, 0.2);
+}
+
+.bbttcc-st-bom-row.bbttcc-st-bom-loadbearing {
+  background: rgba(217, 185, 107, 0.04);
+}
+
+.bbttcc-st-bom-bar {
+  width: 80px;
+}
+
+.bbttcc-st-qty-bar {
+  height: 8px;
+  width: var(--qty-pct, 100%);
+  background: var(--fam-color, #888);
+  border-radius: 1px;
+  opacity: 0.7;
+}
+
+.bbttcc-st-bom-name {
+  font-weight: 500;
+  color: #ddd;
+}
+
+.bbttcc-st-bom-family {
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+.bbttcc-st-bom-tier,
+.bbttcc-st-bom-qty {
+  font-family: monospace;
+  font-size: 0.72rem;
+  opacity: 0.75;
+  text-align: center;
+  width: 30px;
+}
+
+.bbttcc-st-lb-tag {
+  background: rgba(217, 185, 107, 0.15);
+  border: 1px solid rgba(217, 185, 107, 0.35);
+  padding: 0.02rem 0.2rem;
+  border-radius: 2px;
+  font-size: 0.6rem;
+  color: #d9b96b;
+  letter-spacing: 0.1em;
+}
+
+/* Actions */
+.bbttcc-st-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid #2a2620;
+  padding-top: 0.4rem;
+}
+
+.bbttcc-st-btn {
+  background: #2a2620;
+  border: 1px solid #4a4538;
+  color: #c9bc92;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.74rem;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+}
+
+.bbttcc-st-btn:hover:not(:disabled) {
+  background: #38322a;
+  color: #ebe1bf;
+}
+
+.bbttcc-st-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bbttcc-st-stamp {
+  background: rgba(217, 185, 107, 0.15);
+  border-color: rgba(217, 185, 107, 0.45);
+  color: #e8d488;
+}
+
+.bbttcc-st-stamp:hover {
+  background: rgba(217, 185, 107, 0.25);
+}
+
+.bbttcc-st-btn-secondary {
+  opacity: 0.7;
+  margin-left: auto;
+}
+
+.bbttcc-st-btn-danger {
+  border-color: rgba(192, 80, 60, 0.4);
+  color: #d99a90;
+}
+
+.bbttcc-st-btn-danger:hover:not(:disabled) {
+  background: rgba(192, 80, 60, 0.15);
+}
+
+/* Empty state */
+.bbttcc-st-empty-body {
+  padding: 0.4rem 0;
+}
+
+.bbttcc-st-empty-msg {
+  font-size: 0.76rem;
+  opacity: 0.65;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}

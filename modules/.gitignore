@@ -34,6 +34,8 @@
 !bbttcc-raid/**
 !bbttcc-sorting-engine/
 !bbttcc-sorting-engine/**
+!bbttcc-structures/
+!bbttcc-structures/**
 !bbttcc-territory/
 !bbttcc-territory/**
 !bbttcc-tikkun/

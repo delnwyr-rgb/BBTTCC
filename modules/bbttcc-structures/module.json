@@ -1,0 +1,40 @@
+{
+  "id": "bbttcc-structures",
+  "title": "BBTTCC Structures",
+  "description": "Material-BOM-driven Structure damage track for Rigs, Facilities, and standalone fortifications. Phase A: schema + derivation + sheet panel (no damage path yet).",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios"
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "fourththing",
+        "type": "system",
+        "compatibility": {
+          "verified": "14"
+        }
+      }
+    ],
+    "requires": []
+  },
+  "esmodules": [
+    "scripts/api.structures.js",
+    "scripts/structure-sheet-panel.enhancer.js"
+  ],
+  "styles": [
+    "styles/structure-panel.css"
+  ],
+  "languages": [],
+  "socket": true,
+  "packs": [],
+  "url": "",
+  "manifest": "",
+  "download": ""
+}

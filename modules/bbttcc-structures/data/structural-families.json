@@ -1,0 +1,110 @@
+{
+  "_comment": "Structural family coefficients per STRUCTURE_DAMAGE_SPEC.md §3. plateCoef contributes to Plates max; threshWeight contributes to weighted-avg Threshold; chipN = damage points consumed per material unit chipped; nativeResists are inherent damage-type modifiers; chipOrder = sort position in the chip queue (lower = chipped first).",
+  "families": {
+    "cloth": {
+      "label": "Cloth",
+      "plateCoef": 1,
+      "threshWeight": 0.3,
+      "chipN": 2,
+      "nativeResists": [],
+      "vulnerabilities": ["fire", "blade"],
+      "chipOrder": 1,
+      "color": "#c0a890",
+      "icon": "🧵"
+    },
+    "wood": {
+      "label": "Wood",
+      "plateCoef": 2,
+      "threshWeight": 0.6,
+      "chipN": 4,
+      "nativeResists": ["concussive-partial"],
+      "vulnerabilities": ["fire"],
+      "chipOrder": 2,
+      "color": "#8a6a3b",
+      "icon": "🌲"
+    },
+    "salvage": {
+      "label": "Salvage",
+      "plateCoef": 2,
+      "threshWeight": 0.7,
+      "chipN": 5,
+      "nativeResists": ["quirk"],
+      "vulnerabilities": [],
+      "chipOrder": 3,
+      "color": "#7a7066",
+      "icon": "⚙",
+      "note": "Quirk resist = on chip, GM may roll a random quirk (Phase B+)"
+    },
+    "memetic": {
+      "label": "Memetic",
+      "plateCoef": 1,
+      "threshWeight": 0.5,
+      "chipN": 3,
+      "nativeResists": ["truth-affecting"],
+      "vulnerabilities": [],
+      "chipOrder": 4,
+      "color": "#9a86b0",
+      "icon": "👁",
+      "note": "Affects witness/truth rolls, not direct damage. Damage-side behavior is mid-fragility."
+    },
+    "ward": {
+      "label": "Ward",
+      "plateCoef": 2,
+      "threshWeight": 0.8,
+      "chipN": 5,
+      "nativeResists": ["typed-from-tags"],
+      "vulnerabilities": [],
+      "chipOrder": 5,
+      "color": "#c89a5a",
+      "icon": "⊕",
+      "note": "Resist type is derived from material tags[]: 'hex-resistant', 'qliphothic-resistant', 'curse-resistant', 'blessed'."
+    },
+    "metal": {
+      "label": "Metal",
+      "plateCoef": 3,
+      "threshWeight": 1.2,
+      "chipN": 6,
+      "nativeResists": ["kinetic", "piercing"],
+      "vulnerabilities": ["heat", "holy-typed"],
+      "chipOrder": 6,
+      "color": "#9aa6b6",
+      "icon": "⛓"
+    },
+    "stone": {
+      "label": "Stone",
+      "plateCoef": 4,
+      "threshWeight": 1.0,
+      "chipN": 8,
+      "nativeResists": ["kinetic"],
+      "vulnerabilities": ["concussive"],
+      "chipOrder": 7,
+      "color": "#8a8a8a",
+      "icon": "▰"
+    },
+    "sephirotic": {
+      "label": "Sephirotic",
+      "plateCoef": 3,
+      "threshWeight": 1.5,
+      "chipN": 10,
+      "nativeResists": ["qliphothic", "curse", "foundation"],
+      "vulnerabilities": [],
+      "chipOrder": 8,
+      "color": "#d9b96b",
+      "icon": "⚜",
+      "loadBearing": true,
+      "note": "LOAD-BEARING. Structure cannot transition Breached → Razed while any sephirotic unit remains in BOM. Yesodium / Tree-of-Life Shard live here."
+    }
+  },
+  "stateThresholds": {
+    "intact":   { "platesMin": 0.75 },
+    "damaged":  { "platesMin": 0.50 },
+    "breached": { "platesMin": 0.25 },
+    "razed":    { "platesMin": 0.00, "requiresNoLoadBearing": true }
+  },
+  "rubbleJitter": {
+    "formula": "1d4-1",
+    "min": 0,
+    "max": 3,
+    "note": "Locked per spec §4. Asymmetric upside for attacker; rubble comes apart in unkind chunks."
+  }
+}
