@@ -1,18 +1,26 @@
-// modules/bbttcc-raid/scripts/courtly-tableau.spike.js
+// modules/bbttcc-raid/scripts/tableau.canvas.js
 //
-// BBTTCC Courtly Intrigue — Phase A Spike: Tableau depth-scale + z-sort
-// Spec: bbttcc-raid/COURTLY_INTRIGUE_SPEC.md §3
+// BBTTCC Tableau — forced-perspective canvas substrate
+// Spec: bbttcc-raid/TABLEAU_SUBSTRATE.md (system-level) · COURTLY_INTRIGUE_SPEC.md §3 (first consumer)
 //
-// Validates the canvas technique for portrait-token tableau scenes:
+// System-level capability — NOT courtly-specific. Any scene can opt in by
+// setting flags.bbttcc-raid.tableau.enabled = true; any token can participate
+// by setting flags.bbttcc-raid.tableauActor = true. Validated consumers
+// include courtly tableaux, forced-perspective combat, cinematic entrances,
+// duels, ambush staging, and non-raid dialog/vendor scenes.
+//
+// How it works:
 //   * Tokens flagged tableauActor get visual scale based on Y position
 //     (higher Y / closer to camera = larger; lower Y / further back = smaller)
 //   * Z-order follows Y so closer tokens draw on top of farther ones
 //   * Scale is VISUAL-ONLY (token.mesh.scale, token.mesh.sort) — not persisted
 //     to the document, so re-deriving from Y on every refresh is free and
-//     self-correcting if Foundry's own refresh stomps us.
+//     self-correcting if Foundry's own refresh stomps us
+//   * Mechanical distance (strike range, line-of-sight) is unaffected — it
+//     uses document coords, not visual scale. Visual ≠ mechanical is the
+//     correct tabletop call.
 //
-// Spike exit criteria: drag a flagged token in a tableau-enabled scene and
-// see it scale + reorder live, with no document churn.
+// GM tuning UI: bbttcc-master-content/tools/tableau-tune.macro.js
 
 (() => {
   const MOD = "bbttcc-raid";

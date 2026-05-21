@@ -1,8 +1,9 @@
-// BBTTCC — Courtly Tableau Phase A spike: live-tuning control panel
+// BBTTCC — Tableau: GM live-tuning control panel
 // ─────────────────────────────────────────────────────────────────────────────
-// Per-scene live tuning for the depth-scale tableau. Sliders update tokens
-// in real time as you drag — every input event debounce-persists the value
-// to `scene.flags.bbttcc-raid.tableau` so each scene keeps its own feel.
+// Per-scene live tuning for the forced-perspective tableau substrate
+// (courtly tableaux, combat staging, cinematic scenes, etc.). Sliders update
+// tokens in real time as you drag — every input event debounce-persists the
+// value to `scene.flags.bbttcc-raid.tableau` so each scene keeps its own feel.
 //
 // Drop this into a Script macro (or import as a hotbar macro) and run from
 // inside the scene you want to configure.
@@ -17,12 +18,12 @@
 
 (async () => {
   if (!game.user?.isGM) {
-    ui.notifications.warn("Tableau spike: GM only.");
+    ui.notifications.warn("Tableau tune: GM only.");
     return;
   }
   const api = foundry.utils.getProperty(game, "bbttcc.api.raid.tableau");
   if (!api) {
-    ui.notifications.error("Tableau spike script not loaded. Check bbttcc-raid module.");
+    ui.notifications.error("Tableau substrate not loaded. Check bbttcc-raid module is active.");
     return;
   }
   const scene = canvas?.scene;
