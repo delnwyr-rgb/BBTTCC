@@ -249,7 +249,7 @@
       }
       // ---------------------------------------------------------------------
 
-      async function step({ spendIntrigue = 2, spendNonlethal = 2, note = "", stewardBonus = 0, exposedCount = 0 } = {}) {
+      async function step({ spendIntrigue = 2, spendNonlethal = 2, note = "", stewardBonus = 0, exposedCount = 0, atkOpBonus = 0, defOpBonus = 0 } = {}) {
         if (state.outcome !== "ongoing") return { ...state, note: "scenario already resolved" };
 
         const _stepBeforeAlarm = state.alarm; // S3a.4: VFX hook baseline
@@ -291,8 +291,12 @@
 
         // S3a.5: Steward chip declarations bias the attacker roll.
         const stewBonus = Math.max(0, Math.floor(Number(stewardBonus || 0)));
-        const atkBonus = Math.ceil(atkSpend / 2) + stewBonus;
-        const defBonus = Math.ceil(defSpend / 2) + Math.max(0, Math.floor(state.difficulty));
+        // Lead + Support coalition OP bonus (intrigue for attacker, nonlethal for defender);
+        // caller computes via _rcCoalitionBonus and passes the totals here.
+        const atkCoalition = Math.max(0, Math.floor(Number(atkOpBonus || 0)));
+        const defCoalition = Math.max(0, Math.floor(Number(defOpBonus || 0)));
+        const atkBonus = Math.ceil(atkSpend / 2) + stewBonus + atkCoalition;
+        const defBonus = Math.ceil(defSpend / 2) + Math.max(0, Math.floor(state.difficulty)) + defCoalition;
 
         const atkRoll = await (new Roll("2d10 + @b", { b: atkBonus })).evaluate();
         const defRoll = await (new Roll("2d10 + @b", { b: defBonus })).evaluate();
@@ -349,18 +353,19 @@
         // S3a.5.2 — breakdown components, so players can verify every input
         // actually applied. Dice sums extracted from the Roll objects directly;
         // OP/steward/difficulty bonuses are the same numbers fed to the roll.
-        const atkOpBonus = Math.ceil(atkSpend / 2);
-        const defOpBonus = Math.ceil(defSpend / 2);
+        const atkSpendBonus = Math.ceil(atkSpend / 2);
+        const defSpendBonus = Math.ceil(defSpend / 2);
         const atkDiceSum = atkRoll?.dice?.[0]?.results?.reduce((s, r) => s + Number(r.result || 0), 0) ?? (atkTotal - atkBonus);
         const defDiceSum = defRoll?.dice?.[0]?.results?.reduce((s, r) => s + Number(r.result || 0), 0) ?? (defTotal - defBonus);
-
         const atkParts = [`${atkDiceSum} <small style="opacity:.7;">(2d10)</small>`];
-        if (atkOpBonus > 0) atkParts.push(`+ ${atkOpBonus} <small style="opacity:.7;">(Intrigue OP × ${atkSpend})</small>`);
-        if (stewBonus  > 0) atkParts.push(`+ ${stewBonus} <small style="opacity:.7;">(stewards × ${stewBonus})</small>`);
+        if (atkSpendBonus > 0) atkParts.push(`+ ${atkSpendBonus} <small style="opacity:.7;">(Intrigue OP × ${atkSpend})</small>`);
+        if (stewBonus     > 0) atkParts.push(`+ ${stewBonus} <small style="opacity:.7;">(stewards × ${stewBonus})</small>`);
+        if (atkCoalition  > 0) atkParts.push(`+ ${atkCoalition} <small style="opacity:.7;">(coalition Intrigue OP)</small>`);
 
         const defParts = [`${defDiceSum} <small style="opacity:.7;">(2d10)</small>`];
-        if (defOpBonus > 0) defParts.push(`+ ${defOpBonus} <small style="opacity:.7;">(Nonlethal OP × ${defSpend})</small>`);
+        if (defSpendBonus > 0) defParts.push(`+ ${defSpendBonus} <small style="opacity:.7;">(Nonlethal OP × ${defSpend})</small>`);
         if (Number(state.difficulty) > 0) defParts.push(`+ ${state.difficulty} <small style="opacity:.7;">(difficulty)</small>`);
+        if (defCoalition  > 0) defParts.push(`+ ${defCoalition} <small style="opacity:.7;">(coalition Nonlethal OP)</small>`);
 
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,

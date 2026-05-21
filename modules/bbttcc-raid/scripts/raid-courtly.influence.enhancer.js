@@ -188,6 +188,8 @@
         defSpend = 0,
         atkSkillBonus = 0,
         defSkillBonus = 0,
+        atkOpBonus = 0,
+        defOpBonus = 0,
         note = ""
       } = {}) {
         if (state.outcome !== "ongoing") {
@@ -211,6 +213,14 @@
         // Compute bonuses
         let atkBonus = Number(atkSkillBonus || 0);
         let defBonus = Number(defSkillBonus || 0);
+
+        // Lead + Support coalition OP bonus (for the chosen action's category).
+        // Caller computes via _rcCoalitionBonus on action's matched key (persuade→diplomacy,
+        // inspire→softpower, expose→intrigue, intimidate→violence) and passes the totals here.
+        const atkOpBonusInt = Math.max(0, Math.floor(Number(atkOpBonus || 0)));
+        const defOpBonusInt = Math.max(0, Math.floor(Number(defOpBonus || 0)));
+        atkBonus += atkOpBonusInt;
+        defBonus += defOpBonusInt;
 
         if (atkAct === "persuade")  atkBonus += Math.ceil(atkSpendInt / 2);
         if (defAct === "persuade")  defBonus += Math.ceil(defSpendInt / 2);
@@ -338,9 +348,14 @@
         });
         await playInfluenceFX({ beforeA, beforeD, afterA: state.influenceA, afterD: state.influenceD });
 
+        const _opLine = (label, k, opb) => {
+          const parts = [];
+          if (opb > 0) parts.push(`coalition ${k} +${opb}`);
+          return parts.length ? ` <small style="opacity:.7;">(${parts.join(", ")})</small>` : "";
+        };
         const lines = [
           `Round ${state.round}: <b>${foundry.utils.escapeHTML(A.name)}</b> vs <b>${foundry.utils.escapeHTML(D.name)}</b>`,
-          `Actions: Attacker <i>${atkAct}</i> (spend ${atkSpendInt}) vs Defender <i>${defAct}</i> (spend ${defSpendInt})`,
+          `Actions: Attacker <i>${atkAct}</i> (spend ${atkSpendInt})${_opLine("atk", atkKey || "", atkOpBonusInt)} vs Defender <i>${defAct}</i> (spend ${defSpendInt})${_opLine("def", defKey || "", defOpBonusInt)}`,
           `Rolls: Attacker ${atkTotal} vs Defender ${defTotal} (margin ${margin >= 0 ? "+"+margin : margin})`,
           `Result: ${result.toUpperCase()} — Influence ${beforeA}/${beforeD} → ${state.influenceA}/${state.influenceD}`
         ];

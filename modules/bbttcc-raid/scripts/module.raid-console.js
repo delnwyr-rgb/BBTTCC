@@ -4656,6 +4656,33 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
         });
         if (!stepArgs) return;
 
+        // Lead + Support coalition OP bonus for chosen actions (matches violence-raid
+        // parity — leading faction's opBank + supporters' opBank − coordination penalty).
+        // Defender contributes its own opBank for the matched key (no supporters).
+        const _ftCourtlyActionToOpKey = (a) => {
+          switch (String(a||"").toLowerCase()) {
+            case "persuade":   return "diplomacy";
+            case "inspire":    return "softpower";
+            case "expose":     return "intrigue";
+            case "intimidate": return "violence";
+            default:           return null;
+          }
+        };
+        try {
+          const atkKey = _ftCourtlyActionToOpKey(stepArgs.atkAction);
+          const defKey = _ftCourtlyActionToOpKey(stepArgs.defAction);
+          const supportIds = _rcNormFactionIds(this.vm.supportFactionIds || []);
+          if (atkKey) {
+            const c = _rcCoalitionBonus(attacker, supportIds, atkKey);
+            stepArgs.atkOpBonus = Number(c?.total || 0);
+          }
+          if (defKey) {
+            stepArgs.defOpBonus = Number(categoryTotalWithRoster(defender, defKey) || 0);
+          }
+        } catch (e) {
+          warn("courtly coalition-bonus compute failed", e);
+        }
+
         let st = null;
         try { st = await this.__courtlyScenario.step(stepArgs); }
         catch (e) { warn("courtly step failed", e); ui.notifications?.error?.("Courtly step failed — see console."); return; }
@@ -4845,8 +4872,21 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           exposedCount += Math.max(0, stewardIds.size - declared);
         } catch (_) { /* tolerate missing canvas */ }
 
+        // Lead + Support coalition OP bonus on the attacker's intrigue pool
+        // (matches violence-raid parity). Defender contributes its own nonlethal opBank.
+        let atkOpBonus = 0;
+        let defOpBonus = 0;
+        try {
+          const supportIds = _rcNormFactionIds(this.vm.supportFactionIds || []);
+          const c = _rcCoalitionBonus(attacker, supportIds, "intrigue");
+          atkOpBonus = Number(c?.total || 0);
+          defOpBonus = Number(categoryTotalWithRoster(defender, "nonlethal") || 0);
+        } catch (e) {
+          warn("infiltration coalition-bonus compute failed", e);
+        }
+
         let st = null;
-        try { st = await this.__infilScenario.step({ spendIntrigue: stepArgs.spendIntrigue, spendNonlethal: stepArgs.spendNonlethal, note: stepArgs.note, stewardBonus, exposedCount }); }
+        try { st = await this.__infilScenario.step({ spendIntrigue: stepArgs.spendIntrigue, spendNonlethal: stepArgs.spendNonlethal, note: stepArgs.note, stewardBonus, exposedCount, atkOpBonus, defOpBonus }); }
         catch (e) { warn("infiltration step failed", e); ui.notifications?.error?.("Infiltration step failed — see console."); return; }
 
         const last = (st?.history && st.history.length) ? st.history[st.history.length-1] : null;
