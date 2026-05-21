@@ -59,6 +59,12 @@
         token.bars.scale.set(1, 1);
         token.bars.position.set(0, 0);
       }
+      if (token.nameplate) {
+        token.nameplate.scale.set(1, 1);
+        const w = Number(token.w || 0);
+        const h = Number(token.h || 0);
+        token.nameplate.position.set(w / 2, h);
+      }
     } catch (_e) {}
   }
 
@@ -96,6 +102,13 @@
       if (token.bars) {
         token.bars.scale.set(s, s);
         token.bars.position.set(ox, oy);
+      }
+      if (token.nameplate) {
+        // Nameplate hangs just below the visible token. Default Foundry y = h
+        // (below the footprint); after scale we want it below the *visual*
+        // edge: oy + h*s + small pad.
+        token.nameplate.scale.set(s, s);
+        token.nameplate.position.set(w / 2, oy + h * s + 4);
       }
 
       if (cfg.zSortByY) {
