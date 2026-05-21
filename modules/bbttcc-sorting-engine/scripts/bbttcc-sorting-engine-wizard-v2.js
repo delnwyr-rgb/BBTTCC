@@ -642,20 +642,21 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
                 <input type="text" data-character-name class="bbttcc-twv2-name-input" value="${_esc(this._characterName || "")}" placeholder="New Operative"/>
               </div>
               <div class="bbttcc-twv2-build-table">${buildRows}</div>
-              <div class="bbttcc-twv2-faculties">
+              <div class="bbttcc-twv2-faculties" data-finalize-section="faculties">
                 <div class="bbttcc-twv2-section-title">Malkuth — Faculty Allocation</div>
                 <p class="bbttcc-twv2-section-note">Distribute the starting array <strong>[5, 4, 3, 3, 2, 2]</strong> across the six RFI faculties. Each value used exactly once.</p>
                 ${facultiesHtml}
               </div>
-              <div class="bbttcc-twv2-chargen-aptitudes">
+              <div class="bbttcc-twv2-chargen-aptitudes" data-finalize-section="aptitudes">
                 <div class="bbttcc-twv2-section-title">Yesod — Aptitude Picks</div>
                 <p class="bbttcc-twv2-section-note">Choose <strong>3 free aptitudes</strong> at character creation. Armor skills (Plating, Weave, Warding) come from your Path. Picks granted at rank&nbsp;1; aptitudes already provided by your class, heritage, crew, or occult association are greyed out — if you select one anyway, the duplicate pick is dropped at finalize.</p>
                 ${chargenAptitudesHtml}
               </div>
             </div>
             <div class="bbttcc-twv2-review-nav">
+              <span class="bbttcc-twv2-finalize-hint" data-finalize-hint></span>
               <button type="button" data-action="back-to-descent" class="bbttcc-twv2-btn">◀ Back to Descent</button>
-              <button type="button" data-action="finalize" class="bbttcc-twv2-btn bbttcc-twv2-btn-primary">Create Character ▶</button>
+              <button type="button" data-action="finalize" class="bbttcc-twv2-btn bbttcc-twv2-btn-primary is-disabled" disabled>Create Character ▶</button>
             </div>
           </div>
 
@@ -1166,6 +1167,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           });
           this._faculties = f;
           this._validateFaculties(root);
+          this._updateFinalizeGate(root);
         });
       });
       this._validateFaculties(root);
@@ -1177,7 +1179,78 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           this.render({ force: true });
         });
       });
+      // Hint-click — scroll the missing section into view and flash it.
+      const hint = root.querySelector("[data-finalize-hint]");
+      if (hint) {
+        hint.addEventListener("click", ev => {
+          const target = ev.target.closest("[data-jump-section]");
+          if (!target) return;
+          ev.preventDefault();
+          this._scrollToFinalizeSection(root, target.dataset.jumpSection);
+        });
+      }
+      // Initial gate compute on every review render.
+      this._updateFinalizeGate(root);
     }
+  }
+
+  // ── Finalize gate ────────────────────────────────────────────────────────
+  // Reads the live wizard state and decides whether Create Character is
+  // clickable. Mirrors the validation in _onFinalize so the warn toasts are a
+  // defensive fallback, not the primary UX. Also surfaces a hint listing what
+  // still needs doing, with click-to-scroll affordance for each missing
+  // section. Called from every handler that mutates a gated input + on every
+  // review-render via _wireHandlers.
+  _updateFinalizeGate(root) {
+    if (!root) return;
+    const btn = root.querySelector('[data-action="finalize"]');
+    const hint = root.querySelector("[data-finalize-hint]");
+    if (!btn) return;
+
+    const facultiesValid = this._areFacultiesValid();
+    const heritageOk = !!this._heritage;
+    const aptitudePicks = (this._chargenAptitudes || []).filter(s => !!s).length;
+    const aptitudesOk = aptitudePicks >= 3;
+
+    const ready = facultiesValid && heritageOk && aptitudesOk;
+    btn.disabled = !ready;
+    btn.classList.toggle("is-disabled", !ready);
+
+    if (!hint) return;
+    if (ready) {
+      hint.innerHTML = "";
+      hint.classList.remove("is-blocking");
+      return;
+    }
+    const parts = [];
+    if (!heritageOk) parts.push(`<a href="#" data-jump-section="heritage">pick a Heritage</a>`);
+    if (!facultiesValid) parts.push(`<a href="#" data-jump-section="faculties">allocate Faculties</a>`);
+    if (!aptitudesOk) parts.push(`<a href="#" data-jump-section="aptitudes">choose ${3 - aptitudePicks} more aptitude${(3 - aptitudePicks) === 1 ? "" : "s"}</a>`);
+    hint.classList.add("is-blocking");
+    hint.innerHTML = `Before creating: ${parts.join(" · ")}`;
+  }
+
+  _areFacultiesValid() {
+    const f = this._faculties || this._defaultFacultyDistribution();
+    const used = FACULTY_KEYS.map(k => f[k]).sort((a, b) => b - a);
+    const required = [...FACULTY_STARTING_ARRAY].sort((a, b) => b - a);
+    return used.length === required.length && used.every((v, i) => v === required[i]);
+  }
+
+  _scrollToFinalizeSection(root, sectionKey) {
+    // "heritage" lives in the build table row, not its own data-finalize-section
+    // block — route it to the heritage <select> so the row scrolls into view.
+    let target = null;
+    if (sectionKey === "heritage") {
+      target = root.querySelector("[data-heritage-pick]")?.closest("[data-row-category]")
+        || root.querySelector("[data-heritage-pick]");
+    } else {
+      target = root.querySelector(`[data-finalize-section="${sectionKey}"]`);
+    }
+    if (!target) return;
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.classList.add("bbttcc-twv2-flash");
+    setTimeout(() => target.classList.remove("bbttcc-twv2-flash"), 1400);
   }
 
   _validateFaculties(root) {
@@ -1319,6 +1392,13 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
     }
     if (!this._heritage) {
       ui.notifications?.warn("Heritage is required — pick one from the dropdown.");
+      this._scrollToFinalizeSection(root, "heritage");
+      return;
+    }
+    const aptitudePicks = (this._chargenAptitudes || []).filter(s => !!s).length;
+    if (aptitudePicks < 3) {
+      ui.notifications?.warn(`Yesod aptitude picks incomplete — choose 3 (${aptitudePicks} chosen).`);
+      this._scrollToFinalizeSection(root, "aptitudes");
       return;
     }
     const confirmed = this._buildConfirmedBuild();
@@ -1976,10 +2056,39 @@ function _injectStylesOnce() {
 
     .bbttcc-twv2-review-nav {
       flex: 0 0 auto;
-      display: flex; gap: 12px; justify-content: flex-end;
+      display: flex; gap: 12px; justify-content: flex-end; align-items: center;
       padding: 12px 6px 4px 0;
       border-top: 1px solid rgba(95,168,255,0.22);
       margin-top: 12px;
+    }
+    .bbttcc-twv2-finalize-hint {
+      flex: 1 1 auto;
+      font-size: 12px; line-height: 1.4;
+      color: rgba(244,240,224,0.55);
+      text-align: left;
+    }
+    .bbttcc-twv2-finalize-hint.is-blocking { color: #ffb863; }
+    .bbttcc-twv2-finalize-hint a {
+      color: #ffd24a; text-decoration: underline; text-decoration-style: dotted;
+      cursor: pointer;
+    }
+    .bbttcc-twv2-finalize-hint a:hover { color: #fff; text-decoration-style: solid; }
+    .bbttcc-twv2-btn-primary:disabled, .bbttcc-twv2-btn-primary.is-disabled {
+      opacity: 0.42; cursor: not-allowed;
+      box-shadow: none;
+    }
+    .bbttcc-twv2-btn-primary:disabled:hover, .bbttcc-twv2-btn-primary.is-disabled:hover {
+      background: linear-gradient(90deg, rgba(255,215,80,0.22), rgba(255,215,80,0.14));
+      box-shadow: none;
+    }
+    @keyframes bbttcc-twv2-flash-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(255,184,99,0); }
+      30%  { box-shadow: 0 0 0 4px rgba(255,184,99,0.55); }
+      100% { box-shadow: 0 0 0 0 rgba(255,184,99,0); }
+    }
+    .bbttcc-twv2-flash {
+      animation: bbttcc-twv2-flash-pulse 1.3s ease-out 1;
+      border-color: rgba(255,184,99,0.7) !important;
     }
 
     /* Description pane (3rd column) */
