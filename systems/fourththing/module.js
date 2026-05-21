@@ -3867,12 +3867,22 @@ function _ftWizV2FacultiesMap() {
 }
 
 // ── Step renderers ─────────────────────────────────────────────────────────
+// Authored tooltip copy for the five conceptual fields. Surfaced via
+// data-tooltip on the field label; Foundry wraps long text automatically.
+const _FT_WIZ_V2_FIELD_TIPS = {
+  expression: "The shape it takes in the world — what your manifestation IS. Sigil / Field / Echo (incorporeal), Vestment / Weapon / Tool / Construct (objects), Rite (ceremony), Body-shift (your form), Gate (threshold). Seeds Interaction Model and Scale defaults on the next step.",
+  function: "What it DOES to the world. Harm = damage. Protect = shield / buff. Reveal = sight / knowledge. Move = push / pull / teleport. Repair = heal. Command = compel a target (save). Transform = change a thing. Bind = restrain. Cascades the most downstream — damage roll, resolution shape, and starter conditions are auto-filled from this pick.",
+  stability: "How long the STRUCTURE of the manifestation persists. Instant = resolves and vanishes (TCC-only 'working'). Sustained = lasts the scene with upkeep. Bound = tethered to an anchor object or place until destroyed. Enduring = self-sustaining, no upkeep. Non-TCC paths only author stable Forms (sustained / bound / enduring).",
+  interactionModel: "How the world ENGAGES with this thing — its surface in the fiction. Event (no surface), Weapon (strikable → attack roll), Tool / Worn / Structure (object), Companion (autonomous), Zone (area → save), Mark (label on target → save), Transformation (changes target's form → save). Cascades into resolution shape.",
+  scale: "Footprint — who and where it touches. Personal = one target / body. Scene = a room or group. Faction = one organization or alliance. Hex = a region on the campaign map. Faction and Hex are campaign-level; leave alone unless this is a Rite or Operation."
+};
+
 function _ftWizV2RenderConcept(state) {
   return `
     <p class="ft-wiz-v2-coach">Bring a new piece of imagination into the world. Start with what it is, what it does, and what makes it strange.</p>
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Name</label>${_ftWizV2Txt("name", state.name, "e.g. Thorn Verdict")}</div>
-      <div class="ft-cast-field"><label>Expression</label>${_ftWizV2Sel("form", FT.MANIFESTATION_FORMS, state.form)}</div>
+      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.expression)}">Expression <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("form", FT.MANIFESTATION_FORMS, state.form)}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Concept</label>${_ftWizV2Area("concept", state.concept, "What are you bringing into the world?", 2)}</div>
     </div>`;
 }
@@ -3882,10 +3892,10 @@ function _ftWizV2RenderForm(state, { actor }) {
   return `
     <p class="ft-wiz-v2-coach">How does it act on the world, and how long does it stay?</p>
     <div class="ft-cast-grid">
-      <div class="ft-cast-field"><label>Function</label>${_ftWizV2Sel("function", FT.MANIFESTATION_FUNCTIONS, state.function)}</div>
-      <div class="ft-cast-field"><label>Stability</label>${_ftWizV2Sel("stability", stabilityMap, state.stability)}</div>
-      <div class="ft-cast-field"><label>Interaction Model</label>${_ftWizV2Sel("interactionModel", FT.MANIFESTATION_INTERACTIONS, state.interactionModel)}</div>
-      <div class="ft-cast-field"><label>Scale</label>${_ftWizV2Sel("scale", FT.MANIFESTATION_SCALES, state.scale)}</div>
+      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.function)}">Function <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("function", FT.MANIFESTATION_FUNCTIONS, state.function)}</div>
+      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.stability)}">Stability <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("stability", stabilityMap, state.stability)}</div>
+      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.interactionModel)}">Interaction Model <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("interactionModel", FT.MANIFESTATION_INTERACTIONS, state.interactionModel)}</div>
+      <div class="ft-cast-field"><label data-tooltip="${ftEscapeHtml(_FT_WIZ_V2_FIELD_TIPS.scale)}">Scale <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("scale", FT.MANIFESTATION_SCALES, state.scale)}</div>
     </div>`;
 }
 
@@ -4215,6 +4225,9 @@ function _ftWizV2RenderShell(actor, state, STEPS) {
           ? `<button type="button" data-wiz-action="finish" class="ft-wiz-v2-finish"><span class="ft-wiz-v2-btn-glyph">✦</span><span>Manifest</span></button>`
           : `<button type="button" data-wiz-action="next"><span>Next</span><span class="ft-wiz-v2-btn-glyph">▷</span></button>`}
       </div>
+      <div class="ft-wiz-v2-nav-cancel-row">
+        <button type="button" data-wiz-action="cancel" class="ft-wiz-v2-cancel" data-tooltip="Discard this manifestation and close the wizard. All step inputs are lost.">cancel and discard</button>
+      </div>
     </div>`;
 }
 
@@ -4436,13 +4449,17 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
 
   return new Promise((resolve) => {
     let resolved = false;
+    // Cancel button is rendered inside the shell HTML (own sub-row under Back/Next),
+    // not in the dialog footer — see _ftWizV2RenderShell. We keep a stub `cancel`
+    // button in the Dialog config so Foundry's Dialog plumbing has something to
+    // render, but its row is hidden via CSS and it has no default flag — so
+    // pressing Enter inside a form field no longer dismisses the wizard.
     const dialog = new Dialog({
       title: `Manifestation Engine — ${titleLabel} (V2)`,
       content: _ftWizV2RenderShell(actor, state, STEPS),
       buttons: {
         cancel: { label: "Cancel", callback: () => { if (!resolved) { resolved = true; resolve(null); } } }
       },
-      default: "cancel",
       close: () => { if (!resolved) { resolved = true; resolve(null); } }
     }, {
       classes: ["fourththing", "ft-manifest-wizard-v2-window"],
@@ -4458,9 +4475,25 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
       const wizRoot = root.querySelector?.(".ft-wiz-v2") ?? root.find?.(".ft-wiz-v2")?.[0];
       if (!wizRoot) return;
 
+      // Swallow Enter inside form fields so it can never trigger the hidden
+      // dialog footer's default-button click (which would discard the wizard).
+      // Textareas keep Enter for newline insertion; everywhere else Enter is
+      // a no-op. The author advances steps explicitly via the Next button.
+      wizRoot.addEventListener("keydown", (ev) => {
+        if (ev.key !== "Enter") return;
+        if (ev.target?.tagName === "TEXTAREA") return;
+        ev.preventDefault();
+        ev.stopPropagation();
+      });
+
       wizRoot.addEventListener("click", async (ev) => {
         const action = ev.target?.closest?.("[data-wiz-action]")?.dataset?.wizAction;
         if (!action) return;
+
+        // Cancel short-circuits before harvest — no need to persist mid-step
+        // state on the way out. close() fires the dialog's close hook which
+        // resolves the promise with null.
+        if (action === "cancel") { dialog.close(); return; }
 
         // Always harvest current step's values before navigating. Then fire
         // any cascades from the changed trigger fields — cascades only write

@@ -4701,22 +4701,11 @@
   border: 1px solid rgba(232, 200, 74, 0.18);
   box-shadow: inset 0 0 32px rgba(120, 90, 200, 0.1);
 }
+/* Hide the dialog's native button bar — Cancel now lives in the shell's
+   own sub-row below Back/Next (.ft-wiz-v2-nav-cancel-row). The window-header
+   × stays as the safety escape hatch. */
 .ft-manifest-wizard-v2-window .dialog-buttons {
-  background: rgba(20, 12, 40, 0.6);
-  border-top: 1px solid rgba(232, 200, 74, 0.2);
-  padding: 0.35rem;
-}
-.ft-manifest-wizard-v2-window .dialog-buttons button {
-  background: rgba(232, 200, 74, 0.06);
-  border: 1px solid rgba(232, 200, 74, 0.28);
-  color: #c8b462;
-  letter-spacing: 0.06em;
-  font-size: 0.8rem;
-}
-.ft-manifest-wizard-v2-window .dialog-buttons button:hover {
-  background: rgba(232, 200, 74, 0.14);
-  color: #e8c84a;
-  text-shadow: 0 0 6px rgba(232, 200, 74, 0.45);
+  display: none !important;
 }
 
 .ft-wiz-v2 {
@@ -5136,6 +5125,53 @@
 .ft-wiz-v2-nav .ft-wiz-v2-finish .ft-wiz-v2-btn-glyph {
   color: #fff3c4;
   text-shadow: 0 0 6px rgba(255, 240, 200, 0.7);
+}
+
+/* ─── Cancel sub-row: separated, dim, hard to mis-click ──────────────── */
+/* Sits BELOW the main Back/Next nav row with extra breathing room. The
+   button is small + low-contrast on purpose so the eye doesn't drift to it.
+   Hover lifts to mild warning red to signal "you're about to discard". */
+.ft-wiz-v2-nav-cancel-row {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.6rem;
+  margin-top: 0.1rem;
+}
+.ft-wiz-v2-cancel {
+  background: transparent;
+  border: 1px solid rgba(140, 100, 100, 0.22);
+  color: rgba(200, 170, 170, 0.55);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  font-family: "Bookerly", "Iowan Old Style", Georgia, serif;
+  padding: 0.2rem 0.65rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 180ms ease-out;
+}
+.ft-wiz-v2-cancel::before {
+  content: "✕ ";
+  opacity: 0.7;
+}
+.ft-wiz-v2-cancel:hover {
+  background: rgba(160, 60, 60, 0.12);
+  border-color: rgba(200, 110, 110, 0.55);
+  color: rgba(240, 200, 200, 0.9);
+}
+
+/* ─── Inline help glyph next to labels with tooltips ─────────────────── */
+.ft-wiz-v2-help-glyph {
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 0.78em;
+  color: rgba(232, 200, 74, 0.55);
+  cursor: help;
+  vertical-align: 0.05em;
+}
+.ft-cast-field label:hover .ft-wiz-v2-help-glyph {
+  color: rgba(255, 240, 200, 0.9);
+  text-shadow: 0 0 4px rgba(232, 200, 74, 0.4);
 }
 
 /* ─── Review summary card on Step 7 ───────────────────────────────────── */
