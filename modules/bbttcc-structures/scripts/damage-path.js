@@ -214,10 +214,11 @@ export function computeStructureDamage(state, damage, opts = {}) {
     : (Math.floor(Math.random() * 4));   // 0..3 (i.e. 1d4-1)
 
   let mode, platesLost = 0, integrityOverflow = 0, chipTarget = 0;
+  const bypassThreshold = !!opts.bypassThreshold;
 
   if (effDmg <= 0) {
     mode = "noop";
-  } else if (effDmg < threshold) {
+  } else if (effDmg < threshold && !bypassThreshold) {
     // CHIP-ONLY — 1 unit from queue front + jitter
     mode = "chip-only";
     chipTarget = 1 + jitterRoll;
@@ -277,6 +278,8 @@ export function computeStructureDamage(state, damage, opts = {}) {
     actualChips,
     requestedChips: chipTarget,
     jitterRoll,
+    bypassThreshold,
+    noSalvage: !!opts.noSalvage,
     newPlates: { current: newPlatesCurr, max: newPlatesMax },
     newBOM,
     newLoadBearing,
@@ -335,9 +338,13 @@ export async function applyStructureDamage(actor, damage, opts = {}) {
 
   // Pass damageType + damageFlavor through to compute, which canonicalizes
   // them via the API (so legacy aliases fold into canonical types + flavors).
+  // Phase C: bypassThreshold + noSalvage are set by the Catastrophic Entry
+  // wedge in damage-wedge.js when the source actor has the flag armed.
   const result = computeStructureDamage(state, damage, {
     damageType: opts.damageType ?? "",
     damageFlavor: opts.damageFlavor ?? "",
+    bypassThreshold: !!opts.bypassThreshold,
+    noSalvage: !!opts.noSalvage,
     FAMILIES: api.FAMILIES
   });
 
@@ -451,6 +458,10 @@ async function postDamageCard(actor, result) {
     "noop":      `<span style="opacity:0.5">no effect</span>`
   }[result.mode] ?? "";
 
+  const bulwarkTag = result.bypassThreshold
+    ? `<span style="background:rgba(232,200,160,0.18); border:1px solid rgba(232,200,160,0.45); padding:1px 5px; border-radius:2px; font-size:0.7rem; color:#e8c8a0; margin-left:4px;" data-tooltip="Catastrophic Entry — Threshold bypassed, no salvage on transition">⚒ Catastrophic Entry</span>`
+    : "";
+
   const resistTagsHtml = result.resistTagsFired.length
     ? result.resistTagsFired.map(t => `<span style="background:rgba(80,140,80,0.18); padding:1px 4px; border-radius:2px; font-size:0.65rem; color:#9cd49c; margin-right:3px;">${_esc(t)}</span>`).join("")
     : "";
@@ -481,7 +492,7 @@ async function postDamageCard(actor, result) {
           <b>${result.rawDamage}</b> incoming
           ${result.resistMult !== 1 ? ` → <b>${result.effDmg}</b> after resists ${resistTagsHtml}` : ""}
           · vs Threshold <b>${result.threshold.toFixed?.(2) ?? result.threshold}</b>
-          · ${modeTag}
+          · ${modeTag}${bulwarkTag}
         </div>
         <div style="font-size:0.74rem; margin-bottom:3px;">
           <b>Plates:</b> <span style="font-family:monospace; color:#b09a4a">${platesBar}</span>

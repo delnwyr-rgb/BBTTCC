@@ -28,6 +28,7 @@
  */
 
 import { applyStructureDamage } from "./damage-path.js";
+import { getActiveDamageSource, consumeCatastrophicEntry } from "./bulwark-hookups.js";
 
 const MOD_ID = "bbttcc-structures";
 const TAG = `[${MOD_ID}/wedge]`;
@@ -63,11 +64,22 @@ function installWedge() {
 
       if (scaledDmg <= 0) return `${actor.name}: no damage (perTargetMultiplier=${safeMult})`;
 
+      // Phase C — check source actor for a Catastrophic Entry charge. If
+      // armed, consume it and route the damage through with bypassThreshold +
+      // noSalvage opts so even chip-only damage punches through to Plates and
+      // salvage is suppressed.
+      const sourceActor = getActiveDamageSource();
+      const ce = await consumeCatastrophicEntry(sourceActor);
+      const bypassThreshold = !!ce?.bypassThreshold;
+      const noSalvage       = !!ce?.noSalvage;
+
       // Route through structure
       const structResult = await applyStructureDamage(actor, scaledDmg, {
         damageType: opts.damageType ?? "",
         damageFlavor: opts.damageFlavor ?? "",
-        track: opts.track ?? "integrity"
+        track: opts.track ?? "integrity",
+        bypassThreshold,
+        noSalvage
       });
 
       // If integrity overflow, route to the saved original with cleared
