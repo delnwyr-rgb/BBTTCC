@@ -1463,6 +1463,25 @@ function ftManifestationDefaults(kind = "power") {
       // shake) without forcing one shared attribute. Empty {} = all states
       // inherit the global saveAttribute (legacy behavior).
       saveAttributeOverrides: {}
+    },
+    // Phase C — Buffs & Wards. Active-effect-equivalent outcomes the
+    // manifestation imparts to its targets on a successful resolution.
+    // Authored in the wizard's Step 4; surfaced on the target as ONE
+    // AE per cast (sibling to per-condition AEs) so the buff is visible
+    // in Foundry's effect bar and the duration auto-expires.
+    //   modifiers — numeric stat bumps. Each: { stat, op:"+"|"-", value }
+    //     stat is one of FT_EFFECT_MOD_AE_KEYS (guard/evasion/resolve/initiative).
+    //     Numeric bumps land via AE.changes targeting system.derived.<stat>.aeBonus,
+    //     which character derive folds into the final value (initiative.bonus pattern).
+    //   resists — damage-TYPE keys (kinetic/fire/cold/…) the target halves.
+    //   immunes — damage-TYPE keys the target negates outright.
+    // ftComputeDefenses merges these AE-flagged lists into the canonical
+    // defenses arrays each derive cycle, so the existing _applyDamageToActor
+    // resist/immune check Just Works without engine refactor.
+    appliedEffects: {
+      modifiers: [],   // [{ stat:"guard", op:"+", value:2 }, ...]
+      resists:   [],   // ["fire", "cold"]
+      immunes:   []    // ["radiation"]
     }
   };
 
@@ -1475,6 +1494,69 @@ function ftManifestationDefaults(kind = "power") {
 // receives the result. Defaults to op:"none" so legacy items roll nothing.
 function ftDamageRollDefaults() {
   return { op: "none", number: 0, die: "d6", attribute: "", type: "kinetic", flavor: "", track: "integrity" };
+}
+
+// Phase C — Buffs & Wards. Map a modifier's stat key (UI choice) to the
+// actor data path that AE.changes will write into. The derive pipeline
+// reads system.derived.<stat>.aeBonus AFTER Foundry applies AE changes,
+// so the bonus survives recompute (same pattern initiative.bonus uses).
+// Returns null for unknown keys so unmapped entries are silently skipped.
+const FT_EFFECT_MOD_AE_KEYS = Object.freeze({
+  guard:      "system.derived.guard.aeBonus",
+  evasion:    "system.derived.evasion.aeBonus",
+  resolve:    "system.derived.resolve.aeBonus",
+  initiative: "system.derived.initiative.bonus"
+});
+function ftEffectModifierAEKey(stat) {
+  return FT_EFFECT_MOD_AE_KEYS[stat] ?? null;
+}
+const FT_EFFECT_MOD_LABELS = Object.freeze({
+  guard:      "Guard",
+  evasion:    "Evasion",
+  resolve:    "Resolve",
+  initiative: "Initiative"
+});
+
+// Normalize the wizard-harvested appliedEffects shape (which can have object
+// maps from checkbox grids + sparse modifier slots) to the canonical storage
+// shape: { modifiers:[{stat,op,value}], resists:[type], immunes:[type] }.
+// Drops empty rows and unknown stats. Idempotent — safe to call on already
+// normalized data.
+function ftNormalizeAppliedEffects(raw) {
+  const out = { modifiers: [], resists: [], immunes: [] };
+  if (!raw || typeof raw !== "object") return out;
+  // Modifiers: keep only rows with a known stat AND a positive value.
+  const modsArr = Array.isArray(raw.modifiers)
+    ? raw.modifiers
+    : Object.values(raw.modifiers ?? {});
+  for (const m of modsArr) {
+    if (!m || typeof m !== "object") continue;
+    const stat = String(m.stat ?? "").toLowerCase();
+    if (!FT_EFFECT_MOD_AE_KEYS[stat]) continue;
+    const value = Math.max(0, Math.floor(Number(m.value) || 0));
+    if (value <= 0) continue;
+    const op = m.op === "-" ? "-" : "+";
+    out.modifiers.push({ stat, op, value });
+  }
+  // Resists / immunes: accept array OR object-map shape from the wizard.
+  const validTypes = new Set(Object.keys(FT.DAMAGE_TYPES ?? {}));
+  const collectTypes = (src) => {
+    const set = new Set();
+    if (Array.isArray(src)) {
+      for (const k of src) if (validTypes.has(k)) set.add(k);
+    } else if (src && typeof src === "object") {
+      for (const [k, v] of Object.entries(src)) if (v === true && validTypes.has(k)) set.add(k);
+    }
+    return [...set];
+  };
+  out.resists = collectTypes(raw.resists);
+  out.immunes = collectTypes(raw.immunes);
+  // Immunity shadows resist on the same type.
+  if (out.immunes.length) {
+    const imm = new Set(out.immunes);
+    out.resists = out.resists.filter(t => !imm.has(t));
+  }
+  return out;
 }
 
 // Phase C — place a Foundry MeasuredTemplate at the caster's token center.
@@ -3761,7 +3843,11 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       area:          values.area,
       activation:    values.activation_block,
       resolution:    values.resolution,
-      appliedStates: values.appliedStates
+      appliedStates: values.appliedStates,
+      // Phase C — Buffs & Wards. Wizard harvests object-map shapes (checkbox
+      // grids on resists/immunes, indexed slots on modifiers); normalize to
+      // canonical arrays here so downstream consumers get a single shape.
+      appliedEffects: ftNormalizeAppliedEffects(values.appliedEffects ?? {})
     },
     { inplace: false }
   );
@@ -4074,7 +4160,68 @@ function _ftWizV2RenderEffectPower(state) {
       <div class="ft-cast-field"><label>Duration</label>${_ftWizV2Sel("appliedStates.duration", { "1-round": "1 round", "2-rounds": "2 rounds", "3-rounds": "3 rounds", scene: "Scene", "until-saved": "Until saved" }, ap.duration ?? "1-round")}</div>
       <div class="ft-cast-field"><label style="display:flex;gap:0.4rem;align-items:center;cursor:pointer">${_ftWizV2Chk("appliedStates.saveEachRound", ap.saveEachRound === true)}<span>Save each round to shake off</span></label></div>
       ${saveSubFields}
-    </div>`;
+    </div>
+    ${_ftWizV2RenderEffectsBlock(state)}`;
+}
+
+// Phase C — Buffs & Wards. Sub-section under Step 4 that authors numeric
+// stat modifiers and damage resist/immune on the target. Lands as a single
+// ActiveEffect on the target alongside any condition AEs from the same cast.
+// Resists/immunes route through ftComputeDefenses; numeric mods land on
+// system.derived.<stat>.aeBonus (initiative.bonus pattern) so character
+// derive folds them into the final value.
+function _ftWizV2RenderEffectsBlock(state) {
+  const eff = state.appliedEffects ?? {};
+  // Modifiers — render exactly 3 slots so wizard layout is stable. Sparse
+  // slots (empty stat) are dropped at normalize time.
+  const modsMap = (eff.modifiers && typeof eff.modifiers === "object" && !Array.isArray(eff.modifiers))
+    ? eff.modifiers
+    : Object.fromEntries((Array.isArray(eff.modifiers) ? eff.modifiers : []).map((m, i) => [`m${i}`, m]));
+  const STAT_OPTS = { "": "— none —", ...FT_EFFECT_MOD_LABELS };
+  const OP_OPTS   = { "+": "+ (boost)", "-": "− (debuff)" };
+  const modRow = (slot) => {
+    const m = modsMap[slot] ?? {};
+    return `
+      <div class="ft-cast-grid ft-wiz-v2-mod-row" style="grid-template-columns:1.4fr 0.7fr 0.5fr;gap:0.4rem;align-items:end;margin-bottom:0.25rem">
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Stat</label>${_ftWizV2Sel(`appliedEffects.modifiers.${slot}.stat`, STAT_OPTS, m.stat ?? "")}</div>
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Op</label>${_ftWizV2Sel(`appliedEffects.modifiers.${slot}.op`, OP_OPTS, m.op ?? "+")}</div>
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Value</label>${_ftWizV2Num(`appliedEffects.modifiers.${slot}.value`, m.value, { min: 0, max: 10 })}</div>
+      </div>`;
+  };
+  // Resist / Immune grid — checkboxes per damage type. Object-map shape lets
+  // setProperty harvest write directly without array-index gymnastics.
+  const resists = eff.resists ?? {};
+  const immunes = eff.immunes ?? {};
+  const isChecked = (src, key) => {
+    if (Array.isArray(src)) return src.includes(key);
+    return src?.[key] === true;
+  };
+  const dmgRows = Object.entries(FT.DAMAGE_TYPES ?? {}).map(([key, cfg]) => {
+    const label = cfg?.label ?? ftCap(key);
+    const r = isChecked(resists, key) ? " checked" : "";
+    const i = isChecked(immunes, key) ? " checked" : "";
+    return `<tr>
+      <td style="padding:0.15rem 0.5rem 0.15rem 0">${label}</td>
+      <td style="padding:0.15rem 0.4rem;text-align:center"><input type="checkbox" name="appliedEffects.resists.${key}"${r} data-tooltip="Target halves ${label} damage"/></td>
+      <td style="padding:0.15rem 0.4rem;text-align:center"><input type="checkbox" name="appliedEffects.immunes.${key}"${i} data-tooltip="Target negates ${label} damage"/></td>
+    </tr>`;
+  }).join("");
+  return `
+    <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Buffs &amp; Wards</div>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Active-effect outcomes the target gains on a successful resolution. Numeric mods land on derived defenses (Guard/Evasion/Resolve) or Initiative, surfacing as a visible AE on the target. Resists halve matching damage; immunities zero it. Each adds to magnitude budget — the tier suggester counts these alongside damage and conditions.</p>
+    <div style="font-size:0.78rem;font-weight:600;opacity:0.85;margin-bottom:0.3rem">Stat Modifiers</div>
+    ${modRow("m0")}${modRow("m1")}${modRow("m2")}
+    <div style="font-size:0.78rem;font-weight:600;opacity:0.85;margin:0.5rem 0 0.3rem">Damage Resist / Immune</div>
+    <table class="ft-wiz-v2-resist-grid" style="font-size:0.78rem;width:auto">
+      <thead>
+        <tr style="opacity:0.6;text-transform:uppercase;font-size:0.68rem;letter-spacing:0.08em">
+          <th style="text-align:left;padding-right:0.5rem">Type</th>
+          <th style="padding:0 0.4rem" data-tooltip="Half damage from this type">Resist (½)</th>
+          <th style="padding:0 0.4rem" data-tooltip="No damage from this type">Immune (0)</th>
+        </tr>
+      </thead>
+      <tbody>${dmgRows}</tbody>
+    </table>`;
 }
 
 function _ftWizV2RenderEffectWeapon(state) {
@@ -4223,11 +4370,44 @@ function _ftWizV2DcBudgetTier(state) {
   return { tier, note: `fixed DC ${dc} → T${tier}` };
 }
 
+// Phase C — Buffs & Wards budget. Per-modifier weight scales with value
+// (+2 to Guard counts more than +1); each resist adds 1, each immune adds 2.
+// Brackets are roughly: 1 unit = T1, 2-3 = T2, 4-5 = T3, 6+ = T4. Sits
+// alongside damage / area / states / DC factors in the magnitude calc.
+function _ftWizV2EffectsBudgetTier(eff) {
+  if (!eff) return { tier: 0, note: null };
+  const modsSrc = (eff.modifiers && typeof eff.modifiers === "object" && !Array.isArray(eff.modifiers))
+    ? Object.values(eff.modifiers)
+    : (Array.isArray(eff.modifiers) ? eff.modifiers : []);
+  const mods = modsSrc.filter(m => m && m.stat && Number(m.value) > 0);
+  const countTrue = (src) => {
+    if (Array.isArray(src)) return src.filter(Boolean).length;
+    if (src && typeof src === "object") return Object.values(src).filter(v => v === true).length;
+    return 0;
+  };
+  const resistN = countTrue(eff.resists);
+  const immuneN = countTrue(eff.immunes);
+  const modWeight = mods.reduce((s, m) => s + Math.max(1, Math.ceil((Number(m.value) || 0) / 2)), 0);
+  const weight = modWeight + resistN + (immuneN * 2);
+  if (weight === 0) return { tier: 0, note: null };
+  let tier;
+  if      (weight <= 1) tier = 1;
+  else if (weight <= 3) tier = 2;
+  else if (weight <= 5) tier = 3;
+  else                  tier = 4;
+  const parts = [];
+  if (mods.length)  parts.push(`${mods.length} stat mod${mods.length>1?"s":""}`);
+  if (resistN)      parts.push(`${resistN} resist`);
+  if (immuneN)      parts.push(`${immuneN} immune`);
+  return { tier, note: `${parts.join(", ")} (weight ${weight}) → T${tier}` };
+}
+
 function _ftWizV2SuggestTier(state) {
   const factors = [
     _ftWizV2DamageBudgetTier(state.damageRoll),
     _ftWizV2AreaBudgetTier(state.area),
     _ftWizV2StatesBudgetTier(state.appliedStates),
+    _ftWizV2EffectsBudgetTier(state.appliedEffects),
     _ftWizV2DcBudgetTier(state)
   ].filter(f => f.tier > 0);
   const tier = factors.length ? Math.max(...factors.map(f => f.tier)) : 1;
@@ -4564,6 +4744,13 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
   // setProperty writes don't mutate an array. Normalizer converts back.
   state.appliedStates = foundry.utils.deepClone(defaults.appliedStates ?? {});
   state.appliedStates.states = {};
+  // Same coercion for Buffs & Wards (Phase C). modifiers is harvested as
+  // indexed-slot objects (m0/m1/m2); resists/immunes are checkbox grids.
+  // ftNormalizeAppliedEffects in createManifestationItemData converts back.
+  state.appliedEffects = foundry.utils.deepClone(defaults.appliedEffects ?? {});
+  state.appliedEffects.modifiers = {};
+  state.appliedEffects.resists   = {};
+  state.appliedEffects.immunes   = {};
   // Default icon — kind-appropriate fallback. Step 7 lets the author swap
   // via FilePicker (curated icon library at FT_ICON_LIBRARY_PATH).
   state.img = wizardKind === "weapon" ? "icons/svg/sword.svg" : "icons/svg/aura.svg";
@@ -5008,6 +5195,21 @@ function ftComputeDefenses(actor, sys) {
           if (validConds.has(k)) condImmunes.add(k);
         }
       }
+    }
+  }
+
+  // Phase C — Buffs & Wards. Scan active effects on the actor for
+  // fourththing-stamped manifestation resist/immune lists and merge them
+  // into the maps. One AE per cast carries `flags.fourththing.manifestationEffect`
+  // with `resists` / `immunes` damage-type arrays (see applyManifestationStates).
+  // Disabled AEs are skipped. Immunity-shadowing below applies to these merges too.
+  if (actor?.effects) {
+    for (const ae of actor.effects) {
+      if (ae.disabled) continue;
+      const mfx = ae.flags?.fourththing?.manifestationEffect;
+      if (!mfx) continue;
+      _ftMergeEntries(resistMap, mfx.resists, validTypes);
+      _ftMergeEntries(immuneMap, mfx.immunes, validTypes);
     }
   }
 
@@ -7925,8 +8127,22 @@ Hooks.once("init", function () {
   // Respects derived condition immunities. Posts a single chat card listing
   // applied + skipped states.
   game.fourththing.applyManifestationStates = async function (caster, target, item, mf, { castDc = 15 } = {}) {
-    if (!caster || !target || !mf?.appliedStates?.states?.length) return null;
-    const cfg = mf.appliedStates;
+    if (!caster || !target) return null;
+    const cfg = mf?.appliedStates ?? null;
+    // Phase C — Buffs & Wards. Pull from mf first (full call sites), then
+    // fall back to the live item's manifestation block (save-prompt synthesizes
+    // mf with only appliedStates, so the item-side lookup is the bridge).
+    const eff = mf?.appliedEffects
+             ?? item?.system?.manifestation?.appliedEffects
+             ?? null;
+    const hasStates  = cfg && Array.isArray(cfg.states) && cfg.states.length > 0;
+    const hasEffects = eff && (
+      (Array.isArray(eff.modifiers) && eff.modifiers.length > 0) ||
+      (Array.isArray(eff.resists)   && eff.resists.length   > 0) ||
+      (Array.isArray(eff.immunes)   && eff.immunes.length   > 0)
+    );
+    if (!hasStates && !hasEffects) return null;
+
     const tSys = target.system?.system ?? target.system ?? {};
     const immune = new Set(tSys?.derived?.defenses?.conditionImmunities ?? []);
 
@@ -7934,20 +8150,20 @@ Hooks.once("init", function () {
     // tick rounds — they're ended by the save-each-round handler or scene
     // boundary. Round-based durations get `rounds` so Foundry decrements.
     const combat = game.combat;
-    const dur = cfg.duration ?? "1-round";
+    const dur = cfg?.duration ?? "1-round";
     const roundsByKey = { "1-round": 1, "2-rounds": 2, "3-rounds": 3 };
     const aeDuration = (roundsByKey[dur] && combat)
       ? { rounds: roundsByKey[dur], startRound: combat.round, startTurn: combat.turn, combat: combat.id }
       : {};
 
-    const dc = cfg.saveDcMode === "fixed" ? (Number(cfg.saveDcFixed) || 15) : (Number(castDc) || 15);
-    const globalSaveAttr = cfg.saveAttribute || "body";
-    const overrides = (cfg.saveAttributeOverrides && typeof cfg.saveAttributeOverrides === "object")
+    const dc = cfg?.saveDcMode === "fixed" ? (Number(cfg?.saveDcFixed) || 15) : (Number(castDc) || 15);
+    const globalSaveAttr = cfg?.saveAttribute || "body";
+    const overrides = (cfg?.saveAttributeOverrides && typeof cfg.saveAttributeOverrides === "object")
       ? cfg.saveAttributeOverrides : {};
 
     const applied = [];
     const skipped = [];
-    for (const condKey of cfg.states) {
+    for (const condKey of (hasStates ? cfg.states : [])) {
       const cond = FT.CONDITIONS?.[condKey];
       if (!cond) continue;
       if (immune.has(condKey)) {
@@ -8002,8 +8218,67 @@ Hooks.once("init", function () {
       }
     }
 
+    // Phase C — Buffs & Wards effect AE. One AE per cast carries the numeric
+    // changes (Guard/Evasion/Resolve/Initiative aeBonus) AND the resist/immune
+    // flag lists (read by ftComputeDefenses). De-dupe by manifestation item
+    // id so AoE re-casts don't stack the same buff on the same target.
+    let effectResult = null;
+    if (hasEffects) {
+      const ADD_MODE = (foundry.CONST?.ACTIVE_EFFECT_MODES?.ADD) ?? 2;
+      const aeChanges = [];
+      for (const m of (Array.isArray(eff.modifiers) ? eff.modifiers : [])) {
+        const key = ftEffectModifierAEKey(m?.stat);
+        if (!key) continue;
+        const v = Math.max(0, Math.floor(Number(m?.value) || 0));
+        if (v <= 0) continue;
+        const sign = m?.op === "-" ? -1 : 1;
+        aeChanges.push({ key, mode: ADD_MODE, value: String(sign * v), priority: 20 });
+      }
+      const resists = Array.isArray(eff.resists) ? eff.resists : [];
+      const immunes = Array.isArray(eff.immunes) ? eff.immunes : [];
+      const itemId = item?.id ?? null;
+      const dup = itemId
+        ? target.effects?.find?.(e => e.flags?.fourththing?.manifestationEffect?.itemId === itemId)
+        : null;
+      if (dup) {
+        effectResult = { status: "duplicate" };
+      } else {
+        const aeData = {
+          name:    item?.name ?? "Manifestation Effect",
+          icon:    item?.img ?? "icons/svg/aura.svg",
+          img:     item?.img ?? "icons/svg/aura.svg",
+          origin:  caster.uuid,
+          duration: aeDuration,
+          changes: aeChanges,
+          flags: {
+            fourththing: {
+              manifestationEffect: {
+                source:        caster.uuid,
+                itemId,
+                itemName:      item?.name ?? "Manifestation",
+                tier:          item?.system?.manifestation?.tier ?? 1,
+                resists,
+                immunes,
+                modifiers:     Array.isArray(eff.modifiers) ? eff.modifiers.filter(m => m?.stat) : [],
+                durationKind:  dur,
+                startRound:    combat?.round ?? null,
+                startTurn:     combat?.turn ?? null
+              }
+            }
+          }
+        };
+        try {
+          await target.createEmbeddedDocuments("ActiveEffect", [aeData]);
+          effectResult = { status: "applied", changes: aeChanges.length, resists: resists.length, immunes: immunes.length };
+        } catch (e) {
+          console.warn("Roll for Initiation | applyManifestationStates effect-AE create failed", e);
+          effectResult = { status: "failed" };
+        }
+      }
+    }
+
     // Chat surfacing.
-    if (applied.length || skipped.length) {
+    if (applied.length || skipped.length || effectResult) {
       const appliedHtml = applied.length
         ? `<p style="margin:0.2rem 0;font-size:0.82rem"><b>Applied:</b> ${applied.map(k => {
             const c = FT.CONDITIONS?.[k];
@@ -8018,19 +8293,42 @@ Hooks.once("init", function () {
       const overrideNote = overrideAppliedKeys.length
         ? ` <span style="opacity:0.7">(${overrideAppliedKeys.map(k => `${FT.CONDITIONS?.[k]?.label ?? k}: ${ftCap(overrides[k])}`).join(", ")})</span>`
         : "";
-      const saveLine = (cfg.saveEachRound && applied.length)
+      const saveLine = (cfg?.saveEachRound && applied.length)
         ? `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85;color:#a0d4ff">↻ Save each round: <b>${ftCap(globalSaveAttr)}</b> vs DC <b>${dc}</b> — success ends the effect.${overrideNote}</p>`
         : `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.7">Duration: <b>${durLabel}</b>.</p>`;
+      // Buffs & Wards summary line — surfaces what numeric mods + resist/immune
+      // landed (or "already active" when a duplicate cast was de-duped).
+      let effectHtml = "";
+      if (effectResult?.status === "applied") {
+        const bits = [];
+        const modList = (Array.isArray(eff?.modifiers) ? eff.modifiers : []).filter(m => m?.stat && Number(m?.value) > 0);
+        for (const m of modList) {
+          const label = FT_EFFECT_MOD_LABELS[m.stat] ?? ftCap(m.stat);
+          bits.push(`${label} ${m.op === "-" ? "−" : "+"}${m.value}`);
+        }
+        for (const t of (eff?.resists ?? [])) bits.push(`<span style="opacity:0.85">resist ${ftCap(t)}</span>`);
+        for (const t of (eff?.immunes ?? [])) bits.push(`<span style="opacity:0.85">immune ${ftCap(t)}</span>`);
+        if (bits.length) {
+          effectHtml = `<p style="margin:0.2rem 0;font-size:0.82rem"><b>Buffs &amp; Wards:</b> ${bits.join(" · ")}</p>`;
+        }
+      } else if (effectResult?.status === "duplicate") {
+        effectHtml = `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.65"><b>Buffs &amp; Wards:</b> already active on ${ftEscapeHtml(target.name)} (de-duped).</p>`;
+      } else if (effectResult?.status === "failed") {
+        effectHtml = `<p style="margin:0.2rem 0;font-size:0.78rem;color:#e88a8a"><b>Buffs &amp; Wards:</b> create failed — check console.</p>`;
+      }
+      const titleLabel = hasStates && hasEffects ? "states + wards applied to"
+                       : hasEffects && !hasStates ? "wards applied to"
+                       : "states applied to";
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: caster }),
         content: `<div class="fourththing-roll">
-          <div class="ft-roll-header"><span class="ft-roll-name">◈ ${ftEscapeHtml(item?.name ?? "Manifestation")} — states applied to ${ftEscapeHtml(target.name)}</span></div>
-          ${appliedHtml}${skippedHtml}${saveLine}
+          <div class="ft-roll-header"><span class="ft-roll-name">◈ ${ftEscapeHtml(item?.name ?? "Manifestation")} — ${titleLabel} ${ftEscapeHtml(target.name)}</span></div>
+          ${appliedHtml}${skippedHtml}${effectHtml}${saveLine}
         </div>`
       });
     }
 
-    return { applied, skipped };
+    return { applied, skipped, effect: effectResult };
   };
 
   // Hook: when an applied-manifestation AE is deleted (auto-expiry, save
@@ -8557,6 +8855,14 @@ Hooks.once("init", function () {
       sys.derived.integrity.perLevel   = intPerLevel;
       sys.derived.stress.max       = 10 + 2 * m + s;
       sys.derived.stress.value    ??= sys.derived.stress.max;
+      // Phase C — Buffs & Wards. Preserve AE-applied aeBonus values (Foundry's
+      // applyActiveEffects runs BEFORE prepareDerivedData, so reads of these
+      // fields see the live AE bonus). Re-stamping after compute also keeps
+      // the field present at zero when no AE is active — same initiative.bonus
+      // pattern below.
+      const aeGuardBonus   = Number(sys.derived.guard?.aeBonus)   || 0;
+      const aeEvasionBonus = Number(sys.derived.evasion?.aeBonus) || 0;
+      const aeResolveBonus = Number(sys.derived.resolve?.aeBonus) || 0;
       sys.derived.guard.value      = 10 + v + b;
       sys.derived.evasion.value    = 10 + i + b;
       sys.derived.resolve.value    = 10 + p + s;
@@ -8575,6 +8881,16 @@ Hooks.once("init", function () {
         sys.derived.evasion.value += 2;
         sys.derived.resolve.value += 2;
       }
+
+      // Phase C — fold in AE-applied bonuses, then re-stamp so the field
+      // survives the next prep cycle (Foundry will overwrite with the live
+      // AE value before derive runs again).
+      sys.derived.guard.value     += aeGuardBonus;
+      sys.derived.evasion.value   += aeEvasionBonus;
+      sys.derived.resolve.value   += aeResolveBonus;
+      sys.derived.guard.aeBonus    = aeGuardBonus;
+      sys.derived.evasion.aeBonus  = aeEvasionBonus;
+      sys.derived.resolve.aeBonus  = aeResolveBonus;
 
       sys.derived.defenses = ftComputeDefenses(this, sys);
 
