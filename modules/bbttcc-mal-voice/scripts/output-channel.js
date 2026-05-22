@@ -135,8 +135,19 @@ async function render({ voice, text, context } = {}) {
   _budgetCheck(voice, context?._costEstimateUSD);
 
   if (channel === "chat" || channel === "whisper") {
-    const { whisper } = _resolveAudience(voice.audience);
+    // Dynamic audience: if the contextBuilder set _audienceOverride (e.g. Faction
+    // Advisor resolving which faction's leader to whisper based on trigger args),
+    // honor it. Otherwise use the voice's static audience.
+    let effectiveAudience = (context?._audienceOverride) || voice.audience;
+    if (voice.audience === "trigger-resolved" && !context?._audienceOverride) {
+      warn(`voice '${voice.id}' declared audience 'trigger-resolved' but contextBuilder did not set context._audienceOverride; falling back to GM whisper`);
+      effectiveAudience = "gm";
+    }
+    const { whisper } = _resolveAudience(effectiveAudience);
     const data = _buildMessageData(voice, text, whisper);
+    // Stamp the effective audience on the message flag for traceability.
+    data.flags = data.flags || {};
+    data.flags[MODULE_ID] = Object.assign(data.flags[MODULE_ID] || {}, { effectiveAudience });
     try {
       const msg = await ChatMessage.create(data);
       return { ok: true, messageId: msg?.id || null, channel, audience: voice.audience };

@@ -2,19 +2,19 @@
  *
  * Foundry macro — paste contents into a macro slot, execute as GM.
  *
- * Smoke-tests the bbttcc-mal-voice Phase 2A stack end-to-end:
- *   1. Verify game.bbttcc.mal is installed and has all sub-namespaces
+ * Smoke-tests the bbttcc-mal-voice stack (Phase 2A + 2B) end-to-end:
+ *   1. Verify game.bbttcc.mal namespace + all sub-systems
  *   2. Verify the agent registry (bbttcc-raid) is reachable for snapshots
  *   3. Confirm API key + provider are configured
- *   4. Fire game.bbttcc.mal.triggers.fire("mal", { hook: "bbttcc:mal:test", ... })
- *   5. Surface Mal's reply (or any error) in chat + notifications
+ *   4. Fire each registered default voice in turn — Mal, GM Advisor, Faction Advisor
+ *   5. Surface each voice's reply (or any error) in a single whisper chat card
  *
- * Expected good result:
- *   - "OK" indicators across the diagnostic
- *   - A Mal-voiced chat message appears in the chat log within ~3-8 seconds
- *   - Token usage + cost estimate logged to console
+ * Expected good result: three ✅ "X responded in Yms" lines and three rendered
+ * voice messages (Mal broadcast / GM Advisor whisper to GM / Faction Advisor
+ * whisper to faction owners). Each call is ~$0.005-0.02 — total smoketest
+ * cost typically under $0.03.
  *
- * Spec: modules/bbttcc-raid/AGENT_API_SPEC.md §8 Phase 2A
+ * Spec: modules/bbttcc-raid/AGENT_API_SPEC.md §8 Phase 2A + 2B
  */
 
 (async () => {
@@ -44,15 +44,17 @@
     const caps = agent.capabilities();
     ok(`agent registry v${caps.version} (${caps.verbs.length} verbs)`);
   } else {
-    warn("agent registry not reachable — Mal will speak without snapshot context");
+    warn("agent registry not reachable — voices will speak without snapshot context");
   }
 
   // 4. Voices
   const voices = mal.voices.list();
   ok(`${voices.length} voice(s) registered: ${voices.map(v => v.id).join(", ")}`);
-  const malVoice = mal.voices.get("mal");
-  if (!malVoice) { fail("Mal voice config not found"); _report(); return; }
-  ok(`Mal config: ${malVoice.systemPrompt.length} chars prompt, ${malVoice.triggers.length} triggers, audience=${malVoice.audience}`);
+  for (const id of ["mal", "gm-advisor", "faction-advisor"]) {
+    const v = mal.voices.get(id);
+    if (v) ok(`${id} config: ${v.systemPrompt.length} chars prompt, ${v.triggers.length} triggers, audience=${v.audience}`);
+    else  fail(`${id} voice config not found`);
+  }
 
   // 5. API key + provider
   const provider = mal.settings.provider();
@@ -66,36 +68,79 @@
   }
   ok(`API key configured (${key.length} chars)`);
 
-  // 6. Fire the test trigger
+  // Find a faction for Faction Advisor (and Mal/GM Advisor context).
+  const factionActor = game.actors?.find(a => a.type === "faction" || a.flags?.["bbttcc-factions"]);
+  const factionId = factionActor?.id || null;
+  if (factionId) ok(`Test faction located: "${factionActor.name}" (${factionId.slice(0,8)}...)`);
+  else          warn("No faction actor in world — Faction Advisor will fall back to GM whisper");
+
+  // ===== 6. Fire Mal =====
   lines.push("");
   lines.push(`🎤 Firing test trigger for Mal...`);
   _report({ keepOpen: true });
 
-  const t0 = performance.now();
-  const result = await mal.triggers.fire("mal", {
+  const malResult = await mal.triggers.fire("mal", {
     hook: "bbttcc:mal:test",
     args: {
-      context: "Smoketest. Steward just finished their first raid round, outcome was greatSuccess. They want to hear from Mal.",
+      context: "Smoketest. Steward just finished a raid round with outcome greatSuccess.",
       outcome: "greatSuccess",
       raidType: "assault"
     },
     mode: "outcome",
     lengthHint: 30
   });
-  const dt = Math.round(performance.now() - t0);
-
-  if (!result.ok) {
-    fail(`fire() failed: ${result.error} — ${result.message || ""}`);
-    _report();
-    return;
+  if (!malResult.ok) {
+    fail(`Mal fire() failed: ${malResult.error} — ${malResult.message || ""}`);
+    _report(); return;
   }
-
-  ok(`Mal responded in ${dt}ms`);
-  ok(`Tokens: in=${result.inputTokens}, out=${result.outputTokens}`);
-  if (result.costUSD != null) ok(`Cost estimate: $${result.costUSD.toFixed(4)}`);
+  ok(`Mal responded in ${malResult.durationMs}ms (in=${malResult.inputTokens} out=${malResult.outputTokens}, $${(malResult.costUSD||0).toFixed(4)})`);
   lines.push("");
   lines.push(`💬 Mal said:`);
-  lines.push(`"${result.text}"`);
+  lines.push(`"${malResult.text}"`);
+
+  // ===== 7. Fire GM Advisor =====
+  lines.push("");
+  lines.push(`💼 Firing test trigger for GM Advisor...`);
+  _report({ keepOpen: true });
+
+  const gmResult = await mal.triggers.fire("gm-advisor", {
+    hook: "bbttcc:gm-advisor:test",
+    args: factionId ? { factionId } : {},
+    mode: "free",
+    lengthHint: 50
+  });
+  if (!gmResult.ok) {
+    fail(`GM Advisor fire() failed: ${gmResult.error} — ${gmResult.message || ""}`);
+  } else {
+    ok(`GM Advisor responded in ${gmResult.durationMs}ms (in=${gmResult.inputTokens} out=${gmResult.outputTokens}, $${(gmResult.costUSD||0).toFixed(4)})`);
+    lines.push("");
+    lines.push(`💼 GM Advisor said:`);
+    lines.push(`"${gmResult.text}"`);
+  }
+
+  // ===== 8. Fire Faction Advisor =====
+  lines.push("");
+  if (!factionId) {
+    fail("Faction Advisor skipped — no faction actor in world to advise");
+  } else {
+    lines.push(`📜 Firing test trigger for Faction Advisor (faction="${factionActor.name}")...`);
+    _report({ keepOpen: true });
+
+    const facResult = await mal.triggers.fire("faction-advisor", {
+      hook: "bbttcc:faction-advisor:test",
+      args: { factionId },
+      mode: "sheet-glance",
+      lengthHint: 35
+    });
+    if (!facResult.ok) {
+      fail(`Faction Advisor fire() failed: ${facResult.error} — ${facResult.message || ""}`);
+    } else {
+      ok(`Faction Advisor responded in ${facResult.durationMs}ms (in=${facResult.inputTokens} out=${facResult.outputTokens}, $${(facResult.costUSD||0).toFixed(4)})`);
+      lines.push("");
+      lines.push(`📜 Faction Advisor said:`);
+      lines.push(`"${facResult.text}"`);
+    }
+  }
 
   _report();
 
@@ -103,9 +148,10 @@
     const html = `<div style="font-family:monospace;font-size:.85em;line-height:1.4"><p><strong>Mal Voice Smoketest</strong></p>${lines.map(l => `<div>${_esc(l)}</div>`).join("")}</div>`;
     ChatMessage.create({ content: html, whisper: [game.user.id] });
     if (!opts.keepOpen) {
-      const summary = lines.filter(l => l.startsWith("❌")).length === 0
-        ? "Mal Voice smoketest passed."
-        : "Mal Voice smoketest had failures — see chat.";
+      const failures = lines.filter(l => l.startsWith("❌")).length;
+      const summary = failures === 0
+        ? "Mal Voice smoketest passed — all 3 voices responded."
+        : `Mal Voice smoketest had ${failures} failure(s) — see chat.`;
       ui.notifications.info(summary);
     }
   }

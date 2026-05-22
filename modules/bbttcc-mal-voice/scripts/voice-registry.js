@@ -34,7 +34,10 @@ const warn = (...a) => console.warn(TAG, ...a);
 const REGISTRY = new Map();         // id -> normalized spec
 const CALLBACKS = { onRegister: [], onUnregister: [] };
 
-const AUDIENCE_VALUES = ["broadcast", "gm", "faction", "player"];
+// "trigger-resolved" = the contextBuilder will set context._audienceOverride
+// dynamically per trigger (used by Faction Advisor to whisper to the correct
+// faction's leader based on which faction the trigger references).
+const AUDIENCE_VALUES = ["broadcast", "gm", "faction", "player", "trigger-resolved"];
 const OUTPUT_VALUES   = ["chat", "whisper", "sheetPopup", "tokenSpeechBubble"];
 
 function _isFn(x) { return typeof x === "function"; }
