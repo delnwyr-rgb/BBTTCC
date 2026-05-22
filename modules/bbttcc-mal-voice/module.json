@@ -1,0 +1,39 @@
+{
+  "id": "bbttcc-mal-voice",
+  "title": "BBTTCC Mal Voice",
+  "description": "LLM-powered AI character voices for BBTTCC. Mal speaks at your table in real time (and GM Advisor / Faction Advisor in Phase 2B). Reads game state through game.bbttcc.api.agent.*, calls Anthropic / OpenAI / Ollama / custom endpoints via your own API key. No backend operated by us.",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "BBTTCC Team"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "14"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "fourththing",
+        "type": "system",
+        "compatibility": { "verified": "14" }
+      }
+    ],
+    "requires": [
+      {
+        "id": "bbttcc-raid",
+        "type": "module"
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/module.js",
+    "scripts/providers/anthropic.js",
+    "scripts/voice-registry.js",
+    "scripts/voices/mal.js",
+    "scripts/output-channel.js",
+    "scripts/trigger-engine.js"
+  ],
+  "socket": false
+}

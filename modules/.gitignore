@@ -24,6 +24,8 @@
 !bbttcc-factions/**
 !bbttcc-fx-integration/
 !bbttcc-fx-integration/**
+!bbttcc-mal-voice/
+!bbttcc-mal-voice/**
 !bbttcc-market/
 !bbttcc-market/**
 !bbttcc-master-content/
