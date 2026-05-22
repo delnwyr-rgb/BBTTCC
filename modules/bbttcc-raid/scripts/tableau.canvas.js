@@ -52,27 +52,17 @@
     return tokenDoc?.flags?.[MOD]?.tableauActor === true;
   }
 
-  // Restore vanilla appearance for tokens that previously had spike scale/sort
-  // (e.g. after disable() or after un-flagging a token).
+  // Restore vanilla appearance for tokens that previously had spike scale/sort.
+  // Don't hardcode mesh.scale to (1,1) — that's only correct if the source
+  // texture is exactly the footprint size. For typical tokens with multi-
+  // thousand-pixel art, the correct visual scale is `footprint / textureSize`
+  // (computed by Foundry from texture.fit). Ask Foundry to recompute via
+  // render flags instead of guessing.
   function resetToken(token) {
     if (!token?.mesh) return;
     try {
-      token.mesh.scale.set(1, 1);
       token.mesh.sort = 0;
-      if (token.border) {
-        token.border.scale.set(1, 1);
-        token.border.position.set(0, 0);
-      }
-      if (token.bars) {
-        token.bars.scale.set(1, 1);
-        token.bars.position.set(0, 0);
-      }
-      if (token.nameplate) {
-        token.nameplate.scale.set(1, 1);
-        const w = Number(token.w || 0);
-        const h = Number(token.h || 0);
-        token.nameplate.position.set(w / 2, h);
-      }
+      token.renderFlags?.set?.({ refreshMesh: true, refreshShader: true });
     } catch (_e) {}
   }
 
@@ -81,7 +71,12 @@
       if (!token?.mesh) return;
       const scene = token.scene || canvas?.scene;
       const cfg = getTableau(scene);
-      if (!cfg) return resetToken(token);
+      // If tableau is off or this token isn't a participant, do nothing.
+      // Don't reset here — Foundry's own refresh already ran and set
+      // mesh.scale correctly from texture.fit. Touching it now (even to
+      // (1,1)) clobbers fit math and makes textures render at native size.
+      // Explicit reset happens at transition points (disable/flag-off/scene-off).
+      if (!cfg) return;
       if (!isTableauActor(token.document)) return;
 
       const y = Number(token.document?.y ?? 0);
@@ -134,7 +129,17 @@
 
   function applyAll() {
     if (!canvas?.tokens?.placeables) return;
-    for (const tk of canvas.tokens.placeables) applyDepth(tk);
+    const cfg = getTableau(canvas?.scene);
+    for (const tk of canvas.tokens.placeables) {
+      // On a tableau-disabled scene, only previously-tagged tokens need an
+      // explicit reset (ask Foundry to redo its fit math). Everything else
+      // is already correct from Foundry's own refresh.
+      if (!cfg) {
+        if (isTableauActor(tk.document)) resetToken(tk);
+        continue;
+      }
+      applyDepth(tk);
+    }
   }
 
   // --- Canvas guide lines (visual feedback for frontY/backY) -------------
