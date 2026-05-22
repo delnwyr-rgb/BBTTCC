@@ -75,13 +75,14 @@ Read the input. Speak as this faction's Advisor. Output ONLY the advice prose. N
 // ============================================================
 async function factionAdvisorContextBuilder(voice, triggerArgs) {
   const agent = globalThis.game?.bbttcc?.api?.agent;
+  const triggers = globalThis.game?.bbttcc?.mal?.triggers;
+  const trunc = triggers?.truncateForLLM || ((o) => o);
+
   if (!agent?.invoke) {
     warn("agent registry unavailable — Faction Advisor context will be thin");
     return _minimalContext(triggerArgs, null);
   }
 
-  // Resolve factionId. Many hooks carry the faction in different shapes;
-  // we accept several aliases.
   const args = triggerArgs.args || {};
   const factionId = args.factionId
                  || args.attackerFactionId
@@ -105,7 +106,8 @@ async function factionAdvisorContextBuilder(voice, triggerArgs) {
   const legalActions    = (legalR.status === "fulfilled" && legalR.value?.ok !== false) ? legalR.value : null;
   const recommendations = (recR.status === "fulfilled"   && recR.value?.ok   !== false) ? recR.value   : null;
 
-  // Mode inference
+  const factionName = globalThis.game?.actors?.get(factionId)?.name || null;
+
   const hook = String(triggerArgs.hook || "").toLowerCase();
   let mode = triggerArgs.mode || "free";
   if (/sheetopened|sheetopen/.test(hook))           mode = "sheet-glance";
@@ -114,11 +116,15 @@ async function factionAdvisorContextBuilder(voice, triggerArgs) {
 
   return {
     factionId,
+    factionName,
     trigger:         { hook: triggerArgs.hook || "manual", args },
-    faction:         observation?.faction || null,
-    observation:     observation || null,
-    legalActions:    legalActions || null,
-    recommendations: recommendations || null,
+    // Aggressively-truncated structured advisor data. The full observation
+    // can be tens of KB — we hand the LLM a hard-capped slice. If the GM
+    // Advisor needs richer context for a specific decision, they can run the
+    // canned `strategic.*` UI directly.
+    faction:         trunc(observation?.faction || null, 1500),
+    legalActions:    trunc(legalActions,    2000),
+    recommendations: trunc(recommendations, 2500),
     mode,
     lengthHint:      triggerArgs.lengthHint || (mode === "sheet-glance" ? 25 : mode === "pre-raid" ? 100 : 40),
     // SIGNAL TO OUTPUT CHANNEL — whisper to this faction's owners (per §2B.2 patch).

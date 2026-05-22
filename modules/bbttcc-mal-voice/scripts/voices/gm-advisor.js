@@ -70,19 +70,23 @@ Read the input. Speak as the GM Advisor. Output ONLY the advice prose. No preamb
 // ============================================================
 async function gmAdvisorContextBuilder(voice, triggerArgs) {
   const agent = globalThis.game?.bbttcc?.api?.agent;
+  const triggers = globalThis.game?.bbttcc?.mal?.triggers;
+  const slim = triggers?.slimSnapshot   || ((s) => s);
+  const trunc = triggers?.truncateForLLM || ((o) => o);
+
   if (!agent?.invoke) {
     warn("agent registry unavailable — GM Advisor context will be thin");
     return _minimalContext(triggerArgs);
   }
 
-  // Pull the snapshot first (lightweight)
+  // Slim snapshot (~200 chars instead of ~25k)
   let snapshot = null;
   try {
     const s = await agent.invoke("snapshot", {});
-    if (s && s.ok !== false) snapshot = s;
+    if (s && s.ok !== false) snapshot = slim(s);
   } catch (e) { warn("snapshot fetch failed:", e?.message); }
 
-  // Pull the GM's factionId (if inferable from context)
+  // Resolve factionId
   let factionId = triggerArgs.args?.factionId || null;
   if (!factionId) {
     try {
@@ -91,7 +95,7 @@ async function gmAdvisorContextBuilder(voice, triggerArgs) {
     } catch (_) { /* non-fatal */ }
   }
 
-  // Pull the observation for that faction (needed by gm.suggest*)
+  // Per-faction observation (needed by gm.suggest*; we don't pass it to LLM — too large)
   let observation = null;
   if (factionId) {
     try {
@@ -100,7 +104,9 @@ async function gmAdvisorContextBuilder(voice, triggerArgs) {
     } catch (e) { warn("observation fetch failed:", e?.message); }
   }
 
-  // Pull the canon suggestions
+  // Canon suggestions — these are the GROUND TRUTH structured input the
+  // GM Advisor system prompt is designed around. Truncate each to a hard
+  // cap so a verbose engine output can't blow the budget.
   let beats = null, tables = null, worldSignals = null;
   if (observation) {
     try {
@@ -115,7 +121,11 @@ async function gmAdvisorContextBuilder(voice, triggerArgs) {
     if (w && w.ok !== false) worldSignals = w;
   } catch (e) { warn("gm.recommendWorldSignals failed:", e?.message); }
 
-  // Mode inference
+  // Faction name (cheap, useful for the LLM to ground its prose)
+  const factionName = factionId && globalThis.game?.actors
+    ? (globalThis.game.actors.get(factionId)?.name || null)
+    : null;
+
   const hook = String(triggerArgs.hook || "").toLowerCase();
   let mode = triggerArgs.mode || "free";
   if (/(scene.*enter|scene.*transition)/.test(hook)) mode = "world-pressure";
@@ -125,13 +135,14 @@ async function gmAdvisorContextBuilder(voice, triggerArgs) {
   return {
     trigger:    { hook: triggerArgs.hook || "manual", args: triggerArgs.args || {} },
     snapshot,
+    factionId,
+    factionName,
     canonSuggestions: {
-      beats:        beats        || null,
-      tables:       tables       || null,
-      worldSignals: worldSignals || null
+      beats:        trunc(beats,        2500),
+      tables:       trunc(tables,       2500),
+      worldSignals: trunc(worldSignals, 1500)
     },
     mode,
-    factionId,
     lengthHint: triggerArgs.lengthHint || (mode === "round-debrief" ? 100 : 40)
   };
 }

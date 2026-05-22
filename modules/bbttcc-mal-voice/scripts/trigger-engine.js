@@ -32,21 +32,73 @@ function _inferMode(triggerArgs) {
   return "snark";
 }
 
-// ----- Default context builder -----
+// ============================================================
+// Context-size guards. The raw snapshot from agent.invoke("snapshot")
+// includes the entire raid API namespace + maneuver registry — ~25k
+// tokens of mostly-irrelevant data per call. Slim aggressively before
+// putting it in the user message. Anthropic rate limit is 30k input
+// tokens/min on the lowest tier, so unbounded contexts blow up fast.
+// ============================================================
+
+// Extract only the essential bits from the agent's snapshot. Voice
+// contextBuilders that need richer per-faction state should query
+// observation.snapshot({factionId}) directly rather than reading from
+// the global snapshot.
+function slimSnapshot(snap) {
+  if (!snap || typeof snap !== "object") return null;
+  return {
+    ts:    snap.ts || Date.now(),
+    ready: !!snap.ready,
+    user:  snap.user ? { id: snap.user.id, name: snap.user.name, isGM: !!snap.user.isGM } : null
+  };
+}
+
+// Hard cap on any nested object we hand to the LLM. Converts to JSON,
+// truncates if over budget, returns either the original object or a
+// truncation marker. Default cap ~3000 chars = ~750 tokens.
+function truncateForLLM(obj, maxChars = 3000) {
+  if (obj == null) return obj;
+  let str;
+  try { str = JSON.stringify(obj); } catch (_) { return obj; }
+  if (str.length <= maxChars) return obj;
+  return {
+    _truncated: true,
+    _originalLength: str.length,
+    _cap: maxChars,
+    partial: str.substring(0, maxChars) + "…"
+  };
+}
+
+// ----- Default context builder (used by Mal and any voice that doesn't
+//       declare its own contextBuilder). Slim by default.
 async function defaultContextBuilder(voice, triggerArgs) {
   const agent = globalThis.game?.bbttcc?.api?.agent;
   let snapshot = null;
   if (agent?.invoke) {
     try {
       const s = await agent.invoke("snapshot", {});
-      if (s && s.ok !== false) snapshot = s;
+      if (s && s.ok !== false) snapshot = slimSnapshot(s);
     } catch (e) {
       warn("snapshot fetch failed:", e?.message || e);
     }
   }
+
+  // Mal benefits from a tiny name-context for the active world. Pull a
+  // single faction name if the trigger references one, plus the current
+  // scene name. Both are cheap (<200 chars) and dramatically improve
+  // Mal's grounding without adding tokens.
+  const args = triggerArgs.args || {};
+  const factionId = args.factionId || args.attackerFactionId || null;
+  let factionName = null;
+  if (factionId && globalThis.game?.actors) {
+    factionName = globalThis.game.actors.get(factionId)?.name || null;
+  }
+  const sceneName = globalThis.game?.scenes?.active?.name || null;
+
   return {
-    trigger:    { hook: triggerArgs.hook || "manual", args: triggerArgs.args || {} },
+    trigger:    { hook: triggerArgs.hook || "manual", args },
     snapshot,
+    nameContext: { factionId, factionName, sceneName },
     mode:       triggerArgs.mode       || _inferMode(triggerArgs),
     lengthHint: triggerArgs.lengthHint || (triggerArgs.mode === "atmospheric" ? 80 : 30)
   };
@@ -223,6 +275,8 @@ function _install() {
     globalThis.game.bbttcc.mal.triggers = Object.assign(globalThis.game.bbttcc.mal.triggers || {}, {
       fire,
       defaultContextBuilder,
+      slimSnapshot,
+      truncateForLLM,
       _subscribeHook,
       _subscribedHooks: () => [...HOOK_HANDLERS.keys()]
     });
