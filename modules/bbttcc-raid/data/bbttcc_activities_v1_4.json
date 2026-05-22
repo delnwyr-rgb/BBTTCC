@@ -752,5 +752,50 @@
         "minFactionTier": 3
       }
     }
+  },
+  {
+    "name": "Begin Siege [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "category": "Violence / Military",
+        "opCosts": {
+          "violence": 30,
+          "logistics": 20,
+          "economy": 10
+        },
+        "effects": {
+          "text": "Establish a multi-turn siege on a target hex. Layers are drawn from the hex's structureActorIds (or GM override at planning time). Commits an OP-denominated Supply Buffer that ticks down per turn from the derived Siege Cost (terrain + supply-chain length + harassment, less Bulwark discount). Resolves over multiple campaign turns until a layer is breached, defender surrenders, attacker withdraws, or Buffer is exhausted. See bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md."
+        },
+        "minFactionTier": 1,
+        "activityKey": "begin_siege",
+        "siegeRequiresTarget": true,
+        "siegeSizePicker": true
+      }
+    }
+  },
+  {
+    "name": "Establish Siege Camp [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Violence / Military",
+        "opCosts": {
+          "violence": 10,
+          "logistics": 20
+        },
+        "effects": {
+          "text": "Stamp the 'Beached Camp' modifier on a target hex (must be owned, neutral, or claimable by the attacker). Hex qualifies as a temporary siege depot for the duration of the attacker's active siege; auto-clears on siege resolution. Used for naval/wilderness sieges where no permanent depot is in range."
+        },
+        "minFactionTier": 1,
+        "activityKey": "establish_siege_camp"
+      }
+    }
   }
 ]
