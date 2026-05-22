@@ -378,22 +378,42 @@
       {
         name: "gm.suggestCampaignBeats",
         layer: "query",
-        description: "Suggest canon-grounded campaign beats for GM consideration. Phase 2 Mal/Advisor voices consume as structured LLM input.",
-        args: { type: "object", properties: { observation: S_OBJ, opts: S_OBJ } },
+        description: "Suggest canon-grounded campaign beats for GM consideration, given an observation snapshot. Phase 2 Mal/Advisor voices consume as structured LLM input.",
+        args: {
+          type: "object",
+          required: ["observation"],
+          properties: {
+            observation:     S_OBJ,
+            detectors:       S_OBJ,
+            recommendations: { type: "array", items: S_OBJ },
+            opts:            S_OBJ
+          }
+        },
         returns: S_OBJ,
         permissions: ["gm"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.gm?.resolveCampaignBeatSuggestions?.(args)
+        handler: async ({ observation, detectors, recommendations, opts } = {}) =>
+          agent.gm?.resolveCampaignBeatSuggestions?.(observation, detectors, recommendations, opts)
       },
       {
         name: "gm.suggestCampaignTables",
         layer: "query",
-        description: "Suggest canon-grounded campaign tables for the GM. Phase 2 voices consume as LLM input.",
-        args: { type: "object", properties: { observation: S_OBJ, opts: S_OBJ } },
+        description: "Suggest canon-grounded campaign tables for the GM, given an observation snapshot. Phase 2 voices consume as LLM input.",
+        args: {
+          type: "object",
+          required: ["observation"],
+          properties: {
+            observation:     S_OBJ,
+            detectors:       S_OBJ,
+            recommendations: { type: "array", items: S_OBJ },
+            opts:            S_OBJ
+          }
+        },
         returns: S_OBJ,
         permissions: ["gm"],
         sideEffects: { audit: false },
-        handler: async (args) => agent.gm?.resolveCampaignTableSuggestions?.(args)
+        handler: async ({ observation, detectors, recommendations, opts } = {}) =>
+          agent.gm?.resolveCampaignTableSuggestions?.(observation, detectors, recommendations, opts)
       }
     ];
   }

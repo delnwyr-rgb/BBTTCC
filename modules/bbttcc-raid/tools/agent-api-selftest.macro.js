@@ -27,8 +27,20 @@
 
   const factionId = game.actors?.find(a => a.type === "faction" || a.flags?.["bbttcc-factions"])?.id || null;
 
+  // Pre-fetch a single observation snapshot; reused by gm.suggest* verbs.
+  let observation = null;
+  if (factionId) {
+    try {
+      const obs = await agent.invoke("observation.snapshot", { factionId });
+      if (obs && obs.ok !== false) observation = obs;
+    } catch (_) { /* leave null */ }
+  }
+
   const NEEDS_FACTION = new Set([
     "observation.snapshot", "strategic.legalActions"
+  ]);
+  const NEEDS_OBSERVATION = new Set([
+    "gm.suggestCampaignBeats", "gm.suggestCampaignTables"
   ]);
 
   const results = [];
@@ -37,6 +49,10 @@
     if (NEEDS_FACTION.has(name)) {
       if (!factionId) { results.push({ name, ok: false, durationMs: 0, error: "no faction in world" }); continue; }
       args.factionId = factionId;
+    }
+    if (NEEDS_OBSERVATION.has(name)) {
+      if (!observation) { results.push({ name, ok: false, durationMs: 0, error: "no observation available" }); continue; }
+      args = { observation };
     }
     if (name === "validate.maneuver") args = { maneuverKey: "rally_the_line", outcomeTier: "success" };
 
