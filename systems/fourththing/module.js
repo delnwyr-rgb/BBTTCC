@@ -5473,6 +5473,22 @@ FT.ARMOR_RANK_SCALE = {
 
 FT.ARMOR_SKILLS = ["plating", "weave", "warding"];
 
+// Weight tag → gating skill. Tag is the canonical route; the item's
+// `system.armorSkill` field is treated as a fallback hint for armor that
+// lacks an explicit weight tag.
+FT.ARMOR_WEIGHT_SKILL = { light: "weave", medium: "warding", heavy: "plating" };
+
+function _ftArmorGateSkill(item) {
+  const tags = item?.system?.tags || [];
+  for (const t of tags) {
+    const k = FT.ARMOR_WEIGHT_SKILL[String(t).toLowerCase()];
+    if (k) return k;
+  }
+  const declared = item?.system?.armorSkill;
+  if (declared && FT.ARMOR_SKILLS.includes(declared)) return declared;
+  return "weave";
+}
+
 // ─── Combat Actions (Phase 1: codified RFI action lexicon) ────────────────────
 // Each entry consumes a pool (action/bonus/reaction) and applies a mechanical
 // effect — flag, derived bump (read in prepareDerivedData), or chained roll.
@@ -5654,12 +5670,12 @@ function ftComputeDefenses(actor, sys) {
       }
 
       // Armor skill gate — protection requires the wearer be at least Trained
-      // in the armor's declared skill (rank ≥ 1). Untrained armor delivers the
-      // material but not the practice; resistance grants are dormant.
+      // in the canonical skill for the armor's weight tag (light→weave,
+      // medium→warding, heavy→plating). Falls back to system.armorSkill if no
+      // weight tag is present. Untrained armor delivers the material but not
+      // the practice; resistance grants are dormant.
       if (item.type === "armor") {
-        const skillKey = (item.system?.armorSkill && FT.ARMOR_SKILLS.includes(item.system.armorSkill))
-          ? item.system.armorSkill
-          : "weave";
+        const skillKey = _ftArmorGateSkill(item);
         const rank = sys?.skills?.[skillKey]?.value ?? 0;
         if (rank < 1) continue;
       }
@@ -5978,9 +5994,9 @@ function ftComputeArmorBonus(actor, sys) {
     const a = item.system ?? {};
     if (a.equipped === false) continue;
 
-    const skillKey = a.armorSkill && FT.ARMOR_SKILLS.includes(a.armorSkill)
-      ? a.armorSkill
-      : "weave"; // default per Appendix A: light/med → weave
+    // Weight tag is canonical (light→weave, medium→warding, heavy→plating);
+    // armorSkill field is the fallback for armor without a weight tag.
+    const skillKey = _ftArmorGateSkill(item);
     const rank = sys?.skills?.[skillKey]?.value ?? 0;
     const scale = FT.ARMOR_RANK_SCALE[rank] ?? FT.ARMOR_RANK_SCALE[0];
 
