@@ -53,7 +53,9 @@ const COST_TABLE = {
   "claude-3-5-haiku":     { in:   0.80, out:  4.00 }
 };
 
-const DEFAULT_MODEL = "claude-sonnet-4-7";
+// Latest Sonnet is 4.6 (Sonnet didn't bump with Opus 4.7). Use Opus only when
+// the user explicitly opts in via Module Settings → Model — Opus is 5× cost.
+const DEFAULT_MODEL = "claude-sonnet-4-6";
 
 function _estimateCost(model, inputTokens, outputTokens) {
   const rate = COST_TABLE[model];
