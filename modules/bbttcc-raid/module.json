@@ -36,7 +36,11 @@
   "esmodules": [
     "scripts/compat-bridge.js",
     "scripts/effects-fire-mode-tags.js",
+    "scripts/agent-registry.js",
     "scripts/bbttcc-agent-api.js",
+    "scripts/agent-verb-schemas.js",
+    "scripts/agent-action-verbs.js",
+    "scripts/agent-socket-envelopes.js",
     "scripts/raid-maneuvers.js",
     "scripts/module.raid-console.js",
     "scripts/strategic-throughput.js",
