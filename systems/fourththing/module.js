@@ -8,6 +8,12 @@ import {
   getLinkedFaction,
   getFactionEchoAssets,
   ftEnsureEchoAssetsBootstrap,
+  ftSlugifyEchoName,
+  getStewardEchoRoster,
+  setStewardEchoRoster,
+  deleteStewardEchoRoster,
+  listStewardEchoRosters,
+  getStewardEchoRosterCount,
   openBridge,
   openRadiation,
   openTikkunPopup,
@@ -6624,12 +6630,14 @@ async function ftCollectGrantedNames(uuid) {
   return names;
 }
 
-function buildEchoAssetsManagerHTML(faction, echoAssets = {}, eligible = { crew: [], occult: [] }) {
-  const fmt = (arr = []) => Array.isArray(arr) ? arr.join("\n") : "";
+function ftEchoBucketKind(bucket) {
+  return /Crew/.test(bucket) ? "crew" : "occult";
+}
 
+function buildEchoAssetsManagerHTML(faction, echoAssets = {}, eligible = { crew: [], occult: [] }, rosterCounts = {}, manifestingByName = {}) {
   // Pool of every name the steward could have here = current active + reserve
-  // + any auto-detected legacy. Dropdown-driven add for easy switching when
-  // the steward has multiple crew/occult acquired through play.
+  // + any auto-detected legacy. Used as the dropdown source for re-adding
+  // entries that were removed from a bucket.
   const crewPool = ftUniqueStringsLocal([
     ...(echoAssets.activeCrew ?? []),
     ...(echoAssets.reserveCrew ?? []),
@@ -6644,12 +6652,38 @@ function buildEchoAssetsManagerHTML(faction, echoAssets = {}, eligible = { crew:
   ]);
 
   const opt = (name) => `<option value="${ftEscapeHtml(name)}">${ftEscapeHtml(name)}</option>`;
-  const crewOpts   = crewPool.length   ? crewPool.map(opt).join("")   : `<option value="" disabled>No crew detected yet</option>`;
-  const occultOpts = occultPool.length ? occultPool.map(opt).join("") : `<option value="" disabled>No occult detected yet</option>`;
+  const crewOpts   = crewPool.length   ? `<option value="">— pick acquired —</option>${crewPool.map(opt).join("")}`     : `<option value="" disabled>No crew detected yet</option>`;
+  const occultOpts = occultPool.length ? `<option value="">— pick acquired —</option>${occultPool.map(opt).join("")}` : `<option value="" disabled>No occult detected yet</option>`;
 
   const tier = echoAssets.tier ?? 0;
   const crewLabel   = `Active Crew  ${echoAssets.crewStatusLabel   ?? `${echoAssets.activeCrewCount   ?? 0} / ${echoAssets.crewSlots   ?? 2}`}`;
   const occultLabel = `Active Occult  ${echoAssets.occultStatusLabel ?? `${echoAssets.activeOccultCount ?? 0} / ${echoAssets.occultSlots ?? 2}`}`;
+
+  const rowHtml = (bucket, name, otherBucket, manifestingByName = {}) => {
+    const slug = ftSlugifyEchoName(name);
+    const count = Number(rosterCounts?.[slug] ?? 0);
+    const otherLabel = /reserve/i.test(otherBucket) ? "Reserve" : "Active";
+    const isActive = /^active/i.test(bucket);
+    const manifestNames = isActive ? (manifestingByName?.[slug] ?? []) : [];
+    const manifestHtml = manifestNames.length
+      ? `<div class="ft-echo-row-manifest" data-ft-manifest-for="${ftEscapeHtml(slug)}" style="flex-basis:100%;font-size:.8rem;opacity:.85;padding:.15rem 0 0 .1rem;">✦ With: ${manifestNames.map(ftEscapeHtml).join(", ")}</div>`
+      : `<div class="ft-echo-row-manifest" data-ft-manifest-for="${ftEscapeHtml(slug)}" style="flex-basis:100%;font-size:.8rem;opacity:.55;font-style:italic;padding:.15rem 0 0 .1rem;${isActive ? "" : "display:none;"}">${isActive ? "✦ No one defaulted as present — edit roster to set." : ""}</div>`;
+    return `
+      <div class="ft-echo-row" data-ft-bucket="${bucket}" data-ft-name="${ftEscapeHtml(name)}" data-ft-slug="${ftEscapeHtml(slug)}" style="display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;padding:.3rem .4rem;border:1px solid var(--color-border-light-tertiary,#3a3a3a);border-radius:4px;margin-bottom:.2rem;background:rgba(255,255,255,.02);">
+        <span class="ft-echo-row-name" style="flex:1;font-weight:500">${ftEscapeHtml(name)}</span>
+        <button type="button" data-ft-action="roster" data-ft-kind="${ftEchoBucketKind(bucket)}" title="Edit roster — who was in this past life" style="padding:.15rem .5rem;display:flex;align-items:center;gap:.25rem;">
+          <i class="fas fa-users"></i> Roster <span class="ft-echo-roster-count" style="opacity:.75">(${count})</span>
+        </button>
+        <button type="button" data-ft-action="swap" data-ft-target="${otherBucket}" title="Move to ${otherLabel}" style="padding:.15rem .5rem;">↔</button>
+        <button type="button" data-ft-action="remove" title="Remove from this bucket" style="padding:.15rem .5rem;">×</button>
+        ${manifestHtml}
+      </div>`;
+  };
+
+  const rowList = (bucket, items, otherBucket, emptyMsg) => {
+    if (!items?.length) return `<div class="ft-echo-empty" data-ft-empty="${bucket}" style="opacity:.55;font-style:italic;padding:.4rem .25rem;">${ftEscapeHtml(emptyMsg)}</div>`;
+    return items.map(n => rowHtml(bucket, n, otherBucket, manifestingByName)).join("");
+  };
 
   return `
   <div class="ft-echo-dialog ft-cast-dialog">
@@ -6664,37 +6698,41 @@ function buildEchoAssetsManagerHTML(faction, echoAssets = {}, eligible = { crew:
 
       <div class="ft-cast-field ft-cast-span-2">
         <label>${ftEscapeHtml(crewLabel)}</label>
-        <div style="display:flex;gap:0.4rem;align-items:flex-start">
-          <textarea name="activeCrew" rows="3" placeholder="One per line" style="flex:1">${ftEscapeHtml(fmt(echoAssets.activeCrew))}</textarea>
-          <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:11rem">
-            <select name="crewPool">${crewOpts}</select>
-            <button type="button" data-ft-add="activeCrew">Add → Active</button>
-            <button type="button" data-ft-add="reserveCrew">Add → Reserve</button>
-          </div>
-        </div>
+        <div class="ft-echo-rows" data-ft-list="activeCrew">${rowList("activeCrew", echoAssets.activeCrew, "reserveCrew", "No active crew — add one below.")}</div>
       </div>
       <div class="ft-cast-field ft-cast-span-2">
         <label>Reserve Crew</label>
-        <textarea name="reserveCrew" rows="3" placeholder="Known but not currently manifested">${ftEscapeHtml(fmt(echoAssets.reserveCrew))}</textarea>
+        <div class="ft-echo-rows" data-ft-list="reserveCrew">${rowList("reserveCrew", echoAssets.reserveCrew, "activeCrew", "Known but not currently manifested — none yet.")}</div>
+      </div>
+      <div class="ft-cast-field ft-cast-span-2 ft-echo-add" data-ft-pool="crew">
+        <label>Add Crew</label>
+        <div style="display:flex;gap:.35rem;align-items:center;flex-wrap:wrap">
+          <select name="crewPool" style="flex:1 1 11rem;min-width:9rem">${crewOpts}</select>
+          <input type="text" name="crewNew" placeholder="+ Or type a new name…" style="flex:1 1 11rem;min-width:9rem"/>
+          <button type="button" data-ft-add="activeCrew">Add → Active</button>
+          <button type="button" data-ft-add="reserveCrew">Add → Reserve</button>
+        </div>
       </div>
 
       <div class="ft-cast-field ft-cast-span-2">
         <label>${ftEscapeHtml(occultLabel)}</label>
-        <div style="display:flex;gap:0.4rem;align-items:flex-start">
-          <textarea name="activeOccult" rows="3" placeholder="One per line" style="flex:1">${ftEscapeHtml(fmt(echoAssets.activeOccult))}</textarea>
-          <div style="display:flex;flex-direction:column;gap:0.25rem;min-width:11rem">
-            <select name="occultPool">${occultOpts}</select>
-            <button type="button" data-ft-add="activeOccult">Add → Active</button>
-            <button type="button" data-ft-add="reserveOccult">Add → Reserve</button>
-          </div>
-        </div>
+        <div class="ft-echo-rows" data-ft-list="activeOccult">${rowList("activeOccult", echoAssets.activeOccult, "reserveOccult", "No active occult — add one below.")}</div>
       </div>
       <div class="ft-cast-field ft-cast-span-2">
         <label>Reserve Occult</label>
-        <textarea name="reserveOccult" rows="3" placeholder="Known but not currently manifested">${ftEscapeHtml(fmt(echoAssets.reserveOccult))}</textarea>
+        <div class="ft-echo-rows" data-ft-list="reserveOccult">${rowList("reserveOccult", echoAssets.reserveOccult, "activeOccult", "Known but not currently manifested — none yet.")}</div>
+      </div>
+      <div class="ft-cast-field ft-cast-span-2 ft-echo-add" data-ft-pool="occult">
+        <label>Add Occult</label>
+        <div style="display:flex;gap:.35rem;align-items:center;flex-wrap:wrap">
+          <select name="occultPool" style="flex:1 1 11rem;min-width:9rem">${occultOpts}</select>
+          <input type="text" name="occultNew" placeholder="+ Or type a new name…" style="flex:1 1 11rem;min-width:9rem"/>
+          <button type="button" data-ft-add="activeOccult">Add → Active</button>
+          <button type="button" data-ft-add="reserveOccult">Add → Reserve</button>
+        </div>
       </div>
     </div>
-    <p class="ft-echo-dialog-foot">Use the dropdowns to swap between acquired crew/occult. Each pool (Crew, Occult) has its own capacity = Tier + 1.</p>
+    <p class="ft-echo-dialog-foot">Each row is a past life. Click <b>Roster</b> to record who that crew/association was. Each pool's capacity = Tier + 1.</p>
   </div>`;
 }
 
@@ -6711,7 +6749,7 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
   if (!faction) return ui.notifications?.warn("No linked faction available for this Steward.");
 
   // Auto-detect + persist crew/occult from the steward before showing the dialog,
-  // so the textareas are pre-populated even on the very first open after a
+  // so the rows are pre-populated even on the very first open after a
   // faction link is made.
   await ftEnsureEchoAssetsBootstrap(faction, actor);
 
@@ -6724,25 +6762,200 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
     occult: echoAssets.legacyOccult ?? []
   };
 
+  // Roster counts for badging — keyed by name-slug. Covers every slug the
+  // Steward has authored AND every slug currently visible in any bucket, so
+  // rows with no roster yet still render "(0)" cleanly.
+  const computeRosterMaps = () => {
+    const rosters = listStewardEchoRosters(actor);
+    const counts = {};
+    const manifesting = {};
+    for (const [slug, r] of Object.entries(rosters)) {
+      counts[slug] = r.members.length;
+      manifesting[slug] = r.members.filter(m => m.defaultPresent && m.name).map(m => m.name);
+    }
+    for (const name of [
+      ...(echoAssets.activeCrew    ?? []),
+      ...(echoAssets.reserveCrew   ?? []),
+      ...(echoAssets.activeOccult  ?? []),
+      ...(echoAssets.reserveOccult ?? [])
+    ]) {
+      const slug = ftSlugifyEchoName(name);
+      if (!(slug in counts)) counts[slug] = 0;
+      if (!(slug in manifesting)) manifesting[slug] = [];
+    }
+    return { counts, manifesting };
+  };
+
+  const { counts: rosterCounts, manifesting: manifestingByName } = computeRosterMaps();
+
   new Dialog({
     title: `Echo Assets — ${faction.name}`,
-    content: buildEchoAssetsManagerHTML(faction, echoAssets, eligible),
+    content: buildEchoAssetsManagerHTML(faction, echoAssets, eligible, rosterCounts, manifestingByName),
     render: (html) => {
-      // Dropdown-driven add: select an eligible name, click "Add → Active"
-      // or "Add → Reserve" to append it to the corresponding textarea.
       const $html = html instanceof HTMLElement ? $(html) : html;
+
+      const refreshEmptyState = (bucket) => {
+        const $list = $html.find(`[data-ft-list='${bucket}']`);
+        if (!$list.length) return;
+        const hasRows = $list.children(".ft-echo-row").length > 0;
+        const $empty = $list.children(`[data-ft-empty='${bucket}']`);
+        if (hasRows && $empty.length) $empty.remove();
+        if (!hasRows && !$empty.length) {
+          const msg = /Crew/.test(bucket)
+            ? (/^active/i.test(bucket) ? "No active crew — add one below." : "Known but not currently manifested — none yet.")
+            : (/^active/i.test(bucket) ? "No active occult — add one below." : "Known but not currently manifested — none yet.");
+          $list.append(`<div class="ft-echo-empty" data-ft-empty="${bucket}" style="opacity:.55;font-style:italic;padding:.4rem .25rem;">${ftEscapeHtml(msg)}</div>`);
+        }
+      };
+
+      const allBucketRowNames = () => {
+        const out = { activeCrew: [], reserveCrew: [], activeOccult: [], reserveOccult: [] };
+        for (const bucket of Object.keys(out)) {
+          $html.find(`[data-ft-list='${bucket}'] .ft-echo-row`).each((_i, el) => {
+            const name = String(el.dataset.ftName ?? "").trim();
+            if (name) out[bucket].push(name);
+          });
+        }
+        return out;
+      };
+
+      const renderManifestPill = (slug, isActive) => {
+        const names = manifestingByName[slug] ?? [];
+        if (!isActive) return `<div class="ft-echo-row-manifest" data-ft-manifest-for="${slug}" style="flex-basis:100%;display:none;"></div>`;
+        if (names.length) {
+          return `<div class="ft-echo-row-manifest" data-ft-manifest-for="${slug}" style="flex-basis:100%;font-size:.8rem;opacity:.85;padding:.15rem 0 0 .1rem;">✦ With: ${names.map(n => ftEscapeHtml(n)).join(", ")}</div>`;
+        }
+        return `<div class="ft-echo-row-manifest" data-ft-manifest-for="${slug}" style="flex-basis:100%;font-size:.8rem;opacity:.55;font-style:italic;padding:.15rem 0 0 .1rem;">✦ No one defaulted as present — edit roster to set.</div>`;
+      };
+
+      const buildRowEl = (bucket, name, otherBucket) => {
+        const slug = ftSlugifyEchoName(name);
+        const count = Number(rosterCounts[slug] ?? 0);
+        const otherLabel = /reserve/i.test(otherBucket) ? "Reserve" : "Active";
+        const isActive = /^active/i.test(bucket);
+        const wrap = document.createElement("div");
+        wrap.className = "ft-echo-row";
+        wrap.dataset.ftBucket = bucket;
+        wrap.dataset.ftName = name;
+        wrap.dataset.ftSlug = slug;
+        wrap.setAttribute("style", "display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;padding:.3rem .4rem;border:1px solid var(--color-border-light-tertiary,#3a3a3a);border-radius:4px;margin-bottom:.2rem;background:rgba(255,255,255,.02);");
+        wrap.innerHTML = `
+          <span class="ft-echo-row-name" style="flex:1;font-weight:500"></span>
+          <button type="button" data-ft-action="roster" data-ft-kind="${ftEchoBucketKind(bucket)}" title="Edit roster — who was in this past life" style="padding:.15rem .5rem;display:flex;align-items:center;gap:.25rem;">
+            <i class="fas fa-users"></i> Roster <span class="ft-echo-roster-count" style="opacity:.75">(${count})</span>
+          </button>
+          <button type="button" data-ft-action="swap" data-ft-target="${otherBucket}" title="Move to ${otherLabel}" style="padding:.15rem .5rem;">↔</button>
+          <button type="button" data-ft-action="remove" title="Remove from this bucket" style="padding:.15rem .5rem;">×</button>
+          ${renderManifestPill(slug, isActive)}`;
+        wrap.querySelector(".ft-echo-row-name").textContent = name;
+        return wrap;
+      };
+
+      const refreshManifestPillFor = (row, slug) => {
+        if (!row) return;
+        const isActive = /^active/i.test(row.dataset.ftBucket || "");
+        const pill = row.querySelector(`[data-ft-manifest-for]`);
+        if (!pill) return;
+        const names = manifestingByName[slug] ?? [];
+        if (!isActive) {
+          pill.setAttribute("style", "flex-basis:100%;display:none;");
+          pill.innerHTML = "";
+          return;
+        }
+        if (names.length) {
+          pill.setAttribute("style", "flex-basis:100%;font-size:.8rem;opacity:.85;padding:.15rem 0 0 .1rem;");
+          pill.innerHTML = "";
+          pill.append(document.createTextNode("✦ With: "));
+          names.forEach((n, i) => {
+            if (i > 0) pill.append(document.createTextNode(", "));
+            pill.append(document.createTextNode(n));
+          });
+        } else {
+          pill.setAttribute("style", "flex-basis:100%;font-size:.8rem;opacity:.55;font-style:italic;padding:.15rem 0 0 .1rem;");
+          pill.textContent = "✦ No one defaulted as present — edit roster to set.";
+        }
+      };
+
+      // Add → Active / → Reserve: pick a name from dropdown OR text input,
+      // dedupe across all four buckets, append a row.
       $html.find("[data-ft-add]").on("click", (ev) => {
         ev.preventDefault();
-        const targetName = ev.currentTarget.dataset.ftAdd;
-        const isCrew = /Crew/i.test(targetName);
-        const $select = $html.find(`[name='${isCrew ? "crewPool" : "occultPool"}']`);
-        const value = String($select.val() ?? "").trim();
-        if (!value) return;
-        const $ta = $html.find(`[name='${targetName}']`);
-        const lines = String($ta.val() ?? "").split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-        if (lines.includes(value)) return;
-        lines.push(value);
-        $ta.val(lines.join("\n"));
+        const targetBucket = ev.currentTarget.dataset.ftAdd;
+        const kind = ftEchoBucketKind(targetBucket);
+        const $newInput = $html.find(`[name='${kind}New']`);
+        const $select = $html.find(`[name='${kind}Pool']`);
+        const typed = String($newInput.val() ?? "").trim();
+        const picked = String($select.val() ?? "").trim();
+        const raw = typed || picked;
+        if (!raw) return;
+        const normalized = (typeof ftNormalizeEchoName === "function") ? ftNormalizeEchoName(raw, kind) : raw;
+        if (!normalized) return;
+
+        const others = allBucketRowNames();
+        const exists = Object.values(others).some(list => list.includes(normalized));
+        if (exists) {
+          ui.notifications?.info(`"${normalized}" is already in one of the buckets.`);
+          return;
+        }
+        const isCrewBucket = /Crew$/.test(targetBucket);
+        const isActiveBucket = /^active/i.test(targetBucket);
+        const otherBucket = isCrewBucket
+          ? (isActiveBucket ? "reserveCrew" : "activeCrew")
+          : (isActiveBucket ? "reserveOccult" : "activeOccult");
+
+        const $list = $html.find(`[data-ft-list='${targetBucket}']`);
+        const rowEl = buildRowEl(targetBucket, normalized, otherBucket);
+        $list.append(rowEl);
+        refreshEmptyState(targetBucket);
+        if (typed) $newInput.val("");
+      });
+
+      // Per-row action delegation (roster / swap / remove). Bound to the
+      // dialog root so freshly-added rows pick it up automatically.
+      $html.on("click", "[data-ft-action]", async (ev) => {
+        ev.preventDefault();
+        const btn = ev.currentTarget;
+        const row = btn.closest(".ft-echo-row");
+        if (!row) return;
+        const action = btn.dataset.ftAction;
+        const bucket = row.dataset.ftBucket;
+        const name = row.dataset.ftName;
+        const kind = ftEchoBucketKind(bucket);
+
+        if (action === "remove") {
+          row.remove();
+          refreshEmptyState(bucket);
+          return;
+        }
+        if (action === "swap") {
+          const target = btn.dataset.ftTarget;
+          if (!target) return;
+          const $targetList = $html.find(`[data-ft-list='${target}']`);
+          const otherBucket = bucket;
+          row.dataset.ftBucket = target;
+          row.querySelector("[data-ft-action='swap']").dataset.ftTarget = otherBucket;
+          row.querySelector("[data-ft-action='swap']").title = /reserve/i.test(otherBucket) ? "Move to Reserve" : "Move to Active";
+          $targetList.append(row);
+          refreshEmptyState(bucket);
+          refreshEmptyState(target);
+          refreshManifestPillFor(row, ftSlugifyEchoName(name));
+          return;
+        }
+        if (action === "roster") {
+          if (typeof openEchoRosterEditor !== "function") {
+            ui.notifications?.warn("Roster editor not yet available — load the latest module build.");
+            return;
+          }
+          await openEchoRosterEditor(actor, name, kind);
+          // Refresh count badge + manifest pill in-place from latest stored roster.
+          const slug = ftSlugifyEchoName(name);
+          const fresh = getStewardEchoRoster(actor, name);
+          rosterCounts[slug] = fresh.members.length;
+          manifestingByName[slug] = fresh.members.filter(m => m.defaultPresent && m.name).map(m => m.name);
+          const badge = row.querySelector(".ft-echo-roster-count");
+          if (badge) badge.textContent = `(${rosterCounts[slug]})`;
+          refreshManifestPillFor(row, slug);
+        }
       });
     },
     buttons: {
@@ -6750,12 +6963,23 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
         icon: "<i class='fas fa-users-cog'></i>",
         label: "Save",
         callback: async (html) => {
-          const read = (name) => html.find(`[name='${name}']`).val() ?? "";
+          const $html = html instanceof HTMLElement ? $(html) : html;
+          const read = (name) => $html.find(`[name='${name}']`).val() ?? "";
 
-          const activeCrew = ftParseEchoText(read("activeCrew"), "crew");
-          const reserveCrew = ftParseEchoText(read("reserveCrew"), "crew").filter(v => !activeCrew.includes(v));
-          const activeOccult = ftParseEchoText(read("activeOccult"), "occult");
-          const reserveOccult = ftParseEchoText(read("reserveOccult"), "occult").filter(v => !activeOccult.includes(v));
+          const readBucket = (bucket, kind) => {
+            const out = [];
+            $html.find(`[data-ft-list='${bucket}'] .ft-echo-row`).each((_i, el) => {
+              const raw = String(el.dataset.ftName ?? "").trim();
+              const norm = (typeof ftNormalizeEchoName === "function") ? ftNormalizeEchoName(raw, kind) : raw;
+              if (norm) out.push(norm);
+            });
+            return ftUniqueStringsLocal(out);
+          };
+
+          const activeCrew   = readBucket("activeCrew", "crew");
+          const reserveCrew  = readBucket("reserveCrew", "crew").filter(v => !activeCrew.includes(v));
+          const activeOccult = readBucket("activeOccult", "occult");
+          const reserveOccult = readBucket("reserveOccult", "occult").filter(v => !activeOccult.includes(v));
 
           const crewSlotsRaw   = Number(read("crewSlots"));
           const occultSlotsRaw = Number(read("occultSlots"));
@@ -6792,6 +7016,183 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
     },
     default: "save"
   }).render(true);
+}
+
+// ─── Echo Roster editor (per-Steward past-life members) ──────────────────────
+// Sub-sheet opened from "Manage Echo Assets" → Roster button on a crew/occult
+// row. Edits actor.flags['bbttcc-character-options'].echoRoster[<slug>] for
+// the current Steward. Members capture who that crew/association WAS in the
+// Steward's past life — name, role, portrait, notes — and which members are
+// pre-selected at spend time via defaultPresent.
+
+function buildEchoRosterMemberRowHTML(member = {}) {
+  const id = String(member.id ?? foundry.utils.randomID(12));
+  const portrait = String(member.portrait ?? "");
+  const name = String(member.name ?? "");
+  const role = String(member.role ?? "");
+  const notes = String(member.notes ?? "");
+  const actorUuid = String(member.actorUuid ?? "");
+  const defaultPresent = !!member.defaultPresent;
+  const safePortrait = portrait || "icons/svg/mystery-man.svg";
+
+  return `
+  <div class="ft-roster-row" data-row-id="${ftEscapeHtml(id)}" style="display:grid;grid-template-columns:auto 1fr;gap:.5rem;padding:.5rem;border:1px solid var(--color-border-light-tertiary,#3a3a3a);border-radius:6px;margin-bottom:.4rem;background:rgba(255,255,255,.03);">
+    <div class="ft-roster-portrait" style="display:flex;flex-direction:column;align-items:center;gap:.25rem;">
+      <img class="ft-roster-portrait-img" src="${ftEscapeHtml(safePortrait)}" data-row-portrait alt="" style="width:64px;height:64px;border-radius:6px;object-fit:cover;border:1px solid var(--color-border-light-tertiary,#3a3a3a);background:#000;"/>
+      <button type="button" data-row-action="pick-portrait" title="Choose portrait image" style="padding:.1rem .4rem;font-size:.8rem;">📷 Image</button>
+    </div>
+    <div class="ft-roster-fields" style="display:grid;grid-template-columns:1fr 1fr auto;gap:.35rem;align-items:center;">
+      <input type="text" data-row-field="name" placeholder="Name (required)" value="${ftEscapeHtml(name)}" style="grid-column:span 2"/>
+      <button type="button" data-row-action="remove" title="Remove member" style="padding:.15rem .55rem;">×</button>
+
+      <input type="text" data-row-field="role" placeholder="Role / specialty (e.g. Sniper, Archivist)" value="${ftEscapeHtml(role)}" style="grid-column:span 2"/>
+      <label style="display:flex;align-items:center;gap:.3rem;font-size:.85rem;white-space:nowrap;">
+        <input type="checkbox" data-row-field="defaultPresent" ${defaultPresent ? "checked" : ""}/>
+        <span>Default present</span>
+      </label>
+
+      <textarea data-row-field="notes" rows="2" placeholder="Who were they back then? Relationship to the Steward, fate, signature beats…" style="grid-column:span 3;resize:vertical;">${ftEscapeHtml(notes)}</textarea>
+
+      <input type="hidden" data-row-field="portrait" value="${ftEscapeHtml(portrait)}"/>
+      <input type="text" data-row-field="actorUuid" placeholder="Linked NPC actor UUID (optional, e.g. Actor.xxxxxxxxxxxxxxxx)" value="${ftEscapeHtml(actorUuid)}" style="grid-column:span 3;font-size:.8rem;opacity:.85;"/>
+    </div>
+  </div>`;
+}
+
+function buildEchoRosterHTML(entryName, kind, roster) {
+  const members = Array.isArray(roster?.members) ? roster.members : [];
+  const kindLabel = (kind === "occult") ? "Occult Association" : "Awesome Crew";
+  const rowsHtml = members.length
+    ? members.map(buildEchoRosterMemberRowHTML).join("")
+    : `<div class="ft-roster-empty" style="opacity:.6;font-style:italic;padding:.6rem .25rem;">No members yet — click <b>+ Add Member</b> below. These are the people who were with you the last time you lived this life.</div>`;
+
+  return `
+  <div class="ft-roster-dialog ft-cast-dialog">
+    <div class="ft-roster-note" style="margin-bottom:.5rem;font-size:.9rem;opacity:.85;">
+      <b>${ftEscapeHtml(entryName)}</b> · ${ftEscapeHtml(kindLabel)} · This Steward's past-life roster.
+      Members marked <b>Default present</b> are pre-selected when this asset is invoked in a raid.
+    </div>
+    <div class="ft-roster-scroll" style="max-height:60vh;overflow-y:auto;padding-right:.3rem;">
+      <div class="ft-roster-rows" data-roster-rows>${rowsHtml}</div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:.5rem;">
+      <button type="button" data-roster-action="add-member" style="padding:.3rem .7rem;"><i class="fas fa-user-plus"></i> Add Member</button>
+    </div>
+  </div>`;
+}
+
+async function openEchoRosterEditor(actor, entryName, kind = "crew") {
+  if (!actor || !entryName) return null;
+  const roster = getStewardEchoRoster(actor, entryName);
+  const kindLabel = (kind === "occult") ? "Occult Association" : "Awesome Crew";
+
+  return new Promise((resolve) => {
+    let resolved = false;
+    const dlg = new Dialog({
+      title: `Roster — ${entryName} (${kindLabel})`,
+      content: buildEchoRosterHTML(entryName, kind, roster),
+      render: (html) => {
+        const $html = html instanceof HTMLElement ? $(html) : html;
+
+        const refreshEmpty = () => {
+          const $rows = $html.find("[data-roster-rows]");
+          if (!$rows.length) return;
+          const hasRows = $rows.children(".ft-roster-row").length > 0;
+          const hasEmpty = $rows.children(".ft-roster-empty").length > 0;
+          if (hasRows && hasEmpty) $rows.children(".ft-roster-empty").remove();
+          if (!hasRows && !hasEmpty) {
+            $rows.append(`<div class="ft-roster-empty" style="opacity:.6;font-style:italic;padding:.6rem .25rem;">No members yet — click <b>+ Add Member</b> below.</div>`);
+          }
+        };
+
+        // + Add Member
+        $html.find("[data-roster-action='add-member']").on("click", (ev) => {
+          ev.preventDefault();
+          const rowHtml = buildEchoRosterMemberRowHTML({});
+          const $rows = $html.find("[data-roster-rows]");
+          $rows.children(".ft-roster-empty").remove();
+          $rows.append(rowHtml);
+          // Focus the new row's name input.
+          $rows.find(".ft-roster-row").last().find("[data-row-field='name']").trigger("focus");
+        });
+
+        // Per-row actions: pick portrait, remove.
+        $html.on("click", "[data-row-action]", (ev) => {
+          ev.preventDefault();
+          const btn = ev.currentTarget;
+          const row = btn.closest(".ft-roster-row");
+          if (!row) return;
+          const action = btn.dataset.rowAction;
+          if (action === "remove") {
+            row.remove();
+            refreshEmpty();
+            return;
+          }
+          if (action === "pick-portrait") {
+            const hiddenInput = row.querySelector("[data-row-field='portrait']");
+            const previewImg = row.querySelector("[data-row-portrait]");
+            const current = String(hiddenInput?.value ?? "");
+            try {
+              new FilePicker({
+                type: "image",
+                current: current || "icons/svg/mystery-man.svg",
+                callback: (path) => {
+                  if (hiddenInput) hiddenInput.value = path;
+                  if (previewImg) previewImg.src = path;
+                }
+              }).render(true);
+            } catch (e) {
+              console.warn("Echo Roster | FilePicker failed:", e);
+              ui.notifications?.warn("Could not open file picker.");
+            }
+          }
+        });
+      },
+      buttons: {
+        save: {
+          icon: "<i class='fas fa-save'></i>",
+          label: "Save Roster",
+          callback: async (html) => {
+            const $html = html instanceof HTMLElement ? $(html) : html;
+            const members = [];
+            $html.find(".ft-roster-row").each((_i, row) => {
+              const read = (field) => {
+                const el = row.querySelector(`[data-row-field='${field}']`);
+                if (!el) return "";
+                if (el.type === "checkbox") return !!el.checked;
+                return String(el.value ?? "");
+              };
+              const name = String(read("name") ?? "").trim();
+              if (!name) return; // drop unnamed rows silently
+              members.push({
+                id: row.dataset.rowId || foundry.utils.randomID(12),
+                name,
+                role: String(read("role") ?? "").trim(),
+                notes: String(read("notes") ?? ""),
+                portrait: String(read("portrait") ?? "").trim(),
+                defaultPresent: !!read("defaultPresent"),
+                actorUuid: String(read("actorUuid") ?? "").trim()
+              });
+            });
+            await setStewardEchoRoster(actor, entryName, members);
+            ui.notifications?.info(`Roster saved for "${entryName}" — ${members.length} member${members.length === 1 ? "" : "s"}.`);
+            resolved = true;
+            resolve(members);
+          }
+        },
+        cancel: {
+          label: "Cancel",
+          callback: () => { resolved = true; resolve(null); }
+        }
+      },
+      default: "save",
+      close: () => { if (!resolved) resolve(null); }
+    }, {
+      width: 640,
+      resizable: true
+    });
+    dlg.render(true);
+  });
 }
 
 // ─── Foundry init ──────────────────────────────────────────────────────────────
@@ -6845,6 +7246,33 @@ Hooks.once("init", function () {
         const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
         if (!actor) return null;
         return openEchoAssetsManager(actor);
+      },
+      roster: {
+        get: (actorOrId, entryName) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return getStewardEchoRoster(actor, entryName);
+        },
+        set: (actorOrId, entryName, members) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return setStewardEchoRoster(actor, entryName, members);
+        },
+        delete: (actorOrId, entryName) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return deleteStewardEchoRoster(actor, entryName);
+        },
+        list: (actorOrId) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return listStewardEchoRosters(actor);
+        },
+        count: (actorOrId, entryName) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return getStewardEchoRosterCount(actor, entryName);
+        },
+        open: (actorOrId, entryName, kind) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return openEchoRosterEditor(actor, entryName, kind);
+        },
+        slug: ftSlugifyEchoName
       }
     },
     _syncAuraEffects: syncAuraEffects,

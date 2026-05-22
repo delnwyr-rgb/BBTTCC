@@ -1104,6 +1104,94 @@ export function getFactionEchoAssets(faction, actor = null) {
   }
 }
 
+// ─── Echo Roster (per-Steward past-life overlay) ─────────────────────────────
+// Each Echo Asset entry (crew or occult name) is one of the Steward's past
+// lives. The roster captures WHO was in that crew/association — companions,
+// rivals, mentors — and who is manifesting when the asset is invoked. Stored
+// per-Steward on the PC actor (not on the faction), so two Stewards sharing
+// the same faction-pool entry name each get their own roster.
+
+export function ftSlugifyEchoName(name = "") {
+  let s = String(name ?? "");
+  try { s = s.normalize("NFKD").replace(/\p{M}/gu, ""); } catch (_e) { /* normalize unsupported, skip */ }
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function ftCoerceRosterMember(raw = {}) {
+  const id = String(raw.id ?? foundry.utils.randomID(12));
+  return {
+    id,
+    name: String(raw.name ?? "").trim(),
+    role: String(raw.role ?? "").trim(),
+    notes: String(raw.notes ?? ""),
+    portrait: String(raw.portrait ?? "").trim(),
+    defaultPresent: !!raw.defaultPresent,
+    actorUuid: String(raw.actorUuid ?? "").trim()
+  };
+}
+
+export function getStewardEchoRoster(actor, entryName = "") {
+  const slug = ftSlugifyEchoName(entryName);
+  if (!actor || !slug) return { slug, displayName: String(entryName ?? ""), members: [] };
+  const store = actor.flags?.["bbttcc-character-options"]?.echoRoster ?? {};
+  const entry = store[slug] ?? {};
+  const members = Array.isArray(entry.members) ? entry.members.map(ftCoerceRosterMember) : [];
+  return {
+    slug,
+    displayName: entry.displayName || String(entryName ?? ""),
+    members,
+    updatedTs: entry.updatedTs ?? 0
+  };
+}
+
+export async function setStewardEchoRoster(actor, entryName = "", members = []) {
+  const slug = ftSlugifyEchoName(entryName);
+  if (!actor || !slug) return null;
+  const coerced = (Array.isArray(members) ? members : [])
+    .map(ftCoerceRosterMember)
+    .filter(m => m.name);
+  const payload = {
+    displayName: String(entryName ?? "").trim() || slug,
+    members: coerced,
+    updatedTs: Date.now()
+  };
+  await actor.update({
+    [`flags.bbttcc-character-options.echoRoster.${slug}`]: payload
+  });
+  return payload;
+}
+
+export async function deleteStewardEchoRoster(actor, entryName = "") {
+  const slug = ftSlugifyEchoName(entryName);
+  if (!actor || !slug) return;
+  await actor.update({
+    [`flags.bbttcc-character-options.echoRoster.-=${slug}`]: null
+  });
+}
+
+export function listStewardEchoRosters(actor) {
+  const store = actor?.flags?.["bbttcc-character-options"]?.echoRoster ?? {};
+  const out = {};
+  for (const [slug, entry] of Object.entries(store)) {
+    if (!entry || typeof entry !== "object") continue;
+    const members = Array.isArray(entry.members) ? entry.members.map(ftCoerceRosterMember) : [];
+    out[slug] = {
+      slug,
+      displayName: entry.displayName || slug,
+      members,
+      updatedTs: entry.updatedTs ?? 0
+    };
+  }
+  return out;
+}
+
+export function getStewardEchoRosterCount(actor, entryName = "") {
+  return getStewardEchoRoster(actor, entryName).members.length;
+}
+
 // ─── Terrain → Sephirah resonance map ────────────────────────────────────────
 // Maps BBTTCC terrain keys to sephirothic resonance.
 // If the actor's active sephirah matches the terrain resonance, magic rolls gain +1.
