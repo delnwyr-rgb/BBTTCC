@@ -96,6 +96,11 @@ import {
   openSoulSmithAtonementCrucible,
   openSoulSmithFurnaceOfRenewal,
   openSoulSmithRelicOfRebirth,
+  openHarmonyMarshalInitiate,
+  openHarmonyMarshalAttritionEaser,
+  openHarmonyMarshalLoyaltySteward,
+  openHarmonyMarshalUnityConductor,
+  openHarmonyMarshalRallyingWords,
   openPassiveClassInfo,
   // Sprint F — new handlers
   openBulwarkSpendFrame,
@@ -8187,7 +8192,9 @@ Hooks.once("init", function () {
       openSpendFrameDie, openFrameDiePool,
       openAurabladeAction, openChangeAura, openStabilizeBurn, openBurnState,
       openSpendAccessDie, openAccessPool,
-      openBreakerRuin, openDreamwalkerResonance, openDreamwalkerDeployCache, openDreamwalkerEchoReservoir, openDreamwalkerSpendEchoDie, openSoulSmithForge, openSoulSmithForgeInitiate, openSoulSmithAtonementCrucible, openSoulSmithFurnaceOfRenewal, openSoulSmithRelicOfRebirth, openPassiveClassInfo,
+      openBreakerRuin, openDreamwalkerResonance, openDreamwalkerDeployCache, openDreamwalkerEchoReservoir, openDreamwalkerSpendEchoDie, openSoulSmithForge, openSoulSmithForgeInitiate, openSoulSmithAtonementCrucible, openSoulSmithFurnaceOfRenewal, openSoulSmithRelicOfRebirth,
+      openHarmonyMarshalInitiate, openHarmonyMarshalAttritionEaser, openHarmonyMarshalLoyaltySteward, openHarmonyMarshalUnityConductor, openHarmonyMarshalRallyingWords,
+      openPassiveClassInfo,
       // Sprint F
       openBulwarkSpendFrame, openBulwarkFramePool, openBulwarkRuin, openBulwarkStance,
       openShadowCourierPackage, openShadowCourierCrossing, openShadowCourierPassive,
@@ -11499,6 +11506,30 @@ Hooks.once("init", function () {
     }).catch(err => console.error("fourththing | AoO chat prompt failed", err));
   });
 
+  // Harmony Marshal strategic-turn rollover hooks.
+  //  · T2 Attrition Easer: clear `attritionEaserUsedThisTurn` so the once-per-turn cap refreshes.
+  //  · T4 Unity Conductor: for each PC at tier 4+ with HM class, post a chat reminder for +2 Soft Power OP.
+  Hooks.on("bbttcc:advanceTurn:end", async () => {
+    if (!game.user?.isGM) return;
+    for (const actor of game.actors?.contents ?? []) {
+      const hasHM = actor.items?.some?.(it => it.type === "class" && (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
+      if (!hasHM) continue;
+      const flags = actor.flags?.fourththing?.harmonyMarshal ?? {};
+      if (flags.attritionEaserUsedThisTurn) {
+        try { await actor.update({ "flags.fourththing.harmonyMarshal.attritionEaserUsedThisTurn": false }); }
+        catch (_e) {}
+      }
+      const tier = Math.max(1, Math.min(4, Number(actor.system?.system?.details?.tier ?? actor.system?.details?.tier) || 1));
+      if (tier >= 4) {
+        const fName = actor.getFlag?.("bbttcc-factions", "factionName") ?? actor.system?.system?.faction?.name ?? actor.system?.faction?.name ?? "(faction)";
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Unity Conductor — strategic turn rolled over</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${foundry.utils.escapeHTML(actor.name)}</b> (Tier ${tier}, Harmony Marshal): grant <b>+2 Soft Power OP</b> to <b>${foundry.utils.escapeHTML(String(fName))}</b> this turn (canon: T4 passive).</p><p style="margin:0.2rem 0 0;font-size:0.7rem;opacity:0.6">Use the Unity Conductor button on the sheet to apply directly.</p></div>`
+        });
+      }
+    }
+  });
+
   // Aurablade Burn-band auto-sync. When Burn or Aura changes, re-derive the
   // managed AE pack (passive / engaged / overheated layers) so the steward
   // doesn't have to manually re-cast the aura. Mirrors the change-aura dialog
@@ -12325,6 +12356,20 @@ Hooks.once("init", function () {
           : (_ssTier >= 2 ? "Atonement Crucible online." : "Forge Initiate active.")
       } : null;
 
+      // Harmony Marshal state (Phase 1.5 canon).
+      const _hmClsItem = Array.from(actor.items).find(it => it.type === "class" && (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
+      const _hmTier = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
+      const _hmFlags = actor.flags?.fourththing?.harmonyMarshal ?? {};
+      const harmonyMarshalState = _hmClsItem ? {
+        tier:                          _hmTier,
+        tierAtLeast2:                  _hmTier >= 2,
+        tierAtLeast3:                  _hmTier >= 3,
+        tierAtLeast4:                  _hmTier >= 4,
+        l1GrantsApplied:               !!_hmFlags.l1GrantsApplied,
+        attritionEaserUsedThisTurn:    !!_hmFlags.attritionEaserUsedThisTurn,
+        attritionStatus:               _hmFlags.attritionEaserUsedThisTurn ? "used" : "ready"
+      } : null;
+
       // Death & Dying: surface Last Stand pips + Blood Debt ledger so the
       // template renders without inline date math or pip arithmetic.
       const lastStandRaw = sysData.lastStand ?? { active: false, successes: 0, failures: 0, ledger: [] };
@@ -12378,6 +12423,7 @@ Hooks.once("init", function () {
         dreamwalkerState,
         pactkeeperState,
         soulSmithState,
+        harmonyMarshalState,
         sigModePills,
         actions:       { actionUsed: actions.actionUsed ?? false,
                          bonusUsed:  actions.bonusUsed  ?? false,
@@ -13618,6 +13664,11 @@ Hooks.once("init", function () {
         soul_smith_atonement_crucible:    (a) => mod.openSoulSmithAtonementCrucible(a),
         soul_smith_furnace_of_renewal:    (a) => mod.openSoulSmithFurnaceOfRenewal(a),
         soul_smith_relic_of_rebirth:      (a) => mod.openSoulSmithRelicOfRebirth(a),
+        harmony_marshal_initiate:           (a) => mod.openHarmonyMarshalInitiate(a),
+        harmony_marshal_attrition_easer:    (a) => mod.openHarmonyMarshalAttritionEaser(a),
+        harmony_marshal_loyalty_steward:    (a) => mod.openHarmonyMarshalLoyaltySteward(a),
+        harmony_marshal_unity_conductor:    (a) => mod.openHarmonyMarshalUnityConductor(a),
+        harmony_marshal_rallying_words:     (a) => mod.openHarmonyMarshalRallyingWords(a),
         // Sprint F — Bulwark
         bulwark_spend_frame:   (a) => mod.openBulwarkSpendFrame(a),
         bulwark_frame_pool:    (a) => mod.openBulwarkFramePool(a),
@@ -14586,6 +14637,19 @@ Hooks.once("init", function () {
         relicUsed:             !!_ssFlags2.relicUsed
       } : null;
 
+      // Harmony Marshal state for NPC sheet.
+      const _hmClsItem2 = classItems.find(i => i.type === "class" && (i.system?.identifier === "harmony-marshal" || i.system?.identifier === "harmony_marshal"));
+      const _hmTier2 = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
+      const _hmFlags2 = actor.flags?.fourththing?.harmonyMarshal ?? {};
+      const harmonyMarshalState = _hmClsItem2 ? {
+        tier:                          _hmTier2,
+        tierAtLeast2:                  _hmTier2 >= 2,
+        tierAtLeast3:                  _hmTier2 >= 3,
+        tierAtLeast4:                  _hmTier2 >= 4,
+        l1GrantsApplied:               !!_hmFlags2.l1GrantsApplied,
+        attritionEaserUsedThisTurn:    !!_hmFlags2.attritionEaserUsedThisTurn
+      } : null;
+
       const actorIsTCC = isTCC(actor);
 
       const attributeRows = Object.entries(sysData.attributes ?? {}).map(([key, a]) => ({
@@ -14717,6 +14781,7 @@ Hooks.once("init", function () {
         dreamwalkerState,
         pactkeeperState,
         soulSmithState,
+        harmonyMarshalState,
         burnBand:  _abBurnBand,
         auraState: _abAuraState,
         auraData:  _abAuraData,

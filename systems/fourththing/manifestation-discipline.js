@@ -51,9 +51,27 @@ export function isModeActive(actor, key) {
 
 // Aggregate every item on the actor into one shifts bundle. Cheap — runs once
 // per cast / misfire / upkeep tick. Items without discipline flags are skipped.
+//
+// Class-identity baseline (added 2026-05-22): canonical class-level discipline
+// budgets are encoded here directly rather than requiring every compendium
+// class item to carry the right flags. This keeps canon transparent in code
+// and survives compendium edits.
+//   - Pactkeeper: passive concurrencyBonus +1 (Initiation 1 — The Bargain)
+//   - Pactkeeper: mode `pkSealedPact` grants concurrencyBonus +2 (Initiation 11)
 export function getDisciplineShifts(actor) {
   const out = _zero();
   if (!actor?.items) return out;
+
+  // Class-identity baseline (canon class budgets).
+  const hasPactkeeper = (actor.items ?? []).some(
+    it => it?.type === "class" && it?.system?.identifier === "pactkeeper"
+  );
+  if (hasPactkeeper) {
+    out.concurrencyBonus += 1; // The Bargain (Initiation 1)
+    if (isModeActive(actor, "pkSealedPact")) {
+      out.concurrencyBonus += 2; // Sealed Pact (Initiation 11) while stance ON
+    }
+  }
 
   for (const it of actor.items) {
     const disc = it?.flags?.fourththing?.discipline;

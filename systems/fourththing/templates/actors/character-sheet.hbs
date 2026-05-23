@@ -188,20 +188,14 @@
 
       {{#if pactkeeperState}}
       <div class="ft-pk-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
-        <span class="ft-chip ft-chip-leverage" data-tooltip="Pactkeeper — Leverage. Narrative currency gained by witnessing agreements, doing tracked favors, uncovering precedent. Spent on Binding Clauses. Refills on Soma Break." style="background:#1f2a2a;color:#a0c8b8;border:1px solid #3a6a5a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">§ Leverage
-          <input type="number" name="system.resources.pactLeverage.current" value="{{pactkeeperState.leverage.current}}" min="0" max="{{pactkeeperState.leverage.max}}" style="width:32px;background:transparent;color:inherit;border:1px solid #3a6a5a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;" data-tooltip="Current Leverage — edit directly."/>
-          / {{pactkeeperState.leverage.max}}
-        </span>
-        <span class="ft-chip ft-chip-civic-charge" data-tooltip="Pactkeeper — Civic Charge. Dice-based pool of institutional authority. Die size scales by level (L1-4 d6, L5+ d8, L11+ d10, L17+ d12). Earned ≤1/round by stabilizing a volatile situation, resolving without violence, enforcing a Contract or Precedent, completing a closure ritual, or casting in esoteric alignment. Spend a die to roll for Stabilization, Authority Boost, Enforcement, Containment, or Closure. Max stored = max(1, Soul mod)." style="background:#3a2a4a;color:#d4b8e8;border:1px solid #6a4a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">🗂 Civic Charge
-          <input type="number" name="system.resources.civicCharge.dice" value="{{pactkeeperState.civicCharge.dice}}" min="0" max="{{pactkeeperState.civicCharge.maxDice}}" style="width:32px;background:transparent;color:inherit;border:1px solid #6a4a8a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;" data-tooltip="Current Civic Charge dice — edit directly."/>
-          / {{pactkeeperState.civicCharge.maxDice}} {{pactkeeperState.civicCharge.dieSize}}
-        </span>
-        <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="pactkeeper_spend_civic_charge" style="background:#3a2a4a;color:#d4b8e8;border:1px solid #6a4a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;" data-tooltip="Roll a Civic Charge die and spend on Stabilization / Authority Boost / Enforcement / Containment / Closure.">Spend</button>
-        <span class="ft-chip ft-chip-pressure ft-pressure-{{pactkeeperState.pressure.band}}" data-tooltip="Pactkeeper — Administrative Pressure. Bureaucratic + metaphysical strain accrued by acting outside Jurisdiction, overriding consent, forcing outcomes, or ignoring due process. 1-2 = Low (NPCs question authority), 3-5 = Moderate (enforcement costs rise), 6+ = High (mandates contested, Auditors intervene). Cleared by downtime, proper closure, or delegation." style="background:#3a1f1f;color:#ffc8a0;border:1px solid #8a5a3a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">⚖ Pressure
-          <input type="number" name="system.resources.administrativePressure.value" value="{{pactkeeperState.pressure.value}}" min="0" max="{{pactkeeperState.pressure.max}}" style="width:32px;background:transparent;color:inherit;border:1px solid #8a5a3a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;" data-tooltip="Current Pressure points — edit directly."/>
-          <span style="opacity:0.8;font-size:0.74rem">({{pactkeeperState.pressure.bandLabel}})</span>
-        </span>
-        <button type="button" class="ft-chip ft-chip-pact-subject" data-action="ftClassAction" data-handler="pactkeeper_bind_subject" data-tooltip="Pactkeeper — Pact Subject. The creature, object, or place currently bargained-with. Sustained manifestations cast targeting this subject get free upkeep (capped by your concurrencyBonus = The Bargain +1, Sealed Pact stance +2). Click to bind currently-targeted token, or open the dialog to clear." style="background:{{#if pactkeeperState.pactSubject}}#1f3a2a{{else}}#2a2a2a{{/if}};color:{{#if pactkeeperState.pactSubject}}#a0d8b8{{else}}#888{{/if}};border:1px solid {{#if pactkeeperState.pactSubject}}#3a8a5a{{else}}#5a5a5a{{/if}};padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">{{#if pactkeeperState.pactSubject}}🔗 Pact: {{pactkeeperState.pactSubject.name}}{{else}}🔓 Bind Pact Subject{{/if}}</button>
+        {{!-- Pact Subject (Initiation 1 — The Bargain). Bind a creature/object/place to grant +1 concurrent manifestation at no extra Clarity upkeep. --}}
+        <button type="button" class="ft-chip ft-chip-pact-subject" data-action="ftClassAction" data-handler="pactkeeper_bind_subject" data-tooltip="Pactkeeper — Pact Subject (The Bargain, Initiation 1). The creature/object/place bargained with. While bound, sustain +1 manifestation on/near them at no extra Clarity upkeep. Click to bind currently-targeted token, or open the dialog to clear." style="background:{{#if pactkeeperState.pactSubject}}#1f3a2a{{else}}#2a2a2a{{/if}};color:{{#if pactkeeperState.pactSubject}}#a0d8b8{{else}}#888{{/if}};border:1px solid {{#if pactkeeperState.pactSubject}}#3a8a5a{{else}}#5a5a5a{{/if}};padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">{{#if pactkeeperState.pactSubject}}🔗 Pact: {{pactkeeperState.pactSubject.name}}{{else}}🔓 Bind Pact Subject{{/if}}</button>
+        {{!-- L1 Skill Pick (Initiation 1). Surfaces here until the player has locked their two skills, then becomes a quiet "✓ Picked" indicator. --}}
+        {{#unless pactkeeperState.l1SkillsPicked}}
+        <button type="button" class="ft-chip" data-action="ftClassAction" data-handler="pactkeeper_pick_l1_skills" data-tooltip="Pactkeeper — Initiation 1: pick +1 skill rank in two of {Diplomacy, Insight, Intimidation, Lore}. One-time choice." style="background:#3a2a1f;color:#e8c8a0;border:1px solid #8a6a3a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">⚖ Pick L1 Skills</button>
+        {{/unless}}
+        {{!-- Ledger Day (Initiation 16) — transfer a sustained manifestation to a willing ally. Only useful at L16+. --}}
+        <button type="button" class="ft-chip" data-action="ftClassAction" data-handler="pk_ledger_day" data-tooltip="Pactkeeper — Ledger Day (Initiation 16). 1/Soma Break, transfer a sustained manifestation to a willing ally — they pick up upkeep from their Clarity from that point on." style="background:#2a2a4a;color:#a0a8e0;border:1px solid #5a5a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">📜 Ledger Day</button>
       </div>
       {{/if}}
     </div>
@@ -551,6 +545,11 @@
             {{/each}}
           </div>
           <span class="ft-resource-count" style="color:{{burnBand.color}}">{{resources.burn.current}}/8 {{burnBand.label}}</span>
+          {{!-- Edit mode: directly set Burn charges (canon is 0–8). --}}
+          <div class="ft-edit-only ft-resource-edit">
+            <input type="number" name="system.resources.burn.current" value="{{resources.burn.current}}" min="0" max="8" style="width:40px" data-tooltip="Burn charges"/>
+            <span style="opacity:0.4">/ 8</span>
+          </div>
         </div>
         <div class="ft-aura-row">
           <span class="ft-aura-badge" style="background:{{auraData.color}}22;border:1px solid {{auraData.color}}88;color:{{auraData.color}}">{{auraData.label}}</span>
@@ -686,13 +685,17 @@
 
       {{#if activePools.pactkeeper}}
       <div class="ft-combat-section ft-resource-panel">
-        <h3>§ Leverage <span class="ft-resource-tag">Pactkeeper</span></h3>
+        <h3>§ Pactkeeper</h3>
         <div class="ft-resource-row">
-          <span class="ft-aura-badge" style="background:rgba(120,144,156,0.18);border:1px solid rgba(120,144,156,0.5);color:#78909c">Leverage</span>
+          <span class="ft-aura-badge" style="background:rgba(160,200,184,0.12);border:1px solid rgba(160,200,184,0.4);color:#a0c8b8">
+            {{#if pactkeeperState.pactSubject}}🔗 Pact: {{pactkeeperState.pactSubject.name}}{{else}}🔓 No subject bound{{/if}}
+          </span>
+          <span class="ft-aura-desc">
+            {{#if pactkeeperState.pactSubject}}The Bargain: +1 concurrent manifestation on this subject (no extra Clarity upkeep).{{else}}Bind a creature/object/place to activate The Bargain.{{/if}}
+          </span>
           <div class="ft-resource-controls">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="pactkeeper_leverage">Pool</button>
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="pactkeeper_binding_clause">Bind</button>
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="pactkeeper_precedent">Precedent</button>
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="pactkeeper_bind_subject" data-tooltip="Bind / clear the Pact Subject (Initiation 1).">Bind</button>
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="pk_ledger_day" data-tooltip="Ledger Day (Initiation 16) — 1/Soma Break: transfer a sustained manifestation to a willing ally.">Ledger Day</button>
           </div>
         </div>
       </div>
@@ -700,14 +703,48 @@
 
       {{#if activePools.soulSmith}}
       <div class="ft-combat-section ft-resource-panel">
-        <h3>⚒ Forge Charge <span class="ft-resource-tag">Soul-Smith</span></h3>
+        <h3>⚒ Soul-Smith <span class="ft-resource-tag">Forge</span></h3>
         <div class="ft-resource-row">
-          <span class="ft-aura-badge" style="background:{{#if resources.forgeCharge.relicUsed}}rgba(255,255,255,0.04){{else}}rgba(232,200,74,0.12){{/if}};border:1px solid {{#if resources.forgeCharge.relicUsed}}rgba(255,255,255,0.1){{else}}rgba(232,200,74,0.4){{/if}};color:{{#if resources.forgeCharge.relicUsed}}rgba(255,255,255,0.3){{else}}#e8c84a{{/if}}">
-            Relic {{#if resources.forgeCharge.relicUsed}}Used{{else}}Ready{{/if}}
-          </span>
-          <span class="ft-aura-desc">{{resources.forgeCharge.sparksRepaired}} Sparks repaired</span>
+          <span class="ft-aura-badge" style="background:rgba(232,200,74,0.12);border:1px solid rgba(232,200,74,0.4);color:#e8c84a">Tier {{soulSmithState.tier}}</span>
+          <span class="ft-aura-desc">{{soulSmithState.statusLine}}</span>
           <div class="ft-resource-controls">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_forge">Forge</button>
+            {{!-- T1 always available --}}
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_forge_initiate" data-tooltip="Tier 1 — Sanctified Forge Initiate. +1 Faith, +1 Plating, Economy OP hex repair.">T1 Forge Initiate</button>
+            {{!-- T2 — Atonement Crucible (1/arc) --}}
+            {{#if soulSmithState.tierAtLeast2}}
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_atonement_crucible" data-tooltip="Tier 2 — Atonement Crucible. 1/campaign-arc: purify a Corrupted Spark instead of destroying it.">T2 Atonement {{#if soulSmithState.atonementUsedThisArc}}(used){{else}}({{soulSmithState.atonementStatus}}){{/if}}</button>
+            {{/if}}
+            {{!-- T3 — Furnace of Renewal (passive resist + rest narration) --}}
+            {{#if soulSmithState.tierAtLeast3}}
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_furnace_of_renewal" data-tooltip="Tier 3 — Furnace of Renewal. Passive: poison + necrotic resistance. Click to announce rest-bonus to the table.">T3 Furnace</button>
+            {{/if}}
+            {{!-- T4 — Relic of Rebirth --}}
+            {{#if soulSmithState.tierAtLeast4}}
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_relic_of_rebirth" data-tooltip="Tier 4 — Relic of Rebirth. One-per-use: forge an artifact that restores a corrupted region/hex.">T4 Relic {{#if soulSmithState.relicUsed}}(used){{else}}(ready){{/if}}</button>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      {{/if}}
+
+      {{#if activePools.harmonyMarshal}}
+      <div class="ft-combat-section ft-resource-panel">
+        <h3>⚖ Harmony Marshal <span class="ft-resource-tag">Mandate</span></h3>
+        <div class="ft-resource-row">
+          <span class="ft-aura-badge" style="background:rgba(184,216,150,0.12);border:1px solid rgba(184,216,150,0.4);color:#b8d896">Tier {{harmonyMarshalState.tier}}</span>
+          <span class="ft-aura-desc">Soft Power engine — Attrition Easer, Loyalty Steward, Unity Conductor.</span>
+          <div class="ft-resource-controls">
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_initiate" data-tooltip="Tier 1 — Harmony Initiate. +1 Diplomacy, +1 Insight, faction Soft Power +10% (narrative).">T1 Initiate{{#if harmonyMarshalState.l1GrantsApplied}} ✓{{/if}}</button>
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_rallying_words" data-tooltip="Rallying Words (bonus action) — target an ally; bank reroll-lowest on their next roll this scene.">📣 Rallying Words</button>
+            {{#if harmonyMarshalState.tierAtLeast2}}
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_attrition_easer" data-tooltip="Tier 2 — Attrition Easer. 1/strategic turn: spend 1 Soft Power OP → -1 Attrition faction-wide.">T2 Attrition Easer{{#if harmonyMarshalState.attritionEaserUsedThisTurn}} (used){{/if}}</button>
+            {{/if}}
+            {{#if harmonyMarshalState.tierAtLeast3}}
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_loyalty_steward" data-tooltip="Tier 3 — Loyalty Steward. After a successful major Diplomacy / Courtly Intrigue resolution: choose a hex, Loyalty +1.">T3 Loyalty Steward</button>
+            {{/if}}
+            {{#if harmonyMarshalState.tierAtLeast4}}
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_unity_conductor" data-tooltip="Tier 4 — Unity Conductor. Faction passive: +2 Soft Power OP per strategic turn. Auto-reminder fires on advance-turn.">T4 Unity Conductor</button>
+            {{/if}}
           </div>
         </div>
       </div>

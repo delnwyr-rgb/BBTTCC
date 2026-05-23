@@ -1460,45 +1460,139 @@ export async function clampSkillRanksToCap(actor, cap = 5) {
 }
 
 // ─── Aurablade conditional AE management ─────────────────────────────────────
+// Aura-state and Burn-band changes both reshape which AEs the steward carries.
+// The canon (Aurablade Phase 1.5 doc) defines THREE layers:
+//   1. Passive — always on while the aura is active
+//   2. Engaged — adds on at Burn 2–3
+//   3. Overheated — adds on at Burn 4+
+// We materialize each as its own AE with `flags.fourththing.auraEffect: true`
+// and `flags.fourththing.aurablade.layer: passive|engaged|overheated`. Sync
+// runs on every aura change AND every Burn change so the table sees real
+// numbers move when the player commits.
+//
+// Statlines below are canonical *proxies* — the canon mostly speaks in narrative
+// ("on hit: prone", "auto-succeed save") which is wired in
+// `ft-class-automation.js::openAurabladeAction` and `applyManifestationStates`.
+// The AE numbers here are the auto-on numeric grants (Guard, attribute, skill
+// bumps) — what shows up as a number on the sheet the moment the aura/band
+// triggers, so the steward can actually feel the escalation in roll math.
 
-// Aura AE definitions — what each aura state grants
+// Layer 1 — Passive (always-on while aura active)
 export const AURA_EFFECTS = {
   fury: [
-    { key: "system.attributes.violence.value", mode: 2, value: 1, label: "Fury Aura: Violence +1" },
+    { key: "system.attributes.violence.value", mode: 2, value: 1, label: "Fury Aura — Violence +1 (canon: +1 melee weapon damage)" },
   ],
   resolve: [
-    { key: "system.derived.guard.value",   mode: 2, value: 2, label: "Resolve Aura: Guard +2" },
+    // Canon caveat: +1 Guard only while not-moved-this-turn. Modeled here as
+    // always-on +1 for simplicity; the "moved-this-turn" gate would need a
+    // hook in the movement path to suppress.
+    { key: "system.derived.guard.value",   mode: 2, value: 1, label: "Resolve Aura — Guard +1 (canon: while you haven't moved)" },
   ],
   mercy: [
-    { key: "system.attributes.soul.value", mode: 2, value: 1, label: "Mercy Aura: Soul +1" },
+    // Mercy's passive is the permission to deal nonlethal damage; no number.
+    // We grant +1 Soul as a thematic proxy for healing/protection potency.
+    { key: "system.attributes.soul.value", mode: 2, value: 1, label: "Mercy Aura — Soul +1 (nonlethal permission unlocked)" },
   ],
   dread: [
-    { key: "system.skills.intimidation.value", mode: 2, value: 2, label: "Dread Aura: Intimidation +2" },
-    { key: "system.skills.stealth.value",      mode: 2, value: 1, label: "Dread Aura: Stealth +1" },
+    // Dread's passive is a zone effect on nearby enemies (3d10kl2 morale).
+    // We grant +1 Intimidation as the local representative of that pressure.
+    { key: "system.skills.intimidation.value", mode: 2, value: 1, label: "Dread Aura — Intimidation +1 (enemies w/in 5 ft: morale dis.)" },
+  ],
+};
+
+// Layer 2 — Engaged (Burn 2-3) layered on top of passive.
+export const ENGAGED_EFFECTS = {
+  fury: [
+    { key: "system.attributes.violence.value", mode: 2, value: 1, label: "Fury Engaged — +1 Violence (canon: +tier melee damage on hit)" },
+  ],
+  resolve: [
+    { key: "system.derived.guard.value",   mode: 2, value: 1, label: "Resolve Engaged — +1 Guard (canon: OAs vs you at disadvantage)" },
+    { key: "system.derived.resolve.value", mode: 2, value: 1, label: "Resolve Engaged — +1 Resolve (canon: ignore forced movement 10 ft)" },
+  ],
+  mercy: [
+    { key: "system.attributes.soul.value", mode: 2, value: 1, label: "Mercy Engaged — +1 Soul (canon: reduce / redirect ally damage)" },
+  ],
+  dread: [
+    { key: "system.skills.intimidation.value", mode: 2, value: 1, label: "Dread Engaged — +1 Intimidation (canon: Shaken on hit; no reactions)" },
+  ],
+};
+
+// Layer 3 — Overheated (Burn 4+) layered on top of passive + engaged.
+export const OVERHEATED_EFFECTS = {
+  fury: [
+    { key: "system.attributes.violence.value", mode: 2, value: 1, label: "Fury Overheated — +1 Violence (canon: knockdown + deny reactions)" },
+  ],
+  resolve: [
+    { key: "system.derived.guard.value",   mode: 2, value: 2, label: "Resolve Overheated — +2 Guard (canon: lock position; auto-save)" },
+  ],
+  mercy: [
+    { key: "system.attributes.soul.value", mode: 2, value: 1, label: "Mercy Overheated — +1 Soul (canon: prevent drop; Last-Stand)" },
+  ],
+  dread: [
+    { key: "system.skills.intimidation.value", mode: 2, value: 2, label: "Dread Overheated — +2 Intimidation (canon: 3d10kl2 on ALL saves)" },
   ],
 };
 
 const AURA_EFFECT_PREFIX = "ft-aura-";
 
-export async function syncAuraEffects(actor, newAura) {
+// Sync ALL aurablade AE layers based on the actor's current aura + burn state.
+// Optional `overrideAura` is used by callers that have JUST set a new aura
+// state but want to be defensive about read-after-write ordering.
+export async function syncAurabladeEffects(actor, overrideAura = null) {
   if (!actor) return;
 
-  // Remove all existing aura AEs
+  const rawSys = actor.system?.system ?? actor.system ?? {};
+  const aura = overrideAura ?? rawSys?.resources?.aura?.state ?? "none";
+  const burn = Number(rawSys?.resources?.burn?.current ?? 0) || 0;
+
+  // Wipe ALL aura-managed AEs and rebuild from the current state. This keeps
+  // the layer cake consistent even after schema edits or hand-tinkering.
   const toDelete = Array.from(actor.effects ?? [])
     .filter(e => e.name?.startsWith(AURA_EFFECT_PREFIX) || e.flags?.fourththing?.auraEffect)
     .map(e => e.id);
-  if (toDelete.length) await actor.deleteEmbeddedDocuments("ActiveEffect", toDelete);
+  if (toDelete.length) {
+    try { await actor.deleteEmbeddedDocuments("ActiveEffect", toDelete); }
+    catch (_e) {}
+  }
 
-  // Add new aura AEs if not "none"
-  const auraChanges = AURA_EFFECTS[newAura];
-  if (!auraChanges) return;
+  if (aura === "none" || !AURA_EFFECTS[aura]) return;
 
-  await actor.createEmbeddedDocuments("ActiveEffect", [{
-    name:    `${AURA_EFFECT_PREFIX}${newAura}`,
-    icon:    "icons/magic/light/beam-rays-orange-small.webp",
-    changes: auraChanges,
+  const creates = [];
+  const makeAE = (layer, changes, label) => ({
+    name: `${AURA_EFFECT_PREFIX}${layer}-${aura}`,
+    icon: layer === "overheated"
+      ? "icons/magic/fire/explosion-fireball-medium-orange.webp"
+      : layer === "engaged"
+        ? "icons/magic/fire/flame-burning-fence.webp"
+        : "icons/magic/light/beam-rays-orange-small.webp",
+    changes,
     disabled: false,
-    flags:   { fourththing: { auraEffect: true, aura: newAura } },
+    flags: { fourththing: { auraEffect: true, aura, aurablade: { layer } } },
     duration: {},
-  }]);
+  });
+
+  // Layer 1 — always on while aura is active.
+  creates.push(makeAE("passive", AURA_EFFECTS[aura], "Passive"));
+
+  // Layer 2 — Engaged (Burn 2-3+).
+  if (burn >= 2 && ENGAGED_EFFECTS[aura]) {
+    creates.push(makeAE("engaged", ENGAGED_EFFECTS[aura], "Engaged"));
+  }
+
+  // Layer 3 — Overheated (Burn 4+).
+  if (burn >= 4 && OVERHEATED_EFFECTS[aura]) {
+    creates.push(makeAE("overheated", OVERHEATED_EFFECTS[aura], "Overheated"));
+  }
+
+  if (creates.length) {
+    try { await actor.createEmbeddedDocuments("ActiveEffect", creates); }
+    catch (e) { console.warn("[fourththing] aurablade AE sync create failed", e); }
+  }
+}
+
+// Back-compat shim — existing callers pass (actor, newAura) when changing aura.
+// Delegates to the layered sync; the newAura overrides actor state for the
+// brief moment between update + AE-rebuild.
+export async function syncAuraEffects(actor, newAura) {
+  return syncAurabladeEffects(actor, newAura ?? null);
 }

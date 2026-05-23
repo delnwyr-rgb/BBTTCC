@@ -75,13 +75,25 @@ export const FEATURE_ROUTER = {
   "fractal-self":                  "dw_feat_activate",
   "apotheosis-of-the-oneiric":     "dw_feat_activate",
   // Soul-Smith
-  "soul_smith_relic":              "soul_smith_forge",
-  "soulsmith_relic":               "soul_smith_forge",
+  // Soul-Smith — canon (Phase 1.5): T1 Sanctified Forge Initiate, T2 Atonement
+  // Crucible, T3 Furnace of Renewal, T4 Relic of Rebirth. Typo aliases
+  // soulsmith_relic + soul_smith_relic retired 2026-05-23.
+  "soul_smith_forge_initiate":        "soul_smith_forge_initiate",
+  "soul_smith_atonement_crucible":    "soul_smith_atonement_crucible",
+  "soul_smith_furnace_of_renewal":    "soul_smith_furnace_of_renewal",
+  "soul_smith_relic_of_rebirth":      "soul_smith_relic_of_rebirth",
+  // Legacy aliases — keep the combined entry pointing at the tier-routing shim.
   "soul_smith_forge":              "soul_smith_forge",
   "soul_smith_repair":             "soul_smith_forge",
   // Passive classes — show info dialog
   "harmony_marshal_core":          "passive_info",
   "harmony_marshal_tier":          "passive_info",
+  // Harmony Marshal — canon (Phase 1.5): T1 Initiate · T2 Attrition Easer · T3 Loyalty Steward · T4 Unity Conductor + Rallying Words tactical surface.
+  "harmony_marshal_initiate":         "harmony_marshal_initiate",
+  "harmony_marshal_attrition_easer":  "harmony_marshal_attrition_easer",
+  "harmony_marshal_loyalty_steward":  "harmony_marshal_loyalty_steward",
+  "harmony_marshal_unity_conductor":  "harmony_marshal_unity_conductor",
+  "harmony_marshal_rallying_words":   "harmony_marshal_rallying_words",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -107,14 +119,14 @@ export const FEATURE_ROUTER = {
   "cosmic_linguist_annotation":    "cosmic_linguist_annotation",
   "cosmic_linguist_core":          "passive_info",
   "cosmic_linguist_tier":          "passive_info",
-  // Pactkeeper — Leverage + Binding Clause + Civic Charge canonical pool
-  "pactkeeper_leverage":           "pactkeeper_leverage",
-  "pactkeeper_binding_clause":     "pactkeeper_binding_clause",
-  "pactkeeper_precedent":          "pactkeeper_precedent",
-  "pactkeeper_civic_charge":       "pactkeeper_civic_charge",
-  "pactkeeper_spend_civic_charge": "pactkeeper_spend_civic_charge",
-  "pactkeeper_administrative_pressure": "pactkeeper_administrative_pressure",
+  // Pactkeeper — canon surfaces: Pact Subject (The Bargain), Renegotiate
+  // (misfire conversion), Sealed Pact (Signature Mode — see pk_mode_*),
+  // Ledger Day (manifestation transfer), L1 skill pick (Initiation 1).
+  // Older Leverage/Binding-Clause/Precedent/Civic-Charge/Admin-Pressure
+  // handlers were retired 2026-05-22 as game-development residue.
   "pactkeeper_bind_subject":       "pactkeeper_bind_subject",
+  "pactkeeper_renegotiate":        "pactkeeper_renegotiate",
+  "pactkeeper_pick_l1_skills":     "pactkeeper_pick_l1_skills",
   // Generic counter/dispel — any actor's feat with this identifier routes here.
   "counter_manifestation":         "counter_manifestation",
   "dispel_manifestation":          "counter_manifestation",
@@ -191,9 +203,13 @@ export const NAME_ROUTER = [
   ["Dreamwalker: Commune",       "dreamwalker_resonance"],
   ["Oneiric",                    "dreamwalker_resonance"],
   // Soul-Smith
-  ["Relic of Rebirth",           "soul_smith_forge"],
-  ["Soul-Smith: Tier",           "soul_smith_forge"],
-  ["Atonement",                  "soul_smith_forge"],
+  // Soul-Smith — canon-aligned (Phase 1.5).
+  ["Sanctified Forge Initiate",  "soul_smith_forge_initiate"],
+  ["Atonement Crucible",         "soul_smith_atonement_crucible"],
+  ["Furnace of Renewal",         "soul_smith_furnace_of_renewal"],
+  ["Relic of Rebirth",           "soul_smith_relic_of_rebirth"],
+  ["Soul-Smith: Tier",           "soul_smith_forge"],   // legacy passive-info row
+  ["Atonement",                  "soul_smith_atonement_crucible"],
   // Passive — core class items
   ["Harmony Marshal: Tier",      "passive_info"],
   ["Harmony Marshal: Core",      "passive_info"],
@@ -233,15 +249,15 @@ export const NAME_ROUTER = [
   ["Declared Likeness",          "cosmic_linguist_annotation"],  // Metaphor Apostle L1
   ["The First Strike",           "cosmic_linguist_annotation"],  // Redactor L1
   ["Annotation",                 "cosmic_linguist_annotation"],
-  // Pactkeeper
+  // Pactkeeper — canon-only (Bargain / Renegotiate / Sealed Pact / Ledger Day).
+  // Subclass feats (Read The Ledger, The Examination, The Protected Clause)
+  // need their own canon-aligned handlers when those subclasses are refactored;
+  // routing them to the retired Leverage handler was wrong.
   ["Pactkeeper: Core",           "passive_info"],
   ["Pactkeeper: Tier",           "passive_info"],
-  ["Leverage",                   "pactkeeper_leverage"],
-  ["Binding Clause",             "pactkeeper_binding_clause"],
-  ["Precedent",                  "pactkeeper_precedent"],
-  ["Read The Ledger",            "pactkeeper_precedent"],         // Archivist L1
-  ["The Examination",            "pactkeeper_leverage"],          // Auditor L1
-  ["The Protected Clause",       "pactkeeper_leverage"],          // Steward L1
+  ["The Bargain",                "pactkeeper_bind_subject"],      // Initiation 1
+  ["Renegotiate",                "pactkeeper_renegotiate"],       // Initiation 6
+  ["Ledger Day",                 "pk_ledger_day"],                // Initiation 16
 
   // === Buried per-use — Ancestry cores (name fallback for FEATURE_ROUTER) ===
   ["Menhirkin Core",                  "menhirkin_hex_recognition"],
@@ -578,12 +594,9 @@ export async function openChangeAura(actor) {
             "system.resources.aura.state":   newAura,
             "system.resources.burn.current": newBurn,
           });
-          // Sync conditional AEs for new aura state
-          if (typeof syncAuraEffects === "function") {
-            await syncAuraEffects(actor, newAura);
-          } else if (game.fourththing?._syncAuraEffects) {
-            await game.fourththing._syncAuraEffects(actor, newAura);
-          }
+          // AE sync runs automatically via the updateActor hook in module.js
+          // (aurablade burn-band auto-sync). No explicit call needed; keeping
+          // one would race the hook and double-create the AE pack.
           const av = AURA_STATES[newAura];
           ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
@@ -603,6 +616,88 @@ export async function openChangeAura(actor) {
   }).render(true);
 }
 
+// Helper — apply a condition AE (Foundry status) to a target token's actor.
+// Uses the canonical applyManifestationStates path so duration / dedupe /
+// condition-immunity gates all behave correctly.
+async function _ftAurabladeApplyCondition(caster, targetActor, condKey, { duration = "1-round", castDc = 15, item = null } = {}) {
+  if (!game?.fourththing?.applyManifestationStates) return false;
+  const synthMf = { appliedStates: { states: [condKey], duration } };
+  // applyManifestationStates expects an `item` for context; synth a minimal stub.
+  const stub = item ?? { name: "Aurablade Aura", id: caster?.id, system: {} };
+  try {
+    await game.fourththing.applyManifestationStates(caster, targetActor, stub, synthMf, { castDc });
+    return true;
+  } catch (e) {
+    console.warn("[fourththing] Aurablade condition apply failed", condKey, e);
+    return false;
+  }
+}
+
+// Helper — set a one-shot flag on the actor that downstream rolls/movement
+// can read. Cleared on next round, or consumed by the relevant rule path.
+async function _ftAurabladeStampOneShot(actor, key, value = true) {
+  if (!actor?.setFlag) return;
+  await actor.setFlag("fourththing", `aurablade.oneShot.${key}`, value);
+}
+
+// Canon-driven action matrix per AURABLADE class doc:
+//   Burn 0–1 Controlled · Burn 2–3 Engaged · Burn 4+ Overheated
+// Each action carries: band gate, burn cost (how much Burn entering the
+// action accrues — canon says you gain Burn from committing, not from
+// "spending" a pool), mechanical apply (where automatable), narrative
+// description (fallback for GM-adjudicated effects). target=true means we
+// require game.user.targets.first().
+const AURABLADE_ACTIONS = {
+  fury: [
+    { id: "fury_strike",       label: "Strike",                     band: "any",         burnCost: 1, target: false,
+      desc: "Aura-enhanced melee strike. +1 damage (passive). Pair with a weapon attack roll." },
+    { id: "fury_press_push",   label: "Press & Push 5 ft",          band: "engaged",     burnCost: 1, target: true,
+      desc: "On a melee hit: +tier damage; shove target 5 ft. Once per turn." },
+    { id: "fury_cleave",       label: "Cleave (second target)",     band: "engaged",     burnCost: 1, target: false,
+      desc: "On hit: extend the strike to a second creature within reach (deal the same damage). Once per turn." },
+    { id: "fury_dis_attack",   label: "Impose Disadvantage (one attack)", band: "engaged", burnCost: 1, target: true,
+      desc: "Force one enemy attack this turn to be rolled 3d10kl2 against you or an ally." },
+    { id: "fury_knockdown",    label: "Pressing Knockdown — knock prone", band: "overheated", burnCost: 1, target: true,
+      desc: "On hit: target must succeed on a Violence save or fall Prone." },
+    { id: "fury_deny_reacts",  label: "Deny Reactions (target)",    band: "overheated",  burnCost: 1, target: true,
+      desc: "Your attacks against the target deny their reactions until the start of your next turn." }
+  ],
+  resolve: [
+    { id: "resolve_brace",     label: "Brace — halve next hit",     band: "any",         burnCost: 1, target: false,
+      desc: "The next incoming hit this round is halved." },
+    { id: "resolve_resist",    label: "Resist one damage type",     band: "engaged",     burnCost: 1, target: false,
+      desc: "Gain resistance to one damage type until the start of your next turn." },
+    { id: "resolve_ignore_push", label: "Ignore Forced Movement (10 ft)", band: "engaged", burnCost: 1, target: false,
+      desc: "Ignore forced movement up to 10 ft until end of round." },
+    { id: "resolve_auto_save", label: "Auto-Succeed One Save",      band: "overheated",  burnCost: 1, target: false,
+      desc: "Automatically succeed on one Violence, Body, or Intrigue save this round." },
+    { id: "resolve_lock_pos",  label: "Lock Position",              band: "overheated",  burnCost: 1, target: false,
+      desc: "Enemies cannot move you at all until the start of your next turn." }
+  ],
+  mercy: [
+    { id: "mercy_nonlethal",   label: "Deal Nonlethal Damage",      band: "any",         burnCost: 1, target: false,
+      desc: "Toggle nonlethal on your next damaging hit. No penalty (passive)." },
+    { id: "mercy_redirect",    label: "Reduce / Redirect Damage to Ally", band: "engaged", burnCost: 1, target: true,
+      desc: "When an ally within 10 ft takes damage: reduce by your tier OR redirect to yourself. Once per round." },
+    { id: "mercy_stabilize",   label: "Stabilize on Touch",         band: "engaged",     burnCost: 1, target: true,
+      desc: "Automatically stabilize a dying creature you touch (clears Dying / sets Integrity to 1)." },
+    { id: "mercy_prevent_drop",label: "Prevent Ally Dropping below 1 Integrity", band: "overheated", burnCost: 1, target: true,
+      desc: "Once per round: ally cannot drop below 1 Integrity from the next hit." },
+    { id: "mercy_lastsave",    label: "Auto-Pass Last Stand",       band: "overheated",  burnCost: 1, target: true,
+      desc: "Convert one failed Last Stand check into a success." }
+  ],
+  dread: [
+    { id: "dread_shake",       label: "Inflict Shaken",             band: "any",         burnCost: 1, target: true,
+      desc: "On hit: target saves vs Resolve or becomes Shaken until end of its next turn (canon: Engaged+; usable at low Burn as the entry-level effect)." },
+    { id: "dread_suppress",    label: "Suppress One Buff / Inspiration", band: "engaged", burnCost: 1, target: true,
+      desc: "Suppress one beneficial morale, inspiration, or buff effect on the target (GM adjudicated)." },
+    { id: "dread_dis_saves",   label: "Disadvantage on All Saves",  band: "overheated",  burnCost: 1, target: true,
+      desc: "Target rolls 3d10kl2 on all saves until the start of your next turn." },
+    { id: "dread_hesitate",    label: "Hesitation — nearby enemies", band: "overheated", burnCost: 1, target: false,
+      desc: "Enemies near the target save or hesitate (lose movement or reactions). GM picks." }
+  ]
+};
+
 export async function openAurabladeAction(actor) {
   const res  = getResources(actor);
   const burn = res.burn?.current ?? 0;
@@ -610,39 +705,31 @@ export async function openAurabladeAction(actor) {
   const band = getBurnBand(burn);
   const av   = AURA_STATES[aura] ?? AURA_STATES.fury;
 
-  // Build available actions based on aura + burn band
-  const ACTIONS = {
-    fury: [
-      { id: "strike",          label: "Strike",            burnCost: 1, desc: "Deal Violence damage + Burn bonus", always: true },
-      { id: "overload_strike", label: "Overload Strike",   burnCost: 2, desc: "+2d6 bonus damage, risk backlash",  overheated: true },
-      { id: "press",           label: "Press the Assault", burnCost: 1, desc: "Move then attack; target is Staggered on hit", always: true },
-    ],
-    resolve: [
-      { id: "brace",      label: "Brace",       burnCost: 1, desc: "Halve next incoming hit this round", always: true },
-      { id: "shield_ally",label: "Shield Ally", burnCost: 1, desc: "Redirect one attack from adjacent ally to you", always: true },
-      { id: "fortress",   label: "Fortress Mode", burnCost: 2, desc: "Immune to Staggered until your next turn", engaged: true },
-    ],
-    mercy: [
-      { id: "cleanse",   label: "Cleanse",         burnCost: 1, desc: "Remove one condition (not Scarred) from self or ally", always: true },
-      { id: "restore",   label: "Restore",          burnCost: 1, desc: "Target recovers 1d6 + Soul Stress",               always: true },
-      { id: "wave",      label: "Mercy Wave",       burnCost: 2, desc: "All allies within Near: clear Shaken condition",  engaged: true },
-    ],
-    dread: [
-      { id: "terror",    label: "Terror Strike",    burnCost: 1, desc: "On hit, target gains Shaken",                    always: true },
-      { id: "shadow",    label: "Shadow Step",      burnCost: 1, desc: "Teleport to unoccupied space within Near range", always: true },
-      { id: "nightmare", label: "Nightmare Pulse",  burnCost: 2, desc: "All enemies within Near: Resolve DC 14 or Shaken", overheated: true },
-    ]
+  // Band gate: "any" always; "engaged" = Engaged or Overheated; "overheated" = Overheated only.
+  const bandMatches = (gate) => {
+    if (gate === "any") return true;
+    if (gate === "engaged")    return band.label === "Engaged" || band.label === "Overheated";
+    if (gate === "overheated") return band.label === "Overheated";
+    return false;
   };
+  const available = (AURABLADE_ACTIONS[aura] ?? []).filter(a => bandMatches(a.band));
 
-  const available = (ACTIONS[aura] ?? []).filter(a =>
-    a.always ||
-    (a.overheated && band.label === "Overheated") ||
-    (a.engaged && band.label !== "Controlled")
-  );
+  // Build option list, grouped by band for clarity.
+  const renderGroup = (label, gate) => {
+    const subset = available.filter(a => a.band === gate);
+    if (!subset.length) return "";
+    return `<optgroup label="${label}">` +
+      subset.map(a => `<option value="${a.id}" data-cost="${a.burnCost}">${a.label} — ${a.desc}</option>`).join("") +
+      `</optgroup>`;
+  };
+  const opts = renderGroup("Any band", "any") + renderGroup("Engaged / Overheated", "engaged") + renderGroup("Overheated only", "overheated");
 
-  const opts = available.map(a =>
-    `<option value="${a.id}" data-cost="${a.burnCost}">${a.label} (${a.burnCost} Burn) — ${a.desc}</option>`
-  ).join("");
+  const passiveByAura = {
+    fury:    "+1 melee weapon damage.",
+    resolve: "+1 Guard while you haven't moved this turn.",
+    mercy:   "Deal nonlethal damage at no penalty.",
+    dread:   "Enemies within 5 ft roll 3d10kl2 on morale checks."
+  };
 
   new Dialog({
     title: `Aurablade Action — ${av.label}`,
@@ -657,38 +744,192 @@ export async function openAurabladeAction(actor) {
           <span class="ft-prev-val" style="color:${band.color}">${burn} (${band.label})</span>
         </span>
       </div>
+      <p style="font-size:0.74rem;opacity:0.75;margin:0 0 0.4rem;border-left:2px solid ${av.color}55;padding-left:0.4rem">
+        <b>Passive:</b> ${passiveByAura[aura] ?? "(none)"}
+      </p>
       <div class="ft-cast-field">
-        <label>Available actions</label>
+        <label>Available actions (band-gated)</label>
         <select name="action">${opts}</select>
       </div>
+      <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">Using an action raises your Burn by its listed cost (canon: Burn is gained from commitment, not spent from a pool).</p>
     </div>`,
     buttons: {
       act: {
         icon: "<i class='fas fa-bolt'></i>",
         label: "Use Action",
         callback: async (html) => {
-          const sel = html.find("[name='action'] option:selected");
+          const sel       = html.find("[name='action'] option:selected");
           const actionId  = html.find("[name='action']").val();
           const burnCost  = parseInt(sel.data("cost")) || 1;
           const newBurn   = Math.min(8, burn + burnCost);
           const newBand   = getBurnBand(newBurn);
           const action    = available.find(a => a.id === actionId);
+          if (!action) return;
+
+          // Resolve target if required.
+          let targetActor = null;
+          if (action.target) {
+            const tk = Array.from(game.user?.targets ?? [])[0];
+            targetActor = tk?.actor ?? null;
+            if (!targetActor) {
+              return ui.notifications?.warn(`Aurablade ${action.label}: target a token first, then re-use the action.`);
+            }
+          }
+
+          // Mechanical apply — match by action id.
+          let appliedNote = "";
+          const rawSys   = actor.system?.system ?? actor.system;
+          const tier     = Number(rawSys?.tier ?? rawSys?.details?.tier ?? 1) || 1;
+
+          switch (action.id) {
+            // ─── FURY ───────────────────────────────────────────────────────
+            case "fury_knockdown": {
+              const ok = await _ftAurabladeApplyCondition(actor, targetActor, "prone");
+              appliedNote = ok ? `🪓 <b>${targetActor.name}</b> is knocked Prone.` : "";
+              break;
+            }
+            case "fury_deny_reacts": {
+              await _ftAurabladeStampOneShot(actor, "denyReactsTargetId", targetActor.id);
+              appliedNote = `🚫 ${targetActor.name}'s reactions denied vs your attacks until start of your next turn.`;
+              break;
+            }
+            case "fury_press_push": {
+              // Token nudge — 5 ft directly away from caster.
+              try {
+                const srcTk = actor.getActiveTokens?.()[0];
+                const tgtTk = Array.from(game.user.targets ?? [])[0];
+                if (srcTk && tgtTk) {
+                  const dx = tgtTk.x - srcTk.x, dy = tgtTk.y - srcTk.y;
+                  const mag = Math.hypot(dx, dy) || 1;
+                  const grid = canvas.dimensions?.size || 100;
+                  const pushPx = grid; // 5 ft = 1 square in default grid; canon push is 5 ft
+                  await tgtTk.document.update({
+                    x: Math.round(tgtTk.x + (dx / mag) * pushPx),
+                    y: Math.round(tgtTk.y + (dy / mag) * pushPx)
+                  });
+                  appliedNote = `↗ ${targetActor.name} shoved 5 ft.`;
+                }
+              } catch (e) { console.warn("Fury push failed", e); }
+              break;
+            }
+            case "fury_dis_attack": {
+              await _ftAurabladeStampOneShot(actor, "imposedDisAttackId", targetActor.id);
+              appliedNote = `🎯 One attack by ${targetActor.name} this turn will be rolled 3d10kl2.`;
+              break;
+            }
+            // ─── RESOLVE ────────────────────────────────────────────────────
+            case "resolve_brace": {
+              await _ftAurabladeStampOneShot(actor, "halveNextHit", true);
+              appliedNote = "🛡 Next incoming hit this round is halved.";
+              break;
+            }
+            case "resolve_resist": {
+              await _ftAurabladeStampOneShot(actor, "resistTypePending", true);
+              appliedNote = "🛡 Choose a damage type — gain resistance until start of your next turn (GM applies on next damage).";
+              break;
+            }
+            case "resolve_ignore_push": {
+              await _ftAurabladeStampOneShot(actor, "ignoreForcedMovement", 10);
+              appliedNote = "⚓ Ignore forced movement up to 10 ft until end of round.";
+              break;
+            }
+            case "resolve_auto_save": {
+              await _ftAurabladeStampOneShot(actor, "autoSucceedSave", { attrs: ["violence","body","intrigue"], uses: 1 });
+              appliedNote = "✦ Auto-succeed on one Violence/Body/Intrigue save this round.";
+              break;
+            }
+            case "resolve_lock_pos": {
+              await _ftAurabladeStampOneShot(actor, "lockPosition", true);
+              appliedNote = "⚓ Position locked — cannot be moved until start of your next turn.";
+              break;
+            }
+            // ─── MERCY ──────────────────────────────────────────────────────
+            case "mercy_nonlethal": {
+              await _ftAurabladeStampOneShot(actor, "nonlethalNextHit", true);
+              appliedNote = "🤍 Next hit is nonlethal.";
+              break;
+            }
+            case "mercy_redirect": {
+              await _ftAurabladeStampOneShot(actor, "redirectAllyId", targetActor.id);
+              appliedNote = `🤍 Next damage to ${targetActor.name}: reduce by ${tier} OR redirect to yourself (your choice on apply).`;
+              break;
+            }
+            case "mercy_stabilize": {
+              // Touch-stabilize — clear Dying AE + set Integrity to 1 if 0.
+              try {
+                const dyingAE = targetActor.effects?.find?.(e => e.flags?.fourththing?.condition === "dying");
+                if (dyingAE) await dyingAE.delete();
+                const tSys = targetActor.system?.system ?? targetActor.system;
+                if ((tSys?.derived?.integrity?.value ?? 0) < 1) {
+                  await targetActor.update({ "system.derived.integrity.value": 1 });
+                }
+                appliedNote = `❤ ${targetActor.name} stabilized.`;
+              } catch (e) { console.warn("Mercy stabilize failed", e); }
+              break;
+            }
+            case "mercy_prevent_drop": {
+              await targetActor.setFlag?.("fourththing", "aurablade.preventDropOnce", true);
+              appliedNote = `❤ ${targetActor.name} cannot drop below 1 Integrity on the next hit.`;
+              break;
+            }
+            case "mercy_lastsave": {
+              await targetActor.setFlag?.("fourththing", "aurablade.autoPassLastStand", true);
+              appliedNote = `❤ ${targetActor.name}: next failed Last Stand check converts to a success.`;
+              break;
+            }
+            // ─── DREAD ──────────────────────────────────────────────────────
+            case "dread_shake": {
+              const ok = await _ftAurabladeApplyCondition(actor, targetActor, "shaken");
+              appliedNote = ok ? `🕳 ${targetActor.name} is Shaken.` : "";
+              break;
+            }
+            case "dread_suppress": {
+              appliedNote = `🕳 GM: suppress one buff / inspiration on ${targetActor.name}.`;
+              break;
+            }
+            case "dread_dis_saves": {
+              // Apply a 1-round AE that flags the target with disSaves so the
+              // save roller picks up 3d10kl2. The state isn't in FT.CONDITIONS,
+              // so create a bespoke AE here.
+              try {
+                await targetActor.createEmbeddedDocuments?.("ActiveEffect", [{
+                  name: "Dread — Disadvantage on Saves",
+                  icon: "icons/svg/skull.svg",
+                  duration: { rounds: 1 },
+                  changes: [],
+                  flags: { fourththing: { aurablade: { disSavesAll: true } } }
+                }]);
+                appliedNote = `🕳 ${targetActor.name}: disadvantage on ALL saves until your next turn.`;
+              } catch (e) { console.warn("Dread AE failed", e); }
+              break;
+            }
+            case "dread_hesitate": {
+              appliedNote = "🕳 GM: nearby enemies save or hesitate (lose movement / reactions).";
+              break;
+            }
+            // Default = no automation, narration only.
+            default: {
+              appliedNote = "";
+            }
+          }
+
           await actor.update({ "system.resources.burn.current": newBurn });
 
           let backlashNote = "";
           if (newBand.label === "Overheated" && band.label !== "Overheated") {
-            backlashNote = `<p style="color:#eb5757;font-size:0.75rem;margin:0.2rem 0 0">⚠ Now Overheated — risk backlash at end of turn!</p>`;
+            backlashNote = `<p style="color:#eb5757;font-size:0.75rem;margin:0.2rem 0 0">⚠ Now Overheated — risk backlash at end of turn.</p>`;
           }
 
           ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
             content: `<div class="fourththing-roll ft-attack-roll">
               <div class="ft-roll-header">
-                <span class="ft-roll-name">Aurablade: ${action?.label}</span>
+                <span class="ft-roll-name">Aurablade · ${action.label}</span>
                 <span class="ft-seph-pill" style="background:${av.color}22;border-color:${av.color}88;color:${av.color}">${av.label}</span>
               </div>
-              <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.8">${action?.desc}</p>
-              <p style="margin:0;font-size:0.75rem;color:${newBand.color}">Burn: ${burn} → ${newBurn} (${newBand.label})</p>
+              <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.85">${action.desc}</p>
+              ${appliedNote ? `<p style="margin:0.2rem 0;font-size:0.78rem;color:${av.color}">${appliedNote}</p>` : ""}
+              <p style="margin:0;font-size:0.74rem;color:${newBand.color}">Burn: ${burn} → ${newBurn} (${newBand.label})</p>
               ${backlashNote}
             </div>`
           });
@@ -1272,73 +1513,440 @@ export async function openDreamwalkerSpendEchoDie(actor) {
 }
 
 // ─── Soul-Smith dialogs ───────────────────────────────────────────────────────
+// Canon (Phase 1.5):
+//   T1 Sanctified Forge Initiate — Faith +1, Plating apt, Economy OP hex repair
+//   T2 Atonement Crucible        — 1/arc, purify a Corrupted Spark
+//   T3 Furnace of Renewal        — passive poison+necrotic resist, rest-bonus narrative
+//   T4 Relic of Rebirth          — 1-per-use artifact, restores a corrupted region
+//
+// One handler per canon feature (was a single combined Forge dialog; refactored
+// 2026-05-23 because conflating four features behind one dropdown made the
+// 1/arc and 1/Soma Break gates ambiguous in play).
 
+function _ssCharTier(actor) {
+  const sys = actor?.system?.system ?? actor?.system ?? {};
+  return Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+}
+
+// ── Tier 1 — Sanctified Forge Initiate ──────────────────────────────────────
+export async function openSoulSmithForgeInitiate(actor) {
+  const granted = !!actor.flags?.fourththing?.soulSmith?.l1GrantsApplied;
+  const sys = actor.system?.system ?? actor.system ?? {};
+  const faithRank   = Number(sys?.skills?.faith?.value)   || 0;
+  const platingRank = Number(sys?.skills?.plating?.value) || 0;
+
+  new Dialog({
+    title: "Soul-Smith · Sanctified Forge Initiate (T1)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">You can spend Economy OP to repair or stabilize damaged hexes more effectively — focal point for infrastructure recovery. (GM adjudicates spend at the table.)</p>
+      <div class="ft-preview-stats" style="margin-bottom:0.5rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Faith rank</span>
+          <span class="ft-prev-val">${faithRank}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Plating rank</span>
+          <span class="ft-prev-val">${platingRank}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">L1 grants</span>
+          <span class="ft-prev-val" style="color:${granted ? '#a0d8b8' : '#e8c84a'}">${granted ? "Applied" : "Pending"}</span></span>
+      </div>
+      ${granted ? "" : `<p style="font-size:0.72rem;opacity:0.7;margin:0.2rem 0">Click <b>Apply L1 grants</b> to add +1 Faith and +1 Plating (one-time, idempotent).</p>`}
+    </div>`,
+    buttons: {
+      ...(granted ? {} : {
+        grant: {
+          label: "Apply L1 grants",
+          callback: async () => {
+            const updates = {
+              "system.skills.faith.value":   Math.max(faithRank, faithRank + 1, 1),
+              "system.skills.plating.value": Math.max(platingRank, platingRank + 1, 1),
+              "flags.fourththing.soulSmith.l1GrantsApplied": true
+            };
+            await actor.update(updates);
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll" style="border-color:#8a6a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c8a0">⚒ Sanctified Forge Initiate — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem">+1 Faith and +1 Plating applied.</p></div>`
+            });
+          }
+        }
+      }),
+      hex: {
+        label: "Announce hex repair",
+        callback: async () => {
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#8a6a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c8a0">⚒ Forge Initiate — Hex Repair</span></div><p style="margin:0.3rem 0;font-size:0.82rem">${_ftEscape(actor.name)} channels Economy OP into repairing / stabilizing a damaged hex. GM tracks the repair budget at the strategic layer.</p></div>`
+          });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: granted ? "hex" : "grant"
+  }).render(true);
+}
+
+// ── Tier 2 — Atonement Crucible ─────────────────────────────────────────────
+export async function openSoulSmithAtonementCrucible(actor) {
+  const used = !!actor.flags?.fourththing?.soulSmith?.atonementUsedThisArc;
+
+  new Dialog({
+    title: "Soul-Smith · Atonement Crucible (T2)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Once per campaign arc, lead an atonement crafting project to attempt to <b>purify a single Corrupted Spark</b> instead of destroying it — transforming it into a redeemed or stabilized form.</p>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${used ? "USED THIS ARC — reset at next arc" : "AVAILABLE"}</b></p>
+      <div class="ft-cast-field"><label>Spark being purified (narrative)</label>
+        <input type="text" name="spark" placeholder="e.g., the Spark of Calliope's Tomb"/></div>
+      <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">Mechanics: GM applies the Tikkun/Spark-engine outcome at the table; the canon swap is destruction → redemption.</p>
+    </div>`,
+    buttons: {
+      ...(used ? {} : {
+        lead: {
+          label: "Lead the Crucible",
+          callback: async (html) => {
+            const spark = String(html.find("[name='spark']").val() || "").trim() || "(unnamed Spark)";
+            await actor.update({ "flags.fourththing.soulSmith.atonementUsedThisArc": true });
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll" style="border-color:#5a3a8a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#d4b8e8">⚒ Atonement Crucible — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem">${_ftEscape(actor.name)} leads an atonement project to purify <b>${_ftEscape(spark)}</b>. GM resolves via Tikkun/Spark rules.</p><p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.55">Used this arc — refresh at next arc.</p></div>`
+            });
+          }
+        }
+      }),
+      reset: {
+        label: "Reset (new arc)",
+        callback: async () => {
+          await actor.update({ "flags.fourththing.soulSmith.atonementUsedThisArc": false });
+          ui.notifications?.info(`${actor.name}: Atonement Crucible refreshed for new arc.`);
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: used ? "close" : "lead"
+  }).render(true);
+}
+
+// ── Tier 3 — Furnace of Renewal ─────────────────────────────────────────────
+export async function openSoulSmithFurnaceOfRenewal(actor) {
+  const tier = _ssCharTier(actor);
+  const active = tier >= 3;
+  new Dialog({
+    title: "Soul-Smith · Furnace of Renewal (T3)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Passive: resistance to <b>poison</b> and <b>necrotic</b> damage. (Auto-applied as an Active Effect when you reach Tier 3.)</p>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Rest-bonus: during rests you oversee, allies regain extra Integrity when they spend Body dice — your fire burns away the worst of what's stuck to them.</p>
+      <p style="font-size:0.74rem;opacity:0.7;margin:0.3rem 0">Status: <b style="color:${active ? "#a0d8b8" : "#e8c84a"}">${active ? "ACTIVE (Tier " + tier + ")" : "PENDING (current tier " + tier + " — reach Tier 3)"}</b></p>
+    </div>`,
+    buttons: {
+      ...(active ? {
+        announce: {
+          label: "Announce rest-bonus to table",
+          callback: async () => {
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll" style="border-color:#8a6a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ffc878">🔥 Furnace of Renewal — ${_ftEscape(actor.name)} oversees this rest</span></div><p style="margin:0.3rem 0;font-size:0.82rem">Allies who spend Body dice during this rest regain <b>extra Integrity</b>. ${_ftEscape(actor.name)}'s fire burns away the worst of what's stuck to them. (GM applies the per-die bump.)</p></div>`
+            });
+          }
+        }
+      } : {}),
+      close: { label: "Close" }
+    },
+    default: "close"
+  }).render(true);
+}
+
+// ── Tier 4 — Relic of Rebirth ───────────────────────────────────────────────
+export async function openSoulSmithRelicOfRebirth(actor) {
+  const tier      = _ssCharTier(actor);
+  const available = tier >= 4;
+  const used      = !!actor.flags?.fourththing?.soulSmith?.relicUsed;
+
+  new Dialog({
+    title: "Soul-Smith · Relic of Rebirth (T4)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Forge a Relic of Rebirth — massive, one-per-use artifact capable of restoring a corrupted or ruined region/hex in a single, campaign-shaping stroke.</p>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b style="color:${!available ? "#888" : used ? "#888" : "#e8c84a"}">${!available ? "LOCKED (Tier " + tier + " — reach Tier 4)" : used ? "USED — refresh on Soma Break" : "AVAILABLE"}</b></p>
+      ${available ? `<div class="ft-cast-field"><label>Region / hex being restored (narrative)</label>
+        <input type="text" name="region" placeholder="e.g., the Burned Vale of Yesod"/></div>` : ""}
+    </div>`,
+    buttons: {
+      ...(available && !used ? {
+        forge: {
+          label: "Forge the Relic",
+          callback: async (html) => {
+            const region = String(html.find("[name='region']").val() || "").trim() || "(unspecified region)";
+            await actor.update({ "flags.fourththing.soulSmith.relicUsed": true });
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll" style="border-color:#a07a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ffd498">⚒ Relic of Rebirth — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem">A campaign-shaping artifact is forged. <b>${_ftEscape(region)}</b> is restored.</p><p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.55">One-per-use — refresh on Soma Break.</p></div>`
+            });
+          }
+        }
+      } : {}),
+      reset: {
+        label: "Reset (Soma Break)",
+        callback: async () => {
+          await actor.update({ "flags.fourththing.soulSmith.relicUsed": false });
+          ui.notifications?.info(`${actor.name}: Relic of Rebirth refreshed.`);
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: available && !used ? "forge" : "close"
+  }).render(true);
+}
+
+// Back-compat shim — old dispatcher / compendium content keyed to
+// "soul_smith_forge" routes here. Picks the right tier handler by current tier.
 export async function openSoulSmithForge(actor) {
+  const tier = _ssCharTier(actor);
+  if (tier >= 4) return openSoulSmithRelicOfRebirth(actor);
+  if (tier >= 3) return openSoulSmithFurnaceOfRenewal(actor);
+  if (tier >= 2) return openSoulSmithAtonementCrucible(actor);
+  return openSoulSmithForgeInitiate(actor);
+}
+
+// RETIRED placeholder so the original block's closing brace still has scope.
+async function _RETIRED_OldSoulSmithForgeBlock(actor) {
   const res       = getResources(actor);
   const relicUsed = res.forgeCharge?.relicUsed ?? false;
   const sparks    = res.forgeCharge?.sparksRepaired ?? 0;
-
   new Dialog({
     title: "Soul-Smith — Forge Charge",
+    content: `<div class="ft-cast-dialog">retired placeholder</div>`,
+    buttons: {
+      apply: { label: "Apply", callback: () => {} },
+      close: { label: "Close" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
+// ─── Harmony Marshal dialogs ─────────────────────────────────────────────────
+// Canon (Phase 1.5):
+//   T1 Harmony Initiate   — Diplomacy +1, Insight +1, Soft Power +10% gen (narrative)
+//   T2 Attrition Easer    — 1/strategic turn: spend 1 Soft Power OP → -1 Attrition faction-wide
+//   T3 Loyalty Steward    — on resolved hex/faction conflict: chosen hex Loyalty +1
+//   T4 Unity Conductor    — faction passive: +2 Soft Power OP per strategic turn
+// (No personal resource pool by canon — strategic-layer specialist.)
+
+function _hmCharTier(actor) {
+  const sys = actor?.system?.system ?? actor?.system ?? {};
+  return Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+}
+
+function _hmGetFaction(actor) {
+  const fid = actor?.getFlag?.("bbttcc-factions", "factionId");
+  const fname = actor?.getFlag?.("bbttcc-factions", "factionName");
+  const sys = actor?.system?.system ?? actor?.system ?? {};
+  const sysFid = sys?.faction?.id;
+  const sysFname = sys?.faction?.name;
+  const targetId = fid || sysFid;
+  const targetName = fname || sysFname;
+  if (targetId) return (game.actors?.contents ?? []).find(a => a.id === targetId || a.uuid === targetId);
+  if (targetName) return (game.actors?.contents ?? []).find(a => a.type === "npc" && a.name === String(targetName).trim());
+  return null;
+}
+
+// ── Tier 1 — Harmony Initiate ───────────────────────────────────────────────
+export async function openHarmonyMarshalInitiate(actor) {
+  const granted = !!actor.flags?.fourththing?.harmonyMarshal?.l1GrantsApplied;
+  const sys = actor.system?.system ?? actor.system ?? {};
+  const diplomacyRank = Number(sys?.skills?.diplomacy?.value) || 0;
+  const insightRank   = Number(sys?.skills?.insight?.value)   || 0;
+  const faction       = _hmGetFaction(actor);
+
+  new Dialog({
+    title: "Harmony Marshal · Harmony Initiate (T1)",
     content: `<div class="ft-cast-dialog">
-      <div class="ft-preview-stats" style="margin-bottom:0.6rem">
-        <span class="ft-prev-stat"><span class="ft-prev-label">Relic of Rebirth</span>
-          <span class="ft-prev-val" style="color:${relicUsed ? '#888' : '#e8c84a'}">${relicUsed ? "Used (Soma Break)" : "Available"}</span></span>
-        <span class="ft-prev-stat"><span class="ft-prev-label">Sparks Repaired</span>
-          <span class="ft-prev-val">${sparks}</span></span>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Your faction's Soft Power generation increases by <b>10%</b> (rounding in your favor) as Command routes hearts-and-minds work through you.</p>
+      <div class="ft-preview-stats" style="margin-bottom:0.5rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Diplomacy</span>
+          <span class="ft-prev-val">${diplomacyRank}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Insight</span>
+          <span class="ft-prev-val">${insightRank}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">L1 grants</span>
+          <span class="ft-prev-val" style="color:${granted ? '#a0d8b8' : '#e8c84a'}">${granted ? "Applied" : "Pending"}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Faction</span>
+          <span class="ft-prev-val">${_ftEscape(faction?.name ?? "(none)")}</span></span>
       </div>
-      <div class="ft-cast-field" style="margin-top:0.3rem">
-        <label>Action</label>
-        <select name="action">
-          <option value="none">— Update state only —</option>
-          <option value="relic" ${relicUsed ? 'disabled' : ''}>Create Relic of Rebirth (1/Soma Break — restore corrupted region)</option>
-          <option value="repair">Repair Spark (Economy OPs — purify Corrupted Spark)</option>
-          <option value="hex_repair">Hex Repair (Economy OPs — repair hex structure)</option>
-          <option value="reset">Reset after Soma Break</option>
-        </select>
+      ${granted ? "" : `<p style="font-size:0.72rem;opacity:0.7;margin:0.2rem 0">Click <b>Apply L1 grants</b> to add +1 Diplomacy and +1 Insight (one-time, idempotent).</p>`}
+      <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">SP +10% generation is a passive — GM applies at the strategic-turn rollover when computing faction OPs.</p>
+    </div>`,
+    buttons: {
+      ...(granted ? {} : {
+        grant: {
+          label: "Apply L1 grants",
+          callback: async () => {
+            const updates = {
+              "system.skills.diplomacy.value": Math.max(diplomacyRank, diplomacyRank + 1, 1),
+              "system.skills.insight.value":   Math.max(insightRank, insightRank + 1, 1),
+              "flags.fourththing.harmonyMarshal.l1GrantsApplied": true
+            };
+            await actor.update(updates);
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Harmony Initiate — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem">+1 Diplomacy and +1 Insight applied. Faction Soft Power generation +10% (narrative — GM applies at strategic turn).</p></div>`
+            });
+          }
+        }
+      }),
+      close: { label: "Close" }
+    },
+    default: granted ? "close" : "grant"
+  }).render(true);
+}
+
+// ── Tier 2 — Attrition Easer ────────────────────────────────────────────────
+export async function openHarmonyMarshalAttritionEaser(actor) {
+  const used = !!actor.flags?.fourththing?.harmonyMarshal?.attritionEaserUsedThisTurn;
+  const faction = _hmGetFaction(actor);
+  const opPath = "system.opPools.softpower";
+  const factionSys = faction?.system?.system ?? faction?.system ?? {};
+  const currentSP = Number(foundry.utils.getProperty(factionSys, "opPools.softpower")) || 0;
+  const canAfford = currentSP >= 1;
+
+  new Dialog({
+    title: "Harmony Marshal · Attrition Easer (T2)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Once per strategic turn, spend <b>1 Soft Power OP</b> to remove <b>1 Attrition point</b> faction-wide — reconciliation campaigns, rest cycles, "we actually talked about it" debriefs.</p>
+      <div class="ft-preview-stats" style="margin-bottom:0.5rem">
+        <span class="ft-prev-stat"><span class="ft-prev-label">Faction</span>
+          <span class="ft-prev-val">${_ftEscape(faction?.name ?? "(unbound)")}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">Soft Power OP</span>
+          <span class="ft-prev-val" style="color:${canAfford ? '#a0d8b8' : '#eb5757'}">${currentSP}</span></span>
+        <span class="ft-prev-stat"><span class="ft-prev-label">This turn</span>
+          <span class="ft-prev-val" style="color:${used ? '#888' : '#e8c84a'}">${used ? "USED" : "AVAILABLE"}</span></span>
       </div>
-      <div class="ft-cast-field" style="margin-top:0.3rem">
-        <input type="number" name="sparks" value="${sparks}" min="0" style="width:60px"/>
-        <label> total Sparks repaired this arc</label>
+      ${!faction ? `<p style="color:#eb5757;font-size:0.74rem">⚠ No faction bound — bind via the faction dropdown on the sheet first.</p>` : ""}
+      ${!canAfford && faction ? `<p style="color:#eb5757;font-size:0.74rem">⚠ Faction has no Soft Power OP to spend.</p>` : ""}
+    </div>`,
+    buttons: {
+      ...(faction && canAfford && !used ? {
+        spend: {
+          label: "Spend 1 SP OP · Ease 1 Attrition",
+          callback: async () => {
+            await faction.update({ [opPath]: currentSP - 1 });
+            await actor.update({ "flags.fourththing.harmonyMarshal.attritionEaserUsedThisTurn": true });
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Attrition Easer — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: -1 Soft Power OP (now ${currentSP - 1}), <b>-1 Attrition</b> faction-wide. GM applies the Attrition reduction to the faction sheet.</p><p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.55">Used this strategic turn — refresh at next turn.</p></div>`
+            });
+          }
+        }
+      } : {}),
+      reset: {
+        label: "Reset (new strategic turn)",
+        callback: async () => {
+          await actor.update({ "flags.fourththing.harmonyMarshal.attritionEaserUsedThisTurn": false });
+          ui.notifications?.info(`${actor.name}: Attrition Easer refreshed.`);
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: faction && canAfford && !used ? "spend" : "close"
+  }).render(true);
+}
+
+// ── Tier 3 — Loyalty Steward ────────────────────────────────────────────────
+export async function openHarmonyMarshalLoyaltySteward(actor) {
+  // List candidate hexes — for the simple version, just collect any hex tile
+  // documents the user can see. Fall back to a free-text "hex name" input.
+  const hexes = (game.scenes?.contents ?? [])
+    .filter(s => /hex/i.test(s.name) || s.flags?.["bbttcc-territory"]?.hexId)
+    .map(s => ({ id: s.id, name: s.name }));
+  const hexOptions = hexes.length
+    ? hexes.map(h => `<option value="${h.id}">${_ftEscape(h.name)}</option>`).join("")
+    : `<option value="">(no hex scenes detected — describe in chat below)</option>`;
+
+  new Dialog({
+    title: "Harmony Marshal · Loyalty Steward (T3)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">On a successful major Diplomacy check (or Courtly Intrigue scene win) that resolves a hex- or faction-level conflict: choose one affected hex — <b>Loyalty in that hex increases by 1</b>.</p>
+      <div class="ft-cast-field">
+        <label>Affected hex</label>
+        <select name="hex" ${hexes.length ? "" : "disabled"}>${hexOptions}</select>
       </div>
+      <div class="ft-cast-field">
+        <label>Or describe the hex (chat narrative)</label>
+        <input type="text" name="hexNote" placeholder="e.g., Hex 12 — Allesh Gilliam Long Market"/>
+      </div>
+      <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">If a hex scene is selected, its Loyalty flag is incremented. Otherwise narrative only — GM applies on the faction/hex sheet.</p>
     </div>`,
     buttons: {
       apply: {
-        label: "Apply",
+        label: "Apply Loyalty +1",
         callback: async (html) => {
-          const action      = html.find("[name='action']").val();
-          const newSparks   = parseInt(html.find("[name='sparks']").val()) || sparks;
-          const newRelicUsed = action === "relic"  ? true
-                             : action === "reset"  ? false
-                             : relicUsed;
-          const finalSparks  = action === "repair" ? sparks + 1
-                             : action === "reset"  ? 0
-                             : newSparks;
-          await actor.update({
-            "system.resources.forgeCharge.relicUsed":     newRelicUsed,
-            "system.resources.forgeCharge.sparksRepaired": finalSparks,
-          });
-          const labels = {
-            relic:      "Relic of Rebirth created — corrupted region targeted for restoration",
-            repair:     "Spark Repaired — Corrupted Spark cleansed via atonement crafting",
-            hex_repair: "Hex Repair initiated — Economy OPs spent, structure restoration begun",
-            reset:      "Forge charge reset after Soma Break"
-          };
-          if (action !== "none") {
-            ChatMessage.create({
-              speaker: ChatMessage.getSpeaker({ actor }),
-              content: `<div class="fourththing-roll">
-                <div class="ft-roll-header"><span class="ft-roll-name">⚒ Soul-Smith: ${labels[action]?.split(' — ')[0]}</span></div>
-                <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">${labels[action]}</p>
-              </div>`
-            });
+          const hexId = html.find("[name='hex']").val();
+          const note  = String(html.find("[name='hexNote']").val() || "").trim();
+          let hexName = note || "(unspecified hex)";
+          let bumped = false;
+          if (hexId) {
+            const scene = game.scenes.get(hexId);
+            if (scene) {
+              hexName = scene.name;
+              const cur = Number(scene.getFlag?.("bbttcc-factions", "loyalty")) || 0;
+              await scene.setFlag("bbttcc-factions", "loyalty", cur + 1);
+              bumped = true;
+            }
           }
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Loyalty Steward — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem">Loyalty +1 in <b>${_ftEscape(hexName)}</b>.${bumped ? "" : " <em>(narrative — GM applies)</em>"}</p></div>`
+          });
         }
       },
       close: { label: "Close" }
     },
     default: "apply"
   }).render(true);
+}
+
+// ── Tier 4 — Unity Conductor ────────────────────────────────────────────────
+export async function openHarmonyMarshalUnityConductor(actor) {
+  const faction = _hmGetFaction(actor);
+
+  new Dialog({
+    title: "Harmony Marshal · Unity Conductor (T4)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Passive: your faction gains an additional <b>+2 Soft Power OP per strategic turn</b>, as long as you are alive, active, and in communication with Command.</p>
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Faction bound: <b>${_ftEscape(faction?.name ?? "(unbound)")}</b></p>
+      <p style="font-size:0.7rem;opacity:0.55;margin:0.4rem 0 0">Reminder chat card fires automatically on <code>bbttcc:advanceTurn:end</code> so the GM doesn't forget the grant.</p>
+    </div>`,
+    buttons: {
+      ...(faction ? {
+        grant: {
+          label: "Apply +2 SP OP now (manual)",
+          callback: async () => {
+            const factionSys = faction?.system?.system ?? faction?.system ?? {};
+            const cur = Number(foundry.utils.getProperty(factionSys, "opPools.softpower")) || 0;
+            await faction.update({ "system.opPools.softpower": cur + 2 });
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Unity Conductor — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: +2 Soft Power OP applied (now ${cur + 2}).</p></div>`
+            });
+          }
+        }
+      } : {}),
+      close: { label: "Close" }
+    },
+    default: "close"
+  }).render(true);
+}
+
+// ── Tactical surface — Rallying Words ───────────────────────────────────────
+// Out-of-tier per canon (mentioned at L2). Bonus action; target an ally, bank
+// reroll-lowest on their next roll this scene (matches `aid` action shape in
+// module.js::FT.COMBAT_ACTIONS).
+export async function openHarmonyMarshalRallyingWords(actor) {
+  const targets = Array.from(game.user?.targets ?? []);
+  const ally = targets[0]?.actor;
+  if (!ally) {
+    return ui.notifications?.warn(`${actor.name}: target an ally token first, then click Rallying Words.`);
+  }
+  const banked = ally.getFlag?.("fourththing", "aidBanked") ?? [];
+  banked.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "rallying-words" });
+  await ally.setFlag("fourththing", "aidBanked", banked);
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">📣 Rallying Words — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(ally.name)}</b>: reroll-lowest banked on next roll this scene.</p></div>`
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -2036,40 +2644,14 @@ function _ftCap(s) { return String(s ?? "").charAt(0).toUpperCase() + String(s ?
 
 // ─── Pactkeeper dialogs ──────────────────────────────────────────────────────
 
-export async function openPactkeeperLeverage(actor) {
-  const lev = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "pactLeverage", legacyFlag: "pkLeverage", defaultMax: 5 });
+// RETIRED 2026-05-22 — openPactkeeperLeverage / openPactkeeperBindingClause /
+// openPactkeeperPrecedent / openPactkeeperCivicCharge /
+// openPactkeeperSpendCivicCharge / openPactkeeperPressure were game-development
+// residue with no canon backing (Phase 1.5 canon: The Bargain · Renegotiate ·
+// Sealed Pact · Ledger Day). Their dispatcher cases + sheet chips + identifier
+// mappings are gone. Function bodies stripped to reduce surface area.
 
-  new Dialog({
-    title: "Pactkeeper — Leverage",
-    content: `<div class="ft-cast-dialog">
-      <div class="ft-preview-stats">
-        <span class="ft-prev-stat"><span class="ft-prev-label">Leverage</span>
-          <span class="ft-prev-val" style="color:#78909c">${lev.current} / ${lev.max}</span></span>
-      </div>
-      <p style="font-size:0.72rem;opacity:0.55;margin:0.4rem 0">
-        Gained by witnessing agreements, doing tracked favors, uncovering precedent.
-        Max scales with Steward tier (5/6/7/8) — sheet chip auto-recomputes.
-      </p>
-      <div class="ft-cast-grid">
-        <div class="ft-cast-field"><label>Current</label>
-          <input type="number" name="current" value="${lev.current}" min="0" max="${lev.max}"/></div>
-      </div>
-    </div>`,
-    buttons: {
-      save: {
-        label: "Apply",
-        callback: async (html) => {
-          const current = parseInt(html.find("[name='current']").val()) || 0;
-          await actor.update({ "system.resources.pactLeverage.current": Math.min(current, lev.max) });
-        }
-      },
-      close: { label: "Close" }
-    },
-    default: "save"
-  }).render(true);
-}
-
-export async function openPactkeeperBindingClause(actor) {
+async function _RETIRED_PactkeeperLeverage_placeholder(actor) {
   const lev = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "pactLeverage", legacyFlag: "pkLeverage", defaultMax: 5 });
 
   new Dialog({
@@ -2281,9 +2863,141 @@ export async function openPactkeeperBindSubject(actor) {
   }).render(true);
 }
 
+// Pactkeeper — Renegotiate (Initiation 6). When a manifestation would misfire,
+// accept a GM-set narrative debt and treat the cast as having succeeded at
+// base tier. Stub: surfaces the offer, records intent on a ledger flag.
+// Real misfire interception (so the chat-card auto-prompts on misfire) wires
+// up in a follow-on pass — see task #14.
+// Pactkeeper — Renegotiate ledger surface (Initiation 6).
+// AUTO-FLOW: when a manifestation misfires, the misfire chat card surfaces
+// a "§ Renegotiate — accept narrative debt" button automatically (see
+// _ftPostMisfireConversionCard + _ftHandleMisfireConvertClick in module.js).
+// THIS DIALOG: manual entry point to view + add to the debt ledger outside a
+// misfire (e.g. GM logging an after-the-fact debt agreed at the table).
+// Ledger lives at flags.fourththing.pkNarrativeDebts — same field the
+// misfire path writes to, so both surfaces stay in sync.
+export async function openPactkeeperRenegotiate(actor) {
+  const ledger = Array.isArray(actor.flags?.fourththing?.pkNarrativeDebts)
+    ? actor.flags.fourththing.pkNarrativeDebts : [];
+  const recent = ledger.slice(-5).map(d => {
+    const ts = d.ts ? new Date(d.ts).toLocaleDateString() : "";
+    const src = d.source ? ` <span style="opacity:0.55">(${_ftEscape(d.source)})</span>` : "";
+    return `<li>${_ftEscape(d.debt || d.note || "(unspecified)")}${src} <span style="opacity:0.5">— ${ts}</span></li>`;
+  }).join("");
+  const lines = ledger.length
+    ? `<p style="font-size:0.74rem;opacity:0.7;margin:0.3rem 0">Last ${Math.min(5, ledger.length)} of ${ledger.length} debt(s):</p><ul style="margin:0;padding-left:1.2rem;font-size:0.74rem">${recent}</ul>`
+    : `<p style="font-size:0.74rem;opacity:0.7;margin:0.3rem 0">No outstanding debts yet.</p>`;
+
+  new Dialog({
+    title: "Pactkeeper — Renegotiate Ledger (Initiation 6)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Misfire-conversion debts are added automatically when you click "§ Renegotiate" on a misfire card. Use this surface to <b>log a debt agreed at the table</b> independent of a misfire, or to review existing debts.</p>
+      <div class="ft-cast-field">
+        <label>Describe the debt being logged</label>
+        <input type="text" name="note" placeholder="e.g., owe the Verdict Court a favor next session"/>
+      </div>
+      ${lines}
+    </div>`,
+    buttons: {
+      accept: {
+        label: "Log Debt",
+        callback: async (html) => {
+          const note = String(html.find("[name='note']").val() || "").trim() || "(unspecified debt)";
+          const next = [...ledger, { ts: Date.now(), debt: note, source: "manual" }];
+          await actor.setFlag("fourththing", "pkNarrativeDebts", next);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#3a6a5a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0c8b8">§ Debt Logged — ${_ftEscape(actor.name)}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.8rem"><b>Debt:</b> ${_ftEscape(note)}</p>
+              <p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.55">Ledger now holds ${next.length} debt(s).</p>
+            </div>`
+          });
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: "accept"
+  }).render(true);
+}
+
+// Pactkeeper — Initiation 1 skill pick. Canon: "Skill rank +1 in two of:
+// Diplomacy, Insight, Intimidation, Lore." Player picks at character creation.
+// Idempotent: once locked, attempting to re-open shows the prior pick and
+// requires GM to clear the flag for a redo. Grants are direct skill-rank
+// writes; the wizard auto-grant path is bypassed here because canon is a
+// constrained choice, not a blanket grant.
+export async function openPactkeeperPickL1Skills(actor) {
+  const CHOICES = [
+    { key: "diplomacy",    label: "Diplomacy"    },
+    { key: "insight",      label: "Insight"      },
+    { key: "intimidation", label: "Intimidation" },
+    { key: "lore",         label: "Lore"         }
+  ];
+  const prior = actor.flags?.fourththing?.pactkeeperL1Picks;
+  if (Array.isArray(prior) && prior.length === 2) {
+    return new Dialog({
+      title: "Pactkeeper — L1 Skill Pick (already chosen)",
+      content: `<div class="ft-cast-dialog">
+        <p style="font-size:0.78rem">You already picked your Initiation 1 skill grants:</p>
+        <ul style="margin:0.3rem 0;padding-left:1.2rem;font-size:0.82rem"><li><b>${_ftEscape(CHOICES.find(c => c.key === prior[0])?.label || prior[0])}</b></li><li><b>${_ftEscape(CHOICES.find(c => c.key === prior[1])?.label || prior[1])}</b></li></ul>
+        <p style="font-size:0.72rem;opacity:0.6;margin:0.4rem 0 0">To redo: GM clears <code>flags.fourththing.pactkeeperL1Picks</code> on this actor.</p>
+      </div>`,
+      buttons: { close: { label: "Close" } }
+    }).render(true);
+  }
+
+  const rawSys = actor.system?.system ?? actor.system ?? {};
+  const skills = rawSys?.skills ?? {};
+  const rows = CHOICES.map(c => {
+    const curVal = Number(skills[c.key]?.value ?? 0);
+    return `<label style="display:flex;gap:0.4rem;align-items:center;font-size:0.82rem;padding:0.2rem 0">
+      <input type="checkbox" name="skill" value="${c.key}"/>
+      <span>${c.label} <span style="opacity:0.55;font-size:0.74rem">(current rank ${curVal})</span></span>
+    </label>`;
+  }).join("");
+
+  new Dialog({
+    title: "Pactkeeper — Initiation 1 Skill Pick",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem"><b>The Bargain</b> grants +1 skill rank in <b>two of</b>:</p>
+      <div style="margin:0 0 0.5rem">${rows}</div>
+      <p style="font-size:0.72rem;opacity:0.6;margin:0">Tick exactly two boxes. Choice is locked once applied.</p>
+    </div>`,
+    buttons: {
+      apply: {
+        label: "Apply (lock pick)",
+        callback: async (html) => {
+          const picked = Array.from(html.find("[name='skill']:checked")).map(el => el.value);
+          if (picked.length !== 2) {
+            return ui.notifications?.warn("Pick exactly two skills.");
+          }
+          const updates = {};
+          for (const sk of picked) {
+            const cur = Number(skills[sk]?.value ?? 0);
+            updates[`system.skills.${sk}.value`] = Math.max(cur, cur + 1, 1);
+          }
+          updates["flags.fourththing.pactkeeperL1Picks"] = picked;
+          await actor.update(updates);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#3a6a5a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0c8b8">§ The Bargain — ${_ftEscape(actor.name)}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.82rem">+1 skill rank in <b>${_ftEscape(CHOICES.find(c => c.key === picked[0])?.label)}</b> and <b>${_ftEscape(CHOICES.find(c => c.key === picked[1])?.label)}</b>.</p>
+            </div>`
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "apply"
+  }).render(true);
+}
+
 // Pactkeeper — Civic Charge dice pool (canonical class resource per Core
 // Features compendium item v2PteOnTErjsVZ66). Display + manual gain/spend.
-export async function openPactkeeperCivicCharge(actor) {
+// RETIRED 2026-05-22 — see banner above openPactkeeperLeverage.
+async function _RETIRED_openPactkeeperCivicCharge(actor) {
   const rawSys = actor.system?.system ?? actor.system;
   const cc = rawSys?.resources?.civicCharge ?? { dice: 0, maxDice: 1, dieSize: "d6" };
   const gainedThisRound = actor.getFlag("fourththing", "pkChargeGainedThisRound") === true;
@@ -2339,7 +3053,8 @@ export async function openPactkeeperCivicCharge(actor) {
 // Pactkeeper — Spend Civic Charge: rolls a die, presents the 5 spend modes
 // (Stabilization / Authority Boost / Enforcement / Containment / Closure),
 // debits the die on confirm. Per canonical Core Features (v2PteOnTErjsVZ66).
-export async function openPactkeeperSpendCivicCharge(actor) {
+// RETIRED 2026-05-22 — see banner above openPactkeeperLeverage.
+async function _RETIRED_openPactkeeperSpendCivicCharge(actor) {
   const rawSys = actor.system?.system ?? actor.system;
   const cc = rawSys?.resources?.civicCharge ?? { dice: 0, maxDice: 1, dieSize: "d6" };
   if (cc.dice < 1) {
@@ -2412,7 +3127,8 @@ export async function openPactkeeperSpendCivicCharge(actor) {
 }
 
 // Pactkeeper — Administrative Pressure track. Display + clear/edit dialog.
-export async function openPactkeeperPressure(actor) {
+// RETIRED 2026-05-22 — see banner above openPactkeeperLeverage.
+async function _RETIRED_openPactkeeperPressure(actor) {
   const rawSys = actor.system?.system ?? actor.system;
   const ap = rawSys?.resources?.administrativePressure ?? { value: 0, max: 10 };
   const v = Number(ap.value) || 0;
@@ -2465,7 +3181,8 @@ export async function openPactkeeperPressure(actor) {
   }).render(true);
 }
 
-export async function openPactkeeperPrecedent(actor) {
+// RETIRED 2026-05-22 — see banner above openPactkeeperLeverage.
+async function _RETIRED_openPactkeeperPrecedent(actor) {
   const used = actor.getFlag("fourththing", "pkPrecedentUsed") ?? false;
 
   new Dialog({
@@ -4574,9 +5291,88 @@ export async function openDreamwalkerSharedDream(actor) {
     "Allies who Soma Break in your presence regain Clarity equal to half your tier (round up). 1/Soma Break you may explicitly invoke this to grant the bonus retroactively to the just-completed Soma Break.");
 }
 
+// Pactkeeper — Ledger Day (Initiation 16). 1/Soma Break: transfer ONE of your
+// sustained manifestations to a willing ally; the ally's `activeManifestations`
+// flag grows the entry, yours shrinks. Upkeep ticks bill from whoever holds
+// the entry, so the move is real and immediate. Tier-16 gate enforced by GM at
+// the table (we don't read tier on Pactkeeper directly — Init 16 = char level 16+).
 export async function openPactkeeperLedgerDay(actor) {
-  return _openSomaBreakAbility(actor, "pkLedgerDay", "Ledger Day",
-    "Transfer one of your sustained manifestations to a willing ally — they pick up upkeep from their Clarity from that point on. The pact moves with the paper, not the person who originally signed.");
+  const used = Boolean(actor.getFlag("fourththing", "disciplineUsed.pkLedgerDay"));
+  const active = actor.getFlag("fourththing", "activeManifestations") ?? [];
+  // Eligible recipients: PC actors other than self that the current user can see.
+  const allies = (game.actors?.contents ?? []).filter(a =>
+    a.id !== actor.id && a.type === "character" && a.testUserPermission?.(game.user, "OBSERVER")
+  );
+
+  if (!active.length) {
+    return ui.notifications?.warn(`${actor.name}: no sustained manifestations to transfer.`);
+  }
+
+  const manifOptions = active.map(e =>
+    `<option value="${e.instanceId}">${_ftEscape(e.itemName)} (T${e.tier}, ${_ftEscape(e.stability || "sustained")}${e.pactBound ? ", pact-bound" : ""})</option>`
+  ).join("");
+  const allyOptions = allies.length
+    ? allies.map(a => `<option value="${a.id}">${_ftEscape(a.name)}</option>`).join("")
+    : `<option value="">(no eligible allies found)</option>`;
+
+  new Dialog({
+    title: "Pactkeeper — Ledger Day (Initiation 16)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${used ? "SPENT — refresh on Soma Break" : "AVAILABLE (1/Soma Break)"}</b></p>
+      <p style="font-size:0.76rem;opacity:0.8;margin:0 0 0.5rem">Transfer one of your sustained manifestations to a willing ally. They pick up upkeep from their Clarity from that point on. The pact moves with the paper, not the person who originally signed.</p>
+      <div class="ft-cast-field">
+        <label>Manifestation to transfer</label>
+        <select name="manif">${manifOptions}</select>
+      </div>
+      <div class="ft-cast-field">
+        <label>Recipient (willing ally)</label>
+        <select name="ally" ${allies.length ? "" : "disabled"}>${allyOptions}</select>
+      </div>
+    </div>`,
+    buttons: {
+      transfer: {
+        label: used ? "(already spent)" : "Transfer",
+        callback: async (html) => {
+          if (used) {
+            return ui.notifications?.warn("Ledger Day already spent — reset on Soma Break.");
+          }
+          const instanceId = html.find("[name='manif']").val();
+          const allyId     = html.find("[name='ally']").val();
+          if (!allyId) return ui.notifications?.warn("Pick a recipient.");
+          const ally = game.actors.get(allyId);
+          if (!ally) return ui.notifications?.warn("Recipient not found.");
+          const entry = active.find(e => e.instanceId === instanceId);
+          if (!entry) return ui.notifications?.warn("Manifestation not found.");
+
+          // Move the entry: append to ally's list, remove from self.
+          const allyActive = ally.getFlag("fourththing", "activeManifestations") ?? [];
+          const transferred = { ...entry, transferredFrom: actor.uuid, transferredAt: Date.now() };
+          await ally.setFlag("fourththing", "activeManifestations", [...allyActive, transferred]);
+          await actor.setFlag("fourththing", "activeManifestations", active.filter(e => e.instanceId !== instanceId));
+          await actor.setFlag("fourththing", "disciplineUsed.pkLedgerDay", true);
+
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#5a5a8a">
+              <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0a8e0">📜 Ledger Day — ${_ftEscape(actor.name)}</span></div>
+              <p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(entry.itemName)}</b> (T${entry.tier}) transferred to <b>${_ftEscape(ally.name)}</b>.</p>
+              <p style="margin:0.2rem 0;font-size:0.76rem;opacity:0.8">From this point on, upkeep ticks bill from ${_ftEscape(ally.name)}'s Clarity. The pact moves with the paper.</p>
+              <p style="margin:0.2rem 0 0;font-size:0.7rem;opacity:0.55">1/Soma Break — resets when ${_ftEscape(actor.name)} takes their next Soma Break.</p>
+            </div>`
+          });
+        }
+      },
+      reset: {
+        label: "Reset (Soma Break)",
+        callback: async () => {
+          await actor.setFlag("fourththing", "disciplineUsed.pkLedgerDay", false);
+          ui.notifications?.info(`${actor.name}: Ledger Day reset.`);
+        }
+      },
+      close: { label: "Close" }
+    },
+    default: used ? "close" : "transfer"
+  }).render(true);
 }
 
 // ─── Legacy handler → actionCost map ──────────────────────────────────────────
@@ -4598,8 +5394,8 @@ const LEGACY_ACTION_COST = {
   // Cosmic Linguist / Wyrdlens / Dreamwalker / Pactkeeper
   "cosmic_linguist_authority":  "action",
   "cosmic_linguist_annotation": "bonus",
-  "pactkeeper_leverage":        "bonus",
-  "pactkeeper_binding_clause":  "action",
+  "pactkeeper_renegotiate":     "free",
+  "pactkeeper_pick_l1_skills":  "free",
   "dreamwalker_resonance":      "bonus",
   // Mode toggles — bonus action stance switch
   "cl_mode_sentence":           "bonus",
@@ -4607,7 +5403,17 @@ const LEGACY_ACTION_COST = {
   "dw_mode_walking_lane":       "bonus",
   "pk_mode_sealed_pact":        "bonus",
   // Soul Smith / Shadow Courier package use
-  "soul_smith_forge":           "action",
+  "soul_smith_forge":               "action",   // legacy combined router
+  "soul_smith_forge_initiate":      "free",     // T1 — narrative + grant button
+  "soul_smith_atonement_crucible":  "action",   // T2 — once per arc, deliberate work
+  "soul_smith_furnace_of_renewal":  "free",     // T3 — passive info + rest narration
+  "soul_smith_relic_of_rebirth":    "action",   // T4 — one-per-use artifact creation
+  // Harmony Marshal — canon-aligned (Phase 1.5)
+  "harmony_marshal_initiate":           "free",       // T1 — narrative + grant button
+  "harmony_marshal_attrition_easer":    "free",       // T2 — strategic-layer (no tactical action)
+  "harmony_marshal_loyalty_steward":    "free",       // T3 — manual application after Diplomacy success
+  "harmony_marshal_unity_conductor":    "free",       // T4 — passive surface
+  "harmony_marshal_rallying_words":     "bonus",      // tactical surface — bonus action
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -4629,9 +5435,6 @@ const LEGACY_ACTION_COST = {
   "bulwark_ruin":               "free",
   "passive_info":               "free",
   "dreamwalker_deploy_cache":   "free",
-  "pactkeeper_civic_charge":            "free",
-  "pactkeeper_administrative_pressure": "free",
-  "pactkeeper_spend_civic_charge":      "bonus",
   "pactkeeper_bind_subject":            "free",
   "counter_manifestation":              "action",
   "dream_echo_reservoir":               "free",
@@ -4687,7 +5490,19 @@ export async function dispatchFeatureAction(actor, item) {
     case "dream_echo_reservoir":       return openDreamwalkerEchoReservoir(actor);
     case "dream_echo_reservoir_spend": return openDreamwalkerSpendEchoDie(actor);
     case "dw_feat_activate":           return openDreamwalkerFeatActivate(actor, item);
-    case "soul_smith_forge":       return openSoulSmithForge(actor);
+    // Soul-Smith — canon-aligned (Phase 1.5): one handler per tier feature
+    case "soul_smith_forge_initiate":      return openSoulSmithForgeInitiate(actor);
+    case "soul_smith_atonement_crucible":  return openSoulSmithAtonementCrucible(actor);
+    case "soul_smith_furnace_of_renewal":  return openSoulSmithFurnaceOfRenewal(actor);
+    case "soul_smith_relic_of_rebirth":    return openSoulSmithRelicOfRebirth(actor);
+    // Legacy combined router — dispatches to the right tier handler.
+    case "soul_smith_forge":               return openSoulSmithForge(actor);
+    // Harmony Marshal — canon-aligned (Phase 1.5): one handler per tier feature
+    case "harmony_marshal_initiate":          return openHarmonyMarshalInitiate(actor);
+    case "harmony_marshal_attrition_easer":   return openHarmonyMarshalAttritionEaser(actor);
+    case "harmony_marshal_loyalty_steward":   return openHarmonyMarshalLoyaltySteward(actor);
+    case "harmony_marshal_unity_conductor":   return openHarmonyMarshalUnityConductor(actor);
+    case "harmony_marshal_rallying_words":    return openHarmonyMarshalRallyingWords(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);
@@ -4705,14 +5520,10 @@ export async function dispatchFeatureAction(actor, item) {
     // Cosmic Linguist
     case "cosmic_linguist_authority":   return openCosmicLinguistAuthority(actor);
     case "cosmic_linguist_annotation":  return openCosmicLinguistAnnotation(actor);
-    // Pactkeeper
-    case "pactkeeper_leverage":         return openPactkeeperLeverage(actor);
-    case "pactkeeper_binding_clause":   return openPactkeeperBindingClause(actor);
-    case "pactkeeper_precedent":        return openPactkeeperPrecedent(actor);
-    case "pactkeeper_civic_charge":     return openPactkeeperCivicCharge(actor);
-    case "pactkeeper_spend_civic_charge": return openPactkeeperSpendCivicCharge(actor);
-    case "pactkeeper_administrative_pressure": return openPactkeeperPressure(actor);
+    // Pactkeeper — canon-aligned: Bargain / Renegotiate / Sealed Pact / Ledger Day / L1 skill pick
     case "pactkeeper_bind_subject":     return openPactkeeperBindSubject(actor);
+    case "pactkeeper_renegotiate":      return openPactkeeperRenegotiate(actor);
+    case "pactkeeper_pick_l1_skills":   return openPactkeeperPickL1Skills(actor);
     case "counter_manifestation":       return openCounterManifestation(actor);
     // === Caster Discipline pilot 2026-04-27 ===
     case "cl_mode_sentence":            return openCosmicLinguistMode(actor);
