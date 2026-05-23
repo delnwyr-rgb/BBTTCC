@@ -3041,6 +3041,104 @@ async function _ftBankSurge(actor, n) {
   return next - cur;
 }
 
+// Surge one-shot reader (2026-05-23 — consumer side wiring). Mirrors
+// _ftReadDwOneShots. Returns a structured shape per roll context so each
+// roll path only reads what it needs. `actor.flags.fourththing.surge.oneShot.<key>`
+// truthy = primed; the consumer clears the flag with _ftConsumeSurgeOneShots.
+function _ftReadSurgeOneShots(actor, { context = "strike" } = {}) {
+  const f = actor?.flags?.fourththing?.surge?.oneShot ?? {};
+  const out = {
+    snapStrike:     false,
+    sunderingBlow:  false,
+    doomstrike:     false,
+    crowningBlow:   false,
+    finalArgument:  false,
+    tierSurge:      false,
+    surgingCast:    false,
+    ironWord:       false,
+    wrathCascade:   false,
+    cinderwake:     false,
+    consumed:       []   // flag keys to unset after the roll resolves
+  };
+  const has = (k) => !!f[k];
+  if (context === "strike") {
+    if (has("snap-strike"))     { out.snapStrike    = true; out.consumed.push("snap-strike"); }
+    if (has("sundering-blow"))  { out.sunderingBlow = true; out.consumed.push("sundering-blow"); }
+    if (has("doomstrike"))      { out.doomstrike    = true; out.consumed.push("doomstrike"); }
+    if (has("crowning-blow"))   { out.crowningBlow  = true; out.consumed.push("crowning-blow"); }
+    if (has("final-argument"))  { out.finalArgument = true; out.consumed.push("final-argument"); }
+    if (has("tier-surge"))      { out.tierSurge     = true; out.consumed.push("tier-surge"); }
+  } else if (context === "cast") {
+    if (has("surging-cast"))    { out.surgingCast   = true; out.consumed.push("surging-cast"); }
+    if (has("tier-surge"))      { out.tierSurge     = true; out.consumed.push("tier-surge"); }
+  } else if (context === "save") {
+    if (has("iron-word"))       { out.ironWord      = true; out.consumed.push("iron-word"); }
+  }
+  // wrath-cascade + cinderwake apply to *any* d10 roll path.
+  if (context === "strike" || context === "cast" || context === "save") {
+    if (has("wrath-cascade"))   { out.wrathCascade  = true; out.consumed.push("wrath-cascade"); }
+    if (has("cinderwake"))      { out.cinderwake    = true; out.consumed.push("cinderwake"); }
+  }
+  return out;
+}
+
+// Mutate a base `2d10x10 + N` formula to apply Wrath Cascade and/or Cinderwake.
+// Cinderwake lowers the explode threshold to 8 (more explosions);
+// Wrath Cascade adds 2 guaranteed bonus dice that also explode on 10.
+// Returns the new formula string. Operates AFTER any cast-side threshold
+// rewrites (surging-cast → x>=9), so the regex tolerates `x10`, `x>=8`, `x>=9`.
+function _ftApplySurgeRollMods(formula, shots) {
+  let f = formula;
+  if (shots.cinderwake) {
+    // Replace the FIRST 2d10 die expression with x>=8 threshold.
+    f = f.replace(/2d10x(?:10|>=\d+)/, "2d10x>=8");
+  }
+  if (shots.wrathCascade) {
+    // Match whatever threshold ended up in the base term and mirror it onto
+    // the bonus dice (so the two pools have consistent explode behavior).
+    const m = f.match(/2d10x(10|>=\d+)/);
+    const thresh = m ? m[1] : "10";
+    const bonusDie = `2d10x${thresh.includes(">") ? thresh : thresh}`;
+    // Insert immediately after the first matched die term.
+    f = f.replace(/(2d10x(?:10|>=\d+))/, `$1 + ${bonusDie}`);
+  }
+  return f;
+}
+
+// Consume one-shot Surge flags after the roll resolves. Unsets each key in
+// shots.consumed. Posts a styled chat note crediting which boosts fired
+// (matches the DW pattern where consumption is visible in chat).
+async function _ftConsumeSurgeOneShots(actor, shots, { context = "strike" } = {}) {
+  if (!actor || !shots?.consumed?.length) return;
+  const updates = {};
+  for (const key of shots.consumed) {
+    updates[`flags.fourththing.surge.oneShot.-=${key}`] = null;
+  }
+  try { await actor.update(updates); }
+  catch (e) { console.warn("[fourththing] Surge one-shot consume failed", e); }
+}
+
+// Pretty labels for chat notes when a Surge boost fires.
+const _FT_SURGE_LABELS = {
+  "snap-strike":    "Snap Strike (advantage)",
+  "sundering-blow": "Sundering Blow (ignores resists)",
+  "doomstrike":     "Doomstrike (+T d6 exploding)",
+  "crowning-blow":  "Crowning Blow (max-die)",
+  "final-argument": "Final Argument (auto-hit · max · +1 Tier)",
+  "tier-surge":     "Tier Surge (+1 Tier)",
+  "surging-cast":   "Surging Cast (explodes 9–10)",
+  "iron-word":      "Iron Word (auto-pass)",
+  "wrath-cascade":  "Wrath Cascade (+2d10 free)",
+  "cinderwake":     "Cinderwake (explodes 8+)"
+};
+function _ftSurgeBoostBanner(shots) {
+  if (!shots?.consumed?.length) return "";
+  const items = shots.consumed.map(k => _FT_SURGE_LABELS[k] || k);
+  return `<p style="font-size:0.72rem;color:#e8c84a;margin:0.25rem 0 0;font-weight:600">
+    ✦ Surge boosts consumed: ${items.join(" · ")}
+  </p>`;
+}
+
 // Surge spend menu spec — 2026-05-22 expansion. Each cost band gets at least
 // one offensive + one defensive option; heals at 2/4/7/10. Tier-gated entries
 // stay visible but disabled at low tier (tooltip explains why). `bucket`
@@ -3213,13 +3311,28 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     }
   }
 
+  // Pre-prompt for damage type on steel-veil / sanctum so we can refund
+  // (don't-charge) on cancel. Type stored locally; AE built after charge.
+  let chosenType = null;
+  if (effectKey === "steel-veil" || effectKey === "sanctum") {
+    chosenType = await _ftSurgePickDamageType(effectKey === "steel-veil" ? "Steel Veil — resist which type?" : "Sanctum — immune to which type?");
+    if (!chosenType) return; // cancelled
+  }
+
   // Pay the cost.
   await actor.update({ "system.resources.surge.value": Math.max(0, curSurge - cost) });
+
+  // Spend-time AEs: brace / mythic-stand / steel-veil / sanctum apply
+  // immediately via short-duration Active Effects + flag markers that the
+  // damage-apply path reads. No oneShot flag — the AE itself is the contract.
+  const SPEND_TIME_AE = new Set(["brace", "mythic-stand", "steel-veil", "sanctum"]);
 
   // Wired heals.
   let chatExtra = "";
   if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
+  } else if (SPEND_TIME_AE.has(effectKey)) {
+    chatExtra = await _ftSurgeApplyDefenseAE(actor, effectKey, tier, chosenType);
   } else {
     // Flag-and-narrate path: stamp one-shot flag for consumers + GM to enforce.
     try {
@@ -3236,6 +3349,30 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
                     : entry.bucket === "heal" ? '<span style="color:#78c88c">✚ Heal</span>'
                     :                           '<span style="color:#e8c84a">✦ Narrative</span>';
 
+  // Footer hint: heal/AE are immediate; auto-consumed one-shots are read by
+  // Strike/Cast/Save paths; the remaining keys are deferred (GM enforces).
+  const AUTO_CONSUMED_KEYS = new Set([
+    "snap-strike", "sundering-blow", "doomstrike", "crowning-blow", "final-argument",
+    "tier-surge", "surging-cast", "iron-word", "wrath-cascade", "cinderwake"
+  ]);
+  const GM_DEFERRED_KEYS = new Set([
+    "aegis", "bulwark-stance", "anchor", "mass-aegis", "echo-strike",
+    "narrative-refund", "narrative-fiction"
+  ]);
+  let footerHint = "";
+  if (entry.wired || SPEND_TIME_AE.has(effectKey)) {
+    footerHint = ""; // immediate effect, no further enforcement needed
+  } else if (AUTO_CONSUMED_KEYS.has(effectKey)) {
+    const where = (effectKey === "iron-word") ? "next save"
+               : (effectKey === "surging-cast") ? "next Cast"
+               : (effectKey === "wrath-cascade" || effectKey === "cinderwake") ? "next d10 roll"
+               : (effectKey === "tier-surge") ? "next Strike or Cast"
+               : "next Strike";
+    footerHint = ` Auto-consumed on your ${where}.`;
+  } else if (GM_DEFERRED_KEYS.has(effectKey)) {
+    footerHint = ` GM adjudicates — one-shot flag set at <code>flags.fourththing.surge.oneShot.${effectKey}</code>.`;
+  }
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="fourththing-roll">
@@ -3251,7 +3388,7 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
       <p style="margin:0.2rem 0;font-size:0.74rem;opacity:0.75;font-style:italic">${entry.fiction}</p>
       ${chatExtra}
       <p style="margin:0.35rem 0 0;font-size:0.7rem;opacity:0.65">
-        Surge ${curSurge} → ${Math.max(0, curSurge - cost)}.${entry.wired ? "" : " GM adjudicates — one-shot flag set at <code>flags.fourththing.surge.oneShot." + effectKey + "</code>."}
+        Surge ${curSurge} → ${Math.max(0, curSurge - cost)}.${footerHint}
       </p>
     </div>`
   });
@@ -3358,6 +3495,100 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
 
   return "";
 }
+
+// Damage-type picker used by Steel Veil + Sanctum spends. Returns the chosen
+// FT.DAMAGE_TYPES key (e.g. "kinetic") or null if the user cancelled.
+async function _ftSurgePickDamageType(title) {
+  return new Promise((resolve) => {
+    const opts = Object.entries(FT.DAMAGE_TYPES ?? {})
+      .map(([k, v]) => `<option value="${k}">${v.label}</option>`).join("");
+    const content = `<div style="padding:0.4rem 0">
+      <label style="display:block;font-size:0.82rem;margin-bottom:0.35rem">Damage type:</label>
+      <select id="ft-surge-dt" style="width:100%;padding:0.35rem">${opts}</select>
+    </div>`;
+    const dlg = new Dialog({
+      title,
+      content,
+      buttons: {
+        ok:     { label: "Lock In",  callback: (html) => resolve(String(html.find("#ft-surge-dt").val() || "kinetic")) },
+        cancel: { label: "Cancel",   callback: () => resolve(null) }
+      },
+      default: "ok",
+      close: () => resolve(null)
+    });
+    dlg.render(true);
+  });
+}
+
+// Spend-time defense AE applier. Builds short-duration Active Effects for
+// brace / mythic-stand / steel-veil / sanctum. Returns a chat fragment.
+// Tier=duration anchor for messaging only — AEs use rounds/turns directly.
+async function _ftSurgeApplyDefenseAE(actor, effectKey, tier, chosenType) {
+  let aeData = null;
+
+  if (effectKey === "brace") {
+    aeData = {
+      name: "Surge: Brace",
+      img: "icons/svg/shield.svg",
+      origin: actor.uuid,
+      duration: { rounds: 1, turns: 1 },
+      changes: [
+        { key: "system.derived.guard.value",   mode: 2, value: "1", priority: 20 },
+        { key: "system.derived.evasion.value", mode: 2, value: "1", priority: 20 },
+        { key: "system.derived.resolve.value", mode: 2, value: "1", priority: 20 }
+      ],
+      flags: { fourththing: { surge: { kind: "brace" } } }
+    };
+  } else if (effectKey === "mythic-stand") {
+    aeData = {
+      name: "Surge: Mythic Stand (invulnerable)",
+      img: "icons/svg/holy-shield.svg",
+      origin: actor.uuid,
+      duration: { rounds: 1, turns: 1 },
+      changes: [],
+      flags: { fourththing: { surge: { kind: "mythic-stand", invulnerable: true } } }
+    };
+  } else if (effectKey === "steel-veil") {
+    const t = chosenType || "kinetic";
+    aeData = {
+      name: `Surge: Steel Veil (resist ${FT.DAMAGE_TYPES[t]?.label ?? t})`,
+      img: "icons/svg/mage-shield.svg",
+      origin: actor.uuid,
+      duration: { rounds: 1 },
+      changes: [],
+      flags: { fourththing: { surge: { kind: "steel-veil", resistType: t } } }
+    };
+  } else if (effectKey === "sanctum") {
+    const t = chosenType || "kinetic";
+    aeData = {
+      name: `Surge: Sanctum (immune ${FT.DAMAGE_TYPES[t]?.label ?? t})`,
+      img: "icons/svg/aura.svg",
+      origin: actor.uuid,
+      duration: { rounds: 1 },
+      changes: [],
+      flags: { fourththing: { surge: { kind: "sanctum", immuneType: t } } }
+    };
+  }
+
+  if (!aeData) return "";
+  try {
+    await actor.createEmbeddedDocuments("ActiveEffect", [aeData]);
+  } catch (e) {
+    console.warn("[fourththing] Surge AE create failed", effectKey, e);
+    return `<p style="font-size:0.75rem;color:#dc8050;font-style:italic">⚠ AE creation failed — GM enforces manually.</p>`;
+  }
+
+  const dur = aeData.duration?.rounds ? `${aeData.duration.rounds} round${aeData.duration.rounds === 1 ? "" : "s"}` : "1 turn";
+  const what = effectKey === "brace"        ? "+1 Guard / Evasion / Resolve"
+             : effectKey === "mythic-stand" ? "All damage ignored"
+             : effectKey === "steel-veil"   ? `Half damage from ${FT.DAMAGE_TYPES[chosenType]?.label}`
+             : effectKey === "sanctum"      ? `Immune to ${FT.DAMAGE_TYPES[chosenType]?.label}`
+             : "Defense buff applied";
+  return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">
+    🛡 ${what} · ${dur}.
+  </p>`;
+}
+
 // Guard/Evasion/Resolve. All actor types now populate `derived.<key>.value`
 // in prepareDerivedData, so this is mostly a fallback-safe wrapper — but it
 // pins the contract so B11.B/C and downstream raid code don't need to know
@@ -6773,7 +7004,7 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
                                 damageRolledTotal = 0, damageDiceTooltip = "",
                                 explosionDice = [], surgeBanked = 0, doubleTen = false,
                                 costNote = "", signature = "", thirdThing = "",
-                                itemUuid = "" }) {
+                                itemUuid = "", ignoreResists = false }) {
   const ic = FT.INTENT_COLORS[intent] ?? "#888";
   const defData = FT.DEFENSES[defense] ?? { label: defense };
   const diceRow = diceResults.map(d =>
@@ -6817,8 +7048,9 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
               data-damage-type="${damageType ?? ""}"
               data-damage-flavor="${damageFlavor ?? ""}"
               data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}"
-              data-item-uuid="${ftEscapeHtml(itemUuid ?? "")}">
-        Apply to target
+              data-item-uuid="${ftEscapeHtml(itemUuid ?? "")}"
+              data-ignore-resists="${ignoreResists ? "1" : "0"}">
+        Apply to target${ignoreResists ? " ⚔ ignores resists" : ""}
       </button>
     </div>` : "";
   const metaBlock = (costNote || signature || thirdThing) ? `
@@ -8281,11 +8513,24 @@ Hooks.once("init", function () {
     const totalAlign    = alignMod + terrainAlign;
     const totalNoise    = noise + terrainNoise + aeNoise;
 
-    const posTotal = attrI + attrC + clarity + totalAlign + aeIntent + aeChannel + aeClarity;
+    // Surge one-shots (consumer side). tier-surge adds +Tier to posTotal;
+    // surging-cast lowers explode threshold to 9; wrath-cascade adds free
+    // bonus dice; cinderwake lowers threshold to 8 (wins over surging-cast
+    // when both active). Consumed after roll resolves.
+    const _castSurge = _ftReadSurgeOneShots(actor, { context: "cast" });
+    const _castTier  = _ftCasterTier(actor);
+    const _castTierBonus = _castSurge.tierSurge ? _castTier : 0;
+
+    const posTotal = attrI + attrC + clarity + totalAlign + aeIntent + aeChannel + aeClarity + _castTierBonus;
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; double-10
     // base flags Act Again. Same engine as Engage/Steward — keeps all three
     // tactical roll paths visually + mechanically consistent.
-    const formula  = `2d10x10 + ${posTotal} - ${totalNoise}`;
+    let formula  = `2d10x10 + ${posTotal} - ${totalNoise}`;
+    // Apply surging-cast threshold first (cinderwake will override below if set).
+    if (_castSurge.surgingCast && !_castSurge.cinderwake) {
+      formula = formula.replace(/2d10x10/, "2d10x>=9");
+    }
+    formula = _ftApplySurgeRollMods(formula, _castSurge);
     const roll     = new Roll(formula);
     await roll.evaluate();
     const rawTotal      = roll.total;
@@ -8361,8 +8606,11 @@ Hooks.once("init", function () {
         ? `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Reroll: ${
             rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`).join(", ")
           }</p>`
-        : "")
+        : "") + _ftSurgeBoostBanner(_castSurge)
     });
+
+    // Consume Surge one-shots on the cast (surging-cast, tier-surge, wrath/cinder).
+    await _ftConsumeSurgeOneShots(actor, _castSurge, { context: "cast" });
 
     // Auto-apply Qliphothic Echo (misfire 5-6) + terrain noise
     if (misfireData?.rolled >= 5 && misfireData?.rolled <= 6) {
@@ -8517,13 +8765,21 @@ Hooks.once("init", function () {
       }
     }
 
+    // Surge one-shots on the TARGET (the actor rolling the save). Iron Word
+    // auto-passes; wrath-cascade / cinderwake mutate the formula.
+    const _saveSurge = _ftReadSurgeOneShots(target, { context: "save" });
+
     const totalBonus = attrVal + aeAttr;
     // CL Resonance Channel — defenseImpose forces 3d10kl2 (3 dice, keep
     // lowest 2) instead of 2d10x10. Worse expected total, no explosions.
     // Phase D 2026-05-08 wiring; engine branch closes the deferred item.
-    const formula    = rollOverride === "3d10kl2"
+    let formula      = rollOverride === "3d10kl2"
       ? `3d10kl2 + ${totalBonus}`
       : `2d10x10 + ${totalBonus}`;
+    // 3d10kl2 path doesn't explode, so wrath/cinder modifiers are skipped.
+    if (rollOverride !== "3d10kl2") {
+      formula = _ftApplySurgeRollMods(formula, _saveSurge);
+    }
     const roll       = new Roll(formula);
     await roll.evaluate();
 
@@ -8536,7 +8792,8 @@ Hooks.once("init", function () {
     if (explosions > 0) await _ftBankSurge(target, explosions);
 
     const total = roll.total;
-    const saved = total >= dc;
+    // Iron Word: auto-pass overrides the DC check entirely.
+    const saved = _saveSurge.ironWord ? true : (total >= dc);
 
     const surgeNote = explosions > 0
       ? ` <span style="color:#e8c84a;font-weight:600">+${explosions} Surge banked</span>`
@@ -8564,12 +8821,16 @@ Hooks.once("init", function () {
         Roll: ${baseDice.join(", ")}${explodeTail} + ${totalBonus} (${ftCap(saveAttr)})${surgeNote}
       </p>
       ${aeNote}
+      ${_ftSurgeBoostBanner(_saveSurge)}
     </div>`;
 
     await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: target }),
       flavor:  html
     });
+
+    // Consume Surge one-shots on save (iron-word, wrath, cinder).
+    await _ftConsumeSurgeOneShots(target, _saveSurge, { context: "save" });
 
     return { saved, total, dc, onSave, explosions };
   };
@@ -8809,11 +9070,19 @@ Hooks.once("init", function () {
         }
       }
     }
+    // Surge one-shots (consumer side). Read BEFORE formula build so wrath-cascade
+    // and cinderwake can mutate dice; tier-surge / final-argument adjust the
+    // scalar bonus; snap-strike adds a reroll-lowest grant post-roll.
+    const _surge = _ftReadSurgeOneShots(actor, { context: "strike" });
+    const tierVal = _ftCasterTier(actor);
+    const tierBonus = (_surge.tierSurge || _surge.finalArgument) ? tierVal : 0;
+
     const flankMod  = Math.max(0, Number(flankBonus) || 0);
-    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression;
+    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus;
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; two
     // base 10s also flag "Act Again" so the sheet exposes the bonus action.
-    const formula   = `2d10x10 + ${total_mod}`;
+    const baseFormula = `2d10x10 + ${total_mod}`;
+    const formula     = _ftApplySurgeRollMods(baseFormula, _surge);
 
     const roll  = new Roll(formula);
     await roll.evaluate();
@@ -8830,6 +9099,9 @@ Hooks.once("init", function () {
 
     // Shape B reroll grants — context "attack" narrowed by skill/attribute.
     const rerollGrants = collectRerolls(actor, { context: "attack", skill, attribute: intent });
+    if (_surge.snapStrike) {
+      rerollGrants.push({ sourceItemName: "Surge: Snap Strike", mode: "reroll-lowest" });
+    }
     const rerollResult = await applyRerollGrants(roll, rerollGrants, total_mod);
     await consumeAnnotationReroll(actor, rerollResult.applied);
 
@@ -8844,7 +9116,8 @@ Hooks.once("init", function () {
       bonus = r.bonus || 0;
     }
     const total   = roll.total - pulled + bonus;
-    const success = total >= defenseValue;
+    // Final Argument: auto-hit. Surge spends overpower the defense gate.
+    const success = _surge.finalArgument ? true : (total >= defenseValue);
 
     const restraintNote = (pulled || bonus)
       ? `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">${[
@@ -8858,9 +9131,14 @@ Hooks.once("init", function () {
     // accuracy, raw faculty drives force. The +mod is baked straight into the
     // formula so the Apply button rolls the final number with no extra plumbing.
     const damageFacultyMod = (Number(attrVal) || 0) + (Number(aeAttr) || 0) + aimedMod;
-    const finalDamageFormula = (damageFormula && damageFacultyMod !== 0)
+    let finalDamageFormula = (damageFormula && damageFacultyMod !== 0)
       ? `${damageFormula} ${damageFacultyMod >= 0 ? "+" : "-"} ${Math.abs(damageFacultyMod)}`
       : (damageFormula || "");
+
+    // Doomstrike: tack on `+Td6x10` exploding bonus damage.
+    if (_surge.doomstrike && finalDamageFormula) {
+      finalDamageFormula = `${finalDamageFormula} + ${tierVal}d6x10`;
+    }
 
     // 2026-05-20 — Pre-roll damage on a hit so players see dice + total
     // immediately instead of "?? damage" until the GM clicks Apply.
@@ -8873,9 +9151,33 @@ Hooks.once("init", function () {
       try {
         const dmgRoll = new Roll(finalDamageFormula);
         await dmgRoll.evaluate();
-        damageRolledTotal = Number(dmgRoll.total) || 0;
-        const dice = (dmgRoll.dice || []).flatMap(d => (d.results || []).map(r => r.result));
-        damageDiceTooltip = dice.length ? `[${dice.join(" · ")}]` : "";
+        // Crowning Blow / Final Argument: set every rolled die to its max face.
+        // We compute the "as if every die rolled max" total + reconstruct the
+        // displayed dice tooltip so the chat card matches the apply total.
+        if (_surge.crowningBlow || _surge.finalArgument) {
+          let maxedTotal = 0;
+          const maxedDiceDisplay = [];
+          for (const term of (dmgRoll.terms ?? [])) {
+            if (term?.results && Array.isArray(term.results)) {
+              const faces = Number(term.faces) || 0;
+              for (const r of term.results) {
+                const v = faces || Number(r.result) || 0;
+                maxedTotal += v;
+                maxedDiceDisplay.push(v);
+              }
+            } else if (typeof term?.number === "number") {
+              maxedTotal += term.number * (term.operator === "-" ? -1 : 1);
+            } else if (typeof term?.total === "number") {
+              maxedTotal += term.total;
+            }
+          }
+          damageRolledTotal = Math.max(0, maxedTotal);
+          damageDiceTooltip = maxedDiceDisplay.length ? `[max: ${maxedDiceDisplay.join(" · ")}]` : "";
+        } else {
+          damageRolledTotal = Number(dmgRoll.total) || 0;
+          const dice = (dmgRoll.dice || []).flatMap(d => (d.results || []).map(r => r.result));
+          damageDiceTooltip = dice.length ? `[${dice.join(" · ")}]` : "";
+        }
       } catch (e) { console.warn("[fourththing] pre-roll damage failed", e); }
     }
 
@@ -8889,7 +9191,7 @@ Hooks.once("init", function () {
         damageFacultyMod, damageBaseFormula: damageFormula,
         damageRolledTotal, damageDiceTooltip,
         damageType, damageFlavor, costNote, signature, thirdThing,
-        itemUuid
+        itemUuid, ignoreResists: !!_surge.sunderingBlow
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
         : "") + (aeContribs.length
@@ -8900,8 +9202,11 @@ Hooks.once("init", function () {
         ? `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Reroll: ${
             rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`).join(", ")
           }</p>`
-        : "")
+        : "") + _ftSurgeBoostBanner(_surge)
     });
+
+    // Consume Surge one-shots — flags clear so the next Strike rolls clean.
+    await _ftConsumeSurgeOneShots(actor, _surge, { context: "strike" });
 
     // Reality Tear — attacks are always on; defenseValue is the DC. Tier gate
     // means a Tier-IV bashing a Tier-I mook is when the ground actually breaks.
@@ -8933,7 +9238,7 @@ Hooks.once("init", function () {
   // 0.5 / 0). Returns a short description for chat-card summaries.
   game.fourththing.rolls._applyDamageToActor = async function (actor, baseDmg, {
     op = "damage", track = "integrity", damageType = "", damageFlavor = "",
-    perTargetMultiplier = 1
+    perTargetMultiplier = 1, ignoreResists = false
   } = {}) {
     if (!actor) return null;
     const rawSys = actor.system?.system ?? actor.system;
@@ -8949,10 +9254,45 @@ Hooks.once("init", function () {
       return `${actor.name}: ${track} ${cur} → ${newVal} (+${newVal - cur})`;
     }
 
+    // Surge defense one-shots (target side). Scan AEs flagged with
+    // flags.fourththing.surge.kind for invulnerability / type-immunity /
+    // type-resist. The AE itself expires via Foundry's duration system after
+    // 1 round/turn, so no manual cleanup is needed.
+    let surgeImmune = false, surgeResist = false;
+    const surgeTags = [];
+    for (const ae of (actor.appliedEffects ?? actor.effects ?? [])) {
+      if (ae.disabled) continue;
+      const kind = ae.flags?.fourththing?.surge?.kind;
+      if (!kind) continue;
+      if (kind === "mythic-stand" && ae.flags?.fourththing?.surge?.invulnerable) {
+        surgeImmune = true;
+        surgeTags.push("Mythic Stand: invulnerable");
+      } else if (kind === "sanctum") {
+        const t = ae.flags?.fourththing?.surge?.immuneType;
+        if (t && t === damageType) {
+          surgeImmune = true;
+          surgeTags.push(`Sanctum: immune ${FT.DAMAGE_TYPES[t]?.label ?? t}`);
+        }
+      } else if (kind === "steel-veil") {
+        const t = ae.flags?.fourththing?.surge?.resistType;
+        if (t && t === damageType) {
+          surgeResist = true;
+          surgeTags.push(`Steel Veil: resist ${FT.DAMAGE_TYPES[t]?.label ?? t}`);
+        }
+      }
+    }
+
     // Resolve defense multiplier (immunity shadows; vuln + resist stack).
+    // Surge: invulnerability (Mythic Stand / Sanctum match) → 0. Sundering
+    // Blow on the attacker side flows in via `ignoreResists` → skip target
+    // resistances (still honors immunities + vulns since those reflect
+    // worldbuilding, not absorbed armor).
     let defMult = 1;
     const tags = [];
-    if (damageType) {
+    if (surgeImmune) {
+      defMult = 0;
+      tags.push(...surgeTags);
+    } else if (damageType) {
       const def = rawSys?.derived?.defenses ?? {};
       const flavorLabel = damageFlavor ? `${damageType}:${damageFlavor}` : damageType;
       if (ftDefenseMatches(def.immunities, damageType, damageFlavor)) {
@@ -8963,11 +9303,19 @@ Hooks.once("init", function () {
           defMult *= 2;
           tags.push(`vulnerable to ${flavorLabel}`);
         }
-        if (ftDefenseMatches(def.resistances, damageType, damageFlavor)) {
+        if (!ignoreResists && ftDefenseMatches(def.resistances, damageType, damageFlavor)) {
           defMult *= 0.5;
           tags.push(`resist ${flavorLabel}`);
         }
+        if (surgeResist) {
+          defMult *= 0.5;
+          tags.push(...surgeTags);
+        }
       }
+      if (ignoreResists) tags.push("Sundering Blow: resists bypassed");
+    } else if (surgeResist) {
+      // Untyped damage with a Steel Veil on the actor — Veil only triggers
+      // when the type matches, so no-op here.
     }
     const defenseTag = tags.length ? ` (${tags.join(", ")})` : "";
     const dmg = Math.floor(scaled * defMult);
@@ -9054,13 +9402,14 @@ Hooks.once("init", function () {
   };
 
   game.fourththing.rolls.applyDamageFromButton = async function (btn) {
-    const formula      = btn.dataset.formula;
-    const track        = btn.dataset.track ?? "integrity";
-    const damageType   = String(btn.dataset.damageType   ?? "").toLowerCase();
-    const damageFlavor = String(btn.dataset.damageFlavor ?? "").toLowerCase();
-    const op           = String(btn.dataset.op ?? "damage").toLowerCase();
-    const itemUuid     = btn.dataset.itemUuid ?? "";
-    const targets      = game.user.targets;
+    const formula       = btn.dataset.formula;
+    const track         = btn.dataset.track ?? "integrity";
+    const damageType    = String(btn.dataset.damageType   ?? "").toLowerCase();
+    const damageFlavor  = String(btn.dataset.damageFlavor ?? "").toLowerCase();
+    const op            = String(btn.dataset.op ?? "damage").toLowerCase();
+    const itemUuid      = btn.dataset.itemUuid ?? "";
+    const ignoreResists = btn.dataset.ignoreResists === "1";
+    const targets       = game.user.targets;
 
     if (!targets.size) {
       ui.notifications.warn("No tokens targeted. Target a token first, then click Apply.");
@@ -9098,13 +9447,13 @@ Hooks.once("init", function () {
         game.socket?.emit?.("system.fourththing", {
           t: "ft-applyDamage",
           actorId: actor.id,
-          baseDmg, op, track, damageType, damageFlavor
+          baseDmg, op, track, damageType, damageFlavor, ignoreResists
         });
         ui.notifications.info(`${actor.name}: damage relayed to GM.`);
         continue;
       }
       const desc = await game.fourththing.rolls._applyDamageToActor(actor, baseDmg, {
-        op, track, damageType, damageFlavor, perTargetMultiplier: 1
+        op, track, damageType, damageFlavor, perTargetMultiplier: 1, ignoreResists
       });
       if (desc) ui.notifications.info(desc);
 
@@ -20324,7 +20673,8 @@ function _ftRelayHandler(msg) {
         track: msg.track ?? "integrity",
         damageType: msg.damageType ?? "",
         damageFlavor: msg.damageFlavor ?? "",
-        perTargetMultiplier: 1
+        perTargetMultiplier: 1,
+        ignoreResists: !!msg.ignoreResists
       }).then(desc => { if (desc) ui.notifications.info(desc); })
         .catch(e => console.warn("[fourththing] GM-relay damage apply failed", e));
     }
