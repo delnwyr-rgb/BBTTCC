@@ -8985,15 +8985,24 @@ Hooks.once("init", function () {
     // auto-passes; wrath-cascade / cinderwake mutate the formula.
     const _saveSurge = _ftReadSurgeOneShots(target, { context: "save" });
 
+    // Aurablade one-shots on the TARGET (the actor rolling the save):
+    //  · Dread "Disadvantage on Saves" AE → force 3d10kl2 (persists 1 round).
+    //  · Resolve "Auto-Succeed One Save" → auto-pass if the save attr matches.
+    const _abDisSaves = (target.appliedEffects ?? target.effects ?? []).some(
+      e => !e.disabled && e.flags?.fourththing?.aurablade?.disSavesAll);
+    const _abAutoSave = target.flags?.fourththing?.aurablade?.oneShot?.autoSucceedSave;
+    const _abAutoHit  = !!_abAutoSave && Array.isArray(_abAutoSave.attrs)
+      && _abAutoSave.attrs.includes(saveAttr) && (Number(_abAutoSave.uses) || 0) > 0;
+
     const totalBonus = attrVal + aeAttr;
-    // CL Resonance Channel — defenseImpose forces 3d10kl2 (3 dice, keep
-    // lowest 2) instead of 2d10x10. Worse expected total, no explosions.
-    // Phase D 2026-05-08 wiring; engine branch closes the deferred item.
-    let formula      = rollOverride === "3d10kl2"
+    // CL Resonance Channel defenseImpose OR Aurablade Dread → 3d10kl2 (3 dice,
+    // keep lowest 2) instead of 2d10x10. Worse expected total, no explosions.
+    const effOverride = (rollOverride === "3d10kl2" || _abDisSaves) ? "3d10kl2" : rollOverride;
+    let formula      = effOverride === "3d10kl2"
       ? `3d10kl2 + ${totalBonus}`
       : `2d10x10 + ${totalBonus}`;
     // 3d10kl2 path doesn't explode, so wrath/cinder modifiers are skipped.
-    if (rollOverride !== "3d10kl2") {
+    if (effOverride !== "3d10kl2") {
       formula = _ftApplySurgeRollMods(formula, _saveSurge);
     }
     const roll       = new Roll(formula);
@@ -9008,8 +9017,13 @@ Hooks.once("init", function () {
     if (explosions > 0) await _ftBankSurge(target, explosions);
 
     const total = roll.total;
-    // Iron Word: auto-pass overrides the DC check entirely.
-    const saved = _saveSurge.ironWord ? true : (total >= dc);
+    // Iron Word OR Aurablade Resolve auto-succeed: auto-pass overrides the DC.
+    const saved = (_saveSurge.ironWord || _abAutoHit) ? true : (total >= dc);
+    if (_abAutoHit) {
+      const _left = (Number(_abAutoSave.uses) || 1) - 1;
+      if (_left > 0) await target.update({ "flags.fourththing.aurablade.oneShot.autoSucceedSave.uses": _left });
+      else           await target.update({ "flags.fourththing.aurablade.oneShot.-=autoSucceedSave": null });
+    }
 
     const surgeNote = explosions > 0
       ? ` <span style="color:#e8c84a;font-weight:600">+${explosions} Surge banked</span>`
@@ -9295,12 +9309,22 @@ Hooks.once("init", function () {
     // Echo Strike: this free Strike takes a −2 accuracy penalty.
     const echoPenalty = _surge.echoStrike ? 2 : 0;
 
+    // Aurablade Fury — Imposed Disadvantage: this attacker's next attack is
+    // forced to 3d10kl2 (one-shot stamped on them by fury_dis_attack). Same
+    // 3d10kl2 mechanic the CL defenseImpose gate uses on the save side.
+    const _abDisAttack = !!actor.flags?.fourththing?.aurablade?.disAttackOnce;
+    if (_abDisAttack) {
+      try { await actor.update({ "flags.fourththing.aurablade.-=disAttackOnce": null }); }
+      catch (_e) { /* non-owner — clears on next round commit */ }
+    }
+
     const flankMod  = Math.max(0, Number(flankBonus) || 0);
     const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus - echoPenalty;
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; two
     // base 10s also flag "Act Again" so the sheet exposes the bonus action.
-    const baseFormula = `2d10x10 + ${total_mod}`;
-    const formula     = _ftApplySurgeRollMods(baseFormula, _surge);
+    // Imposed disadvantage forces 3d10kl2 (no explosions), shadowing surge dice mods.
+    const baseFormula = _abDisAttack ? `3d10kl2 + ${total_mod}` : `2d10x10 + ${total_mod}`;
+    const formula     = _abDisAttack ? baseFormula : _ftApplySurgeRollMods(baseFormula, _surge);
 
     const roll  = new Roll(formula);
     await roll.evaluate();
@@ -9467,6 +9491,36 @@ Hooks.once("init", function () {
     return true;
   };
 
+  // Unified "does this actor refuse this forced movement?" gate. Returns true
+  // (and consumes the relevant one-shot) if any of these are active on `actor`:
+  //   • Bulwark Frame Die — Anchor (one-shot; via consumeBulwarkAnchor)
+  //   • Bulwark Stance = anchor (persistent while in the stance)
+  //   • Aurablade Resolve — Lock Position (persists until cleared; not consumed)
+  //   • Aurablade Resolve — Ignore Forced Movement (one-shot; consumed)
+  // Forced-movement chokepoints (Aurablade push, structure collapse knockback)
+  // call this and skip the move when it returns true.
+  game.fourththing.resistsForcedMove = async function (actor, { reason = "forced movement" } = {}) {
+    if (!actor) return false;
+    if (await game.fourththing.consumeBulwarkAnchor?.(actor, { reason })) return true;
+    const ff = actor.flags?.fourththing ?? {};
+    const note = async (label) => {
+      try {
+        await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll" style="border-color:#7a8a9a"><div class="ft-roll-header"><span class="ft-roll-name">${label}</span></div><p style="margin:0.2rem 0;font-size:0.78rem">${foundry.utils.escapeHTML(actor.name)} cannot be moved — ${foundry.utils.escapeHTML(reason)} refused.</p></div>`
+        });
+      } catch (_e) {}
+    };
+    if (ff.bulwarkStance === "anchor") { await note("⛰ Bulwark Stance: Anchored"); return true; }
+    if (ff.aurablade?.oneShot?.lockPosition) { await note("⚓ Aurablade: Position Locked"); return true; }
+    if (ff.aurablade?.oneShot?.ignoreForcedMovement) {
+      await actor.update({ "flags.fourththing.aurablade.oneShot.-=ignoreForcedMovement": null });
+      await note("⚓ Aurablade: Ignore Forced Movement");
+      return true;
+    }
+    return false;
+  };
+
   // ── Apply damage from chat button ──────────────────────────────────────────
   // Phase 3 engine: system.derived.defenses = { resistances, immunities, vulnerabilities }
   // is computed per-actor in prepareDerivedData. Entries are { type, flavor } objects.
@@ -9568,19 +9622,48 @@ Hooks.once("init", function () {
       tags.push(`Aegis DR −${reduced}`);
     }
 
-    // Bulwark Frame Die — Absorb one-shot. "Convert damage to the Frame die
-    // roll": the incoming hit is capped at the pre-rolled value (you take the
-    // roll instead of the full hit). Consumed on the first hit that actually
-    // deals damage — fully negated/immune hits keep it armed for a real one.
-    let clearFrameAbsorb = false;
+    // ── One-shot defensive consumers on the DEFENDER (Bulwark + Aurablade) ───
+    // All read flags on `actor`. Damage-reducing ones mutate `dmg`; clears
+    // accumulate in oneShotClears and ride the damage write below. preventDrop
+    // is applied at the integrity floor (newVal) further down. Only fire on a
+    // hit that actually deals damage (dmg>0) so fully-negated hits don't waste
+    // a one-shot.
+    const oneShotClears = {};
+    let preventDropArmed = false;
     if (op === "damage" && dmg > 0) {
-      const fa = actor.flags?.fourththing?.bulwark?.frameOneShot?.absorb;
+      const ff = actor.flags?.fourththing ?? {};
+
+      // Bulwark Frame Die — Absorb: cap the hit at the pre-rolled value.
+      const fa = ff.bulwark?.frameOneShot?.absorb;
       if (fa?.roll != null) {
         const cap = Math.max(0, Number(fa.roll) || 0);
         if (dmg > cap) { tags.push(`Frame Absorb: ${dmg} → ${cap}`); dmg = cap; }
         else           { tags.push(`Frame Absorb (${dmg} ≤ ${cap}; spent)`); }
-        clearFrameAbsorb = true;
+        oneShotClears["flags.fourththing.bulwark.frameOneShot.-=absorb"] = null;
       }
+      // Aurablade Resolve · Brace — halve the next incoming hit.
+      if (ff.aurablade?.oneShot?.halveNextHit) {
+        const b = dmg; dmg = Math.floor(dmg / 2);
+        tags.push(`Aurablade Brace: ${b} → ${dmg}`);
+        oneShotClears["flags.fourththing.aurablade.oneShot.-=halveNextHit"] = null;
+      }
+      // Aurablade Resolve · Resist — halve the next incoming hit (type-agnostic
+      // simplification of "resist one damage type"; consumed on first hit).
+      if (ff.aurablade?.oneShot?.resistTypePending) {
+        const b = dmg; dmg = Math.floor(dmg / 2);
+        tags.push(`Aurablade Resist: ${b} → ${dmg}`);
+        oneShotClears["flags.fourththing.aurablade.oneShot.-=resistTypePending"] = null;
+      }
+      // Aurablade Mercy · Redirect — reduce next damage to a guarded ally by the
+      // Aurablade's tier (the "redirect to self" option stays GM-adjudicated).
+      const rd = ff.aurablade?.reduceNextDamageByTier;
+      if (rd != null) {
+        const b = dmg; dmg = Math.max(0, dmg - Math.max(0, Number(rd) || 0));
+        tags.push(`Aurablade Mercy −${b - dmg}`);
+        oneShotClears["flags.fourththing.aurablade.-=reduceNextDamageByTier"] = null;
+      }
+      // Aurablade Mercy · Prevent Drop — applied at the integrity floor below.
+      if (track === "integrity" && ff.aurablade?.preventDropOnce) preventDropArmed = true;
     }
     const defenseTag = tags.length ? ` (${tags.join(", ")})` : "";
 
@@ -9589,7 +9672,7 @@ Hooks.once("init", function () {
       const newVal = cur + dmg;
       await actor.update({
         "system.radiation.rp": newVal,
-        ...(clearFrameAbsorb ? { "flags.fourththing.bulwark.frameOneShot.-=absorb": null } : {})
+        ...oneShotClears
       });
       const thr = rawSys?.radiation?.thresholds ?? { minor: 25, major: 50, severe: 75 };
       const crossed = [];
@@ -9601,7 +9684,16 @@ Hooks.once("init", function () {
     }
 
     const cur    = rawSys?.derived?.[track]?.value ?? 0;
-    const newVal = Math.max(0, cur - dmg);
+    let   newVal = Math.max(0, cur - dmg);
+
+    // Aurablade Mercy · Prevent Drop — this hit can't reduce the guarded ally
+    // below 1 on its primary track. Consumed only when it actually saves them.
+    let preventDropNote = "";
+    if (preventDropArmed && cur > 0 && newVal < 1) {
+      newVal = 1;
+      preventDropNote = " · Aurablade: held at 1";
+      oneShotClears["flags.fourththing.aurablade.-=preventDropOnce"] = null;
+    }
 
     // Fires BEFORE the write so a Frame Die can react while still standing.
     // Guarded so already-destroyed rigs (cur===0) re-hit by AoE don't re-fire.
@@ -9624,7 +9716,7 @@ Hooks.once("init", function () {
       : `system.derived.${track}.value`;
     const updates = { [writeKey]: newVal };
     if (rigDestroyed) updates["system.identity.state"] = "destroyed";
-    if (clearFrameAbsorb) updates["flags.fourththing.bulwark.frameOneShot.-=absorb"] = null;
+    Object.assign(updates, oneShotClears);
     if (isBoss && track === "integrity") {
       console.log(`[fourththing] boss damage: ${actor.name} integrity ${cur} → ${newVal} (writeKey=${writeKey})`);
     }
@@ -9666,7 +9758,7 @@ Hooks.once("init", function () {
     }
 
     const destroyedTag = rigDestroyed ? " — DESTROYED" : "";
-    return `${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})${defenseTag}${destroyedTag}`;
+    return `${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})${defenseTag}${preventDropNote}${destroyedTag}`;
   };
 
   game.fourththing.rolls.applyDamageFromButton = async function (btn) {
@@ -10471,6 +10563,16 @@ Hooks.once("init", function () {
     else if (anyOne)  outcome = "failure";
     else              outcome = "success";
 
+    // Aurablade Mercy — Auto-Pass Last Stand: convert one failed Last Stand into
+    // a success (consumed). Leaves a Vision Surge alone (already better).
+    let _abLastSaveUsed = false;
+    if (outcome === "failure" && actor.flags?.fourththing?.aurablade?.autoPassLastStand) {
+      outcome = "success";
+      _abLastSaveUsed = true;
+      try { await actor.update({ "flags.fourththing.aurablade.-=autoPassLastStand": null }); }
+      catch (_e) { /* non-owner — clears on round commit */ }
+    }
+
     const prior      = sys.lastStand ?? { successes: 0, failures: 0, ledger: [] };
     const successes  = (prior.successes ?? 0) + (outcome === "success" ? 1 : 0);
     const failures   = (prior.failures  ?? 0) + (outcome === "failure" ? 1 : 0);
@@ -10482,7 +10584,7 @@ Hooks.once("init", function () {
     }];
 
     const color = outcome === "vision" ? "#4a90d9" : outcome === "success" ? "#27ae60" : "#ff8a8a";
-    const label = outcome === "vision" ? "Vision Surge" : outcome === "success" ? "Success" : "Failure";
+    const label = (outcome === "vision" ? "Vision Surge" : outcome === "success" ? "Success" : "Failure") + (_abLastSaveUsed ? " (Aurablade Mercy)" : "");
 
     await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),

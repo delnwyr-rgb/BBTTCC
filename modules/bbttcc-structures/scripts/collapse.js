@@ -141,8 +141,8 @@ function clampNonlethal(damage, currentHP) {
  */
 async function knockbackToken(token, fromCenter, knockbackFt) {
   if (!token || knockbackFt <= 0) return;
-  // Bulwark Frame Die — Anchor refuses forced movement (best-effort chokepoint).
-  if (await game?.fourththing?.consumeBulwarkAnchor?.(token.actor, { reason: "collapse knockback" })) return;
+  // Forced-movement gate (Bulwark Anchor/Stance, Aurablade Lock/Ignore-push).
+  if (await game?.fourththing?.resistsForcedMove?.(token.actor, { reason: "collapse knockback" })) return;
   const grid = canvas?.scene?.grid;
   if (!grid?.distance || !grid?.size) return;
   const pxPerFt = grid.size / grid.distance;

@@ -795,9 +795,10 @@ export async function openAurabladeAction(actor) {
             }
             case "fury_press_push": {
               // Token nudge — 5 ft directly away from caster.
-              // Bulwark Frame Die — Anchor on the target refuses forced movement.
-              if (await game.fourththing?.consumeBulwarkAnchor?.(targetActor, { reason: "forced movement" })) {
-                appliedNote = `⛰ ${targetActor.name} anchors — the shove is refused.`;
+              // Forced-movement gate: Bulwark Anchor / Stance, or Aurablade
+              // Lock Position / Ignore Forced Movement on the target refuses it.
+              if (await game.fourththing?.resistsForcedMove?.(targetActor, { reason: "forced movement" })) {
+                appliedNote = `⛰ ${targetActor.name} holds fast — the shove is refused.`;
                 break;
               }
               try {
@@ -818,8 +819,10 @@ export async function openAurabladeAction(actor) {
               break;
             }
             case "fury_dis_attack": {
-              await _ftAurabladeStampOneShot(actor, "imposedDisAttackId", targetActor.id);
-              appliedNote = `🎯 One attack by ${targetActor.name} this turn will be rolled 3d10kl2.`;
+              // Stamp the ENEMY so their next attack rolls 3d10kl2 — attackTest
+              // consumes it (no actor-scan needed), mirroring dread_dis_saves.
+              await targetActor.setFlag?.("fourththing", "aurablade.disAttackOnce", true);
+              appliedNote = `🎯 ${targetActor.name}'s next attack this turn is rolled 3d10kl2.`;
               break;
             }
             // ─── RESOLVE ────────────────────────────────────────────────────
@@ -855,8 +858,10 @@ export async function openAurabladeAction(actor) {
               break;
             }
             case "mercy_redirect": {
-              await _ftAurabladeStampOneShot(actor, "redirectAllyId", targetActor.id);
-              appliedNote = `🤍 Next damage to ${targetActor.name}: reduce by ${tier} OR redirect to yourself (your choice on apply).`;
+              // Stamp the reduction on the ALLY so _applyDamageToActor consumes
+              // it when they're next hit. Redirect-to-self stays GM-adjudicated.
+              await targetActor.setFlag?.("fourththing", "aurablade.reduceNextDamageByTier", tier);
+              appliedNote = `🤍 Next damage to ${targetActor.name} is reduced by ${tier} (your tier). (Redirect-to-self stays GM-adjudicated.)`;
               break;
             }
             case "mercy_stabilize": {
@@ -1143,7 +1148,12 @@ export async function openBreakerRuin(actor) {
           const newMax     = parseInt(html.find("[name='ruinMax']").val()) || ruinMax;
           const action     = html.find("[name='action']").val();
           const spendOne   = action !== "none";
-          const finalRuin  = spendOne ? Math.max(0, newRuin - 1) : newRuin;
+          // Bulwark Stance · Advance reduces Ruin charge cost by 1 (to 0): the
+          // action still fires (chat-sniffed by bbttcc-structures) but spends no
+          // charge. Non-Bulwark Breakers never have the stance flag → normal cost.
+          const _advance   = actor.getFlag("fourththing", "bulwarkStance") === "advance";
+          const ruinCost   = spendOne ? (_advance ? 0 : 1) : 0;
+          const finalRuin  = Math.max(0, newRuin - ruinCost);
           await actor.update({
             "system.resources.ruinCharges.current": Math.min(finalRuin, newMax),
             "system.resources.ruinCharges.max":     newMax,
@@ -1160,7 +1170,7 @@ export async function openBreakerRuin(actor) {
               content: `<div class="fourththing-roll">
                 <div class="ft-roll-header"><span class="ft-roll-name">⚒ Breaker: ${labels[action]?.split(' — ')[0]}</span></div>
                 <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">${labels[action]}</p>
-                <p style="margin:0;font-size:0.72rem;opacity:0.5">Ruin Charges: ${finalRuin}/${newMax}</p>
+                <p style="margin:0;font-size:0.72rem;opacity:0.5">Ruin Charges: ${finalRuin}/${newMax}${_advance ? " · ⛰ Advance — no charge spent" : ""}</p>
               </div>`
             });
           }
@@ -1802,10 +1812,15 @@ export async function openHarmonyMarshalInitiate(actor) {
 export async function openHarmonyMarshalAttritionEaser(actor) {
   const used = !!actor.flags?.fourththing?.harmonyMarshal?.attritionEaserUsedThisTurn;
   const faction = _hmGetFaction(actor);
-  const opPath = "system.opPools.softpower";
-  const factionSys = faction?.system?.system ?? faction?.system ?? {};
-  const currentSP = Number(foundry.utils.getProperty(factionSys, "opPools.softpower")) || 0;
-  const canAfford = currentSP >= 1;
+  // Real faction OP lives at flags.bbttcc-factions.opBank.<bucket> in MARKS
+  // (1 OP = OP_TO_MARKS marks). Spend via the canonical OP commit API so caps +
+  // underflow are honored — NOT the phantom system.opPools.softpower field
+  // (which nothing in bbttcc-factions ever read).
+  const opApi = game.bbttcc?.api?.op;
+  const marksPerOP = opApi?.OP_TO_MARKS || 10;
+  const bank = faction?.getFlag?.("bbttcc-factions", "opBank") || {};
+  const currentSP = Math.floor((Number(bank.softpower) || 0) / marksPerOP);
+  const canAfford = currentSP >= 1 && !!opApi?.commit;
 
   new Dialog({
     title: "Harmony Marshal · Attrition Easer (T2)",
@@ -1827,11 +1842,14 @@ export async function openHarmonyMarshalAttritionEaser(actor) {
         spend: {
           label: "Spend 1 SP OP · Ease 1 Attrition",
           callback: async () => {
-            await faction.update({ [opPath]: currentSP - 1 });
+            const res = await opApi.commit(faction.id, { softpower: -marksPerOP }, { context: "harmony-marshal-attrition-easer" });
+            if (!res?.committed) {
+              return ui.notifications?.warn(`${actor.name}: could not spend Soft Power OP (${res?.error || "insufficient / cap"}).`);
+            }
             await actor.update({ "flags.fourththing.harmonyMarshal.attritionEaserUsedThisTurn": true });
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor }),
-              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Attrition Easer — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: -1 Soft Power OP (now ${currentSP - 1}), <b>-1 Attrition</b> faction-wide. GM applies the Attrition reduction to the faction sheet.</p><p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.55">Used this strategic turn — refresh at next turn.</p></div>`
+              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Attrition Easer — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: −1 Soft Power OP (now ${currentSP - 1}), <b>−1 Attrition</b> faction-wide. GM applies the Attrition reduction to the faction sheet.</p><p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.55">Used this strategic turn — refresh at next turn.</p></div>`
             });
           }
         }
@@ -1886,8 +1904,12 @@ export async function openHarmonyMarshalLoyaltySteward(actor) {
             const scene = game.scenes.get(hexId);
             if (scene) {
               hexName = scene.name;
-              const cur = Number(scene.getFlag?.("bbttcc-factions", "loyalty")) || 0;
-              await scene.setFlag("bbttcc-factions", "loyalty", cur + 1);
+              // Hex loyalty lives under the bbttcc-territory namespace — the same
+              // field adjustHexTrack (turn-driver.js) writes and the territory
+              // upkeep/overview read. The old bbttcc-factions write was a dead
+              // path nothing consumed. Floor at 0 to match adjustHexTrack.
+              const cur = Number(scene.getFlag?.("bbttcc-territory", "loyalty")) || 0;
+              await scene.setFlag("bbttcc-territory", "loyalty", Math.max(0, cur + 1));
               bumped = true;
             }
           }
@@ -1919,12 +1941,22 @@ export async function openHarmonyMarshalUnityConductor(actor) {
         grant: {
           label: "Apply +2 SP OP now (manual)",
           callback: async () => {
-            const factionSys = faction?.system?.system ?? faction?.system ?? {};
-            const cur = Number(foundry.utils.getProperty(factionSys, "opPools.softpower")) || 0;
-            await faction.update({ "system.opPools.softpower": cur + 2 });
+            const opApi = game.bbttcc?.api?.op;
+            if (!opApi?.commit) {
+              return ui.notifications?.warn(`${actor.name}: OP engine not available — cannot grant Soft Power OP.`);
+            }
+            const marksPerOP = opApi.OP_TO_MARKS || 10;
+            // allowOvercap: this is a bonus grant, not a normal earn — don't let
+            // the cap refuse the canon +2.
+            const res = await opApi.commit(faction.id, { softpower: +(2 * marksPerOP) }, { context: "harmony-marshal-unity-conductor", allowOvercap: true });
+            if (!res?.committed) {
+              return ui.notifications?.warn(`${actor.name}: could not grant Soft Power OP (${res?.error || "API error"}).`);
+            }
+            const bankNow = faction.getFlag?.("bbttcc-factions", "opBank") || {};
+            const nowSP = Math.floor((Number(bankNow.softpower) || 0) / marksPerOP);
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor }),
-              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Unity Conductor — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: +2 Soft Power OP applied (now ${cur + 2}).</p></div>`
+              content: `<div class="fourththing-roll" style="border-color:#5a8a3a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#b8d896">⚖ Unity Conductor — ${_ftEscape(actor.name)}</span></div><p style="margin:0.3rem 0;font-size:0.82rem"><b>${_ftEscape(faction.name)}</b>: +2 Soft Power OP applied (now ${nowSP}).</p></div>`
             });
           }
         }
@@ -2037,7 +2069,9 @@ export async function openBulwarkSpendFrame(actor) {
         label: "Spend",
         callback: async (html) => {
           const purpose = html.find("[name='purpose']").val();
-          const roll = new Roll("1d8");
+          // Bulwark Stance · Anchor adds +1d4 to Frame Die spends.
+          const _stance = actor.getFlag("fourththing", "bulwarkStance");
+          const roll = new Roll(_stance === "anchor" ? "1d8 + 1d4" : "1d8");
           await roll.evaluate();
           const rolled = Number(roll.total) || 0;
           await actor.update({ "system.resources.frameDice.current": frame - 1 });
