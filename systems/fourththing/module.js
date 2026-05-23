@@ -8552,7 +8552,15 @@ Hooks.once("init", function () {
         }
       }
     }
-    const totalBonus = attrVal + skillVal + aeAttr + aeSkill;
+    // Bulwark Frame Die — Push one-shot. Adds the pre-rolled Frame die to the
+    // next BODY check only (the canonical "Strength check to move/break").
+    // Consumed below after the roll resolves.
+    let _framePushBonus = 0;
+    {
+      const fp = actor.flags?.fourththing?.bulwark?.frameOneShot?.push;
+      if (fp?.roll != null && attribute === "body") _framePushBonus = Math.max(0, Number(fp.roll) || 0);
+    }
+    const totalBonus = attrVal + skillVal + aeAttr + aeSkill + _framePushBonus;
 
     // Dreamwalker per-rest one-shot bonus dice — consumed on use.
     const _dw = _ftReadDwOneShots(actor, { context: "check" });
@@ -8584,6 +8592,7 @@ Hooks.once("init", function () {
     // Consume any DW one-shots used on this roll (omen d6, foresight d4,
     // fractal advantage). Append a chat note crediting the source(s).
     if (_dw.sources.length) await _ftConsumeDwOneShots(actor, _dw);
+    if (_framePushBonus > 0) await actor.update({ "flags.fourththing.bulwark.frameOneShot.-=push": null });
 
     // Restraint: pull the punch on this roll, bank +1d4 vs. target for next.
     let pulled = 0;
@@ -8607,6 +8616,7 @@ Hooks.once("init", function () {
       const parts = aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`);
       noteBits.push(`Passives: ${parts.join(", ")}`);
     }
+    if (_framePushBonus > 0) noteBits.push(`⛰ Frame Push +${_framePushBonus} (Body)`);
     if (rerollResult.applied.length) {
       const parts = rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`);
       noteBits.push(`Reroll: ${parts.join(", ")}`);
@@ -9434,6 +9444,29 @@ Hooks.once("init", function () {
     return { roll, success };
   };
 
+  // Bulwark Frame Die — Anchor one-shot. "Refuse forced movement or condition":
+  // a single armed Anchor negates the next condition OR forced-move that would
+  // affect the actor, whichever lands first. Consumed here; returns true if it
+  // fired (the caller then skips applying that effect). Used by
+  // applyManifestationStates (conditions) and the forced-movement chokepoints
+  // (Aurablade push, structure collapse knockback).
+  game.fourththing.consumeBulwarkAnchor = async function (actor, { reason = "effect" } = {}) {
+    if (!actor) return false;
+    const armed = actor.flags?.fourththing?.bulwark?.frameOneShot?.anchor;
+    if (!armed) return false;
+    await actor.update({ "flags.fourththing.bulwark.frameOneShot.-=anchor": null });
+    try {
+      await ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll" style="border-color:#7a8a9a">
+          <div class="ft-roll-header"><span class="ft-roll-name">⛰ Bulwark: Anchored</span></div>
+          <p style="margin:0.2rem 0;font-size:0.78rem">${foundry.utils.escapeHTML(actor.name)} refuses the ${foundry.utils.escapeHTML(reason)} — Frame Die spent.</p>
+        </div>`
+      });
+    } catch (_e) { /* chat is best-effort */ }
+    return true;
+  };
+
   // ── Apply damage from chat button ──────────────────────────────────────────
   // Phase 3 engine: system.derived.defenses = { resistances, immunities, vulnerabilities }
   // is computed per-actor in prepareDerivedData. Entries are { type, flavor } objects.
@@ -9534,12 +9567,30 @@ Hooks.once("init", function () {
       dmg -= reduced;
       tags.push(`Aegis DR −${reduced}`);
     }
+
+    // Bulwark Frame Die — Absorb one-shot. "Convert damage to the Frame die
+    // roll": the incoming hit is capped at the pre-rolled value (you take the
+    // roll instead of the full hit). Consumed on the first hit that actually
+    // deals damage — fully negated/immune hits keep it armed for a real one.
+    let clearFrameAbsorb = false;
+    if (op === "damage" && dmg > 0) {
+      const fa = actor.flags?.fourththing?.bulwark?.frameOneShot?.absorb;
+      if (fa?.roll != null) {
+        const cap = Math.max(0, Number(fa.roll) || 0);
+        if (dmg > cap) { tags.push(`Frame Absorb: ${dmg} → ${cap}`); dmg = cap; }
+        else           { tags.push(`Frame Absorb (${dmg} ≤ ${cap}; spent)`); }
+        clearFrameAbsorb = true;
+      }
+    }
     const defenseTag = tags.length ? ` (${tags.join(", ")})` : "";
 
     if (track === "radiation") {
       const cur = rawSys?.radiation?.rp ?? 0;
       const newVal = cur + dmg;
-      await actor.update({ "system.radiation.rp": newVal });
+      await actor.update({
+        "system.radiation.rp": newVal,
+        ...(clearFrameAbsorb ? { "flags.fourththing.bulwark.frameOneShot.-=absorb": null } : {})
+      });
       const thr = rawSys?.radiation?.thresholds ?? { minor: 25, major: 50, severe: 75 };
       const crossed = [];
       for (const [name, val] of Object.entries(thr)) {
@@ -9573,6 +9624,7 @@ Hooks.once("init", function () {
       : `system.derived.${track}.value`;
     const updates = { [writeKey]: newVal };
     if (rigDestroyed) updates["system.identity.state"] = "destroyed";
+    if (clearFrameAbsorb) updates["flags.fourththing.bulwark.frameOneShot.-=absorb"] = null;
     if (isBoss && track === "integrity") {
       console.log(`[fourththing] boss damage: ${actor.name} integrity ${cur} → ${newVal} (writeKey=${writeKey})`);
     }
@@ -10152,6 +10204,14 @@ Hooks.once("init", function () {
       const existing = target.effects?.find?.(e => e.flags?.fourththing?.condition === condKey);
       if (existing) {
         skipped.push({ key: condKey, reason: "already-active" });
+        continue;
+      }
+      // Bulwark Frame Die — Anchor refuses the next condition that would land.
+      // A single armed Anchor negates one condition (or one forced-move). Placed
+      // after immune + de-dupe so it's only spent when a condition would
+      // genuinely be newly applied; consumed on the first such condition.
+      if (await game.fourththing.consumeBulwarkAnchor?.(target, { reason: cond.label })) {
+        skipped.push({ key: condKey, reason: "anchored" });
         continue;
       }
 

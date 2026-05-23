@@ -236,6 +236,47 @@ function _findInjectionTarget(appEl) {
   return host || null;
 }
 
+// ── Plates → Integrity-track mirror ───────────────────────────────────────────
+// Per design choice 2026-05-23: for structure actors the prominent top
+// Integrity tile should reflect the structure's Plates (the real combat HP),
+// so the big number actually moves when the structure takes damage. Display-
+// only — we never write to system.integrity here (that would fight
+// prepareDerivedData and corrupt the overflow track). On every sheet re-render
+// the structure panel is re-injected, so this re-applies and stays live as
+// Plates change. The ± buttons still adjust the underlying integrity-overflow
+// track; the tooltip explains the relationship.
+function _mirrorPlatesIntoIntegrity(appEl, actor, state) {
+  try {
+    if (!appEl?.querySelector || !state?.plates) return;
+    const tile = appEl.querySelector(".ft-rig-stat-integrity");
+    if (!tile) return;
+    const cur = Math.max(0, Number(state.plates.current) || 0);
+    const max = Math.max(0, Number(state.plates.max) || 0);
+    const pct = max > 0 ? Math.max(0, Math.min(100, (cur / max) * 100)) : 0;
+
+    const valEl  = tile.querySelector(".ft-rig-stat-val");
+    const maxEl  = tile.querySelector(".ft-rig-stat-max");
+    const fillEl = tile.querySelector(".ft-integrity-fill");
+    if (valEl)  valEl.textContent  = String(cur);
+    if (maxEl)  maxEl.textContent  = String(max);
+    if (fillEl) fillEl.style.width = `${pct}%`;
+
+    // Surface the raw integrity-overflow value (what the ± buttons touch) in
+    // the tooltip so the GM understands the prominent number is now Plates.
+    const rawSys = actor.system?.system ?? actor.system;
+    const ovCur = Number(rawSys?.integrity?.value);
+    const ovMax = Number(rawSys?.integrity?.max);
+    const ovNote = (Number.isFinite(ovCur) && Number.isFinite(ovMax))
+      ? ` Integrity-overflow track (± buttons): ${ovCur}/${ovMax}.`
+      : "";
+    tile.setAttribute("data-tooltip",
+      `Structure HP — now shows Plates ${cur}/${max} (BOM-derived). Damage chips Plates first; only overflow past 0 reaches the integrity-overflow track.${ovNote}`);
+    tile.setAttribute("data-bbttcc-plates-mirrored", "1");
+  } catch (e) {
+    console.warn(TAG, "plates→integrity mirror failed", e);
+  }
+}
+
 function _sweepPriorPanels(appEl) {
   // Sweep the ENTIRE window. Earlier injections may have landed in the wrong
   // place if a partial-render hook fired before the part DOM was complete;
@@ -270,6 +311,11 @@ function injectPanel(app /* html unused — we use app.element */) {
     target.appendChild(wrap);
 
     _bindActions(wrap, actor, app);
+
+    // Mirror Plates into the prominent top Integrity tile (display-only) so the
+    // big number reflects structure HP. Only when a BOM is stamped.
+    const state = game.bbttcc?.api?.structures?.readState?.(actor);
+    if (state?.plates) _mirrorPlatesIntoIntegrity(appEl, actor, state);
   } catch (e) {
     console.warn(TAG, "injectPanel failed", e);
   }

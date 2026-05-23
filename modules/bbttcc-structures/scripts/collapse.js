@@ -40,13 +40,54 @@ function findStructureToken(actor) {
 }
 
 /**
- * Tokens whose center sits inside the rect defined by `structToken.bounds`.
- * Excludes the structure itself.
+ * Set of "i,j" grid-offset keys the structure token actually occupies, or null
+ * if the grid has no discrete cells (gridless) so the caller falls back to the
+ * bounding-rect test.
+ *
+ * Why not just the bounding rect: a large or HEX-grid structure token's AABB
+ * includes corner space the structure doesn't really stand on, so a token
+ * merely *adjacent* to the structure gets falsely caught in the collapse
+ * (the "bad guy on top of the wall when he wasn't" bug). We instead enumerate
+ * the grid cells whose CENTER lands inside the structure token's rect and treat
+ * that as the true footprint — trimming the hex/diagonal corners.
+ */
+function _structureOccupiedCells(structToken, r, grid) {
+  if (!grid?.getOffset || !grid?.getCenterPoint || !grid?.getOffsetRange) return null;
+  const GRIDLESS = globalThis.CONST?.GRID_TYPES?.GRIDLESS ?? 0;
+  if (grid.isGridless || grid.type === GRIDLESS) return null;
+  try {
+    const range = grid.getOffsetRange(r); // [i0, j0, i1, j1], end-exclusive
+    if (!Array.isArray(range) || range.length !== 4) return null;
+    const [i0, j0, i1, j1] = range;
+    const cells = new Set();
+    for (let i = i0; i < i1; i++) {
+      for (let j = j0; j < j1; j++) {
+        const c = grid.getCenterPoint({ i, j });
+        if (c.x >= r.x && c.x <= r.x + r.width && c.y >= r.y && c.y <= r.y + r.height) {
+          cells.add(`${i},${j}`);
+        }
+      }
+    }
+    return cells.size ? cells : null;
+  } catch (e) {
+    console.warn(TAG, "occupied-cell computation failed; falling back to bounding rect", e);
+    return null;
+  }
+}
+
+/**
+ * Tokens standing on the structure's footprint. Excludes the structure itself.
+ * Uses grid-cell occupancy: a candidate counts as "on top" only if its center
+ * sits in a cell the structure actually occupies. Falls back to a bounding-rect
+ * test on gridless scenes or if the grid offset API is unavailable.
  */
 function findTokensInsideFootprint(structToken) {
   if (!structToken || !canvas?.tokens?.placeables) return [];
   const r = structToken.bounds;
   if (!r) return [];
+  const grid = canvas?.grid;
+  const occupied = _structureOccupiedCells(structToken, r, grid);
+
   const result = [];
   for (const t of canvas.tokens.placeables) {
     if (!t.actor) continue;
@@ -54,7 +95,13 @@ function findTokensInsideFootprint(structToken) {
     const cx = t.center?.x;
     const cy = t.center?.y;
     if (cx == null || cy == null) continue;
-    if (cx >= r.x && cx <= r.x + r.width && cy >= r.y && cy <= r.y + r.height) {
+
+    if (occupied) {
+      let off = null;
+      try { off = grid.getOffset({ x: cx, y: cy }); } catch (_e) { off = null; }
+      if (off && occupied.has(`${off.i},${off.j}`)) result.push(t);
+    } else if (cx >= r.x && cx <= r.x + r.width && cy >= r.y && cy <= r.y + r.height) {
+      // Gridless / no-offset-API fallback: original bounding-rect test.
       result.push(t);
     }
   }
@@ -69,15 +116,20 @@ function findTokensInsideFootprint(structToken) {
 function readTargetCurrentHP(actor) {
   // Rigs/Bosses: system.integrity.value
   // Everything else: system.derived.integrity.value (fourththing characters/npcs)
+  // Returns null (NOT 0) when the track is unreadable, so the nonlethal clamp
+  // can tell "genuinely at/below 1" apart from "couldn't read the field".
   const isStruct = ["rig", "boss"].includes(actor.type);
   const raw = actor.system?.system ?? actor.system;
-  if (isStruct) {
-    return Number(raw?.integrity?.value) || 0;
-  }
-  return Number(raw?.derived?.integrity?.value) || 0;
+  const v = isStruct ? raw?.integrity?.value : raw?.derived?.integrity?.value;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
 }
 
 function clampNonlethal(damage, currentHP) {
+  // null = HP unreadable. Apply in full rather than silently zeroing the hit —
+  // the old `|| 0` read made collapses deal NO damage whenever the field came
+  // back empty/NaN, which is exactly the "card says 12, nothing happened" bug.
+  if (currentHP == null) return damage;
   if (currentHP <= 1) return 0;   // already at 1 or below; nonlethal does nothing
   const maxAllowed = currentHP - 1;
   return Math.max(0, Math.min(damage, maxAllowed));
@@ -89,6 +141,8 @@ function clampNonlethal(damage, currentHP) {
  */
 async function knockbackToken(token, fromCenter, knockbackFt) {
   if (!token || knockbackFt <= 0) return;
+  // Bulwark Frame Die — Anchor refuses forced movement (best-effort chokepoint).
+  if (await game?.fourththing?.consumeBulwarkAnchor?.(token.actor, { reason: "collapse knockback" })) return;
   const grid = canvas?.scene?.grid;
   if (!grid?.distance || !grid?.size) return;
   const pxPerFt = grid.size / grid.distance;
@@ -107,27 +161,54 @@ async function knockbackToken(token, fromCenter, knockbackFt) {
 }
 
 /**
- * Toggle prone status on an actor. Idempotent.
+ * Apply prone to an actor. Returns true if it landed, false otherwise.
+ * Idempotent. Prefers the system's canonical condition applier so prone lands
+ * through the same managed-AE path the rest of fourththing uses (sheet/HUD
+ * reflection + system.conditions.prone). A bare toggleStatusEffect("prone")
+ * doesn't register here — that's why collapse prone wasn't sticking.
  */
 async function applyProne(actor) {
-  if (!actor) return;
+  if (!actor) return false;
+  // Already prone? Treat as success, don't double-apply.
+  const alreadyProne = actor.effects?.some?.(e =>
+    e.flags?.fourththing?.condition === "prone" || e.statuses?.has?.("prone"));
+  if (alreadyProne) return true;
+
+  // Canonical path — applies the condition AE immediately (the dc is only
+  // stored on the AE for any later save-each-round handler; there is no save
+  // gate at apply time, so prone lands).
+  try {
+    const applyStates = game?.fourththing?.applyManifestationStates;
+    if (typeof applyStates === "function") {
+      const stub = { name: "Structure Collapse", id: actor.id, system: {} };
+      const synthMf = { appliedStates: { states: ["prone"], duration: "1-round" } };
+      const res = await applyStates(actor, actor, stub, synthMf, { castDc: 15 });
+      // res.applied includes "prone" on success; null/empty means it no-op'd
+      // (e.g. condition immunity) — fall through to the manual fallback only if
+      // it truly failed to create anything.
+      if (res && Array.isArray(res.applied) && res.applied.includes("prone")) return true;
+      if (res && Array.isArray(res.skipped) && res.skipped.some(s => s.key === "prone")) return false; // immune/dedup — respect it
+    }
+  } catch (e) {
+    console.warn(TAG, "canonical prone apply failed; trying fallback", e);
+  }
+
+  // Fallback for environments without the system applier.
   try {
     if (typeof actor.toggleStatusEffect === "function") {
-      // V13/V14 path — accepts ("prone", { active: true })
       await actor.toggleStatusEffect("prone", { active: true });
-      return;
+      return true;
     }
-    // Fallback: create an AE manually
-    const existing = actor.effects?.find?.(e => e.statuses?.has?.("prone"));
-    if (existing) return;
     await actor.createEmbeddedDocuments("ActiveEffect", [{
       name: "Prone (Collapse)",
       icon: "icons/svg/falling.svg",
       statuses: ["prone"],
       duration: { rounds: 1 }
     }]);
+    return true;
   } catch (e) {
     console.warn(TAG, "applyProne failed", e);
+    return false;
   }
 }
 
@@ -210,12 +291,12 @@ export async function triggerCollapse(actor, { fromState, toState }) {
     }
 
     // Prone + knockback
-    await applyProne(tokActor);
+    const proneApplied = await applyProne(tokActor);
     if (knockbackFt > 0) await knockbackToken(tok, center, knockbackFt);
 
-    results.push({ actor: tokActor, rolled, applied, nonlethalCapped: applied < rolled, desc });
+    results.push({ actor: tokActor, rolled, applied, nonlethalCapped: applied < rolled, prone: proneApplied, desc });
 
-    await postCollapseTargetCard(actor, tokActor, { rolled, applied, nonlethal, formula: damageDice });
+    await postCollapseTargetCard(actor, tokActor, { rolled, applied, nonlethal, formula: damageDice, prone: proneApplied });
   }
 
   await actor.setFlag(FLAG_SCOPE, "collapseFired", true);
@@ -244,10 +325,14 @@ async function postCollapseHeaderCard(actor, profile, tokensCount) {
   });
 }
 
-async function postCollapseTargetCard(structure, target, { rolled, applied, nonlethal, formula }) {
-  const cappedNote = applied < rolled
-    ? `<span style="color:#e8c84a; font-size:0.7rem"> (nonlethal cap: ${rolled} → ${applied})</span>`
-    : "";
+async function postCollapseTargetCard(structure, target, { rolled, applied, nonlethal, formula, prone }) {
+  // Show what was actually APPLIED, not just the raw roll — the card used to
+  // always report `rolled` + "prone" even when the nonlethal clamp zeroed the
+  // hit or prone didn't land, so it claimed effects that never happened.
+  const dmgNote = applied !== rolled
+    ? `<b>${formula}</b> = ${rolled} → <b>${applied}</b> applied <span style="color:#e8c84a; font-size:0.7rem">(nonlethal cap)</span>`
+    : `<b>${formula}</b> = <b>${applied}</b> damage`;
+  const proneNote = prone ? ` · <i style="opacity:0.7">prone</i>` : "";
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: target }),
     content: `
@@ -256,8 +341,7 @@ async function postCollapseTargetCard(structure, target, { rolled, applied, nonl
           ◈ ${_esc(target.name)} caught in collapse of ${_esc(structure.name)}
         </div>
         <div style="font-size:0.74rem;">
-          <b>${formula}</b> = ${rolled} damage${cappedNote}
-          · <i style="opacity:0.7">prone</i>
+          ${dmgNote}${proneNote}
         </div>
       </div>
     `

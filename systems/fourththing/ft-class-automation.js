@@ -795,6 +795,11 @@ export async function openAurabladeAction(actor) {
             }
             case "fury_press_push": {
               // Token nudge — 5 ft directly away from caster.
+              // Bulwark Frame Die — Anchor on the target refuses forced movement.
+              if (await game.fourththing?.consumeBulwarkAnchor?.(targetActor, { reason: "forced movement" })) {
+                appliedNote = `⛰ ${targetActor.name} anchors — the shove is refused.`;
+                break;
+              }
               try {
                 const srcTk = actor.getActiveTokens?.()[0];
                 const tgtTk = Array.from(game.user.targets ?? [])[0];
@@ -2034,20 +2039,33 @@ export async function openBulwarkSpendFrame(actor) {
           const purpose = html.find("[name='purpose']").val();
           const roll = new Roll("1d8");
           await roll.evaluate();
+          const rolled = Number(roll.total) || 0;
           await actor.update({ "system.resources.frameDice.current": frame - 1 });
-          const labels = {
-            absorb: "Absorbed",
-            anchor: "Anchored",
-            push:   "Pushed"
+
+          // Arm a one-shot the relevant system chokepoint consumes:
+          //   absorb → next incoming hit capped at `rolled`   (_applyDamageToActor)
+          //   anchor → refuse next condition OR forced move    (applyManifestationStates
+          //            + push chokepoints, via game.fourththing.consumeBulwarkAnchor)
+          //   push   → +`rolled` to next Body check            (attributeTest)
+          // Persists until consumed. Consume clears via
+          //   update({ "flags.fourththing.bulwark.frameOneShot.-=<key>": null }).
+          await actor.setFlag("fourththing", `bulwark.frameOneShot.${purpose}`, { roll: rolled, ts: Date.now() });
+
+          const labels = { absorb: "Absorb armed", anchor: "Anchor armed", push: "Push armed" };
+          const blurb = {
+            absorb: `Your next incoming hit is <b>capped at ${rolled}</b> — you take the Frame die roll instead of the full hit. Consumed by the next hit that deals damage.`,
+            anchor: `You <b>refuse the next condition or forced movement</b> that would affect you. Consumed on the next such effect.`,
+            push:   `<b>+${rolled}</b> to your next <b>Body</b> check (move / break). Consumed on use.`
           };
           ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
             content: `<div class="fourththing-roll">
               <div class="ft-roll-header">
-                <span class="ft-roll-name">⛰ Bulwark: ${labels[purpose]}</span>
-                <span class="ft-defense-pill">${roll.total}</span>
+                <span class="ft-roll-name">⛰ Bulwark: ${labels[purpose] ?? "Frame Die"}</span>
+                <span class="ft-defense-pill">d8 = ${rolled}</span>
               </div>
-              <p style="margin:0;font-size:0.75rem;opacity:0.6">Frame remaining: ${frame - 1}</p>
+              <p style="margin:0.25rem 0;font-size:0.78rem">${blurb[purpose] ?? ""}</p>
+              <p style="margin:0;font-size:0.72rem;opacity:0.55">Frame remaining: ${frame - 1}</p>
             </div>`
           });
         }
