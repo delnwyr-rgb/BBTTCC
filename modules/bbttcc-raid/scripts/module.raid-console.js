@@ -6505,6 +6505,29 @@ function bindAPI() {
             } catch (eC) { console.warn(TAG, "courtlyHook replay threw", eC); }
             return;
           }
+          if (msg.t === "siegeSceneSwap") {
+            // Siege Phase D.1 — follow the GM to a convened Breach Scene.
+            // GM-side convene() emits this so non-GM clients view the layer scene too.
+            console.log(TAG, "siegeSceneSwap RECV", msg);
+            try {
+              if (game.user?.isGM) return; // GM already navigated locally
+              const scene = msg.sceneId ? game.scenes?.get?.(String(msg.sceneId)) : null;
+              if (scene) scene.view();
+            } catch (eSS) { console.warn(TAG, "siegeSceneSwap threw", eSS); }
+            return;
+          }
+          if (msg.t === "siegeHook") {
+            // Siege Phase D — re-fire bbttcc:siege:* hooks locally so HUD + VFX
+            // subscribers (siege-hud.js, D.3 VFX) react on every connected client.
+            console.log(TAG, "siegeHook RECV", msg);
+            try {
+              const hookName = String(msg.hook || "");
+              if (hookName.startsWith("bbttcc:siege:")) {
+                Hooks.callAll(hookName, msg.payload || {});
+              }
+            } catch (eSh) { console.warn(TAG, "siegeHook replay threw", eSh); }
+            return;
+          }
         } catch(_eS) {}
       });
     }

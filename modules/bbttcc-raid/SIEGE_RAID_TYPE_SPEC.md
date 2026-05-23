@@ -1,6 +1,6 @@
 # SIEGE_RAID_TYPE_SPEC.md
 
-**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C SHIPPED 2026-05-22/23 (Phase D next)
+**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** SHIPPED 2026-05-22/23; **Phase E.1 (counter-activities)** SHIPPED 2026-05-23 (E.2 champions next).
 **Parent specs:**
 - `bbttcc-structures/STRUCTURE_DAMAGE_SPEC.md` (SIGNED OFF 2026-05-20; Phases A+B+B.9+C+D SHIPPED 2026-05-21)
 - `bbttcc-raid/COURTLY_INTRIGUE_SPEC.md` (SIGNED OFF 2026-05-20; ALL PHASES SHIPPED 2026-05-21)
@@ -693,19 +693,51 @@ Read-only mirror of GM HUD:
 - **Planner hints for threat vectors** — they use the standard hex picker; no dedicated picker UI (which path hex feeds which siege) yet. Phase D/A.6 candidate.
 
 ### Phase D — Tactical Convene Breach Scene + Champion Duel maneuver
-- Siege HUD "Convene" button + auto-suggest pip
-- Scene swap routing + layer Structure placement
-- `bbttcc:structure:stateChanged` subscription + layer transition
-- Catastrophic Entry VFX on breach
-- Champion Duel maneuver (`siege_champion_duel`) — UI handler + resolution
-- **LOC est: ~550**
+Sub-phased D.1→D.4 (mirrors Courtly S.2 cadence).
+
+**D.1 — Siege HUD + Convene spine — ✅ SHIPPED 2026-05-23** (`scripts/siege-hud.js`, ~230 LOC)
+- On-canvas Siege HUD mirroring `raid-courtly.hud.js` plumbing (DOM panel on `document.body`, innerHTML `_swapPanel`-style update + `_ftMakeHudDraggable` storageKey `siege:hud:panel`). Data source = live `game.bbttcc.api.siege.list()` — no open console needed; surfaces whenever ≥1 active siege. Renders per siege: name · size · Buffer bar (total/start) · supply-status chip (supplied/harassed/severed colour) · interdiction + relief chips · layers strip (current ◄ bronze-highlit, breached ✗ strikethrough) · auto-suggest pip (scaffold; lit by `state._suggestConvene`, which D.2 Bombard accrual will toggle).
+- `convene(hexUuid)` (GM): views current layer's bound `sceneId` if set + broadcasts `siegeSceneSwap` socket so players follow → opens raid console w/ `{factionId, siegeId, layerIdx}` context → appends `convene` narrativeBeat → fires `bbttcc:siege:convene` + relays via `siegeHook` socket. Exposed at `game.bbttcc.api.siege.convene` / `.refreshHud`.
+- Socket dispatcher (`module.raid-console.js`): new `siegeSceneSwap` branch (non-GM `scene.view()`) + `siegeHook` branch (re-fire `bbttcc:siege:*` locally for HUD/VFX). Mirrors `infilHook`/`courtlyHook`.
+- Debounced `_renderAll` on canvasReady + `bbttcc:siege:{begin,ticked,convene,interdicted,counterInterdicted,sortie,layerBreached}`.
+- Selftest `tools/siege-phase-d-selftest.macro.js` (6 sections). Module loaded after `siege-planner-enhancer.js`.
+- **D.1 deferred**: layer→scene binding editor is the planner Phase A.6 item (convene falls back to console-only when a layer has no `sceneId`); player-side siege filtering (currently all clients see all active sieges read-only).
+
+**D.2 — Layer transition engine — ✅ SHIPPED 2026-05-23** (`scripts/siege-layer-transition.js`, ~165 LOC)
+- Subscribes `bbttcc:structure:stateChanged` (payload `{actor, fromState, toState, ctx}` from bbttcc-structures `damage-path.js:436`). GM-only (siege state on shared hex docs; damage applied GM-side via canonical apply-damage path). Matches the changed structure actor to the **current** layer of each active siege.
+- `layerBreaches(layer, actor, toState)` predicate (exposed on API): **razed** → `toState==="razed"` (load-bearing locks at "breached" until sephirotic is chipped, then flips and reaches razed — universal terminal trigger, no special-case); **threshold** → `plates.current/plates.max ≤ thresholdPct` (plates at `actor.flags["bbttcc-structures"].plates.{current,max}`; misconfig→razed fallback; max≤0→false); **stockpile** → `layer.stockpileCurrent ≤ 0`.
+- On breach: mark `breached/breachedAtTurn/breachedBy="damage"` + `layer_breached` beat + advance `currentLayerIdx`. Final layer → `status="won_storm"` + `endedTurn` + `siege_storm` beat + `bbttcc:siege:outcome` hook (**full §8 write-back = Phase F**). Non-final → scene-swap to next layer's `sceneId` + set `state._suggestConvene=true` (lights the HUD pip). Always fires `bbttcc:siege:layerBreached` + `siegeHook` relay (D.3 VFX subscribes).
+- `convene()` (D.1) now clears `_suggestConvene` when the GM acts on the pip.
+- Debug API: `siege.breachCurrentLayer(hexUuid)` (force-breach) + `siege.layerBreaches(...)` (pure predicate). Selftest extended (sections 7–8, 13 assertions total). module.json: after siege-tick.js.
+**D.3 — Catastrophic Entry VFX — ✅ SHIPPED 2026-05-23** (`scripts/siege-vfx.js`, ~190 LOC)
+- Mirrors `raid-courtly.vfx.js` (one-time `ft-siege-vfx-styles` injection, `_banner`/`_fullScreenFlash`/`_pulse`/`_shakeBoard`). Subscribes on every client to the three socket-relayed beats: `bbttcc:siege:layerBreached` (Catastrophic Entry — red full-screen flash + board shake + "{layer} Breached" banner + HUD pulse), `bbttcc:siege:convene` (amber "Breach Scene — Layer N" banner), `bbttcc:siege:outcome` (per-§8-status palette banner + conditional flash/shake). No double-fire: GM fires locally, remotes get the `siegeHook` relay.
+- Outcome palette covers all 9 §8 statuses (won_storm red+flash+shake / won_sack amber / won_surrender green / won_trojan_horse violet+flash / lost_hold gray / lost_supply_crisis red+flash / lost_pyrrhic amber+flash / lost_relieved blue / abandoned gray).
+- **Wired tick → VFX**: `siege-tick.js` now fires `bbttcc:siege:outcome` + `siegeHook` relay when a tick ends a siege (Buffer exhaustion), so supply-crisis/hold outcomes get banners too. **Also fixed a latent Phase B bug**: tick called `S.setState`/`S.list()` (public-API aliases) against the internals bridge, which only exposes `setSiegeState`/`listActiveSieges` — would `TypeError` on first live tick. Corrected.
+- `siege.previewVfx(kind, payload)` debug helper. Selftest section 9 (16 assertions / 9 sections total).
+**D.4 — Champion Duel — ✅ SHIPPED 2026-05-23** (`scripts/siege-champion-duel.js`, ~210 LOC)
+- `game.bbttcc.api.siege.openChampionDuelDialog({hexUuid?|siegeId?})` — GM dialog: pick an **active** champion per side (from `siege.{attacker,defender}Champions`), resolve by 1d20-each roll (margin ≥ 10 = lethal) or declared winner, optional "lethal" toggle. Loser → `applyChampionStatusChange(...,"dead"|"wounded","champion_duel",side)`. Posts a chat card; appends `champion_duel` beat.
+- On a kill, fires `bbttcc:siege:championDeath` (+ relay) — **the Champion Death Cascade subscribes here in Phase F** (grief/rally flips + next-layer threshold −10%, §8). Always fires `bbttcc:siege:championDuel` (+ relay).
+- **`uiHandler` note**: the spec's `uiHandler` field is not a real dispatch in this build, so the duel is API + HUD-driven. Catalog entry `siege_champion_duel` registered in EFFECTS (kind maneuver, T1, cost `{anytime:2}`, raidTypes `["siege"]`) with `apply()` → opens the dialog if the console fires it.
+- **Siege HUD** (D.1) extended: GM button row "⚔ Convene" + "Duel" (dimmed unless both sides have an active champion) + a champions summary line (`atk ⚔N ·✚ ·☠ / def …`). Re-renders on `championDuel`/`championStatus`/`championDeath`.
+- **Siege VFX** (D.3) extended: `bbttcc:siege:championDuel` → "{winner} bests/slays {loser}" banner (+ red flash + shake on a kill).
+- Selftest section 10 → **18 checks across 10 sections** total.
+
+**Phase D COMPLETE 2026-05-23** (~975 LOC across D.1–D.4 + selftest). Remaining: Phase E (defender activities + champion roster authoring + Relief Force + Trojan Horse), Phase F (outcome write-back + Event Deck content + Champion Death Cascade + player HUD), Phase G (composability/Odyssey/naval).
+- **LOC est: ~550** (delivered ~975 across the four sub-phases)
 
 ### Phase E — Defender counter-activities + Champions + Relief Force
-- 5 defender-side activities
-- Champion mechanic full implementation (roster, status, presence/absence Activities)
-- Relief Force scene flow (separate tableau, own raid console state)
-- Trojan Horse T4 activity (3-roll gate)
-- **LOC est: ~600**
+Sub-phased E.1→E.4.
+
+**E.1 — Counter-activities — ✅ SHIPPED 2026-05-23** (`scripts/siege-counter-activities.js`, ~310 LOC)
+- 9 strategic activities, dual-registered (ST + EFFECTS) like the Phase C threat vectors; all target the besieged hex. Defender: `reinforce_garrison` (+1 Anytime, +1 Renewal), `call_relief` (push wave, arrives turn+2, fires `bbttcc:siege:reliefCalled`), `sue_for_terms` (records offer + `termsOffered` hook), `champion_defends_wall` (lock champion active 2 turns + `championLocks` + +1 Anytime), `pray_for_omen` (`omenReroll=true`). Attacker: `demand_surrender` (records ultimatum + `surrenderDemanded`), `champion_withdraws`/`champion_returns` (via `applyChampionStatusChange`, note `{championId}` or first-eligible), `storm_final_assault` (`stormAssault={budgetMult:2}` + Buffer −30 + lights convene pip).
+- Resolver API completes the negotiated loops → fires `bbttcc:siege:outcome` (D.3 VFX has the palette): `siege.resolveTerms(hexUuid,{accept})` → `won_sack`; `siege.resolveSurrender(hexUuid,{response:"yield"|"parley"|"refuse"})` → `won_surrender` / Buffer +10 / morale note.
+- Schema: `defenderAnytimeBudget`, `renewalPool`, `championLocks{}`, `omenReroll`, `stormAssault`, `pendingTerms` added to `makeSiegeState`. Catalog: 9 entries (46→55). Selftest `tools/siege-phase-e-selftest.macro.js` (9 checks).
+- **E.1 deferred refinements**: full interactive attacker-prompt for terms/surrender (currently API-resolved); distance-modulated relief `arrivesTurn`; champion-picker UI in planner (note JSON for now).
+
+**E.2 — Champion authoring + state machine** (next): roster editor + auto-suggest, wounded→active recovery tick, `championLocks` expiry, defender Anytime budget calc (holdings + active champions ×2 + `defenderAnytimeBudget`).
+**E.3 — Relief Force scene**: convene the relief tableau on wave arrival; attacker win → wave clears + Buffer −15 + defender −1 morale; loss → `lost_relieved`.
+**E.4 — Trojan Horse T4 + Sinon Mode**: 3-roll gate + champion-sacrifice multiplier.
+- **LOC est: ~600** (E.1 ≈ 310 delivered)
 
 ### Phase F — Outcomes write-back + Event Deck + Multiplayer Relay + VFX + War Log integration
 - 9-outcome detector + matrix write-back

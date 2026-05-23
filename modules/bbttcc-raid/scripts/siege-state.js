@@ -133,6 +133,13 @@
       interdictedHexIds: [],
       // Running tally of defender holdings lost to Sorties (outcome bookkeeping; Phase E/F roster write-back).
       sortieCasualtiesTotal: 0,
+      // ---- Counter-activity state (Phase E.1) ----
+      defenderAnytimeBudget: 0,   // Reinforce Garrison / Champion Defends Wall — consumed by E.2 budget calc
+      renewalPool: 0,             // Reinforce Garrison — defender repair pool (Phase F)
+      championLocks: {},          // Champion Defends Wall — { championId: untilTurn }
+      omenReroll: false,          // Pray for Omen — next Event Deck draw re-rolls in defender's favor (Phase F)
+      stormAssault: null,         // Storm Final Assault — { budgetMult, turn } consumed by the next convene
+      pendingTerms: null,         // Sue for Terms / Demand Surrender — { type, turn, resolved }
       reliefWaves: [],
       attackerChampions: attackerChampions.slice(),
       defenderChampions: defenderChampions.slice(),

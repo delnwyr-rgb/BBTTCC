@@ -884,5 +884,158 @@
         "siegeThreatVector": true
       }
     }
+  },
+  {
+    "name": "Reinforce Garrison [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Violence / Military",
+        "opCosts": { "violence": 15, "logistics": 10 },
+        "effects": { "text": "Defender stiffens the defence: +1 Anytime budget per round AND +1 Renewal pool for the duration. Played by the besieged faction; target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "reinforce_garrison",
+        "siegeCounterActivity": true
+      }
+    }
+  },
+  {
+    "name": "Call Relief [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "category": "Diplomacy / Statecraft",
+        "opCosts": { "diplomacy": 20, "softPower": 20 },
+        "effects": { "text": "Summon an allied relief force. Pushes a wave onto the siege that arrives in 2 turns; on arrival the GM convenes the Relief Scene (Phase E.3). Requires a willing ally. Target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "call_relief",
+        "siegeCounterActivity": true
+      }
+    }
+  },
+  {
+    "name": "Sue for Terms [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "category": "Diplomacy / Statecraft",
+        "opCosts": { "diplomacy": 20, "softPower": 15 },
+        "effects": { "text": "Defender offers a negotiated surrender. The attacker may accept (won_sack) or refuse at next resolution (siege.resolveTerms). Target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "sue_for_terms",
+        "siegeCounterActivity": true
+      }
+    }
+  },
+  {
+    "name": "Champion Defends Wall [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Violence / Military",
+        "opCosts": { "violence": 10 },
+        "effects": { "text": "A named defender Champion takes the wall: locked Active for 2 turns and +1 Anytime budget. Optional note {\"championId\":\"...\"} picks the champion; otherwise the first eligible. Target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "champion_defends_wall",
+        "siegeCounterActivity": true
+      }
+    }
+  },
+  {
+    "name": "Pray for Omen [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Faith / Doctrine",
+        "opCosts": { "faith": 10 },
+        "effects": { "text": "Beseech the powers: the next Event Deck draw re-rolls in the defender's favour (consumed when the deck fires, Phase F). Target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "pray_for_omen",
+        "siegeCounterActivity": true
+      }
+    }
+  },
+  {
+    "name": "Demand Surrender [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "category": "Diplomacy / Statecraft",
+        "opCosts": { "diplomacy": 20, "violence": 10, "softPower": 10 },
+        "effects": { "text": "Attacker issues an ultimatum. The defender responds: yield (won_surrender) · parley (besieger Buffer +10) · refuse (−1 morale) — via siege.resolveSurrender. Target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "demand_surrender",
+        "siegeCounterActivity": true
+      }
+    }
+  },
+  {
+    "name": "Champion Withdraws [T2]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 2,
+        "rarity": "rare",
+        "category": "Soft Power / Culture",
+        "opCosts": { "softPower": 15, "diplomacy": 10 },
+        "effects": { "text": "A named attacker Champion withdraws from the siege (status Absent) — the Achilles-in-his-tent lever. Optional note {\"championId\":\"...\"}; otherwise the first active. Target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "champion_withdraws",
+        "siegeCounterActivity": true
+      }
+    }
+  },
+  {
+    "name": "Champion Returns [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Diplomacy / Statecraft",
+        "opCosts": { "diplomacy": 20, "softPower": 10 },
+        "effects": { "text": "Coax an Absent attacker Champion back to the line (status Active). Optional note {\"championId\":\"...\"}; otherwise the first absent. Target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "champion_returns",
+        "siegeCounterActivity": true
+      }
+    }
+  },
+  {
+    "name": "Storm Final Assault [T3]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 3,
+        "rarity": "rare",
+        "category": "Violence / Military",
+        "opCosts": { "violence": 40, "logistics": 20 },
+        "effects": { "text": "Throw everything at the walls: the next Breach Scene's maneuver budget is doubled, and the Buffer drops 30 OP regardless of outcome. Lights the Convene pip. Target the besieged hex." },
+        "minFactionTier": 1,
+        "activityKey": "storm_final_assault",
+        "siegeCounterActivity": true
+      }
+    }
   }
 ]

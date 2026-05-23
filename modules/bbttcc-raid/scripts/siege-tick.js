@@ -290,8 +290,17 @@
     state.escortPipsThisTurn = 0;
 
     // ---- 9. Persist + broadcast ----
-    await S.setState(hexUuid, state);
+    await S.setSiegeState(hexUuid, state);
     Hooks.callAll("bbttcc:siege:ticked", { siegeId: state.siegeId, hexUuid, state, drain: drainCalc });
+
+    // D.3: if this tick ended the siege (Buffer exhaustion → lost_hold / lost_supply_crisis),
+    // fire the outcome hook + relay so siege-vfx.js plays the banner on every client.
+    // Full §8 outcome write-back (ownership / morale / war-log saga) still lands in Phase F.
+    if (state.status !== "active") {
+      const outPayload = { siegeId: state.siegeId, hexUuid, status: state.status };
+      Hooks.callAll("bbttcc:siege:outcome", outPayload);
+      try { game.socket?.emit?.(`module.bbttcc-raid`, { t: "siegeHook", hook: "bbttcc:siege:outcome", payload: outPayload }); } catch (_e) {}
+    }
 
     // Phase F: broadcast socket message for player-side HUD update.
     // For now, GM-only state mutation; clients re-fetch on their next render.
@@ -310,7 +319,7 @@
     const S = globalThis.__bbttccSiegeState;
     if (!S?.list) return;
 
-    const active = S.list();
+    const active = S.listActiveSieges();
     if (!active.length) return;
 
     // Only GM should run the tick (state mutations on shared hex docs)
@@ -342,7 +351,7 @@
     game.bbttcc.api.siege.tickOne = async (hexUuid) => {
       const S = globalThis.__bbttccSiegeState;
       if (!S?.list) return { ok: false, reason: "siege-state not loaded" };
-      const all = S.list();
+      const all = S.listActiveSieges();
       const hit = all.find(s => s.hexUuid === hexUuid);
       if (!hit) return { ok: false, reason: `no active siege at ${hexUuid}` };
       await _tickSiege(hit);
@@ -351,7 +360,7 @@
     game.bbttcc.api.siege.computeDrain = async (hexUuid) => {
       const S = globalThis.__bbttccSiegeState;
       if (!S?.list) return null;
-      const hit = S.list().find(s => s.hexUuid === hexUuid);
+      const hit = S.listActiveSieges().find(s => s.hexUuid === hexUuid);
       if (!hit) return null;
       const doc = await _hexDocFromUuid(hexUuid);
       return _computeDrain({ state: hit.siege, targetHexDoc: doc, S });
