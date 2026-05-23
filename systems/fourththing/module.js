@@ -54,6 +54,7 @@ import {
   promoteStampedAptitudeAEs,
   applyPathFeatures,
   syncAuraEffects,
+  syncAurabladeEffects,
   skillRollWithRank,
   getAllSkillAEBonuses,
   getAllAttrAEBonuses,
@@ -103,13 +104,9 @@ import {
   openShadowCourierSpendPace,
   openCosmicLinguistAuthority,
   openCosmicLinguistAnnotation,
-  openPactkeeperLeverage,
-  openPactkeeperBindingClause,
-  openPactkeeperPrecedent,
-  openPactkeeperCivicCharge,
-  openPactkeeperSpendCivicCharge,
-  openPactkeeperPressure,
   openPactkeeperBindSubject,
+  openPactkeeperRenegotiate,
+  openPactkeeperPickL1Skills,
   openCounterManifestation,
   // Buried per-use Phase 1 — Ancestry cores (2026-04-27)
   openMenhirkinHexRecognition,
@@ -1836,35 +1833,118 @@ function ftNormalizeAppliedEffects(raw) {
   return out;
 }
 
-// Phase C — place a Foundry MeasuredTemplate at the caster's token center.
-// Player drags to position. Maps RFI shapes → Foundry template types:
-// cone→cone, sphere→circle, line→ray, cube→rect, cylinder→circle (height
-// not modeled — Foundry's MeasuredTemplate is 2D only).
+// Phase C — place a Foundry MeasuredTemplate. The caster's token center is
+// the *initial* anchor for the preview ghost; the player drags to aim and
+// left-clicks to commit (right-click cancels). Maps RFI shapes → Foundry
+// template types: cone→cone, sphere→circle, line→ray, cube→rect,
+// cylinder→circle (height not modeled — Foundry's MeasuredTemplate is 2D).
 async function ftPlaceAreaTemplate(actor, area) {
   if (!canvas?.scene) return null;
   const token = actor?.getActiveTokens?.()?.[0];
-  if (!token) {
-    ui.notifications?.warn(`${actor.name}: cannot place area template — no active token on this scene.`);
-    return null;
-  }
   const SHAPE_MAP = { cone: "cone", sphere: "circle", line: "ray", cube: "rect", cylinder: "circle" };
   const t = SHAPE_MAP[area.shape];
   if (!t) return null;
   const distance = Math.max(5, Number(area.size) || 5);
-  const data = {
+  const initial = token
+    ? { x: token.center?.x ?? token.x, y: token.center?.y ?? token.y }
+    : { x: canvas.dimensions.width / 2, y: canvas.dimensions.height / 2 };
+  const baseData = {
     t, user: game.user.id, distance, direction: 0,
-    x: token.center?.x ?? token.x, y: token.center?.y ?? token.y,
+    x: initial.x, y: initial.y,
     fillColor: game.user.color ?? "#ff5500"
   };
-  if (t === "cone") data.angle = 53;   // standard 5e cone angle
-  if (t === "ray")  data.width = 5;    // 5 ft default line width
+  if (t === "cone") baseData.angle = 53;   // standard 5e cone angle
+  if (t === "ray")  baseData.width = 5;    // 5 ft default line width
+
+  // Build a preview placeable (not embedded yet). Foundry v12+ idiom.
+  const TplDoc = CONFIG.MeasuredTemplate.documentClass;
+  const TplObj = CONFIG.MeasuredTemplate.objectClass;
+  let doc;
   try {
-    const docs = await canvas.scene.createEmbeddedDocuments("MeasuredTemplate", [data]);
-    return docs?.[0] ?? null;
+    doc = new TplDoc(baseData, { parent: canvas.scene });
   } catch (err) {
-    console.warn("[fourththing] template placement failed:", err);
+    console.warn("[fourththing] template preview construction failed:", err);
     return null;
   }
+  const preview = new TplObj(doc);
+
+  // Switch to template layer so the preview is visible + on top.
+  const priorLayer = canvas.activeLayer;
+  canvas.templates.activate();
+
+  return new Promise((resolve) => {
+    let finished = false;
+
+    const finish = async (commit) => {
+      if (finished) return;
+      finished = true;
+      canvas.stage.off("pointermove", onMove);
+      canvas.stage.off("mousedown",   onDown);
+      canvas.stage.off("rightdown",   onRight);
+      window.removeEventListener("keydown", onKey, true);
+      try { preview.destroy({ children: true }); } catch (_e) {}
+      try { priorLayer?.activate?.(); } catch (_e) {}
+      if (!commit) return resolve(null);
+      try {
+        const data = preview.document.toObject();
+        // Re-mark current user as author so the embedded doc is owned correctly.
+        data.user = game.user.id;
+        const docs = await canvas.scene.createEmbeddedDocuments("MeasuredTemplate", [data]);
+        const created = docs?.[0] ?? null;
+        // Wait a frame so the canvas placeable finishes drawing — otherwise
+        // the immediate `_ftTokensInTemplate` call sees doc.object.shape=null
+        // and returns no AoE targets.
+        if (created) await new Promise(r => requestAnimationFrame(r));
+        resolve(created);
+      } catch (err) {
+        console.warn("[fourththing] template commit failed:", err);
+        resolve(null);
+      }
+    };
+
+    const _snappedFromEvent = (ev) => {
+      const pos = ev.data.getLocalPosition(canvas.stage);
+      // Snap to half-grid for ergonomic placement.
+      try {
+        const snap = canvas.grid.getSnappedPosition?.(pos.x, pos.y, 2);
+        if (snap) return snap;
+      } catch (_e) {}
+      return pos;
+    };
+
+    const onMove = (ev) => {
+      if (finished) return;
+      const p = _snappedFromEvent(ev);
+      // Rotate toward cursor for cones / rays anchored at the caster.
+      const dx = p.x - initial.x, dy = p.y - initial.y;
+      if (t === "cone" || t === "ray") {
+        const dir = Math.toDegrees(Math.atan2(dy, dx));
+        preview.document.updateSource({ direction: dir });
+        // Cone/ray pivot stays at caster — don't move x/y.
+      } else {
+        preview.document.updateSource({ x: p.x, y: p.y });
+      }
+      preview.refresh();
+    };
+
+    const onDown = (ev) => {
+      if (ev.data?.button === 2) return; // right click handled elsewhere
+      finish(true);
+    };
+    const onRight = () => finish(false);
+    const onKey   = (ev) => { if (ev.key === "Escape") finish(false); };
+
+    // Render preview on the templates layer.
+    canvas.templates.preview.addChild(preview);
+    preview.draw();
+
+    canvas.stage.on("pointermove", onMove);
+    canvas.stage.on("mousedown",   onDown);
+    canvas.stage.on("rightdown",   onRight);
+    window.addEventListener("keydown", onKey, true);
+
+    ui.notifications?.info("Aim and left-click to place template · right-click or Esc to cancel.");
+  });
 }
 
 // Walk all token placeables on the active scene and return those whose
@@ -1872,9 +1952,19 @@ async function ftPlaceAreaTemplate(actor, area) {
 // shapes are local-anchored at (0,0), so subtract template origin before
 // hit-testing. Caster's actor (and any other excluded actor IDs) skipped —
 // friendlies-in-blast handling is GM call, but auto-self-blast feels wrong.
+//
+// Defensive: a freshly-created template document may not have its placeable
+// shape populated yet (canvas draw is async after createEmbeddedDocuments
+// resolves). Compute from the doc directly if `_computeShape` is available;
+// fall back to an empty list rather than silently dropping AoE targets.
 function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set() } = {}) {
   const t = templateDoc?.object;
-  if (!t || !t.shape) return [];
+  if (!t) return [];
+  let shape = t.shape;
+  if (!shape && typeof t._computeShape === "function") {
+    try { shape = t._computeShape(); } catch (_e) {}
+  }
+  if (!shape) return [];
   const tokens = canvas?.tokens?.placeables ?? [];
   const out = [];
   for (const tok of tokens) {
@@ -1882,7 +1972,7 @@ function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set() } = {}) 
     if (!a || excludeActorIds.has(a.id)) continue;
     const cx = tok.center?.x ?? (tok.x + (tok.w ?? 0) / 2);
     const cy = tok.center?.y ?? (tok.y + (tok.h ?? 0) / 2);
-    if (t.shape.contains(cx - t.x, cy - t.y)) out.push(tok);
+    if (shape.contains(cx - t.x, cy - t.y)) out.push(tok);
   }
   return out;
 }
@@ -2909,7 +2999,365 @@ function _ftCasterTier(actor) {
   return Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
 }
 
-// Rig defense reader (B11.A — 2026-05-12). Canonical type-aware accessor for
+// Tier-scaled Surge bank cap. T1=4, T2=6, T3=8, T4=10. Bosses use their own
+// `system.manifestations.surge.max` (typically 6, set at create time).
+function _ftSurgeCap(actor) {
+  if (!actor) return 10;
+  if (actor.type === "boss") {
+    const sys = actor.system?.system ?? actor.system ?? {};
+    return Number(sys?.manifestations?.surge?.max) || 6;
+  }
+  const t = _ftCasterTier(actor);
+  return ({ 1: 4, 2: 6, 3: 8, 4: 10 })[t] ?? 10;
+}
+
+// Bank surge for an actor with tier-scaled cap. Returns the *actual* amount
+// banked (post-clamp) so callers can render overflow notes. Excess explosions
+// already benefited the triggering roll (Foundry's x10 modifier added them to
+// the total before this is called), so clamping the bank wastes nothing.
+async function _ftBankSurge(actor, n) {
+  if (!actor || !Number.isFinite(n) || n <= 0) return 0;
+  const sys = actor.system?.system ?? actor.system ?? {};
+  if (actor.type === "boss") {
+    const s    = sys?.manifestations?.surge ?? { current: 0, max: 6, exploded: 0 };
+    const cur  = Number(s.current) || 0;
+    const max  = Number(s.max) || 6;
+    const expS = Number(s.exploded) || 0;
+    const next = Math.min(max, cur + n);
+    try {
+      await actor.update({
+        "system.manifestations.surge.current": next,
+        "system.manifestations.surge.exploded": expS + n
+      });
+    } catch (e) { /* missing surge fields — silent */ }
+    return next - cur;
+  }
+  const cur  = Number(sys?.resources?.surge?.value) || 0;
+  const cap  = _ftSurgeCap(actor);
+  const next = Math.min(cap, cur + n);
+  if (next === cur) return 0;
+  try { await actor.update({ "system.resources.surge.value": next }); }
+  catch (e) { /* actor lacks surge resource — silent */ }
+  return next - cur;
+}
+
+// Surge spend menu spec — 2026-05-22 expansion. Each cost band gets at least
+// one offensive + one defensive option; heals at 2/4/7/10. Tier-gated entries
+// stay visible but disabled at low tier (tooltip explains why). `bucket`
+// drives column placement: off | def | heal | narr. `wired:true` = handler
+// applies mechanical effects; `wired:false` = sets a one-shot flag at
+// flags.fourththing.surge.oneShot.<key> + posts a chat card for GM to enforce.
+// (Same flag-and-narrate pattern as Aurablade Burn one-shots, [[aurablade-burn-escalation-canon-2026-05-22]].)
+const _FT_SURGE_MENU = [
+  // Cost 1
+  { cost: 1, key: "narrative-bonus-die", tier: 1, bucket: "narr",
+    label: "Bonus Die — +1d10 exploding",
+    fiction: "Press the moment. The dice remember what they were doing.",
+    wired: false },
+  { cost: 1, key: "snap-strike", tier: 1, bucket: "off",
+    label: "Snap Strike — advantage on next Strike",
+    fiction: "An opening narrows. You take it.",
+    wired: false },
+  { cost: 1, key: "brace", tier: 1, bucket: "def",
+    label: "Brace — +1 all defenses till next turn",
+    fiction: "Weight settles. Stance hardens.",
+    wired: false },
+  // Cost 2
+  { cost: 2, key: "narrative-miss", tier: 1, bucket: "def",
+    label: "Reaction Miss — turn one incoming attack into a miss",
+    fiction: "You slide sideways through the moment.",
+    wired: false },
+  { cost: 2, key: "sundering-blow", tier: 1, bucket: "off",
+    label: "Sundering Blow — next Strike ignores resistances",
+    fiction: "Whatever they call armor, it stops mattering for one breath.",
+    wired: false },
+  { cost: 2, key: "stitch", tier: 1, bucket: "heal",
+    label: "Stitch — heal self 2d6 + Tier",
+    fiction: "Soma re-knits along the seams you remember.",
+    wired: true },
+  // Cost 3
+  { cost: 3, key: "reposition-init", tier: 1, bucket: "narr",
+    label: "Reposition — new spot in initiative",
+    fiction: "Step out of the moment. Re-enter where you choose.",
+    wired: true },
+  { cost: 3, key: "narrative-refund", tier: 1, bucket: "narr",
+    label: "Refund — one Manifestation or power use",
+    fiction: "The working didn't cost you. The Tree paid instead.",
+    wired: false },
+  { cost: 3, key: "echo-strike", tier: 1, bucket: "off",
+    label: "Echo Strike — free Strike at −2",
+    fiction: "A second blow that was already there.",
+    wired: false },
+  { cost: 3, key: "aegis", tier: 1, bucket: "def",
+    label: "Aegis — ally gains DR equal to Tier this round",
+    fiction: "Your stance covers theirs.",
+    wired: false },
+  // Cost 4
+  { cost: 4, key: "surging-cast", tier: 1, bucket: "off",
+    label: "Surging Cast — next Cast explodes on 9–10",
+    fiction: "The current runs hotter. Anything could come through.",
+    wired: false },
+  { cost: 4, key: "iron-word", tier: 1, bucket: "def",
+    label: "Iron Word — auto-succeed one save",
+    fiction: "You name what is happening. It listens.",
+    wired: false },
+  { cost: 4, key: "field-patch", tier: 1, bucket: "heal",
+    label: "Field Patch — heal ally 2d6 + Tier (in reach)",
+    fiction: "Hands move faster than the wound can close.",
+    wired: true },
+  // Cost 5
+  { cost: 5, key: "narrative-fiction", tier: 1, bucket: "narr",
+    label: "Reshape Fiction — one beat (GM-gated, 1/scene)",
+    fiction: "A small miracle. A door that wasn't there. A body that didn't quite fall.",
+    wired: false },
+  { cost: 5, key: "doomstrike", tier: 1, bucket: "off",
+    label: "Doomstrike — next Strike +Tier d6 exploding damage",
+    fiction: "You bring more than you swung.",
+    wired: false },
+  { cost: 5, key: "steel-veil", tier: 2, bucket: "def",
+    label: "Steel Veil — resistance to one damage type this round",
+    fiction: "Something between you and the world refuses the harm.",
+    wired: false },
+  // Cost 6
+  { cost: 6, key: "wrath-cascade", tier: 2, bucket: "off",
+    label: "Wrath Cascade — every d10 in next roll explodes once free",
+    fiction: "The dice all remember at once.",
+    wired: false },
+  { cost: 6, key: "bulwark-stance", tier: 2, bucket: "def",
+    label: "Bulwark Stance — adjacent allies share your defenses till next turn",
+    fiction: "You become the wall they fight from behind.",
+    wired: false },
+  // Cost 7
+  { cost: 7, key: "crowning-blow", tier: 3, bucket: "off",
+    label: "Crowning Blow — next Strike is a max-die critical hit",
+    fiction: "Inevitable. The kind of strike fables remember.",
+    wired: false },
+  { cost: 7, key: "anchor", tier: 3, bucket: "def",
+    label: "Anchor — you + one ally immune to forced move / CC till next round",
+    fiction: "You both refuse the verbs they're trying to apply.",
+    wired: false },
+  { cost: 7, key: "rallying-cry", tier: 1, bucket: "heal",
+    label: "Rallying Cry — heal all allies within Tier squares for 1d6 + Tier",
+    fiction: "Your voice carries the Soma back into them.",
+    wired: true },
+  // Cost 8
+  { cost: 8, key: "tier-surge", tier: 3, bucket: "off",
+    label: "Tier Surge — next Strike OR Cast counts as one Tier higher",
+    fiction: "You reach above your weight class for one moment.",
+    wired: false },
+  { cost: 8, key: "mass-aegis", tier: 3, bucket: "def",
+    label: "Mass Aegis — +Tier to all defenses for allies within Tier squares this round",
+    fiction: "Every nearby stance straightens at once.",
+    wired: false },
+  // Cost 9
+  { cost: 9, key: "cinderwake", tier: 4, bucket: "off",
+    label: "Cinderwake — every d10 in next roll explodes on 8+",
+    fiction: "The dice run hot enough to leave scars.",
+    wired: false },
+  { cost: 9, key: "sanctum", tier: 4, bucket: "def",
+    label: "Sanctum — immune to one damage type for one round",
+    fiction: "A category of harm forgets your name.",
+    wired: false },
+  // Cost 10 — cap-spending capstones
+  { cost: 10, key: "final-argument", tier: 4, bucket: "off",
+    label: "Final Argument — next Strike auto-hits, max damage, counts +1 Tier",
+    fiction: "There will be no negotiation.",
+    wired: false },
+  { cost: 10, key: "mythic-stand", tier: 4, bucket: "def",
+    label: "Mythic Stand — invulnerable until start of your next turn",
+    fiction: "The world allows it. You decide for one breath.",
+    wired: false },
+  { cost: 10, key: "phoenix", tier: 1, bucket: "heal",
+    label: "Phoenix — restore self/ally from defeated to half integrity (1 / raid)",
+    fiction: "Remember what you were before the wound. Be that now.",
+    wired: true }
+];
+
+// Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
+// every other option sets a one-shot flag and posts a chat card for GM enforcement.
+async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
+  const entry = _FT_SURGE_MENU.find(e => e.key === effectKey);
+  if (!entry) {
+    ui.notifications?.warn(`Surge: unknown effect "${effectKey}"`);
+    return;
+  }
+
+  // Special-case: reposition-init has its own wired handler from the original
+  // menu — keep using it. It pays cost itself.
+  if (effectKey === "reposition-init") {
+    await _ftRepositionInitiative(actor, cost);
+    return;
+  }
+
+  // Special-case: phoenix is 1/raid — guard the flag.
+  if (effectKey === "phoenix") {
+    if (actor.getFlag?.("fourththing", "surge.phoenixUsedInRaid")) {
+      ui.notifications?.warn(`${actor.name}: Phoenix already used this raid.`);
+      return;
+    }
+  }
+
+  // Pre-validate ally-targeted heals so we don't charge for nothing.
+  if (effectKey === "field-patch") {
+    const targets = Array.from(game.user?.targets ?? []);
+    if (!targets[0]?.actor) {
+      ui.notifications?.warn("Field Patch needs a target — target an ally token first, then re-open the menu.");
+      return;
+    }
+  }
+  if (effectKey === "rallying-cry") {
+    const myToken = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+    if (!myToken) {
+      ui.notifications?.warn("Rallying Cry needs your token on the scene.");
+      return;
+    }
+  }
+
+  // Pay the cost.
+  await actor.update({ "system.resources.surge.value": Math.max(0, curSurge - cost) });
+
+  // Wired heals.
+  let chatExtra = "";
+  if (entry.wired && entry.bucket === "heal") {
+    chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
+  } else {
+    // Flag-and-narrate path: stamp one-shot flag for consumers + GM to enforce.
+    try {
+      await actor.setFlag("fourththing", `surge.oneShot.${effectKey}`, {
+        tier,
+        cost,
+        appliedAt: Date.now()
+      });
+    } catch (e) { /* flag write failed — silent, chat card still posts */ }
+  }
+
+  const bucketBadge = entry.bucket === "off"  ? '<span style="color:#dc5050">⚔ Offense</span>'
+                    : entry.bucket === "def"  ? '<span style="color:#78a0dc">🛡 Defense</span>'
+                    : entry.bucket === "heal" ? '<span style="color:#78c88c">✚ Heal</span>'
+                    :                           '<span style="color:#e8c84a">✦ Narrative</span>';
+
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll">
+      <div class="ft-roll-header">
+        <span class="ft-roll-name">✦ ${actor.name} spends ${cost} Surge</span>
+      </div>
+      <div style="font-size:0.74rem;margin:0.15rem 0 0.35rem;opacity:0.85">
+        ${bucketBadge} · <b>${entry.label.split(" — ")[0]}</b>
+      </div>
+      <p style="margin:0.2rem 0;font-size:0.82rem">
+        ${entry.label.split(" — ").slice(1).join(" — ") || entry.label}
+      </p>
+      <p style="margin:0.2rem 0;font-size:0.74rem;opacity:0.75;font-style:italic">${entry.fiction}</p>
+      ${chatExtra}
+      <p style="margin:0.35rem 0 0;font-size:0.7rem;opacity:0.65">
+        Surge ${curSurge} → ${Math.max(0, curSurge - cost)}.${entry.wired ? "" : " GM adjudicates — one-shot flag set at <code>flags.fourththing.surge.oneShot." + effectKey + "</code>."}
+      </p>
+    </div>`
+  });
+
+  // Mark phoenix consumed this raid.
+  if (effectKey === "phoenix") {
+    try { await actor.setFlag("fourththing", "surge.phoenixUsedInRaid", true); }
+    catch (e) { /* silent */ }
+  }
+}
+
+// Heal dispatch — writes to canonical system.integrity.value (never the
+// derived mirror, per [[chat-apply-damage-canonical]]). Returns chat fragment
+// describing what was healed.
+async function _ftSurgeHeal(actor, effectKey, tier) {
+  const heal = async (target, formula, label) => {
+    const sys = target.system?.system ?? target.system ?? {};
+    const max = Number(sys?.integrity?.max ?? sys?.derived?.integrity?.max ?? 16);
+    const cur = Number(sys?.integrity?.value ?? sys?.derived?.integrity?.value ?? 0);
+    const roll = new Roll(formula);
+    await roll.evaluate();
+    const amount = Math.max(0, Number(roll.total) || 0);
+    const next   = Math.min(max, cur + amount);
+    const banked = next - cur;
+    try { await target.update({ "system.integrity.value": next }); }
+    catch (e) { /* missing field — silent */ }
+    return { target, label, formula, amount, cur, next, banked, max };
+  };
+
+  if (effectKey === "stitch") {
+    const r = await heal(actor, `2d6 + ${tier}`, "Stitch");
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">
+      ✚ Healed <b>${r.banked}</b> integrity (${r.formula} = ${r.amount}). ${r.cur} → ${r.next}/${r.max}.
+    </p>`;
+  }
+
+  if (effectKey === "field-patch") {
+    const targets = Array.from(game.user?.targets ?? []);
+    const tok = targets[0];
+    if (!tok?.actor) {
+      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">
+        ⚠ Field Patch needs a target (target one ally token first). Surge was still spent — GM may refund.
+      </p>`;
+    }
+    const r = await heal(tok.actor, `2d6 + ${tier}`, "Field Patch");
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">
+      ✚ Patched <b>${r.target.name}</b> for <b>${r.banked}</b> integrity (${r.formula} = ${r.amount}). ${r.cur} → ${r.next}/${r.max}.
+    </p>`;
+  }
+
+  if (effectKey === "rallying-cry") {
+    const myToken = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+    if (!myToken) {
+      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">
+        ⚠ Rallying Cry needs your token on a scene. Spent anyway — GM may refund.
+      </p>`;
+    }
+    const grid    = canvas.grid?.size ?? 100;
+    const rangePx = tier * grid;
+    const myUser  = game.user;
+    const allies = (canvas.tokens?.placeables ?? []).filter(t => {
+      if (!t?.actor) return false;
+      if (t.actor.id === actor.id) return true;
+      const dispNonHostile = t.document?.disposition >= 0;
+      const dx = (t.x + (t.document?.width || 1) * grid / 2) - (myToken.x + (myToken.document?.width || 1) * grid / 2);
+      const dy = (t.y + (t.document?.height || 1) * grid / 2) - (myToken.y + (myToken.document?.height || 1) * grid / 2);
+      const dist = Math.hypot(dx, dy);
+      return dispNonHostile && dist <= rangePx + grid / 2;
+    });
+    const results = [];
+    for (const t of allies) {
+      const r = await heal(t.actor, `1d6 + ${tier}`, "Rallying Cry");
+      if (r.banked > 0) results.push(r);
+    }
+    if (!results.length) {
+      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">
+        ⚠ No allies within ${tier} squares needed healing.
+      </p>`;
+    }
+    const lines = results.map(r =>
+      `• <b>${r.target.name}</b>: +${r.banked} (${r.cur} → ${r.next}/${r.max})`
+    ).join("<br>");
+    return `<p style="margin:0.25rem 0;font-size:0.76rem;color:#78c88c">
+      ✚ Allies rallied within ${tier} sq:<br>${lines}
+    </p>`;
+  }
+
+  if (effectKey === "phoenix") {
+    const targets = Array.from(game.user?.targets ?? []);
+    const tok     = targets[0];
+    const target  = tok?.actor ?? actor;
+    const sys     = target.system?.system ?? target.system ?? {};
+    const max     = Number(sys?.integrity?.max ?? sys?.derived?.integrity?.max ?? 16);
+    const half    = Math.max(1, Math.floor(max / 2));
+    const cur     = Number(sys?.integrity?.value ?? sys?.derived?.integrity?.value ?? 0);
+    const next    = Math.max(cur, half);
+    try { await target.update({ "system.integrity.value": next }); }
+    catch (e) { /* silent */ }
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">
+      ⟁ <b>${target.name}</b> restored to half integrity: ${cur} → ${next}/${max}.
+      <span style="opacity:0.7;font-weight:400;font-style:italic"> (1/raid — flag set, GM clears on raid end)</span>
+    </p>`;
+  }
+
+  return "";
+}
 // Guard/Evasion/Resolve. All actor types now populate `derived.<key>.value`
 // in prepareDerivedData, so this is mostly a fallback-safe wrapper — but it
 // pins the contract so B11.B/C and downstream raid code don't need to know
@@ -2986,7 +3434,7 @@ async function castManifestation(actor, item, {
   useOverlay = false,
   bankToCache = false,
   freeClarity = false,
-  useAoeSavePrompts = false,
+  useAoeSavePrompts = true,
   aoeApplyConfirm = false
 } = {}) {
   const rawSys = actor?.system?.system ?? actor?.system ?? {};
@@ -6197,7 +6645,7 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
   const aoeBlock = _hasArea ? `
   <div class="ft-cast-field ft-cast-span-2 ft-aoe-opts-block" data-tooltip="AoE controls — only visible when the manifestation declares an area shape.">
     ${_hasSaveShape ? `<label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d4ff;margin-bottom:0.2rem">
-      <input type="checkbox" name="useAoeSavePrompts"/>
+      <input type="checkbox" name="useAoeSavePrompts" checked/>
       <span>⚖ Prompt each target for their save (instead of GM-side rolls)</span>
     </label>` : ""}
     <label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d8a0">
@@ -6403,7 +6851,7 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
   </div>
   ${critRow}
   ${metaBlock}
-  ${success ? dmgBlock : ""}
+  ${dmgBlock /* Always render — post-hoc rerolls / aid / called-shot can flip a miss to a hit, and GM may need to apply anyway. */}
 </div>`;
 }
 
@@ -7292,6 +7740,7 @@ Hooks.once("init", function () {
       }
     },
     _syncAuraEffects: syncAuraEffects,
+    _syncAurabladeEffects: syncAurabladeEffects,
     _progression: {
       tierForLevel,
       deriveItemUnlockLevel,
@@ -7312,8 +7761,7 @@ Hooks.once("init", function () {
       openBulwarkSpendFrame, openBulwarkFramePool, openBulwarkRuin, openBulwarkStance,
       openShadowCourierPackage, openShadowCourierCrossing, openShadowCourierPassive,
       openCosmicLinguistAuthority, openCosmicLinguistAnnotation,
-      openPactkeeperLeverage, openPactkeeperBindingClause, openPactkeeperPrecedent,
-      openPactkeeperCivicCharge, openPactkeeperSpendCivicCharge, openPactkeeperPressure, openPactkeeperBindSubject,
+      openPactkeeperBindSubject, openPactkeeperRenegotiate, openPactkeeperPickL1Skills,
       openCounterManifestation,
       // Buried per-use Phase 1 — Ancestry cores
       openMenhirkinHexRecognition, openEchoDiverTemporalFlinch,
@@ -7684,10 +8132,7 @@ Hooks.once("init", function () {
     const explosions = Math.max(0, allResults.length - 2);
     const doubleTen  = baseDice.filter(v => v === 10).length >= 2;
 
-    if (explosions > 0) {
-      const curSurge = rawSys?.resources?.surge?.value ?? 0;
-      await actor.update({ "system.resources.surge.value": curSurge + explosions });
-    }
+    if (explosions > 0) await _ftBankSurge(actor, explosions);
     if (doubleTen) await actor.setFlag("fourththing", "bonusActionAvailable", true);
 
     // Shape B reroll grants — passive items can grant reroll-lowest/highest on
@@ -7852,22 +8297,7 @@ Hooks.once("init", function () {
     const doubleTen     = baseDiceVals.filter(v => v === 10).length >= 2;
 
     if (explosions > 0) {
-      if (isBossCaster) {
-        // Boss surge bank lives at system.manifestations.surge.{current, max,
-        // exploded}; cap deposits at .max but track the raw explosion count
-        // separately in `.exploded` so the GM can see how juiced the dice were.
-        const s = sys?.manifestations?.surge ?? { current: 0, max: 6, exploded: 0 };
-        const curS = Number(s.current) || 0;
-        const maxS = Number(s.max) || 6;
-        const expS = Number(s.exploded) || 0;
-        await actor.update({
-          "system.manifestations.surge.current": Math.min(maxS, curS + explosions),
-          "system.manifestations.surge.exploded": expS + explosions
-        });
-      } else {
-        const curSurge = sys?.resources?.surge?.value ?? 0;
-        await actor.update({ "system.resources.surge.value": curSurge + explosions });
-      }
+      await _ftBankSurge(actor, explosions);
     }
     if (doubleTen && !isBossCaster) await actor.setFlag("fourththing", "bonusActionAvailable", true);
 
@@ -8007,12 +8437,7 @@ Hooks.once("init", function () {
     const baseDice      = dieResults.slice(0, 2).map(r => r.result);
     const explosionVals = dieResults.slice(2).map(r => r.result);
 
-    if (explosions > 0) {
-      try {
-        const cur = Number(sys?.resources?.surge?.value) || 0;
-        await actor.update({ "system.resources.surge.value": cur + explosions });
-      } catch (e) { /* surge resource missing — silent */ }
-    }
+    if (explosions > 0) await _ftBankSurge(actor, explosions);
 
     const total = roll.total;
     const hit   = total >= defenseValue;
@@ -8108,12 +8533,7 @@ Hooks.once("init", function () {
     const explosionVals = dieResults.slice(2).map(r => r.result);
 
     // Target banks Surge from explosions — they're the active roller.
-    if (explosions > 0) {
-      try {
-        const cur = Number(sys?.resources?.surge?.value) || 0;
-        await target.update({ "system.resources.surge.value": cur + explosions });
-      } catch (e) { /* surge missing — silent */ }
-    }
+    if (explosions > 0) await _ftBankSurge(target, explosions);
 
     const total = roll.total;
     const saved = total >= dc;
@@ -8210,12 +8630,7 @@ Hooks.once("init", function () {
     const cExplos = Math.max(0, cDie.length - 2);
     const cBase   = cDie.slice(0, 2).map(r => r.result);
     const cTail   = cDie.slice(2).map(r => r.result);
-    if (cExplos > 0) {
-      try {
-        const cur = Number(cSys?.resources?.surge?.value) || 0;
-        await actor.update({ "system.resources.surge.value": cur + cExplos });
-      } catch (e) { /* surge missing — silent */ }
-    }
+    if (cExplos > 0) await _ftBankSurge(actor, cExplos);
     const cTotal = cRoll.total;
 
     // ─ Target's roll ────────────────────────────────────────────────────────
@@ -8242,12 +8657,7 @@ Hooks.once("init", function () {
     const tExplos = Math.max(0, tDie.length - 2);
     const tBase   = tDie.slice(0, 2).map(r => r.result);
     const tTail   = tDie.slice(2).map(r => r.result);
-    if (tExplos > 0) {
-      try {
-        const cur = Number(tSys?.resources?.surge?.value) || 0;
-        await target.update({ "system.resources.surge.value": cur + tExplos });
-      } catch (e) { /* surge missing — silent */ }
-    }
+    if (tExplos > 0) await _ftBankSurge(target, tExplos);
     const tTotal = tRoll.total;
 
     // Tie → target wins. Strict greater-than for caster.
@@ -8415,10 +8825,7 @@ Hooks.once("init", function () {
     const baseDice      = diceResults.map(r => r.result);
     const doubleTen     = baseDice.filter(v => v === 10).length >= 2;
 
-    if (explosions > 0) {
-      const curSurge = rawSys?.resources?.surge?.value ?? 0;
-      await actor.update({ "system.resources.surge.value": curSurge + explosions });
-    }
+    if (explosions > 0) await _ftBankSurge(actor, explosions);
     if (doubleTen) await actor.setFlag("fourththing", "bonusActionAvailable", true);
 
     // Shape B reroll grants — context "attack" narrowed by skill/attribute.
@@ -9855,11 +10262,20 @@ Hooks.once("init", function () {
       const intBracket = ftIntegrityBracketFor(this);
       const intPerLevel = intBracket.base + Math.floor(b / 2);
       sys.derived.integrity.max    = 10 + 3 * b + (charLevel - 1) * intPerLevel;
-      sys.derived.integrity.value ??= sys.derived.integrity.max;
+      // Clamp value to max — `??=` only seeded when undefined, so stale values
+      // from earlier maxes (e.g. NPC seeded at 120 then re-stat to 46) leaked
+      // through and displayed as 120/46. Treat max as the cap on every prepare.
+      {
+        const cur = sys.derived.integrity.value ?? sys.derived.integrity.max;
+        sys.derived.integrity.value = Math.max(0, Math.min(cur, sys.derived.integrity.max));
+      }
       sys.derived.integrity.bracket    = intBracket.bracket;
       sys.derived.integrity.perLevel   = intPerLevel;
       sys.derived.stress.max       = 10 + 2 * m + s;
-      sys.derived.stress.value    ??= sys.derived.stress.max;
+      {
+        const cur = sys.derived.stress.value ?? sys.derived.stress.max;
+        sys.derived.stress.value = Math.max(0, Math.min(cur, sys.derived.stress.max));
+      }
       // Phase C — Buffs & Wards. Preserve AE-applied aeBonus values (Foundry's
       // applyActiveEffects runs BEFORE prepareDerivedData, so reads of these
       // fields see the live AE bonus). Re-stamping after compute also keeps
@@ -10186,12 +10602,9 @@ Hooks.once("init", function () {
         const explosions = Math.max(0, dieResults.length - 2);
         let surgeNote = "";
         if (explosions > 0 && actor) {
-          try {
-            const sys = actor.system?.system ?? actor.system;
-            const cur = Number(sys?.resources?.surge?.value) || 0;
-            await actor.update({ "system.resources.surge.value": cur + explosions });
-            surgeNote = ` <span style="color:#e8c84a;font-weight:600">+${explosions} Surge banked</span>`;
-          } catch (e) { /* actor lacks surge resource or update blocked — silent */ }
+          const banked = await _ftBankSurge(actor, explosions);
+          if (banked > 0) surgeNote = ` <span style="color:#e8c84a;font-weight:600">+${banked} Surge banked</span>`;
+          if (banked < explosions) surgeNote += ` <span style="color:rgba(232,200,74,0.55);font-style:italic">(${explosions - banked} overflow — bank full)</span>`;
         }
 
         updates.push({ _id: id, initiative: roll.total });
@@ -10377,11 +10790,7 @@ Hooks.once("init", function () {
         await roll.evaluate();
         const dieResults = roll.dice?.[0]?.results ?? [];
         const explos     = Math.max(0, dieResults.length - 2);
-        if (explos > 0) {
-          const cur = Number(sys?.resources?.surge?.value) || 0;
-          try { await actor.update({ "system.resources.surge.value": cur + explos }); }
-          catch (e) { /* surge missing — silent */ }
-        }
+        if (explos > 0) await _ftBankSurge(actor, explos);
         const saved = roll.total >= dc;
         const condLabel = FT.CONDITIONS?.[meta.condition ?? eff.flags.fourththing.condition]?.label ?? "condition";
         const headerColor = saved ? "#5fb35f" : "#c45f5f";
@@ -10530,6 +10939,23 @@ Hooks.once("init", function () {
       speaker: ChatMessage.getSpeaker({ actor: observerActor }),
       content: html
     }).catch(err => console.error("fourththing | AoO chat prompt failed", err));
+  });
+
+  // Aurablade Burn-band auto-sync. When Burn or Aura changes, re-derive the
+  // managed AE pack (passive / engaged / overheated layers) so the steward
+  // doesn't have to manually re-cast the aura. Mirrors the change-aura dialog
+  // sync but covers the openAurabladeAction / direct-edit / class-feature paths.
+  Hooks.on("updateActor", async (actor, changes) => {
+    if (actor.type !== "character") return;
+    const burnChanged = foundry.utils.getProperty(changes, "system.resources.burn.current");
+    const auraChanged = foundry.utils.getProperty(changes, "system.resources.aura.state");
+    if (burnChanged === undefined && auraChanged === undefined) return;
+    // Only sync if the actor actually has the Aurablade pool surface.
+    const sys = actor.system?.system ?? actor.system;
+    const hasBurn = sys?.resources?.burn !== undefined;
+    if (!hasBurn) return;
+    try { await syncAurabladeEffects(actor); }
+    catch (e) { console.warn("Roll for Initiation | aurablade auto-sync failed", e); }
   });
 
   // Integrity → 0 detector: enters Last Stand on collapse; exits if healed above 0.
@@ -11316,7 +11742,9 @@ Hooks.once("init", function () {
         pactSubject: _pactSubject?.uuid ? {
           uuid: _pactSubject.uuid,
           name: _pactSubject.name ?? "(unnamed)"
-        } : null
+        } : null,
+        l1SkillsPicked: Array.isArray(actor.flags?.fourththing?.pactkeeperL1Picks)
+          && actor.flags.fourththing.pactkeeperL1Picks.length === 2
       } : null;
 
       // Death & Dying: surface Last Stand pips + Blood Debt ledger so the
@@ -11979,8 +12407,20 @@ Hooks.once("init", function () {
     static async _onFtManifestDrop(event, target) {
       const instanceId = target?.dataset?.instanceId;
       if (!instanceId) return;
-      const dropped = await ftDropActiveManifestation(this.actor, instanceId);
-      if (dropped) ui.notifications?.info(`${this.actor.name}: manifestation dropped.`);
+      // Sealed Pact lock (Pactkeeper Initiation 11) — while stance is ON, a
+      // manifestation sustained on a pact-bound subject cannot be voluntarily
+      // dropped. The seal carries the upkeep, not moment-to-moment will.
+      const actor = this.actor;
+      const sealOn = !!actor.flags?.fourththing?.modes?.pkSealedPact;
+      if (sealOn) {
+        const entries = actor.getFlag("fourththing", "activeManifestations") ?? [];
+        const entry = entries.find(e => e.instanceId === instanceId);
+        if (entry?.pactBound === true) {
+          return ui.notifications?.warn(`${actor.name}: Sealed Pact holds — cannot voluntarily drop a manifestation on the pact-bound subject. Drop the stance first.`);
+        }
+      }
+      const dropped = await ftDropActiveManifestation(actor, instanceId);
+      if (dropped) ui.notifications?.info(`${actor.name}: manifestation dropped.`);
     }
 
     static async _onFtManifestEndScene(event, target) {
@@ -12288,37 +12728,98 @@ Hooks.once("init", function () {
       const actor  = this.actor;
       const rawSys = actor.system?.system ?? actor.system;
       const surge  = rawSys?.resources?.surge?.value ?? 0;
+      const tier   = _ftCasterTier(actor);
+      const cap    = _ftSurgeCap(actor);
 
       if (surge <= 0) {
         ui.notifications.warn(`${actor.name}: no Surge banked to spend.`);
         return;
       }
 
-      const opt = (cost, key, label, fiction) => `
-        <button type="button" class="ft-surge-opt" data-cost="${cost}" data-effect="${key}"
-                ${surge < cost ? "disabled" : ""}
-                style="display:block;width:100%;text-align:left;padding:0.5rem 0.6rem;margin-bottom:0.4rem;
-                       background:${surge < cost ? "rgba(255,255,255,0.03)" : "rgba(232,200,74,0.1)"};
-                       border:1px solid ${surge < cost ? "rgba(255,255,255,0.1)" : "rgba(232,200,74,0.4)"};
-                       border-radius:4px;color:${surge < cost ? "rgba(255,255,255,0.3)" : "#e8c84a"};cursor:${surge < cost ? "default" : "pointer"}">
-          <div style="font-weight:600;font-size:0.82rem">${cost} Surge — ${label}</div>
-          <div style="font-size:0.72rem;opacity:0.75;margin-top:0.15rem;font-style:italic">${fiction}</div>
-        </button>`;
+      // Menu spec — every cost band has at least one Offense + Defense.
+      // tier is the minimum tier required (1 = no gate). bucket determines column.
+      const MENU = _FT_SURGE_MENU;
 
-      const html = `<div class="ft-cast-dialog">
-        <p style="font-size:0.78rem;opacity:0.7;margin:0 0 0.5rem">
-          Banked: <b style="color:#e8c84a">${surge} Surge</b>. Choose one:
+      // Group by cost.
+      const byCost = {};
+      for (const e of MENU) {
+        (byCost[e.cost] ??= []).push(e);
+      }
+
+      const cell = (e) => {
+        const tierLocked = tier < e.tier;
+        const tooBroke   = surge < e.cost;
+        const disabled   = tierLocked || tooBroke;
+        const why = tierLocked ? `Requires Tier ${e.tier}+`
+                  : tooBroke   ? `Needs ${e.cost} Surge (you have ${surge})`
+                  : `Click to spend ${e.cost} Surge`;
+        const bg = e.bucket === "off"  ? (disabled ? "rgba(220,80,80,0.05)"  : "rgba(220,80,80,0.13)")
+                 : e.bucket === "def"  ? (disabled ? "rgba(120,160,220,0.05)": "rgba(120,160,220,0.13)")
+                 : e.bucket === "heal" ? (disabled ? "rgba(120,200,140,0.05)": "rgba(120,200,140,0.13)")
+                 :                       (disabled ? "rgba(232,200,74,0.05)" : "rgba(232,200,74,0.13)");
+        const bd = e.bucket === "off"  ? (disabled ? "rgba(220,80,80,0.18)"  : "rgba(220,80,80,0.50)")
+                 : e.bucket === "def"  ? (disabled ? "rgba(120,160,220,0.18)": "rgba(120,160,220,0.50)")
+                 : e.bucket === "heal" ? (disabled ? "rgba(120,200,140,0.18)": "rgba(120,200,140,0.50)")
+                 :                       (disabled ? "rgba(232,200,74,0.18)" : "rgba(232,200,74,0.50)");
+        const fg = disabled ? "rgba(255,255,255,0.30)" : "#f0f0f0";
+        return `
+          <button type="button" class="ft-surge-opt" data-cost="${e.cost}" data-effect="${e.key}"
+                  ${disabled ? "disabled" : ""} title="${why}"
+                  style="display:block;width:100%;text-align:left;padding:0.4rem 0.5rem;margin:0;
+                         background:${bg};border:1px solid ${bd};
+                         border-radius:4px;color:${fg};cursor:${disabled ? "not-allowed" : "pointer"}">
+            <div style="font-weight:600;font-size:0.78rem;display:flex;justify-content:space-between;gap:0.4rem">
+              <span>${e.label}</span>${e.tier > 1 ? `<span style="opacity:0.55;font-size:0.68rem">T${e.tier}+</span>` : ""}
+            </div>
+            <div style="font-size:0.70rem;opacity:0.75;margin-top:0.15rem;font-style:italic">${e.fiction}</div>
+          </button>`;
+      };
+
+      const emptyCell = `<div style="opacity:0.25;font-size:0.7rem;text-align:center;padding:0.3rem 0;font-style:italic">—</div>`;
+
+      const buckets = ["off", "def", "heal", "narr"];
+      const bucketLabel = { off: "Offense", def: "Defense", heal: "Heal", narr: "Narrative" };
+      const bucketColor = { off: "#dc5050", def: "#78a0dc", heal: "#78c88c", narr: "#e8c84a" };
+
+      let rowsHtml = "";
+      const costs = Object.keys(byCost).map(n => Number(n)).sort((a, b) => a - b);
+      for (const c of costs) {
+        const cells = buckets.map(b => {
+          const entries = byCost[c].filter(e => e.bucket === b);
+          if (!entries.length) return emptyCell;
+          return entries.map(cell).join('<div style="height:0.25rem"></div>');
+        });
+        rowsHtml += `
+          <tr>
+            <td style="vertical-align:top;padding:0.25rem 0.4rem 0.25rem 0;text-align:right;
+                       color:#e8c84a;font-weight:700;font-size:0.95rem;white-space:nowrap;width:2.5rem">
+              ${c}<span style="font-size:0.62rem;opacity:0.6">◆</span>
+            </td>
+            ${cells.map(c => `<td style="vertical-align:top;padding:0.25rem 0.25rem;width:23.5%">${c}</td>`).join("")}
+          </tr>`;
+      }
+
+      const headerCells = buckets.map(b =>
+        `<th style="text-align:left;padding:0.2rem 0.3rem;color:${bucketColor[b]};font-size:0.74rem;
+                    border-bottom:1px solid ${bucketColor[b]}55;letter-spacing:0.05em">${bucketLabel[b].toUpperCase()}</th>`).join("");
+
+      const html = `<div class="ft-cast-dialog" style="min-width:680px">
+        <p style="font-size:0.78rem;opacity:0.85;margin:0 0 0.55rem">
+          Banked: <b style="color:#e8c84a">${surge} / ${cap}</b> Surge · Tier <b>${tier}</b>.
+          <span style="opacity:0.65">Hover locked rows for why.</span>
         </p>
-        ${opt(1, "narrative-bonus-die", "Add +1d10 exploding to a roll you are about to make.",
-              "You press the moment — the dice remember what they were doing.")}
-        ${opt(2, "narrative-miss",      "Reaction: treat one incoming attack as a miss.",
-              "You slide sideways through the moment.")}
-        ${opt(3, "reposition-init",     "Reposition: pick a new spot in the initiative order (combat only).",
-              "You step out of the moment and re-enter where you choose. The Tree shrugs.")}
-        ${opt(3, "narrative-refund",    "Refund one manifestation or power use when it resolves.",
-              "The working didn't cost you. The Tree paid instead.")}
-        ${opt(5, "narrative-fiction",   "Reshape one beat of fiction in the scene (GM-gated, 1/scene).",
-              "A small miracle. A door that wasn't there. A body that didn't quite fall.")}
+        <table style="width:100%;border-collapse:collapse;font-size:0.78rem">
+          <thead><tr>
+            <th style="width:2.5rem;text-align:right;padding:0.2rem 0.4rem 0.2rem 0;
+                       color:#e8c84a;font-size:0.7rem;border-bottom:1px solid #e8c84a55">COST</th>
+            ${headerCells}
+          </tr></thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+        <p style="font-size:0.68rem;opacity:0.55;margin:0.6rem 0 0;font-style:italic">
+          Heals write directly to integrity. Other effects set a one-shot flag at
+          <code>flags.fourththing.surge.oneShot.&lt;key&gt;</code> + post a chat card; GM enforces consumption.
+        </p>
       </div>`;
 
       const dialog = new Dialog({
@@ -12333,28 +12834,12 @@ Hooks.once("init", function () {
         if (d !== dialog) return;
         $html.find(".ft-surge-opt").on("click", async (e) => {
           const cost   = parseInt(e.currentTarget.dataset.cost);
-          const effect = String(e.currentTarget.dataset.effect || "narrative");
+          const effect = String(e.currentTarget.dataset.effect || "");
           const cur    = actor.system?.system?.resources?.surge?.value
                       ?? actor.system?.resources?.surge?.value ?? 0;
           if (cur < cost) return;
-
-          if (effect === "reposition-init") {
-            dialog.close();
-            await _ftRepositionInitiative(actor, cost);
-            return;
-          }
-
-          await actor.update({ "system.resources.surge.value": cur - cost });
-          ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({ actor }),
-            content: `<div class="fourththing-roll">
-              <div class="ft-roll-header"><span class="ft-roll-name">✦ ${actor.name} spends ${cost} Surge</span></div>
-              <p style="margin:0.2rem 0;font-size:0.82rem;opacity:0.8">
-                Surge ${cur} → ${cur - cost}. GM adjudicates the effect.
-              </p>
-            </div>`
-          });
           dialog.close();
+          await _ftSurgeExecute(actor, effect, cost, cur, tier);
         });
       });
     }
@@ -12562,18 +13047,12 @@ Hooks.once("init", function () {
         // Sprint F — Cosmic Linguist
         cosmic_linguist_authority:   (a) => mod.openCosmicLinguistAuthority(a),
         cosmic_linguist_annotation:  (a) => mod.openCosmicLinguistAnnotation(a),
-        // Sprint F — Pactkeeper
-        pactkeeper_leverage:                 (a) => mod.openPactkeeperLeverage(a),
-        pactkeeper_binding_clause:           (a) => mod.openPactkeeperBindingClause(a),
-        pactkeeper_precedent:                (a) => mod.openPactkeeperPrecedent(a),
-        // DEPRECATED 2026-05-14 — singular superseded by
-        // pactkeeper_spend_civic_charge (the live key on both sheets).
-        pactkeeper_civic_charge:             (a) => mod.openPactkeeperCivicCharge(a),
-        pactkeeper_spend_civic_charge:       (a) => mod.openPactkeeperSpendCivicCharge(a),
-        // DEPRECATED 2026-05-14 — no template surface; the chip is
-        // display-only and read-only edits flow via inline number input.
-        pactkeeper_administrative_pressure:  (a) => mod.openPactkeeperPressure(a),
+        // Pactkeeper — canon (Phase 1.5): Bargain · Renegotiate · Sealed Pact · Ledger Day.
+        // Leverage / Binding Clause / Precedent / Civic Charge / Admin Pressure
+        // handlers retired 2026-05-22 (game-development residue with no canon backing).
         pactkeeper_bind_subject:             (a) => mod.openPactkeeperBindSubject(a),
+        pactkeeper_renegotiate:              (a) => mod.openPactkeeperRenegotiate(a),
+        pactkeeper_pick_l1_skills:           (a) => mod.openPactkeeperPickL1Skills(a),
         // DEPRECATED 2026-05-14 — no template surface; Counter is wired
         // into the cast-time flow (compat-bridge), not surfaced as a button.
         counter_manifestation:               (a) => mod.openCounterManifestation(a),
@@ -13120,11 +13599,9 @@ Hooks.once("init", function () {
       const explosions = Math.max(0, dieResults.length - 2);
       let surgeNote = "";
       if (explosions > 0) {
-        try {
-          const cur = Number(sys?.resources?.surge?.value) || 0;
-          await actor.update({ "system.resources.surge.value": cur + explosions });
-          surgeNote = ` <span style="color:#e8c84a;font-weight:600">+${explosions} Surge banked</span>`;
-        } catch (e) { /* surge resource missing — silent */ }
+        const banked = await _ftBankSurge(actor, explosions);
+        if (banked > 0) surgeNote = ` <span style="color:#e8c84a;font-weight:600">+${banked} Surge banked</span>`;
+        if (banked < explosions) surgeNote += ` <span style="color:rgba(232,200,74,0.55);font-style:italic">(${explosions - banked} overflow — bank full)</span>`;
       }
 
       await roll.toMessage({
@@ -15554,7 +16031,7 @@ Hooks.once("init", function () {
       const aoeBlock = hasArea ? `
         <div class="ft-cast-field ft-cast-span-2 ft-aoe-opts-block">
           ${hasSaveShape ? `<label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d4ff;margin-bottom:0.2rem">
-            <input type="checkbox" name="useAoeSavePrompts"/>
+            <input type="checkbox" name="useAoeSavePrompts" checked/>
             <span>⚖ Prompt each target for their save</span>
           </label>` : ""}
           <label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d8a0">
