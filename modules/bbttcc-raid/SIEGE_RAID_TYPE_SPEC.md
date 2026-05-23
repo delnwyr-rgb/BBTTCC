@@ -1,6 +1,6 @@
 # SIEGE_RAID_TYPE_SPEC.md
 
-**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** · **E (COMPLETE: E.1 counter-activities + E.2 champions + E.3 Relief Force scene + E.4 Trojan Horse/Sinon)** SHIPPED 2026-05-22/23. **NEXT: Phase F — the big §8 outcome write-back** (incl. draining `pendingMoraleDeltas`), Event Deck content, Champion Death Cascade, player HUD.
+**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** · **E (COMPLETE)** SHIPPED+synced 2026-05-22/23. **Phase F IN PROGRESS: F.1 outcome write-back engine BUILT** 2026-05-23 (pending F5 + in-game selftest, not yet synced). **NEXT: F.2 Champion Death Cascade**, then F.3 Event Deck content, F.4 player HUD.
 **Parent specs:**
 - `bbttcc-structures/STRUCTURE_DAMAGE_SPEC.md` (SIGNED OFF 2026-05-20; Phases A+B+B.9+C+D SHIPPED 2026-05-21)
 - `bbttcc-raid/COURTLY_INTRIGUE_SPEC.md` (SIGNED OFF 2026-05-20; ALL PHASES SHIPPED 2026-05-21)
@@ -758,12 +758,19 @@ Sub-phased E.1→E.4.
 - **LOC est: ~600** (E.1 ≈ 310 + E.2 ≈ 210 + E.3 ≈ 290 + E.4 ≈ 280 delivered = ~1,090 across Phase E)
 
 ### Phase F — Outcomes write-back + Event Deck + Multiplayer Relay + VFX + War Log integration
-- 9-outcome detector + matrix write-back
-- Event Deck schema + starter roster (12+ events) + per-turn 2d10 roll
-- Socket relay (5 message types)
-- Player Siege HUD
-- Champion Death Cascade hook
-- End-of-siege chat card with retold narrativeBeats
+Sub-phased F.1→F.4.
+
+**F.1 — Outcome write-back engine — ✅ BUILT 2026-05-23** (`scripts/siege-outcome-writeback.js`, ~336 LOC; pending F5 + in-game selftest, NOT yet synced)
+- Subscribes `bbttcc:siege:outcome` (GM-only single writer; in-memory lock + "siege flag already cleared" idempotency). Runs the §8 9-row `MATRIX` (`game.bbttcc.api.siege.OUTCOME_MATRIX`): hex ownership→attacker + `["Sacked"]`/`["Sacked","Treachery"]` modifiers (add-turn recorded in `modifierHistory`; 30d auto-expiry deferred) + `recordHexImprovement` ledger entry.
+- Faction writes: **drains `state.pendingMoraleDeltas[]`** (E.3 relief −1 / E.4 trojan −2) THEN matrix morale via `factions.bumpMorale`; Buffer refund % via `op.commit` (**OP→marks ×10**, `softPower`→`softpower` remap); `won_sack` steals 50% defender stockpile, `lost_hold` shaves −15 defender stockpile (best-effort across items).
+- **Holdings (intent-driven inline)**: on a taken hex, `sack→capture` / `raze→destroy` / `capture→capture`; `byIntentHalf` (Trojan/Pyrrhic) preserves ⌈half⌉. **NON-destructive** — capture reassigns `system.identity.factionOwnerId`; destroy/scatter stamp `flags.bbttcc-raid.siegeFate` + drop from the hex `holdings` roster, actors NEVER deleted.
+- `siege_resolved` War Log saga pushed to BOTH factions (role-tagged, full `narrativeBeats[]`) + end-of-siege chat card with the retold saga + clear hex siege flag + remove `activeSieges`/`defendingSieges` back-refs. Fires `bbttcc:siege:writtenBack`. Every external API call is guarded (degrades + console-warns if a sibling API is absent). Selftest `tools/siege-phase-f-selftest.macro.js`. 11/11 node logic checks green.
+- **F.1 deferred**: "Sacked" 30d auto-expiry (permanent now); per-recipe `onStormHandling` schema (intent-driven inline instead); `lost_supply_crisis` `atkHoldingsLost: 1d4` is recorded in the matrix but not yet applied (no attacker-holdings-at-hex roster to draw from — revisit with holdings semantics).
+
+**F.2 — Champion Death Cascade** (next): subscribe `bbttcc:siege:championDeath` → attacker champ dies: Buffer.violence −20, morale −2, 30% other attacker champs → `absent` (grief); defender champ dies: morale −2, 30% absent defenders → `active` (rally), next-turn layer threshold −10%. `championFalls` VFX + chat card.
+**F.3 — Event Deck content**: author `data/siege-events.json` (11 starter events × generic/naval/desert/sacred), replace the tick's placeholder 2d10≥14 roll with real draw→apply, consume `omenReroll`, deck pick at Begin Siege, `siegeEvent` relay.
+**F.4 — Player Siege HUD + relay**: read-only player HUD mirror + `siegeStateUpdate`/`siegeEvent` ticker (most relay already exists via the generic `siegeHook` branch).
+- End-of-siege chat card with retold narrativeBeats — ✅ done in F.1
 - **War Log integration**: `siege_resolved` entries pushed to `flags.bbttcc-factions.warLogs` for both attacker and defender; existing War Log UI surfaces narrativeBeats[] as the persistent "Siege Saga" view (no new sheet/journal — just extends existing surface)
 - **LOC est: ~550**
 

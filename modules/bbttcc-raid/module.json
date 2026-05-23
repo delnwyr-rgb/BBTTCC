@@ -115,6 +115,7 @@
     "scripts/siege-champions.js",
     "scripts/siege-relief.js",
     "scripts/siege-trojan-horse.js",
+    "scripts/siege-outcome-writeback.js",
     "scripts/raid-resolveRaidRound.throughput.enhancer.js",
     "scripts/raid-scene-intents.enhancer.js",
     "scripts/raid-anytime-budget.enhancer.js",
