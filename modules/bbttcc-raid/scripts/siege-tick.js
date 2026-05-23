@@ -310,6 +310,9 @@
     // ---- 9. Persist + broadcast ----
     await S.setSiegeState(hexUuid, state);
     Hooks.callAll("bbttcc:siege:ticked", { siegeId: state.siegeId, hexUuid, state, drain: drainCalc });
+    // F.4: relay a lightweight tick ping so non-GM Siege HUDs re-render each strategic turn
+    // (the tick is GM-only; without this, players' read-only HUDs go stale between actions).
+    try { game.socket?.emit?.(`module.bbttcc-raid`, { t: "siegeHook", hook: "bbttcc:siege:ticked", payload: { siegeId: state.siegeId, hexUuid } }); } catch (_e) {}
 
     // D.3: if this tick ended the siege (Buffer exhaustion → lost_hold / lost_supply_crisis),
     // fire the outcome hook + relay so siege-vfx.js plays the banner on every client.

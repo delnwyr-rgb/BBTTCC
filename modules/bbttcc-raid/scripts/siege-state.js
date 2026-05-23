@@ -463,9 +463,10 @@
     }
 
     await setSiegeState(hit.hexUuid, state);
-    Hooks.callAll("bbttcc:siege:championStatus", {
-      siegeId, championId, status: newStatus, source, side
-    });
+    const _cs = { siegeId, championId, status: newStatus, source, side };
+    Hooks.callAll("bbttcc:siege:championStatus", _cs);
+    // F.4: relay so non-GM Siege HUDs reflect roster changes live (GM is the writer).
+    try { game.socket?.emit?.(`module.bbttcc-raid`, { t: "siegeHook", hook: "bbttcc:siege:championStatus", payload: _cs }); } catch (_e) {}
     return true;
   }
 

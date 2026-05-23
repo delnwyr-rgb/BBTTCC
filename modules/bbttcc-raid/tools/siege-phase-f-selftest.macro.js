@@ -14,6 +14,8 @@
  *      (attacker buffer−20 + rally absent allies; defender threshold−10% clamp, no buffer)
  *   8. F.3 Event Deck: module + API; deck JSON (11 events / 4 decks / refs resolve /
  *      naval→storm, sacred→sacred-day); eligibility-gate mirror; VFX present
+ *   9. F.4 Player Siege HUD: module loaded; Buffer colour-band + grace-clock mirrors
+ *      (the live tick/championStatus relays are exercised in a real playtest)
  *
  * Live execution (a real siege resolving → hex flips owner, morale moves, saga written;
  * a champion falling → allies rally) needs a real besieged hex — exercise in a playtest.
@@ -156,6 +158,22 @@
   // VFX renderer extended with the event ticker.
   if (globalThis.__bbttcc_siege_vfx_loaded_v1) pass("f3-vfx-present");
   else fail("f3-vfx-present", "siege-vfx.js missing");
+
+  // 9. F.4 — Player Siege HUD (read-only mirror + live tick relay) -------------
+  if (globalThis.__bbttcc_siege_hud_loaded_v1) pass("f4-hud-loaded");
+  else fail("f4-hud-loaded", "siege-hud.js not loaded");
+  // Buffer colour-band mirror (green > 50 / amber 25–50 / red < 25).
+  try {
+    const bc = (pct) => pct > 50 ? "#6fcf6f" : (pct >= 25 ? "#ffaa55" : "#ff5555");
+    if (bc(100) === "#6fcf6f" && bc(51) === "#6fcf6f" && bc(50) === "#ffaa55" && bc(25) === "#ffaa55" && bc(24) === "#ff5555" && bc(0) === "#ff5555") pass("f4-bufcolor");
+    else fail("f4-bufcolor", "buffer colour bands diverged");
+  } catch (err) { fail("f4-bufcolor", err.message); }
+  // Grace-clock mirror (severed counts down + clamps; null when supplied).
+  try {
+    const g = (supply, at, gt, turn) => (supply === "severed" && at != null) ? Math.max(0, (gt ?? 2) - (turn - at)) : null;
+    if (g("severed", 5, 2, 5) === 2 && g("severed", 5, 2, 6) === 1 && g("severed", 5, 2, 9) === 0 && g("supplied", null, 2, 9) === null) pass("f4-grace");
+    else fail("f4-grace", "grace clock diverged");
+  } catch (err) { fail("f4-grace", err.message); }
 
   // ---- Report ----
   console.table(results.map(r => ({ name: r.name, ok: r.ok ? "PASS" : "FAIL", detail: r.detail })));

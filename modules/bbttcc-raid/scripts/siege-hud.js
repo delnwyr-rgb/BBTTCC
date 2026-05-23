@@ -84,6 +84,18 @@
     }).join(" ");
   }
 
+  // F.4 — player-facing helpers.
+  function _turn() { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } }
+  function _bufColor(pct) { return pct > 50 ? "#6fcf6f" : (pct >= 25 ? "#ffaa55" : "#ff5555"); }
+
+  // The last few siege beats — the saga-so-far ticker (read-only, all clients).
+  function _beatsFooter(s) {
+    const beats = Array.isArray(s.narrativeBeats) ? s.narrativeBeats.slice(-3) : [];
+    if (!beats.length) return "";
+    const rows = beats.map(b => `<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">• ${esc(b.title || b.kind || "—")}</div>`).join("");
+    return `<div title="Recent siege beats" style="margin-top:.35rem;padding-top:.3rem;border-top:1px solid #2a2518;font-size:0.64rem;color:#9a9a8a;line-height:1.35;">${rows}</div>`;
+  }
+
   function _siegeRow(entry, isGM) {
     const s = entry.siege;
     const supply = String(s.supplyStatus || "supplied");
@@ -96,6 +108,10 @@
     const reliefWaves = (s.reliefWaves || []).filter(w => !w.resolved);
     const reliefPending = reliefWaves.length;
     const reliefArrived = reliefWaves.filter(w => w.arrived).length;
+    const bufColor = _bufColor(pct);
+    const graceLeft = (supply === "severed" && s.supplySeveredAtTurn != null)
+      ? Math.max(0, (s.gracePeriodTurns ?? 2) - (_turn() - s.supplySeveredAtTurn))
+      : null;
 
     // Auto-suggest pip — scaffold. Lit when state._suggestConvene is set (D.2 Bombard accrual
     // will toggle this); dim otherwise. Never auto-fires — convening stays a GM gesture.
@@ -128,16 +144,17 @@
         <span>${total}${start > 0 ? `/${start}` : ""} OP</span>
       </div>
       <div style="position:relative;height:7px;background:#1a1a22;border:1px solid #333;border-radius:3px;overflow:hidden;">
-        <div style="position:absolute;left:0;top:0;bottom:0;width:${pct}%;background:${BRONZE};box-shadow:0 0 6px ${BRONZE};"></div>
+        <div style="position:absolute;left:0;top:0;bottom:0;width:${pct}%;background:${bufColor};box-shadow:0 0 6px ${bufColor};transition:width .3s;"></div>
       </div>
       <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
-        ${statusChip(`supply: ${supply}`, sc)}
+        ${statusChip(`supply: ${supply}${graceLeft != null ? ` · grace ${graceLeft}` : ""}`, sc)}
         ${interd ? statusChip(`${interd} cut`, "#ff7a7a") : ""}
         ${reliefArrived ? `<span style="font-size:0.66rem;padding:1px 5px;border:1px solid #88bbff;border-radius:8px;color:#cfe2ff;background:#101a2a;box-shadow:0 0 8px rgba(136,187,255,0.5);font-weight:600;">relief here ×${reliefArrived}</span>` : (reliefPending ? statusChip(`relief ×${reliefPending}`, "#88bbff") : "")}
         ${atk ? `<span style="font-size:0.66rem;color:#888;">vs ${esc(atk.name)}</span>` : ""}
       </div>
       <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:4px;">${_layersStrip(s)}</div>
       ${_champStrip(s)}
+      ${_beatsFooter(s)}
       ${gmBtns}
     </div>`;
   }
