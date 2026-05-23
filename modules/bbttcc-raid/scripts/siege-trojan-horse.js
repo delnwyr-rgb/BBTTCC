@@ -65,15 +65,16 @@
     const { sneakDC, sabotageDC, breachDC, sabotageCat, sinon, sinonChampId, sinonMode, sinonAutoKey } = cfg;
 
     // 1. Sinon sacrifice FIRST — persists the death so the outcome write below re-reads it.
-    let sinonName = null;
+    //    The championDeath HOOK is fired LAST (see end of fn): Hooks.callAll doesn't await async
+    //    handlers, so firing it before the outcome write would let the F.2 cascade's state persist
+    //    get clobbered by step 3's setState. Firing it after makes the cascade the last writer.
+    let sinonName = null, sinonDeathPayload = null;
     if (sinon && sinonChampId) {
       const cur = entry.siege;
       const ok = await api.applyChampionStatusChange({ siegeId: cur.siegeId, championId: sinonChampId, newStatus: "dead", source: "trojan_horse_sinon", side: "attacker" });
       if (ok) {
         sinonName = _nm(sinonChampId);
-        // The death + cascade fire as-if the activity succeeded (mythic gravity).
-        const deathPayload = { siegeId: cur.siegeId, hexUuid, championId: sinonChampId, side: "attacker", source: "trojan_horse_sinon" };
-        _relayHook("bbttcc:siege:championDeath", deathPayload); // Phase F cascade subscribes here
+        sinonDeathPayload = { siegeId: cur.siegeId, hexUuid, championId: sinonChampId, side: "attacker", source: "trojan_horse_sinon" };
       }
     }
 
@@ -162,6 +163,11 @@
 
     ui.notifications?.info?.(allPass ? "Trojan Horse SUCCEEDS — won_trojan_horse." : "Trojan Horse fails — heavy losses.");
     api.refreshHud?.();
+
+    // Sinon: fire championDeath + cascade LAST, after the outcome write above (race-safe).
+    // On a win the siege is already cleared by F.1's outcome write-back → cascade applies morale
+    // only and skips siege-state effects; on a fail it applies the full cascade to the live siege.
+    if (sinonDeathPayload) _relayHook("bbttcc:siege:championDeath", sinonDeathPayload);
   }
 
   // ─── Dialog ────────────────────────────────────────────────────────────────

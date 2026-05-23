@@ -10,9 +10,11 @@
  *      degrades gracefully if any are missing, but full function needs them
  *   5. refund conversion mirror (OP→marks ×10, softPower→softpower remap)
  *   6. intent→holdings mode mirror (sack→capture / raze→destroy / capture→capture)
+ *   7. F.2 Champion Death Cascade: module + hook + API; cascade-core mirror
+ *      (attacker buffer−20 + rally absent allies; defender threshold−10% clamp, no buffer)
  *
- * Live execution (a real siege resolving → hex flips owner, morale moves, saga
- * written) needs a real besieged hex — exercise in a playtest. This confirms wiring.
+ * Live execution (a real siege resolving → hex flips owner, morale moves, saga written;
+ * a champion falling → allies rally) needs a real besieged hex — exercise in a playtest.
  *
  * Spec: modules/bbttcc-raid/SIEGE_RAID_TYPE_SPEC.md §8
  */
@@ -80,6 +82,39 @@
     if (mode("sack") === "capture" && mode("raze") === "destroy" && mode("capture") === "capture" && mode(undefined) === "capture") pass("f1-intent-mirror");
     else fail("f1-intent-mirror", "intent map diverged");
   } catch (err) { fail("f1-intent-mirror", err.message); }
+
+  // 7. F.2 — Champion Death Cascade -------------------------------------------
+  if (globalThis.__bbttcc_siege_champion_cascade_loaded_v1) pass("f2-loaded");
+  else fail("f2-loaded", "siege-champion-cascade.js not loaded");
+  if (globalThis.__bbttcc_siege_cascade_hook_installed) pass("f2-hook", "subscribed to bbttcc:siege:championDeath");
+  else fail("f2-hook", "cascade hook not installed");
+  if (typeof siege.runChampionCascade === "function") pass("f2-api");
+  else fail("f2-api", "siege.runChampionCascade missing");
+
+  // Deterministic cascade-core mirror: attacker death rallies absent allies (rng→0), skips
+  // dead + active; Buffer.violence −20 clamped; no threshold change on attacker side.
+  try {
+    const CH = 0.30, WK = 0.10, HIT = 20;
+    const core = (state, side, championId, rng) => {
+      const roster = side === "attacker" ? state.attackerChampions : state.defenderChampions;
+      const rallied = []; let bufferHit = 0, thr = false;
+      if (side === "attacker") { const b = state.buffer.violence || 0; state.buffer.violence = Math.max(0, b - HIT); bufferHit = b - state.buffer.violence; }
+      for (const c of roster) { if (c.actorId === championId) continue; if (c.status === "absent" && rng() < CH) { c.status = "active"; rallied.push(c.actorId); } }
+      if (side === "defender") { const L = state.layers[state.currentLayerIdx ?? 0]; if (L && L.thresholdPct != null) { L.thresholdPct = Math.min(0.95, L.thresholdPct + WK); thr = true; } }
+      return { rallied, bufferHit, thr };
+    };
+    const s = { buffer: { violence: 30 }, currentLayerIdx: 0, layers: [{ thresholdPct: 0.3 }],
+      attackerChampions: [{ actorId: "p", status: "dead" }, { actorId: "a", status: "absent" }, { actorId: "d", status: "active" }], defenderChampions: [] };
+    const r = core(s, "attacker", "p", () => 0);
+    const okA = r.bufferHit === 20 && s.buffer.violence === 10 && r.rallied.join() === "a"
+      && s.attackerChampions.find(c => c.actorId === "d").status === "active" && r.thr === false;
+    // defender side: threshold weakens, no buffer hit
+    const s2 = { buffer: { violence: 30 }, currentLayerIdx: 0, layers: [{ thresholdPct: 0.9 }], attackerChampions: [], defenderChampions: [{ actorId: "h", status: "dead" }] };
+    const r2 = core(s2, "defender", "h", () => 0);
+    const okD = r2.bufferHit === 0 && s2.layers[0].thresholdPct === 0.95 && r2.thr === true;
+    if (okA && okD) pass("f2-cascade-mirror", "atk: buffer−20 + rally absent only; def: threshold+10% clamp 0.95, no buffer");
+    else fail("f2-cascade-mirror", `okA=${okA} okD=${okD}`);
+  } catch (err) { fail("f2-cascade-mirror", err.message); }
 
   // ---- Report ----
   console.table(results.map(r => ({ name: r.name, ok: r.ok ? "PASS" : "FAIL", detail: r.detail })));

@@ -219,6 +219,24 @@
     } catch (e) { console.warn(TAG, "trojanFailed vfx failed", e); }
   }
 
+  // Phase F.2 — Champion Death Cascade. The fall itself is bannered by the duel (championDuel
+  // VFX); this marks the cascade CONSEQUENCE — the rally (absent allies return) or the mourning.
+  function _onCascade(payload) {
+    _injectStylesOnce();
+    try {
+      const side = payload?.side;
+      const color = side === "attacker" ? "#ff9a9a" : BLUE;
+      const rallied = Array.isArray(payload?.rallied) ? payload.rallied : [];
+      if (rallied.length) {
+        const nm = game.actors?.get?.(rallied[0])?.name || "An ally";
+        _banner(rallied.length > 1 ? `${rallied.length} Rally to the Banner` : `${nm} Returns to the Fray`, color);
+      } else {
+        _banner(side === "defender" && payload?.thresholdWeakened ? "The Wall Mourns" : "The Camp Mourns", color);
+      }
+      _pulse(_hudPanel(), color);
+    } catch (e) { console.warn(TAG, "cascade vfx failed", e); }
+  }
+
   Hooks.on("bbttcc:siege:layerBreached", _onLayerBreached);
   Hooks.on("bbttcc:siege:convene", _onConvene);
   Hooks.on("bbttcc:siege:outcome", _onOutcome);
@@ -228,6 +246,7 @@
   Hooks.on("bbttcc:siege:reliefRepulsed", _onReliefRepulsed);
   Hooks.on("bbttcc:siege:trojanHorse", _onTrojanHorse);
   Hooks.on("bbttcc:siege:trojanFailed", _onTrojanFailed);
+  Hooks.on("bbttcc:siege:cascade", _onCascade);
 
   // Expose for the selftest / manual preview.
   function _install() {
@@ -244,6 +263,7 @@
       if (kind === "reliefRepulsed") return _onReliefRepulsed(payload);
       if (kind === "trojanHorse") return _onTrojanHorse(payload);
       if (kind === "trojanFailed") return _onTrojanFailed(payload);
+      if (kind === "cascade") return _onCascade(payload);
       console.warn(TAG, "previewVfx: unknown kind", kind);
     };
   }

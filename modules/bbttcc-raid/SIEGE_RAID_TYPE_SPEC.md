@@ -1,6 +1,6 @@
 # SIEGE_RAID_TYPE_SPEC.md
 
-**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** · **E (COMPLETE)** SHIPPED+synced 2026-05-22/23. **Phase F IN PROGRESS: F.1 outcome write-back engine BUILT** 2026-05-23 (pending F5 + in-game selftest, not yet synced). **NEXT: F.2 Champion Death Cascade**, then F.3 Event Deck content, F.4 player HUD.
+**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** · **E (COMPLETE)** SHIPPED+synced 2026-05-22/23. **Phase F IN PROGRESS: F.1 SHIPPED + synced** (`0ada94a`); **F.2 Champion Death Cascade BUILT** 2026-05-23 (pending F5 + selftest, not yet synced). **NEXT: F.3 Event Deck content**, then F.4 player HUD.
 **Parent specs:**
 - `bbttcc-structures/STRUCTURE_DAMAGE_SPEC.md` (SIGNED OFF 2026-05-20; Phases A+B+B.9+C+D SHIPPED 2026-05-21)
 - `bbttcc-raid/COURTLY_INTRIGUE_SPEC.md` (SIGNED OFF 2026-05-20; ALL PHASES SHIPPED 2026-05-21)
@@ -767,7 +767,10 @@ Sub-phased F.1→F.4.
 - `siege_resolved` War Log saga pushed to BOTH factions (role-tagged, full `narrativeBeats[]`) + end-of-siege chat card with the retold saga + clear hex siege flag + remove `activeSieges`/`defendingSieges` back-refs. Fires `bbttcc:siege:writtenBack`. Every external API call is guarded (degrades + console-warns if a sibling API is absent). Selftest `tools/siege-phase-f-selftest.macro.js`. 11/11 node logic checks green.
 - **F.1 deferred**: "Sacked" 30d auto-expiry (permanent now); per-recipe `onStormHandling` schema (intent-driven inline instead); `lost_supply_crisis` `atkHoldingsLost: 1d4` is recorded in the matrix but not yet applied (no attacker-holdings-at-hex roster to draw from — revisit with holdings semantics).
 
-**F.2 — Champion Death Cascade** (next): subscribe `bbttcc:siege:championDeath` → attacker champ dies: Buffer.violence −20, morale −2, 30% other attacker champs → `absent` (grief); defender champ dies: morale −2, 30% absent defenders → `active` (rally), next-turn layer threshold −10%. `championFalls` VFX + chat card.
+**F.2 — Champion Death Cascade — ✅ BUILT 2026-05-23** (`scripts/siege-champion-cascade.js`, ~176 LOC; pending F5 + selftest, not yet synced)
+- Subscribes `bbttcc:siege:championDeath` (GM-only; dedupe `siegeId:championId` + per-siege serialize lock). **Attacker** falls: Buffer.violence −20 (clamp 0), attacker morale −2 (immediate `factions.bumpMorale`), 30% each OTHER **absent** attacker champ → `active` (vengeance). **Defender** falls: defender morale −2, 30% each OTHER absent defender champ → `active` (rally), current layer `thresholdPct` +0.10 (clamp 0.95; skipped if razed-rule/null). Appends `champion_falls` beat; fires `bbttcc:siege:cascade` (+relay) → new VFX banner ("N Rally to the Banner" / "The Wall Mourns") + consequences chat card.
+- **SPEC CONTRADICTION RESOLVED**: §8 pseudocode line 542 said attacker-death → others → `absent` (grief), but line 551 prose ("Achilles … flip to active") + the Patroclus→Achilles premise + memory all say RALLY (absent → active). Implemented **rally** for both sides. Morale is immediate (faction-level API), not `pendingMoraleDeltas` — the hit lands when the champion falls.
+- **RACE FIX**: `Hooks.callAll` doesn't await async handlers, so the Trojan **Sinon** path was reordered to fire `championDeath` AFTER its outcome write (the Duel already fires it last) → the cascade is always the last siege-state writer. Selftest §7 (→10 checks). 13/13 node logic green.
 **F.3 — Event Deck content**: author `data/siege-events.json` (11 starter events × generic/naval/desert/sacred), replace the tick's placeholder 2d10≥14 roll with real draw→apply, consume `omenReroll`, deck pick at Begin Siege, `siegeEvent` relay.
 **F.4 — Player Siege HUD + relay**: read-only player HUD mirror + `siegeStateUpdate`/`siegeEvent` ticker (most relay already exists via the generic `siegeHook` branch).
 - End-of-siege chat card with retold narrativeBeats — ✅ done in F.1
