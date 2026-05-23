@@ -92,6 +92,10 @@ import {
   openDreamwalkerEchoReservoir,
   openDreamwalkerSpendEchoDie,
   openSoulSmithForge,
+  openSoulSmithForgeInitiate,
+  openSoulSmithAtonementCrucible,
+  openSoulSmithFurnaceOfRenewal,
+  openSoulSmithRelicOfRebirth,
   openPassiveClassInfo,
   // Sprint F — new handlers
   openBulwarkSpendFrame,
@@ -3054,6 +3058,7 @@ function _ftReadSurgeOneShots(actor, { context = "strike" } = {}) {
     crowningBlow:   false,
     finalArgument:  false,
     tierSurge:      false,
+    echoStrike:     false,
     surgingCast:    false,
     ironWord:       false,
     wrathCascade:   false,
@@ -3068,6 +3073,7 @@ function _ftReadSurgeOneShots(actor, { context = "strike" } = {}) {
     if (has("crowning-blow"))   { out.crowningBlow  = true; out.consumed.push("crowning-blow"); }
     if (has("final-argument"))  { out.finalArgument = true; out.consumed.push("final-argument"); }
     if (has("tier-surge"))      { out.tierSurge     = true; out.consumed.push("tier-surge"); }
+    if (has("echo-strike"))     { out.echoStrike    = true; out.consumed.push("echo-strike"); }
   } else if (context === "cast") {
     if (has("surging-cast"))    { out.surgingCast   = true; out.consumed.push("surging-cast"); }
     if (has("tier-surge"))      { out.tierSurge     = true; out.consumed.push("tier-surge"); }
@@ -3126,6 +3132,7 @@ const _FT_SURGE_LABELS = {
   "crowning-blow":  "Crowning Blow (max-die)",
   "final-argument": "Final Argument (auto-hit · max · +1 Tier)",
   "tier-surge":     "Tier Surge (+1 Tier)",
+  "echo-strike":    "Echo Strike (free, −2)",
   "surging-cast":   "Surging Cast (explodes 9–10)",
   "iron-word":      "Iron Word (auto-pass)",
   "wrath-cascade":  "Wrath Cascade (+2d10 free)",
@@ -3311,6 +3318,23 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     }
   }
 
+  // Single-ally-targeted buffs need a target; proximity buffs need the
+  // caster's token on the scene. Pre-validate so we don't charge for nothing.
+  if (effectKey === "aegis" || effectKey === "anchor") {
+    const t = Array.from(game.user?.targets ?? [])[0];
+    if (!t?.actor) {
+      ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target ally — target a token first, then re-open the menu.`);
+      return;
+    }
+  }
+  if (effectKey === "bulwark-stance" || effectKey === "mass-aegis") {
+    const myToken = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+    if (!myToken) {
+      ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs your token on the scene.`);
+      return;
+    }
+  }
+
   // Pre-prompt for damage type on steel-veil / sanctum so we can refund
   // (don't-charge) on cancel. Type stored locally; AE built after charge.
   let chosenType = null;
@@ -3326,6 +3350,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   // immediately via short-duration Active Effects + flag markers that the
   // damage-apply path reads. No oneShot flag — the AE itself is the contract.
   const SPEND_TIME_AE = new Set(["brace", "mythic-stand", "steel-veil", "sanctum"]);
+  // Ally-targeted / proximity AEs (cross-actor; relays to GM for unowned allies).
+  const ALLY_AE = new Set(["aegis", "anchor", "bulwark-stance", "mass-aegis"]);
 
   // Wired heals.
   let chatExtra = "";
@@ -3333,6 +3359,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
     chatExtra = await _ftSurgeApplyDefenseAE(actor, effectKey, tier, chosenType);
+  } else if (ALLY_AE.has(effectKey)) {
+    chatExtra = await _ftSurgeApplyAllyAE(actor, effectKey, tier);
   } else {
     // Flag-and-narrate path: stamp one-shot flag for consumers + GM to enforce.
     try {
@@ -3342,6 +3370,13 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
         appliedAt: Date.now()
       });
     } catch (e) { /* flag write failed — silent, chat card still posts */ }
+    // Echo Strike also grants a free action so the bonus Strike costs nothing.
+    if (effectKey === "echo-strike") {
+      try {
+        await actor.setFlag("fourththing", "bonusActionAvailable", true);
+        await actor.update({ "system.actions.bonusUsed": false });
+      } catch (e) { /* non-owner — GM grants manually */ }
+    }
   }
 
   const bucketBadge = entry.bucket === "off"  ? '<span style="color:#dc5050">⚔ Offense</span>'
@@ -3349,24 +3384,24 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
                     : entry.bucket === "heal" ? '<span style="color:#78c88c">✚ Heal</span>'
                     :                           '<span style="color:#e8c84a">✦ Narrative</span>';
 
-  // Footer hint: heal/AE are immediate; auto-consumed one-shots are read by
-  // Strike/Cast/Save paths; the remaining keys are deferred (GM enforces).
+  // Footer hint: heal/AE/ally-AE are immediate; auto-consumed one-shots are
+  // read by Strike/Cast/Save paths; the remaining keys are deferred (GM enforces).
   const AUTO_CONSUMED_KEYS = new Set([
     "snap-strike", "sundering-blow", "doomstrike", "crowning-blow", "final-argument",
-    "tier-surge", "surging-cast", "iron-word", "wrath-cascade", "cinderwake"
+    "tier-surge", "surging-cast", "iron-word", "wrath-cascade", "cinderwake", "echo-strike"
   ]);
   const GM_DEFERRED_KEYS = new Set([
-    "aegis", "bulwark-stance", "anchor", "mass-aegis", "echo-strike",
     "narrative-refund", "narrative-fiction"
   ]);
   let footerHint = "";
-  if (entry.wired || SPEND_TIME_AE.has(effectKey)) {
+  if (entry.wired || SPEND_TIME_AE.has(effectKey) || ALLY_AE.has(effectKey)) {
     footerHint = ""; // immediate effect, no further enforcement needed
   } else if (AUTO_CONSUMED_KEYS.has(effectKey)) {
     const where = (effectKey === "iron-word") ? "next save"
                : (effectKey === "surging-cast") ? "next Cast"
                : (effectKey === "wrath-cascade" || effectKey === "cinderwake") ? "next d10 roll"
                : (effectKey === "tier-surge") ? "next Strike or Cast"
+               : (effectKey === "echo-strike") ? "next (free) Strike at −2"
                : "next Strike";
     footerHint = ` Auto-consumed on your ${where}.`;
   } else if (GM_DEFERRED_KEYS.has(effectKey)) {
@@ -3587,6 +3622,158 @@ async function _ftSurgeApplyDefenseAE(actor, effectKey, tier, chosenType) {
   return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">
     🛡 ${what} · ${dur}.
   </p>`;
+}
+
+// Create an Active Effect on an ally. Direct create when the spender owns the
+// ally; otherwise relay to an active GM over the system socket (mirrors the
+// ft-applyDamage pattern — players can't write to GM-owned NPC allies). Returns
+// true if applied or relayed, false if neither was possible.
+async function _ftCreateAllyAE(ally, aeData) {
+  if (!ally || !aeData) return false;
+  if (ally.isOwner) {
+    try { await ally.createEmbeddedDocuments("ActiveEffect", [aeData]); return true; }
+    catch (e) { /* fall through to relay */ }
+  }
+  if (game.users?.some?.(u => u.isGM && u.active)) {
+    game.socket?.emit?.("system.fourththing", { t: "ft-applySurgeAE", actorId: ally.id, aeData });
+    return true;
+  }
+  ui.notifications?.warn(`No GM online — couldn't buff ${ally.name}.`);
+  return false;
+}
+
+// Read an actor's current defense trio (guard/evasion/resolve) from the
+// derived store. Used by Bulwark Stance to share the higher value.
+function _ftReadDefTrio(actor) {
+  const sys = actor?.system?.system ?? actor?.system ?? {};
+  return {
+    guard:   Number(sys?.derived?.guard?.value)   || 10,
+    evasion: Number(sys?.derived?.evasion?.value) || 10,
+    resolve: Number(sys?.derived?.resolve?.value) || 10
+  };
+}
+
+// Ally-targeted / proximity defense buffs. aegis (1 target, flat DR=Tier),
+// anchor (self + 1 target, CC/forced-move immunity marker), bulwark-stance
+// (adjacent allies share the higher of caster's defenses), mass-aegis (allies
+// within Tier squares, +Tier to all defenses). Returns a chat fragment.
+async function _ftSurgeApplyAllyAE(caster, effectKey, tier) {
+  const grid    = canvas.grid?.size ?? 100;
+  const myToken = caster.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+
+  // Center-to-center distance in pixels between two tokens.
+  const dist = (a, b) => {
+    const ax = a.x + (a.document?.width  || 1) * grid / 2;
+    const ay = a.y + (a.document?.height || 1) * grid / 2;
+    const bx = b.x + (b.document?.width  || 1) * grid / 2;
+    const by = b.y + (b.document?.height || 1) * grid / 2;
+    return Math.hypot(ax - bx, ay - by);
+  };
+
+  // ── aegis: single target, flat damage reduction = Tier for 1 round ──
+  if (effectKey === "aegis") {
+    const tok = Array.from(game.user?.targets ?? [])[0];
+    if (!tok?.actor) return "";
+    const ae = {
+      name: `Surge: Aegis (DR ${tier})`,
+      img: "icons/svg/shield.svg",
+      origin: caster.uuid,
+      duration: { rounds: 1 },
+      changes: [],
+      flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } }
+    };
+    const ok = await _ftCreateAllyAE(tok.actor, ae);
+    return ok
+      ? `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 <b>${tok.actor.name}</b> gains DR ${tier} this round.</p>`
+      : "";
+  }
+
+  // ── anchor: self + 1 target, CC + forced-move immunity marker, 1 round ──
+  if (effectKey === "anchor") {
+    const tok = Array.from(game.user?.targets ?? [])[0];
+    const buildAE = () => ({
+      name: "Surge: Anchor (CC/forced-move immune)",
+      img: "icons/svg/anchor.svg",
+      origin: caster.uuid,
+      duration: { rounds: 1 },
+      changes: [],
+      flags: { fourththing: { surge: { kind: "anchor", ccImmune: true, forcedMoveImmune: true } } }
+    });
+    const names = [];
+    try { await caster.createEmbeddedDocuments("ActiveEffect", [buildAE()]); names.push(caster.name); }
+    catch (e) { /* non-owner self — unlikely */ }
+    if (tok?.actor && tok.actor.id !== caster.id) {
+      const ok = await _ftCreateAllyAE(tok.actor, buildAE());
+      if (ok) names.push(tok.actor.name);
+    }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">
+      ⚓ ${names.map(n => `<b>${n}</b>`).join(" + ")} immune to forced movement / crowd-control till next round.
+      <span style="opacity:0.65;font-style:italic"> (GM honors the marker when applying CC.)</span>
+    </p>`;
+  }
+
+  // ── bulwark-stance: adjacent allies share the higher of caster's defenses ──
+  if (effectKey === "bulwark-stance") {
+    if (!myToken) return "";
+    const mine = _ftReadDefTrio(caster);
+    const allies = (canvas.tokens?.placeables ?? []).filter(t => {
+      if (!t?.actor || t.actor.id === caster.id) return false;
+      if ((t.document?.disposition ?? 0) < 0) return false;       // non-hostile only
+      return dist(t, myToken) <= grid * 1.5;                       // ~adjacent
+    });
+    const buffed = [];
+    for (const t of allies) {
+      const theirs = _ftReadDefTrio(t.actor);
+      const changes = [];
+      for (const k of ["guard", "evasion", "resolve"]) {
+        const delta = Math.max(0, mine[k] - theirs[k]);
+        if (delta > 0) changes.push({ key: `system.derived.${k}.value`, mode: 2, value: String(delta), priority: 20 });
+      }
+      if (!changes.length) continue;  // ally already as good or better
+      const ok = await _ftCreateAllyAE(t.actor, {
+        name: "Surge: Bulwark Stance",
+        img: "icons/svg/shield.svg",
+        origin: caster.uuid,
+        duration: { rounds: 1, turns: 1 },
+        changes,
+        flags: { fourththing: { surge: { kind: "bulwark-stance" } } }
+      });
+      if (ok) buffed.push(t.actor.name);
+    }
+    return buffed.length
+      ? `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Adjacent allies share your stance (G ${mine.guard}/E ${mine.evasion}/R ${mine.resolve}): ${buffed.map(n => `<b>${n}</b>`).join(", ")}.</p>`
+      : `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ No adjacent ally benefited (none nearby or all already better-defended).</p>`;
+  }
+
+  // ── mass-aegis: allies within Tier squares, +Tier to all defenses, 1 round ──
+  if (effectKey === "mass-aegis") {
+    if (!myToken) return "";
+    const rangePx = tier * grid;
+    const allies = (canvas.tokens?.placeables ?? []).filter(t => {
+      if (!t?.actor) return false;
+      if (t.actor.id === caster.id) return true;                  // include self
+      if ((t.document?.disposition ?? 0) < 0) return false;
+      return dist(t, myToken) <= rangePx + grid / 2;
+    });
+    const buffed = [];
+    for (const t of allies) {
+      const ok = await _ftCreateAllyAE(t.actor, {
+        name: `Surge: Mass Aegis (+${tier})`,
+        img: "icons/svg/mage-shield.svg",
+        origin: caster.uuid,
+        duration: { rounds: 1 },
+        changes: ["guard", "evasion", "resolve"].map(k =>
+          ({ key: `system.derived.${k}.value`, mode: 2, value: String(tier), priority: 20 })),
+        flags: { fourththing: { surge: { kind: "mass-aegis" } } }
+      });
+      if (ok) buffed.push(t.actor.name);
+    }
+    return buffed.length
+      ? `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 +${tier} to all defenses within ${tier} sq: ${buffed.map(n => `<b>${n}</b>`).join(", ")}.</p>`
+      : `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ No allies within ${tier} squares.</p>`;
+  }
+
+  return "";
 }
 
 // Guard/Evasion/Resolve. All actor types now populate `derived.<key>.value`
@@ -6326,6 +6513,18 @@ function ftComputeDefenses(actor, sys) {
     if (validConds.has(k)) condImmunes.add(k);
   }
 
+  // Class-identity baseline resistances (Phase 1.5 canon).
+  //   Soul-Smith T3 (Furnace of Renewal): resistance to poison + necrotic.
+  // Encoded here so canon survives compendium edits and doesn't require a
+  // managed AE to be present on every Soul-Smith actor.
+  const _ssCls = actor?.items?.find?.(it => it.type === "class" && (it.system?.identifier === "soul-smith" || it.system?.identifier === "soul_smith"));
+  if (_ssCls) {
+    const _ssTier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+    if (_ssTier >= 3) {
+      _ftMergeEntries(resistMap, ["poison", "necrotic"], validTypes);
+    }
+  }
+
   if (actor?.items) {
     for (const item of actor.items) {
       const grants     = item.flags?.fourththing?.grants;
@@ -7988,7 +8187,7 @@ Hooks.once("init", function () {
       openSpendFrameDie, openFrameDiePool,
       openAurabladeAction, openChangeAura, openStabilizeBurn, openBurnState,
       openSpendAccessDie, openAccessPool,
-      openBreakerRuin, openDreamwalkerResonance, openDreamwalkerDeployCache, openDreamwalkerEchoReservoir, openDreamwalkerSpendEchoDie, openSoulSmithForge, openPassiveClassInfo,
+      openBreakerRuin, openDreamwalkerResonance, openDreamwalkerDeployCache, openDreamwalkerEchoReservoir, openDreamwalkerSpendEchoDie, openSoulSmithForge, openSoulSmithForgeInitiate, openSoulSmithAtonementCrucible, openSoulSmithFurnaceOfRenewal, openSoulSmithRelicOfRebirth, openPassiveClassInfo,
       // Sprint F
       openBulwarkSpendFrame, openBulwarkFramePool, openBulwarkRuin, openBulwarkStance,
       openShadowCourierPackage, openShadowCourierCrossing, openShadowCourierPassive,
@@ -9076,9 +9275,11 @@ Hooks.once("init", function () {
     const _surge = _ftReadSurgeOneShots(actor, { context: "strike" });
     const tierVal = _ftCasterTier(actor);
     const tierBonus = (_surge.tierSurge || _surge.finalArgument) ? tierVal : 0;
+    // Echo Strike: this free Strike takes a −2 accuracy penalty.
+    const echoPenalty = _surge.echoStrike ? 2 : 0;
 
     const flankMod  = Math.max(0, Number(flankBonus) || 0);
-    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus;
+    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus - echoPenalty;
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; two
     // base 10s also flag "Act Again" so the sheet exposes the bonus action.
     const baseFormula = `2d10x10 + ${total_mod}`;
@@ -9258,7 +9459,7 @@ Hooks.once("init", function () {
     // flags.fourththing.surge.kind for invulnerability / type-immunity /
     // type-resist. The AE itself expires via Foundry's duration system after
     // 1 round/turn, so no manual cleanup is needed.
-    let surgeImmune = false, surgeResist = false;
+    let surgeImmune = false, surgeResist = false, surgeDrFlat = 0;
     const surgeTags = [];
     for (const ae of (actor.appliedEffects ?? actor.effects ?? [])) {
       if (ae.disabled) continue;
@@ -9279,6 +9480,8 @@ Hooks.once("init", function () {
           surgeResist = true;
           surgeTags.push(`Steel Veil: resist ${FT.DAMAGE_TYPES[t]?.label ?? t}`);
         }
+      } else if (kind === "aegis") {
+        surgeDrFlat += Number(ae.flags?.fourththing?.surge?.drFlat) || 0;
       }
     }
 
@@ -9317,8 +9520,14 @@ Hooks.once("init", function () {
       // Untyped damage with a Steel Veil on the actor — Veil only triggers
       // when the type matches, so no-op here.
     }
+    // Aegis flat damage reduction — applied after the multiplier, before write.
+    let dmg = Math.floor(scaled * defMult);
+    if (surgeDrFlat > 0 && dmg > 0 && !surgeImmune) {
+      const reduced = Math.min(dmg, surgeDrFlat);
+      dmg -= reduced;
+      tags.push(`Aegis DR −${reduced}`);
+    }
     const defenseTag = tags.length ? ` (${tags.join(", ")})` : "";
-    const dmg = Math.floor(scaled * defMult);
 
     if (track === "radiation") {
       const cur = rawSys?.radiation?.rp ?? 0;
@@ -12096,6 +12305,26 @@ Hooks.once("init", function () {
           && actor.flags.fourththing.pactkeeperL1Picks.length === 2
       } : null;
 
+      // Soul-Smith state (Phase 1.5 canon: T1 Forge Initiate / T2 Atonement
+      // Crucible / T3 Furnace of Renewal / T4 Relic of Rebirth). Tier-gates
+      // surface the right buttons per character level.
+      const _ssClsItem = Array.from(actor.items).find(it => it.type === "class" && (it.system?.identifier === "soul-smith" || it.system?.identifier === "soul_smith"));
+      const _ssTier = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
+      const _ssFlags = actor.flags?.fourththing?.soulSmith ?? {};
+      const soulSmithState = _ssClsItem ? {
+        tier:                  _ssTier,
+        tierAtLeast2:          _ssTier >= 2,
+        tierAtLeast3:          _ssTier >= 3,
+        tierAtLeast4:          _ssTier >= 4,
+        l1GrantsApplied:       !!_ssFlags.l1GrantsApplied,
+        atonementUsedThisArc:  !!_ssFlags.atonementUsedThisArc,
+        atonementStatus:       _ssFlags.atonementUsedThisArc ? "used" : "ready",
+        relicUsed:             !!_ssFlags.relicUsed,
+        statusLine: _ssTier >= 3
+          ? "Furnace active — poison + necrotic resistance."
+          : (_ssTier >= 2 ? "Atonement Crucible online." : "Forge Initiate active.")
+      } : null;
+
       // Death & Dying: surface Last Stand pips + Blood Debt ledger so the
       // template renders without inline date math or pip arithmetic.
       const lastStandRaw = sysData.lastStand ?? { active: false, successes: 0, failures: 0, ledger: [] };
@@ -12148,6 +12377,7 @@ Hooks.once("init", function () {
         wyrdlensState,
         dreamwalkerState,
         pactkeeperState,
+        soulSmithState,
         sigModePills,
         actions:       { actionUsed: actions.actionUsed ?? false,
                          bonusUsed:  actions.bonusUsed  ?? false,
@@ -13166,8 +13396,8 @@ Hooks.once("init", function () {
           <tbody>${rowsHtml}</tbody>
         </table>
         <p style="font-size:0.68rem;opacity:0.55;margin:0.6rem 0 0;font-style:italic">
-          Heals write directly to integrity. Other effects set a one-shot flag at
-          <code>flags.fourththing.surge.oneShot.&lt;key&gt;</code> + post a chat card; GM enforces consumption.
+          Heals + defense buffs apply immediately; Strike/Cast/Save boosts auto-consume on your next roll.
+          Refund &amp; Reshape Fiction remain GM-adjudicated.
         </p>
       </div>`;
 
@@ -13383,7 +13613,11 @@ Hooks.once("init", function () {
         // dream_echo_reservoir_spend (plural — wired to Spend button).
         dream_echo_reservoir:         (a) => mod.openDreamwalkerEchoReservoir(a),
         dream_echo_reservoir_spend:   (a) => mod.openDreamwalkerSpendEchoDie(a),
-        soul_smith_forge:      (a) => mod.openSoulSmithForge(a),
+        soul_smith_forge:                 (a) => mod.openSoulSmithForge(a),
+        soul_smith_forge_initiate:        (a) => mod.openSoulSmithForgeInitiate(a),
+        soul_smith_atonement_crucible:    (a) => mod.openSoulSmithAtonementCrucible(a),
+        soul_smith_furnace_of_renewal:    (a) => mod.openSoulSmithFurnaceOfRenewal(a),
+        soul_smith_relic_of_rebirth:      (a) => mod.openSoulSmithRelicOfRebirth(a),
         // Sprint F — Bulwark
         bulwark_spend_frame:   (a) => mod.openBulwarkSpendFrame(a),
         bulwark_frame_pool:    (a) => mod.openBulwarkFramePool(a),
@@ -14337,6 +14571,21 @@ Hooks.once("init", function () {
         } : null
       } : null;
 
+      // Soul-Smith state for NPC sheet (mirrors char-sheet builder).
+      const _ssClsItem2 = classItems.find(i => i.type === "class" && (i.system?.identifier === "soul-smith" || i.system?.identifier === "soul_smith"));
+      const _ssTier2 = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
+      const _ssFlags2 = actor.flags?.fourththing?.soulSmith ?? {};
+      const soulSmithState = _ssClsItem2 ? {
+        tier:                  _ssTier2,
+        tierAtLeast2:          _ssTier2 >= 2,
+        tierAtLeast3:          _ssTier2 >= 3,
+        tierAtLeast4:          _ssTier2 >= 4,
+        l1GrantsApplied:       !!_ssFlags2.l1GrantsApplied,
+        atonementUsedThisArc:  !!_ssFlags2.atonementUsedThisArc,
+        atonementStatus:       _ssFlags2.atonementUsedThisArc ? "used" : "ready",
+        relicUsed:             !!_ssFlags2.relicUsed
+      } : null;
+
       const actorIsTCC = isTCC(actor);
 
       const attributeRows = Object.entries(sysData.attributes ?? {}).map(([key, a]) => ({
@@ -14467,6 +14716,7 @@ Hooks.once("init", function () {
         cosmicLinguistState,
         dreamwalkerState,
         pactkeeperState,
+        soulSmithState,
         burnBand:  _abBurnBand,
         auraState: _abAuraState,
         auraData:  _abAuraData,
@@ -20677,6 +20927,15 @@ function _ftRelayHandler(msg) {
         ignoreResists: !!msg.ignoreResists
       }).then(desc => { if (desc) ui.notifications.info(desc); })
         .catch(e => console.warn("[fourththing] GM-relay damage apply failed", e));
+    } else if (msg?.t === "ft-applySurgeAE") {
+      // 2026-05-23 — Players can't write AEs to GM-owned NPC allies. Surge
+      // ally-buffs (Aegis / Anchor / Bulwark Stance / Mass Aegis) relay here
+      // so the GM applies the Active Effect on their behalf.
+      if (_ftRelaySeenRecently(`surgeAE:${msg.actorId}:${msg.aeData?.name ?? ""}`)) return;
+      const actor = game.actors?.get(msg.actorId);
+      if (!actor || !msg.aeData) return;
+      actor.createEmbeddedDocuments("ActiveEffect", [msg.aeData])
+        .catch(e => console.warn("[fourththing] GM-relay Surge AE apply failed", e));
     }
   } catch (e) {
     console.error("[ft:relay] handler threw", e);
