@@ -797,5 +797,92 @@
         "activityKey": "establish_siege_camp"
       }
     }
+  },
+  {
+    "name": "Interdict Supply Line [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Intrigue / Espionage",
+        "opCosts": {
+          "intrigue": 15,
+          "violence": 10
+        },
+        "effects": {
+          "text": "Cut a supply-path hex feeding an enemy siege. Strips the hex's 'Supply Line' modifier (severs the route until restored) and lands an immediate harassment pulse: the besieger's Supply Buffer is shaved and per-turn attrition rises. Any faction except the besieger may interdict. Target the supply-road hex, not the besieged hex."
+        },
+        "minFactionTier": 1,
+        "activityKey": "interdict_supply_line",
+        "siegeThreatVector": true
+      }
+    }
+  },
+  {
+    "name": "Escort Supply Line [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Violence / Military",
+        "opCosts": {
+          "violence": 10,
+          "logistics": 10
+        },
+        "effects": {
+          "text": "Screen your own siege's supply convoy. Adds one escort pip; each pip cancels one enemy interdiction at the next strategic tick and deters defender sorties (escort-protected hexes inflict heavier sortie casualties on the defender). Played by the besieger or a supporter. Target the siege's supply-road hex or the besieged hex."
+        },
+        "minFactionTier": 1,
+        "activityKey": "escort_supply_line",
+        "siegeThreatVector": true
+      }
+    }
+  },
+  {
+    "name": "Counter-Interdict [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Violence / Military",
+        "opCosts": {
+          "violence": 10,
+          "intrigue": 10
+        },
+        "effects": {
+          "text": "Clear an enemy interdiction from one of your siege's supply-path hexes. Restores the stripped 'Supply Line' modifier and lowers this turn's harassment. Played by the besieger or a supporter. Target the interdicted supply-road hex."
+        },
+        "minFactionTier": 1,
+        "activityKey": "counter_interdict",
+        "siegeThreatVector": true
+      }
+    }
+  },
+  {
+    "name": "Sortie [T1]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 1,
+        "rarity": "uncommon",
+        "category": "Violence / Military",
+        "opCosts": {
+          "violence": 20
+        },
+        "effects": {
+          "text": "Defender sallies out to strike an adjacent attacker supply hex. Severs the 'Supply Line' modifier and shaves 15 OP from the besieger's Buffer. Risk: 1d4 of your own garrison holdings are lost (+2 if the hex is escort-protected). Played by the besieged faction. Target the attacker's supply-road hex."
+        },
+        "minFactionTier": 1,
+        "activityKey": "sortie",
+        "siegeThreatVector": true
+      }
+    }
   }
 ]

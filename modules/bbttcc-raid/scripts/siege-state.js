@@ -123,8 +123,16 @@
       isNavalSupply,
       perTurnDrain: {},
       conditionsBreakdown: {},
+      // ---- Threat-vector state (Phase C) ----
+      // Per-turn pulse counters — netted + reset each strategic tick.
       interdictionsThisTurn: 0,
       escortPipsThisTurn: 0,
+      // Persistent severance bookkeeping: path hexes whose "Supply Line" modifier
+      // has been stripped by Interdict/Sortie and not yet Counter-Interdicted.
+      // Survives across turns until restored or the siege resolves.
+      interdictedHexIds: [],
+      // Running tally of defender holdings lost to Sorties (outcome bookkeeping; Phase E/F roster write-back).
+      sortieCasualtiesTotal: 0,
       reliefWaves: [],
       attackerChampions: attackerChampions.slice(),
       defenderChampions: defenderChampions.slice(),
@@ -334,6 +342,63 @@
     return "generic";
   }
 
+  // ---- Threat-vector helpers (Phase C) ----
+
+  /**
+   * Find active sieges whose supply path includes the given hex.
+   * Threat vectors (Interdict / Counter-Interdict / Sortie) target a SUPPLY-PATH hex,
+   * which may serve more than one concurrent siege.
+   * @param {string} hexUuid
+   * @param {object} [opts]
+   * @param {boolean} [opts.includeTarget=false] include sieges where the hex IS the besieged target
+   * @param {boolean} [opts.interdictedOnly=false] only sieges already listing the hex in interdictedHexIds
+   * @returns {Array<{hexUuid, hexName, sceneId, siege}>}
+   */
+  function findSiegesUsingHex(hexUuid, { includeTarget = false, interdictedOnly = false } = {}){
+    if (!hexUuid) return [];
+    return listActiveSieges().filter(entry => {
+      const s = entry.siege;
+      if (!s) return false;
+      if (interdictedOnly) return (s.interdictedHexIds || []).includes(hexUuid);
+      const onPath = (s.supplyPathHexIds || []).includes(hexUuid);
+      if (!onPath) return false;
+      // Exclude the besieged hex itself (the path endpoint) unless explicitly requested —
+      // you can't interdict a supply line at its destination.
+      if (!includeTarget && entry.hexUuid === hexUuid) return false;
+      return true;
+    });
+  }
+
+  /**
+   * Round-robin shave of OP from a buffer object across its non-empty categories.
+   * Mirrors siege-tick.js::_drainBuffer so threat vectors and the tick deduct identically.
+   * Mutates `buffer` in place. Returns { shaved, remaining, deducted }.
+   */
+  function shaveBuffer(buffer, amount){
+    const deducted = { violence: 0, logistics: 0, economy: 0, softPower: 0, diplomacy: 0, faith: 0, intrigue: 0 };
+    let remaining = Math.max(0, Number(amount) || 0);
+    const want = remaining;
+    const categories = Object.keys(buffer || {}).filter(k => buffer[k] > 0);
+    if (!categories.length) return { shaved: 0, remaining: want, deducted };
+    while (remaining > 0) {
+      let drewAny = false;
+      for (const cat of categories) {
+        if (buffer[cat] <= 0) continue;
+        buffer[cat] -= 1;
+        deducted[cat] += 1;
+        remaining -= 1;
+        drewAny = true;
+        if (remaining <= 0) break;
+      }
+      if (!drewAny) break;
+    }
+    return { shaved: want - remaining, remaining, deducted };
+  }
+
+  function bufferTotal(buffer){
+    return Object.values(buffer || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+  }
+
   // ---- Champion status change (cascade detail deferred to Phase F) ----
 
   async function applyChampionStatusChange({ siegeId, championId, newStatus, source = "manual", side = null }){
@@ -406,6 +471,11 @@
       snapshotChampions,
       applyChampionStatusChange,
 
+      // threat vectors (Phase C)
+      findSiegesUsingHex,
+      shaveBuffer,
+      bufferTotal,
+
       // misc
       pickEventDeck,
 
@@ -427,6 +497,7 @@
     getSiegeState, setSiegeState, clearSiegeState, listActiveSieges,
     validateDepot, bfsSupplyPath, snapshotChampions,
     applyChampionStatusChange, pickEventDeck,
+    findSiegesUsingHex, shaveBuffer, bufferTotal,
     hexOwner, hexModifiers, hexTerrainKey, hexHoldings,
     hexStructureActorIds, hexHasActiveSiege,
     isFactionActor,

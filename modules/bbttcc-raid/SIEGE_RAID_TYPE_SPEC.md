@@ -1,6 +1,6 @@
 # SIEGE_RAID_TYPE_SPEC.md
 
-**Status:** SIGNED OFF 2026-05-22 — Phase A in progress
+**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C SHIPPED 2026-05-22/23 (Phase D next)
 **Parent specs:**
 - `bbttcc-structures/STRUCTURE_DAMAGE_SPEC.md` (SIGNED OFF 2026-05-20; Phases A+B+B.9+C+D SHIPPED 2026-05-21)
 - `bbttcc-raid/COURTLY_INTRIGUE_SPEC.md` (SIGNED OFF 2026-05-20; ALL PHASES SHIPPED 2026-05-21)
@@ -676,12 +676,21 @@ Read-only mirror of GM HUD:
 - New file: `bbttcc-raid/scripts/siege-tick.js`, `siege-supply-bfs.js`
 - **LOC est: ~500**
 
-### Phase C — Threat vectors (Interdict / Escort / Counter-Interdict / Sortie)
-- 4 new activities + handlers
-- Interdiction state on siege + Buffer shave
-- Path-hex modifier strip + restore via `turn.pending`
-- Sortie defender-side flow
-- **LOC est: ~350**
+### Phase C — Threat vectors (Interdict / Escort / Counter-Interdict / Sortie) — ✅ SHIPPED 2026-05-23
+- 4 new activities + handlers → `scripts/siege-threat-vectors.js` (dual-registered ST + EFFECTS, mirrors begin_siege)
+- Interdiction state on siege: persistent `interdictedHexIds[]` + per-turn `interdictionsThisTurn`/`escortPipsThisTurn` pulse counters; `sortieCasualtiesTotal` tally. Buffer shave via shared `shaveBuffer()` round-robin (siege-state.js).
+- Path-hex modifier strip + restore via `turn.pending.repairs.removeModifiers`/`addModifiers` (territory `resolution-engine.js` honored; strip/restore each cancel a queued opposite on the same hex+turn).
+- Tick consumer (siege-tick.js step 0 + reset): escort pips net against interdiction pulses each tick, then both pulse counters reset; persistent severance stays via stripped Supply Line + `interdictedHexIds`.
+- Sortie defender-side flow: sever + Buffer −15 + 1d4 casualties (+2 if escort-protected). **Garrison roster write-back deferred to Phase E** (Phase C records casualty count on `sortieCasualtiesTotal` + war log).
+- Role guards: attacker can't interdict/sortie own siege; escort/counter restricted to attacker-side. New hooks: `bbttcc:siege:interdicted`/`escortPosted`/`counterInterdicted`/`sortie`.
+- Selftest: `tools/siege-phase-c-selftest.macro.js` (8 sections — API surface · registries · catalog · schema · shaveBuffer math · findSiegesUsingHex · netting formula · interdict↔counter round-trip).
+- **Catalog**: 4 entries appended to `data/bbttcc_activities_v1_4.json` (now 46 total). All T1, flagged `siegeThreatVector`.
+- **LOC est: ~350** (delivered ~440 across siege-threat-vectors.js + siege-state.js + siege-tick.js + selftest)
+
+#### Phase C deferred sub-features
+- **Garrison casualty write-back** — sortie records count only; physical holding removal is Phase E (defender activities + roster semantics).
+- **Hex-granular escort protection** — escort pips are siege-level; the sortie penalty checks `escortPipsThisTurn > 0` on the siege rather than per-hex. Per-hex escort tracking deferred.
+- **Planner hints for threat vectors** — they use the standard hex picker; no dedicated picker UI (which path hex feeds which siege) yet. Phase D/A.6 candidate.
 
 ### Phase D — Tactical Convene Breach Scene + Champion Duel maneuver
 - Siege HUD "Convene" button + auto-suggest pip

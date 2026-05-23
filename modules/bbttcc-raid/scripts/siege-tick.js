@@ -152,6 +152,23 @@
 
     const turn = _currentTurn();
 
+    // ---- 0. Phase C: net escort pips against interdiction pulses ----
+    // Each escort pip cancels one interdiction harassment pulse this tick.
+    // (Persistent severance is handled separately via stripped Supply Line modifiers / interdictedHexIds.)
+    const rawInterdictions = state.interdictionsThisTurn || 0;
+    const escortPips = state.escortPipsThisTurn || 0;
+    const cancelled = Math.min(rawInterdictions, escortPips);
+    if (cancelled > 0) {
+      S.appendNarrativeBeat(state, {
+        turn,
+        kind: "escort_cancel",
+        title: `${cancelled} interdiction(s) repelled by escort`,
+        description: `Escort screens turned back ${cancelled} of ${rawInterdictions} interdiction pulse(s) this turn.`
+      });
+    }
+    // Drive harassment drain + harassed status off the NET value for this tick.
+    state.interdictionsThisTurn = Math.max(0, rawInterdictions - escortPips);
+
     // ---- 1+2. Recompute supply ----
     const allowedFactionIds = _allowedFactionIdsFor(state);
     const bfs = await S.bfsSupplyPath({
@@ -265,6 +282,12 @@
         payload: ev
       });
     }
+
+    // ---- Phase C: reset per-turn pulse counters for the next turn ----
+    // Interdiction/escort pulses are spent this tick; persistent severance lives in
+    // interdictedHexIds + the stripped Supply Line modifiers (which the BFS re-reads).
+    state.interdictionsThisTurn = 0;
+    state.escortPipsThisTurn = 0;
 
     // ---- 9. Persist + broadcast ----
     await S.setState(hexUuid, state);

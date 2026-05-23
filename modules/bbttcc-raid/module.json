@@ -92,6 +92,7 @@
     "scripts/effects-wilderness.enhancer.js",
     "scripts/effects-integration-activities.enhancer.js",
     "scripts/siege-throughput.js",
+    "scripts/siege-threat-vectors.js",
     "scripts/raid-infiltration.alarm.enhancer.js",
     "scripts/raid-courtly.influence.enhancer.js",
     "scripts/raid-courtly.secrets.api.js",
