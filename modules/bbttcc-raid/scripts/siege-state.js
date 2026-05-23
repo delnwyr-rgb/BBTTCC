@@ -141,6 +141,13 @@
       stormAssault: null,         // Storm Final Assault — { budgetMult, turn } consumed by the next convene
       pendingTerms: null,         // Sue for Terms / Demand Surrender — { type, turn, resolved }
       reliefWaves: [],
+      // ---- Pending faction-morale deltas (Phase E.3 → drained by Phase F) ----
+      // Morale changes that land MID-siege (e.g. a relief force repulsed → defender −1)
+      // have no siege-ending `bbttcc:siege:outcome` hook to apply them, so we accumulate
+      // them here as structured records. Phase F's outcome write-back drains this array
+      // IN ADDITION to the §8 outcome-matrix morale (which keys off the terminal status).
+      // Each entry: { factionId, delta, reason, turn }.
+      pendingMoraleDeltas: [],
       attackerChampions: attackerChampions.slice(),
       defenderChampions: defenderChampions.slice(),
       eventDeckId,
@@ -163,6 +170,18 @@
     if (Array.isArray(beat.actorIds)) out.actorIds = beat.actorIds.slice();
     if (beat.payload !== undefined) out.payload = beat.payload;
     state.narrativeBeats.push(out);
+    return state;
+  }
+
+  /**
+   * Record a pending faction-morale delta on the siege state (Phase E.3 → Phase F drains).
+   * For morale changes that land mid-siege (no terminal outcome hook to carry them).
+   * Mutates + returns state. `delta` is signed (−1 = lost a point of morale).
+   */
+  function recordMoraleDelta(state, { factionId, delta, reason = "", turn = null } = {}){
+    if (!factionId || !Number.isFinite(delta) || delta === 0) return state;
+    state.pendingMoraleDeltas = Array.isArray(state.pendingMoraleDeltas) ? state.pendingMoraleDeltas : [];
+    state.pendingMoraleDeltas.push({ factionId, delta, reason, turn });
     return state;
   }
 
@@ -461,6 +480,7 @@
       // schema + factories
       makeSiegeState,
       appendNarrativeBeat,
+      recordMoraleDelta,
       terrainModifier,
 
       // state CRUD
@@ -500,7 +520,7 @@
 
   // Expose internals to siege-throughput.js without going through public API
   globalThis.__bbttccSiegeState = {
-    makeSiegeState, appendNarrativeBeat, terrainModifier,
+    makeSiegeState, appendNarrativeBeat, recordMoraleDelta, terrainModifier,
     getSiegeState, setSiegeState, clearSiegeState, listActiveSieges,
     validateDepot, bfsSupplyPath, snapshotChampions,
     applyChampionStatusChange, pickEventDeck,

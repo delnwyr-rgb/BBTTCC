@@ -93,7 +93,9 @@
     const pct = start > 0 ? Math.round(100 * clamp(total, 0, start) / start) : 0;
     const atk = game.actors?.get?.(s.attackerFactionId);
     const interd = (s.interdictedHexIds || []).length;
-    const reliefPending = (s.reliefWaves || []).filter(w => !w.resolved).length;
+    const reliefWaves = (s.reliefWaves || []).filter(w => !w.resolved);
+    const reliefPending = reliefWaves.length;
+    const reliefArrived = reliefWaves.filter(w => w.arrived).length;
 
     // Auto-suggest pip — scaffold. Lit when state._suggestConvene is set (D.2 Bombard accrual
     // will toggle this); dim otherwise. Never auto-fires — convening stays a GM gesture.
@@ -101,10 +103,16 @@
     const pip = `<span title="${pipLit ? "Breach Scene suggested (Bombard accrual)" : "Convene when ready (GM gesture)"}" style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${pipLit ? BRONZE : "#333"};box-shadow:${pipLit ? `0 0 8px ${BRONZE}` : "none"};"></span>`;
 
     const canDuel = _champCounts(s.attackerChampions).active > 0 && _champCounts(s.defenderChampions).active > 0;
+    // Relief button only shows when a wave is in flight; it lights up once a wave has arrived.
+    const reliefBtn = reliefPending
+      ? `<button type="button" data-act="relieve" data-hex="${esc(entry.hexUuid)}" title="${reliefArrived ? "Convene the Relief Scene (relief has arrived)" : "Relief is still en route — convene early to pre-empt"}" style="flex:1;padding:3px 6px;background:#101a2a;color:${reliefArrived ? "#88bbff" : "#5a6a8a"};border:1px solid ${reliefArrived ? "#88bbff" : "#2a4a6a"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${reliefArrived ? "1" : "0.6"};box-shadow:${reliefArrived ? "0 0 8px rgba(136,187,255,0.5)" : "none"};">🛡 Relieve</button>`
+      : "";
     const gmBtns = isGM
-      ? `<div style="margin-top:.35rem;display:flex;gap:5px;">
+      ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;">
           <button type="button" data-act="convene" data-hex="${esc(entry.hexUuid)}" style="flex:2;padding:3px 6px;background:#2a2310;color:${BRONZE};border:1px solid ${BRONZE};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⚔ Convene</button>
           <button type="button" data-act="duel" data-hex="${esc(entry.hexUuid)}" title="${canDuel ? "Issue a Champion Duel" : "Needs an active champion on both sides"}" style="flex:1;padding:3px 6px;background:#2a2310;color:${canDuel ? "#ff9a9a" : "#7a6a4a"};border:1px solid ${canDuel ? "#ff9a9a" : "#5a4a2a"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${canDuel ? "1" : "0.55"};">Duel</button>
+          ${reliefBtn}
+          <button type="button" data-act="trojan" data-hex="${esc(entry.hexUuid)}" title="Trojan Horse (T4 Intrigue gambit)" style="flex:1;padding:3px 6px;background:#1a1530;color:#a78bfa;border:1px solid #6d5aa8;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">🐴 Trojan</button>
         </div>`
       : "";
 
@@ -125,7 +133,7 @@
       <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
         ${statusChip(`supply: ${supply}`, sc)}
         ${interd ? statusChip(`${interd} cut`, "#ff7a7a") : ""}
-        ${reliefPending ? statusChip(`relief ×${reliefPending}`, "#88bbff") : ""}
+        ${reliefArrived ? `<span style="font-size:0.66rem;padding:1px 5px;border:1px solid #88bbff;border-radius:8px;color:#cfe2ff;background:#101a2a;box-shadow:0 0 8px rgba(136,187,255,0.5);font-weight:600;">relief here ×${reliefArrived}</span>` : (reliefPending ? statusChip(`relief ×${reliefPending}`, "#88bbff") : "")}
         ${atk ? `<span style="font-size:0.66rem;color:#888;">vs ${esc(atk.name)}</span>` : ""}
       </div>
       <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:4px;">${_layersStrip(s)}</div>
@@ -215,6 +223,24 @@
         else ui.notifications?.warn?.("Champion Duel not available (siege-champion-duel.js not loaded?).");
       });
     });
+    el.querySelectorAll('button[data-act="relieve"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const hex = btn.dataset.hex;
+        const fn = game.bbttcc?.api?.siege?.conveneRelief;
+        if (typeof fn === "function") fn({ hexUuid: hex }).catch(e => { console.error(TAG, "conveneRelief failed", e); ui.notifications?.error?.("Convene Relief failed — see console."); });
+        else ui.notifications?.warn?.("Relief Scene not available (siege-relief.js not loaded?).");
+      });
+    });
+    el.querySelectorAll('button[data-act="trojan"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const hex = btn.dataset.hex;
+        const fn = game.bbttcc?.api?.siege?.openTrojanHorseDialog;
+        if (typeof fn === "function") fn({ hexUuid: hex });
+        else ui.notifications?.warn?.("Trojan Horse not available (siege-trojan-horse.js not loaded?).");
+      });
+    });
   }
 
   function _teardown() {
@@ -259,6 +285,13 @@
   Hooks.on("bbttcc:siege:championDuel", _scheduleRender);
   Hooks.on("bbttcc:siege:championStatus", _scheduleRender);
   Hooks.on("bbttcc:siege:championDeath", _scheduleRender);
+  Hooks.on("bbttcc:siege:reliefCalled", _scheduleRender);
+  Hooks.on("bbttcc:siege:reliefArrives", _scheduleRender);
+  Hooks.on("bbttcc:siege:reliefConvene", _scheduleRender);
+  Hooks.on("bbttcc:siege:reliefRepulsed", _scheduleRender);
+  Hooks.on("bbttcc:siege:trojanHorse", _scheduleRender);
+  Hooks.on("bbttcc:siege:trojanFailed", _scheduleRender);
+  Hooks.on("bbttcc:siege:outcome", _scheduleRender);
 
   function _install() {
     game.bbttcc = game.bbttcc || { api: {} };

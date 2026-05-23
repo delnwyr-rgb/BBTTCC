@@ -1,6 +1,6 @@
 # SIEGE_RAID_TYPE_SPEC.md
 
-**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** SHIPPED 2026-05-22/23; **E.1 (counter-activities) + E.2 (champions)** SHIPPED 2026-05-23 (E.3 Relief scene next).
+**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** · **E (COMPLETE: E.1 counter-activities + E.2 champions + E.3 Relief Force scene + E.4 Trojan Horse/Sinon)** SHIPPED 2026-05-22/23. **NEXT: Phase F — the big §8 outcome write-back** (incl. draining `pendingMoraleDeltas`), Event Deck content, Champion Death Cascade, player HUD.
 **Parent specs:**
 - `bbttcc-structures/STRUCTURE_DAMAGE_SPEC.md` (SIGNED OFF 2026-05-20; Phases A+B+B.9+C+D SHIPPED 2026-05-21)
 - `bbttcc-raid/COURTLY_INTRIGUE_SPEC.md` (SIGNED OFF 2026-05-20; ALL PHASES SHIPPED 2026-05-21)
@@ -740,10 +740,22 @@ Sub-phased E.1→E.4.
 - `computeDefenderBudget(hexUuid)` — Anytime budget = holdings (rig×1 + boss×2 + facility×0.5) + active champions×2 + wounded×1 + `defenderAnytimeBudget`. Exposed on API (console integration of the budget is a refinement).
 - Selftest extended (section 7 → 14 checks): module · API · `processChampionsTurn` lock-expiry + locked-wounded-skip (deterministic) · `championCandidates` ranking. module.json: after siege-champion-duel.js.
 
-**E.3 — Relief Force scene** (next): convene the relief tableau on wave arrival; attacker win → wave clears + Buffer −15 + defender −1 morale; loss → `lost_relieved`.
-**E.3 — Relief Force scene**: convene the relief tableau on wave arrival; attacker win → wave clears + Buffer −15 + defender −1 morale; loss → `lost_relieved`.
-**E.4 — Trojan Horse T4 + Sinon Mode**: 3-roll gate + champion-sacrifice multiplier.
-- **LOC est: ~600** (E.1 ≈ 310 delivered)
+**E.3 — Relief Force scene — ✅ SHIPPED 2026-05-23** (`scripts/siege-relief.js`, ~290 LOC)
+- `siege-tick.js` step 7 now MARKS the arriving wave (`wave.arrived=true`) on the state it's about to persist (single-writer-safe — not from a hook subscriber), lights `state._suggestReliefConvene`, and relays `bbttcc:siege:reliefArrives` for VFX. Arrival guard is `arrivesTurn <= turn` so a missed tick can't strand a wave.
+- `siege.conveneRelief({hexUuid, waveId?})` — GM gesture (Siege HUD "🛡 Relieve" button): open-field scene swap (`wave.sceneId`/`state.reliefSceneId`, console-only fallback) + `openConsole` with relief context + `bbttcc:siege:reliefConvene` (+relay) + resolution dialog. Mirrors the breach `convene()`.
+- Resolution dialog (mirrors the duel): roll (besiegers 1d20 vs relief 1d20, besiegers hold ties) / declared hold / declared break-through. `siege.resolveRelief({hexUuid, waveId?, outcome})` applies it:
+  - **attacker_won** → wave `resolved`+`outcome`; Buffer −15 (`shaveBuffer`); defender −1 morale via new `recordMoraleDelta` → `pendingMoraleDeltas[]` (drained by Phase F — relief-won has no terminal outcome hook to carry it); `bbttcc:siege:reliefRepulsed` (+relay); siege grinds on. `_suggestReliefConvene` re-points to the next arrived wave.
+  - **attacker_lost** → `status:"lost_relieved"` + `endedTurn`; `bbttcc:siege:outcome` (+relay; D.3 VFX palette already covers it). §8 morale (attacker −2 / relieving +1 / relationship) is **Phase F's** outcome write-back — NOT double-recorded here.
+- Schema: `pendingMoraleDeltas[]` added to `makeSiegeState`; `recordMoraleDelta(state,{factionId,delta,reason,turn})` helper exposed on API + internals. HUD: arrived-wave chip glows ("relief here ×N") + GM "🛡 Relieve" button (lit on arrival). VFX: `reliefArrives`/`reliefConvene`/`reliefRepulsed` BLUE/BRONZE banners + previewVfx kinds. module.json: after siege-champions.js. Selftest extended (section 8 → 20 checks).
+- **E.3 deferred**: relief-scene `sceneId` binding editor (planner Phase A.6; console-only fallback now); champion participation in the field battle (binary 1d20 now); distance-modulated `arrivesTurn` (still turn+2, shared with E.1).
+
+**E.4 — Trojan Horse T4 + Sinon Mode — ✅ SHIPPED 2026-05-23** (`scripts/siege-trojan-horse.js`, ~280 LOC) — **Phase E COMPLETE**
+- `siege.openTrojanHorseDialog({hexUuid?})` GM dialog (HUD "🐴 Trojan" button + catalog `apply()` + `STRATEGIC_THROUGHPUT.trojan_horse`). 3-roll gate, each 1d20 vs a GM-editable DC: **sneak** (default DC = 10 + active defender champions = the watching "Suspicion"), **sabotage** (Faith/Diplomacy flavor pick, DC 12), **breach** (Violence, DC 12).
+- **ALL pass** → every unbreached layer marked `breached`+`breachedBy:"trojan_horse"`, `currentLayerIdx`→last, `status:"won_trojan_horse"`+`endedTurn`; fires `bbttcc:siege:trojanHorse{success:true}` + `bbttcc:siege:outcome` (D.3 violet "Gates Open from Within" VFX already wired). **ANY fail** → `shaveBuffer(40)` then halve every remaining category (−50% forces) + attacker −2 morale (`recordMoraleDelta`→`pendingMoraleDeltas`, Phase F drains); fires `bbttcc:siege:trojanFailed` (new RED "Ruse is Undone" VFX); siege continues (next tick's Buffer-exhaustion check ends it if it hit 0).
+- **Sinon Mode** (optional): commit an active attacker Champion → `applyChampionStatusChange(...,"dead",...)` + `bbttcc:siege:championDeath` (+relay; Phase F cascade subscribes) fire IMMEDIATELY (as-if success — the champion dies whether or not the ruse then works) + "[name] enters the gates" beat/violet banner. In exchange: **+5 to all three rolls**, OR **auto-success on one roll** of the player's choice. Champion-sacrifice ordering is FIRST (persists the death) so the outcome write re-reads fresh state.
+- Catalog: `trojan_horse` T4 legendary Intrigue (Int40+D20+SP20) appended to `bbttcc_activities_v1_4.json` (55→56). VFX: `trojanHorse`/`trojanFailed` handlers + previewVfx kinds. HUD: GM "🐴 Trojan" button (row now `flex-wrap`). module.json after siege-relief.js. Selftest §9 (→27 checks). 6/6 node logic checks green (win/fail/sinon-all/sinon-auto + partial-fail).
+- **E.4 deferred**: faction-OP modifiers on the 3 rolls (pure 1d20+DC now, mirrors duel/relief); reading a live Courtly `Suspicion` meter for the sneak DC (uses champion-count proxy now — composability is Phase G).
+- **LOC est: ~600** (E.1 ≈ 310 + E.2 ≈ 210 + E.3 ≈ 290 + E.4 ≈ 280 delivered = ~1,090 across Phase E)
 
 ### Phase F — Outcomes write-back + Event Deck + Multiplayer Relay + VFX + War Log integration
 - 9-outcome detector + matrix write-back

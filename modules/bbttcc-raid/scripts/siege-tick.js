@@ -246,20 +246,29 @@
       // For Phase B we just mark status; the bookkeeping fires on next handler.
     }
 
-    // ---- 7. Resolve relief waves arriving this turn ----
-    let triggeredRelief = false;
+    // ---- 7. Resolve relief waves arriving this turn (Phase E.3 surfaces the prompt) ----
+    // The tick is the single writer per siege per turn, so the arrival is marked HERE
+    // (on the state we're about to persist) — not from a reliefArrives hook subscriber,
+    // which would race the step-9 persist below.
     for (const wave of (state.reliefWaves || [])) {
-      if (wave.resolved) continue;
-      if (wave.arrivesTurn === turn) {
-        // Phase E: GM convene relief scene. Phase B: just narrative beat + Hook.
+      if (wave.resolved || wave.arrived) continue;
+      // `<=` (not `===`) so a wave isn't silently skipped if a strategic tick was missed.
+      if ((wave.arrivesTurn ?? Infinity) <= turn) {
+        wave.arrived = true;
+        // Light the Siege HUD "🛡 Relieve" prompt — convening the relief scene stays a GM gesture.
+        state._suggestReliefConvene = wave.waveId;
+        const fromName = game.actors?.get?.(wave.callingFactionId)?.name || "an ally";
         S.appendNarrativeBeat(state, {
           turn,
           kind: "relief_arrival",
-          title: `Relief wave arrives from ${wave.callingFactionId || "ally"}`,
-          description: "GM should Convene Relief Scene (Phase E will surface the prompt)."
+          title: `Relief wave arrives from ${fromName}`,
+          description: "A relief force is on the open field. GM: convene the Relief Scene from the Siege HUD (🛡 Relieve).",
+          payload: { waveId: wave.waveId, callingFactionId: wave.callingFactionId }
         });
-        Hooks.callAll("bbttcc:siege:reliefArrives", { siegeId: state.siegeId, hexUuid, wave });
-        triggeredRelief = true;
+        const reliefPayload = { siegeId: state.siegeId, hexUuid, wave };
+        Hooks.callAll("bbttcc:siege:reliefArrives", reliefPayload);
+        // Relay so the arrival VFX banner plays on every client (the tick runs GM-only).
+        try { game.socket?.emit?.(`module.bbttcc-raid`, { t: "siegeHook", hook: "bbttcc:siege:reliefArrives", payload: reliefPayload }); } catch (_e) {}
       }
     }
 

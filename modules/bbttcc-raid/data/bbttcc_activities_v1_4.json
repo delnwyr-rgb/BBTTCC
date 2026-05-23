@@ -1037,5 +1037,22 @@
         "siegeCounterActivity": true
       }
     }
+  },
+  {
+    "name": "Trojan Horse [T4]",
+    "type": "feat",
+    "flags": {
+      "bbttcc": {
+        "kind": "strategic",
+        "tier": 4,
+        "rarity": "legendary",
+        "category": "Intrigue / Subterfuge",
+        "opCosts": { "intrigue": 40, "diplomacy": 20, "softPower": 20 },
+        "effects": { "text": "The T4 gambit at the gate: a 3-roll gate — sneak (Intrigue vs the defender's Suspicion), sabotage (Faith or Diplomacy), breach (Violence). All succeed and the final layer opens from within (won_trojan_horse); any fail and your forces are halved, Buffer drops 40, morale −2. Sinon Mode (optional): sacrifice an active Champion — they die regardless of the outcome, but every roll gains +5 OR one roll of your choice auto-succeeds, and their name binds to the saga forever. Resolve via the Siege HUD 🐴 Trojan button or game.bbttcc.api.siege.openTrojanHorseDialog. Target the besieged hex." },
+        "minFactionTier": 4,
+        "activityKey": "trojan_horse",
+        "siegeTrojanHorse": true
+      }
+    }
   }
 ]

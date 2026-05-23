@@ -169,10 +169,65 @@
     } catch (e) { console.warn(TAG, "championDuel vfx failed", e); }
   }
 
+  // Phase E.3 — Relief Force beats.
+  function _onReliefArrives(payload) {
+    _injectStylesOnce();
+    try {
+      const from = game.actors?.get?.(payload?.wave?.callingFactionId)?.name;
+      _banner(from ? `Relief Approaches — ${from}` : "Relief Approaches", BLUE);
+      _pulse(_hudPanel(), BLUE);
+    } catch (e) { console.warn(TAG, "reliefArrives vfx failed", e); }
+  }
+
+  function _onReliefConvene(payload) {
+    _injectStylesOnce();
+    try {
+      _banner("Relief Force — The Open Field", BLUE);
+      _pulse(_hudPanel(), BLUE);
+    } catch (e) { console.warn(TAG, "reliefConvene vfx failed", e); }
+  }
+
+  function _onReliefRepulsed(payload) {
+    _injectStylesOnce();
+    try {
+      const from = game.actors?.get?.(payload?.callingFactionId)?.name;
+      _banner(from ? `Relief Repulsed — ${from} Thrown Back` : "Relief Repulsed", BRONZE);
+      _pulse(_hudPanel(), BRONZE);
+    } catch (e) { console.warn(TAG, "reliefRepulsed vfx failed", e); }
+  }
+
+  // Phase E.4 — Trojan Horse. Success rides the won_trojan_horse outcome banner (violet);
+  // here we mark the Sinon sacrifice + the discovered-ruse failure.
+  function _onTrojanHorse(payload) {
+    _injectStylesOnce();
+    try {
+      if (payload?.sinon) {
+        const nm = game.actors?.get?.(payload?.championId)?.name || "A champion";
+        _banner(`${nm} Enters the Gates`, VIOLET);
+        _pulse(_hudPanel(), VIOLET);
+      }
+    } catch (e) { console.warn(TAG, "trojanHorse vfx failed", e); }
+  }
+
+  function _onTrojanFailed(payload) {
+    _injectStylesOnce();
+    try {
+      _fullScreenFlash(RED);
+      _shakeBoard();
+      _banner("The Ruse is Undone", RED);
+      _pulse(_hudPanel(), RED);
+    } catch (e) { console.warn(TAG, "trojanFailed vfx failed", e); }
+  }
+
   Hooks.on("bbttcc:siege:layerBreached", _onLayerBreached);
   Hooks.on("bbttcc:siege:convene", _onConvene);
   Hooks.on("bbttcc:siege:outcome", _onOutcome);
   Hooks.on("bbttcc:siege:championDuel", _onChampionDuel);
+  Hooks.on("bbttcc:siege:reliefArrives", _onReliefArrives);
+  Hooks.on("bbttcc:siege:reliefConvene", _onReliefConvene);
+  Hooks.on("bbttcc:siege:reliefRepulsed", _onReliefRepulsed);
+  Hooks.on("bbttcc:siege:trojanHorse", _onTrojanHorse);
+  Hooks.on("bbttcc:siege:trojanFailed", _onTrojanFailed);
 
   // Expose for the selftest / manual preview.
   function _install() {
@@ -184,6 +239,11 @@
       if (kind === "convene") return _onConvene(payload);
       if (kind === "outcome") return _onOutcome(payload);
       if (kind === "championDuel") return _onChampionDuel(payload);
+      if (kind === "reliefArrives") return _onReliefArrives(payload);
+      if (kind === "reliefConvene") return _onReliefConvene(payload);
+      if (kind === "reliefRepulsed") return _onReliefRepulsed(payload);
+      if (kind === "trojanHorse") return _onTrojanHorse(payload);
+      if (kind === "trojanFailed") return _onTrojanFailed(payload);
       console.warn(TAG, "previewVfx: unknown kind", kind);
     };
   }
