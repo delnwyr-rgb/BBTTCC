@@ -1,6 +1,6 @@
 # SIEGE_RAID_TYPE_SPEC.md
 
-**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** SHIPPED 2026-05-22/23; **Phase E.1 (counter-activities)** SHIPPED 2026-05-23 (E.2 champions next).
+**Status:** SIGNED OFF 2026-05-22 — Phases A · A.5 · B · C · **D (COMPLETE)** SHIPPED 2026-05-22/23; **E.1 (counter-activities) + E.2 (champions)** SHIPPED 2026-05-23 (E.3 Relief scene next).
 **Parent specs:**
 - `bbttcc-structures/STRUCTURE_DAMAGE_SPEC.md` (SIGNED OFF 2026-05-20; Phases A+B+B.9+C+D SHIPPED 2026-05-21)
 - `bbttcc-raid/COURTLY_INTRIGUE_SPEC.md` (SIGNED OFF 2026-05-20; ALL PHASES SHIPPED 2026-05-21)
@@ -734,7 +734,13 @@ Sub-phased E.1→E.4.
 - Schema: `defenderAnytimeBudget`, `renewalPool`, `championLocks{}`, `omenReroll`, `stormAssault`, `pendingTerms` added to `makeSiegeState`. Catalog: 9 entries (46→55). Selftest `tools/siege-phase-e-selftest.macro.js` (9 checks).
 - **E.1 deferred refinements**: full interactive attacker-prompt for terms/surrender (currently API-resolved); distance-modulated relief `arrivesTurn`; champion-picker UI in planner (note JSON for now).
 
-**E.2 — Champion authoring + state machine** (next): roster editor + auto-suggest, wounded→active recovery tick, `championLocks` expiry, defender Anytime budget calc (holdings + active champions ×2 + `defenderAnytimeBudget`).
+**E.2 — Champion authoring + state machine — ✅ SHIPPED 2026-05-23** (`scripts/siege-champions.js`, ~210 LOC)
+- `openChampionRosterDialog(factionId)` — multi-select roster editor writing `faction.flags.bbttcc-factions.championRoster`, with "✨ Auto-suggest top 5" (rank = boss tier×5 / rig tier×4 / PC `system.details.level`; affiliated-first via `system.identity.factionOwnerId`/faction flags). Surfaced as a "⚔ Champions (N)" button on the faction sheet (`renderBBTTCCFactionSheet` hook). **This is what makes D.4 duels + all champion levers playable without hand-editing flags.**
+- `processChampionsTurn(state, turn)` — status machine: expire `championLocks` (Champion Defends Wall), roll wounded→active recovery (50%/turn; locked champions skip). **Folded into `siege-tick.js`** before persist → single writer per siege/turn, no race with the supply tick.
+- `computeDefenderBudget(hexUuid)` — Anytime budget = holdings (rig×1 + boss×2 + facility×0.5) + active champions×2 + wounded×1 + `defenderAnytimeBudget`. Exposed on API (console integration of the budget is a refinement).
+- Selftest extended (section 7 → 14 checks): module · API · `processChampionsTurn` lock-expiry + locked-wounded-skip (deterministic) · `championCandidates` ranking. module.json: after siege-champion-duel.js.
+
+**E.3 — Relief Force scene** (next): convene the relief tableau on wave arrival; attacker win → wave clears + Buffer −15 + defender −1 morale; loss → `lost_relieved`.
 **E.3 — Relief Force scene**: convene the relief tableau on wave arrival; attacker win → wave clears + Buffer −15 + defender −1 morale; loss → `lost_relieved`.
 **E.4 — Trojan Horse T4 + Sinon Mode**: 3-roll gate + champion-sacrifice multiplier.
 - **LOC est: ~600** (E.1 ≈ 310 delivered)

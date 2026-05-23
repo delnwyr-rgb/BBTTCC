@@ -283,6 +283,11 @@
       });
     }
 
+    // ---- E.2: champion status machine (lock expiry + wounded→active recovery) ----
+    // Folded into the tick so there's a single writer per siege per turn (no race).
+    try { globalThis.__bbttccSiegeChampions?.processChampionsTurn?.(state, turn); }
+    catch (e) { console.warn(TAG, "champion turn processing failed", e); }
+
     // ---- Phase C: reset per-turn pulse counters for the next turn ----
     // Interdiction/escort pulses are spent this tick; persistent severance lives in
     // interdictedHexIds + the stripped Supply Line modifiers (which the BFS re-reads).

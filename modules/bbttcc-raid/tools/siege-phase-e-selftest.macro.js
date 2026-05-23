@@ -9,6 +9,8 @@
  *   5. resolveTerms / resolveSurrender API present
  *   6. makeSiegeState schema additions (defenderAnytimeBudget / renewalPool /
  *      championLocks / omenReroll / stormAssault / pendingTerms)
+ *   7. E.2 champion authoring + state machine: module, API, processChampionsTurn
+ *      (lock expiry + locked-wounded skip), championCandidates ranking
  *
  * Live execution (Reinforce, Call Relief, champion levers, terms/surrender) needs a real
  * besieged hex — exercise those in a playtest. This macro confirms the wiring contract.
@@ -91,6 +93,42 @@
     else fail("schema-additions", `wrong/missing: ${bad.join(", ")}`);
   } catch (err) {
     fail("schema-additions", err.message);
+  }
+
+  // 7. E.2 — champion authoring + state machine ------------------------------
+  if (globalThis.__bbttcc_siege_champions_loaded_v1) pass("e2-loaded");
+  else fail("e2-loaded", "siege-champions.js not loaded");
+  const e2fns = ["openChampionRosterDialog", "computeDefenderBudget", "championCandidates"];
+  const e2missing = e2fns.filter(fn => typeof siege?.[fn] !== "function");
+  if (!e2missing.length) pass("e2-api", `${e2fns.length} functions`);
+  else fail("e2-api", `missing: ${e2missing.join(", ")}`);
+
+  const champ = globalThis.__bbttccSiegeChampions;
+  if (typeof champ?.processChampionsTurn === "function") pass("e2-processTurn-present");
+  else fail("e2-processTurn-present", "__bbttccSiegeChampions.processChampionsTurn missing");
+
+  // Deterministic slice of the state machine: lock expiry + locked-wounded stays wounded.
+  try {
+    const st = {
+      championLocks: { a: 3, b: 8 },
+      attackerChampions: [{ actorId: "b", status: "wounded" }], // 'b' is locked → must NOT recover
+      defenderChampions: []
+    };
+    champ.processChampionsTurn(st, 5); // turn 5: lock a (until 3) expires, b (until 8) holds
+    const ok = !("a" in st.championLocks) && ("b" in st.championLocks) && st.attackerChampions[0].status === "wounded";
+    if (ok) pass("e2-state-machine", "lock a expired · b held · locked-wounded stayed wounded");
+    else fail("e2-state-machine", `locks=${JSON.stringify(st.championLocks)} b=${st.attackerChampions[0].status}`);
+  } catch (err) {
+    fail("e2-state-machine", err.message);
+  }
+
+  // championCandidates returns a ranked array (uses real world actors).
+  try {
+    const c = siege.championCandidates?.("__none__");
+    if (Array.isArray(c)) pass("e2-candidates", `${c.length} candidate actor(s) ranked`);
+    else fail("e2-candidates", "did not return an array");
+  } catch (err) {
+    fail("e2-candidates", err.message);
   }
 
   // ---- Report ----

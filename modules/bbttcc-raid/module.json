@@ -112,6 +112,7 @@
     "scripts/siege-hud.js",
     "scripts/siege-vfx.js",
     "scripts/siege-champion-duel.js",
+    "scripts/siege-champions.js",
     "scripts/raid-resolveRaidRound.throughput.enhancer.js",
     "scripts/raid-scene-intents.enhancer.js",
     "scripts/raid-anytime-budget.enhancer.js",
