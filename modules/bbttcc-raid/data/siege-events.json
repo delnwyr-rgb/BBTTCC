@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "_note": "Siege Event Deck (SIEGE_RAID_TYPE_SPEC.md §9). Events are defined once in `events` and referenced by id from each deck's `eventIds` (avoids duplicating shared events across the 4 terrain decks). Effect types the F.3 engine (siege-events.js) understands: buffer | defenderBudget | morale | moraleSwing | championWound | championRecover | supplySever | truce | defection | ledgerBeat. `side`: attacker | defender | both | random. `count` may be a number or a dice string like \"1d4\". Conditions: minDuration | requiresNaval | requiresRecentChampionDeath | minActiveChampions.",
+  "events": {
+    "plague": {
+      "name": "Plague",
+      "weight": 10,
+      "conditions": { "minDuration": 3 },
+      "effects": [
+        { "type": "buffer", "side": "attacker", "amount": -10 },
+        { "type": "championWound", "side": "random", "count": 1 }
+      ],
+      "narrativeText": "A sickness sweeps the camps."
+    },
+    "good_omen": {
+      "name": "Good Omen",
+      "weight": 10,
+      "effects": [
+        { "type": "morale", "side": "random", "amount": 1 },
+        { "type": "defenderBudget", "amount": 2 }
+      ],
+      "narrativeText": "The birds favor the watchful."
+    },
+    "bad_omen": {
+      "name": "Bad Omen",
+      "weight": 10,
+      "effects": [
+        { "type": "morale", "side": "random", "amount": -1 },
+        { "type": "defenderBudget", "amount": -1 }
+      ],
+      "narrativeText": "The augurs spoke ill."
+    },
+    "defection": {
+      "name": "Defection",
+      "weight": 6,
+      "conditions": { "minDuration": 5 },
+      "effects": [
+        { "type": "defection" }
+      ],
+      "narrativeText": "Discontent breeds desertion — a holding changes its banner."
+    },
+    "sacred_day": {
+      "name": "Sacred Day",
+      "weight": 10,
+      "effects": [
+        { "type": "truce" },
+        { "type": "championRecover", "side": "both", "count": 1 }
+      ],
+      "narrativeText": "A festival is observed; weapons rest and the wounded are tended."
+    },
+    "funeral_games": {
+      "name": "Funeral Games",
+      "weight": 10,
+      "conditions": { "requiresRecentChampionDeath": true },
+      "effects": [
+        { "type": "morale", "side": "both", "amount": 1 },
+        { "type": "ledgerBeat" }
+      ],
+      "narrativeText": "Games are held in honor of the fallen."
+    },
+    "storm_at_sea": {
+      "name": "Storm at Sea",
+      "weight": 10,
+      "conditions": { "requiresNaval": true },
+      "effects": [
+        { "type": "buffer", "side": "attacker", "amount": -15 },
+        { "type": "supplySever", "turns": 1 }
+      ],
+      "narrativeText": "The sea god is angered; the supply ships scatter."
+    },
+    "reinforcements": {
+      "name": "Reinforcements Arrive",
+      "weight": 10,
+      "effects": [
+        { "type": "buffer", "side": "random", "amount": 20 }
+      ],
+      "narrativeText": "A column arrives bearing supplies."
+    },
+    "champion_wounded": {
+      "name": "Champion Wounded",
+      "weight": 10,
+      "conditions": { "minActiveChampions": 2 },
+      "effects": [
+        { "type": "championWound", "side": "random", "count": 1 }
+      ],
+      "narrativeText": "Misfortune strikes a champion — illness or a training mishap."
+    },
+    "prophets_visitation": {
+      "name": "Prophet's Visitation",
+      "weight": 10,
+      "conditions": { "minDuration": 4 },
+      "effects": [
+        { "type": "moraleSwing", "amount": 1 }
+      ],
+      "narrativeText": "An oracle delivers a word — welcome to one camp, bitter to the other."
+    },
+    "divine_plague": {
+      "name": "Divine Plague",
+      "weight": 1,
+      "conditions": { "minDuration": 6 },
+      "effects": [
+        { "type": "buffer", "side": "attacker", "amount": -40 },
+        { "type": "championWound", "side": "attacker", "count": "1d4" },
+        { "type": "morale", "side": "defender", "amount": 2 }
+      ],
+      "narrativeText": "A god strikes the besieging army with arrows of pestilence."
+    }
+  },
+  "decks": {
+    "generic": {
+      "threshold": 14,
+      "eventIds": ["plague", "good_omen", "bad_omen", "defection", "funeral_games", "reinforcements", "champion_wounded", "prophets_visitation", "divine_plague"]
+    },
+    "naval": {
+      "threshold": 14,
+      "eventIds": ["plague", "good_omen", "bad_omen", "defection", "funeral_games", "reinforcements", "champion_wounded", "prophets_visitation", "divine_plague", "storm_at_sea"]
+    },
+    "desert": {
+      "threshold": 14,
+      "eventIds": ["plague", "good_omen", "bad_omen", "defection", "funeral_games", "reinforcements", "champion_wounded", "prophets_visitation", "divine_plague"]
+    },
+    "sacred": {
+      "threshold": 14,
+      "eventIds": ["plague", "good_omen", "bad_omen", "defection", "funeral_games", "reinforcements", "champion_wounded", "prophets_visitation", "divine_plague", "sacred_day"]
+    }
+  }
+}

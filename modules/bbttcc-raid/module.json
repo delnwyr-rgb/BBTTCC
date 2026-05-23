@@ -47,6 +47,7 @@
     "scripts/siege-state.js",
     "scripts/siege-supply-bfs.js",
     "scripts/siege-tick.js",
+    "scripts/siege-events.js",
     "scripts/siege-layer-transition.js",
     "scripts/boss/bossRegistry.js",
     "scripts/boss/applyBehaviors.js",

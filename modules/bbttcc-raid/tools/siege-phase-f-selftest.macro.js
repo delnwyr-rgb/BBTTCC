@@ -12,6 +12,8 @@
  *   6. intent→holdings mode mirror (sack→capture / raze→destroy / capture→capture)
  *   7. F.2 Champion Death Cascade: module + hook + API; cascade-core mirror
  *      (attacker buffer−20 + rally absent allies; defender threshold−10% clamp, no buffer)
+ *   8. F.3 Event Deck: module + API; deck JSON (11 events / 4 decks / refs resolve /
+ *      naval→storm, sacred→sacred-day); eligibility-gate mirror; VFX present
  *
  * Live execution (a real siege resolving → hex flips owner, morale moves, saga written;
  * a champion falling → allies rally) needs a real besieged hex — exercise in a playtest.
@@ -115,6 +117,45 @@
     if (okA && okD) pass("f2-cascade-mirror", "atk: buffer−20 + rally absent only; def: threshold+10% clamp 0.95, no buffer");
     else fail("f2-cascade-mirror", `okA=${okA} okD=${okD}`);
   } catch (err) { fail("f2-cascade-mirror", err.message); }
+
+  // 8. F.3 — Event Deck content + engine ---------------------------------------
+  if (globalThis.__bbttcc_siege_events_loaded_v1) pass("f3-loaded");
+  else fail("f3-loaded", "siege-events.js not loaded");
+  if (typeof globalThis.__bbttccSiegeEvents?.drawAndApplyEvent === "function" && typeof siege.events?.drawAndApplyEvent === "function") pass("f3-api");
+  else fail("f3-api", "drawAndApplyEvent missing (internals or api.siege.events)");
+
+  // Deck JSON: 11 events, 4 decks, naval→storm_at_sea, sacred→sacred_day, refs resolve.
+  try {
+    const mod = game.modules.get("bbttcc-raid");
+    const base = (mod?.url || mod?.path || "/modules/bbttcc-raid").replace(/\/+$/, "");
+    const D = await (await fetch(`${base}/data/siege-events.json`, { cache: "no-store" })).json();
+    const nEvents = Object.keys(D.events || {}).length;
+    const decks = Object.keys(D.decks || {});
+    const refsOk = decks.every(k => (D.decks[k].eventIds || []).every(id => D.events[id]?.name && Array.isArray(D.events[id].effects)));
+    const navalStorm = D.decks?.naval?.eventIds?.includes("storm_at_sea") && !D.decks?.generic?.eventIds?.includes("storm_at_sea");
+    const sacredDay = D.decks?.sacred?.eventIds?.includes("sacred_day") && !D.decks?.generic?.eventIds?.includes("sacred_day");
+    if (nEvents === 11 && decks.length === 4 && refsOk && navalStorm && sacredDay) pass("f3-deck-json", `11 events, ${decks.length} decks, refs resolve`);
+    else fail("f3-deck-json", `events=${nEvents} decks=${decks.length} refs=${refsOk} navalStorm=${navalStorm} sacredDay=${sacredDay}`);
+  } catch (err) { fail("f3-deck-json", err.message); }
+
+  // Eligibility mirror: minDuration / requiresNaval / requiresRecentChampionDeath / minActiveChampions.
+  try {
+    const E = globalThis.__bbttccSiegeEvents;
+    const D = await E._loadDecks();
+    const ev = (id) => Object.assign({ id }, D.events[id]);
+    const early = { startedTurn: 0, isNavalSupply: false, attackerChampions: [], defenderChampions: [] };
+    const okElig = E._eligible(ev("plague"), { state: early, turn: 2 }) === false
+      && E._eligible(ev("plague"), { state: early, turn: 3 }) === true
+      && E._eligible(ev("storm_at_sea"), { state: early, turn: 9 }) === false
+      && E._eligible(ev("storm_at_sea"), { state: { ...early, isNavalSupply: true }, turn: 9 }) === true
+      && E._eligible(ev("good_omen"), { state: early, turn: 0 }) === true;
+    if (okElig) pass("f3-eligibility", "minDuration + requiresNaval gates honored");
+    else fail("f3-eligibility", "an eligibility gate misfired");
+  } catch (err) { fail("f3-eligibility", err.message); }
+
+  // VFX renderer extended with the event ticker.
+  if (globalThis.__bbttcc_siege_vfx_loaded_v1) pass("f3-vfx-present");
+  else fail("f3-vfx-present", "siege-vfx.js missing");
 
   // ---- Report ----
   console.table(results.map(r => ({ name: r.name, ok: r.ok ? "PASS" : "FAIL", detail: r.detail })));

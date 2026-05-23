@@ -272,24 +272,28 @@
       }
     }
 
-    // ---- 8. Event Deck roll ----
+    // ---- 8. Event Deck roll (F.3: real draw→apply via siege-events.js) ----
     const deckId = state.eventDeckId || "generic";
     const ev = _rollEventDeck(deckId);
     state.eventsFired = Array.isArray(state.eventsFired) ? state.eventsFired : [];
     if (ev.fired) {
-      const placeholderName = "An unnamed event"; // Phase F replaces with real draw
-      state.eventsFired.push({
-        turn,
-        eventId: `placeholder-${turn}`,
-        payload: { roll: ev.roll, dice: ev.dice, deckId: ev.deckId }
-      });
-      S.appendNarrativeBeat(state, {
-        turn,
-        kind: "event_deck",
-        title: `Event Deck fires (2d10=${ev.roll}, threshold ${ev.threshold})`,
-        description: `Deck "${ev.deckId}": ${placeholderName} (mechanical content authored in Phase F).`,
-        payload: ev
-      });
+      const engine = globalThis.__bbttccSiegeEvents;
+      if (engine?.drawAndApplyEvent) {
+        // Engine mutates `state` (state-field effects) + does its own external writes (morale/
+        // defection/ledger) + appends the beat + relays bbttcc:siege:event. We persist at step 9.
+        try { await engine.drawAndApplyEvent({ state, hexUuid, hexDoc: targetHexDoc, turn, deckId, gateRoll: ev }); }
+        catch (e) { console.warn(TAG, "event draw/apply failed", e); }
+      } else {
+        // Fallback (engine not loaded): record the gate fire only.
+        state.eventsFired.push({ turn, eventId: `ungated-${turn}`, payload: { roll: ev.roll, dice: ev.dice, deckId: ev.deckId } });
+        S.appendNarrativeBeat(state, {
+          turn,
+          kind: "event_deck",
+          title: `Event Deck fires (2d10=${ev.roll}) — engine not loaded`,
+          description: `Deck "${ev.deckId}": gate fired but siege-events.js is unavailable.`,
+          payload: ev
+        });
+      }
     }
 
     // ---- E.2: champion status machine (lock expiry + wounded→active recovery) ----

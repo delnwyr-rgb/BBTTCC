@@ -237,6 +237,15 @@
     } catch (e) { console.warn(TAG, "cascade vfx failed", e); }
   }
 
+  // Phase F.3 — Event Deck draw. Amber ticker banner with the event name.
+  function _onEvent(payload) {
+    _injectStylesOnce();
+    try {
+      _banner(`⚑ ${payload?.name || "A Siege Event"}`, AMBER);
+      _pulse(_hudPanel(), AMBER);
+    } catch (e) { console.warn(TAG, "event vfx failed", e); }
+  }
+
   Hooks.on("bbttcc:siege:layerBreached", _onLayerBreached);
   Hooks.on("bbttcc:siege:convene", _onConvene);
   Hooks.on("bbttcc:siege:outcome", _onOutcome);
@@ -247,6 +256,7 @@
   Hooks.on("bbttcc:siege:trojanHorse", _onTrojanHorse);
   Hooks.on("bbttcc:siege:trojanFailed", _onTrojanFailed);
   Hooks.on("bbttcc:siege:cascade", _onCascade);
+  Hooks.on("bbttcc:siege:event", _onEvent);
 
   // Expose for the selftest / manual preview.
   function _install() {
@@ -264,6 +274,7 @@
       if (kind === "trojanHorse") return _onTrojanHorse(payload);
       if (kind === "trojanFailed") return _onTrojanFailed(payload);
       if (kind === "cascade") return _onCascade(payload);
+      if (kind === "event") return _onEvent(payload);
       console.warn(TAG, "previewVfx: unknown kind", kind);
     };
   }

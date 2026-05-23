@@ -286,6 +286,7 @@
   Hooks.on("bbttcc:siege:championStatus", _scheduleRender);
   Hooks.on("bbttcc:siege:championDeath", _scheduleRender);
   Hooks.on("bbttcc:siege:cascade", _scheduleRender);
+  Hooks.on("bbttcc:siege:event", _scheduleRender);
   Hooks.on("bbttcc:siege:reliefCalled", _scheduleRender);
   Hooks.on("bbttcc:siege:reliefArrives", _scheduleRender);
   Hooks.on("bbttcc:siege:reliefConvene", _scheduleRender);
