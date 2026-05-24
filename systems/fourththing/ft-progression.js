@@ -346,6 +346,33 @@ export function collectRerolls(actor, query = {}) {
       });
     }
   }
+  // Shadow Courier — Spend Pace · Reroll. One-shot reroll-lowest armed by the
+  // Pace dialog (flags.fourththing.combat.paceReroll). Skill checks only, so it
+  // only surfaces on the "check" context (attributeTest). Consumed via
+  // consumePaceReroll after applyRerollGrants; cleared by _onFtNewTurn if unused.
+  if (actor?.flags?.fourththing?.combat?.paceReroll && wantContext === "check") {
+    out.push({
+      mode: "reroll-lowest",
+      sourceItemName: "Pace (Shadow Courier)",
+      sourceItemId: null,
+      _paceReroll: true
+    });
+  }
+  // Ancestry one-shot reroll grants (Sefirot Attunement, Qliphothic Saturation).
+  // Single slot at flags.fourththing.ancestry.oneShotReroll = { mode, source,
+  // attribute?, skill? }. Optionally scoped; armed by the ability dialog, cleared
+  // by consumeAncestryReroll. Check-context only (these are skill/attribute checks).
+  const ancR = actor?.flags?.fourththing?.ancestry?.oneShotReroll;
+  if (ancR && wantContext === "check"
+      && (!ancR.attribute || ancR.attribute === wantAttribute)
+      && (!ancR.skill     || ancR.skill === wantSkill)) {
+    out.push({
+      mode: ancR.mode || "reroll-lowest",
+      sourceItemName: ancR.source || "Ancestry",
+      sourceItemId: null,
+      _ancestryReroll: true
+    });
+  }
   return out;
 }
 
@@ -362,6 +389,31 @@ export async function consumeAnnotationReroll(actor, applied) {
   if (cur <= 0) return;
   try { await actor.update({ "flags.fourththing.annotationPending": Math.max(0, cur - 1) }); }
   catch (e) { console.warn("Annotation consume failed", e); }
+}
+
+// Consume the Shadow Courier Pace reroll one-shot if it was used on the just-
+// applied reroll list. Call AFTER applyRerollGrants, alongside
+// consumeAnnotationReroll. The flag is a single-use boolean (not a count).
+export async function consumePaceReroll(actor, applied) {
+  if (!actor || !Array.isArray(applied) || !applied.length) return;
+  const used = applied.some(a =>
+    a?.source === "Pace (Shadow Courier)" || a?.sourceItemName === "Pace (Shadow Courier)"
+  );
+  if (!used) return;
+  try { await actor.update({ "flags.fourththing.combat.-=paceReroll": null }); }
+  catch (e) { console.warn("Pace reroll consume failed", e); }
+}
+
+// Consume the single-slot ancestry reroll one-shot if it was used on the just-
+// applied reroll list. Call AFTER applyRerollGrants, alongside the others.
+export async function consumeAncestryReroll(actor, applied) {
+  if (!actor || !Array.isArray(applied) || !applied.length) return;
+  const src = actor.flags?.fourththing?.ancestry?.oneShotReroll?.source;
+  if (!src) return;
+  const used = applied.some(a => a?.source === src || a?.sourceItemName === src);
+  if (!used) return;
+  try { await actor.update({ "flags.fourththing.ancestry.-=oneShotReroll": null }); }
+  catch (e) { console.warn("Ancestry reroll consume failed", e); }
 }
 
 // Apply reroll grants to a freshly-evaluated Roll. Mutates dieResults in
@@ -1311,6 +1363,15 @@ export function extractSkillGrantsFromFeature(featureDesc) {
   const text = featureDesc.replace(/<[^>]+>/g, " ").toLowerCase();
   const grants = [];
 
+  // Choice-grant guard: skill grants phrased as a player CHOICE ("+1 skill rank
+  // in two of {Diplomacy, Insight, …}", "choose one of the following", "either
+  // X or Y") are resolved by a dedicated picker (e.g. the Pactkeeper L1 "Bargain"
+  // button), NOT a flat auto-grant of every listed skill. Without this guard the
+  // wizard granted ALL listed skills (and greyed them in the aptitude picker),
+  // then the picker double-granted on top. Detect choice phrasing in the captured
+  // skill list and skip it — the picker is the single source of truth.
+  const CHOICE_GRANT_RE = /\b(?:one|two|three|four|five|\d+)\s+of\b|\bany\b|\beither\b|\bchoos\w*\b|\bof the following\b|[{}]/;
+
   // Match patterns like "proficiency in/with X and Y" or "gain proficiency in/with X".
   // "with" covers D&D tool/kit phrasing ("proficient with Tinker's Tools") that
   // the scrub macro may not have rewritten yet.
@@ -1325,6 +1386,8 @@ export function extractSkillGrantsFromFeature(featureDesc) {
     let match;
     while ((match = pattern.exec(text)) !== null) {
       const raw = match[1].trim();
+      // Skip player-choice grants — resolved by a dedicated picker, not auto-granted here.
+      if (CHOICE_GRANT_RE.test(raw)) continue;
       // Split on "&", "and", ","
       const parts = raw.split(/[&,]|\band\b/).map(s => s.trim());
       for (const part of parts) {

@@ -2318,6 +2318,36 @@ export async function openShadowCourierSpendPace(actor) {
           const mode = html.find("[name='mode']").val();
           const ctx  = html.find("[name='ctx']").val()?.trim() || "";
           await actor.update({ "system.resources.pace.current": Math.max(0, cur - 1) });
+
+          // ── Mechanical apply (2026-05-23 Tier-2 spend-menu wiring) ───────────
+          // move → real movement budget bump (Dash precedent); reroll → arm a
+          // one-shot reroll-lowest read by collectRerolls; Wayfarer route →
+          // commit +1 Intrigue OP to the Courier's faction. dodge + Black Stair /
+          // Last Mile routes stay narrative-by-design (no reaction-strike engine /
+          // strategic-hex action surface).
+          let mechNote = "";
+          if (mode === "move") {
+            const mcur = Number(rawSys?.actions?.movementBudgetFt) || 0;
+            await actor.update({ "system.actions.movementBudgetFt": mcur + 5 });
+            mechNote = `Movement budget +5 ft (now ${mcur + 5} ft this turn).`;
+          } else if (mode === "reroll") {
+            const cf = actor.flags?.fourththing?.combat ?? {};
+            await actor.setFlag("fourththing", "combat", { ...cf, paceReroll: true });
+            mechNote = "Armed — your next skill check rerolls its lowest die.";
+          } else if (mode === "route" && /wayfarer-tongue/.test(subId)) {
+            const faction = _hmGetFaction(actor);
+            const opApi   = game.bbttcc?.api?.op;
+            const marksPerOP = opApi?.OP_TO_MARKS || 10;
+            if (faction && opApi?.commit) {
+              const res = await opApi.commit(faction.id, { intrigue: marksPerOP }, { context: "shadow-courier-wayfarer-tongue" });
+              mechNote = res?.committed
+                ? `+1 Intrigue OP committed to <b>${_ftEscape(faction.name)}</b>.`
+                : `+1 Intrigue OP — commit failed (${res?.error || "cap / API"}); GM applies manually.`;
+            } else {
+              mechNote = "+1 Intrigue OP — no bound faction; GM applies to the carried faction.";
+            }
+          }
+
           const labels = {
             move:   { icon: "🏃", title: "+5 ft Movement",  body: "Add <b>+5 ft</b> to your movement this turn." },
             reroll: { icon: "🎲", title: "Skill Reroll",     body: "Reroll a Stealth / Acrobatics / Streetwise / Intrigue check — take the new result." },
@@ -2330,6 +2360,7 @@ export async function openShadowCourierSpendPace(actor) {
             content: `<div class="fourththing-roll" style="border-color:#7a8fc8">
               <div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0b8e8">${lbl.icon} Pace Spent — ${lbl.title}</span></div>
               <p style="margin:0.3rem 0;font-size:0.82rem">${lbl.body}</p>
+              ${mechNote ? `<p style="margin:0.2rem 0;font-size:0.8rem;color:#a0d8b0">${mechNote}</p>` : ""}
               ${ctx ? `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85"><b>Context:</b> ${_ftEscape(ctx)}</p>` : ""}
               <p style="margin:0;font-size:0.72rem;opacity:0.55">Pace now ${Math.max(0, cur - 1)} / ${max}.</p>
             </div>`
@@ -3343,21 +3374,36 @@ export async function openPassiveClassInfo(actor, item) {
 // 1/Soma Break dialogs gated by an actor flag the player resets manually on
 // Soma Break.)
 
-// Generic Signature Mode dialog factory.
-async function _openSignatureMode(actor, key, label, summaryHtml) {
-  const on = isModeActive(actor, key);
+// Generic Signature Mode dialog factory. `opts.clarityUpkeep` (int) charges that
+// many Clarity once, at stance-take, modelling the per-scene upkeep these stances
+// pay (user canon 2026-05-23: 1 Clarity/scene). Pactkeeper's Sealed Pact opts out
+// — its cost is the concurrency lock, not Clarity.
+async function _openSignatureMode(actor, key, label, summaryHtml, opts = {}) {
+  const on   = isModeActive(actor, key);
   const disc = summarizeDiscipline(actor);
+  const upkeep = Math.max(0, Number(opts.clarityUpkeep) || 0);
   new Dialog({
     title: label,
     content: `<div class="ft-cast-dialog">
       <p style="font-size:0.78rem;margin:0 0 0.4rem">Stance: <b>${on ? "ON" : "OFF"}</b></p>
       ${summaryHtml ? `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-bottom:0.4rem">${summaryHtml}</div>` : ""}
+      ${upkeep && !on ? `<p style="font-size:0.72rem;color:#a0c8d8;margin:0 0 0.3rem">Taking this stance costs <b>${upkeep} Clarity</b> (per scene).</p>` : ""}
       <p style="font-size:0.7rem;opacity:0.65;margin:0">Active discipline: <i>${disc || "(no shifts)"}</i></p>
     </div>`,
     buttons: {
       toggle: {
         label: on ? "Drop stance" : "Take stance",
-        callback: () => toggleMode(actor, key, { label })
+        callback: async () => {
+          if (!on && upkeep) {
+            const sys = actor.system?.system ?? actor.system ?? {};
+            const cur = Number(sys?.magic?.clarity?.value) || 0;
+            if (cur < upkeep) {
+              return ui.notifications?.warn(`${actor.name}: not enough Clarity to hold ${label} (needs ${upkeep}/scene, have ${cur}).`);
+            }
+            await actor.update({ "system.magic.clarity.value": cur - upkeep });
+          }
+          await toggleMode(actor, key, { label });
+        }
       },
       close: { label: "Cancel" }
     },
@@ -3367,17 +3413,20 @@ async function _openSignatureMode(actor, key, label, summaryHtml) {
 
 export async function openCosmicLinguistMode(actor) {
   return _openSignatureMode(actor, "clSentence", "Cosmic Linguist — The Sentence",
-    "While held: every sustained manifestation treats its primary target as bound by name. Pays ongoing upkeep against your Clarity (pilot: GM-set per scene).");
+    "While held: every sustained manifestation treats its primary target as bound by name — your manifestation saves are rolled at disadvantage against them. Costs 1 Clarity per scene to hold.",
+    { clarityUpkeep: 1 });
 }
 
 export async function openWyrdlensMode(actor) {
   return _openSignatureMode(actor, "wlRefraction", "Wyrdlens Adept — Refraction",
-    "While held: declare your manifestation last in the round, after seeing what allies and enemies commit to. Pays ongoing upkeep (pilot: GM-set).");
+    "While held: declare your manifestation last in the round, after seeing what allies and enemies commit to. (Declaration order is a table procedure — honor it at the table.) Costs 1 Clarity per scene to hold.",
+    { clarityUpkeep: 1 });
 }
 
 export async function openDreamwalkerMode(actor) {
   return _openSignatureMode(actor, "dwWalkingLane", "Dreamwalker — The Walking Lane",
-    "While held: sustained manifestations reach into adjacent realms — ignore one band of cover or distance for one effect per round. Pays ongoing upkeep (pilot: GM-set).");
+    "While held: sustained manifestations reach into adjacent realms — ignore one band of cover or distance for one effect per round (range auto-allowed once per round; cover is GM-adjudicated). Costs 1 Clarity per scene to hold.",
+    { clarityUpkeep: 1 });
 }
 
 export async function openPactkeeperMode(actor) {
@@ -3692,19 +3741,84 @@ export async function openMenhirkinHexRecognition(actor) {
 export async function openEchoDiverTemporalFlinch(actor) {
   return _openPerSceneAbility(actor, "echoDiverTemporalFlinch",
     "Temporal Flinch (Echo-Diver Core)",
-    "Reaction. When you or an ally within 10 ft would be hit by an attack you can see, shift them 5 ft. If that moves them out of range or line of sight, the attack misses.");
+    "Reaction. When you or an ally within 10 ft would be hit by an attack you can see, shift them 5 ft. If that moves them out of range or line of sight, the attack misses.",
+    // Shift the flinch target (a targeted ally token, else self) 5 ft directly
+    // away from the nearest hostile token (the likely attacker). The miss itself
+    // stays GM-adjudicated per canon ("if that moves them out of range or LoS").
+    // Distance math is inline — ft-class-automation has no shared helper.
+    async (a) => {
+      const selfTok   = a.getActiveTokens?.()[0] ?? null;
+      const targetTok = Array.from(game.user?.targets ?? [])[0] ?? null;
+      const flinchTok = targetTok ?? selfTok;
+      if (!flinchTok) {
+        ui.notifications?.warn("Temporal Flinch: place your token or target an ally first.");
+        return false;
+      }
+      const grid    = canvas?.dimensions?.size     || 100;
+      const ftPerSq = canvas?.dimensions?.distance || 5;
+      const ctr = (t) => ({ x: t.x + (t.w ?? t.width ?? grid) / 2, y: t.y + (t.h ?? t.height ?? grid) / 2 });
+      const ftBetween = (t1, t2) => {
+        const c1 = ctr(t1), c2 = ctr(t2);
+        return Math.hypot(c1.x - c2.x, c1.y - c2.y) * (ftPerSq / grid);
+      };
+      // Reject an ally target that isn't within 10 ft of the Echo-Diver.
+      if (targetTok && selfTok && targetTok.id !== selfTok.id && ftBetween(selfTok, targetTok) > 10) {
+        ui.notifications?.warn("Temporal Flinch: the ally must be within 10 ft.");
+        return false;
+      }
+      // Find the nearest hostile (opposite disposition sign) to set the dodge vector.
+      const myDisp = flinchTok.document?.disposition ?? 1;
+      let nearest = null, nd = Infinity;
+      for (const t of (canvas?.tokens?.placeables ?? [])) {
+        if (!t?.actor || t.id === flinchTok.id) continue;
+        const d = t.document?.disposition ?? 0;
+        const isEnemy = (myDisp >= 0 && d < 0) || (myDisp < 0 && d > 0);
+        if (!isEnemy) continue;
+        const dist = ftBetween(flinchTok, t);
+        if (dist < nd) { nd = dist; nearest = t; }
+      }
+      let dx = 0, dy = -1; // default nudge = north when no threat is on the board
+      if (nearest) {
+        const f = ctr(flinchTok), e = ctr(nearest);
+        const vx = f.x - e.x, vy = f.y - e.y, mag = Math.hypot(vx, vy) || 1;
+        dx = vx / mag; dy = vy / mag;
+      }
+      const px5 = grid * (5 / ftPerSq);
+      try {
+        await flinchTok.document.update({
+          x: Math.round(flinchTok.x + dx * px5),
+          y: Math.round(flinchTok.y + dy * px5)
+        });
+      } catch (e) {
+        console.warn("Temporal Flinch shift failed", e);
+        return `<p style="font-size:0.75rem;color:#e0a060;margin:0.2rem 0 0">Couldn't move the token automatically — shift it 5 ft by hand.</p>`;
+      }
+      const who = (selfTok && flinchTok.id === selfTok.id) ? a.name : (flinchTok.actor?.name ?? "ally");
+      return `<p style="font-size:0.75rem;color:#a0d8b0;margin:0.2rem 0 0">${_ftEscape(who)} flinches 5 ft${nearest ? " (away from the nearest threat)" : ""}. <span style="opacity:0.7">GM: if now out of the attack's range or LoS, it misses — reposition if needed.</span></p>`;
+    });
 }
 
 export async function openSephirotScionAttunement(actor) {
   return _openPerSceneAbility(actor, "scionSefirotAttunement",
     "Sefirot Attunement (Sephirotic Scion Core)",
-    "Invoke your chosen sephirah's register for +1 rank bonus on a check clearly in its domain. (Pick the sephirah at character creation; the bonus is on top of normal rank.)");
+    "Invoke your chosen sephirah's register for +1 rank bonus on a check clearly in its domain. (Pick the sephirah at character creation; the bonus is on top of normal rank.)",
+    // Canon: "+1 rank" expressed as reroll-lowest on the next check (user call
+    // 2026-05-23). Single-slot ancestry reroll read by collectRerolls.
+    async (a) => {
+      await a.setFlag("fourththing", "ancestry.oneShotReroll", { mode: "reroll-lowest", source: "Sefirot Attunement" });
+      return `<p style="font-size:0.75rem;color:#a0d8b0;margin:0.2rem 0 0">Armed — your next domain check rerolls its lowest die.</p>`;
+    });
 }
 
 export async function openQliphScarredSaturation(actor) {
   return _openPerSceneAbility(actor, "qliphScarredSaturation",
     "Qliphothic Saturation (Qliph-Scarred Core)",
-    "Reroll a failed Soul check — but the scene's Darkness-gain count goes up by 1. The scar pays for what the scar saves. (GM: tick scene Darkness on use.)");
+    "Reroll a failed Soul check — but the scene's Darkness-gain count goes up by 1. The scar pays for what the scar saves. (GM: tick scene Darkness on use.)",
+    // Reroll wired; Darkness tick stays GM-adjudicated per the canon text.
+    async (a) => {
+      await a.setFlag("fourththing", "ancestry.oneShotReroll", { mode: "reroll-lowest", attribute: "soul", source: "Qliphothic Saturation" });
+      return `<p style="font-size:0.75rem;color:#a0d8b0;margin:0.2rem 0 0">Armed — your next Soul check rerolls its lowest die. <span style="opacity:0.7">(GM: tick scene Darkness +1.)</span></p>`;
+    });
 }
 
 // ─── Buried per-use abilities — Phase 2 helpers (2026-04-27) ──────────────
@@ -3772,11 +3886,17 @@ async function _openBankSpendAbility(actor, key, label, body, opts = {}) {
             return;
           }
           await actor.setFlag("fourththing", `bankSpend.${key}`, banked - 1);
+          let spendExtra = "";
+          if (typeof opts.onSpend === "function") {
+            const r = await opts.onSpend(actor);
+            if (typeof r === "string") spendExtra = r;
+          }
           ChatMessage.create({
             speaker: ChatMessage.getSpeaker({ actor }),
             content: `<div class="fourththing-roll">
               <div class="ft-roll-header"><span class="ft-roll-name">✶ ${label} — Spent (${banked - 1} remaining)</span></div>
               <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+              ${spendExtra}
             </div>`
           });
         }
@@ -3826,7 +3946,15 @@ export async function openMenhirkinIgneousHeatMemory(actor) {
   return _openBankSpendAbility(actor, "menhirkinIgneousHeat",
     "Heat Memory (Menhirkin Igneous)",
     "Bank fire damage you take, then spend banked heat as a bonus action to add +1d10 exploding energy damage (fire) to your next weapon attack, unarmed strike, or grapple that connects. All banked heat clears on Soma Break.",
-    { bankLabel: "Bank Fire Damage (+1)", spendLabel: "Spend (Bonus Action, +1d10 fire)" });
+    { bankLabel: "Bank Fire Damage (+1)", spendLabel: "Spend (Bonus Action, +1d10 fire)",
+      // Spending arms a +1d10x10 bonus-damage rider; attackTest appends it to the
+      // next hit's damage formula and clears it (mirrors the Surge Doomstrike rider).
+      // Each spend stacks +1 die. The bonus inherits the attack's damage type for
+      // resist purposes — same simplification Doomstrike accepts.
+      onSpend: async (a) => {
+        const cur = Number(a.getFlag("fourththing", "ancestry.oneShot.heatRider") ?? 0);
+        await a.setFlag("fourththing", "ancestry.oneShot.heatRider", cur + 1);
+      } });
 }
 
 export async function openOldenbornRustlandPatch(actor) {
@@ -3838,13 +3966,25 @@ export async function openOldenbornRustlandPatch(actor) {
 export async function openFurrykinPredatorPatience(actor) {
   return _openSomaBreakAbility(actor, "furrykinPredatorPatience",
     "Predator Patience (Furrykin: Felid)",
-    "1/Soma Break: treat a failed attack roll as a hit. Describe the perfect timing.");
+    "1/Soma Break: treat a failed attack roll as a hit. Describe the perfect timing.",
+    async (a) => {
+      await a.setFlag("fourththing", "ancestry.oneShot.predatorAutoHit", true);
+      return `<p style="font-size:0.75rem;color:#a0d8b0;margin:0.2rem 0 0">Armed — your next attack roll hits regardless of the total.</p>`;
+    });
 }
 
 export async function openOldenbornPhoenixOath(actor) {
   return _openSomaBreakAbility(actor, "oldenbornPhoenixOath",
     "Phoenix Oath (Oldenborn: Ember-Touched)",
-    "1/Soma Break, when you would drop to 0 HP: instead drop to 1 HP and erupt in a controlled blaze. Each hostile creature within 10 ft takes 2d6 + PB fire damage, and you immediately end one condition affecting you (charmed, frightened, or restrained).");
+    "1/Soma Break, when you would drop to 0 HP: instead drop to 1 HP and erupt in a controlled blaze. Each hostile creature within 10 ft takes 2d6 + PB fire damage, and you immediately end one condition affecting you (charmed, frightened, or restrained).",
+    // Full wire (user call 2026-05-23): arms a prevent-drop one-shot that
+    // _applyDamageToActor honors at the integrity floor, then fires the eruption
+    // (AOE 2d6+tier fire within 10 ft + end one condition). PB→tier (this system
+    // has no D&D proficiency bonus; ft-translation maps it to rank/tier).
+    async (a) => {
+      await a.setFlag("fourththing", "ancestry.oneShot.phoenixOath", true);
+      return `<p style="font-size:0.75rem;color:#e0a060;margin:0.2rem 0 0">Armed — the next hit that would drop you to 0 instead holds you at 1 and erupts (2d6 + tier fire, 10 ft; ends one condition).</p>`;
+    });
 }
 
 export async function openOldenbornHearthDominion(actor) {
@@ -3887,10 +4027,73 @@ export async function openCircuitbornAbilities(actor) {
   }).render(true);
 }
 
+// Full choice dialog (user call 2026-05-23): HP-regain heals tier to integrity;
+// OP-regain commits +1 OP to a chosen category on the bound faction. PB→tier
+// (this system has no D&D proficiency bonus). 1/Soma Break via disciplineUsed flag.
 export async function openCircuitbornAttentionResonance(actor) {
-  return _openSomaBreakAbility(actor, "circuitbornAttentionResonance",
-    "Attention Resonance (Circuitborn)",
-    "1/Soma Break: when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), choose either (a) regain one spent BBTTCC OP from a category you used this scene, or (b) regain HP equal to your proficiency bonus.");
+  const used    = Boolean(actor.getFlag("fourththing", "disciplineUsed.circuitbornAttentionResonance"));
+  const sys     = actor.system?.system ?? actor.system ?? {};
+  const tier    = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+  const faction = _hmGetFaction(actor);
+  const opApi   = game.bbttcc?.api?.op;
+  const buckets = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+  const bucketOpts = buckets.map(b => `<option value="${b}">${b.charAt(0).toUpperCase() + b.slice(1)}</option>`).join("");
+  const body = "1/Soma Break: when a creature you can see is intensely focused on you (ally or enemy; GM adjudicates), regain HP equal to your tier, OR regain one spent OP in a category you used this scene.";
+  new Dialog({
+    title: "Attention Resonance (Circuitborn)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${used ? "SPENT — refresh on Soma Break" : "AVAILABLE"}</b></p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem;margin-bottom:0.5rem">${body}</div>
+      <div class="ft-cast-field" style="margin-bottom:0.4rem">
+        <label>Choice</label>
+        <select name="mode">
+          <option value="hp">Regain HP equal to your tier (+${tier})</option>
+          <option value="op">Regain 1 spent OP (pick category)</option>
+        </select>
+      </div>
+      <div class="ft-cast-field">
+        <label>OP category (if regaining OP)</label>
+        <select name="bucket">${bucketOpts}</select>
+      </div>
+      <p style="font-size:0.7rem;opacity:0.6;margin:0.4rem 0 0">Faction: <b>${_ftEscape(faction?.name ?? "(unbound)")}</b>. OP regain commits +1 OP to the chosen category on your faction.</p>
+    </div>`,
+    buttons: {
+      use: {
+        label: "Use",
+        callback: async (html) => {
+          if (used) return ui.notifications?.warn("Attention Resonance: already spent — reset on Soma Break.");
+          const mode = html.find("[name='mode']").val();
+          let note = "";
+          if (mode === "hp") {
+            const desc = await game.fourththing.rolls._applyDamageToActor(actor, tier, { op: "heal", track: "integrity" });
+            note = `Regained <b>${tier}</b> HP (tier).`;
+          } else {
+            const bucket = html.find("[name='bucket']").val();
+            const marksPerOP = opApi?.OP_TO_MARKS || 10;
+            if (faction && opApi?.commit) {
+              const res = await opApi.commit(faction.id, { [bucket]: marksPerOP }, { context: "circuitborn-attention-resonance" });
+              note = res?.committed
+                ? `+1 ${_ftEscape(bucket)} OP regained for <b>${_ftEscape(faction.name)}</b>.`
+                : `+1 ${_ftEscape(bucket)} OP — commit failed (${res?.error || "cap / API"}); GM applies.`;
+            } else {
+              note = `+1 ${_ftEscape(bucket)} OP — no bound faction; GM applies.`;
+            }
+          }
+          await actor.setFlag("fourththing", "disciplineUsed.circuitbornAttentionResonance", true);
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">✶ Attention Resonance</span></div><p style="margin:0.3rem 0;font-size:0.82rem">${note}</p></div>`
+          });
+        }
+      },
+      reset: {
+        label: "Reset (Soma Break)",
+        callback: () => actor.setFlag("fourththing", "disciplineUsed.circuitbornAttentionResonance", false)
+      },
+      close: { label: "Close" }
+    },
+    default: "use"
+  }).render(true);
 }
 
 export async function openCircuitbornGlitchSurge(actor) {
@@ -3928,19 +4131,56 @@ export async function openHumanAbilities(actor) {
 export async function openHumanAdaptive(actor) {
   return _openSomaBreakAbility(actor, "humanAdaptive",
     "Adaptive (Human)",
-    "1/Soma Break: when you fail a saving throw, choose to succeed instead.");
+    "1/Soma Break: when you fail a saving throw, choose to succeed instead.",
+    async (a) => {
+      await a.setFlag("fourththing", "ancestry.oneShot.adaptiveAutoSave", true);
+      return `<p style="font-size:0.75rem;color:#a0d8b0;margin:0.2rem 0 0">Armed — your next failed saving throw automatically succeeds.</p>`;
+    });
 }
 
+// Advantage at exactly 1 HP, expressed as a reroll-lowest one-shot (same as
+// Sefirot/Qliph — the system's advantage idiom). Gated on integrity === 1; the
+// "1/round" cap is self-regulated (single-use, re-armed each round while at 1 HP).
 export async function openHumanTenacious(actor) {
-  return _openInfoOnlyAbility(actor,
-    "Tenacious (Human)",
-    "Conditional trigger — while you have exactly 1 HP, you have advantage on one check of your choice each round. Declare which check before rolling. (No tracking flag — only available when at 1 HP.)");
+  const sys   = actor.system?.system ?? actor.system ?? {};
+  const hp    = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
+  const atOne = hp === 1;
+  new Dialog({
+    title: "Tenacious (Human)",
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${atOne ? "AT 1 HP — AVAILABLE" : `HP ${hp} — only usable at exactly 1 HP`}</b></p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">While at exactly 1 HP, gain advantage on one check of your choice each round (expressed as reroll-lowest). Declare the check before rolling.</div>
+    </div>`,
+    buttons: {
+      ...(atOne ? {
+        use: {
+          label: "Arm Advantage (next check)",
+          callback: async () => {
+            await actor.setFlag("fourththing", "ancestry.oneShotReroll", { mode: "reroll-lowest", source: "Tenacious" });
+            ChatMessage.create({
+              speaker: ChatMessage.getSpeaker({ actor }),
+              content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">✶ Tenacious — Advantage</span></div><p style="margin:0.3rem 0;font-size:0.82rem">At 1 HP: your next check rerolls its lowest die. <span style="opacity:0.7">(1/round while at 1 HP.)</span></p></div>`
+            });
+          }
+        }
+      } : {}),
+      close: { label: "Close" }
+    },
+    default: atOne ? "use" : "close"
+  }).render(true);
 }
 
 export async function openStormbornWardOfTheGale(actor) {
   return _openSomaBreakAbility(actor, "stormbornWardOfTheGale",
     "Ward of the Gale (Stormborn Nomad)",
-    "1/Soma Break: when you would take environmental damage (storm, heat, hazard, etc.), use your reaction to reduce that damage to half until the start of your next turn.");
+    "1/Soma Break: when you would take environmental damage (storm, heat, hazard, etc.), use your reaction to reduce that damage to half until the start of your next turn.",
+    // _applyDamageToActor halves the next incoming hit (type-agnostic — same
+    // simplification as Aurablade Resolve·Resist; the "environmental" gate is
+    // honor-system, since the damage path doesn't carry a hazard flavor).
+    async (a) => {
+      await a.setFlag("fourththing", "ancestry.oneShot.galeHalveNext", true);
+      return `<p style="font-size:0.75rem;color:#a0d8b0;margin:0.2rem 0 0">Armed — your next incoming (environmental) damage is halved.</p>`;
+    });
 }
 
 // ─── Phase 4 — Character Options (Archetypes / Crews / Occult) (2026-04-27) ───
@@ -5340,7 +5580,47 @@ export async function openWyrdlensTikkunSight(actor) {
 
 export async function openDreamwalkerSharedDream(actor) {
   return _openSomaBreakAbility(actor, "dwSharedDream", "Shared Dream",
-    "Allies who Soma Break in your presence regain Clarity equal to half your tier (round up). 1/Soma Break you may explicitly invoke this to grant the bonus retroactively to the just-completed Soma Break.");
+    "Allies who Soma Break in your presence regain Clarity equal to half your tier (round up). 1/Soma Break you may explicitly invoke this to grant the bonus retroactively to the just-completed Soma Break.",
+    // Grant ⌈tier/2⌉ Clarity to allied tokens (same disposition) within 30 ft.
+    // Owner writes directly; non-owned allies go via GM relay (ft-grantClarity),
+    // mirroring _ftCreateAllyAE. Caps at each ally's clarity max (non-casters
+    // with no clarity track get nothing).
+    async (a) => {
+      const sys    = a.system?.system ?? a.system ?? {};
+      const tier   = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+      const amount = Math.ceil(tier / 2);
+      const selfTok = a.getActiveTokens?.()[0] ?? null;
+      if (!selfTok) {
+        ui.notifications?.warn("Shared Dream: place your token so presence (30 ft) can be measured.");
+        return false;
+      }
+      const grid    = canvas?.dimensions?.size     || 100;
+      const ftPerSq = canvas?.dimensions?.distance || 5;
+      const ctr = (t) => ({ x: t.x + (t.w ?? grid) / 2, y: t.y + (t.h ?? grid) / 2 });
+      const ftBetween = (t1, t2) => {
+        const c1 = ctr(t1), c2 = ctr(t2);
+        return Math.hypot(c1.x - c2.x, c1.y - c2.y) * (ftPerSq / grid);
+      };
+      const myDisp = selfTok.document?.disposition ?? 1;
+      const granted = [];
+      const hasGM = game.users?.some?.(u => u.isGM && u.active);
+      for (const t of (canvas?.tokens?.placeables ?? [])) {
+        if (!t?.actor || t.id === selfTok.id) continue;
+        if ((t.document?.disposition ?? 0) !== myDisp) continue; // allies only (same side)
+        if (ftBetween(selfTok, t) > 30) continue;
+        const ally = t.actor;
+        if (ally.isOwner) {
+          const asys = ally.system?.system ?? ally.system ?? {};
+          const cur  = Number(asys?.magic?.clarity?.value) || 0;
+          const max  = Number(asys?.magic?.clarity?.max) || cur; // no track → no grant
+          if (max > cur) { await ally.update({ "system.magic.clarity.value": Math.min(max, cur + amount) }); granted.push(ally.name); }
+        } else if (hasGM) {
+          game.socket?.emit?.("system.fourththing", { t: "ft-grantClarity", actorId: ally.id, amount });
+          granted.push(`${ally.name} (relayed)`);
+        }
+      }
+      return `<p style="font-size:0.75rem;color:#c8a0ff;margin:0.2rem 0 0">${granted.length ? `+${amount} Clarity to: ${_ftEscape(granted.join(", "))}.` : "No allies within 30 ft to share the dream with."}</p>`;
+    });
 }
 
 // Pactkeeper — Ledger Day (Initiation 16). 1/Soma Break: transfer ONE of your

@@ -61,6 +61,8 @@ import {
   collectRerolls,
   applyRerollGrants,
   consumeAnnotationReroll,
+  consumePaceReroll,
+  consumeAncestryReroll,
   collectResourceGrants,
   fireResourceGrants,
   collectTriggers,
@@ -116,6 +118,7 @@ import {
   openPactkeeperBindSubject,
   openPactkeeperRenegotiate,
   openPactkeeperPickL1Skills,
+  openPactkeeperLedgerDay,
   openCounterManifestation,
   // Buried per-use Phase 1 — Ancestry cores (2026-04-27)
   openMenhirkinHexRecognition,
@@ -1625,6 +1628,54 @@ function _ftCollectChainCandidates(caster, primaryActor, rangeFt) {
   }
   out.sort((a, b) => a.distance - b.distance);
   return out;
+}
+
+// Oldenborn Phoenix Oath eruption — fired from _applyDamageToActor when a
+// Phoenix-Oath-armed actor is held at 1 HP. Deals 2d6 + tier fire to each enemy
+// token within 10 ft (enemy = opposite disposition sign) and ends one condition
+// (charmed / frightened / restrained) on the eruptor. PB→tier (this system has
+// no D&D proficiency bonus). Returns a short note for the damage result line and
+// posts a chat card. Best-effort — never throws into the damage path.
+async function _ftPhoenixOathEruption(actor) {
+  const srcTok = actor?.getActiveTokens?.()?.[0];
+  const tier   = Math.max(1, Math.min(4, Number((actor.system?.system ?? actor.system)?.details?.tier) || 1));
+  const hits = [];
+  if (srcTok) {
+    const myDisp = srcTok.document?.disposition ?? 1;
+    for (const tok of (canvas?.tokens?.placeables ?? [])) {
+      if (!tok?.actor || tok.id === srcTok.id) continue;
+      const d = tok.document?.disposition ?? 0;
+      const isEnemy = (myDisp >= 0 && d < 0) || (myDisp < 0 && d > 0);
+      if (!isEnemy) continue;
+      if (_ftDistanceBetweenTokens(srcTok, tok) > 10) continue;
+      try {
+        const roll = new Roll(`2d6 + ${tier}`);
+        await roll.evaluate();
+        await game.fourththing.rolls._applyDamageToActor(tok.actor, roll.total, {
+          op: "damage", track: "integrity", damageType: "energy", damageFlavor: "fire"
+        });
+        hits.push(`${tok.actor.name} (${roll.total})`);
+      } catch (_e) { /* skip this token */ }
+    }
+  }
+  // End one condition (charmed / frightened / restrained) on the eruptor.
+  let endedCond = "";
+  const endable = ["charmed", "frightened", "restrained"];
+  const condAE = (actor.effects ?? []).find(e => endable.includes(e.flags?.fourththing?.condition));
+  if (condAE) { try { await condAE.delete(); endedCond = condAE.flags?.fourththing?.condition || ""; } catch (_e) {} }
+
+  try {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="fourththing-roll" style="border-color:#e0883a">
+        <div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8a85a">🔥 Phoenix Oath — Eruption</span></div>
+        <p style="margin:0.3rem 0;font-size:0.82rem">${foundry.utils.escapeHTML(actor.name)} holds at 1 and erupts (2d6 + ${tier} fire, 10 ft).</p>
+        ${hits.length ? `<p style="margin:0.2rem 0;font-size:0.78rem">Caught: ${foundry.utils.escapeHTML(hits.join(", "))}.</p>` : `<p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.7">No hostiles within 10 ft.</p>`}
+        ${endedCond ? `<p style="margin:0.2rem 0;font-size:0.78rem;color:#a0d8b0">Ended condition: ${foundry.utils.escapeHTML(endedCond)}.</p>` : `<p style="margin:0.2rem 0;font-size:0.74rem;opacity:0.6">No charmed/frightened/restrained to end.</p>`}
+      </div>`
+    });
+  } catch (_e) { /* chat best-effort */ }
+  return ` · 🔥 Phoenix Oath erupts${hits.length ? ` (${hits.length} caught)` : ""}`;
 }
 
 // Dialog for picking which secondaries the chain lands on. Pre-checks the
@@ -3915,17 +3966,30 @@ async function castManifestation(actor, item, {
       const dist = _ftDistanceBetweenTokens(casterToken, targetToken);
       const allowed = Number(mf.rangeFt);
       if (dist > allowed) {
-        const ok = await Dialog.confirm({
-          title: "Out of Range",
-          content: `<div style="display:flex;flex-direction:column;gap:0.4rem;padding:0.2rem 0;font-size:0.84rem">
-            <div>⚠ <b>${ftEscapeHtml(item?.name ?? "Manifestation")}</b> has an engine range of <b>${allowed} ft</b>, but <b>${ftEscapeHtml(target.name)}</b> is <b>${dist.toFixed(0)} ft</b> away.</div>
-            <div style="font-size:0.78rem;opacity:0.75">Cast anyway? (The fictional range often allows GM judgment; this is a soft check.)</div>
-          </div>`,
-          yes: () => true,
-          no:  () => false,
-          defaultYes: false
-        });
-        if (!ok) return false;
+        // Dreamwalker — The Walking Lane: 1/round while held, reach across the
+        // band — auto-allow an out-of-range cast (the range half of "ignore one
+        // band of cover or distance"; cover stays GM-adjudicated). Marks used.
+        const wlOn   = !!actor.flags?.fourththing?.modes?.dwWalkingLane;
+        const wlUsed = !!actor.flags?.fourththing?.modes?.walkingLaneUsedRound;
+        if (wlOn && !wlUsed) {
+          await actor.update({ "flags.fourththing.modes.walkingLaneUsedRound": true });
+          await ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll" style="border-color:#6a3a8a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c8a0ff">⟁ Walking Lane</span></div><p style="margin:0.2rem 0;font-size:0.8rem">${ftEscapeHtml(actor.name)} reaches across the band — <b>${ftEscapeHtml(item?.name ?? "manifestation")}</b> ignores range this cast (${dist.toFixed(0)} ft / ${allowed} ft engine range). 1/round.</p></div>`
+          });
+        } else {
+          const ok = await Dialog.confirm({
+            title: "Out of Range",
+            content: `<div style="display:flex;flex-direction:column;gap:0.4rem;padding:0.2rem 0;font-size:0.84rem">
+              <div>⚠ <b>${ftEscapeHtml(item?.name ?? "Manifestation")}</b> has an engine range of <b>${allowed} ft</b>, but <b>${ftEscapeHtml(target.name)}</b> is <b>${dist.toFixed(0)} ft</b> away.</div>
+              <div style="font-size:0.78rem;opacity:0.75">Cast anyway? (The fictional range often allows GM judgment; this is a soft check.)${wlOn ? " <em>Walking Lane already used this round.</em>" : ""}</div>
+            </div>`,
+            yes: () => true,
+            no:  () => false,
+            defaultYes: false
+          });
+          if (!ok) return false;
+        }
       }
     }
   }
@@ -7208,7 +7272,7 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
                                 damageRolledTotal = 0, damageDiceTooltip = "",
                                 explosionDice = [], surgeBanked = 0, doubleTen = false,
                                 costNote = "", signature = "", thirdThing = "",
-                                itemUuid = "", ignoreResists = false }) {
+                                itemUuid = "", ignoreResists = false, nonlethal = false }) {
   const ic = FT.INTENT_COLORS[intent] ?? "#888";
   const defData = FT.DEFENSES[defense] ?? { label: defense };
   const diceRow = diceResults.map(d =>
@@ -7253,8 +7317,9 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
               data-damage-flavor="${damageFlavor ?? ""}"
               data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}"
               data-item-uuid="${ftEscapeHtml(itemUuid ?? "")}"
-              data-ignore-resists="${ignoreResists ? "1" : "0"}">
-        Apply to target${ignoreResists ? " ⚔ ignores resists" : ""}
+              data-ignore-resists="${ignoreResists ? "1" : "0"}"
+              data-nonlethal="${nonlethal ? "1" : "0"}">
+        Apply to target${ignoreResists ? " ⚔ ignores resists" : ""}${nonlethal ? " 🤍 nonlethal" : ""}
       </button>
     </div>` : "";
   const metaBlock = (costNote || signature || thirdThing) ? `
@@ -8199,7 +8264,7 @@ Hooks.once("init", function () {
       openBulwarkSpendFrame, openBulwarkFramePool, openBulwarkRuin, openBulwarkStance,
       openShadowCourierPackage, openShadowCourierCrossing, openShadowCourierPassive,
       openCosmicLinguistAuthority, openCosmicLinguistAnnotation,
-      openPactkeeperBindSubject, openPactkeeperRenegotiate, openPactkeeperPickL1Skills,
+      openPactkeeperBindSubject, openPactkeeperRenegotiate, openPactkeeperPickL1Skills, openPactkeeperLedgerDay,
       openCounterManifestation,
       // Buried per-use Phase 1 — Ancestry cores
       openMenhirkinHexRecognition, openEchoDiverTemporalFlinch,
@@ -8589,6 +8654,8 @@ Hooks.once("init", function () {
     if (_dw.advantage) rerollGrants.push({ sourceItemName: "Fractal Self", mode: "reroll-lowest" });
     const rerollResult = await applyRerollGrants(roll, rerollGrants, totalBonus);
     await consumeAnnotationReroll(actor, rerollResult.applied);
+    await consumePaceReroll(actor, rerollResult.applied);
+    await consumeAncestryReroll(actor, rerollResult.applied);
     // Consume any DW one-shots used on this roll (omen d6, foresight d4,
     // fractal advantage). Append a chat note crediting the source(s).
     if (_dw.sources.length) await _ftConsumeDwOneShots(actor, _dw);
@@ -8997,7 +9064,12 @@ Hooks.once("init", function () {
     const totalBonus = attrVal + aeAttr;
     // CL Resonance Channel defenseImpose OR Aurablade Dread → 3d10kl2 (3 dice,
     // keep lowest 2) instead of 2d10x10. Worse expected total, no explosions.
-    const effOverride = (rollOverride === "3d10kl2" || _abDisSaves) ? "3d10kl2" : rollOverride;
+    // Cosmic Linguist — The Sentence: while the caster holds the stance, the
+    // primary target rolls its save vs the caster's manifestation at disadvantage
+    // ("bound by name"). Caster = `actor` here. Simplification: applies to all of
+    // the caster's manifestation saves while held, not a single named target.
+    const _clSentence = !!actor?.flags?.fourththing?.modes?.clSentence;
+    const effOverride = (rollOverride === "3d10kl2" || _abDisSaves || _clSentence) ? "3d10kl2" : rollOverride;
     let formula      = effOverride === "3d10kl2"
       ? `3d10kl2 + ${totalBonus}`
       : `2d10x10 + ${totalBonus}`;
@@ -9017,8 +9089,16 @@ Hooks.once("init", function () {
     if (explosions > 0) await _ftBankSurge(target, explosions);
 
     const total = roll.total;
-    // Iron Word OR Aurablade Resolve auto-succeed: auto-pass overrides the DC.
-    const saved = (_saveSurge.ironWord || _abAutoHit) ? true : (total >= dc);
+    // Human Adaptive — "when you fail a saving throw, choose to succeed" (1/SB
+    // one-shot armed on the saver). Only flips an actual failure; consumed then.
+    const _adaptive = !!target.flags?.fourththing?.ancestry?.oneShot?.adaptiveAutoSave;
+    const _adaptiveApplies = _adaptive && !(_saveSurge.ironWord || _abAutoHit) && total < dc;
+    if (_adaptiveApplies) {
+      try { await target.update({ "flags.fourththing.ancestry.oneShot.-=adaptiveAutoSave": null }); }
+      catch (_e) { /* non-owner — clears on round commit */ }
+    }
+    // Iron Word OR Aurablade Resolve OR Human Adaptive auto-succeed: override DC.
+    const saved = (_saveSurge.ironWord || _abAutoHit || _adaptiveApplies) ? true : (total >= dc);
     if (_abAutoHit) {
       const _left = (Number(_abAutoSave.uses) || 1) - 1;
       if (_left > 0) await target.update({ "flags.fourththing.aurablade.oneShot.autoSucceedSave.uses": _left });
@@ -9358,8 +9438,25 @@ Hooks.once("init", function () {
       bonus = r.bonus || 0;
     }
     const total   = roll.total - pulled + bonus;
-    // Final Argument: auto-hit. Surge spends overpower the defense gate.
-    const success = _surge.finalArgument ? true : (total >= defenseValue);
+    // Furrykin Predator Patience — "treat a failed attack as a hit" (1/SB one-shot,
+    // armed by the ability dialog). Consumed on the next attack made while armed.
+    const _predatorHit = !!actor.flags?.fourththing?.ancestry?.oneShot?.predatorAutoHit;
+    if (_predatorHit) {
+      try { await actor.update({ "flags.fourththing.ancestry.oneShot.-=predatorAutoHit": null }); }
+      catch (_e) { /* non-owner — clears on round commit */ }
+    }
+    // Final Argument / Predator Patience: auto-hit. Surge spends overpower the gate.
+    const success = (_surge.finalArgument || _predatorHit) ? true : (total >= defenseValue);
+
+    // Aurablade Mercy — Nonlethal: "next damaging hit is nonlethal" (one-shot
+    // armed on the attacker). The defender doesn't know the attacker, so we
+    // decide it here (attacker known) and stamp the Apply-Damage button; consume
+    // only on a hit, since it rides "next DAMAGING hit".
+    const _nonlethalHit = success && !!actor.flags?.fourththing?.aurablade?.oneShot?.nonlethalNextHit;
+    if (_nonlethalHit) {
+      try { await actor.update({ "flags.fourththing.aurablade.oneShot.-=nonlethalNextHit": null }); }
+      catch (_e) { /* non-owner — clears on round commit */ }
+    }
 
     const restraintNote = (pulled || bonus)
       ? `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">${[
@@ -9380,6 +9477,17 @@ Hooks.once("init", function () {
     // Doomstrike: tack on `+Td6x10` exploding bonus damage.
     if (_surge.doomstrike && finalDamageFormula) {
       finalDamageFormula = `${finalDamageFormula} + ${tierVal}d6x10`;
+    }
+
+    // Menhirkin Heat Memory — banked-heat rider: +Nd10x10 fire on a connecting
+    // hit (N = heat spent). Consumed only on a hit (persists through a miss, per
+    // "next attack that connects"). Bonus inherits the attack's damage type for
+    // resist math — same simplification Doomstrike accepts.
+    const _heatRider = Math.max(0, Number(actor.flags?.fourththing?.ancestry?.oneShot?.heatRider) || 0);
+    if (_heatRider > 0 && success && finalDamageFormula) {
+      finalDamageFormula = `${finalDamageFormula} + ${_heatRider}d10x10`;
+      try { await actor.update({ "flags.fourththing.ancestry.oneShot.-=heatRider": null }); }
+      catch (_e) { /* non-owner — rider lingers; harmless */ }
     }
 
     // 2026-05-20 — Pre-roll damage on a hit so players see dice + total
@@ -9433,7 +9541,7 @@ Hooks.once("init", function () {
         damageFacultyMod, damageBaseFormula: damageFormula,
         damageRolledTotal, damageDiceTooltip,
         damageType, damageFlavor, costNote, signature, thirdThing,
-        itemUuid, ignoreResists: !!_surge.sunderingBlow
+        itemUuid, ignoreResists: !!_surge.sunderingBlow, nonlethal: _nonlethalHit
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
         : "") + (aeContribs.length
@@ -9533,7 +9641,7 @@ Hooks.once("init", function () {
   // 0.5 / 0). Returns a short description for chat-card summaries.
   game.fourththing.rolls._applyDamageToActor = async function (actor, baseDmg, {
     op = "damage", track = "integrity", damageType = "", damageFlavor = "",
-    perTargetMultiplier = 1, ignoreResists = false
+    perTargetMultiplier = 1, ignoreResists = false, nonlethal = false
   } = {}) {
     if (!actor) return null;
     const rawSys = actor.system?.system ?? actor.system;
@@ -9630,6 +9738,7 @@ Hooks.once("init", function () {
     // a one-shot.
     const oneShotClears = {};
     let preventDropArmed = false;
+    let phoenixArmed = false;
     if (op === "damage" && dmg > 0) {
       const ff = actor.flags?.fourththing ?? {};
 
@@ -9662,8 +9771,18 @@ Hooks.once("init", function () {
         tags.push(`Aurablade Mercy −${b - dmg}`);
         oneShotClears["flags.fourththing.aurablade.-=reduceNextDamageByTier"] = null;
       }
+      // Stormborn Ward of the Gale — halve the next incoming (environmental) hit.
+      // Type-agnostic (the damage path carries no hazard flavor) — honor-system
+      // gate, same simplification as Aurablade Resist.
+      if (ff.ancestry?.oneShot?.galeHalveNext) {
+        const b = dmg; dmg = Math.floor(dmg / 2);
+        tags.push(`Ward of the Gale: ${b} → ${dmg}`);
+        oneShotClears["flags.fourththing.ancestry.oneShot.-=galeHalveNext"] = null;
+      }
       // Aurablade Mercy · Prevent Drop — applied at the integrity floor below.
       if (track === "integrity" && ff.aurablade?.preventDropOnce) preventDropArmed = true;
+      // Oldenborn Phoenix Oath — drop-to-1 + eruption, applied at the floor below.
+      if (track === "integrity" && ff.ancestry?.oneShot?.phoenixOath) phoenixArmed = true;
     }
     const defenseTag = tags.length ? ` (${tags.join(", ")})` : "";
 
@@ -9694,6 +9813,23 @@ Hooks.once("init", function () {
       preventDropNote = " · Aurablade: held at 1";
       oneShotClears["flags.fourththing.aurablade.-=preventDropOnce"] = null;
     }
+    // Oldenborn Phoenix Oath — when this hit would drop you to 0, hold at 1 and
+    // erupt. Fire the AOE + condition-end AFTER the write (below), so you're
+    // stabilized first. Consumed here regardless of Aurablade also being armed.
+    let phoenixErupted = false;
+    if (phoenixArmed && cur > 0 && newVal < 1) {
+      newVal = 1;
+      phoenixErupted = true;
+      preventDropNote += " · Phoenix Oath: held at 1";
+      oneShotClears["flags.fourththing.ancestry.oneShot.-=phoenixOath"] = null;
+    }
+    // Aurablade Mercy — Nonlethal: this specific hit can't drop the target below
+    // 1 (knocked out, not killed). An incoming-hit property passed by the apply
+    // path (attacker stamped it at attack time), not a flag on the defender.
+    if (nonlethal && track === "integrity" && cur > 0 && newVal < 1) {
+      newVal = 1;
+      preventDropNote += " · 🤍 nonlethal: held at 1";
+    }
 
     // Fires BEFORE the write so a Frame Die can react while still standing.
     // Guarded so already-destroyed rigs (cur===0) re-hit by AoE don't re-fire.
@@ -9721,6 +9857,14 @@ Hooks.once("init", function () {
       console.log(`[fourththing] boss damage: ${actor.name} integrity ${cur} → ${newVal} (writeKey=${writeKey})`);
     }
     await actor.update(updates);
+
+    // Phoenix Oath eruption — stabilized at 1 above; now blast nearby hostiles
+    // and end one condition. Best-effort; appended to the result line.
+    let phoenixNote = "";
+    if (phoenixErupted) {
+      try { phoenixNote = await _ftPhoenixOathEruption(actor); }
+      catch (e) { console.warn("[fourththing] Phoenix Oath eruption failed", e); }
+    }
 
     // Damage-while-dying: +1 failure (or +2 if massive ≥ tier × 5).
     if (track === "integrity" && actor.type === "character" && rawSys?.conditions?.dying) {
@@ -9758,7 +9902,7 @@ Hooks.once("init", function () {
     }
 
     const destroyedTag = rigDestroyed ? " — DESTROYED" : "";
-    return `${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})${defenseTag}${preventDropNote}${destroyedTag}`;
+    return `${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})${defenseTag}${preventDropNote}${destroyedTag}${phoenixNote}`;
   };
 
   game.fourththing.rolls.applyDamageFromButton = async function (btn) {
@@ -9769,6 +9913,7 @@ Hooks.once("init", function () {
     const op            = String(btn.dataset.op ?? "damage").toLowerCase();
     const itemUuid      = btn.dataset.itemUuid ?? "";
     const ignoreResists = btn.dataset.ignoreResists === "1";
+    const nonlethal     = btn.dataset.nonlethal === "1";
     const targets       = game.user.targets;
 
     if (!targets.size) {
@@ -9807,13 +9952,13 @@ Hooks.once("init", function () {
         game.socket?.emit?.("system.fourththing", {
           t: "ft-applyDamage",
           actorId: actor.id,
-          baseDmg, op, track, damageType, damageFlavor, ignoreResists
+          baseDmg, op, track, damageType, damageFlavor, ignoreResists, nonlethal
         });
         ui.notifications.info(`${actor.name}: damage relayed to GM.`);
         continue;
       }
       const desc = await game.fourththing.rolls._applyDamageToActor(actor, baseDmg, {
-        op, track, damageType, damageFlavor, perTargetMultiplier: 1, ignoreResists
+        op, track, damageType, damageFlavor, perTargetMultiplier: 1, ignoreResists, nonlethal
       });
       if (desc) ui.notifications.info(desc);
 
@@ -11059,6 +11204,13 @@ Hooks.once("init", function () {
         if (typeof mv.fly   === "number") sys.derived.movement.fly   = Math.max(sys.derived.movement.fly,   mv.fly);
         if (typeof mv.walkBonus === "number") sys.derived.movement.walk += mv.walkBonus;
       }
+      // Bulwark Stance · Advance — +10 ft walk speed while the stance is held
+      // (canon pair to Advance's free Ruin, wired in openBreakerRuin). Derived
+      // here so the turn-start movement budget (= derived.movement.walk) and all
+      // speed displays pick it up. Drops automatically when the stance ends.
+      if (this.flags?.fourththing?.bulwarkStance === "advance") {
+        sys.derived.movement.walk += 10;
+      }
 
       // Initiative bonus reader (RFI canon: 2026-04-29; AE-aware 2026-05-05).
       // Items declare flags.fourththing.passives.initiative.bonus = N. AEs
@@ -11518,7 +11670,13 @@ Hooks.once("init", function () {
         const dieResults = roll.dice?.[0]?.results ?? [];
         const explos     = Math.max(0, dieResults.length - 2);
         if (explos > 0) await _ftBankSurge(actor, explos);
-        const saved = roll.total >= dc;
+        // Human Adaptive — auto-succeed a failed save (also honored on this
+        // condition-shake path; roller is `actor`).
+        const _adaptiveCS = !!actor.flags?.fourththing?.ancestry?.oneShot?.adaptiveAutoSave && roll.total < dc;
+        if (_adaptiveCS) {
+          try { await actor.update({ "flags.fourththing.ancestry.oneShot.-=adaptiveAutoSave": null }); } catch (_e) {}
+        }
+        const saved = _adaptiveCS ? true : (roll.total >= dc);
         const condLabel = FT.CONDITIONS?.[meta.condition ?? eff.flags.fourththing.condition]?.label ?? "condition";
         const headerColor = saved ? "#5fb35f" : "#c45f5f";
         const headerLabel = saved ? "SHAKEN OFF" : "STILL AFFLICTED";
@@ -13456,6 +13614,10 @@ Hooks.once("init", function () {
       if (this.actor.flags?.fourththing?.bonusActionAvailable) {
         await this.actor.unsetFlag("fourththing", "bonusActionAvailable");
       }
+      // Dreamwalker Walking Lane — per-round "ignore range" use refreshes at turn start.
+      if (this.actor.flags?.fourththing?.modes?.walkingLaneUsedRound) {
+        await this.actor.update({ "flags.fourththing.modes.-=walkingLaneUsedRound": null });
+      }
       // Clear per-turn combat flags (Dodge / Disengage / Hold + B11.C rig
       // weapon fire gate + B12 pilot/engineer gates). combat.hidden
       // persists across turns until the steward acts overtly.
@@ -13468,7 +13630,7 @@ Hooks.once("init", function () {
         combat.dodging || combat.disengaged || combat.holding ||
         combat.rigWeaponFiredThisRound || combat.rigWeaponsFiredThisRound ||
         combat.pilotActionUsedThisRound || combat.engineerRepairedThisRound ||
-        combat.lastFiredRigId || combat.lastFiredWeaponId
+        combat.lastFiredRigId || combat.lastFiredWeaponId || combat.paceReroll
       )) {
         await this.actor.update({
           "flags.fourththing.combat.-=dodging":                    null,
@@ -13479,7 +13641,8 @@ Hooks.once("init", function () {
           "flags.fourththing.combat.-=lastFiredRigId":             null,
           "flags.fourththing.combat.-=lastFiredWeaponId":          null,
           "flags.fourththing.combat.-=pilotActionUsedThisRound":   null,
-          "flags.fourththing.combat.-=engineerRepairedThisRound":  null
+          "flags.fourththing.combat.-=engineerRepairedThisRound":  null,
+          "flags.fourththing.combat.-=paceReroll":                 null   // SC Pace reroll one-shot, if unused
         });
       }
 
@@ -13849,6 +14012,10 @@ Hooks.once("init", function () {
         pactkeeper_bind_subject:             (a) => mod.openPactkeeperBindSubject(a),
         pactkeeper_renegotiate:              (a) => mod.openPactkeeperRenegotiate(a),
         pactkeeper_pick_l1_skills:           (a) => mod.openPactkeeperPickL1Skills(a),
+        // Ledger Day uses the pk_ledger_day key on all 3 sheet buttons (char x2 + NPC);
+        // it lived only in the ft-class-automation dispatcher before, so the sheet's
+        // DISPATCH fell through to "No handler for: pk_ledger_day". Wired 2026-05-23.
+        pk_ledger_day:                       (a) => mod.openPactkeeperLedgerDay(a),
         // DEPRECATED 2026-05-14 — no template surface; Counter is wired
         // into the cast-time flow (compat-bridge), not surfaced as a button.
         counter_manifestation:               (a) => mod.openCounterManifestation(a),
@@ -21151,7 +21318,8 @@ function _ftRelayHandler(msg) {
         damageType: msg.damageType ?? "",
         damageFlavor: msg.damageFlavor ?? "",
         perTargetMultiplier: 1,
-        ignoreResists: !!msg.ignoreResists
+        ignoreResists: !!msg.ignoreResists,
+        nonlethal: !!msg.nonlethal
       }).then(desc => { if (desc) ui.notifications.info(desc); })
         .catch(e => console.warn("[fourththing] GM-relay damage apply failed", e));
     } else if (msg?.t === "ft-applySurgeAE") {
@@ -21163,6 +21331,22 @@ function _ftRelayHandler(msg) {
       if (!actor || !msg.aeData) return;
       actor.createEmbeddedDocuments("ActiveEffect", [msg.aeData])
         .catch(e => console.warn("[fourththing] GM-relay Surge AE apply failed", e));
+    } else if (msg?.t === "ft-grantClarity") {
+      // 2026-05-23 — Dreamwalker Shared Dream grants Clarity to allies the
+      // invoking player may not own. GM applies, capped at the ally's max
+      // (allies with no clarity track get nothing). GM-only to avoid dupes.
+      if (!game.user?.isGM) return;
+      if (_ftRelaySeenRecently(`grantClarity:${msg.actorId}:${msg.amount}`)) return;
+      const ally = game.actors?.get(msg.actorId);
+      if (!ally) return;
+      const asys = ally.system?.system ?? ally.system ?? {};
+      const cur  = Number(asys?.magic?.clarity?.value) || 0;
+      const max  = Number(asys?.magic?.clarity?.max) || cur;
+      const amt  = Math.max(0, Number(msg.amount) || 0);
+      if (max > cur && amt > 0) {
+        ally.update({ "system.magic.clarity.value": Math.min(max, cur + amt) })
+          .catch(e => console.warn("[fourththing] GM-relay Clarity grant failed", e));
+      }
     }
   } catch (e) {
     console.error("[ft:relay] handler threw", e);
