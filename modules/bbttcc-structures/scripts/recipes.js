@@ -153,7 +153,7 @@ export async function build(recipeId, factionActor, opts = {}) {
         archetype: `Structure: ${recipe.name}`,
         mobility: "stationary",
         state: "parked",
-        factionOwnerId: factionActor.id
+        factionOwnerId: factionActor?.id ?? ""
       }
     }
   };
@@ -372,12 +372,13 @@ async function postBuildCard(actor, recipe, faction) {
   const rows = (recipe.materialOf ?? []).map(c =>
     `<li>${_esc(c.name ?? c.key)} <b>×${c.qty}</b></li>`
   ).join("");
+  const raiser = faction?.name ? `<b>${_esc(faction.name)}</b> raises` : "Raised:";
   await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor: faction }),
+    speaker: faction ? ChatMessage.getSpeaker({ actor: faction }) : ChatMessage.getSpeaker(),
     content: `<div style="border:2px solid #d9c47a; padding:0.5rem 0.7rem; background:#1a1611; color:#cfc4a8; font-family:sans-serif">
       <div style="font-size:0.82rem; color:#d9c47a; letter-spacing:0.1em;">⧉ STRUCTURE BUILT — ${_esc(recipe.name)}</div>
       <div style="font-size:0.74rem; margin-top:3px;">
-        <b>${_esc(faction.name)}</b> raises <b>${_esc(actor.name)}</b>.
+        ${raiser} <b>${_esc(actor.name)}</b>.
       </div>
       <ul style="margin:4px 0 0 18px; padding:0; font-size:0.72rem;">${rows}</ul>
       ${recipe.specialNote ? `<div style="margin-top:5px; font-size:0.7rem; font-style:italic; opacity:0.7">${_esc(recipe.specialNote)}</div>` : ""}

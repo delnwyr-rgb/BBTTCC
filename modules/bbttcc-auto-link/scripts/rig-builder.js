@@ -100,6 +100,7 @@ const CHASSIS_STARTERS = [
   },
   {
     key: "stationary_battery",
+    category: "facility",
     label: "Stationary Battery",
     description: "An emplacement. Doesn't move; threatens an arc. Bind to a hex.",
     defaults: {
@@ -107,6 +108,33 @@ const CHASSIS_STARTERS = [
       capacity: { pilot: [0,1], gunner: [1,2], engineer: [0,1], crew: [0,2] },
       tags: "emplacement, battery, fixed",
       loadout: { frame: "Garrison Fort Frame", weapons: ["Mortar Battery"], systems: ["Reinforced Plating", "Sensor Suite"] }
+    }
+  },
+  {
+    // Facility chip — a fixed manned strongpoint. Stationary rig under the
+    // unified model; the Facilities tab biases mobility to stationary on commit.
+    key: "garrison_outpost",
+    category: "facility",
+    label: "Garrison Outpost",
+    description: "A fixed strongpoint. Houses a small garrison, watches an approach, doesn't move.",
+    defaults: {
+      bracket: "medium", mobility: "stationary", tier: 2,
+      capacity: { pilot: [0,0], gunner: [1,2], engineer: [0,1], crew: [2,6] },
+      tags: "garrison, outpost, fixed, facility",
+      loadout: { frame: "Garrison Fort Frame", weapons: ["Twin Autocannons"], systems: ["Reinforced Plating", "Sensor Suite"] }
+    }
+  },
+  {
+    // Facility chip — stationary fabrication & repair bay; anchors a holding.
+    key: "field_workshop",
+    category: "facility",
+    label: "Field Workshop",
+    description: "A stationary fabrication & repair bay. Mends rigs, fabricates parts, anchors a holding.",
+    defaults: {
+      bracket: "medium", mobility: "stationary", tier: 2,
+      capacity: { pilot: [0,0], gunner: [0,0], engineer: [1,2], crew: [1,4] },
+      tags: "workshop, fabrication, repair, facility",
+      loadout: { frame: "Forge Facility Frame", weapons: [], systems: ["Repair Bay", "Comms Array"], outputs: ["Mounted Forge"] }
     }
   },
   {
@@ -297,13 +325,54 @@ function _factionOptions() {
     .join("");
 }
 
-function _starterChipsHTML() {
-  return CHASSIS_STARTERS.map((t, i) => `
+// Render the chassis chips for one category (default "rig"). The global index
+// into CHASSIS_STARTERS is preserved on data-bbttcc-idx so _wireStarterChips
+// can resolve the original entry regardless of which category it sits in.
+function _starterChipsHTML(category = "rig") {
+  return CHASSIS_STARTERS
+    .map((t, i) => ({ t, i }))
+    .filter(({ t }) => (t.category ?? "rig") === category)
+    .map(({ t, i }) => `
     <button type="button" class="ft-manifest-chip" data-bbttcc-starter="${_esc(t.key)}"
             data-bbttcc-idx="${i}" title="${_esc(t.description)}"
             style="cursor:pointer; border:1px solid rgba(255,255,255,0.18); background:rgba(255,255,255,0.06);">
       ${_esc(t.label)}
     </button>`).join(" ");
+}
+
+// Render infrastructure chips dynamically from the bbttcc-structures recipe
+// catalog, grouped by recipe.category. Clicking one selects a recipe to build
+// through game.bbttcc.api.structures.recipes.build (see _commitInfrastructure).
+function _infraChipsHTML() {
+  const recipes = game.bbttcc?.api?.structures?.recipes?.list?.() ?? [];
+  if (!recipes.length) {
+    return `<div style="font-size:0.74rem; opacity:0.7; padding:0.4rem 0;">
+      No structure recipes available — is the <code>bbttcc-structures</code> module active?
+    </div>`;
+  }
+  const LABELS = {
+    dwellings: "Dwellings", civic: "Civic & Market", utility: "Utility & Industrial",
+    barriers: "Barriers & Cover", fortifications: "Fortifications", misc: "Other"
+  };
+  const groups = {};
+  const order = [];
+  for (const r of recipes) {
+    const cat = r.category ?? "misc";
+    if (!groups[cat]) { groups[cat] = []; order.push(cat); }
+    groups[cat].push(r);
+  }
+  return order.map(cat => `
+    <div style="width:100%;">
+      <div style="font-size:0.6rem; letter-spacing:0.09em; text-transform:uppercase; opacity:0.5; margin:0.4rem 0 0.2rem;">${_esc(LABELS[cat] ?? cat)}</div>
+      <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+        ${groups[cat].map(r => `
+          <button type="button" class="ft-manifest-chip" data-bbttcc-recipe="${_esc(r.id)}"
+                  title="${_esc(r.description ?? "")}"
+                  style="cursor:pointer; border:1px solid rgba(255,255,255,0.18); background:rgba(255,255,255,0.06);">
+            ${_esc(r.name)}
+          </button>`).join(" ")}
+      </div>
+    </div>`).join("");
 }
 
 /* Extract a field-level draft from a source Rig actor for duplicate flows.
@@ -346,7 +415,8 @@ export function rigSeedFromActor(actor) {
 
 export async function openRigBuilder({ seed = null } = {}) {
   const factionOpts = _factionOptions();
-  const starterChips = _starterChipsHTML();
+  const starterChipsRig = _starterChipsHTML("rig");
+  const starterChipsFacility = _starterChipsHTML("facility");
 
   const bracketOpts = BRACKETS.map(b =>
     `<option value="${b.key}"${b.key === "medium" ? " selected" : ""}>${b.label} · base ${b.base}</option>`
@@ -379,21 +449,31 @@ export async function openRigBuilder({ seed = null } = {}) {
     <div class="ft-manifest-dialog-title">Create Rig</div>
     <div class="ft-manifest-dialog-domain">Frame · Vehicle authoring</div>
     <div class="ft-manifest-dialog-copy">
-      Bring a frame into the world. A rig is a chassis with crew slots — it can
-      drive, fly, sail, or stand. Pick the chassis, set who rides where, and
-      let the integrity envelope speak for the rest. Weapons, output modules,
-      and frame items are added from the sheet after creation.
+      Three things live here. A <b>Rig</b> is a mobile chassis with crew slots.
+      A <b>Facility</b> is a fixed emplacement bound to a hex. <b>Infrastructure</b>
+      is breakable scenery — shacks, fences, sheds — that takes damage, breaches,
+      and collapses when a rig rams through. Pick a category, pick a template.
     </div>
-    <div class="ft-manifest-guide-body" style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.4rem;">
-      ${starterChips}
+    <div class="bbttcc-rb-tabs" style="display:flex; gap:0.3rem; margin-top:0.55rem;">
+      <button type="button" class="bbttcc-rb-tab" data-bbttcc-cat="rig">Rigs</button>
+      <button type="button" class="bbttcc-rb-tab" data-bbttcc-cat="facility">Facilities</button>
+      <button type="button" class="bbttcc-rb-tab" data-bbttcc-cat="infrastructure">Infrastructure</button>
     </div>
+    <div class="ft-manifest-guide-body" data-bbttcc-chiprow="rig" style="display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.45rem;">
+      ${starterChipsRig}
+    </div>
+    <div class="ft-manifest-guide-body" data-bbttcc-chiprow="facility" style="display:none; flex-wrap:wrap; gap:0.35rem; margin-top:0.45rem;">
+      ${starterChipsFacility}
+    </div>
+    <div data-bbttcc-chiprow="infrastructure" id="bbttcc-rb-infra-chips" style="display:none; margin-top:0.25rem;"></div>
     <ul class="ft-manifest-dialog-list" style="margin-top:0.4rem;">
-      <li>Pick a chassis chip above to seed bracket, mobility, capacity, and tags. Override anything afterwards.</li>
+      <li><b>Rig / Facility:</b> a template chip seeds bracket, mobility, capacity, and tags. Override anything afterwards.</li>
       <li>Bracket × Tier sets the integrity envelope; Guard/Evasion/Resolve derive from bracket at render time.</li>
-      <li>Stationary chassis bind to a hex (emplacement, facility, battery). Mobile chassis can be deployed to a battle scene.</li>
+      <li><b>Infrastructure:</b> a template builds a structure with a material bill — it has Plates, a Threshold, and a collapse profile. Flimsy by design.</li>
     </ul>
   </div>
 
+  <div class="bbttcc-rb-pane" data-bbttcc-pane="rigform">
   <div class="ft-manifest-dialog-section" style="margin-top:0.6rem;">
     <div class="ft-prev-label">What is this rig?</div>
     <div class="ft-prev-align-note">Name it, name its archetype. Faction owner powers downstream territory + raid integration.</div>
@@ -482,6 +562,29 @@ export async function openRigBuilder({ seed = null } = {}) {
        avoids the dataset/jQuery-wrap discrepancy that caused the loadout
        seed to silently skip on first ship (2026-05-17 patch). -->
   <input type="hidden" data-bbttcc-field="_starterKey" value=""/>
+  </div><!-- /[data-bbttcc-pane="rigform"] -->
+
+  <div class="bbttcc-rb-pane" data-bbttcc-pane="infra" style="display:none;">
+    <div class="ft-manifest-dialog-section" style="margin-top:0.6rem;">
+      <div class="ft-prev-label">What are you raising?</div>
+      <div class="ft-prev-align-note">Pick an infrastructure template above. These are breakable, drive-through structures — they take real damage, breach, and collapse. Owner is optional; leave it Unaffiliated to drop free GM scenery.</div>
+    </div>
+    <div class="ft-cast-grid">
+      <div class="ft-cast-field ft-cast-span-2"><label>Name override</label>
+        <input type="text" data-bbttcc-infra="name" placeholder="(default: template name)"/></div>
+      <div class="ft-cast-field"><label>Owner / pay-from faction</label>
+        <select data-bbttcc-infra="factionId">${factionOpts}</select></div>
+      <div class="ft-cast-field"><label>Placement</label>
+        <label style="display:flex; align-items:center; gap:0.4rem; font-weight:normal; margin-top:0.35rem;">
+          <input type="checkbox" data-bbttcc-infra="dropToken" checked/> Drop token at view center
+        </label></div>
+      <div class="ft-cast-field ft-cast-span-2">
+        <label style="display:flex; align-items:center; gap:0.4rem; font-weight:normal;">
+          <input type="checkbox" data-bbttcc-infra="charge"/> Charge the owner faction's stockpile for the material bill (otherwise it's a free build)
+        </label></div>
+    </div>
+    <div id="bbttcc-rb-infra-preview" style="margin-top:0.5rem;"></div>
+  </div>
 </div>`;
 
   const isDuplicate = !!seed;
@@ -509,7 +612,16 @@ export async function openRigBuilder({ seed = null } = {}) {
       },
       default: "create",
       render: (html) => {
+        const root = (html instanceof HTMLElement ? html : html[0]);
+        // Inject infrastructure chips from the live structures recipe catalog.
+        const infraHost = root?.querySelector("#bbttcc-rb-infra-chips");
+        if (infraHost) infraHost.innerHTML = _infraChipsHTML();
+        // A duplicated actor is always a rig/facility; open on the matching tab.
+        if (root) root.dataset.bbttccCategory = (seed?.mobility === "stationary") ? "facility" : "rig";
         _wireStarterChips(html);
+        _wireInfraChips(root);
+        _wireCategoryTabs(html);
+        _updateInfraPreview(root);
         if (seed) _applySeed(html, seed);
       }
     }, {
@@ -609,8 +721,199 @@ function _wireStarterChips(html) {
   });
 }
 
+/* Wire the Rigs / Facilities / Infrastructure category tabs. Switching a tab
+ * swaps the visible chip row + form pane, retitles the guide domain line, and
+ * relabels the footer create button. The active category is stashed on
+ * root.dataset.bbttccCategory, which _commit reads to route on submit. */
+function _wireCategoryTabs(html) {
+  const root = (html instanceof HTMLElement ? html : html?.[0]);
+  if (!root) return;
+  const DOMAINS = {
+    rig: "Frame · Vehicle authoring",
+    facility: "Emplacement · Facility authoring",
+    infrastructure: "Scenery · Breakable infrastructure"
+  };
+  const BTN_LABELS = { rig: "Create Rig", facility: "Create Facility", infrastructure: "Build Structure" };
+  const activeCss = "cursor:pointer; padding:0.25rem 0.75rem; border:1px solid #3e8ec8; border-radius:4px; font-size:0.8rem; background:rgba(62,142,200,0.28); color:inherit;";
+  const idleCss   = "cursor:pointer; padding:0.25rem 0.75rem; border:1px solid rgba(255,255,255,0.18); border-radius:4px; font-size:0.8rem; background:rgba(255,255,255,0.06); color:inherit;";
+
+  const setCat = (cat) => {
+    root.dataset.bbttccCategory = cat;
+    root.querySelectorAll(".bbttcc-rb-tab").forEach(t => {
+      t.style.cssText = (t.dataset.bbttccCat === cat) ? activeCss : idleCss;
+    });
+    root.querySelectorAll("[data-bbttcc-chiprow]").forEach(r => {
+      const on = r.dataset.bbttccChiprow === cat;
+      r.style.display = on ? (cat === "infrastructure" ? "block" : "flex") : "none";
+    });
+    root.querySelectorAll("[data-bbttcc-pane]").forEach(p => {
+      const isInfra = p.dataset.bbttccPane === "infra";
+      p.style.display = ((cat === "infrastructure") === isInfra) ? "block" : "none";
+    });
+    const dom = root.querySelector(".ft-manifest-dialog-domain");
+    if (dom) dom.textContent = DOMAINS[cat] ?? "";
+    // Facilities are stationary — reflect that in the (hidden-but-submitted) field.
+    if (cat === "facility") {
+      const mob = root.querySelector('[data-bbttcc-field="mobility"]');
+      if (mob) mob.value = "stationary";
+    }
+    // Relabel the footer button, preserving its icon.
+    const dlgRoot = root.closest(".app, .application, .window-app, .dialog");
+    const btn = dlgRoot?.querySelector('.dialog-buttons button[data-button="create"], .dialog-buttons button.create');
+    if (btn) {
+      const icon = btn.querySelector("i")?.outerHTML ?? "<i class='fas fa-cogs'></i>";
+      btn.innerHTML = `${icon} ${BTN_LABELS[cat] ?? "Create"}`;
+    }
+  };
+
+  root.querySelectorAll(".bbttcc-rb-tab").forEach(tab => {
+    tab.addEventListener("click", () => setCat(tab.dataset.bbttccCat));
+  });
+  setCat(root.dataset.bbttccCategory || "rig");
+}
+
+/* Wire infrastructure recipe chips + the inputs that affect the cost preview. */
+function _wireInfraChips(root) {
+  if (!root) return;
+  root.querySelectorAll("[data-bbttcc-recipe]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      root.dataset.bbttccRecipeId = String(btn.dataset.bbttccRecipe || "");
+      root.querySelectorAll("[data-bbttcc-recipe]").forEach(b => {
+        b.style.background = b === btn ? "rgba(62,142,200,0.22)" : "rgba(255,255,255,0.06)";
+      });
+      _updateInfraPreview(root);
+    });
+  });
+  root.querySelectorAll('[data-bbttcc-infra="factionId"], [data-bbttcc-infra="charge"]').forEach(el => {
+    el.addEventListener("change", () => _updateInfraPreview(root));
+  });
+}
+
+/* Render the material-bill + footprint preview for the selected structure
+ * recipe. Mirrors the build-structure macro's cost preview; the "In stockpile"
+ * column only populates when a faction is selected AND charging is enabled. */
+function _updateInfraPreview(root) {
+  const box = root?.querySelector("#bbttcc-rb-infra-preview");
+  if (!box) return;
+  const api = game.bbttcc?.api?.structures;
+  const recipeId = String(root.dataset.bbttccRecipeId || "");
+  const recipe = api?.recipes?.byId?.(recipeId) ?? null;
+  if (!recipe) {
+    box.innerHTML = `<div style="font-size:0.74rem; opacity:0.6; border-top:1px dotted #3a3528; padding-top:6px;">Pick a template above to preview its material bill and footprint.</div>`;
+    return;
+  }
+  const factionId = root.querySelector('[data-bbttcc-infra="factionId"]')?.value || "";
+  const charge = !!root.querySelector('[data-bbttcc-infra="charge"]')?.checked;
+  const faction = factionId ? game.actors?.get?.(factionId) : null;
+  const stock = game.bbttcc?.api?.factions?.stockpile;
+  const showHave = charge && faction && stock?.qty;
+
+  const rows = (recipe.materialOf ?? []).map(c => {
+    const have = showHave ? (stock.qty(faction, c.key) ?? 0) : null;
+    const short = have != null && have < c.qty;
+    const haveColor = have == null ? "#777" : (short ? "#e08a3a" : "#c9bc92");
+    return `<tr style="font-size:0.72rem">
+      <td style="padding:1px 6px">${_esc(c.key)}</td>
+      <td style="padding:1px 6px; text-align:right; font-family:monospace">${c.qty}</td>
+      <td style="padding:1px 6px; text-align:right; font-family:monospace; color:${haveColor}">${have == null ? "—" : have}</td>
+    </tr>`;
+  }).join("");
+
+  const fp = recipe.footprintGrid ?? { w: 1, h: 1 };
+  let status;
+  if (charge && faction && api?.recipes?.canAfford) {
+    const aff = api.recipes.canAfford(faction, recipe.materialOf);
+    status = aff.ok
+      ? `<div style="font-size:0.7rem; color:#7cc77c; margin-top:4px;">✓ ${_esc(faction.name)}'s stockpile can cover this</div>`
+      : `<div style="font-size:0.7rem; color:#e08a3a; margin-top:4px;">✗ short on ${aff.missing.length} material(s)</div>`;
+  } else {
+    status = `<div style="font-size:0.7rem; opacity:0.6; margin-top:4px;">Free build — no stockpile charge.</div>`;
+  }
+
+  box.innerHTML = `
+    <div style="border-top:1px dotted #3a3528; padding-top:6px;">
+      <div style="font-size:0.82rem; color:#d9c47a;">${_esc(recipe.name)} · ${fp.w}×${fp.h} grid</div>
+      <p style="margin:3px 0 5px 0; font-size:0.74rem; opacity:0.82">${_esc(recipe.description ?? "")}</p>
+      <table style="width:100%; border-collapse:collapse;">
+        <thead><tr style="opacity:0.55; font-size:0.6rem">
+          <th style="text-align:left; padding:2px 6px">Material</th>
+          <th style="text-align:right; padding:2px 6px">Need</th>
+          <th style="text-align:right; padding:2px 6px">In stockpile</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${status}
+      <div style="margin-top:5px; font-size:0.68rem; opacity:0.62; font-style:italic;">Breakable structure — takes damage, breaches, and collapses when a rig rams through.${recipe.specialNote ? " " + _esc(recipe.specialNote) : ""}</div>
+    </div>`;
+}
+
+/* Build an infrastructure structure through the bbttcc-structures recipe
+ * engine. Returns the created structure actor (a stationary type:"rig" with a
+ * stamped BOM) or null. Ownerless / unaffiliated builds are always free. */
+async function _commitInfrastructure(root) {
+  const api = game.bbttcc?.api?.structures;
+  if (!api?.recipes?.build) {
+    ui.notifications?.error?.("bbttcc-structures recipe API not loaded — cannot build infrastructure.");
+    return null;
+  }
+  const recipeId = String(root.dataset.bbttccRecipeId || "");
+  if (!recipeId) {
+    ui.notifications?.warn?.("Pick an infrastructure template first.");
+    return null;
+  }
+  const recipe = api.recipes.byId(recipeId);
+  if (!recipe) {
+    ui.notifications?.warn?.("That template is no longer available.");
+    return null;
+  }
+
+  const nameOverride = String(root.querySelector('[data-bbttcc-infra="name"]')?.value || "").trim() || undefined;
+  const factionId = String(root.querySelector('[data-bbttcc-infra="factionId"]')?.value || "");
+  const charge = !!root.querySelector('[data-bbttcc-infra="charge"]')?.checked;
+  const dropToken = !!root.querySelector('[data-bbttcc-infra="dropToken"]')?.checked;
+  const faction = factionId ? game.actors?.get?.(factionId) : null;
+
+  if (charge && !faction) {
+    ui.notifications?.warn?.("Choose an owner faction to charge, or uncheck the stockpile-charge box.");
+    return null;
+  }
+  // No faction (or charging disabled) ⇒ free build that bypasses the stockpile.
+  const skipCostCheck = !charge || !faction;
+
+  let dropPosition = null;
+  if (dropToken && canvas?.scene) {
+    const center = canvas.stage?.toLocal?.(new PIXI.Point(window.innerWidth / 2, window.innerHeight / 2)) ?? null;
+    if (center) dropPosition = { x: center.x, y: center.y };
+  }
+
+  const res = await api.recipes.build(recipeId, faction, { actorName: nameOverride, dropPosition, skipCostCheck });
+  if (!res?.ok) {
+    const missing = (res?.missing ?? []).map(m => `${m.name} (need ${m.need}, have ${m.have})`).join(", ");
+    ui.notifications?.error?.(`${res?.error ?? "Build failed"}${missing ? " — " + missing : ""}`);
+    return null;
+  }
+
+  // Stamp builder provenance + entityKind so downstream tooling recognises
+  // builder-made infrastructure (parity with the rig/facility commit path).
+  try {
+    await res.actor?.setFlag?.(MOD, "entityKind", "infrastructure");
+    await res.actor?.setFlag?.(MOD, "createdViaRigBuilder", true);
+  } catch (_e) { /* non-fatal */ }
+
+  res.actor?.sheet?.render?.(true);
+  ui.notifications?.info?.(`Built infrastructure: ${res.actor?.name}${res.token ? " (token placed)" : ""}.`);
+  return res.actor;
+}
+
 async function _commit(root) {
   if (!root) return null;
+
+  // Three-category router: infrastructure goes through the structures recipe
+  // engine; rig + facility share the chassis form below (facility just locks
+  // mobility to stationary and stamps a distinct entityKind).
+  const category = String(root.dataset.bbttccCategory || "rig");
+  if (category === "infrastructure") return _commitInfrastructure(root);
+
   const read = (name) => root.querySelector(`[data-bbttcc-field="${name}"]`)?.value ?? "";
   const readNum = (name, fallback = 0) => {
     const v = Number(read(name));
@@ -629,7 +932,8 @@ async function _commit(root) {
   const bracketDef = BRACKETS.find(b => b.key === bracket) ?? BRACKETS[2];
   const tier = Math.max(1, Math.min(4, readNum("tier", 1)));
   const integrityMax = Math.max(1, readNum("integrity", bracketDef.base));
-  const mobility = String(read("mobility") || "mobile");
+  // Facilities are stationary by definition; the form value is a hint at best.
+  const mobility = (category === "facility") ? "stationary" : String(read("mobility") || "mobile");
   const archetype = String(read("archetype") || "").trim();
   const factionOwnerId = String(read("factionOwnerId") || "").trim();
   const disposition = Number(read("disposition") ?? 0);
@@ -664,7 +968,7 @@ async function _commit(root) {
     type: "rig",
     flags: {
       [MOD]: {
-        entityKind: "rig",
+        entityKind: (category === "facility") ? "facility" : "rig",
         createdViaRigBuilder: true,
         createdAt: Date.now()
       }
@@ -754,7 +1058,8 @@ async function _commit(root) {
                     (loadout.systems?.length ? `${loadout.systems.length} system(s)` : null)]
                      .filter(Boolean).join(", ")}`
     : "";
-  ui.notifications?.info?.(`Created RFI Rig: ${actor.name} (tier ${tier}, ${bracketDef.label}, ${mobility})${loadoutHint}`);
+  const kindLabel = (category === "facility") ? "Facility" : "RFI Rig";
+  ui.notifications?.info?.(`Created ${kindLabel}: ${actor.name} (tier ${tier}, ${bracketDef.label}, ${mobility})${loadoutHint}`);
   return actor;
 }
 

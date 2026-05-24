@@ -88,6 +88,272 @@
         { "key": "yesodium",       "qty": 1 }
       ],
       "specialNote": "Collapse fires at Damaged state — the ravine is the whole point"
+    },
+
+    {
+      "_section": "FLIMSY INFRASTRUCTURE — breakable scenery, not fortress walls. Mostly cloth/wood/salvage (low Plates, low Threshold so almost anything chips them), no sephirotic (so they can be fully Razed), light collapse profiles (a rig drives THROUGH these). facilityMode:false — these are scatter, not Holdings-scale facilities.",
+      "id": "wasteland-shack",
+      "name": "Wasteland Shack",
+      "category": "dwellings",
+      "tierGate": 1,
+      "description": "A one-room hovel of scavenged board and salvaged sheet, draped in old cloth. Keeps the wind off. Keeps almost nothing else off.",
+      "footprintGrid": { "w": 2, "h": 2 },
+      "tokenImg": "icons/svg/village.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "materialOf": [
+        { "key": "ash-wood",      "qty": 4 },
+        { "key": "scrap-salvage", "qty": 3 },
+        { "key": "sept-cloth",    "qty": 2 }
+      ]
+    },
+    {
+      "id": "lean-to",
+      "name": "Lean-To Shelter",
+      "category": "dwellings",
+      "tierGate": 1,
+      "description": "A few poles, a hide, and optimism. Half a roof leaned against whatever was standing. The lightest thing anyone calls a home.",
+      "footprintGrid": { "w": 2, "h": 1 },
+      "tokenImg": "icons/svg/oak.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "materialOf": [
+        { "key": "ash-wood",      "qty": 2 },
+        { "key": "root-leather",  "qty": 2 },
+        { "key": "scrap-salvage", "qty": 1 }
+      ]
+    },
+    {
+      "id": "shanty-hut",
+      "name": "Shanty Hut",
+      "category": "dwellings",
+      "tierGate": 1,
+      "description": "Corrugated salvage nailed to a timber frame, a bog-iron stovepipe poking through. Sturdier than a shack, still nothing you'd bet your life on.",
+      "footprintGrid": { "w": 2, "h": 2 },
+      "tokenImg": "icons/svg/village.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "materialOf": [
+        { "key": "scrap-salvage", "qty": 4 },
+        { "key": "ash-wood",      "qty": 3 },
+        { "key": "sept-cloth",    "qty": 2 },
+        { "key": "bog-iron",      "qty": 1 }
+      ]
+    },
+    {
+      "id": "dilapidated-cottage",
+      "name": "Dilapidated Cottage",
+      "category": "dwellings",
+      "tierGate": 1,
+      "description": "Pre-Fall mudbrick and rotten beams, half-reclaimed by the weather. Bigger and heavier than a shack, but the mortar is long dead — it comes down in slabs.",
+      "footprintGrid": { "w": 3, "h": 2 },
+      "tokenImg": "icons/svg/ruins.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d8", "fallFt": 10 },
+      "materialOf": [
+        { "key": "ash-wood",   "qty": 6 },
+        { "key": "river-clay",  "qty": 4 },
+        { "key": "sept-cloth", "qty": 3 }
+      ]
+    },
+
+    {
+      "id": "market-stall",
+      "name": "Market Stall",
+      "category": "civic",
+      "tierGate": 1,
+      "description": "A trestle, a cloth awning, a board counter. Folds, splinters, and scatters the wares the instant anything heavier than a customer leans on it.",
+      "footprintGrid": { "w": 2, "h": 1 },
+      "tokenImg": "icons/svg/barrel.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "materialOf": [
+        { "key": "ash-wood",      "qty": 3 },
+        { "key": "sept-cloth",    "qty": 3 },
+        { "key": "scrap-salvage", "qty": 1 }
+      ]
+    },
+    {
+      "id": "wooden-fence-gate",
+      "name": "Wooden Fence & Gate",
+      "category": "civic",
+      "tierGate": 1,
+      "description": "A run of plank fencing with a bronze-pinned gate. Marks a boundary, stops a wanderer, means nothing at all to a rig at speed.",
+      "footprintGrid": { "w": 4, "h": 1 },
+      "tokenImg": "icons/svg/door-closed.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "materialOf": [
+        { "key": "ash-wood",      "qty": 5 },
+        { "key": "bronze-nail",   "qty": 2 },
+        { "key": "scrap-salvage", "qty": 1 }
+      ]
+    },
+    {
+      "id": "watchpost-shack",
+      "name": "Watchpost Shack",
+      "category": "civic",
+      "tierGate": 1,
+      "description": "A raised plank box on stilts with a salvage-tin roof. Somewhere for a lookout to sit out of the rain — until something knocks the legs out.",
+      "footprintGrid": { "w": 2, "h": 2 },
+      "tokenImg": "icons/svg/tower-flag.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d8", "fallFt": 10 },
+      "materialOf": [
+        { "key": "ash-wood",      "qty": 4 },
+        { "key": "scrap-salvage", "qty": 2 },
+        { "key": "bog-iron",      "qty": 1 },
+        { "key": "sept-cloth",    "qty": 1 }
+      ],
+      "specialNote": "A perch, not a fortification — tips and drops its occupant when breached"
+    },
+    {
+      "id": "roadside-shrine",
+      "name": "Roadside Shrine",
+      "category": "civic",
+      "tierGate": 1,
+      "description": "A little clay alcove with a blessed-thread offering, raised where someone died or something was promised. Small, soft, and oddly hard to bring yourself to flatten.",
+      "footprintGrid": { "w": 1, "h": 1 },
+      "tokenImg": "icons/svg/aura.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "materialOf": [
+        { "key": "river-clay",     "qty": 3 },
+        { "key": "ash-wood",       "qty": 2 },
+        { "key": "blessed-thread", "qty": 1 }
+      ]
+    },
+
+    {
+      "id": "fuel-shed",
+      "name": "Fuel Shed",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "A salvage lean-to over a cache of jerry cans and seep-oil drums. Flimsy walls; very much not a flimsy thing to set on fire.",
+      "footprintGrid": { "w": 2, "h": 2 },
+      "tokenImg": "icons/svg/fire.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "materialOf": [
+        { "key": "scrap-salvage", "qty": 4 },
+        { "key": "bog-iron",      "qty": 2 },
+        { "key": "ash-wood",      "qty": 2 }
+      ],
+      "specialNote": "Volatile — GM may rule that a fire-flavored breach detonates the stored fuel (area damage)"
+    },
+    {
+      "id": "salvage-depot",
+      "name": "Salvage Depot",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "An open-sided rack-and-tarp pile of pre-Fall components waiting to be picked over. Lots of mass, none of it structural.",
+      "footprintGrid": { "w": 3, "h": 2 },
+      "tokenImg": "icons/svg/barrel.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "materialOf": [
+        { "key": "scrap-salvage",     "qty": 6 },
+        { "key": "ash-wood",          "qty": 3 },
+        { "key": "prefall-component", "qty": 2 }
+      ]
+    },
+    {
+      "id": "water-tank",
+      "name": "Water Tank",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "A riveted soft-alloy cistern on a low cradle. The metal skin dents and splits; what's inside does the rest.",
+      "footprintGrid": { "w": 2, "h": 2 },
+      "tokenImg": "icons/svg/barrel.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5, "knockbackFt": 10 },
+      "materialOf": [
+        { "key": "soft-alloy",    "qty": 4 },
+        { "key": "bog-iron",      "qty": 2 },
+        { "key": "scrap-salvage", "qty": 1 }
+      ],
+      "specialNote": "A breach floods the cell — GM may rule difficult terrain / a knockback wave below it"
+    },
+    {
+      "id": "generator-hut",
+      "name": "Generator Hut",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "A bog-iron housing around a coughing pre-Fall generator. Powers a few lamps, throws a few sparks, falls over like everything else out here.",
+      "footprintGrid": { "w": 2, "h": 2 },
+      "tokenImg": "icons/svg/anvil.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "materialOf": [
+        { "key": "bog-iron",      "qty": 3 },
+        { "key": "scrap-salvage", "qty": 3 },
+        { "key": "ash-wood",      "qty": 2 }
+      ]
+    },
+
+    {
+      "id": "sandbag-wall",
+      "name": "Sandbag Wall",
+      "category": "barriers",
+      "tierGate": 1,
+      "description": "A stacked course of earth-filled sacks. Soaks up bullets and shrugs off small arms — then bursts and slumps when something heavy hits it.",
+      "footprintGrid": { "w": 3, "h": 1 },
+      "tokenImg": "icons/svg/hazard.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "materialOf": [
+        { "key": "sept-cloth",    "qty": 4 },
+        { "key": "river-clay",    "qty": 3 },
+        { "key": "scrap-salvage", "qty": 1 }
+      ],
+      "specialNote": "Good cover against fire (earth resists kinetic); concussive / ramming bursts it"
+    },
+    {
+      "id": "junk-barricade",
+      "name": "Junk Barricade",
+      "category": "barriers",
+      "tierGate": 1,
+      "description": "A heap of welded scrap, fence wire, and dead engine blocks dragged across the road. Blocks a lane until someone with enough momentum disagrees.",
+      "footprintGrid": { "w": 3, "h": 1 },
+      "tokenImg": "icons/svg/hazard.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "materialOf": [
+        { "key": "scrap-salvage", "qty": 5 },
+        { "key": "ash-wood",      "qty": 2 },
+        { "key": "bog-iron",      "qty": 1 }
+      ]
+    },
+    {
+      "id": "scrap-cover",
+      "name": "Scrap Cover",
+      "category": "barriers",
+      "tierGate": 1,
+      "description": "A single hunched plate of bolted salvage — a one-person bit of cover to crouch behind. Lasts exactly as long as nobody focuses on it.",
+      "footprintGrid": { "w": 1, "h": 1 },
+      "tokenImg": "icons/svg/trap.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0, "knockbackFt": 0 },
+      "materialOf": [
+        { "key": "scrap-salvage", "qty": 3 },
+        { "key": "soft-alloy",    "qty": 1 }
+      ]
+    },
+    {
+      "id": "palisade-fence",
+      "name": "Palisade Fence",
+      "category": "barriers",
+      "tierGate": 1,
+      "description": "A line of sharpened ash stakes lashed upright. Stops a crowd, channels a charge — and burns or splinters readily.",
+      "footprintGrid": { "w": 4, "h": 1 },
+      "tokenImg": "icons/svg/oak.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "materialOf": [
+        { "key": "ash-wood",      "qty": 6 },
+        { "key": "scrap-salvage", "qty": 1 }
+      ],
+      "specialNote": "Wood — doubly vulnerable to fire"
     }
   ]
 }
