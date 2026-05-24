@@ -157,6 +157,120 @@ const CHASSIS_STARTERS = [
         systems: ["Sensor Suite"]
       }
     }
+  },
+  // ── ICONIC COALITION FLAGSHIPS — 2026-05-23 ──────────────────────────────
+  // One signature flagship per Known Coalition of the Bad Eden. These chips
+  // carry their full character (defenses / integrity / travel / disposition /
+  // concept / signature) so a single click reproduces the iconic rig.
+  // Integrity values match the seed-macro sizing rubric (base+(tier-1)×step:
+  // medium 40/10, heavy 60/15, siege 80/20). Companion macro:
+  // bbttcc-master-content/tools/seed-coalition-flagship-rigs.macro.js.
+  {
+    key: "flagship_attaccountant_auditor",
+    label: "Attaccountant Auditor",
+    description: "Attaccountant flagship. A wandering audit-tribunal on tracks — the IRS as a death-cult war-wagon. Medium · T3.",
+    defaults: {
+      bracket: "medium", mobility: "mobile", tier: 3, disposition: 0,
+      integrity: 60,
+      travel: { speed: 3, range: 12, hazardResist: 1 },
+      capacity: { pilot: [1,1], gunner: [1,2], engineer: [0,1], crew: [2,6] },
+      tags: "numeromancy, audit, war-shaman, attaccountant, faction-flagship",
+      resistances: "psychic, energy",
+      concept: "A wandering audit-tribunal on tracks — the IRS reincarnated as a death-cult on a war-wagon. Numeromancers ride the gun decks turning averages into blades and standard deviations into force shields. It does not destroy you. It reviews you, and finds you wanting.",
+      signature: "A ledger amidships that updates itself in nobody's handwriting. When the Plasma Lance fires it does not burn the target — it EDITS it. The curse rides the beam: “You are found… wanting.”",
+      loadout: {
+        frame: "Sail Barge Frame",
+        weapons: ["Plasma Lance", "Resonance Howler"],
+        systems: ["Reinforced Plating", "Sensor Suite", "Comms Array"]
+      }
+    }
+  },
+  {
+    key: "flagship_avuncular_war_tower",
+    label: "Avuncular Order War Tower",
+    description: "Avuncular Order flagship. A rolling bastion-cathedral that brings the potluck AND the artillery. Siege · T3.",
+    defaults: {
+      bracket: "siege", mobility: "mobile", tier: 3, disposition: 1,
+      integrity: 120,
+      travel: { speed: 1, range: 8, hazardResist: 2 },
+      capacity: { pilot: [1,2], gunner: [1,4], engineer: [1,2], crew: [4,12] },
+      tags: "bastion, soft-power, morale, community, siege, avuncular, faction-flagship",
+      resistances: "psychic, kinetic",
+      immunities: "fear",
+      concept: "A rolling bastion-cathedral that brings the potluck AND the artillery. The Avuncular Order's mobile strongpoint: it shelters refugees, hosts the best dinners in the wastes, and — if it absolutely must — drags the region into enlightenment kicking and screaming. The prettiest hex is wherever this thing parks.",
+      signature: "A galley amidships that never goes cold; the smell of a hundred shared meals soaked into the plate. Strategos Joans' standard flies from the crown, and the hexes seem to align just by it being near.",
+      loadout: {
+        frame: "Forge Facility Frame",
+        weapons: ["Mortar Battery", "Twin Autocannons"],
+        systems: ["Reinforced Plating", "Repair Bay", "Comms Array", "Sensor Suite"],
+        outputs: ["Quartermaster Dispenser"]
+      }
+    }
+  },
+  {
+    key: "flagship_proselytizer",
+    label: "Proselytizer",
+    description: "Church of We're Tired of Waiting flagship. A rolling pulpit & mobile summoning engine. Medium · T2 · hybrid.",
+    defaults: {
+      bracket: "medium", mobility: "hybrid", tier: 2, disposition: 0,
+      integrity: 50,
+      travel: { speed: 3, range: 14, hazardResist: 0 },
+      capacity: { pilot: [1,1], gunner: [0,2], engineer: [0,1], crew: [2,8] },
+      tags: "faith, summoning, conversion, revival, church, faction-flagship",
+      resistances: "psychic",
+      concept: "A rolling pulpit and mobile summoning engine for the Church of We're Tired of Waiting. It tours the abandoned Walmarts of the Bad Eden, parks, raises the spire, and screams into the cosmos for the prophets who ghosted humanity to PLEASE, finally, return. The summoning works far more often than it has any right to.",
+      signature: "A bootleg Shroud of Turin draped over the prow that absolutely works and absolutely should not. A summoning circle painted on the deck. The Phase Disruptor doesn't fire so much as it complains at reality until something answers.",
+      loadout: {
+        frame: "Sail Barge Frame",
+        weapons: ["Resonance Howler", "Phase Disruptor"],
+        systems: ["Comms Array", "Sensor Suite"],
+        outputs: ["Beacon Spire"]
+      }
+    }
+  },
+  {
+    key: "flagship_unicorn_vc_class",
+    label: "Unicorn VC Class",
+    description: "Monodynamic Industries flagship. Late-stage capitalism as a sleek predatory dreadnought. Heavy · T4 · APEX.",
+    defaults: {
+      bracket: "heavy", mobility: "mobile", tier: 4, disposition: -1,
+      integrity: 105,
+      travel: { speed: 3, range: 10, hazardResist: 1 },
+      capacity: { pilot: [1,2], gunner: [2,5], engineer: [1,2], crew: [2,8] },
+      tags: "corporate, qliphothic, hostile-takeover, predatory, monodynamic, faction-flagship",
+      resistances: "qliphothic",
+      immunities: "morale",
+      concept: "Late-stage capitalism rendered as a sleek predatory dreadnought. Monodynamic Industries' flagship hull-class — five weapon divisions, one for each of Mr. Monocle's heads: Synergy, Scale, Growth, Compliance, and pure aesthetic Monocle. It does not win battles. It acquires them. A hostile takeover with a railgun.",
+      signature: "A monocle-shaped sensor eye on the prow. An org-chart on the bridge that rewrites itself mid-engagement, promoting whoever's still alive. NDAs enforced via direct psychic assault. The Darkness Track loves this thing.",
+      loadout: {
+        frame: "War Rig Frame",
+        weapons: ["Phase Disruptor", "Plasma Lance", "Resonance Howler"],
+        systems: ["Reinforced Plating", "Phase Cloak", "Sensor Suite", "Comms Array"],
+        outputs: ["Mounted Forge"]
+      }
+    }
+  },
+  {
+    key: "flagship_valhauler",
+    label: "Valhauler",
+    description: "Valhaulan flagship. An aerial techno-Viking longship of dragon hide, sheet metal, and unconvincing optimism. Heavy · T2 · aerial.",
+    defaults: {
+      bracket: "heavy", mobility: "mobile", tier: 2, disposition: 0,
+      integrity: 75,
+      travel: { speed: 5, range: 18, hazardResist: 2 },
+      capacity: { pilot: [1,2], gunner: [1,4], engineer: [0,2], crew: [4,12] },
+      tags: "aerial, airship, pirate, raider, valhaulan, faction-flagship",
+      resistances: "kinetic",
+      vulnerabilities: "fire",
+      concept: "An aerial techno-Viking longship, patched together from dragon hide, sheet metal, and unconvincing optimism. The Valhaulans raid, steal, trade, vanish, return, apologize, steal again — and then sell you your own stuff back at a markup. Part war-barge, part ValLyft ride-share, all enthusiasm and zero accountability.",
+      signature: "Dragon-hide hull patches over a ValLyft livery painted over somebody else's raided sigil. Rigging tied by genuine knot-tying champions. The Mortar crew yells coordinates at each other and the math, sometimes, lands.",
+      loadout: {
+        frame: "War Rig Frame",
+        weapons: ["Twin Autocannons", "Mortar Battery"],
+        systems: ["Reinforced Plating", "Repair Bay", "Comms Array"],
+        outputs: ["Quartermaster Dispenser"]
+      }
+    }
   }
 ];
 
@@ -461,12 +575,24 @@ function _wireStarterChips(html) {
       set("mobility", d.mobility);
       set("tier", d.tier);
       set("tags", d.tags ?? "");
-      // Integrity prefills from bracket base × tier (caller can override).
+      // Flagship chips carry their full character. set() no-ops on undefined,
+      // so these only apply when a chip actually defines them — the basic
+      // chassis chips leave any GM-typed defenses/prose untouched. (2026-05-23)
+      set("resistances", d.resistances);
+      set("immunities", d.immunities);
+      set("vulnerabilities", d.vulnerabilities);
+      set("concept", d.concept);
+      set("signature", d.signature);
+      set("disposition", d.disposition);
+      set("hazardResist", d.travel?.hazardResist);
+      // Integrity prefills from bracket base × tier unless the chip pins an
+      // explicit value (flagships do, to match their seed-macro sizing).
       const brk = BRACKETS.find(b => b.key === d.bracket);
+      if (d.integrity != null) set("integrity", d.integrity);
       if (brk) {
-        set("integrity", brk.base + (d.tier - 1) * Math.round(brk.base * 0.3));
-        set("speed", brk.speed);
-        set("range", brk.range);
+        if (d.integrity == null) set("integrity", brk.base + (d.tier - 1) * Math.round(brk.base * 0.3));
+        set("speed", d.travel?.speed ?? brk.speed);
+        set("range", d.travel?.range ?? brk.range);
       }
       // Capacity
       for (const role of ["pilot", "gunner", "engineer", "crew"]) {
@@ -669,7 +795,8 @@ async function _seedLoadout(actor, loadout, { tier = 1 } = {}) {
   // single item is non-fatal; we just skip it.
   const namedItems = [
     ...(loadout.weapons ?? []),
-    ...(loadout.systems ?? [])
+    ...(loadout.systems ?? []),
+    ...(loadout.outputs ?? [])
   ];
   if (namedItems.length && idx) {
     for (const name of namedItems) {
