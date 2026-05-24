@@ -585,6 +585,14 @@ export async function openRigBuilder({ seed = null } = {}) {
     </div>
     <div id="bbttcc-rb-infra-preview" style="margin-top:0.5rem;"></div>
   </div>
+
+  <!-- Category + selected-recipe state live in hidden inputs, NOT root.dataset.
+       The render hook and the button callback receive different jQuery wraps,
+       so a dataset set at tab-click time is invisible at commit (defaults the
+       category back to "rig" → spurious "needs a name"). querySelector on a
+       hidden field resolves the node from either wrap — same fix as _starterKey. -->
+  <input type="hidden" data-bbttcc-field="_category" value="rig"/>
+  <input type="hidden" data-bbttcc-field="_recipeId" value=""/>
 </div>`;
 
   const isDuplicate = !!seed;
@@ -617,7 +625,10 @@ export async function openRigBuilder({ seed = null } = {}) {
         const infraHost = root?.querySelector("#bbttcc-rb-infra-chips");
         if (infraHost) infraHost.innerHTML = _infraChipsHTML();
         // A duplicated actor is always a rig/facility; open on the matching tab.
-        if (root) root.dataset.bbttccCategory = (seed?.mobility === "stationary") ? "facility" : "rig";
+        // Seed the category into the hidden field (the source of truth at commit).
+        const initialCat = (seed?.mobility === "stationary") ? "facility" : "rig";
+        const catEl0 = root?.querySelector('[data-bbttcc-field="_category"]');
+        if (catEl0) catEl0.value = initialCat;
         _wireStarterChips(html);
         _wireInfraChips(root);
         _wireCategoryTabs(html);
@@ -723,8 +734,9 @@ function _wireStarterChips(html) {
 
 /* Wire the Rigs / Facilities / Infrastructure category tabs. Switching a tab
  * swaps the visible chip row + form pane, retitles the guide domain line, and
- * relabels the footer create button. The active category is stashed on
- * root.dataset.bbttccCategory, which _commit reads to route on submit. */
+ * relabels the footer create button. The active category is written to the
+ * hidden [data-bbttcc-field="_category"] input (source of truth that _commit
+ * reads to route on submit) plus root.dataset as a secondary. */
 function _wireCategoryTabs(html) {
   const root = (html instanceof HTMLElement ? html : html?.[0]);
   if (!root) return;
@@ -738,7 +750,9 @@ function _wireCategoryTabs(html) {
   const idleCss   = "cursor:pointer; padding:0.25rem 0.75rem; border:1px solid rgba(255,255,255,0.18); border-radius:4px; font-size:0.8rem; background:rgba(255,255,255,0.06); color:inherit;";
 
   const setCat = (cat) => {
-    root.dataset.bbttccCategory = cat;
+    root.dataset.bbttccCategory = cat;                       // secondary (defense in depth)
+    const catEl = root.querySelector('[data-bbttcc-field="_category"]');
+    if (catEl) catEl.value = cat;                            // PRIMARY — read at commit
     root.querySelectorAll(".bbttcc-rb-tab").forEach(t => {
       t.style.cssText = (t.dataset.bbttccCat === cat) ? activeCss : idleCss;
     });
@@ -769,7 +783,7 @@ function _wireCategoryTabs(html) {
   root.querySelectorAll(".bbttcc-rb-tab").forEach(tab => {
     tab.addEventListener("click", () => setCat(tab.dataset.bbttccCat));
   });
-  setCat(root.dataset.bbttccCategory || "rig");
+  setCat(root.querySelector('[data-bbttcc-field="_category"]')?.value || root.dataset.bbttccCategory || "rig");
 }
 
 /* Wire infrastructure recipe chips + the inputs that affect the cost preview. */
@@ -777,7 +791,10 @@ function _wireInfraChips(root) {
   if (!root) return;
   root.querySelectorAll("[data-bbttcc-recipe]").forEach(btn => {
     btn.addEventListener("click", () => {
-      root.dataset.bbttccRecipeId = String(btn.dataset.bbttccRecipe || "");
+      const rid = String(btn.dataset.bbttccRecipe || "");
+      root.dataset.bbttccRecipeId = rid;                     // secondary
+      const ridEl = root.querySelector('[data-bbttcc-field="_recipeId"]');
+      if (ridEl) ridEl.value = rid;                          // PRIMARY — read at commit
       root.querySelectorAll("[data-bbttcc-recipe]").forEach(b => {
         b.style.background = b === btn ? "rgba(62,142,200,0.22)" : "rgba(255,255,255,0.06)";
       });
@@ -796,7 +813,7 @@ function _updateInfraPreview(root) {
   const box = root?.querySelector("#bbttcc-rb-infra-preview");
   if (!box) return;
   const api = game.bbttcc?.api?.structures;
-  const recipeId = String(root.dataset.bbttccRecipeId || "");
+  const recipeId = String(root.querySelector('[data-bbttcc-field="_recipeId"]')?.value || root.dataset.bbttccRecipeId || "");
   const recipe = api?.recipes?.byId?.(recipeId) ?? null;
   if (!recipe) {
     box.innerHTML = `<div style="font-size:0.74rem; opacity:0.6; border-top:1px dotted #3a3528; padding-top:6px;">Pick a template above to preview its material bill and footprint.</div>`;
@@ -856,7 +873,7 @@ async function _commitInfrastructure(root) {
     ui.notifications?.error?.("bbttcc-structures recipe API not loaded — cannot build infrastructure.");
     return null;
   }
-  const recipeId = String(root.dataset.bbttccRecipeId || "");
+  const recipeId = String(root.querySelector('[data-bbttcc-field="_recipeId"]')?.value || root.dataset.bbttccRecipeId || "");
   if (!recipeId) {
     ui.notifications?.warn?.("Pick an infrastructure template first.");
     return null;
@@ -911,7 +928,7 @@ async function _commit(root) {
   // Three-category router: infrastructure goes through the structures recipe
   // engine; rig + facility share the chassis form below (facility just locks
   // mobility to stationary and stamps a distinct entityKind).
-  const category = String(root.dataset.bbttccCategory || "rig");
+  const category = String(root.querySelector('[data-bbttcc-field="_category"]')?.value || root.dataset.bbttccCategory || "rig");
   if (category === "infrastructure") return _commitInfrastructure(root);
 
   const read = (name) => root.querySelector(`[data-bbttcc-field="${name}"]`)?.value ?? "";
