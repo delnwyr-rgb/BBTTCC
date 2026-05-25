@@ -18605,7 +18605,7 @@ Hooks.on("updateActor", (actor, changes) => {
 
 const _FT_CREW_ACTION_DESC = {
   steer:           "Move the rig at frame speed.",
-  ram:             "Charge a target — collision damage scaled by integrity bracket.",
+  ram:             "Pilot charge into a TARGETED structure — momentum × bracket structural damage; recoil scales with the structure's toughness.",
   "hold-position": "Steady the rig — gunners gain advantage until next pilot turn.",
   evasive:         "Disadvantage on attacks against the rig until next turn.",
   swerve:          "Reaction — avoid an incoming attack (skill check vs incoming roll).",
@@ -18830,6 +18830,71 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">💨 ${rig.name} evades</span></div>
           <p style="margin:0.2rem 0;font-size:0.82rem"><b>+${evaBonus} Evasion</b> until the next pilot turn (${steward.name}).${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
+      });
+      return;
+    }
+
+    case "ram": {
+      if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
+      const _targets = _resolveTargetActors();
+      const structTarget = _targets.find(a => a?.flags?.["bbttcc-structures"]?.hasStructure);
+      if (!structTarget) {
+        warn(`${steward.name}: target a structure to ram — select the building's token as your target (T) first.`);
+        return;
+      }
+      // Momentum × bracket. Ram is a self-contained CHARGE — you can't Steer
+      // AND Ram in the same round (both spend the pilot action) — so momentum
+      // is the rig's Speed (how hard it closes), and any movement already
+      // banked this round counts instead if it's larger.
+      const RAM_BRACKET = { personal: 4, light: 5, medium: 7, heavy: 10, siege: 14 };
+      const bracketFactor = RAM_BRACKET[bracket] ?? 7;
+      const momentum = Math.max(Number(speed) || 1, Number(cmb.hexesMoved) || 0);
+      const ramDamage = Math.max(1, Math.round(bracketFactor * momentum));
+
+      // Recoil scales with what you hit: a stone bunker (high Threshold) bites
+      // back hard; a cloth/wood shack barely scuffs the paint.
+      const structThreshold = Number(structTarget.getFlag?.("bbttcc-structures", "threshold")) || 0;
+      const recoil = Math.max(0, Math.round(structThreshold * 3));
+      const apply = game?.fourththing?.rolls?._applyDamageToActor;
+
+      // Structural damage — kinetic/concussive routes through the structures
+      // wedge → chips Plates → may breach → fires collapse. Concussive flavor
+      // is what cracks stone (its kinetic resist + concussive vuln cancel), so
+      // a ram works on walls where small-arms bounce.
+      try {
+        if (apply) {
+          await apply(structTarget, ramDamage, {
+            op: "damage", track: "integrity",
+            damageType: "kinetic", damageFlavor: "concussive", perTargetMultiplier: 1
+          });
+        }
+      } catch (e) { console.warn("[fourththing] ram structural damage failed", e); }
+
+      // Recoil to the rig — real integrity (ramming a fortress is a genuine risk).
+      try {
+        if (apply && recoil > 0) {
+          await apply(rig, recoil, {
+            op: "damage", track: "integrity",
+            damageType: "kinetic", damageFlavor: "ram-recoil", perTargetMultiplier: 1
+          });
+        }
+      } catch (e) { console.warn("[fourththing] ram recoil failed", e); }
+
+      // Momentum is spent on impact.
+      await setRigCombat({ hexesMoved: 0 });
+      await setPilotGate();
+      await consumeAction();
+
+      const newState = structTarget.getFlag?.("bbttcc-structures", "state") ?? "?";
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e08a3a">💥 ${steward.name} rams ${rig.name} into ${structTarget.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">
+            <b>${ramDamage}</b> structural damage <span style="opacity:0.75">(${bracket} ×${bracketFactor} × momentum ${momentum})</span> — ${structTarget.name} is now <b>${newState}</b>.
+            ${recoil > 0
+              ? `<br>⟲ Recoil <b>${recoil}</b> to ${rig.name} <span style="opacity:0.75">(structure Threshold ${structThreshold.toFixed(1)})</span>.`
+              : `<br><span style="opacity:0.7">No recoil — it barely scuffed the paint.</span>`}
+          </p></div>`
       });
       return;
     }
@@ -19092,7 +19157,12 @@ function _ftCollectCrewControlsContext(actor) {
 
   // Frame-defined actions for this role
   const frameItem = (rig.items ?? []).find(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-frame");
-  const frameActions = frameItem?.getFlag?.("fourththing", "rigFrame")?.actions?.[flag.role] ?? [];
+  let frameActions = frameItem?.getFlag?.("fourththing", "rigFrame")?.actions?.[flag.role] ?? [];
+  // Ram is available to ANY pilot (collision damage scales by bracket, so a
+  // scout only dents flimsy scenery while a siege engine flattens it). Inject
+  // it for pilots even on frames authored before Ram existed, so the button
+  // surfaces on the sheet banner + HUD without re-stamping every frame.
+  if (flag.role === "pilot" && !frameActions.includes("ram")) frameActions = [...frameActions, "ram"];
 
   // Rig weapons (only gunners + crew can fire — pilots/engineers focus elsewhere)
   // 2026-05-13 — Gate on whether the rig has a Gunner role authored, not

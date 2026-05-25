@@ -250,54 +250,68 @@ export async function triggerCollapse(actor, { fromState, toState }) {
 
   const results = [];
   for (const tok of tokensOnTop) {
-    const tokActor = tok.actor;
-    if (!tokActor) continue;
-
-    let roll, rolled;
+    // Isolate each token. Previously an exception on one target (e.g. a
+    // knockback move or the card post throwing) aborted the whole for-loop,
+    // so only the FIRST token-on-top took damage/prone and the rest were
+    // silently skipped. Each token is now independent.
     try {
-      roll = new Roll(damageDice);
-      await roll.evaluate();
-      rolled = Math.max(0, Math.floor(Number(roll.total) || 0));
-    } catch (e) {
-      console.warn(TAG, "damage roll failed", e);
-      rolled = 0;
-    }
+      const tokActor = tok.actor;
+      if (!tokActor) continue;
 
-    let applied = rolled;
-    if (nonlethal) {
-      const curHP = readTargetCurrentHP(tokActor);
-      applied = clampNonlethal(rolled, curHP);
-    }
-
-    // Apply damage via the canonical path (which routes through our wedge
-    // for hasStructure actors — and through the existing integrity path
-    // otherwise). Use _applyDamageToActor directly so this collapse damage
-    // doesn't accidentally re-fire structure damage on the COLLAPSING
-    // structure (the wedge filters by op === "damage" + hasStructure on the
-    // TARGET, which for a token-on-top is different from the structure).
-    let desc = "";
-    try {
-      if (applied > 0 && game?.fourththing?.rolls?._applyDamageToActor) {
-        desc = await game.fourththing.rolls._applyDamageToActor(tokActor, applied, {
-          op: "damage",
-          track: "integrity",
-          damageType: "concussive",
-          damageFlavor: "collapse",
-          perTargetMultiplier: 1
-        });
+      let roll, rolled;
+      try {
+        roll = new Roll(damageDice);
+        await roll.evaluate();
+        rolled = Math.max(0, Math.floor(Number(roll.total) || 0));
+      } catch (e) {
+        console.warn(TAG, "damage roll failed", e);
+        rolled = 0;
       }
+
+      let applied = rolled;
+      if (nonlethal) {
+        const curHP = readTargetCurrentHP(tokActor);
+        applied = clampNonlethal(rolled, curHP);
+      }
+
+      // Apply damage via the canonical path (which routes through our wedge
+      // for hasStructure actors — and through the existing integrity path
+      // otherwise). Use _applyDamageToActor directly so this collapse damage
+      // doesn't accidentally re-fire structure damage on the COLLAPSING
+      // structure (the wedge filters by op === "damage" + hasStructure on the
+      // TARGET, which for a token-on-top is different from the structure).
+      let desc = "";
+      try {
+        if (applied > 0 && game?.fourththing?.rolls?._applyDamageToActor) {
+          desc = await game.fourththing.rolls._applyDamageToActor(tokActor, applied, {
+            op: "damage",
+            track: "integrity",
+            damageType: "concussive",
+            damageFlavor: "collapse",
+            perTargetMultiplier: 1
+          });
+        }
+      } catch (e) {
+        console.warn(TAG, "collapse damage apply failed", e);
+      }
+
+      // Prone + knockback. Knockback is guarded on its own so a movement
+      // failure can't skip this token's card or block the next token.
+      const proneApplied = await applyProne(tokActor);
+      if (knockbackFt > 0) {
+        try { await knockbackToken(tok, center, knockbackFt); }
+        catch (e) { console.warn(TAG, "collapse knockback failed", e); }
+      }
+
+      results.push({ actor: tokActor, rolled, applied, nonlethalCapped: applied < rolled, prone: proneApplied, desc });
+
+      await postCollapseTargetCard(actor, tokActor, { rolled, applied, nonlethal, formula: damageDice, prone: proneApplied });
     } catch (e) {
-      console.warn(TAG, "collapse damage apply failed", e);
+      console.warn(TAG, `collapse processing failed for token ${tok?.name ?? tok?.id}; continuing with the rest`, e);
     }
-
-    // Prone + knockback
-    const proneApplied = await applyProne(tokActor);
-    if (knockbackFt > 0) await knockbackToken(tok, center, knockbackFt);
-
-    results.push({ actor: tokActor, rolled, applied, nonlethalCapped: applied < rolled, prone: proneApplied, desc });
-
-    await postCollapseTargetCard(actor, tokActor, { rolled, applied, nonlethal, formula: damageDice, prone: proneApplied });
   }
+
+  console.log(TAG, `collapse of ${actor.name}: ${tokensOnTop.length} on footprint, ${results.length} processed`);
 
   await actor.setFlag(FLAG_SCOPE, "collapseFired", true);
 
