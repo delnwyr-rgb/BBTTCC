@@ -12390,11 +12390,23 @@ Hooks.once("init", function () {
         plating:      { label: "Tank Mode",                     tip: "Fine — Plating" }
       };
 
+      // Ensure every master-list skill renders even on actors whose stored
+      // skill bag predates it — e.g. Piloting was added to FT_SKILL_MASTER
+      // after these characters were created, so it's absent from their
+      // system.skills and never showed on the sheet. Stored values win;
+      // missing skills default to rank 0. Display-only — a rank persists only
+      // once the player sets it. Non-master/legacy keys are preserved as-is.
+      const skillsForDisplay = {};
+      for (const spec of (FT_SKILL_MASTER || [])) {
+        skillsForDisplay[spec.key] = { value: 0, attribute: spec.attribute, label: spec.label, ...(skills[spec.key] || {}) };
+      }
+      for (const [k, v] of Object.entries(skills)) if (!skillsForDisplay[k]) skillsForDisplay[k] = v;
+
       // Build enriched skill list with precomputed pips (avoids nested-each context issues).
       // Skips malformed skill entries that lack either `label` or `attribute` — these show
       // up as blank rows on the sheet (typical cause: partial keystroke committed as a key,
       // e.g., "ins" instead of "insight"). Log once per entry so they can be cleaned up.
-      const enrichedSkills = Object.entries(skills).flatMap(([key, skill]) => {
+      const enrichedSkills = Object.entries(skillsForDisplay).flatMap(([key, skill]) => {
         const canonLabel = String(skill?.label ?? "").trim();
         const attribute  = String(skill?.attribute ?? "").trim();
         if (!canonLabel || !attribute) {
@@ -18605,7 +18617,7 @@ Hooks.on("updateActor", (actor, changes) => {
 
 const _FT_CREW_ACTION_DESC = {
   steer:           "Move the rig at frame speed.",
-  ram:             "Pilot charge into a TARGETED structure — momentum × bracket structural damage; recoil scales with the structure's toughness.",
+  ram:             "Pilot charge — ram a TARGETED token: (tier × bracket + Piloting)d6 collision damage, half fed back to your rig. Structures take it as Plate damage and can collapse.",
   "hold-position": "Steady the rig — gunners gain advantage until next pilot turn.",
   evasive:         "Disadvantage on attacks against the rig until next turn.",
   swerve:          "Reaction — avoid an incoming attack (skill check vs incoming roll).",
@@ -18834,71 +18846,6 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       return;
     }
 
-    case "ram": {
-      if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
-      const _targets = _resolveTargetActors();
-      const structTarget = _targets.find(a => a?.flags?.["bbttcc-structures"]?.hasStructure);
-      if (!structTarget) {
-        warn(`${steward.name}: target a structure to ram — select the building's token as your target (T) first.`);
-        return;
-      }
-      // Momentum × bracket. Ram is a self-contained CHARGE — you can't Steer
-      // AND Ram in the same round (both spend the pilot action) — so momentum
-      // is the rig's Speed (how hard it closes), and any movement already
-      // banked this round counts instead if it's larger.
-      const RAM_BRACKET = { personal: 4, light: 5, medium: 7, heavy: 10, siege: 14 };
-      const bracketFactor = RAM_BRACKET[bracket] ?? 7;
-      const momentum = Math.max(Number(speed) || 1, Number(cmb.hexesMoved) || 0);
-      const ramDamage = Math.max(1, Math.round(bracketFactor * momentum));
-
-      // Recoil scales with what you hit: a stone bunker (high Threshold) bites
-      // back hard; a cloth/wood shack barely scuffs the paint.
-      const structThreshold = Number(structTarget.getFlag?.("bbttcc-structures", "threshold")) || 0;
-      const recoil = Math.max(0, Math.round(structThreshold * 3));
-      const apply = game?.fourththing?.rolls?._applyDamageToActor;
-
-      // Structural damage — kinetic/concussive routes through the structures
-      // wedge → chips Plates → may breach → fires collapse. Concussive flavor
-      // is what cracks stone (its kinetic resist + concussive vuln cancel), so
-      // a ram works on walls where small-arms bounce.
-      try {
-        if (apply) {
-          await apply(structTarget, ramDamage, {
-            op: "damage", track: "integrity",
-            damageType: "kinetic", damageFlavor: "concussive", perTargetMultiplier: 1
-          });
-        }
-      } catch (e) { console.warn("[fourththing] ram structural damage failed", e); }
-
-      // Recoil to the rig — real integrity (ramming a fortress is a genuine risk).
-      try {
-        if (apply && recoil > 0) {
-          await apply(rig, recoil, {
-            op: "damage", track: "integrity",
-            damageType: "kinetic", damageFlavor: "ram-recoil", perTargetMultiplier: 1
-          });
-        }
-      } catch (e) { console.warn("[fourththing] ram recoil failed", e); }
-
-      // Momentum is spent on impact.
-      await setRigCombat({ hexesMoved: 0 });
-      await setPilotGate();
-      await consumeAction();
-
-      const newState = structTarget.getFlag?.("bbttcc-structures", "state") ?? "?";
-      ChatMessage.create({
-        speaker: cardSpeaker,
-        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e08a3a">💥 ${steward.name} rams ${rig.name} into ${structTarget.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem">
-            <b>${ramDamage}</b> structural damage <span style="opacity:0.75">(${bracket} ×${bracketFactor} × momentum ${momentum})</span> — ${structTarget.name} is now <b>${newState}</b>.
-            ${recoil > 0
-              ? `<br>⟲ Recoil <b>${recoil}</b> to ${rig.name} <span style="opacity:0.75">(structure Threshold ${structThreshold.toFixed(1)})</span>.`
-              : `<br><span style="opacity:0.7">No recoil — it barely scuffed the paint.</span>`}
-          </p></div>`
-      });
-      return;
-    }
-
     case "brace": {
       if (!requireBonus()) return;
       await setRigCombat({ brace: true });
@@ -19052,8 +18999,11 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
 
     case "ram": {
       if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
-      const targets = Array.from(game.user?.targets ?? []);
-      const targetActor = targets[0]?.actor;
+      // Relay-safe: use the targetIds captured at click time (the binding
+      // captures them for ram explicitly) so a player pilot's target survives
+      // the GM round-trip instead of resolving to the GM's own selection.
+      const _ramTargets = _resolveTargetActors();
+      const targetActor = _ramTargets[0];
       if (!targetActor) { ui.notifications?.warn("Target a token first (the ram needs an objective)."); return; }
       const weight = FT_RIG_BRACKET_WEIGHT[bracket] || 3;
       const baseDice = Math.max(1, tier * weight);

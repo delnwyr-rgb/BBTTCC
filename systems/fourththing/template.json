@@ -74,6 +74,11 @@
           "label": "Tinkering",
           "value": 0
         },
+        "piloting": {
+          "attribute": "intrigue",
+          "label": "Piloting",
+          "value": 0
+        },
         "streetwise": {
           "attribute": "intrigue",
           "label": "Streetwise",
