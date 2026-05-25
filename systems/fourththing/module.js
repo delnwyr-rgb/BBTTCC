@@ -3891,6 +3891,63 @@ async function _ftCascadeRigDestruction(rigActor) {
   return summaries;
 }
 
+// ── ftOpenCastDialog: the Invoke dialog the sheet's cast button drives ──────
+// Extracted 2026-05-24 from FourthThingCharacterSheet._onFtCast so the player
+// HUD can open the exact same cast flow without a sheet instance. Behavior is
+// identical — _onFtCast now just calls this with (actor, item).
+function ftOpenCastDialog(actor, item) {
+  if (!actor) return;
+  const rawSys  = actor.system?.system ?? actor.system;
+  const intent  = item?.system?.intent   ?? "presence";
+  const channel = item?.system?.channel  ?? "soul";
+  const seph    = item?.system?.sephirah ?? rawSys?.magic?.sephirah ?? "tiferet";
+  const label   = item?.name             ?? "Manifestation";
+
+  new Dialog({
+    title:   `Invoke: ${label}`,
+    content: buildCastDialogHTML(actor, { intent, channel, sephirah: seph, label, item }),
+    buttons: {
+      cast: {
+        icon:  "<i class='fas fa-magic'></i>",
+        label: "Invoke",
+        callback: async (html) => {
+          const dc   = parseInt(html.find("[name='difficulty']").val()) || 15;
+          const selI = html.find("[name='intent']").val()   || intent;
+          const selC = html.find("[name='channel']").val()  || channel;
+          const selS = html.find("[name='sephirah']").val() || seph;
+          const mode = html.find("[name='castMode']:checked").val() || "hermetic";
+          const reachPathVal = html.find("[name='reachPath']:checked").val() || "";
+          const restraint    = parseInt(html.find("[name='restraintReduction']").val()) || 0;
+          const targetTokens = Array.from(game.user?.targets ?? []);
+          const target       = targetTokens[0]?.actor ?? null;
+          // Cosmic Linguist Resonance Channel allocation (no-op for non-CL).
+          const resonanceSpend = {
+            resolveDc:      Math.max(0, parseInt(html.find("[name='resResolveDc']").val())      || 0),
+            damageDie:      Math.max(0, parseInt(html.find("[name='resDamageDie']").val())      || 0),
+            extendDur:      Math.max(0, parseInt(html.find("[name='resExtendDur']").val())      || 0),
+            defenseImpose:  Math.max(0, parseInt(html.find("[name='resDefenseImpose']").val())  || 0),
+            stabilize:      Math.max(0, parseInt(html.find("[name='resStabilize']").val())      || 0),
+            aggressive:     html.find("[name='resAggressive']").is(":checked") === true
+          };
+          const useOverlay  = html.find("[name='wlUseOverlay']").is(":checked")  === true;
+          const bankToCache = html.find("[name='dwBankToCache']").is(":checked") === true;
+          const useAoeSavePrompts = html.find("[name='useAoeSavePrompts']").is(":checked") === true;
+          const aoeApplyConfirm   = html.find("[name='aoeApplyConfirm']").is(":checked")   === true;
+          return castManifestation(actor, item, {
+            intent: selI, channel: selC, sephirah: selS,
+            label, difficulty: dc, mode, reachPath: reachPathVal,
+            target, restraintReduction: restraint, resonanceSpend,
+            useOverlay, bankToCache,
+            useAoeSavePrompts, aoeApplyConfirm
+          });
+        }
+      },
+      cancel: { label: "Cancel" }
+    },
+    default: "cast"
+  }).render(true);
+}
+
 // ── castManifestation: full tier-aware cast flow ───────────────────────────
 // Resolves a manifestation cast end-to-end, honoring the tier ruleset:
 //   * mode (hermetic/chaos/ascendant) shifts Clarity cost, Noise gain, misfire
@@ -10051,6 +10108,14 @@ Hooks.once("init", function () {
   // a cast at no Clarity cost).
   game.fourththing.castManifestation = castManifestation;
 
+  // ftOpenEngageDialog / ftOpenCastDialog — exposed 2026-05-24 so the player
+  // HUD (bbttcc-territory) can fire strikes + manifestation casts through the
+  // canonical sheet paths without the steward sheet being open. Same dialogs
+  // the sheet's Strike / Invoke buttons drive.
+  game.fourththing.ftOpenEngageDialog = ftOpenEngageDialog;
+  game.fourththing.ftOpenCastDialog   = ftOpenCastDialog;
+  game.fourththing.classifyPrinciple  = ftClassifyPrinciple;
+
   // createManifestationItemData — exposed 2026-05-17 so the BBTTCC Boss
   // Builder (bbttcc-auto-link/scripts/boss-builder.js) can synthesize
   // template-appropriate manifestations as embedded items at boss-create
@@ -11717,6 +11782,13 @@ Hooks.once("init", function () {
     if (game.user.id !== userId) return;
     const actor = tokenDoc.actor;
     if (!actor) return;
+    // 2026-05-24 — Passenger gate. A boarded steward's hidden token is
+    // force-synced to the rig's position on every rig move (see the rig
+    // `updateToken` follow-sync). That sync is NOT the steward walking, so it
+    // must not fire on-move triggers (Kinetic Inversion / Pace) or debit the
+    // personal movement budget — otherwise they auto-proc every rig square.
+    // Riders generate no personal movement; the rig owns the locomotion.
+    if (actor.flags?.fourththing?.boardedRig) return;
     const scene    = tokenDoc.parent;
     const gridSize = scene?.grid?.size     ?? 100;
     const gridDist = scene?.grid?.distance ?? 5;
@@ -13284,56 +13356,7 @@ Hooks.once("init", function () {
     static async _onFtCast(event, target) {
       const itemId  = target.closest("[data-item-id]")?.dataset.itemId;
       const item    = itemId ? this.actor.items.get(itemId) : null;
-      const rawSys  = this.actor.system?.system ?? this.actor.system;
-      const intent  = item?.system?.intent   ?? "presence";
-      const channel = item?.system?.channel  ?? "soul";
-      const seph    = item?.system?.sephirah ?? rawSys?.magic?.sephirah ?? "tiferet";
-      const label   = item?.name             ?? "Manifestation";
-      const actor   = this.actor;
-
-      new Dialog({
-        title:   `Invoke: ${label}`,
-        content: buildCastDialogHTML(actor, { intent, channel, sephirah: seph, label, item }),
-        buttons: {
-          cast: {
-            icon:  "<i class='fas fa-magic'></i>",
-            label: "Invoke",
-            callback: async (html) => {
-              const dc   = parseInt(html.find("[name='difficulty']").val()) || 15;
-              const selI = html.find("[name='intent']").val()   || intent;
-              const selC = html.find("[name='channel']").val()  || channel;
-              const selS = html.find("[name='sephirah']").val() || seph;
-              const mode = html.find("[name='castMode']:checked").val() || "hermetic";
-              const reachPathVal = html.find("[name='reachPath']:checked").val() || "";
-              const restraint    = parseInt(html.find("[name='restraintReduction']").val()) || 0;
-              const targetTokens = Array.from(game.user?.targets ?? []);
-              const target       = targetTokens[0]?.actor ?? null;
-              // Cosmic Linguist Resonance Channel allocation (no-op for non-CL).
-              const resonanceSpend = {
-                resolveDc:      Math.max(0, parseInt(html.find("[name='resResolveDc']").val())      || 0),
-                damageDie:      Math.max(0, parseInt(html.find("[name='resDamageDie']").val())      || 0),
-                extendDur:      Math.max(0, parseInt(html.find("[name='resExtendDur']").val())      || 0),
-                defenseImpose:  Math.max(0, parseInt(html.find("[name='resDefenseImpose']").val())  || 0),
-                stabilize:      Math.max(0, parseInt(html.find("[name='resStabilize']").val())      || 0),
-                aggressive:     html.find("[name='resAggressive']").is(":checked") === true
-              };
-              const useOverlay  = html.find("[name='wlUseOverlay']").is(":checked")  === true;
-              const bankToCache = html.find("[name='dwBankToCache']").is(":checked") === true;
-              const useAoeSavePrompts = html.find("[name='useAoeSavePrompts']").is(":checked") === true;
-              const aoeApplyConfirm   = html.find("[name='aoeApplyConfirm']").is(":checked")   === true;
-              return castManifestation(actor, item, {
-                intent: selI, channel: selC, sephirah: selS,
-                label, difficulty: dc, mode, reachPath: reachPathVal,
-                target, restraintReduction: restraint, resonanceSpend,
-                useOverlay, bankToCache,
-                useAoeSavePrompts, aoeApplyConfirm
-              });
-            }
-          },
-          cancel: { label: "Cancel" }
-        },
-        default: "cast"
-      }).render(true);
+      return ftOpenCastDialog(this.actor, item);
     }
 
     static async _onFtMisfire(event, target) {
@@ -18376,6 +18399,12 @@ async function ftBoardRig(steward, rig, role = null) {
           // shape so it round-trips cleanly through token update.
           const priorSight = t.sight?.toObject?.() ?? t.sight ?? null;
           u.sight = foundry.utils.deepClone(rigSight);
+          // 2026-05-24 — Force vision on. The hidden steward token is the
+          // player's vision source while boarded (they own it; the rig is only
+          // Observer). If the rig token shipped with sight.enabled=false the
+          // copy would leave the player blind the moment they select it — the
+          // "click my invisible token and the map goes dark" bug.
+          u.sight.enabled = true;
           u.flags = { fourththing: { boardSightOverride: { priorSight, rigId: rig.id } } };
         }
         return u;
@@ -19013,13 +19042,25 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const roll   = new Roll(`${dice}d6`);
       await roll.evaluate();
       const dmgTarget = Math.max(1, Number(roll.total) || 1);
-      const dmgSelf   = Math.max(1, Math.floor(dmgTarget / 2));
+      // Recoil: ramming a STRUCTURE scales with how solid it is (its Threshold)
+      // — a cloth/wood shack barely scuffs the paint; a stone wall bites back.
+      // Ramming a non-structure (enemy rig/creature) keeps the flat half-feedback.
+      const isStruct = !!targetActor?.flags?.["bbttcc-structures"]?.hasStructure;
+      const structThreshold = isStruct
+        ? (Number(targetActor.getFlag?.("bbttcc-structures", "threshold")) || 0)
+        : 0;
+      const dmgSelf = isStruct
+        ? Math.max(0, Math.round(structThreshold * 3))
+        : Math.max(1, Math.floor(dmgTarget / 2));
       const descT = await game.fourththing.rolls._applyDamageToActor(targetActor, dmgTarget, {
         op: "damage", track: "integrity", damageType: "kinetic", damageFlavor: "ram"
       });
-      const descS = await game.fourththing.rolls._applyDamageToActor(rig, dmgSelf, {
-        op: "damage", track: "integrity", damageType: "kinetic", damageFlavor: "ram"
-      });
+      let descS = "";
+      if (dmgSelf > 0) {
+        descS = await game.fourththing.rolls._applyDamageToActor(rig, dmgSelf, {
+          op: "damage", track: "integrity", damageType: "kinetic", damageFlavor: "ram"
+        });
+      }
       // Phase 2 VFX: collision line + dual impact. Runs after damage
       // apply so the destroyed-state ring (if any) fires on top via the
       // bbttcc:rig:destroyed hook subscriber.
@@ -19030,11 +19071,16 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const pilotingRamNote = piloting > 0
         ? ` <span style="opacity:0.8">+ Piloting ${piloting}</span>`
         : "";
+      const recoilNote = isStruct
+        ? (dmgSelf > 0
+            ? ` · <b>${dmgSelf}</b> recoil <span style="opacity:0.7">(Threshold ${structThreshold.toFixed(1)})</span>`
+            : ` · <span style="opacity:0.7">no recoil — flimsy</span>`)
+        : ` · <b>${dmgSelf}</b> feedback (self half)`;
       await roll.toMessage({
         speaker: cardSpeaker,
         flavor: `<div class="ft-roll-header"><span class="ft-roll-name" style="color:#eb5757">💥 ${rig.name} rams ${targetActor.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem"><b>${dice}d6</b> · ${bracket} ×${weight} × T${tier}${pilotingRamNote} → <b>${dmgTarget}</b> dmg (target) · <b>${dmgSelf}</b> feedback (self half)</p>
-          <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85">${descT}<br>${descS}</p>`
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>${dice}d6</b> · ${bracket} ×${weight} × T${tier}${pilotingRamNote} → <b>${dmgTarget}</b> dmg (target)${recoilNote}</p>
+          <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85">${descT}${descS ? `<br>${descS}` : ""}</p>`
       });
       return;
     }
