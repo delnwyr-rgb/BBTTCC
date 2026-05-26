@@ -4753,72 +4753,111 @@ async function ftDropActiveManifestation(actor, instanceId) {
 // Bill upkeep against a subset of stability cadences. Entries the actor
 // cannot afford are dropped; a chat card summarizes billed + dropped items.
 // Upkeep formula: 1 Clarity × tier per active entry of the matching stability.
-async function ftChargeUpkeep(actor, { stabilities = [], cadence = "tick" } = {}) {
-  if (!actor || !Array.isArray(stabilities) || !stabilities.length) return { billed: [], dropped: [] };
+// Phase F2 enforcement (2026-05-26) — parse an authored maintenanceKey into a
+// billable spec. Keys are "<amount>-<resource>-<cadence>" (e.g. 1-clarity-round).
+// Returns null for none / custom / unset / unparseable → caller uses the flat
+// tier-Clarity baseline. Clarity is a SPEND (deduct, drop-if-insufficient);
+// stress / noise / burn ACCRUE (add toward max, never drop the form).
+function _ftParseMaintenanceKey(key) {
+  const k = String(key ?? "").toLowerCase().trim();
+  if (!k || k === "none" || k === "custom") return null;
+  const m = k.match(/^(\d+)-(clarity|stress|noise|burn)-(scene|round)$/);
+  if (!m) return null;
+  return { resource: m[2], amount: Math.max(0, parseInt(m[1], 10) || 0), cadence: m[3] };
+}
+
+// Bill upkeep for a single cadence tick. cadence ∈ {"round","scene","soma"}.
+// KEY-AUTHORITATIVE (user decision 2026-05-26): a form with an authored
+// maintenanceKey bills exactly that resource/amount on its own cadence; a form
+// with none/custom/legacy bills the canon flat tier-Clarity at its stability
+// cadence (sustained→scene, bound/enduring→soma). Clarity drains the caster pool
+// (drop the form if it can't pay); stress/noise/burn accrue toward their max.
+async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
+  if (!actor) return { billed: [], dropped: [] };
   const active = actor.getFlag("fourththing", "activeManifestations") ?? [];
   if (!active.length) return { billed: [], dropped: [] };
 
-  const matching = active.filter(e => stabilities.includes(e.stability));
-  if (!matching.length) return { billed: [], dropped: [] };
-
-  const rawSys = actor.system?.system ?? actor.system ?? {};
-  // Boss casts (2026-05-11) bill upkeep against the Surge bank via _ftCasterPool.
+  const cadenceLabel = ({ round: "Per Round", scene: "End Scene", soma: "Soma Break" })[cadence] ?? cadence;
+  // Boss casts bill against the Surge bank via _ftCasterPool; PCs bill Clarity.
   const upkPool = _ftCasterPool(actor);
   let curClarity = upkPool.current;
+  // Discipline upkeep scale (e.g. Sealed Pact halves per-tick Clarity upkeep).
+  const upkeepScale = Math.max(0, Number(getUpkeepScale(actor)) || 1);
+  // Concurrency free passes apply ONLY to pactBound entries (Phase D canon).
+  let freePasses = Math.max(0, Number(getConcurrencyBonus(actor)) || 0);
+
   const billed = [];
   const dropped = [];
   const surviving = [...active];
+  const accrual = {};        // FT_TRACK_PATHS path → next value (stress/noise/burn)
+  let paidClarity = 0;
 
-  // Discipline upkeep scale (e.g. Sealed Pact halves per-tick upkeep).
-  const upkeepScale = Math.max(0, Number(getUpkeepScale(actor)) || 1);
-  // Discipline concurrency bonus — pact-subject scoped (Phase D 2026-05-08).
-  // Free passes apply ONLY to entries with `pactBound: true` (manifestations
-  // cast targeting the currently-bound Pactkeeper subject). Cap = N. Replaces
-  // the Phase A permissive first-N-free interpretation per class canon.
-  let freePasses = Math.max(0, Number(getConcurrencyBonus(actor)) || 0);
+  for (const entry of active) {
+    const item = actor.items?.get?.(entry.itemId) ?? null;
+    const spec = _ftParseMaintenanceKey(item?.system?.manifestation?.maintenanceKey);
 
-  for (const entry of matching) {
-    const baseCost = Math.max(0, Number(entry.tier) || 1);
-    const scaled   = Math.max(0, Math.ceil(baseCost * upkeepScale));
-    let cost  = scaled;
-    let freed = false;
-    if (cost > 0 && freePasses > 0 && entry.pactBound === true) {
-      cost = 0;
-      freed = true;
-      freePasses -= 1;
-    }
-    if (curClarity >= cost) {
-      curClarity -= cost;
-      billed.push({ ...entry, cost, freed });
+    let resource = null, amount = 0;
+    if (spec) {
+      if (spec.cadence !== cadence) continue;   // keyed forms bill only on their own cadence
+      resource = spec.resource;
+      amount = resource === "clarity" ? Math.max(0, Math.ceil(spec.amount * upkeepScale)) : spec.amount;
     } else {
-      dropped.push({ ...entry, cost, reason: "insufficient-clarity" });
-      const idx = surviving.findIndex(e => e.instanceId === entry.instanceId);
-      if (idx >= 0) surviving.splice(idx, 1);
+      // Baseline (none / custom / legacy): flat tier-Clarity at the stability cadence.
+      const st = entry.stability;
+      const baseHere = (cadence === "scene" && st === "sustained")
+                    || (cadence === "soma"  && (st === "bound" || st === "enduring"));
+      if (!baseHere) continue;
+      resource = "clarity";
+      amount = Math.max(0, Math.ceil((Number(entry.tier) || 1) * upkeepScale));
+    }
+    if (amount <= 0) continue;
+
+    if (resource === "clarity") {
+      let cost = amount, freed = false;
+      if (cost > 0 && freePasses > 0 && entry.pactBound === true) { cost = 0; freed = true; freePasses -= 1; }
+      if (curClarity >= cost) {
+        curClarity -= cost; paidClarity += cost;
+        billed.push({ itemName: entry.itemName, tier: entry.tier, cost, resourceLabel: upkPool.label, freed });
+      } else {
+        dropped.push({ itemName: entry.itemName, tier: entry.tier });
+        const idx = surviving.findIndex(e => e.instanceId === entry.instanceId);
+        if (idx >= 0) surviving.splice(idx, 1);
+      }
+    } else {
+      // Accrual (stress / noise / burn) — add toward max, never drop.
+      const tspec = FT_TRACK_PATHS[resource];
+      if (!tspec) continue;
+      const cur = Number(accrual[tspec.path] ?? foundry.utils.getProperty(actor, tspec.path) ?? 0);
+      let next = cur + amount;
+      const max = tspec.max ? Number(foundry.utils.getProperty(actor, tspec.max) ?? 0) : null;
+      if (max !== null && max > 0) next = Math.min(max, next);
+      if (Number.isFinite(tspec.floor)) next = Math.max(tspec.floor, next);
+      accrual[tspec.path] = next;
+      billed.push({ itemName: entry.itemName, tier: entry.tier, cost: amount, resourceLabel: resource.charAt(0).toUpperCase() + resource.slice(1), freed: false });
     }
   }
 
-  const updates = {};
-  const paid = billed.reduce((sum, b) => sum + b.cost, 0);
-  if (paid > 0) updates[upkPool.writePath] = Math.max(0, upkPool.current - paid);
+  if (!billed.length && !dropped.length) return { billed, dropped };
+
+  const updates = { ...accrual };
+  if (paidClarity > 0) updates[upkPool.writePath] = Math.max(0, upkPool.current - paidClarity);
   if (Object.keys(updates).length) await actor.update(updates);
   if (dropped.length) await actor.setFlag("fourththing", "activeManifestations", surviving);
 
-  if (billed.length || dropped.length) {
-    const billedHtml = billed.length
-      ? `<div class="ft-prev-align-note"><b>Upkeep billed (${cadence}):</b> ${billed.map(b => `${b.itemName} (T${b.tier}, ${b.freed ? "<span style='color:#a0d4ff'>free</span>" : b.cost})`).join(" · ")}</div>`
-      : "";
-    const droppedHtml = dropped.length
-      ? `<div class="ft-prev-align-note" style="color:#ff8a8a"><b>Dropped (could not pay):</b> ${dropped.map(d => `${d.itemName} (T${d.tier})`).join(" · ")}</div>`
-      : "";
-    const discNote = summarizeDiscipline(actor);
-    const discHtml = discNote
-      ? `<div class="ft-prev-align-note" style="opacity:0.75"><b>Discipline:</b> ${discNote}</div>`
-      : "";
-    ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor }),
-      content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">⟳ Upkeep — ${actor.name}</span></div>${billedHtml}${droppedHtml}${discHtml}</div>`
-    });
-  }
+  const billedHtml = billed.length
+    ? `<div class="ft-prev-align-note"><b>Upkeep (${cadenceLabel}):</b> ${billed.map(b => `${b.itemName} (T${b.tier}, ${b.freed ? "<span style='color:#a0d4ff'>free</span>" : `${b.cost} ${b.resourceLabel}`})`).join(" · ")}</div>`
+    : "";
+  const droppedHtml = dropped.length
+    ? `<div class="ft-prev-align-note" style="color:#ff8a8a"><b>Dropped (could not pay):</b> ${dropped.map(d => `${d.itemName} (T${d.tier})`).join(" · ")}</div>`
+    : "";
+  const discNote = summarizeDiscipline(actor);
+  const discHtml = discNote
+    ? `<div class="ft-prev-align-note" style="opacity:0.75"><b>Discipline:</b> ${discNote}</div>`
+    : "";
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name">⟳ Upkeep — ${actor.name}</span></div>${billedHtml}${droppedHtml}${discHtml}</div>`
+  });
 
   return { billed, dropped };
 }
@@ -6016,6 +6055,13 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
     : `<button type="button" data-wiz-action="apply-tier" data-tier="${sug.tier}" class="ft-wiz-v2-apply-tier" style="margin-top:0.4rem;padding:0.25rem 0.6rem;font-size:0.78rem">Set tier to ${_ftWizV2TierLabel(sug.tier)}</button>`;
 
   const iconImg = state.img || "icons/svg/aura.svg";
+  // ME-1 (2026-05-26) — optional "also save a copy to my library" toggle. Shown
+  // only when there's an actor (a no-actor wizard already saves straight to a
+  // pack). Harvested generically as state.saveToLibrary; the finish handler
+  // runs ftExportItemToCompendium on the created item when checked.
+  const libToggle = actor
+    ? `<label class="ft-cast-field ft-cast-span-2" style="display:flex;align-items:center;gap:0.5rem;margin-top:0.6rem;cursor:pointer">${_ftWizV2Chk("saveToLibrary", state.saveToLibrary)}<span>Also save a copy to my library <small style="opacity:0.6">(opens a pack picker after creating; the copy on this character is untouched)</small></span></label>`
+    : "";
   return `
     <p class="ft-wiz-v2-coach">The texture that makes this <em>your</em> manifestation. Then a quick look-over and you're done.</p>
     <div class="ft-cast-grid">
@@ -6041,6 +6087,7 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
         <span style="opacity:0.7">Cost:</span> ${ftEscapeHtml(String(costBits))}
       </div>
     </div>
+    ${libToggle}
     <div class="ft-wiz-v2-tier-suggest" style="margin-top:0.6rem;padding:0.6rem;border:1px solid ${bColor};border-radius:4px;background:${bBg}">
       <div style="font-size:0.82rem;font-weight:600;margin-bottom:0.2rem">⚖ Magnitude (v1.1)</div>
       <div style="font-size:0.78rem;line-height:1.4">${headline}</div>
@@ -6448,6 +6495,12 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
             if (actor) {
               const docs = await actor.createEmbeddedDocuments("Item", [itemData]);
               created = docs?.[0] ?? null;
+              // ME-1 (2026-05-26) — "also save a copy to my library" toggle:
+              // dual-create. Opens the same pack picker the per-row 📚 export uses.
+              if (created && state.saveToLibrary) {
+                try { await ftExportItemToCompendium(created); }
+                catch (e) { console.warn("Roll for Initiation | wizard library export failed", e); }
+              }
             } else {
               let _packId = targetPack || null;
               if (!_packId && !targetFolder) {
@@ -10320,7 +10373,7 @@ Hooks.once("init", function () {
 
     // Bill Bound/Enduring upkeep against pre-refill Clarity. Anything we
     // can't afford is dropped before the Soma Break refills the pool.
-    await ftChargeUpkeep(actor, { stabilities: ["bound", "enduring"], cadence: "Soma Break" });
+    await ftChargeUpkeep(actor, { cadence: "soma" });
 
     const updates = {
       "system.magic.clarity.value":            sys.magic?.clarity?.max            ?? 5,
@@ -10557,7 +10610,7 @@ Hooks.once("init", function () {
   // Active strip on the manifestation tab or via macro.
   game.fourththing.actions.endScene = async function (actor) {
     if (!actor) return;
-    return ftChargeUpkeep(actor, { stabilities: ["sustained"], cadence: "End Scene" });
+    return ftChargeUpkeep(actor, { cadence: "scene" });
   };
 
   // ── Condition toggle ───────────────────────────────────────────────────────
@@ -11962,6 +12015,25 @@ Hooks.once("init", function () {
   Hooks.on("updateCombat", async (combat, changes) => {
     if (changes.turn === undefined && changes.round === undefined) return;
     await _ftHandleTurnStart("updateCombat", combat, combat.combatant);
+  });
+
+  // Per-round manifestation upkeep (2026-05-26) — bill round-cadence
+  // maintenanceKeys (e.g. 1-clarity-round) once per round advance. GM-side (the
+  // GM owns combat and can write any combatant actor). Fires on round INCREMENT
+  // only, so a form cast mid-round first pays at the next round (no double-dip
+  // with its cast cost).
+  Hooks.on("updateCombat", async (combat, changes) => {
+    if (!game.user?.isGM) return;
+    if (changes?.round === undefined) return;
+    if (!(Number(combat.round) > Number(combat.previous?.round ?? 0))) return;
+    const seen = new Set();
+    for (const c of (combat.combatants ?? [])) {
+      const a = c?.actor;
+      if (!a || seen.has(a.id)) continue;
+      seen.add(a.id);
+      try { await ftChargeUpkeep(a, { cadence: "round" }); }
+      catch (e) { console.warn("[fourththing] per-round upkeep failed", a?.name, e); }
+    }
   });
 
   // Phase C trigger: on-move. Fires when a token moves a non-zero distance.
