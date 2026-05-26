@@ -830,7 +830,7 @@
       <div class="ft-combat-section ft-resource-panel">
         <h3>✦ Surge <span class="ft-resource-tag">Meta</span></h3>
         <div class="ft-resource-row">
-          <span class="ft-resource-count ft-surge-count">{{resources.surge.value}} / {{resources.surge.max}}</span>
+          <span class="ft-resource-count ft-surge-count">{{resources.surge.value}} / {{#if ftFoeSurge.isFoe}}{{ftFoeSurge.cap}}{{else}}{{resources.surge.max}}{{/if}}</span>
           <div class="ft-edit-only ft-resource-edit">
             <input type="number" name="system.resources.surge.value" value="{{resources.surge.value}}" min="0" style="width:40px" data-tooltip="Current"/>
             <span style="opacity:0.4">/</span>
@@ -840,6 +840,20 @@
             <button type="button" class="ft-res-btn" data-action="ftSurgeSpend" data-tooltip="Spend banked Surge">Spend</button>
           </div>
         </div>
+        {{#if ftFoeSurge.isFoe}}
+        {{!-- Per-foe Surge gate (2026-05-26). Off by default for NPCs/Monsters;
+              GM enables it + tunes the bank cap (Elites get a bigger reservoir). --}}
+        <div class="ft-foe-surge-gate" style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:.35rem;padding-top:.3rem;border-top:1px dashed rgba(120,120,120,0.3);font-size:0.72rem;">
+          <label style="display:flex;align-items:center;gap:.3rem;cursor:pointer;" data-tooltip="When off, this foe cannot bank Surge from exploding dice or spend it. Off by default for NPCs/Monsters.">
+            <input type="checkbox" name="flags.fourththing.surgeEnabled" {{#if ftFoeSurge.enabled}}checked{{/if}}/> Surge enabled
+          </label>
+          {{#if ftFoeSurge.enabled}}
+          <label style="display:flex;align-items:center;gap:.3rem;" data-tooltip="Max Surge this foe can bank. Leave blank for the tier default ({{ftFoeSurge.tierDefault}}). Raise it for Elites.">
+            Bank max <input type="number" name="flags.fourththing.surgeCap" value="{{ftFoeSurge.capOverride}}" min="1" placeholder="{{ftFoeSurge.tierDefault}}" style="width:46px"/>
+          </label>
+          {{/if}}
+        </div>
+        {{/if}}
         <p class="ft-hint" style="margin:0.2rem 0 0;font-size:0.7rem;opacity:0.55">
           Banked by rolling 10s. Resets to 0 on Soma Break.
         </p>

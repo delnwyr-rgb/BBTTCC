@@ -789,8 +789,24 @@ export async function openAurabladeAction(actor) {
               break;
             }
             case "fury_deny_reacts": {
-              await _ftAurabladeStampOneShot(actor, "denyReactsTargetId", targetActor.id);
-              appliedNote = `🚫 ${targetActor.name}'s reactions denied vs your attacks until start of your next turn.`;
+              // Deny the target's reactions for the round — a 1-round AE the
+              // reaction gates (AoO prompt + strike, reaction-type features,
+              // crew hold-on) all respect via `_ftReactionsDenied`. Canon is
+              // "vs your attacks"; FT's reaction model has no per-attacker
+              // chokepoint, so we lock out ALL their reactions until the start
+              // of your next turn (broader, but fine at Overheated). Owner-or-
+              // relay so it lands on unowned foes too.
+              const combat = game.combat;
+              const dur = combat
+                ? { rounds: 1, startRound: combat.round, startTurn: combat.turn, combat: combat.id }
+                : { rounds: 1 };
+              const denyAE = {
+                name: "Reactions Denied", img: "icons/svg/net.svg", origin: actor.uuid,
+                duration: dur, changes: [],
+                flags: { fourththing: { reactionsDenied: true, source: actor.uuid } }
+              };
+              try { await game.fourththing?.applyEffectsToTarget?.(targetActor, [denyAE], []); } catch (_e) {}
+              appliedNote = `🚫 ${targetActor.name}'s reactions are denied until the start of your next turn.`;
               break;
             }
             case "fury_press_push": {

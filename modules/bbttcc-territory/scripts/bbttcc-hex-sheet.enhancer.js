@@ -129,6 +129,14 @@
     return null;
   }
 
+  // P.5 2026-05-26 — the faction an asset belongs to, for the Station picker's
+  // owner filter. Rigs/facilities carry it on identity.factionOwnerId; bosses on
+  // identity.factionId (system.factionId as a generic fallback). "" = unlinked.
+  function _hldActorFactionId(actor) {
+    const sys = actor?.system || {};
+    return String(sys?.identity?.factionOwnerId || sys?.identity?.factionId || sys?.factionId || "");
+  }
+
   function _hldBonusForActor(actor) {
     const kind = _hldClassify(actor);
     if (!kind) return null;
@@ -984,6 +992,11 @@
         const already = new Set([].concat(rigIds, bossIds));
 
         // Build candidate list from world actors. Group by classification.
+        // P.5 2026-05-26 — tag each candidate as owned by the hex's controlling
+        // faction (hex flag `factionId`). Owned assets render in the main groups;
+        // other-faction assets fold into a collapsible <details> so the GM can
+        // still station them for scenario reasons. No hex owner = show all.
+        const ownerFactionId = String(tf.factionId || "");
         const groups = { boss: [], rig: [], facility: [] };
         try {
           for (const a of (game.actors?.contents || [])) {
@@ -994,7 +1007,8 @@
             const meta = (kind === "boss") ? `T${b?.tier || 1}` :
                          (kind === "rig")  ? String(b?.bracket || "—") :
                          String(b?.facilityType || "facility");
-            groups[kind].push({ id: a.id, name: a.name, bonus: b?.bonus ?? 0, meta });
+            const owned = !ownerFactionId || (_hldActorFactionId(a) === ownerFactionId);
+            groups[kind].push({ id: a.id, name: a.name, bonus: b?.bonus ?? 0, meta, owned });
           }
         } catch (eList) { warn("holdings: candidate list failed", eList); }
 
@@ -1012,9 +1026,32 @@
             ${items}
           </div>`;
         };
-        const bossesHtml     = groupHtml("Bosses",     "#a78bfa", groups.boss);
-        const rigsHtml       = groupHtml("Rigs",       "#60a5fa", groups.rig);
-        const facilitiesHtml = groupHtml("Facilities", "#34d399", groups.facility);
+        // P.5 — owned assets in the main groups; other-faction assets in a
+        // collapsible disclosure below (only when the hex has an owner).
+        const _owned = (rows) => rows.filter(x => x.owned);
+        const _other = (rows) => rows.filter(x => !x.owned);
+        const bossesHtml     = groupHtml("Bosses",     "#a78bfa", _owned(groups.boss));
+        const rigsHtml       = groupHtml("Rigs",       "#60a5fa", _owned(groups.rig));
+        const facilitiesHtml = groupHtml("Facilities", "#34d399", _owned(groups.facility));
+        const ownedEmpty = !_owned(groups.boss).length && !_owned(groups.rig).length && !_owned(groups.facility).length;
+
+        let otherHtml = "";
+        if (ownerFactionId) {
+          const otherCount = _other(groups.boss).length + _other(groups.rig).length + _other(groups.facility).length;
+          if (otherCount) {
+            const oBoss = groupHtml("Bosses",     "#a78bfa", _other(groups.boss));
+            const oRig  = groupHtml("Rigs",       "#60a5fa", _other(groups.rig));
+            const oFac  = groupHtml("Facilities", "#34d399", _other(groups.facility));
+            otherHtml = `<details style="margin-top:.4rem;">
+              <summary style="cursor:pointer; opacity:.8; font-size:.85rem; padding:.25rem 0;">Other factions' assets (${otherCount}) — station anyway</summary>
+              <div style="margin-top:.4rem; display:flex; flex-direction:column; gap:.4rem;">${oBoss}${oRig}${oFac}</div>
+            </details>`;
+          }
+        }
+        const ownerName = ownerFactionId ? (game.actors?.get?.(ownerFactionId)?.name || "the controlling faction") : "";
+        const filterNote = ownerFactionId
+          ? `<p style="margin:0 0 .25rem 0; opacity:.7; font-size:.78rem;">Showing <b>${foundry.utils.escapeHTML(ownerName)}</b>'s assets. Other factions' assets are under the expander below.</p>`
+          : "";
         // DialogV2 does NOT use ApplicationV2's `scrollable: [...]` part
         // declaration, so the hex sheet's native scroll pattern doesn't
         // apply here. Inline height + overflow on the <form> gets ignored
@@ -1025,11 +1062,14 @@
         // wrapper clips and scrolls. Mirrors that here.
         const content = `<form style="display:flex; flex-direction:column; gap:.4rem;">
           <p style="margin:0 0 .25rem 0; opacity:.85; font-size:.85rem;">Select rigs, bosses, or facilities to station at this hex. Each adds its strategic bonus to defender DC when this hex is raided.</p>
+          ${filterNote}
           <div style="max-height:60vh; overflow-y:auto; padding-right:.35rem; display:flex; flex-direction:column; gap:.4rem;">
             ${bossesHtml}
             ${rigsHtml}
             ${facilitiesHtml}
-            ${(!groups.boss.length && !groups.rig.length && !groups.facility.length) ? '<p style="opacity:.7;">No eligible actors found (or all are already stationed here).</p>' : ""}
+            ${ownedEmpty && !otherHtml ? '<p style="opacity:.7;">No eligible actors found (or all are already stationed here).</p>' : ""}
+            ${ownedEmpty && otherHtml ? `<p style="opacity:.7; font-size:.82rem;">No assets owned by ${foundry.utils.escapeHTML(ownerName)} are available — see other factions below.</p>` : ""}
+            ${otherHtml}
           </div>
         </form>`;
 

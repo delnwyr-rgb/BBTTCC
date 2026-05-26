@@ -248,7 +248,11 @@
                 <td class="center">
                   {{#if r.dcFinal}}
                     {{#if r.meta.dcBreakdown}}
+                      {{#if r.meta.dcBreakdown.tip}}
+                      <b data-tooltip="{{r.meta.dcBreakdown.tip}}">{{r.dcFinal}}</b>
+                      {{else}}
                       <b data-tooltip="DC {{r.dcFinal}} = Defender roll {{r.meta.dcBreakdown.defRollText}} | bonus +{{r.meta.dcBreakdown.defBonus}} (HexDef {{r.meta.dcBreakdown.hexBase}} · Holdings +{{r.meta.dcBreakdown.holdings}} · Roster +{{r.meta.dcBreakdown.roster}} · Stage +{{r.meta.dcBreakdown.stage}} · DiffAdj {{r.meta.dcBreakdown.diffAdj}} · DiffOffset {{r.meta.dcBreakdown.diffOffset}} · DefExtra {{r.meta.dcBreakdown.defExtra}} · DefMan +{{r.meta.dcBreakdown.defManBonus}})">{{r.dcFinal}}</b>
+                      {{/if}}
                     {{else}}
                       <b>{{r.dcFinal}}</b>
                     {{/if}}

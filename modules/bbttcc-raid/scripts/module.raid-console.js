@@ -4424,7 +4424,7 @@ async _postRoundCard(idx){
       const def = Number(cas.defender || 0);
       const cardId = `bbttcc-cas-${r.roundId || idx}`;
       casualtiesBlock = `
-      <p class="bbttcc-cas-line" data-cas-card="${cardId}" data-round-id="${r.roundId || idx}" style="margin:.25rem 0;padding:.35rem .5rem;border-radius:6px;background:rgba(58,46,14,0.25);border:1px solid rgba(108,84,24,0.4);">
+      <p class="bbttcc-cas-line" data-cas-card="${cardId}" data-round-id="${r.roundId || idx}" data-attacker-id="${r.attackerId || ''}" style="margin:.25rem 0;padding:.35rem .5rem;border-radius:6px;background:rgba(58,46,14,0.25);border:1px solid rgba(108,84,24,0.4);">
         <strong style="color:#ffb84d;">Casualties:</strong>
         <span style="margin-left:.5rem;">Attacker <b data-cas-att>${att}</b>
           <button type="button" data-cas-act="att-minus" data-round-id="${r.roundId || idx}" style="margin:0 .15rem;padding:0 .35em;border-radius:3px;background:rgba(120,60,60,0.5);color:#fff;border:1px solid rgba(160,80,80,0.7);cursor:pointer;font-size:.85em;">−</button>
@@ -4435,6 +4435,7 @@ async _postRoundCard(idx){
           <button type="button" data-cas-act="def-plus"  data-round-id="${r.roundId || idx}" style="margin:0 .15rem;padding:0 .35em;border-radius:3px;background:rgba(60,120,60,0.5);color:#fff;border:1px solid rgba(80,160,80,0.7);cursor:pointer;font-size:.85em;">+</button>
         </span>
         <small style="opacity:.7;margin-left:.6rem;">margin-driven · GM may adjust</small>
+        <button type="button" data-cas-apply data-round-id="${r.roundId || idx}" data-attacker-id="${r.attackerId || ''}" data-defender-id="${r.defenderId || ''}" title="Wound randomly-selected faction crew/stewards by these casualty counts (GM)" style="margin-left:.6rem;padding:0 .5em;border-radius:3px;background:rgba(140,40,40,0.45);color:#ffd9d9;border:1px solid rgba(180,70,70,0.7);cursor:pointer;font-size:.78em;">⚔ Apply to roster</button>
       </p>`;
     }
   } catch (_eCas) {}
@@ -5294,6 +5295,27 @@ if (res && res.totalFinal!=null && res.dcFinal!=null) {
       rollUsed = r1;
       totalFinal = r1.total;
       dcFinal = Number(r.DC||10) + dBonus + Number(r.diffOffset||0) + __b3DefExtra2;
+
+      // P.8 2026-05-26 — non-contested DC breakdown for the Final-DC cell
+      // tooltip (contested rounds stash their own above). Prebuilt `tip`
+      // string; the 3 raid-console templates prefer it when present, so the
+      // contested-only tooltip stays untouched.
+      try {
+        const _base = Number(r.DC || 10);
+        const _stage = Number(dBonus || 0);
+        const _diffOff = Number(r.diffOffset || 0);
+        const _defExtra = Number(__b3DefExtra2 || 0);
+        const _parts = [`base ${_base}`];
+        if (_stage)   _parts.push(`Stage +${_stage}`);
+        if (_diffOff) _parts.push(`DiffOffset ${_diffOff >= 0 ? "+" : ""}${_diffOff}`);
+        if (_defExtra) _parts.push(`DefExtra +${_defExtra}`);
+        r.meta ||= {};
+        r.meta.dcBreakdown = {
+          kind: "dc",
+          base: _base, stage: _stage, diffOffset: _diffOff, defExtra: _defExtra,
+          tip: `DC ${Number(dcFinal || 0)} = ${_parts.join(" · ")}`
+        };
+      } catch (_eDcb2) {}
 
 // B3.3: Suppressive Fire — in non-contested mode, defender may force attacker reroll.
 try {
@@ -8216,6 +8238,153 @@ Hooks.once("ready", () => {
   document.head.appendChild(style);
 });
 
+// P.6 2026-05-26 — persist a casualty edit to the attacker faction's stored
+// raidSession flag when no open console holds the round. Targeted by attacker
+// id first (the session lives on the attacker actor), then an all-actors scan
+// (roundId is globally unique, so a match is unambiguous). Bumps `rev` so a
+// console reopened later picks up the change via _applySessionIfNewer.
+async function _rcPersistCasualtyToStoredSession(roundId, side, delta, attackerId) {
+  if (!game.user?.isGM) return false;
+  const rid = String(roundId || "");
+  if (!rid) return false;
+
+  const _apply = async (actor) => {
+    let s; try { s = actor.getFlag(RAID_ID, "raidSession"); } catch (_e) { return false; }
+    if (!s || !Array.isArray(s.rounds)) return false;
+    const hit = s.rounds.find(rr => String(rr?.roundId || "") === rid);
+    if (!hit) return false;
+    hit.meta ||= {};
+    const cas = (hit.meta.casualties ||= { attacker: 0, defender: 0, source: "gm-override" });
+    cas[side] = Math.max(0, Number(cas[side] || 0) + delta);
+    cas.source = "gm-override";
+    s.rev = Number(s.rev || 0) + 1;
+    try { await actor.setFlag(RAID_ID, "raidSession", s); return true; }
+    catch (e) { console.warn("[bbttcc-raid] casualty stored-session setFlag failed", e); return false; }
+  };
+
+  if (attackerId) {
+    const a = await getActorByIdOrUuid(attackerId);
+    if (a && await _apply(a)) return true;
+  }
+  for (const a of (game.actors?.contents || [])) {
+    if (await _apply(a)) return true;
+  }
+  return false;
+}
+
+// P.4 2026-05-26 — turn abstract casualty counts into real integrity wounds.
+// Roster of a faction = type:character actors linked via the bbttcc-factions
+// flag. `npcOnly` (the safe default) limits to NPC crew (auto-link entityKind),
+// sparing player stewards unless the GM opts in.
+function _rcFactionRoster(factionId, { npcOnly = true } = {}) {
+  const fid = String(factionId || "");
+  if (!fid) return [];
+  return (game.actors?.contents || []).filter(a => {
+    if (a?.type !== "character") return false;
+    if (String(a?.flags?.["bbttcc-factions"]?.factionId || "") !== fid) return false;
+    if (npcOnly && a?.flags?.["bbttcc-auto-link"]?.entityKind !== "npc") return false;
+    return true;
+  });
+}
+
+function _rcShuffle(arr) {
+  const a = (arr || []).slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Apply casualty counts to each faction's roster: wound `count` random members
+// for `perCasualty` integrity each via the fourththing damage pipeline (so the
+// dying cycle / triggers fire). Counts beyond roster size stay abstract. Posts
+// a GM-whispered summary.
+async function _rcApplyCasualtiesToRoster({ attackerId, defenderId, attCount, defCount, perCasualty, npcOnly }) {
+  const apply = game.fourththing?.rolls?._applyDamageToActor;
+  if (typeof apply !== "function") {
+    ui.notifications?.warn("fourththing damage API unavailable — cannot apply casualties to roster.");
+    return;
+  }
+  const per = Math.max(1, Number(perCasualty) || 1);
+  const lines = [];
+  const _side = async (label, factionId, count) => {
+    const fid = String(factionId || "");
+    const n0 = Math.max(0, Number(count) || 0);
+    if (n0 <= 0) return;
+    const fac = fid ? game.actors?.get?.(fid) : null;
+    if (!fid) { lines.push(`<li><b>${label}</b>: no faction on this round — ${n0} casualt${n0===1?"y":"ies"} stay abstract.</li>`); return; }
+    const roster = _rcShuffle(_rcFactionRoster(fid, { npcOnly }));
+    if (!roster.length) {
+      lines.push(`<li><b>${label}</b> (${foundry.utils.escapeHTML(fac?.name || fid)}): no ${npcOnly ? "NPC crew" : "roster members"} found — ${n0} casualt${n0===1?"y":"ies"} stay abstract.</li>`);
+      return;
+    }
+    const n = Math.min(n0, roster.length);
+    const wounded = [];
+    for (let i = 0; i < n; i++) {
+      try {
+        await apply(roster[i], per, { op: "damage", track: "integrity", damageType: "kinetic", damageFlavor: "raid casualty" });
+        wounded.push(roster[i].name);
+      } catch (e) { console.warn("[bbttcc-raid] casualty apply failed", roster[i]?.name, e); }
+    }
+    const overflow = n0 > n ? ` <small style="opacity:.7;">(+${n0 - n} beyond roster, abstract)</small>` : "";
+    lines.push(`<li><b>${label}</b> (${foundry.utils.escapeHTML(fac?.name || fid)}): wounded ${wounded.map(w => foundry.utils.escapeHTML(w)).join(", ")} for ${per} integrity each${overflow}.</li>`);
+  };
+  await _side("Attacker", attackerId, attCount);
+  await _side("Defender", defenderId, defCount);
+  if (lines.length) {
+    ChatMessage.create({
+      speaker: { alias: "BBTTCC Raid" },
+      whisper: game.users.filter(u => u.isGM).map(u => u.id),
+      content: `<section class="bbttcc-raid"><h3 style="margin:0 0 .25rem 0;">⚔ Casualties Applied to Roster</h3><ul style="margin:.2rem 0 0 .9rem;padding:0;">${lines.join("")}</ul></section>`
+    });
+  }
+}
+
+// P.4 — "Apply to roster" button on the casualty chat card. GM-only. Reads the
+// current (edited) counts from the card DOM, prompts for severity + whether to
+// spare player stewards, then wounds the rosters.
+Hooks.once("ready", () => {
+  document.body.addEventListener("click", async (ev) => {
+    try {
+      const btn = ev.target?.closest?.("button[data-cas-apply]");
+      if (!btn) return;
+      if (!game.user?.isGM) return;
+      ev.preventDefault();
+      const card = btn.closest(".bbttcc-cas-line");
+      const attCount = Number(card?.querySelector("[data-cas-att]")?.textContent || 0) || 0;
+      const defCount = Number(card?.querySelector("[data-cas-def]")?.textContent || 0) || 0;
+      const attackerId = String(btn.dataset.attackerId || "");
+      const defenderId = String(btn.dataset.defenderId || "");
+      if (attCount <= 0 && defCount <= 0) { ui.notifications?.info("No casualties on this round to apply."); return; }
+
+      let go = false, per = 3, npcOnly = true;
+      await new foundry.applications.api.DialogV2({
+        window: { title: "Apply Casualties to Roster" },
+        position: { width: 420 },
+        content: `<form style="display:flex;flex-direction:column;gap:.5rem;">
+          <p style="margin:0;font-size:.88rem;">Wound randomly-selected faction crew/stewards as integrity damage. Counts beyond a roster's size stay abstract.</p>
+          <p style="margin:0;font-size:.9rem;">Attacker: <b>${attCount}</b> · Defender: <b>${defCount}</b></p>
+          <label style="display:flex;align-items:center;gap:.5rem;">Integrity per casualty <input type="number" name="per" value="3" min="1" style="width:4.5em;"/></label>
+          <label style="display:flex;align-items:center;gap:.5rem;"><input type="checkbox" name="npcOnly" checked/> Spare player stewards (wound NPC crew only)</label>
+        </form>`,
+        buttons: [
+          { action: "apply", label: "Apply", default: true, callback: (event, button, dialog) => {
+            const root = dialog.element ?? dialog;
+            per = Math.max(1, Number(root.querySelector("[name='per']")?.value) || 3);
+            npcOnly = !!root.querySelector("[name='npcOnly']")?.checked;
+            go = true;
+          }},
+          { action: "cancel", label: "Cancel" }
+        ]
+      }).render({ force: true });
+
+      if (!go) return;
+      await _rcApplyCasualtiesToRoster({ attackerId, defenderId, attCount, defCount, perCasualty: per, npcOnly });
+    } catch (e) { console.warn("[bbttcc-raid] casualty apply-to-roster handler", e); }
+  });
+});
+
 // Damage Tracking Unification 2026-05-14 — chat-card casualty +/- handler.
 // GM-only. Updates r.meta.casualties on the matching round in any open
 // raid console (matched by roundId), and updates the chat-card DOM in
@@ -8247,6 +8416,15 @@ Hooks.once("ready", () => {
         cas[side] = Math.max(0, Number(cas[side] || 0) + delta);
         cas.source = "gm-override";
         try { foundApp?._queueSaveSession?.(); } catch (_eS) {}
+      } else {
+        // P.6 2026-05-26 — no open console holds this round (closed after
+        // commit). Persist the edit straight to the attacker faction's stored
+        // raidSession flag so the casualty count survives. Targeted by the
+        // card's attacker id, with an all-actors scan fallback (roundId is
+        // globally unique). Fire-and-forget; the DOM cell still updates below.
+        const aid = String(btn.closest(".bbttcc-cas-line")?.dataset?.attackerId || "");
+        _rcPersistCasualtyToStoredSession(rid, side, delta, aid)
+          .catch(e => console.warn("[bbttcc-raid] casualty persist (closed console) failed", e));
       }
       const line = btn.closest(".bbttcc-cas-line");
       if (line) {

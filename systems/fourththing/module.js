@@ -3063,13 +3063,52 @@ function _ftCasterTier(actor) {
   return Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
 }
 
+// 2026-05-26 — Foe surge gating. NPCs (classed, type "character" +
+// entityKind "npc") and Monsters (stat-block type "npc") only bank/spend
+// Surge when the GM explicitly enables it per-foe (`flags.fourththing
+// .surgeEnabled === true`). PCs, bosses, and rigs are unaffected. Lets the
+// GM experiment with which foes (e.g. Elites) get Surge without it being on
+// by default for every mook.
+function _ftIsFoeActor(actor) {
+  if (!actor) return false;
+  if (actor.type === "npc") return true; // Monsters (stat-block actors)
+  if (actor.type === "character") {
+    return actor.flags?.["bbttcc-auto-link"]?.entityKind === "npc";
+  }
+  return false;
+}
+function _ftSurgeAllowed(actor) {
+  if (!_ftIsFoeActor(actor)) return true; // PCs / bosses / rigs unchanged
+  return actor.flags?.fourththing?.surgeEnabled === true;
+}
+// Sheet-context shape for the per-foe Surge toggle + bank-cap editor.
+function _ftFoeSurgeContext(actor) {
+  if (!_ftIsFoeActor(actor)) return { isFoe: false };
+  const tierDefault = ({ 1: 4, 2: 6, 3: 8, 4: 10 })[_ftCasterTier(actor)] ?? 10;
+  const capOvr = Number(actor.flags?.fourththing?.surgeCap);
+  const hasOvr = Number.isFinite(capOvr) && capOvr > 0;
+  return {
+    isFoe:       true,
+    enabled:     actor.flags?.fourththing?.surgeEnabled === true,
+    tierDefault,
+    cap:         hasOvr ? Math.floor(capOvr) : tierDefault,
+    capOverride: hasOvr ? Math.floor(capOvr) : ""   // blank input → tier default
+  };
+}
+
 // Tier-scaled Surge bank cap. T1=4, T2=6, T3=8, T4=10. Bosses use their own
 // `system.manifestations.surge.max` (typically 6, set at create time).
+// Foes (NPC/Monster) may override the cap via `flags.fourththing.surgeCap`
+// (used for Elites). 2026-05-26.
 function _ftSurgeCap(actor) {
   if (!actor) return 10;
   if (actor.type === "boss") {
     const sys = actor.system?.system ?? actor.system ?? {};
     return Number(sys?.manifestations?.surge?.max) || 6;
+  }
+  if (_ftIsFoeActor(actor)) {
+    const ovr = Number(actor.flags?.fourththing?.surgeCap);
+    if (Number.isFinite(ovr) && ovr > 0) return Math.floor(ovr);
   }
   const t = _ftCasterTier(actor);
   return ({ 1: 4, 2: 6, 3: 8, 4: 10 })[t] ?? 10;
@@ -3081,6 +3120,8 @@ function _ftSurgeCap(actor) {
 // the total before this is called), so clamping the bank wastes nothing.
 async function _ftBankSurge(actor, n) {
   if (!actor || !Number.isFinite(n) || n <= 0) return 0;
+  // 2026-05-26 — Foes only bank Surge when the GM has enabled it for them.
+  if (!_ftSurgeAllowed(actor)) return 0;
   const sys = actor.system?.system ?? actor.system ?? {};
   if (actor.type === "boss") {
     const s    = sys?.manifestations?.surge ?? { current: 0, max: 6, exploded: 0 };
@@ -3734,6 +3775,15 @@ async function _ftApplyEffectsToTarget(target, aeList = [], conditionKeys = []) 
   return "none";
 }
 
+// Aurablade Fury — "Deny Reactions": true while the actor carries a live
+// `reactionsDenied` AE (1 round, applied by fury_deny_reacts). Reaction gates
+// bail when this is set, so a denied creature can't spend its reaction.
+function _ftReactionsDenied(actor) {
+  if (!actor) return false;
+  return (actor.appliedEffects ?? actor.effects ?? []).some(
+    e => !e.disabled && e.flags?.fourththing?.reactionsDenied);
+}
+
 // True when a manifestation is a pure buff/ward: no damage and a protective
 // function (or only positive numeric wards with no offensive states). Such
 // manifestations must auto-apply — never resolve an attack/save/contest against
@@ -4219,6 +4269,10 @@ async function castManifestation(actor, item, {
     }
   } else if (item && mf?.activation?.consumePool) {
     const poolKey = POOL_KEY_FROM_TYPE[mf.activation.type];
+    if (mf.activation.type === "reaction" && _ftReactionsDenied(actor)) {
+      ui.notifications?.warn(`${actor.name}: reactions are denied this round (Aurablade Fury).`);
+      return false;
+    }
     if (poolKey && rawSys?.actions?.[poolKey]) {
       // Canon §5 — Elite bonus manifestation. If an Action-type cast is
       // blocked because actionUsed is already burned, an Elite may spend
@@ -12029,6 +12083,7 @@ Hooks.once("init", function () {
     if (!observerActor.flags?.fourththing?.passives?.combat?.attackOfOpportunity) return;
     const sys = observerActor.system?.system ?? observerActor.system;
     if (sys?.actions?.reactionUsed) return;
+    if (_ftReactionsDenied(observerActor)) return; // Aurablade Fury — Deny Reactions
     const item = ftFindMeleeAttackItem(observerActor);
     if (!item) return; // nothing to swing with
     const html = `<div class="fourththing-roll">
@@ -13018,6 +13073,7 @@ Hooks.once("init", function () {
           };
         })(),
         ftFlags:       actor.flags?.fourththing ?? {},
+        ftFoeSurge:    _ftFoeSurgeContext(actor),
         resources,
         activePools,
         burnBand,
@@ -13857,6 +13913,11 @@ Hooks.once("init", function () {
 
     static async _onFtSurgeSpend(event, target) {
       const actor  = this.actor;
+      // 2026-05-26 — Surge disabled for this foe → block spending entirely.
+      if (!_ftSurgeAllowed(actor)) {
+        ui.notifications?.warn(`${actor.name}: Surge is disabled for this foe — enable it on the sheet to allow spending.`);
+        return;
+      }
       const rawSys = actor.system?.system ?? actor.system;
       const surge  = rawSys?.resources?.surge?.value ?? 0;
       const tier   = _ftCasterTier(actor);
@@ -15345,6 +15406,7 @@ Hooks.once("init", function () {
         // character-sheet contracts so the same templates work cleanly.
         resources: sysData?.resources ?? {},
         ftFlags:   actor?.flags?.fourththing ?? {},
+        ftFoeSurge: _ftFoeSurgeContext(actor),
         isEditable: this.isEditable,
         isGM: !!game.user?.isGM,
       };
@@ -18121,6 +18183,10 @@ Hooks.on(_chatHook, (message, html) => {
           ui.notifications?.warn(`${observer.name}'s reaction is already used.`);
           return;
         }
+        if (_ftReactionsDenied(observer)) {
+          ui.notifications?.warn(`${observer.name}'s reactions are denied this round.`);
+          return;
+        }
         const item = observer.items.get(btn.dataset.itemId) ?? ftFindMeleeAttackItem(observer);
         if (!item) {
           ui.notifications?.warn(`${observer.name} has no equipped melee weapon for an AoO.`);
@@ -18458,7 +18524,12 @@ async function ftBoardRig(steward, rig, role = null) {
   // so relay to an active GM via the existing module.bbttcc-raid socket
   // (same pattern as ftActivateBattleScene above). GM-side handler
   // re-enters ftBoardRig with full perms.
-  if (!game.user?.isGM && !rig.isOwner) {
+  // 2026-05-25b — Relay for ANY non-GM, even a player who OWNS the rig
+  // (personal Hexmobiles etc.). The token-hide block below is GM-gated, so
+  // an owner-player running locally updated crew slots but never hid the
+  // token — the "player board doesn't go invisible; GM board does" report.
+  // Routing all non-GM boards through the GM guarantees the hide happens.
+  if (!game.user?.isGM) {
     if (!game.users?.some?.(u => u.isGM && u.active)) {
       ui.notifications?.warn("No GM is online to confirm boarding.");
       return;
@@ -18662,7 +18733,9 @@ async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
   for (const id of candidateIds) {
     const r = game.actors?.get(id);
     if (!r) continue;
-    if (game.user?.isGM || r.isOwner) localRigs.push(r);
+    // 2026-05-25b — Non-GM always relays (even owned rigs) so the un-hide
+    // below runs GM-side, symmetric to the board-hide relay fix.
+    if (game.user?.isGM) localRigs.push(r);
     else relayIds.push(id);
   }
 
@@ -18708,7 +18781,10 @@ async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
   // scenes, not just the GM's current canvas, so a player self-disembarking
   // (relayed to a GM viewing another scene) doesn't stay stuck invisible —
   // the symmetric fix to the board-hide scene-scoping bug above.
-  for (const scene of (game.scenes ?? [])) {
+  // 2026-05-25b — GM-gated: non-GM disembarks now always relay (see split
+  // above), so the GM re-enters and performs the un-hide. Keeps token
+  // visibility a GM-only mutation in both directions.
+  if (game.user?.isGM) for (const scene of (game.scenes ?? [])) {
     const stewardTokens = scene.tokens.filter(t => t.actorId === steward.id);
     if (!stewardTokens.length) continue;
     const updates = stewardTokens.map(t => {
@@ -18828,12 +18904,16 @@ const _FT_CREW_ACTION_DESC = {
 // AEs surface combat state on the token nameplate + sheet effects bar.
 // Identified by `flags.fourththing.rigState=<key>` for idempotent
 // create/clear without name collisions.
+// `negative:true` marks debuffs the crew should see on the HUD/banner
+// (overheat is rendered by the dedicated heat gauge; suppressed + any future
+// negatives surface as condition pills). 2026-05-26.
 const _FT_RIG_STATE_AE = {
   holding:        { label: "Holding Position", icon: "icons/svg/shield.svg" },
   evading:        { label: "Evading",          icon: "icons/svg/wing.svg" },
   brace:          { label: "Braced",           icon: "icons/svg/anchor.svg" },
   "boost-system": { label: "System Enhanced",  icon: "icons/svg/upgrade.svg" },
-  overheat:       { label: "Overheated",       icon: "icons/svg/fire.svg" }
+  overheat:       { label: "Overheated",       icon: "icons/svg/fire.svg", negative: true },
+  suppressed:     { label: "Suppressed",       icon: "icons/svg/down.svg",  negative: true }
 };
 
 async function _ftEnsureRigStateAE(rig, key, { extraDesc = "" } = {}) {
@@ -19176,6 +19256,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       // the steward; consumed by the crew bleed-through hook.
       if (stCmb.holdingOn) { warn(`${steward.name}: already holding on this round.`); return; }
       if (sysActs.reactionUsed) { warn(`${steward.name}: reaction already used this turn.`); return; }
+      if (_ftReactionsDenied(steward)) { warn(`${steward.name}: reactions are denied this round.`); return; }
       await steward.update({
         "system.actions.reactionUsed": true,
         "flags.fourththing.combat.holdingOn": true
@@ -19345,7 +19426,58 @@ function _ftCollectCrewControlsContext(actor) {
     ? (rig.items ?? []).filter(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-weapon")
     : [];
 
-  return { flag, rig, frameItem, frameActions, rigWeapons };
+  // 2026-05-26 — Negative-condition + heat status for the HUD/banner, so the
+  // crew can read overheating and debuffs without opening the rig sheet.
+  // Heat lives at flags.fourththing.combat.heat; negative states are rigState
+  // AEs flagged `negative` in _FT_RIG_STATE_AE (overheat shown by the gauge,
+  // so it's excluded from the pill list to avoid duplicate signalling).
+  const heatVal = _ftRigHeatValue(rig);
+  const heatMax = _ftRigHeatMax(rig);
+  const negStates = (rig.effects ?? [])
+    .filter(e => !e.disabled)
+    .map(e => ({ key: e.getFlag?.("fourththing", "rigState"), label: e.name, desc: e.description }))
+    .filter(s => s.key && _FT_RIG_STATE_AE[s.key]?.negative && s.key !== "overheat");
+  const status = {
+    heat: { value: heatVal, max: heatMax, overheated: heatVal >= heatMax },
+    negStates
+  };
+
+  return { flag, rig, frameItem, frameActions, rigWeapons, status };
+}
+
+// Shared negative-condition + heat status strip for the boarded banner AND the
+// on-canvas crew HUD (identical markup so either layout reads the same).
+// 2026-05-26 — surfaces overheating + rig debuffs so players can run the rig
+// entirely from the HUD without opening the rig sheet.
+function _ftBuildRigStatusHtml(ctx) {
+  const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
+  const status = ctx?.status;
+  if (!status) return "";
+  const bits = [];
+
+  // Heat gauge appears once heat is building (and vanishes when fully vented),
+  // so a cold/parked rig shows no clutter — only conditions worth acting on.
+  const h = status.heat;
+  if (h && h.max > 0 && h.value > 0) {
+    const pct = h.value / h.max;
+    const col = h.overheated ? "#ff5a3c"
+              : pct >= 0.66  ? "#ff9a3c"
+              : pct >= 0.34  ? "#ffd23c"
+              : "#9fb2c8";
+    const bg  = h.overheated ? "rgba(255,60,40,0.18)" : "rgba(0,0,0,0.25)";
+    const label = h.overheated ? `OVERHEATED ${h.value}/${h.max}` : `${h.value}/${h.max}`;
+    const tip = h.overheated
+      ? `Overheated — weapons locked until vented below ${h.max}. Pilot vents −1, Engineer −2.`
+      : `Heat ${h.value}/${h.max}. At ${h.max} the rig overheats and weapons lock. Pilot vents −1, Engineer −2.`;
+    bits.push(`<span class="ft-rig-status-heat" data-tooltip="${esc(tip)}" style="display:inline-flex;align-items:center;gap:.2rem;padding:.05rem .35rem;border:1px solid ${col};border-radius:3px;background:${bg};color:${col};font-size:0.7rem;font-weight:600;white-space:nowrap;">🔥 ${esc(label)}</span>`);
+  }
+
+  for (const st of (status.negStates ?? [])) {
+    bits.push(`<span class="ft-rig-status-cond" data-tooltip="${esc(st.desc || st.label)}" style="display:inline-flex;align-items:center;gap:.2rem;padding:.05rem .35rem;border:1px solid #ff5a3c;border-radius:3px;background:rgba(255,60,40,0.16);color:#ff8a6b;font-size:0.7rem;font-weight:600;white-space:nowrap;">⚠ ${esc(st.label)}</span>`);
+  }
+
+  if (!bits.length) return "";
+  return `<span class="ft-rig-status" style="display:inline-flex;align-items:center;gap:.3rem;flex-wrap:wrap;">${bits.join("")}</span>`;
 }
 
 function _ftBuildCrewControlsHtml(actor, ctx) {
@@ -19388,8 +19520,11 @@ function _ftBuildCrewControlsHtml(actor, ctx) {
     return `<button type="button" class="ft-crew-action-btn" data-action-id="${esc(a)}" data-tooltip="${esc(desc)}" ${_styleAct}>${esc(a)}</button>`;
   }).join("");
 
+  const statusStrip = _ftBuildRigStatusHtml(ctx);
+
   return `<div style="display:flex;align-items:center;flex-wrap:wrap;gap:.35rem;row-gap:.3rem;">
     ${idChip}
+    ${statusStrip ? `<span style="opacity:.55;font-size:0.72rem;">·</span>${statusStrip}` : ""}
     ${weaponChips ? `<span style="opacity:.55;font-size:0.72rem;">·</span>${weaponChips}` : ""}
     ${actionChips ? `<span style="opacity:.55;font-size:0.72rem;">·</span>${actionChips}` : ""}
     <span style="flex:1 1 auto;"></span>
@@ -19879,6 +20014,7 @@ function _ftBuildCrewHudLinearHtml(actor, ctx) {
     <img src="${esc(rig.img)}" alt="" style="width:20px;height:20px;border-radius:3px;object-fit:cover;border:1px solid #888;"/>
     <span style="font-weight:600;">${esc(rig.name)}</span>
     <span style="opacity:.85;font-size:0.75rem;">[${esc(flag.role)}]</span>
+    ${(() => { const s = _ftBuildRigStatusHtml(ctx); return s ? `${sep}${s}` : ""; })()}
     ${rigWeapons.length ? `${sep}${rigWeapons.map(fireBtn).join("")}` : ""}
     ${frameActions.length ? `${sep}${frameActions.map(actionBtn).join("")}` : ""}
     ${sep}
@@ -19995,6 +20131,13 @@ Hooks.on("updateActor", (actor) => {
 Hooks.on("createItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("deleteItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("updateItem", (item) => { if (item?.parent?.type === "rig") _ftRenderCrewHud(); });
+// 2026-05-26 — Refresh the HUD/banner status strip the moment a rig condition
+// AE (overheat / suppressed) lands or clears, so negative conditions surface
+// without waiting for an unrelated rig update. (Heat-value changes already
+// re-render via the updateActor hook on the rig flag.)
+Hooks.on("createActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
+Hooks.on("deleteActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
+Hooks.on("updateActiveEffect", (ae) => { if (ae?.parent?.type === "rig") _ftRenderCrewHud(); });
 Hooks.on("canvasReady", () => _ftRenderCrewHud());
 
 // ─── Passenger Manifest ──────────────────────────────────────────────

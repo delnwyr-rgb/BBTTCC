@@ -265,10 +265,22 @@
       <button type="button" data-action="ftCombatAction" data-combat-action="hide"      class="ft-npc-tool {{#if ftFlags.combat.hidden}}used{{/if}}"     data-tooltip="Roll Stealth (Intrigue). On a high roll vs. observers' Perception, you become hidden.">🌑 Hide</button>
     </div>
 
-    <div class="ft-npc-surge" style="display:flex; align-items:center; gap:.3rem; padding-left:.5rem; border-left:1px solid rgba(120,120,120,0.3);" data-tooltip="Surge — banked when base dice roll 10s. Resets to 0 on Soma Break.">
+    <div class="ft-npc-surge" style="display:flex; align-items:center; gap:.3rem; padding-left:.5rem; border-left:1px solid rgba(120,120,120,0.3);" data-tooltip="Surge — banked when base dice roll 10s. Resets to 0 on Soma Break. Off by default for foes.">
       <span style="font-size:0.78rem; letter-spacing:.04em;">✦ Surge</span>
-      <span class="ft-npc-surge-count" style="font-weight:700;">{{resources.surge.value}} / {{resources.surge.max}}</span>
+      {{!-- Per-foe Surge gate (2026-05-26): off by default; GM enables + tunes
+            bank cap for Elites. Surge count reflects the effective cap. --}}
+      <label style="display:flex;align-items:center;gap:.2rem;font-size:0.72rem;cursor:pointer;" data-tooltip="When off, this foe can't bank or spend Surge. Off by default for NPCs/Monsters.">
+        <input type="checkbox" name="flags.fourththing.surgeEnabled" {{#if ftFoeSurge.enabled}}checked{{/if}}/>
+      </label>
+      {{#if ftFoeSurge.enabled}}
+      <span class="ft-npc-surge-count" style="font-weight:700;">{{resources.surge.value}} / {{ftFoeSurge.cap}}</span>
+      <label style="display:flex;align-items:center;gap:.2rem;font-size:0.7rem;opacity:0.8;" data-tooltip="Max Surge bankable. Blank = tier default ({{ftFoeSurge.tierDefault}}). Raise for Elites.">
+        max <input type="number" name="flags.fourththing.surgeCap" value="{{ftFoeSurge.capOverride}}" min="1" placeholder="{{ftFoeSurge.tierDefault}}" style="width:38px"/>
+      </label>
       <button type="button" data-action="ftSurgeSpend" class="ft-npc-tool" data-tooltip="Spend banked Surge.">Spend</button>
+      {{else}}
+      <span class="ft-npc-surge-count" style="font-weight:700;opacity:0.5;" data-tooltip="Surge disabled for this foe.">off</span>
+      {{/if}}
     </div>
   </section>
 

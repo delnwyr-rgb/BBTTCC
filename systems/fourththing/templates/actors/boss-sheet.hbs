@@ -541,7 +541,10 @@
         </div>
         <div class="ft-meta">
           <label>Current Phase Index</label>
-          <input type="number" data-ft-boss-edit="system.phases.currentPhase" value="{{phases.currentPhase}}" min="0"/>
+          {{!-- P.2 2026-05-26: currentPhase is auto-derived from Integrity vs the
+                phase ladder in prepareDerivedData (it overwrites any stored value on
+                every render), so a writable field was misleading. Read-only now. --}}
+          <span class="ft-boss-readonly" title="Auto-derived from Integrity vs the phase ladder — not directly editable.">{{phases.currentPhase}}{{#if ladder.length}} / {{ladder.length}}{{/if}} <small style="opacity:.55;">(auto)</small></span>
         </div>
       </section>
 

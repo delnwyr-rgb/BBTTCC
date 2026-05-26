@@ -128,6 +128,8 @@ async function _promptPickRig(){
 
 // L1 Option Maneuvers: define primary OP, baseline cost, and normalized activity keys.
 // These values are intentionally light; stacking discounts come later.
+// Optional per-entry `fireMode: "pre-roll" | "anytime" | "post-commit"` (P.3) overrides
+// the default "anytime" firing window — add it alongside a maneuver's mechanical rider.
 const OPTION_L1_SPECS = {
   coordinated_advance:    { primaryKey:"violence",   cost:{ violence:10 },   raidTypes:["assault","occupation","liberation","siege","assault_defense"] },
   containment_protocol:   { primaryKey:"nonlethal",  cost:{ nonlethal:10 },  raidTypes:["occupation","siege","assault_defense"] },
@@ -212,8 +214,12 @@ function buildOptionManeuverDef(key, meta){
     defenderAccess: "Conditional",
 
     // Phase 4C: character-option maneuvers default to anytime (flexible firing
-    // per-character). Slice 4/5 may override per-option when mechanical riders land.
-    fireMode: "anytime",
+    // per-character). P.3 2026-05-26: honor a per-option `fireMode` declared on
+    // OPTION_L1_SPECS so a maneuver can opt into "pre-roll"/"post-commit" when
+    // its mechanical rider (Slice 4/5) lands; falls back to "anytime". The read
+    // side (raid-console-ui enhancer badge + anytime-budget gate) already prefers
+    // spec.fireMode, so setting it here flows through end-to-end.
+    fireMode: spec?.fireMode || "anytime",
 
     async apply({ actor, entry }) {
       // Narrative-safe for now; Slice 4/5 will attach real mechanical riders per maneuver.
