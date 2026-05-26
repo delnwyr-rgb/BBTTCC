@@ -499,7 +499,7 @@ if (!spec) {
       }
     }
     if (!spec) {
-      spec = TERRAIN_NORM[normalizeTerrainKey("plains")] || { cost: { economy:1 }, tier:1, bias:"balanced" };
+      spec = TERRAIN_NORM[normalizeTerrainKey("plains")] || { cost: { economy:10 }, tier:1, bias:"balanced" };  // marks (1 OP); matches TERRAIN_TABLE scale, not OP-scale 1
       key = normalizeTerrainKey("plains");
       terrFlags = terrFlags || {};
       raw = raw || "plains";

@@ -31,7 +31,7 @@
   const RAW = [
     {
       key: "courtly_whispered_aside", label: "Whispered Aside", tier: 1, costBand: "light",
-      cost: { diplomacy: 1 },
+      cost: { diplomacy: 10 },
       effectsText: "Pick a courtier. +1 Favor to your side.",
       description: "<p>A bowed head, a brushed sleeve, a coded word at the edge of the music. <b>+1 Favor with a chosen courtier toward your side.</b></p>",
       effects: [
@@ -40,7 +40,7 @@
     },
     {
       key: "courtly_public_toast", label: "Public Toast", tier: 1, costBand: "light",
-      cost: { softpower: 1 },
+      cost: { softpower: 10 },
       effectsText: "Suspicion −1. Next Persuade by your side: +1.",
       description: "<p>A raised cup, a gracious phrase that lands the room. <b>−1 Suspicion</b>, and your next Persuade reads as warmer by half a degree. <b>+1 to your next Persuade.</b></p>",
       effects: [
@@ -50,7 +50,7 @@
     },
     {
       key: "courtly_plant_a_doubt", label: "Plant a Doubt", tier: 2, costBand: "light",
-      cost: { intrigue: 1 },
+      cost: { intrigue: 10 },
       effectsText: "Pick a courtier. −1 Favor to opponent's side. Suspicion +1.",
       description: "<p>A muttered question, a raised eyebrow at the wrong moment. The doubt seeds itself. <b>−1 Favor with a chosen courtier toward your opponent's side. +1 Suspicion.</b></p>",
       effects: [
@@ -60,7 +60,7 @@
     },
     {
       key: "courtly_quote_old_law", label: "Quote the Old Law", tier: 2, costBand: "medium",
-      cost: { diplomacy: 2 },
+      cost: { diplomacy: 20 },
       effectsText: "Suspicion −2. Cancel one Scandal on the table.",
       description: "<p>An invocation of precedent that even the rumormongers daren't trespass. <b>−2 Suspicion</b> and <b>clears one Scandal flag</b> (your choice — your own or your opponent's).</p>",
       effects: [
@@ -70,7 +70,7 @@
     },
     {
       key: "courtly_read_the_room", label: "Read the Room", tier: 1, costBand: "light",
-      cost: { intrigue: 1 },
+      cost: { intrigue: 10 },
       effectsText: "Draw 1 Earned Secret.",
       description: "<p>You attend to the right glances, the right silences. Something useful coalesces. <b>Draw 1 Earned secret</b> from the courtly secrets compendium.</p>",
       effects: [
@@ -79,7 +79,7 @@
     },
     {
       key: "courtly_stage_distraction", label: "Stage a Distraction", tier: 2, costBand: "light",
-      cost: { softpower: 1 },
+      cost: { softpower: 10 },
       effectsText: "Suspicion −1. Opponent discards a Stolen secret if held.",
       description: "<p>A spilled tray, a sudden song, a fainting noble — eyes turn, and your opponent's loudest piece of intel becomes inconvenient. <b>−1 Suspicion. Opponent discards one Stolen secret</b> (if any).</p>",
       effects: [
@@ -89,7 +89,7 @@
     },
     {
       key: "courtly_forged_letter", label: "Forged Letter", tier: 3, costBand: "medium",
-      cost: { intrigue: 2 },
+      cost: { intrigue: 20 },
       effectsText: "Acquire 1 Stolen secret. Suspicion +2.",
       description: "<p>The seal is convincing. The handwriting is *almost* right. It will hold — but not quietly. <b>Acquire 1 Stolen secret</b> from the courtly secrets compendium. <b>+2 Suspicion</b> because it's <em>almost</em> convincing.</p>",
       effects: [
@@ -99,7 +99,7 @@
     },
     {
       key: "courtly_sidle_closer", label: "Sidle Closer", tier: 1, costBand: "light",
-      cost: { diplomacy: 1 },
+      cost: { diplomacy: 10 },
       effectsText: "Approach the center. +1 to your next Persuade or Inspire.",
       description: "<p>You drift toward the principal — close enough to be heard, close enough to be seen choosing them. <b>+1 to your next Persuade or Inspire.</b> <em>(Token movement on the tableau is a Phase D-prime polish item; the bonus lands now.)</em></p>",
       effects: [
@@ -108,7 +108,7 @@
     },
     {
       key: "courtly_eavesdrop", label: "Eavesdrop", tier: 2, costBand: "light",
-      cost: { intrigue: 1 },
+      cost: { intrigue: 10 },
       effectsText: "Draw 1 Earned Secret (courtier-flavored).",
       description: "<p>A wall, an alcove, a half-open door. Patience does the rest. <b>Draw 1 Earned secret</b> tied to a courtier (GM may rename to taste).</p>",
       effects: [
@@ -117,7 +117,7 @@
     },
     {
       key: "courtly_call_question", label: "Call the Question", tier: 3, costBand: "medium",
-      cost: { softpower: 2 },
+      cost: { softpower: 20 },
       effectsText: "Force next exchange to resolve with 0 spend both sides.",
       description: "<p>You demand a vote, a ruling, a single yes-or-no. The court must oblige. <b>Next round's spending is capped at 0 OP for both sides</b> — pure rolls, pure stakes.</p>",
       effects: [
@@ -126,7 +126,7 @@
     },
     {
       key: "courtly_patrons_word", label: "Patron's Word", tier: 3, costBand: "medium",
-      cost: { diplomacy: 1 },
+      cost: { diplomacy: 10 },
       effectsText: "Spend a +2 patron's favor → +3 to one non-Intimidate roll.",
       description: "<p>You call in a chip from a high-placed friend (a courtier with favor ≥ 2 toward you). Their voice tips the scale. <b>−1 favor with the chosen patron → +3 to your next Persuade, Inspire, or Expose</b> (cannot be Intimidate).</p>",
       effects: [
@@ -135,7 +135,7 @@
     },
     {
       key: "courtly_mask_off", label: "Mask Off", tier: 4, costBand: "heavy",
-      cost: { violence: 1 },
+      cost: { violence: 10 },
       effectsText: "Burn a Scandal Scar → +2 to one Intimidate. Suspicion +2.",
       description: "<p>You stop pretending the rumor was beneath you and weaponize it. <b>Burn one light Scandal Scar from your faction → +2 to your next Intimidate this raid. +2 Suspicion.</b></p>",
       effects: [

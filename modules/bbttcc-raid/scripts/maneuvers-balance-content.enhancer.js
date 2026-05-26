@@ -48,7 +48,7 @@
       layer: "tactical-out",
       fireMode: "anytime",
       costBand: "light",
-      cost: { violence: 2 }, // 20 marks
+      cost: { violence: 20 }, // 20 marks
       effectsText: "Sappers work the base of the wall: all enemy structure/tokens on the breach scene take 4 damage.",
       description: "<p>Picks and powder at the foundation while the line keeps their heads down. <b>All enemy tokens on the bound breach scene take 4 damage</b> (~1d6 avg). Needs a battle scene to land; narrative-only otherwise.</p>",
       throughput: function (ctx) {
@@ -73,7 +73,7 @@
       layer: "tactical-down",
       fireMode: "anytime",
       costBand: "light",
-      cost: { logistics: 2 }, // 20 marks
+      cost: { logistics: 20 }, // 20 marks
       effectsText: "Defenders brace the gate: friendly tokens gain 'Braced' for 1 round.",
       description: "<p>Beams, rubble, and stubbornness jammed against the failing gate. If a breach scene is bound, <b>all friendly tokens gain Braced</b> (hold the line, +1 defense) for one round.</p>",
       throughput: function (ctx) {
@@ -105,7 +105,7 @@
       layer: "cross-layer",
       fireMode: "anytime",
       costBand: "medium",
-      cost: { violence: 3, softpower: 1 }, // 40 marks
+      cost: { violence: 30, softpower: 10 }, // 40 marks
       effectsText: "The garrison pours out: friendly tokens gain 'Sally' (+1 attack) 1 round; enemy tokens take 4 damage from the charge.",
       description: "<p>The gates swing wide and the defenders come out screaming. <b>Friendly tokens gain Sally (+1 attack)</b> for one round and <b>all enemy tokens take 4 damage</b> from the sudden charge.</p>",
       throughput: function (ctx) {
@@ -140,7 +140,7 @@
       layer: "cross-layer",
       fireMode: "post-commit",
       costBand: "heavy",
-      cost: { violence: 5, logistics: 2 }, // 70 marks
+      cost: { violence: 50, logistics: 20 }, // 70 marks
       effectsText: "On a breached round: all enemy tokens take 11 damage; the wall comes down in dust and fire (breach VFX).",
       description: "<p>Everything the faction has, thrown at one point in the wall. On a successful round the keep finally gives. <b>All enemy tokens take 11 damage</b> (~3d6 avg) and the battle scene erupts with a breach burst.</p>",
       throughput: function (ctx) {
@@ -174,7 +174,7 @@
       layer: "strategic",
       fireMode: "pre-roll",
       costBand: "light",
-      cost: { economy: 2 }, // 20 marks
+      cost: { economy: 20 }, // 20 marks
       effectsText: "Bankroll the push: +1 to the attacker's roll this round.",
       description: "<p>Coin talks. Fresh pay, fresh gear, fresh nerve bought at the last moment. <b>+1 to the attacker's roll this round.</b></p>",
       throughput: function (ctx) {
@@ -198,7 +198,7 @@
       layer: "cross-layer",
       fireMode: "anytime",
       costBand: "medium",
-      cost: { faith: 2, softpower: 1 }, // 30 marks
+      cost: { faith: 20, softpower: 10 }, // 30 marks
       effectsText: "Chaplains walk the line: darkness −1; friendly tokens gain 'Blessed' for 2 rounds.",
       description: "<p>A steady voice between the volleys, hands on shoulders, names remembered. <b>Darkness −1.</b> If a battle scene is bound, all friendly tokens gain <i>Blessed</i> for 2 rounds.</p>",
       throughput: function (ctx) {
@@ -234,7 +234,7 @@
       layer: "strategic",
       fireMode: "post-commit",
       costBand: "medium",
-      cost: { culture: 3, softpower: 1 }, // 40 marks
+      cost: { culture: 30, softpower: 10 }, // 40 marks
       effectsText: "On success: win hearts as well as ground — faction morale +2.",
       description: "<p>Songs, stories, and the right gift at the right time turn a victory into a legend people repeat. On a successful round, <b>faction morale +2.</b></p>",
       throughput: function (ctx) {
@@ -259,7 +259,7 @@
       layer: "cross-layer",
       fireMode: "pre-roll",
       costBand: "medium",
-      cost: { logistics: 3, economy: 2 }, // 50 marks
+      cost: { logistics: 30, economy: 20 }, // 50 marks
       effectsText: "Everyone in: +1 to all friendly rolls this round; friendly tokens gain +5 ft movement for 1 round.",
       description: "<p>The whole faction leans into it at once — every hand, every cart, every reserve. <b>+1 to all friendly rolls this round.</b> If a battle scene is bound, friendly tokens surge with +5 ft movement for one round.</p>",
       throughput: function (ctx) {

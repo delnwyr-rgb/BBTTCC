@@ -52,7 +52,7 @@
       layer: "strategic",
       fireMode: "anytime",
       costBand: "light",
-      cost: { logistics: 1, economy: 1 }, // 20 marks total
+      cost: { logistics: 10, economy: 10 }, // 20 marks total
       effectsText: "Sudden logistics push: +1 to all friendly rolls this round.",
       description: "<p>The faction's quartermaster reroutes supply lines on the fly, giving every commander on the field a momentary edge. <b>All friendly rolls this round +1.</b></p>",
       throughput: function (ctx) {
@@ -80,7 +80,7 @@
       layer: "strategic",
       fireMode: "anytime",
       costBand: "medium",
-      cost: { diplomacy: 4 }, // 40 marks
+      cost: { diplomacy: 40 }, // 40 marks
       effectsText: "Open a back-channel: defender may opt-in to a negotiated outcome (GM adjudicates).",
       description: "<p>An envoy slips through the lines with a sealed offer. The defender may, at their option, pause hostilities for one round of negotiation.</p><p><b>GM adjudicates terms;</b> a successful negotiation can end the raid without further bloodshed. Refusal forfeits no resources but signals contempt.</p>",
       throughput: function (ctx) {
@@ -105,7 +105,7 @@
       layer: "cross-layer",
       fireMode: "pre-roll",
       costBand: "light",
-      cost: { softpower: 2 }, // 20 marks
+      cost: { softpower: 20 }, // 20 marks
       effectsText: "Inspire the line: +1 attacker roll this round; friendly tokens on the battle scene gain 'Rallied' for 1 round.",
       description: "<p>A wave of inspiration ripples through the faction. <b>+1 to the attacker's roll this round.</b> If a battle scene is bound, every friendly token gains the <i>Rallied</i> status for one round.</p>",
       throughput: function (ctx) {
@@ -139,7 +139,7 @@
       layer: "cross-layer",
       fireMode: "post-commit",
       costBand: "medium",
-      cost: { faith: 4, softpower: 2 }, // 40 marks (faith=10/mark + softpower=10/mark)
+      cost: { faith: 40, softpower: 20 }, // 40 marks (faith=10/mark + softpower=10/mark)
       effectsText: "On success: faction morale +2, darkness −1. Scene-bound: 'Prayer's Grace' on allies + gold pulse VFX.",
       description: "<p>The faction's faithful raise their voices as one. On a successful round, the rebuke of the dark resonates outward.</p><p><b>Faction morale +2, darkness −1.</b> If a battle scene is bound, all friendly tokens gain <i>Prayer's Grace</i> for 3 rounds and the canvas pulses gold.</p>",
       throughput: function (ctx) {
@@ -181,7 +181,7 @@
       layer: "tactical-out",
       fireMode: "anytime",
       costBand: "light",
-      cost: { violence: 2 }, // 20 marks
+      cost: { violence: 20 }, // 20 marks
       effectsText: "Hose the line: all enemy tokens on the battle scene take 4 damage (1d6 avg).",
       description: "<p>The faction's gunners pour fire into the enemy line. <b>All enemy tokens on the bound battle scene take 4 damage</b> (~1d6 avg). Strategic-map only? Narrative-only; needs a battle scene to land.</p>",
       throughput: function (ctx) {
@@ -209,7 +209,7 @@
       layer: "tactical-down",
       fireMode: "anytime",
       costBand: "light",
-      cost: { logistics: 2 }, // 20 marks — cross-pool spend (universal fuel funds violence engine)
+      cost: { logistics: 20 }, // 20 marks — cross-pool spend (universal fuel funds violence engine)
       effectsText: "Cache drop: all friendly tokens on the battle scene gain 'Resupplied' (+1 attack) for 1 round.",
       description: "<p>A vanguard team breaks contact long enough to redistribute spare magazines, batteries, and stim packs. <b>All friendly tokens gain Resupplied (+1 attack)</b> for one round.</p>",
       throughput: function (ctx) {
@@ -243,7 +243,7 @@
       layer: "cross-layer",
       fireMode: "post-commit",
       costBand: "medium",
-      cost: { violence: 3, softpower: 1 }, // 40 marks
+      cost: { violence: 30, softpower: 10 }, // 40 marks
       effectsText: "On success: enemy tokens take 7 damage, allied tokens gain 'Press the Advantage', faction morale +1.",
       description: "<p>The faction's officers synchronize an attack with parade precision. On a successful round, the enemy line buckles.</p><p><b>All enemy tokens take 7 damage</b> (~2d6 avg), <b>allied tokens gain Press the Advantage</b> for 1 round, and faction morale ticks +1.</p>",
       throughput: function (ctx) {
@@ -286,7 +286,7 @@
       layer: "cross-layer",
       fireMode: "pre-roll",
       costBand: "light",
-      cost: { logistics: 2 }, // 20 marks
+      cost: { logistics: 20 }, // 20 marks
       effectsText: "Sync the advance: +1 attacker roll; friendly tokens on the scene gain 'Coordinated' (+1 attack) for 1 round.",
       description: "<p>Junior officers signal across the line and the advance moves as one body. <b>+1 to the attacker's roll this round.</b> If a battle scene is bound, every friendly token gains <i>Coordinated</i> (+1 attack) for one round.</p>",
       throughput: function (ctx) {
@@ -322,7 +322,7 @@
       layer: "strategic",
       fireMode: "anytime",
       costBand: "light",
-      cost: { diplomacy: 1, faith: 1 }, // 20 marks
+      cost: { diplomacy: 10, faith: 10 }, // 20 marks
       effectsText: "Offer the defender a sealed bargain: accept (+2 to defender's next roll, attacker gains 1 darkness) or refuse (defender morale −1 from the snubbed offer).",
       description: "<p>The attacker's emissary presents a sealed offer with an unmistakable cost.</p><p><b>Defender chooses one (GM adjudicates):</b><ul><li><b>Accept</b> — defender gains +2 to their next exchange roll; attacker's faction gains 1 darkness.</li><li><b>Refuse</b> — defender's morale drops by 1 (the snub is read as weakness in the back-channels).</li></ul></p>",
       throughput: function (ctx) {
@@ -347,7 +347,7 @@
       layer: "tactical-out",
       fireMode: "anytime",
       costBand: "medium",
-      cost: { violence: 3, logistics: 2 }, // 50 marks (top of medium band)
+      cost: { violence: 30, logistics: 20 }, // 50 marks (top of medium band)
       effectsText: "Devastating barrage: 11 damage (3d6 avg) to all enemy tokens; orange impact VFX across the scene.",
       description: "<p>Long-range tube artillery walks rounds across the enemy position. <b>All enemy tokens take 11 damage</b> (~3d6 avg). The battle scene flashes with impact bursts.</p>",
       throughput: function (ctx) {

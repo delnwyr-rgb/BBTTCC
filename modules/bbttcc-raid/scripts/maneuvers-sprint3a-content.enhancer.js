@@ -33,55 +33,55 @@
   // Compact authoring: per-entry overrides only. `effects` becomes scenarioEffects.
   const RAW = [
     { key: "hide_in_shadow", label: "Hide in Shadow", tier: 1, costBand: "light",
-      cost: { intrigue: 1 },
+      cost: { intrigue: 10 },
       effectsText: "Slip into cover: -1 alarm.",
       description: "<p>The infiltrators melt into shadow, breaking the patrol's line of sight. <b>-1 alarm.</b></p>",
       effects: [{ type: "alarmDecay", delta: 1, reason: "Hide in Shadow" }] },
 
     { key: "take_cover", label: "Take Cover", tier: 2, costBand: "medium",
-      cost: { intrigue: 2 },
+      cost: { intrigue: 20 },
       effectsText: "Press against an obstacle: -2 alarm.",
       description: "<p>Hard cover breaks the patrol's silhouette read entirely. <b>-2 alarm.</b></p>",
       effects: [{ type: "alarmDecay", delta: 2, reason: "Take Cover" }] },
 
     { key: "distract", label: "Distract", tier: 2, costBand: "medium",
-      cost: { intrigue: 2 },
+      cost: { intrigue: 20 },
       effectsText: "Pull attention away: -2 alarm.",
       description: "<p>A thrown bauble, a feigned cough — patrol eyes track the wrong direction for a beat. <b>-2 alarm.</b></p>",
       effects: [{ type: "alarmDecay", delta: 2, reason: "Distract" }] },
 
     { key: "disable_alarm", label: "Disable Alarm", tier: 3, costBand: "medium",
-      cost: { intrigue: 3 },
+      cost: { intrigue: 30 },
       effectsText: "Sabotage the alert system: -3 alarm.",
       description: "<p>Tinkering hands silence a tripwire, a sensor, a bell. <b>-3 alarm.</b></p>",
       effects: [{ type: "alarmDecay", delta: 3, reason: "Disable Alarm" }] },
 
     { key: "pick_lock", label: "Pick Lock", tier: 1, costBand: "light",
-      cost: { intrigue: 1 },
+      cost: { intrigue: 10 },
       effectsText: "Bypass a barrier: +1 progress.",
       description: "<p>A barrier yields to patient hands. <b>+1 progress toward the objective.</b></p>",
       effects: [{ type: "progressDelta", delta: 1 }] },
 
     { key: "bypass_obstacle", label: "Bypass Obstacle", tier: 2, costBand: "medium",
-      cost: { intrigue: 2 },
+      cost: { intrigue: 20 },
       effectsText: "Open the way: +2 progress.",
       description: "<p>A clever route around the guards, the wall, the warded door. <b>+2 progress.</b></p>",
       effects: [{ type: "progressDelta", delta: 2 }] },
 
     { key: "subdue_nonlethal", label: "Subdue (Non-Lethal)", tier: 2, costBand: "light",
-      cost: { intrigue: 1, violence: 1 },
+      cost: { intrigue: 10, violence: 10 },
       effectsText: "Knock out a guard; body is findable in 2 rounds.",
       description: "<p>A chokehold, a sandbag, a fast hand at the throat — a guard goes down silent. <b>If left for 2 rounds, alarm spikes +3.</b> Chain with <i>Conceal Body</i> to buy time.</p>",
       effects: [{ type: "bodyDiscovery", turns: 2, alarmGain: 3, note: "subdued guard" }] },
 
     { key: "conceal_body", label: "Conceal Body", tier: 1, costBand: "light",
-      cost: { intrigue: 1 },
+      cost: { intrigue: 10 },
       effectsText: "Hide a downed guard: +2 turns, -2 alarm on discovery.",
       description: "<p>Drag the unconscious guard into a closet, a shadow, a crate. <b>Extends the discovery window by 2 rounds and reduces the eventual alarm spike by 2.</b> Use right after <i>Subdue (Non-Lethal)</i>.</p>",
       effects: [{ type: "extendDiscovery", extraTurns: 2, alarmReduction: 2 }] },
 
     { key: "tailgate", label: "Tailgate", tier: 2, costBand: "light",
-      cost: { intrigue: 1 },
+      cost: { intrigue: 10 },
       effectsText: "Slip past behind a patrol: +2 progress, +1 alarm (risk).",
       description: "<p>Time the gait, match the cadence, breathe shallow. Cheap progress, but the risk is real. <b>+2 progress, +1 alarm.</b></p>",
       effects: [
@@ -90,7 +90,7 @@
       ] },
 
     { key: "impersonate", label: "Impersonate", tier: 3, costBand: "medium",
-      cost: { diplomacy: 2, intrigue: 1 },
+      cost: { diplomacy: 20, intrigue: 10 },
       effectsText: "Bluff past a checkpoint: +2 progress, -1 alarm.",
       description: "<p>The right uniform, the right paperwork, the right confidence. <b>+2 progress, -1 alarm</b> — a Presence-driven infiltration win.</p>",
       effects: [
