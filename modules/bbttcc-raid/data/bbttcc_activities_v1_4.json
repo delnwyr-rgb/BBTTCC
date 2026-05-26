@@ -8,7 +8,7 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "economy": 1
+          "economy": 10
         },
         "effects": {
           "text": "+1 Economy regen next turn."
@@ -26,7 +26,7 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "intrigue": 1
+          "intrigue": 10
         },
         "effects": {
           "text": "Reveal alignment of 1 adjacent Hex."
@@ -44,7 +44,7 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "softPower": 1
+          "softPower": 10
         },
         "effects": {
           "text": "+1 Loyalty to one controlled Hex."
@@ -62,8 +62,8 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "economy": 1,
-          "materials": 1
+          "economy": 10,
+          "materials": 10
         },
         "effects": {
           "text": "Remove 'Damaged Infrastructure'."
@@ -81,8 +81,8 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "culture": 1,
-          "faith": 1
+          "culture": 10,
+          "faith": 10
         },
         "effects": {
           "text": "+1 Empathy Meter."
@@ -100,8 +100,8 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "faith": 1,
-          "softPower": 1
+          "faith": 10,
+          "softPower": 10
         },
         "effects": {
           "text": "Reduce regional Darkness −1."
@@ -119,8 +119,8 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "violence": 1,
-          "nonLethal": 1
+          "violence": 10,
+          "nonLethal": 10
         },
         "effects": {
           "text": "Prevent Infiltration attempts next turn."
@@ -138,8 +138,8 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "intrigue": 1,
-          "economy": 1
+          "intrigue": 10,
+          "economy": 10
         },
         "effects": {
           "text": "Detect corruption; restore Loyalty +1."
@@ -157,8 +157,8 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "softPower": 1,
-          "violence": 1
+          "softPower": 10,
+          "violence": 10
         },
         "effects": {
           "text": "+1 Morale for next Raid."
@@ -176,8 +176,8 @@
         "tier": 1,
         "rarity": "common",
         "opCosts": {
-          "faith": 1,
-          "diplomacy": 1
+          "faith": 10,
+          "diplomacy": 10
         },
         "effects": {
           "text": "+1 Faith regen; Loyalty +1 to Hex."
@@ -195,7 +195,7 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "intrigue": 3
+          "intrigue": 30
         },
         "effects": {
           "text": "Establish 1 Trade Route (+1 Diplomacy regen)."
@@ -213,8 +213,8 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "violence": 3,
-          "nonLethal": 2
+          "violence": 30,
+          "nonLethal": 20
         },
         "effects": {
           "text": "Increase Violence cap +1 for 2 turns."
@@ -232,8 +232,8 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "economy": 2,
-          "softPower": 2
+          "economy": 20,
+          "softPower": 20
         },
         "effects": {
           "text": "Upgrade Hex status to 'Claimed'."
@@ -251,8 +251,8 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "diplomacy": 2,
-          "softPower": 2
+          "diplomacy": 20,
+          "softPower": 20
         },
         "effects": {
           "text": "Share Alignment bonus between Hexes."
@@ -270,8 +270,8 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "intrigue": 2,
-          "diplomacy": 1
+          "intrigue": 20,
+          "diplomacy": 10
         },
         "effects": {
           "text": "Reveal enemy OP pools next turn."
@@ -289,8 +289,8 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "softPower": 2,
-          "faith": 1
+          "softPower": 20,
+          "faith": 10
         },
         "effects": {
           "text": "Remove 1 Darkness; Empathy +1."
@@ -308,7 +308,7 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "diplomacy": 3
+          "diplomacy": 30
         },
         "effects": {
           "text": "Prevent enemy Raids for 2 turns on both sides."
@@ -326,8 +326,8 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "softPower": 2,
-          "economy": 1
+          "softPower": 20,
+          "economy": 10
         },
         "effects": {
           "text": "Spread Loyalty +1 across 2 Hexes."
@@ -345,8 +345,8 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "intrigue": 3,
-          "diplomacy": 2
+          "intrigue": 30,
+          "diplomacy": 20
         },
         "effects": {
           "text": "Initiate social combat; gain intel on enemy plans."
@@ -364,8 +364,8 @@
         "tier": 2,
         "rarity": "rare",
         "opCosts": {
-          "economy": 3,
-          "violence": 2
+          "economy": 30,
+          "violence": 20
         },
         "effects": {
           "text": "Steal +2 Economy from enemy; Darkness +1."
@@ -383,8 +383,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "economy": 4,
-          "faith": 4
+          "economy": 40,
+          "faith": 40
         },
         "effects": {
           "text": "Cleanse 1 Corrupted Hex."
@@ -402,8 +402,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "diplomacy": 3,
-          "softPower": 3
+          "diplomacy": 30,
+          "softPower": 30
         },
         "effects": {
           "text": "Merge resources for 1 Strategic Turn."
@@ -421,7 +421,7 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "economy": 4
+          "economy": 40
         },
         "effects": {
           "text": "Double Economy output for 2 turns."
@@ -439,8 +439,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "softPower": 3,
-          "intrigue": 3
+          "softPower": 30,
+          "intrigue": 30
         },
         "effects": {
           "text": "−2 Loyalty to enemy Hex."
@@ -458,8 +458,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "faith": 3,
-          "softPower": 2
+          "faith": 30,
+          "softPower": 20
         },
         "effects": {
           "text": "Reduce Darkness Track −2."
@@ -477,8 +477,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "diplomacy": 3,
-          "faith": 2
+          "diplomacy": 30,
+          "faith": 20
         },
         "effects": {
           "text": "Prevent Morale loss globally for 1 turn."
@@ -496,8 +496,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "economy": 4,
-          "faith": 2
+          "economy": 40,
+          "faith": 20
         },
         "effects": {
           "text": "Convert Darkness to +2 Economy; Empathy −1."
@@ -515,8 +515,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "economy": 3,
-          "violence": 2
+          "economy": 30,
+          "violence": 20
         },
         "effects": {
           "text": "Reduce Siege costs by 25%."
@@ -534,8 +534,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "faith": 4,
-          "intrigue": 2
+          "faith": 40,
+          "intrigue": 20
         },
         "effects": {
           "text": "Expose Qliphothic assets; Darkness −1."
@@ -553,8 +553,8 @@
         "tier": 3,
         "rarity": "very rare",
         "opCosts": {
-          "faith": 3,
-          "economy": 3
+          "faith": 30,
+          "economy": 30
         },
         "effects": {
           "text": "Create permanent 'Blessed Ground' in Hex (−1 Darkness regen)."
@@ -591,8 +591,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "violence": 6,
-          "economy": 6
+          "violence": 60,
+          "economy": 60
         },
         "effects": {
           "text": "+25% OP generation next turn, then −25%."
@@ -610,8 +610,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "faith": 5,
-          "diplomacy": 5
+          "faith": 50,
+          "diplomacy": 50
         },
         "effects": {
           "text": "Raise Enlightenment for all PCs by 1."
@@ -648,8 +648,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "violence": 8,
-          "intrigue": 4
+          "violence": 80,
+          "intrigue": 40
         },
         "effects": {
           "text": "Destroy enemy Hex; Darkness +3."
@@ -667,8 +667,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "faith": 6,
-          "violence": 6
+          "faith": 60,
+          "violence": 60
         },
         "effects": {
           "text": "Purify enemy Hex without destruction."
@@ -686,8 +686,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "diplomacy": 8,
-          "faith": 5
+          "diplomacy": 80,
+          "faith": 50
         },
         "effects": {
           "text": "Negotiate with Ego-Dragon fragment; if successful, Darkness −3."
@@ -724,8 +724,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "diplomacy": 8,
-          "economy": 6
+          "diplomacy": 80,
+          "economy": 60
         },
         "effects": {
           "text": "Permanently raise global Empathy Meter +2."
@@ -743,8 +743,8 @@
         "tier": 4,
         "rarity": "legendary",
         "opCosts": {
-          "intrigue": 8,
-          "faith": 8
+          "intrigue": 80,
+          "faith": 80
         },
         "effects": {
           "text": "Collapse Qliphothic gate; resets Darkness Track to 0."
