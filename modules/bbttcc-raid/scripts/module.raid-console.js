@@ -4505,6 +4505,7 @@ async _postRoundCard(idx){
 
   // Echo Roster (2026-05-26) — manifesting past-life echoes for the attacker.
   // First round only (raid-start flavor; defaultPresent doesn't change per round).
+  // Posted as a separate PUBLIC message after the GM card (see below).
   let echoesBlock = "";
   try {
     if (idx === 0) echoesBlock = _rcEchoesManifestingBlock(game.actors?.get?.(r.attackerId));
@@ -4536,9 +4537,15 @@ async _postRoundCard(idx){
       </table>
       ${holdingsBlock}
       ${casualtiesBlock}
-      ${echoesBlock}
     </section>`;
   ChatMessage.create({ speaker:{alias:"BBTTCC Raid"}, flavor:card, whisper: game.users.filter(u=>u.isGM).map(u=>u.id) });
+
+  // Echo Roster (2026-05-26) — manifesting echoes posted as a PUBLIC message
+  // (players see their past-life crews show up), separate from the GM-whispered
+  // round card above. First-round only; empty block = no message.
+  if (echoesBlock) {
+    ChatMessage.create({ speaker: { alias: "BBTTCC Raid" }, content: `<section class="bbttcc-raid">${echoesBlock}</section>` });
+  }
 }
 
   async _commitRound(idx){
