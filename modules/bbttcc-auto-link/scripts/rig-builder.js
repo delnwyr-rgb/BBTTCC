@@ -922,6 +922,27 @@ async function _commitInfrastructure(root) {
   return res.actor;
 }
 
+// Phase E (2026-05-26) — default structural BOM per rig bracket (the "mechanical
+// envelope" axis). Auto-stamped on rig create so every new Rig ships with a
+// hardness model (bbttcc-structures damage path: small-arms < Threshold chip
+// cosmetically; Plates ablate only under Rig-grade fire). Keys are valid
+// RFI-catalog slugs; Plates ≈ spec §8 ballparks (personal≈17 = Hexmobile,
+// medium≈33 = ATR). siege carries a yesodium load-bearing core. Retune via the
+// structure sheet panel / Harden recipe.
+const CHASSIS_BRACKET_BOM = {
+  personal: [{ materialKey: "bog-iron", qty: 4 }, { materialKey: "ash-wood", qty: 2 }, { materialKey: "hex-iron-cleat", qty: 1 }],
+  light:    [{ materialKey: "bog-iron", qty: 5 }, { materialKey: "ash-wood", qty: 2 }, { materialKey: "cold-iron", qty: 1 }],
+  medium:   [{ materialKey: "scribed-steel", qty: 6 }, { materialKey: "heart-iron", qty: 3 }, { materialKey: "cold-iron", qty: 2 }],
+  heavy:    [{ materialKey: "scribed-steel", qty: 8 }, { materialKey: "heart-iron", qty: 4 }, { materialKey: "cold-iron", qty: 3 }, { materialKey: "mountain-stone", qty: 2 }],
+  siege:    [{ materialKey: "scribed-steel", qty: 10 }, { materialKey: "heart-iron", qty: 5 }, { materialKey: "cold-iron", qty: 4 }, { materialKey: "mountain-stone", qty: 4 }, { materialKey: "yesodium", qty: 1 }]
+};
+function _rigBracketBOM(bracket) {
+  const b = String(bracket || "").toLowerCase();
+  if (CHASSIS_BRACKET_BOM[b]) return CHASSIS_BRACKET_BOM[b];
+  if (b === "hybrid") return CHASSIS_BRACKET_BOM.medium;   // hybrid envelope ≈ medium
+  return CHASSIS_BRACKET_BOM.light;                        // safe default for unknown brackets
+}
+
 async function _commit(root) {
   if (!root) return null;
 
@@ -1066,6 +1087,20 @@ async function _commit(root) {
     }
   } else if (selectedKey) {
     console.warn(`[bbttcc-auto-link/rig-builder] Starter chip '${selectedKey}' had no loadout — rig minted bare.`);
+  }
+
+  // Phase E (2026-05-26) — auto-stamp a structural BOM so the rig has a hardness
+  // model out of the box. Bracket-driven; facilities stamp facilityMode. Skips
+  // when the bbttcc-structures module is absent or a BOM is already present.
+  try {
+    const structApi = game.bbttcc?.api?.structures;
+    if (structApi?.stampBOM && !actor.flags?.["bbttcc-structures"]?.hasStructure) {
+      const bom = _rigBracketBOM(bracket);
+      await structApi.stampBOM(actor, bom, { facilityMode: mobility === "stationary", resetCurrentPlates: true });
+      console.log("[bbttcc-auto-link/rig-builder] auto-stamped structural BOM", { bracket, materials: bom.length });
+    }
+  } catch (e) {
+    console.warn("[bbttcc-auto-link/rig-builder] structure BOM auto-stamp failed (non-fatal):", e);
   }
 
   actor.sheet?.render(true);
