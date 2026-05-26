@@ -656,6 +656,52 @@ function categoryTotalWithRoster(faction, key) {
   return categoryValue(faction, key) + rosterContribution(faction, key);
 }
 
+// Echo Roster chat-card integration (2026-05-26) — surface each contributing
+// Steward's "manifesting" past-life echoes (roster members flagged
+// defaultPresent) as raid-card flavor. Pure narrative; OP is summed separately
+// via rosterContribution. Mirrors that function's steward-enumeration so the
+// echoes shown match the stewards who actually contribute.
+function _rcFactionStewards(faction) {
+  if (!faction) return [];
+  const isChar = (a) => { const t = String(a?.type || "").toLowerCase(); return t === "character" || t === "pc" || t === "npc"; };
+  const belongs = (char) => {
+    try { if (typeof _characterBelongsToFaction === "function") return _characterBelongsToFaction(char, faction); } catch {}
+    const fid = faction.id;
+    const byId = [
+      char?.getFlag?.(FCT_ID, "factionId"), char?.getFlag?.(FCT_ID, "ownerFactionId"),
+      char?.flags?.[FCT_ID]?.factionId, char?.flags?.[FCT_ID]?.ownerFactionId,
+      char?.flags?.["bbttcc-core"]?.factionId, char?.flags?.["bbttcc-character-options"]?.factionId
+    ].filter(Boolean).map(String);
+    return byId.includes(fid);
+  };
+  return (game.actors?.contents || []).filter(a => isChar(a) && belongs(a));
+}
+
+function _rcEchoesManifestingBlock(faction) {
+  try {
+    if (!faction) return "";
+    const rosterApi = game.fourththing?.api?.echoAssets?.roster;
+    if (!rosterApi?.list) return "";
+    const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
+    const rows = [];
+    for (const s of _rcFactionStewards(faction)) {
+      let rosters; try { rosters = rosterApi.list(s) || {}; } catch { continue; }
+      for (const slug of Object.keys(rosters)) {
+        const entry = rosters[slug] || {};
+        const present = (entry.members || []).filter(m => m && m.defaultPresent && m.name);
+        if (!present.length) continue;
+        const names = present.map(m => esc(m.role ? `${m.name} (${m.role})` : m.name)).join(", ");
+        rows.push(`<div style="margin:.12rem 0;font-size:.82rem;"><span style="color:#c9a0ff;">⟡ ${esc(entry.displayName || slug)}</span> <small style="opacity:.6;">via ${esc(s.name)}</small> — ${names}</div>`);
+      }
+    }
+    if (!rows.length) return "";
+    return `<p style="margin:.25rem 0;padding:.35rem .5rem;border-radius:6px;background:rgba(40,24,58,0.3);border:1px solid rgba(120,80,160,0.45);">
+      <strong style="color:#c9a0ff;">✦ Echoes Manifesting</strong> <small style="opacity:.6;">past-life crews lending their aid</small>
+      ${rows.join("")}
+    </p>`;
+  } catch (_e) { return ""; }
+}
+
 function _rcNormFactionIds(ids){
   const out = [];
   for (const v of (Array.isArray(ids) ? ids : [])) {
@@ -4457,6 +4503,13 @@ async _postRoundCard(idx){
     }
   } catch (_eHo) {}
 
+  // Echo Roster (2026-05-26) — manifesting past-life echoes for the attacker.
+  // First round only (raid-start flavor; defaultPresent doesn't change per round).
+  let echoesBlock = "";
+  try {
+    if (idx === 0) echoesBlock = _rcEchoesManifestingBlock(game.actors?.get?.(r.attackerId));
+  } catch (_eEc) {}
+
   const card = `
     <section class="bbttcc-raid">
       <h3 style="margin:0 0 .25rem 0;">BBTTCC — Raid (Round ${idx+1})</h3>
@@ -4483,6 +4536,7 @@ async _postRoundCard(idx){
       </table>
       ${holdingsBlock}
       ${casualtiesBlock}
+      ${echoesBlock}
     </section>`;
   ChatMessage.create({ speaker:{alias:"BBTTCC Raid"}, flavor:card, whisper: game.users.filter(u=>u.isGM).map(u=>u.id) });
 }
