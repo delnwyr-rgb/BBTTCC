@@ -475,11 +475,22 @@ async function _bbttccGrantDoctrineEmbeddedItem(actor, { kind, key, silent=false
 }
 
 
+// Starter maneuvers — one usable T1 per engine so no raid type leaves a brand-new
+// faction empty-handed (the raid console locks a faction to its OWNED maneuvers
+// once it owns any). MANEUVER_BALANCE_PASS.md faction-kit fix, 2026-05-24.
+//   Violence : suppressive_fire · patch_the_breach (def) · flank_attack
+//   Intrigue : smoke_and_mirrors
+//   Universal: logistics_surge_s2  (anytime — usable in EVERY raid type)
+//   Presence : opt_infernal_bargain (anytime)
+//   Courtly  : courtly_whispered_aside (anytime — for Presence/tableau raids)
 const _BBTTCC_STANDARD_START_MANEUVERS = [
   "suppressive_fire",
   "patch_the_breach",
   "smoke_and_mirrors",
-  "flank_attack"
+  "flank_attack",
+  "logistics_surge_s2",
+  "opt_infernal_bargain",
+  "courtly_whispered_aside"
 ];
 const _BBTTCC_STANDARD_START_STRATEGICS = [
   "harvest_season",

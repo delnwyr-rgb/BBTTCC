@@ -68,13 +68,15 @@
 
     const factionEffects = [];
 
-    // Radiant Rally — attacker throughput
-    if (attMans.includes("radiant_rally") && attackerFactionId) {
+    // Rally the Line — attacker throughput. The +2 Morale / −1 Darkness rider
+    // was merged in from the retired Radiant Rally (MANEUVER_BALANCE_PASS.md §3.C).
+    // "radiant_rally" kept in the test for back-compat with any legacy in-flight round.
+    if ((attMans.includes("rally_the_line") || attMans.includes("radiant_rally")) && attackerFactionId) {
       factionEffects.push({
         factionId: attackerFactionId,
         moraleDelta: 2,
         darknessDelta: -1,
-        note: "Radiant Rally"
+        note: "Rally the Line"
       });
     }
 

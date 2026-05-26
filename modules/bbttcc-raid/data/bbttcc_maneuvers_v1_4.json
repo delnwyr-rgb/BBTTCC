@@ -63,7 +63,7 @@
           "softPower": 1
         },
         "effects": {
-          "text": "+1 to next attack/defense for allies."
+          "text": "+1 to allies' next attack/defense. On Success: +2 Morale and −1 Darkness (merged from Radiant Rally)."
         },
         "raidTypes": [
           "Assault",
@@ -126,31 +126,6 @@
         "minFactionTier": 1,
         "availability": "standard",
         "unlockKey": "flash_bargain"
-      }
-    }
-  },
-  {
-    "name": "Radiant Rally [T1]",
-    "type": "feat",
-    "flags": {
-      "bbttcc": {
-        "kind": "maneuver",
-        "tier": 1,
-        "rarity": "common",
-        "opCosts": {
-          "softPower": 1
-        },
-        "effects": {
-          "text": "Boost ally morale; Darkness −1 on success."
-        },
-        "raidTypes": [
-          "Liberation",
-          "Siege"
-        ],
-        "defenderAccess": "Yes",
-        "minFactionTier": 1,
-        "availability": "standard",
-        "unlockKey": "radiant_rally"
       }
     }
   },
@@ -688,7 +663,7 @@
           "economy": 2
         },
         "effects": {
-          "text": "Rerun a failed roll this round; if used twice, Darkness +1."
+          "text": "Rerun one failed roll this round on Success; on failure, Darkness +1."
         },
         "raidTypes": [
           "Espionage",
@@ -843,7 +818,7 @@
           "economy": 3
         },
         "effects": {
-          "text": "Re-run last round as if it never occurred."
+          "text": "Re-roll your faction's round result once; you must keep the second result. Darkness +1."
         },
         "raidTypes": [
           "Espionage",
@@ -948,7 +923,7 @@
           "faith": 3
         },
         "effects": {
-          "text": "Nullify all maneuvers this round; Darkness +1."
+          "text": "Nullify all ENEMY maneuvers this round; your own still resolve. Darkness +1."
         },
         "raidTypes": [
           "Espionage",

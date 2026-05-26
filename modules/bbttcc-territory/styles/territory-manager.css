@@ -387,6 +387,100 @@
   padding: 4px 2px;
 }
 
+/* ── Player HUD v2: resource strip + accordion (2026-05-24) ───────────── */
+#bbttcc-player-hud .bbttcc-hud-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: #cdeafd;
+  border: 1px solid rgba(120, 210, 255, 0.35);
+  background: rgba(20, 60, 90, 0.55);
+  text-transform: none;
+}
+
+#bbttcc-player-hud .bbttcc-resstrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(120, 210, 255, 0.16);
+}
+
+#bbttcc-player-hud .bbttcc-res-chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 210, 255, 0.28);
+  background: linear-gradient(180deg, rgba(22, 36, 52, 0.96), rgba(12, 20, 32, 0.98));
+  color: #e8f4ff;
+  font-weight: 600;
+  font-size: 0.78rem;
+  cursor: default;
+}
+#bbttcc-player-hud .bbttcc-res-chip i { color: #9ad9ff; font-size: 0.82rem; }
+#bbttcc-player-hud .bbttcc-res-chip .bbttcc-res-val {
+  font-weight: 800;
+  color: #ffe39a;
+  letter-spacing: 0.02em;
+}
+#bbttcc-player-hud .bbttcc-res-chip.is-clickable { cursor: pointer; transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease; }
+#bbttcc-player-hud .bbttcc-res-chip.is-clickable:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 200, 120, 0.7);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.28), 0 0 12px rgba(255,190,90,0.18);
+}
+#bbttcc-player-hud .bbttcc-res-chip.is-empty { opacity: 0.5; }
+
+#bbttcc-player-hud .bbttcc-acc-section { margin-bottom: 4px; }
+
+#bbttcc-player-hud .bbttcc-acc-header {
+  appearance: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(120, 210, 255, 0.07);
+  color: #cdeafd;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+#bbttcc-player-hud .bbttcc-acc-header:hover { background: rgba(120, 210, 255, 0.14); }
+#bbttcc-player-hud .bbttcc-acc-header > .bbttcc-acc-chev { width: 12px; text-align: center; color: #9ad9ff; }
+#bbttcc-player-hud .bbttcc-acc-header > .bbttcc-acc-title { flex: 1; text-align: left; }
+#bbttcc-player-hud .bbttcc-acc-header > .bbttcc-acc-count {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #061018;
+  background: #9ad9ff;
+  border-radius: 999px;
+  min-width: 18px;
+  text-align: center;
+  padding: 1px 6px;
+}
+#bbttcc-player-hud .bbttcc-acc-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 4px 6px;
+}
+#bbttcc-player-hud .bbttcc-acc-section.is-collapsed .bbttcc-acc-body { display: none; }
+
 @media (max-width: 760px) {
   #bbttcc-player-hud {
     max-width: calc(100vw - 28px);

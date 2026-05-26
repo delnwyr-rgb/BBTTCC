@@ -127,6 +127,23 @@ export async function consumeCatastrophicEntry(sourceActor) {
   const pending = sourceActor.getFlag?.(FLAG_SCOPE, "bulwarkPendingEntry");
   if (!pending?.armed) return null;
   await sourceActor.unsetFlag(FLAG_SCOPE, "bulwarkPendingEntry");
+  // 2026-05-25 — deferred Ruin spend. The charge stays armed (and UNPAID)
+  // through misses; the Ruin cost is only paid here, when the breach actually
+  // lands a hit. A miss never reaches this path (damage-wedge early-returns on
+  // 0 damage), so the charge is not wasted. Cost stamped by the Breaker dialog.
+  const cost = Number(sourceActor.getFlag?.(FLAG_SCOPE, "bulwarkEntryRuinCost")) || 0;
+  if (cost > 0) {
+    const sys = sourceActor.system?.system ?? sourceActor.system;
+    const cur = Number(sys?.resources?.ruinCharges?.current) || 0;
+    try {
+      await sourceActor.update({ "system.resources.ruinCharges.current": Math.max(0, cur - cost) });
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor: sourceActor }),
+        content: `<div style="font-size:0.72rem; opacity:0.7; padding:0.2rem 0.5rem; color:#e8c8a0">⚒ Catastrophic Entry landed — spent <b>${cost}</b> Ruin Charge${cost === 1 ? "" : "s"} (${Math.max(0, cur - cost)} left).</div>`
+      });
+    } catch (e) { console.warn(TAG, "deferred Ruin spend failed", e); }
+  }
+  await sourceActor.unsetFlag?.(FLAG_SCOPE, "bulwarkEntryRuinCost");
   return { bypassThreshold: true, noSalvage: true };
 }
 

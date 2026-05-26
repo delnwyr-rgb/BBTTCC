@@ -291,20 +291,10 @@
   // ----------------------------
   const THROUGHPUT = Object.create(null);
 
-  THROUGHPUT["radiant_rally"] = function (ctx) {
-    if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
-    return {
-      factionEffects: [
-        {
-          factionId: ctx.attackerFactionId || null,
-          moraleDelta: 2,
-          darknessDelta: -1,
-          note: "Radiant Rally (preview): +2 Morale, -1 Darkness on success."
-        }
-      ],
-      meta: { source: "throughput", maneuverKey: "radiant_rally", preview: true }
-    };
-  };
+  // RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) — radiant_rally merged
+  // into rally_the_line; its +2 Morale / −1 Darkness rider now lives on the
+  // rally_the_line handler below. Handler removed so the GM-only stub synthesis
+  // in _mansForType doesn't resurrect it.
 
   THROUGHPUT["supply_overrun"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
@@ -349,6 +339,15 @@
           when: "nextRoll",
           amount: 1,
           note: "Rally the Line (preview): +1 to next attack/defense for allies."
+        }
+      ],
+      // Merged rider from the retired Radiant Rally (MANEUVER_BALANCE_PASS.md §3.C).
+      factionEffects: [
+        {
+          factionId: ctx.attackerFactionId || null,
+          moraleDelta: 2,
+          darknessDelta: -1,
+          note: "Rally the Line (preview): +2 Morale, −1 Darkness on success."
         }
       ],
       meta: { source: "throughput", maneuverKey: "rally_the_line", preview: true }
@@ -833,21 +832,28 @@
   // --- T3 LEARNED: Chrono-Loop Command ---
   // "Rerun a failed roll this round; if used twice, Darkness +1."
   THROUGHPUT["chrono_loop_command"] = function (ctx) {
-    if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
-
+    // RETUNED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.D) — fixed the inverted
+    // incentive. On Success: rerun one failed roll. On failure: Darkness +1
+    // (the loop frays when you push it and lose). Symmetric risk, no free reruns.
+    if (isSuccessTier(ctx?.outcomeTier || ctx?.result)) {
+      return {
+        roundEffects: [
+          {
+            type: "rerunFailedRoll",
+            scope: "attacker",
+            window: "thisRound",
+            note: "Chrono-Loop Command (preview): Rerun one failed roll this round on success."
+          }
+        ],
+        meta: { source: "throughput", maneuverKey: "chrono_loop_command", preview: true }
+      };
+    }
     return {
-      roundEffects: [
+      factionEffects: [
         {
-          type: "rerunFailedRoll",
-          scope: "attacker",
-          window: "thisRound",
-          note: "Chrono-Loop Command (preview): Rerun a failed roll this round on success."
-        },
-        {
-          type: "conditionalPenalty",
-          condition: "secondUseThisRound",
-          factionDelta: { darknessDelta: +1 },
-          note: "Chrono-Loop Command (preview): If used twice in the same round, attacker Darkness +1."
+          factionId: ctx.attackerFactionId || null,
+          darknessDelta: +1,
+          note: "Chrono-Loop Command (preview): the loop frays — Darkness +1 on failure."
         }
       ],
       meta: { source: "throughput", maneuverKey: "chrono_loop_command", preview: true }
@@ -995,7 +1001,9 @@
   };
 
   // --- T4 LEARNED: Void-Signal Collapse ---
-  // "Nullify all maneuvers this round; Darkness +1."
+  // RETUNED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.D) — nullifies ENEMY
+  // maneuvers only; the caster's own still resolve (scope:"enemy"). The
+  // consumer _b2ApplyNullifyAllManeuvers keeps attacker-side rows intact.
   THROUGHPUT["void_signal_collapse"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 
@@ -1003,9 +1011,9 @@
       roundEffects: [
         {
           type: "nullifyAllManeuvers",
-          scope: "bothSides",
+          scope: "enemy",
           window: "thisRound",
-          note: "Void-Signal Collapse (preview): Nullify all maneuvers this round on success."
+          note: "Void-Signal Collapse (preview): Nullify all enemy maneuvers this round on success; your own still resolve."
         }
       ],
       factionEffects: [
@@ -1044,16 +1052,26 @@
   };
 
   // --- T4 LEARNED: Reality Hack ---
-  // "Re-run last round as if it never occurred."
+  // RETUNED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.D) — bounded. Re-roll your
+  // OWN faction's round result once and keep the second result (no erasing the
+  // round / the other side's outcome). Always costs Darkness +1. Fires on any
+  // outcome (it's the gamble itself), GM-adjudicated preview intent.
   THROUGHPUT["reality_hack"] = function (ctx) {
-    if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
-
     return {
       roundEffects: [
         {
-          type: "rewindRound",
-          scope: "lastRound",
-          note: "Reality Hack (preview): Re-run the last round as if it never occurred on success."
+          type: "rerollRoundResult",
+          scope: "attacker",
+          keepSecond: true,
+          window: "thisRound",
+          note: "Reality Hack (preview): re-roll your round result once; you MUST keep the second result."
+        }
+      ],
+      factionEffects: [
+        {
+          factionId: ctx.attackerFactionId || null,
+          darknessDelta: +1,
+          note: "Reality Hack (preview): bending the round costs Darkness +1."
         }
       ],
       meta: { source: "throughput", maneuverKey: "reality_hack", preview: true }
@@ -1168,23 +1186,10 @@
     };
   };
 
-  // --- T1 NARRATIVE UNLOCK: Battlefield Harmony ---
-  // Runtime intent: margin treated as +2 higher for outcome tiering.
-  THROUGHPUT["battlefield_harmony"] = function (ctx) {
-    if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
-
-    return {
-      roundEffects: [
-        {
-          type: "attackerMarginDelta",
-          delta: +2,
-          window: "thisRound",
-          note: "Battlefield Harmony (preview): Treat margin as +2 higher for outcome tiering on success."
-        }
-      ],
-      meta: { source: "throughput", maneuverKey: "battlefield_harmony", preview: true }
-    };
-  };
+  // --- Battlefield Harmony — RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) ---
+  // Merged into Rally the Line. THROUGHPUT handler removed so the GM-only stub
+  // synthesis in _mansForType doesn't resurrect it. The attackerMarginDelta
+  // consumer in module.raid-console.js (~line 7890) is left dormant + guarded.
 
   // --- T1 NARRATIVE UNLOCK: Sympathetic Stabilization ---
   // Runtime intent: reduce one negative consequence on Fail OR reduce incoming siege damage by 1.

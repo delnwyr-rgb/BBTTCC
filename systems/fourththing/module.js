@@ -1091,10 +1091,14 @@ function ftOpenEngageDialog(actor, item, options = {}) {
               lastFiredRigId:    rig.id,
               lastFiredWeaponId: item.id
             });
-            // 2026-05-19 — Heat increment per fire (+1). Engineer's
-            // vent-heat (−2) or vent-button is the relief valve. At max
-            // heat, the Overheated AE is set in _ftSetRigHeat.
-            try { await _ftSetRigHeat(rig, _ftRigHeatValue(rig) + 1); }
+            // 2026-05-19 — Heat increment per fire. 2026-05-24 — cost now
+            // scales with weapon weight (system.tags): light/untagged +1,
+            // medium +2, heavy +3, so a small weapon no longer cooks a hex
+            // bike in two shots. Pilot/Engineer vent-heat is the relief valve;
+            // at max heat the Overheated AE is set in _ftSetRigHeat.
+            const _wtags = (Array.isArray(item.system?.tags) ? item.system.tags : []).map(t => String(t).toLowerCase());
+            const _heatCost = _wtags.includes("heavy") ? 3 : _wtags.includes("medium") ? 2 : 1;
+            try { await _ftSetRigHeat(rig, _ftRigHeatValue(rig) + _heatCost); }
             catch (e) { console.warn("[fourththing] heat bump failed", e); }
             // 2026-05-19 — Consume aimed-shot on fire (success or miss).
             if (aimedShotActive) {
@@ -3698,6 +3702,72 @@ async function _ftCreateAllyAE(ally, aeData) {
   return false;
 }
 
+// Apply a batch of Active Effects + condition flags to ANY target, routing
+// through a GM when the invoking user can't write to it. 2026-05-25 — players
+// can't create effects on tokens they don't own ("effect creation failed"), so
+// steward actions / manifestations that land conditions or wards on enemies (or
+// GM-owned allies) silently dropped. Owner → direct write; else relay by UUID
+// (works for synthetic token actors, unlike the actor-id Surge relay). Returns
+// the mode used: "direct" | "relay" | "none".
+async function _ftApplyEffectsToTarget(target, aeList = [], conditionKeys = []) {
+  const aes  = (Array.isArray(aeList) ? aeList : []).filter(Boolean);
+  const conds = Array.isArray(conditionKeys) ? conditionKeys : [];
+  if (!target || (!aes.length && !conds.length)) return "none";
+  if (target.isOwner) {
+    try {
+      if (aes.length) await target.createEmbeddedDocuments("ActiveEffect", aes);
+      if (conds.length) {
+        const upd = {};
+        for (const k of conds) upd[`system.conditions.${k}`] = true;
+        await target.update(upd);
+      }
+      return "direct";
+    } catch (e) { /* fall through to relay */ console.warn("[fourththing] direct effect apply failed; relaying", e); }
+  }
+  if (game.users?.some?.(u => u.isGM && u.active)) {
+    game.socket?.emit?.("system.fourththing", {
+      t: "ft-applyEffects", targetUuid: target.uuid, aeList: aes, conditionKeys: conds
+    });
+    return "relay";
+  }
+  ui.notifications?.warn(`No GM online — couldn't apply effects to ${target?.name ?? "target"}.`);
+  return "none";
+}
+
+// True when a manifestation is a pure buff/ward: no damage and a protective
+// function (or only positive numeric wards with no offensive states). Such
+// manifestations must auto-apply — never resolve an attack/save/contest against
+// the (usually allied) target. 2026-05-25 — "buffs should just buff."
+function _ftIsBeneficialManifestation(mf, item, dr) {
+  if (dr && dr.op === "damage" && Number(dr.number) > 0) return false;
+  const fn = String(mf?.function ?? item?.system?.manifestation?.function ?? "").toLowerCase();
+  const BENEFICIAL_FNS = new Set(["protect","heal","mend","ward","shelter","bolster","bless","empower","restore","shield","guard","sustain","fortify"]);
+  if (BENEFICIAL_FNS.has(fn)) return true;
+  const eff = mf?.appliedEffects ?? item?.system?.manifestation?.appliedEffects ?? null;
+  const hasPositiveEff = !!eff && Array.isArray(eff.modifiers)
+    && eff.modifiers.some(m => m?.stat && m.op !== "-" && Number(m.value) > 0);
+  const st = mf?.appliedStates?.states;
+  const hasStates = Array.isArray(st) ? st.length > 0
+                  : (st && typeof st === "object" ? Object.values(st).some(Boolean) : false);
+  return hasPositiveEff && !hasStates && (!dr || dr.op === "none" || Number(dr.number) === 0);
+}
+
+// True when a manifestation has anything to apply via applyManifestationStates —
+// states (array OR object-of-booleans from the wizard) OR appliedEffects wards.
+// Used to gate the post-cast apply call so pure-ward buffs (no states) still land.
+function _ftHasManifestationApplicables(mf, item) {
+  const st = mf?.appliedStates?.states;
+  const hasStates = Array.isArray(st) ? st.length > 0
+                  : (st && typeof st === "object" ? Object.values(st).some(Boolean) : false);
+  const eff = mf?.appliedEffects ?? item?.system?.manifestation?.appliedEffects ?? null;
+  const hasEffects = !!eff && (
+    (Array.isArray(eff.modifiers) && eff.modifiers.length > 0) ||
+    (Array.isArray(eff.resists)   && eff.resists.length   > 0) ||
+    (Array.isArray(eff.immunes)   && eff.immunes.length   > 0)
+  );
+  return !!(hasStates || hasEffects);
+}
+
 // Read an actor's current defense trio (guard/evasion/resolve) from the
 // derived store. Used by Bulwark Stance to share the higher value.
 function _ftReadDefTrio(actor) {
@@ -4338,13 +4408,16 @@ async function castManifestation(actor, item, {
     // resolveDc bonus. Caster's cast roll is unaffected (already happened).
     const targetSaveCastDc = difficulty + rs.resolveDc;
     const resolution = mf?.resolution;
+    // 2026-05-25 — beneficial buffs/wards auto-apply: never resolve an attack,
+    // save, or contest against the (usually allied) target. "Buffs just buff."
+    const effShape = _ftIsBeneficialManifestation(mf, item, dr) ? "auto" : resolution?.shape;
 
     // saveByPrompt — singular save-shape with the prompt flag short-circuits
     // the synchronous save + damage/state apply. Posts a chat-card Save button
     // that the target's owner clicks to roll; the click handler resolves
     // damage + states. AoE always GM-side (multi-target prompts are noisy).
     const usePromptSave = !useAoE
-      && resolution?.shape === "save"
+      && effShape === "save"
       && resolution?.saveByPrompt === true
       && !!target;
 
@@ -4365,12 +4438,12 @@ async function castManifestation(actor, item, {
     //   0.5 = half damage   (saved with onSave="half")
     //   0   = no damage     (attack missed, OR saved with onSave="negate")
     let damageMultiplier = 1;
-    if (resolution?.shape === "attack" && target) {
+    if (effShape === "attack" && target) {
       const atk = await game.fourththing.rolls.resolveManifestationAttack(actor, target, item, resolution, {
         intent, channel
       });
       if (!atk?.hit) damageMultiplier = 0;
-    } else if (resolution?.shape === "save" && target && !useAoE) {
+    } else if (effShape === "save" && target && !useAoE) {
       // Skipped under AoE — per-target saves run inside the AoE walk below.
       const sav = await game.fourththing.rolls.resolveManifestationSave(actor, target, item, resolution, {
         castDc: targetSaveCastDc,
@@ -4380,7 +4453,7 @@ async function castManifestation(actor, item, {
         if (sav.onSave === "negate")    damageMultiplier = 0;
         else if (sav.onSave === "half") damageMultiplier = 0.5;
       }
-    } else if (resolution?.shape === "contested" && target && !useAoE) {
+    } else if (effShape === "contested" && target && !useAoE) {
       const con = await game.fourththing.rolls.resolveManifestationContest(actor, target, item, resolution, {
         intent, channel
       });
@@ -4423,7 +4496,7 @@ async function castManifestation(actor, item, {
       // card's owner clicks to roll their save; their card's handler applies
       // the pre-rolled baseDmg with the resulting multiplier. Skips the rest
       // of the AoE walk for damage/states (handled lazily on click).
-      if (useAoeSavePrompts && resolution?.shape === "save" && baseDmg > 0) {
+      if (useAoeSavePrompts && effShape === "save" && baseDmg > 0) {
         for (const aoeActor of aoeActors) {
           await _ftPostAoeSavePromptCard(actor, aoeActor, item, mf, dr, baseDmg, trackKey, {
             castDc: targetSaveCastDc, intent, channel,
@@ -4439,16 +4512,16 @@ async function castManifestation(actor, item, {
 
         for (const aoeActor of aoeActors) {
           let aoeMult = 1;
-          if (resolution?.shape === "save") {
+          if (effShape === "save") {
             const sav = await game.fourththing.rolls.resolveManifestationSave(actor, aoeActor, item, resolution, {
               castDc: targetSaveCastDc,
               rollOverride: rs.defenseImpose > 0 ? "3d10kl2" : null
             });
             if (sav?.saved) aoeMult = (sav.onSave === "negate") ? 0 : 0.5;
-          } else if (resolution?.shape === "contested") {
+          } else if (effShape === "contested") {
             const con = await game.fourththing.rolls.resolveManifestationContest(actor, aoeActor, item, resolution, { intent, channel });
             if (con && !con.casterWins) aoeMult = (con.onContestLoss === "negate") ? 0 : 0.5;
-          } else if (resolution?.shape === "attack") {
+          } else if (effShape === "attack") {
             aoeMult = damageMultiplier;
           }
 
@@ -4468,9 +4541,9 @@ async function castManifestation(actor, item, {
             dmgLines.push(`${aoeActor.name}: resisted — no ${dr.op === "heal" ? "healing" : "damage"}`);
           }
 
-          // States — same multiplier gate. (Always immediate; the confirm
-          // step is only for damage application, not state-AE creation.)
-          if (mf?.appliedStates?.states?.length) {
+          // States + wards — same multiplier gate. (Always immediate; the
+          // confirm step is only for damage application, not state-AE creation.)
+          if (_ftHasManifestationApplicables(mf, item)) {
             if (aoeMult > 0) {
               try {
                 await game.fourththing.applyManifestationStates(actor, aoeActor, item, mf, { castDc: targetSaveCastDc });
@@ -4533,7 +4606,7 @@ async function castManifestation(actor, item, {
       if (dr.op !== "none" && dr.number > 0 && damageMultiplier > 0) {
         await ftRollManifestationDamage(actor, item, dr, { multiplier: damageMultiplier });
       }
-      if (target && damageMultiplier > 0 && mf?.appliedStates?.states?.length) {
+      if (target && damageMultiplier > 0 && _ftHasManifestationApplicables(mf, item)) {
         try {
           await game.fourththing.applyManifestationStates(actor, target, item, mf, { castDc: targetSaveCastDc });
         } catch (e) {
@@ -6993,6 +7066,16 @@ function ftComputeArmorBonus(actor, sys) {
   const result = { guard: 0, evasion: 0, resolve: 0, breakdown: [] };
   if (!actor?.items) return result;
 
+  // 2026-05-25 — Armor Sundered (Bulwark · Catastrophic Entry vs a foe). While
+  // an armor-sundered effect is active, the wearer gets NO defensive benefit
+  // from armor, for EVERY attacker. The AE carries its own ~1-round duration.
+  const sundered = actor.effects?.some?.(e =>
+    (e.active ?? !e.disabled) && e.flags?.fourththing?.armorSundered === true);
+  if (sundered) {
+    result.breakdown.push({ item: "— armor sundered —", skill: null, rank: 0, guard: 0, evasion: 0, resolve: 0 });
+    return result;
+  }
+
   for (const item of actor.items) {
     if (item.type !== "armor") continue;
     const a = item.system ?? {};
@@ -7617,6 +7700,41 @@ function ftClassifyPrinciple(item, {
   }
 
   return "other";
+}
+
+// Player-HUD helper (2026-05-24): classify a steward's feature-like items the
+// SAME way the sheet's Principles tab does — resolving class/ancestry names +
+// granted-name sets internally (the HUD can't, living in another module). Returns
+// a plain { itemId: group } where group ∈ path | ancestry | identity | echo |
+// other. "echo" = Echo Assets: Occult Associations + Crew/Awesome Crews (the
+// OP-pool past lives), split out of the broader "identity" bucket.
+async function ftBuildStewardItemGroups(actor) {
+  const out = {};
+  if (!actor) return out;
+  let className = "", ancestryName = "";
+  try {
+    const bbttcc = await getBBTTCCContext(actor);
+    className    = bbttcc?.identity?.cls ?? "";
+    ancestryName = bbttcc?.identity?.ancestry ?? "";
+  } catch (_e) {}
+  const co    = actor.flags?.["bbttcc-character-options"] ?? {};
+  const links = co.nativeLinks ?? {};
+  const classGrantNames    = await ftCollectGrantedNames(co.classUuid   ?? links.classUuid   ?? "");
+  const ancestryGrantNames = await ftCollectGrantedNames(co.speciesUuid ?? links.speciesUuid ?? "");
+  const FEAT_LIKE = new Set(["feature","feat","class","subclass","race","species"]);
+  for (const i of (actor.items ?? [])) {
+    if (!FEAT_LIKE.has(i.type)) continue;
+    let g = ftClassifyPrinciple(i, { className, ancestryName, classGrantNames, ancestryGrantNames });
+    if (g === "identity") {
+      const nm  = String(i.name ?? "");
+      const cat = i.flags?.["bbttcc-character-options"]?.category
+               ?? i.getFlag?.("bbttcc-character-options", "category") ?? "";
+      if (/^(Crew Type|Occult Association):/i.test(nm) ||
+          ["crew-types","crew","occult-associations","occult"].includes(cat)) g = "echo";
+    }
+    out[i.id] = g;
+  }
+  return out;
 }
 
 // Cache of UUID → Set<lowercase item name> built by walking ItemGrant advancements.
@@ -10115,6 +10233,10 @@ Hooks.once("init", function () {
   game.fourththing.ftOpenEngageDialog = ftOpenEngageDialog;
   game.fourththing.ftOpenCastDialog   = ftOpenCastDialog;
   game.fourththing.classifyPrinciple  = ftClassifyPrinciple;
+  // Owner-or-GM-relay effect/condition writer (used by steward actions + the
+  // Breaker dialog's Armor Sunder on foes the player doesn't own).
+  game.fourththing.applyEffectsToTarget = _ftApplyEffectsToTarget;
+  game.fourththing.classifyStewardItems = ftBuildStewardItemGroups;
 
   // createManifestationItemData — exposed 2026-05-17 so the BBTTCC Boss
   // Builder (bbttcc-auto-link/scripts/boss-builder.js) can synthesize
@@ -10466,7 +10588,12 @@ Hooks.once("init", function () {
     const eff = mf?.appliedEffects
              ?? item?.system?.manifestation?.appliedEffects
              ?? null;
-    const hasStates  = cfg && Array.isArray(cfg.states) && cfg.states.length > 0;
+    // States may arrive as an array (full call sites) OR an object-of-booleans
+    // (wizard-authored items, e.g. {prone:true, shaken:false}). Normalize.
+    const statesArr = Array.isArray(cfg?.states) ? cfg.states
+                    : (cfg?.states && typeof cfg.states === "object"
+                        ? Object.keys(cfg.states).filter(k => cfg.states[k]) : []);
+    const hasStates  = statesArr.length > 0;
     const hasEffects = eff && (
       (Array.isArray(eff.modifiers) && eff.modifiers.length > 0) ||
       (Array.isArray(eff.resists)   && eff.resists.length   > 0) ||
@@ -10494,7 +10621,9 @@ Hooks.once("init", function () {
 
     const applied = [];
     const skipped = [];
-    for (const condKey of (hasStates ? cfg.states : [])) {
+    const condAEs = [];          // collected condition AEs — written via owner-or-relay after the loop
+    const condKeysToFlag = [];
+    for (const condKey of statesArr) {
       const cond = FT.CONDITIONS?.[condKey];
       if (!cond) continue;
       if (immune.has(condKey)) {
@@ -10547,14 +10676,9 @@ Hooks.once("init", function () {
         }
       };
 
-      try {
-        await target.createEmbeddedDocuments("ActiveEffect", [aeData]);
-        await target.update({ [`system.conditions.${condKey}`]: true });
-        applied.push(condKey);
-      } catch (e) {
-        console.warn("Roll for Initiation | applyManifestationStates create failed", condKey, e);
-        skipped.push({ key: condKey, reason: "create-failed" });
-      }
+      condAEs.push(aeData);
+      condKeysToFlag.push(condKey);
+      applied.push(condKey);
     }
 
     // Phase C — Buffs & Wards effect AE. One AE per cast carries the numeric
@@ -10562,6 +10686,7 @@ Hooks.once("init", function () {
     // flag lists (read by ftComputeDefenses). De-dupe by manifestation item
     // id so AoE re-casts don't stack the same buff on the same target.
     let effectResult = null;
+    let buffAE = null;
     if (hasEffects) {
       const ADD_MODE = (foundry.CONST?.ACTIVE_EFFECT_MODES?.ADD) ?? 2;
       const aeChanges = [];
@@ -10606,13 +10731,25 @@ Hooks.once("init", function () {
             }
           }
         };
-        try {
-          await target.createEmbeddedDocuments("ActiveEffect", [aeData]);
-          effectResult = { status: "applied", changes: aeChanges.length, resists: resists.length, immunes: immunes.length };
-        } catch (e) {
-          console.warn("Roll for Initiation | applyManifestationStates effect-AE create failed", e);
-          effectResult = { status: "failed" };
+        buffAE = aeData;
+        effectResult = { status: "applied", changes: aeChanges.length, resists: resists.length, immunes: immunes.length };
+      }
+    }
+
+    // 2026-05-25 — ONE owner-or-relay write for all collected condition AEs +
+    // buff AE + condition flags. Players landing effects on non-owned targets
+    // (enemies, GM-owned allies) used to hit "effect creation failed"; now the
+    // GM applies on their behalf. Downgrade results only if no GM is available.
+    const _effectAEs = condAEs.slice();
+    if (buffAE) _effectAEs.push(buffAE);
+    if (_effectAEs.length || condKeysToFlag.length) {
+      const _mode = await _ftApplyEffectsToTarget(target, _effectAEs, condKeysToFlag);
+      if (_mode === "none") {
+        for (const k of condKeysToFlag) {
+          const i = applied.indexOf(k);
+          if (i >= 0) { applied.splice(i, 1); skipped.push({ key: k, reason: "no-gm" }); }
         }
+        if (effectResult?.status === "applied") effectResult = { status: "failed" };
       }
     }
 
@@ -11789,6 +11926,12 @@ Hooks.once("init", function () {
     // personal movement budget — otherwise they auto-proc every rig square.
     // Riders generate no personal movement; the rig owns the locomotion.
     if (actor.flags?.fourththing?.boardedRig) return;
+    // 2026-05-24 — A rig actor never generates personal movement. And the
+    // boardedRig flag can drift from the rig's crew.slots (the slot list is
+    // source of truth); fall back to slot membership so a seated-but-unflagged
+    // steward's force-synced move still can't proc Pace / Kinetic Inversion.
+    if (actor.type === "rig") return;
+    if (_ftFindRigsForSteward(actor.id).length) return;
     const scene    = tokenDoc.parent;
     const gridSize = scene?.grid?.size     ?? 100;
     const gridDist = scene?.grid?.distance ?? 5;
@@ -11806,6 +11949,9 @@ Hooks.once("init", function () {
     const inCombat = !!game.combat?.combatants?.find(c => c.actor?.id === actor.id);
     const curCumulative = inCombat ? (Number(actor.system?.actions?.movementUsedFt) || 0) : 0;
     const nextCumulative = curCumulative + distanceFt;
+    // 2026-05-24 — Movement procs (Pace / Kinetic Inversion) never fire out of
+    // combat. on-move exists only to drive those, so gate the whole dispatch.
+    if (!inCombat) return;
     fireTriggers(actor, "on-move", { amount: distanceFt, cumulativeFt: nextCumulative, inCombat, scope: "self" })
       .catch(err => console.error("fourththing | on-move trigger failed", err));
 
@@ -18382,10 +18528,17 @@ async function ftBoardRig(steward, rig, role = null) {
   // a boarded non-owner player would see from wherever their PC token
   // was sitting when they boarded (often outside the rig's vision range).
   // Prior sight is captured on the token doc so disembark can restore it.
-  if (canvas?.scene && game.user?.isGM) {
-    const rigTokenDoc = canvas.scene.tokens.find(t => t.actorId === rig.id) ?? null;
-    const stewardTokens = canvas.scene.tokens.filter(t => t.actorId === steward.id);
-    if (stewardTokens.length) {
+  // 2026-05-25 — Search ALL scenes for the steward's tokens, not just the
+  // GM's currently-viewed `canvas.scene`. A player self-boarding relays to a
+  // GM who may be looking at a different scene, so canvas-scoping hid nothing
+  // (player-side boards never went invisible; GM-side worked only because the
+  // GM is always viewing the very token they board). Find the rig token on the
+  // SAME scene as each steward token for the position + sight copy.
+  if (game.user?.isGM) {
+    for (const scene of (game.scenes ?? [])) {
+      const stewardTokens = scene.tokens.filter(t => t.actorId === steward.id);
+      if (!stewardTokens.length) continue;
+      const rigTokenDoc = scene.tokens.find(t => t.actorId === rig.id) ?? null;
       const rigSight = rigTokenDoc?.sight?.toObject?.() ?? rigTokenDoc?.sight ?? null;
       const updates = stewardTokens.map(t => {
         const u = { _id: t.id, hidden: true };
@@ -18409,7 +18562,7 @@ async function ftBoardRig(steward, rig, role = null) {
         }
         return u;
       });
-      try { await canvas.scene.updateEmbeddedDocuments("Token", updates); }
+      try { await scene.updateEmbeddedDocuments("Token", updates); }
       catch (e) { console.warn("[fourththing] board: steward token sync failed", e); }
     }
   }
@@ -18551,20 +18704,22 @@ async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
     catch (e) { console.warn("[fourththing] disembark: GM-side unsetFlag failed", e); }
   }
 
-  // Restore the steward's tokens on the current scene (un-hide + sight).
-  if (canvas?.scene) {
-    const stewardTokens = canvas.scene.tokens.filter(t => t.actorId === steward.id);
-    if (stewardTokens.length) {
-      const updates = stewardTokens.map(t => {
-        const ovr = t.getFlag?.("fourththing", "boardSightOverride");
-        const u = { _id: t.id, hidden: false };
-        if (ovr?.priorSight) u.sight = ovr.priorSight;
-        u.flags = { fourththing: { "-=boardSightOverride": null } };
-        return u;
-      });
-      try { await canvas.scene.updateEmbeddedDocuments("Token", updates); }
-      catch (e) { console.warn("[fourththing] disembark: token restore failed", e); }
-    }
+  // Restore the steward's tokens (un-hide + sight). 2026-05-25 — search ALL
+  // scenes, not just the GM's current canvas, so a player self-disembarking
+  // (relayed to a GM viewing another scene) doesn't stay stuck invisible —
+  // the symmetric fix to the board-hide scene-scoping bug above.
+  for (const scene of (game.scenes ?? [])) {
+    const stewardTokens = scene.tokens.filter(t => t.actorId === steward.id);
+    if (!stewardTokens.length) continue;
+    const updates = stewardTokens.map(t => {
+      const ovr = t.getFlag?.("fourththing", "boardSightOverride");
+      const u = { _id: t.id, hidden: false };
+      if (ovr?.priorSight) u.sight = ovr.priorSight;
+      u.flags = { fourththing: { "-=boardSightOverride": null } };
+      return u;
+    });
+    try { await scene.updateEmbeddedDocuments("Token", updates); }
+    catch (e) { console.warn("[fourththing] disembark: token restore failed", e); }
   }
 
   // Per-rig badge refresh + chat card.
@@ -18660,7 +18815,7 @@ const _FT_CREW_ACTION_DESC = {
   "opportunity-fire": "Reaction — fire at enemy entering reach.",
   repair:          "Tinkering check — restore rig integrity.",
   "boost-system":  "Bonus — temp buff to a `rig-system` until end of round.",
-  "vent-heat":     "Reset a cooldown on a weapon or system.",
+  "vent-heat":     "Vent rig heat (Engineer −2 / Pilot −1, bonus action) — clears the overheat weapon-lock.",
   "cycle-power":   "Reset a cooldown.",
   "counter-sabotage": "Reaction — cancel a hostile boarding or sabotage attempt.",
   "operate-module":"Activate a specific `rig-system` or `output-module`.",
@@ -18718,12 +18873,15 @@ async function _ftClearAllRigStateAEs(rig) {
   catch (e) { console.warn("[fourththing] AE bulk delete failed", e); }
 }
 
-// Heat: stored at flags.fourththing.combat.heat (number). Max = tier × 2.
-// Each rig-weapon fire +1; vent-heat (engineer bonus) −2; cap at max creates
-// an Overheated AE that blocks weapon fire until vented below max.
+// Heat: stored at flags.fourththing.combat.heat (number). Max = 2 + tier × 2.
+// Rig-weapon fire adds heat by weapon weight (light +1 / medium +2 / heavy +3);
+// vent-heat (Engineer bonus −2, Pilot bonus −1) is the relief valve; cap at max
+// creates an Overheated AE that blocks weapon fire until vented below max.
 function _ftRigHeatMax(rig) {
   const tier = Math.max(1, Math.min(4, Number(rig?.system?.integrity?.tier) || 1));
-  return tier * 2;
+  // 2026-05-24 — base headroom + tier so small rigs aren't bricked in 2 shots.
+  // T1=4 · T2=6 · T3=8 · T4=10.
+  return 2 + tier * 2;
 }
 function _ftRigHeatValue(rig) {
   return Math.max(0, Number(rig?.flags?.fourththing?.combat?.heat) || 0);
@@ -18889,18 +19047,22 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
     }
 
     case "vent-heat": {
-      if (!requireEngineer()) return;
+      // 2026-05-24 — Pilot can vent too (−1, emergency cooling) so a solo
+      // crew can save its own rig; the Engineer stays the specialist (−2).
+      const canVent = role === "engineer" || role === "pilot";
+      if (!canVent) { warn(`${steward.name}: only the Pilot or Engineer can vent heat (role: ${role}).`); return; }
       if (!requireBonus()) return;
       const cur = _ftRigHeatValue(rig);
       const max = _ftRigHeatMax(rig);
       if (cur <= 0) { warn(`${rig.name} has no heat to vent.`); return; }
-      const next = Math.max(0, cur - 2);
+      const ventAmt = role === "engineer" ? 2 : 1;
+      const next = Math.max(0, cur - ventAmt);
       await _ftSetRigHeat(rig, next);
       await consumeBonus();
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">🌬 ${steward.name} vents heat from ${rig.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem">Heat <b>${cur} → ${next}</b> / ${max}.${next >= max ? " Still overheated." : (cur >= max ? " <b>Weapons re-armed</b>." : "")}</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem">Heat <b>${cur} → ${next}</b> / ${max} <span style="opacity:0.7">(${role === "engineer" ? "Engineer −2" : "Pilot −1"})</span>.${next >= max ? " Still overheated." : (cur >= max ? " <b>Weapons re-armed</b>." : "")}</p></div>`
       });
       return;
     }
@@ -19159,6 +19321,12 @@ function _ftCollectCrewControlsContext(actor) {
   // it for pilots even on frames authored before Ram existed, so the button
   // surfaces on the sheet banner + HUD without re-stamping every frame.
   if (flag.role === "pilot" && !frameActions.includes("ram")) frameActions = [...frameActions, "ram"];
+  // 2026-05-25 — A solo pilot can vent their own heat (−1 emergency cooling;
+  // the Engineer stays the −2 specialist). The vent-heat handler authorizes
+  // pilots, but the button lives only in the frame's engineer action list —
+  // inject it for pilots so the control surfaces on the banner + HUD without
+  // re-stamping every frame (same rationale as the Ram injection above).
+  if (flag.role === "pilot" && !frameActions.includes("vent-heat")) frameActions = [...frameActions, "vent-heat"];
 
   // Rig weapons (only gunners + crew can fire — pilots/engineers focus elsewhere)
   // 2026-05-13 — Gate on whether the rig has a Gunner role authored, not
@@ -19373,9 +19541,23 @@ Hooks.on("renderTokenHUD", (hud, html, data) => {
         rightCol.appendChild(mkBtn("fa-door-open", "Disembark Rig", () => ftDisembarkSteward(actor)));
       } else {
         rightCol.appendChild(mkBtn("fa-truck-pickup", "Board a Rig…", async () => {
-          // Open picker — list rigs on current scene first, else all rigs
-          const sceneRigs = (canvas?.scene?.tokens ?? []).filter(t => t.actor?.type === "rig").map(t => t.actor);
-          const allRigs   = game.actors.filter(a => a.type === "rig");
+          // Open picker — list rigs on current scene first, else all rigs.
+          // 2026-05-24 — Players only see rigs they personally own, rigs of
+          // their own faction, or rigs of a faction whose relationship to
+          // theirs is above Neutral (friendly/allied). GM sees everything.
+          const stewardFac = actor.getFlag?.("bbttcc-factions", "factionId")
+                          ?? actor.system?.faction?.id ?? null;
+          const rel = game.bbttcc?.api?.factions?.relations;
+          const allowedRig = (rig) => {
+            if (game.user.isGM) return true;
+            if (rig.testUserPermission?.(game.user, "OWNER")) return true;   // personally owned
+            const owner = rig.system?.identity?.factionOwnerId || null;
+            if (!owner) return false;                                        // unowned scenery hidden from players
+            if (stewardFac && owner === stewardFac) return true;             // own faction's rig
+            return !!(stewardFac && rel?.tier && rel.tier(stewardFac, owner) > 3); // > Neutral
+          };
+          const sceneRigs = (canvas?.scene?.tokens ?? []).filter(t => t.actor?.type === "rig").map(t => t.actor).filter(allowedRig);
+          const allRigs   = game.actors.filter(a => a.type === "rig").filter(allowedRig);
           const list      = sceneRigs.length ? sceneRigs : allRigs;
           if (!list.length) { ui.notifications?.warn("No rigs available to board."); return; }
           const opts = list.map(r => `<option value="${r.id}">${foundry.utils.escapeHTML?.(r.name) ?? r.name}${r === sceneRigs[0] ? " (on scene)" : ""}</option>`).join("");
@@ -21397,6 +21579,29 @@ function _ftRelayHandler(msg) {
       if (!actor || !msg.aeData) return;
       actor.createEmbeddedDocuments("ActiveEffect", [msg.aeData])
         .catch(e => console.warn("[fourththing] GM-relay Surge AE apply failed", e));
+    } else if (msg?.t === "ft-applyEffects") {
+      // 2026-05-25 — generic effect/condition relay. Players can't write AEs or
+      // condition flags to tokens they don't own (enemies, GM-owned allies).
+      // applyManifestationStates / steward-action conditions route here so the
+      // GM applies them. UUID-resolved so synthetic token actors work too.
+      if (!game.user?.isGM) return;
+      const sig = `applyEffects:${msg.targetUuid}:${(msg.aeList||[]).map(a=>a?.name).join("|")}:${(msg.conditionKeys||[]).join("|")}`;
+      if (_ftRelaySeenRecently(sig)) return;
+      (async () => {
+        try {
+          const doc = await fromUuid(msg.targetUuid);
+          const target = doc?.actor ?? doc;
+          if (!target?.createEmbeddedDocuments) return;
+          const aes = (Array.isArray(msg.aeList) ? msg.aeList : []).filter(Boolean);
+          if (aes.length) await target.createEmbeddedDocuments("ActiveEffect", aes);
+          const conds = Array.isArray(msg.conditionKeys) ? msg.conditionKeys : [];
+          if (conds.length) {
+            const upd = {};
+            for (const k of conds) upd[`system.conditions.${k}`] = true;
+            await target.update(upd);
+          }
+        } catch (e) { console.warn("[fourththing] GM-relay applyEffects failed", e); }
+      })();
     } else if (msg?.t === "ft-grantClarity") {
       // 2026-05-23 — Dreamwalker Shared Dream grants Clarity to allies the
       // invoking player may not own. GM applies, capped at the ally's max

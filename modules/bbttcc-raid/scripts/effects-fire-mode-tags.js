@@ -72,9 +72,8 @@ const FIRE_MODE_TAGS = {
   courtly_mask_off:         "anytime",
 
   // ── post-commit (12): triggered by round outcome
-  battlefield_harmony:      "post-commit",
+  // battlefield_harmony + radiant_rally RETIRED 2026-05-24 (merged into rally_the_line, §3.C)
   divine_favor:             "post-commit",
-  radiant_rally:            "post-commit",
   supply_overrun:           "post-commit",
   sympathetic_stabilization: "post-commit",
   command_overdrive:        "post-commit",

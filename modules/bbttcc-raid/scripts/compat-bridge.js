@@ -325,20 +325,9 @@ const EFFECTS = {
    *   the canonical runtime metadata surface for Raid Console.
    * ============================================================ */
 
-  radiant_rally: {
-    kind: "maneuver",
-    tier: 1,
-    rarity: "common",
-    minFactionTier: 1,
-    availability: "standard",
-    label: "Radiant Rally",
-    primaryKey: "softpower",
-    cost: { softpower: 10 },
-    opCosts: { softpower: 1 },
-    raidTypes: ["liberation","siege"],
-    defenderAccess: "Yes",
-    text: "On Success: +2 Morale (or negate Morale loss); Darkness −1."
-  },
+  // RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) — Radiant Rally merged
+  // into Rally the Line (which now carries the +2 Morale / −1 Darkness rider).
+  // EFFECTS entry removed so it no longer surfaces in the raid console picker.
 
   supply_overrun: {
     kind: "maneuver",
@@ -491,20 +480,10 @@ divine_favor: {
     text: "Phase through the seams: ignore one defensive circumstance this round (GM adjudicates) and gain +2 to the attacker roll if the raid type is Infiltration/Espionage."
   },
 
-  battlefield_harmony: {
-    kind: "maneuver",
-    tier: 1,
-    rarity: "uncommon",
-    minFactionTier: 1,
-    unlockKey: "battlefield_harmony",
-    label: "Battlefield Harmony",
-    primaryKey: "softpower",
-    cost: { softpower: 10 },
-    opCosts: { softpower: 1 },
-    raidTypes: ["assault","liberation","propaganda","courtly"],
-    defenderAccess: "Conditional",
-    text: "A chorus in the kill-zone: stabilize morale and coordination. On Success, treat the margin as +2 higher for outcome tiering (GM adjudicates until wired)."
-  },
+  // RETIRED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.C) — Battlefield Harmony
+  // merged into Rally the Line (redundant ally morale/coordination buff). EFFECTS
+  // entry removed so it no longer surfaces in the raid console picker. The
+  // attackerMarginDelta consumer in module.raid-console.js is left dormant (guarded).
 
   sympathetic_stabilization: {
     kind: "maneuver",
@@ -621,14 +600,12 @@ divine_favor: {
 function _applyFxMetadata(){
   try {
     const FAMILY_BY_KEY = {
-      radiant_rally: "faith",
       supply_overrun: "industrial",
       flank_attack: "martial",
       supply_surge: "industrial",
       defensive_entrenchment: "martial",
       divine_favor: "faith",
       ghost_slip_infiltration: "void",
-      battlefield_harmony: "faith",
       sympathetic_stabilization: "faith",
       gradient_surge: "industrial",
       repair_fortifications: "industrial",

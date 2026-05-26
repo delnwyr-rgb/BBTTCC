@@ -24,6 +24,8 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+import { getActiveDamageSource } from "./bulwark-hookups.js";
+
 const MOD_ID = "bbttcc-structures";
 const TAG = `[${MOD_ID}/collapse]`;
 const FLAG_SCOPE = MOD_ID;
@@ -218,6 +220,13 @@ async function applyProne(actor) {
 export async function triggerCollapse(actor, { fromState, toState }) {
   if (!actor) return;
 
+  // Capture the breaching actor (the Bulwark who just damaged this structure)
+  // FIRST, before any await — getActiveDamageSource is only live inside the
+  // synchronous damage-apply window. 2026-05-25: the one who breaches a wall is
+  // never caught in the collapse of THEIR OWN breach (they were adjacent, not
+  // standing on it). Excluded from the footprint below.
+  const breacher = getActiveDamageSource();
+
   // Only GM-side, to avoid double-applying via multiple clients
   if (!game.user?.isGM) return;
 
@@ -238,7 +247,9 @@ export async function triggerCollapse(actor, { fromState, toState }) {
     return;
   }
 
-  const tokensOnTop = findTokensInsideFootprint(structToken);
+  const breacherId = breacher?.id ?? null;
+  const tokensOnTop = findTokensInsideFootprint(structToken)
+    .filter(t => !breacherId || t.actor?.id !== breacherId);
 
   await postCollapseHeaderCard(actor, profile, tokensOnTop.length);
 

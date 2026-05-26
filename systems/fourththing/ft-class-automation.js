@@ -1133,44 +1133,83 @@ export async function openBreakerRuin(actor) {
         <label>Spend ruin charge for</label>
         <select name="action">
           <option value="none">— Just update charges —</option>
-          <option value="entry">Catastrophic Entry (ignore structure resistance)</option>
+          <option value="entry">Catastrophic Entry (ignore structure resistance / sunder foe armor)</option>
           <option value="siege">Siege Cost Reduction (−1 Violence OP this Siege)</option>
           <option value="shockwave">Shockwave Footing (resist knockback, push adjacent)</option>
           <option value="renewal">Ruin to Renewal (purify fortification, Faith/Economy DC 15)</option>
         </select>
       </div>
+      <div class="ft-cast-field" style="margin-top:0.4rem">
+        <label>Charges to spend</label>
+        <input type="number" name="cost" value="1" min="0" max="${ruinMax}"/>
+      </div>
+      <p style="margin:0.3rem 0 0;font-size:0.72rem;opacity:0.6">Spends exactly this many charges from your current pool (the field above is only for manually re-setting the count). <b>Catastrophic Entry:</b> target a foe to <b>sunder their armor</b> — every attacker ignores it for 1 round; with no target it arms a structure breach that stays charged until you land a hit.</p>
     </div>`,
     buttons: {
       save: {
         label: "Apply",
         callback: async (html) => {
-          const newRuin    = parseInt(html.find("[name='ruin']").val())    || 0;
+          const manualRuin = parseInt(html.find("[name='ruin']").val())    || 0;
           const newMax     = parseInt(html.find("[name='ruinMax']").val()) || ruinMax;
           const action     = html.find("[name='action']").val();
-          const spendOne   = action !== "none";
-          // Bulwark Stance · Advance reduces Ruin charge cost by 1 (to 0): the
-          // action still fires (chat-sniffed by bbttcc-structures) but spends no
-          // charge. Non-Bulwark Breakers never have the stance flag → normal cost.
+          const isSpend    = action !== "none";
+          // Bulwark Stance · Advance reduces the Ruin cost by 1 (min 0).
           const _advance   = actor.getFlag("fourththing", "bulwarkStance") === "advance";
-          const ruinCost   = spendOne ? (_advance ? 0 : 1) : 0;
-          const finalRuin  = Math.max(0, newRuin - ruinCost);
-          await actor.update({
-            "system.resources.ruinCharges.current": Math.min(finalRuin, newMax),
+          // 2026-05-25 fix — spend EXACTLY the chosen number of charges from the
+          // ACTUAL current pool. Previously the spend was layered on top of the
+          // manual "Ruin charges" field, so setting it to 1 with 2 in the pool
+          // ended at 0 ("consumed 2"). The manual field now only applies when
+          // just updating (action = none).
+          const wantCost   = Math.max(0, parseInt(html.find("[name='cost']").val()) || 1);
+          const ruinCost   = isSpend ? Math.max(0, _advance ? wantCost - 1 : wantCost) : 0;
+
+          // Catastrophic Entry vs a TARGETED foe — sunder their armor now
+          // (immediate; costs Ruin now). With NO target it arms a structure
+          // breach whose Ruin cost is DEFERRED to the hit (a miss wastes nothing).
+          let sunderNote = "";
+          const foes = (action === "entry")
+            ? Array.from(game.user?.targets ?? []).map(t => t.actor).filter(Boolean) : [];
+          const deferRuin = action === "entry" && foes.length === 0;
+          if (foes.length) {
+            const combat = game.combat;
+            const dur = combat
+              ? { rounds: 1, startRound: combat.round, startTurn: combat.turn, combat: combat.id }
+              : { rounds: 1 };
+            const sunderAE = {
+              name: "Armor Sundered", img: "icons/svg/sword.svg", origin: actor.uuid,
+              duration: dur, changes: [],
+              flags: { fourththing: { armorSundered: true, source: actor.uuid } }
+            };
+            for (const foe of foes) {
+              try { await game.fourththing?.applyEffectsToTarget?.(foe, [sunderAE], []); } catch (_e) {}
+            }
+            sunderNote = ` <span style="color:#ffb060">⚔ Armor sundered on ${foes.map(f => f.name).join(", ")} — all attackers ignore their armor for 1 round.</span>`;
+          }
+
+          const spentNow  = deferRuin ? 0 : ruinCost;
+          const baseRuin  = isSpend ? ruin : manualRuin;
+          const finalRuin = Math.min(Math.max(0, baseRuin - spentNow), newMax);
+          const update = {
+            "system.resources.ruinCharges.current": finalRuin,
             "system.resources.ruinCharges.max":     newMax,
-          });
-          if (spendOne) {
+          };
+          if (deferRuin) update["flags.bbttcc-structures.bulwarkEntryRuinCost"] = ruinCost;
+          await actor.update(update);
+
+          if (isSpend) {
             const labels = {
               entry:     "Catastrophic Entry — structure resistance ignored",
               siege:     "Siege Cost Reduced — −1 Violence OP this Siege",
               shockwave: "Shockwave Footing — knockback resisted; adjacent pushed",
               renewal:   "Ruin to Renewal — attempting purification (Faith/Economy DC 15)"
             };
+            const costNote = deferRuin ? `armed — ${ruinCost} Ruin spent on hit` : `spent ${ruinCost}`;
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor }),
               content: `<div class="fourththing-roll">
                 <div class="ft-roll-header"><span class="ft-roll-name">⚒ Breaker: ${labels[action]?.split(' — ')[0]}</span></div>
-                <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">${labels[action]}</p>
-                <p style="margin:0;font-size:0.72rem;opacity:0.5">Ruin Charges: ${finalRuin}/${newMax}${_advance ? " · ⛰ Advance — no charge spent" : ""}</p>
+                <p style="margin:0.2rem 0;font-size:0.8rem;opacity:0.75">${labels[action]}${sunderNote}</p>
+                <p style="margin:0;font-size:0.72rem;opacity:0.5">Ruin Charges: ${finalRuin}/${newMax} · ${costNote}${_advance ? " · ⛰ Advance −1" : ""}</p>
               </div>`
             });
           }

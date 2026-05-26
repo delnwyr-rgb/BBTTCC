@@ -1837,19 +1837,19 @@ async function _rcAutoFireMode(r, mode, attackerPre = null, defenderPre = null, 
 // curated + dynamic maneuver lists
 const _MAN_KEYS_BY_TYPE = {
   assault: ["rally_the_line", "supply_overrun", "suppressive_fire", "bless_the_fallen", "command_overdrive", "logistical_surge", "tactical_overwatch", "echo_strike_protocol", "overclock_the_golems", "siege_breaker_volley", "ego_breaker", "qliphothic_gambit"],
-  infiltration: ["smoke_and_mirrors", "psychic_disruption", "saboteurs_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "flash_bargain", "overclock_the_golems", "supply_surge", "divine_favor", "battlefield_harmony"],
-  infiltration_alarm: ["smoke_and_mirrors", "psychic_disruption", "saboteurs_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "flash_bargain", "overclock_the_golems", "supply_surge", "divine_favor", "battlefield_harmony"],
+  infiltration: ["smoke_and_mirrors", "psychic_disruption", "saboteurs_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "flash_bargain", "overclock_the_golems", "supply_surge", "divine_favor"],
+  infiltration_alarm: ["smoke_and_mirrors", "psychic_disruption", "saboteurs_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "flash_bargain", "overclock_the_golems", "supply_surge", "divine_favor"],
   espionage: ["flash_bargain", "smoke_and_mirrors", "flash_interdict", "psychic_disruption", "saboteurs_edge", "signal_hijack", "chrono_loop_command", "reality_hack", "void_signal_collapse", "overclock_the_golems"],
   blockade: ["industrial_sabotage", "logistical_surge", "overclock_the_golems"],
   occupation: ["rally_the_line", "suppressive_fire", "last_stand_banner", "command_overdrive", "industrial_sabotage", "logistical_surge", "counter_propaganda_wave", "quantum_shield", "ego_breaker"],
-  liberation: ["flash_bargain", "prayer_in_the_smoke", "radiant_rally", "rally_the_line", "bless_the_fallen", "command_overdrive", "empathic_surge", "faithful_intervention", "counter_propaganda_wave", "echo_strike_protocol", "harmonic_chant", "moral_high_ground", "radiant_retaliation", "engine_of_absolution", "sephirotic_intervention", "unity_surge", "flash_interdict"],
+  liberation: ["flash_bargain", "prayer_in_the_smoke", "rally_the_line", "bless_the_fallen", "command_overdrive", "empathic_surge", "faithful_intervention", "counter_propaganda_wave", "echo_strike_protocol", "harmonic_chant", "moral_high_ground", "radiant_retaliation", "engine_of_absolution", "sephirotic_intervention", "unity_surge", "flash_interdict"],
   propaganda: ["flash_bargain", "smoke_and_mirrors", "flash_interdict", "empathic_surge", "counter_propaganda_wave", "moral_high_ground", "unity_surge"],
   ritual: ["prayer_in_the_smoke", "bless_the_fallen", "faithful_intervention", "psychic_disruption", "harmonic_chant", "moral_high_ground", "quantum_shield", "radiant_retaliation", "crown_of_mercy", "ego_dragon_echo", "reality_hack", "sephirotic_intervention", "temporal_armistice", "unity_surge", "qliphothic_gambit", "flash_interdict"],
-  siege: ["radiant_rally", "supply_overrun", "tactical_overwatch", "defender_s_reversal", "siege_breaker_volley", "void_signal_collapse"],
+  siege: ["supply_overrun", "tactical_overwatch", "defender_s_reversal", "siege_breaker_volley", "void_signal_collapse", "sap_the_walls", "shore_the_gate", "sortie_en_masse", "crack_the_keep"],
   assault_defense: ["patch_the_breach", "quantum_shield", "defensive_entrenchment", "last_stand_banner", "defender_s_reversal"],
   occupation_defense: ["patch_the_breach", "defender_s_reversal", "last_stand_banner"],
   siege_defense: ["last_stand_banner", "patch_the_breach", "defender_s_reversal"],
-  any: ["supply_surge", "divine_favor", "battlefield_harmony"],
+  any: ["supply_surge", "divine_favor"],
 };
 
 function _mansForType(type){
@@ -7221,7 +7221,8 @@ function _b2ApplyCancelRules(byManeuver){
 // ---------------------------------------------------------------------------
 // Batch C — Nullify helper (Void-Signal Collapse)
 // - If the attacker succeeds AND a nullifyAllManeuvers directive is present,
-//   strip all other maneuver bundles (both sides), leaving only the nullifier(s).
+//   strip ENEMY (defender-side) maneuver bundles only — attacker-side maneuvers
+//   (incl. the nullifier) still resolve. Retuned 2026-05-24 (§3.D Void-Signal).
 // - Deterministic + audited: round.meta.b2.nullified = [{side,maneuverKey,reason}]
 //
 // NOTE: Agent throughput uses roundEffects.type = "nullifyAllManeuvers" for void_signal_collapse.
@@ -7264,6 +7265,9 @@ function _b2ApplyNullifyAllManeuvers(byManeuver, { attackerSuccess=false } = {})
     const row0 = out[i] || {};
     const key = String(row0.maneuverKey||"").toLowerCase().trim();
     const side = String(row0.side||"").toLowerCase().trim();
+    // RETUNED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.D): Void-Signal Collapse
+    // nullifies ENEMY maneuvers only — the attacker-side caster's own still resolve.
+    if (side === "att") continue;
     // Strip bundles but preserve audit trail
     const clean = foundry.utils.duplicate(row0 || {});
     clean.bundle = { factionEffects: [], scenarioEffects: [], roundEffects: [], worldEffects: [] };

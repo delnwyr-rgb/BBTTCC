@@ -124,6 +124,7 @@
     "scripts/maneuvers-sprint2-content.enhancer.js",
     "scripts/maneuvers-sprint3a-content.enhancer.js",
     "scripts/maneuvers-courtly-content.enhancer.js",
+    "scripts/maneuvers-balance-content.enhancer.js",
     "scripts/raid-infiltration.canvas-vfx.enhancer.js",
     "scripts/affiliation-op-table.enhancer.js"
   ],
