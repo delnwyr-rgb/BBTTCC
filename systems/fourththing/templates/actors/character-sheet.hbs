@@ -190,10 +190,9 @@
       <div class="ft-pk-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
         {{!-- Pact Subject (Initiation 1 — The Bargain). Bind a creature/object/place to grant +1 concurrent manifestation at no extra Clarity upkeep. --}}
         <button type="button" class="ft-chip ft-chip-pact-subject" data-action="ftClassAction" data-handler="pactkeeper_bind_subject" data-tooltip="Pactkeeper — Pact Subject (The Bargain, Initiation 1). The creature/object/place bargained with. While bound, sustain +1 manifestation on/near them at no extra Clarity upkeep. Click to bind currently-targeted token, or open the dialog to clear." style="background:{{#if pactkeeperState.pactSubject}}#1f3a2a{{else}}#2a2a2a{{/if}};color:{{#if pactkeeperState.pactSubject}}#a0d8b8{{else}}#888{{/if}};border:1px solid {{#if pactkeeperState.pactSubject}}#3a8a5a{{else}}#5a5a5a{{/if}};padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">{{#if pactkeeperState.pactSubject}}🔗 Pact: {{pactkeeperState.pactSubject.name}}{{else}}🔓 Bind Pact Subject{{/if}}</button>
-        {{!-- L1 Skill Pick (Initiation 1). Surfaces here until the player has locked their two skills, then becomes a quiet "✓ Picked" indicator. --}}
-        {{#unless pactkeeperState.l1SkillsPicked}}
-        <button type="button" class="ft-chip" data-action="ftClassAction" data-handler="pactkeeper_pick_l1_skills" data-tooltip="Pactkeeper — Initiation 1: pick +1 skill rank in two of {Diplomacy, Insight, Intimidation, Lore}. One-time choice." style="background:#3a2a1f;color:#e8c8a0;border:1px solid #8a6a3a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">⚖ Pick L1 Skills</button>
-        {{/unless}}
+        {{!-- L1 aptitudes (Diplomacy/Insight/Intimidation/Lore) are auto-granted
+             via ⊕ Grant Aptitudes (applySkillGrantsFromFeatures) as of the
+             2026-05-25 design decision to grant all four — no picker pill. --}}
         {{!-- Ledger Day (Initiation 16) — transfer a sustained manifestation to a willing ally. Only useful at L16+. --}}
         <button type="button" class="ft-chip" data-action="ftClassAction" data-handler="pk_ledger_day" data-tooltip="Pactkeeper — Ledger Day (Initiation 16). 1/Soma Break, transfer a sustained manifestation to a willing ally — they pick up upkeep from their Clarity from that point on." style="background:#2a2a4a;color:#a0a8e0;border:1px solid #5a5a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">📜 Ledger Day</button>
       </div>

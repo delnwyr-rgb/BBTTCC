@@ -1428,6 +1428,24 @@ export async function applySkillGrantsFromFeatures(actor) {
     }
   }
 
+  // Pactkeeper — Initiation 1 "The Bargain". Canon authored this grant as a
+  // 2-of-4 player choice, but per design decision 2026-05-25 the four L1
+  // aptitudes are auto-granted in full (no picker pill). The feature prose
+  // ("…+1 skill rank in two of {Diplomacy, Insight, Intimidation, Lore}") trips
+  // the choice-grant guard in extractSkillGrantsFromFeature, so the loop above
+  // skips it — we grant the full set explicitly here. Idempotent: rank set to 1
+  // only when currently 0, identical semantics to the feature-text loop.
+  const _isPactkeeper = Array.from(actor.items ?? [])
+    .some(it => it.type === "class" && it.system?.identifier === "pactkeeper");
+  if (_isPactkeeper) {
+    for (const sk of ["diplomacy", "insight", "intimidation", "lore"]) {
+      if (skills[sk] !== undefined && (skills[sk]?.value ?? 0) === 0) {
+        updates[`system.skills.${sk}.value`] = 1;
+        if (!granted.includes(sk)) granted.push(sk);
+      }
+    }
+  }
+
   if (Object.keys(updates).length > 0) {
     await actor.update(updates);
   }
