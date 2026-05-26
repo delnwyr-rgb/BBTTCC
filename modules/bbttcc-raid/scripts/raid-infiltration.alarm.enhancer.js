@@ -394,6 +394,7 @@
         _resolveOutcome();
         if (state.outcome !== "ongoing") await _onOutcomeResolved(state.outcome);
 
+        await persistState();
         return { ...state };
       }
 
@@ -422,6 +423,7 @@
         if (note) lines.push(foundry.utils.escapeHTML(note));
         await sendChat(lines, { title: `${label}: Flashback` });
 
+        await persistState();
         return { ...state };
       }
 
@@ -536,6 +538,7 @@
             if (state.outcome !== "ongoing") await _onOutcomeResolved(state.outcome);
           }
         }
+        await persistState();
         return getState();
       }
 
@@ -547,6 +550,7 @@
         state.pendingDiscoveries = []; // S3a.2: clear any deferred discovery timers
         state._flashbackUsedThisRound = false;
         _resolveOutcome(); // re-derive if reset values are already at cap
+        await persistState();
         return getState();
       }
 
@@ -558,6 +562,19 @@
           return JSON.parse(JSON.stringify(state));
         }
       }
+
+      // S3a HUD parity (2026-05-26) — mirror the live snapshot onto the defender
+      // actor so player HUDs (which lack the GM-only __infilScenario closure) can
+      // read alarm/progress/outcome. GM-side write; propagates via updateActor.
+      // _ftBuildRaidHudHtml reads flags.bbttcc-raid.infilState when no scenario.
+      async function persistState() {
+        try {
+          if (!game.user?.isGM || !D) return;
+          await D.setFlag("bbttcc-raid", "infilState", getState());
+        } catch (e) { console.warn(TAG, "persistState (HUD mirror) failed", e); }
+      }
+      // Initial mirror so the meters appear the instant the scenario is created.
+      persistState();
 
       const apiObj = { step, flashback, applyEffects, reset, getState };
 

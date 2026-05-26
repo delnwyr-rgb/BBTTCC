@@ -21156,6 +21156,15 @@ function _ftBuildRaidHudHtml(consoleApp) {
   const target = _ftResolveRaidTargetActor(consoleVm);
   const targetName = consoleVm?.targetName || target?.name || "—";
 
+  // S3a HUD parity (2026-05-26) — player HUDs lack the GM-only __infilScenario
+  // closure; fall back to the snapshot the GM mirrors onto the defender flag so
+  // alarm/progress/outcome meters render for players too (parity with the
+  // Violence HUD's actor-read model).
+  if (!infilState && target) {
+    const _fs = target.flags?.["bbttcc-raid"]?.infilState;
+    if (_fs && typeof _fs === "object") infilState = _fs;
+  }
+
   const tgtSys  = target?.system?.system ?? target?.system ?? {};
   const morale  = Number(tgtSys?.raidStats?.morale)       ?? null;
   const moraleMax = Number(tgtSys?.raidProfile?.moraleHits) || 4;
@@ -21359,6 +21368,14 @@ Hooks.on("closeApplication",   () => _ftRenderRaidHud()); // V1 fallback
 Hooks.on("bbttcc:infiltration:alarmChanged",    () => _ftRenderRaidHud());
 Hooks.on("bbttcc:infiltration:progressChanged", () => _ftRenderRaidHud());
 Hooks.on("bbttcc:infiltration:outcomeResolved", () => _ftRenderRaidHud());
+// S3a HUD parity (2026-05-26) — re-render when the GM's mirrored infil snapshot
+// lands on the defender actor. Covers players whose only state source is the
+// flag (the infiltration hooks may re-render slightly before the flag
+// propagates; this corrects it the instant the actor update arrives).
+Hooks.on("updateActor", (actor, changes) => {
+  try { if (foundry.utils.hasProperty(changes, "flags.bbttcc-raid.infilState")) _ftRenderRaidHud(); }
+  catch (_) { /* noop */ }
+});
 
 // 2026-05-13 — Belt-and-suspenders re-render on canvas ready and on a
 // short timer after world ready, since the raid console may register
