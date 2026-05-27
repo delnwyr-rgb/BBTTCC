@@ -3445,7 +3445,39 @@ const _FT_SURGE_MENU = [
   { cost: 5, key: "conductors-crescendo", tier: 4, bucket: "heal", classFilter: ["harmony-marshal"],
     label: "Conductor's Crescendo — allies reroll all 1s + clear a condition (1/scene)",
     fiction: "The whole line moves as one body.",
-    wired: false }
+    wired: false },
+
+  // ─── Soul-Smith FORGE (subclass) entries — gated by `forge`, all cost a Spark ──
+  // Forge of Victory (Sparks from fallen foes → offense):
+  { cost: 3, key: "fov-trophy",  tier: 2, bucket: "off", forge: "victory",
+    label: "Forged Trophy (Spark) — your next Strike +tier d6 + an ally gains DR",
+    fiction: "You forge a weapon from the kill, and it remembers how to bite.", wired: true },
+  { cost: 1, key: "fov-compound", tier: 3, bucket: "off", forge: "victory",
+    label: "Compounded Blow (Spark) — your next Strike lands as a max-die crit",
+    fiction: "The fallen foe strikes alongside you.", wired: true },
+  { cost: 4, key: "fov-sunder",  tier: 4, bucket: "off", forge: "victory",
+    label: "Sundering Stroke (Spark) — next Strike ignores resists + Staggers the target",
+    fiction: "What breaks makes the hammer.", wired: true },
+  // Forge of the Spark Reclaimer (Sparks from destruction → salvage/utility):
+  { cost: 2, key: "rec-reclaim",  tier: 2, bucket: "def", forge: "reclaimer",
+    label: "Reclaim (Spark) — salvage a condition off an ally + grant them DR",
+    fiction: "Nothing is beyond salvage.", wired: true },
+  { cost: 3, key: "rec-remember", tier: 3, bucket: "heal", forge: "reclaimer",
+    label: "The Remembered Thing (Spark) — salvage a relic for an ally (heal + DR)",
+    fiction: "It returns as it last existed, usable if it was usable.", wired: true },
+  { cost: 4, key: "rec-deepsalvage", tier: 4, bucket: "heal", forge: "reclaimer",
+    label: "Deep Salvage (Spark) — restore an ally (big heal + clear all conditions)",
+    fiction: "From ancient ruin, something disproportionate to the effort.", wired: true },
+  // Forge of Bound Light (Sparks from containment → protection/support):
+  { cost: 2, key: "bl-vessel", tier: 2, bucket: "def", forge: "bound-light",
+    label: "Bound Vessel (Spark) — ward an ally: DR + poison/necrotic resist (3 rds)",
+    fiction: "Containment is the first virtue.", wired: true },
+  { cost: 3, key: "bl-sealed", tier: 3, bucket: "def", forge: "bound-light",
+    label: "The Sealed Work (Spark) — ward an ally: DR + hold the next lethal hit at 1",
+    fiction: "Sealed against corruption, radiation, and breaking.", wired: true },
+  { cost: 2, key: "bl-blessed", tier: 4, bucket: "off", forge: "bound-light",
+    label: "Blessed Weapon (Spark) — your weapon blazes with bound light: next Strike +tier d6",
+    fiction: "The light remembers what it was given to hold.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3464,6 +3496,16 @@ const _FT_SOUL_SMITH_KEYS = new Set(["forge-weld", "atonement", "share-furnace",
 
 // Harmony Marshal Surge spend keys — routed to _ftHarmonySurge before generic dispatch.
 const _FT_HARMONY_KEYS = new Set(["rallying-words", "ease-attrition", "rally-to-me", "unity-flourish", "conductors-crescendo"]);
+
+// Soul-Smith subclass "forge" Surge spend keys — routed to _ftForgeSurge; shown only
+// for the matching forge (see _ftSoulSmithForge), and every one costs a Spark.
+const _FT_FORGE_KEYS = new Set([
+  "fov-trophy", "fov-compound", "fov-sunder",
+  "rec-reclaim", "rec-remember", "rec-deepsalvage",
+  "bl-vessel", "bl-sealed", "bl-blessed"
+]);
+// Forge spends that target SELF (no ally target needed).
+const _FT_FORGE_SELF_KEYS = new Set(["fov-compound", "bl-blessed"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3529,6 +3571,17 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
       return;
     }
   }
+  // Soul-Smith subclass forge spends — every one costs a Spark; non-self ones need a target.
+  if (_FT_FORGE_KEYS.has(effectKey)) {
+    if (_ftGetSparks(actor) < 1) {
+      ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a Spark — none banked.`);
+      return;
+    }
+    if (!_FT_FORGE_SELF_KEYS.has(effectKey) && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+      ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+      return;
+    }
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -3567,6 +3620,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   let chatExtra = "";
   if (_FT_SOUL_SMITH_KEYS.has(effectKey)) {
     chatExtra = await _ftSoulSmithSurge(actor, effectKey, tier);
+  } else if (_FT_FORGE_KEYS.has(effectKey)) {
+    chatExtra = await _ftForgeSurge(actor, effectKey, tier);
   } else if (_FT_HARMONY_KEYS.has(effectKey)) {
     chatExtra = await _ftHarmonySurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
@@ -3750,6 +3805,142 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
 // Overheated ×2 + a Stress backlash — the furnace bites). Atonement / Share the
 // Furnace / Relic of Rebirth stamp a one-shot flag + post a chat card the GM
 // enforces (deeper wiring is a Phase 2.1 pass).
+// ─── Soul-Smith forge (subclass) Spark economy ───────────────────────────────
+// Sparks are the shared Soul-Smith subclass resource. Each forge earns them a
+// different way and spends them on crunchy, Surge-paired effects. Cap = tier + 1.
+function _ftSparkCap(actor) { return _ftCasterTier(actor) + 1; }
+function _ftGetSparks(actor) { return Number(actor?.flags?.fourththing?.soulSmith?.sparks ?? 0) || 0; }
+async function _ftAddSparks(actor, n) {
+  const cap = _ftSparkCap(actor); const cur = _ftGetSparks(actor);
+  const next = Math.max(0, Math.min(cap, cur + (Number(n) || 0)));
+  if (next !== cur) { try { await actor.setFlag("fourththing", "soulSmith.sparks", next); } catch (e) {} }
+  return next;
+}
+async function _ftSpendSparks(actor, n) {
+  const cur = _ftGetSparks(actor); const need = Number(n) || 0;
+  if (cur < need) return false;
+  try { await actor.setFlag("fourththing", "soulSmith.sparks", cur - need); } catch (e) {}
+  return true;
+}
+// Which forge (subclass) is this actor? Flexible match on subclass identifier OR name.
+function _ftSoulSmithForge(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("victory")   || nm.includes("forge of victory"))  return "victory";
+    if (id.includes("reclaimer") || nm.includes("spark reclaimer"))   return "reclaimer";
+    if (id.includes("bound-light") || id.includes("bound_light") || nm.includes("bound light")) return "bound-light";
+  }
+  return null;
+}
+// Spark generation, called from _applyDamageToActor. `dropped` = the damaged actor
+// just fell to 0. Victory: a foe fell near you. Reclaimer: anything fell near you.
+// Bound Light: an ally near you took damage (you contain the released harm).
+async function _ftSoulSmithSparkGen(damagedActor, dmg, dropped) {
+  if (!damagedActor) return;
+  const dTok = damagedActor.getActiveTokens?.()?.[0];
+  if (!dTok) return;
+  const dDisp = dTok.document?.disposition ?? 0;
+  for (const t of (canvas?.tokens?.placeables ?? [])) {
+    const smith = t?.actor;
+    if (!smith) continue;
+    const forge = _ftSoulSmithForge(smith);
+    if (!forge) continue;
+    if (!_ftSurgeAllowed(smith)) continue; // foe-gating
+    if (_ftDistanceBetweenTokens(dTok, t) > 30) continue;
+    const sDisp = t.document?.disposition ?? 0;
+    const sameSide = (sDisp >= 0 && dDisp >= 0) || (sDisp < 0 && dDisp < 0);
+    let earn = false;
+    if (forge === "victory")        earn = dropped && !sameSide;       // a foe fell
+    else if (forge === "reclaimer") earn = dropped;                    // anything fell
+    else if (forge === "bound-light") earn = (Number(dmg) > 0) && sameSide && smith.id !== damagedActor.id; // an ally hurt
+    if (earn) { try { await _ftAddSparks(smith, 1); } catch (e) {} }
+  }
+}
+// The nine forge spends. Every one costs a Spark; effects reuse existing chokepoints
+// (surge one-shots doomstrike/crowning-blow/sundering-blow, aegis-DR + steel-veil
+// resist AEs, integrity heal, toggleCondition, relicWard) — no new consumers.
+async function _ftForgeSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  if (!await _ftSpendSparks(actor, 1)) {
+    return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ No Spark banked. Surge spent — GM may refund.</p>`;
+  }
+  const left = _ftGetSparks(actor);
+  const tail = ` <span style="opacity:0.55">(${left} Spark${left === 1 ? "" : "s"} left)</span>`;
+  const tname = target?.name ?? "the target";
+  const drAE  = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const resAE = (rt)   => ({ name: `Forge ward: resist ${rt}`, img: "icons/svg/fire-shield.svg", origin: actor.uuid, duration: { rounds: 3 }, changes: [], flags: { fourththing: { surge: { kind: "steel-veil", resistType: rt } } } });
+  const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
+  const healAlly = async (a, formula) => {
+    const s = a.system?.system ?? a.system ?? {};
+    const max = Number(s?.integrity?.max ?? s?.derived?.integrity?.max ?? 16);
+    const cur = Number(s?.integrity?.value ?? s?.derived?.integrity?.value ?? 0);
+    const r = new Roll(formula); await r.evaluate();
+    const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
+    if (next !== cur) { try { await a.update({ "system.integrity.value": next }); } catch (e) {} }
+    return next - cur;
+  };
+  const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
+
+  switch (effectKey) {
+    // ── Forge of Victory ──
+    case "fov-trophy": {
+      await oneShot("doomstrike");
+      if (target) await _ftCreateAllyAE(target, drAE(`Forged Trophy (DR ${tier})`));
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Forged Trophy — your next Strike blazes (+${tier}d6) and <b>${tname}</b> gains DR ${tier}.${tail}</p>`;
+    }
+    case "fov-compound": {
+      await oneShot("crowning-blow");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Compounded Blow — your next Strike lands as a max-die critical.${tail}</p>`;
+    }
+    case "fov-sunder": {
+      await oneShot("sundering-blow");
+      if (target) { try { await game.fourththing?.toggleCondition?.(target, "staggered"); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Sundering Stroke — your next Strike ignores resistances; <b>${tname}</b> is Staggered.${tail}</p>`;
+    }
+    // ── Forge of the Spark Reclaimer ──
+    case "rec-reclaim": {
+      let cleared = "";
+      if (target) {
+        const ts = target.system?.system ?? target.system ?? {};
+        const k = NEG.find(x => ts?.conditions?.[x] === true);
+        if (k) { try { await game.fourththing?.toggleCondition?.(target, k); cleared = FT?.CONDITIONS?.[k]?.label ?? k; } catch (e) {} }
+        await _ftCreateAllyAE(target, drAE(`Reclaimed Guard (DR ${tier})`));
+      }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">♻ Reclaim — ${cleared ? `salvaged <b>${cleared}</b> off ` : "shored up "}<b>${tname}</b> (DR ${tier}).${tail}</p>`;
+    }
+    case "rec-remember": {
+      const h = target ? await healAlly(target, `1d8 + ${tier}`) : 0;
+      if (target) await _ftCreateAllyAE(target, drAE(`Remembered Thing (DR ${tier})`));
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">♻ The Remembered Thing — salvaged a relic for <b>${tname}</b>: +${h} integrity and DR ${tier}.${tail}</p>`;
+    }
+    case "rec-deepsalvage": {
+      const h = target ? await healAlly(target, `2d8 + ${tier}`) : 0;
+      let n = 0;
+      if (target) {
+        const ts = target.system?.system ?? target.system ?? {};
+        for (const k of NEG) if (ts?.conditions?.[k] === true) { try { await game.fourththing?.toggleCondition?.(target, k); n++; } catch (e) {} }
+      }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">♻ Deep Salvage — restored <b>${tname}</b>: +${h} integrity and cleared ${n} condition${n === 1 ? "" : "s"}.${tail}</p>`;
+    }
+    // ── Forge of Bound Light ──
+    case "bl-vessel": {
+      if (target) { await _ftCreateAllyAE(target, drAE(`Bound Vessel (DR ${tier})`)); for (const rt of ["poison", "necrotic"]) await _ftCreateAllyAE(target, resAE(rt)); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Bound Vessel — <b>${tname}</b> is warded: DR ${tier} + poison/necrotic resist (3 rds).${tail}</p>`;
+    }
+    case "bl-sealed": {
+      if (target) { await _ftCreateAllyAE(target, drAE(`Sealed Work (DR ${tier})`)); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 The Sealed Work — <b>${tname}</b>: DR ${tier}, and the next hit that would drop them is held at 1.${tail}</p>`;
+    }
+    case "bl-blessed": {
+      await oneShot("doomstrike");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🛡 Blessed Weapon — your weapon blazes with bound light: next Strike +${tier}d6.${tail}</p>`;
+    }
+  }
+  return "";
+}
+
 async function _ftSoulSmithSurge(actor, effectKey, tier) {
   const tok        = Array.from(game.user?.targets ?? [])[0];
   const target     = tok?.actor ?? null;
@@ -10542,6 +10733,9 @@ Hooks.once("init", function () {
     if (track === "integrity" && dmg > 0) {
       try { await _ftSoulSmithForgeOnDamage(actor, dmg); }
       catch (e) { console.warn("[ft] soul-smith forge hook failed", e); }
+      // Soul-Smith subclass Spark generation (Victory/Reclaimer on a defeat, Bound Light on ally damage).
+      try { await _ftSoulSmithSparkGen(actor, dmg, (newVal <= 0 && cur > 0)); }
+      catch (e) { console.warn("[ft] soul-smith spark gen failed", e); }
     }
 
     const destroyedTag = rigDestroyed ? " — DESTROYED" : "";
@@ -13386,6 +13580,8 @@ Hooks.once("init", function () {
       const _ssFlags = actor.flags?.fourththing?.soulSmith ?? {};
       const soulSmithState = _ssClsItem ? {
         tier:                  _ssTier,
+        forge:                 _ftSoulSmithForge(actor),
+        sparks:                { value: _ftGetSparks(actor), max: _ftSparkCap(actor) },
         tierAtLeast2:          _ssTier >= 2,
         tierAtLeast3:          _ssTier >= 3,
         tierAtLeast4:          _ssTier >= 4,
@@ -14370,7 +14566,9 @@ Hooks.once("init", function () {
       // tier is the minimum tier required (1 = no gate). bucket determines column.
       // Class-exclusive entries (classFilter) only show for matching classes;
       // entries with no classFilter are universal.
-      const MENU = _FT_SURGE_MENU.filter(e => !e.classFilter || _ftActorMatchesClass(actor, e.classFilter));
+      const MENU = _FT_SURGE_MENU.filter(e =>
+        (!e.classFilter || _ftActorMatchesClass(actor, e.classFilter)) &&
+        (!e.forge || _ftSoulSmithForge(actor) === e.forge));
 
       // Group by cost.
       const byCost = {};

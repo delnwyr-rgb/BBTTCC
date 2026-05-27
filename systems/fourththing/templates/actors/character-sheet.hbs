@@ -764,6 +764,13 @@
         <div class="ft-aura-row" style="margin-top:0.2rem">
           <span class="ft-aura-desc" style="color:{{burnBand.color}}"><b>{{burnBand.label}}:</b> {{burnBand.desc}}</span>
         </div>
+        {{#if soulSmithState.forge}}
+        {{!-- Subclass Spark economy (Forge of Victory / Spark Reclaimer / Bound Light). --}}
+        <div class="ft-aura-row" style="margin-top:0.2rem" data-tooltip="Sparks — your forge's subclass resource. Earned when foes fall / things are destroyed / allies are hurt near you (per forge). Spend on your forge abilities via the Surge menu.">
+          <span class="ft-resource-count" style="color:#e8c84a">✦ Sparks {{soulSmithState.sparks.value}}/{{soulSmithState.sparks.max}}</span>
+          <span class="ft-aura-desc" style="opacity:0.65">spend on forge abilities via the Surge menu</span>
+        </div>
+        {{/if}}
       </div>
       {{/if}}
 
