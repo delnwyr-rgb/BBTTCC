@@ -3120,10 +3120,16 @@ function _ftSurgeCap(actor) {
 // banked (post-clamp) so callers can render overflow notes. Excess explosions
 // already benefited the triggering roll (Foundry's x10 modifier added them to
 // the total before this is called), so clamping the bank wastes nothing.
-async function _ftBankSurge(actor, n) {
+async function _ftBankSurge(actor, n, { fromHarvest = false } = {}) {
   if (!actor || !Number.isFinite(n) || n <= 0) return 0;
   // 2026-05-26 — Foes only bank Surge when the GM has enabled it for them.
   if (!_ftSurgeAllowed(actor)) return 0;
+  // Harmony Marshal (Phase 3): a friendly's surging roll resonates into nearby
+  // Marshals (+1 Surge each, +2/round). Fire before self-banking so it triggers
+  // even when the exploder is at cap; fromHarvest guards against recursion.
+  if (!fromHarvest) {
+    try { await _ftHarmonyHarvest(actor, n); } catch (e) { console.warn("[ft] harmony harvest failed", e); }
+  }
   const sys = actor.system?.system ?? actor.system ?? {};
   if (actor.type === "boss") {
     const s    = sys?.manifestations?.surge ?? { current: 0, max: 6, exploded: 0 };
@@ -3399,6 +3405,30 @@ const _FT_SURGE_MENU = [
   { cost: 5, key: "relic-rebirth", tier: 4, bucket: "heal", classFilter: ["soul-smith"],
     label: "Relic of Rebirth — 1/fight, keep an ally from dropping below 1",
     fiction: "Not yet. I forged you something to hold the line.",
+    wired: false },
+
+  // ─── Harmony Marshal class-exclusive entries (Pool archetype, Phase 3) ─────
+  // Generation = "harvest the party's surges" (see _ftHarmonyHarvest). Rallying
+  // Words + Ease Attrition are wired; the rest stamp a one-shot flag + chat card.
+  { cost: 1, key: "rallying-words", tier: 1, bucket: "narr", classFilter: ["harmony-marshal"],
+    label: "Rallying Words — ally banks a reroll on their next roll",
+    fiction: "A word at the right moment. They find the line again.",
+    wired: true },
+  { cost: 2, key: "ease-attrition", tier: 1, bucket: "heal", classFilter: ["harmony-marshal"],
+    label: "Ease Attrition — heal an ally + clear one condition",
+    fiction: "You take the weight off them for a breath.",
+    wired: true },
+  { cost: 2, key: "rally-to-me", tier: 2, bucket: "narr", classFilter: ["harmony-marshal"],
+    label: "Rally to Me — an ally acts or reacts out of turn",
+    fiction: "They move because you asked. That's all it takes.",
+    wired: false },
+  { cost: 3, key: "unity-flourish", tier: 3, bucket: "def", classFilter: ["harmony-marshal"],
+    label: "Unity Flourish — allies within 30 ft +1 to checks till your next turn",
+    fiction: "Every nearby stance straightens at once.",
+    wired: false },
+  { cost: 5, key: "conductors-crescendo", tier: 4, bucket: "heal", classFilter: ["harmony-marshal"],
+    label: "Conductor's Crescendo — allies reroll all 1s + clear a condition (1/scene)",
+    fiction: "The whole line moves as one body.",
     wired: false }
 ];
 
@@ -3415,6 +3445,9 @@ function _ftActorMatchesClass(actor, slugs) {
 
 // Soul-Smith Surge spend keys — routed to _ftSoulSmithSurge before generic dispatch.
 const _FT_SOUL_SMITH_KEYS = new Set(["forge-weld", "atonement", "share-furnace", "relic-rebirth"]);
+
+// Harmony Marshal Surge spend keys — routed to _ftHarmonySurge before generic dispatch.
+const _FT_HARMONY_KEYS = new Set(["rallying-words", "ease-attrition", "rally-to-me", "unity-flourish", "conductors-crescendo"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3480,6 +3513,21 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
       return;
     }
   }
+  // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
+  if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
+    const t = Array.from(game.user?.targets ?? [])[0];
+    if (!t?.actor) {
+      ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target ally — target a token first, then re-open the menu.`);
+      return;
+    }
+  }
+  if (effectKey === "unity-flourish" || effectKey === "conductors-crescendo") {
+    const myToken = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+    if (!myToken) {
+      ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs your token on the scene.`);
+      return;
+    }
+  }
 
   // Pre-prompt for damage type on steel-veil / sanctum so we can refund
   // (don't-charge) on cancel. Type stored locally; AE built after charge.
@@ -3503,6 +3551,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   let chatExtra = "";
   if (_FT_SOUL_SMITH_KEYS.has(effectKey)) {
     chatExtra = await _ftSoulSmithSurge(actor, effectKey, tier);
+  } else if (_FT_HARMONY_KEYS.has(effectKey)) {
+    chatExtra = await _ftHarmonySurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
@@ -3771,6 +3821,78 @@ async function _ftSoulSmithForgeOnDamage(damagedActor, dmg) {
       try { await ftAddBurn(smith, 1); } catch (e) { /* burn helper unavailable */ }
       await smith.setFlag("fourththing", "soulSmith.forge", { round, count: count + 1 });
     } catch (e) { console.warn("[ft] soul-smith forge stoke failed for", smith?.name, e); }
+  }
+}
+
+// ─── Harmony Marshal Surge spends (Pool archetype) ───────────────────────────
+// Rallying Words (banks an aid reroll on the target, mirroring the existing
+// aid / Rallying-Words flag shape) + Ease Attrition (small heal + condition
+// clear) are wired; Rally to Me / Unity Flourish / Conductor's Crescendo stamp a
+// one-shot flag + chat card the GM enforces (deeper wiring = Phase 3.1).
+async function _ftHarmonySurge(actor, effectKey, tier) {
+  const tok    = Array.from(game.user?.targets ?? [])[0];
+  const target = tok?.actor ?? null;
+
+  if (effectKey === "rallying-words") {
+    if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Rallying Words needs a target ally. Surge spent — GM may refund.</p>`;
+    const banked = target.getFlag?.("fourththing", "aidBanked") ?? [];
+    banked.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "surge-rallying-words" });
+    try { await target.setFlag("fourththing", "aidBanked", banked); } catch (e) { /* silent */ }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#b8d896">📣 <b>${target.name}</b> banks reroll-lowest on their next roll this scene.</p>`;
+  }
+
+  if (effectKey === "ease-attrition") {
+    if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Ease Attrition needs a target ally. Surge spent — GM may refund.</p>`;
+    const sys = target.system?.system ?? target.system ?? {};
+    const max = Number(sys?.integrity?.max ?? sys?.derived?.integrity?.max ?? 16);
+    const cur = Number(sys?.integrity?.value ?? sys?.derived?.integrity?.value ?? 0);
+    const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
+    const amount = Math.max(0, Number(roll.total) || 0);
+    const next   = Math.min(max, cur + amount);
+    const banked = next - cur;
+    try { await target.update({ "system.integrity.value": next }); } catch (e) { /* silent */ }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⚖ Eased <b>${target.name}</b>: +${banked} integrity (1d6+${tier}=${amount}), ${cur} → ${next}/${max}, and clear one condition. <span style="opacity:0.6">(GM clears the condition.)</span></p>`;
+  }
+
+  // Rally to Me / Unity Flourish / Conductor's Crescendo — one-shot flag + chat.
+  try { await actor.setFlag("fourththing", `surge.oneShot.${effectKey}`, { tier, target: target?.id ?? null, appliedAt: Date.now() }); }
+  catch (e) { /* silent */ }
+  if (effectKey === "rally-to-me")
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Rally to Me — <b>${target?.name ?? "an ally"}</b> may immediately take a reaction or basic action out of turn. <span style="opacity:0.6">(GM grants.)</span></p>`;
+  if (effectKey === "unity-flourish")
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🎼 Unity Flourish — allies within 30 ft gain +1 to checks until the start of your next turn. <span style="opacity:0.6">(GM applies.)</span></p>`;
+  if (effectKey === "conductors-crescendo")
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🎺 Conductor's Crescendo — allies within 30 ft reroll all 1s this round and each clears one condition. <span style="opacity:0.6">(1/scene; GM applies.)</span></p>`;
+  return "";
+}
+
+// Harmony Marshal harvest (Phase 3): when `explodingActor` lands a surging roll,
+// friendly Harmony Marshals within 30 ft bank +1 Surge each (capped +2/round via
+// round-keyed flag). Excludes the exploder (no self-harvest). Foe Marshals are
+// gated by _ftSurgeAllowed inside _ftBankSurge.
+async function _ftHarmonyHarvest(explodingActor, n) {
+  if (!explodingActor || !(Number(n) > 0)) return;
+  const exTok = explodingActor.getActiveTokens?.()?.[0];
+  if (!exTok) return;
+  const isMarshal = (a) => !!a?.items?.find?.(it => it.type === "class" &&
+    (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
+  const exDisp = exTok.document?.disposition ?? 0;
+  const round  = Number(game.combat?.round ?? 0);
+  for (const tok of (canvas?.tokens?.placeables ?? [])) {
+    const a = tok?.actor;
+    if (!a || a.id === explodingActor.id) continue;
+    if (!isMarshal(a)) continue;
+    const tDisp = tok.document?.disposition ?? 0;
+    const sameSide = (exDisp >= 0 && tDisp >= 0) || (exDisp < 0 && tDisp < 0);
+    if (!sameSide) continue;
+    if (_ftDistanceBetweenTokens(exTok, tok) > 30) continue;
+    try {
+      const f = a.flags?.fourththing?.harmonyMarshal?.harvest ?? {};
+      const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+      if (count >= 2) continue; // +2 Surge/round cap from the harvest hook
+      const got = await _ftBankSurge(a, 1, { fromHarvest: true });
+      if (got > 0) await a.setFlag("fourththing", "harmonyMarshal.harvest", { round, count: count + 1 });
+    } catch (e) { console.warn("[ft] harmony harvest bank failed for", a?.name, e); }
   }
 }
 

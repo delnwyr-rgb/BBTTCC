@@ -1,6 +1,6 @@
 # Surge Unification Spec — v0 (pilot: Harmony Marshal + Soul-Smith)
 
-**Status:** Design locked. **Phases 1 (Burn generalization) + 2 (Soul-Smith) BUILT + DEPLOYED to both live instances** 2026-05-26 — syntax-checked, unit-tested (33/33), md5-verified on both Lightsail instances + pm2-restarted. **NOT yet live-tested. NOT git-committed.** Phases 3 (Harmony Marshal) + 4 (roster) pending.
+**Status:** Design locked. **Phases 1 (Burn generalization) + 2 (Soul-Smith) BUILT + DEPLOYED to both live instances** 2026-05-26 — syntax-checked, unit-tested (33/33), md5-verified on both Lightsail instances + pm2-restarted; committed + pushed to canonical `origin/monorepo-init` (`ede2af1`). **NOT yet live-tested.** Phases 3 (Harmony Marshal) + 4 (roster) pending.
 **Date:** 2026-05-26
 **Scope of this doc:** the universal model + two archetypes + full spec for the two pilot classes (Harmony Marshal, Soul-Smith). The rest of the roster is converted in a later pass once these two are playtested.
 
