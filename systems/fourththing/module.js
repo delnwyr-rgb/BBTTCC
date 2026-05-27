@@ -3478,7 +3478,39 @@ const _FT_SURGE_MENU = [
     fiction: "Sealed against corruption, radiation, and breaking.", wired: true },
   { cost: 2, key: "bl-blessed", tier: 4, bucket: "off", forge: "bound-light",
     label: "Blessed Weapon (Spark) — your weapon blazes with bound light: next Strike +tier d6",
-    fiction: "The light remembers what it was given to hold.", wired: true }
+    fiction: "The light remembers what it was given to hold.", wired: true },
+
+  // ─── Harmony Marshal MANDATE (subclass) entries — gated by `mandate` ──────────
+  // Mandate of Accord — coordination/teamwork:
+  { cost: 1, key: "acc-breath", tier: 1, bucket: "narr", mandate: "accord",
+    label: "Shared Breath — name an Accord Partner: you + they bank a reroll, they free a reaction",
+    fiction: "Act as one.", wired: true },
+  { cost: 3, key: "acc-sync", tier: 2, bucket: "off", mandate: "accord",
+    label: "Synchronized Advance — allies within 30 ft bank a reroll on their next attack",
+    fiction: "Strike together; the second blow lands on the opening the first made.", wired: true },
+  { cost: 5, key: "acc-group", tier: 4, bucket: "narr", mandate: "accord",
+    label: "Group Turn — allies within 30 ft each gain a freed bonus action",
+    fiction: "One breath, one motion, the whole line moving at once.", wired: true },
+  // Mandate of Overwatch — defensive/reactive:
+  { cost: 1, key: "ovw-covered", tier: 1, bucket: "def", mandate: "overwatch",
+    label: "Covered — an ally gains DR this round (the Network has them)",
+    fiction: "Nothing unobserved.", wired: true },
+  { cost: 2, key: "ovw-counter", tier: 2, bucket: "def", mandate: "overwatch",
+    label: "Counter-Discord — cleanse a debuff off an ally + they bank a reroll",
+    fiction: "The lie is seen; it stops working.", wired: true },
+  { cost: 4, key: "ovw-perimeter", tier: 3, bucket: "def", mandate: "overwatch",
+    label: "Locked Perimeter — allies within 30 ft gain DR",
+    fiction: "A line drawn that the enemy crosses at a price.", wired: true },
+  // Mandate of Resolve — morale/anti-death:
+  { cost: 1, key: "res-hold", tier: 1, bucket: "def", mandate: "resolve",
+    label: "Hold the Line — clear Shaken off an ally + they bank a reroll",
+    fiction: "No one breaks.", wired: true },
+  { cost: 3, key: "res-secondwind", tier: 2, bucket: "heal", mandate: "resolve",
+    label: "Second Wind — ward an ally: the next hit that would drop them holds at 1",
+    fiction: "They refuse to fall because you were watching.", wired: true },
+  { cost: 5, key: "res-nonelost", tier: 4, bucket: "heal", mandate: "resolve",
+    label: "None Lost — refuse a death: restore a fallen ally to half + ward (1/fight)",
+    fiction: "Not this one. Not today.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3507,6 +3539,16 @@ const _FT_FORGE_KEYS = new Set([
 ]);
 // Forge spends that target SELF (no ally target needed).
 const _FT_FORGE_SELF_KEYS = new Set(["fov-compound", "bl-blessed"]);
+
+// Harmony Marshal Mandate spend keys — routed to _ftMandateSurge; gated by which
+// Mandate the actor's subclass is (see _ftHarmonyMandate). "Command" → Surge.
+const _FT_MANDATE_KEYS = new Set([
+  "acc-breath", "acc-sync", "acc-group",
+  "ovw-covered", "ovw-counter", "ovw-perimeter",
+  "res-hold", "res-secondwind", "res-nonelost"
+]);
+// Mandate spends that target SELF / an aura (no single ally target needed).
+const _FT_MANDATE_SELF_KEYS = new Set(["acc-sync", "acc-group", "ovw-perimeter"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3583,6 +3625,12 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
       return;
     }
   }
+  // Harmony Marshal Mandate spends — non-aura ones need a target ally.
+  if (_FT_MANDATE_KEYS.has(effectKey) && !_FT_MANDATE_SELF_KEYS.has(effectKey)
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target ally — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -3623,6 +3671,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftSoulSmithSurge(actor, effectKey, tier);
   } else if (_FT_FORGE_KEYS.has(effectKey)) {
     chatExtra = await _ftForgeSurge(actor, effectKey, tier);
+  } else if (_FT_MANDATE_KEYS.has(effectKey)) {
+    chatExtra = await _ftMandateSurge(actor, effectKey, tier);
   } else if (_FT_HARMONY_KEYS.has(effectKey)) {
     chatExtra = await _ftHarmonySurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
@@ -3823,6 +3873,119 @@ async function _ftSpendSparks(actor, n) {
   try { await actor.setFlag("fourththing", "soulSmith.sparks", cur - need); } catch (e) {}
   return true;
 }
+// ─── Harmony Marshal Mandate (subclass) detection + Surge spends ──────────────
+// Which Mandate is this actor? Flexible match on subclass identifier OR name.
+function _ftHarmonyMandate(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("accord")    || nm.includes("mandate of accord"))    return "accord";
+    if (id.includes("overwatch") || nm.includes("mandate of overwatch")) return "overwatch";
+    if (id.includes("resolve")   || nm.includes("mandate of resolve"))   return "resolve";
+  }
+  return null;
+}
+// The nine Mandate spends. Surge-cost (placeholder "Command" → Surge); reuse the
+// aidBanked reroll pipeline (now auto-firing), aegis-DR AEs, toggleCondition,
+// relicWard prevent-drop, integrity heal, bonusActionAvailable — no new consumers.
+async function _ftMandateSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the ally";
+  const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
+  const bankReroll = async (a, src) => {
+    const b = a.getFlag?.("fourththing", "aidBanked") ?? [];
+    b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src });
+    try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+  };
+  const drAE = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const alliesInAura = (ft) => {
+    const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+    if (!myTok) return null;
+    return (canvas.tokens?.placeables ?? []).filter(t =>
+      t?.actor && (t.document?.disposition ?? 0) >= 0 && _ftDistanceBetweenTokens(myTok, t) <= ft);
+  };
+  const needTarget = `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Needs a target ally. Surge spent — GM may refund.</p>`;
+  const needToken  = `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Needs your token on the scene. Surge spent — GM may refund.</p>`;
+
+  switch (effectKey) {
+    // ── Mandate of Accord (coordination) ──
+    case "acc-breath": {
+      if (!target) return needTarget;
+      await bankReroll(actor, "accord"); await bankReroll(target, "accord");
+      try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#b8d896">🤝 Shared Breath — you and <b>${tname}</b> each bank a reroll-lowest; ${tname} may take a reaction now (Accord Partner).</p>`;
+    }
+    case "acc-sync": {
+      const allies = alliesInAura(30);
+      if (!allies) return needToken;
+      const names = [];
+      for (const t of allies) { await bankReroll(t.actor, "accord"); names.push(t.actor.name); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Synchronized Advance — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 30 ft"} bank a reroll-lowest on their next attack.</p>`;
+    }
+    case "acc-group": {
+      const allies = alliesInAura(30);
+      if (!allies) return needToken;
+      let n = 0;
+      for (const t of allies) { try { await t.actor.setFlag("fourththing", "bonusActionAvailable", true); n++; } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Group Turn — ${n} ${n === 1 ? "ally" : "allies"} within 30 ft each gain a freed bonus action.</p>`;
+    }
+    // ── Mandate of Overwatch (defensive/reactive) ──
+    case "ovw-covered": {
+      if (!target) return needTarget;
+      await _ftCreateAllyAE(target, drAE(`Covered (DR ${tier})`));
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Covered — <b>${tname}</b> gains DR ${tier} this round.</p>`;
+    }
+    case "ovw-counter": {
+      if (!target) return needTarget;
+      const ts = target.system?.system ?? target.system ?? {};
+      const k = NEG.find(x => ts?.conditions?.[x] === true);
+      let cl = "";
+      if (k) { try { await game.fourththing?.toggleCondition?.(target, k); cl = `cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b> and `; } catch (e) {} }
+      await bankReroll(target, "overwatch");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Counter-Discord — ${cl}<b>${tname}</b> banks a reroll-lowest.</p>`;
+    }
+    case "ovw-perimeter": {
+      const allies = alliesInAura(30);
+      if (!allies) return needToken;
+      const names = [];
+      for (const t of allies) { await _ftCreateAllyAE(t.actor, drAE(`Perimeter (DR ${tier})`)); names.push(t.actor.name); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Locked Perimeter — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 30 ft"} gain DR ${tier} this round.</p>`;
+    }
+    // ── Mandate of Resolve (morale / anti-death) ──
+    case "res-hold": {
+      if (!target) return needTarget;
+      const ts = target.system?.system ?? target.system ?? {};
+      let cl = "";
+      if (ts?.conditions?.shaken === true) { try { await game.fourththing?.toggleCondition?.(target, "shaken"); cl = "cleared <b>Shaken</b> and "; } catch (e) {} }
+      await bankReroll(target, "resolve");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⚔ Hold the Line — ${cl}<b>${tname}</b> banks a reroll-lowest.</p>`;
+    }
+    case "res-secondwind": {
+      if (!target) return needTarget;
+      try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⚔ Second Wind — <b>${tname}</b> won't fall: the next hit that would drop them is held at 1 Integrity.</p>`;
+    }
+    case "res-nonelost": {
+      if (!target) return needTarget;
+      const combatId = String(game.combat?.id ?? "none");
+      if (actor.flags?.fourththing?.harmonyMarshal?.noneLostCombat === combatId) {
+        return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ None Lost already invoked this fight.</p>`;
+      }
+      const ts = target.system?.system ?? target.system ?? {};
+      const max = Number(ts?.integrity?.max ?? ts?.derived?.integrity?.max ?? 16);
+      const half = Math.max(1, Math.floor(max / 2));
+      const cur = Number(ts?.integrity?.value ?? ts?.derived?.integrity?.value ?? 0);
+      const next = Math.max(cur, half);
+      try { await target.update({ "system.integrity.value": next }); } catch (e) {}
+      try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
+      try { await actor.setFlag("fourththing", "harmonyMarshal.noneLostCombat", combatId); } catch (e) {}
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">⚔ None Lost — <b>${tname}</b> refuses to fall: restored to ${next}/${max} Integrity and warded against the next drop. <span style="opacity:0.7;font-weight:400">(1/fight)</span></p>`;
+    }
+  }
+  return "";
+}
+
 // Which forge (subclass) is this actor? Flexible match on subclass identifier OR name.
 function _ftSoulSmithForge(actor) {
   for (const i of (actor?.items ?? [])) {
@@ -14612,7 +14775,8 @@ Hooks.once("init", function () {
       // entries with no classFilter are universal.
       const MENU = _FT_SURGE_MENU.filter(e =>
         (!e.classFilter || _ftActorMatchesClass(actor, e.classFilter)) &&
-        (!e.forge || _ftSoulSmithForge(actor) === e.forge));
+        (!e.forge || _ftSoulSmithForge(actor) === e.forge) &&
+        (!e.mandate || _ftHarmonyMandate(actor) === e.mandate));
 
       // Group by cost.
       const byCost = {};
