@@ -26,16 +26,25 @@ const DRY_RUN = true;
 // feats — now superseded by the 4 Surge tiers (Omen / Dream Ward / Shared Dream /
 // Reality Hack). ADD leftover subclass feature names here AFTER reviewing the table.
 const PRUNE_NAMES = [
-  "Dream-Thread Tuning",
-  "Dream Rite",
-  "Omen-Thread Weaving",
-  "Mnemonic Spillway",
-  "Waking Dreamfield",
-  "Ascension Layer",
-  "Fractal Self",
-  "Apotheosis of the Oneiric",
-  // e.g. (uncomment / add after you confirm they're superseded on a sheet):
-  // "Triumph Weave", "Rally Stitch", "Banner of the Final Push", "Marchwork",
+  // ── CONFIRMED 2026-05-27 — The Hammer is Forge of BOUND LIGHT, so these
+  //    Forge-of-Victory feats are strays from a previous subclass: safe to remove.
+  //    (Only The Hammer carries them in the current roster.)
+  //    ⚠ If you later add a REAL Forge of Victory character, drop "Standard of Will"
+  //    and "Victory Forge" from this list FIRST — those are that subclass's kept
+  //    out-of-combat skin. The DRY-run table always shows exactly what would go.
+  "Triumph Weave",
+  "Victory Forge",
+  "Rally Stitch",
+  "Banner of the Final Push",
+  "Standard of Will",
+  "Marchwork",
+
+  // ── Dreamwalker's 8 soma-break feats — the "sprawl", now covered by the 4 Surge
+  //    tiers. No current (low-tier) Dreamwalker has them yet; uncomment when you have
+  //    a high-level one. NOTE: "Fractal Self" gave a passive reroll (advantage) — the
+  //    Omen Surge spend replaces it on demand. Keep it commented to preserve the passive.
+  // "Dream-Thread Tuning", "Dream Rite", "Omen-Thread Weaving", "Mnemonic Spillway",
+  // "Waking Dreamfield", "Ascension Layer", "Fractal Self", "Apotheosis of the Oneiric",
 ];
 
 const PROTECT_TYPES = new Set(["class", "subclass"]);   // never delete progression docs
