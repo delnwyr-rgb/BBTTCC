@@ -3407,21 +3407,21 @@ const _FT_SURGE_MENU = [
   // with the Smith's Burn band; the other three stamp a one-shot flag + chat card
   // the GM enforces (deeper wiring is a Phase 2.1 polish pass).
   { cost: 1, key: "forge-weld", tier: 1, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Forge-Weld — repair an ally's integrity (scales with forge heat)",
+    label: "Forge-Weld — repair an ally (1d8+tier, scales with forge heat)",
     fiction: "You lay hands on the breakage and will it whole.",
     wired: true },
   { cost: 2, key: "atonement", tier: 2, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Atonement — cleanse a debuff / condition from an ally",
-    fiction: "Whatever was done can be unmade. Hold still.",
-    wired: false },
-  { cost: 2, key: "share-furnace", tier: 3, bucket: "def", classFilter: ["soul-smith"],
-    label: "Share the Furnace — grant an ally poison/necrotic resistance",
+    label: "Atonement Crucible — cleanse a condition + temper an ally into armor (DR)",
+    fiction: "Whatever was done can be unmade — and made into a shield.",
+    wired: true },
+  { cost: 3, key: "share-furnace", tier: 3, bucket: "heal", classFilter: ["soul-smith"],
+    label: "Furnace of Renewal — heal allies within 30 ft + share poison/necrotic resist",
     fiction: "Stand near the forge. Let it burn the rot out of you.",
-    wired: false },
+    wired: true },
   { cost: 5, key: "relic-rebirth", tier: 4, bucket: "heal", classFilter: ["soul-smith"],
-    label: "Relic of Rebirth — 1/fight, keep an ally from dropping below 1",
+    label: "Relic of Rebirth — ward an ally vs dropping (Overheated: reforge a fallen ally)",
     fiction: "Not yet. I forged you something to hold the line.",
-    wired: false },
+    wired: true },
 
   // ─── Harmony Marshal class-exclusive entries (Pool archetype, Phase 3) ─────
   // Generation = "harvest the party's surges" (see _ftHarmonyHarvest). Rallying
@@ -3784,16 +3784,83 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
     </p>`;
   }
 
-  // Atonement / Share the Furnace / Relic of Rebirth — one-shot flag + chat card.
-  try { await actor.setFlag("fourththing", `surge.oneShot.${effectKey}`, { tier, target: target?.id ?? null, appliedAt: Date.now() }); }
-  catch (e) { /* silent */ }
-  const tname = target?.name ?? "the chosen ally";
-  if (effectKey === "atonement")
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⚖ Atonement — cleanse one debuff/condition from <b>${tname}</b>. <span style="opacity:0.6">(GM applies.)</span></p>`;
-  if (effectKey === "share-furnace")
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🔥 Share the Furnace — <b>${tname}</b> gains poison/necrotic resistance (1 min). <span style="opacity:0.6">(GM applies the resist.)</span></p>`;
-  if (effectKey === "relic-rebirth")
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⟁ Relic of Rebirth — <b>${tname}</b> cannot drop below 1 integrity from the next hit this fight. <span style="opacity:0.6">(GM tracks.)</span></p>`;
+  // ── T2: Atonement Crucible — cleanse condition(s) + temper into armor (DR) ──
+  if (effectKey === "atonement") {
+    if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Atonement Crucible needs a target ally. Surge spent — GM may refund.</p>`;
+    const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
+    const tsys = target.system?.system ?? target.system ?? {};
+    const active = NEG.filter(k => tsys?.conditions?.[k] === true);
+    const clearN = (stoked || overheated) ? 2 : 1;
+    const cleared = [];
+    for (const k of active.slice(0, clearN)) {
+      try { await game.fourththing?.toggleCondition?.(target, k); cleared.push(FT?.CONDITIONS?.[k]?.label ?? k); } catch (e) { /* silent */ }
+    }
+    // Temper the wound into armor — flat DR = tier this round (aegis-kind AE the damage path reads).
+    try {
+      await _ftCreateAllyAE(target, {
+        name: `Atonement: Tempered (DR ${tier})`, img: "icons/svg/shield.svg", origin: actor.uuid,
+        duration: { rounds: 1 }, changes: [],
+        flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } }
+      });
+    } catch (e) { /* silent */ }
+    const clr = cleared.length ? `cleansed <b>${cleared.join(", ")}</b> and ` : "";
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⚖ Atonement Crucible — ${clr}tempered <b>${target.name}</b> into armor (DR ${tier} this round). <span style="opacity:0.6">[${heatTag}]</span></p>`;
+  }
+
+  // ── T3: Furnace of Renewal — AoE heal aura + share poison/necrotic resist ──
+  if (effectKey === "share-furnace") {
+    const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+    if (!myTok) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Furnace of Renewal needs your token on the scene. Surge spent — GM may refund.</p>`;
+    const allies = (canvas.tokens?.placeables ?? []).filter(t => {
+      if (!t?.actor) return false;
+      if (t.actor.id === actor.id) return true;
+      if ((t.document?.disposition ?? 0) < 0) return false; // non-hostile only
+      return _ftDistanceBetweenTokens(myTok, t) <= 30;
+    });
+    const lines = [];
+    for (const t of allies) {
+      const a = t.actor;
+      const asys = a.system?.system ?? a.system ?? {};
+      const max = Number(asys?.integrity?.max ?? asys?.derived?.integrity?.max ?? 16);
+      const cur = Number(asys?.integrity?.value ?? asys?.derived?.integrity?.value ?? 0);
+      const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
+      const amt  = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
+      const next = Math.min(max, cur + amt);
+      if (next !== cur) { try { await a.update({ "system.integrity.value": next }); } catch (e) {} }
+      for (const rt of ["poison", "necrotic"]) {
+        try { await _ftCreateAllyAE(a, {
+          name: `Furnace: resist ${rt}`, img: "icons/svg/fire-shield.svg", origin: actor.uuid,
+          duration: { rounds: 3 }, changes: [],
+          flags: { fourththing: { surge: { kind: "steel-veil", resistType: rt } } }
+        }); } catch (e) {}
+      }
+      if (next > cur) lines.push(`<b>${a.name}</b> +${next - cur}`);
+    }
+    const healTxt = lines.length ? `healed ${lines.join(", ")} and ` : "";
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🔥 Furnace of Renewal — ${healTxt}warded allies within 30 ft vs poison/necrotic (3 rds). <span style="opacity:0.6">[${heatTag}]</span></p>`;
+  }
+
+  // ── T4: Relic of Rebirth — Overheated: reforge a fallen ally to half; else forge a ward ──
+  if (effectKey === "relic-rebirth") {
+    if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Relic of Rebirth needs a target ally. Surge spent — GM may refund.</p>`;
+    if (overheated) {
+      const combatId = String(game.combat?.id ?? "none");
+      if (actor.flags?.fourththing?.soulSmith?.reforgeCombat === combatId) {
+        return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Relic already reforged this fight.</p>`;
+      }
+      const tsys = target.system?.system ?? target.system ?? {};
+      const max = Number(tsys?.integrity?.max ?? tsys?.derived?.integrity?.max ?? 16);
+      const half = Math.max(1, Math.floor(max / 2));
+      const cur = Number(tsys?.integrity?.value ?? tsys?.derived?.integrity?.value ?? 0);
+      const next = Math.max(cur, half);
+      try { await target.update({ "system.integrity.value": next }); } catch (e) {}
+      try { await actor.setFlag("fourththing", "soulSmith.reforgeCombat", combatId); } catch (e) {}
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#e8c84a;font-weight:600">⟁ Relic of Rebirth — reforged <b>${target.name}</b> to half Integrity: ${cur} → ${next}/${max}. <span style="opacity:0.7;font-weight:400">(Overheated · 1/fight)</span></p>`;
+    }
+    try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⟁ Relic of Rebirth — forged a ward on <b>${target.name}</b>: the next hit that would drop them is held at 1 Integrity. <span style="opacity:0.6">(Run Overheated to reforge a fallen ally instead.)</span></p>`;
+  }
+
   return "";
 }
 
@@ -10343,6 +10410,8 @@ Hooks.once("init", function () {
       }
       // Aurablade Mercy · Prevent Drop — applied at the integrity floor below.
       if (track === "integrity" && ff.aurablade?.preventDropOnce) preventDropArmed = true;
+      // Soul-Smith Relic of Rebirth — forged ward: same floor-at-1 behavior.
+      if (track === "integrity" && ff.soulSmith?.relicWard) preventDropArmed = true;
       // Oldenborn Phoenix Oath — drop-to-1 + eruption, applied at the floor below.
       if (track === "integrity" && ff.ancestry?.oneShot?.phoenixOath) phoenixArmed = true;
     }
@@ -10372,8 +10441,13 @@ Hooks.once("init", function () {
     let preventDropNote = "";
     if (preventDropArmed && cur > 0 && newVal < 1) {
       newVal = 1;
-      preventDropNote = " · Aurablade: held at 1";
-      oneShotClears["flags.fourththing.aurablade.-=preventDropOnce"] = null;
+      if (ff.soulSmith?.relicWard) {
+        preventDropNote = " · Soul-Smith Relic: held at 1";
+        oneShotClears["flags.fourththing.soulSmith.-=relicWard"] = null;
+      } else {
+        preventDropNote = " · Aurablade: held at 1";
+        oneShotClears["flags.fourththing.aurablade.-=preventDropOnce"] = null;
+      }
     }
     // Oldenborn Phoenix Oath — when this hit would drop you to 0, hold at 1 and
     // erupt. Fire the AOE + condition-end AFTER the write (below), so you're

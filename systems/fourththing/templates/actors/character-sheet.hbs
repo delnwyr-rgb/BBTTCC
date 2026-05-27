@@ -707,20 +707,10 @@
           <span class="ft-aura-badge" style="background:rgba(232,200,74,0.12);border:1px solid rgba(232,200,74,0.4);color:#e8c84a">Tier {{soulSmithState.tier}}</span>
           <span class="ft-aura-desc">{{soulSmithState.statusLine}}</span>
           <div class="ft-resource-controls">
-            {{!-- T1 always available --}}
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_forge_initiate" data-tooltip="Tier 1 — Sanctified Forge Initiate. +1 Faith, +1 Plating, Economy OP hex repair.">T1 Forge Initiate</button>
-            {{!-- T2 — Atonement Crucible (1/arc) --}}
-            {{#if soulSmithState.tierAtLeast2}}
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_atonement_crucible" data-tooltip="Tier 2 — Atonement Crucible. 1/campaign-arc: purify a Corrupted Spark instead of destroying it.">T2 Atonement {{#if soulSmithState.atonementUsedThisArc}}(used){{else}}({{soulSmithState.atonementStatus}}){{/if}}</button>
-            {{/if}}
-            {{!-- T3 — Furnace of Renewal (passive resist + rest narration) --}}
-            {{#if soulSmithState.tierAtLeast3}}
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_furnace_of_renewal" data-tooltip="Tier 3 — Furnace of Renewal. Passive: poison + necrotic resistance. Click to announce rest-bonus to the table.">T3 Furnace</button>
-            {{/if}}
-            {{!-- T4 — Relic of Rebirth --}}
-            {{#if soulSmithState.tierAtLeast4}}
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_relic_of_rebirth" data-tooltip="Tier 4 — Relic of Rebirth. One-per-use: forge an artifact that restores a corrupted region/hex.">T4 Relic {{#if soulSmithState.relicUsed}}(used){{else}}(ready){{/if}}</button>
-            {{/if}}
+            {{!-- The four forge TIERS are now Surge spends (Forge-Weld / Atonement Crucible /
+                  Furnace of Renewal / Relic of Rebirth) — use "Forge ▸ Spend Surge" below.
+                  This single button opens the out-of-combat campaign forge works for your tier. --}}
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_forge" data-tooltip="Forge Works (campaign / out-of-combat): tier-appropriate narrative crafting — hex repair (T1), purify a Corrupted Spark (T2), region restoration (T4). Your COMBAT abilities are the four Surge spends — use 'Forge ▸ Spend Surge'.">⚒ Forge Works</button>
           </div>
         </div>
         {{!-- Forge heat (Burn 0–8) — fuel + overheat readout. Spend banked Surge on
