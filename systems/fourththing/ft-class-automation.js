@@ -29,8 +29,99 @@ export const BURN_BANDS = [
   { min: 4, max: 99, label: "Overheated", color: "#eb5757", desc: "+2 damage. Risk backlash at end of turn." }
 ];
 
-export function getBurnBand(burn) {
-  return BURN_BANDS.find(b => burn >= b.min && burn <= b.max) ?? BURN_BANDS[2];
+export function getBurnBand(burn, bands = BURN_BANDS) {
+  return bands.find(b => burn >= b.min && burn <= b.max) ?? bands[bands.length - 1];
+}
+
+// ─── Burn archetype registry ─────────────────────────────────────────────────
+// Burn is a shared "escalation track" substrate: a 0→max heat clock that is at
+// once fuel (good) and risk (bad). The TRACK, BANDS, VENT options, and HUD
+// presentation are generic and declared per class here; the PAYLOADS (what each
+// band/action actually DOES, and what raises Burn) stay in each class's own
+// handlers. Phase 1 (2026-05-26): extracted from Aurablade with IDENTICAL values
+// so Aurablade behavior is unchanged. New burn classes (e.g. soul-smith) register
+// here with their own track shape, vent flavor, and HUD tag.
+export const BURN_CLASSES = {
+  aurablade: {
+    tag:   "Aurablade",
+    icon:  "🔥",
+    max:   8,
+    bands: BURN_BANDS,
+    // Vent options for the Stabilize dialog. reduce:"all" clears the track to 0;
+    // req:"overheated" only offers the option in the Overheated band; a
+    // backlashStress formula is rolled and subtracted from Stress when chosen.
+    vent: [
+      { id: "meditate", label: "Meditate (action)",  reduce: 2,     req: "any",        desc: "Spend your action to reduce Burn by 2" },
+      { id: "rest",     label: "Brief rest (5 min)", reduce: "all", req: "any",        desc: "Clear all Burn on a brief rest" },
+      { id: "accept",   label: "Accept backlash",    reduce: 3,     req: "overheated", backlashStress: "1d6", desc: "Take 1d6 Stress to reduce Burn by 3" },
+    ],
+  },
+  // Soul-Smith — constructive-register Burn (Phase 2, 2026-05-26). Same 0→8 track +
+  // vent substrate as Aurablade, its OWN bands/flavor. Stoked amplifies repairs;
+  // Overheated bites back. Generation = "damage stokes the forge" (see module.js).
+  "soul-smith": {
+    tag:   "Soul-Smith",
+    icon:  "⚒",
+    max:   8,
+    bands: [
+      { min: 0, max: 1,  label: "Cool",       color: "#5dade2", desc: "Forge banked. Steady — no bonus." },
+      { min: 2, max: 3,  label: "Stoked",     color: "#f2994a", desc: "Forge roaring. Repairs ×1.5." },
+      { min: 4, max: 99, label: "Overheated", color: "#eb5757", desc: "Furnace bites. Repairs ×2, but drawing on it costs you Stress." },
+    ],
+    vent: [
+      { id: "quench",   label: "Quench (action)",       reduce: 2,     req: "any",        desc: "Spend your action to cool the forge by 2" },
+      { id: "bank",     label: "Bank the coals (rest)", reduce: "all", req: "any",        desc: "Let the forge go cold on a brief rest" },
+      { id: "overdraw", label: "Overdraw",              reduce: 3,     req: "overheated", backlashStress: "1d6", desc: "Take 1d6 Stress to cool the furnace by 3" },
+    ],
+  },
+};
+
+// Identifier match shared with detectActivePools' hasClass(): a class/feat item
+// whose system.identifier equals the slug or is `<slug>_*` prefixed (normalized).
+function _ftBurnClassIdMatch(actor, slug) {
+  const norm = String(slug).toLowerCase().replace(/[\s-]/g, "_");
+  return Array.from(actor?.items ?? []).some(i => {
+    if (i.type !== "class" && i.type !== "feat") return false;
+    const id = String(i.system?.identifier ?? "").toLowerCase().replace(/-/g, "_");
+    if (!id) return false;
+    return id === norm || id.startsWith(norm + "_");
+  });
+}
+
+// Burn descriptor for the actor's burn class ({ slug, ...config }), or null when
+// the actor is not a burn-archetype class.
+export function ftBurnClassFor(actor) {
+  for (const [slug, cfg] of Object.entries(BURN_CLASSES)) {
+    if (_ftBurnClassIdMatch(actor, slug)) return { slug, ...cfg };
+  }
+  return null;
+}
+
+export function ftIsBurnClass(actor) {
+  return ftBurnClassFor(actor) !== null;
+}
+
+export function ftBurnMax(actor) {
+  return ftBurnClassFor(actor)?.max ?? 8;
+}
+
+export function ftGetBurn(actor) {
+  return Number(getResources(actor)?.burn?.current ?? 0) || 0;
+}
+
+// Band for the actor computed against its own class bands (defaults to BURN_BANDS).
+export function ftBurnBandFor(actor) {
+  const desc = ftBurnClassFor(actor);
+  return getBurnBand(ftGetBurn(actor), desc?.bands ?? BURN_BANDS);
+}
+
+// Add (or subtract) Burn, clamped to [0, class max]. Returns the new value.
+export async function ftAddBurn(actor, delta) {
+  const max  = ftBurnMax(actor);
+  const cur  = ftGetBurn(actor);
+  const next = Math.max(0, Math.min(max, cur + (Number(delta) || 0)));
+  if (next !== cur) await actor.update({ "system.resources.burn.current": next });
+  return next;
 }
 
 // ─── Feature identifier → handler map ────────────────────────────────────────
@@ -968,22 +1059,27 @@ export async function openAurabladeAction(actor) {
 }
 
 export async function openStabilizeBurn(actor) {
+  const desc = ftBurnClassFor(actor);
   const res  = getResources(actor);
   const burn = res.burn?.current ?? 0;
-  const band = getBurnBand(burn);
+  const band = getBurnBand(burn, desc?.bands ?? BURN_BANDS);
 
   if (burn <= 0) {
     return ui.notifications.info(`${actor.name}: Burn is already at 0.`);
   }
 
-  const options = [
-    { id: "meditate", label: "Meditate (action)",      reduce: 2, req: "any",         desc: "Spend your action to reduce Burn by 2" },
-    { id: "rest",     label: "Brief rest (5 min)",     reduce: burn,req: "any",       desc: "Clear all Burn on a brief rest" },
-    { id: "accept",   label: "Accept backlash",        reduce: 3,  req: "overheated", desc: "Take 1d6 Stress to reduce Burn by 3" },
-  ].filter(o => o.req === "any" || (o.req === "overheated" && band.label === "Overheated"));
+  // Vent options come from the burn descriptor; fall back to the Aurablade set so
+  // any non-registered caller keeps the original behavior.
+  const ventDefs = desc?.vent ?? [
+    { id: "meditate", label: "Meditate (action)",  reduce: 2,     req: "any",        desc: "Spend your action to reduce Burn by 2" },
+    { id: "rest",     label: "Brief rest (5 min)", reduce: "all", req: "any",        desc: "Clear all Burn on a brief rest" },
+    { id: "accept",   label: "Accept backlash",    reduce: 3,     req: "overheated", backlashStress: "1d6", desc: "Take 1d6 Stress to reduce Burn by 3" },
+  ];
+  const reduceOf = (o) => (o.reduce === "all" ? burn : (Number(o.reduce) || 1));
+  const options  = ventDefs.filter(o => o.req === "any" || (o.req === "overheated" && band.label === "Overheated"));
 
   const opts = options.map(o =>
-    `<option value="${o.id}" data-reduce="${o.reduce}">${o.label} (−${Math.min(o.reduce, burn)} Burn) — ${o.desc}</option>`
+    `<option value="${o.id}" data-reduce="${reduceOf(o)}">${o.label} (−${Math.min(reduceOf(o), burn)} Burn) — ${o.desc}</option>`
   ).join("");
 
   new Dialog({
@@ -1005,13 +1101,14 @@ export async function openStabilizeBurn(actor) {
           const sel    = html.find("[name='method'] option:selected");
           const reduce = parseInt(sel.data("reduce")) || 1;
           const method = html.find("[name='method']").val();
+          const chosen = ventDefs.find(o => o.id === method);
           const newBurn = Math.max(0, burn - reduce);
           const updates = { "system.resources.burn.current": newBurn };
-          // Backlash costs Stress
-          if (method === "accept") {
+          // Backlash (if the chosen vent option carries one) costs Stress.
+          if (chosen?.backlashStress) {
             const rawSys = actor.system?.system ?? actor.system;
             const curStr = rawSys?.derived?.stress?.value ?? 10;
-            const roll = new Roll("1d6");
+            const roll = new Roll(String(chosen.backlashStress));
             await roll.evaluate();
             updates["system.derived.stress.value"] = Math.max(0, curStr - roll.total);
           }

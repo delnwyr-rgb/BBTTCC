@@ -536,7 +536,7 @@
 
       {{#if activePools.aurablade}}
       <div class="ft-combat-section ft-resource-panel">
-        <h3>🔥 Burn <span class="ft-resource-tag">Aurablade</span></h3>
+        <h3>🔥 Burn <span class="ft-resource-tag">{{burnClass.tag}}</span></h3>
         <div class="ft-resource-row">
           <div class="ft-burn-track">
             {{#each (times 8) as |n|}}
@@ -721,6 +721,20 @@
             {{#if soulSmithState.tierAtLeast4}}
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="soul_smith_relic_of_rebirth" data-tooltip="Tier 4 — Relic of Rebirth. One-per-use: forge an artifact that restores a corrupted region/hex.">T4 Relic {{#if soulSmithState.relicUsed}}(used){{else}}(ready){{/if}}</button>
             {{/if}}
+          </div>
+        </div>
+        {{!-- Forge heat (Burn 0–8) — fuel + overheat readout. Spend banked Surge on
+              Forge-Weld etc. via the Surge "Spend" button. --}}
+        <div class="ft-resource-row" style="margin-top:0.35rem" data-tooltip="Forge heat: rises +1 when you or a nearby ally takes damage. Cool 0–1 / Stoked 2–3 (repairs ×1.5) / Overheated 4+ (repairs ×2, but the furnace bites). Vent via Stabilize.">
+          <div class="ft-burn-track" style="display:inline-flex;gap:1px;letter-spacing:-0.05em">
+            {{#each (times 8) as |n|}}<span style="color:{{#if (lte (add n 1) (or ../resources.burn.current 0))}}{{../burnBand.color}}{{else}}rgba(255,255,255,0.15){{/if}}">▰</span>{{/each}}
+          </div>
+          <span class="ft-resource-count" style="color:{{burnBand.color}}">🔥 {{or resources.burn.current 0}}/8 · {{burnBand.label}}</span>
+          <div class="ft-resource-controls">
+            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_stabilize" data-tooltip="Vent the forge (cool Burn).">Vent</button>
+          </div>
+          <div class="ft-edit-only ft-resource-edit">
+            <input type="number" name="system.resources.burn.current" value="{{or resources.burn.current 0}}" min="0" max="8" style="width:40px" data-tooltip="Forge heat (Burn 0–8)"/>
           </div>
         </div>
       </div>

@@ -80,6 +80,8 @@ import {
   getResources,
   AURA_STATES,
   getBurnBand,
+  ftBurnClassFor,
+  ftAddBurn,
   openSpendFrameDie,
   openFrameDiePool,
   openAurabladeAction,
@@ -3376,8 +3378,43 @@ const _FT_SURGE_MENU = [
   { cost: 10, key: "phoenix", tier: 1, bucket: "heal",
     label: "Phoenix — restore self/ally from defeated to half integrity (1 / raid)",
     fiction: "Remember what you were before the wound. Be that now.",
-    wired: true }
+    wired: true },
+
+  // ─── Soul-Smith class-exclusive entries (Burn archetype, Phase 2) ──────────
+  // Shown only to Soul-Smiths (classFilter). Forge-Weld is fully wired and scales
+  // with the Smith's Burn band; the other three stamp a one-shot flag + chat card
+  // the GM enforces (deeper wiring is a Phase 2.1 polish pass).
+  { cost: 1, key: "forge-weld", tier: 1, bucket: "heal", classFilter: ["soul-smith"],
+    label: "Forge-Weld — repair an ally's integrity (scales with forge heat)",
+    fiction: "You lay hands on the breakage and will it whole.",
+    wired: true },
+  { cost: 2, key: "atonement", tier: 2, bucket: "heal", classFilter: ["soul-smith"],
+    label: "Atonement — cleanse a debuff / condition from an ally",
+    fiction: "Whatever was done can be unmade. Hold still.",
+    wired: false },
+  { cost: 2, key: "share-furnace", tier: 3, bucket: "def", classFilter: ["soul-smith"],
+    label: "Share the Furnace — grant an ally poison/necrotic resistance",
+    fiction: "Stand near the forge. Let it burn the rot out of you.",
+    wired: false },
+  { cost: 5, key: "relic-rebirth", tier: 4, bucket: "heal", classFilter: ["soul-smith"],
+    label: "Relic of Rebirth — 1/fight, keep an ally from dropping below 1",
+    fiction: "Not yet. I forged you something to hold the line.",
+    wired: false }
 ];
+
+// Slugs (normalized) → does this actor have a matching class/feat item? Gates the
+// class-exclusive Surge menu entries (classFilter).
+function _ftActorMatchesClass(actor, slugs) {
+  const ids = (Array.isArray(slugs) ? slugs : [slugs]).map(s => String(s).toLowerCase().replace(/[\s-]/g, "_"));
+  return Array.from(actor?.items ?? []).some(i => {
+    if (i.type !== "class" && i.type !== "feat") return false;
+    const id = String(i.system?.identifier ?? "").toLowerCase().replace(/-/g, "_");
+    return !!id && ids.some(s => id === s || id.startsWith(s + "_"));
+  });
+}
+
+// Soul-Smith Surge spend keys — routed to _ftSoulSmithSurge before generic dispatch.
+const _FT_SOUL_SMITH_KEYS = new Set(["forge-weld", "atonement", "share-furnace", "relic-rebirth"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3435,6 +3472,14 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
       return;
     }
   }
+  // Soul-Smith forge spends all target an ally.
+  if (_FT_SOUL_SMITH_KEYS.has(effectKey)) {
+    const t = Array.from(game.user?.targets ?? [])[0];
+    if (!t?.actor) {
+      ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target ally — target a token first, then re-open the menu.`);
+      return;
+    }
+  }
 
   // Pre-prompt for damage type on steel-veil / sanctum so we can refund
   // (don't-charge) on cancel. Type stored locally; AE built after charge.
@@ -3456,7 +3501,9 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
 
   // Wired heals.
   let chatExtra = "";
-  if (entry.wired && entry.bucket === "heal") {
+  if (_FT_SOUL_SMITH_KEYS.has(effectKey)) {
+    chatExtra = await _ftSoulSmithSurge(actor, effectKey, tier);
+  } else if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
     chatExtra = await _ftSurgeApplyDefenseAE(actor, effectKey, tier, chosenType);
@@ -3630,6 +3677,101 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
   }
 
   return "";
+}
+
+// ─── Soul-Smith Surge spends (Burn archetype) ────────────────────────────────
+// Forge-Weld is fully wired and scales with the Smith's Burn band (Stoked ×1.5,
+// Overheated ×2 + a Stress backlash — the furnace bites). Atonement / Share the
+// Furnace / Relic of Rebirth stamp a one-shot flag + post a chat card the GM
+// enforces (deeper wiring is a Phase 2.1 pass).
+async function _ftSoulSmithSurge(actor, effectKey, tier) {
+  const tok        = Array.from(game.user?.targets ?? [])[0];
+  const target     = tok?.actor ?? null;
+  const burn       = Number((actor.system?.system ?? actor.system)?.resources?.burn?.current ?? 0) || 0;
+  const overheated = burn >= 4;
+  const stoked     = burn >= 2 && !overheated;
+  const mult       = overheated ? 2 : (stoked ? 1.5 : 1);
+  const heatTag    = overheated ? "Overheated ×2" : (stoked ? "Stoked ×1.5" : "Cool ×1");
+
+  if (effectKey === "forge-weld") {
+    if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Forge-Weld needs a target ally. Surge spent — GM may refund.</p>`;
+    const sys = target.system?.system ?? target.system ?? {};
+    const max = Number(sys?.integrity?.max ?? sys?.derived?.integrity?.max ?? 16);
+    const cur = Number(sys?.integrity?.value ?? sys?.derived?.integrity?.value ?? 0);
+    const roll = new Roll(`1d8 + ${tier}`);
+    await roll.evaluate();
+    const amount = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
+    const next   = Math.min(max, cur + amount);
+    const banked = next - cur;
+    try { await target.update({ "system.integrity.value": next }); } catch (e) { /* silent */ }
+    let backlash = "";
+    if (overheated) {
+      const br = new Roll("1d6"); await br.evaluate();
+      const rs = actor.system?.system ?? actor.system;
+      const curStr = Number(rs?.derived?.stress?.value ?? 10);
+      try { await actor.update({ "system.derived.stress.value": Math.max(0, curStr - br.total) }); } catch (e) { /* silent */ }
+      backlash = ` <span style="color:#eb5757">The furnace bites: ${br.total} Stress backlash.</span>`;
+    }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">
+      ⚒ Forge-Welded <b>${target.name}</b> for <b>${banked}</b> integrity
+      (1d8+${tier} ×${mult} <span style="opacity:0.7">[${heatTag}]</span>). ${cur} → ${next}/${max}.${backlash}
+    </p>`;
+  }
+
+  // Atonement / Share the Furnace / Relic of Rebirth — one-shot flag + chat card.
+  try { await actor.setFlag("fourththing", `surge.oneShot.${effectKey}`, { tier, target: target?.id ?? null, appliedAt: Date.now() }); }
+  catch (e) { /* silent */ }
+  const tname = target?.name ?? "the chosen ally";
+  if (effectKey === "atonement")
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⚖ Atonement — cleanse one debuff/condition from <b>${tname}</b>. <span style="opacity:0.6">(GM applies.)</span></p>`;
+  if (effectKey === "share-furnace")
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🔥 Share the Furnace — <b>${tname}</b> gains poison/necrotic resistance (1 min). <span style="opacity:0.6">(GM applies the resist.)</span></p>`;
+  if (effectKey === "relic-rebirth")
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">⟁ Relic of Rebirth — <b>${tname}</b> cannot drop below 1 integrity from the next hit this fight. <span style="opacity:0.6">(GM tracks.)</span></p>`;
+  return "";
+}
+
+// "Damage stokes the forge": when the Soul-Smith OR a friendly within 30 ft takes
+// integrity damage, a nearby Smith banks +1 Surge and +1 Burn (capped +2 each per
+// combat round). Surge routes through _ftBankSurge (foe-gating + cap honored); Burn
+// rises on the shared 0→8 track via ftAddBurn. Explosions stay pure Surge.
+async function _ftSoulSmithForgeOnDamage(damagedActor, dmg) {
+  if (!damagedActor || !(Number(dmg) > 0)) return;
+  const isSoulSmith = (a) => !!a?.items?.find?.(it => it.type === "class" &&
+    (it.system?.identifier === "soul-smith" || it.system?.identifier === "soul_smith"));
+
+  const smiths = [];
+  const seen = new Set();
+  const add = (a) => { if (a && !seen.has(a.id) && isSoulSmith(a)) { seen.add(a.id); smiths.push(a); } };
+  add(damagedActor); // the Smith taking the hit themselves
+
+  const dmgTok = damagedActor.getActiveTokens?.()?.[0];
+  if (dmgTok) {
+    const dDisp = dmgTok.document?.disposition ?? 0;
+    for (const tok of (canvas?.tokens?.placeables ?? [])) {
+      const a = tok?.actor;
+      if (!a || a.id === damagedActor.id) continue;
+      const tDisp = tok.document?.disposition ?? 0;
+      const sameSide = (dDisp >= 0 && tDisp >= 0) || (dDisp < 0 && tDisp < 0);
+      if (!sameSide) continue;
+      if (_ftDistanceBetweenTokens(dmgTok, tok) > 30) continue;
+      add(a);
+    }
+  }
+  if (!smiths.length) return;
+
+  const round = Number(game.combat?.round ?? 0);
+  for (const smith of smiths) {
+    if (!_ftSurgeAllowed(smith)) continue; // foe Smiths need the GM toggle
+    try {
+      const f = smith.flags?.fourththing?.soulSmith?.forge ?? {};
+      const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+      if (count >= 2) continue; // +2 Surge / +2 Burn per round from the forge hook
+      await _ftBankSurge(smith, 1);
+      try { await ftAddBurn(smith, 1); } catch (e) { /* burn helper unavailable */ }
+      await smith.setFlag("fourththing", "soulSmith.forge", { round, count: count + 1 });
+    } catch (e) { console.warn("[ft] soul-smith forge stoke failed for", smith?.name, e); }
+  }
 }
 
 // Damage-type picker used by Steel Veil + Sanctum spends. Returns the chosen
@@ -10183,6 +10325,13 @@ Hooks.once("init", function () {
       }
     }
 
+    // Soul-Smith forge: integrity damage to self or a nearby ally stokes a Smith's
+    // forge (Surge + Burn). Awaited in try/catch so it can never break damage apply.
+    if (track === "integrity" && dmg > 0) {
+      try { await _ftSoulSmithForgeOnDamage(actor, dmg); }
+      catch (e) { console.warn("[ft] soul-smith forge hook failed", e); }
+    }
+
     const destroyedTag = rigDestroyed ? " — DESTROYED" : "";
     return `${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})${defenseTag}${preventDropNote}${destroyedTag}${phoenixNote}`;
   };
@@ -12689,12 +12838,14 @@ Hooks.once("init", function () {
       let resources   = {};
       let activePools = {};
       let burnBand    = { label: "Controlled", color: "#27ae60", desc: "Stable." };
+      let burnClass   = null;
       let auraState   = "none";
       try {
         resources   = sysData.resources ?? {};
         activePools = detectActivePools ? detectActivePools(actor) : {};
+        burnClass   = ftBurnClassFor ? ftBurnClassFor(actor) : null;
         const burn  = resources.burn?.current ?? 0;
-        burnBand    = getBurnBand ? getBurnBand(burn) : burnBand;
+        burnBand    = getBurnBand ? getBurnBand(burn, burnClass?.bands) : burnBand;
         auraState   = resources.aura?.state ?? "none";
       } catch(poolErr) {
         console.error("Roll for Initiation | Resource pool context failed:", poolErr);
@@ -13149,6 +13300,7 @@ Hooks.once("init", function () {
         resources,
         activePools,
         burnBand,
+        burnClass,
         auraState,
         auraData:      (AURA_STATES ?? {})[auraState] ?? { label: "None", color: "#78909c", desc: "" },
         powers:        rawPowers,
@@ -14002,7 +14154,9 @@ Hooks.once("init", function () {
 
       // Menu spec — every cost band has at least one Offense + Defense.
       // tier is the minimum tier required (1 = no gate). bucket determines column.
-      const MENU = _FT_SURGE_MENU;
+      // Class-exclusive entries (classFilter) only show for matching classes;
+      // entries with no classFilter are universal.
+      const MENU = _FT_SURGE_MENU.filter(e => !e.classFilter || _ftActorMatchesClass(actor, e.classFilter));
 
       // Group by cost.
       const byCost = {};
@@ -15206,7 +15360,8 @@ Hooks.once("init", function () {
       // Mirror that exactly. `getBurnBand` and `AURA_STATES` are module-level
       // imports already in scope.
       const _abBurn     = Number(resources.burn?.current ?? 0);
-      const _abBurnBand = (typeof getBurnBand === "function") ? getBurnBand(_abBurn) : { label: "Controlled", color: "#27ae60", desc: "Stable." };
+      const _abBurnClass = (typeof ftBurnClassFor === "function") ? ftBurnClassFor(actor) : null;
+      const _abBurnBand = (typeof getBurnBand === "function") ? getBurnBand(_abBurn, _abBurnClass?.bands) : { label: "Controlled", color: "#27ae60", desc: "Stable." };
       const _abAuraState = resources.aura?.state ?? "none";
       const _abAuraData  = (AURA_STATES ?? {})[_abAuraState] ?? { label: "None", color: "#78909c", desc: "" };
 
@@ -15426,6 +15581,7 @@ Hooks.once("init", function () {
         soulSmithState,
         harmonyMarshalState,
         burnBand:  _abBurnBand,
+        burnClass: _abBurnClass,
         auraState: _abAuraState,
         auraData:  _abAuraData,
         // 2026-05-13 — surface active pools so the NPC sheet can render the
