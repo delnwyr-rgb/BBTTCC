@@ -3524,7 +3524,39 @@ const _FT_SURGE_MENU = [
     fiction: "Pull them into the dream; they wake up sharper.", wired: true },
   { cost: 5, key: "dw-reality", tier: 4, bucket: "off", classFilter: ["dreamwalker"],
     label: "Reality Hack — party banks a reroll + one enemy rerolls its next attack at disadvantage",
-    fiction: "Rewrite the moment. The world barely notices.", wired: true }
+    fiction: "Rewrite the moment. The world barely notices.", wired: true },
+
+  // ─── Dreamwalker TRANCE (subclass) entries — gated by `trance`; Resonance → Surge ──
+  // Trance of the Quiet Sun — perception / de-escalation / non-lethal:
+  { cost: 1, key: "qs-attention", tier: 1, bucket: "narr", trance: "quiet-sun",
+    label: "Still Attention — you + allies within 30 ft bank a reroll (the stillness sees)",
+    fiction: "Stillness is the loudest thing.", wired: true },
+  { cost: 2, key: "qs-peace", tier: 2, bucket: "def", trance: "quiet-sun",
+    label: "Somnolent Peace — the next lethal blow against an ally drops them to 1, not dead",
+    fiction: "Sleep, not death. There's a difference, and you keep it.", wired: true },
+  { cost: 3, key: "qs-pause", tier: 3, bucket: "narr", trance: "quiet-sun",
+    label: "Radiant Pause — nearby enemies are Calmed (a contemplative beat)",
+    fiction: "For one round, everyone remembers they'd rather not.", wired: true },
+  // Trance of the Sapphire Gate — reposition / movement:
+  { cost: 1, key: "sg-touched", tier: 1, bucket: "def", trance: "sapphire-gate",
+    label: "Gate-Touched — carry an ally to safety: DR + a freed reaction",
+    fiction: "Every threshold is also a doorway.", wired: true },
+  { cost: 2, key: "sg-step", tier: 2, bucket: "narr", trance: "sapphire-gate",
+    label: "Sapphire Step — you + an ally reposition: each banks a reroll + a freed reaction",
+    fiction: "In one door, out another you remember.", wired: true },
+  { cost: 3, key: "sg-held", tier: 3, bucket: "def", trance: "sapphire-gate",
+    label: "Gate Held Open — allies within 30 ft bank a reroll + gain DR",
+    fiction: "Hold the way open; nobody falls through the cracks.", wired: true },
+  // Trance of the Thousand Faces — misdirection / social:
+  { cost: 1, key: "tf-face", tier: 1, bucket: "def", trance: "thousand-faces",
+    label: "Borrowed Face — misdirection: you gain DR + bank a reroll",
+    fiction: "Identity is negotiable.", wired: true },
+  { cost: 2, key: "tf-mirror", tier: 2, bucket: "off", trance: "thousand-faces",
+    label: "Mirror Read — a foe rolls its next attack at disadvantage + you bank a reroll",
+    fiction: "You wear their tell back at them.", wired: true },
+  { cost: 3, key: "tf-shared", tier: 3, bucket: "def", trance: "thousand-faces",
+    label: "Shared Face — you + an ally blur behind borrowed identities: both gain DR",
+    fiction: "Two of you, both wrong, both safe.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3568,6 +3600,15 @@ const _FT_MANDATE_SELF_KEYS = new Set(["acc-sync", "acc-group", "ovw-perimeter"]
 const _FT_DREAMWALKER_KEYS = new Set(["dw-omen", "dw-ward", "dw-shared", "dw-reality"]);
 // dw-omen self-targets (defaults to caster); dw-shared is an aura — neither needs a target.
 const _FT_DREAMWALKER_SELF_KEYS = new Set(["dw-omen", "dw-shared"]);
+
+// Dreamwalker Trance (subclass) Surge spend keys — routed to _ftTranceSurge.
+const _FT_TRANCE_KEYS = new Set([
+  "qs-attention", "qs-peace", "qs-pause",
+  "sg-touched", "sg-step", "sg-held",
+  "tf-face", "tf-mirror", "tf-shared"
+]);
+// Trance spends that target SELF / an aura (no single target needed).
+const _FT_TRANCE_SELF_KEYS = new Set(["qs-attention", "qs-pause", "sg-held", "tf-face"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3656,6 +3697,12 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
     return;
   }
+  // Dreamwalker Trance spends — non-aura/self ones need a target.
+  if (_FT_TRANCE_KEYS.has(effectKey) && !_FT_TRANCE_SELF_KEYS.has(effectKey)
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -3700,6 +3747,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftMandateSurge(actor, effectKey, tier);
   } else if (_FT_DREAMWALKER_KEYS.has(effectKey)) {
     chatExtra = await _ftDreamwalkerSurge(actor, effectKey, tier);
+  } else if (_FT_TRANCE_KEYS.has(effectKey)) {
+    chatExtra = await _ftTranceSurge(actor, effectKey, tier);
   } else if (_FT_HARMONY_KEYS.has(effectKey)) {
     chatExtra = await _ftHarmonySurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
@@ -3929,6 +3978,95 @@ async function _ftDreamwalkerCastGen(actor) {
   const got = await _ftBankSurge(actor, 1);
   if (got > 0) await actor.setFlag("fourththing", "dreamwalker.castGen", { round, count: count + 1 });
 }
+// Which Trance (subclass) is this actor? Flexible match on subclass id OR name.
+function _ftDreamwalkerTrance(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("quiet-sun")      || nm.includes("quiet sun"))      return "quiet-sun";
+    if (id.includes("sapphire-gate")  || nm.includes("sapphire gate"))  return "sapphire-gate";
+    if (id.includes("thousand-faces") || nm.includes("thousand faces")) return "thousand-faces";
+  }
+  return null;
+}
+// The nine Trance spends. "Resonance" → Surge; reuse the aidBanked reroll pipeline,
+// aegis-DR AE, toggleCondition (Calmed), relicWard, disAttackOnce, bonusActionAvailable
+// — no new consumers. (Exploration/social capstones stay as out-of-combat skin.)
+async function _ftTranceSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the ally";
+  const needTarget = (l) => `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ ${l} needs a target. Surge spent — GM may refund.</p>`;
+  const needToken  = (l) => `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ ${l} needs your token on the scene. Surge spent — GM may refund.</p>`;
+  const bankReroll = async (a, src) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const drAE = (name) => ({ name, img: "icons/svg/aura.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const myTok = () => actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  const alliesInAura = (ft) => { const m = myTok(); if (!m) return null; return (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && _ftDistanceBetweenTokens(m, t) <= ft); };
+  const foesInAura = (ft) => { const m = myTok(); if (!m) return null; const md = m.document?.disposition ?? 1; return (canvas.tokens?.placeables ?? []).filter(t => { if (!t?.actor) return false; const d = t.document?.disposition ?? 0; const foe = (md >= 0 && d < 0) || (md < 0 && d >= 0); return foe && _ftDistanceBetweenTokens(m, t) <= ft; }); };
+
+  switch (effectKey) {
+    // ── Trance of the Quiet Sun ──
+    case "qs-attention": {
+      const allies = alliesInAura(30) ?? [];
+      await bankReroll(actor, "quiet-sun");
+      for (const t of allies) if (t.actor.id !== actor.id) await bankReroll(t.actor, "quiet-sun");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8d8a0">☀ Still Attention — you and allies within 30 ft bank a reroll-lowest (the stillness sees clearly).</p>`;
+    }
+    case "qs-peace": {
+      if (!target) return needTarget("Somnolent Peace");
+      try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8d8a0">☀ Somnolent Peace — the next lethal blow against <b>${tname}</b> drops them to 1 Integrity (unconscious), not dead.</p>`;
+    }
+    case "qs-pause": {
+      const foes = foesInAura(30);
+      if (!foes) return needToken("Radiant Pause");
+      const n = [];
+      for (const t of foes) { try { await game.fourththing?.toggleCondition?.(t.actor, "calmed"); n.push(t.actor.name); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8d8a0">☀ Radiant Pause — ${n.length ? `<b>${n.join(", ")}</b> are` : "nearby enemies are"} Calmed: a contemplative beat where violence stalls.</p>`;
+    }
+    // ── Trance of the Sapphire Gate ──
+    case "sg-touched": {
+      if (!target) return needTarget("Gate-Touched");
+      await _ftCreateAllyAE(target, drAE(`Gate-Touched (DR ${tier})`));
+      try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Gate-Touched — carried <b>${tname}</b> through to safety: DR ${tier} and a freed reaction.</p>`;
+    }
+    case "sg-step": {
+      if (!target) return needTarget("Sapphire Step");
+      await bankReroll(actor, "sapphire-gate"); await bankReroll(target, "sapphire-gate");
+      try { await actor.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Sapphire Step — you and <b>${tname}</b> step through a threshold: each banks a reroll and a freed reaction (reposition).</p>`;
+    }
+    case "sg-held": {
+      const allies = alliesInAura(30);
+      if (!allies) return needToken("Gate Held Open");
+      const names = [];
+      for (const t of allies) { await bankReroll(t.actor, "sapphire-gate"); await _ftCreateAllyAE(t.actor, drAE(`Gate Held (DR ${tier})`)); names.push(t.actor.name); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🚪 Gate Held Open — ${names.length ? `<b>${names.join(", ")}</b>` : "allies within 30 ft"} bank a reroll and gain DR ${tier}.</p>`;
+    }
+    // ── Trance of the Thousand Faces ──
+    case "tf-face": {
+      await _ftCreateAllyAE(actor, drAE(`Borrowed Face (DR ${tier})`));
+      await bankReroll(actor, "thousand-faces");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🎭 Borrowed Face — they can't tell which face is real: you gain DR ${tier} and bank a reroll.</p>`;
+    }
+    case "tf-mirror": {
+      if (!target) return needTarget("Mirror Read");
+      try { await target.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) {}
+      await bankReroll(actor, "thousand-faces");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🎭 Mirror Read — you wear <b>${tname}</b>'s tell back at them: it rolls its next attack at disadvantage, and you bank a reroll.</p>`;
+    }
+    case "tf-shared": {
+      if (!target) return needTarget("Shared Face");
+      await _ftCreateAllyAE(actor, drAE(`Shared Face (DR ${tier})`));
+      await _ftCreateAllyAE(target, drAE(`Shared Face (DR ${tier})`));
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🎭 Shared Face — you and <b>${tname}</b> blur behind borrowed identities: both gain DR ${tier}.</p>`;
+    }
+  }
+  return "";
+}
+
 // The four Dreamwalker spends. Surge-cost; reuse the aidBanked reroll pipeline,
 // aegis-DR AE, a direct Clarity grant, and the disAttackOnce attack-disadvantage
 // flag — no new consumers. (Echo Dice folded into Surge; Dream-Cache kept separate.)
@@ -14876,7 +15014,8 @@ Hooks.once("init", function () {
       const MENU = _FT_SURGE_MENU.filter(e =>
         (!e.classFilter || _ftActorMatchesClass(actor, e.classFilter)) &&
         (!e.forge || _ftSoulSmithForge(actor) === e.forge) &&
-        (!e.mandate || _ftHarmonyMandate(actor) === e.mandate));
+        (!e.mandate || _ftHarmonyMandate(actor) === e.mandate) &&
+        (!e.trance || _ftDreamwalkerTrance(actor) === e.trance));
 
       // Group by cost.
       const byCost = {};
