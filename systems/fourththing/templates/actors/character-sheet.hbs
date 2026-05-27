@@ -754,6 +754,7 @@
           <div class="ft-resource-controls">
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_initiate" data-tooltip="Tier 1 — Harmony Initiate. +1 Diplomacy, +1 Insight, faction Soft Power +10% (narrative).">T1 Initiate{{#if harmonyMarshalState.l1GrantsApplied}} ✓{{/if}}</button>
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_rallying_words" data-tooltip="Rallying Words (bonus action) — target an ally; bank reroll-lowest on their next roll this scene.">📣 Rallying Words</button>
+            <button type="button" class="ft-res-btn" data-action="ftSurgeSpend" data-tooltip="Spend banked Surge on your Marshal abilities: Rallying Words (1), Ease Attrition (2), Rally to Me (2·T2), Unity Flourish (3·T3), Conductor's Crescendo (5·T4).">⚡ Spend Surge</button>
             {{#if harmonyMarshalState.tierAtLeast2}}
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="harmony_marshal_attrition_easer" data-tooltip="Tier 2 — Attrition Easer. 1/strategic turn: spend 1 Soft Power OP → -1 Attrition faction-wide.">T2 Attrition Easer{{#if harmonyMarshalState.attritionEaserUsedThisTurn}} (used){{/if}}</button>
             {{/if}}

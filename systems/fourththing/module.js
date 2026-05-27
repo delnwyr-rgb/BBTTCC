@@ -14385,7 +14385,7 @@ Hooks.once("init", function () {
         content: html,
         buttons: { close: { label: "Close" } },
         default: "close"
-      });
+      }, { width: 740 }); // wide enough to show all 4 columns (Offense/Defense/Heal/Narrative); default Dialog width clipped Heal+Narrative — where Forge-Weld / Rallying Words / Ease Attrition live
       dialog.render(true);
 
       Hooks.once("renderDialog", (d, $html) => {
