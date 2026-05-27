@@ -373,6 +373,16 @@ export function collectRerolls(actor, query = {}) {
       _ancestryReroll: true
     });
   }
+  // Aid / Rallying Words — banked reroll-lowest grants on the roller's
+  // flags.fourththing.aidBanked array (pushed by Aid, Rallying Words, Rally to Me,
+  // Unity Flourish, Conductor's Crescendo). Each entry = one reroll-lowest on a
+  // check / save / attack. ONE entry is popped via consumeAidReroll if used.
+  const _aid = actor?.flags?.fourththing?.aidBanked;
+  if (Array.isArray(_aid) && _aid.some(b => b?.kind === "reroll-lowest")) {
+    const ctxOk = !wantContext || wantContext === "check" || wantContext === "save"
+               || wantContext === "attack" || wantContext === "caster-check";
+    if (ctxOk) out.push({ mode: "reroll-lowest", sourceItemName: "Aid (Rallying Words)", sourceItemId: null, _aid: true });
+  }
   return out;
 }
 
@@ -414,6 +424,21 @@ export async function consumeAncestryReroll(actor, applied) {
   if (!used) return;
   try { await actor.update({ "flags.fourththing.ancestry.-=oneShotReroll": null }); }
   catch (e) { console.warn("Ancestry reroll consume failed", e); }
+}
+
+// Consume ONE banked Aid / Rallying-Words reroll-lowest if it was used on the
+// just-applied reroll list. Call AFTER applyRerollGrants, alongside the others.
+// (Makes Aid, Rallying Words, and all Harmony Marshal rally abilities auto-fire.)
+export async function consumeAidReroll(actor, applied) {
+  if (!actor || !Array.isArray(applied) || !applied.length) return;
+  const used = applied.some(a => a?.source === "Aid (Rallying Words)" || a?.sourceItemName === "Aid (Rallying Words)");
+  if (!used) return;
+  const banked = Array.isArray(actor.flags?.fourththing?.aidBanked) ? [...actor.flags.fourththing.aidBanked] : [];
+  const i = banked.findIndex(b => b?.kind === "reroll-lowest");
+  if (i < 0) return;
+  banked.splice(i, 1);
+  try { await actor.update({ "flags.fourththing.aidBanked": banked }); }
+  catch (e) { console.warn("Aid reroll consume failed", e); }
 }
 
 // Apply reroll grants to a freshly-evaluated Roll. Mutates dieResults in

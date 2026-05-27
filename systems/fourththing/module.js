@@ -63,6 +63,7 @@ import {
   consumeAnnotationReroll,
   consumePaceReroll,
   consumeAncestryReroll,
+  consumeAidReroll,
   collectResourceGrants,
   fireResourceGrants,
   collectTriggers,
@@ -4115,6 +4116,19 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#b8d896">📣 <b>${target.name}</b> banks reroll-lowest on their next roll this scene.</p>`;
   }
 
+  const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
+  const bankReroll = async (a, src) => {
+    const b = a.getFlag?.("fourththing", "aidBanked") ?? [];
+    b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src });
+    try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+  };
+  const alliesInAura = (ft) => {
+    const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+    if (!myTok) return null;
+    return (canvas.tokens?.placeables ?? []).filter(t =>
+      t?.actor && (t.document?.disposition ?? 0) >= 0 && _ftDistanceBetweenTokens(myTok, t) <= ft);
+  };
+
   if (effectKey === "ease-attrition") {
     if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Ease Attrition needs a target ally. Surge spent — GM may refund.</p>`;
     const sys = target.system?.system ?? target.system ?? {};
@@ -4123,20 +4137,47 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
     const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
     const amount = Math.max(0, Number(roll.total) || 0);
     const next   = Math.min(max, cur + amount);
-    const banked = next - cur;
+    const healed = next - cur;
     try { await target.update({ "system.integrity.value": next }); } catch (e) { /* silent */ }
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⚖ Eased <b>${target.name}</b>: +${banked} integrity (1d6+${tier}=${amount}), ${cur} → ${next}/${max}, and clear one condition. <span style="opacity:0.6">(GM clears the condition.)</span></p>`;
+    const k = NEG.find(x => sys?.conditions?.[x] === true);
+    let cl = "";
+    if (k) { try { await game.fourththing?.toggleCondition?.(target, k); cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`; } catch (e) {} }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⚖ Eased <b>${target.name}</b>: +${healed} integrity (1d6+${tier}=${amount}), ${cur} → ${next}/${max}${cl}.</p>`;
   }
 
-  // Rally to Me / Unity Flourish / Conductor's Crescendo — one-shot flag + chat.
-  try { await actor.setFlag("fourththing", `surge.oneShot.${effectKey}`, { tier, target: target?.id ?? null, appliedAt: Date.now() }); }
-  catch (e) { /* silent */ }
-  if (effectKey === "rally-to-me")
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Rally to Me — <b>${target?.name ?? "an ally"}</b> may immediately take a reaction or basic action out of turn. <span style="opacity:0.6">(GM grants.)</span></p>`;
-  if (effectKey === "unity-flourish")
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🎼 Unity Flourish — allies within 30 ft gain +1 to checks until the start of your next turn. <span style="opacity:0.6">(GM applies.)</span></p>`;
-  if (effectKey === "conductors-crescendo")
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🎺 Conductor's Crescendo — allies within 30 ft reroll all 1s this round and each clears one condition. <span style="opacity:0.6">(1/scene; GM applies.)</span></p>`;
+  // ── Rally to Me — embolden one ally: bank a reroll + free a reaction ──
+  if (effectKey === "rally-to-me") {
+    if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Rally to Me needs a target ally. Surge spent — GM may refund.</p>`;
+    await bankReroll(target, "rally-to-me");
+    try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🤝 Rally to Me — <b>${target.name}</b> banks a reroll-lowest and may immediately take a reaction (bonus action freed).</p>`;
+  }
+
+  // ── Unity Flourish — the whole line: every ally within 30 ft banks a reroll ──
+  if (effectKey === "unity-flourish") {
+    const allies = alliesInAura(30);
+    if (!allies) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Unity Flourish needs your token on the scene. Surge spent — GM may refund.</p>`;
+    const names = [];
+    for (const t of allies) { await bankReroll(t.actor, "unity-flourish"); names.push(t.actor.name); }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🎼 Unity Flourish — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 30 ft bank"} a reroll-lowest on their next roll.</p>`;
+  }
+
+  // ── Conductor's Crescendo — capstone: party banks a reroll + clears a condition ──
+  if (effectKey === "conductors-crescendo") {
+    const allies = alliesInAura(30);
+    if (!allies) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Conductor's Crescendo needs your token on the scene. Surge spent — GM may refund.</p>`;
+    const lines = [];
+    for (const t of allies) {
+      const a = t.actor;
+      await bankReroll(a, "conductors-crescendo");
+      const ts = a.system?.system ?? a.system ?? {};
+      const k = NEG.find(x => ts?.conditions?.[x] === true);
+      let cl = "";
+      if (k) { try { await game.fourththing?.toggleCondition?.(a, k); cl = ` (−${FT?.CONDITIONS?.[k]?.label ?? k})`; } catch (e) {} }
+      lines.push(`${a.name}${cl}`);
+    }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🎺 Conductor's Crescendo — ${lines.length ? `<b>${lines.join(", ")}</b>` : "allies within 30 ft"} each bank a reroll-lowest and clear a condition.</p>`;
+  }
   return "";
 }
 
@@ -9474,6 +9515,7 @@ Hooks.once("init", function () {
     if (_dw.advantage) rerollGrants.push({ sourceItemName: "Fractal Self", mode: "reroll-lowest" });
     const rerollResult = await applyRerollGrants(roll, rerollGrants, totalBonus);
     await consumeAnnotationReroll(actor, rerollResult.applied);
+    await consumeAidReroll(actor, rerollResult.applied);
     await consumePaceReroll(actor, rerollResult.applied);
     await consumeAncestryReroll(actor, rerollResult.applied);
     // Consume any DW one-shots used on this roll (omen d6, foresight d4,
@@ -9663,6 +9705,7 @@ Hooks.once("init", function () {
     }
     const rerollResult = await applyRerollGrants(roll, rerollGrants, posTotal - totalNoise);
     await consumeAnnotationReroll(actor, rerollResult.applied);
+    await consumeAidReroll(actor, rerollResult.applied);
 
     // Restraint pass — bank pull-the-punch, then consume any prior banked die.
     let pulled = 0;
@@ -10246,6 +10289,7 @@ Hooks.once("init", function () {
     }
     const rerollResult = await applyRerollGrants(roll, rerollGrants, total_mod);
     await consumeAnnotationReroll(actor, rerollResult.applied);
+    await consumeAidReroll(actor, rerollResult.applied);
 
     // Restraint pass — bank pull-the-punch, then consume any prior banked die.
     let pulled = 0;
