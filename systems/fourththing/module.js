@@ -9252,6 +9252,192 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
 // Steward's past life — name, role, portrait, notes — and which members are
 // pre-selected at spend time via defaultPresent.
 
+// ─── Echo Roster generator (LLM + offline fallback) ─────────────────────────────
+// "You are not your crew. You HAVE a crew." — Mal. This invents past-life roster
+// members (companions / rivals / mentors) so players can CURATE instead of authoring
+// from a blank page. Uses the bbttcc-mal-voice Anthropic adapter when a key is
+// configured; otherwise a self-contained procedural generator keeps the button
+// working with zero setup. Output shape is always: [{ name, role, notes }].
+
+const FT_ECHO_FLAVOR_PRIMER = `BAD EDEN SETTING (keep everything inside this world):
+Bad Eden is a post-Shattering world: reality fractured into hexes and is being slowly,
+violently repaired (the Great Work). The tone is gritty, occult, hopeful-despite-itself.
+Magic is alignment with deep structure (the Tree, the Sephirah, Leylines, the Spark),
+not flashy spellcasting — and it always exacts a cost. People are competent but mortal,
+scarred by collapse, politically messy: no pure heroes or villains. Real factions/places
+for TEXTURE (echo this register, do not copy): the Tanneritos (mall-dwellers who treat
+the apocalypse as a market correction), the Circuit Riders (a robot crew led by a human
+posing as an AI god), the Valhaulans (patchwork-airship sky-pirates), Monodynamic
+Industries, the Jackalopes; places like Port Kudzu, the Bedlam Barrens, the Polygon
+Forests, Khezek Tor, Thirdword. Names are gritty / functional / occasionally absurdist
+(Sklar Bjornholt, Farrier, Captain Robot) — NOT Tolkien fantasy. No elves, dwarves,
+wizards, or taverns.
+
+CANON: a Steward HAS a crew; they are not their crew. Each crew/occult entry is a PAST
+LIFE — an organized group the Steward once ran with. Roster members are the companions,
+rivals, and mentors from that life: people with skills, debts, and unfinished business.`;
+
+// Canonical Crew Types & Occult Associations → specialty + moral-drift + role pool.
+// _ftResolveEchoArchetype matches by keyword, so minor name drift ("Covert Ops Cell"
+// vs "Covert Ops Cells") still resolves to the right archetype.
+const FT_ECHO_ARCHETYPES = [
+  // ── Crew Types ──
+  { kind: "crew", keys: ["verdant", "stalker"], specialty: "wilderness infiltration & forest ops", drift: "drift toward isolationist self-reliance", roles: ["Trail-scout", "Poacher", "Forest tracker", "Quiet killer", "Forager-medic"] },
+  { kind: "crew", keys: ["ashbound", "survivor"], specialty: "enduring scarcity & ruin-salvage", drift: "drift toward grim fatalism", roles: ["Salvager", "Ration-keeper", "Ruin-delver", "Burn-medic", "Last-stand veteran"] },
+  { kind: "crew", keys: ["gridbreaker"], specialty: "sabotage of old-world tech & infrastructure", drift: "drift toward gleeful nihilism", roles: ["Demolitionist", "Wire-witch", "Grid-saboteur", "Scrap-coder", "Lookout"] },
+  { kind: "crew", keys: ["ironbound", "ascendant"], specialty: "heavy industry & disciplined war-labor", drift: "drift toward rigid authoritarianism", roles: ["Forgehand", "Drill-sergeant", "Armorer", "Foreman", "Heavy gunner"] },
+  { kind: "crew", keys: ["abyssal", "cartographer"], specialty: "mapping the deep, drowned & forbidden", drift: "drift toward obsessive secrecy", roles: ["Deep-diver", "Chart-keeper", "Pressure-pilot", "Lantern-bearer", "Sounding-clerk"] },
+  { kind: "crew", keys: ["storm", "warden"], specialty: "weathering hazards & holding the line", drift: "drift toward fortress paranoia", roles: ["Stormcaller", "Wall-warden", "Signal-watch", "Storm-pilot", "Relief runner"] },
+  { kind: "crew", keys: ["covert", "ops"], specialty: "infiltration, intel & deniable work", drift: "drift toward libertarian anarchism", roles: ["Infiltrator", "Fixer", "Cut-out", "Forger", "Sniper"] },
+  { kind: "crew", keys: ["cultural", "ambassador"], specialty: "bridging hostile cultures", drift: "drift toward rootless relativism", roles: ["Translator", "Rite-keeper", "Go-between", "Archivist", "Hostage-broker"] },
+  { kind: "crew", keys: ["diplomatic", "envoy"], specialty: "treaties & quiet leverage", drift: "drift toward cynical brokerage", roles: ["Envoy", "Ledger-clerk", "Bodyguard", "Spy-attaché", "Protocol-keeper"] },
+  { kind: "crew", keys: ["mercenary"], specialty: "efficient paid violence", drift: "drift toward amoral authoritarianism", roles: ["Sellsword", "Breacher", "Paymaster", "Field-medic", "Heavy"] },
+  { kind: "crew", keys: ["militia"], specialty: "citizen defense of home ground", drift: "drift toward insular zealotry", roles: ["Volunteer", "Drill-corporal", "Watch-captain", "Powder-keeper", "Stretcher-bearer"] },
+  { kind: "crew", keys: ["peacekeeper"], specialty: "order-keeping & de-escalation", drift: "drift toward heavy-handed control", roles: ["Marshal", "Mediator", "Jailer", "Riot-warden", "Investigator"] },
+  // ── Occult Associations ──
+  { kind: "occult", keys: ["alchem"], specialty: "rebalancing matter's hidden equations", drift: "cost: Residue — what they transmute leaves a stain", roles: ["Transmuter", "Still-tender", "Reagent-hunter", "Poisoner", "Glasswright"] },
+  { kind: "occult", keys: ["gnostic"], specialty: "piercing the false world to the true", drift: "cost: Alienation — the more they see, the less they belong", roles: ["Heretic-scholar", "Dream-reader", "Iconoclast", "Whisper-confessor", "Lens-grinder"] },
+  { kind: "occult", keys: ["goetic", "summoner"], specialty: "binding & bargaining with dangerous things", drift: "cost: Debt — every pact comes due", roles: ["Circle-warder", "Names-keeper", "Bound-thing handler", "Sigil-cutter", "Banisher"] },
+  { kind: "occult", keys: ["kabbal"], specialty: "manipulating the scaffolding of reality", drift: "cost: Rigidity — the structure starts dictating to them", roles: ["Tree-reader", "Letter-mason", "Sefirah-tuner", "Gematria-clerk", "Path-walker"] },
+  { kind: "occult", keys: ["rosicru"], specialty: "secret-society healing & hidden orders", drift: "cost: Secrecy — loyalty to the order above all", roles: ["Adept", "Cipher-keeper", "Rose-healer", "Vault-warden", "Initiate-master"] },
+  { kind: "occult", keys: ["tarot", "card"], specialty: "reading & nudging fate's arcana", drift: "cost: Fatalism — they stop fighting the draw", roles: ["Reader", "Deck-keeper", "Fate-broker", "Arcana-painter", "Querent-guide"] },
+  { kind: "occult", keys: ["shaman"], specialty: "walking between flesh and spirit", drift: "cost: Possession — the spirits ride back", roles: ["Spirit-walker", "Drum-keeper", "Mask-maker", "Threshold-guide", "Beast-speaker"] },
+  { kind: "occult", keys: ["prophet", "oracle"], specialty: "speaking what is coming", drift: "cost: Burden — they cannot un-know the future", roles: ["Seer", "Voice", "Omen-reader", "Scribe of warnings", "Mad witness"] },
+  { kind: "occult", keys: ["biomanc"], specialty: "reshaping living flesh", drift: "cost: Drift — their own body keeps changing", roles: ["Flesh-shaper", "Graft-surgeon", "Plague-tender", "Bonewright", "Breeder of useful things"] },
+  { kind: "occult", keys: ["exorcist"], specialty: "casting out what should not be", drift: "cost: Scarring — each casting-out marks them", roles: ["Cleanser", "Salt-bearer", "Confessor", "Chain-warden", "Vigil-keeper"] }
+];
+
+const FT_ECHO_GEN_DEFAULT = {
+  crew: { specialty: "surviving the broken world together", drift: "drift under pressure", roles: ["Operator", "Fixer", "Scout", "Medic", "Muscle", "Quartermaster"] },
+  occult: { specialty: "trafficking with deep forces", drift: "cost: every working takes something back", roles: ["Adept", "Ritualist", "Diviner", "Warder", "Initiate"] }
+};
+
+const _FT_ECHO_NAMES = {
+  given: ["Sklar", "Farrier", "Junko", "Bram", "Vell", "Odile", "Cole", "Marn", "Tindra", "Hesper", "Garrick", "Lune", "Pike", "Damaris", "Rax", "Cinder", "Tally", "Ledger", "Mireille", "Boaz", "Senna", "Knox", "Wren", "Dov"],
+  sur: ["Holt", "Brask", "Vane", "Corvi", "Stell", "Marrow", "Bjornholt", "Sallow", "Okafor", "Drummond", "Vasquez", "Ketch", "Halloran", "Pell", "Sandoval", "Crane", "Voss", "Mott", "Renko", "Tarn"],
+  occultEpithet: ["the Unsleeping", "Threadbare", "of the Ninth Knock", "Saltmouth", "who counts the doors", "the Recurrent", "Greywick", "Ashthroat", "the Twice-Bound", "No-Shadow", "the Patient", "of the Long Tally"]
+};
+
+const _FT_ECHO_HOOKS = {
+  deed: [
+    "ran salvage through the Bedlam Barrens",
+    "held a leyline node through three bad winters",
+    "lost a hand to a misfired Spark and kept working",
+    "talked a Valhaulan boarding party back onto its airship",
+    "buried more of the old crew than they'll admit",
+    "mapped a drowned hex no one else came back from",
+    "kept the lights on in Port Kudzu when the grid died",
+    "walked out of a sacked hex with the ledger and nothing else"
+  ],
+  rel: [
+    "owed you their life and never quite forgave it",
+    "trained you, then drifted when the work turned ugly",
+    "rode out of the Polygon Forests at your side",
+    "still sends word — mostly threats, sometimes warnings",
+    "vanished after the Shattering and surfaced here, changed",
+    "split the take with you once and has been counting ever since",
+    "swore they'd never work with you again, and keeps showing up",
+    "carried you out when you couldn't carry yourself"
+  ]
+};
+
+function _ftEchoPick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function _ftResolveEchoArchetype(entryName, kind) {
+  const hay = String(entryName ?? "").toLowerCase();
+  const k = (kind === "occult") ? "occult" : "crew";
+  const hit = FT_ECHO_ARCHETYPES.find(a => a.kind === k && a.keys.some(key => hay.includes(key)));
+  if (hit) return hit;
+  const def = FT_ECHO_GEN_DEFAULT[k];
+  return { kind: k, keys: [], specialty: def.specialty, drift: def.drift, roles: def.roles };
+}
+
+// Offline procedural generator — always works, no API key required.
+function _ftEchoGenFallback({ entryName, kind, count = 3, archetype, taken = [] } = {}) {
+  const k = (kind === "occult") ? "occult" : "crew";
+  const arc = archetype || _ftResolveEchoArchetype(entryName, k);
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  const used = new Set((taken || []).map(n => String(n).toLowerCase()));
+  const out = [];
+  let guard = 0;
+  while (out.length < count && guard++ < count * 12) {
+    const name = (k === "occult" && Math.random() < 0.5)
+      ? `${_ftEchoPick(_FT_ECHO_NAMES.given)} ${_ftEchoPick(_FT_ECHO_NAMES.occultEpithet)}`
+      : `${_ftEchoPick(_FT_ECHO_NAMES.given)} ${_ftEchoPick(_FT_ECHO_NAMES.sur)}`;
+    if (used.has(name.toLowerCase())) continue;
+    used.add(name.toLowerCase());
+    out.push({
+      name,
+      role: _ftEchoPick(arc.roles),
+      notes: `${cap(_ftEchoPick(_FT_ECHO_HOOKS.deed))}; ${_ftEchoPick(_FT_ECHO_HOOKS.rel)}.`
+    });
+  }
+  return out;
+}
+
+function _ftParseEchoGenJson(text) {
+  let s = String(text ?? "").trim();
+  s = s.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "");
+  const start = s.indexOf("[");
+  const end = s.lastIndexOf("]");
+  if (start >= 0 && end > start) s = s.slice(start, end + 1);
+  try {
+    const arr = JSON.parse(s);
+    return Array.isArray(arr) ? arr.filter(x => x && typeof x === "object") : [];
+  } catch (_e) {
+    return [];
+  }
+}
+
+// Main entry: LLM if a bbttcc-mal-voice key is configured, else procedural fallback.
+// Returns { ok, source: "llm"|"offline", members: [{name, role, notes}], costUSD }.
+async function ftGenerateEchoRosterMembers({ entryName, kind = "crew", count = 3, actor = null, existingNames = [] } = {}) {
+  const k = (kind === "occult") ? "occult" : "crew";
+  const n = Math.max(1, Math.min(8, Number(count) || 3));
+  const archetype = _ftResolveEchoArchetype(entryName, k);
+  const taken = (existingNames || []).filter(Boolean);
+
+  let apiKey = "";
+  try { apiKey = game.bbttcc?.mal?.settings?.apiKey?.() || ""; } catch (_e) { apiKey = ""; }
+  const call = game.bbttcc?.mal?.providers?.anthropic?.call;
+
+  if (apiKey && typeof call === "function") {
+    try {
+      const faction = (actor && typeof getLinkedFaction === "function") ? getLinkedFaction(actor) : null;
+      const kindLabel = (k === "occult") ? "Occult Association" : "Awesome Crew";
+      const systemPrompt = `You generate fictional roster members for a tabletop RPG set in Bad Eden. Return ONLY a JSON array — no prose, no code fences. Each element: {"name": string, "role": string (a short job/specialty, 1-4 words), "hook": string (ONE sentence: who they were to the Steward — a debt, scar, or piece of unfinished business)}. Keep names and hooks vivid, grounded, and specific to this world.\n\n${FT_ECHO_FLAVOR_PRIMER}`;
+      const userMessage = JSON.stringify({
+        task: `Invent ${n} roster members from one of the Steward's past lives.`,
+        pastLife: String(entryName ?? "").trim(),
+        kind: kindLabel,
+        archetypeSpecialty: archetype.specialty,
+        archetypeDrift: archetype.drift,
+        roleInspiration: archetype.roles,
+        stewardName: actor?.name || null,
+        factionName: faction?.name || null,
+        avoidDuplicateNames: taken,
+        count: n,
+        outputFormat: '[{"name":"...","role":"...","hook":"..."}]'
+      });
+      const res = await call({ systemPrompt, userMessage, maxTokens: 90 + n * 110, temperature: 0.95 });
+      if (res?.ok && res.text) {
+        const parsed = _ftParseEchoGenJson(res.text);
+        const members = parsed.slice(0, n).map(m => ({
+          name: String(m.name ?? "").trim(),
+          role: String(m.role ?? "").trim(),
+          notes: String(m.hook ?? m.notes ?? "").trim()
+        })).filter(m => m.name);
+        if (members.length) return { ok: true, source: "llm", members, costUSD: Number(res.costEstimateUSD) || 0 };
+      }
+      console.warn("Echo Gen | LLM returned no usable members; using offline fallback.", res?.error || "");
+    } catch (e) {
+      console.warn("Echo Gen | LLM call failed; using offline fallback:", e?.message || e);
+    }
+  }
+
+  return { ok: true, source: "offline", members: _ftEchoGenFallback({ entryName, kind: k, count: n, archetype, taken }), costUSD: 0 };
+}
+
 function buildEchoRosterMemberRowHTML(member = {}) {
   const id = String(member.id ?? foundry.utils.randomID(12));
   const portrait = String(member.portrait ?? "");
@@ -9302,7 +9488,8 @@ function buildEchoRosterHTML(entryName, kind, roster) {
     <div class="ft-roster-scroll" style="max-height:60vh;overflow-y:auto;padding-right:.3rem;">
       <div class="ft-roster-rows" data-roster-rows>${rowsHtml}</div>
     </div>
-    <div style="display:flex;justify-content:flex-end;margin-top:.5rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-top:.5rem;">
+      <button type="button" data-roster-action="suggest" title="Generate setting-flavored members you can keep, edit, or delete — no writing required" style="padding:.3rem .7rem;"><i class="fas fa-wand-magic-sparkles"></i> Suggest members</button>
       <button type="button" data-roster-action="add-member" style="padding:.3rem .7rem;"><i class="fas fa-user-plus"></i> Add Member</button>
     </div>
   </div>`;
@@ -9341,6 +9528,39 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
           $rows.append(rowHtml);
           // Focus the new row's name input.
           $rows.find(".ft-roster-row").last().find("[data-row-field='name']").trigger("focus");
+        });
+
+        // ✨ Suggest members — LLM if a bbttcc-mal-voice key is configured, else
+        // procedural fallback. Appends rows the player can keep / edit / delete.
+        $html.find("[data-roster-action='suggest']").on("click", async (ev) => {
+          ev.preventDefault();
+          const btn = ev.currentTarget;
+          const $rows = $html.find("[data-roster-rows]");
+          const existingNames = $rows.find("[data-row-field='name']")
+            .map((_i, el) => String(el.value ?? "").trim()).get().filter(Boolean);
+          const original = btn.innerHTML;
+          btn.disabled = true;
+          btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Summoning…`;
+          try {
+            const result = await ftGenerateEchoRosterMembers({ entryName, kind, count: 3, actor, existingNames });
+            const members = result?.members ?? [];
+            if (!members.length) {
+              ui.notifications?.warn("No members generated — try again.");
+            } else {
+              $rows.children(".ft-roster-empty").remove();
+              members.forEach(m => $rows.append(buildEchoRosterMemberRowHTML(m)));
+              const via = result.source === "llm"
+                ? `Mal${result.costUSD ? ` · ~$${result.costUSD.toFixed(4)}` : ""}`
+                : "offline tables";
+              ui.notifications?.info(`Added ${members.length} suggested member${members.length === 1 ? "" : "s"} (${via}). Edit or delete any before saving.`);
+            }
+          } catch (e) {
+            console.warn("Echo Roster | suggest failed:", e);
+            ui.notifications?.warn("Could not generate members.");
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = original;
+          }
         });
 
         // Per-row actions: pick portrait, remove.
@@ -9499,7 +9719,11 @@ Hooks.once("init", function () {
           const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
           return openEchoRosterEditor(actor, entryName, kind);
         },
-        slug: ftSlugifyEchoName
+        slug: ftSlugifyEchoName,
+        generate: (actorOrId, entryName, kind, count) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return ftGenerateEchoRosterMembers({ actor, entryName, kind, count });
+        }
       }
     },
     _syncAuraEffects: syncAuraEffects,
