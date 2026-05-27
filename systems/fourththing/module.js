@@ -3510,7 +3510,21 @@ const _FT_SURGE_MENU = [
     fiction: "They refuse to fall because you were watching.", wired: true },
   { cost: 5, key: "res-nonelost", tier: 4, bucket: "heal", mandate: "resolve",
     label: "None Lost — refuse a death: restore a fallen ally to half + ward (1/fight)",
-    fiction: "Not this one. Not today.", wired: true }
+    fiction: "Not this one. Not today.", wired: true },
+
+  // ─── Dreamwalker (Oracle) class-exclusive entries — dream/omen/manifestation ──
+  { cost: 1, key: "dw-omen", tier: 1, bucket: "narr", classFilter: ["dreamwalker"],
+    label: "Omen — you or an ally banks a reroll on their next roll (you saw the thread)",
+    fiction: "The future is just memory pointed the other way.", wired: true },
+  { cost: 2, key: "dw-ward", tier: 2, bucket: "def", classFilter: ["dreamwalker"],
+    label: "Dream Ward — an ally drifts into a protective dreamstate: DR + a reroll",
+    fiction: "Sleep is the safest place there is, briefly.", wired: true },
+  { cost: 3, key: "dw-shared", tier: 3, bucket: "heal", classFilter: ["dreamwalker"],
+    label: "Shared Dream — allies within 30 ft bank a reroll + draw 1 Clarity",
+    fiction: "Pull them into the dream; they wake up sharper.", wired: true },
+  { cost: 5, key: "dw-reality", tier: 4, bucket: "off", classFilter: ["dreamwalker"],
+    label: "Reality Hack — party banks a reroll + one enemy rerolls its next attack at disadvantage",
+    fiction: "Rewrite the moment. The world barely notices.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3549,6 +3563,11 @@ const _FT_MANDATE_KEYS = new Set([
 ]);
 // Mandate spends that target SELF / an aura (no single ally target needed).
 const _FT_MANDATE_SELF_KEYS = new Set(["acc-sync", "acc-group", "ovw-perimeter"]);
+
+// Dreamwalker (Oracle) Surge spend keys — routed to _ftDreamwalkerSurge.
+const _FT_DREAMWALKER_KEYS = new Set(["dw-omen", "dw-ward", "dw-shared", "dw-reality"]);
+// dw-omen self-targets (defaults to caster); dw-shared is an aura — neither needs a target.
+const _FT_DREAMWALKER_SELF_KEYS = new Set(["dw-omen", "dw-shared"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3631,6 +3650,12 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target ally — target a token first, then re-open the menu.`);
     return;
   }
+  // Dreamwalker spends — dw-ward (ally) + dw-reality (enemy) need a target.
+  if (_FT_DREAMWALKER_KEYS.has(effectKey) && !_FT_DREAMWALKER_SELF_KEYS.has(effectKey)
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -3673,6 +3698,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftForgeSurge(actor, effectKey, tier);
   } else if (_FT_MANDATE_KEYS.has(effectKey)) {
     chatExtra = await _ftMandateSurge(actor, effectKey, tier);
+  } else if (_FT_DREAMWALKER_KEYS.has(effectKey)) {
+    chatExtra = await _ftDreamwalkerSurge(actor, effectKey, tier);
   } else if (_FT_HARMONY_KEYS.has(effectKey)) {
     chatExtra = await _ftHarmonySurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
@@ -3889,6 +3916,74 @@ function _ftHarmonyMandate(actor) {
 // The nine Mandate spends. Surge-cost (placeholder "Command" → Surge); reuse the
 // aidBanked reroll pipeline (now auto-firing), aegis-DR AEs, toggleCondition,
 // relicWard prevent-drop, integrity heal, bonusActionAvailable — no new consumers.
+// ─── Dreamwalker (Oracle) Surge spends + cast generation ─────────────────────
+// Flavor gen: working the Tree fuels foresight — a Dreamwalker banks +1 Surge on a
+// successful manifestation cast (capped +2/round). Called from castManifestation.
+async function _ftDreamwalkerCastGen(actor) {
+  if (!_ftActorMatchesClass(actor, "dreamwalker")) return;
+  if (!_ftSurgeAllowed(actor)) return; // foe-gating
+  const round = Number(game.combat?.round ?? 0);
+  const f = actor.flags?.fourththing?.dreamwalker?.castGen ?? {};
+  const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+  if (count >= 2) return;
+  const got = await _ftBankSurge(actor, 1);
+  if (got > 0) await actor.setFlag("fourththing", "dreamwalker.castGen", { round, count: count + 1 });
+}
+// The four Dreamwalker spends. Surge-cost; reuse the aidBanked reroll pipeline,
+// aegis-DR AE, a direct Clarity grant, and the disAttackOnce attack-disadvantage
+// flag — no new consumers. (Echo Dice folded into Surge; Dream-Cache kept separate.)
+async function _ftDreamwalkerSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the ally";
+  const bankReroll = async (a, src) => {
+    const b = a.getFlag?.("fourththing", "aidBanked") ?? [];
+    b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: src });
+    try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+  };
+  const grantClarity = async (a, n) => {
+    const s = a.system?.system ?? a.system ?? {};
+    const cur = Number(s?.magic?.clarity?.value ?? 0);
+    const max = Number(s?.magic?.clarity?.max ?? 0);
+    const next = max > 0 ? Math.min(max, cur + n) : cur + n;
+    if (next !== cur) { try { await a.update({ "system.magic.clarity.value": next }); } catch (e) {} }
+    return next - cur;
+  };
+  const alliesInAura = (ft) => {
+    const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+    if (!myTok) return null;
+    return (canvas.tokens?.placeables ?? []).filter(t =>
+      t?.actor && (t.document?.disposition ?? 0) >= 0 && _ftDistanceBetweenTokens(myTok, t) <= ft);
+  };
+
+  switch (effectKey) {
+    case "dw-omen": {
+      const who = target ?? actor;
+      await bankReroll(who, "dreamwalker-omen");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🔮 Omen — <b>${who.name}</b> saw the thread coming: banks a reroll-lowest on their next roll.</p>`;
+    }
+    case "dw-ward": {
+      if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Dream Ward needs a target ally. Surge spent — GM may refund.</p>`;
+      await _ftCreateAllyAE(target, { name: `Dream Ward (DR ${tier})`, img: "icons/svg/aura.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+      await bankReroll(target, "dreamwalker-ward");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🌙 Dream Ward — <b>${tname}</b> drifts into a protective dreamstate: DR ${tier} and banks a reroll.</p>`;
+    }
+    case "dw-shared": {
+      const allies = alliesInAura(30);
+      if (!allies) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Shared Dream needs your token on the scene. Surge spent — GM may refund.</p>`;
+      const lines = [];
+      for (const t of allies) { await bankReroll(t.actor, "dreamwalker-shared"); const c = await grantClarity(t.actor, 1); lines.push(`${t.actor.name}${c > 0 ? " +1 Clarity" : ""}`); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0ff">🌌 Shared Dream — ${lines.length ? `<b>${lines.join(", ")}</b>` : "allies within 30 ft"} bank a reroll and draw Clarity from the dream.</p>`;
+    }
+    case "dw-reality": {
+      const allies = alliesInAura(30);
+      for (const t of (allies ?? [])) await bankReroll(t.actor, "dreamwalker-reality");
+      if (target) { try { await target.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0ff;font-weight:600">✶ Reality Hack — the dream rewrites the moment: allies within 30 ft bank a reroll${target ? `, and <b>${tname}</b> rolls its next attack at disadvantage` : ""}.</p>`;
+    }
+  }
+  return "";
+}
+
 async function _ftMandateSurge(actor, effectKey, tier) {
   const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
   const tname  = target?.name ?? "the ally";
@@ -5123,6 +5218,11 @@ async function castManifestation(actor, item, {
   // All gated on cast success. Damage additionally gated on attack hit when
   // the manifestation declares resolution.shape="attack" with a target.
   const castSuccess = result?.success !== false;
+  // Dreamwalker (Oracle) flavor Surge gen — working the Tree fuels foresight.
+  if (castSuccess) {
+    try { await _ftDreamwalkerCastGen(actor); }
+    catch (e) { console.warn("[ft] dreamwalker cast-gen failed", e); }
+  }
   if (item && castSuccess) {
     // Phase B 2026-05-19 — Action economy debit (boss slots / elite bonus
     // mani / standard pool). Mirrors the pre-gate above.

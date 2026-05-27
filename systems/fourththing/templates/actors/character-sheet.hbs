@@ -168,13 +168,8 @@
         {{#if dreamwalkerState.cache.banked}}
         <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="dreamwalker_deploy_cache" style="background:#2a1f3a;color:#dac8ff;border:1px solid #6a3a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">Deploy</button>
         {{/if}}
-        {{#if dreamwalkerState.echo}}
-        <span class="ft-chip ft-chip-echo" data-tooltip="Dreamwalker — Dream Echo Reservoir (L13). Bottled fragments of unrealized possibility. Gain 1 Echo Die (d6) per Soma Break, store up to 2. Spend modes: Self-Resonance (+1d6 to your failed check after seeing the roll) · Shared Echo (+1d6 to an ally's failed check within 30 ft) · World-Tuning (-1d6 to environmental DC vs you)." style="background:#1a3a3a;color:#a0d8d4;border:1px solid #3a8a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">◐ Echo Dice
-          <input type="number" name="system.resources.echoDice.dice" value="{{dreamwalkerState.echo.dice}}" min="0" max="{{dreamwalkerState.echo.maxDice}}" style="width:32px;background:transparent;color:inherit;border:1px solid #3a8a8a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;" data-tooltip="Current Echo Dice — edit directly."/>
-          / {{dreamwalkerState.echo.maxDice}} d6
-        </span>
-        <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="dream_echo_reservoir_spend" style="background:#1a3a3a;color:#a0d8d4;border:1px solid #3a8a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;" data-tooltip="Roll an Echo Die and apply: Self-Resonance / Shared Echo / World-Tuning.">Spend</button>
-        {{/if}}
+        {{!-- Echo Dice folded into Surge 2026-05-27 — its "spend to bend an outcome" role
+              is now Dreamwalker's Surge spends (Omen / Dream Ward / Shared Dream / Reality Hack). --}}
       </div>
       {{/if}}
 
