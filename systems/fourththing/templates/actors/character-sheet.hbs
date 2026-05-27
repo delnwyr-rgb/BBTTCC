@@ -731,11 +731,16 @@
           </div>
           <span class="ft-resource-count" style="color:{{burnBand.color}}">🔥 {{or resources.burn.current 0}}/8 · {{burnBand.label}}</span>
           <div class="ft-resource-controls">
+            <button type="button" class="ft-res-btn" data-action="ftSurgeSpend" data-tooltip="Open the Surge menu — spend banked Surge on Forge-Weld, Atonement, Share the Furnace, or Relic of Rebirth.">Forge ▸ Spend Surge</button>
             <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="aurablade_stabilize" data-tooltip="Vent the forge (cool Burn).">Vent</button>
           </div>
           <div class="ft-edit-only ft-resource-edit">
             <input type="number" name="system.resources.burn.current" value="{{or resources.burn.current 0}}" min="0" max="8" style="width:40px" data-tooltip="Forge heat (Burn 0–8)"/>
           </div>
+        </div>
+        {{!-- Band readout: what the current forge heat is doing right now. --}}
+        <div class="ft-aura-row" style="margin-top:0.2rem">
+          <span class="ft-aura-desc" style="color:{{burnBand.color}}"><b>{{burnBand.label}}:</b> {{burnBand.desc}}</span>
         </div>
       </div>
       {{/if}}

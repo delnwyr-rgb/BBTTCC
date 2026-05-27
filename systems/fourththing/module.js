@@ -3154,6 +3154,22 @@ async function _ftBankSurge(actor, n, { fromHarvest = false } = {}) {
   return next - cur;
 }
 
+// Aurablade flavor Surge gen (playtest fix 2026-05-27): committing to the aura —
+// using a Burn action or changing aura — sheds spendable Surge. +1 per Burn-gaining
+// commitment, capped +2/round (round-keyed flag). Foe-gating + Surge cap honored by
+// _ftBankSurge. Called from ft-class-automation (openAurabladeAction / openChangeAura)
+// via game.fourththing.aurabladeFlavorSurge.
+async function _ftAurabladeFlavorSurge(actor) {
+  if (!actor) return 0;
+  const round = Number(game.combat?.round ?? 0);
+  const f = actor.flags?.fourththing?.aurablade?.surgeGen ?? {};
+  const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+  if (count >= 2) return 0; // +2 Surge/round cap from the commitment hook
+  const got = await _ftBankSurge(actor, 1);
+  if (got > 0) await actor.setFlag("fourththing", "aurablade.surgeGen", { round, count: count + 1 });
+  return got;
+}
+
 // Surge one-shot reader (2026-05-23 — consumer side wiring). Mirrors
 // _ftReadDwOneShots. Returns a structured shape per roll context so each
 // roll path only reads what it needs. `actor.flags.fourththing.surge.oneShot.<key>`
@@ -10615,6 +10631,8 @@ Hooks.once("init", function () {
   // Breaker dialog's Armor Sunder on foes the player doesn't own).
   game.fourththing.applyEffectsToTarget = _ftApplyEffectsToTarget;
   game.fourththing.classifyStewardItems = ftBuildStewardItemGroups;
+  // Aurablade flavor Surge gen — called by ft-class-automation when Burn is gained.
+  game.fourththing.aurabladeFlavorSurge = _ftAurabladeFlavorSurge;
 
   // createManifestationItemData — exposed 2026-05-17 so the BBTTCC Boss
   // Builder (bbttcc-auto-link/scripts/boss-builder.js) can synthesize

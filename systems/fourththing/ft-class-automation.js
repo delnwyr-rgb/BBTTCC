@@ -685,6 +685,8 @@ export async function openChangeAura(actor) {
             "system.resources.aura.state":   newAura,
             "system.resources.burn.current": newBurn,
           });
+          // Committing to the aura sheds spendable Surge (flavor gen, capped/round).
+          if (newBurn > burn) { try { await game.fourththing?.aurabladeFlavorSurge?.(actor); } catch (e) { /* silent */ } }
           // AE sync runs automatically via the updateActor hook in module.js
           // (aurablade burn-band auto-sync). No explicit call needed; keeping
           // one would race the hook and double-create the AE pack.
@@ -1031,6 +1033,8 @@ export async function openAurabladeAction(actor) {
           }
 
           await actor.update({ "system.resources.burn.current": newBurn });
+          // Committing a Burn action sheds spendable Surge (flavor gen, capped/round).
+          try { await game.fourththing?.aurabladeFlavorSurge?.(actor); } catch (e) { /* silent */ }
 
           let backlashNote = "";
           if (newBand.label === "Overheated" && band.label !== "Overheated") {
