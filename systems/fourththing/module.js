@@ -8898,7 +8898,7 @@ function buildEchoAssetsManagerHTML(faction, echoAssets = {}, eligible = { crew:
     return `
       <div class="ft-echo-row" data-ft-bucket="${bucket}" data-ft-name="${ftEscapeHtml(name)}" data-ft-slug="${ftEscapeHtml(slug)}" style="display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;padding:.3rem .4rem;border:1px solid var(--color-border-light-tertiary,#3a3a3a);border-radius:4px;margin-bottom:.2rem;background:rgba(255,255,255,.02);">
         <span class="ft-echo-row-name" style="flex:1;font-weight:500">${ftEscapeHtml(name)}</span>
-        <button type="button" data-ft-action="roster" data-ft-kind="${ftEchoBucketKind(bucket)}" title="Edit roster — who was in this past life" style="padding:.15rem .5rem;display:flex;align-items:center;gap:.25rem;">
+        <button type="button" data-ft-action="roster" data-ft-kind="${ftEchoBucketKind(bucket)}" title="Edit roster — people the Steward has met through this" style="padding:.15rem .5rem;display:flex;align-items:center;gap:.25rem;">
           <i class="fas fa-users"></i> Roster <span class="ft-echo-roster-count" style="opacity:.75">(${count})</span>
         </button>
         <button type="button" data-ft-action="swap" data-ft-target="${otherBucket}" title="Move to ${otherLabel}" style="padding:.15rem .5rem;">↔</button>
@@ -8959,7 +8959,7 @@ function buildEchoAssetsManagerHTML(faction, echoAssets = {}, eligible = { crew:
         </div>
       </div>
     </div>
-    <p class="ft-echo-dialog-foot">Each row is a past life. Click <b>Roster</b> to record who that crew/association was. Each pool's capacity = Tier + 1.</p>
+    <p class="ft-echo-dialog-foot">Each row is one of this Steward's crews or occult associations. Click <b>Roster</b> to record the people they've met through it. Each pool's capacity = Tier + 1.</p>
   </div>`;
 }
 
@@ -9068,7 +9068,7 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
         wrap.setAttribute("style", "display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;padding:.3rem .4rem;border:1px solid var(--color-border-light-tertiary,#3a3a3a);border-radius:4px;margin-bottom:.2rem;background:rgba(255,255,255,.02);");
         wrap.innerHTML = `
           <span class="ft-echo-row-name" style="flex:1;font-weight:500"></span>
-          <button type="button" data-ft-action="roster" data-ft-kind="${ftEchoBucketKind(bucket)}" title="Edit roster — who was in this past life" style="padding:.15rem .5rem;display:flex;align-items:center;gap:.25rem;">
+          <button type="button" data-ft-action="roster" data-ft-kind="${ftEchoBucketKind(bucket)}" title="Edit roster — people the Steward has met through this" style="padding:.15rem .5rem;display:flex;align-items:center;gap:.25rem;">
             <i class="fas fa-users"></i> Roster <span class="ft-echo-roster-count" style="opacity:.75">(${count})</span>
           </button>
           <button type="button" data-ft-action="swap" data-ft-target="${otherBucket}" title="Move to ${otherLabel}" style="padding:.15rem .5rem;">↔</button>
@@ -9245,17 +9245,21 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
   }).render(true);
 }
 
-// ─── Echo Roster editor (per-Steward past-life members) ──────────────────────
+// ─── Echo Roster editor (people the Steward has met through each crew/occult) ───
 // Sub-sheet opened from "Manage Echo Assets" → Roster button on a crew/occult
 // row. Edits actor.flags['bbttcc-character-options'].echoRoster[<slug>] for
-// the current Steward. Members capture who that crew/association WAS in the
-// Steward's past life — name, role, portrait, notes — and which members are
-// pre-selected at spend time via defaultPresent.
+// the current Steward. Members capture the people the Steward has met through
+// that crew/association — companions, rivals, mentors, debts going either way —
+// with name, role, portrait, notes; defaultPresent flags who is pre-selected at
+// spend time. (Originally framed as "past lives"; 2026-05-28 playtest confirmed
+// the more useful interpretation is current-tense people with live threads, so
+// the player copy was reframed to match.)
 
 // ─── Echo Roster generator (LLM + offline fallback) ─────────────────────────────
-// "You are not your crew. You HAVE a crew." — Mal. This invents past-life roster
-// members (companions / rivals / mentors) so players can CURATE instead of authoring
-// from a blank page. Uses the bbttcc-mal-voice Anthropic adapter when a key is
+// "You are not your crew. You HAVE a crew." — Mal. This invents roster members
+// (people the Steward has met through this crew/association — companions, rivals,
+// mentors, debts going either way) so players can CURATE instead of authoring from
+// a blank page. Uses the bbttcc-mal-voice Anthropic adapter when a key is
 // configured; otherwise a self-contained procedural generator keeps the button
 // working with zero setup. Output shape is always: [{ name, role, notes }].
 
@@ -9477,7 +9481,7 @@ function buildEchoRosterMemberRowHTML(member = {}) {
         <span>Default present</span>
       </label>
 
-      <textarea data-row-field="notes" rows="2" placeholder="Who were they back then? Relationship to the Steward, fate, signature beats…" style="grid-column:span 3;resize:vertical;">${ftEscapeHtml(notes)}</textarea>
+      <textarea data-row-field="notes" rows="2" placeholder="Who are they to the Steward? Debts, mentorships, friendships, rivalries, unfinished business…" style="grid-column:span 3;resize:vertical;">${ftEscapeHtml(notes)}</textarea>
 
       <input type="hidden" data-row-field="portrait" value="${ftEscapeHtml(portrait)}"/>
       <input type="text" data-row-field="actorUuid" placeholder="Linked NPC actor UUID (optional, e.g. Actor.xxxxxxxxxxxxxxxx)" value="${ftEscapeHtml(actorUuid)}" style="grid-column:span 3;font-size:.8rem;opacity:.85;"/>
@@ -9490,13 +9494,13 @@ function buildEchoRosterHTML(entryName, kind, roster) {
   const kindLabel = (kind === "occult") ? "Occult Association" : "Awesome Crew";
   const rowsHtml = members.length
     ? members.map(buildEchoRosterMemberRowHTML).join("")
-    : `<div class="ft-roster-empty" style="opacity:.6;font-style:italic;padding:.6rem .25rem;">No members yet — click <b>+ Add Member</b> below. These are the people who were with you the last time you lived this life.</div>`;
+    : `<div class="ft-roster-empty" style="opacity:.6;font-style:italic;padding:.6rem .25rem;">No members yet — click <b>✨ Suggest members</b> or <b>+ Add Member</b> below. These are the people the Steward has met through this ${(kind === "occult") ? "association" : "crew"} — companions, rivals, mentors, debts going either way.</div>`;
 
   return `
   <div class="ft-roster-dialog ft-cast-dialog">
     <div class="ft-roster-note" style="margin-bottom:.5rem;font-size:.9rem;opacity:.85;">
-      <b>${ftEscapeHtml(entryName)}</b> · ${ftEscapeHtml(kindLabel)} · This Steward's past-life roster.
-      Members marked <b>Default present</b> are pre-selected when this asset is invoked in a raid.
+      <b>${ftEscapeHtml(entryName)}</b> · ${ftEscapeHtml(kindLabel)} · People the Steward has met through this ${(kind === "occult") ? "association" : "crew"} — companions, rivals, mentors, debts going either way.
+      Members marked <b>Default present</b> are pre-selected when this ${(kind === "occult") ? "association" : "crew"} is invoked in a raid.
     </div>
     <div class="ft-roster-scroll" style="max-height:60vh;overflow-y:auto;padding-right:.3rem;">
       <div class="ft-roster-rows" data-roster-rows>${rowsHtml}</div>
@@ -9528,7 +9532,7 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
           const hasEmpty = $rows.children(".ft-roster-empty").length > 0;
           if (hasRows && hasEmpty) $rows.children(".ft-roster-empty").remove();
           if (!hasRows && !hasEmpty) {
-            $rows.append(`<div class="ft-roster-empty" style="opacity:.6;font-style:italic;padding:.6rem .25rem;">No members yet — click <b>+ Add Member</b> below.</div>`);
+            $rows.append(`<div class="ft-roster-empty" style="opacity:.6;font-style:italic;padding:.6rem .25rem;">No members yet — click <b>✨ Suggest members</b> or <b>+ Add Member</b> below.</div>`);
           }
         };
 
