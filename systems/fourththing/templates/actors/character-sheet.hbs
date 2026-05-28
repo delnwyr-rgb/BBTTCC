@@ -104,22 +104,8 @@
         <button type="button" data-action="ftDefensesOpen" class="ft-def-manage-btn" data-tooltip="Open the defenses, vulnerabilities, and condition-immunity editor in a popout.">⚙ Defenses</button>
         {{/if}}
       </div>
-      {{#if bulwarkPools}}
-      <div class="ft-bulwark-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
-        {{#if bulwarkPools.merged}}
-        <span class="ft-chip ft-chip-inev" data-tooltip="Bulwark — Inevitability Dice (Cataclyst capstone: Frame and Ruin merged). Spend for any Frame or Ruin effect." style="background:#2d1f3a;color:#dac8ff;border:1px solid #6a3a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;">⬢ Inevitability {{bulwarkPools.inev.current}}/{{bulwarkPools.inev.max}}</span>
-        <button type="button" data-action="ftBulwarkInevAdjust" data-delta="-1" data-tooltip="Spend 1 Inevitability die (drains Ruin first, then Frame)." style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#3a1a3a;color:#dac8ff;border:1px solid #6a3a8a;border-radius:3px;cursor:pointer">−1</button>
-        <button type="button" data-action="ftBulwarkInevAdjust" data-delta="1"  data-tooltip="Recover 1 Inevitability die (tops Frame first, then Ruin)." style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#2a3a3a;color:#c8ffea;border:1px solid #3a8a6a;border-radius:3px;cursor:pointer">+1</button>
-        {{else}}
-        <span class="ft-chip ft-chip-frame" data-tooltip="Bulwark — Frame Dice (persistence). Spend to absorb damage or fuel defensive doctrine effects. Refills on Soma Break." style="background:#22324a;color:#c8d8ff;border:1px solid #3a5b8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;">◧ Frame {{bulwarkPools.frame.current}}/{{bulwarkPools.frame.max}}</span>
-        <button type="button" data-action="ftBulwarkInevAdjust" data-pool="frame" data-delta="-1" data-tooltip="Spend 1 Frame Die" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#1a2a3a;color:#c8d8ff;border:1px solid #3a5b8a;border-radius:3px;cursor:pointer">−</button>
-        <button type="button" data-action="ftBulwarkInevAdjust" data-pool="frame" data-delta="1"  data-tooltip="Recover 1 Frame Die" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#2a3a4a;color:#c8d8ff;border:1px solid #3a5b8a;border-radius:3px;cursor:pointer">+</button>
-        <span class="ft-chip ft-chip-ruin"  data-tooltip="Bulwark — Ruin Charges (inevitability). Spend on offensive doctrine effects. Refills on Soma Break." style="background:#3a1a1a;color:#ffd2c8;border:1px solid #8a3a3a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;">◨ Ruin {{bulwarkPools.ruin.current}}/{{bulwarkPools.ruin.max}}</span>
-        <button type="button" data-action="ftBulwarkInevAdjust" data-pool="ruin"  data-delta="-1" data-tooltip="Spend 1 Ruin Charge" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#3a1a1a;color:#ffd2c8;border:1px solid #8a3a3a;border-radius:3px;cursor:pointer">−</button>
-        <button type="button" data-action="ftBulwarkInevAdjust" data-pool="ruin"  data-delta="1"  data-tooltip="Recover 1 Ruin Charge" style="padding:0.05rem 0.4rem;font-size:0.78rem;background:#4a2a2a;color:#ffd2c8;border:1px solid #8a3a3a;border-radius:3px;cursor:pointer">+</button>
-        {{/if}}
-      </div>
-      {{/if}}
+      {{!-- 2026-05-28 — Bulwark Frame/Ruin (+ Cataclyst Inevitability) chips retired.
+           Abilities folded into the Surge menu; Bulwark runs on Surge. --}}
       {{#if shadowCourierState}}
       <div class="ft-courier-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
         {{!-- 2026-05-28 — Pace folded into Surge ("keep moving" generator + the
@@ -528,38 +514,8 @@
       </div>
 
       {{!-- Class resource pools --}}
-      {{#if activePools.titanbound}}
-      <div class="ft-combat-section ft-resource-panel">
-        <h3>⬡ Frame Dice <span class="ft-resource-tag">Titanbound</span></h3>
-        <div class="ft-resource-row">
-          <div class="ft-die-pips">
-            {{#each (times (or resources.frameDice.max 3)) as |n|}}
-            <span class="ft-die-pip {{#if (lte (add n 1) (or ../resources.frameDice.current 0))}}active{{/if}}">◈</span>
-            {{/each}}
-          </div>
-          <span class="ft-resource-count">{{resources.frameDice.current}} / {{resources.frameDice.max}}</span>
-          {{!-- Edit mode: direct inputs --}}
-          <div class="ft-edit-only ft-resource-edit">
-            <input type="number" name="system.resources.frameDice.current" value="{{resources.frameDice.current}}" min="0" max="{{resources.frameDice.max}}" style="width:40px" data-tooltip="Current"/>
-            <span style="opacity:0.4">/</span>
-            <input type="number" name="system.resources.frameDice.max" value="{{resources.frameDice.max}}" min="1" max="10" style="width:40px" data-tooltip="Max"/>
-          </div>
-          <div class="ft-resource-controls ft-view-only">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="titanbound_spend">Spend</button>
-            <button type="button" class="ft-res-btn ft-res-btn-sm" data-action="ftClassAction" data-handler="titanbound_pool">⚙</button>
-          </div>
-        </div>
-        <div class="ft-stress-row">
-          <span class="ft-stress-label">Structural Stress</span>
-          <div class="ft-stress-track">
-            {{#each (times (or resources.stress.max 5)) as |n|}}
-            <span class="ft-stress-pip {{#if (lte (add n 1) (or ../resources.stress.current 0))}}filled{{/if}}">■</span>
-            {{/each}}
-          </div>
-          <span class="ft-resource-count">{{resources.stress.current}} / {{resources.stress.max}}</span>
-        </div>
-      </div>
-      {{/if}}
+      {{!-- 2026-05-28 — Titanbound Frame Dice panel retired (Titanbound folded into
+           Bulwark, whose Frame/Ruin pools are now Surge spends). --}}
 
       {{#if activePools.aurablade}}
       <div class="ft-combat-section ft-resource-panel">
@@ -631,40 +587,10 @@
       </div>
       {{/if}}
 
-      {{#if activePools.bulwark}}
-      <div class="ft-combat-section ft-resource-panel">
-        <h3>⛰ Frame Dice <span class="ft-resource-tag">Bulwark</span></h3>
-        <div class="ft-resource-row">
-          <div class="ft-die-pips">
-            {{#each (times (or resources.frameDice.max 3)) as |n|}}
-            <span class="ft-die-pip {{#if (lte (add n 1) (or ../resources.frameDice.current 0))}}active{{/if}}">◈</span>
-            {{/each}}
-          </div>
-          <span class="ft-resource-count">{{resources.frameDice.current}} / {{resources.frameDice.max}}</span>
-          <div class="ft-edit-only ft-resource-edit">
-            <input type="number" name="system.resources.frameDice.current" value="{{resources.frameDice.current}}" min="0" max="{{resources.frameDice.max}}" style="width:40px" data-tooltip="Current"/>
-            <span style="opacity:0.4">/</span>
-            <input type="number" name="system.resources.frameDice.max" value="{{resources.frameDice.max}}" min="1" max="10" style="width:40px" data-tooltip="Max"/>
-          </div>
-          <div class="ft-resource-controls ft-view-only">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="bulwark_spend_frame">Spend</button>
-            <button type="button" class="ft-res-btn ft-res-btn-sm" data-action="ftClassAction" data-handler="bulwark_frame_pool">⚙</button>
-          </div>
-        </div>
-        <div class="ft-resource-row">
-          <div class="ft-die-pips">
-            {{#each (times (or resources.ruinCharges.max 3)) as |n|}}
-            <span class="ft-die-pip ft-die-pip--ruin {{#if (lte (add n 1) (or ../resources.ruinCharges.current 0))}}active{{/if}}">◈</span>
-            {{/each}}
-          </div>
-          <span class="ft-resource-count">{{resources.ruinCharges.current}} / {{resources.ruinCharges.max}}</span>
-          <div class="ft-resource-controls ft-view-only">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="bulwark_ruin">Ruin</button>
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="bulwark_stance">Stance</button>
-          </div>
-        </div>
-      </div>
-      {{/if}}
+      {{!-- 2026-05-28 — Bulwark Frame Dice / Ruin Charges resource panel retired.
+           Absorb / Push / Anchor / Catastrophic Entry / Shockwave / Siege Works /
+           Ruin to Renewal are now Surge spends (◆ Surge menu); the eat-the-blow
+           generator is unchanged. Stance + the pool ⚙ editors are gone. --}}
 
       {{!-- 2026-05-28 — Shadow Courier Pace pool folded into Surge. Movement banks
            Surge ("keep moving"); the courier kit + 3 route kits spend it from the

@@ -3565,6 +3565,28 @@ const _FT_SURGE_MENU = [
   { cost: 1, key: "bw-brace-wall", tier: 1, bucket: "def", classFilter: ["bulwark"],
     label: "Brace Wall — you + adjacent allies gain DR equal to Tier this round",
     fiction: "Set your feet. The line forms on you.", wired: true },
+  // Folded from the retired Frame Dice / Ruin Charges pools (2026-05-28) — same
+  // abilities, now Surge-spent (the eat-the-blow generator is unchanged). Reuse the
+  // existing one-shot consumers (frameOneShot.absorb/push, Armor-Sundered AE,
+  // structure-breach) so no new wiring is needed; Frame "Anchor" = the Surge Anchor above.
+  { cost: 1, key: "bw-absorb", tier: 1, bucket: "def", classFilter: ["bulwark"],
+    label: "Absorb — the next hit you take is capped at a d8 roll (take the wall, not the blow)",
+    fiction: "Meet it with the part of you that was already stone.", wired: true },
+  { cost: 1, key: "bw-push", tier: 1, bucket: "off", classFilter: ["bulwark"],
+    label: "Push — +1d8 to your next Body check to move, break, or shove",
+    fiction: "The wall decides to walk. Things in the way stop being in the way.", wired: true },
+  { cost: 2, key: "bw-shockwave", tier: 2, bucket: "def", classFilter: ["bulwark"],
+    label: "Shockwave Footing — you resist the next forced move and shove adjacent foes back",
+    fiction: "Plant once. The ground passes the message along.", wired: true },
+  { cost: 3, key: "bw-cat-entry", tier: 2, bucket: "off", classFilter: ["bulwark"],
+    label: "Catastrophic Entry — sunder a foe's armor (all attackers ignore it 1 rd) / breach a structure",
+    fiction: "Doors are a courtesy. You declined.", wired: true },
+  { cost: 2, key: "bw-siege", tier: 3, bucket: "narr", classFilter: ["bulwark"],
+    label: "Siege Works — −1 Violence OP cost on this Siege (GM applies)",
+    fiction: "You read the load-bearing truth of the place and lean on it.", wired: true },
+  { cost: 3, key: "bw-renewal", tier: 3, bucket: "narr", classFilter: ["bulwark"],
+    label: "Ruin to Renewal — purify / restore a fortification (Faith or Economy DC 15)",
+    fiction: "What you can break, you can also choose to mend.", wired: true },
 
   // ─── Bulwark CATACLYST (subclass) entries — gated by `bulwarkPath` ─────────────
   // Cataclyst — controlled eruption; trade stability for force.
@@ -3751,7 +3773,7 @@ const _FT_TRANCE_SELF_KEYS = new Set(["qs-attention", "qs-pause", "sg-held", "tf
 // Bulwark base class-exclusive Surge keys — routed to _ftBulwarkSurge. (The
 // re-homed fortress tier — bulwark-stance/anchor/mass-aegis/sanctum/mythic-stand —
 // keeps its existing ALLY_AE / SPEND_TIME_AE wiring; only Brace Wall is new.)
-const _FT_BULWARK_KEYS = new Set(["bw-brace-wall"]);
+const _FT_BULWARK_KEYS = new Set(["bw-brace-wall", "bw-absorb", "bw-push", "bw-shockwave", "bw-cat-entry", "bw-siege", "bw-renewal"]);
 // Bulwark subclass "path" Surge keys — routed to _ftBulwarkPathSurge; gated by
 // which path the actor's subclass is (see _ftBulwarkPath).
 const _FT_BULWARK_PATH_KEYS = new Set([
@@ -4758,6 +4780,40 @@ async function _ftBulwarkSurge(actor, effectKey, tier) {
     try { await actor.createEmbeddedDocuments("ActiveEffect", [drAE(`Brace Wall (DR ${tier})`)]); buffed.push(actor.name); } catch (e) { /* non-owner */ }
     for (const t of adjacentAllies()) { const ok = await _ftCreateAllyAE(t.actor, drAE(`Brace Wall (DR ${tier})`)); if (ok) buffed.push(t.actor.name); }
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🧱 Brace Wall — ${buffed.length ? `${buffed.map(n => `<b>${n}</b>`).join(", ")} gain` : "you + adjacent allies gain"} DR ${tier} this round.</p>`;
+  }
+
+  // ── Folded Frame/Ruin abilities (one-shot flags the existing consumers read) ──
+  if (effectKey === "bw-absorb") {
+    const r = new Roll("1d8"); await r.evaluate();
+    try { await actor.setFlag("fourththing", "bulwark.frameOneShot.absorb", { roll: Number(r.total) || 0, ts: Date.now() }); } catch (e) {}
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Absorb — your next incoming hit is <b>capped at ${r.total}</b> (you take the wall, not the blow). Consumed by the next hit that deals damage.</p>`;
+  }
+  if (effectKey === "bw-push") {
+    const r = new Roll("1d8"); await r.evaluate();
+    try { await actor.setFlag("fourththing", "bulwark.frameOneShot.push", { roll: Number(r.total) || 0, ts: Date.now() }); } catch (e) {}
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc8050">⛏ Push — <b>+${r.total}</b> to your next Body check (move / break / shove). Consumed on use.</p>`;
+  }
+  if (effectKey === "bw-shockwave") {
+    try { await actor.setFlag("fourththing", "bulwark.frameOneShot.anchor", { roll: 0, ts: Date.now() }); } catch (e) {}
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">💥 Shockwave Footing — you <b>refuse the next forced movement</b>, and adjacent foes are shoved back. <span style="opacity:0.65;font-style:italic">(GM resolves the push.)</span></p>`;
+  }
+  if (effectKey === "bw-cat-entry") {
+    const foes = Array.from(game.user?.targets ?? []).map(t => t.actor).filter(Boolean);
+    if (foes.length) {
+      const combat = game.combat;
+      const dur = combat ? { rounds: 1, startRound: combat.round, startTurn: combat.turn, combat: combat.id } : { rounds: 1 };
+      const sunderAE = { name: "Armor Sundered", img: "icons/svg/sword.svg", origin: actor.uuid, duration: dur, changes: [], flags: { fourththing: { armorSundered: true, source: actor.uuid } } };
+      for (const foe of foes) { try { await game.fourththing?.applyEffectsToTarget?.(foe, [sunderAE], []); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚒ Catastrophic Entry — armor sundered on <b>${foes.map(f => f.name).join(", ")}</b>; all attackers ignore their armor for 1 round.</p>`;
+    }
+    try { await actor.setFlag("bbttcc-structures", "bulwarkEntryRuinCost", 0); } catch (e) {}
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚒ Catastrophic Entry — structure breach armed: your next hit ignores structure resistance (no target → it lands on the structure you strike).</p>`;
+  }
+  if (effectKey === "bw-siege") {
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🏛 Siege Works — <b>−1 Violence OP</b> cost on this Siege. <span style="opacity:0.65;font-style:italic">(GM applies on the siege ledger.)</span></p>`;
+  }
+  if (effectKey === "bw-renewal") {
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">🛠 Ruin to Renewal — attempting to purify / restore a fortification (Faith or Economy DC 15). <span style="opacity:0.65;font-style:italic">(GM adjudicates the check.)</span></p>`;
   }
   return "";
 }
@@ -12545,9 +12601,7 @@ Hooks.once("init", function () {
       // wizard-created Bulwark before prepareDerivedData runs). Drop to `?? 0`
       // — derived prep will set the right max immediately on the next render
       // and current can grow into it on the next refill rather than overshoot.
-      "system.resources.frameDice.current":    sys.resources?.frameDice?.max      ?? 0,
       "system.resources.accessDice.current":   sys.resources?.accessDice?.max     ?? 0,
-      "system.resources.ruinCharges.current":  sys.resources?.ruinCharges?.max    ?? 0,
       // Cosmic Linguist — Resonance refills to max; Strain wipes (the friction
       // counter resets when the caster centers themselves at the deeper rest).
       "system.resources.resonanceDice.current": sys.resources?.resonanceDice?.max ?? 0,
@@ -13724,35 +13778,12 @@ Hooks.once("init", function () {
       //   max(2, ceil((Violence value + Bulwark Initiation) / 3)), capped at 8.
       // Only applied when the actor carries a Bulwark class item; otherwise
       // template defaults (max 3) stand for non-Bulwark stewards.
-      const bulwarkClass = this.items?.find?.(i => i.type === "class" && i.system?.identifier === "bulwark");
-      if (bulwarkClass) {
-        const bulwarkLvl = sys.details?.level ?? 1;
-        const poolMax = Math.min(8, Math.max(2, Math.ceil((v + bulwarkLvl) / 3)));
-        sys.resources             ??= {};
-        sys.resources.frameDice   ??= { current: 0, max: 0 };
-        sys.resources.ruinCharges ??= { current: 0, max: 0 };
-        sys.resources.frameDice.max   = poolMax;
-        sys.resources.ruinCharges.max = poolMax;
-        // Clamp current down to the recomputed max. Without this, a stale
-        // refill (or wizard-created character with `current = 3` from the
-        // template default) shows e.g. Ruin 3/2 even though the formula
-        // capped the pool at 2. We only clamp DOWN — never up — so the
-        // user's spent state is preserved.
-        sys.resources.frameDice.current   = Math.min(Number(sys.resources.frameDice.current   ?? 0), poolMax);
-        sys.resources.ruinCharges.current = Math.min(Number(sys.resources.ruinCharges.current ?? 0), poolMax);
-      } else {
-        // Non-Bulwark stewards: Frame/Ruin pools are inert. Template defaults
-        // (3/3) leaked through to the retired Breaker panel; zero them so any
-        // residual UI / chip rendering shows nothing rather than ghost values.
-        if (sys.resources?.frameDice) {
-          sys.resources.frameDice.max = 0;
-          sys.resources.frameDice.current = 0;
-        }
-        if (sys.resources?.ruinCharges) {
-          sys.resources.ruinCharges.max = 0;
-          sys.resources.ruinCharges.current = 0;
-        }
-      }
+      // 2026-05-28 — Bulwark Frame Dice / Ruin Charges pools RETIRED. Their abilities
+      // (Absorb / Push / Anchor / Catastrophic Entry / Shockwave / Siege Works / Ruin
+      // to Renewal) folded into the Surge menu; the eat-the-blow Surge generator is
+      // unchanged. The one-shot consumers (frameOneShot.absorb/push/anchor + the
+      // structure-breach) are kept and now armed by Surge spends. Pools no longer
+      // derived or surfaced.
 
       // Shadow Courier resource pool — Pace shares the same formula:
       //   max(2, ceil((Intrigue value + Shadow Courier Initiation) / 3)), cap 8.
@@ -15016,21 +15047,9 @@ Hooks.once("init", function () {
           })
         }));
 
-      // Bulwark resource pools — only render header chips if the actor carries
-      // a Bulwark class item (otherwise frame/ruin defaults from template would
-      // misleadingly show on every Steward).
-      const _bulwarkCls = Array.from(actor.items).find(i => i.type === "class" && i.system?.identifier === "bulwark");
-      const _bulwarkMerged = !!actor.flags?.fourththing?.bulwark?.inevitabilityMerged;
-      const _frameC = resources.frameDice?.current   ?? 0;
-      const _frameM = resources.frameDice?.max       ?? 0;
-      const _ruinC  = resources.ruinCharges?.current ?? 0;
-      const _ruinM  = resources.ruinCharges?.max     ?? 0;
-      const bulwarkPools = _bulwarkCls ? {
-        frame:  { current: _frameC, max: _frameM },
-        ruin:   { current: _ruinC,  max: _ruinM  },
-        merged: _bulwarkMerged,
-        inev:   _bulwarkMerged ? { current: _frameC + _ruinC, max: _frameM + _ruinM } : null
-      } : null;
+      // Bulwark Frame/Ruin pools retired 2026-05-28 (abilities folded into Surge);
+      // the header chips + resource panel are gone. Kept null for the template ref.
+      const bulwarkPools = null;
 
       // TCC flag — surfaces the Fiat (T0) button on the sheet for
       // Trad Caster Class actors (Cosmic Linguist, Wyrdlens Adept, Dreamwalker,
@@ -17262,18 +17281,8 @@ Hooks.once("init", function () {
       // recomputed in prepareDerivedData. Surface only when the NPC actually
       // carries the class item, so we don't show ghost chips on plain monsters.
       const resources = sysData.resources ?? {};
-      const _bulwarkCls = classItems.find(i => i.type === "class" && i.system?.identifier === "bulwark");
-      const _bulwarkMerged = !!actor.flags?.fourththing?.bulwark?.inevitabilityMerged;
-      const _frameC = resources.frameDice?.current   ?? 0;
-      const _frameM = resources.frameDice?.max       ?? 0;
-      const _ruinC  = resources.ruinCharges?.current ?? 0;
-      const _ruinM  = resources.ruinCharges?.max     ?? 0;
-      const bulwarkPools = (_bulwarkCls && (_frameM > 0 || _ruinM > 0)) ? {
-        frame:  { current: _frameC, max: _frameM },
-        ruin:   { current: _ruinC,  max: _ruinM  },
-        merged: _bulwarkMerged,
-        inev:   _bulwarkMerged ? { current: _frameC + _ruinC, max: _frameM + _ruinM } : null
-      } : null;
+      // Bulwark Frame/Ruin pools retired 2026-05-28 (folded into Surge).
+      const bulwarkPools = null;
 
       const _courierCls = classItems.find(i => i.type === "class" && i.system?.identifier === "shadow_courier");
       const _courierSub = _courierCls

@@ -1225,6 +1225,9 @@ export async function openSpendAccessDie(actor) {
 // ─── Breaker dialogs ─────────────────────────────────────────────────────────
 
 export async function openBreakerRuin(actor) {
+  // 2026-05-28 — Frame Dice / Ruin Charges retired; abilities folded into Surge.
+  ui.notifications?.info(`${actor?.name ?? "Bulwark"}: Ruin Charges are retired — open the ◆ Surge menu (Catastrophic Entry / Shockwave Footing / Siege Works / Ruin to Renewal).`);
+  return;
   const res      = getResources(actor);
   const ruin     = res.ruinCharges?.current ?? 0;
   const ruinMax  = res.ruinCharges?.max     ?? 3;
@@ -2159,6 +2162,9 @@ export async function openHarmonyMarshalRallyingWords(actor) {
 // existing Titanbound + Breaker handlers, merged.
 
 export async function openBulwarkFramePool(actor) {
+  // 2026-05-28 — Frame Dice retired; abilities folded into Surge.
+  ui.notifications?.info(`${actor?.name ?? "Bulwark"}: Frame Dice are retired — open the ◆ Surge menu (Absorb / Push / Anchor / Brace Wall).`);
+  return;
   const res = getResources(actor);
   const frame    = res.frameDice?.current ?? 0;
   const frameMax = res.frameDice?.max ?? 3;
@@ -2203,6 +2209,9 @@ export async function openBulwarkFramePool(actor) {
 }
 
 export async function openBulwarkSpendFrame(actor) {
+  // 2026-05-28 — Frame Dice retired; Absorb / Push / Anchor are now Surge spends.
+  ui.notifications?.info(`${actor?.name ?? "Bulwark"}: Frame Dice are retired — open the ◆ Surge menu (Absorb / Push / Anchor).`);
+  return;
   const res = getResources(actor);
   const frame = res.frameDice?.current ?? 0;
   if (frame <= 0) return ui.notifications.warn(`${actor.name}: No Frame Dice available.`);
@@ -2273,7 +2282,10 @@ export async function openBulwarkRuin(actor) {
 }
 
 export async function openBulwarkStance(actor) {
-  // Cataclyst L5 "Stance Dance" — toggle between Advance and Anchor.
+  // 2026-05-28 — Bulwark Stance (Advance/Anchor) retired with the Frame/Ruin pools;
+  // the Cataclyst identity is now its Surge doctrine kit (Erupt / Shatter / Cataclysm).
+  ui.notifications?.info(`${actor?.name ?? "Bulwark"}: Stances retired with the Frame/Ruin pools — your Cataclyst spends live in the ◆ Surge menu.`);
+  return;
   const currentStance = actor.getFlag("fourththing", "bulwarkStance") ?? "none";
   new Dialog({
     title: "Bulwark — Stance (Cataclyst)",
