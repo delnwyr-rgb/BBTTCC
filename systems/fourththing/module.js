@@ -8901,6 +8901,7 @@ function buildEchoAssetsManagerHTML(faction, echoAssets = {}, eligible = { crew:
         <button type="button" data-ft-action="roster" data-ft-kind="${ftEchoBucketKind(bucket)}" title="Edit roster — people the Steward has met through this" style="padding:.15rem .5rem;display:flex;align-items:center;gap:.25rem;">
           <i class="fas fa-users"></i> Roster <span class="ft-echo-roster-count" style="opacity:.75">(${count})</span>
         </button>
+        ${isActive ? `<button type="button" data-ft-action="invoke" title="Spotlight a member — one beat per scene" style="padding:.15rem .55rem;display:flex;align-items:center;gap:.25rem;"><i class="fas fa-star"></i> Invoke</button>` : ""}
         <button type="button" data-ft-action="swap" data-ft-target="${otherBucket}" title="Move to ${otherLabel}" style="padding:.15rem .5rem;">↔</button>
         <button type="button" data-ft-action="remove" title="Remove from this bucket" style="padding:.15rem .5rem;">×</button>
         ${manifestHtml}
@@ -9071,6 +9072,7 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
           <button type="button" data-ft-action="roster" data-ft-kind="${ftEchoBucketKind(bucket)}" title="Edit roster — people the Steward has met through this" style="padding:.15rem .5rem;display:flex;align-items:center;gap:.25rem;">
             <i class="fas fa-users"></i> Roster <span class="ft-echo-roster-count" style="opacity:.75">(${count})</span>
           </button>
+          ${isActive ? `<button type="button" data-ft-action="invoke" title="Spotlight a member — one beat per scene" style="padding:.15rem .55rem;display:flex;align-items:center;gap:.25rem;"><i class="fas fa-star"></i> Invoke</button>` : ""}
           <button type="button" data-ft-action="swap" data-ft-target="${otherBucket}" title="Move to ${otherLabel}" style="padding:.15rem .5rem;">↔</button>
           <button type="button" data-ft-action="remove" title="Remove from this bucket" style="padding:.15rem .5rem;">×</button>
           ${renderManifestPill(slug, isActive)}`;
@@ -9166,6 +9168,14 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
           refreshEmptyState(bucket);
           refreshEmptyState(target);
           refreshManifestPillFor(row, ftSlugifyEchoName(name));
+          return;
+        }
+        if (action === "invoke") {
+          if (typeof openEchoInvocationPicker !== "function") {
+            ui.notifications?.warn("Spotlight invocation not yet available — load the latest module build.");
+            return;
+          }
+          await openEchoInvocationPicker(actor, name, kind);
           return;
         }
         if (action === "roster") {
@@ -9455,6 +9465,221 @@ async function ftGenerateEchoRosterMembers({ entryName, kind = "crew", count = 3
   return { ok: true, source: "offline", members: _ftEchoGenFallback({ entryName, kind: k, count: n, archetype, taken }), costUSD: 0 };
 }
 
+// ─── Echo Spotlight — invoke a roster member, one beat per scene ────────────────
+// "What if Vell shows up?" — turns the roster's named people into actual table
+// moments. Once per scene the Steward calls in a member of an ACTIVE crew or
+// occult association; the player narrates the arrival; a chat card posts to
+// the table; 1 Surge is banked immediately; AND a one-shot benefit (the
+// player's pick at spend-time: +2 to one roll, OR reroll one failed roll) is
+// armed and consumable any time before Scene Break. Member-centric: the cost
+// is the once-per-scene cap; the reward is a remembered beat at the table.
+
+const _FT_SPOTLIGHT_FLAG = "echoSpotlight";
+
+function _ftGetEchoSpotlight(actor) {
+  try { return actor?.getFlag("fourththing", _FT_SPOTLIGHT_FLAG) ?? null; } catch (_e) { return null; }
+}
+
+function ftCanInvokeSpotlight(actor) {
+  const s = _ftGetEchoSpotlight(actor);
+  return !s || !!s.consumed;
+}
+
+async function ftClearEchoSpotlight(actor) {
+  if (!actor) return;
+  try { await actor.unsetFlag("fourththing", _FT_SPOTLIGHT_FLAG); } catch (_e) {}
+}
+
+function _ftBuildSpotlightChatCard({ actor, member, slug, entryName, kind, narration, ts, surgeBanked, consumed = false, consumedAs = null }) {
+  const kindLabel = (kind === "occult") ? "Occult Association" : "Awesome Crew";
+  const portrait = String(member?.portrait ?? "").trim();
+  const memberName = ftEscapeHtml(String(member?.name ?? "").trim() || "Someone");
+  const memberRole = ftEscapeHtml(String(member?.role ?? "").trim());
+  const narrationHtml = narration
+    ? `<p style="margin:.3rem 0;font-style:italic;font-size:.88rem;">"${ftEscapeHtml(narration)}"</p>`
+    : "";
+  const portraitHtml = portrait
+    ? `<img src="${ftEscapeHtml(portrait)}" alt="" style="width:48px;height:48px;border-radius:6px;object-fit:cover;border:1px solid rgba(255,255,255,.1);flex:0 0 auto;"/>`
+    : "";
+  const buttonsHtml = consumed
+    ? `<p style="margin:.4rem 0 0;font-size:.82rem;opacity:.85;">✔ Spent: ${consumedAs === "reroll" ? "reroll one failed roll" : "+2 to one roll"}.</p>`
+    : `<div style="display:flex;gap:.4rem;margin-top:.5rem;flex-wrap:wrap;align-items:center;">
+        <button type="button" class="ft-echo-spotlight-btn" data-mode="bonus" data-actor-id="${actor.id}" data-spotlight-ts="${ts}" style="padding:.25rem .6rem;">Spend +2 to one roll</button>
+        <button type="button" class="ft-echo-spotlight-btn" data-mode="reroll" data-actor-id="${actor.id}" data-spotlight-ts="${ts}" style="padding:.25rem .6rem;">Spend reroll</button>
+      </div>`;
+  return `
+  <div class="fourththing-roll ft-echo-spotlight-card" data-actor-id="${actor.id}" data-spotlight-ts="${ts}">
+    <div class="ft-roll-header"><span class="ft-roll-name">✦ ${memberName} shows up</span></div>
+    <div style="display:flex;gap:.6rem;align-items:flex-start;margin:.4rem 0;">
+      ${portraitHtml}
+      <div style="flex:1;font-size:.85rem;">
+        <div style="opacity:.9;"><b>${memberName}</b>${memberRole ? ` — ${memberRole}` : ""}</div>
+        <div style="opacity:.7;font-size:.78rem;">${ftEscapeHtml(actor.name)} · ${ftEscapeHtml(entryName)} (${ftEscapeHtml(kindLabel)})</div>
+      </div>
+    </div>
+    ${narrationHtml}
+    ${buttonsHtml}
+    <p style="margin:.4rem 0 0;font-size:.72rem;opacity:.55;font-style:italic;">
+      ${surgeBanked ? "+1 Surge banked. " : ""}One spotlight per scene — Scene Break refreshes.
+    </p>
+  </div>`;
+}
+
+async function ftSpotlightInvokeMember(actor, { slug, entryName, kind, memberId, narration } = {}) {
+  if (!actor) { ui.notifications?.warn("No actor."); return null; }
+  if (!ftCanInvokeSpotlight(actor)) {
+    const cur = _ftGetEchoSpotlight(actor);
+    ui.notifications?.warn(`${actor.name} has already spotlighted ${cur?.memberName ?? "someone"} this scene. Scene Break to refresh.`);
+    return null;
+  }
+  if (!entryName || !memberId) { ui.notifications?.warn("Missing entry or member."); return null; }
+
+  const roster = (typeof getStewardEchoRoster === "function") ? getStewardEchoRoster(actor, entryName) : null;
+  const members = Array.isArray(roster?.members) ? roster.members : [];
+  const member = members.find(m => m.id === memberId);
+  if (!member) { ui.notifications?.warn("Member not found in roster."); return null; }
+
+  const ts = Date.now();
+  const flagPayload = {
+    memberId,
+    memberName: member.name,
+    memberRole: member.role ?? "",
+    memberPortrait: member.portrait ?? "",
+    slug: slug ?? (typeof ftSlugifyEchoName === "function" ? ftSlugifyEchoName(entryName) : ""),
+    entryName,
+    kind: (kind === "occult") ? "occult" : "crew",
+    narration: String(narration ?? "").trim(),
+    consumed: false,
+    consumedAs: null,
+    ts
+  };
+  try { await actor.setFlag("fourththing", _FT_SPOTLIGHT_FLAG, flagPayload); }
+  catch (e) { console.warn("Echo Spotlight | setFlag failed:", e); }
+
+  let surgeBanked = false;
+  try {
+    if (typeof _ftBankSurge === "function") {
+      const got = await _ftBankSurge(actor, 1);
+      surgeBanked = (got ?? 1) >= 1;
+    }
+  } catch (e) { console.warn("Echo Spotlight | Surge bank failed:", e); }
+
+  try {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: _ftBuildSpotlightChatCard({
+        actor, member, slug: flagPayload.slug, entryName, kind: flagPayload.kind,
+        narration: flagPayload.narration, ts, surgeBanked, consumed: false
+      }),
+      flags: { fourththing: { echoSpotlight: { actorId: actor.id, ts } } }
+    });
+  } catch (e) { console.warn("Echo Spotlight | ChatMessage.create failed:", e); }
+
+  return flagPayload;
+}
+
+async function ftSpotlightConsume(actor, mode = "bonus") {
+  if (!actor) return null;
+  const cur = _ftGetEchoSpotlight(actor);
+  if (!cur) { ui.notifications?.warn("No active spotlight to spend."); return null; }
+  if (cur.consumed) { ui.notifications?.info("Spotlight already spent this scene."); return null; }
+  const consumedAs = (mode === "reroll") ? "reroll" : "bonus";
+  try { await actor.setFlag("fourththing", _FT_SPOTLIGHT_FLAG, { ...cur, consumed: true, consumedAs }); }
+  catch (e) { console.warn("Echo Spotlight | consume setFlag failed:", e); }
+
+  // Post a follow-up confirmation card so the whole table sees the spend land.
+  try {
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: _ftBuildSpotlightChatCard({
+        actor,
+        member: { name: cur.memberName, role: cur.memberRole, portrait: cur.memberPortrait },
+        slug: cur.slug, entryName: cur.entryName, kind: cur.kind,
+        narration: cur.narration, ts: cur.ts, surgeBanked: false, consumed: true, consumedAs
+      })
+    });
+  } catch (e) { console.warn("Echo Spotlight | spent-card create failed:", e); }
+  return { consumed: true, consumedAs };
+}
+
+// Picker dialog — opens from the Echo Assets Manager's ✦ Invoke button. Lists
+// members of one specific active crew/occult, sorts defaultPresent on top, lets
+// the player narrate the arrival, then fires the invocation.
+async function openEchoInvocationPicker(actor, entryName, kind = "crew") {
+  if (!actor || !entryName) return null;
+  if (!ftCanInvokeSpotlight(actor)) {
+    const cur = _ftGetEchoSpotlight(actor);
+    ui.notifications?.warn(`${actor.name} has already spotlighted ${cur?.memberName ?? "someone"} this scene. Scene Break to refresh.`);
+    return null;
+  }
+  const roster = (typeof getStewardEchoRoster === "function") ? getStewardEchoRoster(actor, entryName) : null;
+  const members = Array.isArray(roster?.members) ? roster.members.filter(m => m?.name) : [];
+  const slug = (typeof ftSlugifyEchoName === "function") ? ftSlugifyEchoName(entryName) : "";
+  const kindLabel = (kind === "occult") ? "Occult Association" : "Awesome Crew";
+
+  if (!members.length) {
+    ui.notifications?.warn(`No members on the ${entryName} roster yet — open Roster and add some (or ✨ Suggest members) first.`);
+    return null;
+  }
+
+  // Sort defaultPresent first.
+  const sorted = [...members].sort((a, b) => (b.defaultPresent ? 1 : 0) - (a.defaultPresent ? 1 : 0));
+
+  const memberOptionHtml = sorted.map((m, i) => {
+    const safePortrait = String(m.portrait ?? "").trim() || "icons/svg/mystery-man.svg";
+    return `
+      <label class="ft-spot-member" style="display:flex;gap:.5rem;padding:.4rem;border:1px solid rgba(255,255,255,.08);border-radius:6px;margin-bottom:.3rem;align-items:flex-start;cursor:pointer;">
+        <input type="radio" name="spotMember" value="${ftEscapeHtml(m.id)}" ${i === 0 ? "checked" : ""} style="margin-top:.25rem;"/>
+        <img src="${ftEscapeHtml(safePortrait)}" alt="" style="width:44px;height:44px;border-radius:5px;object-fit:cover;border:1px solid rgba(255,255,255,.08);flex:0 0 auto;"/>
+        <div style="flex:1;font-size:.85rem;">
+          <div><b>${ftEscapeHtml(m.name)}</b>${m.role ? ` — <span style="opacity:.8;">${ftEscapeHtml(m.role)}</span>` : ""}${m.defaultPresent ? ` <span style="opacity:.55;font-size:.7rem;">· default-present</span>` : ""}</div>
+          ${m.notes ? `<div style="opacity:.7;font-size:.78rem;margin-top:.15rem;">${ftEscapeHtml(m.notes)}</div>` : ""}
+        </div>
+      </label>`;
+  }).join("");
+
+  const dialogHtml = `
+    <div class="ft-spotlight-picker ft-cast-dialog">
+      <p style="margin:0 0 .4rem;font-size:.85rem;opacity:.85;">
+        Spotlight one person from <b>${ftEscapeHtml(entryName)}</b> (${ftEscapeHtml(kindLabel)}). They show up at the table for one beat: <b>+1 Surge banked</b> immediately, plus one of <b>+2 to a roll</b> OR <b>reroll one failed roll</b> this scene — your pick when you spend it.
+      </p>
+      <div class="ft-spot-members" style="max-height:50vh;overflow-y:auto;padding-right:.3rem;">
+        ${memberOptionHtml}
+      </div>
+      <div style="margin-top:.5rem;">
+        <label style="font-size:.8rem;opacity:.8;">Narrate the arrival (one line — say their name out loud at the table):</label>
+        <textarea name="spotNarration" rows="2" placeholder="e.g. 'Vell crests the ridgeline and takes the shot.'" style="width:100%;margin-top:.25rem;resize:vertical;"></textarea>
+      </div>
+    </div>`;
+
+  return new Promise((resolve) => {
+    let resolved = false;
+    const dlg = new Dialog({
+      title: `✦ Spotlight — ${entryName}`,
+      content: dialogHtml,
+      buttons: {
+        invoke: {
+          icon: "<i class='fas fa-star'></i>",
+          label: "Invoke",
+          callback: async (html) => {
+            const $html = html instanceof HTMLElement ? $(html) : html;
+            const memberId = String($html.find("[name='spotMember']:checked").val() ?? "").trim();
+            const narration = String($html.find("[name='spotNarration']").val() ?? "").trim();
+            if (!memberId) { ui.notifications?.warn("Pick a member to spotlight."); return; }
+            resolved = true;
+            const result = await ftSpotlightInvokeMember(actor, { slug, entryName, kind, memberId, narration });
+            resolve(result);
+          }
+        },
+        cancel: { label: "Cancel", callback: () => { resolved = true; resolve(null); } }
+      },
+      default: "invoke",
+      close: () => { if (!resolved) resolve(null); }
+    }, { width: 520, resizable: true });
+    dlg.render(true);
+  });
+}
+
 function buildEchoRosterMemberRowHTML(member = {}) {
   const id = String(member.id ?? foundry.utils.randomID(12));
   const portrait = String(member.portrait ?? "");
@@ -9740,6 +9965,32 @@ Hooks.once("init", function () {
         generate: (actorOrId, entryName, kind, count) => {
           const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
           return ftGenerateEchoRosterMembers({ actor, entryName, kind, count });
+        }
+      },
+      spotlight: {
+        can: (actorOrId) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return ftCanInvokeSpotlight(actor);
+        },
+        get: (actorOrId) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return _ftGetEchoSpotlight(actor);
+        },
+        invoke: (actorOrId, opts) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return ftSpotlightInvokeMember(actor, opts || {});
+        },
+        consume: (actorOrId, mode) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return ftSpotlightConsume(actor, mode);
+        },
+        clear: (actorOrId) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return ftClearEchoSpotlight(actor);
+        },
+        pickFromCrew: (actorOrId, entryName, kind) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return openEchoInvocationPicker(actor, entryName, kind);
         }
       }
     },
@@ -11760,6 +12011,9 @@ Hooks.once("init", function () {
   // taken multiple times per scene if the GM allows the fiction.
   game.fourththing.actions.sceneBreak = async function (actor) {
     if (!actor) return;
+    // Clear any active Echo Spotlight — the spotlight is once-per-scene; Scene
+    // Break is the canonical scene boundary, so refreshing it here.
+    try { if (typeof ftClearEchoSpotlight === "function") await ftClearEchoSpotlight(actor); } catch (_e) {}
     const rawSys = actor.system?.system ?? actor.system ?? {};
     const sys    = rawSys ?? {};
     const curC   = Number(sys.magic?.clarity?.value) || 0;
@@ -19573,6 +19827,31 @@ Hooks.on(_chatHook, (message, html) => {
   // when the world setting / cast checkbox gates auto-apply.
   root.querySelectorAll(".ft-aoe-apply-all-btn").forEach(btn => {
     btn.addEventListener("click", () => _ftHandleAoeApplyAllClick(btn, message));
+  });
+
+  // Echo Spotlight spend buttons — player clicks Spend +2 or Spend reroll on
+  // their own spotlight chat card to consume the once-per-scene benefit. The
+  // consume call writes a flag + posts a follow-up "spent" card so the whole
+  // table sees the resolution land.
+  root.querySelectorAll(".ft-echo-spotlight-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (btn.disabled) return;
+      btn.disabled = true;
+      try {
+        const actorId = btn.dataset.actorId;
+        const mode = btn.dataset.mode;
+        const actor = game.actors?.get(actorId);
+        if (!actor) { ui.notifications?.warn("Spotlight actor not found."); btn.disabled = false; return; }
+        if (typeof ftSpotlightConsume !== "function") { ui.notifications?.warn("Spotlight consume unavailable — reload."); btn.disabled = false; return; }
+        await ftSpotlightConsume(actor, mode);
+        // Disable both buttons on this card so the UI reflects the spend immediately.
+        const card = btn.closest(".ft-echo-spotlight-card");
+        if (card) card.querySelectorAll(".ft-echo-spotlight-btn").forEach(b => { b.disabled = true; b.style.opacity = "0.4"; });
+      } catch (err) {
+        console.warn("fourththing | echo-spotlight-btn failed", err);
+        btn.disabled = false;
+      }
+    });
   });
 
   // Redemption ritual buttons (GM-only; other clients see disabled buttons).
