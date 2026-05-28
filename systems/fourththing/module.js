@@ -3596,7 +3596,56 @@ const _FT_SURGE_MENU = [
     fiction: "No. That is the whole spell.", wired: true },
   { cost: 5, key: "mt-bastion", tier: 4, bucket: "def", bulwarkPath: "mountain",
     label: "Bastion — allies within Tier squares gain DR equal to Tier; you cannot be moved",
-    fiction: "Stand behind me. Everything does, eventually.", wired: true }
+    fiction: "Stand behind me. Everything does, eventually.", wired: true },
+
+  // ─── Shadow Courier (Pool) class-exclusive entries — "keep moving" ────────────
+  // Generation = movement (see _ftCourierMoveGen; folds the old Pace pool into
+  // Surge). Base kit = mobility + tempo; the 3 routes add their tactical flavor.
+  { cost: 1, key: "sc-step", tier: 1, bucket: "narr", classFilter: ["shadow_courier"],
+    label: "Courier's Step — +half-speed move (no provoke) and a freed reaction",
+    fiction: "You're already moving. The fight rearranges around it.", wired: true },
+  { cost: 3, key: "sc-ghost", tier: 2, bucket: "def", classFilter: ["shadow_courier"],
+    label: "Ghoststep — DR equal to Tier till your next turn; reposition out of danger",
+    fiction: "Hard to hit a thing that won't hold still.", wired: true },
+  { cost: 5, key: "sc-flank", tier: 3, bucket: "off", classFilter: ["shadow_courier"],
+    label: "Flank & Strike — reposition, then your next Strike has advantage and +Tier d6",
+    fiction: "You arrive from the side they forgot they had.", wired: true },
+  { cost: 8, key: "sc-nodoor", tier: 4, bucket: "def", classFilter: ["shadow_courier"],
+    label: "No Such Door — allies within Tier squares each gain a freed reaction + a reroll",
+    fiction: "The whole team finds the road at once.", wired: true },
+
+  // ─── Shadow Courier WAYFARER (route) — movement is mercy / extraction ─────────
+  { cost: 1, key: "wf-clearroad", tier: 1, bucket: "def", courierRoute: "wayfarer",
+    label: "Clear Road — an ally gains a freed reaction and a reroll (open their road out)",
+    fiction: "Go. I'll hold the way.", wired: true },
+  { cost: 2, key: "wf-safepassage", tier: 2, bucket: "def", courierRoute: "wayfarer",
+    label: "Safe Passage — an ally gains DR equal to Tier and a reroll (escorted through)",
+    fiction: "Nothing touches what I'm carrying.", wired: true },
+  { cost: 5, key: "wf-arrival", tier: 4, bucket: "heal", courierRoute: "wayfarer",
+    label: "Impossible Arrival — whisk a hurt ally clear: heal + DR equal to Tier + a freed reaction",
+    fiction: "You were never going to die here. I won't allow it.", wired: true },
+
+  // ─── Shadow Courier BLACK STAIR (route) — weaponized thresholds / denial ──────
+  { cost: 1, key: "bs-ambush", tier: 1, bucket: "off", courierRoute: "black-stair",
+    label: "Ambush — your next Strike +Tier d6; the target's next attack is at disadvantage",
+    fiction: "You came through a door that wasn't for them.", wired: true },
+  { cost: 2, key: "bs-cutoff", tier: 2, bucket: "off", courierRoute: "black-stair",
+    label: "Cut Off — a foe is Staggered and cannot take reactions until your next turn",
+    fiction: "The crossing closes behind you. They don't get to answer.", wired: true },
+  { cost: 5, key: "bs-stairtrap", tier: 4, bucket: "off", courierRoute: "black-stair",
+    label: "Stair-Trap — next Strike is a max-die crit + knocks Prone; if it drops them, regain a freed action",
+    fiction: "The stair that does not end. Mind the last step.", wired: true },
+
+  // ─── Shadow Courier LAST MILE (route) — carry the burden / anti-death ─────────
+  { cost: 1, key: "lm-shoulder", tier: 1, bucket: "heal", courierRoute: "last-mile",
+    label: "Shoulder the Weight — heal an ally Tier d6; you take half as Stress; they bank a reroll",
+    fiction: "Give it to me. I carry things.", wired: true },
+  { cost: 2, key: "lm-quiet", tier: 2, bucket: "def", courierRoute: "last-mile",
+    label: "Quiet Voyage — an ally gains DR equal to Tier + the next hit that would drop them holds at 1",
+    fiction: "Sleep. I've got the road from here.", wired: true },
+  { cost: 5, key: "lm-delivered", tier: 4, bucket: "heal", courierRoute: "last-mile",
+    label: "Delivered — restore a fallen/hurt ally to half integrity and clear a condition",
+    fiction: "The unbearable thing arrives. Intact.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3664,6 +3713,21 @@ const _FT_BULWARK_PATH_KEYS = new Set([
 // Path spends that target SELF / an aura (no single target needed). av-unstoppable
 // is here too — its core is self CC-immunity; the Prone just applies if a foe is targeted.
 const _FT_BULWARK_PATH_SELF_KEYS = new Set(["cl-cataclysm", "av-unstoppable", "mt-root", "mt-deny", "mt-bastion"]);
+
+// Shadow Courier base class-exclusive Surge keys — routed to _ftCourierSurge.
+const _FT_COURIER_KEYS = new Set(["sc-step", "sc-ghost", "sc-flank", "sc-nodoor"]);
+// Base spends that target SELF / an aura (sc-flank needs a foe target).
+const _FT_COURIER_SELF_KEYS = new Set(["sc-step", "sc-ghost", "sc-nodoor"]);
+// Shadow Courier route (subclass) Surge keys — routed to _ftCourierRouteSurge; gated
+// by which route the actor's subclass is (see _ftCourierRoute).
+const _FT_COURIER_ROUTE_KEYS = new Set([
+  "wf-clearroad", "wf-safepassage", "wf-arrival",
+  "bs-ambush", "bs-cutoff", "bs-stairtrap",
+  "lm-shoulder", "lm-quiet", "lm-delivered"
+]);
+// Route spends that target SELF (no target needed) — only bs-ambush (self strike-buff;
+// the disadvantage rider just applies if a foe is targeted).
+const _FT_COURIER_ROUTE_SELF_KEYS = new Set(["bs-ambush"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3764,6 +3828,17 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
     return;
   }
+  // Shadow Courier base sc-flank needs a foe target; the rest of the base kit is self/aura.
+  if (effectKey === "sc-flank" && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
+  // Shadow Courier route spends — all but bs-ambush (self strike-buff) need a target.
+  if (_FT_COURIER_ROUTE_KEYS.has(effectKey) && !_FT_COURIER_ROUTE_SELF_KEYS.has(effectKey)
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -3816,6 +3891,10 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftBulwarkSurge(actor, effectKey, tier);
   } else if (_FT_BULWARK_PATH_KEYS.has(effectKey)) {
     chatExtra = await _ftBulwarkPathSurge(actor, effectKey, tier);
+  } else if (_FT_COURIER_KEYS.has(effectKey)) {
+    chatExtra = await _ftCourierSurge(actor, effectKey, tier);
+  } else if (_FT_COURIER_ROUTE_KEYS.has(effectKey)) {
+    chatExtra = await _ftCourierRouteSurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
@@ -4699,6 +4778,169 @@ async function _ftBulwarkPathSurge(actor, effectKey, tier) {
       await selfAE(anchorAE("Bulwark: Bastion (forced-move immune)"));
       for (const t of allies) { if (await _ftCreateAllyAE(t.actor, drAE(`Bastion (DR ${tier})`))) buffed.push(t.actor.name); }
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">🏔 Bastion — ${buffed.length ? `${buffed.map(n => `<b>${n}</b>`).join(", ")} gain` : "allies in reach gain"} DR ${tier}; you cannot be moved.</p>`;
+    }
+  }
+  return "";
+}
+
+// ─── Shadow Courier (Pool archetype) — "keep moving" gen + Surge spends ───────
+// Crossing 30 ft of movement in a combat turn banks +1 Surge (again at 60 ft),
+// capped +2/round. Folds the old Pace pool into Surge. Banked through _ftBankSurge
+// (cap + foe-gating honored). Called fire-and-forget from the on-move hook with the
+// per-turn cumulative footage.
+async function _ftCourierMoveGen(actor, cumulativeFt) {
+  if (!actor || !_ftActorMatchesClass(actor, "shadow_courier")) return;
+  if (!_ftSurgeAllowed(actor)) return; // foe Couriers need the GM toggle
+  const round  = Number(game.combat?.round ?? 0);
+  const f      = actor.flags?.fourththing?.courier?.moveGen ?? {};
+  const had    = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+  const earned = Math.min(2, Math.floor(Number(cumulativeFt) / 30)); // +1 per 30 ft, cap +2/round
+  if (earned <= had) return;
+  let banked = 0;
+  for (let i = had; i < earned; i++) banked += await _ftBankSurge(actor, 1);
+  if (banked > 0) await actor.setFlag("fourththing", "courier.moveGen", { round, count: earned });
+}
+
+// Which route (subclass) is this Courier? Flexible match on subclass id OR name.
+function _ftCourierRoute(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("wayfarer")    || nm.includes("wayfarer"))    return "wayfarer";
+    if (id.includes("black-stair") || id.includes("black_stair") || nm.includes("black stair")) return "black-stair";
+    if (id.includes("last-mile")   || id.includes("last_mile")   || nm.includes("last mile"))   return "last-mile";
+  }
+  return null;
+}
+
+// Shadow Courier base Surge spends — mobility + tempo. Reuse existing chokepoints
+// (movementBudgetFt, bonusActionAvailable freed reaction, aegis-DR AE, snap-strike +
+// doomstrike one-shots, aidBanked reroll) — no new consumers.
+async function _ftCourierSurge(actor, effectKey, tier) {
+  const grid    = canvas.grid?.size ?? 100;
+  const rawSys  = actor.system?.system ?? actor.system;
+  const drAE    = (name) => ({ name, img: "icons/svg/wingfoot.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
+  const freeReaction = async (a) => { try { await a.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} };
+  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "courier" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const selfMove = async () => {
+    const speed = Number(rawSys?.derived?.speed?.value ?? rawSys?.attributes?.speed?.value ?? rawSys?.attributes?.speed ?? 30) || 30;
+    const half  = Math.max(5, Math.round(speed / 2 / 5) * 5);
+    const cur   = Number(rawSys?.actions?.movementBudgetFt) || 0;
+    try { await actor.update({ "system.actions.movementBudgetFt": cur + half }); } catch (e) {}
+    return half;
+  };
+  const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
+
+  if (effectKey === "sc-step") {
+    const half = await selfMove(); await freeReaction(actor);
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0b8e8">🏃 Courier's Step — +${half} ft movement (no provoke) and a freed reaction.</p>`;
+  }
+  if (effectKey === "sc-ghost") {
+    try { await actor.createEmbeddedDocuments("ActiveEffect", [drAE(`Ghoststep (DR ${tier})`)]); } catch (e) {}
+    const half = await selfMove();
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0b8e8">🌫 Ghoststep — DR ${tier} till your next turn; reposition up to ${half} ft out of danger.</p>`;
+  }
+  if (effectKey === "sc-flank") {
+    await oneShot("snap-strike"); await oneShot("doomstrike");
+    const half = await selfMove();
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">⚔ Flank & Strike — reposition (${half} ft), then your next Strike has advantage and hits for +${tier}d6.</p>`;
+  }
+  if (effectKey === "sc-nodoor") {
+    const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= tier * grid + grid / 2) : [];
+    const names = [];
+    for (const t of allies) { await freeReaction(t.actor); await bankReroll(t.actor); names.push(t.actor.name); }
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#a0b8e8;font-weight:600">🚪 No Such Door — ${names.length ? `<b>${names.join(", ")}</b> each gain` : "allies in reach gain"} a freed reaction and a reroll.</p>`;
+  }
+  return "";
+}
+
+// Shadow Courier route (subclass) Surge spends. Wayfarer = mobility support/
+// extraction, Black Stair = ambush/denial, Last Mile = anti-death/burden-bearer.
+// Reuse chokepoints (aegis-DR + reactionsDenied AEs, doomstrike/crowning-blow
+// one-shots, disAttackOnce, relicWard, toggleCondition, heal, bonusActionAvailable,
+// aidBanked, self Stress) — no new consumers.
+async function _ftCourierRouteSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the ally";
+  const drAE   = (name) => ({ name, img: "icons/svg/wingfoot.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
+  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "courier-route" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const freeReaction = async (a) => { try { await a.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} };
+  const disAdv  = async (foe) => { try { await foe.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) {} };
+  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const healAlly = async (a, formula) => {
+    const s = a.system?.system ?? a.system ?? {};
+    const max = Number(s?.integrity?.max ?? s?.derived?.integrity?.max ?? 16);
+    const cur = Number(s?.integrity?.value ?? s?.derived?.integrity?.value ?? 0);
+    const r = new Roll(formula); await r.evaluate();
+    const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
+    if (next !== cur) { try { await a.update({ "system.integrity.value": next }); } catch (e) {} }
+    return { banked: next - cur, next, max, cur };
+  };
+  const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
+
+  switch (effectKey) {
+    // ── Wayfarer — movement is mercy / extraction ──
+    case "wf-clearroad": {
+      if (target) { await freeReaction(target); await bankReroll(target); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0b8e8">🛤 Clear Road — <b>${tname}</b> gains a freed reaction and a reroll (the road opens).</p>`;
+    }
+    case "wf-safepassage": {
+      if (target) { await _ftCreateAllyAE(target, drAE(`Safe Passage (DR ${tier})`)); await bankReroll(target); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Safe Passage — <b>${tname}</b> gains DR ${tier} and a reroll (escorted through).</p>`;
+    }
+    case "wf-arrival": {
+      let h = 0;
+      if (target) { const r = await healAlly(target, `1d8 + ${tier}`); h = r.banked; await _ftCreateAllyAE(target, drAE(`Impossible Arrival (DR ${tier})`)); await freeReaction(target); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">✦ Impossible Arrival — whisked <b>${tname}</b> clear: +${h} integrity, DR ${tier}, and a freed reaction.</p>`;
+    }
+    // ── Black Stair — weaponized thresholds / denial ──
+    case "bs-ambush": {
+      await oneShot("doomstrike");
+      if (target) await disAdv(target);
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🗡 Ambush — your next Strike +${tier}d6${target ? `, and <b>${tname}</b>'s next attack is at disadvantage` : ""}.</p>`;
+    }
+    case "bs-cutoff": {
+      if (target) {
+        await setCond(target, "staggered");
+        await _ftCreateAllyAE(target, { name: "Black Stair: Cut Off (reactions denied)", img: "icons/svg/door-exit.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { reactionsDenied: true } } });
+      }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🚧 Cut Off — <b>${tname}</b> is Staggered and cannot take reactions until your next turn.</p>`;
+    }
+    case "bs-stairtrap": {
+      await oneShot("crowning-blow");
+      if (target) await setCond(target, "prone");
+      try { await actor.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {}
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🌀 Stair-Trap — your next Strike lands as a max-die crit${target ? `; <b>${tname}</b> is knocked Prone` : ""}; if it drops them, you regain a freed action.</p>`;
+    }
+    // ── Last Mile — carry the burden / anti-death ──
+    case "lm-shoulder": {
+      if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Shoulder the Weight needs a target ally. Surge spent — GM may refund.</p>`;
+      const r = await healAlly(target, `${Math.max(1, tier)}d6`);
+      await bankReroll(target);
+      const sCur = Number((actor.system?.system ?? actor.system)?.derived?.stress?.value ?? 10);
+      const cost = Math.ceil(r.banked / 2);
+      if (cost > 0) { try { await actor.update({ "system.derived.stress.value": Math.max(0, sCur - cost) }); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🤲 Shoulder the Weight — carried <b>${tname}</b>'s pain: +${r.banked} integrity to them, ${cost} Stress to you; they bank a reroll.</p>`;
+    }
+    case "lm-quiet": {
+      if (target) { await _ftCreateAllyAE(target, drAE(`Quiet Voyage (DR ${tier})`)); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🕯 Quiet Voyage — <b>${tname}</b> gains DR ${tier}, and the next hit that would drop them is held at 1.</p>`;
+    }
+    case "lm-delivered": {
+      if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Delivered needs a target ally. Surge spent — GM may refund.</p>`;
+      const tsys = target.system?.system ?? target.system ?? {};
+      const max  = Number(tsys?.integrity?.max ?? tsys?.derived?.integrity?.max ?? 16);
+      const half = Math.max(1, Math.floor(max / 2));
+      const cur  = Number(tsys?.integrity?.value ?? tsys?.derived?.integrity?.value ?? 0);
+      const next = Math.max(cur, half);
+      try { await target.update({ "system.integrity.value": next }); } catch (e) {}
+      let cl = ""; const k = NEG.find(x => tsys?.conditions?.[x] === true);
+      if (k && await setCond(target, k)) cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`;
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">📦 Delivered — the unbearable thing arrives: restored <b>${tname}</b> to ${next}/${max} integrity${cl}.</p>`;
     }
   }
   return "";
@@ -13790,6 +14032,11 @@ Hooks.once("init", function () {
     fireTriggers(actor, "on-move", { amount: distanceFt, cumulativeFt: nextCumulative, inCombat, scope: "self" })
       .catch(err => console.error("fourththing | on-move trigger failed", err));
 
+    // Shadow Courier "keep moving" — crossing 30/60 ft this turn banks Surge (Pool;
+    // folds the old Pace pool into Surge). Fire-and-forget; never blocks the move.
+    _ftCourierMoveGen(actor, nextCumulative)
+      .catch(err => console.error("fourththing | courier move-gen failed", err));
+
     // Movement budget accumulator — only debits while actor is in combat.
     // Soft-warn when over budget; never blocks the move (RFI tactical play
     // permits Surge / Soma-Break workarounds the system can't introspect).
@@ -15723,7 +15970,8 @@ Hooks.once("init", function () {
         (!e.forge || _ftSoulSmithForge(actor) === e.forge) &&
         (!e.mandate || _ftHarmonyMandate(actor) === e.mandate) &&
         (!e.trance || _ftDreamwalkerTrance(actor) === e.trance) &&
-        (!e.bulwarkPath || _ftBulwarkPath(actor) === e.bulwarkPath));
+        (!e.bulwarkPath || _ftBulwarkPath(actor) === e.bulwarkPath) &&
+        (!e.courierRoute || _ftCourierRoute(actor) === e.courierRoute));
 
       // Group by cost.
       const byCost = {};
@@ -16391,7 +16639,7 @@ Hooks.once("init", function () {
           <input type="text" name="recv-hex" placeholder="e.g. Hex 04-12 / Talanu" style="padding:0.3rem"/>
         </label>
         <p style="opacity:0.65;font-size:0.75rem;margin:0.2rem 0 0;font-style:italic">
-          Pace will refill to max. Package slot will clear. Doctrine effects post to chat.
+          Surge banks to full. Package slot will clear. Doctrine effects post to chat.
         </p>
       </div>`;
 
@@ -16405,21 +16653,21 @@ Hooks.once("init", function () {
               const root = dlgHtml instanceof HTMLElement ? dlgHtml : dlgHtml[0] ?? dlgHtml;
               const recvFaction = (root.querySelector('[name="recv-faction"]')?.value ?? "").trim();
               const recvHex     = (root.querySelector('[name="recv-hex"]')?.value ?? "").trim();
-              const paceMax     = rawSys?.resources?.pace?.max ?? 0;
-
-              const updates = {
-                "system.resources.pace.current":    paceMax,
+              await actor.update({
                 "system.resources.package.type":    "",
                 "system.resources.package.id":     "",
                 "system.resources.package.carried":false
-              };
-              await actor.update(updates);
+              });
+              // Fold: delivery banks Surge to full (the road paid off) instead of
+              // refilling the retired Pace pool. _ftBankSurge clamps to the cap.
+              const surgeCap = _ftSurgeCap(actor);
+              const banked   = await _ftBankSurge(actor, surgeCap);
 
               // Build per-route effect bullets for the chat card.
               const lines = [];
               const recv = recvFaction ? `<b>${foundry.utils.escapeHTML(recvFaction)}</b>` : "the recipient faction";
               const hex  = recvHex     ? `<b>${foundry.utils.escapeHTML(recvHex)}</b>`     : "the recipient hex";
-              lines.push(`<li>Pace refilled to <b>${paceMax}/${paceMax}</b>.</li>`);
+              lines.push(`<li>Surge banked${banked > 0 ? ` <b>+${banked}</b>` : ""} (to ${surgeCap} cap).</li>`);
               if (route === "wayfarer") {
                 lines.push(`<li>${recv} gains <b>+1 Intrigue OP</b> (apply on faction sheet).</li>`);
                 if (hasMastery) lines.push(`<li><em>Package Mastery:</em> ${recv} gains an additional <b>+1 Intrigue OP</b>.</li>`);

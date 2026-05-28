@@ -122,14 +122,13 @@
       {{/if}}
       {{#if shadowCourierState}}
       <div class="ft-courier-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
-        <span class="ft-chip ft-chip-pace" data-tooltip="Shadow Courier — Pace (movement-generated). Spend on doctrine effects, +5 ft moves, rerolls. Refills on Package delivery and Soma Break." style="background:#1f2d3a;color:#c8e0ff;border:1px solid #3a6a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">◌ Pace
-          <input type="number" name="system.resources.pace.current" value="{{shadowCourierState.pace.current}}" min="0" max="{{shadowCourierState.pace.max}}" style="width:32px;background:transparent;color:inherit;border:1px solid #3a6a8a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;" data-tooltip="Current Pace — edit directly."/>
-          / {{shadowCourierState.pace.max}}
-        </span>
-        <button type="button" data-action="ftCourierPaceSpend" data-tooltip="Spend 1 Pace — opens the spend dialog (+5 ft move / reroll / dodge / route-specific)." style="padding:0.1rem 0.5rem;font-size:0.78rem;background:#2a3a4a;color:#c8e0ff;border:1px solid #3a6a8a;border-radius:3px;cursor:pointer">Spend</button>
+        {{!-- 2026-05-28 — Pace folded into Surge ("keep moving" generator + the
+             Courier Surge kit). Movement banks Surge directly; the Pace chip +
+             Spend button retired. Surge is shown in the universal resource cluster.
+             Package stays as the strategic signature. --}}
         {{#if shadowCourierState.package.carried}}
         <button type="button" data-action="ftCourierPackageEdit" class="ft-chip ft-chip-package" data-tooltip="Shadow Courier — Package: {{shadowCourierState.package.type}}{{#if shadowCourierState.package.id}} ({{shadowCourierState.package.id}}){{/if}}. Click to edit." style="background:#2a1f3a;color:#dac8ff;border:1px solid #6a3a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;cursor:pointer;">◯ Package: {{shadowCourierState.package.type}}{{#if shadowCourierState.package.id}} — {{shadowCourierState.package.id}}{{/if}}</button>
-        <button type="button" data-action="ftCourierPackageDeliver" data-tooltip="Deliver Package — refills Pace, clears slot, posts route delivery effects to chat." style="padding:0.05rem 0.45rem;font-size:0.78rem;background:#1a3a1a;color:#c8ffd2;border:1px solid #3a8a3a;border-radius:3px;cursor:pointer">✦ Deliver</button>
+        <button type="button" data-action="ftCourierPackageDeliver" data-tooltip="Deliver Package — banks Surge to full, clears slot, posts route delivery effects to chat." style="padding:0.05rem 0.45rem;font-size:0.78rem;background:#1a3a1a;color:#c8ffd2;border:1px solid #3a8a3a;border-radius:3px;cursor:pointer">✦ Deliver</button>
         {{else}}
         <button type="button" data-action="ftCourierPackageEdit" class="ft-chip ft-chip-package" data-tooltip="Shadow Courier — Package slot empty. Click to designate a Package (doctrine L1 sets your default type)." style="background:#1a1a1f;color:#9098a8;border:1px solid #4a4a55;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;font-style:italic;cursor:pointer;">◯ Package: empty</button>
         {{/if}}
@@ -667,35 +666,11 @@
       </div>
       {{/if}}
 
-      {{#if activePools.shadowCourier}}
-      <div class="ft-combat-section ft-resource-panel">
-        <h3>◌ Pace <span class="ft-resource-tag">Shadow Courier</span></h3>
-        <div class="ft-resource-row">
-          <div class="ft-die-pips">
-            {{#each (times (or resources.pace.max 3)) as |n|}}
-            <span class="ft-die-pip {{#if (lte (add n 1) (or ../resources.pace.current 0))}}active{{/if}}">◈</span>
-            {{/each}}
-          </div>
-          <span class="ft-resource-count">{{resources.pace.current}} / {{resources.pace.max}}</span>
-          {{!-- 2026-05-20 — Edit-only twin inputs removed. Two form fields
-               sharing `name="system.resources.pace.current"` (top-bar chip
-               at the sheet header + this hidden twin) caused a clobber: the
-               hidden twin's stale value="0" was submitted on every chip
-               change, reverting the edit. Edit the value via the top-bar
-               chip input + Spend button — those are the canonical surface. --}}
-        </div>
-        <div class="ft-resource-row">
-          <span class="ft-aura-badge" style="background:rgba(155,89,182,0.15);border:1px solid rgba(155,89,182,0.5);color:#9b59b6">Package</span>
-          <div class="ft-resource-controls">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="shadow_courier_package">Package</button>
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="shadow_courier_crossing">Crossing</button>
-          </div>
-        </div>
-        <p class="ft-hint" style="margin:0.3rem 0 0;font-size:0.7rem;opacity:0.55">
-          Pace is generated by movement. Spend on doctrine effects, +5 ft moves, rerolls. Refills on Package delivery and Soma Break.
-        </p>
-      </div>
-      {{/if}}
+      {{!-- 2026-05-28 — Shadow Courier Pace pool folded into Surge. Movement banks
+           Surge ("keep moving"); the courier kit + 3 route kits spend it from the
+           universal Surge menu. Package edit/deliver lives on the header chip row.
+           The redundant Pace resource panel (+ legacy Package/Crossing buttons) was
+           removed. (Crossing as an exploration utility = deferred re-surface.) --}}
 
       {{#if activePools.cosmicLinguist}}
       <div class="ft-combat-section ft-resource-panel">
