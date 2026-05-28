@@ -9259,23 +9259,26 @@ async function openEchoAssetsManager(actor, sheetApp = null) {
 // configured; otherwise a self-contained procedural generator keeps the button
 // working with zero setup. Output shape is always: [{ name, role, notes }].
 
-const FT_ECHO_FLAVOR_PRIMER = `BAD EDEN SETTING (keep everything inside this world):
-Bad Eden is a post-Shattering world: reality fractured into hexes and is being slowly,
-violently repaired (the Great Work). The tone is gritty, occult, hopeful-despite-itself.
-Magic is alignment with deep structure (the Tree, the Sephirah, Leylines, the Spark),
-not flashy spellcasting — and it always exacts a cost. People are competent but mortal,
-scarred by collapse, politically messy: no pure heroes or villains. Real factions/places
-for TEXTURE (echo this register, do not copy): the Tanneritos (mall-dwellers who treat
-the apocalypse as a market correction), the Circuit Riders (a robot crew led by a human
-posing as an AI god), the Valhaulans (patchwork-airship sky-pirates), Monodynamic
-Industries, the Jackalopes; places like Port Kudzu, the Bedlam Barrens, the Polygon
-Forests, Khezek Tor, Thirdword. Names are gritty / functional / occasionally absurdist
-(Sklar Bjornholt, Farrier, Captain Robot) — NOT Tolkien fantasy. No elves, dwarves,
-wizards, or taverns.
+const FT_ECHO_FLAVOR_PRIMER = `BAD EDEN — read carefully. Earlier batches got the canon wrong and over-leaned grimdark.
 
-CANON: a Steward HAS a crew; they are not their crew. Each crew/occult entry is a PAST
-LIFE — an organized group the Steward once ran with. Roster members are the companions,
-rivals, and mentors from that life: people with skills, debts, and unfinished business.`;
+FACTS YOU MUST NOT GET WRONG (these are LAWS, not flavor):
+1. The world was UNIFIED, then it Shattered. Hexes are the RESULT of the Shattering — they did NOT exist before it. Do not place hexes, factions, or Steward-era infrastructure pre-Shattering. Anything pre-Shattering is the old, whole world.
+2. The Great Work is the slow, violent POST-Shattering effort to repair reality. Ongoing, not finished.
+3. Magic = alignment with deep structure (the Tree, the Sephirah, Leylines, the Spark). It is not flashy spellcasting, and it ALWAYS exacts a named cost.
+4. A Steward HAS a crew; the Steward IS NOT their crew. Crews and occult associations are organizations the Steward runs with — not labels for who the Steward is.
+
+WHAT YOU ARE ACTUALLY GENERATING — the framing matters:
+You are NOT producing ghosts from past incarnations. You are generating CURRENT-TENSE PEOPLE the Steward has met through one of their crew/occult associations and has a LIVE THREAD with — connections that could pull them into a session this week. Each hook is that thread, in the present tense, between this person and the Steward.
+
+EMOTIONAL PALETTE — VARY THIS across the batch. Do NOT lock into one register:
+• Debts in BOTH directions: ones the Steward owes, ones owed to the Steward, debts no one can settle, debts paid quietly.
+• Roles: mentors who taught the Steward; peers who rode with them; juniors the Steward trained; lovers and ex-lovers; rivals who respect them; rivals who don't.
+• Bonds: people the Steward saved, people who saved the Steward, friends who drifted, friends who didn't.
+• Lighter beats too: someone who owes the Steward a drink; an inside joke from a bad job; a recurring small kindness; a comic-relief loyalty; a quiet mutual obsession with a specific old machine.
+NOT EVERY MEMBER IS A GRUDGE, A BETRAYAL, OR A WRONG THE STEWARD DID. One of those per batch is great; three of three is grimdark stew. Aim for genuine variety — at least one warm or lateral relationship in every batch.
+
+TEXTURE — echo the register, do not copy literally:
+Factions like the Tanneritos (mall-dwellers treating apocalypse as a market correction), the Circuit Riders (a robot crew led by a human posing as an AI god), the Valhaulans (patchwork-airship sky-pirates), Monodynamic Industries, the Jackalopes. Places like Port Kudzu, the Bedlam Barrens, the Polygon Forests, Khezek Tor, Thirdword. Names lean gritty / functional / occasionally absurdist (Sklar Bjornholt, Farrier, Captain Robot) — NOT Tolkien fantasy. No elves, dwarves, wizards, taverns. People are competent but mortal, scarred but not ONLY scarred, politically messy — no pure heroes or villains.`;
 
 // Canonical Crew Types & Occult Associations → specialty + moral-drift + role pool.
 // _ftResolveEchoArchetype matches by keyword, so minor name drift ("Covert Ops Cell"
@@ -9327,7 +9330,10 @@ const _FT_ECHO_HOOKS = {
     "buried more of the old crew than they'll admit",
     "mapped a drowned hex no one else came back from",
     "kept the lights on in Port Kudzu when the grid died",
-    "walked out of a sacked hex with the ledger and nothing else"
+    "walked out of a sacked hex with the ledger and nothing else",
+    "salvaged a working printer in the Bedlam Barrens and keeps it like a saint's relic",
+    "ran a clean job for Monodynamic and walked away with the receipts",
+    "fixed a generator everyone else had written off"
   ],
   rel: [
     "owed you their life and never quite forgave it",
@@ -9337,7 +9343,14 @@ const _FT_ECHO_HOOKS = {
     "vanished after the Shattering and surfaced here, changed",
     "split the take with you once and has been counting ever since",
     "swore they'd never work with you again, and keeps showing up",
-    "carried you out when you couldn't carry yourself"
+    "carried you out when you couldn't carry yourself",
+    "owes you a round at the Salt House and keeps saying next visit",
+    "shared a long quiet job with you once; you've trusted each other ever since",
+    "covered for you in front of a faction marshal and never asked why",
+    "still keeps your spare set of papers, just in case",
+    "trained you on the loud machines and tells the story wrong on purpose",
+    "writes you whenever they hear about a working printer",
+    "lost the same coin-flip with you a dozen times and never let it sour"
   ]
 };
 
