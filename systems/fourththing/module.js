@@ -4080,76 +4080,80 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
 // derived mirror, per [[chat-apply-damage-canonical]]). Returns chat fragment
 // describing what was healed.
 async function _ftSurgeHeal(actor, effectKey, tier) {
-  const heal = async (target, formula, label) => {
-    const sys = target.system?.system ?? target.system ?? {};
-    const max = Number(sys?.integrity?.max ?? sys?.derived?.integrity?.max ?? 16);
-    const cur = Number(sys?.integrity?.value ?? sys?.derived?.integrity?.value ?? 0);
+  // Post a heal as a REAL roll (DSN-animated via rolls:[roll]) + an Apply Healing
+  // button — the existing .ft-apply-dmg-btn with data-op="heal" → applyDamageFromButton
+  // → canonical _applyDamageToActor → system.derived.integrity.value. Single-target
+  // heals bake the recipient UUID (data-target-uuid) so the button needs no live
+  // target (you don't have to target yourself to drink your own Stitch). Returns total.
+  const postHealCard = async (formula, label, targetUuid) => {
     const roll = new Roll(formula);
     await roll.evaluate();
-    const amount = Math.max(0, Number(roll.total) || 0);
-    const next   = Math.min(max, cur + amount);
-    const banked = next - cur;
-    try { await target.update({ "system.integrity.value": next }); }
-    catch (e) { /* missing field — silent */ }
-    return { target, label, formula, amount, cur, next, banked, max };
+    const total = Math.max(0, Number(roll.total) || 0);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      rolls: [roll],
+      content: `<div class="fourththing-roll">
+        <div class="ft-roll-header"><span class="ft-roll-name">✚ ${label} — Healing</span></div>
+        <div class="ft-dmg-row">
+          <span class="ft-dmg-label">Healing</span>
+          <span class="ft-dmg-formula">${formula} = <b>${total}</b></span>
+          <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="heal" data-track="integrity"${targetUuid ? ` data-target-uuid="${targetUuid}"` : ""}>✚ Apply Healing${targetUuid ? "" : " to target"}</button>
+        </div>
+      </div>`
+    });
+    return total;
   };
 
   if (effectKey === "stitch") {
-    const r = await heal(actor, `2d6 + ${tier}`, "Stitch");
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">
-      ✚ Healed <b>${r.banked}</b> integrity (${r.formula} = ${r.amount}). ${r.cur} → ${r.next}/${r.max}.
-    </p>`;
+    const total = await postHealCard(`2d6 + ${tier}`, "Stitch", actor.uuid);
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Stitch — rolled <b>${total}</b> healing (roll posted below); click <b>Apply Healing</b> to mend yourself.</p>`;
   }
 
   if (effectKey === "field-patch") {
-    const targets = Array.from(game.user?.targets ?? []);
-    const tok = targets[0];
+    const tok = Array.from(game.user?.targets ?? [])[0];
     if (!tok?.actor) {
-      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">
-        ⚠ Field Patch needs a target (target one ally token first). Surge was still spent — GM may refund.
-      </p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Field Patch needs a target (target one ally token first). Surge was still spent — GM may refund.</p>`;
     }
-    const r = await heal(tok.actor, `2d6 + ${tier}`, "Field Patch");
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">
-      ✚ Patched <b>${r.target.name}</b> for <b>${r.banked}</b> integrity (${r.formula} = ${r.amount}). ${r.cur} → ${r.next}/${r.max}.
-    </p>`;
+    const total = await postHealCard(`2d6 + ${tier}`, `Field Patch → ${tok.actor.name}`, tok.actor.uuid);
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Field Patch — rolled <b>${total}</b> for <b>${tok.actor.name}</b>; click <b>Apply Healing</b>.</p>`;
   }
 
   if (effectKey === "rallying-cry") {
     const myToken = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
     if (!myToken) {
-      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">
-        ⚠ Rallying Cry needs your token on a scene. Spent anyway — GM may refund.
-      </p>`;
+      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Rallying Cry needs your token on a scene. Spent anyway — GM may refund.</p>`;
     }
     const grid    = canvas.grid?.size ?? 100;
     const rangePx = tier * grid;
-    const myUser  = game.user;
     const allies = (canvas.tokens?.placeables ?? []).filter(t => {
       if (!t?.actor) return false;
       if (t.actor.id === actor.id) return true;
-      const dispNonHostile = t.document?.disposition >= 0;
+      if ((t.document?.disposition ?? 0) < 0) return false;
       const dx = (t.x + (t.document?.width || 1) * grid / 2) - (myToken.x + (myToken.document?.width || 1) * grid / 2);
       const dy = (t.y + (t.document?.height || 1) * grid / 2) - (myToken.y + (myToken.document?.height || 1) * grid / 2);
-      const dist = Math.hypot(dx, dy);
-      return dispNonHostile && dist <= rangePx + grid / 2;
+      return Math.hypot(dx, dy) <= rangePx + grid / 2;
     });
-    const results = [];
+    if (!allies.length) {
+      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ No allies within ${tier} squares.</p>`;
+    }
+    // AOE: one roll (shown via DSN), applied to each in-range ally via the canonical path.
+    const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
+    const amt  = Math.max(0, Number(roll.total) || 0);
+    const names = [];
     for (const t of allies) {
-      const r = await heal(t.actor, `1d6 + ${tier}`, "Rallying Cry");
-      if (r.banked > 0) results.push(r);
+      try { const desc = await game.fourththing?.rolls?._applyDamageToActor?.(t.actor, amt, { op: "heal", track: "integrity" }); if (desc) names.push(t.actor.name); }
+      catch (e) { /* unowned ally — skip */ }
     }
-    if (!results.length) {
-      return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">
-        ⚠ No allies within ${tier} squares needed healing.
-      </p>`;
-    }
-    const lines = results.map(r =>
-      `• <b>${r.target.name}</b>: +${r.banked} (${r.cur} → ${r.next}/${r.max})`
-    ).join("<br>");
-    return `<p style="margin:0.25rem 0;font-size:0.76rem;color:#78c88c">
-      ✚ Allies rallied within ${tier} sq:<br>${lines}
-    </p>`;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      rolls: [roll],
+      content: `<div class="fourththing-roll">
+        <div class="ft-roll-header"><span class="ft-roll-name">✚ Rallying Cry — Healing</span></div>
+        <div class="ft-dmg-row"><span class="ft-dmg-label">Healing</span><span class="ft-dmg-formula">1d6 + ${tier} = <b>${amt}</b></span></div>
+        <p style="margin:0.2rem 0;font-size:0.76rem">Applied to allies within ${tier} sq: <b>${names.join(", ") || "—"}</b>.</p>
+      </div>`
+    });
+    return `<p style="margin:0.25rem 0;font-size:0.76rem;color:#78c88c">✚ Rallying Cry — +${amt} integrity to ${names.length} ${names.length === 1 ? "ally" : "allies"} within ${tier} sq.</p>`;
   }
 
   if (effectKey === "phoenix") {
@@ -4157,11 +4161,11 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
     const tok     = targets[0];
     const target  = tok?.actor ?? actor;
     const sys     = target.system?.system ?? target.system ?? {};
-    const max     = Number(sys?.integrity?.max ?? sys?.derived?.integrity?.max ?? 16);
+    const max     = Number(sys?.derived?.integrity?.max ?? sys?.integrity?.max ?? 16);
     const half    = Math.max(1, Math.floor(max / 2));
-    const cur     = Number(sys?.integrity?.value ?? sys?.derived?.integrity?.value ?? 0);
+    const cur     = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
     const next    = Math.max(cur, half);
-    try { await target.update({ "system.integrity.value": next }); }
+    try { await target.update({ "system.derived.integrity.value": next }); }
     catch (e) { /* silent */ }
     return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">
       ⟁ <b>${target.name}</b> restored to half integrity: ${cur} → ${next}/${max}.
@@ -4451,11 +4455,11 @@ async function _ftMandateSurge(actor, effectKey, tier) {
         return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ None Lost already invoked this fight.</p>`;
       }
       const ts = target.system?.system ?? target.system ?? {};
-      const max = Number(ts?.integrity?.max ?? ts?.derived?.integrity?.max ?? 16);
+      const max = Number(ts?.derived?.integrity?.max ?? ts?.integrity?.max ?? 16);
       const half = Math.max(1, Math.floor(max / 2));
-      const cur = Number(ts?.integrity?.value ?? ts?.derived?.integrity?.value ?? 0);
+      const cur = Number(ts?.derived?.integrity?.value ?? ts?.integrity?.value ?? 0);
       const next = Math.max(cur, half);
-      try { await target.update({ "system.integrity.value": next }); } catch (e) {}
+      try { await target.update({ "system.derived.integrity.value": next }); } catch (e) {}
       try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {}
       try { await actor.setFlag("fourththing", "harmonyMarshal.noneLostCombat", combatId); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">⚔ None Lost — <b>${tname}</b> refuses to fall: restored to ${next}/${max} Integrity and warded against the next drop. <span style="opacity:0.7;font-weight:400">(1/fight)</span></p>`;
@@ -4516,11 +4520,11 @@ async function _ftForgeSurge(actor, effectKey, tier) {
   const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
   const healAlly = async (a, formula) => {
     const s = a.system?.system ?? a.system ?? {};
-    const max = Number(s?.integrity?.max ?? s?.derived?.integrity?.max ?? 16);
-    const cur = Number(s?.integrity?.value ?? s?.derived?.integrity?.value ?? 0);
+    const max = Number(s?.derived?.integrity?.max ?? s?.integrity?.max ?? 16);
+    const cur = Number(s?.derived?.integrity?.value ?? s?.integrity?.value ?? 0);
     const r = new Roll(formula); await r.evaluate();
     const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
-    if (next !== cur) { try { await a.update({ "system.integrity.value": next }); } catch (e) {} }
+    if (next !== cur) { try { await a.update({ "system.derived.integrity.value": next }); } catch (e) {} }
     return next - cur;
   };
   const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
@@ -4595,14 +4599,14 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
   if (effectKey === "forge-weld") {
     if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Forge-Weld needs a target ally. Surge spent — GM may refund.</p>`;
     const sys = target.system?.system ?? target.system ?? {};
-    const max = Number(sys?.integrity?.max ?? sys?.derived?.integrity?.max ?? 16);
-    const cur = Number(sys?.integrity?.value ?? sys?.derived?.integrity?.value ?? 0);
+    const max = Number(sys?.derived?.integrity?.max ?? sys?.integrity?.max ?? 16);
+    const cur = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
     const roll = new Roll(`1d8 + ${tier}`);
     await roll.evaluate();
     const amount = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
     const next   = Math.min(max, cur + amount);
     const banked = next - cur;
-    try { await target.update({ "system.integrity.value": next }); } catch (e) { /* silent */ }
+    try { await target.update({ "system.derived.integrity.value": next }); } catch (e) { /* silent */ }
     let backlash = "";
     if (overheated) {
       const br = new Roll("1d6"); await br.evaluate();
@@ -4654,12 +4658,12 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
     for (const t of allies) {
       const a = t.actor;
       const asys = a.system?.system ?? a.system ?? {};
-      const max = Number(asys?.integrity?.max ?? asys?.derived?.integrity?.max ?? 16);
-      const cur = Number(asys?.integrity?.value ?? asys?.derived?.integrity?.value ?? 0);
+      const max = Number(asys?.derived?.integrity?.max ?? asys?.integrity?.max ?? 16);
+      const cur = Number(asys?.derived?.integrity?.value ?? asys?.integrity?.value ?? 0);
       const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
       const amt  = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
       const next = Math.min(max, cur + amt);
-      if (next !== cur) { try { await a.update({ "system.integrity.value": next }); } catch (e) {} }
+      if (next !== cur) { try { await a.update({ "system.derived.integrity.value": next }); } catch (e) {} }
       for (const rt of ["poison", "necrotic"]) {
         try { await _ftCreateAllyAE(a, {
           name: `Furnace: resist ${rt}`, img: "icons/svg/fire-shield.svg", origin: actor.uuid,
@@ -4682,11 +4686,11 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
         return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Relic already reforged this fight.</p>`;
       }
       const tsys = target.system?.system ?? target.system ?? {};
-      const max = Number(tsys?.integrity?.max ?? tsys?.derived?.integrity?.max ?? 16);
+      const max = Number(tsys?.derived?.integrity?.max ?? tsys?.integrity?.max ?? 16);
       const half = Math.max(1, Math.floor(max / 2));
-      const cur = Number(tsys?.integrity?.value ?? tsys?.derived?.integrity?.value ?? 0);
+      const cur = Number(tsys?.derived?.integrity?.value ?? tsys?.integrity?.value ?? 0);
       const next = Math.max(cur, half);
-      try { await target.update({ "system.integrity.value": next }); } catch (e) {}
+      try { await target.update({ "system.derived.integrity.value": next }); } catch (e) {}
       try { await actor.setFlag("fourththing", "soulSmith.reforgeCombat", combatId); } catch (e) {}
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#e8c84a;font-weight:600">⟁ Relic of Rebirth — reforged <b>${target.name}</b> to half Integrity: ${cur} → ${next}/${max}. <span style="opacity:0.7;font-weight:400">(Overheated · 1/fight)</span></p>`;
     }
@@ -5008,11 +5012,11 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
   const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
   const healAlly = async (a, formula) => {
     const s = a.system?.system ?? a.system ?? {};
-    const max = Number(s?.integrity?.max ?? s?.derived?.integrity?.max ?? 16);
-    const cur = Number(s?.integrity?.value ?? s?.derived?.integrity?.value ?? 0);
+    const max = Number(s?.derived?.integrity?.max ?? s?.integrity?.max ?? 16);
+    const cur = Number(s?.derived?.integrity?.value ?? s?.integrity?.value ?? 0);
     const r = new Roll(formula); await r.evaluate();
     const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
-    if (next !== cur) { try { await a.update({ "system.integrity.value": next }); } catch (e) {} }
+    if (next !== cur) { try { await a.update({ "system.derived.integrity.value": next }); } catch (e) {} }
     return { banked: next - cur, next, max, cur };
   };
   const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
@@ -5068,11 +5072,11 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
     case "lm-delivered": {
       if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Delivered needs a target ally. Surge spent — GM may refund.</p>`;
       const tsys = target.system?.system ?? target.system ?? {};
-      const max  = Number(tsys?.integrity?.max ?? tsys?.derived?.integrity?.max ?? 16);
+      const max  = Number(tsys?.derived?.integrity?.max ?? tsys?.integrity?.max ?? 16);
       const half = Math.max(1, Math.floor(max / 2));
-      const cur  = Number(tsys?.integrity?.value ?? tsys?.derived?.integrity?.value ?? 0);
+      const cur  = Number(tsys?.derived?.integrity?.value ?? tsys?.integrity?.value ?? 0);
       const next = Math.max(cur, half);
-      try { await target.update({ "system.integrity.value": next }); } catch (e) {}
+      try { await target.update({ "system.derived.integrity.value": next }); } catch (e) {}
       let cl = ""; const k = NEG.find(x => tsys?.conditions?.[x] === true);
       if (k && await setCond(target, k)) cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`;
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">📦 Delivered — the unbearable thing arrives: restored <b>${tname}</b> to ${next}/${max} integrity${cl}.</p>`;
@@ -5159,11 +5163,11 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
   const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
   const healAlly = async (a, formula) => {
     const s = a.system?.system ?? a.system ?? {};
-    const max = Number(s?.integrity?.max ?? s?.derived?.integrity?.max ?? 16);
-    const cur = Number(s?.integrity?.value ?? s?.derived?.integrity?.value ?? 0);
+    const max = Number(s?.derived?.integrity?.max ?? s?.integrity?.max ?? 16);
+    const cur = Number(s?.derived?.integrity?.value ?? s?.integrity?.value ?? 0);
     const r = new Roll(formula); await r.evaluate();
     const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
-    if (next !== cur) { try { await a.update({ "system.integrity.value": next }); } catch (e) {} }
+    if (next !== cur) { try { await a.update({ "system.derived.integrity.value": next }); } catch (e) {} }
     return next - cur;
   };
   const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
@@ -5250,13 +5254,13 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
   if (effectKey === "ease-attrition") {
     if (!target) return `<p style="margin:0.25rem 0;font-size:0.74rem;color:#dc8050;font-style:italic">⚠ Ease Attrition needs a target ally. Surge spent — GM may refund.</p>`;
     const sys = target.system?.system ?? target.system ?? {};
-    const max = Number(sys?.integrity?.max ?? sys?.derived?.integrity?.max ?? 16);
-    const cur = Number(sys?.integrity?.value ?? sys?.derived?.integrity?.value ?? 0);
+    const max = Number(sys?.derived?.integrity?.max ?? sys?.integrity?.max ?? 16);
+    const cur = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
     const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
     const amount = Math.max(0, Number(roll.total) || 0);
     const next   = Math.min(max, cur + amount);
     const healed = next - cur;
-    try { await target.update({ "system.integrity.value": next }); } catch (e) { /* silent */ }
+    try { await target.update({ "system.derived.integrity.value": next }); } catch (e) { /* silent */ }
     const k = NEG.find(x => sys?.conditions?.[x] === true);
     let cl = "";
     if (k) { try { await game.fourththing?.toggleCondition?.(target, k); cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`; } catch (e) {} }
@@ -12413,9 +12417,19 @@ Hooks.once("init", function () {
     const itemUuid      = btn.dataset.itemUuid ?? "";
     const ignoreResists = btn.dataset.ignoreResists === "1";
     const nonlethal     = btn.dataset.nonlethal === "1";
-    const targets       = game.user.targets;
+    let   targets       = game.user.targets;
 
-    if (!targets.size) {
+    // 2026-05-28 — baked target fallback. Cards (e.g. a Surge self-heal) can carry
+    // data-target-uuid so the Apply button resolves a specific actor when nothing is
+    // live-targeted — no need to target yourself to drink your own heal.
+    let bakedTargets = null;
+    if (!targets.size && btn.dataset.targetUuid) {
+      const a = await (foundry.utils?.fromUuid ?? fromUuid)?.(btn.dataset.targetUuid).catch(() => null);
+      const tok = a?.getActiveTokens?.()?.[0];
+      if (tok) bakedTargets = [tok];
+      else if (a) bakedTargets = [{ actor: a }];
+    }
+    if (!targets.size && !bakedTargets) {
       ui.notifications.warn("No tokens targeted. Target a token first, then click Apply.");
       return;
     }
@@ -12423,6 +12437,7 @@ Hooks.once("init", function () {
     const roll = new Roll(formula);
     await roll.evaluate();
     const baseDmg = roll.total;
+    const applyTargets = bakedTargets ?? targets;
 
     // Phase E — source item lookup for conditional damage + weapon parity.
     // Resolves itemUuid via Foundry's UUID resolver; null when the chat card
@@ -12431,10 +12446,10 @@ Hooks.once("init", function () {
     const sourceMf   = sourceItem?.system?.manifestation ?? null;
     const cdRows     = Array.isArray(sourceMf?.conditionalDamage) ? sourceMf.conditionalDamage : [];
     const isWeapon   = sourceItem?.type === "weapon";
-    const targetCount = targets.size;
+    const targetCount = bakedTargets ? bakedTargets.length : targets.size;
     let firstTarget = null;
 
-    for (const token of targets) {
+    for (const token of applyTargets) {
       const actor = token.actor;
       if (!actor) continue;
       if (!firstTarget) firstTarget = actor;

@@ -2328,6 +2328,11 @@ export async function openBulwarkStance(actor) {
 // resource panel input; no dedicated spend/pool dialog needed.
 
 export async function openShadowCourierPackage(actor) {
+  // 2026-05-28 — legacy flag-based Package dialog retired; the Package lives on the
+  // sheet header chip now (◯ Package / ✦ Deliver). Redirect so old feats don't open the
+  // disconnected dialog.
+  ui.notifications?.info(`${actor?.name ?? "Courier"}: use the ◯ Package chip on your sheet header to designate / deliver.`);
+  return;
   const pkg = actor.getFlag("fourththing", "scPackage") ?? { type: "none", note: "" };
 
   new Dialog({
@@ -2374,7 +2379,11 @@ export async function openShadowCourierPackage(actor) {
 }
 
 export async function openShadowCourierCrossing(actor) {
-  // 2026-05-20 — Migrated from legacy accessDice to Pace.
+  // 2026-05-28 — Pace retired (folded into Surge). The Crossing's combat repositioning
+  // lives in the courier Surge kit (Courier's Step / Ghoststep / Threshold Cross via
+  // No Such Door); a pure threshold-bypass is now a free GM-adjudicated beat.
+  ui.notifications?.info(`${actor?.name ?? "Courier"}: Pace is folded into Surge — your moves are in the ◆ Surge menu. A bare threshold-crossing is a free narrative beat (no pool).`);
+  return;
   const rawSys = actor.system?.system ?? actor.system;
   const pace   = rawSys?.resources?.pace ?? { current: 0, max: 0 };
   const cur    = Number(pace.current) || 0;
@@ -2428,6 +2437,11 @@ export async function openShadowCourierCrossing(actor) {
 // Pattern mirrors openPactkeeperSpendCivicCharge but without the die roll
 // (Pace is a flat counter, not a die pool).
 export async function openShadowCourierSpendPace(actor) {
+  // 2026-05-28 — Pace folded into Surge. Its spends (move / reroll / dodge / route)
+  // are now the courier Surge kit (Courier's Step / Ghoststep / Flank & Strike /
+  // No Such Door + the 3 route kits). Redirect old "Spend Pace / Pace Pool" feats.
+  ui.notifications?.info(`${actor?.name ?? "Courier"}: Pace is retired — your courier moves are Surge spends now. Open the ◆ Surge menu.`);
+  return;
   const rawSys = actor.system?.system ?? actor.system;
   const pace   = rawSys?.resources?.pace ?? { current: 0, max: 0 };
   const cur    = Number(pace.current) || 0;
