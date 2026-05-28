@@ -3354,7 +3354,7 @@ const _FT_SURGE_MENU = [
     label: "Wrath Cascade — every d10 in next roll explodes once free",
     fiction: "The dice all remember at once.",
     wired: false },
-  { cost: 6, key: "bulwark-stance", tier: 2, bucket: "def",
+  { cost: 6, key: "bulwark-stance", tier: 2, bucket: "def", classFilter: ["bulwark"],
     label: "Bulwark Stance — adjacent allies share your defenses till next turn",
     fiction: "You become the wall they fight from behind.",
     wired: false },
@@ -3363,7 +3363,7 @@ const _FT_SURGE_MENU = [
     label: "Crowning Blow — next Strike is a max-die critical hit",
     fiction: "Inevitable. The kind of strike fables remember.",
     wired: false },
-  { cost: 7, key: "anchor", tier: 3, bucket: "def",
+  { cost: 5, key: "anchor", tier: 3, bucket: "def", classFilter: ["bulwark"],
     label: "Anchor — you + one ally immune to forced move / CC till next round",
     fiction: "You both refuse the verbs they're trying to apply.",
     wired: false },
@@ -3376,7 +3376,7 @@ const _FT_SURGE_MENU = [
     label: "Tier Surge — next Strike OR Cast counts as one Tier higher",
     fiction: "You reach above your weight class for one moment.",
     wired: false },
-  { cost: 8, key: "mass-aegis", tier: 3, bucket: "def",
+  { cost: 8, key: "mass-aegis", tier: 3, bucket: "def", classFilter: ["bulwark"],
     label: "Mass Aegis — +Tier to all defenses for allies within Tier squares this round",
     fiction: "Every nearby stance straightens at once.",
     wired: false },
@@ -3385,7 +3385,7 @@ const _FT_SURGE_MENU = [
     label: "Cinderwake — every d10 in next roll explodes on 8+",
     fiction: "The dice run hot enough to leave scars.",
     wired: false },
-  { cost: 9, key: "sanctum", tier: 4, bucket: "def",
+  { cost: 9, key: "sanctum", tier: 4, bucket: "def", classFilter: ["bulwark"],
     label: "Sanctum — immune to one damage type for one round",
     fiction: "A category of harm forgets your name.",
     wired: false },
@@ -3394,7 +3394,7 @@ const _FT_SURGE_MENU = [
     label: "Final Argument — next Strike auto-hits, max damage, counts +1 Tier",
     fiction: "There will be no negotiation.",
     wired: false },
-  { cost: 10, key: "mythic-stand", tier: 4, bucket: "def",
+  { cost: 10, key: "mythic-stand", tier: 4, bucket: "def", classFilter: ["bulwark"],
     label: "Mythic Stand — invulnerable until start of your next turn",
     fiction: "The world allows it. You decide for one breath.",
     wired: false },
@@ -3556,7 +3556,47 @@ const _FT_SURGE_MENU = [
     fiction: "You wear their tell back at them.", wired: true },
   { cost: 3, key: "tf-shared", tier: 3, bucket: "def", trance: "thousand-faces",
     label: "Shared Face — you + an ally blur behind borrowed identities: both gain DR",
-    fiction: "Two of you, both wrong, both safe.", wired: true }
+    fiction: "Two of you, both wrong, both safe.", wired: true },
+
+  // ─── Bulwark (Pool) class-exclusive entries — the wall converts impact to power ──
+  // Generation = "eat the blow" (see _ftBulwarkOnDamage). The fortress tier
+  // (bulwark-stance / anchor / mass-aegis / sanctum / mythic-stand, above) is
+  // re-homed to Bulwark via classFilter; Brace Wall is the wired T1 opener.
+  { cost: 1, key: "bw-brace-wall", tier: 1, bucket: "def", classFilter: ["bulwark"],
+    label: "Brace Wall — you + adjacent allies gain DR equal to Tier this round",
+    fiction: "Set your feet. The line forms on you.", wired: true },
+
+  // ─── Bulwark CATACLYST (subclass) entries — gated by `bulwarkPath` ─────────────
+  // Cataclyst — controlled eruption; trade stability for force.
+  { cost: 1, key: "cl-erupt", tier: 1, bucket: "off", bulwarkPath: "cataclyst",
+    label: "Erupt — your next Strike erupts (+Tier d6 exploding) and knocks the target back",
+    fiction: "Something gives way. You aim where.", wired: true },
+  { cost: 3, key: "cl-shatter", tier: 2, bucket: "off", bulwarkPath: "cataclyst",
+    label: "Shatter — your next Strike ignores resistances and Staggers the target",
+    fiction: "Whatever held it together, you found the seam.", wired: true },
+  { cost: 5, key: "cl-cataclysm", tier: 4, bucket: "off", bulwarkPath: "cataclyst",
+    label: "Cataclysm — your next Strike lands as a max-die crit; foes in reach are knocked Prone",
+    fiction: "The ground decides it has had enough of standing still.", wired: true },
+  // Avalanche — momentum; geography deciding to move.
+  { cost: 1, key: "av-roll", tier: 1, bucket: "off", bulwarkPath: "avalanche",
+    label: "Roll Forward — your next Strike +Tier d6 and the target is knocked Prone",
+    fiction: "You do not stop. They learn this the hard way.", wired: true },
+  { cost: 3, key: "av-crash", tier: 2, bucket: "off", bulwarkPath: "avalanche",
+    label: "Crash — your next Strike lands as a max-die crit and Staggers the target",
+    fiction: "All that mass, arriving at once.", wired: true },
+  { cost: 5, key: "av-unstoppable", tier: 4, bucket: "off", bulwarkPath: "avalanche",
+    label: "Unstoppable — immune to forced-move/CC this round; your next Strike ignores resists + knocks Prone",
+    fiction: "Nothing in the world is currently able to stop you.", wired: true },
+  // Mountain — durability/refusal; immovable, load-bearing, patient.
+  { cost: 1, key: "mt-root", tier: 1, bucket: "def", bulwarkPath: "mountain",
+    label: "Root — you + adjacent allies gain DR equal to Tier and cannot be forcibly moved",
+    fiction: "You belong here now. Argue with the mountain.", wired: true },
+  { cost: 2, key: "mt-deny", tier: 2, bucket: "def", bulwarkPath: "mountain",
+    label: "Deny — you or an ally becomes immune to forced-move/CC + gains DR this round",
+    fiction: "No. That is the whole spell.", wired: true },
+  { cost: 5, key: "mt-bastion", tier: 4, bucket: "def", bulwarkPath: "mountain",
+    label: "Bastion — allies within Tier squares gain DR equal to Tier; you cannot be moved",
+    fiction: "Stand behind me. Everything does, eventually.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3609,6 +3649,21 @@ const _FT_TRANCE_KEYS = new Set([
 ]);
 // Trance spends that target SELF / an aura (no single target needed).
 const _FT_TRANCE_SELF_KEYS = new Set(["qs-attention", "qs-pause", "sg-held", "tf-face"]);
+
+// Bulwark base class-exclusive Surge keys — routed to _ftBulwarkSurge. (The
+// re-homed fortress tier — bulwark-stance/anchor/mass-aegis/sanctum/mythic-stand —
+// keeps its existing ALLY_AE / SPEND_TIME_AE wiring; only Brace Wall is new.)
+const _FT_BULWARK_KEYS = new Set(["bw-brace-wall"]);
+// Bulwark subclass "path" Surge keys — routed to _ftBulwarkPathSurge; gated by
+// which path the actor's subclass is (see _ftBulwarkPath).
+const _FT_BULWARK_PATH_KEYS = new Set([
+  "cl-erupt", "cl-shatter", "cl-cataclysm",
+  "av-roll", "av-crash", "av-unstoppable",
+  "mt-root", "mt-deny", "mt-bastion"
+]);
+// Path spends that target SELF / an aura (no single target needed). av-unstoppable
+// is here too — its core is self CC-immunity; the Prone just applies if a foe is targeted.
+const _FT_BULWARK_PATH_SELF_KEYS = new Set(["cl-cataclysm", "av-unstoppable", "mt-root", "mt-deny", "mt-bastion"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3703,6 +3758,12 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
     return;
   }
+  // Bulwark path spends — the offensive (non-self/aura) ones need a foe target.
+  if (_FT_BULWARK_PATH_KEYS.has(effectKey) && !_FT_BULWARK_PATH_SELF_KEYS.has(effectKey)
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -3751,6 +3812,10 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftTranceSurge(actor, effectKey, tier);
   } else if (_FT_HARMONY_KEYS.has(effectKey)) {
     chatExtra = await _ftHarmonySurge(actor, effectKey, tier);
+  } else if (_FT_BULWARK_KEYS.has(effectKey)) {
+    chatExtra = await _ftBulwarkSurge(actor, effectKey, tier);
+  } else if (_FT_BULWARK_PATH_KEYS.has(effectKey)) {
+    chatExtra = await _ftBulwarkPathSurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
@@ -4493,6 +4558,150 @@ async function _ftSoulSmithForgeOnDamage(damagedActor, dmg) {
       await smith.setFlag("fourththing", "soulSmith.forge", { round, count: count + 1 });
     } catch (e) { console.warn("[ft] soul-smith forge stoke failed for", smith?.name, e); }
   }
+}
+
+// ─── Bulwark (Pool archetype) — "eat the blow" generation + Surge spends ──────
+// The wall converts impact into power: when a Bulwark takes integrity damage it
+// banks +1 Surge (capped +2/combat-round). Self-only (distinct from Soul-Smith's
+// ally-aura forge), no Burn (Pool, not Burn). Foe-gated. Called from
+// _applyDamageToActor in a try/catch so it can never break damage apply.
+async function _ftBulwarkOnDamage(damagedActor, dmg) {
+  if (!damagedActor || !(Number(dmg) > 0)) return;
+  if (!_ftActorMatchesClass(damagedActor, "bulwark")) return;
+  if (!_ftSurgeAllowed(damagedActor)) return; // foe Bulwarks need the GM toggle
+  const round = Number(game.combat?.round ?? 0);
+  const f = damagedActor.flags?.fourththing?.bulwark?.surgeGen ?? {};
+  const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+  if (count >= 2) return; // +2 Surge / round from the eat-the-blow hook
+  const got = await _ftBankSurge(damagedActor, 1);
+  if (got > 0) await damagedActor.setFlag("fourththing", "bulwark.surgeGen", { round, count: count + 1 });
+}
+
+// Bulwark base class-exclusive Surge spend. Only Brace Wall (the wired T1 opener)
+// routes here; the re-homed fortress tier (bulwark-stance/anchor/mass-aegis/
+// sanctum/mythic-stand) keeps its existing ALLY_AE / SPEND_TIME_AE wiring.
+async function _ftBulwarkSurge(actor, effectKey, tier) {
+  const grid = canvas.grid?.size ?? 100;
+  const drAE = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  const adjacentAllies = () => {
+    if (!myTok) return [];
+    const dist = (a, b) => {
+      const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2;
+      const bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2;
+      return Math.hypot(ax - bx, ay - by);
+    };
+    return (canvas.tokens?.placeables ?? []).filter(t =>
+      t?.actor && t.actor.id !== actor.id && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= grid * 1.5);
+  };
+
+  if (effectKey === "bw-brace-wall") {
+    const buffed = [];
+    try { await actor.createEmbeddedDocuments("ActiveEffect", [drAE(`Brace Wall (DR ${tier})`)]); buffed.push(actor.name); } catch (e) { /* non-owner */ }
+    for (const t of adjacentAllies()) { const ok = await _ftCreateAllyAE(t.actor, drAE(`Brace Wall (DR ${tier})`)); if (ok) buffed.push(t.actor.name); }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🧱 Brace Wall — ${buffed.length ? `${buffed.map(n => `<b>${n}</b>`).join(", ")} gain` : "you + adjacent allies gain"} DR ${tier} this round.</p>`;
+  }
+  return "";
+}
+
+// Which Bulwark path (subclass) is this actor? Flexible match on subclass id OR name.
+function _ftBulwarkPath(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("cataclyst") || nm.includes("cataclyst")) return "cataclyst";
+    if (id.includes("avalanche") || nm.includes("avalanche")) return "avalanche";
+    if (id.includes("mountain")  || nm.includes("mountain"))  return "mountain";
+  }
+  return null;
+}
+
+// The nine Bulwark path spends. Cataclyst/Avalanche = eruption/momentum (offense),
+// Mountain = durability/refusal (defense). All reuse existing chokepoints — surge
+// one-shots (doomstrike/crowning-blow/sundering-blow), aegis-DR + anchor (CC/forced-
+// move immune) AEs, toggleCondition (Prone/Staggered) — no new consumers.
+async function _ftBulwarkPathSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the target";
+  const grid   = canvas.grid?.size ?? 100;
+  const myTok  = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
+  const drAE = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const anchorAE = (name) => ({ name, img: "icons/svg/anchor.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "anchor", ccImmune: true, forcedMoveImmune: true } } } });
+  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const selfAE = async (ae) => { try { await actor.createEmbeddedDocuments("ActiveEffect", [ae]); return true; } catch (e) { return false; } };
+  const dist = (a, b) => {
+    const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2;
+    const bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2;
+    return Math.hypot(ax - bx, ay - by);
+  };
+  const nearbyFoes = (squares) => myTok ? (canvas.tokens?.placeables ?? []).filter(t =>
+    t?.actor && (t.document?.disposition ?? 0) < 0 && dist(t, myTok) <= squares * grid + grid / 2) : [];
+  const nearbyAllies = (squares) => myTok ? (canvas.tokens?.placeables ?? []).filter(t =>
+    t?.actor && t.actor.id !== actor.id && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= squares * grid + grid / 2) : [];
+
+  switch (effectKey) {
+    // ── Cataclyst — controlled eruption ──
+    case "cl-erupt": {
+      await oneShot("doomstrike");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🌋 Erupt — your next Strike blazes (+${tier}d6 exploding) and hurls <b>${tname}</b> back. <span style="opacity:0.6">(GM resolves the knockback.)</span></p>`;
+    }
+    case "cl-shatter": {
+      await oneShot("sundering-blow");
+      if (target) await setCond(target, "staggered");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">💥 Shatter — your next Strike ignores resistances; <b>${tname}</b> is Staggered.</p>`;
+    }
+    case "cl-cataclysm": {
+      await oneShot("crowning-blow");
+      const foes = nearbyFoes(tier);
+      const downed = [];
+      for (const t of foes) if (await setCond(t.actor, "prone")) downed.push(t.actor.name);
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🌋 Cataclysm — your next Strike lands as a max-die crit${downed.length ? `; knocked Prone: <b>${downed.join(", ")}</b>` : "; no foes in reach to fell"}.</p>`;
+    }
+    // ── Avalanche — momentum ──
+    case "av-roll": {
+      await oneShot("doomstrike");
+      if (target) await setCond(target, "prone");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🏔 Roll Forward — your next Strike +${tier}d6; <b>${tname}</b> is knocked Prone.</p>`;
+    }
+    case "av-crash": {
+      await oneShot("crowning-blow");
+      if (target) await setCond(target, "staggered");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">💢 Crash — your next Strike lands as a max-die crit; <b>${tname}</b> is Staggered.</p>`;
+    }
+    case "av-unstoppable": {
+      await selfAE(anchorAE("Bulwark: Unstoppable (CC/forced-move immune)"));
+      await oneShot("sundering-blow");
+      if (target) await setCond(target, "prone");
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">⛰ Unstoppable — immune to forced movement / crowd-control this round; your next Strike ignores resistances${target ? `, and <b>${tname}</b> is knocked Prone` : ""}.</p>`;
+    }
+    // ── Mountain — durability / refusal ──
+    case "mt-root": {
+      const buffed = [];
+      if (await selfAE(drAE(`Rooted (DR ${tier})`))) buffed.push(actor.name);
+      await selfAE(anchorAE("Bulwark: Rooted (forced-move immune)"));
+      const adj = myTok ? (canvas.tokens?.placeables ?? []).filter(t =>
+        t?.actor && t.actor.id !== actor.id && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= grid * 1.5) : [];
+      for (const t of adj) { if (await _ftCreateAllyAE(t.actor, drAE(`Rooted (DR ${tier})`))) buffed.push(t.actor.name); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">⛰ Root — ${buffed.length ? `${buffed.map(n => `<b>${n}</b>`).join(", ")} gain` : "you + adjacent allies gain"} DR ${tier} and cannot be forcibly moved.</p>`;
+    }
+    case "mt-deny": {
+      const who = target ?? actor;
+      if (who.id === actor.id) { await selfAE(anchorAE("Bulwark: Deny (CC/forced-move immune)")); await selfAE(drAE(`Deny (DR ${tier})`)); }
+      else { await _ftCreateAllyAE(who, anchorAE("Bulwark: Deny (CC/forced-move immune)")); await _ftCreateAllyAE(who, drAE(`Deny (DR ${tier})`)); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Deny — <b>${who.name}</b> is immune to forced movement / crowd-control and gains DR ${tier} this round.</p>`;
+    }
+    case "mt-bastion": {
+      const allies = nearbyAllies(tier);
+      const buffed = [];
+      if (await selfAE(drAE(`Bastion (DR ${tier})`))) buffed.push(actor.name);
+      await selfAE(anchorAE("Bulwark: Bastion (forced-move immune)"));
+      for (const t of allies) { if (await _ftCreateAllyAE(t.actor, drAE(`Bastion (DR ${tier})`))) buffed.push(t.actor.name); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">🏔 Bastion — ${buffed.length ? `${buffed.map(n => `<b>${n}</b>`).join(", ")} gain` : "allies in reach gain"} DR ${tier}; you cannot be moved.</p>`;
+    }
+  }
+  return "";
 }
 
 // ─── Harmony Marshal Surge spends (Pool archetype) ───────────────────────────
@@ -11673,6 +11882,9 @@ Hooks.once("init", function () {
       // Soul-Smith subclass Spark generation (Victory/Reclaimer on a defeat, Bound Light on ally damage).
       try { await _ftSoulSmithSparkGen(actor, dmg, (newVal <= 0 && cur > 0)); }
       catch (e) { console.warn("[ft] soul-smith spark gen failed", e); }
+      // Bulwark "eat the blow": taking integrity damage banks the wall Surge (Pool).
+      try { await _ftBulwarkOnDamage(actor, dmg); }
+      catch (e) { console.warn("[ft] bulwark eat-the-blow hook failed", e); }
     }
 
     const destroyedTag = rigDestroyed ? " — DESTROYED" : "";
@@ -15510,7 +15722,8 @@ Hooks.once("init", function () {
         (!e.classFilter || _ftActorMatchesClass(actor, e.classFilter)) &&
         (!e.forge || _ftSoulSmithForge(actor) === e.forge) &&
         (!e.mandate || _ftHarmonyMandate(actor) === e.mandate) &&
-        (!e.trance || _ftDreamwalkerTrance(actor) === e.trance));
+        (!e.trance || _ftDreamwalkerTrance(actor) === e.trance) &&
+        (!e.bulwarkPath || _ftBulwarkPath(actor) === e.bulwarkPath));
 
       // Group by cost.
       const byCost = {};
