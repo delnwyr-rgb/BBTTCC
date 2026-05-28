@@ -1,7 +1,18 @@
 # Surge Unification Spec — v0 (pilot: Harmony Marshal + Soul-Smith)
 
-**Status:** Design locked. **Phases 1 (Burn generalization) + 2 (Soul-Smith) + 3 (Harmony Marshal) BUILT + DEPLOYED to both live instances + COMMITTED** 2026-05-26 — node-checked + unit-tested, md5-verified on both Lightsail instances + pm2-restarted, pushed to canonical `origin/monorepo-init` (P1/P2 `ede2af1`, P3 `b622de0`). **NOT yet live-tested.** Phase 4 (rest of roster) + per-class deep-wiring (2.1 / 3.1) pending.
-**Date:** 2026-05-26
+**Status:** Design locked. Phases 1–3 (Burn generalization + Soul-Smith + Harmony Marshal) BUILT + DEPLOYED + COMMITTED 2026-05-26 (P1/P2 `ede2af1`, P3 `b622de0`). **Phase 4 (rest of roster) is now in flight — one class per sprint via the locked template (base generator → Surge + class-exclusive tier powers + 3 subclass kits + Mal-voice text macro).**
+
+**Roster progress (5 of 9 redesigned):**
+- ✅ **Aurablade** — Burn (the original template).
+- ✅ **Soul-Smith** — Burn, forge-on-damage (Phase 2, `ede2af1`).
+- ✅ **Harmony Marshal** — Pool, harvest-ally-surges (Phase 3, `b622de0`).
+- ✅ **Dreamwalker** — Pool/Oracle, cast→Surge (2026-05-27, base `ada2053` + Trances `f73c6a5`).
+- ✅ **Bulwark** — Pool, "eat the blow" (take Integrity dmg → Surge); fortress tier re-homed off the shared menu to Bulwark-only; 3 paths Cataclyst/Avalanche/Mountain (2026-05-28, `6abbf61`).
+- ⬜ **Shadow Courier** (mid; Shadowjack + Phantom Courier folded in, 3 real subclasses) — NEXT.
+- ⬜ **Pactkeeper** (caster) · ⬜ **Wyrdlens Adept** (caster) · ⬜ **Cosmic Linguist** (caster).
+
+All redesigned classes are **NOT yet live-tested**. Per-class deep-wiring polish (2.1 / 3.1, and the Bulwark sheet-panel de-clutter) still pending. See memory `project_bulwark_surge_redesign_2026_05_28` for the Bulwark sprint details + the Titanbound/Breaker fold-in canon.
+**Date:** 2026-05-26 (status refreshed 2026-05-28)
 **Scope of this doc:** the universal model + two archetypes + full spec for the two pilot classes (Harmony Marshal, Soul-Smith). The rest of the roster is converted in a later pass once these two are playtested.
 
 ---
@@ -179,6 +190,8 @@ Hex repair (Forge Initiate), 1/arc Spark purification (Atonement Crucible), 1/us
    - *Phase 2.1 polish:* fully wire Atonement (condition cleanse) / Share-the-Furnace (resist AE) / Relic-of-Rebirth (prevent-drop consumer); optional turn-start Overheated backlash (currently backlash fires on Forge-Weld-while-Overheated to avoid touching the combat turn loop).
 3. ✅ **Harmony Marshal — BUILT + DEPLOYED 2026-05-26 (Pool archetype).** Generation hook `_ftHarmonyHarvest` fires inside `_ftBankSurge` (re-entry guarded via `fromHarvest` param — one edit vs 12 explosion sites): a friendly's surging roll within 30 ft banks +1 Surge for nearby Marshals, capped +2/round (round-keyed flag), excludes the exploder, foe-gated. Class-exclusive Surge entries via `classFilter`: Rallying Words (wired → `aidBanked` reroll), Ease Attrition (wired heal + condition clear), Rally-to-Me / Unity-Flourish / Conductor's-Crescendo (one-shot flag + chat, GM-enforced). No Burn, no new HUD gauge (Pool — Surge is already universal). Strategic faction-OP / hex-loyalty layer untouched.
    - *Phase 3.1 polish:* deep-wire Rally-to-Me (out-of-turn action) / Unity-Flourish (aura check-buff AE) / Conductor's-Crescendo (aura reroll-1s + a real 1/scene guard). Note: `aidBanked` is producer-only in code today (reroll is GM-applied) — wiring a consumer would auto-apply both the existing aid and Surge Rallying Words.
-4. **Playtest both**, settle §6, *then* template the rest of the roster.
+4. ✅ **Dreamwalker — BUILT + DEPLOYED 2026-05-27 (Pool/Oracle archetype).** Distinct gen = bank +1 Surge on a successful manifestation cast (`_ftDreamwalkerCastGen` at the castSuccess point in `castManifestation`, capped +2/round, foe-gated). 4 Surge-native tier powers via `_FT_DREAMWALKER_KEYS` → `_ftDreamwalkerSurge` (Omen/Dream Ward/Shared Dream/Reality Hack); Echo Dice folded into Surge (chip removed from panel); Dream-Cache kept as the signature. 3 Trance subclass kits (9 entries, `trance:` tag → `_ftTranceSurge`): Quiet Sun / Sapphire Gate / Thousand Faces. Base `ada2053`, Trances + macro `f73c6a5`.
+5. ✅ **Bulwark — BUILT + DEPLOYED 2026-05-28 (Pool archetype, `6abbf61`).** Gen = "eat the blow" — `_ftBulwarkOnDamage` in `_applyDamageToActor` banks +1 Surge per Integrity hit (cap +2/round, round-keyed flag, foe-gated, **no Burn**; self-only, distinct from Soul-Smith's ally-aura). **Shared-menu fix:** the fortress tier (bulwark-stance/anchor[7→5]/mass-aegis/sanctum/mythic-stand) was leaking into the universal menu → re-homed to Bulwark via `classFilter:["bulwark"]` (existing ALLY_AE/SPEND_TIME_AE wiring kept) + new wired T1 opener `bw-brace-wall` (`_ftBulwarkSurge`). 3 path kits (9 entries, `bulwarkPath:` tag → `_ftBulwarkPathSurge`, `_ftBulwarkPath` detector): Cataclyst/Avalanche/Mountain — reuse doomstrike/crowning-blow/sundering-blow one-shots + aegis-DR/anchor AEs + toggleCondition, **no new consumers**. Frame Dice/Ruin/siege kept as strategic skin; Titanbound+Breaker were folded into Bulwark (retired, not subclasses). Macro `rewrite-bulwark-bodies.macro.js`. Panel de-clutter deferred (works through the existing Surge button, no sheet edit).
+6. **Live-test the redesigned classes**, settle §6, then template the remaining roster: **Shadow Courier** (NEXT — Shadowjack + Phantom Courier folded in, 3 real subclasses; pick archetype + generator), **Pactkeeper**, **Wyrdlens Adept**, **Cosmic Linguist**.
 
 Every remaining class then answers the §0 test via the same three slots: **archetype · generation hook · spend menu.**
