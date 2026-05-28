@@ -3645,7 +3645,56 @@ const _FT_SURGE_MENU = [
     fiction: "Sleep. I've got the road from here.", wired: true },
   { cost: 5, key: "lm-delivered", tier: 4, bucket: "heal", courierRoute: "last-mile",
     label: "Delivered — restore a fallen/hurt ally to half integrity and clear a condition",
-    fiction: "The unbearable thing arrives. Intact.", wired: true }
+    fiction: "The unbearable thing arrives. Intact.", wired: true },
+
+  // ─── Pactkeeper (Pool) class-exclusive entries — "obligation compounds" ───────
+  // Generation = sustaining manifestations (see _ftPactkeeperGen). Base kit = the
+  // enforcer's toolkit: bind, enforce terms, shelter the parties, impose the law.
+  { cost: 1, key: "pk-clause", tier: 1, bucket: "off", classFilter: ["pactkeeper"],
+    label: "Invoke Clause — name a clause on a foe: its next attack is at disadvantage",
+    fiction: "Read the fine print back to them. It binds.", wired: true },
+  { cost: 3, key: "pk-writ", tier: 2, bucket: "off", classFilter: ["pactkeeper"],
+    label: "Binding Writ — a foe is Staggered and rolls its saves at disadvantage till your next turn",
+    fiction: "The terms are not negotiable. Neither are you.", wired: true },
+  { cost: 5, key: "pk-shelter", tier: 3, bucket: "def", classFilter: ["pactkeeper"],
+    label: "Shelter the Bound — you + an ally gain DR equal to Tier; the next hit that would drop them holds at 1",
+    fiction: "The pact protects its parties. That is the whole point of a pact.", wired: true },
+  { cost: 8, key: "pk-sovereign", tier: 4, bucket: "off", classFilter: ["pactkeeper"],
+    label: "Sovereign Writ — a foe cannot take reactions and rolls its next attack + saves at disadvantage",
+    fiction: "You do not argue with the law. You are the clerk who files it.", wired: true },
+
+  // ─── Pactkeeper ARCHIVIST OF PRECEDENT (doctrine) — history-as-leverage ───────
+  { cost: 1, key: "ar-precedent", tier: 1, bucket: "narr", pactDoctrine: "archivist",
+    label: "Cite Precedent — you and an ally each bank a reroll (the record supports you)",
+    fiction: "This was already decided. Long ago. In your favor.", wired: true },
+  { cost: 2, key: "ar-staredecisis", tier: 2, bucket: "off", pactDoctrine: "archivist",
+    label: "Stare Decisis — a foe's next attack and its saves are at disadvantage (bound by precedent)",
+    fiction: "It is settled. The ruling holds, and so do you.", wired: true },
+  { cost: 5, key: "ar-resjudicata", tier: 4, bucket: "off", pactDoctrine: "archivist",
+    label: "Res Judicata — a foe cannot take reactions and rolls its saves at disadvantage (the matter is closed)",
+    fiction: "The matter is closed. There is no appeal.", wired: true },
+
+  // ─── Pactkeeper AUDITOR (doctrine) — expose debt / punish ─────────────────────
+  { cost: 1, key: "au-expose", tier: 1, bucket: "off", pactDoctrine: "auditor",
+    label: "Expose the Debt — your next Strike or manifestation deals +Tier d6 (the hidden cost comes due)",
+    fiction: "I've seen the real ledger. You're overdrawn.", wired: true },
+  { cost: 2, key: "au-levy", tier: 2, bucket: "off", pactDoctrine: "auditor",
+    label: "Levy — a foe is Staggered and its next attack is at disadvantage (the penalty lands)",
+    fiction: "Payment is due. Now.", wired: true },
+  { cost: 5, key: "au-foreclose", tier: 4, bucket: "off", pactDoctrine: "auditor",
+    label: "Foreclose — your next Strike is a max-die crit and ignores resistances (the debt is called in full)",
+    fiction: "Everything you have. It was never really yours.", wired: true },
+
+  // ─── Pactkeeper STEWARD OF LIVING COMMUNITIES (doctrine) — protect the bound ──
+  { cost: 1, key: "st-shelter", tier: 1, bucket: "def", pactDoctrine: "steward",
+    label: "Shield the Vulnerable — an ally gains DR equal to Tier and a reroll",
+    fiction: "Stand behind the agreement. It was written to hold you.", wired: true },
+  { cost: 2, key: "st-bound", tier: 2, bucket: "heal", pactDoctrine: "steward",
+    label: "Keep the Agreement — heal an ally; the next hit that would drop them holds at 1",
+    fiction: "No one falls while the terms still stand.", wired: true },
+  { cost: 5, key: "st-sanctuary", tier: 4, bucket: "def", pactDoctrine: "steward",
+    label: "Sanctuary — allies within 30 ft gain DR equal to Tier and a freed reaction",
+    fiction: "This ground is under contract. Nothing crosses it uninvited.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3728,6 +3777,20 @@ const _FT_COURIER_ROUTE_KEYS = new Set([
 // Route spends that target SELF (no target needed) — only bs-ambush (self strike-buff;
 // the disadvantage rider just applies if a foe is targeted).
 const _FT_COURIER_ROUTE_SELF_KEYS = new Set(["bs-ambush"]);
+
+// Pactkeeper base class-exclusive Surge keys — routed to _ftPactkeeperSurge.
+const _FT_PACTKEEPER_KEYS = new Set(["pk-clause", "pk-writ", "pk-shelter", "pk-sovereign"]);
+// Base spends that target SELF / an ally (pk-shelter); the rest need a foe target.
+const _FT_PACTKEEPER_SELF_KEYS = new Set(["pk-shelter"]);
+// Pactkeeper doctrine (subclass) Surge keys — routed to _ftPactDoctrineSurge; gated
+// by which doctrine the actor's subclass is (see _ftPactDoctrine).
+const _FT_PACT_DOCTRINE_KEYS = new Set([
+  "ar-precedent", "ar-staredecisis", "ar-resjudicata",
+  "au-expose", "au-levy", "au-foreclose",
+  "st-shelter", "st-bound", "st-sanctuary"
+]);
+// Doctrine spends that target SELF / an aura (no single target needed).
+const _FT_PACT_DOCTRINE_SELF_KEYS = new Set(["ar-precedent", "au-expose", "au-foreclose", "st-sanctuary"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3839,6 +3902,18 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
     return;
   }
+  // Pactkeeper base — pk-clause/pk-writ/pk-sovereign need a foe target (pk-shelter is self/ally).
+  if (_FT_PACTKEEPER_KEYS.has(effectKey) && !_FT_PACTKEEPER_SELF_KEYS.has(effectKey)
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
+  // Pactkeeper doctrine spends — non-self/aura ones need a target.
+  if (_FT_PACT_DOCTRINE_KEYS.has(effectKey) && !_FT_PACT_DOCTRINE_SELF_KEYS.has(effectKey)
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -3895,6 +3970,10 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftCourierSurge(actor, effectKey, tier);
   } else if (_FT_COURIER_ROUTE_KEYS.has(effectKey)) {
     chatExtra = await _ftCourierRouteSurge(actor, effectKey, tier);
+  } else if (_FT_PACTKEEPER_KEYS.has(effectKey)) {
+    chatExtra = await _ftPactkeeperSurge(actor, effectKey, tier);
+  } else if (_FT_PACT_DOCTRINE_KEYS.has(effectKey)) {
+    chatExtra = await _ftPactDoctrineSurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
@@ -4941,6 +5020,142 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
       let cl = ""; const k = NEG.find(x => tsys?.conditions?.[x] === true);
       if (k && await setCond(target, k)) cl = ` and cleared <b>${FT?.CONDITIONS?.[k]?.label ?? k}</b>`;
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">📦 Delivered — the unbearable thing arrives: restored <b>${tname}</b> to ${next}/${max} integrity${cl}.</p>`;
+    }
+  }
+  return "";
+}
+
+// ─── Pactkeeper (Pool archetype) — "obligation compounds" gen + Surge spends ──
+// At the start of your turn, bank +1 Surge per manifestation you're sustaining
+// (cap +2). The longer the pacts run, the more leverage. Foe-gated; routed through
+// _ftBankSurge. Called from _ftHandleTurnStart (fires once/turn via dedup, so no
+// round-keyed flag is needed here).
+async function _ftPactkeeperGen(actor) {
+  if (!actor || !_ftActorMatchesClass(actor, "pactkeeper")) return;
+  if (!_ftSurgeAllowed(actor)) return; // foe Pactkeepers need the GM toggle
+  const sustained = (actor.getFlag("fourththing", "activeManifestations") ?? []).length;
+  const gain = Math.min(2, sustained);
+  for (let i = 0; i < gain; i++) await _ftBankSurge(actor, 1);
+}
+
+// Which doctrine (subclass) is this Pactkeeper? Flexible match on subclass id OR name.
+function _ftPactDoctrine(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("archivist") || nm.includes("archivist")) return "archivist";
+    if (id.includes("auditor")   || nm.includes("auditor"))   return "auditor";
+    if (id.includes("steward")   || nm.includes("steward"))   return "steward";
+  }
+  return null;
+}
+
+// Shared Pactkeeper spend helpers — enforcement chokepoints reused from the wider
+// system (no new consumers): disAttackOnce (attack disadvantage), disSavesAll AE
+// (saves at disadvantage), reactionsDenied AE, aegis-DR AE, relicWard (hold-at-1),
+// toggleCondition, integrity heal, aidBanked reroll, bonusActionAvailable, strike
+// one-shots (doomstrike / crowning-blow / sundering-blow).
+function _ftPactDisAttack(foe) { try { return foe.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) {} }
+function _ftPactDisSavesAE(actor, foe, name) { return _ftCreateAllyAE(foe, { name, img: "icons/svg/daze.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { aurablade: { disSavesAll: true } } } }); }
+function _ftPactNoReactAE(actor, foe, name) { return _ftCreateAllyAE(foe, { name, img: "icons/svg/padlock.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { reactionsDenied: true } } }); }
+
+// Pactkeeper base Surge spends — the enforcer's toolkit (bind / enforce / shelter /
+// impose). pk-clause/pk-writ/pk-sovereign need a foe target; pk-shelter is self + ally.
+async function _ftPactkeeperSurge(actor, effectKey, tier) {
+  const target  = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname   = target?.name ?? "the target";
+  const drAE    = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+
+  if (effectKey === "pk-clause") {
+    if (target) await _ftPactDisAttack(target);
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">§ Invoke Clause — <b>${tname}</b>'s next attack is at disadvantage (the terms bind).</p>`;
+  }
+  if (effectKey === "pk-writ") {
+    if (target) { await setCond(target, "staggered"); await _ftPactDisSavesAE(actor, target, "Binding Writ (saves at disadvantage)"); }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">§ Binding Writ — <b>${tname}</b> is Staggered and rolls its saves at disadvantage till your next turn.</p>`;
+  }
+  if (effectKey === "pk-shelter") {
+    const names = [];
+    try { await actor.createEmbeddedDocuments("ActiveEffect", [drAE(`Shelter the Bound (DR ${tier})`)]); names.push(actor.name); } catch (e) {}
+    if (target && target.id !== actor.id) { if (await _ftCreateAllyAE(target, drAE(`Shelter the Bound (DR ${tier})`))) names.push(target.name); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+    else { try { await actor.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Shelter the Bound — ${names.map(n => `<b>${n}</b>`).join(" + ")} gain DR ${tier}; the next hit that would drop ${target && target.id !== actor.id ? `<b>${tname}</b>` : "you"} holds at 1.</p>`;
+  }
+  if (effectKey === "pk-sovereign") {
+    if (target) { await _ftPactNoReactAE(actor, target, "Sovereign Writ (reactions denied)"); await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Sovereign Writ (saves at disadvantage)"); }
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">§ Sovereign Writ — <b>${tname}</b> cannot take reactions and rolls its next attack + saves at disadvantage.</p>`;
+  }
+  return "";
+}
+
+// Pactkeeper doctrine (subclass) Surge spends. Archivist = lockdown + precedent
+// rerolls, Auditor = expose/punish (damage), Steward = protect the bound (DR/heal).
+async function _ftPactDoctrineSurge(actor, effectKey, tier) {
+  const target  = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname   = target?.name ?? "the ally";
+  const grid    = canvas.grid?.size ?? 100;
+  const drAE    = (name) => ({ name, img: "icons/svg/shield.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
+  const bankReroll   = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "pactkeeper" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const freeReaction = async (a) => { try { await a.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} };
+  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const healAlly = async (a, formula) => {
+    const s = a.system?.system ?? a.system ?? {};
+    const max = Number(s?.integrity?.max ?? s?.derived?.integrity?.max ?? 16);
+    const cur = Number(s?.integrity?.value ?? s?.derived?.integrity?.value ?? 0);
+    const r = new Roll(formula); await r.evaluate();
+    const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
+    if (next !== cur) { try { await a.update({ "system.integrity.value": next }); } catch (e) {} }
+    return next - cur;
+  };
+  const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
+
+  switch (effectKey) {
+    // ── Archivist of Precedent — history as leverage ──
+    case "ar-precedent": {
+      await bankReroll(actor);
+      if (target && target.id !== actor.id && (target.getActiveTokens?.()?.[0]?.document?.disposition ?? 0) >= 0) { await bankReroll(target); return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">📚 Cite Precedent — you and <b>${tname}</b> each bank a reroll (the record supports you).</p>`; }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">📚 Cite Precedent — you bank a reroll (the record supports you).</p>`;
+    }
+    case "ar-staredecisis": {
+      if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Stare Decisis (saves at disadvantage)"); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">⚖ Stare Decisis — <b>${tname}</b>'s next attack and its saves are at disadvantage (bound by precedent).</p>`;
+    }
+    case "ar-resjudicata": {
+      if (target) { await _ftPactNoReactAE(actor, target, "Res Judicata (reactions denied)"); await _ftPactDisSavesAE(actor, target, "Res Judicata (saves at disadvantage)"); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⚖ Res Judicata — <b>${tname}</b> cannot take reactions and rolls its saves at disadvantage. The matter is closed.</p>`;
+    }
+    // ── Auditor — expose debt / punish ──
+    case "au-expose": {
+      await oneShot("doomstrike");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🧾 Expose the Debt — your next Strike or manifestation deals +${tier}d6 (the hidden cost comes due).</p>`;
+    }
+    case "au-levy": {
+      if (target) { await setCond(target, "staggered"); await _ftPactDisAttack(target); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc5050">🧾 Levy — <b>${tname}</b> is Staggered and its next attack is at disadvantage (payment is due).</p>`;
+    }
+    case "au-foreclose": {
+      await oneShot("crowning-blow"); await oneShot("sundering-blow");
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#dc5050;font-weight:600">🧾 Foreclose — your next Strike lands as a max-die crit and ignores resistances. The debt is called in full.</p>`;
+    }
+    // ── Steward of Living Communities — protect the bound ──
+    case "st-shelter": {
+      if (target) { await _ftCreateAllyAE(target, drAE(`Shielded (DR ${tier})`)); await bankReroll(target); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Shield the Vulnerable — <b>${tname}</b> gains DR ${tier} and a reroll.</p>`;
+    }
+    case "st-bound": {
+      let h = 0;
+      if (target) { h = await healAlly(target, `1d8 + ${tier}`); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">🤝 Keep the Agreement — healed <b>${tname}</b> +${h}; the next hit that would drop them holds at 1.</p>`;
+    }
+    case "st-sanctuary": {
+      const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
+      const names = [];
+      for (const t of allies) { if (await _ftCreateAllyAE(t.actor, drAE(`Sanctuary (DR ${tier})`))) { await freeReaction(t.actor); names.push(t.actor.name); } }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">⛪ Sanctuary — ${names.length ? `<b>${names.join(", ")}</b> each gain` : "allies within 30 ft gain"} DR ${tier} and a freed reaction.</p>`;
     }
   }
   return "";
@@ -12340,7 +12555,6 @@ Hooks.once("init", function () {
       // Phase B 2026-05-07 — narrative caster pools refill on Soma Break,
       // mirroring the CL ceremony.
       "system.resources.clAuthority.current":   sys.resources?.clAuthority?.max   ?? 0,
-      "system.resources.pactLeverage.current":  sys.resources?.pactLeverage?.max  ?? 0,
       "system.resources.probabilityOverlay.current": sys.resources?.probabilityOverlay?.max ?? 0,
       // Dream-Cache empties on Soma Break — banked manifestations expire when
       // the caster's between-scenes lane closes at the deeper rest.
@@ -13604,47 +13818,11 @@ Hooks.once("init", function () {
         sys.resources.clAuthority.current = 0;
       }
 
-      const pactkeeperClass = this.items?.find?.(it => it.type === "class" && it.system?.identifier === "pactkeeper");
-      if (pactkeeperClass) {
-        const levMax = 4 + _phaseBTier;
-        sys.resources              ??= {};
-        sys.resources.pactLeverage ??= { current: 0, max: levMax };
-        sys.resources.pactLeverage.max = levMax;
-        sys.resources.pactLeverage.current = Math.min(Number(sys.resources.pactLeverage.current ?? 0), levMax);
-
-        // Pactkeeper Civic Charge dice pool — canon per Pactkeeper Core
-        // Features (compendium item v2PteOnTErjsVZ66). Die size scales by
-        // character level: L1-4 d6, L5-10 d8, L11-16 d10, L17+ d12.
-        // Max stored dice = max(1, Soul modifier). Earned ≤1/round by
-        // stabilizing / non-violence / contract-enforce / closure / aligned-cast.
-        const _pkLvl    = Math.max(1, Number(sys.details?.level) || 1);
-        const _pkDieSz  = _pkLvl >= 17 ? "d12" : _pkLvl >= 11 ? "d10" : _pkLvl >= 5 ? "d8" : "d6";
-        const _pkSoul   = Math.max(0, Number(sys.attributes?.soul?.value) || 0);
-        const _pkCcMax  = Math.max(1, _pkSoul);
-        sys.resources.civicCharge ??= { dice: 0, maxDice: _pkCcMax, dieSize: _pkDieSz };
-        sys.resources.civicCharge.maxDice = _pkCcMax;
-        sys.resources.civicCharge.dieSize = _pkDieSz;
-        sys.resources.civicCharge.dice    = Math.min(Number(sys.resources.civicCharge.dice ?? 0), _pkCcMax);
-
-        // Administrative Pressure track (1-2 Low, 3-5 Moderate, 6+ High).
-        // Soft cap at 10 — narrative pressure beyond that is rarely numeric.
-        sys.resources.administrativePressure ??= { value: 0, max: 10 };
-        sys.resources.administrativePressure.max = 10;
-        sys.resources.administrativePressure.value = Math.max(0, Math.min(10, Number(sys.resources.administrativePressure.value ?? 0)));
-      } else {
-        if (sys.resources?.pactLeverage) {
-          sys.resources.pactLeverage.max = 0;
-          sys.resources.pactLeverage.current = 0;
-        }
-        if (sys.resources?.civicCharge) {
-          sys.resources.civicCharge.dice = 0;
-          sys.resources.civicCharge.maxDice = 0;
-        }
-        if (sys.resources?.administrativePressure) {
-          sys.resources.administrativePressure.value = 0;
-          sys.resources.administrativePressure.max = 0;
-        }
-      }
+      // 2026-05-28 — Pactkeeper Surge redesign ("obligation compounds"): the
+      // orphan pactLeverage / civicCharge / administrativePressure resource pools
+      // were purged (maintained every derive but read by nothing; their spend
+      // paths were retired in the 2026-05-22 Phase-1.5 pass). Pactkeeper now runs
+      // on Surge like the rest of the roster.
 
       // Wyrdlens identifier appears as both `wyrdlens-adept` (dash, in
       // FT_TCC_IDENTIFIERS) and `wyrdlens_adept` (underscore) across the
@@ -13846,6 +14024,12 @@ Hooks.once("init", function () {
           catch (e) { /* update blocked — silent */ }
         }
       }
+
+      // Pactkeeper — "obligation compounds": bank +1 Surge per sustained
+      // manifestation at the start of your turn (cap +2). Fires once/turn (this
+      // hook is deduped by _ftLastTurnKey). Foe-gated inside _ftPactkeeperGen.
+      try { await _ftPactkeeperGen(actor); }
+      catch (e) { console.warn("[ft] pactkeeper obligation-compounds gen failed", e); }
 
       // Pactkeeper — Civic Charge per-round gain limit reset. Class text caps
       // gain at 1 die/round; flag tracks whether this round's earn already
@@ -14938,31 +15122,11 @@ Hooks.once("init", function () {
         .map(([k, def]) => ({ key: k, ...def }));
 
       const _pkCls = Array.from(actor.items).find(it => it.type === "class" && it.system?.identifier === "pactkeeper");
-      const _pressureValue = Number(resources.administrativePressure?.value ?? 0);
-      const _pressureBand  = _pressureValue >= 6 ? "high"
-                          : _pressureValue >= 3 ? "moderate"
-                          : _pressureValue >= 1 ? "low"
-                          : "none";
+      // Pactkeeper state — Surge redesign purged the orphan leverage / civicCharge /
+      // administrativePressure pools; only the live Bargain (pact subject) + L1-pick
+      // indicator remain. Combat agency is now the Surge menu.
       const _pactSubject = actor.flags?.fourththing?.pactSubject ?? null;
       const pactkeeperState = _pkCls ? {
-        leverage: {
-          current: resources.pactLeverage?.current ?? 0,
-          max:     resources.pactLeverage?.max     ?? 0
-        },
-        civicCharge: {
-          dice:    resources.civicCharge?.dice    ?? 0,
-          maxDice: resources.civicCharge?.maxDice ?? 1,
-          dieSize: resources.civicCharge?.dieSize ?? "d6"
-        },
-        pressure: {
-          value: _pressureValue,
-          max:   resources.administrativePressure?.max ?? 10,
-          band:  _pressureBand,
-          bandLabel: _pressureBand === "none" ? "Clear"
-                   : _pressureBand === "low"  ? "Low"
-                   : _pressureBand === "moderate" ? "Moderate"
-                   : "High"
-        },
         pactSubject: _pactSubject?.uuid ? {
           uuid: _pactSubject.uuid,
           name: _pactSubject.name ?? "(unnamed)"
@@ -15971,7 +16135,8 @@ Hooks.once("init", function () {
         (!e.mandate || _ftHarmonyMandate(actor) === e.mandate) &&
         (!e.trance || _ftDreamwalkerTrance(actor) === e.trance) &&
         (!e.bulwarkPath || _ftBulwarkPath(actor) === e.bulwarkPath) &&
-        (!e.courierRoute || _ftCourierRoute(actor) === e.courierRoute));
+        (!e.courierRoute || _ftCourierRoute(actor) === e.courierRoute) &&
+        (!e.pactDoctrine || _ftPactDoctrine(actor) === e.pactDoctrine));
 
       // Group by cost.
       const byCost = {};
@@ -17204,31 +17369,10 @@ Hooks.once("init", function () {
       // dispatcher buttons (pactkeeper_leverage, _binding_clause, _precedent,
       // _spend_civic_charge, _bind_subject) work cleanly on NPC Pactkeepers.
       const _pkCls = classItems.find(i => i.type === "class" && i.system?.identifier === "pactkeeper");
-      const _pkPressureValue = Number(resources.administrativePressure?.value ?? 0);
-      const _pkPressureBand  = _pkPressureValue >= 6 ? "high"
-                            : _pkPressureValue >= 3 ? "moderate"
-                            : _pkPressureValue >= 1 ? "low"
-                            : "none";
+      // Pactkeeper state (NPC sheet) — orphan leverage/civicCharge/pressure pools
+      // purged in the Surge redesign; only the live Bargain (pact subject) remains.
       const _pkPactSubject = actor.flags?.fourththing?.pactSubject ?? null;
       const pactkeeperState = _pkCls ? {
-        leverage: {
-          current: resources.pactLeverage?.current ?? 0,
-          max:     resources.pactLeverage?.max     ?? 0
-        },
-        civicCharge: {
-          dice:    resources.civicCharge?.dice    ?? 0,
-          maxDice: resources.civicCharge?.maxDice ?? 1,
-          dieSize: resources.civicCharge?.dieSize ?? "d6"
-        },
-        pressure: {
-          value: _pkPressureValue,
-          max:   resources.administrativePressure?.max ?? 10,
-          band:  _pkPressureBand,
-          bandLabel: _pkPressureBand === "none" ? "Clear"
-                   : _pkPressureBand === "low"  ? "Low"
-                   : _pkPressureBand === "moderate" ? "Moderate"
-                   : "High"
-        },
         pactSubject: _pkPactSubject?.uuid ? {
           uuid: _pkPactSubject.uuid,
           name: _pkPactSubject.name ?? "(unnamed)"
