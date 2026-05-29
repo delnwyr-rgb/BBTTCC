@@ -279,28 +279,21 @@
   }
 
   // ── Resource strip ──────────────────────────────────────────────────────
-  // Which class owns which pool. Only pools whose owning class the steward has
-  // are shown (template defaults for frameDice/burn/ruin are non-zero for
-  // everyone, so value-gating alone would mislead). Clarity + Surge are
-  // universal and always shown.
+  // Surge is now the central engine of action — every class spends from one
+  // Surge pool via the unified spend table (system: game.fourththing.surge.
+  // openSpendDialog). The old per-class pools (Bulwark Frame Dice / Ruin Charges,
+  // Shadow Courier Pace, Cosmic Linguist Authority, Pactkeeper Jurisdiction) were
+  // FOLDED INTO SURGE during the Phase-4 redesign, so they're no longer shown
+  // here. Clarity + Surge are universal; Burn (Aurablade / forge heat) survives.
   const CLASS_POOL_KEYS = {
-    bulwark:         ["frameDice", "ruinCharges"],
-    aurablade:       ["burn"],
-    shadow_courier:  ["pace"],
-    cosmic_linguist: ["clAuthority"],
-    pactkeeper:      ["pactLeverage"]
+    aurablade: ["burn"]
   };
   const POOL_DEFS = {
-    clarity:      { label:"Clarity",      icon:"brain",             path:"system.magic.clarity",          open:null },
-    surge:        { label:"Surge",        icon:"bolt-lightning",    path:"system.resources.surge",        open:null },
-    frameDice:    { label:"Frame",        icon:"shield-halved",     path:"system.resources.frameDice",    open:"openBulwarkSpendFrame" },
-    ruinCharges:  { label:"Ruin",         icon:"burst",             path:"system.resources.ruinCharges",  open:"openBulwarkRuin" },
-    burn:         { label:"Burn",         icon:"fire-flame-curved", path:"system.resources.burn",         open:"openStabilizeBurn" },
-    pace:         { label:"Pace",         icon:"person-running",    path:"system.resources.pace",         open:"openShadowCourierCrossing" },
-    clAuthority:  { label:"Authority",    icon:"scale-balanced",    path:"system.resources.clAuthority",  open:"openCosmicLinguistAuthority" },
-    pactLeverage: { label:"Jurisdiction", icon:"gavel",             path:"system.resources.pactLeverage", open:"openPactkeeperRenegotiate" }
+    clarity: { label:"Clarity", icon:"brain",             path:"system.magic.clarity",      open:null },
+    surge:   { label:"Surge",   icon:"bolt-lightning",    path:"system.resources.surge",    open:"__surge" },
+    burn:    { label:"Burn",    icon:"fire-flame-curved", path:"system.resources.burn",     open:"openStabilizeBurn" }
   };
-  const POOL_ORDER = ["clarity","surge","frameDice","ruinCharges","burn","pace","clAuthority","pactLeverage"];
+  const POOL_ORDER = ["clarity","surge","burn"];
 
   function getStewardClassKeys(steward) {
     return (steward.items?.contents ?? [])
@@ -328,16 +321,42 @@
       const v = readPool(steward, key);
       if (!v) return "";
       const valTxt = (v.max != null) ? `${v.cur}/${v.max}` : `${v.cur}`;
-      const clickable = !!(def.open && game.fourththing?._classAutomation?.[def.open]);
+      // Surge opens the unified spend table; other pools fire their class handler.
+      const clickable = (key === "surge")
+        ? !!game.fourththing?.surge?.openSpendDialog
+        : !!(def.open && def.open !== "__surge" && game.fourththing?._classAutomation?.[def.open]);
       const empty = (v.cur <= 0);
       return `<button type="button" class="bbttcc-res-chip ${clickable?'is-clickable':''} ${empty?'is-empty':''}"
         ${clickable ? `data-fire="pool" data-key="${key}"` : 'disabled'}
-        title="${esc(def.label)}${clickable?' — click to use':''}">
+        title="${esc(def.label)}${clickable ? (key === "surge" ? ' — click to spend' : ' — click to use') : ''}">
         <i class="fas fa-${def.icon}"></i><span>${esc(def.label)}</span>
         <span class="bbttcc-res-val">${valTxt}</span>
       </button>`;
     }).join("");
     return `<div class="bbttcc-resstrip">${chips}</div>`;
+  }
+
+  // Prominent "Spend Surge" action — the headline of the new action economy.
+  // Opens the full spend table (class kit + universal options). Disabled with a
+  // reason when nothing is banked or Surge is gated off for a foe.
+  function surgeActionHTML(steward) {
+    const obj = foundry.utils.getProperty(steward, "system.resources.surge") ?? {};
+    const cur = Number(obj.value ?? 0);
+    const max = Number(obj.max ?? 0);
+    const hasApi = !!game.fourththing?.surge?.openSpendDialog;
+    const disabled = !hasApi || cur <= 0;
+    const reason = !hasApi ? "Surge engine not ready"
+                 : cur <= 0 ? "No Surge banked yet"
+                 : "Open the Surge spend table — your class kit + universal options";
+    return `<div class="bbttcc-surge-action" style="padding:.1rem .4rem .45rem;">
+      <button type="button" class="bbttcc-res-chip bbttcc-surge-spend ${disabled?'is-empty':'is-clickable'}"
+        ${disabled ? 'disabled' : 'data-fire="pool" data-key="surge"'}
+        title="${esc(reason)}"
+        style="width:100%;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.35rem .5rem;font-weight:600;">
+        <i class="fas fa-bolt-lightning"></i> Spend Surge
+        <span class="bbttcc-res-val">${cur}${max?`/${max}`:''} ◆</span>
+      </button>
+    </div>`;
   }
 
   // ── Active-states helpers (kept from v1) ────────────────────────────────
@@ -430,6 +449,7 @@
 
     const parts = [];
     parts.push(resStripHTML(steward));
+    parts.push(surgeActionHTML(steward));
     parts.push(section("faculties", "Faculties", 6, facultiesBody(steward)));
     parts.push(section("defenses",  "Defenses",  3, defensesBody(steward)));
     if (abilities.length) parts.push(section("abilities", "Steward Abilities", abilities.length, itemsBody(abilities, "ability")));
@@ -495,6 +515,13 @@
     return power.sheet?.render(true, { focus:true });
   }
   async function firePool(steward, key) {
+    // Surge → open the unified spend table (the engine of action).
+    if (key === "surge") {
+      const fn = game.fourththing?.surge?.openSpendDialog;
+      if (typeof fn !== "function") return ui.notifications?.warn?.("Surge spend table not ready.");
+      await ensureEmanateFromRig(steward);
+      return fn(steward);
+    }
     const def = POOL_DEFS[key];
     const handler = def?.open && game.fourththing?._classAutomation?.[def.open];
     if (typeof handler !== "function") return;

@@ -11358,6 +11358,14 @@ Hooks.once("init", function () {
       // Resolve the discrete compendium Item backing a Surge ability — for
       // debugging / wiring Automated Animations to a specific spend.
       itemFor: (key) => _ftSurgeItemFor(key),
+      // Open the full Surge spend table for any actor (Player HUD / macros).
+      // The sheet handler only reads `this.actor`, so a minimal context call
+      // gives the dialog without needing an open sheet.
+      openSpendDialog: (actorOrId) => {
+        const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+        if (!actor) return null;
+        return FourthThingCharacterSheet._onFtSurgeSpend.call({ actor });
+      },
       // Programmatic spend (mirrors the sheet's Spend button).
       spend: (actorOrId, key, cost, tier) => {
         const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
