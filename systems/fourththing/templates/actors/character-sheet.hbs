@@ -121,22 +121,9 @@
       </div>
       {{/if}}
 
-      {{#if cosmicLinguistState}}
-      <div class="ft-cl-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
-        <span class="ft-chip ft-chip-resonance" data-tooltip="Cosmic Linguist — Resonance Dice. Auto-gain 1 at start of your turn (cap = max). Spend at cast time to channel the working: +1 Resolve DC · extra damage die · extend duration · impose 3d10kl2 on a defense · stabilize vs counter/dispel. Refills on Soma Break." style="background:#1f1f3a;color:#c8c8ff;border:1px solid #5a3a8a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">✦ Resonance
-          <input type="number" name="system.resources.resonanceDice.current" value="{{cosmicLinguistState.resonance.current}}" min="0" max="{{cosmicLinguistState.resonance.max}}" style="width:32px;background:transparent;color:inherit;border:1px solid #5a3a8a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;" data-tooltip="Current Resonance — edit directly."/>
-          / {{cosmicLinguistState.resonance.max}}
-        </span>
-        <span class="ft-chip ft-chip-strain" data-tooltip="Cosmic Linguist — Strain. Friction counter; ticks up on aggressive Resonance use (forcing contradiction or misaligned power). Resets to 0 on Soma Break. Soft cap 10." style="background:#3a1f1f;color:#ffc8c8;border:1px solid #8a3a3a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">⚡ Strain
-          <input type="number" name="system.resources.strain.value" value="{{cosmicLinguistState.strain.value}}" min="0" max="{{cosmicLinguistState.strain.max}}" style="width:32px;background:transparent;color:inherit;border:1px solid #8a3a3a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;" data-tooltip="Current Strain — edit directly."/>
-          / {{cosmicLinguistState.strain.max}}
-        </span>
-        <span class="ft-chip ft-chip-authority" data-tooltip="Cosmic Linguist — Editorial Authority. Narrative currency gained by listening, correcting error, or being cited. Spent on Annotations (composing Edits via the Authority dialog). Refills on Soma Break." style="background:#3a2f1a;color:#f5d97a;border:1px solid #8a6a2a;padding:0.2rem 0.45rem;border-radius:4px;font-size:0.78rem;display:inline-flex;align-items:center;gap:0.3rem;">📎 Authority
-          <input type="number" name="system.resources.clAuthority.current" value="{{cosmicLinguistState.authority.current}}" min="0" max="{{cosmicLinguistState.authority.max}}" style="width:32px;background:transparent;color:inherit;border:1px solid #8a6a2a;border-radius:2px;text-align:center;font-size:0.78rem;padding:0;" data-tooltip="Current Authority — edit directly."/>
-          / {{cosmicLinguistState.authority.max}}
-        </span>
-      </div>
-      {{/if}}
+      {{!-- 2026-05-28 — Cosmic Linguist Resonance / Strain / Authority chips retired.
+           All folded into Surge: Resonance → Surge (+1/turn), the 5 cast-channels → the
+           Surge base kit, the 3 Edits → Surge doctrine spends. The Sentence is kept. --}}
 
       {{#if wyrdlensState}}
       <div class="ft-wl-pools" style="margin-top:0.4rem;display:flex;gap:0.4rem;flex-wrap:wrap;align-items:center;">
@@ -598,18 +585,9 @@
            The redundant Pace resource panel (+ legacy Package/Crossing buttons) was
            removed. (Crossing as an exploration utility = deferred re-surface.) --}}
 
-      {{#if activePools.cosmicLinguist}}
-      <div class="ft-combat-section ft-resource-panel">
-        <h3>📜 Editorial Authority <span class="ft-resource-tag">Cosmic Linguist</span></h3>
-        <div class="ft-resource-row">
-          <span class="ft-aura-badge" style="background:rgba(232,200,74,0.15);border:1px solid rgba(232,200,74,0.5);color:#e8c84a">Authority</span>
-          <div class="ft-resource-controls">
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="cosmic_linguist_authority">Pool</button>
-            <button type="button" class="ft-res-btn" data-action="ftClassAction" data-handler="cosmic_linguist_annotation">Edit</button>
-          </div>
-        </div>
-      </div>
-      {{/if}}
+      {{!-- 2026-05-28 — Cosmic Linguist Editorial Authority panel retired. Edits
+           (Annotation/Metaphor/Redaction) are Surge doctrine spends now (◆ Surge menu);
+           the Pool/Edit buttons + Authority pool are gone. --}}
 
       {{#if activePools.pactkeeper}}
       <div class="ft-combat-section ft-resource-panel">

@@ -3765,7 +3765,56 @@ const _FT_SURGE_MENU = [
     fiction: "The lie stops working the moment it is named.", wired: true },
   { cost: 5, key: "tr-exposure", tier: 4, bucket: "off", wlRefraction: "truth",
     label: "The Exposure — a foe cannot take reactions and rolls its saves at disadvantage",
-    fiction: "Laid bare. There is nowhere left to hide a single intention.", wired: true }
+    fiction: "Laid bare. There is nowhere left to hide a single intention.", wired: true },
+
+  // ─── Cosmic Linguist (Pool) class-exclusive entries — reality as editable text ─
+  // Generation = +1 Surge/turn ("the editor always has the next word"; folds the old
+  // Resonance auto-gain). The 5 Resonance cast-channels live here as Surge spends.
+  { cost: 1, key: "cl-emphasis", tier: 1, bucket: "off", classFilter: ["cosmic_linguist"],
+    label: "Emphasis — your next Strike or manifestation hits for +Tier d6 (the word, underlined)",
+    fiction: "Some words simply matter more. You decide which.", wired: true },
+  { cost: 2, key: "cl-stabilize", tier: 2, bucket: "def", classFilter: ["cosmic_linguist"],
+    label: "Stabilize — you gain DR equal to Tier; your next cast resists counter / dispel",
+    fiction: "The sentence is load-bearing now. Try to move it.", wired: true },
+  { cost: 3, key: "cl-impose", tier: 2, bucket: "off", classFilter: ["cosmic_linguist"],
+    label: "Impose a Reading — a foe's next attack and its saves are at disadvantage",
+    fiction: "There is only one correct interpretation. Yours.", wired: true },
+  { cost: 5, key: "cl-rewrite", tier: 4, bucket: "off", classFilter: ["cosmic_linguist"],
+    label: "Rewrite the Sentence — a foe loses its reactions + rolls saves at disadvantage; allies near you bank a reroll",
+    fiction: "Strike the clause. Insert your own. Reality reads from the top.", wired: true },
+
+  // ─── Cosmic Linguist ANNOTATOR (doctrine) — footnote / reroll / precision ─────
+  { cost: 1, key: "an-footnote", tier: 1, bucket: "narr", clDoctrine: "annotator",
+    label: "Footnote — an ally banks a reroll-lowest (a small note, a large consequence)",
+    fiction: "See below. It changes everything above.", wired: true },
+  { cost: 2, key: "an-margin", tier: 2, bucket: "off", clDoctrine: "annotator",
+    label: "Marginalia — a foe is Staggered and rolls its saves at disadvantage",
+    fiction: "A note in the margin that the text cannot ignore.", wired: true },
+  { cost: 5, key: "an-revision", tier: 4, bucket: "narr", clDoctrine: "annotator",
+    label: "Revision — allies within 30 ft each bank a reroll-lowest (the whole passage, corrected)",
+    fiction: "The draft was wrong. This is the draft now.", wired: true },
+
+  // ─── Cosmic Linguist METAPHOR APOSTLE (doctrine) — declared likeness ──────────
+  { cost: 1, key: "mp-likeness", tier: 1, bucket: "def", clDoctrine: "metaphor",
+    label: "Declared Likeness — an ally gains DR equal to Tier ('you are a wall')",
+    fiction: "Say what counts as what now. Reality is listening.", wired: true },
+  { cost: 2, key: "mp-frailty", tier: 2, bucket: "off", clDoctrine: "metaphor",
+    label: "Declared Frailty — a foe's next attack and its saves are at disadvantage ('their armor is paper')",
+    fiction: "It was always paper. You just said so out loud.", wired: true },
+  { cost: 5, key: "mp-apotheosis", tier: 4, bucket: "def", clDoctrine: "metaphor",
+    label: "Apotheosis — allies within 30 ft gain DR equal to Tier and a reroll ('you are all giants')",
+    fiction: "Stand up. You were always this tall.", wired: true },
+
+  // ─── Cosmic Linguist REDACTOR (doctrine) — omission / strip / deny ────────────
+  { cost: 1, key: "rd-redact", tier: 1, bucket: "def", clDoctrine: "redactor",
+    label: "Redact — strike one condition off an ally (clean edges where it used to be)",
+    fiction: "It is not there anymore. It was never there.", wired: true },
+  { cost: 2, key: "rd-silence", tier: 2, bucket: "off", clDoctrine: "redactor",
+    label: "Silence — a foe cannot take reactions until your next turn (its options, omitted)",
+    fiction: "[ redacted ]", wired: true },
+  { cost: 5, key: "rd-erasure", tier: 4, bucket: "off", clDoctrine: "redactor",
+    label: "Erasure — a foe is Staggered, cannot take reactions, and rolls saves at disadvantage",
+    fiction: "Struck from the sentence. The room forgets it was ever a threat.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3876,6 +3925,20 @@ const _FT_WL_REFRACTION_KEYS = new Set([
 ]);
 // Refraction spends that target SELF (no target needed) — only fs-anticipate.
 const _FT_WL_REFRACTION_SELF_KEYS = new Set(["fs-anticipate"]);
+
+// Cosmic Linguist base class-exclusive Surge keys — routed to _ftCosmicLinguistSurge.
+const _FT_COSMIC_KEYS = new Set(["cl-emphasis", "cl-stabilize", "cl-impose", "cl-rewrite"]);
+// Base spends that target SELF / an aura (cl-impose needs a foe target).
+const _FT_COSMIC_SELF_KEYS = new Set(["cl-emphasis", "cl-stabilize", "cl-rewrite"]);
+// Cosmic Linguist doctrine (subclass) Surge keys — routed to _ftClDoctrineSurge; gated
+// by which doctrine the actor's subclass is (see _ftClDoctrine).
+const _FT_CL_DOCTRINE_KEYS = new Set([
+  "an-footnote", "an-margin", "an-revision",
+  "mp-likeness", "mp-frailty", "mp-apotheosis",
+  "rd-redact", "rd-silence", "rd-erasure"
+]);
+// Doctrine spends that target SELF / an aura (no single target needed).
+const _FT_CL_DOCTRINE_SELF_KEYS = new Set(["an-revision", "mp-apotheosis"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -4006,6 +4069,13 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
     return;
   }
+  // Cosmic Linguist base + doctrine spends — non-self/aura ones need a target.
+  if (((_FT_COSMIC_KEYS.has(effectKey) && !_FT_COSMIC_SELF_KEYS.has(effectKey))
+      || (_FT_CL_DOCTRINE_KEYS.has(effectKey) && !_FT_CL_DOCTRINE_SELF_KEYS.has(effectKey)))
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -4070,6 +4140,10 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftWyrdlensSurge(actor, effectKey, tier);
   } else if (_FT_WL_REFRACTION_KEYS.has(effectKey)) {
     chatExtra = await _ftWlRefractionSurge(actor, effectKey, tier);
+  } else if (_FT_COSMIC_KEYS.has(effectKey)) {
+    chatExtra = await _ftCosmicLinguistSurge(actor, effectKey, tier);
+  } else if (_FT_CL_DOCTRINE_KEYS.has(effectKey)) {
+    chatExtra = await _ftClDoctrineSurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
@@ -5415,6 +5489,118 @@ async function _ftWlRefractionSurge(actor, effectKey, tier) {
     case "tr-exposure": {
       if (target) { await _ftPactNoReactAE(actor, target, "The Exposure (reactions denied)"); await _ftPactDisSavesAE(actor, target, "The Exposure (saves at disadvantage)"); }
       return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">👁 The Exposure — <b>${tname}</b> cannot take reactions and rolls its saves at disadvantage (laid bare).</p>`;
+    }
+  }
+  return "";
+}
+
+// ─── Cosmic Linguist (Pool archetype) — "the editor always has the next word" ─
+// Generation = +1 Surge at the start of your turn (folds the old Resonance auto-gain;
+// see _ftHandleTurnStart). Resonance/Authority/Strain retired — all one Surge pool now.
+
+// Which doctrine (subclass) is this Linguist? Flexible match on subclass id OR name.
+function _ftClDoctrine(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("annotator")        || nm.includes("annotator"))        return "annotator";
+    if (id.includes("metaphor")         || nm.includes("metaphor"))         return "metaphor";
+    if (id.includes("redactor")         || nm.includes("redactor"))         return "redactor";
+  }
+  return null;
+}
+
+// Cosmic Linguist base Surge spends — edit reality like text (emphasis, stabilize,
+// impose a reading, rewrite the sentence). The 5 old Resonance cast-channels live here
+// now. Reuse chokepoints: doomstrike one-shot, aegis-DR, disAttackOnce, the disSavesAll
+// + reactionsDenied AEs (_ftPact* helpers), aidBanked — no new consumers.
+async function _ftCosmicLinguistSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the target";
+  const grid   = canvas.grid?.size ?? 100;
+  const drAE   = (name) => ({ name, img: "icons/svg/book.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const oneShot = async (k) => { try { await actor.setFlag("fourththing", `surge.oneShot.${k}`, { tier, cost: 0, appliedAt: Date.now() }); } catch (e) {} };
+  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "cosmic-linguist" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
+
+  if (effectKey === "cl-emphasis") {
+    await oneShot("doomstrike");
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8c8ff">✎ Emphasis — your next Strike or manifestation hits for +${tier}d6 (the word, underlined).</p>`;
+  }
+  if (effectKey === "cl-stabilize") {
+    try { await actor.createEmbeddedDocuments("ActiveEffect", [drAE(`Stabilized (DR ${tier})`)]); } catch (e) {}
+    await oneShot("surging-cast");
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">⌖ Stabilize — you gain DR ${tier}; your next cast resists counter / dispel (the sentence holds).</p>`;
+  }
+  if (effectKey === "cl-impose") {
+    if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Imposed Reading (saves at disadvantage)"); }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">✎ Impose a Reading — <b>${tname}</b>'s next attack and its saves are at disadvantage.</p>`;
+  }
+  if (effectKey === "cl-rewrite") {
+    if (target) { await _ftPactNoReactAE(actor, target, "Rewritten (reactions denied)"); await _ftPactDisSavesAE(actor, target, "Rewritten (saves at disadvantage)"); }
+    const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
+    const names = []; for (const t of allies) { await bankReroll(t.actor); names.push(t.actor.name); }
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8c8ff;font-weight:600">✦ Rewrite the Sentence — ${target ? `<b>${tname}</b> cannot take reactions and rolls saves at disadvantage; ` : ""}${names.length ? `nearby allies (<b>${names.join(", ")}</b>) each bank a reroll` : "allies near you bank a reroll"}.</p>`;
+  }
+  return "";
+}
+
+// Cosmic Linguist doctrine (subclass) Surge spends. Annotator = footnote/reroll,
+// Metaphor Apostle = declared likeness (buff/transform), Redactor = omission (strip/deny).
+async function _ftClDoctrineSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the ally";
+  const grid   = canvas.grid?.size ?? 100;
+  const drAE   = (name) => ({ name, img: "icons/svg/book.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "cl-doctrine" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+  const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
+  const aura = () => myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
+  const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
+
+  switch (effectKey) {
+    // ── Annotator — footnote / reroll / precision ──
+    case "an-footnote": {
+      if (target) await bankReroll(target);
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#e8c84a">📝 Footnote — <b>${tname}</b> banks a reroll-lowest (a small note, a large consequence).</p>`;
+    }
+    case "an-margin": {
+      if (target) { await _ftPactDisSavesAE(actor, target, "Marginalia (saves at disadvantage)"); await setCond(target, "staggered"); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">📝 Marginalia — <b>${tname}</b> is Staggered and rolls its saves at disadvantage (annotated into a corner).</p>`;
+    }
+    case "an-revision": {
+      const names = []; for (const t of aura()) { await bankReroll(t.actor); names.push(t.actor.name); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#e8c84a;font-weight:600">📝 Revision — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 30 ft bank"} a reroll-lowest (the whole passage, corrected).</p>`;
+    }
+    // ── Metaphor Apostle — declared likeness / transform ──
+    case "mp-likeness": {
+      if (target) await _ftCreateAllyAE(target, drAE(`Declared Likeness (DR ${tier})`));
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🜂 Declared Likeness — "<b>${tname}</b> is a wall." They gain DR ${tier}.</p>`;
+    }
+    case "mp-frailty": {
+      if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Declared Frailty (saves at disadvantage)"); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">🜂 Declared Frailty — "<b>${tname}</b>'s armor is paper." Its next attack and saves are at disadvantage.</p>`;
+    }
+    case "mp-apotheosis": {
+      const names = []; for (const t of aura()) { await _ftCreateAllyAE(t.actor, drAE(`Apotheosis (DR ${tier})`)); await bankReroll(t.actor); names.push(t.actor.name); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78a0dc;font-weight:600">🜂 Apotheosis — "you are all giants." ${names.length ? `<b>${names.join(", ")}</b>` : "Allies within 30 ft"} gain DR ${tier} and a reroll.</p>`;
+    }
+    // ── Redactor — omission / strip / deny ──
+    case "rd-redact": {
+      let cleared = "";
+      if (target) { const ts = target.system?.system ?? target.system ?? {}; const k = NEG.find(x => ts?.conditions?.[x] === true); if (k && await setCond(target, k)) cleared = FT?.CONDITIONS?.[k]?.label ?? k; }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">⌫ Redact — struck <b>${cleared || "an affliction"}</b> from <b>${tname}</b> (clean edges where it used to be).</p>`;
+    }
+    case "rd-silence": {
+      if (target) await _ftPactNoReactAE(actor, target, "Redacted (reactions denied)");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">⌫ Silence — <b>${tname}</b> cannot take reactions until your next turn (its options, omitted).</p>`;
+    }
+    case "rd-erasure": {
+      if (target) { await setCond(target, "staggered"); await _ftPactNoReactAE(actor, target, "Erasure (reactions denied)"); await _ftPactDisSavesAE(actor, target, "Erasure (saves at disadvantage)"); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⌫ Erasure — <b>${tname}</b> is Staggered, cannot take reactions, and rolls saves at disadvantage (struck from the sentence).</p>`;
     }
   }
   return "";
@@ -12819,13 +13005,8 @@ Hooks.once("init", function () {
       // — derived prep will set the right max immediately on the next render
       // and current can grow into it on the next refill rather than overshoot.
       "system.resources.accessDice.current":   sys.resources?.accessDice?.max     ?? 0,
-      // Cosmic Linguist — Resonance refills to max; Strain wipes (the friction
-      // counter resets when the caster centers themselves at the deeper rest).
-      "system.resources.resonanceDice.current": sys.resources?.resonanceDice?.max ?? 0,
-      "system.resources.strain.value":          0,
-      // Phase B 2026-05-07 — narrative caster pools refill on Soma Break,
-      // mirroring the CL ceremony.
-      "system.resources.clAuthority.current":   sys.resources?.clAuthority?.max   ?? 0,
+      // Cosmic Linguist Resonance/Strain/Authority retired (folded into Surge 2026-05-28).
+      // Phase B 2026-05-07 — narrative caster pools refill on Soma Break.
       "system.resources.probabilityOverlay.current": sys.resources?.probabilityOverlay?.max ?? 0,
       // Dream-Cache empties on Soma Break — banked manifestations expire when
       // the caster's between-scenes lane closes at the deeper rest.
@@ -14025,46 +14206,18 @@ Hooks.once("init", function () {
       // on Soma Break.
       // Strain: friction counter, soft-cap 10. Ticks up on aggressive Resonance
       // use ("force a contradiction"); resets to 0 on Soma Break.
-      const cosmicLinguistClass = this.items?.find?.(it => it.type === "class" && it.system?.identifier === "cosmic_linguist");
-      if (cosmicLinguistClass) {
-        const clLvl = sys.details?.level ?? 1;
-        const resonanceMax = Math.min(8, Math.max(2, Math.ceil((m + clLvl) / 3)));
-        sys.resources                ??= {};
-        sys.resources.resonanceDice  ??= { current: 0, max: 0 };
-        sys.resources.strain         ??= { value: 0, max: 10 };
-        sys.resources.resonanceDice.max     = resonanceMax;
-        sys.resources.resonanceDice.current = Math.min(Number(sys.resources.resonanceDice.current ?? 0), resonanceMax);
-        sys.resources.strain.max     = 10;
-        sys.resources.strain.value   = Math.max(0, Math.min(10, Number(sys.resources.strain.value ?? 0)));
-      } else {
-        // Non-CL stewards: zero out so any stale flag values stop showing.
-        if (sys.resources?.resonanceDice) {
-          sys.resources.resonanceDice.max = 0;
-          sys.resources.resonanceDice.current = 0;
-        }
-        if (sys.resources?.strain) {
-          sys.resources.strain.max = 0;
-          sys.resources.strain.value = 0;
-        }
-      }
+      // 2026-05-28 — Cosmic Linguist FULL FOLD into Surge. Resonance Dice, Strain,
+      // and Editorial Authority are retired: Resonance → Surge (+1/turn, see turn
+      // start), the 5 cast-time channels → Surge base kit, the 3 Edits → Surge
+      // subclass spends. Pools no longer derived; the cast-dialog Resonance block
+      // self-hides at resonance.current 0, and the Authority/Edit dialogs redirect
+      // to the Surge menu. The Sentence (signature mode) is kept.
 
       // ── Phase B sheet-pool surfacing (2026-05-07) ─────────────────────────
-      // Migrate clAuthority / pkLeverage from flag-based narrative pools to
-      // system.resources, and surface Wyrdlens Probability Overlay (1/round)
-      // + Dreamwalker Dream-Cache slot as first-class pools next to
-      // Resonance/Strain. Tier-scaled max for Authority/Leverage matches the
-      // doctrine-heavy CL/PK rhythm: 5/6/7/8.
-      const _phaseBTier = Math.max(1, Math.min(4, Number(sys.details?.tier) || 1));
-
-      if (cosmicLinguistClass) {
-        const authMax = 4 + _phaseBTier;
-        sys.resources.clAuthority ??= { current: 0, max: authMax };
-        sys.resources.clAuthority.max = authMax;
-        sys.resources.clAuthority.current = Math.min(Number(sys.resources.clAuthority.current ?? 0), authMax);
-      } else if (sys.resources?.clAuthority) {
-        sys.resources.clAuthority.max = 0;
-        sys.resources.clAuthority.current = 0;
-      }
+      // 2026-05-28 — Editorial Authority (clAuthority) retired with the Cosmic
+      // Linguist full fold: the 3 Edits (Annotation/Metaphor/Redaction) cost Surge
+      // now, not Authority. Wyrdlens Probability Overlay + Dreamwalker Dream-Cache
+      // surfacing continues below.
 
       // 2026-05-28 — Pactkeeper Surge redesign ("obligation compounds"): the
       // orphan pactLeverage / civicCharge / administrativePressure resource pools
@@ -14247,15 +14400,13 @@ Hooks.once("init", function () {
     // Caps at the recomputed max (set in prepareDerivedData). Skipped when
     // already at cap to avoid noisy chat.
     if (actor.type === "character") {
+      // Cosmic Linguist — "the editor always has the next word": fold the old
+      // Resonance auto-gain into Surge. Bank +1 Surge at the start of your turn
+      // (foe-gated). Resonance/Authority/Strain are retired (see derive + sheet).
       const isCL = actor.items?.some?.(it => it.type === "class" && it.system?.identifier === "cosmic_linguist");
-      if (isCL) {
-        const sys = actor.system?.system ?? actor.system;
-        const cur = Number(sys?.resources?.resonanceDice?.current) || 0;
-        const max = Number(sys?.resources?.resonanceDice?.max)     || 0;
-        if (max > 0 && cur < max) {
-          try { await actor.update({ "system.resources.resonanceDice.current": cur + 1 }); }
-          catch (e) { /* update blocked — silent */ }
-        }
+      if (isCL && _ftSurgeAllowed(actor)) {
+        try { await _ftBankSurge(actor, 1); }
+        catch (e) { /* banking blocked — silent */ }
       }
 
       // Wyrdlens Adept — Probability Overlay refresh (Phase B 2026-05-07).
@@ -15303,21 +15454,9 @@ Hooks.once("init", function () {
       // Resonance auto-gains 1/round at turn start; full refill on Soma Break.
       // Strain ticks via "aggressive" Resonance spends; resets on Soma Break.
       // Authority is the older narrative pool, now first-class on the sheet.
-      const _clCls = Array.from(actor.items).find(it => it.type === "class" && it.system?.identifier === "cosmic_linguist");
-      const cosmicLinguistState = _clCls ? {
-        resonance: {
-          current: resources.resonanceDice?.current ?? 0,
-          max:     resources.resonanceDice?.max     ?? 0
-        },
-        strain: {
-          value: resources.strain?.value ?? 0,
-          max:   resources.strain?.max   ?? 10
-        },
-        authority: {
-          current: resources.clAuthority?.current ?? 0,
-          max:     resources.clAuthority?.max     ?? 0
-        }
-      } : null;
+      // Cosmic Linguist Resonance/Strain/Authority chips retired (folded into Surge
+      // 2026-05-28). Kept null for the template ref.
+      const cosmicLinguistState = null;
 
       // Phase B (2026-05-07) — Wyrdlens / Dreamwalker / Pactkeeper sheet states.
       // Mirrors cosmicLinguistState — null when the actor doesn't carry the
@@ -16373,7 +16512,8 @@ Hooks.once("init", function () {
         (!e.bulwarkPath || _ftBulwarkPath(actor) === e.bulwarkPath) &&
         (!e.courierRoute || _ftCourierRoute(actor) === e.courierRoute) &&
         (!e.pactDoctrine || _ftPactDoctrine(actor) === e.pactDoctrine) &&
-        (!e.wlRefraction || _ftWyrdlensRefraction(actor) === e.wlRefraction));
+        (!e.wlRefraction || _ftWyrdlensRefraction(actor) === e.wlRefraction) &&
+        (!e.clDoctrine || _ftClDoctrine(actor) === e.clDoctrine));
 
       // Group by cost.
       const byCost = {};
@@ -17575,21 +17715,8 @@ Hooks.once("init", function () {
       // NPC Parity Sprint B (2026-05-14) — Cosmic Linguist class panel state.
       // Mirrors char-sheet builder; Resonance auto-gains 1/round, Strain
       // ticks on aggressive spends, Authority is the older narrative pool.
-      const _clCls = classItems.find(i => i.type === "class" && i.system?.identifier === "cosmic_linguist");
-      const cosmicLinguistState = _clCls ? {
-        resonance: {
-          current: resources.resonanceDice?.current ?? 0,
-          max:     resources.resonanceDice?.max     ?? 0
-        },
-        strain: {
-          value: resources.strain?.value ?? 0,
-          max:   resources.strain?.max   ?? 10
-        },
-        authority: {
-          current: resources.clAuthority?.current ?? 0,
-          max:     resources.clAuthority?.max     ?? 0
-        }
-      } : null;
+      // Cosmic Linguist Resonance/Strain/Authority retired (folded into Surge 2026-05-28).
+      const cosmicLinguistState = null;
 
       // NPC Parity Sprint B (2026-05-14) — Pactkeeper class panel state.
       // Mirrors the character sheet's pactkeeperState builder so the same

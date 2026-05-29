@@ -2578,6 +2578,9 @@ export async function openShadowCourierPassive(actor, item) {
 // ─── Cosmic Linguist dialogs ─────────────────────────────────────────────────
 
 export async function openCosmicLinguistAuthority(actor) {
+  // 2026-05-28 — Editorial Authority retired (folded into Surge). The 3 Edits cost Surge now.
+  ui.notifications?.info(`${actor?.name ?? "Linguist"}: Authority is folded into Surge — your edits live in the ◆ Surge menu (Footnote / Marginalia / Declared Likeness / Redact …).`);
+  return;
   const auth = await _ftReadPoolWithLegacyMigration(actor, { resourceName: "clAuthority", legacyFlag: "clAuthority", defaultMax: 5 });
 
   new Dialog({
@@ -2617,6 +2620,10 @@ export async function openCosmicLinguistAuthority(actor) {
 //   • Redactor (The First Strike) → Redaction — strip a condition AE from a target
 // Multi-subclass / no subclass → fall back to the legacy buffet picker.
 export async function openCosmicLinguistAnnotation(actor) {
+  // 2026-05-28 — the Edits (Annotation/Metaphor/Redaction) are Surge spends now (full
+  // fold). Redirect the old Authority-cost dialog so L1 feats don't open it.
+  ui.notifications?.info(`${actor?.name ?? "Linguist"}: your edits are Surge spends now — open the ◆ Surge menu (Annotator: Footnote/Marginalia/Revision · Metaphor: Declared Likeness/Frailty/Apotheosis · Redactor: Redact/Silence/Erasure).`);
+  return;
   const subclassIds = (actor.items ?? [])
     .filter(it => it.type === "subclass")
     .map(it => String(it.system?.identifier ?? "").toLowerCase());
