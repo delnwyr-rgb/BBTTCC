@@ -376,14 +376,32 @@ export const NAME_ROUTER = [
   ["Qliph-Scarred Heritage:",         "qliph_qliphothic_saturation"],
 ];
 
+// Handlers that were RETIRED when their pools folded into Surge (2026-05-28).
+// They now only post a "use the ◆ Surge menu" nudge, so the feats that route to
+// them (e.g. Avalanche L1 "Kinetic Inversion", Editorial Authority) are vestigial:
+// their real mechanics live in the Surge spend table. Treat them as non-actionable
+// so they drop out of the Player HUD's Steward Abilities list instead of cluttering
+// it with dead buttons.
+const RETIRED_FEATURE_HANDLERS = new Set([
+  "bulwark_frame_pool",       // Bulwark Frame Dice → Surge (Absorb/Push/Anchor/Brace Wall)
+  "bulwark_ruin",             // Bulwark Ruin Charges → Surge (Cat. Entry/Shockwave/Siege/Renewal)
+  "bulwark_stance",           // Bulwark Cataclyst stances → Surge path kit
+  "cosmic_linguist_authority" // Editorial Authority → Surge (the 3 Edits)
+]);
+
 export function routeFeature(item) {
   const identifier = item.system?.identifier ?? "";
   const name       = item.name ?? "";
-  if (FEATURE_ROUTER[identifier]) return FEATURE_ROUTER[identifier];
-  for (const [fragment, handler] of NAME_ROUTER) {
-    if (name.includes(fragment)) return handler;
+  let handler = null;
+  if (FEATURE_ROUTER[identifier]) handler = FEATURE_ROUTER[identifier];
+  else {
+    for (const [fragment, h] of NAME_ROUTER) {
+      if (name.includes(fragment)) { handler = h; break; }
+    }
   }
-  return null;
+  // Folded-into-Surge handlers are no longer real actions — report no route.
+  if (handler && RETIRED_FEATURE_HANDLERS.has(handler)) return null;
+  return handler;
 }
 
 // Every routed handler opens a player-facing dialog (per-use picker, info
