@@ -3716,7 +3716,56 @@ const _FT_SURGE_MENU = [
     fiction: "No one falls while the terms still stand.", wired: true },
   { cost: 5, key: "st-sanctuary", tier: 4, bucket: "def", pactDoctrine: "steward",
     label: "Sanctuary — allies within 30 ft gain DR equal to Tier and a freed reaction",
-    fiction: "This ground is under contract. Nothing crosses it uninvited.", wired: true }
+    fiction: "This ground is under contract. Nothing crosses it uninvited.", wired: true },
+
+  // ─── Wyrdlens Adept (Pool) class-exclusive entries — perception as force ──────
+  // Generation = successful manifestation cast (see _ftWyrdlensCastGen). The free
+  // Probability Overlay (T2, 1/round reroll) stays as the innate; these add reach.
+  { cost: 1, key: "wl-foresight", tier: 1, bucket: "narr", classFilter: ["wyrdlens-adept"],
+    label: "Foresight — you or an ally banks a reroll on their next roll (you saw the thread)",
+    fiction: "The future is just a diagram you already read.", wired: true },
+  { cost: 2, key: "wl-expose", tier: 2, bucket: "off", classFilter: ["wyrdlens-adept"],
+    label: "Expose — a foe's next attack and its saves are at disadvantage (read the seam)",
+    fiction: "Every structure has a flaw. You only have to look at it correctly.", wired: true },
+  { cost: 3, key: "wl-refract", tier: 3, bucket: "def", classFilter: ["wyrdlens-adept"],
+    label: "Refract — an ally gains DR equal to Tier and a freed reaction (harm bends aside)",
+    fiction: "Aim it somewhere that isn't them.", wired: true },
+  { cost: 5, key: "wl-revelation", tier: 4, bucket: "narr", classFilter: ["wyrdlens-adept"],
+    label: "Revelation — allies within 30 ft bank a reroll; a foe's next attack is at disadvantage",
+    fiction: "For one moment, everyone sees the whole board.", wired: true },
+
+  // ─── Wyrdlens REFRACTION OF FORESIGHT (subclass) — anticipation / temporal ────
+  { cost: 1, key: "fs-anticipate", tier: 1, bucket: "narr", wlRefraction: "foresight",
+    label: "Anticipation — you and an ally each bank a reroll (foreseen)",
+    fiction: "You already know how this goes.", wired: true },
+  { cost: 2, key: "fs-slow", tier: 2, bucket: "def", wlRefraction: "foresight",
+    label: "The Slowed Instant — an ally gains a freed reaction and DR equal to Tier",
+    fiction: "Time gives them just enough room.", wired: true },
+  { cost: 5, key: "fs-stop", tier: 4, bucket: "off", wlRefraction: "foresight",
+    label: "The Stopped Strike — a foe is Staggered and its next attack is at disadvantage",
+    fiction: "The instant simply… declines to proceed.", wired: true },
+
+  // ─── Wyrdlens REFRACTION OF MERCY (subclass) — protection / de-escalation ─────
+  { cost: 1, key: "mc-soft", tier: 1, bucket: "def", wlRefraction: "mercy",
+    label: "The Prevented Blow — an ally gains DR equal to Tier (you stepped between)",
+    fiction: "Not them. Not like this.", wired: true },
+  { cost: 2, key: "mc-redirect", tier: 2, bucket: "def", wlRefraction: "mercy",
+    label: "Redirected Harm — an ally gains DR + the next hit that would drop them holds at 1",
+    fiction: "Send it into the wall. Walls don't mind.", wired: true },
+  { cost: 5, key: "mc-openhand", tier: 4, bucket: "heal", wlRefraction: "mercy",
+    label: "The Open Hand — heal an ally and clear a condition (offer the clean exit)",
+    fiction: "There is always another way out. You just have to show it to them.", wired: true },
+
+  // ─── Wyrdlens REFRACTION OF TRUTH (subclass) — exposure / lockdown ────────────
+  { cost: 1, key: "tr-read", tier: 1, bucket: "off", wlRefraction: "truth",
+    label: "The Reading Eye — a foe rolls its saves at disadvantage (you read it true)",
+    fiction: "I see what you actually are.", wired: true },
+  { cost: 2, key: "tr-unconceal", tier: 2, bucket: "off", wlRefraction: "truth",
+    label: "The Unconcealed Word — a foe is Staggered and its next attack is at disadvantage",
+    fiction: "The lie stops working the moment it is named.", wired: true },
+  { cost: 5, key: "tr-exposure", tier: 4, bucket: "off", wlRefraction: "truth",
+    label: "The Exposure — a foe cannot take reactions and rolls its saves at disadvantage",
+    fiction: "Laid bare. There is nowhere left to hide a single intention.", wired: true }
 ];
 
 // Slugs (normalized) → does this actor have a matching class/feat item? Gates the
@@ -3813,6 +3862,20 @@ const _FT_PACT_DOCTRINE_KEYS = new Set([
 ]);
 // Doctrine spends that target SELF / an aura (no single target needed).
 const _FT_PACT_DOCTRINE_SELF_KEYS = new Set(["ar-precedent", "au-expose", "au-foreclose", "st-sanctuary"]);
+
+// Wyrdlens Adept base class-exclusive Surge keys — routed to _ftWyrdlensSurge.
+const _FT_WYRDLENS_KEYS = new Set(["wl-foresight", "wl-expose", "wl-refract", "wl-revelation"]);
+// Base spends that target SELF / an aura (wl-expose/wl-refract need a target).
+const _FT_WYRDLENS_SELF_KEYS = new Set(["wl-foresight", "wl-revelation"]);
+// Wyrdlens Refraction (subclass) Surge keys — routed to _ftWlRefractionSurge; gated
+// by which Refraction the actor's subclass is (see _ftWyrdlensRefraction).
+const _FT_WL_REFRACTION_KEYS = new Set([
+  "fs-anticipate", "fs-slow", "fs-stop",
+  "mc-soft", "mc-redirect", "mc-openhand",
+  "tr-read", "tr-unconceal", "tr-exposure"
+]);
+// Refraction spends that target SELF (no target needed) — only fs-anticipate.
+const _FT_WL_REFRACTION_SELF_KEYS = new Set(["fs-anticipate"]);
 
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
@@ -3936,6 +3999,13 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
     return;
   }
+  // Wyrdlens base + Refraction spends — non-self/aura ones need a target.
+  if (((_FT_WYRDLENS_KEYS.has(effectKey) && !_FT_WYRDLENS_SELF_KEYS.has(effectKey))
+      || (_FT_WL_REFRACTION_KEYS.has(effectKey) && !_FT_WL_REFRACTION_SELF_KEYS.has(effectKey)))
+      && !Array.from(game.user?.targets ?? [])[0]?.actor) {
+    ui.notifications?.warn(`${entry.label.split(" — ")[0]} needs a target — target a token first, then re-open the menu.`);
+    return;
+  }
   // Harmony Marshal: single-target spends need a target; aura spends need the Marshal's token.
   if (effectKey === "rallying-words" || effectKey === "ease-attrition" || effectKey === "rally-to-me") {
     const t = Array.from(game.user?.targets ?? [])[0];
@@ -3996,6 +4066,10 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
     chatExtra = await _ftPactkeeperSurge(actor, effectKey, tier);
   } else if (_FT_PACT_DOCTRINE_KEYS.has(effectKey)) {
     chatExtra = await _ftPactDoctrineSurge(actor, effectKey, tier);
+  } else if (_FT_WYRDLENS_KEYS.has(effectKey)) {
+    chatExtra = await _ftWyrdlensSurge(actor, effectKey, tier);
+  } else if (_FT_WL_REFRACTION_KEYS.has(effectKey)) {
+    chatExtra = await _ftWlRefractionSurge(actor, effectKey, tier);
   } else if (entry.wired && entry.bucket === "heal") {
     chatExtra = await _ftSurgeHeal(actor, effectKey, tier);
   } else if (SPEND_TIME_AE.has(effectKey)) {
@@ -5221,6 +5295,131 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
   return "";
 }
 
+// ─── Wyrdlens Adept (Pool archetype) — "every revelation feeds the lens" ──────
+// Bank +1 Surge on a successful manifestation cast (cap +2/round, foe-gated). Called
+// from the castSuccess point in castManifestation alongside the Dreamwalker hook.
+async function _ftWyrdlensCastGen(actor) {
+  if (!_ftActorMatchesClass(actor, "wyrdlens-adept")) return;
+  if (!_ftSurgeAllowed(actor)) return;
+  const round = Number(game.combat?.round ?? 0);
+  const f = actor.flags?.fourththing?.wyrdlens?.castGen ?? {};
+  const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+  if (count >= 2) return;
+  const got = await _ftBankSurge(actor, 1);
+  if (got > 0) await actor.setFlag("fourththing", "wyrdlens.castGen", { round, count: count + 1 });
+}
+
+// Which Refraction (subclass) is this Adept? Flexible match on subclass id OR name.
+function _ftWyrdlensRefraction(actor) {
+  for (const i of (actor?.items ?? [])) {
+    if (i.type !== "subclass") continue;
+    const id = String(i.system?.identifier ?? "").toLowerCase();
+    const nm = String(i.name ?? "").toLowerCase();
+    if (id.includes("foresight") || nm.includes("foresight")) return "foresight";
+    if (id.includes("mercy")     || nm.includes("mercy"))     return "mercy";
+    if (id.includes("truth")     || nm.includes("truth"))     return "truth";
+  }
+  return null;
+}
+
+// Wyrdlens base Surge spends — perception as force (read the angle, expose the seam,
+// refract harm, reveal the field). Reuse chokepoints: aidBanked reroll, disAttackOnce,
+// the disSavesAll AE (_ftPactDisSavesAE) + reactionsDenied AE (_ftPactNoReactAE),
+// aegis-DR, bonusActionAvailable, toggleCondition — no new consumers.
+async function _ftWyrdlensSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the target";
+  const grid   = canvas.grid?.size ?? 100;
+  const drAE   = (name) => ({ name, img: "icons/svg/eye.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "wyrdlens" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const myTok = actor.getActiveTokens?.()?.[0] ?? canvas.tokens?.controlled?.[0];
+  const dist  = (a, b) => { const ax = a.x + (a.document?.width || 1) * grid / 2, ay = a.y + (a.document?.height || 1) * grid / 2, bx = b.x + (b.document?.width || 1) * grid / 2, by = b.y + (b.document?.height || 1) * grid / 2; return Math.hypot(ax - bx, ay - by); };
+
+  if (effectKey === "wl-foresight") {
+    const who = (target && (target.getActiveTokens?.()?.[0]?.document?.disposition ?? 0) >= 0) ? target : actor;
+    await bankReroll(who);
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0c8d8">🔭 Foresight — <b>${who.name}</b> banks a reroll-lowest on their next roll (you saw the thread).</p>`;
+  }
+  if (effectKey === "wl-expose") {
+    if (target) { await _ftPactDisAttack(target); await _ftPactDisSavesAE(actor, target, "Exposed (saves at disadvantage)"); }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">🔍 Expose — <b>${tname}</b>'s next attack and its saves are at disadvantage (you read the seam).</p>`;
+  }
+  if (effectKey === "wl-refract") {
+    if (target) { await _ftCreateAllyAE(target, drAE(`Refracted (DR ${tier})`)); try { await target.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} }
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🪞 Refract — <b>${tname}</b> gains DR ${tier} and a freed reaction (harm bends aside).</p>`;
+  }
+  if (effectKey === "wl-revelation") {
+    const allies = myTok ? (canvas.tokens?.placeables ?? []).filter(t => t?.actor && (t.document?.disposition ?? 0) >= 0 && dist(t, myTok) <= 30 / (canvas.scene?.grid?.distance ?? 5) * grid + grid / 2) : [];
+    const names = [];
+    for (const t of allies) { await bankReroll(t.actor); names.push(t.actor.name); }
+    if (target && (target.getActiveTokens?.()?.[0]?.document?.disposition ?? 0) < 0) await _ftPactDisAttack(target);
+    return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#a0c8d8;font-weight:600">✨ Revelation — ${names.length ? `<b>${names.join(", ")}</b> each bank` : "allies within 30 ft bank"} a reroll${target ? `; <b>${tname}</b>'s next attack is at disadvantage` : ""}.</p>`;
+  }
+  return "";
+}
+
+// Wyrdlens Refraction (subclass) Surge spends. Foresight = anticipation/temporal,
+// Mercy = protection/de-escalation, Truth = exposure/lockdown. Reuse chokepoints only.
+async function _ftWlRefractionSurge(actor, effectKey, tier) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  const tname  = target?.name ?? "the ally";
+  const drAE   = (name) => ({ name, img: "icons/svg/eye.svg", origin: actor.uuid, duration: { rounds: 1 }, changes: [], flags: { fourththing: { surge: { kind: "aegis", drFlat: tier } } } });
+  const bankReroll = async (a) => { const b = a.getFlag?.("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "wyrdlens-refraction" }); try { await a.setFlag("fourththing", "aidBanked", b); } catch (e) {} };
+  const freeReaction = async (a) => { try { await a.setFlag("fourththing", "bonusActionAvailable", true); } catch (e) {} };
+  const setCond = async (a, c) => { try { await game.fourththing?.toggleCondition?.(a, c); return true; } catch (e) { return false; } };
+
+  switch (effectKey) {
+    // ── Refraction of Foresight — anticipation / temporal ──
+    case "fs-anticipate": {
+      await bankReroll(actor);
+      if (target && target.id !== actor.id && (target.getActiveTokens?.()?.[0]?.document?.disposition ?? 0) >= 0) { await bankReroll(target); return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0c8d8">⏳ Anticipation — you and <b>${tname}</b> each bank a reroll (foreseen).</p>`; }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#a0c8d8">⏳ Anticipation — you bank a reroll (foreseen).</p>`;
+    }
+    case "fs-slow": {
+      if (target) { await freeReaction(target); await _ftCreateAllyAE(target, drAE(`Slowed Instant (DR ${tier})`)); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">⏳ The Slowed Instant — <b>${tname}</b> gains a freed reaction and DR ${tier} (time gives them room).</p>`;
+    }
+    case "fs-stop": {
+      if (target) { await _ftPactDisAttack(target); await setCond(target, "staggered"); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">⏳ The Stopped Strike — <b>${tname}</b> is Staggered and its next attack is at disadvantage (the instant freezes).</p>`;
+    }
+    // ── Refraction of Mercy — protection / de-escalation ──
+    case "mc-soft": {
+      if (target) await _ftCreateAllyAE(target, drAE(`Prevented Blow (DR ${tier})`));
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🕊 The Prevented Blow — <b>${tname}</b> gains DR ${tier} (you stepped between).</p>`;
+    }
+    case "mc-redirect": {
+      if (target) { await _ftCreateAllyAE(target, drAE(`Redirected Harm (DR ${tier})`)); try { await target.setFlag("fourththing", "soulSmith.relicWard", true); } catch (e) {} }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🕊 Redirected Harm — <b>${tname}</b> gains DR ${tier}, and the next hit that would drop them is held at 1.</p>`;
+    }
+    case "mc-openhand": {
+      let h = 0;
+      if (target) {
+        try { const desc = await game.fourththing?.rolls?._applyDamageToActor?.(target, Math.max(1, tier) * 2 + 2, { op: "heal", track: "integrity" }); h = desc ? 1 : 0; } catch (e) {}
+        const NEG = ["staggered","scarred","calmed","blinded","prone","shaken","burning","restrained","charmed","compelled"];
+        const ts = target.system?.system ?? target.system ?? {};
+        const k = NEG.find(x => ts?.conditions?.[x] === true);
+        if (k) await setCond(target, k);
+      }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#78c88c;font-weight:600">🕊 The Open Hand — healed <b>${tname}</b> and offered a clean exit (cleared a condition).</p>`;
+    }
+    // ── Refraction of Truth — exposure / lockdown ──
+    case "tr-read": {
+      if (target) await _ftPactDisSavesAE(actor, target, "The Reading Eye (saves at disadvantage)");
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">👁 The Reading Eye — <b>${tname}</b> rolls its saves at disadvantage (you read it true).</p>`;
+    }
+    case "tr-unconceal": {
+      if (target) { await setCond(target, "staggered"); await _ftPactDisAttack(target); }
+      return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#c8a0dc">👁 The Unconcealed Word — <b>${tname}</b> is Staggered and its next attack is at disadvantage.</p>`;
+    }
+    case "tr-exposure": {
+      if (target) { await _ftPactNoReactAE(actor, target, "The Exposure (reactions denied)"); await _ftPactDisSavesAE(actor, target, "The Exposure (saves at disadvantage)"); }
+      return `<p style="margin:0.25rem 0;font-size:0.80rem;color:#c8a0dc;font-weight:600">👁 The Exposure — <b>${tname}</b> cannot take reactions and rolls its saves at disadvantage (laid bare).</p>`;
+    }
+  }
+  return "";
+}
+
 // ─── Harmony Marshal Surge spends (Pool archetype) ───────────────────────────
 // Rallying Words (banks an aid reroll on the target, mirroring the existing
 // aid / Rallying-Words flag shape) + Ease Attrition (small heal + condition
@@ -6086,6 +6285,9 @@ async function castManifestation(actor, item, {
   if (castSuccess) {
     try { await _ftDreamwalkerCastGen(actor); }
     catch (e) { console.warn("[ft] dreamwalker cast-gen failed", e); }
+    // Wyrdlens Adept — "every revelation feeds the lens": cast → Surge.
+    try { await _ftWyrdlensCastGen(actor); }
+    catch (e) { console.warn("[ft] wyrdlens cast-gen failed", e); }
   }
   if (item && castSuccess) {
     // Phase B 2026-05-19 — Action economy debit (boss slots / elite bonus
@@ -16170,7 +16372,8 @@ Hooks.once("init", function () {
         (!e.trance || _ftDreamwalkerTrance(actor) === e.trance) &&
         (!e.bulwarkPath || _ftBulwarkPath(actor) === e.bulwarkPath) &&
         (!e.courierRoute || _ftCourierRoute(actor) === e.courierRoute) &&
-        (!e.pactDoctrine || _ftPactDoctrine(actor) === e.pactDoctrine));
+        (!e.pactDoctrine || _ftPactDoctrine(actor) === e.pactDoctrine) &&
+        (!e.wlRefraction || _ftWyrdlensRefraction(actor) === e.wlRefraction));
 
       // Group by cost.
       const byCost = {};
