@@ -596,6 +596,7 @@
         "damageFlavor": "",
         "track": "integrity"
       },
+      "damageParts": [],
       "range": {
         "short": 1,
         "long": 1
@@ -671,6 +672,7 @@
         "flavor": "",
         "track": "integrity"
       },
+      "damageParts": [],
       "effect": "",
       "tags": [],
       "category": "manifestation",

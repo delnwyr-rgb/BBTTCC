@@ -1050,6 +1050,7 @@ function ftOpenEngageDialog(actor, item, options = {}) {
             intent: selIntent, skill: selSkill,
             defense, defenseValue: defVal,
             label: chatLabel, damageFormula: dmgF, damageType: dmgT, damageFlavor: dmgFlv,
+            damageParts: ftCollectExtraDamageParts(item),
             costNote: costAssessment?.label ?? "",
             signature: item?.system?.manifestation?.signature ?? "",
             thirdThing: item?.system?.manifestation?.thirdThing ?? "",
@@ -2865,6 +2866,45 @@ function buildManifestationGlossaryHTML() {
       </div>
     </details>
   </div>`;
+}
+
+// 2026-05-29 — Multi-damage-type support. An item (weapon or power) may carry
+// `system.damageParts`: extra damage components rolled IN ADDITION to the main
+// hit, each with its own type/track for per-type resist/immune math. The
+// primary damage (system.damage / system.damageRoll) is unchanged; these are
+// pure additive riders (no faculty bonus added to them). Returns a normalized
+// array of { formula, type, flavor, track }. Accepts an array or a numeric-key
+// object (FormDataExtended expansion) and drops blank-formula rows.
+function ftCollectExtraDamageParts(item) {
+  const raw = item?.system?.damageParts;
+  const src = Array.isArray(raw) ? raw : (raw && typeof raw === "object" ? Object.values(raw) : []);
+  const out = [];
+  for (const p of src) {
+    if (!p || typeof p !== "object") continue;
+    const formula = String(p.formula ?? "").trim();
+    if (!formula) continue;
+    const type   = String(p.type ?? "kinetic").toLowerCase();
+    const track  = String(p.track || FT.DAMAGE_TYPES?.[type]?.track || "integrity");
+    const flavor = String(p.flavor ?? "");
+    out.push({ formula, type, flavor, track });
+    if (out.length >= 6) break;
+  }
+  return out;
+}
+
+// 2026-05-29 — Does this manifestation's invoke cost apply PER USE, or once on
+// manifest? A persistent/sustained weapon-form manifestation (e.g. a conjured
+// blade you keep in hand) pays its clarity/burn once when it's manifested, NOT
+// every swing — so the Strike dialog defaults its "apply cost" box OFF for
+// these. Instant/per-use manifestations (a one-shot conjured bolt) still
+// default ON. Returns true = per-use (default the cost box checked).
+function ftManifestationCostIsPerUse(item) {
+  const mf = item?.system?.manifestation ?? {};
+  const tags = Array.isArray(item?.system?.tags) ? item.system.tags.map(t => String(t).toLowerCase()) : [];
+  const isWeaponForm = mf.form === "weapon" || mf.interactionModel === "weapon" || tags.includes("weapon");
+  const persists = ["persistent", "scene", "sustained"].includes(String(mf.duration ?? "").toLowerCase())
+                || ["enduring", "sustained"].includes(String(mf.stability ?? "").toLowerCase());
+  return !(isWeaponForm && persists);
 }
 
 function ftAssessManifestationCost(actor, item, kind = "power") {
@@ -7087,7 +7127,7 @@ async function ftChargeUpkeep(actor, { cadence = "scene" } = {}) {
   return { billed, dropped };
 }
 
-function buildManifestationCostBoxHTML(assessment, { inputName = "applyCost" } = {}) {
+function buildManifestationCostBoxHTML(assessment, { inputName = "applyCost", defaultChecked = true } = {}) {
   if (!assessment || assessment.type === "none") {
     return `
 <div class="ft-manifest-costbox">
@@ -7096,8 +7136,15 @@ function buildManifestationCostBoxHTML(assessment, { inputName = "applyCost" } =
 </div>`;
   }
 
+  // 2026-05-29 — Persistent weapon-form manifestations pay their invoke cost
+  // once when manifested, not per swing. The caller passes defaultChecked=false
+  // for those so the box defaults OFF (no more un-ticking every round); the
+  // note explains, and the player can still tick it for the initial manifest.
+  const persistentNote = defaultChecked
+    ? ""
+    : `<div class="ft-prev-align-note" style="opacity:0.8">Persistent weapon — its invoke cost is paid once when manifested, not per strike. Tick to charge it now (e.g. first manifest).</div>`;
   const checkbox = assessment.autoSupported
-    ? `<label class="ft-manifest-cost-toggle"><input type="checkbox" name="${inputName}" checked/> Auto-apply ${ftEscapeHtml(assessment.label)}</label>`
+    ? `<label class="ft-manifest-cost-toggle"><input type="checkbox" name="${inputName}" ${defaultChecked ? "checked" : ""}/> Auto-apply ${ftEscapeHtml(assessment.label)}</label>${persistentNote}`
     : "";
   const statusClass = assessment.autoSupported && !assessment.canPay ? " blocked" : "";
 
@@ -9742,6 +9789,7 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
                                 damageFlavor = "",
                                 damageFacultyMod = 0, damageBaseFormula = "",
                                 damageRolledTotal = 0, damageDiceTooltip = "",
+                                rolledParts = [],
                                 explosionDice = [], surgeBanked = 0, doubleTen = false,
                                 costNote = "", signature = "", thirdThing = "",
                                 itemUuid = "", ignoreResists = false, nonlethal = false }) {
@@ -9778,16 +9826,27 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
   const dmgFormulaDisplay = damageRolledTotal > 0
     ? `<b style="color:#ffc878">${damageRolledTotal}</b> <span style="opacity:0.7">(${damageFormula}${damageDiceTooltip ? " " + damageDiceTooltip : ""})</span>${facultyTail}`
     : `${damageFormula}${facultyTail}`;
-  const dmgBlock = damageFormula ? `
+  // 2026-05-29 — Multi-damage-type riders. Render each rolled part inline
+  // after the primary type ("+ 4 Kinetic") and serialize them onto the Apply
+  // button (data-parts JSON) so one click applies every component with its own
+  // type/track. Sanitized to {amount,type,flavor,track} — no display fields.
+  const parts = Array.isArray(rolledParts) ? rolledParts.filter(p => p && Number(p.amount) > 0) : [];
+  const partsDisplay = parts.map(p =>
+    ` <span class="ft-dmg-type ${p.type ?? ""}" style="opacity:0.92">+ ${p.amount} ${ftCap(p.type ?? "")}${p.tooltip ? ` <span style="opacity:0.6">${p.tooltip}</span>` : ""}</span>`
+  ).join("");
+  const partsData = parts.length
+    ? ` data-parts="${ftEscapeHtml(JSON.stringify(parts.map(p => ({ amount: p.amount, type: p.type, flavor: p.flavor ?? "", track: p.track }))))}"`
+    : "";
+  const dmgBlock = (damageFormula || parts.length) ? `
     <div class="ft-dmg-row">
       <span class="ft-dmg-label">Damage</span>
       <span class="ft-dmg-formula">${dmgFormulaDisplay}</span>
-      <span class="ft-dmg-type ${damageType ?? ""}">${ftCap(damageType ?? "")}</span>
+      <span class="ft-dmg-type ${damageType ?? ""}">${ftCap(damageType ?? "")}</span>${partsDisplay}
       <button class="ft-apply-dmg-btn"
               data-formula="${applyFormula}"
               data-damage-type="${damageType ?? ""}"
               data-damage-flavor="${damageFlavor ?? ""}"
-              data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}"
+              data-track="${FT.DAMAGE_TYPES[damageType]?.track ?? "integrity"}"${partsData}
               data-item-uuid="${ftEscapeHtml(itemUuid ?? "")}"
               data-ignore-resists="${ignoreResists ? "1" : "0"}"
               data-nonlethal="${nonlethal ? "1" : "0"}">
@@ -9897,7 +9956,7 @@ function buildAttackDialogHTML(actor, item) {
     `<option value="${k}" ${k === intent ? "selected" : ""}>${v.label}</option>`
   ).join("");
   const costAssessment = item ? ftAssessManifestationCost(actor, item, "weapon") : null;
-  const costBox = item ? buildManifestationCostBoxHTML(costAssessment, { inputName: "applyCost" }) : "";
+  const costBox = item ? buildManifestationCostBoxHTML(costAssessment, { inputName: "applyCost", defaultChecked: ftManifestationCostIsPerUse(item) }) : "";
   const signature = item?.system?.manifestation?.signature ?? "";
   const thirdThing = item?.system?.manifestation?.thirdThing ?? "";
   const stewardTier = Math.max(1, Math.min(4, Number(sysData?.details?.tier) || 1));
@@ -12542,6 +12601,7 @@ Hooks.once("init", function () {
     intent = "violence", skill = "melee", defense = "guard",
     defenseValue = 14, label = "Strike", damageFormula = "", damageType = "kinetic",
     damageFlavor = "",
+    damageParts = [],
     costNote = "", signature = "", thirdThing = "",
     target = null, restraintReduction = 0,
     flankBonus = 0,
@@ -12747,6 +12807,26 @@ Hooks.once("init", function () {
       } catch (e) { console.warn("[fourththing] pre-roll damage failed", e); }
     }
 
+    // 2026-05-29 — Multi-damage-type riders. Each extra part pre-rolls to a
+    // locked integer (no faculty bonus — that rides the primary only) and is
+    // carried on the Apply button so one click applies every component with
+    // its own type/track. Miss = no parts rolled, matching the primary.
+    let rolledParts = [];
+    if (success && Array.isArray(damageParts) && damageParts.length) {
+      for (const part of damageParts) {
+        try {
+          const pr = new Roll(String(part.formula));
+          await pr.evaluate();
+          const amount = Math.max(0, Math.floor(Number(pr.total) || 0));
+          const dice = (pr.dice || []).flatMap(d => (d.results || []).map(r => r.result));
+          rolledParts.push({
+            amount, type: part.type, flavor: part.flavor ?? "", track: part.track,
+            formula: String(part.formula), tooltip: dice.length ? `[${dice.join(" · ")}]` : ""
+          });
+        } catch (e) { console.warn("[fourththing] extra damage part roll failed", part, e); }
+      }
+    }
+
     await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
       flavor:  buildAttackChatHTML({
@@ -12756,7 +12836,8 @@ Hooks.once("init", function () {
         damageFormula: success ? finalDamageFormula : "",
         damageFacultyMod, damageBaseFormula: damageFormula,
         damageRolledTotal, damageDiceTooltip,
-        damageType, damageFlavor, costNote, signature, thirdThing,
+        damageType, damageFlavor, rolledParts: success ? rolledParts : [],
+        costNote, signature, thirdThing,
         itemUuid, ignoreResists: !!_surge.sunderingBlow, nonlethal: _nonlethalHit
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
@@ -13168,6 +13249,12 @@ Hooks.once("init", function () {
     const itemUuid      = btn.dataset.itemUuid ?? "";
     const ignoreResists = btn.dataset.ignoreResists === "1";
     const nonlethal     = btn.dataset.nonlethal === "1";
+    // 2026-05-29 — Multi-damage-type riders carried on the button as JSON.
+    // Each part is a pre-rolled integer with its own type/track, applied as a
+    // follow-up hit so per-type resist/immune math is honored.
+    let extraParts = [];
+    try { extraParts = JSON.parse(btn.dataset.parts || "[]"); } catch (_e) { extraParts = []; }
+    if (!Array.isArray(extraParts)) extraParts = [];
     let   targets       = game.user.targets;
 
     // 2026-05-28 — baked target fallback. Cards (e.g. a Surge self-heal) can carry
@@ -13185,9 +13272,13 @@ Hooks.once("init", function () {
       return;
     }
 
-    const roll = new Roll(formula);
-    await roll.evaluate();
-    const baseDmg = roll.total;
+    // Primary formula may be empty for a parts-only card; roll only if present.
+    let baseDmg = 0;
+    if (formula) {
+      const roll = new Roll(formula);
+      await roll.evaluate();
+      baseDmg = Number(roll.total) || 0;
+    }
     const applyTargets = bakedTargets ?? targets;
 
     // Phase E — source item lookup for conditional damage + weapon parity.
@@ -13217,7 +13308,8 @@ Hooks.once("init", function () {
         game.socket?.emit?.("system.fourththing", {
           t: "ft-applyDamage",
           actorId: actor.id,
-          baseDmg, op, track, damageType, damageFlavor, ignoreResists, nonlethal
+          baseDmg, op, track, damageType, damageFlavor, ignoreResists, nonlethal,
+          parts: extraParts
         });
         ui.notifications.info(`${actor.name}: damage relayed to GM.`);
         continue;
@@ -13226,6 +13318,20 @@ Hooks.once("init", function () {
         op, track, damageType, damageFlavor, perTargetMultiplier: 1, ignoreResists, nonlethal
       });
       if (desc) ui.notifications.info(desc);
+
+      // 2026-05-29 — Apply each multi-type damage part as its own hit so the
+      // target's per-type resists/immunities/vulnerabilities shadow correctly.
+      for (const part of extraParts) {
+        const amt = Math.max(0, Math.floor(Number(part?.amount) || 0));
+        if (amt <= 0) continue;
+        const pType  = String(part.type ?? "").toLowerCase();
+        const pTrack = String(part.track || FT.DAMAGE_TYPES?.[pType]?.track || "integrity");
+        const pDesc = await game.fourththing.rolls._applyDamageToActor(actor, amt, {
+          op, track: pTrack, damageType: pType, damageFlavor: String(part.flavor ?? "").toLowerCase(),
+          perTargetMultiplier: 1, ignoreResists, nonlethal
+        });
+        if (pDesc) ui.notifications.info(pDesc);
+      }
 
       // Phase E — conditional damage rows. After the primary hit lands,
       // check the target's creature types vs each row's vsType. Matching
@@ -20685,6 +20791,33 @@ Hooks.once("init", function () {
     await eff.update({ disabled: !eff.disabled });
   }
 
+  // 2026-05-29 — Multi-damage-type editor (weapon + power sheets). Reads the
+  // RAW array (not the validated one) so a freshly-added blank row isn't
+  // dropped before the user fills it in. New rows default to 1d6 kinetic.
+  function _ftReadDamagePartsRaw(item) {
+    const raw = item?.system?.damageParts;
+    if (Array.isArray(raw)) return foundry.utils.deepClone(raw);
+    if (raw && typeof raw === "object") return Object.values(foundry.utils.deepClone(raw));
+    return [];
+  }
+  async function _ftOnAddDamagePart(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const parts = _ftReadDamagePartsRaw(item);
+    parts.push({ formula: "1d6", type: "kinetic", flavor: "", track: "integrity" });
+    await item.update({ "system.damageParts": parts });
+  }
+  async function _ftOnDeleteDamagePart(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const idx = Number(target?.dataset?.idx ?? target?.closest?.("[data-idx]")?.dataset?.idx);
+    const parts = _ftReadDamagePartsRaw(item);
+    if (Number.isInteger(idx) && idx >= 0 && idx < parts.length) {
+      parts.splice(idx, 1);
+      await item.update({ "system.damageParts": parts });
+    }
+  }
+
   // ── FourthThingPowerSheet ─────────────────────────────────────────────────
   class FourthThingPowerSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
@@ -20694,7 +20827,8 @@ Hooks.once("init", function () {
       window:   { resizable: true },
       actions:  { ftEditItemImg: _ftOnEditItemImg, ftToggleManifestMode: _ftOnToggleManifestMode,
                   ftAddItemEffect: _ftOnAddItemEffect, ftEditItemEffect: _ftOnEditItemEffect,
-                  ftDeleteItemEffect: _ftOnDeleteItemEffect, ftToggleItemEffect: _ftOnToggleItemEffect },
+                  ftDeleteItemEffect: _ftOnDeleteItemEffect, ftToggleItemEffect: _ftOnToggleItemEffect,
+                  ftAddDamagePart: _ftOnAddDamagePart, ftDeleteDamagePart: _ftOnDeleteDamagePart },
       form:     { submitOnChange: true, closeOnSubmit: false }
     };
 
@@ -20708,6 +20842,10 @@ Hooks.once("init", function () {
       system.flavor ??= "";
       system.manifestation = ftNormalizeManifestationData(system, "power");
       system.damageRoll    = ftNormalizeDamageRoll(system);
+      // Multi-damage editor rows — ensure an array for template iteration.
+      system.damageParts = Array.isArray(system.damageParts)
+        ? system.damageParts
+        : (system.damageParts && typeof system.damageParts === "object" ? Object.values(system.damageParts) : []);
       const { intent, channel, sephirah } = system;
       const sheetMode = _ftReadManifestMode(this.item);
       // Build an object map of currently-selected condition keys so the
@@ -20791,6 +20929,17 @@ Hooks.once("init", function () {
           .map(([k]) => k);
         foundry.utils.setProperty(data, path, keys);
       }
+      // 2026-05-29 — Multi-damage rows post as `system.damageParts.<n>.<field>`,
+      // which FormDataExtended expands into a numeric-key object. Coerce back to
+      // an array so mergeObject replaces cleanly (same reason as appliedStates).
+      const dpPath = "system.damageParts";
+      const dpRaw  = foundry.utils.getProperty(data, dpPath);
+      if (dpRaw && typeof dpRaw === "object" && !Array.isArray(dpRaw)) {
+        const arr = Object.keys(dpRaw)
+          .sort((a, b) => Number(a) - Number(b))
+          .map(k => dpRaw[k]);
+        foundry.utils.setProperty(data, dpPath, arr);
+      }
       return data;
     }
   }
@@ -20804,7 +20953,8 @@ Hooks.once("init", function () {
       window:   { resizable: true },
       actions:  { ftEditItemImg: _ftOnEditItemImg, ftToggleManifestMode: _ftOnToggleManifestMode,
                   ftAddItemEffect: _ftOnAddItemEffect, ftEditItemEffect: _ftOnEditItemEffect,
-                  ftDeleteItemEffect: _ftOnDeleteItemEffect, ftToggleItemEffect: _ftOnToggleItemEffect },
+                  ftDeleteItemEffect: _ftOnDeleteItemEffect, ftToggleItemEffect: _ftOnToggleItemEffect,
+                  ftAddDamagePart: _ftOnAddDamagePart, ftDeleteDamagePart: _ftOnDeleteDamagePart },
       form:     { submitOnChange: true, closeOnSubmit: false }
     };
 
@@ -20820,6 +20970,10 @@ Hooks.once("init", function () {
       system.manifestation = ftNormalizeManifestationData(system, "weapon");
       system.damage ??= { formula: "2d6", attribute: system.intent ?? "violence", type: "kinetic", track: "integrity" };
       system.damage.track ??= "integrity";
+      // Multi-damage editor rows — ensure an array for template iteration.
+      system.damageParts = Array.isArray(system.damageParts)
+        ? system.damageParts
+        : (system.damageParts && typeof system.damageParts === "object" ? Object.values(system.damageParts) : []);
       const sheetMode = _ftReadManifestMode(this.item);
       const selectedStates = Array.isArray(system.manifestation.appliedStates?.states)
         ? Object.fromEntries(system.manifestation.appliedStates.states.map(k => [k, true]))
@@ -20836,6 +20990,7 @@ Hooks.once("init", function () {
         system,
         INTENTS:     FT.INTENTS,
         DAMAGE_TYPES: FT.DAMAGE_TYPES,
+        TRACKS:      { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" },
         MANIFESTATION_FORMS: FT.MANIFESTATION_FORMS,
         MANIFESTATION_FUNCTIONS: FT.MANIFESTATION_FUNCTIONS,
         MANIFESTATION_DURATIONS: FT.MANIFESTATION_DURATIONS,
@@ -20883,6 +21038,17 @@ Hooks.once("init", function () {
           .filter(([, v]) => v === true || v === "true")
           .map(([k]) => k);
         foundry.utils.setProperty(data, path, keys);
+      }
+      // 2026-05-29 — Multi-damage rows post as `system.damageParts.<n>.<field>`,
+      // which FormDataExtended expands into a numeric-key object. Coerce back to
+      // an array so mergeObject replaces cleanly (same reason as appliedStates).
+      const dpPath = "system.damageParts";
+      const dpRaw  = foundry.utils.getProperty(data, dpPath);
+      if (dpRaw && typeof dpRaw === "object" && !Array.isArray(dpRaw)) {
+        const arr = Object.keys(dpRaw)
+          .sort((a, b) => Number(a) - Number(b))
+          .map(k => dpRaw[k]);
+        foundry.utils.setProperty(data, dpPath, arr);
       }
       return data;
     }
@@ -24757,6 +24923,19 @@ function _ftRelayHandler(msg) {
         nonlethal: !!msg.nonlethal
       }).then(desc => { if (desc) ui.notifications.info(desc); })
         .catch(e => console.warn("[fourththing] GM-relay damage apply failed", e));
+      // 2026-05-29 — relayed multi-type damage parts.
+      for (const part of (Array.isArray(msg.parts) ? msg.parts : [])) {
+        const amt = Math.max(0, Math.floor(Number(part?.amount) || 0));
+        if (amt <= 0) continue;
+        const pType  = String(part.type ?? "").toLowerCase();
+        const pTrack = String(part.track || FT.DAMAGE_TYPES?.[pType]?.track || "integrity");
+        game.fourththing.rolls._applyDamageToActor(actor, amt, {
+          op: msg.op ?? "damage", track: pTrack, damageType: pType,
+          damageFlavor: String(part.flavor ?? "").toLowerCase(), perTargetMultiplier: 1,
+          ignoreResists: !!msg.ignoreResists, nonlethal: !!msg.nonlethal
+        }).then(desc => { if (desc) ui.notifications.info(desc); })
+          .catch(e => console.warn("[fourththing] GM-relay part apply failed", e));
+      }
     } else if (msg?.t === "ft-applySurgeAE") {
       // 2026-05-23 — Players can't write AEs to GM-owned NPC allies. Surge
       // ally-buffs (Aegis / Anchor / Bulwark Stance / Mass Aegis) relay here

@@ -258,6 +258,30 @@
         </div>
       </div>
 
+      {{!-- Multi-damage-type riders (2026-05-29). Extra damage rolled in
+            addition to the main hit, each with its own type/track. --}}
+      <div class="ft-field-full">
+        <label>Extra damage parts <span style="opacity:0.6;font-weight:normal">— rolled on a hit in addition to the main damage; each its own type &amp; track</span></label>
+        {{#each system.damageParts as |part idx|}}
+        <div class="ft-dmg-part-row" data-idx="{{idx}}" style="display:flex;gap:0.35rem;align-items:center;margin:0.25rem 0">
+          <input type="text" name="system.damageParts.{{idx}}.formula" value="{{part.formula}}" placeholder="1d6" style="width:74px" data-tooltip="Dice formula for this part (e.g. 1d6)."/>
+          <select name="system.damageParts.{{idx}}.type" data-tooltip="Damage type — drives the target's resist/immune math.">
+            {{#each ../DAMAGE_TYPES as |dtype key|}}
+            <option value="{{key}}" {{#if (eq part.type key)}}selected{{/if}}>{{dtype.label}}</option>
+            {{/each}}
+          </select>
+          <select name="system.damageParts.{{idx}}.track" data-tooltip="Which actor track this part touches.">
+            {{#each ../TRACKS as |label key|}}
+            <option value="{{key}}" {{#if (eq part.track key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+          <input type="text" name="system.damageParts.{{idx}}.flavor" value="{{part.flavor}}" placeholder="flavor" style="flex:1" data-tooltip="Optional flavor, e.g. 'fire'."/>
+          <a class="ft-dmg-part-del" data-action="ftDeleteDamagePart" data-idx="{{idx}}" data-tooltip="Remove this part"><i class="fas fa-times"></i></a>
+        </div>
+        {{/each}}
+        <button type="button" class="ft-dmg-part-add" data-action="ftAddDamagePart" style="margin-top:0.3rem"><i class="fas fa-plus"></i> Add damage part</button>
+      </div>
+
       <div class="ft-field-full">
         <label>Target / Reach</label>
         <input type="text" name="system.manifestation.targetText" value="{{system.manifestation.targetText}}" placeholder="One foe, a door, whoever wears it, everyone inside the ward..."/>
