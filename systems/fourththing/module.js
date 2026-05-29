@@ -10406,7 +10406,13 @@ EMOTIONAL PALETTE — VARY THIS across the batch. Do NOT lock into one register:
 NOT EVERY MEMBER IS A GRUDGE, A BETRAYAL, OR A WRONG THE STEWARD DID. One of those per batch is great; three of three is grimdark stew. Aim for genuine variety — at least one warm or lateral relationship in every batch.
 
 TEXTURE — echo the register, do not copy literally:
-Factions like the Tanneritos (mall-dwellers treating apocalypse as a market correction), the Circuit Riders (a robot crew led by a human posing as an AI god), the Valhaulans (patchwork-airship sky-pirates), Monodynamic Industries, the Jackalopes. Places like Port Kudzu, the Bedlam Barrens, the Polygon Forests, Khezek Tor, Thirdword. Names lean gritty / functional / occasionally absurdist (Sklar Bjornholt, Farrier, Captain Robot) — NOT Tolkien fantasy. No elves, dwarves, wizards, taverns. People are competent but mortal, scarred but not ONLY scarred, politically messy — no pure heroes or villains.`;
+Factions like the Tanneritos (mall-dwellers treating apocalypse as a market correction), the Circuit Riders (a robot crew led by a human posing as an AI god), the Valhaulans (patchwork-airship sky-pirates), Monodynamic Industries, the Jackalopes. Places like Port Kudzu, the Bedlam Barrens, the Polygon Forests, Khezek Tor, Thirdword. Names lean gritty / functional / occasionally absurdist (Sklar Bjornholt, Farrier, Captain Robot) — NOT Tolkien fantasy. No elves, dwarves, wizards, taverns. People are competent but mortal, scarred but not ONLY scarred, politically messy — no pure heroes or villains.
+
+ANTI-ECHO — do not reuse the exemplars literally:
+The faction names, place names, and personal names above are TONAL REGISTER, not canon you must include. Reaching for "Bedlam Barrens" or "Sklar Bjornholt" or "Port Kudzu" in every batch is the most repetitive failure mode of this generator. Invent NEW proper nouns each batch that fit the register — new hex names, new faction nicknames, new given/surname combinations, new little landmarks. The exemplars taught you the music; now play your own.
+
+VARY SENTENCE SHAPES — do not stamp the same rhythm three times:
+The three hooks in a batch should not share the same shape. Mix at least three of: past-tense recollection ("Took the bad shift so a friend could see their kid"), present-tense state ("Carries a debt you both pretend isn't there"), compound clause ("Owes you a knife and a quiet apology, in that order"), terse two-sentence ("She kept your name out of it. You've never been able to repay that."). Vary openings — some lead with what they did, some with what they carry, some with how they feel about the Steward. Hooks that all start the same way feel generated; hooks that vary feel observed.`;
 
 // Canonical Crew Types & Occult Associations → specialty + moral-drift + role pool.
 // _ftResolveEchoArchetype matches by keyword, so minor name drift ("Covert Ops Cell"
@@ -10451,6 +10457,7 @@ const _FT_ECHO_NAMES = {
 
 const _FT_ECHO_HOOKS = {
   deed: [
+    // ── existing ──
     "ran salvage through the Bedlam Barrens",
     "held a leyline node through three bad winters",
     "lost a hand to a misfired Spark and kept working",
@@ -10461,9 +10468,44 @@ const _FT_ECHO_HOOKS = {
     "walked out of a sacked hex with the ledger and nothing else",
     "salvaged a working printer in the Bedlam Barrens and keeps it like a saint's relic",
     "ran a clean job for Monodynamic and walked away with the receipts",
-    "fixed a generator everyone else had written off"
+    "fixed a generator everyone else had written off",
+    // ── warm / mercy / sacrifice ──
+    "took the bad shift so a friend could see their kid one more time",
+    "raised a kid that wasn't theirs to raise",
+    "kept faith with a dead woman's promise for fourteen years running",
+    "carried a dying friend three days through hostile hex",
+    "fed a hex that didn't ask for it and never expected payment",
+    "stood between a hex and its own Marshal once and walked away from it",
+    "stitched together a working crew out of three half-broken ones",
+    "took the rap for a friend and got out a year early on good behavior",
+    "mended a relic that nobody else admitted was broken",
+    "stopped a fire with their bare hands and only remembered the pain later",
+    // ── defiant / craft / labor ──
+    "burned a contract they could have lived off and never looked back",
+    "wrote the whole thing down so it couldn't be forgotten or fixed",
+    "broke a long peace with one sentence and rebuilt it with twelve",
+    "kept a debt-book balanced through two collapsed economies",
+    "smuggled a pre-Shatter map past three checkpoints and burned the cover",
+    "spent three seasons learning to weld in absolute silence",
+    "built a chapel out of car doors and held service there for two winters",
+    "ferried a banned book three hex-lines under the wrong name",
+    "broke a knife on a stone the surveyors said wasn't there",
+    // ── quiet mysticism / watchfulness ──
+    "took the long winter watching the Lattice for changes no one believed in",
+    "learned a song that quiets bound things and only sings it when needed",
+    "kept a tally of names so the dead don't go uncounted",
+    "buried their own teacher beside a leyline and planted nothing",
+    "walked the long way around the Bog the year it was hungry",
+    // ── comic / human ──
+    "lost a contest of stubbornness with a goat and accepted the loss",
+    "spent a year drinking and another year sorry about it",
+    "got drunk with a Circuit Rider and learned something they shouldn't have heard",
+    "ran the same route every market-day until the route ran them",
+    "told a Marshal exactly where the door was and was never thanked for it",
+    "drew the short straw in the dark and never told anyone what it meant"
   ],
   rel: [
+    // ── existing ──
     "owed you their life and never quite forgave it",
     "trained you, then drifted when the work turned ugly",
     "rode out of the Polygon Forests at your side",
@@ -10478,7 +10520,68 @@ const _FT_ECHO_HOOKS = {
     "still keeps your spare set of papers, just in case",
     "trained you on the loud machines and tells the story wrong on purpose",
     "writes you whenever they hear about a working printer",
-    "lost the same coin-flip with you a dozen times and never let it sour"
+    "lost the same coin-flip with you a dozen times and never let it sour",
+    // ── warm / intimate ──
+    "shared a campfire silence with you so long it became its own conversation",
+    "calls you by a name only the two of you remember",
+    "thinks of you whenever they smell smoke, and is glad about it",
+    "kept your back during the long quiet and asked nothing back",
+    "let you take the credit when you needed it more than they did",
+    "would walk back into the Bog for you and won't say why",
+    "saved your name once when a Marshal asked the wrong question",
+    "watches the road for you whenever a season turns",
+    "spends the cold months hoping you'll send word",
+    // ── wary / sharp ──
+    "carries a debt you both pretend isn't there",
+    "would forgive you anything except the one thing",
+    "owes you a fight you've both put off for too long",
+    "still thinks you were wrong about the job, and is still right",
+    "kept a knife sharp for you that you've never asked them to draw",
+    "made you swear an oath you've both been gently breaking for years",
+    "stole something of yours once and put it back before you noticed",
+    // ── professional / lateral ──
+    "respects you the way a smith respects a flaw they can't quite hammer out",
+    "would lie to a Marshal for you without asking what for",
+    "would deny knowing you to a stranger and tell the truth in the dark",
+    "lost the same friend you lost and you've never spoken of them",
+    // ── comic / quietly fond ──
+    "argues with you in their head when you're not around, and wins",
+    "treats every meeting like the first time, on purpose",
+    "writes you a letter every solstice and burns it instead of sending",
+    "has a piece of your handwriting pinned to their workbench",
+    "still owes you the favor you've never named"
+  ],
+  trait: [
+    // ── physical tells ──
+    "missing the last knuckle on their left hand",
+    "walks with a slight list to the right, scar habit",
+    "is taller than people expect, and quieter",
+    "has hands that have done both gentle and ugly work",
+    "has the kind of laugh that makes a room turn toward them",
+    // ── habits ──
+    "never drinks anything they haven't poured themselves",
+    "always sits where they can see the door and the window",
+    "burns letters they don't want to answer yet",
+    "talks to themselves in their old crew's dialect when nervous",
+    "draws birds in the margins of any paper they touch",
+    "keeps a count of the days since the last bad thing",
+    "smiles only when something serious has just happened",
+    "won't sleep where they can hear their own breath",
+    // ── possessions / scars ──
+    "wears the same wool cap winter and summer",
+    "carries a folding knife older than they are",
+    "owns one good shirt and treats it like furniture",
+    "still carries a Pre-Shatter coin for luck",
+    "wears two wedding rings on a string, neither theirs",
+    "has a tattoo of a faction no one can find anymore",
+    // ── speech / oddity ──
+    "speaks three languages, lies in two",
+    "has the unsettling habit of remembering exactly what was said",
+    "hasn't told their real name to anyone in a decade",
+    "won't take silver, will take favors",
+    "keeps a list of things they've promised to come back to",
+    // ── craft ──
+    "can fix anything with a wire and a patient hour"
   ]
 };
 
@@ -10494,11 +10597,43 @@ function _ftResolveEchoArchetype(entryName, kind) {
 }
 
 // Offline procedural generator — always works, no API key required.
+// Variety is enforced two ways: WITHIN a batch, fragments don't repeat across
+// the three members (pickFresh keeps a seen-set per pool). And per-member,
+// sentence SHAPE rotates through 6 templates so the batch doesn't stamp the
+// same rhythm three times. Pool size × shape variety ≈ many thousands of
+// distinct possible outputs from this fallback alone.
 function _ftEchoGenFallback({ entryName, kind, count = 3, archetype, taken = [] } = {}) {
   const k = (kind === "occult") ? "occult" : "crew";
   const arc = archetype || _ftResolveEchoArchetype(entryName, k);
   const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
   const used = new Set((taken || []).map(n => String(n).toLowerCase()));
+
+  // Within-batch dedup pools — don't reuse the SAME fragment across this
+  // batch's members. Cheap, high-quality win.
+  const seenDeed  = new Set();
+  const seenRel   = new Set();
+  const seenTrait = new Set();
+  const pickFresh = (pool, seen) => {
+    if (!Array.isArray(pool) || !pool.length) return "";
+    if (seen.size >= pool.length) seen.clear();
+    let pick = _ftEchoPick(pool);
+    for (let i = 0; i < 8 && seen.has(pick); i++) pick = _ftEchoPick(pool);
+    seen.add(pick);
+    return pick;
+  };
+
+  // Six sentence-shape templates — rotated (in shuffled order) so the FIRST
+  // member doesn't always read deed-led, and the batch reads observed-rhythm.
+  const shapes = [
+    (d, r) => `${cap(d)}; ${r}.`,
+    (d, r) => `${cap(r)} — ${d}.`,
+    (d, r, t) => `${cap(t)}; ${r}; ${d}.`,
+    (d, r, t) => `${cap(t)}. ${cap(r)}.`,
+    (d, r) => `${cap(d)}. ${cap(r)}.`,
+    (d, r) => `${cap(r)}; once ${d}.`
+  ];
+  const shapeOrder = [0, 1, 2, 3, 4, 5].sort(() => Math.random() - 0.5);
+
   const out = [];
   let guard = 0;
   while (out.length < count && guard++ < count * 12) {
@@ -10507,10 +10642,16 @@ function _ftEchoGenFallback({ entryName, kind, count = 3, archetype, taken = [] 
       : `${_ftEchoPick(_FT_ECHO_NAMES.given)} ${_ftEchoPick(_FT_ECHO_NAMES.sur)}`;
     if (used.has(name.toLowerCase())) continue;
     used.add(name.toLowerCase());
+
+    const deed  = pickFresh(_FT_ECHO_HOOKS.deed,  seenDeed);
+    const rel   = pickFresh(_FT_ECHO_HOOKS.rel,   seenRel);
+    const trait = pickFresh(_FT_ECHO_HOOKS.trait, seenTrait);
+    const shape = shapes[shapeOrder[out.length % shapes.length]];
+
     out.push({
       name,
       role: _ftEchoPick(arc.roles),
-      notes: `${cap(_ftEchoPick(_FT_ECHO_HOOKS.deed))}; ${_ftEchoPick(_FT_ECHO_HOOKS.rel)}.`
+      notes: shape(deed, rel, trait)
     });
   }
   return out;
