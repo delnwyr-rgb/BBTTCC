@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000040",
+  "name": "Sundering Stroke (Spark)",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>What breaks makes the hammer.</em></p><p>next Strike ignores resists + Staggers the target</p><p style=\"opacity:0.7\"><strong>4◆ Surge</strong> · Offense · Tier 4+ · Forge ▸ Victory</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "fov-sunder",
+      "surgeBucket": "off",
+      "surgeCost": 4,
+      "surgeTier": 4,
+      "surgeClass": "Forge ▸ Victory"
+    }
+  }
+}

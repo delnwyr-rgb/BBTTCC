@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000075",
+  "name": "Ruin to Renewal",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>What you can break, you can also choose to mend.</em></p><p>purify / restore a fortification (Faith or Economy DC 15)</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Narrative · Tier 3+ · Bulwark</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 7500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bw-renewal",
+      "surgeBucket": "narr",
+      "surgeCost": 3,
+      "surgeTier": 3,
+      "surgeClass": "Bulwark"
+    }
+  }
+}

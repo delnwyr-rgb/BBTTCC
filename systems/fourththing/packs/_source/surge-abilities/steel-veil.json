@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000016",
+  "name": "Steel Veil",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Something between you and the world refuses the harm.</em></p><p>resistance to one damage type this round</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Defense · Tier 2+ · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "steel-veil",
+      "surgeBucket": "def",
+      "surgeCost": 5,
+      "surgeTier": 2,
+      "surgeClass": "General"
+    }
+  }
+}

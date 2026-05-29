@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000113",
+  "name": "Refract",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Aim it somewhere that isn't them.</em></p><p>an ally gains DR equal to Tier and a freed reaction (harm bends aside)</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 3+ · Wyrdlens Adept</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 11300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "wl-refract",
+      "surgeBucket": "def",
+      "surgeCost": 3,
+      "surgeTier": 3,
+      "surgeClass": "Wyrdlens Adept"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000046",
+  "name": "Blessed Weapon (Spark)",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The light remembers what it was given to hold.</em></p><p>your weapon blazes with bound light: next Strike +tier d6</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 4+ · Forge ▸ Bound Light</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bl-blessed",
+      "surgeBucket": "off",
+      "surgeCost": 2,
+      "surgeTier": 4,
+      "surgeClass": "Forge ▸ Bound Light"
+    }
+  }
+}

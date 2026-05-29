@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000058",
+  "name": "Shared Dream",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Pull them into the dream; they wake up sharper.</em></p><p>allies within 30 ft bank a reroll + draw 1 Clarity</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Heal · Tier 3+ · Dreamwalker</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "dw-shared",
+      "surgeBucket": "heal",
+      "surgeCost": 3,
+      "surgeTier": 3,
+      "surgeClass": "Dreamwalker"
+    }
+  }
+}

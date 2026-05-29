@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000030",
+  "name": "Atonement Crucible",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Whatever was done can be unmade — and made into a shield.</em></p><p>cleanse a condition + temper an ally into armor (DR)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Heal · Tier 2+ · Soul Smith</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "atonement",
+      "surgeBucket": "heal",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Soul Smith"
+    }
+  }
+}

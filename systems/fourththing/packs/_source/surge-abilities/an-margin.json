@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000129",
+  "name": "Marginalia",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>A note in the margin that the text cannot ignore.</em></p><p>a foe is Staggered and rolls its saves at disadvantage</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Doctrine ▸ Annotator</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 12900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "an-margin",
+      "surgeBucket": "off",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Doctrine ▸ Annotator"
+    }
+  }
+}

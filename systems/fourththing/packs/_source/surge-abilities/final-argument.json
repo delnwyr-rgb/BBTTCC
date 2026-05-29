@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000026",
+  "name": "Final Argument",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>There will be no negotiation.</em></p><p>next Strike auto-hits, max damage, counts +1 Tier</p><p style=\"opacity:0.7\"><strong>10◆ Surge</strong> · Offense · Tier 4+ · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "final-argument",
+      "surgeBucket": "off",
+      "surgeCost": 10,
+      "surgeTier": 4,
+      "surgeClass": "General"
+    }
+  }
+}

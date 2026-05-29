@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000136",
+  "name": "Erasure",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Struck from the sentence. The room forgets it was ever a threat.</em></p><p>a foe is Staggered, cannot take reactions, and rolls saves at disadvantage</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 4+ · Doctrine ▸ Redactor</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 13600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "rd-erasure",
+      "surgeBucket": "off",
+      "surgeCost": 5,
+      "surgeTier": 4,
+      "surgeClass": "Doctrine ▸ Redactor"
+    }
+  }
+}

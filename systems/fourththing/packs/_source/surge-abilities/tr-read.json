@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000121",
+  "name": "The Reading Eye",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>I see what you actually are.</em></p><p>a foe rolls its saves at disadvantage (you read it true)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Refraction ▸ Truth</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 12100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "tr-read",
+      "surgeBucket": "off",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Refraction ▸ Truth"
+    }
+  }
+}

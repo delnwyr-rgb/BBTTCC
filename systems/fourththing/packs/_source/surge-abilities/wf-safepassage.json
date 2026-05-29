@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000090",
+  "name": "Safe Passage",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Nothing touches what I'm carrying.</em></p><p>an ally gains DR equal to Tier and a reroll (escorted through)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Route ▸ Wayfarer</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 9000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "wf-safepassage",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Route ▸ Wayfarer"
+    }
+  }
+}

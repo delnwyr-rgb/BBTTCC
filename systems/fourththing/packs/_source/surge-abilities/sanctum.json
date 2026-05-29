@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000025",
+  "name": "Sanctum",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>A category of harm forgets your name.</em></p><p>immune to one damage type for one round</p><p style=\"opacity:0.7\"><strong>9◆ Surge</strong> · Defense · Tier 4+ · Bulwark</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "sanctum",
+      "surgeBucket": "def",
+      "surgeCost": 9,
+      "surgeTier": 4,
+      "surgeClass": "Bulwark"
+    }
+  }
+}

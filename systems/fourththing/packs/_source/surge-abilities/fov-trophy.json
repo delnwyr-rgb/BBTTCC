@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000038",
+  "name": "Forged Trophy (Spark)",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You forge a weapon from the kill, and it remembers how to bite.</em></p><p>your next Strike +tier d6 + an ally gains DR</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Forge ▸ Victory</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "fov-trophy",
+      "surgeBucket": "off",
+      "surgeCost": 3,
+      "surgeTier": 2,
+      "surgeClass": "Forge ▸ Victory"
+    }
+  }
+}

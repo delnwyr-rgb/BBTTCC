@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000057",
+  "name": "Dream Ward",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Sleep is the safest place there is, briefly.</em></p><p>an ally drifts into a protective dreamstate: DR + a reroll</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Dreamwalker</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "dw-ward",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Dreamwalker"
+    }
+  }
+}

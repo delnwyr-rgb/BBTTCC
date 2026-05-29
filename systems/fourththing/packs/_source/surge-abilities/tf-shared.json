@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000068",
+  "name": "Shared Face",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Two of you, both wrong, both safe.</em></p><p>you + an ally blur behind borrowed identities: both gain DR</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 3+ · Trance ▸ Thousand Faces</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 6800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "tf-shared",
+      "surgeBucket": "def",
+      "surgeCost": 3,
+      "surgeTier": 3,
+      "surgeClass": "Trance ▸ Thousand Faces"
+    }
+  }
+}

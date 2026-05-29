@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000021",
+  "name": "Rallying Cry",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Your voice carries the Soma back into them.</em></p><p>heal all allies within Tier squares for 1d6 + Tier</p><p style=\"opacity:0.7\"><strong>7◆ Surge</strong> · Heal · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "rallying-cry",
+      "surgeBucket": "heal",
+      "surgeCost": 7,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

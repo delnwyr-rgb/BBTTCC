@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000101",
+  "name": "Sovereign Writ",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You do not argue with the law. You are the clerk who files it.</em></p><p>a foe cannot take reactions and rolls its next attack + saves at disadvantage</p><p style=\"opacity:0.7\"><strong>8◆ Surge</strong> · Offense · Tier 4+ · Pactkeeper</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 10100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "pk-sovereign",
+      "surgeBucket": "off",
+      "surgeCost": 8,
+      "surgeTier": 4,
+      "surgeClass": "Pactkeeper"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000054",
+  "name": "Second Wind",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>They refuse to fall because you were watching.</em></p><p>ward an ally: the next hit that would drop them holds at 1</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Heal · Tier 2+ · Mandate ▸ Resolve</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "res-secondwind",
+      "surgeBucket": "heal",
+      "surgeCost": 3,
+      "surgeTier": 2,
+      "surgeClass": "Mandate ▸ Resolve"
+    }
+  }
+}

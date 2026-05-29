@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000028",
+  "name": "Phoenix",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Remember what you were before the wound. Be that now.</em></p><p>restore self/ally from defeated to half integrity (1 / raid)</p><p style=\"opacity:0.7\"><strong>10◆ Surge</strong> · Heal · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "phoenix",
+      "surgeBucket": "heal",
+      "surgeCost": 10,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

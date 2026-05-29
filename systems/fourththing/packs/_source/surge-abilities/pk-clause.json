@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000098",
+  "name": "Invoke Clause",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Read the fine print back to them. It binds.</em></p><p>name a clause on a foe: its next attack is at disadvantage</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Pactkeeper</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 9800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "pk-clause",
+      "surgeBucket": "off",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Pactkeeper"
+    }
+  }
+}

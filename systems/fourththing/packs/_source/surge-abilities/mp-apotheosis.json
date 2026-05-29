@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000133",
+  "name": "Apotheosis",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Stand up. You were always this tall.</em></p><p>allies within 30 ft gain DR equal to Tier and a reroll ('you are all giants')</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Defense · Tier 4+ · Doctrine ▸ Metaphor</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 13300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "mp-apotheosis",
+      "surgeBucket": "def",
+      "surgeCost": 5,
+      "surgeTier": 4,
+      "surgeClass": "Doctrine ▸ Metaphor"
+    }
+  }
+}

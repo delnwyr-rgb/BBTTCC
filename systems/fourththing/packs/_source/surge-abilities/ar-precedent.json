@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000102",
+  "name": "Cite Precedent",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>This was already decided. Long ago. In your favor.</em></p><p>you and an ally each bank a reroll (the record supports you)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Narrative · Doctrine ▸ Archivist</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 10200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "ar-precedent",
+      "surgeBucket": "narr",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Doctrine ▸ Archivist"
+    }
+  }
+}

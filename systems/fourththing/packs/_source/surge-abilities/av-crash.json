@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000080",
+  "name": "Crash",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>All that mass, arriving at once.</em></p><p>your next Strike lands as a max-die crit and Staggers the target</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Bulwark ▸ Avalanche</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 8000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "av-crash",
+      "surgeBucket": "off",
+      "surgeCost": 3,
+      "surgeTier": 2,
+      "surgeClass": "Bulwark ▸ Avalanche"
+    }
+  }
+}

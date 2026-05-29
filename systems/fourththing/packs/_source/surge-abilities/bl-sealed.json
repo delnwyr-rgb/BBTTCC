@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000045",
+  "name": "The Sealed Work (Spark)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Sealed against corruption, radiation, and breaking.</em></p><p>ward an ally: DR + hold the next lethal hit at 1</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 3+ · Forge ▸ Bound Light</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bl-sealed",
+      "surgeBucket": "def",
+      "surgeCost": 3,
+      "surgeTier": 3,
+      "surgeClass": "Forge ▸ Bound Light"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000130",
+  "name": "Revision",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The draft was wrong. This is the draft now.</em></p><p>allies within 30 ft each bank a reroll-lowest (the whole passage, corrected)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Narrative · Tier 4+ · Doctrine ▸ Annotator</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 13000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "an-revision",
+      "surgeBucket": "narr",
+      "surgeCost": 5,
+      "surgeTier": 4,
+      "surgeClass": "Doctrine ▸ Annotator"
+    }
+  }
+}

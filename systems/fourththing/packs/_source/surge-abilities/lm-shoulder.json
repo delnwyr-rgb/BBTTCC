@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000095",
+  "name": "Shoulder the Weight",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Give it to me. I carry things.</em></p><p>heal an ally Tier d6; you take half as Stress; they bank a reroll</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Heal · Route ▸ Last Mile</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 9500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "lm-shoulder",
+      "surgeBucket": "heal",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Route ▸ Last Mile"
+    }
+  }
+}

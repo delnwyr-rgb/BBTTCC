@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000018",
+  "name": "Bulwark Stance",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You become the wall they fight from behind.</em></p><p>adjacent allies share your defenses till next turn</p><p style=\"opacity:0.7\"><strong>6◆ Surge</strong> · Defense · Tier 2+ · Bulwark</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bulwark-stance",
+      "surgeBucket": "def",
+      "surgeCost": 6,
+      "surgeTier": 2,
+      "surgeClass": "Bulwark"
+    }
+  }
+}

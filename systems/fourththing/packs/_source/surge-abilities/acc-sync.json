@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000048",
+  "name": "Synchronized Advance",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Strike together; the second blow lands on the opening the first made.</em></p><p>allies within 30 ft bank a reroll on their next attack</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Mandate ▸ Accord</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "acc-sync",
+      "surgeBucket": "off",
+      "surgeCost": 3,
+      "surgeTier": 2,
+      "surgeClass": "Mandate ▸ Accord"
+    }
+  }
+}

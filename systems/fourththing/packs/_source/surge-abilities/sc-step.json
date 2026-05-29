@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000085",
+  "name": "Courier's Step",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You're already moving. The fight rearranges around it.</em></p><p>+half-speed move (no provoke) and a freed reaction</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Narrative · Shadow Courier</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 8500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "sc-step",
+      "surgeBucket": "narr",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Shadow Courier"
+    }
+  }
+}

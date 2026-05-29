@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000122",
+  "name": "The Unconcealed Word",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The lie stops working the moment it is named.</em></p><p>a foe is Staggered and its next attack is at disadvantage</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Refraction ▸ Truth</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 12200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "tr-unconceal",
+      "surgeBucket": "off",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Refraction ▸ Truth"
+    }
+  }
+}

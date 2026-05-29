@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000035",
+  "name": "Rally to Me",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>They move because you asked. That's all it takes.</em></p><p>an ally acts or reacts out of turn</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Narrative · Tier 2+ · Harmony Marshal</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "rally-to-me",
+      "surgeBucket": "narr",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Harmony Marshal"
+    }
+  }
+}

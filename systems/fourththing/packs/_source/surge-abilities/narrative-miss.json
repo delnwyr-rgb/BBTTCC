@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000004",
+  "name": "Reaction Miss",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>You slide sideways through the moment.</em></p><p>turn one incoming attack into a miss</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "narrative-miss",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

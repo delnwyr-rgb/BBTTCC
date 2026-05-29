@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000031",
+  "name": "Furnace of Renewal",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Stand near the forge. Let it burn the rot out of you.</em></p><p>heal allies within 30 ft + share poison/necrotic resist</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Heal · Tier 3+ · Soul Smith</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "share-furnace",
+      "surgeBucket": "heal",
+      "surgeCost": 3,
+      "surgeTier": 3,
+      "surgeClass": "Soul Smith"
+    }
+  }
+}

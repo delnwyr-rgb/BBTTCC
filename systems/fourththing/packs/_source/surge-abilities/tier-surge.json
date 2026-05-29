@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000022",
+  "name": "Tier Surge",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>You reach above your weight class for one moment.</em></p><p>next Strike OR Cast counts as one Tier higher</p><p style=\"opacity:0.7\"><strong>8◆ Surge</strong> · Offense · Tier 3+ · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "tier-surge",
+      "surgeBucket": "off",
+      "surgeCost": 8,
+      "surgeTier": 3,
+      "surgeClass": "General"
+    }
+  }
+}

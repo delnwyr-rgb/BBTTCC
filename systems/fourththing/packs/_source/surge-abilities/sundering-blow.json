@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000005",
+  "name": "Sundering Blow",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Whatever they call armor, it stops mattering for one breath.</em></p><p>next Strike ignores resistances</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "sundering-blow",
+      "surgeBucket": "off",
+      "surgeCost": 2,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

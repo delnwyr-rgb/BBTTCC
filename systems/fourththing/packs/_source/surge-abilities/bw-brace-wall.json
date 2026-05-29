@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000069",
+  "name": "Brace Wall",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Set your feet. The line forms on you.</em></p><p>you + adjacent allies gain DR equal to Tier this round</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Bulwark</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 6900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bw-brace-wall",
+      "surgeBucket": "def",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Bulwark"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000027",
+  "name": "Mythic Stand",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The world allows it. You decide for one breath.</em></p><p>invulnerable until start of your next turn</p><p style=\"opacity:0.7\"><strong>10◆ Surge</strong> · Defense · Tier 4+ · Bulwark</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "mythic-stand",
+      "surgeBucket": "def",
+      "surgeCost": 10,
+      "surgeTier": 4,
+      "surgeClass": "Bulwark"
+    }
+  }
+}

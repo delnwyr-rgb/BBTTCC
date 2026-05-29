@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000125",
+  "name": "Stabilize",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The sentence is load-bearing now. Try to move it.</em></p><p>you gain DR equal to Tier; your next cast resists counter / dispel</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Cosmic Linguist</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 12500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "cl-stabilize",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Cosmic Linguist"
+    }
+  }
+}

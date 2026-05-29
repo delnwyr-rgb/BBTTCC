@@ -46,6 +46,19 @@
           "description": "Nine starter manifestations from the RFI deck — teach players how to think in Manifestation before they build their own."
         }
       }
+    },
+    {
+      "name": "surge-abilities",
+      "label": "Surge Abilities",
+      "path": "packs/surge-abilities",
+      "type": "Item",
+      "system": "fourththing",
+      "private": false,
+      "flags": {
+        "fourththing": {
+          "description": "One discrete Item per Surge spend (universal + every class kit). Configure an Automated Animations animation on an item here and it plays for every steward when that Surge ability is spent. Regenerate with tools/build-surge-abilities.mjs + compile-surge-abilities.mjs."
+        }
+      }
     }
   ],
   "actorTypes": [

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000051",
+  "name": "Counter-Discord",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The lie is seen; it stops working.</em></p><p>cleanse a debuff off an ally + they bank a reroll</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Mandate ▸ Overwatch</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "ovw-counter",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Mandate ▸ Overwatch"
+    }
+  }
+}

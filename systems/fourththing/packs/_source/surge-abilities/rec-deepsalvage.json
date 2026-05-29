@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000043",
+  "name": "Deep Salvage (Spark)",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>From ancient ruin, something disproportionate to the effort.</em></p><p>restore an ally (big heal + clear all conditions)</p><p style=\"opacity:0.7\"><strong>4◆ Surge</strong> · Heal · Tier 4+ · Forge ▸ Reclaimer</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "rec-deepsalvage",
+      "surgeBucket": "heal",
+      "surgeCost": 4,
+      "surgeTier": 4,
+      "surgeClass": "Forge ▸ Reclaimer"
+    }
+  }
+}

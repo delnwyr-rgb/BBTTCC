@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000077",
+  "name": "Shatter",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Whatever held it together, you found the seam.</em></p><p>your next Strike ignores resistances and Staggers the target</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Bulwark ▸ Cataclyst</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 7700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "cl-shatter",
+      "surgeBucket": "off",
+      "surgeCost": 3,
+      "surgeTier": 2,
+      "surgeClass": "Bulwark ▸ Cataclyst"
+    }
+  }
+}

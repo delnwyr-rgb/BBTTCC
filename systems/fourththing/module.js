@@ -3189,6 +3189,7 @@ function _ftReadSurgeOneShots(actor, { context = "strike" } = {}) {
     ironWord:       false,
     wrathCascade:   false,
     cinderwake:     false,
+    bonusDie:       false,
     consumed:       []   // flag keys to unset after the roll resolves
   };
   const has = (k) => !!f[k];
@@ -3206,10 +3207,11 @@ function _ftReadSurgeOneShots(actor, { context = "strike" } = {}) {
   } else if (context === "save") {
     if (has("iron-word"))       { out.ironWord      = true; out.consumed.push("iron-word"); }
   }
-  // wrath-cascade + cinderwake apply to *any* d10 roll path.
+  // wrath-cascade + cinderwake + narrative-bonus-die apply to *any* d10 roll path.
   if (context === "strike" || context === "cast" || context === "save") {
-    if (has("wrath-cascade"))   { out.wrathCascade  = true; out.consumed.push("wrath-cascade"); }
-    if (has("cinderwake"))      { out.cinderwake    = true; out.consumed.push("cinderwake"); }
+    if (has("wrath-cascade"))      { out.wrathCascade = true; out.consumed.push("wrath-cascade"); }
+    if (has("cinderwake"))         { out.cinderwake   = true; out.consumed.push("cinderwake"); }
+    if (has("narrative-bonus-die")){ out.bonusDie     = true; out.consumed.push("narrative-bonus-die"); }
   }
   return out;
 }
@@ -3234,6 +3236,10 @@ function _ftApplySurgeRollMods(formula, shots) {
     // Insert immediately after the first matched die term.
     f = f.replace(/(2d10x(?:10|>=\d+))/, `$1 + ${bonusDie}`);
   }
+  if (shots.bonusDie) {
+    // Narrative Bonus Die — one extra exploding d10 appended to the roll.
+    f = `${f} + 1d10x10`;
+  }
   return f;
 }
 
@@ -3248,6 +3254,41 @@ async function _ftConsumeSurgeOneShots(actor, shots, { context = "strike" } = {}
   }
   try { await actor.update(updates); }
   catch (e) { console.warn("[fourththing] Surge one-shot consume failed", e); }
+  // Remove the visible "primed" marker AEs for whatever just fired (the sheet
+  // shows them under States & Modifiers; clearing keeps the sheet honest).
+  try {
+    const consumed = new Set(shots.consumed);
+    const ids = Array.from(actor.effects ?? [])
+      .filter(e => consumed.has(e.flags?.fourththing?.surge?.oneShotMarker))
+      .map(e => e.id);
+    if (ids.length) await actor.deleteEmbeddedDocuments("ActiveEffect", ids);
+  } catch (e) { /* marker cleanup is best-effort */ }
+}
+
+// Create a visible "primed" Active Effect for a one-shot Surge boost so the
+// player can see the banked boost on the steward sheet (States & Modifiers).
+// Purely cosmetic — the mechanical contract is still the `surge.oneShot.<key>`
+// flag; `oneShotMarker` ties the AE to that flag so _ftConsumeSurgeOneShots can
+// delete it on use. `narrative-miss` additionally carries a 1-round marker the
+// incoming-damage path reads to negate a hit.
+async function _ftSurgeMarkerAE(actor, entry) {
+  if (!actor || !entry) return;
+  const head = String(entry.label || entry.key).split(" — ")[0];
+  const icon = entry.bucket === "off"  ? "icons/svg/sword.svg"
+             : entry.bucket === "def"  ? "icons/svg/shield.svg"
+             : entry.bucket === "heal" ? "icons/svg/regen.svg"
+             :                           "icons/svg/dice-target.svg";
+  const surgeFlags = { oneShotMarker: entry.key };
+  const ae = {
+    name: `Surge: ${head} (primed)`,
+    img: icon,
+    origin: actor.uuid,
+    changes: [],
+    flags: { fourththing: { surge: surgeFlags } }
+  };
+  if (entry.key === "narrative-miss") { surgeFlags.narrativeMiss = true; ae.duration = { rounds: 1 }; }
+  try { await actor.createEmbeddedDocuments("ActiveEffect", [ae]); }
+  catch (e) { /* non-owner — flag still set; GM enforces */ }
 }
 
 // Pretty labels for chat notes when a Surge boost fires.
@@ -3262,7 +3303,8 @@ const _FT_SURGE_LABELS = {
   "surging-cast":   "Surging Cast (explodes 9–10)",
   "iron-word":      "Iron Word (auto-pass)",
   "wrath-cascade":  "Wrath Cascade (+2d10 free)",
-  "cinderwake":     "Cinderwake (explodes 8+)"
+  "cinderwake":     "Cinderwake (explodes 8+)",
+  "narrative-bonus-die": "Bonus Die (+1d10 exploding)"
 };
 function _ftSurgeBoostBanner(shots) {
   if (!shots?.consumed?.length) return "";
@@ -3940,6 +3982,68 @@ const _FT_CL_DOCTRINE_KEYS = new Set([
 // Doctrine spends that target SELF / an aura (no single target needed).
 const _FT_CL_DOCTRINE_SELF_KEYS = new Set(["an-revision", "mp-apotheosis"]);
 
+// ── Class vs General classification for the Surge spend dialog ────────────────
+// An entry is a CLASS ability if it carries any class/subclass gating tag;
+// otherwise it is a universal (GENERAL) ability available to every steward.
+const _FT_SURGE_CLASS_TAGS = ["classFilter", "forge", "mandate", "trance",
+  "bulwarkPath", "courierRoute", "pactDoctrine", "wlRefraction", "clDoctrine"];
+function _ftSurgeEntryKind(entry) {
+  return _FT_SURGE_CLASS_TAGS.some(t => entry?.[t] != null) ? "class" : "general";
+}
+// Title-case a slug ("shadow_courier" / "quiet-sun" → "Shadow Courier" / "Quiet Sun").
+function _ftPrettySlug(s) {
+  return String(s ?? "").replace(/[-_]+/g, " ").replace(/\b\w/g, c => c.toUpperCase()).trim();
+}
+// Short source label for a class entry's badge ("Bulwark", "Forge ▸ Victory",
+// "Mandate ▸ Accord", …). Returns "" for general entries.
+function _ftSurgeEntryClassLabel(entry) {
+  if (!entry) return "";
+  if (entry.classFilter)   return _ftPrettySlug((Array.isArray(entry.classFilter) ? entry.classFilter[0] : entry.classFilter));
+  if (entry.forge)         return `Forge ▸ ${_ftPrettySlug(entry.forge)}`;
+  if (entry.mandate)       return `Mandate ▸ ${_ftPrettySlug(entry.mandate)}`;
+  if (entry.trance)        return `Trance ▸ ${_ftPrettySlug(entry.trance)}`;
+  if (entry.bulwarkPath)   return `Bulwark ▸ ${_ftPrettySlug(entry.bulwarkPath)}`;
+  if (entry.courierRoute)  return `Route ▸ ${_ftPrettySlug(entry.courierRoute)}`;
+  if (entry.pactDoctrine)  return `Doctrine ▸ ${_ftPrettySlug(entry.pactDoctrine)}`;
+  if (entry.wlRefraction)  return `Refraction ▸ ${_ftPrettySlug(entry.wlRefraction)}`;
+  if (entry.clDoctrine)    return `Doctrine ▸ ${_ftPrettySlug(entry.clDoctrine)}`;
+  return "";
+}
+
+// DSN roll sink — every Surge handler that rolls dice pushes its evaluated Roll
+// here via _ftSurgeRoll(); _ftSurgeExecute resets it before dispatch and attaches
+// the collected rolls to the main spend card so Dice So Nice animates every die.
+// (Heals post their own roll cards already, so they don't use the sink.)
+let _ftSurgeRollSink = [];
+function _ftSurgeRoll(roll) { try { if (roll) _ftSurgeRollSink.push(roll); } catch (e) {} return roll; }
+
+// Resolve the discrete compendium Item backing a Surge ability (for Automated
+// Animations). The `fourththing.surge-abilities` pack holds one configurable
+// Item per menu key; AA reads its animation config straight off the item, so a
+// GM sets each animation once and it plays for every steward. Cached: the pack
+// is loaded + indexed by `flags.fourththing.surgeKey` on first use.
+let _ftSurgeItemIndex = null;
+async function _ftSurgeItemFor(key) {
+  if (!key) return null;
+  if (!_ftSurgeItemIndex) {
+    _ftSurgeItemIndex = (async () => {
+      const map = new Map();
+      const pack = game.packs?.get("fourththing.surge-abilities");
+      if (!pack) return map;
+      try {
+        const docs = await pack.getDocuments();
+        for (const d of docs) {
+          const k = d.flags?.fourththing?.surgeKey;
+          if (k) map.set(k, d);
+        }
+      } catch (e) { console.warn("[fourththing] surge-abilities pack load failed", e); }
+      return map;
+    })();
+  }
+  try { return (await _ftSurgeItemIndex).get(key) ?? null; }
+  catch (e) { return null; }
+}
+
 // Execute a chosen Surge spend. Heals are wired (write to system.integrity.value);
 // every other option sets a one-shot flag and posts a chat card for GM enforcement.
 async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
@@ -3962,6 +4066,13 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
       ui.notifications?.warn(`${actor.name}: Phoenix already used this raid.`);
       return;
     }
+  }
+
+  // Narrative Miss is reactive (negates the next incoming attack via a 1-round
+  // marker AE). Only meaningful in combat — don't charge for it otherwise.
+  if (effectKey === "narrative-miss" && !game.combat?.started) {
+    ui.notifications?.warn("Reaction Miss only applies during combat — start an encounter first.");
+    return;
   }
 
   // Pre-validate ally-targeted heals so we don't charge for nothing.
@@ -4111,6 +4222,7 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   const ALLY_AE = new Set(["aegis", "anchor", "bulwark-stance", "mass-aegis"]);
 
   // Wired heals.
+  _ftSurgeRollSink = []; // reset before dispatch; handlers push their dice for DSN
   let chatExtra = "";
   if (_FT_SOUL_SMITH_KEYS.has(effectKey)) {
     chatExtra = await _ftSoulSmithSurge(actor, effectKey, tier);
@@ -4159,6 +4271,9 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
         appliedAt: Date.now()
       });
     } catch (e) { /* flag write failed — silent, chat card still posts */ }
+    // Surface a visible "primed" Active Effect on the steward sheet so the
+    // banked boost (or pending narrative beat) is tracked, not invisible.
+    await _ftSurgeMarkerAE(actor, entry);
     // Echo Strike also grants a free action so the bonus Strike costs nothing.
     if (effectKey === "echo-strike") {
       try {
@@ -4177,7 +4292,8 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   // read by Strike/Cast/Save paths; the remaining keys are deferred (GM enforces).
   const AUTO_CONSUMED_KEYS = new Set([
     "snap-strike", "sundering-blow", "doomstrike", "crowning-blow", "final-argument",
-    "tier-surge", "surging-cast", "iron-word", "wrath-cascade", "cinderwake", "echo-strike"
+    "tier-surge", "surging-cast", "iron-word", "wrath-cascade", "cinderwake", "echo-strike",
+    "narrative-bonus-die"
   ]);
   const GM_DEFERRED_KEYS = new Set([
     "narrative-refund", "narrative-fiction"
@@ -4185,20 +4301,25 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   let footerHint = "";
   if (entry.wired || SPEND_TIME_AE.has(effectKey) || ALLY_AE.has(effectKey)) {
     footerHint = ""; // immediate effect, no further enforcement needed
+  } else if (effectKey === "narrative-miss") {
+    footerHint = " Primed — turns your next incoming attack into a miss (shown on your sheet).";
   } else if (AUTO_CONSUMED_KEYS.has(effectKey)) {
     const where = (effectKey === "iron-word") ? "next save"
                : (effectKey === "surging-cast") ? "next Cast"
-               : (effectKey === "wrath-cascade" || effectKey === "cinderwake") ? "next d10 roll"
+               : (effectKey === "wrath-cascade" || effectKey === "cinderwake" || effectKey === "narrative-bonus-die") ? "next d10 roll"
                : (effectKey === "tier-surge") ? "next Strike or Cast"
                : (effectKey === "echo-strike") ? "next (free) Strike at −2"
                : "next Strike";
-    footerHint = ` Auto-consumed on your ${where}.`;
+    footerHint = ` Auto-consumed on your ${where} (primed effect shown on your sheet).`;
   } else if (GM_DEFERRED_KEYS.has(effectKey)) {
-    footerHint = ` GM adjudicates — one-shot flag set at <code>flags.fourththing.surge.oneShot.${effectKey}</code>.`;
+    footerHint = ` GM adjudicates — primed marker shown on your sheet; one-shot flag at <code>flags.fourththing.surge.oneShot.${effectKey}</code>.`;
   }
 
+  const _surgeRolls = _ftSurgeRollSink.slice();
+  _ftSurgeRollSink = [];
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
+    ...(_surgeRolls.length ? { rolls: _surgeRolls, sound: CONFIG.sounds?.dice } : {}),
     content: `<div class="fourththing-roll">
       <div class="ft-roll-header">
         <span class="ft-roll-name">✦ ${actor.name} spends ${cost} Surge</span>
@@ -4216,6 +4337,15 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
       </p>
     </div>`
   });
+
+  // Automated Animations — play the per-ability animation configured on the
+  // discrete compendium Item. Offense buckets read as a "hit"; everything else
+  // plays its on-self/aura animation. Best-effort: no-op if AA or the item is
+  // absent (ftPlayAutoAnimation guards the module presence).
+  try {
+    const aaItem = await _ftSurgeItemFor(effectKey);
+    if (aaItem) ftPlayAutoAnimation(actor, aaItem, { hit: entry.bucket === "off" });
+  } catch (e) { /* AA is cosmetic */ }
 
   // Mark phoenix consumed this raid.
   if (effectKey === "phoenix") {
@@ -4670,7 +4800,7 @@ async function _ftForgeSurge(actor, effectKey, tier) {
     const s = a.system?.system ?? a.system ?? {};
     const max = Number(s?.derived?.integrity?.max ?? s?.integrity?.max ?? 16);
     const cur = Number(s?.derived?.integrity?.value ?? s?.integrity?.value ?? 0);
-    const r = new Roll(formula); await r.evaluate();
+    const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
     const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
     if (next !== cur) { try { await a.update({ "system.derived.integrity.value": next }); } catch (e) {} }
     return next - cur;
@@ -4750,14 +4880,14 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
     const max = Number(sys?.derived?.integrity?.max ?? sys?.integrity?.max ?? 16);
     const cur = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
     const roll = new Roll(`1d8 + ${tier}`);
-    await roll.evaluate();
+    await roll.evaluate(); _ftSurgeRoll(roll);
     const amount = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
     const next   = Math.min(max, cur + amount);
     const banked = next - cur;
     try { await target.update({ "system.derived.integrity.value": next }); } catch (e) { /* silent */ }
     let backlash = "";
     if (overheated) {
-      const br = new Roll("1d6"); await br.evaluate();
+      const br = new Roll("1d6"); await br.evaluate(); _ftSurgeRoll(br);
       const rs = actor.system?.system ?? actor.system;
       const curStr = Number(rs?.derived?.stress?.value ?? 10);
       try { await actor.update({ "system.derived.stress.value": Math.max(0, curStr - br.total) }); } catch (e) { /* silent */ }
@@ -4808,7 +4938,7 @@ async function _ftSoulSmithSurge(actor, effectKey, tier) {
       const asys = a.system?.system ?? a.system ?? {};
       const max = Number(asys?.derived?.integrity?.max ?? asys?.integrity?.max ?? 16);
       const cur = Number(asys?.derived?.integrity?.value ?? asys?.integrity?.value ?? 0);
-      const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
+      const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate(); _ftSurgeRoll(roll);
       const amt  = Math.max(0, Math.round((Number(roll.total) || 0) * mult));
       const next = Math.min(max, cur + amt);
       if (next !== cur) { try { await a.update({ "system.derived.integrity.value": next }); } catch (e) {} }
@@ -4936,12 +5066,12 @@ async function _ftBulwarkSurge(actor, effectKey, tier) {
 
   // ── Folded Frame/Ruin abilities (one-shot flags the existing consumers read) ──
   if (effectKey === "bw-absorb") {
-    const r = new Roll("1d8"); await r.evaluate();
+    const r = new Roll("1d8"); await r.evaluate(); _ftSurgeRoll(r);
     try { await actor.setFlag("fourththing", "bulwark.frameOneShot.absorb", { roll: Number(r.total) || 0, ts: Date.now() }); } catch (e) {}
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78a0dc">🛡 Absorb — your next incoming hit is <b>capped at ${r.total}</b> (you take the wall, not the blow). Consumed by the next hit that deals damage.</p>`;
   }
   if (effectKey === "bw-push") {
-    const r = new Roll("1d8"); await r.evaluate();
+    const r = new Roll("1d8"); await r.evaluate(); _ftSurgeRoll(r);
     try { await actor.setFlag("fourththing", "bulwark.frameOneShot.push", { roll: Number(r.total) || 0, ts: Date.now() }); } catch (e) {}
     return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#dc8050">⛏ Push — <b>+${r.total}</b> to your next Body check (move / break / shove). Consumed on use.</p>`;
   }
@@ -5162,7 +5292,7 @@ async function _ftCourierRouteSurge(actor, effectKey, tier) {
     const s = a.system?.system ?? a.system ?? {};
     const max = Number(s?.derived?.integrity?.max ?? s?.integrity?.max ?? 16);
     const cur = Number(s?.derived?.integrity?.value ?? s?.integrity?.value ?? 0);
-    const r = new Roll(formula); await r.evaluate();
+    const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
     const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
     if (next !== cur) { try { await a.update({ "system.derived.integrity.value": next }); } catch (e) {} }
     return { banked: next - cur, next, max, cur };
@@ -5313,7 +5443,7 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
     const s = a.system?.system ?? a.system ?? {};
     const max = Number(s?.derived?.integrity?.max ?? s?.integrity?.max ?? 16);
     const cur = Number(s?.derived?.integrity?.value ?? s?.integrity?.value ?? 0);
-    const r = new Roll(formula); await r.evaluate();
+    const r = new Roll(formula); await r.evaluate(); _ftSurgeRoll(r);
     const next = Math.min(max, cur + Math.max(0, Number(r.total) || 0));
     if (next !== cur) { try { await a.update({ "system.derived.integrity.value": next }); } catch (e) {} }
     return next - cur;
@@ -5641,7 +5771,7 @@ async function _ftHarmonySurge(actor, effectKey, tier) {
     const sys = target.system?.system ?? target.system ?? {};
     const max = Number(sys?.derived?.integrity?.max ?? sys?.integrity?.max ?? 16);
     const cur = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0);
-    const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate();
+    const roll = new Roll(`1d6 + ${tier}`); await roll.evaluate(); _ftSurgeRoll(roll);
     const amount = Math.max(0, Number(roll.total) || 0);
     const next   = Math.min(max, cur + amount);
     const healed = next - cur;
@@ -11224,6 +11354,21 @@ Hooks.once("init", function () {
     collectTriggers,
     fireTriggers,
     getAlignmentModifier: ftAlignmentMod,
+    surge: {
+      // Resolve the discrete compendium Item backing a Surge ability — for
+      // debugging / wiring Automated Animations to a specific spend.
+      itemFor: (key) => _ftSurgeItemFor(key),
+      // Programmatic spend (mirrors the sheet's Spend button).
+      spend: (actorOrId, key, cost, tier) => {
+        const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+        if (!actor) return null;
+        const cur = actor.system?.system?.resources?.surge?.value ?? actor.system?.resources?.surge?.value ?? 0;
+        const entry = _FT_SURGE_MENU.find(e => e.key === key);
+        const c = Number(cost ?? entry?.cost ?? 0);
+        const t = Number(tier ?? _ftCasterTier(actor));
+        return _ftSurgeExecute(actor, key, c, cur, t);
+      }
+    },
     echoAssets: {
       get: (actorOrId) => {
         const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
@@ -12723,9 +12868,17 @@ Hooks.once("init", function () {
     // type-resist. The AE itself expires via Foundry's duration system after
     // 1 round/turn, so no manual cleanup is needed.
     let surgeImmune = false, surgeResist = false, surgeDrFlat = 0;
+    let narrativeMissAE = null;
     const surgeTags = [];
     for (const ae of (actor.appliedEffects ?? actor.effects ?? [])) {
       if (ae.disabled) continue;
+      // Surge: Narrative Miss — a primed one-shot (no `kind`) that turns the
+      // next incoming attack into a clean miss. Treated as one-shot immunity so
+      // it negates the hit BEFORE the other defensive one-shots fire (they'd be
+      // wasted on a hit that does 0).
+      if (ae.flags?.fourththing?.surge?.narrativeMiss && op === "damage") {
+        narrativeMissAE = narrativeMissAE ?? ae;
+      }
       const kind = ae.flags?.fourththing?.surge?.kind;
       if (!kind) continue;
       if (kind === "mythic-stand" && ae.flags?.fourththing?.surge?.invulnerable) {
@@ -12753,6 +12906,16 @@ Hooks.once("init", function () {
     // Blow on the attacker side flows in via `ignoreResists` → skip target
     // resistances (still honors immunities + vulns since those reflect
     // worldbuilding, not absorbed armor).
+    // Narrative Miss negates the hit entirely and is consumed (delete the marker
+    // AE + clear the one-shot flag). Folds into surgeImmune so defMult → 0 and the
+    // downstream one-shot reducers (which only fire on dmg>0) don't get spent.
+    if (narrativeMissAE) {
+      surgeImmune = true;
+      surgeTags.push("Narrative Miss: attack turned aside");
+      try { await actor.deleteEmbeddedDocuments("ActiveEffect", [narrativeMissAE.id]); } catch (e) { /* best-effort */ }
+      try { await actor.update({ "flags.fourththing.surge.oneShot.-=narrative-miss": null }); } catch (e) { /* best-effort */ }
+    }
+
     let defMult = 1;
     const tags = [];
     if (surgeImmune) {
@@ -16713,6 +16876,10 @@ Hooks.once("init", function () {
         (byCost[e.cost] ??= []).push(e);
       }
 
+      // A single ability button. Class abilities get a gold left-accent + a
+      // filled source badge (Bulwark / Forge ▸ Victory / …); universal abilities
+      // get a muted accent + a hollow "GENERAL" tag — so class vs general reads
+      // at a glance (the ask). Bucket background tints (off/def/heal/narr) stay.
       const cell = (e) => {
         const tierLocked = tier < e.tier;
         const tooBroke   = surge < e.cost;
@@ -16720,6 +16887,9 @@ Hooks.once("init", function () {
         const why = tierLocked ? `Requires Tier ${e.tier}+`
                   : tooBroke   ? `Needs ${e.cost} Surge (you have ${surge})`
                   : `Click to spend ${e.cost} Surge`;
+        const kind      = _ftSurgeEntryKind(e);
+        const isClass   = kind === "class";
+        const classLbl  = isClass ? _ftSurgeEntryClassLabel(e) : "";
         const bg = e.bucket === "off"  ? (disabled ? "rgba(220,80,80,0.05)"  : "rgba(220,80,80,0.13)")
                  : e.bucket === "def"  ? (disabled ? "rgba(120,160,220,0.05)": "rgba(120,160,220,0.13)")
                  : e.bucket === "heal" ? (disabled ? "rgba(120,200,140,0.05)": "rgba(120,200,140,0.13)")
@@ -16729,15 +16899,30 @@ Hooks.once("init", function () {
                  : e.bucket === "heal" ? (disabled ? "rgba(120,200,140,0.18)": "rgba(120,200,140,0.50)")
                  :                       (disabled ? "rgba(232,200,74,0.18)" : "rgba(232,200,74,0.50)");
         const fg = disabled ? "rgba(255,255,255,0.30)" : "#f0f0f0";
+        // Class/General accent — gold bar for class, slate bar for general.
+        const accent = isClass
+          ? (disabled ? "rgba(232,200,74,0.45)" : "#e8c84a")
+          : (disabled ? "rgba(150,160,175,0.25)" : "rgba(150,160,175,0.5)");
+        const kindBadge = isClass
+          ? `<span title="Class ability (${classLbl})"
+                   style="flex-shrink:0;padding:0.05rem 0.35rem;border-radius:3px;font-size:0.6rem;font-weight:700;
+                          letter-spacing:0.04em;background:${disabled ? "rgba(232,200,74,0.18)" : "rgba(232,200,74,0.85)"};
+                          color:${disabled ? "rgba(232,200,74,0.7)" : "#1a1505"}">${classLbl}</span>`
+          : `<span title="Universal ability — every steward has this"
+                   style="flex-shrink:0;padding:0.05rem 0.35rem;border-radius:3px;font-size:0.6rem;font-weight:700;
+                          letter-spacing:0.06em;background:transparent;border:1px solid rgba(150,160,175,0.45);
+                          color:rgba(180,190,205,${disabled ? "0.4" : "0.85"})">GENERAL</span>`;
         return `
           <button type="button" class="ft-surge-opt" data-cost="${e.cost}" data-effect="${e.key}"
                   ${disabled ? "disabled" : ""} title="${why}"
                   style="display:block;width:100%;text-align:left;padding:0.4rem 0.5rem;margin:0;
-                         background:${bg};border:1px solid ${bd};
+                         background:${bg};border:1px solid ${bd};border-left:3px solid ${accent};
                          border-radius:4px;color:${fg};cursor:${disabled ? "not-allowed" : "pointer"}">
-            <div style="font-weight:600;font-size:0.78rem;display:flex;justify-content:space-between;gap:0.4rem">
-              <span>${e.label}</span>${e.tier > 1 ? `<span style="opacity:0.55;font-size:0.68rem">T${e.tier}+</span>` : ""}
+            <div style="display:flex;justify-content:space-between;gap:0.35rem;align-items:flex-start;margin-bottom:0.15rem">
+              ${kindBadge}
+              ${e.tier > 1 ? `<span style="flex-shrink:0;opacity:0.6;font-size:0.62rem;font-weight:600">T${e.tier}+</span>` : "<span></span>"}
             </div>
+            <div style="font-weight:600;font-size:0.78rem">${e.label}</div>
             <div style="font-size:0.70rem;opacity:0.75;margin-top:0.15rem;font-style:italic">${e.fiction}</div>
           </button>`;
       };
@@ -16748,32 +16933,67 @@ Hooks.once("init", function () {
       const bucketLabel = { off: "Offense", def: "Defense", heal: "Heal", narr: "Narrative" };
       const bucketColor = { off: "#dc5050", def: "#78a0dc", heal: "#78c88c", narr: "#e8c84a" };
 
-      let rowsHtml = "";
       const costs = Object.keys(byCost).map(n => Number(n)).sort((a, b) => a - b);
-      for (const c of costs) {
-        const cells = buckets.map(b => {
-          const entries = byCost[c].filter(e => e.bucket === b);
-          if (!entries.length) return emptyCell;
-          return entries.map(cell).join('<div style="height:0.25rem"></div>');
-        });
-        rowsHtml += `
-          <tr>
-            <td style="vertical-align:top;padding:0.25rem 0.4rem 0.25rem 0;text-align:right;
-                       color:#e8c84a;font-weight:700;font-size:0.95rem;white-space:nowrap;width:2.5rem">
-              ${c}<span style="font-size:0.62rem;opacity:0.6">◆</span>
-            </td>
-            ${cells.map(c => `<td style="vertical-align:top;padding:0.25rem 0.25rem;width:23.5%">${c}</td>`).join("")}
-          </tr>`;
-      }
+
+      // Build the table body for a mode. "available" shows only entries the actor
+      // can spend right now (tier met AND affordable) and drops empty cost-rows;
+      // "all" shows the whole ladder (higher-cost / tier-locked greyed, hover-why).
+      const isSpendable = (e) => !(tier < e.tier || surge < e.cost);
+      const renderBody = (mode) => {
+        let rowsHtml = "";
+        for (const c of costs) {
+          const cells = buckets.map(b => {
+            let entries = byCost[c].filter(e => e.bucket === b);
+            if (mode === "available") entries = entries.filter(isSpendable);
+            if (!entries.length) return emptyCell;
+            return entries.map(cell).join('<div style="height:0.25rem"></div>');
+          });
+          if (mode === "available" && cells.every(x => x === emptyCell)) continue;
+          rowsHtml += `
+            <tr>
+              <td style="vertical-align:top;padding:0.25rem 0.4rem 0.25rem 0;text-align:right;
+                         color:#e8c84a;font-weight:700;font-size:0.95rem;white-space:nowrap;width:2.5rem">
+                ${c}<span style="font-size:0.62rem;opacity:0.6">◆</span>
+              </td>
+              ${cells.map(cc => `<td style="vertical-align:top;padding:0.25rem 0.25rem;width:23.5%">${cc}</td>`).join("")}
+            </tr>`;
+        }
+        if (!rowsHtml) {
+          rowsHtml = `<tr><td colspan="5" style="text-align:center;padding:1.1rem 0.5rem;opacity:0.6;font-style:italic;font-size:0.8rem">
+            Nothing affordable at ${surge} Surge — switch to <b>All</b> to see the full ladder.</td></tr>`;
+        }
+        return rowsHtml;
+      };
 
       const headerCells = buckets.map(b =>
         `<th style="text-align:left;padding:0.2rem 0.3rem;color:${bucketColor[b]};font-size:0.74rem;
                     border-bottom:1px solid ${bucketColor[b]}55;letter-spacing:0.05em">${bucketLabel[b].toUpperCase()}</th>`).join("");
 
+      // Last-used view persists on the actor; default to Available.
+      const startMode = (actor.flags?.fourththing?.surge?.menuMode === "all") ? "all" : "available";
+      const toggleBtn = (m, label, on) =>
+        `<button type="button" class="ft-surge-mode" data-mode="${m}"
+                 style="padding:0.12rem 0.6rem;font-size:0.72rem;font-weight:600;cursor:pointer;
+                        border:1px solid ${on ? "#e8c84a" : "rgba(232,200,74,0.3)"};
+                        background:${on ? "rgba(232,200,74,0.85)" : "transparent"};
+                        color:${on ? "#1a1505" : "rgba(232,200,74,0.8)"};
+                        border-radius:${m === "available" ? "4px 0 0 4px" : "0 4px 4px 0"}">${label}</button>`;
+
       const html = `<div class="ft-cast-dialog" style="min-width:680px">
-        <p style="font-size:0.78rem;opacity:0.85;margin:0 0 0.55rem">
-          Banked: <b style="color:#e8c84a">${surge} / ${cap}</b> Surge · Tier <b>${tier}</b>.
-          <span style="opacity:0.65">Hover locked rows for why.</span>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:0.6rem;margin:0 0 0.5rem;flex-wrap:wrap">
+          <p style="font-size:0.78rem;opacity:0.85;margin:0">
+            Banked: <b style="color:#e8c84a">${surge} / ${cap}</b> Surge · Tier <b>${tier}</b>.
+          </p>
+          <div style="display:flex;align-items:center;gap:0">
+            ${toggleBtn("available", "Available", startMode === "available")}
+            ${toggleBtn("all", "All", startMode === "all")}
+          </div>
+        </div>
+        <p style="font-size:0.68rem;opacity:0.6;margin:0 0 0.5rem">
+          <span style="display:inline-block;width:0.7rem;height:0.7rem;border-radius:2px;background:#e8c84a;vertical-align:middle"></span>
+          <b style="color:#e8c84a">Class</b> ability (your kit) ·
+          <span style="display:inline-block;width:0.7rem;height:0.7rem;border-radius:2px;background:rgba(150,160,175,0.5);vertical-align:middle"></span>
+          <b style="color:#b4becd">General</b> (everyone has it). <span style="opacity:0.7">All view shows higher-cost options you can't afford yet.</span>
         </p>
         <table style="width:100%;border-collapse:collapse;font-size:0.78rem">
           <thead><tr>
@@ -16781,10 +17001,10 @@ Hooks.once("init", function () {
                        color:#e8c84a;font-size:0.7rem;border-bottom:1px solid #e8c84a55">COST</th>
             ${headerCells}
           </tr></thead>
-          <tbody>${rowsHtml}</tbody>
+          <tbody class="ft-surge-body">${renderBody(startMode)}</tbody>
         </table>
         <p style="font-size:0.68rem;opacity:0.55;margin:0.6rem 0 0;font-style:italic">
-          Heals + defense buffs apply immediately; Strike/Cast/Save boosts auto-consume on your next roll.
+          Heals + defense buffs apply immediately; Strike/Cast/Save boosts prime a tracked effect on your sheet and auto-consume on your next roll.
           Refund &amp; Reshape Fiction remain GM-adjudicated.
         </p>
       </div>`;
@@ -16799,15 +17019,46 @@ Hooks.once("init", function () {
 
       Hooks.once("renderDialog", (d, $html) => {
         if (d !== dialog) return;
-        $html.find(".ft-surge-opt").on("click", async (e) => {
-          const cost   = parseInt(e.currentTarget.dataset.cost);
-          const effect = String(e.currentTarget.dataset.effect || "");
-          const cur    = actor.system?.system?.resources?.surge?.value
-                      ?? actor.system?.resources?.surge?.value ?? 0;
-          if (cur < cost) return;
-          dialog.close();
-          await _ftSurgeExecute(actor, effect, cost, cur, tier);
+        const root = $html[0] ?? $html;
+
+        const bindOptions = () => {
+          root.querySelectorAll(".ft-surge-opt").forEach(btn => {
+            btn.addEventListener("click", async (ev) => {
+              const b = ev.currentTarget;
+              if (b.disabled) return;
+              const cost   = parseInt(b.dataset.cost);
+              const effect = String(b.dataset.effect || "");
+              const cur    = actor.system?.system?.resources?.surge?.value
+                          ?? actor.system?.resources?.surge?.value ?? 0;
+              if (cur < cost) return;
+              dialog.close();
+              await _ftSurgeExecute(actor, effect, cost, cur, tier);
+            });
+          });
+        };
+
+        const applyMode = (mode) => {
+          const body = root.querySelector(".ft-surge-body");
+          if (body) body.innerHTML = renderBody(mode);
+          root.querySelectorAll(".ft-surge-mode").forEach(b => {
+            const on = b.dataset.mode === mode;
+            b.style.background = on ? "rgba(232,200,74,0.85)" : "transparent";
+            b.style.color      = on ? "#1a1505" : "rgba(232,200,74,0.8)";
+            b.style.borderColor = on ? "#e8c84a" : "rgba(232,200,74,0.3)";
+          });
+          bindOptions();
+          dialog.setPosition?.({ height: "auto" });
+        };
+
+        root.querySelectorAll(".ft-surge-mode").forEach(b => {
+          b.addEventListener("click", () => {
+            const mode = b.dataset.mode === "all" ? "all" : "available";
+            applyMode(mode);
+            actor.setFlag?.("fourththing", "surge.menuMode", mode).catch(() => {});
+          });
         });
+
+        bindOptions();
       });
     }
 

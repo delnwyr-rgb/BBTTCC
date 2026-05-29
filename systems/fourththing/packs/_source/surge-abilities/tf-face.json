@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000066",
+  "name": "Borrowed Face",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Identity is negotiable.</em></p><p>misdirection: you gain DR + bank a reroll</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Trance ▸ Thousand Faces</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 6600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "tf-face",
+      "surgeBucket": "def",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Trance ▸ Thousand Faces"
+    }
+  }
+}

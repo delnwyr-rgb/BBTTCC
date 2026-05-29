@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000044",
+  "name": "Bound Vessel (Spark)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Containment is the first virtue.</em></p><p>ward an ally: DR + poison/necrotic resist (3 rds)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Forge ▸ Bound Light</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bl-vessel",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Forge ▸ Bound Light"
+    }
+  }
+}

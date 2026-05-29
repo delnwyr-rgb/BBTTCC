@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000083",
+  "name": "Deny",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>No. That is the whole spell.</em></p><p>you or an ally becomes immune to forced-move/CC + gains DR this round</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Bulwark ▸ Mountain</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 8300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "mt-deny",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Bulwark ▸ Mountain"
+    }
+  }
+}

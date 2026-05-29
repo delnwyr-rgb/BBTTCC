@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000041",
+  "name": "Reclaim (Spark)",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Nothing is beyond salvage.</em></p><p>salvage a condition off an ally + grant them DR</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Forge ▸ Reclaimer</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "rec-reclaim",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Forge ▸ Reclaimer"
+    }
+  }
+}

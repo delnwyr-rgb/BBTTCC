@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000061",
+  "name": "Somnolent Peace",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Sleep, not death. There's a difference, and you keep it.</em></p><p>the next lethal blow against an ally drops them to 1, not dead</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Trance ▸ Quiet Sun</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 6100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "qs-peace",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Trance ▸ Quiet Sun"
+    }
+  }
+}

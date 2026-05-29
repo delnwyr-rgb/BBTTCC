@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000017",
+  "name": "Wrath Cascade",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>The dice all remember at once.</em></p><p>every d10 in next roll explodes once free</p><p style=\"opacity:0.7\"><strong>6◆ Surge</strong> · Offense · Tier 2+ · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "wrath-cascade",
+      "surgeBucket": "off",
+      "surgeCost": 6,
+      "surgeTier": 2,
+      "surgeClass": "General"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000050",
+  "name": "Covered",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Nothing unobserved.</em></p><p>an ally gains DR this round (the Network has them)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Mandate ▸ Overwatch</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "ovw-covered",
+      "surgeBucket": "def",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Mandate ▸ Overwatch"
+    }
+  }
+}

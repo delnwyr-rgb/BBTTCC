@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000019",
+  "name": "Crowning Blow",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Inevitable. The kind of strike fables remember.</em></p><p>next Strike is a max-die critical hit</p><p style=\"opacity:0.7\"><strong>7◆ Surge</strong> · Offense · Tier 3+ · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "crowning-blow",
+      "surgeBucket": "off",
+      "surgeCost": 7,
+      "surgeTier": 3,
+      "surgeClass": "General"
+    }
+  }
+}

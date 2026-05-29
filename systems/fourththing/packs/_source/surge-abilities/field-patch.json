@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000013",
+  "name": "Field Patch",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Hands move faster than the wound can close.</em></p><p>heal ally 2d6 + Tier (in reach)</p><p style=\"opacity:0.7\"><strong>4◆ Surge</strong> · Heal · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "field-patch",
+      "surgeBucket": "heal",
+      "surgeCost": 4,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

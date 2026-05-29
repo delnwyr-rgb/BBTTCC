@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000064",
+  "name": "Sapphire Step",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>In one door, out another you remember.</em></p><p>you + an ally reposition: each banks a reroll + a freed reaction</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Narrative · Tier 2+ · Trance ▸ Sapphire Gate</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 6400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "sg-step",
+      "surgeBucket": "narr",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Trance ▸ Sapphire Gate"
+    }
+  }
+}

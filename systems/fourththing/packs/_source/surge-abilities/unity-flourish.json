@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000036",
+  "name": "Unity Flourish",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Every nearby stance straightens at once.</em></p><p>allies within 30 ft +1 to checks till your next turn</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · Tier 3+ · Harmony Marshal</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "unity-flourish",
+      "surgeBucket": "def",
+      "surgeCost": 3,
+      "surgeTier": 3,
+      "surgeClass": "Harmony Marshal"
+    }
+  }
+}

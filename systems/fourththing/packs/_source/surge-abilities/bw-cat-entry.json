@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000073",
+  "name": "Catastrophic Entry",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Doors are a courtesy. You declined.</em></p><p>sunder a foe's armor (all attackers ignore it 1 rd) / breach a structure</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Offense · Tier 2+ · Bulwark</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 7300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bw-cat-entry",
+      "surgeBucket": "off",
+      "surgeCost": 3,
+      "surgeTier": 2,
+      "surgeClass": "Bulwark"
+    }
+  }
+}

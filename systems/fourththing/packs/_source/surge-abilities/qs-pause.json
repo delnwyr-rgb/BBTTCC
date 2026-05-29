@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000062",
+  "name": "Radiant Pause",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>For one round, everyone remembers they'd rather not.</em></p><p>nearby enemies are Calmed (a contemplative beat)</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Narrative · Tier 3+ · Trance ▸ Quiet Sun</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 6200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "qs-pause",
+      "surgeBucket": "narr",
+      "surgeCost": 3,
+      "surgeTier": 3,
+      "surgeClass": "Trance ▸ Quiet Sun"
+    }
+  }
+}

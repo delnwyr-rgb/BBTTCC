@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000053",
+  "name": "Hold the Line",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>No one breaks.</em></p><p>clear Shaken off an ally + they bank a reroll</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Mandate ▸ Resolve</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "res-hold",
+      "surgeBucket": "def",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Mandate ▸ Resolve"
+    }
+  }
+}

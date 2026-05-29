@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000008",
+  "name": "Refund",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>The working didn't cost you. The Tree paid instead.</em></p><p>one Manifestation or power use</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Narrative · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "narrative-refund",
+      "surgeBucket": "narr",
+      "surgeCost": 3,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

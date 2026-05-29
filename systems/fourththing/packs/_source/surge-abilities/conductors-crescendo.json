@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000037",
+  "name": "Conductor's Crescendo",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The whole line moves as one body.</em></p><p>allies reroll all 1s + clear a condition (1/scene)</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Heal · Tier 4+ · Harmony Marshal</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "conductors-crescendo",
+      "surgeBucket": "heal",
+      "surgeCost": 5,
+      "surgeTier": 4,
+      "surgeClass": "Harmony Marshal"
+    }
+  }
+}

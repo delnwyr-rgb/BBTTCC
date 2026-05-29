@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000060",
+  "name": "Still Attention",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Stillness is the loudest thing.</em></p><p>you + allies within 30 ft bank a reroll (the stillness sees)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Narrative · Trance ▸ Quiet Sun</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 6000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "qs-attention",
+      "surgeBucket": "narr",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Trance ▸ Quiet Sun"
+    }
+  }
+}

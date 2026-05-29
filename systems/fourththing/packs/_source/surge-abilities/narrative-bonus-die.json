@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000001",
+  "name": "Bonus Die",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Press the moment. The dice remember what they were doing.</em></p><p>+1d10 exploding</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Narrative · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "narrative-bonus-die",
+      "surgeBucket": "narr",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000047",
+  "name": "Shared Breath",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Act as one.</em></p><p>name an Accord Partner: you + they bank a reroll, they free a reaction</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Narrative · Mandate ▸ Accord</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "acc-breath",
+      "surgeBucket": "narr",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Mandate ▸ Accord"
+    }
+  }
+}

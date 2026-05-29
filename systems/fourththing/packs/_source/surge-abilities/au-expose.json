@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000105",
+  "name": "Expose the Debt",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>I've seen the real ledger. You're overdrawn.</em></p><p>your next Strike or manifestation deals +Tier d6 (the hidden cost comes due)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Doctrine ▸ Auditor</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 10500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "au-expose",
+      "surgeBucket": "off",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Doctrine ▸ Auditor"
+    }
+  }
+}

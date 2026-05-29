@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000118",
+  "name": "The Prevented Blow",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Not them. Not like this.</em></p><p>an ally gains DR equal to Tier (you stepped between)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Refraction ▸ Mercy</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 11800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "mc-soft",
+      "surgeBucket": "def",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Refraction ▸ Mercy"
+    }
+  }
+}

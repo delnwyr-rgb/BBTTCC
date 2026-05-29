@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000039",
+  "name": "Compounded Blow (Spark)",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The fallen foe strikes alongside you.</em></p><p>your next Strike lands as a max-die crit</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Tier 3+ · Forge ▸ Victory</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "fov-compound",
+      "surgeBucket": "off",
+      "surgeCost": 1,
+      "surgeTier": 3,
+      "surgeClass": "Forge ▸ Victory"
+    }
+  }
+}

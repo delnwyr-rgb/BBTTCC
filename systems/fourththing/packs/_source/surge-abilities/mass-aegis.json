@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000023",
+  "name": "Mass Aegis",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Every nearby stance straightens at once.</em></p><p>+Tier to all defenses for allies within Tier squares this round</p><p style=\"opacity:0.7\"><strong>8◆ Surge</strong> · Defense · Tier 3+ · Bulwark</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "mass-aegis",
+      "surgeBucket": "def",
+      "surgeCost": 8,
+      "surgeTier": 3,
+      "surgeClass": "Bulwark"
+    }
+  }
+}

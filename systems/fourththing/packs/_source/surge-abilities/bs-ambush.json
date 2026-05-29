@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000092",
+  "name": "Ambush",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You came through a door that wasn't for them.</em></p><p>your next Strike +Tier d6; the target's next attack is at disadvantage</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Route ▸ Black Stair</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 9200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bs-ambush",
+      "surgeBucket": "off",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Route ▸ Black Stair"
+    }
+  }
+}

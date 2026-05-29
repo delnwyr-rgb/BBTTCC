@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000029",
+  "name": "Forge-Weld",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You lay hands on the breakage and will it whole.</em></p><p>repair an ally (1d8+tier, scales with forge heat)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Heal · Soul Smith</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "forge-weld",
+      "surgeBucket": "heal",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Soul Smith"
+    }
+  }
+}

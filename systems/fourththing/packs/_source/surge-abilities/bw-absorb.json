@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000070",
+  "name": "Absorb",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Meet it with the part of you that was already stone.</em></p><p>the next hit you take is capped at a d8 roll (take the wall, not the blow)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Bulwark</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 7000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "bw-absorb",
+      "surgeBucket": "def",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Bulwark"
+    }
+  }
+}

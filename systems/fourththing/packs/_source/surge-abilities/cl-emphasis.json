@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000124",
+  "name": "Emphasis",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Some words simply matter more. You decide which.</em></p><p>your next Strike or manifestation hits for +Tier d6 (the word, underlined)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Offense · Cosmic Linguist</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 12400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "cl-emphasis",
+      "surgeBucket": "off",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Cosmic Linguist"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000033",
+  "name": "Rallying Words",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>A word at the right moment. They find the line again.</em></p><p>ally banks a reroll on their next roll</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Narrative · Harmony Marshal</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "rallying-words",
+      "surgeBucket": "narr",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Harmony Marshal"
+    }
+  }
+}

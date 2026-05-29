@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000096",
+  "name": "Quiet Voyage",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Sleep. I've got the road from here.</em></p><p>an ally gains DR equal to Tier + the next hit that would drop them holds at 1</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Route ▸ Last Mile</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 9600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "lm-quiet",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Route ▸ Last Mile"
+    }
+  }
+}

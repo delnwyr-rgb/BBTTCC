@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000106",
+  "name": "Levy",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Payment is due. Now.</em></p><p>a foe is Staggered and its next attack is at disadvantage (the penalty lands)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Doctrine ▸ Auditor</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 10600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "au-levy",
+      "surgeBucket": "off",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Doctrine ▸ Auditor"
+    }
+  }
+}

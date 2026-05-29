@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000007",
+  "name": "Reposition",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Step out of the moment. Re-enter where you choose.</em></p><p>new spot in initiative</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Narrative · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "reposition-init",
+      "surgeBucket": "narr",
+      "surgeCost": 3,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

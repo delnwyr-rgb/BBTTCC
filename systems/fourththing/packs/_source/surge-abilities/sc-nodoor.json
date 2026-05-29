@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000088",
+  "name": "No Such Door",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The whole team finds the road at once.</em></p><p>allies within Tier squares each gain a freed reaction + a reroll</p><p style=\"opacity:0.7\"><strong>8◆ Surge</strong> · Defense · Tier 4+ · Shadow Courier</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 8800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "sc-nodoor",
+      "surgeBucket": "def",
+      "surgeCost": 8,
+      "surgeTier": 4,
+      "surgeClass": "Shadow Courier"
+    }
+  }
+}

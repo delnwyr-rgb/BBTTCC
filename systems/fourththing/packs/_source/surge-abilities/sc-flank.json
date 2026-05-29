@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000087",
+  "name": "Flank & Strike",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You arrive from the side they forgot they had.</em></p><p>reposition, then your next Strike has advantage and +Tier d6</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Offense · Tier 3+ · Shadow Courier</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 8700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "sc-flank",
+      "surgeBucket": "off",
+      "surgeCost": 5,
+      "surgeTier": 3,
+      "surgeClass": "Shadow Courier"
+    }
+  }
+}

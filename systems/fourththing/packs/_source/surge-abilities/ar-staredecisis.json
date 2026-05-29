@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000103",
+  "name": "Stare Decisis",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "off",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>It is settled. The ruling holds, and so do you.</em></p><p>a foe's next attack and its saves are at disadvantage (bound by precedent)</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Offense · Tier 2+ · Doctrine ▸ Archivist</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 10300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "ar-staredecisis",
+      "surgeBucket": "off",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Doctrine ▸ Archivist"
+    }
+  }
+}

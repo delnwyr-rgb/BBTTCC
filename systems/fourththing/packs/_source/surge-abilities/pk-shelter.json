@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000100",
+  "name": "Shelter the Bound",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>The pact protects its parties. That is the whole point of a pact.</em></p><p>you + an ally gain DR equal to Tier; the next hit that would drop them holds at 1</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Defense · Tier 3+ · Pactkeeper</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 10000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "pk-shelter",
+      "surgeBucket": "def",
+      "surgeCost": 5,
+      "surgeTier": 3,
+      "surgeClass": "Pactkeeper"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000091",
+  "name": "Impossible Arrival",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You were never going to die here. I won't allow it.</em></p><p>whisk a hurt ally clear: heal + DR equal to Tier + a freed reaction</p><p style=\"opacity:0.7\"><strong>5◆ Surge</strong> · Heal · Tier 4+ · Route ▸ Wayfarer</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 9100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "wf-arrival",
+      "surgeBucket": "heal",
+      "surgeCost": 5,
+      "surgeTier": 4,
+      "surgeClass": "Route ▸ Wayfarer"
+    }
+  }
+}

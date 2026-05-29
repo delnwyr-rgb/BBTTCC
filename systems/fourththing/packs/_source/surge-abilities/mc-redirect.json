@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000119",
+  "name": "Redirected Harm",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>Send it into the wall. Walls don't mind.</em></p><p>an ally gains DR + the next hit that would drop them holds at 1</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Defense · Tier 2+ · Refraction ▸ Mercy</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 11900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "mc-redirect",
+      "surgeBucket": "def",
+      "surgeCost": 2,
+      "surgeTier": 2,
+      "surgeClass": "Refraction ▸ Mercy"
+    }
+  }
+}

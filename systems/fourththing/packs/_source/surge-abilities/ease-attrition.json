@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000034",
+  "name": "Ease Attrition",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>You take the weight off them for a breath.</em></p><p>heal an ally + clear one condition</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Heal · Harmony Marshal</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "ease-attrition",
+      "surgeBucket": "heal",
+      "surgeCost": 2,
+      "surgeTier": 1,
+      "surgeClass": "Harmony Marshal"
+    }
+  }
+}

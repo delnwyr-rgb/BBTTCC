@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000010",
+  "name": "Aegis",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Your stance covers theirs.</em></p><p>ally gains DR equal to Tier this round</p><p style=\"opacity:0.7\"><strong>3◆ Surge</strong> · Defense · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "aegis",
+      "surgeBucket": "def",
+      "surgeCost": 3,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

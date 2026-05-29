@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000006",
+  "name": "Stitch",
+  "type": "feature",
+  "img": "icons/svg/regen.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "heal",
+      "general"
+    ],
+    "description": {
+      "value": "<p><em>Soma re-knits along the seams you remember.</em></p><p>heal self 2d6 + Tier</p><p style=\"opacity:0.7\"><strong>2◆ Surge</strong> · Heal · General</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "stitch",
+      "surgeBucket": "heal",
+      "surgeCost": 2,
+      "surgeTier": 1,
+      "surgeClass": "General"
+    }
+  }
+}

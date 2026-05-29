@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000134",
+  "name": "Redact",
+  "type": "feature",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "def",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>It is not there anymore. It was never there.</em></p><p>strike one condition off an ally (clean edges where it used to be)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Defense · Doctrine ▸ Redactor</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 13400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "rd-redact",
+      "surgeBucket": "def",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Doctrine ▸ Redactor"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "ftsurge000000128",
+  "name": "Footnote",
+  "type": "feature",
+  "img": "icons/svg/dice-target.svg",
+  "system": {
+    "category": "principle",
+    "source": "Surge",
+    "tags": [
+      "narr",
+      "class"
+    ],
+    "description": {
+      "value": "<p><em>See below. It changes everything above.</em></p><p>an ally banks a reroll-lowest (a small note, a large consequence)</p><p style=\"opacity:0.7\"><strong>1◆ Surge</strong> · Narrative · Doctrine ▸ Annotator</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 12800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "surgeKey": "an-footnote",
+      "surgeBucket": "narr",
+      "surgeCost": 1,
+      "surgeTier": 1,
+      "surgeClass": "Doctrine ▸ Annotator"
+    }
+  }
+}
