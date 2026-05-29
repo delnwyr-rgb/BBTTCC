@@ -2,7 +2,7 @@
 
 **Status:** Design locked. Phases 1–3 (Burn generalization + Soul-Smith + Harmony Marshal) BUILT + DEPLOYED + COMMITTED 2026-05-26 (P1/P2 `ede2af1`, P3 `b622de0`). **Phase 4 (rest of roster) is now in flight — one class per sprint via the locked template (base generator → Surge + class-exclusive tier powers + 3 subclass kits + Mal-voice text macro).**
 
-**Roster progress (7 of 9 redesigned):**
+**Roster progress (9 of 9 redesigned — 🎉 COMPLETE 2026-05-28):**
 - ✅ **Aurablade** — Burn (the original template).
 - ✅ **Soul-Smith** — Burn, forge-on-damage (Phase 2, `ede2af1`).
 - ✅ **Harmony Marshal** — Pool, harvest-ally-surges (Phase 3, `b622de0`).
@@ -10,8 +10,10 @@
 - ✅ **Bulwark** — Pool, "eat the blow" (take Integrity dmg → Surge); fortress tier re-homed off the shared menu to Bulwark-only; 3 paths Cataclyst/Avalanche/Mountain (2026-05-28, `6abbf61`).
 - ✅ **Shadow Courier** — Pool, "keep moving" (move 30 ft → Surge); Pace pool folded into Surge; 3 routes Wayfarer/Black Stair/Last Mile (2026-05-28, `ec8a163`).
 - ✅ **Pactkeeper** — Pool, "obligation compounds" (sustain manifestations → Surge); full cruft purge (3 orphan resource pools + 5 dead handlers + 4 dead feat items); 3 doctrines Archivist/Auditor/Steward (2026-05-28, `e7e7ab9`).
-- ⬜ **Wyrdlens Adept** (caster) — NEXT.
-- ⬜ **Cosmic Linguist** (caster).
+- ✅ **Wyrdlens Adept** — Pool, "every revelation feeds the lens" (cast → Surge); 3 Refractions Foresight/Mercy/Truth; Probability Overlay + Tikkun kept (2026-05-28, `7814ad0`).
+- ✅ **Cosmic Linguist** — Pool, "editor always has the next word" (+1 Surge/turn); FULL fold of Resonance + Authority + Strain into one Surge pool; 3 doctrines Annotator/Metaphor Apostle/Redactor; The Sentence kept (2026-05-28, `33f8fdd`).
+
+**🎉 ALL 9 CLASSES RUN ON SURGE.** Every class answers the §0 design test via archetype · generation hook · spend menu. NEXT: live-test the full roster; run the per-class Mal-voice + prune macros in-world; optional follow-ups (combined class-heal roll-cards; prune orphan subclass feat items for Bulwark/SC; repoint SC Liminal Operator + Bulwark/SC vestigial data fields).
 
 All redesigned classes are **NOT yet live-tested**. Per-class deep-wiring polish (2.1 / 3.1, and the Bulwark sheet-panel de-clutter) still pending. See memory `project_bulwark_surge_redesign_2026_05_28` for the Bulwark sprint details + the Titanbound/Breaker fold-in canon.
 **Date:** 2026-05-26 (status refreshed 2026-05-28)
