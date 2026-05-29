@@ -434,7 +434,13 @@
     parts.push(section("defenses",  "Defenses",  3, defensesBody(steward)));
     if (abilities.length) parts.push(section("abilities", "Steward Abilities", abilities.length, itemsBody(abilities, "ability")));
     if (ancestry.length)  parts.push(section("ancestry",  "Ancestry Abilities", ancestry.length, itemsBody(ancestry, "ability")));
-    if (echo.length)      parts.push(section("echo",      "Echo Assets", echo.length, itemsBody(echo, "ability", "ghost")));
+    if (echo.length) {
+      const echoInvokeBtns = `<div class="bbttcc-echo-actions" style="display:flex;gap:.35rem;padding:.3rem .4rem .4rem;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:.3rem;">
+        <button type="button" data-ft-spotlight="crew" title="Spotlight a member from an active crew — one beat per scene" style="padding:.2rem .55rem;display:flex;align-items:center;gap:.25rem;font-size:.82rem;"><i class="fas fa-star"></i> Invoke Crew</button>
+        <button type="button" data-ft-spotlight="occult" title="Spotlight a member from an active association — one beat per scene" style="padding:.2rem .55rem;display:flex;align-items:center;gap:.25rem;font-size:.82rem;"><i class="fas fa-star"></i> Invoke Association</button>
+      </div>`;
+      parts.push(section("echo", "Echo Assets", echo.length, echoInvokeBtns + itemsBody(echo, "ability", "ghost")));
+    }
     if (strikes.length)   parts.push(section("strikes",   "Strikes", strikes.length, itemsBody(strikes, "strike")));
     if (manifs.length)    parts.push(section("manifestations", "Manifestations", manifs.length, itemsBody(manifs, manifFireKind)));
     if (states.length)    parts.push(section("states", "Active States", states.length, statesBody(steward)));
@@ -538,6 +544,15 @@
         _secOpen[id] = !_secOpen[id];
         saveSecState();
         renderTray(host);
+        return;
+      }
+      // Echo Spotlight invoke buttons → quickInvoke (handles 0/1/many active)
+      const spotBtn = ev.target.closest("button[data-ft-spotlight]");
+      if (spotBtn) {
+        ev.preventDefault(); ev.stopPropagation();
+        const fn = game.fourththing?.echoAssets?.spotlight?.quickInvoke;
+        if (typeof fn === "function") return fn(steward, spotBtn.dataset.ftSpotlight);
+        ui.notifications?.warn?.("Spotlight not ready.");
         return;
       }
       // Fire actions

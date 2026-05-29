@@ -10935,6 +10935,51 @@ async function openEchoInvocationPicker(actor, entryName, kind = "crew") {
   });
 }
 
+// One-click entry point used by the character sheet's "Invoke Crew/Association"
+// buttons and the Player HUD's Echo Assets section. Handles 0/1/many active
+// entries gracefully: 0 = warn; 1 = open the picker directly; many = small
+// chooser dialog ("Which crew?"), then the existing picker. Keeps the player
+// UX to ONE button per kind regardless of how many active entries exist.
+async function ftQuickInvoke(actor, kind = "crew") {
+  if (!actor) { ui.notifications?.warn("No actor."); return null; }
+  const k = (kind === "occult") ? "occult" : "crew";
+  let echoAssets = null;
+  try { echoAssets = game.fourththing?.echoAssets?.get?.(actor) ?? null; } catch (_e) { echoAssets = null; }
+  if (!echoAssets) {
+    ui.notifications?.warn("No Echo Assets available — link a faction to this Steward first.");
+    return null;
+  }
+  const active = (k === "occult") ? (echoAssets.activeOccult ?? []) : (echoAssets.activeCrew ?? []);
+  const kindLabel = (k === "occult") ? "occult association" : "crew";
+  if (!active.length) {
+    ui.notifications?.warn(`No active ${kindLabel} to invoke from. Manage Echo Assets to activate one.`);
+    return null;
+  }
+  if (active.length === 1) {
+    return openEchoInvocationPicker(actor, active[0], k);
+  }
+  // Multiple active → quick chooser, then the existing per-roster picker.
+  return new Promise((resolve) => {
+    let resolved = false;
+    const buttons = {};
+    active.forEach((name) => {
+      const slug = (typeof ftSlugifyEchoName === "function") ? ftSlugifyEchoName(name) : name;
+      buttons[`b_${slug}`] = {
+        label: name,
+        callback: async () => { resolved = true; resolve(await openEchoInvocationPicker(actor, name, k)); }
+      };
+    });
+    buttons.cancel = { label: "Cancel", callback: () => { resolved = true; resolve(null); } };
+    new Dialog({
+      title: `✦ Spotlight — pick a ${kindLabel}`,
+      content: `<p style="margin:0 0 .4rem;font-size:.85rem;opacity:.85;">${actor.name} has more than one active ${kindLabel}. Which one does the spotlight come from?</p>`,
+      buttons,
+      default: `b_${(typeof ftSlugifyEchoName === "function") ? ftSlugifyEchoName(active[0]) : active[0]}`,
+      close: () => { if (!resolved) resolve(null); }
+    }, { width: 360 }).render(true);
+  });
+}
+
 function buildEchoRosterMemberRowHTML(member = {}) {
   const id = String(member.id ?? foundry.utils.randomID(12));
   const portrait = String(member.portrait ?? "");
@@ -11246,6 +11291,10 @@ Hooks.once("init", function () {
         pickFromCrew: (actorOrId, entryName, kind) => {
           const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
           return openEchoInvocationPicker(actor, entryName, kind);
+        },
+        quickInvoke: (actorOrId, kind) => {
+          const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+          return ftQuickInvoke(actor, kind);
         }
       }
     },
@@ -15257,7 +15306,9 @@ Hooks.once("init", function () {
         ftBBTTCCRadiation:FourthThingCharacterSheet._onFtBBTTCCRadiation,
         ftBBTTCCTikkun:   FourthThingCharacterSheet._onFtBBTTCCTikkun,
         ftBBTTCCFaction:  FourthThingCharacterSheet._onFtBBTTCCFaction,
-        ftEchoAssetsManage: FourthThingCharacterSheet._onFtEchoAssetsManage,
+        ftEchoAssetsManage:    FourthThingCharacterSheet._onFtEchoAssetsManage,
+        ftEchoSpotlightCrew:   FourthThingCharacterSheet._onFtEchoSpotlightCrew,
+        ftEchoSpotlightOccult: FourthThingCharacterSheet._onFtEchoSpotlightOccult,
         ftBBTTCCIdentity: FourthThingCharacterSheet._onFtBBTTCCIdentity,
         ftASIApply:       FourthThingCharacterSheet._onFtASIApply,
         ftUseFeature:     FourthThingCharacterSheet._onFtUseFeature,
@@ -16800,6 +16851,14 @@ Hooks.once("init", function () {
 
     static async _onFtEchoAssetsManage(event, target) {
       return openEchoAssetsManager(this.actor, this);
+    }
+
+    static async _onFtEchoSpotlightCrew(event, target) {
+      return ftQuickInvoke(this.actor, "crew");
+    }
+
+    static async _onFtEchoSpotlightOccult(event, target) {
+      return ftQuickInvoke(this.actor, "occult");
     }
 
     static async _onFtBBTTCCIdentity(event, target) {
