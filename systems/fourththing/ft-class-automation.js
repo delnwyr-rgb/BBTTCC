@@ -389,19 +389,35 @@ const RETIRED_FEATURE_HANDLERS = new Set([
   "cosmic_linguist_authority" // Editorial Authority → Surge (the 3 Edits)
 ]);
 
-export function routeFeature(item) {
+// Raw route — resolves a feature's handler WITHOUT the retired-handler filter.
+// routeFeature() applies the filter on top; the prune helper needs the unfiltered
+// answer to recognize folded feats (whose filtered route is null).
+function _rawRouteFeature(item) {
   const identifier = item.system?.identifier ?? "";
   const name       = item.name ?? "";
-  let handler = null;
-  if (FEATURE_ROUTER[identifier]) handler = FEATURE_ROUTER[identifier];
-  else {
-    for (const [fragment, h] of NAME_ROUTER) {
-      if (name.includes(fragment)) { handler = h; break; }
-    }
+  if (FEATURE_ROUTER[identifier]) return FEATURE_ROUTER[identifier];
+  for (const [fragment, h] of NAME_ROUTER) {
+    if (name.includes(fragment)) return h;
   }
+  return null;
+}
+
+export function routeFeature(item) {
+  const handler = _rawRouteFeature(item);
   // Folded-into-Surge handlers are no longer real actions — report no route.
   if (handler && RETIRED_FEATURE_HANDLERS.has(handler)) return null;
   return handler;
+}
+
+// True when a feat's ONLY mechanic was folded into Surge (its handler is retired).
+// Such granted feat items are vestigial — their abilities now live in the ◆ Surge
+// spend table — so they're safe to prune from actors. Restricted to feat/feature
+// items so class/subclass anchors are never matched. Used by the prune macro
+// (prune-surge-folded-feats) and matches the same set the HUD hides.
+export function isRetiredFoldedFeature(item) {
+  if (item?.type !== "feat" && item?.type !== "feature") return false;
+  const h = _rawRouteFeature(item);
+  return !!(h && RETIRED_FEATURE_HANDLERS.has(h));
 }
 
 // Every routed handler opens a player-facing dialog (per-use picker, info

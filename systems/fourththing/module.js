@@ -147,6 +147,7 @@ import {
   // Buried per-use Phase 4 — Character options (data-driven, 2026-04-27)
   openCharOptAbility,
   isActionableFeature,
+  isRetiredFoldedFeature,
   // Action-economy audit pass 2026-05-04 — exposed for tools/audit-action-economy-gaps
   CHAR_OPT_ABILITIES,
   FEATURE_ROUTER
@@ -11465,6 +11466,7 @@ Hooks.once("init", function () {
     _classAutomation: {
       dispatchFeatureAction,
       isActionableFeature,
+      isRetiredFoldedFeature,
       openSpendFrameDie, openFrameDiePool,
       openAurabladeAction, openChangeAura, openStabilizeBurn, openBurnState,
       openSpendAccessDie, openAccessPool,
