@@ -142,7 +142,8 @@ function patchConsoleClass(api, ConsoleClass) {
         outcome: roundAfter?.outcome || key.replace(/_/g, " "),
         outcomeLabel: key.replace(/_/g, " "),
         raidType,
-        targetToken: target
+        targetToken: target,
+        effectRequiresTarget: true
       }, { phase: "resolve", banner: false, raidType });
     }
 

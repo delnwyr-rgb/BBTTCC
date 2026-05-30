@@ -237,21 +237,46 @@ export function createFXAPI() {
   }
 
 
-  function canonicalizeCinematicKey(raw) {
-    return String(raw || "")
-      .trim()
-      .toLowerCase()
-      .replace(/[’']/g, "")
-      .replace(/[^a-z0-9]+/g, "_")
-      .replace(/^_+|_+$/g, "");
+  // JB2A looping magic-circle keys per maneuver family. "complete" variants
+  // loop, which reads well as a glyph hovering over a hex / the map centre.
+  // All keys verified present in the installed jb2a_patreon library; a missing
+  // key still degrades safely via engine.playSequencerEffect's fallback chain.
+  const CIRCLE_BY_FAMILY = {
+    faith:      "jb2a.magic_signs.circle.02.divination.complete.blue",
+    void:       "jb2a.magic_signs.circle.02.necromancy.complete.dark_purple",
+    temporal:   "jb2a.magic_signs.circle.02.evocation.complete.blue",
+    industrial: "jb2a.magic_signs.circle.02.conjuration.complete.dark_red",
+    political:  "jb2a.magic_signs.circle.02.enchantment.complete.yellow",
+    boss:       "jb2a.magic_signs.circle.02.necromancy.complete.dark_red",
+    martial:    "jb2a.magic_signs.circle.02.abjuration.complete.red"
+  };
+  const FAMILY_FALLBACK = "jb2a.magic_signs.circle.02.transmutation.complete.blue";
+
+  // One-shot "burst" accents layered over the circle glyph for punch. All keys
+  // verified present in jb2a_patreon; a miss is silently skipped by the engine.
+  const BURST_BY_FAMILY = {
+    faith:      "jb2a.explosion.01.yellow",
+    void:       "jb2a.explosion.01.purple",
+    temporal:   "jb2a.particle_burst.01.circle.bluepurple",
+    industrial: "jb2a.explosion.02.orange",
+    political:  "jb2a.particle_burst.01.star.yellow",
+    boss:       "jb2a.explosion.02.purple",
+    martial:    "jb2a.explosion.01.orange"
+  };
+  const BURST_FALLBACK = "jb2a.explosion.01.orange";
+
+  function effectForFamily(family) {
+    return CIRCLE_BY_FAMILY[String(family || "").toLowerCase()] || FAMILY_FALLBACK;
   }
 
-  function aliasCinematicKey(key) {
-    const k = canonicalizeCinematicKey(key);
-    const aliases = {
-      defender_s_reversal: "defenders_reversal"
-    };
-    return aliases[k] || k;
+  function burstForFamily(family) {
+    return BURST_BY_FAMILY[String(family || "").toLowerCase()] || BURST_FALLBACK;
+  }
+
+  // A registry spec can override with spec.effect; otherwise map by family.
+  function effectForSpec(spec, key) {
+    const fam = spec?.family || familyForKey(key);
+    return spec?.effect || effectForFamily(fam);
   }
 
   function isDefenderContext(ctx = {}) {
@@ -285,26 +310,77 @@ export function createFXAPI() {
     engine.screenShake(shake, spec[phase === "impact" ? "impactShakeMs" : "resolveShakeMs"] || 260);
   }
 
-  async function maybePlayCinematic(spec = {}, key, phase) {
+  // Play the JB2A canvas effect for a maneuver. Placement is decided by
+  // engine.playSequencerEffect: on the target token/hex when ctx.targetToken
+  // is set, otherwise a reasonably-sized effect at the centre of the view.
+  async function maybePlayEffect(spec = {}, key, phase, ctx = {}, family = null) {
     const needed = String(spec.cinematicPhase || "resolve");
     if (needed !== phase) return null;
+    if (!engine.playSequencerEffect) return null;
 
-    let cinematic = spec.cinematic;
-    if (!cinematic && phase === "resolve") {
-      const fallbackKey = aliasCinematicKey(key);
-      if (fallbackKey && !["raid_outcome", "facility_damage", "rig_damage", "boss_phase_change", "turn_start", "turn_end"].includes(fallbackKey)) {
-        cinematic = `${fallbackKey}.webm`;
-      }
-    }
-    if (!cinematic || !engine.playCinematicBlocking) return null;
+    // Per-maneuver calls set effectRequiresTarget so they only fire when they
+    // have their own target; the round's single overhead effect (raid_outcome)
+    // leaves it unset and always plays. Keeps multi-maneuver rounds from
+    // stacking circles at screen centre.
+    if (ctx.effectRequiresTarget && !ctx.targetToken) return null;
 
-    return engine.playCinematicBlocking(cinematic, {
-      key: `${key}:${phase}`,
-      opacity: spec.cinematicOpacity,
-      blendMode: spec.cinematicBlendMode,
-      maxMs: spec.cinematicMs || 8000,
-      muted: spec.cinematicMuted
+    const fam = family || spec.family || familyForKey(key);
+    const path = spec.effect || effectForFamily(fam);
+    // Raid punch: magic-circle glyph + a one-shot burst detonating over it.
+    return engine.playSequencerEffect(path, {
+      target: ctx.targetToken || null,
+      fallbackPath: FAMILY_FALLBACK,
+      accentPath: spec.burst || burstForFamily(fam),
+      accentDelay: 120,
+      color: spec.canvasColor,
+      radius: spec.canvasRadius,
+      ms: spec.effectMs || spec.cinematicMs || 2400,
+      family: fam
     });
+  }
+
+  // Planner: pop a brief JB2A loop above the hex where a strategic activity
+  // resolved. Driven by the finalized planned entries (targetUuid + activityKey)
+  // that flow back through advanceTurn's rows.
+  async function playHexActivity(key, hexUuid, opts = {}) {
+    if (!engine.isEnabled() || !engine.turnEnabled()) return { ok: true, skipped: true };
+    if (!hexUuid || !engine.playSequencerEffect) return { ok: true, skipped: true };
+
+    let doc = null;
+    try {
+      doc = await fromUuid(String(hexUuid));
+    } catch {
+      doc = null;
+    }
+    if (!doc) return { ok: true, skipped: true };
+
+    // Only render when the hex lives on the scene the GM is currently viewing.
+    try {
+      const sceneId = doc.parent?.id || doc.scene?.id || null;
+      if (sceneId && canvas?.scene?.id && sceneId !== canvas.scene.id) {
+        return { ok: true, skipped: true, offscene: true };
+      }
+    } catch {}
+
+    const spec = get(key) || {};
+    const family = spec.family || familyForKey(key);
+    const path = effectForSpec(spec, key);
+    // Planner pop: the brief circle loop above the hex, with a burst accent so
+    // it lands rather than just fading in.
+    engine.playSequencerEffect(path, {
+      target: doc,
+      fallbackPath: FAMILY_FALLBACK,
+      accentPath: spec.burst || burstForFamily(family),
+      accentDelay: 80,
+      color: spec.canvasColor,
+      radius: spec.canvasRadius || 120,
+      size: opts.size,
+      ms: opts.ms || 2400,
+      fadeIn: 300,
+      fadeOut: 700,
+      family
+    });
+    return { ok: true, key, hexUuid };
   }
 
   async function playRolls(ctx = {}, opts = {}) {
@@ -377,7 +453,7 @@ export function createFXAPI() {
       const defenderLead = isDefenderContext(ctx);
 
       if (defenderLead) {
-        await maybePlayCinematic(spec, key, "resolve");
+        await maybePlayEffect(spec, key, "resolve", ctx, family);
         await wait(Number(spec.postCinematicGapMs || 220));
       }
 
@@ -388,7 +464,7 @@ export function createFXAPI() {
       maybePulseCanvas(spec, ctx);
 
       if (!defenderLead) {
-        await maybePlayCinematic(spec, key, "resolve");
+        await maybePlayEffect(spec, key, "resolve", ctx, family);
       }
     }
 
@@ -414,6 +490,9 @@ export function createFXAPI() {
     playRolls,
     playScenarioShift,
     playTurnPresentation,
+    playHexActivity,
+    effectForFamily,
+    burstForFamily,
     familyForKey,
     normalizeRaidType,
     raidToneForType,

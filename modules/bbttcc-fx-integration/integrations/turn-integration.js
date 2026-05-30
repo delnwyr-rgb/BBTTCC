@@ -1,5 +1,38 @@
 const TAG = "[bbttcc-fx/turn]";
 
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, Math.max(0, Number(ms) || 0)));
+}
+
+// Finalized planned strategic entries carry { targetUuid, targetType, activityKey }.
+// Those are the rows that map to a hex on the map — pop a JB2A loop over each.
+function plannedHexRows(rows = []) {
+  const out = [];
+  for (const r of rows) {
+    if (!r || !r.targetUuid) continue;
+    const tt = String(r.targetType || "hex").toLowerCase();
+    if (tt && tt !== "hex") continue;
+    out.push({
+      key: String(r.activityKey || r.activity || "turn_activity"),
+      hexUuid: r.targetUuid,
+      label: r.targetName || r.summary || ""
+    });
+  }
+  return out;
+}
+
+async function playHexActivityRows(api, rows = []) {
+  const hexes = plannedHexRows(rows);
+  for (const h of hexes) {
+    try {
+      await api.playHexActivity(h.key, h.hexUuid, { label: h.label });
+    } catch (err) {
+      console.warn(TAG, "hex fx failed", err);
+    }
+    await wait(650);
+  }
+}
+
 function summarizeRows(rows = []) {
   const events = [];
   for (const row of rows) {
@@ -39,6 +72,7 @@ export function installTurnIntegration(api) {
     const res = await orig(args);
     try {
       if (args?.apply) {
+        await playHexActivityRows(api, res?.rows || []);
         const events = summarizeRows(res?.rows || []);
         if (events.length) await api.playTurnPresentation(events, { speed: "normal" });
       }

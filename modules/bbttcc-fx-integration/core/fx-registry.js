@@ -6,8 +6,7 @@ function defaultVisualsForFamily(family, key) {
   const f = String(family || "martial");
   const base = {
     cinematicPhase: "resolve",
-    cinematicMs: 8000,
-    cinematicOpacity: 0.72,
+    effectMs: 2400,
     canvasRadius: 132,
     canvasMs: 1000,
     resolveOverlayMs: 950,
@@ -16,21 +15,19 @@ function defaultVisualsForFamily(family, key) {
     impactShake: ""
   };
 
-  if (f === "faith") return { ...base, cinematicBlendMode: "screen", canvasColor: 0x67d4ff, resolveOverlay: "ritual-rays", impactOverlay: "ritual-rays", canvasRadius: 140 };
-  if (f === "void") return { ...base, cinematicBlendMode: "multiply", canvasColor: 0x7a5cff, resolveOverlay: "void-fracture", impactOverlay: "void-fracture", canvasRadius: 150, impactShake: "subtle", resolveShake: "subtle" };
-  if (f === "temporal") return { ...base, cinematicBlendMode: "screen", canvasColor: 0x6fa8ff, resolveOverlay: "temporal-ripple", impactOverlay: "temporal-ripple", canvasRadius: 146 };
-  if (f === "industrial") return { ...base, cinematicBlendMode: "screen", canvasColor: 0xff8c42, resolveOverlay: "tactical-sweep", impactOverlay: "tactical-sweep", canvasRadius: 145 };
-  if (f === "political") return { ...base, cinematicBlendMode: "screen", canvasColor: 0xd4af37, resolveOverlay: "mirror-flash", impactOverlay: "mirror-flash", canvasRadius: 136 };
-  if (f === "boss") return { ...base, cinematicBlendMode: "multiply", canvasColor: 0x8b1e3f, resolveOverlay: "void-fracture", impactOverlay: "void-fracture", canvasRadius: 185, resolveShake: "heavy" };
-  return { ...base, cinematicBlendMode: "screen", canvasColor: 0xff6b4a, resolveOverlay: "assault", impactOverlay: "assault", canvasRadius: 138 };
+  if (f === "faith") return { ...base, canvasColor: 0x67d4ff, resolveOverlay: "ritual-rays", impactOverlay: "ritual-rays", canvasRadius: 140 };
+  if (f === "void") return { ...base, canvasColor: 0x7a5cff, resolveOverlay: "void-fracture", impactOverlay: "void-fracture", canvasRadius: 150, impactShake: "subtle", resolveShake: "subtle" };
+  if (f === "temporal") return { ...base, canvasColor: 0x6fa8ff, resolveOverlay: "temporal-ripple", impactOverlay: "temporal-ripple", canvasRadius: 146 };
+  if (f === "industrial") return { ...base, canvasColor: 0xff8c42, resolveOverlay: "tactical-sweep", impactOverlay: "tactical-sweep", canvasRadius: 145 };
+  if (f === "political") return { ...base, canvasColor: 0xd4af37, resolveOverlay: "mirror-flash", impactOverlay: "mirror-flash", canvasRadius: 136 };
+  if (f === "boss") return { ...base, canvasColor: 0x8b1e3f, resolveOverlay: "void-fracture", impactOverlay: "void-fracture", canvasRadius: 185, resolveShake: "heavy" };
+  return { ...base, canvasColor: 0xff6b4a, resolveOverlay: "assault", impactOverlay: "assault", canvasRadius: 138 };
 }
 
 function cinematicSpecs(api) {
   return {
     chrono_loop_command: {
       ...baseSpec(api, "chrono_loop_command"),
-      cinematic: "chrono_loop_command.webm",
-      cinematicOpacity: 0.82,
       canvasColor: 0x6fa8ff,
       canvasRadius: 150,
       impactOverlay: "temporal-ripple",
@@ -38,8 +35,6 @@ function cinematicSpecs(api) {
     },
     sephirotic_intervention: {
       ...baseSpec(api, "sephirotic_intervention"),
-      cinematic: "sephirotic_intervention.webm",
-      cinematicOpacity: 0.80,
       canvasColor: 0x67d4ff,
       canvasRadius: 140,
       impactOverlay: "ritual-rays",
@@ -47,9 +42,6 @@ function cinematicSpecs(api) {
     },
     void_signal_collapse: {
       ...baseSpec(api, "void_signal_collapse"),
-      cinematic: "void_signal_collapse.webm",
-      cinematicOpacity: 0.86,
-      cinematicBlendMode: "multiply",
       canvasColor: 0x7a5cff,
       canvasRadius: 155,
       impactOverlay: "void-fracture",
@@ -59,8 +51,6 @@ function cinematicSpecs(api) {
     },
     defenders_reversal: {
       ...baseSpec(api, "defenders_reversal"),
-      cinematic: "defenders_reversal.webm",
-      cinematicOpacity: 0.78,
       canvasColor: 0xffc857,
       canvasRadius: 145,
       resolveOverlay: "mirror-flash",
@@ -68,8 +58,6 @@ function cinematicSpecs(api) {
     },
     reality_hack: {
       ...baseSpec(api, "reality_hack"),
-      cinematic: "reality_hack.webm",
-      cinematicOpacity: 0.80,
       canvasColor: 0x67d4ff,
       canvasRadius: 140,
       resolveOverlay: "temporal-ripple",
@@ -77,8 +65,6 @@ function cinematicSpecs(api) {
     },
     raid_outcome: {
       ...baseSpec(api, "raid_outcome"),
-      cinematic: "raid_outcome.webm",
-      cinematicOpacity: 0.42,
       canvasColor: 0xff6b4a,
       canvasRadius: 150,
       canvasMs: 760,
@@ -86,8 +72,6 @@ function cinematicSpecs(api) {
     },
     facility_damage: {
       ...baseSpec(api, "facility_damage"),
-      cinematic: "facility_damage.webm",
-      cinematicOpacity: 0.62,
       canvasColor: 0xff8c42,
       canvasRadius: 160,
       canvasMs: 780,
@@ -95,8 +79,6 @@ function cinematicSpecs(api) {
     },
     rig_damage: {
       ...baseSpec(api, "rig_damage"),
-      cinematic: "rig_damage.webm",
-      cinematicOpacity: 0.60,
       canvasColor: 0xff8c42,
       canvasRadius: 155,
       canvasMs: 760,
@@ -104,9 +86,6 @@ function cinematicSpecs(api) {
     },
     boss_phase_change: {
       ...baseSpec(api, "boss_phase_change"),
-      cinematic: "boss_phase_change.webm",
-      cinematicOpacity: 0.88,
-      cinematicBlendMode: "multiply",
       canvasColor: 0x8b1e3f,
       canvasRadius: 195,
       canvasMs: 960,
@@ -156,15 +135,13 @@ function buildGenericManeuverSpecs(api) {
     const visuals = defaultVisualsForFamily(family, key);
     out[key] = {
       family,
-      cinematic: `${key}.webm`,
       ...visuals
     };
     const alias = aliases[key];
     if (alias && !out[alias]) {
       out[alias] = {
         ...out[key],
-        key: alias,
-        cinematic: `${alias}.webm`
+        key: alias
       };
     }
   };

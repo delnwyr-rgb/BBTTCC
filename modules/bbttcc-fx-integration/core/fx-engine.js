@@ -111,90 +111,147 @@ function showFloatingTextNear(el, text, kind = "info") {
   }, dur(900));
 }
 
-function cinematicEnabled() {
-  return isEnabled() && uiEnabled();
-}
+// ---------------------------------------------------------------------------
+// Canvas effects (JB2A via Sequencer). Replaces the old full-screen .webm
+// cinematics. When Sequencer/JB2A are unavailable (or a key fails to resolve)
+// we degrade gracefully to the existing PIXI canvasPulse so the engine stays
+// shippable without the animation stack installed.
+// ---------------------------------------------------------------------------
 
-function normalizeCinematicPath(file) {
-  const s = String(file || "").trim();
-  if (!s) return "";
-  if (/^(https?:)?\/\//i.test(s) || s.startsWith("modules/")) return s;
-  const mod = game.modules.get("bbttcc-fx-integration");
-  const base = mod?.id || "bbttcc-fx-integration";
-  return `modules/${base}/cinematics/${s}`;
-}
-
-function playCinematic(file, opts = {}) {
-  if (!cinematicEnabled()) return null;
-  const src = normalizeCinematicPath(file);
-  if (!src) return null;
-
-  const root = resolveFXRoot();
-  if (!root) return null;
-
-  const key = String(opts.key || file);
-  const existing = root.querySelector(`video.bbttcc-fx-cinematic[data-cinematic-key="${key}"]`);
-  if (existing) {
-    try {
-      existing.currentTime = 0;
-      existing.play().catch(() => {});
-    } catch {}
-    return existing;
+function sequencerReady() {
+  try {
+    return !!globalThis.Sequence && !!game.modules?.get?.("sequencer")?.active;
+  } catch {
+    return false;
   }
-
-  const video = document.createElement("video");
-  video.className = "bbttcc-fx-cinematic";
-  video.dataset.cinematicKey = key;
-  video.src = src;
-  video.autoplay = true;
-  video.muted = opts.muted !== false;
-  video.loop = !!opts.loop;
-  video.playsInline = true;
-  video.preload = "auto";
-
-  if (opts.opacity != null) video.style.opacity = String(opts.opacity);
-  if (opts.blendMode) video.style.mixBlendMode = String(opts.blendMode);
-
-  const cleanup = () => {
-    try {
-      video.pause();
-      video.removeAttribute("src");
-      video.load();
-    } catch {}
-    video.remove();
-  };
-
-  video.addEventListener("ended", cleanup, { once: true });
-  video.addEventListener("error", () => {
-    console.warn("[bbttcc-fx] cinematic failed to load:", src);
-    cleanup();
-  }, { once: true });
-
-  root.appendChild(video);
-  const p = video.play();
-  if (p && typeof p.catch === "function") p.catch(() => {});
-
-  const maxMs = Number(opts.maxMs || 8000);
-  if (!video.loop && maxMs > 0) window.setTimeout(cleanup, dur(maxMs));
-  return video;
 }
 
-function playCinematicBlocking(file, opts = {}) {
-  const video = playCinematic(file, opts);
-  if (!video) return Promise.resolve(null);
+// Defensive: only feed Sequencer a path it can actually resolve. A missing key
+// throws inside Sequencer, so we check the database first and fall back.
+function jb2aEntryExists(path) {
+  if (!path) return false;
+  try {
+    const db = globalThis.Sequencer?.Database;
+    if (!db) return false;
+    if (typeof db.entryExists === "function") return !!db.entryExists(String(path));
+    if (typeof db.getEntry === "function") {
+      try {
+        return !!db.getEntry(String(path), { softFail: true });
+      } catch {
+        return false;
+      }
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
 
-  const ms = dur(Number(opts.maxMs || 8000));
-  return new Promise((resolve) => {
-    let settled = false;
-    const done = () => {
-      if (settled) return;
-      settled = true;
-      resolve(video);
-    };
-    video.addEventListener("ended", done, { once: true });
-    video.addEventListener("error", done, { once: true });
-    window.setTimeout(done, ms);
-  });
+// The world coordinate currently centered in the viewport — Foundry pans by
+// moving stage.pivot, so the pivot IS the centre of what the GM is looking at.
+function viewportCenter() {
+  try {
+    if (!canvas?.ready || !canvas?.stage) return null;
+    const p = canvas.stage.pivot;
+    if (p && Number.isFinite(p.x) && Number.isFinite(p.y)) return { x: Number(p.x), y: Number(p.y) };
+    const r = canvas.dimensions?.sceneRect;
+    if (r) return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+  } catch {}
+  return null;
+}
+
+// Append one JB2A effect section to a sequence at a fixed location.
+function _addEffectSection(seq, path, where, o = {}) {
+  const gs = Number(canvas?.grid?.size || 100);
+  const eff = seq.effect()
+    .file(String(path))
+    .atLocation(where)
+    .fadeIn(Number(o.fadeIn ?? 250))
+    .fadeOut(Number(o.fadeOut ?? 600));
+  if (o.size != null) eff.size(Number(o.size));
+  else if (o.scale != null) eff.scale(Number(o.scale));
+  else eff.size(gs * (o.centered ? 8 : 3));
+  if (o.ms != null) eff.duration(dur(Number(o.ms)));
+  if (o.opacity != null) eff.opacity(Number(o.opacity));
+  if (o.delay) eff.delay(Number(o.delay));
+  if (o.belowTokens) eff.belowTokens();
+  eff.zIndex(Number(o.zIndex ?? 1));
+  return eff;
+}
+
+/**
+ * Play a JB2A effect on the canvas.
+ * Placement rule: if opts.target resolves to a position, land there; otherwise
+ * play a reasonably-sized effect at the centre of the current view (NOT full
+ * map). Centred effects are scaled up for "big overhead" raid moments; targeted
+ * / hex effects are smaller.
+ *
+ * Layering: opts.accentPath plays a second JB2A effect at the same location,
+ * simultaneously and above the primary — e.g. a one-shot burst detonating over
+ * a magic-circle glyph. The accent is best-effort; if its key doesn't resolve
+ * it's simply skipped (the primary still plays).
+ */
+function playSequencerEffect(effectPath, opts = {}) {
+  if (!isEnabled()) return null;
+
+  const targetPos = opts.target ? resolveCanvasPosition(opts.target) : null;
+  const centered = !targetPos;
+  const pos = targetPos || viewportCenter() || inferCanvasPosition(opts);
+
+  const path = jb2aEntryExists(effectPath)
+    ? String(effectPath)
+    : (jb2aEntryExists(opts.fallbackPath) ? String(opts.fallbackPath) : null);
+
+  // Graceful fallback: no Sequencer/JB2A, or no resolvable key → PIXI pulse.
+  if (!sequencerReady() || !path) {
+    if (pos) return canvasPulse(pos, { color: opts.color, radius: opts.radius || (centered ? 220 : 130), ms: opts.ms || 800 });
+    return null;
+  }
+  if (!pos) return null;
+
+  try {
+    const gs = Number(canvas?.grid?.size || 100);
+    const where = opts.target && targetPos ? opts.target : pos;
+    const baseSize = opts.size != null ? Number(opts.size) : (opts.scale != null ? null : gs * (centered ? 8 : 3));
+    const seq = new globalThis.Sequence();
+
+    // Primary (the magic-circle glyph in our wiring) — sits below the accent.
+    _addEffectSection(seq, path, where, {
+      centered,
+      size: baseSize,
+      scale: baseSize == null ? opts.scale : null,
+      ms: opts.ms ?? (centered ? 2600 : 2200),
+      fadeIn: opts.fadeIn,
+      fadeOut: opts.fadeOut,
+      opacity: opts.opacity,
+      belowTokens: opts.belowTokens,
+      zIndex: opts.zIndex ?? 1
+    });
+
+    // Accent burst (one-shot) — layered on top, a touch smaller, no forced
+    // duration so it plays its natural length.
+    const accent = jb2aEntryExists(opts.accentPath) ? String(opts.accentPath) : null;
+    if (accent) {
+      const accentSize = opts.accentSize != null
+        ? Number(opts.accentSize)
+        : (baseSize != null ? baseSize * 0.85 : gs * (centered ? 6 : 2.4));
+      _addEffectSection(seq, accent, where, {
+        centered,
+        size: accentSize,
+        fadeIn: opts.accentFadeIn ?? 0,
+        fadeOut: opts.accentFadeOut ?? 300,
+        delay: opts.accentDelay ?? 0,
+        zIndex: (opts.zIndex ?? 1) + 1
+      });
+    }
+
+    seq.play();
+    return seq;
+  } catch (e) {
+    console.warn("[bbttcc-fx] sequencer effect failed:", effectPath, e);
+    if (pos) return canvasPulse(pos, { color: opts.color, radius: centered ? 220 : 130, ms: 800 });
+    return null;
+  }
 }
 
 function makeOverlayParticle(className, count) {
@@ -407,8 +464,10 @@ export const engine = {
   chipPulseForManeuverKey,
   showFloatingTextNear,
   playTurnCard,
-  playCinematic,
-  playCinematicBlocking,
+  playSequencerEffect,
+  sequencerReady,
+  jb2aEntryExists,
+  viewportCenter,
   screenOverlay,
   overlayForFamily,
   screenShake,

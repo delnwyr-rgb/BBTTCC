@@ -52,17 +52,6 @@ function ensureStyles() {
 .bbttcc-fx-float {
   text-shadow: 0 0 10px var(--fx-accent-strong);
 }
-.bbttcc-fx-cinematic {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  opacity: .78;
-  z-index: 100001;
-  filter: saturate(1.08) contrast(1.05);
-}
 .bbttcc-fx-overlay {
   position: fixed;
   inset: 0;
