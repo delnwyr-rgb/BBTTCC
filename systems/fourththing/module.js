@@ -1924,6 +1924,26 @@ function ftNormalizeConditionalDamage(raw) {
   return out;
 }
 
+// 2026-05-29 — normalize `system.damageParts` (Additional Damage Dice). Accepts
+// an array or the engine's indexed object-map (p0/p1/p2). Drops blank-formula
+// rows, lowercases type, defaults track from the damage-type table. Caps at 6.
+// Idempotent — the canonical writer for the field across sheet + engine paths.
+function ftNormalizeDamageParts(raw) {
+  const src = Array.isArray(raw) ? raw : (raw && typeof raw === "object" ? Object.values(raw) : []);
+  const out = [];
+  for (const p of src) {
+    if (!p || typeof p !== "object") continue;
+    const formula = String(p.formula ?? "").trim();
+    if (!formula) continue;
+    const type   = String(p.type ?? "kinetic").toLowerCase();
+    const track  = String(p.track || FT.DAMAGE_TYPES?.[type]?.track || "integrity");
+    const flavor = String(p.flavor ?? "");
+    out.push({ formula, type, flavor, track });
+    if (out.length >= 6) break;
+  }
+  return out;
+}
+
 // Phase D — normalize the chain config. Coerces numeric strings, clamps
 // ranges, validates damage type against FT.DAMAGE_TYPES, and force-bools
 // the toggles. Idempotent.
@@ -3070,20 +3090,7 @@ function buildManifestationGlossaryHTML() {
 // array of { formula, type, flavor, track }. Accepts an array or a numeric-key
 // object (FormDataExtended expansion) and drops blank-formula rows.
 function ftCollectExtraDamageParts(item) {
-  const raw = item?.system?.damageParts;
-  const src = Array.isArray(raw) ? raw : (raw && typeof raw === "object" ? Object.values(raw) : []);
-  const out = [];
-  for (const p of src) {
-    if (!p || typeof p !== "object") continue;
-    const formula = String(p.formula ?? "").trim();
-    if (!formula) continue;
-    const type   = String(p.type ?? "kinetic").toLowerCase();
-    const track  = String(p.track || FT.DAMAGE_TYPES?.[type]?.track || "integrity");
-    const flavor = String(p.flavor ?? "");
-    out.push({ formula, type, flavor, track });
-    if (out.length >= 6) break;
-  }
-  return out;
+  return ftNormalizeDamageParts(item?.system?.damageParts);
 }
 
 // 2026-05-29 — Does this manifestation's invoke cost apply PER USE, or once on
@@ -7897,6 +7904,7 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
           short: Number(values.rangeShort ?? 1) || 1,
           long: Number(values.rangeLong ?? 1) || 1
         },
+        damageParts: ftNormalizeDamageParts(values.damageParts ?? []),
         tags,
         effect: values.effect || "",
         flavor: values.flavor || "",
@@ -7928,6 +7936,7 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       range: values.range || "near",
       damage: values.damage || "",
       damageRoll,
+      damageParts: ftNormalizeDamageParts(values.damageParts ?? []),
       effect: values.effect || "",
       flavor: values.flavor || "",
       tags,
@@ -8209,7 +8218,8 @@ function _ftWizV2RenderEffectPower(state) {
       ${saveSubFields}
     </div>
     ${_ftWizV2RenderEffectsBlock(state)}
-    ${_ftWizV2RenderConditionalDamageBlock(state)}`;
+    ${_ftWizV2RenderConditionalDamageBlock(state)}
+    ${_ftWizV2RenderDamagePartsBlock(state)}`;
 }
 
 // Phase C — Buffs & Wards. Sub-section under Step 4 that authors numeric
@@ -8286,7 +8296,8 @@ function _ftWizV2RenderEffectWeapon(state) {
       <div class="ft-cast-field"><label>Long Range</label>${_ftWizV2Num("rangeLong", state.rangeLong ?? 1, { min: 0, max: 999 })}</div>
     </div>
     ${_ftWizV2RenderEffectsBlock(state)}
-    ${_ftWizV2RenderConditionalDamageBlock(state)}`;
+    ${_ftWizV2RenderConditionalDamageBlock(state)}
+    ${_ftWizV2RenderDamagePartsBlock(state)}`;
 }
 
 // Phase E — Conditional Damage. Shared between power Step 4 and weapon Step 4.
@@ -8313,6 +8324,34 @@ function _ftWizV2RenderConditionalDamageBlock(state) {
     <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Conditional Damage <span style="font-weight:400;font-size:0.78rem;opacity:0.65">(vs creature type)</span></div>
     <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Extra dice that roll when the target matches a creature type. Use for "+1d6 vs Undead", "+2d6 vs Outsider" style effects. Damage type and track inherit from the primary — the bonus stacks onto the same hit so resist/immune shadowing applies once. Set the target's creature type via <code>actor.flags.fourththing.creatureType</code> (string or array).</p>
     ${rowHtml("c0")}${rowHtml("c1")}${rowHtml("c2")}`;
+}
+
+// 2026-05-29 — Additional Damage Dice. Up to 3 rows of { formula, type, track,
+// flavor } rolled on EVERY hit in addition to the primary damage, each its own
+// type/track for per-type resist/immune math. Authored here (in the engine) so
+// the dice count toward the suggested Tier via _ftWizV2DamagePartsBudgetTier.
+// Harvested generically into state.damageParts (p0/p1/p2); ftNormalizeDamageParts
+// converts back to a clean array on save. Mirrors the conditional-damage block.
+function _ftWizV2RenderDamagePartsBlock(state) {
+  const rows = state.damageParts ?? {};
+  const rowMap = (rows && typeof rows === "object" && !Array.isArray(rows))
+    ? rows
+    : Object.fromEntries((Array.isArray(rows) ? rows : []).map((r, i) => [`p${i}`, r]));
+  const TRACK_OPTS = { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" };
+  const rowHtml = (slot) => {
+    const r = rowMap[slot] ?? {};
+    return `
+      <div class="ft-cast-grid" style="grid-template-columns:0.8fr 1fr 0.9fr 1fr;gap:0.4rem;align-items:end;margin-bottom:0.25rem">
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Dice</label>${_ftWizV2Txt(`damageParts.${slot}.formula`, r.formula ?? "", "1d6")}</div>
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Type</label>${_ftWizV2Sel(`damageParts.${slot}.type`, FT.DAMAGE_TYPES, r.type ?? "kinetic")}</div>
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Track</label>${_ftWizV2Sel(`damageParts.${slot}.track`, TRACK_OPTS, r.track ?? "integrity")}</div>
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Flavor</label>${_ftWizV2Txt(`damageParts.${slot}.flavor`, r.flavor ?? "", "fire")}</div>
+      </div>`;
+  };
+  return `
+    <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Additional Damage Dice</div>
+    <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Extra dice rolled on every hit, in addition to the main damage — each with its own type &amp; track so the target's resists/immunities apply per type. These count toward the suggested Tier (see Soul &amp; Review). Leave a row's Dice blank to skip it.</p>
+    ${rowHtml("p0")}${rowHtml("p1")}${rowHtml("p2")}`;
 }
 
 function _ftWizV2RenderResolution(state) {
@@ -8540,6 +8579,29 @@ function _ftWizV2ConditionalDamageBudgetTier(rows) {
   return { tier, note: `${n} conditional row${n>1?"s":""} (weight ${total.toFixed(1)}) → T${tier}` };
 }
 
+// 2026-05-29 — Additional Damage Dice magnitude. Unconditional extra damage, so
+// FULL weight (vs conditional's half) — sums each row's average and brackets on
+// the same anchors as the primary damage budget (≤4→T1, ≤8→T2, ≤12→T3, else T4).
+// This is what makes "build the extra dice in so they count toward Tier" real.
+function _ftWizV2DamagePartsBudgetTier(parts) {
+  const src = Array.isArray(parts) ? parts : (parts && typeof parts === "object" ? Object.values(parts) : []);
+  let total = 0, n = 0;
+  for (const p of src) {
+    const f = String(p?.formula ?? "").trim();
+    if (!f) continue;
+    n++;
+    const m = f.match(/^\s*(\d+)\s*d\s*(\d+)\s*$/i);
+    total += m ? Math.floor(Number(m[1])) * ((Number(m[2]) + 1) / 2) : (Number(f) || 3);
+  }
+  if (!n) return { tier: 0, note: null };
+  let tier;
+  if      (total <= 4)  tier = 1;
+  else if (total <= 8)  tier = 2;
+  else if (total <= 12) tier = 3;
+  else                  tier = 4;
+  return { tier, note: `${n} extra die row${n>1?"s":""} (avg ${total.toFixed(1)}) → T${tier}` };
+}
+
 function _ftWizV2SuggestTier(state) {
   const factors = [
     _ftWizV2DamageBudgetTier(state.damageRoll),
@@ -8548,6 +8610,7 @@ function _ftWizV2SuggestTier(state) {
     _ftWizV2EffectsBudgetTier(state.appliedEffects),
     _ftWizV2ChainBudgetTier(state.chain),
     _ftWizV2ConditionalDamageBudgetTier(state.conditionalDamage),
+    _ftWizV2DamagePartsBudgetTier(state.damageParts),
     _ftWizV2DcBudgetTier(state)
   ].filter(f => f.tier > 0);
   const tier = factors.length ? Math.max(...factors.map(f => f.tier)) : 1;
@@ -8901,6 +8964,14 @@ function _ftWizV2OverlayFromItem(state, item, kind) {
     resists:   Object.fromEntries((Array.isArray(eff.resists) ? eff.resists : []).map(k => [k, true])),
     immunes:   Object.fromEntries((Array.isArray(eff.immunes) ? eff.immunes : []).map(k => [k, true]))
   };
+  // 2026-05-29 — Additional damage dice: array → p0/p1/… indexed slots so the
+  // engine repopulates the rows when editing an existing manifestation.
+  const dpArr = Array.isArray(sys.damageParts)
+    ? sys.damageParts
+    : (sys.damageParts && typeof sys.damageParts === "object" ? Object.values(sys.damageParts) : []);
+  state.damageParts = Object.fromEntries(dpArr.map((p, i) => [`p${i}`, {
+    formula: p?.formula ?? "", type: p?.type ?? "kinetic", track: p?.track ?? "integrity", flavor: p?.flavor ?? ""
+  }]));
   if (kind === "weapon") {
     state.category     = sys.category ?? "melee";
     state.skill        = sys.skill ?? "melee";
@@ -8964,6 +9035,9 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
   // Phase E — Conditional damage uses indexed object-map for indexed slots
   // (c0/c1/c2); ftNormalizeConditionalDamage converts back to a clean array.
   state.conditionalDamage = {};
+  // 2026-05-29 — Additional damage dice use the same indexed-slot shape (p0/p1/p2);
+  // ftNormalizeDamageParts converts back to a clean array on save.
+  state.damageParts = {};
   // Default icon — kind-appropriate fallback. Step 7 lets the author swap
   // via FilePicker (curated icon library at FT_ICON_LIBRARY_PATH).
   state.img = wizardKind === "weapon" ? "icons/svg/sword.svg" : "icons/svg/aura.svg";

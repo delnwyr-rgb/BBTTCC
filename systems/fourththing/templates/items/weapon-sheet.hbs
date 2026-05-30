@@ -265,10 +265,10 @@
         </div>
       </div>
 
-      {{!-- Multi-damage-type riders (2026-05-29). Extra damage rolled in
-            addition to the main hit, each with its own type/track. --}}
+      {{!-- Additional damage dice (2026-05-29). Extra dice rolled on a hit in
+            addition to the main damage, each with its own type/track. --}}
       <div class="ft-field-full">
-        <label>Extra damage parts <span style="opacity:0.6;font-weight:normal">— rolled on a hit in addition to the main damage; each its own type &amp; track</span></label>
+        <label>Additional damage dice <span style="opacity:0.6;font-weight:normal">— rolled on a hit in addition to the main damage; each its own type &amp; track</span></label>
         {{#each system.damageParts as |part idx|}}
         <div class="ft-dmg-part-row" data-idx="{{idx}}" style="display:flex;gap:0.35rem;align-items:center;margin:0.25rem 0">
           <input type="text" name="system.damageParts.{{idx}}.formula" value="{{part.formula}}" placeholder="1d6" style="width:74px" data-tooltip="Dice formula for this part (e.g. 1d6)."/>
