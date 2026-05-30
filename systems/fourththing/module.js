@@ -2108,13 +2108,28 @@ async function ftPlaceAreaTemplate(actor, area) {
 // resolves). Compute from the doc directly if `_computeShape` is available;
 // fall back to an empty list rather than silently dropping AoE targets.
 function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set() } = {}) {
-  const t = templateDoc?.object;
-  if (!t) return [];
-  let shape = t.shape;
-  if (!shape && typeof t._computeShape === "function") {
-    try { shape = t._computeShape(); } catch (_e) {}
+  if (!templateDoc) return [];
+  // Template origin + shape type come from the DOCUMENT (always populated),
+  // NOT the canvas placeable (whose PIXI shape may not be drawn yet — the old
+  // bug: one rAF after createEmbeddedDocuments, `object.shape` was still null,
+  // so this returned [] and the cast silently fell back to single-target).
+  const ox = Number(templateDoc.x) || 0;
+  const oy = Number(templateDoc.y) || 0;
+  const shapeType = templateDoc.t; // "circle" | "cone" | "ray" | "rect"
+  const grid = canvas?.grid;
+  const pxPerUnit = grid ? (grid.size / (grid.distance || 5)) : 1;
+  const radiusPx  = (Number(templateDoc.distance) || 0) * pxPerUnit; // circle radius / ray length in px
+
+  // Prefer the placeable's real PIXI shape for cones/rays/rects (accurate
+  // angles), but circle/sphere is computed geometrically so it never depends
+  // on draw timing. Geometric circle is also the fallback for any shape whose
+  // placeable shape isn't ready — better an approximate hit than zero AoE.
+  const placeable = templateDoc.object;
+  let shape = placeable?.shape;
+  if (!shape && typeof placeable?._computeShape === "function") {
+    try { shape = placeable._computeShape(); } catch (_e) {}
   }
-  if (!shape) return [];
+
   const tokens = canvas?.tokens?.placeables ?? [];
   const out = [];
   for (const tok of tokens) {
@@ -2122,7 +2137,17 @@ function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set() } = {}) 
     if (!a || excludeActorIds.has(a.id)) continue;
     const cx = tok.center?.x ?? (tok.x + (tok.w ?? 0) / 2);
     const cy = tok.center?.y ?? (tok.y + (tok.h ?? 0) / 2);
-    if (shape.contains(cx - t.x, cy - t.y)) out.push(tok);
+    let inside;
+    if (shapeType === "circle") {
+      // tolerance: half a grid square so a token clipping the edge counts in.
+      inside = Math.hypot(cx - ox, cy - oy) <= radiusPx + (grid?.size ?? 0) / 2;
+    } else if (shape && typeof shape.contains === "function") {
+      inside = shape.contains(cx - ox, cy - oy);
+    } else {
+      // Placeable shape not ready for a cone/ray/rect — approximate by radius.
+      inside = Math.hypot(cx - ox, cy - oy) <= radiusPx + (grid?.size ?? 0) / 2;
+    }
+    if (inside) out.push(tok);
   }
   return out;
 }
@@ -6847,9 +6872,17 @@ async function castManifestation(actor, item, {
     const aoeTokens = placedTemplate
       ? _ftTokensInTemplate(placedTemplate, { excludeActorIds: new Set([actor.id]) })
       : [];
-    const aoeActors = Array.from(new Set(
+    let aoeActors = Array.from(new Set(
       aoeTokens.map(tok => tok.actor).filter(a => !!a && a.id !== actor.id)
     ));
+    // Fallback (2026-05-29): an area manifestation whose template caught nobody
+    // but whose caster manually targeted 2+ tokens uses that selection instead —
+    // so deliberately-targeted foes are never silently dropped to single-target.
+    if (aoeActors.length === 0 && mf?.area?.shape && mf.area.shape !== "none") {
+      const picked = Array.from(game.user?.targets ?? [])
+        .map(t => t.actor).filter(a => !!a && a.id !== actor.id);
+      if (picked.length > 1) aoeActors = Array.from(new Set(picked));
+    }
     const useAoE = aoeActors.length > 0;
     const dr = ftNormalizeDamageRoll(item.system ?? {});
     // Resonance Channel: extra damage dice stack onto the rolled total.
