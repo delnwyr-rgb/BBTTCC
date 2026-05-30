@@ -256,6 +256,10 @@
           <label>Long Range</label>
           <input type="number" name="system.range.long" value="{{system.range.long}}" min="0"/>
         </div>
+        <div class="ft-field">
+          <label>Range (ft) — engine</label>
+          <input type="number" name="system.manifestation.rangeFt" value="{{system.manifestation.rangeFt}}" min="0" placeholder="0 = use Short/Long" data-tooltip="Real range in feet used for the out-of-range warning. 0 = derive from Short/Long (squares ×5)."/>
+        </div>
       </div>
 
       {{!-- Multi-damage-type riders (2026-05-29). Extra damage rolled in

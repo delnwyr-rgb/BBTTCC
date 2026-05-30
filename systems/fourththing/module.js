@@ -942,7 +942,12 @@ function ftOpenEngageDialog(actor, item, options = {}) {
   // they've already burned `reactionUsed` before invoking the engage flow.
   // Boss actors with no `system.actions` slot are silently exempt; Phase B
   // introduces their per-round Manifestation Slots + Legendary Actions.
-  if (!options.skipActionGate) {
+  // 2026-05-29 (playtest #3/#9) — the hard action-economy lockout only binds
+  // player-controlled actors during active combat. NPCs/foes are GM-driven (fire
+  // multiattacks freely — the Action chip still tracks usage), and out of combat
+  // there are no rounds to limit. The rig per-weapon gate below is unaffected.
+  const _ftEnforceActionGate = !options.skipActionGate && !!game.combat?.started && !_ftIsFoeActor(actor);
+  if (_ftEnforceActionGate) {
     const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
     if (sysActs && sysActs.actionUsed) {
       ui.notifications?.warn(`${actor.name}: action already used this turn.`);
@@ -971,6 +976,8 @@ function ftOpenEngageDialog(actor, item, options = {}) {
     ui.notifications?.warn(`${actor.name}: ${item.name} already fired this round.`);
     return;
   }
+
+  _ftWarnIfOutOfRange(actor, item); // playtest #1 — warn-only numeric range
 
   const intent  = item?.system?.intent   ?? "violence";
   const skill   = item?.system?.skill    ?? "melee";
@@ -1035,6 +1042,7 @@ function ftOpenEngageDialog(actor, item, options = {}) {
           }
 
           const restraint    = parseInt(html.find("[name='restraintReduction']").val()) || 0;
+          const rollMode     = html.find("[name='ftRollMode']").val() || "normal";
           const targetTokens = Array.from(game.user?.targets ?? []);
           const targetActor  = targetTokens[0]?.actor ?? null;
           const flankBonus   = Number(html.find(".ft-cast-dialog").attr("data-ft-flank-bonus")) || 0;
@@ -1057,6 +1065,7 @@ function ftOpenEngageDialog(actor, item, options = {}) {
             target: targetActor, restraintReduction: restraint,
             flankBonus,
             aimedShotBonus,
+            rollMode,
             itemUuid: item?.uuid ?? ""
           });
 
@@ -1612,6 +1621,78 @@ function _ftDistanceBetweenTokens(tokenA, tokenB) {
   // pixel-width of one square. ft = pixels × (distance / size).
   const ftPerPixel = (grid.distance ?? 5) / (grid.size ?? 100);
   return px * ftPerPixel;
+}
+
+// 2026-05-29 (playtest #1) — Effective range in feet for any weapon/manifestation
+// item. Real numeric ranges replacing flavor "near/far". Resolution order:
+//   1. explicit `system.manifestation.rangeFt` override (>0)
+//   2. weapon `system.range.long`/`.short` (small values treated as squares ×5)
+//   3. power categorical `system.range` ("near"/"far"/...) mapped to feet
+// Returns 0 when nothing meaningful is authored → callers skip the range check
+// (covers self/touch/unlimited). Centralizes the mapping so no data migration is
+// needed; the explicit field just overrides when an author wants a precise number.
+const _FT_RANGE_LABEL_FT = { self: 0, personal: 0, touch: 5, close: 15, near: 30, medium: 60, far: 60, long: 120, sight: 120, hex: 300, scene: 0, unlimited: 0 };
+function _ftItemRangeFt(item) {
+  const sys = item?.system ?? {};
+  const explicit = Number(sys?.manifestation?.rangeFt);
+  if (Number.isFinite(explicit) && explicit > 0) return explicit;
+  // Weapon short/long (object form). Small integers read as squares → ×5 ft.
+  const long  = Number(sys?.range?.long);
+  const short = Number(sys?.range?.short);
+  const wr = (Number.isFinite(long) && long > 0) ? long : ((Number.isFinite(short) && short > 0) ? short : 0);
+  if (wr > 0) return wr <= 4 ? wr * 5 : wr;
+  // Power categorical label (string form) or rangeAreaText fallback.
+  const cat = String(sys?.range ?? sys?.power?.range ?? "").trim().toLowerCase();
+  if (cat in _FT_RANGE_LABEL_FT) return _FT_RANGE_LABEL_FT[cat];
+  return 0;
+}
+
+// Warn-only out-of-range notice (playtest #1 — decision: numeric feet, warn-only).
+// Posts a heads-up if the actor's first target is beyond the item's effective
+// range, but never blocks the action (GM keeps the final call).
+function _ftWarnIfOutOfRange(actor, item) {
+  try {
+    const rangeFt = _ftItemRangeFt(item);
+    if (!(rangeFt > 0)) return; // self/touch/unlimited → no check
+    const myTok = actor?.getActiveTokens?.()?.[0];
+    const tgt   = Array.from(game.user?.targets ?? [])[0];
+    if (!myTok || !tgt || tgt.id === myTok.id) return;
+    const d = _ftDistanceBetweenTokens(myTok, tgt);
+    if (d > rangeFt + 0.5) {
+      ui.notifications?.warn(`${item?.name ?? "This"} — range ${rangeFt} ft, but ${tgt.actor?.name ?? "target"} is ~${Math.round(d)} ft away. Proceeding (GM's call).`);
+    }
+  } catch (e) { /* range check never blocks */ }
+}
+
+// 2026-05-29 (playtest #5) — Advantage/Disadvantage roll modes for every d10 roll.
+// Core dice expression for a mode:
+//   normal       → 2d10x10      (the canon exploding base)
+//   advantage    → 3d10x10kh2   (roll 3 exploding, keep the best 2)
+//   disadvantage → 3d10kl2      (roll 3, keep lowest 2 — matches the existing
+//                                effect-imposed disadvantage, which drops explosions)
+function _ftCoreDice(mode) {
+  if (mode === "advantage")    return "3d10kh2";
+  if (mode === "disadvantage") return "3d10kl2";
+  return "2d10x10";
+}
+// Resolve a user-chosen mode against any effect-forced adv/dis, 5e-style: a
+// matched pair cancels to normal. Returns "advantage" | "disadvantage" | "normal".
+function _ftResolveRollMode({ user = "normal", forcedAdv = false, forcedDis = false } = {}) {
+  const adv = user === "advantage"    || forcedAdv;
+  const dis = user === "disadvantage" || forcedDis;
+  if (adv && dis) return "normal";
+  return adv ? "advantage" : dis ? "disadvantage" : "normal";
+}
+// Reusable 3-way picker markup for the roll dialogs. `name` is the form field.
+function _ftRollModeFieldHTML(name = "ftRollMode") {
+  return `<div class="ft-cast-field" title="Advantage rolls 3d10 keep-highest-2; Disadvantage rolls 3d10 keep-lowest-2. Combines with effect-imposed (dis)advantage and cancels 5e-style.">
+      <label>Roll</label>
+      <select name="${name}">
+        <option value="normal" selected>Normal</option>
+        <option value="advantage">⬆ Advantage</option>
+        <option value="disadvantage">⬇ Disadvantage</option>
+      </select>
+    </div>`;
 }
 
 // Find candidate secondary-chain tokens within `rangeFt` of the primary's
@@ -3113,9 +3194,25 @@ function _ftCasterTier(actor) {
 // .surgeEnabled === true`). PCs, bosses, and rigs are unaffected. Lets the
 // GM experiment with which foes (e.g. Elites) get Surge without it being on
 // by default for every mook.
+// Best-effort actor disposition: prefer a live token, fall back to prototype.
+// Returns a CONST.TOKEN_DISPOSITIONS number, or null if undeterminable.
+function _ftActorDisposition(actor) {
+  try {
+    const tok = actor?.getActiveTokens?.()?.[0];
+    const d = tok?.document?.disposition ?? tok?.disposition ?? actor?.prototypeToken?.disposition;
+    return Number.isFinite(Number(d)) ? Number(d) : null;
+  } catch (e) { return null; }
+}
 function _ftIsFoeActor(actor) {
   if (!actor) return false;
+  if (actor.type === "boss") return false; // bosses run their own surge pool
   if (actor.type === "npc") return true; // Monsters (stat-block actors)
+  // 2026-05-29 — disposition-based foe detection: any actor whose token is
+  // HOSTILE counts as a foe regardless of actor type/flags. Fixes Surge
+  // leaking onto classed NPCs (type "character") that lack the entityKind flag
+  // (playtest: "Surges keep rolling on bad guys, and being counted").
+  const HOST = CONST?.TOKEN_DISPOSITIONS?.HOSTILE ?? -1;
+  if (_ftActorDisposition(actor) === HOST) return true;
   if (actor.type === "character") {
     return actor.flags?.["bbttcc-auto-link"]?.entityKind === "npc";
   }
@@ -3203,10 +3300,11 @@ async function _ftBankSurge(actor, n, { fromHarvest = false } = {}) {
 // via game.fourththing.aurabladeFlavorSurge.
 async function _ftAurabladeFlavorSurge(actor) {
   if (!actor) return 0;
+  const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
   const round = Number(game.combat?.round ?? 0);
   const f = actor.flags?.fourththing?.aurablade?.surgeGen ?? {};
   const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-  if (count >= 2) return 0; // +2 Surge/round cap from the commitment hook
+  if (inCombat && count >= 2) return 0; // +2 Surge/round cap from the commitment hook
   const got = await _ftBankSurge(actor, 1);
   if (got > 0) await actor.setFlag("fourththing", "aurablade.surgeGen", { round, count: count + 1 });
   return got;
@@ -4539,10 +4637,11 @@ function _ftHarmonyMandate(actor) {
 async function _ftDreamwalkerCastGen(actor) {
   if (!_ftActorMatchesClass(actor, "dreamwalker")) return;
   if (!_ftSurgeAllowed(actor)) return; // foe-gating
+  const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
   const round = Number(game.combat?.round ?? 0);
   const f = actor.flags?.fourththing?.dreamwalker?.castGen ?? {};
   const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-  if (count >= 2) return;
+  if (inCombat && count >= 2) return;
   const got = await _ftBankSurge(actor, 1);
   if (got > 0) await actor.setFlag("fourththing", "dreamwalker.castGen", { round, count: count + 1 });
 }
@@ -5049,18 +5148,37 @@ async function _ftSoulSmithForgeOnDamage(damagedActor, dmg) {
   }
   if (!smiths.length) return;
 
+  const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
   const round = Number(game.combat?.round ?? 0);
   for (const smith of smiths) {
     if (!_ftSurgeAllowed(smith)) continue; // foe Smiths need the GM toggle
     try {
       const f = smith.flags?.fourththing?.soulSmith?.forge ?? {};
       const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-      if (count >= 2) continue; // +2 Surge / +2 Burn per round from the forge hook
+      if (inCombat && count >= 2) continue; // +2 Surge / +2 Burn per round from the forge hook
       await _ftBankSurge(smith, 1);
       try { await ftAddBurn(smith, 1); } catch (e) { /* burn helper unavailable */ }
       await smith.setFlag("fourththing", "soulSmith.forge", { round, count: count + 1 });
     } catch (e) { console.warn("[ft] soul-smith forge stoke failed for", smith?.name, e); }
   }
+}
+
+// Burn-on-hit (playtest #8). A Burn-class actor (Aurablade / Soul-Smith) banks
+// +1 Burn whenever an attack lands — the commitment of the strike feeds the edge,
+// a second auto-Burn hook alongside aura-switching. Capped +2/round in combat
+// (lifted out of combat, like the other gens), foe-gated, never breaks the strike.
+async function _ftBurnOnHitGen(actor) {
+  try {
+    if (!actor || !ftBurnClassFor(actor)) return; // Burn classes only
+    if (!_ftSurgeAllowed(actor)) return;          // suppress on foes unless GM-enabled
+    const inCombat = !!game.combat?.started;
+    const round = Number(game.combat?.round ?? 0);
+    const f = actor.flags?.fourththing?.burnOnHit ?? {};
+    const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
+    if (inCombat && count >= 2) return; // +2 Burn/round cap from the on-hit hook
+    await ftAddBurn(actor, 1);
+    await actor.setFlag("fourththing", "burnOnHit", { round, count: count + 1 });
+  } catch (e) { console.warn("[ft] burn-on-hit gen failed", e); }
 }
 
 // ─── Bulwark (Pool archetype) — "eat the blow" generation + Surge spends ──────
@@ -5072,10 +5190,11 @@ async function _ftBulwarkOnDamage(damagedActor, dmg) {
   if (!damagedActor || !(Number(dmg) > 0)) return;
   if (!_ftActorMatchesClass(damagedActor, "bulwark")) return;
   if (!_ftSurgeAllowed(damagedActor)) return; // foe Bulwarks need the GM toggle
+  const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
   const round = Number(game.combat?.round ?? 0);
   const f = damagedActor.flags?.fourththing?.bulwark?.surgeGen ?? {};
   const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-  if (count >= 2) return; // +2 Surge / round from the eat-the-blow hook
+  if (inCombat && count >= 2) return; // +2 Surge / round from the eat-the-blow hook
   const got = await _ftBankSurge(damagedActor, 1);
   if (got > 0) await damagedActor.setFlag("fourththing", "bulwark.surgeGen", { round, count: count + 1 });
 }
@@ -5249,10 +5368,12 @@ async function _ftBulwarkPathSurge(actor, effectKey, tier) {
 async function _ftCourierMoveGen(actor, cumulativeFt) {
   if (!actor || !_ftActorMatchesClass(actor, "shadow_courier")) return;
   if (!_ftSurgeAllowed(actor)) return; // foe Couriers need the GM toggle
+  const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
   const round  = Number(game.combat?.round ?? 0);
   const f      = actor.flags?.fourththing?.courier?.moveGen ?? {};
   const had    = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-  const earned = Math.min(2, Math.floor(Number(cumulativeFt) / 30)); // +1 per 30 ft, cap +2/round
+  // Out of combat the +2/round cap is lifted; in combat keep it. Surge cap still bounds total.
+  const earned = inCombat ? Math.min(2, Math.floor(Number(cumulativeFt) / 30)) : Math.floor(Number(cumulativeFt) / 30);
   if (earned <= had) return;
   let banked = 0;
   for (let i = had; i < earned; i++) banked += await _ftBankSurge(actor, 1);
@@ -5546,10 +5667,11 @@ async function _ftPactDoctrineSurge(actor, effectKey, tier) {
 async function _ftWyrdlensCastGen(actor) {
   if (!_ftActorMatchesClass(actor, "wyrdlens-adept")) return;
   if (!_ftSurgeAllowed(actor)) return;
+  const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
   const round = Number(game.combat?.round ?? 0);
   const f = actor.flags?.fourththing?.wyrdlens?.castGen ?? {};
   const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-  if (count >= 2) return;
+  if (inCombat && count >= 2) return;
   const got = await _ftBankSurge(actor, 1);
   if (got > 0) await actor.setFlag("fourththing", "wyrdlens.castGen", { round, count: count + 1 });
 }
@@ -5870,6 +5992,7 @@ async function _ftHarmonyHarvest(explodingActor, n) {
   const isMarshal = (a) => !!a?.items?.find?.(it => it.type === "class" &&
     (it.system?.identifier === "harmony-marshal" || it.system?.identifier === "harmony_marshal"));
   const exDisp = exTok.document?.disposition ?? 0;
+  const inCombat = !!game.combat?.started; // round caps only apply in combat (playtest #9)
   const round  = Number(game.combat?.round ?? 0);
   for (const tok of (canvas?.tokens?.placeables ?? [])) {
     const a = tok?.actor;
@@ -6310,12 +6433,13 @@ function ftOpenCastDialog(actor, item) {
           const bankToCache = html.find("[name='dwBankToCache']").is(":checked") === true;
           const useAoeSavePrompts = html.find("[name='useAoeSavePrompts']").is(":checked") === true;
           const aoeApplyConfirm   = html.find("[name='aoeApplyConfirm']").is(":checked")   === true;
+          const rollMode          = html.find("[name='ftRollMode']").val() || "normal";
           return castManifestation(actor, item, {
             intent: selI, channel: selC, sephirah: selS,
             label, difficulty: dc, mode, reachPath: reachPathVal,
             target, restraintReduction: restraint, resonanceSpend,
             useOverlay, bankToCache,
-            useAoeSavePrompts, aoeApplyConfirm
+            useAoeSavePrompts, aoeApplyConfirm, rollMode
           });
         }
       },
@@ -6343,7 +6467,8 @@ async function castManifestation(actor, item, {
   bankToCache = false,
   freeClarity = false,
   useAoeSavePrompts = true,
-  aoeApplyConfirm = false
+  aoeApplyConfirm = false,
+  rollMode = "normal"
 } = {}) {
   const rawSys = actor?.system?.system ?? actor?.system ?? {};
   const stewardTier = _ftCasterTier(actor);
@@ -6530,7 +6655,11 @@ async function castManifestation(actor, item, {
       ui.notifications?.warn(`${actor.name}: reactions are denied this round (Aurablade Fury).`);
       return false;
     }
-    if (poolKey && rawSys?.actions?.[poolKey]) {
+    // 2026-05-29 (playtest #3/#9) — per-turn "already used" lockout only binds
+    // player actors in active combat. NPCs/foes are GM-driven; out of combat there
+    // are no rounds. Let the cast through (chip still tracks usage on resolve).
+    const _ftEnforceCastGate = !!game.combat?.started && !_ftIsFoeActor(actor);
+    if (_ftEnforceCastGate && poolKey && rawSys?.actions?.[poolKey]) {
       // Canon §5 — Elite bonus manifestation. If an Action-type cast is
       // blocked because actionUsed is already burned, an Elite may spend
       // their once-per-round bonus mani instead.
@@ -6542,6 +6671,8 @@ async function castManifestation(actor, item, {
       }
     }
   }
+
+  _ftWarnIfOutOfRange(actor, item); // playtest #1 — warn-only numeric range
 
   const baseClarity = FT.MANIFESTATION_TIERS?.[manTier]?.clarityCost ?? 1;
 
@@ -6612,7 +6743,7 @@ async function castManifestation(actor, item, {
     misfireTier, skipMisfire,
     modeMisfireBias: totalMisfireBias,
     target, restraintReduction,
-    useOverlay
+    useOverlay, rollMode
   });
 
   ftPlayAutoAnimation(actor, item, { hit: result?.success !== false });
@@ -9740,6 +9871,7 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
       <label>Restraint pull</label>
       <input type="number" name="restraintReduction" value="0" min="0" max="${stewardTier}"/>
     </div>
+    ${_ftRollModeFieldHTML("ftRollMode")}
   </div>
 
   <div class="ft-cast-preview">
@@ -9991,6 +10123,7 @@ function buildAttackDialogHTML(actor, item) {
       <label>Restraint pull</label>
       <input type="number" name="restraintReduction" value="0" min="0" max="${stewardTier}"/>
     </div>
+    ${_ftRollModeFieldHTML("ftRollMode")}
   </div>
   ${costBox}
   ${(signature || thirdThing) ? `
@@ -11682,6 +11815,17 @@ Hooks.once("init", function () {
     choices: { "off": "Off", "gm-opt": "GM opt-in", "always": "Always" }
   });
 
+  // Auto-apply effects (playtest #6, 2026-05-29). When on, conditions / active
+  // effects from a manifestation auto-apply to the target on a hit / failed save
+  // (resolved GM-side to avoid permission races) instead of waiting for a manual
+  // Apply click. Damage still uses the Apply Damage button. The manual button
+  // stays as a fallback; a per-application guard flag prevents double-stacking.
+  game.settings.register("fourththing", "autoApplyEffects", {
+    name: "Auto-apply manifestation effects",
+    hint: "Conditions / active effects apply automatically to the target on a hit or failed save (GM-resolved). Damage still uses the Apply button. Turn off to require a manual Apply click for everything.",
+    scope: "world", config: true, type: Boolean, default: true
+  });
+
   // ── Sprint D: TierEngine recalc stub ─────────────────────────────────────
   // BBTTCC's character-options module calls game.system.recalcActor(actor).
   // We provide a Fourth Thing-native implementation that reads FT attributes
@@ -12009,7 +12153,8 @@ Hooks.once("init", function () {
     misfireTier, skipMisfire = false, modeMisfireBias = 0,
     target = null, restraintReduction = 0,
     item = null,
-    useOverlay = false
+    useOverlay = false,
+    rollMode = "normal"
   } = {}) {
     // Item-driven cast: clamp misfire to the item's tier and inherit signature
     // when the caller didn't pass one explicitly.
@@ -12081,18 +12226,34 @@ Hooks.once("init", function () {
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; double-10
     // base flags Act Again. Same engine as Engage/Steward — keeps all three
     // tactical roll paths visually + mechanically consistent.
-    let formula  = `2d10x10 + ${posTotal} - ${totalNoise}`;
-    // Apply surging-cast threshold first (cinderwake will override below if set).
-    if (_castSurge.surgingCast && !_castSurge.cinderwake) {
-      formula = formula.replace(/2d10x10/, "2d10x>=9");
+    // Playtest #5 — dialog-chosen adv/dis. A modified roll uses the clean
+    // 3-keep-2 shape (no explosions, no surge/surging-cast dice mods); normal
+    // keeps the full 2d10x10 + surging-cast threshold + surge dice-mods engine.
+    const _castMode = _ftResolveRollMode({ user: rollMode });
+    let formula;
+    if (_castMode !== "normal") {
+      formula = `${_ftCoreDice(_castMode)} + ${posTotal} - ${totalNoise}`;
+    } else {
+      formula = `2d10x10 + ${posTotal} - ${totalNoise}`;
+      // Apply surging-cast threshold first (cinderwake will override below if set).
+      if (_castSurge.surgingCast && !_castSurge.cinderwake) {
+        formula = formula.replace(/2d10x10/, "2d10x>=9");
+      }
+      formula = _ftApplySurgeRollMods(formula, _castSurge);
     }
-    formula = _ftApplySurgeRollMods(formula, _castSurge);
     const roll     = new Roll(formula);
     await roll.evaluate();
     const rawTotal      = roll.total;
     const allDieResults = roll.dice[0]?.results ?? [];
-    const diceResults   = allDieResults.slice(0, 2);
-    const explosionDice = allDieResults.slice(2).map(r => r.result);
+    let diceResults, explosionDice;
+    if (_castMode === "normal") {
+      diceResults   = allDieResults.slice(0, 2);
+      explosionDice = allDieResults.slice(2).map(r => r.result);
+    } else {
+      const active  = allDieResults.filter(r => r.active && !r.discarded);
+      diceResults   = active.slice(0, 2);
+      explosionDice = active.slice(2).map(r => r.result);
+    }
     const explosions    = explosionDice.length;
     const baseDiceVals  = diceResults.map(r => r.result);
     const doubleTen     = baseDiceVals.filter(v => v === 10).length >= 2;
@@ -12606,6 +12767,7 @@ Hooks.once("init", function () {
     target = null, restraintReduction = 0,
     flankBonus = 0,
     aimedShotBonus = 0,
+    rollMode = "normal",
     itemUuid = ""
   } = {}) {
     const rawSys  = actor.system?.system ?? actor.system;
@@ -12678,17 +12840,36 @@ Hooks.once("init", function () {
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; two
     // base 10s also flag "Act Again" so the sheet exposes the bonus action.
     // Imposed disadvantage forces 3d10kl2 (no explosions), shadowing surge dice mods.
-    const baseFormula = _abDisAttack ? `3d10kl2 + ${total_mod}` : `2d10x10 + ${total_mod}`;
-    const formula     = _abDisAttack ? baseFormula : _ftApplySurgeRollMods(baseFormula, _surge);
+    // Playtest #5 — resolve dialog-chosen adv/dis against effect-forced disadvantage
+    // (Aurablade Fury). Disadvantage keeps the no-explosion 3d10kl2 shape (and skips
+    // surge dice mods, as before); advantage/normal still take surge boosts.
+    const _attkMode   = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack });
+    const baseFormula = `${_ftCoreDice(_attkMode)} + ${total_mod}`;
+    // Surge dice-mods (wrath-cascade/cinderwake add exploding dice) only ride the
+    // normal 2d10x10 base — a modified adv/dis roll keeps its clean 3-keep-2 shape.
+    const formula     = (_attkMode !== "normal") ? baseFormula : _ftApplySurgeRollMods(baseFormula, _surge);
 
     const roll  = new Roll(formula);
     await roll.evaluate();
     const rawTotal      = roll.total;
     const allDieResults = roll.dice[0]?.results ?? [];
-    const diceResults   = allDieResults.slice(0, 2);
-    const explosionDice = allDieResults.slice(2).map(r => r.result);
+    // Dice parsing is mode-aware (playtest #5). Normal (2d10x10): the first two
+    // entries are the base dice and the rest are explosions. Advantage/Disadvantage
+    // (3d10…kh2/kl2): keep the two *active* (kept) dice as the base; the advantage
+    // x10 explosions are the kept dice's own exploded results. Disadvantage doesn't
+    // explode, so no surge banking — matching the prior forced-disadvantage feel.
+    let diceResults, explosionDice, baseDice;
+    if (_attkMode === "normal") {
+      diceResults   = allDieResults.slice(0, 2);
+      explosionDice = allDieResults.slice(2).map(r => r.result);
+    } else {
+      const active  = allDieResults.filter(r => r.active && !r.discarded);
+      diceResults   = active.slice(0, 2);
+      // Any active dice beyond the kept two are explosion products (advantage only).
+      explosionDice = active.slice(2).map(r => r.result);
+    }
     const explosions    = explosionDice.length;
-    const baseDice      = diceResults.map(r => r.result);
+    baseDice            = diceResults.map(r => r.result);
     const doubleTen     = baseDice.filter(v => v === 10).length >= 2;
 
     if (explosions > 0) await _ftBankSurge(actor, explosions);
@@ -12869,6 +13050,26 @@ Hooks.once("init", function () {
       const maxDie = Math.max(0, ...baseDieValues);
       const tags = [skill, defense, intent, damageType].filter(Boolean);
       await fireTriggers(actor, "on-attack-hit", { tags, maxDie, scope: "self" });
+
+      // Burn-on-hit auto-gen for Burn classes (playtest #8).
+      await _ftBurnOnHitGen(actor);
+
+      // Auto-apply weapon-strike effects on a hit (playtest #6). Conditions/AEs
+      // land immediately instead of waiting for the Apply Damage click. Damage
+      // itself still uses the Apply button. applyManifestationStates de-dupes per
+      // (target,item), so the later Apply-Damage path is a harmless no-op — no
+      // double-stack. GM-resolved via the function's own owner-or-relay write.
+      try {
+        if (game.settings?.get?.("fourththing", "autoApplyEffects") && itemUuid) {
+          const _strikeItem = await fromUuid(itemUuid);
+          const _strikeMf   = _strikeItem?.system?.manifestation;
+          const _strikeTgt  = target?.actor ?? target;
+          if (_strikeItem?.type === "weapon" && _strikeMf && _strikeTgt &&
+              _ftHasManifestationApplicables(_strikeMf, _strikeItem)) {
+            await game.fourththing.applyManifestationStates(actor, _strikeTgt, _strikeItem, _strikeMf, { castDc: Number(defenseValue) || 15 });
+          }
+        }
+      } catch (e) { console.warn("[fourththing] auto-apply weapon effects on hit failed", e); }
     }
     return { roll, success };
   };

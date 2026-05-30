@@ -558,13 +558,17 @@
         <div class="ft-field">
           <label>Range Baseline</label>
           <select name="system.range">
-            <option value="self"  {{#if (eq system.range "self")}}selected{{/if}}>Self</option>
-            <option value="touch" {{#if (eq system.range "touch")}}selected{{/if}}>Touch</option>
-            <option value="near"  {{#if (eq system.range "near")}}selected{{/if}}>Near</option>
-            <option value="far"   {{#if (eq system.range "far")}}selected{{/if}}>Far</option>
-            <option value="sight" {{#if (eq system.range "sight")}}selected{{/if}}>Sight</option>
-            <option value="hex"   {{#if (eq system.range "hex")}}selected{{/if}}>Hex-scale</option>
+            <option value="self"  {{#if (eq system.range "self")}}selected{{/if}}>Self (0 ft)</option>
+            <option value="touch" {{#if (eq system.range "touch")}}selected{{/if}}>Touch (5 ft)</option>
+            <option value="near"  {{#if (eq system.range "near")}}selected{{/if}}>Near (30 ft)</option>
+            <option value="far"   {{#if (eq system.range "far")}}selected{{/if}}>Far (60 ft)</option>
+            <option value="sight" {{#if (eq system.range "sight")}}selected{{/if}}>Sight (120 ft)</option>
+            <option value="hex"   {{#if (eq system.range "hex")}}selected{{/if}}>Hex-scale (300 ft)</option>
           </select>
+        </div>
+        <div class="ft-field">
+          <label>Range (ft) — engine</label>
+          <input type="number" name="system.manifestation.rangeFt" value="{{system.manifestation.rangeFt}}" min="0" placeholder="0 = use Baseline" data-tooltip="Real range in feet used for the out-of-range warning. 0 = derive from the Range Baseline above."/>
         </div>
       </div>
 
