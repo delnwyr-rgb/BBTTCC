@@ -72,6 +72,13 @@
     },
     {
       "type": "Item",
+      "name": "npc-abilities",
+      "label": "BBTTCC NPC Abilities",
+      "path": "packs/npc-abilities",
+      "system": "fourththing"
+    },
+    {
+      "type": "Item",
       "name": "doctrines",
       "label": "BBTTCC Doctrines",
       "path": "packs/doctrines",
