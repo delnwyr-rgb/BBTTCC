@@ -2587,7 +2587,12 @@ const politicalPressure = {
       const parts = [];
       for (const k of OP_KEYS_9) {
         const v = Number(c[k] ?? 0) || 0;
-        if (v > 0) parts.push(`${v} ${k}`);
+        if (v > 0) {
+          // Costs are stored in MARKS (1 OP = 10 marks); show OP to match the OP Bank.
+          const op = v / 10;
+          const opStr = Number.isInteger(op) ? String(op) : op.toFixed(1);
+          parts.push(`${opStr} ${k}`);
+        }
       }
       return parts.length ? parts.join(" • ") : "—";
     };

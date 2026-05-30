@@ -25,7 +25,8 @@
     if (!app.__siegeCfg) app.__siegeCfg = {
       sizeProfile: "standard",
       depotHexUuid: "",
-      intent: "sack"
+      intent: "sack",
+      supportingFactionIds: []
     };
     return app.__siegeCfg;
   }
@@ -283,6 +284,54 @@
     }
     panel.appendChild(intentRow);
 
+    // ---- Supporters multi-select ----
+    // Registered supporters lend their Supply-Line hexes to the BFS and may play
+    // attacker-side support activities (Escort Supply Line / Counter-Interdict).
+    const supRow = document.createElement("div");
+    supRow.style.cssText = "margin-bottom:6px;font-size:0.72rem;";
+    const supLabel = document.createElement("div");
+    supLabel.style.cssText = "opacity:0.8;margin-bottom:3px;";
+    supLabel.textContent = "Supporters (lend supply hexes · may Escort / Counter-Interdict):";
+    supRow.appendChild(supLabel);
+
+    let defenderId = "";
+    try {
+      const td = (targetUuid && typeof fromUuidSync === "function") ? fromUuidSync(targetUuid) : null;
+      defenderId = (td?.flags ?? td?.document?.flags)?.["bbttcc-territory"]?.factionId || "";
+    } catch (_e) {}
+    const _isFaction = (a) => a?.getFlag?.("bbttcc-factions", "isFaction") === true || a?.type === "faction";
+    const supCandidates = (game.actors?.contents || []).filter(a => _isFaction(a) && a.id !== attackerId && a.id !== defenderId);
+
+    if (!supCandidates.length) {
+      const none = document.createElement("div");
+      none.style.cssText = "opacity:0.6;font-style:italic;";
+      none.textContent = attackerActor ? "(no other factions available)" : "(select the attacker faction first)";
+      supRow.appendChild(none);
+    } else {
+      const supWrap = document.createElement("div");
+      supWrap.style.cssText = "display:flex;flex-wrap:wrap;gap:6px;";
+      for (const f of supCandidates) {
+        const lbl = document.createElement("label");
+        lbl.style.cssText = "display:inline-flex;align-items:center;gap:3px;cursor:pointer;padding:1px 6px;border:1px solid rgba(148,163,184,0.35);border-radius:4px;background:rgba(15,23,42,0.45);";
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.value = f.id;
+        cb.checked = (cfg.supportingFactionIds || []).includes(f.id);
+        cb.addEventListener("change", () => {
+          const set = new Set(cfg.supportingFactionIds || []);
+          if (cb.checked) set.add(f.id); else set.delete(f.id);
+          cfg.supportingFactionIds = Array.from(set);
+        });
+        const nm = document.createElement("span");
+        nm.textContent = f.name;
+        lbl.appendChild(cb);
+        lbl.appendChild(nm);
+        supWrap.appendChild(lbl);
+      }
+      supRow.appendChild(supWrap);
+    }
+    panel.appendChild(supRow);
+
     // ---- Layer preview ----
     const layerRow = document.createElement("div");
     layerRow.style.cssText = "margin-top:4px;font-size:0.72rem;opacity:0.9;";
@@ -336,9 +385,8 @@
       // Are we currently in a siege activity?
       const ps = app._plannerState;
       if (!ps?.selectedKey) return;
-      _findActivityByKey(ps.selectedKey).then(actEntry => {
-        if (!_activityHasFlag(actEntry, "siegeRequiresTarget")) return;
-        // Yes — serialize cfg into note input.
+      const serialize = (isSiege) => {
+        if (!isSiege) return;
         const cfg = _getCfg(app);
         const noteInput = root.querySelector('input[data-role="note"]');
         if (!noteInput) return;
@@ -347,10 +395,15 @@
           sizeProfile: cfg.sizeProfile,
           depotHexUuid: cfg.depotHexUuid,
           intent: cfg.intent,
+          supportingFactionIds: Array.isArray(cfg.supportingFactionIds) ? cfg.supportingFactionIds : [],
           gmNote: userNote
         };
         noteInput.value = JSON.stringify(payload);
-      }).catch(err => console.warn(TAG, "plan-intercept error", err));
+      };
+      // EFFECTS-first detection (reliable, in-memory); fall back to the catalog fetch.
+      const eff = game.bbttcc?.api?.raid?.EFFECTS?.[String(ps.selectedKey).toLowerCase()];
+      if (eff?.siegeRequiresTarget) serialize(true);
+      else _findActivityByKey(ps.selectedKey).then(a => serialize(_activityHasFlag(a, "siegeRequiresTarget"))).catch(err => console.warn(TAG, "plan-intercept error", err));
     };
 
     // Capture phase — runs before the planner's own click handler on `wrap`.
@@ -360,7 +413,10 @@
   // ---- Render hook ----
 
   async function _onPlannerRender(app, element){
-    if (app?.id !== PLANNER_ID) return;
+    // AppV2 may assign an auto id (e.g. "app-62") rather than DEFAULT_OPTIONS.id, so match on
+    // the class name (reliable) and keep the id check as a secondary accept. renderApplicationV2
+    // fires for ALL apps, so this guard is what filters to the planner.
+    if (app?.constructor?.name !== "ActivityPlanner" && app?.id !== PLANNER_ID) return;
     const root = element?.[0] ?? element;
     if (!root || typeof root.querySelector !== "function") return;
 
@@ -394,6 +450,11 @@
     _wirePlanButtonInterceptor(app, root);
   }
 
+  // Foundry V13 AppV2 fires a CLASS-NAME-specific render hook — the ActivityPlanner
+  // class fires renderActivityPlanner. The generic renderApplicationV2 is NOT emitted
+  // in all V13 builds, which is why the siege config panel never rendered. This is the
+  // canonical hook (matches the working renderBBTTCCFactionSheet / renderBBTTCC_RaidConsole pattern).
+  Hooks.on("renderActivityPlanner", _onPlannerRender);
   Hooks.on("renderApplicationV2", _onPlannerRender);
   // Older bridge: some Foundry V13 builds still fire renderApplication for V2 apps
   Hooks.on("renderApplication", _onPlannerRender);

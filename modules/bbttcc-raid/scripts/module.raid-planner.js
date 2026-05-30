@@ -818,7 +818,10 @@ Hooks.once("init",()=>{
       if (!v) continue;
       const icon  = OP_ICONS[key]  || "";
       const label = OP_LABELS[key] || prettifyKey(key);
-      parts.push(`${icon} ${label} ${v}`);
+      // Costs are stored in MARKS (1 OP = 10 marks); show OP to match the OP Bank.
+      const op = v / 10;
+      const opStr = Number.isInteger(op) ? String(op) : op.toFixed(1);
+      parts.push(`${icon} ${label} ${opStr}`);
     }
     return parts.join("   ");
   }

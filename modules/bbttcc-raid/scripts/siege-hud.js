@@ -358,6 +358,20 @@
   Hooks.on("bbttcc:siege:trojanFailed", _scheduleRender);
   Hooks.on("bbttcc:siege:outcome", _scheduleRender);
 
+  // PLAYER-SIDE refresh: the bbttcc:siege:* hooks above fire only locally on the GM
+  // (no socket relay listener exists). Siege state lives in hex-drawing flags, so a
+  // GM mutation broadcasts an updateDrawing to every client — players included. React
+  // to changes on territory hexes so non-GM HUDs update live (declare / tick / resolve).
+  const _onHexDocChange = (doc) => {
+    try {
+      const tf = doc?.flags?.["bbttcc-territory"];
+      if (tf && (tf.isHex || tf.siege !== undefined)) _scheduleRender();
+    } catch (_e) {}
+  };
+  Hooks.on("updateDrawing", _onHexDocChange);
+  Hooks.on("createDrawing", _onHexDocChange);
+  Hooks.on("deleteDrawing", _onHexDocChange);
+
   function _install() {
     game.bbttcc = game.bbttcc || { api: {} };
     game.bbttcc.api = game.bbttcc.api || {};
