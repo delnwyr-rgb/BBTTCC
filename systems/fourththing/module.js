@@ -8726,7 +8726,69 @@ function _ftWizV2BuildPreview(state) {
   return bits.join(` <span style="opacity:0.4">·</span> `);
 }
 
-async function openManifestationWizardV2(actor, { kind = "power", starter = "", targetFolder = null, targetPack = null } = {}) {
+// Edit-mode bridge (2026-05-29). Build the wizard's flat `state` from an existing
+// manifestation item — the inverse of createManifestationItemData. Coerces the
+// canonical array shapes (appliedStates.states, appliedEffects.modifiers/resists/
+// immunes) back into the wizard's object-map harvest shapes so the checkbox grids
+// and indexed-slot editors render the item's current values. Mutates `state`.
+function _ftWizV2OverlayFromItem(state, item, kind) {
+  const sys = item?.system ?? {};
+  const mf  = sys.manifestation ?? {};
+  state.name = item?.name ?? state.name;
+  state.img  = item?.img ?? state.img;
+  const copyMf = ["tier","concept","form","function","stability","interactionModel",
+    "costType","costValue","costText","duration","durationText","triggerText","scale",
+    "targetText","rangeAreaText","maintenanceCost","maintenanceKey","riskText","pathResonance",
+    "fictionalPermission","gmCalibration","mechanicalHook","signature","thirdThing"];
+  for (const k of copyMf) if (mf[k] !== undefined) state[k] = mf[k];
+  if (Number(mf.rangeFt)) state.rangeFt = Number(mf.rangeFt);
+  if (mf.area)       state.area = foundry.utils.deepClone(mf.area);
+  if (mf.activation) state.activation_block = foundry.utils.deepClone(mf.activation);
+  if (mf.resolution) state.resolution = foundry.utils.deepClone(mf.resolution);
+  state.tags   = Array.isArray(sys.tags) ? [...sys.tags] : (state.tags ?? []);
+  state.effect = sys.effect ?? state.effect ?? "";
+  state.flavor = sys.flavor ?? state.flavor ?? "";
+  state.intent = sys.intent ?? state.intent;
+  // appliedStates.states: array → { condKey: true }
+  const stArr = Array.isArray(mf.appliedStates?.states) ? mf.appliedStates.states : [];
+  state.appliedStates = foundry.utils.mergeObject(
+    foundry.utils.deepClone(mf.appliedStates ?? {}),
+    { states: Object.fromEntries(stArr.map(k => [k, true])) },
+    { inplace: false }
+  );
+  // appliedEffects: modifiers array → m0/m1/…; resists/immunes array → { key: true }
+  const eff  = mf.appliedEffects ?? {};
+  const mods = Array.isArray(eff.modifiers) ? eff.modifiers : [];
+  state.appliedEffects = {
+    modifiers: Object.fromEntries(mods.map((m, i) => [`m${i}`, { stat: m.stat, op: m.op, value: m.value }])),
+    resists:   Object.fromEntries((Array.isArray(eff.resists) ? eff.resists : []).map(k => [k, true])),
+    immunes:   Object.fromEntries((Array.isArray(eff.immunes) ? eff.immunes : []).map(k => [k, true]))
+  };
+  if (kind === "weapon") {
+    state.category     = sys.category ?? "melee";
+    state.skill        = sys.skill ?? "melee";
+    state.damageFormula= sys.damage?.formula ?? "";
+    state.damageType   = sys.damage?.type ?? "kinetic";
+    state.damageTrack  = sys.damage?.track ?? "integrity";
+    state.rangeShort   = sys.range?.short ?? 1;
+    state.rangeLong    = sys.range?.long ?? 1;
+  } else {
+    state.channel    = sys.channel ?? state.channel;
+    state.sephirah   = sys.sephirah ?? state.sephirah;
+    state.mode       = sys.mode ?? state.mode;
+    state.target     = sys.target ?? state.target;
+    state.range      = sys.range ?? state.range;
+    state.damage     = sys.damage ?? "";
+    state.damageRoll  = foundry.utils.mergeObject(ftDamageRollDefaults(), foundry.utils.deepClone(sys.damageRoll ?? {}), { inplace: false });
+    if (Number(sys.clarityRequired) > 0)   { state.costType = "clarity"; state.costValue = Number(sys.clarityRequired); }
+    else if (Number(sys.noiseGain) > 0)    { state.costType = "noise";   state.costValue = Number(sys.noiseGain); }
+  }
+}
+
+async function openManifestationWizardV2(actor, { kind = "power", starter = "", targetFolder = null, targetPack = null, existingItem = null } = {}) {
+  // Edit mode (playtest 2026-05-29) — when editing an existing manifestation we
+  // bypass the starter gate and key the wizard off the item's own type.
+  if (existingItem) { kind = existingItem.type === "weapon" ? "weapon" : "power"; starter = ""; }
   // Mirror the non-TCC gate from the legacy wizard. Skipped for actor-less
   // GM authoring (targetFolder mode) — the GM can author any starter shape.
   if (actor && !isTCC(actor) && (starter === "ephemeral" || starter === "working")) {
@@ -8770,6 +8832,12 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
   state.img = wizardKind === "weapon" ? "icons/svg/sword.svg" : "icons/svg/aura.svg";
   state._currentStep = 0;
 
+  // Edit mode — overlay the existing item's current values onto the fresh state.
+  if (existingItem) {
+    try { _ftWizV2OverlayFromItem(state, existingItem, wizardKind); }
+    catch (e) { console.warn("Roll for Initiation | wizard edit-overlay failed", e); }
+  }
+
   const STEPS = _ftWizV2Steps(wizardKind);
 
   return new Promise((resolve) => {
@@ -8780,7 +8848,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
     // render, but its row is hidden via CSS and it has no default flag — so
     // pressing Enter inside a form field no longer dismisses the wizard.
     const dialog = new Dialog({
-      title: `Manifestation Engine — ${titleLabel} (V2)`,
+      title: existingItem ? `Manifestation Engine — Edit: ${existingItem.name}` : `Manifestation Engine — ${titleLabel} (V2)`,
       content: _ftWizV2RenderShell(actor, state, STEPS),
       buttons: {
         cancel: { label: "Cancel", callback: () => { if (!resolved) { resolved = true; resolve(null); } } }
@@ -8886,6 +8954,18 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
           }
           try {
             const itemData = createManifestationItemData(actor, wizardKind, state);
+            // Edit mode (2026-05-29) — write back to the existing item in place.
+            // Skips all the create branches; preserves the item's _id / location.
+            let created = null;
+            if (existingItem) {
+              await existingItem.update({ name: itemData.name, img: itemData.img, system: itemData.system });
+              created = existingItem;
+              ui.notifications?.info(`Updated "${existingItem.name}" via the Manifestation Engine.`);
+              resolved = true;
+              resolve(created);
+              dialog.close();
+              return;
+            }
             // Three-mode create:
             //   1. actor → actor-embedded Item
             //   2. no actor, targetPack set OR auto-resolves → compendium entry
@@ -8894,7 +8974,6 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
             // when invoked with no actor + no explicit target. Previously the
             // wizard always made a world Item; macros that expected pack saves
             // silently went to the world directory.
-            let created = null;
             if (actor) {
               const docs = await actor.createEmbeddedDocuments("Item", [itemData]);
               created = docs?.[0] ?? null;
@@ -21019,6 +21098,18 @@ Hooks.once("init", function () {
     }
   }
 
+  // Open this manifestation item in the Manifestation Engine (wizard V2) for a
+  // richer guided edit (2026-05-29). Writes back to the same item in place.
+  async function _ftOnOpenManifestationEngine(event, target) {
+    const item = this.item;
+    if (!item) return;
+    try { await openManifestationWizardV2(item.actor ?? null, { existingItem: item }); }
+    catch (e) {
+      console.warn("[fourththing] open Manifestation Engine failed", e);
+      ui.notifications?.error("Manifestation Engine failed to open (see console).");
+    }
+  }
+
   // ── FourthThingPowerSheet ─────────────────────────────────────────────────
   class FourthThingPowerSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
@@ -21029,7 +21120,8 @@ Hooks.once("init", function () {
       actions:  { ftEditItemImg: _ftOnEditItemImg, ftToggleManifestMode: _ftOnToggleManifestMode,
                   ftAddItemEffect: _ftOnAddItemEffect, ftEditItemEffect: _ftOnEditItemEffect,
                   ftDeleteItemEffect: _ftOnDeleteItemEffect, ftToggleItemEffect: _ftOnToggleItemEffect,
-                  ftAddDamagePart: _ftOnAddDamagePart, ftDeleteDamagePart: _ftOnDeleteDamagePart },
+                  ftAddDamagePart: _ftOnAddDamagePart, ftDeleteDamagePart: _ftOnDeleteDamagePart,
+                  ftOpenEngine: _ftOnOpenManifestationEngine },
       form:     { submitOnChange: true, closeOnSubmit: false }
     };
 
@@ -21155,7 +21247,8 @@ Hooks.once("init", function () {
       actions:  { ftEditItemImg: _ftOnEditItemImg, ftToggleManifestMode: _ftOnToggleManifestMode,
                   ftAddItemEffect: _ftOnAddItemEffect, ftEditItemEffect: _ftOnEditItemEffect,
                   ftDeleteItemEffect: _ftOnDeleteItemEffect, ftToggleItemEffect: _ftOnToggleItemEffect,
-                  ftAddDamagePart: _ftOnAddDamagePart, ftDeleteDamagePart: _ftOnDeleteDamagePart },
+                  ftAddDamagePart: _ftOnAddDamagePart, ftDeleteDamagePart: _ftOnDeleteDamagePart,
+                  ftOpenEngine: _ftOnOpenManifestationEngine },
       form:     { submitOnChange: true, closeOnSubmit: false }
     };
 
