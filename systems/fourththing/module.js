@@ -2152,6 +2152,94 @@ function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set() } = {}) 
   return out;
 }
 
+// ── AoE disposition filter + target picker (2026-05-29 playtest) ─────────────
+// Relation of a token to the caster by token disposition: opposite sign = foe,
+// disposition 0 = neutral, same sign = ally. Mirrors foesInAura's convention.
+function _ftAoeRelation(casterDisp, tokenDisp) {
+  const cd = Number(casterDisp ?? 1), td = Number(tokenDisp ?? 0);
+  const foe = (cd >= 0 && td < 0) || (cd < 0 && td >= 0);
+  if (foe) return "foe";
+  return td === 0 ? "neutral" : "ally";
+}
+// Filter a token list by disposition relative to the caster. mode: foes | allies | all.
+// "allies" includes neutrals (you don't usually want to blast bystanders either).
+function _ftFilterByDisposition(caster, tokens, mode = "all") {
+  if (mode === "all") return [...tokens];
+  const cd = _ftActorDisposition(caster);
+  return tokens.filter(t => {
+    const rel = _ftAoeRelation(cd, t.document?.disposition ?? t.disposition ?? 0);
+    if (mode === "foes")   return rel === "foe";
+    if (mode === "allies") return rel === "ally" || rel === "neutral";
+    return true;
+  });
+}
+// Interactive picker: list every token caught in the area with a Foe/Ally/Neutral
+// badge, pre-checked by a smart default (harmful → foes, beneficial → allies),
+// quick-filter buttons, and per-token checkboxes. Returns the chosen actors.
+async function _ftPickAoeTargets(caster, tokens, { beneficial = false, label = "Manifestation" } = {}) {
+  if (!tokens?.length) return [];
+  const cd = _ftActorDisposition(caster);
+  const entries = tokens.map(t => ({
+    id: t.actor.id, name: t.actor.name, actor: t.actor,
+    rel: _ftAoeRelation(cd, t.document?.disposition ?? t.disposition ?? 0)
+  }));
+  const defaultMode = beneficial ? "allies" : "foes";
+  const checkedFor = (rel) => defaultMode === "allies" ? (rel === "ally" || rel === "neutral") : (rel === "foe");
+  const badge = {
+    foe:     '<span style="color:#e06060;font-size:0.72rem;font-weight:600">FOE</span>',
+    ally:    '<span style="color:#60c060;font-size:0.72rem;font-weight:600">ALLY</span>',
+    neutral: '<span style="color:#c0a040;font-size:0.72rem;font-weight:600">NEUTRAL</span>'
+  };
+  const rows = entries.map(e => `
+    <label style="display:flex;align-items:center;gap:0.5rem;padding:0.25rem 0.1rem;font-size:0.85rem;cursor:pointer">
+      <input type="checkbox" class="ft-aoe-tgt" data-id="${e.id}" data-rel="${e.rel}" ${checkedFor(e.rel) ? "checked" : ""}/>
+      <span style="flex:1">${ftEscapeHtml(e.name)}</span>${badge[e.rel] ?? ""}
+    </label>`).join("");
+  const content = `
+    <div class="ft-aoe-picker" style="font-size:0.85rem">
+      <p style="margin:0 0 0.45rem"><b>${ftEscapeHtml(label)}</b> caught <b>${entries.length}</b> in the area. Who does it hit?</p>
+      <div style="display:flex;gap:0.3rem;margin-bottom:0.45rem;flex-wrap:wrap">
+        <button type="button" data-ft-pick="foes"   class="ft-aoe-quick">Foes</button>
+        <button type="button" data-ft-pick="allies" class="ft-aoe-quick">Allies</button>
+        <button type="button" data-ft-pick="all"    class="ft-aoe-quick">Everyone</button>
+        <button type="button" data-ft-pick="none"   class="ft-aoe-quick">None</button>
+      </div>
+      <div class="ft-aoe-list" style="max-height:300px;overflow:auto;border-top:1px solid rgba(0,0,0,0.2);padding-top:0.3rem">${rows}</div>
+    </div>`;
+  return new Promise((resolve) => {
+    let resolved = false;
+    const done = (arr) => { if (!resolved) { resolved = true; resolve(arr); } };
+    new Dialog({
+      title: "Area — choose targets",
+      content,
+      buttons: {
+        apply:  { icon: "<i class='fas fa-bolt'></i>",  label: "Affect selected",
+          callback: (html) => {
+            const root = html[0] ?? html;
+            const ids = new Set(Array.from(root.querySelectorAll(".ft-aoe-tgt:checked")).map(c => c.dataset.id));
+            done(entries.filter(e => ids.has(e.id)).map(e => e.actor));
+          } },
+        none:   { icon: "<i class='fas fa-ban'></i>", label: "Hit nobody", callback: () => done([]) }
+      },
+      default: "apply",
+      render: (html) => {
+        const root = html[0] ?? html;
+        root.querySelectorAll("[data-ft-pick]").forEach(btn => btn.addEventListener("click", () => {
+          const mode = btn.dataset.ftPick;
+          root.querySelectorAll(".ft-aoe-tgt").forEach(c => {
+            const rel = c.dataset.rel;
+            c.checked = mode === "all" ? true
+                      : mode === "none" ? false
+                      : mode === "foes" ? rel === "foe"
+                      : (rel === "ally" || rel === "neutral");
+          });
+        }));
+      },
+      close: () => done([])
+    }).render(true);
+  });
+}
+
 // saveByPrompt — post a deferred Save button chat card. The cast's damage +
 // state apply are queued behind the click; clicking rolls the save on the
 // target's side, then walks the same downstream apply path with the resulting
@@ -6868,25 +6956,38 @@ async function castManifestation(actor, item, {
       placedTemplate = await ftPlaceAreaTemplate(actor, mf.area);
     }
 
-    // Detect AoE first — picks the post-success dispatch path.
-    const aoeTokens = placedTemplate
+    const wasAreaCast = !!(mf?.area?.shape && mf.area.shape !== "none");
+
+    // Candidate token list: those inside the template, or — when the template
+    // caught nobody — a 2+ manual-target selection. Caster excluded, deduped by actor.
+    let aoeTokenList = (placedTemplate
       ? _ftTokensInTemplate(placedTemplate, { excludeActorIds: new Set([actor.id]) })
-      : [];
-    let aoeActors = Array.from(new Set(
-      aoeTokens.map(tok => tok.actor).filter(a => !!a && a.id !== actor.id)
-    ));
-    // Fallback (2026-05-29): an area manifestation whose template caught nobody
-    // but whose caster manually targeted 2+ tokens uses that selection instead —
-    // so deliberately-targeted foes are never silently dropped to single-target.
-    if (aoeActors.length === 0 && mf?.area?.shape && mf.area.shape !== "none") {
-      const picked = Array.from(game.user?.targets ?? [])
-        .map(t => t.actor).filter(a => !!a && a.id !== actor.id);
-      if (picked.length > 1) aoeActors = Array.from(new Set(picked));
+      : []).filter(t => t?.actor && t.actor.id !== actor.id);
+    if (aoeTokenList.length === 0 && wasAreaCast) {
+      const picked = Array.from(game.user?.targets ?? []).filter(t => t?.actor && t.actor.id !== actor.id);
+      if (picked.length > 1) aoeTokenList = picked;
     }
-    const useAoE = aoeActors.length > 0;
+    { const seen = new Set(); aoeTokenList = aoeTokenList.filter(t => seen.has(t.actor.id) ? false : (seen.add(t.actor.id), true)); }
+
     const dr = ftNormalizeDamageRoll(item.system ?? {});
     // Resonance Channel: extra damage dice stack onto the rolled total.
     if (rs.damageDie > 0) dr.number = Math.max(0, dr.number + rs.damageDie);
+
+    // Disposition filter + target picker (2026-05-29 playtest). For an area cast,
+    // let the caster choose exactly who in the blast is affected — pre-checked by
+    // a smart default (harmful → foes, beneficial → allies). The world setting
+    // gates the dialog; off = silently apply the smart disposition default. So
+    // allies are never caught in your own area effect by accident.
+    let aoeActors = aoeTokenList.map(t => t.actor);
+    if (wasAreaCast && aoeActors.length >= 1) {
+      const beneficial = _ftIsBeneficialManifestation(mf, item, dr);
+      if (game.settings.get("fourththing", "ftAoeTargetPicker")) {
+        aoeActors = await _ftPickAoeTargets(actor, aoeTokenList, { beneficial, label });
+      } else {
+        aoeActors = _ftFilterByDisposition(actor, aoeTokenList, beneficial ? "allies" : "foes").map(t => t.actor);
+      }
+    }
+    const useAoE = aoeActors.length > 0;
     // Effective DC the TARGET faces on saves — base difficulty + resonance
     // resolveDc bonus. Caster's cast roll is unaffected (already happened).
     const targetSaveCastDc = difficulty + rs.resolveDc;
@@ -6900,6 +7001,7 @@ async function castManifestation(actor, item, {
     // that the target's owner clicks to roll; the click handler resolves
     // damage + states. AoE always GM-side (multi-target prompts are noisy).
     const usePromptSave = !useAoE
+      && !wasAreaCast
       && effShape === "save"
       && resolution?.saveByPrompt === true
       && !!target;
@@ -7084,8 +7186,10 @@ async function castManifestation(actor, item, {
           });
         }
       }
-    } else {
-      // Singular path — picked target only, current chat-card-Apply UX.
+    } else if (!wasAreaCast) {
+      // Singular path — picked target only, current chat-card-Apply UX. Skipped
+      // for area casts: if the template/picker resolved to nobody, the area cast
+      // simply affects nobody rather than defaulting to the single targeted token.
       if (dr.op !== "none" && dr.number > 0 && damageMultiplier > 0) {
         await ftRollManifestationDamage(actor, item, dr, { multiplier: damageMultiplier });
       }
@@ -11935,6 +12039,17 @@ Hooks.once("init", function () {
   game.settings.register("fourththing", "autoApplyEffects", {
     name: "Auto-apply manifestation effects",
     hint: "Conditions / active effects apply automatically to the target on a hit or failed save (GM-resolved). Damage still uses the Apply button. Turn off to require a manual Apply click for everything.",
+    scope: "world", config: true, type: Boolean, default: true
+  });
+
+  // AoE target picker (playtest 2026-05-29). After an area manifestation drops
+  // its template, show a picker of everyone caught inside — pre-checked by a
+  // smart default (harmful → foes, beneficial → allies) — so the caster chooses
+  // exactly who is affected. Off = silently apply the smart disposition default
+  // (no dialog), so allies still aren't blasted by your own area effects.
+  game.settings.register("fourththing", "ftAoeTargetPicker", {
+    name: "Area manifestation target picker",
+    hint: "After placing an area template, pop a picker to choose who inside it is affected (with Foe/Ally/Neutral filters). Off = auto-apply the smart default (foes for harmful, allies for beneficial) without a dialog.",
     scope: "world", config: true, type: Boolean, default: true
   });
 
