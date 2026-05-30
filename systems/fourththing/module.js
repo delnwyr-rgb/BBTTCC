@@ -17208,6 +17208,9 @@ Hooks.once("init", function () {
         ui.notifications?.warn(`${item.name} has no consume effects defined.`);
         return;
       }
+      // Fire Automated Animations on consume (guarded: no-ops if the item has no
+      // flags.autoanimations and no autorec match). Mirrors the weapon-Strike hook.
+      ftPlayAutoAnimation(this.actor, item, { hit: true });
       return runConsumeEffects(this.actor, item, consume);
     }
 
@@ -17828,6 +17831,9 @@ Hooks.once("init", function () {
       const item   = itemId ? this.actor.items.get(itemId) : null;
       console.log("[ftUseFeature] itemId=", itemId, "item=", item?.name, "identifier=", item?.system?.identifier);
       if (!item) { console.warn("[ftUseFeature] no item found for", itemId); return; }
+      // Fire Automated Animations on feature/feat use (guarded: no-ops without
+      // flags.autoanimations / autorec match). Mirrors the weapon-Strike hook.
+      ftPlayAutoAnimation(this.actor, item, { hit: true });
       try {
         const handled = await dispatchFeatureAction(this.actor, item);
         console.log("[ftUseFeature] dispatchFeatureAction returned:", handled);
