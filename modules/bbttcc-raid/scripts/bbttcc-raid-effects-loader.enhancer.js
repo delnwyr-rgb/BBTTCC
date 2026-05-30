@@ -101,6 +101,7 @@
       const label = String(item.name || "").replace(/\[[^\]]*\]/g, "").trim();
       const key   = slugifyName(item.name || label);
       const tier  = f.tier ?? null;
+      const minFactionTier = f.minFactionTier ?? f.minTier ?? null;
       const rarity = f.rarity || null;
       const opCosts = normalizeCost(f.opCosts || {});   // JSON → normalized opCosts
       const text  = f.effects?.text || "";
@@ -113,6 +114,7 @@
         primaryKey,
         opCosts,
         tier,
+        minFactionTier,
         rarity,
         text
       };
@@ -127,6 +129,7 @@
         existing.primaryKey = existing.primaryKey || spec.primaryKey;
         existing.opCosts    = Object.assign({}, spec.opCosts, existing.opCosts || {});
         if (spec.tier   != null && existing.tier   == null) existing.tier   = spec.tier;
+        if (spec.minFactionTier != null && existing.minFactionTier == null) existing.minFactionTier = spec.minFactionTier;
         if (spec.rarity != null && !existing.rarity) existing.rarity = spec.rarity;
         if (spec.text   && !existing.text)         existing.text   = spec.text;
         merged++;

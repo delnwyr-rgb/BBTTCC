@@ -91,6 +91,60 @@
     },
 
     {
+      "_section": "SIEGE LAYERS — heavy fortress-grade walls purpose-built as breachable siege layers (high Plates + Threshold). The Strategic Siege engine stacks these as a besieged hex's structureActorIds; also buildable by hand from Rig Builder → Infrastructure → Fortifications.",
+      "id": "siege-curtain-wall",
+      "name": "Curtain Wall (siege layer)",
+      "category": "fortifications",
+      "tierGate": 2,
+      "description": "The outer ring — a thick course of quarried highland stone over an anchored foundation, cold-iron lacing, blessed thread woven through. No sephirotic core, so it can be ground all the way down to rubble. The first thing a siege has to chew through.",
+      "footprintGrid": { "w": 8, "h": 1 },
+      "tokenImg": "icons/svg/castle.svg",
+      "facilityMode": true,
+      "materialOf": [
+        { "key": "mountain-stone", "qty": 20 },
+        { "key": "anchorstone",    "qty": 10 },
+        { "key": "cold-iron",      "qty": 6 },
+        { "key": "blessed-thread", "qty": 4 }
+      ],
+      "specialNote": "Outer siege layer (~142 Plates, no sephirotic → can be fully Razed). Pair as transitionRule 'razed' or 'threshold'."
+    },
+
+    {
+      "id": "siege-barbican-gate",
+      "name": "Barbican Gate (siege layer)",
+      "category": "fortifications",
+      "tierGate": 2,
+      "description": "The fortified gatehouse — scribed-steel leaves on hex-iron cleats, glyph-warded against breaching charges, set into a stone surround. The chokepoint where a storm gets bloody.",
+      "footprintGrid": { "w": 4, "h": 2 },
+      "tokenImg": "icons/svg/padlock.svg",
+      "facilityMode": true,
+      "materialOf": [
+        { "key": "scribed-steel",  "qty": 16 },
+        { "key": "hex-iron-cleat", "qty": 6 },
+        { "key": "hex-glyph-plate","qty": 8 },
+        { "key": "mountain-stone", "qty": 8 }
+      ],
+      "specialNote": "Middle siege layer (~114 Plates, ward-resist vs breaching). Good as transitionRule 'threshold' (≤0.25)."
+    },
+
+    {
+      "id": "siege-inner-keep",
+      "name": "Inner Keep (siege layer)",
+      "category": "fortifications",
+      "tierGate": 3,
+      "description": "The last redoubt — a mass stone shell under dense glyph-warding and blessed courses, the garrison's final stand. Densely armoured but not load-bearing, so a determined storm can grind it all the way down.",
+      "footprintGrid": { "w": 3, "h": 3 },
+      "tokenImg": "icons/svg/holy-shield.svg",
+      "facilityMode": true,
+      "materialOf": [
+        { "key": "mountain-stone",  "qty": 16 },
+        { "key": "hex-glyph-plate", "qty": 14 },
+        { "key": "blessed-thread",  "qty": 4 }
+      ],
+      "specialNote": "Innermost siege layer (~96 Plates, ward-resist, no sephirotic → fully Razable). Final layer — breach it to win the storm."
+    },
+
+    {
       "_section": "FLIMSY INFRASTRUCTURE — breakable scenery, not fortress walls. Mostly cloth/wood/salvage (low Plates, low Threshold so almost anything chips them), no sephirotic (so they can be fully Razed), light collapse profiles (a rig drives THROUGH these). facilityMode:false — these are scatter, not Holdings-scale facilities.",
       "id": "wasteland-shack",
       "name": "Wasteland Shack",

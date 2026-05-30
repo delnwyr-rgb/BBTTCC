@@ -338,7 +338,7 @@
 
   async function _onAdvanceTurnEnd(ctx){
     const S = globalThis.__bbttccSiegeState;
-    if (!S?.list) return;
+    if (!S?.listActiveSieges) return;
 
     const active = S.listActiveSieges();
     if (!active.length) return;
@@ -371,7 +371,7 @@
     game.bbttcc.api.siege.tickAll = () => _onAdvanceTurnEnd({});
     game.bbttcc.api.siege.tickOne = async (hexUuid) => {
       const S = globalThis.__bbttccSiegeState;
-      if (!S?.list) return { ok: false, reason: "siege-state not loaded" };
+      if (!S?.listActiveSieges) return { ok: false, reason: "siege-state not loaded" };
       const all = S.listActiveSieges();
       const hit = all.find(s => s.hexUuid === hexUuid);
       if (!hit) return { ok: false, reason: `no active siege at ${hexUuid}` };
@@ -380,7 +380,7 @@
     };
     game.bbttcc.api.siege.computeDrain = async (hexUuid) => {
       const S = globalThis.__bbttccSiegeState;
-      if (!S?.list) return null;
+      if (!S?.listActiveSieges) return null;
       const hit = S.listActiveSieges().find(s => s.hexUuid === hexUuid);
       if (!hit) return null;
       const doc = await _hexDocFromUuid(hexUuid);
