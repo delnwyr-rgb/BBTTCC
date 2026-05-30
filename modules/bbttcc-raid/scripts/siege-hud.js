@@ -132,6 +132,28 @@
         </div>`
       : "";
 
+    // Pending-offer prompt — appears when a Sue for Terms / Demand Surrender is on the
+    // table (set by the counter-activities) and lets the deciding side resolve by click.
+    const pt = (s.pendingTerms && !s.pendingTerms.resolved) ? s.pendingTerms : null;
+    const offerBtns = (isGM && pt)
+      ? (pt.type === "sue"
+          ? `<div style="margin-top:.35rem;padding:4px 6px;background:rgba(40,30,10,0.6);border:1px solid #b8863a;border-radius:4px;">
+              <div style="font-size:0.68rem;color:#f0d090;margin-bottom:3px;">⚖ Defender sues for terms — attacker decides:</div>
+              <div style="display:flex;gap:5px;">
+                <button type="button" data-act="terms-accept" data-hex="${esc(entry.hexUuid)}" title="Accept the negotiated surrender (won_sack)" style="flex:1;padding:3px 6px;background:#15300f;color:#9ae6a0;border:1px solid #4a8a4a;border-radius:4px;font-size:0.72rem;cursor:pointer;font-weight:600;">✔ Accept (Sack)</button>
+                <button type="button" data-act="terms-refuse" data-hex="${esc(entry.hexUuid)}" title="Reject the offer — the siege grinds on" style="flex:1;padding:3px 6px;background:#301010;color:#e69a9a;border:1px solid #8a4a4a;border-radius:4px;font-size:0.72rem;cursor:pointer;font-weight:600;">✘ Refuse</button>
+              </div>
+            </div>`
+          : `<div style="margin-top:.35rem;padding:4px 6px;background:rgba(40,30,10,0.6);border:1px solid #b8863a;border-radius:4px;">
+              <div style="font-size:0.68rem;color:#f0d090;margin-bottom:3px;">🏳 Surrender demanded — defender responds:</div>
+              <div style="display:flex;gap:5px;">
+                <button type="button" data-act="surrender-yield" data-hex="${esc(entry.hexUuid)}" title="Yield the fortress (won_surrender; holdings preserved)" style="flex:1;padding:3px 6px;background:#15300f;color:#9ae6a0;border:1px solid #4a8a4a;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:600;">🏳 Yield</button>
+                <button type="button" data-act="surrender-parley" data-hex="${esc(entry.hexUuid)}" title="Parley — no surrender; besieger re-commits (+10 Buffer)" style="flex:1;padding:3px 6px;background:#101a2a;color:#88bbff;border:1px solid #4a6a8a;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:600;">Parley</button>
+                <button type="button" data-act="surrender-refuse" data-hex="${esc(entry.hexUuid)}" title="Defiance — refuse (−1 morale)" style="flex:1;padding:3px 6px;background:#301010;color:#e69a9a;border:1px solid #8a4a4a;border-radius:4px;font-size:0.7rem;cursor:pointer;font-weight:600;">✘ Refuse</button>
+              </div>
+            </div>`)
+      : "";
+
     const statusChip = (label, color) => `<span style="font-size:0.66rem;padding:1px 5px;border:1px solid ${color};border-radius:8px;color:${color};">${esc(label)}</span>`;
 
     return `<div data-hex="${esc(entry.hexUuid)}" style="padding:.4rem .5rem;border:1px solid #3a3322;border-radius:5px;background:rgba(30,26,16,0.5);margin-bottom:.4rem;">
@@ -155,6 +177,7 @@
       <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:4px;">${_layersStrip(s)}</div>
       ${_champStrip(s)}
       ${_beatsFooter(s)}
+      ${offerBtns}
       ${gmBtns}
     </div>`;
   }
@@ -258,6 +281,27 @@
         else ui.notifications?.warn?.("Trojan Horse not available (siege-trojan-horse.js not loaded?).");
       });
     });
+    // Pending-offer resolution (Sue for Terms / Demand Surrender) — resolve by click.
+    const _resolveOffer = (act, hex) => {
+      const api = game.bbttcc?.api?.siege;
+      switch (act) {
+        case "terms-accept":     return api?.resolveTerms?.(hex, { accept: true });
+        case "terms-refuse":     return api?.resolveTerms?.(hex, { accept: false });
+        case "surrender-yield":  return api?.resolveSurrender?.(hex, { response: "yield" });
+        case "surrender-parley": return api?.resolveSurrender?.(hex, { response: "parley" });
+        case "surrender-refuse": return api?.resolveSurrender?.(hex, { response: "refuse" });
+        default: return undefined;
+      }
+    };
+    el.querySelectorAll('button[data-act^="terms-"], button[data-act^="surrender-"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const hex = btn.dataset.hex; const act = btn.dataset.act;
+        const p = _resolveOffer(act, hex);
+        if (p && typeof p.catch === "function") p.catch(e => { console.error(TAG, `${act} failed`, e); ui.notifications?.error?.(`${act} failed — see console.`); });
+        else if (p === undefined) ui.notifications?.warn?.("Offer resolver not available (siege-counter-activities.js not loaded?).");
+      });
+    });
   }
 
   function _teardown() {
@@ -304,6 +348,8 @@
   Hooks.on("bbttcc:siege:championDeath", _scheduleRender);
   Hooks.on("bbttcc:siege:cascade", _scheduleRender);
   Hooks.on("bbttcc:siege:event", _scheduleRender);
+  Hooks.on("bbttcc:siege:termsOffered", _scheduleRender);
+  Hooks.on("bbttcc:siege:surrenderDemanded", _scheduleRender);
   Hooks.on("bbttcc:siege:reliefCalled", _scheduleRender);
   Hooks.on("bbttcc:siege:reliefArrives", _scheduleRender);
   Hooks.on("bbttcc:siege:reliefConvene", _scheduleRender);

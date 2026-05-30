@@ -371,8 +371,18 @@
       return;
     }
 
-    const actEntry = await _findActivityByKey(selectedKey);
-    if (!_activityHasFlag(actEntry, "siegeRequiresTarget")) {
+    // Detect siege activities robustly from the in-memory EFFECTS registry first
+    // (siegeRequiresTarget is set on EFFECTS.begin_siege / establish_siege_camp at
+    // registration). Fall back to the JSON catalog fetch only if EFFECTS is bare —
+    // the fetch can silently 404 depending on module.url, which previously left the
+    // siege config panel (size dial + depot picker) from ever rendering.
+    const eff = game.bbttcc?.api?.raid?.EFFECTS?.[String(selectedKey).toLowerCase()];
+    let isSiege = !!eff?.siegeRequiresTarget;
+    if (!isSiege) {
+      const actEntry = await _findActivityByKey(selectedKey);
+      isSiege = _activityHasFlag(actEntry, "siegeRequiresTarget");
+    }
+    if (!isSiege) {
       // Not a siege activity — strip any prior panel
       const prior = root.querySelector('[data-siege-config-panel]');
       if (prior) prior.remove();
