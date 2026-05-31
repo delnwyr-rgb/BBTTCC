@@ -219,6 +219,27 @@
       ui.notifications?.info?.("Current layer has no bound scene (set one in the planner layer editor). Opening raid console only.");
     }
 
+    // 1.5 Auto-stage: ensure the current layer's wall has a token on the viewed scene,
+    //     so the breach can actually be fought (strikes / Catastrophic Entry hit the
+    //     Structure actor → Plates → razed → layer advances). Works whether or not the
+    //     layer has a bound scene (we deploy onto whatever scene is now active).
+    try {
+      const wall = layer ? game.actors.get(layer.structureActorId) : null;
+      const scene = canvas?.scene;
+      if (wall && scene && !scene.tokens.some(t => t.actorId === wall.id)) {
+        let tx = (scene.width || 2000) / 2, ty = (scene.height || 2000) / 2;
+        try {
+          const ref = await fromUuid(hexUuid);
+          const hx = ref?.x ?? ref?.document?.x, hy = ref?.y ?? ref?.document?.y;
+          if (Number.isFinite(hx) && Number.isFinite(hy)) { tx = hx; ty = hy; }
+        } catch (_e) {}
+        const td = await wall.getTokenDocument({ x: Math.round(tx), y: Math.round(ty), disposition: -1, actorLink: true, displayName: 30 });
+        await scene.createEmbeddedDocuments("Token", [td.toObject()]);
+        const pl = game.bbttcc?.api?.structures?.readState?.(wall)?.plates;
+        ui.notifications?.info?.(`Breach staged: ${wall.name} deployed (Plates ${pl ? `${pl.current}/${pl.max}` : "?"}). Attack it — or use Catastrophic Entry — to breach.`);
+      }
+    } catch (e) { console.warn(TAG, "auto-stage wall token failed", e); }
+
     // 2. Open the raid console with siege context.
     try {
       await game.bbttcc?.api?.raid?.openConsole?.({ factionId: state.attackerFactionId, siegeId: state.siegeId, layerIdx: idx });

@@ -56,7 +56,7 @@
   for (const b of besiegers) await setRel(b, evil, "at_war");
 
   // 3 ── Doctrine grant (safe — only where the gate is already active) ─────────
-  const ATTACKER_KEYS = ["begin_siege","establish_siege_camp","interdict_supply_line","escort_supply_line","counter_interdict","demand_surrender","champion_withdraws","champion_returns"];
+  const ATTACKER_KEYS = ["begin_siege","establish_siege_camp","bombard","storm_final_assault","interdict_supply_line","escort_supply_line","counter_interdict","demand_surrender","champion_withdraws","champion_returns"];
   const DEFENDER_KEYS = ["sortie","reinforce_garrison","call_relief","sue_for_terms","champion_defends_wall","pray_for_omen","champion_returns","interdict_supply_line"];
   const dApi = game.bbttcc?.api?.factions?.doctrine;
   let grantedTotal = 0;
