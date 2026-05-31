@@ -258,11 +258,46 @@
     return { ok: true, response };
   }
 
+  // ── Bombard (attacker) — STRATEGIC wall damage ──
+  // Fills the seam between the strategic layer (planner/turns) and the tactical
+  // breach: each Bombard chips the CURRENT layer's Structure Plates. Damage routes
+  // through the fourththing wedge → applyStructureDamage → bbttcc:structure:stateChanged,
+  // so siege-layer-transition advances/breaches the layer automatically when it razes.
+  async function bombard({ factionId, targetUuid, S }){
+    const actor = game.actors.get(factionId);
+    const st = await S.getSiegeState(targetUuid);
+    if (!st || st.status !== "active") return { ok: false, reason: "no active siege on this hex" };
+    const idx = st.currentLayerIdx ?? 0;
+    const layer = (st.layers || [])[idx] || null;
+    const wall = layer ? game.actors.get(layer.structureActorId) : null;
+    if (!wall) return { ok: false, reason: "current layer has no Structure actor to bombard" };
+
+    let dmg = 25;
+    try { const roll = new Roll("2d10+15"); await roll.evaluate(); dmg = Math.max(1, Math.floor(Number(roll.total) || 0)); } catch (_e) {}
+
+    // Record the beat first (persisted) so the breach transition fired by the damage sees it.
+    await _withSiege(S, targetUuid, (state) => {
+      S.appendNarrativeBeat(state, { turn: _turn(), kind: "bombard", title: "Bombardment",
+        description: `${actor?.name || "The besiegers"} bombard ${wall.name} for ${dmg} structure damage.`,
+        payload: { layerIdx: idx, dmg } });
+    });
+
+    const apply = game.fourththing?.rolls?._applyDamageToActor;
+    if (typeof apply !== "function") return { ok: false, reason: "structure damage path unavailable (fourththing not loaded)" };
+    await apply(wall, dmg, { op: "damage", track: "integrity", damageType: "concussive", damageFlavor: "bombardment" });
+
+    const after = game.bbttcc?.api?.structures?.readState?.(wall);
+    const plates = after?.plates ? `${after.plates.current}/${after.plates.max}` : "?";
+    await _pushWarLog(actor, `Bombard: ${dmg} structure damage to ${wall.name} (Plates ${plates}, ${after?.state || "?"}).`, { activityKey: "bombard", hexUuid: targetUuid });
+    return { ok: true, summary: `Bombarded ${wall.name} for ${dmg} (Plates ${plates}).` };
+  }
+
   // ============================================================
   // Registration
   // ============================================================
 
   const HANDLERS = {
+    bombard:               { fn: bombard,               label: "Bombard",             cost: { violence: 20, logistics: 20 },              band: "standard", siege: true, siegeSide: "attacker" },
     reinforce_garrison:    { fn: reinforce_garrison,    label: "Reinforce Garrison",  cost: { violence: 15, logistics: 10 },              band: "standard" },
     call_relief:           { fn: call_relief,           label: "Call Relief",          cost: { diplomacy: 20, softPower: 20 },             band: "rare" },
     sue_for_terms:         { fn: sue_for_terms,         label: "Sue for Terms",        cost: { diplomacy: 20, softPower: 15 },             band: "rare" },
@@ -289,6 +324,7 @@
       ST[key] = async (ctx) => shared({ factionId: ctx.factionId || ctx.attackerId, targetUuid: ctx.targetUuid, note: ctx.notes || ctx.note || "" });
       EFFECTS[key] = Object.assign({}, EFFECTS[key], {
         kind: "strategic", band: def.band, label: def.label, cost: def.cost, siegeCounterActivity: true,
+        ...(def.siege ? { siege: true, siegeSide: def.siegeSide || "attacker" } : {}),
         async apply({ entry }){
           const r = await shared({ factionId: entry?.attackerId || entry?.factionId, targetUuid: entry?.targetUuid, note: entry?.note || "" });
           return r.ok ? `${def.label}: ${r.summary || "done"}.` : `${def.label} failed: ${r.reason}`;
