@@ -268,6 +268,61 @@
     return { ok: true, response };
   }
 
+  // ============================================================
+  // In-the-moment ("clash tempo") invoker
+  // ============================================================
+  // Siege activities default to the STRATEGIC clock — planned, then resolved on Advance Turn.
+  // That's right for off-camera attrition (interdiction, relief, terms). But a convened clash
+  // is a TACTICAL clock — one pitched battle, fired in the moment. Maneuvers tagged
+  // `tempo:"clash"` get a second entry point: fireManeuver runs the SAME handler NOW.
+  //
+  // Cost model A (owner's call 2026-06-01): pay the maneuver's OP cost out of the siege Buffer
+  // immediately (the Buffer IS the besieger's committed OP pool; mirrors storm_final_assault's
+  // own shaveBuffer). Attacker-side only for v1 — the Buffer is the attacker's; defender clash
+  // actions would need a defender-OP path. Bombard is the clean case (no internal self-charge);
+  // storm_final_assault stays strategic because it ALSO shaves the Buffer inside its handler
+  // (firing it here would double-bill) and its effect (next breach-scene budget ×2) is strategic.
+  async function fireManeuver(key, { hexUuid, note } = {}) {
+    if (!game.user?.isGM) return { ok: false, reason: "GM only" };
+    const def = HANDLERS[key];
+    if (!def) return { ok: false, reason: `unknown maneuver "${key}"` };
+    if (def.tempo !== "clash") return { ok: false, reason: `"${def.label}" is a strategic activity — plan it and Advance Turn` };
+
+    const S = globalThis.__bbttccSiegeState;
+    if (!S) return { ok: false, reason: "siege-state internals unavailable" };
+
+    // Resolve the besieged hex (works on the hexless tableau via the bound scene → sole siege).
+    let uuid = hexUuid || null;
+    if (!uuid) { try { uuid = game.bbttcc?.api?.siege?.resolveActiveHexUuid?.() || null; } catch (_e) {} }
+    if (!uuid) { const list = S.listActiveSieges?.() || []; if (list.length === 1) uuid = list[0].hexUuid; }
+    if (!uuid) return { ok: false, reason: "no active siege resolved (pass { hexUuid })" };
+
+    const st = await S.getSiegeState(uuid);
+    if (!st || st.status !== "active") return { ok: false, reason: "no active siege on that hex" };
+    const factionId = st.attackerFactionId;
+
+    // Cost model A — deduct the maneuver's OP cost from the Buffer right now.
+    const costTotal = Object.values(def.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+    if (costTotal > 0) {
+      const have = S.bufferTotal(st.buffer);
+      if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal} OP, have ${have})` };
+      const dup = foundry.utils.duplicate(st);
+      S.shaveBuffer(dup.buffer, costTotal);
+      S.appendNarrativeBeat(dup, { turn: _turn(), kind: "clash_maneuver", title: `${def.label} — in the moment`, description: `Fired during the clash (tactical tempo). Buffer −${costTotal} OP.` });
+      await S.setSiegeState(uuid, dup);
+    }
+
+    // Run the SAME handler that the strategic clock uses — it does the real work + its own beat/VFX.
+    let r;
+    try { r = await def.fn({ factionId, targetUuid: uuid, note: note || "", S }); }
+    catch (err) { console.error(TAG, `fireManeuver ${key} failed`, err); return { ok: false, reason: err.message }; }
+
+    try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
+    if (r?.ok !== false) ui.notifications?.info?.(`${def.label} (in the moment)${costTotal ? ` — Buffer −${costTotal}` : ""}: ${r?.summary || "done"}.`);
+    else ui.notifications?.warn?.(`${def.label}: ${r?.reason || "failed"}.`);
+    return Object.assign({ ok: r?.ok !== false, key, cost: costTotal }, r || {});
+  }
+
   // ── Bombard (attacker) — STRATEGIC wall damage ──
   // Fills the seam between the strategic layer (planner/turns) and the tactical
   // breach: each Bombard chips the CURRENT layer's Structure Plates. Damage routes
@@ -323,7 +378,7 @@
   // intra-section ordering (signature/opener activities first); the planner falls back to
   // band + alpha when it's absent. See RAID_ABILITY_SURVEY.md §4 / §8 step 2.
   const HANDLERS = {
-    bombard:               { fn: bombard,               label: "Bombard",             cost: { violence: 20, logistics: 20 },              band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 1 },
+    bombard:               { fn: bombard,               label: "Bombard",             cost: { violence: 20, logistics: 20 },              band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 1, tempo: "clash", icon: "⛰" },
     storm_final_assault:   { fn: storm_final_assault,   label: "Storm Final Assault",  cost: { violence: 40, logistics: 20 },              band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 2 },
     demand_surrender:      { fn: demand_surrender,      label: "Demand Surrender",     cost: { diplomacy: 20, violence: 10, softPower: 10 }, band: "rare",   siege: true, siegeSide: "attacker", siegeOrder: 3 },
     champion_returns:      { fn: champion_returns,      label: "Champion Returns",     cost: { diplomacy: 20, softPower: 10 },             band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 4 },
@@ -362,7 +417,16 @@
     game.bbttcc.api.siege.resolveTerms = resolveTerms;
     game.bbttcc.api.siege.resolveSurrender = resolveSurrender;
 
-    console.log(TAG, `registered ${Object.keys(HANDLERS).length} counter-activities (STRATEGIC_THROUGHPUT + EFFECTS) + resolveTerms/resolveSurrender.`);
+    // In-the-moment clash invoker + a descriptor of the clash-tempo maneuvers (for the HUD).
+    game.bbttcc.api.siege.fireManeuver = fireManeuver;
+    game.bbttcc.api.siege.clashManeuvers = Object.entries(HANDLERS)
+      .filter(([, d]) => d.tempo === "clash")
+      .map(([key, d]) => ({
+        key, label: d.label, side: d.siegeSide || "attacker", icon: d.icon || "⚔",
+        cost: d.cost || {}, costTotal: Object.values(d.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0)
+      }));
+
+    console.log(TAG, `registered ${Object.keys(HANDLERS).length} counter-activities + resolveTerms/resolveSurrender + fireManeuver (${game.bbttcc.api.siege.clashManeuvers.length} clash-tempo).`);
   }));
 
   console.log(TAG, "loaded (awaiting raid API)");

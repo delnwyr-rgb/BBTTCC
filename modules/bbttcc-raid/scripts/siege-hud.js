@@ -138,6 +138,20 @@
           ${musRead}
         </div>`
       : "";
+    // Clash maneuvers (tactical tempo) — fire a siege maneuver IN THE MOMENT during a battle
+    // instead of queuing it for Advance Turn. Cost model A: paid from the Buffer immediately,
+    // so each is buffer-gated (dimmed when the siege can't afford it). Descriptor + invoker
+    // come from siege-counter-activities (game.bbttcc.api.siege.clashManeuvers / fireManeuver).
+    const clashMans = isGM ? (game.bbttcc?.api?.siege?.clashManeuvers || []) : [];
+    const clashBtns = (isGM && clashMans.length)
+      ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
+          <span style="font-size:0.6rem;color:#c9a;letter-spacing:.05em;text-transform:uppercase;width:100%;opacity:.75;">Clash maneuvers · fire now</span>
+          ${clashMans.map(m => {
+            const afford = total >= (m.costTotal || 0);
+            return `<button type="button" data-act="maneuver" data-key="${esc(m.key)}" data-hex="${esc(entry.hexUuid)}" title="${afford ? `Fire ${esc(m.label)} now — Buffer −${m.costTotal} OP` : `Need ${m.costTotal} OP (Buffer has ${total})`}" style="flex:1;padding:3px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${afford ? "1" : "0.55"};">${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${m.costTotal}</span></button>`;
+          }).join("")}
+        </div>`
+      : "";
     const gmBtns = isGM
       ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;">
           <button type="button" data-act="convene" data-hex="${esc(entry.hexUuid)}" style="flex:2;padding:3px 6px;background:#2a2310;color:${BRONZE};border:1px solid ${BRONZE};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⚔ Convene</button>
@@ -194,6 +208,7 @@
       ${_beatsFooter(s)}
       ${offerBtns}
       ${gmBtns}
+      ${clashBtns}
       ${musterBtns}
     </div>`;
   }
@@ -400,6 +415,17 @@
         if (typeof fn !== "function") return ui.notifications?.warn?.("Resolve the Clash not available (siege-muster.js not loaded?).");
         fn({ hexUuid: hex }).then(r => { if (r && r.ok === false) ui.notifications?.warn?.(r.error || "Clash could not resolve."); })
           .catch(e => { console.error(TAG, "resolveClash failed", e); ui.notifications?.error?.("Resolve the Clash failed — see console."); });
+      });
+    });
+    // Clash maneuvers — fire a siege maneuver in the moment (tactical tempo).
+    el.querySelectorAll('button[data-act="maneuver"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const hex = btn.dataset.hex, key = btn.dataset.key;
+        const fn = game.bbttcc?.api?.siege?.fireManeuver;
+        if (typeof fn !== "function") return ui.notifications?.warn?.("Clash maneuvers not available (siege-counter-activities.js not loaded?).");
+        fn(key, { hexUuid: hex }).then(r => { if (r && r.ok === false) ui.notifications?.warn?.(r.reason || "Maneuver could not fire."); })
+          .catch(e => { console.error(TAG, "fireManeuver failed", e); ui.notifications?.error?.("Maneuver failed — see console."); });
       });
     });
     // Pending-offer resolution (Sue for Terms / Demand Surrender) — resolve by click.
