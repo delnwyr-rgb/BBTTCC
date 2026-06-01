@@ -157,6 +157,7 @@
       ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
           <button type="button" data-act="formup" data-hex="${esc(entry.hexUuid)}" title="Form Up — deploy both hosts as unit tokens (forced-perspective)" style="flex:1;padding:3px 6px;background:#102818;color:#8fd6a0;border:1px solid #3f8a55;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⛺ Form Up</button>
           <button type="button" data-act="clash" data-hex="${esc(entry.hexUuid)}" title="${formedUp ? "Resolve the Clash — simulate the engagement, deplete the muster" : "Form Up both sides first"}" style="flex:1;padding:3px 6px;background:#2a1410;color:${formedUp ? "#ff9a7a" : "#7a5a4a"};border:1px solid ${formedUp ? "#b85a3a" : "#5a3a2a"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${formedUp ? "1" : "0.6"};">⚔ Resolve</button>
+          <button type="button" data-act="recall" data-hex="${esc(entry.hexUuid)}" title="Recall the muster — remove all deployed contingents (both sides, incl. boarded garrison) from the scene" style="flex:0 0 auto;padding:3px 7px;background:#1a1a22;color:#bbb;border:1px solid #555;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">↩</button>
           ${musRead}
         </div>`
       : "";
@@ -437,6 +438,17 @@
         if (typeof fn !== "function") return ui.notifications?.warn?.("Resolve the Clash not available (siege-muster.js not loaded?).");
         fn({ hexUuid: hex }).then(r => { if (r && r.ok === false) ui.notifications?.warn?.(r.error || "Clash could not resolve."); })
           .catch(e => { console.error(TAG, "resolveClash failed", e); ui.notifications?.error?.("Resolve the Clash failed — see console."); });
+      });
+    });
+    // Recall the muster — clear both sides (incl. hidden boarded garrison) off the scene.
+    el.querySelectorAll('button[data-act="recall"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const hex = btn.dataset.hex;
+        const fn = game.bbttcc?.api?.siege?.recallMuster;
+        if (typeof fn !== "function") return ui.notifications?.warn?.("Recall not available (siege-muster.js not loaded?).");
+        fn({ hexUuid: hex }).then(r => { if (r && r.ok === false) ui.notifications?.warn?.(r.error || "Recall failed."); })
+          .catch(e => { console.error(TAG, "recallMuster failed", e); ui.notifications?.error?.("Recall failed — see console."); });
       });
     });
     // Clash maneuvers — fire a siege maneuver in the moment (tactical tempo).
