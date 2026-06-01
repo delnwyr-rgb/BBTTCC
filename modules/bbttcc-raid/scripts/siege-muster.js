@@ -311,7 +311,7 @@
     try {
       await ChatMessage.create({
         content: `<div class="bbttcc-siege-clash" style="border:1px solid ${color};border-radius:6px;padding:.5rem .7rem;">
-          <h3 style="margin:0 0 .3rem;color:${color};">⚔ ${foundry.utils.escapeHTML(_clashTitle(outcome))} — ${foundry.utils.escapeHTML(hexName || "the wall")}</h3>
+          <h3 style="margin:0 0 .3rem;color:${color};">⚔ ${foundry.utils.escapeHTML(_clashTitle(outcome))} — ${foundry.utils.escapeHTML(hexName || "the fortress")}</h3>
           <div style="font-size:0.82em;color:#ccc;">The lines met ${breached ? "at the breach" : "before the wall"} over ${rounds} round${rounds === 1 ? "" : "s"}.</div>
           <table style="width:100%;margin-top:.35rem;font-size:0.8em;color:#ddd;border-collapse:collapse;">
             <tr style="color:#999;"><th style="text-align:left;"></th><th style="text-align:right;">Fell</th><th style="text-align:right;">Left</th><th style="text-align:right;">Lost</th></tr>
@@ -430,8 +430,11 @@
     _relay("bbttcc:siege:projectile", { structureActorId: wallId, family: breached ? "fire" : "boulder", count: volley, direction: "incoming", shake: true });
     if (D > 0) _relay("bbttcc:siege:projectile", { structureActorId: wallId, family: "arrows", count: Math.max(2, Math.round(volley * 0.7)), direction: "outgoing", shake: false });
 
+    // Hex name for the card. On the hexless tableau, fromUuid returns the territory drawing —
+    // its display name lives in flags.bbttcc-territory.name (a bare Drawing has no .name), so
+    // read that first (matches listActiveSieges) before any .name fallback.
     let hexName = null;
-    try { const ref = await fromUuid(hexUuid); hexName = ref?.name || ref?.document?.flags?.[MOD_T]?.name || null; } catch (_e) {}
+    try { const ref = await fromUuid(hexUuid); hexName = ref?.flags?.[MOD_T]?.name || ref?.name || null; } catch (_e) {}
     await _clashCard({ hexName, outcome, breached, atkLost, defLost, A, D, A0, D0, rounds: roundLog.length });
     try { _siege()?.refreshHud?.(); } catch (_e) {}
 
