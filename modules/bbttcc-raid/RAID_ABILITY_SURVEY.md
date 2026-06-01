@@ -1,8 +1,35 @@
 # RAID ABILITY SURVEY — toward a unified Raid/Siege ability architecture
 
-**Status:** DRAFT v0.1 — 2026-05-31. A living survey/design doc. Grounded in a full
+**Status:** DRAFT v0.2 — 2026-05-31. A living survey/design doc + sprint spec. Grounded in a full
 inventory of the 80-maneuver catalog + the granting/casualty/VFX subsystems (see §1).
-Many classification calls below are PROPOSALS for the owner to ratify/refine.
+
+---
+
+## ⭐ RATIFIED DECISIONS (owner, 2026-05-31)
+1. **Granting bodies = CREW TYPES + OCCULT ASSOCIATIONS only.** Drop Archetypes from the grant
+   model entirely. Mapping is **MANY-TO-MANY** (a maneuver can be granted by several crews/occult;
+   a crew/occult grants several maneuvers).
+2. **The Muster** (off-camera troop scalar, §5) is **required for Sieges, OPTIONAL for the 3 scene
+   raids** — available as a flavor/scale layer there but never a gate.
+3. **Psy-ops / info-war = its OWN strategic track**, running in **parallel** to everything. A "psy-ops
+   campaign" that ticks on its own but **directly affects all 3 scene types AND siege** (morale,
+   suspicion, alarm, supply-confidence buffs/debuffs that the other tracks read).
+4. **First VFX wire-up = Bombard → `bbttcc:siege:bombardment`** onto the existing JB2A/Sequencer
+   boulder layer (§6 / `[[project_siege_boulder_bombardment_handoff_2026_05_31]]`).
+
+**Source-of-truth correction:** the live crew/occult lists are the **compendium packs**
+`bbttcc-character-options.{crew-types, occult-associations}` (`.db`), NOT the stale
+`refined-options.js` (which has only the old 6+6 + archetypes). Current set (owner screenshot):
+- **Crews (12):** Abyssal Cartographer · Ashbound Survivors · Covert Ops Cell · Cultural Ambassadors
+  · Diplomatic Envoys · Gridbreaker · Ironbound Ascendants · Mercenary Band · Peacekeeper Corps ·
+  Storm Wardens · Survivors/Militia · Verdant Stalkers.
+- **Occult (10):** Alchemist · Biomancer · Exorcist/Purifier · Gnostic · Goetic Summoner · Kabbalist
+  · Prophet/Oracle · Rosicrucian · Shaman · Tarot Mage.
+Each is a compendium folder/item; the sprint must read what abilities each contains and build the
+many-to-many crew/occult ↔ maneuver grant map against THESE, not refined-options.js.
+
+**➡ This is a SEPARATE SPRINT** (see §8). This doc is its spec/handoff; the survey + Bombard +
+test-bed work that produced it is complete. Pick up cold from §8 step order.
 
 ---
 
@@ -125,11 +152,14 @@ attrition/supply. They don't belong in a hero-token scene; they belong as **stra
 on the siege turn. `Bombard` (shipped 2026-05-30) is the proof of concept: a "Sap the Walls"-class
 maneuver re-expressed as a per-turn strategic activity that chips Plates. Do the same for the rest.
 
-**Finding B — Psy-ops/info spans two timescales and was never sorted.** ~25 abilities. Some are
-genuinely tactical (reduce *this scene's* alarm; win *this* exchange). Others are campaign-scale
-(propaganda that shifts a faction's morale over turns; supply/info interdiction). Split them: the
-in-scene ones stay maneuvers; the campaign ones become **strategic activities** (and many already
-have siege analogues — Interdict Supply Line, etc.).
+**Finding B — Psy-ops/info is its OWN parallel campaign track (RATIFIED).** ~25 abilities. The
+in-scene ones (reduce *this* alarm, win *this* exchange) stay maneuvers. The campaign ones become a
+standalone **Psy-Ops Campaign track** that runs in parallel to scene-raids AND sieges and *feeds
+them*: a running campaign produces buffs/debuffs the other tracks READ — morale, suspicion, alarm-
+baseline, supply-confidence. (Mechanically akin to the siege Event Deck's morale levers, but
+player-driven and persistent.) Think: a propaganda offensive softening a city for weeks before the
+assault, or info-disruption that raises every infiltration's starting alarm. Its own planner track;
+its outputs are flags other tracks consume.
 
 **Finding C — Crews don't grant what they thematically own.** The data is *already there*
 (`REFINED_OPTIONS` maps each crew/occult/archetype → maneuvers), but the grant is character-level.
@@ -171,7 +201,9 @@ Each gets `siege:true, siegeSide` tags (groundwork already threaded) so they slo
 
 ## §5 — The off-camera troops fiction + casualties
 
-**Proposal — the MUSTER (a troop-count scalar per side per siege):**
+**Proposal — the MUSTER (a troop-count scalar per side).** REQUIRED for Sieges; OPTIONAL flavor/scale
+layer for the 3 scene raids (present if the GM wants depletable off-camera support behind the heroes,
+never a gate). Per side per siege:
 - `siege.attackerMuster` / `siege.defenderMuster` — a "number of soldiers" derived at declare
   from the contributing fiction: garrison holdings (rigs/bosses/facilities) + faction tier +
   active supporters' contingents. (Champions stay named/special on top of the muster.)
@@ -228,24 +260,48 @@ already-greenlit boulder/Sequencer layer."
 
 ## §7 — Draft deliverable tables (TO RATIFY — owner's calls)
 
-### 7a. Scene maneuver → granting crew/association → raid type(s)
-*(Seeded from `REFINED_OPTIONS` l1/l2; "any" = applies to all 3 scene types. Multiple groups MAY
-grant the same power. This table is the survey's core worksheet — fill/adjust per group.)*
+### 7a. Maneuver ↔ Crew/Occult grant map (MANY-TO-MANY worksheet)
+Source of truth = the **compendium** crew/occult items (NOT refined-options). The sprint reads each
+crew/occult folder's abilities, then maps every scene maneuver to **one or more** granting bodies
+(shared grants allowed), tags its domain (Violence/Infiltration/Social; "any"=all 3), and notes any
+psy-ops cross-affect. Recommended data shape: a `grants` table keyed by maneuver → `{ crews:[],
+occult:[] }`, OR per crew/occult item a `flags.bbttcc.grantsManeuvers:[]` array (so it lives on the
+compendium item the GM already edits).
 
-| Crew / Association | Grants (l1 / l2) | Domain | Applies to |
-|---|---|---|---|
-| mercenary_band (crew) | hardened_advance / contract_warfare_doctrine | Violence | Violence (+ Siege host?) |
-| peacekeeper_corps (crew) | containment_protocol / stability_enforcement | Violence/Social | Violence, Social |
-| covert_ops_cell (crew) | silent_entry / deep_cover_network | Infiltration | Infiltration |
-| cultural_ambassadors (crew) | psychological_pressure / cultural_diffusion | Social/Psy-ops | Social (+ campaign info-war?) |
-| diplomatic_envoys (crew) | formal_parley / integration_framework | Social | Social |
-| survivors_militia (crew) | make_do_and_hold / never_scattered | Violence/Universal | all 3 (+ Siege defense?) |
-| kabbalist … rosicrucian (6 occult) | per refined-options | mixed/Faith | per-power |
-| warlord … squad_leader (6 archetypes) | per refined-options | mixed | per-power |
+**Crews (12) — thematic lean (sprint to confirm against compendium contents):**
+| Crew | Likely domain(s) | Notes |
+|---|---|---|
+| Mercenary Band | Violence | hardened assault; siege host |
+| Peacekeeper Corps | Violence / Social | containment, stability |
+| Covert Ops Cell | Infiltration | silent entry, deep cover |
+| Cultural Ambassadors | Social / Psy-ops | hearts-and-minds, info-war |
+| Diplomatic Envoys | Social | parley, integration |
+| Survivors/Militia | any / Violence-def | make-do, never-scattered; siege defense |
+| Abyssal Cartographer | Infiltration / occult-adjacent | mapping the unseen (NEW — confirm) |
+| Ashbound Survivors | Violence-def / Universal | attrition/endurance (NEW) |
+| Gridbreaker | Infiltration / Psy-ops | systems/comms disruption (NEW) |
+| Ironbound Ascendants | Violence | heavy assault (NEW) |
+| Storm Wardens | Violence / Faith | shock + protective (NEW) |
+| Verdant Stalkers | Infiltration / Violence | ambush/skirmish (NEW) |
 
-*(The base-40 + sprint/balance/courtly maneuvers each need a "granted-by" assignment too — many are
-currently faction-doctrine-only with no crew home. That's the bulk of the survey work: give every
-scene maneuver a crew/association home, allowing shared grants.)*
+**Occult (10) — thematic lean:**
+| Occult | Likely domain(s) | Notes |
+|---|---|---|
+| Kabbalist | Faith / Social | tree-of-life, ascent |
+| Alchemist | Universal / Violence | transmutation |
+| Tarot Mage | Intrigue / Social | fate manipulation |
+| Gnostic | Faith / Infiltration | pierce-the-veil |
+| Goetic Summoner | Violence / Faith | infernal bargains, binding |
+| Rosicrucian | Infiltration / Social | veiled access, brotherhood |
+| Biomancer | Violence / Faith | flesh/healing (NEW) |
+| Exorcist/Purifier | Faith / Violence-def | cleansing, anti-darkness (NEW) |
+| Prophet/Oracle | Faith / Psy-ops | omens, morale, foresight (NEW) |
+| Shaman | Faith / Universal | spirits, terrain (NEW) |
+
+*(Every scene maneuver — the base-40 + sprint/balance/courtly — needs a "granted-by" assignment;
+most are currently faction-doctrine-only with no crew home. That assignment is the bulk of the
+sprint work. Many-to-many: e.g. `smoke_and_mirrors` could be granted by Covert Ops Cell AND
+Gridbreaker AND Cultural Ambassadors.)*
 
 ### 7b. Siege/strategic conversions — see §4.
 
@@ -266,12 +322,15 @@ scene maneuver a crew/association home, allowing shared grants.)*
 
 ---
 
-## Open questions for the owner
-- Do **scene maneuvers** want a single crew home each, or a many-to-many "any of these crews can
-  grant it" map? (The data supports many-to-many.)
-- Should the **Muster** exist only for Sieges, or also back scene raids (so a scene's "off-camera
-  support" has a depletable size too)?
-- For psy-ops: is campaign **info-war** its own strategic track, or a wing of Siege/Courtly?
-- VFX: the Sequencer/JB2A layer already exists (`fx.playSequencerEffect`) + the boulder-bombardment
-  handoff is greenlit — confirm we wire **Bombard → `bbttcc:siege:bombardment`** as the first
-  projectile beat?
+## Open questions — RESOLVED 2026-05-31 (see ⭐ Ratified Decisions)
+- Crew grants = many-to-many ✓ · Crews + Occult only (no archetypes) ✓
+- Muster = required for Siege, optional for scene raids ✓
+- Psy-ops = its own parallel campaign track that feeds all tracks ✓
+- VFX = wire Bombard → `bbttcc:siege:bombardment` first ✓
+
+## ⏭ SPRINT KICKOFF (next conversation)
+This doc is the spec. Suggested first move in the new convo: **(1) Dedicated Siege planner section**
+(houses the strategic activities; `siege`/`siegeSide` tags already threaded), then **(2) Bombard →
+boulder VFX** (the greenlit boulder handoff + the shipped Bombard activity meet here), then the
+§8 order. Defer the full maneuver↔crew grant map (7a) until the Echo-Assets grant engine step — it's
+the biggest worksheet and wants the compendium read first.
