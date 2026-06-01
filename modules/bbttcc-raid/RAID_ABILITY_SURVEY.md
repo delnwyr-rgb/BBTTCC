@@ -194,23 +194,35 @@ saga remembers.
 
 ---
 
-## §6 — Tableau VFX for siege events (vision + honest gap)
+## §6 — Tableau VFX for siege events (capability EXISTS — wire it)
 
-**What's live:** forced-perspective tableau (Y→depth scaling) + a rich DOM banner/flash/shake VFX
-layer keyed to every siege hook. So the *triggers* and the *forced-perspective stage* both exist.
+**Correction to the v0.1 VFX agent finding:** the agent only saw `siege-vfx.js` (the DOM
+banner/flash layer). There is ALSO a real **JB2A + Sequencer projectile layer** already integrated
+(`bbttcc-fx-integration`, `fx.playSequencerEffect`, rewired Sequencer-direct 2026-05-30, LIVE-
+validated). So forced-perspective bolts/fireballs/boulders are NOT a from-scratch gap — the renderer
+exists.
 
-**What's missing:** a **projectile/spatial renderer.** Siege VFX today is page-level text+flash; it
-can't fire a ballista bolt from the siege line to the wall or drop a fireball on the muster.
+**What's live:**
+- Forced-perspective **tableau** (Y→depth scaling, `tableau.canvas.js`) — the staged camera.
+- DOM **banner/flash/shake** VFX per siege hook (`siege-vfx.js`).
+- **JB2A/Sequencer** projectile/effect playback (`fx.playSequencerEffect`) — JB2A `SiegeBoulder` /
+  `rolling_boulder` / `eruption` assets confirmed present.
 
-**Proposal — `siegeVfx.projectile({from, to, kind})`:** a small canvas/Pixi (or Sequencer-style)
-layer that animates a forced-perspective bolt/fireball/boulder along a from→to vector on the active
-tableau scene, fired by the big siege beats:
-- **Bombard** → arc of boulders/bolts siege-line → wall, with a Plate-impact burst.
-- **Event deck** → Storm-at-Sea lightning, Divine Plague arrow-rain on the muster, Reinforcements
-  banner-march.
-- **Breach storm** → the existing red flash + a wall-collapse particle burst.
-The hooks already carry the event; we add the spatial payload (from/to = siege-line anchor →
-wall/muster token) + the renderer. Tie intensity to **muster size** (a big host throws more bolts).
+**Already greenlit (handoff written, not started):** **Siege boulder bombardment** —
+`[[project_siege_boulder_bombardment_handoff_2026_05_31]]`: JB2A boulders as `tableauActor` tokens
+that auto-recede/shrink down a tableau siege scene (free, via tableau Y-scaling on `refreshToken`)
+toward the `layer.structureActorId` wall token, explode on impact (`fx.playSequencerEffect` +
+`_shakeBoard`), then clean up. Fires a new `bbttcc:siege:bombardment` beat via the existing
+siegeHook socket relay (`module.raid-console.js:~6602`).
+
+**The synergy to wire:** the new **Bombard strategic activity** (`828bac4`) is the perfect trigger —
+when Bombard resolves on Advance Turn, fire `bbttcc:siege:bombardment` so the boulders arc siege-line
+→ wall in forced perspective, impact-burst, and the Plate damage lands visibly. Same pattern for the
+event deck (Storm-at-Sea lightning, Divine Plague arrow-rain on the muster) and the breach storm.
+Tie projectile **count/intensity to muster size** (§5) — a big host throws more.
+
+**Net:** §6 is not "build a renderer," it's "connect Bombard + the event deck + muster to the
+already-greenlit boulder/Sequencer layer."
 
 ---
 
@@ -260,5 +272,6 @@ scene maneuver a crew/association home, allowing shared grants.)*
 - Should the **Muster** exist only for Sieges, or also back scene raids (so a scene's "off-camera
   support" has a depletable size too)?
 - For psy-ops: is campaign **info-war** its own strategic track, or a wing of Siege/Courtly?
-- VFX: build a lightweight in-house projectile layer, or lean on an existing VFX module (Sequencer)
-  if present?
+- VFX: the Sequencer/JB2A layer already exists (`fx.playSequencerEffect`) + the boulder-bombardment
+  handoff is greenlit — confirm we wire **Bombard → `bbttcc:siege:bombardment`** as the first
+  projectile beat?
