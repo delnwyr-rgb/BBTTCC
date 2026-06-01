@@ -446,6 +446,25 @@ async function releaseCrew(actor, tokenId) {
   return { ok: true, crew: readCrew(actor) };
 }
 
+// Fortifications are built through the rig-builder, so they inherit the generic VEHICLE crew
+// model (pilot/gunner/engineer/crew) — which is nonsense on a wall ("boarded as pilot"). This
+// zeroes those vehicle slots (and clears any actor stranded in them) so the rig CREW tab stops
+// offering them. The wall's real garrison runs through the siege crew relationship above +
+// the Siege HUD, not these vehicle seats. Idempotent; no-op if the actor has no crew schema.
+async function retypeFortification(actor) {
+  if (!actor?.system?.crew) return { ok: false, reason: "no crew schema" };
+  const zero = { min: 0, max: 0 };
+  try {
+    await actor.update({
+      "system.crew.capacity": { pilot: { ...zero }, gunner: { ...zero }, engineer: { ...zero }, crew: { ...zero } },
+      "system.crew.slots": [],
+      "system.crew.crewMin": 0,
+      "system.crew.crewMax": 0
+    });
+  } catch (e) { return { ok: false, reason: e.message }; }
+  return { ok: true };
+}
+
 // ── API install ─────────────────────────────────────────────────────────────
 // Per [[bbttcc-api-exposure-pattern]] memory: install at BOTH script-load AND
 // Hooks.once("ready") to defend against load-order clobber + browser cache
@@ -470,7 +489,7 @@ function _installApi() {
       // Reading
       readState,
       // Crew (who mans the structure)
-      crew: { capacity: crewCapacity, read: readCrew, assign: assignCrew, release: releaseCrew },
+      crew: { capacity: crewCapacity, read: readCrew, assign: assignCrew, release: releaseCrew, retypeFortification },
       // Tables (live refs; immutable in practice — load once)
       get FAMILIES() { return _FAMILIES?.families ?? {}; },
       get FAMILY_MAP() { return _FAMILY_MAP?.materialKeyToFamily ?? {}; },

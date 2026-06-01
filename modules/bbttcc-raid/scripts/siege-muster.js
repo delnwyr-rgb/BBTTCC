@@ -384,12 +384,12 @@
     const weights = walls.map(w => Math.max(1, w.plateMax || 1));
     const wsum = weights.reduce((a, b) => a + b, 0) || 1;
 
-    const mkTok = async (x, y, strength, deploy, label, crewingStructureId = null) => {
+    const mkTok = async (x, y, strength, deploy, label, crewingStructureId = null, hidden = false) => {
       let proto;
       try { proto = await unitActor.getTokenDocument({ x, y }); }
       catch (e) { console.warn(TAG, "getTokenDocument failed", e); return null; }
       const data = (proto && typeof proto.toObject === "function") ? proto.toObject() : foundry.utils.deepClone(proto);
-      data.x = x; data.y = y; data.actorLink = false; data.hidden = false; data.disposition = -1; data.displayName = dispMode;
+      data.x = x; data.y = y; data.actorLink = false; data.hidden = hidden; data.disposition = -1; data.displayName = dispMode;
       data.name = `🛡 ${label} · ${strength}`;
       data.flags = data.flags || {};
       data.flags[MOD_R] = Object.assign({}, data.flags[MOD_R] || {}, {
@@ -412,7 +412,8 @@
       const per = Math.max(1, Math.round(g / K));
       const slots = _garrisonSlots(wall, K, gs);
       for (let i = 0; i < K; i++) {
-        const d = await mkTok(slots[i].x, slots[i].y, per, { garrisonLayerId: wall.layer.layerId }, "Garrison", wall.td.actorId);
+        // hidden:true → the garrison is BOARDED inside the wall (invisible) until it crumbles.
+        const d = await mkTok(slots[i].x, slots[i].y, per, { garrisonLayerId: wall.layer.layerId }, "Garrison", wall.td.actorId, true);
         if (d) tokenData.push(d);
       }
       plannedGarrison[wall.layer.layerId] = { full: g, units: K, per, structureActorId: wall.td.actorId };
@@ -453,6 +454,12 @@
         const structId = md?.garrisonLayerId ? plannedGarrison[md.garrisonLayerId]?.structureActorId : null;
         const wallActor = structId ? game.actors.get(structId) : null;
         if (wallActor) { try { await crew.assign(wallActor, { tokenId: t.id, label: t.name, strength: _num(t.flags?.[MOD_R]?.unitStrength, md.strength) }); } catch (_e) {} }
+      }
+      // Retype each manned fortification: zero the inherited vehicle crew (pilot/gunner) so the
+      // CREW tab stops offering them. The garrison runs through the siege crew relationship.
+      for (const layerId of Object.keys(plannedGarrison)) {
+        const a = game.actors.get(plannedGarrison[layerId]?.structureActorId);
+        if (a && crew.retypeFortification) { try { await crew.retypeFortification(a); } catch (_e) {} }
       }
     }
 
@@ -745,6 +752,30 @@
           await S.setState(hexUuid, st);
         }
       } catch (e) { console.warn(TAG, "garrison muster reconcile failed", e); }
+    }
+
+    // EJECT: the survivors spill out of the broken wall. Unhide the collapsed structure's
+    // garrison (they were boarded/invisible) + shove them downstage out of the breach; they
+    // keep the damage + prone the collapse already dealt. Release them from the wall's crew.
+    const structActor = payload?.actor;
+    if (structActor) {
+      const crew = _api()?.structures?.crew;
+      const structTok = (scene.tokens?.contents || []).find(t => t.actorId === structActor.id);
+      const ejecting = (scene.tokens?.contents || []).filter(t => t?.flags?.[MOD_R]?.crewingStructureId === structActor.id);
+      if (ejecting.length && structTok) {
+        const gs = _num(scene.grid?.size || scene.gridSize, 100);
+        const baseX = _num(structTok.x) + _num(structTok.width, 1) * gs / 2;
+        const baseY = _num(structTok.y) + _num(structTok.height, 1) * gs;   // bottom edge = downstage
+        const ejUpdates = ejecting.map((t, i) => ({
+          _id: t.id, hidden: false,
+          x: Math.round(baseX + (i - (ejecting.length - 1) / 2) * gs * 1.2 - gs / 2),
+          y: Math.round(baseY + gs * 0.5),
+          [`flags.${MOD_R}.crewingStructureId`]: null
+        }));
+        try { await scene.updateEmbeddedDocuments("Token", ejUpdates); } catch (e) { console.warn(TAG, "garrison eject failed", e); }
+        if (crew) { for (const t of ejecting) { try { await crew.release(structActor, t.id); } catch (_e) {} } }
+        try { await _tableau()?.applyAll?.(); } catch (_e) {}
+      }
     }
     try { _siege()?.refreshHud?.(); } catch (_e) {}
   }
