@@ -301,8 +301,11 @@
     if (!st || st.status !== "active") return { ok: false, reason: "no active siege on that hex" };
     const factionId = st.attackerFactionId;
 
-    // Cost model A — deduct the maneuver's OP cost from the Buffer right now.
-    const costTotal = Object.values(def.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+    // Cost model A — deduct the maneuver's OP cost from the Buffer right now. Clash tempo costs
+    // a FRACTION of the strategic queued form (def.clashCost): one volley ≠ a week's commitment.
+    const costTotal = Number.isFinite(def.clashCost)
+      ? def.clashCost
+      : Object.values(def.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0);
     if (costTotal > 0) {
       const have = S.bufferTotal(st.buffer);
       if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal} OP, have ${have})` };
@@ -378,7 +381,7 @@
   // intra-section ordering (signature/opener activities first); the planner falls back to
   // band + alpha when it's absent. See RAID_ABILITY_SURVEY.md §4 / §8 step 2.
   const HANDLERS = {
-    bombard:               { fn: bombard,               label: "Bombard",             cost: { violence: 20, logistics: 20 },              band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 1, tempo: "clash", icon: "⛰" },
+    bombard:               { fn: bombard,               label: "Bombard",             cost: { violence: 20, logistics: 20 }, clashCost: 15,      band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 1, tempo: "clash", icon: "⛰" },
     storm_final_assault:   { fn: storm_final_assault,   label: "Storm Final Assault",  cost: { violence: 40, logistics: 20 },              band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 2 },
     demand_surrender:      { fn: demand_surrender,      label: "Demand Surrender",     cost: { diplomacy: 20, violence: 10, softPower: 10 }, band: "rare",   siege: true, siegeSide: "attacker", siegeOrder: 3 },
     champion_returns:      { fn: champion_returns,      label: "Champion Returns",     cost: { diplomacy: 20, softPower: 10 },             band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 4 },
@@ -423,7 +426,8 @@
       .filter(([, d]) => d.tempo === "clash")
       .map(([key, d]) => ({
         key, label: d.label, side: d.siegeSide || "attacker", icon: d.icon || "⚔",
-        cost: d.cost || {}, costTotal: Object.values(d.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0)
+        cost: d.cost || {},
+        costTotal: Number.isFinite(d.clashCost) ? d.clashCost : Object.values(d.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0)
       }));
 
     console.log(TAG, `registered ${Object.keys(HANDLERS).length} counter-activities + resolveTerms/resolveSurrender + fireManeuver (${game.bbttcc.api.siege.clashManeuvers.length} clash-tempo).`);
