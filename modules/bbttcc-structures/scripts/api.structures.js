@@ -465,6 +465,23 @@ async function retypeFortification(actor) {
   return { ok: true };
 }
 
+// Full Repair — restore a structure to pristine: re-stamp from the original BOM (plates → max,
+// state → intact) + clear the collapseFired one-shot so it can collapse again. The same logic
+// behind the sheet's "Full Repair" button, exposed so reset macros / siege restore can call it.
+async function fullRepair(actor) {
+  const cur = readState(actor);
+  if (!cur) return { ok: false, reason: "not a structure" };
+  const rawBom = (cur.materialBOM || []).map(r => ({
+    materialKey: r.materialKey,
+    qty: Number(r.originalQty) > 0 ? r.originalQty : r.qty
+  }));
+  try {
+    await stampBOM(actor, rawBom, { facilityMode: cur.facilityMode, collapseProfile: cur.collapseProfile, resetCurrentPlates: true });
+    await actor.unsetFlag(FLAG_SCOPE, "collapseFired");
+  } catch (e) { return { ok: false, reason: e.message }; }
+  return { ok: true };
+}
+
 // ── API install ─────────────────────────────────────────────────────────────
 // Per [[bbttcc-api-exposure-pattern]] memory: install at BOTH script-load AND
 // Hooks.once("ready") to defend against load-order clobber + browser cache
@@ -486,6 +503,7 @@ function _installApi() {
       // Mutating
       stampBOM,
       clearStructure,
+      fullRepair,
       // Reading
       readState,
       // Crew (who mans the structure)

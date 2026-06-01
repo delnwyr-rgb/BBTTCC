@@ -511,6 +511,33 @@
     return { ok: true, total, hexUuid: uuid };
   }
 
+  // ---- Layer restore (GM dev / testbed helper) ----
+  // The siege STATE (layers/breached) and the structure ACTORS (plates/collapseFired) are two
+  // separate stores tied only by layer.structureActorId. A reset that only clears siege state
+  // leaves the wall actors damaged + collapseFired=true (so they won't collapse again). This
+  // Full-Repairs every layer's structure AND un-breaches the state, so a siege is fightable again.
+  async function restoreSiegeLayers(hexUuid){
+    if (!game.user?.isGM) return { ok: false, reason: "GM only" };
+    let uuid = hexUuid;
+    if (!uuid) { const list = listActiveSieges(); if (list.length === 1) uuid = list[0].hexUuid; }
+    if (!uuid) return { ok: false, reason: "pass a hexUuid (zero or multiple active sieges)" };
+    const state = await getSiegeState(uuid);
+    if (!state) return { ok: false, reason: "no siege state on that hex" };
+    const repair = game.bbttcc?.api?.structures?.fullRepair;
+    let repaired = 0;
+    for (const layer of (state.layers || [])) {
+      const a = layer?.structureActorId ? game.actors.get(layer.structureActorId) : null;
+      if (a && typeof repair === "function") { try { const r = await repair(a); if (r?.ok) repaired++; } catch (_e) {} }
+      layer.breached = false; layer.breachedAtTurn = null; layer.breachedBy = null;
+    }
+    state.currentLayerIdx = 0;
+    state._suggestConvene = false;
+    await setSiegeState(uuid, state);
+    try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
+    ui.notifications?.info?.(`Restored ${repaired} layer structure(s) to full + un-breached the siege.`);
+    return { ok: true, repaired };
+  }
+
   // ---- API exposure (per bbttcc-api-exposure-pattern) ----
 
   function _installSiegeAPI(){
@@ -531,6 +558,7 @@
       clearState: clearSiegeState,
       list: listActiveSieges,
       topUpBuffer: topUpSiegeBuffer,
+      restoreLayers: restoreSiegeLayers,
 
       // validation
       validateDepot,
