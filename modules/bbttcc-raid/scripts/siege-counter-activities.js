@@ -173,14 +173,24 @@
     const actor = game.actors.get(factionId);
     const turn = _turn();
     let shaved = 0;
+    let wallId = null;
     const r = await _withSiege(S, targetUuid, (state) => {
       state.stormAssault = { budgetMult: 2, turn };
       const sh = S.shaveBuffer(state.buffer, 30);
       shaved = sh.shaved;
       state._suggestConvene = true;
+      wallId = (state.layers || [])[state.currentLayerIdx ?? 0]?.structureActorId || null;
       S.appendNarrativeBeat(state, { turn, kind: "storm_assault", title: "Final assault ordered", description: `Next Breach Scene's maneuver budget is doubled. Buffer −${shaved} OP regardless of outcome.` });
     });
     if (!r.ok) return r;
+
+    // §6 VFX — the all-out throw: a heavy 6-boulder barrage on the wall (reuses the proven
+    // projectile primitive via the generic bbttcc:siege:projectile beat).
+    _relayHook("bbttcc:siege:projectile", {
+      structureActorId: wallId, family: "boulder", count: 6, scale: 2.0, stagger: 170,
+      banner: "⚔ Storm the Walls", color: "#ff5555"
+    });
+
     await _pushWarLog(actor, `Storm Final Assault: next Breach Scene budget ×2; Buffer −${shaved}.`, { activityKey: "storm_final_assault", hexUuid: targetUuid });
     return { ok: true, summary: `Final assault ordered (budget ×2; Buffer −${shaved}).` };
   }

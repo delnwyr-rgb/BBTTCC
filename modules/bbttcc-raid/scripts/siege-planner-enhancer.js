@@ -215,7 +215,9 @@
     depotSel.value = cfg.depotHexUuid || "";
 
     function _updateValidationStatus(){
+      // cfg.depotValid is the gate the Plan-button interceptor reads (synchronous).
       if (!cfg.depotHexUuid) {
+        cfg.depotValid = false;
         validationStatus.textContent = "—";
         validationStatus.style.background = "rgba(148,163,184,0.25)";
         validationStatus.style.color = "#cbd5e1";
@@ -223,10 +225,12 @@
       }
       const h = ownedHexes.find(x => x.uuid === cfg.depotHexUuid);
       if (!h || !siegeAPI?.validateDepot) {
+        cfg.depotValid = false;
         validationStatus.textContent = "?";
         return;
       }
       const v = siegeAPI.validateDepot(h.doc, attackerId);
+      cfg.depotValid = !!v.ok;
       if (v.ok) {
         validationStatus.textContent = "✓ qualified";
         validationStatus.style.background = "rgba(22,163,74,0.3)";
@@ -400,10 +404,28 @@
         };
         noteInput.value = JSON.stringify(payload);
       };
-      // EFFECTS-first detection (reliable, in-memory); fall back to the catalog fetch.
+      // GATE (Phase A.5): a siege activity may not be planned without a VALID supply depot.
+      // begin_siege would otherwise bail server-side ("no depotHexUuid") and silently create
+      // no siege. We block the click synchronously (capture phase, before the planner handler)
+      // and tell the GM to pick a depot. Only the EFFECTS-first (in-memory) path can gate
+      // synchronously; that path reliably covers begin_siege (it carries siegeRequiresTarget).
       const eff = game.bbttcc?.api?.raid?.EFFECTS?.[String(ps.selectedKey).toLowerCase()];
-      if (eff?.siegeRequiresTarget) serialize(true);
-      else _findActivityByKey(ps.selectedKey).then(a => serialize(_activityHasFlag(a, "siegeRequiresTarget"))).catch(err => console.warn(TAG, "plan-intercept error", err));
+      if (eff?.siegeRequiresTarget) {
+        const cfg = _getCfg(app);
+        if (!cfg.depotHexUuid || cfg.depotValid === false) {
+          ev.preventDefault();
+          ev.stopImmediatePropagation();
+          const why = cfg.depotHexUuid ? "the selected depot is rejected" : "no depot is selected";
+          ui.notifications?.warn?.(`Begin Siege needs a valid supply depot (${why}). Pick a ✓ depot in the Depot dropdown first.`);
+          const panel = root.querySelector('[data-siege-config-panel]');
+          if (panel) { panel.style.outline = `2px solid #f87171`; setTimeout(() => { try { panel.style.outline = ""; } catch (_) {} }, 1400); }
+          return;
+        }
+        serialize(true);
+        return;
+      }
+      // Non-EFFECTS fallback (async — can't gate, but begin_siege is always in EFFECTS).
+      _findActivityByKey(ps.selectedKey).then(a => serialize(_activityHasFlag(a, "siegeRequiresTarget"))).catch(err => console.warn(TAG, "plan-intercept error", err));
     };
 
     // Capture phase — runs before the planner's own click handler on `wrap`.

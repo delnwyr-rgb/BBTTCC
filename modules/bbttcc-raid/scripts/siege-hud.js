@@ -195,6 +195,62 @@
 
   // ─── Convene Breach Scene ─────────────────────────────────────────────────
 
+  // ── Scene ↔ besieged-hex binding ─────────────────────────────────────────────
+  // A tableau battle scene has no hexes, so any siege op that resolves "which hex/siege
+  // am I on?" from the canvas fails there. Binding the scene to its besieged hex
+  // (flags.bbttcc-raid.siegeHexUuid) lets that resolution succeed no matter what scene is
+  // active. Auto-bound on convene; also settable via game.bbttcc.api.siege.bindScene.
+  async function _bindSceneToHex(scene, hexUuid) {
+    try { if (scene && hexUuid && scene.getFlag?.(MOD_R, "siegeHexUuid") !== hexUuid) await scene.setFlag(MOD_R, "siegeHexUuid", hexUuid); }
+    catch (e) { console.warn(TAG, "bindSceneToHex failed", e); }
+  }
+  function _sceneHexUuid(scene) { try { return (scene || canvas?.scene)?.getFlag?.(MOD_R, "siegeHexUuid") || null; } catch { return null; } }
+  async function bindScene(hexUuid, sceneId) {
+    const scene = sceneId ? game.scenes?.get?.(sceneId) : canvas?.scene;
+    if (!scene) return { ok: false, error: "no scene" };
+    if (!hexUuid) return { ok: false, error: "no hexUuid" };
+    await _bindSceneToHex(scene, hexUuid);
+    ui.notifications?.info?.(`Bound "${scene.name}" to this siege.`);
+    return { ok: true, sceneId: scene.id, hexUuid };
+  }
+  // One-call "bring everything onto the depth layer": flag the staged wall(s), any deployed
+  // rigs/holdings, and the muster as tableauActor so they all forced-perspective scale + move.
+  // Retro-fixes tokens staged before this wiring (e.g. an already-convened wall).
+  async function tableauStageScene(sceneId) {
+    const scene = sceneId ? game.scenes?.get?.(sceneId) : canvas?.scene;
+    if (!scene) return { ok: false, error: "no scene" };
+    const wallIds = new Set();
+    try {
+      for (const e of (_siegeApi()?.list?.() || [])) {
+        for (const l of (e?.siege?.layers || [])) if (l?.structureActorId) wallIds.add(l.structureActorId);
+      }
+    } catch (_e) {}
+    const updates = [];
+    for (const t of (scene.tokens?.contents || [])) {
+      const f = t?.flags?.[MOD_R] || {};
+      const tf = t?.flags?.["bbttcc-territory"] || {};
+      const isSiegeTok = !!(f.musterDeployment || tf.holdingDeployment || (t.actorId && wallIds.has(t.actorId)));
+      if (isSiegeTok && f.tableauActor !== true) updates.push({ _id: t.id, [`flags.${MOD_R}.tableauActor`]: true });
+    }
+    if (updates.length) { try { await scene.updateEmbeddedDocuments("Token", updates); } catch (e) { return { ok: false, error: e.message }; } }
+    try { game.bbttcc?.api?.raid?.tableau?.applyAll?.(); } catch (_e) {}
+    ui.notifications?.info?.(`Tableau-staged ${updates.length} siege token(s) (walls / rigs / muster).`);
+    return { ok: true, staged: updates.length };
+  }
+
+  // Resolve the besieged hex for the current context: bound scene flag → the sole active
+  // siege → null. Siege commands can use this to work on a hexless battle scene.
+  function resolveActiveHexUuid(scene) {
+    const bound = _sceneHexUuid(scene); if (bound) return bound;
+    try {
+      // listActiveSieges() entries are { hexUuid, hexName, sceneId, siege } and ALREADY filtered
+      // to active — so any entry qualifies; pick when it's unambiguous (exactly one).
+      const list = _siegeApi()?.list?.() || [];
+      const arr = Array.isArray(list) ? list : [];
+      return (arr.length === 1) ? (arr[0].hexUuid || null) : null;
+    } catch (_e) { return null; }
+  }
+
   async function convene(hexUuid) {
     const api = _siegeApi();
     if (!api) return ui.notifications?.warn?.("Siege API not available.");
@@ -234,11 +290,19 @@
           if (Number.isFinite(hx) && Number.isFinite(hy)) { tx = hx; ty = hy; }
         } catch (_e) {}
         const td = await wall.getTokenDocument({ x: Math.round(tx), y: Math.round(ty), disposition: -1, actorLink: true, displayName: 30 });
-        await scene.createEmbeddedDocuments("Token", [td.toObject()]);
+        const tdObj = td.toObject();
+        // Join the forced-perspective layer so the wall depth-scales with the muster + rigs.
+        tdObj.flags = tdObj.flags || {};
+        tdObj.flags[MOD_R] = Object.assign({}, tdObj.flags[MOD_R] || {}, { tableauActor: true });
+        await scene.createEmbeddedDocuments("Token", [tdObj]);
         const pl = game.bbttcc?.api?.structures?.readState?.(wall)?.plates;
         ui.notifications?.info?.(`Breach staged: ${wall.name} deployed (Plates ${pl ? `${pl.current}/${pl.max}` : "?"}). Attack it — or use Catastrophic Entry — to breach.`);
       }
     } catch (e) { console.warn(TAG, "auto-stage wall token failed", e); }
+
+    // 1.6 Bind the now-active battle scene to this besieged hex, so siege commands resolve
+    //     the right siege even though the diorama scene has no hexes (see resolveActiveHexUuid).
+    try { await _bindSceneToHex(canvas?.scene, hexUuid); } catch (_e) {}
 
     // 2. Open the raid console with siege context.
     try {
@@ -399,6 +463,10 @@
     game.bbttcc.api.siege = game.bbttcc.api.siege || {};
     game.bbttcc.api.siege.convene = convene;
     game.bbttcc.api.siege.refreshHud = _scheduleRender;
+    game.bbttcc.api.siege.bindScene = bindScene;
+    game.bbttcc.api.siege.sceneHexUuid = (scene) => _sceneHexUuid(scene);
+    game.bbttcc.api.siege.resolveActiveHexUuid = resolveActiveHexUuid;
+    game.bbttcc.api.siege.tableauStageScene = tableauStageScene;
   }
   Hooks.once("ready", () => { _install(); _scheduleRender(); console.log(TAG, "Siege HUD loaded (D.1)."); });
   if (game?.ready) { _install(); _scheduleRender(); }

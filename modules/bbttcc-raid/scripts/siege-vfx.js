@@ -167,52 +167,88 @@
     return null;
   }
 
-  const _BOULDER_KEYS = ["jb2a.boulder.toss.01", "jb2a.boulder.toss", "jb2a.flaming_boulder.throw.01", "jb2a.catapult.boulder"];
-  const _IMPACT_KEYS  = ["jb2a.explosion.01.orange", "jb2a.explosion.02.orange", "jb2a.explosion.01", "jb2a.eruption.orange.0", "jb2a.impact.ground_crack.orange.01"];
   // Visual tuning — dial these to taste.
   const _BOULDER_SCALE  = 1.8;  // projectile sprite size multiplier (1.0 = native)
   const _IMPACT_SIZE_GS = 6.5;  // impact-burst diameter, in grid squares
   const _LAUNCH_DIST_GS = 13;   // launch origin distance "downstage" (toward camera), in grid squares
 
-  // GM-only: build + play the boulder volley. Sequencer broadcasts to all clients.
-  function _playBoulderVolley(payload, { count, stagger, travel }) {
+  // Asset families — the reusable vocabulary of "things a siege throws". Each is a JB2A
+  // projectile + impact pair (resolved defensively at runtime: candidate keys first, then a
+  // DB search, then graceful degrade). `boulder` reproduces the proven Bombard look exactly.
+  // Projectile-less families (debris) play impact-only — for breach/collapse moments.
+  const _FAMILIES = {
+    boulder: { projKeys: ["jb2a.boulder.toss.01", "jb2a.boulder.toss", "jb2a.catapult.boulder"],          projSearch: ["boulder", "rolling_boulder", "catapult", "rock"], impactKeys: ["jb2a.explosion.01.orange", "jb2a.explosion.02.orange", "jb2a.eruption.orange.0", "jb2a.impact.ground_crack.orange.01"], impactSearch: ["explosion", "eruption", "ground_crack"], scale: _BOULDER_SCALE, impactSizeGs: _IMPACT_SIZE_GS },
+    fire:    { projKeys: ["jb2a.flaming_boulder.throw.01", "jb2a.fire_bolt.orange", "jb2a.boulder.toss.01"], projSearch: ["flaming_boulder", "fire_bolt", "firebomb", "fireball"], impactKeys: ["jb2a.fireball.explosion.orange", "jb2a.explosion.01.orange", "jb2a.eruption.orange.0"], impactSearch: ["fireball", "explosion", "fire"], scale: 1.6, impactSizeGs: 6 },
+    bolt:    { projKeys: ["jb2a.ballista.shot", "jb2a.spear.throw.01", "jb2a.arrow.physical.white.01"],     projSearch: ["ballista", "spear", "bolt", "arrow"], impactKeys: ["jb2a.impact.001.orange", "jb2a.explosion.01.orange"], impactSearch: ["impact", "explosion"], scale: 1.4, impactSizeGs: 3.5 },
+    arrows:  { projKeys: ["jb2a.arrow.physical.white.01", "jb2a.arrow.physical"],                          projSearch: ["arrow"], impactKeys: ["jb2a.impact.ground_crack.white.01", "jb2a.impact.001"], impactSearch: ["impact", "ground_crack"], scale: 1.2, impactSizeGs: 2.5 },
+    debris:  { projKeys: [],                                                                                projSearch: [], impactKeys: ["jb2a.explosion.08.orange", "jb2a.debris.bird", "jb2a.impact.ground_crack.orange.01"], impactSearch: ["debris", "ground_crack", "explosion"], scale: 1, impactSizeGs: 7 }
+  };
+
+  // GM-only: build + play a projectile volley. Sequencer broadcasts to all clients.
+  // opts = { structureActorId, family, count, stagger, travel, scale, impactSizeGs,
+  //          direction: "incoming" (camp→wall, default) | "outgoing" (wall→camp, counter-fire) }
+  function _playProjectileVolley(opts = {}) {
     if (!_sequencerReady()) return false;
-    const target = _wallCenter(payload?.structureActorId) || _viewportCenter();
-    if (!target) return false;
+    const fam = _FAMILIES[opts.family] || _FAMILIES.boulder;
+    const wall = _wallCenter(opts.structureActorId) || _viewportCenter();
+    if (!wall) return false;
     const gs = Number(canvas?.grid?.size || 100);
-    const boulderPath = _resolveJB2A(_BOULDER_KEYS, ["boulder", "rolling_boulder", "catapult", "rock"]);
-    const impactPath  = _resolveJB2A(_IMPACT_KEYS,  ["explosion", "eruption", "ground_crack"]);
-    if (!boulderPath && !impactPath) return false;
+    const count   = Math.max(1, Math.min(8, Number(opts.count) || 2));
+    const stagger = Number(opts.stagger) || 260;
+    const travel  = Number(opts.travel)  || 750;
+    const scale   = Number(opts.scale)   || fam.scale || 1.4;
+    const impSize = Number(opts.impactSizeGs) || fam.impactSizeGs || 5;
+    const outgoing = opts.direction === "outgoing";       // wall → besieging line (counter-fire)
+    const launch  = gs * _LAUNCH_DIST_GS;
+    const camp    = { x: wall.x, y: wall.y + launch };     // downstage, toward the camera
+
+    const projPath   = (fam.projKeys && fam.projKeys.length) ? _resolveJB2A(fam.projKeys, fam.projSearch) : null;
+    const impactPath = _resolveJB2A(fam.impactKeys, fam.impactSearch);
+    if (!projPath && !impactPath) return false;
 
     const seq = new globalThis.Sequence();
-    const launchDist = gs * _LAUNCH_DIST_GS; // launch from "downstage" (toward the camera/besieging line)
     for (let i = 0; i < count; i++) {
-      const jx = (i - (count - 1) / 2) * gs * 1.6;       // spread the volley horizontally
-      const src = { x: target.x + jx, y: target.y + launchDist + Math.abs(jx) * 0.2 };
-      if (boulderPath) {
+      const jx = (i - (count - 1) / 2) * gs * 1.6;         // spread the volley horizontally
+      const wallPt = { x: wall.x + jx, y: wall.y };
+      const campPt = { x: camp.x + jx, y: camp.y + Math.abs(jx) * 0.2 };
+      const src = outgoing ? wallPt : campPt;
+      const dst = outgoing ? campPt : wallPt;
+      if (projPath) {
         try {
           seq.effect()
-            .file(boulderPath)
+            .file(projPath)
             .atLocation(src)
-            .stretchTo({ x: target.x, y: target.y })   // JB2A ranged asset arcs src → wall
-            .scale(_BOULDER_SCALE)
+            .stretchTo(dst)            // JB2A ranged asset arcs src → dst
+            .scale(scale)
             .delay(i * stagger)
             .zIndex(3);
-        } catch (e) { console.warn(TAG, "boulder effect skipped", e); }
+        } catch (e) { console.warn(TAG, "projectile effect skipped", e); }
       }
       if (impactPath) {
         try {
           seq.effect()
             .file(impactPath)
-            .atLocation({ x: target.x + jx * 0.35, y: target.y })
-            .size(gs * _IMPACT_SIZE_GS)
-            .delay(travel + i * stagger)
+            .atLocation(dst)
+            .size(gs * impSize)
+            .delay((projPath ? travel : 0) + i * stagger)   // impact-only families land immediately
             .fadeOut(400)
             .zIndex(4);
         } catch (e) { console.warn(TAG, "impact effect skipped", e); }
       }
     }
     try { seq.play(); return true; } catch (e) { console.warn(TAG, "volley play failed", e); return false; }
+  }
+
+  // Back-compat wrapper for the proven Bombard path (boulder family, camp → wall).
+  function _playBoulderVolley(payload, { count, stagger, travel }) {
+    return _playProjectileVolley({ structureActorId: payload?.structureActorId, family: "boulder", count, stagger, travel });
+  }
+
+  // Local hook relay (mirror of siege-counter-activities._relayHook): fire locally + socket
+  // so the volley plays on every client, GM-authoritative play, Sequencer broadcasts visuals.
+  function _relaySiege(hook, payload) {
+    try { Hooks.callAll(hook, payload); } catch (e) { console.warn(TAG, "relay callAll failed", e); }
+    try { game.socket?.emit?.("module.bbttcc-raid", { t: "siegeHook", hook, payload }); } catch (_e) {}
   }
 
   // ─── Outcome palette (spec §8 status names) ─────────────────────────────────
@@ -375,6 +411,28 @@
     catch (e) { console.warn(TAG, "bombardment volley failed", e); }
   }
 
+  // Generic projectile beat — the reusable spectacle layer any siege event can fire.
+  // payload = { structureActorId, family, count, scale, direction, stagger, travel,
+  //             banner?, color?, shake?:false }. Banner + shake run on every client; the
+  //             Sequencer volley plays GM-side and broadcasts. Degrades to banner+shake.
+  function _onProjectile(payload) {
+    _injectStylesOnce();
+    if (payload?.banner) {
+      try { _banner(String(payload.banner), payload.color || BRONZE); _pulse(_hudPanel(), payload.color || BRONZE); }
+      catch (e) { console.warn(TAG, "projectile banner failed", e); }
+    }
+    const count   = Math.max(1, Math.min(8, Number(payload?.count) || 2));
+    const stagger = Number(payload?.stagger) || 260;
+    const travel  = Number(payload?.travel)  || 750;
+    if (payload?.shake !== false) {
+      const impactAt = travel + (count - 1) * stagger;
+      try { setTimeout(() => { try { _shakeBoard(); } catch (_) {} }, impactAt); } catch (_) {}
+    }
+    if (!game.user?.isGM) return;
+    try { _playProjectileVolley({ ...payload, count, stagger, travel }); }
+    catch (e) { console.warn(TAG, "projectile volley failed", e); }
+  }
+
   Hooks.on("bbttcc:siege:layerBreached", _onLayerBreached);
   Hooks.on("bbttcc:siege:convene", _onConvene);
   Hooks.on("bbttcc:siege:outcome", _onOutcome);
@@ -387,6 +445,7 @@
   Hooks.on("bbttcc:siege:cascade", _onCascade);
   Hooks.on("bbttcc:siege:event", _onEvent);
   Hooks.on("bbttcc:siege:bombardment", _onBombardment);
+  Hooks.on("bbttcc:siege:projectile", _onProjectile);
 
   // Expose for the selftest / manual preview.
   function _install() {
@@ -406,8 +465,15 @@
       if (kind === "cascade") return _onCascade(payload);
       if (kind === "event") return _onEvent(payload);
       if (kind === "bombardment") return _onBombardment(payload);
+      if (kind === "projectile") return _onProjectile(payload);
       console.warn(TAG, "previewVfx: unknown kind", kind);
     };
+
+    // Public, reusable: fire a projectile volley from anywhere (relayed to all clients).
+    // e.g. game.bbttcc.api.siege.projectile({ structureActorId, family:"fire", count:5, banner:"🔥 Storm the Walls" })
+    game.bbttcc.api.siege.projectile = (payload = {}) => _relaySiege("bbttcc:siege:projectile", payload);
+    // Family names available to callers (for menus/tooling).
+    game.bbttcc.api.siege.projectileFamilies = Object.keys(_FAMILIES);
   }
 
   Hooks.once("ready", () => { _injectStylesOnce(); _install(); console.log(TAG, "Siege VFX renderer ready (D.3)."); });
