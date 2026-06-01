@@ -249,7 +249,13 @@ export async function triggerCollapse(actor, { fromState, toState }) {
 
   const breacherId = breacher?.id ?? null;
   const tokensOnTop = findTokensInsideFootprint(structToken)
-    .filter(t => !breacherId || t.actor?.id !== breacherId);
+    .filter(t => !breacherId || t.actor?.id !== breacherId)
+    // A collapsing structure does NOT catch OTHER structures in its rubble: they aren't
+    // creatures standing on it, "Prone" is meaningless on a wall/keep, and falling damage
+    // shouldn't transfer between structures. In a siege the fortification layers (Outer Wall /
+    // Barbican / Inner Keep) are staged near each other on the tableau diorama, so their
+    // footprints overlap — without this, breaching one wall proned + damaged all the others.
+    .filter(t => t.actor?.getFlag?.(FLAG_SCOPE, "hasStructure") !== true);
 
   await postCollapseHeaderCard(actor, profile, tokensOnTop.length);
 
@@ -309,7 +315,12 @@ export async function triggerCollapse(actor, { fromState, toState }) {
       // Prone + knockback. Knockback is guarded on its own so a movement
       // failure can't skip this token's card or block the next token.
       const proneApplied = await applyProne(tokActor);
-      if (knockbackFt > 0) {
+      // Tableau (forced-perspective) tokens sit in choreographed depth bands — a physical
+      // knockback flings them out of formation and the Y→scale curve snaps them to the wrong
+      // size, which reads as "the tableau effect turned off". Keep their damage + prone, but
+      // leave them standing where they are. Non-tableau collapses knock back exactly as before.
+      const isTableauTok = tok.document?.flags?.["bbttcc-raid"]?.tableauActor === true;
+      if (knockbackFt > 0 && !isTableauTok) {
         try { await knockbackToken(tok, center, knockbackFt); }
         catch (e) { console.warn(TAG, "collapse knockback failed", e); }
       }
