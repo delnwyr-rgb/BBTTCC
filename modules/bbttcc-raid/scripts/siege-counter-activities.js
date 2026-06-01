@@ -288,6 +288,18 @@
 
     const after = game.bbttcc?.api?.structures?.readState?.(wall);
     const plates = after?.plates ? `${after.plates.current}/${after.plates.max}` : "?";
+
+    // §6 VFX — fire the bombardment beat so the boulder volley arcs siege-line → wall on
+    // every client (siege-vfx.js _onBombardment). Spectacle only; the Plate damage already
+    // landed above. Volley size nods at intensity (bigger hit → one more boulder); later this
+    // scales off the muster (§5). Relayed via the siegeHook socket branch.
+    const volley = (dmg >= 30) ? 3 : 2;
+    _relayHook("bbttcc:siege:bombardment", {
+      siegeId: st.siegeId, hexUuid: targetUuid, layerIdx: idx,
+      structureActorId: wall.id, wallName: wall.name,
+      factionName: actor?.name || "The besiegers", dmg, volley
+    });
+
     await _pushWarLog(actor, `Bombard: ${dmg} structure damage to ${wall.name} (Plates ${plates}, ${after?.state || "?"}).`, { activityKey: "bombard", hexUuid: targetUuid });
     return { ok: true, summary: `Bombarded ${wall.name} for ${dmg} (Plates ${plates}).` };
   }
@@ -296,17 +308,21 @@
   // Registration
   // ============================================================
 
+  // All 9 are SIEGE strategic activities (siege:true) → they slot into the planner's
+  // dedicated Siege section, split Attacker/Defender by siegeSide. siegeOrder gives the
+  // intra-section ordering (signature/opener activities first); the planner falls back to
+  // band + alpha when it's absent. See RAID_ABILITY_SURVEY.md §4 / §8 step 2.
   const HANDLERS = {
-    bombard:               { fn: bombard,               label: "Bombard",             cost: { violence: 20, logistics: 20 },              band: "standard", siege: true, siegeSide: "attacker" },
-    reinforce_garrison:    { fn: reinforce_garrison,    label: "Reinforce Garrison",  cost: { violence: 15, logistics: 10 },              band: "standard" },
-    call_relief:           { fn: call_relief,           label: "Call Relief",          cost: { diplomacy: 20, softPower: 20 },             band: "rare" },
-    sue_for_terms:         { fn: sue_for_terms,         label: "Sue for Terms",        cost: { diplomacy: 20, softPower: 15 },             band: "rare" },
-    champion_defends_wall: { fn: champion_defends_wall, label: "Champion Defends Wall",cost: { violence: 10 },                             band: "standard" },
-    pray_for_omen:         { fn: pray_for_omen,         label: "Pray for Omen",        cost: { faith: 10 },                                band: "standard" },
-    demand_surrender:      { fn: demand_surrender,      label: "Demand Surrender",     cost: { diplomacy: 20, violence: 10, softPower: 10 }, band: "rare" },
-    champion_withdraws:    { fn: champion_withdraws,    label: "Champion Withdraws",   cost: { softPower: 15, diplomacy: 10 },             band: "rare" },
-    champion_returns:      { fn: champion_returns,      label: "Champion Returns",     cost: { diplomacy: 20, softPower: 10 },             band: "standard" },
-    storm_final_assault:   { fn: storm_final_assault,   label: "Storm Final Assault",  cost: { violence: 40, logistics: 20 },              band: "rare" }
+    bombard:               { fn: bombard,               label: "Bombard",             cost: { violence: 20, logistics: 20 },              band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 1 },
+    storm_final_assault:   { fn: storm_final_assault,   label: "Storm Final Assault",  cost: { violence: 40, logistics: 20 },              band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 2 },
+    demand_surrender:      { fn: demand_surrender,      label: "Demand Surrender",     cost: { diplomacy: 20, violence: 10, softPower: 10 }, band: "rare",   siege: true, siegeSide: "attacker", siegeOrder: 3 },
+    champion_returns:      { fn: champion_returns,      label: "Champion Returns",     cost: { diplomacy: 20, softPower: 10 },             band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 4 },
+    champion_withdraws:    { fn: champion_withdraws,    label: "Champion Withdraws",   cost: { softPower: 15, diplomacy: 10 },             band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 5 },
+    reinforce_garrison:    { fn: reinforce_garrison,    label: "Reinforce Garrison",  cost: { violence: 15, logistics: 10 },              band: "standard", siege: true, siegeSide: "defender", siegeOrder: 1 },
+    champion_defends_wall: { fn: champion_defends_wall, label: "Champion Defends Wall",cost: { violence: 10 },                             band: "standard", siege: true, siegeSide: "defender", siegeOrder: 2 },
+    call_relief:           { fn: call_relief,           label: "Call Relief",          cost: { diplomacy: 20, softPower: 20 },             band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 3 },
+    pray_for_omen:         { fn: pray_for_omen,         label: "Pray for Omen",        cost: { faith: 10 },                                band: "standard", siege: true, siegeSide: "defender", siegeOrder: 4 },
+    sue_for_terms:         { fn: sue_for_terms,         label: "Sue for Terms",        cost: { diplomacy: 20, softPower: 15 },             band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 5 }
   };
 
   whenRaidReady((api) => whenSiegeStateReady((S) => {
@@ -324,7 +340,7 @@
       ST[key] = async (ctx) => shared({ factionId: ctx.factionId || ctx.attackerId, targetUuid: ctx.targetUuid, note: ctx.notes || ctx.note || "" });
       EFFECTS[key] = Object.assign({}, EFFECTS[key], {
         kind: "strategic", band: def.band, label: def.label, cost: def.cost, siegeCounterActivity: true,
-        ...(def.siege ? { siege: true, siegeSide: def.siegeSide || "attacker" } : {}),
+        ...(def.siege ? { siege: true, siegeSide: def.siegeSide || "attacker", siegeOrder: def.siegeOrder ?? null } : {}),
         async apply({ entry }){
           const r = await shared({ factionId: entry?.attackerId || entry?.factionId, targetUuid: entry?.targetUuid, note: entry?.note || "" });
           return r.ok ? `${def.label}: ${r.summary || "done"}.` : `${def.label} failed: ${r.reason}`;

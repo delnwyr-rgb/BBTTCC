@@ -843,6 +843,22 @@ function inferPackageGroup(activityOrKey){
     };
   }
 
+  // 1.5) Siege section (RAID_ABILITY_SURVEY.md §4): any strategic activity tagged
+  // siege:true lands in a dedicated Siege section, split Attacker/Defender by siegeSide.
+  // Labels start "Siege — " so the two halves cluster and sort Attacker-before-Defender
+  // (cross-group sort is by groupLabel). Intra-section order = explicit siegeOrder, else
+  // band (standard before rare), else the planner's alpha fallback.
+  if (a && a.siege) {
+    const side = (a.siegeSide === "defender") ? "defender" : "attacker";
+    const order = (a.siegeOrder != null) ? Number(a.siegeOrder)
+                : (String(a.band).toLowerCase() === "rare" ? 90 : 50);
+    return {
+      groupKey: `siege_${side}`,
+      groupLabel: side === "defender" ? "Siege — Defender" : "Siege — Attacker",
+      groupOrder: order
+    };
+  }
+
   // 2) Deterministic overrides by activity key (B.1)
   // Add keys here as we formalize packages; this avoids "string contains" drift.
   const OVERRIDE = {
@@ -1045,6 +1061,10 @@ if (_fid) {
             groupLabel: v.groupLabel ?? v.packageLabel ?? null,
             groupOrder: v.groupOrder ?? v.packageOrder ?? null,
             legacyTierFromGroupOrder,
+            // Siege tagging (RAID_ABILITY_SURVEY.md §4) — drives the dedicated Siege section.
+            siege: !!v.siege,
+            siegeSide: v.siegeSide ?? null,
+            siegeOrder: v.siegeOrder ?? null,
             opCosts,
             text: v.text || ""
           });

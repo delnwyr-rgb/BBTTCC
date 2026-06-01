@@ -111,6 +111,110 @@
 
   function _hudPanel() { return document.getElementById("ft-siege-hud"); }
 
+  // ─── Canvas projectile helpers (§6 — boulder bombardment) ────────────────────
+  // Sequencer-direct (no spawned tokens, no actor/compendium): the boulder is a JB2A
+  // ranged projectile stretched launch-point → wall, with an impact burst on landing.
+  // GM plays once; Sequencer broadcasts to every client. Everything degrades to the
+  // DOM banner + board shake when Sequencer/JB2A or a target are unavailable.
+  function _sequencerReady() {
+    try { return !!globalThis.Sequence && !!game.modules?.get?.("sequencer")?.active; }
+    catch { return false; }
+  }
+
+  // The world-space centre of the current view (Foundry pans via stage.pivot).
+  function _viewportCenter() {
+    try {
+      const p = canvas?.stage?.pivot;
+      if (p && Number.isFinite(p.x) && Number.isFinite(p.y)) return { x: Number(p.x), y: Number(p.y) };
+      const r = canvas?.dimensions?.sceneRect;
+      if (r) return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+    } catch {}
+    return null;
+  }
+
+  // Centre of the wall (Structure) actor's token on the current canvas, or null if it
+  // isn't staged here (e.g. the GM is looking at a different scene).
+  function _wallCenter(structureActorId) {
+    try {
+      if (!structureActorId || !canvas?.ready) return null;
+      const actor = game.actors?.get?.(structureActorId);
+      let tok = actor?.getActiveTokens?.()?.[0];
+      if (!tok) tok = canvas.tokens?.placeables?.find(t => (t.actor?.id === structureActorId) || (t.document?.actorId === structureActorId));
+      if (!tok) return null;
+      const c = tok.center || { x: tok.x + (tok.w || 0) / 2, y: tok.y + (tok.h || 0) / 2 };
+      return (Number.isFinite(c.x) && Number.isFinite(c.y)) ? { x: c.x, y: c.y } : null;
+    } catch { return null; }
+  }
+
+  // Resolve the first JB2A key that actually exists: explicit candidates first, then a
+  // database search (we don't hardcode-guess a path that would silently fall back).
+  function _resolveJB2A(candidates = [], searchTerms = []) {
+    try {
+      const db = globalThis.Sequencer?.Database;
+      if (!db) return null;
+      for (const c of candidates) {
+        try { if (typeof db.entryExists === "function" && db.entryExists(String(c))) return String(c); } catch {}
+      }
+      for (const term of searchTerms) {
+        try {
+          const hits = db.searchFor?.(String(term));
+          const arr = Array.isArray(hits) ? hits : (hits ? Object.values(hits) : []);
+          const pick = arr.find(p => typeof p === "string" && p.length);
+          if (pick) return pick;
+        } catch {}
+      }
+    } catch {}
+    return null;
+  }
+
+  const _BOULDER_KEYS = ["jb2a.boulder.toss.01", "jb2a.boulder.toss", "jb2a.flaming_boulder.throw.01", "jb2a.catapult.boulder"];
+  const _IMPACT_KEYS  = ["jb2a.explosion.01.orange", "jb2a.explosion.02.orange", "jb2a.explosion.01", "jb2a.eruption.orange.0", "jb2a.impact.ground_crack.orange.01"];
+  // Visual tuning — dial these to taste.
+  const _BOULDER_SCALE  = 1.8;  // projectile sprite size multiplier (1.0 = native)
+  const _IMPACT_SIZE_GS = 6.5;  // impact-burst diameter, in grid squares
+  const _LAUNCH_DIST_GS = 13;   // launch origin distance "downstage" (toward camera), in grid squares
+
+  // GM-only: build + play the boulder volley. Sequencer broadcasts to all clients.
+  function _playBoulderVolley(payload, { count, stagger, travel }) {
+    if (!_sequencerReady()) return false;
+    const target = _wallCenter(payload?.structureActorId) || _viewportCenter();
+    if (!target) return false;
+    const gs = Number(canvas?.grid?.size || 100);
+    const boulderPath = _resolveJB2A(_BOULDER_KEYS, ["boulder", "rolling_boulder", "catapult", "rock"]);
+    const impactPath  = _resolveJB2A(_IMPACT_KEYS,  ["explosion", "eruption", "ground_crack"]);
+    if (!boulderPath && !impactPath) return false;
+
+    const seq = new globalThis.Sequence();
+    const launchDist = gs * _LAUNCH_DIST_GS; // launch from "downstage" (toward the camera/besieging line)
+    for (let i = 0; i < count; i++) {
+      const jx = (i - (count - 1) / 2) * gs * 1.6;       // spread the volley horizontally
+      const src = { x: target.x + jx, y: target.y + launchDist + Math.abs(jx) * 0.2 };
+      if (boulderPath) {
+        try {
+          seq.effect()
+            .file(boulderPath)
+            .atLocation(src)
+            .stretchTo({ x: target.x, y: target.y })   // JB2A ranged asset arcs src → wall
+            .scale(_BOULDER_SCALE)
+            .delay(i * stagger)
+            .zIndex(3);
+        } catch (e) { console.warn(TAG, "boulder effect skipped", e); }
+      }
+      if (impactPath) {
+        try {
+          seq.effect()
+            .file(impactPath)
+            .atLocation({ x: target.x + jx * 0.35, y: target.y })
+            .size(gs * _IMPACT_SIZE_GS)
+            .delay(travel + i * stagger)
+            .fadeOut(400)
+            .zIndex(4);
+        } catch (e) { console.warn(TAG, "impact effect skipped", e); }
+      }
+    }
+    try { seq.play(); return true; } catch (e) { console.warn(TAG, "volley play failed", e); return false; }
+  }
+
   // ─── Outcome palette (spec §8 status names) ─────────────────────────────────
   const OUTCOME = {
     won_storm:          { color: RED,    label: "Carried by Storm",            flash: true,  shake: true },
@@ -246,6 +350,31 @@
     } catch (e) { console.warn(TAG, "event vfx failed", e); }
   }
 
+  // §6 — Bombardment. The Plate damage already landed in the Bombard handler; this is the
+  // spectacle: a 2–3 boulder volley arcing the siege line → wall, impact-burst + board shake.
+  // Banner + shake run on every client; the Sequencer volley plays GM-side and broadcasts.
+  function _onBombardment(payload) {
+    _injectStylesOnce();
+    try {
+      _banner("⛰ Bombardment", BRONZE);
+      _pulse(_hudPanel(), BRONZE);
+    } catch (e) { console.warn(TAG, "bombardment banner failed", e); }
+
+    const count   = Math.max(1, Math.min(3, Number(payload?.volley) || 2));
+    const STAGGER = 260;  // ms between boulders in the volley
+    const TRAVEL  = 750;  // ms ~ a boulder's flight (impact-burst sync)
+    const impactAt = TRAVEL + (count - 1) * STAGGER;
+
+    // Shake on impact, on every client. The hook fires near-simultaneously everywhere
+    // (GM local + socket relay), so a local timer keeps it roughly in sync with the burst.
+    try { setTimeout(() => { try { _shakeBoard(); } catch (_) {} }, impactAt); } catch (_) {}
+
+    // Token/effect choreography is GM-authoritative; Sequencer relays the visuals to clients.
+    if (!game.user?.isGM) return;
+    try { _playBoulderVolley(payload, { count, stagger: STAGGER, travel: TRAVEL }); }
+    catch (e) { console.warn(TAG, "bombardment volley failed", e); }
+  }
+
   Hooks.on("bbttcc:siege:layerBreached", _onLayerBreached);
   Hooks.on("bbttcc:siege:convene", _onConvene);
   Hooks.on("bbttcc:siege:outcome", _onOutcome);
@@ -257,6 +386,7 @@
   Hooks.on("bbttcc:siege:trojanFailed", _onTrojanFailed);
   Hooks.on("bbttcc:siege:cascade", _onCascade);
   Hooks.on("bbttcc:siege:event", _onEvent);
+  Hooks.on("bbttcc:siege:bombardment", _onBombardment);
 
   // Expose for the selftest / manual preview.
   function _install() {
@@ -275,6 +405,7 @@
       if (kind === "trojanFailed") return _onTrojanFailed(payload);
       if (kind === "cascade") return _onCascade(payload);
       if (kind === "event") return _onEvent(payload);
+      if (kind === "bombardment") return _onBombardment(payload);
       console.warn(TAG, "previewVfx: unknown kind", kind);
     };
   }
