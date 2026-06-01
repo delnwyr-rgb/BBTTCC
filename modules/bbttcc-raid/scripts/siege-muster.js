@@ -142,6 +142,54 @@
     return slots;
   }
 
+  // ── Crew join (a contingent mans the structure it stands on) ──────────────────
+  // The structure owns the crew relationship (game.bbttcc.api.structures.crew). A muster
+  // contingent whose center sits on a fortification's footprint auto-JOINS that structure's
+  // garrison; drag it off and it's released. garrisonWalls pre-tags its drops so it can assign
+  // them race-free; hand-drags are handled live by the create/move hooks below.
+  function _structureTokenUnder(scene, tokDoc) {
+    if (!scene || !tokDoc) return null;
+    const gs = _num(scene.grid?.size || scene.gridSize, 100);
+    const cx = _num(tokDoc.x) + _num(tokDoc.width, 1) * gs / 2;
+    const cy = _num(tokDoc.y) + _num(tokDoc.height, 1) * gs / 2;
+    for (const t of (scene.tokens?.contents || [])) {
+      if (t.id === tokDoc.id) continue;
+      const a = t.actor;
+      if (a?.getFlag?.("bbttcc-structures", "hasStructure") !== true) continue;
+      const w = _num(t.width, 1) * gs, h = _num(t.height, 1) * gs;
+      const x = _num(t.x), y = _num(t.y);
+      if (cx >= x && cx <= x + w && cy >= y && cy <= y + h) return t;
+    }
+    return null;
+  }
+  // Re-evaluate which structure (if any) a contingent crews, releasing the old + joining the
+  // new. Single-token, sequential — safe for one-at-a-time user drags. Skips when unchanged.
+  async function _reconcileCrew(tokDoc) {
+    if (!game.user?.isGM) return;
+    const md = tokDoc?.flags?.[MOD_R]?.musterDeployment;
+    if (!md) return;                                   // only muster contingents
+    const crew = _api()?.structures?.crew; if (!crew) return;
+    const scene = tokDoc.parent; if (!scene) return;
+    const prevId = tokDoc.flags?.[MOD_R]?.crewingStructureId || null;
+    const structTok = _structureTokenUnder(scene, tokDoc);
+    const newId = structTok?.actor?.id || null;
+    if (prevId === newId) return;                      // no change (also breaks the flag-write loop)
+    if (prevId) { const a = game.actors.get(prevId); if (a) { try { await crew.release(a, tokDoc.id); } catch (_e) {} } }
+    if (newId) {
+      const strength = _num(tokDoc.flags?.[MOD_R]?.unitStrength, md.strength);
+      try { await crew.assign(structTok.actor, { tokenId: tokDoc.id, label: tokDoc.name, strength }); } catch (_e) {}
+      try { const c = crew.read(structTok.actor); ui.notifications?.info?.(`${tokDoc.name} mans ${structTok.actor.name}.`); } catch (_e) {}
+    }
+    try { await tokDoc.update({ [`flags.${MOD_R}.crewingStructureId`]: newId }); } catch (_e) {}
+  }
+  async function _releaseCrewOnDelete(tokDoc) {
+    if (!game.user?.isGM) return;
+    const prevId = tokDoc?.flags?.[MOD_R]?.crewingStructureId || null;
+    if (!prevId) return;
+    const crew = _api()?.structures?.crew; const a = game.actors.get(prevId);
+    if (crew && a) { try { await crew.release(a, tokDoc.id); } catch (_e) {} }
+  }
+
   // ── The unit actor (minimal — combat is simulated) ───────────────────────────
   function _pickActorType() {
     let types = game.documentTypes?.Actor || CONFIG?.Actor?.documentClass?.metadata?.types || [];
@@ -336,7 +384,7 @@
     const weights = walls.map(w => Math.max(1, w.plateMax || 1));
     const wsum = weights.reduce((a, b) => a + b, 0) || 1;
 
-    const mkTok = async (x, y, strength, deploy, label) => {
+    const mkTok = async (x, y, strength, deploy, label, crewingStructureId = null) => {
       let proto;
       try { proto = await unitActor.getTokenDocument({ x, y }); }
       catch (e) { console.warn(TAG, "getTokenDocument failed", e); return null; }
@@ -346,6 +394,9 @@
       data.flags = data.flags || {};
       data.flags[MOD_R] = Object.assign({}, data.flags[MOD_R] || {}, {
         tableauActor: true, unitStrength: strength,
+        // Pre-tag the crewing structure so the create-hook skips it (no race) — garrisonWalls
+        // assigns these to the structure crew itself, sequentially, just below.
+        crewingStructureId: crewingStructureId || null,
         musterDeployment: Object.assign({ hexUuid, side: "defender", factionId: faction?.id || null, strength, deployedAt: Date.now() }, deploy)
       });
       return data;
@@ -361,10 +412,10 @@
       const per = Math.max(1, Math.round(g / K));
       const slots = _garrisonSlots(wall, K, gs);
       for (let i = 0; i < K; i++) {
-        const d = await mkTok(slots[i].x, slots[i].y, per, { garrisonLayerId: wall.layer.layerId }, "Garrison");
+        const d = await mkTok(slots[i].x, slots[i].y, per, { garrisonLayerId: wall.layer.layerId }, "Garrison", wall.td.actorId);
         if (d) tokenData.push(d);
       }
-      plannedGarrison[wall.layer.layerId] = { full: g, units: K, per };
+      plannedGarrison[wall.layer.layerId] = { full: g, units: K, per, structureActorId: wall.td.actorId };
     }
 
     // Field reserve — a band at the defender's deep position (far/small on the tableau).
@@ -392,6 +443,18 @@
     try { created = await scene.createEmbeddedDocuments("Token", tokenData); }
     catch (e) { console.warn(TAG, "garrison token create failed", e); return { ok: false, error: `createEmbeddedDocuments failed: ${e.message}` }; }
     try { await tab?.applyAll?.(); } catch (_e) {}
+
+    // Crew the walls: each garrison contingent JOINS its wall's structure. Sequential awaits =
+    // race-free (the create-hook skips these since they ship with crewingStructureId pre-set).
+    const crew = _api()?.structures?.crew;
+    if (crew) {
+      for (const t of created) {
+        const md = t.flags?.[MOD_R]?.musterDeployment;
+        const structId = md?.garrisonLayerId ? plannedGarrison[md.garrisonLayerId]?.structureActorId : null;
+        const wallActor = structId ? game.actors.get(structId) : null;
+        if (wallActor) { try { await crew.assign(wallActor, { tokenId: t.id, label: t.name, strength: _num(t.flags?.[MOD_R]?.unitStrength, md.strength) }); } catch (_e) {} }
+      }
+    }
 
     // Record the deployment: per-layer garrison (with token ids) + reserve, and seed defenderMuster.
     try {
@@ -521,15 +584,19 @@
     // garrison → big bonus, thinned/slaughtered → little). Storm Final Assault presses harder.
     const layer = (state.layers || [])[state.currentLayerIdx ?? 0] || null;
     const breached = !!layer?.breached;
-    const layerId = layer?.layerId;
-    // Garrison fraction on THIS layer = current garrison strength / strength deployed there.
+    // Garrison fill on THIS layer's structure — the CREW relationship is the source of truth:
+    // live crewing strength / the structure's garrison capacity. Full = stiff, slaughtered = soft.
     let garrisonFrac = 0;
-    const gMeta = state.musterDeployments?.defender?.garrison?.[layerId] || null;
-    if (gMeta && gMeta.full > 0) {
-      const cur = defTokens
-        .filter(t => t.flags?.[MOD_R]?.musterDeployment?.garrisonLayerId === layerId)
-        .reduce((a, t) => a + _tokStrength(t), 0);
-      garrisonFrac = Math.max(0, Math.min(1, cur / gMeta.full));
+    const wallActor = layer?.structureActorId ? game.actors.get(layer.structureActorId) : null;
+    const crewApi = _api()?.structures?.crew;
+    if (wallActor && crewApi) {
+      const cap = _num(crewApi.capacity?.(wallActor), 0);
+      if (cap > 0) {
+        const cr = crewApi.read?.(wallActor) || { assigned: [] };
+        let live = 0;
+        for (const m of (cr.assigned || [])) { const t = scene.tokens.get(m.tokenId); if (t) live += _tokStrength(t); }
+        garrisonFrac = Math.max(0, Math.min(1, live / cap));
+      }
     }
     const structuralMult = breached ? 1.0 : _num(opts.wallMult, 1.3);   // the stone itself
     const garrisonMult   = 1 + 0.4 * garrisonFrac;                       // manned battlements
@@ -727,6 +794,15 @@
     if (!globalThis.__bbttcc_siege_muster_collapse_hook) {
       Hooks.on("bbttcc:structure:collapse", _onStructureCollapse);
       globalThis.__bbttcc_siege_muster_collapse_hook = true;
+    }
+    // Drag-to-join: a contingent dropped/moved onto a fortification footprint mans it (and is
+    // released when dragged off / deleted). garrisonWalls' own drops pre-tag crewingStructureId
+    // so the create-hook no-ops on them (it assigns them itself, race-free).
+    if (!globalThis.__bbttcc_siege_muster_crew_hooks) {
+      Hooks.on("createToken", (doc) => { _reconcileCrew(doc).catch(() => {}); });
+      Hooks.on("updateToken", (doc, changes) => { if (changes?.x !== undefined || changes?.y !== undefined) _reconcileCrew(doc).catch(() => {}); });
+      Hooks.on("deleteToken", (doc) => { _releaseCrewOnDelete(doc).catch(() => {}); });
+      globalThis.__bbttcc_siege_muster_crew_hooks = true;
     }
     console.log(TAG, "ready — game.bbttcc.api.siege.{musterToScene,recallMuster,musterSize,resolveClash,garrisonWalls,formUpBoth,musterReport}");
   });

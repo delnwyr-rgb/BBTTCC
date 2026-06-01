@@ -401,6 +401,51 @@ export function readState(actor) {
   };
 }
 
+// ── Crew (who mans the structure) ─────────────────────────────────────────────
+// Structures can be MANNED. Unlike rigs (pilot/gunner/engineer slots), a fortification
+// holds an undifferentiated GARRISON pool whose capacity scales with the structure's size
+// (plate count). Membership is a real relationship stored on the structure actor:
+//   flags.bbttcc-structures.crew = { assigned: [{ tokenId, label, joinedStrength }] }
+// Capacity is derived (not stored) unless an explicit `crewCapacity` flag overrides it.
+// Live garrison STRENGTH is read from the crewing tokens by the consumer (the siege layer),
+// so this stays decoupled from any one strength-flag convention.
+
+function crewCapacity(actor) {
+  if (!actor) return 0;
+  const explicit = Number(actor.getFlag?.(FLAG_SCOPE, "crewCapacity"));
+  if (Number.isFinite(explicit) && explicit > 0) return explicit;
+  const st = readState(actor);
+  if (!st) return 0;
+  const plateMax = Number(st.plates?.max) || 0;
+  // ~0.6 garrison strength per plate, floored so even a small wall holds a token group.
+  return plateMax > 0 ? Math.max(10, Math.round(plateMax * 0.6)) : 0;
+}
+
+function readCrew(actor) {
+  const c = actor?.getFlag?.(FLAG_SCOPE, "crew") || {};
+  const assigned = Array.isArray(c.assigned) ? c.assigned : [];
+  return { capacity: crewCapacity(actor), assigned };
+}
+
+async function assignCrew(actor, { tokenId, label = "Garrison", strength = 0 } = {}) {
+  if (!actor || !tokenId) return { ok: false, reason: "actor + tokenId required" };
+  const c = foundry.utils.duplicate(actor.getFlag(FLAG_SCOPE, "crew") || {});
+  c.assigned = Array.isArray(c.assigned) ? c.assigned : [];
+  const idx = c.assigned.findIndex(m => m.tokenId === tokenId);
+  const entry = { tokenId, label, joinedStrength: Number(strength) || 0 };
+  if (idx >= 0) c.assigned[idx] = entry; else c.assigned.push(entry);
+  await actor.setFlag(FLAG_SCOPE, "crew", c);
+  return { ok: true, crew: readCrew(actor) };
+}
+
+async function releaseCrew(actor, tokenId) {
+  if (!actor || !tokenId) return { ok: false };
+  const c = foundry.utils.duplicate(actor.getFlag(FLAG_SCOPE, "crew") || {});
+  c.assigned = (Array.isArray(c.assigned) ? c.assigned : []).filter(m => m.tokenId !== tokenId);
+  await actor.setFlag(FLAG_SCOPE, "crew", c);
+  return { ok: true, crew: readCrew(actor) };
+}
+
 // ── API install ─────────────────────────────────────────────────────────────
 // Per [[bbttcc-api-exposure-pattern]] memory: install at BOTH script-load AND
 // Hooks.once("ready") to defend against load-order clobber + browser cache
@@ -424,6 +469,8 @@ function _installApi() {
       clearStructure,
       // Reading
       readState,
+      // Crew (who mans the structure)
+      crew: { capacity: crewCapacity, read: readCrew, assign: assignCrew, release: releaseCrew },
       // Tables (live refs; immutable in practice — load once)
       get FAMILIES() { return _FAMILIES?.families ?? {}; },
       get FAMILY_MAP() { return _FAMILY_MAP?.materialKeyToFamily ?? {}; },

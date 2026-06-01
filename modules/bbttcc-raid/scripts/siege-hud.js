@@ -62,6 +62,25 @@
 
   // ─── HTML builders ──────────────────────────────────────────────────────────
 
+  // Live garrison fill on a structure (crew relationship): summed unitStrength of crewing
+  // tokens on the current scene / the structure's garrison capacity. null if uncrewable.
+  function _garrisonReadout(structureActorId) {
+    try {
+      const crew = game.bbttcc?.api?.structures?.crew;
+      const a = structureActorId && game.actors?.get?.(structureActorId);
+      if (!crew || !a) return null;
+      const cap = Number(crew.capacity?.(a)) || 0;
+      if (cap <= 0) return null;
+      const cr = crew.read?.(a) || { assigned: [] };
+      let live = 0;
+      for (const m of (cr.assigned || [])) {
+        const t = canvas?.scene?.tokens?.get?.(m.tokenId);
+        if (t) live += Math.max(0, Number(t.flags?.["bbttcc-raid"]?.unitStrength) || 0);
+      }
+      return { live, cap, frac: cap > 0 ? live / cap : 0 };
+    } catch (_e) { return null; }
+  }
+
   function _layersStrip(siege) {
     const layers = Array.isArray(siege.layers) ? siege.layers : [];
     if (!layers.length) return `<span style="color:#888;font-style:italic;">no layers</span>`;
@@ -80,7 +99,10 @@
         style = `padding:1px 6px;border-radius:8px;font-size:0.68rem;border:1px solid ${BRONZE};color:${BRONZE};background:#2a2310;font-weight:600;box-shadow:0 0 6px rgba(217,164,65,0.4);`;
         mark = " ◄";
       }
-      return `<span title="${esc(name)}${l.transitionRule ? " — " + esc(l.transitionRule) : ""}" style="${style}">${esc(name)}${mark}</span>`;
+      const g = _garrisonReadout(l.structureActorId);
+      const gCol = g ? (g.frac > 0.6 ? "#9fe09f" : g.frac >= 0.25 ? "#ffd27a" : "#ff9a9a") : null;
+      const gBadge = g ? ` <span title="garrison ${g.live}/${g.cap}" style="color:${gCol};font-size:0.92em;">🛡${g.live}</span>` : "";
+      return `<span title="${esc(name)}${l.transitionRule ? " — " + esc(l.transitionRule) : ""}${g ? ` · garrison ${g.live}/${g.cap}` : ""}" style="${style}">${esc(name)}${mark}${gBadge}</span>`;
     }).join(" ");
   }
 
@@ -519,6 +541,17 @@
   Hooks.on("updateDrawing", _onHexDocChange);
   Hooks.on("createDrawing", _onHexDocChange);
   Hooks.on("deleteDrawing", _onHexDocChange);
+
+  // Garrison readout: re-render when a muster contingent's strength/position changes or a
+  // structure's crew roster changes, so the per-layer 🛡 fill stays live.
+  Hooks.on("updateToken", (doc, changes) => {
+    try { if (doc?.flags?.["bbttcc-raid"]?.musterDeployment || foundry.utils.getProperty(changes, "flags.bbttcc-raid.unitStrength") !== undefined) _scheduleRender(); } catch (_e) {}
+  });
+  Hooks.on("createToken", (doc) => { try { if (doc?.flags?.["bbttcc-raid"]?.musterDeployment) _scheduleRender(); } catch (_e) {} });
+  Hooks.on("deleteToken", (doc) => { try { if (doc?.flags?.["bbttcc-raid"]?.musterDeployment) _scheduleRender(); } catch (_e) {} });
+  Hooks.on("updateActor", (actor, changes) => {
+    try { if (foundry.utils.getProperty(changes, "flags.bbttcc-structures.crew") !== undefined) _scheduleRender(); } catch (_e) {}
+  });
 
   function _install() {
     game.bbttcc = game.bbttcc || { api: {} };
