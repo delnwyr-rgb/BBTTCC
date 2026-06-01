@@ -32,6 +32,14 @@
   const _api     = () => game?.bbttcc?.api;
   const _siege   = () => _api()?.siege;
   const _tableau = () => _api()?.raid?.tableau;
+  const _turn    = () => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } };
+
+  // Fire a siege beat locally + relay over the socket so VFX/HUD react on every client.
+  // Mirrors siege-vfx._relaySiege / siege-counter-activities._relayHook.
+  function _relay(hook, payload) {
+    try { Hooks.callAll(hook, payload); } catch (e) { console.warn(TAG, "relay callAll failed", e); }
+    try { game.socket?.emit?.(`module.${MOD_R}`, { t: "siegeHook", hook, payload }); } catch (_e) {}
+  }
 
   // ── Muster derivation (§5 seed) ──────────────────────────────────────────────
   function _factionTier(f) {
@@ -242,12 +250,224 @@
     return _factionMuster(f);
   }
 
+  // ── Stage 2: Resolve the Clash ───────────────────────────────────────────────
+  // Simulate the engagement between the two formed-up musters. A short multi-round
+  // attrition exchange: each side fells the other in proportion to its CURRENT strength
+  // (Lanchester-ish), tilted by the defender's wall (lost once breached) + any Storm order
+  // + luck. It then depletes each unit token's `strength`, routs units at zero, reconciles
+  // the §5 muster (muster IS the field → equals the surviving strength), lays down a
+  // butcher's-bill beat + chat card, and fires the projectile VFX. Combat is SIMULATED
+  // (units carry only a strength flag, no stat block) — exactly the model Stage 1 set up.
+
+  function _sideUnitTokens(scene, hexUuid, side) {
+    return (scene.tokens?.contents || []).filter(t => {
+      const m = t?.flags?.[MOD_R]?.musterDeployment;
+      return m && m.hexUuid === hexUuid && m.side === side;
+    });
+  }
+  const _tokStrength = (t) => Math.max(0, _num(t?.flags?.[MOD_R]?.unitStrength, 0));
+
+  // Distribute `casualties` across `tokens` proportional to current strength (largest-
+  // remainder), never below 0 and never beyond a unit's strength. Returns Map id → newStrength.
+  function _distributeCasualties(tokens, casualties) {
+    const out = new Map();
+    for (const t of tokens) out.set(t.id, _tokStrength(t));
+    const live = tokens.filter(t => _tokStrength(t) > 0);
+    const total = live.reduce((a, t) => a + _tokStrength(t), 0);
+    const cas = Math.min(Math.max(0, Math.round(casualties)), total);
+    if (total <= 0 || cas <= 0) return out;
+    const alloc = live.map(t => {
+      const exact = cas * (_tokStrength(t) / total);
+      const floor = Math.floor(exact);
+      return { id: t.id, take: floor, frac: exact - floor, cap: _tokStrength(t) };
+    });
+    let rem = cas - alloc.reduce((a, x) => a + x.take, 0);
+    alloc.sort((a, b) => b.frac - a.frac);
+    for (let i = 0; i < alloc.length && rem > 0; i++) if (alloc[i].take < alloc[i].cap) { alloc[i].take++; rem--; }
+    let guard = 0;
+    while (rem > 0 && guard++ < 10000) {                       // spill any capped remainder
+      let placed = false;
+      for (const x of alloc) { if (rem <= 0) break; if (x.take < x.cap) { x.take++; rem--; placed = true; } }
+      if (!placed) break;
+    }
+    for (const x of alloc) out.set(x.id, Math.max(0, x.cap - x.take));
+    return out;
+  }
+
+  function _clashTitle(outcome) {
+    return ({
+      defender_routed: "The wall is swept",
+      attacker_routed: "The assault is thrown back",
+      mutual_collapse: "Both hosts break",
+      stalemate:       "The lines grind"
+    })[outcome] || "The lines meet";
+  }
+
+  async function _clashCard({ hexName, outcome, breached, atkLost, defLost, A, D, A0, D0, rounds }) {
+    const pct = (lost, base) => base > 0 ? Math.round(100 * lost / base) : 0;
+    const color = outcome === "defender_routed" ? "#ff7a5a"
+                : outcome === "attacker_routed" ? "#88bbff"
+                : outcome === "mutual_collapse" ? "#ff5555" : "#d9a441";
+    try {
+      await ChatMessage.create({
+        content: `<div class="bbttcc-siege-clash" style="border:1px solid ${color};border-radius:6px;padding:.5rem .7rem;">
+          <h3 style="margin:0 0 .3rem;color:${color};">⚔ ${foundry.utils.escapeHTML(_clashTitle(outcome))} — ${foundry.utils.escapeHTML(hexName || "the wall")}</h3>
+          <div style="font-size:0.82em;color:#ccc;">The lines met ${breached ? "at the breach" : "before the wall"} over ${rounds} round${rounds === 1 ? "" : "s"}.</div>
+          <table style="width:100%;margin-top:.35rem;font-size:0.8em;color:#ddd;border-collapse:collapse;">
+            <tr style="color:#999;"><th style="text-align:left;"></th><th style="text-align:right;">Fell</th><th style="text-align:right;">Left</th><th style="text-align:right;">Lost</th></tr>
+            <tr><td style="color:#ffb;">⚔ Attacker</td><td style="text-align:right;">${atkLost}</td><td style="text-align:right;">${A}</td><td style="text-align:right;">${pct(atkLost, A0)}%</td></tr>
+            <tr><td style="color:#bdf;">🛡 Defender</td><td style="text-align:right;">${defLost}</td><td style="text-align:right;">${D}</td><td style="text-align:right;">${pct(defLost, D0)}%</td></tr>
+          </table>
+        </div>`
+      });
+    } catch (e) { console.warn(TAG, "clash card failed", e); }
+  }
+
+  async function resolveClash(opts = {}) {
+    if (!game.user?.isGM) return { ok: false, error: "GM only" };
+
+    const sib = await _resolveSiege(opts.hexUuid);
+    if (!sib) return { ok: false, error: "no active siege found (pass { hexUuid })" };
+    const { hexUuid, state } = sib;
+
+    let scene = opts.sceneId ? game.scenes.get(opts.sceneId) : null;
+    if (!scene) { const sid = (state.layers || [])[state.currentLayerIdx ?? 0]?.sceneId; if (sid) scene = game.scenes.get(sid); }
+    if (!scene) scene = canvas?.scene || null;
+    if (!scene) return { ok: false, error: "no scene" };
+
+    const atkTokens = _sideUnitTokens(scene, hexUuid, "attacker");
+    const defTokens = _sideUnitTokens(scene, hexUuid, "defender");
+    if (!atkTokens.length || !defTokens.length) {
+      return { ok: false, error: `both sides must be formed up first (attacker units: ${atkTokens.length}, defender units: ${defTokens.length}) — run musterToScene for each side` };
+    }
+
+    let A = atkTokens.reduce((a, t) => a + _tokStrength(t), 0);
+    let D = defTokens.reduce((a, t) => a + _tokStrength(t), 0);
+    const A0 = A, D0 = D;
+    if (A <= 0 || D <= 0) return { ok: false, error: `a side is already spent (attacker ${A}, defender ${D}) — recall + re-form to fight again` };
+
+    // Fortification posture: an unbreached current layer lets the defender trade up; once
+    // breached the wall advantage is gone. Storm Final Assault presses the attacker harder.
+    const layer = (state.layers || [])[state.currentLayerIdx ?? 0] || null;
+    const breached = !!layer?.breached;
+    const wallMult  = breached ? 1.0 : _num(opts.wallMult, 1.5);
+    const stormMult = state.stormAssault ? 1.25 : 1.0;
+    const atkEff = _num(opts.atkEff, 0.15) * stormMult * _num(opts.attackerBonus, 1);
+    const defEff = _num(opts.defEff, 0.15) * wallMult  * _num(opts.defenderBonus, 1);
+
+    const rounds = Math.max(1, Math.min(6, _num(opts.rounds, 3)));
+    const luck = () => 0.78 + Math.random() * 0.44;            // 0.78–1.22 per-exchange swing
+    const roundLog = [];
+    for (let r = 0; r < rounds; r++) {
+      const defCas = Math.min(D, Math.round(A * atkEff * luck()));   // attacker fells defenders
+      const atkCas = Math.min(A, Math.round(D * defEff * luck()));   // defenders fell attackers
+      A = Math.max(0, A - atkCas);
+      D = Math.max(0, D - defCas);
+      roundLog.push({ round: r + 1, atkCas, defCas, atkLeft: A, defLeft: D });
+      if (A <= 0 || D <= 0) break;
+    }
+    let outcome = "stalemate";
+    if (A <= 0 && D <= 0) outcome = "mutual_collapse";
+    else if (D <= 0) outcome = "defender_routed";
+    else if (A <= 0) outcome = "attacker_routed";
+    const atkLost = A0 - A, defLost = D0 - D;
+
+    // Deplete the unit tokens to match the simulated survivors; rout (mark/optionally remove) at 0.
+    const atkNew = _distributeCasualties(atkTokens, atkLost);
+    const defNew = _distributeCasualties(defTokens, defLost);
+    const updates = [], routedIds = [];
+    const _mkUpdate = (t, side) => {
+      const newStr = (side === "attacker" ? atkNew : defNew).get(t.id) ?? _tokStrength(t);
+      const f = t.flags?.[MOD_R] || {};
+      const md = f.musterDeployment || {};
+      const routed = newStr <= 0;
+      const label = String(t.name || "").replace(/^💀\s*/, "").replace(/\s*·\s*\d+.*$/, "").trim() || "Contingent";
+      const u = {
+        _id: t.id,
+        name: routed ? `💀 ${label} · 0` : `${label} · ${newStr}`,
+        [`flags.${MOD_R}.unitStrength`]: newStr,
+        [`flags.${MOD_R}.musterDeployment`]: Object.assign({}, md, { strength: newStr, routed })
+      };
+      if (routed) { u.alpha = 0.4; routedIds.push(t.id); }
+      updates.push(u);
+    };
+    for (const t of atkTokens) _mkUpdate(t, "attacker");
+    for (const t of defTokens) _mkUpdate(t, "defender");
+    try { if (updates.length) await scene.updateEmbeddedDocuments("Token", updates); }
+    catch (e) { console.warn(TAG, "token depletion update failed", e); }
+    if (opts.removeRouted && routedIds.length) {
+      try { await scene.deleteEmbeddedDocuments("Token", routedIds); }
+      catch (e) { console.warn(TAG, "routed-token removal failed", e); }
+    }
+    try { await _tableau()?.applyAll?.(); } catch (_e) {}
+
+    // Reconcile the §5 muster (muster IS the field → equals surviving strength) + record the
+    // clash for the end-of-siege butcher's bill.
+    const turn = _turn();
+    try {
+      const S = _siege(); const st = await S.getState(hexUuid);
+      if (st) {
+        st.attackerMuster = A;
+        st.defenderMuster = D;
+        st.clashCasualties = st.clashCasualties || { attacker: 0, defender: 0 };
+        st.clashCasualties.attacker += atkLost;
+        st.clashCasualties.defender += defLost;
+        st.clashes = Array.isArray(st.clashes) ? st.clashes : [];
+        st.clashes.push({ turn, rounds: roundLog.length, atkLost, defLost, atkLeft: A, defLeft: D, outcome });
+        S.appendNarrativeBeat(st, {
+          turn, kind: "clash", title: _clashTitle(outcome),
+          description: `The lines meet ${breached ? "at the breach" : "before the wall"}: attacker −${atkLost} (${A} left), defender −${defLost} (${D} left).`,
+          payload: { atkLost, defLost, atkLeft: A, defLeft: D, outcome, rounds: roundLog.length }
+        });
+        await S.setState(hexUuid, st);
+      }
+    } catch (e) { console.warn(TAG, "clash state write failed", e); }
+
+    // §6 VFX — fire the clash spectacle on every client (relayed). Volley scales with host size.
+    const wallId = layer?.structureActorId || null;
+    const volley = Math.max(2, Math.min(8, Math.round(Math.min(A0, D0) / 30)));
+    _relay("bbttcc:siege:clash", { siegeId: state.siegeId, hexUuid, outcome, atkLost, defLost, atkLeft: A, defLeft: D, rounds: roundLog.length });
+    _relay("bbttcc:siege:projectile", { structureActorId: wallId, family: breached ? "fire" : "boulder", count: volley, direction: "incoming", shake: true });
+    if (D > 0) _relay("bbttcc:siege:projectile", { structureActorId: wallId, family: "arrows", count: Math.max(2, Math.round(volley * 0.7)), direction: "outgoing", shake: false });
+
+    let hexName = null;
+    try { const ref = await fromUuid(hexUuid); hexName = ref?.name || ref?.document?.flags?.[MOD_T]?.name || null; } catch (_e) {}
+    await _clashCard({ hexName, outcome, breached, atkLost, defLost, A, D, A0, D0, rounds: roundLog.length });
+    try { _siege()?.refreshHud?.(); } catch (_e) {}
+
+    ui.notifications?.info(`Clash resolved — ${_clashTitle(outcome)} (attacker −${atkLost}, defender −${defLost}).`);
+    return { ok: true, outcome, rounds: roundLog.length, attacker: { start: A0, left: A, lost: atkLost }, defender: { start: D0, left: D, lost: defLost }, log: roundLog, routed: routedIds.length };
+  }
+
+  // Convenience for the HUD: form up BOTH sides in one gesture (attacker then defender).
+  async function formUpBoth(opts = {}) {
+    const a = await musterToScene(Object.assign({}, opts, { side: "attacker" }));
+    const d = await musterToScene(Object.assign({}, opts, { side: "defender" }));
+    return { ok: !!(a.ok || d.ok), attacker: a, defender: d };
+  }
+
+  // End-of-siege muster reconciliation (read-only): the butcher's bill for the saga / outcome card.
+  async function musterReport(opts = {}) {
+    const sib = await _resolveSiege(opts.hexUuid); if (!sib) return null;
+    const st = sib.state || {};
+    const cc = st.clashCasualties || { attacker: 0, defender: 0 };
+    return {
+      hexUuid: sib.hexUuid,
+      attacker: { muster: _num(st.attackerMuster, null), clashDead: _num(cc.attacker, 0) },
+      defender: { muster: _num(st.defenderMuster, null), clashDead: _num(cc.defender, 0) },
+      clashes: Array.isArray(st.clashes) ? st.clashes.length : 0
+    };
+  }
+
   // ── Install ───────────────────────────────────────────────────────────────────
   function _install() {
     const S = _siege(); if (!S) return false;
     S.musterToScene = musterToScene;
     S.recallMuster  = recallMuster;
     S.musterSize    = musterSize;
+    S.resolveClash  = resolveClash;
+    S.formUpBoth    = formUpBoth;
+    S.musterReport  = musterReport;
     return true;
   }
   Hooks.once("ready", () => {
@@ -255,7 +475,7 @@
       let n = 0;
       const iv = setInterval(() => { if (_install() || ++n > 40) clearInterval(iv); }, 250);
     }
-    console.log(TAG, "ready — game.bbttcc.api.siege.{musterToScene,recallMuster,musterSize}");
+    console.log(TAG, "ready — game.bbttcc.api.siege.{musterToScene,recallMuster,musterSize,resolveClash,formUpBoth,musterReport}");
   });
 
   console.log(TAG, "loaded");

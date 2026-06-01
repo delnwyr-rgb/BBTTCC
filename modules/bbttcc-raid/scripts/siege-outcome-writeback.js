@@ -215,7 +215,7 @@
     } catch (e) { console.warn(TAG, `war-log saga push failed (${role})`, e); }
   }
 
-  async function _chatCard({ state, cfg, hexName, refunded, holdingsSummary }){
+  async function _chatCard({ state, cfg, hexName, refunded, holdingsSummary, musterSummary }){
     const beats = (state.narrativeBeats || []).slice(-8);
     const beatList = beats.map(b => `<li style="margin:0;">${foundry.utils.escapeHTML(b.title || b.kind || "—")}</li>`).join("");
     const color = cfg.win ? "#d9a441" : "#9a9a9a";
@@ -225,6 +225,7 @@
         <div style="font-size:0.85em;color:#bbb;">
           ${cfg.transferHex ? "Hex taken. " : ""}${cfg.modifiers?.length ? `Modifiers: ${cfg.modifiers.join(", ")}. ` : ""}${refunded ? `Buffer refund: +${refunded} OP. ` : ""}${holdingsSummary && holdingsSummary !== "no holdings at hex" ? `Holdings: ${holdingsSummary}.` : ""}
         </div>
+        ${musterSummary ? `<div style="font-size:0.82em;color:#e0b0a0;margin-top:.25rem;">⚔ ${foundry.utils.escapeHTML(musterSummary)}</div>` : ""}
         ${beats.length ? `<details style="margin-top:.35rem;"><summary style="cursor:pointer;color:${color};font-size:0.82em;">Siege Saga (${(state.narrativeBeats || []).length} beats)</summary><ul style="margin:.25rem 0 0;padding-left:1.1rem;font-size:0.8em;color:#ccc;">${beatList}</ul></details>` : ""}
       </div>`
     });
@@ -255,6 +256,19 @@
       const attackerId = state.attackerFactionId || null;
       const defenderId = (hexDoc && S.hexOwner) ? (S.hexOwner(hexDoc) || null) : null;   // read BEFORE transfer
       const intent = state.intent || "sack";
+
+      // 0. Muster reconciliation (§5) — the end-of-siege butcher's bill. resolveClash (Stage 2)
+      //    deducts every clash casualty from the per-side muster and tallies state.clashCasualties;
+      //    here we retell it in the saga + outcome card. (The named-roster overflow — champions/
+      //    holdings dying once the muster is bled out — rides the existing breach/duel machinery.)
+      const cc = state.clashCasualties || { attacker: 0, defender: 0 };
+      const aDead = Number(cc.attacker) || 0, dDead = Number(cc.defender) || 0;
+      const clashCount = Array.isArray(state.clashes) ? state.clashes.length : 0;
+      let musterSummary = "";
+      if (aDead || dDead || clashCount) {
+        musterSummary = `Muster losses — attacker ${aDead}, defender ${dDead} over ${clashCount} clash${clashCount === 1 ? "" : "es"}.`;
+        S.appendNarrativeBeat(state, { turn, kind: "butchers_bill", title: "The butcher's bill", description: musterSummary });
+      }
 
       // 1. Drain mid-siege pending morale deltas (E.3 relief −1 / E.4 trojan −2).
       for (const d of (state.pendingMoraleDeltas || [])) await _bumpMorale(d.factionId, d.delta, d.reason || "pending");
@@ -290,7 +304,7 @@
       if (defenderId && defenderId !== attackerId) await _pushSaga(defenderId, "defender", { state, cfg, hexUuid, turn });
 
       // 8. Chat card with the retold saga.
-      await _chatCard({ state, cfg, hexName: ref?.name || hexDoc?.name, refunded, holdingsSummary });
+      await _chatCard({ state, cfg, hexName: ref?.name || hexDoc?.name, refunded, holdingsSummary, musterSummary });
 
       // 9. Clear the siege flag + faction back-refs (the campaign moves on).
       try { await S.clearState(hexUuid); } catch (e) { console.warn(TAG, "clearState failed", e); }

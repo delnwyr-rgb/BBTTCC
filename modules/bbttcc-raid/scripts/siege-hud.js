@@ -123,6 +123,21 @@
     const reliefBtn = reliefPending
       ? `<button type="button" data-act="relieve" data-hex="${esc(entry.hexUuid)}" title="${reliefArrived ? "Convene the Relief Scene (relief has arrived)" : "Relief is still en route — convene early to pre-empt"}" style="flex:1;padding:3px 6px;background:#101a2a;color:${reliefArrived ? "#88bbff" : "#5a6a8a"};border:1px solid ${reliefArrived ? "#88bbff" : "#2a4a6a"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${reliefArrived ? "1" : "0.6"};box-shadow:${reliefArrived ? "0 0 8px rgba(136,187,255,0.5)" : "none"};">🛡 Relieve</button>`
       : "";
+    // Muster (§5 / Stage 2) — Form Up deploys both hosts as unit tokens on the battle scene;
+    // Resolve the Clash simulates the engagement, depletes them, and reconciles the muster.
+    const aMus = Number(s.attackerMuster);
+    const dMus = Number(s.defenderMuster);
+    const formedUp = (s.musterDeployments?.attacker?.tokenIds?.length || 0) > 0
+                  && (s.musterDeployments?.defender?.tokenIds?.length || 0) > 0;
+    const musRead = (Number.isFinite(aMus) || Number.isFinite(dMus))
+      ? `<span style="font-size:0.66rem;color:#9a8;margin-left:auto;">host ⚔ ${Number.isFinite(aMus) ? aMus : "—"} · 🛡 ${Number.isFinite(dMus) ? dMus : "—"}</span>` : "";
+    const musterBtns = isGM
+      ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
+          <button type="button" data-act="formup" data-hex="${esc(entry.hexUuid)}" title="Form Up — deploy both hosts as unit tokens (forced-perspective)" style="flex:1;padding:3px 6px;background:#102818;color:#8fd6a0;border:1px solid #3f8a55;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⛺ Form Up</button>
+          <button type="button" data-act="clash" data-hex="${esc(entry.hexUuid)}" title="${formedUp ? "Resolve the Clash — simulate the engagement, deplete the muster" : "Form Up both sides first"}" style="flex:1;padding:3px 6px;background:#2a1410;color:${formedUp ? "#ff9a7a" : "#7a5a4a"};border:1px solid ${formedUp ? "#b85a3a" : "#5a3a2a"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${formedUp ? "1" : "0.6"};">⚔ Resolve</button>
+          ${musRead}
+        </div>`
+      : "";
     const gmBtns = isGM
       ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;">
           <button type="button" data-act="convene" data-hex="${esc(entry.hexUuid)}" style="flex:2;padding:3px 6px;background:#2a2310;color:${BRONZE};border:1px solid ${BRONZE};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⚔ Convene</button>
@@ -179,6 +194,7 @@
       ${_beatsFooter(s)}
       ${offerBtns}
       ${gmBtns}
+      ${musterBtns}
     </div>`;
   }
 
@@ -366,6 +382,26 @@
         else ui.notifications?.warn?.("Trojan Horse not available (siege-trojan-horse.js not loaded?).");
       });
     });
+    // Muster (Stage 2) — Form Up both hosts / Resolve the Clash.
+    el.querySelectorAll('button[data-act="formup"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const hex = btn.dataset.hex;
+        const fn = game.bbttcc?.api?.siege?.formUpBoth;
+        if (typeof fn === "function") fn({ hexUuid: hex }).catch(e => { console.error(TAG, "formUp failed", e); ui.notifications?.error?.("Form Up failed — see console."); });
+        else ui.notifications?.warn?.("Form Up not available (siege-muster.js not loaded?).");
+      });
+    });
+    el.querySelectorAll('button[data-act="clash"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const hex = btn.dataset.hex;
+        const fn = game.bbttcc?.api?.siege?.resolveClash;
+        if (typeof fn !== "function") return ui.notifications?.warn?.("Resolve the Clash not available (siege-muster.js not loaded?).");
+        fn({ hexUuid: hex }).then(r => { if (r && r.ok === false) ui.notifications?.warn?.(r.error || "Clash could not resolve."); })
+          .catch(e => { console.error(TAG, "resolveClash failed", e); ui.notifications?.error?.("Resolve the Clash failed — see console."); });
+      });
+    });
     // Pending-offer resolution (Sue for Terms / Demand Surrender) — resolve by click.
     const _resolveOffer = (act, hex) => {
       const api = game.bbttcc?.api?.siege;
@@ -441,6 +477,7 @@
   Hooks.on("bbttcc:siege:reliefRepulsed", _scheduleRender);
   Hooks.on("bbttcc:siege:trojanHorse", _scheduleRender);
   Hooks.on("bbttcc:siege:trojanFailed", _scheduleRender);
+  Hooks.on("bbttcc:siege:clash", _scheduleRender);
   Hooks.on("bbttcc:siege:outcome", _scheduleRender);
 
   // PLAYER-SIDE refresh: the bbttcc:siege:* hooks above fire only locally on the GM

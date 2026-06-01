@@ -411,6 +411,27 @@
     catch (e) { console.warn(TAG, "bombardment volley failed", e); }
   }
 
+  // Stage 2 — Resolve the Clash. The lines meet: a banner keyed to who broke (the boulder/
+  // arrow volleys are fired separately by resolveClash via the projectile beat). Decisive
+  // routs flash + shake; a grinding stalemate just banners.
+  function _onClash(payload) {
+    _injectStylesOnce();
+    try {
+      const outcome = String(payload?.outcome || "stalemate");
+      const map = {
+        defender_routed: { label: "The Wall is Swept",        color: "#ff7a5a", flash: true,  shake: true },
+        attacker_routed: { label: "The Assault is Thrown Back", color: BLUE,    flash: false, shake: true },
+        mutual_collapse: { label: "Both Hosts Break",          color: RED,      flash: true,  shake: true },
+        stalemate:       { label: "The Lines Grind",           color: BRONZE,   flash: false, shake: false }
+      };
+      const p = map[outcome] || map.stalemate;
+      _banner(`⚔ ${p.label}`, p.color);
+      if (p.flash) _fullScreenFlash(p.color);
+      if (p.shake) _shakeBoard();
+      _pulse(_hudPanel(), p.color);
+    } catch (e) { console.warn(TAG, "clash vfx failed", e); }
+  }
+
   // Generic projectile beat — the reusable spectacle layer any siege event can fire.
   // payload = { structureActorId, family, count, scale, direction, stagger, travel,
   //             banner?, color?, shake?:false }. Banner + shake run on every client; the
@@ -446,6 +467,7 @@
   Hooks.on("bbttcc:siege:event", _onEvent);
   Hooks.on("bbttcc:siege:bombardment", _onBombardment);
   Hooks.on("bbttcc:siege:projectile", _onProjectile);
+  Hooks.on("bbttcc:siege:clash", _onClash);
 
   // Expose for the selftest / manual preview.
   function _install() {
@@ -466,6 +488,7 @@
       if (kind === "event") return _onEvent(payload);
       if (kind === "bombardment") return _onBombardment(payload);
       if (kind === "projectile") return _onProjectile(payload);
+      if (kind === "clash") return _onClash(payload);
       console.warn(TAG, "previewVfx: unknown kind", kind);
     };
 

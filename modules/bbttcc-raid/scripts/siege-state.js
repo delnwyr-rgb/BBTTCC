@@ -133,6 +133,15 @@
       interdictedHexIds: [],
       // Running tally of defender holdings lost to Sorties (outcome bookkeeping; Phase E/F roster write-back).
       sortieCasualtiesTotal: 0,
+      // ---- Muster (§5) + Stage 2 "Resolve the Clash" bookkeeping ----
+      // attackerMuster/defenderMuster are the per-side troop scalars (seeded at Form Up by
+      // siege-muster.musterToScene, depleted by resolveClash). clashCasualties is the running
+      // butcher's bill; clashes[] logs each engagement for the end-of-siege reconciliation.
+      attackerMuster: null,
+      defenderMuster: null,
+      musterDeployments: {},
+      clashCasualties: { attacker: 0, defender: 0 },
+      clashes: [],
       // ---- Counter-activity state (Phase E.1) ----
       defenderAnytimeBudget: 0,   // Reinforce Garrison / Champion Defends Wall — consumed by E.2 budget calc
       renewalPool: 0,             // Reinforce Garrison — defender repair pool (Phase F)
