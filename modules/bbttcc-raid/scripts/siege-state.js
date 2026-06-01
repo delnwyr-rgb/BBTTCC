@@ -479,6 +479,38 @@
     return true;
   }
 
+  // ---- Buffer top-up (GM dev / testbed helper) ----
+  // The siege OP Buffer is committed at Begin Siege and meant to deplete (tick + clash maneuvers).
+  // There's no in-fiction "refill" — but for testing (e.g. having enough OP to fire Bombard) this
+  // refills it. Default: restore to the starting total (min 60), distributed like the initial commit.
+  //   topUpBuffer()                       → restore active siege to full
+  //   topUpBuffer(hexUuid, { set: 80 })   → set total to 80
+  //   topUpBuffer(hexUuid, { add: 30 })   → add 30 (to violence)
+  async function topUpSiegeBuffer(hexUuid, { set = null, add = null } = {}){
+    if (!game.user?.isGM) return { ok: false, reason: "GM only" };
+    let uuid = hexUuid;
+    if (!uuid) { const list = listActiveSieges(); if (list.length === 1) uuid = list[0].hexUuid; }
+    if (!uuid) return { ok: false, reason: "pass a hexUuid (zero or multiple active sieges)" };
+    const state = await getSiegeState(uuid);
+    if (!state) return { ok: false, reason: "no siege state on that hex" };
+    const empty = { violence: 0, logistics: 0, economy: 0, softPower: 0, diplomacy: 0, faith: 0, intrigue: 0 };
+    const buf = Object.assign({}, empty, state.buffer || {});
+    if (add != null) {
+      buf.violence = (Number(buf.violence) || 0) + Number(add);
+    } else {
+      const target = set != null ? Number(set) : Math.max(60, Number(state.bufferStartingTotal) || 60);
+      const v = Math.round(target * 0.5), l = Math.round(target * 0.33);
+      Object.assign(buf, empty, { violence: v, logistics: l, economy: Math.max(0, target - v - l) });
+    }
+    state.buffer = buf;
+    const total = Object.values(buf).reduce((a, b) => a + (Number(b) || 0), 0);
+    if (!Number(state.bufferStartingTotal) || total > Number(state.bufferStartingTotal)) state.bufferStartingTotal = total;
+    await setSiegeState(uuid, state);
+    try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
+    ui.notifications?.info?.(`Siege Buffer topped up — ${total} OP.`);
+    return { ok: true, total, hexUuid: uuid };
+  }
+
   // ---- API exposure (per bbttcc-api-exposure-pattern) ----
 
   function _installSiegeAPI(){
@@ -498,6 +530,7 @@
       setState: setSiegeState,
       clearState: clearSiegeState,
       list: listActiveSieges,
+      topUpBuffer: topUpSiegeBuffer,
 
       // validation
       validateDepot,
