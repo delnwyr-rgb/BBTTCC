@@ -103,6 +103,45 @@
     } catch (_e) { return null; }
   }
 
+  // ── Garrison helpers (defenders ON the walls) ────────────────────────────────
+  // Each fortification layer with a wall token on the scene can be MANNED: a slice of the
+  // defender muster stands on the wall's footprint. Because garrison contingents are NPC
+  // contingents (not structures), the breach collapse (collapse.js findTokensInsideFootprint)
+  // catches them automatically → breaching a manned wall slaughters its garrison.
+  function _layerWallTokens(scene, state) {
+    const out = [];
+    const gs = _num(scene.grid?.size || scene.gridSize, 100);
+    for (const layer of (state?.layers || [])) {
+      const wallId = layer?.structureActorId;
+      if (!wallId) continue;
+      const td = (scene.tokens?.contents || []).find(t => t.actorId === wallId);
+      if (!td) continue;
+      const w = _num(td.width, 1) * gs, h = _num(td.height, 1) * gs;
+      let plateMax = 0;
+      try { plateMax = _num(_api()?.structures?.readState?.(game.actors.get(wallId))?.plates?.max, 0); } catch (_e) {}
+      out.push({ layer, td, x: _num(td.x), y: _num(td.y), w, h, cx: _num(td.x) + w / 2, cy: _num(td.y) + h / 2, plateMax });
+    }
+    return out;
+  }
+  // K slot CENTERS clustered on a wall's footprint, biased toward the battlements (upper third),
+  // clamped so each token center lands inside the wall's grid cells (so collapse catches them).
+  // Returns top-left token coords (center − gs/2).
+  function _garrisonSlots(wall, K, gs) {
+    const cols = Math.max(1, Math.min(K, 4));
+    const rows = Math.ceil(K / cols);
+    const sx = gs * 0.9, sy = gs * 0.75;
+    const slots = [];
+    for (let i = 0; i < K; i++) {
+      const c = i % cols, r = Math.floor(i / cols);
+      let ccx = wall.cx + (c - (cols - 1) / 2) * sx;
+      let ccy = wall.cy + (r - (rows - 1) / 2) * sy - wall.h * 0.12;   // bias up = on the battlements
+      ccx = Math.max(wall.x + gs * 0.3, Math.min(wall.x + wall.w - gs * 0.3, ccx));
+      ccy = Math.max(wall.y + gs * 0.3, Math.min(wall.y + wall.h - gs * 0.3, ccy));
+      slots.push({ x: Math.round(ccx - gs / 2), y: Math.round(ccy - gs / 2) });
+    }
+    return slots;
+  }
+
   // ── The unit actor (minimal — combat is simulated) ───────────────────────────
   function _pickActorType() {
     let types = game.documentTypes?.Actor || CONFIG?.Actor?.documentClass?.metadata?.types || [];
@@ -250,6 +289,136 @@
     return _factionMuster(f);
   }
 
+  // ── Garrison the Walls (defenders man the fortifications) ─────────────────────
+  // Split the defender muster: most of it GARRISONS the wall layers (staged on each present
+  // wall's footprint, tagged garrisonLayerId), the rest stands as a field RESERVE behind. A
+  // manned wall fights stiffer (resolveClash scales its bonus to remaining garrison); breaching
+  // a wall culls its garrison (collapse → muster bridge) and the survivors bleed into the muster.
+  async function garrisonWalls(opts = {}) {
+    if (!game.user?.isGM) return { ok: false, error: "GM only" };
+
+    const sib = await _resolveSiege(opts.hexUuid);
+    if (!sib) return { ok: false, error: "no active siege found (pass { hexUuid })" };
+    const { hexUuid, state } = sib;
+
+    let scene = opts.sceneId ? game.scenes.get(opts.sceneId) : null;
+    if (!scene) { const sid = (state.layers || [])[state.currentLayerIdx ?? 0]?.sceneId; if (sid) scene = game.scenes.get(sid); }
+    if (!scene) scene = canvas?.scene || null;
+    if (!scene) return { ok: false, error: "no scene to deploy onto" };
+
+    const faction = await _factionForSide("defender", hexUuid, state);
+    const total = _num(opts.total, 0) || _factionMuster(faction);
+    const garrisonPct = Math.max(0, Math.min(1, opts.garrisonPct != null ? _num(opts.garrisonPct, 0.7) : 0.7));
+
+    // De-dup the whole defender side (garrison + reserve).
+    const existing = (scene.tokens?.contents || []).filter(t => {
+      const m = t?.flags?.[MOD_R]?.musterDeployment; return m && m.hexUuid === hexUuid && m.side === "defender";
+    });
+    if (existing.length && !opts.force) {
+      return { ok: false, error: `defender muster already deployed (${existing.length} units) — recall first, or pass { force: true }`, existing: existing.length };
+    }
+
+    const tab = _tableau();
+    try { if (tab && tab.readConfig?.(scene)?.enabled !== true) await tab.enable?.({}, scene); } catch (_e) {}
+    const cfg = (tab?.readConfig?.(scene)) || { frontY: 800, backY: 200 };
+
+    const unitActor = await _ensureUnitActor(opts.unitActorId);
+    if (!unitActor) return { ok: false, error: "could not resolve a unit actor" };
+
+    const gs = _num(scene.grid?.size || scene.gridSize, 100);
+    const sw = _num(scene.width, 4000), sh = _num(scene.height, 3000);
+    const dispMode = globalThis.CONST?.TOKEN_DISPLAY_MODES?.ALWAYS ?? 50;
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+    const walls = _layerWallTokens(scene, state);
+    const garrisonTotal = walls.length ? Math.round(total * garrisonPct) : 0;
+    const reserveTotal = total - garrisonTotal;
+    const weights = walls.map(w => Math.max(1, w.plateMax || 1));
+    const wsum = weights.reduce((a, b) => a + b, 0) || 1;
+
+    const mkTok = async (x, y, strength, deploy, label) => {
+      let proto;
+      try { proto = await unitActor.getTokenDocument({ x, y }); }
+      catch (e) { console.warn(TAG, "getTokenDocument failed", e); return null; }
+      const data = (proto && typeof proto.toObject === "function") ? proto.toObject() : foundry.utils.deepClone(proto);
+      data.x = x; data.y = y; data.actorLink = false; data.hidden = false; data.disposition = -1; data.displayName = dispMode;
+      data.name = `🛡 ${label} · ${strength}`;
+      data.flags = data.flags || {};
+      data.flags[MOD_R] = Object.assign({}, data.flags[MOD_R] || {}, {
+        tableauActor: true, unitStrength: strength,
+        musterDeployment: Object.assign({ hexUuid, side: "defender", factionId: faction?.id || null, strength, deployedAt: Date.now() }, deploy)
+      });
+      return data;
+    };
+
+    const tokenData = [];
+    const plannedGarrison = {};   // layerId → { full, units, per }
+    for (let wi = 0; wi < walls.length; wi++) {
+      const wall = walls[wi];
+      const g = Math.round(garrisonTotal * weights[wi] / wsum);
+      if (g <= 0) continue;
+      const K = Math.max(1, Math.min(5, Math.round(g / 25) || 1));
+      const per = Math.max(1, Math.round(g / K));
+      const slots = _garrisonSlots(wall, K, gs);
+      for (let i = 0; i < K; i++) {
+        const d = await mkTok(slots[i].x, slots[i].y, per, { garrisonLayerId: wall.layer.layerId }, "Garrison");
+        if (d) tokenData.push(d);
+      }
+      plannedGarrison[wall.layer.layerId] = { full: g, units: K, per };
+    }
+
+    // Field reserve — a band at the defender's deep position (far/small on the tableau).
+    let plannedReserve = null;
+    if (reserveTotal > 0) {
+      const Kr = Math.max(1, Math.min(6, Math.round(reserveTotal / 30) || 1));
+      const perR = Math.max(1, Math.round(reserveTotal / Kr));
+      const cols = Math.max(1, Math.min(Kr, 4));
+      const stride = gs * 1.6;
+      const baseY = (opts.reserveBaseY != null) ? _num(opts.reserveBaseY) : _num(cfg.backY, 200) + stride;
+      const anchorX = sw / 2;
+      for (let i = 0; i < Kr; i++) {
+        const col = i % cols, row = Math.floor(i / cols);
+        const x = Math.round(clamp(anchorX + (col - (cols - 1) / 2) * stride, gs, sw - gs));
+        const y = Math.round(clamp(baseY + row * stride, gs, sh - gs));
+        const d = await mkTok(x, y, perR, { reserve: true }, "Reserve");
+        if (d) tokenData.push(d);
+      }
+      plannedReserve = { total: reserveTotal, units: Kr, per: perR };
+    }
+
+    if (!tokenData.length) return { ok: false, error: "no defender units could be built" };
+
+    let created = [];
+    try { created = await scene.createEmbeddedDocuments("Token", tokenData); }
+    catch (e) { console.warn(TAG, "garrison token create failed", e); return { ok: false, error: `createEmbeddedDocuments failed: ${e.message}` }; }
+    try { await tab?.applyAll?.(); } catch (_e) {}
+
+    // Record the deployment: per-layer garrison (with token ids) + reserve, and seed defenderMuster.
+    try {
+      const S = _siege(); const st = await S.getState(hexUuid);
+      if (st) {
+        st.defenderMuster = total;
+        st.musterDeployments = st.musterDeployments || {};
+        const garrison = {};
+        for (const [layerId, meta] of Object.entries(plannedGarrison)) {
+          const ids = created.filter(t => t.flags?.[MOD_R]?.musterDeployment?.garrisonLayerId === layerId).map(t => t.id);
+          garrison[layerId] = { full: meta.full, units: meta.units, per: meta.per, tokenIds: ids };
+        }
+        const reserveIds = created.filter(t => t.flags?.[MOD_R]?.musterDeployment?.reserve === true).map(t => t.id);
+        st.musterDeployments.defender = {
+          total, garrisonPct, sceneId: scene.id, deployedAt: Date.now(),
+          garrison, reserve: plannedReserve ? Object.assign({}, plannedReserve, { tokenIds: reserveIds }) : null
+        };
+        await S.setState(hexUuid, st);
+      }
+    } catch (e) { console.warn(TAG, "garrison state write failed", e); }
+
+    const layersManned = Object.keys(plannedGarrison).length;
+    ui.notifications?.info(`Garrison deployed — ${total} strong: ${garrisonTotal} on ${layersManned} wall(s), ${reserveTotal} in reserve.`);
+    try { _siege()?.refreshHud?.(); } catch (_e) {}
+    return { ok: true, total, garrisonTotal, reserveTotal, layersManned, created: created.length, scene: scene.id };
+  }
+
   // ── Stage 2: Resolve the Clash ───────────────────────────────────────────────
   // Simulate the engagement between the two formed-up musters. A short multi-round
   // attrition exchange: each side fells the other in proportion to its CURRENT strength
@@ -347,13 +516,26 @@
     if (A <= 0 || D <= 0) return { ok: false, error: `a side is already spent (attacker ${A}, defender ${D}) — recall + re-form to fight again` };
 
     // Fortification posture: an unbreached current layer lets the defender trade up; once
-    // breached the wall advantage is gone. Storm Final Assault presses the attacker harder.
+    // breached the structural advantage is gone. ON TOP of the stone, a MANNED wall fights
+    // stiffer — the bonus scales with how much garrison still holds the current layer (full
+    // garrison → big bonus, thinned/slaughtered → little). Storm Final Assault presses harder.
     const layer = (state.layers || [])[state.currentLayerIdx ?? 0] || null;
     const breached = !!layer?.breached;
-    const wallMult  = breached ? 1.0 : _num(opts.wallMult, 1.5);
+    const layerId = layer?.layerId;
+    // Garrison fraction on THIS layer = current garrison strength / strength deployed there.
+    let garrisonFrac = 0;
+    const gMeta = state.musterDeployments?.defender?.garrison?.[layerId] || null;
+    if (gMeta && gMeta.full > 0) {
+      const cur = defTokens
+        .filter(t => t.flags?.[MOD_R]?.musterDeployment?.garrisonLayerId === layerId)
+        .reduce((a, t) => a + _tokStrength(t), 0);
+      garrisonFrac = Math.max(0, Math.min(1, cur / gMeta.full));
+    }
+    const structuralMult = breached ? 1.0 : _num(opts.wallMult, 1.3);   // the stone itself
+    const garrisonMult   = 1 + 0.4 * garrisonFrac;                       // manned battlements
     const stormMult = state.stormAssault ? 1.25 : 1.0;
     const atkEff = _num(opts.atkEff, 0.15) * stormMult * _num(opts.attackerBonus, 1);
-    const defEff = _num(opts.defEff, 0.15) * wallMult  * _num(opts.defenderBonus, 1);
+    const defEff = _num(opts.defEff, 0.15) * structuralMult * garrisonMult * _num(opts.defenderBonus, 1);
 
     const rounds = Math.max(1, Math.min(6, _num(opts.rounds, 3)));
     const luck = () => 0.78 + Math.random() * 0.44;            // 0.78–1.22 per-exchange swing
@@ -442,10 +624,72 @@
     return { ok: true, outcome, rounds: roundLog.length, attacker: { start: A0, left: A, lost: atkLost }, defender: { start: D0, left: D, lost: defLost }, log: roundLog, routed: routedIds.length };
   }
 
-  // Convenience for the HUD: form up BOTH sides in one gesture (attacker then defender).
+  // ── Collapse → muster bridge ──────────────────────────────────────────────────
+  // When a wall breaches, collapse.js culls the tokens on its footprint (rubble damage + prone).
+  // For garrison contingents that's the fiction made real — so fold those casualties into the
+  // abstract muster: reduce unitStrength by the rubble toll, rout at 0, reconcile defenderMuster.
+  // GM-only (collapse is GM-authoritative). Harmless globally: non-muster tokens are skipped.
+  async function _onStructureCollapse(payload) {
+    if (!game.user?.isGM) return;
+    const results = Array.isArray(payload?.results) ? payload.results : [];
+    if (!results.length) return;
+    const scene = canvas?.scene; if (!scene) return;
+
+    const updates = [];
+    let hexUuid = null, culled = 0;
+    for (const res of results) {
+      const aId = res?.actor?.id; if (!aId) continue;
+      const loss = Math.max(0, _num(res?.rolled, _num(res?.applied, 0)));   // bodies lost = the rubble's toll
+      if (loss <= 0) continue;
+      const tok = (scene.tokens?.contents || []).find(t => t.actor?.id === aId);
+      const md = tok?.flags?.[MOD_R]?.musterDeployment;
+      if (!tok || !md) continue;                                            // not a muster contingent
+      const prev = _tokStrength(tok);
+      const next = Math.max(0, prev - loss);
+      culled += (prev - next);
+      const routed = next <= 0;
+      const label = String(tok.name || "").replace(/^💀\s*/, "").replace(/\s*·\s*\d+.*$/, "").trim() || "Garrison";
+      const u = {
+        _id: tok.id,
+        name: routed ? `💀 ${label} · 0` : `${label} · ${next}`,
+        [`flags.${MOD_R}.unitStrength`]: next,
+        [`flags.${MOD_R}.musterDeployment`]: Object.assign({}, md, { strength: next, routed })
+      };
+      if (routed) u.alpha = 0.4;
+      updates.push(u);
+      if (md.hexUuid) hexUuid = md.hexUuid;
+    }
+    if (!updates.length) return;
+    try { await scene.updateEmbeddedDocuments("Token", updates); }
+    catch (e) { console.warn(TAG, "collapse→muster update failed", e); return; }
+
+    // Reconcile the defender muster = surviving defender strength on the scene.
+    if (hexUuid) {
+      try {
+        const S = _siege(); const st = await S.getState(hexUuid);
+        if (st) {
+          const survivors = (scene.tokens?.contents || [])
+            .filter(t => { const m = t?.flags?.[MOD_R]?.musterDeployment; return m && m.hexUuid === hexUuid && m.side === "defender"; })
+            .reduce((a, t) => a + _tokStrength(t), 0);
+          st.defenderMuster = survivors;
+          st.clashCasualties = st.clashCasualties || { attacker: 0, defender: 0 };
+          st.clashCasualties.defender += culled;
+          S.appendNarrativeBeat(st, { turn: _turn(), kind: "garrison_culled", title: "The garrison falls with the wall", description: `Defenders caught in the collapse — −${culled}, defender muster down to ${survivors}.` });
+          await S.setState(hexUuid, st);
+        }
+      } catch (e) { console.warn(TAG, "garrison muster reconcile failed", e); }
+    }
+    try { _siege()?.refreshHud?.(); } catch (_e) {}
+  }
+
+  // Convenience for the HUD: form up BOTH sides in one gesture. Attacker = field host;
+  // defender = GARRISON the walls + field reserve (falls back to a plain field band when no
+  // wall tokens are staged). Pass { defenderField: true } to force the old field-band defender.
   async function formUpBoth(opts = {}) {
     const a = await musterToScene(Object.assign({}, opts, { side: "attacker" }));
-    const d = await musterToScene(Object.assign({}, opts, { side: "defender" }));
+    const d = opts.defenderField
+      ? await musterToScene(Object.assign({}, opts, { side: "defender" }))
+      : await garrisonWalls(opts);
     return { ok: !!(a.ok || d.ok), attacker: a, defender: d };
   }
 
@@ -469,6 +713,7 @@
     S.recallMuster  = recallMuster;
     S.musterSize    = musterSize;
     S.resolveClash  = resolveClash;
+    S.garrisonWalls = garrisonWalls;
     S.formUpBoth    = formUpBoth;
     S.musterReport  = musterReport;
     return true;
@@ -478,7 +723,12 @@
       let n = 0;
       const iv = setInterval(() => { if (_install() || ++n > 40) clearInterval(iv); }, 250);
     }
-    console.log(TAG, "ready — game.bbttcc.api.siege.{musterToScene,recallMuster,musterSize,resolveClash,formUpBoth,musterReport}");
+    // Garrison casualties: when a wall breaches, fold the collapse cull into the muster.
+    if (!globalThis.__bbttcc_siege_muster_collapse_hook) {
+      Hooks.on("bbttcc:structure:collapse", _onStructureCollapse);
+      globalThis.__bbttcc_siege_muster_collapse_hook = true;
+    }
+    console.log(TAG, "ready — game.bbttcc.api.siege.{musterToScene,recallMuster,musterSize,resolveClash,garrisonWalls,formUpBoth,musterReport}");
   });
 
   console.log(TAG, "loaded");
