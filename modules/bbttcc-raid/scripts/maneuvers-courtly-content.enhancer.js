@@ -59,6 +59,15 @@
       ]
     },
     {
+      key: "courtly_the_last_word", label: "The Last Word", tier: 3, costBand: "medium",
+      cost: { softpower: 20 },
+      effectsText: "Your next Expose/Intimidate raises NO Suspicion (once per scenario).",
+      description: "<p>The Cosmic Linguist's signature — you speak the one sentence the room cannot answer. <b>Your next Expose or Intimidate generates no Suspicion at all.</b> Swing the social hammer and the court can't turn on you for it. <em>Once per scenario.</em></p>",
+      effects: [
+        { type: "armLastWord", side: "self", source: "The Last Word" }
+      ]
+    },
+    {
       key: "courtly_quote_old_law", label: "Quote the Old Law", tier: 2, costBand: "medium",
       cost: { diplomacy: 20 },
       effectsText: "Suspicion −2. Cancel one Scandal on the table.",

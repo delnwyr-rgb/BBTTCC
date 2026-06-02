@@ -134,6 +134,19 @@
     if (game?.ready) go(); else Hooks.once("ready", go);
   }
 
+  // Survey audit — Diplomatic Envoys (the Social specialist CREW). An ACTIVE Diplomatic Envoys
+  // crew on a side softens the court: that side's Expose/Intimidate cost −1 Suspicion (the
+  // Covert-Ops-Cell analog — raising tolerance for the obstacle). Name match slash/space-insensitive.
+  function _sideHasActiveCrew(actor, crewName) {
+    try {
+      const ac = actor?.flags?.fourththing?.echoAssets?.activeCrew;
+      if (!Array.isArray(ac)) return false;
+      const norm = (s) => String(s || "").toLowerCase().replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").trim();
+      const want = norm(crewName);
+      return ac.some(n => norm(n) === want);
+    } catch { return false; }
+  }
+
   function computeInfluenceHP({ baseCommitDip=0, baseCommitSoft=0 }) {
     return Math.max(
       1,
@@ -338,6 +351,14 @@
         courtBonusA: 0,                // computed at step() entry from courtier favor
         courtBonusD: 0,
         courtCollapsed: false,         // set when suspicion hits 10
+        // Social obstacle-KEY (survey audit) — "The Last Word" (Cosmic Linguist signature):
+        // the armed side's NEXT Expose/Intimidate raises NO Suspicion (bypassing the meter that
+        // punishes the social hammer — the courtly analog of Catastrophic Entry vs a wall's
+        // Threshold). Once per side per scenario.
+        lastWordA: false, lastWordD: false, lastWordUsedA: false, lastWordUsedD: false,
+        // Diplomatic Envoys (Social specialist crew) — that side's aggressive plays cost −1 Suspicion.
+        envoysA: _sideHasActiveCrew(A, "Diplomatic Envoys"),
+        envoysD: _sideHasActiveCrew(D, "Diplomatic Envoys"),
         // Phase C/D — Pending mods queue.
         // Schema: { side, type: "bonus"|"forceReroll"|"actionBonus", value?, source,
         //          actionFilter? (D), fireOnRound? (E — gate to specific round) }
@@ -606,6 +627,23 @@
         } else {
           state.suspicionQuietStreak = 0;
         }
+
+        // ── Social obstacle-KEY effects ──────────────────────────────────────
+        // "The Last Word" (Cosmic Linguist): the armed side's aggressive play this round raises
+        // NO Suspicion. Diplomatic Envoys (crew): −1 Suspicion on that side's aggressive play.
+        // Per-side — computed from this round's OWN contributions so only the acting side is hit.
+        const _sideSuspContribution = (act, isAtk) => {
+          let s = 0;
+          if (act === "expose") s += 1;
+          if (act === "intimidate") s += 1;
+          if (act === "expose" && ((isAtk && result === "defender" && (-margin) >= 5) || (!isAtk && result === "attacker" && margin >= 5))) s += 2;
+          return s;
+        };
+        if (state.lastWordA) { const s = _sideSuspContribution(atkAct, true); if (s > 0) { suspDelta -= s; susReasons.push("⚜ The Last Word — attacker raises no Suspicion"); } state.lastWordA = false; }
+        if (state.lastWordD) { const s = _sideSuspContribution(defAct, false); if (s > 0) { suspDelta -= s; susReasons.push("⚜ The Last Word — defender raises no Suspicion"); } state.lastWordD = false; }
+        if (state.envoysA) { if (_sideSuspContribution(atkAct, true) > 0) { suspDelta -= 1; susReasons.push("Diplomatic Envoys — attacker Suspicion −1"); } }
+        if (state.envoysD) { if (_sideSuspContribution(defAct, false) > 0) { suspDelta -= 1; susReasons.push("Diplomatic Envoys — defender Suspicion −1"); } }
+
         state.suspicion = clamp(suspBefore + suspDelta, 0, 10);
 
         // Phase F — VFX hooks for suspicion threshold crosses (broadcast to all clients).
@@ -907,6 +945,27 @@
         return state.spendLock;
       }
 
+      // Social obstacle-KEY — "The Last Word" (Cosmic Linguist signature). Arms the side's NEXT
+      // Expose/Intimidate to raise NO Suspicion — bypassing the meter that punishes the social
+      // hammer (the courtly analog of Catastrophic Entry ignoring a wall's Threshold). Once per
+      // side per scenario. (Class-affinity gate to a Cosmic Linguist on the roster = a follow-on
+      // when the class-grant layer lands; v1 is invoke-gated by once-per-scenario.)
+      async function armLastWord(side, source = "The Last Word") {
+        const s = _normSide(side);
+        if (!s) return false;
+        const usedKey = s === "A" ? "lastWordUsedA" : "lastWordUsedD";
+        const who = s === "A" ? A.name : D.name;
+        if (state[usedKey]) {
+          await sendChat([`The Last Word has already been spoken by ${esc(who)} this scenario.`], { title: `${label}: The Last Word` });
+          return false;
+        }
+        state[s === "A" ? "lastWordA" : "lastWordD"] = true;
+        state[usedKey] = true;
+        await sendChat([`<b>⚜ The Last Word</b> — ${esc(who)} prepares the unanswerable argument. Their next <b>Expose/Intimidate raises no Suspicion</b>. <small style="opacity:.7;">(${esc(source)})</small>`], { title: `${label}: The Last Word` });
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return true;
+      }
+
       // Phase D — Draw a random secret from the bbttcc-master-content.courtly-secrets
       // compendium and add it to the target actor (self/opp) via addSecret.
       async function drawSecret(side, acquisition = "earned") {
@@ -1028,6 +1087,8 @@
                 lockSpend(eff.rounds || 1, eff.maxSpend ?? 0);
                 await sendChat([`Spending capped to ${eff.maxSpend ?? 0} OP per side for ${eff.rounds || 1} round(s) (Call the Question).`], { title: `${label}: Spending Lock` });
                 break;
+              case "armLastWord":
+                await armLastWord(resolveSide(eff.side), eff.source || "The Last Word"); break;
               case "drawSecret":
                 await drawSecret(resolveSide(eff.side), eff.acquisition || "earned"); break;
               case "spendFavor":
@@ -1171,7 +1232,7 @@
         if (lines.length) await sendChat(lines, { title: `${label}: ${kind || "Outcome"}` });
       }
 
-      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, spendFavorAndBoost, applyEffects, burnScandalScar };
+      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, spendFavorAndBoost, applyEffects, burnScandalScar, armLastWord };
 
       // Convenience for GM
       raidApi._lastCourtly = apiObj;
