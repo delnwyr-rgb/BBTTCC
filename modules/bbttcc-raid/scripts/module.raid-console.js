@@ -7103,31 +7103,81 @@ const OCCULT_MANEUVER_GRANTS = {
   "Prophet/Oracle":     ["faithful_intervention", "moral_high_ground", "crown_of_mercy", "prayer_in_the_smoke"],
   "Shaman":             ["prayer_in_the_smoke", "harmonic_chant", "radiant_retaliation", "empathic_surge"]
 };
+// CLASS → MANEUVER GRANTS (the class-grant layer, sibling to crews/occult). A steward CLASS
+// on the faction's ROSTER arms the faction with that class's signature maneuvers — "a Bulwark
+// opens the siege kit", "a Cosmic Linguist brings the word-craft". Keyed by class display name
+// (matches the type:"class" item .name / system.identifier via _normName). FIRST-PASS DRAFT —
+// ⚙️ TUNE HERE. (The obstacle-key abilities themselves — Catastrophic Entry, The Last Word —
+// are class-locked at the ability level; this layer is the broader maneuver access.)
+const CLASS_MANEUVER_GRANTS = {
+  "Bulwark":        ["patch_the_breach", "last_stand_banner", "quantum_shield", "defender_s_reversal", "siege_breaker_volley", "tactical_overwatch"],
+  "Cosmic Linguist":["counter_propaganda_wave", "moral_high_ground", "unity_surge", "empathic_surge", "reality_hack"],
+  "Shadow Courier": ["smoke_and_mirrors", "saboteur_s_edge", "signal_hijack", "chrono_loop_command"],
+  "Pactkeeper":     ["faithful_intervention", "sephirotic_intervention", "qliphothic_gambit", "harmonic_chant"],
+  "Wyrdlens Adept": ["psychic_disruption", "reality_hack", "moral_high_ground", "chrono_loop_command"],
+  "Aurablade":      ["suppressive_fire", "rally_the_line", "echo_strike_protocol", "ego_breaker"],
+  "Dreamwalker":    ["psychic_disruption", "smoke_and_mirrors", "reality_hack", "empathic_surge"],
+  "Harmony Marshal":["rally_the_line", "command_overdrive", "empathic_surge", "moral_high_ground", "unity_surge"],
+  "Soul-Smith":     ["industrial_sabotage", "overclock_the_golems", "supply_overrun", "logistical_surge"]
+};
 // Name normalizer: lowercase, collapse whitespace, and strip spaces around slashes — so the
 // spec form ("Prophet/Oracle", "Survivors/Militia") and the compendium-item form
 // ("Prophet / Oracle") both resolve to the same key. Guards against silent no-grants.
 const _normName = (s) => String(s || "").toLowerCase().replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").trim();
 const _NORM_GRANTS = (() => {
   const out = {};
-  for (const src of [CREW_MANEUVER_GRANTS, OCCULT_MANEUVER_GRANTS])
+  for (const src of [CREW_MANEUVER_GRANTS, OCCULT_MANEUVER_GRANTS, CLASS_MANEUVER_GRANTS])
     for (const [name, keys] of Object.entries(src)) out[_normName(name)] = keys.map(k => String(k).toLowerCase());
   return out;
 })();
-const _crewGrantCache = new Map();   // factionId → { sig, set }
+// Version counter bumped on any actor/item change → cheaply invalidates the grant caches when
+// a roster's classes or a faction's active crews change (so we don't rescan per-maneuver).
+let _grantVer = 0;
+const _bumpGrantVer = () => { _grantVer++; };
+const _rosterClassCache = new Map();   // factionId → { ver, set<displayName> }
+// Class display names present on a faction's roster (type:"class" embedded items).
+function _factionRosterClasses(factionActor){
+  if (!factionActor) return new Set();
+  const c = _rosterClassCache.get(factionActor.id);
+  if (c && c.ver === _grantVer) return c.set;
+  const set = new Set();
+  try {
+    for (const a of _collectFactionRosterActors(factionActor)) {
+      for (const it of (a.items?.contents || [])) {
+        if (String(it?.type) !== "class") continue;
+        const nm = String(it?.name || "").trim() || String(it?.system?.identifier || "").trim();
+        if (nm) set.add(nm);
+      }
+    }
+  } catch (_e) {}
+  _rosterClassCache.set(factionActor.id, { ver: _grantVer, set });
+  return set;
+}
+// Does a faction have a given class on its roster? (slash/space-insensitive, used by class gates.)
+function _factionHasClass(factionActor, className){
+  const want = _normName(className);
+  for (const c of _factionRosterClasses(factionActor)) if (_normName(c) === want) return true;
+  return false;
+}
+
+const _crewGrantCache = new Map();   // factionId → { ver, set }
+// All maneuver keys granted to a faction by its active crews + occult associations + roster classes.
 function _factionCrewGrantedSet(factionActor){
   try {
-    const ea = factionActor?.flags?.fourththing?.echoAssets || {};
-    const crews = Array.isArray(ea.activeCrew) ? ea.activeCrew : [];
-    const occ   = Array.isArray(ea.activeOccult) ? ea.activeOccult : [];
-    const sig = crews.join("|") + "§" + occ.join("|");
     const cached = _crewGrantCache.get(factionActor.id);
-    if (cached && cached.sig === sig) return cached.set;
+    if (cached && cached.ver === _grantVer) return cached.set;
+    const ea = factionActor?.flags?.fourththing?.echoAssets || {};
+    const sources = [
+      ...(Array.isArray(ea.activeCrew) ? ea.activeCrew : []),
+      ...(Array.isArray(ea.activeOccult) ? ea.activeOccult : []),
+      ..._factionRosterClasses(factionActor)
+    ];
     const set = new Set();
-    for (const name of [...crews, ...occ]) {
+    for (const name of sources) {
       const keys = _NORM_GRANTS[_normName(name)];
       if (keys) for (const k of keys) set.add(k);
     }
-    _crewGrantCache.set(factionActor.id, { sig, set });
+    _crewGrantCache.set(factionActor.id, { ver: _grantVer, set });
     return set;
   } catch { return new Set(); }
 }
@@ -7139,13 +7189,18 @@ function _factionCrewGrantsManeuver(factionActor, mKey){
   const uk = _lc(e?.unlockKey || e?.meta?.unlockKey || "");
   return uk ? set.has(uk) : false;
 }
-// Which active crew/occult grants this maneuver to the faction (for "✦ granted by X" UI). → name|null
+// Which active crew/occult/class grants this maneuver (for "✦ granted by X" UI). → name|null
 function _crewGrantingManeuver(factionActor, mKey){
   try {
     const e = _effectForManeuverKey(mKey);
     const uk = _lc(e?.unlockKey || e?.meta?.unlockKey || "");
     const ea = factionActor?.flags?.fourththing?.echoAssets || {};
-    for (const name of [...(ea.activeCrew||[]), ...(ea.activeOccult||[])]) {
+    const sources = [
+      ...(Array.isArray(ea.activeCrew) ? ea.activeCrew : []),
+      ...(Array.isArray(ea.activeOccult) ? ea.activeOccult : []),
+      ..._factionRosterClasses(factionActor)
+    ];
+    for (const name of sources) {
       const keys = _NORM_GRANTS[_normName(name)];
       if (keys && (keys.includes(_lc(mKey)) || (uk && keys.includes(uk)))) return name;
     }
@@ -7161,11 +7216,16 @@ Hooks.once("ready", () => {
     game.bbttcc.api.raid.crewGrants = {
       crewMap: CREW_MANEUVER_GRANTS,
       occultMap: OCCULT_MANEUVER_GRANTS,
-      forFaction: (f) => Array.from(_factionCrewGrantedSet(f)),       // all keys this faction's active crews grant
-      grants: (f, mKey) => _factionCrewGrantsManeuver(f, mKey),       // does an active crew grant this maneuver?
-      grantedBy: (f, mKey) => _crewGrantingManeuver(f, mKey)          // which crew/occult name grants it (or null)
+      classMap: CLASS_MANEUVER_GRANTS,
+      forFaction: (f) => Array.from(_factionCrewGrantedSet(f)),       // all keys granted by crews + occult + roster classes
+      grants: (f, mKey) => _factionCrewGrantsManeuver(f, mKey),       // does any active source grant this maneuver?
+      grantedBy: (f, mKey) => _crewGrantingManeuver(f, mKey),         // which crew/occult/class name grants it (or null)
+      rosterClasses: (f) => Array.from(_factionRosterClasses(f)),     // class display names on the faction's roster
+      factionHasClass: (f, cls) => _factionHasClass(f, cls)          // is a given class on the roster? (for class gates)
     };
-    console.log("[bbttcc-raid] crew→maneuver grants ready (game.bbttcc.api.raid.crewGrants).");
+    // Cache invalidation: a roster's classes or a faction's crews can change at any time.
+    for (const h of ["createItem", "deleteItem", "updateItem", "updateActor", "createActor", "deleteActor"]) Hooks.on(h, _bumpGrantVer);
+    console.log("[bbttcc-raid] crew/class→maneuver grants ready (game.bbttcc.api.raid.crewGrants).");
   } catch (e) { console.warn("[bbttcc-raid] crewGrants expose failed", e); }
 });
 

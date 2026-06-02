@@ -955,6 +955,14 @@
         if (!s) return false;
         const usedKey = s === "A" ? "lastWordUsedA" : "lastWordUsedD";
         const who = s === "A" ? A.name : D.name;
+        // Class gate (class-grant layer): The Last Word is the Cosmic Linguist's signature — it
+        // requires a Cosmic Linguist on that side's roster. GM may always invoke for adjudication.
+        const fac = s === "A" ? A : D;
+        const hasCL = !!game.bbttcc?.api?.raid?.factionHasClass?.(fac, "Cosmic Linguist");
+        if (!hasCL && !game.user?.isGM) {
+          await sendChat([`The Last Word requires a <b>Cosmic Linguist</b> on ${esc(who)}'s roster.`], { title: `${label}: The Last Word` });
+          return false;
+        }
         if (state[usedKey]) {
           await sendChat([`The Last Word has already been spoken by ${esc(who)} this scenario.`], { title: `${label}: The Last Word` });
           return false;
