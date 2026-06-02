@@ -26,7 +26,9 @@
       sizeProfile: "standard",
       depotHexUuid: "",
       intent: "sack",
-      supportingFactionIds: []
+      supportingFactionIds: [],
+      // OP marshalled into the siege buffer (spent from the bank at Begin Siege, per-category).
+      bufferCommit: { violence: 30, logistics: 20, economy: 10 }
     };
     return app.__siegeCfg;
   }
@@ -288,6 +290,52 @@
     }
     panel.appendChild(intentRow);
 
+    // ---- Buffer commit (OP marshalled into the siege) ----
+    // The attacker pours OP from its bank into the buffer. A bigger commit sustains a longer/
+    // harder siege before supply crisis, but it's SPENT NOW, per-category — the marshalling
+    // decision. begin_siege debits these exact buckets (violence/logistics/economy) from the bank.
+    cfg.bufferCommit = cfg.bufferCommit || { violence: 30, logistics: 20, economy: 10 };
+    const bankRaw = attackerActor?.getFlag?.("bbttcc-factions", "opBank") || {};
+    const bankOP = (k) => Math.floor((Number(bankRaw[k]) || 0) / 10);   // marks → OP
+    const commitRow = document.createElement("div");
+    commitRow.style.cssText = "margin-bottom:6px;font-size:0.72rem;";
+    const commitLabel = document.createElement("div");
+    commitLabel.style.cssText = "opacity:0.8;margin-bottom:3px;";
+    commitLabel.textContent = "Buffer commit (OP marshalled — spent now, per-category):";
+    commitRow.appendChild(commitLabel);
+    const commitInputs = document.createElement("div");
+    commitInputs.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;";
+    const commitTotal = document.createElement("span");
+    commitTotal.style.cssText = "margin-left:auto;opacity:0.85;font-weight:600;";
+    const _commitSum = () => ["violence", "logistics", "economy"].reduce((a, k) => a + (Number(cfg.bufferCommit[k]) || 0), 0);
+    const _updateCommitTotal = () => { commitTotal.textContent = `Σ ${_commitSum()} OP`; };
+    for (const bk of ["violence", "logistics", "economy"]) {
+      const have = bankOP(bk);
+      const wrap = document.createElement("label");
+      wrap.style.cssText = "display:flex;align-items:center;gap:3px;";
+      const cl = document.createElement("span");
+      cl.textContent = bk.charAt(0).toUpperCase() + bk.slice(1, 3);   // Vio / Log / Eco
+      cl.style.cssText = "opacity:0.75;";
+      const inp = document.createElement("input");
+      inp.type = "number"; inp.min = "0"; inp.step = "5";
+      inp.value = String(Number(cfg.bufferCommit[bk]) || 0);
+      inp.style.cssText = "width:3.4rem;text-align:right;font-size:0.72rem;";
+      inp.title = `${bk} OP to commit (bank has ${have})`;
+      inp.addEventListener("change", () => {
+        cfg.bufferCommit[bk] = Math.max(0, Math.floor(Number(inp.value) || 0));
+        _updateCommitTotal();
+      });
+      const bankTag = document.createElement("span");
+      bankTag.style.cssText = `opacity:0.5;font-size:0.66rem;${(Number(cfg.bufferCommit[bk]) || 0) > have ? "color:#fca5a5;opacity:0.9;" : ""}`;
+      bankTag.textContent = `/${have}`;
+      wrap.appendChild(cl); wrap.appendChild(inp); wrap.appendChild(bankTag);
+      commitInputs.appendChild(wrap);
+    }
+    _updateCommitTotal();
+    commitInputs.appendChild(commitTotal);
+    commitRow.appendChild(commitInputs);
+    panel.appendChild(commitRow);
+
     // ---- Supporters multi-select ----
     // Registered supporters lend their Supply-Line hexes to the BFS and may play
     // attacker-side support activities (Escort Supply Line / Counter-Interdict).
@@ -400,6 +448,7 @@
           depotHexUuid: cfg.depotHexUuid,
           intent: cfg.intent,
           supportingFactionIds: Array.isArray(cfg.supportingFactionIds) ? cfg.supportingFactionIds : [],
+          bufferCommit: cfg.bufferCommit && typeof cfg.bufferCommit === "object" ? cfg.bufferCommit : undefined,
           gmNote: userNote
         };
         noteInput.value = JSON.stringify(payload);
