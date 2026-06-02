@@ -7055,45 +7055,138 @@ function _bbttccDoctrineAllowsManeuver(factionActor, mKey){
 }
 
 
+// ════════════════════════════════════════════════════════════════════════════
+// CREW → MANEUVER GRANTS (RAID_ABILITY_SURVEY.md §7a)
+// An ACTIVE crew/occult-association arms the faction it backs with its signature
+// maneuvers — they become selectable even without the roster option / learned unlock
+// (the tier SCALE gate still applies). This is what makes "a Covert Ops Cell is a
+// must-have for Infiltration" true in mechanics, not just at the table.
+//
+// ⚙️ TUNE HERE: keys are maneuver `unlockKey`s (lowercase_underscore). Crew/occult names
+// match the normalized names in faction.flags.fourththing.echoAssets.{activeCrew,activeOccult}
+// ("Crew Type: X (Tier N)" → "X"). This is a FIRST-PASS DRAFT from the survey's thematic
+// leans — edit freely. (A per-crew-item flags.bbttcc.grantsManeuvers override can layer on
+// later via an index; the map below is the source of truth today.)
+// ════════════════════════════════════════════════════════════════════════════
+const CREW_MANEUVER_GRANTS = {
+  "Mercenary Band":       ["suppressive_fire", "rally_the_line", "supply_overrun", "command_overdrive", "siege_breaker_volley", "ego_breaker"],
+  "Peacekeeper Corps":    ["patch_the_breach", "last_stand_banner", "quantum_shield", "defender_s_reversal", "moral_high_ground"],
+  "Covert Ops Cell":      ["smoke_and_mirrors", "saboteur_s_edge", "signal_hijack", "chrono_loop_command", "reality_hack"],
+  "Cultural Ambassadors": ["flash_bargain", "empathic_surge", "counter_propaganda_wave", "flash_interdict", "unity_surge"],
+  "Diplomatic Envoys":    ["flash_bargain", "empathic_surge", "moral_high_ground", "temporal_armistice", "engine_of_absolution"],
+  "Survivors/Militia":    ["rally_the_line", "patch_the_breach", "last_stand_banner", "defender_s_reversal", "logistical_surge"],
+  "Abyssal Cartographer": ["smoke_and_mirrors", "psychic_disruption", "chrono_loop_command", "reality_hack"],
+  "Ashbound Survivors":   ["patch_the_breach", "last_stand_banner", "quantum_shield", "bless_the_fallen", "logistical_surge"],
+  "Gridbreaker":          ["signal_hijack", "flash_interdict", "industrial_sabotage", "overclock_the_golems", "void_signal_collapse"],
+  "Ironbound Ascendants": ["suppressive_fire", "supply_overrun", "tactical_overwatch", "echo_strike_protocol", "siege_breaker_volley", "ego_breaker"],
+  "Storm Wardens":        ["rally_the_line", "quantum_shield", "radiant_retaliation", "faithful_intervention", "harmonic_chant"],
+  "Verdant Stalkers":     ["saboteur_s_edge", "signal_hijack", "psychic_disruption", "overclock_the_golems"]
+};
+const OCCULT_MANEUVER_GRANTS = {
+  "Kabbalist":          ["prayer_in_the_smoke", "harmonic_chant", "sephirotic_intervention"],
+  "Goetic Summoner":    ["qliphothic_gambit", "psychic_disruption", "ego_dragon_echo"],
+  "Prophet/Oracle":     ["faithful_intervention", "moral_high_ground", "crown_of_mercy"],
+  "Exorcist/Purifier":  ["radiant_retaliation", "bless_the_fallen", "crown_of_mercy"]
+  // Alchemist / Tarot Mage / Gnostic / Rosicrucian / Biomancer / Shaman — add as you author them.
+};
+// Normalized lookup (lowercased, trimmed) so name casing/spacing in echoAssets still matches.
+const _NORM_GRANTS = (() => {
+  const out = {};
+  for (const src of [CREW_MANEUVER_GRANTS, OCCULT_MANEUVER_GRANTS])
+    for (const [name, keys] of Object.entries(src)) out[String(name).trim().toLowerCase()] = keys.map(k => String(k).toLowerCase());
+  return out;
+})();
+const _crewGrantCache = new Map();   // factionId → { sig, set }
+function _factionCrewGrantedSet(factionActor){
+  try {
+    const ea = factionActor?.flags?.fourththing?.echoAssets || {};
+    const crews = Array.isArray(ea.activeCrew) ? ea.activeCrew : [];
+    const occ   = Array.isArray(ea.activeOccult) ? ea.activeOccult : [];
+    const sig = crews.join("|") + "§" + occ.join("|");
+    const cached = _crewGrantCache.get(factionActor.id);
+    if (cached && cached.sig === sig) return cached.set;
+    const set = new Set();
+    for (const name of [...crews, ...occ]) {
+      const keys = _NORM_GRANTS[String(name).trim().toLowerCase()];
+      if (keys) for (const k of keys) set.add(k);
+    }
+    _crewGrantCache.set(factionActor.id, { sig, set });
+    return set;
+  } catch { return new Set(); }
+}
+function _factionCrewGrantsManeuver(factionActor, mKey){
+  const set = _factionCrewGrantedSet(factionActor);
+  if (!set.size) return false;
+  if (set.has(_lc(mKey))) return true;
+  const e = _effectForManeuverKey(mKey);
+  const uk = _lc(e?.unlockKey || e?.meta?.unlockKey || "");
+  return uk ? set.has(uk) : false;
+}
+// Which active crew/occult grants this maneuver to the faction (for "✦ granted by X" UI). → name|null
+function _crewGrantingManeuver(factionActor, mKey){
+  try {
+    const e = _effectForManeuverKey(mKey);
+    const uk = _lc(e?.unlockKey || e?.meta?.unlockKey || "");
+    const ea = factionActor?.flags?.fourththing?.echoAssets || {};
+    for (const name of [...(ea.activeCrew||[]), ...(ea.activeOccult||[])]) {
+      const keys = _NORM_GRANTS[String(name).trim().toLowerCase()];
+      if (keys && (keys.includes(_lc(mKey)) || (uk && keys.includes(uk)))) return name;
+    }
+  } catch {}
+  return null;
+}
+
+Hooks.once("ready", () => {
+  try {
+    game.bbttcc = game.bbttcc || { api: {} };
+    game.bbttcc.api = game.bbttcc.api || {};
+    game.bbttcc.api.raid = game.bbttcc.api.raid || {};
+    game.bbttcc.api.raid.crewGrants = {
+      crewMap: CREW_MANEUVER_GRANTS,
+      occultMap: OCCULT_MANEUVER_GRANTS,
+      forFaction: (f) => Array.from(_factionCrewGrantedSet(f)),       // all keys this faction's active crews grant
+      grants: (f, mKey) => _factionCrewGrantsManeuver(f, mKey),       // does an active crew grant this maneuver?
+      grantedBy: (f, mKey) => _crewGrantingManeuver(f, mKey)          // which crew/occult name grants it (or null)
+    };
+    console.log("[bbttcc-raid] crew→maneuver grants ready (game.bbttcc.api.raid.crewGrants).");
+  } catch (e) { console.warn("[bbttcc-raid] crewGrants expose failed", e); }
+});
+
 function _canFactionUseManeuver(factionActor, mKey, { side="att", activityKey="", targetType="", rigCombatCtx=null } = {}){
   if (!factionActor || !mKey) return { ok:true, reason:"" }; // fail-open to avoid breakage
   const e = _effectForManeuverKey(mKey);
   const isGMView = !!_rcIsGMUser();
 
-  // 0) Doctrine ownership gate (only when doctrine items exist on the faction)
-  // GM bypass: allow testing and adjudication.
-  if (!_rcIsGMUser()) {
-    if (!_bbttccDoctrineAllowsManeuver(factionActor, mKey)) {
-      return { ok:false, reason:"Not in faction doctrine." };
-    }
-  }
-
-
-
-  // 0) Tier gating (Faction Tier A/B/C)
-  // GM view: allow selecting locked maneuvers for testing / adjudication.
-  if (!_rcIsGMUser()) {
+  // 0) Tier SCALE gate FIRST — crew grants arm ACCESS, not scale, so this always applies.
+  if (!isGMView) {
     const factionTier = _factionTierForActor(factionActor);
     const reqTier = _requiredFactionTierForManeuver(mKey);
     if (reqTier > factionTier) return { ok:false, reason:`Requires Faction Tier ${reqTier} (current ${factionTier})` };
   }
 
-  
-  // 0.5) Availability gating (Standard vs Learned)
-  // - Standard: always available if tier gate passes.
-  // - Learned: requires an unlock unless the viewer is GM.
+  // 0.1) CREW/OCCULT GRANT (survey §7a) — an active crew/association arms the faction with its
+  // signature maneuvers, bypassing the doctrine / learned-unlock / roster-option ACCESS gates
+  // below. Scale already enforced above; GM already sees everything.
+  if (!isGMView && _factionCrewGrantsManeuver(factionActor, mKey)) {
+    return { ok:true, reason:"Granted by active crew" };
+  }
+
+  // 1) Doctrine ownership gate (only when doctrine items exist on the faction).
+  if (!isGMView && !_bbttccDoctrineAllowsManeuver(factionActor, mKey)) {
+    return { ok:false, reason:"Not in faction doctrine." };
+  }
+
+  // 2) Availability gating (Standard vs Learned). Learned requires an unlock unless GM.
   const avail = _lc(e?.availability || e?.meta?.availability || "");
   const unlockKey = _lc(e?.unlockKey || e?.meta?.unlockKey || "");
-  if (!_rcIsGMUser()) {
-    if (avail === "learned" || unlockKey) {
-      const k = unlockKey || _lc(mKey);
-      if (!_factionHasManeuverUnlock(factionActor, k)) {
-        return { ok:false, reason:`Requires unlock: ${k}` };
-      }
+  if (!isGMView && (avail === "learned" || unlockKey)) {
+    const k = unlockKey || _lc(mKey);
+    if (!_factionHasManeuverUnlock(factionActor, k)) {
+      return { ok:false, reason:`Requires unlock: ${k}` };
     }
   }
 
-// 1) Option-derived maneuvers are roster-gated
+  // 3) Option-derived maneuvers are roster-gated.
   if (_isOptionDerivedManeuver(mKey)) {
     const need = _requiredOptionsForManeuver(mKey);
     if (need.length) {
