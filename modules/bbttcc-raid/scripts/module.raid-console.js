@@ -3106,10 +3106,17 @@ _renderScenarioHUD(host, round){
           const roundOpen = !!round.open && !round.committed && !round.cancelled;
           const showFire = (checked || fired) && roundOpen;
           const fireHTML = showFire ? _rcFireRowHTML(fireMode, k, side, fired) : "";
+          // ✦ Crew/occult grant badge — shows which active crew/association unlocked this
+          // maneuver for the side (survey §7a). Informative even for GM (who sees all).
+          const _gFac = (side === "def") ? defenderActor : attackerActor;
+          const grantedBy = _gFac ? _crewGrantingManeuver(_gFac, k) : null;
+          const grantBadge = grantedBy
+            ? ` <span class="bbttcc-crew-grant" title="Unlocked by your active crew / association: ${foundry.utils.escapeHTML(grantedBy)}" style="font-size:.66em;font-weight:600;color:#9fe0b0;background:#102818;border:1px solid #3f8a55;border-radius:6px;padding:0 .35em;white-space:nowrap;">✦ ${foundry.utils.escapeHTML(grantedBy)}</span>`
+            : "";
           const lbl = document.createElement("label");
-          lbl.style.display="flex"; lbl.style.alignItems="center"; lbl.style.gap=".25rem";
+          lbl.style.display="flex"; lbl.style.alignItems="center"; lbl.style.gap=".25rem"; lbl.style.flexWrap="wrap";
           lbl.dataset.fmRow = fireMode;
-          lbl.innerHTML = `<input type="checkbox" ${checked?"checked":""} data-maneuver="${k}" data-side="${side}" id="${id}"><span>${m?.label||k}</span>${_rcFireModeBadgeHTML(fireMode)}<span class="bbttcc-tip-icon" data-tip-kind="maneuver" data-tip-key="${k}" >ⓘ</span>${mkCost(m?.cost)}${fireHTML}`;
+          lbl.innerHTML = `<input type="checkbox" ${checked?"checked":""} data-maneuver="${k}" data-side="${side}" id="${id}"><span>${m?.label||k}</span>${grantBadge}${_rcFireModeBadgeHTML(fireMode)}<span class="bbttcc-tip-icon" data-tip-kind="maneuver" data-tip-key="${k}" >ⓘ</span>${mkCost(m?.cost)}${fireHTML}`;
           grid.appendChild(lbl);
         }
 
