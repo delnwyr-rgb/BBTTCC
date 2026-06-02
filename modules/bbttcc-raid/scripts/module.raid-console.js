@@ -7082,18 +7082,28 @@ const CREW_MANEUVER_GRANTS = {
   "Storm Wardens":        ["rally_the_line", "quantum_shield", "radiant_retaliation", "faithful_intervention", "harmonic_chant"],
   "Verdant Stalkers":     ["saboteur_s_edge", "signal_hijack", "psychic_disruption", "overclock_the_golems"]
 };
+// All 10 canonical occult associations (resolverWeights). Names are matched slash/space-
+// insensitively (see _normName), so "Prophet/Oracle" and the item form "Prophet / Oracle" both hit.
 const OCCULT_MANEUVER_GRANTS = {
-  "Kabbalist":          ["prayer_in_the_smoke", "harmonic_chant", "sephirotic_intervention"],
-  "Goetic Summoner":    ["qliphothic_gambit", "psychic_disruption", "ego_dragon_echo"],
-  "Prophet/Oracle":     ["faithful_intervention", "moral_high_ground", "crown_of_mercy"],
-  "Exorcist/Purifier":  ["radiant_retaliation", "bless_the_fallen", "crown_of_mercy"]
-  // Alchemist / Tarot Mage / Gnostic / Rosicrucian / Biomancer / Shaman — add as you author them.
+  "Kabbalist":          ["prayer_in_the_smoke", "harmonic_chant", "sephirotic_intervention", "unity_surge"],
+  "Alchemist":          ["industrial_sabotage", "overclock_the_golems", "logistical_surge", "bless_the_fallen"],
+  "Tarot Mage":         ["chrono_loop_command", "reality_hack", "temporal_armistice", "psychic_disruption"],
+  "Gnostic":            ["counter_propaganda_wave", "moral_high_ground", "reality_hack", "smoke_and_mirrors"],
+  "Goetic Summoner":    ["qliphothic_gambit", "psychic_disruption", "ego_dragon_echo", "ego_breaker"],
+  "Rosicrucian":        ["faithful_intervention", "harmonic_chant", "quantum_shield", "radiant_retaliation"],
+  "Biomancer":          ["bless_the_fallen", "faithful_intervention", "radiant_retaliation", "empathic_surge"],
+  "Exorcist/Purifier":  ["radiant_retaliation", "bless_the_fallen", "crown_of_mercy", "harmonic_chant"],
+  "Prophet/Oracle":     ["faithful_intervention", "moral_high_ground", "crown_of_mercy", "prayer_in_the_smoke"],
+  "Shaman":             ["prayer_in_the_smoke", "harmonic_chant", "radiant_retaliation", "empathic_surge"]
 };
-// Normalized lookup (lowercased, trimmed) so name casing/spacing in echoAssets still matches.
+// Name normalizer: lowercase, collapse whitespace, and strip spaces around slashes — so the
+// spec form ("Prophet/Oracle", "Survivors/Militia") and the compendium-item form
+// ("Prophet / Oracle") both resolve to the same key. Guards against silent no-grants.
+const _normName = (s) => String(s || "").toLowerCase().replace(/\s*\/\s*/g, "/").replace(/\s+/g, " ").trim();
 const _NORM_GRANTS = (() => {
   const out = {};
   for (const src of [CREW_MANEUVER_GRANTS, OCCULT_MANEUVER_GRANTS])
-    for (const [name, keys] of Object.entries(src)) out[String(name).trim().toLowerCase()] = keys.map(k => String(k).toLowerCase());
+    for (const [name, keys] of Object.entries(src)) out[_normName(name)] = keys.map(k => String(k).toLowerCase());
   return out;
 })();
 const _crewGrantCache = new Map();   // factionId → { sig, set }
@@ -7107,7 +7117,7 @@ function _factionCrewGrantedSet(factionActor){
     if (cached && cached.sig === sig) return cached.set;
     const set = new Set();
     for (const name of [...crews, ...occ]) {
-      const keys = _NORM_GRANTS[String(name).trim().toLowerCase()];
+      const keys = _NORM_GRANTS[_normName(name)];
       if (keys) for (const k of keys) set.add(k);
     }
     _crewGrantCache.set(factionActor.id, { sig, set });
@@ -7129,7 +7139,7 @@ function _crewGrantingManeuver(factionActor, mKey){
     const uk = _lc(e?.unlockKey || e?.meta?.unlockKey || "");
     const ea = factionActor?.flags?.fourththing?.echoAssets || {};
     for (const name of [...(ea.activeCrew||[]), ...(ea.activeOccult||[])]) {
-      const keys = _NORM_GRANTS[String(name).trim().toLowerCase()];
+      const keys = _NORM_GRANTS[_normName(name)];
       if (keys && (keys.includes(_lc(mKey)) || (uk && keys.includes(uk)))) return name;
     }
   } catch {}
