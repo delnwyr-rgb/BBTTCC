@@ -1373,11 +1373,41 @@ async function bbttccRefreshCapitalOverlayForDrawing(doc) {
   }
 }
 
+// A scene is the territory HEX MAP unless it's a SIEGE BATTLE diorama — a forced-perspective
+// tableau scene or a scene bound to a siege (flags set by bbttcc-raid), or explicitly opted out.
+// Hex chrome (capital overlays, the hex drawings themselves) must NOT render on battle scenes,
+// which can carry stray hex drawings (e.g. duplicated from the map) that otherwise bleed through.
+function bbttccIsHexMapScene(scene) {
+  const s = scene ?? canvas?.scene;
+  if (!s) return true;                                    // permissive when unknown
+  if (s.getFlag?.(MOD, "isNotHexMapScene") === true) return false;
+  const raid = s.flags?.["bbttcc-raid"];
+  if (raid?.tableau?.enabled === true) return false;      // forced-perspective battle diorama
+  if (raid?.siegeHexUuid) return false;                   // a scene bound to an active siege
+  return true;
+}
+function bbttccIsHexDrawingDoc(doc) {
+  const f = doc?.flags?.[MOD]; if (!f) return false;
+  return (f.isHex === true) || (f.kind === "territory-hex")
+    || (doc.shape?.type === "p" && Array.isArray(doc.shape?.points) && doc.shape.points.length === 12);
+}
+// Client-side, non-destructive: hide any stray territory-hex drawings on a battle scene (no doc
+// mutation — just suppress the placeable's render, per client so players see it clean too).
+function bbttccSuppressHexesOnBattleScene() {
+  try {
+    if (bbttccIsHexMapScene(canvas?.scene)) return;
+    for (const p of (canvas?.drawings?.placeables || [])) {
+      if (bbttccIsHexDrawingDoc(p?.document)) { try { p.renderable = false; p.visible = false; } catch (_e) {} }
+    }
+  } catch (_e) {}
+}
+
 async function bbttccRefreshAllCapitalOverlays() {
   try {
     const host = bbttccGetCapitalOverlayHost();
     if (!host) return;
     bbttccClearCapitalOverlays();
+    if (!bbttccIsHexMapScene(canvas?.scene)) return;      // no hex chrome on battle/diorama scenes
     const draws = canvas && canvas.drawings && canvas.drawings.placeables ? canvas.drawings.placeables : [];
     for (const p of draws) {
       const doc = p && p.document ? p.document : null;
@@ -3116,6 +3146,16 @@ Hooks.on("canvasReady", () => {
   } catch (e) {
     console.warn("[bbttcc-territory] capital overlay rebuild on canvasReady failed", e);
   }
+  try { bbttccSuppressHexesOnBattleScene(); } catch (_e) {}
+});
+
+// Stray hex drawings on a battle/diorama scene: suppress each as it draws (covers refreshes
+// after the canvasReady sweep). No-op on real hex-map scenes.
+Hooks.on("drawDrawing", (drawing) => {
+  try {
+    if (bbttccIsHexMapScene(canvas?.scene)) return;
+    if (bbttccIsHexDrawingDoc(drawing?.document)) { drawing.renderable = false; drawing.visible = false; }
+  } catch (_e) {}
 });
 
 // canvas.primary is torn down on scene swap; the next canvasReady will get
