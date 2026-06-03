@@ -229,27 +229,47 @@
       const opApi = game.bbttcc?.api?.op;
       if (opApi?.commit) {
         const disc = bulwark.applied ? 0.75 : 1;
-        const deltas = {};
-        let paidMarks = 0;
-        // state.buffer is already in MARKS (1 OP = 10 marks) — same scale as the activity
-        // opCosts. Deduct it DIRECTLY; do NOT re-multiply (that was a 10× over-charge bug).
-        for (const [k, v] of Object.entries(buffer)) {
-          const marks = Math.round((Number(v) || 0) * disc);
-          if (marks > 0) { deltas[String(k).toLowerCase()] = -marks; paidMarks += marks; }
+        // CO-FUNDED buffer: the coalition (lead attacker + ticked supporters) stages the OP.
+        // Each category's marks split evenly across contributors, capped by each one's bank;
+        // the attacker backstops any per-bucket shortfall. buffer is MARKS (deduct directly).
+        const contributors = Array.from(new Set([attackerId, ...supportingFactionIds]))
+          .map(id => game.actors.get(id)).filter(a => a);
+        const bankOf = (a, b) => Number(a.getFlag(MOD_F, "opBank")?.[b]) || 0;
+        const plan = new Map();                       // factionId → { bucket: marks }
+        for (const a of contributors) plan.set(a.id, {});
+        let shortBucket = null;
+        for (const [bk, v] of Object.entries(buffer)) {
+          const b = String(bk).toLowerCase();
+          const need = Math.round((Number(v) || 0) * disc);
+          if (need <= 0) continue;
+          const avail = contributors.map(a => ({ a, have: bankOf(a, b) }));
+          if (avail.reduce((s, x) => s + x.have, 0) < need) { shortBucket = { bucket: b, need, have: avail.reduce((s, x) => s + x.have, 0) }; break; }
+          let remaining = need;
+          const share = Math.floor(need / contributors.length);
+          for (const x of avail) { const p = Math.min(share, x.have); plan.get(x.a.id)[b] = (plan.get(x.a.id)[b] || 0) + p; remaining -= p; x.have -= p; }
+          avail.sort((x, y) => (x.a.id === attackerId ? -1 : y.a.id === attackerId ? 1 : 0));   // attacker backstops first
+          for (const x of avail) { if (remaining <= 0) break; const p = Math.min(remaining, x.have); plan.get(x.a.id)[b] = (plan.get(x.a.id)[b] || 0) + p; remaining -= p; x.have -= p; }
         }
-        if (paidMarks > 0) {
-          const res = await opApi.commit(attackerId, deltas, {
-            source: "siege",
-            label: `Begin Siege — buffer commit${bulwark.applied ? " (Bulwark ×0.75)" : ""}`,
-            allowOvercap: true
-          });
+        if (shortBucket) {
+          const msg = `Begin Siege rejected — the coalition can't marshal the buffer: ${shortBucket.bucket} needs ${shortBucket.need / 10} OP, coalition has ${shortBucket.have / 10}.`;
+          await _pushWarLog(attackerFactionActor, msg, { activityKey: "begin_siege", hexUuid });
+          return { ok: false, reason: msg };
+        }
+        const paidReport = [];
+        for (const a of contributors) {
+          const deltas = {}; let sum = 0;
+          for (const [b, m] of Object.entries(plan.get(a.id) || {})) { if (m > 0) { deltas[b] = -m; sum += m; } }
+          if (!sum) continue;
+          const res = await opApi.commit(a.id, deltas, { source: "siege", label: "Begin Siege — buffer commit (coalition share)", allowOvercap: true });
           if (!res || res.committed === false || res.ok === false) {
-            const need = Object.entries(buffer).filter(([, v]) => (Number(v) || 0) > 0)
-              .map(([k, v]) => `${k} ${Math.round((Number(v) || 0) * disc) / 10}`).join(", ");
-            const msg = `Begin Siege rejected — not enough OP to marshal the buffer (need ${need} OP${bulwark.applied ? "; Bulwark −25% applied" : ""}).`;
+            const msg = `Begin Siege rejected — ${a.name} could not commit its buffer share (${sum / 10} OP).`;
             await _pushWarLog(attackerFactionActor, msg, { activityKey: "begin_siege", hexUuid });
             return { ok: false, reason: msg };
           }
+          paidReport.push(`${a.name} ${sum / 10} OP`);
+        }
+        if (paidReport.length) {
+          await _pushWarLog(attackerFactionActor, `Buffer marshalled: ${paidReport.join(" · ")}${bulwark.applied ? " (Bulwark ×0.75)" : ""}.`, { activityKey: "begin_siege", hexUuid });
         }
       } else {
         console.warn("[bbttcc/siege-throughput] OP API unavailable — buffer committed WITHOUT debiting the bank (faucet).");
