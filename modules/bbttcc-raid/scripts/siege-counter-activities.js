@@ -308,10 +308,10 @@
       : Object.values(def.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0);
     if (costTotal > 0) {
       const have = S.bufferTotal(st.buffer);
-      if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal} OP, have ${have})` };
+      if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal/10} OP, have ${have/10})` };
       const dup = foundry.utils.duplicate(st);
       S.shaveBuffer(dup.buffer, costTotal);
-      S.appendNarrativeBeat(dup, { turn: _turn(), kind: "clash_maneuver", title: `${def.label} — in the moment`, description: `Fired during the clash (tactical tempo). Buffer −${costTotal} OP.` });
+      S.appendNarrativeBeat(dup, { turn: _turn(), kind: "clash_maneuver", title: `${def.label} — in the moment`, description: `Fired during the clash (tactical tempo). Buffer −${costTotal/10} OP.` });
       await S.setSiegeState(uuid, dup);
     }
 
@@ -321,7 +321,7 @@
     catch (err) { console.error(TAG, `fireManeuver ${key} failed`, err); return { ok: false, reason: err.message }; }
 
     try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
-    if (r?.ok !== false) ui.notifications?.info?.(`${def.label} (in the moment)${costTotal ? ` — Buffer −${costTotal}` : ""}: ${r?.summary || "done"}.`);
+    if (r?.ok !== false) ui.notifications?.info?.(`${def.label} (in the moment)${costTotal ? ` — Buffer −${costTotal/10} OP` : ""}: ${r?.summary || "done"}.`);
     else ui.notifications?.warn?.(`${def.label}: ${r?.reason || "failed"}.`);
     return Object.assign({ ok: r?.ok !== false, key, cost: costTotal }, r || {});
   }

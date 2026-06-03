@@ -228,15 +228,16 @@
     {
       const opApi = game.bbttcc?.api?.op;
       if (opApi?.commit) {
-        const OP_TO_MARKS = Number(opApi.OP_TO_MARKS) || 10;
         const disc = bulwark.applied ? 0.75 : 1;
         const deltas = {};
-        let paidOP = 0;
+        let paidMarks = 0;
+        // state.buffer is already in MARKS (1 OP = 10 marks) — same scale as the activity
+        // opCosts. Deduct it DIRECTLY; do NOT re-multiply (that was a 10× over-charge bug).
         for (const [k, v] of Object.entries(buffer)) {
-          const op = Math.round((Number(v) || 0) * disc);
-          if (op > 0) { deltas[String(k).toLowerCase()] = -(op * OP_TO_MARKS); paidOP += op; }
+          const marks = Math.round((Number(v) || 0) * disc);
+          if (marks > 0) { deltas[String(k).toLowerCase()] = -marks; paidMarks += marks; }
         }
-        if (paidOP > 0) {
+        if (paidMarks > 0) {
           const res = await opApi.commit(attackerId, deltas, {
             source: "siege",
             label: `Begin Siege — buffer commit${bulwark.applied ? " (Bulwark ×0.75)" : ""}`,
@@ -244,8 +245,8 @@
           });
           if (!res || res.committed === false || res.ok === false) {
             const need = Object.entries(buffer).filter(([, v]) => (Number(v) || 0) > 0)
-              .map(([k, v]) => `${k} ${Math.round((Number(v) || 0) * disc)}`).join(", ");
-            const msg = `Begin Siege rejected — not enough OP to marshal the buffer (need ${need}${bulwark.applied ? "; Bulwark −25% applied" : ""}).`;
+              .map(([k, v]) => `${k} ${Math.round((Number(v) || 0) * disc) / 10}`).join(", ");
+            const msg = `Begin Siege rejected — not enough OP to marshal the buffer (need ${need} OP${bulwark.applied ? "; Bulwark −25% applied" : ""}).`;
             await _pushWarLog(attackerFactionActor, msg, { activityKey: "begin_siege", hexUuid });
             return { ok: false, reason: msg };
           }

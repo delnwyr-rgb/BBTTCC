@@ -41,6 +41,8 @@
   function _bufferTotal(buffer) {
     return Object.values(buffer || {}).reduce((a, b) => a + (Number(b) || 0), 0);
   }
+  // Buffer is stored in MARKS (1 OP = 10); display as OP to match the OP Bank.
+  function _mToOP(m) { const v = (Number(m) || 0) / 10; return Number.isInteger(v) ? String(v) : v.toFixed(1); }
 
   function _champCounts(arr) {
     const a = Array.isArray(arr) ? arr : [];
@@ -170,8 +172,8 @@
       ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
           <span style="font-size:0.6rem;color:#c9a;letter-spacing:.05em;text-transform:uppercase;width:100%;opacity:.75;">Clash maneuvers · fire now</span>
           ${clashMans.map(m => {
-            const afford = total >= (m.costTotal || 0);
-            return `<button type="button" data-act="maneuver" data-key="${esc(m.key)}" data-hex="${esc(entry.hexUuid)}" title="${afford ? `Fire ${esc(m.label)} now — Buffer −${m.costTotal} OP` : `Need ${m.costTotal} OP (Buffer has ${total})`}" style="flex:1;padding:3px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${afford ? "1" : "0.55"};">${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${m.costTotal}</span></button>`;
+            const afford = total >= (m.costTotal || 0);   // marks vs marks
+            return `<button type="button" data-act="maneuver" data-key="${esc(m.key)}" data-hex="${esc(entry.hexUuid)}" title="${afford ? `Fire ${esc(m.label)} now — Buffer −${_mToOP(m.costTotal)} OP` : `Need ${_mToOP(m.costTotal)} OP (Buffer has ${_mToOP(total)})`}" style="flex:1;padding:3px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${afford ? "1" : "0.55"};">${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_mToOP(m.costTotal)}</span></button>`;
           }).join("")}
         </div>`
       : "";
@@ -215,7 +217,7 @@
       </div>
       <div style="margin:.3rem 0 2px;display:flex;justify-content:space-between;font-size:0.7rem;color:#ccc;">
         <span style="color:${BRONZE};">Buffer</span>
-        <span>${total}${start > 0 ? `/${start}` : ""} OP</span>
+        <span>${_mToOP(total)}${start > 0 ? `/${_mToOP(start)}` : ""} OP</span>
       </div>
       <div style="position:relative;height:7px;background:#1a1a22;border:1px solid #333;border-radius:3px;overflow:hidden;">
         <div style="position:absolute;left:0;top:0;bottom:0;width:${pct}%;background:${bufColor};box-shadow:0 0 6px ${bufColor};transition:width .3s;"></div>

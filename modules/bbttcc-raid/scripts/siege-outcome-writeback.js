@@ -59,18 +59,20 @@
 
   async function _refundBuffer(factionId, buffer, pct){
     if (!factionId || !(pct > 0)) return { refunded: 0 };
-    const deltas = {}; let refunded = 0;
+    // buffer is already in MARKS (1 OP = 10) — credit it DIRECTLY (the old ×10 over-refunded 10×,
+    // symmetric to the debit's old over-charge). `refunded` returned in OP for display.
+    const deltas = {}; let refundedMarks = 0;
     for (const [bk, ok] of Object.entries(BUFFER_TO_OPBANK)) {
-      const op = Math.round((Number(buffer?.[bk]) || 0) * pct);   // OP units
-      if (op > 0) { deltas[ok] = (deltas[ok] || 0) + op * 10; refunded += op; }   // ×10 = marks
+      const marks = Math.round((Number(buffer?.[bk]) || 0) * pct);
+      if (marks > 0) { deltas[ok] = (deltas[ok] || 0) + marks; refundedMarks += marks; }
     }
-    if (!refunded) return { refunded: 0 };
+    if (!refundedMarks) return { refunded: 0 };
     try {
       const fn = game.bbttcc?.api?.op?.commit;
       if (typeof fn === "function") await fn(factionId, deltas, { source: "siege", label: "Siege Buffer refund", allowOvercap: false });
       else console.warn(TAG, "op.commit unavailable; refund skipped", deltas);
     } catch (e) { console.warn(TAG, "buffer refund failed", e); }
-    return { refunded };
+    return { refunded: Math.round(refundedMarks / 10) };   // OP, for the chat card
   }
 
   function _hexFlags(hexDoc){ return foundry.utils.duplicate(hexDoc.flags?.[MOD_T] || {}); }

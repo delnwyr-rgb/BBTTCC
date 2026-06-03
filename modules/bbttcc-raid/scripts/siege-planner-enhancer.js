@@ -294,9 +294,11 @@
     // The attacker pours OP from its bank into the buffer. A bigger commit sustains a longer/
     // harder siege before supply crisis, but it's SPENT NOW, per-category — the marshalling
     // decision. begin_siege debits these exact buckets (violence/logistics/economy) from the bank.
+    // cfg.bufferCommit is stored in MARKS (1 OP = 10) to match state.buffer + the activity opCosts.
+    // The inputs DISPLAY in OP (÷10) to match the OP Bank + the activity cost badges.
     cfg.bufferCommit = cfg.bufferCommit || { violence: 30, logistics: 20, economy: 10 };
     const bankRaw = attackerActor?.getFlag?.("bbttcc-factions", "opBank") || {};
-    const bankOP = (k) => Math.floor((Number(bankRaw[k]) || 0) / 10);   // marks → OP
+    const bankMarks = (k) => Number(bankRaw[k]) || 0;
     const commitRow = document.createElement("div");
     commitRow.style.cssText = "margin-bottom:6px;font-size:0.72rem;";
     const commitLabel = document.createElement("div");
@@ -307,27 +309,31 @@
     commitInputs.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;";
     const commitTotal = document.createElement("span");
     commitTotal.style.cssText = "margin-left:auto;opacity:0.85;font-weight:600;";
-    const _commitSum = () => ["violence", "logistics", "economy"].reduce((a, k) => a + (Number(cfg.bufferCommit[k]) || 0), 0);
-    const _updateCommitTotal = () => { commitTotal.textContent = `Σ ${_commitSum()} OP`; };
+    const _commitMarks = () => ["violence", "logistics", "economy"].reduce((a, k) => a + (Number(cfg.bufferCommit[k]) || 0), 0);
+    const _updateCommitTotal = () => { commitTotal.textContent = `Σ ${_commitMarks() / 10} OP`; };
     for (const bk of ["violence", "logistics", "economy"]) {
-      const have = bankOP(bk);
+      const haveOP = bankMarks(bk) / 10;
       const wrap = document.createElement("label");
       wrap.style.cssText = "display:flex;align-items:center;gap:3px;";
       const cl = document.createElement("span");
       cl.textContent = bk.charAt(0).toUpperCase() + bk.slice(1, 3);   // Vio / Log / Eco
       cl.style.cssText = "opacity:0.75;";
       const inp = document.createElement("input");
-      inp.type = "number"; inp.min = "0"; inp.step = "5";
-      inp.value = String(Number(cfg.bufferCommit[bk]) || 0);
+      inp.type = "number"; inp.min = "0"; inp.step = "1";
+      inp.value = String((Number(cfg.bufferCommit[bk]) || 0) / 10);   // marks → OP for display
       inp.style.cssText = "width:3.4rem;text-align:right;font-size:0.72rem;";
-      inp.title = `${bk} OP to commit (bank has ${have})`;
-      inp.addEventListener("change", () => {
-        cfg.bufferCommit[bk] = Math.max(0, Math.floor(Number(inp.value) || 0));
-        _updateCommitTotal();
-      });
+      inp.title = `${bk} OP to commit (bank has ${haveOP} OP)`;
       const bankTag = document.createElement("span");
-      bankTag.style.cssText = `opacity:0.5;font-size:0.66rem;${(Number(cfg.bufferCommit[bk]) || 0) > have ? "color:#fca5a5;opacity:0.9;" : ""}`;
-      bankTag.textContent = `/${have}`;
+      bankTag.textContent = `/${haveOP}`;
+      const _refresh = () => {
+        const over = (Number(cfg.bufferCommit[bk]) || 0) > bankMarks(bk);   // compare marks vs marks
+        bankTag.style.cssText = `font-size:0.66rem;${over ? "color:#fca5a5;opacity:0.9;" : "opacity:0.5;"}`;
+      };
+      inp.addEventListener("change", () => {
+        cfg.bufferCommit[bk] = Math.max(0, Math.round((Number(inp.value) || 0) * 10));   // OP → marks
+        _updateCommitTotal(); _refresh();
+      });
+      _refresh();
       wrap.appendChild(cl); wrap.appendChild(inp); wrap.appendChild(bankTag);
       commitInputs.appendChild(wrap);
     }
