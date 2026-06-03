@@ -171,6 +171,13 @@
     const crew = _api()?.structures?.crew; if (!crew) return;
     const scene = tokDoc.parent; if (!scene) return;
     const prevId = tokDoc.flags?.[MOD_R]?.crewingStructureId || null;
+    // Routed/spilled rubble (strength 0) doesn't man walls — when an ejected 💀 contingent is
+    // shoved onto a neighbour's footprint, don't re-crew it. Release from any prior wall + bail.
+    if (_tokStrength(tokDoc) <= 0) {
+      if (prevId) { const a = game.actors.get(prevId); if (a) { try { await crew.release(a, tokDoc.id); } catch (_e) {} } }
+      if (prevId) { try { await tokDoc.update({ [`flags.${MOD_R}.crewingStructureId`]: null }); } catch (_e) {} }
+      return;
+    }
     const structTok = _structureTokenUnder(scene, tokDoc);
     const newId = structTok?.actor?.id || null;
     if (prevId === newId) return;                      // no change (also breaks the flag-write loop)
