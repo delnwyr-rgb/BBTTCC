@@ -233,9 +233,12 @@ export async function triggerCollapse(actor, { fromState, toState }) {
   const profile = actor.getFlag(FLAG_SCOPE, "collapseProfile") ?? {};
   const triggerState = profile.triggerState ?? "breached";
 
-  // Trigger condition: newState matches triggerState. We DON'T re-fire if
-  // the actor already collapsed in this scene (per the collapseFired flag).
-  if (toState !== triggerState) return;
+  // Trigger condition: fire when the structure reaches the trigger state OR a MORE destroyed
+  // one. A hit big enough to skip "breached" straight to "razed" (or any over-kill blow) must
+  // STILL collapse — the garrison is ejected/hurt regardless. The collapseFired flag makes it
+  // once-only, so the normal breached→razed progression won't double-fire.
+  const _SEV = { intact: 0, damaged: 1, breached: 2, razed: 3 };
+  if ((_SEV[toState] ?? -1) < (_SEV[triggerState] ?? 2)) return;
   const alreadyFired = !!actor.getFlag(FLAG_SCOPE, "collapseFired");
   if (alreadyFired) return;
 
