@@ -705,17 +705,22 @@
   // GM-only (collapse is GM-authoritative). Harmless globally: non-muster tokens are skipped.
   async function _onStructureCollapse(payload) {
     if (!game.user?.isGM) return;
-    const results = Array.isArray(payload?.results) ? payload.results : [];
-    if (!results.length) return;
     const scene = canvas?.scene; if (!scene) return;
+    const structActor = payload?.actor;
+    const results = Array.isArray(payload?.results) ? payload.results : [];
 
+    // 1. Casualty reconcile — reduce unitStrength of caught contingents by the rubble toll.
+    // Resolve the token via res.actor.token (the synthetic token-actor's parent doc) FIRST —
+    // unlinked muster tokens share the base "Muster Unit" actor id, so matching by actor.id
+    // alone would collapse them all onto one token.
     const updates = [];
     let hexUuid = null, culled = 0;
     for (const res of results) {
-      const aId = res?.actor?.id; if (!aId) continue;
-      const loss = Math.max(0, _num(res?.rolled, _num(res?.applied, 0)));   // bodies lost = the rubble's toll
+      const loss = Math.max(0, _num(res?.rolled, _num(res?.applied, 0)));
       if (loss <= 0) continue;
-      const tok = (scene.tokens?.contents || []).find(t => t.actor?.id === aId);
+      const tokId = res?.actor?.token?.id || null;
+      const tok = tokId ? (scene.tokens.get(tokId) || null)
+                        : ((scene.tokens?.contents || []).find(t => t.actor?.id === res?.actor?.id) || null);
       const md = tok?.flags?.[MOD_R]?.musterDeployment;
       if (!tok || !md) continue;                                            // not a muster contingent
       const prev = _tokStrength(tok);
@@ -733,11 +738,36 @@
       updates.push(u);
       if (md.hexUuid) hexUuid = md.hexUuid;
     }
-    if (!updates.length) return;
-    try { await scene.updateEmbeddedDocuments("Token", updates); }
-    catch (e) { console.warn(TAG, "collapse→muster update failed", e); return; }
+    if (updates.length) {
+      try { await scene.updateEmbeddedDocuments("Token", updates); }
+      catch (e) { console.warn(TAG, "collapse→muster update failed", e); }
+    }
 
-    // Reconcile the defender muster = surviving defender strength on the scene.
+    // 2. EJECT — UNCONDITIONAL: when a structure collapses, its garrison spills out. Keyed on
+    // crewingStructureId (a reliable per-token flag), NOT on the collapse results or the wall
+    // token — so it fires even when a hit razes the wall (token gone) or caught nobody on the
+    // footprint. Always UNHIDE; reposition downstage only when the wall token still exists.
+    if (structActor) {
+      const crew = _api()?.structures?.crew;
+      const structTok = (scene.tokens?.contents || []).find(t => t.actorId === structActor.id);
+      const ejecting = (scene.tokens?.contents || []).filter(t => t?.flags?.[MOD_R]?.crewingStructureId === structActor.id);
+      if (ejecting.length) {
+        const gs = _num(scene.grid?.size || scene.gridSize, 100);
+        let baseX = null, baseY = null;
+        if (structTok) { baseX = _num(structTok.x) + _num(structTok.width, 1) * gs / 2; baseY = _num(structTok.y) + _num(structTok.height, 1) * gs; }
+        const ejUpdates = ejecting.map((t, i) => {
+          const u = { _id: t.id, hidden: false, [`flags.${MOD_R}.crewingStructureId`]: null };
+          if (baseX != null) { u.x = Math.round(baseX + (i - (ejecting.length - 1) / 2) * gs * 1.2 - gs / 2); u.y = Math.round(baseY + gs * 0.5); }
+          return u;
+        });
+        try { await scene.updateEmbeddedDocuments("Token", ejUpdates); } catch (e) { console.warn(TAG, "garrison eject failed", e); }
+        if (crew) { for (const t of ejecting) { try { await crew.release(structActor, t.id); } catch (_e) {} } }
+        try { await _tableau()?.applyAll?.(); } catch (_e) {}
+        if (!hexUuid) hexUuid = ejecting[0]?.flags?.[MOD_R]?.musterDeployment?.hexUuid || null;
+      }
+    }
+
+    // 3. Reconcile the defender muster = surviving defender strength on the scene.
     if (hexUuid) {
       try {
         const S = _siege(); const st = await S.getState(hexUuid);
@@ -752,30 +782,6 @@
           await S.setState(hexUuid, st);
         }
       } catch (e) { console.warn(TAG, "garrison muster reconcile failed", e); }
-    }
-
-    // EJECT: the survivors spill out of the broken wall. Unhide the collapsed structure's
-    // garrison (they were boarded/invisible) + shove them downstage out of the breach; they
-    // keep the damage + prone the collapse already dealt. Release them from the wall's crew.
-    const structActor = payload?.actor;
-    if (structActor) {
-      const crew = _api()?.structures?.crew;
-      const structTok = (scene.tokens?.contents || []).find(t => t.actorId === structActor.id);
-      const ejecting = (scene.tokens?.contents || []).filter(t => t?.flags?.[MOD_R]?.crewingStructureId === structActor.id);
-      if (ejecting.length && structTok) {
-        const gs = _num(scene.grid?.size || scene.gridSize, 100);
-        const baseX = _num(structTok.x) + _num(structTok.width, 1) * gs / 2;
-        const baseY = _num(structTok.y) + _num(structTok.height, 1) * gs;   // bottom edge = downstage
-        const ejUpdates = ejecting.map((t, i) => ({
-          _id: t.id, hidden: false,
-          x: Math.round(baseX + (i - (ejecting.length - 1) / 2) * gs * 1.2 - gs / 2),
-          y: Math.round(baseY + gs * 0.5),
-          [`flags.${MOD_R}.crewingStructureId`]: null
-        }));
-        try { await scene.updateEmbeddedDocuments("Token", ejUpdates); } catch (e) { console.warn(TAG, "garrison eject failed", e); }
-        if (crew) { for (const t of ejecting) { try { await crew.release(structActor, t.id); } catch (_e) {} } }
-        try { await _tableau()?.applyAll?.(); } catch (_e) {}
-      }
     }
     try { _siege()?.refreshHud?.(); } catch (_e) {}
   }
