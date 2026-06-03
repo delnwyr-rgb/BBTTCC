@@ -210,12 +210,23 @@
         const showFire = (cb.checked || fired) && roundOpen;
         const fireHtml = showFire ? fireRowHTML(fireMode, key, side, fired) : "";
 
+        // ✦ Crew/occult/class grant badge — names the active source that unlocked this maneuver
+        // for the side's faction (survey §7a). The enhancer rebuilds the label innerHTML from
+        // scratch, so the badge must live HERE (the mkFS copy gets wiped).
+        const facId = side === "def" ? round?.defenderId : round?.attackerId;
+        const fac = facId ? game.actors.get(facId) : null;
+        const grantedBy = fac ? game.bbttcc?.api?.raid?.crewGrants?.grantedBy?.(fac, key) : null;
+        const grantHtml = grantedBy
+          ? `<span class="bbttcc-crew-grant" title="Unlocked by ${foundry.utils.escapeHTML(fac?.name || "your faction")}'s active crew / association / class: ${foundry.utils.escapeHTML(grantedBy)}" style="margin-left:4px;font-size:0.66rem;font-weight:600;color:#9fe0b0;background:#102818;border:1px solid #3f8a55;border-radius:6px;padding:1px .4em;white-space:nowrap;">✦ ${foundry.utils.escapeHTML(grantedBy)}</span>`
+          : "";
+
         // Rebuild the label content
         lbl.innerHTML = `
           <input type="checkbox" ${cb.checked?"checked":""} data-maneuver="${cb.dataset.maneuver}" data-side="${cb.dataset.side}">
           <span>${baseLabel}</span>
           ${fmBadgeHtml}
           ${badgeHtml}
+          ${grantHtml}
           ${costHtml}
           ${fireHtml}
         `;
