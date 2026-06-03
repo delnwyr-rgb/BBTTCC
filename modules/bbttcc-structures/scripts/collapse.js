@@ -258,7 +258,12 @@ export async function triggerCollapse(actor, { fromState, toState }) {
     // shouldn't transfer between structures. In a siege the fortification layers (Outer Wall /
     // Barbican / Inner Keep) are staged near each other on the tableau diorama, so their
     // footprints overlap — without this, breaching one wall proned + damaged all the others.
-    .filter(t => t.actor?.getFlag?.(FLAG_SCOPE, "hasStructure") !== true);
+    .filter(t => t.actor?.getFlag?.(FLAG_SCOPE, "hasStructure") !== true)
+    // Crew-aware: a contingent that GARRISONS a DIFFERENT structure is "inside that wall", not
+    // standing on this one — even if their token visually overlaps this footprint on the
+    // compressed tableau. Only catch contingents crewing THIS structure (or crewing nothing,
+    // e.g. heroes/field tokens). Keyed on flags.bbttcc-raid.crewingStructureId.
+    .filter(t => { const cs = t.document?.flags?.["bbttcc-raid"]?.crewingStructureId; return !cs || cs === actor.id; });
 
   await postCollapseHeaderCard(actor, profile, tokensOnTop.length);
 
