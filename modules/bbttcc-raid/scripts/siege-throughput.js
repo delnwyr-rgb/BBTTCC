@@ -116,14 +116,20 @@
       }));
     }
     const ids = hexDoc?.flags?.[MOD_T]?.structureActorIds || [];
-    return (Array.isArray(ids) ? ids : []).map((structureActorId, idx) => ({
-      layerId: `layer-${idx}`,
-      structureActorId,
-      sceneId: null,
-      transitionRule: "razed",
-      thresholdPct: null,
-      stockpileMax: null
-    }));
+    // Optional per-hex layer config: flags.bbttcc-territory.layerRules = { [actorId]: { transitionRule, thresholdPct } }.
+    // Lets a hex declare threshold breaches (e.g. breach at ≤50% plates) instead of the full-raze default.
+    const rules = hexDoc?.flags?.[MOD_T]?.layerRules;
+    return (Array.isArray(ids) ? ids : []).map((structureActorId, idx) => {
+      const r = (rules && typeof rules === "object") ? (rules[structureActorId] || {}) : {};
+      return {
+        layerId: `layer-${idx}`,
+        structureActorId,
+        sceneId: null,
+        transitionRule: r.transitionRule || "razed",
+        thresholdPct: Number.isFinite(Number(r.thresholdPct)) ? Number(r.thresholdPct) : null,
+        stockpileMax: null
+      };
+    });
   }
 
   // ============================================================
