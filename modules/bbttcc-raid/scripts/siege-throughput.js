@@ -295,6 +295,8 @@
       defenderChampions,
       intent: noteCfg.intent || "sack"
     });
+    // Record the besieged faction on the state so the HUD can name the coalition vs the besieged.
+    state.defenderFactionId = defenderFactionId || null;
 
     // Initial narrative beat
     S.appendNarrativeBeat(state, {

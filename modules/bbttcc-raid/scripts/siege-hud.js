@@ -58,8 +58,8 @@
     const A = _champCounts(s.attackerChampions), D = _champCounts(s.defenderChampions);
     if (!A.total && !D.total) return "";
     const fmt = (c) => `⚔${c.active}${c.wounded ? ` ·${c.wounded}<span style="color:#ffaa55;">✚</span>` : ""}${c.dead ? ` ·${c.dead}<span style="color:#ff5555;">☠</span>` : ""}`;
-    return `<div title="active · wounded ✚ · dead ☠" style="margin-top:.3rem;display:flex;justify-content:space-between;font-size:0.66rem;color:#bbb;">
-        <span>atk ${fmt(A)}</span><span>def ${fmt(D)}</span></div>`;
+    return `<div title="Named champions on each side — active · wounded ✚ · dead ☠ (NOT faction counts)" style="margin-top:.3rem;display:flex;justify-content:space-between;font-size:0.66rem;color:#bbb;">
+        <span><span style="opacity:.6;">champions</span> atk ${fmt(A)}</span><span>def ${fmt(D)}</span></div>`;
   }
 
   // ─── HTML builders ──────────────────────────────────────────────────────────
@@ -86,25 +86,29 @@
   function _layersStrip(siege) {
     const layers = Array.isArray(siege.layers) ? siege.layers : [];
     if (!layers.length) return `<span style="color:#888;font-style:italic;">no layers</span>`;
+    const structApi = game.bbttcc?.api?.structures;
     return layers.map((l, i) => {
       const cur = i === (siege.currentLayerIdx ?? 0);
-      const name = (() => {
-        const a = game.actors?.get?.(l.structureActorId);
-        return a?.name || l.layerId || `Layer ${i + 1}`;
-      })();
-      let style = "padding:1px 6px;border-radius:8px;font-size:0.68rem;border:1px solid #444;color:#aaa;background:#1a1a22;";
-      let mark = "";
-      if (l.breached) {
-        style = "padding:1px 6px;border-radius:8px;font-size:0.68rem;border:1px solid #6a3030;color:#ff7a7a;background:#241416;text-decoration:line-through;";
-        mark = " ✗";
-      } else if (cur) {
-        style = `padding:1px 6px;border-radius:8px;font-size:0.68rem;border:1px solid ${BRONZE};color:${BRONZE};background:#2a2310;font-weight:600;box-shadow:0 0 6px rgba(217,164,65,0.4);`;
-        mark = " ◄";
-      }
+      const actor = game.actors?.get?.(l.structureActorId);
+      const name = actor?.name || l.layerId || `Layer ${i + 1}`;
+      // Read the live STRUCTURE state — so a breach shows even if the siege layer flag lags (the
+      // structure can hit "breached"/"razed" plate state before/independent of layer advance).
+      const st = structApi?.readState?.(actor) || null;
+      const stState = st?.state || (l.breached ? "breached" : "intact");
+      const plates = st?.plates && st.plates.max ? st.plates : null;
+      const razed = stState === "razed";
+      const broken = !!l.breached || stState === "breached" || razed;
+      let border = "#444", color = "#aaa", bg = "#1a1a22", weight = "", strike = "", mark = "";
+      if (broken)            { border = "#6a3030"; color = "#ff7a7a"; bg = "#241416"; strike = "text-decoration:line-through;"; mark = razed ? " ☠" : " ✗"; weight = "font-weight:600;"; }
+      else if (cur)          { border = BRONZE;    color = BRONZE;    bg = "#2a2310"; weight = "font-weight:600;box-shadow:0 0 6px rgba(217,164,65,0.4);"; mark = " ◄"; }
+      else if (stState === "damaged") { border = "#6a5a30"; color = "#ffd27a"; bg = "#221c10"; }
+      const cur2 = (cur && broken) ? " ◄" : "";   // keep the current marker even when breached
+      const plateTxt = plates ? ` <span style="opacity:.7;font-size:.9em;">${plates.current}/${plates.max}</span>` : "";
       const g = _garrisonReadout(l.structureActorId);
       const gCol = g ? (g.frac > 0.6 ? "#9fe09f" : g.frac >= 0.25 ? "#ffd27a" : "#ff9a9a") : null;
       const gBadge = g ? ` <span title="garrison ${g.live}/${g.cap}" style="color:${gCol};font-size:0.92em;">🛡${g.live}</span>` : "";
-      return `<span title="${esc(name)}${l.transitionRule ? " — " + esc(l.transitionRule) : ""}${g ? ` · garrison ${g.live}/${g.cap}` : ""}" style="${style}">${esc(name)}${mark}${gBadge}</span>`;
+      const style = `padding:1px 6px;border-radius:8px;font-size:0.68rem;border:1px solid ${border};color:${color};background:${bg};${weight}${strike}`;
+      return `<span title="${esc(name)} — ${esc(stState)}${plates ? ` (${plates.current}/${plates.max})` : ""}${g ? ` · garrison ${g.live}/${g.cap}` : ""}" style="${style}">${esc(name)}${mark}${cur2}${plateTxt}${gBadge}</span>`;
     }).join(" ");
   }
 
@@ -128,6 +132,9 @@
     const start = Number(s.bufferStartingTotal || 0);
     const pct = start > 0 ? Math.round(100 * clamp(total, 0, start) / start) : 0;
     const atk = game.actors?.get?.(s.attackerFactionId);
+    const supIds = Array.isArray(s.supportingFactionIds) ? s.supportingFactionIds : [];
+    const supNames = supIds.map(id => game.actors?.get?.(id)?.name).filter(Boolean);
+    const def = game.actors?.get?.(s.defenderFactionId);
     const interd = (s.interdictedHexIds || []).length;
     const reliefWaves = (s.reliefWaves || []).filter(w => !w.resolved);
     const reliefPending = reliefWaves.length;
@@ -215,6 +222,10 @@
         <span style="font-weight:600;color:#f0e6d0;font-size:0.8rem;">${esc(entry.hexName || "Siege")}</span>
         <span style="display:flex;align-items:center;gap:5px;">${pip}<span style="font-size:0.66rem;color:#999;">${esc(s.sizeProfile || "standard")}</span></span>
       </div>
+      <div style="margin:.1rem 0 .15rem;display:flex;justify-content:space-between;gap:8px;font-size:0.66rem;">
+        <span title="Besieging coalition${supNames.length ? ` — supporters: ${esc(supNames.join(", "))}` : ""}" style="color:#ffc69a;">⚔ ${atk ? esc(atk.name) : "?"}${supIds.length ? ` <span style="opacity:.85;">+${supIds.length}</span>` : ""}</span>
+        <span title="Besieged" style="color:#9fbfff;">🛡 ${def ? esc(def.name) : esc(entry.hexName || "?")}</span>
+      </div>
       <div style="margin:.3rem 0 2px;display:flex;justify-content:space-between;font-size:0.7rem;color:#ccc;">
         <span style="color:${BRONZE};">Buffer</span>
         <span>${_mToOP(total)}${start > 0 ? `/${_mToOP(start)}` : ""} OP</span>
@@ -226,7 +237,6 @@
         ${statusChip(`supply: ${supply}${graceLeft != null ? ` · grace ${graceLeft}` : ""}`, sc)}
         ${interd ? statusChip(`${interd} cut`, "#ff7a7a") : ""}
         ${reliefArrived ? `<span style="font-size:0.66rem;padding:1px 5px;border:1px solid #88bbff;border-radius:8px;color:#cfe2ff;background:#101a2a;box-shadow:0 0 8px rgba(136,187,255,0.5);font-weight:600;">relief here ×${reliefArrived}</span>` : (reliefPending ? statusChip(`relief ×${reliefPending}`, "#88bbff") : "")}
-        ${atk ? `<span style="font-size:0.66rem;color:#888;">vs ${esc(atk.name)}</span>` : ""}
       </div>
       <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:4px;">${_layersStrip(s)}</div>
       ${_champStrip(s)}
