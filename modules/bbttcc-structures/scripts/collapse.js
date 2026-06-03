@@ -328,7 +328,9 @@ export async function triggerCollapse(actor, { fromState, toState }) {
         catch (e) { console.warn(TAG, "collapse knockback failed", e); }
       }
 
-      results.push({ actor: tokActor, rolled, applied, nonlethalCapped: applied < rolled, prone: proneApplied, desc });
+      // Include the TOKEN id (+ scene) — unlinked tokens can share a base actor id, so consumers
+      // (e.g. the siege garrison bridge) must key off the token, not the actor, to hit the right one.
+      results.push({ actor: tokActor, tokenId: tok.id, sceneId: tok.scene?.id ?? canvas?.scene?.id ?? null, rolled, applied, nonlethalCapped: applied < rolled, prone: proneApplied, desc });
 
       await postCollapseTargetCard(actor, tokActor, { rolled, applied, nonlethal, formula: damageDice, prone: proneApplied });
     } catch (e) {
