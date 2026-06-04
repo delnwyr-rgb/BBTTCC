@@ -258,6 +258,15 @@
     const cols = 4;
     const stride = gridSize * 2;
 
+    // Tableau scenes (siege dioramas / courtly stages): tokens flagged
+    // flags["bbttcc-raid"].tableauActor get forced-perspective depth scaling
+    // (tableau.canvas.js). Muster contingents bake the flag at creation; bake it
+    // here too so deployed rigs/bosses join the depth layer on drop — no
+    // tableauStageScene() retro-fix needed.
+    const _tableau = game.bbttcc?.api?.raid?.tableau || null;
+    let onTableau = false;
+    try { onTableau = _tableau?.readConfig?.(scene)?.enabled === true; } catch (_e) {}
+
     const tokenData = [];
     const skipped = [];
     let placed = 0;
@@ -287,6 +296,9 @@
           deployedAt: Date.now()
         }
       });
+      if (onTableau) {
+        data.flags["bbttcc-raid"] = Object.assign({}, data.flags["bbttcc-raid"] || {}, { tableauActor: true });
+      }
       tokenData.push(data);
       placed++;
     }
@@ -296,6 +308,7 @@
     try {
       created = await scene.createEmbeddedDocuments("Token", tokenData);
     } catch (e) { warn("token create failed", e); return { ok: false, error: "createDocuments failed" }; }
+    if (onTableau) { try { await _tableau?.applyAll?.(); } catch (_e) {} }
     return { ok: true, created: created?.length || 0, skipped, scene };
   }
 
