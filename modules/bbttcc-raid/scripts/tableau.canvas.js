@@ -197,6 +197,21 @@
   // land last. Movement, vision tweaks, sheet edits all trigger refresh.
   Hooks.on("refreshToken", (token) => applyDepth(token));
 
+  // Auto-enrol: ANY token dropped onto a tableau-enabled scene joins the depth
+  // layer — drag from the Actors tab, a hex sheet, or a compendium alike. The
+  // diorama IS the stage, so new arrivals should depth-scale without a macro
+  // step. Respects an explicitly pre-set flag (muster/holdings bake true; set
+  // false via tableau.markActor(token, false) to exempt a token). No applyAll
+  // needed — refreshToken applies depth as soon as the new token renders.
+  Hooks.on("preCreateToken", (doc) => {
+    try {
+      if (!getTableau(doc.parent)) return;
+      const cur = foundry.utils.getProperty(doc, `flags.${MOD}.tableauActor`);
+      if (cur !== undefined) return;
+      doc.updateSource({ [`flags.${MOD}.tableauActor`]: true });
+    } catch (e) { console.warn(TAG, "preCreateToken auto-enrol failed", e); }
+  });
+
   // Initial paint on scene load.
   Hooks.on("canvasReady", () => applyAll());
 
