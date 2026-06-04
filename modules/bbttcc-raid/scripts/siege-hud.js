@@ -445,16 +445,26 @@
       }
     } catch (_e) {}
     const updates = [];
+    let pinned = 0;
     for (const t of (scene.tokens?.contents || [])) {
       const f = t?.flags?.[MOD_R] || {};
       const tf = t?.flags?.["bbttcc-territory"] || {};
-      const isSiegeTok = !!(f.musterDeployment || tf.holdingDeployment || (t.actorId && wallIds.has(t.actorId)));
-      if (isSiegeTok && f.tableauActor !== true) updates.push({ _id: t.id, [`flags.${MOD_R}.tableauActor`]: true });
+      // Structures hold true size (owner call 2026-06-04): PIN them — including
+      // un-flagging any wall enrolled before this rule, so re-running this is the
+      // one-call cleanup for an existing scene. Token HUD masks button overrides.
+      const isStruct = t.actor?.getFlag?.("bbttcc-structures", "hasStructure") === true || (t.actorId && wallIds.has(t.actorId));
+      if (isStruct) {
+        if (f.tableauActor === true) { updates.push({ _id: t.id, [`flags.${MOD_R}.tableauActor`]: false }); pinned++; }
+        continue;
+      }
+      const isSiegeTok = !!(f.musterDeployment || tf.holdingDeployment);
+      // Respect an explicit pin (false) — only enrol tokens that never chose.
+      if (isSiegeTok && f.tableauActor === undefined) updates.push({ _id: t.id, [`flags.${MOD_R}.tableauActor`]: true });
     }
     if (updates.length) { try { await scene.updateEmbeddedDocuments("Token", updates); } catch (e) { return { ok: false, error: e.message }; } }
     try { game.bbttcc?.api?.raid?.tableau?.applyAll?.(); } catch (_e) {}
-    ui.notifications?.info?.(`Tableau-staged ${updates.length} siege token(s) (walls / rigs / muster).`);
-    return { ok: true, staged: updates.length };
+    ui.notifications?.info?.(`Tableau-staged ${updates.length} siege token(s)${pinned ? ` — ${pinned} structure(s) pinned at true size` : ""} (rigs / muster scale; walls hold size).`);
+    return { ok: true, staged: updates.length, pinned };
   }
 
   // Resolve the besieged hex for the current context: bound scene flag → the sole active
@@ -510,9 +520,12 @@
         } catch (_e) {}
         const td = await wall.getTokenDocument({ x: Math.round(tx), y: Math.round(ty), disposition: -1, actorLink: true, displayName: 30 });
         const tdObj = td.toObject();
-        // Join the forced-perspective layer so the wall depth-scales with the muster + rigs.
+        // Structures hold their authored size on the stage (owner call 2026-06-04) —
+        // the depth curve shrinks a back-of-stage wall to comic size next to the
+        // foreground muster. PIN it (explicit false beats auto-enrol); opt back in
+        // via the Token HUD masks button if a scene ever wants a scaling building.
         tdObj.flags = tdObj.flags || {};
-        tdObj.flags[MOD_R] = Object.assign({}, tdObj.flags[MOD_R] || {}, { tableauActor: true });
+        tdObj.flags[MOD_R] = Object.assign({}, tdObj.flags[MOD_R] || {}, { tableauActor: false });
         await scene.createEmbeddedDocuments("Token", [tdObj]);
         const pl = game.bbttcc?.api?.structures?.readState?.(wall)?.plates;
         ui.notifications?.info?.(`Breach staged: ${wall.name} deployed (Plates ${pl ? `${pl.current}/${pl.max}` : "?"}). Attack it — or use Catastrophic Entry — to breach.`);

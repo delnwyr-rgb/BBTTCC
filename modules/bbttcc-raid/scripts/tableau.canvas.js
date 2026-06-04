@@ -208,8 +208,45 @@
       if (!getTableau(doc.parent)) return;
       const cur = foundry.utils.getProperty(doc, `flags.${MOD}.tableauActor`);
       if (cur !== undefined) return;
+      // Structures are the STAGE, not actors on it (owner call 2026-06-04): the depth
+      // curve makes a back-of-stage wall comically tiny next to a foreground muster,
+      // and no token footprint compensates. Buildings hold their authored size —
+      // opt one in via the Token HUD masks button or tableau.markActor(tok, true).
+      const isStructure = game.actors?.get?.(doc.actorId)?.getFlag?.("bbttcc-structures", "hasStructure") === true;
+      if (isStructure) return;
       doc.updateSource({ [`flags.${MOD}.tableauActor`]: true });
     } catch (e) { console.warn(TAG, "preCreateToken auto-enrol failed", e); }
+  });
+
+  // --- Token HUD toggle: per-token tableau participation ---------------------
+  // GM-only, shown only on tableau-enabled scenes. One click flips the token
+  // between "scales with depth" (🎭 lit) and "pinned at true size". An explicit
+  // flag (true OR false) always beats the auto-enrolment defaults, so a pin
+  // survives re-staging; the updateToken handler above applies/resets the mesh.
+  Hooks.on("renderTokenHUD", (hud, html) => {
+    try {
+      if (!game.user?.isGM) return;
+      const doc = hud?.object?.document;
+      const scene = doc?.parent ?? canvas?.scene;
+      if (!doc || !getTableau(scene)) return;
+      const root = html?.[0] ?? html;
+      const col = root?.querySelector?.(".col.right");
+      if (!col || col.querySelector('[data-action="bbttcc-tableau"]')) return;
+      const on = isTableauActor(doc);
+      const btn = document.createElement("div");
+      btn.className = `control-icon${on ? " active" : ""}`;
+      btn.dataset.action = "bbttcc-tableau";
+      btn.title = on
+        ? "Tableau: scales with depth — click to PIN at true size"
+        : "Tableau: pinned at true size — click to scale with depth";
+      btn.innerHTML = `<i class="fa-solid fa-masks-theater"></i>`;
+      btn.addEventListener("click", async (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        await doc.update({ [`flags.${MOD}.tableauActor`]: !on });
+        try { hud.render(); } catch (_e) {}
+      });
+      col.appendChild(btn);
+    } catch (e) { console.warn(TAG, "token HUD tableau toggle failed", e); }
   });
 
   // Initial paint on scene load.

@@ -296,7 +296,9 @@
           deployedAt: Date.now()
         }
       });
-      if (onTableau) {
+      if (onTableau && actor.getFlag?.("bbttcc-structures", "hasStructure") !== true) {
+        // Structures hold their authored size on the stage (2026-06-04) — only
+        // non-structure holdings (mobile rigs, bosses) join the depth layer.
         data.flags["bbttcc-raid"] = Object.assign({}, data.flags["bbttcc-raid"] || {}, { tableauActor: true });
       }
       tokenData.push(data);
