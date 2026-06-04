@@ -171,6 +171,12 @@
   const _BOULDER_SCALE  = 1.8;  // projectile sprite size multiplier (1.0 = native)
   const _IMPACT_SIZE_GS = 6.5;  // impact-burst diameter, in grid squares
   const _LAUNCH_DIST_GS = 13;   // launch origin distance "downstage" (toward camera), in grid squares
+  // Hard cap on the launch arc in PIXELS. JB2A's longest ranged variant is ~4000px native;
+  // stretching past it flips Sequencer into its TILING path (TilingSpriteMesh), which crashes
+  // under Foundry v14 (SpriteMesh reads texture.defaultAnchor.x → undefined). A big-grid
+  // diorama (gs 200+) blew 13 squares past that. Capping keeps every volley on the proven
+  // plain-sprite path regardless of scene grid size. (2026-06-04)
+  const _LAUNCH_MAX_PX  = 3000;
 
   // Asset families — the reusable vocabulary of "things a siege throws". Each is a JB2A
   // projectile + impact pair (resolved defensively at runtime: candidate keys first, then a
@@ -199,7 +205,7 @@
     const scale   = Number(opts.scale)   || fam.scale || 1.4;
     const impSize = Number(opts.impactSizeGs) || fam.impactSizeGs || 5;
     const outgoing = opts.direction === "outgoing";       // wall → besieging line (counter-fire)
-    const launch  = gs * _LAUNCH_DIST_GS;
+    const launch  = Math.min(gs * _LAUNCH_DIST_GS, _LAUNCH_MAX_PX);
     const camp    = { x: wall.x, y: wall.y + launch };     // downstage, toward the camera
 
     const projPath   = (fam.projKeys && fam.projKeys.length) ? _resolveJB2A(fam.projKeys, fam.projSearch) : null;
