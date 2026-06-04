@@ -220,56 +220,40 @@
       override: noteCfg.bufferCommit
     });
 
-    // FUND THE BUFFER from the attacker's OP bank (per-category, in marks). The refund half of
-    // this loop already existed (the outcome write-back credits OP back on a win) — this is the
-    // debit that closes it: a siege now COSTS what it commits. The Bulwark discount (×0.75) lowers
-    // the bill. Affordability is enforced by op.commit (refuses underflow), so you can't begin a
-    // siege you can't fund — and a bigger commit is a real "marshal the war chest" decision.
+    // FUND THE BUFFER from the LEAD's OP bank (per-category, in marks). Supporter Integration
+    // 2026-06-03: the lead OPENS the buffer ALONE — the coalition auto-split is gone. Ticked
+    // supporters are merely INVITED (state.participants below); each self-commits its OWN OP
+    // via Join Siege (siege-state.joinSiege), which folds into this same shared buffer. Every
+    // faction pays its own way. The Bulwark discount (×0.75) lowers the lead's bill;
+    // affordability is enforced by op.commit (refuses underflow), so you can't begin a siege
+    // you can't fund — and a bigger commit is a real "marshal the war chest" decision.
     {
       const opApi = game.bbttcc?.api?.op;
       if (opApi?.commit) {
         const disc = bulwark.applied ? 0.75 : 1;
-        // CO-FUNDED buffer: the coalition (lead attacker + ticked supporters) stages the OP.
-        // Each category's marks split evenly across contributors, capped by each one's bank;
-        // the attacker backstops any per-bucket shortfall. buffer is MARKS (deduct directly).
-        const contributors = Array.from(new Set([attackerId, ...supportingFactionIds]))
-          .map(id => game.actors.get(id)).filter(a => a);
-        const bankOf = (a, b) => Number(a.getFlag(MOD_F, "opBank")?.[b]) || 0;
-        const plan = new Map();                       // factionId → { bucket: marks }
-        for (const a of contributors) plan.set(a.id, {});
-        let shortBucket = null;
+        const bankOf = (b) => Number(attackerFactionActor.getFlag(MOD_F, "opBank")?.[b]) || 0;
+        const deltas = {};
+        let sum = 0, shortBucket = null;
         for (const [bk, v] of Object.entries(buffer)) {
           const b = String(bk).toLowerCase();
           const need = Math.round((Number(v) || 0) * disc);
           if (need <= 0) continue;
-          const avail = contributors.map(a => ({ a, have: bankOf(a, b) }));
-          if (avail.reduce((s, x) => s + x.have, 0) < need) { shortBucket = { bucket: b, need, have: avail.reduce((s, x) => s + x.have, 0) }; break; }
-          let remaining = need;
-          const share = Math.floor(need / contributors.length);
-          for (const x of avail) { const p = Math.min(share, x.have); plan.get(x.a.id)[b] = (plan.get(x.a.id)[b] || 0) + p; remaining -= p; x.have -= p; }
-          avail.sort((x, y) => (x.a.id === attackerId ? -1 : y.a.id === attackerId ? 1 : 0));   // attacker backstops first
-          for (const x of avail) { if (remaining <= 0) break; const p = Math.min(remaining, x.have); plan.get(x.a.id)[b] = (plan.get(x.a.id)[b] || 0) + p; remaining -= p; x.have -= p; }
+          if (bankOf(b) < need) { shortBucket = { bucket: b, need, have: bankOf(b) }; break; }
+          deltas[b] = -need; sum += need;
         }
         if (shortBucket) {
-          const msg = `Begin Siege rejected — the coalition can't marshal the buffer: ${shortBucket.bucket} needs ${shortBucket.need / 10} OP, coalition has ${shortBucket.have / 10}.`;
+          const msg = `Begin Siege rejected — ${attackerFactionActor.name} can't marshal the buffer alone: ${shortBucket.bucket} needs ${shortBucket.need / 10} OP, bank has ${shortBucket.have / 10}. (Supporters add their OP AFTER declaration, via Join Siege.)`;
           await _pushWarLog(attackerFactionActor, msg, { activityKey: "begin_siege", hexUuid });
           return { ok: false, reason: msg };
         }
-        const paidReport = [];
-        for (const a of contributors) {
-          const deltas = {}; let sum = 0;
-          for (const [b, m] of Object.entries(plan.get(a.id) || {})) { if (m > 0) { deltas[b] = -m; sum += m; } }
-          if (!sum) continue;
-          const res = await opApi.commit(a.id, deltas, { source: "siege", label: "Begin Siege — buffer commit (coalition share)", allowOvercap: true });
+        if (sum > 0) {
+          const res = await opApi.commit(attackerId, deltas, { source: "siege", label: "Begin Siege — buffer commit (lead opens)", allowOvercap: true });
           if (!res || res.committed === false || res.ok === false) {
-            const msg = `Begin Siege rejected — ${a.name} could not commit its buffer share (${sum / 10} OP).`;
+            const msg = `Begin Siege rejected — ${attackerFactionActor.name} could not commit the opening buffer (${sum / 10} OP).`;
             await _pushWarLog(attackerFactionActor, msg, { activityKey: "begin_siege", hexUuid });
             return { ok: false, reason: msg };
           }
-          paidReport.push(`${a.name} ${sum / 10} OP`);
-        }
-        if (paidReport.length) {
-          await _pushWarLog(attackerFactionActor, `Buffer marshalled: ${paidReport.join(" · ")}${bulwark.applied ? " (Bulwark ×0.75)" : ""}.`, { activityKey: "begin_siege", hexUuid });
+          await _pushWarLog(attackerFactionActor, `Buffer marshalled: ${attackerFactionActor.name} ${sum / 10} OP (lead opens; supporters self-commit on Join)${bulwark.applied ? " (Bulwark ×0.75)" : ""}.`, { activityKey: "begin_siege", hexUuid });
         }
       } else {
         console.warn("[bbttcc/siege-throughput] OP API unavailable — buffer committed WITHOUT debiting the bank (faucet).");
@@ -297,6 +281,20 @@
     });
     // Record the besieged faction on the state so the HUD can name the coalition vs the besieged.
     state.defenderFactionId = defenderFactionId || null;
+
+    // Participants roster (Supporter Integration 2026-06-03). The lead is JOINED from turn 0
+    // (its contribution = the opening buffer it just paid); each ticked supporter is INVITED
+    // and becomes a co-combatant only when it self-commits via Join Siege.
+    state.participants = {
+      [attackerId]: {
+        factionId: attackerId, role: "lead", joined: true, invited: true,
+        contribution: Object.assign({}, buffer), joinedTurn: state.startedTurn
+      }
+    };
+    for (const sid of supportingFactionIds) {
+      if (!sid || sid === attackerId) continue;
+      state.participants[sid] = { factionId: sid, role: "supporter", joined: false, invited: true, contribution: {}, joinedTurn: null };
+    }
 
     // Initial narrative beat
     S.appendNarrativeBeat(state, {

@@ -116,6 +116,110 @@
   function _turn() { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } }
   function _bufColor(pct) { return pct > 50 ? "#6fcf6f" : (pct >= 25 ? "#ffaa55" : "#ff5555"); }
 
+  // ── Supporter Integration (2026-06-03) — true co-combatants ────────────────
+  // A participant faction's own PLAYER acts in the siege: Join (self-commit OP into the
+  // shared buffer), Muster (form up its own contingents), and clash maneuvers — all
+  // executed through the player→GM siegeRequest socket relay (module.raid-console.js).
+
+  function _isFactionDoc(a) {
+    return a?.getFlag?.(MOD_F, "isFaction") === true
+      || String(foundry.utils.getProperty(a, "system.details.type.value") || "").toLowerCase() === "faction";
+  }
+  function _ownedFactionIds() {
+    const out = [];
+    for (const a of (game.actors?.contents || [])) {
+      if (a?.isOwner && _isFactionDoc(a)) out.push(a.id);
+    }
+    return out;
+  }
+  // Join gate = Friendly or Allied with the siege lead — strictly above Neutral
+  // (relations are directional: how the would-be SUPPORTER rates the lead).
+  function _canJoinSiege(s, fid) {
+    try {
+      const rel = game.bbttcc?.api?.factions?.relations;
+      const lead = game.actors?.get?.(s.attackerFactionId);
+      const fac = game.actors?.get?.(fid);
+      if (!rel?.tier || !lead || !fac) return false;
+      return Number(rel.tier(fac, lead)) >= 4;   // friendly(4) / allied(5)
+    } catch (_e) { return false; }
+  }
+  // Joined vs invited supporter chips — ✓ joined (with its OP contribution), ✉ invited.
+  function _participantStrip(s) {
+    const parts = Object.values(s.participants || {}).filter(p => p && p.role !== "lead");
+    if (!parts.length) return "";
+    const chips = parts.map(p => {
+      const nm = game.actors?.get?.(p.factionId)?.name || "?";
+      const joined = !!p.joined;
+      const col = joined ? "#9fe09f" : "#8a8a7a";
+      const glyph = joined ? "✓" : "✉";
+      const opTotal = Object.values(p.contribution || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+      const tip = joined
+        ? `joined turn ${p.joinedTurn ?? "?"} — committed ${_mToOP(opTotal)} OP to the buffer`
+        : "invited — has not yet joined (Join Siege to commit)";
+      return `<span title="${esc(tip)}" style="font-size:0.64rem;padding:1px 5px;border:1px solid ${col};border-radius:8px;color:${col};${joined ? "" : "opacity:.65;font-style:italic;"}">${glyph} ${esc(nm)}${joined && opTotal ? ` <span style="opacity:.7;">+${_mToOP(opTotal)}</span>` : ""}</span>`;
+    }).join(" ");
+    return `<div style="margin-top:.3rem;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
+      <span style="font-size:0.6rem;color:#998;opacity:.7;text-transform:uppercase;letter-spacing:.05em;">allies</span>${chips}</div>`;
+  }
+  // Execute a siege action as a faction: GM runs locally with GM authority; a player
+  // relays to the GM client (siegeRequest), which validates ownership + echoes the result.
+  function _siegeRequest(action, hexUuid, factionId, payload = {}) {
+    if (game.user?.isGM) {
+      const S = _siegeApi();
+      const p = action === "join"     ? S?.joinSiege?.(hexUuid, factionId, payload.commit || {})
+              : action === "muster"   ? S?.musterToScene?.({ hexUuid, side: payload.side || "attacker", factionId, label: payload.label })
+              : action === "recall"   ? S?.recallMuster?.({ hexUuid, factionId })
+              : action === "maneuver" ? S?.fireManeuver?.(String(payload.key || ""), { hexUuid, factionId })
+              : null;
+      if (p?.then) p.then(r => { if (r && r.ok === false) ui.notifications?.warn?.(r.reason || r.error || `${action} failed.`); })
+        .catch(e => { console.error(TAG, `siege ${action} failed`, e); ui.notifications?.error?.(`${action} failed — see console.`); });
+      return;
+    }
+    try {
+      game.socket?.emit?.(`module.${MOD_R}`, { t: "siegeRequest", action, hexUuid, factionId, userId: game.user.id, payload });
+      ui.notifications?.info?.("Order sent to the GM…");
+    } catch (e) { console.warn(TAG, "siegeRequest emit failed", e); }
+  }
+  // The Join buffer-commit dialog: the supporter folds its OWN OP into the shared buffer
+  // (marks debited from its own bank by joinSiege — every faction pays its own way).
+  function _openJoinDialog(hexUuid, factionId) {
+    const fac = game.actors?.get?.(factionId);
+    if (!fac) return ui.notifications?.warn?.("Faction not found.");
+    const bank = fac.getFlag?.(MOD_F, "opBank") || {};
+    const bankOP = (k) => (Number(bank[k]) || 0) / 10;
+    const buckets = ["violence", "logistics", "economy"];
+    const defOP = (k) => Math.min(bankOP(k), k === "violence" ? 2 : 1);
+    const rows = buckets.map(b => `<div style="display:flex;align-items:center;gap:6px;margin:.25rem 0;">
+        <label style="flex:1;text-transform:capitalize;">${b}</label>
+        <input type="number" name="${b}" min="0" step="1" value="${defOP(b)}" style="width:5rem;text-align:right;"/>
+        <span style="opacity:.6;font-size:.8em;">/ ${bankOP(b)} OP</span>
+      </div>`).join("");
+    new Dialog({
+      title: `⚔ Join the Siege — ${fac.name}`,
+      content: `<div style="font-size:0.85rem;">
+          <p style="margin:.2rem 0 .5rem;">${esc(fac.name)} commits its <b>own</b> OP into the shared siege buffer — spent now, fights for the coalition.</p>
+          ${rows}
+        </div>`,
+      buttons: {
+        join: {
+          icon: '<i class="fas fa-fist-raised"></i>',
+          label: "We join the siege",
+          callback: (html) => {
+            const root = html?.[0] ?? html;
+            const commit = {};
+            for (const b of buckets) {
+              const v = Number(root?.querySelector?.(`input[name="${b}"]`)?.value) || 0;
+              if (v > 0) commit[b] = Math.round(v * 10);   // OP → marks
+            }
+            _siegeRequest("join", hexUuid, factionId, { commit });
+          }
+        },
+        cancel: { label: "Not yet" }
+      },
+      default: "join"
+    }).render(true);
+  }
+
   // The last few siege beats — the saga-so-far ticker (read-only, all clients).
   function _beatsFooter(s) {
     const beats = Array.isArray(s.narrativeBeats) ? s.narrativeBeats.slice(-3) : [];
@@ -215,6 +319,45 @@
             </div>`)
       : "";
 
+    // ── Co-combatant controls (Supporter Integration 2026-06-03) ──
+    // Players: ⚔ Join for an owned Friendly+ faction not yet in; ⛺ Muster / clash
+    // maneuvers / ↩ Recall for owned factions that FIGHT here (lead or joined supporter).
+    // GM: ⚔ Join buttons for invited-but-unjoined NPC allies (same dialog, runs locally).
+    let coBtns = "";
+    {
+      const allMans = game.bbttcc?.api?.siege?.clashManeuvers || [];
+      const atkMans = allMans.filter(m => (m.side || "attacker") === "attacker");
+      const rows = [];
+      if (isGM) {
+        const pending = Object.values(s.participants || {}).filter(p => p && p.role === "supporter" && p.invited && !p.joined);
+        for (const p of pending) {
+          const nm = game.actors?.get?.(p.factionId)?.name || "?";
+          rows.push(`<button type="button" data-act="p-join" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(p.factionId)}" title="Join ${esc(nm)} to the siege (commits its own OP)" style="flex:1;padding:3px 6px;background:#16201a;color:#9fe09f;border:1px solid #3f8a55;border-radius:4px;font-size:0.72rem;cursor:pointer;font-weight:600;">⚔ Join (${esc(nm)})</button>`);
+        }
+      } else {
+        const myFids = _ownedFactionIds();
+        const joinable = myFids.filter(fid => fid !== s.attackerFactionId && fid !== s.defenderFactionId
+          && !(s.participants?.[fid]?.joined) && _canJoinSiege(s, fid));
+        const fighting = myFids.filter(fid => fid === s.attackerFactionId || s.participants?.[fid]?.joined);
+        const many = (joinable.length + fighting.length) > 1;
+        for (const fid of joinable) {
+          const nm = game.actors?.get?.(fid)?.name || "?";
+          rows.push(`<button type="button" data-act="p-join" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="March ${esc(nm)} to the siege — commit your own OP into the shared buffer" style="flex:2;padding:3px 6px;background:#16201a;color:#9fe09f;border:1px solid #3f8a55;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⚔ Join the Siege${many ? ` (${esc(nm)})` : ""}</button>`);
+        }
+        for (const fid of fighting) {
+          const nm = game.actors?.get?.(fid)?.name || "?";
+          rows.push(`<button type="button" data-act="p-muster" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="Form up ${esc(nm)}'s contingents on the battle scene" style="flex:1;padding:3px 6px;background:#102818;color:#8fd6a0;border:1px solid #3f8a55;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⛺ Muster${many ? ` (${esc(nm)})` : ""}</button>`);
+          for (const m of atkMans) {
+            const afford = total >= (m.costTotal || 0);
+            rows.push(`<button type="button" data-act="p-maneuver" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" data-key="${esc(m.key)}" title="${afford ? `Fire ${esc(m.label)} now as ${esc(nm)} — Buffer −${_mToOP(m.costTotal)} OP` : `Need ${_mToOP(m.costTotal)} OP (Buffer has ${_mToOP(total)})`}" style="flex:1;padding:3px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:${afford ? "pointer" : "not-allowed"};font-weight:600;opacity:${afford ? "1" : "0.55"};" ${afford ? "" : "disabled"}>${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_mToOP(m.costTotal)}</span></button>`);
+          }
+          rows.push(`<button type="button" data-act="p-recall" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="Recall ${esc(nm)}'s contingents from the field" style="flex:0 0 auto;padding:3px 7px;background:#1a1a22;color:#bbb;border:1px solid #555;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">↩</button>`);
+        }
+        if (fighting.length && (Number.isFinite(aMus) || Number.isFinite(dMus))) rows.push(musRead);
+      }
+      if (rows.length) coBtns = `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">${rows.join("")}</div>`;
+    }
+
     const statusChip = (label, color) => `<span style="font-size:0.66rem;padding:1px 5px;border:1px solid ${color};border-radius:8px;color:${color};">${esc(label)}</span>`;
 
     return `<div data-hex="${esc(entry.hexUuid)}" style="padding:.4rem .5rem;border:1px solid #3a3322;border-radius:5px;background:rgba(30,26,16,0.5);margin-bottom:.4rem;">
@@ -239,12 +382,14 @@
         ${reliefArrived ? `<span style="font-size:0.66rem;padding:1px 5px;border:1px solid #88bbff;border-radius:8px;color:#cfe2ff;background:#101a2a;box-shadow:0 0 8px rgba(136,187,255,0.5);font-weight:600;">relief here ×${reliefArrived}</span>` : (reliefPending ? statusChip(`relief ×${reliefPending}`, "#88bbff") : "")}
       </div>
       <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:4px;">${_layersStrip(s)}</div>
+      ${_participantStrip(s)}
       ${_champStrip(s)}
       ${_beatsFooter(s)}
       ${offerBtns}
       ${gmBtns}
       ${clashBtns}
       ${musterBtns}
+      ${coBtns}
     </div>`;
   }
 
@@ -397,7 +542,36 @@
   // ─── Render plumbing ──────────────────────────────────────────────────────
 
   function _bind(el) {
-    if (!el || !game.user?.isGM) return;
+    if (!el) return;
+    // Co-combatant buttons render for BOTH roles (player actions + GM join-on-behalf);
+    // everything below them is GM-only markup, so binding is naturally role-safe — the
+    // selectors simply find nothing on a player client.
+    el.querySelectorAll('button[data-act="p-join"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        _openJoinDialog(btn.dataset.hex, btn.dataset.fid);
+      });
+    });
+    el.querySelectorAll('button[data-act="p-muster"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        _siegeRequest("muster", btn.dataset.hex, btn.dataset.fid, { side: "attacker" });
+      });
+    });
+    el.querySelectorAll('button[data-act="p-recall"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        _siegeRequest("recall", btn.dataset.hex, btn.dataset.fid, {});
+      });
+    });
+    el.querySelectorAll('button[data-act="p-maneuver"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        if (btn.disabled) return;
+        _siegeRequest("maneuver", btn.dataset.hex, btn.dataset.fid, { key: btn.dataset.key });
+      });
+    });
+    if (!game.user?.isGM) return;
     el.querySelectorAll('button[data-act="convene"]').forEach(btn => {
       btn.addEventListener("click", (ev) => {
         ev.preventDefault(); ev.stopPropagation();
@@ -550,6 +724,7 @@
   Hooks.on("bbttcc:siege:trojanHorse", _scheduleRender);
   Hooks.on("bbttcc:siege:trojanFailed", _scheduleRender);
   Hooks.on("bbttcc:siege:clash", _scheduleRender);
+  Hooks.on("bbttcc:siege:supporterJoined", _scheduleRender);
   Hooks.on("bbttcc:siege:outcome", _scheduleRender);
 
   // PLAYER-SIDE refresh: the bbttcc:siege:* hooks above fire only locally on the GM

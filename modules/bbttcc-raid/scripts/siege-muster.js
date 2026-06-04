@@ -234,7 +234,19 @@
     if (!scene) scene = canvas?.scene || null;
     if (!scene) return { ok: false, error: "no scene to deploy onto" };
 
-    const faction = await _factionForSide(side, hexUuid, state);
+    // Faction override (Supporter Integration 2026-06-03): a JOINED supporter musters its own
+    // contingents alongside the lead's. Default (no opts.factionId) = the side's principal
+    // faction, exactly as before.
+    let faction;
+    if (opts.factionId) {
+      faction = game.actors.get(opts.factionId) || null;
+      if (!faction) return { ok: false, error: `faction ${opts.factionId} not found` };
+      if (side === "attacker" && opts.factionId !== state.attackerFactionId && !(state.participants?.[opts.factionId]?.joined)) {
+        return { ok: false, error: `${faction.name} hasn't joined this siege — Join Siege first` };
+      }
+    } else {
+      faction = await _factionForSide(side, hexUuid, state);
+    }
     const total = _num(opts.total, 0) || _factionMuster(faction);
     let K = _num(opts.units, 0);
     if (!K) K = Math.max(2, Math.min(8, Math.round(total / 30)));
@@ -248,21 +260,36 @@
     try { if (tab && tab.readConfig?.(scene)?.enabled !== true) await tab.enable?.({}, scene); } catch (_e) {}
     const cfg = (tab?.readConfig?.(scene)) || { frontY: 800, backY: 200 };
 
-    // De-dup per side (recall or pass force to redeploy).
+    // De-dup per FACTION within the side (recall or pass force to redeploy) — a supporter
+    // forming up next to an already-deployed lead is the whole point, so only the same
+    // faction's prior deployment blocks.
+    const dedupFid = faction?.id || null;
     const existing = (scene.tokens?.contents || []).filter(t => {
-      const m = t?.flags?.[MOD_R]?.musterDeployment; return m && m.hexUuid === hexUuid && m.side === side;
+      const m = t?.flags?.[MOD_R]?.musterDeployment;
+      if (!m || m.hexUuid !== hexUuid || m.side !== side) return false;
+      return dedupFid ? (m.factionId === dedupFid) : true;
     });
     if (existing.length && !opts.force) {
-      return { ok: false, error: `${side} muster already deployed (${existing.length} units) — recall first, or pass { force: true }`, existing: existing.length };
+      return { ok: false, error: `${faction?.name || side} muster already deployed (${existing.length} units) — recall first, or pass { force: true }`, existing: existing.length };
     }
 
     // Formation: a block anchored on the wall's X (or scene centre), in the side's depth band.
     const gs = _num(scene.grid?.size || scene.gridSize, 100);
     const sw = _num(scene.width, 4000), sh = _num(scene.height, 3000);
     const wall = _wallTokenCenter(scene, state);
-    const anchorX = wall ? wall.x : sw / 2;
     const cols = Math.max(1, _num(opts.cols, Math.min(K, 4)));
     const stride = gs * 1.6;
+    // Stagger co-combatant blocks: when OTHER factions already hold this side's band, shift
+    // this faction's block sideways (alternating right/left) so allied hosts stand abreast.
+    let anchorX = wall ? wall.x : sw / 2;
+    {
+      const otherFactions = new Set((scene.tokens?.contents || [])
+        .map(t => t?.flags?.[MOD_R]?.musterDeployment)
+        .filter(m => m && m.hexUuid === hexUuid && m.side === side && m.factionId && m.factionId !== dedupFid)
+        .map(m => m.factionId));
+      const bi = otherFactions.size;
+      if (bi > 0) anchorX += Math.ceil(bi / 2) * (cols * stride + gs) * (bi % 2 ? 1 : -1);
+    }
     // attacker → downstage (near frontY, big); defender → at the wall (near backY, far/small).
     const baseY = (opts.baseY != null) ? _num(opts.baseY)
                 : (side === "attacker" ? _num(cfg.frontY, 800) : _num(cfg.backY, 200) + stride);
@@ -284,7 +311,7 @@
       data.hidden = false;
       data.disposition = disposition;
       data.displayName = dispMode;
-      data.name = `${side === "attacker" ? "⚔" : "🛡"} ${opts.label || "Contingent"} · ${per}`;
+      data.name = `${side === "attacker" ? "⚔" : "🛡"} ${opts.label || (opts.factionId ? (faction?.name || "Contingent") : "Contingent")} · ${per}`;
       data.flags = data.flags || {};
       data.flags[MOD_R] = Object.assign({}, data.flags[MOD_R] || {}, {
         tableauActor: true,
@@ -302,18 +329,26 @@
     try { await tab?.applyAll?.(); } catch (_e) {}
 
     // Seed §5 muster + record the deployment on siege state (Stage 2's clash reads this).
+    // The side scalar is RECOMPUTED from ALL same-side tokens on the scene (faction-agnostic
+    // sum), so a supporter's contingents ADD to the muster instead of clobbering the lead's.
+    let sideTotal = total;
     try {
       const S = _siege(); const st = await S.getState(hexUuid);
       if (st) {
-        st[side === "attacker" ? "attackerMuster" : "defenderMuster"] = total;
+        sideTotal = _sideUnitTokens(scene, hexUuid, side).reduce((a, t) => a + _tokStrength(t), 0) || total;
+        st[side === "attacker" ? "attackerMuster" : "defenderMuster"] = sideTotal;
         st.musterDeployments = st.musterDeployments || {};
-        st.musterDeployments[side] = { total, per, units: K, tokenIds: created.map(t => t.id), sceneId: scene.id, deployedAt: Date.now() };
+        const prev = st.musterDeployments[side];
+        const prevIds = (prev?.sceneId === scene.id)
+          ? (prev.tokenIds || []).filter(id => scene.tokens.get(id))
+          : [];
+        st.musterDeployments[side] = { total: sideTotal, per, units: K, tokenIds: [...prevIds, ...created.map(t => t.id)], sceneId: scene.id, deployedAt: Date.now() };
         await S.setState(hexUuid, st);
       }
     } catch (e) { console.warn(TAG, "muster state write failed", e); }
 
-    ui.notifications?.info(`Formed up ${created.length} ${side} contingent(s) — ${total} strong.`);
-    return { ok: true, created: created.length, side, total, per, units: K, scene: scene.id };
+    ui.notifications?.info(`Formed up ${created.length} ${side} contingent(s) — ${total} strong${sideTotal !== total ? ` (side now ${sideTotal})` : ""}.`);
+    return { ok: true, created: created.length, side, total, sideTotal, per, units: K, scene: scene.id };
   }
 
   // ── Recall ──────────────────────────────────────────────────────────────────
@@ -328,6 +363,7 @@
       const m = t?.flags?.[MOD_R]?.musterDeployment; if (!m) return false;
       if (hexUuid && m.hexUuid !== hexUuid) return false;
       if (side && m.side !== side) return false;
+      if (opts.factionId && m.factionId !== opts.factionId) return false;   // supporter recalls only ITS host
       return true;
     }).map(t => t.id);
     if (!ids.length) return { ok: true, removed: 0 };

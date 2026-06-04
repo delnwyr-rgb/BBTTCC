@@ -6595,6 +6595,67 @@ function bindAPI() {
             } catch (eC) { console.warn(TAG, "courtlyHook replay threw", eC); }
             return;
           }
+          if (msg.t === "siegeRequest") {
+            // Siege Supporter Integration (2026-06-03) — a participant faction's own PLAYER
+            // acts in a siege via this player→GM relay. The GM client validates that the
+            // requesting user OWNS the acting faction, then executes the action with GM
+            // authority (joinSiege / musterToScene / recallMuster / fireManeuver are all
+            // GM-only at the write layer). Outcome echoes back via siegeRequestResult so
+            // the requesting player sees the success/refusal, not just the GM.
+            if (!_rcIsGMUser()) return;
+            try {
+              const action    = String(msg.action || "");
+              const hexUuid   = String(msg.hexUuid || "");
+              const factionId = String(msg.factionId || "");
+              const userId    = String(msg.userId || "");
+              const payload   = (msg.payload && typeof msg.payload === "object") ? msg.payload : {};
+              const reply = (ok, message) => {
+                try { game.socket?.emit?.(`module.${RAID_ID}`, { t: "siegeRequestResult", userId, ok: !!ok, message: String(message || "") }); } catch(_eR) {}
+              };
+              const user = game.users?.get?.(userId) || null;
+              const fac  = game.actors?.get?.(factionId) || null;
+              const S    = game.bbttcc?.api?.siege;
+              if (!user || !fac || !S || !hexUuid) return reply(false, "Siege relay: bad request.");
+              if (!fac.testUserPermission(user, "OWNER")) {
+                console.warn(TAG, `siegeRequest DENIED — ${user.name} does not own ${fac.name}`);
+                return reply(false, `You don't own ${fac.name}.`);
+              }
+              let r = null;
+              switch (action) {
+                case "join":
+                  r = await S.joinSiege?.(hexUuid, factionId, payload.commit || {});
+                  break;
+                case "muster":
+                  r = await S.musterToScene?.({ hexUuid, side: payload.side === "defender" ? "defender" : "attacker", factionId, label: payload.label || fac.name });
+                  break;
+                case "recall":
+                  r = await S.recallMuster?.({ hexUuid, factionId });
+                  break;
+                case "maneuver":
+                  r = await S.fireManeuver?.(String(payload.key || ""), { hexUuid, factionId });
+                  break;
+                default:
+                  return reply(false, `Siege relay: unknown action "${action}".`);
+              }
+              const ok = !!(r && r.ok !== false);
+              reply(ok, ok
+                ? `${fac.name}: ${action === "join" ? "joined the siege" : action} ✓`
+                : (r?.reason || r?.error || `${action} failed.`));
+            } catch (eSRq) {
+              console.warn(TAG, "siegeRequest threw", eSRq);
+              try { game.socket?.emit?.(`module.${RAID_ID}`, { t: "siegeRequestResult", userId: String(msg.userId || ""), ok: false, message: eSRq?.message || "Siege relay error." }); } catch(_eR2) {}
+            }
+            return;
+          }
+          if (msg.t === "siegeRequestResult") {
+            // Player-side echo of a relayed siege request — only the requester reacts.
+            try {
+              if (String(msg.userId || "") !== String(game.user?.id || "")) return;
+              if (msg.ok) ui.notifications?.info?.(String(msg.message || "Done."));
+              else ui.notifications?.warn?.(String(msg.message || "Request refused."));
+            } catch (_eRR) {}
+            return;
+          }
           if (msg.t === "siegeSceneSwap") {
             // Siege Phase D.1 — follow the GM to a convened Breach Scene.
             // GM-side convene() emits this so non-GM clients view the layer scene too.

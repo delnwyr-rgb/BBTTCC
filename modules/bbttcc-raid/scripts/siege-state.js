@@ -159,6 +159,12 @@
       pendingMoraleDeltas: [],
       attackerChampions: attackerChampions.slice(),
       defenderChampions: defenderChampions.slice(),
+      // ---- Participants (Supporter Integration 2026-06-03) ----
+      // Map keyed by factionId → { factionId, role:"lead"|"supporter", joined, invited,
+      // contribution:{bucket:marks}, joinedTurn }. The LEAD opens the buffer at Begin Siege
+      // (joined from turn 0); supporters are INVITED and self-commit via joinSiege — every
+      // faction pays its own way. handleBeginSiege seeds this after makeSiegeState.
+      participants: {},
       eventDeckId,
       eventsFired: [],
       narrativeBeats: [],
@@ -538,6 +544,113 @@
     return { ok: true, repaired };
   }
 
+  // ---- Supporter co-combatants (Supporter Integration 2026-06-03) ----
+  // Buffer model: LEAD OPENS, SUPPORTERS SELF-COMMIT ON JOIN. At Begin Siege only the lead
+  // pays the opening buffer; each supporter folds its OWN OP into the shared buffer here.
+  // Gate: the joining faction must rate the siege lead Friendly or Allied — strictly above
+  // Neutral (TIER_KEYS idx: at_war0 hostile1 unfriendly2 neutral3 friendly4 allied5).
+  const JOIN_MIN_TIER = 4;   // friendly
+
+  /**
+   * joinSiege — a supporter commits to an active siege as a true co-combatant.
+   * GM-only at the write layer (hex-flag + actor-flag writes); players reach it via the
+   * siegeRequest socket relay in module.raid-console.js.
+   * @param {string} hexUuid   besieged hex
+   * @param {string} factionId joining faction (must be Friendly+ with the lead)
+   * @param {object} commit    { bucket: marks } — OP the supporter folds into the buffer (MARKS)
+   */
+  async function joinSiege(hexUuid, factionId, commit = {}){
+    if (!game.user?.isGM) return { ok: false, reason: "GM only — players join via the Siege HUD relay" };
+    const state = await getSiegeState(hexUuid);
+    if (!state || state.status !== "active") return { ok: false, reason: "no active siege on that hex" };
+    const fac = game.actors.get(factionId);
+    if (!fac || !isFactionActor(fac)) return { ok: false, reason: "joining faction not found" };
+    if (factionId === state.attackerFactionId) return { ok: false, reason: "the siege leader is already in" };
+    if (factionId === state.defenderFactionId) return { ok: false, reason: "the besieged cannot join the besiegers" };
+
+    // Friendly+ gate (relations are directional: how the SUPPORTER rates the lead).
+    const lead = game.actors.get(state.attackerFactionId);
+    const rel = game.bbttcc?.api?.factions?.relations;
+    if (rel?.tier && lead) {
+      const t = rel.tier(fac, lead);
+      if (!(Number.isFinite(t) && t >= JOIN_MIN_TIER)) {
+        return { ok: false, reason: `${fac.name} must be Friendly or Allied with ${lead.name} to join (currently ${rel.get?.(fac, lead) || "neutral"})` };
+      }
+    }
+
+    state.participants = state.participants || {};
+    const prior = state.participants[factionId];
+    if (prior?.joined) return { ok: false, reason: `${fac.name} has already joined this siege` };
+
+    // Normalize the commit: { bucket: marks ≥ 0 }. A join MUST cost something — discrete
+    // costs everywhere (feedback_siege_discrete_costs_realism): no free seats at the siege.
+    const marks = {};
+    let total = 0;
+    for (const [bk, v] of Object.entries(commit || {})) {
+      const m = Math.max(0, Math.round(Number(v) || 0));
+      if (m > 0) { marks[String(bk).toLowerCase()] = m; total += m; }
+    }
+    if (total <= 0) return { ok: false, reason: "commit at least some OP to join — every faction pays its own way" };
+
+    // Debit the supporter's OWN bank. op.commit refuses underflow = the affordability gate.
+    const opApi = game.bbttcc?.api?.op;
+    if (opApi?.commit) {
+      const deltas = {};
+      for (const [b, m] of Object.entries(marks)) deltas[b] = -m;
+      const res = await opApi.commit(factionId, deltas, { source: "siege", label: "Join Siege — supporter buffer commit", allowOvercap: true });
+      if (!res || res.committed === false || res.ok === false) {
+        return { ok: false, reason: `${fac.name} can't marshal that commitment (${total / 10} OP) — bank is short` };
+      }
+    } else {
+      console.warn(TAG, "OP API unavailable — supporter joined WITHOUT debiting its bank (faucet).");
+    }
+
+    // Fold the marks into the shared buffer + roster the participant.
+    state.buffer = state.buffer || {};
+    for (const [b, m] of Object.entries(marks)) state.buffer[b] = (Number(state.buffer[b]) || 0) + m;
+    state.bufferStartingTotal = (Number(state.bufferStartingTotal) || 0) + total;
+    const turn = (() => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } })();
+    const contribution = Object.assign({}, prior?.contribution || {});
+    for (const [b, m] of Object.entries(marks)) contribution[b] = (Number(contribution[b]) || 0) + m;
+    state.participants[factionId] = {
+      factionId, role: "supporter",
+      joined: true, invited: prior?.invited ?? false,
+      contribution, joinedTurn: turn
+    };
+    // Keep supportingFactionIds in sync — the supply BFS + console routing read it.
+    state.supportingFactionIds = Array.from(new Set([...(state.supportingFactionIds || []), factionId]));
+    appendNarrativeBeat(state, {
+      turn, kind: "supporter_joined",
+      title: `${fac.name} marches to the siege`,
+      description: `${fac.name} commits ${total / 10} OP of its own to the shared buffer (now ${bufferTotal(state.buffer) / 10} OP).`,
+      payload: { factionId, marks, total }
+    });
+    await setSiegeState(hexUuid, state);
+
+    const payload = { siegeId: state.siegeId, hexUuid, factionId, total };
+    Hooks.callAll("bbttcc:siege:supporterJoined", payload);
+    try { game.socket?.emit?.(`module.${MOD_R}`, { t: "siegeHook", hook: "bbttcc:siege:supporterJoined", payload }); } catch (_e) {}
+    try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}
+    ui.notifications?.info?.(`${fac.name} joins the siege — +${total / 10} OP to the buffer.`);
+    return { ok: true, factionId, total, buffer: state.buffer };
+  }
+
+  /**
+   * siegeForFaction — the active siege a faction FIGHTS IN (lead or joined supporter).
+   * Auto-target resolver for the planner + the player HUD. Returns the listActiveSieges
+   * entry extended with { role } or null.
+   */
+  function siegeForFaction(factionId){
+    if (!factionId) return null;
+    for (const entry of listActiveSieges()) {
+      const s = entry.siege;
+      if (!s) continue;
+      if (s.attackerFactionId === factionId) return Object.assign({ role: "lead" }, entry);
+      if (s.participants?.[factionId]?.joined) return Object.assign({ role: "supporter" }, entry);
+    }
+    return null;
+  }
+
   // ---- API exposure (per bbttcc-api-exposure-pattern) ----
 
   function _installSiegeAPI(){
@@ -569,6 +682,10 @@
       snapshotChampions,
       applyChampionStatusChange,
 
+      // supporter co-combatants (2026-06-03)
+      joinSiege,
+      siegeForFaction,
+
       // threat vectors (Phase C)
       findSiegesUsingHex,
       shaveBuffer,
@@ -595,6 +712,7 @@
     getSiegeState, setSiegeState, clearSiegeState, listActiveSieges,
     validateDepot, bfsSupplyPath, snapshotChampions,
     applyChampionStatusChange, pickEventDeck,
+    joinSiege, siegeForFaction,
     findSiegesUsingHex, shaveBuffer, bufferTotal,
     hexOwner, hexModifiers, hexTerrainKey, hexHoldings,
     hexStructureActorIds, hexHasActiveSiege,

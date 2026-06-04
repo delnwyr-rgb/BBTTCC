@@ -282,7 +282,7 @@
   // actions would need a defender-OP path. Bombard is the clean case (no internal self-charge);
   // storm_final_assault stays strategic because it ALSO shaves the Buffer inside its handler
   // (firing it here would double-bill) and its effect (next breach-scene budget ×2) is strategic.
-  async function fireManeuver(key, { hexUuid, note } = {}) {
+  async function fireManeuver(key, { hexUuid, note, factionId } = {}) {
     if (!game.user?.isGM) return { ok: false, reason: "GM only" };
     const def = HANDLERS[key];
     if (!def) return { ok: false, reason: `unknown maneuver "${key}"` };
@@ -299,7 +299,16 @@
 
     const st = await S.getSiegeState(uuid);
     if (!st || st.status !== "active") return { ok: false, reason: "no active siege on that hex" };
-    const factionId = st.attackerFactionId;
+    // Attribution (Supporter Integration 2026-06-03): a JOINED supporter may fire as ITSELF —
+    // the player relay path passes its factionId. Cost stays on the SHARED buffer (the
+    // supporter co-funded it on Join). Default = the lead, exactly as before.
+    let actingFactionId = st.attackerFactionId;
+    if (factionId && factionId !== st.attackerFactionId) {
+      if (!(st.participants?.[factionId]?.joined)) {
+        return { ok: false, reason: `${game.actors.get(factionId)?.name || "that faction"} hasn't joined this siege — Join Siege first` };
+      }
+      actingFactionId = factionId;
+    }
 
     // Cost model A — deduct the maneuver's OP cost from the Buffer right now. Clash tempo costs
     // a FRACTION of the strategic queued form (def.clashCost): one volley ≠ a week's commitment.
@@ -311,13 +320,13 @@
       if (have < costTotal) return { ok: false, reason: `not enough Buffer to fire ${def.label} now (need ${costTotal/10} OP, have ${have/10})` };
       const dup = foundry.utils.duplicate(st);
       S.shaveBuffer(dup.buffer, costTotal);
-      S.appendNarrativeBeat(dup, { turn: _turn(), kind: "clash_maneuver", title: `${def.label} — in the moment`, description: `Fired during the clash (tactical tempo). Buffer −${costTotal/10} OP.` });
+      S.appendNarrativeBeat(dup, { turn: _turn(), kind: "clash_maneuver", title: `${def.label} — in the moment`, description: `Fired during the clash (tactical tempo) by ${game.actors.get(actingFactionId)?.name || "the besiegers"}. Buffer −${costTotal/10} OP.` });
       await S.setSiegeState(uuid, dup);
     }
 
     // Run the SAME handler that the strategic clock uses — it does the real work + its own beat/VFX.
     let r;
-    try { r = await def.fn({ factionId, targetUuid: uuid, note: note || "", S }); }
+    try { r = await def.fn({ factionId: actingFactionId, targetUuid: uuid, note: note || "", S }); }
     catch (err) { console.error(TAG, `fireManeuver ${key} failed`, err); return { ok: false, reason: err.message }; }
 
     try { game.bbttcc?.api?.siege?.refreshHud?.(); } catch (_e) {}

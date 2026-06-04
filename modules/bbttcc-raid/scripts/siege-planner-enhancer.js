@@ -510,6 +510,30 @@
     // the fetch can silently 404 depending on module.url, which previously left the
     // siege config panel (size dial + depot picker) from ever rendering.
     const eff = game.bbttcc?.api?.raid?.EFFECTS?.[String(selectedKey).toLowerCase()];
+
+    // AUTO-TARGET (Supporter Integration 2026-06-03): when a participant faction plans a
+    // siege-tagged activity (the counter-activities, NOT begin_siege itself), default the
+    // target to ITS active siege's hex — no hex-map selection needed, which also covers the
+    // hexless diorama where the hex isn't even on the current scene. Runs after every planner
+    // render, so it wins over the hex-select's snap-to-first-option rebuild.
+    try {
+      if (eff?.siege && !eff?.siegeRequiresTarget) {
+        const fid = ps.factionId || ps.attackerId || null;
+        const siegeApi = game.bbttcc?.api?.siege;
+        let hit = fid ? siegeApi?.siegeForFaction?.(fid) : null;
+        // Defender-side activities: the besieged faction targets its own siege too.
+        if (!hit && fid && eff.siegeSide === "defender") {
+          hit = (siegeApi?.list?.() || []).find(e => e?.siege?.defenderFactionId === fid) || null;
+        }
+        if (hit?.hexUuid && ps.selectedHexUuid !== hit.hexUuid) {
+          ps.selectedHexUuid = hit.hexUuid;
+          if (app.__siegeAutoTargetHex !== hit.hexUuid) {
+            app.__siegeAutoTargetHex = hit.hexUuid;
+            ui.notifications?.info?.(`⚔ Targeting your active siege — ${hit.hexName || "besieged hex"}.`);
+          }
+        }
+      }
+    } catch (eAT) { console.warn(TAG, "siege auto-target failed", eAT); }
     let isSiege = !!eff?.siegeRequiresTarget;
     if (!isSiege) {
       const actEntry = await _findActivityByKey(selectedKey);
