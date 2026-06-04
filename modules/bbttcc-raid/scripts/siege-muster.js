@@ -34,6 +34,15 @@
   const _tableau = () => _api()?.raid?.tableau;
   const _turn    = () => { try { return Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch { return 0; } };
 
+  // The territory HEX MAP must never be auto-flipped into a battle diorama: stamping
+  // flags.bbttcc-raid.tableau onto it makes bbttccIsHexMapScene() (territory/main.js)
+  // misclassify it and suppress ALL hex chrome — the 2026-06-04 "extra hex" regression.
+  // A scene holding real territory hexes is the map: deploy flat there, no forced perspective.
+  function _sceneHasHexes(scene) {
+    try { return (scene?.drawings?.contents || []).some(d => d?.flags?.[MOD_T]?.isHex === true); }
+    catch (_e) { return false; }
+  }
+
   // Fire a siege beat locally + relay over the socket so VFX/HUD react on every client.
   // Mirrors siege-vfx._relaySiege / siege-counter-activities._relayHook.
   function _relay(hook, payload) {
@@ -257,7 +266,7 @@
 
     // Forced-perspective: ensure tableau is on so depth-scaling applies.
     const tab = _tableau();
-    try { if (tab && tab.readConfig?.(scene)?.enabled !== true) await tab.enable?.({}, scene); } catch (_e) {}
+    try { if (tab && tab.readConfig?.(scene)?.enabled !== true && !_sceneHasHexes(scene)) await tab.enable?.({}, scene); } catch (_e) {}
     const cfg = (tab?.readConfig?.(scene)) || { frontY: 800, backY: 200 };
 
     // De-dup per FACTION within the side (recall or pass force to redeploy) — a supporter
@@ -410,7 +419,7 @@
     }
 
     const tab = _tableau();
-    try { if (tab && tab.readConfig?.(scene)?.enabled !== true) await tab.enable?.({}, scene); } catch (_e) {}
+    try { if (tab && tab.readConfig?.(scene)?.enabled !== true && !_sceneHasHexes(scene)) await tab.enable?.({}, scene); } catch (_e) {}
     const cfg = (tab?.readConfig?.(scene)) || { frontY: 800, backY: 200 };
 
     const unitActor = await _ensureUnitActor(opts.unitActorId);

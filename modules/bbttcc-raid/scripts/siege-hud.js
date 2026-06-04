@@ -412,7 +412,15 @@
   // (flags.bbttcc-raid.siegeHexUuid) lets that resolution succeed no matter what scene is
   // active. Auto-bound on convene; also settable via game.bbttcc.api.siege.bindScene.
   async function _bindSceneToHex(scene, hexUuid) {
-    try { if (scene && hexUuid && scene.getFlag?.(MOD_R, "siegeHexUuid") !== hexUuid) await scene.setFlag(MOD_R, "siegeHexUuid", hexUuid); }
+    try {
+      if (!scene || !hexUuid) return;
+      // Never stamp siegeHexUuid onto the territory hex map itself — that flag marks a
+      // scene as a battle diorama (bbttccIsHexMapScene, territory/main.js) and would
+      // suppress all hex chrome there. A scene holding real territory hexes is the map;
+      // siege resolution there works via the hex drawings / sole-active-siege fallback.
+      if ((scene.drawings?.contents || []).some(d => d?.flags?.["bbttcc-territory"]?.isHex === true)) return;
+      if (scene.getFlag?.(MOD_R, "siegeHexUuid") !== hexUuid) await scene.setFlag(MOD_R, "siegeHexUuid", hexUuid);
+    }
     catch (e) { console.warn(TAG, "bindSceneToHex failed", e); }
   }
   function _sceneHexUuid(scene) { try { return (scene || canvas?.scene)?.getFlag?.(MOD_R, "siegeHexUuid") || null; } catch { return null; } }
