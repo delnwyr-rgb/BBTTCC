@@ -117,15 +117,27 @@
     }
   }
 
-  // --- The core hook: facing rides the movement update -----------------------
-  // preUpdate hooks run on the INITIATING client only, before the write is
-  // sent — mutating `changes` here folds the art swap into the same update.
+  // --- The core hooks: stamp facing on the move, swap art AT REST -------------
+  // v1 injected texture.src into the movement update itself. That entangled
+  // the swap with the movement animation: a texture change forces a FULL token
+  // redraw at animation end (bars/border flash at natural size, then the
+  // tableau re-shrinks them = scale pop), and fast successive drags cancel
+  // the crossfade mid-flight, leaving the VISUAL texture stale while the
+  // document was already correct — a stuck facing no further diff would heal.
+  //
+  // v2: preUpdateToken (initiating client, old coords still comparable) only
+  // stamps the facing FLAG — cheap, no redraw, rides the move. The art swap
+  // itself happens after the movement animation settles, as its own update,
+  // always derived from the LATEST facing vs the live document. Rapid moves
+  // coalesce to a single swap; the swap crossfades while the token is at
+  // rest, where the end-of-transition redraw is barely noticeable.
 
   Hooks.on("preUpdateToken", (doc, changes) => {
     try {
       const cfg = getDirArt(doc);
       if (!cfg) return;
-      // Never fight an explicit texture change riding the same update.
+      // An explicit texture change riding this update (our own settle-swap,
+      // a polymorph, a wildcard re-roll) owns the art — don't restamp facing.
       if (foundry.utils.getProperty(changes, "texture.src") !== undefined) return;
 
       let dir = null;
@@ -140,8 +152,42 @@
       }
       if (!dir || dir === cfg.facing) return;
 
-      applyFacingToChanges(doc, cfg, dir, changes);
+      foundry.utils.setProperty(changes, `flags.${MOD}.${FLAG}.facing`, dir);
     } catch (e) { console.warn(TAG, "preUpdateToken facing failed", e); }
+  });
+
+  // Facing changed → wait out the movement animation, then swap the art.
+  // Initiator-only (one client writes); per-token guard coalesces bursts.
+  const _settling = new Set();
+
+  async function settleThenSwap(doc) {
+    if (_settling.has(doc.uuid)) return;
+    _settling.add(doc.uuid);
+    try {
+      // Chained drags spawn fresh animation contexts — loop until quiet.
+      let p;
+      while ((p = doc.object?.movementAnimationPromise)) await p;
+      const cfg = getDirArt(doc);
+      if (!cfg) return;
+      const art = resolveArt(cfg.images, cfg.facing ?? "south");
+      if (!art) return;
+      const changes = {};
+      if (art.src !== doc.texture?.src) changes["texture.src"] = art.src;
+      const curFlip = (doc.texture?.scaleX ?? 1) < 0;
+      if (art.flip !== curFlip) {
+        changes["texture.scaleX"] = (art.flip ? -1 : 1) * (Math.abs(doc.texture?.scaleX ?? 1) || 1);
+      }
+      if (Object.keys(changes).length) await doc.update(changes);
+    } catch (e) { console.warn(TAG, "settle-swap failed", e); }
+    finally { _settling.delete(doc.uuid); }
+  }
+
+  Hooks.on("updateToken", (doc, changes, _options, userId) => {
+    try {
+      if (userId !== game.user.id) return;
+      if (foundry.utils.getProperty(changes, `flags.${MOD}.${FLAG}.facing`) === undefined) return;
+      settleThenSwap(doc);
+    } catch (e) { console.warn(TAG, "updateToken facing watch failed", e); }
   });
 
   // Warm caches when a scene loads so direction swaps are instant.
@@ -295,8 +341,8 @@
       const doc = hud?.object?.document;
       if (!doc) return;
       if (!(game.user?.isGM || doc.isOwner)) return;
-      // v13 HUD is a <form>, and HTMLFormElement[0] indexes its own inputs —
-      // so only unwrap [0] for actual jQuery (v11/12), never for elements.
+      // v13+ AppV2 HUD is a <form>, and HTMLFormElement[0] indexes its own
+      // inputs — only unwrap [0] for actual jQuery (v11/12), never elements.
       const root = html instanceof HTMLElement ? html : (html?.[0] ?? html);
       const col = root?.querySelector?.(".col.right");
       if (!col || col.querySelector('[data-action="bbttcc-directional-art"]')) return;

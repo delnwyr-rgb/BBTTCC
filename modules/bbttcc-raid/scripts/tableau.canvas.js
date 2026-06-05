@@ -197,6 +197,12 @@
   // land last. Movement, vision tweaks, sheet edits all trigger refresh.
   Hooks.on("refreshToken", (token) => applyDepth(token));
 
+  // A texture.src change (directional art swap, polymorph) triggers a FULL
+  // token redraw — mesh/border/bars rebuilt at natural size, and the next
+  // refresh tick may render a frame later. Re-assert depth the moment the
+  // redraw completes so a depth-scaled token never flashes full-size chrome.
+  Hooks.on("drawToken", (token) => applyDepth(token));
+
   // Auto-enrol: ANY token dropped onto a tableau-enabled scene joins the depth
   // layer — drag from the Actors tab, a hex sheet, or a compendium alike. The
   // diorama IS the stage, so new arrivals should depth-scale without a macro
@@ -229,8 +235,8 @@
       const doc = hud?.object?.document;
       const scene = doc?.parent ?? canvas?.scene;
       if (!doc || !getTableau(scene)) return;
-      // v13 HUD is a <form>, and HTMLFormElement[0] indexes its own inputs —
-      // so only unwrap [0] for actual jQuery (v11/12), never for elements.
+      // v13+ AppV2 HUD is a <form>, and HTMLFormElement[0] indexes its own
+      // inputs — only unwrap [0] for actual jQuery (v11/12), never elements.
       const root = html instanceof HTMLElement ? html : (html?.[0] ?? html);
       const col = root?.querySelector?.(".col.right");
       if (!col || col.querySelector('[data-action="bbttcc-tableau"]')) return;
