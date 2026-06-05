@@ -6634,6 +6634,11 @@ function bindAPI() {
                 case "maneuver":
                   r = await S.fireManeuver?.(String(payload.key || ""), { hexUuid, factionId });
                   break;
+                case "raise":
+                  // THE MUSTER POOL — a player raises troops for their own faction (costed
+                  // in OP; pool engine enforces caps + overextension surcharge/bar).
+                  r = await S.pool?.raiseTroops?.(factionId, { troops: payload.troops });
+                  break;
                 default:
                   return reply(false, `Siege relay: unknown action "${action}".`);
               }

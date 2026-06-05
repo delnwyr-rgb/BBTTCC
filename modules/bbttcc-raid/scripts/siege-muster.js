@@ -59,8 +59,9 @@
     const ea = f?.flags?.fourththing?.echoAssets || f?.flags?.["roll-for-initiation"]?.echoAssets || {};
     return Array.isArray(ea.activeCrew) ? ea.activeCrew.length : 0;
   }
-  // A troop-count scalar from faction tier + active crew. This IS the §5 muster seed:
-  // deploy writes it onto siege state, Stage 2's clash depletes it.
+  // LEGACY fallback only (pre-pool formula). THE MUSTER POOL (siege-muster-pool.js) now owns
+  // the real number — this formula survives as the pool's CAP and as the deploy total when
+  // the pool engine is absent or the side has no faction (unowned hex).
   function _factionMuster(f) {
     if (!f) return 60;
     return Math.max(20, 20 * _factionTier(f) + 15 * _echoCrewCount(f));
@@ -206,6 +207,22 @@
     if (crew && a) { try { await crew.release(a, tokDoc.id); } catch (_e) {} }
   }
 
+  // ── Pool checkin (survivors come home) ────────────────────────────────────────
+  // THE SINGLE REFUND PATH: any deleted muster contingent credits its SURVIVING strength
+  // back to its faction's pool — recallMuster's deletes and hand-deletes both land here, so
+  // nothing double-refunds. Routed contingents (strength 0) and clash casualties (strength
+  // already depleted on the token) refund exactly what survived. NOTE: deleting a whole
+  // SCENE skips deleteToken hooks — recall the muster before tearing a battle scene down.
+  async function _refundPoolOnDelete(tokDoc) {
+    if (!game.user?.isGM) return;
+    const md = tokDoc?.flags?.[MOD_R]?.musterDeployment;
+    if (!md?.factionId) return;
+    const s = _tokStrength(tokDoc);
+    if (s <= 0) return;
+    const f = game.actors.get(md.factionId); if (!f) return;
+    try { await _siege()?.pool?.credit?.(f, s, "recalled from the field"); } catch (e) { console.warn(TAG, "pool refund failed", e); }
+  }
+
   // ── The unit actor (minimal — combat is simulated) ───────────────────────────
   function _pickActorType() {
     let types = game.documentTypes?.Actor || CONFIG?.Actor?.documentClass?.metadata?.types || [];
@@ -256,10 +273,6 @@
     } else {
       faction = await _factionForSide(side, hexUuid, state);
     }
-    const total = _num(opts.total, 0) || _factionMuster(faction);
-    let K = _num(opts.units, 0);
-    if (!K) K = Math.max(2, Math.min(8, Math.round(total / 30)));
-    const per = Math.max(1, Math.round(total / K));
 
     const unitActor = await _ensureUnitActor(opts.unitActorId);
     if (!unitActor) return { ok: false, error: "could not resolve a unit actor" };
@@ -281,6 +294,30 @@
     if (existing.length && !opts.force) {
       return { ok: false, error: `${faction?.name || side} muster already deployed (${existing.length} units) — recall first, or pass { force: true }`, existing: existing.length };
     }
+
+    // THE MUSTER POOL (discrete-costs directive): Form Up CHECKS TROOPS OUT of the faction's
+    // finite pool — you field what you actually have (capped by overextension), not a formula.
+    // Recall checks survivors back in (deleteToken hook below); casualties never come home.
+    // No pool API / no faction → legacy formula (e.g. an unowned defender hex).
+    const P = _siege()?.pool || null;
+    let total = Math.max(0, _num(opts.total, 0));
+    if (P && faction) {
+      const avail = P.fieldable(faction);
+      total = total ? Math.min(total, avail) : avail;
+      if (total <= 0) {
+        const pp = P.get(faction);
+        return { ok: false, error: `${faction.name} has no troops to field (pool ${pp.size}/${pp.cap}${pp.effectiveCap < pp.cap ? `, fields at most ${pp.effectiveCap} — ${pp.band}` : ""}) — ⚒ Raise Troops first.` };
+      }
+    } else if (!total) {
+      total = _factionMuster(faction);
+    }
+    let K = _num(opts.units, 0);
+    if (!K) K = Math.max(2, Math.min(8, Math.round(total / 30)));
+    K = Math.max(1, Math.min(K, total));               // never more units than troops
+    // Exact strengths (first `rem` units carry the remainder) so the checkout sums to `total`.
+    const baseStr = Math.floor(total / K), remStr = total - baseStr * K;
+    const strengths = Array.from({ length: K }, (_, i) => baseStr + (i < remStr ? 1 : 0));
+    const per = Math.max(1, Math.round(total / K));
 
     // Formation: a block anchored on the wall's X (or scene centre), in the side's depth band.
     const gs = _num(scene.grid?.size || scene.gridSize, 100);
@@ -320,12 +357,13 @@
       data.hidden = false;
       data.disposition = disposition;
       data.displayName = dispMode;
-      data.name = `${side === "attacker" ? "⚔" : "🛡"} ${opts.label || (opts.factionId ? (faction?.name || "Contingent") : "Contingent")} · ${per}`;
+      const str = strengths[i];
+      data.name = `${side === "attacker" ? "⚔" : "🛡"} ${opts.label || (opts.factionId ? (faction?.name || "Contingent") : "Contingent")} · ${str}`;
       data.flags = data.flags || {};
       data.flags[MOD_R] = Object.assign({}, data.flags[MOD_R] || {}, {
         tableauActor: true,
-        unitStrength: per,
-        musterDeployment: { hexUuid, side, factionId: faction?.id || null, strength: per, deployedAt: Date.now() }
+        unitStrength: str,
+        musterDeployment: { hexUuid, side, factionId: faction?.id || null, strength: str, deployedAt: Date.now() }
       });
       tokenData.push(data);
     }
@@ -334,6 +372,12 @@
     let created = [];
     try { created = await scene.createEmbeddedDocuments("Token", tokenData); }
     catch (e) { console.warn(TAG, "token create failed", e); return { ok: false, error: `createEmbeddedDocuments failed: ${e.message}` }; }
+
+    // Checkout: the fielded strength leaves the pool (survivors return on recall/delete).
+    if (P && faction) {
+      const deployed = created.reduce((a, t) => a + _num(t.flags?.[MOD_R]?.unitStrength, 0), 0);
+      try { await P.debit(faction, deployed, `form up — ${side}`); } catch (e) { console.warn(TAG, "pool debit failed", e); }
+    }
 
     try { await tab?.applyAll?.(); } catch (_e) {}
 
@@ -357,6 +401,7 @@
     } catch (e) { console.warn(TAG, "muster state write failed", e); }
 
     ui.notifications?.info(`Formed up ${created.length} ${side} contingent(s) — ${total} strong${sideTotal !== total ? ` (side now ${sideTotal})` : ""}.`);
+    try { _siege()?.refreshHud?.(); } catch (_e) {}   // pool chips just changed (checkout)
     return { ok: true, created: created.length, side, total, sideTotal, per, units: K, scene: scene.id };
   }
 
@@ -386,7 +431,10 @@
     const sib = await _resolveSiege(opts.hexUuid); if (!sib) return null;
     const side = (opts.side === "defender") ? "defender" : "attacker";
     const f = await _factionForSide(side, sib.hexUuid, sib.state);
-    return _factionMuster(f);
+    // What the side could field RIGHT NOW: the finite pool (capped by overextension),
+    // legacy formula only when the pool engine is absent / the hex has no faction.
+    const P = _siege()?.pool;
+    return (P && f) ? P.fieldable(f) : _factionMuster(f);
   }
 
   // ── Garrison the Walls (defenders man the fortifications) ─────────────────────
@@ -407,7 +455,6 @@
     if (!scene) return { ok: false, error: "no scene to deploy onto" };
 
     const faction = await _factionForSide("defender", hexUuid, state);
-    const total = _num(opts.total, 0) || _factionMuster(faction);
     const garrisonPct = Math.max(0, Math.min(1, opts.garrisonPct != null ? _num(opts.garrisonPct, 0.7) : 0.7));
 
     // De-dup the whole defender side (garrison + reserve).
@@ -416,6 +463,21 @@
     });
     if (existing.length && !opts.force) {
       return { ok: false, error: `defender muster already deployed (${existing.length} units) — recall first, or pass { force: true }`, existing: existing.length };
+    }
+
+    // THE MUSTER POOL: the garrison is checked out of the defender's finite pool, same as
+    // the attacker's Form Up. Unowned hex (no defender faction) → legacy formula, no debit.
+    const P = _siege()?.pool || null;
+    let total = Math.max(0, _num(opts.total, 0));
+    if (P && faction) {
+      const avail = P.fieldable(faction);
+      total = total ? Math.min(total, avail) : avail;
+      if (total <= 0) {
+        const pp = P.get(faction);
+        return { ok: false, error: `${faction.name} has no troops to man the walls (pool ${pp.size}/${pp.cap}${pp.effectiveCap < pp.cap ? `, fields at most ${pp.effectiveCap} — ${pp.band}` : ""}) — ⚒ Raise Troops first.` };
+      }
+    } else if (!total) {
+      total = _factionMuster(faction);
     }
 
     const tab = _tableau();
@@ -495,6 +557,13 @@
     let created = [];
     try { created = await scene.createEmbeddedDocuments("Token", tokenData); }
     catch (e) { console.warn(TAG, "garrison token create failed", e); return { ok: false, error: `createEmbeddedDocuments failed: ${e.message}` }; }
+
+    // Checkout: the deployed garrison + reserve leave the defender's pool.
+    if (P && faction) {
+      const deployed = created.reduce((a, t) => a + _num(t.flags?.[MOD_R]?.unitStrength, 0), 0);
+      try { await P.debit(faction, deployed, "garrison the walls"); } catch (e) { console.warn(TAG, "pool debit failed", e); }
+    }
+
     try { await tab?.applyAll?.(); } catch (_e) {}
 
     // Crew the walls: each garrison contingent JOINS its wall's structure. Sequential awaits =
@@ -558,6 +627,23 @@
   }
   const _tokStrength = (t) => Math.max(0, _num(t?.flags?.[MOD_R]?.unitStrength, 0));
 
+  // Clash morale (overextension bites): an overextended faction's host fights soft. The
+  // side multiplier is the strength-weighted average of each contributing faction's morale
+  // mult (×1/×1/×0.95/×0.90/×0.80 by logistics band) — a fresh supporter stiffens a
+  // strained lead's line in proportion to the troops it actually fields.
+  function _sideMoraleMult(tokens) {
+    const P = _siege()?.pool; if (!P) return 1;
+    let w = 0, m = 0;
+    for (const t of tokens) {
+      const s = _tokStrength(t); if (s <= 0) continue;
+      const fid = t?.flags?.[MOD_R]?.musterDeployment?.factionId;
+      const f = fid ? game.actors.get(fid) : null;
+      m += s * (f ? P.clashMoraleMult(f) : 1);
+      w += s;
+    }
+    return w > 0 ? (m / w) : 1;
+  }
+
   // Distribute `casualties` across `tokens` proportional to current strength (largest-
   // remainder), never below 0 and never beyond a unit's strength. Returns Map id → newStrength.
   function _distributeCasualties(tokens, casualties) {
@@ -594,7 +680,11 @@
     })[outcome] || "The lines meet";
   }
 
-  async function _clashCard({ hexName, outcome, breached, atkLost, defLost, A, D, A0, D0, rounds }) {
+  async function _clashCard({ hexName, outcome, breached, atkLost, defLost, A, D, A0, D0, rounds, atkMorale = 1, defMorale = 1 }) {
+    // Overextension footnote — only when a side actually fought soft.
+    const mLine = (atkMorale < 1 || defMorale < 1)
+      ? `<div style="font-size:0.72em;color:#c9a;margin-top:.25rem;">overextension saps morale: ⚔ ×${atkMorale.toFixed(2)} · 🛡 ×${defMorale.toFixed(2)}</div>`
+      : "";
     const pct = (lost, base) => base > 0 ? Math.round(100 * lost / base) : 0;
     const color = outcome === "defender_routed" ? "#ff7a5a"
                 : outcome === "attacker_routed" ? "#88bbff"
@@ -608,7 +698,7 @@
             <tr style="color:#999;"><th style="text-align:left;"></th><th style="text-align:right;">Fell</th><th style="text-align:right;">Left</th><th style="text-align:right;">Lost</th></tr>
             <tr><td style="color:#ffb;">⚔ Attacker</td><td style="text-align:right;">${atkLost}</td><td style="text-align:right;">${A}</td><td style="text-align:right;">${pct(atkLost, A0)}%</td></tr>
             <tr><td style="color:#bdf;">🛡 Defender</td><td style="text-align:right;">${defLost}</td><td style="text-align:right;">${D}</td><td style="text-align:right;">${pct(defLost, D0)}%</td></tr>
-          </table>
+          </table>${mLine}
         </div>`
       });
     } catch (e) { console.warn(TAG, "clash card failed", e); }
@@ -660,8 +750,12 @@
     const structuralMult = breached ? 1.0 : _num(opts.wallMult, 1.3);   // the stone itself
     const garrisonMult   = 1 + 0.4 * garrisonFrac;                       // manned battlements
     const stormMult = state.stormAssault ? 1.25 : 1.0;
-    const atkEff = _num(opts.atkEff, 0.15) * stormMult * _num(opts.attackerBonus, 1);
-    const defEff = _num(opts.defEff, 0.15) * structuralMult * garrisonMult * _num(opts.defenderBonus, 1);
+    // Overextension morale: each side's effectiveness scales with how healthy the factions
+    // fielding it are (see _sideMoraleMult) — critically overextended hosts hit at ×0.80.
+    const atkMorale = _sideMoraleMult(atkTokens);
+    const defMorale = _sideMoraleMult(defTokens);
+    const atkEff = _num(opts.atkEff, 0.15) * stormMult * _num(opts.attackerBonus, 1) * atkMorale;
+    const defEff = _num(opts.defEff, 0.15) * structuralMult * garrisonMult * _num(opts.defenderBonus, 1) * defMorale;
 
     const rounds = Math.max(1, Math.min(6, _num(opts.rounds, 3)));
     const luck = () => 0.78 + Math.random() * 0.44;            // 0.78–1.22 per-exchange swing
@@ -743,11 +837,11 @@
     // read that first (matches listActiveSieges) before any .name fallback.
     let hexName = null;
     try { const ref = await fromUuid(hexUuid); hexName = ref?.flags?.[MOD_T]?.name || ref?.name || null; } catch (_e) {}
-    await _clashCard({ hexName, outcome, breached, atkLost, defLost, A, D, A0, D0, rounds: roundLog.length });
+    await _clashCard({ hexName, outcome, breached, atkLost, defLost, A, D, A0, D0, rounds: roundLog.length, atkMorale, defMorale });
     try { _siege()?.refreshHud?.(); } catch (_e) {}
 
     ui.notifications?.info(`Clash resolved — ${_clashTitle(outcome)} (attacker −${atkLost}, defender −${defLost}).`);
-    return { ok: true, outcome, rounds: roundLog.length, attacker: { start: A0, left: A, lost: atkLost }, defender: { start: D0, left: D, lost: defLost }, log: roundLog, routed: routedIds.length };
+    return { ok: true, outcome, rounds: roundLog.length, attacker: { start: A0, left: A, lost: atkLost, morale: atkMorale }, defender: { start: D0, left: D, lost: defLost, morale: defMorale }, log: roundLog, routed: routedIds.length };
   }
 
   // ── Collapse → muster bridge ──────────────────────────────────────────────────
@@ -899,7 +993,7 @@
     if (!globalThis.__bbttcc_siege_muster_crew_hooks) {
       Hooks.on("createToken", (doc) => { _reconcileCrew(doc).catch(() => {}); });
       Hooks.on("updateToken", (doc, changes) => { if (changes?.x !== undefined || changes?.y !== undefined) _reconcileCrew(doc).catch(() => {}); });
-      Hooks.on("deleteToken", (doc) => { _releaseCrewOnDelete(doc).catch(() => {}); });
+      Hooks.on("deleteToken", (doc) => { _releaseCrewOnDelete(doc).catch(() => {}); _refundPoolOnDelete(doc).catch(() => {}); });
       globalThis.__bbttcc_siege_muster_crew_hooks = true;
     }
     console.log(TAG, "ready — game.bbttcc.api.siege.{musterToScene,recallMuster,musterSize,resolveClash,garrisonWalls,formUpBoth,musterReport}");

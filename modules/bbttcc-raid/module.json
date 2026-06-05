@@ -113,6 +113,7 @@
     "scripts/siege-planner-enhancer.js",
     "scripts/siege-hud.js",
     "scripts/siege-vfx.js",
+    "scripts/siege-muster-pool.js",
     "scripts/siege-muster.js",
     "scripts/siege-champion-duel.js",
     "scripts/siege-champions.js",

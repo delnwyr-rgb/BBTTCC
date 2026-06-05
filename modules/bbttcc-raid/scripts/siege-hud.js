@@ -161,6 +161,88 @@
     return `<div style="margin-top:.3rem;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
       <span style="font-size:0.6rem;color:#998;opacity:.7;text-transform:uppercase;letter-spacing:.05em;">allies</span>${chips}</div>`;
   }
+  // ── THE MUSTER POOL strip (finite hosts, 2026-06-05) ──
+  // One chip per FIGHTING faction (lead + joined supporters + defender): 🪖 pool/cap, tinted
+  // when overextension is biting (cap cut). GM chips are clickable → Raise Troops dialog.
+  function _poolStrip(entry, s, isGM) {
+    const pool = game.bbttcc?.api?.siege?.pool; if (!pool) return "";
+    const fids = [];
+    if (s.attackerFactionId) fids.push(s.attackerFactionId);
+    for (const p of Object.values(s.participants || {})) {
+      if (p?.joined && p.role !== "lead" && p.factionId && !fids.includes(p.factionId)) fids.push(p.factionId);
+    }
+    if (s.defenderFactionId && !fids.includes(s.defenderFactionId)) fids.push(s.defenderFactionId);
+    const chips = [];
+    for (const fid of fids) {
+      const f = game.actors?.get?.(fid); if (!f) continue;
+      let p; try { p = pool.get(f); } catch (_e) { continue; }
+      const biting = p.effectiveCap < p.cap;
+      const col = !biting ? "#9a8" : (p.band === "critical" ? "#ff7a7a" : (p.band === "strained" ? "#ffaa7a" : "#e0c080"));
+      const tip = `${f.name} — host ${p.size}/${p.cap}${biting ? ` · ${p.band}: fields at most ${p.effectiveCap}` : ""}${isGM ? " · click to ⚒ Raise Troops" : ""}`;
+      const inner = `🪖 ${esc(String(f.name).split(/\s+/)[0])} <b>${p.size}</b>/${p.cap}`;
+      chips.push(isGM
+        ? `<button type="button" data-act="raise" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="${esc(tip)}" style="font-size:0.64rem;padding:1px 6px;background:#1a1812;border:1px solid ${col};border-radius:8px;color:${col};cursor:pointer;">${inner}</button>`
+        : `<span title="${esc(tip)}" style="font-size:0.64rem;padding:1px 5px;border:1px solid ${col};border-radius:8px;color:${col};">${inner}</span>`);
+    }
+    if (!chips.length) return "";
+    return `<div style="margin-top:.3rem;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
+      <span style="font-size:0.6rem;color:#998;opacity:.7;text-transform:uppercase;letter-spacing:.05em;">hosts</span>${chips.join(" ")}</div>`;
+  }
+  // The Raise Troops dialog — every body has a price (1 OP per 10 troops, overextension
+  // surcharge). Live bill readout as the count changes; GM commits locally, players relay.
+  function _openRaiseDialog(hexUuid, factionId) {
+    const pool = game.bbttcc?.api?.siege?.pool;
+    const fac = game.actors?.get?.(factionId);
+    if (!pool || !fac) return ui.notifications?.warn?.("Muster pool not available.");
+    const p = pool.get(fac);
+    const probe = pool.quote(fac, Math.max(1, p.effectiveCap - p.size));
+    if (!probe.ok && !probe.troops) return ui.notifications?.warn?.(probe.reason || "Can't raise troops right now.");
+    // Default to the most the faction can both HOLD and PAY for.
+    const maxAfford = probe.ok ? probe.troops
+      : Math.max(0, Math.floor((probe.costMarks - probe.shortfall) / (probe.mult || 1)));
+    const defTroops = Math.max(1, Math.min(probe.room ?? 1, maxAfford || 1));
+    const surch = (probe.mult > 1) ? ` <span style="color:#e0c080;">— ${esc(probe.band)}: every body costs ×${probe.mult}</span>` : "";
+    const quoteLine = (n) => {
+      const q = pool.quote(fac, n);
+      if (!q.troops) return `<span style="color:#ff9a7a;">${esc(q.reason || "—")}</span>`;
+      const paid = Object.entries(q.split || {}).map(([b, m]) => `${b} ${m / 10}`).join(" · ");
+      return q.ok
+        ? `${q.troops} troops — <b>${q.costMarks / 10} OP</b> <span style="opacity:.65;">(${paid})</span>`
+        : `<span style="color:#ff9a7a;">${q.troops} troops — ${q.costMarks / 10} OP, short ${q.shortfall / 10} OP</span>`;
+    };
+    new Dialog({
+      title: `⚒ Raise Troops — ${fac.name}`,
+      content: `<div style="font-size:0.85rem;">
+          <p style="margin:.2rem 0 .4rem;">The host stands at <b>${p.size}</b>/${p.cap}${p.effectiveCap < p.cap ? ` <span style="color:#e0c080;">(${esc(p.band)} — fields at most ${p.effectiveCap})</span>` : ""}. Recruits are paid in OP${surch}.</p>
+          <div style="display:flex;align-items:center;gap:6px;margin:.25rem 0;">
+            <label style="flex:1;">Troops to raise</label>
+            <input type="number" name="troops" min="1" max="${probe.room ?? 999}" step="1" value="${defTroops}" style="width:5.5rem;text-align:right;"/>
+            <span style="opacity:.6;font-size:.8em;">/ ${probe.room ?? "?"} room</span>
+          </div>
+          <div class="bbttcc-raise-quote" style="margin:.35rem 0 .15rem;font-size:.82em;color:#ccc;">${quoteLine(defTroops)}</div>
+        </div>`,
+      buttons: {
+        raise: {
+          icon: '<i class="fas fa-drum"></i>',
+          label: "Beat the drums",
+          callback: (html) => {
+            const root = html instanceof HTMLElement ? html : (html?.[0] ?? html);
+            const troops = Math.max(1, Math.round(Number(root?.querySelector?.('input[name="troops"]')?.value) || 0));
+            _siegeRequest("raise", hexUuid, factionId, { troops });
+          }
+        },
+        cancel: { label: "Not yet" }
+      },
+      default: "raise",
+      render: (html) => {
+        const root = html instanceof HTMLElement ? html : (html?.[0] ?? html);
+        const inp = root?.querySelector?.('input[name="troops"]');
+        const out = root?.querySelector?.(".bbttcc-raise-quote");
+        if (inp && out) inp.addEventListener("input", () => { out.innerHTML = quoteLine(Math.max(0, Math.round(Number(inp.value) || 0))); });
+      }
+    }).render(true);
+  }
+
   // Execute a siege action as a faction: GM runs locally with GM authority; a player
   // relays to the GM client (siegeRequest), which validates ownership + echoes the result.
   function _siegeRequest(action, hexUuid, factionId, payload = {}) {
@@ -170,6 +252,7 @@
               : action === "muster"   ? S?.musterToScene?.({ hexUuid, side: payload.side || "attacker", factionId, label: payload.label })
               : action === "recall"   ? S?.recallMuster?.({ hexUuid, factionId })
               : action === "maneuver" ? S?.fireManeuver?.(String(payload.key || ""), { hexUuid, factionId })
+              : action === "raise"    ? S?.pool?.raiseTroops?.(factionId, { troops: payload.troops })
               : null;
       if (p?.then) p.then(r => { if (r && r.ok === false) ui.notifications?.warn?.(r.reason || r.error || `${action} failed.`); })
         .catch(e => { console.error(TAG, `siege ${action} failed`, e); ui.notifications?.error?.(`${action} failed — see console.`); });
@@ -351,6 +434,7 @@
             const afford = total >= (m.costTotal || 0);
             rows.push(`<button type="button" data-act="p-maneuver" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" data-key="${esc(m.key)}" title="${afford ? `Fire ${esc(m.label)} now as ${esc(nm)} — Buffer −${_mToOP(m.costTotal)} OP` : `Need ${_mToOP(m.costTotal)} OP (Buffer has ${_mToOP(total)})`}" style="flex:1;padding:3px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:${afford ? "pointer" : "not-allowed"};font-weight:600;opacity:${afford ? "1" : "0.55"};" ${afford ? "" : "disabled"}>${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_mToOP(m.costTotal)}</span></button>`);
           }
+          rows.push(`<button type="button" data-act="p-raise" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="Raise troops for ${esc(nm)} — recruits cost OP (1 OP per 10 troops; overextension surcharges)" style="flex:1;padding:3px 6px;background:#221c10;color:#e0c080;border:1px solid #8a763a;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">⚒ Raise${many ? ` (${esc(nm)})` : ""}</button>`);
           rows.push(`<button type="button" data-act="p-recall" data-hex="${esc(entry.hexUuid)}" data-fid="${esc(fid)}" title="Recall ${esc(nm)}'s contingents from the field" style="flex:0 0 auto;padding:3px 7px;background:#1a1a22;color:#bbb;border:1px solid #555;border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;">↩</button>`);
         }
         if (fighting.length && (Number.isFinite(aMus) || Number.isFinite(dMus))) rows.push(musRead);
@@ -383,6 +467,7 @@
       </div>
       <div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:4px;">${_layersStrip(s)}</div>
       ${_participantStrip(s)}
+      ${_poolStrip(entry, s, isGM)}
       ${_champStrip(s)}
       ${_beatsFooter(s)}
       ${offerBtns}
@@ -590,6 +675,14 @@
         ev.preventDefault(); ev.stopPropagation();
         if (btn.disabled) return;
         _siegeRequest("maneuver", btn.dataset.hex, btn.dataset.fid, { key: btn.dataset.key });
+      });
+    });
+    // ⚒ Raise Troops — player button AND the GM's clickable 🪖 host chips share the dialog
+    // (GM commits locally inside _siegeRequest; players relay).
+    el.querySelectorAll('button[data-act="p-raise"], button[data-act="raise"]').forEach(btn => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        _openRaiseDialog(btn.dataset.hex, btn.dataset.fid);
       });
     });
     if (!game.user?.isGM) return;
