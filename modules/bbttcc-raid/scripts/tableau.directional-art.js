@@ -23,6 +23,11 @@
 // The sign is only touched when a mirror state actually changes, so a token
 // that never mirrors never has its scaleX managed.
 //
+// Actor-level library copy: save the image set to the ACTOR (default in the
+// config dialog) and every token it spawns — now and forever — inherits it,
+// no per-spawn setup. Token-level config remains a per-token override
+// (enabled:false explicitly opts one token out). Facing is always per-token.
+//
 // Config UI: 🧭 compass button on the Token HUD — GM and token OWNERS alike
 // (players upload their own art; FilePicker honors their upload permissions).
 // Manual rotation: core Foundry already rotates controlled tokens with
@@ -60,11 +65,31 @@
   const dirFromRotation = (rot) => dirFromAngle(Number(rot) + 90);
 
   // --- Flag access -----------------------------------------------------------
+  // Config lives at TWO levels:
+  //   * ACTOR  flags.bbttcc-raid.directionalArt {enabled, images} — the
+  //     library copy, tied to the actor document (travels with its UUID,
+  //     exports, compendia). Every token the actor spawns inherits it —
+  //     configure once, every drop is directional from birth.
+  //   * TOKEN  same path — a per-token override. enabled:true beats the
+  //     actor; enabled:false explicitly opts THIS token out. A bare
+  //     {facing} stamp (from movement) does NOT count as an override.
+  // Facing is ALWAYS per-token (two tokens of one actor face independently).
+
+  function baseActorOf(tokenDoc) {
+    return tokenDoc?.actorId ? (game.actors?.get(tokenDoc.actorId) ?? null) : null;
+  }
+
+  function getFacing(tokenDoc) {
+    return tokenDoc?.flags?.[MOD]?.[FLAG]?.facing ?? "south";
+  }
 
   function getDirArt(tokenDoc) {
-    const cfg = tokenDoc?.flags?.[MOD]?.[FLAG];
-    if (!cfg || cfg.enabled !== true) return null;
-    return cfg;
+    const own = tokenDoc?.flags?.[MOD]?.[FLAG];
+    if (own?.enabled === true) return own;
+    if (own?.enabled === false) return null; // explicit per-token opt-out
+    const actor = tokenDoc?.actor ?? baseActorOf(tokenDoc);
+    const inherited = actor?.flags?.[MOD]?.[FLAG];
+    return inherited?.enabled === true ? inherited : null;
   }
 
   // Resolve the artwork for a direction. Mirror fallback: a missing side
@@ -150,7 +175,7 @@
       if (changes.rotation !== undefined && game.settings.get(MOD, SET_ROT)) {
         dir = dirFromRotation(changes.rotation);
       }
-      if (!dir || dir === cfg.facing) return;
+      if (!dir || dir === getFacing(doc)) return;
 
       foundry.utils.setProperty(changes, `flags.${MOD}.${FLAG}.facing`, dir);
     } catch (e) { console.warn(TAG, "preUpdateToken facing failed", e); }
@@ -169,7 +194,7 @@
       while ((p = doc.object?.movementAnimationPromise)) await p;
       const cfg = getDirArt(doc);
       if (!cfg) return;
-      const art = resolveArt(cfg.images, cfg.facing ?? "south");
+      const art = resolveArt(cfg.images, getFacing(doc));
       if (!art) return;
       const changes = {};
       if (art.src !== doc.texture?.src) changes["texture.src"] = art.src;
@@ -188,6 +213,19 @@
       if (foundry.utils.getProperty(changes, `flags.${MOD}.${FLAG}.facing`) === undefined) return;
       settleThenSwap(doc);
     } catch (e) { console.warn(TAG, "updateToken facing watch failed", e); }
+  });
+
+  // Fresh spawn of an actor with a library copy → snap to facing art at once
+  // (the prototype texture may not be the front view). settleThenSwap is a
+  // no-op when the art already matches.
+  Hooks.on("createToken", (doc, _options, userId) => {
+    try {
+      if (userId !== game.user.id) return;
+      const cfg = getDirArt(doc);
+      if (!cfg) return;
+      preloadArt(cfg);
+      settleThenSwap(doc);
+    } catch (e) { console.warn(TAG, "createToken snap failed", e); }
   });
 
   // Warm caches when a scene loads so direction swaps are instant.
@@ -212,7 +250,7 @@
     { key: "west",  label: "Left profile",  icon: "fa-arrow-left",  hint: "Moves left" }
   ]);
 
-  function buildFormRows(cfg) {
+  function buildFormRows(cfg, actor) {
     const rows = ROWS.map(({ key, label, icon, hint }) => {
       const val = cfg?.images?.[key] ?? "";
       return `
@@ -228,11 +266,24 @@
           </div>
         </div>`;
     }).join("");
+    // Default scope = actor: configure once, every spawn of this actor is
+    // directional from birth — the whole point of the library copy.
+    const scope = actor ? `
+      <div class="form-group">
+        <label>Save to</label>
+        <div class="form-fields" style="flex-direction:column; align-items:flex-start; gap:2px;">
+          <label style="font-weight:normal;"><input type="radio" name="scope" value="actor" checked>
+            ${_esc(actor.name)} — every token, now and on spawn</label>
+          <label style="font-weight:normal;"><input type="radio" name="scope" value="token">
+            This token only (override)</label>
+        </div>
+      </div>` : `<input type="hidden" name="scope" value="token">`;
     return `
       <div class="form-group">
         <label><input type="checkbox" name="enabled" ${cfg?.enabled ? "checked" : ""}> Swap art with facing</label>
       </div>
       ${rows}
+      ${scope}
       <p class="notes">Leave one profile empty and it mirrors the other, flipped.
       Art swaps when the token moves (or rotates); SHIFT+arrows rotate in place.</p>`;
   }
@@ -271,19 +322,35 @@
     const enabled = !!fd.enabled;
     const images = {};
     for (const key of DIR_KEYS) images[key] = (fd[key] ?? "").trim();
-    const facing = doc.flags?.[MOD]?.[FLAG]?.facing ?? "south";
-    await doc.update({ [`flags.${MOD}.${FLAG}`]: { enabled, images, facing } });
+    const payload = { enabled, images };
+
+    const actor = doc.actor ?? baseActorOf(doc);
+    const toActor = fd.scope === "actor" && actor;
+    if (toActor) {
+      // Library copy on the BASE actor (synthetic token-actors write through
+      // to the world actor) so future spawns inherit it.
+      const base = actor.isToken ? (baseActorOf(doc) ?? actor) : actor;
+      await base.update({ [`flags.${MOD}.${FLAG}`]: payload });
+      // Drop any token-level override so inheritance takes effect here too.
+      if (doc.flags?.[MOD]?.[FLAG] !== undefined) {
+        await doc.update({ [`flags.${MOD}.-=${FLAG}`]: null });
+      }
+    } else {
+      await doc.update({ [`flags.${MOD}.${FLAG}`]: { ...payload, facing: getFacing(doc) } });
+    }
+
     if (enabled) {
-      preloadArt({ images });
+      preloadArt(payload);
       // Snap the art to the current facing immediately — no need to move first.
       const changes = {};
-      applyFacingToChanges(doc, { enabled, images, facing }, facing, changes);
+      applyFacingToChanges(doc, payload, getFacing(doc), changes);
       if (foundry.utils.getProperty(changes, "texture.src") !== undefined ||
           foundry.utils.getProperty(changes, "texture.scaleX") !== undefined) {
         await doc.update(changes);
       }
     }
-    ui.notifications?.info(`Directional art ${enabled ? "saved" : "disabled"} for ${doc.name}.`);
+    const where = toActor ? `${actor.name} (all tokens)` : doc.name;
+    ui.notifications?.info(`Directional art ${enabled ? "saved" : "disabled"} for ${where}.`);
   }
 
   async function openConfig(tokenOrDoc) {
@@ -292,8 +359,14 @@
     if (!(game.user?.isGM || doc.isOwner)) {
       return ui.notifications?.warn("You can only configure directional art for your own tokens.");
     }
-    const cfg = doc.flags?.[MOD]?.[FLAG] ?? { enabled: false, images: {} };
-    const rows = buildFormRows(cfg);
+    // Show the EFFECTIVE config: a real token-level override wins (a bare
+    // {facing} stamp from movement doesn't count), else the actor's library
+    // copy, else blank.
+    const own = doc.flags?.[MOD]?.[FLAG];
+    const actor = doc.actor ?? baseActorOf(doc);
+    const ownIsConfig = own && (own.images !== undefined || own.enabled !== undefined);
+    const cfg = ownIsConfig ? own : (actor?.flags?.[MOD]?.[FLAG] ?? { enabled: false, images: {} });
+    const rows = buildFormRows(cfg, actor);
     const title = `Directional Art — ${doc.name}`;
 
     const D2 = foundry.applications?.api?.DialogV2;
@@ -387,15 +460,26 @@
       DIR_KEYS,
       isEnabled: (tokenOrDoc) => !!getDirArt(tokenOrDoc?.document ?? tokenOrDoc),
       read: (tokenOrDoc) => (tokenOrDoc?.document ?? tokenOrDoc)?.flags?.[MOD]?.[FLAG] ?? null,
-      // configure(token, { south, north, east, west }) — script-side setup.
+      // configure(token, { south, north, east, west }) — per-token override.
       configure: async (tokenOrDoc, images = {}, { enabled = true } = {}) => {
         const doc = tokenOrDoc?.document ?? tokenOrDoc;
         if (!doc?.update) return;
         const clean = {};
         for (const key of DIR_KEYS) clean[key] = (images[key] ?? "").trim?.() ?? "";
-        const facing = doc.flags?.[MOD]?.[FLAG]?.facing ?? "south";
-        await doc.update({ [`flags.${MOD}.${FLAG}`]: { enabled, images: clean, facing } });
+        await doc.update({ [`flags.${MOD}.${FLAG}`]: { enabled, images: clean, facing: getFacing(doc) } });
         if (enabled) preloadArt({ images: clean });
+      },
+      // configureActor(actorOrUuid, images) — the library copy: every token
+      // of this actor (current AND future spawns) inherits it. Accepts an
+      // Actor document or its UUID ("Actor.abc123" / compendium uuid).
+      configureActor: async (actorOrUuid, images = {}, { enabled = true } = {}) => {
+        const actor = typeof actorOrUuid === "string" ? await fromUuid(actorOrUuid) : actorOrUuid;
+        if (!actor?.update) return ui.notifications?.warn("Actor not found.");
+        const clean = {};
+        for (const key of DIR_KEYS) clean[key] = (images[key] ?? "").trim?.() ?? "";
+        await actor.update({ [`flags.${MOD}.${FLAG}`]: { enabled, images: clean } });
+        if (enabled) preloadArt({ images: clean });
+        return actor;
       },
       setDirection,
       openConfig,
