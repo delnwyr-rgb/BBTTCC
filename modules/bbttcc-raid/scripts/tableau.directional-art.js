@@ -295,7 +295,9 @@
       const doc = hud?.object?.document;
       if (!doc) return;
       if (!(game.user?.isGM || doc.isOwner)) return;
-      const root = html?.[0] ?? html;
+      // v13 HUD is a <form>, and HTMLFormElement[0] indexes its own inputs —
+      // so only unwrap [0] for actual jQuery (v11/12), never for elements.
+      const root = html instanceof HTMLElement ? html : (html?.[0] ?? html);
       const col = root?.querySelector?.(".col.right");
       if (!col || col.querySelector('[data-action="bbttcc-directional-art"]')) return;
       const on = !!getDirArt(doc);
