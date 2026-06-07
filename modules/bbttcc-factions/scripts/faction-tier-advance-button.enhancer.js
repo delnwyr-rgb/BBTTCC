@@ -15,6 +15,35 @@
   const TAG  = "[bbttcc-factions/tier-advance-btn]";
   const MODF = "bbttcc-factions";
 
+  // OP cap bands per bucket, in MARKS (1 OP = 10 marks) — mirrors op-engine's
+  // tier-derived bands. T0=50, T1=70, T2=90, T3=110, T4=130.
+  const OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+  const CAP_BAND = [50, 70, 90, 110, 130];
+
+  // Raise explicit per-bucket opCaps to at least the tier band. Explicit
+  // opCaps shadow the tier-derived bands in op-engine's _readCaps forever —
+  // so a faction that set caps at creation never felt a tier-up (playtest
+  // 2026-06-06: Tier 2 faction stuck at its old max). max() preserves any
+  // custom bucket already raised ABOVE the band. Idempotent; never lowers.
+  async function raiseOpCapsToTierBand(actor, tier) {
+    const t = Math.max(0, Math.min(4, Math.floor(Number(tier) || 0)));
+    const band = CAP_BAND[t] ?? CAP_BAND[0];
+    const raw = get(actor, `flags.${MODF}.opCaps`, null);
+    if (!raw || typeof raw !== "object") return false; // no explicit caps → derived path already follows tier
+    const next = {};
+    let changed = false;
+    for (const k of OP_KEYS) {
+      const cur = Math.max(0, Math.floor(Number(raw[k]) || 0));
+      const v = Math.max(cur, band);
+      next[k] = v;
+      if (v !== cur) changed = true;
+    }
+    if (!changed) return false;
+    await actor.update({ [`flags.${MODF}.opCaps`]: next });
+    console.log(TAG, `opCaps raised to T${t} band (${band} marks/bucket) for ${actor.name}`);
+    return true;
+  }
+
   const esc = (s) => {
     try { return foundry.utils.escapeHTML(String(s ?? "")); }
     catch { return String(s ?? ""); }
@@ -106,6 +135,11 @@
     await actor.update({
       [`flags.${MODF}.tier`]: nextTier
     });
+
+    // Tier-up raises the OP ceiling (playtest 2026-06-06) — without this,
+    // explicit opCaps from faction creation shadow the new tier band forever.
+    try { await raiseOpCapsToTierBand(actor, nextTier); }
+    catch (e) { console.warn(TAG, "opCaps raise failed (non-fatal)", e); }
 
     // Write War Log entry
     const warLogs = get(actor, `flags.${MODF}.warLogs`, []) || [];
@@ -205,6 +239,26 @@
     } catch (e) {
       console.warn(TAG, "render hook failed:", e);
     }
+  });
+
+  // One-shot GM-side repair (2026-06-06): factions that advanced tier BEFORE
+  // the opCaps raise existed are stuck at their creation-era ceiling (the
+  // playtest Tier 2 faction capped at 510 marks). Sweep all faction actors and
+  // raise any explicit opCaps bucket below the current tier band. Idempotent —
+  // max() only, never lowers, logs what it touched.
+  Hooks.once("ready", async () => {
+    try {
+      if (!game.user?.isGM) return;
+      for (const actor of game.actors ?? []) {
+        if (!isFactionActor(actor)) continue;
+        const tier = Number(get(actor, `flags.${MODF}.tier`, 0)) || 0;
+        if (tier <= 0) continue;
+        try {
+          const raised = await raiseOpCapsToTierBand(actor, tier);
+          if (raised) ui.notifications?.info?.(`${actor.name}: OP pool max raised to its Tier ${tier} band.`);
+        } catch (e) { console.warn(TAG, "repair sweep failed for", actor.name, e); }
+      }
+    } catch (e) { console.warn(TAG, "opCaps repair sweep failed:", e); }
   });
 
   console.log(TAG, "installed");

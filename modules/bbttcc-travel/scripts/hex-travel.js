@@ -554,6 +554,33 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       console.log(TAG, "Ley Gate discount applied:", { strength, mult, cost: ctx.cost });
     }
 
+    // Dev-6 free passage (owner directive 2026-06-06): a fully-developed hex
+    // (development.stage / integration.progress == 6) costs NOTHING to move
+    // through for the OWNING faction and its ALLIES (relations tier >= allied).
+    // Civilization means roads. Applied after the gate discount, before GM
+    // overrides (costSet still has final authority).
+    try {
+      const tf = to?.document?.getFlag?.(MOD_TERR) || {};
+      const devStage = Number(tf.development?.stage ?? tf.integration?.progress ?? 0);
+      if (devStage >= 6) {
+        const hexOwnerId = String(tf.factionId || tf.ownerId || "").trim();
+        let freeRide = false, why = "";
+        if (hexOwnerId && hexOwnerId === factionId) { freeRide = true; why = "owner"; }
+        else if (hexOwnerId) {
+          const rel = game.bbttcc?.api?.factions?.relations;
+          const ALLIED = 5; // relations tier ladder: ..., friendly=4, allied=5
+          if (rel?.tier && Number(rel.tier(hexOwnerId, factionId)) >= ALLIED) { freeRide = true; why = "allied"; }
+        }
+        if (freeRide) {
+          for (const k of Object.keys(ctx.cost || {})) ctx.cost[k] = 0;
+          ctx.devSixFreePassage = why;
+          console.log(TAG, "Dev-6 free passage:", { hexOwnerId, factionId, why });
+        }
+      }
+    } catch (e) {
+      console.warn(TAG, "dev-6 free-passage check failed (non-fatal)", e);
+    }
+
 
     
     // ----------------------------------------------------------
