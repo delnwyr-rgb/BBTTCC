@@ -34,14 +34,24 @@
     return type ? docs.filter(d => d.type === type) : docs;
   };
 
-  const classDocs    = await getDocs("bbttcc-master-content.classes", "class");
+  // Subclasses LIVE IN THE CLASSES PACK alongside their classes (owner intel
+  // 2026-06-07) — pull type "subclass" from there, plus the dedicated packs
+  // as extra sources where present.
+  const classesPackDocs = await getDocs("bbttcc-master-content.classes");
+  const classDocs    = classesPackDocs.filter(d => d.type === "class");
   const subclassDocs = [
+    ...classesPackDocs.filter(d => d.type === "subclass"),
     ...(await getDocs("bbttcc-master-content.subclasses", "subclass")),
     ...(await getDocs("bbttcc-master-content.doctrines", "subclass"))   // Aurablade doctrines etc.
   ];
   const ancestryDocs = await getDocs("bbttcc-master-content.ancestries");
   const itemsDocs    = await getDocs("bbttcc-master-content.items");
   const starterDocs  = await getDocs("fourththing.starter-manifestations");
+  // BBTTCC option kits live in their own module's packs (not master-content).
+  const archetypeDocs = await getDocs("bbttcc-character-options.character-archetypes");
+  const crewDocs      = await getDocs("bbttcc-character-options.crew-types");
+  const assocDocs     = await getDocs("bbttcc-character-options.occult-associations");
+  const alignDocs     = await getDocs("bbttcc-character-options.sephirothic-alignments");
 
   // class ↔ subclass pairing by identifier CONTAINMENT — robust to prefix
   // variants (class "shadow_courier" or "bbttcc-shadow-courier" both match
@@ -69,18 +79,18 @@
     return { species: sp, feats: mates.slice(0, 3) };
   });
 
-  // BBTTCC option groups from the items pack, grouped base + "(Tier N)" mates.
-  const groupOptions = (prefix) => {
-    const bases = itemsDocs.filter(d => d.name.startsWith(prefix) && !/\(Tier \d+\)$/.test(d.name));
-    return bases.map(b => ({
-      base: b,
-      tiers: itemsDocs.filter(d => d.name.startsWith(b.name.replace(/\s*\(.*$/, "")) && /\(Tier \d+\)$/.test(d.name))
-    }));
+  // Option kits: group each pack's items as base + "(Tier N)" mates by name root.
+  const groupPack = (docs) => {
+    const bases = docs.filter(d => !/\(Tier \d+\)\s*$/.test(d.name));
+    return bases.map(b => {
+      const root = b.name.replace(/\s*\(Tier \d+\)\s*$/, "").trim();
+      return { base: b, tiers: docs.filter(d => d.id !== b.id && d.name.startsWith(root) && /\(Tier \d+\)\s*$/.test(d.name)) };
+    });
   };
-  const archetypes   = groupOptions("Archetype: ");
-  const crews        = groupOptions("Crew Type: ");
-  const associations = groupOptions("Occult Association: ");
-  const alignments   = itemsDocs.filter(d => d.name.startsWith("Alignment: "));
+  const archetypes   = groupPack(archetypeDocs);
+  const crews        = groupPack(crewDocs);
+  const associations = groupPack(assocDocs);
+  const alignments   = alignDocs;
   // BBTTCC techniques (feat folder) — distribute 2 per actor.
   const techniques   = itemsDocs.filter(d => d.type === "feat" && d.folder?.id === "QbGNBV70xh9pF0eh");
   const weapons      = itemsDocs.filter(d => d.type === "weapon");
