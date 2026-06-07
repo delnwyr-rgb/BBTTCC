@@ -123,8 +123,12 @@
   const installCapture = () => {
     // Deprecation notices (V1 Dialog etc.) fire app-wide — separate concern,
     // not a per-ability failure; trial run false-positived on them.
-    console.error = (...a) => { const s = a.map(String).join(" "); if (!/deprecat/i.test(s)) captured.push("ERR: " + s.slice(0, 300)); origErr(...a); };
-    console.warn  = (...a) => { const s = a.map(String).join(" "); if (/error|failed|exception/i.test(s) && !/deprecat/i.test(s)) captured.push("WARN: " + s.slice(0, 300)); origWarn(...a); };
+    // Filtered as registered v14 debt, not per-ability failures: deprecation
+    // notices AND the "-=key legacy syntax" migration warnings (they fire on
+    // every Soma-Break flag clear and bleed into adjacent fire windows).
+    const NOISE = /deprecat|legacy\s+syntax/i;
+    console.error = (...a) => { const s = a.map(String).join(" "); if (!NOISE.test(s)) captured.push("ERR: " + s.slice(0, 300)); origErr(...a); };
+    console.warn  = (...a) => { const s = a.map(String).join(" "); if (/error|failed|exception/i.test(s) && !NOISE.test(s)) captured.push("WARN: " + s.slice(0, 300)); origWarn(...a); };
   };
   const removeCapture = () => { console.error = origErr; console.warn = origWarn; };
 
@@ -173,11 +177,20 @@
         if (!actionable) continue;
         await fire(actor, it.name, "feat", () => CA.dispatchFeatureAction(actor, it));
       }
-      // weapons → engage. Area templates RE-ENABLED in v4 — the blind-click
-      // fallback un-sticks previews the clicker can't see (v14 Region merge);
-      // a true hang still gets caught by the 4s timeout and reported.
+      // weapons → engage. v5: auto-bisect the area-template hang — if the
+      // full path times out, RETRY with skipAreaTemplate. A retry that
+      // succeeds reclassifies the failure as "template-flow hang (v14)"
+      // instead of burying the engage/damage path behind it.
       for (const it of actor.items.filter(i => i.type === "weapon")) {
         await fire(actor, it.name, "strike", () => game.fourththing.ftOpenEngageDialog(actor, it));
+        const last = results[results.length - 1];
+        if (last?.error?.startsWith("timeout") && it.system?.manifestation?.area?.shape && it.system.manifestation.area.shape !== "none") {
+          await fire(actor, `${it.name} (retry, no template)`, "strike", () => game.fourththing.ftOpenEngageDialog(actor, it, { skipAreaTemplate: true }));
+          const retry = results[results.length - 1];
+          if (retry && !retry.error && !retry.captured) {
+            last.error = "TEMPLATE-FLOW HANG (v14) — engage path itself OK on retry";
+          }
+        }
       }
       // powers → cast
       for (const it of actor.items.filter(i => i.type === "power")) {
