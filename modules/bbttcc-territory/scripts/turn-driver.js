@@ -204,24 +204,50 @@ function ensureConsumePlannedShim(){
   };
   const inferPrimaryKey = (effect)=> effect?.primaryKey || effect?.primaryOp || effect?.primary || null;
 
-  async function spendOPBestEffort({ factionActor, primaryKey, amount=1, ctx={} }){
-    try {
-      const fapi = game?.bbttcc?.api?.factions;
-      if (typeof fapi?.spendOP === "function") {
-        return await fapi.spendOP({ factionId: factionActor.id, key: primaryKey, amount, ctx });
-      }
-      if (typeof fapi?.adjustOP === "function") {
-        return await fapi.adjustOP({ factionId: factionActor.id, key: primaryKey, delta: -Math.abs(amount), ctx });
-      }
-      if (typeof factionActor?.bbttccSpendOP === "function") {
-        return await factionActor.bbttccSpendOP(primaryKey, amount, ctx);
-      }
-    } catch (e) {
-      warn("OP spend attempt failed (non-fatal).", e);
-      return { ok:false, error:e };
+  // SIM-BADEDEN fix 2026-06-05 (Bug 2): planned activities previously billed a
+  // token `amount:1` of the primary key via faction APIs that don't exist
+  // (spendOk:false every time) — strategic activities were effectively FREE.
+  // Now: bill the FULL declared cost vector (marks) straight from opBank, the
+  // same direct-bank style the Garrison Upkeep Engine uses. Discrete-cost law:
+  // if the faction can't cover the whole vector, the activity does NOT run.
+  const OP_KEYS_CANON = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+
+  function normalizeCostVector(cost){
+    const out = {};
+    for (const [k, v] of Object.entries(cost || {})) {
+      const key = String(k || "").toLowerCase().replace(/[^a-z]/g, "");
+      const canon = key === "softpower" ? "softpower" : key === "nonlethal" ? "nonlethal" : key;
+      if (!OP_KEYS_CANON.includes(canon)) continue;
+      const n = Number(v) || 0;
+      if (n > 0) out[canon] = (out[canon] || 0) + n;
     }
-    warn("No OP spend function found; skipping OP spend (alpha).");
-    return { ok:false, skipped:true };
+    return out;
+  }
+
+  // Activities whose throughput handler commits its own OP (begin_siege derives
+  // the buffer from its declared cost and op.commit's it — billing here too
+  // would double-charge the lead).
+  const SELF_BILLING_ACTIVITIES = new Set(["begin_siege"]);
+
+  async function payActivityCost({ factionActor, effect, entry }){
+    if (SELF_BILLING_ACTIVITIES.has(String(entry?.activityKey || ""))) {
+      return { ok:true, selfBilling:true, paid:{} };
+    }
+    const cost = normalizeCostVector(effect?.cost || effect?.opCosts || {});
+    if (!Object.keys(cost).length) return { ok:true, free:true, paid:{} };
+
+    const bank = foundry.utils.duplicate(factionActor.getFlag(MOD_FACTIONS, "opBank") || {});
+    const short = {};
+    for (const [k, need] of Object.entries(cost)) {
+      const have = Number(bank[k]) || 0;
+      if (have < need) short[k] = need - have;
+    }
+    if (Object.keys(short).length) {
+      return { ok:false, insufficient: short, cost, paid:{} };
+    }
+    for (const [k, need] of Object.entries(cost)) bank[k] = (Number(bank[k]) || 0) - need;
+    await factionActor.update({ [`flags.${MOD_FACTIONS}.opBank`]: bank });
+    return { ok:true, paid: cost };
   }
 
   async function runEffectBestEffort({ effect, entry, factionActor, apply }){
@@ -230,6 +256,11 @@ function ensureConsumePlannedShim(){
     const ctx = {
       apply: !!apply,
       entry,
+      // SIM-BADEDEN fix 2026-06-05 (Bug 1): the wilderness/supply-line/depot
+      // effect handlers destructure `{ actor, entry }` — without `actor` every
+      // one of them bailed with "No faction actor." and territory development
+      // was silently impossible from the planner path.
+      actor: factionActor,
       attackerId: entry?.attackerId || factionActor?.id,
       factionId: factionActor?.id,
       activityKey: entry?.activityKey,
@@ -272,7 +303,7 @@ function ensureConsumePlannedShim(){
       note: entry.note || "",
       plannedTs: entry.ts,
       primaryKey,
-      opSpent: primaryKey ? { [primaryKey]: 1 } : {},
+      opSpent: (spendResult && spendResult.paid) ? spendResult.paid : {},
       spendResult: spendResult || null,
       effectResult: effectResult || null,
       summary: `${factionActor.name} executed ${entry.activityKey} on ${entry.targetName || entry.targetType || "target"}`
@@ -293,12 +324,23 @@ function ensureConsumePlannedShim(){
       const effect = getEffect(entry.activityKey);
       const primaryKey = inferPrimaryKey(effect);
 
-      const spendResult = primaryKey
-        ? await spendOPBestEffort({ factionActor, primaryKey, amount: 1, ctx:{ reason:"consumePlanned", entry } })
-        : { ok:false, skipped:true };
+      // SIM-BADEDEN fix 2026-06-05 (Bug 2): pay the FULL declared cost vector
+      // up front; an activity the faction cannot afford is refused outright
+      // (consumed from the queue, logged unaffordable, effect NOT run).
+      const spendResult = apply
+        ? await payActivityCost({ factionActor, effect, entry })
+        : { ok:true, preview:true, paid:{} };
+
+      if (apply && spendResult.ok === false) {
+        finalizedEntries.push(Object.assign(
+          finalizeEntry({ entry, factionActor, effect, effectResult: { ok:false, skipped:"insufficient-op" }, spendResult }),
+          { summary: `${factionActor.name} could NOT afford ${entry.activityKey} (short: ${Object.entries(spendResult.insufficient||{}).map(([k,v])=>`${k}:${v}`).join(", ")}) — activity refused.` }
+        ));
+        continue;
+      }
 
       let effectResult = null;
-  
+
       // ------------------------------------------------------------
       // Strategic Throughput Routing (Apply only)
       // ------------------------------------------------------------
@@ -512,6 +554,10 @@ const LOGI = Object.freeze({
   CAPACITY_INFRA_DEPOT: 1.0,
   CAPACITY_INFRA_MAJORPORT: 1.0,
   CAPACITY_INFRA_ROADNET: 0.5,
+  // SIM-BADEDEN tuning 2026-06-05: Supply Lines are logistics infrastructure —
+  // they now grant capacity like roads do. (Previously 0.95× upkeep only: the
+  // exact infra the supply-chain arc builds did nothing against overextension.)
+  CAPACITY_INFRA_SUPPLYLINE: 0.5,
   CAPACITY_LOGI_RIG: 0.5
 });
 
@@ -615,7 +661,13 @@ function countIntegrationStates(owned){
   let short = 0, occ = 0, full = 0;
 
   for (const h of owned) {
-    const integ = h.tf?.integration || {};
+    // SIM-BADEDEN tuning 2026-06-05: a hex with NO integration flag is settled
+    // home territory (peaceful claim/founding), NOT an occupation. The old
+    // default (no flag → prog 0 → occ) put every starting faction at
+    // occupation-grade demand (×2/hex) from turn 1 — all three sim factions
+    // opened at ratio ≥1.1 (strained/overextended) before making a single move.
+    if (!h.tf?.integration) continue;
+    const integ = h.tf.integration;
     const state = safeStr(integ?.state || integ?.phase || "").toLowerCase();
     const prog  = safeNum(integ?.progress, safeNum(integ?.tier, 0));
 
@@ -636,7 +688,7 @@ function countIntegrationStates(owned){
 
 function countSpecials(owned){
   let city = 0, special = 0;
-  let depot = 0, majorPort = 0, roadNet = 0;
+  let depot = 0, majorPort = 0, roadNet = 0, supplyLine = 0;
 
   const isMod = (mods, needle) => mods.some(m => safeStr(m).toLowerCase() === needle);
   const hasAny = (mods, needles) => needles.some(n => mods.some(m => safeStr(m).toLowerCase().includes(n)));
@@ -657,9 +709,11 @@ function countSpecials(owned){
     if (isMod(mods, "logistics depot") || mods.some(m => safeStr(m).toLowerCase().includes("depot"))) depot++;
     if (isMod(mods, "major port") || mods.some(m => safeStr(m).toLowerCase().includes("major port"))) majorPort++;
     if (isMod(mods, "road network") || mods.some(m => safeStr(m).toLowerCase().includes("road"))) roadNet++;
+    // SIM-BADEDEN tuning 2026-06-05: count Supply Line hexes for capacity credit
+    if (mods.some(m => safeStr(m).toLowerCase().includes("supply line"))) supplyLine++;
   }
 
-  return { city, special, depot, majorPort, roadNet };
+  return { city, special, depot, majorPort, roadNet, supplyLine };
 }
 
 function deriveTradeRouteCountFromWarLogs(factionActor){
@@ -765,7 +819,15 @@ async function computeLogisticsPressureForFaction(factionActor){
   // 1) Faction-side inputs
   const bank = clone(getFlag(factionActor, `${MOD_FACTIONS}.opBank`, zeroOps()));
   // bank values are MARKS (1 OP = 10 marks); logistics capacity formula was authored in OP units.
-  const logisticsOP = Math.floor(safeNum(bank.logistics) / 10);
+  // SIM-BADEDEN tuning 2026-06-05: capacity now keys off the logistics CAP
+  // (organizational potential), not the current bank. The old bank-keyed
+  // formula was a death spiral: spending logistics (on the very supply lines
+  // meant to relieve pressure) cut capacity → worse band → −35% logistics
+  // regen → bank pinned at 0 → ratio 10.0 forever (observed turns 3–20, all
+  // three sim factions). Falls back to bank if no cap is set.
+  const capsBank = clone(getFlag(factionActor, `${MOD_FACTIONS}.opCaps`, {}));
+  const logisticsMarks = safeNum(capsBank.logistics) > 0 ? safeNum(capsBank.logistics) : safeNum(bank.logistics);
+  const logisticsOP = Math.floor(logisticsMarks / 10);
 
   const { activeRigCount, logisticsRigCount } = readRigs(factionActor);
 
@@ -800,7 +862,7 @@ async function computeLogisticsPressureForFaction(factionActor){
   const distSteps = Math.floor(avgDist);
 
   const { short: shortIntegCount, occ: occupationCount, full: fullIntegCount } = countIntegrationStates(owned);
-  const { city: cityCount, special: specialCount, depot: infraDepotCount, majorPort: infraMajorPortCount, roadNet: infraRoadNetCount } = countSpecials(owned);
+  const { city: cityCount, special: specialCount, depot: infraDepotCount, majorPort: infraMajorPortCount, roadNet: infraRoadNetCount, supplyLine: infraSupplyLineCount } = countSpecials(owned);
 
   // 3) Compute Demand
   const baseDemand = totalHexes * LOGI.DEMAND_TERRITORY_PER_HEX;
@@ -824,7 +886,8 @@ async function computeLogisticsPressureForFaction(factionActor){
   const infraCapacity =
     (infraDepotCount * LOGI.CAPACITY_INFRA_DEPOT) +
     (infraMajorPortCount * LOGI.CAPACITY_INFRA_MAJORPORT) +
-    (infraRoadNetCount * LOGI.CAPACITY_INFRA_ROADNET);
+    (infraRoadNetCount * LOGI.CAPACITY_INFRA_ROADNET) +
+    (infraSupplyLineCount * LOGI.CAPACITY_INFRA_SUPPLYLINE);
   const rigCapacity = logisticsRigCount * LOGI.CAPACITY_LOGI_RIG;
 
   const capacity = opCapacity + tradeCapacity + integrationCapacity + infraCapacity + rigCapacity;
@@ -852,6 +915,7 @@ async function computeLogisticsPressureForFaction(factionActor){
         infraDepotCount,
         infraMajorPortCount,
         infraRoadNetCount,
+        infraSupplyLineCount,
         activeRigCount,
         logisticsRigCount,
         tradeRouteCount,
@@ -881,6 +945,43 @@ async function computeLogisticsPressureForAllFactions({ apply=false } = {}){
 }
 
 /* ------------------------------- OP regen -------------------------------- */
+/* ------------- territory matrix income (RES_TO_OP, leyline-aware) ----------
+ * SIM-BADEDEN 2026-06-05 (owner call): main.js has carried the INTENDED income
+ * engine all along — resourcesToOP() converts each hex's resources into a
+ * weighted six-bucket OP vector (incl. nonLethal + softPower, which the crude
+ * DEFAULT_REGEN_MAP never feeds), modulated by the hex's leyline flowState
+ * (surge ×1.3, stagnation ×0.6, inversion swaps V↔SP / D↔I). It was only ever
+ * used as a UI cache ("harmless for UI"). This wires it into real income:
+ * per-hex, per-flow-state, summed per faction. The matrix has no logistics
+ * lane (it predates food→logistics), so food keeps feeding logistics 1:1.
+ * Falls back to the legacy stockpile map when the API/hexes are unavailable.
+ * -------------------------------------------------------------------------- */
+function computeTerritoryMatrixIncome(factionActor){
+  try {
+    const convert = game.bbttcc?.api?.territory?.resourcesToOP;
+    if (typeof convert !== "function") return null;
+    const owned = getAllOwnedHexDocs(factionActor.id);
+    if (!owned.length) return null;
+    const KEYMAP = { economy:"economy", violence:"violence", nonLethal:"nonlethal", intrigue:"intrigue", diplomacy:"diplomacy", softPower:"softpower" };
+    const out = zeroOps();
+    const flows = {};
+    for (const h of owned) {
+      const tf = h.tf || {};
+      const res = tf.resources || {};
+      const flow = String(tf.leylines?.flowState || "normal");
+      flows[flow] = (flows[flow] || 0) + 1;
+      const v = convert(res, flow) || {};
+      for (const [mk, canon] of Object.entries(KEYMAP)) out[canon] += safeNum(v[mk]);
+      out.logistics += safeNum(res.food); // preserved legacy logistics lane
+    }
+    for (const k of Object.keys(out)) out[k] = Math.max(0, Math.round(safeNum(out[k])));
+    return { delta: out, flows };
+  } catch (e) {
+    warn("territory matrix income failed; falling back to stockpile map", e);
+    return null;
+  }
+}
+
 async function advanceOPRegen({ apply=false, factionId=null } = {}){
   const targets = factionId ? [game.actors.get(factionId)].filter(Boolean) : allFactions();
   const results = [];
@@ -903,8 +1004,12 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
       const map     = { ...DEFAULT_REGEN_MAP, ...(getFlag(A, `${MOD_FACTIONS}.opRegenMap`, {})||{}) };
       const factors = { ...DEFAULT_FACTORS,  ...(getFlag(A, `${MOD_FACTIONS}.opRegenFactors`, {})||{}) };
 
-      // 4) Compute OP delta
-      const opsDelta = computeOpsFromStockpile(stock, map, factors);
+      // 4) Compute OP delta — territory matrix first (intended engine), legacy
+      // stockpile map as fallback. Matrix income flows live from hexes each
+      // turn; the stockpile burn-down only applies on the legacy path.
+      const matrix = computeTerritoryMatrixIncome(A);
+      const usedMatrix = !!matrix;
+      const opsDelta = usedMatrix ? matrix.delta : computeOpsFromStockpile(stock, map, factors);
 
       // 4.1) Overextension → Logistics regen multiplier (Alpha v1)
       // We compute logistics pressure on-demand here so the penalty applies immediately this turn.
@@ -931,15 +1036,19 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
       results.push(row);
 
       if (apply && totalGained > 0) {
-        // proportional burn-down of stockpile (simple floor-based consume)
+        // proportional burn-down of stockpile (simple floor-based consume) —
+        // LEGACY PATH ONLY: matrix income flows live from territory and does
+        // not consume the stockpile (it stays a material store for builds).
         const newStock = clone(stock);
-        for (const [res, amtRaw] of Object.entries(stock||{})) {
-          const amt = safeNum(amtRaw); if (!amt || amt <= 0) continue;
-          const key = map[res]; if (!key) continue;
-          const fac = safeNum(factors?.[res], 1); if (!(fac > 0)) continue;
-          const gainedRes = Math.floor(amt * fac); if (gainedRes <= 0) continue;
-          const consumed = Math.min(amt, Math.ceil(gainedRes / fac));
-          newStock[res] = Math.max(0, amt - consumed);
+        if (!usedMatrix) {
+          for (const [res, amtRaw] of Object.entries(stock||{})) {
+            const amt = safeNum(amtRaw); if (!amt || amt <= 0) continue;
+            const key = map[res]; if (!key) continue;
+            const fac = safeNum(factors?.[res], 1); if (!(fac > 0)) continue;
+            const gainedRes = Math.floor(amt * fac); if (gainedRes <= 0) continue;
+            const consumed = Math.min(amt, Math.ceil(gainedRes / fac));
+            newStock[res] = Math.max(0, amt - consumed);
+          }
         }
 
         const newBank = addOps(opBank, opsDelta);
@@ -975,7 +1084,7 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
             summary: `Overextension: ${over?.band || "unknown"} — Logistics regen -${pct}% (ratio ${ratioStr}) [${logiBefore}→${opsDelta.logistics}]`
           });
         }
-        warLogs.push({ type:"commit", date:(new Date()).toLocaleString(), summary:`OP Regen: ${fmtOpsRow(opsDelta)}` });
+        warLogs.push({ type:"commit", date:(new Date()).toLocaleString(), summary:`OP Regen${usedMatrix ? ` (territory matrix · flows: ${Object.entries(matrix.flows).map(([k,n])=>`${k}×${n}`).join(", ")})` : ""}: ${fmtOpsRow(opsDelta)}` });
         await A.update({ [`flags.${MOD_FACTIONS}.warLogs`]: warLogs });
 
         await ChatMessage.create({
@@ -1142,17 +1251,145 @@ async function normalizePendingShapes(){
 }
 
 /* -------------------- (4) consume queued turn.pending -------------------- */
+// SIM-BADEDEN fix 2026-06-05 (dead-letter queue #1): hex `turn.pending.repairs`
+// had NO working consumer — ~15 strategic activities (Supply Line, Trade Route,
+// Fortify, Supply Depot, Diplomatic Mission, …) billed real OP, queued their hex
+// changes, and hardCleanupQueued() wiped the queue unapplied every turn. The
+// raid-side wrappers (queue-drawings v1.0.8, consumePlanned.shim v1.0.7) all
+// wrap a base consumeQueuedTurnEffects that no build ever defines. This sweep
+// applies hex pendings directly, then clears them; the raid consumer (if one
+// ever materializes) still runs first and simply leaves nothing to sweep.
+async function applyHexPendingSweep(){
+  const dup = (x)=>foundry.utils.duplicate(x ?? {});
+  let appliedHexes = 0;
+  for (const sc of game.scenes ?? []) {
+    const patches = [];
+    for (const d of sc.drawings ?? []) {
+      const tf = d.flags?.[MOD_TERRITORY];
+      if (!tf || !(tf.isHex === true || tf.kind === "territory-hex")) continue;
+      const pend = dup(tf.turn?.pending || {});
+      if (!Object.keys(pend).length) continue;
+
+      const f = dup(tf);
+      let actionable = false;
+
+      // modifiers (repairs queue — new + legacy shapes)
+      f.modifiers = Array.isArray(f.modifiers) ? f.modifiers.slice() : [];
+      if (Array.isArray(pend.repairs?.removeModifiers) && pend.repairs.removeModifiers.length) {
+        const rm = new Set(pend.repairs.removeModifiers.map(String));
+        f.modifiers = f.modifiers.filter(m => !rm.has(String(m)));
+        actionable = true;
+      }
+      if (Array.isArray(pend.repairs?.addModifiers) && pend.repairs.addModifiers.length) {
+        for (const m of pend.repairs.addModifiers) if (!f.modifiers.includes(m)) f.modifiers.push(m);
+        actionable = true;
+      }
+      if (Array.isArray(pend.repairs?.requests) && pend.repairs.requests.length) {
+        const rmLegacy = new Set(pend.repairs.requests.map(x => typeof x === "string" ? x : x?.tag).filter(Boolean));
+        if (rmLegacy.size) { f.modifiers = f.modifiers.filter(m => !rmLegacy.has(m)); actionable = true; }
+      }
+
+      // numeric deltas → mods
+      const mods = dup(f.mods || {});
+      for (const [pk, mk] of [["defenseDelta","defense"],["tradeYieldDelta","tradeYield"],["loyaltyDelta","loyalty"],["enemyLoyaltyDelta","enemyLoyalty"],["moraleDelta","morale"],["radiationRisk","radiation"]]) {
+        const v = safeNum(pend[pk]);
+        if (v) { mods[mk] = safeNum(mods[mk]) + v; actionable = true; }
+      }
+
+      if (!actionable) continue;
+      const applied = Array.isArray(f.turn?.applied) ? f.turn.applied.slice() : [];
+      applied.push({ ts: Date.now(), data: pend });
+      patches.push({
+        _id: d.id,
+        [`flags.${MOD_TERRITORY}.modifiers`]: f.modifiers,
+        [`flags.${MOD_TERRITORY}.mods`]: mods,
+        [`flags.${MOD_TERRITORY}.turn.applied`]: applied,
+        [`flags.${MOD_TERRITORY}.turn.-=pending`]: null
+      });
+    }
+    if (patches.length) {
+      await sc.updateEmbeddedDocuments("Drawing", patches);
+      appliedHexes += patches.length;
+    }
+  }
+  if (appliedHexes) log(`Hex pending sweep: applied queued strategic effects on ${appliedHexes} hex(es).`);
+  return { changed: appliedHexes > 0, appliedHexes };
+}
+
 async function applyQueuedPostEffects(){
   const raid = game.bbttcc?.api?.raid;
-  if (!raid?.consumeQueuedTurnEffects) return { changed:false, rows:[] };
   let changed = false;
+  if (raid?.consumeQueuedTurnEffects) {
+    for (const F of allFactions()) {
+      try {
+        const res = await raid.consumeQueuedTurnEffects({ factionId: F.id });
+        if (res?.changed || res?.appliedAt) changed = true;
+      } catch (e) { warn("consumeQueuedTurnEffects error for", F?.name, e); }
+    }
+  }
+  // Direct hex sweep — catches everything the (often missing/broken) raid
+  // consumer chain didn't apply, BEFORE hardCleanupQueued wipes it.
+  try {
+    const swept = await applyHexPendingSweep();
+    if (swept.changed) changed = true;
+  } catch (e) { warn("applyHexPendingSweep failed", e); }
+  return { changed, rows:[] };
+}
+
+/* ------------- (4b) mature scheduled OP bonuses (deferred income) ---------- */
+// SIM-BADEDEN fix 2026-06-05 (dead-letter queue #2): `bonuses.scheduled`
+// (written by both STRATEGIC_THROUGHPUT registries for "+N OP next turn"
+// income — Harvest Season, Supply Overrun, Prayer in the Smoke, …) had NO
+// consumer anywhere. Deferred income never arrived. This step ticks each
+// entry's turnOffset on Apply and pays matured opDeltas (MARKS) into opBank,
+// clamped to opCaps.
+async function applyScheduledOPBonuses(){
+  const dup = (x)=>foundry.utils.duplicate(x ?? {});
+  const rows = [];
   for (const F of allFactions()) {
     try {
-      const res = await raid.consumeQueuedTurnEffects({ factionId: F.id });
-      if (res?.changed || res?.appliedAt) changed = true;
-    } catch (e) { warn("consumeQueuedTurnEffects error for", F?.name, e); }
+      const bonuses = dup(F.getFlag(MOD_FACTIONS, "bonuses") || {});
+      const sched = Array.isArray(bonuses.scheduled) ? bonuses.scheduled : [];
+      if (!sched.length) continue;
+
+      const matured = [];
+      const remaining = [];
+      for (const s of sched) {
+        const t = safeNum(s?.turnOffset, 1) - 1;
+        if (t <= 0) matured.push(s);
+        else remaining.push(Object.assign({}, s, { turnOffset: t }));
+      }
+      if (!matured.length && remaining.length === sched.length) continue;
+
+      let bank = dup(F.getFlag(MOD_FACTIONS, "opBank") || {});
+      const caps = dup(F.getFlag(MOD_FACTIONS, "opCaps") || {});
+      const gained = {};
+      for (const s of matured) {
+        for (const [k, v] of Object.entries(s?.opDelta || {})) {
+          const n = safeNum(v);
+          if (!n) continue;
+          const cap = safeNum(caps[k]);
+          const next = safeNum(bank[k]) + n;
+          bank[k] = cap > 0 ? Math.min(next, cap) : next;
+          gained[k] = safeNum(gained[k]) + n;
+        }
+      }
+
+      bonuses.scheduled = remaining;
+      const updates = { [`flags.${MOD_FACTIONS}.bonuses`]: bonuses };
+      if (Object.keys(gained).length) updates[`flags.${MOD_FACTIONS}.opBank`] = bank;
+      await F.update(updates);
+
+      if (Object.keys(gained).length) {
+        const wl = dup(F.getFlag(MOD_FACTIONS, "warLogs") || []);
+        const txt = Object.entries(gained).map(([k,v]) => `${k}:+${v}`).join(", ");
+        wl.push({ ts: Date.now(), date: (new Date()).toLocaleString(), type: "turn", activity: "scheduled_op", summary: `Scheduled OP matured: ${txt} (marks).` });
+        await F.update({ [`flags.${MOD_FACTIONS}.warLogs`]: wl });
+        rows.push({ factionId: F.id, gained });
+      }
+    } catch (e) { warn("applyScheduledOPBonuses failed for", F?.name, e); }
   }
-  return { changed, rows:[] };
+  return { changed: rows.length > 0, rows };
 }
 
 /* ------------------------- (5) hard cleanup (Apply) ---------------------- */
@@ -1231,6 +1468,11 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
       base = (await terr._delegateAdvanceTurn({ apply, sceneId })) ?? base;
     }
 
+    // Mature deferred OP income ("+N next turn") BEFORE regen so it lands
+    // the turn it comes due. (Dead-letter queue #2 fix, 2026-06-05.)
+    let scheduledOP = { changed:false, rows:[] };
+    if (apply) scheduledOP = await applyScheduledOPBonuses();
+
     let regen = { changed:false, rows:[] };
     if (apply) regen = await advanceOPRegen({ apply:true });
 
@@ -1277,7 +1519,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     }
 
     return {
-      changed: !!(promoted.changed || planned.changed || base.changed || regen.changed || logistics.changed || normalized.changed || queued.changed),
+      changed: !!(promoted.changed || planned.changed || base.changed || scheduledOP.changed || regen.changed || logistics.changed || normalized.changed || queued.changed),
       rows: __rows
     };
   } finally {

@@ -45,7 +45,13 @@
     settlement: { logistics: 5, diplomacy: 5, economy: 5 },
     city:       { logistics: 10, diplomacy: 10, economy: 10 },
     ruins:      { intrigue: 10, nonlethal: 5, economy: 5 },
-    default:    { economy: 5, nonlethal: 5 } // fallback
+    // SIM-BADEDEN tuning 2026-06-05 (owner call): nonlethal has NO income source —
+    // the old {economy:5, nonlethal:5} default made every wilderness claim a
+    // permanently unpayable bleed (Run I: perma-arrears, claiming frozen).
+    // Re-denominated toward diplomacy (the bucket trade keeps filling); a token
+    // nonlethal cost remains while unintegrated — pacification still draws on
+    // the peace-keepers, but it's survivable until the hex settles.
+    default:    { economy: 5, diplomacy: 3, nonlethal: 2 } // fallback
   };
 
   // Size multipliers.

@@ -110,9 +110,20 @@
   function scheduleFactionOP(A, opDelta, turns){
     if (!A) return;
     turns = Number(turns || 1) || 1;
+    // SIM-BADEDEN fix 2026-06-05: every caller in this file authors opDelta in
+    // OP units ("+1 Economy", "+2 Logistics" per the warLog copy) but the bank
+    // is denominated in MARKS (1 OP = 10 marks, op-engine canon 2026-05-09).
+    // Convert here so deferred income is worth what the copy promises —
+    // previously it under-paid 10× (when it paid at all; the scheduled queue
+    // also had no consumer until turn-driver's applyScheduledOPBonuses).
+    const marksDelta = {};
+    for (const [k, v] of Object.entries(opDelta || {})) {
+      const n = Number(v) || 0;
+      if (n) marksDelta[k] = n * 10;
+    }
     const bonuses = foundry.utils.duplicate(A.getFlag(MODF,"bonuses")||{});
     bonuses.scheduled = Array.isArray(bonuses.scheduled) ? bonuses.scheduled : [];
-    bonuses.scheduled.push({ turnOffset: turns, opDelta: opDelta || {} });
+    bonuses.scheduled.push({ turnOffset: turns, opDelta: marksDelta });
     return A.update({ [`flags.${MODF}.bonuses`]: bonuses });
   }
 
@@ -139,8 +150,11 @@
     // ===== Canon T1: Harvest Season =====
     async harvest_season(ctx){
       const A = game.actors.get(ctx.factionId);
-      await scheduleFactionOP(A, { economy: 1 }, 1);
-      await pushWarLog(A,"Harvest Season: +1 Economy next turn.");
+      // SIM-BADEDEN tuning 2026-06-05: at +1 Economy vs a 1-OP activity cost,
+      // Harvest was zero-sum (a pure time-shift). As the canonical T1 income
+      // action it now yields +2 Economy → net +1 OP per turn worked. OWNER DIAL.
+      await scheduleFactionOP(A, { economy: 2 }, 1);
+      await pushWarLog(A,"Harvest Season: +2 Economy next turn.");
     },
 
     // ===== Canon T1: Ration Distribution =====

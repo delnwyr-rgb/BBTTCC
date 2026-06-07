@@ -166,7 +166,12 @@
       kind:  "strategic",
       band:  "standard",
       label: EFFECTS.develop_outpost_stability?.label || "Develop Outpost (Stability)",
-      cost:  EFFECTS.develop_outpost_stability?.cost  || { softpower:20, nonlethal:10 },
+      // SIM-BADEDEN tuning 2026-06-05 (owner call): softpower/nonlethal have NO
+      // income source anywhere (regen map covers 5 of 9 buckets) — pricing the
+      // settle-the-frontier action in dead currencies made integration
+      // mathematically impossible (74/74 refusals in Run I). "Build trust" is
+      // diplomats' work: re-denominated into the buckets factions actually earn.
+      cost:  EFFECTS.develop_outpost_stability?.cost  || { diplomacy:20, economy:10 },
       description: EFFECTS.develop_outpost_stability?.description || "Stabilize a young outpost: clear hazards, patrol, and build trust.",
       async apply({ actor, entry }){
         if (!entry?.targetUuid) return "No target selected.";
