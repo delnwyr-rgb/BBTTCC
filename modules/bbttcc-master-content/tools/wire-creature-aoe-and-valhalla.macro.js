@@ -134,8 +134,10 @@
       if (icon && isPlaceholder(it.img)) u["img"] = ICON_BASE + "/" + icon;
       const v = VALHALLA[it.name];
       if (v && it.type !== "power") {
+        // Foundry v14: type changes require the system field force-replaced
+        // (the "==" prefix operator), not diff-merged.
         u["type"] = v.type;
-        u["system"] = v.system;
+        u["==system"] = v.system;
         // Print the original prose so the authored stats can be verified.
         const txt = (it.system?.description?.value ?? it.system?.body ?? "").replace(/<[^>]*>/g, " ").trim();
         console.log(`── ${actor.name} · ${it.name} — ORIGINAL TEXT:\n${txt || "(no description found)"}\n`);

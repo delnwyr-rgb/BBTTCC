@@ -131,12 +131,14 @@
         if (!cur.includes("ft-engine-note")) { u["system.description.value"] = banner + cur; tally.banners++; }
       }
 
-      // 4. feature→weapon conversion
+      // 4. feature→weapon conversion. Foundry v14: a Document type change
+      // demands the system field be FORCE-REPLACED — the "==" prefix operator
+      // — not diff-merged (first run errored "ForcedReplacement operator").
       const c = CONV[it.name];
       if (c && (it.type === "feat" || it.type === "feature")) {
         const ns = convSystem(c, sys);
         u["type"] = "weapon";
-        u["system"] = ns;
+        u["==system"] = ns;
         tally.conv++;
         console.log(`[conv] ${actor.name} · ${it.name}: feature → weapon (${c.dice} ${c.dmgType}${c.shape !== "single" ? `, ${c.size}ft ${c.shape}` : ""})`);
       }
@@ -144,7 +146,8 @@
       // 5. smell fixes (powers/weapons — skip if conversion already handled it)
       const sf = SMELL_FIXES[it.name];
       if (sf && !c) {
-        console.log(`[smell] ${actor.name} · ${it.name} — CURRENT PROSE:\n  ${strip(sys.description?.value).slice(0, 300)}`);
+        const prose = strip(`${sys.description?.value ?? ""} ${sys.effect ?? ""} ${sys.flavor ?? ""}`);
+        console.log(`[smell] ${actor.name} · ${it.name} — CURRENT PROSE:\n  ${prose.slice(0, 300) || "(no text fields)"}`);
         if (sf.damageRoll && (sys.damageRoll?.op ?? "none") === "none") u["system.damageRoll"] = sf.damageRoll;
         if (sf.area) u["system.manifestation.area"] = sf.area;
         if (Object.keys(u).length) tally.smells++;
