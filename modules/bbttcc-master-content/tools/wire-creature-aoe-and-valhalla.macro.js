@@ -175,14 +175,38 @@
     }
     if (wasLocked && !DRY_RUN) await pack.configure({ locked: true });
   }
-  // world NPC actors
+  // world actors — npc + character + BOSS (first run missed bosses: the
+  // Valhaulan Spark Adept / Gilbert tier live as type "boss").
   for (const actor of game.actors) {
-    if (actor.type !== "npc" && actor.type !== "character") continue;
+    if (!["npc", "character", "boss"].includes(actor.type)) continue;
     const r = updatesFor(actor);
     if (!r.ups.length && !r.convs.length) continue;
     worldActors++; worldItems += r.ups.length + r.convs.length;
     console.log(`[world] ${actor.name}: ${[...r.ups.map(u => actor.items.get(u._id)?.name), ...r.convs.map(c => c.it.name)].join(", ")}`);
     await applyTo(actor, r);
+  }
+
+  // ── Diagnostic: where do the target names actually live, and why were any
+  //    skipped? Prints every world item matching a target name with its
+  //    actor type + skip reason — so a 0-hit run explains itself.
+  {
+    const targets = new Set([...Object.keys(AREAS), ...Object.keys(ICONS), ...Object.keys(VALHALLA)]);
+    console.log("── diagnostic: target-name locations across ALL world actors ──");
+    for (const actor of game.actors) {
+      for (const it of actor.items) {
+        if (!targets.has(it.name)) continue;
+        const reasons = [];
+        const area = AREAS[it.name];
+        if (area) {
+          const cur = it.system?.manifestation?.area;
+          reasons.push((cur?.shape === area.shape && Number(cur?.size) === area.size) ? "area ✓ already set" : "area MISSING");
+        }
+        const icon = ICONS[it.name];
+        if (icon) reasons.push(isPlaceholder(it.img) ? "icon would apply" : `icon skipped (img=${it.img?.slice(0, 40)})`);
+        if (VALHALLA[it.name]) reasons.push(it.type === "power" ? "valhalla ✓ already power" : `valhalla CONVERT (type=${it.type})`);
+        console.log(`  [${actor.type}] ${actor.name} · ${it.name} → ${reasons.join(" · ")}`);
+      }
+    }
   }
   console.log(`=== wire-creature-aoe-and-valhalla ${DRY_RUN ? "(DRY RUN)" : "(APPLIED)"} ===`);
   console.log(`world: ${worldActors} actors / ${worldItems} items · pack: ${packActors} actors / ${packItems} items`);
