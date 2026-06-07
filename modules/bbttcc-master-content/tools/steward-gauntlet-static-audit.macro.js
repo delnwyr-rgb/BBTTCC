@@ -31,6 +31,22 @@
   const isActionable = (it) => { try { return CA.isActionableFeature?.(it) === true; } catch (_e) { return false; } };
   const isRetired    = (it) => { try { return CA.isRetiredFoldedFeature?.(it) === true; } catch (_e) { return false; } };
 
+  // Ids wired through CODE TABLES the router can't see (derive grants, reroll
+  // tables, strike-path hooks — Brexit audit fixes 9f05f7b). Keep in sync.
+  const KNOWN_WIRED_IDS = new Set([
+    "bbttcc_feat_grim_persistence",     // +2×lvl integrity in derive + hold-at-1
+    "bbttcc_feat_fluid_footwork",       // +10 ft via FT_FEAT_MOVE_GRANTS
+    "bbttcc_feat_anchor_point",         // ID_REROLL_GRANTS in collectRerolls
+    "bulwark_tier3_polarity_mastery",   // strike-path surge gen
+    "bbttcc_feat_spark_sense"           // ITEM_APTITUDE_GRANTS (+1 Occult)
+  ]);
+  // Deliberately narrative — free-movement / economy riders with no engine
+  // moment to hook. Reviewed + accepted 2026-06-07.
+  const NARRATIVE_BY_DESIGN = new Set([
+    "bbttcc_feat_decisive_momentum",
+    "bbttcc_feat_bladed_tempo"
+  ]);
+
   const stripHtml = (h) => String(h ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
   const FACULTIES = new Set(["violence", "intrigue", "presence", "body", "mind", "soul"]);
   const ACTIVE_RX  = /\b(bonus action|reaction|1\/(scene|day|round|soma)|once per (scene|day|round|turn|sanctuary|soma)|recharge \d|you may spend|as an action)\b/i;
@@ -68,10 +84,12 @@
 
     // B. active prose, no automation (feats/features only)
     if ((it.type === "feat" || it.type === "feature") && ACTIVE_RX.test(desc)) {
+      const id = String(sys.identifier ?? "");
       const hasFlagWiring = Array.isArray(flags.rerolls) || flags.grants || flags.passives || flags.actionCost;
       const hasDice = (sys.damage?.formula) || (sys.damageRoll?.op && sys.damageRoll.op !== "none" && Number(sys.damageRoll.number) > 0);
-      if (!isActionable(it) && !isRetired(it) && !hasFlagWiring && !hasDice) {
-        out.unautomated.push({ where: loc, id: sys.identifier ?? "—", smell: (desc.match(ACTIVE_RX) ?? [""])[0] });
+      if (!isActionable(it) && !isRetired(it) && !hasFlagWiring && !hasDice
+          && !KNOWN_WIRED_IDS.has(id) && !NARRATIVE_BY_DESIGN.has(id)) {
+        out.unautomated.push({ where: loc, id: id || "—", smell: (desc.match(ACTIVE_RX) ?? [""])[0] });
       }
     }
 
@@ -153,6 +171,15 @@
   }
   console.log("JSON (copy for the fix sprint):");
   console.log(JSON.stringify(out));
+  // Auto-download the full report — console.table clips and the JSON line
+  // truncates; the file lands in ~/Downloads ready for the fix sprint.
+  try {
+    saveDataToFile(
+      JSON.stringify({ world: game.world?.id, when: new Date().toISOString(), actors, items, findings: out }, null, 2),
+      "application/json",
+      `steward-gauntlet-audit-${game.world?.id ?? "world"}.json`
+    );
+  } catch (e) { console.warn("[gauntlet] file download failed — copy the JSON line above", e); }
 
   const counts = SECTIONS.map(([t, r]) => `<li>${t.split("·")[1].trim().split("(")[0].trim()}: <b>${r.length}</b></li>`).join("");
   ChatMessage.create({
