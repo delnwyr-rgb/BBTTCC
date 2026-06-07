@@ -194,13 +194,36 @@
     try { await P.applySkillGrantsFromFeatures?.(actor); } catch (e) { console.warn("[foundry] skillGrants", p.name, e); }
     try { await P.promoteStampedAptitudeAEs?.(actor); } catch (e) { console.warn("[foundry] promoteAEs", p.name, e); }
 
-    // Top up pools to the freshly-derived maxima.
+    // Tier pill + identity flags (the sheet's Identity & Faction dropdowns
+    // read wizard-written FLAGS, not the items — stamp the same shapes the
+    // wizard writes; details.tier drives the header Tier badge).
+    const mkEntry = (doc) => doc ? { key: doc.id, id: doc.id, pack: doc.pack, optionKey: doc.id, identifier: doc.id, name: doc.name } : null;
+    const identity = {};
+    if (p.archetype) identity.archetype = mkEntry(p.archetype.base);
+    if (p.crew)      identity.crew = mkEntry(p.crew.base);
+    if (p.align)     identity.sephirothicAlignment = mkEntry(p.align);
+    if (p.assoc)     identity.occult = mkEntry(p.assoc.base);
+    const coFlags = {
+      identity,
+      archetype: identity.archetype ?? undefined,
+      crew:      identity.crew ?? undefined,
+      sephirot:  identity.sephirothicAlignment ?? undefined,
+      occult:    identity.occult ?? undefined,
+      nativeLinks: {
+        classUuid:    p.cls.uuid,
+        subclassUuid: p.sub?.uuid ?? null,
+        ancestryUuid: p.ancestry?.species?.uuid ?? null
+      }
+    };
+    // Top up pools to the freshly-derived maxima + tier + identity flags.
     const sys = actor.system?.system ?? actor.system ?? {};
     await actor.update({
+      "system.details.tier":            (P.tierForLevel?.(20) ?? 4),
       "system.derived.integrity.value": sys.derived?.integrity?.max ?? 100,
       "system.derived.stress.value":    sys.derived?.stress?.max ?? 50,
       "system.magic.clarity.value":     sys.magic?.clarity?.max ?? 5,
-      "system.resources.surge.value":   5
+      "system.resources.surge.value":   5,
+      "flags.bbttcc-character-options": coFlags
     });
     made.push(actor);
     log(`forged ${actor.name} (${toEmbed.length} items)`);
