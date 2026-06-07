@@ -15174,7 +15174,18 @@ Hooks.once("init", function () {
       }
       sys.derived.integrity.bracket    = intBracket.bracket;
       sys.derived.integrity.perLevel   = intPerLevel;
-      sys.derived.stress.max       = 10 + 2 * m + s;
+      // Stress = base derivative (Mind/Soul) + per-level class-bracketed boost
+      // (design gap closed 2026-06-07: nothing raised Stress — L20 sat at 211
+      // Integrity / 16 Stress). Mirrors the Integrity formula with INVERSE
+      // brackets: casters are stress-tanks the way vanguards are
+      // integrity-tanks. Boost = bracket base + ⌊Mind/2⌋ per level past 1.
+      // A maxed-Mind/Soul L20 caster hits 211 Stress — symmetric with a
+      // maxed-Body L20 vanguard's 211 Integrity.
+      const stressBase = ({ vanguard: 2, mid: 3, caster: 4 })[intBracket.bracket] ?? 3;
+      const stressPerLevel = stressBase + Math.floor(m / 2);
+      sys.derived.stress.max       = 10 + 2 * m + s + (charLevel - 1) * stressPerLevel;
+      sys.derived.stress.bracket   = intBracket.bracket;
+      sys.derived.stress.perLevel  = stressPerLevel;
       {
         const cur = sys.derived.stress.value ?? sys.derived.stress.max;
         sys.derived.stress.value = Math.max(0, Math.min(cur, sys.derived.stress.max));
@@ -16291,7 +16302,17 @@ Hooks.once("init", function () {
       const rawSys  = actor.system?.system ?? actor.system;
       const sysData = rawSys?.toObject ? rawSys.toObject() : JSON.parse(JSON.stringify(rawSys ?? {}));
 
-      const attributes = sysData.attributes ?? {};
+      // Canonical 6 faculties ONLY — legacy actors carry fossil keys (hp,
+      // movement) from an ancient template.json revision; Foundry never
+      // deletes stored source keys, and the sheet's {{#each attributes}}
+      // rendered them as anomalous empty boxes (playtest 2026-06-07).
+      const _FT_FACULTY_KEYS = ["violence", "intrigue", "presence", "body", "mind", "soul"];
+      const _rawAttributes = sysData.attributes ?? {};
+      const attributes = Object.fromEntries(_FT_FACULTY_KEYS.map(k => [k, _rawAttributes[k] ?? { value: 0 }]));
+      {
+        const fossils = Object.keys(_rawAttributes).filter(k => !_FT_FACULTY_KEYS.includes(k));
+        if (fossils.length) console.warn(`Roll for Initiation | ${actor.name}: ignoring non-canonical attribute keys [${fossils.join(", ")}] — remove with actor.update({"system.attributes.-=${fossils[0]}": null})`);
+      }
       const skills     = sysData.skills     ?? {};
       const derived    = sysData.derived    ?? {};
       const magic      = sysData.magic      ?? {};
@@ -19004,8 +19025,10 @@ Hooks.once("init", function () {
 
       const actorIsTCC = isTCC(actor);
 
-      const attributeRows = Object.entries(sysData.attributes ?? {}).map(([key, a]) => ({
-        key, label: ftCap(key), value: Number(a?.value ?? 0)
+      // Canonical 6 only — same fossil-key guard as the character sheet
+      // (legacy hp/movement attribute keys rendered as anomalous boxes).
+      const attributeRows = ["violence", "intrigue", "presence", "body", "mind", "soul"].map((key) => ({
+        key, label: ftCap(key), value: Number(sysData.attributes?.[key]?.value ?? 0)
       }));
 
       // Aptitudes — derive from the master schema so NPCs render the full
