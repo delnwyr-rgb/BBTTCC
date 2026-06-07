@@ -147,9 +147,13 @@
         if (!actionable) continue;
         await fire(actor, it.name, "feat", () => CA.dispatchFeatureAction(actor, it));
       }
-      // weapons → engage
+      // weapons → engage. skipAreaTemplate: the v14 template preview doesn't
+      // live where the autopilot's clicker looks (Region merge) — area
+      // weapons timed out at 4s ×9 in the first full run. Template placement
+      // itself is live-validated at the table (Frag Grenade); the gauntlet
+      // tests the engage/damage path with the Sponge pre-targeted.
       for (const it of actor.items.filter(i => i.type === "weapon")) {
-        await fire(actor, it.name, "strike", () => game.fourththing.ftOpenEngageDialog(actor, it));
+        await fire(actor, it.name, "strike", () => game.fourththing.ftOpenEngageDialog(actor, it, { skipAreaTemplate: true }));
       }
       // powers → cast
       for (const it of actor.items.filter(i => i.type === "power")) {
