@@ -22095,16 +22095,17 @@ Hooks.once("ready", async () => {
   }
 });
 
-// Remap D&D5E item types that BBTTCC imports into valid Fourth Thing types.
-// "feat" → "feature", "class" → "feature", "subclass" → "feature"
-// "spell" → "power", "loot" → "gear", "equipment" → "gear"
+// Remap genuinely-foreign D&D5E item types into Fourth Thing types.
+// ⚠ HISTORY (Gauntlet find, 2026-06-07): this map used to also remap
+// feat/class/subclass/heritage/ancestry/doctrine → "feature", and the v14
+// ForcedReplacement guard made the updateSource THROW on every such creation
+// — the hook has been silently broken (error spam, never applied) since the
+// v14 migration. That breakage was load-bearing: feat/class/subclass are
+// VALID native types the whole system depends on (class detection, feat
+// routing). Re-enabling the old map would have remapped every class item to
+// "feature" and broken everything. Pruned to the actually-foreign types and
+// switched to the sanctioned "==system" ForcedReplacement form.
 const FT_TYPE_MAP = {
-  feat:      "feature",
-  class:     "feature",
-  subclass:  "feature",
-  heritage:  "feature",
-  ancestry:  "feature",
-  doctrine:  "feature",
   spell:     "power",
   loot:      "gear",
   equipment: "gear",
@@ -22116,9 +22117,11 @@ const FT_TYPE_MAP = {
 Hooks.on("preCreateItem", (item, data, options, userId) => {
   const mapped = FT_TYPE_MAP[item.type];
   if (mapped) {
-    // V14: type changes require system to also be updated with a ForcedReplacement.
-    // Pass both type and a clean system object to satisfy the validator.
-    item.updateSource({ type: mapped, system: {} }, { dryRun: false });
+    try {
+      item.updateSource({ type: mapped, "==system": {} });
+    } catch (e) {
+      console.warn(`Roll for Initiation | type remap ${item.type}→${mapped} failed for "${item.name}"`, e);
+    }
   }
 });
 

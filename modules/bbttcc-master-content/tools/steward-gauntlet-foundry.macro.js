@@ -35,22 +35,32 @@
   };
 
   const classDocs    = await getDocs("bbttcc-master-content.classes", "class");
-  const subclassDocs = await getDocs("bbttcc-master-content.subclasses", "subclass");
+  const subclassDocs = [
+    ...(await getDocs("bbttcc-master-content.subclasses", "subclass")),
+    ...(await getDocs("bbttcc-master-content.doctrines", "subclass"))   // Aurablade doctrines etc.
+  ];
   const ancestryDocs = await getDocs("bbttcc-master-content.ancestries");
   const itemsDocs    = await getDocs("bbttcc-master-content.items");
   const starterDocs  = await getDocs("fourththing.starter-manifestations");
 
-  // class ↔ subclass pairing by identifier: class "shadow_courier" →
-  // subclasses "bbttcc-shadow-courier-*".
+  // class ↔ subclass pairing by identifier CONTAINMENT — robust to prefix
+  // variants (class "shadow_courier" or "bbttcc-shadow-courier" both match
+  // subclass "bbttcc-shadow-courier-wayfarer-tongue"). First run paired ZERO
+  // because the prefix-only check missed; containment + a diagnostic now.
   const norm = (s) => String(s ?? "").toLowerCase().replace(/_/g, "-");
   const pairs = [];
+  const orphanSubs = new Set(subclassDocs);
   for (const cls of classDocs) {
-    const cid = norm(cls.system?.identifier);
-    if (!cid) continue;
-    const subs = subclassDocs.filter(s => norm(s.system?.identifier).startsWith(`bbttcc-${cid}`));
-    if (subs.length) for (const sub of subs) pairs.push({ cls, sub });
+    const base = norm(cls.system?.identifier).replace(/^bbttcc-/, "");
+    if (!base) continue;
+    const subs = subclassDocs.filter(s => norm(s.system?.identifier).includes(base)
+      || norm(s.name).includes(base.replace(/-/g, " ")));
+    if (subs.length) for (const sub of subs) { pairs.push({ cls, sub }); orphanSubs.delete(sub); }
     else pairs.push({ cls, sub: null }); // classes without subclasses still get one actor
   }
+  console.log("[foundry] pairing diagnostic:");
+  for (const p of pairs) console.log(`  ${p.cls.name} (${p.cls.system?.identifier}) ⇢ ${p.sub ? `${p.sub.name} (${p.sub.system?.identifier})` : "— no subclass found —"}`);
+  if (orphanSubs.size) console.warn(`[foundry] UNPAIRED subclasses (no class matched): ${[...orphanSubs].map(s => `${s.name} (${s.system?.identifier})`).join(" · ")}`);
 
   // ancestry bundles: species item + its heritage feat(s) by name prefix.
   const speciesDocs = ancestryDocs.filter(d => ["species", "race"].includes(d.type));
