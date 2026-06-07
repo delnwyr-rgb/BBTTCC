@@ -100,6 +100,7 @@
   for (const actor of game.actors ?? []) {
     if (!["character", "npc", "boss"].includes(actor.type)) continue;
     const itemUps = [];
+    const convOps = [];
     for (const it of actor.items) {
       const u = {};
       const sys = it.system ?? {};
@@ -131,16 +132,15 @@
         if (!cur.includes("ft-engine-note")) { u["system.description.value"] = banner + cur; tally.banners++; }
       }
 
-      // 4. feature→weapon conversion. Foundry v14: a Document type change
-      // demands the system field be FORCE-REPLACED — the "==" prefix operator
-      // — not diff-merged (first run errored "ForcedReplacement operator").
+      // 4. feature→weapon conversion. v14 saga: in-place type updates need
+      // "==system" — but even then the token-delta CASCADE (unlinked token
+      // copies on scenes) re-applies the change without the operator and
+      // crashes. Bulletproof path: DELETE + RE-CREATE with keepId — the type
+      // never "changes", so no guard fires anywhere. Queued after the loop
+      // (can't mutate actor.items mid-iteration).
       const c = CONV[it.name];
       if (c && (it.type === "feat" || it.type === "feature")) {
-        const ns = convSystem(c, sys);
-        u["type"] = "weapon";
-        u["==system"] = ns;
-        tally.conv++;
-        console.log(`[conv] ${actor.name} · ${it.name}: feature → weapon (${c.dice} ${c.dmgType}${c.shape !== "single" ? `, ${c.size}ft ${c.shape}` : ""})`);
+        convOps.push({ it, ns: convSystem(c, sys), c });
       }
 
       // 5. smell fixes (powers/weapons — skip if conversion already handled it)
@@ -157,6 +157,19 @@
     }
     if (itemUps.length && !DRY_RUN) await actor.updateEmbeddedDocuments("Item", itemUps);
     if (itemUps.length) console.log(`[items] ${actor.name}: ${itemUps.length} item update(s)`);
+
+    // feature→weapon conversions: delete + re-create (keepId) — see note above.
+    for (const op of convOps) {
+      tally.conv++;
+      console.log(`[conv] ${actor.name} · ${op.it.name}: feature → weapon (${op.c.dice} ${op.c.dmgType}${op.c.shape !== "single" ? `, ${op.c.size}ft ${op.c.shape}` : ""})`);
+      if (!DRY_RUN) {
+        const data = op.it.toObject();
+        data.type = "weapon";
+        data.system = op.ns;
+        await op.it.delete();
+        await actor.createEmbeddedDocuments("Item", [data], { keepId: true });
+      }
+    }
 
     // 6. fossils + clamps (characters)
     const au = {};

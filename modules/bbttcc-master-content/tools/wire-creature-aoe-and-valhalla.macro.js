@@ -121,6 +121,7 @@
 
   const updatesFor = (actor) => {
     const ups = [];
+    const convs = [];   // type conversions — delete+recreate (see applyTo)
     for (const it of actor.items) {
       const u = {};
       const area = AREAS[it.name];
@@ -134,17 +135,29 @@
       if (icon && isPlaceholder(it.img)) u["img"] = ICON_BASE + "/" + icon;
       const v = VALHALLA[it.name];
       if (v && it.type !== "power") {
-        // Foundry v14: type changes require the system field force-replaced
-        // (the "==" prefix operator), not diff-merged.
-        u["type"] = v.type;
-        u["==system"] = v.system;
+        // v14: in-place type updates trip the ForcedReplacement guard — and
+        // even "==system" crashes in the unlinked-token delta cascade. So:
+        // delete + re-create with keepId (type never "changes").
+        convs.push({ it, v });
         // Print the original prose so the authored stats can be verified.
         const txt = (it.system?.description?.value ?? it.system?.body ?? "").replace(/<[^>]*>/g, " ").trim();
         console.log(`── ${actor.name} · ${it.name} — ORIGINAL TEXT:\n${txt || "(no description found)"}\n`);
       }
       if (Object.keys(u).length) { u._id = it.id; ups.push(u); }
     }
-    return ups;
+    return { ups, convs };
+  };
+  const applyTo = async (actor, { ups, convs }) => {
+    if (ups.length && !DRY_RUN) await actor.updateEmbeddedDocuments("Item", ups);
+    for (const { it, v } of convs) {
+      console.log(`[conv] ${actor.name} · ${it.name}: ${it.type} → ${v.type}`);
+      if (DRY_RUN) continue;
+      const data = it.toObject();
+      data.type = v.type;
+      data.system = v.system;
+      await it.delete();
+      await actor.createEmbeddedDocuments("Item", [data], { keepId: true });
+    }
   };
 
   let worldActors = 0, worldItems = 0, packActors = 0, packItems = 0;
@@ -154,22 +167,22 @@
     const wasLocked = pack.locked;
     if (wasLocked && !DRY_RUN) await pack.configure({ locked: false });
     for (const actor of await pack.getDocuments()) {
-      const ups = updatesFor(actor);
-      if (!ups.length) continue;
-      packActors++; packItems += ups.length;
-      console.log(`[pack] ${actor.name}: ${ups.map(u => actor.items.get(u._id)?.name).join(", ")}`);
-      if (!DRY_RUN) await actor.updateEmbeddedDocuments("Item", ups);
+      const r = updatesFor(actor);
+      if (!r.ups.length && !r.convs.length) continue;
+      packActors++; packItems += r.ups.length + r.convs.length;
+      console.log(`[pack] ${actor.name}: ${[...r.ups.map(u => actor.items.get(u._id)?.name), ...r.convs.map(c => c.it.name)].join(", ")}`);
+      await applyTo(actor, r);
     }
     if (wasLocked && !DRY_RUN) await pack.configure({ locked: true });
   }
   // world NPC actors
   for (const actor of game.actors) {
     if (actor.type !== "npc" && actor.type !== "character") continue;
-    const ups = updatesFor(actor);
-    if (!ups.length) continue;
-    worldActors++; worldItems += ups.length;
-    console.log(`[world] ${actor.name}: ${ups.map(u => actor.items.get(u._id)?.name).join(", ")}`);
-    if (!DRY_RUN) await actor.updateEmbeddedDocuments("Item", ups);
+    const r = updatesFor(actor);
+    if (!r.ups.length && !r.convs.length) continue;
+    worldActors++; worldItems += r.ups.length + r.convs.length;
+    console.log(`[world] ${actor.name}: ${[...r.ups.map(u => actor.items.get(u._id)?.name), ...r.convs.map(c => c.it.name)].join(", ")}`);
+    await applyTo(actor, r);
   }
   console.log(`=== wire-creature-aoe-and-valhalla ${DRY_RUN ? "(DRY RUN)" : "(APPLIED)"} ===`);
   console.log(`world: ${worldActors} actors / ${worldItems} items · pack: ${packActors} actors / ${packItems} items`);
