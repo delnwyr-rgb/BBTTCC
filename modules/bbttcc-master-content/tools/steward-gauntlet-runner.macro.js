@@ -50,7 +50,10 @@
   const origRender  = Dialog.prototype.render;
   const origConfirm = Dialog.confirm;
   const origPrompt  = Dialog.prompt;
+  const DV2 = foundry.applications?.api?.DialogV2;
+  const origDV2 = DV2 ? { confirm: DV2.confirm, prompt: DV2.prompt, wait: DV2.wait } : null;
   let templateClicker = null;
+  let fireStartedAt = 0;   // blind-click fallback window (see clicker below)
   const installAutopilot = () => {
     Dialog.prototype.render = function (...args) {
       // Click the default button (or the first) against an off-DOM render of
@@ -69,11 +72,31 @@
     };
     Dialog.confirm = async () => true;
     Dialog.prompt  = async ({ callback } = {}) => { try { return callback?.($("<div></div>")); } catch (_e) { return null; } };
-    // Template auto-placer: whenever a preview template appears, nudge it onto
-    // the Sponge and click. (ftPlaceAreaTemplate listens on canvas.stage.)
+    // DialogV2 statics (v4) — auto-resolve confirm/prompt/wait with the
+    // default (or first) button. Many newer flows route through these.
+    if (DV2) {
+      DV2.confirm = async () => true;
+      DV2.prompt  = async (cfg = {}) => {
+        try { return (await cfg.ok?.callback?.(null, { form: { elements: {} } }, null)) ?? true; }
+        catch (_e) { return true; }
+      };
+      DV2.wait = async (cfg = {}) => {
+        const btns = Array.isArray(cfg.buttons) ? cfg.buttons : Object.values(cfg.buttons ?? {});
+        const def  = btns.find(b => b?.default) ?? btns[0];
+        try { return def?.callback ? await def.callback(null, { form: { elements: {} } }, null) : (def?.action ?? "ok"); }
+        catch (_e) { return def?.action ?? "ok"; }
+      };
+    }
+    // Template auto-placer (v4): click when a preview is detected — and BLIND
+    // CLICK once a fire has been in flight > 1.2s regardless, because the v14
+    // Region merge moved the preview away from canvas.templates.preview on
+    // some paths (first full run: 9 area-weapon strikes timed out unseen).
     templateClicker = setInterval(() => {
       try {
-        if (!canvas.templates?.preview?.children?.length) return;
+        const hasPreview = !!(canvas.templates?.preview?.children?.length
+          || canvas.activeLayer?.preview?.children?.length);
+        const stuck = fireStartedAt && (Date.now() - fireStartedAt) > 1200;
+        if (!hasPreview && !stuck) return;
         const pos = { x: spongeTok.center.x, y: spongeTok.center.y };
         const ev = { data: { button: 0, getLocalPosition: () => pos } };
         canvas.stage.emit("pointermove", ev);
@@ -85,6 +108,7 @@
     Dialog.prototype.render = origRender;
     Dialog.confirm = origConfirm;
     Dialog.prompt  = origPrompt;
+    if (DV2 && origDV2) { DV2.confirm = origDV2.confirm; DV2.prompt = origDV2.prompt; DV2.wait = origDV2.wait; }
     if (templateClicker) clearInterval(templateClicker);
   };
   const forceCloseDialogs = () => {
@@ -113,6 +137,7 @@
       await actor.update({ "system.actions.actionUsed": false, "system.actions.bonusUsed": false, "system.actions.reactionUsed": false });
     } catch (_e) {}
     setTargets([spongeTok]);
+    fireStartedAt = Date.now();
     let error = null;
     try {
       await Promise.race([
@@ -120,6 +145,7 @@
         sleep(FIRE_TIMEOUT_MS).then(() => { forceCloseDialogs(); throw new Error(`timeout ${FIRE_TIMEOUT_MS}ms (dialog stuck?)`); })
       ]);
     } catch (e) { error = String(e?.message ?? e).slice(0, 300); }
+    fireStartedAt = 0;  // stop the blind-click fallback between fires
     await sleep(450); // let async hooks + Dice So Nice settle before reading chat delta
     const chatDelta = game.messages.size - chatBefore;
     const row = { actor: actor.name.replace("GAUNTLET · ", ""), item: label, kind,
@@ -147,22 +173,32 @@
         if (!actionable) continue;
         await fire(actor, it.name, "feat", () => CA.dispatchFeatureAction(actor, it));
       }
-      // weapons → engage. skipAreaTemplate: the v14 template preview doesn't
-      // live where the autopilot's clicker looks (Region merge) — area
-      // weapons timed out at 4s ×9 in the first full run. Template placement
-      // itself is live-validated at the table (Frag Grenade); the gauntlet
-      // tests the engage/damage path with the Sponge pre-targeted.
+      // weapons → engage. Area templates RE-ENABLED in v4 — the blind-click
+      // fallback un-sticks previews the clicker can't see (v14 Region merge);
+      // a true hang still gets caught by the 4s timeout and reported.
       for (const it of actor.items.filter(i => i.type === "weapon")) {
-        await fire(actor, it.name, "strike", () => game.fourththing.ftOpenEngageDialog(actor, it, { skipAreaTemplate: true }));
+        await fire(actor, it.name, "strike", () => game.fourththing.ftOpenEngageDialog(actor, it));
       }
       // powers → cast
       for (const it of actor.items.filter(i => i.type === "power")) {
         await fire(actor, it.name, "cast", () => game.fourththing.ftOpenCastDialog?.(actor, it)
           ?? game.fourththing.castManifestation?.(actor, it));
       }
-      // one faculty test + the surge spend dialog
+      // one faculty test
       await fire(actor, "Violence test", "roll", () => game.fourththing.rolls.attributeTest(actor, { attribute: "violence" }));
-      await fire(actor, "Surge spend dialog", "surge", () => game.fourththing.surge?.openSpendDialog?.(actor));
+
+      // Surge spends (v4) — driven DIRECTLY per key through the same
+      // availability filter the dialog uses (the dialog itself isn't a V1
+      // Dialog and can't be auto-piloted: 25× silent in the first census).
+      // Top the pool up before each spend so cost gates never block coverage.
+      const surgeEntries = (game.fourththing.surge?.availableFor?.(actor) ?? [])
+        .filter(e => e.wired !== false && Number(e.tier) <= 4);
+      for (const e of surgeEntries) {
+        await fire(actor, `Surge ${e.cost}✦ ${e.key}`, "surge", async () => {
+          await actor.update({ "system.resources.surge.value": Math.max(10, Number(e.cost) || 0) });
+          return game.fourththing.surge.spend(actor, e.key, e.cost);
+        });
+      }
 
       // resets between actors: steward soma break, sponge wipe, token removal
       try { await game.fourththing.actions.somaBreak(actor, { confirmed: true }); } catch (_e) {}

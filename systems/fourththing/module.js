@@ -3673,6 +3673,22 @@ function _ftSurgeBoostBanner(shots) {
 // applies mechanical effects; `wired:false` = sets a one-shot flag at
 // flags.fourththing.surge.oneShot.<key> + posts a chat card for GM to enforce.
 // (Same flag-and-narrate pattern as Aurablade Burn one-shots, [[aurablade-burn-escalation-canon-2026-05-22]].)
+// Availability filter for the Surge spend table — ONE source of truth shared
+// by the spend dialog and the surge API (game.fourththing.surge.availableFor),
+// so the Gauntlet runner exercises exactly what players can click.
+function _ftSurgeAvailableFor(actor) {
+  return _FT_SURGE_MENU.filter(e =>
+    (!e.classFilter || _ftActorMatchesClass(actor, e.classFilter)) &&
+    (!e.forge || _ftSoulSmithForge(actor) === e.forge) &&
+    (!e.mandate || _ftHarmonyMandate(actor) === e.mandate) &&
+    (!e.trance || _ftDreamwalkerTrance(actor) === e.trance) &&
+    (!e.bulwarkPath || _ftBulwarkPath(actor) === e.bulwarkPath) &&
+    (!e.courierRoute || _ftCourierRoute(actor) === e.courierRoute) &&
+    (!e.pactDoctrine || _ftPactDoctrine(actor) === e.pactDoctrine) &&
+    (!e.wlRefraction || _ftWyrdlensRefraction(actor) === e.wlRefraction) &&
+    (!e.clDoctrine || _ftClDoctrine(actor) === e.clDoctrine));
+}
+
 const _FT_SURGE_MENU = [
   // Cost 1
   { cost: 1, key: "narrative-bonus-die", tier: 1, bucket: "narr",
@@ -12017,6 +12033,17 @@ Hooks.once("init", function () {
         const c = Number(cost ?? entry?.cost ?? 0);
         const t = Number(tier ?? _ftCasterTier(actor));
         return _ftSurgeExecute(actor, key, c, cur, t);
+      },
+      // Enumerate the spend-table entries this actor can actually use — same
+      // filter the dialog applies (class/forge/mandate/trance/path/route/
+      // doctrine/refraction). Gauntlet runner drives spends through this.
+      availableFor: (actorOrId) => {
+        const actor = typeof actorOrId === "string" ? game.actors?.get(actorOrId) : actorOrId;
+        if (!actor) return [];
+        return _ftSurgeAvailableFor(actor).map(e => ({
+          key: e.key, cost: e.cost, tier: e.tier, bucket: e.bucket,
+          label: e.label, wired: e.wired !== false
+        }));
       }
     },
     echoAssets: {
@@ -17773,17 +17800,10 @@ Hooks.once("init", function () {
       // Menu spec — every cost band has at least one Offense + Defense.
       // tier is the minimum tier required (1 = no gate). bucket determines column.
       // Class-exclusive entries (classFilter) only show for matching classes;
-      // entries with no classFilter are universal.
-      const MENU = _FT_SURGE_MENU.filter(e =>
-        (!e.classFilter || _ftActorMatchesClass(actor, e.classFilter)) &&
-        (!e.forge || _ftSoulSmithForge(actor) === e.forge) &&
-        (!e.mandate || _ftHarmonyMandate(actor) === e.mandate) &&
-        (!e.trance || _ftDreamwalkerTrance(actor) === e.trance) &&
-        (!e.bulwarkPath || _ftBulwarkPath(actor) === e.bulwarkPath) &&
-        (!e.courierRoute || _ftCourierRoute(actor) === e.courierRoute) &&
-        (!e.pactDoctrine || _ftPactDoctrine(actor) === e.pactDoctrine) &&
-        (!e.wlRefraction || _ftWyrdlensRefraction(actor) === e.wlRefraction) &&
-        (!e.clDoctrine || _ftClDoctrine(actor) === e.clDoctrine));
+      // entries with no classFilter are universal. Filter extracted to
+      // _ftSurgeAvailableFor (2026-06-07) — shared with the surge API so the
+      // Gauntlet runner can drive spends through the same availability law.
+      const MENU = _ftSurgeAvailableFor(actor);
 
       // Group by cost.
       const byCost = {};
