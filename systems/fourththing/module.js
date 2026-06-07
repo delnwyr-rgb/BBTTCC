@@ -2162,7 +2162,13 @@ function _ftTokensInTemplate(templateDoc, { excludeActorIds = new Set() } = {}) 
       // tolerance: half a grid square so a token clipping the edge counts in.
       inside = Math.hypot(cx - ox, cy - oy) <= radiusPx + (grid?.size ?? 0) / 2;
     } else if (shape && typeof shape.contains === "function") {
-      inside = shape.contains(cx - ox, cy - oy);
+      // Sample the center + 4 inset corners, not just the center: a strict
+      // center-only test made small cones (e.g. a 10ft Screams of Terror)
+      // catch nobody whose center sat a hair outside the wedge (2026-06-06).
+      const hw = (tok.w ?? grid?.size ?? 0) / 4;
+      const hh = (tok.h ?? grid?.size ?? 0) / 4;
+      inside = [[cx, cy], [cx - hw, cy - hh], [cx + hw, cy - hh], [cx - hw, cy + hh], [cx + hw, cy + hh]]
+        .some(([sx, sy]) => shape.contains(sx - ox, sy - oy));
     } else {
       // Placeable shape not ready for a cone/ray/rect — approximate by radius.
       inside = Math.hypot(cx - ox, cy - oy) <= radiusPx + (grid?.size ?? 0) / 2;
@@ -3318,6 +3324,13 @@ function _ftCasterTier(actor) {
 // Returns a CONST.TOKEN_DISPOSITIONS number, or null if undeterminable.
 function _ftActorDisposition(actor) {
   try {
+    // Prefer the combat token: surge gating mostly fires mid-combat, and
+    // getActiveTokens() only sees the *viewed* scene — a GM looking at another
+    // scene would fall through to the (often Neutral) prototype and un-foe a
+    // hostile combatant (playtest 2026-06-06: "surge still rolling for bad guys").
+    const cb = game.combat?.combatants?.find?.(c => c.actor?.id === actor?.id);
+    const dc = cb?.token?.disposition;
+    if (Number.isFinite(Number(dc))) return Number(dc);
     const tok = actor?.getActiveTokens?.()?.[0];
     const d = tok?.document?.disposition ?? tok?.disposition ?? actor?.prototypeToken?.disposition;
     return Number.isFinite(Number(d)) ? Number(d) : null;
@@ -4622,10 +4635,16 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
   // → canonical _applyDamageToActor → system.derived.integrity.value. Single-target
   // heals bake the recipient UUID (data-target-uuid) so the button needs no live
   // target (you don't have to target yourself to drink your own Stitch). Returns total.
-  const postHealCard = async (formula, label, targetUuid) => {
+  const postHealCard = async (formula, label, targetUuid, { extraTracks = [] } = {}) => {
     const roll = new Roll(formula);
     await roll.evaluate();
     const total = Math.max(0, Number(roll.total) || 0);
+    // Dual-pool heals (Stitch, playtest 2026-06-06): mirror the rolled total
+    // onto extra tracks via the multi-part rider the Apply button already
+    // understands (data-parts → per-track follow-up applies, op carries over).
+    const parts     = extraTracks.map(tr => ({ amount: total, type: "", track: tr }));
+    const partsAttr = parts.length ? ` data-parts='${JSON.stringify(parts)}'` : "";
+    const trackNote = parts.length ? ` (Integrity + ${extraTracks.map(ftCap).join(" + ")})` : "";
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),
       rolls: [roll],
@@ -4634,7 +4653,7 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
         <div class="ft-dmg-row">
           <span class="ft-dmg-label">Healing</span>
           <span class="ft-dmg-formula">${formula} = <b>${total}</b></span>
-          <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="heal" data-track="integrity"${targetUuid ? ` data-target-uuid="${targetUuid}"` : ""}>✚ Apply Healing${targetUuid ? "" : " to target"}</button>
+          <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="heal" data-track="integrity"${partsAttr}${targetUuid ? ` data-target-uuid="${targetUuid}"` : ""}>✚ Apply Healing${trackNote}${targetUuid ? "" : " to target"}</button>
         </div>
       </div>`
     });
@@ -4642,8 +4661,9 @@ async function _ftSurgeHeal(actor, effectKey, tier) {
   };
 
   if (effectKey === "stitch") {
-    const total = await postHealCard(`2d6 + ${tier}`, "Stitch", actor.uuid);
-    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Stitch — rolled <b>${total}</b> healing (roll posted below); click <b>Apply Healing</b> to mend yourself.</p>`;
+    // Stitch mends BOTH pools — the rolled total lands on Integrity AND Stress.
+    const total = await postHealCard(`2d6 + ${tier}`, "Stitch", actor.uuid, { extraTracks: ["stress"] });
+    return `<p style="margin:0.25rem 0;font-size:0.78rem;color:#78c88c">✚ Stitch — rolled <b>${total}</b> healing (roll posted below); click <b>Apply Healing</b> to mend Integrity <i>and</i> Stress.</p>`;
   }
 
   if (effectKey === "field-patch") {
@@ -6168,10 +6188,14 @@ async function _ftSurgeApplyDefenseAE(actor, effectKey, tier, chosenType) {
       img: "icons/svg/shield.svg",
       origin: actor.uuid,
       duration: { rounds: 1, turns: 1 },
+      // Target .aeBonus, NOT .value — prepareDerivedData recomputes the defense
+      // values from scratch AFTER AEs apply (stomping any .value write), then
+      // re-adds aeBonus on top. Same pattern as FT_EFFECT_MOD_AE_KEYS buffs.
+      // (Playtest 2026-06-06: Brace +1 never landed — this was why.)
       changes: [
-        { key: "system.derived.guard.value",   mode: 2, value: "1", priority: 20 },
-        { key: "system.derived.evasion.value", mode: 2, value: "1", priority: 20 },
-        { key: "system.derived.resolve.value", mode: 2, value: "1", priority: 20 }
+        { key: "system.derived.guard.aeBonus",   mode: 2, value: "1", priority: 20 },
+        { key: "system.derived.evasion.aeBonus", mode: 2, value: "1", priority: 20 },
+        { key: "system.derived.resolve.aeBonus", mode: 2, value: "1", priority: 20 }
       ],
       flags: { fourththing: { surge: { kind: "brace" } } }
     };
@@ -6587,7 +6611,9 @@ async function castManifestation(actor, item, {
   bankToCache = false,
   freeClarity = false,
   useAoeSavePrompts = true,
-  aoeApplyConfirm = false,
+  // 2026-06-06 playtest direction: manifestation damage lands on an Apply
+  // button by default (like melee strikes) — never silently auto-applied.
+  aoeApplyConfirm = true,
   rollMode = "normal"
 } = {}) {
   const rawSys = actor?.system?.system ?? actor?.system ?? {};
@@ -6971,8 +6997,12 @@ async function castManifestation(actor, item, {
       ? _ftTokensInTemplate(placedTemplate, { excludeActorIds: new Set([actor.id]) })
       : []).filter(t => t?.actor && t.actor.id !== actor.id);
     if (aoeTokenList.length === 0 && wasAreaCast) {
+      // Manual-target fallback. Used to demand 2+ picks, so an area cast whose
+      // template caught nobody + a SINGLE targeted token resolved to zero
+      // targets and silently did nothing — no damage card, no Apply button
+      // (playtest 2026-06-06: Screams of Terror, 10ft cone). One pick counts.
       const picked = Array.from(game.user?.targets ?? []).filter(t => t?.actor && t.actor.id !== actor.id);
-      if (picked.length > 1) aoeTokenList = picked;
+      if (picked.length >= 1) aoeTokenList = picked;
     }
     { const seen = new Set(); aoeTokenList = aoeTokenList.filter(t => seen.has(t.actor.id) ? false : (seen.add(t.actor.id), true)); }
 
@@ -6995,6 +7025,15 @@ async function castManifestation(actor, item, {
       }
     }
     const useAoE = aoeActors.length > 0;
+    // An area cast that resolves to NOBODY must say so — the silent version
+    // read at the table as "the system ate my damage" (playtest 2026-06-06).
+    if (wasAreaCast && !useAoE) {
+      ui.notifications?.warn(`${item.name}: the area caught no targets — no damage or effects to resolve. Place the template over tokens (or target them) and recast.`);
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div style="font-size:0.78rem;opacity:0.85">⚠ <b>${ftEscapeHtml(item.name)}</b> — area effect caught no targets. Resources were spent; GM may refund.</div>`
+      });
+    }
     // Effective DC the TARGET faces on saves — base difficulty + resonance
     // resolveDc bonus. Caster's cast roll is unaffected (already happened).
     const targetSaveCastDc = difficulty + rs.resolveDc;
@@ -7133,9 +7172,11 @@ async function castManifestation(actor, item, {
             dmgLines.push(`${aoeActor.name}: resisted — no ${dr.op === "heal" ? "healing" : "damage"}`);
           }
 
-          // States + wards — same multiplier gate. (Always immediate; the
-          // confirm step is only for damage application, not state-AE creation.)
-          if (_ftHasManifestationApplicables(mf, item)) {
+          // States + wards — same multiplier gate. (Immediate when the
+          // autoApplyEffects world setting is on — it governs manifestations
+          // too now, same contract as weapon strikes. The confirm step is only
+          // for damage application, not state-AE creation.)
+          if (_ftHasManifestationApplicables(mf, item) && (game.settings?.get?.("fourththing", "autoApplyEffects") ?? true)) {
             if (aoeMult > 0) {
               try {
                 await game.fourththing.applyManifestationStates(actor, aoeActor, item, mf, { castDc: targetSaveCastDc });
@@ -7200,7 +7241,8 @@ async function castManifestation(actor, item, {
       if (dr.op !== "none" && dr.number > 0 && damageMultiplier > 0) {
         await ftRollManifestationDamage(actor, item, dr, { multiplier: damageMultiplier });
       }
-      if (target && damageMultiplier > 0 && _ftHasManifestationApplicables(mf, item)) {
+      if (target && damageMultiplier > 0 && _ftHasManifestationApplicables(mf, item)
+          && (game.settings?.get?.("fourththing", "autoApplyEffects") ?? true)) {
         try {
           await game.fourththing.applyManifestationStates(actor, target, item, mf, { castDc: targetSaveCastDc });
         } catch (e) {
@@ -10088,8 +10130,8 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
       <span>⚖ Prompt each target for their save (instead of GM-side rolls)</span>
     </label>` : ""}
     <label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d8a0">
-      <input type="checkbox" name="aoeApplyConfirm"/>
-      <span>⚔ Pause before applying AoE damage (Apply All button)</span>
+      <input type="checkbox" name="aoeApplyConfirm" checked/>
+      <span>⚔ Apply Damage button (uncheck to auto-apply instantly)</span>
     </label>
   </div>` : "";
 
@@ -13556,8 +13598,11 @@ Hooks.once("init", function () {
     const oneShotClears = {};
     let preventDropArmed = false;
     let phoenixArmed = false;
+    // Hoisted out of the damage block: the prevent-drop floor logic below also
+    // reads ff (block-scoped const here used to throw ReferenceError the moment
+    // Prevent Drop / Relic Ward actually fired — found 2026-06-06).
+    const ff = actor.flags?.fourththing ?? {};
     if (op === "damage" && dmg > 0) {
-      const ff = actor.flags?.fourththing ?? {};
 
       // Bulwark Frame Die — Absorb: cap the hit at the pre-rolled value.
       const fa = ff.bulwark?.frameOneShot?.absorb;
@@ -15290,7 +15335,10 @@ Hooks.once("init", function () {
         const dieResults = roll.dice?.[0]?.results ?? [];
         const explosions = Math.max(0, dieResults.length - 2);
         let surgeNote = "";
-        if (explosions > 0 && actor) {
+        // Gated foes get NO surge note at all — _ftBankSurge returns 0 for them,
+        // but the old "overflow — bank full" fallback still rendered, reading at
+        // the table as "surge is still rolling for bad guys" (playtest 2026-06-06).
+        if (explosions > 0 && actor && _ftSurgeAllowed(actor)) {
           const banked = await _ftBankSurge(actor, explosions);
           if (banked > 0) surgeNote = ` <span style="color:#e8c84a;font-weight:600">+${banked} Surge banked</span>`;
           if (banked < explosions) surgeNote += ` <span style="color:rgba(232,200,74,0.55);font-style:italic">(${explosions - banked} overflow — bank full)</span>`;
@@ -15355,6 +15403,28 @@ Hooks.once("init", function () {
       "system.actions.movementUsedFt":  0,
       "system.actions.movementBudgetFt": walkFt
     });
+
+    // Expired-AE culling (playtest 2026-06-06: "Surge: Brace never drops off the
+    // States tab"). Foundry computes duration.remaining for round/turn-based AEs
+    // but never DELETES them — surge defense AEs ({rounds:1,turns:1}) lingered
+    // forever. At the start of the owner's turn, delete any owned temporary
+    // effect whose combat-time duration has run out.
+    try {
+      const expired = Array.from(actor.effects ?? []).filter(e => {
+        if (e.disabled) return false;
+        const d = e.duration;
+        return d?.type === "turns" && Number.isFinite(d.remaining) && d.remaining <= 0;
+      });
+      if (expired.length) {
+        await actor.deleteEmbeddedDocuments("ActiveEffect", expired.map(e => e.id));
+        ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div style="font-size:0.78rem;opacity:0.85">⌛ <b>${ftEscapeHtml(actor.name)}</b> — expired: ${expired.map(e => ftEscapeHtml(e.name)).join(", ")}</div>`
+        });
+      }
+    } catch (err) {
+      console.warn("Roll for Initiation | expired-AE culling failed", err);
+    }
 
     if (actor.type === "character") {
       const sys = actor.system?.system ?? actor.system;
@@ -18461,7 +18531,9 @@ Hooks.once("init", function () {
       const dieResults = roll.dice?.[0]?.results ?? [];
       const explosions = Math.max(0, dieResults.length - 2);
       let surgeNote = "";
-      if (explosions > 0) {
+      // Same foe-gate as the combat-tracker path: a disabled foe banks nothing,
+      // so render nothing (the overflow note used to leak through here too).
+      if (explosions > 0 && _ftSurgeAllowed(actor)) {
         const banked = await _ftBankSurge(actor, explosions);
         if (banked > 0) surgeNote = ` <span style="color:#e8c84a;font-weight:600">+${banked} Surge banked</span>`;
         if (banked < explosions) surgeNote += ` <span style="color:rgba(232,200,74,0.55);font-style:italic">(${explosions - banked} overflow — bank full)</span>`;
@@ -20887,8 +20959,8 @@ Hooks.once("init", function () {
             <span>⚖ Prompt each target for their save</span>
           </label>` : ""}
           <label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d8a0">
-            <input type="checkbox" name="aoeApplyConfirm"/>
-            <span>⚔ Pause before applying AoE damage (Apply All)</span>
+            <input type="checkbox" name="aoeApplyConfirm" checked/>
+            <span>⚔ Apply Damage button (uncheck to auto-apply instantly)</span>
           </label>
         </div>` : "";
 
