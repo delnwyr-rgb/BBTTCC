@@ -214,9 +214,34 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "" } 
 // invisible to the sheet (root cause of A1 — wizard armor proficiency bug).
 const _isAddChange = (change) => change?.type === "add" || change?.mode === 2;
 
+// ── Item-name aptitude grants (2026-06-06) ───────────────────────────────────
+// OWNER-TUNABLE: techniques/feats whose presence on an actor grants flat
+// aptitude bonuses, keyed by item name (lowercased prefix match — catches
+// both "Spark Sense" and "Spark Sense (1/Soma Break)"). Same code-table
+// pattern as CREW_MANEUVER_GRANTS: no LevelDB pack edit needed, the bonus
+// rides the AE column on the sheet and every skill roll automatically, and
+// vanishes if the item is removed. Playtest 2026-06-06: Spark Sense should
+// provide +1 Occult and didn't (the pack item carries no Active Effect).
+export const ITEM_APTITUDE_GRANTS = {
+  "spark sense": { occult: 1 },
+};
+function _itemAptitudeGrants(actor) {
+  const out = {};
+  for (const item of actor?.items ?? []) {
+    const n = String(item.name ?? "").toLowerCase().trim();
+    for (const [nameKey, grants] of Object.entries(ITEM_APTITUDE_GRANTS)) {
+      if (!n.startsWith(nameKey)) continue;
+      for (const [skill, v] of Object.entries(grants)) {
+        out[skill] = (out[skill] ?? 0) + (Number(v) || 0);
+      }
+    }
+  }
+  return out;
+}
+
 // Get total Active Effect bonus for a specific skill key
 export function getAEBonusForSkill(actor, skillKey) {
-  let bonus = 0;
+  let bonus = _itemAptitudeGrants(actor)[skillKey] ?? 0;
   for (const effect of actor.appliedEffects ?? []) {
     if (effect.disabled) continue;
     for (const change of effect.changes ?? []) {
@@ -251,7 +276,7 @@ export function getAEBonusForAttr(actor, attrKey) {
 
 // Get all active skill bonuses as a map { skillKey: totalBonus }
 export function getAllSkillAEBonuses(actor) {
-  const bonuses = {};
+  const bonuses = _itemAptitudeGrants(actor); // item-name grants (Spark Sense etc.)
   for (const effect of actor.appliedEffects ?? []) {
     if (effect.disabled) continue;
     for (const change of effect.changes ?? []) {

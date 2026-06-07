@@ -263,6 +263,7 @@ const FT = {
   MANIFESTATION_FUNCTIONS: {
     harm:      { label: "Harm" },
     protect:   { label: "Protect" },
+    heal:      { label: "Heal" },      // mend a creature — healing dice (2026-06-06)
     reveal:    { label: "Reveal" },
     move:      { label: "Move" },
     repair:    { label: "Repair" },
@@ -919,8 +920,29 @@ async function ftRigWeaponFire(steward, weapon) {
   return ftOpenEngageDialog(steward, weapon);
 }
 
-function ftOpenEngageDialog(actor, item, options = {}) {
+async function ftOpenEngageDialog(actor, item, options = {}) {
   if (!actor || !item) return;
+
+  // AoE weapon abilities (Frag Grenade & friends, playtest 2026-06-06): when a
+  // strikable item declares system.manifestation.area, drop the template FIRST
+  // and auto-target everyone caught — the engage flow + Apply Damage then land
+  // on the whole blast instead of one token. Same ftPlaceAreaTemplate +
+  // _ftTokensInTemplate machinery the cast path uses.
+  const _engageArea = item?.system?.manifestation?.area;
+  if (_engageArea?.shape && _engageArea.shape !== "none" && !options.skipAreaTemplate && canvas?.ready) {
+    try {
+      const placed = await ftPlaceAreaTemplate(actor, _engageArea);
+      if (placed) {
+        const toks = _ftTokensInTemplate(placed, { excludeActorIds: new Set([actor.id]) });
+        if (toks.length) {
+          game.user?.updateTokenTargets?.(toks.map(t => t.id));
+          ui.notifications?.info(`${item.name}: ${toks.length} target${toks.length === 1 ? "" : "s"} caught in the area — Apply Damage will hit all of them.`);
+        } else {
+          ui.notifications?.warn(`${item.name}: the area caught no targets — Apply Damage will use your manual targets.`);
+        }
+      }
+    } catch (e) { console.warn("Roll for Initiation | engage area template failed", e); }
+  }
 
   // B11.C rig-weapon detection. When item is a rig-weapon owned by a rig,
   // frame the dialog + chat as "fire from rig", run the destroyed guard,
@@ -8158,7 +8180,7 @@ function _ftWizV2FacultiesMap() {
 // data-tooltip on the field label; Foundry wraps long text automatically.
 const _FT_WIZ_V2_FIELD_TIPS = {
   expression: "The shape it takes in the world — what your manifestation IS. Sigil / Field / Echo (incorporeal), Vestment / Weapon / Tool / Construct (objects), Rite (ceremony), Body-shift (your form), Gate (threshold). Seeds Interaction Model and Scale defaults on the next step.",
-  function: "What it DOES to the world. Harm = damage. Protect = shield / buff. Reveal = sight / knowledge. Move = push / pull / teleport. Repair = heal. Command = compel a target (save). Transform = change a thing. Bind = restrain. Cascades the most downstream — damage roll, resolution shape, and starter conditions are auto-filled from this pick.",
+  function: "What it DOES to the world. Harm = damage. Protect = shield / buff. Heal = mend a creature (healing dice). Reveal = sight / knowledge. Move = push / pull / teleport. Repair = fix an object / structure. Command = compel a target (save). Transform = change a thing. Bind = restrain. Cascades the most downstream — damage roll, resolution shape, and starter conditions are auto-filled from this pick.",
   stability: "How long the STRUCTURE of the manifestation persists. Instant = resolves and vanishes (TCC-only 'working'). Sustained = lasts the scene with upkeep. Bound = tethered to an anchor object or place until destroyed. Enduring = self-sustaining, no upkeep. Non-TCC paths only author stable Forms (sustained / bound / enduring).",
   interactionModel: "How the world ENGAGES with this thing — its surface in the fiction. Event (no surface), Weapon (strikable → attack roll), Tool / Worn / Structure (object), Companion (autonomous), Zone (area → save), Mark (label on target → save), Transformation (changes target's form → save). Cascades into resolution shape.",
   scale: "Footprint — who and where it touches. Personal = one target / body. Scene = a room or group. Faction = one organization or alliance. Hex = a region on the campaign map. Faction and Hex are campaign-level; leave alone unless this is a Rite or Operation."
@@ -8829,6 +8851,18 @@ const _FT_WIZ_V2_CASCADES = {
     },
     protect: {
       "damageRoll.op":         "none",
+      "resolution.shape":      "auto"
+    },
+    heal: {
+      // Heal = mend a CREATURE. Healing dice land via the existing heal op
+      // (Apply Healing button / auto-apply to allies). Repair stays the
+      // object/structure-fixing cousin. (Playtest 2026-06-06: Shadow Courier
+      // wanted a healing intent for an item manifestation.)
+      "damageRoll.op":         "heal",
+      "damageRoll.number":     2,
+      "damageRoll.die":        "d6",
+      "damageRoll.attribute":  "presence",
+      "damageRoll.track":      "integrity",
       "resolution.shape":      "auto"
     },
     reveal: {
@@ -17311,8 +17345,13 @@ Hooks.once("init", function () {
       const skillKey   = target.closest("[data-skill]")?.dataset?.skill;
       const actor      = this.actor;
       if (!skillKey || !Number.isFinite(targetRank)) return;
-      const sys = actor.system?.system ?? actor.system;
-      const cur = Number(sys?.skills?.[skillKey]?.value ?? 0);
+      // Read the SOURCE rank, not prepared data — the pip display reads source
+      // (toObject), but this handler read the AE-modified prepared value, so
+      // with any skill AE active the click math used the wrong baseline and
+      // pips went dead (playtest 2026-06-06: "unable to edit Occult").
+      const srcSys = actor._source?.system?.system ?? actor._source?.system;
+      const cur = Number(srcSys?.skills?.[skillKey]?.value
+        ?? (actor.system?.system ?? actor.system)?.skills?.[skillKey]?.value ?? 0);
       // Click filled pip at current rank → decrement (standard star-rating pattern).
       const newRank = (cur === targetRank) ? Math.max(0, targetRank - 1) : Math.min(5, Math.max(0, targetRank));
       if (newRank === cur) return;
