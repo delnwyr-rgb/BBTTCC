@@ -97,8 +97,10 @@
   let captured = [];
   const origErr = console.error, origWarn = console.warn;
   const installCapture = () => {
-    console.error = (...a) => { captured.push("ERR: " + a.map(String).join(" ").slice(0, 300)); origErr(...a); };
-    console.warn  = (...a) => { const s = a.map(String).join(" "); if (/error|failed|exception/i.test(s)) captured.push("WARN: " + s.slice(0, 300)); origWarn(...a); };
+    // Deprecation notices (V1 Dialog etc.) fire app-wide — separate concern,
+    // not a per-ability failure; trial run false-positived on them.
+    console.error = (...a) => { const s = a.map(String).join(" "); if (!/deprecat/i.test(s)) captured.push("ERR: " + s.slice(0, 300)); origErr(...a); };
+    console.warn  = (...a) => { const s = a.map(String).join(" "); if (/error|failed|exception/i.test(s) && !/deprecat/i.test(s)) captured.push("WARN: " + s.slice(0, 300)); origWarn(...a); };
   };
   const removeCapture = () => { console.error = origErr; console.warn = origWarn; };
 
@@ -118,7 +120,7 @@
         sleep(FIRE_TIMEOUT_MS).then(() => { forceCloseDialogs(); throw new Error(`timeout ${FIRE_TIMEOUT_MS}ms (dialog stuck?)`); })
       ]);
     } catch (e) { error = String(e?.message ?? e).slice(0, 300); }
-    await sleep(60); // let async hooks settle
+    await sleep(450); // let async hooks + Dice So Nice settle before reading chat delta
     const chatDelta = game.messages.size - chatBefore;
     const row = { actor: actor.name.replace("GAUNTLET · ", ""), item: label, kind,
       error, captured: captured.join(" | ") || null, chatDelta };
