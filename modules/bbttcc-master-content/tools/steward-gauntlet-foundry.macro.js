@@ -72,11 +72,17 @@
   for (const p of pairs) console.log(`  ${p.cls.name} (${p.cls.system?.identifier}) ⇢ ${p.sub ? `${p.sub.name} (${p.sub.system?.identifier})` : "— no subclass found —"}`);
   if (orphanSubs.size) console.warn(`[foundry] UNPAIRED subclasses (no class matched): ${[...orphanSubs].map(s => `${s.name} (${s.system?.identifier})`).join(" · ")}`);
 
-  // ancestry bundles: species item + its heritage feat(s) by name prefix.
+  // ancestry bundles: species + ONE coherent heritage line. Pattern (Brexit):
+  // "<Species> Heritage: <H>" then "<Species> (<H>): <feat>" — first run's
+  // bare prefix match mixed Jackalope + Furrykin feats on one Cryptidkin.
   const speciesDocs = ancestryDocs.filter(d => ["species", "race"].includes(d.type));
   const ancestryBundles = speciesDocs.map(sp => {
-    const mates = ancestryDocs.filter(d => d.id !== sp.id && d.name.startsWith(sp.name));
-    return { species: sp, feats: mates.slice(0, 3) };
+    const heritage = ancestryDocs.find(d => d.id !== sp.id && d.name.startsWith(`${sp.name} Heritage:`)) ?? null;
+    const hname = heritage ? heritage.name.replace(/^.*Heritage:\s*/, "").trim() : null;
+    const hFeats = hname
+      ? ancestryDocs.filter(d => d.name.startsWith(`${sp.name} (${hname})`))
+      : ancestryDocs.filter(d => d.id !== sp.id && d.name.startsWith(sp.name)).slice(0, 2);
+    return { species: sp, feats: [heritage, ...hFeats.slice(0, 2)].filter(Boolean) };
   });
 
   // Option kits: group each pack's items as base + "(Tier N)" mates by name root.
@@ -155,9 +161,18 @@
       }
     });
 
-    // Embed the kit. toObject() so pack docs become owned copies.
+    // Embed the kit. toObject() so pack docs become owned copies — STAMPED
+    // with flags.core.sourceId so applyPathFeatures can resolve each item back
+    // to its pack folder (raw copies have no compendiumSource; first run's
+    // path-feature import bailed with "Class item has no compendium source").
     const toEmbed = [];
-    const add = (doc) => { if (doc) toEmbed.push(doc.toObject()); };
+    const add = (doc) => {
+      if (!doc) return;
+      const data = doc.toObject();
+      data.flags = foundry.utils.mergeObject(data.flags ?? {}, { core: { sourceId: doc.uuid } });
+      if (data.type === "class") data.system.levels = 20;  // L20 chassis
+      toEmbed.push(data);
+    };
     if (p.ancestry) { add(p.ancestry.species); p.ancestry.feats.forEach(add); }
     add(p.cls); add(p.sub);
     if (p.archetype) { add(p.archetype.base); p.archetype.tiers.forEach(add); }
@@ -169,8 +184,13 @@
     add(p.weapon);
     await actor.createEmbeddedDocuments("Item", toEmbed);
 
-    // Progression pass — the same machinery chargen + level-up use.
-    try { await P.applyPathFeatures?.(actor); } catch (e) { console.warn("[foundry] applyPathFeatures", p.name, e); }
+    // Progression pass — the same machinery chargen + level-up use. LOUD on
+    // failure: a steward without its class kit is a useless gauntlet entry.
+    try {
+      const pf = await P.applyPathFeatures?.(actor);
+      if (pf?.error) console.warn(`[foundry] ⚠ ${actor.name}: path features — ${pf.error}`);
+      else log(`  ${actor.name}: ${pf?.imported?.length ?? 0} path features imported${pf?.skipped?.length ? ` (${pf.skipped.length} skipped by level gate)` : ""}`);
+    } catch (e) { console.warn("[foundry] applyPathFeatures", p.name, e); }
     try { await P.applySkillGrantsFromFeatures?.(actor); } catch (e) { console.warn("[foundry] skillGrants", p.name, e); }
     try { await P.promoteStampedAptitudeAEs?.(actor); } catch (e) { console.warn("[foundry] promoteAEs", p.name, e); }
 
