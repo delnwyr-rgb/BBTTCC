@@ -46,6 +46,12 @@
     "bbttcc_feat_decisive_momentum",
     "bbttcc_feat_bladed_tempo"
   ]);
+  // NPC behavioral riders — reactive flavor the GM plays, no automation moment
+  // (reviewed from the first live audit run 2026-06-07). Name-keyed: NPC items
+  // rarely carry identifiers.
+  const NARRATIVE_NPC_NAMES = new Set([
+    "Territorial", "Skittish", "Slipped Through", "Slip the Frame", "Overkill"
+  ]);
 
   const stripHtml = (h) => String(h ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
   const FACULTIES = new Set(["violence", "intrigue", "presence", "body", "mind", "soul"]);
@@ -88,7 +94,8 @@
       const hasFlagWiring = Array.isArray(flags.rerolls) || flags.grants || flags.passives || flags.actionCost;
       const hasDice = (sys.damage?.formula) || (sys.damageRoll?.op && sys.damageRoll.op !== "none" && Number(sys.damageRoll.number) > 0);
       if (!isActionable(it) && !isRetired(it) && !hasFlagWiring && !hasDice
-          && !KNOWN_WIRED_IDS.has(id) && !NARRATIVE_BY_DESIGN.has(id)) {
+          && !KNOWN_WIRED_IDS.has(id) && !NARRATIVE_BY_DESIGN.has(id)
+          && !NARRATIVE_NPC_NAMES.has(it.name)) {
         out.unautomated.push({ where: loc, id: id || "—", smell: (desc.match(ACTIVE_RX) ?? [""])[0] });
       }
     }

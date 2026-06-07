@@ -202,6 +202,32 @@ export const FEATURE_ROUTER = {
   // Frame/Ruin → Surge fold as their own actions, not Surge spends.
   "bulwark_tier2_anchor_or_advance":   "bulwark_anchor_advance",  // T2: 1/scene stance
   "bulwark_avalanche_l13_the_breach":  "bulwark_breach",          // Avalanche L13: 1/scene line-break
+
+  // === Gauntlet fix-pass 1 (2026-06-07) — static-audit B-list routing ===
+  // Generic per-use surface: cadence + action economy parsed from the item's
+  // own prose, recovery on Scene/Soma Break. Bespoke automation can supersede
+  // any of these later by re-routing the id.
+  "human-stubborn-spark":                                 "generic_per_use",
+  "circuitborn-firmware-of-identity":                     "generic_per_use",
+  "circuitborn-synapse-yesod_diver":                      "generic_per_use",
+  "circuitborn_salvage_heritage":                         "generic_per_use",
+  "scion-light-of-harmony":                               "generic_per_use",
+  "dreamwalker-sapphire-lucid-step":                      "generic_per_use",
+  "dreamwalker-sapphire-gate-anchor":                     "generic_per_use",
+  "harmmarshal-overwatch-overwatch":                      "generic_per_use",
+  "harmmarshal-overwatch-signal-boost":                   "generic_per_use",
+  "harmmarshal-overwatch-counter-discord":                "generic_per_use",
+  "unity-field":                                          "generic_per_use",
+  "soulsmith-forge-spark-reclaimer-spark-resurrection":   "generic_per_use",
+  "soulsmith-forge-spark-reclaimer-reverse-anvil":        "generic_per_use",
+  "soulsmith-forge-spark-reclaimer-spark-reclaimer":      "generic_per_use",
+  "soulsmith-forge-spark-reclaimer-overcharge-cycle":     "generic_per_use",
+  // Resonance Channels are spent INSIDE the cast dialog — the feat items are
+  // explainers, not actions.
+  "cosmic_linguist_resonance_strain":                     "passive_info",
+  "cosmic_linguist_resonance_channel_action":             "passive_info",
+  // Civic Charge pool was purged in the Surge redesign — vestigial feat.
+  "pactkeeper_spend_civic_charge":                        "pactkeeper_civic_charge",
   // Shadow Courier — merged Shadowjack + Phantom Courier with Package mechanic
   "shadow_courier_spend_access":   "shadow_courier_spend_access",
   "shadow_courier_access_pool":    "shadow_courier_access_pool",
@@ -392,7 +418,8 @@ const RETIRED_FEATURE_HANDLERS = new Set([
   "bulwark_frame_pool",       // Bulwark Frame Dice → Surge (Absorb/Push/Anchor/Brace Wall)
   "bulwark_ruin",             // Bulwark Ruin Charges → Surge (Cat. Entry/Shockwave/Siege/Renewal)
   "bulwark_stance",           // Bulwark Cataclyst stances → Surge path kit
-  "cosmic_linguist_authority" // Editorial Authority → Surge (the 3 Edits)
+  "cosmic_linguist_authority",// Editorial Authority → Surge (the 3 Edits)
+  "pactkeeper_civic_charge"   // Civic Charge pool purged in the Surge redesign (2026-06-07)
 ]);
 
 // Raw route — resolves a feature's handler WITHOUT the retired-handler filter.
@@ -2358,6 +2385,72 @@ export async function openBulwarkStance(actor) {
     },
     default: "set"
   }).render(true);
+}
+
+// ─── Generic per-use feat handler (Gauntlet fix-pass 1, 2026-06-07) ───────────
+// One trigger surface for active-prose feats with no bespoke automation (the
+// auditor's B-list: Stubborn Spark, Firmware of Identity, the HM Overwatch and
+// SS Spark Reclaimer doctrine kits, …). Parses the cadence from the item's OWN
+// text (1/Soma · 1/scene · 1/round · 1/day), debits a per-use flag with the
+// right recovery (Soma Break clears all; Scene Break clears scene/round), and
+// charges action economy detected from prose (action / bonus / reaction).
+// Posts the ability card to chat. Faithful gate without hand-authoring a
+// bespoke dialog per feat — bespoke automation can still supersede later by
+// re-routing the id.
+export async function openGenericPerUse(actor, item) {
+  if (!actor || !item) return;
+  const rawDesc = String(item.system?.description?.value ?? item.system?.body ?? "");
+  const desc = rawDesc.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  const name = item.name;
+  const slug = String(item.system?.identifier || name).toLowerCase().replace(/[^a-z0-9]+/g, "_");
+
+  const cad =
+    /1\s*\/\s*soma|once per soma/i.test(desc)                  ? "soma"  :
+    /1\s*\/\s*scene|once per scene/i.test(desc)                ? "scene" :
+    /1\s*\/\s*(round|turn)|once per (round|turn)/i.test(desc)  ? "round" :
+    /1\s*\/\s*day|once per day/i.test(desc)                    ? "day"   : null;
+
+  const sceneId = canvas?.scene?.id ?? "none";
+  const round   = Number(game.combat?.round ?? 0);
+  const uses    = actor.flags?.fourththing?.perUse?.[slug] ?? null;
+  let spent = false;
+  if (uses && cad) {
+    if (cad === "soma")  spent = true; // cleared only by Soma Break
+    if (cad === "scene") spent = uses.sceneId === sceneId;
+    if (cad === "round") spent = !game.combat?.started ? false : (uses.sceneId === sceneId && uses.round === round);
+    if (cad === "day")   spent = uses.day === new Date().toDateString();
+  }
+  if (spent) {
+    const when = { soma: "recovers on Soma Break", scene: "1/scene — recovers on Scene/Soma Break", round: "1/round", day: "1/day" }[cad];
+    return ui.notifications?.warn(`${actor.name}: ${name} is spent (${when}).`);
+  }
+
+  const cost = /\breaction\b/i.test(desc) ? "reaction"
+             : /\bbonus action\b/i.test(desc) ? "bonus"
+             : /\bas an action\b|\baction\s*[:—－-]/i.test(desc) ? "action" : null;
+  if (cost) {
+    const ok = await _checkAndDebitActionEconomy(actor, { label: name, actionCost: cost });
+    if (!ok) return;
+  }
+  if (cad) {
+    await actor.setFlag("fourththing", `perUse.${slug}`, { cad, sceneId, round, day: new Date().toDateString(), at: Date.now() });
+  }
+
+  const cadChip = cad ? `<span class="ft-manifest-chip">${{ soma: "1/Soma Break", scene: "1/scene", round: "1/round", day: "1/day" }[cad]}</span>` : "";
+  const costChip = cost ? `<span class="ft-manifest-chip">${cost}</span>` : "";
+  const shown = desc.length > 600 ? desc.slice(0, 597) + "…" : desc;
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:#7a6aa0">
+      <div class="ft-roll-header" style="display:flex;align-items:center;gap:0.4rem">
+        <img src="${item.img}" style="width:24px;height:24px;border:none" alt=""/>
+        <span class="ft-roll-name">✦ ${name}</span>${cadChip}${costChip}
+      </div>
+      <p style="margin:0.3rem 0;font-size:0.8rem">${shown}</p>
+    </div>`
+  });
+  try { game.fourththing?.ftPlayAutoAnimation?.(actor, item, { hit: false }); } catch (_e) {}
+  return true;
 }
 
 // ─── Bulwark T2 — Anchor or Advance (wired 2026-06-07, Brexit audit) ──────────
@@ -5876,6 +5969,7 @@ export async function dispatchFeatureAction(actor, item) {
     case "bulwark_stance":         return openBulwarkStance(actor);
     case "bulwark_anchor_advance": return openBulwarkAnchorOrAdvance(actor);  // T2 signature (2026-06-07)
     case "bulwark_breach":         return openBulwarkTheBreach(actor);        // Avalanche L13 (2026-06-07)
+    case "generic_per_use":        return openGenericPerUse(actor, item);     // Gauntlet fix-pass 1 (2026-06-07)
     // Shadow Courier (Pace pool replaces legacy Access Dice — no spend/pool dialogs)
     case "shadow_courier_package":      return openShadowCourierPackage(actor);
     case "shadow_courier_crossing":     return openShadowCourierCrossing(actor);

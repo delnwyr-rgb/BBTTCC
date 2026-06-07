@@ -14171,7 +14171,10 @@ Hooks.once("init", function () {
       // Anchor-or-Advance, Avalanche L13 The Breach, Grim Persistence hold-at-1.
       "flags.fourththing.bulwark.-=anchorAdvanceUsedScene": null,
       "flags.fourththing.bulwark.-=breachUsedScene":        null,
-      "flags.fourththing.-=grimPersistenceUsed":            null
+      "flags.fourththing.-=grimPersistenceUsed":            null,
+      // Generic per-use feats (Gauntlet fix-pass 1) — Soma Break is the
+      // deepest reset: everything recovers.
+      "flags.fourththing.-=perUse":                         null
     };
 
     // Structural stress (Titanbound) is a rechargeable, not a friction counter.
@@ -14309,6 +14312,19 @@ Hooks.once("init", function () {
     if (actor.getFlag?.("fourththing", "bulwark.breachUsedScene")) {
       updates["flags.fourththing.bulwark.-=breachUsedScene"] = null;
       deltas.push("The Breach refreshed");
+    }
+    // Generic per-use feats — scene/round cadences refresh at the scene
+    // boundary; soma/day cadences hold until their own reset.
+    {
+      const pu = actor.flags?.fourththing?.perUse ?? {};
+      let refreshed = 0;
+      for (const [k, v] of Object.entries(pu)) {
+        if (v?.cad === "scene" || v?.cad === "round") {
+          updates[`flags.fourththing.perUse.-=${k}`] = null;
+          refreshed++;
+        }
+      }
+      if (refreshed) deltas.push(`${refreshed} per-scene abilit${refreshed === 1 ? "y" : "ies"} refreshed`);
     }
     if (Object.keys(updates).length) await actor.update(updates);
 
