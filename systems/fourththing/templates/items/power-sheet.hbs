@@ -55,6 +55,12 @@
       </div>
       {{/if}}
 
+      {{#if statStrip.length}}
+      <div class="ft-stat-strip">
+        {{#each statStrip as |c|}}<span class="ft-stat-chip" data-tooltip="{{c.tip}}"><span class="ft-stat-ico">{{c.icon}}</span>{{c.label}}</span>{{/each}}
+      </div>
+      {{/if}}
+
       <div class="ft-formula-preview-box">
         <span class="ft-prev-label">Roll formula</span>
         <code>2d10 + {{ftCap system.intent}} + {{ftCap system.channel}} + Clarity + {{alignMod}} (align) − Noise</code>

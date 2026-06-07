@@ -2765,6 +2765,42 @@ async function ftRollManifestationDamage(actor, item, dr, { multiplier = 1 } = {
   return roll;
 }
 
+// ── Inline stat strip (playtest 2026-06-06) ─────────────────────────────────
+// One compact at-a-glance row for usable items: action type, range, area,
+// target, damage/healing dice + type, cost, ongoing cost. Shared by the
+// weapon + power sheets and the engage dialog so the numbers live where the
+// click happens instead of scattered across tabs.
+function ftItemStatStrip(item, systemOverride = null) {
+  const sys = systemOverride ?? item?.system ?? {};
+  const mf  = sys.manifestation ?? {};
+  const dr  = ftNormalizeDamageRoll(sys);
+  const chips = [];
+  const add = (icon, label, tip) => {
+    const l = String(label ?? "").trim();
+    if (l) chips.push({ icon, label: l, tip: tip ?? "" });
+  };
+  const act = mf.activation?.type ?? sys.activation?.type;
+  if (act && act !== "none") add("⏱", ftCap(act), "Action type to use");
+  const rng = Number(mf.rangeFt) ? `${mf.rangeFt} ft`
+    : (sys.range?.short ? `${sys.range.short}/${sys.range.long ?? sys.range.short} sq` : (mf.rangeAreaText || ""));
+  add("→", rng, "Range");
+  if (mf.area?.shape && mf.area.shape !== "none") add("◎", `${mf.area.size} ft ${mf.area.shape}`, "Area of effect");
+  add("◌", mf.targetText, "Target");
+  const wDmg = String(sys.damage?.formula ?? "").trim();
+  if (wDmg) add("⚔", `${wDmg} ${sys.damage?.type ?? ""}`.trim(), "Strike damage");
+  if (dr.op === "damage" && dr.number > 0) add("⚔", `${dr.number}${dr.die}${dr.attribute ? ` + ${ftCap(dr.attribute)}` : ""} ${dr.type}`, "Damage roll");
+  if (dr.op === "heal"   && dr.number > 0) add("❤", `${dr.number}${dr.die}${dr.attribute ? ` + ${ftCap(dr.attribute)}` : ""} → ${dr.track}`, "Healing roll");
+  for (const p of (Array.isArray(sys.damageParts) ? sys.damageParts : [])) {
+    if (p?.formula) add("＋", `${p.formula} ${p.type ?? ""}`.trim(), "Extra damage part");
+  }
+  if (mf.costType && mf.costType !== "none") add("✦", [mf.costValue, ftCap(mf.costType)].filter(v => v !== "" && v != null && v !== 0).join(" "), "Cost to use");
+  else if (Number(sys.clarityRequired) > 0) add("✦", `${sys.clarityRequired} Clarity`, "Cost to use");
+  if (Number(sys.noiseGain) > 0) add("〰", `+${sys.noiseGain} Noise`, "Noise gain");
+  const ongoing = mf.maintenanceCost || (mf.maintenanceKey && mf.maintenanceKey !== "none" ? mf.maintenanceKey : "");
+  add("↻", ongoing, "Ongoing / maintenance cost");
+  return chips;
+}
+
 function ftNormalizeDamageRoll(system = {}) {
   const dr = foundry.utils.mergeObject(
     ftDamageRollDefaults(),
@@ -10212,6 +10248,14 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
     </div>
   </div>` : "";
 
+  // Inline stat strip (playtest 2026-06-06) — vitals at the moment of casting.
+  const _castStripChips = ftItemStatStrip(item);
+  const _castStatStrip = _castStripChips.length
+    ? `<div class="ft-stat-strip" style="margin:0 0 0.45rem">${_castStripChips.map(c =>
+        `<span class="ft-stat-chip" data-tooltip="${ftEscapeHtml(c.tip)}"><span class="ft-stat-ico">${c.icon}</span>${ftEscapeHtml(c.label)}</span>`
+      ).join("")}</div>`
+    : "";
+
   return `
 <div class="ft-cast-dialog">
   <div class="ft-cast-header-row">
@@ -10220,6 +10264,7 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
     <span class="ft-manifest-chip" title="${FT_KNOB_TIPS.clarity}">Base ${baseClarity} Clarity</span>
     <span class="ft-manifest-chip ft-footprint">${tierInfo.footprint}</span>
   </div>
+  ${_castStatStrip}
 
   <div class="ft-cast-grid">
     ${modeBlock}
@@ -10474,8 +10519,18 @@ function buildAttackDialogHTML(actor, item) {
        </div>`
     : "";
 
+  // Inline stat strip (playtest 2026-06-06) — the item's vitals at the moment
+  // of use: action type, range, area, target, dice, type, cost, upkeep.
+  const stripChips = ftItemStatStrip(item);
+  const statStrip = stripChips.length
+    ? `<div class="ft-stat-strip" style="margin:0 0 0.45rem">${stripChips.map(c =>
+        `<span class="ft-stat-chip" data-tooltip="${ftEscapeHtml(c.tip)}"><span class="ft-stat-ico">${c.icon}</span>${ftEscapeHtml(c.label)}</span>`
+      ).join("")}</div>`
+    : "";
+
   return `
 <div class="ft-cast-dialog" data-ft-flank-bonus="${flankBonus}">
+  ${statStrip}
   ${targetBanner}
   ${flankBanner}
   <div class="ft-cast-grid">
@@ -21535,6 +21590,7 @@ Hooks.once("init", function () {
         manifestationModeLabel: ftManifestationModeLabel(system, "power"),
         manifestationFrameChips: ftManifestationFrameChips("power", system),
         manifestationCostLabel: ftManifestationCostLabel("power", system),
+        statStrip: ftItemStatStrip(this.item, system),
         alignMod:   ftAlignmentMod(sephirah, intent, channel),
         manifestationCoachHtml: buildManifestationCoachHTML(this.item.actor, { kind: "power", system }),
         isEditable: this.isEditable,
@@ -21649,6 +21705,7 @@ Hooks.once("init", function () {
         manifestationModeLabel: ftManifestationModeLabel(system, "weapon"),
         manifestationFrameChips: ftManifestationFrameChips("weapon", system),
         manifestationCostLabel: ftManifestationCostLabel("weapon", system),
+        statStrip: ftItemStatStrip(this.item, system),
         manifestationCoachHtml: buildManifestationCoachHTML(this.item.actor, { kind: "weapon", system }),
         isEditable:  this.isEditable,
         isEditMode:  sheetMode === "edit",

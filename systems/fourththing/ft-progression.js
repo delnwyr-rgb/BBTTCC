@@ -884,14 +884,17 @@ const BBTTCC_FEATS_FOLDER = "QbGNBV70xh9pF0eh";
 async function getBBTTCCTechniqueOptions(actor) {
   const pack = game.packs.get(BBTTCC_FEATS_PACK);
   if (!pack) return { options: [], error: `Pack ${BBTTCC_FEATS_PACK} not found` };
-  const index = await pack.getIndex({ fields: ["folder", "type", "name"] });
-  const entries = index.filter(e => e.folder === BBTTCC_FEATS_FOLDER && e.type === "feat")
-                       .sort((a, b) => a.name.localeCompare(b.name));
+  // Full docs, not just the index — the picker shows each technique's synopsis
+  // (playtest 2026-06-06: players couldn't see what their choices do).
+  const docs = (await pack.getDocuments({ folder: BBTTCC_FEATS_FOLDER, type: "feat" }))
+    .sort((a, b) => a.name.localeCompare(b.name));
   const ownedNames = new Set((actor.items ?? []).map(i => i.name));
-  const options = entries.map(e => ({
-    uuid: e.uuid ?? `Compendium.${BBTTCC_FEATS_PACK}.Item.${e._id}`,
-    name: e.name,
-    owned: ownedNames.has(e.name),
+  const options = docs.map(d => ({
+    uuid: d.uuid,
+    name: d.name,
+    description: String(d.system?.description?.value ?? "")
+      .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim(),
+    owned: ownedNames.has(d.name),
   }));
   return { options, error: null };
 }
@@ -1091,15 +1094,33 @@ export async function levelUp(actor) {
   const skillNote = gainSkillPts
     ? `<p style="color:#6fcf97;font-size:0.78rem;margin:0.3rem 0">You gain <b>${gainSkillPts} aptitude points</b> to spend on the Aptitudes tab.</p>` : "";
 
-  const techOptsHtml = techOpts ? [
-    `<option value="">— skip —</option>`,
-    ...techOpts.map(t => `<option value="${t.uuid}"${t.owned ? " disabled" : ""}>${t.name}${t.owned ? " (owned)" : ""}</option>`)
-  ].join("") : "";
+  // Radio list with per-technique synopsis + 📖 content-link (playtest
+  // 2026-06-06 — replaces the bare <select> nobody could evaluate).
+  const _esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
+  const techRows = techOpts ? techOpts.map(t => {
+    const synopsis = t.description
+      ? (t.description.length > 170 ? t.description.slice(0, 167) + "…" : t.description)
+      : "";
+    return `
+      <label style="display:flex;gap:0.45rem;align-items:flex-start;padding:0.3rem 0.4rem;border-radius:4px;border:1px solid rgba(255,255,255,0.06);margin:0.15rem 0;${t.owned ? "opacity:0.45;" : "cursor:pointer;"}">
+        <input type="radio" name="techniqueChoice" value="${t.uuid}"${t.owned ? " disabled" : ""} style="margin-top:0.2rem;flex:none"/>
+        <span style="flex:1;min-width:0">
+          <span style="display:flex;justify-content:space-between;gap:0.4rem;align-items:baseline">
+            <b>${_esc(t.name)}${t.owned ? " (owned)" : ""}</b>
+            <a class="content-link" draggable="true" data-uuid="${t.uuid}" data-link data-tooltip="Open ${_esc(t.name)}" style="flex:none;font-size:0.72rem"><i class="fas fa-book-open"></i></a>
+          </span>
+          ${synopsis ? `<span style="display:block;font-size:0.72rem;opacity:0.7;line-height:1.35" data-tooltip="${_esc(t.description)}">${_esc(synopsis)}</span>` : ""}
+        </span>
+      </label>`;
+  }).join("") : "";
   const techField = techOpts ? `
         <div class="ft-cast-field" style="margin-top:0.5rem">
           <label>✦ Pick a <b>BBTTCC Technique</b> (in addition to the stat bump):</label>
-          <select name="techniqueChoice">${techOptsHtml}</select>
-          <p style="font-size:0.72rem;opacity:0.6;margin:0.2rem 0 0">${techOpts.length} available · owned techniques greyed out</p>
+          <div style="max-height:250px;overflow-y:auto;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:0.25rem 0.35rem;background:rgba(0,0,0,0.15)">
+            <label style="display:flex;gap:0.45rem;align-items:center;padding:0.25rem 0.4rem;cursor:pointer"><input type="radio" name="techniqueChoice" value="" checked/> <i>— skip —</i></label>
+            ${techRows}
+          </div>
+          <p style="font-size:0.72rem;opacity:0.6;margin:0.2rem 0 0">${techOpts.length} available · owned greyed · 📖 opens the full technique · hover a synopsis for the full text</p>
         </div>` : "";
 
   const attrNames = ["Violence", "Intrigue", "Presence", "Body", "Mind", "Soul"];
@@ -1172,7 +1193,9 @@ export async function levelUp(actor) {
 
             // Grant chosen BBTTCC Technique (aptitude-point levels only)
             let grantedTechName = null;
-            const techUuid = html.find("[name='techniqueChoice']").val();
+            // Radio list (2026-06-06): read the CHECKED radio — bare .val()
+            // on a radio group returns the first input, not the selection.
+            const techUuid = html.find("[name='techniqueChoice']:checked").val();
             if (techUuid) {
               try {
                 const src = await fromUuid(techUuid);

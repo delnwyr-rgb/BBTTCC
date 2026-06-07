@@ -5987,3 +5987,32 @@
   font-size: 0.78rem !important;
   gap: 0.25rem !important;
 }
+
+/* ── Inline stat strip (playtest 2026-06-06) ─────────────────────────────────
+   Compact at-a-glance vitals on weapon/power sheets + engage & cast dialogs:
+   action type · range · area · target · dice · type · cost · upkeep. */
+.fourththing .ft-stat-strip,
+.ft-cast-dialog .ft-stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0.35rem 0;
+}
+.fourththing .ft-stat-chip,
+.ft-cast-dialog .ft-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(160, 200, 255, 0.25);
+  background: rgba(40, 60, 90, 0.25);
+  font-size: 0.74rem;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+.fourththing .ft-stat-chip .ft-stat-ico,
+.ft-cast-dialog .ft-stat-chip .ft-stat-ico {
+  opacity: 0.8;
+  font-size: 0.78rem;
+}

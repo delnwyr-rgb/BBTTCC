@@ -405,11 +405,48 @@
       return btn(`data-fire="defense" data-key="${key}"`, "shield", `${label} ${v}`, `Roll ${label} (DC ${v})`);
     }).join("");
   }
+  // ── Hover synopsis (playtest 2026-06-06) ─────────────────────────────────
+  // Rich data-tooltip for ability buttons: name + a compact stat strip
+  // (damage/heal dice, AoE, range, cost, action type) + a trimmed description.
+  // Rendered by Foundry's TooltipManager, so light HTML is fine — all dynamic
+  // text is escaped before being wrapped in tags.
+  function synopsisFor(it) {
+    const sys = it?.system ?? {};
+    const mf  = sys.manifestation ?? {};
+    const bits = [];
+    const dr = sys.damageRoll ?? {};
+    const dmgF = String(sys.damage?.formula ?? "").trim()
+      || ((dr.op && dr.op !== "none" && Number(dr.number) > 0) ? `${dr.number}${dr.die ?? "d6"}` : "");
+    if (dmgF) {
+      const heal = dr.op === "heal";
+      const dmgT = heal ? (dr.track ?? "") : String(sys.damage?.type ?? dr.type ?? "");
+      bits.push(`${heal ? "❤" : "⚔"} ${dmgF}${dmgT ? ` ${dmgT}` : ""}`);
+    }
+    if (mf.area?.shape && mf.area.shape !== "none") bits.push(`◎ ${mf.area.size ?? "?"}ft ${mf.area.shape}`);
+    const rng = Number(mf.rangeFt) ? `${mf.rangeFt}ft`
+      : (mf.rangeAreaText ? String(mf.rangeAreaText)
+      : (sys.range?.short ? `${sys.range.short} sq` : ""));
+    if (rng) bits.push(`→ ${rng}`);
+    if (mf.costType && mf.costType !== "none") bits.push(`✦ ${[mf.costValue, mf.costType].filter(Boolean).join(" ")}`);
+    if (mf.maintenanceCost) bits.push(`↻ ${mf.maintenanceCost}`);
+    const act = mf.activation?.type ?? sys.activation?.type;
+    if (act) bits.push(`⏱ ${act}`);
+    let desc = String(sys.description?.value ?? sys.effect ?? sys.body ?? sys.flavor ?? "")
+      .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    if (desc.length > 260) desc = desc.slice(0, 257) + "…";
+    const parts = [`<b>${esc(it.name)}</b>`];
+    if (bits.length) parts.push(`<span style="opacity:.85">${esc(bits.join(" · "))}</span>`);
+    if (desc) parts.push(esc(desc));
+    return parts.join("<br>");
+  }
+
   function itemsBody(items, fireKindOf, iconOverride) {
     return items.map(it => {
       const kind = (typeof fireKindOf === "function") ? fireKindOf(it) : fireKindOf;
       const icon = iconOverride ?? abilityIcon(it);
-      return btn(`data-fire="${kind}" data-item-id="${esc(it.id)}"`, icon, it.name, it.name);
+      // data-tooltip carries the rich synopsis; title is blanked so the native
+      // browser tooltip doesn't double up with Foundry's.
+      return btn(`data-fire="${kind}" data-item-id="${esc(it.id)}" data-tooltip="${esc(synopsisFor(it))}"`, icon, it.name, "");
     }).join("");
   }
   function statesBody(steward) {
@@ -529,6 +566,51 @@
     return handler(steward);
   }
 
+  // ── Tray sizing (playtest 2026-06-06: "standard expandable, scrollable
+  //    window"). Size persists per user; ⛶ toggles an expanded preset; the
+  //    bottom-right grip drag-resizes like a normal window.
+  const SIZE_KEY = () => `bbttcc-player-hud-tray-size:${game.user?.id ?? "anon"}`;
+  function loadTraySize() {
+    try { return JSON.parse(window.localStorage?.getItem(SIZE_KEY()) || "null"); } catch (_e) { return null; }
+  }
+  function saveTraySize(sz) {
+    try { window.localStorage?.setItem(SIZE_KEY(), JSON.stringify(sz ?? null)); } catch (_e) {}
+  }
+  function applyTraySize(tray) {
+    const sz = loadTraySize();
+    if (!sz) return;
+    if (sz.expanded) {
+      tray.classList.add("is-expanded");
+      tray.style.maxHeight = "85vh";
+      return;
+    }
+    if (sz.w) tray.style.width = `${sz.w}px`;
+    if (sz.h) { tray.style.height = `${sz.h}px`; tray.style.maxHeight = "none"; }
+  }
+  function wireTrayResize(tray) {
+    const grip = tray.querySelector("[data-tray-grip]");
+    if (!grip) return;
+    grip.addEventListener("pointerdown", (ev) => {
+      ev.preventDefault(); ev.stopPropagation();
+      const startX = ev.clientX, startY = ev.clientY;
+      const r = tray.getBoundingClientRect();
+      tray.style.maxHeight = "none";
+      tray.classList.remove("is-expanded");
+      const onMove = (mv) => {
+        tray.style.width  = `${Math.max(380, r.width  + (mv.clientX - startX))}px`;
+        tray.style.height = `${Math.max(140, r.height + (mv.clientY - startY))}px`;
+      };
+      const onUp = () => {
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        const fr = tray.getBoundingClientRect();
+        saveTraySize({ w: Math.round(fr.width), h: Math.round(fr.height), expanded: false });
+      };
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+    });
+  }
+
   // ── Tray render ─────────────────────────────────────────────────────────
   function renderTray(host) {
     const steward = getSteward();
@@ -558,11 +640,33 @@
     tray.innerHTML = `
       <div class="bbttcc-player-hud-tray-header">
         <span>${esc(steward.name)}${badge}</span>
+        <span class="bbttcc-tray-winbtns">
+          <button type="button" data-tray-expand title="Expand / restore">⛶</button>
+          <button type="button" data-tray-close title="Close">✕</button>
+        </span>
       </div>
       <div class="bbttcc-player-hud-tray-body">${abilitiesTrayHTML(steward)}</div>
+      <div class="bbttcc-tray-grip" data-tray-grip title="Drag to resize"></div>
     `;
+    applyTraySize(tray);
+    wireTrayResize(tray);
 
     tray.addEventListener("click", async (ev) => {
+      // Window buttons — expand/restore preset + close.
+      if (ev.target.closest("button[data-tray-close]")) {
+        ev.preventDefault(); ev.stopPropagation();
+        tray.remove();
+        return;
+      }
+      if (ev.target.closest("button[data-tray-expand]")) {
+        ev.preventDefault(); ev.stopPropagation();
+        const nowExpanded = !tray.classList.contains("is-expanded");
+        tray.classList.toggle("is-expanded", nowExpanded);
+        tray.style.width = ""; tray.style.height = "";
+        tray.style.maxHeight = nowExpanded ? "85vh" : "";
+        saveTraySize(nowExpanded ? { expanded: true } : null);
+        return;
+      }
       // Accordion toggle
       const secBtn = ev.target.closest("button[data-sec-toggle]");
       if (secBtn) {
