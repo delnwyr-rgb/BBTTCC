@@ -4722,6 +4722,48 @@ async function _ftSurgeExecute(actor, effectKey, cost, curSurge, tier) {
   }
 }
 
+// Reposition (Surge 3✦, narr) — "Step out of the moment. Re-enter where you
+// choose." Pays its own cost (the special-case caller skips the shared
+// debit). Gauntlet find 2026-06-07: the original handler was deleted in the
+// Surge-menu rewrite but its call survived — ReferenceError on every spend.
+async function _ftRepositionInitiative(actor, cost) {
+  const rawSys = actor.system?.system ?? actor.system ?? {};
+  const cur = Number(rawSys?.resources?.surge?.value) || 0;
+  if (cur < cost) return ui.notifications?.warn(`${actor.name}: Reposition needs ${cost} Surge (has ${cur}).`);
+  const combat = game.combat;
+  const combatant = combat?.combatants?.find?.(c => c.actor?.id === actor.id);
+  if (!combat?.started || !combatant) {
+    return ui.notifications?.warn(`${actor.name}: Reposition needs an active combat with them in the tracker.`);
+  }
+  const suggested = Math.ceil((combat.combatants.contents?.[0]?.initiative ?? 20) + 1);
+  const newInit = await new Promise((resolve) => {
+    new Dialog({
+      title: "Reposition — re-enter where you choose",
+      content: `<div class="ft-cast-dialog">
+        <p style="font-size:0.78rem;opacity:0.75;margin:0 0 0.4rem;font-style:italic">Step out of the moment. Re-enter where you choose. (${cost}✦)</p>
+        <div class="ft-cast-field"><label>New initiative value</label>
+          <input type="number" name="init" value="${suggested}"/></div>
+      </div>`,
+      buttons: {
+        go:     { label: "Step out · step in", callback: (html) => resolve(Number(html.find("[name='init']").val())) },
+        cancel: { label: "Cancel",             callback: () => resolve(null) }
+      },
+      default: "go",
+      close: () => resolve(null)
+    }).render(true);
+  });
+  if (newInit === null || !Number.isFinite(newInit)) return;
+  await actor.update({ "system.resources.surge.value": cur - cost });
+  await combat.setInitiative(combatant.id, newInit);
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:#7a6aa0">
+      <div class="ft-roll-header"><span class="ft-roll-name">⏪ Reposition — ${ftEscapeHtml(actor.name)} steps out of the moment (${cost}✦)</span></div>
+      <p style="margin:0.3rem 0;font-size:0.8rem">Re-enters at initiative <b>${newInit}</b>. <span style="opacity:0.6">Surge ${cur} → ${cur - cost}.</span></p>
+    </div>`
+  });
+}
+
 // Heal dispatch — writes to canonical system.integrity.value (never the
 // derived mirror, per [[chat-apply-damage-canonical]]). Returns chat fragment
 // describing what was healed.
