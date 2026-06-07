@@ -354,6 +354,12 @@ export const NAME_ROUTER = [
   ["Denial",                     "bulwark_frame_pool"],     // Mountain L5
   ["Anchor or Advance",          "bulwark_anchor_advance"], // T2 signature (2026-06-07)
   ["The Breach",                 "bulwark_breach"],         // Avalanche L13 (2026-06-07)
+  // Gauntlet fix-pass 1 stragglers — NPC items carry no identifiers, so
+  // name-fragment routing to the generic per-use surface. "Legendary Action"
+  // deliberately catches every legendary action across the bestiary.
+  ["Legendary Action",           "generic_per_use"],
+  ["Legendary Resistance",       "generic_per_use"],
+  ["The Mop Knows",              "generic_per_use"],
   // Shadow Courier
   ["Shadow Courier: Core",       "shadow_courier_passive"],
   ["Shadow Courier: Tier",       "shadow_courier_passive"],

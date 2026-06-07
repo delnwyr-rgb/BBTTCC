@@ -100,9 +100,14 @@
       }
     }
 
-    // C. retired vocabulary
-    const rv = desc.match(RETIRED_RX);
-    if (rv) out.retiredVocab.push({ where: loc, term: rv[0] });
+    // C. retired vocabulary — skip items carrying the ⚙ ENGINE NOTE banner:
+    // the banner deliberately preserves the original prose (and itself names
+    // the retired terms to translate them), so its presence IS remediation.
+    const rawDescHtml = String((typeof sys.description === "object" ? sys.description?.value : sys.description) ?? "");
+    if (!rawDescHtml.includes("ft-engine-note")) {
+      const rv = desc.match(RETIRED_RX);
+      if (rv) out.retiredVocab.push({ where: loc, term: rv[0] });
+    }
 
     // F. broken dice
     const tryRoll = (f, label) => {
