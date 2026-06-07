@@ -321,6 +321,17 @@ export function getAllAttrAEBonuses(actor) {
 //
 // `attacked-by` direction is NOT yet wired — it requires target-context (the
 // attacker queries the target's grants). Phase 2 of the reroll sprint.
+// Id-keyed reroll grants for techniques whose imported items carry no
+// flags.fourththing.rerolls (audit 2026-06-07: Anchor Point promised
+// reroll-lowest vs push/prone/Shaken/charm and granted nothing).
+const ID_REROLL_GRANTS = {
+  bbttcc_feat_anchor_point: [
+    { context: "save",            mode: "reroll-lowest", vs: "being pushed, pulled, knocked prone, Shaken, or charmed", note: "Anchor Point" },
+    { context: "check",           mode: "reroll-lowest", vs: "being pushed, pulled, knocked prone, Shaken, or charmed", note: "Anchor Point" },
+    { context: "forced-movement", mode: "reroll-lowest", note: "Anchor Point" }
+  ]
+};
+
 export function collectRerolls(actor, query = {}) {
   const out = [];
   const items = actor?.items ?? [];
@@ -328,7 +339,8 @@ export function collectRerolls(actor, query = {}) {
   const wantSkill     = query.skill ?? null;
   const wantAttribute = query.attribute ?? null;
   for (const item of items) {
-    const grants = item.flags?.fourththing?.rerolls;
+    const grants = item.flags?.fourththing?.rerolls
+      ?? ID_REROLL_GRANTS[String(item.system?.identifier ?? "")];
     if (!Array.isArray(grants) || grants.length === 0) continue;
     for (const g of grants) {
       if (!g || !g.context || !g.mode) continue;

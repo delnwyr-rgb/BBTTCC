@@ -198,6 +198,10 @@ export const FEATURE_ROUTER = {
   "bulwark_stance_dance":          "bulwark_stance",       // Cataclyst L5
   "bulwark_core":                  "passive_info",
   "bulwark_tier":                  "passive_info",
+  // Bulwark signatures wired 2026-06-07 (Brexit audit) — these survived the
+  // Frame/Ruin → Surge fold as their own actions, not Surge spends.
+  "bulwark_tier2_anchor_or_advance":   "bulwark_anchor_advance",  // T2: 1/scene stance
+  "bulwark_avalanche_l13_the_breach":  "bulwark_breach",          // Avalanche L13: 1/scene line-break
   // Shadow Courier — merged Shadowjack + Phantom Courier with Package mechanic
   "shadow_courier_spend_access":   "shadow_courier_spend_access",
   "shadow_courier_access_pool":    "shadow_courier_access_pool",
@@ -322,6 +326,8 @@ export const NAME_ROUTER = [
   ["Stance Dance",               "bulwark_stance"],         // Cataclyst L5
   ["Shockwave Arrival",          "bulwark_ruin"],           // Avalanche L5
   ["Denial",                     "bulwark_frame_pool"],     // Mountain L5
+  ["Anchor or Advance",          "bulwark_anchor_advance"], // T2 signature (2026-06-07)
+  ["The Breach",                 "bulwark_breach"],         // Avalanche L13 (2026-06-07)
   // Shadow Courier
   ["Shadow Courier: Core",       "shadow_courier_passive"],
   ["Shadow Courier: Tier",       "shadow_courier_passive"],
@@ -2352,6 +2358,109 @@ export async function openBulwarkStance(actor) {
     },
     default: "set"
   }).render(true);
+}
+
+// ─── Bulwark T2 — Anchor or Advance (wired 2026-06-07, Brexit audit) ──────────
+// 1/scene signature stance, lasts until the end of your next turn (recovers on
+// Scene/Soma Break — flag cleared there). Anchor = immovable: an anchor-kind AE
+// the damage/CC paths already honor (kind:"anchor", ccImmune/forcedMoveImmune).
+// Advance = unstoppable path: marker AE + table directive (terrain/ZoC/reaction
+// gates are board-state the GM adjudicates). Also stamps the legacy
+// `bulwarkStance` flag that Catastrophic Entry pricing still reads.
+export async function openBulwarkAnchorOrAdvance(actor) {
+  if (!actor) return;
+  if (actor.getFlag("fourththing", "bulwark.anchorAdvanceUsedScene") === true) {
+    return ui.notifications?.warn(`${actor.name}: Anchor or Advance is spent this scene (recovers on Scene/Soma Break).`);
+  }
+  const stance = await new Promise((resolve) => {
+    new Dialog({
+      title: "Anchor or Advance — declare your inevitability (1/scene)",
+      content: `<div class="ft-cast-dialog" style="font-size:0.82rem">
+        <p style="margin:0.3rem 0"><b>⚓ Anchor.</b> Until the end of your next turn you cannot be moved against your will — forced movement, knockback, teleport-targeting, banishment, dimensional swap all fail (Heroic-DC 22 push from your size+ is the only exception).</p>
+        <p style="margin:0.3rem 0"><b>🏔 Advance.</b> Declare a destination as part of an action: difficult terrain, speed-halving conditions, opportunity reactions, and zones of control cannot stop you reaching it. You may still take damage on the way.</p>
+      </div>`,
+      buttons: {
+        anchor:  { label: "⚓ Nothing moves me",  callback: () => resolve("anchor") },
+        advance: { label: "🏔 Nothing stops me",  callback: () => resolve("advance") },
+        cancel:  { label: "Cancel",               callback: () => resolve(null) }
+      },
+      default: "anchor",
+      close: () => resolve(null)
+    }).render(true);
+  });
+  if (!stance) return;
+  const ae = stance === "anchor"
+    ? { name: "Bulwark: Anchor (immovable)", img: "icons/svg/anchor.svg", origin: actor.uuid,
+        duration: { rounds: 1, turns: 1 }, changes: [],
+        flags: { fourththing: { surge: { kind: "anchor", ccImmune: true, forcedMoveImmune: true } } } }
+    : { name: "Bulwark: Advance (unstoppable path)", img: "icons/svg/upgrade.svg", origin: actor.uuid,
+        duration: { rounds: 1, turns: 1 }, changes: [],
+        flags: { fourththing: { bulwark: { advance: true } } } };
+  try { await actor.createEmbeddedDocuments("ActiveEffect", [ae]); } catch (_e) {}
+  await actor.setFlag("fourththing", "bulwark.anchorAdvanceUsedScene", true);
+  await actor.setFlag("fourththing", "bulwarkStance", stance);
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:#5a7a9a">
+      <div class="ft-roll-header"><span class="ft-roll-name">${stance === "anchor" ? "⚓ ANCHOR" : "🏔 ADVANCE"} — ${actor.name} declares which kind of inevitability they are</span></div>
+      <p style="margin:0.3rem 0;font-size:0.8rem">${stance === "anchor"
+        ? "Until the end of their next turn: cannot be moved against their will. Forced movement, knockback, teleportation, banishment, and dimensional swaps <b>fail</b>."
+        : "Until the end of their next turn: a declared destination <b>cannot be denied</b> — difficult terrain, slows, reactions, and zones of control do not stop the movement."}</p>
+      <p style="margin:0.2rem 0;font-size:0.72rem;opacity:0.6;font-style:italic">1/scene · recovers on Scene/Soma Break.</p>
+    </div>`
+  });
+}
+
+// ─── Bulwark / Avalanche L13 — The Breach (wired 2026-06-07, Brexit audit) ────
+// 1/scene: declare a straight line; barriers break open (wood auto, stone =
+// Violence vs DC 22), creatures along the line take (Violence + Initiation)
+// kinetic and are knocked prone. Target the creatures on the line first; the
+// card carries an Apply button (GM-relay capable) and prone is auto-attempted.
+export async function openBulwarkTheBreach(actor) {
+  if (!actor) return;
+  if (actor.getFlag("fourththing", "bulwark.breachUsedScene") === true) {
+    return ui.notifications?.warn(`${actor.name}: The Breach is spent this scene (recovers on Scene/Soma Break).`);
+  }
+  const sys = actor.system?.system ?? actor.system ?? {};
+  const violence = Number(sys.attributes?.violence?.value) || 0;
+  const level    = Math.max(1, Number(sys.details?.level) || 1);
+  const dmg      = violence + level;
+  const targets  = Array.from(game.user?.targets ?? []).filter(t => t?.actor);
+  const go = await Dialog.confirm({
+    title: "The Breach — declare the line (1/scene)",
+    content: `<div style="font-size:0.82rem">
+      <p><b>Declare a straight-line path</b> within your movement. You move to the destination; the world yields:</p>
+      <ul style="margin:0.2rem 0;padding-left:1.2rem">
+        <li>Wood / doors / panes up to Hard (DC 18): <b>broken open automatically</b>.</li>
+        <li>Stone / reinforced: Violence check vs <b>Heroic DC 22</b> — fail = stop adjacent, movement ends.</li>
+        <li>Creatures (Huge or smaller) on the line: <b>${dmg} kinetic</b> (bludgeoning) and knocked <b>prone</b>. They do not block you.</li>
+      </ul>
+      <p style="opacity:0.75">${targets.length ? `Targets on the line: <b>${targets.map(t => t.actor.name).join(", ")}</b>.` : "<i>No tokens targeted — target the creatures on the line first if you want the damage card pre-aimed.</i>"}</p>
+    </div>`
+  });
+  if (!go) return;
+  await actor.setFlag("fourththing", "bulwark.breachUsedScene", true);
+  // Prone is auto-attempted (works when the firer owns/los the targets — GM);
+  // damage rides the Apply button so the existing GM-relay handles permissions.
+  const proned = [];
+  for (const t of targets) {
+    try { if (await game.fourththing?.toggleCondition?.(t.actor, "prone")) proned.push(t.actor.name); }
+    catch (_e) {}
+  }
+  ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:#9a5a3a">
+      <div class="ft-roll-header"><span class="ft-roll-name">🧱 THE BREACH — ${actor.name} declares the line. The line happens.</span></div>
+      <p style="margin:0.3rem 0;font-size:0.8rem">Wood breaks open. Stone demands <b>Violence vs DC 22</b>. Creatures on the line take the hit and are knocked <b>prone</b>${proned.length ? ` (applied: ${proned.join(", ")})` : ""}.</p>
+      <div class="ft-dmg-row">
+        <span class="ft-dmg-label">Line damage</span>
+        <span class="ft-dmg-formula">Violence ${violence} + Initiation ${level} = <b>${dmg}</b></span>
+        <span class="ft-dmg-type kinetic">Kinetic</span>
+        <button class="ft-apply-dmg-btn" data-formula="${dmg}" data-op="damage" data-track="integrity" data-damage-type="kinetic" data-damage-flavor="bludgeoning">⚔ Apply to targets</button>
+      </div>
+      <p style="margin:0.2rem 0;font-size:0.72rem;opacity:0.6;font-style:italic">1/scene · recovers on Scene/Soma Break. You arrive upright, with whatever debris a person carries when they have just opened a wall.</p>
+    </div>`
+  });
 }
 
 // ─── Shadow Courier dialogs ──────────────────────────────────────────────────
@@ -5640,6 +5749,8 @@ const LEGACY_ACTION_COST = {
   "titanbound_spend":           "bonus",
   "bulwark_spend_frame":        "bonus",
   "bulwark_stance":             "bonus",
+  "bulwark_anchor_advance":     "free",     // T2: declared "as part of any action"
+  "bulwark_breach":             "action",   // Avalanche L13: the move IS the turn
   "shadowjack_spend":           "bonus",
   "shadow_courier_spend_access":"bonus",
   // Cosmic Linguist / Wyrdlens / Dreamwalker / Pactkeeper
@@ -5763,6 +5874,8 @@ export async function dispatchFeatureAction(actor, item) {
     case "bulwark_frame_pool":     return openBulwarkFramePool(actor);
     case "bulwark_ruin":           return openBulwarkRuin(actor);
     case "bulwark_stance":         return openBulwarkStance(actor);
+    case "bulwark_anchor_advance": return openBulwarkAnchorOrAdvance(actor);  // T2 signature (2026-06-07)
+    case "bulwark_breach":         return openBulwarkTheBreach(actor);        // Avalanche L13 (2026-06-07)
     // Shadow Courier (Pace pool replaces legacy Access Dice — no spend/pool dialogs)
     case "shadow_courier_package":      return openShadowCourierPackage(actor);
     case "shadow_courier_crossing":     return openShadowCourierCrossing(actor);

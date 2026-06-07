@@ -5392,7 +5392,13 @@ async function _ftBulwarkOnDamage(damagedActor, dmg) {
   const round = Number(game.combat?.round ?? 0);
   const f = damagedActor.flags?.fourththing?.bulwark?.surgeGen ?? {};
   const count = (Number(f.round) === round) ? (Number(f.count) || 0) : 0;
-  if (inCombat && count >= 2) return; // +2 Surge / round from the eat-the-blow hook
+  // Polarity Mastery, Mountain voice (2026-06-07): the T3 generation rule's
+  // second voice raises the eat-the-blow cap from +2 to +3 per round.
+  const _polarityMountain = damagedActor.items?.some?.(i =>
+    String(i.system?.identifier ?? "") === "bulwark_tier3_polarity_mastery")
+    && (damagedActor.items?.some?.(i => i.type === "subclass" && /mountain/i.test(`${i.name} ${i.system?.identifier ?? ""}`)));
+  const _genCap = _polarityMountain ? 3 : 2;
+  if (inCombat && count >= _genCap) return; // eat-the-blow per-round cap
   const got = await _ftBankSurge(damagedActor, 1);
   if (got > 0) await damagedActor.setFlag("fourththing", "bulwark.surgeGen", { round, count: count + 1 });
 }
@@ -13337,6 +13343,32 @@ Hooks.once("init", function () {
     // Final Argument / Predator Patience: auto-hit. Surge spends overpower the gate.
     const success = (_surge.finalArgument || _predatorHit) ? true : (total >= defenseValue);
 
+    // Bulwark T3 Polarity Mastery, Avalanche voice (wired 2026-06-07 —
+    // Frame/Ruin folded into Surge): a SUCCESSFUL melee strike whose base
+    // dice (pre-explosion) show ≥ 8 banks +1 Surge, 1/round cap in combat.
+    if (success && skill === "melee") {
+      try {
+        const hasPolarity = actor.items?.some?.(i =>
+          String(i.system?.identifier ?? "") === "bulwark_tier3_polarity_mastery");
+        if (hasPolarity && baseDice.some(v => v >= 8) && _ftSurgeAllowed(actor)) {
+          const inCombat = !!game.combat?.started;
+          const round = Number(game.combat?.round ?? 0);
+          const pg = actor.flags?.fourththing?.bulwark?.polarityGen ?? {};
+          const usedThisRound = Number(pg.round) === round && pg.used === true;
+          if (!inCombat || !usedThisRound) {
+            const got = await _ftBankSurge(actor, 1);
+            if (got > 0) {
+              await actor.setFlag("fourththing", "bulwark.polarityGen", { round, used: true });
+              ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({ actor }),
+                content: `<div style="font-size:0.78rem">⛰ <b>Polarity Mastery</b> — the strike lands heavy (base die ≥ 8): <span style="color:#e8c84a;font-weight:600">+1 Surge banked</span>.</div>`
+              });
+            }
+          }
+        }
+      } catch (e) { console.warn("[ft] polarity mastery gen failed", e); }
+    }
+
     // Aurablade Mercy — Nonlethal: "next damaging hit is nonlethal" (one-shot
     // armed on the attacker). The defender doesn't know the attacker, so we
     // decide it here (attacker known) and stamp the Apply-Damage button; consume
@@ -13734,6 +13766,13 @@ Hooks.once("init", function () {
       if (track === "integrity" && ff.aurablade?.preventDropOnce) preventDropArmed = true;
       // Soul-Smith Relic of Rebirth — forged ward: same floor-at-1 behavior.
       if (track === "integrity" && ff.soulSmith?.relicWard) preventDropArmed = true;
+      // Grim Persistence (BBTTCC technique, audit 2026-06-07): once per
+      // Sanctuary, hold at 1 instead of dropping to 0. Flag clears on Soma
+      // Break (the system's deepest reset cadence).
+      if (track === "integrity" && !ff.grimPersistenceUsed
+          && actor.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_grim_persistence")) {
+        preventDropArmed = true;
+      }
       // Oldenborn Phoenix Oath — drop-to-1 + eruption, applied at the floor below.
       if (track === "integrity" && ff.ancestry?.oneShot?.phoenixOath) phoenixArmed = true;
     }
@@ -13766,9 +13805,13 @@ Hooks.once("init", function () {
       if (ff.soulSmith?.relicWard) {
         preventDropNote = " · Soul-Smith Relic: held at 1";
         oneShotClears["flags.fourththing.soulSmith.-=relicWard"] = null;
-      } else {
+      } else if (ff.aurablade?.preventDropOnce) {
         preventDropNote = " · Aurablade: held at 1";
         oneShotClears["flags.fourththing.aurablade.-=preventDropOnce"] = null;
+      } else {
+        // Grim Persistence — the only remaining armer. 1/Sanctuary.
+        preventDropNote = " · Grim Persistence: held at 1 (spent — recovers on Soma Break)";
+        oneShotClears["flags.fourththing.grimPersistenceUsed"] = true;
       }
     }
     // Oldenborn Phoenix Oath — when this hit would drop you to 0, hold at 1 and
@@ -14123,7 +14166,12 @@ Hooks.once("init", function () {
       "system.resources.forgeCharge.relicUsed": false,
       "system.resources.surge.value":          0,
       "system.derived.integrity.value":        sys.derived?.integrity?.max        ?? 16,
-      "system.derived.stress.value":           sys.derived?.stress?.max           ?? 16
+      "system.derived.stress.value":           sys.derived?.stress?.max           ?? 16,
+      // 1/scene + 1/Sanctuary recoveries (Brexit audit 2026-06-07): Bulwark T2
+      // Anchor-or-Advance, Avalanche L13 The Breach, Grim Persistence hold-at-1.
+      "flags.fourththing.bulwark.-=anchorAdvanceUsedScene": null,
+      "flags.fourththing.bulwark.-=breachUsedScene":        null,
+      "flags.fourththing.-=grimPersistenceUsed":            null
     };
 
     // Structural stress (Titanbound) is a rechargeable, not a friction counter.
@@ -14252,6 +14300,16 @@ Hooks.once("init", function () {
     const deltas  = [];
     if (newC !== curC) { updates["system.magic.clarity.value"] = newC; deltas.push(`Clarity ${curC} → ${newC}`); }
     if (newN !== curN) { updates["system.magic.noise.value"]   = newN; deltas.push(`Noise ${curN} → ${newN}`); }
+    // 1/scene recoveries (Brexit audit 2026-06-07) — Scene Break is the scene
+    // boundary, so the Bulwark signatures refresh here too.
+    if (actor.getFlag?.("fourththing", "bulwark.anchorAdvanceUsedScene")) {
+      updates["flags.fourththing.bulwark.-=anchorAdvanceUsedScene"] = null;
+      deltas.push("Anchor or Advance refreshed");
+    }
+    if (actor.getFlag?.("fourththing", "bulwark.breachUsedScene")) {
+      updates["flags.fourththing.bulwark.-=breachUsedScene"] = null;
+      deltas.push("The Breach refreshed");
+    }
     if (Object.keys(updates).length) await actor.update(updates);
 
     ChatMessage.create({
@@ -15165,6 +15223,13 @@ Hooks.once("init", function () {
       const intBracket = ftIntegrityBracketFor(this);
       const intPerLevel = intBracket.base + Math.floor(b / 2);
       sys.derived.integrity.max    = 10 + 3 * b + (charLevel - 1) * intPerLevel;
+      // Grim Persistence (BBTTCC technique): +2×level Integrity max. Wired
+      // id-keyed in the derive (audit 2026-06-07: the imported item's AE is an
+      // empty marker — changes:[] — so the bonus never landed; L20 Bulwark sat
+      // at 211 when his sheet promised 251).
+      if (this.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_grim_persistence")) {
+        sys.derived.integrity.max += 2 * charLevel;
+      }
       // Clamp value to max — `??=` only seeded when undefined, so stale values
       // from earlier maxes (e.g. NPC seeded at 120 then re-stat to 46) leaked
       // through and displayed as 120/46. Treat max as the cap on every prepare.
@@ -15237,8 +15302,14 @@ Hooks.once("init", function () {
       sys.derived.movement.climb = 0;
       sys.derived.movement.swim  = 0;
       sys.derived.movement.fly   = 0;
+      // Id-keyed movement grants for techniques whose imported AEs are empty
+      // markers (audit 2026-06-07: Fluid Footwork's "+10 ft" AE has changes:[]).
+      const FT_FEAT_MOVE_GRANTS = {
+        bbttcc_feat_fluid_footwork: { walkBonus: 10 }
+      };
       for (const item of (this.items ?? [])) {
-        const mv = item.flags?.fourththing?.passives?.movement;
+        const mv = item.flags?.fourththing?.passives?.movement
+          ?? FT_FEAT_MOVE_GRANTS[String(item.system?.identifier ?? "")];
         if (!mv) continue;
         if (mv.climbEqualsWalk) sys.derived.movement.climb = sys.derived.movement.walk;
         if (typeof mv.climb === "number") sys.derived.movement.climb = Math.max(sys.derived.movement.climb, mv.climb);
