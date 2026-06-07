@@ -920,6 +920,28 @@ async function ftRigWeaponFire(steward, weapon) {
   return ftOpenEngageDialog(steward, weapon);
 }
 
+// Cross-version user targeting (v14 removed User#updateTokenTargets — found
+// by the Steward Gauntlet runner 2026-06-07; the optional-chained call sites
+// had silently become no-ops). Newest API first, then legacy, then the
+// Token#setTarget loop that has existed forever.
+function ftSetUserTargets(tokens) {
+  const toks = (tokens ?? []).filter(Boolean);
+  try {
+    if (typeof canvas?.tokens?.setTargets === "function") {
+      return canvas.tokens.setTargets(toks, { mode: "replace" });
+    }
+    if (typeof game.user?.updateTokenTargets === "function") {
+      return game.user.updateTokenTargets(toks.map(t => t.id));
+    }
+    for (const t of Array.from(game.user?.targets ?? [])) {
+      t.setTarget?.(false, { user: game.user, releaseOthers: false, groupSelection: true });
+    }
+    for (const t of toks) {
+      t.setTarget?.(true, { user: game.user, releaseOthers: false, groupSelection: true });
+    }
+  } catch (e) { console.warn("Roll for Initiation | ftSetUserTargets failed", e); }
+}
+
 async function ftOpenEngageDialog(actor, item, options = {}) {
   if (!actor || !item) return;
 
@@ -935,7 +957,7 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
       if (placed) {
         const toks = _ftTokensInTemplate(placed, { excludeActorIds: new Set([actor.id]) });
         if (toks.length) {
-          game.user?.updateTokenTargets?.(toks.map(t => t.id));
+          ftSetUserTargets(toks);
           ui.notifications?.info(`${item.name}: ${toks.length} target${toks.length === 1 ? "" : "s"} caught in the area — Apply Damage will hit all of them.`);
         } else {
           ui.notifications?.warn(`${item.name}: the area caught no targets — Apply Damage will use your manual targets.`);
@@ -22165,7 +22187,7 @@ Hooks.on(_chatHook, (message, html) => {
         }
         await observer.update({ "system.actions.reactionUsed": true });
         const moverToken = mover.getActiveTokens?.()?.[0];
-        if (moverToken) game.user.updateTokenTargets([moverToken.id]);
+        if (moverToken) ftSetUserTargets([moverToken]);
         // skipActionGate: AoO debited reactionUsed above; the engage flow
         // must not also debit actionUsed (Action Economy canon §3).
         ftOpenEngageDialog(observer, item, { skipActionGate: true });

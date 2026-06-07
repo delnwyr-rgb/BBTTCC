@@ -29,6 +29,15 @@
   const CA = game.fourththing?._classAutomation ?? {};
   const results = [];
   const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+  // Cross-version targeting (v14 removed User#updateTokenTargets).
+  const setTargets = (toks) => {
+    try {
+      if (typeof canvas?.tokens?.setTargets === "function") return canvas.tokens.setTargets(toks, { mode: "replace" });
+      if (typeof game.user?.updateTokenTargets === "function") return game.user.updateTokenTargets(toks.map(t => t.id));
+      for (const t of Array.from(game.user?.targets ?? [])) t.setTarget?.(false, { user: game.user, releaseOthers: false, groupSelection: true });
+      for (const t of toks) t.setTarget?.(true, { user: game.user, releaseOthers: false, groupSelection: true });
+    } catch (_e) {}
+  };
 
   const roster = game.actors.filter(a => a.name.startsWith("GAUNTLET ·")
     && !["GAUNTLET · Sponge", "GAUNTLET · Ally"].includes(a.name)
@@ -101,7 +110,7 @@
     try {
       await actor.update({ "system.actions.actionUsed": false, "system.actions.bonusUsed": false, "system.actions.reactionUsed": false });
     } catch (_e) {}
-    game.user.updateTokenTargets([spongeTok.id]);
+    setTargets([spongeTok]);
     let error = null;
     try {
       await Promise.race([
