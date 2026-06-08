@@ -1576,6 +1576,10 @@
           $box.innerHTML = `<div class="rp-abilities-empty">No travel-tagged abilities on this faction's roster yet.</div>`;
           return;
         }
+        // Phase 2B: reduce-or-advantage mode + per-turn use readout (engine: api.travel.mitigation).
+        const mitApi = game.bbttcc?.api?.travel?.mitigation;
+        const mitMode = (mitApi?.getMode?.(factionId)) || "reduce";
+        const mitUses = (mitApi?.usesFor?.(factionId)) || { used: {}, perTurn: 1 };
 
         // Phase C: compute which legs each ability mitigates so the row can
         // surface "🛡 Covers leg N" badges. Match: ability.mitigates ∩ leg's
@@ -1631,10 +1635,16 @@
                     const tip = `Masks vs: ${b.vanguardMasks.join(", ")}`;
                     maskHtml = `<span class="rp-ability-mask" data-tooltip="${enc(tip)}" data-tooltip-direction="LEFT">🎭 ${enc(b.vanguardMasks.length)}</span>`;
                   }
+                  // Phase 2B: per-turn use readout (only for mitigation abilities).
+                  const left = (mitUses.perTurn || 1) - Number(mitUses.used?.[b.key] || 0);
+                  const usesHtml = (b.mitigates && b.mitigates.length)
+                    ? `<span class="rp-ability-uses" data-tooltip="Mitigation uses left this strategic turn" data-tooltip-direction="LEFT" style="opacity:0.6;font-size:0.7rem;margin-left:4px;">${left > 0 ? `${left}/${mitUses.perTurn}` : "spent"}</span>`
+                    : "";
                   return `
                     <li>
                       <span class="rp-ability-label" data-tooltip="${enc(b.body)}" data-tooltip-direction="LEFT">${enc(b.label)}</span>
                       ${coverHtml}
+                      ${usesHtml}
                       ${maskHtml}
                       <button type="button" class="rp-ability-use" data-actor="${enc(actor.id)}" data-item="${enc(b.item.id)}">Use</button>
                     </li>
@@ -1656,7 +1666,13 @@
           ? `<div class="rp-stack-mask-summary" style="display:block;" data-tooltip="Combined masks across the vanguard's available abilities. Narrative — GM arbitrates mechanical detection.">🎭 Masked vs: ${enc(Array.from(maskedSet).join(", "))}</div>`
           : "";
 
-        $box.innerHTML = html.join("") + maskSummary;
+        // Phase 2B header: reduce-or-advantage toggle (the card choice) + cadence note.
+        const modeHeaderHtml = `<div class="rp-mit-header" style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:0.76rem;">
+          <span style="opacity:0.7">Mitigation mode:</span>
+          <button type="button" class="rp-mode-toggle" data-faction="${enc(factionId)}" data-mode="${enc(mitMode)}" style="padding:2px 9px;border-radius:4px;cursor:pointer;border:1px solid #88aaff;background:#1a2438;color:#cfe0ff;">${mitMode === "advantage" ? "🎲 Advantage" : "▽ Reduce"}</button>
+          <span style="opacity:0.5;font-size:0.7rem">${mitMode === "advantage" ? "roll 2d20 keep-high; complication stays" : "blunt the complication one step"} · 1 use/ability/turn</span>
+        </div>`;
+        $box.innerHTML = modeHeaderHtml + html.join("") + maskSummary;
       }
 
       function render() {
@@ -2520,7 +2536,16 @@ if (game.bbttcc?.runVisuals) {
       const $abilitiesBox = content.querySelector('[data-role="rp-abilities"]');
       if ($abilitiesBox && !$abilitiesBox.dataset.bbttccBound) {
         $abilitiesBox.dataset.bbttccBound = "1";
-        $abilitiesBox.addEventListener("click", (ev) => {
+        $abilitiesBox.addEventListener("click", async (ev) => {
+          const modeBtn = ev.target?.closest?.(".rp-mode-toggle");
+          if (modeBtn) {
+            ev.preventDefault(); ev.stopPropagation();
+            const mitApi = game.bbttcc?.api?.travel?.mitigation;
+            const cur = modeBtn.dataset.mode || "reduce";
+            await mitApi?.setMode?.(modeBtn.dataset.faction, cur === "advantage" ? "reduce" : "advantage");
+            renderAbilities();
+            return;
+          }
           const btn = ev.target?.closest?.(".rp-ability-use");
           if (!btn) return;
           ev.preventDefault();

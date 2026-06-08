@@ -144,6 +144,18 @@
     return { turn: led.turn, used: led.used, perTurn: USES_PER_TURN };
   }
 
+  // ── reduce-or-advantage mode (per faction) ──
+  function getMode(factionId) {
+    const f = game.actors?.get(String(factionId));
+    return String(foundry.utils.getProperty(f, `flags.${MOD_TRV}.mitigationMode`) || "reduce").toLowerCase();
+  }
+  async function setMode(factionId, mode) {
+    const f = game.actors?.get(String(factionId)); if (!f) return null;
+    const m = String(mode).toLowerCase() === "advantage" ? "advantage" : "reduce";
+    await f.update({ [`flags.${MOD_TRV}.mitigationMode`]: m });
+    return m;
+  }
+
   Hooks.on("bbttcc:beforeTravel", (ctx) => {
     try {
       const faction = _factionFromCtx(ctx);
@@ -153,48 +165,53 @@
       const arch = weatherKey ? game.bbttcc?.api?.travel?.weather?.archetypes?.[weatherKey] : null;
       const terrainTags = [low(tf?.terrain?.key)].filter(Boolean);
 
-      const cover = coverageFor(faction.id, { weatherKey, terrainTags });
-      // Cadence: only abilities with a remaining use THIS strategic turn actually apply.
-      // Read-only here — uses are consumed in afterTravel so the forecast never burns them.
-      const led = _readLedger(faction);
-      const availWeather   = cover.weather.filter(a => _hasUse(led, a.key));
-      const availTerrain   = cover.terrain.filter(a => _hasUse(led, a.key));
-      const availEncounter = cover.encounter.filter(a => _hasUse(led, a.key));
-
-      // 1) Weather complication → DC. opDelta>0 = penalty (blunted one step per AVAILABLE coverer); <0 = boon.
-      let weatherDc = 0, weatherEffected = false;
-      if (arch) {
-        const opDelta = Number(arch?.travel?.opDelta ?? 0);
-        if (opDelta > 0) { weatherDc = Math.max(0, opDelta - availWeather.length); weatherEffected = availWeather.length > 0; }
-        else weatherDc = opDelta;
-      }
-
-      // 2) Terrain mitigation → −2 DC per available coverer (one effective tier), capped above tier-1.
+      const opDelta = arch ? Number(arch?.travel?.opDelta ?? 0) : 0;
       const tier = Number(ctx.terrainTier || 1);
-      const terrainStep = Math.min(availTerrain.length, Math.max(0, tier - 1));
-      const terrainDc = -2 * terrainStep;
 
-      ctx.dcMod = Number(ctx.dcMod || 0) + weatherDc + terrainDc;
+      const cover = coverageFor(faction.id, { weatherKey, terrainTags });
+      // Cadence: only abilities with a remaining use this turn may apply. Per-leg ARM override —
+      // if ctx.armedMitigation is a list, ONLY those keys may spend (Travel Console picks which to
+      // spend on which leg); null = auto-consume default. Read-only here — consumed in afterTravel.
+      const led = _readLedger(faction);
+      const armed = Array.isArray(ctx.armedMitigation) ? new Set(ctx.armedMitigation.map(low)) : null;
+      const usable = (a) => _hasUse(led, a.key) && (!armed || armed.has(low(a.key)));
+      const availWeather   = cover.weather.filter(usable);
+      const availTerrain   = cover.terrain.filter(usable);
+      const availEncounter = cover.encounter.filter(usable);
 
-      // 3) Encounter mitigation — only abilities with a use left arm the reroll.
+      // Abilities that actually act this leg (consumed whether they reduce DC or grant advantage):
+      const appliedWeather = (arch && opDelta > 0) ? availWeather : [];   // weather only has a penalty to blunt when opDelta>0
+      const appliedTerrain = (tier > 1) ? availTerrain : [];             // terrain only easable above tier 1
+      const mode = String(foundry.utils.getProperty(faction, `flags.${MOD_TRV}.mitigationMode`) || "reduce").toLowerCase();
+
+      // reduce-OR-advantage choice: "reduce" blunts the complication; "advantage" leaves the penalty
+      // but rolls 2d20 keep-high on the travel check (set ctx.travelAdvantage; travelHex honors it).
+      let weatherDc = arch ? opDelta : 0, terrainStep = 0;
+      if (mode === "advantage" && (appliedWeather.length || appliedTerrain.length)) {
+        ctx.travelAdvantage = true;                                       // penalty stays; 2d20kh in travelHex
+      } else {
+        if (arch && opDelta > 0) weatherDc = Math.max(0, opDelta - appliedWeather.length);
+        terrainStep = Math.min(appliedTerrain.length, Math.max(0, tier - 1));
+      }
+      ctx.dcMod = Number(ctx.dcMod || 0) + weatherDc + (-2 * terrainStep);
+
+      // Encounter mitigation — independent of mode; arms the travelHex reroll.
       ctx.encounterMitigation = { covered: availEncounter.length > 0, abilities: availEncounter.map(a => a.label) };
 
-      // Consume-lists drained in afterTravel (real travel only): weather/terrain consumed when they
-      // actually reduced something; encounter consumed only if the reroll fires (set in travelHex).
-      const wt = new Set();
-      if (weatherEffected) availWeather.forEach(a => wt.add(a.key));
-      if (terrainStep > 0)  availTerrain.forEach(a => wt.add(a.key));
-      ctx.__mitConsumeWT = [...wt];
+      // Consume-lists drained in afterTravel (real travel only). Weather/terrain consumed whenever they
+      // acted (reduced DC OR granted advantage); encounter consumed only if the reroll actually fires.
+      ctx.__mitConsumeWT = [...new Set([...appliedWeather, ...appliedTerrain].map(a => a.key))];
       ctx.__mitConsumeEncounter = availEncounter.map(a => a.key);
 
       ctx.weatherMitigationReport = {
-        weatherKey, archetypeTags: arch?.tags || [],
-        weatherPenaltyBase: arch ? Math.max(0, Number(arch?.travel?.opDelta ?? 0)) : 0,
+        weatherKey, archetypeTags: arch?.tags || [], mode, advantage: !!ctx.travelAdvantage,
+        weatherPenaltyBase: arch ? Math.max(0, opDelta) : 0,
         weatherDcApplied: weatherDc,
-        weatherCovered: availWeather.map(a => a.label),
+        weatherCovered: appliedWeather.map(a => a.label),
         weatherExhausted: cover.weather.length - availWeather.length,   // covered but out of uses this turn
-        terrainStep, terrainCovered: availTerrain.map(a => a.label),
-        dcDelta: weatherDc + terrainDc,
+        terrainStep, terrainCovered: appliedTerrain.map(a => a.label),
+        dcDelta: weatherDc + (-2 * terrainStep),
+        armed: armed ? [...armed] : null,
         masks: rosterAbilities(faction.id).flatMap(a => a.vanguardMasks)
       };
     } catch (e) { console.warn(TAG, "weather/terrain mitigation bridge failed", e); }
@@ -214,7 +231,7 @@
 
   function _install() {
     game.bbttcc ??= {}; game.bbttcc.api ??= {}; game.bbttcc.api.travel ??= {};
-    game.bbttcc.api.travel.mitigation = { rosterAbilities, coverageFor, coversWeather, filterByWeather, usesFor };
+    game.bbttcc.api.travel.mitigation = { rosterAbilities, coverageFor, coversWeather, filterByWeather, usesFor, getMode, setMode };
     console.log(TAG, "weather/terrain mitigation bridge ready (passive coverage v1)");
   }
   Hooks.once("ready", _install);

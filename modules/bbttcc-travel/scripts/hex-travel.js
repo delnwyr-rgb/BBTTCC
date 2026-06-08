@@ -749,7 +749,10 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     // 2) Legacy auto Scout Signs disabled (campaign tables own frequency now).
     { await _maybeAutoScoutSigns(actor, ctx, from, to); }
 
-Hooks.callAll("bbttcc:beforeTravel", ctx);
+    // Per-leg armed mitigation (Travel Console may pass an explicit ability-key list to spend on
+    // THIS leg; null = auto-consume default). The mitigation bridge reads ctx.armedMitigation.
+    ctx.armedMitigation = (opts.armedMitigation !== undefined) ? opts.armedMitigation : null;
+    Hooks.callAll("bbttcc:beforeTravel", ctx);
 
     const a = from?.center || ctx.token?.center || { x: to.center.x - 20, y: to.center.y - 20 };
     const b = to.center;
@@ -765,13 +768,15 @@ Hooks.callAll("bbttcc:beforeTravel", ctx);
     const darknessBump = darknessEncounterBoost(actor, to);
     const dc = 15 + (ctx.terrainTier * 2) + ctx.dcMod + darknessBump;
 
-    const roll = await (new Roll("1d20 + @int + @scout", { int: intrigueMod, scout: scoutRollMod })).evaluate();
+    // Advantage (reduce-or-advantage choice): a mitigation ability in "advantage" mode rolls 2d20 keep-high.
+    const rollFormula = ctx.travelAdvantage ? "2d20kh + @int + @scout" : "1d20 + @int + @scout";
+    const roll = await (new Roll(rollFormula, { int: intrigueMod, scout: scoutRollMod })).evaluate();
     let total = roll.total;
     let success = total >= dc;
     // Encounter-mitigation reroll (Wheel of Fortune T4 "Force the Reroll", mitigates:["encounter"]):
     // on a missed travel check, a covering roster ability rerolls once and keeps the better result.
     if (!success && !ctx.preventHazard && ctx.encounterMitigation?.covered) {
-      const r2 = await (new Roll("1d20 + @int + @scout", { int: intrigueMod, scout: scoutRollMod })).evaluate();
+      const r2 = await (new Roll(rollFormula, { int: intrigueMod, scout: scoutRollMod })).evaluate();
       ctx.encounterReroll = { first: total, second: r2.total, by: ctx.encounterMitigation.abilities || [] };
       if (r2.total > total) { total = r2.total; success = total >= dc; }
     }

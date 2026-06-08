@@ -248,6 +248,35 @@
         rec("F", "use resets next strategic turn", t3.weatherDcApplied === 1, `travel3 dcApplied=${t3.weatherDcApplied} (covered=[${(t3.weatherCovered || []).join(", ")}])`);
         await clearLedger();
       } catch (e) { rec("F", "cadence/use-tracking", false, `threw: ${e.message}`); }
+
+      // F13-F15 · 2B-2: reduce-or-advantage choice + per-leg ARM override
+      try {
+        const wdoc = await fromUuid(M.roles.weather.uuid);
+        const reseedW = () => wdoc.update({ [`flags.${TERR}.weather`]: { key: "dustfront", label: "Dustfront", remainingTurns: 2, ts: 0 } });
+        const travelArmed = (fromKey, toKey, armed) => travelHex({ factionId: faction.id, hexFrom: place(fromKey), hexTo: place(toKey), encounterPolicy: "skip", source: "travel-gauntlet", armedMitigation: armed });
+
+        // F13 · advantage mode — penalty stays (dcApplied=2) but the travel check rolls 2d20kh.
+        if (mit.setMode) {
+          await drainAndClear(); await reseedW();
+          await mit.setMode(faction.id, "advantage");
+          const adv = (await travel("home", "weather")).context || {};
+          const ar = adv.weatherMitigationReport || {};
+          rec("F", "advantage mode: penalty kept + 2d20kh armed", adv.travelAdvantage === true && ar.weatherDcApplied === 2 && ar.mode === "advantage",
+            `travelAdvantage=${adv.travelAdvantage} weatherDcApplied=${ar.weatherDcApplied} mode=${ar.mode}`);
+          rec("F", "getMode reflects setMode", mit.getMode?.(faction.id) === "advantage", `mode=${mit.getMode?.(faction.id)}`);
+          await mit.setMode(faction.id, "reduce");
+        } else rec("F", "(advantage mode)", false, "mitigation.setMode not installed — redeploy bridge");
+
+        // F14 · per-leg ARM override — armed:[] suppresses auto (full penalty) even with a use available;
+        //        armed:[key] spends explicitly (mitigated).
+        await drainAndClear(); await reseedW();
+        const noneR = ((await travelArmed("home", "weather", [])).context?.weatherMitigationReport) || {};
+        await reseedW();
+        const armR = ((await travelArmed("home", "weather", [M.weatherMitigationAbility])).context?.weatherMitigationReport) || {};
+        rec("F", "armed:[] suppresses, armed:[key] spends", noneR.weatherDcApplied === 2 && armR.weatherDcApplied === 1,
+          `armed[]=${noneR.weatherDcApplied} (covered=[${(noneR.weatherCovered || []).join(", ")}]) · armed[key]=${armR.weatherDcApplied} (covered=[${(armR.weatherCovered || []).join(", ")}])`);
+        await drainAndClear();
+      } catch (e) { rec("F", "2B-2 advantage/arm", false, `threw: ${e.message}`); }
     } else rec("F", "(mitigation section)", false, "game.bbttcc.api.travel.mitigation not installed — deploy travel-mitigation.bridge.js + module.json");
 
   } finally {
