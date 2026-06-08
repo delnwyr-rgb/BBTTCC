@@ -766,9 +766,17 @@ Hooks.callAll("bbttcc:beforeTravel", ctx);
     const dc = 15 + (ctx.terrainTier * 2) + ctx.dcMod + darknessBump;
 
     const roll = await (new Roll("1d20 + @int + @scout", { int: intrigueMod, scout: scoutRollMod })).evaluate();
-    const success = roll.total >= dc;
+    let total = roll.total;
+    let success = total >= dc;
+    // Encounter-mitigation reroll (Wheel of Fortune T4 "Force the Reroll", mitigates:["encounter"]):
+    // on a missed travel check, a covering roster ability rerolls once and keeps the better result.
+    if (!success && !ctx.preventHazard && ctx.encounterMitigation?.covered) {
+      const r2 = await (new Roll("1d20 + @int + @scout", { int: intrigueMod, scout: scoutRollMod })).evaluate();
+      ctx.encounterReroll = { first: total, second: r2.total, by: ctx.encounterMitigation.abilities || [] };
+      if (r2.total > total) { total = r2.total; success = total >= dc; }
+    }
     pulseToken(ctx.token ?? canvas.tokens.controlled[0] ?? canvas.tokens.placeables[0], success ? "#00FF66" : "#FF3366");
-    popupText(b, `Travel Check ${roll.total} vs DC ${dc} ${success ? "✅" : "❌"}`);
+    popupText(b, `Travel Check ${total} vs DC ${dc} ${success ? "✅" : "❌"}${ctx.encounterReroll ? " ↻" : ""}`);
 
     const travelStub = {
       active: true,
@@ -809,13 +817,13 @@ Hooks.callAll("bbttcc:beforeTravel", ctx);
       hexFrom, hexTo,
       terrain: terrFlags?.terrainType || raw || key,
       opSpent: ctx.cost,
-      roll: roll.total,
+      roll: total,
       dc,
       result: success ? "safe" : (ctx.preventHazard ? "safe-prevented" : "encounter"),
       note: encounterLabel
     });
 
-    Hooks.callAll("bbttcc:afterTravel", { ...ctx, success, rollTotal: roll.total, dc });
+    Hooks.callAll("bbttcc:afterTravel", { ...ctx, success, rollTotal: total, dc });
 
     // ---------------------------------------------------------------------------
     // Campaign Engine — OPTION B: Travel Threshold Injection
@@ -877,7 +885,7 @@ Hooks.callAll("bbttcc:beforeTravel", ctx);
       distanceUnitsLabel: ctx.distanceUnitsLabel,
       success,
       dc,
-      roll: roll.total,
+      roll: total,
       encounter,
       context: ctx
     };

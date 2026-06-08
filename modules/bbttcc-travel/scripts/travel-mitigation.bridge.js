@@ -67,20 +67,35 @@
     return out;
   }
 
+  // ── Tag-match predicates (THE single source of truth — console delegates here too) ──
+  function coversWeather(mitigates, weatherKey) {
+    const mit = (mitigates || []).map(low);
+    if (!mit.length || !weatherKey) return false;
+    if (mit.includes("weather")) return true;                 // catch-all
+    const arch = game.bbttcc?.api?.travel?.weather?.archetypes?.[weatherKey];
+    const wTags = arch && Array.isArray(arch.tags) ? arch.tags.map(low) : [];
+    return wTags.some(t => mit.includes(t));
+  }
+  // Filter arbitrary {mitigates} bonus objects by weather — used by the Travel Console's
+  // findMitigationsForWeather so forecast display + engine never drift on the match logic.
+  function filterByWeather(bonuses, weatherKey) {
+    return (Array.isArray(bonuses) ? bonuses : []).filter(b => coversWeather(b?.mitigates || [], weatherKey));
+  }
+
   // ── Which mitigation tags the roster covers for a given weather/terrain ──
   function coverageFor(factionIds, { weatherKey = null, terrainTags = [] } = {}) {
     const abilities = rosterAbilities(factionIds);
-    const arch = weatherKey ? game.bbttcc?.api?.travel?.weather?.archetypes?.[weatherKey] : null;
-    const wTags = arch && Array.isArray(arch.tags) ? arch.tags.map(low) : [];
     const tTags = (terrainTags || []).map(low);
-    const covered = { weather: [], terrain: [], all: [] };
+    const covered = { weather: [], terrain: [], encounter: [], all: [] };
     for (const ab of abilities) {
       if (!ab.mitigates.length) continue;
-      const coversWeather = !!weatherKey && (ab.mitigates.includes("weather") || wTags.some(t => ab.mitigates.includes(t)));
+      const coversWx = coversWeather(ab.mitigates, weatherKey);
       const coversTerrain = ab.mitigates.includes("terrain") || tTags.some(t => ab.mitigates.includes(t));
-      if (coversWeather) covered.weather.push(ab);
+      const coversEncounter = ab.mitigates.includes("encounter");   // meta: reroll the travel-encounter outcome
+      if (coversWx) covered.weather.push(ab);
       if (coversTerrain) covered.terrain.push(ab);
-      if (coversWeather || coversTerrain) covered.all.push(ab);
+      if (coversEncounter) covered.encounter.push(ab);
+      if (coversWx || coversTerrain || coversEncounter) covered.all.push(ab);
     }
     return covered;
   }
@@ -128,6 +143,10 @@
       const dcDelta = weatherDc + terrainDc;
       ctx.dcMod = Number(ctx.dcMod || 0) + dcDelta;
 
+      // 3) Encounter mitigation (Wheel of Fortune T4 etc.) — flag for travelHex to reroll a
+      //    missed travel check once and keep the better result. Weather/terrain-independent.
+      ctx.encounterMitigation = { covered: cover.encounter.length > 0, abilities: cover.encounter.map(a => a.label) };
+
       ctx.weatherMitigationReport = {
         weatherKey,
         archetypeTags: arch?.tags || [],
@@ -144,7 +163,7 @@
 
   function _install() {
     game.bbttcc ??= {}; game.bbttcc.api ??= {}; game.bbttcc.api.travel ??= {};
-    game.bbttcc.api.travel.mitigation = { rosterAbilities, coverageFor };
+    game.bbttcc.api.travel.mitigation = { rosterAbilities, coverageFor, coversWeather, filterByWeather };
     console.log(TAG, "weather/terrain mitigation bridge ready (passive coverage v1)");
   }
   Hooks.once("ready", _install);

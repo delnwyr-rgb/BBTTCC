@@ -210,6 +210,17 @@
         rec("F", "weather ability reduces the penalty", Number(withR.weatherDcApplied) < Number(withoutR.weatherDcApplied) && (withR.weatherCovered?.length || 0) > 0,
           `mitigated=${withR.weatherDcApplied} (covered=[${(withR.weatherCovered || []).join(", ")}]) vs unmitigated=${withoutR.weatherDcApplied}`);
       } catch (e) { rec("F", "weather mitigation apply", false, `threw: ${e.message}`); }
+
+      // F8/F9 · ENCOUNTER-REROLL (Phase 2A) — Wheel of Fortune T4 `mitigates:["encounter"]`.
+      try {
+        const cov = mit.coverageFor(faction.id, {});
+        rec("F", "coverageFor resolves encounter mitigation", (cov?.encounter?.length || 0) > 0, `encounterCovered=[${(cov?.encounter || []).map(a => a.label).join(", ")}]`);
+        // Ocean (tier 4 → DC 23) is unbeatable by 1d20+0 → guaranteed miss → reroll must fire.
+        const r = await travel("home", "ocean");
+        const em = r.context?.encounterMitigation, rr = r.context?.encounterReroll;
+        rec("F", "encounter-reroll fires on a missed check", em?.covered === true && rr && Number.isFinite(rr.first) && Number.isFinite(rr.second),
+          `covered=${em?.covered} reroll=${rr ? `first ${rr.first}→second ${rr.second} by [${(rr.by || []).join(", ")}]` : "none"} (dc23 ocean, guaranteed miss)`);
+      } catch (e) { rec("F", "encounter-reroll", false, `threw: ${e.message}`); }
     } else rec("F", "(mitigation section)", false, "game.bbttcc.api.travel.mitigation not installed — deploy travel-mitigation.bridge.js + module.json");
 
   } finally {

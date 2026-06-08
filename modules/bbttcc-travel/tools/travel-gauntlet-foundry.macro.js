@@ -57,7 +57,10 @@
   // Registry match is by item.system.identifier vs CHAR_OPT_ABILITIES — item type is irrelevant.
   const warden = await Actor.create({ name: `${PREFIX} Storm Warden`, type: "character" });
   await warden.update({ [`flags.${FCT}.factionId`]: faction.id, [`flags.${FCT}.factionName`]: faction.name });
-  await warden.createEmbeddedDocuments("Item", [{ name: "Storm Wardens — Weather Veto", type: "class", system: { identifier: "crew-storm-wardens-t2" } }]);
+  await warden.createEmbeddedDocuments("Item", [
+    { name: "Storm Wardens — Weather Veto", type: "class", system: { identifier: "crew-storm-wardens-t2" } },
+    { name: "Wheel of Fortune — Force the Reroll", type: "class", system: { identifier: "archetype-wheel-of-fortune-t4" } }   // mitigates:["encounter"]
+  ]);
 
   // ── 4. Pick distinct real hexes by terrain ──
   const used = new Set();
@@ -104,6 +107,7 @@
     factionId: faction.id,
     wardenId: warden.id,
     weatherMitigationAbility: "crew-storm-wardens-t2",
+    encounterMitigationAbility: "archetype-wheel-of-fortune-t4",
     roles: Object.fromEntries(Object.entries(roleDocs).map(([k, d]) => [k, role(d)])),
     gateStrength: 0.5,
     radiation: { radiated: 3, contaminated: 1 }, // Radiated +1 + mods 2 = 3; Contaminated +1

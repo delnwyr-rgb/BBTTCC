@@ -315,7 +315,10 @@
     };
     simulateBeforeTravelHooks(ctx);
 
-    const dc  = 15 + (tier*2) + ctx.dcMod + darknessBump(actor, curr.hex);
+    // Use ctx.terrainTier (a beforeTravel hook — rig encounterTierBias / terrain mitigation —
+    // may have downshifted it); fall back to the raw terrain tier. Was using local `tier`, so
+    // tier-based mitigation never showed in the forecast DC.
+    const dc  = 15 + (Number(ctx.terrainTier ?? tier) * 2) + ctx.dcMod + darknessBump(actor, curr.hex);
     const mod = intrigueMod(actor);
 
     const intel = intelConfidence(curr.hex);

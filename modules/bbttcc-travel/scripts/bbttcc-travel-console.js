@@ -386,15 +386,15 @@
   // archetype's `tags`, plus any bonus that mitigates "weather" (catch-all).
   function findMitigationsForWeather(weatherKey, bonuses) {
     if (!weatherKey || !Array.isArray(bonuses) || !bonuses.length) return [];
-    const archetypes = game?.bbttcc?.api?.travel?.weather?.archetypes;
-    const arch = archetypes?.[weatherKey];
-    const tags = Array.isArray(arch?.tags) ? arch.tags : [];
+    // Single source of truth: delegate the match to the engine's bridge so the forecast
+    // display and the actual travel mitigation can never drift. Inline fallback below.
+    const api = game?.bbttcc?.api?.travel?.mitigation;
+    if (typeof api?.filterByWeather === "function") return api.filterByWeather(bonuses, weatherKey);
+    const tags = Array.isArray(game?.bbttcc?.api?.travel?.weather?.archetypes?.[weatherKey]?.tags) ? game.bbttcc.api.travel.weather.archetypes[weatherKey].tags : [];
     return bonuses.filter(b => {
       const mit = b.mitigates || [];
       if (!mit.length) return false;
-      // Catch-all "weather" matches any active weather entry.
       if (mit.includes("weather")) return true;
-      // Specific tag overlap.
       for (const t of tags) if (mit.includes(t)) return true;
       return false;
     });
