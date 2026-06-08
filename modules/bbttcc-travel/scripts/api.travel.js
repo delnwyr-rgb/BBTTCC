@@ -534,7 +534,8 @@
   function readHexOnEnterBeatIdFromDrawing(toDrawing) {
     try {
       const doc = toDrawing && toDrawing.document ? toDrawing.document : toDrawing;
-      const tf = (doc && doc.getFlag) ? (doc.getFlag("bbttcc-territory") || {}) : (doc && doc.flags ? (doc.flags["bbttcc-territory"] || {}) : {});
+      // getFlag(scope) w/o a key returns undefined — read the flags object directly.
+      const tf = (doc && doc.flags ? (doc.flags["bbttcc-territory"] || {}) : {});
       const beatId = tf && tf.campaign ? (tf.campaign.onEnterBeatId || "") : "";
       return String(beatId || "").trim() || null;
     } catch (_e) { return null; }
@@ -587,8 +588,8 @@
     const key = dkey(campaignId, beatId, hexUuid, factionId);
     if (seen(key, 5000)) { log("Hex enter: dedupe skip", { beatId, hexUuid }); return; }
 
-    const terrFlags = (to && to.document && to.document.getFlag) ? (to.document.getFlag("bbttcc-territory") || {}) :
-      (to && to.document && to.document.flags) ? (to.document.flags["bbttcc-territory"] || {}) : {};
+    // getFlag(scope) w/o a key returns undefined — read the flags object directly.
+    const terrFlags = (to && to.document && to.document.flags) ? (to.document.flags["bbttcc-territory"] || {}) : {};
 
     const terrain = String((terrFlags && (terrFlags.terrainType || terrFlags.terrain)) || (ctx && ctx.terrainKey) || "wilderness").toLowerCase();
 

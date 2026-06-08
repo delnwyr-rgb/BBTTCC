@@ -34,7 +34,7 @@
   }
   function robustGetHexAtPoint(gx, gy) {
     const all = canvas.drawings.placeables
-      .filter(d => !!d.document.getFlag(MOD_TERR))
+      .filter(d => !!d.document?.flags?.[MOD_TERR])   // getFlag(scope) w/o key returns undefined — read flags directly
       .sort((a,b)=> (a.zIndex||0) - (b.zIndex||0))
       .reverse();
     for (const d of all) if (drawingContainsGlobal(d, gx, gy)) return d;
@@ -43,14 +43,14 @@
 
   // ---------- Math / helpers ----------
   function intrigueMod(actor) {
-    const fx = actor?.getFlag(MOD_FCT) || {};
+    const fx = actor?.flags?.[MOD_FCT] || {};   // getFlag(scope) w/o key returns undefined — read flags directly
     return Number(
       foundry.utils.getProperty(fx, "skills.intrigue.mod") ??
       foundry.utils.getProperty(fx, "mods.intrigue") ?? 0
     );
   }
   function darknessBump(actor, hexDrawing) {
-    const fx = actor?.getFlag(MOD_FCT) || {};
+    const fx = actor?.flags?.[MOD_FCT] || {};   // getFlag(scope) w/o key returns undefined — read flags directly
     const regionId = hexDrawing?.id || "global";
     const regional = foundry.utils.getProperty(fx, `darkness.${regionId}`) ?? 0;
     const global   = foundry.utils.getProperty(fx, `darkness.global`) ?? 0;
@@ -264,7 +264,7 @@
   function addHexToPath(hexDrawing) {
     if (!ACTIVE) return;
     const center = hexDrawing.center;
-    const hasFlags = !!hexDrawing?.document?.getFlag(MOD_TERR);
+    const hasFlags = !!hexDrawing?.document?.flags?.[MOD_TERR];   // getFlag(scope) w/o key returns undefined — read flags directly
     // use engine helper if flags exist; else safe defaults
     const specFull = hasFlags && getHexTerrainSpec ? getHexTerrainSpec(hexDrawing)
       : { key:"unknown", spec: { cost: { economy:10 }, tier: 1 }, flags: { terrainType: "Unknown" } };
