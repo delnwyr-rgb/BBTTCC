@@ -7148,9 +7148,12 @@ const CREW_MANEUVER_GRANTS = {
   "Cultural Ambassadors": ["flash_bargain", "empathic_surge", "counter_propaganda_wave", "flash_interdict", "unity_surge"],
   "Diplomatic Envoys":    ["flash_bargain", "empathic_surge", "moral_high_ground", "temporal_armistice", "engine_of_absolution"],
   "Survivors/Militia":    ["rally_the_line", "patch_the_breach", "last_stand_banner", "defender_s_reversal", "logistical_surge"],
-  "Abyssal Cartographer": ["smoke_and_mirrors", "psychic_disruption", "chrono_loop_command", "reality_hack"],
+  // Canonical compendium names are PLURAL ("Abyssal Cartographers"/"Gridbreakers") —
+  // ftNormalizeAssetName strips "Crew Type:"/"(Tier N)" but not the plural, so the
+  // grant key must match the pack form or the grant silently never fires (raid-gauntlet audit 2026-06-07).
+  "Abyssal Cartographers": ["smoke_and_mirrors", "psychic_disruption", "chrono_loop_command", "reality_hack"],
   "Ashbound Survivors":   ["patch_the_breach", "last_stand_banner", "quantum_shield", "bless_the_fallen", "logistical_surge"],
-  "Gridbreaker":          ["signal_hijack", "flash_interdict", "industrial_sabotage", "overclock_the_golems", "void_signal_collapse"],
+  "Gridbreakers":         ["signal_hijack", "flash_interdict", "industrial_sabotage", "overclock_the_golems", "void_signal_collapse"],
   "Ironbound Ascendants": ["suppressive_fire", "supply_overrun", "tactical_overwatch", "echo_strike_protocol", "siege_breaker_volley", "ego_breaker"],
   "Storm Wardens":        ["rally_the_line", "quantum_shield", "radiant_retaliation", "faithful_intervention", "harmonic_chant"],
   "Verdant Stalkers":     ["saboteur_s_edge", "signal_hijack", "psychic_disruption", "overclock_the_golems"]
@@ -7164,7 +7167,8 @@ const OCCULT_MANEUVER_GRANTS = {
   "Gnostic":            ["counter_propaganda_wave", "moral_high_ground", "reality_hack", "smoke_and_mirrors"],
   "Goetic Summoner":    ["qliphothic_gambit", "psychic_disruption", "ego_dragon_echo", "ego_breaker"],
   "Rosicrucian":        ["faithful_intervention", "harmonic_chant", "quantum_shield", "radiant_retaliation"],
-  "Biomancer":          ["bless_the_fallen", "faithful_intervention", "radiant_retaliation", "empathic_surge"],
+  // Compendium item is "Biomancer/Fleshcrafter" — key must carry the subtitle or the grant never fires (raid-gauntlet audit 2026-06-07).
+  "Biomancer/Fleshcrafter": ["bless_the_fallen", "faithful_intervention", "radiant_retaliation", "empathic_surge"],
   "Exorcist/Purifier":  ["radiant_retaliation", "bless_the_fallen", "crown_of_mercy", "harmonic_chant"],
   "Prophet/Oracle":     ["faithful_intervention", "moral_high_ground", "crown_of_mercy", "prayer_in_the_smoke"],
   "Shaman":             ["prayer_in_the_smoke", "harmonic_chant", "radiant_retaliation", "empathic_surge"]
@@ -7289,16 +7293,23 @@ Hooks.once("ready", () => {
       rosterClasses: (f) => Array.from(_factionRosterClasses(f)),     // class display names on the faction's roster
       factionHasClass: (f, cls) => _factionHasClass(f, cls)          // is a given class on the roster? (for class gates)
     };
+    // The full use-gate (tier + crew/occult/class grant + doctrine + availability + roster + rig
+    // role) — exposed for the raid-gauntlet runner's gate assertions (attacker can-use vs tier probe).
+    game.bbttcc.api.raid.canUseManeuver = (f, mKey, opts = {}) => {
+      try { return _canFactionUseManeuver(f, mKey, opts); } catch (e) { return { ok: false, reason: String(e?.message ?? e) }; }
+    };
     // Cache invalidation: a roster's classes or a faction's crews can change at any time.
     for (const h of ["createItem", "deleteItem", "updateItem", "updateActor", "createActor", "deleteActor"]) Hooks.on(h, _bumpGrantVer);
     console.log("[bbttcc-raid] crew/class→maneuver grants ready (game.bbttcc.api.raid.crewGrants).");
   } catch (e) { console.warn("[bbttcc-raid] crewGrants expose failed", e); }
 });
 
-function _canFactionUseManeuver(factionActor, mKey, { side="att", activityKey="", targetType="", rigCombatCtx=null } = {}){
+function _canFactionUseManeuver(factionActor, mKey, { side="att", activityKey="", targetType="", rigCombatCtx=null, ignoreGM=false } = {}){
   if (!factionActor || !mKey) return { ok:true, reason:"" }; // fail-open to avoid breakage
   const e = _effectForManeuverKey(mKey);
-  const isGMView = !!_rcIsGMUser();
+  // ignoreGM forces the player-facing gate path (the GM normally bypasses all gates) — used by
+  // the raid-gauntlet runner to assert tier/grant gating from a GM client.
+  const isGMView = ignoreGM ? false : !!_rcIsGMUser();
 
   // 0) Tier SCALE gate FIRST — crew grants arm ACCESS, not scale, so this always applies.
   if (!isGMView) {
