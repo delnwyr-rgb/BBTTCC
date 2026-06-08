@@ -245,6 +245,11 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 
     await _setSparkMap(actor, map);
     ui.notifications?.info?.(`${actor.name} gathered ${s.name}${s.corrupted ? " (Corrupted)" : ""}`);
+    // Emit corruption from the CORE so EVERY gather path (direct API, not just
+    // beats) propagates to the faction corruption gate. (Gauntlet finding #1.)
+    if (s.corrupted) {
+      try { Hooks.callAll("bbttcc:spark:corrupted", { actor, sparkKey: key, sparkItem: item, sephirah: s.sephirah ?? null, spark: s }); } catch (_e) {}
+    }
     return s;
   }
 
@@ -330,6 +335,11 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 
     _pushHistory(s, { phase, note });
     await _setSparkMap(actor, map);
+    // Re-marking a spark corrupted (e.g. the beat-listener integrate path) must also
+    // propagate to the faction corruption gate. (Gauntlet finding #1.)
+    if (String(phase || "").toLowerCase() === "corrupted") {
+      try { Hooks.callAll("bbttcc:spark:corrupted", { actor, sparkKey: s.key || key, sparkItem: null, sephirah: s.sephirah ?? null, spark: s }); } catch (_e) {}
+    }
     return s;
   }
 
@@ -440,7 +450,11 @@ console.log("[bbttcc-tikkun/api] LOADED CORRECT FILE");
 
         const sparkMap = _getSparkMap(A);
         for (const s of Object.values(sparkMap)) {
-          if (s && (s.integrated || String(s.status || "").toLowerCase() === "integrated")) {
+          // Corrupted sparks must NOT count toward Great-Work readiness — corruption
+          // is the central cost/risk; a tainted spark in an operative's hands is not
+          // progress until it's repaired (then re-deposited). (Gauntlet finding #1+#2,
+          // 2026-06-07: corrupted+integrated sparks were inflating sparkCount.)
+          if (s && (s.integrated || String(s.status || "").toLowerCase() === "integrated") && !s.corrupted) {
             count++;
           }
         }

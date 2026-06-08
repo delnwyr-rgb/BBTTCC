@@ -174,7 +174,7 @@ const TERRAIN_TABLE = {
   function getHexAtPoint(x, y) {
     const dwgs = canvas.drawings.placeables;
     for (const d of dwgs) {
-      const f = d.document.getFlag(MOD_TERR);
+      const f = d.document?.flags?.[MOD_TERR];   // getFlag(scope) w/o key returns undefined — read flags directly
       if (!f) continue;
       const pt = new PIXI.Point(x, y);
       if (d.bounds?.contains(x, y) || d.containsPoint?.(pt)) return d;
@@ -218,7 +218,9 @@ const TERRAIN_TABLE = {
   }
 
   function getHexTerrainSpec(drawing) {
-    const flags = drawing?.document?.getFlag?.(MOD_TERR) || {};
+    // getFlag(scope) with no key returns undefined (getProperty guard) → every hex
+    // read as plains. Read flags directly; handle placeable OR document input.
+    const flags = drawing?.document?.flags?.[MOD_TERR] || drawing?.flags?.[MOD_TERR] || {};
 
     // Terrain may be stored as:
     // - terrainType: "plains" OR a human label like "Mountains / Highlands"
@@ -301,7 +303,7 @@ const TERRAIN_TABLE = {
 
   function getFactionIntrigueMod(actor) {
     try {
-      const fx = actor?.getFlag?.(MOD_FCT) || {};
+      const fx = actor?.flags?.[MOD_FCT] || {};   // getFlag(scope) w/o key returns undefined — read flags directly
       return Number(
         foundry.utils.getProperty(fx, "skills.intrigue.mod") ??
         foundry.utils.getProperty(fx, "mods.intrigue") ??
@@ -314,7 +316,7 @@ const TERRAIN_TABLE = {
   // Safe fallback: uses faction flags.bbttcc-factions.darkness.{global|<hexId>} if present.
   function darknessEncounterBoost(actor, toDrawing) {
     try {
-      const fx = actor?.getFlag?.(MOD_FCT) || {};
+      const fx = actor?.flags?.[MOD_FCT] || {};   // getFlag(scope) w/o key returns undefined — read flags directly
       const d = fx?.darkness || {};
       const hexId = toDrawing?.id || toDrawing?.document?.id || null;
       const regional = (hexId && (d[hexId] != null)) ? Number(d[hexId] || 0) : 0;
@@ -560,7 +562,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     // Civilization means roads. Applied after the gate discount, before GM
     // overrides (costSet still has final authority).
     try {
-      const tf = to?.document?.getFlag?.(MOD_TERR) || {};
+      const tf = to?.document?.flags?.[MOD_TERR] || to?.flags?.[MOD_TERR] || {};
       const devStage = Number(tf.development?.stage ?? tf.integration?.progress ?? 0);
       if (devStage >= 6) {
         const hexOwnerId = String(tf.factionId || tf.ownerId || "").trim();
@@ -678,7 +680,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
     }
 
     function _deriveBandFromHex(ctx, toDrawing) {
-      const tf = toDrawing?.document?.getFlag(MOD_TERR) || {};
+      const tf = toDrawing?.document?.flags?.[MOD_TERR] || toDrawing?.flags?.[MOD_TERR] || {};
       const claimed = !!tf.factionId;
       const progress = tf?.integration?.progress ?? 0;
       const mods = tf.modifiers || [];
@@ -823,7 +825,7 @@ Hooks.callAll("bbttcc:beforeTravel", ctx);
       const injector = game.bbttcc?.api?.campaigns?.injector;
 
       if (injector?.maybeInject && !game.combat?.started) {
-        const terrFlags = to?.document?.getFlag(MOD_TERR) || {};
+        const terrFlags = to?.document?.flags?.[MOD_TERR] || to?.flags?.[MOD_TERR] || {};
 
         const thresholdCtx = {
           source: "travel",

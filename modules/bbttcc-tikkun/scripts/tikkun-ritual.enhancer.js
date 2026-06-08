@@ -250,10 +250,14 @@
         state.round += 1;
         const spec = roundSpec(state.round);
 
-        // Spend OPs (negative deltas)
-        const fSpend = Math.max(0, Math.floor(Number(spendFaith||0)));
-        const cSpend = Math.max(0, Math.floor(Number(spendCulture||0)));
-        const dSpend = Math.max(0, Math.floor(Number(spendDiplomacy||0)));
+        // Spend OPs (negative deltas) — CLAMP each spend to what the bank actually
+        // holds BEFORE it earns a roll bonus. Previously computeBonus read the
+        // REQUESTED spend while adjustOpBank just floored the bank at 0, so you
+        // could "spend" Faith you didn't have for free bonus. (Gauntlet finding #3.)
+        const bankNow = dup(A.flags?.[MODF]?.opBank || {});
+        const fSpend = Math.min(Number(bankNow.faith     || 0), Math.max(0, Math.floor(Number(spendFaith||0))));
+        const cSpend = Math.min(Number(bankNow.softpower  || 0), Math.max(0, Math.floor(Number(spendCulture||0))));
+        const dSpend = Math.min(Number(bankNow.diplomacy  || 0), Math.max(0, Math.floor(Number(spendDiplomacy||0))));
 
         if (fSpend) await adjustOpBank(A, "faith", -fSpend, label);
         if (cSpend) await adjustOpBank(A, "softpower", -cSpend, label);
