@@ -184,6 +184,12 @@
     // F6 · MITIGATION RESOLVER — the shared API the forecast + engine both use
     const mit = api?.travel?.mitigation;
     if (mit?.coverageFor) {
+      // Cadence-aware test hygiene: prior §F travels consume per-turn uses via the (async) afterTravel
+      // hook. Drain those in-flight consumes, THEN reset the ledger, so each probe starts with fresh uses.
+      // Delete the flag (not write {used:{}}) — update() merges, so an empty `used` won't clear stale keys.
+      const clearLedger = () => faction.update({ [`flags.bbttcc-travel.-=mitigationUses`]: null });
+      const drainAndClear = async () => { await sleep(600); await clearLedger(); };
+      try { await drainAndClear(); } catch (_e) {}   // §F starts clean (ledger persists across runs within a world turn)
       try {
         const reg = game?.fourththing?._classAutomation?.CHAR_OPT_ABILITIES;
         const warden = game.actors.get(M.wardenId);
@@ -215,12 +221,33 @@
       try {
         const cov = mit.coverageFor(faction.id, {});
         rec("F", "coverageFor resolves encounter mitigation", (cov?.encounter?.length || 0) > 0, `encounterCovered=[${(cov?.encounter || []).map(a => a.label).join(", ")}]`);
+        await drainAndClear();   // fresh encounter use (earlier missed §F travels may have spent it)
         // Ocean (tier 4 → DC 23) is unbeatable by 1d20+0 → guaranteed miss → reroll must fire.
         const r = await travel("home", "ocean");
         const em = r.context?.encounterMitigation, rr = r.context?.encounterReroll;
         rec("F", "encounter-reroll fires on a missed check", em?.covered === true && rr && Number.isFinite(rr.first) && Number.isFinite(rr.second),
           `covered=${em?.covered} reroll=${rr ? `first ${rr.first}→second ${rr.second} by [${(rr.by || []).join(", ")}]` : "none"} (dc23 ocean, guaranteed miss)`);
       } catch (e) { rec("F", "encounter-reroll", false, `threw: ${e.message}`); }
+
+      // F10-F12 · CADENCE / USE-TRACKING (Phase 2B): 1 use/ability/strategic turn, lazy reset.
+      try {
+        const wdoc = await fromUuid(M.roles.weather.uuid);
+        const reseed = () => wdoc.update({ [`flags.${TERR}.weather`]: { key: "dustfront", label: "Dustfront", remainingTurns: 2, ts: 0 } });
+        await drainAndClear(); await reseed();   // drain in-flight consumes from F7/F9, then reset
+        const t1 = (await travel("home", "weather")).context?.weatherMitigationReport || {};   // fresh → mitigated
+        await sleep(500);                                                                       // let afterTravel consume
+        const u = mit.usesFor?.(faction.id);
+        await reseed();
+        const t2 = (await travel("home", "weather")).context?.weatherMitigationReport || {};   // same turn → exhausted
+        await faction.update({ [`flags.bbttcc-travel.mitigationUses.turn`]: -999 });            // stale anchor = "next turn" w/o touching world engine
+        await reseed();
+        const t3 = (await travel("home", "weather")).context?.weatherMitigationReport || {};   // reset → mitigated again
+        rec("F", "use consumed: 2nd same-turn travel is unmitigated", t1.weatherDcApplied === 1 && t2.weatherDcApplied === 2,
+          `travel1 dcApplied=${t1.weatherDcApplied} (covered=[${(t1.weatherCovered || []).join(", ")}]) → travel2 dcApplied=${t2.weatherDcApplied} (exhausted=${t2.weatherExhausted})`);
+        rec("F", "usesFor reports the spent use", (Number(u?.used?.[M.weatherMitigationAbility]) || 0) >= 1, `used=${JSON.stringify(u?.used)} perTurn=${u?.perTurn}`);
+        rec("F", "use resets next strategic turn", t3.weatherDcApplied === 1, `travel3 dcApplied=${t3.weatherDcApplied} (covered=[${(t3.weatherCovered || []).join(", ")}])`);
+        await clearLedger();
+      } catch (e) { rec("F", "cadence/use-tracking", false, `threw: ${e.message}`); }
     } else rec("F", "(mitigation section)", false, "game.bbttcc.api.travel.mitigation not installed — deploy travel-mitigation.bridge.js + module.json");
 
   } finally {

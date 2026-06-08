@@ -117,6 +117,33 @@
     return (key && turns > 0) ? String(key) : null;   // only ACTIVE weather
   }
 
+  // ── Use-ledger (Phase 2B cadence): N uses per ability per strategic turn, lazy-reset on turn change ──
+  const MOD_TRV = "bbttcc-travel";
+  const USES_PER_TURN = 1;
+  const _worldTurn = () => { try { return Number(game.bbttcc?.api?.world?.getState?.().turn ?? 0); } catch { return 0; } };
+  function _readLedger(faction) {
+    const raw = faction?.flags?.[MOD_TRV]?.mitigationUses || {};
+    const turn = _worldTurn();
+    return (Number(raw.turn) === turn) ? { turn, used: { ...(raw.used || {}) } } : { turn, used: {} }; // lazy turn reset
+  }
+  const _hasUse = (led, key) => Number(led.used[key] || 0) < USES_PER_TURN;
+  async function _consumeUses(faction, keys) {
+    if (!keys?.length || !game.user?.isGM) return;   // GM owns the ledger write (travelHex executes GM-side)
+    const led = _readLedger(faction);                // logically fresh (lazy turn-reset)
+    for (const k of keys) led.used[k] = Number(led.used[k] || 0) + 1;
+    try {
+      // Delete-then-set: Foundry update() MERGES objects, so a turn-reset `used:{}` (or fewer keys)
+      // would merge-resurrect stale keys from a previous turn. Delete the flag first for a clean write.
+      await faction.update({ [`flags.${MOD_TRV}.-=mitigationUses`]: null });
+      await faction.update({ [`flags.${MOD_TRV}.mitigationUses`]: led });
+    } catch (e) { console.warn(TAG, "use-consume write failed", e); }
+  }
+  function usesFor(factionId) {
+    const f = game.actors?.get(String(factionId)); if (!f) return null;
+    const led = _readLedger(f);
+    return { turn: led.turn, used: led.used, perTurn: USES_PER_TURN };
+  }
+
   Hooks.on("bbttcc:beforeTravel", (ctx) => {
     try {
       const faction = _factionFromCtx(ctx);
@@ -127,43 +154,67 @@
       const terrainTags = [low(tf?.terrain?.key)].filter(Boolean);
 
       const cover = coverageFor(faction.id, { weatherKey, terrainTags });
+      // Cadence: only abilities with a remaining use THIS strategic turn actually apply.
+      // Read-only here — uses are consumed in afterTravel so the forecast never burns them.
+      const led = _readLedger(faction);
+      const availWeather   = cover.weather.filter(a => _hasUse(led, a.key));
+      const availTerrain   = cover.terrain.filter(a => _hasUse(led, a.key));
+      const availEncounter = cover.encounter.filter(a => _hasUse(led, a.key));
 
-      // 1) Weather complication → DC. opDelta>0 = penalty (blunted one step per weather coverer); <0 = boon.
-      let weatherDc = 0;
+      // 1) Weather complication → DC. opDelta>0 = penalty (blunted one step per AVAILABLE coverer); <0 = boon.
+      let weatherDc = 0, weatherEffected = false;
       if (arch) {
         const opDelta = Number(arch?.travel?.opDelta ?? 0);
-        weatherDc = opDelta > 0 ? Math.max(0, opDelta - cover.weather.length) : opDelta;
+        if (opDelta > 0) { weatherDc = Math.max(0, opDelta - availWeather.length); weatherEffected = availWeather.length > 0; }
+        else weatherDc = opDelta;
       }
 
-      // 2) Terrain mitigation → −2 DC per coverer (one effective tier), capped above tier-1.
+      // 2) Terrain mitigation → −2 DC per available coverer (one effective tier), capped above tier-1.
       const tier = Number(ctx.terrainTier || 1);
-      const terrainStep = Math.min(cover.terrain.length, Math.max(0, tier - 1));
+      const terrainStep = Math.min(availTerrain.length, Math.max(0, tier - 1));
       const terrainDc = -2 * terrainStep;
 
-      const dcDelta = weatherDc + terrainDc;
-      ctx.dcMod = Number(ctx.dcMod || 0) + dcDelta;
+      ctx.dcMod = Number(ctx.dcMod || 0) + weatherDc + terrainDc;
 
-      // 3) Encounter mitigation (Wheel of Fortune T4 etc.) — flag for travelHex to reroll a
-      //    missed travel check once and keep the better result. Weather/terrain-independent.
-      ctx.encounterMitigation = { covered: cover.encounter.length > 0, abilities: cover.encounter.map(a => a.label) };
+      // 3) Encounter mitigation — only abilities with a use left arm the reroll.
+      ctx.encounterMitigation = { covered: availEncounter.length > 0, abilities: availEncounter.map(a => a.label) };
+
+      // Consume-lists drained in afterTravel (real travel only): weather/terrain consumed when they
+      // actually reduced something; encounter consumed only if the reroll fires (set in travelHex).
+      const wt = new Set();
+      if (weatherEffected) availWeather.forEach(a => wt.add(a.key));
+      if (terrainStep > 0)  availTerrain.forEach(a => wt.add(a.key));
+      ctx.__mitConsumeWT = [...wt];
+      ctx.__mitConsumeEncounter = availEncounter.map(a => a.key);
 
       ctx.weatherMitigationReport = {
-        weatherKey,
-        archetypeTags: arch?.tags || [],
+        weatherKey, archetypeTags: arch?.tags || [],
         weatherPenaltyBase: arch ? Math.max(0, Number(arch?.travel?.opDelta ?? 0)) : 0,
         weatherDcApplied: weatherDc,
-        weatherCovered: cover.weather.map(a => a.label),
-        terrainStep,
-        terrainCovered: cover.terrain.map(a => a.label),
-        dcDelta,
+        weatherCovered: availWeather.map(a => a.label),
+        weatherExhausted: cover.weather.length - availWeather.length,   // covered but out of uses this turn
+        terrainStep, terrainCovered: availTerrain.map(a => a.label),
+        dcDelta: weatherDc + terrainDc,
         masks: rosterAbilities(faction.id).flatMap(a => a.vanguardMasks)
       };
     } catch (e) { console.warn(TAG, "weather/terrain mitigation bridge failed", e); }
   });
 
+  // Consume the uses the leg actually spent — fires on REAL travel only (travelHex emits afterTravel;
+  // the forecast's simulateBeforeTravelHooks does NOT), so the planner never drains the ledger.
+  Hooks.on("bbttcc:afterTravel", async (ctx) => {
+    try {
+      const faction = _factionFromCtx(ctx);
+      if (!faction) return;
+      const keys = new Set(ctx.__mitConsumeWT || []);
+      if (ctx.encounterReroll) (ctx.__mitConsumeEncounter || []).forEach(k => keys.add(k)); // reroll actually fired
+      if (keys.size) await _consumeUses(faction, [...keys]);
+    } catch (e) { console.warn(TAG, "mitigation use-consume failed", e); }
+  });
+
   function _install() {
     game.bbttcc ??= {}; game.bbttcc.api ??= {}; game.bbttcc.api.travel ??= {};
-    game.bbttcc.api.travel.mitigation = { rosterAbilities, coverageFor, coversWeather, filterByWeather };
+    game.bbttcc.api.travel.mitigation = { rosterAbilities, coverageFor, coversWeather, filterByWeather, usesFor };
     console.log(TAG, "weather/terrain mitigation bridge ready (passive coverage v1)");
   }
   Hooks.once("ready", _install);
