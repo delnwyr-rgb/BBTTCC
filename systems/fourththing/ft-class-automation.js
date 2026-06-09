@@ -205,6 +205,15 @@ export const FEATURE_ROUTER = {
   "harmmarshal-resolve-calm-push":             "harmony_marshal_calm_push",
   "harmmarshal-resolve-rally-quiet":           "harmony_marshal_rally_quiet",
   "harmmarshal-overwatch-sentinel-protocol":   "harmony_marshal_sentinel_protocol",
+  // Wyrdlens Adept — Refraction techniques (2026-06-08, fix-on-touch)
+  "wyrdlens-refraction-truth-clear-signal":            "wyrdlens_clear_signal",
+  "wyrdlens-refraction-foresight-convergence-horizon": "wyrdlens_convergence_horizon",
+  "wyrdlens-refraction-mercy-covenant-prism":          "wyrdlens_covenant_prism",
+  "wyrdlens-refraction-mercy-gentle-pivot":            "wyrdlens_gentle_pivot",
+  "wyrdlens-refraction-mercy-mercy-refraction":        "wyrdlens_mercy_refraction",
+  "wyrdlens-refraction-mercy-soft-focus":              "wyrdlens_soft_focus",
+  "wyrdlens-refraction-foresight-split-beam":          "wyrdlens_split_beam",
+  "wyrdlens-refraction-truth-truth-horizon":           "wyrdlens_truth_horizon",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5915,6 +5924,15 @@ const LEGACY_ACTION_COST = {
   "harmony_marshal_calm_push":          "bonus",      // Resolve technique — at-will ally advance + Guard
   "harmony_marshal_rally_quiet":        "reaction",   // Resolve technique — reaction reroll vs Shaken
   "harmony_marshal_sentinel_protocol":  "action",     // Overwatch technique — 30-ft awareness field
+  // Wyrdlens Adept — Refraction techniques
+  "wyrdlens_clear_signal":      "reaction",   // cancel a deceit penalty
+  "wyrdlens_convergence_horizon":"action",    // 30-ft foresight aura
+  "wyrdlens_covenant_prism":    "action",     // 30-ft mercy aura
+  "wyrdlens_gentle_pivot":      "reaction",   // nudge a kill to non-lethal
+  "wyrdlens_mercy_refraction":  "reaction",   // 1/scene prevent-death
+  "wyrdlens_soft_focus":        "action",     // 30-ft softening field (at-will)
+  "wyrdlens_split_beam":        "free",       // share a defense advantage
+  "wyrdlens_truth_horizon":     "action",     // 30-ft anti-illusion aura
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6247,6 +6265,121 @@ export async function openHarmonyMarshalSentinelProtocol(actor) {
     });
 }
 
+// ─── Wyrdlens Adept — Refraction techniques (build-out 2026-06-08, fix-on-touch) ──
+// Shared aura applicator: self marker AE (1 min) + ally reroll-lowest aid in range.
+// Returns { allyNames, foes } for the caller's chat-card, or null if no caster token.
+async function _ftAuraApply(actor, { radiusFt, markerName, markerImg, markerFlag, aidSource }) {
+  const myToken = actor.getActiveTokens?.()?.[0];
+  if (!myToken) { ui.notifications?.warn(`${markerName}: place your token on the canvas first.`); return null; }
+  const scene = myToken.scene ?? canvas.scene;
+  const grid  = scene?.grid?.size ?? canvas.grid?.size ?? 100;
+  const rangePx = (radiusFt / (scene?.grid?.distance ?? 5)) * grid;
+  const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 });
+  const me  = ctr(myToken);
+  const inRange = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && t.id !== myToken.id
+    && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
+  const allies = inRange.filter((t) => (t.document?.disposition ?? 0) >= 0);
+  const foes   = inRange.filter((t) => (t.document?.disposition ?? 0) <  0);
+  try {
+    await actor.createEmbeddedDocuments("ActiveEffect", [{
+      name: markerName, img: markerImg, origin: actor.uuid,
+      duration: { rounds: 10, seconds: 60 }, changes: [], flags: { fourththing: { [markerFlag]: { radiusFt } } }
+    }]);
+  } catch (e) { /* skip */ }
+  const allyNames = [];
+  for (const t of allies) {
+    try { const b = t.actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: aidSource }); await t.actor.setFlag("fourththing", "aidBanked", b); allyNames.push(t.actor.name); } catch (e) {}
+  }
+  return { allyNames, foes };
+}
+
+// Convergence Horizon (Foresight) — 1/Soma-Break action, 30-ft aura.
+export async function openWyrdlensConvergenceHorizon(actor) {
+  return _openSomaBreakAbility(actor, "wlConvergenceHorizon", "Convergence Horizon",
+    "Spend an action: a <b>30-ft Convergence Horizon</b> (1 minute, moves with you). Allies inside <b>reroll the lowest die</b> on attack/check/defense (the futures agree on the kinder one); enemies who crit vs your party must reroll.",
+    async (actor) => {
+      const r = await _ftAuraApply(actor, { radiusFt: 30, markerName: "Convergence Horizon (aura)", markerImg: "icons/magic/light/explosion-star-glow-blue.webp", markerFlag: "convergenceHorizon", aidSource: "convergence-horizon" });
+      if (!r) return false;
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">⟁ <b>Horizon unfolded</b> — 30 ft, 1 minute.</p><p style="margin:0.15rem 0;color:#78c88c">Allies aided (reroll-lowest): <b>${r.allyNames.join(", ") || "—"}</b></p><p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">Enemies in range (${r.foes.length}) who crit vs your party must reroll.</p></div>`;
+    });
+}
+
+// Covenant Prism (Mercy) — 1/Soma-Break action, 30-ft aura.
+export async function openWyrdlensCovenantPrism(actor) {
+  return _openSomaBreakAbility(actor, "wlCovenantPrism", "Covenant Prism",
+    "Spend an action: a <b>30-ft Covenant Prism</b> (1 minute, moves with you). Allies inside gain <b>resistance to psychic & radiant (sephirotic)</b> and <b>reroll-lowest</b> on defense vs Shaken/charmed. Enemies trying to drop a creature to 0 must Soul-save or the blow is non-lethal.",
+    async (actor) => {
+      const r = await _ftAuraApply(actor, { radiusFt: 30, markerName: "Covenant Prism (aura)", markerImg: "icons/magic/holy/barrier-shield-winged-blue.webp", markerFlag: "covenantPrism", aidSource: "covenant-prism" });
+      if (!r) return false;
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">⟁ <b>Prism invoked</b> — 30 ft, 1 minute.</p><p style="margin:0.15rem 0;color:#78c88c">Allies aided (reroll vs Shaken/charmed; resist psychic & radiant): <b>${r.allyNames.join(", ") || "—"}</b></p><p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">Enemies in range (${r.foes.length}) attempting a killing blow must Soul-save or it resolves non-lethal.</p></div>`;
+    });
+}
+
+// Truth Horizon (Truth) — 1/Soma-Break action, 30-ft anti-illusion aura.
+export async function openWyrdlensTruthHorizon(actor) {
+  return _openSomaBreakAbility(actor, "wlTruthHorizon", "Truth Horizon",
+    "Spend an action: a <b>30-ft Truth Horizon</b> (1 minute, moves with you). Inside, creatures can't benefit from invisibility or illusion-disguise vs you and allies, and have <b>disadvantage on Stealth</b>; you and allies gain advantage to see through deception.",
+    async (actor) => {
+      const r = await _ftAuraApply(actor, { radiusFt: 30, markerName: "Truth Horizon (aura)", markerImg: "icons/magic/perception/eye-ringed-glow-angry-large-teal.webp", markerFlag: "truthHorizon", aidSource: "truth-horizon" });
+      if (!r) return false;
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">⟁ <b>Truth Horizon opened</b> — 30 ft, 1 minute. Invisibility & illusion-disguise fail inside.</p><p style="margin:0.15rem 0;color:#78c88c">Allies aided (see-through-deception): <b>${r.allyNames.join(", ") || "—"}</b></p><p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">Creatures in range (${r.foes.length}) have disadvantage on Stealth.</p></div>`;
+    });
+}
+
+// Soft Focus (Mercy) — at-will action, 30-ft softening field. Direct apply.
+export async function openWyrdlensSoftFocus(actor) {
+  const r = await _ftAuraApply(actor, { radiusFt: 30, markerName: "Soft Focus (field)", markerImg: "icons/magic/control/silhouette-hold-beam-blue.webp", markerFlag: "softFocus", aidSource: "soft-focus" });
+  if (!r) return;
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">◐ Soft Focus</span></div><div class="ft-prev-align-note" style="font-size:0.78rem"><p style="margin:0.15rem 0">30-ft softening field, 1 minute. Intimidation vs you/allies inside is at disadvantage.</p><p style="margin:0.15rem 0;color:#78c88c">Allies aided: <b>${r.allyNames.join(", ") || "—"}</b></p><p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">Foes (${r.foes.length}) starting their turn in range must Soul-save or treat hostiles as having half cover.</p></div></div>` });
+}
+
+// Clear the Signal (Truth) — reaction, tier uses/Soma Break, single targeted creature.
+export async function openWyrdlensClearTheSignal(actor) {
+  const key = "wlClearSignal";
+  return _openTierUsesPerSomaBreak(actor, key, "Clear the Signal",
+    "Reaction: cancel a deceit-based penalty (illusion disadvantage, misinformation, fear propaganda) on a <b>targeted</b> creature's roll within 60 ft. <i>Banked as reroll-lowest aid.</i>",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Clear the Signal: target the affected creature first."); const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0); await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1)); return; }
+      try { const b = ally.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "clear-the-signal" }); await ally.setFlag("fourththing", "aidBanked", b); } catch (e) { ui.notifications?.warn("Clear the Signal: couldn't reach that creature."); return; }
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">📡 Clear the Signal → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">deceit penalty cut — reroll-lowest banked on the affected roll.</p></div>` });
+    });
+}
+
+// Split Beam (Foresight) — at-will free action after a defense success, single ally.
+export async function openWyrdlensSplitBeam(actor) {
+  const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+  if (!ally) return ui.notifications?.warn("Split Beam: target an ally within 30 ft (after your defense success).");
+  try { const b = ally.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "split-beam" }); await ally.setFlag("fourththing", "aidBanked", b); } catch (e) { return ui.notifications?.warn("Split Beam: couldn't reach that ally."); }
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">⟁ Split Beam → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">advantage (reroll-lowest) banked on their next defense check.</p></div>` });
+}
+
+// Gentle Pivot (Mercy) — at-will reaction, target the attacker → disadvantage / non-lethal nudge.
+export async function openWyrdlensGentlePivot(actor) {
+  const foe = Array.from(game.user?.targets ?? [])[0]?.actor;
+  if (!foe) return ui.notifications?.warn("Gentle Pivot: target the attacker first.");
+  try { await foe.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) { return ui.notifications?.warn("Gentle Pivot: couldn't reach the attacker."); }
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">↪ Gentle Pivot → ${_ftEscape(foe.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">The kill is nudged sideways: their attack is at <b>disadvantage</b> and may be substituted for a contested shove/grapple/disarm, or applied as <b>non-lethal</b>.</p></div>` });
+}
+
+// Mercy Refraction (Mercy) — 1/scene reaction, target a falling ally → non-lethal / stabilize.
+export async function openWyrdlensMercyRefraction(actor) {
+  return _openPerSceneAbility(actor, "wlMercyRefraction", "Mercy Refraction",
+    "Reaction: when a <b>targeted</b> creature within 30 ft takes a blow that would reduce it to 0 Integrity, refract it to <b>non-lethal</b> — they fall unconscious but stable instead of dying.",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Mercy Refraction: target the falling creature first."); return false; }
+      let note = ` <b>${_ftEscape(ally.name)}</b>'s next lethal blow this scene resolves as non-lethal (GM applies).`;
+      try {
+        const tsys = ally.system?.system ?? ally.system ?? {};
+        const cur  = Number(tsys?.derived?.integrity?.value ?? tsys?.integrity?.value ?? 1);
+        if (cur <= 0) { await ally.update({ "system.derived.integrity.value": 1 }); note = ` <b>${_ftEscape(ally.name)}</b> stabilized at 1 Integrity — unconscious, not dying.`; }
+      } catch (e) {}
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#a0d8b8">⟁ Mercy Refraction —${note}</p>`;
+    });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6305,6 +6438,14 @@ export async function dispatchFeatureAction(actor, item) {
     case "harmony_marshal_calm_push":         return openHarmonyMarshalCalmPush(actor);
     case "harmony_marshal_rally_quiet":       return openHarmonyMarshalRallyQuiet(actor);
     case "harmony_marshal_sentinel_protocol": return openHarmonyMarshalSentinelProtocol(actor);
+    case "wyrdlens_clear_signal":             return openWyrdlensClearTheSignal(actor);
+    case "wyrdlens_convergence_horizon":      return openWyrdlensConvergenceHorizon(actor);
+    case "wyrdlens_covenant_prism":           return openWyrdlensCovenantPrism(actor);
+    case "wyrdlens_gentle_pivot":             return openWyrdlensGentlePivot(actor);
+    case "wyrdlens_mercy_refraction":         return openWyrdlensMercyRefraction(actor);
+    case "wyrdlens_soft_focus":               return openWyrdlensSoftFocus(actor);
+    case "wyrdlens_split_beam":               return openWyrdlensSplitBeam(actor);
+    case "wyrdlens_truth_horizon":            return openWyrdlensTruthHorizon(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);

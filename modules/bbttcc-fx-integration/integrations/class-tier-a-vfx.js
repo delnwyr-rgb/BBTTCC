@@ -91,6 +91,15 @@ const MAP = {
   "Calm Push":                                                "bolster",
   "Rally the Quiet (BBTTCC)":                                 "bolster",
   "Sentinel Protocol":                                        "watch_aura",
+  // Wyrdlens Adept — Refraction techniques (wired 2026-06-08, fix-on-touch)
+  "Convergence Horizon":                                      "watch_aura",
+  "Covenant Prism":                                           "ward_aura",
+  "Truth Horizon":                                            "watch_aura",
+  "Soft Focus":                                               "peace_aura",
+  "Clear the Signal":                                         "bolster",
+  "Split Beam":                                               "bolster",
+  "Gentle Pivot":                                             "bolster",
+  "Mercy Refraction (BBTTCC)":                                "bolster",
 };
 
 // ---- self-contained Sequencer helpers ----
