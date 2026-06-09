@@ -249,6 +249,12 @@ export const FEATURE_ROUTER = {
   "stillheart_emotional_lock":    "stillheart_emotional_lock",
   "auditor_forensic_audit":       "auditor_forensic_audit",
   "cl_init6_translation":         "cl_init6_translation",
+  // Shadow Courier signature teleports (2026-06-09) — exact-id wins over the hidden
+  // NAME_ROUTER "The Crossing" fallback; these are real abilities, not the Pace stubs.
+  "shadow_courier_tier2_the_crossing":                     "shadow_courier_the_crossing_v2",
+  "shadow_courier_tier4_unfound_route":                    "shadow_courier_unfound_route",
+  "shadow_courier_blackstair_l17_stair_that_does_not_end": "shadow_courier_stair_never_ends",
+  "shadow_courier_lastmile_l13_quiet_voyage":              "shadow_courier_quiet_voyage",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -6003,6 +6009,11 @@ const LEGACY_ACTION_COST = {
   "stillheart_emotional_lock":  "bonus",      // freeze Aura/Burn
   "auditor_forensic_audit":     "action",     // mark Out of Compliance
   "cl_init6_translation":       "reaction",   // 1/scene transcribe a manifestation
+  // Shadow Courier signature teleports
+  "shadow_courier_the_crossing_v2": "action", // cross a barrier/ward
+  "shadow_courier_unfound_route":   "action", // link two thresholds
+  "shadow_courier_stair_never_ends":"action", // threshold network
+  "shadow_courier_quiet_voyage":    "bonus",  // become insubstantial
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6842,6 +6853,43 @@ export async function openClInit6Translation(actor) {
     });
 }
 
+// ─── Shadow Courier — signature threshold teleports (build-out 2026-06-09) ───────
+// These are NOT the combat-mobility Surge spends (sc-step/ghost/flank/nodoor) — they're
+// the narrative threshold-crossing signatures. Exact-id FEATURE_ROUTER entries override
+// the NAME_ROUTER "The Crossing" → hidden-stub fallback. Animate via teleport/phase recipes.
+
+// The Crossing (T2, 1/scene action) — cross any single barrier/ward/threshold within reach.
+export async function openShadowCourierTheCrossing(actor) {
+  return _openSomaBreakAbility(actor, "scTheCrossing", "The Crossing",
+    "Action: declare a single threshold within reach — a door, wall, ward, alarm, divination perimeter, or hex boundary. You cross it (resolution depends on the threshold — GM adjudicates).",
+    async () => ` The membrane chooses you instead of the wall — name the threshold; you are through it.`);
+}
+
+// Unfound Route (T4, 1/session action) — link two thresholds you have crossed this campaign.
+export async function openShadowCourierUnfoundRoute(actor) {
+  return _openSomaBreakAbility(actor, "scUnfoundRoute", "Unfound Route",
+    "Action: name two thresholds you have personally crossed earlier in this campaign. A route opens between them — step through one, exit the other (GM adjudicates).",
+    async () => ` Two thresholds remember you — the route opens between them.`);
+}
+
+// The Stair That Does Not End (Black Stair capstone, 1/session action) — threshold network.
+export async function openShadowCourierStairNeverEnds(actor) {
+  return _openSomaBreakAbility(actor, "scStairNeverEnds", "The Stair That Does Not End",
+    "Action: step through any door, arch, gate, or marked threshold within reach — exit through any other threshold you have personally used. The Black Stair connects them all.",
+    async () => ` You take the Stair — every threshold you have ever crossed is one step away.`);
+}
+
+// The Quiet Voyage (Last Mile L13, bonus action) — become insubstantial for tier rounds.
+export async function openShadowCourierQuietVoyage(actor) {
+  return _openSomaBreakAbility(actor, "scQuietVoyage", "The Quiet Voyage",
+    "Bonus action (while carrying a Soul): become insubstantial for up to your tier rounds this scene — pass through creatures and barriers, immune to non-magical physical harm. Deactivate as a free action.",
+    async (actor) => {
+      const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "The Quiet Voyage (insubstantial)", img: "icons/magic/movement/trail-streak-pink.webp", origin: actor.uuid, duration: { rounds: tier, seconds: tier * 6 }, changes: [], flags: { fourththing: { quietVoyage: true } } }]); } catch (e) {}
+      return ` You step half-out of the world — insubstantial for up to <b>${tier}</b> rounds.`;
+    });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6939,6 +6987,10 @@ export async function dispatchFeatureAction(actor, item) {
     case "stillheart_emotional_lock":         return openStillheartEmotionalLock(actor);
     case "auditor_forensic_audit":            return openAuditorForensicAudit(actor);
     case "cl_init6_translation":              return openClInit6Translation(actor);
+    case "shadow_courier_the_crossing_v2":    return openShadowCourierTheCrossing(actor);
+    case "shadow_courier_unfound_route":      return openShadowCourierUnfoundRoute(actor);
+    case "shadow_courier_stair_never_ends":   return openShadowCourierStairNeverEnds(actor);
+    case "shadow_courier_quiet_voyage":       return openShadowCourierQuietVoyage(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);
