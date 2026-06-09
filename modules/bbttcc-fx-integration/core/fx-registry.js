@@ -166,6 +166,135 @@ function buildGenericManeuverSpecs(api) {
   return out;
 }
 
+// ─── Doctrine VFX taxonomy (2026-06-09 "variety pass") ──────────────────────
+// Instead of every maneuver/activity falling back to one of 7 magic-circles +
+// explosions, each doctrine key gets a THEMATIC effect+burst by category:
+// agrarian→nature(Entangle/healing-bloom), martial→melee weapons, siege→ordnance,
+// stealth→smoke, economy→lightning/spark, etc. Effect/burst are thematic-first,
+// proven-last arrays — fx-api.resolveKey() plays the first key that resolves in
+// this world's Sequencer DB and degrades to the proven final entry, so variety is
+// additive and never breaks. `fam` = the existing family for overlay/tone/color base.
+const DOC_CAT_OVERRIDE = {
+  dark_harvest: "void", apocalyptic_weapon_test: "void", found_site_research: "temporal",
+  found_site_temple: "faith", found_site_farm: "agrarian", found_site_mine: "economy",
+  found_site_port: "economy", found_site_fortress: "fortify", local_festival: "agrarian",
+  world_reformation_council: "faith", dragon_s_parley: "void", repair_rig: "fortify",
+  reconstruction_drive: "agrarian", terrain_calibration: "agrarian", faultline_tuning: "agrarian",
+  optact_ritual_binding: "faith", optact_cultural_diffusion: "political", optact_operational_cohesion: "martial",
+  civic_audit: "stealth", crown_of_mercy: "faith", engine_of_absolution: "faith",
+  psychic_disruption: "void", sympathetic_stabilization: "faith", opt_psychological_pressure: "political",
+  upgrade_outpost_settlement: "economy"
+};
+
+function doctrineCategory(key, name = "") {
+  const k = String(key || "");
+  if (DOC_CAT_OVERRIDE[k]) return DOC_CAT_OVERRIDE[k];
+  const s = (k + " " + name).toLowerCase();
+  const has = (...w) => w.some((x) => s.includes(x));
+  if (has("courtly","propaganda","diplomat","cultural","festival","loyalty","peace","toast","forged_letter","doubt","mask_off","patron","call_question","read_the_room","eavesdrop","sidle","stage_distract","whispered","tensions","policy_reform","psych_ops","moral_high","flash_bargain","flash_interdict","intrigue_council","alliance_summit","crisis_summit","exchange")) return "political";
+  if (has("farm","harvest","eden","terraform","reconstruct","pilgrim","ration_distribut","charity","sanctum","outpost","garden")) return "agrarian";
+  if (has("qliph","void","ego","infernal","oblivion","apocalyptic")) return "void";
+  if (has("chrono","reality","temporal","quantum")) return "temporal";
+  if (has("bless","mercy","divine","faithful","chaplain","harmonic","prayer","radiant","sephirot","absolution","empath","unity","alignment","purif","judgment","inquisi","great_work","final_weave","temple","enlighten","reformation","justice")) return "faith";
+  if (has("shadow","ghost","conceal","disable_alarm","distract","impersonate","pick_lock","smoke","tailgate","signal_hijack","sabote","subdue","gather_intel","spy_insert","recon","bypass","infiltrat")) return "stealth";
+  if (has("artillery","siege","suppressive","crack_the_keep","sap_the_walls","echo_strike")) return "siege";
+  if (has("fortif","repair","entrench","take_cover","shore_the_gate","patch_the_breach","perimeter","patrol","border","training","secure")) return "fortify";
+  if (has("industr","overclock","gradient","war_chest","supply","trade","smuggl","expropriat","mine","port","infrastructure","logistic","mobiliz","resupply")) return "economy";
+  if (has("flank","coordinated","sortie","last_stand","rally","command","faction_wide","reversal","overwatch","advance","cohesion","strike")) return "martial";
+  return "martial";
+}
+
+// category → { fam, color, [overlay], effect[], burst[] }. Arrays thematic-first, proven-last.
+const DOC_FX = {
+  agrarian:  { fam: "faith",      color: 0x6fbf4b, effect: ["jb2a.entangle.02.green", "jb2a.entangle.01.green", "jb2a.magic_signs.circle.02.conjuration.complete.green", "jb2a.magic_signs.circle.02.transmutation.complete.blue"], burst: ["jb2a.cure_wounds.400px.green", "jb2a.healing_generic.burst.greenorange", "jb2a.particle_burst.01.circle.bluepurple"] },
+  martial:   { fam: "martial",    color: 0xff6b4a, effect: ["jb2a.sword.melee.01.white", "jb2a.greatsword.melee.01.white", "jb2a.melee_generic.slashing.one_handed.01.orange", "jb2a.magic_signs.circle.02.abjuration.complete.red"], burst: ["jb2a.impact.001.orange", "jb2a.impact.001.red", "jb2a.explosion.01.orange"] },
+  siege:     { fam: "industrial", color: 0xff8c42, effect: ["jb2a.catapult.boulder", "jb2a.flaming_boulder.throw.01", "jb2a.boulder.toss.01", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.explosion.08.orange", "jb2a.impact.ground_crack.orange.01", "jb2a.explosion.02.orange"] },
+  faith:     { fam: "faith",      color: 0x67d4ff, effect: ["jb2a.cure_wounds.400px.blue", "jb2a.healing_generic.200px.blue", "jb2a.magic_signs.circle.02.divination.complete.blue"], burst: ["jb2a.explosion.01.yellow", "jb2a.particle_burst.01.star.yellow"] },
+  void:      { fam: "void",       color: 0x7a5cff, effect: ["jb2a.toll_the_dead.purple.skulls", "jb2a.magic_signs.circle.02.necromancy.complete.dark_purple"], burst: ["jb2a.explosion.01.purple", "jb2a.explosion.02.purple"] },
+  temporal:  { fam: "temporal",   color: 0x6fa8ff, effect: ["jb2a.portals.vertical.vortex.blue", "jb2a.magic_signs.circle.02.evocation.complete.blue"], burst: ["jb2a.particle_burst.01.circle.bluepurple", "jb2a.explosion.01.blue"] },
+  political: { fam: "political",  color: 0xd4af37, effect: ["jb2a.magic_signs.circle.02.enchantment.complete.yellow", "jb2a.magic_signs.circle.02.enchantment.complete.purple"], burst: ["jb2a.particle_burst.01.star.yellow", "jb2a.explosion.01.yellow"] },
+  stealth:   { fam: "void",       color: 0x2dd4bf, overlay: "infiltration", effect: ["jb2a.smoke.puff.centered.dark_black", "jb2a.smoke.puff.centered.grey", "jb2a.magic_signs.circle.02.necromancy.complete.purple"], burst: ["jb2a.smoke.puff.side.02.grey", "jb2a.particle_burst.01.circle.bluepurple"] },
+  economy:   { fam: "industrial", color: 0xffb347, effect: ["jb2a.lightning_strike.blue.0", "jb2a.chain_lightning.primary.blue", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.static_electricity.03.blue", "jb2a.explosion.02.orange"] },
+  fortify:   { fam: "martial",    color: 0x6fb3ff, effect: ["jb2a.shield.01.intro.blue", "jb2a.magic_signs.circle.02.abjuration.complete.blue"], burst: ["jb2a.explosion.01.blue", "jb2a.particle_burst.01.circle.bluepurple"] }
+};
+
+// Signature per-key flourishes — override the category effect/burst for iconic doctrines.
+const DOC_SIG = {
+  ego_dragon_echo:      { effect: ["jb2a.magic_signs.circle.02.necromancy.complete.dark_red"], burst: ["jb2a.fireball.explosion.orange", "jb2a.eruption.orange.0"] },
+  project_eden:         { effect: ["jb2a.entangle.02.green", "jb2a.entangle.01.green"], burst: ["jb2a.cure_wounds.400px.green", "jb2a.particle_burst.01.circle.bluepurple"] },
+  harvest_season:       { effect: ["jb2a.entangle.02.green", "jb2a.magic_signs.circle.02.conjuration.complete.green"], burst: ["jb2a.particle_burst.01.star.yellow"] },
+  artillery_salvo:      { effect: ["jb2a.flaming_boulder.throw.01", "jb2a.catapult.boulder"], burst: ["jb2a.explosion.08.orange", "jb2a.explosion.02.orange"] },
+  siege_breaker_volley: { effect: ["jb2a.ballista.shot", "jb2a.spear.throw.01"], burst: ["jb2a.impact.ground_crack.orange.01"] },
+  flank_attack:         { effect: ["jb2a.dagger.melee.01.white", "jb2a.sword.melee.01.white"], burst: ["jb2a.impact.001.red"] },
+  overclock_the_golems: { effect: ["jb2a.chain_lightning.primary.blue", "jb2a.lightning_strike.blue.0"], burst: ["jb2a.static_electricity.03.blue"] },
+  smoke_and_mirrors:    { effect: ["jb2a.smoke.puff.centered.grey"], burst: ["jb2a.smoke.puff.side.02.grey"] },
+  void_signal_collapse: { effect: ["jb2a.magic_signs.circle.02.necromancy.complete.dark_purple"], burst: ["jb2a.explosion.02.purple"] }
+};
+
+// All 87 maneuvers + 74 strategic activities (live Ember doctrines pack, 2026-06-09).
+// Registered explicitly so every key gets a thematic spec regardless of runtime discovery.
+const DOCTRINE_KEYS = [
+  "alignment_shift", "alliance_summit", "apocalyptic_weapon_test", "artillery_salvo",
+  "auto_recon_sweep", "bless_the_fallen", "border_patrol", "bypass_obstacle",
+  "charity_drive", "chrono_loop_command", "civic_audit", "command_overdrive",
+  "conceal_body", "coordinated_strike", "counter_propaganda_wave", "courtly_call_question",
+  "courtly_eavesdrop", "courtly_forged_letter", "courtly_intrigue_council", "courtly_mask_off",
+  "courtly_patrons_word", "courtly_plant_a_doubt", "courtly_public_toast", "courtly_quote_old_law",
+  "courtly_read_the_room", "courtly_sidle_closer", "courtly_stage_distraction", "courtly_whispered_aside",
+  "crack_the_keep", "crisis_summit", "crown_of_mercy", "cultural_exchange",
+  "cultural_festival_std", "cultural_offensive", "dark_harvest", "defender_s_reversal",
+  "defensive_entrenchment", "defuse_tensions", "develop_infrastructure_std", "develop_outpost_stability",
+  "diplomatic_channel", "diplomatic_mission_std", "disable_alarm", "distract",
+  "divine_favor", "dragon_s_parley", "echo_strike_protocol", "ego_breaker",
+  "ego_dragon_echo", "empathic_surge", "engine_of_absolution", "enlightenment_congress",
+  "establish_outpost", "establish_supply_line", "establish_trade_route", "faction_wide_rally",
+  "faithful_intervention", "faultline_tuning", "field_chaplaincy", "flank_attack",
+  "flash_bargain", "flash_interdict", "fortify_hex", "forward_resupply",
+  "found_site_farm", "found_site_fortress", "found_site_mine", "found_site_port",
+  "found_site_research", "found_site_temple", "gather_intel", "ghost_slip_infiltration",
+  "gradient_surge", "great_work_ritual", "harmonic_chant", "harvest_season",
+  "hide_in_shadow", "impersonate", "industrial_revolution", "industrial_sabotage",
+  "infrastructure_expansion", "inquisition_mandate", "judgment_of_light", "justice_tribunal",
+  "last_stand_banner", "local_festival", "logistical_surge", "logistics_surge_s2",
+  "loyalty_program", "mass_mobilization", "minor_repair", "moral_high_ground",
+  "oblivion_protocol", "opt_coordinated_advance", "opt_infernal_bargain", "opt_psychological_pressure",
+  "optact_cultural_diffusion", "optact_operational_cohesion", "optact_ritual_binding", "overclock_the_golems",
+  "patch_the_breach", "patrol_routes", "peace_accords", "pick_lock",
+  "pilgrimage_route", "policy_reforms", "prayer_in_the_smoke", "prayer_pulse",
+  "project_eden", "propaganda_campaign", "propaganda_tour", "psych_ops_broadcast",
+  "psychic_disruption", "purification_rite", "qliphothic_gambit", "quantum_shield",
+  "radiant_retaliation", "rally_the_line", "ration_distribution", "reality_hack",
+  "recon_sweep", "reconstruction_drive", "repair_fortifications", "repair_rig",
+  "resource_expropriation", "saboteur_s_edge", "sanctum_expansion", "sap_the_walls",
+  "secure_perimeter", "sephirotic_intervention", "shore_the_gate", "siege_breaker_volley",
+  "siege_logistics_overhaul", "signal_hijack", "smoke_and_mirrors", "smuggling_network",
+  "sortie_en_masse", "spy_insertion", "subdue_nonlethal", "supply_cache",
+  "supply_depot", "supply_overrun", "supply_surge", "suppressive_fire",
+  "suppressive_volley", "sympathetic_stabilization", "tactical_overwatch", "tailgate",
+  "take_cover", "temporal_armistice", "terraforming_project", "terrain_calibration",
+  "the_final_weave", "total_mobilization", "training_drills", "training_parade",
+  "unity_surge", "upgrade_outpost_settlement", "void_signal_collapse", "war_chest",
+  "world_reformation_council"
+];
+
+function doctrineSpec(key, name = "") {
+  const cat = doctrineCategory(key, name);
+  const fx = DOC_FX[cat] || DOC_FX.martial;
+  const sig = DOC_SIG[key] || {};
+  return {
+    family: fx.fam,
+    ...defaultVisualsForFamily(fx.fam, key),
+    canvasColor: fx.color,
+    ...(fx.overlay ? { impactOverlay: fx.overlay, resolveOverlay: fx.overlay } : {}),
+    effect: sig.effect || fx.effect,
+    burst: sig.burst || fx.burst,
+    category: cat
+  };
+}
+
+// Exposed for the verify-doctrine-vfx macro (offline coverage report).
+export const DOCTRINE_FX_API = { DOCTRINE_KEYS, doctrineCategory, doctrineSpec, DOC_FX, DOC_SIG };
+
 export async function installRegistry(api) {
   const agent = game.bbttcc?.api?.agent;
   let throughput = {};
@@ -200,4 +329,23 @@ export async function installRegistry(api) {
 
   const specs = cinematicSpecs(api);
   for (const [key, spec] of Object.entries(specs)) api.register(key, spec);
+
+  // Doctrine VFX variety pass (2026-06-09) — register a thematic effect/burst spec
+  // for every maneuver + strategic activity. Runs LAST so the per-key recipes win
+  // over the family-only generic specs. Covers the static 161-key list plus any
+  // maneuver discovered at runtime from raid.EFFECTS (handles future additions).
+  for (const key of DOCTRINE_KEYS) {
+    api.register(key, doctrineSpec(key));
+    const canon = canonicalizeKey(key);
+    if (canon && canon !== key) api.register(canon, doctrineSpec(key));
+  }
+  try {
+    const raid = game.bbttcc?.api?.raid;
+    const effects = raid?.EFFECTS || {};
+    for (const [key, eff] of Object.entries(effects)) {
+      if (!key) continue;
+      const canon = canonicalizeKey(key);
+      if (!api.get(canon) || !api.get(canon)?.effect) api.register(canon, doctrineSpec(canon, eff?.label || ""));
+    }
+  } catch {}
 }

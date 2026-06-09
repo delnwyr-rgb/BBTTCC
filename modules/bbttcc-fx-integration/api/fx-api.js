@@ -265,6 +265,23 @@ export function createFXAPI() {
   };
   const BURST_FALLBACK = "jb2a.explosion.01.orange";
 
+  // True iff a Sequencer DB key resolves in this world (JB2A installed + key present).
+  function keyExists(k) {
+    try { return !!globalThis.Sequencer?.Database?.entryExists?.(String(k)); } catch { return false; }
+  }
+
+  // Resolve a spec effect/burst value (string OR [preferred, …, proven] array) to the first
+  // key that exists. Thematic-first arrays degrade gracefully: if no listed key resolves we
+  // return the LAST entry (the proven fallback), so variety is additive and never breaks.
+  function resolveKey(v) {
+    if (!v) return null;
+    if (Array.isArray(v)) {
+      for (const k of v) if (keyExists(k)) return k;
+      return v.length ? v[v.length - 1] : null;
+    }
+    return v;
+  }
+
   function effectForFamily(family) {
     return CIRCLE_BY_FAMILY[String(family || "").toLowerCase()] || FAMILY_FALLBACK;
   }
@@ -325,12 +342,15 @@ export function createFXAPI() {
     if (ctx.effectRequiresTarget && !ctx.targetToken) return null;
 
     const fam = family || spec.family || familyForKey(key);
-    const path = spec.effect || effectForFamily(fam);
+    // Thematic-first: resolve the spec's effect/burst (string or array) to a key that exists,
+    // else fall back to the family circle/burst. fallbackPath stays the family circle so even
+    // a fully-missing thematic key lands on a sensible glyph rather than the generic default.
+    const path = resolveKey(spec.effect) || effectForFamily(fam);
     // Raid punch: magic-circle glyph + a one-shot burst detonating over it.
     return engine.playSequencerEffect(path, {
       target: ctx.targetToken || null,
-      fallbackPath: FAMILY_FALLBACK,
-      accentPath: spec.burst || burstForFamily(fam),
+      fallbackPath: effectForFamily(fam),
+      accentPath: resolveKey(spec.burst) || burstForFamily(fam),
       accentDelay: 120,
       color: spec.canvasColor,
       radius: spec.canvasRadius,
@@ -364,13 +384,13 @@ export function createFXAPI() {
 
     const spec = get(key) || {};
     const family = spec.family || familyForKey(key);
-    const path = effectForSpec(spec, key);
+    const path = resolveKey(spec.effect) || effectForFamily(family);
     // Planner pop: the brief circle loop above the hex, with a burst accent so
     // it lands rather than just fading in.
     engine.playSequencerEffect(path, {
       target: doc,
-      fallbackPath: FAMILY_FALLBACK,
-      accentPath: spec.burst || burstForFamily(family),
+      fallbackPath: effectForFamily(family),
+      accentPath: resolveKey(spec.burst) || burstForFamily(family),
       accentDelay: 80,
       color: spec.canvasColor,
       radius: spec.canvasRadius || 120,
@@ -494,6 +514,8 @@ export function createFXAPI() {
     effectForFamily,
     burstForFamily,
     familyForKey,
+    keyExists,
+    resolveKey,
     normalizeRaidType,
     raidToneForType,
     defaultPhaseForKey,
