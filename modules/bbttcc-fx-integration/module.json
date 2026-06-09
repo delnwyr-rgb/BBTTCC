@@ -13,7 +13,8 @@
     "verified": "13"
   },
   "esmodules": [
-    "module.js"
+    "module.js",
+    "integrations/class-tier-a-vfx.js"
   ],
   "styles": [
     "styles/fx.css"

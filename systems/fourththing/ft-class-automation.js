@@ -185,6 +185,17 @@ export const FEATURE_ROUTER = {
   "harmony_marshal_loyalty_steward":  "harmony_marshal_loyalty_steward",
   "harmony_marshal_unity_conductor":  "harmony_marshal_unity_conductor",
   "harmony_marshal_rallying_words":   "harmony_marshal_rallying_words",
+  // 2026-06-08 — slugified-from-name identifier aliases. Built content items carry
+  // name-derived ids ("harmony-marshal-tier-1--harmony-initiate") that did NOT match
+  // the hand-authored keys above, so they fell through NAME_ROUTER's generic
+  // "Harmony Marshal: Tier" → passive_info and showed a fluff dialog instead of
+  // running their real handler. Wire the real ids to the real handlers. (Found via
+  // the L20-gauntlet dead-button audit — the buttons "worked" so the gauntlet missed it.)
+  "harmony-marshal-tier-1--harmony-initiate":  "harmony_marshal_initiate",
+  "harmony-marshal-tier-2--attrition-easer":   "harmony_marshal_attrition_easer",
+  "harmony-marshal-tier-3--loyalty-steward":   "harmony_marshal_loyalty_steward",
+  "harmony-marshal-tier-4--unity-conductor":   "harmony_marshal_unity_conductor",
+  "rallying-words":                            "harmony_marshal_rallying_words",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -428,6 +439,16 @@ const RETIRED_FEATURE_HANDLERS = new Set([
   "pactkeeper_civic_charge"   // Civic Charge pool purged in the Surge redesign (2026-06-07)
 ]);
 
+// 2026-06-08 — Handlers whose BUTTON is suppressed but whose FEAT is kept. These are
+// early-return stubs whose mechanic moved elsewhere (Pace → Surge, Package → sheet chip),
+// so the ▶ Use button was a dead no-op. Unlike RETIRED_FEATURE_HANDLERS, these are NOT
+// treated as prunable-folded (the features keep their descriptions on the actor; only the
+// dead button disappears). Found via the L20-gauntlet dead-button audit.
+const HIDDEN_BUTTON_HANDLERS = new Set([
+  "shadow_courier_crossing",  // The Crossing / Threshold Is A Lie — fires via Surge, not this button
+  "shadow_courier_package",   // The Weight You Carry / Tongue That Does Not Lie — Package is a sheet chip
+]);
+
 // Raw route — resolves a feature's handler WITHOUT the retired-handler filter.
 // routeFeature() applies the filter on top; the prune helper needs the unfiltered
 // answer to recognize folded feats (whose filtered route is null).
@@ -443,8 +464,10 @@ function _rawRouteFeature(item) {
 
 export function routeFeature(item) {
   const handler = _rawRouteFeature(item);
-  // Folded-into-Surge handlers are no longer real actions — report no route.
-  if (handler && RETIRED_FEATURE_HANDLERS.has(handler)) return null;
+  // Folded-into-Surge handlers are no longer real actions — report no route. Hidden-button
+  // handlers are likewise suppressed (dead-no-op stubs) but stay out of RETIRED so the prune
+  // helper does NOT treat their feats as folded/prunable.
+  if (handler && (RETIRED_FEATURE_HANDLERS.has(handler) || HIDDEN_BUTTON_HANDLERS.has(handler))) return null;
   return handler;
 }
 
