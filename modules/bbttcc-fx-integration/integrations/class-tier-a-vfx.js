@@ -100,6 +100,14 @@ const MAP = {
   "Split Beam":                                               "bolster",
   "Gentle Pivot":                                             "bolster",
   "Mercy Refraction (BBTTCC)":                                "bolster",
+  // Soul-Smith — Forge techniques (wired 2026-06-08, fix-on-touch)
+  "Banner of the Final Push":                                 "peace_aura",
+  "Sanctuary Engine":                                         "ward_aura",
+  "Standard of Will (BBTTCC)":                                "peace_aura",
+  "Triumph Weave":                                            "peace_aura",
+  "Forge Blessing":                                           "inspire",
+  "Rally Stitch":                                             "bolster",
+  "Luminous Intercession":                                    "inspire",
 };
 
 // ---- self-contained Sequencer helpers ----

@@ -214,6 +214,14 @@ export const FEATURE_ROUTER = {
   "wyrdlens-refraction-mercy-soft-focus":              "wyrdlens_soft_focus",
   "wyrdlens-refraction-foresight-split-beam":          "wyrdlens_split_beam",
   "wyrdlens-refraction-truth-truth-horizon":           "wyrdlens_truth_horizon",
+  // Soul-Smith — Forge techniques (2026-06-08, fix-on-touch)
+  "soulsmith-forge-victory-banner-final-push":         "soulsmith_banner_final_push",
+  "soulsmith-forge-bound-light-forge-blessing":        "soulsmith_forge_blessing",
+  "soulsmith-forge-bound-light-luminous-intercession": "soulsmith_luminous_intercession",
+  "soulsmith-forge-victory-rally-stitch":              "soulsmith_rally_stitch",
+  "soulsmith-forge-bound-light-sanctuary-engine":      "soulsmith_sanctuary_engine",
+  "soulsmith-forge-victory-standard-of-will":          "soulsmith_standard_of_will",
+  "soulsmith-forge-victory-triumph-weave":             "soulsmith_triumph_weave",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5933,6 +5941,14 @@ const LEGACY_ACTION_COST = {
   "wyrdlens_soft_focus":        "action",     // 30-ft softening field (at-will)
   "wyrdlens_split_beam":        "free",       // share a defense advantage
   "wyrdlens_truth_horizon":     "action",     // 30-ft anti-illusion aura
+  // Soul-Smith — Forge techniques
+  "soulsmith_banner_final_push": "action",    // 30-ft rally aura
+  "soulsmith_forge_blessing":    "bonus",     // bless an ally's gear
+  "soulsmith_luminous_intercession": "reaction", // reduce a creature's damage 2d8+tier
+  "soulsmith_rally_stitch":      "reaction",  // reroll a failed ally defense
+  "soulsmith_sanctuary_engine":  "action",    // 15-ft resist-all field
+  "soulsmith_standard_of_will":  "action",    // 15-ft +1 resolve banner (at-will)
+  "soulsmith_triumph_weave":     "reaction",  // momentum surge to allies in 15 ft
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6268,7 +6284,7 @@ export async function openHarmonyMarshalSentinelProtocol(actor) {
 // ─── Wyrdlens Adept — Refraction techniques (build-out 2026-06-08, fix-on-touch) ──
 // Shared aura applicator: self marker AE (1 min) + ally reroll-lowest aid in range.
 // Returns { allyNames, foes } for the caller's chat-card, or null if no caster token.
-async function _ftAuraApply(actor, { radiusFt, markerName, markerImg, markerFlag, aidSource }) {
+async function _ftAuraApply(actor, { radiusFt, markerName, markerImg, markerFlag, aidSource, allyChanges = null, durationRounds = 10, foeDisattack = false }) {
   const myToken = actor.getActiveTokens?.()?.[0];
   if (!myToken) { ui.notifications?.warn(`${markerName}: place your token on the canvas first.`); return null; }
   const scene = myToken.scene ?? canvas.scene;
@@ -6280,17 +6296,24 @@ async function _ftAuraApply(actor, { radiusFt, markerName, markerImg, markerFlag
     && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
   const allies = inRange.filter((t) => (t.document?.disposition ?? 0) >= 0);
   const foes   = inRange.filter((t) => (t.document?.disposition ?? 0) <  0);
+  const dur = { rounds: durationRounds, seconds: durationRounds * 6 };
   try {
     await actor.createEmbeddedDocuments("ActiveEffect", [{
       name: markerName, img: markerImg, origin: actor.uuid,
-      duration: { rounds: 10, seconds: 60 }, changes: [], flags: { fourththing: { [markerFlag]: { radiusFt } } }
+      duration: dur, changes: [], flags: { fourththing: { [markerFlag]: { radiusFt } } }
     }]);
   } catch (e) { /* skip */ }
   const allyNames = [];
   for (const t of allies) {
-    try { const b = t.actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: aidSource }); await t.actor.setFlag("fourththing", "aidBanked", b); allyNames.push(t.actor.name); } catch (e) {}
+    try {
+      const b = t.actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: aidSource }); await t.actor.setFlag("fourththing", "aidBanked", b);
+      if (allyChanges?.length) await t.actor.createEmbeddedDocuments("ActiveEffect", [{ name: markerName, img: markerImg, origin: actor.uuid, duration: dur, changes: allyChanges, flags: { fourththing: { [markerFlag]: true } } }]);
+      allyNames.push(t.actor.name);
+    } catch (e) {}
   }
-  return { allyNames, foes };
+  const foeNames = [];
+  if (foeDisattack) for (const t of foes) { try { await t.actor.setFlag("fourththing", "aurablade.disAttackOnce", true); foeNames.push(t.actor.name); } catch (e) {} }
+  return { allyNames, foes, foeNames };
 }
 
 // Convergence Horizon (Foresight) — 1/Soma-Break action, 30-ft aura.
@@ -6380,6 +6403,98 @@ export async function openWyrdlensMercyRefraction(actor) {
     });
 }
 
+// ─── Soul-Smith — Forge techniques (build-out 2026-06-08, fix-on-touch) ──────────
+
+// Banner of the Final Push (Victory) — 1/Soma-Break action, 30-ft rally aura (+2 Guard AE).
+export async function openSoulSmithBannerFinalPush(actor) {
+  return _openSomaBreakAbility(actor, "ssBannerFinalPush", "Banner of the Final Push",
+    "Spend an action: raise the Final Push Standard — a <b>30-ft aura</b> (1 minute, moves with you). Allies inside gain <b>+2 Guard</b> (and +2 attack — surfaced), <b>reroll-lowest</b> aid, and <b>temp Integrity = your tier</b> at the start of each of their turns.",
+    async (actor) => {
+      const r = await _ftAuraApply(actor, { radiusFt: 30, markerName: "Banner of the Final Push (aura)", markerImg: "icons/magic/fire/flame-burning-banner-red.webp", markerFlag: "bannerFinalPush", aidSource: "banner-final-push", allyChanges: [{ key: "system.derived.guard.aeBonus", mode: 2, value: "2", priority: 20 }] });
+      if (!r) return false;
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">⟁ <b>Final Push Standard raised</b> — 30 ft, 1 minute.</p><p style="margin:0.15rem 0;color:#78c88c">Allies rallied (+2 Guard, reroll-lowest): <b>${r.allyNames.join(", ") || "—"}</b></p><p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">Also: +2 attack rolls, and temp Integrity = tier at the start of each ally's turn (apply on their turn).</p></div>`;
+    });
+}
+
+// Sanctuary Engine (Bound Light) — 1/Soma-Break action, 15-ft resist-all field.
+export async function openSoulSmithSanctuaryEngine(actor) {
+  return _openSomaBreakAbility(actor, "ssSanctuaryEngine", "Sanctuary Engine",
+    "Spend an action: ignite a moving <b>15-ft Sanctuary Field</b> (1 minute, moves with you). Allies inside gain <b>resistance to all damage</b> and <b>reroll-lowest</b> aid; hostiles inside have <b>disadvantage</b> on attacks against anyone but you; allied Body-dice healing rolls twice.",
+    async (actor) => {
+      const r = await _ftAuraApply(actor, { radiusFt: 15, markerName: "Sanctuary Engine (field)", markerImg: "icons/magic/holy/barrier-shield-dome-deflect-teal.webp", markerFlag: "sanctuaryEngine", aidSource: "sanctuary-engine", foeDisattack: true });
+      if (!r) return false;
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">⟁ <b>Sanctuary Field ignited</b> — 15 ft, 1 minute.</p><p style="margin:0.15rem 0;color:#78c88c">Allies sheltered (resist all damage, reroll-lowest): <b>${r.allyNames.join(", ") || "—"}</b></p><p style="margin:0.15rem 0;color:#dc8050">Hostiles inside (disadvantage vs anyone but you): <b>${r.foeNames.join(", ") || "—"}</b></p></div>`;
+    });
+}
+
+// Standard of Will (Victory) — at-will action, 15-ft, +1 resolve to allies until next turn.
+export async function openSoulSmithStandardOfWill(actor) {
+  const r = await _ftAuraApply(actor, { radiusFt: 15, markerName: "Standard of Will", markerImg: "icons/magic/holy/yin-yang-balance-symbol.webp", markerFlag: "standardOfWill", aidSource: "standard-of-will", allyChanges: [{ key: "system.derived.resolve.aeBonus", mode: 2, value: "1", priority: 20 }], durationRounds: 1 });
+  if (!r) return;
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c84a">🚩 Standard of Will</span></div><div class="ft-prev-align-note" style="font-size:0.78rem"><p style="margin:0.15rem 0">15-ft standard, until your next turn. Allies gain <b>+1 defense vs Shaken</b>.</p><p style="margin:0.15rem 0;color:#78c88c">Allies under the banner: <b>${r.allyNames.join(", ") || "—"}</b></p></div></div>` });
+}
+
+// Forge Blessing (Bound Light) — bonus action, tier uses/Soma Break, single ally aid.
+export async function openSoulSmithForgeBlessing(actor) {
+  const key = "ssForgeBlessing";
+  return _openTierUsesPerSomaBreak(actor, key, "Forge Blessing",
+    "Bonus action: bless a <b>targeted</b> ally's weapon/shield. Once in the next minute they may add your tier to one attack roll or their Guard vs one attack. <i>Banked as reroll-lowest aid.</i>",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Forge Blessing: target the ally to bless first."); const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0); await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1)); return; }
+      try { const b = ally.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "forge-blessing" }); await ally.setFlag("fourththing", "aidBanked", b); } catch (e) { ui.notifications?.warn("Forge Blessing: couldn't reach that ally."); return; }
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ffb347">🔨 Forge Blessing → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">Their gear holds a pulse of intent — reroll-lowest banked on an attack or defense.</p></div>` });
+    });
+}
+
+// Rally Stitch (Victory) — reaction, tier uses/Soma Break, reroll a failed ally defense.
+export async function openSoulSmithRallyStitch(actor) {
+  const key = "ssRallyStitch";
+  return _openTierUsesPerSomaBreak(actor, key, "Rally Stitch",
+    "Reaction: when a <b>targeted</b> friendly within 30 ft fails a defense check, they reroll it and use the new result.",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Rally Stitch: target the ally who failed first."); const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0); await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1)); return; }
+      try { const b = ally.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "rally-stitch" }); await ally.setFlag("fourththing", "aidBanked", b); } catch (e) { ui.notifications?.warn("Rally Stitch: couldn't reach that ally."); return; }
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0d8b8">🧵 Rally Stitch → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">reroll banked on their failed defense.</p></div>` });
+    });
+}
+
+// Luminous Intercession (Bound Light) — at-will reaction, reduce a creature's damage by 2d8+tier.
+export async function openSoulSmithLuminousIntercession(actor) {
+  const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+  if (!ally) return ui.notifications?.warn("Luminous Intercession: target the creature taking damage first.");
+  const sys  = actor.system?.system ?? actor.system ?? {};
+  const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+  const dc   = 8 + tier * 2;
+  const roll = new Roll(`2d8 + ${tier}`); await roll.evaluate();
+  const amt  = Math.max(0, Number(roll.total) || 0);
+  let healed = false;
+  try { const desc = await game.fourththing?.rolls?._applyDamageToActor?.(ally, amt, { op: "heal", track: "integrity" }); healed = !!desc; } catch (e) {}
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), rolls: [roll],
+    content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ffe27a">✦ Luminous Intercession → ${_ftEscape(ally.name)}</span></div><div class="ft-dmg-row"><span class="ft-dmg-label">Damage reduced</span><span class="ft-dmg-formula">2d8 + ${tier} = <b>${amt}</b></span></div><p style="margin:0.2rem 0;font-size:0.78rem">${healed ? `Restored <b>${amt}</b> Integrity to ${_ftEscape(ally.name)} (prevented damage → temp Integrity).` : `Reduce the incoming damage by <b>${amt}</b>.`} Attacker must Soul-save (DC ${dc}) or attack at disadvantage next turn.</p></div>` });
+}
+
+// Triumph Weave (Victory) — at-will reaction, momentum surge to allies within 15 ft.
+export async function openSoulSmithTriumphWeave(actor) {
+  const myToken = actor.getActiveTokens?.()?.[0];
+  if (!myToken) return ui.notifications?.warn("Triumph Weave: place your token on the canvas first.");
+  const sys  = actor.system?.system ?? actor.system ?? {};
+  const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+  const scene = myToken.scene ?? canvas.scene;
+  const grid  = scene?.grid?.size ?? canvas.grid?.size ?? 100;
+  const rangePx = (15 / (scene?.grid?.distance ?? 5)) * grid;
+  const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 });
+  const me  = ctr(myToken);
+  const allies = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && (t.document?.disposition ?? 0) >= 0
+    && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
+  const names = [];
+  for (const t of allies) { try { const desc = await game.fourththing?.rolls?._applyDamageToActor?.(t.actor, tier, { op: "heal", track: "integrity" }); if (desc) names.push(t.actor.name); } catch (e) {} }
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ffd27a">🎇 Triumph Weave</span></div><p style="margin:0.2rem 0;font-size:0.8rem">Momentum surges to allies within 15 ft: <b>+${tier}</b> Integrity, <b>+10 ft</b> speed until end of next turn, and one boosted Diplomacy/Intimidation check.<br>Affected: <b>${names.join(", ") || "—"}</b></p></div>` });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6446,6 +6561,13 @@ export async function dispatchFeatureAction(actor, item) {
     case "wyrdlens_soft_focus":               return openWyrdlensSoftFocus(actor);
     case "wyrdlens_split_beam":               return openWyrdlensSplitBeam(actor);
     case "wyrdlens_truth_horizon":            return openWyrdlensTruthHorizon(actor);
+    case "soulsmith_banner_final_push":       return openSoulSmithBannerFinalPush(actor);
+    case "soulsmith_forge_blessing":          return openSoulSmithForgeBlessing(actor);
+    case "soulsmith_luminous_intercession":   return openSoulSmithLuminousIntercession(actor);
+    case "soulsmith_rally_stitch":            return openSoulSmithRallyStitch(actor);
+    case "soulsmith_sanctuary_engine":        return openSoulSmithSanctuaryEngine(actor);
+    case "soulsmith_standard_of_will":        return openSoulSmithStandardOfWill(actor);
+    case "soulsmith_triumph_weave":           return openSoulSmithTriumphWeave(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);
