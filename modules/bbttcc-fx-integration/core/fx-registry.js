@@ -296,8 +296,19 @@ function doctrineSpec(key, name = "") {
   };
 }
 
+// Courtly Secrets — played via the courtly HUD (api.playSecret → bbttcc:courtly:vfx
+// "secret-play"); raid-courtly.vfx.js fires fx.playKey(effectKey) on the player's token.
+// Political/gold base with a per-secret flourish; new effectKeys fall back to the generic
+// "courtly_secret" (also registered) via the handler's default. Keys probe-verified.
+const COURTLY_SECRET_FX = {
+  clearScandal:   { family: "political", canvasColor: 0xffd54a, effect: ["jb2a.healing_generic.400px.yellow", "jb2a.magic_signs.circle.02.enchantment.complete.yellow"], burst: ["jb2a.particle_burst.01.star.yellow", "jb2a.explosion.01.yellow"] },          // Royal Pardon — a cleansing gold pardon
+  influenceDmg2:  { family: "political", canvasColor: 0xc792ea, effect: ["jb2a.magic_signs.circle.02.enchantment.complete.purple", "jb2a.magic_signs.circle.02.enchantment.complete.yellow"], burst: ["jb2a.explosion.01.purple", "jb2a.particle_burst.01.star.yellow"] }, // Compromising Letter — a cutting exposure
+  rollPlus2:      { family: "political", canvasColor: 0xd4af37, effect: ["jb2a.magic_signs.circle.02.enchantment.complete.yellow"], burst: ["jb2a.particle_burst.01.star.yellow"] },                                                                          // Cabinet Whisper — an intel edge
+  courtly_secret: { family: "political", canvasColor: 0xd4af37, effect: ["jb2a.magic_signs.circle.02.enchantment.complete.yellow"], burst: ["jb2a.particle_burst.01.star.yellow"] }                                                                           // generic fallback for future secrets
+};
+
 // Exposed for the verify-doctrine-vfx macro (offline coverage report).
-export const DOCTRINE_FX_API = { DOCTRINE_KEYS, doctrineCategory, doctrineSpec, DOC_FX, DOC_SIG };
+export const DOCTRINE_FX_API = { DOCTRINE_KEYS, doctrineCategory, doctrineSpec, DOC_FX, DOC_SIG, COURTLY_SECRET_FX };
 
 export async function installRegistry(api) {
   const agent = game.bbttcc?.api?.agent;
@@ -352,4 +363,9 @@ export async function installRegistry(api) {
       if (!api.get(canon) || !api.get(canon)?.effect) api.register(canon, doctrineSpec(canon, eff?.label || ""));
     }
   } catch {}
+
+  // Courtly Secrets — register a thematic spec per known secret effectKey.
+  for (const [key, spec] of Object.entries(COURTLY_SECRET_FX)) {
+    api.register(key, { ...defaultVisualsForFamily(spec.family, key), ...spec, category: "courtly-secret" });
+  }
 }

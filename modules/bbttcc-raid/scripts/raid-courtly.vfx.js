@@ -171,6 +171,17 @@
           _banner(`${evt.actorName || "A faction"} plays ${evt.itemName || "a secret"}`, color);
           const sec = document.querySelector("#ft-courtly-secrets");
           if (sec) _pulseElement(sec, color);
+          // Canvas flourish (2026-06-09): fire a thematic Sequencer effect on the
+          // player's token via the fx API, keyed by the secret's effectKey (courtly
+          // gold base + per-secret flavor). GM-only so the broadcast fires once for
+          // everyone (the hook itself runs on every client for the DOM banner above).
+          try {
+            if (game.user?.isGM) {
+              const fx = game.bbttcc?.api?.fx;
+              const tok = (canvas?.tokens?.placeables || []).find((t) => t.actor?.id === evt.actorId) || null;
+              if (fx?.playKey) fx.playKey(evt.effectKey || "courtly_secret", { targetToken: tok, effectRequiresTarget: false }, { family: "political", phase: "resolve", banner: false });
+            }
+          } catch (e) { console.warn(TAG, "secret-play fx failed", e); }
           break;
         }
         case "outcome": {
