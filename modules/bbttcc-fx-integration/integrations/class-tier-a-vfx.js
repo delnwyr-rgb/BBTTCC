@@ -126,6 +126,12 @@ const MAP = {
   "Shared Burden Harness":                                    "bolster",
   "Shared Dreamwork":                                         "bolster",
   "Unbroken Line":                                            "bolster",
+  // Single-class one-offs (2026-06-08; Final Crescendo→rampage & Living Allegory→summon already mapped)
+  "Pulse of the Forge":                                       "peace_aura",
+  "Archivist: Akashic Access":                                "watch_aura",
+  "Stillheart: Emotional Lock":                               "ward_aura",
+  "Auditor: Forensic Audit":                                  "bolster",
+  "Cosmic Linguist: Initiation 6 — Translation":              "peace_aura",
 };
 
 // ---- self-contained Sequencer helpers ----

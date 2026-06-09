@@ -241,6 +241,14 @@ export const FEATURE_ROUTER = {
   "shared-burden-harness":        "ft_shared_burden_harness",
   "shared-dreamwork":             "ft_shared_dreamwork",
   "unbroken-line":                "ft_unbroken_line",
+  // Single-class one-off techniques (2026-06-08, fix-on-touch)
+  "bloodhymn_final_crescendo":    "bloodhymn_final_crescendo",
+  "metaphor_living_allegory":     "metaphor_living_allegory",
+  "pulse-of-the-forge":           "ft_pulse_of_the_forge",
+  "archivist_akashic_access":     "archivist_akashic_access",
+  "stillheart_emotional_lock":    "stillheart_emotional_lock",
+  "auditor_forensic_audit":       "auditor_forensic_audit",
+  "cl_init6_translation":         "cl_init6_translation",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5987,6 +5995,14 @@ const LEGACY_ACTION_COST = {
   "ft_shared_burden_harness":   "reaction",   // damage redirect
   "ft_shared_dreamwork":        "action",     // 10-min dream link
   "ft_unbroken_line":           "reaction",   // shout an ally back to 1
+  // Single-class one-off techniques
+  "bloodhymn_final_crescendo":  "bonus",      // capstone max-damage turn
+  "metaphor_living_allegory":   "action",     // conjure an allegory
+  "ft_pulse_of_the_forge":      "action",     // 15-ft AoE heal
+  "archivist_akashic_access":   "free",       // declare a Precedent aspect
+  "stillheart_emotional_lock":  "bonus",      // freeze Aura/Burn
+  "auditor_forensic_audit":     "action",     // mark Out of Compliance
+  "cl_init6_translation":       "reaction",   // 1/scene transcribe a manifestation
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6749,6 +6765,83 @@ export async function openFtUnbrokenLine(actor) {
     });
 }
 
+// ─── Single-class one-off techniques (build-out 2026-06-08, fix-on-touch) ────────
+
+// Blood Hymn: Final Crescendo (Aurablade capstone) — 1/Soma-Break bonus: max-damage turn.
+export async function openBloodHymnFinalCrescendo(actor) {
+  return _openSomaBreakAbility(actor, "bhFinalCrescendo", "Final Crescendo",
+    "Bonus action: enter <b>Burn 4</b>. For the rest of this turn all your attacks deal <b>maximum damage</b> and you may cleave freely. Aftermath: Burn → 0, disadvantage (3d10kl2) on attacks/saves, and speed 0 until the end of your next turn.",
+    async (actor) => {
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Final Crescendo (max damage)", img: "icons/magic/fire/explosion-fireball-large-red.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { finalCrescendo: true } } }]); } catch (e) {}
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#ff5544">⟁ The hymn burns to its peak — <b>Burn 4</b>, all attacks <b>max damage</b>, free cleave this turn. Then silence: Burn 0, disadvantage on attacks/saves, speed 0 next turn.</p>`;
+    });
+}
+
+// Metaphor Apostle: Living Allegory — action: conjure a scene-long allegorical entity (pick one).
+export async function openMetaphorLivingAllegory(actor) {
+  const choices = { judge: "The Judge (control)", mirror: "The Mirror (reflection)", choir: "The Choir (distraction)", crown: "The Hungry Crown (leverage)" };
+  new Dialog({
+    title: "Living Allegory — conjure which?",
+    content: `<p style="font-size:0.82rem;margin:0 0 0.4rem">Conjure a scene-long allegorical entity (control / distraction / leverage, no direct damage — GM adjudicates).</p>`,
+    buttons: Object.fromEntries(Object.entries(choices).map(([k, label]) => [k, { label, callback: () => {
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#cc6688">❖ Living Allegory — ${label}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">${_ftEscape(actor.name)} conjures <b>${label}</b> for the scene — control, distraction, and leverage (GM adjudication).</p></div>` });
+    } }])),
+    default: "judge"
+  }).render(true);
+}
+
+// Pulse of the Forge (Soul-Smith / Bound Light) — 1/short-or-Soma-Break action, 15-ft AoE heal.
+export async function openFtPulseOfTheForge(actor) {
+  return _openSomaBreakAbility(actor, "ftPulseOfForge", "Pulse of the Forge",
+    "Spend an action: release a wave of stabilizing heat in a 15-ft radius. Allies in range each regain Integrity equal to your tier + Body modifier.",
+    async (actor) => {
+      const myToken = actor.getActiveTokens?.()?.[0];
+      if (!myToken) { ui.notifications?.warn("Pulse of the Forge: place your token on the canvas first."); return false; }
+      const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1)); const body = Number(sys?.attributes?.body?.value) || 0; const amt = tier + body;
+      const scene = myToken.scene ?? canvas.scene; const grid = scene?.grid?.size ?? 100; const rangePx = (15 / (scene?.grid?.distance ?? 5)) * grid;
+      const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 }); const me = ctr(myToken);
+      const allies = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && (t.document?.disposition ?? 0) >= 0 && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
+      const names = []; for (const t of allies) { try { const desc = await game.fourththing?.rolls?._applyDamageToActor?.(t.actor, amt, { op: "heal", track: "integrity" }); if (desc) names.push(t.actor.name); } catch (e) {} }
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#ffb347">⟁ Forge-heat pulses (15 ft) — <b>+${amt}</b> Integrity to: <b>${names.join(", ") || "—"}</b></p>`;
+    });
+}
+
+// Archivist: Akashic Access — declare a Precedent and which aspect sticks hardest.
+export async function openArchivistAkashicAccess(actor) {
+  const aspects = { intent: "Intent (why)", outcome: "Outcome (what)", method: "Method (how)", cost: "Cost (what it took)", weight: "Emotional Weight" };
+  new Dialog({
+    title: "Akashic Access — record which aspect?",
+    content: `<p style="font-size:0.82rem;margin:0 0 0.4rem">Declare a Precedent (+1 beyond your normal limit). Choose which aspect sticks hardest and is most enforceable when cited.</p>`,
+    buttons: Object.fromEntries(Object.entries(aspects).map(([k, label]) => [k, { label, callback: () => {
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">📚 Akashic Access — ${label}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">${_ftEscape(actor.name)} files a Precedent recording <b>${label}</b> — it sticks hardest and is most enforceable when cited.</p></div>` });
+    } }])),
+    default: "intent"
+  }).render(true);
+}
+
+// Stillheart: Emotional Lock (Aurablade) — bonus action: freeze your Aura/Burn until next turn.
+export async function openStillheartEmotionalLock(actor) {
+  try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Emotional Lock", img: "icons/magic/control/buff-flight-wings-blue.webp", origin: actor.uuid, duration: { rounds: 1, seconds: 6 }, changes: [], flags: { fourththing: { emotionalLock: true } } }]); } catch (e) {}
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7db8ff">🔒 Emotional Lock</span></div><p style="margin:0.2rem 0;font-size:0.8rem">Your Aura cannot be forcibly changed and your Burn is <b>frozen</b> until the start of your next turn. At Burn 3+ you may ignore one backlash trigger.</p></div>` });
+}
+
+// Auditor: Forensic Audit — action: mark a targeted creature Out of Compliance for the scene.
+export async function openAuditorForensicAudit(actor) {
+  const foe = Array.from(game.user?.targets ?? [])[0]?.actor;
+  if (!foe) return ui.notifications?.warn("Forensic Audit: target the creature to mark Out of Compliance.");
+  try { await foe.createEmbeddedDocuments("ActiveEffect", [{ name: "Out of Compliance", img: "icons/magic/control/debuff-chains-shackle-movement-red.webp", origin: actor.uuid, duration: { rounds: 100, seconds: 600 }, changes: [], flags: { fourththing: { outOfCompliance: { by: actor.uuid } } } }]); } catch (e) { return ui.notifications?.warn("Forensic Audit: couldn't reach that creature."); }
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#dca0ff">⚖ Forensic Audit → ${_ftEscape(foe.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem"><b>${_ftEscape(foe.name)}</b> is marked <b>Out of Compliance</b> this scene — your suppression / banishment / disable effects gain advantage (or add your Civic Charge die to the DC).</p></div>` });
+}
+
+// Cosmic Linguist: Initiation 6 — Translation — 1/scene reaction: transcribe an ally's manifestation.
+export async function openClInit6Translation(actor) {
+  return _openPerSceneAbility(actor, "clInit6Translation", "Translation",
+    "Reaction to an ally completing a manifestation within Reach: transcribe it into your idiom. Until the end of the next round you carry their effect at your tier cap, paying its upkeep from your Clarity.",
+    async (actor) => {
+      return ` You transcribe the manifestation — carry its effect at your tier cap until the end of the next round (upkeep from your Clarity).`;
+    });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6839,6 +6932,13 @@ export async function dispatchFeatureAction(actor, item) {
     case "ft_shared_burden_harness":          return openFtSharedBurdenHarness(actor);
     case "ft_shared_dreamwork":               return openFtSharedDreamwork(actor);
     case "ft_unbroken_line":                  return openFtUnbrokenLine(actor);
+    case "bloodhymn_final_crescendo":         return openBloodHymnFinalCrescendo(actor);
+    case "metaphor_living_allegory":          return openMetaphorLivingAllegory(actor);
+    case "ft_pulse_of_the_forge":             return openFtPulseOfTheForge(actor);
+    case "archivist_akashic_access":          return openArchivistAkashicAccess(actor);
+    case "stillheart_emotional_lock":         return openStillheartEmotionalLock(actor);
+    case "auditor_forensic_audit":            return openAuditorForensicAudit(actor);
+    case "cl_init6_translation":              return openClInit6Translation(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);
