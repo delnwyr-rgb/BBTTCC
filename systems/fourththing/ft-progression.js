@@ -79,7 +79,10 @@ async function explodeFromBase(baseValue) {
   return { bonus: total, explosions };
 }
 
-export async function skillRollWithRank(actor, { attribute, skill, label = "" } = {}) {
+// `allowSurge` (default true) gates the per-die explosion chain. Foes that the
+// GM hasn't enabled Surge for pass `false` so their checks roll plain Nd10 —
+// no exploding dice fed into the total, nothing banked (playtest 2026-06-09).
+export async function skillRollWithRank(actor, { attribute, skill, label = "", allowSurge = true } = {}) {
   const rawSys   = actor.system?.system ?? actor.system;
   const attrVal  = rawSys?.attributes?.[attribute]?.value ?? 2;
   const rank     = rawSys?.skills?.[skill]?.value ?? 0;
@@ -169,7 +172,9 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "" } 
   const dieResults = [];
   let surgeBanked = 0;
   for (let i = 0; i < baseDice.length; i++) {
-    const { bonus, explosions } = await explodeFromBase(explodeTriggers[i]);
+    const { bonus, explosions } = allowSurge
+      ? await explodeFromBase(explodeTriggers[i])
+      : { bonus: 0, explosions: [] };
     surgeBanked += explosions.length;
     dieResults.push({ base: adjusted[i], explosions, chainTotal: adjusted[i] + bonus });
   }

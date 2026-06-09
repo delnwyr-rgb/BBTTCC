@@ -1723,11 +1723,24 @@ function _ftWarnIfOutOfRange(actor, item) {
 //   advantage    → 3d10x10kh2   (roll 3 exploding, keep the best 2)
 //   disadvantage → 3d10kl2      (roll 3, keep lowest 2 — matches the existing
 //                                effect-imposed disadvantage, which drops explosions)
-function _ftCoreDice(mode) {
+// `actor` (optional) gates the explosion: foes (hostile NPCs/Monsters) only
+// explode — and thus only feed Surge dice into the total — when the GM has
+// enabled Surge for them. Without it their d10s would explode and inflate the
+// roll total even though banking is suppressed (playtest 2026-06-09: "NPCs
+// still roll surge dice into their totals when hostile"). PCs/bosses/rigs
+// (and any callsite passing no actor) keep the canon exploding base.
+function _ftCoreDice(mode, actor = null) {
   if (mode === "advantage")    return "3d10kh2";
   if (mode === "disadvantage") return "3d10kl2";
-  return "2d10x10";
+  return (actor && !_ftSurgeAllowed(actor)) ? "2d10" : "2d10x10";
 }
+// Foe-gated exploding base for the many roll sites that hardcode "2d10x10 + N".
+// Returns the canon exploding "2d10x10" for PCs/bosses/rigs (and any
+// surge-enabled foe), but a plain non-exploding "2d10" for hostile NPCs/Monsters
+// the GM hasn't toggled Surge on for — so their Surge dice never explode into
+// the roll total (banking was already gated; this closes the total-inflation
+// half). Playtest 2026-06-09: "NPCs still roll surge dice into their totals."
+function _ftXd10(actor) { return (actor && !_ftSurgeAllowed(actor)) ? "2d10" : "2d10x10"; }
 // Resolve a user-chosen mode against any effect-forced adv/dis, 5e-style: a
 // matched pair cancels to normal. Returns "advantage" | "disadvantage" | "normal".
 function _ftResolveRollMode({ user = "normal", forcedAdv = false, forcedDis = false } = {}) {
@@ -12591,7 +12604,7 @@ Hooks.once("init", function () {
     // RFI canon: d10s explode on 10 — each extra die banks +1 Surge. Foundry's
     // x10 modifier chains the explosions natively so the dice tray and total
     // stay correct.
-    const formula = `2d10x10 + ${totalBonus}${_dwExtra}`;
+    const formula = `${_ftXd10(actor)} + ${totalBonus}${_dwExtra}`;
     const roll    = new Roll(formula);
     await roll.evaluate();
 
@@ -12771,13 +12784,20 @@ Hooks.once("init", function () {
     // 3-keep-2 shape (no explosions, no surge/surging-cast dice mods); normal
     // keeps the full 2d10x10 + surging-cast threshold + surge dice-mods engine.
     const _castMode = _ftResolveRollMode({ user: rollMode });
+    // Foes only explode (and only feed Surge dice into the total) when the GM
+    // has enabled Surge for them; otherwise their base is a plain, non-exploding
+    // 2d10 (playtest 2026-06-09).
+    const _castExplode = _ftSurgeAllowed(actor);
+    const _castBase    = _castExplode ? "2d10x10" : "2d10";
     let formula;
     if (_castMode !== "normal") {
-      formula = `${_ftCoreDice(_castMode)} + ${posTotal} - ${totalNoise}`;
+      formula = `${_ftCoreDice(_castMode, actor)} + ${posTotal} - ${totalNoise}`;
     } else {
-      formula = `2d10x10 + ${posTotal} - ${totalNoise}`;
+      formula = `${_castBase} + ${posTotal} - ${totalNoise}`;
       // Apply surging-cast threshold first (cinderwake will override below if set).
-      if (_castSurge.surgingCast && !_castSurge.cinderwake) {
+      // Only meaningful when explosions are live (surge-disabled foes carry no
+      // surging-cast one-shot anyway).
+      if (_castExplode && _castSurge.surgingCast && !_castSurge.cinderwake) {
         formula = formula.replace(/2d10x10/, "2d10x>=9");
       }
       formula = _ftApplySurgeRollMods(formula, _castSurge);
@@ -12935,7 +12955,7 @@ Hooks.once("init", function () {
     }
 
     const totalBonus = intentVal + channelVal + aeIntent + aeChannel;
-    const formula    = `2d10x10 + ${totalBonus}`;
+    const formula    = `${_ftXd10(actor)} + ${totalBonus}`;
     const roll       = new Roll(formula);
     await roll.evaluate();
 
@@ -13048,7 +13068,7 @@ Hooks.once("init", function () {
     const effOverride = (rollOverride === "3d10kl2" || _abDisSaves || _clSentence) ? "3d10kl2" : rollOverride;
     let formula      = effOverride === "3d10kl2"
       ? `3d10kl2 + ${totalBonus}`
-      : `2d10x10 + ${totalBonus}`;
+      : `${_ftXd10(target)} + ${totalBonus}`;
     // 3d10kl2 path doesn't explode, so wrath/cinder modifiers are skipped.
     if (effOverride !== "3d10kl2") {
       formula = _ftApplySurgeRollMods(formula, _saveSurge);
@@ -13171,7 +13191,7 @@ Hooks.once("init", function () {
       }
     }
     const cBonus  = cBaseAttr + cAE;
-    const cRoll   = new Roll(`2d10x10 + ${cBonus}`);
+    const cRoll   = new Roll(`${_ftXd10(actor)} + ${cBonus}`);
     await cRoll.evaluate();
     const cDie    = cRoll.dice?.[0]?.results ?? [];
     const cExplos = Math.max(0, cDie.length - 2);
@@ -13198,7 +13218,7 @@ Hooks.once("init", function () {
       }
     }
     const tBonus  = tBaseAttr + tAE;
-    const tRoll   = new Roll(`2d10x10 + ${tBonus}`);
+    const tRoll   = new Roll(`${_ftXd10(target)} + ${tBonus}`);
     await tRoll.evaluate();
     const tDie    = tRoll.dice?.[0]?.results ?? [];
     const tExplos = Math.max(0, tDie.length - 2);
@@ -13385,7 +13405,7 @@ Hooks.once("init", function () {
     // (Aurablade Fury). Disadvantage keeps the no-explosion 3d10kl2 shape (and skips
     // surge dice mods, as before); advantage/normal still take surge boosts.
     const _attkMode   = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack });
-    const baseFormula = `${_ftCoreDice(_attkMode)} + ${total_mod}`;
+    const baseFormula = `${_ftCoreDice(_attkMode, actor)} + ${total_mod}`;
     // Surge dice-mods (wrath-cascade/cinderwake add exploding dice) only ride the
     // normal 2d10x10 base — a modified adv/dis roll keeps its clean 3-keep-2 shape.
     const formula     = (_attkMode !== "normal") ? baseFormula : _ftApplySurgeRollMods(baseFormula, _surge);
@@ -14911,7 +14931,7 @@ Hooks.once("init", function () {
     const sys = actor.system?.system ?? actor.system;
     if (!sys?.conditions?.dying) return null;
 
-    const roll = new Roll("2d10x10");
+    const roll = new Roll(_ftXd10(actor));
     await roll.evaluate();
     const all     = roll.terms[0]?.results ?? [];
     const base    = all.slice(0, 2).map(r => r.result);
@@ -15625,7 +15645,11 @@ Hooks.once("init", function () {
         if (!combatant?.isOwner) continue;
         const actor    = combatant.actor;
         const rollData = actor?.getRollData?.() ?? {};
-        const roll     = new Roll(baseFormula, rollData);
+        // Foe-gate explosions: a hostile NPC without GM-enabled Surge rolls a
+        // plain 2d10 so unearned Surge dice don't inflate its initiative total
+        // (it banks nothing either way). PCs/bosses keep the exploding base.
+        const initFormula = _ftSurgeAllowed(actor) ? baseFormula : baseFormula.replace(/2d10x10/g, "2d10");
+        const roll     = new Roll(initFormula, rollData);
         try { await roll.evaluate(); }
         catch (e) { console.warn("Roll for Initiation | initiative roll failed", combatant.name, e); continue; }
 
@@ -15847,7 +15871,7 @@ Hooks.once("init", function () {
           }
         }
         const total = attrVal + aeAttr;
-        const roll  = new Roll(`2d10x10 + ${total}`);
+        const roll  = new Roll(`${_ftXd10(actor)} + ${total}`);
         await roll.evaluate();
         const dieResults = roll.dice?.[0]?.results ?? [];
         const explos     = Math.max(0, dieResults.length - 2);
@@ -17640,7 +17664,7 @@ Hooks.once("init", function () {
       const which = String(target.dataset.defense || "guard");
       const sys   = actor.system?.system ?? actor.system ?? {};
       const v     = Number(sys.derived?.[which]?.value ?? 10);
-      const roll  = await new Roll(`2d10x10 + ${v}`).roll();
+      const roll  = await new Roll(`${_ftXd10(actor)} + ${v}`).roll();
       await roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor }),
         flavor:  `${actor.name} — ${ftCap(which)} check (DC ${v})`
@@ -17675,7 +17699,8 @@ Hooks.once("init", function () {
       }
 
       const result = await skillRollWithRank(actor, { attribute, skill,
-        label: actor.system?.skills?.[skill]?.label ?? skill });
+        label: actor.system?.skills?.[skill]?.label ?? skill,
+        allowSurge: _ftSurgeAllowed(actor) });
 
       const { total, roll, rankData, attrVal, aeBonus, totalBonus,
               aeAttrContribs,
@@ -18807,7 +18832,7 @@ Hooks.once("init", function () {
       const attr  = String(target.dataset.attr || "violence");
       const sys   = actor.system?.system ?? actor.system ?? {};
       const v     = Number(sys.attributes?.[attr]?.value ?? 0);
-      const roll  = await new Roll(`2d10x10 + ${v}`).roll();
+      const roll  = await new Roll(`${_ftXd10(actor)} + ${v}`).roll();
       await roll.toMessage({
         speaker:   ChatMessage.getSpeaker({ actor }),
         flavor:    `${actor.name} — ${ftCap(attr)} check`
@@ -18818,7 +18843,7 @@ Hooks.once("init", function () {
       const which = String(target.dataset.defense || "guard");
       const sys   = actor.system?.system ?? actor.system ?? {};
       const v     = Number(sys.derived?.[which]?.value ?? 10);
-      const roll  = await new Roll(`2d10x10 + ${v}`).roll();
+      const roll  = await new Roll(`${_ftXd10(actor)} + ${v}`).roll();
       await roll.toMessage({
         speaker:   ChatMessage.getSpeaker({ actor }),
         flavor:    `${actor.name} — ${ftCap(which)} check (DC ${v})`
@@ -18831,7 +18856,7 @@ Hooks.once("init", function () {
       const bonus = Number(sys.derived?.initiative?.bonus ?? 0);
       const total = v + bonus;
       const bonusTag = bonus ? ` ${bonus >= 0 ? "+" : ""}${bonus} init bonus` : "";
-      const roll  = await new Roll(`2d10x10 + ${total}`).roll();
+      const roll  = await new Roll(`${_ftXd10(actor)} + ${total}`).roll();
 
       // Surge bank on explosions — matches Combat tracker initiative path.
       const dieResults = roll.dice?.[0]?.results ?? [];
@@ -23435,7 +23460,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const tinkering = Number(stSys?.skills?.tinkering?.value)   || 0;
       const mod = intrigue + tinkering;
       const dc  = 10;
-      const roll = new Roll(`2d10x10 + ${mod}`);
+      const roll = new Roll(`${_ftXd10(steward)} + ${mod}`);
       await roll.evaluate();
       const success = roll.total >= dc;
       const margin  = success ? Math.max(0, Math.floor((roll.total - dc) / 5)) : 0;
