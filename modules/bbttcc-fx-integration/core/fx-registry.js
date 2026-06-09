@@ -205,30 +205,34 @@ function doctrineCategory(key, name = "") {
 }
 
 // category → { fam, color, [overlay], effect[], burst[] }. Arrays thematic-first, proven-last.
+// Keys verified against the live install via probe-jb2a-keys.macro.js (2026-06-09).
+// Arrays stay thematic-first, proven-last: resolveKey plays the first that exists.
 const DOC_FX = {
-  agrarian:  { fam: "faith",      color: 0x6fbf4b, effect: ["jb2a.entangle.02.green", "jb2a.entangle.01.green", "jb2a.magic_signs.circle.02.conjuration.complete.green", "jb2a.magic_signs.circle.02.transmutation.complete.blue"], burst: ["jb2a.cure_wounds.400px.green", "jb2a.healing_generic.burst.greenorange", "jb2a.particle_burst.01.circle.bluepurple"] },
-  martial:   { fam: "martial",    color: 0xff6b4a, effect: ["jb2a.sword.melee.01.white", "jb2a.greatsword.melee.01.white", "jb2a.melee_generic.slashing.one_handed.01.orange", "jb2a.magic_signs.circle.02.abjuration.complete.red"], burst: ["jb2a.impact.001.orange", "jb2a.impact.001.red", "jb2a.explosion.01.orange"] },
-  siege:     { fam: "industrial", color: 0xff8c42, effect: ["jb2a.catapult.boulder", "jb2a.flaming_boulder.throw.01", "jb2a.boulder.toss.01", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.explosion.08.orange", "jb2a.impact.ground_crack.orange.01", "jb2a.explosion.02.orange"] },
-  faith:     { fam: "faith",      color: 0x67d4ff, effect: ["jb2a.cure_wounds.400px.blue", "jb2a.healing_generic.200px.blue", "jb2a.magic_signs.circle.02.divination.complete.blue"], burst: ["jb2a.explosion.01.yellow", "jb2a.particle_burst.01.star.yellow"] },
-  void:      { fam: "void",       color: 0x7a5cff, effect: ["jb2a.toll_the_dead.purple.skulls", "jb2a.magic_signs.circle.02.necromancy.complete.dark_purple"], burst: ["jb2a.explosion.01.purple", "jb2a.explosion.02.purple"] },
-  temporal:  { fam: "temporal",   color: 0x6fa8ff, effect: ["jb2a.portals.vertical.vortex.blue", "jb2a.magic_signs.circle.02.evocation.complete.blue"], burst: ["jb2a.particle_burst.01.circle.bluepurple", "jb2a.explosion.01.blue"] },
+  agrarian:  { fam: "faith",      color: 0x6fbf4b, effect: ["jb2a.entangle.02.complete.02.green", "jb2a.entangle.green", "jb2a.magic_signs.circle.02.transmutation.complete.blue"], burst: ["jb2a.cure_wounds.400px.green", "jb2a.healing_generic.400px.green", "jb2a.particle_burst.01.circle.bluepurple"] },
+  martial:   { fam: "martial",    color: 0xff6b4a, effect: ["jb2a.greatsword.melee.standard.white", "jb2a.sword.melee.01.blue", "jb2a.mace.melee.01.orange", "jb2a.magic_signs.circle.02.abjuration.complete.red"], burst: ["jb2a.impact.001.orange", "jb2a.impact.001.red", "jb2a.explosion.01.orange"] },
+  siege:     { fam: "industrial", color: 0xff8c42, effect: ["jb2a.boulder.siege.01", "jb2a.boulder.toss.01", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.explosion.08.orange", "jb2a.impact.ground_crack.orange.01", "jb2a.explosion.02.orange"] },
+  faith:     { fam: "faith",      color: 0x67d4ff, effect: ["jb2a.cure_wounds.400px.blue", "jb2a.healing_generic.400px.blue", "jb2a.magic_signs.circle.02.divination.complete.blue"], burst: ["jb2a.explosion.01.yellow", "jb2a.particle_burst.01.star.yellow"] },
+  void:      { fam: "void",       color: 0x7a5cff, effect: ["jb2a.energy_strands.in.purple.01", "jb2a.toll_the_dead.grey.skull_smoke", "jb2a.magic_signs.circle.02.necromancy.complete.dark_purple"], burst: ["jb2a.explosion.01.purple", "jb2a.explosion.02.purple"] },
+  temporal:  { fam: "temporal",   color: 0x6fa8ff, effect: ["jb2a.portals.horizontal.ring.blue", "jb2a.magic_signs.circle.02.evocation.complete.blue"], burst: ["jb2a.particle_burst.01.circle.bluepurple", "jb2a.explosion.01.blue"] },
   political: { fam: "political",  color: 0xd4af37, effect: ["jb2a.magic_signs.circle.02.enchantment.complete.yellow", "jb2a.magic_signs.circle.02.enchantment.complete.purple"], burst: ["jb2a.particle_burst.01.star.yellow", "jb2a.explosion.01.yellow"] },
-  stealth:   { fam: "void",       color: 0x2dd4bf, overlay: "infiltration", effect: ["jb2a.smoke.puff.centered.dark_black", "jb2a.smoke.puff.centered.grey", "jb2a.magic_signs.circle.02.necromancy.complete.purple"], burst: ["jb2a.smoke.puff.side.02.grey", "jb2a.particle_burst.01.circle.bluepurple"] },
-  economy:   { fam: "industrial", color: 0xffb347, effect: ["jb2a.lightning_strike.blue.0", "jb2a.chain_lightning.primary.blue", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.static_electricity.03.blue", "jb2a.explosion.02.orange"] },
+  stealth:   { fam: "void",       color: 0x2dd4bf, overlay: "infiltration", effect: ["jb2a.smoke.puff.centered.dark_black", "jb2a.smoke.puff.centered.grey", "jb2a.magic_signs.circle.02.necromancy.complete.purple"], burst: ["jb2a.smoke.puff.side.02.dark_black", "jb2a.particle_burst.01.circle.bluepurple"] },
+  economy:   { fam: "industrial", color: 0xffb347, effect: ["jb2a.lightning_strike.blue", "jb2a.chain_lightning.primary.blue", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.static_electricity.01.blue", "jb2a.explosion.02.orange"] },
   fortify:   { fam: "martial",    color: 0x6fb3ff, effect: ["jb2a.shield.01.intro.blue", "jb2a.magic_signs.circle.02.abjuration.complete.blue"], burst: ["jb2a.explosion.01.blue", "jb2a.particle_burst.01.circle.bluepurple"] }
 };
 
 // Signature per-key flourishes — override the category effect/burst for iconic doctrines.
+// Signatures — verified keys (probe 2026-06-09), each ending in a proven circle/explosion.
 const DOC_SIG = {
-  ego_dragon_echo:      { effect: ["jb2a.magic_signs.circle.02.necromancy.complete.dark_red"], burst: ["jb2a.fireball.explosion.orange", "jb2a.eruption.orange.0"] },
-  project_eden:         { effect: ["jb2a.entangle.02.green", "jb2a.entangle.01.green"], burst: ["jb2a.cure_wounds.400px.green", "jb2a.particle_burst.01.circle.bluepurple"] },
-  harvest_season:       { effect: ["jb2a.entangle.02.green", "jb2a.magic_signs.circle.02.conjuration.complete.green"], burst: ["jb2a.particle_burst.01.star.yellow"] },
-  artillery_salvo:      { effect: ["jb2a.flaming_boulder.throw.01", "jb2a.catapult.boulder"], burst: ["jb2a.explosion.08.orange", "jb2a.explosion.02.orange"] },
-  siege_breaker_volley: { effect: ["jb2a.ballista.shot", "jb2a.spear.throw.01"], burst: ["jb2a.impact.ground_crack.orange.01"] },
-  flank_attack:         { effect: ["jb2a.dagger.melee.01.white", "jb2a.sword.melee.01.white"], burst: ["jb2a.impact.001.red"] },
-  overclock_the_golems: { effect: ["jb2a.chain_lightning.primary.blue", "jb2a.lightning_strike.blue.0"], burst: ["jb2a.static_electricity.03.blue"] },
-  smoke_and_mirrors:    { effect: ["jb2a.smoke.puff.centered.grey"], burst: ["jb2a.smoke.puff.side.02.grey"] },
-  void_signal_collapse: { effect: ["jb2a.magic_signs.circle.02.necromancy.complete.dark_purple"], burst: ["jb2a.explosion.02.purple"] }
+  ego_dragon_echo:      { effect: ["jb2a.eruption.orange.01", "jb2a.magic_signs.circle.02.necromancy.complete.dark_red"], burst: ["jb2a.explosion.08.orange", "jb2a.explosion.02.purple"] },
+  project_eden:         { effect: ["jb2a.entangle.02.complete.02.green", "jb2a.entangle.green", "jb2a.magic_signs.circle.02.transmutation.complete.blue"], burst: ["jb2a.cure_wounds.400px.green", "jb2a.particle_burst.01.circle.bluepurple"] },
+  harvest_season:       { effect: ["jb2a.entangle.green02", "jb2a.entangle.02.complete.02.green", "jb2a.magic_signs.circle.02.transmutation.complete.blue"], burst: ["jb2a.particle_burst.01.star.yellow", "jb2a.explosion.01.yellow"] },
+  artillery_salvo:      { effect: ["jb2a.boulder.toss.02.01.lava.orange", "jb2a.boulder.siege.01", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.explosion.08.orange", "jb2a.explosion.02.orange"] },
+  siege_breaker_volley: { effect: ["jb2a.boulder.siege.02", "jb2a.boulder.toss.01", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.impact.ground_crack.orange.01", "jb2a.explosion.02.orange"] },
+  flank_attack:         { effect: ["jb2a.dagger.melee.02.white", "jb2a.sword.melee.01.blue", "jb2a.magic_signs.circle.02.abjuration.complete.red"], burst: ["jb2a.impact.001.red", "jb2a.explosion.01.orange"] },
+  overclock_the_golems: { effect: ["jb2a.chain_lightning.primary.blue", "jb2a.lightning_strike.blue", "jb2a.magic_signs.circle.02.conjuration.complete.dark_red"], burst: ["jb2a.static_electricity.01.blue", "jb2a.explosion.02.orange"] },
+  smoke_and_mirrors:    { effect: ["jb2a.smoke.puff.centered.grey", "jb2a.smoke.puff.centered.dark_black", "jb2a.magic_signs.circle.02.necromancy.complete.purple"], burst: ["jb2a.smoke.puff.side.02.dark_black", "jb2a.particle_burst.01.circle.bluepurple"] },
+  void_signal_collapse: { effect: ["jb2a.energy_strands.in.purple.01", "jb2a.magic_signs.circle.02.necromancy.complete.dark_purple"], burst: ["jb2a.explosion.02.purple"] },
+  qliphothic_gambit:    { effect: ["jb2a.energy_strands.in.purple.01", "jb2a.toll_the_dead.grey.skull_smoke", "jb2a.magic_signs.circle.02.necromancy.complete.dark_purple"], burst: ["jb2a.explosion.02.purple", "jb2a.explosion.01.purple"] }
 };
 
 // All 87 maneuvers + 74 strategic activities (live Ember doctrines pack, 2026-06-09).
