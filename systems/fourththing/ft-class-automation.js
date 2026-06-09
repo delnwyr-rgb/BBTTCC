@@ -196,8 +196,10 @@ export const FEATURE_ROUTER = {
   "harmony-marshal-tier-3--loyalty-steward":   "harmony_marshal_loyalty_steward",
   "harmony-marshal-tier-4--unity-conductor":   "harmony_marshal_unity_conductor",
   "rallying-words":                            "harmony_marshal_rallying_words",
-  // 2026-06-08 — Mandate-technique build-out (fix-on-touch). Accord Mandala wired first.
+  // 2026-06-08 — Mandate-technique build-out (fix-on-touch).
   "harmmarshal-mandate-accord-mandala":        "harmony_marshal_accord_mandala",
+  "harmmarshal-mandate-resonant-truce":        "harmony_marshal_resonant_truce",
+  "harmmarshal-resolve-unbreakable-front":     "harmony_marshal_unbreakable_front",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5901,6 +5903,8 @@ const LEGACY_ACTION_COST = {
   "harmony_marshal_unity_conductor":    "free",       // T4 — passive surface
   "harmony_marshal_rallying_words":     "bonus",      // tactical surface — bonus action
   "harmony_marshal_accord_mandala":     "action",     // Mandate technique — spend an action to raise the aura
+  "harmony_marshal_resonant_truce":     "action",     // Mandate technique — 15-ft hesitation field
+  "harmony_marshal_unbreakable_front":  "action",     // Resolve technique — 30-ft defensive aura
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6005,6 +6009,90 @@ export async function openHarmonyMarshalAccordMandala(actor) {
     });
 }
 
+// ─── Harmony Marshal · Resonant Truce (Mandate technique) ─────────────────────
+// 1/Soma-Break action: a 15-ft "enforced hesitation" field. Sibling of Accord Mandala
+// at smaller radius — foe attack-disadvantage + ally reroll-aid (defense to end charm/Shaken).
+export async function openHarmonyMarshalResonantTruce(actor) {
+  return _openSomaBreakAbility(actor, "hmResonantTruce", "Resonant Truce",
+    "Spend an action: a <b>15-ft field of enforced hesitation</b> (1 minute, moves with you). Hostiles inside have <b>disadvantage on attacks</b> against creatures who haven't attacked (non-combatants, negotiators, civilians). Allies inside <b>reroll the lowest die</b> on defense checks to end <b>charmed</b>/<b>Shaken</b>.",
+    async (actor) => {
+      const myToken = actor.getActiveTokens?.()?.[0];
+      if (!myToken) { ui.notifications?.warn("Resonant Truce: place your token on the canvas first."); return false; }
+      const scene = myToken.scene ?? canvas.scene;
+      const grid  = scene?.grid?.size ?? canvas.grid?.size ?? 100;
+      const rangePx = (15 / (scene?.grid?.distance ?? 5)) * grid;
+      const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 });
+      const me  = ctr(myToken);
+      const inRange = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && t.id !== myToken.id
+        && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
+      const allies = inRange.filter((t) => (t.document?.disposition ?? 0) >= 0);
+      const foes   = inRange.filter((t) => (t.document?.disposition ?? 0) <  0);
+      try {
+        await actor.createEmbeddedDocuments("ActiveEffect", [{
+          name: "Resonant Truce (aura)", img: "icons/magic/sonic/bell-alarm-red-purple.webp", origin: actor.uuid,
+          duration: { rounds: 10, seconds: 60 }, changes: [], flags: { fourththing: { resonantTruce: { radiusFt: 15 } } }
+        }]);
+      } catch (e) { /* skip */ }
+      const allyNames = [];
+      for (const t of allies) {
+        try { const b = t.actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "resonant-truce" }); await t.actor.setFlag("fourththing", "aidBanked", b); allyNames.push(t.actor.name); } catch (e) {}
+      }
+      const foeNames = [];
+      for (const t of foes) { try { await t.actor.setFlag("fourththing", "aurablade.disAttackOnce", true); foeNames.push(t.actor.name); } catch (e) {} }
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem">
+        <p style="margin:0.15rem 0">⟁ <b>Truce field raised</b> — 15 ft, 1 minute, moves with you.</p>
+        <p style="margin:0.15rem 0;color:#78c88c">Allies aided (reroll-lowest to end charm/Shaken): <b>${allyNames.join(", ") || "—"}</b></p>
+        <p style="margin:0.15rem 0;color:#dc8050">Hostiles hesitant (disadvantage vs non-attackers): <b>${foeNames.join(", ") || "—"}</b></p>
+      </div>`;
+    });
+}
+
+// ─── Harmony Marshal · Unbreakable Front (Resolve technique) ──────────────────
+// 1/Soma-Break action: a 30-ft ally-only resolve aura. Real +1 Guard AE on allies +
+// reroll-aid (advantage proxy vs Shaken/charmed); temp-Integrity-on-success surfaced.
+export async function openHarmonyMarshalUnbreakableFront(actor) {
+  return _openSomaBreakAbility(actor, "hmUnbreakableFront", "Unbreakable Front",
+    "Spend an action: a <b>30-ft resolve aura</b> (1 minute, moves with you). Allies inside gain <b>+1 Guard</b>, <b>advantage</b> on defense vs <b>Shaken</b>/<b>charmed</b>, and gain <b>temporary Integrity = your tier</b> when they succeed on such a save.",
+    async (actor) => {
+      const myToken = actor.getActiveTokens?.()?.[0];
+      if (!myToken) { ui.notifications?.warn("Unbreakable Front: place your token on the canvas first."); return false; }
+      const sys  = actor.system?.system ?? actor.system ?? {};
+      const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+      const scene = myToken.scene ?? canvas.scene;
+      const grid  = scene?.grid?.size ?? canvas.grid?.size ?? 100;
+      const rangePx = (30 / (scene?.grid?.distance ?? 5)) * grid;
+      const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 });
+      const me  = ctr(myToken);
+      const inRange = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && t.id !== myToken.id
+        && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
+      const allies = inRange.filter((t) => (t.document?.disposition ?? 0) >= 0);
+      try {
+        await actor.createEmbeddedDocuments("ActiveEffect", [{
+          name: "Unbreakable Front (aura)", img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin: actor.uuid,
+          duration: { rounds: 10, seconds: 60 }, changes: [], flags: { fourththing: { unbreakableFront: { radiusFt: 30, tier } } }
+        }]);
+      } catch (e) { /* skip */ }
+      const allyNames = [];
+      for (const t of allies) {
+        try {
+          await t.actor.createEmbeddedDocuments("ActiveEffect", [{
+            name: "Unbreakable Front — +1 Guard", img: "icons/magic/defensive/shield-barrier-glowing-blue.webp", origin: actor.uuid,
+            duration: { rounds: 10, seconds: 60 },
+            changes: [{ key: "system.derived.guard.aeBonus", mode: 2, value: "1", priority: 20 }],
+            flags: { fourththing: { unbreakableFront: true } }
+          }]);
+          const b = t.actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "unbreakable-front" }); await t.actor.setFlag("fourththing", "aidBanked", b);
+          allyNames.push(t.actor.name);
+        } catch (e) {}
+      }
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem">
+        <p style="margin:0.15rem 0">⟁ <b>Front raised</b> — 30 ft, 1 minute, moves with you.</p>
+        <p style="margin:0.15rem 0;color:#78c88c">Allies fortified (+1 Guard, reroll-lowest vs charm/Shaken): <b>${allyNames.join(", ") || "—"}</b></p>
+        <p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">When an aided ally succeeds on a save vs Shaken/charmed, grant them <b>${tier}</b> temporary Integrity.</p>
+      </div>`;
+    });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6056,6 +6144,8 @@ export async function dispatchFeatureAction(actor, item) {
     case "harmony_marshal_unity_conductor":   return openHarmonyMarshalUnityConductor(actor);
     case "harmony_marshal_rallying_words":    return openHarmonyMarshalRallyingWords(actor);
     case "harmony_marshal_accord_mandala":    return openHarmonyMarshalAccordMandala(actor);
+    case "harmony_marshal_resonant_truce":    return openHarmonyMarshalResonantTruce(actor);
+    case "harmony_marshal_unbreakable_front": return openHarmonyMarshalUnbreakableFront(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);

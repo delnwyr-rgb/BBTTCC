@@ -47,9 +47,12 @@ const RECIPES = {
   reality:     { at:"source", scale:1.8, color:0x66ccff,
                  primary:["jb2a.magic_signs.circle.02.divination.complete.blue","jb2a.magic_signs.circle.02.evocation.complete.blue"],
                  accent: ["jb2a.particle_burst.01.circle.bluepurple"], accentDelay:400 },
-  peace_aura:  { at:"source", scale:2.4, color:0xffe27a,   // Accord Mandala — 30-ft ceasefire aura
+  peace_aura:  { at:"source", scale:2.4, color:0xffe27a,   // Accord Mandala / Resonant Truce — ceasefire aura
                  primary:["jb2a.magic_signs.circle.02.enchantment.complete.yellow","jb2a.magic_signs.circle.02.abjuration.complete.yellow","jb2a.magic_signs.circle.02.transmutation.complete.blue"],
                  accent: ["jb2a.particle_burst.01.circle.bluepurple","jb2a.explosion.01.yellow"], accentDelay:450 },
+  ward_aura:   { at:"source", scale:2.4, color:0x6fb3ff,   // Unbreakable Front — defensive resolve aura
+                 primary:["jb2a.magic_signs.circle.02.abjuration.complete.blue","jb2a.magic_signs.circle.02.abjuration.complete.red","jb2a.magic_signs.circle.02.transmutation.complete.blue"],
+                 accent: ["jb2a.particle_burst.01.circle.bluepurple","jb2a.explosion.01.blue"], accentDelay:450 },
 };
 
 // ---- exact feature NAME -> family ----
@@ -72,6 +75,8 @@ const MAP = {
   "Blood Hymn: Final Crescendo":                              "rampage",
   // Harmony Marshal Mandate techniques (wired 2026-06-08, fix-on-touch)
   "Accord Mandala":                                           "peace_aura",
+  "Resonant Truce":                                           "peace_aura",
+  "Unbreakable Front":                                        "ward_aura",
 };
 
 // ---- self-contained Sequencer helpers ----
