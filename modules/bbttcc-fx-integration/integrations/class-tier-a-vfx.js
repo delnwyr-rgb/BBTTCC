@@ -108,6 +108,13 @@ const MAP = {
   "Forge Blessing":                                           "inspire",
   "Rally Stitch":                                             "bolster",
   "Luminous Intercession":                                    "inspire",
+  // Dreamwalker — Sapphire/Quiet/Thousand (wired 2026-06-08; Blue Meridian already maps to teleport)
+  "Solar Stillpoint":                                         "peace_aura",
+  "Lull the Riot":                                            "peace_aura",
+  "Thousandfold Echo":                                        "peace_aura",
+  "Persona Cache (BBTTCC)":                                   "peace_aura",
+  "Mirror Read":                                              "inspire",
+  "Somnolent Peace (BBTTCC)":                                 "bolster",
 };
 
 // ---- self-contained Sequencer helpers ----

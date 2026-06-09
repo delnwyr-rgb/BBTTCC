@@ -222,6 +222,14 @@ export const FEATURE_ROUTER = {
   "soulsmith-forge-bound-light-sanctuary-engine":      "soulsmith_sanctuary_engine",
   "soulsmith-forge-victory-standard-of-will":          "soulsmith_standard_of_will",
   "soulsmith-forge-victory-triumph-weave":             "soulsmith_triumph_weave",
+  // Dreamwalker — Sapphire/Quiet/Thousand techniques (2026-06-08, fix-on-touch)
+  "dreamwalker-sapphire-blue-meridian":     "dreamwalker_blue_meridian",
+  "dreamwalker-quiet-lull-riot":            "dreamwalker_lull_riot",
+  "dreamwalker-thousand-mirror-read":       "dreamwalker_mirror_read",
+  "dreamwalker-thousand-persona-cache":     "dreamwalker_persona_cache",
+  "dreamwalker-quiet-solar-stillpoint":     "dreamwalker_solar_stillpoint",
+  "dreamwalker-quiet-somnolent-peace":      "dreamwalker_somnolent_peace",
+  "dreamwalker-thousand-thousandfold-echo": "dreamwalker_thousandfold_echo",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5949,6 +5957,14 @@ const LEGACY_ACTION_COST = {
   "soulsmith_sanctuary_engine":  "action",    // 15-ft resist-all field
   "soulsmith_standard_of_will":  "action",    // 15-ft +1 resolve banner (at-will)
   "soulsmith_triumph_weave":     "reaction",  // momentum surge to allies in 15 ft
+  // Dreamwalker — Sapphire/Quiet/Thousand techniques
+  "dreamwalker_blue_meridian":   "action",    // open teleport corridor
+  "dreamwalker_lull_riot":       "action",    // 20-ft aggression suppression
+  "dreamwalker_mirror_read":     "action",    // contested Insight read
+  "dreamwalker_persona_cache":   "bonus",     // switch persona (at-will)
+  "dreamwalker_solar_stillpoint": "action",   // 30-ft golden aura
+  "dreamwalker_somnolent_peace": "reaction",  // 1/scene prevent-death (sleep)
+  "dreamwalker_thousandfold_echo":"bonus",    // 1-min persona-flux buff
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6495,6 +6511,95 @@ export async function openSoulSmithTriumphWeave(actor) {
     content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ffd27a">🎇 Triumph Weave</span></div><p style="margin:0.2rem 0;font-size:0.8rem">Momentum surges to allies within 15 ft: <b>+${tier}</b> Integrity, <b>+10 ft</b> speed until end of next turn, and one boosted Diplomacy/Intimidation check.<br>Affected: <b>${names.join(", ") || "—"}</b></p></div>` });
 }
 
+// ─── Dreamwalker — Sapphire/Quiet/Thousand techniques (build-out 2026-06-08) ─────
+
+// Blue Meridian (Sapphire) — 1/Soma-Break action: open a 1-minute teleport corridor (self).
+export async function openDreamwalkerBlueMeridian(actor) {
+  return _openSomaBreakAbility(actor, "dwBlueMeridian", "Blue Meridian",
+    "Spend an action: open the Blue Meridian for 1 minute. You may <b>teleport up to 30 ft</b> as part of any movement or bonus action, and teleport to any <b>Gate Anchor</b> within 300 ft (doors fine, walls not). Allies within 10 ft of an Anchor you reach may teleport to it (reaction, once each).",
+    async (actor) => {
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Blue Meridian (open)", img: "icons/magic/movement/portal-vortex-blue.webp", origin: actor.uuid, duration: { rounds: 10, seconds: 60 }, changes: [], flags: { fourththing: { blueMeridian: true } } }]); } catch (e) {}
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#7db8ff">⟁ The lucid corridor is open for 1 minute — teleport 30 ft on any move/bonus, or to a Gate Anchor within 300 ft.</p>`;
+    });
+}
+
+// Solar Stillpoint (Quiet) — 1/Soma-Break action, 30-ft golden aura (+1 Guard AE).
+export async function openDreamwalkerSolarStillpoint(actor) {
+  return _openSomaBreakAbility(actor, "dwSolarStillpoint", "Solar Stillpoint",
+    "Spend an action: a <b>30-ft aura of quiet golden light</b> (1 minute, moves with you). Allies inside gain <b>+1 Guard</b> and advantage (reroll-lowest) vs Shaken/charmed; you may react to soften a killing blow inside the aura.",
+    async (actor) => {
+      const r = await _ftAuraApply(actor, { radiusFt: 30, markerName: "Solar Stillpoint (aura)", markerImg: "icons/magic/light/explosion-star-glow-yellow.webp", markerFlag: "solarStillpoint", aidSource: "solar-stillpoint", allyChanges: [{ key: "system.derived.guard.aeBonus", mode: 2, value: "1", priority: 20 }] });
+      if (!r) return false;
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">⟁ <b>Solar Stillpoint invoked</b> — 30 ft, 1 minute.</p><p style="margin:0.15rem 0;color:#78c88c">Allies stilled (+1 Guard, reroll vs Shaken/charmed): <b>${r.allyNames.join(", ") || "—"}</b></p></div>`;
+    });
+}
+
+// Somnolent Peace (Quiet) — 1/scene reaction: refract a killing blow to dream-sleep (stabilize at 1).
+export async function openDreamwalkerSomnolentPeace(actor) {
+  return _openPerSceneAbility(actor, "dwSomnolentPeace", "Somnolent Peace",
+    "Reaction: when a <b>targeted</b> creature within 30 ft would be reduced to 0 Integrity, it instead drops to <b>1 Integrity and falls unconscious</b> (dream-sleep, non-magical).",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Somnolent Peace: target the falling creature first."); return false; }
+      let note = ` <b>${_ftEscape(ally.name)}</b>'s next lethal blow this scene drops them to 1 Integrity, unconscious (GM applies).`;
+      try {
+        const tsys = ally.system?.system ?? ally.system ?? {};
+        const cur  = Number(tsys?.derived?.integrity?.value ?? tsys?.integrity?.value ?? 1);
+        if (cur <= 0) { await ally.update({ "system.derived.integrity.value": 1 }); note = ` <b>${_ftEscape(ally.name)}</b> dropped to 1 Integrity, unconscious — dream-sleep, not dying.`; }
+      } catch (e) {}
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#a0d8b8">⟁ Somnolent Peace —${note}</p>`;
+    });
+}
+
+// Lull the Riot (Quiet) — at-will action: suppress targeted hostiles' aggression (20-ft sphere).
+export async function openDreamwalkerLullTheRiot(actor) {
+  const sys  = actor.system?.system ?? actor.system ?? {};
+  const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+  const dc   = 8 + tier * 2;
+  let foes = Array.from(game.user?.targets ?? []).filter((t) => t?.actor);
+  if (!foes.length) {
+    const myToken = actor.getActiveTokens?.()?.[0];
+    if (myToken) {
+      const scene = myToken.scene ?? canvas.scene; const grid = scene?.grid?.size ?? canvas.grid?.size ?? 100;
+      const rangePx = (20 / (scene?.grid?.distance ?? 5)) * grid;
+      const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 });
+      const me  = ctr(myToken);
+      foes = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && (t.document?.disposition ?? 0) < 0 && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
+    }
+  }
+  if (!foes.length) return ui.notifications?.warn("Lull the Riot: target hostile creatures (or stand within 20 ft of them).");
+  const names = [];
+  for (const t of foes) { try { await t.actor.setFlag("fourththing", "aurablade.disAttackOnce", true); names.push(t.actor.name); } catch (e) {} }
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">🌊 Lull the Riot</span></div><p style="margin:0.2rem 0;font-size:0.8rem">A dream of quiet spreads (20-ft sphere). Affected hostiles must Soul-save (DC ${dc}) or have their aggression suppressed (no Attack / damaging cast, halved movement) for 1 round — applied as attack disadvantage: <b>${names.join(", ") || "—"}</b></p></div>` });
+}
+
+// Mirror Read (Thousand) — action: contested Insight (Soul) read of a targeted creature.
+export async function openDreamwalkerMirrorRead(actor) {
+  const target = Array.from(game.user?.targets ?? [])[0]?.actor;
+  if (!target) return ui.notifications?.warn("Mirror Read: target a creature within 30 ft first.");
+  const sys  = actor.system?.system ?? actor.system ?? {};
+  const soul = Number(sys?.attributes?.soul?.value) || 0;
+  const roll = new Roll(`2d10 + ${soul}`); await roll.evaluate();
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), rolls: [roll], content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">🪞 Mirror Read → ${_ftEscape(target.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">Insight (Soul) read: <b>${roll.total}</b> — contested by ${_ftEscape(target.name)}'s Stealth/Presence. On a win, the GM reveals one tag: a <b>primary fear</b>, <b>loyalty</b>, or <b>desire</b>.</p></div>` });
+}
+
+// Persona Cache (Thousand) — at-will bonus action (1 Soft Power OP): slip into a cached persona.
+export async function openDreamwalkerPersonaCache(actor) {
+  try { const b = actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "persona-cache" }); await actor.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9b8ff">🎭 Persona Cache</span></div><p style="margin:0.2rem 0;font-size:0.8rem">You slip into a cached persona (spend 1 Soft Power OP) — advantage (reroll-lowest) banked on your next Stealth or Diplomacy check.</p></div>` });
+}
+
+// Thousandfold Echo (Thousand) — 1/Soma-Break bonus action: 1-minute persona-flux self buff.
+export async function openDreamwalkerThousandfoldEcho(actor) {
+  return _openSomaBreakAbility(actor, "dwThousandfoldEcho", "Thousandfold Echo",
+    "Bonus action: manifest the Thousandfold Echo for 1 minute. Switch personas as a free interaction; each switch grants +1 (stacking to +3) to your next Stealth/Diplomacy/Performance check, and creatures struggle to recall your true face.",
+    async (actor) => {
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Thousandfold Echo", img: "icons/magic/control/hypnosis-mesmerism-eye-tan.webp", origin: actor.uuid, duration: { rounds: 10, seconds: 60 }, changes: [], flags: { fourththing: { thousandfoldEcho: true } } }]); } catch (e) {}
+      try { const b = actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "thousandfold-echo" }); await actor.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#c9b8ff">⟁ The Echo manifests for 1 minute — free persona-switching, +1→+3 on social checks; reroll-lowest banked on your next.</p>`;
+    });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6568,6 +6673,13 @@ export async function dispatchFeatureAction(actor, item) {
     case "soulsmith_sanctuary_engine":        return openSoulSmithSanctuaryEngine(actor);
     case "soulsmith_standard_of_will":        return openSoulSmithStandardOfWill(actor);
     case "soulsmith_triumph_weave":           return openSoulSmithTriumphWeave(actor);
+    case "dreamwalker_blue_meridian":         return openDreamwalkerBlueMeridian(actor);
+    case "dreamwalker_lull_riot":             return openDreamwalkerLullTheRiot(actor);
+    case "dreamwalker_mirror_read":           return openDreamwalkerMirrorRead(actor);
+    case "dreamwalker_persona_cache":         return openDreamwalkerPersonaCache(actor);
+    case "dreamwalker_solar_stillpoint":      return openDreamwalkerSolarStillpoint(actor);
+    case "dreamwalker_somnolent_peace":       return openDreamwalkerSomnolentPeace(actor);
+    case "dreamwalker_thousandfold_echo":     return openDreamwalkerThousandfoldEcho(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);
