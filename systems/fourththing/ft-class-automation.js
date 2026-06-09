@@ -196,6 +196,8 @@ export const FEATURE_ROUTER = {
   "harmony-marshal-tier-3--loyalty-steward":   "harmony_marshal_loyalty_steward",
   "harmony-marshal-tier-4--unity-conductor":   "harmony_marshal_unity_conductor",
   "rallying-words":                            "harmony_marshal_rallying_words",
+  // 2026-06-08 — Mandate-technique build-out (fix-on-touch). Accord Mandala wired first.
+  "harmmarshal-mandate-accord-mandala":        "harmony_marshal_accord_mandala",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5898,6 +5900,7 @@ const LEGACY_ACTION_COST = {
   "harmony_marshal_loyalty_steward":    "free",       // T3 — manual application after Diplomacy success
   "harmony_marshal_unity_conductor":    "free",       // T4 — passive surface
   "harmony_marshal_rallying_words":     "bonus",      // tactical surface — bonus action
+  "harmony_marshal_accord_mandala":     "action",     // Mandate technique — spend an action to raise the aura
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -5936,6 +5939,71 @@ const LEGACY_ACTION_COST = {
   "dw_shared_dream":            "free",     // post-Soma-Break
   "pk_ledger_day":              "free",     // narrative transfer
 };
+
+// ─── Harmony Marshal · Accord Mandala (Mandate technique) ─────────────────────
+// First of the Mandate-technique build-out (2026-06-08, "fix on touch"). 1/Soma Break,
+// action: raise a 30-ft ceasefire aura. v1 applies real teeth on invoke — a self aura-marker
+// AE (1 min), ally reroll-lowest aid (Diplomacy + defense vs charm/Shaken), and hostile
+// attack disadvantage via the existing disAttackOnce chokepoint; the per-turn Soul-save is
+// surfaced in the chat card for the table. The aura VFX rides the fourththing:itemAnimated
+// hook (bbttcc-fx-integration/class-tier-a-vfx maps "Accord Mandala" → a peace-aura recipe).
+export async function openHarmonyMarshalAccordMandala(actor) {
+  return _openSomaBreakAbility(actor, "hmAccordMandala", "Accord Mandala",
+    "Spend an action: raise a <b>30-ft ceasefire aura</b> (1 minute, moves with you). Hostiles inside must make a Soul check (DC = your Resolve DC) at the start of their turn or be pacified — no attacks, or disadvantage against non-combatants. Allies inside <b>reroll the lowest die</b> on Diplomacy and on defense vs <b>charmed</b>/<b>Shaken</b>.",
+    async (actor) => {
+      const myToken = actor.getActiveTokens?.()?.[0];
+      if (!myToken) { ui.notifications?.warn("Accord Mandala: place your token on the canvas first."); return false; }
+      const sys   = actor.system?.system ?? actor.system ?? {};
+      const tier  = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+      const dc    = 8 + tier * 2;                       // Resolve DC proxy (T1 10 → T4 16)
+      const scene = myToken.scene ?? canvas.scene;
+      const grid  = scene?.grid?.size ?? canvas.grid?.size ?? 100;
+      const gridDist = scene?.grid?.distance ?? 5;
+      const rangePx  = (30 / gridDist) * grid;
+      const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 });
+      const me  = ctr(myToken);
+      const inRange = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && t.id !== myToken.id
+        && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
+      const allies = inRange.filter((t) => (t.document?.disposition ?? 0) >= 0);
+      const foes   = inRange.filter((t) => (t.document?.disposition ?? 0) <  0);
+
+      // Self: aura-marker AE (1 minute / 10 rounds) — moves with the caster.
+      try {
+        await actor.createEmbeddedDocuments("ActiveEffect", [{
+          name: "Accord Mandala (aura)",
+          img: "icons/magic/holy/saint-glass-portrait-halo.webp",
+          origin: actor.uuid,
+          duration: { rounds: 10, seconds: 60 },
+          changes: [],
+          flags: { fourththing: { accordMandala: { radiusFt: 30, dc } } }
+        }]);
+      } catch (e) { /* unowned / no perms — skip */ }
+
+      // Allies: bank reroll-lowest aid (the system's supported aid kind).
+      const allyNames = [];
+      for (const t of allies) {
+        try {
+          const b = t.actor.getFlag("fourththing", "aidBanked") ?? [];
+          b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "accord-mandala" });
+          await t.actor.setFlag("fourththing", "aidBanked", b);
+          allyNames.push(t.actor.name);
+        } catch (e) { /* unowned ally — skip */ }
+      }
+
+      // Hostiles: pacifying pressure → disadvantage on their next attack (existing chokepoint).
+      const foeNames = [];
+      for (const t of foes) {
+        try { await t.actor.setFlag("fourththing", "aurablade.disAttackOnce", true); foeNames.push(t.actor.name); } catch (e) { /* skip */ }
+      }
+
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem">
+        <p style="margin:0.15rem 0">⟁ <b>Aura raised</b> — 30 ft, 1 minute, moves with you.</p>
+        <p style="margin:0.15rem 0;color:#78c88c">Allies aided (reroll-lowest banked): <b>${allyNames.join(", ") || "—"}</b></p>
+        <p style="margin:0.15rem 0;color:#dc8050">Hostiles pressured (disadvantage on next attack): <b>${foeNames.join(", ") || "—"}</b></p>
+        <p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">Each pressured foe may make a Soul check (DC ${dc}) at the start of its turn to act freely — clear its disadvantage if it succeeds.</p>
+      </div>`;
+    });
+}
 
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
@@ -5987,6 +6055,7 @@ export async function dispatchFeatureAction(actor, item) {
     case "harmony_marshal_loyalty_steward":   return openHarmonyMarshalLoyaltySteward(actor);
     case "harmony_marshal_unity_conductor":   return openHarmonyMarshalUnityConductor(actor);
     case "harmony_marshal_rallying_words":    return openHarmonyMarshalRallyingWords(actor);
+    case "harmony_marshal_accord_mandala":    return openHarmonyMarshalAccordMandala(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);
