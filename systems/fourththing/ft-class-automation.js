@@ -200,6 +200,8 @@ export const FEATURE_ROUTER = {
   "harmmarshal-mandate-accord-mandala":        "harmony_marshal_accord_mandala",
   "harmmarshal-mandate-resonant-truce":        "harmony_marshal_resonant_truce",
   "harmmarshal-resolve-unbreakable-front":     "harmony_marshal_unbreakable_front",
+  "harmmarshal-mandate-conductors-beat":       "harmony_marshal_conductors_beat",
+  "harmmarshal-resolve-measured-command":      "harmony_marshal_measured_command",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5905,6 +5907,8 @@ const LEGACY_ACTION_COST = {
   "harmony_marshal_accord_mandala":     "action",     // Mandate technique — spend an action to raise the aura
   "harmony_marshal_resonant_truce":     "action",     // Mandate technique — 15-ft hesitation field
   "harmony_marshal_unbreakable_front":  "action",     // Resolve technique — 30-ft defensive aura
+  "harmony_marshal_conductors_beat":    "bonus",      // Mandate technique — single-ally tempo aid
+  "harmony_marshal_measured_command":   "bonus",      // Resolve technique — single-ally +Guard/+resolve
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6093,6 +6097,66 @@ export async function openHarmonyMarshalUnbreakableFront(actor) {
     });
 }
 
+// ─── Harmony Marshal · Conductor's Beat (Mandate technique) ───────────────────
+// Bonus action, tier uses/Soma Break: mark one targeted ally → bank reroll-lowest aid
+// on their next attribute check (the system's supported aid kind; the prose's "+tier" is
+// flavor — there is no flat-bonus aid pipeline). Modeled on Rallying Words.
+export async function openHarmonyMarshalConductorsBeat(actor) {
+  const key = "hmConductorsBeat";
+  return _openTierUsesPerSomaBreak(actor, key, "Conductor's Beat",
+    "Bonus action: mark one <b>targeted</b> ally within 30 ft. Before the start of your next turn they may add your tier to one attribute check (decided after the roll). <i>Banked as reroll-lowest aid.</i>",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) {
+        ui.notifications?.warn("Conductor's Beat: target an ally token first.");
+        const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0);
+        await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1));  // refund the use
+        return;
+      }
+      try {
+        const b = ally.getFlag("fourththing", "aidBanked") ?? [];
+        b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "conductors-beat" });
+        await ally.setFlag("fourththing", "aidBanked", b);
+      } catch (e) { ui.notifications?.warn("Conductor's Beat: couldn't reach that ally (unowned)."); return; }
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c84a">🎵 Conductor's Beat → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">reroll-lowest banked on their next attribute check.</p></div>` });
+    });
+}
+
+// ─── Harmony Marshal · Measured Command (Resolve technique) ───────────────────
+// Bonus action, tier uses/Soma Break: mark one targeted ally → real +1 Guard and +1
+// resolve (defense vs Shaken/charmed) AE until the start of your next turn; temp-Integrity
+// -on-success surfaced in the card.
+export async function openHarmonyMarshalMeasuredCommand(actor) {
+  const key = "hmMeasuredCommand";
+  return _openTierUsesPerSomaBreak(actor, key, "Measured Command",
+    "Bonus action: mark one <b>targeted</b> ally within 30 ft. Until the start of your next turn they gain <b>+1 Guard</b> and <b>+1</b> on defense vs <b>Shaken</b>/<b>charmed</b>; on a success they gain temporary Integrity = your tier.",
+    async (actor) => {
+      const sys  = actor.system?.system ?? actor.system ?? {};
+      const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) {
+        ui.notifications?.warn("Measured Command: target an ally token first.");
+        const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0);
+        await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1));  // refund the use
+        return;
+      }
+      try {
+        await ally.createEmbeddedDocuments("ActiveEffect", [{
+          name: "Measured Command", img: "icons/magic/defensive/shield-barrier-flaming-diamond-blue.webp", origin: actor.uuid,
+          duration: { rounds: 1, seconds: 6 },
+          changes: [
+            { key: "system.derived.guard.aeBonus",   mode: 2, value: "1", priority: 20 },
+            { key: "system.derived.resolve.aeBonus", mode: 2, value: "1", priority: 20 }
+          ],
+          flags: { fourththing: { measuredCommand: { tier } } }
+        }]);
+      } catch (e) { ui.notifications?.warn("Measured Command: couldn't reach that ally (unowned)."); return; }
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#6fb3ff">🛡 Measured Command → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">+1 Guard, +1 defense vs Shaken/charmed until your next turn. On a success: +${tier} temp Integrity.</p></div>` });
+    });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6146,6 +6210,8 @@ export async function dispatchFeatureAction(actor, item) {
     case "harmony_marshal_accord_mandala":    return openHarmonyMarshalAccordMandala(actor);
     case "harmony_marshal_resonant_truce":    return openHarmonyMarshalResonantTruce(actor);
     case "harmony_marshal_unbreakable_front": return openHarmonyMarshalUnbreakableFront(actor);
+    case "harmony_marshal_conductors_beat":   return openHarmonyMarshalConductorsBeat(actor);
+    case "harmony_marshal_measured_command":  return openHarmonyMarshalMeasuredCommand(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);

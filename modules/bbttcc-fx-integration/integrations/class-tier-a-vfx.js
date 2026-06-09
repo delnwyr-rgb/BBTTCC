@@ -53,6 +53,12 @@ const RECIPES = {
   ward_aura:   { at:"source", scale:2.4, color:0x6fb3ff,   // Unbreakable Front — defensive resolve aura
                  primary:["jb2a.magic_signs.circle.02.abjuration.complete.blue","jb2a.magic_signs.circle.02.abjuration.complete.red","jb2a.magic_signs.circle.02.transmutation.complete.blue"],
                  accent: ["jb2a.particle_burst.01.circle.bluepurple","jb2a.explosion.01.blue"], accentDelay:450 },
+  inspire:     { at:"target", scale:1.4, color:0xffe27a,   // Conductor's Beat — single-ally tempo aid
+                 primary:["jb2a.particle_burst.01.star.yellow","jb2a.magic_signs.circle.02.enchantment.complete.yellow"],
+                 accent: ["jb2a.explosion.01.yellow"], accentDelay:150 },
+  bolster:     { at:"target", scale:1.4, color:0x6fb3ff,   // Measured Command — single-ally +Guard/+resolve
+                 primary:["jb2a.particle_burst.01.circle.bluepurple","jb2a.magic_signs.circle.02.abjuration.complete.blue"],
+                 accent: ["jb2a.explosion.01.blue"], accentDelay:150 },
 };
 
 // ---- exact feature NAME -> family ----
@@ -77,6 +83,8 @@ const MAP = {
   "Accord Mandala":                                           "peace_aura",
   "Resonant Truce":                                           "peace_aura",
   "Unbreakable Front":                                        "ward_aura",
+  "Conductor's Beat":                                         "inspire",
+  "Measured Command":                                         "bolster",
 };
 
 // ---- self-contained Sequencer helpers ----
