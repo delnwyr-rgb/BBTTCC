@@ -4208,6 +4208,180 @@ export async function openOldenbornSunScar(actor) {
     "Passive trigger — when you succeed on a saving throw, you may deal psychic damage equal to your proficiency bonus to a creature within 10 ft (your aura flares). No daily cap; player choice on each save success.");
 }
 
+// ─── Ancestry signature abilities — Celestial / Draconic / Tideborne build-out ──
+//     (2026-06-09, "Animate Everything: Ancestries" sprint). Nine prose-only
+//     ancestry shells that the CHAR_OPT corpus never wired. Each gets a real
+//     mechanical effect on the ▶ Use click (aura / heal / damage / mark / flight
+//     marker) plus a bespoke VFX recipe (bbttcc-fx-integration/class-tier-a-vfx).
+//     Reached via the ANCESTRY_CUSTOM branch in _dispatchSingleAbility (the same
+//     per-key escape hatch Shield Projector uses). Effect primitives reused:
+//     _ftAuraApply (aura), _openSomaBreakAbility/_openPerSceneAbility/
+//     _openTierUsesPerSomaBreak (cadence dialogs), and the .ft-apply-dmg-btn
+//     chat button (canonical damage/heal apply, cross-ownership-safe).
+
+// Self-only status marker (no stat changes) — a visible AE so the buff/flight/phase
+// state reads on the token. Cosmetic; ignore creation failures.
+async function _ftSelfMarker(actor, name, img, flag, durationRounds = 10) {
+  try {
+    await actor.createEmbeddedDocuments("ActiveEffect", [{
+      name, img, origin: actor.uuid,
+      duration: { rounds: durationRounds, seconds: durationRounds * 6 },
+      changes: [], flags: { fourththing: { [flag]: true } }
+    }]);
+  } catch (e) { /* cosmetic marker — ignore */ }
+}
+
+// Canonical damage apply-button row (GM/owner clicks → applyDamageFromButton →
+// _applyDamageToActor). targetUuid baked = single target; omitted = current targets.
+function _ftAncDamageRow(total, dtype, targetUuid) {
+  return `<div class="ft-dmg-row" style="margin-top:0.3rem">
+    <span class="ft-dmg-label">⚔ ${dtype}</span>
+    <span class="ft-dmg-formula"><b>${total}</b></span>
+    <button class="ft-apply-dmg-btn" data-formula="${total}" data-op="damage" data-track="integrity" data-type="${dtype}"${targetUuid ? ` data-target-uuid="${targetUuid}"` : ""}>Apply ${total} ${dtype}${targetUuid ? "" : " (to targets)"}</button>
+  </div>`;
+}
+
+// Dragon: Adolescent Breath — 1/Scene Break, 15-ft cone, 2d6 elemental, Dex save half.
+function _openDragonAdolescentBreath(actor, key, label, body) {
+  return _openPerSceneAbility(actor, key, label, body, async (a) => {
+    const sys = a.system?.system ?? a.system;
+    const tier = Math.max(1, Number(sys?.details?.tier ?? 1));
+    const bodyAttr = Number(sys?.attributes?.body?.value ?? 0);
+    const dc = 8 + tier + bodyAttr;
+    const roll = new Roll("2d6"); await roll.evaluate();
+    const total = Math.max(0, Number(roll.total) || 0);
+    return `<p style="font-size:0.78rem;margin:0.2rem 0">🐉 15-ft cone of elemental fury · Dex save <b>DC ${dc}</b> for half. Target the foes caught in the cone, then Apply.</p>${_ftAncDamageRow(total, "fire", null)}`;
+  });
+}
+
+// Dragon: Ancient Aura — 1/Soma Break, 30-ft frighten aura (Wis save).
+function _openDragonAncientAura(actor, key, label, body) {
+  return _openSomaBreakAbility(actor, key, label, body, async (a) => {
+    const sys = a.system?.system ?? a.system;
+    const tier = Math.max(1, Number(sys?.details?.tier ?? 1));
+    const pres = Number(sys?.attributes?.presence?.value ?? 0);
+    const dc = 8 + tier + pres;
+    const r = await _ftAuraApply(a, { radiusFt: 30, markerName: "Ancient Aura (dread)", markerImg: "icons/magic/control/fear-fright-monster-red.webp", markerFlag: "dragonAncientAura", aidSource: "ancient-aura", foeDisattack: true });
+    if (!r) return false;
+    return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">🐉 <b>Ancient dread radiates</b> — 30 ft. Hostiles that can see you must Wis save <b>DC ${dc}</b> at the start of their turn or be Frightened until end of their next turn (immune 24h once frightened).</p><p style="margin:0.15rem 0;color:#e08a8a">Foes cowed (disadvantage on their next attack): <b>${r.foeNames?.join(", ") || "—"}</b></p></div>`;
+  });
+}
+
+// Dragon: Elder Wing — fly speed (= walk) + 1/Soma Break Dash-while-flying as a bonus action.
+function _openDragonElderWing(actor, key, label, body) {
+  return _openSomaBreakAbility(actor, key, label, body, async (a) => {
+    await _ftSelfMarker(a, "Elder Wing (flight)", "icons/creatures/abilities/wings-membrane-gray.webp", "dragonElderWing", 100);
+    return `<p style="font-size:0.78rem;margin:0.2rem 0;color:#cdbfa0">Vast wings unfurl — fly speed equal to your walking speed. Once this Soma Break you may Dash as a bonus action while flying.</p>`;
+  });
+}
+
+// Angel: Archon's Word — 1/Soma Break, 30-ft word of binding truth (Cha save), radiant immunity.
+function _openAngelArchonsWord(actor, key, label, body) {
+  return _openSomaBreakAbility(actor, key, label, body, async (a) => {
+    const sys = a.system?.system ?? a.system;
+    const tier = Math.max(1, Number(sys?.details?.tier ?? 1));
+    const pres = Number(sys?.attributes?.presence?.value ?? 0);
+    const dc = 8 + tier + pres;
+    await _ftSelfMarker(a, "Archon's Word (radiant immunity)", "icons/magic/holy/saint-glass-portrait-gold.webp", "angelArchonsWord");
+    const r = await _ftAuraApply(a, { radiusFt: 30, markerName: "Archon's Word (binding)", markerImg: "icons/magic/holy/projectile-explosion-flare-gold.webp", markerFlag: "angelArchonsWordBind", aidSource: "archons-word", foeDisattack: false });
+    if (!r) return false;
+    return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem"><p style="margin:0.15rem 0">😇 <b>A word of binding truth</b> — creatures of your choice within 30 ft must Cha save <b>DC ${dc}</b> or be unable to speak a deliberate lie for 1 minute. Your radiant resistance becomes immunity.</p><p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">Creatures in range: <b>${(r.allyNames?.length || 0) + (r.foes?.length || 0)}</b> (your choice who it binds).</p></div>`;
+  });
+}
+
+// Angel: Seraphic Wings — Tier uses/Soma Break, radiant flight 1 minute.
+function _openAngelSeraphicWings(actor, key, label, body) {
+  return _openTierUsesPerSomaBreak(actor, key, label, body, async (a) => {
+    await _ftSelfMarker(a, "Seraphic Wings (flight)", "icons/magic/holy/angel-wings-gray.webp", "angelSeraphicWings");
+  });
+}
+
+// Angel: Grace Touch — Tier uses/Soma Break, touch-heal 1d6 + Spirit (soul) + cure.
+async function _openAngelGraceTouch(actor, key, label, body) {
+  const sys = actor.system?.system ?? actor.system;
+  const tier = Math.max(1, Number(sys?.details?.tier ?? 1));
+  const soul = Number(sys?.attributes?.soul?.value ?? 0);
+  const maxUses = tier;
+  const spent = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0);
+  const remaining = Math.max(0, maxUses - spent);
+  if (remaining <= 0) return ui.notifications.warn(`${label}: out of uses (${spent}/${maxUses}) — refresh on Soma Break.`);
+  const tgtActor = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+  new Dialog({
+    title: label,
+    content: `<div class="ft-cast-dialog">
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Status: <b>${remaining} / ${maxUses} uses remaining</b> (refresh on Soma Break)</p>
+      ${tgtActor ? `<p style="font-size:0.78rem;margin:0 0 0.4rem">Target: <b>${_ftEscape(tgtActor.name)}</b></p>` : `<p style="font-size:0.78rem;color:#f5a04a;margin:0 0 0.4rem">⚠ No target — target the creature you touch before Use.</p>`}
+      <p style="font-size:0.78rem;margin:0 0 0.4rem">Restores <b>1d6 + ${soul}</b> Integrity and ends one disease or one effect inflicting blindness/deafness.</p>
+      <div class="ft-prev-align-note" style="font-size:0.78rem">${body}</div>
+    </div>`,
+    buttons: {
+      use: { label: tgtActor ? `Use → Touch ${_ftEscape(tgtActor.name)}` : "Use (no target)",
+        callback: async () => {
+          if (!tgtActor) return ui.notifications.warn(`${label}: target a creature first, then Use.`);
+          const roll = new Roll(`1d6 + ${soul}`); await roll.evaluate();
+          const heal = Math.max(0, Number(roll.total) || 0);
+          await actor.setFlag("fourththing", `disciplineSpent.${key}`, spent + 1);
+          await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), rolls: [roll],
+            content: `<div class="fourththing-roll" style="border-color:#ffe27a"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ffe9a8">😇 Grace Touch — ${_ftEscape(actor.name)}</span><span class="ft-defense-pill">${remaining - 1} / ${maxUses} left</span></div><div class="ft-dmg-row"><span class="ft-dmg-label">✚ Heal</span><span class="ft-dmg-formula">1d6 + ${soul} = <b>${heal}</b></span><button class="ft-apply-dmg-btn" data-formula="${heal}" data-op="heal" data-track="integrity" data-target-uuid="${tgtActor.uuid}">✚ Apply Healing to ${_ftEscape(tgtActor.name)}</button></div><p style="margin:0.2rem 0 0;font-size:0.72rem;opacity:0.75">Also ends one disease or one blindness/deafness effect (GM).</p></div>` });
+        } },
+      cancel: { label: "Cancel" }
+    }, default: "use"
+  }).render(true);
+}
+
+// Eidolon: Concept-Voice — 1/Scene Break, single-target 4d6 psychic + Charm/Frighten (Wis save).
+function _openEidolonConceptVoice(actor, key, label, body) {
+  return _openPerSceneAbility(actor, key, label, body, async (a) => {
+    const tgtActor = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+    if (!tgtActor) { ui.notifications?.warn("Concept-Voice: target a creature within 30 ft first."); return false; }
+    const sys = a.system?.system ?? a.system;
+    const tier = Math.max(1, Number(sys?.details?.tier ?? 1));
+    const pres = Number(sys?.attributes?.presence?.value ?? 0);
+    const dc = 8 + tier + pres;
+    const roll = new Roll("4d6"); await roll.evaluate();
+    const total = Math.max(0, Number(roll.total) || 0);
+    return `<p style="font-size:0.78rem;margin:0.2rem 0">🗣 Named a single concept at <b>${_ftEscape(tgtActor.name)}</b> — Wis save <b>DC ${dc}</b> for half damage and to negate Charmed/Frightened (until end of your next turn).</p>${_ftAncDamageRow(total, "psychic", tgtActor.uuid)}`;
+  });
+}
+
+// Eidolon: Whisper Walk — 1/Scene Break, step out of consensus reality (invisible + pass one wall).
+function _openEidolonWhisperWalk(actor, key, label, body) {
+  return _openPerSceneAbility(actor, key, label, body, async (a) => {
+    await _ftSelfMarker(a, "Whisper Walk (insubstantial)", "icons/magic/movement/trail-streak-impact-blue.webp", "eidolonWhisperWalk", 1);
+    return `<p style="font-size:0.78rem;margin:0.2rem 0;color:#9fc6ff">You step sideways out of consensus reality — invisible, passing through one wall up to 5 ft thick before reappearing on the far side. No concentration required.</p>`;
+  });
+}
+
+// Oldenborn (Tideborne): Ocean Judge — 1/Soma Break, mark an oathbreaker (direction-sense + psychic rider).
+function _openOldenbornOceanJudge(actor, key, label, body) {
+  return _openSomaBreakAbility(actor, key, label, body, async (a) => {
+    const sys = a.system?.system ?? a.system;
+    const tier = Math.max(1, Number(sys?.details?.tier ?? 1));
+    const tgtActor = Array.from(game.user?.targets ?? [])[0]?.actor ?? null;
+    let note = "Mark declared — the deep water remembers the oathbreaker (target a creature to bind the mark mechanically).";
+    if (tgtActor) {
+      try { await tgtActor.setFlag("fourththing", "oceanJudge", { by: a.name, tier, set: Date.now() }); } catch (e) {}
+      try { await tgtActor.createEmbeddedDocuments("ActiveEffect", [{ name: "Ocean Judge (marked)", img: "icons/magic/water/wave-water-blue.webp", origin: a.uuid, duration: { rounds: 600, seconds: 3600 }, changes: [], flags: { fourththing: { oceanJudgeMark: true } } }]); } catch (e) {}
+      note = `<b>${_ftEscape(tgtActor.name)}</b> marked for 1 hour — you always know the direction to them, and your attacks deal <b>+${tier} psychic</b> once per turn when you hit them.`;
+    }
+    return `<p style="font-size:0.78rem;margin:0.2rem 0;color:#7fc6e0">⚖ ${note}</p>`;
+  });
+}
+
+// Live-identifier → custom ancestry handler. Read by _dispatchSingleAbility (the
+// per-key escape hatch, sibling to the Shield Projector branch).
+const ANCESTRY_CUSTOM = {
+  "dragon-adolescent":               _openDragonAdolescentBreath,
+  "dragon-ancient":                  _openDragonAncientAura,
+  "dragon-elder":                    _openDragonElderWing,
+  "angel-archon":                    _openAngelArchonsWord,
+  "angel-seraph":                    _openAngelSeraphicWings,
+  "angel-grace":                     _openAngelGraceTouch,
+  "eidolon-voice":                   _openEidolonConceptVoice,
+  "eidolon-whisper":                 _openEidolonWhisperWalk,
+  "oldenborn-tideborne-ocean_judge": _openOldenbornOceanJudge,
+};
+
 // ─── Phase 3 — Species multi-ability pickers (2026-04-27) ─────────────────────
 
 export async function openCircuitbornAbilities(actor) {
@@ -5360,6 +5534,53 @@ export const CHAR_OPT_ABILITIES = {
     label: "Circuitborn (Parallax Line): Light-Bend Cloak (tier/Soma Break)",
     body: "Bonus action — become lightly obscured until the start of your next turn. Your first attack from this state has advantage."
   },
+
+  // ── Ancestry signature build-out (2026-06-09) — effects via ANCESTRY_CUSTOM ──
+  "dragon-adolescent": {
+    type: "scene", level: 1,
+    label: "Dragon: Adolescent Breath (1/Scene Break)",
+    body: "Action — exhale a 15-ft cone of elemental fury (type chosen at creation). 2d6 damage, Dex save (DC 8 + Tier + Body) for half."
+  },
+  "dragon-ancient": {
+    type: "soma-break", level: 1,
+    label: "Dragon: Ancient Aura (1/Soma Break)",
+    body: "Project a 30-ft aura of ancient dread. Hostiles that can see you must Wis save (DC 8 + Tier + Presence) at the start of their turn or be Frightened. Once frightened, immune for 24h."
+  },
+  "dragon-elder": {
+    type: "soma-break", level: 1,
+    label: "Dragon: Elder Wing",
+    body: "Gain a fly speed equal to your walking speed. Once per Soma Break you may take the Dash action as a bonus action while flying."
+  },
+  "angel-archon": {
+    type: "soma-break", level: 1,
+    label: "Angel: Archon's Word (1/Soma Break)",
+    body: "Action — speak a word of binding truth. Creatures of your choice within 30 ft must Cha save (DC 8 + Tier + Presence) or be unable to speak a deliberate lie for 1 minute. Your radiant resistance becomes immunity."
+  },
+  "angel-seraph": {
+    type: "soma-break-tier", level: 1,
+    label: "Angel: Seraphic Wings (Tier/Soma Break)",
+    body: "Bonus action — manifest radiant wings; gain a fly speed equal to your walking speed for 1 minute. Usable Tier times per Soma Break."
+  },
+  "angel-grace": {
+    type: "soma-break-tier", level: 1,
+    label: "Angel: Grace Touch (Tier/Soma Break)",
+    body: "Action — touch a creature; restore 1d6 + Spirit Integrity. Also ends one disease, or one effect inflicting blindness or deafness."
+  },
+  "eidolon-voice": {
+    type: "scene", level: 1,
+    label: "Eidolon: Concept-Voice (1/Scene Break)",
+    body: "Action — name a single concept at a creature within 30 ft. 4d6 psychic damage and Charmed or Frightened by the named concept until the end of your next turn (Wis save DC 8 + Tier + Presence for half and to negate)."
+  },
+  "eidolon-whisper": {
+    type: "scene", level: 1,
+    label: "Eidolon: Whisper Walk (1/Scene Break)",
+    body: "Bonus action — step sideways out of consensus reality; become invisible and pass through one wall up to 5 ft thick before reappearing on the other side. No concentration."
+  },
+  "oldenborn-tideborne-ocean_judge": {
+    type: "soma-break", level: 1,
+    label: "Oldenborn (Tideborne): Ocean Judge (1/Soma Break)",
+    body: "When a creature you can see lies to you, betrays a promise, or breaks a sworn agreement, mark them for 1 hour. While marked you always know the direction to them, and your attacks against them deal +Tier psychic damage once per turn."
+  },
   "apotheosis-of-the-oneiric": {
     type: "info", level: 20,
     label: "Apotheosis of the Oneiric (Capstone, passive)",
@@ -5660,6 +5881,11 @@ async function _dispatchSingleAbility(actor, ab, key, requiredLevel) {
   // Projector (rolls 1d6+tier + heals targeted ally's Integrity).
   if (key === "circuitborn-exo-shield_projector") {
     return _openShieldProjector(actor, key, ab.label, ab.body);
+  }
+  // Ancestry signature abilities with real mechanical effects (2026-06-09) —
+  // aura / heal / damage / mark / flight markers. Same escape-hatch as above.
+  if (ANCESTRY_CUSTOM[key]) {
+    return ANCESTRY_CUSTOM[key](actor, key, ab.label, ab.body);
   }
 
   switch (ab.type) {

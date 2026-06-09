@@ -62,6 +62,16 @@ const RECIPES = {
   watch_aura:  { at:"source", scale:2.4, color:0x4fd0d0,   // Sentinel Protocol — awareness / reveal field
                  primary:["jb2a.magic_signs.circle.02.divination.complete.blue","jb2a.magic_signs.circle.02.divination.complete.purple","jb2a.magic_signs.circle.02.evocation.complete.blue"],
                  accent: ["jb2a.particle_burst.01.circle.bluepurple","jb2a.explosion.01.blue"], accentDelay:450 },
+  // ── Ancestry signature recipes (2026-06-09) — composed from already-verified keys ──
+  breath:      { at:"target", scale:1.8, color:0xff7722,   // Dragon: Adolescent Breath — elemental cone
+                 primary:["jb2a.fireball.explosion.orange","jb2a.explosion.08.orange","jb2a.explosion.02.orange"],
+                 accent: ["jb2a.eruption.orange.0","jb2a.explosion.01.orange"], accentDelay:120 },
+  wings:       { at:"source", scale:2.0, color:0xffe27a,   // Elder Wing / Seraphic Wings — radiant flight manifest
+                 primary:["jb2a.magic_signs.circle.02.enchantment.complete.yellow","jb2a.magic_signs.circle.02.abjuration.complete.yellow","jb2a.magic_signs.circle.02.transmutation.complete.blue"],
+                 accent: ["jb2a.particle_burst.01.star.yellow","jb2a.explosion.01.yellow"], accentDelay:300 },
+  concept:     { at:"target", scale:1.6, color:0x9a4bd0,   // Eidolon: Concept-Voice — psychic naming
+                 primary:["jb2a.magic_signs.circle.02.necromancy.complete.purple","jb2a.magic_signs.circle.02.necromancy.complete.dark_purple","jb2a.magic_signs.circle.02.enchantment.complete.purple"],
+                 accent: ["jb2a.explosion.02.purple","jb2a.explosion.01.purple"], accentDelay:250 },
 };
 
 // ---- exact feature NAME -> family ----
@@ -132,6 +142,16 @@ const MAP = {
   "Stillheart: Emotional Lock":                               "ward_aura",
   "Auditor: Forensic Audit":                                  "bolster",
   "Cosmic Linguist: Initiation 6 — Translation":              "peace_aura",
+  // Ancestry signature build-out (wired 2026-06-09, "Animate Everything: Ancestries")
+  "Dragon: Adolescent Breath":                                "breath",
+  "Dragon: Ancient Aura":                                     "dread",
+  "Dragon: Elder Wing":                                       "wings",
+  "Angel: Archon's Word":                                     "peace_aura",
+  "Angel: Seraphic Wings":                                    "wings",
+  "Angel: Grace Touch":                                       "revive",
+  "Eidolon: Concept-Voice":                                   "concept",
+  "Eidolon: Whisper Walk":                                    "phase",
+  "Oldenborn (Tideborne): Ocean Judge":                       "watch_aura",
 };
 
 // ---- self-contained Sequencer helpers ----

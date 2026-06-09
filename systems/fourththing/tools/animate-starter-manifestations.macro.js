@@ -16,7 +16,7 @@
   const offBlk = () => ({ enable:false, video:{dbSection:"static",menuType:"spell",animation:"curewounds",variant:"01",color:"blue",enableCustom:false,customPath:""}, sound:{...SOUND}, options:{...SOPT} });
   const buildAA = (tag, name) => {
     const p = PALETTE[tag];
-    return { id:"ft-"+name.toLowerCase().replace(/[^a-z0-9]+/g,"-"), label:name,
+    return { id:(globalThis.crypto?.randomUUID?crypto.randomUUID():"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==="x"?r:(r&0x3|0x8)).toString(16);})), label:name,
       macro:{enable:false,playWhen:"0"}, menu:p.menu,
       primary:{video:{...p.v}, sound:{...SOUND}, options:{...POPT}},
       secondary:offBlk(), soundOnly:{sound:{...SOUND}}, source:offBlk(), target:offBlk(),
