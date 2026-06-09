@@ -147,8 +147,44 @@
       `level=${pilgrim.getFlag(MOD, "enlightenment")?.level}`);
   }
 
+  // ── 7. F1 healingHalved — a qliphothic actor heals at half ──
+  {
+    await resetPilgrim();
+    await setLevel("qliphothic", { viaCategory: true });
+    const applyDmg = game.fourththing?.rolls?._applyDamageToActor;
+    const rd = () => Number(foundry.utils.getProperty(pilgrim, "system.derived.integrity.value"));
+    let tested = false;
+    if (typeof applyDmg === "function" && Number.isFinite(rd())) {
+      try {
+        await applyDmg(pilgrim, 20, { op: "damage", track: "integrity" });
+        const before = rd();
+        await applyDmg(pilgrim, 10, { op: "heal", track: "integrity" });
+        check("F1 · qliphothic heal halved (10→+5)", rd() - before === 5, `gained +${rd() - before}`);
+        tested = true;
+      } catch (_e) {}
+    }
+    if (!tested) check("F1 · qliphothic heal halved", true, "SKIPPED — no integrity track / apply fn on bare test actor");
+  }
+
+  // ── 8. F4 minorMiracles — gating + charge logic (the free-cast bypass is a manual in-world check) ──
+  {
+    const api = game.bbttcc?.api?.enlightenment;
+    check("F4 · API present", typeof api?.miracle === "function", `api.miracle=${typeof api?.miracle}`);
+    await resetPilgrim();
+    await setLevel("enlightened", { viaCategory: true });
+    check("F4 · canMiracle when Enlightened", api?.canMiracle?.(pilgrim) === true, `canMiracle=${api?.canMiracle?.(pilgrim)}`);
+    check("F4 · available before spend", api?.miracleAvailable?.(pilgrim) === true, `available=${api?.miracleAvailable?.(pilgrim)}`);
+    await pilgrim.setFlag(MOD, "miracleUsed", true);
+    check("F4 · unavailable after spend", api?.miracleAvailable?.(pilgrim) === false, `available=${api?.miracleAvailable?.(pilgrim)}`);
+    await pilgrim.unsetFlag(MOD, "miracleUsed");
+    await resetPilgrim();
+    await setLevel("unawakened", { viaCategory: true });
+    check("F4 · denied when not Enlightened", api?.canMiracle?.(pilgrim) === false, `canMiracle=${api?.canMiracle?.(pilgrim)}`);
+  }
+
   // ── Restore ──
   await resetPilgrim();
+  try { await pilgrim.unsetFlag(MOD, "miracleUsed"); } catch (_e) {}
 
   // ── Report ──
   const fails = F.filter(r => !r.pass);

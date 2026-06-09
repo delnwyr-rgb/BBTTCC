@@ -1360,6 +1360,15 @@ function ftPlaySweepArcVfx(target, opts = {}) {
 // token document → controlled placeable. AA wants a TokenDocument when isEmbedded.
 function ftPlayAutoAnimation(actor, item, { hit = true } = {}) {
   if (!item) return;
+  // Bespoke VFX bridge — emit a public hook for ANY animated item use, BEFORE the AA guards
+  // so listeners fire even if Automated Animations is absent. bbttcc-fx-integration's
+  // class-tier-a-vfx listens here to layer hero Sequencer effects on the item's base AA flag.
+  // Defensive: a thrown listener must never break the item-use flow.
+  try {
+    const _stk = actor?.getActiveTokens?.()?.[0]?.document ?? actor?.getActiveTokens?.()?.[0]
+              ?? canvas?.tokens?.controlled?.[0]?.document ?? canvas?.tokens?.controlled?.[0];
+    Hooks.callAll("fourththing:itemAnimated", { actor, item, sourceToken: _stk, targets: Array.from(game.user?.targets ?? []), hit });
+  } catch (_e) { /* never block use on VFX */ }
   if (!game.modules.get("autoanimations")?.active) return;
   const aa = globalThis.AutomatedAnimations ?? window.AutomatedAnimations;
   if (!aa?.playAnimation) return;
@@ -6754,6 +6763,9 @@ async function castManifestation(actor, item, {
   useOverlay = false,
   bankToCache = false,
   freeClarity = false,
+  // Enlightenment "minor miracle": a free cast of any power up to T4, bypassing
+  // access/tier gating with no Clarity/Blood-Debt cost, no Noise, no misfire/backlash.
+  miracle = false,
   useAoeSavePrompts = true,
   // 2026-06-06 playtest direction: manifestation damage lands on an Apply
   // button by default (like melee strikes) — never silently auto-applied.
@@ -6891,7 +6903,7 @@ async function castManifestation(actor, item, {
   // Boss actors (2026-05-11) are exempt — they are adversarial casters whose
   // entire shtick is resolving Workings against the party.
   const declaredStability = mf?.stability ?? null;
-  if (declaredStability === "instant" && !actorIsTCC && actor?.type !== "boss") {
+  if (!miracle && declaredStability === "instant" && !actorIsTCC && actor?.type !== "boss") {
     ui.notifications?.warn(`${actor.name}: only Trad Caster Classes (Cosmic Linguist, Wyrdlens Adept, Dreamwalker, Pactkeeper) can resolve a working in the active register. Non-TCCs may sustain forms.`);
     return false;
   }
@@ -6902,20 +6914,20 @@ async function castManifestation(actor, item, {
   // path actually costs 4 OP per tier — set in the dialog). The lockout
   // bars casts at-or-below that tier until the next Soma Break clears it.
   const lockoutTiers = Number(actor.flags?.fourththing?.manifestationLockout) || 0;
-  if (lockoutTiers > 0 && manTier <= lockoutTiers) {
+  if (!miracle && lockoutTiers > 0 && manTier <= lockoutTiers) {
     ui.notifications?.warn(`${actor.name}: T${manTier} manifestations are locked out (Blood Debt — ${lockoutTiers} tier${lockoutTiers > 1 ? "s" : ""} sealed). Clears on next Soma Break.`);
     return false;
   }
 
-  if (reachBy > 1) {
+  if (!miracle && reachBy > 1) {
     ui.notifications?.warn(`${actor.name}: T${manTier} is out of reach. Canon allows reaching only one tier above yours.`);
     return false;
   }
-  if (reachBy === 1 && !reachPath) {
+  if (!miracle && reachBy === 1 && !reachPath) {
     ui.notifications?.warn(`${actor.name}: choose Surge or Blood Debt to reach T${manTier}.`);
     return false;
   }
-  if (reachBy <= 0) reachPath = "";
+  if (miracle || reachBy <= 0) reachPath = ""; // a miracle reaches freely, accruing no reach cost
 
   // Activation pool gate. Original (Phase C 2026-05-XX) honored
   // `manifestation.activation.consumePool` on the item. Extended by Action
@@ -6939,7 +6951,7 @@ async function castManifestation(actor, item, {
       ui.notifications?.warn(`${actor.name}: Manifestation Slots exhausted (${slotsMax}/round; refills on round advance).`);
       return false;
     }
-  } else if (item && mf?.activation?.consumePool) {
+  } else if (!miracle && item && mf?.activation?.consumePool) {
     const poolKey = POOL_KEY_FROM_TYPE[mf.activation.type];
     if (mf.activation.type === "reaction" && _ftReactionsDenied(actor)) {
       ui.notifications?.warn(`${actor.name}: reactions are denied this round (Aurablade Fury).`);
@@ -6984,7 +6996,7 @@ async function castManifestation(actor, item, {
   // — Dreamwalker Dream-Cache deploy fires this; Blood Debt + Noise still due).
   // Boss casts (2026-05-11) draw from the Surge bank via _ftCasterPool.
   const tccDiscount = actorIsTCC ? 1 : 0;
-  const clarityCost = (cfg.ascendant || freeClarity) ? 0 : Math.max(0, baseClarity + cfg.clarityShift - tccDiscount);
+  const clarityCost = (cfg.ascendant || freeClarity || miracle) ? 0 : Math.max(0, baseClarity + cfg.clarityShift - tccDiscount);
   const casterPool = _ftCasterPool(actor);
   const curClarity = casterPool.current;
 
@@ -6992,11 +7004,11 @@ async function castManifestation(actor, item, {
   // Discipline-aware: Reach-BD cost is reduced by getReachDiscount(actor).
   let bloodDebtCost = 0;
   const reachDiscount = Math.max(0, Number(getReachDiscount(actor)) || 0);
-  if (reachPath === "bloodDebt") bloodDebtCost += Math.max(0, 1 - reachDiscount);
-  if (cfg.ascendant) bloodDebtCost += 1;
+  if (!miracle && reachPath === "bloodDebt") bloodDebtCost += Math.max(0, 1 - reachDiscount);
+  if (!miracle && cfg.ascendant) bloodDebtCost += 1;
 
-  // Resolve Noise gain (mode; no base Noise cost for manifestations).
-  const noiseGain = cfg.noiseGain;
+  // Resolve Noise gain (mode; no base Noise cost for manifestations). A miracle is silent.
+  const noiseGain = miracle ? 0 : cfg.noiseGain;
 
   if (!cfg.ascendant && curClarity < clarityCost) {
     ui.notifications?.warn(`${actor.name}: need ${clarityCost} ${casterPool.label} (have ${curClarity}).`);
@@ -7005,7 +7017,7 @@ async function castManifestation(actor, item, {
 
   // Misfire column: reach pushes the target one tier higher than the caster.
   const misfireTier = reachPath ? manTier : stewardTier;
-  const skipMisfire = reachPath === "bloodDebt" || cfg.ascendant;
+  const skipMisfire = miracle || reachPath === "bloodDebt" || cfg.ascendant;
 
   const costPieces = [];
   if (clarityCost > 0) costPieces.push(`Clarity ${clarityCost}`);
@@ -13703,11 +13715,14 @@ Hooks.once("init", function () {
 
     if (op === "heal") {
       if (track === "radiation") return `${actor.name}: cannot heal radiation`;
+      // Qliphothic corruption (bbttcc enlightenment) — healing received is halved.
+      const qliphHalved = actor.getFlag?.("bbttcc-character-options", "enlightenment")?.level === "qliphothic";
+      const healAmt = qliphHalved ? Math.floor(scaled / 2) : scaled;
       const cur = rawSys?.derived?.[track]?.value ?? 0;
-      const max = rawSys?.derived?.[track]?.max   ?? cur + scaled;
-      const newVal = Math.min(max, cur + scaled);
+      const max = rawSys?.derived?.[track]?.max   ?? cur + healAmt;
+      const newVal = Math.min(max, cur + healAmt);
       await actor.update({ [`system.derived.${track}.value`]: newVal });
-      return `${actor.name}: ${track} ${cur} → ${newVal} (+${newVal - cur})`;
+      return `${actor.name}: ${track} ${cur} → ${newVal} (+${newVal - cur})${qliphHalved && scaled ? " ·½ qliphothic" : ""}`;
     }
 
     // Surge defense one-shots (target side). Scan AEs flagged with
@@ -14310,6 +14325,11 @@ Hooks.once("init", function () {
     // Clear manifestation lockout flag (Blood Debt refit 2026-05-09).
     if (Number(actor.flags?.fourththing?.manifestationLockout) > 0) {
       updates["flags.fourththing.-=manifestationLockout"] = null;
+    }
+
+    // Refresh the Enlightenment "minor miracle" charge (bbttcc) on Soma Break.
+    if (actor.flags?.["bbttcc-character-options"]?.miracleUsed) {
+      updates["flags.bbttcc-character-options.-=miracleUsed"] = null;
     }
 
     await actor.update(updates);

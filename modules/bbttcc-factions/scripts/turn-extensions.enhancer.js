@@ -129,6 +129,26 @@ try {
         }
       }
 
+      // QLIPHOTHIC DARKNESS SPIKES — corrupted members suffer per-turn in deep darkness.
+      const DARK_SPIKE_THRESHOLD = 7;        // owner-tunable
+      const DARK_SPIKE_DIE       = "1d4";    // owner-tunable
+      const globalDark = Number(get(A,`flags.${MODF}.darkness.global`,0))||0;
+      if(globalDark >= DARK_SPIKE_THRESHOLD){
+        const applyDmg = game.fourththing?.rolls?._applyDamageToActor;
+        for(const m of (game.actors?.contents ?? [])){
+          if(m.type!=="character") continue;
+          if(m.getFlag(MODF,"factionId")!==A.id) continue;
+          if(m.getFlag("bbttcc-character-options","enlightenment")?.level!=="qliphothic") continue;
+          let dmg=2;
+          try{ const r=await (new Roll(DARK_SPIKE_DIE)).evaluate(); dmg=r.total; }catch(_e){}
+          if(applyDmg){ try{ await applyDmg(m,dmg,{op:"damage",track:"integrity",damageType:"necrotic"}); }
+            catch(e){ console.warn(TAG,"darkness spike failed",e); } }
+          war.push({type:"turn",date:(new Date()).toLocaleString(),
+            summary:`Darkness Spike — ${m.name} suffers ${dmg} necrotic (corruption · darkness ${globalDark})`});
+          any=true;
+        }
+      }
+
       if(any){
         await A.update({[`flags.${MODF}`]:{
           ...(A.flags?.[MODF]||{}),
