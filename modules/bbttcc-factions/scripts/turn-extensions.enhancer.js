@@ -70,14 +70,18 @@ const hasMercy = (tikkun && typeof tikkun.hasSpark === "function")
 if (UR?.any && hasMercy) {
   const bank = get(A, `flags.${MODF}.opBank`, {}) || {};
   const nb = foundry.utils.deepClone(bank);
+  // Enlightenment opRegenBonus — an Enlightened faction regenerates +10% OP (the only
+  // per-turn OP regen in the engine is this Unity/Mercy path, so the bonus rides it).
+  const enlightened = String(get(A, `flags.${MODF}.enlightenmentLevel`, "")).toLowerCase();
+  const opMult = (enlightened === "enlightened" || enlightened === "transcendent") ? 1.10 : 1;
   for (const [k, v] of Object.entries(UR.ops || {})) {
-    if (v > 0) nb[k] = Number(nb[k] || 0) + Number(v);
+    if (v > 0) nb[k] = Number(nb[k] || 0) + Math.round(Number(v) * opMult);
   }
   updates["opBank"] = nb; any = true;
   war.push({
     type: "turn",
     date: (new Date()).toLocaleString(),
-    summary: `Unity Bonus — ${UR.sephirah} (${UR.count} aligned): ${UR.note}`
+    summary: `Unity Bonus — ${UR.sephirah} (${UR.count} aligned): ${UR.note}${opMult > 1 ? " · +10% Enlightened OP regen" : ""}`
   });
 }
 
@@ -108,9 +112,9 @@ try {
         war.push({type:"turn",date:(new Date()).toLocaleString(),
           summary:`Trend: Morale→${mNext}% • Loyalty→${lNext}%`});
 
-      // DARKNESS (Transcendent)
+      // DARKNESS (top ascension level — canonical "enlightened", legacy "transcendent"/"5")
       const lvl=String(get(A,`flags.${MODF}.enlightenmentLevel`,"")).toLowerCase();
-      if(lvl==="transcendent"||lvl==="5"){
+      if(lvl==="enlightened"||lvl==="transcendent"||lvl==="5"){
         const box=get(A,`flags.${MODF}.darkness`,{})||{};
         const next=foundry.utils.deepClone(box);const changed=[];
         for(const[k,v]of Object.entries(box)){
