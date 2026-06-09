@@ -1227,7 +1227,19 @@ const _FT_COMBAT_VFX_PRESETS = {
   stealthPing:    { color: 0x2dd4bf, ringWidth: 2, maxRadiusMult: 0.7, durationMs: 520 },
   detectionPing:  { color: 0xfbbf24, ringWidth: 3, maxRadiusMult: 1.0, durationMs: 640 },
   alarmWave:      { color: 0xef4444, ringWidth: 5, maxRadiusMult: 2.4, durationMs: 1100 },
-  progressPulse:  { color: 0x14b8a6, ringWidth: 3, maxRadiusMult: 0.9, durationMs: 560 }
+  progressPulse:  { color: 0x14b8a6, ringWidth: 3, maxRadiusMult: 0.9, durationMs: 560 },
+  // Rig maneuver palette (2026-06-09) — one preset per silent rig action so every
+  // sheet maneuver reads on the canvas, layered on the same PIXI ring primitive as
+  // ram/repair/impact (no AA/Sequencer dep). Tuned by feel: fast+tight for evade,
+  // slow+wide for steam/signal, defensive blue for ward.
+  steer:     { color: 0x88ccff, ringWidth: 2, maxRadiusMult: 0.70, durationMs: 460 },  // pilot reposition
+  anchor:    { color: 0xc9b27a, ringWidth: 4, maxRadiusMult: 0.85, durationMs: 620 },  // hold-position
+  evade:     { color: 0x9be7ff, ringWidth: 3, maxRadiusMult: 1.35, durationMs: 420 },  // evasive (quick blur)
+  ward:      { color: 0x6fb3ff, ringWidth: 5, maxRadiusMult: 1.00, durationMs: 700 },  // brace / hold-on
+  steam:     { color: 0xffb066, ringWidth: 4, maxRadiusMult: 1.50, durationMs: 820 },  // vent-heat
+  surge:     { color: 0x6ee7b7, ringWidth: 4, maxRadiusMult: 1.20, durationMs: 640 },  // boost-system
+  signal:    { color: 0xc1a3ff, ringWidth: 2, maxRadiusMult: 2.00, durationMs: 900 },  // signal (wide comms pulse)
+  suppress:  { color: 0xef6b4d, ringWidth: 4, maxRadiusMult: 1.60, durationMs: 760 }   // suppression
 };
 
 function _ftPlaceableForActor(actor) {
@@ -23197,6 +23209,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       await setRigCombat({ hexesMoved: prevMoved + effHexes });
       await setPilotGate();
       await consumeAction();
+      try { ftPlayCombatVfx(rig, "steer"); } catch (e) { console.warn("[fourththing] steer VFX", e); }
       const pilotingNote = pilotingHexBonus > 0
         ? ` <span style="opacity:0.75">(base ${speed} + ${pilotingHexBonus} from Piloting ${piloting})</span>`
         : "";
@@ -23215,6 +23228,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       await setPilotGate();
       await consumeAction();
       await _ftEnsureRigStateAE(rig, "holding", { extraDesc: `+${holdBonus} Guard until next pilot turn.` });
+      try { ftPlayCombatVfx(rig, "anchor"); } catch (e) { console.warn("[fourththing] hold-position VFX", e); }
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">🛡 ${rig.name} holds position</span></div>
@@ -23230,6 +23244,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       await setPilotGate();
       await consumeAction();
       await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${evaBonus} Evasion until next pilot turn.` });
+      try { ftPlayCombatVfx(rig, "evade"); } catch (e) { console.warn("[fourththing] evasive VFX", e); }
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">💨 ${rig.name} evades</span></div>
@@ -23243,6 +23258,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       await setRigCombat({ brace: true });
       await consumeBonus();
       await _ftEnsureRigStateAE(rig, "brace", { extraDesc: "+1 Guard until next pilot turn." });
+      try { ftPlayCombatVfx(rig, "ward"); } catch (e) { console.warn("[fourththing] brace VFX", e); }
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">⚓ ${steward.name} braces ${rig.name}</span></div>
@@ -23264,6 +23280,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const next = Math.max(0, cur - ventAmt);
       await _ftSetRigHeat(rig, next);
       await consumeBonus();
+      try { ftPlayCombatVfx(rig, "steam"); } catch (e) { console.warn("[fourththing] vent-heat VFX", e); }
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">🌬 ${steward.name} vents heat from ${rig.name}</span></div>
@@ -23299,6 +23316,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       await setRigCombat({ boostedSystemId: picked, boostedSystemName: sysItem.name, boostedUntilRound: round + 1 });
       await consumeBonus();
       await _ftEnsureRigStateAE(rig, "boost-system", { extraDesc: `${sysItem.name} treated as +1 tier until next round.` });
+      try { ftPlayCombatVfx(rig, "surge"); } catch (e) { console.warn("[fourththing] boost-system VFX", e); }
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">⚡ ${steward.name} enhances ${sysItem.name}</span></div>
@@ -23334,6 +23352,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       if (target.id === steward.id) { warn(`${steward.name}: pick someone other than yourself.`); return; }
       await target.update({ "flags.fourththing.combat.signalBonus": 1 });
       await consumeBonus();
+      try { ftPlayCombatVfx(target, "signal"); } catch (e) { console.warn("[fourththing] signal VFX", e); }
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: steward }),
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">📡 ${steward.name} signals ${target.name}</span></div>
@@ -23367,6 +23386,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         }
       } catch (e) { console.warn("[fourththing] suppression AE create failed", e); }
       await consumeBonus();
+      try { ftPlayCombatVfx(target, "suppress"); } catch (e) { console.warn("[fourththing] suppression VFX", e); }
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: steward }),
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#eb8757">🎯 ${steward.name} suppresses ${target.name}</span></div>
@@ -23386,6 +23406,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         "system.actions.reactionUsed": true,
         "flags.fourththing.combat.holdingOn": true
       });
+      try { ftPlayCombatVfx(rig, "ward"); } catch (e) { console.warn("[fourththing] hold-on VFX", e); }
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: steward }),
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0d4ff">⚓ ${steward.name} holds on</span></div>
