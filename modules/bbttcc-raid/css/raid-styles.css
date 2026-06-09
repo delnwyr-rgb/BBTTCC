@@ -1,11 +1,54 @@
-/* BBTTCC — Raid Console Hex Chrome Skin */
+/* BBTTCC — Raid Console HUD Skin
+   Re-skin (look-and-feel only): brings the Raid/Planner console in line with the
+   dark-glass aesthetic of the Siege HUD (siege-hud.js) and Courtly Intrigue HUD
+   (raid-courtly.hud.js). Functionality/structure unchanged — this file only
+   restyles. Theme is token-driven: set the --ft-hud-* custom properties once and
+   the whole console inherits them. Per-raid-type accent is switched via a
+   bbttcc-raidtype-<key> class on the console root (see module.raid-console.js). */
 
-/* Root + window content */
+/* ---- HUD theme tokens -----------------------------------------------------
+   The console root carries both .bbttcc-raid-console and .bbttcc-raid-planner,
+   so define tokens on both (same element) and the planner half inherits too. */
+.bbttcc-raid-console,
+.bbttcc-raid-planner,
+.bbttcc-activity-planner {
+  /* Default accent = bronze/orange (siege palette, thematically "war"). */
+  --ft-hud-accent: #d9a441;
+  --ft-hud-accent-rgb: 217,164,65;
+  --ft-hud-accent-soft: #ffc69a;
+  --ft-hud-bg: rgba(22,19,12,0.93);          /* warm dark glass */
+  --ft-hud-bg-2: rgba(30,25,16,0.96);        /* raised card */
+  --ft-hud-bg-3: rgba(16,13,8,0.96);         /* recessed track/input */
+  --ft-hud-text: #e8e2d4;                     /* warm parchment */
+  --ft-hud-dim: #b8ad94;                      /* dimmed labels */
+  --ft-hud-border: rgba(217,164,65,0.55);
+  --ft-hud-border-soft: rgba(217,164,65,0.30);
+  --ft-hud-glow: 0 0 16px rgba(217,164,65,0.18), 0 4px 12px rgba(0,0,0,0.5);
+  --ft-hud-track: #1a1712;
+  --ft-hud-radius: 6px;
 
-.bbttcc-raid-console {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Signika', sans-serif;
   font-size: 12px;
-  color: #e5e7eb;
+  color: var(--ft-hud-text);
+}
+
+/* Per-raid-type accent overrides (class set on the console root by render).
+   Infiltration = cyan/teal (covert, cool) to echo the Courtly HUD palette. */
+.bbttcc-raid-console.bbttcc-raidtype-infiltration,
+.bbttcc-raid-console.bbttcc-raidtype-intrigue,
+.bbttcc-raid-console.bbttcc-raidtype-infiltration_alarm {
+  --ft-hud-accent: #5ce1e6;
+  --ft-hud-accent-rgb: 92,225,230;
+  --ft-hud-accent-soft: #9fe9ec;
+  --ft-hud-bg: rgba(18,20,26,0.93);          /* cool dark glass */
+  --ft-hud-bg-2: rgba(24,27,35,0.96);
+  --ft-hud-bg-3: rgba(13,15,20,0.96);
+  --ft-hud-text: #e6edf0;
+  --ft-hud-dim: #9fb0b6;
+  --ft-hud-border: rgba(92,225,230,0.50);
+  --ft-hud-border-soft: rgba(92,225,230,0.26);
+  --ft-hud-glow: 0 0 16px rgba(92,225,230,0.20), 0 4px 12px rgba(0,0,0,0.5);
+  --ft-hud-track: #12161c;
 }
 
 
@@ -66,14 +109,14 @@
 .bbttcc-raid-console .window-content {
   padding: 0.6rem 0.8rem 0.8rem;
   background:
-    radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
-    radial-gradient(circle at 100% 0, rgba(56,189,248,0.18), transparent 55%),
-    radial-gradient(circle at 0 100%, rgba(147,51,234,0.18), transparent 60%),
-    linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+    radial-gradient(circle at 0 0, rgba(var(--ft-hud-accent-rgb),0.12), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(0,0,0,0.35), transparent 55%),
+    var(--ft-hud-bg);
+  backdrop-filter: blur(2px);
   border-radius: 0.9rem;
   box-shadow:
-    0 0 0 1px rgba(15,23,42,0.95),
-    0 18px 32px rgba(15,23,42,0.9);
+    inset 0 0 0 1px var(--ft-hud-border-soft),
+    var(--ft-hud-glow);
   box-sizing: border-box;
 }
 
@@ -84,11 +127,11 @@
   padding: 0.45rem 0.55rem;
   border-radius: 0.75rem;
   background:
-    linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
-  border: 1px solid rgba(59,130,246,0.8);
+    linear-gradient(135deg, var(--ft-hud-bg-2), rgba(var(--ft-hud-accent-rgb),0.16));
+  border: 1px solid var(--ft-hud-border);
   box-shadow:
-    0 0 0 1px rgba(15,23,42,0.9),
-    0 0 18px rgba(59,130,246,0.45);
+    inset 0 0 0 1px rgba(0,0,0,0.4),
+    0 0 14px rgba(var(--ft-hud-accent-rgb),0.28);
   align-items: center;
   gap: 0.5rem;
 }
@@ -97,7 +140,7 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #cbd5f5;
+  color: var(--ft-hud-dim);
 }
 
 /* Identity strip */
@@ -110,10 +153,10 @@
 
 .bbttcc-raid-console select,
 .bbttcc-raid-console input[type="text"] {
-  background-color: rgba(15,23,42,0.9);
+  background-color: var(--ft-hud-bg-3);
   border-radius: 0.4rem;
-  border: 1px solid rgba(31,41,55,0.95);
-  color: #e5e7eb;
+  border: 1px solid var(--ft-hud-border-soft);
+  color: var(--ft-hud-text);
   padding: 0.2rem 0.4rem;
   font-size: 12px;
 }
@@ -121,8 +164,8 @@
 .bbttcc-raid-console select:focus,
 .bbttcc-raid-console input[type="text"]:focus {
   outline: none;
-  border-color: rgba(59,130,246,0.9);
-  box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+  border-color: var(--ft-hud-accent);
+  box-shadow: 0 0 0 1px rgba(var(--ft-hud-accent-rgb),0.7);
 }
 
 /* Generic button styling */
@@ -133,11 +176,10 @@
   justify-content: center;
   padding: 0.18rem 0.6rem;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.9);
+  border: 1px solid var(--ft-hud-border-soft);
   background:
-    radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
-    linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
-  color: #e5e7eb;
+    linear-gradient(135deg, var(--ft-hud-bg-2), var(--ft-hud-bg-3));
+  color: var(--ft-hud-text);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -146,7 +188,8 @@
 }
 
 .bbttcc-raid-console .btn:hover {
-  filter: brightness(1.06);
+  filter: brightness(1.1);
+  border-color: var(--ft-hud-border);
 }
 
 /* Emphasize key actions */
@@ -154,18 +197,20 @@
 .bbttcc-raid-console .btn[data-id="add-round"],
 .bbttcc-raid-console .btn[data-manage-act="commit"],
 .bbttcc-raid-console .btn[data-act="post"] {
-  border-color: rgba(59,130,246,0.95);
+  border-color: var(--ft-hud-accent);
+  color: #1a140a;
   background:
-    radial-gradient(circle at 0 0, rgba(56,189,248,0.5), transparent 55%),
-    linear-gradient(135deg, rgba(79,70,229,0.98), rgba(14,165,233,0.98));
+    linear-gradient(135deg, var(--ft-hud-accent), var(--ft-hud-accent-soft));
+  box-shadow: 0 0 10px rgba(var(--ft-hud-accent-rgb),0.45);
+  font-weight: 600;
 }
 
 .bbttcc-raid-console .btn[data-act="del"],
 .bbttcc-raid-console .btn[data-manage-act="cancel"] {
   border-color: rgba(220,38,38,0.85);
+  color: #ffd1d1;
   background:
-    radial-gradient(circle at 0 0, rgba(220,38,38,0.4), transparent 55%),
-    linear-gradient(135deg, rgba(127,29,29,0.98), rgba(15,23,42,0.98));
+    linear-gradient(135deg, rgba(90,20,20,0.96), rgba(20,12,10,0.98));
 }
 
 /* Target + primary key line */
@@ -174,7 +219,7 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #cbd5f5;
+  color: var(--ft-hud-dim);
 }
 
 /* Top DC block */
@@ -191,9 +236,9 @@
   width: 14px;
   height: 14px;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.9);
+  border: 1px solid var(--ft-hud-border-soft);
   font-size: 9px;
-  background: rgba(15,23,42,0.95);
+  background: var(--ft-hud-bg-3);
 }
 
 /* Bank cards */
@@ -206,13 +251,12 @@
   padding: 0.45rem 0.55rem;
   border-radius: 0.7rem;
   background:
-    radial-gradient(circle at 0 0, rgba(30,64,175,0.24), transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.24), transparent 55%),
-    linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,1));
-  border: 1px solid rgba(30,64,175,0.9);
+    radial-gradient(circle at 0 0, rgba(var(--ft-hud-accent-rgb),0.16), transparent 60%),
+    var(--ft-hud-bg-2);
+  border: 1px solid var(--ft-hud-border);
   box-shadow:
-    0 0 0 1px rgba(15,23,42,0.9),
-    0 8px 18px rgba(15,23,42,0.9);
+    inset 0 0 0 1px rgba(0,0,0,0.4),
+    0 4px 12px rgba(0,0,0,0.5);
 }
 
 .bbttcc-raid-console .bbttcc-bank h4 {
@@ -220,6 +264,7 @@
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.16em;
+  color: var(--ft-hud-accent);
 }
 
 /* Bank tables */
@@ -231,25 +276,44 @@
 }
 
 .bbttcc-raid-console .bbttcc-bank .bbttcc-table thead {
-  background: linear-gradient(90deg, rgba(15,23,42,0.96), rgba(30,64,175,0.96));
+  background: linear-gradient(90deg, var(--ft-hud-bg-3), rgba(var(--ft-hud-accent-rgb),0.20));
 }
 
 .bbttcc-raid-console .bbttcc-bank .bbttcc-table th {
   padding: 0.15rem 0.3rem;
   text-align: center;
   font-weight: 600;
-  color: #cbd5f5;
-  border-bottom: 1px solid rgba(30,64,175,0.95);
+  color: var(--ft-hud-dim);
+  border-bottom: 1px solid var(--ft-hud-border-soft);
 }
 
 .bbttcc-raid-console .bbttcc-bank .bbttcc-table td {
   padding: 0.2rem 0.3rem;
   text-align: center;
-  border-top: 1px solid rgba(15,23,42,0.9);
+  border-top: 1px solid rgba(0,0,0,0.4);
 }
 
 .bbttcc-raid-console .bbttcc-bank .bbttcc-table tbody tr {
-  background-color: rgba(15,23,42,0.98);
+  background-color: rgba(0,0,0,0.18);
+}
+
+/* OP progress bars (HUD-style: recessed track + glowing accent fill).
+   Mirrors siege buffer bar / courtly influence bar. Markup-optional: any
+   .bbttcc-op-bar > .bbttcc-op-bar-fill renders themed; width set inline. */
+.bbttcc-raid-console .bbttcc-op-bar {
+  position: relative;
+  height: 8px;
+  background: var(--ft-hud-track);
+  border: 1px solid rgba(0,0,0,0.5);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bbttcc-raid-console .bbttcc-op-bar-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: var(--ft-hud-accent);
+  box-shadow: 0 0 6px var(--ft-hud-accent);
+  transition: width .3s;
 }
 
 /* Rounds table */
@@ -265,30 +329,30 @@
 }
 
 .bbttcc-raid-console .bbttcc-rounds thead {
-  background: linear-gradient(90deg, rgba(15,23,42,0.96), rgba(30,64,175,0.96));
+  background: linear-gradient(90deg, var(--ft-hud-bg-3), rgba(var(--ft-hud-accent-rgb),0.20));
 }
 
 .bbttcc-raid-console .bbttcc-rounds thead th {
   padding: 0.25rem 0.4rem;
   text-align: center;
   font-weight: 600;
-  color: #cbd5f5;
-  border-bottom: 1px solid rgba(30,64,175,0.95);
+  color: var(--ft-hud-dim);
+  border-bottom: 1px solid var(--ft-hud-border-soft);
 }
 
 .bbttcc-raid-console .bbttcc-rounds tbody td {
   padding: 0.25rem 0.4rem;
-  border-top: 1px solid rgba(31,41,55,0.95);
+  border-top: 1px solid rgba(0,0,0,0.35);
 }
 
 /* Simple zebra striping when enhancer isn't active */
 
 .bbttcc-raid-console .bbttcc-rounds tbody tr:nth-child(odd) {
-  background-color: rgba(15,23,42,0.96);
+  background-color: rgba(0,0,0,0.14);
 }
 
 .bbttcc-raid-console .bbttcc-rounds tbody tr:nth-child(even) {
-  background-color: rgba(15,23,42,0.94);
+  background-color: rgba(0,0,0,0.24);
 }
 
 .bbttcc-raid-console .bbttcc-rounds td.center,
@@ -302,10 +366,9 @@
   padding: 0.5rem;
   border-radius: 0.7rem;
   background:
-    radial-gradient(circle at 0 0, rgba(30,64,175,0.24), transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.24), transparent 55%),
-    linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,1));
-  border: 1px solid rgba(30,64,175,0.9);
+    radial-gradient(circle at 0 0, rgba(var(--ft-hud-accent-rgb),0.16), transparent 60%),
+    var(--ft-hud-bg-2);
+  border: 1px solid var(--ft-hud-border);
 }
 
 /* Maneuvers cell + projections */
@@ -313,12 +376,12 @@
 .bbttcc-raid-console .bbttcc-mans-cell {
   margin-top: 0.45rem;
   padding-top: 0.3rem;
-  border-top: 1px solid rgba(30,64,175,0.7);
+  border-top: 1px solid var(--ft-hud-border-soft);
 }
 
 .bbttcc-raid-console fieldset.bbttcc-mans {
   border-radius: 0.55rem;
-  border: 1px solid rgba(148,163,184,0.7);
+  border: 1px solid var(--ft-hud-border-soft);
   padding: 0.35rem 0.4rem 0.4rem;
   margin: 0;
 }
@@ -328,7 +391,7 @@
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #cbd5f5;
+  color: var(--ft-hud-dim);
 }
 
 .bbttcc-raid-console .bbttcc-mans label {
@@ -345,7 +408,7 @@
 .bbttcc-raid-console .bbttcc-tag {
   padding: 1px 4px;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.9);
+  border: 1px solid var(--ft-hud-border-soft);
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -366,22 +429,24 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   font-weight: 600;
-  border: 1px solid rgba(148,163,184,0.8);
-  background: rgba(15,23,42,0.95);
+  border: 1px solid var(--ft-hud-border-soft);
+  background: var(--ft-hud-bg-3);
 }
 
 .bbttcc-raid-console .bbttcc-pill-primary {
-  border-color: rgba(59,130,246,0.95);
+  border-color: var(--ft-hud-accent);
+  color: var(--ft-hud-accent-soft);
   background:
-    radial-gradient(circle at 0 0, rgba(59,130,246,0.5), transparent 55%),
-    rgba(15,23,42,0.96);
+    radial-gradient(circle at 0 0, rgba(var(--ft-hud-accent-rgb),0.4), transparent 55%),
+    var(--ft-hud-bg-3);
 }
 
 .bbttcc-raid-console .bbttcc-pill-gold {
   border-color: rgba(234,179,8,0.9);
+  color: #ffe6a3;
   background:
-    radial-gradient(circle at 0 0, rgba(234,179,8,0.5), transparent 55%),
-    rgba(15,23,42,0.96);
+    radial-gradient(circle at 0 0, rgba(234,179,8,0.45), transparent 55%),
+    var(--ft-hud-bg-3);
 }
 
 /* Helper */
@@ -391,18 +456,18 @@
 }
 
 
-/* BBTTCC — Activity Planner Hex Chrome Skin */
+/* BBTTCC — Activity Planner HUD Skin */
 
 
 /* The planner app should include one of these classes on the Application:
    - bbttcc-raid-planner (preferred)
    - bbttcc-activity-planner (fallback)
-*/
+   (Tokens are defined at the top of this file on the shared selector.) */
 .bbttcc-raid-planner,
 .bbttcc-activity-planner {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Signika', sans-serif;
   font-size: 12px;
-  color: #e5e7eb;
+  color: var(--ft-hud-text);
 }
 
 /* Window chrome */
@@ -410,14 +475,14 @@
 .bbttcc-activity-planner .window-content {
   padding: 0.6rem 0.8rem 0.8rem;
   background:
-    radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
-    radial-gradient(circle at 100% 0, rgba(56,189,248,0.18), transparent 55%),
-    radial-gradient(circle at 0 100%, rgba(147,51,234,0.18), transparent 60%),
-    linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
+    radial-gradient(circle at 0 0, rgba(var(--ft-hud-accent-rgb),0.12), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(0,0,0,0.35), transparent 55%),
+    var(--ft-hud-bg);
+  backdrop-filter: blur(2px);
   border-radius: 0.9rem;
   box-shadow:
-    0 0 0 1px rgba(15,23,42,0.95),
-    0 18px 32px rgba(15,23,42,0.9);
+    inset 0 0 0 1px var(--ft-hud-border-soft),
+    var(--ft-hud-glow);
   box-sizing: border-box;
 }
 
@@ -427,7 +492,7 @@
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #cbd5f5;
+  color: var(--ft-hud-dim);
 }
 
 /* Inputs */
@@ -437,10 +502,10 @@
 .bbttcc-activity-planner select,
 .bbttcc-activity-planner input[type="text"],
 .bbttcc-activity-planner textarea {
-  background-color: rgba(15,23,42,0.9);
+  background-color: var(--ft-hud-bg-3);
   border-radius: 0.45rem;
-  border: 1px solid rgba(31,41,55,0.95);
-  color: #e5e7eb;
+  border: 1px solid var(--ft-hud-border-soft);
+  color: var(--ft-hud-text);
   padding: 0.25rem 0.45rem;
   font-size: 12px;
 }
@@ -452,8 +517,8 @@
 .bbttcc-activity-planner input[type="text"]:focus,
 .bbttcc-activity-planner textarea:focus {
   outline: none;
-  border-color: rgba(59,130,246,0.9);
-  box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+  border-color: var(--ft-hud-accent);
+  box-shadow: 0 0 0 1px rgba(var(--ft-hud-accent-rgb),0.7);
 }
 
 /* Category chips */
@@ -466,11 +531,10 @@
   justify-content: center;
   padding: 0.15rem 0.65rem;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.75);
+  border: 1px solid var(--ft-hud-border-soft);
   background:
-    radial-gradient(circle at 0 0, rgba(148,163,184,0.25), transparent 55%),
-    linear-gradient(135deg, rgba(30,64,175,0.75), rgba(15,23,42,0.96));
-  color: #e5e7eb;
+    linear-gradient(135deg, var(--ft-hud-bg-2), var(--ft-hud-bg-3));
+  color: var(--ft-hud-text);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.10em;
@@ -483,10 +547,11 @@
 .bbttcc-raid-planner .chip.active,
 .bbttcc-activity-planner .bbttcc-chip.active,
 .bbttcc-activity-planner .chip.active {
-  border-color: rgba(59,130,246,0.95);
+  border-color: var(--ft-hud-accent);
+  color: #1a140a;
   background:
-    radial-gradient(circle at 0 0, rgba(56,189,248,0.45), transparent 55%),
-    linear-gradient(135deg, rgba(79,70,229,0.96), rgba(14,165,233,0.96));
+    linear-gradient(135deg, var(--ft-hud-accent), var(--ft-hud-accent-soft));
+  box-shadow: 0 0 8px rgba(var(--ft-hud-accent-rgb),0.4);
 }
 
 /* Activity list container */
@@ -495,14 +560,13 @@
 .bbttcc-activity-planner .bbttcc-acts,
 .bbttcc-activity-planner .acts {
   border-radius: 0.75rem;
-  border: 1px solid rgba(30,64,175,0.65);
+  border: 1px solid var(--ft-hud-border-soft);
   background:
-    radial-gradient(circle at 0 0, rgba(30,64,175,0.18), transparent 60%),
-    radial-gradient(circle at 100% 100%, rgba(147,51,234,0.18), transparent 55%),
-    rgba(15,23,42,0.88);
+    radial-gradient(circle at 0 0, rgba(var(--ft-hud-accent-rgb),0.10), transparent 60%),
+    var(--ft-hud-bg-2);
   box-shadow:
-    0 0 0 1px rgba(15,23,42,0.85),
-    0 10px 18px rgba(15,23,42,0.75);
+    inset 0 0 0 1px rgba(0,0,0,0.4),
+    0 6px 14px rgba(0,0,0,0.45);
   overflow: hidden;
 }
 
@@ -515,9 +579,9 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.35rem 0.55rem;
-  background: linear-gradient(90deg, rgba(15,23,42,0.96), rgba(30,64,175,0.78));
-  border-bottom: 1px solid rgba(30,64,175,0.65);
-  color: #cbd5f5;
+  background: linear-gradient(90deg, var(--ft-hud-bg-3), rgba(var(--ft-hud-accent-rgb),0.18));
+  border-bottom: 1px solid var(--ft-hud-border-soft);
+  color: var(--ft-hud-dim);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -528,26 +592,26 @@
 .bbttcc-raid-planner .group:hover,
 .bbttcc-activity-planner .bbttcc-group:hover,
 .bbttcc-activity-planner .group:hover {
-  filter: brightness(1.05);
+  filter: brightness(1.08);
 }
 
 /* Activity rows */
 .bbttcc-raid-planner [data-act],
 .bbttcc-activity-planner [data-act] {
   padding: 0.4rem 0.55rem;
-  border-top: 1px solid rgba(31,41,55,0.85);
-  background-color: rgba(15,23,42,0.94);
+  border-top: 1px solid rgba(0,0,0,0.35);
+  background-color: rgba(0,0,0,0.14);
 }
 
 .bbttcc-raid-planner [data-act]:nth-child(even),
 .bbttcc-activity-planner [data-act]:nth-child(even) {
-  background-color: rgba(15,23,42,0.90);
+  background-color: rgba(0,0,0,0.24);
 }
 
 .bbttcc-raid-planner [data-act].selected,
 .bbttcc-activity-planner [data-act].selected {
-  outline: 1px solid rgba(56,189,248,0.75);
-  box-shadow: 0 0 0 1px rgba(56,189,248,0.35) inset;
+  outline: 1px solid var(--ft-hud-accent);
+  box-shadow: 0 0 0 1px rgba(var(--ft-hud-accent-rgb),0.35) inset;
 }
 
 /* Bottom action buttons */
@@ -558,11 +622,10 @@
   justify-content: center;
   padding: 0.22rem 0.75rem;
   border-radius: 999px;
-  border: 1px solid rgba(148,163,184,0.9);
+  border: 1px solid var(--ft-hud-border-soft);
   background:
-    radial-gradient(circle at 0 0, rgba(148,163,184,0.35), transparent 55%),
-    linear-gradient(135deg, rgba(30,64,175,0.96), rgba(15,23,42,0.96));
-  color: #e5e7eb;
+    linear-gradient(135deg, var(--ft-hud-bg-2), var(--ft-hud-bg-3));
+  color: var(--ft-hud-text);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -572,17 +635,20 @@
 
 .bbttcc-raid-planner button:hover,
 .bbttcc-activity-planner button:hover {
-  filter: brightness(1.06);
+  filter: brightness(1.1);
+  border-color: var(--ft-hud-border);
 }
 
 .bbttcc-raid-planner button.primary,
 .bbttcc-raid-planner button[data-act="plan"],
 .bbttcc-activity-planner button.primary,
 .bbttcc-activity-planner button[data-act="plan"] {
-  border-color: rgba(59,130,246,0.95);
+  border-color: var(--ft-hud-accent);
+  color: #1a140a;
   background:
-    radial-gradient(circle at 0 0, rgba(56,189,248,0.5), transparent 55%),
-    linear-gradient(135deg, rgba(79,70,229,0.98), rgba(14,165,233,0.98));
+    linear-gradient(135deg, var(--ft-hud-accent), var(--ft-hud-accent-soft));
+  box-shadow: 0 0 10px rgba(var(--ft-hud-accent-rgb),0.45);
+  font-weight: 600;
 }
 
 /* Prevent Foundry light theme from forcing black text inside planner */
@@ -753,7 +819,7 @@
   height:84px;
   object-fit:cover;
   border-radius:10px;
-  border:1px solid rgba(220,38,38,0.55);
+  border:1px solid var(--ft-hud-border, rgba(220,38,38,0.55));
   box-shadow: 0 4px 14px rgba(0,0,0,0.4);
   flex: 0 0 auto;
 }
@@ -769,12 +835,12 @@
   height:36px;
   object-fit:cover;
   border-radius:50%;
-  border:2px solid rgba(148,163,184,0.55);
-  background: rgba(2,6,23,0.6);
+  border:2px solid var(--ft-hud-border-soft, rgba(148,163,184,0.55));
+  background: rgba(0,0,0,0.5);
   box-shadow: 0 2px 6px rgba(0,0,0,0.4);
 }
 .bbttcc-raid-faction-token-attacker{
-  border-color: rgba(56,189,248,0.85);
+  border-color: var(--ft-hud-accent, rgba(56,189,248,0.85));
 }
 .bbttcc-raid-faction-token-support{
   border-color: rgba(168,85,247,0.7);

@@ -131,10 +131,10 @@
       // Give each round row a card-like container
       const bodyRows = table.querySelectorAll("tbody tr[data-idx]");
       bodyRows.forEach((row) => {
-        row.style.border = "1px solid rgba(148,163,184,0.7)";
+        row.style.border = "1px solid var(--ft-hud-border, rgba(148,163,184,0.7))";
         row.style.borderRadius = "8px";
-        row.style.boxShadow = "0 4px 12px rgba(15,23,42,0.7)";
-        row.style.background = "linear-gradient(135deg, #020617, #111827)";
+        row.style.boxShadow = "0 4px 12px rgba(0,0,0,0.5)";
+        row.style.background = "var(--ft-hud-bg-2, linear-gradient(135deg, #020617, #111827))";
         row.style.marginBottom = "8px";
         row.style.display = "block";
         row.style.padding = "6px 8px";
@@ -142,11 +142,11 @@
         // The "manage" row (next sibling) is part of the card
         const manage = row.nextElementSibling;
         if (manage && manage.dataset && manage.dataset.manageRow === "true") {
-          manage.style.border = "1px solid rgba(148,163,184,0.5)";
+          manage.style.border = "1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.5))";
           manage.style.borderTop = "none";
           manage.style.borderRadius = "0 0 8px 8px";
-          manage.style.boxShadow = "0 4px 12px rgba(15,23,42,0.7)";
-          manage.style.background = "#020617";
+          manage.style.boxShadow = "0 4px 12px rgba(0,0,0,0.5)";
+          manage.style.background = "var(--ft-hud-bg-3, #020617)";
           manage.style.marginTop = "-4px";
           manage.style.marginBottom = "10px";
           manage.style.display = "block";
@@ -183,7 +183,7 @@
         // Tier + rarity badge
         const badge = rarityBadge(spec.tier, spec.rarity);
         const badgeHtml = badge
-          ? `<span class="bbttcc-tag" style="margin-left:4px; padding:1px 4px; border-radius:999px; border:1px solid rgba(148,163,184,0.9); font-size:0.7rem; opacity:0.9;">${badge}</span>`
+          ? `<span class="bbttcc-tag" style="margin-left:4px; padding:1px 4px; border-radius:999px; border:1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.9)); font-size:0.7rem; opacity:0.9;">${badge}</span>`
           : "";
 
         // Phase 4D — fire-mode chip (PRE/ANY/POS). Also stamps `data-fm-row`

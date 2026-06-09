@@ -2242,9 +2242,9 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       wrap.style.gap = "8px";
       wrap.style.padding = "6px 8px";
       wrap.style.margin = "0 0 8px 0";
-      wrap.style.border = "1px solid rgba(148,163,184,0.25)";
+      wrap.style.border = "1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.25))";
       wrap.style.borderRadius = "10px";
-      wrap.style.background = "rgba(15,23,42,0.35)";
+      wrap.style.background = "var(--ft-hud-bg-3, rgba(15,23,42,0.35))";
 
       const label = document.createElement("strong");
       label.textContent = "Coalition Support:";
@@ -2275,8 +2275,8 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
           pill.style.gap = "6px";
           pill.style.padding = "2px 8px";
           pill.style.borderRadius = "999px";
-          pill.style.background = "rgba(30,41,59,0.7)";
-          pill.style.border = "1px solid rgba(148,163,184,0.25)";
+          pill.style.background = "var(--ft-hud-bg-2, rgba(30,41,59,0.7))";
+          pill.style.border = "1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.25))";
 
           const txt = document.createElement("span");
           txt.textContent = a.name;
@@ -2535,12 +2535,12 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
       wrap.style.marginTop = '.35rem';
       wrap.style.padding = '.45rem .55rem';
       wrap.style.borderRadius = '10px';
-      wrap.style.border = '1px solid rgba(148,163,184,0.22)';
-      wrap.style.background = 'rgba(2,6,23,0.22)';
+      wrap.style.border = '1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.22))';
+      wrap.style.background = 'var(--ft-hud-bg-3, rgba(2,6,23,0.22))';
 
       const supports = this._supportActors();
       const pills = supports.length
-        ? supports.map(a => `<span class="bbttcc-coalition-pill" style="display:inline-flex;align-items:center;gap:.35rem;padding:.12rem .5rem;border-radius:999px;background:rgba(30,64,175,0.22);border:1px solid rgba(59,130,246,0.35);margin:.15rem .25rem .15rem 0;"><span>${foundry.utils.escapeHTML(String(a.name||a.id))}</span>${_rcIsGMUser() ? `<button type="button" data-id="coalition-remove" data-faction-id="${a.id}" style="border:0;background:transparent;color:inherit;cursor:pointer;font-weight:700;">×</button>` : ``}</span>`).join('')
+        ? supports.map(a => `<span class="bbttcc-coalition-pill" style="display:inline-flex;align-items:center;gap:.35rem;padding:.12rem .5rem;border-radius:999px;background:rgba(var(--ft-hud-accent-rgb,59,130,246),0.18);border:1px solid var(--ft-hud-border, rgba(59,130,246,0.35));margin:.15rem .25rem .15rem 0;"><span>${foundry.utils.escapeHTML(String(a.name||a.id))}</span>${_rcIsGMUser() ? `<button type="button" data-id="coalition-remove" data-faction-id="${a.id}" style="border:0;background:transparent;color:inherit;cursor:pointer;font-weight:700;">×</button>` : ``}</span>`).join('')
         : `<span style="opacity:.72;">No support factions selected.</span>`;
 
       const coalition = this.vm.attackerId ? _rcCoalitionBonus(game.actors?.get?.(this.vm.attackerId) || null, this.vm.supportFactionIds || [], primaryKeyFor(this.vm.activityKey || 'assault')) : null;
@@ -2640,8 +2640,8 @@ _mkBar(value, max, { w=110 } = {}){
   wrap.style.width = w + "px";
   wrap.style.height = "8px";
   wrap.style.borderRadius = "999px";
-  wrap.style.background = "rgba(148, 163, 184, 0.15)";
-  wrap.style.border = "1px solid rgba(148, 163, 184, 0.18)";
+  wrap.style.background = "var(--ft-hud-track, rgba(148, 163, 184, 0.15))";
+  wrap.style.border = "1px solid rgba(0,0,0,0.45)";
   wrap.style.overflow = "hidden";
   wrap.style.verticalAlign = "middle";
 
@@ -2649,7 +2649,8 @@ _mkBar(value, max, { w=110 } = {}){
   fill.style.display = "block";
   fill.style.height = "100%";
   fill.style.width = pct + "%";
-  fill.style.background = "rgba(59, 130, 246, 0.65)";
+  fill.style.background = "var(--ft-hud-accent, rgba(59, 130, 246, 0.65))";
+  fill.style.boxShadow = "0 0 6px var(--ft-hud-accent, rgba(59, 130, 246, 0.65))";
   wrap.appendChild(fill);
 
   return { wrap, pct };
@@ -2883,11 +2884,11 @@ _renderScenarioHUD(host, round){
 
       const wrap = document.createElement("div");
       wrap.className = "bbttcc-steward-chips";
-      wrap.style.cssText = "display:flex; flex-direction:column; gap:.35rem; margin:.4rem 0 .6rem 0; padding:.5rem .65rem; border:1px solid rgba(125, 211, 252, 0.22); border-radius:8px; background:rgba(2, 6, 23, 0.32);";
+      wrap.style.cssText = "display:flex; flex-direction:column; gap:.35rem; margin:.4rem 0 .6rem 0; padding:.5rem .65rem; border:1px solid var(--ft-hud-border-soft, rgba(125, 211, 252, 0.22)); border-radius:8px; background:var(--ft-hud-bg-3, rgba(2, 6, 23, 0.32));";
 
       const hdr = document.createElement("div");
-      hdr.style.cssText = "display:flex; align-items:baseline; gap:.55rem; font-size:11px; font-weight:700; letter-spacing:.04em; color:#7dd3fc; text-transform:uppercase;";
-      hdr.innerHTML = `Steward Actions <span style="font-size:10px; font-weight:400; color:#94a3b8; text-transform:none;">— self-report each Steward's scene action; biases the end-of-round roll</span>`;
+      hdr.style.cssText = "display:flex; align-items:baseline; gap:.55rem; font-size:11px; font-weight:700; letter-spacing:.04em; color:var(--ft-hud-accent, #7dd3fc); text-transform:uppercase;";
+      hdr.innerHTML = `Steward Actions <span style="font-size:10px; font-weight:400; color:var(--ft-hud-dim, #94a3b8); text-transform:none;">— self-report each Steward's scene action; biases the end-of-round roll</span>`;
       wrap.appendChild(hdr);
 
       if (!stewards.length) {
@@ -3202,9 +3203,9 @@ _renderScenarioHUD(host, round){
               chip.style.alignItems = "center";
               chip.style.gap = ".2rem";
               chip.style.padding = ".15rem .35rem";
-              chip.style.border = "1px solid rgba(148,163,184,0.18)";
+              chip.style.border = "1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.18))";
               chip.style.borderRadius = "999px";
-              chip.style.background = "rgba(15,23,42,0.28)";
+              chip.style.background = "var(--ft-hud-bg-3, rgba(15,23,42,0.28))";
 
               chip.innerHTML = `
                 <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="-1">−</button>
@@ -3816,6 +3817,18 @@ r.view = {
 
 
     try { _rcApplyGateToAddRoundButton(this); } catch (_eGate) {}
+
+    // HUD re-skin: stamp the active raid type onto the root element so the
+    // stylesheet can switch the accent palette per type (assault=bronze,
+    // infiltration=cyan). Pure className toggle — no behavioral effect.
+    try {
+      const rootEl = (this.element instanceof HTMLElement) ? this.element : (this.element?.[0] || this.element);
+      if (rootEl?.classList) {
+        Array.from(rootEl.classList).forEach(c => { if (c.startsWith("bbttcc-raidtype-")) rootEl.classList.remove(c); });
+        const tk = String(this.vm.activityKey || "assault").toLowerCase().replace(/[^a-z0-9_]+/g, "");
+        if (tk) rootEl.classList.add(`bbttcc-raidtype-${tk}`);
+      }
+    } catch (_eType) {}
 
     try {
       if (!this.__centered){
