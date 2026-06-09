@@ -230,6 +230,17 @@ export const FEATURE_ROUTER = {
   "dreamwalker-quiet-solar-stillpoint":     "dreamwalker_solar_stillpoint",
   "dreamwalker-quiet-somnolent-peace":      "dreamwalker_somnolent_peace",
   "dreamwalker-thousand-thousandfold-echo": "dreamwalker_thousandfold_echo",
+  // Cross-class shared feats (2026-06-08, fix-on-touch)
+  "coordinated-advance":          "ft_coordinated_advance",
+  "emissary-of-the-great-accord": "ft_emissary_accord",
+  "initiate-of-the-great-work":   "ft_initiate_great_work",
+  "lattice-profiler":             "ft_lattice_profiler",
+  "lucid-step":                   "ft_lucid_step",
+  "negotiated-advantage":         "ft_negotiated_advantage",
+  "probability-threading":        "ft_probability_threading",
+  "shared-burden-harness":        "ft_shared_burden_harness",
+  "shared-dreamwork":             "ft_shared_dreamwork",
+  "unbroken-line":                "ft_unbroken_line",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5965,6 +5976,17 @@ const LEGACY_ACTION_COST = {
   "dreamwalker_solar_stillpoint": "action",   // 30-ft golden aura
   "dreamwalker_somnolent_peace": "reaction",  // 1/scene prevent-death (sleep)
   "dreamwalker_thousandfold_echo":"bonus",    // 1-min persona-flux buff
+  // Cross-class shared feats
+  "ft_coordinated_advance":     "free",       // free move rider
+  "ft_emissary_accord":         "action",     // scene-tipping declaration
+  "ft_initiate_great_work":     "bonus",      // Dream guidance
+  "ft_lattice_profiler":        "action",     // 1/scene profile
+  "ft_lucid_step":              "reaction",   // damage reduction
+  "ft_negotiated_advantage":    "reaction",   // impose disadvantage
+  "ft_probability_threading":   "reaction",   // anti-crit-fail nudge
+  "ft_shared_burden_harness":   "reaction",   // damage redirect
+  "ft_shared_dreamwork":        "action",     // 10-min dream link
+  "ft_unbroken_line":           "reaction",   // shout an ally back to 1
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6600,6 +6622,133 @@ export async function openDreamwalkerThousandfoldEcho(actor) {
     });
 }
 
+// ─── Cross-class shared feats (build-out 2026-06-08, fix-on-touch) ───────────────
+
+// Coordinated Advance — tier uses/Soma Break: grant a targeted ally a free half-speed move.
+export async function openFtCoordinatedAdvance(actor) {
+  const key = "ftCoordinatedAdvance";
+  return _openTierUsesPerSomaBreak(actor, key, "Coordinated Advance",
+    "After a hit or a key social win: a <b>targeted</b> ally may immediately move up to half its speed as a reaction, without provoking from one creature of your choice.",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Coordinated Advance: target the ally to move."); const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0); await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1)); return; }
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">➔ Coordinated Advance → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">${_ftEscape(ally.name)} may move up to <b>half speed</b> now as a reaction — no opportunity attacks from one creature of your choice.</p></div>` });
+    });
+}
+
+// Emissary of the Great Accord — 1/Soma-Break action: declare peace; pacify hostiles in range.
+export async function openFtEmissaryAccord(actor) {
+  return _openSomaBreakAbility(actor, "ftEmissaryAccord", "Emissary of the Great Accord",
+    "Spend an action at a scene's tipping point: declare what peace would look like. All involved hostiles must make a Soul check vs your save DC or stand down. Targeted (or nearby) hostiles are pacified — attack at disadvantage.",
+    async (actor) => {
+      const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1)); const dc = 8 + tier * 2;
+      let foes = Array.from(game.user?.targets ?? []).filter((t) => t?.actor);
+      if (!foes.length) { const mt = actor.getActiveTokens?.()?.[0]; if (mt) { const sc = mt.scene ?? canvas.scene; const grid = sc?.grid?.size ?? 100; const rp = (60 / (sc?.grid?.distance ?? 5)) * grid; const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 }); const me = ctr(mt); foes = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && (t.document?.disposition ?? 0) < 0 && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rp + grid / 2); } }
+      const names = []; for (const t of foes) { try { await t.actor.setFlag("fourththing", "aurablade.disAttackOnce", true); names.push(t.actor.name); } catch (e) {} }
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#ffe27a">⟁ You declare the Accord — all involved must Soul-save (DC ${dc}) or stand down. Pacified (disadvantage): <b>${names.join(", ") || "—"}</b></p>`;
+    });
+}
+
+// Initiate of the Great Work — 1/Soma-Break bonus: self reroll-aid + ask the Dream a question.
+export async function openFtInitiateGreatWork(actor) {
+  return _openSomaBreakAbility(actor, "ftInitiateGreatWork", "Initiate of the Great Work",
+    "Call upon the Dream: gain <b>reroll-lowest</b> on one Insight (Soul), Soul, or Presence check, and ask the Dream one question (an omen, a vector, or a hidden connection).",
+    async (actor) => {
+      try { const b = actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "initiate-great-work" }); await actor.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#c9b8ff">⟁ The Dream answers — reroll-lowest banked on your next Insight/Soul/Presence check. Ask the GM your one question.</p>`;
+    });
+}
+
+// Lattice Profiler — 1/scene action: roll an Occult/Insight profile of a hex/faction/Spark.
+export async function openFtLatticeProfiler(actor) {
+  return _openPerSceneAbility(actor, "ftLatticeProfiler", "Lattice Profiler",
+    "Spend an action (or 1 minute): profile a hex, faction, or Spark with an Occult (Mind) or Insight (Soul) check. On a success the GM gives a diagnostic — tilt, stressors, hidden risks, and the single most effective action.",
+    async (actor) => {
+      const sys = actor.system?.system ?? actor.system ?? {}; const stat = Math.max(Number(sys?.attributes?.mind?.value) || 0, Number(sys?.attributes?.soul?.value) || 0);
+      const roll = new Roll(`2d10 + ${stat}`); await roll.evaluate();
+      return `<div class="ft-dmg-row" style="margin-top:0.3rem"><span class="ft-dmg-label">Profile (Occult/Insight)</span><span class="ft-dmg-formula"><b>${roll.total}</b></span></div><p style="margin:0.15rem 0;font-size:0.74rem;opacity:0.8">On a success the GM reveals: current tilt, major stressors, hidden risks, and the single most effective action.</p>`;
+    });
+}
+
+// Lucid Step — 1/Soma-Break: reduce damage you take by your tier (slip half-into the safe place).
+export async function openFtLucidStep(actor) {
+  return _openSomaBreakAbility(actor, "ftLucidStep", "Lucid Step",
+    "When you take damage, reduce the total by your tier — you slip half-into the place you meant to go.",
+    async (actor) => {
+      const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+      let healed = false; try { const desc = await game.fourththing?.rolls?._applyDamageToActor?.(actor, tier, { op: "heal", track: "integrity" }); healed = !!desc; } catch (e) {}
+      return `<p style="margin:0.15rem 0;font-size:0.78rem;color:#7db8ff">⟁ You step at an angle — ${healed ? `<b>${tier}</b> damage shrugged off (Integrity restored).` : `reduce the incoming damage by <b>${tier}</b>.`}</p>`;
+    });
+}
+
+// Negotiated Advantage — tier uses/Soma Break reaction: impose disadvantage on a foe's roll.
+export async function openFtNegotiatedAdvantage(actor) {
+  const key = "ftNegotiatedAdvantage";
+  return _openTierUsesPerSomaBreak(actor, key, "Negotiated Advantage",
+    "Reaction: when a <b>targeted</b> creature within 30 ft attacks or makes a check against you or an ally, impose <b>disadvantage</b> as you derail the moment.",
+    async (actor) => {
+      const foe = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!foe) { ui.notifications?.warn("Negotiated Advantage: target the acting creature."); const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0); await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1)); return; }
+      try { await foe.setFlag("fourththing", "aurablade.disAttackOnce", true); } catch (e) { ui.notifications?.warn("Negotiated Advantage: couldn't reach that creature."); return; }
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#dca0ff">✋ Negotiated Advantage → ${_ftEscape(foe.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">A sharp interjection — their next roll is at <b>disadvantage</b>.</p></div>` });
+    });
+}
+
+// Probability Threading — tier uses/Soma Break reaction: nudge a targeted roll (anti-crit-fail).
+export async function openFtProbabilityThreading(actor) {
+  const key = "ftProbabilityThreading";
+  return _openTierUsesPerSomaBreak(actor, key, "Probability Threading",
+    "Reaction: when you or a <b>targeted</b> creature within 30 ft rolls, nudge fate — treat a natural 1 as a 2. <i>Banked as reroll-lowest aid.</i>",
+    async (actor) => {
+      const t = Array.from(game.user?.targets ?? [])[0]?.actor || actor;
+      try { const b = t.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "probability-threading" }); await t.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">🧵 Probability Threading → ${_ftEscape(t.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">Fate nudged — reroll-lowest banked (worst-case softened).</p></div>` });
+    });
+}
+
+// Shared Burden Harness — tier uses/Soma Break reaction: pull a creature's damage onto yourself.
+export async function openFtSharedBurdenHarness(actor) {
+  const key = "ftSharedBurdenHarness";
+  return _openTierUsesPerSomaBreak(actor, key, "Shared Burden Harness",
+    "Reaction: when a <b>targeted</b> creature within 30 ft takes damage, pull your tier of it onto yourself — reduce their damage by your tier and take that much.",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Shared Burden Harness: target the creature taking damage."); const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0); await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1)); return; }
+      const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+      try { await game.fourththing?.rolls?._applyDamageToActor?.(ally, tier, { op: "heal", track: "integrity" }); } catch (e) {}
+      try { const cur = Number(sys?.derived?.integrity?.value ?? sys?.integrity?.value ?? 0); await actor.update({ "system.derived.integrity.value": Math.max(0, cur - tier) }); } catch (e) {}
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">⛓ Shared Burden Harness → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">You pull <b>${tier}</b> damage off ${_ftEscape(ally.name)} onto yourself.</p></div>` });
+    });
+}
+
+// Shared Dreamwork — 1/Soma-Break action: link with a willing ally for 10 min (+1 Insight, aid).
+export async function openFtSharedDreamwork(actor) {
+  return _openSomaBreakAbility(actor, "ftSharedDreamwork", "Shared Dreamwork",
+    "Spend an action: link with one willing <b>targeted</b> creature within 30 ft for 10 minutes. Both gain <b>+1 Insight</b> (use either's bonus); emotional-mirror and a shared omen are available.",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Shared Dreamwork: target a willing ally first."); return false; }
+      for (const who of [actor, ally]) { try { const b = who.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "shared-dreamwork" }); await who.setFlag("fourththing", "aidBanked", b); } catch (e) {} }
+      try { await actor.createEmbeddedDocuments("ActiveEffect", [{ name: "Shared Dreamwork (linked)", img: "icons/magic/control/hypnosis-mesmerism-eye-tan.webp", origin: actor.uuid, duration: { rounds: 100, seconds: 600 }, changes: [], flags: { fourththing: { sharedDreamwork: { partner: ally.uuid } } } }]); } catch (e) {}
+      return ` <b>${_ftEscape(ally.name)}</b> linked for 10 minutes — both gain +1 Insight (reroll-lowest banked).`;
+    });
+}
+
+// Unbroken Line — 1/Soma-Break reaction: shout a falling ally back to 1 + temp Integrity + reroll-aid.
+export async function openFtUnbrokenLine(actor) {
+  return _openSomaBreakAbility(actor, "ftUnbrokenLine", "Unbroken Line",
+    "Reaction: when a <b>targeted</b> ally within 30 ft is reduced to 0 (not killed outright), they instead drop to <b>1 Integrity</b>, gain temp Integrity = Presence + tier, and <b>reroll-lowest</b> on defense until your next turn.",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) { ui.notifications?.warn("Unbroken Line: target the falling ally first."); return false; }
+      const sys = actor.system?.system ?? actor.system ?? {}; const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1)); const pre = Number(sys?.attributes?.presence?.value) || 0; const amt = tier + pre;
+      try { const tsys = ally.system?.system ?? ally.system ?? {}; const cur = Number(tsys?.derived?.integrity?.value ?? tsys?.integrity?.value ?? 1); if (cur <= 0) await ally.update({ "system.derived.integrity.value": 1 }); } catch (e) {}
+      try { await game.fourththing?.rolls?._applyDamageToActor?.(ally, amt, { op: "heal", track: "integrity" }); } catch (e) {}
+      try { const b = ally.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "unbroken-line" }); await ally.setFlag("fourththing", "aidBanked", b); } catch (e) {}
+      return ` <b>${_ftEscape(ally.name)}</b> shouted back into formation — 1 Integrity + <b>${amt}</b> temp Integrity + reroll-lowest on defense.`;
+    });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6680,6 +6829,16 @@ export async function dispatchFeatureAction(actor, item) {
     case "dreamwalker_solar_stillpoint":      return openDreamwalkerSolarStillpoint(actor);
     case "dreamwalker_somnolent_peace":       return openDreamwalkerSomnolentPeace(actor);
     case "dreamwalker_thousandfold_echo":     return openDreamwalkerThousandfoldEcho(actor);
+    case "ft_coordinated_advance":            return openFtCoordinatedAdvance(actor);
+    case "ft_emissary_accord":                return openFtEmissaryAccord(actor);
+    case "ft_initiate_great_work":            return openFtInitiateGreatWork(actor);
+    case "ft_lattice_profiler":               return openFtLatticeProfiler(actor);
+    case "ft_lucid_step":                     return openFtLucidStep(actor);
+    case "ft_negotiated_advantage":           return openFtNegotiatedAdvantage(actor);
+    case "ft_probability_threading":          return openFtProbabilityThreading(actor);
+    case "ft_shared_burden_harness":          return openFtSharedBurdenHarness(actor);
+    case "ft_shared_dreamwork":               return openFtSharedDreamwork(actor);
+    case "ft_unbroken_line":                  return openFtUnbrokenLine(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);

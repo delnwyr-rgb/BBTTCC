@@ -115,6 +115,17 @@ const MAP = {
   "Persona Cache (BBTTCC)":                                   "peace_aura",
   "Mirror Read":                                              "inspire",
   "Somnolent Peace (BBTTCC)":                                 "bolster",
+  // Cross-class shared feats (wired 2026-06-08, fix-on-touch)
+  "Coordinated Advance":                                      "bolster",
+  "Emissary of the Great Accord":                             "peace_aura",
+  "Initiate of the Great Work":                               "peace_aura",
+  "Lattice Profiler":                                         "watch_aura",
+  "Lucid Step":                                               "ward_aura",
+  "Negotiated Advantage":                                     "bolster",
+  "Probability Threading":                                    "inspire",
+  "Shared Burden Harness":                                    "bolster",
+  "Shared Dreamwork":                                         "bolster",
+  "Unbroken Line":                                            "bolster",
 };
 
 // ---- self-contained Sequencer helpers ----
