@@ -1128,30 +1128,30 @@ if (_fid) {
         style.dataset.bbttccHexchrome = "planner";
         style.textContent = `
           .bbttcc-hexchrome-planner {
-            font-family: Helvetica, Arial, sans-serif;
-            color: #e5e7eb;
+            font-family: 'Signika', sans-serif;
+            color: var(--ft-hud-text, #e5e7eb);
           }
 
           .bbttcc-hexchrome-planner input,
           .bbttcc-hexchrome-planner select,
           .bbttcc-hexchrome-planner textarea {
-            background: rgba(15,23,42,0.92);
-            color: #e5e7eb;
-            border: 1px solid rgba(55,65,81,0.95);
+            background: var(--ft-hud-bg-3, rgba(15,23,42,0.92));
+            color: var(--ft-hud-text, #e5e7eb);
+            border: 1px solid var(--ft-hud-border-soft, rgba(55,65,81,0.95));
             border-radius: 10px;
           }
 
           .bbttcc-hexchrome-planner input:focus,
           .bbttcc-hexchrome-planner select:focus,
           .bbttcc-hexchrome-planner textarea:focus {
-            border-color: rgba(59,130,246,0.9);
-            box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+            border-color: var(--ft-hud-accent, rgba(59,130,246,0.9));
+            box-shadow: 0 0 0 1px rgba(var(--ft-hud-accent-rgb, 59,130,246),0.7);
             outline: none;
           }
 
           .bbttcc-hexchrome-planner .bbttcc-activity-group {
-            background: linear-gradient(90deg, rgba(15,23,42,0.96), rgba(30,64,175,0.45));
-            border: 1px solid rgba(59,130,246,0.35);
+            background: linear-gradient(90deg, var(--ft-hud-bg-3, rgba(15,23,42,0.96)), rgba(var(--ft-hud-accent-rgb, 30,64,175),0.18));
+            border: 1px solid var(--ft-hud-border, rgba(59,130,246,0.35));
             border-radius: 10px;
             padding: 6px 10px;
             text-transform: uppercase;
@@ -1159,14 +1159,14 @@ if (_fid) {
           }
 
           .bbttcc-hexchrome-planner .bbttcc-activity-row {
-            background: rgba(0,0,0,0.15);
+            background: rgba(0,0,0,0.18);
             border-radius: 10px;
             padding: 6px 8px;
           }
 
           .bbttcc-hexchrome-planner .bbttcc-activity-row[data-selected="true"] {
-            background: rgba(29,78,216,0.35);
-            border: 1px solid rgba(59,130,246,0.9);
+            background: rgba(var(--ft-hud-accent-rgb, 29,78,216),0.30);
+            border: 1px solid var(--ft-hud-accent, rgba(59,130,246,0.9));
           }
         `;
 
@@ -1534,10 +1534,10 @@ wrap.appendChild(top);
         btn.style.fontSize = "0.7rem";
         btn.style.padding = "2px 6px";
         btn.style.borderRadius = "999px";
-        btn.style.border = "none";
+        btn.style.border = "1px solid var(--ft-hud-border-soft, transparent)";
         btn.style.cursor = "pointer";
-        btn.style.background = (cat === currentCat) ? "#1f2937" : "#111827";
-        btn.style.color = "#e5e7eb";
+        btn.style.background = (cat === currentCat) ? "rgba(var(--ft-hud-accent-rgb, 31,41,55),0.30)" : "var(--ft-hud-bg-3, #111827)";
+        btn.style.color = (cat === currentCat) ? "var(--ft-hud-accent-soft, #e5e7eb)" : "var(--ft-hud-text, #e5e7eb)";
         catRow.appendChild(btn);
       }
 
@@ -1589,10 +1589,10 @@ wrap.appendChild(top);
       listBox.style.minHeight = "0";
       listBox.style.maxHeight = "320px";
       listBox.style.overflowY = "auto";
-      listBox.style.border = "1px solid #374151";
+      listBox.style.border = "1px solid var(--ft-hud-border-soft, #374151)";
       listBox.style.borderRadius = "6px";
       listBox.style.padding = "4px 4px";
-      listBox.style.background = "rgba(15,23,42,0.95)";
+      listBox.style.background = "var(--ft-hud-bg-2, rgba(15,23,42,0.95))";
 
       if (!filtered.length) {
         const empty = document.createElement("div");
@@ -1637,7 +1637,7 @@ wrap.appendChild(top);
             hdr.style.margin = "6px 0 4px";
             hdr.style.padding = "4px 8px";
             hdr.style.borderRadius = "6px";
-            hdr.style.background = "rgba(0,0,0,0.25)";
+            // background comes from the themed .bbttcc-activity-group rule (accent gradient)
             hdr.style.fontSize = "0.75rem";
             hdr.style.fontWeight = "700";
             hdr.style.opacity = "0.95";
@@ -1679,8 +1679,8 @@ wrap.appendChild(top);
           row.title = a.text || "";
 
           const isSelected = (this._plannerState.selectedKey === a.key) || (!this._plannerState.selectedKey && a.key === selectedKey);
-          row.style.background = isSelected ? "#1d4ed8" : "transparent";
-          row.style.color      = isSelected ? "#f9fafb" : "#e5e7eb";
+          row.style.background = isSelected ? "rgba(var(--ft-hud-accent-rgb, 29,78,216),0.30)" : "transparent";
+          row.style.color      = isSelected ? "var(--ft-hud-accent-soft, #f9fafb)" : "var(--ft-hud-text, #e5e7eb)";
 
           if (pkg.groupKey && this._plannerState.groupCollapsed?.[pkg.groupKey]) {
             row.style.display = "none";
@@ -1802,8 +1802,8 @@ wrap.appendChild(top);
       telemetry.style.marginTop = "6px";
       telemetry.style.padding = "6px 8px";
       telemetry.style.borderRadius = "10px";
-      telemetry.style.border = "1px solid rgba(148,163,184,0.35)";
-      telemetry.style.background = "rgba(15,23,42,0.55)";
+      telemetry.style.border = "1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.35))";
+      telemetry.style.background = "var(--ft-hud-bg-3, rgba(15,23,42,0.55))";
       telemetry.style.fontSize = "11px";
       telemetry.style.textTransform = "uppercase";
       telemetry.style.letterSpacing = "0.12em";

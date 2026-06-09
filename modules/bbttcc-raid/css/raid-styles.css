@@ -11,7 +11,8 @@
    so define tokens on both (same element) and the planner half inherits too. */
 .bbttcc-raid-console,
 .bbttcc-raid-planner,
-.bbttcc-activity-planner {
+.bbttcc-activity-planner,
+.bbttcc-activity-planner-window {
   /* Default accent = bronze/orange (siege palette, thematically "war"). */
   --ft-hud-accent: #d9a441;
   --ft-hud-accent-rgb: 217,164,65;
@@ -470,9 +471,14 @@
   color: var(--ft-hud-text);
 }
 
-/* Window chrome */
+/* Window chrome.
+   Note: the live Activity Planner app (module.raid-planner.js) sets its window
+   root class to `bbttcc-activity-planner-window` and only adds
+   `bbttcc-activity-planner` to the inner <section>, so the .window-content
+   (an ancestor of that section) must be themed via the -window class. */
 .bbttcc-raid-planner .window-content,
-.bbttcc-activity-planner .window-content {
+.bbttcc-activity-planner .window-content,
+.bbttcc-activity-planner-window .window-content {
   padding: 0.6rem 0.8rem 0.8rem;
   background:
     radial-gradient(circle at 0 0, rgba(var(--ft-hud-accent-rgb),0.12), transparent 55%),
