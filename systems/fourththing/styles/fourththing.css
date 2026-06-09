@@ -6016,3 +6016,166 @@
   opacity: 0.8;
   font-size: 0.78rem;
 }
+
+/* ── 2026-06-08 · Steward sheet re-optimization ──────────────────────────────
+   The persistent header (Faculties / Derived / Defenses + class chips, and the
+   Manifestations panel) was moved OUT of <header> and INTO the Steward tab and
+   the Manifestations tab respectively. The header is now identity-only, so the
+   tab nav sits right at the top (Faction-sheet style). These rules are scoped to
+   .ft-character-sheet so NPC/Boss/Rig (not yet ported) keep their old headers.
+   Replaces the old "cap header at 42%" workaround for this sheet.            */
+
+/* Bare header → slim horizontal identity bar */
+.ft-character-sheet .ft-header {
+  max-height: none;
+  overflow: visible;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  padding-bottom: 0.4rem;
+}
+.ft-character-sheet .ft-identity {
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.6rem;
+}
+.ft-character-sheet .ft-portrait { flex: 0 0 auto; }
+.ft-character-sheet .ft-portrait img {
+  width: 46px;
+  height: 46px;
+  max-width: 46px;
+  max-height: 46px;
+  margin: 0;
+  border-radius: 0.45rem;
+}
+.ft-character-sheet .ft-name {
+  flex: 0 1 220px;
+  min-width: 140px;
+}
+.ft-character-sheet .ft-name input { width: 100%; }
+/* Level / tier / unspent-point badges hug the right edge of the bar */
+.ft-character-sheet .ft-level-display { margin-left: auto; }
+
+/* Relocated blocks now read as ordinary sections at the top of their tab */
+.ft-character-sheet .ft-tab-vitals,
+.ft-character-sheet .ft-tab-manifest-panel {
+  margin: 0 0 0.85rem;
+  padding: 0.6rem 0.7rem;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 0.5rem;
+}
+/* These were flex children of the header (fixed-basis); in a block tab they
+   should simply fill the tab width. */
+.ft-character-sheet .ft-tab-vitals .ft-attributes,
+.ft-character-sheet .ft-tab-manifest-panel .ft-magic-panel {
+  flex: 1 1 auto;
+  padding: 0;
+  width: auto;
+}
+
+/* ── 2026-06-08 · Boss + Rig sheet re-optimization ───────────────────────────
+   Same move as the Steward sheet: the persistent header stat-summary grid
+   (Integrity / Tier / Crew / Output etc.) was relocated into the Identity tab,
+   leaving an identity-only header with the tab nav at the top. Scoped per sheet
+   class. Also retires the old "cap header at 42%" workaround for these sheets. */
+.bbttcc-boss-sheet .ft-header,
+.bbttcc-rig-sheet .ft-header {
+  max-height: none;
+  overflow: visible;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  padding-bottom: 0.4rem;
+}
+.bbttcc-boss-sheet .ft-identity,
+.bbttcc-rig-sheet .ft-identity {
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.6rem;
+}
+.bbttcc-boss-sheet .ft-portrait,
+.bbttcc-rig-sheet .ft-portrait { flex: 0 0 auto; }
+.bbttcc-boss-sheet .ft-portrait img,
+.bbttcc-rig-sheet .ft-portrait img {
+  width: 46px;
+  height: 46px;
+  max-width: 46px;
+  max-height: 46px;
+  margin: 0;
+  border-radius: 0.45rem;
+}
+.bbttcc-boss-sheet .ft-name,
+.bbttcc-rig-sheet .ft-name {
+  flex: 0 1 220px;
+  min-width: 140px;
+}
+/* The relocated summary grid reads as an ordinary section at the top of the
+   Identity tab. */
+.bbttcc-boss-sheet .ft-tab-summary,
+.bbttcc-rig-sheet .ft-tab-summary {
+  margin: 0 0 0.85rem;
+}
+
+/* ── 2026-06-08 · NPC sheet re-optimization ──────────────────────────────────
+   The NPC sheet is tabless (single flat scroll). Faculties/Derived/Defenses and
+   the Manifestations panel were moved OUT of the header into the body top (just
+   below the toolbar), leaving an identity-only header. Scoped to .ft-npc-sheet. */
+.ft-npc-sheet .ft-header {
+  max-height: none;
+  overflow: visible;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem 0.75rem;
+  padding-bottom: 0.4rem;
+}
+.ft-npc-sheet .ft-identity {
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.6rem;
+}
+.ft-npc-sheet .ft-portrait { flex: 0 0 auto; }
+.ft-npc-sheet .ft-portrait img {
+  width: 46px;
+  height: 46px;
+  max-width: 46px;
+  max-height: 46px;
+  margin: 0;
+  border-radius: 0.45rem;
+}
+.ft-npc-sheet .ft-name {
+  flex: 0 1 200px;
+  min-width: 140px;
+}
+.ft-npc-sheet .ft-name input { width: 100%; }
+/* The NPC sheet has no .ft-body (it's a flat scroll); .ft-sheet itself is
+   overflow:hidden, so post-header content was clipped once the statblock moved
+   into it. This wrapper takes the remaining height and scrolls — mirrors what
+   .ft-body does on the Steward/Boss/Rig sheets. Keeps the slim header fixed. */
+.ft-npc-sheet .ft-npc-scrollbody {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  padding-top: 0.4rem;
+}
+/* Relocated statblock + manifestations read as ordinary body sections now. */
+.ft-npc-sheet .ft-npc-statblock,
+.ft-npc-sheet .ft-npc-manifest-panel {
+  margin: 0 0 0.6rem;
+}
+.ft-npc-sheet .ft-npc-statblock .ft-attributes,
+.ft-npc-sheet .ft-npc-manifest-panel .ft-magic-panel {
+  flex: 1 1 auto;
+  padding: 0;
+  width: auto;
+}

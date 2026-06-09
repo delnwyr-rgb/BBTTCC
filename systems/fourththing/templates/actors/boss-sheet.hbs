@@ -43,6 +43,19 @@
          mirroring the NPC Derived/Manifestations panels. Each tile carries its
          own ± controls inline. Integrity tile spans full width so it can host
          the fill bar. --}}
+  </header>
+
+  <div class="ft-tabs-bar">
+    <nav class="ft-tabs" data-group="primary">
+      {{#each tabs as |t|}}{{#if t.visible}}<a class="item{{#if t.active}} active{{/if}}" data-tab="{{t.id}}">{{t.label}}</a>{{/if}}{{/each}}
+    </nav>
+  </div>
+
+  <div class="ft-body">
+
+    {{!-- IDENTITY TAB --}}
+    <div class="tab identity{{#if (eq activeTab "identity")}} active{{/if}}" data-tab="identity">
+      <section class="ft-tab-summary ft-boss-tab-summary">
     <div class="ft-boss-summary ft-boss-stat-grid">
 
       <div class="ft-boss-stat-tile ft-boss-stat-integrity ft-stat-span-2" data-tooltip="Integrity — boss's health pool. Phase changes fire at thresholds.">
@@ -95,18 +108,7 @@
       </div>
 
     </div>
-  </header>
-
-  <div class="ft-tabs-bar">
-    <nav class="ft-tabs" data-group="primary">
-      {{#each tabs as |t|}}{{#if t.visible}}<a class="item{{#if t.active}} active{{/if}}" data-tab="{{t.id}}">{{t.label}}</a>{{/if}}{{/each}}
-    </nav>
-  </div>
-
-  <div class="ft-body">
-
-    {{!-- IDENTITY TAB --}}
-    <div class="tab identity{{#if (eq activeTab "identity")}} active{{/if}}" data-tab="identity">
+      </section>
       <section class="ft-boss-identity-grid">
         <div class="ft-meta">
           <label data-tooltip="Free-text archetype — see header pill.">Archetype</label>

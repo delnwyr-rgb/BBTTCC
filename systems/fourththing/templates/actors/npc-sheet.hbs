@@ -65,6 +65,39 @@
       </div>
     </div>
 
+  </header>
+  <div class="ft-npc-scrollbody">
+
+  <section class="ft-npc-toolbar flexrow">
+    <button type="button" class="ft-npc-tool" data-action="ftNpcSurgeInit" data-tooltip="2d10x10 + Intrigue + init bonus"><i class="fas fa-bolt"></i> Surge Init</button>
+    <div class="ft-action-economy">
+      <button type="button" class="ft-econ-chip {{#if actionEconomy.actionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="actionUsed">Action</button>
+      <button type="button" class="ft-econ-chip {{#if actionEconomy.bonusUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="bonusUsed">Bonus</button>
+      <button type="button" class="ft-econ-chip {{#if actionEconomy.reactionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="reactionUsed">Reaction</button>
+      {{#if ftFlags.bonusActionAvailable}}
+      <button type="button" data-action="ftActAgain" class="ft-econ-chip ft-act-again" data-tooltip="Both base dice rolled 10 — take a full bonus action this turn.">⚡ Act Again</button>
+      {{/if}}
+      <button type="button" class="ft-npc-tool" data-action="ftNewTurn" data-tooltip="Reset action economy">↻ New Turn</button>
+    </div>
+    <div class="ft-rest-controls">
+      <button type="button" class="ft-npc-tool" data-action="ftSceneBreak" data-tooltip="Scene Break — clear scene-scoped resources">Scene</button>
+      <button type="button" class="ft-npc-tool" data-action="ftSomaBreak" data-tooltip="Soma Break — full reset">Soma</button>
+    </div>
+    <div class="ft-progress-controls">
+      <button type="button" class="ft-npc-tool" data-action="ftLevelUp" data-tooltip="Advance Initiation — bumps level by 1, applies attribute bump, fires path-feature auto-grants for the new level.">▲ Advance Initiation</button>
+    </div>
+    {{!-- NPC Parity Sprint C (2026-05-14) — BBTTCC bridges + Add Effect. --}}
+    <div class="ft-bbttcc-bridges" style="display:flex; gap:0.25rem;">
+      <button type="button" data-action="ftBBTTCCBridge"    class="ft-npc-tool" data-tooltip="Open the BBTTCC Bridge — campaign-state actions (faction OP transfer, hex bond, scenario beats).">🜲 Bridge</button>
+      <button type="button" data-action="ftBBTTCCTikkun"    class="ft-npc-tool" data-tooltip="Open the Tikkun panel — Sparks ledger / repair ritual / deposit (B3 system).">✦ Tikkun</button>
+      <button type="button" data-action="ftBBTTCCRadiation" class="ft-npc-tool" data-tooltip="Open the Radiation track — exposure ledger + manifestation interactions.">☢ Rad</button>
+    </div>
+    <button type="button" data-action="ftAddEffect" class="ft-npc-tool" data-tooltip="Author a new Active Effect on this actor (V14 ActiveEffectConfig — GM-style edit).">+ Effect</button>
+    <button type="button" data-action="ftToggleEditMode" class="ft-edit-mode-btn" data-tooltip="Toggle edit mode — exposes raw rank inputs and other normally-locked fields for direct editing.">✎ Edit</button>
+  </section>
+
+  {{!-- 2026-06-08 — Statblock + Manifestations moved out of the header into the body top. --}}
+  <section class="ft-npc-statblock">
     <div class="ft-attributes ft-npc-attributes flexcol">
       <h2 data-tooltip="Faculties — the six attributes. Same ladder as stewards: bare 2d10x10 + value for opposed checks.">Faculties</h2>
       <div class="ft-attr-grid">
@@ -163,7 +196,8 @@
       </div>
       {{/if}}
     </div>
-
+  </section>
+  <section class="ft-npc-manifest-panel">
     <div class="ft-magic-panel flexcol">
       <h2 data-tooltip="Manifestation panel — Clarity gates the cast, Sephirah colors it, Noise tracks Chaos-mode residue. NPCs cast manifestations the same as stewards.">Manifestations</h2>
       <div class="ft-magic-row" data-tooltip="Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=5). Max scales with Tier (5/7/10/14). +5 if classed as a TCC (Wyrdlens Adept, Cosmic Linguist, Dreamwalker, Pactkeeper).">
@@ -209,34 +243,6 @@
       </div>
       {{/if}}
     </div>
-  </header>
-
-  <section class="ft-npc-toolbar flexrow">
-    <button type="button" class="ft-npc-tool" data-action="ftNpcSurgeInit" data-tooltip="2d10x10 + Intrigue + init bonus"><i class="fas fa-bolt"></i> Surge Init</button>
-    <div class="ft-action-economy">
-      <button type="button" class="ft-econ-chip {{#if actionEconomy.actionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="actionUsed">Action</button>
-      <button type="button" class="ft-econ-chip {{#if actionEconomy.bonusUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="bonusUsed">Bonus</button>
-      <button type="button" class="ft-econ-chip {{#if actionEconomy.reactionUsed}}used{{/if}}" data-action="ftActionToggle" data-slot="reactionUsed">Reaction</button>
-      {{#if ftFlags.bonusActionAvailable}}
-      <button type="button" data-action="ftActAgain" class="ft-econ-chip ft-act-again" data-tooltip="Both base dice rolled 10 — take a full bonus action this turn.">⚡ Act Again</button>
-      {{/if}}
-      <button type="button" class="ft-npc-tool" data-action="ftNewTurn" data-tooltip="Reset action economy">↻ New Turn</button>
-    </div>
-    <div class="ft-rest-controls">
-      <button type="button" class="ft-npc-tool" data-action="ftSceneBreak" data-tooltip="Scene Break — clear scene-scoped resources">Scene</button>
-      <button type="button" class="ft-npc-tool" data-action="ftSomaBreak" data-tooltip="Soma Break — full reset">Soma</button>
-    </div>
-    <div class="ft-progress-controls">
-      <button type="button" class="ft-npc-tool" data-action="ftLevelUp" data-tooltip="Advance Initiation — bumps level by 1, applies attribute bump, fires path-feature auto-grants for the new level.">▲ Advance Initiation</button>
-    </div>
-    {{!-- NPC Parity Sprint C (2026-05-14) — BBTTCC bridges + Add Effect. --}}
-    <div class="ft-bbttcc-bridges" style="display:flex; gap:0.25rem;">
-      <button type="button" data-action="ftBBTTCCBridge"    class="ft-npc-tool" data-tooltip="Open the BBTTCC Bridge — campaign-state actions (faction OP transfer, hex bond, scenario beats).">🜲 Bridge</button>
-      <button type="button" data-action="ftBBTTCCTikkun"    class="ft-npc-tool" data-tooltip="Open the Tikkun panel — Sparks ledger / repair ritual / deposit (B3 system).">✦ Tikkun</button>
-      <button type="button" data-action="ftBBTTCCRadiation" class="ft-npc-tool" data-tooltip="Open the Radiation track — exposure ledger + manifestation interactions.">☢ Rad</button>
-    </div>
-    <button type="button" data-action="ftAddEffect" class="ft-npc-tool" data-tooltip="Author a new Active Effect on this actor (V14 ActiveEffectConfig — GM-style edit).">+ Effect</button>
-    <button type="button" data-action="ftToggleEditMode" class="ft-edit-mode-btn" data-tooltip="Toggle edit mode — exposes raw rank inputs and other normally-locked fields for direct editing.">✎ Edit</button>
   </section>
 
   {{!-- NPC Parity Sprint A (2026-05-14) — Move + Combat Actions + Surge.
@@ -703,4 +709,5 @@
     </details>
 
   </section>
+  </div>
 </div>

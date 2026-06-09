@@ -1,4 +1,4 @@
-<div class="ft-sheet flexcol">
+<div class="ft-sheet ft-character-sheet flexcol">
 
   {{!-- ── Header ── --}}
   <header class="ft-header flexrow">
@@ -40,6 +40,28 @@
       </div>
     </div>
 
+  </header>
+
+  {{!-- ── Tabs ── --}}
+  <div class="ft-tabs-bar">
+    <nav class="ft-tabs" data-group="primary">
+      <a class="item" data-tab="core">Steward</a>
+      <a class="item" data-tab="combat">Engagement</a>
+      <a class="item" data-tab="skills">Aptitudes</a>
+      <a class="item" data-tab="powers">Manifestations</a>
+      <a class="item" data-tab="features">Principles</a>
+      <a class="item" data-tab="effects">States</a>
+      <a class="item" data-tab="inventory">Inventory</a>
+      <a class="item" data-tab="tikkun">The Work</a>
+    </nav>
+    <button type="button" data-action="ftToggleEditMode" class="ft-edit-mode-btn" data-tooltip="Toggle edit mode — exposes raw rank inputs and other normally-locked fields for direct editing.">✎ Edit</button>
+  </div>
+
+  <section class="ft-body">
+
+    {{!-- ── Core ── --}}
+    <div class="tab core" data-tab="core">
+      <section class="ft-tab-vitals ft-steward-vitals">
     <div class="ft-attributes flexcol">
       <h2 data-tooltip="Faculties — the six attributes that shape every roll. Each faculty drives certain aptitudes and feeds one or more derived pools/defenses below.">Faculties</h2>
       <div class="ft-attr-grid">
@@ -165,63 +187,7 @@
       </div>
       {{/if}}
     </div>
-
-    <div class="ft-magic-panel flexcol">
-      <h2>Manifestations</h2>
-      <div class="ft-magic-row" data-tooltip="Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=5) and per-tick upkeep on sustained manifestations. Max scales with Steward tier (5 / 7 / 10 / 14). Recovers fully on Soma Break. Dreamwalker Discipline boosts max.">
-        <label>Clarity</label>
-        <div class="ft-clarity-track">
-          {{#each magic.clarityPips as |pip|}}
-          <span class="ft-pip {{#if pip.filled}}on{{/if}}"></span>
-          {{/each}}
-        </div>
-        <input type="number" name="system.magic.clarity.value" value="{{magic.clarity.value}}" min="0" max="{{magic.clarity.max}}" class="ft-pip-input"/>
-      </div>
-      <div class="ft-magic-row" data-tooltip="Noise — metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool. Doesn't drop on its own; high Noise feeds Corruption / Intrigue detection / Lattice attention at GM thresholds. Hermetic and Ascendant generate 0 Noise.">
-        <label>Noise</label>
-        <span class="ft-noise-bar">
-          <span class="ft-noise-fill {{ftNoiseClass magic.noise.value}}" style="width: {{magic.noisePercent}}%"></span>
-        </span>
-        <input type="number" name="system.magic.noise.value" value="{{magic.noise.value}}" min="0" max="10" class="ft-noise-input {{ftNoiseClass magic.noise.value}}"/>
-      </div>
-      <div class="ft-magic-row ft-seph-row" data-tooltip="Sephirah — your active sphere on the Tree of Life. Shapes manifestation flavor, eligible disciplines, and sephirotic damage alignment. Switch in narrative beats; some manifestations are gated to a specific sphere.">
-        <label>Sephirah</label>
-        <select name="system.magic.sephirah" class="ft-seph-select" style="border-color: {{ftSephColor magic.sephirah}}44">
-          {{#each SEPHIROTH as |seph key|}}
-          <option value="{{key}}" {{#if (eq ../magic.sephirah key)}}selected{{/if}}>{{seph.label}}</option>
-          {{/each}}
-        </select>
-      </div>
-      <div class="ft-seph-domain">{{ftSephDomain magic.sephirah}}</div>
-      <div class="ft-magic-actions">
-        <button type="button" data-action="ftMisfire" class="ft-misfire-btn" data-tooltip="Roll a Misfire — clamped to your Steward tier. Use when a manifestation goes sideways (Noise threshold trip, GM call, or voluntary). Posts a misfire chart result to chat.">⚡ Misfire</button>
-        {{#if isTCC}}
-        <button type="button" data-action="ftFiat" class="ft-misfire-btn" data-tooltip="Trad Caster Class — speak a free Fiat (T0). Must begin with &quot;Let there be …&quot;. No roll, no resource.">✦ Fiat</button>
-        {{/if}}
-      </div>
-    </div>
-
-  </header>
-
-  {{!-- ── Tabs ── --}}
-  <div class="ft-tabs-bar">
-    <nav class="ft-tabs" data-group="primary">
-      <a class="item" data-tab="core">Steward</a>
-      <a class="item" data-tab="combat">Engagement</a>
-      <a class="item" data-tab="skills">Aptitudes</a>
-      <a class="item" data-tab="powers">Manifestations</a>
-      <a class="item" data-tab="features">Principles</a>
-      <a class="item" data-tab="effects">States</a>
-      <a class="item" data-tab="inventory">Inventory</a>
-      <a class="item" data-tab="tikkun">The Work</a>
-    </nav>
-    <button type="button" data-action="ftToggleEditMode" class="ft-edit-mode-btn" data-tooltip="Toggle edit mode — exposes raw rank inputs and other normally-locked fields for direct editing.">✎ Edit</button>
-  </div>
-
-  <section class="ft-body">
-
-    {{!-- ── Core ── --}}
-    <div class="tab core" data-tab="core">
+      </section>
       <div class="ft-core flexcol">
         <div class="ft-core-left flexcol">
 
@@ -1109,6 +1075,42 @@
 
     {{!-- ── Manifestation Engine (cleaned tab — tier-aware) ── --}}
     <div class="tab powers" data-tab="powers">
+      <section class="ft-tab-manifest-panel">
+    <div class="ft-magic-panel flexcol">
+      <h2>Manifestations</h2>
+      <div class="ft-magic-row" data-tooltip="Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=5) and per-tick upkeep on sustained manifestations. Max scales with Steward tier (5 / 7 / 10 / 14). Recovers fully on Soma Break. Dreamwalker Discipline boosts max.">
+        <label>Clarity</label>
+        <div class="ft-clarity-track">
+          {{#each magic.clarityPips as |pip|}}
+          <span class="ft-pip {{#if pip.filled}}on{{/if}}"></span>
+          {{/each}}
+        </div>
+        <input type="number" name="system.magic.clarity.value" value="{{magic.clarity.value}}" min="0" max="{{magic.clarity.max}}" class="ft-pip-input"/>
+      </div>
+      <div class="ft-magic-row" data-tooltip="Noise — metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool. Doesn't drop on its own; high Noise feeds Corruption / Intrigue detection / Lattice attention at GM thresholds. Hermetic and Ascendant generate 0 Noise.">
+        <label>Noise</label>
+        <span class="ft-noise-bar">
+          <span class="ft-noise-fill {{ftNoiseClass magic.noise.value}}" style="width: {{magic.noisePercent}}%"></span>
+        </span>
+        <input type="number" name="system.magic.noise.value" value="{{magic.noise.value}}" min="0" max="10" class="ft-noise-input {{ftNoiseClass magic.noise.value}}"/>
+      </div>
+      <div class="ft-magic-row ft-seph-row" data-tooltip="Sephirah — your active sphere on the Tree of Life. Shapes manifestation flavor, eligible disciplines, and sephirotic damage alignment. Switch in narrative beats; some manifestations are gated to a specific sphere.">
+        <label>Sephirah</label>
+        <select name="system.magic.sephirah" class="ft-seph-select" style="border-color: {{ftSephColor magic.sephirah}}44">
+          {{#each SEPHIROTH as |seph key|}}
+          <option value="{{key}}" {{#if (eq ../magic.sephirah key)}}selected{{/if}}>{{seph.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="ft-seph-domain">{{ftSephDomain magic.sephirah}}</div>
+      <div class="ft-magic-actions">
+        <button type="button" data-action="ftMisfire" class="ft-misfire-btn" data-tooltip="Roll a Misfire — clamped to your Steward tier. Use when a manifestation goes sideways (Noise threshold trip, GM call, or voluntary). Posts a misfire chart result to chat.">⚡ Misfire</button>
+        {{#if isTCC}}
+        <button type="button" data-action="ftFiat" class="ft-misfire-btn" data-tooltip="Trad Caster Class — speak a free Fiat (T0). Must begin with &quot;Let there be …&quot;. No roll, no resource.">✦ Fiat</button>
+        {{/if}}
+      </div>
+    </div>
+      </section>
       <div class="ft-section-header ft-manifest-header">
         <div>
           <h3>Manifestations</h3>

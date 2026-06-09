@@ -55,6 +55,42 @@
          Crew (filled/total), Output % (color-coded by state). Edit Mode button
          retired (was a no-op on this template; GM Edit tab is the canonical
          gate). --}}
+  </header>
+
+  {{!-- Combat States + Heat (2026-05-19) — surfaces per-round crew-action
+       states (holding/evading/brace/boost) and the persistent heat meter
+       so any glance at the sheet shows what's active. Matches Active
+       Effects created by _ftHandleCrewAction → _ftEnsureRigStateAE. --}}
+  {{#if showCombatSurface}}
+  <div class="ft-rig-combat-states" style="display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;padding:.4rem .6rem;margin:0 .5rem .5rem;background:rgba(20,20,28,0.55);border:1px solid #444;border-radius:6px;">
+    {{#each combatStates as |s|}}
+    <span data-tooltip="{{s.note}}" style="display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .5rem;border:1px solid {{s.color}};border-radius:12px;font-size:0.72rem;color:{{s.color}};background:rgba(0,0,0,0.25);">
+      <strong>{{s.label}}</strong><span style="opacity:0.8">· {{s.note}}</span>
+    </span>
+    {{/each}}
+    {{#if heat.max}}
+    <span data-tooltip="Heat builds +1 per weapon fire. Engineer's Vent Heat removes 2. At max, weapons lock until vented." style="display:inline-flex;align-items:center;gap:.4rem;padding:.15rem .5rem;border:1px solid {{#if heat.overheated}}#eb5757{{else}}#d4a35f{{/if}};border-radius:12px;font-size:0.72rem;color:{{#if heat.overheated}}#eb5757{{else}}#ffd28a{{/if}};background:rgba(0,0,0,0.25);">
+      <strong>{{#if heat.overheated}}🔥 OVERHEATED{{else}}🌡 Heat{{/if}}</strong>
+      <span style="opacity:0.85">{{heat.value}}/{{heat.max}}</span>
+      <span style="display:inline-block;width:40px;height:5px;background:#222;border-radius:2px;overflow:hidden;">
+        <span style="display:block;width:{{heat.pct}}%;height:100%;background:{{#if heat.overheated}}#eb5757{{else}}#d4a35f{{/if}};"></span>
+      </span>
+    </span>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <div class="ft-tabs-bar">
+    <nav class="ft-tabs" data-group="primary">
+      {{#each tabs as |t|}}{{#if t.visible}}<a class="item{{#if t.active}} active{{/if}}" data-tab="{{t.id}}">{{t.label}}</a>{{/if}}{{/each}}
+    </nav>
+  </div>
+
+  <div class="ft-body">
+
+    {{!-- IDENTITY TAB --------------------------------------------------- --}}
+    <div class="tab identity{{#if (eq activeTab "identity")}} active{{/if}}" data-tab="identity">
+      <section class="ft-tab-summary ft-rig-tab-summary">
     <div class="ft-rig-summary ft-rig-stat-grid">
 
       <div class="ft-rig-stat-tile ft-rig-stat-integrity ft-stat-span-2" data-tooltip="Integrity = rig's structural health. 0 → destroyed.">
@@ -105,41 +141,7 @@
       </div>
 
     </div>
-  </header>
-
-  {{!-- Combat States + Heat (2026-05-19) — surfaces per-round crew-action
-       states (holding/evading/brace/boost) and the persistent heat meter
-       so any glance at the sheet shows what's active. Matches Active
-       Effects created by _ftHandleCrewAction → _ftEnsureRigStateAE. --}}
-  {{#if showCombatSurface}}
-  <div class="ft-rig-combat-states" style="display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;padding:.4rem .6rem;margin:0 .5rem .5rem;background:rgba(20,20,28,0.55);border:1px solid #444;border-radius:6px;">
-    {{#each combatStates as |s|}}
-    <span data-tooltip="{{s.note}}" style="display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .5rem;border:1px solid {{s.color}};border-radius:12px;font-size:0.72rem;color:{{s.color}};background:rgba(0,0,0,0.25);">
-      <strong>{{s.label}}</strong><span style="opacity:0.8">· {{s.note}}</span>
-    </span>
-    {{/each}}
-    {{#if heat.max}}
-    <span data-tooltip="Heat builds +1 per weapon fire. Engineer's Vent Heat removes 2. At max, weapons lock until vented." style="display:inline-flex;align-items:center;gap:.4rem;padding:.15rem .5rem;border:1px solid {{#if heat.overheated}}#eb5757{{else}}#d4a35f{{/if}};border-radius:12px;font-size:0.72rem;color:{{#if heat.overheated}}#eb5757{{else}}#ffd28a{{/if}};background:rgba(0,0,0,0.25);">
-      <strong>{{#if heat.overheated}}🔥 OVERHEATED{{else}}🌡 Heat{{/if}}</strong>
-      <span style="opacity:0.85">{{heat.value}}/{{heat.max}}</span>
-      <span style="display:inline-block;width:40px;height:5px;background:#222;border-radius:2px;overflow:hidden;">
-        <span style="display:block;width:{{heat.pct}}%;height:100%;background:{{#if heat.overheated}}#eb5757{{else}}#d4a35f{{/if}};"></span>
-      </span>
-    </span>
-    {{/if}}
-  </div>
-  {{/if}}
-
-  <div class="ft-tabs-bar">
-    <nav class="ft-tabs" data-group="primary">
-      {{#each tabs as |t|}}{{#if t.visible}}<a class="item{{#if t.active}} active{{/if}}" data-tab="{{t.id}}">{{t.label}}</a>{{/if}}{{/each}}
-    </nav>
-  </div>
-
-  <div class="ft-body">
-
-    {{!-- IDENTITY TAB --------------------------------------------------- --}}
-    <div class="tab identity{{#if (eq activeTab "identity")}} active{{/if}}" data-tab="identity">
+      </section>
       {{!-- Mobility + State readonly fields retired (2026-05-12) — they
            duplicated the header pills exactly. Keep authored fields here. --}}
       <section class="ft-rig-identity-grid">
