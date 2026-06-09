@@ -202,6 +202,9 @@ export const FEATURE_ROUTER = {
   "harmmarshal-resolve-unbreakable-front":     "harmony_marshal_unbreakable_front",
   "harmmarshal-mandate-conductors-beat":       "harmony_marshal_conductors_beat",
   "harmmarshal-resolve-measured-command":      "harmony_marshal_measured_command",
+  "harmmarshal-resolve-calm-push":             "harmony_marshal_calm_push",
+  "harmmarshal-resolve-rally-quiet":           "harmony_marshal_rally_quiet",
+  "harmmarshal-overwatch-sentinel-protocol":   "harmony_marshal_sentinel_protocol",
   "phantom_courier_core":          "shadow_courier_passive",  // Legacy fallback
   "phantom_courier_tier":          "shadow_courier_passive",  // Legacy fallback
   "wyrdlens_adept_core":           "passive_info",
@@ -5909,6 +5912,9 @@ const LEGACY_ACTION_COST = {
   "harmony_marshal_unbreakable_front":  "action",     // Resolve technique — 30-ft defensive aura
   "harmony_marshal_conductors_beat":    "bonus",      // Mandate technique — single-ally tempo aid
   "harmony_marshal_measured_command":   "bonus",      // Resolve technique — single-ally +Guard/+resolve
+  "harmony_marshal_calm_push":          "bonus",      // Resolve technique — at-will ally advance + Guard
+  "harmony_marshal_rally_quiet":        "reaction",   // Resolve technique — reaction reroll vs Shaken
+  "harmony_marshal_sentinel_protocol":  "action",     // Overwatch technique — 30-ft awareness field
   "shadow_courier_package":     "action",
   "shadow_courier_crossing":    "action",
   // Phase 1 ancestry cores — single-fire reactions / soma-break
@@ -6157,6 +6163,90 @@ export async function openHarmonyMarshalMeasuredCommand(actor) {
     });
 }
 
+// ─── Harmony Marshal · Calm Push (Resolve technique) ──────────────────────────
+// At-will bonus action (no use limit): a targeted ally may move 10 ft without provoking
+// and gains a real +1 Guard AE until your next turn. Direct apply (no cadence dialog).
+export async function openHarmonyMarshalCalmPush(actor) {
+  const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+  if (!ally) return ui.notifications?.warn("Calm Push: target an ally token within 30 ft first.");
+  try {
+    await ally.createEmbeddedDocuments("ActiveEffect", [{
+      name: "Calm Push — +1 Guard", img: "icons/magic/movement/trail-streak-impact-blue.webp", origin: actor.uuid,
+      duration: { rounds: 1, seconds: 6 },
+      changes: [{ key: "system.derived.guard.aeBonus", mode: 2, value: "1", priority: 20 }],
+      flags: { fourththing: { calmPush: true } }
+    }]);
+  } catch (e) { return ui.notifications?.warn("Calm Push: couldn't reach that ally (unowned)."); }
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9ad0ff">➳ Calm Push → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem"><b>${_ftEscape(ally.name)}</b> may move up to <b>10 ft</b> now without provoking, and gains <b>+1 Guard</b> until your next turn.</p></div>` });
+}
+
+// ─── Harmony Marshal · Rally the Quiet (Resolve technique) ────────────────────
+// Reaction, tier uses/Soma Break: a targeted friendly who failed a defense vs Shaken
+// rerolls it. The most literal aidBanked use — reroll-lowest IS "reroll the check".
+export async function openHarmonyMarshalRallyQuiet(actor) {
+  const key = "hmRallyQuiet";
+  return _openTierUsesPerSomaBreak(actor, key, "Rally the Quiet",
+    "Reaction: when a <b>targeted</b> friendly creature within 30 ft fails a defense check vs <b>Shaken</b>, they reroll it and use the new result.",
+    async (actor) => {
+      const ally = Array.from(game.user?.targets ?? [])[0]?.actor;
+      if (!ally) {
+        ui.notifications?.warn("Rally the Quiet: target the ally who failed first.");
+        const s = Number(actor.getFlag("fourththing", `disciplineSpent.${key}`) || 0);
+        await actor.setFlag("fourththing", `disciplineSpent.${key}`, Math.max(0, s - 1));  // refund the use
+        return;
+      }
+      try {
+        const b = ally.getFlag("fourththing", "aidBanked") ?? [];
+        b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "rally-the-quiet" });
+        await ally.setFlag("fourththing", "aidBanked", b);
+      } catch (e) { ui.notifications?.warn("Rally the Quiet: couldn't reach that ally (unowned)."); return; }
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#a0d8b8">🤝 Rally the Quiet → ${_ftEscape(ally.name)}</span></div><p style="margin:0.2rem 0;font-size:0.8rem">reroll banked on their defense vs Shaken.</p></div>` });
+    });
+}
+
+// ─── Harmony Marshal · Sentinel Protocol (Overwatch technique) ────────────────
+// 1/Soma-Break action: a 30-ft awareness field. Allies aided (Insight + defense vs
+// charm/fear/Stealth, can't be surprised); hostiles must Soul-save (DC = 8 + tier + PRE)
+// or be revealed — surfaced for table adjudication.
+export async function openHarmonyMarshalSentinelProtocol(actor) {
+  return _openSomaBreakAbility(actor, "hmSentinelProtocol", "Sentinel Protocol",
+    "Spend an action: a <b>30-ft awareness field</b> (1 minute, moves with you). You and allies inside <b>cannot be surprised</b> and gain <b>advantage on Insight</b> and defense vs <b>charm/fear/Stealth</b>. Hostiles entering must make a Soul check (DC = 8 + tier + Presence) or be <b>revealed in full</b>.",
+    async (actor) => {
+      const myToken = actor.getActiveTokens?.()?.[0];
+      if (!myToken) { ui.notifications?.warn("Sentinel Protocol: place your token on the canvas first."); return false; }
+      const sys  = actor.system?.system ?? actor.system ?? {};
+      const tier = Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
+      const pre  = Number(sys?.attributes?.presence?.value) || 0;
+      const dc   = 8 + tier + pre;
+      const scene = myToken.scene ?? canvas.scene;
+      const grid  = scene?.grid?.size ?? canvas.grid?.size ?? 100;
+      const rangePx = (30 / (scene?.grid?.distance ?? 5)) * grid;
+      const ctr = (t) => ({ x: t.x + ((t.document?.width || 1) * grid) / 2, y: t.y + ((t.document?.height || 1) * grid) / 2 });
+      const me  = ctr(myToken);
+      const inRange = (canvas.tokens?.placeables ?? []).filter((t) => t?.actor && t.id !== myToken.id
+        && Math.hypot(ctr(t).x - me.x, ctr(t).y - me.y) <= rangePx + grid / 2);
+      const allies = inRange.filter((t) => (t.document?.disposition ?? 0) >= 0);
+      const foes   = inRange.filter((t) => (t.document?.disposition ?? 0) <  0);
+      try {
+        await actor.createEmbeddedDocuments("ActiveEffect", [{
+          name: "Sentinel Protocol (awareness field)", img: "icons/magic/perception/eye-ringed-glow-angry-large-teal.webp", origin: actor.uuid,
+          duration: { rounds: 10, seconds: 60 }, changes: [], flags: { fourththing: { sentinelProtocol: { radiusFt: 30, dc } } }
+        }]);
+      } catch (e) { /* skip */ }
+      const allyNames = [];
+      for (const t of allies) {
+        try { const b = t.actor.getFlag("fourththing", "aidBanked") ?? []; b.push({ from: actor.name, kind: "reroll-lowest", set: Date.now(), source: "sentinel-protocol" }); await t.actor.setFlag("fourththing", "aidBanked", b); allyNames.push(t.actor.name); } catch (e) {}
+      }
+      return `<div class="ft-prev-align-note" style="font-size:0.78rem;margin-top:0.3rem">
+        <p style="margin:0.15rem 0">⟁ <b>Awareness field raised</b> — 30 ft, 1 minute. You + allies cannot be surprised.</p>
+        <p style="margin:0.15rem 0;color:#78c88c">Allies aided (Insight + defense vs charm/fear/Stealth): <b>${allyNames.join(", ") || "—"}</b></p>
+        <p style="margin:0.15rem 0;opacity:0.7;font-size:0.72rem">Hostiles in range (${foes.length}) must make a Soul check (DC ${dc}) or be revealed — no invisibility/illusion/disguise for the duration.</p>
+      </div>`;
+    });
+}
+
 // ─── Main dispatch function ───────────────────────────────────────────────────
 
 export async function dispatchFeatureAction(actor, item) {
@@ -6212,6 +6302,9 @@ export async function dispatchFeatureAction(actor, item) {
     case "harmony_marshal_unbreakable_front": return openHarmonyMarshalUnbreakableFront(actor);
     case "harmony_marshal_conductors_beat":   return openHarmonyMarshalConductorsBeat(actor);
     case "harmony_marshal_measured_command":  return openHarmonyMarshalMeasuredCommand(actor);
+    case "harmony_marshal_calm_push":         return openHarmonyMarshalCalmPush(actor);
+    case "harmony_marshal_rally_quiet":       return openHarmonyMarshalRallyQuiet(actor);
+    case "harmony_marshal_sentinel_protocol": return openHarmonyMarshalSentinelProtocol(actor);
     // === Passive / info dialogs ===
     case "passive_info":           return openPassiveClassInfo(actor, item);
     case "shadow_courier_passive": return openShadowCourierPassive(actor, item);
