@@ -68,15 +68,27 @@
   if (wasLocked && !DRY_RUN) await pack.configure({ locked:false });
   const actors = await pack.getDocuments();
 
-  const plan = { stamped:[], skipHasAA:[], missing:[] };
+  // Valid fourththing Actor types (template.json). The shipped Vehicles pack actors are
+  // legacy dnd5e type:"vehicle" with dnd5e system data — they fail validation on ANY write
+  // (the server re-validates the parent actor when you update an embedded item), so embedded
+  // AA stamps are impossible until the actors are PORTED to a native "rig". Detect + report
+  // instead of crashing on the first update.
+  const VALID_ACTOR_TYPES = new Set(["character", "npc", "rig", "boss"]);
+  const plan = { stamped:[], skipHasAA:[], missing:[], blockedActors:[], failed:[] };
   const seen = new Set();
   for (const actor of actors) {
+    const badType = !VALID_ACTOR_TYPES.has(actor.type);
+    if (badType) plan.blockedActors.push(`${actor.name} (type="${actor.type}" — not a valid fourththing actor type; port to "rig" first)`);
     for (const item of actor.items) {
       const tag = MAP[item.name];
       if (!tag) continue;
       seen.add(item.name);
       if (item.flags?.autoanimations) { plan.skipHasAA.push(`${actor.name} → ${item.name}`); continue; }
-      if (!DRY_RUN) await item.update({ "flags.autoanimations": buildAA(tag, item.name) });
+      if (badType) { plan.failed.push(`${actor.name} → ${item.name} (parent type "${actor.type}" invalid)`); continue; }
+      if (!DRY_RUN) {
+        try { await item.update({ "flags.autoanimations": buildAA(tag, item.name) }); }
+        catch (e) { plan.failed.push(`${actor.name} → ${item.name}: ${e.message}`); continue; }
+      }
       plan.stamped.push(`${actor.name} → ${item.name}  [${tag}]`);
     }
   }
@@ -84,8 +96,13 @@
   if (wasLocked && !DRY_RUN) await pack.configure({ locked:true });
 
   console.log("=== animate-vehicles " + (DRY_RUN ? "(DRY RUN — no changes written)" : "(APPLIED)") + " ===");
-  console.log(`Stamped (${plan.stamped.length}):`); console.log(plan.stamped.join("\n") || "  (none — all already had AA)");
+  console.log(`Stamped (${plan.stamped.length}):`); console.log(plan.stamped.join("\n") || "  (none)");
   console.log(`\nSkipped — already had AA (${plan.skipHasAA.length}):`, plan.skipHasAA);
-  if (plan.missing.length) console.warn(`⚠ ${plan.missing.length} mapped name(s) NOT found on any vehicle (fix spelling):`, plan.missing);
-  ui.notifications.info((DRY_RUN ? "[DRY RUN] " : "") + `Vehicles: ${plan.stamped.length} system(s) ${DRY_RUN ? "would be stamped" : "stamped"} across ${actors.length} vehicles. ${plan.skipHasAA.length} already had AA.${plan.missing.length ? " ⚠ " + plan.missing.length + " not found." : ""} See console (F12).` + (DRY_RUN ? " Set DRY_RUN=false to apply." : " F5 to load."));
+  if (plan.blockedActors.length) {
+    console.warn(`\n⛔ ${plan.blockedActors.length} vehicle actor(s) have an INVALID type — they are legacy dnd5e "vehicle" actors never ported to the fourththing "rig" schema. Embedded items on them CANNOT be written (parent fails validation). Port them to type "rig" before animating:`);
+    for (const b of plan.blockedActors) console.warn("   " + b);
+  }
+  if (plan.failed.length) { console.warn(`\n✗ ${plan.failed.length} item(s) could NOT be stamped:`); for (const f of plan.failed) console.warn("   " + f); }
+  if (plan.missing.length) console.warn(`\n⚠ ${plan.missing.length} mapped name(s) NOT found on any vehicle (fix spelling):`, plan.missing);
+  ui.notifications[plan.blockedActors.length ? "warn" : "info"]((DRY_RUN ? "[DRY RUN] " : "") + `Vehicles: ${plan.stamped.length} stamped, ${plan.failed.length} blocked.` + (plan.blockedActors.length ? ` ${plan.blockedActors.length} vehicle actor(s) are legacy dnd5e type — port to "rig" first. See console (F12).` : (DRY_RUN ? " Set DRY_RUN=false to apply." : " F5 to load.")));
 })();
