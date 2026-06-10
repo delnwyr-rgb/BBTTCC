@@ -56,3 +56,17 @@
 **/packs-backup-*/
 **/items.bak-*/
 **/items-broken-*/
+
+# LevelDB pack runtime artifacts — Foundry rotates these on every compendium
+# access (CURRENT, LOG, LOG.old, MANIFEST-*, *.log, *.ldb, LOCK). They churn
+# constantly and never carry source signal. 317 had been accidentally tracked
+# pre-2026-06-10; this rule + `git rm --cached` retired them.
+# Covers both flat pack dirs (packs/foo/CURRENT) and nested same-name
+# subfolders some packs use (packs/foo/foo/CURRENT).
+**/packs/**/CURRENT
+**/packs/**/LOCK
+**/packs/**/LOG
+**/packs/**/LOG.old
+**/packs/**/MANIFEST-*
+**/packs/**/*.log
+**/packs/**/*.ldb
