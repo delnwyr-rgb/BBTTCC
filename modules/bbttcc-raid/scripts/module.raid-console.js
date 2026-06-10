@@ -4727,7 +4727,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           new Dialog({
             title: "Courtly Intrigue — Exchange",
             content: `
-              <form>
+              <form class="bbttcc-raid-dialog-form">
                 <div class="form-group"><label>Attacker Action</label><select name="atkAction">${actions}</select></div>
                 <div class="form-group"><label>Attacker Spend (OP)</label><input type="number" name="atkSpend" value="2" min="0" step="1"/></div>
                 <div class="form-group"><label>Attacker Skill Bonus</label><input type="number" name="atkSkill" value="0" step="1"/></div>

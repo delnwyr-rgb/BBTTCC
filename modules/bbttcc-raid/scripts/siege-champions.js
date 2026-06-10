@@ -80,7 +80,7 @@
     const content = `
       <div style="display:flex;flex-direction:column;gap:.5rem;font-size:0.9rem;">
         <div>Champions for <b>${esc(faction.name)}</b>. Ctrl/Cmd-click to multi-select. ★ = affiliated · r = rank (boss tier×5 / rig tier×4 / level).</div>
-        <select name="roster" multiple size="12" style="width:100%;">${rows}</select>
+        <select name="roster" class="bbttcc-champ-roster" multiple size="12" style="width:100%;">${rows}</select>
         <div style="display:flex;gap:6px;">
           <button type="button" data-act="suggest" style="flex:1;">✨ Auto-suggest top 5</button>
           <button type="button" data-act="clear" style="flex:1;">Clear</button>
@@ -115,7 +115,7 @@
           [...sel.options].forEach(o => { o.selected = false; });
         });
       }
-    }, { width: 460 }).render(true);
+    }, { width: 460, classes: ["dialog", "bbttcc-hexchrome-dialog"] }).render(true);
   }
 
   // ─── Per-turn status machine (called by siege-tick.js before persist) ──────

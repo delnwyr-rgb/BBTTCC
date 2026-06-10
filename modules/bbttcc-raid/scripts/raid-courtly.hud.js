@@ -23,7 +23,12 @@
   const MODF  = "bbttcc-factions";
   const TAG   = "[bbttcc-raid/courtly-hud]";
 
-  const CYAN   = "#5ce1e6";
+  // CYAN is centralized: the Influence + Roster panels carry .ft-hud-acc-cyan,
+  // which sets --ft-hud-accent (fallback keeps the old colour if the shared
+  // stylesheet fails to load). VIOLET stays a literal — it's also painted onto
+  // the cyan Influence panel as a secret-drop hint (see drag outline below), so
+  // it can't ride the panel's accent variable.
+  const CYAN   = "var(--ft-hud-accent, #5ce1e6)";
   const VIOLET = "#a78bfa";
   const ATK_COLOR = "#ffb15a";
   const DEF_COLOR = "#5cb8ff";
@@ -109,7 +114,7 @@
     const outChip = outcome === "ongoing" ? "" :
       `<span style="font-size:0.7rem;padding:1px 6px;background:#3a2a1a;color:#ffd28a;border:1px solid #ffd28a;border-radius:3px;">${esc(outcome.toUpperCase())}</span>`;
 
-    return `<div id="ft-courtly-influence" style="position:fixed;left:12px;top:60px;z-index:120;width:300px;padding:.5rem .7rem;background:rgba(20,20,28,0.92);color:#e8e8f0;border:1px solid ${CYAN};border-radius:6px;font-family:'Signika',sans-serif;font-size:0.82rem;box-shadow:0 0 16px rgba(92,225,230,0.25),0 4px 12px rgba(0,0,0,0.5);backdrop-filter:blur(2px);pointer-events:auto;">
+    return `<div id="ft-courtly-influence" class="ft-hud-panel ft-hud-acc-cyan" style="position:fixed;left:12px;top:60px;width:300px;padding:.5rem .7rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem;">
         <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ Courtly Intrigue</span>
         <span style="font-size:0.72rem;color:#999;">Round ${round}</span>
@@ -169,7 +174,7 @@
           </div>`;
         }).join("");
 
-    return `<div id="ft-courtly-roster" style="position:fixed;right:12px;top:60px;z-index:120;width:280px;max-height:60vh;display:flex;flex-direction:column;padding:.5rem .55rem;background:rgba(20,20,28,0.92);color:#e8e8f0;border:1px solid ${CYAN};border-radius:6px;font-family:'Signika',sans-serif;font-size:0.82rem;box-shadow:0 0 16px rgba(92,225,230,0.25),0 4px 12px rgba(0,0,0,0.5);backdrop-filter:blur(2px);pointer-events:auto;">
+    return `<div id="ft-courtly-roster" class="ft-hud-panel ft-hud-acc-cyan" style="position:fixed;right:12px;top:60px;width:280px;max-height:60vh;display:flex;flex-direction:column;padding:.5rem .55rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem;">
         <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ Courtiers</span>
         <span style="font-size:0.7rem;color:#888;">${tokens.length}</span>
@@ -220,7 +225,7 @@
       </div>`;
     }).join('<div style="height:6px;"></div>');
 
-    return `<div id="ft-courtly-secrets" style="position:fixed;left:12px;bottom:16px;z-index:120;width:300px;max-height:40vh;display:flex;flex-direction:column;padding:.5rem .55rem;background:rgba(20,20,28,0.92);color:#e8e8f0;border:1px solid ${VIOLET};border-radius:6px;font-family:'Signika',sans-serif;font-size:0.82rem;box-shadow:0 0 16px rgba(167,139,250,0.25),0 4px 12px rgba(0,0,0,0.5);backdrop-filter:blur(2px);pointer-events:auto;">
+    return `<div id="ft-courtly-secrets" class="ft-hud-panel ft-hud-acc-violet" style="position:fixed;left:12px;bottom:16px;width:300px;max-height:40vh;display:flex;flex-direction:column;padding:.5rem .55rem;">
       <div style="margin-bottom:.35rem;color:${VIOLET};font-weight:600;letter-spacing:.04em;">⚜ Secrets &amp; Leverage</div>
       <div style="overflow-y:auto;display:flex;flex-direction:column;gap:4px;">${sectionHtml}</div>
     </div>`;

@@ -21,7 +21,10 @@
   const TAG = "[bbttcc/siege-hud]";
 
   // Siege palette
-  const BRONZE = "#d9a441";
+  // Accent is now centralized: the panel root carries .ft-hud-acc-bronze, which
+  // sets --ft-hud-accent. All accent usages below resolve through it (fallback
+  // keeps the old colour if the shared stylesheet ever fails to load).
+  const BRONZE = "var(--ft-hud-accent, #d9a441)";
   const SUPPLY_COLOR = { supplied: "#6fcf6f", harassed: "#ffaa55", severed: "#ff5555" };
 
   let _el = null;
@@ -480,7 +483,7 @@
 
   function _buildHtml(sieges, isGM) {
     const rows = sieges.map(e => _siegeRow(e, isGM)).join("");
-    return `<div id="ft-siege-hud" style="position:fixed;right:12px;top:60px;z-index:120;width:288px;padding:.5rem .7rem;background:rgba(22,19,12,0.93);color:#e8e2d4;border:1px solid ${BRONZE};border-radius:6px;font-family:'Signika',sans-serif;font-size:0.82rem;box-shadow:0 0 16px rgba(217,164,65,0.22),0 4px 12px rgba(0,0,0,0.5);backdrop-filter:blur(2px);pointer-events:auto;">
+    return `<div id="ft-siege-hud" class="ft-hud-panel ft-hud-acc-bronze" style="position:fixed;right:12px;top:60px;width:288px;padding:.5rem .7rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
         <span style="color:${BRONZE};font-weight:600;letter-spacing:.04em;">⚔ Sieges</span>
         <span style="font-size:0.7rem;color:#999;">${sieges.length} active</span>

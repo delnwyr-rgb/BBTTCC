@@ -55,6 +55,113 @@
 
 
 
+/* ── Shared raid-HUD chrome ─────────────────────────────────────────────────
+   One dark-glass panel shell + accent variants for the floating HUDs
+   (siege-hud.js, raid-courtly.hud.js). These panels live on <body>, so the
+   shell is defined as plain classes (not scoped tokens). Panels keep their own
+   position / size / padding inline; everything else — bg, border, glow, font,
+   blur — comes from here, so the whole raid suite (console + planner + HUDs)
+   shares one design language and tunes from one place. */
+.ft-hud-panel {
+  position: fixed;
+  z-index: 120;
+  border: 1px solid var(--ft-hud-accent);
+  border-radius: 6px;
+  font-family: 'Signika', sans-serif;
+  font-size: 0.82rem;
+  background: var(--ft-hud-bg);
+  color: var(--ft-hud-text);
+  box-shadow: 0 0 16px var(--ft-hud-glow), 0 4px 12px rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+  pointer-events: auto;
+}
+/* Siege = bronze/warm (matches the console's assault accent). */
+.ft-hud-acc-bronze {
+  --ft-hud-accent: #d9a441; --ft-hud-accent-rgb: 217,164,65;
+  --ft-hud-glow: rgba(217,164,65,0.22);
+  --ft-hud-bg: rgba(22,19,12,0.93); --ft-hud-text: #e8e2d4;
+}
+/* Courtly Influence + Roster = cyan/cool. */
+.ft-hud-acc-cyan {
+  --ft-hud-accent: #5ce1e6; --ft-hud-accent-rgb: 92,225,230;
+  --ft-hud-glow: rgba(92,225,230,0.25);
+  --ft-hud-bg: rgba(20,20,28,0.92); --ft-hud-text: #e8e8f0;
+}
+/* Courtly Secrets = violet/cool. */
+.ft-hud-acc-violet {
+  --ft-hud-accent: #a78bfa; --ft-hud-accent-rgb: 167,139,250;
+  --ft-hud-glow: rgba(167,139,250,0.25);
+  --ft-hud-bg: rgba(20,20,28,0.92); --ft-hud-text: #e8e8f0;
+}
+
+/* Raid dialog form fields — vertically center select/input text so it isn't
+   clipped (the bare Dialog selects rendered with the glyph baseline too low).
+   Tag a dialog's <form> with this class to fix every usage of that template. */
+.bbttcc-raid-dialog-form select,
+.bbttcc-raid-dialog-form input {
+  height: auto;
+  min-height: 1.9rem;
+  line-height: 1.4;
+  padding: 0.2rem 0.5rem;
+  box-sizing: border-box;
+}
+
+/* ── Shared HexChrome dialog skin ───────────────────────────────────────────
+   Apply via `new Dialog(data, { classes:["dialog","bbttcc-hexchrome-dialog"] })`
+   to pull a plain Foundry dialog into the bronze dark-glass design language —
+   body, fields, multi-selects, and buttons. (Also retro-themes existing users
+   of the class, e.g. the quest-notes dialog, which referenced it before any
+   skin existed.) */
+.bbttcc-hexchrome-dialog .window-content,
+.bbttcc-hexchrome-dialog .dialog-content {
+  background: rgba(22,19,12,0.96);
+  color: #e8e2d4;
+  font-family: 'Signika', sans-serif;
+}
+.bbttcc-hexchrome-dialog .window-content b,
+.bbttcc-hexchrome-dialog .dialog-content b { color: #f2d9a8; }
+
+.bbttcc-hexchrome-dialog select,
+.bbttcc-hexchrome-dialog input,
+.bbttcc-hexchrome-dialog textarea {
+  background: rgba(12,14,20,0.96);
+  color: #e8e2d4;
+  border: 1px solid rgba(217,164,65,0.40);
+  border-radius: 4px;
+}
+/* The multi-select list shows the OPTION backgrounds, not the select's — so the
+   options themselves must be darkened (this is what was washing out before). */
+.bbttcc-hexchrome-dialog option {
+  background-color: rgba(12,14,20,0.98) !important;
+  color: #e8e2d4 !important;
+  padding: 3px 6px;
+}
+.bbttcc-hexchrome-dialog option:checked {
+  color: #1a140a !important;
+  /* linear-gradient is the Chromium/Electron-reliable way to force an
+     <option>'s background while the <select> is focused. */
+  background: #d9a441 linear-gradient(#d9a441, #d9a441) !important;
+}
+
+.bbttcc-hexchrome-dialog button {
+  background: linear-gradient(135deg, rgba(30,25,16,0.96), rgba(16,13,8,0.96));
+  color: #e8e2d4;
+  border: 1px solid rgba(217,164,65,0.50);
+  border-radius: 6px;
+}
+.bbttcc-hexchrome-dialog button:hover {
+  border-color: #d9a441;
+  box-shadow: 0 0 8px rgba(217,164,65,0.35);
+  filter: brightness(1.08);
+}
+.bbttcc-hexchrome-dialog .dialog-buttons button.default,
+.bbttcc-hexchrome-dialog .dialog-buttons button[data-button="save"] {
+  border-color: #d9a441;
+  box-shadow: 0 0 8px rgba(217,164,65,0.3);
+}
+/* Champion roster list — give it a comfortable height. */
+.bbttcc-champ-roster { min-height: 16rem; }
+
 /* Force browser-level resizing fallback on the outer window as well as Foundry's handle */
 .window-app.bbttcc-raid-console,
 .application.bbttcc-raid-console,

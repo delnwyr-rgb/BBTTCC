@@ -23908,13 +23908,13 @@ function _ftMakeHudDraggable(el, opts = {}) {
   el.querySelectorAll(":scope > .ft-hud-ctrl").forEach(n => n.remove());
   const ctrl = document.createElement("div");
   ctrl.className = "ft-hud-ctrl";
-  ctrl.style.cssText = "position:absolute;top:1px;right:2px;display:flex;gap:2px;z-index:5;pointer-events:auto;";
+  ctrl.style.cssText = "position:absolute;top:3px;right:4px;display:flex;gap:4px;z-index:5;pointer-events:auto;";
   const mkBtn = (label, title, fn) => {
     const b = document.createElement("button");
     b.type = "button";
     b.textContent = label;
     b.title = title;
-    b.style.cssText = "padding:0 5px;font-size:0.72rem;line-height:1.2;height:15px;background:rgba(0,0,0,0.4);color:#ffd28a;border:1px solid #666;border-radius:3px;cursor:pointer;";
+    b.style.cssText = "display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:18px;height:18px;padding:0 5px;font-size:0.74rem;line-height:1;background:rgba(0,0,0,0.4);color:#ffd28a;border:1px solid #666;border-radius:3px;cursor:pointer;";
     b.addEventListener("click", (e) => { e.stopPropagation(); e.preventDefault(); fn(e); });
     b.addEventListener("pointerdown", (e) => e.stopPropagation()); // don't trigger drag
     return b;
@@ -23934,7 +23934,7 @@ function _ftMakeHudDraggable(el, opts = {}) {
         chip = document.createElement("span");
         chip.className = "ft-hud-chip";
         chip.textContent = collapsedLabel;
-        chip.style.cssText = "font-size:0.78rem;color:#ffd28a;cursor:pointer;padding:1px 24px 1px 8px;display:inline-block;";
+        chip.style.cssText = "font-size:0.78rem;color:#ffd28a;cursor:pointer;padding:1px 46px 1px 8px;display:inline-block;";
         chip.addEventListener("click", () => setCollapsed(false));
         el.insertBefore(chip, ctrl);
       }
@@ -23980,7 +23980,7 @@ function _ftMakeHudDraggable(el, opts = {}) {
   if (el.dataset.ftHudInit !== "1") {
     el.dataset.ftHudInit = "1";
     el.style.position = el.style.position || "fixed";
-    el.style.paddingRight = "32px"; // room for ctrl bar
+    el.style.paddingRight = "50px"; // clears the ctrl bar (collapse + reset) so right-aligned header text never slides under it
     if (saved.collapsed) setCollapsed(true);
 
     // 2026-05-19 — Drag uses a movement threshold so a true click on a
