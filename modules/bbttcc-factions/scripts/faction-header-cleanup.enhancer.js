@@ -137,25 +137,14 @@
    * - otherwise, inject a compact launcher panel at the top of Activities
    */
   function wireRaidPlanner(root, actor) {
-    if (!actor) return;
-
-    const legacyPanel = root.querySelector("#bbttcc-raidplan-strip");
-    if (legacyPanel) {
-      if (legacyPanel.dataset.bbttccRaidPlanner === "1") return;
-      legacyPanel.dataset.bbttccRaidPlanner = "1";
-      legacyPanel.replaceChildren();
-      const panel = buildRaidPlannerPanel(actor);
-      panel.style.marginBottom = "0";
-      legacyPanel.appendChild(panel);
-      return;
-    }
-
-    const activitiesTab = root.querySelector('.bbttcc-tab[data-tab="activities"]');
-    if (!activitiesTab) return;
-    if (activitiesTab.querySelector('[data-bbttcc-raid-planner-panel="1"]')) return;
-
-    const panel = buildRaidPlannerPanel(actor);
-    activitiesTab.prepend(panel);
+    // No-op. The faction sheet template now provides a clean "Open Raid" card in
+    // the Activities tab that opens the console with this faction pre-selected as
+    // attacker — and it smart-routes supporting factions to the coalition lead,
+    // which this older panel did not. The injected "Raid Planner" panel was a
+    // redundant (and inferior) duplicate, so it's no longer added.
+    // (buildRaidPlannerPanel / openRaidPlanner kept above for reference / legacy
+    // strip compatibility, but intentionally not invoked.)
+    return;
   }
 
   Hooks.on("renderBBTTCCFactionSheet", (app, html) => {

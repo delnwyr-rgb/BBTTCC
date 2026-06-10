@@ -83,7 +83,10 @@
           .bbttcc-stockpile-qty { font-weight: 700; opacity: .9; min-width: 2rem; text-align: right; }
           .bbttcc-stockpile-rowbtns { display: inline-flex; gap: .25rem; }
           .bbttcc-stockpile-rowbtns .bbttcc-mini { padding: .15rem .35rem; font-size: .75rem; }
-          .bbttcc-stockpile-empty { font-style: italic; opacity: .6; padding: .35rem .5rem; }
+          /* Empty-state is also an li, so it matches the grid rule above and
+             would cram the text into the 1.4rem image column. Force it back to a
+             plain full-width block (li.class specificity beats the bare li rule). */
+          .bbttcc-stockpile li.bbttcc-stockpile-empty { display: block; grid-template-columns: none; font-style: italic; opacity: .6; padding: .35rem .5rem; }
           .bbttcc-stockpile-actions { display: flex; gap: .35rem; flex-wrap: wrap; margin-top: .5rem; }
         </style>
         <ul>${rows}</ul>

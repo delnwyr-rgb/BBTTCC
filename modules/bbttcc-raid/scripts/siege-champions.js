@@ -190,14 +190,22 @@
     const faction = app?.actor;
     if (!faction) return;
     const count = (faction.getFlag(MOD_F, "championRoster") || []).length;
-    const target = root.querySelector(".sheet-header, header, .window-content") || root;
+    // Home it among the other faction-management launchers in the Activities
+    // tab, NOT the window header. The header target was unstable across tab/edit
+    // re-renders (it landed in the title bar on Overview and re-injected a
+    // duplicate bar inside the card on other tabs). The Activities tab is always
+    // present in the DOM, so this lands in one consistent place every render.
+    const target =
+      root.querySelector('.bbttcc-tab[data-tab="activities"] .bbttcc-card-actions .flexrow') ||
+      root.querySelector('.bbttcc-card-actions .flexrow') ||
+      root.querySelector('.bbttcc-tab[data-tab="activities"]');
+    if (!target) return;
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "ft-siege-champions-btn";
-    btn.style.cssText = "margin:.25rem .5rem;padding:3px 8px;font-size:0.8rem;cursor:pointer;";
+    btn.className = "button ft-siege-champions-btn";
     btn.innerHTML = `<i class="fas fa-khanda"></i> Champions${count ? ` (${count})` : ""}`;
     btn.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); openChampionRosterDialog(faction.id); });
-    target.insertBefore(btn, target.firstChild);
+    target.appendChild(btn);
   }
 
   Hooks.on("renderBBTTCCFactionSheet", (app, html) => {
