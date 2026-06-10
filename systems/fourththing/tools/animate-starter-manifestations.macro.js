@@ -1,6 +1,6 @@
 // animate-starter-manifestations.macro.js — RUN IN-WORLD (GM). Run in BOTH worlds.
 // NON-DESTRUCTIVE: only ADDS Automated Animations to manifestations that lack it, and only
-// SWAPS generic Foundry placeholder icons (icons/*) for BBTTCC button icons. Never alters
+// SWAPS generic Foundry placeholder icons (icons/*) for Bad Eden button icons. Never alters
 // items that already have AA or already use custom/button art. Keyed by item NAME.
 //
 // DRY_RUN=true first (just reports). Set DRY_RUN=false to apply. F5 afterwards.

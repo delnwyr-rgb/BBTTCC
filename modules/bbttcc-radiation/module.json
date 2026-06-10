@@ -1,11 +1,11 @@
 {
   "id": "bbttcc-radiation",
-  "title": "BBTTCC Radiation",
+  "title": "Bad Eden: Radiation",
   "description": "Radiation tracking and environmental hazard system.",
   "version": "13.1.16",
   "authors": [
     {
-      "name": "BBTTCC Team"
+      "name": "Shattered Lens Studios"
     }
   ],
   "compatibility": {

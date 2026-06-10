@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-character-options",
-  "title": "BBTTCC Character Options",
-  "description": "Archetypes, crew types, occult associations, and enlightenment hooks for BBTTCC characters (Tier Engine + refined unlock mapping).",
+  "title": "Bad Eden: Character Options",
+  "description": "Archetypes, crew types, occult associations, and enlightenment hooks for Bad Eden characters (Tier Engine + refined unlocks).",
   "version": "1.1.1",
   "compatibility": {
     "minimum": "11",

@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-fx-integration",
-  "title": "BBTTCC FX Integration",
-  "description": "Native cinematic FX system for BBTTCC raids and turn events.",
+  "title": "Combat FX Integration",
+  "description": "Native cinematic FX system for raids and turn events.",
   "version": "0.1.0",
   "authors": [
     {

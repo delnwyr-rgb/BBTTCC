@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-campaign",
-  "title": "BBTTCC Campaign Builder",
-  "description": "Campaign authoring engine for BBTTCC: multi-beat adventures, branching flows, scene/actor integration, and beat-level triggers for Encounters, Raid, Resolution, and Territory systems.",
+  "title": "Campaign Beat Builder",
+  "description": "Campaign authoring engine: multi-beat adventures, branching flows, scene/actor integration, and beat-level tracking.",
   "version": "1.0.0",
   "compatibility": {
     "minimum": "13",

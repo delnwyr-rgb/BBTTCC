@@ -1,8 +1,8 @@
-// Fourth Thing — bbttcc-bridge.js  v0.1.0
-// Sprint C: BBTTCC Bridge
+// Roll For Initiation — bbttcc-bridge.js  v0.1.0
+// Sprint C: Bad Eden Bridge
 //
 // All functions are defensive — every call is guarded by bbttccActive().
-// Fourth Thing works fully standalone when bbttcc-auto-link is not loaded.
+// Roll For Initiation works fully standalone when bbttcc-auto-link is not loaded.
 
 // ─── Guard ───────────────────────────────────────────────────────────────────
 
@@ -249,7 +249,7 @@ async function ftIndexEchoAssetPack(key, kind = "crew") {
       }))
       .sort((a, b) => String(a.name).localeCompare(String(b.name)));
   } catch (err) {
-    console.warn(`Fourth Thing | ftIndexEchoAssetPack(${key}) failed:`, err);
+    console.warn(`Roll For Initiation | ftIndexEchoAssetPack(${key}) failed:`, err);
     return [];
   }
 }
@@ -277,7 +277,7 @@ async function ftIndexItemPackByType(packKey, allowedTypes) {
       }))
       .sort((a, b) => String(a.name).localeCompare(String(b.name)));
   } catch (err) {
-    console.warn(`Fourth Thing | ftIndexItemPackByType(${packKey}, ${allowedTypes}) failed:`, err);
+    console.warn(`Roll For Initiation | ftIndexItemPackByType(${packKey}, ${allowedTypes}) failed:`, err);
     return [];
   }
 }
@@ -337,7 +337,7 @@ async function ftIndexHeritagePack(packKey) {
       })
       .sort((a, b) => String(a.name).localeCompare(String(b.name)));
   } catch (err) {
-    console.warn(`Fourth Thing | ftIndexHeritagePack(${packKey}) failed:`, err);
+    console.warn(`Roll For Initiation | ftIndexHeritagePack(${packKey}) failed:`, err);
     return [];
   }
 }
@@ -351,7 +351,7 @@ function ftIdFromUuid(uuid) {
 
 /**
  * Swap (or clear) the embedded item of a given type on an actor, and update
- * the BBTTCC nativeLinks flag so the header pills reflect the new choice.
+ * the Bad Eden nativeLinks flag so the header pills reflect the new choice.
  *
  * @param {Actor} actor
  * @param {object} cfg  { types, packKey, flagName, flagUuid, flagApplied }
@@ -893,7 +893,7 @@ async function ftSyncLegacyIdentityMirror(actor, slotKey, slotData) {
 // has never had its echoAssets seeded), scan the steward's items for crew/
 // occult feats and persist any newly detected names into the faction flag.
 // Idempotent — only writes when there's a delta. Called during the async
-// context build (getBBTTCCContext) so the steward tab + Manage Echo Assets
+// context build (getBad EdenContext) so the steward tab + Manage Echo Assets
 // dialog both see auto-populated values on first render.
 export async function ftEnsureEchoAssetsBootstrap(faction, actor) {
   if (!faction || !actor || !bbttccActive()) return;
@@ -941,7 +941,7 @@ export async function ftEnsureEchoAssetsBootstrap(faction, actor) {
       "flags.fourththing.echoAssets": payload
     });
   } catch (e) {
-    console.warn("Fourth Thing | ftEnsureEchoAssetsBootstrap failed:", e);
+    console.warn("Roll For Initiation | ftEnsureEchoAssetsBootstrap failed:", e);
   }
 }
 
@@ -951,7 +951,7 @@ export function getLinkedFaction(actor) {
   try {
     return ftResolveFactionLink(actor).actor ?? null;
   } catch (e) {
-    console.warn("Fourth Thing | getLinkedFaction failed:", e);
+    console.warn("Roll For Initiation | getLinkedFaction failed:", e);
     return null;
   }
 }
@@ -1099,7 +1099,7 @@ export function getFactionEchoAssets(faction, actor = null) {
         : `Crew ${crewStatusLabel} • Occult ${occultStatusLabel}`
     };
   } catch (e) {
-    console.warn("Fourth Thing | getFactionEchoAssets failed:", e);
+    console.warn("Roll For Initiation | getFactionEchoAssets failed:", e);
     return blank;
   }
 }
@@ -1193,7 +1193,7 @@ export function getStewardEchoRosterCount(actor, entryName = "") {
 }
 
 // ─── Terrain → Sephirah resonance map ────────────────────────────────────────
-// Maps BBTTCC terrain keys to sephirothic resonance.
+// Maps Bad Eden terrain keys to sephirothic resonance.
 // If the actor's active sephirah matches the terrain resonance, magic rolls gain +1.
 // Qliphothic terrain adds +1 Noise instead.
 
@@ -1241,11 +1241,11 @@ export function getTerrainMagicModifiers(actor) {
     if (!token) return result;
 
     // Read terrain from the hex the token occupies.
-    // BBTTCC stores terrain on scene flags keyed by hex ID.
+    // Bad Eden stores terrain on scene flags keyed by hex ID.
     const scene   = token.scene ?? game.scenes.active;
     const hexData = scene?.getFlag("bbttcc-territory", "hexes") ?? {};
 
-    // Find which hex contains this token (BBTTCC stores hex center coords)
+    // Find which hex contains this token (Bad Eden stores hex center coords)
     const tx = token.x + (token.width  * scene?.grid?.size ?? 100) / 2;
     const ty = token.y + (token.height * scene?.grid?.size ?? 100) / 2;
 
@@ -1274,7 +1274,7 @@ export function getTerrainMagicModifiers(actor) {
       if (actorSeph === sephirahResonance) result.alignBonus = 1;
     }
   } catch (e) {
-    console.warn("Fourth Thing | getTerrainMagicModifiers failed:", e);
+    console.warn("Roll For Initiation | getTerrainMagicModifiers failed:", e);
   }
 
   return result;
@@ -1284,7 +1284,7 @@ export function getTerrainMagicModifiers(actor) {
 
 /**
  * Returns the actor's Tikkun data from bbttcc-tikkun flags.
- * Falls back to the actor's own system.tikkun if BBTTCC is not active.
+ * Falls back to the actor's own system.tikkun if Bad Eden is not active.
  */
 export function getTikkunData(actor) {
   const rawSys = actor.system?.system ?? actor.system;
@@ -1302,7 +1302,7 @@ export function getTikkunData(actor) {
       sephirothicProgress: flags.sephirothicProgress ?? {}
     };
   } catch (e) {
-    console.warn("Fourth Thing | getTikkunData failed:", e);
+    console.warn("Roll For Initiation | getTikkunData failed:", e);
     return base;
   }
 }
@@ -1311,7 +1311,7 @@ export function getTikkunData(actor) {
 
 /**
  * Returns live faction data for the actor's linked faction.
- * Returns null if BBTTCC inactive or no faction linked.
+ * Returns null if Bad Eden inactive or no faction linked.
  */
 
 export function getFactionData(actor) {
@@ -1360,7 +1360,7 @@ export function getFactionData(actor) {
       echoAssets: getFactionEchoAssets(faction, actor)
     };
   } catch (e) {
-    console.warn("Fourth Thing | getFactionData failed:", e);
+    console.warn("Roll For Initiation | getFactionData failed:", e);
     return null;
   }
 }
@@ -1465,7 +1465,7 @@ async function ftBuildEditContext(actor) {
 // ─── Full bridge context ──────────────────────────────────────────────────────
 
 /**
- * Returns structured identity data from BBTTCC flags.
+ * Returns structured identity data from Bad Eden flags.
  * All fields have safe string defaults.
  */
 export async function getIdentityData(actor) {
@@ -1486,7 +1486,7 @@ export async function getIdentityData(actor) {
       } catch(e) { /* UUID not resolvable */ }
     }
 
-    // Prefer the BBTTCC Wizard's recorded class name; fall back to the actor's embedded class item.
+    // Prefer the Bad Eden Wizard's recorded class name; fall back to the actor's embedded class item.
     let cls = coTop.nativeLinks?.className ?? "";
     if (!cls) {
       const classItem = (actor.items?.contents ?? Array.from(actor.items ?? []))
@@ -1540,7 +1540,7 @@ export async function getIdentityData(actor) {
              sephirotic, enlightenment, hasIdentity, needsStatSync,
              classApplied, classUuid };
   } catch(e) {
-    console.warn("Fourth Thing | getIdentityData failed:", e);
+    console.warn("Roll For Initiation | getIdentityData failed:", e);
     return empty;
   }
 }
@@ -1555,7 +1555,7 @@ export async function getBBTTCCContext(actor) {
     const linked = getLinkedFaction(actor);
     if (linked) await ftEnsureEchoAssetsBootstrap(linked, actor);
   } catch (e) {
-    console.warn("Fourth Thing | echo-asset bootstrap pre-context failed:", e);
+    console.warn("Roll For Initiation | echo-asset bootstrap pre-context failed:", e);
   }
   return {
     active:   bbttccActive(),
@@ -1568,16 +1568,16 @@ export async function getBBTTCCContext(actor) {
 }
 
 
-// ─── BBTTCC API delegates ─────────────────────────────────────────────────────
-// Called from sheet action handlers — each is a no-op if BBTTCC is inactive.
+// ─── Bad Eden API delegates ─────────────────────────────────────────────────────
+// Called from sheet action handlers — each is a no-op if Bad Eden is inactive.
 
 export function openBridge(actor) {
-  if (!bbttccActive()) return ui.notifications?.warn("BBTTCC support module not active.");
+  if (!bbttccActive()) return ui.notifications?.warn("Bad Eden support module not active.");
   game.bbttcc?.api?.bridge?.open?.(actor.id);
 }
 
 export function openRadiation(actor) {
-  if (!bbttccActive()) return ui.notifications?.warn("BBTTCC support module not active.");
+  if (!bbttccActive()) return ui.notifications?.warn("Bad Eden support module not active.");
   // Radiation API is data-only — show a simple dialog with current RP and level
   const rawSys  = actor.system?.system ?? actor.system;
   const rp      = rawSys?.radiation?.rp ?? 0;
@@ -1612,13 +1612,13 @@ export function openRadiation(actor) {
 }
 
 export function openTikkunPopup(actor) {
-  if (!bbttccActive()) return ui.notifications?.warn("BBTTCC support module not active.");
+  if (!bbttccActive()) return ui.notifications?.warn("Bad Eden support module not active.");
   const resolved = ftResolveFactionLink(actor);
   game.bbttcc.api.tikkun.openRitualConsole({ factionId: resolved.id || null });
 }
 
 export function openIdentityChooser(actor, app, type) {
-  if (!bbttccActive()) return ui.notifications?.warn("BBTTCC support module not active.");
+  if (!bbttccActive()) return ui.notifications?.warn("Bad Eden support module not active.");
   // openCharacterWizard is the V14 AppV2-compatible identity UI
   const autoLink = game.bbttcc.api.autoLink;
   if (autoLink?.openCharacterWizard) {
@@ -1631,7 +1631,7 @@ export function openIdentityChooser(actor, app, type) {
     sorting.openWizard(actor);
     return;
   }
-  ui.notifications?.warn(`BBTTCC identity chooser not available for type: ${type}`);
+  ui.notifications?.warn(`Bad Eden identity chooser not available for type: ${type}`);
 }
 
 export function openFactionSheet(actor) {

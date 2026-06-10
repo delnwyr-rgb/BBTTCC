@@ -893,8 +893,8 @@ export async function resetSomaBreakTriggerLimits(actor) {
   await actor.setFlag("fourththing", _TRIGGER_USAGE_FLAG, cleaned);
 }
 
-// ─── BBTTCC Technique picker ─────────────────────────────────────────────────
-// Pool: 59 feats in the "BBTTCC Feats" folder of bbttcc-master-content.items.
+// ─── Bad Eden Technique picker ─────────────────────────────────────────────────
+// Pool: 59 feats in the "Bad Eden Feats" folder of bbttcc-master-content.items.
 const BBTTCC_FEATS_PACK   = "bbttcc-master-content.items";
 const BBTTCC_FEATS_FOLDER = "QbGNBV70xh9pF0eh";
 
@@ -1094,7 +1094,7 @@ export async function levelUp(actor) {
 
   const gainSkillPts = SKILL_POINT_LEVELS.has(newLevel) ? 2 : 0;
 
-  // BBTTCC Technique: granted at aptitude-point levels (3/6/9/12/15/18/20)
+  // Bad Eden Technique: granted at aptitude-point levels (3/6/9/12/15/18/20)
   let techOpts = null;
   if (gainSkillPts) {
     const { options, error } = await getBBTTCCTechniqueOptions(actor);
@@ -1132,7 +1132,7 @@ export async function levelUp(actor) {
   }).join("") : "";
   const techField = techOpts ? `
         <div class="ft-cast-field" style="margin-top:0.5rem">
-          <label>✦ Pick a <b>BBTTCC Technique</b> (in addition to the stat bump):</label>
+          <label>✦ Pick a <b>Bad Eden Technique</b> (in addition to the stat bump):</label>
           <div style="max-height:250px;overflow-y:auto;border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:0.25rem 0.35rem;background:rgba(0,0,0,0.15)">
             <label style="display:flex;gap:0.45rem;align-items:center;padding:0.25rem 0.4rem;cursor:pointer"><input type="radio" name="techniqueChoice" value="" checked/> <i>— skip —</i></label>
             ${techRows}
@@ -1208,7 +1208,7 @@ export async function levelUp(actor) {
               await actor.update({ "system.derived.integrity.value": topped });
             }
 
-            // Grant chosen BBTTCC Technique (aptitude-point levels only)
+            // Grant chosen Bad Eden Technique (aptitude-point levels only)
             let grantedTechName = null;
             // Radio list (2026-06-06): read the CHECKED radio — bare .val()
             // on a radio group returns the first input, not the selection.

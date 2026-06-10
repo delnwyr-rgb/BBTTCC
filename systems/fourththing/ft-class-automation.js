@@ -1,4 +1,4 @@
-// Fourth Thing — ft-class-automation.js  v0.1.0
+// Roll For Initiation — ft-class-automation.js  v0.1.0
 // Sprint D: Class Automation — resource pools, dialogs, feature click router
 //
 // Covers all 9 classes:
@@ -125,7 +125,7 @@ export async function ftAddBurn(actor, delta) {
 }
 
 // ─── Feature identifier → handler map ────────────────────────────────────────
-// Maps BBTTCC feature identifier strings to automation handler keys.
+// Maps Bad Eden feature identifier strings to automation handler keys.
 // Checked against item.system.identifier (lowercase, underscored).
 
 export const FEATURE_ROUTER = {
@@ -4482,7 +4482,7 @@ export async function openCircuitbornAttentionResonance(actor) {
 export async function openCircuitbornGlitchSurge(actor) {
   return _openInfoOnlyAbility(actor,
     "Glitch-Surge (Circuitborn)",
-    "Passive trigger — when you drop to 0 HP, you may emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In BBTTCC play, this is a perfect excuse for weird narrative consequences. (GM-adjudicated; no daily cap.)");
+    "Passive trigger — when you drop to 0 HP, you may emit a controlled burst of static (no damage, but loud and disorienting) before you fall. In Bad Eden play, this is a perfect excuse for weird narrative consequences. (GM-adjudicated; no daily cap.)");
 }
 
 export async function openHumanAbilities(actor) {
@@ -5253,7 +5253,7 @@ export const CHAR_OPT_ABILITIES = {
   "oldenborn-skythreaded-weather_crown": {
     type: "soma-break", level: 17, travel: true, mitigates: ["weather"],
     label: "Weather Crown (1/Soma Break)",
-    body: "Over 1 minute, call a localized weather effect in a 60-ft radius for 10 minutes (fog, wind, rain, or clear). The effect is real and interacts with fire, ranged attacks, and travel checks. BBTTCC: 1/Turn your faction may re-roll a Weather event affecting your hex."
+    body: "Over 1 minute, call a localized weather effect in a 60-ft radius for 10 minutes (fog, wind, rain, or clear). The effect is real and interacts with fire, ranged attacks, and travel checks. Bad Eden: 1/Turn your faction may re-roll a Weather event affecting your hex."
   },
   "oldenborn-stormborn-ward-of-the-gale": {
     type: "soma-break", level: 5,
@@ -5282,7 +5282,7 @@ export const CHAR_OPT_ABILITIES = {
   "furrykin-felid-king_of_alleys": {
     type: "soma-break", level: 17,
     label: "King of Alleys (1/Soma Break)",
-    body: "For 10 minutes, gain a climbing speed equal to your walking speed and ignore difficult terrain in urban ruins. BBTTCC: 1/Turn, reduce an Intrigue travel cost by 1 if your route passes through ruins."
+    body: "For 10 minutes, gain a climbing speed equal to your walking speed and ignore difficult terrain in urban ruins. Bad Eden: 1/Turn, reduce an Intrigue travel cost by 1 if your route passes through ruins."
   },
   "furrykin-felid-nine_lives": {
     type: "soma-break", level: 5,

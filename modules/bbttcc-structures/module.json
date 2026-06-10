@@ -1,6 +1,6 @@
 {
   "id": "bbttcc-structures",
-  "title": "BBTTCC Structures",
+  "title": "Bad Eden: Structures",
   "description": "Material-BOM-driven Structure damage track for Rigs, Facilities, and standalone fortifications. Phase A: schema + derivation + sheet panel (no damage path yet).",
   "version": "0.1.0",
   "compatibility": {

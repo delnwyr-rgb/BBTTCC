@@ -1,6 +1,6 @@
 {
   "id": "bbttcc-sorting-engine",
-  "title": "BBTTCC Sorting Engine",
+  "title": "Sorting Engine",
   "version": "1.0.0",
   "esmodules": [
     "scripts/bbttcc-sorting-engine-v2.js",

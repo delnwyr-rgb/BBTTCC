@@ -1,5 +1,5 @@
-// Fourth Thing System — module.js  v0.3.0
-// Sprint A: Magic Engine | Sprint B: Combat Engine | Sprint C: BBTTCC Bridge
+// Roll For Initiation System — module.js  v0.3.0
+// Sprint A: Magic Engine | Sprint B: Combat Engine | Sprint C: Bad Eden Bridge
 
 import {
   getBBTTCCContext,
@@ -3196,7 +3196,7 @@ function buildManifestationGlossaryHTML() {
       <summary class="ft-prev-label" style="cursor:pointer">Glossary — what do these knobs mean?</summary>
       <div class="ft-manifest-glossary-body" style="font-size:0.78rem;line-height:1.35;opacity:0.9;padding:0.35rem 0.1rem 0.1rem">
         ${items}
-        <div style="opacity:0.6;font-size:0.72rem;margin-top:0.4rem">Full reference: <i>Manifestation Glossary</i> journal in BBTTCC Documentation compendium.</div>
+        <div style="opacity:0.6;font-size:0.72rem;margin-top:0.4rem">Full reference: <i>Manifestation Glossary</i> journal in Bad Eden: Documentation compendium.</div>
       </div>
     </details>
   </div>`;
@@ -8892,7 +8892,7 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
     <p class="ft-wiz-v2-coach">The texture that makes this <em>your</em> manifestation. Then a quick look-over and you're done.</p>
     <div class="ft-cast-grid">
       <div class="ft-cast-field ft-cast-span-2">
-        <label data-tooltip="The icon that shows on the item, on the player HUD, and in chat cards. Pick from the curated BBTTCC icon library or any image you can browse to.">Icon</label>
+        <label data-tooltip="The icon that shows on the item, on the player HUD, and in chat cards. Pick from the curated Bad Eden icon library or any image you can browse to.">Icon</label>
         <div style="display:flex;gap:0.5rem;align-items:center;padding:0.3rem;border:1px solid rgba(232,200,74,0.18);border-radius:4px;background:rgba(20,12,40,0.4)">
           <img src="${ftEscapeHtml(iconImg)}" style="width:48px;height:48px;border:1px solid rgba(232,200,74,0.3);border-radius:4px;background:#0a0814;object-fit:cover" alt="manifestation icon"/>
           <button type="button" data-wiz-action="pick-image" style="padding:0.3rem 0.6rem;font-size:0.78rem">Choose from icon library…</button>
@@ -9345,7 +9345,7 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
         if (action === "back") {
           if (state._currentStep > 0) state._currentStep--;
         } else if (action === "pick-image") {
-          // FilePicker scoped to the curated BBTTCC icon library. Trusted
+          // FilePicker scoped to the curated Bad Eden icon library. Trusted
           // Player perm gates browse access — players without it will see
           // an empty picker. Picked path stamps onto state.img and triggers
           // a re-render so the preview updates immediately.
@@ -10222,7 +10222,7 @@ function buildMagicChatHTML({ label, intent, channel, sephirah, attrIntent, attr
 
 // Manifestation knob tooltips — single source of truth so labels in the cast
 // dialog, sheet, and chat cards share the same one-liners. Full reference
-// lives in the BBTTCC Documentation > Manifestation Glossary journal.
+// lives in the Bad Eden Documentation > Manifestation Glossary journal.
 const FT_KNOB_TIPS = {
   clarity:     "Clarity — focus pool. Spent on cast (T1=1 / T2=2 / T3=3 / T4=5) and per-tick upkeep on sustained manifestations. Max scales with Steward tier (5/7/10/14). Recovers fully on Soma Break, half-fills on Scene Break. TCCs +5 to max; Dreamwalker stacks up to +3 more.",
   reach:       "Reach — casting one tier above your own. Surge: misfire on the higher column. Blood Debt: +1 Blood Debt, no misfire. Two tiers above is rejected. Cosmic Linguist Discipline reduces Blood-Debt-reach cost.",
@@ -12056,7 +12056,7 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
 Hooks.once("init", function () {
   console.log("Roll for Initiation | Initializing v0.4.0 — Foundation Refactor");
 
-  // BBTTCC Display font — registered so it appears in Foundry's font dropdowns
+  // Bad Eden Display font — registered so it appears in Foundry's font dropdowns
   // (Drawings, Scene text, journal rich-text editor). CSS usage is also wired
   // via @font-face in styles/fourththing.css for system UI.
   try {
@@ -12253,7 +12253,7 @@ Hooks.once("init", function () {
     if (resetLegendaryOnSceneChange) resetLegendaryOnSceneChange();
   });
 
-  // Register abilities config so BBTTCC Character Wizard reads our attributes
+  // Register abilities config so Bad Eden Character Wizard reads our attributes
   // instead of falling back to D&D5E defaults.
   const rfiConfig = {
     abilities: {
@@ -12269,7 +12269,7 @@ Hooks.once("init", function () {
   CONFIG["fourththing"] = rfiConfig;
   CONFIG["roll-for-initiation"] = rfiConfig;
   game.rollForInitiation = game.fourththing;
-  // Point game.system.config at our config so BBTTCC can read it
+  // Point game.system.config at our config so Bad Eden can read it
   if (!game.system.config) {
     Object.defineProperty(game.system, "config", {
       get: () => CONFIG["fourththing"] ?? CONFIG.fourththing,
@@ -12393,8 +12393,8 @@ Hooks.once("init", function () {
   });
 
   // ── Sprint D: TierEngine recalc stub ─────────────────────────────────────
-  // BBTTCC's character-options module calls game.system.recalcActor(actor).
-  // We provide a Fourth Thing-native implementation that reads FT attributes
+  // Bad Eden's character-options module calls game.system.recalcActor(actor).
+  // We provide a Roll For Initiation-native implementation that reads FT attributes
   // and returns the OP budget structure the TierEngine expects.
   game.system.recalcActor = function(actor) {
     try {
@@ -12406,7 +12406,7 @@ Hooks.once("init", function () {
       const b = attrs.body?.value     ?? 2;
       const m = attrs.mind?.value     ?? 2;
       const s = attrs.soul?.value     ?? 2;
-      // Map FT attributes to BBTTCC OP categories
+      // Map FT attributes to Bad Eden OP categories
       return {
         violence:   v,
         nonlethal:  Math.floor(v / 2),
@@ -13904,7 +13904,7 @@ Hooks.once("init", function () {
       if (track === "integrity" && ff.aurablade?.preventDropOnce) preventDropArmed = true;
       // Soul-Smith Relic of Rebirth — forged ward: same floor-at-1 behavior.
       if (track === "integrity" && ff.soulSmith?.relicWard) preventDropArmed = true;
-      // Grim Persistence (BBTTCC technique, audit 2026-06-07): once per
+      // Grim Persistence (Bad Eden technique, audit 2026-06-07): once per
       // Sanctuary, hold at 1 instead of dropping to 0. Flag clears on Soma
       // Break (the system's deepest reset cadence).
       if (track === "integrity" && !ff.grimPersistenceUsed
@@ -14253,7 +14253,7 @@ Hooks.once("init", function () {
   // Aurablade flavor Surge gen — called by ft-class-automation when Burn is gained.
   game.fourththing.aurabladeFlavorSurge = _ftAurabladeFlavorSurge;
 
-  // createManifestationItemData — exposed 2026-05-17 so the BBTTCC Boss
+  // createManifestationItemData — exposed 2026-05-17 so the Bad Eden Boss
   // Builder (bbttcc-auto-link/scripts/boss-builder.js) can synthesize
   // template-appropriate manifestations as embedded items at boss-create
   // time without having to replicate the schema. Same shape the wizard
@@ -15382,7 +15382,7 @@ Hooks.once("init", function () {
       const intBracket = ftIntegrityBracketFor(this);
       const intPerLevel = intBracket.base + Math.floor(b / 2);
       sys.derived.integrity.max    = 10 + 3 * b + (charLevel - 1) * intPerLevel;
-      // Grim Persistence (BBTTCC technique): +2×level Integrity max. Wired
+      // Grim Persistence (Bad Eden technique): +2×level Integrity max. Wired
       // id-keyed in the derive (audit 2026-06-07: the imported item's AE is an
       // empty marker — changes:[] — so the bonus never landed; L20 Bulwark sat
       // at 211 when his sheet promised 251).
@@ -16486,7 +16486,7 @@ Hooks.once("init", function () {
         ftForge:          FourthThingCharacterSheet._onFtForge,
         ftGather:         FourthThingCharacterSheet._onFtGather,
         ftWeaponCreate:   FourthThingCharacterSheet._onFtWeaponCreate,
-        // Sprint C: BBTTCC bridge actions
+        // Sprint C: Bad Eden bridge actions
         ftBBTTCCBridge:   FourthThingCharacterSheet._onFtBBTTCCBridge,
         ftBBTTCCRadiation:FourthThingCharacterSheet._onFtBBTTCCRadiation,
         ftBBTTCCTikkun:   FourthThingCharacterSheet._onFtBBTTCCTikkun,
@@ -16608,7 +16608,7 @@ Hooks.once("init", function () {
       }));
       const activeConditions = conditionList.filter(c => c.active);
 
-      // Sprint C: BBTTCC bridge context
+      // Sprint C: Bad Eden bridge context
       const bbttcc = await getBBTTCCContext(actor);
 
       // Sprint D: class resource pools
@@ -18116,7 +18116,7 @@ Hooks.once("init", function () {
       return openManifestationWizardV2(this.actor, { kind: "weapon", starter: "form" });
     }
 
-    // ── Sprint C: BBTTCC bridge action handlers ──────────────────────────────
+    // ── Sprint C: Bad Eden bridge action handlers ──────────────────────────────
 
     static async _onFtBBTTCCBridge(event, target) {
       openBridge(this.actor);
@@ -18152,7 +18152,7 @@ Hooks.once("init", function () {
       openIdentityChooser(this.actor, this, identityType);
     }
 
-    // Stub for BBTTCC advancement system compatibility
+    // Stub for Bad Eden advancement system compatibility
     async _onDropSingleItem(itemData) {
       return this.actor.createEmbeddedDocuments("Item", [itemData]);
     }
@@ -18820,7 +18820,7 @@ Hooks.once("init", function () {
         // NPC Parity Sprint C (2026-05-14) — MED/LOW cleanup actions.
         // Both already exist as type-agnostic statics; just wire here.
         // ftAddEffect → opens the V14 ActiveEffectConfig in author mode.
-        // ftBBTTCCTikkun → opens the Tikkun bridge panel for this actor.
+        // ftBad EdenTikkun → opens the Tikkun bridge panel for this actor.
         ftAddEffect:           FourthThingCharacterSheet._onFtAddEffect,
         ftBBTTCCTikkun:        FourthThingCharacterSheet._onFtBBTTCCTikkun,
         // Legacy NPC-only roll handlers retained for back-compat with any
@@ -19116,7 +19116,7 @@ Hooks.once("init", function () {
       }));
       const magicCtx = { ...magic, clarityPips, noisePercent: (magic.noise.value ?? 0) * 10 };
 
-      // BBTTCC bridge context — feeds identity pills + faction OP snapshot.
+      // Bad Eden bridge context — feeds identity pills + faction OP snapshot.
       // Wrapped so a missing/inactive bridge doesn't break the NPC sheet.
       let bbttcc = { active: false, identity: {}, faction: null };
       try {
@@ -22236,7 +22236,7 @@ Hooks.once("ready", async () => {
   }
 });
 
-// Remap genuinely-foreign D&D5E item types into Fourth Thing types.
+// Remap genuinely-foreign D&D5E item types into Roll For Initiation types.
 // ⚠ HISTORY (Gauntlet find, 2026-06-07): this map used to also remap
 // feat/class/subclass/heritage/ancestry/doctrine → "feature", and the v14
 // ForcedReplacement guard made the updateSource THROW on every such creation
@@ -22582,7 +22582,7 @@ Hooks.on("renderDialog", (dialog, html, _data) => {
 });
 
 // ── Hex Sheet → Resource Node button ──────────────────────────────────────
-// The bbttcc-territory hex sheet (BBTTCC_HexSheet) doesn't expose canvas
+// The bbttcc-territory hex sheet (Bad Eden_HexSheet) doesn't expose canvas
 // selection, but its underlying hex doc can carry our harvest flag like any
 // other document. Inject a "🜨 Resource Node" button into the window header
 // that opens the mark/edit dialog operating on the hex doc.
@@ -25334,7 +25334,7 @@ function _ftBuildRaidHudHtml(consoleApp) {
 
 // 2026-05-13 — Compute HUD position relative to the canvas BOARD center
 // (not the full viewport) so the right-side GM sidebar doesn't obscure it.
-// Vertical anchor sits below the BBTTCC top toolbar (#bbttcc-toolbar)
+// Vertical anchor sits below the Bad Eden top toolbar (#bbttcc-toolbar)
 // when present so the HUD doesn't hide behind it. Falls back to a
 // reasonable default offset otherwise.
 function _ftPositionRaidHud() {
@@ -25345,7 +25345,7 @@ function _ftPositionRaidHud() {
     const rect = board.getBoundingClientRect();
     if (rect && rect.width > 0) centerX = rect.left + rect.width / 2;
   }
-  // Find the bottom edge of any BBTTCC top-bar so we sit below it.
+  // Find the bottom edge of any Bad Eden top-bar so we sit below it.
   let topY = 60; // sensible default if no toolbar exists
   const toolbar = document.getElementById("bbttcc-toolbar")
                 ?? document.querySelector("[data-bbttcc-toolbar]")
@@ -25963,7 +25963,7 @@ Hooks.once("ready", () => {
 });
 
 // Hex sheet panel injection — adds a "Battle Scenes" UI to the
-// BBTTCC_HexSheet. Reads `app._hexDoc` for the underlying drawing.
+// Bad Eden_HexSheet. Reads `app._hexDoc` for the underlying drawing.
 Hooks.on("renderApplicationV2", (app, html) => {
   try {
     const className = app?.constructor?.name ?? "";

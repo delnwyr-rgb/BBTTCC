@@ -1,11 +1,11 @@
 {
   "id": "bbttcc-raid",
-  "title": "BBTTCC Raid",
-  "description": "Raid management system for the BBTTCC Suite.",
+  "title": "Raid & Siege Engine",
+  "description": "Raid and siege management engine: maneuvers, doctrines, boss behaviors, and agent API.",
   "version": "1.3.14.4",
   "authors": [
     {
-      "name": "BBTTCC Team"
+      "name": "Shattered Lens Studios"
     }
   ],
   "compatibility": {

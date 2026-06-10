@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-factions",
-  "title": "BBTTCC Factions",
-  "description": "Factions, OP economy, meters, and war logs for BBTTCC.",
+  "title": "Faction & OP Engine",
+  "description": "Factions, OP economy, meters, and war logs.",
   "version": "1.3.17",
   "compatibility": {
     "minimum": "13",

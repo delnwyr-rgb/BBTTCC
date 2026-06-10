@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-facility-console",
-  "title": "BBTTCC Facility Console",
-  "description": "Hex-attached facility builder for BBTTCC. Provides a HexChrome UI to configure bunkers, towers, castles, and custom facilities directly on territory hexes.",
+  "title": "Facility Console",
+  "description": "Hex-attached facility builder. Provides a HexChrome UI to configure bunkers, towers, castles, and custom facilities.",
   "version": "1.0.0",
   "authors": [
     {

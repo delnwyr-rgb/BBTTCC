@@ -41,7 +41,7 @@ export const ATTR_MAP = {
   "cha": "presence",
 };
 
-// D&D → Fourth Thing attribute key for system writes
+// D&D → Roll For Initiation attribute key for system writes
 export const STAT_TO_FT = {
   str: "violence", dex: "intrigue", con: "body",
   int: "mind",     wis: "soul",     cha: "presence"

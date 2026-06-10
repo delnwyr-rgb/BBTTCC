@@ -1,4 +1,4 @@
-// BBTTCC — Manifestation Discipline aggregator (caster-pilot 2026-04-27)
+// Bad Eden — Manifestation Discipline aggregator (caster-pilot 2026-04-27)
 // ─────────────────────────────────────────────────────────────────────────────
 // Reads per-actor "discipline" knobs off feature items + per-actor Mode flag,
 // returns a single bundle the cast/upkeep/misfire pipeline consults. Designed

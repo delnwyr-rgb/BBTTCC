@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-travel",
-  "title": "BBTTCC Travel Engine",
-  "description": "Unified Travel Planner, Travel Arc Engine, radiation-aware movement, hazard prediction, random encounters, away-team battles, and overworld navigation for BBTTCC.",
+  "title": "Travel & Overworld Engine",
+  "description": "Unified Travel Planner, Travel Arc Engine, radiation-aware movement, hazard prediction, random encounters, away-team battles.",
   "version": "1.4.0",
   "socket": true,
   "compatibility": {
@@ -20,7 +20,6 @@
     "scripts/travel.weather.engine.js",
     "scripts/travel.arc.engine.js"
   ],
-
   "scripts": [
     "scripts/bbttcc-travel-console.js",
     "scripts/bbttcc-travel-visuals.js",

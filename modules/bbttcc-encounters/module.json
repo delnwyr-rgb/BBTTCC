@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-encounters",
-  "title": "BBTTCC Encounter Engine",
-  "description": "Scene Trigger & Encounter Engine for BBTTCC: travel, hex-entry, raid outcomes, and GM test-fire.",
+  "title": "Encounter Engine",
+  "description": "Scene Trigger & Encounter Engine: travel, hex-entry, raid outcomes, and GM test-fire.",
   "version": "1.0.0",
   "compatibility": {
     "minimum": "13",
@@ -16,19 +16,25 @@
   ],
   "url": "",
   "license": "MIT",
-
   "esmodules": [
     "scripts/module.js"
   ],
-
   "relationships": {
     "requires": [
-      { "id": "bbttcc-territory", "type": "module" },
-      { "id": "bbttcc-factions",  "type": "module" },
-      { "id": "bbttcc-travel",    "type": "module" }
+      {
+        "id": "bbttcc-territory",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-factions",
+        "type": "module"
+      },
+      {
+        "id": "bbttcc-travel",
+        "type": "module"
+      }
     ]
   },
-
   "flags": {
     "bbttcc": {
       "isCore": false,

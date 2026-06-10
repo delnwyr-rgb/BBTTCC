@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-aae",
-  "title": "BBTTCC Adaptive Adversary Engine",
-  "description": "Adaptive Moral Profile Engine and strategic guidance for BBTTCC factions.",
+  "title": "Adaptive Adversary Engine",
+  "description": "Adaptive Moral Profile Engine and strategic guidance for factions.",
   "version": "1.0.0",
   "type": "module",
   "compatibility": {

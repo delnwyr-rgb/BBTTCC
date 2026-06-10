@@ -1,11 +1,11 @@
 {
   "id": "bbttcc-master-content",
-  "title": "BBTTCC Master Content",
-  "description": "Core BBTTCC content: ancestries, classes, subclasses, sample NPCs, plus placeholders for items and vehicles.",
+  "title": "Bad Eden: Content",
+  "description": "Core Bad Eden content: ancestries, classes, subclasses, sample NPCs, plus placeholders for items and vehicles.",
   "version": "13.1.16",
   "authors": [
     {
-      "name": "BBTTCC Team"
+      "name": "Shattered Lens Studios"
     }
   ],
   "compatibility": {
@@ -31,76 +31,76 @@
     {
       "type": "Item",
       "name": "ancestries",
-      "label": "BBTTCC Ancestries",
+      "label": "Bad Eden: Ancestries",
       "path": "packs/ancestries",
       "system": "fourththing"
     },
     {
       "type": "Item",
       "name": "classes",
-      "label": "BBTTCC Classes",
+      "label": "Bad Eden: Classes",
       "path": "packs/classes",
       "system": "fourththing"
     },
     {
       "type": "Item",
       "name": "subclasses",
-      "label": "BBTTCC Subclasses",
+      "label": "Bad Eden: Subclasses",
       "path": "packs/subclasses",
       "system": "fourththing"
     },
     {
       "type": "Item",
       "name": "items",
-      "label": "BBTTCC Items",
+      "label": "Bad Eden: Items",
       "path": "packs/items",
       "system": "fourththing"
     },
     {
       "type": "Actor",
       "name": "vehicles",
-      "label": "BBTTCC Vehicles",
+      "label": "Bad Eden: Vehicles",
       "path": "packs/vehicles",
       "system": "fourththing"
     },
     {
       "type": "Actor",
       "name": "npcs",
-      "label": "BBTTCC NPC Pack v1",
+      "label": "Bad Eden: NPC Pack v1",
       "path": "packs/npcs",
       "system": "fourththing"
     },
     {
       "type": "Item",
       "name": "npc-abilities",
-      "label": "BBTTCC NPC Abilities",
+      "label": "Bad Eden: NPC Abilities",
       "path": "packs/npc-abilities",
       "system": "fourththing"
     },
     {
       "type": "Item",
       "name": "doctrines",
-      "label": "BBTTCC Doctrines",
+      "label": "Bad Eden: Doctrines",
       "path": "packs/doctrines",
       "system": "fourththing"
     },
     {
       "type": "Item",
       "name": "courtly-secrets",
-      "label": "BBTTCC Courtly Secrets",
+      "label": "Bad Eden: Courtly Secrets",
       "path": "packs/courtly-secrets",
       "system": "fourththing"
     },
     {
       "type": "JournalEntry",
       "name": "documentation",
-      "label": "BBTTCC Documentation",
+      "label": "Bad Eden: Documentation",
       "path": "packs/documentation"
     },
     {
       "type": "Scene",
       "name": "scenes",
-      "label": "BBTTCC Scenes",
+      "label": "Bad Eden: Scenes",
       "path": "packs/scenes"
     }
   ],

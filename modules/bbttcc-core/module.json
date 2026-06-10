@@ -1,10 +1,17 @@
 {
   "id": "bbttcc-core",
-  "title": "BBTTCC Core",
-  "description": "Core registry for BBTTCC modules.",
+  "title": "Strategic Layer Core",
+  "description": "Core registry for the strategic-layer engines (factions, territory, raid, campaign).",
   "version": "13.1.16",
-  "compatibility": { "minimum": "12", "verified": "14" },
-  "authors": [{ "name": "BBTTCC" }],
+  "compatibility": {
+    "minimum": "12",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "BBTTCC"
+    }
+  ],
   "esmodules": [
     "scripts/window-defaults.enhancer.js",
     "scripts/module.js",
