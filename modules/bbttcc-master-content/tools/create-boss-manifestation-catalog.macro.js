@@ -1,4 +1,4 @@
-// BBTTCC — Boss Manifestation Catalog (2026-05-17)
+// Bad Eden — Boss Manifestation Catalog (2026-05-17)
 // ─────────────────────────────────────────────────────────────────────────────
 // Authors 15 curated boss-flavored manifestations spanning the 5 canonical
 // boss template archetypes (3 per archetype). Each manifestation is a

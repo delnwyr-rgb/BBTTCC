@@ -1,8 +1,8 @@
 // =========================================================================
-// == BBTTCC Tikkun - FINAL CONSOLIDATED MODULE
+// == Bad Eden Tikkun - FINAL CONSOLIDATED MODULE
 // =========================================================================
 
-console.log('🏁 BBTTCC Tikkun | Final consolidated module loading...');
+console.log('🏁 Bad Eden Tikkun | Final consolidated module loading...');
 
 // --- From constellation-generator.js ---
 class ConstellationGenerator {

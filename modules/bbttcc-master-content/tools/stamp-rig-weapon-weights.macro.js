@@ -1,4 +1,4 @@
-// BBTTCC — Stamp rig-weapon WEIGHT tags (light / medium / heavy)
+// Bad Eden — Stamp rig-weapon WEIGHT tags (light / medium / heavy)
 // ─────────────────────────────────────────────────────────────────────────────
 // 2026-05-24. The rig heat system now scales heat-per-shot by weapon weight:
 //   light / untagged → +1   ·   medium → +2   ·   heavy → +3

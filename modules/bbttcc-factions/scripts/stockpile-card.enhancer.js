@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/stockpile-card.enhancer.js
-// BBTTCC — Material Stockpile card on the faction sheet.
+// Bad Eden — Material Stockpile card on the faction sheet.
 //
 // Injects into the Assets tab (with Overview fallback). Lists current stockpile
 // and exposes Deposit / Withdraw / Adjust dialogs that drive stockpile-api.

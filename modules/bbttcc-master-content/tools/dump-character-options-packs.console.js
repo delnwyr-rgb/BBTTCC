@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Dump bbttcc-character-options packs for buried per-use survey
+// Bad Eden — Dump bbttcc-character-options packs for buried per-use survey
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM) and hit Enter.
 // Walks 4 packs and prints each item's name + identifier + description tail

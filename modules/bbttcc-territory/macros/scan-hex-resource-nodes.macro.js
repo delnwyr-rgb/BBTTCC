@@ -1,4 +1,4 @@
-// BBTTCC — Scan Hex Resource Nodes (read-only console diagnostic)
+// Bad Eden — Scan Hex Resource Nodes (read-only console diagnostic)
 // ─────────────────────────────────────────────────────────────────────────────
 // Walks the active scene's hexes and tallies resource nodes by material.
 // Useful for verifying a seed run and spot-checking distribution.

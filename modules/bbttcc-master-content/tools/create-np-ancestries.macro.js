@@ -1,4 +1,4 @@
-/* BBTTCC — Create Non-Playable Ancestries content (Dragon, Devil, Angel, Eidolon)
+/* Bad Eden — Create Non-Playable Ancestries content (Dragon, Devil, Angel, Eidolon)
  *
  * One-shot macro. Run from Foundry: paste into a Script Macro and execute.
  * Idempotent: skips ancestries whose base species already exists in the pack.
@@ -150,7 +150,7 @@
       img: ancestry.img,
       system: {
         description: { value: tierDef.desc, chat: "" },
-        source: { custom: "BBTTCC", rules: "2024", revision: 1, book: "", license: "" },
+        source: { custom: "Bad Eden", rules: "2024", revision: 1, book: "", license: "" },
         advancement: {},
         identifier: tierDef.id.replace(/_/g, "-"),
         requirements: ancestry.name,
@@ -203,7 +203,7 @@
       img: ancestry.img,
       system: {
         description: { value: `<p><em>${ancestry.lore}</em></p>`, chat: "" },
-        source: { custom: "BBTTCC", rules: "2024", revision: 1, book: "", license: "" },
+        source: { custom: "Bad Eden", rules: "2024", revision: 1, book: "", license: "" },
         advancement,
         identifier: ancestry.id,
         category: "ancestry",
@@ -215,7 +215,7 @@
       flags: {
         dnd5e: { originType: "species" },
         // bbttcc.kind MUST be "ancestry" (not the ancestry slug) — that's the
-        // bucket label the BBTTCC integration looks for; matches Menhirkin's
+        // bucket label the Bad Eden integration looks for; matches Menhirkin's
         // canonical shape. The ancestry slug lives on flags.bbttcc.lineage.
         bbttcc: {
           kind: "ancestry",
@@ -272,7 +272,7 @@
             });
             tierUpdated++;
           } catch (e) {
-            console.warn("BBTTCC NP-Ancestries — tier in-place update failed", tierDef, e);
+            console.warn("Bad Eden NP-Ancestries — tier in-place update failed", tierDef, e);
           }
         }
         continue;
@@ -285,7 +285,7 @@
         tierUuids.push(created.uuid);
       } catch (e) {
         tierFail = `tier ${i + 1} (${tierDef.id}): ${e?.message || e}`;
-        console.error("BBTTCC NP-Ancestries — tier create failed", tierDef, e);
+        console.error("Bad Eden NP-Ancestries — tier create failed", tierDef, e);
         break;
       }
     }
@@ -320,7 +320,7 @@
           });
           basePatched = true;
         } catch (e) {
-          console.warn("BBTTCC NP-Ancestries — base in-place update failed", ancestry, e);
+          console.warn("Bad Eden NP-Ancestries — base in-place update failed", ancestry, e);
         }
       }
       summary.push(`• ${ancestry.name} — base existed${basePatched ? " + patched (kind/category/principleSource)" : ""}; ${tierUpdated}/4 tier feats patched`);
@@ -332,12 +332,12 @@
       summary.push(`• ${ancestry.name} — CREATED (1 base + 4 tier feats)`);
     } catch (e) {
       summary.push(`• ${ancestry.name} — ERROR creating base species: ${e?.message || e}`);
-      console.error("BBTTCC NP-Ancestries — base species create failed", ancestry, e);
+      console.error("Bad Eden NP-Ancestries — base species create failed", ancestry, e);
     }
   }
 
-  const msg = `BBTTCC NP Ancestries macro complete:\n${summary.join("\n")}`;
+  const msg = `Bad Eden NP Ancestries macro complete:\n${summary.join("\n")}`;
   console.log(msg);
   ChatMessage.create({ content: `<pre>${msg.replace(/</g, "&lt;")}</pre>`, whisper: [game.user.id] });
-  ui.notifications?.info?.("BBTTCC NP Ancestries macro complete — see chat for summary.");
+  ui.notifications?.info?.("Bad Eden NP Ancestries macro complete — see chat for summary.");
 })();

@@ -1,6 +1,6 @@
 // animate-ancestries.macro.js — RUN IN-WORLD (GM). Run in BOTH worlds. F5 afterwards.
 // Stamps Automated Animations (flags.autoanimations) onto the activatable ANCESTRY
-// abilities in the "BBTTCC Ancestries" compendium (bbttcc-master-content.ancestries).
+// abilities in the "Bad Eden Ancestries" compendium (bbttcc-master-content.ancestries).
 //
 // Sibling of tools/animate-classes.macro.js — same rules:
 //   • NON-DESTRUCTIVE — only ADDS AA to features that lack it; never touches features that
@@ -134,7 +134,7 @@
   const pack = game.packs.get("bbttcc-master-content.ancestries")
             || game.packs.find(p => p.metadata?.name === "ancestries" && p.metadata?.type === "Item")
             || game.packs.find(p => (p.title || "").toLowerCase() === "bbttcc ancestries");
-  if (!pack) return ui.notifications.error("Could not find the 'BBTTCC Ancestries' compendium in this world.");
+  if (!pack) return ui.notifications.error("Could not find the 'Bad Eden Ancestries' compendium in this world.");
 
   const wasLocked = pack.locked;
   if (wasLocked && !DRY_RUN) await pack.configure({ locked:false });

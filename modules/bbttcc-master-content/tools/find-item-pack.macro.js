@@ -1,4 +1,4 @@
-// BBTTCC — Find which pack(s) contain a given item _id
+// Bad Eden — Find which pack(s) contain a given item _id
 // ─────────────────────────────────────────────────────────────────────────────
 // Run as a GM script macro. Searches every registered pack (Item type) for
 // each _id in IDS and reports back. Use to track down items whose JSON source

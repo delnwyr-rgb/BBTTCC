@@ -1,4 +1,4 @@
-// BBTTCC — Sig Mode discipline-grant verifier + DW Walking Lane patch
+// Bad Eden — Sig Mode discipline-grant verifier + DW Walking Lane patch
 // (Phase D — 2026-05-08)
 // ─────────────────────────────────────────────────────────────────────────────
 // Verifies that the four Sig Mode feat items carry the expected
@@ -83,7 +83,7 @@ for (const cfg of TAGS) {
 }
 
 ChatMessage.create({
-  speaker: { alias: "BBTTCC Sig Mode Tagging" },
+  speaker: { alias: "Bad Eden Sig Mode Tagging" },
   content: `<h4>Sig Mode discipline-grant verification — Phase D</h4>
             <pre style="font-size:0.78em;white-space:pre-wrap;">${foundry.utils.escapeHTML(results.join("\n"))}</pre>
             <p style="opacity:0.8;font-size:0.85em">Three of the four were pre-tagged by content authoring; this macro is the safety net + DW Walking Lane fill.</p>`

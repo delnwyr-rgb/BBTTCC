@@ -7,7 +7,7 @@ export function installFXSettings() {
   };
 
   reg("enabled", {
-    name: "Enable BBTTCC FX",
+    name: "Enable Bad Eden FX",
     scope: "client",
     config: true,
     type: Boolean,
@@ -15,7 +15,7 @@ export function installFXSettings() {
   });
 
   reg("ui_enabled", {
-    name: "Enable BBTTCC UI FX",
+    name: "Enable Bad Eden UI FX",
     scope: "client",
     config: true,
     type: Boolean,

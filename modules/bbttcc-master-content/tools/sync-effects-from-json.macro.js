@@ -1,4 +1,4 @@
-// BBTTCC — Stamp Shape A passive AEs onto live pack items (self-contained)
+// Bad Eden — Stamp Shape A passive AEs onto live pack items (self-contained)
 // ─────────────────────────────────────────────────────────────────────────────
 // Run as a GM script macro (Macro Directory → "Script" type → paste → execute).
 //

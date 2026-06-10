@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Backfill Horns of Bad Luck onto Jackalope actors (idempotent)
+// Bad Eden — Backfill Horns of Bad Luck onto Jackalope actors (idempotent)
 // ─────────────────────────────────────────────────────────────────────────────
 // Targeted fallback if the seed-jackalope-horns macro's Job 3 didn't fire.
 // Walks every actor with the Jackalope heritage. If they don't have an item

@@ -1,4 +1,4 @@
-// BBTTCC — Cleanup stale heritage items + duplicates on a character
+// Bad Eden — Cleanup stale heritage items + duplicates on a character
 // ─────────────────────────────────────────────────────────────────────────────
 // Walks the SELECTED character actor (selected token, or the prompted actor)
 // and identifies:

@@ -1,4 +1,4 @@
-// v1.0.7 — BBTTCC TURN consumer extender for hex DRAWINGS
+// v1.0.7 — Bad Eden TURN consumer extender for hex DRAWINGS
 // Applies queued effects on hex DRAWINGS and clears pending reliably.
 // Handles numeric deltas, repairs (new + legacy), and request/status keys.
 // Safe boot (runs if ready already fired). Idempotent wrapper (unwraps older).

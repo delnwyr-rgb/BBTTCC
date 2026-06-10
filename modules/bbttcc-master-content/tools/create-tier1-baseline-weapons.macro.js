@@ -1,4 +1,4 @@
-// BBTTCC — Tier I Baseline Weapons (+ rad/frikkin' tier promotions)
+// Bad Eden — Tier I Baseline Weapons (+ rad/frikkin' tier promotions)
 // ─────────────────────────────────────────────────────────────────────────────
 // Two passes in one macro:
 //

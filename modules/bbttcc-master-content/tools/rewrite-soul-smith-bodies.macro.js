@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-soul-smith-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-soul-smith-bodies.macro.js
 //
 // Refreshes the description bodies for the Soul-Smith class doc + its three
 // forges (Forge of Victory / Forge of the Spark Reclaimer / Forge of Bound Light)
@@ -75,7 +75,7 @@ const BOUNDLIGHT_BODY = `
 <p><em>Out-of-combat:</em> <strong>Pattern of Mercy</strong> (convert Economy → Soft Power after a Parley) and the <strong>Cathedral Vessel</strong> (a building or shrine that stabilizes a hex and dampens Darkness) remain the strategic flourishes.</p>
 `.trim();
 
-// ── Targets (flexible name match so the "(BBTTCC)" suffix etc. doesn't matter) ─
+// ── Targets (flexible name match so the "(Bad Eden)" suffix etc. doesn't matter) ─
 const TARGETS = [
   { label: "Soul-Smith (class)",            type: "class",    needles: ["soul", "smith"],       body: BASE_BODY },
   { label: "Forge of Victory",              type: "subclass", needles: ["forge of victory"],    body: VICTORY_BODY },

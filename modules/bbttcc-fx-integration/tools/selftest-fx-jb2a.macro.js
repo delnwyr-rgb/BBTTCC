@@ -1,5 +1,5 @@
 /*
- * BBTTCC FX — JB2A self-test (RUN IN-WORLD as a GM macro).
+ * Bad Eden FX — JB2A self-test (RUN IN-WORLD as a GM macro).
  *
  * Verifies the new Sequencer/JB2A wiring end to end without running a raid:
  *  1. confirms Sequencer + JB2A are active and the family keys resolve,

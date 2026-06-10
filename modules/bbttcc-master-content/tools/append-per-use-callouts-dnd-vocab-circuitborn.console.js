@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts (D&D-vocab scrub Phase 3 — Circuitborn pilot)
+// Bad Eden — Append Per-Use callouts (D&D-vocab scrub Phase 3 — Circuitborn pilot)
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent.
 // 9 ancestry feats — the Circuitborn buried-per-use pilot batch from the

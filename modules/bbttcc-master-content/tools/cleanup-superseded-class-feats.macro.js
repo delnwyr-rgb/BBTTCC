@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / cleanup-superseded-class-feats.macro.js
+// Bad Eden master-content / tools / cleanup-superseded-class-feats.macro.js
 //
 // Prunes feature/feat ITEMS off existing characters whose combat role is now fully
 // covered by the redesigned Surge-spent class abilities (Soul-Smith / Harmony Marshal

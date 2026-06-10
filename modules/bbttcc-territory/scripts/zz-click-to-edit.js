@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/zz-click-to-edit.js
-// v13-safe, robust click-to-edit for BBTTCC hexes.
+// v13-safe, robust click-to-edit for Bad Eden hexes.
 // Listens on stage, renderer view, and document (capture) to ensure we see the click.
 // Uses coordinate resolver; works even if the Drawing can't be selected.
 
@@ -14,7 +14,7 @@
   Hooks.once("init", () => {
     game.settings.register(MOD, "clickToEditEnabled", {
       name: "Click to Edit Hexes",
-      hint: "Open the BBTTCC Hex Editor via single-click (with a modifier) or double-click.",
+      hint: "Open the Bad Eden Hex Editor via single-click (with a modifier) or double-click.",
       scope: "client", config: true, type: Boolean, default: true
     });
     game.settings.register(MOD, "clickToEditModifier", {
@@ -65,7 +65,7 @@
       if (!uuid) return ui.notifications?.warn?.("Hex not found.");
       if (game.bbttcc?.api?.territory?.openHexConfig) return game.bbttcc.api.territory.openHexConfig(uuid);
       if (game.bbttcc?.api?.territory?.claim)       return game.bbttcc.api.territory.claim(uuid);
-      ui.notifications?.warn?.("BBTTCC Hex Editor API is not available.");
+      ui.notifications?.warn?.("Bad Eden Hex Editor API is not available.");
     } catch (e) {
       warn("openHexEditor failed", e);
       ui.notifications?.error?.("Failed to open Hex Editor (see console).");

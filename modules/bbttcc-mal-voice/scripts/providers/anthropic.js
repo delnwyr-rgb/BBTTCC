@@ -73,7 +73,7 @@ async function call(opts = {}) {
 
   const apiKey = opts.apiKey || settings.apiKey();
   if (!apiKey) {
-    return _err("NO_API_KEY", "No Anthropic API key configured. Set one in Module Settings → BBTTCC Mal Voice → API key.");
+    return _err("NO_API_KEY", "No Anthropic API key configured. Set one in Module Settings → Bad Eden Mal Voice → API key.");
   }
 
   const model       = opts.model       || settings.model() || DEFAULT_MODEL;

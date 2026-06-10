@@ -1,5 +1,5 @@
 //
-// BBTTCC Casualty Engine v1.0 (Alpha) — Beat-driven
+// Bad Eden Casualty Engine v1.0 (Alpha) — Beat-driven
 // --------------------------------------------------
 // Invoked from bbttcc-campaign executeBeat() via:
 //   game.bbttcc.api.casualties.applyFromBeat(beat, ctx, beatCtx)

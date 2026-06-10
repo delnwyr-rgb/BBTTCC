@@ -1,4 +1,4 @@
-// BBTTCC — Phase 7 Seed: Technomagical Items (2026-05-10)
+// Bad Eden — Phase 7 Seed: Technomagical Items (2026-05-10)
 // ─────────────────────────────────────────────────────────────────────────────
 // Seeds 17 technomagical items into game.items (world). Each item carries:
 //   - flags.fourththing.rfi.item   (tier, frame, bound, materialOf recipe)

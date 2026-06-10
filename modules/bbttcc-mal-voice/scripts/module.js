@@ -35,7 +35,7 @@ const POLICY_CHOICES = {
 Hooks.once("init", () => {
   game.settings.register(MODULE_ID, "apiProvider", {
     name:    "API provider",
-    hint:    "Which LLM provider to use. BYO-key — no backend operated by BBTTCC.",
+    hint:    "Which LLM provider to use. BYO-key — no backend operated by Bad Eden.",
     scope:   "world",
     config:  true,
     type:    String,

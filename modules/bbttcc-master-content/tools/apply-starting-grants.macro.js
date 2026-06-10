@@ -1,4 +1,4 @@
-// BBTTCC — Apply per-campaign-start resource grants to all character actors
+// Bad Eden — Apply per-campaign-start resource grants to all character actors
 // ─────────────────────────────────────────────────────────────────────────────
 // For each character actor in the world, walk their items for
 // flags.fourththing.resourceGrants entries with cadence "per-campaign-start"

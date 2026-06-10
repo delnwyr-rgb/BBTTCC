@@ -1,6 +1,6 @@
 // PATCHMARK: v13-roll-asyncopt-removed-and-tintguard-20251215-035023
 // PATCH: units-first travel distance fields (distanceUnits + derived distanceMiles from Foundry grid) — 20251218
-/* BBTTCC – Hex Travel Visual Engine (v1.1+parity)
+/* Bad Eden – Hex Travel Visual Engine (v1.1+parity)
  * Foundry v13 compatible
  *
  * Restores parity with the “5:11 PM” known-good behavior:
@@ -1055,7 +1055,7 @@ function _ensureInjectorSettingsRegistered() {
 }
 
 function _getTurnIndexFallback() {
-  // Prefer a BBTTCC turn counter if one exists; otherwise 0.
+  // Prefer a Bad Eden turn counter if one exists; otherwise 0.
   // MVP-safe: cooldown enforcement still works via timestamp if needed later.
   const t = game.bbttcc?.api?.turn?.getTurnIndex?.() ?? game.bbttcc?.api?.turn?.turnIndex;
   return Number.isFinite(Number(t)) ? Number(t) : 0;

@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rebuild-class-advancement.macro.js
+// Bad Eden master-content / tools / rebuild-class-advancement.macro.js
 //
 // Rebuilds every class doc's `system.advancement` ItemGrant entries from the
 // stamped `system.prerequisites.level` on each feat in the class's

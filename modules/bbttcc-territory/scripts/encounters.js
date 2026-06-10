@@ -1,7 +1,7 @@
 /* bbttcc-travel/scripts/encounters.js
  * Fiat Encounter Engine (RETIRED)
  *
- * BBTTCC now selects travel encounters exclusively from Campaign Builder travel tables
+ * Bad Eden now selects travel encounters exclusively from Campaign Builder travel tables
  * stored in the bbttcc-campaign encounterTables world setting.
  *
  * This file is a compatibility shim so legacy callers do not crash.

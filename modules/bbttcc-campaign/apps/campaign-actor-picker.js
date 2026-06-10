@@ -1,4 +1,4 @@
-// BBTTCC Campaign Builder – Actor Picker
+// Bad Eden Campaign Builder – Actor Picker
 //
 // Simple V1 Application that lists all actors and lets the user pick one.
 // The selected actor is passed to an onSelect callback provided in options.

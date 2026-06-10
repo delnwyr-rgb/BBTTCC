@@ -1,5 +1,5 @@
 // modules/bbttcc-tikkun/scripts/tikkun-hotfix.js
-// BBTTCC — Tikkun API hotfix (permanent)
+// Bad Eden — Tikkun API hotfix (permanent)
 //
 // Restores hasSpark / gatherSpark / getAllSparks on game.bbttcc.api.tikkun,
 // so Unity gating can work (Spark of Mercy + aligned hexes).

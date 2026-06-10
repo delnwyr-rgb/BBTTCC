@@ -374,7 +374,7 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
   static DEFAULT_OPTIONS = {
     id: "bbttcc-facility-console",
     window: {
-      title: "BBTTCC Facility Config",
+      title: "Bad Eden Facility Config",
       icon: "fas fa-fort-awesome"
     },
     position: {
@@ -417,7 +417,7 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
     const hex = await this._getHex();
     if (!hex) {
       ui.notifications?.error(
-        "BBTTCC Facility: Could not resolve hex for facility console."
+        "Bad Eden Facility: Could not resolve hex for facility console."
       );
     }
 
@@ -931,7 +931,7 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
 
     await hex.update({ [`flags.${MOD_TERR}.facilities`]: facilities });
 
-    ui.notifications?.info('BBTTCC Facility updated for this hex.');
+    ui.notifications?.info('Bad Eden Facility updated for this hex.');
     this.close();
   }
 }

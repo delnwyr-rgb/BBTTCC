@@ -1,4 +1,4 @@
-// BBTTCC — Personal Rigs add-on (Phase 4.5 follow-up to the 2026-05-07 sprint)
+// Bad Eden — Personal Rigs add-on (Phase 4.5 follow-up to the 2026-05-07 sprint)
 // ─────────────────────────────────────────────────────────────────────────────
 // Adds the "personal" rig bracket: single-pilot speeders, bikes, motorcycles.
 // Mad Max scouting, Tatooine landspeeders, urban escape work. One seat,

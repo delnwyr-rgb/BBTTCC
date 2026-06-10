@@ -1,4 +1,4 @@
-// BBTTCC — Frame Audit Fix (2026-05-13)
+// Bad Eden — Frame Audit Fix (2026-05-13)
 // ─────────────────────────────────────────────────────────────────────────────
 // Fills the rig-frame catalog gaps surfaced during the 2026-05-13 audit:
 //   1. Oathbound Courser Frame (personal, mobile, courier)
@@ -178,7 +178,7 @@ const FRAMES = [
   }
 
   const summary = [
-    `BBTTCC Frame Audit Fix complete.`,
+    `Bad Eden Frame Audit Fix complete.`,
     `Created: ${created.length} (${created.join(", ") || "—"})`,
     `Skipped (existed): ${skipped.length} (${skipped.join(", ") || "—"})`,
     DRY_RUN ? `DRY_RUN was true — no documents written.` : ``

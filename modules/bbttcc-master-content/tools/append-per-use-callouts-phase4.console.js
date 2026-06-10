@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts (Phase 4: character-options — Archetypes /
+// Bad Eden — Append Per-Use callouts (Phase 4: character-options — Archetypes /
 // Crews / Occult Associations)
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent.

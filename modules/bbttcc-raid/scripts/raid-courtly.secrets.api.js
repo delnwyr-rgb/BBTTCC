@@ -1,6 +1,6 @@
 // modules/bbttcc-raid/scripts/raid-courtly.secrets.api.js
 //
-// BBTTCC — Courtly Intrigue Secrets API (Phase C)
+// Bad Eden — Courtly Intrigue Secrets API (Phase C)
 // Spec: bbttcc-raid/COURTLY_INTRIGUE_SPEC.md §4.3
 //
 // Secrets are Items (type "feat") that live in:
@@ -205,7 +205,7 @@
     }
     await ChatMessage.create({
       content: `<p><b>${esc(actor.name)}</b> plays the secret <b>${esc(item.name)}</b> <small style="opacity:.7;">(${esc(secretMeta.acquisition)})</small></p><p>${esc(JSON.stringify(result))}</p>`,
-      speaker: { alias: "BBTTCC Courtly Intrigue" }
+      speaker: { alias: "Bad Eden Courtly Intrigue" }
     }).catch(() => {});
     try { Hooks.callAll("bbttcc:courtly:state", { scenario, state: scenario.getState() }); } catch (_e) {}
 

@@ -93,7 +93,7 @@
         await ChatMessage.create({
           content: `<p><b>${foundry.utils.escapeHTML(A.name)}</b> — <i>Spark integrated:</i> ${k} (+${count})</p>`,
           whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
-          speaker: { alias: "BBTTCC Tikkun" }
+          speaker: { alias: "Bad Eden Tikkun" }
         });
 
         return API.listSparks(A.id);
@@ -152,7 +152,7 @@
         await ChatMessage.create({
           content: `<p><b>${foundry.utils.escapeHTML(A.name)}</b> — <i>Spark revoked:</i> ${k} (-${count})</p>`,
           whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
-          speaker: { alias: "BBTTCC Tikkun" }
+          speaker: { alias: "Bad Eden Tikkun" }
         });
 
         return API.listSparks(A.id);

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Take-us-home macro: Oldenborn + Furrykin (25 items)
+// Bad Eden — Take-us-home macro: Oldenborn + Furrykin (25 items)
 // ─────────────────────────────────────────────────────────────────────────────
 // Idempotent — sentinel-gated. For each identifier:
 //   - if pack item exists → rewrite description with RFI-canon + per-use callout
@@ -54,8 +54,8 @@
       base:`<p><em>"You don't run. You re-route."</em></p><p><strong>Jetstream Traverse (1/Soma Break).</strong> For 10 minutes, gain a flying speed equal to your walking speed; you must end your turn on solid ground (or fall normally). When this ends, you are not harmed by the fall from the last 10 ft.</p>`,
       callout: { label: "Jetstream Traverse", recovery: "1/Soma Break", action: "Activate", summary: "10 min flying speed = walk speed; end turn on solid ground or fall. Last 10 ft of fall is harmless when it ends.", key: "oldSkyJetstreamTraverse" } },
     { _id: "OLDSKYWEATHER001", identifier: "oldenborn-skythreaded-weather_crown", name: "Oldenborn (Sky-Threaded): Weather Crown", requirements: "Oldenborn (Sky-Threaded)", img: OLD_IMG, ancestry: "oldenborn",
-      base:`<p><em>"The sky knows your name again."</em></p><p><strong>Weather Crown (1/Soma Break).</strong> Over 1 minute, call a localized weather effect in a 60-ft radius for 10 minutes (fog, wind, rain, or clear). The effect is real and interacts with fire, ranged attacks, and travel checks. BBTTCC: 1/Turn your faction may re-roll a Weather event affecting your hex.</p>`,
-      callout: { label: "Weather Crown", recovery: "1/Soma Break", action: "1-min ritual", summary: "Call 60-ft localized weather (fog/wind/rain/clear) for 10 min. Real effect on fire/ranged/travel. BBTTCC: 1/Turn faction Weather re-roll.", key: "oldSkyWeatherCrown" } },
+      base:`<p><em>"The sky knows your name again."</em></p><p><strong>Weather Crown (1/Soma Break).</strong> Over 1 minute, call a localized weather effect in a 60-ft radius for 10 minutes (fog, wind, rain, or clear). The effect is real and interacts with fire, ranged attacks, and travel checks. Bad Eden: 1/Turn your faction may re-roll a Weather event affecting your hex.</p>`,
+      callout: { label: "Weather Crown", recovery: "1/Soma Break", action: "1-min ritual", summary: "Call 60-ft localized weather (fog/wind/rain/clear) for 10 min. Real effect on fire/ranged/travel. Bad Eden: 1/Turn faction Weather re-roll.", key: "oldSkyWeatherCrown" } },
     { _id: "OLDSTORMWARDGAL1", identifier: "oldenborn-stormborn-ward-of-the-gale", name: "Oldenborn (Stormborn Nomad): Ward of the Gale", requirements: "Oldenborn (Stormborn Nomad)", img: OLD_IMG, ancestry: "oldenborn",
       base:`<p><em>"Storms have learned to lean around you instead of straight through you."</em></p><p><strong>Ward of the Gale (1/Soma Break).</strong> Reaction — when you take damage from a visible attack, hazard, or effect, wrap yourself in whirling air and reduce that damage by half until the start of your next turn (apply resistance first, then halve the remainder).</p>`,
       callout: { label: "Ward of the Gale", recovery: "1/Soma Break", action: "Reaction (on damage)", summary: "Halve incoming damage from a visible source until start of next turn (resistance first, then halve).", key: "oldStormWardOfTheGale" } },
@@ -71,8 +71,8 @@
 
     // ── Furrykin ──────────────────────────────────────────────────────────
     { _id: "FURFELIDKINGAL01", identifier: "furrykin-felid-king_of_alleys", name: "Furrykin (Felid): King of Alleys", requirements: "Furrykin (Felid)", img: FUR_IMG, ancestry: "furrykin",
-      base:`<p><em>"Cities were made for you. Ruins too."</em></p><p><strong>King of Alleys (1/Soma Break).</strong> For 10 minutes, gain a climbing speed equal to your walking speed and ignore difficult terrain in urban ruins. BBTTCC: 1/Turn, reduce an Intrigue travel cost by 1 if your route passes through ruins.</p>`,
-      callout: { label: "King of Alleys", recovery: "1/Soma Break", action: "Action (10-min duration)", summary: "10 min: climb=walk + ignore difficult terrain in urban ruins. BBTTCC: 1/Turn travel-cost reduction through ruins.", key: "furFelidKingOfAlleys" } },
+      base:`<p><em>"Cities were made for you. Ruins too."</em></p><p><strong>King of Alleys (1/Soma Break).</strong> For 10 minutes, gain a climbing speed equal to your walking speed and ignore difficult terrain in urban ruins. Bad Eden: 1/Turn, reduce an Intrigue travel cost by 1 if your route passes through ruins.</p>`,
+      callout: { label: "King of Alleys", recovery: "1/Soma Break", action: "Action (10-min duration)", summary: "10 min: climb=walk + ignore difficult terrain in urban ruins. Bad Eden: 1/Turn travel-cost reduction through ruins.", key: "furFelidKingOfAlleys" } },
     { _id: "FURFELIDNINELIV1", identifier: "furrykin-felid-nine_lives", name: "Furrykin (Felid): Nine Lives Logic", requirements: "Furrykin (Felid)", img: FUR_IMG, ancestry: "furrykin",
       base:`<p><em>"You do not die. You negotiate."</em></p><p><strong>Nine Lives Logic (1/Soma Break).</strong> When you would drop to 0 Integrity, instead drop to 1 Integrity and immediately Disengage as a reaction.</p>`,
       callout: { label: "Nine Lives Logic", recovery: "1/Soma Break", action: "Triggered (at 0 Integrity)", summary: "Drop to 1 Integrity instead of 0; immediately Disengage as a reaction.", key: "furFelidNineLives" } },
@@ -144,7 +144,7 @@
       _id: it._id, name: it.name, type: "feat", img: it.img, folder: FOLDER_ID,
       system: {
         description: { value: buildDesc(it), chat: "" },
-        source: { custom: "BBTTCC", rules: "2024", revision: 2, book: "", license: "" },
+        source: { custom: "Bad Eden", rules: "2024", revision: 2, book: "", license: "" },
         advancement: {},
         identifier: it.identifier, requirements: it.requirements,
         prerequisites: { items: [], repeatable: false, level: null },

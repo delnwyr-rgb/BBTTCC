@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/territory-build-units.enhancer.js
-// BBTTCC — Build Unit Consumption Engine
+// Bad Eden — Build Unit Consumption Engine
 //
 // Uses Build Units stored on factions at:
 //   flags["bbttcc-factions"].buildUnits
@@ -214,7 +214,7 @@
       await ChatMessage.create({
         content: `<p><b>Build Units Spent — ${foundry.utils.escapeHTML(A.name)}</b><br/>${summaryPieces.join("<br/>")}</p>`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Economy" }
+        speaker: { alias: "Bad Eden Economy" }
       }).catch(() => {});
     }
 

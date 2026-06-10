@@ -1,4 +1,4 @@
-// BBTTCC — Promote stamped class-L1 aptitude AEs into source skill ranks (2026-05-08)
+// Bad Eden — Promote stamped class-L1 aptitude AEs into source skill ranks (2026-05-08)
 // ─────────────────────────────────────────────────────────────────────────────
 // One-shot migration. The 2026-05-04 stamp macro (stamp-class-l1-aptitudes)
 // dropped combat+armor aptitude grants onto each class T1 anchor as transfer-

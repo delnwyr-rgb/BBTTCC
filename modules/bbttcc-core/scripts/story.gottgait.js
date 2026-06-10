@@ -89,7 +89,7 @@
                    name="hexUuid"
                    value="${state.storyHexUuid || ""}"
                    placeholder="e.g. test-hex-17" />
-            <p class="notes">This is your BBTTCC <b>hexUuid</b> (raw string). Not a Foundry UUID.</p>
+            <p class="notes">This is your Bad Eden <b>hexUuid</b> (raw string). Not a Foundry UUID.</p>
           </div>
         </form>
       `;
@@ -132,7 +132,7 @@
       }
 
       // ✅ IMPORTANT CHANGE:
-      // hexUuid is a BBTTCC raw string identifier, NOT a Foundry UUID.
+      // hexUuid is a Bad Eden raw string identifier, NOT a Foundry UUID.
       // We accept it as-is (no fromUuid validation), so we don't re-prompt forever.
 
       if (!factionUuid || !hexUuid) {

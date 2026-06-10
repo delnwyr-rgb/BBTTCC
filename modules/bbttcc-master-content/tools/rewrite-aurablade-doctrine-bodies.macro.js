@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-aurablade-doctrine-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-aurablade-doctrine-bodies.macro.js
 //
 // Replaces the description body on Blood Hymn / Stillheart / Void Edge
 // subclass docs with text that describes the REAL compendium feats at their
@@ -14,7 +14,7 @@ const DRY_RUN = true;
 const PACK_ID = "bbttcc-master-content.classes";
 
 const BODIES = {
-  "Blood Hymn (BBTTCC)": `
+  "Blood Hymn (Bad Eden)": `
 <p><em>The wound is the prayer.</em></p>
 <p><strong>Mode:</strong> Martyr · <strong>Drift:</strong> Toward</p>
 <p>Blood Hymn Aurablades convert suffering into amplification. Where the base class governs Burn and Aura, the Hymn turns each blow into fuel — for cleave, for fear, for irreversible certainty. Played as the operative who runs <em>toward</em> the worst version of the fight on purpose.</p>
@@ -28,7 +28,7 @@ const BODIES = {
 </ul>
 `.trim(),
 
-  "Stillheart (BBTTCC)": `
+  "Stillheart (Bad Eden)": `
 <p><em>The calm is the discipline.</em></p>
 <p><strong>Mode:</strong> Protector · <strong>Drift:</strong> Away</p>
 <p>Stillheart Aurablades hold the aura instead of feeding it. Burn arrives by stillness rather than damage; the doctrine extends safety outward, denies panic to the people you stand near, and refuses disruption when the field starts to fray.</p>
@@ -42,7 +42,7 @@ const BODIES = {
 </ul>
 `.trim(),
 
-  "Void Edge (BBTTCC)": `
+  "Void Edge (Bad Eden)": `
 <p><em>Entropy has a shape. I cut along it.</em></p>
 <p><strong>Mode:</strong> Edge-walker · <strong>Drift:</strong> Sideways</p>
 <p>Void Edge Aurablades cut along the seams of decay. The doctrine suppresses what enemies rely on — buffs, advantage, morale — and propagates dread into the spaces between people. Played as the operative whose presence makes hope harder to organize.</p>

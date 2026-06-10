@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-cosmic-linguist-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-cosmic-linguist-bodies.macro.js
 //
 // Refreshes the description bodies for the Cosmic Linguist class doc + its three
 // doctrines (Annotator / Metaphor Apostle / Redactor) so the TEXT matches the

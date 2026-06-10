@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/diplomacy-apps.js
-// BBTTCC — Diplomacy UI v0.1
+// Bad Eden — Diplomacy UI v0.1
 //   - BBTTCC_AlliedSendApp  — unilateral grant to a mutual-Allied counterparty
 //   - BBTTCC_TradeApp       — bilateral exchange with tier-scaled friction
 //   - GM-arbitration chat card listener — player Submit → whispered card → GM Accept/Decline
@@ -410,7 +410,7 @@ class BBTTCC_TradeApp extends foundry.applications.api.ApplicationV2 {
         await ChatMessage.create({
           content: html,
           whisper: whisperIds,
-          speaker: { alias: "BBTTCC Trade" }
+          speaker: { alias: "Bad Eden Trade" }
         });
         ui.notifications?.info?.(pendingId ? "Trade offer queued in inbox." : "Trade offer submitted to GM.");
         this.close();

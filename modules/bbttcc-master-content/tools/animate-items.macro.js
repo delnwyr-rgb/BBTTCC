@@ -1,6 +1,6 @@
 // animate-items.macro.js — RUN IN-WORLD (GM). Run in BOTH worlds. F5 afterwards.
 // Stamps Automated Animations (flags.autoanimations) onto the activatable NON-WEAPON
-// items in the "BBTTCC Items" compendium (bbttcc-master-content.items).
+// items in the "Bad Eden Items" compendium (bbttcc-master-content.items).
 //
 // NOTE on scope (from the 2026-06-09 live Ember audit, 276 items): all 26 WEAPONS are
 // already AA-stamped (they animate on attack) — this macro does NOT touch them. Most of the
@@ -56,7 +56,7 @@
   const pack = game.packs.get("bbttcc-master-content.items")
             || game.packs.find(p => p.metadata?.name === "items" && p.metadata?.type === "Item")
             || game.packs.find(p => (p.title || "").toLowerCase() === "bbttcc items");
-  if (!pack) return ui.notifications.error("Could not find the 'BBTTCC Items' compendium in this world.");
+  if (!pack) return ui.notifications.error("Could not find the 'Bad Eden Items' compendium in this world.");
 
   const wasLocked = pack.locked;
   if (wasLocked && !DRY_RUN) await pack.configure({ locked:false });

@@ -1,6 +1,6 @@
 // scripts/raid-courtly.faction-sheet.enhancer.js
 //
-// BBTTCC — Courtly Intrigue Faction Sheet badges (Phase E)
+// Bad Eden — Courtly Intrigue Faction Sheet badges (Phase E)
 // Spec: bbttcc-raid/COURTLY_INTRIGUE_SPEC.md §6
 //
 // Renders Scandal Scar badges on the faction sheet header. Light scars

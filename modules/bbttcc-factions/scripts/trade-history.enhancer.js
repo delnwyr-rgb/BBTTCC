@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/trade-history.enhancer.js
-// BBTTCC — Trade History ledger card on the faction sheet.
+// Bad Eden — Trade History ledger card on the faction sheet.
 //
 // Reads warLogs flag (existing storage), filters to type === "exchange" entries
 // (written by exchange-engine.js share/trade), and renders a recent-history card

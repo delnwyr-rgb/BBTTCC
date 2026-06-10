@@ -282,7 +282,7 @@ function _safeGetFlag(actor, scope, key) {
 
 function _extractActorIdFromRosterEntry(ent) {
   if (!ent) return null;
-  // Common shapes we’ve used across BBTTCC over time
+  // Common shapes we’ve used across Bad Eden over time
   const candidates = [
     ent.actorId,
     ent.id,

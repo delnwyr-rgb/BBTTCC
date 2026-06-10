@@ -1,4 +1,4 @@
-// BBTTCC — Update Class & Subclass Stubs (Sprint: Bulwark + Avalanche v1.0)
+// Bad Eden — Update Class & Subclass Stubs (Sprint: Bulwark + Avalanche v1.0)
 // ─────────────────────────────────────────────────────────────────────────────
 // Run this as a GM script macro after running compile-loose-packs.macro.js so
 // that the class stub descriptions stop referencing inline tier mechanics
@@ -138,13 +138,13 @@ const LASTMILE_HTML = `
 
 const PATCHES = {
   "XVCamqENQpSFYQOS": { name: "Bulwark", html: BULWARK_HTML },
-  "iELfZ9lTJzzQtWxG": { name: "Path of the Avalanche (BBTTCC)", html: AVALANCHE_HTML },
-  "LE31MzyjJWZsVDiF": { name: "Path of the Mountain (BBTTCC)", html: MOUNTAIN_HTML },
-  "TymJux36egJ8oH6o": { name: "Path of the Cataclyst (BBTTCC)", html: CATACLYST_HTML },
+  "iELfZ9lTJzzQtWxG": { name: "Path of the Avalanche (Bad Eden)", html: AVALANCHE_HTML },
+  "LE31MzyjJWZsVDiF": { name: "Path of the Mountain (Bad Eden)", html: MOUNTAIN_HTML },
+  "TymJux36egJ8oH6o": { name: "Path of the Cataclyst (Bad Eden)", html: CATACLYST_HTML },
   "5Ncfbe1ReQhbLLUP": { name: "Shadow Courier", html: SHADOW_COURIER_HTML },
-  "kCpxoUP3SA2zbpa8": { name: "Route of the Wayfarer Tongue (BBTTCC)", html: WAYFARER_HTML },
-  "P6cYL1DAZw3YPTsz": { name: "Route of the Black Stair (BBTTCC)", html: BLACKSTAIR_HTML },
-  "ahzRK1eY8exF0JhW": { name: "Route of the Last Mile (BBTTCC)", html: LASTMILE_HTML }
+  "kCpxoUP3SA2zbpa8": { name: "Route of the Wayfarer Tongue (Bad Eden)", html: WAYFARER_HTML },
+  "P6cYL1DAZw3YPTsz": { name: "Route of the Black Stair (Bad Eden)", html: BLACKSTAIR_HTML },
+  "ahzRK1eY8exF0JhW": { name: "Route of the Last Mile (Bad Eden)", html: LASTMILE_HTML }
 };
 
 if (!game.user?.isGM) { ui.notifications.warn("GM-only macro."); return; }
@@ -170,7 +170,7 @@ for (const [id, patch] of Object.entries(PATCHES)) {
 }
 
 ChatMessage.create({
-  speaker: { alias: "BBTTCC Update Class Stubs" },
+  speaker: { alias: "Bad Eden Update Class Stubs" },
   content: `<h4>Update Class Stubs</h4><pre style="font-size:0.78em;white-space:pre-wrap;">${foundry.utils.escapeHTML(results.join("\n"))}</pre>`
 });
 return results;

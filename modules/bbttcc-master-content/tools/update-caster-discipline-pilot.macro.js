@@ -1,4 +1,4 @@
-// BBTTCC — Caster Discipline pilot rewrite (Manifestation Ruleset v1.0)
+// Bad Eden — Caster Discipline pilot rewrite (Manifestation Ruleset v1.0)
 // ─────────────────────────────────────────────────────────────────────────────
 // Re-points the four caster paths at the universal Manifestation knobs as
 // distinct *disciplines*, without touching tier cap, footprint scope, or the
@@ -161,7 +161,7 @@ for (const patch of PATCHES) {
 }
 
 ChatMessage.create({
-  speaker: { alias: "BBTTCC Caster Discipline Pilot" },
+  speaker: { alias: "Bad Eden Caster Discipline Pilot" },
   content: `<h4>Caster Discipline rewrite — Manifestation Ruleset v1.0</h4>
             <pre style="font-size:0.78em;white-space:pre-wrap;">${foundry.utils.escapeHTML(results.join("\n"))}</pre>
             <p style="opacity:0.8;font-size:0.85em">No feature items, doctrines, or subclasses were modified. Class stubs only — playtest the budget intent first, commit item-level edits in the next sprint.</p>`

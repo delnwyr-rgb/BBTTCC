@@ -1,5 +1,5 @@
 /* modules/bbttcc-territory/scripts/api.turn.processRequests.js
- * BBTTCC — Request Processors (Repairs + Hex Requests)
+ * Bad Eden — Request Processors (Repairs + Hex Requests)
  * - Publishes game.bbttcc.api.turn.processRequests({ factionId?, apply=true })
  * - Applies queued requests written by compat consumeQueuedTurnEffects and strategic effects
  * - Writes War Log entries for visibility

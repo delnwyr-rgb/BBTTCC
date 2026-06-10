@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/stockpile-api.js
-// BBTTCC — Faction Material Stockpile API v0.1
+// Bad Eden — Faction Material Stockpile API v0.1
 //
 // Faction-side abstract material storage. Materials are normally items on
 // character actors (frame === "material", with rfi.materialKey + rfi.charges).

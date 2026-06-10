@@ -1,6 +1,6 @@
 /* REVIEW NOTE: Tier stability enhancer is progression-state logic and intentionally retained during faction-sheet layout cleanup. */
 // modules/bbttcc-factions/scripts/faction-tier-stability.enhancer.js
-// BBTTCC — Tier Advancement: Stability Counters (v1.0)
+// Bad Eden — Tier Advancement: Stability Counters (v1.0)
 //
 // Writes deterministic, actor-only stability progress for tier advancement.
 //

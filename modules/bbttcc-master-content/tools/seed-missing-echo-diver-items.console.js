@@ -123,7 +123,7 @@
       _id: it._id, name: it.name, type: it.type, img: it.img, folder: FOLDER_ID,
       system: {
         description: { value: descValue, chat: "" },
-        source: { custom: "BBTTCC", rules: "2024", revision: 2, book: "", license: "" },
+        source: { custom: "Bad Eden", rules: "2024", revision: 2, book: "", license: "" },
         advancement: {},
         identifier: it.identifier,
         requirements: it.requirements,

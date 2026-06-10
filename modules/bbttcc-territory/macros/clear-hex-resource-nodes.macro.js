@@ -1,6 +1,6 @@
-// BBTTCC — Clear Hex Resource Nodes (live scene)
+// Bad Eden — Clear Hex Resource Nodes (live scene)
 // ─────────────────────────────────────────────────────────────────────────────
-// GM macro. Strips `flags.bbttcc-territory.resourceNodes` from every BBTTCC
+// GM macro. Strips `flags.bbttcc-territory.resourceNodes` from every Bad Eden
 // hex on the active scene. Companion to seed-hex-resource-nodes.macro.js.
 // ─────────────────────────────────────────────────────────────────────────────
 

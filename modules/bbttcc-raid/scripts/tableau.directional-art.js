@@ -1,6 +1,6 @@
 // modules/bbttcc-raid/scripts/tableau.directional-art.js
 //
-// BBTTCC Directional Token Art — facing-aware token artwork
+// Bad Eden Directional Token Art — facing-aware token artwork
 // Lineage: the standalone "directional-token-art" module (pre-monorepo),
 // rebuilt as a tableau-substrate sibling. Works on ANY scene, per-token
 // opt-in — the forced-perspective tableau is just where it shines.

@@ -1,5 +1,5 @@
 // modules/bbttcc-tikkun/scripts/tikkun-sheet.enhancer.js
-// BBTTCC — Tikkun Character Sheet Tab (C2, overlay mode)
+// Bad Eden — Tikkun Character Sheet Tab (C2, overlay mode)
 //
 // FULL REPLACEMENT (2026-01-02, rev D)
 // Fixes:
@@ -208,8 +208,8 @@
 
     let tabLabel = "Tikkun";
     try {
-      const loc = game.i18n?.localize?.("BBTTCC.TikkunTabLabel");
-      if (loc && loc !== "BBTTCC.TikkunTabLabel" && loc !== "label") tabLabel = loc;
+      const loc = game.i18n?.localize?.("Bad Eden.TikkunTabLabel");
+      if (loc && loc !== "Bad Eden.TikkunTabLabel" && loc !== "label") tabLabel = loc;
     } catch {}
 
     // IMPORTANT: make this a real v13 tab anchor

@@ -1,4 +1,4 @@
-/* BBTTCC Raid — Affiliation OP Contribution Table
+/* Bad Eden Raid — Affiliation OP Contribution Table
  *
  * Per-NPC additive contribution to the faction's OP roll, derived from
  * affiliation slots on the actor.

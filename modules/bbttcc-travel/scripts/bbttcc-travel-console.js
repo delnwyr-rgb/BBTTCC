@@ -1,7 +1,7 @@
 // PATCHMARK: console-terrain-norm-and-encounter-visuals-20251215-041610
 // PATCHMARK: weather-route-summary-chip-and-hex-association-20260105
 // modules/bbttcc-travel/scripts/bbttcc-travel-console.js
-// BBTTCC — Travel Console v1.5.11
+// Bad Eden — Travel Console v1.5.11
 
 (() => {
   const TAG      = "[bbttcc-travel-console v1.5.11]";
@@ -464,7 +464,7 @@
 
   function pickTokenForFaction(factionId) {
     try {
-      // Faction tokens in BBTTCC are commonly unlinked; for those, t.actor.id is
+      // Faction tokens in Bad Eden are commonly unlinked; for those, t.actor.id is
       // the SYNTHETIC actor id (per-token), while the world Actor id we want lives
       // at t.document.actorId. Check both so the resolver works for linked AND
       // unlinked faction tokens. See feedback_faction_gm_edit_world_actor.md.
@@ -547,7 +547,7 @@
 
   // ApplicationV2 + HandlebarsApplicationMixin — V14 canonical pattern.
   // Bare AppV1 (`extends Application`) doesn't get V14's drag/resize wiring;
-  // V2 + HandlebarsApplicationMixin is what every working BBTTCC dialog
+  // V2 + HandlebarsApplicationMixin is what every working Bad Eden dialog
   // (BBTTCCRigConsole, Tree Wizard v2) uses, so we conform.
   const _ApplicationV2 = foundry.applications.api.ApplicationV2;
   const _HandlebarsApplicationMixin = foundry.applications.api.HandlebarsApplicationMixin;
@@ -557,7 +557,7 @@
       id: "bbttcc-travel-console",
       classes: ["bbttcc", "bbttcc-travel-console", "themed", "theme-dark"],
       window: {
-        title: "BBTTCC: Travel Console",
+        title: "Bad Eden: Travel Console",
         icon: "fas fa-route",
         resizable: true
       },

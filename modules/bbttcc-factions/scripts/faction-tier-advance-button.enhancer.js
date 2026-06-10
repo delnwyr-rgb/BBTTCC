@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/faction-tier-advance-button.enhancer.js
-// BBTTCC — GM Tier Advancement Button (v1.0)
+// Bad Eden — GM Tier Advancement Button (v1.0)
 //
 // Adds a GM-only "Advance Tier" button to the Faction Sheet.
 // Sheet cleanup compatibility pass: prefer Assets tab / GM admin area placement in the refactored five-tab layout.

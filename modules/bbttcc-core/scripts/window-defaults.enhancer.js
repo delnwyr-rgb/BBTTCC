@@ -1,6 +1,6 @@
 /* bbttcc-core/scripts/window-defaults.enhancer.js
  *
- * Global window-default sweep: makes every window in the BBTTCC stack
+ * Global window-default sweep: makes every window in the Bad Eden stack
  * resizable + scrollable by default.
  *
  * Two pieces:

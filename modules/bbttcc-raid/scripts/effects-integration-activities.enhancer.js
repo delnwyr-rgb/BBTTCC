@@ -1,5 +1,5 @@
 // modules/bbttcc-raid/scripts/effects-integration-activities.enhancer.js
-// BBTTCC — Strategic Activities → Integration Track Enhancer
+// Bad Eden — Strategic Activities → Integration Track Enhancer
 //
 // When certain Strategic Activities fire (Develop Infrastructure, etc.),
 // this enhancer bumps the integration.progress of the target hex.

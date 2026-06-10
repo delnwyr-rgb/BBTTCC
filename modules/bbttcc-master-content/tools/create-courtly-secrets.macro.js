@@ -1,4 +1,4 @@
-/* BBTTCC — Courtly Intrigue Secrets seeder (Phase C)
+/* Bad Eden — Courtly Intrigue Secrets seeder (Phase C)
  *
  * Spec: bbttcc-raid/COURTLY_INTRIGUE_SPEC.md §4.3
  * Pairs with: bbttcc-raid/scripts/raid-courtly.secrets.api.js (effectKey handlers)

@@ -17,24 +17,24 @@ function __bbttccInstallBeatEditorUnlockHook() {
         // Delay a tick so the tab DOM exists.
         setTimeout(() => {
           const arg = app?.element || html;
-          try { if (typeof app._ensureUnlocksUI === "function") app._ensureUnlocksUI(arg); } catch (e1) { console.warn("[BBTTCC] unlock inject failed:", e1); }
-          try { if (typeof app._ensureWorldModifiersUI === "function") app._ensureWorldModifiersUI(arg); } catch (e1b) { console.warn("[BBTTCC] world modifiers inject failed:", e1b); }
-          try { if (typeof app._ensureRelationshipEffectsUI === "function") app._ensureRelationshipEffectsUI(arg); } catch (e1c) { console.warn("[BBTTCC] relationship effects inject failed:", e1c); }
-          try { if (typeof app._ensureFactionGMEffectsUI === "function") app._ensureFactionGMEffectsUI(arg); } catch (e1d) { console.warn("[BBTTCC] faction GM effects inject failed:", e1d); }
-          try { if (typeof app._ensureCasualtiesUI === "function") app._ensureCasualtiesUI(arg); } catch (e1e) { console.warn("[BBTTCC] casualties inject failed:", e1e); }
-          try { if (typeof app._ensureTurnAssignUI === "function") app._ensureTurnAssignUI(arg); } catch (e2) { console.warn("[BBTTCC] turn assign inject failed:", e2); }
-          try { if (typeof app._ensureAudioUI === "function") app._ensureAudioUI(arg); } catch (e2a) { console.warn("[BBTTCC] audio inject failed:", e2a); }
+          try { if (typeof app._ensureUnlocksUI === "function") app._ensureUnlocksUI(arg); } catch (e1) { console.warn("[Bad Eden] unlock inject failed:", e1); }
+          try { if (typeof app._ensureWorldModifiersUI === "function") app._ensureWorldModifiersUI(arg); } catch (e1b) { console.warn("[Bad Eden] world modifiers inject failed:", e1b); }
+          try { if (typeof app._ensureRelationshipEffectsUI === "function") app._ensureRelationshipEffectsUI(arg); } catch (e1c) { console.warn("[Bad Eden] relationship effects inject failed:", e1c); }
+          try { if (typeof app._ensureFactionGMEffectsUI === "function") app._ensureFactionGMEffectsUI(arg); } catch (e1d) { console.warn("[Bad Eden] faction GM effects inject failed:", e1d); }
+          try { if (typeof app._ensureCasualtiesUI === "function") app._ensureCasualtiesUI(arg); } catch (e1e) { console.warn("[Bad Eden] casualties inject failed:", e1e); }
+          try { if (typeof app._ensureTurnAssignUI === "function") app._ensureTurnAssignUI(arg); } catch (e2) { console.warn("[Bad Eden] turn assign inject failed:", e2); }
+          try { if (typeof app._ensureAudioUI === "function") app._ensureAudioUI(arg); } catch (e2a) { console.warn("[Bad Eden] audio inject failed:", e2a); }
           try { __bbttccAutosizeAppWindow(app); } catch (e3) {}
         }, 50);
       } catch (e) {
-        console.warn("[BBTTCC] render hook error:", e);
+        console.warn("[Bad Eden] render hook error:", e);
       }
     });
 
     globalThis.__bbttccUnlockRenderHookInstalled = hookId;
-    console.log("[BBTTCC] Unlock Rewards render hook installed (late-load safe):", hookId);
+    console.log("[Bad Eden] Unlock Rewards render hook installed (late-load safe):", hookId);
   } catch (e) {
-    console.warn("[BBTTCC] Failed to install unlock render hook:", e);
+    console.warn("[Bad Eden] Failed to install unlock render hook:", e);
   }
 }
 
@@ -702,7 +702,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       .concat(questOptions.map(x => ({ id: x.id, label: "Quest — " + x.name })))
       .concat(beatIdOptions.map(x => ({ id: x.id, label: "Beat — " + x.label + " (" + x.id + ")" })));
 
-// Choice checks: expose the full D&D 5E roll gamut (skills, abilities, saves) plus ALL BBTTCC OP tracks,
+// Choice checks: expose the full D&D 5E roll gamut (skills, abilities, saves) plus ALL Bad Eden OP tracks,
 // and a GM-adjudication mode for table-resolved outcomes.
 //
 // Runtime expectations (bbttcc-campaign/scripts/module.js):
@@ -801,7 +801,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       // Skills
       ...skills,
 
-      // OP tracks (BBTTCC)
+      // OP tracks (Bad Eden)
       ...opOptions
     ];
 

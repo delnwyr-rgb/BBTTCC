@@ -1,5 +1,5 @@
 // bbttcc-factions/enhancers/faction-meters.enhancer.js
-// Adds read-only Morale and Loyalty meters to the BBTTCC Faction Sheet.
+// Adds read-only Morale and Loyalty meters to the Bad Eden Faction Sheet.
 // Non-breaking, single-file enhancer: injects a UI strip on sheet render and exposes small helpers.
 //
 // Flags read (0–100 clamped):

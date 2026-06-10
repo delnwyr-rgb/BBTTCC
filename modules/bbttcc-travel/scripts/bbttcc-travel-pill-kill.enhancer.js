@@ -1,9 +1,9 @@
 // modules/bbttcc-territory/scripts/bbttcc-travel-pill-kill.enhancer.js
-// BBTTCC — remove legacy "Open Travel Planner" pill from hex-travel-mode.
+// Bad Eden — remove legacy "Open Travel Planner" pill from hex-travel-mode.
 //
 // hex-travel-mode.js creates a top-right <div id="bbttcc-travel-mode-btn">
 // with text "Open Travel Planner" on every canvasReady. We don't want that
-// anymore now that the Hex Chrome BBTTCC toolbar is the canonical UI.
+// anymore now that the Hex Chrome Bad Eden toolbar is the canonical UI.
 
 (() => {
   const TAG = "[bbttcc-ui/travel-pill-kill]";

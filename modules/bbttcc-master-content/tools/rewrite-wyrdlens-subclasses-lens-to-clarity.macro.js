@@ -1,4 +1,4 @@
-// BBTTCC — Wyrdlens subclasses: Lens Charge → Clarity + per-use callout refresh
+// Bad Eden — Wyrdlens subclasses: Lens Charge → Clarity + per-use callout refresh
 // ─────────────────────────────────────────────────────────────────────────────
 // For each of the three Refraction subclass docs in the live
 // `bbttcc-master-content.classes` pack (Foresight, Mercy, Truth):
@@ -27,7 +27,7 @@ const PACK = "bbttcc-master-content.classes";
 // Aggregate-callout content for each subclass. Mirrors the existing visual
 // vocabulary used in other subclass docs (border #b08acc, etc.).
 const CALLOUTS = {
-  "Refraction of Foresight (BBTTCC)": {
+  "Refraction of Foresight (Bad Eden)": {
     aggregateKey: "wyrdlensForesight",
     title: "Refraction of Foresight",
     rows: [
@@ -43,7 +43,7 @@ const CALLOUTS = {
         summary: "Undo the action before it resolves; target may attempt a Soul save to retain (success acts at keep-lowest)." }
     ]
   },
-  "Refraction of Mercy (BBTTCC)": {
+  "Refraction of Mercy (Bad Eden)": {
     aggregateKey: "wyrdlensMercy",
     title: "Refraction of Mercy",
     rows: [
@@ -61,7 +61,7 @@ const CALLOUTS = {
         summary: "Darkness −1 and shift Hex one step toward a beneficial Sephirah." }
     ]
   },
-  "Refraction of Truth (BBTTCC)": {
+  "Refraction of Truth (Bad Eden)": {
     aggregateKey: "wyrdlensTruth",
     title: "Refraction of Truth",
     rows: [

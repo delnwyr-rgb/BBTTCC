@@ -1,4 +1,4 @@
-// BBTTCC — Refactor NPCs to Unified RFI Schema (2026-05-12)
+// Bad Eden — Refactor NPCs to Unified RFI Schema (2026-05-12)
 // ─────────────────────────────────────────────────────────────────────────────
 // World-wide NPC sanitizer + canonicalizer. Walks game.actors filtered to
 // type:"npc" and, per actor:

@@ -1,4 +1,4 @@
-// BBTTCC — Seed Bestiary Attacks & Abilities (2026-05-12)
+// Bad Eden — Seed Bestiary Attacks & Abilities (2026-05-12)
 // ─────────────────────────────────────────────────────────────────────────────
 // Authors offensive items, passive traits, and special abilities for the 29
 // B-cruft-empty NPCs left itemless after the 2026-05-12 unified-schema

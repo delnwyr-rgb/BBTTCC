@@ -1,5 +1,5 @@
 // bbttcc-factions/enhancers/faction-meters.enhancer.js
-// Wireframe-aligned Morale/Loyalty meters for the BBTTCC Faction Sheet.
+// Wireframe-aligned Morale/Loyalty meters for the Bad Eden Faction Sheet.
 // Overview-only injector: keeps the meters out of retained/global sheet chrome.
 //
 // Flags read (0–100 clamped):

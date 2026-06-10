@@ -1,5 +1,5 @@
 // modules/bbttcc-raid/scripts/bbttcc-raid-maneuvers-loader.enhancer.js
-// BBTTCC — Maneuver EFFECTS loader for Raid Console 2.0
+// Bad Eden — Maneuver EFFECTS loader for Raid Console 2.0
 //
 // Loads all maneuvers from bbttcc_maneuvers_v1_4.json into raid.EFFECTS,
 // attaching: label, tier, rarity, opCosts, primaryKey, text, raidTypes, defenderAccess.

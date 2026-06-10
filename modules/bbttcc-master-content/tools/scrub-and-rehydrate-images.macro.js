@@ -22,13 +22,13 @@
     Item: [
       "Items and Gear",
       "BBTTCC_Character_Options",
-      "BBTTCC Button Icons",
+      "Bad Eden Button Icons",
       "ArtForBBTTCCModule",
     ],
     Actor: [
       "GOTTGAIT Token",
       "GOTTGAIT Local Factions",
-      "BBTTCC Faction Tokens",
+      "Bad Eden Faction Tokens",
       "BBTTCC_Character_Options",
     ],
   };

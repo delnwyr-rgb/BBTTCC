@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts (Phase 3: species multi-ability pickers)
+// Bad Eden — Append Per-Use callouts (Phase 3: species multi-ability pickers)
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM) and hit Enter. Idempotent.
 // 3 species items: Circuitborn, Human, Stormborn Nomad.
@@ -16,7 +16,7 @@
       summary: "Click this species feature to open the abilities picker.",
       abilities: [
         ["Attention Resonance", "1/long rest", "GM-triggered (focus on you)",
-         "Regain one BBTTCC OP from a category used this scene, OR HP equal to your PB. Two-choice on use."],
+         "Regain one Bad Eden OP from a category used this scene, OR HP equal to your PB. Two-choice on use."],
         ["Glitch-Surge", "Passive trigger (no daily cap)", "Reaction (on dropping to 0 HP)",
          "Emit a controlled burst of static — loud, disorienting, no damage. Excuse for narrative consequences."]
       ]

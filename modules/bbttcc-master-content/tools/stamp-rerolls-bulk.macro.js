@@ -1,4 +1,4 @@
-// BBTTCC — Bulk-stamp Shape B reroll grants on live ancestry/heritage/path items
+// Bad Eden — Bulk-stamp Shape B reroll grants on live ancestry/heritage/path items
 // ─────────────────────────────────────────────────────────────────────────────
 // Generated 2026-04-28T19:47:52.444Z by build-rerolls-bulk-macro.mjs
 // Source: /tmp/reroll-survey/per-item.json + /tmp/shape-b-zombies.json

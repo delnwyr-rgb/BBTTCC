@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts (Phase 2: heritage-unique + ancestry feats)
+// Bad Eden — Append Per-Use callouts (Phase 2: heritage-unique + ancestry feats)
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM) and hit Enter. Idempotent.
 // 6 items: Igneous Heat Memory, Rustland Patch & Repurpose, Predator Patience,

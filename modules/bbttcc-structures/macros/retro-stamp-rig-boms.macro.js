@@ -1,4 +1,4 @@
-// BBTTCC Structures — Retro-Stamp Rig BOMs (Phase E companion)
+// Bad Eden Structures — Retro-Stamp Rig BOMs (Phase E companion)
 // ─────────────────────────────────────────────────────────────────────────────
 // One-shot GM tool. New Rigs auto-stamp a structural BOM at create-time (Phase E
 // in bbttcc-auto-link/scripts/rig-builder.js). This back-fills EXISTING campaign

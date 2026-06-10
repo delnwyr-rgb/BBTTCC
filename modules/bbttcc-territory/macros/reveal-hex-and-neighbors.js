@@ -1,4 +1,4 @@
-// BBTTCC Reveal Clicked Hex + Adjacent Hexes
+// Bad Eden Reveal Clicked Hex + Adjacent Hexes
 // GM macro — reveal clicked hex + neighbors within RADIUS
 
 (async () => {
@@ -90,7 +90,7 @@
     .map(p => p.document)
     .filter(isHexDrawing);
 
-  if (!allDocs.length) { ui.notifications.warn("No BBTTCC hex drawings found on this scene."); return; }
+  if (!allDocs.length) { ui.notifications.warn("No Bad Eden hex drawings found on this scene."); return; }
 
   ui.notifications.info("Click a hex to reveal it and adjacent hexes. Press Esc to cancel.");
 
@@ -117,7 +117,7 @@
     const wpt = worldFromEvent(evt);
     const clicked = hexAtWorldPoint(wpt);
 
-    console.log("[BBTTCC Reveal] click", {
+    console.log("[Bad Eden Reveal] click", {
       world: { x: Math.round(wpt.x), y: Math.round(wpt.y) },
       hit: !!clicked,
       id: clicked?.id,

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts to ancestry cores + heritages
+// Bad Eden — Append Per-Use callouts to ancestry cores + heritages
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste this whole block into the F12 console (as GM) and hit Enter.
 // It updates BOTH the compendium master copies AND every existing actor that

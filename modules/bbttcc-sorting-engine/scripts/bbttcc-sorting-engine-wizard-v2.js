@@ -1,5 +1,5 @@
 /**
- * BBTTCC Sorting Engine v2 — Tree of Life Wizard (Step 5, Option A + Hex Chrome).
+ * Bad Eden Sorting Engine v2 — Tree of Life Wizard (Step 5, Option A + Hex Chrome).
  *
  * Standalone Foundry ApplicationV2. Self-contained: inline HTML + CSS, no
  * Handlebars template file. Pure quiz-flow descent — NO pickers per station.
@@ -236,7 +236,7 @@ const _SE_DOC_CACHE        = new Map();   // `${category}:${docId}` → { name, 
 
 function _normalizeOptionName(s) {
   let n = String(s || "")
-    .replace(/\s*\(BBTTCC\)\s*$/i, "")  // strip trailing "(BBTTCC)" suffix
+    .replace(/\s*\(Bad Eden\)\s*$/i, "")  // strip trailing "(Bad Eden)" suffix
     .replace(/\s*\/\s*/g, "/")           // canonicalize slash spacing: " / " or "/" both → "/"
     .toLowerCase().trim();
   // Sefirot transliteration aliases — pack uses Kether/Chokmah/Geburah, spec uses Keter/Chokhmah/Gevurah.

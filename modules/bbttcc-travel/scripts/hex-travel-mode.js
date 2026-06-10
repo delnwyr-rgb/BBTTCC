@@ -1,4 +1,4 @@
-/* BBTTCC – Hex Travel Mode (v1.0.3)
+/* Bad Eden – Hex Travel Mode (v1.0.3)
  * Add legs 3 ways:
  *  1) Ctrl/Cmd+Click hex (clickDrawing with modifier)
  *  2) Double-click hex (dblclickDrawing)

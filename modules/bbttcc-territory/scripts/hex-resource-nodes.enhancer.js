@@ -1,5 +1,5 @@
 /* modules/bbttcc-territory/scripts/hex-resource-nodes.enhancer.js
- * BBTTCC Hex Resource Nodes — harvest adapter
+ * Bad Eden Hex Resource Nodes — harvest adapter
  *
  * Phase 2 (2026-05-02). Companion to:
  *   - macros/seed-hex-resource-nodes.macro.js (seeder)

@@ -1,5 +1,5 @@
 // modules/bbttcc-tikkun/scripts/tikkun-ritual-console.js
-// BBTTCC — Final Ritual Console (UI wrapper for the ritual engine)
+// Bad Eden — Final Ritual Console (UI wrapper for the ritual engine)
 //
 // Wraps game.bbttcc.api.tikkun.beginRitual / step in an ApplicationV2 UI.
 // Usage:
@@ -54,7 +54,7 @@ function computeRitualDC(baseDc, darknessNow) {
 class BBTTCC_RitualConsole extends HBM(AppV2) {
   static DEFAULT_OPTIONS = {
     id: "bbttcc-ritual-console",
-    title: "BBTTCC — Final Ritual",
+    title: "Bad Eden — Final Ritual",
     classes: ["bbttcc", "bbttcc-ritual-console"],
     width: 960,
     height: 720,

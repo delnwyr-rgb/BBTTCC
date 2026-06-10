@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / prune-pactkeeper-cruft.macro.js
+// Bad Eden master-content / tools / prune-pactkeeper-cruft.macro.js
 //
 // Deletes the 4 dead Pactkeeper feat items left over from initial creation —
 // their handlers were retired in the 2026-05-22 Phase-1.5 pass and the orphan

@@ -1,5 +1,5 @@
 // bbttcc-encounters/scripts/spawner.interface.js
-// Spawner interface for BBTTCC Encounter Engine.
+// Spawner interface for Bad Eden Encounter Engine.
 // Provides:
 //  - Concrete spawner(s) (currently: bandit_ambush_standard)
 //  - Generic helpers for campaign-authored encounters (spawnAtCenter / spawnActors)

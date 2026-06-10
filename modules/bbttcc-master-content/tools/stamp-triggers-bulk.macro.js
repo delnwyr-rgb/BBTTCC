@@ -1,4 +1,4 @@
-// BBTTCC — Bulk-stamp Phase C triggers (Chunk 6 bulk-author)
+// Bad Eden — Bulk-stamp Phase C triggers (Chunk 6 bulk-author)
 // ─────────────────────────────────────────────────────────────────────────────
 // Generated 2026-04-29T00:25:57.200Z by build-stamp-triggers-bulk.mjs
 // Source: /tmp/trigger-vocab.json (survey output, 61 triggers across 54 items).

@@ -1,4 +1,4 @@
-// BBTTCC — Convert Reward Items to RFI-native gear/consumables
+// Bad Eden — Convert Reward Items to RFI-native gear/consumables
 // ─────────────────────────────────────────────────────────────────────────────
 // Walks the 5 hand-authored items in the Reward Items folder of
 // `bbttcc-master-content.items` and rewrites them as fourththing gear:

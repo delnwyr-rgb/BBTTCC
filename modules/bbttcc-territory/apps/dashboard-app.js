@@ -90,7 +90,7 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
     classes: ["bbttcc","bbttcc-territory-dashboard"],
     position: { width: 1200, height: 600 },
     window: {
-      title: "BBTTCC Territory Dashboard",
+      title: "Bad Eden Territory Dashboard",
       resizable: true,
       // Your Foundry build expects these:
       controls: [],

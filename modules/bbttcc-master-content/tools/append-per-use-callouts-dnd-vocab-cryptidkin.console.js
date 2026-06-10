@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts (D&D-vocab scrub Phase 3 — Cryptidkin batch)
+// Bad Eden — Append Per-Use callouts (D&D-vocab scrub Phase 3 — Cryptidkin batch)
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent.
 // 7 ancestry feats — Cryptidkin batch from the 2026-04-29 Phase 3 sprint.

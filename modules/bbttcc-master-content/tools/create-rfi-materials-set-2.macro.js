@@ -1,7 +1,7 @@
-// BBTTCC — Create RFI Crafting Materials (Set 2 — fill out the catalog)
+// Bad Eden — Create RFI Crafting Materials (Set 2 — fill out the catalog)
 // ─────────────────────────────────────────────────────────────────────────────
 // Adds the remaining 31 materials referenced by `materialOf` arrays in items
-// shipped across sprints A2 + B + C + Rad Suits + BBTTCC Gear conversion.
+// shipped across sprints A2 + B + C + Rad Suits + Bad Eden Gear conversion.
 // After this runs, EVERY recipe in those sprints is completable.
 //
 // Idempotent — items with matching names are skipped unless FORCE = true.

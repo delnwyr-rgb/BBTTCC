@@ -1,6 +1,6 @@
 // animate-classes.macro.js — RUN IN-WORLD (GM). Run in BOTH worlds. F5 afterwards.
 // Stamps Automated Animations (flags.autoanimations) onto the curated set of activatable
-// CLASS features in the "BBTTCC Classes" compendium (bbttcc-master-content.classes).
+// CLASS features in the "Bad Eden Classes" compendium (bbttcc-master-content.classes).
 //
 // Mirrors tools/animate-starter-manifestations.macro.js:
 //   • NON-DESTRUCTIVE — only ADDS AA to features that lack it; never touches features that
@@ -101,7 +101,7 @@
   const pack = game.packs.get("bbttcc-master-content.classes")
             || game.packs.find(p => p.metadata?.name === "classes" && p.metadata?.type === "Item")
             || game.packs.find(p => (p.title || "").toLowerCase() === "bbttcc classes");
-  if (!pack) return ui.notifications.error("Could not find the 'BBTTCC Classes' compendium in this world.");
+  if (!pack) return ui.notifications.error("Could not find the 'Bad Eden Classes' compendium in this world.");
 
   const wasLocked = pack.locked;
   if (wasLocked && !DRY_RUN) await pack.configure({ locked:false });

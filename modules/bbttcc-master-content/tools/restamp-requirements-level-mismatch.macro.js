@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / restamp-requirements-level-mismatch.macro.js
+// Bad Eden master-content / tools / restamp-requirements-level-mismatch.macro.js
 //
 // Repair macro for the 2026-05-19 playtest finding: a handful of class-feature
 // items (Pactkeeper Initiations, Cosmic Linguist Initiations, Dreamwalker Tier

@@ -21,8 +21,8 @@
     try{
       // If api.world.js already registered these, register() will throw; swallow.
       game.settings.register("bbttcc-world", "worldState", {
-        name: "BBTTCC World State",
-        hint: "Canonical BBTTCC world state spine.",
+        name: "Bad Eden World State",
+        hint: "Canonical Bad Eden world state spine.",
         scope: "world",
         config: false,
         type: Object,
@@ -31,7 +31,7 @@
     } catch(_e1) {}
     try{
       game.settings.register("bbttcc-world", "worldLogs", {
-        name: "BBTTCC World Logs",
+        name: "Bad Eden World Logs",
         hint: "Audit log for world state changes.",
         scope: "world",
         config: false,
@@ -67,7 +67,7 @@
 
       try{
         game.settings.registerMenu("bbttcc-world", "gmGodPanel", {
-          name: "BBTTCC — GM God Panel",
+          name: "Bad Eden — GM God Panel",
           label: "Open GM God Panel",
           hint: "Manual world-state editing (Turn, Darkness, Time, Locks). GM only.",
           icon: "fas fa-hand-sparkles",

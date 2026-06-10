@@ -2185,7 +2185,7 @@ async function openHexEditorByUuid(uuid){
     const esc = (s) => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     html = `
       <div class="bbttcc-hex-config-fallback" style="display:grid; gap:.5rem;">
-        <p><strong>BBTTCC Hex Config fallback</strong></p>
+        <p><strong>Bad Eden Hex Config fallback</strong></p>
         <p style="opacity:.8;">Primary template failed to render. You can still inspect the hex and verify the click opener is working.</p>
         <div class="form-group"><label>Name</label><input type="text" name="name" value="${esc(context.name || "Hex")}"></div>
         <div class="form-group"><label>Status</label><input type="text" name="status" value="${esc(context.status || "unclaimed")}"></div>
@@ -2208,7 +2208,7 @@ async function openHexEditorByUuid(uuid){
 
   const dlg = new Dialog(
   {
-    title: "BBTTCC: Hex Configuration",
+    title: "Bad Eden: Hex Configuration",
     content: `<form class="bbttcc-hex-config">${html}${overrideBlock}</form>`,
     buttons: {
       save: {
@@ -2677,13 +2677,13 @@ async function _createHexAt(x,y){
 /* ---------------- Toolbar ---------------- */
 function toolbarHTML(){
   return `
-  <div id="${TOOLBAR_ID}" class="bbttcc-control-bar-wrap" data-bbttcc-toolbar="true" aria-label="BBTTCC Control Bar">
+  <div id="${TOOLBAR_ID}" class="bbttcc-control-bar-wrap" data-bbttcc-toolbar="true" aria-label="Bad Eden Control Bar">
     <div class="bbttcc-toolbar bbttcc-control-bar">
       
       <div class="bbttcc-toolbar-left">
         <div class="bbttcc-toolbar-brand">
           <i class="fas fa-bars"></i>
-          <strong>BBTTCC</strong>
+          <strong>Bad Eden</strong>
         </div>
       </div>
 
@@ -2753,7 +2753,7 @@ function ensureToolbar(){
   try {
     const mkDrag = globalThis._ftMakeHudDraggable;
     if (typeof mkDrag === "function") {
-      mkDrag(el, { storageKey: "bbttcc-toolbar", collapsedLabel: "BBTTCC", skipReset: true });
+      mkDrag(el, { storageKey: "bbttcc-toolbar", collapsedLabel: "Bad Eden", skipReset: true });
     }
   } catch (e) { console.warn("[bbttcc-territory] toolbar drag wire-up failed", e); }
 
@@ -3134,7 +3134,7 @@ Hooks.once("ready", ()=>{
 });
 
 Hooks.on("canvasReady", () => {
-  // Re-ensure the BBTTCC toolbar exists whenever a new scene is drawn.
+  // Re-ensure the Bad Eden toolbar exists whenever a new scene is drawn.
   // If it's already there, ensureToolbar() does nothing.
   try {
     ensureToolbar();
@@ -3266,7 +3266,7 @@ Hooks.on("deleteDrawing", (doc) => {
   class BBTTCC_HexSheetApp extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static DEFAULT_OPTIONS = {
       id: "bbttcc-hex-sheet",
-      window: { title: "BBTTCC — Hex Sheet", icon: "fas fa-hexagon" },
+      window: { title: "Bad Eden — Hex Sheet", icon: "fas fa-hexagon" },
       position: { width: 920, height: 720 },
       classes: ["bbttcc", "bbttcc-hex-sheet", "sheet"],
       resizable: true

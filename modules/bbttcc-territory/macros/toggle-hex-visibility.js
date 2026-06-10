@@ -1,5 +1,5 @@
-// BBTTCC Toggle One Hex Visibility
-// GM macro — click a BBTTCC hex to flip hidden/visible
+// Bad Eden Toggle One Hex Visibility
+// GM macro — click a Bad Eden hex to flip hidden/visible
 
 (async () => {
   if (!game.user?.isGM) { ui.notifications.warn("GM only."); return; }
@@ -80,7 +80,7 @@
     const wpt = worldFromEvent(evt);
     const clicked = hexAtWorldPoint(wpt);
 
-    console.log("[BBTTCC Toggle] click", {
+    console.log("[Bad Eden Toggle] click", {
       world: { x: Math.round(wpt.x), y: Math.round(wpt.y) },
       hit: !!clicked,
       id: clicked?.id,

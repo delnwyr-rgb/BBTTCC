@@ -1,4 +1,4 @@
-// BBTTCC — Class L1 Aptitude Stamp (Phase A, 2026-05-04)
+// Bad Eden — Class L1 Aptitude Stamp (Phase A, 2026-05-04)
 // ─────────────────────────────────────────────────────────────────────────────
 // Each of the 9 canonical classes should grant:
 //   • one combat aptitude (melee or brawl) at rank +1

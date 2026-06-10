@@ -1,6 +1,6 @@
 // modules/bbttcc-raid/scripts/raid-courtly.hud.js
 //
-// BBTTCC — Courtly Intrigue Phase B HUD
+// Bad Eden — Courtly Intrigue Phase B HUD
 // Spec: bbttcc-raid/COURTLY_INTRIGUE_SPEC.md §3.4 (Holographic UI panels)
 // Substrate: bbttcc-raid/TABLEAU_SUBSTRATE.md
 //

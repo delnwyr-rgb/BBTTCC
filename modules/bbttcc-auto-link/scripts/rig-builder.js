@@ -1,4 +1,4 @@
-/* BBTTCC Auto-Link — RFI Rig Builder
+/* Bad Eden Auto-Link — RFI Rig Builder
  *
  * Sibling to boss-builder.js. Mints a type:"rig" actor authored against the
  * fourththing rig schema (identity / integrity / capacity / travel / defenses).

@@ -1,4 +1,4 @@
-// BBTTCC Structures — Stamp Test BOM (Phase A paper-test tool)
+// Bad Eden Structures — Stamp Test BOM (Phase A paper-test tool)
 // ─────────────────────────────────────────────────────────────────────────────
 // Drop into the macro hotbar. Drag the macro onto a Rig or Boss token first
 // to set the speaker, OR select a token then run.

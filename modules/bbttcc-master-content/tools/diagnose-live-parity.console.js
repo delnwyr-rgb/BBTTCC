@@ -1,6 +1,6 @@
 // scripts/tools/diagnose-live-parity.console.js
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC Live Parity Diagnostic
+// Bad Eden Live Parity Diagnostic
 //
 // PASTE INTO A SCRIPT MACRO on each Foundry instance (foundry + ember) and run.
 // Reports content state vs expected counts + suggests the seeder macro to run
@@ -165,7 +165,7 @@
 
   // ── Emit chat card ───────────────────────────────────────────────────
   const content = `<div style="padding:.55rem .65rem; background:linear-gradient(135deg, rgba(125, 211, 252, 0.10), rgba(45, 212, 191, 0.05)); border:1px solid rgba(125, 211, 252, 0.25); border-radius:6px; font-size:11.5px; line-height:1.45;">
-    <h3 style="margin:0 0 .15rem 0; color:#7dd3fc;">🔍 BBTTCC Live Parity Diagnostic</h3>
+    <h3 style="margin:0 0 .15rem 0; color:#7dd3fc;">🔍 Bad Eden Live Parity Diagnostic</h3>
     <p style="margin:.1rem 0 .35rem 0; opacity:.7; font-size:10.5px;">World: <b>${game.world.id}</b> · ${new Date().toLocaleString()}</p>
     ${rows.join("\n")}
     ${footer}
@@ -173,12 +173,12 @@
 
   await ChatMessage.create({
     content,
-    speaker: { alias: "BBTTCC Parity" },
+    speaker: { alias: "Bad Eden Parity" },
     whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id)
   });
 
   // Console mirror for quick scan
-  console.log("[BBTTCC Parity]", {
+  console.log("[Bad Eden Parity]", {
     maneuvers: { total: maneuvers.length, s2, s3a, taggedEngine, taggedFireMode },
     ancestries: anc.size,
     vehicles: vehicles.size,

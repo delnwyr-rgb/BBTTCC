@@ -1,4 +1,4 @@
-// BBTTCC — Retro-apply Class L1 Aptitudes (Phase A companion, 2026-05-04)
+// Bad Eden — Retro-apply Class L1 Aptitudes (Phase A companion, 2026-05-04)
 // ─────────────────────────────────────────────────────────────────────────────
 // Phase A's stamp-class-l1-aptitudes.macro.js stamps the new transfer-AEs onto
 // the compendium-side T1 anchor items. That fixes new characters created from

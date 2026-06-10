@@ -1,4 +1,4 @@
-// BBTTCC — Mal-Voiced Gear (Bad Eden, Frontier Formerly Known As Texas)
+// Bad Eden — Mal-Voiced Gear (Bad Eden, Frontier Formerly Known As Texas)
 // ─────────────────────────────────────────────────────────────────────────────
 // 20 wacky pieces of gear narrated by Mal, the snarky self-aware unreliable
 // narrator of Bad Eden. Mal's voice mixes cosmic absurdity with truck-stop

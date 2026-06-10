@@ -30,7 +30,7 @@ function findActorDirHeader(root) {
 
 function _hideNativeCreateActorButton(root) {
   // 2026-05-16 — Classed Monsters sprint. The Roll For Initiation workflow
-  // routes actor creation through BBTTCC builders (RFI Character / NPC /
+  // routes actor creation through Bad Eden builders (RFI Character / NPC /
   // Boss / Rig). Hide Foundry's native "Create Actor" button so users
   // don't accidentally create raw type:'npc' actors that bypass the
   // entityKind-flagged PC-sheet workflow.
@@ -84,7 +84,7 @@ function injectButtons(html) {
 
   _hideNativeCreateActorButton(root);
 
-  // Create RFI Character (rebranded 2026-05-16 from "Create Character (BBTTCC)").
+  // Create RFI Character (rebranded 2026-05-16 from "Create Character (Bad Eden)").
   // Same underlying wizard (openTreeWizardV2) — produces a Tree-of-Life-walked
   // PC. The label change reflects that this is the canonical RFI character path.
   if (!header.querySelector("[data-bbttcc-create-character]")) {
@@ -99,13 +99,13 @@ function injectButtons(html) {
         const open = game.bbttcc?.openTreeWizardV2;
         if (typeof open !== "function") {
           WARN("Tree Wizard v2 not found. Is bbttcc-sorting-engine enabled?");
-          ui.notifications?.error?.("BBTTCC Tree Wizard v2 not available — enable the bbttcc-sorting-engine module.");
+          ui.notifications?.error?.("Bad Eden Tree Wizard v2 not available — enable the bbttcc-sorting-engine module.");
           return;
         }
         open(null);
       } catch (e) {
-        WARN("Could not open BBTTCC Tree Wizard v2", e);
-        ui.notifications?.error?.("BBTTCC Tree Wizard v2 failed to open.");
+        WARN("Could not open Bad Eden Tree Wizard v2", e);
+        ui.notifications?.error?.("Bad Eden Tree Wizard v2 failed to open.");
       }
     });
 
@@ -257,12 +257,12 @@ Hooks.once("ready", async () => {
     WARN("Late injectButtons failed", e);
   }
 
-  // Register BBTTCC Character Sheet (non-fatal)
+  // Register Bad Eden Character Sheet (non-fatal)
   try {
     const mod = await import("./character-sheet.js");
     if (mod?.registerBBTTCCCharacterSheet) {
       mod.registerBBTTCCCharacterSheet();
-      LOG("Registered BBTTCC Character/NPC sheets (dynamic import).");
+      LOG("Registered Bad Eden Character/NPC sheets (dynamic import).");
     }
   } catch (err) {
     WARN("Character sheet registration failed (non-fatal).", err);

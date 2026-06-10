@@ -1,4 +1,4 @@
-// BBTTCC — Cleanup zombie ancestry items (retired sub-heritages)
+// Bad Eden — Cleanup zombie ancestry items (retired sub-heritages)
 // ─────────────────────────────────────────────────────────────────────────────
 // Searches every Item pack for items whose name matches a CONFIRMED-retired
 // ancestry sub-heritage pattern, lists them (DRY_RUN), and on a second run

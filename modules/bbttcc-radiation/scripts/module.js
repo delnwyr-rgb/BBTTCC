@@ -1,8 +1,8 @@
 // =========================================================================
-// == BBTTCC Radiation - CONSOLIDATED MODULE (Overlay + Mutations Section)
+// == Bad Eden Radiation - CONSOLIDATED MODULE (Overlay + Mutations Section)
 // =========================================================================
 
-console.log("🏁 BBTTCC Radiation | Module loading…");
+console.log("🏁 Bad Eden Radiation | Module loading…");
 
 // --- Tracker & Zone UI placeholders (can be fleshed out later) -------------
 class RadiationTracker extends FormApplication {

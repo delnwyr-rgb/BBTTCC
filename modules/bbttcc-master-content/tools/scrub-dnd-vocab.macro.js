@@ -1,4 +1,4 @@
-// BBTTCC — D&D Vocab Scrub (2026-05-16)
+// Bad Eden — D&D Vocab Scrub (2026-05-16)
 // ─────────────────────────────────────────────────────────────────────────────
 // Rewrites D&D tool/kit/skill names in compendium item descriptions to the
 // Roll for Initiation aptitude vocabulary. Driven by the same need that

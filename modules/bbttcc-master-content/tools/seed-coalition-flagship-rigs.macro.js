@@ -1,4 +1,4 @@
-// BBTTCC — Iconic Coalition Flagship Rigs (2026-05-23)
+// Bad Eden — Iconic Coalition Flagship Rigs (2026-05-23)
 // ─────────────────────────────────────────────────────────────────────────────
 // Mints the five "known methods of transportation" — one signature flagship
 // rig per Known Coalition of the Bad Eden. Each is authored against the

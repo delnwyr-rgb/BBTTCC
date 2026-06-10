@@ -62,7 +62,7 @@
   const model = mal.settings.model() || "(provider default)";
   ok(`Provider: ${provider}, model: ${model}`);
   if (!key) {
-    fail("No API key configured. Open Module Settings → BBTTCC Mal Voice → API key and paste your Anthropic key, then re-run.");
+    fail("No API key configured. Open Module Settings → Bad Eden Mal Voice → API key and paste your Anthropic key, then re-run.");
     _report();
     return;
   }

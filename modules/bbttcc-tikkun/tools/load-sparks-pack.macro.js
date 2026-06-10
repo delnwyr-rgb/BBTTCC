@@ -1,4 +1,4 @@
-// BBTTCC — Load Sparks Pack from JSON sources (Phase A of B3, 2026-05-09)
+// Bad Eden — Load Sparks Pack from JSON sources (Phase A of B3, 2026-05-09)
 // ─────────────────────────────────────────────────────────────────────────────
 // Reads the 30 JSON sources at modules/bbttcc-tikkun/packs-source/sparks/ and
 // creates the corresponding Item documents in the `bbttcc-tikkun.sparks`

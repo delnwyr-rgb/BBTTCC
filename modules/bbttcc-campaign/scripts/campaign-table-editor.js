@@ -1,5 +1,5 @@
 // modules/bbttcc-campaign/apps/campaign-table-editor.js
-// BBTTCC Campaign Builder - Encounter Table Editor (V1)
+// Bad Eden Campaign Builder - Encounter Table Editor (V1)
 //
 // Tables select beats. Beats run normally.
 // Upgrades:

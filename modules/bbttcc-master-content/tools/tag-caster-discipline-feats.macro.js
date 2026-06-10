@@ -1,4 +1,4 @@
-// BBTTCC — Caster Discipline feat tagging (Phase A foundation, 2026-05-07)
+// Bad Eden — Caster Discipline feat tagging (Phase A foundation, 2026-05-07)
 // ─────────────────────────────────────────────────────────────────────────────
 // Companion to update-caster-discipline-pilot.macro.js. The pilot rewrote the
 // four caster CLASS STUBS to advertise a 5-pt Manifestation Discipline budget
@@ -115,7 +115,7 @@ for (const cfg of TAGS) {
 }
 
 ChatMessage.create({
-  speaker: { alias: "BBTTCC Caster Discipline Tagging" },
+  speaker: { alias: "Bad Eden Caster Discipline Tagging" },
   content: `<h4>Caster Discipline feat tagging — Phase A</h4>
             <pre style="font-size:0.78em;white-space:pre-wrap;">${foundry.utils.escapeHTML(results.join("\n"))}</pre>
             <p style="opacity:0.8;font-size:0.85em">Tier-1 budget knobs only. Higher tiers + Sig Modes deferred until playtest signal.</p>`

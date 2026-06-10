@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/bbttcc-dashboard-hexsheet.enhancer.js
-// BBTTCC — Dashboard Enhancer: Add "Sheet" button next to row actions (AppV2-safe)
+// Bad Eden — Dashboard Enhancer: Add "Sheet" button next to row actions (AppV2-safe)
 // Fix: guarantee we pass a real UUID (avoid null.startsWith crash in Foundry internals)
 
 (() => {

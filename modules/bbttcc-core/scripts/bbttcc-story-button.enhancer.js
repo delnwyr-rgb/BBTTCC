@@ -1,5 +1,5 @@
 // modules/bbttcc-core/scripts/bbttcc-story-button.enhancer.js
-// BBTTCC — GM toolbar button for Mal's GOTTGAIT Story Console.
+// Bad Eden — GM toolbar button for Mal's GOTTGAIT Story Console.
 //
 // Adds a "Story" button to the existing #bbttcc-toolbar cluster.
 // Clicking it calls game.bbttcc.api.story.openGOTTGAITConsole().

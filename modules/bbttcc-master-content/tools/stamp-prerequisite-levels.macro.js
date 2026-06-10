@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / stamp-prerequisite-levels.macro.js
+// Bad Eden master-content / tools / stamp-prerequisite-levels.macro.js
 //
 // Idempotent migration: walks every feat in the bbttcc-master-content packs
 // and stamps `system.prerequisites.level` to its canonical unlock level so the
@@ -10,7 +10,7 @@
 //   2. Create a new Script macro and paste this entire file in.
 //   3. Run it. By default it does a DRY RUN — change DRY_RUN below to false
 //      and re-run to actually write.
-//   4. After a successful write, open the BBTTCC Character Wizard's
+//   4. After a successful write, open the Bad Eden Character Wizard's
 //      "+ Apply Path Features" button on a Tier-1 actor — only the L1
 //      features for their path/doctrine should import.
 //

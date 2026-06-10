@@ -17,7 +17,7 @@ const warn = (...a)=>console.warn(`[${RAID_ID}]`,...a);
 
 
 /* ===================================================================
- * BBTTCC Tooltip System (shared, syntax-safe)
+ * Bad Eden Tooltip System (shared, syntax-safe)
  * - Lightweight hover/click tooltip for strategic activities + maneuvers.
  * - Source of truth: game.bbttcc.api.raid.EFFECTS
  * - IMPORTANT: binds globally (document-level) so multiple apps work together.
@@ -655,7 +655,7 @@ function bbttccFilterHexTargets(allHexes, factionId){
   const ownedUuids = new Set(owned.map(h => h.uuid));
 
   // -----------------------------------------------------------------------
-  // Canonical-ish adjacency for BBTTCC hex drawings/tiles:
+  // Canonical-ish adjacency for Bad Eden hex drawings/tiles:
   // We derive neighbor edges from the scene itself by measuring center-to-center
   // distances and treating the "nearest ring" as adjacent.
   //

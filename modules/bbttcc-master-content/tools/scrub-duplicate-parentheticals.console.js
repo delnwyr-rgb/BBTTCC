@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Scrub duplicate parentheticals left by Phase 5 vocab scrub
+// Bad Eden — Scrub duplicate parentheticals left by Phase 5 vocab scrub
 // ─────────────────────────────────────────────────────────────────────────────
 // Phase 5's bulk vocab scrub independently rewrote both halves of phrases like
 // "1/long rest (Soma Break)" — leaving "1/Soma Break (Soma Break)". The

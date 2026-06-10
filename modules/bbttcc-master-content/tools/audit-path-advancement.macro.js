@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / audit-path-advancement.macro.js
+// Bad Eden master-content / tools / audit-path-advancement.macro.js
 //
 // Inspection-only macro. For each of (Aurablade, Dreamwalker, Cosmic Linguist,
 // Pactkeeper, Bulwark, Shadow Courier, Soul-Smith, Harmony Marshal, Wyrdlens

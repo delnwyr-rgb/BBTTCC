@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / swap-metaphor-auditor-parents.macro.js
+// Bad Eden master-content / tools / swap-metaphor-auditor-parents.macro.js
 //
 // One-shot fix: Metaphor Apostle was filed under Pactkeeper, and Auditor was
 // filed under Cosmic Linguist. This swaps each subclass's `system.classIdentifier`

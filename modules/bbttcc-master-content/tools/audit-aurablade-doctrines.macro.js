@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / audit-aurablade-doctrines.macro.js
+// Bad Eden master-content / tools / audit-aurablade-doctrines.macro.js
 //
 // Read-only diagnostic for the Aurablade doctrine drift bug. Walks every
 // Aurablade doctrine (Blood Hymn / Stillheart / Void Edge), enumerates the

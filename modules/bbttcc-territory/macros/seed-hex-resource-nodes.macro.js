@@ -1,6 +1,6 @@
-// BBTTCC — Seed Hex Resource Nodes (live scene)
+// Bad Eden — Seed Hex Resource Nodes (live scene)
 // ─────────────────────────────────────────────────────────────────────────────
-// GM macro. Walks every BBTTCC hex on the active scene and writes a weighted
+// GM macro. Walks every Bad Eden hex on the active scene and writes a weighted
 // random list of resource nodes into `flags.bbttcc-territory.resourceNodes`
 // based on the hex's `type` and `terrainKey`. Idempotent: hexes that already
 // have non-empty resourceNodes are skipped unless OVERWRITE = true.
@@ -194,7 +194,7 @@
     return f.isHex === true || String(f.kind || "").toLowerCase() === "territory-hex";
   });
 
-  if (!hexDocs.length) return ui.notifications?.warn("No BBTTCC hexes on this scene.");
+  if (!hexDocs.length) return ui.notifications?.warn("No Bad Eden hexes on this scene.");
 
   let seeded = 0, skipped = 0, totalNodes = 0;
   const updates = [];

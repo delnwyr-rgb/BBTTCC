@@ -1,4 +1,4 @@
-/* BBTTCC Auto-Link — RFI Monster Builder
+/* Bad Eden Auto-Link — RFI Monster Builder
  *
  * Creates a type:"npc" actor that renders with the native fourththing NPC
  * sheet (FACULTIES + MANIFESTATIONS layout). Distinct from the NPC Builder

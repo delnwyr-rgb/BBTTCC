@@ -7,11 +7,11 @@
  *   2) doc.prototypeToken.texture.src   (Actors only)
  *   3) doc.effects[].img
  *
- * For every broken or generic ref, picks the best-fitting BBTTCC Button Icon
+ * For every broken or generic ref, picks the best-fitting Bad Eden Button Icon
  * using:
  *   - item name tokens
  *   - first 240 chars of description.value (HTML stripped)
- *   - a hand-curated synonym table for BBTTCC archetypes
+ *   - a hand-curated synonym table for Bad Eden archetypes
  *     (menhirkin→stone/crack, igneous→lava/fire, cryptidkin→eye/beast, etc.)
  *
  * Wild guesses fine — rotate-fallback guarantees every broken ref gets filled.
@@ -20,11 +20,11 @@
 
 (async () => {
   const APPLY      = true;
-  const ART_DIR    = "art/bbttcc/GOTTGAIT/BBTTCC Button Icons";
+  const ART_DIR    = "art/bbttcc/GOTTGAIT/Bad Eden Button Icons";
   const BACKUP_DIR = "backups";
   const SCORE_MIN  = 0.16;
 
-  // ---------- synonym hints (BBTTCC archetypes → icon vocabulary) ----------
+  // ---------- synonym hints (Bad Eden archetypes → icon vocabulary) ----------
   const SYNONYMS = {
     menhirkin:    ["stone", "rock", "crack", "cracked", "earth", "sphere", "mountain"],
     igneous:      ["fire", "flame", "lava", "stone", "shockwave", "earthquake"],

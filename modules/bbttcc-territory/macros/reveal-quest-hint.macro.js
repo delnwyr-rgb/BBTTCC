@@ -1,5 +1,5 @@
-// BBTTCC Reveal Quest Hint
-// GM macro — pick a quest, then click a BBTTCC hex on the canvas to mark
+// Bad Eden Reveal Quest Hint
+// GM macro — pick a quest, then click a Bad Eden hex on the canvas to mark
 // the link "hinted" so players see the 📜 scroll marker even while the hex
 // is still under fog. Use for "you've heard whispers about a faraway place"
 // flavor before the hex itself is uncovered.
@@ -20,7 +20,7 @@
       title: "Reveal Quest Hint — pick quest",
       content: `<form>
         <div class="form-group"><label>Quest</label><select name="qid">${opts}</select></div>
-        <p class="notes" style="margin-top:6px; opacity:.8;">After clicking OK, click a BBTTCC hex on the canvas. The hex will be linked to this quest (if it isn't already) and the hint flag set so players see the scroll marker even while the hex is fogged.</p>
+        <p class="notes" style="margin-top:6px; opacity:.8;">After clicking OK, click a Bad Eden hex on the canvas. The hex will be linked to this quest (if it isn't already) and the hint flag set so players see the scroll marker even while the hex is fogged.</p>
       </form>`,
       buttons: {
         ok: { label: "Pick Hex", callback: ($html) => {
@@ -34,7 +34,7 @@
   });
   if (!choice) return;
 
-  ui.notifications.info("Click a BBTTCC hex on the canvas to reveal a hint for this quest.");
+  ui.notifications.info("Click a Bad Eden hex on the canvas to reveal a hint for this quest.");
   const onClick = async (event) => {
     try {
       const local = event?.data?.getLocalPosition?.(canvas.app.stage);

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Diagnose: which Cryptidkin items are in the live pack?
+// Bad Eden — Diagnose: which Cryptidkin items are in the live pack?
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Read-only.
 // Reports presence/absence of each Phase-3 Cryptidkin tier feat in the live

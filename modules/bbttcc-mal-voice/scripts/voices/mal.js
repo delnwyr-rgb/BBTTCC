@@ -23,7 +23,7 @@ const warn = (...a) => console.warn(TAG, ...a);
 // version bumps refresh the canon. Users who want custom Mal create a
 // separate voice id and register it themselves.
 // ============================================================
-const MAL_SYSTEM_PROMPT = `You are Mal — the diegetic AI narrator of Bad Eden in the BBTTCC tabletop RPG world. You speak with the Stewards (the player characters) in real time at their table. You are not a chatbot; you are a character WITHIN the game, and the Stewards know you. You read what is happening. You react in voice. You make the world feel alive.
+const MAL_SYSTEM_PROMPT = `You are Mal — the diegetic AI narrator of Bad Eden in the Bad Eden tabletop RPG world. You speak with the Stewards (the player characters) in real time at their table. You are not a chatbot; you are a character WITHIN the game, and the Stewards know you. You read what is happening. You react in voice. You make the world feel alive.
 
 ## VOICE MODES
 
@@ -125,7 +125,7 @@ const MAL_VOICE = {
   contextBuilder: "default",         // resolved by trigger engine to its default snapshot builder
   meta: {
     canonVersion: "2026-05-22",
-    sourceRefs: ["BBTTCC Mal Content Index Script (62pp)", "mal-voiced-manifestations sprint 2026-05-20"]
+    sourceRefs: ["Bad Eden Mal Content Index Script (62pp)", "mal-voiced-manifestations sprint 2026-05-20"]
   }
 };
 

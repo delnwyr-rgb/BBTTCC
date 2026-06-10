@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/bbttcc-facility-turn-effects.enhancer.js
-// BBTTCC — Facility Turn Effects Enhancer v1.1 (alpha-safe)
+// Bad Eden — Facility Turn Effects Enhancer v1.1 (alpha-safe)
 //
 // Reads per-turn OP effects from hex facilities and applies them to the
 // owning faction each Advance Turn (Apply only).
@@ -50,7 +50,7 @@
       return Array.isArray(parsed) ? parsed : fallback;
     } catch (e) {
       ui.notifications?.warn?.(
-        "BBTTCC Facilities: Could not parse Turn Effects JSON; ignoring for this hex."
+        "Bad Eden Facilities: Could not parse Turn Effects JSON; ignoring for this hex."
       );
       console.warn(TAG, "Failed to parse turnEffectsRaw:", e);
       return fallback;
@@ -193,7 +193,7 @@
         await ChatMessage.create({
           content: `<p><b>Facility Turn Effects</b></p>${lines.join("<br/>")}`,
           whisper: gmIds,
-          speaker: { alias: "BBTTCC Facilities" }
+          speaker: { alias: "Bad Eden Facilities" }
         }).catch(() => {});
       }
     } catch (err) {

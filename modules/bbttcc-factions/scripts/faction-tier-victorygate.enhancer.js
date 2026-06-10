@@ -1,6 +1,6 @@
 /* REVIEW NOTE: Tier victory gate enhancer is progression snapshot logic and intentionally retained during faction-sheet layout cleanup. */
 // modules/bbttcc-factions/scripts/faction-tier-victorygate.enhancer.js
-// BBTTCC — Victory Badge → Tier Eligibility (Identity gate)
+// Bad Eden — Victory Badge → Tier Eligibility (Identity gate)
 //
 // Reads:
 //   flags.bbttcc-factions.victory.badge.key   (or victory.badgeKey)

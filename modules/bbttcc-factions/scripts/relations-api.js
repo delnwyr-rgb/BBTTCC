@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/relations-api.js
-// BBTTCC — Faction Relations API v0.1
+// Bad Eden — Faction Relations API v0.1
 //
 // Public API for reading + mutating directional faction-to-faction relationships.
 // Storage canon (unchanged): flags.bbttcc-factions.relations[targetActorId] = "tierKey"
@@ -66,7 +66,7 @@ function _resolveActor(aOrId) {
 }
 
 // Mirror of overview-button.js's isFactionActor — accepts the isFaction flag,
-// OR system.details.type.value === "faction", OR the BBTTCC faction sheet class.
+// OR system.details.type.value === "faction", OR the Bad Eden faction sheet class.
 // list() must use this broader check; the strict flag-only filter excludes
 // factions authored via dnd5e-ish type or sheet-class detection.
 function _isFactionActor(a) {

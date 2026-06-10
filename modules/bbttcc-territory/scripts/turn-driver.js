@@ -1,4 +1,4 @@
-// BBTTCC Territory — Turn Driver
+// Bad Eden Territory — Turn Driver
 // Pipeline: (0) Promote post.pending → turn.pending (Apply only)
 // → (1) Planned Raids (Dry=preview, Apply=commit per faction via compat)
 // → (2) delegate advanceTurn
@@ -1090,7 +1090,7 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
         await ChatMessage.create({
           content: `<p><b>${foundry.utils.escapeHTML(A.name)}</b> — <i>Advance OP (Apply)</i><br/>Gained: ${fmtOpsRow(opsDelta)}</p>`,
           whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
-          speaker: { alias: "BBTTCC Turn Driver" }
+          speaker: { alias: "Bad Eden Turn Driver" }
         });
 
         row.applied = true;
@@ -1104,7 +1104,7 @@ async function advanceOPRegen({ apply=false, factionId=null } = {}){
     await ChatMessage.create({
       content: `<p><i>Advance OP (Dry)</i> — projected gains:</p><ul>${lines}</ul>`,
       whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
-      speaker: { alias: "BBTTCC Turn Driver" }
+      speaker: { alias: "Bad Eden Turn Driver" }
     });
   }
 
@@ -1226,7 +1226,7 @@ async function plannedRaidsStep({ apply=false } = {}){
       ? `<p><i>Planned Activities (Dry Preview)</i></p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)} ${r.canAfford?"":"<em>(cannot afford)</em>"}</li>`).join("")}</ul>`
       : `<p><i>Planned Activities (Dry Preview)</i>: none queued.</p>`,
     whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
-    speaker: { alias: "BBTTCC Turn Driver" }
+    speaker: { alias: "Bad Eden Turn Driver" }
   });
 
   return { changed:false, rows };

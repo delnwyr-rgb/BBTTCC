@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Phase 5: Bulk D&D-vocab text scrub
+// Bad Eden — Phase 5: Bulk D&D-vocab text scrub
 // ─────────────────────────────────────────────────────────────────────────────
 // Idempotent — sentinel `data-ft-phase5-vocab-scrub="v1"` stamped at top of
 // every patched description on first pass.

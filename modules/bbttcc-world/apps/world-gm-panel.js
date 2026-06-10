@@ -1,5 +1,5 @@
 // bbttcc-world/apps/world-gm-panel.js
-// GM God Panel — ApplicationV2 UI for BBTTCC World State.
+// GM God Panel — ApplicationV2 UI for Bad Eden World State.
 // Foundry v13 PARTS-compatible. Robust against HandlebarsApplicationMixin being non-callable.
 // parse-safe: avoid optional chaining, object spread; avoid arrow funcs.
 
@@ -154,7 +154,7 @@
         var merged = foundry.utils.mergeObject(base, {
           id: "bbttcc-world-gm-panel",
           classes: ["bbttcc-world-gm-panel-app"],
-          title: "BBTTCC — GM God Panel",
+          title: "Bad Eden — GM God Panel",
           tag: "form",
           window: { icon: "fas fa-hand-sparkles", resizable: true }
         }, { inplace: false });

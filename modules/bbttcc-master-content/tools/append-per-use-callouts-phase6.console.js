@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts (Phase 6 — Caster Discipline pilot ladder)
+// Bad Eden — Append Per-Use callouts (Phase 6 — Caster Discipline pilot ladder)
 // ─────────────────────────────────────────────────────────────────────────────
 // Surfaces the 16 class-feature items shipped by `update-caster-discipline-pilot.macro.js`:
 //

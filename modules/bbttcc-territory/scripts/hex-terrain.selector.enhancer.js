@@ -1,5 +1,5 @@
 /* modules/bbttcc-territory/scripts/hex-terrain.selector.enhancer.js
- * v1.3 — Robust save-on-change for BBTTCC Hex Terrain
+ * v1.3 — Robust save-on-change for Bad Eden Hex Terrain
  * - Injects Terrain <select> into .bbttcc-hex-config
  * - Delegated listeners (change/input) so re-renders still work
  * - Resolves the correct DrawingDocument and persists flags immediately

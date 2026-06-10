@@ -1,6 +1,6 @@
-// BBTTCC — Stamp RFI Item Flags On Existing Gear (and coerce dnd5e types)
+// Bad Eden — Stamp RFI Item Flags On Existing Gear (and coerce dnd5e types)
 // ─────────────────────────────────────────────────────────────────────────────
-// Walks `bbttcc-master-content.items` and converts BBTTCC Armor, BBTTCC
+// Walks `bbttcc-master-content.items` and converts Bad Eden Armor, Bad Eden
 // Weapons, and Wondrous Items into RFI-usable gear:
 //   1) Coerces dnd5e types (equipment, consumable, tool, loot) into
 //      fourththing's valid types (armor or gear). The constructor rejects
@@ -25,8 +25,8 @@ const FORCE   = false;
 
 // Folder ids in the items pack (verified against pack folder listing).
 const TARGET_FOLDERS = {
-  "VnpeyGKHKdBSbxb1": { name: "BBTTCC Armor",   defaultTier: "II", forceType: "armor" },
-  "H6eMhWQrjwcwZcBi": { name: "BBTTCC Weapons", defaultTier: "II", forceType: null    }, // weapons stay weapons
+  "VnpeyGKHKdBSbxb1": { name: "Bad Eden Armor",   defaultTier: "II", forceType: "armor" },
+  "H6eMhWQrjwcwZcBi": { name: "Bad Eden Weapons", defaultTier: "II", forceType: null    }, // weapons stay weapons
   "TNrB6kEiHS0KwwJT": { name: "Wondrous Items", defaultTier: "II", forceType: "gear"  }
 };
 

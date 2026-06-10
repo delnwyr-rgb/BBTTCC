@@ -1,4 +1,4 @@
-// BBTTCC — Create RFI-native Consumables (Sprint: New Gear)
+// Bad Eden — Create RFI-native Consumables (Sprint: New Gear)
 // ─────────────────────────────────────────────────────────────────────────────
 // Adds 15 fourththing-shaped consumables to `bbttcc-master-content.items`.
 // Each ships with a `flags.fourththing.rfi.item.consume` block read by the
@@ -7,7 +7,7 @@
 // blood debt), removes conditions, decrements a charge, and posts a chat
 // receipt.
 //
-// Items land in the BBTTCC Consumables folder if it exists, else the root
+// Items land in the Bad Eden Consumables folder if it exists, else the root
 // Consumables folder. Idempotent — items with matching names are skipped
 // unless FORCE = true.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -187,7 +187,7 @@ const DEFAULT_IMG = "icons/svg/mystery-man.svg";
   if (!RfiItems) return ui.notifications?.error("RFI items API not available.");
 
   // Resolve a folder for the new items: prefer a subfolder of Consumables
-  // named "RFI Consumables" or "BBTTCC Consumables", else fall back to
+  // named "RFI Consumables" or "Bad Eden Consumables", else fall back to
   // "Consumables" root, else null (uncategorized).
   const allFolders = pack.folders ?? new Map();
   let targetFolder = null;

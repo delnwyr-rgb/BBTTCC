@@ -1,6 +1,6 @@
 // modules/bbttcc-raid/scripts/tableau.canvas.js
 //
-// BBTTCC Tableau — forced-perspective canvas substrate
+// Bad Eden Tableau — forced-perspective canvas substrate
 // Spec: bbttcc-raid/TABLEAU_SUBSTRATE.md (system-level) · COURTLY_INTRIGUE_SPEC.md §3 (first consumer)
 //
 // System-level capability — NOT courtly-specific. Any scene can opt in by

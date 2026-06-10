@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/advance-turn.tracks.js
-// BBTTCC — Advance Turn Tracks Wrapper
+// Bad Eden — Advance Turn Tracks Wrapper
 //
 // This wrapper runs AFTER the base territory.advanceTurn({apply:true}) logic.
 // It handles:
@@ -194,7 +194,7 @@
       await ChatMessage.create({
         content: `<p><b>Radiation Update</b></p>${lines.join("<br/>")}`,
         whisper: gmIds(),
-        speaker: { alias: "BBTTCC Radiation" }
+        speaker: { alias: "Bad Eden Radiation" }
       }).catch(() => {});
     }
   }
@@ -258,7 +258,7 @@
       await ChatMessage.create({
         content: `<p><b>Cleanup Update</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Cleanup" }
+        speaker: { alias: "Bad Eden Cleanup" }
       }).catch(() => {});
     }
   }
@@ -331,7 +331,7 @@
       await ChatMessage.create({
         content: `<p><b>Cleanup Aura</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Cleanup" }
+        speaker: { alias: "Bad Eden Cleanup" }
       }).catch(() => {});
     }
   }
@@ -388,7 +388,7 @@
       await ChatMessage.create({
         content: `<p><b>Radiation Cleansing (Purified Hexes)</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Radiation" }
+        speaker: { alias: "Bad Eden Radiation" }
       }).catch(() => {});
     }
   }
@@ -440,7 +440,7 @@
       await ChatMessage.create({
         content: `<p><b>Darkness Update</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Darkness" }
+        speaker: { alias: "Bad Eden Darkness" }
       }).catch(() => {});
     }
   }
@@ -474,7 +474,7 @@
     const mk = async (title, arr) => arr.length && ChatMessage.create({
       content: `<p><b>${title}</b></p>${arr.join("<br/>")}`,
       whisper: gm,
-      speaker: { alias: "BBTTCC Darkness" }
+      speaker: { alias: "Bad Eden Darkness" }
     }).catch(()=>{});
 
     await mk("Darkness Event (4–6)", lines4);
@@ -515,7 +515,7 @@
       await ChatMessage.create({
         content: `<p><b>Morale Update (Darkness)</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Darkness" }
+        speaker: { alias: "Bad Eden Darkness" }
       }).catch(()=>{});
     }
   }
@@ -564,7 +564,7 @@
       await ChatMessage.create({
         content: `<p><b>Loyalty Update</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Loyalty" }
+        speaker: { alias: "Bad Eden Loyalty" }
       }).catch(()=>{});
     }
   }
@@ -659,7 +659,7 @@
       await ChatMessage.create({
         content: `<p><b>Loyalty Stability Effects</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Loyalty" }
+        speaker: { alias: "Bad Eden Loyalty" }
       }).catch(()=>{});
     }
   }
@@ -749,7 +749,7 @@
       await ChatMessage.create({
         content: `<p><b>Integration Population Update</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Integration" }
+        speaker: { alias: "Bad Eden Integration" }
       }).catch(() => {});
     }
   }
@@ -864,7 +864,7 @@
       await ChatMessage.create({
         content: `<p><b>Build Units Generated</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Economy" }
+        speaker: { alias: "Bad Eden Economy" }
       }).catch(()=>{});
     }
   }
@@ -947,7 +947,7 @@
       await ChatMessage.create({
         content: `<p><b>Trade Route Logistics Bonus</b></p>${lines.join("<br/>")}`,
         whisper: gm,
-        speaker: { alias: "BBTTCC Economy" }
+        speaker: { alias: "Bad Eden Economy" }
       }).catch(()=>{});
     }
   }

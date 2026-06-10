@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/inbox-card.enhancer.js
-// BBTTCC — Trade Inbox card on the faction sheet.
+// Bad Eden — Trade Inbox card on the faction sheet.
 //
 // Renders the recipient faction's pending trade inbox (managed by
 // pending-trades.js). Buttons:

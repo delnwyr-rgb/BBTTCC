@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Phase 4b survey: missing character-options packs
+// Bad Eden — Phase 4b survey: missing character-options packs
 // ─────────────────────────────────────────────────────────────────────────────
 // Phase 4 only swept 3 of the 4 narrative character-options packs
 // (character-archetypes, crew-types, occult-associations). This survey covers

@@ -1,4 +1,4 @@
-// BBTTCC — Stamp Shape A passives, batch 2 (proficiency/skilled phrasing)
+// Bad Eden — Stamp Shape A passives, batch 2 (proficiency/skilled phrasing)
 // ─────────────────────────────────────────────────────────────────────────────
 // Adds AEs for ancestry/heritage passives whose RFI text uses
 // "you have proficiency in X" or "you are skilled in X" — RFI canon = rank 1

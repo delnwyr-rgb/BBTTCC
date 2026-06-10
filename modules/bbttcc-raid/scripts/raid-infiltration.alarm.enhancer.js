@@ -1,5 +1,5 @@
 // modules/bbttcc-raid/scripts/raid-infiltration.alarm.enhancer.js
-// BBTTCC — Infiltration Scenario Engine (Alarm-Banded)
+// Bad Eden — Infiltration Scenario Engine (Alarm-Banded)
 //
 // Features (per Gap Analysis Infiltration kernel):
 // - Alarm track 0..alarmMax with bands: Quiet / Suspicious / Alerted / Lockdown
@@ -113,7 +113,7 @@
     if (!lines.length) return;
     const data = {
       content: `<p><b>${title}</b></p>${lines.join("<br/>")}`,
-      speaker: { alias: "BBTTCC Infiltration" }
+      speaker: { alias: "Bad Eden Infiltration" }
     };
     // S3a.5.2: GM-only by default for narrative cards; "public" for round
     // summaries so players see the math + dice. Passing Roll objects in

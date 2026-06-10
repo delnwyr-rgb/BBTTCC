@@ -1,5 +1,5 @@
 /* bbttcc-raid/scripts/ui/bbttcc-tooltip-resolver.js
- * Global tooltip resolver for BBTTCC (Raid + Planner)
+ * Global tooltip resolver for Bad Eden (Raid + Planner)
  * - Canonical text hydration from Expansion v1.0 (PDF) for keys that lack descriptions.
  * - Safe, parser-friendly JS (no optional chaining / nullish / spread).
  */

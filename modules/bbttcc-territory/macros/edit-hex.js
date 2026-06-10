@@ -1,5 +1,5 @@
-// BBTTCC Open Hex Editor
-// GM macro — click a BBTTCC hex to open its Hex Configuration dialog
+// Bad Eden Open Hex Editor
+// GM macro — click a Bad Eden hex to open its Hex Configuration dialog
 
 (async () => {
   if (!game.user?.isGM) { ui.notifications.warn("GM only."); return; }
@@ -84,14 +84,14 @@
 
     const api = game.bbttcc?.api?.territory;
     if (!api?.openHexConfig) {
-      ui.notifications.error("BBTTCC Hex Editor API not available.");
+      ui.notifications.error("Bad Eden Hex Editor API not available.");
       return;
     }
 
     try {
       await api.openHexConfig(clicked.uuid);
     } catch (err) {
-      console.error("[BBTTCC Edit] openHexConfig failed", err);
+      console.error("[Bad Eden Edit] openHexConfig failed", err);
       ui.notifications.error(`Failed to open Hex Editor for ${hexName(clicked)} (see console).`);
     }
   };

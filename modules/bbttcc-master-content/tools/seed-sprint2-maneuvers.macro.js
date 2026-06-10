@@ -1,4 +1,4 @@
-// BBTTCC — Seed Sprint 2 Maneuvers into Doctrines Pack (2026-05-14)
+// Bad Eden — Seed Sprint 2 Maneuvers into Doctrines Pack (2026-05-14)
 // ─────────────────────────────────────────────────────────────────────────────
 // Sprint 2 Tool of MANEUVER_CATALOG_SPEC.md §5. Reads the runtime catalog
 // at `game.bbttcc.api.raid.sprint2Maneuvers` (published by

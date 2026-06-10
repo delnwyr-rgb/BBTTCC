@@ -1,5 +1,5 @@
 // modules/bbttcc-campaign/apps/campaign-tag-picker.js
-// BBTTCC Campaign Builder — Tag Picker (checkbox modal)
+// Bad Eden Campaign Builder — Tag Picker (checkbox modal)
 
 export class BBTTCCCampaignTagPickerApp extends Application {
   static get defaultOptions() {

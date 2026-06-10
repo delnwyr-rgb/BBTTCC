@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/bbttcc-weather-tick.enhancer.js
-// BBTTCC — Weather Tick (Alpha)
+// Bad Eden — Weather Tick (Alpha)
 // Decrements flags.bbttcc-territory.weather.remainingTurns and clears when expired.
 // Must be passive: never blocks turn driver.
 

@@ -1,6 +1,6 @@
 /* REVIEW NOTE: OP Engine is core bank/cap logic and intentionally retained during faction-sheet layout cleanup. */
 // modules/bbttcc-factions/scripts/op-engine.js
-// BBTTCC — OP Engine v0.3 (marks)
+// Bad Eden — OP Engine v0.3 (marks)
 // Central preview/commit API for faction OP banks.
 //
 // Unit canon (2026-05-09): bank values are stored as MARKS. 1 OP = 10 marks.
@@ -388,7 +388,7 @@ async function _runMarksMigration() {
     }
     log(`OP marks migration: done. migrated=${ok}, failed=${fail}.`);
     if (ok > 0) {
-      ui.notifications?.info?.(`BBTTCC: migrated ${ok} faction OP bank(s) to marks (1 OP = ${OP_TO_MARKS} marks).`);
+      ui.notifications?.info?.(`Bad Eden: migrated ${ok} faction OP bank(s) to marks (1 OP = ${OP_TO_MARKS} marks).`);
     }
   } catch (e) {
     warn("OP marks migration sweep failed", e);

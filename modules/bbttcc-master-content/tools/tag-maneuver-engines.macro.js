@@ -1,4 +1,4 @@
-// BBTTCC — Tag Maneuver Engines on Post-Refresh Pack (2026-05-15)
+// Bad Eden — Tag Maneuver Engines on Post-Refresh Pack (2026-05-15)
 // ─────────────────────────────────────────────────────────────────────────────
 // Sprint 2.5 follow-up to MANEUVER_CATALOG_SPEC.md §6.B. The S1 refresh pass
 // populated canonical `meta.raidTypes` but did NOT set `meta.engine` — that's

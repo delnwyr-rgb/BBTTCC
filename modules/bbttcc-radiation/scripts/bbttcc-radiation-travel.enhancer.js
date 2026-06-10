@@ -1,5 +1,5 @@
 // ============================================================================
-// BBTTCC — Radiation-on-Travel Enhancer (Phase A)
+// Bad Eden — Radiation-on-Travel Enhancer (Phase A)
 // Adds Radiation exposure to actors when traveling into radiated terrain.
 //
 // Integrates with:
@@ -105,7 +105,7 @@
       await ChatMessage.create({
         content: `<p>${lines}</p>`,
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
-        speaker: { alias: "BBTTCC Radiation" }
+        speaker: { alias: "Bad Eden Radiation" }
       });
 
       console.log(TAG, `Applied +${amount} RP →`, actor.name, reasons);

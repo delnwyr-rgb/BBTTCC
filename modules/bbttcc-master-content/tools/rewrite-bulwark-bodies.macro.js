@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-bulwark-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-bulwark-bodies.macro.js
 //
 // Refreshes the description bodies for the Bulwark class doc + its three Paths
 // (Cataclyst / Avalanche / Mountain) so the TEXT matches the post-redesign CRUNCH

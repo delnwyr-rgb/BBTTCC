@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-shadow-courier-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-shadow-courier-bodies.macro.js
 //
 // Refreshes the description bodies for the Shadow Courier class doc + its three
 // Routes (Wayfarer / Black Stair / Last Mile) so the TEXT matches the post-redesign

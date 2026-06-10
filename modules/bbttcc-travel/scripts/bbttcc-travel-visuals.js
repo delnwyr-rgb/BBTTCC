@@ -1,5 +1,5 @@
 // PATCHMARK: visuals-grid-snap-token-pick-retry-20251220
-/* BBTTCC — Travel Visuals
+/* Bad Eden — Travel Visuals
  * Draw route overlay + animate token along Travel Console legs.
  *
  * Fixes:
@@ -20,7 +20,7 @@
   // ---------------------------------------------------------------------------
   // Hex-centroid helpers
   //
-  // BBTTCC territory hexes are polygon Drawings. `placeable.center` returns the
+  // Bad Eden territory hexes are polygon Drawings. `placeable.center` returns the
   // BOUNDING-BOX center; for polygons with padding / skew / non-uniform scale
   // that point can sit visibly off the polygon's geometric centroid — far
   // enough that the moved token looks like it landed in the wrong hex. The

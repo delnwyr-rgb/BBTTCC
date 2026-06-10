@@ -1,6 +1,6 @@
 // scripts/raid-courtly.vfx.js
 //
-// BBTTCC — Courtly Intrigue Phase F VFX renderer
+// Bad Eden — Courtly Intrigue Phase F VFX renderer
 // Spec: bbttcc-raid/COURTLY_INTRIGUE_SPEC.md §7 Phase F
 //
 // Listens to bbttcc:courtly:vfx hook on every client. Hook is fired by:

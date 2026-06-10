@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/faction-section-skin.enhancer.js
-// BBTTCC — Faction Section Skin (card identity + debug)
+// Bad Eden — Faction Section Skin (card identity + debug)
 //
 // Cosmetic only. Assigns card classes based on fieldset legends so CSS can
 // theme Overview / Activities / Assets / Relationships / War Logs content.

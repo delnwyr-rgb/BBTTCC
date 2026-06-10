@@ -1,5 +1,5 @@
-// BBTTCC Hide Quest Hint
-// GM macro — pick a quest, then click a BBTTCC hex on the canvas. The
+// Bad Eden Hide Quest Hint
+// GM macro — pick a quest, then click a Bad Eden hex on the canvas. The
 // quest's hint flag on that hex is cleared (the link itself stays). The
 // scroll marker reverts to fog-gated visibility (only shows once the hex
 // is unfogged for the player).
@@ -20,7 +20,7 @@
       title: "Hide Quest Hint — pick quest",
       content: `<form>
         <div class="form-group"><label>Quest</label><select name="qid">${opts}</select></div>
-        <p class="notes" style="margin-top:6px; opacity:.8;">After clicking OK, click a BBTTCC hex on the canvas. The hint will be cleared (link stays — players see the scroll only once the hex is unfogged).</p>
+        <p class="notes" style="margin-top:6px; opacity:.8;">After clicking OK, click a Bad Eden hex on the canvas. The hint will be cleared (link stays — players see the scroll only once the hex is unfogged).</p>
       </form>`,
       buttons: {
         ok: { label: "Pick Hex", callback: ($html) => {
@@ -34,7 +34,7 @@
   });
   if (!choice) return;
 
-  ui.notifications.info("Click a BBTTCC hex on the canvas to hide its hint for this quest.");
+  ui.notifications.info("Click a Bad Eden hex on the canvas to hide its hint for this quest.");
   const onClick = async (event) => {
     try {
       const local = event?.data?.getLocalPosition?.(canvas.app.stage);

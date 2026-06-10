@@ -1,4 +1,4 @@
-// BBTTCC — Seed Courtly Maneuvers into Doctrines Pack (2026-05-23)
+// Bad Eden — Seed Courtly Maneuvers into Doctrines Pack (2026-05-23)
 // ─────────────────────────────────────────────────────────────────────────────
 // MANEUVER_BALANCE_PASS.md §3.E. The 12 Courtly Intrigue anytime maneuvers
 // (Phase D) currently exist ONLY at runtime — registered into EFFECTS by

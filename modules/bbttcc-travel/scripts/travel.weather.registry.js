@@ -1,5 +1,5 @@
 // modules/bbttcc-travel/scripts/travel.weather.registry.js
-// BBTTCC Weather Registry (Alpha v1.0)
+// Bad Eden Weather Registry (Alpha v1.0)
 // Data-only. Safe to tweak and rebalance.
 
 export const WEATHER_ARCHETYPES = {

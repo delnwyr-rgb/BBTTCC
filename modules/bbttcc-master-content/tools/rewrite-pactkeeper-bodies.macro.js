@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-pactkeeper-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-pactkeeper-bodies.macro.js
 //
 // Refreshes the description bodies for the Pactkeeper class doc + its three
 // doctrines (Archivist of Precedent / Auditor / Steward of Living Communities) so

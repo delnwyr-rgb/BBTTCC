@@ -1,5 +1,5 @@
 // modules/bbttcc-travel/scripts/travel.weather.helpers.js
-// BBTTCC Weather Helpers (Alpha)
+// Bad Eden Weather Helpers (Alpha)
 
 export function rollBetween(min, max) {
   min = Number(min); max = Number(max);

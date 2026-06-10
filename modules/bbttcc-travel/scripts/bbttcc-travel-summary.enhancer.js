@@ -1,4 +1,4 @@
-/* BBTTCC — Travel Summary Enhancer v1.1
+/* Bad Eden — Travel Summary Enhancer v1.1
  * Lightweight logger for api.travel.travelHex() results.
  * Prints readable summaries to console and Foundry chat for GMs.
  */
@@ -78,7 +78,7 @@
           await ChatMessage.create({
             content: summaryHtml,
             whisper: game.users.filter(u => u.isGM).map(u => u.id) ?? [],
-            speaker: { alias: "BBTTCC Travel" }
+            speaker: { alias: "Bad Eden Travel" }
           });
         }
       } catch (e) {

@@ -1,5 +1,5 @@
 // modules/bbttcc-raid/scripts/bbttcc-raid-console-ui.enhancer.js
-// BBTTCC — Raid Console 3.0 UI Enhancer (Battlefield Card Style)
+// Bad Eden — Raid Console 3.0 UI Enhancer (Battlefield Card Style)
 //
 // - Enriches maneuver lists with: OP cost line (icons + labels), tier + rarity tags, and tooltips from EFFECTS.text.
 // - Gives each round row a "card" feel via lightweight DOM tweaks.

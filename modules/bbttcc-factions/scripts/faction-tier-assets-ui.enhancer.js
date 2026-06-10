@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/faction-tier-assets-ui.enhancer.js
-// BBTTCC — Tier + Assets + Pressure UI (Hex Chrome injection)
+// Bad Eden — Tier + Assets + Pressure UI (Hex Chrome injection)
 //
 // Reads:
 // - Tier: flags.bbttcc-factions.tier OR derives from victory badgeKey/badge.key

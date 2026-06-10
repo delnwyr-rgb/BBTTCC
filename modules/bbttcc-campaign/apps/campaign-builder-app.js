@@ -1173,7 +1173,7 @@ export class BBTTCCCampaignBuilderApp extends Application {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "bbttcc-campaign-builder",
-      title: "BBTTCC Campaign Builder",
+      title: "Bad Eden Campaign Builder",
       template: "modules/bbttcc-campaign/templates/campaign-builder.hbs",
       width: 1240,
       height: 820,
@@ -2945,7 +2945,7 @@ async _ioImportDialog() {
         if (!items || !items.length) {
           const opt = document.createElement("option");
           opt.value = "";
-          opt.textContent = "(No BBTTCC bundles in this pack)";
+          opt.textContent = "(No Bad Eden bundles in this pack)";
           entrySel.appendChild(opt);
           return;
         }
@@ -3072,7 +3072,7 @@ async _ioScanKeysDialog() {
       </div>
     `;
 
-    new Dialog({ title: "BBTTCC Stable Keys", content: content, buttons: { ok: { label: "OK" } }, default: "ok" }).render(true);
+    new Dialog({ title: "Bad Eden Stable Keys", content: content, buttons: { ok: { label: "OK" } }, default: "ok" }).render(true);
   } catch (e) {
     console.error(TAG, "Key report failed:", e);
     ui.notifications?.warn?.("Key report failed (see console).");
@@ -3518,7 +3518,7 @@ try {
       const payload = await Dialog.prompt({
         title: "New Campaign",
         content: `
-          <p>Create a new BBTTCC campaign.</p>
+          <p>Create a new Bad Eden campaign.</p>
           <div class="form-group">
             <label>Label</label>
             <input type="text" name="label" value="New Campaign (${id.slice(0, 4)})" />
@@ -3902,7 +3902,7 @@ try {
       const ql = _ql();
       if (!qid || !ql) { ui.notifications?.warn?.("Quest links API not ready."); return; }
       // Two-pass: dialog asks the GM to click a hex on the active scene.
-      ui.notifications?.info?.("Click a BBTTCC hex on the canvas to link it to this quest. (Esc to cancel)");
+      ui.notifications?.info?.("Click a Bad Eden hex on the canvas to link it to this quest. (Esc to cancel)");
       const onClick = async (event) => {
         try {
           const t = event?.target;

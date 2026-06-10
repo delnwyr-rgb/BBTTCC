@@ -1,4 +1,4 @@
-// BBTTCC — Bulk-stamp Phase D resource grants on live ancestry/heritage/path items
+// Bad Eden — Bulk-stamp Phase D resource grants on live ancestry/heritage/path items
 // ─────────────────────────────────────────────────────────────────────────────
 // Generated 2026-04-28T21:36:32.791Z by build-resource-grants-macros.mjs
 // Filtered to 19 live items / 35 grants.

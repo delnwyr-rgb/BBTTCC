@@ -1,4 +1,4 @@
-// BBTTCC — Rig & Boss Catalog (Phase 4 of the 2026-05-07 modernization sprint)
+// Bad Eden — Rig & Boss Catalog (Phase 4 of the 2026-05-07 modernization sprint)
 // ─────────────────────────────────────────────────────────────────────────────
 // Authors a starter catalog spanning the 6 gear/template subtypes consumed by
 // the new Rig + Boss actor sheets:

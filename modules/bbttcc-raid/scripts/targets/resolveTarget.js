@@ -1,5 +1,5 @@
 // bbttcc-raid/scripts/targets/resolveTarget.js
-// BBTTCC — Raid Target Resolver (v1.0)
+// Bad Eden — Raid Target Resolver (v1.0)
 //
 // Purpose:
 //   Provide a single, normalized resolver for Raid targets:

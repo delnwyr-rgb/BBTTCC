@@ -1,4 +1,4 @@
-// BBTTCC — Backfill engine-coverage maneuvers onto EXISTING factions — 2026-05-24
+// Bad Eden — Backfill engine-coverage maneuvers onto EXISTING factions — 2026-05-24
 // ─────────────────────────────────────────────────────────────────────────────
 // MANEUVER_BALANCE_PASS.md faction-kit fix. New factions now start with one
 // usable T1 per engine (bbttcc-factions/scripts/module.js _BBTTCC_STANDARD_START_
@@ -53,7 +53,7 @@ const NEW_KEYS = ["logistics_surge_s2", "opt_infernal_bargain", "courtly_whisper
               name: spec?.label || key,
               type: "feat",
               flags: { bbttcc: { kind: "maneuver", key } },
-              system: { category: "maneuver", source: "BBTTCC Doctrine",
+              system: { category: "maneuver", source: "Bad Eden Doctrine",
                         description: { value: spec?.description || `<p>${spec?.text || key}</p>`, chat: "" } }
             }]);
           }

@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/territory-garrison-upkeep.enhancer.js
-// BBTTCC — Garrison & Upkeep Engine (Phase-based, type-aware)
+// Bad Eden — Garrison & Upkeep Engine (Phase-based, type-aware)
 //
 // FULL REPLACEMENT — patched to normalize legacy/resource-style upkeep buckets
 // into canonical faction OP bank keys before spending.
@@ -581,7 +581,7 @@
         await ChatMessage.create({
           content,
           whisper: gm,
-          speaker: { alias: "BBTTCC Garrison" }
+          speaker: { alias: "Bad Eden Garrison" }
         }).catch(() => {});
       }
     }

@@ -3,7 +3,7 @@
 // so we can see what is already animated vs. what is still bare — independent of the
 // (often stale) repo packs. Lists the names LACKING an AA flag so you can eyeball candidates.
 //
-// By default audits the BBTTCC content packs we've been working through. Set PACK_IDS to
+// By default audits the Bad Eden content packs we've been working through. Set PACK_IDS to
 // a custom list, or leave null to auto-scan EVERY Item-type compendium in the world.
 (async () => {
   if (!game.user.isGM) return ui.notifications.warn("GM only.");

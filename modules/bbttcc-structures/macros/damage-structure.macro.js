@@ -1,4 +1,4 @@
-// BBTTCC Structures — Damage Selected Structure (Phase B test macro)
+// Bad Eden Structures — Damage Selected Structure (Phase B test macro)
 // ─────────────────────────────────────────────────────────────────────────────
 // Pick a structure target (selected token or current speaker), prompt for
 // damage + source tag + multiplier + bypass-resists, then route through

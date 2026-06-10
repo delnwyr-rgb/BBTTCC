@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Seed or scrub Sephirotic Scion (3 Tier-I feats)
+// Bad Eden — Seed or scrub Sephirotic Scion (3 Tier-I feats)
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent — sentinel-gated.
 //
@@ -116,7 +116,7 @@
       _id: it._id, name: it.name, type: "feat", img: it.img, folder: FOLDER_ID,
       system: {
         description: { value: buildDesc(it), chat: "" },
-        source: { custom: "BBTTCC", rules: "2024", revision: 2, book: "", license: "" },
+        source: { custom: "Bad Eden", rules: "2024", revision: 2, book: "", license: "" },
         advancement: {},
         identifier: it.identifier, requirements: it.requirements,
         prerequisites: { items: [], repeatable: false, level: null },

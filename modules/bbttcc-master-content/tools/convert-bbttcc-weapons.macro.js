@@ -1,6 +1,6 @@
-// BBTTCC — Convert BBTTCC Weapons to RFI-native weapons (Sprint B)
+// Bad Eden — Convert Bad Eden Weapons to RFI-native weapons (Sprint B)
 // ─────────────────────────────────────────────────────────────────────────────
-// Rewrites the 5 hand-authored weapons in the BBTTCC Weapons folder of
+// Rewrites the 5 hand-authored weapons in the Bad Eden Weapons folder of
 // `bbttcc-master-content.items` into proper fourththing-shaped weapons:
 //
 //   • system.damage — RFI 7-damage canon (kinetic, energy, sephirotic,
@@ -176,7 +176,7 @@ const WEAPONS = [
   if (missing.length) console.warn("Missing items:", missing);
 
   if (DRY_RUN) {
-    console.group("BBTTCC Weapons conversion — DRY RUN");
+    console.group("Bad Eden Weapons conversion — DRY RUN");
     reportRows.forEach(r => console.log(r));
     if (missing.length) console.log("MISSING:", missing.join(", "));
     console.groupEnd();
@@ -187,9 +187,9 @@ const WEAPONS = [
     await Item.updateDocuments(updates, { pack: PACK_ID });
   }
 
-  console.group("BBTTCC Weapons conversion — applied");
+  console.group("Bad Eden Weapons conversion — applied");
   reportRows.forEach(r => console.log(r));
   if (missing.length) console.log("MISSING:", missing.join(", "));
   console.groupEnd();
-  ui.notifications?.info(`BBTTCC Weapons converted: ${updates.length}${missing.length ? `; ${missing.length} not found` : ""}.`);
+  ui.notifications?.info(`Bad Eden Weapons converted: ${updates.length}${missing.length ? `; ${missing.length} not found` : ""}.`);
 })();

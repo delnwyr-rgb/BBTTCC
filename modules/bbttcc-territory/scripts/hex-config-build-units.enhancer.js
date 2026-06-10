@@ -1,7 +1,7 @@
 // modules/bbttcc-territory/scripts/hex-config-build-units.enhancer.js
-// BBTTCC — Hex Config Build Unit Buttons
+// Bad Eden — Hex Config Build Unit Buttons
 //
-// Adds three buttons to the BBTTCC Hex Configuration UI:
+// Adds three buttons to the Bad Eden Hex Configuration UI:
 //   - "Fortify Hex (BU)"
 //   - "Repair Hex (BU)"
 //   - "Build Asset (BU)" (placeholder)
@@ -306,7 +306,7 @@ function numOrBlank(v){
       </div>
       <p class="hint">
         Spend Build Units from the owning faction to reinforce or repair this hex.
-        Costs are defined in BBTTCC Territory settings.
+        Costs are defined in Bad Eden Territory settings.
       </p>
     `;
 

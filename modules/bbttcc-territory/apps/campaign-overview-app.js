@@ -296,7 +296,7 @@ function readGreatWorkDisplay(faction) {
 class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id: "bbttcc-campaign-overview",
-    title: "BBTTCC — Campaign Overview",
+    title: "Bad Eden — Campaign Overview",
     width: 980,
     height: 600,
     resizable: true,
@@ -351,7 +351,7 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
 
       const totalOPs = computeFactionTotalOPs(fa);
       const statusKey = bandFor(totalOPs);
-      const statusLabel = game.i18n?.localize?.(`BBTTCC.PowerLevels.${statusKey}`) || statusKey;
+      const statusLabel = game.i18n?.localize?.(`Bad Eden.PowerLevels.${statusKey}`) || statusKey;
 
       rows.push({
         hasActor: true,
@@ -419,7 +419,7 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
     // -----------------------------------------------------------------------
     // 1) Rename "Power" header → "Status"
     // -----------------------------------------------------------------------
-    const statusLabel = game.i18n?.localize?.("BBTTCC.Labels.Status") || "Status";
+    const statusLabel = game.i18n?.localize?.("Bad Eden.Labels.Status") || "Status";
     const thData = root.querySelector("th[data-col='power']");
     if (thData) thData.textContent = statusLabel;
     else {
@@ -451,7 +451,7 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
           if (faction) {
             const totalOPs = computeFactionTotalOPs(faction);
             const key = bandFor(totalOPs);
-            labelText = game.i18n?.localize?.(`BBTTCC.PowerLevels.${key}`) || key;
+            labelText = game.i18n?.localize?.(`Bad Eden.PowerLevels.${key}`) || key;
           }
           td.textContent = labelText;
         }

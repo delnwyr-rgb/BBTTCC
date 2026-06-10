@@ -1,6 +1,6 @@
 
 /* ========================================================================== */
-/* BBTTCC Bridge (Manifestation + Backing) — Sacrifice Types + Resource Locks  */
+/* Bad Eden Bridge (Manifestation + Backing) — Sacrifice Types + Resource Locks  */
 /* v13-safe UI injection: uses BOTH getActorSheetHeaderButtons and render hook */
 /* ========================================================================== */
 (function () {
@@ -454,7 +454,7 @@ async function _clearBridgeDebtAndLocks(actor){
         var line = '<div><b>Manifestation</b>: '+pc.name+' → <b>+'+opAmount+' '+opLabel(opKey)+' OP</b> for '+faction.name+'</div>';
         line += '<div class="bbttcc-muted">Sacrifice: <b>'+sacType+'</b> • Blood Debt +<b>'+bloodDebtDelta+'</b></div>';
         if(note) line += '<div class="bbttcc-muted">Note: '+foundry.utils.escapeHTML(note)+'</div>';
-        await ChatMessage.create({ whisper: gmIds, speaker:{alias:"BBTTCC Bridge"}, content: line });
+        await ChatMessage.create({ whisper: gmIds, speaker:{alias:"Bad Eden Bridge"}, content: line });
       }
     }catch(_e){}
 
@@ -675,7 +675,7 @@ async function _clearBridgeDebtAndLocks(actor){
       '</div>';
 
     var dlg = new Dialog({
-      title: "BBTTCC — Manifestation Bridge",
+      title: "Bad Eden — Manifestation Bridge",
       content: html,
       buttons: { close: { label: "Close" } },
       default: "close",
@@ -813,7 +813,7 @@ async function _clearBridgeDebtAndLocks(actor){
       if(!header.length) return;
       if(header.find(".bbttcc-bridge-btn").length) return;
 
-      var btn = $('<a class="bbttcc-bridge-btn" style="margin-left:6px;" title="BBTTCC Bridge"><i class="fas fa-exchange-alt"></i> Bridge</a>');
+      var btn = $('<a class="bbttcc-bridge-btn" style="margin-left:6px;" title="Bad Eden Bridge"><i class="fas fa-exchange-alt"></i> Bridge</a>');
       btn.on("click", function(ev){ ev.preventDefault(); ev.stopPropagation(); openBridgeForActor(actor); });
       header.find(".window-title").after(btn);
     }catch(e){ warn("fallback inject failed", e); }

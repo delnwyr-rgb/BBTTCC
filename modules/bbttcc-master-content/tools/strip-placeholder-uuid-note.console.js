@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Strip placeholder-UUID notes from heritage / ancestry items
+// Bad Eden — Strip placeholder-UUID notes from heritage / ancestry items
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM) and hit Enter. Idempotent — safe to re-run.
 //

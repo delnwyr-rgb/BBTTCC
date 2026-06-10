@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/bbttcc-toolbar-augment.enhancer.js
-// BBTTCC Hex Chrome HUD toolbar augment — top control bar edition
+// Bad Eden Hex Chrome HUD toolbar augment — top control bar edition
 
 (() => {
   const TAG = "[bbttcc-ui/toolbar-augment]";
@@ -119,7 +119,7 @@
       }
 
       killLegacyTravelPills();
-      log("BBTTCC control bar augmented (Travel Console + Turn Driver).");
+      log("Bad Eden control bar augmented (Travel Console + Turn Driver).");
     } catch (e) {
       warn("augmentToolbar error", e);
     }

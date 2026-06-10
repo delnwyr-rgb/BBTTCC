@@ -1,6 +1,6 @@
 /* REVIEW NOTE: VP Engine is faction progression logic and intentionally retained during faction-sheet layout cleanup. */
 // modules/bbttcc-factions/scripts/vp-engine.js
-// BBTTCC — Permanent Victory Point Engine (ready-safe)
+// Bad Eden — Permanent Victory Point Engine (ready-safe)
 //
 // Restores the working sprint behavior:
 // - VP gain each Advance Turn (Apply)

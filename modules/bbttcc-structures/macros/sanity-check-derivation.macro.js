@@ -1,4 +1,4 @@
-// BBTTCC Structures — Derivation Sanity Sheet (Phase A)
+// Bad Eden Structures — Derivation Sanity Sheet (Phase A)
 // ─────────────────────────────────────────────────────────────────────────────
 // Computes all 8 preset BOMs through the API + independently re-derives them
 // in this script using the same family table. Outputs:

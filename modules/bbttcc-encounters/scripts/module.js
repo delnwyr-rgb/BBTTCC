@@ -34,10 +34,10 @@ function installTravelModBridge() {
 }
 
 Hooks.once("init", () => {
-  console.log(TAG, "Initializing BBTTCC Encounter Engine module");
+  console.log(TAG, "Initializing Bad Eden Encounter Engine module");
 });
 
 Hooks.once("ready", () => {
-  console.log(TAG, "BBTTCC Encounter Engine ready");
+  console.log(TAG, "Bad Eden Encounter Engine ready");
   installTravelModBridge();
 });

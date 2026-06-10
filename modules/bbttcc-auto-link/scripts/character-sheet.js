@@ -1,10 +1,10 @@
 // modules/bbttcc-auto-link/scripts/character-sheet.js
-// BBTTCC Character & NPC Sheet registration + render enhancements.
+// Bad Eden Character & NPC Sheet registration + render enhancements.
 //
-// Hex Chrome BBTTCC Identity tab with inline editing.
+// Hex Chrome Bad Eden Identity tab with inline editing.
 // - Registers custom sheets that extend the default 5E character and NPC sheets.
 // - Adds Hex Chrome root class on render.
-// - Injects a BBTTCC tab that can read & write core BBTTCC identity fields.
+// - Injects a Bad Eden tab that can read & write core Bad Eden identity fields.
 // - Sparks/Tikkun is read-only here and sourced from the Tikkun API.
 // - Enlightenment picker drives a single Enlightenment item + OP recalcs.
 // - Tiered Options Identity:
@@ -19,11 +19,11 @@ const AAE_SCOPE = "bbttcc-aae";
 const LOG  = (...a) => console.log(`[${MOD}]`, ...a);
 const WARN = (...a) => console.warn(`[${MOD}]`, ...a);
 
-/* BBTTCC TAB HEALER (multi-sheet) */
-/* BBTTCC TAB HEALER (multi-sheet)
+/* Bad Eden TAB HEALER (multi-sheet) */
+/* Bad Eden TAB HEALER (multi-sheet)
  * When other sheets (notably faction sheets) open, Foundry's tab controllers can rebuild DOM and
- * leave the BBTTCC tab body empty on already-open character sheets. This healer keeps a registry
- * of processed character sheet roots and re-ensures their BBTTCC tab after ANY actor sheet render.
+ * leave the Bad Eden tab body empty on already-open character sheets. This healer keeps a registry
+ * of processed character sheet roots and re-ensures their Bad Eden tab after ANY actor sheet render.
  *
  * Design goals:
  * - No render loops (no app.render calls)
@@ -65,7 +65,7 @@ function _bbttccScheduleHeal() {
           } catch {/* ignore */}
         }
       } catch (e) {
-        WARN("BBTTCC tab healer failed", e);
+        WARN("Bad Eden tab healer failed", e);
       }
     }, 0);
   } catch {/* ignore */}
@@ -295,7 +295,7 @@ function patchEsotericDisplayCardRoutingOnce() {
 
 
 /* ---------------------------------------
- * BBTTCC Class Resources (Dice Pools + Pushback) — v1
+ * Bad Eden Class Resources (Dice Pools + Pushback) — v1
  *
  * Goal:
  * - Provide first-class sheet UI for class-specific dice pools (single pool, scaling die)
@@ -356,7 +356,7 @@ const BBTTCC_CLASS_RESOURCES = [
   },
 
   // Titanbound (Frame Dice + Structural Stress) — formerly "graveward" in this registry.
-  // Renamed 2026-04-13 to match the BBTTCC Resource Action JSON Suite manifest.
+  // Renamed 2026-04-13 to match the Bad Eden Resource Action JSON Suite manifest.
   {
     classId: "titanbound",
     pools: [
@@ -403,7 +403,7 @@ const BBTTCC_CLASS_RESOURCES = [
 ];
 
 /* ---------------------------------------
- * BBTTCC Action Dialog Registry
+ * Bad Eden Action Dialog Registry
  * ---------------------------------------
  * Specs for the dialogs that open when a resource-action item is used (keyed
  * by `flags.bbttcc.opensDialog` on the item). Each option:
@@ -626,7 +626,7 @@ const BBTTCC_AURA_LABELS = {
 };
 
 /* ---------------------------------------
- * BBTTCC Resource Action Suite — UUID healer
+ * Bad Eden Resource Action Suite — UUID healer
  * ---------------------------------------
  * Class items in the suite carry an ItemGrant advancement flagged with
  * `flags.bbttcc.resourceSuite = true`. The advancement references resource
@@ -634,7 +634,7 @@ const BBTTCC_AURA_LABELS = {
  * `bbttcc-master-content.classes` pack they may receive fresh IDs, breaking
  * those references and silently failing the level-up grant.
  *
- * The healer runs on sheet open: for any class item with the BBTTCC suite
+ * The healer runs on sheet open: for any class item with the Bad Eden suite
  * flag, it (a) repairs broken UUIDs by mapping the original suite UUID →
  * canonical identifier → live compendium UUID, and (b) ensures any items
  * the grant SHOULD have produced are present on the actor (catches up
@@ -707,7 +707,7 @@ async function _bbttccGetResourceItemIndex({ force = false } = {}) {
     _bbttccResourceItemIndexCache = map;
     return map;
   } catch (e) {
-    WARN("Failed to build BBTTCC resource item index", e);
+    WARN("Failed to build Bad Eden resource item index", e);
     _bbttccResourceItemIndexCache = new Map();
     return _bbttccResourceItemIndexCache;
   }
@@ -812,7 +812,7 @@ async function _bbttccHealResourceGrantsCore(actor) {
 
   const liveIndex = await _bbttccGetFreshResourceIndex([...classIds]);
   if (!liveIndex.size) {
-    WARN(`BBTTCC resource pack '${BBTTCC_RESOURCE_PACK}' has no items in its index; cannot heal grants`);
+    WARN(`Bad Eden resource pack '${BBTTCC_RESOURCE_PACK}' has no items in its index; cannot heal grants`);
     return;
   }
 
@@ -837,7 +837,7 @@ async function _bbttccHealResourceGrantsCore(actor) {
         if (!freshUuid) {
           // Item not in the live pack — leave whatever's currently configured
           // for this slot (or nothing). Warn once per sheet open.
-          WARN(`BBTTCC resource item '${identifier}' not found in ${BBTTCC_RESOURCE_PACK}; skipping`);
+          WARN(`Bad Eden resource item '${identifier}' not found in ${BBTTCC_RESOURCE_PACK}; skipping`);
           continue;
         }
         // Try to preserve the existing ref's meta fields if one matches this identifier
@@ -873,7 +873,7 @@ async function _bbttccHealResourceGrantsCore(actor) {
           if (adv?._id) healedObject[adv._id] = adv;
         }
         await classItem.update({ "system.advancement": healedObject });
-        LOG(`Healed BBTTCC resource grant UUIDs on ${actor.name} :: ${classItem.name}`);
+        LOG(`Healed Bad Eden resource grant UUIDs on ${actor.name} :: ${classItem.name}`);
       } catch (e) {
         WARN(`Failed to update advancements on ${classItem.name}`, e);
         continue;
@@ -886,7 +886,7 @@ async function _bbttccHealResourceGrantsCore(actor) {
 }
 
 /**
- * For each BBTTCC resource-suite ItemGrant advancement on the class item,
+ * For each Bad Eden resource-suite ItemGrant advancement on the class item,
  * make sure every EXPECTED resource item is present on the actor:
  *   1. Detects existing items by identifier (multi-key) AND by compendium source
  *      UUID, to avoid duplicates from earlier backfills/imports that may have
@@ -967,7 +967,7 @@ async function _bbttccEnsureGrantedResourceItems(actor, advancements, liveIndex,
   if (dupesToDelete.length) {
     try {
       await actor.deleteEmbeddedDocuments("Item", dupesToDelete);
-      LOG(`Removed ${dupesToDelete.length} duplicate BBTTCC resource item(s) on ${actor.name}`);
+      LOG(`Removed ${dupesToDelete.length} duplicate Bad Eden resource item(s) on ${actor.name}`);
     } catch (e) {
       WARN(`Failed to delete duplicate resource items on ${actor.name}`, e);
     }
@@ -1004,7 +1004,7 @@ async function _bbttccEnsureGrantedResourceItems(actor, advancements, liveIndex,
 
   try {
     await actor.createEmbeddedDocuments("Item", docs);
-    LOG(`Backfilled ${docs.length} missing BBTTCC resource item(s) on ${actor.name}: ${missing.join(", ")}`);
+    LOG(`Backfilled ${docs.length} missing Bad Eden resource item(s) on ${actor.name}: ${missing.join(", ")}`);
   } catch (e) {
     WARN(`Failed to create backfill resource items on ${actor.name}`, e);
   }
@@ -1290,7 +1290,7 @@ function _bbttccReadItemMeta(item) {
     let pb   = _bbttccGet(item, "flags.bbttcc.pushback", null);
     let burn = _bbttccGet(item, "flags.bbttcc.burn", null);
 
-    // Bridge for the BBTTCC Resource Action JSON Suite (2026-04-13).
+    // Bridge for the Bad Eden Resource Action JSON Suite (2026-04-13).
     // Items in the new suite use a flat schema:
     //   flags.bbttcc = { resourceAction: true, engine, classId, pool, track, cost, opensDialog, ... }
     // Translate into the legacy resourceCost / burn / pushback shape that the
@@ -1539,7 +1539,7 @@ function _bbttccRenderResourceCard(section, actor) {
 
   body.innerHTML = rows.join("");
 
-  // Insert near top of BBTTCC tab body (after existing action bar if present)
+  // Insert near top of Bad Eden tab body (after existing action bar if present)
   const target = section.querySelector(".bbttcc-card")?.parentElement || section;
   target.appendChild(wrap);
 }
@@ -1558,7 +1558,7 @@ function _bbttccMountSidebarResourceCard(app, root) {
     if (!actor || !root) return;
 
     // Bail early if no relevant class — keeps the sidebar uncluttered for
-    // characters that don't use any BBTTCC class resource pools.
+    // characters that don't use any Bad Eden class resource pools.
     if (!_bbttccGetActiveResourceSpec(actor).length) {
       // Clean up any leftover card from a previous class swap.
       root.querySelectorAll(".bbttcc-resource-card").forEach(el => el.remove());
@@ -1575,7 +1575,7 @@ function _bbttccMountSidebarResourceCard(app, root) {
     _bbttccWireResourceCardEvents(app, sidebar);
 
     // Make sure the dnd5e.preUseActivity hook is installed so action items
-    // route through BBTTCC dialogs (titanbound_frame, aurablade_burn, etc).
+    // route through Bad Eden dialogs (titanbound_frame, aurablade_burn, etc).
     _bbttccInstallUseItemHookOnce();
     // Combat-tick processing for Burn timers / lock expiry (Aurablade).
     _bbttccInstallBurnTimerHookOnce();
@@ -1668,7 +1668,7 @@ function _bbttccWireResourceCardEvents(app, section) {
 
 // Option C: Hook native item use and auto-spend/roll/tick.
 /**
- * Open the BBTTCC action dialog for an item. Returns the picked option id, or
+ * Open the Bad Eden action dialog for an item. Returns the picked option id, or
  * null if the user cancelled. Handles pool gating (not enough dice → warn +
  * bail), commits the pool spend on pick (not on open), optionally rolls the
  * pool die, and posts a chat card describing the chosen effect.
@@ -1821,7 +1821,7 @@ async function _bbttccExecuteDialogOption(actor, item, spec, option, poolSpec) {
 
   // Post chat card. If we rolled, use the Roll's native chat (includes the
   // dice animation) with our flavor. Otherwise build a plain ChatMessage.
-  const title = `<strong>${item?.name ?? "BBTTCC"}</strong> — ${option.label}`;
+  const title = `<strong>${item?.name ?? "Bad Eden"}</strong> — ${option.label}`;
   if (dieRoll) {
     const flavor = narrative
       ? `${title}<br/><em>${narrative}</em>`
@@ -1918,12 +1918,12 @@ function _bbttccInstallUseItemHookOnce() {
   // `dnd5e.preUseActivity` hook. We listen on the new hook synchronously so
   // we can return `false` to cancel the native usage flow when our dialog
   // takes over. The legacy meta-based spend logic runs fire-and-forget after
-  // the hook returns (only for items that do NOT open a BBTTCC dialog).
+  // the hook returns (only for items that do NOT open a Bad Eden dialog).
   Hooks.on("dnd5e.preUseActivity", (activity, usageConfig /* , dialogConfig, messageConfig */) => {
     try {
       const item = activity?.item;
       if (!item) return;
-      // Guard against re-entry from BBTTCC's own chat-card path
+      // Guard against re-entry from Bad Eden's own chat-card path
       if (usageConfig && usageConfig.__bbttccSkipResources) return;
 
       const actor = item.parent;
@@ -1939,7 +1939,7 @@ function _bbttccInstallUseItemHookOnce() {
       const opensDialog = String(item?.flags?.bbttcc?.opensDialog || "");
       if (opensDialog && BBTTCC_ACTION_DIALOGS[opensDialog]) {
         _bbttccOpenActionDialog(actor, item, opensDialog)
-          .catch(e => WARN("BBTTCC dialog failed", e));
+          .catch(e => WARN("Bad Eden dialog failed", e));
         return false; // cancel the native dnd5e activity use
       }
 
@@ -1957,7 +1957,7 @@ function _bbttccInstallUseItemHookOnce() {
 
 /**
  * Legacy item-use handler — preserves the pre-dialog spend/pushback/burn
- * behavior for items that have BBTTCC flags but no `opensDialog`. Runs as a
+ * behavior for items that have Bad Eden flags but no `opensDialog`. Runs as a
  * fire-and-forget side effect; the native dnd5e activity flow continues
  * normally and posts its own chat card.
  *
@@ -1997,7 +1997,7 @@ async function _bbttccLegacyUseItemHandler(actor, item) {
         const afterSpend = await _bbttccSpendPoolDice(actor, poolSpec, n);
         if (meta.resourceCost.roll !== false) {
           spendRoll = await _bbttccRollDie(afterSpend.die);
-          // Post a clean BBTTCC message (small + readable), *in addition* to the native dnd5e card.
+          // Post a clean Bad Eden message (small + readable), *in addition* to the native dnd5e card.
           await spendRoll.toMessage({
             speaker: ChatMessage.getSpeaker({ actor: actor }),
             flavor: `${item.name} — spent ${n} ${afterSpend.label} (${afterSpend.die})`
@@ -2133,10 +2133,10 @@ function _bbttccInstallBurnTimerHookOnce() {
           await _bbttccSetActorResources(a, { tracks: { burn: { value: nextVal, ts: Date.now(), meta } } });
         }
       }
-    } catch (e) { WARN("BBTTCC Burn timers failed", e); }
+    } catch (e) { WARN("Bad Eden Burn timers failed", e); }
   });
 
-  LOG("BBTTCC class resources: hooks installed (preUseActivity + Burn timer)");
+  LOG("Bad Eden class resources: hooks installed (preUseActivity + Burn timer)");
 }
 /* ---------------------------------------
  * Pack & category mappings for identity families
@@ -2380,7 +2380,7 @@ function findBaseNPCSheet() {
 
 
 /* ---------------------------------------
- * Native BBTTCC quick controls helpers
+ * Native Bad Eden quick controls helpers
  * ------------------------------------ */
 
 async function openBBTTCCIdentityChooser(actor, app, slotKey) {
@@ -2522,7 +2522,7 @@ function _buildQuickbarHTML(actor) {
   return `
     <section class="bbttcc-quickbar" data-bbttcc-quickbar="1" data-bbttcc-debug="quickbar-injected">
       <div class="bbttcc-quickbar-card">
-        <div class="bbttcc-quickbar-title">BBTTCC</div>
+        <div class="bbttcc-quickbar-title">Bad Eden</div>
         <div class="bbttcc-quickbar-subtitle">Faction, character options, and pop-out trackers.</div>
         <div class="bbttcc-quickbar-grid">
           <div class="bbttcc-quickbar-actions">
@@ -2575,7 +2575,7 @@ function _pruneNativeQuickbarSideTabs(root) {
 }
 
 /**
- * Locate the BBTTCC quickbar mount target inside a character/NPC sheet.
+ * Locate the Bad Eden quickbar mount target inside a character/NPC sheet.
  *
  * dnd5e v5+ structure (the only structure we currently support):
  *   <form class="character vertical-tabs">
@@ -2839,7 +2839,7 @@ function hydrateNativeBBTTCCQuickbar(app, root) {
     });
   }
 
-  // Heal any broken BBTTCC Resource Suite ItemGrant UUIDs and backfill missing
+  // Heal any broken Bad Eden Resource Suite ItemGrant UUIDs and backfill missing
   // resource items, then mount the Class Resources card. The heal kicks off
   // an actor.update() if anything needs repair, which will trigger another
   // sheet render — the mount is idempotent so the eventual second pass is fine.
@@ -2853,9 +2853,9 @@ function hydrateNativeBBTTCCQuickbar(app, root) {
 
   // 2026-05-15 — Inject ▶ Use buttons next to items that match FEATURE_ROUTER /
   // NAME_ROUTER. The native fourththing sheets render these via hbs templates,
-  // but BBTTCC-wrapped dnd5e sheets have no equivalent hook — this bridges
+  // but Bad Eden-wrapped dnd5e sheets have no equivalent hook — this bridges
   // the gap so NP ancestry abilities + class techniques get a clickable
-  // invoke surface on both PC and NPC BBTTCC sheets.
+  // invoke surface on both PC and NPC Bad Eden sheets.
   //
   // Belt-and-suspenders: dnd5e v5 AppV2 sometimes re-renders the items
   // partial after our initial hook fires, which would wipe the injected
@@ -2871,7 +2871,7 @@ function hydrateNativeBBTTCCQuickbar(app, root) {
  * ------------------------------------ */
 
 /**
- * BBTTCC sheet integration — Foundry v13 / dnd5e v5+ (ApplicationV2)
+ * Bad Eden sheet integration — Foundry v13 / dnd5e v5+ (ApplicationV2)
  *
  * dnd5e's CharacterActorSheet/NPCActorSheet extend ActorSheetV2 (AppV2),
  * which IGNORES the legacy V1 hooks (`get template()`, `getData()`,
@@ -2880,11 +2880,11 @@ function hydrateNativeBBTTCCQuickbar(app, root) {
  *
  * Therefore, BBTTCCCharacterSheet and BBTTCCNPCSheet below are intentionally
  * thin marker subclasses. They exist only so:
- *   1. Users can pick "BBTTCC Character Sheet" in the sheet picker, and
+ *   1. Users can pick "Bad Eden Character Sheet" in the sheet picker, and
  *   2. The renderActorSheet hook can detect them by constructor name and
- *      run hydrateNativeBBTTCCQuickbar() to DOM-inject the BBTTCC quickbar.
+ *      run hydrateNativeBBTTCCQuickbar() to DOM-inject the Bad Eden quickbar.
  *
- * All BBTTCC UI is added via DOM injection in hydrateNativeBBTTCCQuickbar,
+ * All Bad Eden UI is added via DOM injection in hydrateNativeBBTTCCQuickbar,
  * NOT via Handlebars template override. The bbttcc-native-*.hbs files in
  * templates/actors/ are unused dead code (kept on disk for now in case of
  * a future Option-A refactor that owns the AppV2 PARTS map).
@@ -2894,7 +2894,7 @@ export function registerBBTTCCCharacterSheet() {
   const baseNPC  = findBaseNPCSheet();
 
   if (!baseChar?.cls) {
-    WARN("Could not locate a base character sheet; BBTTCC Character Sheet will not be registered.");
+    WARN("Could not locate a base character sheet; Bad Eden Character Sheet will not be registered.");
   } else {
     // Marker subclass — see comment above. Do NOT add V1 overrides here.
     class BBTTCCCharacterSheet extends baseChar.cls {}
@@ -2904,14 +2904,14 @@ export function registerBBTTCCCharacterSheet() {
     Actors.registerSheet(MOD, BBTTCCCharacterSheet, {
       types: ["character"],
       makeDefault: false,
-      label: "BBTTCC Character Sheet"
+      label: "Bad Eden Character Sheet"
     });
 
-    CONFIG.BBTTCC ??= {};
-    CONFIG.BBTTCC.autoLink ??= {};
-    CONFIG.BBTTCC.autoLink.characterSheetId = sheetId;
+    CONFIG.Bad Eden ??= {};
+    CONFIG.Bad Eden.autoLink ??= {};
+    CONFIG.Bad Eden.autoLink.characterSheetId = sheetId;
 
-    LOG("Registered BBTTCC Character Sheet", {
+    LOG("Registered Bad Eden Character Sheet", {
       sheetId,
       baseSheetId: baseChar.id,
       baseClass: baseChar.cls.name
@@ -2919,10 +2919,10 @@ export function registerBBTTCCCharacterSheet() {
   }
 
   if (!baseNPC?.cls) {
-    WARN("Could not locate a base NPC sheet; BBTTCC NPC Sheet will not be registered.");
+    WARN("Could not locate a base NPC sheet; Bad Eden NPC Sheet will not be registered.");
   } else {
     // Marker subclass — see comment on registerBBTTCCCharacterSheet above.
-    // BBTTCC UI is added via DOM injection in the renderActorSheet hook, not here.
+    // Bad Eden UI is added via DOM injection in the renderActorSheet hook, not here.
     class BBTTCCNPCSheet extends baseNPC.cls {}
 
     const npcSheetId = `${MOD}.BBTTCCNPCSheet`;
@@ -2930,14 +2930,14 @@ export function registerBBTTCCCharacterSheet() {
     Actors.registerSheet(MOD, BBTTCCNPCSheet, {
       types: ["npc"],
       makeDefault: false,
-      label: "BBTTCC NPC Sheet"
+      label: "Bad Eden NPC Sheet"
     });
 
-    CONFIG.BBTTCC ??= {};
-    CONFIG.BBTTCC.autoLink ??= {};
-    CONFIG.BBTTCC.autoLink.npcSheetId = npcSheetId;
+    CONFIG.Bad Eden ??= {};
+    CONFIG.Bad Eden.autoLink ??= {};
+    CONFIG.Bad Eden.autoLink.npcSheetId = npcSheetId;
 
-    LOG("Registered BBTTCC NPC Sheet", {
+    LOG("Registered Bad Eden NPC Sheet", {
       sheetId: npcSheetId,
       baseSheetId: baseNPC.id,
       baseClass: baseNPC.cls.name
@@ -2946,7 +2946,7 @@ export function registerBBTTCCCharacterSheet() {
 }
 
 export function getBBTTCCCharacterSheetId() {
-  return foundry.utils.getProperty(CONFIG, "BBTTCC.autoLink.characterSheetId");
+  return foundry.utils.getProperty(CONFIG, "Bad Eden.autoLink.characterSheetId");
 }
 
 /* ---------------------------------------
@@ -2960,7 +2960,7 @@ function getRoot(html) {
 }
 
 /* ---------------------------------------
- * BBTTCC Native Sheet Curation Layer
+ * Bad Eden Native Sheet Curation Layer
  * ------------------------------------ */
 
 function isBBTTCCActor(actor) {
@@ -2984,7 +2984,7 @@ function isBBTTCCItemFromElement(el) {
     // Strong signals
     if (text.includes("bbttcc")) return true;
 
-    // Known BBTTCC content hints
+    // Known Bad Eden content hints
     if (text.includes("echo diver")) return true;
     if (text.includes("pactkeeper")) return true;
     if (text.includes("furrykin")) return true;
@@ -3104,13 +3104,13 @@ function applyBBTTCCSheetCuration(app, root) {
             // Only touch actual chooser entries inside this sheet/window scope.
             if (!isSpeciesEntry && !isClassEntry && !isBackgroundEntry) return;
 
-            // Always suppress background choices for BBTTCC
+            // Always suppress background choices for Bad Eden
             if (isBackgroundEntry) {
               el.style.display = "none";
               return;
             }
 
-            // Keep BBTTCC entries, hide vanilla ones
+            // Keep Bad Eden entries, hide vanilla ones
             if (!isBBTTCCItemFromElement(el)) {
               el.style.display = "none";
             }
@@ -3150,7 +3150,7 @@ function applyBBTTCCSheetCuration(app, root) {
     root.__bbttccObserver = observer;
 
   } catch (err) {
-    WARN("BBTTCC curation failed", err);
+    WARN("Bad Eden curation failed", err);
   }
 }
 
@@ -3378,7 +3378,7 @@ async function deleteIdentityFamilyItems(actor, slotKey, cfg) {
     .map(it => it.id);
 
   if (toDelete.length) {
-    LOG("BBTTCC Identity — deleting identity family items", {
+    LOG("Bad Eden Identity — deleting identity family items", {
       slotKey,
       actor: actor.name,
       ids: toDelete
@@ -3404,7 +3404,7 @@ async function deleteSephirotItems(actor) {
   }).map(it => it.id);
 
   if (toDelete.length) {
-    LOG("BBTTCC Identity — deleting Sephirot items", { actor: actor.name, ids: toDelete });
+    LOG("Bad Eden Identity — deleting Sephirot items", { actor: actor.name, ids: toDelete });
     await actor.deleteEmbeddedDocuments("Item", toDelete);
   }
 }
@@ -3586,7 +3586,7 @@ async function applyIdentitySlotChange(actor, slotKey, newKey) {
     return patch;
   }
 
-  LOG("BBTTCC Identity — adding item for slot", {
+  LOG("Bad Eden Identity — adding item for slot", {
     slotKey,
     actor: actor.name,
     item: doc.name,
@@ -3771,7 +3771,7 @@ async function persistFaction(actor, factionId) {
 }
 
 /* ---------------------------------------
- * BBTTCC Identity tab
+ * Bad Eden Identity tab
  * ------------------------------------ */
 
 async function ensureBBTTCCTab(app, root) {
@@ -3795,7 +3795,7 @@ async function ensureBBTTCCTab(app, root) {
     root.querySelector(".sheet-content") ||
     root;
 
-  if (!nav || !body) { WARN('BBTTCC tab injection: missing nav/body', { ctor: app?.constructor?.name, hasNav: !!nav, hasBody: !!body }); return; }
+  if (!nav || !body) { WARN('Bad Eden tab injection: missing nav/body', { ctor: app?.constructor?.name, hasNav: !!nav, hasBody: !!body }); return; }
 
   const exampleItem =
     nav.querySelector("a.item[data-action='tab'][data-group='primary'][data-tab]") ||
@@ -3811,7 +3811,7 @@ async function ensureBBTTCCTab(app, root) {
     navItem = document.createElement(exampleItem?.tagName?.toLowerCase() || "a");
     navItem.classList.add("item");
     navItem.dataset.tab = "bbttcc";
-    navItem.textContent = "BBTTCC";
+    navItem.textContent = "Bad Eden";
     if (group) navItem.dataset.group = group;
     if (action) navItem.dataset.action = action;
     nav.appendChild(navItem);
@@ -3913,7 +3913,7 @@ async function ensureBBTTCCTab(app, root) {
     );
     section.innerHTML = inner;
 
-    // Inject a Bridge launcher into the BBTTCC tab (Character sheet) — uses the same pattern as Open Faction Sheet.
+    // Inject a Bridge launcher into the Bad Eden tab (Character sheet) — uses the same pattern as Open Faction Sheet.
     try {
       const actions = section.querySelector('.bbttcc-card .bbttcc-card-actions');
       if (actions && !actions.querySelector('[data-bbttcc-action="open-bridge"]')) {
@@ -3927,7 +3927,7 @@ async function ensureBBTTCCTab(app, root) {
     } catch (_eB) {}
 
 
-    // BBTTCC Class Resources (dice pools + pushback) — inject UI + ensure useItem hook is active
+    // Bad Eden Class Resources (dice pools + pushback) — inject UI + ensure useItem hook is active
     try {
       _bbttccInstallUseItemHookOnce();
       _bbttccInstallBurnTimerHookOnce();
@@ -3937,9 +3937,9 @@ async function ensureBBTTCCTab(app, root) {
 
     wireBBTTCCTabEvents(app, section);
   } catch (err) {
-    WARN("Failed to render BBTTCC tab template; falling back to placeholder.", err);
+    WARN("Failed to render Bad Eden tab template; falling back to placeholder.", err);
     section.innerHTML = `<div class="bbttcc-tab-placeholder">
-      <p style="margin:0;">BBTTCC identity panel failed to load.</p>
+      <p style="margin:0;">Bad Eden identity panel failed to load.</p>
     </div>`;
   }
 }
@@ -3971,7 +3971,7 @@ async function saveFromTab(actor, root) {
   await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
   Hooks.callAll("bbttcc:enlightenmentChanged", { actorId: actor.id, level: lvlKey, display });
 
-  ui.notifications?.info?.("BBTTCC values saved.");
+  ui.notifications?.info?.("Bad Eden values saved.");
 }
 
 function wireBBTTCCTabEvents(app, section) {
@@ -4006,7 +4006,7 @@ function wireBBTTCCTabEvents(app, section) {
           Hooks.callAll("bbttcc:enlightenmentChanged", { actorId: actor.id, level: lvlKey, display });
           app.render(false);
         } catch (e) {
-          WARN("BBTTCC Enlightenment Change — error", e);
+          WARN("Bad Eden Enlightenment Change — error", e);
         }
       });
     }
@@ -4054,13 +4054,13 @@ function wireBBTTCCTabEvents(app, section) {
 
     sel.addEventListener("change", async (ev) => {
       const newKey = String(ev.currentTarget.value ?? "").trim();
-      LOG("BBTTCC Identity Change — slot", { slot, newKey, actor: actor.name });
+      LOG("Bad Eden Identity Change — slot", { slot, newKey, actor: actor.name });
 
       try {
         await reconcileIdentityFromSection(actor, section);
         app.render(false);
       } catch (e) {
-        WARN("BBTTCC Identity Change — error", slot, e);
+        WARN("Bad Eden Identity Change — error", slot, e);
       }
     });
   };
@@ -4073,13 +4073,13 @@ function wireBBTTCCTabEvents(app, section) {
   if (polSelect && isGM) {
     polSelect.addEventListener("change", async (ev) => {
       const newKey = String(ev.currentTarget.value ?? "").trim();
-      LOG("BBTTCC Political Philosophy Change", { newKey, actor: actor.name });
+      LOG("Bad Eden Political Philosophy Change", { newKey, actor: actor.name });
       try {
         await actor.setFlag(AAE_SCOPE, "politicalPhilosophy", newKey || null);
         await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
         app.render(false);
       } catch (e) {
-        WARN("BBTTCC Political Philosophy Change — error", e);
+        WARN("Bad Eden Political Philosophy Change — error", e);
       }
     });
   }
@@ -4099,7 +4099,7 @@ function wireBBTTCCTabEvents(app, section) {
     recalcBtn.addEventListener("click", async (ev) => {
       ev.preventDefault();
       await game.bbttcc?.api?.characterOptions?.recalcActor?.(actor.id);
-      ui.notifications?.info?.("BBTTCC OPs recalculated.");
+      ui.notifications?.info?.("Bad Eden OPs recalculated.");
     });
 
 
@@ -4236,7 +4236,7 @@ function wireBBTTCCTabEvents(app, section) {
     });
   }
 
-  // BBTTCC Class Resources — wire UI buttons (dice pools + pushback)
+  // Bad Eden Class Resources — wire UI buttons (dice pools + pushback)
   try { _bbttccWireResourceCardEvents(app, section); } catch (_eResWire) {}
 
   const openBridgeBtn = section.querySelector("[data-bbttcc-action='open-bridge']");
@@ -4275,7 +4275,7 @@ function wireBBTTCCTabEvents(app, section) {
 }
 
 /* ---------------------------------------
- * Hooks: render BBTTCC sheets
+ * Hooks: render Bad Eden sheets
  * ------------------------------------ */
 
 // Per-(app, render) dedupe. Foundry v13 AppV2 sheets fire both `renderActorSheet`
@@ -4301,7 +4301,7 @@ async function enhanceBBTTCCSheet(app, html) {
     const actor = app?.actor ?? app?.object;
     if (!actor) return;
 
-    // Only PCs/NPCs; faction actors do not receive the BBTTCC tab here.
+    // Only PCs/NPCs; faction actors do not receive the Bad Eden tab here.
     const isPC = (actor.type === "character" || actor.type === "npc");
 
     const root = getRoot(html);
@@ -4367,7 +4367,7 @@ async function enhanceBBTTCCSheet(app, html) {
     }
 
   } catch (err) {
-    WARN("Failed during BBTTCC sheet enhancement", err);
+    WARN("Failed during Bad Eden sheet enhancement", err);
   }
 }
 
@@ -4586,7 +4586,7 @@ function _ftMountBossAffiliationsSurface(app, root) {
   }
 }
 
-/** Mount or refresh the Affiliations card just below the BBTTCC quickbar. */
+/** Mount or refresh the Affiliations card just below the Bad Eden quickbar. */
 function _ftMountAffiliationsCard(app, root) {
   try {
     const actor = app?.actor ?? app?.object;
@@ -4609,11 +4609,11 @@ function _ftMountAffiliationsCard(app, root) {
 }
 
 /* ---------------------------------------
- * 2026-05-15 — ▶ Use button bridge for BBTTCC-wrapped (dnd5e) sheets
+ * 2026-05-15 — ▶ Use button bridge for Bad Eden-wrapped (dnd5e) sheets
  *
  * The fourththing native sheets render a ▶ Use button via their hbs templates
  * (character-sheet.hbs:1228, npc-sheet.hbs:567) gated on isActionableFeature.
- * BBTTCC uses dnd5e-wrapped sheets instead, which have NO equivalent hook,
+ * Bad Eden uses dnd5e-wrapped sheets instead, which have NO equivalent hook,
  * so items routed via FEATURE_ROUTER never get a clickable invoke surface.
  *
  * This injector scans the rendered item list for items where
@@ -4685,7 +4685,7 @@ function _ftMountActionableUseButtons(app, root) {
 // Hook registration strategy (2026-04-17 freeze fix):
 //   In Foundry v13 + dnd5e v5, AppV2 actor sheets reliably fire
 //   `renderActorSheet` in addition to their constructor-named hook. That
-//   single hook covers dnd5e CharacterActorSheet/NPCActorSheet, BBTTCC
+//   single hook covers dnd5e CharacterActorSheet/NPCActorSheet, Bad Eden
 //   marker subclasses, and the legacy V1 path. The four extra hooks we
 //   used to register all fired for the SAME render, fanning every sheet
 //   open into 4–6 calls of `_bbttccHealResourceGrants` — each of which

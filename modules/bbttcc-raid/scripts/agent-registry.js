@@ -1,5 +1,5 @@
 /* agent-registry.js
- * BBTTCC Agent API Registry — Phase 1 §7.1
+ * Bad Eden Agent API Registry — Phase 1 §7.1
  *
  * Schema-validated verb registry layered on top of game.bbttcc.api.agent.*.
  *

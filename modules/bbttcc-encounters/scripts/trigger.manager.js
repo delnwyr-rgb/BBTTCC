@@ -234,7 +234,7 @@
         const cls = String(w?.constructor?.name || "").toLowerCase();
         if (cls.includes("dialog")) return true;
         const title = String((w && (w.title || w.options?.title)) || "").toLowerCase();
-        // Catch BBTTCC scenario / outcome modals too
+        // Catch Bad Eden scenario / outcome modals too
         return title.includes("encounter") || title.includes("outcome") || title.includes("scenario");
       });
       if (!dialogOpen) return true;

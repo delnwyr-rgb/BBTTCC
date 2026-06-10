@@ -1,4 +1,4 @@
-// BBTTCC Raid Console — Tooltip Enhancer v1.2 (generic render hook)
+// Bad Eden Raid Console — Tooltip Enhancer v1.2 (generic render hook)
 (() => {
   const STYLE_ID = "bbttcc-tip-style";
   if (!document.getElementById(STYLE_ID)) {

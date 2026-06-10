@@ -1,4 +1,4 @@
-// BBTTCC — Create RFI Crafting Materials (seed pack)
+// Bad Eden — Create RFI Crafting Materials (seed pack)
 // ─────────────────────────────────────────────────────────────────────────────
 // Adds 12 raw-material items to `bbttcc-master-content.items`. Each has:
 //   • type: "gear"

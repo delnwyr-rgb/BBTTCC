@@ -2,7 +2,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Forges the coverage roster: one L20 "GAUNTLET ·" steward per CLASS × SUBCLASS
 // discovered from the packs, with ancestries / heritages / archetypes / crew
-// types / occult associations / alignments / BBTTCC techniques / starter
+// types / occult associations / alignments / Bad Eden techniques / starter
 // manifestations / weapons DISTRIBUTED across the roster (covering array — every
 // option appears at least once; the cross-product would be thousands).
 //
@@ -47,7 +47,7 @@
   const ancestryDocs = await getDocs("bbttcc-master-content.ancestries");
   const itemsDocs    = await getDocs("bbttcc-master-content.items");
   const starterDocs  = await getDocs("fourththing.starter-manifestations");
-  // BBTTCC option kits live in their own module's packs (not master-content).
+  // Bad Eden option kits live in their own module's packs (not master-content).
   const archetypeDocs = await getDocs("bbttcc-character-options.character-archetypes");
   const crewDocs      = await getDocs("bbttcc-character-options.crew-types");
   const assocDocs     = await getDocs("bbttcc-character-options.occult-associations");
@@ -97,7 +97,7 @@
   const crews        = groupPack(crewDocs);
   const associations = groupPack(assocDocs);
   const alignments   = alignDocs;
-  // BBTTCC techniques (feat folder) — distribute 2 per actor.
+  // Bad Eden techniques (feat folder) — distribute 2 per actor.
   const techniques   = itemsDocs.filter(d => d.type === "feat" && d.folder?.id === "QbGNBV70xh9pF0eh");
   const weapons      = itemsDocs.filter(d => d.type === "weapon");
   const starters     = starterDocs;
@@ -108,7 +108,7 @@
   // ── Roster plan (covering array via round-robin) ───────────────────────────
   const pick = (arr, i) => arr.length ? arr[i % arr.length] : null;
   const plan = pairs.map((p, i) => ({
-    name: `GAUNTLET · ${p.cls.name}${p.sub ? ` / ${p.sub.name.replace(/\s*\(BBTTCC\)\s*$/, "")}` : ""}`,
+    name: `GAUNTLET · ${p.cls.name}${p.sub ? ` / ${p.sub.name.replace(/\s*\(Bad Eden\)\s*$/, "")}` : ""}`,
     cls: p.cls, sub: p.sub,
     ancestry: pick(ancestryBundles, i),
     archetype: pick(archetypes, i),

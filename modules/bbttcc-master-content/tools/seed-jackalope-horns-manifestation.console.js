@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Seed Horns of Bad Luck (Jackalope Manifestation)
+// Bad Eden — Seed Horns of Bad Luck (Jackalope Manifestation)
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent.
 //
@@ -38,7 +38,7 @@
         chat: ""
       },
       identifier: HORNS_IDENT,
-      source: { custom: "BBTTCC", rules: "2024", revision: 1, book: "", license: "" },
+      source: { custom: "Bad Eden", rules: "2024", revision: 1, book: "", license: "" },
       category: "melee",
       intent: "violence",
       skill: "melee",

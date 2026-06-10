@@ -1,5 +1,5 @@
 // modules/bbttcc-travel/scripts/travel.arc.engine.js
-// BBTTCC Travel Arc Engine
+// Bad Eden Travel Arc Engine
 // PURPOSE:
 //  - Resolve per-leg travel outcomes (hazards, encounters, events)
 //  - RETURN SHAPE CONTRACT (CRITICAL):

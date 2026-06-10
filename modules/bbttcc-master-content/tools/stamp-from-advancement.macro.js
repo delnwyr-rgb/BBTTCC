@@ -1,6 +1,6 @@
-// BBTTCC master-content / tools / stamp-from-advancement.macro.js
+// Bad Eden master-content / tools / stamp-from-advancement.macro.js
 //
-// Authoritative back-stamp: for every class/subclass doc in the BBTTCC packs,
+// Authoritative back-stamp: for every class/subclass doc in the Bad Eden packs,
 // walk its `system.advancement` array, follow each ItemGrant's UUIDs, and
 // stamp `system.prerequisites.level` on each granted feat using the grant's
 // level. The class doc IS the canonical source — it's what dnd5e level-up

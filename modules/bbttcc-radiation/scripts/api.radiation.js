@@ -1,5 +1,5 @@
 // modules/bbttcc-radiation/scripts/api.radiation.js
-// BBTTCC — Radiation Core API (R1)
+// Bad Eden — Radiation Core API (R1)
 // *** FIXED VERSION: install() now guaranteed to fire ***
 
 (() => {

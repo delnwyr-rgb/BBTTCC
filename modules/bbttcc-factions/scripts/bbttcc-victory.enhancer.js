@@ -153,7 +153,7 @@
       await ChatMessage.create({
         content: `<p><b>Victory Update</b></p>${gainLines.join("<br/>")}`,
         whisper: gmIds,
-        speaker: { alias: "BBTTCC Victory" }
+        speaker: { alias: "Bad Eden Victory" }
       }).catch(() => {});
     }
 
@@ -161,7 +161,7 @@
       await ChatMessage.create({
         content: `<p><b>Victory Resistance (Darkness)</b></p>${resistLines.join("<br/>")}`,
         whisper: gmIds,
-        speaker: { alias: "BBTTCC Victory" }
+        speaker: { alias: "Bad Eden Victory" }
       }).catch(() => {});
     }
 
@@ -169,7 +169,7 @@
       await ChatMessage.create({
         content: `<p><b>Victory Badge Update</b></p>${badgeLines.join("<br/>")}`,
         whisper: gmIds,
-        speaker: { alias: "BBTTCC Victory" }
+        speaker: { alias: "Bad Eden Victory" }
       }).catch(() => {});
     }
   }

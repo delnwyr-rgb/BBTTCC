@@ -1,4 +1,4 @@
-// BBTTCC — RFI Price Stamp (Phase 2, 2026-05-10)
+// Bad Eden — RFI Price Stamp (Phase 2, 2026-05-10)
 // ─────────────────────────────────────────────────────────────────────────────
 // Walks selected compendium packs (or all gear-bearing packs by default) and
 // stamps `flags.fourththing.rfi.item.price` on every gear item that doesn't

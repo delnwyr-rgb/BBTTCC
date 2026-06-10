@@ -1,4 +1,4 @@
-// BBTTCC Structures — Build Structure (Phase D)
+// Bad Eden Structures — Build Structure (Phase D)
 // ─────────────────────────────────────────────────────────────────────────────
 // Spawn a new Facility actor (type:rig + facilityMode + BOM stamped) by
 // drawing materials from a faction stockpile. Drops a token at the center of

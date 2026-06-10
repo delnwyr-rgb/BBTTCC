@@ -180,8 +180,8 @@
     try {
       if (!game.settings.settings.get(CORE_ID + ".worldState")) {
         game.settings.register(CORE_ID, "worldState", {
-          name: "BBTTCC World State",
-          hint: "Internal: authoritative world state for BBTTCC (turn number, global darkness, etc.)",
+          name: "Bad Eden World State",
+          hint: "Internal: authoritative world state for Bad Eden (turn number, global darkness, etc.)",
           scope: "world",
           config: false,
           type: String,

@@ -1,5 +1,5 @@
 // modules/bbttcc-tikkun/scripts/tikkun-ritual.enhancer.js
-// BBTTCC — Final Ritual Scenario Engine (Great Work)
+// Bad Eden — Final Ritual Scenario Engine (Great Work)
 //
 // A lightweight scenario engine for resolving The Great Work as a ritual.
 // Inspired by the same pattern as Infiltration & Courtly Intrigue.
@@ -72,7 +72,7 @@
     await ChatMessage.create({
       content: `<p><b>${title}</b></p>${lines.join("<br/>")}`,
       whisper: gmIds(),
-      speaker: { alias: "BBTTCC Tikkun" }
+      speaker: { alias: "Bad Eden Tikkun" }
     }).catch(()=>{});
   }
 

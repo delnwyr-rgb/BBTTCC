@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/faction-health-display.js
-// BBTTCC — Faction Health display sync (render hook)
+// Bad Eden — Faction Health display sync (render hook)
 //
 // Focused responsibility:
 // - Reads canonical faction health flags

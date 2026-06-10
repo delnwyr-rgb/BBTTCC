@@ -1,5 +1,5 @@
 // modules/bbttcc-raid/scripts/bbttcc-raid-effects-loader.enhancer.js
-// BBTTCC — FINAL EFFECTS LOADER (Planner 3.0)
+// Bad Eden — FINAL EFFECTS LOADER (Planner 3.0)
 //
 // 1) Loads strategic activities from bbttcc_activities_v1_4.json into raid.EFFECTS.
 // 2) Normalizes OP costs from both JSON (flags.bbttcc.opCosts) and standard enhancers (EFFECTS.*.cost).

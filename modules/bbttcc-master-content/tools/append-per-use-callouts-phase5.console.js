@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts (Phase 5 — RFI subclasses, REVISED)
+// Bad Eden — Append Per-Use callouts (Phase 5 — RFI subclasses, REVISED)
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent.
 // 12 RFI subclass items live in `bbttcc-master-content.classes` (the

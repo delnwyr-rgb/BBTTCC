@@ -1,6 +1,6 @@
 /* REVIEW NOTE: Tier advancement API is engine/read-only and intentionally retained during faction-sheet layout cleanup. */
 // modules/bbttcc-factions/scripts/faction-tier-advancement-api.enhancer.js
-// BBTTCC — Tier Advancement Read-Only API (v1.1)
+// Bad Eden — Tier Advancement Read-Only API (v1.1)
 //
 // Exposes:
 //   game.bbttcc.api.factions.getTierAdvancementReport(factionIdOrActor)

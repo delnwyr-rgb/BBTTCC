@@ -1,4 +1,4 @@
-// BBTTCC — Strategic Throughput Registry (Alpha Consolidated, beacon + watchdog, deduped)
+// Bad Eden — Strategic Throughput Registry (Alpha Consolidated, beacon + watchdog, deduped)
 
 (() => {
   // ---- BEACON: proves this file executed at least once ----

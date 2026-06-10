@@ -1,4 +1,4 @@
-// BBTTCC Campaign Builder - Module Entry
+// Bad Eden Campaign Builder - Module Entry
 //
 // v1.3.5 - AutoDebt Threshold + GM Decline + FallbackOnDecline
 //
@@ -440,7 +440,7 @@ function _announceTurnAvailabilityIfNeeded() {
     ChatMessage.create({
       content: lines.join(""),
       whisper: gm,
-      speaker: { alias: "BBTTCC Campaign" }
+      speaker: { alias: "Bad Eden Campaign" }
     });
   } catch (e) {
     warn("announceTurnAvailabilityIfNeeded failed:", e);
@@ -575,7 +575,7 @@ function _normalizeQuest(id, data = {}) {
     // Optional: campaign association (future-proof; safe to ignore)
     campaignId: String(q?.campaignId ?? "") || null,
 
-    // Hex links — Drawing IDs of BBTTCC hexes this quest is associated with.
+    // Hex links — Drawing IDs of Bad Eden hexes this quest is associated with.
     // Bidirectional with hex flag flags["bbttcc-territory"].quests[questId].
     hexIds: Array.isArray(q?.hexIds) ? Array.from(new Set(q.hexIds.map(String))) : [],
 
@@ -1078,9 +1078,9 @@ async function _broadcastPlayerFacingDialogViaChat(action, payload) {
     };
 
     await ChatMessage.create({
-      content: '<span style="display:none">BBTTCC Courier</span>',
+      content: '<span style="display:none">Bad Eden Courier</span>',
       whisper: recipients,
-      speaker: { alias: "BBTTCC Campaign" },
+      speaker: { alias: "Bad Eden Campaign" },
       flags: {
         [MOD_ID]: {
           [__BBTTCC_PLAYER_CHAT_FLAG]: row
@@ -2454,7 +2454,7 @@ async function _maybePromptQuestAcceptance(campaign, beat, ctx) {
     try {
       const gmIds = (game.users || []).filter(function(u){ return u && u.isGM; }).map(function(u){ return u.id; });
       if (ChatMessage && ChatMessage.create) {
-        ChatMessage.create({ whisper: gmIds, content: "<p><b>BBTTCC Quest:</b> accepted <i>" + questName + "</i> for <b>" + faction.name + "</b>.</p>" });
+        ChatMessage.create({ whisper: gmIds, content: "<p><b>Bad Eden Quest:</b> accepted <i>" + questName + "</i> for <b>" + faction.name + "</b>.</p>" });
       }
     } catch (e5) {}
 
@@ -3444,7 +3444,7 @@ async function _gmPromptDebtBeat({ campaignId, beatId, beatLabel, hexUuid }) {
     `;
 
     new Dialog({
-      title: "BBTTCC: Debt Pressure Beat",
+      title: "Bad Eden: Debt Pressure Beat",
       content,
       buttons: {
         run:     { icon: '<i class="fas fa-play"></i>', label: "Run",     callback: () => resolve(true) },
@@ -3949,7 +3949,7 @@ async function exportCampaignBundleToCompendium(opts) {
   if (!entryDoc) {
     entryDoc = await pack.documentClass.create({
       name: name,
-      content: "<p><b>BBTTCC Campaign Bundle</b></p><p>Use the BBTTCC Campaign Builder to import this bundle.</p>",
+      content: "<p><b>Bad Eden Campaign Bundle</b></p><p>Use the Bad Eden Campaign Builder to import this bundle.</p>",
       flags: {
         "bbttcc-campaign": {
           export: payload
@@ -3988,7 +3988,7 @@ async function importCampaignBundleFromCompendium(opts) {
 
   var payload = _bbttccGetFlag(entryDoc, "bbttcc-campaign", "export");
   if (!payload || String(payload.kind || "") !== "bbttcc-campaign-bundle") {
-    throw new Error("importCampaignBundleFromCompendium: entry is not a BBTTCC campaign bundle");
+    throw new Error("importCampaignBundleFromCompendium: entry is not a Bad Eden campaign bundle");
   }
 
   var mode = String(opts.mode || "merge").trim().toLowerCase(); // merge | duplicate
@@ -4242,8 +4242,8 @@ function buildCampaignAPI() {
 // INIT
 Hooks.once("init", () => {
   game.settings.register(MOD_ID, SETTING_CAMPAIGNS, {
-    name: "BBTTCC Campaign Definitions",
-    hint: "Internal storage for BBTTCC Campaign Builder. Do not edit manually.",
+    name: "Bad Eden Campaign Definitions",
+    hint: "Internal storage for Bad Eden Campaign Builder. Do not edit manually.",
     scope: "world",
     config: false,
     type: Object,
@@ -4251,7 +4251,7 @@ Hooks.once("init", () => {
   });
 
   game.settings.register(MOD_ID, SETTING_INJECT_STATE, {
-    name: "BBTTCC Campaign Injector State",
+    name: "Bad Eden Campaign Injector State",
     hint: "Internal gating state for campaign beat injection (cooldowns / oncePerHex).",
     scope: "world",
     config: false,
@@ -4260,8 +4260,8 @@ Hooks.once("init", () => {
   });
 
   game.settings.register(MOD_ID, SETTING_TABLES, {
-    name: "BBTTCC Encounter Tables",
-    hint: "Internal storage for BBTTCC Random Encounter Tables. Do not edit manually.",
+    name: "Bad Eden Encounter Tables",
+    hint: "Internal storage for Bad Eden Random Encounter Tables. Do not edit manually.",
     scope: "world",
     config: false,
     type: Object,
@@ -4269,8 +4269,8 @@ Hooks.once("init", () => {
   });
 
   game.settings.register(MOD_ID, SETTING_QUESTS, {
-    name: "BBTTCC Quest Registry",
-    hint: "Internal storage for BBTTCC Quests (definitions). Do not edit manually.",
+    name: "Bad Eden Quest Registry",
+    hint: "Internal storage for Bad Eden Quests (definitions). Do not edit manually.",
     scope: "world",
     config: false,
     type: Object,
@@ -4279,7 +4279,7 @@ Hooks.once("init", () => {
 
   // NEW: UI preference  -  which campaign is "active" (auto-selected in Builder)
   game.settings.register(MOD_ID, SETTING_ACTIVE_CAMPAIGN, {
-    name: "BBTTCC Active Campaign",
+    name: "Bad Eden Active Campaign",
     hint: "Internal UI preference: the campaign which should be selected by default in the Campaign Builder.",
     scope: "world",
     config: false,
@@ -4290,7 +4290,7 @@ Hooks.once("init", () => {
   // NEW: Campaign Turn Flow  -  remembers the last Strategic Turn we announced
   // so we don't spam messages on reload. Stored as an integer.
   game.settings.register(MOD_ID, SETTING_LAST_TURN_ANNOUNCED, {
-    name: "BBTTCC Campaign Turn Announcements (Last Turn)",
+    name: "Bad Eden Campaign Turn Announcements (Last Turn)",
     hint: "Internal: last Strategic Turn number for which Campaign Turn Flow was announced.",
     scope: "world",
     config: false,
@@ -4302,7 +4302,7 @@ Hooks.once("init", () => {
   // When on, every enter/exit of the audio path logs caller, token, src, and
   // flags so we can prove behavior before/after each audio-refactor phase.
   game.settings.register(MOD_ID, "audio.debug", {
-    name: "BBTTCC Audio Debug Logging",
+    name: "Bad Eden Audio Debug Logging",
     hint: "Log every beat-audio play/stop/socket event to the browser console. Useful for diagnosing echo/ghost-sound issues; leave off during normal play.",
     scope: "client",
     config: true,

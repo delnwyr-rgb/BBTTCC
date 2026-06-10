@@ -1,5 +1,5 @@
 /* modules/bbttcc-territory/scripts/turn-requests.enhancer.js
- * BBTTCC — Auto Process Requests on Advance Turn (Apply)
+ * Bad Eden — Auto Process Requests on Advance Turn (Apply)
  * Adds a re-entrancy guard to prevent infinite recursion.
  *
  * Behavior:

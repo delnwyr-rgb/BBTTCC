@@ -1,5 +1,5 @@
 //
-// FULL REPLACEMENT — BBTTCC World Mutation Engine v2.3 (Unlocks + Relationship Status)
+// FULL REPLACEMENT — Bad Eden World Mutation Engine v2.3 (Unlocks + Relationship Status)
 // + FIX5 OP Schedules Policy/Correctness
 // -------------------------------------------------------------
 // Exposes: game.bbttcc.api.worldMutation.applyWorldEffects(input, ctx?)

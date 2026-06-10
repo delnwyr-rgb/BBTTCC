@@ -1,5 +1,5 @@
 /* agent-socket-envelopes.js
- * BBTTCC Agent API — Phase 1 §7.4
+ * Bad Eden Agent API — Phase 1 §7.4
  *
  * Declarative schemas for the inter-client socket message types currently
  * in use across bbttcc-raid:

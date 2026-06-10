@@ -1,4 +1,4 @@
-// BBTTCC — Pilot batch: stamp Shape B reroll grants on 4 ancestry feats
+// Bad Eden — Pilot batch: stamp Shape B reroll grants on 4 ancestry feats
 // ─────────────────────────────────────────────────────────────────────────────
 // Authors `flags.fourththing.rerolls` on a small pilot set so we can verify
 // the reroll engine end-to-end before bulk-authoring the remaining ~125 items.

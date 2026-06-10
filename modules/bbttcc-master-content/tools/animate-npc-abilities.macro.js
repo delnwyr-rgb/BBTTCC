@@ -1,6 +1,6 @@
 // animate-npc-abilities.macro.js — RUN IN-WORLD (GM). Run in BOTH worlds. F5 afterwards.
 // Stamps Automated Animations (flags.autoanimations) onto the activatable NPC abilities in the
-// "BBTTCC NPC Abilities" compendium (bbttcc-master-content.npc-abilities).
+// "Bad Eden NPC Abilities" compendium (bbttcc-master-content.npc-abilities).
 //
 // Scope (2026-06-09 live Ember audit, 190 items): 97 already AA-stamped, ~89 unanimated are
 // PASSIVE traits/auras/multiattack tags (not animated), and 8 are genuinely active abilities
@@ -60,7 +60,7 @@
   const pack = game.packs.get("bbttcc-master-content.npc-abilities")
             || game.packs.find(p => p.metadata?.name === "npc-abilities" && p.metadata?.type === "Item")
             || game.packs.find(p => (p.title || "").toLowerCase() === "bbttcc npc abilities");
-  if (!pack) return ui.notifications.error("Could not find the 'BBTTCC NPC Abilities' compendium in this world.");
+  if (!pack) return ui.notifications.error("Could not find the 'Bad Eden NPC Abilities' compendium in this world.");
 
   const wasLocked = pack.locked;
   if (wasLocked && !DRY_RUN) await pack.configure({ locked:false });

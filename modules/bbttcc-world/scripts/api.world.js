@@ -30,7 +30,7 @@
 
       if (!_isSettingRegistered(SETTING_SNAPS)) {
         game.settings.register(MODULE_ID, SETTING_SNAPS, {
-          name: "BBTTCC World Snapshots",
+          name: "Bad Eden World Snapshots",
           hint: "Internal storage for GM world-state snapshots.",
           scope: "world",
           config: false,
@@ -41,7 +41,7 @@
 
       if (!_isSettingRegistered(SETTING_TURN_BEATS)) {
         game.settings.register(MODULE_ID, SETTING_TURN_BEATS, {
-          name: "BBTTCC Turn Beats",
+          name: "Bad Eden Turn Beats",
           hint: "Internal storage for beats assigned to strategic turns.",
           scope: "world",
           config: false,

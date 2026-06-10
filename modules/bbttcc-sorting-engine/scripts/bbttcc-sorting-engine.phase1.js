@@ -1,4 +1,4 @@
-// BBTTCC Sorting Engine Phase 1
+// Bad Eden Sorting Engine Phase 1
 // Conservative syntax-safe Foundry module helper.
 // No optional chaining, no nullish coalescing, no object spread.
 //
@@ -381,7 +381,7 @@
     var alignment = result.alignment.key;
     var cls = result.class.key;
 
-    var meaning = "You solve problems in a way that reveals a coherent pressure-identity. In BBTTCC terms, your instincts point toward a specific political, spiritual, and tactical posture.";
+    var meaning = "You solve problems in a way that reveals a coherent pressure-identity. In Bad Eden terms, your instincts point toward a specific political, spiritual, and tactical posture.";
     var strengths = "You tend to be strongest when acting in accordance with your dominant values rather than borrowing someone else's style.";
     var breaks = "Your failure mode appears when your strongest instincts calcify into reflex, and reflex becomes ideology.";
     var mal = "You are, regrettably, making sense. Broken world. Broken people. Functional pattern recognition.";
@@ -528,7 +528,7 @@
   function buildChatHtml(result, answers, spec) {
     var html = "";
     html += "<div class='bbttcc-sorting-chat'>";
-    html += "<h2 style='margin:0 0 0.4em 0;'>Your BBTTCC Identity Stack</h2>";
+    html += "<h2 style='margin:0 0 0.4em 0;'>Your Bad Eden Identity Stack</h2>";
     html += "<p style='margin:0.2em 0;'><b>Philosophy:</b> " + titleCase(result.short.philosophy) + "</p>";
     html += "<p style='margin:0.2em 0;'><b>Alignment:</b> " + titleCase(result.short.alignment) + "</p>";
     html += "<p style='margin:0.2em 0;'><b>Archetype:</b> " + titleCase(result.short.archetype) + "</p>";

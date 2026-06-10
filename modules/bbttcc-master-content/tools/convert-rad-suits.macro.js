@@ -1,4 +1,4 @@
-// BBTTCC — Convert Rad Suits to RFI-native Armor
+// Bad Eden — Convert Rad Suits to RFI-native Armor
 // ─────────────────────────────────────────────────────────────────────────────
 // Rewrites the three Rad Suits in `bbttcc-master-content.items` from the dnd5e
 // equipment shape (system.armor.value, system.type.value=light/medium/heavy)

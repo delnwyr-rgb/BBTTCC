@@ -1,4 +1,4 @@
-// BBTTCC — Create RFI Gear Sprint C — 12 new standalone pieces
+// Bad Eden — Create RFI Gear Sprint C — 12 new standalone pieces
 // ─────────────────────────────────────────────────────────────────────────────
 // Adds 12 fresh fourththing-shaped items to `bbttcc-master-content.items`.
 // Mix: 3 armor (with skill-gated grants), 3 weapons (RFI 7-damage canon),

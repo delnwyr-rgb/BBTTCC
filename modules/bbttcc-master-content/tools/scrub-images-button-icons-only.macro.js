@@ -2,7 +2,7 @@
  * scrub-images-button-icons-only.macro.js
  *
  * Bad Eden-branded full pass: re-scrubs every Item/Actor in bbttcc/fourththing
- * packs and assigns ONLY images from /Data/art/bbttcc/GOTTGAIT/BBTTCC Button Icons/.
+ * packs and assigns ONLY images from /Data/art/bbttcc/GOTTGAIT/Bad Eden Button Icons/.
  *
  * Three modes (set MODE below):
  *   "broken-only"  — only touch items currently generic/broken (safe top-up)
@@ -18,7 +18,7 @@
 (async () => {
   const APPLY      = true;
   const MODE       = "broken-only";  // "broken-only" | "all"
-  const ART_DIR    = "art/bbttcc/GOTTGAIT/BBTTCC Button Icons";
+  const ART_DIR    = "art/bbttcc/GOTTGAIT/Bad Eden Button Icons";
   const BACKUP_DIR = "backups";
   const SCORE_MIN  = 0.15;            // very loose — Button Icons names are abstract
 

@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / prune-surge-folded-feats.macro.js
+// Bad Eden master-content / tools / prune-surge-folded-feats.macro.js
 //
 // Deletes the vestigial subclass feat items whose mechanics were FOLDED INTO SURGE
 // in the Phase-4 redesign (2026-05-28/29). Their handlers (bulwark_frame_pool,

@@ -1,5 +1,5 @@
 // modules/bbttcc-raid/scripts/raid-planner-mode.enhancer.js
-// BBTTCC — Raid Console Planning Mode Helper
+// Bad Eden — Raid Console Planning Mode Helper
 //
 // Provides:
 //   game.bbttcc.api.raid.forcePlanningMode()

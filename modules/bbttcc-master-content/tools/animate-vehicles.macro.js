@@ -1,6 +1,6 @@
 // animate-vehicles.macro.js — RUN IN-WORLD (GM). Run in BOTH worlds. F5 afterwards.
 // Stamps Automated Animations (flags.autoanimations) onto the vehicle-SYSTEM abilities in the
-// "BBTTCC Vehicles" compendium (bbttcc-master-content.vehicles).
+// "Bad Eden Vehicles" compendium (bbttcc-master-content.vehicles).
 //
 // NOTE: Vehicles is an ACTOR pack — the animatable things are the feat-items EMBEDDED on each
 // vehicle actor (their weapons / beams / auras / shields), so this macro iterates actors → their
@@ -62,7 +62,7 @@
   const pack = game.packs.get("bbttcc-master-content.vehicles")
             || game.packs.find(p => p.metadata?.name === "vehicles" && p.metadata?.type === "Actor")
             || game.packs.find(p => (p.title || "").toLowerCase() === "bbttcc vehicles");
-  if (!pack) return ui.notifications.error("Could not find the 'BBTTCC Vehicles' compendium in this world.");
+  if (!pack) return ui.notifications.error("Could not find the 'Bad Eden Vehicles' compendium in this world.");
 
   const wasLocked = pack.locked;
   if (wasLocked && !DRY_RUN) await pack.configure({ locked:false });

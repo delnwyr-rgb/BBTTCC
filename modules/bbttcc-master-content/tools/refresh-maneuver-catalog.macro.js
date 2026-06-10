@@ -1,4 +1,4 @@
-// BBTTCC — Refresh Maneuver Catalog (2026-05-14)
+// Bad Eden — Refresh Maneuver Catalog (2026-05-14)
 // ─────────────────────────────────────────────────────────────────────────────
 // Sprint 1 Tool #2 of MANEUVER_CATALOG_SPEC.md. Applies the §2 refresh pass
 // to the live bbttcc-master-content.doctrines pack. DRY_RUN by default.

@@ -1,4 +1,4 @@
-// BBTTCC — Create RFI Path-Themed Consumables (Sprint A2)
+// Bad Eden — Create RFI Path-Themed Consumables (Sprint A2)
 // ─────────────────────────────────────────────────────────────────────────────
 // Adds 14 path-flavored consumables to `bbttcc-master-content.items`. Each
 // resonates with one of the existing path lenses (Aurablade, Bulwark, Shadow

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Stamp Cryptidkin Phase 4 passive flags
+// Bad Eden — Stamp Cryptidkin Phase 4 passive flags
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent — sentinel-gated.
 //

@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/territory-integration.enhancer.js
-// BBTTCC — Integration Track Enhancer
+// Bad Eden — Integration Track Enhancer
 //
 // Wraps game.bbttcc.api.territory.applyOutcome so that when a Resolution outcome
 // is applied to a hex, we also advance (or reset) that hex's integration track,

@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/resolution-engine.js
-// BBTTCC — Resolution Engine (plain script, no ES modules)
+// Bad Eden — Resolution Engine (plain script, no ES modules)
 //
 // Wires up:
 //   game.bbttcc.api.territory.applyOutcome({...})
@@ -251,7 +251,7 @@
         await ChatMessage.create({
           content: `<p><b>Resolution Applied</b></p>${lines.join("<br/>")}`,
           whisper: gmIds,
-          speaker: { alias: "BBTTCC Resolution" }
+          speaker: { alias: "Bad Eden Resolution" }
         });
       } catch (e) {
         console.warn(TAG, "Failed to create resolution chat message:", e);

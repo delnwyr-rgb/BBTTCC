@@ -76,7 +76,7 @@ export function computeFamily(materialKey, tags = []) {
 // ── Material catalog lookup ──────────────────────────────────────────────────
 
 /**
- * Look up a material item in the BBTTCC items pack by materialKey.
+ * Look up a material item in the Bad Eden items pack by materialKey.
  * Async — searches the pack index then loads the doc.
  *
  * @returns {Promise<{name, materialKey, tier, family, tags, img}|null>}

@@ -1,5 +1,5 @@
 /* modules/bbttcc-territory/scripts/hex-fog.layer.js
- * BBTTCC Hex Fog of War (v1)
+ * Bad Eden Hex Fog of War (v1)
  *
  * Paints a solid black mask across the entire scene with hex-shaped holes
  * punched for every hex Drawing whose `document.hidden === false`. GMs
@@ -7,7 +7,7 @@
  * visible to preview what players see.
  *
  * Discovery state lives in `document.hidden` (per-Drawing, per-scene). The
- * "BBTTCC Toggle One Hex Visibility" GM macro is the canonical reveal trigger.
+ * "Bad Eden Toggle One Hex Visibility" GM macro is the canonical reveal trigger.
  *
  * Refresh triggers:
  *   - canvasReady (scene change / first load)
@@ -62,7 +62,7 @@
       }
       return abs;
     }
-    // Rectangle fallback (rare for BBTTCC hexes, but keep parity with toggle macro).
+    // Rectangle fallback (rare for Bad Eden hexes, but keep parity with toggle macro).
     const w = Number(doc.shape?.width  || doc.width  || 0);
     const h = Number(doc.shape?.height || doc.height || 0);
     return [x, y, x+w, y, x+w, y+h, x, y+h];
@@ -275,7 +275,7 @@
     }
   });
 
-  // BBTTCC's own update broadcast — covers flag-only edits that don't
+  // Bad Eden's own update broadcast — covers flag-only edits that don't
   // touch hidden but might affect display assumptions later.
   Hooks.on("bbttcc:territory:hexUpdated", () => scheduleRefresh());
 

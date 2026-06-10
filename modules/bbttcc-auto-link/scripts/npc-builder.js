@@ -1,4 +1,4 @@
-/* BBTTCC Auto-Link — RFI NPC Builder
+/* Bad Eden Auto-Link — RFI NPC Builder
  *
  * Light dialog (Manifestation Wizard pattern, not Tree of Life) that creates
  * a Roll For Initiation NPC as a CHARACTER-typed actor with an entityKind
@@ -124,7 +124,7 @@ export async function openNPCBuilder() {
 
   // Build the actor payload. type:"character" so the full PC sheet renders
   // and every existing PC-side mechanism (FEATURE_ROUTER, identity bridge,
-  // BBTTCC quickbar, Affiliations card, etc.) Just Works.
+  // Bad Eden quickbar, Affiliations card, etc.) Just Works.
   const data = {
     name,
     type: "character",

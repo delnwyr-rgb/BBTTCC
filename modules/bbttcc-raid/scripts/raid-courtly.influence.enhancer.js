@@ -1,5 +1,5 @@
 // modules/bbttcc-raid/scripts/raid-courtly.influence.enhancer.js
-// BBTTCC — Courtly Intrigue Scenario Engine (Social Combat)
+// Bad Eden — Courtly Intrigue Scenario Engine (Social Combat)
 //
 // Based on Gap Analysis §5c "Courtly Intrigue (Social Combat)":
 // - Each side has Influence HP = 10 + committed Diplomacy OP + (Soft Power OP / 2).
@@ -120,7 +120,7 @@
     await ChatMessage.create({
       content: `<p><b>${title}</b></p>${lines.join("<br/>")}`,
       whisper: gmIds(),
-      speaker: { alias: "BBTTCC Courtly Intrigue" }
+      speaker: { alias: "Bad Eden Courtly Intrigue" }
     }).catch(()=>{});
   }
 
@@ -1102,7 +1102,7 @@
               case "spendFavor":
                 await spendFavorAndBoost(selfSide, { minFavor: eff.minFavor ?? 2 }); break;
               case "noteForGM":
-                await ChatMessage.create({ content: `<p><em>${esc(eff.text || "")}</em></p>`, whisper: gmIds(), speaker: { alias: "BBTTCC Courtly Intrigue" } }).catch(()=>{});
+                await ChatMessage.create({ content: `<p><em>${esc(eff.text || "")}</em></p>`, whisper: gmIds(), speaker: { alias: "Bad Eden Courtly Intrigue" } }).catch(()=>{});
                 break;
               case "burnScandalScar": {
                 const ok = await burnScandalScar(resolveSide(eff.side));

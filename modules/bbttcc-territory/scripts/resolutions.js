@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/resolutions.js
-// BBTTCC — Resolution Definitions (Canonical Outcome Matrix)
+// Bad Eden — Resolution Definitions (Canonical Outcome Matrix)
 // Plain script version (no ES modules). Attaches to window.BBTTCC_RESOLUTIONS.
 
 window.BBTTCC_RESOLUTIONS = {

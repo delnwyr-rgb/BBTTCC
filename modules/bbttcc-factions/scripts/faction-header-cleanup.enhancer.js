@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/faction-header-cleanup.enhancer.js
-// BBTTCC — Faction Header Cleanup + Raid Planner launcher (Enhancer-Only, Safe)
+// Bad Eden — Faction Header Cleanup + Raid Planner launcher (Enhancer-Only, Safe)
 // Refit for the post-header-cleanup faction sheet layout.
 
 (() => {

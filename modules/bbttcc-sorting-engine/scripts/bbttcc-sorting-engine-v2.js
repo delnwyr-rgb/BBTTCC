@@ -1,5 +1,5 @@
 /**
- * BBTTCC Sorting Engine v2 — Tree of Life descent (Option A: pure Sorting Engine).
+ * Bad Eden Sorting Engine v2 — Tree of Life descent (Option A: pure Sorting Engine).
  *
  * Step 4 of the v2 sprint, REWRITTEN 2026-04-23 for Option A schema.
  * Replaces the picker-era thin-adapter version with a full quiz-scoring engine.
@@ -261,7 +261,7 @@ export function runFullDescent(answers, spec = SPEC) {
       ancestry:   ancestry.best,
       heritage:   null,             // Option B — player picks at review screen
       crew:       crew.best,
-      path:       cls.best,         // canonical: "path" in BBTTCC, "class" in code
+      path:       cls.best,         // canonical: "path" in Bad Eden, "class" in code
       doctrine:   doctrine.best,
       philosophy: philosophy.best,
       occult:     occult.best,

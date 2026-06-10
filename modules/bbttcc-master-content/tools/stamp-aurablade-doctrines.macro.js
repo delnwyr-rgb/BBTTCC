@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / stamp-aurablade-doctrines.macro.js
+// Bad Eden master-content / tools / stamp-aurablade-doctrines.macro.js
 //
 // One-shot fix for the Aurablade doctrine drift. Stamps `system.prerequisites.level`
 // on each of the 15 Blood Hymn / Stillheart / Void Edge doctrine feats per the

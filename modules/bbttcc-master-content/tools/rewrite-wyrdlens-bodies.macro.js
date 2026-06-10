@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-wyrdlens-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-wyrdlens-bodies.macro.js
 //
 // Refreshes the description bodies for the Wyrdlens Adept class doc + its three
 // Refractions (Foresight / Mercy / Truth) so the TEXT matches the post-redesign

@@ -1,4 +1,4 @@
-/* BBTTCC Master Content — NP Ancestries Router Registration
+/* Bad Eden Master Content — NP Ancestries Router Registration
  *
  * Registers the four non-playable ancestry tier feats (Dragon, Devil/Infernal,
  * Angel/Empyrean, Eidolon/Outsider) with the fourththing system's native

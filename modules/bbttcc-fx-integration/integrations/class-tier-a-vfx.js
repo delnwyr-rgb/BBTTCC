@@ -1,4 +1,4 @@
-// class-tier-a-vfx.js — bespoke JB2A/Sequencer VFX for the 16 Tier-A BBTTCC class features.
+// class-tier-a-vfx.js — bespoke JB2A/Sequencer VFX for the 16 Tier-A Bad Eden class features.
 //
 // Listens for the `fourththing:itemAnimated` hook (emitted by ftPlayAutoAnimation in the
 // fourththing system on every animated item use) and plays a HERO-tier Sequencer effect,
@@ -99,7 +99,7 @@ const MAP = {
   "Conductor's Beat":                                         "inspire",
   "Measured Command":                                         "bolster",
   "Calm Push":                                                "bolster",
-  "Rally the Quiet (BBTTCC)":                                 "bolster",
+  "Rally the Quiet (Bad Eden)":                                 "bolster",
   "Sentinel Protocol":                                        "watch_aura",
   // Wyrdlens Adept — Refraction techniques (wired 2026-06-08, fix-on-touch)
   "Convergence Horizon":                                      "watch_aura",
@@ -109,11 +109,11 @@ const MAP = {
   "Clear the Signal":                                         "bolster",
   "Split Beam":                                               "bolster",
   "Gentle Pivot":                                             "bolster",
-  "Mercy Refraction (BBTTCC)":                                "bolster",
+  "Mercy Refraction (Bad Eden)":                                "bolster",
   // Soul-Smith — Forge techniques (wired 2026-06-08, fix-on-touch)
   "Banner of the Final Push":                                 "peace_aura",
   "Sanctuary Engine":                                         "ward_aura",
-  "Standard of Will (BBTTCC)":                                "peace_aura",
+  "Standard of Will (Bad Eden)":                                "peace_aura",
   "Triumph Weave":                                            "peace_aura",
   "Forge Blessing":                                           "inspire",
   "Rally Stitch":                                             "bolster",
@@ -122,9 +122,9 @@ const MAP = {
   "Solar Stillpoint":                                         "peace_aura",
   "Lull the Riot":                                            "peace_aura",
   "Thousandfold Echo":                                        "peace_aura",
-  "Persona Cache (BBTTCC)":                                   "peace_aura",
+  "Persona Cache (Bad Eden)":                                   "peace_aura",
   "Mirror Read":                                              "inspire",
-  "Somnolent Peace (BBTTCC)":                                 "bolster",
+  "Somnolent Peace (Bad Eden)":                                 "bolster",
   // Cross-class shared feats (wired 2026-06-08, fix-on-touch)
   "Coordinated Advance":                                      "bolster",
   "Emissary of the Great Accord":                             "peace_aura",

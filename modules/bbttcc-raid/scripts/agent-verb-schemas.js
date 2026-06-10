@@ -1,5 +1,5 @@
 /* agent-verb-schemas.js
- * BBTTCC Agent API Migration — Phase 1 §7.2
+ * Bad Eden Agent API Migration — Phase 1 §7.2
  *
  * Declares formal JSON Schema arg+return contracts for the ~25 existing
  * agent verbs already attached to game.bbttcc.api.agent.* by

@@ -114,7 +114,7 @@
       let stewards = game.actors.filter(a => a.name?.startsWith("GAUNTLET ·"));
       if (!stewards.length) {
         const npcPack = game.packs.get("bbttcc-master-content.npcs")
-          ?? game.packs.find(p => p.metadata?.label === "BBTTCC NPC Pack v1" || lc(p.metadata?.name) === "npcs");
+          ?? game.packs.find(p => p.metadata?.label === "Bad Eden NPC Pack v1" || lc(p.metadata?.name) === "npcs");
         if (npcPack) {
           const docs = await npcPack.getDocuments();
           const toImport = docs.filter(d => d.name?.startsWith("GAUNTLET ·"));

@@ -1,5 +1,5 @@
 // modules/bbttcc-radiation/scripts/radiation-turn.enhancer.js
-// BBTTCC — Radiation Turn Enhancer (R2)
+// Bad Eden — Radiation Turn Enhancer (R2)
 // Per-turn RP changes for factions & PCs/NPCs based on scene zone + hex radiation.
 //
 // Design:
@@ -163,7 +163,7 @@
         await ChatMessage.create({
           content: `<p><b>Radiation Turn Update</b></p>${lines.join("<br/>")}`,
           whisper: gm,
-          speaker: { alias: "BBTTCC Radiation" }
+          speaker: { alias: "Bad Eden Radiation" }
         }).catch(()=>{});
       }
 

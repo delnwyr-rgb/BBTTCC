@@ -1,5 +1,5 @@
 // modules/bbttcc-travel/scripts/travel.weather.engine.js
-// BBTTCC Weather Engine (Alpha v1.0)
+// Bad Eden Weather Engine (Alpha v1.0)
 // - Rolls a weatherKey based on light biases
 // - Applies effects to a ctx object (non-destructive)
 // - Writes temporary weather flags to a hex doc

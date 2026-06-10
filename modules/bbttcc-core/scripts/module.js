@@ -36,7 +36,7 @@ function _registerSettings() {
   try {
     game.settings.register(CORE_ID, "gmEditMode", {
       name: "GM Edit Mode",
-      hint: "Enables GM-only direct write tools (manual edits) across BBTTCC.",
+      hint: "Enables GM-only direct write tools (manual edits) across Bad Eden.",
       scope: "world",
       config: true,
       type: Boolean,

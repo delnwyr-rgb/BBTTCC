@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Stamp Echo-Diver Phase 4 passive flags
+// Bad Eden — Stamp Echo-Diver Phase 4 passive flags
 // ─────────────────────────────────────────────────────────────────────────────
 // Idempotent. Wires the passive engine for Echo-Diver:
 //   - echo_diver:

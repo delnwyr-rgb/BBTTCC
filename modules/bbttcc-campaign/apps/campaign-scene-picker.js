@@ -1,6 +1,6 @@
 // modules/bbttcc-campaign/apps/campaign-scene-picker.js
 //
-// BBTTCC Campaign Builder – Scene Picker (Hardened)
+// Bad Eden Campaign Builder – Scene Picker (Hardened)
 // - Returns plain scene rows {name,id,uuid} so the picker never leaks Document objects into HBS.
 // - Ensures uuid is always "Scene.<id>" for world scenes.
 // - onSelect receives { id, uuid, name }.

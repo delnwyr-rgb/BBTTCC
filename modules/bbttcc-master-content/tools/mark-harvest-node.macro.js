@@ -1,4 +1,4 @@
-// BBTTCC — Mark Selected Tile / Token as a Harvest Node
+// Bad Eden — Mark Selected Tile / Token as a Harvest Node
 // ─────────────────────────────────────────────────────────────────────────────
 // Run as a GM script macro while a Tile or Token is selected on the canvas.
 // Opens a dialog to set: materialKey, DC, skill, yield, charges, regrowth,

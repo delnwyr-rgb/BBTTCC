@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Phase 4: Bulk passive flag stamper
+// Bad Eden — Phase 4: Bulk passive flag stamper
 // ─────────────────────────────────────────────────────────────────────────────
 // Idempotent. Walks every bbttcc-* Item pack and every actor.
 //

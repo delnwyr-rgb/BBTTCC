@@ -1,5 +1,5 @@
 // modules/bbttcc-core/scripts/bbttcc-ui-cleanup.enhancer.js
-// BBTTCC — Remove legacy UI pills/buttons, but KEEP the GM toolbar.
+// Bad Eden — Remove legacy UI pills/buttons, but KEEP the GM toolbar.
 //
 // This script only removes old floating bits like the pre-HexChrome
 // "Open Travel Console" and "Open Travel Planner" pills.

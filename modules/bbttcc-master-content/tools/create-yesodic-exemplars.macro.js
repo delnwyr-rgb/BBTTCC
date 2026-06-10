@@ -1,4 +1,4 @@
-// BBTTCC — Create Yesodic Exemplar Recipes
+// Bad Eden — Create Yesodic Exemplar Recipes
 // ─────────────────────────────────────────────────────────────────────────────
 // Adds 6 Tier-III/IV recipe targets that consume Yesodium plus supporting
 // materials. Each carries `flags.fourththing.rfi.item.requiresHarmonization:

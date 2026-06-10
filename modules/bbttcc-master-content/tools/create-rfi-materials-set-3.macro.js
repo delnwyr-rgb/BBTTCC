@@ -1,4 +1,4 @@
-// BBTTCC — Create RFI Crafting Materials (Set 3 — raw natural resources)
+// Bad Eden — Create RFI Crafting Materials (Set 3 — raw natural resources)
 // ─────────────────────────────────────────────────────────────────────────────
 // Set 1 + Set 2 shipped 43 theme-loaded materials (sept/vow/witness/courier).
 // Set 3 fills the natural-resource gap so the Hex Resource Node seeder can

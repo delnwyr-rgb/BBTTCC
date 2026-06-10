@@ -1,7 +1,7 @@
-// BBTTCC — Patch Base Ancestries to Use New Consolidated Cores (v1.1)
+// Bad Eden — Patch Base Ancestries to Use New Consolidated Cores (v1.1)
 // ─────────────────────────────────────────────────────────────────────────────
 // Run this AFTER compile-loose-packs.macro.js has populated the Cores into the
-// BBTTCC Ancestries compendium. This macro:
+// Bad Eden Ancestries compendium. This macro:
 //
 //   1. Looks up each of the 4 base ancestry items in the LDB by identifier
 //      (menhirkin, echo_diver, qliph_scarred, sephirotic_scion).
@@ -120,7 +120,7 @@ const rowsHtml = results.map(r => {
 }).join("");
 
 ChatMessage.create({
-  speaker: { alias: "BBTTCC v1.1 Patch" },
+  speaker: { alias: "Bad Eden v1.1 Patch" },
   content: `
 <h3>Base-Ancestry Core Patch ${DRY_RUN ? "— DRY RUN" : ""}</h3>
 <table style="border-collapse:collapse;width:100%;font-size:0.85em;">

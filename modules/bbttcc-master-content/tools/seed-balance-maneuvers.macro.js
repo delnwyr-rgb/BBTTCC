@@ -1,4 +1,4 @@
-// BBTTCC — Seed Balance-Pass Wave 1 Maneuvers into Doctrines Pack (2026-05-23)
+// Bad Eden — Seed Balance-Pass Wave 1 Maneuvers into Doctrines Pack (2026-05-23)
 // ─────────────────────────────────────────────────────────────────────────────
 // MANEUVER_BALANCE_PASS.md Wave 1 tool. Reads the runtime catalog at
 // `game.bbttcc.api.raid.balanceManeuvers` (published by

@@ -1,4 +1,4 @@
-// BBTTCC — Refresh Orphan Pack Docs from Runtime Catalog (2026-05-15)
+// Bad Eden — Refresh Orphan Pack Docs from Runtime Catalog (2026-05-15)
 // ─────────────────────────────────────────────────────────────────────────────
 // Sprint 2.5 cleanup. The 2 orphan maneuvers (opt_coordinated_advance,
 // opt_infernal_bargain) have proper runtime EFFECTS+THROUGHPUT (from

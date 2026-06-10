@@ -1,4 +1,4 @@
-// BBTTCC — Sync Maneuver Tags Audit (2026-05-14)
+// Bad Eden — Sync Maneuver Tags Audit (2026-05-14)
 // ─────────────────────────────────────────────────────────────────────────────
 // Sprint 1 Tool #3 of MANEUVER_CATALOG_SPEC.md. Read-only audit. For each
 // maneuver in the live bbttcc-master-content.doctrines pack, reports:

@@ -1,6 +1,6 @@
 /* REVIEW NOTE: Quest Log App is a standalone application and intentionally retained during faction-sheet layout cleanup. */
 /* modules/bbttcc-factions/scripts/quest-log-app.js
- * BBTTCC Quest Log — AppV2 (Faction-facing)
+ * Bad Eden Quest Log — AppV2 (Faction-facing)
  * - Progress: flags.bbttcc-factions.quests (active/completed/archived)
  * - Registry:  game.settings.get("bbttcc-campaign","quests")
  *
@@ -143,7 +143,7 @@
   class BBTTCCQuestLogApp extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
     static DEFAULT_OPTIONS = {
       id: "bbttcc-quest-log",
-      window: { title: "BBTTCC Quest Log", icon: "fas fa-scroll" },
+      window: { title: "Bad Eden Quest Log", icon: "fas fa-scroll" },
       position: { width: 980, height: 720 },
       classes: ["bbttcc", "bbttcc-quest-log", "sheet"],
       resizable: true

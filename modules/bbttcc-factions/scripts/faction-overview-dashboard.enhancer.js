@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/faction-overview-dashboard.enhancer.js
-// BBTTCC — Faction Overview Dashboard (Hex Chrome cards)
+// Bad Eden — Faction Overview Dashboard (Hex Chrome cards)
 //
 // Adds a dark, neon-edged dashboard row to the Overview tab when the
 // sheet does not already provide a native summary target.

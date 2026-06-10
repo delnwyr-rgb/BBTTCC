@@ -587,17 +587,17 @@ function insertRelationsMiniCard($root, actor){
    CHARACTER ENLIGHTENMENT (lightweight control for character sheets)
 ==================================================================================== */
 const CANON_EFFECTS = {
-  sleeper:      { label:"BBTTCC: Sleeper", icon:"icons/magic/air/air-burst-spiral-blue.webp", changes:[] },
-  awakened:     { label:"BBTTCC: Awakened (+1 WIS saves)", icon:"icons/magic/perception/eye-slit-glowing-yellow.webp",
+  sleeper:      { label:"Bad Eden: Sleeper", icon:"icons/magic/air/air-burst-spiral-blue.webp", changes:[] },
+  awakened:     { label:"Bad Eden: Awakened (+1 WIS saves)", icon:"icons/magic/perception/eye-slit-glowing-yellow.webp",
                   changes:[{ key:"system.bonuses.abilities.save", mode:CONST.ACTIVE_EFFECT_MODES.ADD, value:"+1", priority:20 }] },
-  adept:        { label:"BBTTCC: Adept (Divine Insight)", icon:"icons/magic/perception/eye-tendrils-web-purple.webp",
+  adept:        { label:"Bad Eden: Adept (Divine Insight)", icon:"icons/magic/perception/eye-tendrils-web-purple.webp",
                   changes:[{ key:"flags.dnd5e.skills.rel.adv", mode:CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value:"true", priority:20 },
                            { key:"flags.dnd5e.skills.ins.adv", mode:CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value:"true", priority:20 }] },
-  illuminated:  { label:"BBTTCC: Illuminated (Aura of Clarity)", icon:"icons/magic/light/explosion-star-large-orange-white.webp",
+  illuminated:  { label:"Bad Eden: Illuminated (Aura of Clarity)", icon:"icons/magic/light/explosion-star-large-orange-white.webp",
                   changes:[], extraFlags:{ "bbttcc-character-options.enlightenment.auraClarity":true, "bbttcc-character-options.enlightenment.auraRange":10 } },
-  transcendent: { label:"BBTTCC: Transcendent (Miracle + OP Regen)", icon:"icons/magic/light/explosion-star-glow-blue-yellow.webp",
+  transcendent: { label:"Bad Eden: Transcendent (Miracle + OP Regen)", icon:"icons/magic/light/explosion-star-glow-blue-yellow.webp",
                   changes:[], extraFlags:{ "bbttcc-character-options.enlightenment.opRegenBonus":0.10, "bbttcc-character-options.enlightenment.minorMiracles":true } },
-  qliphothic:   { label:"BBTTCC: Qliphothic", icon:"icons/magic/unholy/orb-hands-pink.webp",
+  qliphothic:   { label:"Bad Eden: Qliphothic", icon:"icons/magic/unholy/orb-hands-pink.webp",
                   changes:[{ key:"system.traits.dr.value", mode:CONST.ACTIVE_EFFECT_MODES.ADD, value:"necrotic", priority:20 },
                            { key:"flags.dnd5e.skills.itm.adv", mode:CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value:"true", priority:20 }],
                   extraFlags:{ "bbttcc-character-options.enlightenment.healingHalved":true } }
@@ -737,7 +737,7 @@ function openMarketSafe() {
     if (game.bbttcc?.api?.market?.openMarket) {
       return game.bbttcc.api.market.openMarket();
     }
-    ui.notifications?.warn?.("BBTTCC Market not available.");
+    ui.notifications?.warn?.("Bad Eden Market not available.");
     return null;
   } catch (e) {
     console.error(NS, "openMarketSafe failed", e);
@@ -749,7 +749,7 @@ function openMarketSafe() {
 
 /* ====================================================================================
    MARKET BUTTON (Toolbar-only; no floating fallback)
-   - Ensures Market is present in the BBTTCC toolbar cluster
+   - Ensures Market is present in the Bad Eden toolbar cluster
    - Never creates fixed-position buttons that can block Scene Controls
 ==================================================================================== */
 function ensureMarketButton() {
@@ -786,7 +786,7 @@ function ensureMarketButton() {
 /* ====================================================================================
    CONTROL PANEL BUTTON CLEANUP (No Floating Buttons + De-Dupe)
    - Removes legacy floating Overview/Market buttons that can block tile controls
-   - De-dupes duplicate Overview/Raid/etc inside the BBTTCC Control Panel cluster
+   - De-dupes duplicate Overview/Raid/etc inside the Bad Eden Control Panel cluster
    Safe: DOM-only; no API behavior changes.
 ==================================================================================== */
 
@@ -796,7 +796,7 @@ function _bbttccRemoveFloatingButtons(){
     document.querySelector("#bbttcc-overview-fallback")?.remove();
     document.querySelector("#bbttcc-campaign-fallback")?.remove();
 
-    // Any other stray BBTTCC fixed-position button shells (defensive)
+    // Any other stray Bad Eden fixed-position button shells (defensive)
     const stray = Array.from(document.querySelectorAll("body > div, body > section"))
       .filter(el => {
         const id = String(el.id || "");
@@ -822,7 +822,7 @@ function _bbttccRemoveFloatingButtons(){
         const lic = li ? String(li.className || "") : "";
         const lid = li ? String(li.id || "") : "";
 
-        // Only remove if it looks BBTTCC-owned:
+        // Only remove if it looks Bad Eden-owned:
         // - explicit bbttcc class/id
         // - OR it is a "Campaigns" button (we do not want *any* floating Campaigns chip in the scene controls rail)
         const bbttccish =
@@ -889,7 +889,7 @@ function _bbttccDedupControlPanelButtons(){
 
 // ---------------------------------------------------------------------------
 // PLAYER LOCKDOWN (Alpha Safety)
-// Goal: Players should not see global BBTTCC control clusters.
+// Goal: Players should not see global Bad Eden control clusters.
 // They will open Planner/Raid/Market from their own Faction Sheet instead.
 // ---------------------------------------------------------------------------
 function _bbttccApplyPlayerLockdown(){
@@ -941,7 +941,7 @@ Hooks.once("ready", () => {
   _bbttccControlPanelCleanupTick();
 });
 
-/* "Create Faction" button (Actors directory) — forces the BBTTCC sheet */
+/* "Create Faction" button (Actors directory) — forces the Bad Eden sheet */
 const FACTION_SHEET_CLASS = "bbttcc-factions.BBTTCCFactionSheet";
 function resolveFactionActorType(){
   try {
@@ -971,13 +971,13 @@ function normalizeFactionRigsFlag(factionFlags){
   }
 }
 
-async function createFactionViaBBTTCC(){
+async function createFactionViaBad Eden(){
   if (!game.user?.isGM) { ui.notifications?.warn?.('Only the GM can create factions.'); return null; }
   const content = `
     <div class="form-group">
       <label>Faction Name</label>
       <input type="text" name="name" value="New Faction" autofocus style="width:100%;" />
-      <p class="notes" style="opacity:.8;margin-top:.35rem;">Creates a new Actor flagged as a BBTTCC Faction and opens the BBTTCC Faction Sheet.</p>
+      <p class="notes" style="opacity:.8;margin-top:.35rem;">Creates a new Actor flagged as a Bad Eden Faction and opens the Bad Eden Faction Sheet.</p>
     </div>`;
   return new Promise((resolve)=>{
     new Dialog({
@@ -1013,7 +1013,7 @@ function insertCreateFactionButton(html){
     const $html = html instanceof jQuery ? html : $(html);
     const header = $html.find(".directory-header .header-actions, .directory-header .action-buttons, .directory-header").first();
     if (!header.length || header.find("#bbttcc-create-faction").length) return;
-    const $btn = $(`<button id="bbttcc-create-faction" type="button" class="header-control" title="Create BBTTCC Faction"><i class="fas fa-flag"></i> Create Faction</button>`);
+    const $btn = $(`<button id="bbttcc-create-faction" type="button" class="header-control" title="Create Bad Eden Faction"><i class="fas fa-flag"></i> Create Faction</button>`);
     header.append($btn); $btn.on("click", async (ev) => {
       try {
         ev?.preventDefault?.();
@@ -1024,7 +1024,7 @@ function insertCreateFactionButton(html){
         return openWizard();
       }
       // Fallback to legacy V1 dialog if the new wizard is not available.
-      return createFactionViaBBTTCC();
+      return createFactionViaBad Eden();
     });
 } catch (e) { warn("Failed to insert Create Faction button", e); }
 }
@@ -1070,7 +1070,7 @@ function bbttccOpenTerritoryDashboardSafe() {
 
     const Ctor = globalThis.BBTTCC_TerritoryDashboardCtor;
     if (typeof Ctor !== "function") {
-      ui.notifications?.warn?.("BBTTCC Territory Dashboard not available (ctor missing).");
+      ui.notifications?.warn?.("Bad Eden Territory Dashboard not available (ctor missing).");
       return null;
     }
 

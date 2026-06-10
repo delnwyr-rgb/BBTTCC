@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Phase 7 helper: dump flagged item descriptions as paste-friendly JSON
+// Bad Eden — Phase 7 helper: dump flagged item descriptions as paste-friendly JSON
 // ─────────────────────────────────────────────────────────────────────────────
 // Run AFTER `phase7-survey-discipline-kit-and-subclass.console.js`. Pulls the
 // flagged items out of `globalThis.__phase7Survey`, strips to the fields we

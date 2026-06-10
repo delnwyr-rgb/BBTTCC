@@ -1,4 +1,4 @@
-// BBTTCC — Tableau: GM live-tuning control panel
+// Bad Eden — Tableau: GM live-tuning control panel
 // ─────────────────────────────────────────────────────────────────────────────
 // Per-scene live tuning for the forced-perspective tableau substrate
 // (courtly tableaux, combat staging, cinematic scenes, etc.). Sliders update

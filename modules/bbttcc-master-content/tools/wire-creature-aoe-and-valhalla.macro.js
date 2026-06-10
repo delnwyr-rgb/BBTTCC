@@ -18,7 +18,7 @@
 (async () => {
   const DRY_RUN = true;                              // <-- set false to apply
   if (!game.user.isGM) return ui.notifications.warn("GM only.");
-  const ICON_BASE = "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons";
+  const ICON_BASE = "art/bbttcc/GOTTGAIT/Bad Eden%20Button%20Icons";
 
   // ── (1) AoE areas, by item name. shape: "sphere" (radius) | "cone".
   //     Matches the curated CONV table in build-npc-actions.mjs.

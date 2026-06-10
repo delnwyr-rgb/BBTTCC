@@ -1,4 +1,4 @@
-// BBTTCC — Phase 9 Seed: Bestiary (2026-05-11)
+// Bad Eden — Phase 9 Seed: Bestiary (2026-05-11)
 // ─────────────────────────────────────────────────────────────────────────────
 // Seeds 28 NPC actors into game.actors covering T1–T4 across raider, wildlife,
 // witness, sept, hex-touched, pre-fall, and legendary themes. Each NPC carries:

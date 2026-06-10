@@ -1,10 +1,10 @@
 // modules/bbttcc-auto-link/scripts/sidepanel.js
-// v1.0.0 — Legacy BBTTCC sidepanel retired.
-// All BBTTCC identity editing now lives in the BBTTCC tab on the character sheet.
+// v1.0.0 — Legacy Bad Eden sidepanel retired.
+// All Bad Eden identity editing now lives in the Bad Eden tab on the character sheet.
 
 const MOD = "bbttcc-auto-link";
 const LOG = (...a) => console.log(`[${MOD}]`, ...a);
 
 Hooks.once("ready", () => {
-  LOG("Legacy BBTTCC sidepanel is retired. Use the BBTTCC Identity tab instead.");
+  LOG("Legacy Bad Eden sidepanel is retired. Use the Bad Eden Identity tab instead.");
 });

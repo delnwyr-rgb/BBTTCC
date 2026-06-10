@@ -1,5 +1,5 @@
 // ============================================================================
-// BBTTCC — Radiation Zone Enhancer (Phase C, Option B)
+// Bad Eden — Radiation Zone Enhancer (Phase C, Option B)
 // Scene-level fallout "weather" that stacks with hex & travel radiation.
 //
 // Features:
@@ -202,7 +202,7 @@
       await ChatMessage.create({
         content: `<p>${lines}</p>`,
         whisper: game.users.filter(u => u.isGM).map(u => u.id),
-        speaker: { alias: "BBTTCC Radiation" }
+        speaker: { alias: "Bad Eden Radiation" }
       });
 
       console.log(TAG, `Applied +${amt} RP from zone '${zone.intensity}' to`, name);
@@ -279,7 +279,7 @@
       await ChatMessage.create({
         content: `<p><b>Radiation Weather Drift</b></p>${lines.join("<br/>")}`,
         whisper: gmIds,
-        speaker: { alias: "BBTTCC Radiation" }
+        speaker: { alias: "Bad Eden Radiation" }
       }).catch(()=>{});
     }
   }

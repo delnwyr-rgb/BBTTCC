@@ -1,4 +1,4 @@
-// BBTTCC — Extract Doctrines Pack → Maneuver Catalog Snapshot (2026-05-14)
+// Bad Eden — Extract Doctrines Pack → Maneuver Catalog Snapshot (2026-05-14)
 // ─────────────────────────────────────────────────────────────────────────────
 // Sprint 1 Tool #1 of MANEUVER_CATALOG_SPEC.md.
 //

@@ -1,4 +1,4 @@
-// BBTTCC — Maneuver Balance Pass WAVE 2 (mutating) — 2026-05-24
+// Bad Eden — Maneuver Balance Pass WAVE 2 (mutating) — 2026-05-24
 // ─────────────────────────────────────────────────────────────────────────────
 // MANEUVER_BALANCE_PASS.md §3.C (merge) + §3.D (retune). Mutates the doctrines
 // pack to match the code-side changes already shipped in bbttcc-raid:

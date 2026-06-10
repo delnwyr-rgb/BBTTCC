@@ -1,6 +1,6 @@
 
 // modules/bbttcc-market/scripts/market.js
-// BBTTCC Market — Procurement Console (MVP)
+// Bad Eden Market — Procurement Console (MVP)
 //
 // - Spend Faction Economy OP to purchase:
 //   - gear (Item UUID → character inventory)
@@ -996,7 +996,7 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
     if (gmIds.length) {
       await ChatMessage.create({
         whisper: gmIds,
-        speaker: { alias: "BBTTCC Market" },
+        speaker: { alias: "Bad Eden Market" },
         content: `<p><b>Market Purchase</b></p>
           <p><b>${esc(faction.name)}</b> acquired <b>${esc(entry.name)}</b> ${econCost ? `for <code>${esc(poolSummary || `economy ${totalMarks}`)} marks</code>` : `<i>(Standard Issue)</i>`}.</p>
           <p class="bbttcc-muted">Rarity: <code>${esc(rarity)}</code> • Horizon: <code>${esc(horizon)}</code> • Δ: <code>${esc(distance)}</code></p>
@@ -1013,7 +1013,7 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
 export class BBTTCCMarketApp extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id: "bbttcc-market",
-    window: { title: "BBTTCC Market", icon: "fas fa-store", resizable: true },
+    window: { title: "Bad Eden Market", icon: "fas fa-store", resizable: true },
     position: { width: 980, height: 720 },
     classes: ["bbttcc", "bbttcc-market", "sheet"],
     resizable: true

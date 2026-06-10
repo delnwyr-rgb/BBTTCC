@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/relationship-nudge.js
-// BBTTCC — Auto-Relationship-Nudge listener
+// Bad Eden — Auto-Relationship-Nudge listener
 //
 // Listens on bbttcc:economy:exchange. When two factions trade ROUGHLY equal value
 // (within tolerance), bumps mutual relationship one step toward Friendly. Caps at

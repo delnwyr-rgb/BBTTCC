@@ -1,4 +1,4 @@
-// BBTTCC — Mal-Voiced Manifestations (2026-05-20)
+// Bad Eden — Mal-Voiced Manifestations (2026-05-20)
 // ─────────────────────────────────────────────────────────────────────────────
 // 20 round-conflict manifestations narrated in Mal's voice (the snarky, self-
 // aware, unreliable narrator of Bad Eden). Mostly Tier 1–2 with a handful of

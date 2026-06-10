@@ -1,4 +1,4 @@
-// BBTTCC — Mal-Voice the Maneuver Catalog (flavor-line pass) — 2026-05-24
+// Bad Eden — Mal-Voice the Maneuver Catalog (flavor-line pass) — 2026-05-24
 // ─────────────────────────────────────────────────────────────────────────────
 // MANEUVER_BALANCE_PASS.md follow-on workstream. Rewrites each maneuver's
 // COMPENDIUM description (system.description.value) into Mal's diegetic voice:

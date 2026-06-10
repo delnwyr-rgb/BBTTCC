@@ -10,7 +10,7 @@
 //
 // Run as a Foundry script macro. Targets: bbttcc-master-content.npcs.
 //
-// Author: BBTTCC team — 2026-05-02
+// Author: Bad Eden team — 2026-05-02
 
 (async () => {
   const PACK_ID = "bbttcc-master-content.npcs";

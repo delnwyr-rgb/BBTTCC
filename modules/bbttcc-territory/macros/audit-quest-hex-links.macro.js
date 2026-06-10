@@ -1,4 +1,4 @@
-// BBTTCC Audit Quest ↔ Hex Links
+// Bad Eden Audit Quest ↔ Hex Links
 // GM macro — scans every scene's hex drawings and the quest registry for
 // orphan / mismatched links and offers a one-click cleanup. Reports:
 //   1. Hex flag references a quest that no longer exists in the registry.

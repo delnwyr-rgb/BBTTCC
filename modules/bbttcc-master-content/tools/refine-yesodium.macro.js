@@ -1,4 +1,4 @@
-// BBTTCC — Refine Yesodium with Canonical Lore + Engine Hooks
+// Bad Eden — Refine Yesodium with Canonical Lore + Engine Hooks
 // ─────────────────────────────────────────────────────────────────────────────
 // Replaces the placeholder Yesodium item with the canonical entry from the
 // "Yesodium Is A Hell Of A Drug" journal: metastable proto-ore from the
@@ -24,7 +24,7 @@ const DRY_RUN = false;
 
 const CANONICAL_LORE = `
 <h3>⛏️ Yesodium</h3>
-<p><i>Canonical Resource Block — BBTTCC.</i></p>
+<p><i>Canonical Resource Block — Bad Eden.</i></p>
 
 <h4>🜂 Resource Classification</h4>
 <ul>

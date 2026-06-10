@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / cleanup-mis-imported-tier-feats.macro.js
+// Bad Eden master-content / tools / cleanup-mis-imported-tier-feats.macro.js
 //
 // Companion to restamp-requirements-level-mismatch.macro.js. Walks every
 // Character actor in the world and removes any owned feat whose corrected

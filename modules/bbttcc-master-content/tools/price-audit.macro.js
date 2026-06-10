@@ -1,4 +1,4 @@
-// BBTTCC — RFI Price Audit (Phase 2, 2026-05-10)
+// Bad Eden — RFI Price Audit (Phase 2, 2026-05-10)
 // ─────────────────────────────────────────────────────────────────────────────
 // Read-only scan of every gear item in selected packs. Reports:
 //   • MISSING        — item has no flags.fourththing.rfi.item.price at all

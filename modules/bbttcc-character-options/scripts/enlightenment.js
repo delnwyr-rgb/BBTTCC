@@ -1,5 +1,5 @@
 // modules/bbttcc-character-options/scripts/enlightenment.js
-// BBTTCC — Enlightenment Levels → Character Actor bonuses (dnd5e-safe, minimal)
+// Bad Eden — Enlightenment Levels → Character Actor bonuses (dnd5e-safe, minimal)
 // FIX: ActiveEffect5e requires "name" (not "label") in v13/dnd5e.
 
 const MOD = "bbttcc-character-options";
@@ -34,13 +34,13 @@ const ALIASES = {
 
 const EFFECTS = {
   unawakened: {
-    label: "BBTTCC: Unawakened",
+    label: "Bad Eden: Unawakened",
     icon: "systems/dnd5e/icons/svg/items/feature.svg",
     changes: [],
     flags: { "bbttcc.enlightenment.unawakened": true }
   },
   awakening: {
-    label: "BBTTCC: Awakening",
+    label: "Bad Eden: Awakening",
     icon: "icons/magic/perception/eye-ringed-glow-angry-red.webp",
     changes: [
       { key: "system.bonuses.abilities.save", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+1", priority: 20 },
@@ -48,7 +48,7 @@ const EFFECTS = {
     flags: { "bbttcc.enlightenment.aura": false }
   },
   seeking: {
-    label: "BBTTCC: Seeking",
+    label: "Bad Eden: Seeking",
     icon: "icons/magic/perception/third-eye-blue.webp",
     changes: [
       { key: "flags.dnd5e.skills.rel.adv", mode: CONST.ACTIVE_EFFECT_MODES.OVERRIDE, value: "true", priority: 20 },
@@ -57,7 +57,7 @@ const EFFECTS = {
     flags: { "bbttcc.enlightenment.hints": true }
   },
   wisdom: {
-    label: "BBTTCC: Wisdom",
+    label: "Bad Eden: Wisdom",
     icon: "icons/magic/holy/meditation-chi-focus-blue.webp",
     changes: [
       { key: "system.bonuses.abilities.check", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+1", priority: 20 },
@@ -68,7 +68,7 @@ const EFFECTS = {
     }
   },
   understanding: {
-    label: "BBTTCC: Understanding",
+    label: "Bad Eden: Understanding",
     icon: "icons/magic/holy/prayer-hands-glowing-yellow.webp",
     changes: [
       { key: "system.bonuses.abilities.save", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+2", priority: 20 },
@@ -79,7 +79,7 @@ const EFFECTS = {
     }
   },
   enlightened: {
-    label: "BBTTCC: Enlightened",
+    label: "Bad Eden: Enlightened",
     icon: "icons/magic/holy/barrier-shield-winged-gold.webp",
     changes: [
       { key: "system.bonuses.abilities.save",  mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "+2", priority: 20 },
@@ -93,7 +93,7 @@ const EFFECTS = {
     }
   },
   qliphothic: {
-    label: "BBTTCC: Qliphothic (Corrupted)",
+    label: "Bad Eden: Qliphothic (Corrupted)",
     icon: "icons/magic/unholy/beam-impact-red.webp",
     changes: [
       { key: "system.traits.dr.value", mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: "necrotic", priority: 20 },
@@ -253,7 +253,7 @@ function decorateSheet(app, html) {
           <span class="flex0">${level}</span>
           <span class="flex1"></span>
           ${miracleBtn}
-          <small class="flex0" style="opacity:.75;">(BBTTCC)</small>
+          <small class="flex0" style="opacity:.75;">(Bad Eden)</small>
         </div>
       </section>
     `);

@@ -1,5 +1,5 @@
 // ============================================================================
-// BBTTCC — Radiation Mutations Enhancer (Phase D, Narrative Only)
+// Bad Eden — Radiation Mutations Enhancer (Phase D, Narrative Only)
 // Listens for bbttcc.mutationRoll(actor, rp) and records a narrative mutation
 // on the actor under flags["bbttcc-radiation"].mutations.
 //
@@ -234,7 +234,7 @@
       await ChatMessage.create({
         content: `<p>${lines.join("<br/>")}</p>`,
         whisper: gmIds,
-        speaker: { alias: "BBTTCC Radiation" }
+        speaker: { alias: "Bad Eden Radiation" }
       }).catch(() => {});
 
       console.log(TAG, "Recorded mutation for", A.name, mut);

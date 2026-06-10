@@ -1,5 +1,5 @@
 // modules/bbttcc-campaign/scripts/campaign-toolbar-button.js
-// BBTTCC Campaign Builder — Control Bar button hook (top-bar edition)
+// Bad Eden Campaign Builder — Control Bar button hook (top-bar edition)
 
 const MOD_CAM = "bbttcc-campaign";
 const NS_CAM  = "[bbttcc-campaign]";
@@ -13,14 +13,14 @@ function openCampaignBuilderFromButton() {
       null;
 
     if (typeof fn !== "function") {
-      ui.notifications?.warn?.("BBTTCC Campaign Builder API not available.");
+      ui.notifications?.warn?.("Bad Eden Campaign Builder API not available.");
       return;
     }
 
     fn();
   } catch (e) {
     console.error(NS_CAM, "Failed to open Campaign Builder from toolbar button:", e);
-    ui.notifications?.error?.("Could not open BBTTCC Campaign Builder — see console.");
+    ui.notifications?.error?.("Could not open Bad Eden Campaign Builder — see console.");
   }
 }
 
@@ -60,7 +60,7 @@ function ensureCampaignButton() {
   btn.id = "bbttcc-campaign-btn";
   btn.className = "bbttcc-btn";
   btn.type = "button";
-  btn.title = "Open BBTTCC Campaign Builder";
+  btn.title = "Open Bad Eden Campaign Builder";
   btn.innerHTML = `<i class="fas fa-project-diagram"></i><span>Campaigns</span>`;
   btn.addEventListener("click", (ev) => {
     ev.preventDefault();

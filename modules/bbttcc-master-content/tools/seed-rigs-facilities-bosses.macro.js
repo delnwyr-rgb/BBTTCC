@@ -1,4 +1,4 @@
-// BBTTCC — Phase 8 Seed: Rigs / Facilities / Bosses / Personal Rigs (2026-05-10)
+// Bad Eden — Phase 8 Seed: Rigs / Facilities / Bosses / Personal Rigs (2026-05-10)
 // ─────────────────────────────────────────────────────────────────────────────
 // Seeds 20 pre-built actor templates into game.actors:
 //   • 6 personal rigs   (bracket=personal, single pilot)

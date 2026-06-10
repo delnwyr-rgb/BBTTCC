@@ -1,6 +1,6 @@
-// BBTTCC — Convert BBTTCC Gear (root Gear folder) to RFI-native gear
+// Bad Eden — Convert Bad Eden Gear (root Gear folder) to RFI-native gear
 // ─────────────────────────────────────────────────────────────────────────────
-// Walks the 13 hand-authored BBTTCC items in the root Gear folder of the
+// Walks the 13 hand-authored Bad Eden items in the root Gear folder of the
 // `bbttcc-master-content.items` pack and rewrites them as fourththing gear:
 //
 //   • type: equipment / consumable → gear  (constructor coercion handles
@@ -180,7 +180,7 @@ const GEAR = [
   }
 
   if (DRY_RUN) {
-    console.group("BBTTCC Gear conversion — DRY RUN");
+    console.group("Bad Eden Gear conversion — DRY RUN");
     reportRows.forEach(r => console.log(r));
     if (missing.length) console.log("MISSING:", missing.join(", "));
     console.groupEnd();
@@ -191,9 +191,9 @@ const GEAR = [
     await Item.updateDocuments(updates, { pack: PACK_ID });
   }
 
-  console.group("BBTTCC Gear conversion — applied");
+  console.group("Bad Eden Gear conversion — applied");
   reportRows.forEach(r => console.log(r));
   if (missing.length) console.log("MISSING:", missing.join(", "));
   console.groupEnd();
-  ui.notifications?.info(`BBTTCC Gear converted: ${updates.length}${missing.length ? `; ${missing.length} not found` : ""}.`);
+  ui.notifications?.info(`Bad Eden Gear converted: ${updates.length}${missing.length ? `; ${missing.length} not found` : ""}.`);
 })();

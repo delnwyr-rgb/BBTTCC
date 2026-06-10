@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/exchange-engine.js
-// BBTTCC — Faction Exchange Engine v0.1
+// Bad Eden — Faction Exchange Engine v0.1
 //
 // Atomic faction-to-faction transfer of marks (per OP bucket) and Build Units.
 // Two surfaces consume this:

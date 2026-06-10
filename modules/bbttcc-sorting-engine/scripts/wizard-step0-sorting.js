@@ -1,4 +1,4 @@
-// BBTTCC Sorting Wizard Step 0
+// Bad Eden Sorting Wizard Step 0
 // Drop-in UI for the existing sorting engine.
 // Requires:
 //   game.bbttcc.api.sorting.loadSpec
@@ -198,7 +198,7 @@
       id: APP_ID,
       tag: "section",
       window: {
-        title: "BBTTCC Sorting Wizard",
+        title: "Bad Eden Sorting Wizard",
         resizable: true
       },
       position: {
@@ -272,7 +272,7 @@
         "<div class='bbttcc-sorter'>" +
           "<h1>Who Are You Under Pressure?</h1>" +
           "<div class='subtitle'>Choose the answer that feels most true when the roof is on fire.</div>" +
-          "<div class='progress'>Question " + (this.index + 1) + " of " + this.spec.questions.length + " • " + answeredCount + " answered</div>" +
+          "<div class='progress'>Question " + (this.index + 1) + " of " + this.spec.questions.length + " ï¿½ " + answeredCount + " answered</div>" +
           "<div class='question-card'>" +
             "<div class='prompt'>" + esc(q.prompt) + "</div>" +
             "<div class='answers'>" + answersHtml + "</div>" +
@@ -304,8 +304,8 @@
 
       return "" +
         "<div class='bbttcc-sorter'>" +
-          "<h1>Your BBTTCC Identity Stack</h1>" +
-          "<div class='subtitle'>Tell me how you solve problems, and I’ll tell you what you are.</div>" +
+          "<h1>Your Bad Eden Identity Stack</h1>" +
+          "<div class='subtitle'>Tell me how you solve problems, and Iï¿½ll tell you what you are.</div>" +
           "<div class='result-card'>" +
             "<div class='stack-grid'>" +
               this._stackItem("Philosophy", short.philosophy) +

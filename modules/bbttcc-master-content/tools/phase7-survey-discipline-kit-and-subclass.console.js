@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Phase 7 survey: caster-discipline kit + subclass per-uses
+// Bad Eden — Phase 7 survey: caster-discipline kit + subclass per-uses
 // ─────────────────────────────────────────────────────────────────────────────
 // Phase 6 surfaced the 16 ladder items shipped by the discipline pilot
 // (Initiation 1/6/11/16 + Tier 1/2/3/4 across CL/WL/DW/PK).

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Description scrub: Echo-Diver batch
+// Bad Eden — Description scrub: Echo-Diver batch
 // ─────────────────────────────────────────────────────────────────────────────
 // Sentinel-gated description rewrite for the 4 Echo-Diver items already in
 // the pack. Replaces D&D vocab ("Constitution saves", "advantage", "Short

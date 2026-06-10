@@ -1,5 +1,5 @@
 // modules/bbttcc-auto-link/scripts/character-wizard.js
-// v2.0.0 — BBTTCC Character Wizard (Roll for Initiation)
+// v2.0.0 — Bad Eden Character Wizard (Roll for Initiation)
 // Immersive guided workflow targeting the Roll for Initiation system:
 // RFI attributes, subclass selection at level 1, and one-pass actor creation
 // with class / subclass / ancestry features auto-imported.
@@ -233,7 +233,7 @@ function docToPreview(doc, fallback) {
   const source = (doc && doc.pack && doc.pack.metadata && (doc.pack.metadata.label || doc.pack.metadata.collection)) || fallback.source || "";
   const identifier = String((((doc || {}).system || {}).identifier) || "");
   return {
-    title: (doc && doc.name) || fallback.name || "BBTTCC Option",
+    title: (doc && doc.name) || fallback.name || "Bad Eden Option",
     subtitle: fallback.subtitle || source || "",
     kicker: fallback.previewKicker || "",
     quote: fallback.previewQuote || guessDocumentQuote((doc && doc.name) || fallback.name || "", body),

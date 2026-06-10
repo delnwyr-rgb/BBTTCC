@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Targeted Hit Die clause scrub
+// Bad Eden — Targeted Hit Die clause scrub
 // ─────────────────────────────────────────────────────────────────────────────
 // Idempotent. Removes the two remaining "Hit Die" clauses that the Phase 5
 // bulk scrub left untouched (they don't have a generic find/replace map —

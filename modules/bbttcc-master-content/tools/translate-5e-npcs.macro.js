@@ -23,7 +23,7 @@
 //   other feat items → RFI feat items with description run through ftTranslate
 //   biography text → notes (ftTranslate-scrubbed)
 //
-// Author: BBTTCC team — 2026-05-02
+// Author: Bad Eden team — 2026-05-02
 
 (async () => {
   const PACK_ID = "bbttcc-master-content.npcs";

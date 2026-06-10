@@ -4,7 +4,7 @@
  * when the polygon is skewed, rotated, or the drawing contains padding.
  *
  * Non-destructive: does NOT update DrawingDocument data; it adjusts the PIXI text each refresh.
- * Applies only to BBTTCC territory hex drawings:
+ * Applies only to Bad Eden territory hex drawings:
  *   flags.bbttcc-territory.isHex === true OR flags.bbttcc-territory.kind === "territory-hex"
  */
 

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Seed missing Cryptidkin tier feats into bbttcc-master-content.ancestries
+// Bad Eden — Seed missing Cryptidkin tier feats into bbttcc-master-content.ancestries
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent — skips items already present
 // (matched by system.identifier).
@@ -164,7 +164,7 @@
       folder: FOLDER_ID,
       system: {
         description: { value: descValue, chat: "" },
-        source: { custom: "BBTTCC", rules: "2024", revision: 2, book: "", license: "" },
+        source: { custom: "Bad Eden", rules: "2024", revision: 2, book: "", license: "" },
         advancement: {},
         identifier: it.identifier,
         requirements: it.requirements,

@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/pending-trades.js
-// BBTTCC — Async Pending-Trade API v0.1
+// Bad Eden — Async Pending-Trade API v0.1
 //
 // Persistent inbox of trade offers awaiting recipient action. Storage lives on
 // the RECIPIENT faction (toFaction). Each entry has a state machine:

@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Ember Cryptidkin/Jackalope audit
+// Bad Eden — Ember Cryptidkin/Jackalope audit
 // ─────────────────────────────────────────────────────────────────────────────
 // Read-only. Paste into F12 (any world, but intended for ember).
 // Reports: every Cryptidkin/Jackalope item by name + identifier + pack,

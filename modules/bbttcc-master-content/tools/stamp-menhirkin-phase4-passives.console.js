@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Stamp Menhirkin Phase 4 passive flags (species root only)
+// Bad Eden — Stamp Menhirkin Phase 4 passive flags (species root only)
 // ─────────────────────────────────────────────────────────────────────────────
 // Idempotent. Stamps three reroll grants on the menhirkin species item:
 //   - Heartstone:  Body check reroll-lowest, note "while in a hex your faction controls or has claimed"

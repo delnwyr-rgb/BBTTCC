@@ -1,5 +1,5 @@
 /* bbttcc-agent-api.js
- * BBTTCC Agent Boundary (Dry-Run v0.5)
+ * Bad Eden Agent Boundary (Dry-Run v0.5)
  *
  * Adds dual-registry support:
  * - Runtime: game.bbttcc.api.raid.EFFECTS (live Raid Console source)
@@ -189,7 +189,7 @@
   }
 
   /* ============================================================
-   * BBTTCC Agent Dry-Run Intent Spec (v1)
+   * Bad Eden Agent Dry-Run Intent Spec (v1)
    *
    * Purpose:
    * - THROUGHPUT handlers return preview-only “intent” objects.
@@ -600,7 +600,7 @@
 
   // --- T2 LEARNED: Command Overdrive ---
   // "Gain initiative for next round."
-  // BBTTCC interpretation: attacker keeps momentum—may retain attacker role next round (no forced flip),
+  // Bad Eden interpretation: attacker keeps momentum—may retain attacker role next round (no forced flip),
   // or may choose roles next round (GM adjudicates; preview intent only).
   THROUGHPUT["command_overdrive"] = function (ctx) {
     // Narrative-only (Alpha): Command Overdrive affects activity/role order.
@@ -711,7 +711,7 @@
 
   // --- T3 LEARNED: Moral High Ground ---
   // "+2 to Empathy Meter after victory."
-  // Empathy Meter is legacy; BBTTCC interpretation: +2 Unity after a successful round/victory.
+  // Empathy Meter is legacy; Bad Eden interpretation: +2 Unity after a successful round/victory.
   THROUGHPUT["moral_high_ground"] = function (ctx) {
     if (!isSuccessTier(ctx?.outcomeTier || ctx?.result)) return null;
 

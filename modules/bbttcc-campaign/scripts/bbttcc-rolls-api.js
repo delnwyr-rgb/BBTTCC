@@ -1,5 +1,5 @@
 // modules/bbttcc-campaign/scripts/bbttcc-rolls-api.js
-// BBTTCC — Rolls API v0.1 (Hex Chrome)
+// Bad Eden — Rolls API v0.1 (Hex Chrome)
 //
 // Goal: provide a single place to resolve bonuses for Campaign Beat "Choice/Check" UI.
 //

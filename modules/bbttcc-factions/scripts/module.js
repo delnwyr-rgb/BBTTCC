@@ -1,5 +1,5 @@
 /* modules/bbttcc-factions/scripts/module.js
- * BBTTCC — Faction Sheet (v13-safe)
+ * Bad Eden — Faction Sheet (v13-safe)
  *
  * - Defense totals, Advance Turn/OP (Dry/Apply), Commit Turn
  * - Header strips: Bank/Stockpile (resources), OP Bank
@@ -452,7 +452,7 @@ async function _bbttccGrantDoctrineEmbeddedItem(actor, { kind, key, silent=false
     flags: { bbttcc: { kind: k, key: kk } },
     system: {
       category: k === "maneuver" ? "maneuver" : "strategic",
-      source: "BBTTCC Doctrine",
+      source: "Bad Eden Doctrine",
       description: { value: _bbttccBuildDoctrineDescription(k, kk, spec), chat: "" }
     }
   };
@@ -1221,7 +1221,7 @@ async function commitTurnBank(actor) {
               <p>Moved to <em>Stockpile</em>:
               Food ${committed.food}, Materials ${committed.materials}, Trade ${committed.trade},
               Military ${committed.military}, Knowledge ${committed.knowledge}, Defense ${committed.defense}</p>`,
-    speaker: { alias: "BBTTCC — Factions" },
+    speaker: { alias: "Bad Eden — Factions" },
     whisper: game.users.filter(u => u.isGM).map(u => u.id)
   });
 
@@ -1904,7 +1904,7 @@ function _readPassiveList(container, currentBonuses) {
 class BBTTCCRigConsole extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id: "bbttcc-rig-console",
-    window: { title: "BBTTCC Rig Config", icon: "fas fa-truck-monster" },
+    window: { title: "Bad Eden Rig Config", icon: "fas fa-truck-monster" },
     position: { width: 780, height: "auto" },
     classes: ["bbttcc", "bbttcc-rig-config", "sheet"],
     resizable: true
@@ -2210,7 +2210,7 @@ class BBTTCCRigConsole extends foundry.applications.api.HandlebarsApplicationMix
       })
       .filter(Boolean);
 
-    console.log("[BBTTCC][RigSprint] SAVE parsed econ =", parsed?.[0]?.op?.economy, "raw=", boxes?.[0]?.querySelector?.('[name="econ"]')?.value);
+    console.log("[Bad Eden][RigSprint] SAVE parsed econ =", parsed?.[0]?.op?.economy, "raw=", boxes?.[0]?.querySelector?.('[name="econ"]')?.value);
 
     // Keep JSON fields in sync so Advanced editor reflects what was saved
     const txt = JSON.stringify(parsed, null, 2);
@@ -2228,7 +2228,7 @@ class BBTTCCRigConsole extends foundry.applications.api.HandlebarsApplicationMix
     }
     parsed = p;
 
-    console.log("[BBTTCC][RigSprint] SAVE parsed bonuses (JSON fallback) =", parsed);
+    console.log("[Bad Eden][RigSprint] SAVE parsed bonuses (JSON fallback) =", parsed);
   }
 
   // Turn effects
@@ -2277,7 +2277,7 @@ class BBTTCCRigConsole extends foundry.applications.api.HandlebarsApplicationMix
 
   const next = normalizeRig(merged, { ownerFactionId: actor.id });
 
-  console.log("[BBTTCC][RigSprint] SAVE writing econ =", next?.passiveBonuses?.[0]?.op?.economy);
+  console.log("[Bad Eden][RigSprint] SAVE writing econ =", next?.passiveBonuses?.[0]?.op?.economy);
 
   if (idx >= 0) rigs[idx] = next;
   else rigs.push(next);
@@ -2474,7 +2474,7 @@ class BBTTCCFactionSheet extends ActorSheet {
 
     const total = rows.reduce((s,r)=>s + (Number.isFinite(r.total) ? r.total : 0), 0);
     const powerKey   = computePowerKey(total);
-    const powerLevelLabel  = game.i18n?.localize?.(`BBTTCC.PowerLevels.${powerKey}`) || powerKey;
+    const powerLevelLabel  = game.i18n?.localize?.(`Bad Eden.PowerLevels.${powerKey}`) || powerKey;
 
     const territoryThisScene = await _collectTerritoryForScope(this.actor, "scene");
     const territoryTotals    = await _collectTerritoryForScope(this.actor, "all");
@@ -3245,7 +3245,7 @@ try {
       const f = doc.flags?.bbttcc || {};
       const kind = String(f.kind || "").toLowerCase().trim();
       const key  = String(f.key  || "").toLowerCase().trim();
-      if (!kind || !key) return ui.notifications?.warn?.("That item is not a BBTTCC doctrine item (missing flags.bbttcc.kind/key).");
+      if (!kind || !key) return ui.notifications?.warn?.("That item is not a Bad Eden doctrine item (missing flags.bbttcc.kind/key).");
 
       const api = game.bbttcc?.api?.factions?.doctrine;
       if (!api?.grant) return ui.notifications?.warn?.("Doctrine API missing.");
@@ -3310,7 +3310,7 @@ try {
         try {
           const gmIds = (game.users?.filter(u=>u.isGM) || []).map(u=>u.id);
           await ChatMessage.create({
-            speaker: { alias: "BBTTCC" },
+            speaker: { alias: "Bad Eden" },
             whisper: gmIds,
             content: `<p><b>Ritual Request</b></p><p><b>${foundry.utils.escapeHTML(this.actor.name)}</b> requests the Ritual Console be opened.</p>`
           });
@@ -3965,7 +3965,7 @@ Hooks.once("init", () => {
   try {
     foundry.applications.apps.DocumentSheetConfig.registerSheet(
       Actor, MODULE_ID, BBTTCCFactionSheet,
-      { types: ["npc"], makeDefault: false, label: "BBTTCC Faction" }
+      { types: ["npc"], makeDefault: false, label: "Bad Eden Faction" }
     );
     log("Faction sheet registered", SHEET_ID);
   } catch (e) { warn("registerSheet failed", e); }
@@ -3996,7 +3996,7 @@ Hooks.once("ready", async () => {
     // -----------------------------------------------------------------
     // Starting Faction Packages (Registry) — v1.0
     // -----------------------------------------------------------------
-    // We keep this as a pure JS registry mounted on the BBTTCC API so:
+    // We keep this as a pure JS registry mounted on the Bad Eden API so:
     // - The Wizard can apply packages atomically.
     // - We can add presets without touching world data.
     // - Later we can optionally mirror to a world setting.
@@ -4781,9 +4781,9 @@ Hooks.on("updateActor", async (actor, data) => {
   try {
     const touchedFlag = foundry.utils.hasProperty(data, "flags.bbttcc-factions.isFaction");
     const touchedType = foundry.utils.hasProperty(data, "system.details.type.value");
-    const touchedBBTTCC = foundry.utils.hasProperty(data, `flags.${MODULE_ID}`);
+    const touchedBad Eden = foundry.utils.hasProperty(data, `flags.${MODULE_ID}`);
 
-    if (touchedFlag || touchedType || touchedBBTTCC) {
+    if (touchedFlag || touchedType || touchedBad Eden) {
       await ensureFactionHints(actor);
       const cur = actor.getFlag("core","sheetClass") || foundry.utils.getProperty(actor,"flags.core.sheetClass");
       if (isFactionActor(actor) && cur !== SHEET_ID) await actor.update({ "flags.core.sheetClass": SHEET_ID });
@@ -4808,7 +4808,7 @@ Hooks.on("updateActor", (actor, data) => {
 
 // Idempotent backfill: populate system.description.value on existing doctrine
 // feat items (Maneuvers + Strategics) that predate description-on-grant, so
-// previously-granted items render rules text in the new Fourth Thing feature
+// previously-granted items render rules text in the new Roll For Initiation feature
 // sheet. Skips items that already have a non-empty description, so repeat
 // loads do no work. GM-only. Delayed so raid.EFFECTS has time to load.
 Hooks.once("ready", () => {

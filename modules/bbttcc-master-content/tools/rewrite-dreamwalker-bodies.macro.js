@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-dreamwalker-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-dreamwalker-bodies.macro.js
 //
 // Refreshes the description bodies for the Dreamwalker class doc + its three
 // Trances (Quiet Sun / Sapphire Gate / Thousand Faces) so the TEXT matches the

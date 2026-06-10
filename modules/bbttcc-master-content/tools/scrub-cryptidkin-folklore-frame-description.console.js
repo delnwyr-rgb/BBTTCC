@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Description scrub: cryptidkin-folklore-frame
+// Bad Eden — Description scrub: cryptidkin-folklore-frame
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste into F12 console (as GM). Idempotent.
 // Rewrites the description of the Cryptidkin Core Traits item ("Folklore &

@@ -1,4 +1,4 @@
-// BBTTCC — Wyrdlens Adept pilot rewrite (Manifestation Discipline budget v1.0)
+// Bad Eden — Wyrdlens Adept pilot rewrite (Manifestation Discipline budget v1.0)
 // ─────────────────────────────────────────────────────────────────────────────
 // Re-points the Wyrdlens Adept class stub at the v1.0 Manifestation Ruleset
 // knobs — specifically as the **Misfire-band specialist**. Tier text reframes
@@ -69,7 +69,7 @@ if (!item) { ui.notifications.error(`Document ${entry._id} not retrievable.`); r
 await item.update({ "system.description.value": WYRDLENS_HTML });
 
 ChatMessage.create({
-  speaker: { alias: "BBTTCC Wyrdlens Pilot" },
+  speaker: { alias: "Bad Eden Wyrdlens Pilot" },
   content: `<h4>Wyrdlens Adept — Manifestation Discipline rewrite</h4>
             <p>Class stub updated to <strong>Misfire-band specialist</strong> (5-pt budget).</p>
             <p>Document: <code>${item.name}</code> (<code>${entry._id}</code>)</p>

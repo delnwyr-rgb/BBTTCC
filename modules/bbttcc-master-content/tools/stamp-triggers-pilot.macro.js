@@ -1,4 +1,4 @@
-// BBTTCC — Pilot batch: stamp Phase C triggers on 5 high-visibility items
+// Bad Eden — Pilot batch: stamp Phase C triggers on 5 high-visibility items
 // ─────────────────────────────────────────────────────────────────────────────
 // Verifies the trigger engine end-to-end before bulk-authoring.
 //

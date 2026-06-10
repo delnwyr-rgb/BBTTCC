@@ -1,4 +1,4 @@
-// BBTTCC — Patch Steelweave Hauberk (live)
+// Bad Eden — Patch Steelweave Hauberk (live)
 // ─────────────────────────────────────────────────────────────────────────────
 // The 2026-05-03 T1 Baseline Armor sprint stamped Steelweave Hauberk's
 // kinetic resistance under `flags.fourththing.rfi.item.grants` — which the

@@ -215,7 +215,7 @@
             await ChatMessage.create({
               content: `<p><i>Unity Bonus (Dry)</i> — <b>${foundry.utils.escapeHTML(A.name)}</b>: ${note}<br/>${deltaStr||"—"}</p>`,
               whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
-              speaker: { alias: "BBTTCC Unity" }
+              speaker: { alias: "Bad Eden Unity" }
             });
           }
 

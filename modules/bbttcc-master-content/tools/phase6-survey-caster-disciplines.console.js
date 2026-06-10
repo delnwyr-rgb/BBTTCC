@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Phase 6 survey: caster discipline class-features
+// Bad Eden — Phase 6 survey: caster discipline class-features
 // ─────────────────────────────────────────────────────────────────────────────
 // Phase 5 per-use callouts touched 12 RFI subclass items in the classes pack
 // but did NOT separately sweep the four caster-discipline class-feature ladders

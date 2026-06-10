@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Diagnostic: where do RFI subclass/doctrine items actually live?
+// Bad Eden — Diagnostic: where do RFI subclass/doctrine items actually live?
 // ─────────────────────────────────────────────────────────────────────────────
 // Paste in F12 console. Lists candidate items from BOTH packs (subclasses +
 // classes) and from every actor, matching the names we expected to wire in

@@ -1,4 +1,4 @@
-// BBTTCC — Seed Sprint 3a Infiltration Maneuvers into Doctrines Pack (2026-05-16)
+// Bad Eden — Seed Sprint 3a Infiltration Maneuvers into Doctrines Pack (2026-05-16)
 // ─────────────────────────────────────────────────────────────────────────────
 // Sibling of seed-sprint2-maneuvers.macro.js. Reads the runtime catalog at
 // `game.bbttcc.api.raid.sprint3aManeuvers` (published by

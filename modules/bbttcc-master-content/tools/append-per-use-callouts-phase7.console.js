@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// BBTTCC — Append Per-Use callouts (Phase 7 — Discipline kit + subclasses)
+// Bad Eden — Append Per-Use callouts (Phase 7 — Discipline kit + subclasses)
 // ─────────────────────────────────────────────────────────────────────────────
 // Surfaces 16 buried per-uses across the older class-kit and subclass items
 // for the four caster disciplines. Excluded from this pass:

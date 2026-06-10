@@ -1,4 +1,4 @@
-// BBTTCC master-content / tools / rewrite-harmony-marshal-bodies.macro.js
+// Bad Eden master-content / tools / rewrite-harmony-marshal-bodies.macro.js
 //
 // Refreshes the description bodies for the Harmony Marshal class doc + its three
 // Mandates (Accord / Overwatch / Resolve) so the TEXT matches the post-redesign

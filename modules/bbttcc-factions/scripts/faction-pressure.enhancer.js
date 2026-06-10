@@ -1,5 +1,5 @@
 // modules/bbttcc-factions/scripts/faction-pressure.enhancer.js
-// BBTTCC — Pressure Flags (Overextension/Upkeep/Risk) writer
+// Bad Eden — Pressure Flags (Overextension/Upkeep/Risk) writer
 // Reviewed for faction-sheet cleanup sprint: data writer only; retained by design.
 //
 // Reads:

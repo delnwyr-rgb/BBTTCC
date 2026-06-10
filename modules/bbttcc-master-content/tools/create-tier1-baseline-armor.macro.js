@@ -1,4 +1,4 @@
-// BBTTCC — Tier I Baseline Armor Kit (+ one T2 Heavy companion)
+// Bad Eden — Tier I Baseline Armor Kit (+ one T2 Heavy companion)
 // ─────────────────────────────────────────────────────────────────────────────
 // Purpose: fill the chargen / level-1 armor gap. Existing armor pool was
 // top-heavy (mostly Tier IV signature plate, plus Septhide & Rad Suit Mk I

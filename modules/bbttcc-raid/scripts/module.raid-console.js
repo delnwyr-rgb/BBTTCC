@@ -1,4 +1,4 @@
-/* BBTTCC Raid — v1.3.24 + RIG TARGETING (Option A, no-template-change)
+/* Bad Eden Raid — v1.3.24 + RIG TARGETING (Option A, no-template-change)
  * Adds Rig targeting without imports and without touching HBS:
  *  - "Pick Target" now prompts: Hex or Rig
  *  - Rig target uses dropdown dialog (Defender Faction -> Rig)
@@ -53,7 +53,7 @@ function _bbttccFxPanelForRound(app, idx){
 
 
 /* ===================================================================
- * BBTTCC Tooltip System (Unified)
+ * Bad Eden Tooltip System (Unified)
  * - Single tooltip manager for Planner + Raid Console
  * - Binds at document level once (no "opened-first" issues)
  * - Targets: .bbttcc-tip-icon[data-tip-kind][data-tip-key]
@@ -358,7 +358,7 @@ Hooks.once("init", () => {
   try {
     if (game && game.settings && !game.settings.settings.has(RAID_ID + ".bossState")) {
       game.settings.register(RAID_ID, "bossState", {
-        name: "BBTTCC Raid Boss State (internal)",
+        name: "Bad Eden Raid Boss State (internal)",
         hint: "Internal persistent boss damage state map.",
         scope: "world",
         config: false,
@@ -591,7 +591,7 @@ function rosterContribution(faction, key) {
     try {
       if (typeof _characterBelongsToFaction === "function") return _characterBelongsToFaction(char, faction);
     } catch {}
-    // fallback: id/name flags commonly used in BBTTCC
+    // fallback: id/name flags commonly used in Bad Eden
     const fid = faction.id;
     const fname = String(faction.name || "").trim();
     const byId = [
@@ -1107,7 +1107,7 @@ function isHexDrawing(d) {
   return sh?.type === "p" && n >= 10;
 }
 
-async function pickTargetHex({ prompt="Click a BBTTCC hex…" } = {}) {
+async function pickTargetHex({ prompt="Click a Bad Eden hex…" } = {}) {
   if (!canvas?.ready) { ui.notifications?.error?.("Canvas not ready."); return null; }
   // 2026-05-13 diagnostic — log what the picker sees up front so empty-list
   // / "no hex under cursor" bugs can be diagnosed from the console.
@@ -1192,7 +1192,7 @@ async function pickTargetHex({ prompt="Click a BBTTCC hex…" } = {}) {
           return resolve({ drawing: winner.p.document, uuid: winner.p.document.uuid, flags: foundry.utils.duplicate(winner.p.document.flags?.[TERR_ID] ?? {}) });
         }
         console.log("[bbttcc-raid:hex-picker] no hit — pt=", pt);
-        ui.notifications?.warn?.("No BBTTCC hex under cursor."); resolve(null);
+        ui.notifications?.warn?.("No Bad Eden hex under cursor."); resolve(null);
       } catch (e) { console.warn("[bbttcc-raid:hex-picker] error", e); resolve(null); }
       finally { try { note?.remove?.(); } catch {} }
     };
@@ -1220,7 +1220,7 @@ async function pickTargetHexOrRig(vm){
   if (!choice) return null;
 
   if (choice === "hex" || choice === "facility") {
-    const sel = await pickTargetHex({ prompt:"Click a BBTTCC hex to raid…" });
+    const sel = await pickTargetHex({ prompt:"Click a Bad Eden hex to raid…" });
     if (!sel) return null;
     const hexName = (sel.flags?.name || (sel.uuid ? sel.uuid.split(".").pop() : "—"));
 
@@ -1617,7 +1617,7 @@ function _rcEmitManFireCard(r, side, key, manDef, attacker, defender) {
       <p style="margin:0 0 .25rem;"><b>🎯 ${foundry.utils.escapeHTML(actorName)}</b> fires <b>${foundry.utils.escapeHTML(label)}</b> ${fmBadge}</p>
       <p style="margin:0;opacity:.85;font-size:.9em;">vs <b>${foundry.utils.escapeHTML(targetName)}</b> · <i>${foundry.utils.escapeHTML(roundLabel)}</i> · <span style="opacity:.7;">${sideLabel} side</span></p>
     </section>`;
-    ChatMessage.create({ speaker: { alias: "BBTTCC Raid" }, content: card }).catch(()=>{});
+    ChatMessage.create({ speaker: { alias: "Bad Eden Raid" }, content: card }).catch(()=>{});
   } catch (e) { console.warn("[bbttcc-raid] fire card emit failed", e); }
 }
 
@@ -2180,7 +2180,7 @@ class BBTTCC_RaidConsole extends HBM(AppV2) {
     classes: ["bbttcc","bbttcc-raid-console","bbttcc-raid-planner"],
     position: { width: 980, height: 720 },
     window: {
-      title: "BBTTCC — Raid Console",
+      title: "Bad Eden — Raid Console",
       resizable: true,
       minimizable: true
     }
@@ -4533,7 +4533,7 @@ async _postRoundCard(idx){
 
   const card = `
     <section class="bbttcc-raid">
-      <h3 style="margin:0 0 .25rem 0;">BBTTCC — Raid (Round ${idx+1})</h3>
+      <h3 style="margin:0 0 .25rem 0;">Bad Eden — Raid (Round ${idx+1})</h3>
       <p style="margin:.25rem 0;"><strong>Activity:</strong> ${foundry.utils.escapeHTML(r.activityLabel)} • <strong>Difficulty:</strong> ${diffName}${r.diffOffset?` • <strong>Adj:</strong> ${r.diffOffset>0?'+':''}${r.diffOffset}`:''}${mansA}${mansD}${coalitionLine}</p>
       <table class="bbttcc-table" style="width:100%;">
         <thead>
@@ -4558,13 +4558,13 @@ async _postRoundCard(idx){
       ${holdingsBlock}
       ${casualtiesBlock}
     </section>`;
-  ChatMessage.create({ speaker:{alias:"BBTTCC Raid"}, flavor:card, whisper: game.users.filter(u=>u.isGM).map(u=>u.id) });
+  ChatMessage.create({ speaker:{alias:"Bad Eden Raid"}, flavor:card, whisper: game.users.filter(u=>u.isGM).map(u=>u.id) });
 
   // Echo Roster (2026-05-26) — manifesting echoes posted as a PUBLIC message
   // (players see their past-life crews show up), separate from the GM-whispered
   // round card above. First-round only; empty block = no message.
   if (echoesBlock) {
-    ChatMessage.create({ speaker: { alias: "BBTTCC Raid" }, content: `<section class="bbttcc-raid">${echoesBlock}</section>` });
+    ChatMessage.create({ speaker: { alias: "Bad Eden Raid" }, content: `<section class="bbttcc-raid">${echoesBlock}</section>` });
   }
 }
 
@@ -6010,7 +6010,7 @@ try {
           await ChatMessage.create({
             content: `<p><b>Facility Siege Damage</b></p><b>${foundry.utils.escapeHTML(defender?.name || "Defender")}</b> — <b>${foundry.utils.escapeHTML(r.targetName || "Facility")}</b>: ${fromS} → <b>${toS}</b> (Δ ${newStep-oldStep>=0?"+":""}${newStep-oldStep})`,
             whisper: gmIds,
-            speaker: { alias: "BBTTCC Siege" }
+            speaker: { alias: "Bad Eden Siege" }
           }).catch(()=>{});
         } catch {}
       }
@@ -6066,7 +6066,7 @@ try {
             await ChatMessage.create({
               content: `<p><b>Rig Siege Damage</b></p><b>${foundry.utils.escapeHTML(defender.name)}</b> — <b>${foundry.utils.escapeHTML(prof.rigName)}</b>: ${fromS} → <b>${toS}</b> (Δ ${newStep-oldStep>=0?"+":""}${newStep-oldStep})`,
               whisper: gmIds,
-              speaker: { alias: "BBTTCC Siege" }
+              speaker: { alias: "Bad Eden Siege" }
             }).catch(()=>{});
           } catch {}
           try {
@@ -6795,11 +6795,11 @@ function attachRaidButtonToToolbar() {
         ev.preventDefault();
         try {
           const open = game?.bbttcc?.api?.raid?.openConsole || game.modules.get(RAID_ID)?.api?.openRaidConsole || globalThis.BBTTCC_OpenRaidConsole;
-          if (typeof open !== "function") return ui.notifications?.warn?.("BBTTCC Raid Console is not available.");
+          if (typeof open !== "function") return ui.notifications?.warn?.("Bad Eden Raid Console is not available.");
           await open();
         } catch (e) {
           console.error(TAG, "Toolbar button failed", e);
-          ui.notifications?.error?.("Could not open BBTTCC tool — see console.");
+          ui.notifications?.error?.("Could not open Bad Eden tool — see console.");
         }
       });
       el.__bbttccRaidClickBound = true;
@@ -6870,7 +6870,7 @@ function _characterBelongsToFaction(charActor, factionActor){
   const fid = factionActor.id;
   const fname = String(factionActor.name||"").trim();
 
-  // Common flag shapes we've used across BBTTCC iterations
+  // Common flag shapes we've used across Bad Eden iterations
   const candidates = [
     charActor.getFlag?.(FCT_ID, "factionId"),
     charActor.getFlag?.(FCT_ID, "ownerFactionId"),
@@ -8655,7 +8655,7 @@ async function _rcApplyCasualtiesToRoster({ attackerId, defenderId, attCount, de
   await _side("Defender", defenderId, defCount);
   if (lines.length) {
     ChatMessage.create({
-      speaker: { alias: "BBTTCC Raid" },
+      speaker: { alias: "Bad Eden Raid" },
       whisper: game.users.filter(u => u.isGM).map(u => u.id),
       content: `<section class="bbttcc-raid"><h3 style="margin:0 0 .25rem 0;">⚔ Casualties Applied to Roster</h3><ul style="margin:.2rem 0 0 .9rem;padding:0;">${lines.join("")}</ul></section>`
     });

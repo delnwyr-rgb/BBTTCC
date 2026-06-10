@@ -1,4 +1,4 @@
-/* BBTTCC — Hex Conditions Enhancer (conditions only)
+/* Bad Eden — Hex Conditions Enhancer (conditions only)
  * - Persistent per-hex conditions on bbttcc-territory hexes
  * - Auto-syncs from queued turn effects (radiation, cleanse, destroy)
  *

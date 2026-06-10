@@ -300,7 +300,7 @@
         await ChatMessage.create({
           content: "<p><b>Boss Behavior</b></p>" + foundry.utils.escapeHTML(String(behavior.log.whisperGM)),
           whisper: gmIds,
-          speaker: { alias: "BBTTCC Boss" }
+          speaker: { alias: "Bad Eden Boss" }
         }).catch(function(){});
       } catch (e) { /* ignore */ }
     }

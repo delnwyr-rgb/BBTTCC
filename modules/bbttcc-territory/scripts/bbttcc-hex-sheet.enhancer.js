@@ -1,5 +1,5 @@
 // modules/bbttcc-territory/scripts/bbttcc-hex-sheet.enhancer.js
-// BBTTCC — Hex Sheet 3.4 (syntax-safe AppV2; no optional chaining / nullish / spread)
+// Bad Eden — Hex Sheet 3.4 (syntax-safe AppV2; no optional chaining / nullish / spread)
 //
 // API: game.bbttcc.api.territory.openHexSheet(hexUuid)
 //
@@ -374,7 +374,7 @@
         classes: ["bbttcc","bbttcc-hex-sheet"],
         position: { width: 960, height: 600 },
         window: {
-          title: "BBTTCC — Hex Sheet",
+          title: "Bad Eden — Hex Sheet",
           resizable: true,
           controls: [],
           icon: ""
@@ -405,7 +405,7 @@
           // keep existing title
         } else {
           if (!this.options.window) this.options.window = {};
-          this.options.window.title = 'BBTTCC — Hex Sheet';
+          this.options.window.title = 'Bad Eden — Hex Sheet';
         }
       } catch (_eId) {}
       this._hexDoc = null;

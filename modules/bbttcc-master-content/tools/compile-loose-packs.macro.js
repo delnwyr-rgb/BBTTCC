@@ -1,4 +1,4 @@
-// BBTTCC — Compile Loose JSONs Into Compendium Packs (folder-aware, multi-pack)
+// Bad Eden — Compile Loose JSONs Into Compendium Packs (folder-aware, multi-pack)
 // ─────────────────────────────────────────────────────────────────────────────
 // Run this as a GM script macro. It walks loose JSON drafts under
 // modules/bbttcc-master-content/packs/{heritages,ancestries,classes/...}/
@@ -303,9 +303,9 @@ const foldersHtml = foldersCreated.length
   : `<p style="opacity:0.55;font-size:0.8em;margin:0.3rem 0 0;">No new folders created — matched against existing structure.</p>`;
 
 ChatMessage.create({
-  speaker: { alias: "BBTTCC Compile" },
+  speaker: { alias: "Bad Eden Compile" },
   content: `
-<h3>BBTTCC Compile Loose JSONs ${DRY_RUN ? "— DRY RUN" : ""}</h3>
+<h3>Bad Eden Compile Loose JSONs ${DRY_RUN ? "— DRY RUN" : ""}</h3>
 <p>${UPDATE_EXISTING ? "<b>UPDATE_EXISTING = true</b> (overwriting existing docs)" : "Existing docs skipped."}</p>
 <table style="border-collapse:collapse;width:100%;font-size:0.82em;">
   <thead><tr><th align="left">Source</th><th align="left">Target</th><th>Files</th><th>Created</th><th>Updated</th><th>Skipped</th><th>Errored</th></tr></thead>

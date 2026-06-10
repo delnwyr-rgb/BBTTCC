@@ -1,5 +1,5 @@
 /* agent-action-verbs.js
- * BBTTCC Agent API — Phase 1 §7.3
+ * Bad Eden Agent API — Phase 1 §7.3
  *
  * Nine pure-config Action (mutating, Layer 3) verbs wrapping
  * implementations scattered across bbttcc-core, bbttcc-factions,

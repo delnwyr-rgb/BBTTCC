@@ -1,4 +1,4 @@
-/* BBTTCC Auto-Link — RFI Boss Builder
+/* Bad Eden Auto-Link — RFI Boss Builder
  *
  * Sibling to npc-builder.js / monster-builder.js. Mints a type:"boss" actor
  * authored against the fourththing boss schema (identity / integrity / raid
