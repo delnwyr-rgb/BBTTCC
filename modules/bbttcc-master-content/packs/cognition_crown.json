@@ -4,11 +4,11 @@
   "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_crown-2.png",
   "system": {
     "description": {
-      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Synapse Line)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You are not a person with thoughts. You are a thought with a body.”</em></p>\n        <p><strong>Cognition Crown (1/Long Rest).</strong> For 1 minute, you gain resistance to psychic damage and advantage on all Intelligence and Wisdom checks. In BBTTCC play, once during the minute you may convert a failed check into a success by “recompiling” (describe the glitch).</p>",
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Synapse Line)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You are not a person with thoughts. You are a thought with a body.”</em></p>\n        <p><strong>Cognition Crown (1/Long Rest).</strong> For 1 minute, you gain resistance to psychic damage and advantage on all Intelligence and Wisdom checks. In Bad Eden play, once during the minute you may convert a failed check into a success by “recompiling” (describe the glitch).</p>",
       "chat": ""
     },
     "source": {
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "rules": "2024",
       "revision": 1
     },

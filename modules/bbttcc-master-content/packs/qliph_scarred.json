@@ -51,11 +51,11 @@
         "value": {},
         "level": 0,
         "title": "Strategic Hooks (Qliph-Scarred)",
-        "hint": "Grants OP and corruption hooks used by BBTTCC faction and world systems."
+        "hint": "Grants OP and corruption hooks used by Bad Eden faction and world systems."
       }
     ],
     "description": {
-      "value": "<p><strong>Normalized BBTTCC ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Qliph-Scarred.</strong> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><hr /><p><em><strong>Qliph-Scarred Traits</strong></em></p><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Ability Scores.</strong> Your background determines your ability score increases; Qliph-Scarred does not grant any ability score bonuses.</li></ul><p>Your Qliph-Scarred heritage grants you additional features through advancements (Item Grants) added during character creation.</p><p class=\"ft-heritages-line\"><strong>Heritages:</strong> Husk, Diabolic, Chthonic.</p>",
+      "value": "<p><strong>Normalized Bad Eden ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Qliph-Scarred.</strong> You walked out of a place that should have unmade you. The hollows and fractures in your soul never fully closed, and the world can feel the pressure leaking out.</p><hr /><p><em><strong>Qliph-Scarred Traits</strong></em></p><ul><li><strong>Creature Type.</strong> Humanoid (Qliph-Scarred).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Ability Scores.</strong> Your background determines your ability score increases; Qliph-Scarred does not grant any ability score bonuses.</li></ul><p>Your Qliph-Scarred heritage grants you additional features through advancements (Item Grants) added during character creation.</p><p class=\"ft-heritages-line\"><strong>Heritages:</strong> Husk, Diabolic, Chthonic.</p>",
       "chat": ""
     },
     "identifier": "qliph_scarred",
@@ -63,7 +63,7 @@
       "revision": 1,
       "rules": "2024",
       "book": "",
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "license": ""
     },
     "movement": {

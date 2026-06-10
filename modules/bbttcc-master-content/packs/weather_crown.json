@@ -4,11 +4,11 @@
   "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_weather_2.png",
   "system": {
     "description": {
-      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Sky-Threaded)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“The sky knows your name again.”</em></p>\n        <p><strong>Weather Crown (1/Long Rest).</strong> Over 1 minute, you call a localized weather effect in a 60-foot radius for 10 minutes (choose fog, wind, rain, or clear). The effect is real and interacts with fire, ranged attacks, and travel checks (GM adjudicates).</p>\n        <p><strong>BBTTCC Hook.</strong> Once per Turn, your faction may re-roll a Weather event affecting your current destination hex (take the new result).</p>",
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Sky-Threaded)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“The sky knows your name again.”</em></p>\n        <p><strong>Weather Crown (1/Long Rest).</strong> Over 1 minute, you call a localized weather effect in a 60-foot radius for 10 minutes (choose fog, wind, rain, or clear). The effect is real and interacts with fire, ranged attacks, and travel checks (GM adjudicates).</p>\n        <p><strong>Bad Eden Hook.</strong> Once per Turn, your faction may re-roll a Weather event affecting your current destination hex (take the new result).</p>",
       "chat": ""
     },
     "source": {
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "rules": "2024",
       "revision": 1
     },

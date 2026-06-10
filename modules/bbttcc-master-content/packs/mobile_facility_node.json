@@ -4,11 +4,11 @@
   "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_bunker_2.png",
   "system": {
     "description": {
-      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Salvage Line)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You are a workshop that learned to walk.”</em></p>\n        <p><strong>Mobile Facility Node (1/Long Rest).</strong> Over 1 minute, deploy a temporary station (a glowing fold-out altar of tools) that lasts 10 minutes. While active, you and allies within 10 feet have advantage on crafting, repairing, and disabling devices. In BBTTCC strategic play, your faction may treat one <em>Repair Rig</em> or <em>Repair Facility</em> activity as costing 1 less OP once per Turn (GM / system).</p>",
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Salvage Line)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You are a workshop that learned to walk.”</em></p>\n        <p><strong>Mobile Facility Node (1/Long Rest).</strong> Over 1 minute, deploy a temporary station (a glowing fold-out altar of tools) that lasts 10 minutes. While active, you and allies within 10 feet have advantage on crafting, repairing, and disabling devices. In Bad Eden strategic play, your faction may treat one <em>Repair Rig</em> or <em>Repair Facility</em> activity as costing 1 less OP once per Turn (GM / system).</p>",
       "chat": ""
     },
     "source": {
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "rules": "2024",
       "revision": 1
     },

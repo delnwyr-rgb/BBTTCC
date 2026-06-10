@@ -1,12 +1,12 @@
 {
-  "name": "Refraction of Truth (BBTTCC)",
+  "name": "Refraction of Truth (Bad Eden)",
   "type": "subclass",
   "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Oldenborne_1.png",
   "system": {
     "category": "doctrine",
     "classIdentifier": "wyrdlens-adept",
     "source": {
-      "custom": "BBTTCC Originals — Sprint F",
+      "custom": "Bad Eden Originals — Sprint F",
       "revision": 1,
       "rules": "2026"
     },

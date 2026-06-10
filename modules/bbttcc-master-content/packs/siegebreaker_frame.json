@@ -4,11 +4,11 @@
   "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/BBTTCC_button_icon_breaker_wall_3.png",
   "system": {
     "description": {
-      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Exo-Knight Line)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“Walls are opinions.”</em></p>\n        <p><strong>Siegebreaker Frame (1/Long Rest).</strong> For 1 minute, your attacks ignore resistance to bludgeoning/piercing/slashing, and you deal double damage to objects and structures. In BBTTCC strategic play, your faction treats one Facility target as if its defense tier were 1 lower for a single Raid round (GM / system).</p>",
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Circuitborn (Exo-Knight Line)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“Walls are opinions.”</em></p>\n        <p><strong>Siegebreaker Frame (1/Long Rest).</strong> For 1 minute, your attacks ignore resistance to bludgeoning/piercing/slashing, and you deal double damage to objects and structures. In Bad Eden strategic play, your faction treats one Facility target as if its defense tier were 1 lower for a single Raid round (GM / system).</p>",
       "chat": ""
     },
     "source": {
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "rules": "2024",
       "revision": 1
     },

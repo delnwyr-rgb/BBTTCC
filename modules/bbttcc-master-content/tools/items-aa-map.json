@@ -1,29 +1,137 @@
 [
-{"name":"Anchor of the Known","animTag":"shield_ice","iconFile":null},
-{"name":"Hunting Rifle","animTag":"arrow","iconFile":null},
-{"name":"Singing Hammer","animTag":"club","iconFile":null},
-{"name":"Plasma Lance","animTag":"fire_bolt","iconFile":"bbttcc_icons_ray_1.png"},
-{"name":"Laser Pistol, Rad","animTag":"holy_bolt","iconFile":null},
-{"name":"Resonance Howler","animTag":"shatter","iconFile":"bbttcc_icons_shout_1.png"},
-{"name":"Horns of Bad Luck","animTag":"fist","iconFile":null},
-{"name":"Sap","animTag":"club","iconFile":null},
-{"name":"Lantern of Unforgotten Light","animTag":"bless","iconFile":null},
-{"name":"Snack Machine Familiar","animTag":"bless","iconFile":null},
-{"name":"Scrubber Harness","animTag":"heal","iconFile":null},
-{"name":"Soulbound Hex-Reaver","animTag":"sword","iconFile":"BBTTCC_button_icon_void_edge_1.png"},
-{"name":"Brass Knife of the Quiet Word","animTag":"dagger","iconFile":null},
-{"name":"Pact-Pen Stylus","animTag":"dagger","iconFile":null},
-{"name":"Mortar Battery","animTag":"shatter","iconFile":"bbttcc_icons_siege_2.png"},
-{"name":"Discount Summoning Circle (10% off)","animTag":"evocation","iconFile":null},
-{"name":"Yesodic Hammer of the First Word","animTag":"club","iconFile":null},
-{"name":"Gilded Atonement Blade","animTag":"sword","iconFile":null},
-{"name":"Potion of Radical Chill","animTag":"frost_impact","iconFile":null},
-{"name":"Phase Disruptor","animTag":"force_missile","iconFile":"BBTTCC_button_icon_dimensional_1.png"},
-{"name":"Frikkin' Laser Blade Saber","animTag":"sword","iconFile":null},
-{"name":"Rad‑Bloom Injector","animTag":"heal","iconFile":null},
-{"name":"Apology Knife, Mass-Produced","animTag":"dagger","iconFile":null},
-{"name":"Laser Rifle, Rad","animTag":"holy_bolt","iconFile":null},
-{"name":"Yesodic Edge","animTag":"sword","iconFile":null},
-{"name":"Hex-Script Pistol","animTag":"eldritch","iconFile":"BBTTCC_button_icon_hex_1.png"},
-{"name":"Mercy Driver","animTag":"club","iconFile":null}
+  {
+    "name": "Anchor of the Known",
+    "animTag": "shield_ice",
+    "iconFile": null
+  },
+  {
+    "name": "Hunting Rifle",
+    "animTag": "arrow",
+    "iconFile": null
+  },
+  {
+    "name": "Singing Hammer",
+    "animTag": "club",
+    "iconFile": null
+  },
+  {
+    "name": "Plasma Lance",
+    "animTag": "fire_bolt",
+    "iconFile": "bbttcc_icons_ray_1.png"
+  },
+  {
+    "name": "Laser Pistol, Rad",
+    "animTag": "holy_bolt",
+    "iconFile": null
+  },
+  {
+    "name": "Resonance Howler",
+    "animTag": "shatter",
+    "iconFile": "bbttcc_icons_shout_1.png"
+  },
+  {
+    "name": "Horns of Bad Luck",
+    "animTag": "fist",
+    "iconFile": null
+  },
+  {
+    "name": "Sap",
+    "animTag": "club",
+    "iconFile": null
+  },
+  {
+    "name": "Lantern of Unforgotten Light",
+    "animTag": "bless",
+    "iconFile": null
+  },
+  {
+    "name": "Snack Machine Familiar",
+    "animTag": "bless",
+    "iconFile": null
+  },
+  {
+    "name": "Scrubber Harness",
+    "animTag": "heal",
+    "iconFile": null
+  },
+  {
+    "name": "Soulbound Hex-Reaver",
+    "animTag": "sword",
+    "iconFile": "BBTTCC_button_icon_void_edge_1.png"
+  },
+  {
+    "name": "Brass Knife of the Quiet Word",
+    "animTag": "dagger",
+    "iconFile": null
+  },
+  {
+    "name": "Pact-Pen Stylus",
+    "animTag": "dagger",
+    "iconFile": null
+  },
+  {
+    "name": "Mortar Battery",
+    "animTag": "shatter",
+    "iconFile": "bbttcc_icons_siege_2.png"
+  },
+  {
+    "name": "Discount Summoning Circle (10% off)",
+    "animTag": "evocation",
+    "iconFile": null
+  },
+  {
+    "name": "Yesodic Hammer of the First Word",
+    "animTag": "club",
+    "iconFile": null
+  },
+  {
+    "name": "Gilded Atonement Blade",
+    "animTag": "sword",
+    "iconFile": null
+  },
+  {
+    "name": "Potion of Radical Chill",
+    "animTag": "frost_impact",
+    "iconFile": null
+  },
+  {
+    "name": "Phase Disruptor",
+    "animTag": "force_missile",
+    "iconFile": "BBTTCC_button_icon_dimensional_1.png"
+  },
+  {
+    "name": "Frikkin' Laser Blade Saber",
+    "animTag": "sword",
+    "iconFile": null
+  },
+  {
+    "name": "Rad‑Bloom Injector",
+    "animTag": "heal",
+    "iconFile": null
+  },
+  {
+    "name": "Apology Knife, Mass-Produced",
+    "animTag": "dagger",
+    "iconFile": null
+  },
+  {
+    "name": "Laser Rifle, Rad",
+    "animTag": "holy_bolt",
+    "iconFile": null
+  },
+  {
+    "name": "Yesodic Edge",
+    "animTag": "sword",
+    "iconFile": null
+  },
+  {
+    "name": "Hex-Script Pistol",
+    "animTag": "eldritch",
+    "iconFile": "BBTTCC_button_icon_hex_1.png"
+  },
+  {
+    "name": "Mercy Driver",
+    "animTag": "club",
+    "iconFile": null
+  }
 ]

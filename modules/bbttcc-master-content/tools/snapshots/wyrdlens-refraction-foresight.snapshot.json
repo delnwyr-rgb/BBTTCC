@@ -1,12 +1,12 @@
 {
-  "name": "Refraction of Foresight (BBTTCC)",
+  "name": "Refraction of Foresight (Bad Eden)",
   "type": "subclass",
   "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Human_Erectus_2.png",
   "system": {
     "category": "doctrine",
     "classIdentifier": "wyrdlens-adept",
     "source": {
-      "custom": "BBTTCC Originals — Sprint F",
+      "custom": "Bad Eden Originals — Sprint F",
       "revision": 1,
       "rules": "2026"
     },

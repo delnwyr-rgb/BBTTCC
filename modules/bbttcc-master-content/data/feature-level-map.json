@@ -255,11 +255,11 @@
       "kind": "class",
       "label": "cosmic_linguist",
       "parents": [
-        "Annotator (BBTTCC)",
+        "Annotator (Bad Eden)",
         "Cosmic Linguist",
-        "Metaphor Apostle (BBTTCC)",
-        "Syntax Warden (BBTTCC)",
-        "The Redactor (BBTTCC)"
+        "Metaphor Apostle (Bad Eden)",
+        "Syntax Warden (Bad Eden)",
+        "The Redactor (Bad Eden)"
       ],
       "levels": {},
       "stats": {
@@ -296,7 +296,7 @@
       "kind": "doctrine",
       "label": "Path of the Faultline",
       "parents": [
-        "Path of the Faultline (BBTTCC)"
+        "Path of the Faultline (Bad Eden)"
       ],
       "levels": {
         "OP Shear (BBTTCC)": 3
@@ -333,7 +333,7 @@
       "kind": "doctrine",
       "label": "Pth of the Gentle Demolition",
       "parents": [
-        "Path of the Gentle Demolition (BBTTCC)"
+        "Path of the Gentle Demolition (Bad Eden)"
       ],
       "levels": {},
       "stats": {
@@ -346,8 +346,8 @@
             "name": "Peacekeeper's Detonation"
           },
           {
-            "file": "💥 Level 3 — Non-Lethal Blast (BBTTCC).json",
-            "name": "Non-Lethal Blast (BBTTCC)"
+            "file": "💥 Level 3 — Non-Lethal Blast (Bad Eden).json",
+            "name": "Non-Lethal Blast (Bad Eden)"
           },
           {
             "file": "🕸️ Level 6 — Shock Net.json",
@@ -368,7 +368,7 @@
       "kind": "doctrine",
       "label": "Pth of the Siege Ascendant",
       "parents": [
-        "Path of the Siege Ascendant (BBTTCC)"
+        "Path of the Siege Ascendant (Bad Eden)"
       ],
       "levels": {},
       "stats": {
@@ -389,8 +389,8 @@
             "name": "Crown of the Siege"
           },
           {
-            "file": "💥 Level 3 — Siege Ascendant (BBTTCC).json",
-            "name": "Siege Ascendant (BBTTCC)"
+            "file": "💥 Level 3 — Siege Ascendant (Bad Eden).json",
+            "name": "Siege Ascendant (Bad Eden)"
           },
           {
             "file": "🧱 Level 6 — Echo Breach.json",
@@ -403,7 +403,7 @@
       "kind": "doctrine",
       "label": "Trance of the Quiet Sun",
       "parents": [
-        "Trance of the Quiet Sun (BBTTCC)"
+        "Trance of the Quiet Sun (Bad Eden)"
       ],
       "levels": {
         "Quiet March": 10,
@@ -424,7 +424,7 @@
       "kind": "doctrine",
       "label": "Trance of the Sapphire Gate",
       "parents": [
-        "Trance of the Sapphire Gate (BBTTCC)"
+        "Trance of the Sapphire Gate (Bad Eden)"
       ],
       "levels": {
         "Bright Hypnopomp": 10,
@@ -445,7 +445,7 @@
       "kind": "doctrine",
       "label": "Trance of the Thousand Faces",
       "parents": [
-        "Trance of the Thousand Faces (BBTTCC)"
+        "Trance of the Thousand Faces (Bad Eden)"
       ],
       "levels": {
         "Borrowed Voice": 10,
@@ -466,7 +466,7 @@
       "kind": "doctrine",
       "label": "Strategos",
       "parents": [
-        "Strategos (BBTTCC)"
+        "Strategos (Bad Eden)"
       ],
       "levels": {
         "Strategos: Battlefield Logistics": 7,
@@ -487,7 +487,7 @@
       "kind": "doctrine",
       "label": "Mandate of Accord",
       "parents": [
-        "Mandate of Accord (BBTTCC)"
+        "Mandate of Accord (Bad Eden)"
       ],
       "levels": {
         "Resonant Truce": 10,
@@ -508,7 +508,7 @@
       "kind": "doctrine",
       "label": "Mandate of Overwatch",
       "parents": [
-        "Mandate of Overwatch (BBTTCC)"
+        "Mandate of Overwatch (Bad Eden)"
       ],
       "levels": {
         "Rally Net": 10,
@@ -529,7 +529,7 @@
       "kind": "doctrine",
       "label": "Mandate of Resolve",
       "parents": [
-        "Mandate of Resolve (BBTTCC)"
+        "Mandate of Resolve (Bad Eden)"
       ],
       "levels": {
         "Calm Push": 10,
@@ -550,7 +550,7 @@
       "kind": "doctrine",
       "label": "Route of the Ashen Run",
       "parents": [
-        "Route of the Ashen Run (BBTTCC)"
+        "Route of the Ashen Run (Bad Eden)"
       ],
       "levels": {
         "Wake of Routes": 10,
@@ -571,7 +571,7 @@
       "kind": "doctrine",
       "label": "Route of the Blackchannel",
       "parents": [
-        "Route of the Blackchannel (BBTTCC)"
+        "Route of the Blackchannel (Bad Eden)"
       ],
       "levels": {
         "Countertrace": 10,
@@ -592,7 +592,7 @@
       "kind": "doctrine",
       "label": "Route of the Emerald Relief",
       "parents": [
-        "Route of the Emerald Relief (BBTTCC)"
+        "Route of the Emerald Relief (Bad Eden)"
       ],
       "levels": {
         "Decoy Column": 10,
@@ -613,7 +613,7 @@
       "kind": "doctrine",
       "label": "Forge of Bound Light",
       "parents": [
-        "Forge of Bound Light (BBTTCC)"
+        "Forge of Bound Light (Bad Eden)"
       ],
       "levels": {},
       "stats": {
@@ -623,7 +623,7 @@
         "samples": [
           {
             "file": "Bound Light.json",
-            "name": "Bound Light (BBTTCC)"
+            "name": "Bound Light (Bad Eden)"
           },
           {
             "file": "Forge Blessing.json",
@@ -648,7 +648,7 @@
       "kind": "doctrine",
       "label": "Forge of Victory",
       "parents": [
-        "Forge of Victory (BBTTCC)"
+        "Forge of Victory (Bad Eden)"
       ],
       "levels": {},
       "stats": {
@@ -670,7 +670,7 @@
           },
           {
             "file": "Standard of Will.json",
-            "name": "Standard of Will (BBTTCC)"
+            "name": "Standard of Will (Bad Eden)"
           },
           {
             "file": "Triumph Weave.json",
@@ -683,7 +683,7 @@
       "kind": "doctrine",
       "label": "Forge of the Spark Reclaimer",
       "parents": [
-        "Forge of the Spark Reclaimer (BBTTCC)"
+        "Forge of the Spark Reclaimer (Bad Eden)"
       ],
       "levels": {},
       "stats": {
@@ -718,7 +718,7 @@
       "kind": "doctrine",
       "label": "Refraction of Foresight",
       "parents": [
-        "Refraction of Foresight (BBTTCC)"
+        "Refraction of Foresight (Bad Eden)"
       ],
       "levels": {
         "Split Beam": 10,
@@ -739,7 +739,7 @@
       "kind": "doctrine",
       "label": "Refraction of Mercy",
       "parents": [
-        "Refraction of Mercy (BBTTCC)"
+        "Refraction of Mercy (Bad Eden)"
       ],
       "levels": {
         "Soft Focus": 10,
@@ -760,7 +760,7 @@
       "kind": "doctrine",
       "label": "Refraction of Truth",
       "parents": [
-        "Refraction of Truth (BBTTCC)"
+        "Refraction of Truth (Bad Eden)"
       ],
       "levels": {
         "Prism Ledger": 10,

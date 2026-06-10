@@ -4,11 +4,11 @@
   "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_climb.png",
   "system": {
     "description": {
-      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Felid)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“Cities were made for you. Ruins too.”</em></p>\n        <p><strong>King of Alleys (1/Long Rest).</strong> For 10 minutes, you gain a climbing speed equal to your walking speed, and you ignore difficult terrain in urban ruins. In BBTTCC travel, once per Turn you may reduce an Intrigue travel cost by 1 if your route passes through ruins (GM/system).</p>",
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Felid)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“Cities were made for you. Ruins too.”</em></p>\n        <p><strong>King of Alleys (1/Long Rest).</strong> For 10 minutes, you gain a climbing speed equal to your walking speed, and you ignore difficult terrain in urban ruins. In Bad Eden travel, once per Turn you may reduce an Intrigue travel cost by 1 if your route passes through ruins (GM/system).</p>",
       "chat": ""
     },
     "source": {
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "rules": "2024",
       "revision": 1
     },

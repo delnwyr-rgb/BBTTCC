@@ -4,11 +4,11 @@
   "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_tunnel_2.png",
   "system": {
     "description": {
-      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Mustelid)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“You know where the earth is soft, even when it looks like stone.”</em></p>\n        <p><strong>Tunnelcraft.</strong> You ignore difficult terrain in caves, tunnels, rubble, and ruins. In BBTTCC travel, your party treats one ‘blocked’ route segment as ‘passable’ once per Turn if you lead (GM/system).</p>",
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Furrykin (Mustelid)</em> at level 11; now available as an optional ancestry feat.</p><p><em>“You know where the earth is soft, even when it looks like stone.”</em></p>\n        <p><strong>Tunnelcraft.</strong> You ignore difficult terrain in caves, tunnels, rubble, and ruins. In Bad Eden travel, your party treats one ‘blocked’ route segment as ‘passable’ once per Turn if you lead (GM/system).</p>",
       "chat": ""
     },
     "source": {
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "rules": "2024",
       "revision": 1
     },

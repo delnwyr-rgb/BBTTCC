@@ -4,11 +4,11 @@
   "img": "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_spellbook_5.png",
   "system": {
     "description": {
-      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Lumenwrought)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You remember yourself. And reality flinches.”</em></p>\n        <p><strong>Mythic Recollection (1/Long Rest).</strong> For 1 minute, you become painfully real. You gain resistance to all damage except force, and hostile creatures within 10 feet have disadvantage on saving throws against your spells and abilities (they are caught in your gravity of meaning).</p>\n        <p><strong>BBTTCC Hook.</strong> Once per Turn, you may declare a minor narrative truth about the current hex (“this place once housed a shrine,” “there is a forgotten tunnel,” etc.). The GM may accept, twist, or charge OP for it—BBTTCC style.</p>",
+      "value": "<p><strong>Normalized Ancestry Feat.</strong> Formerly granted automatically by <em>Oldenborn (Lumenwrought)</em> at level 17; now available as an optional ancestry feat.</p><p><em>“You remember yourself. And reality flinches.”</em></p>\n        <p><strong>Mythic Recollection (1/Long Rest).</strong> For 1 minute, you become painfully real. You gain resistance to all damage except force, and hostile creatures within 10 feet have disadvantage on saving throws against your spells and abilities (they are caught in your gravity of meaning).</p>\n        <p><strong>Bad Eden Hook.</strong> Once per Turn, you may declare a minor narrative truth about the current hex (“this place once housed a shrine,” “there is a forgotten tunnel,” etc.). The GM may accept, twist, or charge OP for it—Bad Eden style.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "rules": "2024",
       "revision": 1
     },

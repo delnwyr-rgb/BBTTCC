@@ -5,11 +5,11 @@
   "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/RayCat.png",
   "system": {
     "description": {
-      "value": "<p><strong>Furrykin.</strong> Normalized BBTTCC ancestry root.</p><p>Select one heritage separately when building the character: <strong>Felid, Leporid, Mustelid, Ursid, Vulpin</strong>.</p><p>This root grants the shared Furrykin core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>\u201cYou are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.\u201d</em></p>\n<p><strong>Wildframe.</strong> Your body is built for a world that bites back. You have advantage on saving throws against disease and environmental poison.</p>\n<p><strong>Keen Sense.</strong> Choose one: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You have advantage on Perception checks relying on that sense.</p>\n<p><strong>Clade Instinct.</strong> Choose a Furrykin clade (Vulpin, Mustelid, Leporid, Ursid, Felid). Your clade grants Tier powers as you level.</p>\n<p><strong>Pack/Trouble Magnet.</strong> When you first meet an NPC group, the GM may decide you are treated as: <em>harmless</em>, <em>useful</em>, or <em>suspicious</em>. You look like folklore with a knife. People react.</p>",
+      "value": "<p><strong>Furrykin.</strong> Normalized Bad Eden ancestry root.</p><p>Select one heritage separately when building the character: <strong>Felid, Leporid, Mustelid, Ursid, Vulpin</strong>.</p><p>This root grants the shared Furrykin core trait package and preserves live UUID compatibility for existing feature items.</p><p><em>“You are not an animal that learned to talk. You are a person the world made with fur because it needed you to survive.”</em></p>\n<p><strong>Wildframe.</strong> Your body is built for a world that bites back. You have advantage on saving throws against disease and environmental poison.</p>\n<p><strong>Keen Sense.</strong> Choose one: <em>Keen Smell</em>, <em>Keen Hearing</em>, or <em>Keen Sight</em>. You have advantage on Perception checks relying on that sense.</p>\n<p><strong>Clade Instinct.</strong> Choose a Furrykin clade (Vulpin, Mustelid, Leporid, Ursid, Felid). Your clade grants Tier powers as you level.</p>\n<p><strong>Pack/Trouble Magnet.</strong> When you first meet an NPC group, the GM may decide you are treated as: <em>harmless</em>, <em>useful</em>, or <em>suspicious</em>. You look like folklore with a knife. People react.</p>",
       "chat": ""
     },
     "source": {
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "rules": "2024",
       "revision": 1,
       "book": "",

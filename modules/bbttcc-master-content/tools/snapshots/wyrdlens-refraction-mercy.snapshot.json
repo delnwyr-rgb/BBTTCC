@@ -1,12 +1,12 @@
 {
-  "name": "Refraction of Mercy (BBTTCC)",
+  "name": "Refraction of Mercy (Bad Eden)",
   "type": "subclass",
   "img": "art/bbttcc/GOTTGAIT/BBTTCC_Character_Options/Raid%20Maneuvers/bbttcc_maneuvers_crown_of_mercy.jpeg",
   "system": {
     "category": "doctrine",
     "classIdentifier": "wyrdlens-adept",
     "source": {
-      "custom": "BBTTCC Originals — Sprint F",
+      "custom": "Bad Eden Originals — Sprint F",
       "revision": 1,
       "rules": "2026"
     },

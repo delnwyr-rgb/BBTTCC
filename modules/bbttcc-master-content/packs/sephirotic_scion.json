@@ -51,11 +51,11 @@
         "value": {},
         "level": 0,
         "title": "Scion: Strategic Hooks",
-        "hint": "Grants OP bonuses and Sephirotic-alignment hooks used by BBTTCC faction and world systems."
+        "hint": "Grants OP bonuses and Sephirotic-alignment hooks used by Bad Eden faction and world systems."
       }
     ],
     "description": {
-      "value": "<p><strong>Normalized BBTTCC ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><hr /><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Ability Scores.</strong> Your background determines your ability score increases; Sephirotic Scion does not grant any ability score bonuses.</li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p><p class=\"ft-heritages-line\"><strong>Heritages:</strong> Cherubic, Ophanic, Seraphic.</p>",
+      "value": "<p><strong>Normalized Bad Eden ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Sephirotic Scion.</strong> Your blood remembers the higher spheres. Light hangs around you a little too long, prayers sometimes answer themselves, and the world’s moral architecture feels less like an abstraction and more like the weather report.</p><hr /><p><em><strong>Sephirotic Scion Traits</strong></em></p><ul><li><strong>Creature Type.</strong> Humanoid (Sephirotic).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Ability Scores.</strong> Your background determines your ability score increases; Sephirotic Scion does not grant any ability score bonuses.</li></ul><p>Your Sephirotic heritage grants you additional features through advancements (Item Grants) added during character creation: sephirotic physiology, attunement to higher patterns, holy conduction, the Light of Harmony, and strategic hooks that tilt factions toward soft power, diplomacy, and alignment work.</p><p class=\"ft-heritages-line\"><strong>Heritages:</strong> Cherubic, Ophanic, Seraphic.</p>",
       "chat": ""
     },
     "identifier": "sephirotic_scion",
@@ -63,7 +63,7 @@
       "revision": 1,
       "rules": "2024",
       "book": "",
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "license": ""
     },
     "movement": {

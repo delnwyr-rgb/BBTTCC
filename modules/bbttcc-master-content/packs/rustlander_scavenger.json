@@ -105,11 +105,11 @@
         "value": {},
         "level": 0,
         "title": "Strategic Hooks (Rustlander)",
-        "hint": "Grants OP edges and salvage hooks used by BBTTCC faction and world systems."
+        "hint": "Grants OP edges and salvage hooks used by Bad Eden faction and world systems."
       }
     ],
     "description": {
-      "value": "<p><strong>Normalized BBTTCC ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Rustlander Scavenger.</strong> You grew up in the skeletons of dead cities, breathing fumes that would knock most people flat and learning the value of anything that wasn\u2019t bolted down. Rustlanders read ruins the way other people read road signs, and you can feel the politics of a marketplace at a glance.</p><hr /><p><em><strong>Rustlander Traits</strong></em></p><ul><li><strong>Creature Type.</strong> Humanoid (Rustlander).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Ability Scores.</strong> Your background determines your ability score increases; Rustlander Scavenger does not grant any ability score bonuses.</li></ul><p>Your Rustlander heritage grants you additional features through advancements (Item Grants) added during character creation, including toxic resistance, ruin-reading instincts, and faction hooks that tilt operations toward salvage and urban advantage.</p>",
+      "value": "<p><strong>Normalized Bad Eden ancestry.</strong> This item keeps the original species UUID while fitting the ancestry-root layer of the new identity stack.</p><p><strong>Rustlander Scavenger.</strong> You grew up in the skeletons of dead cities, breathing fumes that would knock most people flat and learning the value of anything that wasn’t bolted down. Rustlanders read ruins the way other people read road signs, and you can feel the politics of a marketplace at a glance.</p><hr /><p><em><strong>Rustlander Traits</strong></em></p><ul><li><strong>Creature Type.</strong> Humanoid (Rustlander).</li><li><strong>Size.</strong> You are Medium.</li><li><strong>Speed.</strong> Your walking speed is 30 feet.</li><li><strong>Ability Scores.</strong> Your background determines your ability score increases; Rustlander Scavenger does not grant any ability score bonuses.</li></ul><p>Your Rustlander heritage grants you additional features through advancements (Item Grants) added during character creation, including toxic resistance, ruin-reading instincts, and faction hooks that tilt operations toward salvage and urban advantage.</p>",
       "chat": ""
     },
     "identifier": "rustlander_scavenger",
@@ -117,7 +117,7 @@
       "revision": 1,
       "rules": "2024",
       "book": "",
-      "custom": "BBTTCC",
+      "custom": "Bad Eden",
       "license": ""
     },
     "movement": {
