@@ -1582,12 +1582,15 @@ export function openRadiation(actor) {
   const rawSys  = actor.system?.system ?? actor.system;
   const rp      = rawSys?.radiation?.rp ?? 0;
   const radApi  = game.bbttcc.api.radiation;
-  const level   = radApi?.levelFor?.(rp) ?? "none";
+  // levelFor() returns a LEVEL object {name, key, min, max} — use .name for display.
+  // Older code rendered the whole object → "[object Object]" in the dialog.
+  const level     = radApi?.levelFor?.(rp);
+  const levelName = (typeof level === "string") ? level : (level?.name ?? "—");
   new Dialog({
     title:   `Radiation — ${actor.name}`,
     content: `<div style="padding:0.5rem">
       <p style="margin:0 0 0.5rem"><strong>Current RP:</strong> ${rp}</p>
-      <p style="margin:0 0 0.5rem"><strong>Level:</strong> ${level}</p>
+      <p style="margin:0 0 0.5rem"><strong>Level:</strong> ${levelName}</p>
       <div style="display:flex;gap:0.5rem;margin-top:0.75rem">
         <label style="font-size:0.8rem">Adjust RP</label>
         <input type="number" id="ft-rp-delta" value="0" style="width:60px"/>
