@@ -157,6 +157,14 @@ import RfiItems    from "./rfi-items.js";
 import RfiCrafting from "./rfi-crafting.js";
 import RfiHarvest  from "./rfi-harvest.js";
 
+import {
+  registerSchemaVersionSetting,
+  runMigrations,
+  getStoredSchemaVersion,
+  CURRENT_SCHEMA_VERSION,
+  MIGRATIONS,
+} from "./migrations/index.js";
+
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const FT = {
@@ -12051,10 +12059,23 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
   });
 }
 
+// ─── Schema migrations ───────────────────────────────────────────────────────
+// Registered at top-level (module-load time) BEFORE every other Hooks.once(
+// "ready", …) in this file, so it runs FIRST on ready — pending data migrations
+// apply before other ready handlers read potentially-stale shapes. GM-gated and
+// run-once-per-world (see migrations/index.js).
+Hooks.once("ready", () => runMigrations());
+
 // ─── Foundry init ──────────────────────────────────────────────────────────────
 
 Hooks.once("init", function () {
   console.log("Roll for Initiation | Initializing v0.4.0 — Foundation Refactor");
+
+  // Schema-migration framework (SHIP_ROADMAP.md §3/§5). Register the version
+  // setting at init — before anything reads it — so the ready-time migration
+  // runner (registered just above the init hook, so it fires first) can compare
+  // the world's stored schema version against the code target.
+  registerSchemaVersionSetting();
 
   // Bad Eden Display font — registered so it appears in Foundry's font dropdowns
   // (Drawings, Scene text, journal rich-text editor). CSS usage is also wired
@@ -12083,6 +12104,17 @@ Hooks.once("init", function () {
     items:   RfiItems,
     craft:   RfiCrafting,
     harvest: RfiHarvest,
+    // Schema-migration framework — debug/repair surface for macros & console.
+    //   game.fourththing.migrations.run()            → apply pending migrations
+    //   game.fourththing.migrations.run({force:true})→ re-run all (idempotent)
+    //   game.fourththing.migrations.stored           → world's stored version
+    //   game.fourththing.migrations.current          → code target version
+    migrations: {
+      run: (opts) => runMigrations(opts),
+      list: () => MIGRATIONS.map(m => ({ version: m.version, name: m.name })),
+      get stored()  { return getStoredSchemaVersion(); },
+      get current() { return CURRENT_SCHEMA_VERSION; },
+    },
     // Engine helpers exposed for tools macros + cross-module callers
     collectRerolls,
     applyRerollGrants,

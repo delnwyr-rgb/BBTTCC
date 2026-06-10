@@ -2,10 +2,15 @@
   "id": "fourththing",
   "title": "Roll for Initiation (Bad Eden Core Rules)",
   "description": "Core ruleset for Bad Eden: Roll for Initiation. Steward-first play, manifestation, hex-scale decisions, Tikkun, Darkness, and Radiation.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "compatibility": {
     "minimum": "11",
     "verified": "13"
+  },
+  "flags": {
+    "fourththing": {
+      "schemaVersion": 1
+    }
   },
   "authors": [
     {
