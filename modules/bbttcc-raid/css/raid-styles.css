@@ -1,4 +1,4 @@
-/* BBTTCC — Raid Console HUD Skin
+/* Bad Eden — Raid Console HUD Skin
    Re-skin (look-and-feel only): brings the Raid/Planner console in line with the
    dark-glass aesthetic of the Siege HUD (siege-hud.js) and Courtly Intrigue HUD
    (raid-courtly.hud.js). Functionality/structure unchanged — this file only
@@ -564,7 +564,7 @@
 }
 
 
-/* BBTTCC — Activity Planner HUD Skin */
+/* Bad Eden — Activity Planner HUD Skin */
 
 
 /* The planner app should include one of these classes on the Application:
@@ -797,7 +797,7 @@
   border-radius: 3px;
 }
 
-/* BBTTCC — OP Gating Chips (Campaign Dialog) */
+/* Bad Eden — OP Gating Chips (Campaign Dialog) */
 .bbttcc-choice-roll-dialog .bbttcc-op-chips {
   display: flex;
   gap: 0.35rem;

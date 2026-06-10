@@ -3,14 +3,12 @@
   "BBTTCC.Territory.ClaimHex": "Claim Hex",
   "BBTTCC.Territory.NoHexSelected": "No hex selected.",
   "BBTTCC.Territory.Unclaimed": "Unclaimed",
-
   "BBTTCC.Common.Claim": "Claim",
   "BBTTCC.Common.Cancel": "Cancel",
   "BBTTCC.Common.Release": "Release",
   "BBTTCC.Common.Focus": "Focus",
   "BBTTCC.Common.Unclaimed": "Unclaimed",
-
-  "BBTTCC.Dashboard.Title": "BBTTCC Territory Dashboard",
+  "BBTTCC.Dashboard.Title": "Bad Eden Territory Dashboard",
   "BBTTCC.Dashboard.Scene": "Scene",
   "BBTTCC.Dashboard.HexCount": "Hexes",
   "BBTTCC.Dashboard.CreateHex": "Create Hex at Center",
@@ -20,6 +18,5 @@
   "BBTTCC.Dashboard.Size": "Size",
   "BBTTCC.Dashboard.Pop": "Population",
   "BBTTCC.Dashboard.Capital": "Capital",
-
-  "BBTTCC.HexConfig.Title": "BBTTCC Hex Configuration"
+  "BBTTCC.HexConfig.Title": "Bad Eden Hex Configuration"
 }

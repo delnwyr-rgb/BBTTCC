@@ -1,16 +1,16 @@
 {
-  "_comment": "BBTTCC Auto-Link — minimal i18n (safe to expand later)",
+  "_comment": "Bad Eden Auto-Link — minimal i18n (safe to expand later)",
   "BBTTCC": {
     "AutoLink": {
-      "CreateCharacter": "Create Character (BBTTCC)",
+      "CreateCharacter": "Create Character (Bad Eden)",
       "Wizard": {
-        "Title": "Create BBTTCC Character",
+        "Title": "Create Bad Eden Character",
         "Basics": "Basics",
         "Faction": "Faction",
         "DnD5E": "D&D5E Choices",
         "SpeciesUUID": "Species (paste UUID)",
         "ClassUUID": "Class (paste UUID)",
-        "Options": "BBTTCC Options",
+        "Options": "Bad Eden Options",
         "Archetype": "Archetype",
         "Crew": "Crew Type",
         "Sephirot": "Sephirotic Alignment",
@@ -20,11 +20,11 @@
         "Create": "Create Character"
       },
       "Sidepanel": {
-        "Title": "BBTTCC",
+        "Title": "Bad Eden",
         "Radiation": "Radiation",
         "Sparks": "Tikkun Sparks",
         "RaidXP": "Raid XP",
-        "Save": "Save BBTTCC"
+        "Save": "Save Bad Eden"
       }
     }
   }

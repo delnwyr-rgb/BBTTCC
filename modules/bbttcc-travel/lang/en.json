@@ -1,7 +1,6 @@
 {
-  "BBTTCC.Travel.ModuleTitle": "BBTTCC Travel Engine",
-  "BBTTCC.Travel.ModuleDescription": "Unified Travel Planner, Travel Arc Engine, and overworld navigation for BBTTCC.",
-
+  "BBTTCC.Travel.ModuleTitle": "Bad Eden Travel Engine",
+  "BBTTCC.Travel.ModuleDescription": "Unified Travel Planner, Travel Arc Engine, and overworld navigation for Bad Eden.",
   "BBTTCC.Travel.TabLabel": "Travel",
   "BBTTCC.Travel.PanelTitle": "Travel Arc Preview",
   "BBTTCC.Travel.DebugTitle": "Travel Debug",
@@ -9,14 +8,11 @@
   "BBTTCC.Travel.MonsterLabel": "Monster",
   "BBTTCC.Travel.RareLabel": "Rare Event",
   "BBTTCC.Travel.WorldBossLabel": "World Boss",
-
   "BBTTCC.Travel.HexMode": "Hex Travel Mode",
   "BBTTCC.Travel.HexModeHint": "Click hexes to plan and resolve travel along this route.",
-
   "BBTTCC.Travel.Pill.Travel": "Travel",
   "BBTTCC.Travel.Pill.Kill": "Kill",
   "BBTTCC.Travel.Pill.ClearRoute": "Clear Route",
-
   "BBTTCC.Travel.SimulateRoute": "Simulate Route",
   "BBTTCC.Travel.SimulationSeed": "Simulation Seed",
   "BBTTCC.Travel.SimulationSteps": "Steps",

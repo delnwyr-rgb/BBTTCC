@@ -61,7 +61,7 @@
 }
 
 /* =========================================
-   BBTTCC Top Control Bar — Hexchrome HUD
+   Bad Eden Top Control Bar — Hexchrome HUD
 ========================================= */
 
 #bbttcc-toolbar.bbttcc-control-bar-wrap,
@@ -214,7 +214,7 @@
 }
 
 /* =========================================
-   BBTTCC Player HUD — bottom-center pin
+   Bad Eden Player HUD — bottom-center pin
    Mirrors GM toolbar look; uses its own id so
    _bbttccApplyPlayerLockdown() does not hide it.
 ========================================= */
@@ -597,7 +597,7 @@
   }
 }
 /* =========================================
-   BBTTCC Top Control Bar — single-row pass
+   Bad Eden Top Control Bar — single-row pass
 ========================================= */
 
 /* Keep the HUD above canvas, but below Foundry app windows */
@@ -701,7 +701,7 @@
   }
 }
 /* =========================================
-   BBTTCC Hexchrome Gold Accent Layer
+   Bad Eden Hexchrome Gold Accent Layer
 ========================================= */
 
 /* --- GOLD COLOR TOKENS --- */
@@ -817,7 +817,7 @@
   color: #ffd76a;
 }
 /* =========================================
-   BBTTCC Territory Windows — Hex Chrome Pass
+   Bad Eden Territory Windows — Hex Chrome Pass
 ========================================= */
 
 #bbttcc-hex-config .window-content,

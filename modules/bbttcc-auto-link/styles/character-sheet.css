@@ -1,5 +1,5 @@
-/* BBTTCC — Character Sheet styling (Hex Chrome Edition, Phase 1+)
- * Frame + BBTTCC tab card layout + Character Wizard.
+/* Bad Eden — Character Sheet styling (Hex Chrome Edition, Phase 1+)
+ * Frame + Bad Eden tab card layout + Character Wizard.
  */
 
 /* ---------- GLOBAL SHEET FRAME ---------- */
@@ -233,11 +233,11 @@
   border: 1px solid rgba(127,29,29,0.9);
 }
 
-/* ---------- BBTTCC TAB VISIBILITY OVERRIDE ---------- */
+/* ---------- Bad Eden TAB VISIBILITY OVERRIDE ---------- */
 /*
-  BBTTCC is an injected “metaphysical layer”, not a native dnd5e2 tab.
+  Bad Eden is an injected “metaphysical layer”, not a native dnd5e2 tab.
   The dnd5e2 vertical-tabs controller may hide non-registered tabs when other sheets open.
-  We only force visibility when BBTTCC is the active tab (dnd5e2 adds .tab-bbttcc on the sheet root).
+  We only force visibility when Bad Eden is the active tab (dnd5e2 adds .tab-bbttcc on the sheet root).
 */
 .application.sheet.dnd5e2.bbttcc-character-sheet.tab-bbttcc .tab[data-tab="bbttcc"] {
   display: block !important;
@@ -252,7 +252,7 @@
   opacity: 1 !important;
 }
 
-/* ---------- BBTTCC TAB: IDENTITY CARDS ---------- */
+/* ---------- Bad Eden TAB: IDENTITY CARDS ---------- */
 
 .bbttcc-character-sheet .bbttcc-tab-inner {
   display: flex;
@@ -385,7 +385,7 @@
   opacity: 0.72;
 }
 
-/* ---------- BBTTCC CHARACTER WIZARD ---------- */
+/* ---------- Bad Eden CHARACTER WIZARD ---------- */
 
 .bbttcc-character-wizard {
   padding: 0.75rem 0.9rem 0.9rem;
@@ -628,7 +628,7 @@
 }
 
 
-/* ---------- BBTTCC QUICKBAR ---------- */
+/* ---------- Bad Eden QUICKBAR ---------- */
 
 .bbttcc-character-sheet .bbttcc-quickbar {
   margin: 0 0 0.5rem;
@@ -700,7 +700,7 @@
   display: none !important;
 }
 
-/* Also hide legacy/native injected BBTTCC full tab panes in native refactor sheets */
+/* Also hide legacy/native injected Bad Eden full tab panes in native refactor sheets */
 .bbttcc-character-sheet [data-bbttcc-native="1"] .tab[data-tab="bbttcc"] {
   display: none !important;
 }
@@ -715,14 +715,14 @@
 
 
 /* ============================================================================
- * BBTTCC NATIVE SHEET INTEGRATION (Option B — lean on dnd5e v5+ AppV2 sheet)
+ * Bad Eden NATIVE SHEET INTEGRATION (Option B — lean on dnd5e v5+ AppV2 sheet)
  * ============================================================================
  * dnd5e v5+ renders character/NPC sheets via ApplicationV2. The legacy V1
- * template/getData/activateListeners overrides do not run, so the BBTTCC
+ * template/getData/activateListeners overrides do not run, so the Bad Eden
  * Handlebars template never renders. We deliberately keep the dnd5e native
  * layout (sidebar, ability scores, tabs, scroll, resize) intact and only
  * style:
- *   1. The DOM-injected BBTTCC quickbar (.bbttcc-quickbar, injected into
+ *   1. The DOM-injected Bad Eden quickbar (.bbttcc-quickbar, injected into
  *      the sidebar by hydrateNativeBBTTCCQuickbar in character-sheet.js)
  *   2. Defensive suppression of stray side-tab artifacts from earlier
  *      injection systems (radiation/tikkun overlays, legacy bbttcc tabs)
@@ -758,7 +758,7 @@
   overflow: visible !important;
 }
 
-/* BBTTCC quickbar — JS-injected card that lives in the sidebar stack. */
+/* Bad Eden quickbar — JS-injected card that lives in the sidebar stack. */
 .bbttcc-character-sheet .bbttcc-quickbar {
   display: block;
   position: relative;
@@ -807,7 +807,7 @@ form[data-bbttcc-root-shell-off="1"]::after {
 
 
 /* ============================================================================
- * BBTTCC CLASS RESOURCES CARD (sidebar)
+ * Bad Eden CLASS RESOURCES CARD (sidebar)
  * ============================================================================
  * Mounted by _bbttccMountSidebarResourceCard() into the dnd5e v5 sidebar
  * (.main-content > .sidebar) for actors that have any of: titanbound,
@@ -1055,7 +1055,7 @@ form[data-bbttcc-root-shell-off="1"]::after {
 
 /* ---------------------------------------------------------------------
  * 2026-05-15 — ▶ Use button for actionable features (FEATURE_ROUTER bridge)
- * Injected into BBTTCC-wrapped dnd5e item-list rows by
+ * Injected into Bad Eden-wrapped dnd5e item-list rows by
  * _ftMountActionableUseButtons in character-sheet.js. Mirrors the
  * fourththing native sheet's `.ft-use-sm` style.
  * ------------------------------------------------------------------- */

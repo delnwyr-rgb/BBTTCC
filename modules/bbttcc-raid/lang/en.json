@@ -1,22 +1,20 @@
 {
   "BBTTCC": {
     "Raid": {
-      "Title": "BBTTCC Raid Manager",
+      "Title": "Bad Eden Raid Manager",
       "CreateRaid": "Create Raid",
       "EditRaid": "Edit Raid",
       "ExecuteRaid": "Execute Raid",
       "DeleteRaid": "Delete Raid",
       "PlanRaid": "Plan Raid",
-      
       "RaidTypes": {
         "assault": "Direct Military Attack",
-        "infiltration": "Stealth Operation", 
+        "infiltration": "Stealth Operation",
         "sabotage": "Disruption Mission",
         "heist": "Resource Acquisition",
         "rescue": "Extraction Mission",
         "reconnaissance": "Information Gathering"
       },
-      
       "Difficulties": {
         "trivial": "Trivial",
         "easy": "Easy",
@@ -24,30 +22,26 @@
         "hard": "Hard",
         "extreme": "Extreme"
       },
-      
       "Status": {
         "planning": "Planning",
-        "prepared": "Prepared", 
+        "prepared": "Prepared",
         "executing": "Executing",
         "completed": "Completed",
         "failed": "Failed"
       },
-      
       "Resources": {
         "violence": "Violence",
-        "nonLethal": "Non-Lethal", 
+        "nonLethal": "Non-Lethal",
         "intrigue": "Intrigue",
         "economy": "Economy",
         "total": "Total Resources"
       },
-      
       "Timeline": {
         "preparation": "Preparation Phase",
         "execution": "Execution Phase",
         "extraction": "Extraction Phase",
         "total": "Total Duration"
       },
-      
       "Labels": {
         "name": "Raid Name",
         "type": "Raid Type",
@@ -63,7 +57,6 @@
         "outcome": "Outcome",
         "status": "Status"
       },
-      
       "Hints": {
         "name": "Enter a name for this raid",
         "target": "What or where is being raided",
@@ -74,7 +67,6 @@
         "timeline": "Plan the phases of your raid (times in hours)",
         "multiSelect": "Hold Ctrl/Cmd to select multiple factions"
       },
-      
       "Buttons": {
         "addObjective": "Add Objective",
         "removeObjective": "Remove",
@@ -86,10 +78,9 @@
         "save": "Save",
         "cancel": "Cancel"
       },
-      
       "Messages": {
         "created": "Raid '{name}' created successfully",
-        "updated": "Raid '{name}' updated successfully", 
+        "updated": "Raid '{name}' updated successfully",
         "executed": "Raid '{name}' executed - {result}",
         "deleted": "Raid '{name}' deleted successfully",
         "nameRequired": "Raid name is required",
@@ -101,21 +92,19 @@
         "deleteConfirm": "Are you sure you want to delete the raid '{name}'?",
         "executeConfirm": "Are you sure you want to execute the raid '{name}'?"
       },
-      
       "Validation": {
         "nameSpecified": "Raid name specified",
         "objectivesDefined": "Objectives defined",
-        "participantsAssigned": "Participants assigned", 
+        "participantsAssigned": "Participants assigned",
         "resourcesAllocated": "Resources allocated",
         "readyForExecution": "Ready for execution",
         "validationFailed": "Raid validation failed"
       },
-      
       "Outcomes": {
         "success": "Success",
         "failure": "Failure",
         "critical": "Critical Success",
-        "major": "Major Success", 
+        "major": "Major Success",
         "minor": "Minor Success",
         "catastrophic": "Catastrophic Failure",
         "severity": "Severity",
@@ -124,14 +113,13 @@
         "rewards": "Rewards",
         "consequences": "Consequences"
       },
-      
       "Phases": {
         "preparation": {
           "name": "Preparation Phase",
           "description": "Time to gather intelligence, position assets, and prepare"
         },
         "execution": {
-          "name": "Execution Phase", 
+          "name": "Execution Phase",
           "description": "Active raid duration"
         },
         "extraction": {
@@ -139,11 +127,10 @@
           "description": "Withdraw and secure gains"
         }
       },
-      
       "Tabs": {
         "basics": "Basics",
         "resources": "Resources",
-        "participants": "Participants", 
+        "participants": "Participants",
         "timeline": "Timeline",
         "execution": "Execution"
       }

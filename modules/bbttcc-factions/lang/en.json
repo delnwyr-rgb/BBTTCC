@@ -1,7 +1,7 @@
 {
   "BBTTCC": {
-    "ModuleName": "BBTTCC Factions",
-    "ModuleTitle": "BBTTCC Strategic Warfare Suite - Factions",
+    "ModuleName": "Bad Eden Factions",
+    "ModuleTitle": "Bad Eden Strategic Warfare Suite - Factions",
     "OPs": {
       "Violence": "Violence",
       "NonLethal": "Non-Lethal",
@@ -23,7 +23,7 @@
     },
     "PowerLevels": {
       "Emerging": "Emerging",
-      "Growing": "Growing", 
+      "Growing": "Growing",
       "Established": "Established",
       "Powerful": "Powerful",
       "Dominant": "Dominant"
@@ -37,7 +37,7 @@
       "Research": "Research Facility"
     },
     "Sheets": {
-      "FactionSheet": "BBTTCC Faction Sheet - MODERN"
+      "FactionSheet": "Bad Eden Faction Sheet - MODERN"
     },
     "Settings": {
       "EnableMacroIntegration": {
@@ -50,7 +50,7 @@
       }
     },
     "Dialogs": {
-      "CreateFaction": "Create BBTTCC Faction",
+      "CreateFaction": "Create Bad Eden Faction",
       "FactionName": "Faction Name",
       "FactionDescription": "Description",
       "FactionType": "Type",
@@ -61,14 +61,14 @@
       "FactionCreated": "Faction \"{name}\" created successfully!",
       "FactionUpdated": "Faction updated successfully!",
       "InvalidFactionData": "Invalid faction data provided",
-      "ModuleNotReady": "BBTTCC Factions module is not ready",
+      "ModuleNotReady": "Bad Eden Factions module is not ready",
       "GMOnly": "Only GMs can create factions",
       "GameNotReady": "Game is still initializing. Please wait."
     },
     "Actions": {
       "RollOP": "Roll {op} Check",
       "AddWarLogEntry": "Add War Log Entry",
-      "DeleteWarLogEntry": "Delete War Log Entry", 
+      "DeleteWarLogEntry": "Delete War Log Entry",
       "AddBase": "Add Base",
       "DeleteBase": "Delete Base",
       "ViewTerritories": "View Territories",
@@ -111,8 +111,8 @@
       "FactionNotFound": "Faction not found",
       "InvalidOPType": "Invalid Organization Point type",
       "InsufficientPermissions": "Insufficient permissions",
-      "ModuleNotInstalled": "BBTTCC Factions module not installed",
-      "SystemIncompatible": "System not compatible with BBTTCC modules",
+      "ModuleNotInstalled": "Bad Eden Factions module not installed",
+      "SystemIncompatible": "System not compatible with Bad Eden modules",
       "AsyncOperationFailed": "Asynchronous operation failed",
       "TimeoutError": "Operation timed out",
       "ValidationError": "Data validation failed"

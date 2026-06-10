@@ -1,10 +1,9 @@
 {
   "bbttcc-tikkun": {
     "module": {
-      "title": "BBTTCC Tikkun: The Great Work",
-      "description": "The Sparks of Light system - spiritual victory condition for BBTTCC campaigns"
+      "title": "Bad Eden Tikkun: The Great Work",
+      "description": "The Sparks of Light system - spiritual victory condition for Bad Eden campaigns"
     },
-    
     "ui": {
       "greatWork": "The Great Work",
       "tikkunOlam": "Tikkun Olam",
@@ -13,7 +12,7 @@
       "progress": "Progress",
       "complete": "Complete",
       "totalSparks": "Total Sparks",
-      "gathered": "Gathered", 
+      "gathered": "Gathered",
       "corrupted": "Corrupted",
       "recentProgress": "Recent Progress",
       "generateConstellation": "Generate Constellation",
@@ -21,14 +20,13 @@
       "error": "Failed to load The Great Work content",
       "noConstellation": "No constellation generated yet"
     },
-
     "sparks": {
       "sparkOfUnity": "Spark of Unity",
-      "sparkOfWisdom": "Spark of Wisdom", 
+      "sparkOfWisdom": "Spark of Wisdom",
       "sparkOfUnderstanding": "Spark of Understanding",
       "sparkOfMercy": "Spark of Mercy",
       "sparkOfPeace": "Spark of Peace",
-      "sparkOfSeverity": "Spark of Severity", 
+      "sparkOfSeverity": "Spark of Severity",
       "sparkOfJustice": "Spark of Justice",
       "sparkOfTruth": "Spark of Truth",
       "sparkOfPurity": "Spark of Purity",
@@ -38,11 +36,10 @@
       "sparkOfCommunity": "Spark of Community",
       "sparkOfManifestation": "Spark of Manifestation"
     },
-
     "sephiroth": {
       "Keter": "Crown",
       "Chokmah": "Wisdom",
-      "Binah": "Understanding", 
+      "Binah": "Understanding",
       "Chesed": "Mercy",
       "Gevurah": "Severity",
       "Tiferet": "Harmony",
@@ -51,29 +48,26 @@
       "Yesod": "Foundation",
       "Malkuth": "Kingdom"
     },
-
     "sparkTypes": {
       "conceptual": "Conceptual",
-      "vestigial": "Vestigial", 
+      "vestigial": "Vestigial",
       "animate": "Animate",
       "conceptualDesc": "Achieved through specific scenario outcomes and moral choices",
       "vestigialDesc": "Physical artifacts found in forgotten places and ancient ruins",
       "animateDesc": "Living beings who embody divine principles and must be convinced to help"
     },
-
     "sparkStatus": {
       "required": "Required",
       "identified": "Identified",
-      "active": "Active", 
+      "active": "Active",
       "gathered": "Gathered",
       "corrupted": "Corrupted",
       "requiredDesc": "Spark is destined but not yet discovered",
-      "identifiedDesc": "Nature of the spark has been revealed", 
+      "identifiedDesc": "Nature of the spark has been revealed",
       "activeDesc": "Quest for this spark is currently underway",
       "gatheredDesc": "Spark has been successfully integrated",
       "corruptedDesc": "Spark has been tainted and requires purification"
     },
-
     "descriptions": {
       "sparkOfUnity": "The principle of divine oneness and ultimate purpose that unites all creation.",
       "sparkOfWisdom": "The principle of divine inspiration and creative force.",
@@ -90,7 +84,6 @@
       "sparkOfCommunity": "The principle of human connection and collective strength.",
       "sparkOfManifestation": "The principle of bringing divine will into material reality."
     },
-
     "questHints": {
       "conceptual": [
         "This spark awaits within the resolution of a great moral choice...",
@@ -108,7 +101,6 @@
         "This light lives within someone who has mastered its principle..."
       ]
     },
-
     "notifications": {
       "constellationGenerated": "The Great Work Begins",
       "constellationGeneratedDesc": "{actorName} has received their sacred Constellation!",
@@ -128,7 +120,6 @@
       "noRepairsNeeded": "No repairs needed",
       "constellationExported": "Constellation exported: {filename}"
     },
-
     "guidance": {
       "divineGuidance": "Divine Guidance",
       "whispers": "{sparkName} whispers to {actorName}:",
@@ -138,11 +129,10 @@
       "purificationPath": "Path to Purification:",
       "gmReference": "GM Reference"
     },
-
     "controls": {
       "gameMasterControls": "Game Master Controls",
       "repairData": "Repair Data",
-      "exportConstellation": "Export Constellation", 
+      "exportConstellation": "Export Constellation",
       "identifySpark": "Identify Spark",
       "activateQuest": "Activate Quest",
       "generateHint": "Generate Hint",
@@ -152,7 +142,6 @@
       "close": "Close",
       "cancel": "Cancel"
     },
-
     "dialog": {
       "sparkDetails": "Spark Details",
       "divineNature": "Divine Nature",
@@ -175,7 +164,6 @@
       "purificationQuestPlaceholder": "What must be done to purify this spark?",
       "mechanicalEffect": "Mechanical effect of corruption"
     },
-
     "examples": {
       "mercyGathering": [
         "Justice/Reformation scenario outcome",
@@ -184,7 +172,7 @@
       ],
       "mercyCorruption": [
         "Retribution/Subjugation outcomes",
-        "Unnecessary violence or cruelty", 
+        "Unnecessary violence or cruelty",
         "Betraying allies for gain"
       ],
       "severityGathering": [
@@ -204,7 +192,7 @@
       ],
       "truthCorruption": [
         "Deception or betrayal",
-        "Spreading discord or lies", 
+        "Spreading discord or lies",
         "Breaking sacred oaths"
       ],
       "understandingGathering": [
@@ -218,10 +206,9 @@
         "Enduring through great hardship"
       ]
     },
-
     "api": {
       "moduleNotReady": "Tikkun module not ready within timeout",
-      "factionCreationFailed": "Constellation generation returned null", 
+      "factionCreationFailed": "Constellation generation returned null",
       "invalidActor": "Cannot generate constellation: invalid actor",
       "alreadyGenerated": "Constellation already generated for {actorName}",
       "insufficientData": "Not enough character data to generate constellation for {actorName}",
@@ -230,21 +217,20 @@
       "sparkStatusUpdated": "Spark {sparkId} status updated: {oldStatus} → {newStatus}",
       "sparkDataRepaired": "Repaired spark data for {actorName}"
     },
-
     "diagnostics": {
       "runningDiagnostics": "Running Tikkun system diagnostics...",
       "moduleLoaded": "Module loaded",
       "apiExposed": "API exposed",
       "factionsModulePresent": "Factions module present",
-      "templatesRegistered": "Templates registered", 
+      "templatesRegistered": "Templates registered",
       "systemSupported": "System supported",
       "constellationGeneration": "Constellation generation",
       "overallStatus": "Overall Status:",
       "passed": "PASSED",
       "failed": "FAILED",
-      "diagnosticIssues": "BBTTCC Tikkun diagnostic issues detected. Check console for details.",
+      "diagnosticIssues": "Bad Eden Tikkun diagnostic issues detected. Check console for details.",
       "constellationTestFailed": "Constellation generation test failed:",
-      "systemOperational": "BBTTCC Tikkun | System fully operational - The Great Work awaits"
+      "systemOperational": "Bad Eden Tikkun | System fully operational - The Great Work awaits"
     }
   }
 }
