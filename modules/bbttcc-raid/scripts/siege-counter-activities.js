@@ -359,7 +359,7 @@
         payload: { layerIdx: idx, dmg } });
     });
 
-    const apply = game.fourththing?.rolls?._applyDamageToActor;
+    const apply = game.bbttcc?.combat?.applyDamage;
     if (typeof apply !== "function") return { ok: false, reason: "structure damage path unavailable (fourththing not loaded)" };
     await apply(wall, dmg, { op: "damage", track: "integrity", damageType: "concussive", damageFlavor: "bombardment" });
 

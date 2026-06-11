@@ -307,8 +307,8 @@ export async function triggerCollapse(actor, { fromState, toState }) {
       // TARGET, which for a token-on-top is different from the structure).
       let desc = "";
       try {
-        if (applied > 0 && game?.fourththing?.rolls?._applyDamageToActor) {
-          desc = await game.fourththing.rolls._applyDamageToActor(tokActor, applied, {
+        if (applied > 0 && game?.bbttcc?.combat?.applyDamage) {
+          desc = await game.bbttcc.combat.applyDamage(tokActor, applied, {
             op: "damage",
             track: "integrity",
             damageType: "concussive",

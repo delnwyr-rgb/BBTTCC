@@ -29,6 +29,17 @@ function _ensureRoot() {
   if (typeof api.campaign === "undefined")          api.campaign = null;
   if (typeof api.encounters === "undefined")        api.encounters = null;
 
+  // Combat adapter seam (Phase 1) — system-agnostic damage/actor contract.
+  // The active game system registers game.bbttcc.combat.applyDamage with its
+  // impl (RFI: a dynamic alias to the fourththing damage fulcrum; a native
+  // dnd5e impl lands in a later phase). Cross-module damage callers go through
+  // game.bbttcc.combat.applyDamage instead of game.fourththing.rolls.*.
+  // Default applyDamage = null so a caller's existing `if (!apply)` guard
+  // degrades gracefully when no system impl is present (behavior-identical to
+  // the pre-seam game.fourththing?.rolls?._applyDamageToActor guards). Do not
+  // clobber a real impl a system may have already registered.
+  if (!game.bbttcc.combat) game.bbttcc.combat = { applyDamage: null };
+
   return api;
 }
 

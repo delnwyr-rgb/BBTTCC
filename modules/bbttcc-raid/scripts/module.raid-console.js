@@ -5876,7 +5876,7 @@ try {
               if (intMax > 0) {
                 const intPerStep = Math.max(1, Math.floor(intMax / Math.max(1, maxStep)));
                 const intDmg = intPerStep * dmg;
-                const apply = game.fourththing?.rolls?._applyDamageToActor;
+                const apply = game.bbttcc?.combat?.applyDamage;
                 if (typeof apply === "function") {
                   await apply(bossActor, intDmg, {
                     op: "damage", track: "integrity",
@@ -8622,7 +8622,7 @@ function _rcShuffle(arr) {
 // dying cycle / triggers fire). Counts beyond roster size stay abstract. Posts
 // a GM-whispered summary.
 async function _rcApplyCasualtiesToRoster({ attackerId, defenderId, attCount, defCount, perCasualty, npcOnly }) {
-  const apply = game.fourththing?.rolls?._applyDamageToActor;
+  const apply = game.bbttcc?.combat?.applyDamage;
   if (typeof apply !== "function") {
     ui.notifications?.warn("fourththing damage API unavailable — cannot apply casualties to roster.");
     return;

@@ -380,9 +380,9 @@ function _bindActions(root, actor, app) {
       const amount  = Math.max(1, parseInt(dmgInput?.value, 10) || 0);
       const dmgType = typeInput?.value || "";
       const dmgFlavor = (flavorInput?.value ?? "").trim();
-      const fn = game.fourththing?.rolls?._applyDamageToActor;
+      const fn = game.bbttcc?.combat?.applyDamage;
       if (typeof fn !== "function") {
-        ui.notifications?.error?.("_applyDamageToActor not available — fourththing system not ready.");
+        ui.notifications?.error?.("Damage API not available — game.bbttcc.combat.applyDamage not registered (system not ready).");
         return;
       }
       try {

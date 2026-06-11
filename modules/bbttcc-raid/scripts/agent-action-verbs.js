@@ -227,10 +227,10 @@
           properties: { ok: S_BOOL, desc: S_STR, oldVal: S_NUM, newVal: S_NUM, applied: S_NUM }
         },
         permissions: ["gm"],
-        sideEffects: { audit: true, sockets: ["fourththingDamageRelay"], hooks: ["bbttcc:damage:applied"] },
+        sideEffects: { audit: true, sockets: [], hooks: ["bbttcc:rig:damaged", "bbttcc:boss:damaged"] },
         handler: async ({ targetActorUuid, amount, damageType, track, origin, intent }) => {
-          const fn = _resolveFn("game.fourththing.rolls._applyDamageToActor");
-          if (!fn) return _unavailable("game.fourththing.rolls._applyDamageToActor not installed");
+          const fn = _resolveFn("game.bbttcc.combat.applyDamage");
+          if (!fn) return _unavailable("game.bbttcc.combat.applyDamage not installed");
           let actor;
           try {
             actor = (typeof globalThis.fromUuid === "function") ? await globalThis.fromUuid(targetActorUuid) : null;

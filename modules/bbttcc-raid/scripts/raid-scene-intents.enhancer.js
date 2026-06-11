@@ -179,7 +179,7 @@
     let tokens = _tokensOnScene(scene, { intent, ctx, scope });
     tokens = _filterByRadius(tokens, scene, intent);
 
-    const apply = game.fourththing?.rolls?._applyDamageToActor;
+    const apply = game.bbttcc?.combat?.applyDamage;
     if (typeof apply !== "function") return { applied: false, note: "no-damage-api" };
 
     const opts = {

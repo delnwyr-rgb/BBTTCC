@@ -14089,6 +14089,20 @@ Hooks.once("init", function () {
     return `${actor.name}: ${track} ${cur} → ${newVal} (−${dmg})${defenseTag}${preventDropNote}${destroyedTag}${phoenixNote}`;
   };
 
+  // ── BBTTCC combat adapter seam (Phase 1) ──────────────────────────────────
+  // Register the fourththing (RFI) damage impl into the system-agnostic bbttcc
+  // combat contract. This is a DYNAMIC alias: it resolves
+  // rolls._applyDamageToActor at CALL time (not capture time) so the
+  // bbttcc-structures damage wedge — which monkey-patches the fulcrum IN PLACE
+  // at ready — keeps intercepting transparently. Cross-module callers
+  // (raid/structures) go through game.bbttcc.combat.applyDamage; a native dnd5e
+  // impl replaces this in a later phase without touching those call sites.
+  game.bbttcc = game.bbttcc || {};
+  game.bbttcc.combat = game.bbttcc.combat || {};
+  game.bbttcc.combat.applyDamage = function (actor, baseDmg, opts) {
+    return game.fourththing.rolls._applyDamageToActor(actor, baseDmg, opts);
+  };
+
   game.fourththing.rolls.applyDamageFromButton = async function (btn) {
     const formula       = btn.dataset.formula;
     const track         = btn.dataset.track ?? "integrity";
