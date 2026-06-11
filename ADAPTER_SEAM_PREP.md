@@ -145,14 +145,36 @@ F5 + live-test (raid damage + structure collapse).
   `game.fourththing.*` runtime calls remain in collapse.js.
 - ✅ Old stale `damage-wedge.js:10` comment gone (file rewritten).
 
-**LEFT for the dnd5e-impl session (the only untestable-in-fourththing piece):**
-1. Build the dnd5e `applyDamage` (native HP path) + dnd5e impls of the contract
-   methods (`resistsForcedMove`→native knockback, `applyCondition`→prone status,
-   `getHealth`→HP, `hasCondition`, plus `getRole`/`rollCheck` if a caller needs
-   them). Must run the interceptor loop at its top, re-fire the §5 socket +
-   rig/boss hooks (or their dnd5e equivalents), and return the description string.
-2. Decide `applyDamageFromButton` / bulwark source-capture wedge on dnd5e
-   (Catastrophic Entry is RFI-only → feature-gate off). Still-open from §7.
+**dnd5e impl — DONE 2026-06-10 (DORMANT on fourththing; UNVALIDATED in-world).**
+`modules/bbttcc-core/scripts/combat.dnd5e.js` (+ manifest esmodules entry).
+Built against the **locally installed dnd5e v5.3.0** API (real, not guessed):
+- `applyDamage(actor, dmg, opts)` → runs the interceptor loop at top (structures
+  claim + integrity model, identical to RFI), else native `actor.applyDamage`
+  ([{value,type}] form for mapped dnd5e types; numeric form — `ignore=true` —
+  for untyped/`ignoreResists`; negative number for `op:"heal"`). Returns a
+  description string; dnd5e fires its own `dnd5e.applyDamage` hook natively (the
+  rig/boss hooks + `system.fourththing` socket are RFI-only and correctly absent
+  on dnd5e — no rigs/bosses there).
+- `getHealth`→`system.attributes.hp`; `hasCondition`→`actor.statuses`;
+  `applyCondition`→`toggleStatusEffect(id,{active:true})`; `resistsForcedMove`→
+  `false` (dnd5e has no forced-move gate).
+- Best-effort RFI→dnd5e damage-type map (`kinetic→bludgeoning`, …) with untyped
+  fallback so nothing is silently dropped. Tune in a real dnd5e campaign.
+- **Hard-gated** `game.system.id === "dnd5e"` at ready → strict no-op on
+  fourththing; fills only empty slots (never clobbers the RFI impl).
+
+⚠ **The dnd5e path cannot be exercised in the owner's fourththing world** — it's
+a reference impl. Validate by spinning up a dnd5e world before relying on it.
+
+**Still-open (small, dnd5e-world work):** `applyDamageFromButton` / bulwark
+source-capture wedge on dnd5e (Catastrophic Entry is RFI-only → feature-gate
+off); tune the damage-type map; verify the heal + typed-damage paths live.
+
+## 🎉 Phase 1 COMPLETE — the combat/actor adapter seam is fully built.
+The fourththing→adapter decoupling is done: every cross-module damage caller +
+the structures interceptor + collapse secondary effects go through
+`game.bbttcc.combat`, with both an RFI impl (live-validated) and a dnd5e impl
+(dormant reference). Remaining adapter work is per-system tuning, not Phase 1.
 
 ## 6. Proposed step order for next session (ORIGINAL — steps 1–5 now done)
 

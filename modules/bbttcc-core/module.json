@@ -20,7 +20,8 @@
     "scripts/bbttcc-ui-cleanup.enhancer.js",
     "scripts/api.gm.js",
     "scripts/bbttcc-story-button.enhancer.js",
-    "scripts/bbttcc-bridge.js"
+    "scripts/bbttcc-bridge.js",
+    "scripts/combat.dnd5e.js"
   ],
   "styles": [
     "styles/gottgait-story-console.css",
