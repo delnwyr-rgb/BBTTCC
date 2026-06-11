@@ -30,15 +30,44 @@ function _ensureRoot() {
   if (typeof api.encounters === "undefined")        api.encounters = null;
 
   // Combat adapter seam (Phase 1) — system-agnostic damage/actor contract.
-  // The active game system registers game.bbttcc.combat.applyDamage with its
-  // impl (RFI: a dynamic alias to the fourththing damage fulcrum; a native
-  // dnd5e impl lands in a later phase). Cross-module damage callers go through
-  // game.bbttcc.combat.applyDamage instead of game.fourththing.rolls.*.
-  // Default applyDamage = null so a caller's existing `if (!apply)` guard
+  // The active game system registers the impl methods (RFI: thin aliases to the
+  // fourththing fulcrum; a native dnd5e impl lands in a later phase). Cross-
+  // module callers go through game.bbttcc.combat.* instead of game.fourththing.*.
+  //
+  // Method slots default to null so a caller's existing `if (!fn)` guard
   // degrades gracefully when no system impl is present (behavior-identical to
-  // the pre-seam game.fourththing?.rolls?._applyDamageToActor guards). Do not
-  // clobber a real impl a system may have already registered.
-  if (!game.bbttcc.combat) game.bbttcc.combat = { applyDamage: null };
+  // the pre-seam guards). Filled field-by-field (NOT all-or-nothing) so the slot
+  // survives whatever module/system order touches it first, and so a system that
+  // pre-registered one method doesn't lose the others.
+  //
+  // _interceptors is the registered pre-damage extension point that replaces the
+  // bbttcc-structures monkeypatch: each impl's applyDamage runs them at its top
+  // and an interceptor may CLAIM a target (e.g. route a structure through the
+  // integrity/plates model) and short-circuit. Interceptors stay system-agnostic
+  // (they read amount/damageType/flags only), so they work on dnd5e too.
+  if (!game.bbttcc.combat) game.bbttcc.combat = {};
+  var _combat = game.bbttcc.combat;
+  if (typeof _combat.applyDamage === "undefined")        _combat.applyDamage = null;
+  if (typeof _combat.resistsForcedMove === "undefined")  _combat.resistsForcedMove = null;
+  if (typeof _combat.applyCondition === "undefined")     _combat.applyCondition = null;
+  if (typeof _combat.getHealth === "undefined")          _combat.getHealth = null;
+  if (typeof _combat.hasCondition === "undefined")       _combat.hasCondition = null;
+  if (!(_combat._interceptors instanceof Array))         _combat._interceptors = [];
+  if (typeof _combat.registerDamageInterceptor !== "function") {
+    _combat.registerDamageInterceptor = function (fn) {
+      if (typeof fn === "function" && _combat._interceptors.indexOf(fn) === -1) {
+        _combat._interceptors.push(fn);
+      }
+      return fn;
+    };
+  }
+  if (typeof _combat.unregisterDamageInterceptor !== "function") {
+    _combat.unregisterDamageInterceptor = function (fn) {
+      var i = _combat._interceptors.indexOf(fn);
+      if (i !== -1) _combat._interceptors.splice(i, 1);
+      return i !== -1;
+    };
+  }
 
   return api;
 }

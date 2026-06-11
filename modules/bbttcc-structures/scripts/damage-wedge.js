@@ -1,28 +1,28 @@
 /* ─────────────────────────────────────────────────────────────────────────────
- * bbttcc-structures · damage-wedge.js · Phase B.3
+ * bbttcc-structures · damage-wedge.js · Phase B.3 → adapter Phase 1
  * ─────────────────────────────────────────────────────────────────────────────
- * Wedges game.fourththing.rolls._applyDamageToActor so any incoming damage on
- * an actor with hasStructure:true is routed through the Structure damage path
- * (Plates first, then BOM chipping, state transitions). Any integrity overflow
- * is then passed back to the original function with damageType cleared, so
- * the existing destruction cascade + on-damage triggers still fire.
+ * Routes incoming damage on an actor with hasStructure:true through the
+ * Structure damage path (Plates first, then BOM chipping, state transitions).
+ * Any integrity overflow is passed back through the canonical damage path with
+ * damageType cleared, so the existing destruction cascade + on-damage triggers
+ * still fire.
  *
- * Wedge point: _applyDamageToActor (module.js:8083) is the universal
- * per-actor damage entry point. Both:
- *   • applyDamageFromButton (chat-card path)
- *   • ft-applyDamage GM-relay socket handler
- *   • AoE / save-based cast paths
- * funnel through this function. One wedge catches them all.
- *
- * Pattern: save the original, replace with a wrapper. Wrapper checks the
- * hasStructure flag, calls applyStructureDamage if set, then routes any
- * overflow through the saved original.
+ * 2026-06-10 — Converted from a monkeypatch of game.fourththing.rolls.
+ * _applyDamageToActor to a REGISTERED pre-damage interceptor on the system-
+ * agnostic combat adapter (game.bbttcc.combat.registerDamageInterceptor). The
+ * active system's applyDamage runs interceptors at the universal chokepoint, so
+ * this still catches every damage path (chat-card, GM-relay socket, AoE/cast),
+ * but bbttcc-structures no longer depends on the fourththing function existing —
+ * the interceptor is system-agnostic (reads amount/damageType/flags only) and
+ * works identically once a dnd5e combat impl lands. Overflow routes back through
+ * game.bbttcc.combat.applyDamage with _skipInterceptors so it can't re-trigger
+ * this interceptor.
  *
  * Per [[chat-apply-damage-canonical]] memory — never side-channel write to
- * derived/integrity. Use the canonical path. We wedge, we don't bypass.
+ * derived/integrity. Use the canonical path. We intercept, we don't bypass.
  *
  * Per [[crew-rig-combat-arc-2026-05-19-20]] — GM-relay is already handled
- * upstream in applyDamageFromButton; by the time _applyDamageToActor fires,
+ * upstream in applyDamageFromButton; by the time damage interceptors fire,
  * we're on the GM client with write perms. No additional relay needed here.
  * ─────────────────────────────────────────────────────────────────────────────
  */
@@ -34,99 +34,104 @@ const MOD_ID = "bbttcc-structures";
 const TAG = `[${MOD_ID}/wedge]`;
 const FLAG_SCOPE = MOD_ID;
 
-let _wedged = false;
-let _originalApplyDamage = null;
+let _registered = false;
 
-function installWedge() {
-  if (_wedged) return;
-  const target = game?.fourththing?.rolls;
-  if (!target?._applyDamageToActor) {
-    console.warn(TAG, "_applyDamageToActor not found; wedge cannot install yet");
-    return;
-  }
-  _originalApplyDamage = target._applyDamageToActor;
+/**
+ * Pre-damage interceptor. Returns { handled, description } when it CLAIMS the
+ * target (a structure taking a damage op), or a falsy value to let the active
+ * combat impl run its native path (normal actors, heals, non-structures).
+ */
+async function structureDamageInterceptor(actor, baseDmg, opts = {}) {
+  try {
+    const op = String(opts?.op ?? "damage").toLowerCase();
+    const hasStructure = !!actor?.flags?.[FLAG_SCOPE]?.hasStructure;
 
-  target._applyDamageToActor = async function wedgedApplyDamageToActor(actor, baseDmg, opts = {}) {
-    try {
-      // Only intercept damage ops on actors with hasStructure flag.
-      const op = String(opts?.op ?? "damage").toLowerCase();
-      const hasStructure = !!actor?.flags?.[FLAG_SCOPE]?.hasStructure;
+    // Not ours — fall through to the impl's native damage/heal path.
+    if (!hasStructure || op !== "damage") return null;
 
-      if (!hasStructure || op !== "damage") {
-        return await _originalApplyDamage.call(this, actor, baseDmg, opts);
-      }
+    // Apply per-target multiplier here so the Structure path sees the
+    // already-scaled damage (avoids double-scaling when we route overflow back).
+    const safeMult = (Number.isFinite(opts.perTargetMultiplier) && opts.perTargetMultiplier >= 0)
+      ? opts.perTargetMultiplier : 1;
+    const scaledDmg = Math.max(0, Math.floor((Number(baseDmg) || 0) * safeMult));
 
-      // Apply per-target multiplier here so the Structure path sees the
-      // already-scaled damage (avoids double-scaling if we route overflow back).
-      const safeMult = (Number.isFinite(opts.perTargetMultiplier) && opts.perTargetMultiplier >= 0)
-        ? opts.perTargetMultiplier : 1;
-      const scaledDmg = Math.max(0, Math.floor((Number(baseDmg) || 0) * safeMult));
+    if (scaledDmg <= 0) {
+      return { handled: true, description: `${actor.name}: no damage (perTargetMultiplier=${safeMult})` };
+    }
 
-      if (scaledDmg <= 0) return `${actor.name}: no damage (perTargetMultiplier=${safeMult})`;
+    // Phase C — check source actor for a Catastrophic Entry charge. If armed,
+    // consume it and route the damage through with bypassThreshold + noSalvage
+    // so even chip-only damage punches through to Plates and salvage is
+    // suppressed. (RFI-only maneuver; absent on dnd5e → both flags stay false.)
+    const sourceActor = getActiveDamageSource();
+    const ce = await consumeCatastrophicEntry(sourceActor);
+    const bypassThreshold = !!ce?.bypassThreshold;
+    const noSalvage       = !!ce?.noSalvage;
 
-      // Phase C — check source actor for a Catastrophic Entry charge. If
-      // armed, consume it and route the damage through with bypassThreshold +
-      // noSalvage opts so even chip-only damage punches through to Plates and
-      // salvage is suppressed.
-      const sourceActor = getActiveDamageSource();
-      const ce = await consumeCatastrophicEntry(sourceActor);
-      const bypassThreshold = !!ce?.bypassThreshold;
-      const noSalvage       = !!ce?.noSalvage;
+    const structResult = await applyStructureDamage(actor, scaledDmg, {
+      damageType: opts.damageType ?? "",
+      damageFlavor: opts.damageFlavor ?? "",
+      track: opts.track ?? "integrity",
+      bypassThreshold,
+      noSalvage
+    });
 
-      // Route through structure
-      const structResult = await applyStructureDamage(actor, scaledDmg, {
-        damageType: opts.damageType ?? "",
-        damageFlavor: opts.damageFlavor ?? "",
-        track: opts.track ?? "integrity",
-        bypassThreshold,
-        noSalvage
-      });
-
-      // If integrity overflow, route to the saved original with cleared
-      // damageType so its defense-mult shortcut bypasses (we already applied
-      // structure resists). perTargetMultiplier set to 1 because we've
-      // already scaled.
-      if (structResult.integrityOverflow > 0) {
-        const originalDesc = await _originalApplyDamage.call(this, actor, structResult.integrityOverflow, {
+    // Integrity overflow → route back through the canonical adapter path with
+    // damageType cleared (structure resists already applied) and _skipInterceptors
+    // so we don't re-enter this interceptor. perTargetMultiplier 1 (already scaled).
+    if (structResult.integrityOverflow > 0) {
+      const apply = game.bbttcc?.combat?.applyDamage;
+      let originalDesc = "";
+      if (typeof apply === "function") {
+        originalDesc = await apply(actor, structResult.integrityOverflow, {
           ...opts,
           damageType: "",
           damageFlavor: "",
-          perTargetMultiplier: 1
+          perTargetMultiplier: 1,
+          _skipInterceptors: true
         });
-        // Combine descriptions for chat compactness; both cards already posted.
-        return originalDesc
-          ? `${structResult.description} · ${originalDesc}`
-          : structResult.description;
       }
-
-      return structResult.description;
-    } catch (e) {
-      console.warn(TAG, "wedge failure; falling back to original", e);
-      return await _originalApplyDamage.call(this, actor, baseDmg, opts);
+      return {
+        handled: true,
+        description: originalDesc
+          ? `${structResult.description} · ${originalDesc}`
+          : structResult.description
+      };
     }
-  };
 
-  _wedged = true;
-  console.log(TAG, "damage wedge installed on _applyDamageToActor");
+    return { handled: true, description: structResult.description };
+  } catch (e) {
+    // Don't claim the target on failure — let the impl run its native path so a
+    // structure still takes (plain integrity) damage rather than silently eating
+    // the hit. Mirrors the old wedge's fall-back-to-original behavior.
+    console.warn(TAG, "structure interceptor failed; falling through to native path", e);
+    return null;
+  }
+}
+
+function installWedge() {
+  if (_registered) return;
+  const reg = game?.bbttcc?.combat?.registerDamageInterceptor;
+  if (typeof reg !== "function") {
+    console.warn(TAG, "game.bbttcc.combat.registerDamageInterceptor not found; structure interceptor cannot register yet");
+    return;
+  }
+  reg(structureDamageInterceptor);
+  _registered = true;
+  console.log(TAG, "structure damage interceptor registered on game.bbttcc.combat");
 }
 
 function uninstallWedge() {
-  if (!_wedged) return;
-  const target = game?.fourththing?.rolls;
-  if (target && _originalApplyDamage) {
-    target._applyDamageToActor = _originalApplyDamage;
-  }
-  _wedged = false;
-  _originalApplyDamage = null;
+  if (!_registered) return;
+  game?.bbttcc?.combat?.unregisterDamageInterceptor?.(structureDamageInterceptor);
+  _registered = false;
 }
 
-// Defer to ready so fourththing's system code has run + game.fourththing
-// is populated. _applyDamageToActor is assigned during system init.
+// Defer to ready so the combat adapter (bbttcc-core) + the active system impl
+// have registered. registerDamageInterceptor exists from bbttcc-core init.
 Hooks.once("ready", () => {
-  // Small delay — some systems assign the function lazily on first call.
-  // Try immediately, then retry on a microtask if not yet present.
   installWedge();
-  if (!_wedged) {
+  if (!_registered) {
     queueMicrotask(installWedge);
   }
 });
@@ -135,7 +140,7 @@ Hooks.once("ready", () => {
 Hooks.once("ready", () => {
   try {
     if (game.bbttcc?.api?.structures) {
-      game.bbttcc.api.structures._wedge = { install: installWedge, uninstall: uninstallWedge, isInstalled: () => _wedged };
+      game.bbttcc.api.structures._wedge = { install: installWedge, uninstall: uninstallWedge, isInstalled: () => _registered };
     }
   } catch (_e) {}
 });

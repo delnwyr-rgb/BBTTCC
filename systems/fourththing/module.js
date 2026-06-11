@@ -13770,9 +13770,33 @@ Hooks.once("init", function () {
   // 0.5 / 0). Returns a short description for chat-card summaries.
   game.fourththing.rolls._applyDamageToActor = async function (actor, baseDmg, {
     op = "damage", track = "integrity", damageType = "", damageFlavor = "",
-    perTargetMultiplier = 1, ignoreResists = false, nonlethal = false
+    perTargetMultiplier = 1, ignoreResists = false, nonlethal = false,
+    _skipInterceptors = false
   } = {}) {
     if (!actor) return null;
+
+    // BBTTCC combat interceptors (Phase 1) — registered pre-damage handlers on
+    // game.bbttcc.combat (e.g. bbttcc-structures' integrity/plates router, which
+    // replaced its fulcrum monkeypatch). This is the universal chokepoint, so an
+    // interceptor here catches BOTH internal system damage (AoE/casts/chain) and
+    // cross-module callers. Any interceptor may CLAIM the target and fully handle
+    // it → we short-circuit and return its description. `_skipInterceptors` guards
+    // re-entry when an interceptor routes residual damage back through the adapter
+    // (e.g. structure integrity overflow), so it can't re-trigger itself.
+    if (!_skipInterceptors) {
+      const _icepts = game.bbttcc?.combat?._interceptors;
+      if (_icepts instanceof Array && _icepts.length) {
+        const _ictx = { op, track, damageType, damageFlavor, perTargetMultiplier, ignoreResists, nonlethal };
+        for (const _icept of _icepts) {
+          try {
+            const _r = await _icept(actor, baseDmg, _ictx);
+            if (_r && _r.handled) return _r.description ?? null;
+          } catch (_e) {
+            console.warn("[fourththing] damage interceptor threw; falling through to native path", _e);
+          }
+        }
+      }
+    }
     const rawSys = actor.system?.system ?? actor.system;
     const safeMult = (Number.isFinite(perTargetMultiplier) && perTargetMultiplier >= 0) ? perTargetMultiplier : 1;
     const scaled = Math.max(0, Math.floor((Number(baseDmg) || 0) * safeMult));
@@ -14101,6 +14125,44 @@ Hooks.once("init", function () {
   game.bbttcc.combat = game.bbttcc.combat || {};
   game.bbttcc.combat.applyDamage = function (actor, baseDmg, opts) {
     return game.fourththing.rolls._applyDamageToActor(actor, baseDmg, opts);
+  };
+
+  // RFI impls of the rest of the system-agnostic combat contract. These are the
+  // secondary actor effects that bbttcc-structures' collapse path needs; on
+  // dnd5e they map to native knockback/prone/HP. Thin wrappers over the existing
+  // system fns so they pick up any later in-place changes.
+  game.bbttcc.combat.resistsForcedMove = function (actor, opts) {
+    return game.fourththing.resistsForcedMove(actor, opts);
+  };
+  // applyCondition(actor, condition, {dc, sourceName}) → {applied, skipped}.
+  // Wraps applyManifestationStates (the canonical managed-AE path) with a
+  // synthetic source so a single named condition lands through sheet/HUD-visible
+  // state, normalizing the result to a simple shape for agnostic callers.
+  game.bbttcc.combat.applyCondition = async function (actor, condition, { dc = 15, sourceName = "Effect" } = {}) {
+    const applyStates = game.fourththing.applyManifestationStates;
+    if (typeof applyStates !== "function") return { applied: false, skipped: false };
+    const stub = { name: sourceName, id: actor?.id, system: {} };
+    const synthMf = { appliedStates: { states: [condition], duration: "1-round" } };
+    const res = await applyStates(actor, actor, stub, synthMf, { castDc: dc });
+    const applied = !!(res && Array.isArray(res.applied) && res.applied.includes(condition));
+    const skipped = !!(res && Array.isArray(res.skipped) && res.skipped.some(s => s?.key === condition));
+    return { applied, skipped };
+  };
+  // getHealth(actor) → {value, max} of the primary track (integrity on RFI; HP on
+  // dnd5e). null when unreadable so callers can tell "at floor" from "no field".
+  game.bbttcc.combat.getHealth = function (actor) {
+    const isStruct = actor && ["rig", "boss"].includes(actor.type);
+    const raw = actor?.system?.system ?? actor?.system;
+    const t = isStruct ? raw?.integrity : raw?.derived?.integrity;
+    const value = Number(t?.value);
+    const max = Number(t?.max);
+    return { value: Number.isFinite(value) ? value : null, max: Number.isFinite(max) ? max : null };
+  };
+  // hasCondition(actor, condition) → bool. Recognizes the managed-AE condition
+  // flag and the Foundry-core status set (the latter is already cross-system).
+  game.bbttcc.combat.hasCondition = function (actor, condition) {
+    return !!actor?.effects?.some?.(e =>
+      e.flags?.fourththing?.condition === condition || e.statuses?.has?.(condition));
   };
 
   game.fourththing.rolls.applyDamageFromButton = async function (btn) {

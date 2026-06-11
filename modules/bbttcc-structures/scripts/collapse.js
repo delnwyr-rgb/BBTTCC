@@ -116,10 +116,15 @@ function findTokensInsideFootprint(structToken) {
  * HP/integrity value.
  */
 function readTargetCurrentHP(actor) {
-  // Rigs/Bosses: system.integrity.value
-  // Everything else: system.derived.integrity.value (fourththing characters/npcs)
-  // Returns null (NOT 0) when the track is unreadable, so the nonlethal clamp
-  // can tell "genuinely at/below 1" apart from "couldn't read the field".
+  // Primary track current value via the combat adapter (integrity on RFI, HP on
+  // dnd5e). Returns null (NOT 0) when the track is unreadable, so the nonlethal
+  // clamp can tell "genuinely at/below 1" apart from "couldn't read the field".
+  // Falls back to a direct integrity read if the adapter isn't registered.
+  const getHealth = game?.bbttcc?.combat?.getHealth;
+  if (typeof getHealth === "function") {
+    const h = getHealth(actor);
+    return (h && Number.isFinite(h.value)) ? h.value : null;
+  }
   const isStruct = ["rig", "boss"].includes(actor.type);
   const raw = actor.system?.system ?? actor.system;
   const v = isStruct ? raw?.integrity?.value : raw?.derived?.integrity?.value;
@@ -144,7 +149,7 @@ function clampNonlethal(damage, currentHP) {
 async function knockbackToken(token, fromCenter, knockbackFt) {
   if (!token || knockbackFt <= 0) return;
   // Forced-movement gate (Bulwark Anchor/Stance, Aurablade Lock/Ignore-push).
-  if (await game?.fourththing?.resistsForcedMove?.(token.actor, { reason: "collapse knockback" })) return;
+  if (await game?.bbttcc?.combat?.resistsForcedMove?.(token.actor, { reason: "collapse knockback" })) return;
   const grid = canvas?.scene?.grid;
   if (!grid?.distance || !grid?.size) return;
   const pxPerFt = grid.size / grid.distance;
@@ -171,25 +176,26 @@ async function knockbackToken(token, fromCenter, knockbackFt) {
  */
 async function applyProne(actor) {
   if (!actor) return false;
-  // Already prone? Treat as success, don't double-apply.
-  const alreadyProne = actor.effects?.some?.(e =>
-    e.flags?.fourththing?.condition === "prone" || e.statuses?.has?.("prone"));
+  // Already prone? Treat as success, don't double-apply. Via the combat adapter
+  // (agnostic condition check), with the direct AE/status read as fallback.
+  const hasCond = game?.bbttcc?.combat?.hasCondition;
+  const alreadyProne = (typeof hasCond === "function")
+    ? hasCond(actor, "prone")
+    : actor.effects?.some?.(e => e.flags?.fourththing?.condition === "prone" || e.statuses?.has?.("prone"));
   if (alreadyProne) return true;
 
   // Canonical path — applies the condition AE immediately (the dc is only
   // stored on the AE for any later save-each-round handler; there is no save
   // gate at apply time, so prone lands).
   try {
-    const applyStates = game?.fourththing?.applyManifestationStates;
-    if (typeof applyStates === "function") {
-      const stub = { name: "Structure Collapse", id: actor.id, system: {} };
-      const synthMf = { appliedStates: { states: ["prone"], duration: "1-round" } };
-      const res = await applyStates(actor, actor, stub, synthMf, { castDc: 15 });
-      // res.applied includes "prone" on success; null/empty means it no-op'd
-      // (e.g. condition immunity) — fall through to the manual fallback only if
-      // it truly failed to create anything.
-      if (res && Array.isArray(res.applied) && res.applied.includes("prone")) return true;
-      if (res && Array.isArray(res.skipped) && res.skipped.some(s => s.key === "prone")) return false; // immune/dedup — respect it
+    const applyCondition = game?.bbttcc?.combat?.applyCondition;
+    if (typeof applyCondition === "function") {
+      const res = await applyCondition(actor, "prone", { dc: 15, sourceName: "Structure Collapse" });
+      // applied=true on success. skipped=true means immune/dedup — respect it and
+      // don't double-apply. Only a genuine no-op (neither flag) drops to the
+      // manual fallback below.
+      if (res && res.applied) return true;
+      if (res && res.skipped) return false;
     }
   } catch (e) {
     console.warn(TAG, "canonical prone apply failed; trying fallback", e);

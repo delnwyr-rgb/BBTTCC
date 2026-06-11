@@ -90,14 +90,71 @@ needs all of it), but tag by who actually calls it:
 
 ## 5. Side-effect contract to preserve (don't drop these)
 
-- Socket: `fourththingDamageRelay` (GM-resolved damage application across clients).
-- Hook: `bbttcc:damage:applied` (fired post-damage; downstream listeners).
-- The description-string return value (callers display it / log it).
+> **CORRECTED 2026-06-10 (recon).** The names below were wrong in the original
+> draft. Real names, all verified in `systems/fourththing/module.js`:
+> - **Socket:** channel `system.fourththing`, message `t:"ft-applyDamage"`
+>   (emitted in `applyDamageFromButton` @14157 + `ft-class-automation.js:3826`;
+>   GM-side handler @25893). There is **no socket named `fourththingDamageRelay`**.
+> - **Hooks:** `bbttcc:rig:damaged` / `bbttcc:rig:destroyed` /
+>   `bbttcc:boss:damaged` / `bbttcc:boss:defeated`, all fired **inside** the
+>   fulcrum (~14056/14068). There is **no hook named `bbttcc:damage:applied`**.
+> - The description-string return value (callers display it / log it).
+>
+> **Key consequence:** every side-effect fires *inside* the fulcrum, and a grep
+> shows **zero cross-module consumers** of the socket or the hooks. So a thin
+> dynamic alias (`applyDamage → rolls._applyDamageToActor`) preserves the entire
+> contract **for free**. The side-effect contract only needs active porting when
+> the **dnd5e impl** is built — at that point the dnd5e `applyDamage` must
+> re-fire the socket + the rig/boss hooks + return the string, or raid's audit
+> log + multi-client damage break.
 
-The adapter `applyDamage` must keep firing the socket + hook and returning the
-string, or raid's audit log + multi-client damage break.
+## ✅ STATUS — safe unit BUILT + DEPLOYED 2026-06-10 (commit `e4a9f66`)
 
-## 6. Proposed step order for next session
+Steps 1–5 below are **DONE**. The behavior-identical adapter seam is live on
+local + both Lightsails (md5-verified), committed (NOT pushed), awaiting owner
+F5 + live-test (raid damage + structure collapse).
+
+- **Recon (step 1)** corrected §3/§5 above. Headline: **the wedge needs ZERO
+  changes for the call-site swap** — it patches the fulcrum in place, and the
+  RFI alias is a *dynamic* (call-time) lookup of `rolls._applyDamageToActor`, so
+  the wedge still intercepts transparently. The wedge→interceptor conversion is
+  a prerequisite to the **dnd5e impl**, not to this swap. (So §3's "resolve
+  FIRST" was too strong; it's resolve-before-dnd5e.)
+- **Step 3** — `game.bbttcc.combat` slot defined in `bbttcc-core/scripts/module.js`
+  `_ensureRoot` (`applyDamage:null` default, no-clobber).
+- **Step 4** — RFI impl registered in `systems/fourththing/module.js` right after
+  the fulcrum (~line 14091): dynamic alias.
+- **Step 5** — 7 cross-module call sites swapped (raid ×5 incl. string-resolved
+  agent verb; structures ×2 incl. collapse.js direct call). Macro
+  `damage-structure.macro.js` left on the old path (tool, not runtime).
+
+**Phase 1 core — DONE 2026-06-10 (testable on fourththing), behavior-preserving:**
+- ✅ **Interceptor registry.** `bbttcc-core` exposes
+  `combat.registerDamageInterceptor(fn)` + `_interceptors[]` (field-by-field,
+  order-robust). The RFI fulcrum runs registered interceptors at its top
+  (`_skipInterceptors` guards overflow re-entry) — the universal chokepoint, so
+  internal AoE/cast damage is caught too.
+- ✅ **Wedge → interceptor.** `damage-wedge.js` dropped the monkeypatch; it now
+  registers a **system-agnostic** `structureDamageInterceptor` (reads
+  amount/damageType/`flags["bbttcc-structures"]` only); integrity overflow routes
+  back via `game.bbttcc.combat.applyDamage` with `_skipInterceptors`. `damage-path.js`
+  confirmed agnostic.
+- ✅ **Contract methods.** RFI registers `resistsForcedMove` / `applyCondition` /
+  `getHealth` / `hasCondition` on `game.bbttcc.combat`; `collapse.js`'s 4
+  couplings now route through them (each keeps an agnostic fallback). Zero
+  `game.fourththing.*` runtime calls remain in collapse.js.
+- ✅ Old stale `damage-wedge.js:10` comment gone (file rewritten).
+
+**LEFT for the dnd5e-impl session (the only untestable-in-fourththing piece):**
+1. Build the dnd5e `applyDamage` (native HP path) + dnd5e impls of the contract
+   methods (`resistsForcedMove`→native knockback, `applyCondition`→prone status,
+   `getHealth`→HP, `hasCondition`, plus `getRole`/`rollCheck` if a caller needs
+   them). Must run the interceptor loop at its top, re-fire the §5 socket +
+   rig/boss hooks (or their dnd5e equivalents), and return the description string.
+2. Decide `applyDamageFromButton` / bulwark source-capture wedge on dnd5e
+   (Catastrophic Entry is RFI-only → feature-gate off). Still-open from §7.
+
+## 6. Proposed step order for next session (ORIGINAL — steps 1–5 now done)
 
 1. **Deeper recon** (30 min): grep modules for `heal`, `getHealth`, `applyDamageFromButton`,
    `fourththingDamageRelay`, `bbttcc:damage:applied`; read the wedge + bulwark-hookups
