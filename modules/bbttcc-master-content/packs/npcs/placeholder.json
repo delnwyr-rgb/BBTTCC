@@ -1,8 +1,0 @@
-{
-  "name": "Placeholder NPC",
-  "type": "npc",
-  "system": {
-    "cr": 1
-  },
-  "flags": {}
-}
