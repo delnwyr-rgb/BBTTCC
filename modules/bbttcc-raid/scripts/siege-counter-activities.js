@@ -381,6 +381,63 @@
     return { ok: true, summary: `Bombarded ${wall.name} for ${dmg} (Plates ${plates}).` };
   }
 
+  // ── Content Sprint batch 2 (2026-06-13) — in-the-moment siege maneuvers ──────
+  // Five more spectacles beyond Bombard. Attacker maneuvers chip the current
+  // layer's Structure Plates (same applyDamage path as bombard → auto-breach);
+  // defender maneuvers gut the attacker's Buffer (supply). Each relays a VFX hook
+  // (siege-vfx.js) + a narrative beat. tempo:"clash" + icon = shows in the Siege HUD.
+  async function _currentWall(S, targetUuid){
+    const st = await S.getSiegeState(targetUuid);
+    if (!st || st.status !== "active") return { st: null, wall: null, idx: 0, reason: "no active siege on this hex" };
+    const idx = st.currentLayerIdx ?? 0;
+    const layer = (st.layers || [])[idx] || null;
+    const wall = layer ? game.actors.get(layer.structureActorId) : null;
+    return { st, wall, idx, reason: wall ? null : "current layer has no Structure actor" };
+  }
+  const _platesStr = (wall) => { const a = game.bbttcc?.api?.structures?.readState?.(wall); return a?.plates ? `${a.plates.current}/${a.plates.max}` : "?"; };
+  const _roll = async (f, fb) => { try { const r = new Roll(f); await r.evaluate(); return Math.max(1, Math.floor(Number(r.total) || 0)); } catch (_e) { return fb; } };
+  async function _bumpMorale(factionId, delta, why){ try { const fn = game.bbttcc?.api?.factions?.bumpMorale; if (typeof fn === "function") await fn(factionId, delta, why); } catch (e) { console.warn(TAG, "bumpMorale failed", e); } }
+
+  async function _attackerWallManeuver({ factionId, targetUuid, S }, { key, title, formula, fallback, damageType, flavor, garrisonStagger = false }){
+    const actor = game.actors.get(factionId);
+    const { st, wall, idx, reason } = await _currentWall(S, targetUuid);
+    if (!wall) return { ok: false, reason };
+    const dmg = await _roll(formula, fallback);
+    await _withSiege(S, targetUuid, (state) => {
+      if (garrisonStagger) state.defenderAnytimeBudget = Math.max(0, (Number(state.defenderAnytimeBudget) || 0) - 1);
+      S.appendNarrativeBeat(state, { turn: _turn(), kind: key, title, description: `${actor?.name || "The besiegers"} — ${flavor} ${wall.name} for ${dmg} structure damage${garrisonStagger ? "; the garrison reels (−1 Anytime)" : ""}.`, payload: { layerIdx: idx, dmg } });
+    });
+    const apply = game.bbttcc?.combat?.applyDamage;
+    if (typeof apply !== "function") return { ok: false, reason: "structure damage path unavailable (fourththing not loaded)" };
+    await apply(wall, dmg, { op: "damage", track: "integrity", damageType, damageFlavor: key });
+    const plates = _platesStr(wall);
+    _relayHook(`bbttcc:siege:${key}`, { siegeId: st.siegeId, hexUuid: targetUuid, layerIdx: idx, structureActorId: wall.id, wallName: wall.name, factionName: actor?.name || "The besiegers", dmg });
+    await _pushWarLog(actor, `${title}: ${dmg} structure damage to ${wall.name} (Plates ${plates}).`, { activityKey: key, hexUuid: targetUuid });
+    return { ok: true, summary: `${title} — ${wall.name} takes ${dmg} (Plates ${plates}).` };
+  }
+  const escalade        = (ctx) => _attackerWallManeuver(ctx, { key: "escalade",        title: "Escalade",         formula: "1d10+10", fallback: 16, damageType: "kinetic",    flavor: "throw ladders and swarm" });
+  const sapper_undermine= (ctx) => _attackerWallManeuver(ctx, { key: "sapperUndermine", title: "Sapper's Undermine",formula: "3d10+12", fallback: 28, damageType: "concussive", flavor: "collapse a tunnel beneath" });
+  const ram_gate        = (ctx) => _attackerWallManeuver(ctx, { key: "ramGate",         title: "Ram the Gate",      formula: "2d10+12", fallback: 24, damageType: "concussive", flavor: "drive the ram into the gate of", garrisonStagger: true });
+
+  async function _defenderBufferManeuver({ factionId, targetUuid, S }, { key, title, drain, selfRenewal = 0, morale = 0, vfxHook }){
+    const actor = game.actors.get(factionId);
+    let spent = 0;
+    const r = await _withSiege(S, targetUuid, (state) => {
+      const before = Number(state.buffer) || 0;
+      state.buffer = Math.max(0, before - drain); spent = before - state.buffer;
+      if (selfRenewal) state.renewalPool = Math.max(0, (Number(state.renewalPool) || 0) + selfRenewal);
+      S.appendNarrativeBeat(state, { turn: _turn(), kind: key, title, description: `${actor?.name || "The garrison"} — the besiegers' supply scatters (−${spent} Buffer)${selfRenewal ? `; ${selfRenewal < 0 ? "at a cost" : "and rallies"} (Renewal ${selfRenewal > 0 ? "+" : ""}${selfRenewal})` : ""}.` });
+    });
+    if (!r.ok) return r;
+    if (morale) await _bumpMorale(factionId, morale, `${title} steadies the defenders`);
+    _relayHook(`bbttcc:siege:${vfxHook}`, { siegeId: r.state.siegeId, hexUuid: targetUuid, factionName: actor?.name || "The garrison", spent });
+    await _pushWarLog(actor, `${title}: attacker Buffer −${spent}${morale ? `, morale ${morale > 0 ? "+" : ""}${morale}` : ""}.`, { activityKey: key, hexUuid: targetUuid });
+    return { ok: true, summary: `${title} — attacker Buffer −${spent}.` };
+  }
+  const boiling_oil  = (ctx) => _defenderBufferManeuver(ctx, { key: "boiling_oil",  title: "Boiling Oil",  drain: 2, morale: +1, vfxHook: "boilingOil" });
+  const sortie       = (ctx) => _defenderBufferManeuver(ctx, { key: "sortie",       title: "Sortie",       drain: 3, selfRenewal: -1, vfxHook: "sortie" });
+  const flaming_pitch= (ctx) => _defenderBufferManeuver(ctx, { key: "flaming_pitch", title: "Flaming Pitch", drain: 2, morale: +1, vfxHook: "flamingPitch" });
+
   // ============================================================
   // Registration
   // ============================================================
@@ -399,7 +456,14 @@
     champion_defends_wall: { fn: champion_defends_wall, label: "Champion Defends Wall",cost: { violence: 10 },                             band: "standard", siege: true, siegeSide: "defender", siegeOrder: 2 },
     call_relief:           { fn: call_relief,           label: "Call Relief",          cost: { diplomacy: 20, softPower: 20 },             band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 3 },
     pray_for_omen:         { fn: pray_for_omen,         label: "Pray for Omen",        cost: { faith: 10 },                                band: "standard", siege: true, siegeSide: "defender", siegeOrder: 4 },
-    sue_for_terms:         { fn: sue_for_terms,         label: "Sue for Terms",        cost: { diplomacy: 20, softPower: 15 },             band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 5 }
+    sue_for_terms:         { fn: sue_for_terms,         label: "Sue for Terms",        cost: { diplomacy: 20, softPower: 15 },             band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 5 },
+    // ── Content Sprint batch 2 — in-the-moment (clash) spectacles ──
+    escalade:              { fn: escalade,              label: "Escalade",             cost: { violence: 25, logistics: 10 }, clashCost: 18, band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 6, tempo: "clash", icon: "🪜" },
+    sapper_undermine:      { fn: sapper_undermine,      label: "Sapper's Undermine",   cost: { violence: 20, logistics: 30 }, clashCost: 25, band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 7, tempo: "clash", icon: "⛏" },
+    ram_gate:              { fn: ram_gate,              label: "Ram the Gate",         cost: { violence: 30 },                 clashCost: 20, band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 8, tempo: "clash", icon: "🪵" },
+    boiling_oil:           { fn: boiling_oil,           label: "Boiling Oil",          cost: { violence: 15, logistics: 10 }, clashCost: 12, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 6, tempo: "clash", icon: "🛢" },
+    sortie:                { fn: sortie,                label: "Sortie",               cost: { violence: 20 },                 clashCost: 18, band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 7, tempo: "clash", icon: "🚪" },
+    flaming_pitch:         { fn: flaming_pitch,         label: "Flaming Pitch",        cost: { violence: 10, faith: 5 },       clashCost: 12, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 8, tempo: "clash", icon: "🔥" }
   };
 
   whenRaidReady((api) => whenSiegeStateReady((S) => {

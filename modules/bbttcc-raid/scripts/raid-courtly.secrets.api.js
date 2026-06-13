@@ -38,7 +38,15 @@
     "influenceDmg2",
     "clearScandal",
     "favorPlus1",
-    "favorShift"
+    "favorShift",
+    // ── Content Sprint batch 2 (2026-06-13) — new keys, composed from the same
+    //    scenario primitives (queueRollMod / dealInfluenceDamage / raiseSuspicion
+    //    / adjustFavor). No new scenario methods required.
+    "rollPlus3",
+    "influenceDmg3",
+    "coverTracks",
+    "favorPlus2",
+    "doubleAgent"
   ]);
 
   const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
@@ -165,13 +173,45 @@
     });
   }
 
+  // ── Content Sprint batch 2 (2026-06-13) new handlers ──────────────────────
+  async function _effectRollPlus3(actor, side, scenario) {
+    scenario.queueRollMod(side.side, 3, `secret:rollPlus3:${actor.name}`);
+    return { effect: "rollPlus3", queued: "+3 to next roll" };
+  }
+  async function _effectInfluenceDmg3(actor, side, scenario) {
+    const result = await scenario.dealInfluenceDamage(side.oppSide, 3, `secret:influenceDmg3:${actor.name}`);
+    return { effect: "influenceDmg3", oppInfluenceAfter: result };
+  }
+  async function _effectCoverTracks(actor, side, scenario) {
+    await scenario.raiseSuspicion(-2, `secret:coverTracks:${actor.name}`);
+    return { effect: "coverTracks", suspicion: "-2" };
+  }
+  async function _effectFavorPlus2(actor, side, scenario) {
+    const courtier = await _pickCourtier("Choose courtier — +2 favor toward your side");
+    if (!courtier) return { effect: "favorPlus2", cancelled: true };
+    await scenario.adjustFavor(courtier.id, side.factionId, +2);
+    return { effect: "favorPlus2", courtier: courtier.name };
+  }
+  async function _effectDoubleAgent(actor, side, scenario) {
+    const courtier = await _pickCourtier("Choose courtier — flip them: −1 from opponent, +1 to you");
+    if (!courtier) return { effect: "doubleAgent", cancelled: true };
+    await scenario.adjustFavor(courtier.id, side.oppFactionId, -1);
+    await scenario.adjustFavor(courtier.id, side.factionId, +1);
+    return { effect: "doubleAgent", courtier: courtier.name };
+  }
+
   const HANDLERS = Object.freeze({
     rollPlus2:     _effectRollPlus2,
     forceReroll:   _effectForceReroll,
     influenceDmg2: _effectInfluenceDmg2,
     clearScandal:  _effectClearScandal,
     favorPlus1:    _effectFavorPlus1,
-    favorShift:    _effectFavorShift
+    favorShift:    _effectFavorShift,
+    rollPlus3:     _effectRollPlus3,
+    influenceDmg3: _effectInfluenceDmg3,
+    coverTracks:   _effectCoverTracks,
+    favorPlus2:    _effectFavorPlus2,
+    doubleAgent:   _effectDoubleAgent
   });
 
   async function playSecret(actorId, itemId, opts = {}) {

@@ -475,6 +475,35 @@
   Hooks.on("bbttcc:siege:projectile", _onProjectile);
   Hooks.on("bbttcc:siege:clash", _onClash);
 
+  // ── Content Sprint batch 2 (2026-06-13) — in-the-moment siege spectacles ──────
+  // banner + pulse + (flash/shake) run on every client; the projectile volley is
+  // GM-authoritative (Sequencer relays the visuals). _playProjectileVolley degrades
+  // gracefully when Sequencer/JB2A assets are absent.
+  function _siegeSpectacle(payload, { label, color, flash = false, shake = true, volley = null }) {
+    _injectStylesOnce();
+    try {
+      _banner(label, color);
+      _pulse(_hudPanel(), color);
+      if (flash) _fullScreenFlash(color);
+      if (shake) _shakeBoard();
+    } catch (e) { console.warn(TAG, "siege spectacle failed", label, e); }
+    if (!game.user?.isGM || !volley) return;
+    try { _playProjectileVolley(Object.assign({ structureActorId: payload?.structureActorId, count: 2, stagger: 220, travel: 700 }, volley)); }
+    catch (e) { console.warn(TAG, "siege volley failed", label, e); }
+  }
+  const _onEscalade        = (p) => _siegeSpectacle(p, { label: "🪜 Escalade",           color: AMBER,  shake: true, volley: { family: "boulder", count: 3, direction: "incoming" } });
+  const _onSapperUndermine = (p) => _siegeSpectacle(p, { label: "⛏ Sapper's Undermine",  color: GRAY,   flash: true, shake: true });
+  const _onRamGate         = (p) => _siegeSpectacle(p, { label: "🪵 Ram the Gate",        color: BRONZE, shake: true, volley: { family: "boulder", count: 1, scale: 1.8 } });
+  const _onBoilingOil      = (p) => _siegeSpectacle(p, { label: "🛢 Boiling Oil",         color: AMBER,  flash: true, volley: { family: "fire", count: 3, direction: "outgoing" } });
+  const _onSortie          = (p) => _siegeSpectacle(p, { label: "🚪 Sortie",              color: RED,    flash: true, shake: true, volley: { family: "bolt", count: 2, direction: "outgoing" } });
+  const _onFlamingPitch    = (p) => _siegeSpectacle(p, { label: "🔥 Flaming Pitch",       color: AMBER,  flash: true, volley: { family: "fire", count: 3, direction: "outgoing" } });
+  Hooks.on("bbttcc:siege:escalade",        _onEscalade);
+  Hooks.on("bbttcc:siege:sapperUndermine", _onSapperUndermine);
+  Hooks.on("bbttcc:siege:ramGate",         _onRamGate);
+  Hooks.on("bbttcc:siege:boilingOil",      _onBoilingOil);
+  Hooks.on("bbttcc:siege:sortie",          _onSortie);
+  Hooks.on("bbttcc:siege:flamingPitch",    _onFlamingPitch);
+
   // Expose for the selftest / manual preview.
   function _install() {
     game.bbttcc = game.bbttcc || { api: {} };
