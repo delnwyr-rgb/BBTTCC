@@ -7,14 +7,29 @@
       "category": "fortifications",
       "tierGate": 1,
       "description": "Baseline mass fortification — quarried highland stone over an anchored foundation, blessed thread woven into the courses, a single yesodium course at the core. Holds when the sept does.",
-      "footprintGrid": { "w": 6, "h": 1 },
+      "footprintGrid": {
+        "w": 6,
+        "h": 1
+      },
       "tokenImg": "icons/svg/anvil.svg",
       "facilityMode": true,
       "materialOf": [
-        { "key": "mountain-stone", "qty": 12 },
-        { "key": "anchorstone",    "qty": 6  },
-        { "key": "blessed-thread", "qty": 4  },
-        { "key": "yesodium",       "qty": 1  }
+        {
+          "key": "mountain-stone",
+          "qty": 12
+        },
+        {
+          "key": "anchorstone",
+          "qty": 6
+        },
+        {
+          "key": "blessed-thread",
+          "qty": 4
+        },
+        {
+          "key": "yesodium",
+          "qty": 1
+        }
       ]
     },
     {
@@ -23,13 +38,25 @@
       "category": "fortifications",
       "tierGate": 2,
       "description": "Canonical fortress entry — scribed-steel gate leaves, hex-glyph plates pre-engraved along the seams, foundation cores at the threshold.",
-      "footprintGrid": { "w": 4, "h": 2 },
+      "footprintGrid": {
+        "w": 4,
+        "h": 2
+      },
       "tokenImg": "icons/svg/castle.svg",
       "facilityMode": true,
       "materialOf": [
-        { "key": "scribed-steel",   "qty": 10 },
-        { "key": "hex-glyph-plate", "qty": 4  },
-        { "key": "yesodium",        "qty": 2  }
+        {
+          "key": "scribed-steel",
+          "qty": 10
+        },
+        {
+          "key": "hex-glyph-plate",
+          "qty": 4
+        },
+        {
+          "key": "yesodium",
+          "qty": 2
+        }
       ]
     },
     {
@@ -38,14 +65,29 @@
       "category": "fortifications",
       "tierGate": 1,
       "description": "Tall, sparse — ash-wood frame on mountain stone footings, hex-iron cleats anchoring the platform, a focusing lens at the top.",
-      "footprintGrid": { "w": 2, "h": 2 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
       "tokenImg": "icons/svg/tower-flag.svg",
       "facilityMode": true,
       "materialOf": [
-        { "key": "ash-wood",        "qty": 8 },
-        { "key": "mountain-stone",  "qty": 4 },
-        { "key": "hex-iron-cleat",  "qty": 2 },
-        { "key": "focusing-lens",   "qty": 1 }
+        {
+          "key": "ash-wood",
+          "qty": 8
+        },
+        {
+          "key": "mountain-stone",
+          "qty": 4
+        },
+        {
+          "key": "hex-iron-cleat",
+          "qty": 2
+        },
+        {
+          "key": "focusing-lens",
+          "qty": 1
+        }
       ],
       "specialAbility": "detection+1",
       "specialNote": "+1 detection rolls in the containing Hex"
@@ -56,13 +98,25 @@
       "category": "fortifications",
       "tierGate": 3,
       "description": "A single dense column of hex-glyph plates around a sept tuning fork, with a tree-of-life shard at the apex. Radiates a faint warding field.",
-      "footprintGrid": { "w": 1, "h": 1 },
+      "footprintGrid": {
+        "w": 1,
+        "h": 1
+      },
       "tokenImg": "icons/svg/aura.svg",
       "facilityMode": true,
       "materialOf": [
-        { "key": "hex-glyph-plate",     "qty": 6 },
-        { "key": "sept-tuning-fork",    "qty": 2 },
-        { "key": "tree-of-life-shard",  "qty": 1 }
+        {
+          "key": "hex-glyph-plate",
+          "qty": 6
+        },
+        {
+          "key": "sept-tuning-fork",
+          "qty": 2
+        },
+        {
+          "key": "tree-of-life-shard",
+          "qty": 1
+        }
       ],
       "specialAbility": "ward-radiate+1",
       "specialNote": "+1 ward resist to all adjacent Structures (stackable)"
@@ -73,7 +127,10 @@
       "category": "fortifications",
       "tierGate": 1,
       "description": "Stone deck over ash-wood lattice, cold-iron lacing, single foundation anchor at the midspan. Falls hard.",
-      "footprintGrid": { "w": 8, "h": 1 },
+      "footprintGrid": {
+        "w": 8,
+        "h": 1
+      },
       "tokenImg": "icons/svg/bridge.svg",
       "facilityMode": true,
       "collapseProfileOverride": {
@@ -82,14 +139,25 @@
         "fallFt": 20
       },
       "materialOf": [
-        { "key": "mountain-stone", "qty": 8 },
-        { "key": "ash-wood",       "qty": 4 },
-        { "key": "cold-iron",      "qty": 3 },
-        { "key": "yesodium",       "qty": 1 }
+        {
+          "key": "mountain-stone",
+          "qty": 8
+        },
+        {
+          "key": "ash-wood",
+          "qty": 4
+        },
+        {
+          "key": "cold-iron",
+          "qty": 3
+        },
+        {
+          "key": "yesodium",
+          "qty": 1
+        }
       ],
       "specialNote": "Collapse fires at Damaged state — the ravine is the whole point"
     },
-
     {
       "_section": "SIEGE LAYERS — heavy fortress-grade walls purpose-built as breachable siege layers (high Plates + Threshold). The Strategic Siege engine stacks these as a besieged hex's structureActorIds; also buildable by hand from Rig Builder → Infrastructure → Fortifications.",
       "id": "siege-curtain-wall",
@@ -97,53 +165,92 @@
       "category": "fortifications",
       "tierGate": 2,
       "description": "The outer ring — a thick course of quarried highland stone over an anchored foundation, cold-iron lacing, blessed thread woven through. No sephirotic core, so it can be ground all the way down to rubble. The first thing a siege has to chew through.",
-      "footprintGrid": { "w": 8, "h": 1 },
+      "footprintGrid": {
+        "w": 8,
+        "h": 1
+      },
       "tokenImg": "icons/svg/castle.svg",
       "facilityMode": true,
       "materialOf": [
-        { "key": "mountain-stone", "qty": 20 },
-        { "key": "anchorstone",    "qty": 10 },
-        { "key": "cold-iron",      "qty": 6 },
-        { "key": "blessed-thread", "qty": 4 }
+        {
+          "key": "mountain-stone",
+          "qty": 20
+        },
+        {
+          "key": "anchorstone",
+          "qty": 10
+        },
+        {
+          "key": "cold-iron",
+          "qty": 6
+        },
+        {
+          "key": "blessed-thread",
+          "qty": 4
+        }
       ],
       "specialNote": "Outer siege layer (~142 Plates, no sephirotic → can be fully Razed). Pair as transitionRule 'razed' or 'threshold'."
     },
-
     {
       "id": "siege-barbican-gate",
       "name": "Barbican Gate (siege layer)",
       "category": "fortifications",
       "tierGate": 2,
       "description": "The fortified gatehouse — scribed-steel leaves on hex-iron cleats, glyph-warded against breaching charges, set into a stone surround. The chokepoint where a storm gets bloody.",
-      "footprintGrid": { "w": 4, "h": 2 },
+      "footprintGrid": {
+        "w": 4,
+        "h": 2
+      },
       "tokenImg": "icons/svg/padlock.svg",
       "facilityMode": true,
       "materialOf": [
-        { "key": "scribed-steel",  "qty": 16 },
-        { "key": "hex-iron-cleat", "qty": 6 },
-        { "key": "hex-glyph-plate","qty": 8 },
-        { "key": "mountain-stone", "qty": 8 }
+        {
+          "key": "scribed-steel",
+          "qty": 16
+        },
+        {
+          "key": "hex-iron-cleat",
+          "qty": 6
+        },
+        {
+          "key": "hex-glyph-plate",
+          "qty": 8
+        },
+        {
+          "key": "mountain-stone",
+          "qty": 8
+        }
       ],
       "specialNote": "Middle siege layer (~114 Plates, ward-resist vs breaching). Good as transitionRule 'threshold' (≤0.25)."
     },
-
     {
       "id": "siege-inner-keep",
       "name": "Inner Keep (siege layer)",
       "category": "fortifications",
       "tierGate": 3,
       "description": "The last redoubt — a mass stone shell under dense glyph-warding and blessed courses, the garrison's final stand. Densely armoured but not load-bearing, so a determined storm can grind it all the way down.",
-      "footprintGrid": { "w": 3, "h": 3 },
+      "footprintGrid": {
+        "w": 3,
+        "h": 3
+      },
       "tokenImg": "icons/svg/holy-shield.svg",
       "facilityMode": true,
       "materialOf": [
-        { "key": "mountain-stone",  "qty": 16 },
-        { "key": "hex-glyph-plate", "qty": 14 },
-        { "key": "blessed-thread",  "qty": 4 }
+        {
+          "key": "mountain-stone",
+          "qty": 16
+        },
+        {
+          "key": "hex-glyph-plate",
+          "qty": 14
+        },
+        {
+          "key": "blessed-thread",
+          "qty": 4
+        }
       ],
       "specialNote": "Innermost siege layer (~96 Plates, ward-resist, no sephirotic → fully Razable). Final layer — breach it to win the storm."
     },
-
     {
       "_section": "FLIMSY INFRASTRUCTURE — breakable scenery, not fortress walls. Mostly cloth/wood/salvage (low Plates, low Threshold so almost anything chips them), no sephirotic (so they can be fully Razed), light collapse profiles (a rig drives THROUGH these). facilityMode:false — these are scatter, not Holdings-scale facilities.",
       "id": "wasteland-shack",
@@ -151,14 +258,29 @@
       "category": "dwellings",
       "tierGate": 1,
       "description": "A one-room hovel of scavenged board and salvaged sheet, draped in old cloth. Keeps the wind off. Keeps almost nothing else off.",
-      "footprintGrid": { "w": 2, "h": 2 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
       "tokenImg": "icons/svg/village.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
       "materialOf": [
-        { "key": "ash-wood",      "qty": 4 },
-        { "key": "scrap-salvage", "qty": 3 },
-        { "key": "sept-cloth",    "qty": 2 }
+        {
+          "key": "ash-wood",
+          "qty": 4
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 3
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 2
+        }
       ]
     },
     {
@@ -167,14 +289,29 @@
       "category": "dwellings",
       "tierGate": 1,
       "description": "A few poles, a hide, and optimism. Half a roof leaned against whatever was standing. The lightest thing anyone calls a home.",
-      "footprintGrid": { "w": 2, "h": 1 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 1
+      },
       "tokenImg": "icons/svg/oak.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0
+      },
       "materialOf": [
-        { "key": "ash-wood",      "qty": 2 },
-        { "key": "root-leather",  "qty": 2 },
-        { "key": "scrap-salvage", "qty": 1 }
+        {
+          "key": "ash-wood",
+          "qty": 2
+        },
+        {
+          "key": "root-leather",
+          "qty": 2
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 1
+        }
       ]
     },
     {
@@ -183,15 +320,33 @@
       "category": "dwellings",
       "tierGate": 1,
       "description": "Corrugated salvage nailed to a timber frame, a bog-iron stovepipe poking through. Sturdier than a shack, still nothing you'd bet your life on.",
-      "footprintGrid": { "w": 2, "h": 2 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
       "tokenImg": "icons/svg/village.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
       "materialOf": [
-        { "key": "scrap-salvage", "qty": 4 },
-        { "key": "ash-wood",      "qty": 3 },
-        { "key": "sept-cloth",    "qty": 2 },
-        { "key": "bog-iron",      "qty": 1 }
+        {
+          "key": "scrap-salvage",
+          "qty": 4
+        },
+        {
+          "key": "ash-wood",
+          "qty": 3
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 2
+        },
+        {
+          "key": "bog-iron",
+          "qty": 1
+        }
       ]
     },
     {
@@ -200,31 +355,60 @@
       "category": "dwellings",
       "tierGate": 1,
       "description": "Pre-Fall mudbrick and rotten beams, half-reclaimed by the weather. Bigger and heavier than a shack, but the mortar is long dead — it comes down in slabs.",
-      "footprintGrid": { "w": 3, "h": 2 },
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
       "tokenImg": "icons/svg/ruins.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d8", "fallFt": 10 },
+      "collapseProfileOverride": {
+        "damageDice": "1d8",
+        "fallFt": 10
+      },
       "materialOf": [
-        { "key": "ash-wood",   "qty": 6 },
-        { "key": "river-clay",  "qty": 4 },
-        { "key": "sept-cloth", "qty": 3 }
+        {
+          "key": "ash-wood",
+          "qty": 6
+        },
+        {
+          "key": "river-clay",
+          "qty": 4
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 3
+        }
       ]
     },
-
     {
       "id": "market-stall",
       "name": "Market Stall",
       "category": "civic",
       "tierGate": 1,
       "description": "A trestle, a cloth awning, a board counter. Folds, splinters, and scatters the wares the instant anything heavier than a customer leans on it.",
-      "footprintGrid": { "w": 2, "h": 1 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 1
+      },
       "tokenImg": "icons/svg/barrel.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0
+      },
       "materialOf": [
-        { "key": "ash-wood",      "qty": 3 },
-        { "key": "sept-cloth",    "qty": 3 },
-        { "key": "scrap-salvage", "qty": 1 }
+        {
+          "key": "ash-wood",
+          "qty": 3
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 3
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 1
+        }
       ]
     },
     {
@@ -233,14 +417,29 @@
       "category": "civic",
       "tierGate": 1,
       "description": "A run of plank fencing with a bronze-pinned gate. Marks a boundary, stops a wanderer, means nothing at all to a rig at speed.",
-      "footprintGrid": { "w": 4, "h": 1 },
+      "footprintGrid": {
+        "w": 4,
+        "h": 1
+      },
       "tokenImg": "icons/svg/door-closed.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0
+      },
       "materialOf": [
-        { "key": "ash-wood",      "qty": 5 },
-        { "key": "bronze-nail",   "qty": 2 },
-        { "key": "scrap-salvage", "qty": 1 }
+        {
+          "key": "ash-wood",
+          "qty": 5
+        },
+        {
+          "key": "bronze-nail",
+          "qty": 2
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 1
+        }
       ]
     },
     {
@@ -249,15 +448,33 @@
       "category": "civic",
       "tierGate": 1,
       "description": "A raised plank box on stilts with a salvage-tin roof. Somewhere for a lookout to sit out of the rain — until something knocks the legs out.",
-      "footprintGrid": { "w": 2, "h": 2 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
       "tokenImg": "icons/svg/tower-flag.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d8", "fallFt": 10 },
+      "collapseProfileOverride": {
+        "damageDice": "1d8",
+        "fallFt": 10
+      },
       "materialOf": [
-        { "key": "ash-wood",      "qty": 4 },
-        { "key": "scrap-salvage", "qty": 2 },
-        { "key": "bog-iron",      "qty": 1 },
-        { "key": "sept-cloth",    "qty": 1 }
+        {
+          "key": "ash-wood",
+          "qty": 4
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 2
+        },
+        {
+          "key": "bog-iron",
+          "qty": 1
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 1
+        }
       ],
       "specialNote": "A perch, not a fortification — tips and drops its occupant when breached"
     },
@@ -267,31 +484,60 @@
       "category": "civic",
       "tierGate": 1,
       "description": "A little clay alcove with a blessed-thread offering, raised where someone died or something was promised. Small, soft, and oddly hard to bring yourself to flatten.",
-      "footprintGrid": { "w": 1, "h": 1 },
+      "footprintGrid": {
+        "w": 1,
+        "h": 1
+      },
       "tokenImg": "icons/svg/aura.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
       "materialOf": [
-        { "key": "river-clay",     "qty": 3 },
-        { "key": "ash-wood",       "qty": 2 },
-        { "key": "blessed-thread", "qty": 1 }
+        {
+          "key": "river-clay",
+          "qty": 3
+        },
+        {
+          "key": "ash-wood",
+          "qty": 2
+        },
+        {
+          "key": "blessed-thread",
+          "qty": 1
+        }
       ]
     },
-
     {
       "id": "fuel-shed",
       "name": "Fuel Shed",
       "category": "utility",
       "tierGate": 1,
       "description": "A salvage lean-to over a cache of jerry cans and seep-oil drums. Flimsy walls; very much not a flimsy thing to set on fire.",
-      "footprintGrid": { "w": 2, "h": 2 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
       "tokenImg": "icons/svg/fire.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
       "materialOf": [
-        { "key": "scrap-salvage", "qty": 4 },
-        { "key": "bog-iron",      "qty": 2 },
-        { "key": "ash-wood",      "qty": 2 }
+        {
+          "key": "scrap-salvage",
+          "qty": 4
+        },
+        {
+          "key": "bog-iron",
+          "qty": 2
+        },
+        {
+          "key": "ash-wood",
+          "qty": 2
+        }
       ],
       "specialNote": "Volatile — GM may rule that a fire-flavored breach detonates the stored fuel (area damage)"
     },
@@ -301,14 +547,29 @@
       "category": "utility",
       "tierGate": 1,
       "description": "An open-sided rack-and-tarp pile of pre-Fall components waiting to be picked over. Lots of mass, none of it structural.",
-      "footprintGrid": { "w": 3, "h": 2 },
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
       "tokenImg": "icons/svg/barrel.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
       "materialOf": [
-        { "key": "scrap-salvage",     "qty": 6 },
-        { "key": "ash-wood",          "qty": 3 },
-        { "key": "prefall-component", "qty": 2 }
+        {
+          "key": "scrap-salvage",
+          "qty": 6
+        },
+        {
+          "key": "ash-wood",
+          "qty": 3
+        },
+        {
+          "key": "prefall-component",
+          "qty": 2
+        }
       ]
     },
     {
@@ -317,14 +578,30 @@
       "category": "utility",
       "tierGate": 1,
       "description": "A riveted soft-alloy cistern on a low cradle. The metal skin dents and splits; what's inside does the rest.",
-      "footprintGrid": { "w": 2, "h": 2 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
       "tokenImg": "icons/svg/barrel.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5, "knockbackFt": 10 },
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5,
+        "knockbackFt": 10
+      },
       "materialOf": [
-        { "key": "soft-alloy",    "qty": 4 },
-        { "key": "bog-iron",      "qty": 2 },
-        { "key": "scrap-salvage", "qty": 1 }
+        {
+          "key": "soft-alloy",
+          "qty": 4
+        },
+        {
+          "key": "bog-iron",
+          "qty": 2
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 1
+        }
       ],
       "specialNote": "A breach floods the cell — GM may rule difficult terrain / a knockback wave below it"
     },
@@ -334,31 +611,60 @@
       "category": "utility",
       "tierGate": 1,
       "description": "A bog-iron housing around a coughing pre-Fall generator. Powers a few lamps, throws a few sparks, falls over like everything else out here.",
-      "footprintGrid": { "w": 2, "h": 2 },
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
       "tokenImg": "icons/svg/anvil.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d6", "fallFt": 5 },
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
       "materialOf": [
-        { "key": "bog-iron",      "qty": 3 },
-        { "key": "scrap-salvage", "qty": 3 },
-        { "key": "ash-wood",      "qty": 2 }
+        {
+          "key": "bog-iron",
+          "qty": 3
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 3
+        },
+        {
+          "key": "ash-wood",
+          "qty": 2
+        }
       ]
     },
-
     {
       "id": "sandbag-wall",
       "name": "Sandbag Wall",
       "category": "barriers",
       "tierGate": 1,
       "description": "A stacked course of earth-filled sacks. Soaks up bullets and shrugs off small arms — then bursts and slumps when something heavy hits it.",
-      "footprintGrid": { "w": 3, "h": 1 },
+      "footprintGrid": {
+        "w": 3,
+        "h": 1
+      },
       "tokenImg": "icons/svg/hazard.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0
+      },
       "materialOf": [
-        { "key": "sept-cloth",    "qty": 4 },
-        { "key": "river-clay",    "qty": 3 },
-        { "key": "scrap-salvage", "qty": 1 }
+        {
+          "key": "sept-cloth",
+          "qty": 4
+        },
+        {
+          "key": "river-clay",
+          "qty": 3
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 1
+        }
       ],
       "specialNote": "Good cover against fire (earth resists kinetic); concussive / ramming bursts it"
     },
@@ -368,14 +674,29 @@
       "category": "barriers",
       "tierGate": 1,
       "description": "A heap of welded scrap, fence wire, and dead engine blocks dragged across the road. Blocks a lane until someone with enough momentum disagrees.",
-      "footprintGrid": { "w": 3, "h": 1 },
+      "footprintGrid": {
+        "w": 3,
+        "h": 1
+      },
       "tokenImg": "icons/svg/hazard.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0
+      },
       "materialOf": [
-        { "key": "scrap-salvage", "qty": 5 },
-        { "key": "ash-wood",      "qty": 2 },
-        { "key": "bog-iron",      "qty": 1 }
+        {
+          "key": "scrap-salvage",
+          "qty": 5
+        },
+        {
+          "key": "ash-wood",
+          "qty": 2
+        },
+        {
+          "key": "bog-iron",
+          "qty": 1
+        }
       ]
     },
     {
@@ -384,13 +705,26 @@
       "category": "barriers",
       "tierGate": 1,
       "description": "A single hunched plate of bolted salvage — a one-person bit of cover to crouch behind. Lasts exactly as long as nobody focuses on it.",
-      "footprintGrid": { "w": 1, "h": 1 },
+      "footprintGrid": {
+        "w": 1,
+        "h": 1
+      },
       "tokenImg": "icons/svg/trap.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0, "knockbackFt": 0 },
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0,
+        "knockbackFt": 0
+      },
       "materialOf": [
-        { "key": "scrap-salvage", "qty": 3 },
-        { "key": "soft-alloy",    "qty": 1 }
+        {
+          "key": "scrap-salvage",
+          "qty": 3
+        },
+        {
+          "key": "soft-alloy",
+          "qty": 1
+        }
       ]
     },
     {
@@ -399,15 +733,283 @@
       "category": "barriers",
       "tierGate": 1,
       "description": "A line of sharpened ash stakes lashed upright. Stops a crowd, channels a charge — and burns or splinters readily.",
-      "footprintGrid": { "w": 4, "h": 1 },
+      "footprintGrid": {
+        "w": 4,
+        "h": 1
+      },
       "tokenImg": "icons/svg/oak.svg",
       "facilityMode": false,
-      "collapseProfileOverride": { "damageDice": "1d4", "fallFt": 0 },
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0
+      },
       "materialOf": [
-        { "key": "ash-wood",      "qty": 6 },
-        { "key": "scrap-salvage", "qty": 1 }
+        {
+          "key": "ash-wood",
+          "qty": 6
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 1
+        }
       ],
       "specialNote": "Wood — doubly vulnerable to fire"
+    },
+    {
+      "id": "snarky-burger-outpost",
+      "name": "Snarky Burger Outpost",
+      "category": "civic",
+      "tierGate": 1,
+      "description": "A reclaimed fast-food franchise turned frontier waystation. The mascot sign still flickers sarcasm at passers-by; the drive-thru speaker has been rewired into a perimeter intercom. Sells certainty now instead of burgers. The booths make surprisingly good map tables.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/house.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 6
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 3
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 4
+        },
+        {
+          "key": "sun-glass",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": "jackalope-trade-post",
+      "name": "Jackalope Trade-Post",
+      "category": "civic",
+      "tierGate": 2,
+      "description": "A mercantile hub of stacked awnings, swinging scales, and at least three doors that are actually exits for when a deal goes sideways. The Jackalopes will weigh your goods, your worth, and your odds, in that order, and charge you for all three.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 3
+      },
+      "tokenImg": "icons/svg/coins.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 5
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 5
+        },
+        {
+          "key": "bronze-nail",
+          "qty": 3
+        },
+        {
+          "key": "courier-glass",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": "leygate-anchor-pylon",
+      "name": "Leygate Anchor-Pylon",
+      "category": "utility",
+      "tierGate": 3,
+      "description": "A tuned spire that grabs a passing leyline and holds it still long enough to walk through. Hums in a key that makes dogs sit and casters nervous. One yesodium core, one focusing lens, and a great deal of hope pressed into anchorstone.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/lightning.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "anchorstone",
+          "qty": 8
+        },
+        {
+          "key": "yesodium",
+          "qty": 2
+        },
+        {
+          "key": "focusing-lens",
+          "qty": 2
+        },
+        {
+          "key": "hex-script",
+          "qty": 3
+        }
+      ]
+    },
+    {
+      "id": "yesodium-containment-bunker",
+      "name": "Yesodium Containment Bunker",
+      "category": "fortifications",
+      "tierGate": 3,
+      "description": "Where Khezek Tor keeps the ore that bites back. Rad-iron liner, cold-iron ribs, a hex-warded door that takes two to open and a lifetime to regret. Holds the glow in. Mostly. The dosimeter on the wall is decorative; the one in your bones is not.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/bones.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "cold-iron",
+          "qty": 6
+        },
+        {
+          "key": "rad-iron",
+          "qty": 4
+        },
+        {
+          "key": "mountain-stone",
+          "qty": 8
+        },
+        {
+          "key": "hex-glyph-plate",
+          "qty": 3
+        }
+      ]
+    },
+    {
+      "id": "wendigo-ward-fence",
+      "name": "Wendigo Ward-Fence",
+      "category": "barriers",
+      "tierGate": 2,
+      "description": "Salt below, vow-shafts above, hex-rope strung between and a smear of threshold-wax on every post. It will not stop a determined raider. It will give the things that are a bit OFF a reason to stay outside and sulk, which on the frontier is most of what a fence is for.",
+      "footprintGrid": {
+        "w": 5,
+        "h": 1
+      },
+      "tokenImg": "icons/svg/padlock.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 0
+      },
+      "materialOf": [
+        {
+          "key": "vow-shaft",
+          "qty": 5
+        },
+        {
+          "key": "hex-rope",
+          "qty": 4
+        },
+        {
+          "key": "threshold-wax",
+          "qty": 2
+        },
+        {
+          "key": "salt-block",
+          "qty": 3
+        }
+      ]
+    },
+    {
+      "id": "pilgrims-rest-chapel",
+      "name": "Pilgrim's Rest Chapel",
+      "category": "dwellings",
+      "tierGate": 2,
+      "description": "A small Sephirotic waychapel — stone walls, blessed thread in the rafters, a single thread of sacred gold-leaf catching whatever light there is. The faithful sleep here safely. So does anyone else who can sit through the optional theology.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/angel.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "mountain-stone",
+          "qty": 6
+        },
+        {
+          "key": "blessed-thread",
+          "qty": 4
+        },
+        {
+          "key": "sacred-gold-leaf",
+          "qty": 1
+        },
+        {
+          "key": "prayer-binding",
+          "qty": 3
+        }
+      ]
+    },
+    {
+      "id": "battle-bassinet-muster-yard",
+      "name": "Battle-Bassinet Muster Yard",
+      "category": "fortifications",
+      "tierGate": 2,
+      "description": "Where the Valhaulans rock their war-cradles into formation and sing the muster-lullaby loud enough to curdle morale three hexes out. Bog-iron stakes, herd-leather lashings, and a drum the size of an argument.",
+      "footprintGrid": {
+        "w": 4,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/combat.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 4
+        },
+        {
+          "key": "bog-iron",
+          "qty": 5
+        },
+        {
+          "key": "hex-iron-cleat",
+          "qty": 3
+        },
+        {
+          "key": "herd-leather",
+          "qty": 4
+        }
+      ]
+    },
+    {
+      "id": "repurposed-roadside-sign",
+      "name": "Repurposed Roadside Sign",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "An old highway sign stripped, rewired, and pointed at the horizon as a relay mast and lookout perch. Mal likes these — says it's nice to have somewhere to put the words. Reads the weather, the road, and your odds, and is wrong about exactly one of those at a time.",
+      "footprintGrid": {
+        "w": 1,
+        "h": 1
+      },
+      "tokenImg": "icons/svg/eye.svg",
+      "facilityMode": true,
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 10
+      },
+      "materialOf": [
+        {
+          "key": "scrap-salvage",
+          "qty": 3
+        },
+        {
+          "key": "sun-glass",
+          "qty": 1
+        },
+        {
+          "key": "prefall-component",
+          "qty": 2
+        },
+        {
+          "key": "bronze-nail",
+          "qty": 2
+        }
+      ]
     }
   ]
 }
