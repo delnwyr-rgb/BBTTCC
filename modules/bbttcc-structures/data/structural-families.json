@@ -152,7 +152,8 @@
     "bludgeoning":  { "type": "kinetic", "asFlavor": "bludgeoning" },
     "concussive":   { "type": "kinetic", "asFlavor": "concussive" },
     "explosive":    { "type": "kinetic", "asFlavor": "concussive" },
-    "blast":        { "type": "kinetic", "asFlavor": "concussive" }
+    "blast":        { "type": "kinetic", "asFlavor": "concussive" },
+    "acid":         { "type": "poison",  "asFlavor": "caustic" }
   },
   "stateThresholds": {
     "intact":   { "platesMin": 0.75 },

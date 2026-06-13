@@ -134,7 +134,11 @@ try {
       const DARK_SPIKE_DIE       = "1d4";    // owner-tunable
       const globalDark = Number(get(A,`flags.${MODF}.darkness.global`,0))||0;
       if(globalDark >= DARK_SPIKE_THRESHOLD){
-        const applyDmg = game.fourththing?.rolls?._applyDamageToActor;
+        // Damage via the system-agnostic combat adapter (live seam since the
+        // adapter Phase 1). Was a direct fourththing-fulcrum call pre-seam;
+        // routing through game.bbttcc.combat is behavior-identical on RFI
+        // (the RFI impl forwards to the fulcrum) and keeps the chokepoint.
+        const applyDmg = game.bbttcc?.combat?.applyDamage;
         for(const m of (game.actors?.contents ?? [])){
           if(m.type!=="character") continue;
           if(m.getFlag(MODF,"factionId")!==A.id) continue;

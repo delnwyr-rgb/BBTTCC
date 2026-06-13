@@ -53,7 +53,11 @@ async function _writeMap(faction, map) {
       lastUuid: v.lastUuid || null
     };
   }
-  await faction.setFlag(MOD_ID, FLAG_KEY, clean);
+  // Replace wholesale (delete-then-set semantics) — a plain merge-write never
+  // drops a key that hit zero [[reference_foundry_update_merges_use_minus_eq]].
+  // (Backported from the dnd5e build 2026-06-12.)
+  await faction.update({ [`flags.${MOD_ID}.-=${FLAG_KEY}`]: null });
+  await faction.update({ [`flags.${MOD_ID}.${FLAG_KEY}`]: clean });
 }
 
 function _safeQty(v) {

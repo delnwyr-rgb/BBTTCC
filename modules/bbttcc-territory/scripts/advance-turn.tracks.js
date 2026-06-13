@@ -928,7 +928,10 @@
 
       const bank = foundry.utils.duplicate(A.getFlag(MODF,"opBank") || {});
       const before = Number(bank.logistics || 0);
-      const after = before + bonus;
+      // bonus is whole OP; bank is MARKS (1 OP = 10 marks). Adding the raw
+      // integer to a marks bank under-credited the route bonus 10× — fixed
+      // in lockstep with the dnd5e build 2026-06-12.
+      const after = before + bonus * 10;
       bank.logistics = after;
       const warLogs = Array.isArray(A.getFlag(MODF,"warLogs")) ? A.getFlag(MODF,"warLogs").slice() : [];
       warLogs.push({ ts: Date.now(), type: "logisticsRoute", summary: `Trade Routes: ${routeCount} → Logistics +${bonus}` });

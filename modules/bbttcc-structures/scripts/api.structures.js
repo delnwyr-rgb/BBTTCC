@@ -485,39 +485,47 @@ async function fullRepair(actor) {
 // ── API install ─────────────────────────────────────────────────────────────
 // Per [[bbttcc-api-exposure-pattern]] memory: install at BOTH script-load AND
 // Hooks.once("ready") to defend against load-order clobber + browser cache
-// races. Tiny installer.
+// races. The API is a module-scope SINGLETON and _installApi only re-points
+// game.bbttcc.api.structures at it — a fresh object per call would WIPE the
+// extension keys the sibling scripts attach at ready (_wedge from
+// damage-wedge, .bulwark, .triggerCollapse, .recipes): our async ready
+// callback yields at the _loadTables await, the siblings attach to the
+// current object, then a rebuild would clobber them. (Backported from the
+// dnd5e build's structures gauntlet A4 finding 2026-06-12.)
+
+const _API = {
+  // Pure functions
+  computeFamily,
+  deriveBOM,
+  stateFromPlates,
+  canonicalizeDamageType,
+  // I/O
+  lookupMaterial,
+  normalizeBOM,
+  // Mutating
+  stampBOM,
+  clearStructure,
+  fullRepair,
+  // Reading
+  readState,
+  // Crew (who mans the structure)
+  crew: { capacity: crewCapacity, read: readCrew, assign: assignCrew, release: releaseCrew, retypeFortification },
+  // Tables (live refs; immutable in practice — load once)
+  get FAMILIES() { return _FAMILIES?.families ?? {}; },
+  get FAMILY_MAP() { return _FAMILY_MAP?.materialKeyToFamily ?? {}; },
+  get STATE_THRESHOLDS() { return _FAMILIES?.stateThresholds ?? {}; },
+  get RUBBLE_JITTER() { return _FAMILIES?.rubbleJitter ?? { formula: "1d4-1", min: 0, max: 3 }; },
+  // Constants
+  FLAG_SCOPE,
+  MOD_ID,
+  VERSION: "0.1.0-phaseA"
+};
 
 function _installApi() {
   try {
     if (!game.bbttcc) game.bbttcc = { api: {} };
     if (!game.bbttcc.api) game.bbttcc.api = {};
-    game.bbttcc.api.structures = {
-      // Pure functions
-      computeFamily,
-      deriveBOM,
-      stateFromPlates,
-      canonicalizeDamageType,
-      // I/O
-      lookupMaterial,
-      normalizeBOM,
-      // Mutating
-      stampBOM,
-      clearStructure,
-      fullRepair,
-      // Reading
-      readState,
-      // Crew (who mans the structure)
-      crew: { capacity: crewCapacity, read: readCrew, assign: assignCrew, release: releaseCrew, retypeFortification },
-      // Tables (live refs; immutable in practice — load once)
-      get FAMILIES() { return _FAMILIES?.families ?? {}; },
-      get FAMILY_MAP() { return _FAMILY_MAP?.materialKeyToFamily ?? {}; },
-      get STATE_THRESHOLDS() { return _FAMILIES?.stateThresholds ?? {}; },
-      get RUBBLE_JITTER() { return _FAMILIES?.rubbleJitter ?? { formula: "1d4-1", min: 0, max: 3 }; },
-      // Constants
-      FLAG_SCOPE,
-      MOD_ID,
-      VERSION: "0.1.0-phaseA"
-    };
+    game.bbttcc.api.structures = _API;
   } catch (e) {
     console.warn(TAG, "API install failed", e);
   }
