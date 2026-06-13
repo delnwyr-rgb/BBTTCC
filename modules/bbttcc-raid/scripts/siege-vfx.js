@@ -504,6 +504,26 @@
   Hooks.on("bbttcc:siege:sortie",          _onSortie);
   Hooks.on("bbttcc:siege:flamingPitch",    _onFlamingPitch);
 
+  // ── Content Sprint batch 2b (2026-06-13) — class-granted maneuver spectacles ──
+  const _onClsRally    = (p) => _siegeSpectacle(p, { label: "🎏 Rally the Standard", color: BRONZE, shake: false });
+  const _onClsWyrdRead = (p) => _siegeSpectacle(p, { label: "👁 Read the Weak Point", color: VIOLET, flash: true, volley: { family: "boulder", count: 2, direction: "incoming" } });
+  const _onClsPostern  = (p) => _siegeSpectacle(p, { label: "🗝 Open the Postern",    color: GRAY,   shake: true, volley: { family: "bolt", count: 2, direction: "incoming" } });
+  const _onClsMercy    = (p) => _siegeSpectacle(p, { label: "⚔ Mercy's Edge",         color: BLUE,   shake: true });
+  const _onClsClause   = (p) => _siegeSpectacle(p, { label: "📜 Cite the Clause",     color: VIOLET, flash: true });
+  const _onClsDebt     = (p) => _siegeSpectacle(p, { label: "🤝 Call the Debt",       color: AMBER,  shake: false });
+  const _onClsBrace    = (p) => _siegeSpectacle(p, { label: "🛡 Brace the Breach",    color: BLUE,   shake: true });
+  const _onClsRefit    = (p) => _siegeSpectacle(p, { label: "🔨 Field Refit",         color: AMBER,  shake: false });
+  const _onClsPhantom  = (p) => _siegeSpectacle(p, { label: "🌙 Phantom Host",        color: VIOLET, flash: true, volley: { family: "arrows", count: 3, direction: "outgoing" } });
+  Hooks.on("bbttcc:siege:clsRally",      _onClsRally);
+  Hooks.on("bbttcc:siege:clsWyrdRead",   _onClsWyrdRead);
+  Hooks.on("bbttcc:siege:clsOpenPostern",_onClsPostern);
+  Hooks.on("bbttcc:siege:clsMercy",      _onClsMercy);
+  Hooks.on("bbttcc:siege:clsClause",     _onClsClause);
+  Hooks.on("bbttcc:siege:clsDebt",       _onClsDebt);
+  Hooks.on("bbttcc:siege:clsBrace",      _onClsBrace);
+  Hooks.on("bbttcc:siege:clsRefit",      _onClsRefit);
+  Hooks.on("bbttcc:siege:clsPhantom",    _onClsPhantom);
+
   // Expose for the selftest / manual preview.
   function _install() {
     game.bbttcc = game.bbttcc || { api: {} };

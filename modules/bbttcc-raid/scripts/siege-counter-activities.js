@@ -438,6 +438,37 @@
   const sortie       = (ctx) => _defenderBufferManeuver(ctx, { key: "sortie",       title: "Sortie",       drain: 3, selfRenewal: -1, vfxHook: "sortie" });
   const flaming_pitch= (ctx) => _defenderBufferManeuver(ctx, { key: "flaming_pitch", title: "Flaming Pitch", drain: 2, morale: +1, vfxHook: "flamingPitch" });
 
+  // ── Content Sprint batch 2b (2026-06-13) — class-granted siege maneuvers ─────
+  // One per Steward class. grantedByClass gates HUD visibility (siege-hud.js) to
+  // when a Steward of that class is participating. Plate-chip ones reuse
+  // _attackerWallManeuver; the rest mutate siege levers via this generic boon.
+  async function _classBoon({ factionId, targetUuid, S }, { key, title, bufferDelta = 0, defAnytime = 0, defRenewal = 0, morale = 0, note, vfxHook }) {
+    const actor = game.actors.get(factionId);
+    const r = await _withSiege(S, targetUuid, (state) => {
+      if (bufferDelta) state.buffer = Math.max(0, (Number(state.buffer) || 0) + bufferDelta);
+      if (defAnytime) state.defenderAnytimeBudget = Math.max(0, (Number(state.defenderAnytimeBudget) || 0) + defAnytime);
+      if (defRenewal) state.renewalPool = Math.max(0, (Number(state.renewalPool) || 0) + defRenewal);
+      S.appendNarrativeBeat(state, { turn: _turn(), kind: key, title, description: `${actor?.name || "A Steward"} — ${note}` });
+    });
+    if (!r.ok) return r;
+    if (morale) await _bumpMorale(factionId, morale, title);
+    _relayHook(`bbttcc:siege:${vfxHook}`, { siegeId: r.state.siegeId, hexUuid: targetUuid, factionName: actor?.name || "A Steward" });
+    await _pushWarLog(actor, `${title}.`, { activityKey: key, hexUuid: targetUuid });
+    return { ok: true, summary: `${title}.` };
+  }
+  // Attacker plate-chip classes
+  const cls_wyrdlens = (ctx) => _attackerWallManeuver(ctx, { key: "clsWyrdRead",     title: "Read the Weak Point", formula: "2d10+14", fallback: 25, damageType: "kinetic", flavor: "strike the revealed weak point of" });
+  const cls_courier  = (ctx) => _attackerWallManeuver(ctx, { key: "clsOpenPostern",  title: "Open the Postern",    formula: "3d10+12", fallback: 28, damageType: "kinetic", flavor: "slip the postern and breach" });
+  // Attacker boons / control
+  const cls_marshal  = (ctx) => _classBoon(ctx, { key: "clsRally",  title: "Rally the Standard", bufferDelta: +2, morale: +1, note: "the standard rises and the supply train steadies (+2 Buffer).", vfxHook: "clsRally" });
+  const cls_pact     = (ctx) => _classBoon(ctx, { key: "clsDebt",   title: "Call the Debt",      bufferDelta: +2,             note: "a sworn debt is called in; an ally's supply arrives (+2 Buffer).", vfxHook: "clsDebt" });
+  const cls_linguist = (ctx) => _classBoon(ctx, { key: "clsClause", title: "Cite the Clause",    defRenewal: -1,              note: "a binding clause is cited; the defenders' renewal is voided (−1 Renewal).", vfxHook: "clsClause" });
+  const cls_aurablade= (ctx) => _classBoon(ctx, { key: "clsMercy",  title: "Mercy's Edge",       defAnytime: -1,              note: "a merciful edge staggers the garrison without a death (−1 Anytime).", vfxHook: "clsMercy" });
+  // Defender boons
+  const cls_bulwark  = (ctx) => _classBoon(ctx, { key: "clsBrace",  title: "Brace the Breach",   defAnytime: +2, morale: +1, note: "the breach is braced; the line holds (+2 Anytime).", vfxHook: "clsBrace" });
+  const cls_soulsmith= (ctx) => _classBoon(ctx, { key: "clsRefit",  title: "Field Refit",        defRenewal: +2, morale: +1, note: "a field forge refits the wall under fire (+2 Renewal).", vfxHook: "clsRefit" });
+  const cls_dreamwalker = (ctx) => _defenderBufferManeuver(ctx, { key: "clsPhantom", title: "Phantom Host", drain: 2, morale: +1, vfxHook: "clsPhantom" });
+
   // ============================================================
   // Registration
   // ============================================================
@@ -463,7 +494,17 @@
     ram_gate:              { fn: ram_gate,              label: "Ram the Gate",         cost: { violence: 30 },                 clashCost: 20, band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 8, tempo: "clash", icon: "🪵" },
     boiling_oil:           { fn: boiling_oil,           label: "Boiling Oil",          cost: { violence: 15, logistics: 10 }, clashCost: 12, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 6, tempo: "clash", icon: "🛢" },
     sortie:                { fn: sortie,                label: "Sortie",               cost: { violence: 20 },                 clashCost: 18, band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 7, tempo: "clash", icon: "🚪" },
-    flaming_pitch:         { fn: flaming_pitch,         label: "Flaming Pitch",        cost: { violence: 10, faith: 5 },       clashCost: 12, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 8, tempo: "clash", icon: "🔥" }
+    flaming_pitch:         { fn: flaming_pitch,         label: "Flaming Pitch",        cost: { violence: 10, faith: 5 },       clashCost: 12, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 8, tempo: "clash", icon: "🔥" },
+    // ── Content Sprint batch 2b — class-granted clash maneuvers (one per Steward) ──
+    cls_marshal:     { fn: cls_marshal,     label: "Rally the Standard",  cost: { softPower: 15, diplomacy: 10 }, clashCost: 15, band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 10, tempo: "clash", icon: "🎏", grantedByClass: "harmonymarshal" },
+    cls_wyrdlens:    { fn: cls_wyrdlens,    label: "Read the Weak Point", cost: { intrigue: 15, violence: 10 },   clashCost: 18, band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 11, tempo: "clash", icon: "👁", grantedByClass: "wyrdlens-adept" },
+    cls_courier:     { fn: cls_courier,     label: "Open the Postern",    cost: { intrigue: 20, violence: 10 },   clashCost: 22, band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 12, tempo: "clash", icon: "🗝", grantedByClass: "shadow_courier" },
+    cls_aurablade:   { fn: cls_aurablade,   label: "Mercy's Edge",        cost: { violence: 15, softPower: 10 },  clashCost: 15, band: "standard", siege: true, siegeSide: "attacker", siegeOrder: 13, tempo: "clash", icon: "⚔", grantedByClass: "aurablade" },
+    cls_linguist:    { fn: cls_linguist,    label: "Cite the Clause",     cost: { intrigue: 15, culture: 10 },    clashCost: 15, band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 14, tempo: "clash", icon: "📜", grantedByClass: "cosmic_linguist" },
+    cls_pact:        { fn: cls_pact,        label: "Call the Debt",       cost: { faith: 15, diplomacy: 10 },     clashCost: 15, band: "rare",     siege: true, siegeSide: "attacker", siegeOrder: 15, tempo: "clash", icon: "🤝", grantedByClass: "pactkeeper" },
+    cls_bulwark:     { fn: cls_bulwark,     label: "Brace the Breach",    cost: { violence: 15, logistics: 10 },  clashCost: 15, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 10, tempo: "clash", icon: "🛡", grantedByClass: "bulwark" },
+    cls_soulsmith:   { fn: cls_soulsmith,   label: "Field Refit",         cost: { logistics: 15, economy: 10 },   clashCost: 15, band: "standard", siege: true, siegeSide: "defender", siegeOrder: 11, tempo: "clash", icon: "🔨", grantedByClass: "soul-smith" },
+    cls_dreamwalker: { fn: cls_dreamwalker, label: "Phantom Host",        cost: { intrigue: 15, faith: 10 },      clashCost: 15, band: "rare",     siege: true, siegeSide: "defender", siegeOrder: 12, tempo: "clash", icon: "🌙", grantedByClass: "dreamwalker" }
   };
 
   whenRaidReady((api) => whenSiegeStateReady((S) => {
@@ -499,7 +540,7 @@
       .filter(([, d]) => d.tempo === "clash")
       .map(([key, d]) => ({
         key, label: d.label, side: d.siegeSide || "attacker", icon: d.icon || "⚔",
-        cost: d.cost || {},
+        cost: d.cost || {}, grantedByClass: d.grantedByClass || null,
         costTotal: Number.isFinite(d.clashCost) ? d.clashCost : Object.values(d.cost || {}).reduce((a, b) => a + (Number(b) || 0), 0)
       }));
 

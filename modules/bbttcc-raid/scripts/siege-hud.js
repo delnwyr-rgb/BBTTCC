@@ -364,7 +364,21 @@
     // instead of queuing it for Advance Turn. Cost model A: paid from the Buffer immediately,
     // so each is buffer-gated (dimmed when the siege can't afford it). Descriptor + invoker
     // come from siege-counter-activities (game.bbttcc.api.siege.clashManeuvers / fireManeuver).
-    const clashMans = isGM ? (game.bbttcc?.api?.siege?.clashManeuvers || []) : [];
+    // Class-granted maneuvers (Content Sprint 2026-06-13): a maneuver tagged
+    // grantedByClass only surfaces when a Steward of that class is participating —
+    // a PC-owned `character` (or a character token on the battle scene) carrying a
+    // `class` item with the matching system.identifier.
+    const _classesPresent = (() => {
+      const set = new Set();
+      try {
+        const add = (a) => { if (a?.type !== "character") return; for (const it of (a.items?.contents || a.items || [])) if (it?.type === "class" && it?.system?.identifier) set.add(it.system.identifier); };
+        for (const a of (game.actors?.contents || [])) if (a.hasPlayerOwner) add(a);
+        for (const t of (canvas?.tokens?.placeables || [])) if (t.actor) add(t.actor);
+      } catch (_e) {}
+      return set;
+    })();
+    const _gateClass = (m) => !m.grantedByClass || _classesPresent.has(m.grantedByClass);
+    const clashMans = isGM ? (game.bbttcc?.api?.siege?.clashManeuvers || []).filter(_gateClass) : [];
     const clashBtns = (isGM && clashMans.length)
       ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
           <span style="font-size:0.6rem;color:#c9a;letter-spacing:.05em;text-transform:uppercase;width:100%;opacity:.75;">Clash maneuvers · fire now</span>
@@ -412,7 +426,7 @@
     let coBtns = "";
     {
       const allMans = game.bbttcc?.api?.siege?.clashManeuvers || [];
-      const atkMans = allMans.filter(m => (m.side || "attacker") === "attacker");
+      const atkMans = allMans.filter(m => (m.side || "attacker") === "attacker" && _gateClass(m));
       const rows = [];
       if (isGM) {
         const pending = Object.values(s.participants || {}).filter(p => p && p.role === "supporter" && p.invited && !p.joined);
