@@ -318,7 +318,15 @@
     // Use ctx.terrainTier (a beforeTravel hook — rig encounterTierBias / terrain mitigation —
     // may have downshifted it); fall back to the raw terrain tier. Was using local `tier`, so
     // tier-based mitigation never showed in the forecast DC.
-    const dc  = 15 + (Number(ctx.terrainTier ?? tier) * 2) + ctx.dcMod + darknessBump(actor, curr.hex);
+    // DC uses the GM-tunable encounter dial (same helper the core engine uses) so
+    // the forecast matches what travelHex actually rolls against. Falls back to the
+    // historical 15 + tier*2 if the helper isn't published yet.
+    const _encDc = game.bbttcc?.api?._hexTravel?._encounterDc;
+    const _tier = Number(ctx.terrainTier ?? tier);
+    const _dark = darknessBump(actor, curr.hex);
+    const dc  = (typeof _encDc === "function")
+      ? _encDc(_tier, ctx.dcMod, _dark)
+      : (15 + (_tier * 2) + ctx.dcMod + _dark);
     const mod = intrigueMod(actor);
 
     const intel = intelConfidence(curr.hex);

@@ -329,6 +329,46 @@ const TERRAIN_TABLE = {
     }
   }
 
+  // --- Encounter-chance dial (GM world settings) -----------------------------
+  // The travel check succeeds when roll >= DC; an encounter fires on failure, so
+  // a HIGHER DC means encounters are MORE frequent. These two settings let the GM
+  // tune the master frequency without code edits. Defaults (15 / 2) reproduce the
+  // historical hardcoded behavior exactly.
+  const ENC_DIAL_NS = "bbttcc-core"; // always-registered module, avoids unregistered-key crashes
+  const ENC_BASE_DC_KEY = "travelEncounterBaseDC";
+  const ENC_TIER_STEP_KEY = "travelEncounterTierStep";
+
+  function _ensureEncounterDialSettings() {
+    try {
+      if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${ENC_BASE_DC_KEY}`)) {
+        game.settings.register(ENC_DIAL_NS, ENC_BASE_DC_KEY, {
+          name: "Travel: Encounter Base DC",
+          hint: "Base difficulty of every travel check. The party must roll >= this to pass; failure triggers an encounter. HIGHER = more encounters. Default 15.",
+          scope: "world", config: true, type: Number, default: 15
+        });
+      }
+      if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${ENC_TIER_STEP_KEY}`)) {
+        game.settings.register(ENC_DIAL_NS, ENC_TIER_STEP_KEY, {
+          name: "Travel: Encounter DC per Tier",
+          hint: "Extra DC added per terrain danger tier (1-4). HIGHER = dangerous terrain ramps encounter chance faster. Default 2.",
+          scope: "world", config: true, type: Number, default: 2
+        });
+      }
+    } catch (e) {
+      console.warn(TAG, "Encounter dial settings registration failed (non-blocking):", e);
+    }
+  }
+
+  function _encounterDc(tier, dcMod, darknessBump) {
+    _ensureEncounterDialSettings();
+    let base = 15, step = 2;
+    try { base = Number(game.settings.get(ENC_DIAL_NS, ENC_BASE_DC_KEY)); } catch (_e) {}
+    try { step = Number(game.settings.get(ENC_DIAL_NS, ENC_TIER_STEP_KEY)); } catch (_e) {}
+    if (!Number.isFinite(base)) base = 15;
+    if (!Number.isFinite(step)) step = 2;
+    return base + ((Number(tier) || 0) * step) + (Number(dcMod) || 0) + (Number(darknessBump) || 0);
+  }
+
 
   // --- Visuals ---------------------------------------------------------------
 
@@ -426,7 +466,10 @@ const TERRAIN_TABLE = {
       tokenId = null,
       // Optional override from callers (e.g., Travel Console) to keep preview + core in sync
       terrainKey: terrainKeyOverride = null,
-      terrain: terrainOverride = null
+      terrain: terrainOverride = null,
+      // Per-leg GM nudge to the encounter DC (from Travel Console GM Overrides).
+      // Positive = more dangerous (more encounters). Mitigation bridge adds on top.
+      dcMod: dcModOverride = 0
     } = opts;
     if (!factionId || !hexFrom || !hexTo) throw new Error("travelHex: missing factionId/hexFrom/hexTo");
     const actor = game.actors.get(factionId);
@@ -530,7 +573,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
       cost: clone(spec.cost),
       crew: actor.getFlag(MOD_FCT, "crew") || [],
       preventHazard: false,
-      dcMod: 0,
+      dcMod: Number(dcModOverride) || 0,
       token: tokenId ? canvas.tokens.get(tokenId) : null,
       distanceUnits,
       distanceMiles,
@@ -766,7 +809,7 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
 
     const intrigueMod = getFactionIntrigueMod(actor);
     const darknessBump = darknessEncounterBoost(actor, to);
-    const dc = 15 + (ctx.terrainTier * 2) + ctx.dcMod + darknessBump;
+    const dc = _encounterDc(ctx.terrainTier, ctx.dcMod, darknessBump);
 
     // Advantage (reduce-or-advantage choice): a mitigation ability in "advantage" mode rolls 2d20 keep-high.
     const rollFormula = ctx.travelAdvantage ? "2d20kh + @int + @scout" : "1d20 + @int + @scout";
@@ -1432,11 +1475,17 @@ function registerTravelAPI() {
   if (typeof api.travelHex !== "function") api.travelHex = travelHex;
   if (typeof api.travel.travelHex !== "function") api.travel.travelHex = travelHex;
 
+  // Encounter-chance dial: register the GM settings so they appear in the
+  // Configure Settings menu, and expose the DC helper so other travel paths
+  // (e.g. hex-travel-mode interactive mode) compute DC the same way.
+  _ensureEncounterDialSettings();
+
   // OP preview contract (Travel Console reads this)
   api._hexTravel = {
     TERRAIN_TABLE,
     getHexAtPoint,
-    getHexTerrainSpec
+    getHexTerrainSpec,
+    _encounterDc
   };
 
   console.log(TAG, "Hex Travel Visual Engine registered.", {

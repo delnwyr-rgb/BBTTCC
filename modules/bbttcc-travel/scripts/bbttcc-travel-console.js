@@ -1948,6 +1948,7 @@
           let gmOverrides = {
             costMult: 1,
             costAdd: {},
+            encDcMod: 0,
             encounterPolicy: game.user?.isGM ? "auto" : "prompt"
           };
 
@@ -1971,6 +1972,11 @@
                   <label style="display:flex;justify-content:space-between;gap:.5rem;align-items:center;margin:6px 0;">
                     <span><b>Cost Multiplier</b> (1.00 = normal)</span>
                     <input type="number" step="0.05" min="0.10" value="1.00" data-role="costMult" style="width:90px;"/>
+                  </label>
+
+                  <label style="display:flex;justify-content:space-between;gap:.5rem;align-items:center;margin:6px 0;">
+                    <span><b>Encounter DC nudge</b> (+harder / −safer, this trip)</span>
+                    <input type="number" step="1" value="0" data-role="encDcMod" style="width:90px;"/>
                   </label>
 
                   <details style="margin:6px 0;">
@@ -2018,16 +2024,19 @@
                       const sel = root?.querySelector('input[name="encPolicy"]:checked');
                       const encounterPolicy = String(sel?.value || "auto");
 
-                      resolve({ costMult, costAdd, encounterPolicy });
+                      const dm = Number(root?.querySelector('[data-role="encDcMod"]')?.value || 0);
+                      const encDcMod = Number.isFinite(dm) ? Math.round(dm) : 0;
+
+                      resolve({ costMult, costAdd, encDcMod, encounterPolicy });
                     }
                   },
                   cancel: {
                     label: "No Override",
-                    callback: () => resolve({ costMult: 1, costAdd: {}, encounterPolicy: "auto" })
+                    callback: () => resolve({ costMult: 1, costAdd: {}, encDcMod: 0, encounterPolicy: "auto" })
                   }
                 },
                 default: "ok",
-                close: () => resolve({ costMult: 1, costAdd: {}, encounterPolicy: "auto" })
+                close: () => resolve({ costMult: 1, costAdd: {}, encDcMod: 0, encounterPolicy: "auto" })
               });
               d.render(true);
             });
@@ -2062,7 +2071,7 @@
               console.warn(TAG, "Travel Arc roll failed for leg", i + 1, arcErr);
             }
 
-            const r = await game.bbttcc.api.travel.travelHex({ factionId, hexFrom: L.fromUuid, hexTo: L.toUuid, tokenId, sceneId, source: "travel-console", terrainKey: (destHex?.terrainKey || null), timePoints: Number(destHex?.travelUnits || 1), costMult: gmOverrides.costMult, costAdd: gmOverrides.costAdd, encounterPolicy: gmOverrides.encounterPolicy });
+            const r = await game.bbttcc.api.travel.travelHex({ factionId, hexFrom: L.fromUuid, hexTo: L.toUuid, tokenId, sceneId, source: "travel-console", terrainKey: (destHex?.terrainKey || null), timePoints: Number(destHex?.travelUnits || 1), costMult: gmOverrides.costMult, costAdd: gmOverrides.costAdd, dcMod: gmOverrides.encDcMod, encounterPolicy: gmOverrides.encounterPolicy });
 
             out.push(`${i + 1}) ${r?.summary || (r?.ok ? "Travel OK" : "Travel failed")}`);
             if (!r?.ok) break;

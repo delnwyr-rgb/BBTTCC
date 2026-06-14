@@ -46,6 +46,50 @@ function randomID(length) {
 // Overlay layer id for portaled popovers (Campaign Builder)
 const PORTAL_LAYER_ID = "bbttcc-campaign-popover-layer";
 
+// --- Travel table id helpers (shared by New/Duplicate/Repair) ---------------
+// Travel encounter tables MUST be named travel_<terrain>_t<tier> or the engine's
+// resolveTravelTableId() can't find them. Keep terrain keys aligned with the
+// engine's TERRAIN_TABLE (source of truth); fall back to the builder's list.
+function _builderTravelTerrainKeys() {
+  try {
+    const tt = game.bbttcc?.api?._hexTravel?.TERRAIN_TABLE;
+    if (tt && typeof tt === "object") {
+      const keys = Object.keys(tt).map(k => String(k).trim()).filter(Boolean);
+      if (keys.length) return keys;
+    }
+  } catch (_e) {}
+  return ["plains","forest","mountains","canyons","swamp","desert","river","ocean","ruins","wasteland"];
+}
+
+// Slugify a free-text (non-travel) table id into a safe key: lowercase, [a-z0-9_].
+function _slugifyTableId(raw) {
+  return String(raw || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+// Compose the canonical travel id, snapping terrain to a known engine key.
+function _composeTravelTableId(terrain, tier) {
+  const keys = _builderTravelTerrainKeys();
+  let t = String(terrain || "").trim();
+  const hit = keys.find(k => k.toLowerCase() === t.toLowerCase());
+  if (hit) t = hit;
+  const n = Math.max(1, Math.floor(Number(tier) || 1));
+  return `travel_${t}_t${n}`;
+}
+
+// Parse terrain + tier out of an existing travel id (tolerant of junk like _EFyI).
+function _parseTravelTableId(id) {
+  const s = String(id || "").trim();
+  if (!/^travel_/i.test(s)) return null;
+  const rest = s.replace(/^travel_/i, "");
+  const m = rest.match(/^(.+?)_t(?:ier)?(\d+)/i);
+  if (!m) return null;
+  return { terrain: m[1], tier: Number(m[2]) || 1 };
+}
+
 function _getActiveCampaignId() {
   try { return String(game.settings.get(MOD_ID, SETTING_ACTIVE_CAMPAIGN) || "").trim() || null; }
   catch { return null; }
@@ -3217,38 +3261,197 @@ try {
       const tablesApi = api.tables;
       if (!tablesApi?.createTable) return ui.notifications?.warn?.("Encounter Tables API not ready.");
 
-      const terrain = String(rootEl.querySelector(`[data-role="travel-terrain"]`)?.value || this.travelTerrain || "plains").trim().toLowerCase();
-      const tier = Number(rootEl.querySelector(`[data-role="travel-tier"]`)?.value || this.travelTier || 1) || 1;
-      const baseId = `travel_${terrain}_t${tier}`;
-      const labelDefault = `Travel ${terrain.charAt(0).toUpperCase() + terrain.slice(1)} Tier ${tier}`;
+      // Default the dialog to the current filter selection, but ALWAYS let the
+      // GM pick terrain/tier here — otherwise "All terrains" silently defaults to
+      // plains t1 and the create is blocked as a duplicate.
+      const filterTerrain = String(rootEl.querySelector(`[data-role="travel-terrain"]`)?.value || this.travelTerrain || "").trim().toLowerCase();
+      const filterTier = Number(rootEl.querySelector(`[data-role="travel-tier"]`)?.value || this.travelTier || 0) || 0;
+
+      const terrainKeys = _builderTravelTerrainKeys();
+      const terrainOpts = terrainKeys.map(k =>
+        `<option value="${_escapeHtml(k)}" ${k === filterTerrain ? "selected" : ""}>${_escapeHtml(k.charAt(0).toUpperCase() + k.slice(1))}</option>`
+      ).join("");
+      const tierOpts = [1,2,3,4].map(t => `<option value="${t}" ${t === filterTier ? "selected" : ""}>Tier ${t}</option>`).join("");
 
       const payload = await Dialog.prompt({
         title: "New Travel Table",
         content: `
-          <p>Create a new travel encounter table for the current filter.</p>
-          <div class="form-group">
-            <label>Table ID</label>
-            <input type="text" name="id" value="${baseId}" />
-          </div>
-          <div class="form-group">
-            <label>Label</label>
-            <input type="text" name="label" value="${labelDefault}" />
-          </div>
+          <p>Create a travel encounter table. The Table ID is composed automatically as <code>travel_&lt;terrain&gt;_t&lt;tier&gt;</code>.</p>
+          <div class="form-group"><label>Terrain</label><select name="terrain">${terrainOpts}</select></div>
+          <div class="form-group"><label>Tier</label><select name="tier">${tierOpts}</select></div>
+          <div class="form-group"><label>Label (optional)</label><input type="text" name="label" placeholder="auto" /></div>
         `,
         label: "Create",
         callback: html => ({
-          id: String(html.find("input[name='id']")[0]?.value || baseId).trim(),
-          label: String(html.find("input[name='label']")[0]?.value || labelDefault).trim()
+          terrain: String(html.find("select[name='terrain']")[0]?.value || "").trim().toLowerCase(),
+          tier: Number(html.find("select[name='tier']")[0]?.value || 1) || 1,
+          label: String(html.find("input[name='label']")[0]?.value || "").trim()
         })
       });
+      if (!payload) return;
+      if (!payload.terrain) return ui.notifications?.warn?.("Pick a terrain for the travel table.");
 
-      const id = String(payload?.id || "").trim();
-      if (!id) return ui.notifications?.warn?.("Travel table id is required.");
-      if (tablesApi.getTable?.(id)) return ui.notifications?.warn?.(`A table with id '${id}' already exists.`);
+      const terrain = payload.terrain;
+      const tier = payload.tier;
+      const id = `travel_${terrain}_t${tier}`;
+      const labelDefault = `Travel ${terrain.charAt(0).toUpperCase() + terrain.slice(1)} Tier ${tier}`;
 
-      const label = String(payload?.label || labelDefault).trim() || id;
+      if (tablesApi.getTable?.(id)) return ui.notifications?.warn?.(`A travel table for ${terrain} tier ${tier} already exists (${id}).`);
+
+      const label = payload.label || labelDefault;
       await tablesApi.createTable(id, { id, label, scope: "travel", tags: ["travel", terrain, `tier${tier}`], entries: [] });
       await _openTableEditor(id);
+      this.render(false);
+    });
+
+    // Repair: canonicalize travel table ids (travel_<terrain>_t<tier>) and merge
+    // duplicates. Travel encounters resolve by exact id, so a stray suffix (e.g.
+    // travel_swamp_t1_EFyI from old Duplicate) silently breaks the lookup.
+    html.find("[data-action='fix-travel-ids']").on("click", async ev => {
+      ev.preventDefault();
+      const api = this._requireApi(); if (!api) return;
+      const tablesApi = api.tables;
+      if (!tablesApi?.getAllTables || !tablesApi?.setAllTables) return ui.notifications?.warn?.("Encounter Tables API not ready.");
+
+      const all = tablesApi.getAllTables() || {};
+
+      // Group travel tables by their canonical id.
+      const groups = new Map(); // canonical -> [{id, table}]
+      const unparseable = [];
+      for (const [id, t] of Object.entries(all)) {
+        if (String(t?.scope || "") !== "travel") continue;
+        let parsed = _parseTravelTableId(id);
+        if (!parsed) {
+          // Fallback: recover terrain/tier from tags (e.g. ["travel","swamp","tier1"]).
+          const tags = Array.isArray(t?.tags) ? t.tags.map(s => String(s).toLowerCase()) : [];
+          const terr = _builderTravelTerrainKeys().find(k => tags.includes(k.toLowerCase()));
+          const tierTag = tags.map(s => s.match(/^t(?:ier)?(\d+)$/)).find(Boolean);
+          if (terr && tierTag) parsed = { terrain: terr, tier: Number(tierTag[1]) || 1 };
+        }
+        if (!parsed) { unparseable.push(id); continue; }
+        const canon = _composeTravelTableId(parsed.terrain, parsed.tier);
+        if (!groups.has(canon)) groups.set(canon, []);
+        groups.get(canon).push({ id, table: t });
+      }
+
+      // Build the change plan.
+      const ops = []; // { canon, keeperId, renameFrom, deletes:[], mergedFrom:[], addedEntries }
+      const entryKey = e => `${e?.campaignId || ""}|${e?.beatId || ""}|${JSON.stringify(e?.conditions || {})}`;
+      for (const [canon, members] of groups) {
+        const needsWork = members.length > 1 || members.some(m => m.id !== canon);
+        if (!needsWork) continue;
+
+        // A non-travel table already squatting the canonical id blocks repair.
+        const squatter = all[canon];
+        if (squatter && String(squatter.scope || "") !== "travel") {
+          unparseable.push(`${canon} (blocked: non-travel table owns this id)`);
+          continue;
+        }
+
+        // Keeper: the already-canonical table if present, else the richest one.
+        const keeper = members.find(m => m.id === canon)
+          || members.slice().sort((a, b) => (b.table.entries?.length || 0) - (a.table.entries?.length || 0))[0];
+        const others = members.filter(m => m !== keeper);
+
+        // Merge entries from the others into the keeper (deduped).
+        const merged = Array.isArray(keeper.table.entries) ? keeper.table.entries.slice() : [];
+        const seen = new Set(merged.map(entryKey));
+        let added = 0;
+        for (const o of others) {
+          for (const e of (Array.isArray(o.table.entries) ? o.table.entries : [])) {
+            const k = entryKey(e);
+            if (seen.has(k)) continue;
+            seen.add(k); merged.push(e); added++;
+          }
+        }
+
+        ops.push({
+          canon,
+          keeperId: keeper.id,
+          renameFrom: keeper.id !== canon ? keeper.id : null,
+          deletes: others.map(o => o.id),
+          mergedFrom: others.filter(o => (o.table.entries?.length || 0) > 0).map(o => o.id),
+          addedEntries: added,
+          mergedEntries: merged,
+          label: keeper.table.label || canon,
+          scope: "travel",
+          tags: Array.isArray(keeper.table.tags) ? keeper.table.tags : []
+        });
+      }
+
+      // Project the id-canonicalization onto a working copy, THEN scan every
+      // travel table for entry-condition mismatches (e.g. a swamp table whose
+      // entries are conditioned to terrain:"plains" — those entries get filtered
+      // out in-world, leaving only the (Any) entry, so you always roll the same one).
+      const next = foundry.utils.deepClone(all);
+      for (const op of ops) {
+        for (const d of op.deletes) delete next[d];
+        if (op.renameFrom) delete next[op.renameFrom];
+        next[op.canon] = { id: op.canon, label: op.label, scope: "travel", tags: op.tags, entries: op.mergedEntries };
+      }
+
+      const norm = s => String(s || "").trim().toLowerCase();
+      const entryFixes = []; // { id, terrain, tier, count }
+      for (const [id, t] of Object.entries(next)) {
+        if (String(t?.scope || "") !== "travel") continue;
+        const parsed = _parseTravelTableId(id);
+        if (!parsed) continue;
+        const wantTerr = norm(parsed.terrain);
+        const wantTier = String(parsed.tier);
+        let count = 0;
+        for (const e of (Array.isArray(t.entries) ? t.entries : [])) {
+          const c = e.conditions || (e.conditions = {});
+          // Only correct an entry that explicitly names a DIFFERENT terrain.
+          // Leave (Any)/blank entries alone — those are intentionally wildcard.
+          if (c.terrain && norm(c.terrain) !== wantTerr) { c.terrain = parsed.terrain; count++; }
+          if (c.tier && String(c.tier) !== wantTier) { c.tier = wantTier; count++; }
+        }
+        if (count) entryFixes.push({ id, terrain: parsed.terrain, tier: parsed.tier, count });
+      }
+
+      if (!ops.length && !entryFixes.length) {
+        ui.notifications?.info?.(unparseable.length
+          ? `Travel tables look healthy. ${unparseable.length} could not be parsed (see console).`
+          : "Travel tables look healthy — nothing to fix.");
+        if (unparseable.length) console.warn(TAG, "Unparseable/blocked travel tables:", unparseable);
+        return;
+      }
+
+      // Review dialog — nothing is written until the GM confirms.
+      const idRows = ops.map(op => {
+        const bits = [];
+        if (op.renameFrom) bits.push(`rename <code>${_escapeHtml(op.renameFrom)}</code> → <code>${_escapeHtml(op.canon)}</code>`);
+        else bits.push(`keep <code>${_escapeHtml(op.canon)}</code>`);
+        if (op.deletes.length) bits.push(`merge + delete ${op.deletes.map(d => `<code>${_escapeHtml(d)}</code>`).join(", ")} (+${op.addedEntries} entries)`);
+        return `<li>${bits.join("; ")}</li>`;
+      }).join("");
+      const entryRows = entryFixes.map(f =>
+        `<li><code>${_escapeHtml(f.id)}</code>: re-point ${f.count} mismatched entry condition(s) → terrain <b>${_escapeHtml(f.terrain)}</b> / tier <b>${f.tier}</b></li>`
+      ).join("");
+      const warnHtml = unparseable.length
+        ? `<p class="bbttcc-muted">⚠ ${unparseable.length} table(s) couldn't be parsed and will be left untouched (see console).</p>`
+        : "";
+
+      const confirmed = await Dialog.confirm({
+        title: "Fix Travel Tables",
+        content: `<div style="max-height:55vh;overflow:auto;">
+            ${ops.length ? `<p><b>ID / merge changes (${ops.length}):</b></p><ul style="margin:.25rem 0 .5rem 1.1rem;">${idRows}</ul>` : ""}
+            ${entryFixes.length ? `<p><b>Entry condition fixes (${entryFixes.length} table(s)):</b></p><ul style="margin:.25rem 0 .5rem 1.1rem;">${entryRows}</ul>` : ""}
+            ${warnHtml}
+          </div>`,
+        yes: () => true,
+        no: () => false,
+        defaultYes: false
+      });
+      if (!confirmed) return;
+      if (unparseable.length) console.warn(TAG, "Unparseable/blocked travel tables (left untouched):", unparseable);
+
+      // `next` already carries both the id ops and the entry-condition fixes.
+      const renamed = ops.filter(o => o.renameFrom).length;
+      const mergedCount = ops.reduce((s, o) => s + o.deletes.length, 0);
+      const entryCount = entryFixes.reduce((s, f) => s + f.count, 0);
+      await tablesApi.setAllTables(next);
+      ui.notifications?.info?.(`Travel table repair complete: ${renamed} renamed, ${mergedCount} merged/removed, ${entryCount} entry condition(s) fixed.`);
       this.render(false);
     });
 
@@ -3264,34 +3467,64 @@ try {
       const src = foundry.utils.deepClone(tablesApi.getTable(tableId));
       if (!src) return ui.notifications?.warn?.("Table not found.");
 
-      const suggestedId = `${String(src.id || "table")}_copy_${randomID().slice(0,4)}`;
+      const isTravel = String(src.scope || "") === "travel";
       const suggestedLabel = `${String(src.label || src.id || "Table")} (Copy)`;
 
-      const payload = await Dialog.prompt({
-        title: "Duplicate Table",
-        content: `
-          <div class="form-group">
-            <label>New Table ID</label>
-            <input type="text" name="id" value="${_escapeHtml(suggestedId)}" />
-          </div>
-          <div class="form-group">
-            <label>Label</label>
-            <input type="text" name="label" value="${_escapeHtml(suggestedLabel)}" />
-          </div>
-        `,
-        label: "Duplicate",
-        callback: html => ({
-          id: String(html.find("input[name='id']")[0]?.value || suggestedId).trim(),
-          label: String(html.find("input[name='label']")[0]?.value || suggestedLabel).trim()
-        })
-      });
+      let newId;
+      let label;
 
-      const newId = String(payload?.id || "").trim();
+      if (isTravel) {
+        // Travel copies must land on a valid travel_<terrain>_t<tier> id, so pick
+        // terrain/tier rather than typing a free-text id that breaks the lookup.
+        const terrainKeys = _builderTravelTerrainKeys();
+        const terrainOpts = terrainKeys.map(k =>
+          `<option value="${_escapeHtml(k)}">${_escapeHtml(k.charAt(0).toUpperCase() + k.slice(1))}</option>`
+        ).join("");
+        const tierOpts = [1,2,3,4].map(t => `<option value="${t}">Tier ${t}</option>`).join("");
+
+        const payload = await Dialog.prompt({
+          title: "Duplicate Travel Table",
+          content: `
+            <p class="bbttcc-muted">Copy to a new terrain/tier. Table ID is composed automatically.</p>
+            <div class="form-group"><label>Terrain</label><select name="terrain">${terrainOpts}</select></div>
+            <div class="form-group"><label>Tier</label><select name="tier">${tierOpts}</select></div>
+            <div class="form-group"><label>Label</label><input type="text" name="label" value="${_escapeHtml(suggestedLabel)}" /></div>
+          `,
+          label: "Duplicate",
+          callback: html => ({
+            terrain: String(html.find("select[name='terrain']")[0]?.value || "").trim(),
+            tier: Number(html.find("select[name='tier']")[0]?.value || 1) || 1,
+            label: String(html.find("input[name='label']")[0]?.value || suggestedLabel).trim()
+          })
+        });
+        if (!payload) return;
+        if (!payload.terrain) return ui.notifications?.warn?.("Pick a terrain for the travel table.");
+        newId = `travel_${payload.terrain}_t${payload.tier}`;
+        label = payload.label || `Travel ${payload.terrain} Tier ${payload.tier}`;
+      } else {
+        const suggestedId = `${String(src.id || "table")}_copy_${randomID().slice(0,4)}`;
+        const payload = await Dialog.prompt({
+          title: "Duplicate Table",
+          content: `
+            <div class="form-group"><label>New Table ID</label><input type="text" name="id" value="${_escapeHtml(suggestedId)}" /></div>
+            <div class="form-group"><label>Label</label><input type="text" name="label" value="${_escapeHtml(suggestedLabel)}" /></div>
+          `,
+          label: "Duplicate",
+          callback: html => ({
+            id: String(html.find("input[name='id']")[0]?.value || suggestedId).trim(),
+            label: String(html.find("input[name='label']")[0]?.value || suggestedLabel).trim()
+          })
+        });
+        if (!payload) return;
+        newId = _slugifyTableId(payload.id);
+        label = payload.label || suggestedLabel;
+      }
+
       if (!newId) return ui.notifications?.warn?.("New table id is required.");
       if (tablesApi.getTable?.(newId)) return ui.notifications?.warn?.(`A table with id '${newId}' already exists.`);
 
       src.id = newId;
-      src.label = String(payload?.label || suggestedLabel).trim() || newId;
+      src.label = String(label).trim() || newId;
       await tablesApi.createTable(newId, src);
       ui.notifications?.info?.("Encounter Table duplicated.");
       this.render(false);
@@ -3442,37 +3675,93 @@ try {
       const campaignId = this.campaignId || _getActiveCampaignId();
       if (!campaignId) return ui.notifications?.warn?.("Select a campaign first.");
 
-      // Soft Guard (Option A):
-      // Campaign Builder "Preview" should NOT surface engine travel encounters unless the campaign
-      // has explicitly configured Travel Tables for at least one category.
-      const campaign = this._loadCurrentCampaignClone();
-      if (!campaign) return ui.notifications?.warn?.("Campaign not found.");
+      // Soft Guard: don't preview unless travel tables actually exist. Check the
+      // SAME source the list (and the engine) use — the global encounterTables
+      // setting, scope:"travel" — not the old per-campaign embedded config.
+      const tablesApi = game.bbttcc?.api?.campaign?.tables;
+      if (!tablesApi?.runRandomTable) return ui.notifications?.warn?.("Encounter Tables API not ready (runRandomTable missing).");
 
-      const cfg = _readCampaignTravelTables(campaign);
-      const hasAny =
-        (cfg && typeof cfg === "object") &&
-        Object.values(cfg).some(arr => Array.isArray(arr) && arr.length > 0);
-
-      if (!hasAny) {
+      const hasAnyTravelTable = (tablesApi.listTables?.() || [])
+        .some(t => String(t?.scope || "") === "travel");
+      if (!hasAnyTravelTable) {
         this.travelPreview = null;
-        ui.notifications?.info?.("No Travel Tables are active for this campaign. Add entries (or Clone Engine Defaults) in the Travel tab.");
+        ui.notifications?.info?.("No travel tables exist yet. Use “+ New Travel Table” to create one.");
         this.render(false);
         return;
       }
 
-      const tier = Number(rootEl.querySelector(`[data-role="travel-tier"]`)?.value || 1) || 1;
-      const terrain = String(rootEl.querySelector(`[data-role="travel-terrain"]`)?.value || "plains");
+      // Raw selections: terrain "" = All terrains, tier "0" = All tiers.
+      const rawTerrain = String(rootEl.querySelector(`[data-role="travel-terrain"]`)?.value || "").trim();
+      const rawTier = Number(rootEl.querySelector(`[data-role="travel-tier"]`)?.value || 0) || 0;
+      const tier = rawTier || 1;
+      const terrain = rawTerrain || "plains";
 
       this.travelTier = tier;
       this.travelTerrain = terrain;
 
-      const enc = game.bbttcc?.api?.travel?.__encounters;
-      if (!enc?.rollEncounter) return ui.notifications?.warn?.("Fiat Encounter Engine not installed (travel.__encounters.rollEncounter missing).");
+      // Roll off the LIVE travel tables (same path as the table-editor preview).
+      // The old __encounters.rollEncounter engine is retired and always returns
+      // null, which is why this button used to do nothing.
+      let tableId = null;
+      if (rawTerrain) {
+        // Specific terrain: resolve the canonical id the way the engine does —
+        // terrain-specific first, then the generic tier fallback.
+        const candidates = [
+          `travel_${terrain}_t${tier}`,
+          `travel_${terrain}_tier${tier}`,
+          `travel_generic_t${tier}`
+        ];
+        tableId = candidates.find(id => tablesApi.getTable?.(id)) || null;
+        if (!tableId) {
+          this.travelPreview = null;
+          ui.notifications?.warn?.(`No travel table found for ${terrain} tier ${tier} (looked for ${candidates.join(", ")}).`);
+          this.render(false);
+          return;
+        }
+      } else {
+        // "All terrains": pick any existing travel table, honoring the tier filter
+        // if one is set, so a preview always rolls something real.
+        const pool = (tablesApi.listTables?.() || [])
+          .filter(t => String(t?.scope || "") === "travel")
+          .filter(t => {
+            if (!rawTier) return true;
+            const p = _parseTravelTableId(t.id);
+            return p && Number(p.tier) === rawTier;
+          });
+        if (!pool.length) {
+          this.travelPreview = null;
+          ui.notifications?.warn?.(rawTier ? `No travel tables for tier ${rawTier}.` : "No travel tables to preview.");
+          this.render(false);
+          return;
+        }
+        // Deterministic-ish: first by id, so repeated clicks are stable per filter.
+        tableId = pool.map(t => t.id).sort()[0];
+      }
 
-      const res = enc.rollEncounter(tier, { stepCtx: { terrain, campaignId } });
-      this.travelPreview = res ? { key: res.key, label: res.label, category: res.category, source: res.source } : null;
+      try {
+        const res = await tablesApi.runRandomTable({ tableId, tags: "preview" });
+        const beatId = String(res?.beatId || "").trim();
+        const resCampaignId = String(res?.campaignId || campaignId || "").trim();
 
-      if (res?.label) ui.notifications?.info?.(`Preview: ${res.label}`);
+        // Pretty beat label from the campaign, fall back to the raw id.
+        let beatLabel = beatId || "(none)";
+        try {
+          const cc = game.bbttcc?.api?.campaign?.getCampaign?.(resCampaignId);
+          const beat = Array.isArray(cc?.beats) ? cc.beats.find(b => b?.id === beatId) : null;
+          if (beat) beatLabel = String(beat.label || beat.title || beatId).trim();
+        } catch (_e) {}
+
+        this.travelPreview = beatId
+          ? { tableId, beatId, label: beatLabel, campaignId: resCampaignId }
+          : null;
+
+        if (beatId) ui.notifications?.info?.(`Preview: ${tableId} → ${beatLabel}`);
+        else ui.notifications?.warn?.(`Table ${tableId} rolled no eligible beat (check entries/weights).`);
+      } catch (err) {
+        console.error(TAG, "Travel preview roll failed", err);
+        ui.notifications?.error?.(`Travel preview failed: ${err?.message || err}`);
+        this.travelPreview = null;
+      }
       this.render(false);
     });
 

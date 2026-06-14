@@ -107,6 +107,70 @@ const REQUIRED_TAG_OPTIONS = [
   { value: "wilderness", label: "wilderness" }
 ];
 
+// --- Travel table identity (structured, fail-proof) -------------------------
+// Travel encounter tables MUST be named travel_<terrain>_t<tier> or the engine's
+// resolveTravelTableId() (bbttcc-travel/scripts/api.travel.js) can't find them and
+// the encounter silently no-fires. We compose the id from dropdowns instead of
+// trusting free text. Terrain keys come from the engine's TERRAIN_TABLE (source of
+// truth) so the editor and the resolver always agree.
+
+function _canonicalTerrainKeys() {
+  try {
+    const tt = game.bbttcc?.api?._hexTravel?.TERRAIN_TABLE;
+    if (tt && typeof tt === "object") {
+      const keys = Object.keys(tt).map(k => String(k).trim()).filter(Boolean);
+      if (keys.length) return keys;
+    }
+  } catch (_e) {}
+  // Fallback: the local per-entry terrain list (minus the "(Any)" sentinel).
+  return TERRAIN_OPTIONS.map(o => o.value).filter(Boolean);
+}
+
+function _travelTerrainOptions() {
+  return _canonicalTerrainKeys().map(k => ({
+    value: k,
+    label: k.charAt(0).toUpperCase() + k.slice(1)
+  }));
+}
+
+const TRAVEL_TIER_OPTIONS = [
+  { value: "1", label: "Tier 1" },
+  { value: "2", label: "Tier 2" },
+  { value: "3", label: "Tier 3" },
+  { value: "4", label: "Tier 4" }
+];
+
+// Compose the canonical travel table id from terrain + tier.
+function _composeTravelTableId(terrain, tier) {
+  const keys = _canonicalTerrainKeys();
+  let t = String(terrain || "").trim();
+  // Snap to canonical casing if we recognize the terrain (case-insensitive).
+  const hit = keys.find(k => k.toLowerCase() === t.toLowerCase());
+  if (hit) t = hit;
+  const n = Math.max(1, Math.floor(Number(tier) || 1));
+  return `travel_${t}_t${n}`;
+}
+
+// Parse terrain + tier out of an existing id (tolerant of junk suffixes like _EFyI).
+// Returns { terrain, tier } or null.
+function _parseTravelTableId(id) {
+  const s = String(id || "").trim();
+  if (!/^travel_/i.test(s)) return null;
+  const rest = s.replace(/^travel_/i, "");
+  const m = rest.match(/^(.+?)_t(?:ier)?(\d+)/i);
+  if (!m) return null;
+  return { terrain: m[1], tier: Number(m[2]) || 1 };
+}
+
+// Slugify a free-text (non-travel) id into a safe key: lowercase, [a-z0-9_].
+function _slugifyTableId(raw) {
+  return String(raw || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
 function _populateSelect(sel, rows, selectedValue) {
   if (!sel) return;
 
@@ -198,8 +262,23 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     t.tags = Array.isArray(t.tags) ? t.tags : [];
     t.entries = Array.isArray(t.entries) ? t.entries : [];
 
+    // Transient scope override: when the user switches the Scope dropdown we
+    // re-render to swap the Table ID control (text vs terrain/tier) before save.
+    if (this._scopeOverride) t.scope = this._scopeOverride;
+
     const tagsRaw = t.tags.join(" ");
     const scopes = ["global", "travel", "hex", "campaign", "engine"];
+
+    // Travel-scope identity: derive terrain/tier from the current id so the
+    // dropdowns pre-select correctly, and expose the canonical option lists.
+    const isTravel = String(t.scope || "") === "travel";
+    const parsed = _parseTravelTableId(t.id) || { terrain: "", tier: 1 };
+    const travelTerrainOptions = _travelTerrainOptions();
+    // Snap parsed terrain to a canonical key for the dropdown selection.
+    const canonTerrain = travelTerrainOptions.find(o => o.value.toLowerCase() === String(parsed.terrain).toLowerCase());
+    const travelTerrain = canonTerrain ? canonTerrain.value : (parsed.terrain || (travelTerrainOptions[0]?.value || "plains"));
+    const travelTier = String(parsed.tier || 1);
+    const composedId = isTravel ? _composeTravelTableId(travelTerrain, travelTier) : String(t.id || "");
 
     const campaigns = (campApi && campApi.listCampaigns ? campApi.listCampaigns() : []).map(c => ({
       id: c.id,
@@ -246,6 +325,14 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     data.terrainOptions = TERRAIN_OPTIONS;
     data.tierOptions = TIER_OPTIONS;
     data.requiredTagOptions = REQUIRED_TAG_OPTIONS;
+
+    // Structured travel-id controls
+    data.isTravel = isTravel;
+    data.travelTerrainOptions = travelTerrainOptions;
+    data.travelTierOptions = TRAVEL_TIER_OPTIONS;
+    data.travelTerrain = travelTerrain;
+    data.travelTier = travelTier;
+    data.composedId = composedId;
 
     return data;
   }
@@ -295,6 +382,23 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     html.find("[data-action='cancel']").on("click", ev => {
       ev.preventDefault();
       this.close();
+    });
+
+    // Scope change swaps the Table ID control (text <-> terrain/tier). Re-render
+    // with a transient override so the swap happens before the user saves.
+    html.find("[data-action='scope-change']").on("change", ev => {
+      this._scopeOverride = String(ev.currentTarget?.value || "").trim() || null;
+      this.render(false);
+    });
+
+    // Live-update the composed travel id readout as terrain/tier change.
+    html.find("[data-action='compose-id']").on("change", () => {
+      const root = this.element && this.element[0] ? this.element[0] : null;
+      if (!root) return;
+      const terrain = String(root.querySelector("select[name='travel-terrain']")?.value || "").trim();
+      const tier = String(root.querySelector("select[name='travel-tier']")?.value || "1").trim();
+      const out = root.querySelector("[data-role='composed-id']");
+      if (out) out.textContent = _composeTravelTableId(terrain, tier);
     });
 
     html.find("[data-action='save-table']").on("click", ev => {
@@ -519,14 +623,41 @@ export class BBTTCCCampaignTableEditorApp extends Application {
 
     const fd = new FormData(form);
 
-    const id = String(fd.get("id") || this.tableId || "").trim();
+    const scope = String(fd.get("scope") || "global").trim() || "global";
+
+    // Resolve the table id. Travel tables compose a canonical travel_<terrain>_t<tier>
+    // from the dropdowns (never free text). Other scopes slugify the typed id so a
+    // stray space or capital can't produce an unfindable key.
+    let id;
+    if (scope === "travel") {
+      const terrain = String(fd.get("travel-terrain") || "").trim();
+      const tier = String(fd.get("travel-tier") || "1").trim();
+      if (!terrain) {
+        ui.notifications?.warn?.("Table Editor: pick a terrain for the travel table.");
+        return;
+      }
+      id = _composeTravelTableId(terrain, tier);
+    } else {
+      const raw = String(fd.get("id") || this.tableId || "").trim();
+      id = _slugifyTableId(raw);
+      if (raw && id !== raw) {
+        ui.notifications?.info?.(`Table id normalized to '${id}'.`);
+      }
+    }
+
     if (!id) {
       ui.notifications && ui.notifications.warn && ui.notifications.warn("Table Editor: table id missing.");
       return;
     }
 
+    // Reject collisions when creating or renaming into an id that already exists.
+    const renaming = this.tableId && id !== this.tableId;
+    if (id !== this.tableId && tablesApi.getTable?.(id)) {
+      ui.notifications?.warn?.(`A table with id '${id}' already exists. Choose a different terrain/tier or id.`);
+      return;
+    }
+
     const label = String(fd.get("label") || "").trim() || id;
-    const scope = String(fd.get("scope") || "global").trim() || "global";
     const tags = _normalizeTags(fd.get("tags") || "");
 
     const entryCampaignIds = fd.getAll("entry-campaign-id").map(v => String(v || "").trim());
@@ -578,7 +709,14 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     console.log(TAG, "Saving table", payload);
 
     await tablesApi.saveTable(id, payload);
-    ui.notifications && ui.notifications.info && ui.notifications.info("Encounter Table saved.");
+    // Rename: drop the stale key so the old (often broken) id doesn't linger.
+    if (renaming && tablesApi.deleteTable) {
+      try { await tablesApi.deleteTable(this.tableId); } catch (_e) {}
+    }
+    ui.notifications && ui.notifications.info && ui.notifications.info(
+      renaming ? `Encounter Table saved (renamed ${this.tableId} -> ${id}).` : "Encounter Table saved."
+    );
+    this._scopeOverride = null;
     this.tableId = id;
     this.close();
   }

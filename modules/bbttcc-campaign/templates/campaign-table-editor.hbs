@@ -20,18 +20,8 @@
 
       <div class="bbttcc-form-grid bbttcc-form-grid-2">
         <div class="form-group">
-          <label>Table ID</label>
-          <input type="text" name="id" value="{{table.id}}" />
-        </div>
-
-        <div class="form-group">
-          <label>Label</label>
-          <input type="text" name="label" value="{{table.label}}" />
-        </div>
-
-        <div class="form-group">
           <label>Scope</label>
-          <select name="scope">
+          <select name="scope" data-action="scope-change">
             {{#each scopes as |s|}}
               <option value="{{s}}" {{#if (eq s ../table.scope)}}selected{{/if}}>{{s}}</option>
             {{/each}}
@@ -39,9 +29,54 @@
         </div>
 
         <div class="form-group">
-          <label>Tags (space-separated)</label>
-          <input type="text" name="tags" value="{{tagsRaw}}" placeholder="e.g. travel road locals" />
+          <label>Label</label>
+          <input type="text" name="label" value="{{table.label}}" />
         </div>
+
+        {{#if isTravel}}
+          {{! Travel tables are resolved by exact id travel_<terrain>_t<tier>. }}
+          {{! Compose it from dropdowns so a typo can never break the lookup. }}
+          <div class="form-group">
+            <label>Terrain</label>
+            <select name="travel-terrain" data-action="compose-id">
+              {{#each travelTerrainOptions as |o|}}
+                <option value="{{o.value}}" {{#if (eq o.value ../travelTerrain)}}selected{{/if}}>{{o.label}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tier</label>
+            <select name="travel-tier" data-action="compose-id">
+              {{#each travelTierOptions as |o|}}
+                <option value="{{o.value}}" {{#if (eq o.value ../travelTier)}}selected{{/if}}>{{o.label}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <div class="form-group bbttcc-span-2">
+            <label>Table ID (auto)</label>
+            <div class="bbttcc-id-readout">
+              <code data-role="composed-id">{{composedId}}</code>
+              <span class="bbttcc-muted">— resolves directly to the travel engine lookup.</span>
+            </div>
+          </div>
+
+          <div class="form-group bbttcc-span-2">
+            <label>Tags (space-separated)</label>
+            <input type="text" name="tags" value="{{tagsRaw}}" placeholder="e.g. travel road locals" />
+          </div>
+        {{else}}
+          <div class="form-group">
+            <label>Table ID</label>
+            <input type="text" name="id" value="{{table.id}}" placeholder="lowercase_id" />
+          </div>
+
+          <div class="form-group">
+            <label>Tags (space-separated)</label>
+            <input type="text" name="tags" value="{{tagsRaw}}" placeholder="e.g. travel road locals" />
+          </div>
+        {{/if}}
       </div>
 
       <p class="bbttcc-muted">

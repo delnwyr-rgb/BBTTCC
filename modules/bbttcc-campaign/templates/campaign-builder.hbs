@@ -163,6 +163,7 @@
 
                 <button type="button" class="bbttcc-btn" data-action="travel-show-all">Show All</button>
                 <button type="button" class="bbttcc-btn" data-action="travel-preview">Preview Roll</button>
+                <button type="button" class="bbttcc-btn" data-action="fix-travel-ids" title="Scan travel tables for non-canonical/duplicate IDs and mismatched entry terrain/tier conditions, then repair them">🔧 Fix Travel Tables</button>
                 <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="new-travel-table">+ New Travel Table</button>
               </div>
             </div>
@@ -172,9 +173,7 @@
             <p class="bbttcc-muted" style="margin: 6px 0 12px;">
               Preview: <strong>{{travelPreview.label}}</strong>
               <span class="bbttcc-inline-separator">·</span>
-              <code>{{travelPreview.key}}</code>
-              <span class="bbttcc-inline-separator">·</span>
-              <span>{{travelPreview.category}}</span>
+              <code>{{travelPreview.tableId}}</code>
             </p>
           {{/if}}
 
