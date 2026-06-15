@@ -13,8 +13,16 @@
     ["bbttcc-campaign-builder","bbttcc-hexchrome"]
 */
 
+/* Design tokens — scoped to EVERY campaign-module app so the Builder, Beat
+   editor, Table editor, the Scene/Actor/Tag pickers, and the player mirror all
+   share one palette. (Previously only the Builder + Beat editor got these.) */
 .bbttcc-hexchrome.bbttcc-campaign-builder,
-.bbttcc-hexchrome.bbttcc-campaign-beat-editor {
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor,
+.bbttcc-hexchrome.bbttcc-campaign-table-editor,
+.bbttcc-hexchrome.bbttcc-campaign-scene-picker,
+.bbttcc-hexchrome.bbttcc-campaign-actor-picker,
+.bbttcc-hexchrome.bbttcc-campaign-tag-picker,
+.bbttcc-hexchrome.bbttcc-player-mirror {
   --cb-accent:        var(--bbttcc-hexchrome-accent, #4cf5ff);
   --cb-accent-soft:   var(--bbttcc-hexchrome-accent-soft, rgba(76, 245, 255, 0.18));
   --cb-bg:            var(--bbttcc-hexchrome-panel-bg, rgba(3, 10, 30, 0.98));
@@ -28,6 +36,17 @@
   --cb-pill-border:   var(--bbttcc-hexchrome-pill-border, rgba(157, 217, 255, 0.6));
   --cb-radius:        var(--bbttcc-hexchrome-radius, 8px);
   --cb-shadow-soft:   0 0 18px rgba(17, 145, 255, 0.25);
+
+  /* Steward house style: two-tone labels + glow (matches the fourththing
+     actor sheets). AMBER = structural (tabs, headings, primary actions);
+     BLUE = data (field labels); CYAN (--cb-accent) stays for code/ids. */
+  --cb-structural:    #ffcf5c;
+  --cb-data:          #bcd3ff;
+  --cb-glow-amber:        0 0 2px rgba(255, 210, 120, 0.85), 0 0 7px rgba(220, 150, 40, 0.45);
+  --cb-glow-amber-strong: 0 0 3px rgba(255, 210, 120, 0.90), 0 0 9px rgba(220, 150, 40, 0.55), 0 0 20px rgba(180, 95, 15, 0.30);
+  --cb-glow-blue:         0 0 2px rgba(200, 220, 255, 0.85), 0 0 7px rgba(120, 160, 255, 0.45), 0 0 18px rgba(28, 58, 157, 0.60);
+  /* Deep radial backdrop shared with the Steward sheet. */
+  --cb-radial-bg:     radial-gradient(circle at top, #141a33 0, #050712 60%);
 }
 
 /* Window chrome ------------------------------------------------------------ */
@@ -1128,3 +1147,129 @@
 .bbttcc-hexchrome-dialog .bbttcc-player-facing-dialog + .dialog-buttons button {
   flex: 1 1 160px;
 }
+
+/* =========================================================================
+   STEWARD HOUSE-STYLE PASS
+   Matches the fourththing actor sheets: deep radial backdrop, two-tone labels
+   (warm amber = structure, cool blue = data, cyan = code), and a soft glow.
+   Appended last so these win at equal specificity over the legacy rules above.
+   ========================================================================= */
+
+/* Deep radial backdrop on every campaign app window. */
+.bbttcc-hexchrome.bbttcc-campaign-builder .window-content,
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor .window-content,
+.bbttcc-hexchrome.bbttcc-campaign-table-editor .window-content {
+  background:
+    radial-gradient(circle at 100% 0, rgba(56, 189, 248, 0.10), transparent 55%),
+    var(--cb-radial-bg);
+}
+
+/* Window title → amber structural. */
+.bbttcc-hexchrome.bbttcc-campaign-builder .window-header .window-title,
+.bbttcc-hexchrome.bbttcc-campaign-beat-editor .window-header .window-title,
+.bbttcc-hexchrome.bbttcc-campaign-table-editor .window-header .window-title {
+  color: var(--cb-structural);
+  text-shadow: var(--cb-glow-amber);
+}
+
+/* Section / editor headings → amber structural with glow. */
+.bbttcc-hexchrome .bbttcc-beat-section h3,
+.bbttcc-hexchrome .bbttcc-beat-editor-header h2,
+.bbttcc-hexchrome .bbttcc-campaign-title {
+  color: var(--cb-structural);
+  text-shadow: var(--cb-glow-amber);
+}
+
+/* Field labels → cool blue data with glow. */
+.bbttcc-hexchrome .bbttcc-form-grid .form-group label,
+.bbttcc-hexchrome .bbttcc-form-grid label,
+.bbttcc-hexchrome .bbttcc-beat-section label,
+.bbttcc-hexchrome .form-group > label {
+  color: var(--cb-data);
+  text-shadow: var(--cb-glow-blue);
+}
+
+/* Muted helper text stays quiet (no glow) so labels read as the hierarchy. */
+.bbttcc-hexchrome .bbttcc-muted { color: var(--cb-text-muted); text-shadow: none; }
+
+/* Code / id readouts → cyan, the third accent. */
+.bbttcc-hexchrome .bbttcc-id-readout code,
+.bbttcc-hexchrome code {
+  color: var(--cb-accent);
+  text-shadow: 0 0 6px rgba(76, 245, 255, 0.35);
+}
+
+/* Inner editor tabs (Core / Entries, Beat editor tabs). */
+.bbttcc-hexchrome .bbttcc-tab {
+  color: rgba(255, 226, 168, 0.65);
+}
+.bbttcc-hexchrome .bbttcc-tab:hover {
+  color: var(--cb-structural);
+}
+.bbttcc-hexchrome .bbttcc-tab.is-active {
+  background:
+    radial-gradient(circle at 0 0, rgba(255, 207, 92, 0.30), transparent 60%),
+    linear-gradient(135deg, rgba(120, 78, 12, 0.92), rgba(40, 30, 10, 0.92));
+  border-color: rgba(255, 207, 92, 0.75);
+  color: var(--cb-structural);
+  text-shadow: var(--cb-glow-amber);
+  box-shadow: 0 0 12px rgba(220, 150, 40, 0.40);
+}
+
+/* Main top tabs (Campaign / Travel Tables / Beats / Quests / Visualizer). */
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabbtn {
+  color: rgba(255, 226, 168, 0.70);
+}
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabbtn:hover {
+  color: var(--cb-structural);
+  border-color: rgba(255, 207, 92, 0.5);
+}
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabbtn.is-active {
+  border-color: rgba(255, 207, 92, 0.75);
+  background:
+    radial-gradient(circle at 0 0, rgba(255, 207, 92, 0.22), transparent 60%),
+    linear-gradient(135deg, rgba(90, 60, 12, 0.65), rgba(15, 23, 42, 0.75));
+  color: var(--cb-structural);
+  text-shadow: var(--cb-glow-amber);
+  box-shadow: 0 0 0 1px rgba(255, 207, 92, 0.30), 0 0 12px rgba(220, 150, 40, 0.30);
+}
+
+/* Primary buttons → amber structural (SAVE, + NEW, etc.). */
+.bbttcc-hexchrome .bbttcc-btn-primary {
+  border-color: rgba(255, 207, 92, 0.8);
+  background:
+    radial-gradient(circle at 0 0, rgba(255, 222, 140, 0.55), transparent 55%),
+    linear-gradient(135deg, #e0a82e, #b5740f);
+  color: #1a1205;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 240, 200, 0.5);
+}
+.bbttcc-hexchrome .bbttcc-btn-primary:hover {
+  filter: brightness(1.07);
+  box-shadow: 0 0 14px rgba(220, 150, 40, 0.55);
+}
+
+/* Active main-tab underline accent in amber (legacy alt tab class). */
+.bbttcc-hexchrome .bbttcc-main-tabs .bbttcc-tabbtn.is-active {
+  font-weight: 800;
+}
+
+/* -------------------------------------------------------------------------
+   Layout utilities — replace inline grid styles in the templates so spacing
+   is theme-controlled. Values reproduce the prior inline declarations exactly
+   (10px grid gap) so this is a visually-identical swap.
+   ------------------------------------------------------------------------- */
+.bbttcc-hexchrome .bbttcc-form-grid.bbttcc-form-grid-2,
+.bbttcc-hexchrome .bbttcc-form-grid.bbttcc-form-grid-3,
+.bbttcc-hexchrome .bbttcc-form-grid.bbttcc-form-grid-4 {
+  gap: 10px;
+}
+.bbttcc-hexchrome .bbttcc-form-grid.bbttcc-form-grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.bbttcc-hexchrome .bbttcc-form-grid.bbttcc-form-grid-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.bbttcc-hexchrome .bbttcc-grid-111 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: .5rem; }
+.bbttcc-hexchrome .bbttcc-grid-21  { display: grid; grid-template-columns: 2fr 1fr; gap: .5rem; }
+.bbttcc-hexchrome .bbttcc-mt-10 { margin-top: 10px; }

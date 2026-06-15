@@ -24,7 +24,7 @@
   <section class="bbttcc-tab-panel {{#unless (eq activeTab "core")}}is-hidden{{/unless}}" data-tab="core">
     <section class="bbttcc-beat-section">
       <h3>Basic Info</h3>
-      <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+      <div class="bbttcc-form-grid bbttcc-form-grid-2">
         <div class="form-group">
           <label>Beat ID</label>
           <input type="text" name="id" value="{{beat.id}}" />
@@ -114,7 +114,7 @@
     {{#if (eq beat.type "encounter")}}
       <section class="bbttcc-beat-section">
         <h3>Encounter</h3>
-        <div class="bbttcc-form-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+        <div class="bbttcc-form-grid bbttcc-form-grid-3">
           <div class="form-group">
             <label>Encounter Key</label>
             <input type="text" name="encounter-key" value="{{beat.encounter.key}}" placeholder="e.g. demo_gloomgill_raid" />
@@ -201,7 +201,7 @@
         </div>
       </div> {{!-- ✅ closes the Tags form-group --}}
 
-      <div class="bbttcc-form-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;">
+      <div class="bbttcc-form-grid bbttcc-form-grid-3">
         <div class="form-group">
           <label>Once Per Hex</label>
           <select name="inject-once-per-hex">
@@ -224,7 +224,7 @@
 
       <div class="form-group">
         <label>Governance</label>
-        <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+        <div class="bbttcc-form-grid bbttcc-form-grid-2">
           <div class="form-group">
             <label>Prompt GM</label>
             <select name="inject-prompt-gm">
@@ -302,7 +302,7 @@
               Use this for Gloomgill “Success” / “Failure” cutscenes that bounce the table back into the fight scene.
             </div>
 
-            <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+            <div class="bbttcc-form-grid bbttcc-form-grid-2">
               <div class="form-group">
                 <label style="display:flex; align-items:center; gap:.5rem;">
                   <input type="checkbox" name="cinematic-enabled" {{#if beat.cinematic.enabled}}checked{{/if}} />
@@ -322,7 +322,7 @@
               </div>
             </div>
 
-            <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top:10px;">
+            <div class="bbttcc-form-grid bbttcc-form-grid-2 bbttcc-mt-10">
               <div class="form-group">
                 <label>Start Scene</label>
                 <div class="bbttcc-scene-linkbox">
@@ -433,7 +433,7 @@
       {{#if hasChoices}}
         {{#each beat.choices as |ch index|}}
           <div class="bbttcc-choice-row" style="border:1px solid rgba(255,255,255,0.10); border-radius:10px; padding:10px; margin-bottom:10px;">
-            <div class="bbttcc-form-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;">
+            <div class="bbttcc-form-grid bbttcc-form-grid-2">
               <div class="form-group">
                 <label>Choice Label (button)</label>
                 <input type="text" name="choice-label" value="{{ch.label}}" placeholder="e.g. Ask about the vault door" />
@@ -460,7 +460,7 @@
               <textarea name="choice-desc" rows="3" placeholder="Optional: what this choice means / asks / risks.">{{ch.description}}</textarea>
             </div>
 
-            <div class="bbttcc-form-grid" style="grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px;">
+            <div class="bbttcc-form-grid bbttcc-form-grid-4">
               <div class="form-group">
                 <label>Check Stat (optional)</label>
                 {{#if ../skillStatOptions.length}}
@@ -570,7 +570,7 @@
         <p class="bbttcc-muted" style="font-size:0.78rem; margin:0.2rem 0 0.4rem">
           Pair this beat with a Tikkun spark and choose what happens when it resolves. Leave Action blank to disable.
         </p>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:.5rem">
+        <div class="bbttcc-grid-111">
           <div>
             <label style="font-size:0.78rem">Spark</label>
             <select name="spark-link-uuid">
@@ -607,7 +607,7 @@
         <p class="bbttcc-muted" style="font-size:0.78rem; margin:0.2rem 0 0.4rem">
           Flip <code>leylines.gate.enabled</code> on one or more hexes when this beat resolves. Ctrl/Cmd-click in the picker to select multiple anchors (use both ends of a pair for a fully-open corridor).
         </p>
-        <div style="display:grid; grid-template-columns:2fr 1fr; gap:.5rem">
+        <div class="bbttcc-grid-21">
           <div>
             <label style="font-size:0.78rem">Anchor Hex(es)</label>
             <select name="gate-unlock-hex" multiple size="5" style="width:100%;">
