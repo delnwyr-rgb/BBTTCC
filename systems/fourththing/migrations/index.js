@@ -29,6 +29,8 @@
  *      retries on next load.
  */
 
+import { stampActorKind } from "../actor-kind.js";
+
 const SETTING_NS  = "fourththing";
 const SETTING_KEY = "schemaVersion";
 
@@ -46,6 +48,22 @@ export const MIGRATIONS = [
     // known floor for future migrations. Pre-framework ad-hoc macro migrations
     // are NOT replayed here.
     migrate: async () => { /* no-op baseline */ },
+  },
+  {
+    version: 2,
+    name: "stamp-actor-kind",
+    // Backfill the denormalized flags.fourththing.kind cache on every existing
+    // actor so raw queries / templates can filter by canonical kind. Idempotent:
+    // stampActorKind() writes only when the cached value differs from the freshly
+    // resolved actorKind(), so re-running is a no-op.
+    migrate: async () => {
+      let stamped = 0;
+      for (const a of (game.actors?.contents ?? [])) {
+        try { if (await stampActorKind(a)) stamped++; }
+        catch (e) { console.warn(`Roll for Initiation | migration v2: stampActorKind failed for ${a?.name}`, e); }
+      }
+      console.log(`Roll for Initiation | migration v2 "stamp-actor-kind" — stamped ${stamped} actor(s).`);
+    },
   },
 ];
 

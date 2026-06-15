@@ -299,8 +299,11 @@ async function _onRenewal(actor) {
     return `<option value="${t.actor.id}">${foundry.utils.escapeHTML(t.actor.name)} — ${state}</option>`;
   }).join("");
 
+  // Factions are type:"npc" + isFaction flag, so the old `type==="character"`
+  // check matched nothing. Route through actorKind (faction-kind), strict fallback.
   const factions = (game.actors?.contents ?? []).filter(a =>
-    a.type === "character" && a.getFlag("bbttcc-factions", "isFaction"));
+    (game.bbttcc?.api?.actorKind?.(a)
+      ?? (a?.flags?.["bbttcc-factions"]?.isFaction === true ? "faction" : a?.type)) === "faction");
   if (!factions.length) {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor }),

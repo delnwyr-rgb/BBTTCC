@@ -102,11 +102,17 @@ async function _setActiveCampaignId(id) {
 
 function _listFactionActors() {
   try {
+    // Faction-kind only. The old heuristic kept any actor that merely CARRIED a
+    // bbttcc-factions flag — but faction-OWNED rigs/stewards store
+    // flags.bbttcc-factions.factionId, so that leaked rigs/characters into the
+    // picker. Route through the canonical resolver; fall back to a STRICT check
+    // (isFaction===true / type==="faction"), never mere flag presence.
+    const kindOf = (a) => game.bbttcc?.api?.actorKind?.(a)
+      ?? ((a?.flags?.["bbttcc-factions"]?.isFaction === true
+           || String(a?.type || "").toLowerCase() === "faction") ? "faction" : (a?.type || ""));
     const out = [];
     for (const a of (game.actors?.contents || [])) {
-      const hasFlags = !!a?.flags?.["bbttcc-factions"];
-      const isType = String(a?.type || "").toLowerCase() === "faction";
-      if (!hasFlags && !isType) continue;
+      if (kindOf(a) !== "faction") continue;
       out.push({ uuid: a.uuid, name: a.name });
     }
     out.sort((a, b) => String(a.name).localeCompare(String(b.name), game.i18n.lang));

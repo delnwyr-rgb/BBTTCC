@@ -165,6 +165,11 @@ import {
   MIGRATIONS,
 } from "./migrations/index.js";
 
+import {
+  registerActorKindApi,
+  registerActorKindHooks,
+} from "./actor-kind.js";
+
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const FT = {
@@ -12076,6 +12081,12 @@ Hooks.once("init", function () {
   // runner (registered just above the init hook, so it fires first) can compare
   // the world's stored schema version against the code target.
   registerSchemaVersionSetting();
+
+  // Canonical actor-kind resolver + denormalized flags.fourththing.kind cache.
+  // API exposed at game.bbttcc.api.actorKind / actorsOfKind; hooks keep the
+  // stored tag fresh on create/update. Migration v2 backfills existing actors.
+  registerActorKindApi();
+  registerActorKindHooks();
 
   // Bad Eden Display font — registered so it appears in Foundry's font dropdowns
   // (Drawings, Scene text, journal rich-text editor). CSS usage is also wired

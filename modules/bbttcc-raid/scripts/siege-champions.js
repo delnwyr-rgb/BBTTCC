@@ -45,18 +45,27 @@
   }
 
   function _candidates(factionId){
-    const S = globalThis.__bbttccSiegeState;
-    const isFaction = (a) => S?.isFactionActor ? S.isFactionActor(a) : (a?.type === "faction");
+    // Champions are this faction's STEWARDS (PCs) only — not rigs/bosses/npcs,
+    // and not stewards of other factions. Kind via the canonical resolver, with
+    // a fallback (steward = character without entityKind:"npc"). Affiliation is
+    // the established ★ signal (factionOwnerId / factionId flags).
+    const kindOf = (a) => {
+      const k = game.bbttcc?.api?.actorKind?.(a);
+      if (k) return k;
+      const ek = String(a?.flags?.[MOD_AL]?.entityKind || "").toLowerCase();
+      if (a?.type === "character") return ek === "npc" ? "npc" : "steward";
+      return a?.type || "";
+    };
     return (game.actors?.contents || [])
-      .filter(a => a && !isFaction(a) && ["character", "npc", "rig"].includes(a.type))
+      .filter(a => a && kindOf(a) === "steward" && _affiliated(a, factionId))
       .map(a => ({
         actorId: a.id,
         name: a.name,
         kind: a.getFlag?.(MOD_AL, "entityKind") || a.type,
         rank: _actorRank(a),
-        affiliated: _affiliated(a, factionId)
+        affiliated: true
       }))
-      .sort((x, y) => (Number(y.affiliated) - Number(x.affiliated)) || (y.rank - x.rank) || x.name.localeCompare(y.name));
+      .sort((x, y) => (y.rank - x.rank) || x.name.localeCompare(y.name));
   }
 
   // ─── Roster authoring dialog ──────────────────────────────────────────────
@@ -79,7 +88,7 @@
 
     const content = `
       <div style="display:flex;flex-direction:column;gap:.5rem;font-size:0.9rem;">
-        <div>Champions for <b>${esc(faction.name)}</b>. Ctrl/Cmd-click to multi-select. ★ = affiliated · r = rank (boss tier×5 / rig tier×4 / level).</div>
+        <div>Champions for <b>${esc(faction.name)}</b> — its affiliated stewards only. Ctrl/Cmd-click to multi-select. r = character level. (Entries below the line marked "?" are previously-saved non-steward picks, kept so they aren't silently dropped — deselect to retire them.)</div>
         <select name="roster" class="bbttcc-champ-roster" multiple size="12" style="width:100%;">${rows}</select>
         <div style="display:flex;gap:6px;">
           <button type="button" data-act="suggest" style="flex:1;">✨ Auto-suggest top 5</button>

@@ -240,21 +240,62 @@ The recurring pattern: *technomagical items frequently bridge domains, so split-
 
 ## 7. Rig Pricing
 
-Rigs are NOT priced via category multiplier — they have their own bracket-based ladder. Bracket multiplier applies to `tierBase`, then a frame-quality modifier applies on top.
+*Revised 2026-06-14 — opBank-scale rebuild. See the cap-reconciliation note below for why the old 100–67500 ladder was superseded.*
 
-| Bracket | × Multiplier | T1 | T2 | T3 | T4 |
-|---|---|---|---|---|---|
-| **Personal** (single pilot bike/skiff) | 2 | 100 | 300 | 900 | 2700 |
-| **Light** (1–2 crew scout) | 5 | 250 | 750 | 2250 | 6750 |
-| **Medium** (4–8 crew barge) | 12 | 600 | 1800 | 5400 | 16200 |
-| **Heavy** (4–7 crew war-rig) | 25 | 1250 | 3750 | 11250 | 33750 |
-| **Siege** (stationary fortress/forge) | 50 | 2500 | 7500 | 22500 | 67500 |
+> ### ⚠ Cap reconciliation (why this section was rewritten)
+> The original §7 (and the rest of this rubric) priced rigs on the `tierBase × bracketMult` spine — 100 marks for a personal T1 up to 67,500 for a siege T4. That math predates the live faction economy. In `bbttcc-factions/scripts/op-engine.js`, the `opBank` is **per-bucket capped at 50 / 70 / 90 / 110 / 130 marks** for faction Tier 0→4, and `commit()` refuses any spend that would drive a bucket below zero. A faction therefore **can never hold — let alone spend — more than ~130 marks** from its Economy bucket. The old ladder is unbuildable via faction debit (a medium rig at 600 marks exceeds even a T4 faction's entire economy cap by ~5×).
+>
+> Since the **Rig Builder debits the owner faction's Economy `opBank`** (GM-bypassable), rig fabrication cost must live inside that 0–130 band. The table below replaces the old one. Apex coalition flagships intentionally price *above* the cap → GM-grant / macro-seed only.
 
-Frame is the **chassis only**. Weapons, systems, and output modules are separately-priced gear items (use §2 multipliers — `rig-weapon` = weapon ×, `rig-system` = sigil ×, `output-module` = tool ×).
+Rigs are priced by a **power/utility model** (mirrors the manifestation Magnitude philosophy): a bracket × tier chassis base, plus additive adders for what the rig can actually do, minus drawbacks.
 
-**Total rig cost** = frame + Σ(equipped gear).
+```
+cost = chassisBase(bracket, rigTier) + Σ power-adders − Σ drawbacks
+       (floored at chassisBase × 0.5, rounded to whole marks)
+```
+Denominated in **Economy marks**. Implemented as `computeRigCost()` in `bbttcc-auto-link/scripts/rig-builder.js` (exposed at `game.bbttcc.api.rigBuilder.computeRigCost`).
 
-**Pre-built rig templates** (catalog): price = frame + suggested gear loadout, listed as a single bundle. Buyer can swap modules at retail before/after purchase.
+### 7.1 Chassis base (the spine)
+
+| Bracket | T1 | T2 | T3 | T4 |
+|---|---|---|---|---|
+| **Personal** (single pilot bike/skiff) | 5 | 8 | 11 | 16 |
+| **Light** (1–2 crew scout) | 10 | 15 | 22 | 32 |
+| **Medium** (4–8 crew barge) | 18 | 26 | 39 | 56 |
+| **Heavy** (4–7 crew war-rig) | 28 | 41 | 60 | 88 |
+| **Siege** (fortress/forge) | 40 | 60 | 88 | 128 |
+
+### 7.2 Power-adders & drawbacks
+
+Each adder is `count × multiplier × unit`, where the **tier unit** `u` = `{ T1:1, T2:2, T3:3, T4:5 }` (a T4 mount is worth more than a T1).
+
+| Knob | × unit |
+|---|---|
+| Weapon mount (each equipped) | +2u |
+| System module (each) | +1u |
+| Output module (each) | +2u |
+| Resistance tag (each) | +1u |
+| Immunity tag (each) | +2u |
+| Hazard-resist (per point) | +1u |
+| **Vulnerability tag (each)** | **−1u** (drawback) |
+
+### 7.3 Worked examples
+
+| Rig | Bracket·T | Chassis | Adders | **Total** |
+|---|---|---|---|---|
+| Bare personal frame | Pers·T1 | 5 | — | **5** |
+| Hexmobile (free Tier-0 grant) | Pers·T1 | 5 | 1 wpn +2, 1 sys +1 | **8** |
+| ATR transport | Med·T2 | 26 | 1 wpn +4, 2 sys +4 | **34** |
+| Avuncular War Tower | Siege·T3 | 88 | 2 wpn +12, 4 sys +12, 1 out +6, 2 res +6, 1 imm +6 | **130** |
+| Unicorn VC (apex) | Heavy·T4 | 88 | 3 wpn +30, 4 sys +20, 1 out +10, 1 res +5, 1 imm +10 | **163** → *over cap, GM-grant only* |
+
+### 7.4 Notes
+
+- **Free Tier-0 grant:** every new faction is seeded a free personal-bracket Hexmobile at creation (`applyStartingPackage` → `rigBuilder.mintFromChassis("hexmobile", { free: true })`), so a fledgling faction starts mobile without draining its ~30-mark opening economy.
+- **Builder UI** shows a live cost breakdown and (for GMs) a **Bypass cost** checkbox that builds free with no debit.
+- **GM bypass / over-cap:** apex flagships and any rig above the buyer's economy cap are reachable only via the GM bypass or the seed macros (`seed-coalition-flagship-rigs.macro.js`).
+- **Facilities** (stationary rigs) price through the same model in v1; their yield-based valuation (§8) remains the design target for a later pass.
+- **Separately-priced gear:** weapons/systems/output modules added on the actor sheet *after* build are not re-charged by the builder in v1 — the chassis adders price the chip loadout at build time only. Retail gear pricing (§2: `rig-weapon` = weapon ×, `rig-system` = sigil ×, `output-module` = tool ×) still governs market purchase of loose modules.
 
 ---
 
@@ -305,7 +346,9 @@ Hire and ransom use the same table — you hire a war-boss with Violence-marks, 
 
 Personal rigs (bracket: personal) are the steward-scale category — bikes, skiffs, hex-jumpers, single-pilot mechs. They serve as both transport and personal combat platform.
 
-**Pricing** uses the rig bracket = "personal" row in §7. Realistic personal-rig price points:
+> **2026-06-14:** Personal-rig pricing now uses the opBank-scale §7.1 table (5/8/11/16 marks across tiers), not the legacy numbers below. When built through the **Rig Builder**, a personal rig is **charged to the owner faction's Economy opBank** (the canonical motor-pool path), not a steward wallet — and every faction gets one free at creation. The steward-owned / personal-wallet model below is retained as a GM option for off-roster personal vehicles. The old table is left for historical context.
+
+**Pricing** uses the rig bracket = "personal" row in §7 (superseded — see note). Legacy price points:
 
 | T | Stock (frame only) | Mid-tier (frame + 1 system + 1 weapon) | Pimped (frame + 3 modules) |
 |---|---|---|---|

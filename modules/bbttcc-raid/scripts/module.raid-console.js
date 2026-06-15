@@ -554,6 +554,7 @@ function isFaction(a){
     // created via legacy paths sometimes store `isFaction` as 1, "true", or
     // other truthy non-boolean; strict equality silently excluded them,
     // making the coalition picker empty even when factions exist.
+    if (game.bbttcc?.api?.actorKind?.(a) === "faction") return true;
     if (a.getFlag?.(FCT_ID,"isFaction") || a?.flags?.[FCT_ID]?.isFaction) return true;
     const t = (foundry.utils.getProperty(a,"system.details.type.value") ?? "").toString().toLowerCase();
     if (t === "faction") return true;

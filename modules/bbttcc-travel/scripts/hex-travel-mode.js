@@ -163,7 +163,8 @@
   }
 
   function factionsList() {
-    return game.actors.filter(a => a.getFlag(MOD_FCT,"isFaction"));
+    return game.actors.filter(a =>
+      (game.bbttcc?.api?.actorKind?.(a) ?? (a.getFlag(MOD_FCT,"isFaction") ? "faction" : a.type)) === "faction");
   }
 
   function renderPanel() {

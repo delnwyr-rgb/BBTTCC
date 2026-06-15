@@ -58,8 +58,13 @@
     function _listFactionActors() {
       try {
         const all = Array.from(game.actors ?? []);
-        // “Faction actors” are those that have bbttcc-factions flags
-        return all.filter(a => !!a?.flags?.["bbttcc-factions"]);
+        // Faction-kind only. Old check (mere bbttcc-factions flag presence)
+        // leaked faction-owned rigs/stewards; route through actorKind with a
+        // strict isFaction/sysType fallback.
+        const kindOf = (a) => game.bbttcc?.api?.actorKind?.(a)
+          ?? ((a?.flags?.["bbttcc-factions"]?.isFaction === true
+               || String(a?.type || "").toLowerCase() === "faction") ? "faction" : "");
+        return all.filter(a => kindOf(a) === "faction");
       } catch {
         return [];
       }

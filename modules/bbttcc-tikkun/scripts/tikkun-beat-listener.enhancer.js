@@ -97,7 +97,8 @@ console.log("[bbttcc-tikkun/beat-listener] LOADED");
   // when the beat's sparkLink resolves no actor automatically. Returns
   // actor or null (cancelled).
   async function _promptForActor(link, beatLabel) {
-    const candidates = game.actors?.filter(a => a.type === "character" && a.hasPlayerOwner) ?? [];
+    const _isSteward = (a) => { const k = game.bbttcc?.api?.actorKind?.(a); return k ? k === "steward" : a?.type === "character"; };
+    const candidates = game.actors?.filter(a => _isSteward(a) && a.hasPlayerOwner) ?? [];
     if (!candidates.length) return null;
     return new Promise((resolve) => {
       const opts = candidates.map(a => `<option value="${a.id}">${a.name}</option>`).join("");

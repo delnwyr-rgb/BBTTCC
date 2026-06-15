@@ -567,7 +567,8 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
         .filter(a => {
           try {
             if (!a) return false;
-            if (a.type === "faction") return true;
+            if (game.bbttcc?.api?.actorKind?.(a) === "faction") return true;
+          if (a.type === "faction") return true;
             const f = a.flags && (a.flags["bbttcc-factions"] || a.flags.bbttccFactions);
             return !!f;
           } catch (_e) { return false; }
@@ -1190,6 +1191,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       const _isFactionActor = (a) => {
         try {
           if (!a) return false;
+          if (game.bbttcc?.api?.actorKind?.(a) === "faction") return true;
           if (a.type === "faction") return true;
           const f = a.flags && (a.flags["bbttcc-factions"] || a.flags.bbttccFactions);
           if (!f) return false;
@@ -1386,6 +1388,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       const _isFactionActor = (a) => {
         try {
           if (!a) return false;
+          if (game.bbttcc?.api?.actorKind?.(a) === "faction") return true;
           if (a.type === "faction") return true;
           const f = a.flags && (a.flags["bbttcc-factions"] || a.flags.bbttccFactions);
           if (!f) return false;

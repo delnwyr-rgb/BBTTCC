@@ -547,8 +547,11 @@ async function _clearBridgeDebtAndLocks(actor){
     var factions = game.actors.contents.filter(function(a){
       try {
         if (!a) return false;
+        var k = (game.bbttcc && game.bbttcc.api && game.bbttcc.api.actorKind) ? game.bbttcc.api.actorKind(a) : null;
+        if (k) return k === "faction";
+        // Fallback (actorKind API absent): strict markers only — NOT mere
+        // bbttcc-factions flag presence, which faction-owned rigs/stewards carry.
         if (a.type === "faction") return true;
-        if ((a.flags||{})["bbttcc-factions"]) return true;
         if (a.getFlag && a.getFlag("bbttcc-factions","isFaction")) return true;
         var tv = String((((a.system||{}).details||{}).type||{}).value || "").toLowerCase();
         return tv === "faction";
@@ -581,7 +584,11 @@ async function _clearBridgeDebtAndLocks(actor){
       } catch(_e){ return []; }
     }
 
-    var actors = game.actors.contents.filter(function(a){ return a && a.type==="character"; });
+    var actors = game.actors.contents.filter(function(a){
+      if (!a) return false;
+      var k = (game.bbttcc && game.bbttcc.api && game.bbttcc.api.actorKind) ? game.bbttcc.api.actorKind(a) : null;
+      return k ? k === "steward" : a.type==="character";
+    });
     var actorOptions = actors.map(function(a){
       return '<option value="'+a.id+'" '+(actor && a.id===actor.id ? "selected":"")+'>'+a.name+'</option>';
     }).join("");

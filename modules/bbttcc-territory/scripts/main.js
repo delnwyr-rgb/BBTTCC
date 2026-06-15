@@ -1446,8 +1446,10 @@ function worldFromEvent(ev){ try{ if (ev?.data?.getLocalPosition) return ev.data
 function buildOwnerList(){
   const list=[];
   for (const a of game.actors?.contents ?? []) {
-    const isFaction = a.getFlag?.("bbttcc-factions","isFaction")===true ||
-      String(a.system?.details?.type?.value ?? "").toLowerCase()==="faction";
+    const _k = game.bbttcc?.api?.actorKind?.(a);
+    const isFaction = _k ? _k === "faction"
+      : (a.getFlag?.("bbttcc-factions","isFaction")===true ||
+         String(a.system?.details?.type?.value ?? "").toLowerCase()==="faction");
     if (isFaction) list.push({id:a.id, name:a.name});
   }
   return list.sort((A,B)=>A.name.localeCompare(B.name));

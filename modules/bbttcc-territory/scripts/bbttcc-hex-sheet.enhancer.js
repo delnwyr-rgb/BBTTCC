@@ -887,7 +887,17 @@
         // Pick an actor.
         let actor = game.user.character;
         if (!actor) {
-          const owned = (game.actors?.contents || []).filter(a => a.isOwner && (a.type === "character" || a.type === "npc"));
+          // Harvesters are people, not factions. Factions are stored as
+          // type:"npc" + isFaction flag, so a plain type check leaks them into
+          // this picker — filter by canonical kind (steward/npc), with a flag
+          // fallback if the system's actorKind API isn't loaded.
+          const _harvestKind = (a) => game.bbttcc?.api?.actorKind?.(a)
+            ?? (a?.flags?.["bbttcc-factions"]?.isFaction ? "faction" : a?.type);
+          const owned = (game.actors?.contents || []).filter(a => {
+            if (!a.isOwner) return false;
+            const k = _harvestKind(a);
+            return k === "steward" || k === "npc" || k === "character";
+          });
           if (owned.length === 1) actor = owned[0];
           else if (owned.length > 1) {
             const opts = owned.map(a => `<option value="${a.id}">${a.name}</option>`).join("");

@@ -4255,6 +4255,38 @@ factionApi.applyStartingPackage ??= (async ({
     });
   } catch (_e) {}
 
+  // Free Tier-0 starter rig (2026-06-14): every new faction begins with a
+  // personal-bracket Hexmobile, minted free and owned by the faction. The rig
+  // builder lives in bbttcc-auto-link, so this is a guarded cross-module call
+  // (non-fatal if the module is absent). Idempotent via the starterRigGranted
+  // flag, so re-applying the package never duplicates the grant.
+  try {
+    const rigApi = game.bbttcc?.api?.rigBuilder;
+    if (a.getFlag?.(MODULE_ID, "starterRigGranted")) {
+      console.log(`[bbttcc-factions] starter-rig grant skipped for ${a.name} — already granted.`);
+    } else if (!rigApi?.mintFromChassis) {
+      console.warn("[bbttcc-factions] starter-rig grant SKIPPED — game.bbttcc.api.rigBuilder.mintFromChassis unavailable (is bbttcc-auto-link enabled/loaded?).");
+    } else {
+      const rig = await rigApi.mintFromChassis("hexmobile", { factionOwnerId: a.id, free: true });
+      if (rig) {
+        await a.setFlag(MODULE_ID, "starterRigGranted", true);
+        console.log(`[bbttcc-factions] starter rig granted to ${a.name}: "${rig.name}" (actor type=${rig.type}, id=${rig.id}).`);
+        ui.notifications?.info?.(`Starter rig "${rig.name}" granted to ${a.name}.`);
+        try {
+          const logs = Array.isArray(a.getFlag(MODULE_ID, "warLogs"))
+            ? deepClone(a.getFlag(MODULE_ID, "warLogs")) : [];
+          logs.push({
+            ts: Date.now(), date: new Date().toLocaleString(), type: "commit",
+            summary: `Starter rig granted: ${rig.name} (free, personal bracket).`
+          });
+          await a.update({ [`flags.${MODULE_ID}.warLogs`]: logs });
+        } catch (_e) {}
+      } else {
+        console.warn(`[bbttcc-factions] starter-rig grant for ${a.name} — mintFromChassis("hexmobile") returned null (mint failed; check earlier rig-builder warnings).`);
+      }
+    }
+  } catch (e) { console.warn("[bbttcc-factions] starter-rig grant failed (non-fatal):", e); }
+
   return { ok: true, actorId: a.id, packageKey: pkg.key, applied: patch };
 });
 
@@ -4781,9 +4813,9 @@ Hooks.on("updateActor", async (actor, data) => {
   try {
     const touchedFlag = foundry.utils.hasProperty(data, "flags.bbttcc-factions.isFaction");
     const touchedType = foundry.utils.hasProperty(data, "system.details.type.value");
-    const touchedBad Eden = foundry.utils.hasProperty(data, `flags.${MODULE_ID}`);
+    const touchedBadEden = foundry.utils.hasProperty(data, `flags.${MODULE_ID}`);
 
-    if (touchedFlag || touchedType || touchedBad Eden) {
+    if (touchedFlag || touchedType || touchedBadEden) {
       await ensureFactionHints(actor);
       const cur = actor.getFlag("core","sheetClass") || foundry.utils.getProperty(actor,"flags.core.sheetClass");
       if (isFactionActor(actor) && cur !== SHEET_ID) await actor.update({ "flags.core.sheetClass": SHEET_ID });

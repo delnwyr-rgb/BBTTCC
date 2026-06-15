@@ -192,6 +192,8 @@ function _factionOptions() {
   const factions = (game.actors?.contents ?? [])
     .filter(a => {
       try {
+        const k = game.bbttcc?.api?.actorKind?.(a);
+        if (k) return k === "faction";
         return a.getFlag?.("bbttcc-factions", "isFaction")
           || a?.flags?.["bbttcc-factions"]?.isFaction
           || String(foundry.utils.getProperty(a, "system.details.type.value") ?? "").toLowerCase() === "faction";

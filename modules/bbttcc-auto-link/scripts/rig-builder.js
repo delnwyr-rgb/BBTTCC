@@ -302,6 +302,105 @@ const CHASSIS_STARTERS = [
   }
 ];
 
+// ── Rig Fabrication Cost — v1 (2026-06-14) ─────────────────────────────────
+// Economy-marks cost charged to the builder's faction at commit (bypassable
+// by the GM). Mirrors the manifestation Magnitude philosophy: cost = chassis
+// footprint + what the rig can actually DO.
+//
+//   cost = chassisBase(bracket, tier) + Σ power-adders − Σ drawbacks
+//          (floored at chassisBase × 0.5, rounded to whole marks)
+//
+// Denominated in the faction's ECONOMY opBank bucket. That bucket has a hard
+// holding cap of 50/70/90/110/130 marks at faction Tier 0–4 (op-engine.js),
+// so the whole ladder lives in that band. This deliberately SUPERSEDES the
+// legacy PRICING_RUBRIC.md §7 scale (50–6750 marks), which predates the
+// opBank cap and is unbuildable via faction debit. Apex coalition flagships
+// (Unicorn VC etc.) intentionally price ABOVE the cap → GM-grant / macro-seed
+// only; the GM bypass covers any over-cap build a GM wants to wave through.
+const RIG_COST_CHASSIS = {
+  personal: { 1: 5,  2: 8,  3: 11, 4: 16  },
+  light:    { 1: 10, 2: 15, 3: 22, 4: 32  },
+  medium:   { 1: 18, 2: 26, 3: 39, 4: 56  },
+  heavy:    { 1: 28, 2: 41, 3: 60, 4: 88  },
+  siege:    { 1: 40, 2: 60, 3: 88, 4: 128 }
+};
+// Adder unit scales with the RIG's tier (a T4 mount is worth more than a T1).
+const RIG_COST_UNIT = { 1: 1, 2: 2, 3: 3, 4: 5 };
+// Per-knob multipliers on the tier unit.
+const RIG_COST_ADDERS = {
+  weapon:     2, // per equipped weapon mount
+  system:     1, // per system module
+  output:     2, // per output module (economic yield is scarce-economy gold)
+  resistance: 1, // per resistance tag
+  immunity:   2, // per immunity tag
+  hazard:     1  // per point of hazard resist
+};
+const RIG_COST_DRAWBACK_VULN = 1; // per vulnerability tag, × unit (subtracted)
+
+function _rigCostClampTier(t) {
+  return Math.max(1, Math.min(4, Math.floor(Number(t) || 1)));
+}
+
+function _csvCount(str) {
+  return String(str || "").split(",").map(s => s.trim()).filter(Boolean).length;
+}
+
+// Equipped-module counts from a chassis-starter loadout.
+function _chassisLoadoutCounts(chassis) {
+  const lo = chassis?.defaults?.loadout || {};
+  return {
+    weapons: Array.isArray(lo.weapons) ? lo.weapons.length : 0,
+    systems: Array.isArray(lo.systems) ? lo.systems.length : 0,
+    outputs: Array.isArray(lo.outputs) ? lo.outputs.length : 0
+  };
+}
+
+/**
+ * Compute the economy-marks fabrication cost of a rig/facility.
+ * @param {object} p
+ * @param {string} p.bracket  personal|light|medium|heavy|siege
+ * @param {number} p.tier     1–4
+ * @param {object} [p.counts] { weapons, systems, outputs } equipped-module counts
+ * @param {object} [p.defenses] { resistances, immunities, vulnerabilities } counts
+ * @param {number} [p.hazardResist]
+ * @returns {{marks:number, base:number, unit:number, lines:Array, floored:boolean}}
+ */
+function computeRigCost({ bracket = "medium", tier = 1, counts = {}, defenses = {}, hazardResist = 0 } = {}) {
+  const t = _rigCostClampTier(tier);
+  const brk = String(bracket || "medium").toLowerCase();
+  const base = (RIG_COST_CHASSIS[brk] || RIG_COST_CHASSIS.medium)[t] || 0;
+  const unit = RIG_COST_UNIT[t] || 1;
+
+  const n = (v) => Math.max(0, Math.floor(Number(v) || 0));
+  const weapons = n(counts.weapons);
+  const systems = n(counts.systems);
+  const outputs = n(counts.outputs);
+  const res = n(defenses.resistances);
+  const imm = n(defenses.immunities);
+  const vul = n(defenses.vulnerabilities);
+  const haz = n(hazardResist);
+
+  const lines = [{ label: `${brk.charAt(0).toUpperCase() + brk.slice(1)} chassis · T${t}`, marks: base }];
+  const adder = (count, perUnit, label) => {
+    if (count <= 0) return;
+    lines.push({ label: `${label} ×${count}`, marks: count * perUnit * unit });
+  };
+  adder(weapons, RIG_COST_ADDERS.weapon, "Weapon mount");
+  adder(systems, RIG_COST_ADDERS.system, "System module");
+  adder(outputs, RIG_COST_ADDERS.output, "Output module");
+  adder(res, RIG_COST_ADDERS.resistance, "Resistance");
+  adder(imm, RIG_COST_ADDERS.immunity, "Immunity");
+  adder(haz, RIG_COST_ADDERS.hazard, "Hazard resist");
+  if (vul > 0) lines.push({ label: `Vulnerability ×${vul}`, marks: -(vul * RIG_COST_DRAWBACK_VULN * unit) });
+
+  let total = lines.reduce((s, l) => s + l.marks, 0);
+  const floor = Math.ceil(base * 0.5);
+  let floored = false;
+  if (total < floor) { total = floor; floored = true; }
+  total = Math.max(0, Math.round(total));
+  return { marks: total, base, unit, lines, floored };
+}
+
 function _esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, c => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -312,6 +411,8 @@ function _factionOptions() {
   const factions = (game.actors?.contents ?? [])
     .filter(a => {
       try {
+        const k = game.bbttcc?.api?.actorKind?.(a);
+        if (k) return k === "faction";
         return a.getFlag?.("bbttcc-factions", "isFaction")
           || a?.flags?.["bbttcc-factions"]?.isFaction
           || String(foundry.utils.getProperty(a, "system.details.type.value") ?? "").toLowerCase() === "faction";
@@ -551,6 +652,20 @@ export async function openRigBuilder({ seed = null } = {}) {
       <textarea data-bbttcc-field="gmNotes" rows="2" placeholder="Special rules, retrofits, history."></textarea></div>
   </div>
 
+  <div class="ft-manifest-dialog-section" style="margin-top:0.7rem;">
+    <div class="ft-prev-label">Fabrication cost</div>
+    <div class="ft-prev-align-note">Charged in <b>Economy marks</b> to the owner faction on build. Chassis bracket × tier sets the base; mounted weapons, systems, output modules, and defenses add on top.</div>
+  </div>
+  <div id="bbttcc-rb-cost" class="bbttcc-rb-cost"
+       style="margin-top:0.4rem; padding:0.5rem 0.7rem; border:1px solid #3e8ec8aa; border-radius:5px; background:rgba(62,142,200,0.08); font-size:0.82rem;">
+    <em style="opacity:0.7;">Pick a bracket and tier to price this rig…</em>
+  </div>
+  ${game.user?.isGM ? `
+  <label style="display:flex; align-items:center; gap:0.45rem; font-weight:normal; margin-top:0.45rem; font-size:0.82rem;">
+    <input type="checkbox" data-bbttcc-field="bypassCost"/>
+    <span><b>Bypass cost (GM)</b> — build for free, no faction debit.</span>
+  </label>` : ""}
+
   <p style="opacity:0.7; font-size:0.78rem; margin:0.6rem 0 0;">
     After creation: open the sheet to add a frame item, mount weapons, drop in
     output modules, and station the rig as a Holding on a hex if it's a fixed
@@ -634,6 +749,18 @@ export async function openRigBuilder({ seed = null } = {}) {
         _wireCategoryTabs(html);
         _updateInfraPreview(root);
         if (seed) _applySeed(html, seed);
+
+        // Live fabrication-cost readout. Recompute on relevant field edits and
+        // after chip / category-tab clicks (deferred so the chip handler's
+        // synchronous field writes land first).
+        const recost = () => _updateRigCost(root);
+        ["bracket", "tier", "resistances", "immunities", "vulnerabilities", "hazardResist", "bypassCost"].forEach(name => {
+          const el = root.querySelector(`[data-bbttcc-field="${name}"]`);
+          if (el) { el.addEventListener("change", recost); el.addEventListener("input", recost); }
+        });
+        root.querySelectorAll("[data-bbttcc-starter], .bbttcc-rb-tab").forEach(b =>
+          b.addEventListener("click", () => setTimeout(recost, 0)));
+        recost();
       }
     }, {
       classes: ["fourththing", "ft-manifestation-wizard-window", "bbttcc-rig-builder-window"],
@@ -671,6 +798,51 @@ function _applySeed(html, seed) {
       if (maxEl && c.max != null) maxEl.value = Number(c.max) || 0;
     }
   }
+}
+
+/* Recompute + render the live fabrication-cost readout in #bbttcc-rb-cost.
+ * Reads the priceable inputs the builder form exposes: bracket, tier, the
+ * selected chassis chip's loadout (weapon/system/output counts), the defense
+ * CSV fields, and hazard resist. Infrastructure prices via its own material
+ * bill, so the box is hidden on that tab. */
+function _updateRigCost(root) {
+  if (!root) return;
+  const box = root.querySelector("#bbttcc-rb-cost");
+  if (!box) return;
+  const val = (name) => root.querySelector(`[data-bbttcc-field="${name}"]`)?.value ?? "";
+
+  const category = String(root.querySelector('[data-bbttcc-field="_category"]')?.value || "rig");
+  if (category === "infrastructure") { box.style.display = "none"; return; }
+  box.style.display = "";
+
+  const selectedKey = String(val("_starterKey") || root.dataset.bbttccSelectedStarter || "");
+  const chassis = CHASSIS_STARTERS.find(s => s.key === selectedKey);
+  const cost = computeRigCost({
+    bracket: String(val("bracket") || "medium"),
+    tier: val("tier"),
+    counts: _chassisLoadoutCounts(chassis),
+    defenses: {
+      resistances: _csvCount(val("resistances")),
+      immunities: _csvCount(val("immunities")),
+      vulnerabilities: _csvCount(val("vulnerabilities"))
+    },
+    hazardResist: Number(val("hazardResist")) || 0
+  });
+
+  const bypass = !!root.querySelector('[data-bbttcc-field="bypassCost"]')?.checked;
+  const lineHTML = cost.lines.map(l =>
+    `<div style="display:flex; justify-content:space-between; gap:1rem;">
+       <span style="opacity:0.85;">${_esc(l.label)}</span>
+       <span style="font-variant-numeric:tabular-nums;${l.marks < 0 ? " color:#86efac;" : ""}">${l.marks < 0 ? "−" : "+"}${Math.abs(l.marks)}</span>
+     </div>`).join("");
+
+  box.innerHTML = `
+    ${lineHTML}
+    ${cost.floored ? `<div style="opacity:0.6; font-size:0.75rem; margin-top:0.2rem;">(floored at half chassis base)</div>` : ""}
+    <div style="display:flex; justify-content:space-between; gap:1rem; margin-top:0.35rem; padding-top:0.35rem; border-top:1px solid rgba(255,255,255,0.18); font-weight:600;">
+      <span>Total${bypass ? ` <span style="opacity:0.6; font-weight:normal;">(bypassed)</span>` : ""}</span>
+      <span style="font-variant-numeric:tabular-nums;${bypass ? " text-decoration:line-through; opacity:0.5;" : ""}">${cost.marks} Economy marks</span>
+    </div>`;
 }
 
 function _wireStarterChips(html) {
@@ -1001,6 +1173,42 @@ async function _commit(root) {
     crewMaxTotal += mx;
   }
 
+  // ── Fabrication cost (2026-06-14) ──────────────────────────────────────
+  // Debit the owner faction's Economy opBank before minting. The GM may
+  // bypass; a build with no faction owner is also free (nobody to charge).
+  // The op-engine refuses (and notifies) on underflow/overcap, so a faction
+  // that can't afford the rig simply doesn't build it — no orphan actor. We
+  // track the debited amount and refund it if Actor.create later throws.
+  const selectedKey = String(read("_starterKey") || root.dataset.bbttccSelectedStarter || "");
+  const chosen = CHASSIS_STARTERS.find(s => s.key === selectedKey);
+  const bypassCost = !!root.querySelector('[data-bbttcc-field="bypassCost"]')?.checked;
+  const rigCost = computeRigCost({
+    bracket, tier,
+    counts: _chassisLoadoutCounts(chosen),
+    defenses: {
+      resistances: resistances.length,
+      immunities: immunities.length,
+      vulnerabilities: vulnerabilities.length
+    },
+    hazardResist
+  });
+  let chargedMarks = 0;
+  if (!bypassCost && factionOwnerId && rigCost.marks > 0) {
+    const op = game.bbttcc?.api?.op;
+    if (op?.commit) {
+      const res = await op.commit(factionOwnerId, { economy: -rigCost.marks },
+        { context: "rig-fabrication", rigName: name, bracket, tier });
+      if (!res?.ok) {
+        // op-engine already surfaced the underflow/overcap notification.
+        ui.notifications?.warn?.(`"${name}" not built — not enough Economy marks (needs ${rigCost.marks}).`);
+        return null;
+      }
+      chargedMarks = rigCost.marks;
+    } else {
+      console.warn("[bbttcc-auto-link/rig-builder] OP engine API unavailable — building rig without charge.");
+    }
+  }
+
   const data = {
     name,
     type: "rig",
@@ -1008,7 +1216,8 @@ async function _commit(root) {
       [MOD]: {
         entityKind: (category === "facility") ? "facility" : "rig",
         createdViaRigBuilder: true,
-        createdAt: Date.now()
+        createdAt: Date.now(),
+        fabricationCost: { marks: rigCost.marks, charged: chargedMarks, bypassed: bypassCost }
       }
     },
     system: {
@@ -1061,6 +1270,14 @@ async function _commit(root) {
   } catch (err) {
     console.error("[bbttcc-auto-link/rig-builder] Actor.create failed", err);
     ui.notifications?.error?.(`Failed to create RFI Rig: ${err?.message || err}`);
+    // Refund the fabrication charge — allowOvercap so the refund always lands
+    // even if the faction sat near its economy cap.
+    if (chargedMarks > 0) {
+      try {
+        await game.bbttcc?.api?.op?.commit?.(factionOwnerId, { economy: chargedMarks },
+          { context: "rig-fabrication-refund", rigName: name, allowOvercap: true });
+      } catch (_e) { /* non-fatal */ }
+    }
     return null;
   }
   if (!actor) return null;
@@ -1073,8 +1290,7 @@ async function _commit(root) {
   // Source of truth for the selected key is the _starterKey hidden input
   // (read through the same form harvest as every other field); dataset
   // is fallback for safety.
-  const selectedKey = String(read("_starterKey") || root.dataset.bbttccSelectedStarter || "");
-  const chosen = CHASSIS_STARTERS.find(s => s.key === selectedKey);
+  // selectedKey + chosen were resolved above (fabrication-cost block).
   const loadout = chosen?.defaults?.loadout;
   console.log("[bbttcc-auto-link/rig-builder] commit",
     { actorId: actor?.id, selectedKey, hasLoadout: !!loadout,
@@ -1214,14 +1430,163 @@ function _buildSyntheticFrame(spec) {
   };
 }
 
+/* Assemble rig actor data from a chassis starter, with NO DOM. Mirrors the
+ * data shape _commit builds from the form, but sourced from chassis.defaults.
+ * Returns the data plus the derived bracket/tier/mobility/loadout the caller
+ * needs for charging + post-create seeding. */
+function _rigDataFromChassis(chassis, { factionOwnerId = "" } = {}) {
+  const d = chassis?.defaults || {};
+  const bracket = String(d.bracket || "medium");
+  const bracketDef = BRACKETS.find(b => b.key === bracket) ?? BRACKETS[2];
+  const tier = _rigCostClampTier(d.tier ?? 1);
+  const mobility = String(d.mobility || "mobile");
+  const csv = (s) => String(s || "").split(",").map(x => x.trim()).filter(Boolean);
+  const integrityMax = Math.max(1,
+    Number(d.integrity) || (bracketDef.base + (tier - 1) * Math.round(bracketDef.base * 0.3)));
+
+  const capacity = {};
+  let crewMinTotal = 0, crewMaxTotal = 0;
+  for (const role of ["pilot", "gunner", "engineer", "crew"]) {
+    const [mn0, mx0] = d.capacity?.[role] ?? [0, 0];
+    const mn = Math.max(0, Number(mn0) || 0);
+    const mx = Math.max(mn, Number(mx0) || 0);
+    capacity[role] = { min: mn, max: mx };
+    crewMinTotal += mn; crewMaxTotal += mx;
+  }
+
+  const isFacility = chassis?.category === "facility" || mobility === "stationary";
+  const data = {
+    name: chassis?.label || "Rig",
+    type: "rig",
+    flags: {
+      [MOD]: {
+        entityKind: isFacility ? "facility" : "rig",
+        createdViaRigBuilder: true,
+        createdAt: Date.now(),
+        starterChassis: chassis?.key || ""
+      }
+    },
+    system: {
+      identity: {
+        mobility, state: "parked", factionOwnerId,
+        archetype: chassis?.label || "",
+        binding: { hexId: "", sceneId: "", tokenId: "" }
+      },
+      crew: { slots: [], capacity, crewMin: crewMinTotal, crewMax: crewMaxTotal },
+      integrity: { value: integrityMax, max: integrityMax, tier, bracket },
+      defenses: {
+        resistances: csv(d.resistances),
+        immunities: csv(d.immunities),
+        vulnerabilities: csv(d.vulnerabilities)
+      },
+      output: { modules: [], basePerTurn: {} },
+      travel: {
+        speed: Math.max(0, Number(d.travel?.speed ?? bracketDef.speed) || 0),
+        range: Math.max(0, Number(d.travel?.range ?? bracketDef.range) || 0),
+        hazardResist: Math.max(0, Number(d.travel?.hazardResist ?? 0) || 0)
+      },
+      tags: csv(d.tags)
+    },
+    prototypeToken: { actorLink: true, disposition: Number(d.disposition ?? 0) }
+  };
+  if (factionOwnerId) data.flags["bbttcc-factions"] = { factionId: factionOwnerId };
+
+  const descParts = [];
+  if (d.concept)   descParts.push(`<p><strong>Concept.</strong> ${_esc(d.concept)}</p>`);
+  if (d.signature) descParts.push(`<p><strong>Signature.</strong> ${_esc(d.signature)}</p>`);
+  if (descParts.length) {
+    foundry.utils.setProperty(data, "system.details.biography", { value: descParts.join("\n"), public: "" });
+    foundry.utils.setProperty(data, "system.description", descParts.join("\n"));
+  }
+  return { data, tier, bracket, bracketDef, mobility, loadout: d.loadout };
+}
+
+/**
+ * Programmatically mint a rig actor from a chassis starter — no dialog. Used by
+ * the free Tier-0 faction grant and any code that wants a canonical rig built
+ * the same way the builder builds one (charge + loadout seed + structural BOM).
+ * @param {string} chassisKey  a CHASSIS_STARTERS key (e.g. "hexmobile")
+ * @param {object} [opts]
+ * @param {string} [opts.factionOwnerId]
+ * @param {boolean} [opts.free=false]   skip the Economy-marks charge
+ * @param {object} [opts.overrides]     shallow-merged onto the actor data (e.g. { name })
+ * @returns {Promise<Actor|null>}
+ */
+export async function mintFromChassis(chassisKey, { factionOwnerId = "", free = false, overrides = null } = {}) {
+  const chassis = CHASSIS_STARTERS.find(s => s.key === chassisKey);
+  if (!chassis) {
+    console.warn(`[bbttcc-auto-link/rig-builder] mintFromChassis: unknown chassis '${chassisKey}'`);
+    return null;
+  }
+  const { data, tier, bracket, mobility, loadout } = _rigDataFromChassis(chassis, { factionOwnerId });
+  if (overrides && typeof overrides === "object") foundry.utils.mergeObject(data, overrides, { inplace: true });
+
+  // Charge unless free / no owner. Mirrors _commit's charge gate.
+  let chargedMarks = 0;
+  if (!free && factionOwnerId) {
+    const cost = computeRigCost({
+      bracket, tier,
+      counts: _chassisLoadoutCounts(chassis),
+      defenses: {
+        resistances: data.system.defenses.resistances.length,
+        immunities: data.system.defenses.immunities.length,
+        vulnerabilities: data.system.defenses.vulnerabilities.length
+      },
+      hazardResist: data.system.travel.hazardResist
+    });
+    if (cost.marks > 0) {
+      const res = await game.bbttcc?.api?.op?.commit?.(factionOwnerId, { economy: -cost.marks },
+        { context: "rig-fabrication", rigName: data.name });
+      if (!res?.ok) {
+        ui.notifications?.warn?.(`"${data.name}" not minted — faction can't cover ${cost.marks} Economy marks.`);
+        return null;
+      }
+      chargedMarks = cost.marks;
+    }
+  }
+  foundry.utils.setProperty(data, `flags.${MOD}.fabricationCost`,
+    { marks: chargedMarks, charged: chargedMarks, bypassed: !!free });
+
+  let actor;
+  try {
+    actor = await Actor.create(data);
+  } catch (err) {
+    console.error("[bbttcc-auto-link/rig-builder] mintFromChassis Actor.create failed", err);
+    if (chargedMarks > 0) {
+      try {
+        await game.bbttcc?.api?.op?.commit?.(factionOwnerId, { economy: chargedMarks },
+          { context: "rig-fabrication-refund", allowOvercap: true });
+      } catch (_e) { /* non-fatal */ }
+    }
+    return null;
+  }
+  if (!actor) return null;
+
+  if (loadout) {
+    try { await _seedLoadout(actor, loadout, { tier }); }
+    catch (e) { console.warn("[bbttcc-auto-link/rig-builder] mintFromChassis loadout seed failed (non-fatal):", e); }
+  }
+  try {
+    const structApi = game.bbttcc?.api?.structures;
+    if (structApi?.stampBOM && !actor.flags?.["bbttcc-structures"]?.hasStructure) {
+      await structApi.stampBOM(actor, _rigBracketBOM(bracket),
+        { facilityMode: mobility === "stationary", resetCurrentPlates: true });
+    }
+  } catch (e) { console.warn("[bbttcc-auto-link/rig-builder] mintFromChassis BOM stamp failed (non-fatal):", e); }
+
+  return actor;
+}
+
 function _install() {
   globalThis.BBTTCC_RigBuilder = globalThis.BBTTCC_RigBuilder || {};
   globalThis.BBTTCC_RigBuilder.open = openRigBuilder;
   globalThis.BBTTCC_RigBuilder.seedFromActor = rigSeedFromActor;
+  globalThis.BBTTCC_RigBuilder.mintFromChassis = mintFromChassis;
+  globalThis.BBTTCC_RigBuilder.computeRigCost = computeRigCost;
   try {
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.api = game.bbttcc.api || {};
-    game.bbttcc.api.rigBuilder = { open: openRigBuilder, seedFromActor: rigSeedFromActor };
+    game.bbttcc.api.rigBuilder = { open: openRigBuilder, seedFromActor: rigSeedFromActor, mintFromChassis, computeRigCost };
   } catch (_e) {}
 }
 _install();
