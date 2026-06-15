@@ -22,8 +22,14 @@ const BRACKETS = [
   { key: "light",    label: "Light",    base: 20, speed: 4, range: 12 },
   { key: "medium",   label: "Medium",   base: 30, speed: 3, range: 10 },
   { key: "heavy",    label: "Heavy",    base: 48, speed: 2, range: 8 },
-  { key: "siege",    label: "Siege",    base: 72, speed: 1, range: 6 }
+  { key: "siege",    label: "Siege",    base: 72, speed: 1, range: 6 },
+  // Giant Fighting Robot — the mecha bracket. Unlike the others it spans its
+  // OWN Tier 0–5 ladder (Space Marine → Voltron); see RIG_COST_CHASSIS.mecha.
+  { key: "mecha",    label: "Giant Fighting Robot", base: 40, speed: 4, range: 10 }
 ];
+
+// Brackets whose tier ladder runs 0–5 instead of the default 1–4.
+const MECHA_BRACKETS = new Set(["mecha"]);
 
 const MOBILITIES = [
   { key: "mobile",     label: "Mobile (drives the map)" },
@@ -186,6 +192,96 @@ const CHASSIS_STARTERS = [
       }
     }
   },
+  // ── GIANT FIGHTING ROBOTS — mecha bracket, Tier 0–5 (2026-06-14) ──────────
+  // The mecha ladder: Space Marine (T0, a faction-creation starter alternative
+  // to the Hexmobile) → Voltron-class Worldbreaker (T5, apex / GM-grant).
+  {
+    key: "space_marine",
+    label: "Space Marine (Mecha · T0)",
+    description: "A single-pilot power-armor mech — the smallest giant fighting robot. Faction-starter scale; pick it instead of the Hexmobile at faction creation.",
+    defaults: {
+      bracket: "mecha", mobility: "mobile", tier: 0,
+      capacity: { pilot: [1,1], gunner: [0,0], engineer: [0,0], crew: [0,1] },
+      tags: "mecha, power-armor, space-marine, faction-starter",
+      loadout: {
+        frame: { synthName: "Power-Armor Frame", bracket: "mecha", pilotMount: true, baseIntegrity: 24, tierStep: 6,
+                 mobilityAllowed: ["mobile"], slots: { weapon: 1, system: 1, output: 0 },
+                 capacity: { pilot: {min:1,max:1}, gunner: {min:0,max:0}, engineer: {min:0,max:0}, crew: {min:0,max:1} },
+                 actions: { pilot: ["steer","evasive","stomp","fire-weapon"], gunner: [], engineer: [], crew: ["brace","hold-on"] },
+                 travel: { speed: 4, range: 8 } },
+        weapons: ["Twin Autocannons"],
+        systems: ["Reinforced Plating"]
+      }
+    }
+  },
+  {
+    key: "war_mech",
+    label: "War Mech (Mecha · T2)",
+    description: "A line-combatant battle-mech: two-crew, twin-armed, plated. The workhorse giant fighting robot.",
+    defaults: {
+      bracket: "mecha", mobility: "mobile", tier: 2,
+      capacity: { pilot: [1,1], gunner: [0,2], engineer: [0,1], crew: [0,2] },
+      tags: "mecha, war-mech, line-breaker",
+      loadout: {
+        frame: { synthName: "War-Mech Chassis", bracket: "mecha", baseIntegrity: 60, tierStep: 14,
+                 mobilityAllowed: ["mobile"], slots: { weapon: 2, system: 2, output: 0 },
+                 capacity: { pilot: {min:1,max:1}, gunner: {min:0,max:2}, engineer: {min:0,max:1}, crew: {min:0,max:2} },
+                 actions: { pilot: ["steer","stomp","evasive","charge"], gunner: ["fire-weapon","aimed-shot","barrage"], engineer: ["repair","vent-heat","overcharge"], crew: ["brace","hold-on"] },
+                 travel: { speed: 4, range: 10 } },
+        weapons: ["Twin Autocannons", "Plasma Lance"],
+        systems: ["Reinforced Plating", "Sensor Suite"]
+      }
+    }
+  },
+  {
+    key: "siege_titan",
+    label: "Siege Titan (Mecha · T4)",
+    description: "A building-tall war-titan: multi-crew, siege-grade ordnance, a walking fortress short of the apex.",
+    defaults: {
+      bracket: "mecha", mobility: "mobile", tier: 4, disposition: 0,
+      integrity: 140,
+      travel: { speed: 3, range: 12, hazardResist: 2 },
+      capacity: { pilot: [1,2], gunner: [2,4], engineer: [1,2], crew: [2,8] },
+      tags: "mecha, titan, siege, war-titan",
+      resistances: "kinetic, fire",
+      loadout: {
+        frame: { synthName: "Titan Chassis", bracket: "mecha", baseIntegrity: 120, tierStep: 24,
+                 mobilityAllowed: ["mobile"], slots: { weapon: 3, system: 3, output: 1 },
+                 capacity: { pilot: {min:1,max:2}, gunner: {min:2,max:4}, engineer: {min:1,max:2}, crew: {min:2,max:8} },
+                 actions: { pilot: ["steer","stomp","charge","evasive"], gunner: ["fire-weapon","aimed-shot","barrage","bombardment"], engineer: ["repair","overcharge","vent-heat","raise-shields"], crew: ["operate-module","brace","signal","hold-on"] },
+                 travel: { speed: 3, range: 12 } },
+        weapons: ["Plasma Lance", "Mortar Battery", "Twin Autocannons"],
+        systems: ["Reinforced Plating", "Repair Bay", "Sensor Suite"],
+        outputs: ["Mounted Forge"]
+      }
+    }
+  },
+  {
+    key: "worldbreaker_titan",
+    label: "Worldbreaker (Mecha · T5 · VOLTRON)",
+    description: "Kaiju-class war titan — the apex of the giant-robot ladder, crewed by a dozen. Above the economy cap: GM-grant / macro-seed only.",
+    defaults: {
+      bracket: "mecha", mobility: "mobile", tier: 5, disposition: 1,
+      integrity: 240,
+      travel: { speed: 4, range: 14, hazardResist: 3 },
+      capacity: { pilot: [1,2], gunner: [4,8], engineer: [2,4], crew: [6,18] },
+      tags: "mecha, titan, kaiju, voltron, worldbreaker, faction-flagship",
+      resistances: "fire, cold, lightning",
+      immunities: "poison, psychic",
+      concept: "A Kaiju-class war titan — adamantine plate and caged reactor-fire, crewed by a dozen. Where it steps, maps are redrawn. It is not summoned; it is deployed.",
+      signature: "The Apocalypse Maw amidships — a world-ender beam that disintegrates what it does not simply erase. Twelve action stations, each crew member's whole turn.",
+      loadout: {
+        frame: { synthName: "Worldbreaker Chassis", bracket: "mecha", baseIntegrity: 200, tierStep: 40,
+                 mobilityAllowed: ["mobile"], slots: { weapon: 4, system: 4, output: 1 },
+                 capacity: { pilot: {min:1,max:2}, gunner: {min:4,max:8}, engineer: {min:2,max:4}, crew: {min:6,max:18} },
+                 actions: { pilot: ["steer","stomp","charge","evasive"], gunner: ["fire-weapon","aimed-shot","barrage","world-ender"], engineer: ["repair","overcharge","vent-heat","raise-shields"], crew: ["operate-module","brace","signal","hold-on"] },
+                 travel: { speed: 4, range: 14 } },
+        weapons: ["Plasma Lance", "Mortar Battery", "Resonance Howler", "Twin Autocannons"],
+        systems: ["Reinforced Plating", "Repair Bay", "Sensor Suite", "Comms Array"],
+        outputs: ["Mounted Forge"]
+      }
+    }
+  },
   // ── ICONIC COALITION FLAGSHIPS — 2026-05-23 ──────────────────────────────
   // One signature flagship per Known Coalition of the Bad Eden. These chips
   // carry their full character (defenses / integrity / travel / disposition /
@@ -322,10 +418,14 @@ const RIG_COST_CHASSIS = {
   light:    { 1: 10, 2: 15, 3: 22, 4: 32  },
   medium:   { 1: 18, 2: 26, 3: 39, 4: 56  },
   heavy:    { 1: 28, 2: 41, 3: 60, 4: 88  },
-  siege:    { 1: 40, 2: 60, 3: 88, 4: 128 }
+  siege:    { 1: 40, 2: 60, 3: 88, 4: 128 },
+  // Giant Fighting Robot — premium vs conventional rigs of the same tier, on a
+  // 0–5 ladder. T0 "Space Marine" is faction-starter-affordable; T5 "Voltron"
+  // (Worldbreaker-scale) sits far above the economy cap → GM-grant / seed only.
+  mecha:    { 0: 10, 1: 22, 2: 42, 3: 70, 4: 110, 5: 240 }
 };
 // Adder unit scales with the RIG's tier (a T4 mount is worth more than a T1).
-const RIG_COST_UNIT = { 1: 1, 2: 2, 3: 3, 4: 5 };
+const RIG_COST_UNIT = { 0: 1, 1: 1, 2: 2, 3: 3, 4: 5, 5: 8 };
 // Per-knob multipliers on the tier unit.
 const RIG_COST_ADDERS = {
   weapon:     2, // per equipped weapon mount
@@ -337,8 +437,11 @@ const RIG_COST_ADDERS = {
 };
 const RIG_COST_DRAWBACK_VULN = 1; // per vulnerability tag, × unit (subtracted)
 
-function _rigCostClampTier(t) {
-  return Math.max(1, Math.min(4, Math.floor(Number(t) || 1)));
+function _rigCostClampTier(t, bracket) {
+  const n = Math.floor(Number(t) || (MECHA_BRACKETS.has(String(bracket).toLowerCase()) ? 0 : 1));
+  return MECHA_BRACKETS.has(String(bracket).toLowerCase())
+    ? Math.max(0, Math.min(5, n))
+    : Math.max(1, Math.min(4, n));
 }
 
 function _csvCount(str) {
@@ -366,8 +469,8 @@ function _chassisLoadoutCounts(chassis) {
  * @returns {{marks:number, base:number, unit:number, lines:Array, floored:boolean}}
  */
 function computeRigCost({ bracket = "medium", tier = 1, counts = {}, defenses = {}, hazardResist = 0 } = {}) {
-  const t = _rigCostClampTier(tier);
   const brk = String(bracket || "medium").toLowerCase();
+  const t = _rigCostClampTier(tier, brk);
   const base = (RIG_COST_CHASSIS[brk] || RIG_COST_CHASSIS.medium)[t] || 0;
   const unit = RIG_COST_UNIT[t] || 1;
 
@@ -527,9 +630,17 @@ export async function openRigBuilder({ seed = null } = {}) {
     `<option value="${m.key}"${m.key === "mobile" ? " selected" : ""}>${m.label}</option>`
   ).join("");
 
-  const tierOpts = [1, 2, 3, 4].map(t =>
-    `<option value="${t}"${t === 2 ? " selected" : ""}>Tier ${"I".repeat(t)}</option>`
-  ).join("");
+  // Tiers 0 and V are the mecha-only rungs (Space Marine / Voltron). They carry
+  // data-ft-mecha-tier + start `hidden`; _syncTierOptions reveals them when the
+  // bracket is a Giant Fighting Robot. (hidden, NOT disabled — so a mecha chip
+  // can still set the value programmatically before the sync runs.)
+  const tierOpts = [0, 1, 2, 3, 4, 5].map(t => {
+    const label = t === 0 ? "Tier 0 — Space Marine (mecha)"
+      : t === 5 ? "Tier V — Voltron (mecha)"
+      : `Tier ${"I".repeat(t)}`;
+    const mechaOnly = (t === 0 || t === 5) ? ' data-ft-mecha-tier="1" hidden' : "";
+    return `<option value="${t}"${t === 2 ? " selected" : ""}${mechaOnly}>${label}</option>`;
+  }).join("");
 
   // Capacity grid (4 roles × min/max).
   const capacityHTML = ["pilot", "gunner", "engineer", "crew"].map(role => `
@@ -754,13 +865,15 @@ export async function openRigBuilder({ seed = null } = {}) {
         // after chip / category-tab clicks (deferred so the chip handler's
         // synchronous field writes land first).
         const recost = () => _updateRigCost(root);
+        // refresh = keep the mecha tier rungs in sync with the bracket, then reprice.
+        const refresh = () => { _syncTierOptions(root); recost(); };
         ["bracket", "tier", "resistances", "immunities", "vulnerabilities", "hazardResist", "bypassCost"].forEach(name => {
           const el = root.querySelector(`[data-bbttcc-field="${name}"]`);
-          if (el) { el.addEventListener("change", recost); el.addEventListener("input", recost); }
+          if (el) { el.addEventListener("change", refresh); el.addEventListener("input", refresh); }
         });
         root.querySelectorAll("[data-bbttcc-starter], .bbttcc-rb-tab").forEach(b =>
-          b.addEventListener("click", () => setTimeout(recost, 0)));
-        recost();
+          b.addEventListener("click", () => setTimeout(refresh, 0)));
+        refresh();
       }
     }, {
       classes: ["fourththing", "ft-manifestation-wizard-window", "bbttcc-rig-builder-window"],
@@ -843,6 +956,20 @@ function _updateRigCost(root) {
       <span>Total${bypass ? ` <span style="opacity:0.6; font-weight:normal;">(bypassed)</span>` : ""}</span>
       <span style="font-variant-numeric:tabular-nums;${bypass ? " text-decoration:line-through; opacity:0.5;" : ""}">${cost.marks} Economy marks</span>
     </div>`;
+}
+
+/* Reveal/hide the mecha-only tier rungs (Tier 0 / Tier V) based on the chosen
+ * bracket, and snap an out-of-range tier back to a valid one when leaving the
+ * mecha bracket. Uses `hidden` (not `disabled`) so chips can still set the
+ * value programmatically. */
+function _syncTierOptions(root) {
+  if (!root) return;
+  const bracketEl = root.querySelector('[data-bbttcc-field="bracket"]');
+  const tierEl = root.querySelector('[data-bbttcc-field="tier"]');
+  if (!bracketEl || !tierEl) return;
+  const isMecha = MECHA_BRACKETS.has(String(bracketEl.value || "").toLowerCase());
+  tierEl.querySelectorAll('option[data-ft-mecha-tier]').forEach(opt => { opt.hidden = !isMecha; });
+  if (!isMecha && (tierEl.value === "0" || tierEl.value === "5")) tierEl.value = "2";
 }
 
 function _wireStarterChips(html) {
@@ -1438,7 +1565,7 @@ function _rigDataFromChassis(chassis, { factionOwnerId = "" } = {}) {
   const d = chassis?.defaults || {};
   const bracket = String(d.bracket || "medium");
   const bracketDef = BRACKETS.find(b => b.key === bracket) ?? BRACKETS[2];
-  const tier = _rigCostClampTier(d.tier ?? 1);
+  const tier = _rigCostClampTier(d.tier, bracket);
   const mobility = String(d.mobility || "mobile");
   const csv = (s) => String(s || "").split(",").map(x => x.trim()).filter(Boolean);
   const integrityMax = Math.max(1,

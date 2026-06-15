@@ -4122,7 +4122,8 @@ factionApi.applyStartingPackage ??= (async ({
   packageKey = "standard",
   homeHexUuid = null,
   overrides = {},
-  dryRun = false
+  dryRun = false,
+  starterRig = "hexmobile"
 } = {}) => {
   const a = actor
     ?? (actorId ? game.actors?.get?.(actorId) : null);
@@ -4255,19 +4256,20 @@ factionApi.applyStartingPackage ??= (async ({
     });
   } catch (_e) {}
 
-  // Free Tier-0 starter rig (2026-06-14): every new faction begins with a
-  // personal-bracket Hexmobile, minted free and owned by the faction. The rig
-  // builder lives in bbttcc-auto-link, so this is a guarded cross-module call
-  // (non-fatal if the module is absent). Idempotent via the starterRigGranted
-  // flag, so re-applying the package never duplicates the grant.
+  // Free Tier-0 starter rig (2026-06-14): every new faction begins with a free
+  // rig of the chosen chassis — the Hexmobile (default) or the Space Marine
+  // mech — owned by the faction. The rig builder lives in bbttcc-auto-link, so
+  // this is a guarded cross-module call (non-fatal if the module is absent).
+  // Idempotent via the starterRigGranted flag, so re-applying never duplicates.
   try {
     const rigApi = game.bbttcc?.api?.rigBuilder;
+    const starterKey = ["hexmobile", "space_marine"].includes(String(starterRig)) ? String(starterRig) : "hexmobile";
     if (a.getFlag?.(MODULE_ID, "starterRigGranted")) {
       console.log(`[bbttcc-factions] starter-rig grant skipped for ${a.name} — already granted.`);
     } else if (!rigApi?.mintFromChassis) {
       console.warn("[bbttcc-factions] starter-rig grant SKIPPED — game.bbttcc.api.rigBuilder.mintFromChassis unavailable (is bbttcc-auto-link enabled/loaded?).");
     } else {
-      const rig = await rigApi.mintFromChassis("hexmobile", { factionOwnerId: a.id, free: true });
+      const rig = await rigApi.mintFromChassis(starterKey, { factionOwnerId: a.id, free: true });
       if (rig) {
         await a.setFlag(MODULE_ID, "starterRigGranted", true);
         console.log(`[bbttcc-factions] starter rig granted to ${a.name}: "${rig.name}" (actor type=${rig.type}, id=${rig.id}).`);
@@ -4277,7 +4279,7 @@ factionApi.applyStartingPackage ??= (async ({
             ? deepClone(a.getFlag(MODULE_ID, "warLogs")) : [];
           logs.push({
             ts: Date.now(), date: new Date().toLocaleString(), type: "commit",
-            summary: `Starter rig granted: ${rig.name} (free, personal bracket).`
+            summary: `Starter rig granted: ${rig.name} (free).`
           });
           await a.update({ [`flags.${MODULE_ID}.warLogs`]: logs });
         } catch (_e) {}
@@ -4301,7 +4303,8 @@ factionApi.createFactionFromPackage ??= (async ({
   overrides = {},
   folderId = null,
   img = null,
-  dryRun = false
+  dryRun = false,
+  starterRig = "hexmobile"
 } = {}) => {
   const nm = String(name ?? "").trim();
   if (!nm) throw new Error("createFactionFromPackage: missing name");
@@ -4344,7 +4347,8 @@ factionApi.createFactionFromPackage ??= (async ({
     packageKey,
     homeHexUuid,
     overrides,
-    dryRun: false
+    dryRun: false,
+    starterRig
   });
 
   return { ok: true, actorId: a.id, actorUuid: a.uuid, packageKey, applied };
@@ -4670,7 +4674,7 @@ factionApi.assignStartingTerritory ??= (async ({
 factionApi.openCreationWizard ??= (() => {
   return async () => {
     if (!game.user?.isGM) return ui.notifications.warn("GM only.");
-    const name = await new Promise((resolve) => {
+    const choice = await new Promise((resolve) => {
       new Dialog({
         title: "Create Faction",
         content: `
@@ -4678,8 +4682,15 @@ factionApi.openCreationWizard ??= (() => {
             <div class="form-group">
               <label>Faction Name</label>
               <input type="text" name="name" value="New Faction" autofocus style="width:100%;" />
+            </div>
+            <div class="form-group">
+              <label>Starter Rig</label>
+              <select name="starterRig" style="width:100%;">
+                <option value="hexmobile" selected>Hexmobile — personal land transport</option>
+                <option value="space_marine">Space Marine — Tier 0 giant fighting robot</option>
+              </select>
               <p class="notes" style="opacity:.8;margin-top:.35rem;">
-                Creates a Tier 1 faction with the Standard Package applied. No hexes assigned.
+                Creates a Tier 1 faction with the Standard Package applied (no hexes), plus this free starter rig.
               </p>
             </div>
           </form>`,
@@ -4690,7 +4701,8 @@ factionApi.openCreationWizard ??= (() => {
             callback: (html) => {
               const root = html instanceof jQuery ? html[0] : html;
               const v = String(root?.querySelector('input[name="name"]')?.value ?? "").trim();
-              resolve(v || "New Faction");
+              const starterRig = String(root?.querySelector('select[name="starterRig"]')?.value ?? "hexmobile");
+              resolve({ name: v || "New Faction", starterRig });
             }
           }
         },
@@ -4698,11 +4710,12 @@ factionApi.openCreationWizard ??= (() => {
         close: () => resolve(null)
       }).render(true, { focus: true });
     });
-    if (!name) return;
+    if (!choice) return;
+    const { name, starterRig } = choice;
 
     try {
       const created = await game.bbttcc.api.factions.createFactionFromPackage({
-        name, packageKey: "standard"
+        name, packageKey: "standard", starterRig
       });
       const a = game.actors.get(created.actorId);
       if (!a) throw new Error("Created faction actor not found.");

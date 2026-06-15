@@ -291,11 +291,27 @@ Each adder is `count × multiplier × unit`, where the **tier unit** `u` = `{ T1
 
 ### 7.4 Notes
 
-- **Free Tier-0 grant:** every new faction is seeded a free personal-bracket Hexmobile at creation (`applyStartingPackage` → `rigBuilder.mintFromChassis("hexmobile", { free: true })`), so a fledgling faction starts mobile without draining its ~30-mark opening economy.
+- **Free Tier-0 grant:** every new faction is seeded a free starter rig at creation (`applyStartingPackage` → `rigBuilder.mintFromChassis(<starter>, { free: true })`), so a fledgling faction starts mobile without draining its ~30-mark opening economy. The Create Faction dialog offers a **Starter Rig** pick: the **Hexmobile** (default) or the **Space Marine** (Tier 0 mech — see §7.5).
 - **Builder UI** shows a live cost breakdown and (for GMs) a **Bypass cost** checkbox that builds free with no debit.
 - **GM bypass / over-cap:** apex flagships and any rig above the buyer's economy cap are reachable only via the GM bypass or the seed macros (`seed-coalition-flagship-rigs.macro.js`).
 - **Facilities** (stationary rigs) price through the same model in v1; their yield-based valuation (§8) remains the design target for a later pass.
 - **Separately-priced gear:** weapons/systems/output modules added on the actor sheet *after* build are not re-charged by the builder in v1 — the chassis adders price the chip loadout at build time only. Retail gear pricing (§2: `rig-weapon` = weapon ×, `rig-system` = sigil ×, `output-module` = tool ×) still governs market purchase of loose modules.
+
+### 7.5 Giant Fighting Robot (the mecha bracket)
+
+The **mecha** bracket — "Giant Fighting Robot" — is the one exception to the 1–4 tier ladder: it spans its **own Tier 0–5 scale**, from a single-pilot power-armor frame to a Voltron-class war titan. It's a premium chassis (a giant robot costs more than a conventional rig of the same tier).
+
+| Bracket | T0 | T1 | T2 | T3 | T4 | T5 |
+|---|---|---|---|---|---|---|
+| **Mecha** (Giant Fighting Robot) | 10 | 22 | 42 | 70 | 110 | 240 |
+
+Adder unit by tier extends to `{ T0:1, …, T5:8 }`; adders/drawbacks (§7.2) apply unchanged.
+
+- **T0 "Space Marine"** — single-pilot power-armor mech. A **faction-creation starter alternative to the Hexmobile** (chosen in the Create Faction dialog; granted free). Buildable for ~10 marks otherwise.
+- **T1–T4** — War Mech (T2) → Siege Titan (T4): the scaling line-to-fortress robots.
+- **T5 "Voltron"** — the **Worldbreaker**: a Kaiju-class, twelve-crew war titan. Chassis base 240 (plus a large loaded total) sits far above any faction's economy cap → **GM-grant / macro-seed only**, exactly like the coalition flagships. Provided as a chassis chip for one-click authoring; the dnd5e `WORLDBREAKER-titan.macro.js` is its 12-station combat exemplar.
+
+Chassis chips: **Space Marine** (T0), **War Mech** (T2), **Siege Titan** (T4), **Worldbreaker** (T5).
 
 ---
 
