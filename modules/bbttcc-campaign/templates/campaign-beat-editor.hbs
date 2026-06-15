@@ -45,7 +45,7 @@
           <label>Time Points (override)</label>
           <input type="number" name="timePoints" value="{{beat.timePoints}}" min="0" step="1"
                  placeholder="(blank = use timeScale default)" />
-          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+          <p class="bbttcc-muted bbttcc-mt-xs">
             If set, this overrides the timeScale mapping for Strategic Turn progression.
           </p>
         </div>
@@ -59,12 +59,12 @@
         </div>
 
         {{!-- Player-facing mirror toggle --}}
-        <div class="form-group" style="grid-column: 1 / -1;">
+        <div class="form-group bbttcc-col-full">
           <label class="checkbox">
             <input type="checkbox" name="playerFacing" {{#if beat.playerFacing}}checked{{/if}}>
             Player-Facing (Read-Only Mirror)
           </label>
-          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+          <p class="bbttcc-muted bbttcc-mt-xs">
             If enabled, players will see this beat’s description + choices during execution, but only the GM can make selections.
           </p>
         </div>
@@ -81,7 +81,7 @@
               </option>
             {{/each}}
           </select>
-          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+          <p class="bbttcc-muted bbttcc-mt-xs">
             Links this beat to a questline for filtering + completion.
           </p>
         </div>
@@ -89,7 +89,7 @@
         <div class="form-group">
           <label>Quest Step (optional)</label>
           <input type="number" name="questStep" value="{{beat.questStep}}" min="0" step="1" placeholder="e.g. 2" />
-          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+          <p class="bbttcc-muted bbttcc-mt-xs">
             Ordering hint only — does not change runtime behavior.
           </p>
         </div>
@@ -103,7 +103,7 @@
             <option value="optional" {{#if (eq beat.questRole "optional")}}selected{{/if}}>optional</option>
             <option value="resolution" {{#if (eq beat.questRole "resolution")}}selected{{/if}}>resolution</option>
           </select>
-          <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+          <p class="bbttcc-muted bbttcc-mt-xs">
             UI label only (start/core/optional/resolution).
           </p>
         </div>
@@ -176,26 +176,25 @@
         {{!-- Political Tags (AAE) --}}
         <div class="bbttcc-field">
           <label>Political Tags (AAE)</label>
-          <div class="bbttcc-tag-row" style="display:flex; flex-wrap:wrap; gap:.35rem; align-items:center;">
+          <div class="bbttcc-tag-row bbttcc-flex-wrap-35">
             {{#each politicalTagChips}}
-              <a class="bbttcc-tag-chip" href="#"
+              <a class="bbttcc-tag-chip bbttcc-chip-soft" href="#"
                  data-action="remove-political-tag"
                  data-tag="{{this}}"
-                 style="display:inline-flex; gap:.35rem; align-items:center; padding:.15rem .45rem; border-radius:999px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06);">
+                 >
                 <span>{{this}}</span>
-                <span style="opacity:.7;">✕</span>
+                <span class="bbttcc-dim">✕</span>
               </a>
             {{/each}}
-            <button type="button" class="button"
-              data-action="pick-political-tags"
-              style="padding:.2rem .55rem; border-radius:10px;">
+            <button type="button" class="button bbttcc-pill-pad"
+              data-action="pick-political-tags">
               Pick Political Tags…
             </button>
           </div>
 
           {{!-- keep a form field so save() continues to work --}}
           <input type="hidden" name="politicalTags" value="{{beat.politicalTags}}"/>
-          <p class="hint" style="margin:.25rem 0 0;">
+          <p class="hint bbttcc-mt-xs">
             These feed AAE drift + consequences after world effects resolve.
           </p>
         </div>
@@ -293,22 +292,22 @@
 
       {{!-- CINEMATIC (timed scene chain) --}}
       {{#if (eq beat.type "cinematic")}}
-        <div class="form-group" style="margin-top:14px;">
+        <div class="form-group bbttcc-mt-14">
           <label>Cinematic</label>
 
-          <div class="bbttcc-scene-linkbox" style="padding:12px;">
-            <div class="bbttcc-muted" style="margin-bottom:8px;">
+          <div class="bbttcc-scene-linkbox bbttcc-pad-12">
+            <div class="bbttcc-muted bbttcc-mb-8">
               A cinematic beat: activate a <b>Start Scene</b>, wait for <b>Duration</b>, then activate a <b>Next Scene</b>.
               Use this for Gloomgill “Success” / “Failure” cutscenes that bounce the table back into the fight scene.
             </div>
 
             <div class="bbttcc-form-grid bbttcc-form-grid-2">
               <div class="form-group">
-                <label style="display:flex; align-items:center; gap:.5rem;">
+                <label class="bbttcc-flex-center">
                   <input type="checkbox" name="cinematic-enabled" {{#if beat.cinematic.enabled}}checked{{/if}} />
                   <span>Enable Cinematic</span>
                 </label>
-                <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+                <p class="bbttcc-muted bbttcc-mt-xs">
                   Stored on <code>beat.cinematic.enabled</code>. Type <code>cinematic</code> will run this chain.
                 </p>
               </div>
@@ -316,7 +315,7 @@
               <div class="form-group">
                 <label>Duration (ms)</label>
                 <input type="number" name="cinematic-duration-ms" value="{{beat.cinematic.durationMs}}" min="0" step="250" placeholder="e.g. 12000" />
-                <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+                <p class="bbttcc-muted bbttcc-mt-xs">
                   How long to hold the Start Scene before advancing.
                 </p>
               </div>
@@ -373,12 +372,12 @@
       <h3>Journal</h3>
       <div class="form-group">
         <label>Auto-Open Journal Entry</label>
-        <div style="display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:.25rem 0 .5rem;">
-          <label class="bbttcc-check" style="display:inline-flex; gap:.45rem; align-items:center;">
+        <div class="bbttcc-flex-wrap-6">
+          <label class="bbttcc-check bbttcc-inline-center">
             <input type="checkbox" name="journal-enabled" {{#if beat.journal.enabled}}checked{{/if}} />
             <span>Auto-open on Beat run</span>
           </label>
-          <label class="bbttcc-check" style="display:inline-flex; gap:.45rem; align-items:center;">
+          <label class="bbttcc-check bbttcc-inline-center">
             <input type="checkbox" name="journal-force" {{#if beat.journal.force}}checked{{/if}} />
             <span>Force open (GM)</span>
           </label>
@@ -401,7 +400,7 @@
         </div>
 
         <input type="hidden" name="journal-entry-id" value="{{beat.journal.entryId}}" />
-        <p class="bbttcc-muted" style="margin-top:.4rem;">
+        <p class="bbttcc-muted bbttcc-mt-sm">
           Stored on <code>beat.journal</code>. When enabled, the runner can auto-open this Journal Entry for viewers.
         </p>
       </div>
@@ -432,7 +431,7 @@
       <h3>Choices</h3>
       {{#if hasChoices}}
         {{#each beat.choices as |ch index|}}
-          <div class="bbttcc-choice-row" style="border:1px solid rgba(255,255,255,0.10); border-radius:10px; padding:10px; margin-bottom:10px;">
+          <div class="bbttcc-choice-row bbttcc-inset-panel">
             <div class="bbttcc-form-grid bbttcc-form-grid-2">
               <div class="form-group">
                 <label>Choice Label (button)</label>
@@ -482,7 +481,7 @@
                 <input type="number" name="choice-check-dc" value="{{ch.checkDC}}" placeholder="0" />
               </div>
 
-              <div class="form-group" style="grid-column: span 2;">
+              <div class="form-group bbttcc-col-span-2">
                 <label>Failure Beat (optional)</label>
                 {{#if ../beatIdOptions.length}}
                   <select name="choice-fail-next">
@@ -499,8 +498,8 @@
               </div>
             </div>
 
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:10px;">
-              <div style="display:flex; gap:6px; align-items:center;">
+            <div class="bbttcc-flex-between">
+              <div class="bbttcc-flex-gap6">
                 <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="move-choice-up" data-index="{{index}}" title="Move up">▲</button>
                 <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="move-choice-down" data-index="{{index}}" title="Move down">▼</button>
               </div>
@@ -565,14 +564,14 @@
             When set, resolves through tikkun-beat-listener.enhancer.js into
             the spark API. Spark dropdown lists every item authored in the
             bbttcc-tikkun.sparks pack. --}}
-      <div class="form-group" style="border-top:1px solid rgba(255,255,255,0.08); padding-top:.6rem; margin-top:.4rem">
-        <label style="font-weight:600">Spark Link (auto-progression)</label>
-        <p class="bbttcc-muted" style="font-size:0.78rem; margin:0.2rem 0 0.4rem">
+      <div class="form-group bbttcc-divider-top">
+        <label class="bbttcc-fw-600">Spark Link (auto-progression)</label>
+        <p class="bbttcc-muted bbttcc-section-hint">
           Pair this beat with a Tikkun spark and choose what happens when it resolves. Leave Action blank to disable.
         </p>
         <div class="bbttcc-grid-111">
           <div>
-            <label style="font-size:0.78rem">Spark</label>
+            <label class="bbttcc-fs-78">Spark</label>
             <select name="spark-link-uuid">
               {{#each sparkLinkOptions as |opt|}}
                 <option value="{{opt.uuid}}" {{#if (eq opt.uuid ../sparkLink.sparkUuid)}}selected{{/if}}>{{opt.label}}</option>
@@ -580,7 +579,7 @@
             </select>
           </div>
           <div>
-            <label style="font-size:0.78rem">Action</label>
+            <label class="bbttcc-fs-78">Action</label>
             <select name="spark-link-action">
               {{#each sparkLinkActions as |opt|}}
                 <option value="{{opt.id}}" {{#if (eq opt.id ../sparkLink.action)}}selected{{/if}}>{{opt.label}}</option>
@@ -588,7 +587,7 @@
             </select>
           </div>
           <div>
-            <label style="font-size:0.78rem" data-tooltip="Phase C: misaligned methods cause Corruption.">Method Tag</label>
+            <label class="bbttcc-fs-78" data-tooltip="Phase C: misaligned methods cause Corruption.">Method Tag</label>
             <select name="spark-link-method">
               {{#each sparkLinkMethods as |opt|}}
                 <option value="{{opt.id}}" {{#if (eq opt.id ../sparkLink.methodTag)}}selected{{/if}}>{{opt.label}}</option>
@@ -602,28 +601,28 @@
             gates open (or closed). Consumed by
             bbttcc-territory/scripts/bbttcc-gate-beat-listener.js on the
             bbttcc:beat:resolved hook. --}}
-      <div class="form-group" style="border-top:1px solid rgba(255,255,255,0.08); padding-top:.6rem; margin-top:.4rem">
-        <label style="font-weight:600">Gate Unlocks (Leygate network)</label>
-        <p class="bbttcc-muted" style="font-size:0.78rem; margin:0.2rem 0 0.4rem">
+      <div class="form-group bbttcc-divider-top">
+        <label class="bbttcc-fw-600">Gate Unlocks (Leygate network)</label>
+        <p class="bbttcc-muted bbttcc-section-hint">
           Flip <code>leylines.gate.enabled</code> on one or more hexes when this beat resolves. Ctrl/Cmd-click in the picker to select multiple anchors (use both ends of a pair for a fully-open corridor).
         </p>
         <div class="bbttcc-grid-21">
           <div>
-            <label style="font-size:0.78rem">Anchor Hex(es)</label>
-            <select name="gate-unlock-hex" multiple size="5" style="width:100%;">
+            <label class="bbttcc-fs-78">Anchor Hex(es)</label>
+            <select name="gate-unlock-hex" multiple size="5" class="bbttcc-w-full">
               {{#each gateUnlockHexOptions as |opt|}}
                 <option value="{{opt.uuid}}" {{#if opt.selected}}selected{{/if}}>{{opt.label}}</option>
               {{/each}}
             </select>
           </div>
           <div>
-            <label style="font-size:0.78rem">Action</label>
+            <label class="bbttcc-fs-78">Action</label>
             <select name="gate-unlock-action">
               {{#each gateUnlockActions as |opt|}}
                 <option value="{{opt.id}}" {{#if (eq opt.id ../gateUnlockSelectedAction)}}selected{{/if}}>{{opt.label}}</option>
               {{/each}}
             </select>
-            <p class="bbttcc-muted" style="font-size:0.74rem; margin:0.3rem 0 0; opacity:.75;">Enable opens the gate (Travel/Trade adjacency live). Disable closes it.</p>
+            <p class="bbttcc-muted bbttcc-field-note">Enable opens the gate (Travel/Trade adjacency live). Disable closes it.</p>
           </div>
         </div>
       </div>
@@ -632,13 +631,13 @@
         <label>Turn Requests</label>
         {{#if worldEffects.turnRequests.length}}
           {{#each worldEffects.turnRequests as |req index|}}
-            <div class="bbttcc-world-request-row" style="display:flex; flex-wrap:wrap; gap:.5rem; align-items:flex-end; margin-bottom:.5rem; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:10px;">
-              <div class="form-group" style="min-width:12rem;">
+            <div class="bbttcc-world-request-row bbttcc-filter-panel">
+              <div class="form-group bbttcc-mw-12">
                 <label>Request Key</label>
                 <input type="text" name="world-request-key" value="{{req.key}}" placeholder="e.g. clearRockslide" />
               </div>
 
-              <div class="form-group" style="min-width:10rem;">
+              <div class="form-group bbttcc-mw-10">
                 <label>Mode</label>
                 <select name="world-request-mode">
                   <option value="" {{#unless req.value.mode}}selected{{/unless}}>(none)</option>
@@ -649,7 +648,7 @@
                 </select>
               </div>
 
-              <div class="form-group" style="flex:1; min-width:14rem;">
+              <div class="form-group bbttcc-grow-14">
                 <label>Target</label>
                 <select name="world-request-target">
                   {{#each @root.requestTargetOptions as |opt|}}
@@ -658,12 +657,12 @@
                 </select>
               </div>
 
-              <div class="form-group" style="min-width:8rem;">
+              <div class="form-group bbttcc-mw-8">
                 <label>Amount</label>
                 <input type="number" name="world-request-amount" value="{{req.value.amount}}" placeholder="0" />
               </div>
 
-              <div class="form-group" style="flex:1; min-width:16rem;">
+              <div class="form-group bbttcc-grow-16">
                 <label>Note</label>
                 <input type="text" name="world-request-note" value="{{req.value.note}}" placeholder="Optional note / receipt" />
               </div>
@@ -677,7 +676,7 @@
           <p class="bbttcc-muted">No turn requests configured.</p>
         {{/if}}
        <button type="button" class="bbttcc-btn" data-action="add-turn-request">+ Add Turn Request</button>
-        <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+        <p class="bbttcc-muted bbttcc-mt-xs">
           Structured turn requests only. No raw JSON needed.
         </p>
       </div>
@@ -687,8 +686,8 @@
   <label>Quest Effects</label>
   {{#if worldEffects.questEffects.length}}
     {{#each worldEffects.questEffects as |qfx index|}}
-      <div class="bbttcc-world-questfx-row" style="display:flex; flex-wrap:wrap; gap:.5rem; align-items:flex-end; margin-bottom:.5rem; border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:10px;">
-        <div class="form-group" style="min-width:10rem;">
+      <div class="bbttcc-world-questfx-row bbttcc-filter-panel">
+        <div class="form-group bbttcc-mw-10">
           <label>Action</label>
           <select name="world-questfx-action">
             <option value="accept" {{#if (eq qfx.action "accept")}}selected{{/if}}>Accept</option>
@@ -698,7 +697,7 @@
           </select>
         </div>
 
-        <div class="form-group" style="flex:1; min-width:16rem;">
+        <div class="form-group bbttcc-grow-16">
           <label>Quest</label>
           <select name="world-questfx-questId">
             <option value="">(Pick quest)</option>
@@ -710,7 +709,7 @@
           </select>
         </div>
 
-        <div class="form-group" style="flex:1; min-width:14rem;">
+        <div class="form-group bbttcc-grow-14">
           <label>Beat (optional)</label>
           <select name="world-questfx-beatId">
             <option value="">(None)</option>
@@ -722,7 +721,7 @@
           </select>
         </div>
 
-        <div class="form-group" style="min-width:10rem;">
+        <div class="form-group bbttcc-mw-10">
           <label>State</label>
           <select name="world-questfx-state">
             <option value="" {{#unless qfx.state}}selected{{/unless}}>(none)</option>
@@ -731,7 +730,7 @@
           </select>
         </div>
 
-        <div class="form-group" style="flex:1; min-width:16rem;">
+        <div class="form-group bbttcc-grow-16">
           <label>Note (optional)</label>
           <input type="text" name="world-questfx-text" value="{{qfx.text}}" placeholder="Short receipt / note for the quest log" />
         </div>
@@ -745,7 +744,7 @@
     <p class="bbttcc-muted">No quest effects configured.</p>
   {{/if}}
   <button type="button" class="bbttcc-btn" data-action="add-quest-effect">+ Add Quest Effect</button>
-  <p class="bbttcc-muted" style="margin:.25rem 0 0;">
+  <p class="bbttcc-muted bbttcc-mt-xs">
     Quest effects update the party’s Quest Log (Faction). Use <code>Complete</code> to close a questline from an outcome beat.
   </p>
 </div>
