@@ -30,6 +30,8 @@
 !bbttcc-market/**
 !bbttcc-master-content/
 !bbttcc-master-content/**
+!bbttcc-onboarding/
+!bbttcc-onboarding/**
 !bbttcc-radiation/
 !bbttcc-radiation/**
 !bbttcc-raid/
