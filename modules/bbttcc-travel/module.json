@@ -29,6 +29,7 @@
     "scripts/bbttcc-weather-tick.enhancer.js",
     "scripts/hex-travel-mode.js",
     "scripts/hex-travel.js",
+    "scripts/scene-transition.js",
     "scripts/world-overview.js",
     "scripts/travel-mitigation.bridge.js"
   ],

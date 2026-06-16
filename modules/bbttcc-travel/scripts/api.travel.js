@@ -604,6 +604,27 @@
 
     log("Hex enter: resolved beat", { campaignId, beatId, hexUuid, terrain });
 
+    // Cinematic dive: stash a one-shot dive request so this beat's scene launch
+    // becomes a GM-solo zoom-dive into the hex's scene (executeBeat consumes it).
+    try {
+      const txn = game.bbttcc && game.bbttcc.api && game.bbttcc.api.transition;
+      if (txn && typeof txn.requestDive === "function") {
+        const place = (to && to.object) ? to.object : to;
+        const center = place && place.center;
+        const tdoc = (to && to.document) ? to.document : to;
+        const w = Number((tdoc && tdoc.shape && tdoc.shape.width) || (tdoc && tdoc.width) || 0);
+        const h = Number((tdoc && tdoc.shape && tdoc.shape.height) || (tdoc && tdoc.height) || 0);
+        const focus = (center && Number.isFinite(center.x))
+          ? { x: center.x, y: center.y }
+          : { x: Number((tdoc && tdoc.x) || 0) + w / 2, y: Number((tdoc && tdoc.y) || 0) + h / 2 };
+        txn.requestDive({
+          hexUuid, focus, audience: "view",
+          label: (terrFlags && terrFlags.name) || undefined,
+          originUuid: (canvas && canvas.scene) ? canvas.scene.uuid : null
+        });
+      }
+    } catch (_eDive) { /* non-fatal: beat still runs, just plain-activates */ }
+
     // Prefer injector path (gated)
     if (typeof injector.maybeRunBeatById === "function") {
       const res = await injector.maybeRunBeatById({

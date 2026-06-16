@@ -412,14 +412,41 @@
 
     if (canRunBeat && beatId && campaignId) {
       log("afterTravel: launching encounter via campaign.runBeat", { campaignId, beatId, encKey });
+
+      // Cinematic dive: stash a one-shot dive request so the encounter beat's scene
+      // launch zoom-dives to the encounter hex on the map, then into the beat scene
+      // (GM-solo view, with a "⇪ pull table" on the far side). executeBeat consumes
+      // it. When this is active we DON'T auto-return — the GM owns navigation via
+      // the back / pull-table buttons (the missing "pre-launch" feature).
+      const txn = game.bbttcc?.api?.transition;
+      let dived = false;
+      try {
+        if (txn?.requestDive) {
+          const to = ctx?.to;
+          const place = to?.object || to;
+          const center = place?.center;
+          const tdoc = to?.document || to;
+          const w = Number(tdoc?.shape?.width || tdoc?.width || 0);
+          const h = Number(tdoc?.shape?.height || tdoc?.height || 0);
+          const focus = (center && Number.isFinite(center.x))
+            ? { x: center.x, y: center.y }
+            : { x: Number(tdoc?.x || 0) + w / 2, y: Number(tdoc?.y || 0) + h / 2 };
+          const hexUuid = tdoc?.uuid || to?.uuid || ctx?.hexUuid || null;
+          txn.requestDive({
+            hexUuid, focus, audience: "view",
+            label: enc?.label || encKey || undefined,
+            originUuid: canvas?.scene?.uuid || null
+          });
+          dived = true;
+        }
+      } catch (_eDive) { /* non-fatal: beat still runs, just plain-activates */ }
+
       const res = await launchViaCampaignBeat(campaignApi, campaignId, beatId, ctx);
       if (res?.ok) {
-        // Wait until any chained beat dialogs settle, then auto-return to
-        // the travel scene. This restores the previous behavior — the
-        // legacy scenario path called scene.launcher.js's
-        // autoReturnToParentScene at the same point (line 1702 of
-        // scene.launcher.js); the runBeat path was never wired up.
-        await returnToTravelSceneAfterBeat(ctx);
+        // Legacy model auto-returned to the travel scene after the beat. With the
+        // cinematic dive the GM stays on the encounter scene and returns via the
+        // back / pull-table buttons, so skip the auto-return when we dived.
+        if (!dived) await returnToTravelSceneAfterBeat(ctx);
         return;
       }
       warn("afterTravel: campaign.runBeat failed; falling back (best effort)", res);

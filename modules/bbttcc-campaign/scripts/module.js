@@ -80,7 +80,17 @@ try {
       try { html?.addClass?.("bbttcc-choice-roll-dialog bbttcc-hexchrome-dialog"); } catch (_e) {}
       try { __bbttccAutosizeDialogDeferred(app, { pad: 40, maxH: Math.floor(window.innerHeight * 0.94) }); } catch (_e2) {}
     });
-    log("HexChrome Dialog hook installed (renderDialog).");
+    // Foundry v14: Dialog.confirm / Dialog.prompt and DialogV2 render through
+    // DialogV2 → fire "renderDialogV2" (NOT "renderDialog") and pass a raw
+    // HTMLElement (not jQuery). Mirror the theming there so every dialog gets
+    // HexChrome on v14, exactly like the V1 path above.
+    Hooks.on("renderDialogV2", function (app, element) {
+      try {
+        const el = (element instanceof HTMLElement) ? element : (element?.[0] ?? app?.element ?? null);
+        el?.classList?.add("bbttcc-choice-roll-dialog", "bbttcc-hexchrome-dialog");
+      } catch (_e) {}
+    });
+    log("HexChrome Dialog hook installed (renderDialog + renderDialogV2).");
   }
 } catch (_e) {}
 
@@ -2738,6 +2748,26 @@ async function executeBeat(campaign, beat, ctx = {}) {
 
   log("Executing beat", { campaignId: campaign.id, beatId: beat.id, type });
 
+  // Cinematic dive: a travel trigger (hex-entry beat / travel encounter) may have
+  // stashed a one-shot dive request just before running this beat. If present, this
+  // beat's scene launch becomes a GM-solo cinematic dive (zoom→flash→view, with a
+  // "⇪ pull table" on the far side) instead of a plain scene.activate() that yanks
+  // the whole table. Consumed ONCE per beat so chained/sceneless beats don't replay.
+  const _tx = game.bbttcc?.api?.transition;
+  const _dive = _tx?.consumeDive?.() || null;
+  const _diveScene = async (scene) => {
+    if (!scene) return;
+    if (_dive && _tx?.dive) {
+      await _tx.dive(scene.uuid, {
+        focus: _dive.focus, hexUuid: _dive.hexUuid,
+        audience: _dive.audience || "view", label: _dive.label || label,
+        originUuid: _dive.originUuid
+      });
+    } else if (scene.activate) {
+      await scene.activate();
+    }
+  };
+
   const isCinematic =
     (String(type || "").trim() === "cinematic") ||
     !!(beat && beat.cinematic && beat.cinematic.enabled);
@@ -2781,7 +2811,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
             try { sc1 = await fromUuid(`Scene.${raw1}`); } catch (_eS1b) {}
           }
         }
-        if (sc1?.activate) await sc1.activate();
+        await _diveScene(sc1);  // cinematic start scene — dives if a request is pending
 
         // Schedule Next Scene (if configured)
         const raw2 = String(cin.nextSceneId || "").trim();
@@ -2883,7 +2913,7 @@ async function executeBeat(campaign, beat, ctx = {}) {
           try { scene = await fromUuid(maybe); } catch (e2) {}
         }
 
-        if (scene?.activate) await scene.activate();
+        await _diveScene(scene);  // non-cinematic beat scene — dives if a request is pending
       } catch (e) {
         err("Scene activation failed:", e);
         ui.notifications?.error?.("Error activating scene for campaign beat; see console.");
