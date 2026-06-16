@@ -343,59 +343,6 @@ function numOrBlank(v){
           action,
           note
         });
-          return;
-        }
-
-        const api = game.bbttcc && game.bbttcc.api && game.bbttcc.api.gm;
-        if (!api || typeof api.setHex !== "function") {
-          ui.notifications?.error?.("GM API not available (bbttcc-core Phase 1 missing).");
-          return;
-        }
-
-        const note = String(val("gm.note") || "").trim();
-
-        if (action === "clear") {
-          await api.setHex({
-            hexUuid: doc.uuid,
-            patch: {
-              travel: { unitsOverride: null },
-              development: { stage: null, locked: null },
-              alarm: { value: null, locked: null },
-              campaign: { onEnterBeatId: null }
-            },
-            note: note || "Clear hex overrides"
-          });
-          app.render(true);
-          return;
-        }
-
-        if (action === "apply") {
-          const patch = {};
-          const uo = val("gm.travel.unitsOverride").trim();
-          if (uo !== "") patch.travel = Object.assign(patch.travel || {}, { unitsOverride: Number(uo) });
-
-          const st = val("gm.development.stage").trim();
-          patch.development = patch.development || {};
-          if (st !== "") patch.development.stage = Number(st);
-          patch.development.locked = checked("gm.development.locked");
-
-          const av = val("gm.alarm.value").trim();
-          patch.alarm = patch.alarm || {};
-          if (av !== "") patch.alarm.value = Number(av);
-          patch.alarm.locked = checked("gm.alarm.locked");
-
-          const beat = val("gm.campaign.onEnterBeatId").trim();
-          if (beat !== "") patch.campaign = Object.assign(patch.campaign || {}, { onEnterBeatId: beat });
-
-          await api.setHex({ hexUuid: doc.uuid, patch: patch, note: note || "GM edit hex" });
-          app.render(true);
-        }
-      });
-    }
-  }
-} catch (e) {
-  console.warn(TAG, "GM panel inject failed", e);
-}
         if (res?.ok) {
           // Re-render the app so modifiers & flags refresh
           app.render(false);

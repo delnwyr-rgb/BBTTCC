@@ -2907,9 +2907,9 @@ export function registerBBTTCCCharacterSheet() {
       label: "Bad Eden Character Sheet"
     });
 
-    CONFIG.Bad Eden ??= {};
-    CONFIG.Bad Eden.autoLink ??= {};
-    CONFIG.Bad Eden.autoLink.characterSheetId = sheetId;
+    CONFIG.BBTTCC ??= {};
+    CONFIG.BBTTCC.autoLink ??= {};
+    CONFIG.BBTTCC.autoLink.characterSheetId = sheetId;
 
     LOG("Registered Bad Eden Character Sheet", {
       sheetId,
@@ -2933,9 +2933,9 @@ export function registerBBTTCCCharacterSheet() {
       label: "Bad Eden NPC Sheet"
     });
 
-    CONFIG.Bad Eden ??= {};
-    CONFIG.Bad Eden.autoLink ??= {};
-    CONFIG.Bad Eden.autoLink.npcSheetId = npcSheetId;
+    CONFIG.BBTTCC ??= {};
+    CONFIG.BBTTCC.autoLink ??= {};
+    CONFIG.BBTTCC.autoLink.npcSheetId = npcSheetId;
 
     LOG("Registered Bad Eden NPC Sheet", {
       sheetId: npcSheetId,

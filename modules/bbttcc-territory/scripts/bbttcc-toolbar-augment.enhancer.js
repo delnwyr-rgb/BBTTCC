@@ -98,7 +98,10 @@
                 content: "<p>Advance the strategic turn now? This will apply all pending effects.</p>",
                 yes: () => true,
                 no: () => false,
-                defaultYes: false
+                defaultYes: false,
+                // Self-theme with HexChrome so it doesn't depend on the global
+                // renderDialog hook (which doesn't catch this confirm on v14).
+                options: { classes: ["dialog", "bbttcc-hexchrome-dialog"] }
               }).catch(() => false);
 
               if (!ok) return;

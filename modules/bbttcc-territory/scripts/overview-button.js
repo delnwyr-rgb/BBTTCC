@@ -971,7 +971,7 @@ function normalizeFactionRigsFlag(factionFlags){
   }
 }
 
-async function createFactionViaBad Eden(){
+async function createFactionViaBBTTCC(){
   if (!game.user?.isGM) { ui.notifications?.warn?.('Only the GM can create factions.'); return null; }
   const content = `
     <div class="form-group">
@@ -1024,7 +1024,7 @@ function insertCreateFactionButton(html){
         return openWizard();
       }
       // Fallback to legacy V1 dialog if the new wizard is not available.
-      return createFactionViaBad Eden();
+      return createFactionViaBBTTCC();
     });
 } catch (e) { warn("Failed to insert Create Faction button", e); }
 }
