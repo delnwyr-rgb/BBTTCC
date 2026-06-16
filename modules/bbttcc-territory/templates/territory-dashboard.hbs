@@ -317,6 +317,13 @@
       <option value="ruins">Ruins</option>
     </select>
 
+    <select data-filter="terrain" title="Filter by terrain">
+      <option value="">All terrain</option>
+      {{#each terrainList}}
+        <option value="{{key}}">{{label}}</option>
+      {{/each}}
+    </select>
+
     <select data-filter="size" title="Filter by size">
       <option value="">All sizes</option>
       <option value="none">None</option>
@@ -365,6 +372,7 @@
         <th>Owner</th>
         <th>Status</th>
         <th>Type</th>
+        <th>Terrain</th>
         <th>Size</th>
         <th>Population</th>
         <th>Integration</th>
@@ -387,6 +395,7 @@
           data-owner="{{ownerId}}"
           data-status="{{status}}"
           data-type="{{type}}"
+          data-terrain="{{terrainKey}}"
           data-size="{{size}}"
           data-population="{{population}}"
           data-capital="{{#if capital}}yes{{else}}no{{/if}}"
@@ -431,6 +440,12 @@
             <option value="wasteland"  {{#if (bbttcc_eq type "wasteland")}}selected{{/if}}>Wasteland</option>
             <option value="ruins"      {{#if (bbttcc_eq type "ruins")}}selected{{/if}}>Ruins</option>
           </select>
+        </td>
+
+        <td>
+          <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{{terrainLabel}}">
+            {{#if terrainLabel}}{{terrainLabel}}{{else}}<span style="opacity:.5;">—</span>{{/if}}
+          </div>
         </td>
 
         <td>
@@ -495,12 +510,12 @@
 
       {{#if rows.length}}
       <tr class="bbttcc-no-matches" style="display:none;">
-        <td colspan="16" class="center"><em>No hexes match the current filters.</em></td>
+        <td colspan="17" class="center"><em>No hexes match the current filters.</em></td>
       </tr>
       {{/if}}
 
       {{#unless rows.length}}
-      <tr><td colspan="16" class="center"><em>No territory hexes on this Scene yet.</em></td></tr>
+      <tr><td colspan="17" class="center"><em>No territory hexes on this Scene yet.</em></td></tr>
       {{/unless}}
     </tbody>
   </table>

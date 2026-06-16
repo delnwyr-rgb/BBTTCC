@@ -24070,15 +24070,16 @@ function _ftMakeHudDraggable(el, opts = {}) {
   btnCollapse.dataset.act = "collapse";
   ctrl.appendChild(btnCollapse);
   if (!skipReset) {
-    ctrl.appendChild(mkBtn("⟲", "Reset position", () => {
+    ctrl.appendChild(mkBtn("⟲", opts.resize ? "Reset size & position" : "Reset position", () => {
       try { localStorage.removeItem(STORAGE); } catch (_) {}
       el.style.left = "";
       el.style.top = "";
       el.style.right = "";
       el.style.bottom = "";
       el.style.transform = "";
+      if (opts.resize) { el.style.width = ""; el.style.height = ""; }
       if (isCollapsed()) setCollapsed(false);
-      ui.notifications?.info?.("HUD position reset.");
+      ui.notifications?.info?.(opts.resize ? "HUD size & position reset." : "HUD position reset.");
     }));
   }
   el.appendChild(ctrl);
@@ -24094,6 +24095,11 @@ function _ftMakeHudDraggable(el, opts = {}) {
     el.style.bottom = "auto";
     el.style.transform = "none";
   }
+  // Re-apply saved size for resizable HUDs (same pattern as position above).
+  if (opts.resize) {
+    if (saved.width  != null) el.style.width  = saved.width  + "px";
+    if (saved.height != null) el.style.height = saved.height + "px";
+  }
 
   // 3) One-time wire-up: collapse-state restore + drag listeners.
   if (el.dataset.ftHudInit !== "1") {
@@ -24101,6 +24107,26 @@ function _ftMakeHudDraggable(el, opts = {}) {
     el.style.position = el.style.position || "fixed";
     el.style.paddingRight = "50px"; // clears the ctrl bar (collapse + reset) so right-aligned header text never slides under it
     if (saved.collapsed) setCollapsed(true);
+
+    // Opt-in user-resizing: native CSS grip + debounced persistence of the
+    // chosen size to the same localStorage record as position. Skip saves
+    // while collapsed so the chip's tiny height never overwrites the real one.
+    if (opts.resize) {
+      el.style.resize = el.style.resize || "both";
+      if (!el.style.overflow) el.style.overflow = "hidden";
+      if (window.ResizeObserver) {
+        let rzTimer = null;
+        const ro = new ResizeObserver(() => {
+          if (isCollapsed()) return;
+          if (rzTimer) clearTimeout(rzTimer);
+          rzTimer = setTimeout(() => {
+            const r = el.getBoundingClientRect();
+            save({ ...load(), width: Math.round(r.width), height: Math.round(r.height) });
+          }, 250);
+        });
+        ro.observe(el);
+      }
+    }
 
     // 2026-05-19 — Drag uses a movement threshold so a true click on a
     // child element (e.g. a manifest row, which isn't a <button>) still

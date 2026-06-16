@@ -380,11 +380,11 @@
     const _gateClass = (m) => !m.grantedByClass || _classesPresent.has(m.grantedByClass);
     const clashMans = isGM ? (game.bbttcc?.api?.siege?.clashManeuvers || []).filter(_gateClass) : [];
     const clashBtns = (isGM && clashMans.length)
-      ? `<div style="margin-top:.35rem;display:flex;flex-wrap:wrap;gap:5px;align-items:center;">
-          <span style="font-size:0.6rem;color:#c9a;letter-spacing:.05em;text-transform:uppercase;width:100%;opacity:.75;">Clash maneuvers · fire now</span>
+      ? `<div style="margin-top:.35rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:5px;align-items:stretch;">
+          <span style="font-size:0.6rem;color:#c9a;letter-spacing:.05em;text-transform:uppercase;grid-column:1/-1;opacity:.75;">Clash maneuvers · fire now</span>
           ${clashMans.map(m => {
             const afford = total >= (m.costTotal || 0);   // marks vs marks
-            return `<button type="button" data-act="maneuver" data-key="${esc(m.key)}" data-hex="${esc(entry.hexUuid)}" title="${afford ? `Fire ${esc(m.label)} now — Buffer −${_mToOP(m.costTotal)} OP` : `Need ${_mToOP(m.costTotal)} OP (Buffer has ${_mToOP(total)})`}" style="flex:1;padding:3px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${afford ? "1" : "0.55"};">${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_mToOP(m.costTotal)}</span></button>`;
+            return `<button type="button" data-act="maneuver" data-key="${esc(m.key)}" data-hex="${esc(entry.hexUuid)}" title="${afford ? `Fire ${esc(m.label)} now — Buffer −${_mToOP(m.costTotal)} OP` : `Need ${_mToOP(m.costTotal)} OP (Buffer has ${_mToOP(total)})`}" style="display:flex;align-items:center;justify-content:center;gap:4px;text-align:center;line-height:1.15;min-height:34px;padding:4px 6px;background:#2a1810;color:${afford ? "#ffc69a" : "#7a5a4a"};border:1px solid ${afford ? "#b8763a" : "#5a4030"};border-radius:4px;font-size:0.74rem;cursor:pointer;font-weight:600;opacity:${afford ? "1" : "0.55"};">${m.icon} ${esc(m.label)} <span style="opacity:.7;font-size:.85em;">−${_mToOP(m.costTotal)}</span></button>`;
           }).join("")}
         </div>`
       : "";
@@ -497,12 +497,14 @@
 
   function _buildHtml(sieges, isGM) {
     const rows = sieges.map(e => _siegeRow(e, isGM)).join("");
-    return `<div id="ft-siege-hud" class="ft-hud-panel ft-hud-acc-bronze" style="position:fixed;right:12px;top:60px;width:288px;padding:.5rem .7rem;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">
+    return `<div id="ft-siege-hud" class="ft-hud-panel ft-hud-acc-bronze" style="position:fixed;right:12px;top:60px;width:288px;max-height:calc(100vh - 80px);padding:.5rem .7rem;display:flex;flex-direction:column;overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;flex:0 0 auto;">
         <span style="color:${BRONZE};font-weight:600;letter-spacing:.04em;">⚔ Sieges</span>
         <span style="font-size:0.7rem;color:#999;">${sieges.length} active</span>
       </div>
-      ${rows}
+      <div class="ft-siege-hud-body" style="flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;">
+        ${rows}
+      </div>
     </div>`;
   }
 
@@ -823,7 +825,7 @@
     }
     _bind(_el);
     const drag = globalThis._ftMakeHudDraggable;
-    if (typeof drag === "function") drag(_el, { storageKey: "siege:hud:panel", collapsedLabel: "⚔ Sieges" });
+    if (typeof drag === "function") drag(_el, { storageKey: "siege:hud:panel", collapsedLabel: "⚔ Sieges", resize: true });
   }
 
   function _scheduleRender() {

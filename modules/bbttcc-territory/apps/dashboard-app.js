@@ -121,6 +121,7 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       owner: "",
       status: "",
       type: "",
+      terrain: "",
       size: "",
       population: "",
       capital: "",
@@ -146,6 +147,7 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       }
       if (show && f.status && d.status !== f.status) show = false;
       if (show && f.type && d.type !== f.type) show = false;
+      if (show && f.terrain && d.terrain !== f.terrain) show = false;
       if (show && f.size && d.size !== f.size) show = false;
       if (show && f.population && d.population !== f.population) show = false;
       if (show && f.capital && d.capital !== f.capital) show = false;
@@ -168,6 +170,7 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
     const scene = canvas?.scene;
     const ownerList = buildOwnerList();
     const rows = [];
+    const terrainMap = new Map(); // key -> label, distinct terrains in use (for the filter)
     let adoptionCount = 0;
 
     for (const dr of scene?.drawings?.contents ?? []) {
@@ -185,6 +188,11 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       let status = f.status ?? "unclaimed";
       if (status === "claimed") status = "occupied";
 
+      // Terrain: canonical {key,label} object, with legacy field fallbacks.
+      const terrainKey = f.terrain?.key ?? f.terrainKey ?? f.terrainType ?? "";
+      const terrainLabel = f.terrain?.label ?? (terrainKey ? terrainKey.charAt(0).toUpperCase() + terrainKey.slice(1) : "");
+      if (terrainKey) terrainMap.set(terrainKey, terrainLabel || terrainKey);
+
       rows.push({
         id: dr.id,
         uuid: dr.uuid,
@@ -192,6 +200,8 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
         ownerId: f.factionId ?? "",
         status,
         type: f.type ?? "wilderness",
+        terrainKey,
+        terrainLabel,
         size: f.size ?? "outpost",
         population: f.population ?? "uninhabited",
         capital: !!f.capital,
@@ -212,7 +222,10 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
     }
 
     rows.sort((a,b)=> (a.name||"").localeCompare(b.name||""));
-    return { sceneName: scene?.name ?? "—", ownerList, rows, adoptionCount };
+    const terrainList = [...terrainMap.entries()]
+      .map(([key, label]) => ({ key, label }))
+      .sort((a,b)=> a.label.localeCompare(b.label));
+    return { sceneName: scene?.name ?? "—", ownerList, terrainList, rows, adoptionCount };
   }
 
   _rememberScroll(root) {
@@ -430,7 +443,7 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
       if (!btn) return;
       ev.preventDefault(); ev.stopPropagation();
       this._bbttccFilters = {
-        name: "", owner: "", status: "", type: "",
+        name: "", owner: "", status: "", type: "", terrain: "",
         size: "", population: "", capital: "", integrationStage: ""
       };
       for (const el of root.querySelectorAll("[data-filter]")) {
