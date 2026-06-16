@@ -13,6 +13,7 @@
     "verified": "13"
   },
   "esmodules": [
+    "integrations/jb2a-db-heal.js",
     "module.js",
     "integrations/class-tier-a-vfx.js"
   ],

@@ -511,6 +511,10 @@ export function createFXAPI() {
     playScenarioShift,
     playTurnPresentation,
     playHexActivity,
+    // Expose the engine's canvas-effect worker so external callers (e.g. the
+    // scene-transition portal swirl) can ride the same proven path the raid/
+    // siege VFX use. Previously internal-only → portalSwirl bailed to flash-only.
+    playSequencerEffect: (path, opts) => engine.playSequencerEffect(path, opts),
     effectForFamily,
     burstForFamily,
     familyForKey,
