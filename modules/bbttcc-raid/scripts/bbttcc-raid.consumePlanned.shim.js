@@ -7,6 +7,22 @@
   const MOD_R = "bbttcc-raid";
   const MODF  = "bbttcc-factions";
   const MODT  = "bbttcc-territory";
+  const TAG   = "[bbttcc/consumePlanned]";
+
+  // Resilient raid-API gate — the same retry helper every sibling enhancer defines
+  // locally. This file historically RELIED ON a global `whenRaidReady` that no file
+  // actually exports (each defines its own IIFE-local copy), so it threw an UNCAUGHT
+  // ReferenceError whenever load order shifted — which could cascade and starve later
+  // init (HUD/canvas/VFX). Gated on the exact method this shim wraps.
+  function whenRaidReady(cb, tries = 0) {
+    const go = () => {
+      const api = game?.bbttcc?.api?.raid || game?.modules?.get?.(MOD_R)?.api?.raid;
+      if (typeof api?.consumeQueuedTurnEffects === "function") return cb(api);
+      if (tries > 60) return console.warn(TAG, "raid API (consumeQueuedTurnEffects) not ready after timeout");
+      setTimeout(() => whenRaidReady(cb, tries + 1), 250);
+    };
+    if (globalThis.Hooks) Hooks.once("ready", go); else go();
+  }
 
   whenRaidReady((api)=>{
     // unwrap any prior wrappers

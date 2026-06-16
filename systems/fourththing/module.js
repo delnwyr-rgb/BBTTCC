@@ -24060,6 +24060,16 @@ function _ftMakeHudDraggable(el, opts = {}) {
     } else {
       chip?.remove();
     }
+    // Resizable HUDs: hide the grip + shrink to the chip while collapsed; restore on expand.
+    if (opts.resize) {
+      el.style.resize = c ? "none" : "both";
+      if (c) { el.style.width = ""; el.style.height = ""; }
+      else {
+        const sz = load();
+        if (sz.width  != null) el.style.width  = sz.width  + "px";
+        if (sz.height != null) el.style.height = sz.height + "px";
+      }
+    }
     save({ ...load(), collapsed: c });
     // Refresh ctrl-bar's collapse-button label.
     const btnCollapse = ctrl.querySelector("[data-act=collapse]");
@@ -24094,9 +24104,21 @@ function _ftMakeHudDraggable(el, opts = {}) {
     el.style.right = "auto";
     el.style.bottom = "auto";
     el.style.transform = "none";
+  } else if (opts.resize) {
+    // Resizable HUDs must be TOP-LEFT anchored or the native grip resizes "backwards"
+    // (a right-anchored box grows away from the cursor). Pin the current screen box to
+    // left/top once, so the bottom-right grip grows predictably toward the cursor.
+    const r = el.getBoundingClientRect();
+    if (r.width || r.height) {
+      el.style.left = Math.round(r.left) + "px";
+      el.style.top  = Math.round(r.top)  + "px";
+      el.style.right = "auto";
+      el.style.bottom = "auto";
+      el.style.transform = "none";
+    }
   }
-  // Re-apply saved size for resizable HUDs (same pattern as position above).
-  if (opts.resize) {
+  // Re-apply saved size for resizable HUDs (skip while collapsed — the chip stays small).
+  if (opts.resize && !saved.collapsed) {
     if (saved.width  != null) el.style.width  = saved.width  + "px";
     if (saved.height != null) el.style.height = saved.height + "px";
   }
