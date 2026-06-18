@@ -120,6 +120,18 @@ const SEED = [
   entry("system.defenses.immunities",    "Defenses — Immunities",    "Defenses", { desc: "Damage immunities. Comma-separated keys.", valueHint: "comma-sep list" }),
   entry("system.defenses.vulnerabilities","Defenses — Vulnerabilities","Defenses", { desc: "Damage vulnerabilities. Comma-separated keys.", valueHint: "comma-sep list" }),
 
+  // ── Item Defense Grants (read while the item is equipped + skill-gated) ──
+  // Put these on an ITEM's Active Effect (one damage-type/condition per row, or
+  // comma-separated). ftComputeDefenses reads them inside the gated item loop, so
+  // they only apply while the item is equipped and its armor skill is trained.
+  entry("flags.fourththing.grant.resists",     "Grant — Resistance (while equipped)",  "Item Defense Grants", { desc: "Item grants this damage resistance while equipped/trained. One type per row, or comma-sep.", readBy: ["ftComputeDefenses"], valueHint: "damage-type key" }),
+  entry("flags.fourththing.grant.immunes",     "Grant — Immunity (while equipped)",    "Item Defense Grants", { desc: "Item grants this damage immunity while equipped/trained.", readBy: ["ftComputeDefenses"], valueHint: "damage-type key" }),
+  entry("flags.fourththing.grant.vulns",       "Grant — Vulnerability (while equipped)","Item Defense Grants", { desc: "Item imposes this damage vulnerability while equipped.", readBy: ["ftComputeDefenses"], valueHint: "damage-type key" }),
+  entry("flags.fourththing.grant.condImmunes", "Grant — Condition Immunity (while equipped)","Item Defense Grants", { desc: "Item grants immunity to this condition while equipped/trained.", readBy: ["ftComputeDefenses"], valueHint: "condition key" }),
+  entry("flags.fourththing.grant.guard",       "Grant — Guard bonus (armor)",          "Item Defense Grants", { desc: "Armor's Guard modifier. Takes precedence over native guardBonus; scaled by armor-skill rank.", readBy: ["ftComputeArmorBonus"], valueHint: "integer (±)" }),
+  entry("flags.fourththing.grant.evasion",     "Grant — Evasion bonus (armor)",        "Item Defense Grants", { desc: "Armor's Evasion modifier. Takes precedence over native evasionBonus; scaled by armor-skill rank.", readBy: ["ftComputeArmorBonus"], valueHint: "integer (±)" }),
+  entry("flags.fourththing.grant.resolve",     "Grant — Resolve bonus (armor)",        "Item Defense Grants", { desc: "Armor's Resolve modifier. Takes precedence over native resolveBonus; scaled by armor-skill rank.", readBy: ["ftComputeArmorBonus"], valueHint: "integer (±)" }),
+
   // ── Conditions (boolean flags) ──────────────────────────────────────────
   ...CONDITIONS.map(c => entry(
     `system.conditions.${c}`,

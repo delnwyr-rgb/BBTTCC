@@ -9819,6 +9819,31 @@ function ftComputeDefenses(actor, sys) {
           if (validConds.has(k)) condImmunes.add(k);
         }
       }
+
+      // Bucket-A migration toward native Active Effects: an item may declare its
+      // passive defense grants as GM-visible/editable AE *change rows* keyed
+      //   flags.fourththing.grant.{resists|immunes|vulns|condImmunes}
+      // (one damage-type/condition per row, or comma-separated). Read here, inside
+      // the gated item loop, so AE grants inherit the SAME equipped + skill gates as
+      // flag-grants above. The keys are declarative — the engine consumes the change
+      // VALUES directly (not Foundry's generic applier) — which is why they can live
+      // on a transfer:false item effect yet still show + edit natively in the AE
+      // Changes tab. resistMap is Set-keyed, so duplicating an existing flag-grant is
+      // idempotent. Disabled AEs are skipped (per-effect on/off for the GM).
+      const GRANT_RE = /^flags\.fourththing\.grant\.(resists|resistances|immunes|immunities|vulns|vulnerabilities|condImmunes|conditionImmunities)$/;
+      for (const ae of item.effects) {
+        if (ae.disabled) continue;
+        for (const ch of (ae.changes ?? [])) {
+          const m = GRANT_RE.exec(String(ch?.key || ""));
+          if (!m) continue;
+          const vals = String(ch.value ?? "").split(",").map(s => s.trim()).filter(Boolean);
+          const bucket = m[1];
+          if (bucket === "resists" || bucket === "resistances")      _ftMergeEntries(resistMap, vals, validTypes);
+          else if (bucket === "immunes" || bucket === "immunities")  _ftMergeEntries(immuneMap, vals, validTypes);
+          else if (bucket === "vulns" || bucket === "vulnerabilities") _ftMergeEntries(vulnMap, vals, validTypes);
+          else for (const c of vals) { const k = c.toLowerCase(); if (validConds.has(k)) condImmunes.add(k); }
+        }
+      }
     }
   }
 
@@ -9911,6 +9936,7 @@ async function runConsumeEffects(actor, item, consume) {
   const updates = {};
   const summary = [];
   const allRolls = [];
+  const conditionOps = [];   // Bucket B: {key, on} — applied via the native toggle after the batch
 
   for (const eff of (consume.effects ?? [])) {
     if (eff.kind === "track") {
@@ -9933,16 +9959,49 @@ async function runConsumeEffects(actor, item, consume) {
       const formulaTag = rolled ? ` (${eff.formula} → ${rolled.total})` : "";
       summary.push(`<li><b>${eff.track}</b>${formulaTag}: ${cur} ${arrow} ${next}</li>`);
     } else if (eff.kind === "condition") {
-      if (eff.op === "remove") {
-        const key = String(eff.condition || "").toLowerCase();
-        if (!key) continue;
-        updates[`system.conditions.${key}`] = false;
-        summary.push(`<li>condition cleared: <b>${key}</b></li>`);
-      }
+      const key = String(eff.condition || "").toLowerCase();
+      if (!key || !FT.CONDITIONS?.[key]) { summary.push(`<li>unknown condition: ${key}</li>`); continue; }
+      // op "add"/"apply" => set on; "remove" => set off. Applied below via the
+      // canonical toggle so it lands as a native status AE (token icon + States
+      // tab + immunity-aware), not a bare boolean.
+      conditionOps.push({ key, on: eff.op !== "remove" });
     }
   }
 
   if (Object.keys(updates).length) await actor.update(updates);
+
+  // Conditions → native status AEs via the canonical toggle. Force to the desired
+  // state (skip if already there). toggleCondition handles the boolean, the status
+  // AE, immunity refusal, and its own chat line.
+  for (const { key, on } of conditionOps) {
+    const cur = !!foundry.utils.getProperty(actor, `system.conditions.${key}`);
+    if (cur !== on) await game.fourththing.toggleCondition(actor, key);
+    summary.push(`<li>condition ${on ? "applied" : "cleared"}: <b>${FT.CONDITIONS[key].label ?? key}</b></li>`);
+  }
+
+  // Bucket B: clone the item's `applyOnUse` template Active Effects onto the user.
+  // These are GM-authored durational buffs/effects (native changes + duration +
+  // statuses) flagged flags.fourththing.applyOnUse — the AE-native half of an
+  // on-use effect (the dice rolls above are the irreducible procedural half).
+  const onUseAEs = (item.effects ?? []).filter(e => e.flags?.fourththing?.applyOnUse === true && !e.disabled);
+  if (onUseAEs.length) {
+    const aeData = onUseAEs.map(e => {
+      const o = e.toObject();
+      delete o._id;
+      o.origin   = item.uuid;
+      o.transfer = false;
+      o.disabled = false;
+      foundry.utils.setProperty(o, "flags.fourththing.appliedFromItem", item.id);
+      foundry.utils.setProperty(o, "flags.fourththing.applyOnUse", false); // applied copy isn't a template
+      return o;
+    });
+    await actor.createEmbeddedDocuments("ActiveEffect", aeData);
+    for (const e of onUseAEs) {
+      const d = e.duration ?? {};
+      const dtag = d.rounds ? ` (${d.rounds} rd)` : d.seconds ? ` (${Math.round(d.seconds / 60)} min)` : "";
+      summary.push(`<li>effect applied: <b>${e.name}</b>${dtag}</li>`);
+    }
+  }
 
   // Charge bookkeeping — decrement and delete-at-0.
   let chargeNote = "";
@@ -10110,6 +10169,25 @@ async function openGatherDialog(actor) {
   dlg.render(true);
 }
 
+// Resolve an armor item's RAW (pre-scale) defense bonus for a stat
+// (guard|evasion|resolve), honoring GM-editable AE grant rows
+// (flags.fourththing.grant.<stat>) which take PRECEDENCE over the native bonus
+// field per stat — the single source of truth shared by ftComputeArmorBonus
+// (the derived stat) and the inventory/equip tooltips (the display). Multiple
+// AE rows for one stat sum; disabled AEs are skipped.
+function _ftArmorStatRaw(item, stat) {
+  let ae;
+  for (const e of (item?.effects ?? [])) {
+    if (e.disabled) continue;
+    for (const ch of (e.changes ?? [])) {
+      if (String(ch?.key || "") === `flags.fourththing.grant.${stat}`) ae = (ae ?? 0) + (Number(ch.value) || 0);
+    }
+  }
+  if (ae !== undefined) return ae;
+  const field = { guard: "guardBonus", evasion: "evasionBonus", resolve: "resolveBonus" }[stat];
+  return Number(item?.system?.[field] ?? 0) || 0;
+}
+
 function ftComputeArmorBonus(actor, sys) {
   const result = { guard: 0, evasion: 0, resolve: 0, breakdown: [] };
   if (!actor?.items) return result;
@@ -10135,12 +10213,19 @@ function ftComputeArmorBonus(actor, sys) {
     const rank = sys?.skills?.[skillKey]?.value ?? 0;
     const scale = FT.ARMOR_RANK_SCALE[rank] ?? FT.ARMOR_RANK_SCALE[0];
 
+    // Bucket-A migration toward native AEs: GM-editable AE grant rows
+    // (flags.fourththing.grant.{guard,evasion,resolve}) take PRECEDENCE over the
+    // native bonus field per stat (shared resolver — see _ftArmorStatRaw).
+    const rawG = _ftArmorStatRaw(item, "guard");
+    const rawE = _ftArmorStatRaw(item, "evasion");
+    const rawR = _ftArmorStatRaw(item, "resolve");
+
     // Round (not floor) so +1 armor at Trained (mult 0.5) still grants +1
     // instead of silently zeroing. Half-bonuses canon preserved: +1→+1, +2→+1,
     // +3→+2, +4→+2 at Trained; full bonuses at Proficient and above.
-    const g = Math.round((a.guardBonus   ?? 0) * scale.mult) + (a.guardBonus   > 0 ? scale.flat : 0);
-    const e = Math.round((a.evasionBonus ?? 0) * scale.mult) + (a.evasionBonus > 0 ? scale.flat : 0);
-    const r = Math.round((a.resolveBonus ?? 0) * scale.mult) + (a.resolveBonus > 0 ? scale.flat : 0);
+    const g = Math.round(rawG * scale.mult) + (rawG > 0 ? scale.flat : 0);
+    const e = Math.round(rawE * scale.mult) + (rawE > 0 ? scale.flat : 0);
+    const r = Math.round(rawR * scale.mult) + (rawR > 0 ? scale.flat : 0);
 
     result.guard   += g;
     result.evasion += e;
@@ -17199,11 +17284,12 @@ Hooks.once("init", function () {
             : i.type === "armor"
               ? (() => {
                   const sgn = (n) => (n > 0 ? `+${n}` : `${n}`);
+                  const gB = _ftArmorStatRaw(i, "guard"), eB = _ftArmorStatRaw(i, "evasion"), rB = _ftArmorStatRaw(i, "resolve");
                   return [
-                    i.system?.guardBonus    ? `Guard ${sgn(i.system.guardBonus)}`     : "",
-                    i.system?.evasionBonus  ? `Evasion ${sgn(i.system.evasionBonus)}` : "",
-                    i.system?.resolveBonus  ? `Resolve ${sgn(i.system.resolveBonus)}` : "",
-                    i.system?.armorSkill    ? `[${i.system.armorSkill}]`              : ""
+                    gB ? `Guard ${sgn(gB)}`     : "",
+                    eB ? `Evasion ${sgn(eB)}`   : "",
+                    rB ? `Resolve ${sgn(rB)}`   : "",
+                    i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
                   ].filter(Boolean).join(" · ");
                 })()
             : (() => {
@@ -19429,11 +19515,12 @@ Hooks.once("init", function () {
           : i.type === "armor"
             ? (() => {
                 const sgn = (n) => (n > 0 ? `+${n}` : `${n}`);
+                const gB = _ftArmorStatRaw(i, "guard"), eB = _ftArmorStatRaw(i, "evasion"), rB = _ftArmorStatRaw(i, "resolve");
                 return [
-                  i.system?.guardBonus    ? `Guard ${sgn(i.system.guardBonus)}`     : "",
-                  i.system?.evasionBonus  ? `Evasion ${sgn(i.system.evasionBonus)}` : "",
-                  i.system?.resolveBonus  ? `Resolve ${sgn(i.system.resolveBonus)}` : "",
-                  i.system?.armorSkill    ? `[${i.system.armorSkill}]`              : ""
+                  gB ? `Guard ${sgn(gB)}`     : "",
+                  eB ? `Evasion ${sgn(eB)}`   : "",
+                  rB ? `Resolve ${sgn(rB)}`   : "",
+                  i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
                 ].filter(Boolean).join(" · ");
               })()
           : (() => {

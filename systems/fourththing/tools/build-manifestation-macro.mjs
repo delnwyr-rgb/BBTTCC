@@ -57,11 +57,16 @@ const macro = `// animate-starter-manifestations.macro.js — RUN IN-WORLD (GM).
   const offBlk = () => ({ enable:false, video:{dbSection:"static",menuType:"spell",animation:"curewounds",variant:"01",color:"blue",enableCustom:false,customPath:""}, sound:{...SOUND}, options:{...SOPT} });
   const buildAA = (tag, name) => {
     const p = PALETTE[tag];
-    return { id:"ft-"+name.toLowerCase().replace(/[^a-z0-9]+/g,"-"), label:name,
+    const aa = { id: crypto.randomUUID(), label:name,
       macro:{enable:false,playWhen:"0"}, menu:p.menu,
       primary:{video:{...p.v}, sound:{...SOUND}, options:{...POPT}},
       secondary:offBlk(), soundOnly:{sound:{...SOUND}}, source:offBlk(), target:offBlk(),
       isEnabled:true, isCustomized:true, fromAmmo:false, version:5 };
+    // AA's item-config editor reads $animation.meleeSwitch.options unconditionally
+    // for a melee menu — omitting it throws "reading 'options'" and the editor won't
+    // open. Always include the standard block for melee stamps.
+    if (p.menu === "melee") aa.meleeSwitch = { video:{dbSection:"range",menuType:"weapon",animation:"arrow",variant:"regular",color:"regular",enableCustom:false,customPath:""}, sound:{...SOUND}, options:{detect:"automatic",range:2,returning:false,switchType:"on"} };
+    return aa;
   };
   const pack = game.packs.find(p => p.metadata?.name === "starter-manifestations")
             || game.packs.find(p => (p.title||"").toLowerCase().includes("starter manifestation"));
