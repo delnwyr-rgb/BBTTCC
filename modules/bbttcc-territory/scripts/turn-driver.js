@@ -1452,7 +1452,7 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     return { changed:false, skipped:true };
   }
   window._bbttccTurnLock = true;
-  Hooks.callAll("bbttcc:advanceTurn:begin");
+  Hooks.callAll("bbttcc:advanceTurn:begin", { apply });
   if (apply) { try { await _bbttccTurnFxPlay("turn_start", { label:"Advance Turn" }, { phase:"invoke" }); } catch(_eFxStart) {} }
 
   try {
@@ -1524,7 +1524,8 @@ async function driverAdvanceTurn({ apply=false, sceneId=null } = {}) {
     };
   } finally {
     window._bbttccTurnLock = false;
-    Hooks.callAll("bbttcc:advanceTurn:end");
+    // Pass `apply` so listeners can skip mutations on a dry-run / preview.
+    Hooks.callAll("bbttcc:advanceTurn:end", { apply });
   }
 }
 

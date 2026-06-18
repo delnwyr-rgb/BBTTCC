@@ -687,7 +687,8 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       // Robust idempotency: only install if we don't already have a handler function.
       if (globalThis.__bbttccOpScheduleTickHandler && typeof globalThis.__bbttccOpScheduleTickHandler === "function") return;
 
-      globalThis.__bbttccOpScheduleTickHandler = function(){
+      globalThis.__bbttccOpScheduleTickHandler = function(ctx){
+        if (ctx?.apply === false) return; // dry-run / preview — don't tick OP schedules
         // Fire-and-forget; do not block Turn Driver.
         tickOpSchedulesAllFactions({}).catch(e => console.warn(TAG, "tickOpSchedulesAllFactions failed", e));
       };

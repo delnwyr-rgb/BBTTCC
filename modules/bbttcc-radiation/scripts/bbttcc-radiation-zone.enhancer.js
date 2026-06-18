@@ -222,7 +222,8 @@
     return ORDER[idx]; // stable
   }
 
-  async function handleAdvanceTurnEnd() {
+  async function handleAdvanceTurnEnd(ctx = {}) {
+    if (ctx?.apply === false) return; // dry-run / preview — never drift zones
     const radSettings = game.settings;
     const enableDrift = radSettings?.get(MOD_SCN, "enableZoneDrift") ?? true;
 

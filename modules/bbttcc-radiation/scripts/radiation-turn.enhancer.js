@@ -50,7 +50,8 @@
     return null;
   }
 
-  async function handleAdvanceTurnEnd() {
+  async function handleAdvanceTurnEnd(ctx = {}) {
+    if (ctx?.apply === false) return; // dry-run / preview — never mutate radiation
     try {
       const radApi = game.bbttcc?.api?.radiation;
       if (!radApi || typeof radApi.get !== "function" || typeof radApi.add !== "function") {
