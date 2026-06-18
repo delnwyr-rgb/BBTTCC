@@ -65,6 +65,44 @@ export const MIGRATIONS = [
       console.log(`Roll for Initiation | migration v2 "stamp-actor-kind" — stamped ${stamped} actor(s).`);
     },
   },
+  {
+    version: 3,
+    name: "repair-aptitude-downgrade-grants",
+    // Crew-Type / Archetype proficiency grants were authored as Active-Effect
+    // changes of type "downgrade" (cap at value) instead of "upgrade" (floor at
+    // value) on `system.skills.<key>.value`. A downgrade-to-1 caps the aptitude
+    // at rank 1: the player's edited base rank is silently forced back down, so
+    // the skill looks "stuck at 1" and can't be raised on the sheet. Flip every
+    // such skill-grant change to "upgrade". Idempotent — only touches changes
+    // that are still "downgrade". (Foundry v14: changes live at system.changes;
+    // keyed by string `type`. The numeric `mode` is a deprecated shim.)
+    migrate: async () => {
+      const SKILL_RE = /^system\.skills\.[^.]+\.value$/;
+      let effects = 0, changes = 0, actors = 0;
+      const fixEffect = async (effect) => {
+        const list = effect.changes ?? [];
+        let dirty = false;
+        const next = list.map((c) => {
+          const clone = foundry.utils.deepClone(c);
+          if (SKILL_RE.test(String(clone.key || "")) && clone.type === "downgrade") {
+            dirty = true; changes++; clone.type = "upgrade"; delete clone.mode;
+          }
+          return clone;
+        });
+        if (dirty) { await effect.update({ "system.changes": next }); effects++; }
+        return dirty;
+      };
+      for (const a of (game.actors?.contents ?? [])) {
+        let touched = false;
+        try {
+          for (const e of a.effects.contents) if (await fixEffect(e)) touched = true;
+          for (const it of a.items.contents) for (const e of it.effects.contents) if (await fixEffect(e)) touched = true;
+        } catch (e) { console.warn(`Roll for Initiation | migration v3: repair failed for ${a?.name}`, e); }
+        if (touched) actors++;
+      }
+      console.log(`Roll for Initiation | migration v3 "repair-aptitude-downgrade-grants" — flipped ${changes} change(s) on ${effects} effect(s) across ${actors} actor(s).`);
+    },
+  },
 ];
 
 /** The target schema version = highest version in the registry. */

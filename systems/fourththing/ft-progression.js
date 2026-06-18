@@ -1346,6 +1346,14 @@ export async function openSpendSkillPoints(actor) {
       </td>
     </tr>`).join("");
 
+  // Pending rank-ups captured by the +1 button handlers and read by Apply.
+  // Closure state instead of DOM-scraping: survives the v11→v14 render-hook
+  // + jQuery/HTMLElement divergence that previously left this dialog inert
+  // on Foundry v14 (legacy Dialog now renders as DialogV2).
+  const pending   = {};                          // skillKey -> newRank
+  const baseRanks = {};                           // skillKey -> stored rank
+  for (const [k, v] of Object.entries(skills)) baseRanks[k] = v.value ?? 0;
+
   const dialog = new Dialog({
     title: `Spend Aptitude Points (${points} available)`,
     content: `<div class="ft-cast-dialog">
@@ -1366,14 +1374,14 @@ export async function openSpendSkillPoints(actor) {
       </table>
     </div>`,
     buttons: {
-      apply: { label: "Apply", callback: async (html) => {
-        // Collect all pending upgrades from button states
+      apply: { label: "Apply", callback: async () => {
+        // Read pending upgrades from closure state (not the DOM) so Apply
+        // works regardless of which render hook fired or whether the dialog
+        // handed us jQuery or a raw HTMLElement.
         const updates = {};
-        html.find(".ft-skill-up-btn[data-upgraded='1']").each((_, btn) => {
-          const sk = btn.dataset.skill;
-          const newRank = parseInt(btn.dataset.newRank);
+        for (const [sk, newRank] of Object.entries(pending)) {
           updates[`system.skills.${sk}.value`] = newRank;
-        });
+        }
         const spSpent = Object.keys(updates).length;
         if (spSpent > 0) {
           updates["system.details.skillPoints"] = Math.max(0, points - spSpent);
@@ -1388,39 +1396,52 @@ export async function openSpendSkillPoints(actor) {
 
   dialog.render(true);
 
-  // Wire up the upgrade buttons after render
-  Hooks.once("renderDialog", (d, html) => {
-    if (d !== dialog) return;
+  // Wire up the +1 buttons after render. Foundry v14 renders legacy Dialog
+  // through DialogV2, which fires `renderDialogV2` with a raw HTMLElement —
+  // NOT `renderDialog` with jQuery. Hook BOTH and normalize the payload to a
+  // plain Element so the buttons work on v11–v14. (Same trap as the campaign
+  // HexChrome dialog hooks.) Only the first matching render wires it.
+  let wired = false;
+  const wire = (d, htmlOrEl) => {
+    if (d !== dialog || wired) return;
+    const root = htmlOrEl?.jquery ? htmlOrEl[0] : (htmlOrEl?.[0] ?? htmlOrEl);
+    if (!root?.querySelectorAll) return;
+    wired = true;
+
     let remaining = points;
-    const skillRanks = {};
-    for (const [k, v] of Object.entries(skills)) skillRanks[k] = v.value ?? 0;
+    const remEl = root.querySelector("#ft-sp-val");
 
-    html.find(".ft-skill-up-btn").on("click", (e) => {
-      const btn   = e.currentTarget;
-      const sk    = btn.dataset.skill;
-      const upgraded = btn.dataset.upgraded === "1";
+    root.querySelectorAll(".ft-skill-up-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const sk = btn.dataset.skill;
+        if (btn.dataset.upgraded === "1" || remaining <= 0) return;
 
-      if (!upgraded && remaining > 0) {
-        const newRank = (skillRanks[sk] ?? 0) + 1;
-        skillRanks[sk] = newRank;
+        const newRank = (baseRanks[sk] ?? 0) + 1;
+        pending[sk] = newRank;                         // captured for Apply
         const rd = SKILL_RANK_DATA[newRank] ?? SKILL_RANK_DATA[5];
-        const next = SKILL_RANK_DATA[newRank + 1];
+
         btn.dataset.upgraded = "1";
-        btn.dataset.newRank  = newRank;
-        btn.textContent = `✓ → ${rd.label}`;
-        btn.style.background = "rgba(39,174,96,0.2)";
+        btn.dataset.newRank  = String(newRank);
+        btn.textContent = newRank >= 5 ? "✓ Legendary" : `✓ → ${rd.label}`;
+        btn.style.background  = "rgba(39,174,96,0.2)";
         btn.style.borderColor = "rgba(39,174,96,0.5)";
-        btn.style.color = "#6fcf97";
-        if (newRank >= 5) { btn.disabled = true; btn.textContent = `✓ Legendary`; }
-        // Update rank display
-        const row = html.find(`tr[data-skill="${sk}"] td:nth-child(2) span:first-child`);
-        row.text(rd.label).css("color", rd.color);
+        btn.style.color       = "#6fcf97";
+        if (newRank >= 5) btn.disabled = true;
+
+        const rowSpan = root.querySelector(`tr[data-skill="${sk}"] td:nth-child(2) span:first-child`);
+        if (rowSpan) { rowSpan.textContent = rd.label; rowSpan.style.color = rd.color; }
+
         remaining--;
-        html.find("#ft-sp-val").text(remaining);
-        if (remaining <= 0) html.find(".ft-skill-up-btn:not([data-upgraded='1'])").prop("disabled", true);
-      }
+        if (remEl) remEl.textContent = String(remaining);
+        if (remaining <= 0) {
+          root.querySelectorAll(".ft-skill-up-btn:not([data-upgraded='1'])")
+              .forEach((b) => { b.disabled = true; });
+        }
+      });
     });
-  });
+  };
+  Hooks.once("renderDialog", wire);
+  Hooks.once("renderDialogV2", wire);
 }
 
 // ─── Skill proficiency auto-grant from feature text ──────────────────────────
