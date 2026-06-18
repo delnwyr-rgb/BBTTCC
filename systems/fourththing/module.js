@@ -72,7 +72,9 @@ import {
   SKILL_RANK_DATA,
   tierForLevel,
   SKILL_POINT_LEVELS,
-  deriveItemUnlockLevel
+  deriveItemUnlockLevel,
+  legendaryUsed,
+  markLegendaryUsed
 } from "./ft-progression.js";
 
 import {
@@ -2783,6 +2785,76 @@ async function _ftHandleSavePromptClick(btn, message) {
   }
 }
 
+// Legendary aptitude (rank 5) — 1/scene "Invoke Legendary" on a missed strike.
+// Auto-succeed if DC ≤ 20, else +10 to the total. On a resulting hit, rolls the
+// stashed damage and posts an Apply card (the .ft-apply-dmg-btn auto-binds via
+// the renderChatMessage hook). Skill-scoped per scene via legendaryUsed/marked.
+async function _ftHandleLegendaryStrikeInvoke(btn, message) {
+  if (btn.disabled) return;
+  const ctx = message?.getFlag?.("fourththing", "legendaryStrikeContext");
+  if (!ctx) { ui.notifications?.warn("Legendary context missing — card may be from an older strike."); return; }
+  let actor = null;
+  if (ctx.tokenUuid) { const t = await fromUuid(ctx.tokenUuid).catch(() => null); actor = t?.actor ?? null; }
+  if (!actor) actor = game.actors?.get(ctx.actorId) ?? null;
+  if (!actor) { ui.notifications?.warn("Legendary: actor not found."); btn.disabled = true; return; }
+  if (!actor.testUserPermission?.(game.user, "OWNER") && !game.user.isGM) {
+    ui.notifications?.warn(`Only ${actor.name}'s owner (or the GM) can invoke Legendary.`);
+    return;
+  }
+  if (legendaryUsed(actor.id, ctx.skill)) {
+    btn.disabled = true; btn.style.opacity = "0.5"; btn.textContent = "✨ Legendary — already used this scene";
+    ui.notifications?.warn(`${actor.name} has already invoked Legendary ${ftCap(ctx.skill)} this scene.`);
+    return;
+  }
+  btn.disabled = true;
+  const dc = Number(ctx.dc) || 0;
+  let mode, newTotal, hit;
+  if (dc <= 20) { hit = true;  newTotal = Number(ctx.total); mode = `auto-succeed (DC ${dc} ≤ 20)`; }
+  else          { newTotal = Number(ctx.total) + 10; hit = newTotal >= dc; mode = `+10 → ${newTotal}`; }
+  markLegendaryUsed(actor.id, ctx.skill);
+  btn.style.opacity = "0.6";
+  btn.textContent = `✨ Legendary invoked — ${hit ? "HIT" : "still misses"}`;
+
+  // Roll the (locked) damage and surface an Apply button on a hit.
+  let dmgBlock = "";
+  if (hit && ctx.damageFormula) {
+    try {
+      const dmgRoll = new Roll(String(ctx.damageFormula)); await dmgRoll.evaluate();
+      const rolled = Math.max(0, Math.floor(Number(dmgRoll.total) || 0));
+      const dice = (dmgRoll.dice || []).flatMap(d => (d.results || []).map(r => r.result));
+      const tip = dice.length ? `[${dice.join(" · ")}]` : "";
+      const track = FT.DAMAGE_TYPES[ctx.damageType]?.track ?? "integrity";
+      const facTail = (ctx.damageFacultyMod && ctx.damageBaseFormula)
+        ? ` <span style="opacity:0.7;font-size:0.78rem">(${ftEscapeHtml(String(ctx.damageBaseFormula))} ${ctx.damageFacultyMod >= 0 ? "+" : "−"} ${Math.abs(ctx.damageFacultyMod)})</span>`
+        : "";
+      dmgBlock = `<div class="ft-dmg-row">
+        <span class="ft-dmg-label">Damage</span>
+        <span class="ft-dmg-formula"><b style="color:#ffc878">${rolled}</b> <span style="opacity:0.7">(${ftEscapeHtml(String(ctx.damageFormula))}${tip ? ` ${tip}` : ""})</span>${facTail}</span>
+        <span class="ft-dmg-type ${ctx.damageType ?? ""}">${ftCap(ctx.damageType ?? "")}</span>
+        <button class="ft-apply-dmg-btn"
+                data-formula="${rolled}"
+                data-damage-type="${ctx.damageType ?? ""}"
+                data-damage-flavor="${ftEscapeHtml(ctx.damageFlavor ?? "")}"
+                data-track="${track}"
+                data-item-uuid="${ftEscapeHtml(ctx.itemUuid ?? "")}"
+                data-ignore-resists="${ctx.ignoreResists ? "1" : "0"}"
+                data-nonlethal="0">Apply to target${ctx.ignoreResists ? " ⚔ ignores resists" : ""}</button>
+      </div>`;
+    } catch (e) { console.warn("Roll for Initiation | Legendary damage roll failed", e); }
+  }
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll ft-attack-roll" style="border-color:#eb5757">
+      <div class="ft-roll-header">
+        <span class="ft-roll-name" style="color:#eb9beb">✨ Legendary — ${ftCap(ctx.skill)}</span>
+        <span class="ft-defense-pill">vs ${dc}</span>
+      </div>
+      <p style="margin:0.2rem 0;font-size:0.82rem">${ftEscapeHtml(actor.name)} invokes Legendary: <b>${mode}</b> — <b style="color:${hit ? "#6fcf97" : "#eb5757"}">${hit ? "✦ Hit" : "✗ still misses"}</b> <span style="opacity:0.6">(1/scene)</span>.</p>
+      ${dmgBlock}
+    </div>`
+  });
+}
+
 // Phase C — roll a manifestation's structured damage/heal and post a chat
 // card with an Apply button. Bakes the rolled total into data-formula so
 // the apply path applies the same number rather than re-rolling. Heal flows
@@ -3513,6 +3585,17 @@ function _ftFoeSurgeContext(actor) {
     cap:         hasOvr ? Math.floor(capOvr) : tierDefault,
     capOverride: hasOvr ? Math.floor(capOvr) : ""   // blank input → tier default
   };
+}
+
+// Banked-reroll pip context — how many reroll-lowest grants sit on the actor's
+// flags.fourththing.aidBanked (Aid / Rallying Words / aura grants), and who
+// granted them (for the tooltip). Each auto-fires on the holder's next check /
+// save / attack / caster-check and is then consumed. Surfaced on the sheet.
+function _ftBankedRerollContext(actor) {
+  const banked  = Array.isArray(actor?.flags?.fourththing?.aidBanked) ? actor.flags.fourththing.aidBanked : [];
+  const rerolls = banked.filter(b => b?.kind === "reroll-lowest");
+  const sources = rerolls.map(b => b?.from || b?.source || "Aid");
+  return { count: rerolls.length, sources, tooltip: sources.length ? `Banked reroll-lowest from: ${sources.join(", ")}. Auto-fires on your next check / save / attack.` : "" };
 }
 
 // Tier-scaled Surge bank cap. T1=4, T2=6, T3=8, T4=10. Bosses use their own
@@ -13900,8 +13983,32 @@ Hooks.once("init", function () {
       }
     }
 
+    // Legendary (rank 5): on a MISS that Legendary could rescue, surface a
+    // 1/scene "Invoke Legendary" button — auto-succeed if the DC ≤ 20, else +10
+    // to the total. Skill-scoped per scene (the in-memory tracker keys by
+    // actor+skill, reset on scene change). Only strikes carry a DC, so this is
+    // the one roll path where it can self-evaluate.
+    const _legendaryCanSave = (_rankData.mechanic === "legendary") && !success
+      && (Number(defenseValue) <= 20 || (total + 10) >= Number(defenseValue))
+      && !legendaryUsed(actor.id, skill);
+    const _legendaryCtx = _legendaryCanSave ? {
+      actorId:   actor.id,
+      tokenUuid: actor.token?.uuid ?? "",
+      skill, dc: Number(defenseValue), total,
+      damageFormula:     finalDamageFormula || "",   // rolled on invoke (miss didn't pre-roll)
+      damageBaseFormula: damageFormula, damageFacultyMod,
+      damageType, damageFlavor,
+      targetUuid:    target?.uuid ?? "",
+      itemUuid,
+      ignoreResists: !!_surge.sunderingBlow
+    } : null;
+    const _legendaryBtn = _legendaryCanSave
+      ? `<button class="ft-legendary-invoke" data-message-id="" style="margin-top:0.35rem;background:#3a1f3a;color:#eb9beb;border:1px solid #eb5757;padding:0.3rem 0.6rem;border-radius:4px;cursor:pointer">✨ Invoke Legendary (1/scene) — ${Number(defenseValue) <= 20 ? "auto-succeed" : "+10"}</button>`
+      : "";
+
     await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
+      flags: _legendaryCtx ? { fourththing: { legendaryStrikeContext: _legendaryCtx } } : {},
       flavor:  buildAttackChatHTML({
         label, intent, skill, defense, defenseValue,
         attrVal, skillVal, total, success, diceResults,
@@ -13924,7 +14031,7 @@ Hooks.once("init", function () {
           }</p>`
         : "") + (_rankPoolNote
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">${ftEscapeHtml(_rankPoolNote)}</p>`
-        : "") + _ftSurgeBoostBanner(_surge)
+        : "") + _ftSurgeBoostBanner(_surge) + _legendaryBtn
     });
 
     // Consume Surge one-shots — flags clear so the next Strike rolls clean.
@@ -17406,6 +17513,7 @@ Hooks.once("init", function () {
         })(),
         ftFlags:       actor.flags?.fourththing ?? {},
         ftFoeSurge:    _ftFoeSurgeContext(actor),
+        bankedRerolls: _ftBankedRerollContext(actor),
         resources,
         activePools,
         burnBand,
@@ -22869,6 +22977,12 @@ Hooks.on(_chatHook, (message, html) => {
   // resulting multiplier. Context lives on the chat message's flag.
   root.querySelectorAll(".ft-save-prompt-btn").forEach(btn => {
     btn.addEventListener("click", () => _ftHandleSavePromptClick(btn, message));
+  });
+
+  // Legendary (rank 5) invoke — 1/scene on a missed strike. Owner/GM clicks to
+  // auto-succeed (DC ≤ 20) or +10; a hit posts an Apply-damage card.
+  root.querySelectorAll(".ft-legendary-invoke").forEach(btn => {
+    btn.addEventListener("click", () => _ftHandleLegendaryStrikeInvoke(btn, message));
   });
 
   // Misfire conversion buttons (Wyrdlens Tikkun Sight / Pactkeeper Renegotiate).

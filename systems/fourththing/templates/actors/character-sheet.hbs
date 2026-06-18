@@ -449,6 +449,11 @@
             <button type="button" class="ft-res-btn" data-action="ftSurgeSpend" data-tooltip="Spend banked Surge — universal options + your class abilities (Forge-Weld, Rallying Words, etc.)">Spend</button>
           </div>
         </div>
+        {{#if bankedRerolls.count}}
+        <div class="ft-banked-reroll-pip" data-tooltip="{{bankedRerolls.tooltip}}" style="display:inline-flex;align-items:center;gap:.3rem;margin-top:.35rem;padding:.1rem .45rem;font-size:0.74rem;background:rgba(160,212,255,0.12);border:1px solid rgba(160,212,255,0.4);border-radius:10px;color:#a0d4ff">
+          ↑ {{bankedRerolls.count}} banked reroll{{#if (gte bankedRerolls.count 2)}}s{{/if}} <span style="opacity:0.65">— auto-fires next roll</span>
+        </div>
+        {{/if}}
         {{#if ftFoeSurge.isFoe}}
         {{!-- Per-foe Surge gate (2026-05-26). Off by default for NPCs/Monsters;
               GM enables it + tunes the bank cap (Elites get a bigger reservoir). --}}
