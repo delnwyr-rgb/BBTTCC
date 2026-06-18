@@ -28,6 +28,7 @@
           <div style="display:flex;align-items:center;gap:6px;">
             <span class="ft-effect-name" style="font-weight:700;">{{effect.name}}</span>
             {{#if effect.disabled}}<span style="opacity:0.6;font-size:0.75rem;">(disabled)</span>{{/if}}
+            {{#if effect.applyOnUse}}<span style="font-size:0.7rem;padding:1px 6px;background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.5);border-radius:3px;color:#e9d5ff;" title="Cloned onto the user when this item is used">⏱ on use</span>{{/if}}
           </div>
           {{#if effect.changeTags.length}}
           <div class="ft-effect-changes" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:3px;">
@@ -41,6 +42,9 @@
         </div>
         <div class="ft-effect-controls" style="display:flex;gap:4px;">
           {{#if ../../isEditable}}
+            {{#if ../../effectsShowApplyOnUse}}
+            <button type="button" data-action="ftToggleApplyOnUse" data-effect-id="{{effect.id}}" class="ft-res-btn" style="{{#if effect.applyOnUse}}background:rgba(168,85,247,0.25);border-color:rgba(168,85,247,0.6);{{/if}}" title="{{#if effect.applyOnUse}}Applied on use — click to stop cloning this effect onto the user{{else}}Apply on use — clone this effect (with its duration) onto the user when the item is used{{/if}}">⏱</button>
+            {{/if}}
             <button type="button" data-action="ftEditItemEffect" data-effect-id="{{effect.id}}" class="ft-res-btn" title="Edit Effect (opens AE config with key typeahead)">✎</button>
             <button type="button" data-action="ftToggleItemEffect" data-effect-id="{{effect.id}}" class="ft-res-btn" title="{{#if effect.disabled}}Enable{{else}}Disable{{/if}}">{{#if effect.disabled}}▶{{else}}⏸{{/if}}</button>
             <button type="button" data-action="ftDeleteItemEffect" data-effect-id="{{effect.id}}" class="ft-power-delete" title="Delete Effect">✕</button>

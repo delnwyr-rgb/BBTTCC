@@ -138,8 +138,12 @@
 
   // ---- RFI flag block (flags.fourththing.rfi.item) — where LIVE gear/
   // consumable mechanics actually live (heal formulas, charges, cost). ----
-  const TRACK_GOOD_UP = new Set(['integrity','health','hp','guard','armor','vitality','clarity','focus']);
-  const TRACK_GOOD_DOWN = new Set(['stress','noise','corruption','darkness','heat','wound','strain','fatigue']);
+  // Stress is a COMPOSURE pool (higher = better): content authors add=relief
+  // (Calmpact Vial, Communion Tea) and subtract=cost (Surgeon's Pact: "the cost
+  // lands in stress"). So it lives with the good-up tracks — add→Restore, not
+  // "Inflict". Accumulation pools (noise/corruption) stay good-down.
+  const TRACK_GOOD_UP = new Set(['integrity','health','hp','guard','armor','vitality','clarity','focus','stress']);
+  const TRACK_GOOD_DOWN = new Set(['noise','corruption','darkness','heat','wound','strain','fatigue']);
   function renderTrackEffect(e) {
     const amt = (e.formula && String(e.formula).trim()) ? String(e.formula) : (e.delta != null ? String(e.delta) : (e.value != null ? String(e.value) : ''));
     if (!present(amt)) return '';

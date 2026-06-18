@@ -6,9 +6,12 @@
  * engine clones this AE onto the user with its duration — the AE-native half of
  * a Bucket-B on-use effect (the dice/track changes are the procedural half).
  *
- * The demo effect = a 1-hour energy resistance ward (read by ftComputeDefenses
- * Phase C via flags.fourththing.manifestationEffect.resists). Edit CONFIG.EFFECT
- * to author others; durational conditions can instead use (mode 5 = OVERRIDE):
+ * The demo effect = a 1-hour energy resistance ward authored as a NATIVE change
+ * row (key flags.fourththing.grant.resists, mode ADD, value = comma-separated
+ * damage types) so it shows + edits in the AE Changes tab instead of rendering
+ * "empty". ftComputeDefenses reads these change VALUES on the actor. Edit
+ * CONFIG.EFFECT to author others; durational conditions can instead use
+ * (mode 5 = OVERRIDE):
  *   changes: [{ key: "system.conditions.calmed", mode: 5, value: "true" }],
  *   statuses: ["calmed"], duration: { rounds: 3 }
  *
@@ -28,9 +31,9 @@
       name: 'Chill Ward (1 hr)',
       icon: 'icons/svg/frozen.svg',
       duration: { seconds: 3600 },
-      changes: [],
-      // engine-read payloads:
-      manifestationEffect: { resists: ['energy'] },   // ftComputeDefenses Phase C reads this on the actor
+      // Native change row → visible/editable in the AE Changes tab; ftComputeDefenses
+      // reads the change VALUES on the actor (same key as Bucket-A item grants).
+      changes: [{ key: 'flags.fourththing.grant.resists', mode: 2, value: 'energy', priority: 20 }],
     },
   };
   const FLAG_NAME = CONFIG.EFFECT.name;

@@ -9853,12 +9853,31 @@ function ftComputeDefenses(actor, sys) {
   // with `resists` / `immunes` damage-type arrays (see applyManifestationStates).
   // Disabled AEs are skipped. Immunity-shadowing below applies to these merges too.
   if (actor?.effects) {
+    // Same declarative grant key as the gated item loop above — lets a cloned
+    // applyOnUse AE (Bucket B) carry its resist/immune payload as GM-visible,
+    // editable native `changes` rows instead of a hidden flag, so the AE sheet
+    // isn't "empty". Engine consumes the change VALUES directly.
+    const ACTOR_GRANT_RE = /^flags\.fourththing\.grant\.(resists|resistances|immunes|immunities|vulns|vulnerabilities|condImmunes|conditionImmunities)$/;
     for (const ae of actor.effects) {
       if (ae.disabled) continue;
+      // Legacy/flag path — one AE per cast carries manifestationEffect (castManifestation).
       const mfx = ae.flags?.fourththing?.manifestationEffect;
-      if (!mfx) continue;
-      _ftMergeEntries(resistMap, mfx.resists, validTypes);
-      _ftMergeEntries(immuneMap, mfx.immunes, validTypes);
+      if (mfx) {
+        _ftMergeEntries(resistMap, mfx.resists, validTypes);
+        _ftMergeEntries(immuneMap, mfx.immunes, validTypes);
+      }
+      // Native change-row path — applyOnUse clones + any actor AE authored the
+      // Bucket-A way. Merged into the same Set-keyed maps (idempotent overlap).
+      for (const ch of (ae.changes ?? [])) {
+        const m = ACTOR_GRANT_RE.exec(String(ch?.key || ""));
+        if (!m) continue;
+        const vals = String(ch.value ?? "").split(",").map(s => s.trim()).filter(Boolean);
+        const bucket = m[1];
+        if (bucket === "resists" || bucket === "resistances")        _ftMergeEntries(resistMap, vals, validTypes);
+        else if (bucket === "immunes" || bucket === "immunities")    _ftMergeEntries(immuneMap, vals, validTypes);
+        else if (bucket === "vulns" || bucket === "vulnerabilities") _ftMergeEntries(vulnMap, vals, validTypes);
+        else for (const c of vals) { const k = c.toLowerCase(); if (validConds.has(k)) condImmunes.add(k); }
+      }
     }
   }
 
@@ -12410,6 +12429,7 @@ Hooks.once("init", function () {
     "systems/fourththing/templates/partials/inventory-list.hbs",
     "systems/fourththing/templates/partials/powers-list.hbs",
     "systems/fourththing/templates/partials/item-effects.hbs",
+    "systems/fourththing/templates/partials/on-use.hbs",
     "systems/fourththing/templates/items/weapon-sheet.hbs",
   ]);
 
@@ -16710,6 +16730,8 @@ Hooks.once("init", function () {
         ftApplyPathFeatures:FourthThingCharacterSheet._onFtApplyPathFeatures,
         ftToggleEditMode:   FourthThingCharacterSheet._onFtToggleEditMode,
         ftAddEffect:        FourthThingCharacterSheet._onFtAddEffect,
+        ftToggleEffect:     FourthThingCharacterSheet._onFtToggleEffect,
+        ftDeleteEffect:     FourthThingCharacterSheet._onFtDeleteEffect,
         ftDefenseRoll:      FourthThingCharacterSheet._onFtDefenseRoll,
         ftDefenseCycle:     FourthThingCharacterSheet._onFtDefenseCycle,
         ftVulnToggle:       FourthThingCharacterSheet._onFtVulnToggle,
@@ -18694,6 +18716,28 @@ Hooks.once("init", function () {
         flags:   { fourththing: { source: "manual" } }
       }]);
       if (created[0]) created[0].sheet?.render(true);
+    }
+
+    // Enable/Disable a directly-embedded actor Active Effect (States &
+    // Modifiers list). Replaces the old inline onclick whose actor-id path
+    // (../../../actor._id) was a level too deep → resolved empty → silent no-op.
+    static async _onFtToggleEffect(event, target) {
+      const id  = target.closest("[data-effect-id]")?.dataset.effectId;
+      const eff = id ? this.actor.effects.get(id) : null;
+      if (!eff) return ui.notifications?.warn("Effect not found (it may be transferred from an item — toggle it on the source item).");
+      await eff.update({ disabled: !eff.disabled });
+    }
+
+    // Delete a directly-embedded actor Active Effect (with confirm).
+    static async _onFtDeleteEffect(event, target) {
+      const id  = target.closest("[data-effect-id]")?.dataset.effectId;
+      const eff = id ? this.actor.effects.get(id) : null;
+      if (!eff) return ui.notifications?.warn("Effect not found (it may be transferred from an item — remove it at the source item).");
+      const ok = await foundry.applications.api.DialogV2.confirm({
+        window:  { title: "Delete Effect" },
+        content: `<p>Delete <strong>${foundry.utils.escapeHTML(eff.name)}</strong>?</p>`
+      }).catch(() => false);
+      if (ok) await eff.delete();
     }
 
     // ── Bulwark Inevitability merged-pool +/- (Cataclyst L17) ──────────────
@@ -21869,6 +21913,10 @@ Hooks.once("init", function () {
         name:     e.name || "(unnamed effect)",
         icon:     e.icon || e.img || "icons/svg/aura.svg",
         disabled: !!e.disabled,
+        // Bucket B: this AE is a durational template that the use-pipeline clones
+        // onto the user on consume (flags.fourththing.applyOnUse). Surfaced so the
+        // On-Use editor can flag it without opening the AE config.
+        applyOnUse: !!e.flags?.fourththing?.applyOnUse,
         changeTags,
         _primaryKey: changes[0]?.key || ""
       });
@@ -21947,6 +21995,58 @@ Hooks.once("init", function () {
       parts.splice(idx, 1);
       await item.update({ "system.damageParts": parts });
     }
+  }
+
+  // ── Bucket B — On-Use editor (consume.effects[]) ───────────────────────────
+  // The instant half of an on-use item: the dice/track rows that runConsumeEffects
+  // rolls + applies. Lives in flags.fourththing.rfi.item.consume.effects[]. The
+  // durational half (durations, status icons, +stat buffs) is authored as
+  // applyOnUse Active Effects in the Effects section. Mirrors the damageParts
+  // pattern: read the RAW array (object-or-array tolerant) → splice → write back.
+  const FT_ONUSE_OPS = {
+    add:      "Add / Restore / Apply",
+    subtract: "Subtract / Drain",
+    set:      "Set to",
+    setMax:   "Set to Max",
+    remove:   "Remove (condition)"
+  };
+  const FT_ONUSE_KINDS = { track: "Track", condition: "Condition" };
+
+  function _ftReadConsumeEffectsRaw(item) {
+    const raw = foundry.utils.getProperty(item, "flags.fourththing.rfi.item.consume.effects");
+    if (Array.isArray(raw)) return foundry.utils.deepClone(raw);
+    if (raw && typeof raw === "object") return Object.values(foundry.utils.deepClone(raw));
+    return [];
+  }
+  async function _ftOnAddOnUseEffect(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const effects = _ftReadConsumeEffectsRaw(item);
+    effects.push({ kind: "track", track: "integrity", op: "add", formula: "1d6" });
+    await item.update({ "flags.fourththing.rfi.item.consume.effects": effects });
+  }
+  async function _ftOnDeleteOnUseEffect(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const idx = Number(target?.dataset?.idx ?? target?.closest?.("[data-idx]")?.dataset?.idx);
+    const effects = _ftReadConsumeEffectsRaw(item);
+    if (Number.isInteger(idx) && idx >= 0 && idx < effects.length) {
+      effects.splice(idx, 1);
+      await item.update({ "flags.fourththing.rfi.item.consume.effects": effects });
+    }
+  }
+  // Flag/unflag an item Active Effect as an applyOnUse template (cloned onto the
+  // user on consume). applyOnUse templates must be transfer:false so they don't
+  // also passively apply to the holder while sitting in inventory.
+  async function _ftOnToggleApplyOnUse(event, target) {
+    const item = this.item;
+    const id   = _ftEffectIdFrom(target);
+    const eff  = item?.effects?.get(id);
+    if (!eff) return;
+    const next = !eff.flags?.fourththing?.applyOnUse;
+    const update = { "flags.fourththing.applyOnUse": next };
+    if (next) update.transfer = false; // template, not a passive transfer effect
+    await eff.update(update);
   }
 
   // Open this manifestation item in the Manifestation Engine (wizard V2) for a
@@ -22243,13 +22343,41 @@ Hooks.once("init", function () {
       position: { width: 560, height: 620 },
       actions:  { ftEditItemImg: _ftOnEditItemImg,
                   ftAddItemEffect: _ftOnAddItemEffect, ftEditItemEffect: _ftOnEditItemEffect,
-                  ftDeleteItemEffect: _ftOnDeleteItemEffect, ftToggleItemEffect: _ftOnToggleItemEffect },
+                  ftDeleteItemEffect: _ftOnDeleteItemEffect, ftToggleItemEffect: _ftOnToggleItemEffect,
+                  ftAddOnUseEffect: _ftOnAddOnUseEffect, ftDeleteOnUseEffect: _ftOnDeleteOnUseEffect,
+                  ftToggleApplyOnUse: _ftOnToggleApplyOnUse },
       form:     { submitOnChange: true, closeOnSubmit: false }
     };
 
     static PARTS = {
       sheet: { template: "systems/fourththing/templates/items/feature-sheet.hbs" }
     };
+
+    // On-Use rows post as flags.fourththing.rfi.item.consume.effects.<n>.<field>,
+    // which FormDataExtended expands into a numeric-key object. Coerce back to an
+    // array so mergeObject replaces cleanly (same reason as damageParts on the
+    // weapon/power sheets), and strip any stale `delta` from rows that now carry a
+    // `formula` so the formula stays authoritative (_ftResolveAmount prefers delta).
+    _prepareSubmitData(event, form, formData) {
+      const data = super._prepareSubmitData(event, form, formData);
+      const path = "flags.fourththing.rfi.item.consume.effects";
+      const raw  = foundry.utils.getProperty(data, path);
+      if (raw && typeof raw === "object" && !Array.isArray(raw)) {
+        const arr = Object.keys(raw)
+          .sort((a, b) => Number(a) - Number(b))
+          .map(k => raw[k]);
+        foundry.utils.setProperty(data, path, arr);
+      }
+      const eff = foundry.utils.getProperty(data, path);
+      if (Array.isArray(eff)) {
+        for (const r of eff) {
+          if (r && typeof r === "object" && typeof r.formula === "string" && r.formula.trim() !== "") {
+            delete r.delta;
+          }
+        }
+      }
+      return data;
+    }
 
     async _prepareContext(options) {
       const system = foundry.utils.deepClone(this.item.toObject().system ?? {});
@@ -22307,6 +22435,30 @@ Hooks.once("init", function () {
       if (rfi?.bound && rfi.bound !== "free") rfiBadges.push(ftCap(String(rfi.bound)));
       if (rfi?.origin && rfi.origin !== "found") rfiBadges.push(ftCap(String(rfi.origin)));
 
+      // ── Bucket B — On-Use editor context ──────────────────────────────────
+      // The instant track/condition spec (flags.fourththing.rfi.item.consume).
+      // Shown for consumable-ish items (RFI consumables are type "gear") and for
+      // anything that already carries a consume spec or applyOnUse template AE.
+      const consume = rfi?.consume ?? {};
+      const onUseEffects = _ftReadConsumeEffectsRaw(this.item);
+      const itemEffectsCtx = _ftBuildItemEffectsContext(this.item);
+      const hasApplyOnUseAE = (itemEffectsCtx.flat ?? []).some(e => e.applyOnUse);
+      const showOnUse = this.item.type === "gear"
+        || rfi?.frame === "consumable"
+        || (Array.isArray(rfi?.tags) && rfi.tags.includes("consumable"))
+        || onUseEffects.length > 0
+        || hasApplyOnUseAE;
+      const onUseRows = onUseEffects.map((e, i) => ({
+        idx:       i,
+        kind:      e.kind ?? "track",
+        track:     e.track ?? "integrity",
+        op:        e.op ?? "add",
+        // Single amount field — prefer formula; show a flat delta if that's all
+        // the row carries (a plain integer is also a valid Roll formula on save).
+        formula:   e.formula ?? (Number.isFinite(e.delta) ? String(e.delta) : ""),
+        condition: e.condition ?? ""
+      }));
+
       return {
         item:              this.item,
         system,
@@ -22319,9 +22471,22 @@ Hooks.once("init", function () {
         isEditable:        this.isEditable,
         rfiSignature,
         rfiBadges,
-        itemEffects:       _ftBuildItemEffectsContext(this.item).flat,
-        itemEffectGroups:  _ftBuildItemEffectsContext(this.item).groups,
-        effectsSectionOpen:!!game.user?.isGM
+        itemEffects:       itemEffectsCtx.flat,
+        itemEffectGroups:  itemEffectsCtx.groups,
+        effectsSectionOpen:!!game.user?.isGM,
+        // On-Use editor
+        showOnUse,
+        onUseRows,
+        onUseDecrement:    consume?.decrement !== false, // default true (single-use)
+        onUseTrackOptions: Object.keys(FT_TRACK_PATHS),
+        onUseOpOptions:    FT_ONUSE_OPS,
+        onUseKindOptions:  FT_ONUSE_KINDS,
+        onUseConditionOptions: Object.fromEntries(
+          Object.entries(FT.CONDITIONS ?? {}).map(([k, c]) => [k, c?.label ?? k])
+        ),
+        // Surfaces the applyOnUse toggle in the shared item-effects partial
+        // (only on these consumable-ish sheets, not power/weapon manifestations).
+        effectsShowApplyOnUse: showOnUse
       };
     }
   }

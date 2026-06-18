@@ -1055,11 +1055,13 @@
             </div>
             <div class="ft-effect-controls">
               <button type="button" class="ft-res-btn ft-effect-toggle"
-                      onclick="game.actors.get('{{../../../actor._id}}')?.effects?.get('{{effect.id}}')?.update({ disabled: {{#if effect.disabled}}false{{else}}true{{/if}} })">
+                      data-action="ftToggleEffect" data-effect-id="{{effect.id}}"
+                      title="{{#if effect.disabled}}Enable{{else}}Disable{{/if}} this effect">
                 {{#if effect.disabled}}Enable{{else}}Disable{{/if}}
               </button>
               <button type="button" class="ft-power-delete"
-                      onclick="game.actors.get('{{../../../actor._id}}')?.effects?.get('{{effect.id}}')?.delete()">✕</button>
+                      data-action="ftDeleteEffect" data-effect-id="{{effect.id}}"
+                      title="Delete this effect">✕</button>
             </div>
           </div>
           {{/each}}

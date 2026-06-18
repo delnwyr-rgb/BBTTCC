@@ -1,0 +1,72 @@
+{{!-- On-Use editor for fourththing consumable/gear item sheets (Bucket B).
+     Edits the INSTANT half of an on-use item: flags.fourththing.rfi.item.consume.effects[]
+     — track deltas (heal 4d6+5, drain stress) and condition toggles that
+     runConsumeEffects rolls + applies when the item's Use button is clicked.
+     The DURATIONAL half (timed buffs, status icons, +stat wards) is authored as
+     "apply on use" Active Effects in the Active Effects section below — flag an AE
+     with the ⏱ button and it gets cloned onto the user (with its duration) on use.
+     Wired to action handlers in module.js: ftAddOnUseEffect, ftDeleteOnUseEffect. --}}
+
+<details class="ft-item-onuse-section" {{#if effectsSectionOpen}}open{{/if}}>
+  <summary class="ft-item-effects-summary">
+    <span class="ft-prev-label" style="font-weight:700;">On Use ({{onUseRows.length}})</span>
+    <span class="ft-prev-align-note" style="font-weight:400;opacity:0.75;">Instant effects rolled + applied when this item is used. Durational effects → flag an Active Effect ⏱ below.</span>
+  </summary>
+
+  {{#if isEditable}}
+  <div class="ft-section-header" style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;gap:12px;">
+    <label class="ft-onuse-decrement" style="display:flex;align-items:center;gap:6px;font-size:0.8rem;opacity:0.85;" title="Spend one charge per use and delete the item at zero.">
+      <input type="checkbox" name="flags.fourththing.rfi.item.consume.decrement" {{#if onUseDecrement}}checked{{/if}}/>
+      Consume on use (−1 charge)
+    </label>
+    <button type="button" data-action="ftAddOnUseEffect" class="ft-add-btn">+ Add On-Use Effect</button>
+  </div>
+  {{/if}}
+
+  {{#if onUseRows.length}}
+  <div class="ft-onuse-list" style="display:flex;flex-direction:column;gap:4px;">
+    {{#each onUseRows as |row|}}
+    <div class="ft-onuse-row" data-idx="{{row.idx}}" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 8px;border:1px solid rgba(55,65,81,0.6);border-radius:8px;background:rgba(15,23,42,0.55);">
+      <select name="flags.fourththing.rfi.item.consume.effects.{{row.idx}}.kind" {{#unless ../isEditable}}disabled{{/unless}} title="Effect kind">
+        {{#each ../onUseKindOptions as |label key|}}
+        <option value="{{key}}" {{#if (eq row.kind key)}}selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+
+      <select name="flags.fourththing.rfi.item.consume.effects.{{row.idx}}.op" {{#unless ../isEditable}}disabled{{/unless}} title="Operation">
+        {{#each ../onUseOpOptions as |label key|}}
+        <option value="{{key}}" {{#if (eq row.op key)}}selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+
+      {{#if (eq row.kind "condition")}}
+      <select name="flags.fourththing.rfi.item.consume.effects.{{row.idx}}.condition" {{#unless ../isEditable}}disabled{{/unless}} title="Condition" style="flex:1;min-width:140px;">
+        {{#each ../onUseConditionOptions as |label key|}}
+        <option value="{{key}}" {{#if (eq row.condition key)}}selected{{/if}}>{{label}}</option>
+        {{/each}}
+      </select>
+      {{else}}
+      <select name="flags.fourththing.rfi.item.consume.effects.{{row.idx}}.track" {{#unless ../isEditable}}disabled{{/unless}} title="Track">
+        {{#each ../onUseTrackOptions as |track|}}
+        <option value="{{track}}" {{#if (eq row.track track)}}selected{{/if}}>{{track}}</option>
+        {{/each}}
+      </select>
+      <input type="text" name="flags.fourththing.rfi.item.consume.effects.{{row.idx}}.formula" value="{{row.formula}}" placeholder="4d6+5 or 1" {{#unless ../isEditable}}readonly{{/unless}} title="Dice formula or flat amount" style="flex:1;min-width:90px;"/>
+      {{/if}}
+
+      {{#if ../isEditable}}
+      <button type="button" data-action="ftDeleteOnUseEffect" data-idx="{{row.idx}}" class="ft-power-delete" title="Remove on-use effect">✕</button>
+      {{/if}}
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+  <div class="ft-empty-state" style="padding:8px;font-size:0.85rem;opacity:0.7;">
+    {{#if isEditable}}
+      No on-use effects. Click <strong>+ Add On-Use Effect</strong> to roll a heal / drain a track / toggle a condition when this item is used. For a <em>timed</em> effect (e.g. resist fire for 1 minute), add an Active Effect below and flag it ⏱ Apply on use.
+    {{else}}
+      No on-use effects.
+    {{/if}}
+  </div>
+  {{/if}}
+</details>
