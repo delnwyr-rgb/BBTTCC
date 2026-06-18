@@ -72,8 +72,12 @@
     return item?.type === "power";
   }
 
+  // Players always see their HUD; GMs now do too, but theirs follows the
+  // controlled token (see getSteward / the controlToken hook) Token-Action-HUD
+  // style, so a GM can drive any selected token — including NPC/monster/rig —
+  // without opening a second window.
   function shouldShow() {
-    return !!game.user && !game.user.isGM;
+    return !!game.user;
   }
 
   // ── Actor resolution ────────────────────────────────────────────────────
@@ -88,11 +92,31 @@
     } catch { return false; }
   }
 
+  // GMs: the HUD follows whatever token the GM controls — ANY actor type
+  // (character, npc/monster, rig), Token-Action-HUD style — so a GM can drive a
+  // selected token without opening its sheet. _gmActorId remembers the last
+  // controlled token so a manually-reopened tray still has a subject after the
+  // GM deselects; falls back to any assigned character.
+  let _gmActorId = null;
+  function getGmHudActor() {
+    const ctrl = canvas?.tokens?.controlled ?? [];
+    if (ctrl.length) {
+      const a = ctrl[ctrl.length - 1]?.actor; // most-recently controlled
+      if (a) { _gmActorId = a.id; return a; }
+    }
+    if (_gmActorId) {
+      const a = game.actors?.get(_gmActorId);
+      if (a) return a;
+    }
+    return game.user?.character ?? null;
+  }
+
   // The player's STEWARD — their assigned character if it's a PC (never a rig
   // or faction), else a controlled non-rig PC token they own, else the first
   // owned character actor. Deliberately decoupled from the controlled token so
   // a boarded player (controlling the rig) still drives steward abilities.
   function getSteward() {
+    if (game.user?.isGM) return getGmHudActor();
     const isPC = (a) => a && a.type === "character" && !isFactionActor(a);
     const assigned = game.user?.character ?? null;
     if (isPC(assigned)) return assigned;
@@ -622,7 +646,10 @@
     tray.className = "bbttcc-player-hud-tray";
 
     if (!steward) {
-      tray.innerHTML = `<div class="bbttcc-player-hud-empty">No steward found — assign a character in User Configuration.</div>`;
+      const msg = game.user?.isGM
+        ? "Select a token on the canvas to drive it from the HUD."
+        : "No steward found — assign a character in User Configuration.";
+      tray.innerHTML = `<div class="bbttcc-player-hud-empty">${msg}</div>`;
       host.appendChild(tray);
       return;
     }
@@ -820,9 +847,29 @@
     return !!rig && actor.id === rig.id;
   }
 
+  // GMs: follow the controlled token Token-Action-HUD style — auto-open/refresh
+  // the abilities tray for whatever is selected, and hide it when nothing is.
+  // Debounced so the release→control pair fired when switching tokens (which
+  // momentarily leaves zero controlled) doesn't flicker the tray closed/open.
+  const gmSyncFromControl = foundry.utils.debounce(() => {
+    const host = document.getElementById(HUD_ID);
+    if (!host) return;
+    const ctrl = canvas?.tokens?.controlled ?? [];
+    if (ctrl.length) {
+      _gmActorId = ctrl[ctrl.length - 1]?.actor?.id ?? _gmActorId;
+      _groupCache.actorId = null; // new subject — reclassify on render
+      renderTray(host);           // auto-appear + follow the selection
+    } else {
+      document.getElementById(TRAY_ID)?.remove(); // nothing selected — hide
+    }
+  }, 30);
+
   Hooks.once("ready", buildHud);
   Hooks.on("canvasReady", () => { if (shouldShow()) { buildHud(); refreshTrayIfOpen(); refreshTravelStackPill(); } });
-  Hooks.on("controlToken", () => refreshTrayIfOpen());
+  Hooks.on("controlToken", () => {
+    if (game.user?.isGM) return gmSyncFromControl();
+    refreshTrayIfOpen();
+  });
   Hooks.on("updateActor", (actor, changes) => {
     if (affectsSteward(actor)) refreshTrayIfOpen();
     try {
