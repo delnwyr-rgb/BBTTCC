@@ -91,7 +91,7 @@
     <!-- Top DC block with breakdown (GM only) -->
     {{#if currentBank.topDC}}
     <div class="flexrow" style="gap:.75rem; align-items:center; opacity:.9;">
-      <small class="flex0">
+      <small class="flex1" style="min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
         <b>Base DC:</b> {{default currentBank.topDC.base 0}}
         {{#if currentBank.topDC.defProjBonus}} • <b>Defender staged bonus:</b> +{{currentBank.topDC.defProjBonus}}{{/if}}
         {{#if currentBank.topDC.diff}} • <b>Diff:</b> +{{currentBank.topDC.diff}}{{/if}}
@@ -101,9 +101,6 @@
           • <b>Projected DC:</b>
             <span {{#if currentBank.topDC.breakdown}}title="{{currentBank.topDC.breakdown}}"{{/if}} style="font-weight:700;">{{currentBank.topDC.projected}}</span>
             {{#if currentBank.topDC.breakdown}}<span class="bbttcc-tip" data-tip="{{currentBank.topDC.breakdown}}" aria-label="DC breakdown">ⓘ</span>{{/if}}
-        {{/if}}
-        {{#if currentBank.topDC.breakdown}}
-          <br/><em style="opacity:.8;">{{currentBank.topDC.breakdown}}</em>
         {{/if}}
       </small>
     </div>
@@ -398,20 +395,6 @@
                     </div>
                   </div>
 
-                  <div class="flex1 card" style="padding:.5rem;">
-                    <h4 style="margin:0 0 .25rem 0;">{{#if @root.isGM}}Round Details{{else}}Details{{/if}}</h4>
-                    <p style="margin:.25rem 0;"><b>Activity:</b> {{r.activityLabel}} • <b>Primary Key:</b> {{upper r.view.cat}}</p>
-                    <p style="margin:.25rem 0;"><b>Your Faction:</b> {{r.attackerName}}</p>
-                    <p style="margin:.25rem 0;"><b>Target:</b> {{r.targetName}}</p>
-                    {{#if @root.isGM}}
-                      <p style="margin:.25rem 0;"><b>Base Bonus:</b> +{{r.attBonus}} • <b>Base DC:</b> {{r.DC}}</p>
-                      <p style="margin:.25rem 0;"><i>Attack bonus on commit</i> will be <b>+ceil(attacker_staged/2)</b>.</p>
-                      <p style="margin:.25rem 0;"><i>DC increase on commit</i> will be <b>+ceil(defender_staged/2)</b>.</p>
-                    {{else}}
-                      <p style="margin:.25rem 0;"><i>Your staged spend</i> informs your side’s commitment.</p>
-                      <p style="margin:.25rem 0;"><i>Enemy info</i> and final outcome are GM-only.</p>
-                    {{/if}}
-                  </div>
                 </div>
               </td>
             </tr>
