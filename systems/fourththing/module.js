@@ -1543,6 +1543,11 @@ function ftManifestationDefaults(kind = "power") {
     gmCalibration: "",
     mechanicalHook: "",
     signature: "",
+    // When true, this manifestation's tier auto-levels to match the steward's
+    // tier on tier-up (ft-progression levelSignatureManifestations). Authored
+    // damage/effects are untouched — tier alone raises DC / Clarity / reach /
+    // misfire scaling. Never lowers a manually higher-tier manifestation.
+    isSignature: false,
     thirdThing: "",
     opCost: { pool: "", value: 0 },
     // Phase A — structured mechanical hooks. Phase B will surface them; Phase
@@ -3636,17 +3641,18 @@ function _ftReadSurgeOneShots(actor, { context = "strike" } = {}) {
 function _ftApplySurgeRollMods(formula, shots) {
   let f = formula;
   if (shots.cinderwake) {
-    // Replace the FIRST 2d10 die expression with x>=8 threshold.
-    f = f.replace(/2d10x(?:10|>=\d+)/, "2d10x>=8");
+    // Drop the explode threshold to x>=8 on the base pool (any Nd10 — the rank
+    // pool may roll 3d10/4d10, not just 2d10).
+    f = f.replace(/(\d+)d10x(?:10|>=\d+)/, (_m, n) => `${n}d10x>=8`);
   }
   if (shots.wrathCascade) {
     // Match whatever threshold ended up in the base term and mirror it onto
     // the bonus dice (so the two pools have consistent explode behavior).
-    const m = f.match(/2d10x(10|>=\d+)/);
-    const thresh = m ? m[1] : "10";
-    const bonusDie = `2d10x${thresh.includes(">") ? thresh : thresh}`;
+    const m = f.match(/(\d+)d10x(10|>=\d+)/);
+    const thresh = m ? m[2] : "10";
+    const bonusDie = `2d10x${thresh}`;
     // Insert immediately after the first matched die term.
-    f = f.replace(/(2d10x(?:10|>=\d+))/, `$1 + ${bonusDie}`);
+    f = f.replace(/(\d+d10x(?:10|>=\d+))/, `$1 + ${bonusDie}`);
   }
   if (shots.bonusDie) {
     // Narrative Bonus Die — one extra exploding d10 appended to the roll.
@@ -8110,6 +8116,7 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       gmCalibration: values.gmCalibration,
       mechanicalHook: values.mechanicalHook,
       signature: values.signature,
+      isSignature: !!values.isSignature,
       thirdThing: values.thirdThing,
       // Wizard V2 plumbing — area / activation / resolution / appliedStates
       // authored in the stepwise wizard pass through `values` as nested
@@ -8193,6 +8200,43 @@ function createManifestationItemData(actor, kind = "power", values = {}) {
       manifestation
     }
   };
+}
+
+// ── Item stacking (2026-06-18) ──────────────────────────────────────────────
+// Two plain "gear" items of the same kind merge into one ×N line on add instead
+// of creating a second inventory row. Identity = type + name + RFI tier / frame /
+// origin, read from stored flags via getProperty so a live Document and fresh
+// drop-data compare equal. Scope: type "gear" only — loot and consumables — so
+// weapons, armor, and authored manifestations stay as individual lines. The
+// inventory templates already render the ×N badge off system.quantity.
+function _ftStackIdentity(obj) {
+  const r = foundry.utils.getProperty(obj, "flags.fourththing.rfi.item") ?? {};
+  return [obj?.type, obj?.name, r.tier ?? "", r.frame ?? "", r.origin ?? ""].join(" ");
+}
+function _ftFindStackTarget(actor, itemData) {
+  if (itemData?.type !== "gear") return null;
+  if (RfiItems.is.isManifestation(itemData)) return null;
+  const want = _ftStackIdentity(itemData);
+  for (const existing of actor?.items ?? []) {
+    if (existing.type !== "gear") continue;
+    if (RfiItems.is.isManifestation(existing)) continue;
+    if (_ftStackIdentity(existing) === want) return existing;
+  }
+  return null;
+}
+async function ftStackOnto(target, itemData) {
+  const curQty = Math.max(1, Number(target.system?.quantity) || 1);
+  const addQty = Math.max(1, Number(itemData?.system?.quantity) || 1);
+  await target.update({ "system.quantity": curQty + addQty });
+  ui.notifications?.info(`Stacked ${itemData?.name ?? target.name} — now ×${curQty + addQty}.`);
+  return [target];
+}
+// Add itemData to an actor, stacking onto an identical gear line when one
+// exists; otherwise create it. Returns the affected item Document(s).
+async function ftStackOrCreateItem(actor, itemData) {
+  const target = _ftFindStackTarget(actor, itemData);
+  if (target) return ftStackOnto(target, itemData);
+  return actor.createEmbeddedDocuments("Item", [itemData]);
 }
 
 async function openManifestationStarterDialog(actor) {
@@ -8448,6 +8492,10 @@ function _ftWizV2RenderEffectPower(state) {
   ` : "";
   return `
     <p class="ft-wiz-v2-coach">Does the working harm, heal, or transform without measurable damage? Configure the structured damage/heal roll the cast path will roll on success — and which conditions land alongside it.</p>
+    <div class="ft-wiz-v2-subhead">Casting Channel</div>
+    <div class="ft-cast-grid">
+      <div class="ft-cast-field"><label data-tooltip="Which faculty powers this working — Body, Mind, or Soul. Drives the caster's alignment bonus and the contested-cast attribute. Always editable later on the item sheet.">Channel <span class="ft-wiz-v2-help-glyph">ⓘ</span></label>${_ftWizV2Sel("channel", FT.CHANNELS, state.channel ?? "soul")}</div>
+    </div>
     <div class="ft-wiz-v2-subhead">Damage / Heal Roll</div>
     <div class="ft-cast-grid">
       <div class="ft-cast-field"><label>Operation</label>${_ftWizV2Sel("damageRoll.op", { none: "None (no roll)", damage: "Damage", heal: "Heal" }, dr.op ?? "none")}</div>
@@ -8926,6 +8974,7 @@ function _ftWizV2RenderSoulAndReview(state, { actor }) {
         </div>
       </div>
       <div class="ft-cast-field ft-cast-span-2"><label>Signature</label>${_ftWizV2Txt("signature", state.signature, "What tells people this could only have come from you?")}</div>
+      <label class="ft-cast-field ft-cast-span-2" style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">${_ftWizV2Chk("isSignature", state.isSignature)}<span>Signature manifestation <small style="opacity:0.6">— auto-levels its tier in tandem with you whenever you tier up</small></span></label>
       <div class="ft-cast-field ft-cast-span-2"><label>Third Thing</label>${_ftWizV2Txt("thirdThing", state.thirdThing, "The one eerie detail that makes this more than a stock effect.")}</div>
       <div class="ft-cast-field ft-cast-span-2"><label>Path / Doctrine / Resonance</label>${_ftWizV2Txt("pathResonance", state.pathResonance, "What belief, oath, appetite, wound, or philosophy gives this its logic?")}</div>
     </div>
@@ -9200,7 +9249,7 @@ function _ftWizV2OverlayFromItem(state, item, kind) {
   const copyMf = ["tier","concept","form","function","stability","interactionModel",
     "costType","costValue","costText","duration","durationText","triggerText","scale",
     "targetText","rangeAreaText","maintenanceCost","maintenanceKey","riskText","pathResonance",
-    "fictionalPermission","gmCalibration","mechanicalHook","signature","thirdThing"];
+    "fictionalPermission","gmCalibration","mechanicalHook","signature","isSignature","thirdThing"];
   for (const k of copyMf) if (mf[k] !== undefined) state[k] = mf[k];
   if (Number(mf.rangeFt)) state.rangeFt = Number(mf.rangeFt);
   if (mf.area)       state.area = foundry.utils.deepClone(mf.area);
@@ -13610,52 +13659,96 @@ Hooks.once("init", function () {
 
     const flankMod  = Math.max(0, Number(flankBonus) || 0);
     const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus - echoPenalty;
-    // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; two
-    // base 10s also flag "Act Again" so the sheet exposes the bonus action.
-    // Imposed disadvantage forces 3d10kl2 (no explosions), shadowing surge dice mods.
-    // Playtest #5 — resolve dialog-chosen adv/dis against effect-forced disadvantage
-    // (Aurablade Fury). Disadvantage keeps the no-explosion 3d10kl2 shape (and skips
-    // surge dice mods, as before); advantage/normal still take surge boosts.
-    const _attkMode   = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack });
-    const baseFormula = `${_ftCoreDice(_attkMode, actor)} + ${total_mod}`;
-    // Surge dice-mods (wrath-cascade/cinderwake add exploding dice) only ride the
-    // normal 2d10x10 base — a modified adv/dis roll keeps its clean 3-keep-2 shape.
-    const formula     = (_attkMode !== "normal") ? baseFormula : _ftApplySurgeRollMods(baseFormula, _surge);
+    // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
+    // Strikes roll the SAME rank-aware pool as an Aptitude check so a weapon hit
+    // benefits identically. The rank's flat +N is already in total_mod; here the
+    // rank shapes the DICE: Master/Legendary add a die and keep the best 2 — a
+    // genuine, visible 3d10 pool that explodes and banks Surge. Advantage /
+    // disadvantage each add a die too (keep best / worst 2). Explosions follow
+    // the existing rule: only a normal-mode roll for a Surge-enabled actor
+    // explodes; advantage/disadvantage stay clean (no surge), as before.
+    const _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack });
+    const _rankClamped = Math.max(0, Math.min(5, Number(skillVal) || 0));
+    const _rankData    = SKILL_RANK_DATA[_rankClamped] ?? SKILL_RANK_DATA[0];
+    const _masterPool  = _rankClamped >= 4;                       // Master / Legendary
+    let   _rankPoolNote = "";
+
+    const surgeAllowed = _ftSurgeAllowed(actor);
+    const explodes     = (_attkMode === "normal") && surgeAllowed;
+    const baseN        = 2 + (_attkMode !== "normal" ? 1 : 0) + (_masterPool ? 1 : 0);
+    const dropCount    = baseN - 2;
+    // Disadvantage keeps the WORST 2 — unless Master/Legendary, whose pool always
+    // keeps the BEST 2 (the rank layers on top, mitigating disadvantage).
+    const keepBest     = !(_attkMode === "disadvantage" && !_masterPool);
+
+    const baseFormula  = `${baseN}d10${explodes ? "x10" : ""} + ${total_mod}`;
+    // Surge dice-mods (cinderwake / wrath-cascade / bonus-die) ride only a normal
+    // roll; the helper now matches any Nd10 base, so they compose with the pool.
+    const formula      = (_attkMode === "normal") ? _ftApplySurgeRollMods(baseFormula, _surge) : baseFormula;
 
     const roll  = new Roll(formula);
     await roll.evaluate();
     const rawTotal      = roll.total;
     const allDieResults = roll.dice[0]?.results ?? [];
-    // Dice parsing is mode-aware (playtest #5). Normal (2d10x10): the first two
-    // entries are the base dice and the rest are explosions. Advantage/Disadvantage
-    // (3d10…kh2/kl2): keep the two *active* (kept) dice as the base; the advantage
-    // x10 explosions are the kept dice's own exploded results. Disadvantage doesn't
-    // explode, so no surge banking — matching the prior forced-disadvantage feel.
-    let diceResults, explosionDice, baseDice;
-    if (_attkMode === "normal") {
-      diceResults   = allDieResults.slice(0, 2);
-      explosionDice = allDieResults.slice(2).map(r => r.result);
-    } else {
-      const active  = allDieResults.filter(r => r.active && !r.discarded);
-      diceResults   = active.slice(0, 2);
-      // Any active dice beyond the kept two are explosion products (advantage only).
-      explosionDice = active.slice(2).map(r => r.result);
+    // Base dice are the first `baseN` results (Foundry rolls the initial pool
+    // before appending explosions). Explosions (normal mode) follow them.
+    const baseResults   = allDieResults.slice(0, baseN);
+    let   explosionDice = explodes ? allDieResults.slice(baseN).map(r => r.result) : [];
+    const explosionSum0 = explosionDice.reduce((s, v) => s + v, 0);
+    // The slice of the total that ISN'T the base dice or their explosions —
+    // surge-mod extra dice + the flat mod. Constant through the keep/drop, so the
+    // final total is keptBaseSum + explosions + constPart.
+    const origBaseSum   = baseResults.reduce((s, r) => s + (Number(r.result) || 0), 0);
+    const constPart     = rawTotal - origBaseSum - explosionSum0;
+
+    // Proficient (reroll-lowest) + Shape-B / Aid / Snap-Strike reroll grants.
+    const rerollGrants = collectRerolls(actor, { context: "attack", skill, attribute: intent });
+    if (_rankData.mechanic === "reroll_low") rerollGrants.push({ sourceItemName: `${ftCap(skill)} · Proficient`, mode: "reroll-lowest" });
+    if (_surge.snapStrike) rerollGrants.push({ sourceItemName: "Surge: Snap Strike", mode: "reroll-lowest" });
+    // applyRerollGrants mutates the lowest base die in place. Its own _total
+    // patch assumes a 2-die base; we recompute the pool total below, overriding it.
+    const rerollResult = await applyRerollGrants(roll, rerollGrants, total_mod);
+    await consumeAnnotationReroll(actor, rerollResult.applied);
+    await consumeAidReroll(actor, rerollResult.applied);
+
+    // Expert (floor-4): no base die can show below 4. Floor the whole pool before
+    // the keep so a floored die can survive the drop (matches the Aptitude roll).
+    if (_rankData.mechanic === "floor_4") {
+      for (const r of baseResults) { const v = Number(r.result) || 0; if (v < 4) r.result = 4; }
     }
-    const explosions    = explosionDice.length;
-    baseDice            = diceResults.map(r => r.result);
-    const doubleTen     = baseDice.filter(v => v === 10).length >= 2;
+
+    // Keep best/worst 2 of the pool — drop `dropCount` dice by value (post reroll
+    // + floor). Master/Legendary therefore resolve as a real 3d10-keep-best-2.
+    const baseValsFinal = baseResults.map(r => Number(r.result) || 0);
+    const order   = baseValsFinal.map((v, i) => ({ v, i })).sort((a, b) => a.v - b.v); // ascending
+    const dropIdx = new Set();
+    for (let k = 0; k < dropCount; k++) {
+      const pick = keepBest ? order[k] : order[order.length - 1 - k]; // drop lowest (keepBest) / highest
+      if (pick) dropIdx.add(pick.i);
+    }
+    const keptVals    = baseValsFinal.filter((_v, i) => !dropIdx.has(i));
+    const droppedVals = baseValsFinal.filter((_v, i) => dropIdx.has(i));
+    const keptSum     = keptVals.reduce((s, v) => s + v, 0);
+    // Final total = kept base dice + their explosions + the constant part. Exact:
+    // a dropped die is the lowest (keepBest) and < 10, so it carried no explosion.
+    try { roll._total = keptSum + explosionSum0 + constPart; } catch (_e) {}
+
+    // Card shows EVERY base die rolled (so the 3rd die is visible); triggers /
+    // Polarity use only the dice that count.
+    const diceResults = baseResults;
+    const baseDice    = keptVals;
+    const explosions  = explosionDice.length;
+    const doubleTen   = keptVals.filter(v => v === 10).length >= 2;
 
     if (explosions > 0) await _ftBankSurge(actor, explosions);
     if (doubleTen) await actor.setFlag("fourththing", "bonusActionAvailable", true);
 
-    // Shape B reroll grants — context "attack" narrowed by skill/attribute.
-    const rerollGrants = collectRerolls(actor, { context: "attack", skill, attribute: intent });
-    if (_surge.snapStrike) {
-      rerollGrants.push({ sourceItemName: "Surge: Snap Strike", mode: "reroll-lowest" });
+    if (dropCount > 0) {
+      const poolLabel = _masterPool
+        ? (_rankData.mechanic === "legendary" ? "Legendary" : "Master")
+        : (_attkMode === "advantage" ? "Advantage" : "Disadvantage");
+      _rankPoolNote = `${poolLabel}: ${baseN}d10 keep ${keepBest ? "best 2" : "worst 2"}${droppedVals.length ? ` (dropped ${droppedVals.join(", ")})` : ""}`;
     }
-    const rerollResult = await applyRerollGrants(roll, rerollGrants, total_mod);
-    await consumeAnnotationReroll(actor, rerollResult.applied);
-    await consumeAidReroll(actor, rerollResult.applied);
 
     // Restraint pass — bank pull-the-punch, then consume any prior banked die.
     let pulled = 0;
@@ -13829,6 +13922,8 @@ Hooks.once("init", function () {
         ? `<p style="font-size:0.78rem;color:#a0d4ff;margin:0.2rem 0 0">Reroll: ${
             rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`).join(", ")
           }</p>`
+        : "") + (_rankPoolNote
+        ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">${ftEscapeHtml(_rankPoolNote)}</p>`
         : "") + _ftSurgeBoostBanner(_surge)
     });
 
@@ -13844,9 +13939,10 @@ Hooks.once("init", function () {
 
       // Phase C trigger: on-attack-hit. Payload includes:
       //   tags  — for predicate.tag matching (skill, defense, intent)
-      //   maxDie — for predicate.dieMin (e.g. Polarity Mastery's "any die ≥ 8")
-      const baseDieValues = (roll.terms?.[0]?.results ?? []).slice(0, 2).map(r => r.result);
-      const maxDie = Math.max(0, ...baseDieValues);
+      //   maxDie — for predicate.dieMin (e.g. Polarity Mastery's "any die ≥ 8").
+      // Use the computed kept base dice so rank-pool swaps / floor / reroll are
+      // reflected (rather than re-reading the raw roll term).
+      const maxDie = Math.max(0, ...(Array.isArray(baseDice) ? baseDice : []));
       const tags = [skill, defense, intent, damageType].filter(Boolean);
       await fireTriggers(actor, "on-attack-hit", { tags, maxDie, scope: "self" });
 
@@ -18435,9 +18531,10 @@ Hooks.once("init", function () {
       openIdentityChooser(this.actor, this, identityType);
     }
 
-    // Stub for Bad Eden advancement system compatibility
+    // Stub for Bad Eden advancement system compatibility. Identical loot /
+    // consumable gear stacks onto an existing ×N line (ftStackOrCreateItem).
     async _onDropSingleItem(itemData) {
-      return this.actor.createEmbeddedDocuments("Item", [itemData]);
+      return ftStackOrCreateItem(this.actor, itemData);
     }
 
     // ── Drag-drop handlers ─────────────────────────────────────────────────────
@@ -19265,6 +19362,11 @@ Hooks.once("init", function () {
         if (item.parent?.id === this.actor.id) return;
 
         const itemData = item.toObject();
+        // Identical loot / consumable gear stacks onto an existing ×N line.
+        // Stacked gear carries no advancement grants, so return before the
+        // class/ancestry grant passes below.
+        const stackTarget = _ftFindStackTarget(this.actor, itemData);
+        if (stackTarget) return ftStackOnto(stackTarget, itemData);
         const created  = await this.actor.createEmbeddedDocuments("Item", [itemData]);
         const droppedItem = created?.[0];
         if (!droppedItem) return created;

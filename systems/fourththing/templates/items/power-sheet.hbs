@@ -226,6 +226,13 @@
       </div>
 
       <div class="ft-field-full">
+        <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer">
+          <input type="checkbox" name="system.manifestation.isSignature" {{#if system.manifestation.isSignature}}checked{{/if}}/>
+          <span>Signature manifestation <small style="opacity:0.6">— auto-levels its tier in tandem with you when you tier up</small></span>
+        </label>
+      </div>
+
+      <div class="ft-field-full">
         <label>Third Thing</label>
         <input type="text" name="system.manifestation.thirdThing" value="{{system.manifestation.thirdThing}}" placeholder="The one eerie detail that makes this more than a stock effect."/>
       </div>

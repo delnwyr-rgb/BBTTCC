@@ -1084,6 +1084,31 @@ export async function applyPathFeatures(actor) {
 
 // ─── Level up ─────────────────────────────────────────────────────────────────
 
+// Signature manifestations (system.manifestation.isSignature === true) auto-level
+// their tier in tandem with the steward. Called on a tier-up: bump any signature
+// manifestation whose tier trails the steward's new tier up to match. Never
+// lowers a manually higher-tier item, never touches authored damage/effects —
+// tier alone raises DC / Clarity cost / reach / misfire scaling. Returns the
+// names of bumped items so the level-up chat note can report them.
+export async function levelSignatureManifestations(actor, newTier) {
+  const target = Math.max(1, Math.min(4, Number(newTier) || 1));
+  const updates = [];
+  const bumped  = [];
+  for (const item of actor?.items ?? []) {
+    const mf = item.system?.manifestation;
+    if (!mf || mf.isSignature !== true) continue;
+    const cur = Math.max(1, Math.min(4, Number(mf.tier) || 1));
+    if (cur >= target) continue;
+    updates.push({ _id: item.id, "system.manifestation.tier": target });
+    bumped.push(item.name);
+  }
+  if (updates.length) {
+    try { await actor.updateEmbeddedDocuments("Item", updates); }
+    catch (e) { console.warn("ft-progression: signature manifestation tier-up failed", e); }
+  }
+  return bumped;
+}
+
 export async function levelUp(actor) {
   const rawSys  = actor.system?.system ?? actor.system;
   const current = rawSys?.details?.level ?? 1;
@@ -1247,6 +1272,14 @@ export async function levelUp(actor) {
               console.error("ft-progression: post-levelUp auto-grant failed", e);
             }
 
+            // Signature manifestations climb in tier with their steward (phase 1
+            // — tier only). Only on an actual tier-up, not on every level.
+            let signatureLeveled = [];
+            if (tierUp) {
+              try { signatureLeveled = await levelSignatureManifestations(actor, newTier); }
+              catch (e) { console.error("ft-progression: signature manifestation tier-up failed", e); }
+            }
+
             ChatMessage.create({
               speaker: ChatMessage.getSpeaker({ actor }),
               content: `<div class="fourththing-roll">
@@ -1261,11 +1294,12 @@ export async function levelUp(actor) {
                   ${grantedTechName ? `<br/>Technique gained: <b>${grantedTechName}</b>.` : ""}
                   ${autoGranted.imported.length ? `<br/>✦ New principles: <b>${autoGranted.imported.join(", ")}</b>.` : ""}
                   ${autoGranted.grantedSkills.length ? `<br/>✦ Aptitude rank 1: <b>${autoGranted.grantedSkills.join(", ")}</b>.` : ""}
+                  ${signatureLeveled.length ? `<br/>✦ Signature manifestations advanced to <b>Tier ${newTier}</b>: ${signatureLeveled.join(", ")}.` : ""}
                 </p>
               </div>`
             });
 
-            resolve({ attrKey, newVal, newLevel, newTier, tierUp, gainSkillPts, grantedTechName, autoGranted });
+            resolve({ attrKey, newVal, newLevel, newTier, tierUp, gainSkillPts, grantedTechName, autoGranted, signatureLeveled });
           }
         },
         cancel: { label: "Cancel", callback: () => resolve(null) }
