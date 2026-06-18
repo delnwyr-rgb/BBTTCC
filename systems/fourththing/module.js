@@ -9950,21 +9950,23 @@ async function _ftResolveAmount(actor, eff) {
   return { amount: 0, rolled: null };
 }
 
-async function runConsumeEffects(actor, item, consume) {
-  if (!actor || !item || !consume) return;
+// Apply one item's consume spec to a SINGLE recipient actor: roll + apply
+// instant track deltas, toggle conditions (native status AEs), and clone the
+// item's applyOnUse template AEs onto the recipient. Returns the chat summary
+// (<li> fragments). Charges + the chat card are handled once by the caller.
+// Instant formulas re-evaluate per recipient (each target gets its own roll).
+async function _ftApplyConsumeToRecipient(recipient, item, consume) {
   const updates = {};
   const summary = [];
-  const allRolls = [];
-  const conditionOps = [];   // Bucket B: {key, on} — applied via the native toggle after the batch
+  const conditionOps = [];
 
   for (const eff of (consume.effects ?? [])) {
     if (eff.kind === "track") {
       const spec = FT_TRACK_PATHS[eff.track];
       if (!spec) { summary.push(`<li>unknown track: ${eff.track}</li>`); continue; }
-      const cur  = Number(foundry.utils.getProperty(actor, spec.path) ?? 0);
-      let max    = spec.max ? Number(foundry.utils.getProperty(actor, spec.max) ?? 0) : null;
-      const { amount, rolled } = await _ftResolveAmount(actor, eff);
-      if (rolled) allRolls.push(rolled);
+      const cur  = Number(foundry.utils.getProperty(recipient, spec.path) ?? 0);
+      let max    = spec.max ? Number(foundry.utils.getProperty(recipient, spec.max) ?? 0) : null;
+      const { amount, rolled } = await _ftResolveAmount(recipient, eff);
       let next = cur;
       if (eff.op === "add")        next = cur + amount;
       else if (eff.op === "subtract") next = cur - amount;
@@ -9987,21 +9989,21 @@ async function runConsumeEffects(actor, item, consume) {
     }
   }
 
-  if (Object.keys(updates).length) await actor.update(updates);
+  if (Object.keys(updates).length) await recipient.update(updates);
 
   // Conditions → native status AEs via the canonical toggle. Force to the desired
   // state (skip if already there). toggleCondition handles the boolean, the status
   // AE, immunity refusal, and its own chat line.
   for (const { key, on } of conditionOps) {
-    const cur = !!foundry.utils.getProperty(actor, `system.conditions.${key}`);
-    if (cur !== on) await game.fourththing.toggleCondition(actor, key);
+    const cur = !!foundry.utils.getProperty(recipient, `system.conditions.${key}`);
+    if (cur !== on) await game.fourththing.toggleCondition(recipient, key);
     summary.push(`<li>condition ${on ? "applied" : "cleared"}: <b>${FT.CONDITIONS[key].label ?? key}</b></li>`);
   }
 
-  // Bucket B: clone the item's `applyOnUse` template Active Effects onto the user.
-  // These are GM-authored durational buffs/effects (native changes + duration +
-  // statuses) flagged flags.fourththing.applyOnUse — the AE-native half of an
-  // on-use effect (the dice rolls above are the irreducible procedural half).
+  // Bucket B: clone the item's `applyOnUse` template Active Effects onto the
+  // recipient. These are GM-authored durational buffs/effects (native changes +
+  // duration + statuses) flagged flags.fourththing.applyOnUse — the AE-native
+  // half of an on-use effect (the dice rolls above are the procedural half).
   const onUseAEs = (item.effects ?? []).filter(e => e.flags?.fourththing?.applyOnUse === true && !e.disabled);
   if (onUseAEs.length) {
     const aeData = onUseAEs.map(e => {
@@ -10014,7 +10016,7 @@ async function runConsumeEffects(actor, item, consume) {
       foundry.utils.setProperty(o, "flags.fourththing.applyOnUse", false); // applied copy isn't a template
       return o;
     });
-    await actor.createEmbeddedDocuments("ActiveEffect", aeData);
+    await recipient.createEmbeddedDocuments("ActiveEffect", aeData);
     for (const e of onUseAEs) {
       const d = e.duration ?? {};
       const dtag = d.rounds ? ` (${d.rounds} rd)` : d.seconds ? ` (${Math.round(d.seconds / 60)} min)` : "";
@@ -10022,7 +10024,35 @@ async function runConsumeEffects(actor, item, consume) {
     }
   }
 
-  // Charge bookkeeping — decrement and delete-at-0.
+  return summary;
+}
+
+async function runConsumeEffects(actor, item, consume, { targets = null } = {}) {
+  if (!actor || !item || !consume) return;
+
+  // Resolve recipients. Default = self (the user). consume.target === "target"
+  // applies the effects to the user's CURRENTLY TARGETED token(s) — throwables,
+  // apply-to-ally heals, offensive consumables. Multiple targets are each
+  // affected independently (instant rolls re-evaluate per target). `targets`
+  // may be passed in (snapshot from the click) — falls back to game.user.targets.
+  const mode = String(consume.target ?? "self").toLowerCase();
+  let recipients = [actor];
+  if (mode === "target" || mode === "targeted") {
+    recipients = Array.isArray(targets) && targets.length
+      ? [...new Set(targets)]
+      : [...new Set(Array.from(game.user?.targets ?? [], t => t.actor).filter(Boolean))];
+    if (!recipients.length) {
+      ui.notifications?.warn(`${item.name}: target a token first — this item applies to its target.`);
+      return;
+    }
+  }
+
+  const perRec = [];
+  for (const rec of recipients) {
+    perRec.push({ rec, summary: await _ftApplyConsumeToRecipient(rec, item, consume) });
+  }
+
+  // Charge bookkeeping — decrement and delete-at-0. Once, on the user's item.
   let chargeNote = "";
   if (consume.decrement !== false) {
     const charges = Number(item.getFlag("fourththing", "rfi.item.charges") ?? 1);
@@ -10036,15 +10066,24 @@ async function runConsumeEffects(actor, item, consume) {
     }
   }
 
+  // Self use → flat list (unchanged UX). Targeted use → one block per recipient.
+  const isSelf = recipients.length === 1 && recipients[0] === actor;
+  const targetTag = isSelf ? "" : ` → ${recipients.length} target${recipients.length === 1 ? "" : "s"}`;
+  const listHtml = isSelf
+    ? perRec[0].summary.join("")
+    : perRec.map(({ rec, summary }) =>
+        `<li style="list-style:none;margin:0.25rem 0 0"><b>→ ${rec.name}</b><ul style="margin:0.1rem 0 0 1rem;padding:0">${summary.join("")}</ul></li>`
+      ).join("");
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="fourththing-roll ft-magic-roll">
                 <div class="ft-misfire-box standalone" style="border-color:#5fb35f">
-                  <span class="ft-misfire-label">🧪 ${item.name}${chargeNote}</span>
-                  <ul class="ft-consume-list" style="margin:0.2rem 0 0 1.2rem;padding:0">${summary.join("")}</ul>
+                  <span class="ft-misfire-label">🧪 ${item.name}${chargeNote}${targetTag}</span>
+                  <ul class="ft-consume-list" style="margin:0.2rem 0 0 1.2rem;padding:0">${listHtml}</ul>
                 </div></div>`
   });
-  return { ok: true, updates, item: item.id };
+  return { ok: true, item: item.id, recipients: recipients.map(r => r.id) };
 }
 
 // ─── Forge dialog (Crafting UI) ───────────────────────────────────────────────
@@ -17849,10 +17888,14 @@ Hooks.once("init", function () {
         ui.notifications?.warn(`${item.name} has no consume effects defined.`);
         return;
       }
+      // Snapshot the user's targets at click-time and hand them to the engine
+      // explicitly — keeps consume targeting in lock-step with the AA animation
+      // (which reads the same set) and immune to any later target change.
+      const targets = [...new Set(Array.from(game.user?.targets ?? [], t => t.actor).filter(Boolean))];
       // Fire Automated Animations on consume (guarded: no-ops if the item has no
       // flags.autoanimations and no autorec match). Mirrors the weapon-Strike hook.
       ftPlayAutoAnimation(this.actor, item, { hit: true });
-      return runConsumeEffects(this.actor, item, consume);
+      return runConsumeEffects(this.actor, item, consume, { targets });
     }
 
     static async _onFtForge(event, target) {
@@ -22478,6 +22521,8 @@ Hooks.once("init", function () {
         showOnUse,
         onUseRows,
         onUseDecrement:    consume?.decrement !== false, // default true (single-use)
+        onUseTarget:       String(consume?.target ?? "self").toLowerCase(),
+        onUseTargetOptions: { self: "Self (the user)", target: "Targeted token(s)" },
         onUseTrackOptions: Object.keys(FT_TRACK_PATHS),
         onUseOpOptions:    FT_ONUSE_OPS,
         onUseKindOptions:  FT_ONUSE_KINDS,

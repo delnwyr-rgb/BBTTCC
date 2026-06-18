@@ -14,11 +14,21 @@
   </summary>
 
   {{#if isEditable}}
-  <div class="ft-section-header" style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;gap:12px;">
-    <label class="ft-onuse-decrement" style="display:flex;align-items:center;gap:6px;font-size:0.8rem;opacity:0.85;" title="Spend one charge per use and delete the item at zero.">
-      <input type="checkbox" name="flags.fourththing.rfi.item.consume.decrement" {{#if onUseDecrement}}checked{{/if}}/>
-      Consume on use (−1 charge)
-    </label>
+  <div class="ft-section-header" style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;gap:12px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <label class="ft-onuse-decrement" style="display:flex;align-items:center;gap:6px;font-size:0.8rem;opacity:0.85;" title="Spend one charge per use and delete the item at zero.">
+        <input type="checkbox" name="flags.fourththing.rfi.item.consume.decrement" {{#if onUseDecrement}}checked{{/if}}/>
+        Consume on use (−1 charge)
+      </label>
+      <label class="ft-onuse-target" style="display:flex;align-items:center;gap:6px;font-size:0.8rem;opacity:0.85;" title="Self applies to the user. Targeted applies to the user's targeted token(s) on use — throwables, apply-to-ally heals, offensive consumables.">
+        Applies to
+        <select name="flags.fourththing.rfi.item.consume.target">
+          {{#each onUseTargetOptions as |label key|}}
+          <option value="{{key}}" {{#if (eq onUseTarget key)}}selected{{/if}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </label>
+    </div>
     <button type="button" data-action="ftAddOnUseEffect" class="ft-add-btn">+ Add On-Use Effect</button>
   </div>
   {{/if}}
