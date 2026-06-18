@@ -13045,6 +13045,53 @@ Hooks.once("init", function () {
   //                 wants no misfire roll regardless of the result.
   //   modeMisfireBias — integer shift applied to the d10 (Hermetic −2, Chaos +2,
   //                 capped to [1,10]) from the stance toggle.
+  // Public aptitude/skill-check API — used by the Player HUD's Aptitudes
+  // section (and any other caller). Rolls the skill with full rank mechanics
+  // via skillRollWithRank and posts the same card the Steward sheet uses.
+  game.fourththing.rolls.skillCheck = async function (actor, { skill, attribute, label } = {}) {
+    if (!actor || !skill) return;
+    const rawSys = actor.system?.system ?? actor.system;
+    const sk   = rawSys?.skills?.[skill] ?? {};
+    const attr = attribute || sk.attribute || "violence";
+    const lbl  = label || sk.label || ftCap(skill);
+    const result = await skillRollWithRank(actor, { attribute: attr, skill, label: lbl, allowSurge: _ftSurgeAllowed(actor) });
+    const { total, roll, rankData, attrVal, aeBonus, isFumble, mechNote, rerollNote,
+            surgeBanked, doubleTen, dieResults, kept } = result;
+    const rankColor = rankData?.color ?? "#888";
+    const notes = [mechNote, rerollNote].filter(Boolean).join(" · ");
+    const diceHtml = (dieResults || []).map(d => {
+      const explodedTail = d.explosions.length ? ` <span style="color:#e8c84a;font-weight:600">!→${d.explosions.join("+")}</span>` : "";
+      const isKept = !kept || kept.includes(d);
+      return isKept
+        ? `<span class="ft-dice-pip">${d.base}${explodedTail}</span>`
+        : `<span class="ft-dice-pip" style="opacity:0.4;text-decoration:line-through">${d.base}${explodedTail}</span>`;
+    }).join(" · ");
+    const surgeNote  = surgeBanked ? ` <span style="color:#e8c84a;font-weight:600">+${surgeBanked} Surge banked</span>` : "";
+    const dblTenNote = doubleTen ? ` <span style="color:#4a90d9;font-weight:600">· Double-10 — Act Again</span>` : "";
+    const breakdownHtml = (dieResults && dieResults.length)
+      ? `<p style="font-size:0.74rem;opacity:0.85;margin:0.25rem 0 0">Dice: ${diceHtml}${surgeNote}${dblTenNote}</p>` : "";
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      flavor: `<div class="fourththing-roll ft-attack-roll">
+        <div class="ft-roll-header">
+          <span class="ft-roll-name">${ftEscapeHtml(lbl)}</span>
+          <span class="ft-seph-pill" style="background:${rankColor}22;border-color:${rankColor}88;color:${rankColor}">${rankData?.label ?? "Untrained"}</span>
+        </div>
+        <div class="ft-roll-formula">
+          <span class="ft-fp" title="${ftEscapeHtml(attr)}">+${attrVal}</span>
+          <span class="ft-fp" title="rank ${rankData?.bonus}">+${rankData?.bonus ?? 0}</span>
+          ${aeBonus ? `<span class="ft-fp ft-ae-bonus" title="AE bonuses">+${aeBonus}</span>` : ""}
+        </div>
+        <div class="ft-roll-result ${isFumble ? 'ft-fumble' : total >= 20 ? 'ft-success' : ''}">
+          <span class="ft-total">${isFumble ? '✗ Fumble' : total}</span>
+        </div>
+        ${breakdownHtml}
+        ${notes ? `<p style="font-size:0.72rem;opacity:0.55;margin:0.2rem 0 0">${ftEscapeHtml(notes)}</p>` : ""}
+      </div>`
+    });
+    return result;
+  };
+
   game.fourththing.rolls.magicTest = async function (actor, {
     intent, channel, sephirah, label = "Manifestation", difficulty = 15,
     costNote = "", signature = "", thirdThing = "",
@@ -16226,6 +16273,9 @@ Hooks.once("init", function () {
       const expired = Array.from(actor.effects ?? []).filter(e => {
         if (e.disabled) return false;
         const d = e.duration;
+        // Explicit expiry flag ({value, units, expiry, expired} durations — what
+        // conditions like Dying use) OR Foundry core round/turn remaining ≤ 0.
+        if (d?.expired === true || e._source?.duration?.expired === true) return true;
         return d?.type === "turns" && Number.isFinite(d.remaining) && d.remaining <= 0;
       });
       if (expired.length) {
@@ -17189,7 +17239,23 @@ Hooks.once("init", function () {
           filled: i < rankClamped,
           color:  i < rankClamped ? rd.color : null
         }));
-        return [{ key, ...skill, label, slangTooltip, rank, rankData: rd, pips, aeBonus: aeB,
+        // Cumulative rank tooltip — lists EVERY benefit accrued up to the
+        // current rank (not just the top one) plus a preview of the next, so a
+        // player can see what all their pips actually grant. Built with light
+        // HTML; the browser decodes the escaped attribute back to markup that
+        // Foundry's tooltip renders (same round-trip the HUD uses).
+        const _esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
+        const tipParts = [`<b>${_esc(label)} — ${_esc(rd.label)}</b>`];
+        if (rankClamped === 0) tipParts.push("Untrained — no special training yet.");
+        else for (let i = 1; i <= rankClamped; i++) {
+          const ri = SKILL_RANK_DATA?.[i]; if (ri) tipParts.push(`✓ <b>${_esc(ri.label)}</b>: ${_esc(ri.desc)}`);
+        }
+        if (rankClamped < 5) {
+          const nx = SKILL_RANK_DATA?.[rankClamped + 1];
+          if (nx) tipParts.push(`<span style='opacity:.55'>Next — ${_esc(nx.label)}: ${_esc(nx.desc)}</span>`);
+        }
+        const rankTip = tipParts.join("<br>");
+        return [{ key, ...skill, label, slangTooltip, rank, rankData: rd, rankTip, pips, aeBonus: aeB,
                  attrBonus: attrV, totalBonus: attrV + rank + aeB,
                  breakdown: `${attrV} ${attribute}${rank ? ` + ${rank} rank` : ""}${aeB ? ` + ${aeB} AE` : ""}` }];
       });

@@ -29,10 +29,13 @@
   const cap  = (s)=>{ s=String(s??""); return s.charAt(0).toUpperCase()+s.slice(1); };
 
   // ── Accordion open/closed state (per user, persisted) ───────────────────
-  const SEC_KEY = () => `bbttcc-player-hud-acc:${game.user?.id ?? "anon"}`;
+  // :v2 bump force-resets users who had the old all-open defaults saved.
+  const SEC_KEY = () => `bbttcc-player-hud-acc:v2:${game.user?.id ?? "anon"}`;
+  // Default + reset state: EVERY section starts collapsed — there's a lot going
+  // on, so the player opens only what they need.
   const SEC_DEFAULTS = {
-    faculties: true, defenses: false, abilities: true,
-    echo: true, ancestry: false, strikes: true, manifestations: true, states: false
+    faculties: false, defenses: false, aptitudes: false, abilities: false,
+    echo: false, ancestry: false, strikes: false, manifestations: false, states: false
   };
   let _secOpen = { ...SEC_DEFAULTS };
   function loadSecState() {
@@ -408,6 +411,26 @@
       return score > 0 ? "buff" : score < 0 ? "debuff" : "neutral";
     } catch { return "neutral"; }
   }
+  // A temporary combat effect (round/turn duration) whose time has fully run out
+  // but which Foundry hasn't deleted — the system only culls these at the owner's
+  // turn-start in combat, so out of combat / before their turn they'd linger on
+  // the HUD. Hide them so Active States drop off reliably. Mirrors the system's
+  // cull test (duration.type "turns" + finite remaining ≤ 0). Non-combat /
+  // infinite effects (remaining null) are NOT hidden.
+  function isEffectExpired(eff) {
+    try {
+      const d   = eff?.duration ?? {};
+      const src = eff?._source?.duration ?? {};
+      // Explicit expiry flag (system / dnd5e-style {value, units, expiry,
+      // expired} durations — what conditions like Dying actually use).
+      if (d.expired === true || src.expired === true) return true;
+      // Foundry core round/turn duration whose time has fully run out.
+      return d.type === "turns" && Number.isFinite(d.remaining) && d.remaining <= 0;
+    } catch { return false; }
+  }
+  function liveStates(steward) {
+    return (steward.effects?.contents ?? []).filter(e => !!e && !isEffectExpired(e));
+  }
 
   // ── Section HTML builders ───────────────────────────────────────────────
   function btn(dataAttrs, icon, label, title) {
@@ -427,6 +450,48 @@
     return DEFENSES.map(([key, label]) => {
       const v = Number(foundry.utils.getProperty(steward, `system.derived.${key}.value`) ?? 10);
       return btn(`data-fire="defense" data-key="${key}"`, "shield", `${label} ${v}`, `Roll ${label} (DC ${v})`);
+    }).join("");
+  }
+  // ── Aptitudes (skill ranks 0–5) ──────────────────────────────────────────
+  // Mirrors the system's SKILL_RANK_DATA. The tooltip is CUMULATIVE: it lists
+  // every rank benefit accrued up to the current rank (not just the top one),
+  // plus a preview of the next rank.
+  const RANK_INFO = [
+    { label: "Untrained",  color: "#546e7a", desc: "Natural 1+1 always fumbles." },
+    { label: "Trained",    color: "#78909c", desc: "+1 · a natural 1+1 no longer auto-fails." },
+    { label: "Proficient", color: "#4a90d9", desc: "+2 · reroll the lowest die, keep the new result." },
+    { label: "Expert",     color: "#27ae60", desc: "+3 · neither die can show below 4." },
+    { label: "Master",     color: "#e8c84a", desc: "+4 · roll 3d10, drop the lowest." },
+    { label: "Legendary",  color: "#eb5757", desc: "+5 · 1/scene: auto-succeed DC ≤ 20, or +10 to the roll." }
+  ];
+  function rankCumulativeTip(label, rank) {
+    const r = Math.max(0, Math.min(5, Number(rank) || 0));
+    const lines = [`<b>${esc(label)} — ${RANK_INFO[r].label}</b>`];
+    if (r === 0) lines.push("Untrained — no special training yet.");
+    else for (let i = 1; i <= r; i++) lines.push(`✓ <b>${RANK_INFO[i].label}</b>: ${RANK_INFO[i].desc}`);
+    if (r < 5) lines.push(`<span style="opacity:.55">Next — ${RANK_INFO[r + 1].label}: ${RANK_INFO[r + 1].desc}</span>`);
+    return lines.join("<br>");
+  }
+  function aptPip(filled, color) {
+    return `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;margin:0 1px;border:1px solid ${filled ? color : "rgba(255,255,255,.25)"};background:${filled ? color : "transparent"}"></span>`;
+  }
+  function aptitudeRows(steward) {
+    const skills = foundry.utils.getProperty(steward, "system.skills") ?? {};
+    return Object.entries(skills)
+      .map(([key, sk]) => ({ key, rank: Number(sk?.value ?? 0), label: String(sk?.label ?? cap(key)), attribute: String(sk?.attribute ?? "") }))
+      .filter(s => s.rank >= 1)
+      .sort((a, b) => b.rank - a.rank || a.label.localeCompare(b.label));
+  }
+  function aptitudesBody(steward) {
+    const rows = aptitudeRows(steward);
+    if (!rows.length) return `<div style="padding:.4rem .5rem;opacity:.6;font-size:.82rem">No trained aptitudes yet — raise an aptitude on the Steward sheet's Aptitudes tab.</div>`;
+    return rows.map(s => {
+      const ri = RANK_INFO[Math.max(0, Math.min(5, s.rank))];
+      const pips = Array.from({ length: 5 }, (_, i) => aptPip(i < s.rank, ri.color)).join("");
+      return `<button type="button" class="bbttcc-btn bbttcc-apt-row" data-fire="aptitude" data-key="${esc(s.key)}" data-attribute="${esc(s.attribute)}" data-tooltip="${esc(rankCumulativeTip(s.label, s.rank))}" style="display:flex;align-items:center;gap:.5rem;justify-content:space-between">
+        <span style="display:flex;align-items:center;gap:.45rem;min-width:0"><i class="fas fa-dice-d20" style="opacity:.7"></i><span style="overflow:hidden;text-overflow:ellipsis">${esc(s.label)}</span></span>
+        <span style="display:flex;align-items:center;gap:.5rem;flex:none"><span>${pips}</span><span style="color:${ri.color};font-size:.78rem;min-width:4.2rem;text-align:right">${esc(ri.label)}</span></span>
+      </button>`;
     }).join("");
   }
   // ── Hover synopsis (playtest 2026-06-06) ─────────────────────────────────
@@ -474,7 +539,7 @@
     }).join("");
   }
   function statesBody(steward) {
-    const effects = (steward.effects?.contents ?? []).filter(e => !!e);
+    const effects = liveStates(steward);
     if (!effects.length) return "";
     return effects.map(eff => {
       const id = esc(eff.id);
@@ -503,7 +568,8 @@
 
   function abilitiesTrayHTML(steward) {
     const { abilities, ancestry, echo, strikes, manifs } = collectSections(steward);
-    const states = (steward.effects?.contents ?? []).filter(e => !!e);
+    const states = liveStates(steward);
+    const apts = aptitudeRows(steward);
     // Manifestations mix powers (Invoke→cast) and form-weapons (Engage→strike);
     // fire each through the same path the sheet uses for that kind.
     const manifFireKind = (it) => it.type === "power" ? "mani" : "strike";
@@ -513,6 +579,7 @@
     parts.push(surgeActionHTML(steward));
     parts.push(section("faculties", "Faculties", 6, facultiesBody(steward)));
     parts.push(section("defenses",  "Defenses",  3, defensesBody(steward)));
+    if (apts.length) parts.push(section("aptitudes", "Aptitudes", apts.length, aptitudesBody(steward)));
     if (abilities.length) parts.push(section("abilities", "Steward Abilities", abilities.length, itemsBody(abilities, "ability")));
     if (ancestry.length)  parts.push(section("ancestry",  "Ancestry Abilities", ancestry.length, itemsBody(ancestry, "ability")));
     if (echo.length) {
@@ -532,6 +599,13 @@
   async function fireFaculty(steward, key) {
     const rolls = game.fourththing?.rolls;
     if (rolls?.attributeTest) return rolls.attributeTest(steward, { attribute: key });
+    ui.notifications?.warn?.("Roll engine not ready.");
+  }
+  async function fireAptitude(steward, skill, attribute) {
+    const rolls = game.fourththing?.rolls;
+    if (typeof rolls?.skillCheck === "function") return rolls.skillCheck(steward, { skill, attribute });
+    // Fallback until the skillCheck API is present: roll the keyed faculty.
+    if (typeof rolls?.attributeTest === "function" && attribute) return rolls.attributeTest(steward, { attribute });
     ui.notifications?.warn?.("Roll engine not ready.");
   }
   async function fireDefense(steward, which) {
@@ -723,6 +797,7 @@
         const item = itemId ? steward.items.get(itemId) : null;
         switch (kind) {
           case "faculty": return fireFaculty(steward, key);
+          case "aptitude": return fireAptitude(steward, key, fireBtn.dataset.attribute);
           case "defense": return fireDefense(steward, key);
           case "ability": if (item) return fireAbility(steward, item); break;
           case "strike":  if (item) return fireStrike(steward, item); break;
