@@ -75,6 +75,55 @@ function _registerOps() {
     return { rigId: rig?.id || null };
   });
 
+  reg("ensureSandboxHex", async ({ sceneId, name = "Tutelary Hold" }) => {
+    const scene = game.scenes?.get?.(sceneId);
+    if (!scene) return null;
+    // Reuse the existing sandbox hex (reset to unclaimed for clean replay) if present.
+    let dr = scene.drawings?.find(d => d.getFlag?.(MODULE_ID, "sandboxHex"));
+    if (dr) {
+      try { await dr.update({ "flags.bbttcc-territory.factionId": "", "flags.bbttcc-territory.status": "unclaimed", "flags.bbttcc-territory.population": "uninhabited" }); } catch (_) {}
+      return { hexUuid: dr.uuid, drawingId: dr.id, sceneId };
+    }
+    // Create a 12-point hexagon (the shape the Territory Dashboard recognises) at centre.
+    const cx = Math.round(scene.width * 0.5), cy = Math.round(scene.height * 0.5);
+    const r = 130, start = Math.PI / 6;
+    const abs = [];
+    for (let i = 0; i < 6; i++) { const a = start + i * Math.PI / 3; abs.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
+    const minX = Math.min(...abs.map(p => p[0])), minY = Math.min(...abs.map(p => p[1]));
+    const points = []; for (const [x, y] of abs) points.push(Math.round(x - minX), Math.round(y - minY));
+    const data = {
+      shape: { type: "p", points },
+      x: Math.round(minX), y: Math.round(minY),
+      fillColor: "#3aa0ff", fillAlpha: 0.18, strokeColor: "#bfe3ff", strokeAlpha: 0.9, strokeWidth: 4,
+      text: name, fontSize: 28, textColor: "#ffffff",
+      flags: {
+        "bbttcc-territory": {
+          isHex: true, kind: "territory-hex", name, status: "unclaimed", type: "wilderness", size: "none",
+          population: "uninhabited", capital: false,
+          resources: { food: 0, materials: 0, trade: 0, military: 0, knowledge: 0 },
+          createdAt: Date.now()
+        },
+        [MODULE_ID]: { spawned: true, sandboxHex: true }
+      }
+    };
+    const [created] = await scene.createEmbeddedDocuments("Drawing", [data]);
+    return { hexUuid: created.uuid, drawingId: created.id, sceneId };
+  });
+
+  reg("claimHex", async ({ hexUuid, factionId }) => {
+    const doc = hexUuid ? await fromUuid(hexUuid) : null;
+    if (!doc || !factionId) return { ok: false };
+    try { await doc.update({ "flags.bbttcc-territory.factionId": factionId, "flags.bbttcc-territory.status": "occupied" }); return { ok: true }; }
+    catch (e) { console.warn(TAG, "claimHex failed", e); return { ok: false }; }
+  });
+
+  reg("unclaimHex", async ({ hexUuid }) => {
+    const doc = hexUuid ? await fromUuid(hexUuid) : null;
+    if (!doc) return { ok: false };
+    try { await doc.update({ "flags.bbttcc-territory.factionId": "", "flags.bbttcc-territory.status": "unclaimed", "flags.bbttcc-territory.population": "uninhabited" }); } catch (_) {}
+    return { ok: true };
+  });
+
   reg("disembark", async ({ stewardId, rigId }) => {
     const steward = game.actors?.get?.(stewardId);
     if (!steward) return { ok: false };
@@ -144,6 +193,24 @@ async function disembark(stewardId, rigId) {
   await _runAsGM("disembark", { stewardId, rigId });
 }
 
+/** Ensure the sandbox tutorial hex exists on `scene` (reset to unclaimed). Returns {hexUuid,drawingId,sceneId}. */
+async function ensureSandboxHex(scene, name) {
+  if (!scene) return null;
+  return await _runAsGM("ensureSandboxHex", { sceneId: scene.id, name });
+}
+
+/** Claim a hex for a faction (no player-facing claim GUI exists yet). */
+async function claimHex(hexUuid, factionId) {
+  if (!hexUuid || !factionId) return;
+  await _runAsGM("claimHex", { hexUuid, factionId });
+}
+
+/** Reset a hex back to unclaimed (clean tutorial replay). */
+async function unclaimHex(hexUuid) {
+  if (!hexUuid) return;
+  await _runAsGM("unclaimHex", { hexUuid });
+}
+
 /**
  * Tear down staged scaffolding. Each item may carry:
  *   .token / .doc — a TokenDocument to delete   .actor — an Actor (deleted only if spawned-flagged)
@@ -162,5 +229,5 @@ async function cleanup(items = []) {
 Hooks.once("ready", () => {
   _registerOps();
   const ns = _ns();
-  if (ns) ns.stage = { ensureTokenOnScene, spawnDummy, mintRig, disembark, cleanup, folder: _folder };
+  if (ns) ns.stage = { ensureTokenOnScene, spawnDummy, mintRig, disembark, ensureSandboxHex, claimHex, unclaimHex, cleanup, folder: _folder };
 });

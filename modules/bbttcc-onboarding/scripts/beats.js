@@ -178,6 +178,111 @@ const driving = {
   }
 };
 
+/* ───────────────────────── STEWARDSHIP — CLAIM ───────────────────────── */
+// Claim the dedicated SANDBOX hex (real Dashboard/click-to-edit interface, tutorial hex
+// so nothing touches the living world). Detected via the territory hex-update hook.
+const stewardshipClaim = {
+  id: "stewardship_claim",
+  title: "Stewardship — Claim",
+  scope: "shared",
+
+  enter: async (ctx) => {
+    ctx._spawned = [];
+    ctx._sandboxHex = null;
+    await ctx.speak("Now the real work — stewardship. A hex is yours to shape, but first you have to CLAIM it. This one's a sandbox; nothing you do here touches the living world.");
+    await _pause(900);
+
+    const scene = ctx.scene("sandbox-hex");
+    if (scene) { await _enterScene(scene, "Sandbox Hold"); await _pause(800); }
+
+    const stage = _stage();
+    if (scene && stage?.ensureSandboxHex) ctx._sandboxHex = await stage.ensureSandboxHex(scene, "Tutelary Hold");
+    if (scene && stage) {
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, { x: Math.round(scene.width * 0.5), y: Math.round(scene.height * 0.66) });
+      if (st.created) ctx._spawned.push({ token: st.doc });
+    }
+    await _pause(500);
+    await ctx.speak("See the hex below — unclaimed, neutral ground. Make it yours. Your steward's writ handles the filing; you just give the word.");
+    ctx.riff({ beat: "stewardship_claim", line: "Player is about to claim their first hex.", intent: "Dry, a little proud. One line." });
+  },
+
+  detect: (ctx, done) => {
+    const hexUuid = ctx._sandboxHex?.hexUuid;
+    const drawingId = ctx._sandboxHex?.drawingId;
+    const isClaimed = (doc) => !!doc?.flags?.["bbttcc-territory"]?.factionId;
+    // Fallback: also advance if the hex is claimed externally (e.g. a GM macro/dashboard).
+    const onDraw = (doc) => { if (doc?.id === drawingId && isClaimed(doc)) done(); };
+    const onHex = async ({ hexUuid: u } = {}) => { if (u && u === hexUuid) { try { if (isClaimed(await fromUuid(u))) done(); } catch (_) {} } };
+    Hooks.on("updateDrawing", onDraw);
+    Hooks.on("bbttcc:territory:hexUpdated", onHex);
+    // Primary path: there is no player-facing claim GUI yet, so the tutorial files the claim.
+    ctx.prompt({
+      title: "◇ OPERATOR",
+      content: `<p>Plant your banner on <b>Tutelary Hold</b> — claim it for your faction.</p><p><i>(No field UI for this yet, so I'll file the writ for you. One day you'll do it from a map menu.)</i></p>`,
+      label: "Plant my banner"
+    }).then(async () => {
+      if (ctx.faction && hexUuid) await _stage()?.claimHex?.(hexUuid, ctx.faction.id);
+      else await ctx.speak("No faction on file to claim under— *bzzt* —waving it through. Lead a faction and the banner's real.");
+      done();
+    });
+    return () => { Hooks.off("updateDrawing", onDraw); Hooks.off("bbttcc:territory:hexUpdated", onHex); };
+  },
+
+  exit: async (ctx) => {
+    await ctx.speak("Claimed. The hex knows your name now. Let's see what it costs to RUN it.");
+  }
+};
+
+/* ───────────────────────── STEWARDSHIP — OP & TURN ───────────────────────── */
+// Familiarise with the OP economy (read-only readout of the REAL faction's banks) and
+// the Turn cycle via a NON-COMMITTING dry-run Advance Turn. Resets the sandbox hex after.
+const stewardshipTurn = {
+  id: "stewardship_turn",
+  title: "Stewardship — OP & Turn",
+  scope: "shared",
+
+  enter: async (ctx) => {
+    const op = globalThis.game?.bbttcc?.api?.op;
+    const fmt = (m) => { try { return op?.formatMarksAsOP ? op.formatMarksAsOP(m) : `${(Number(m) || 0) / 10} OP`; } catch (_) { return `${(Number(m) || 0) / 10} OP`; } };
+    let said = false;
+    if (ctx.faction && op?.preview) {
+      try {
+        const st = await op.preview(ctx.faction.id, {}, {});
+        const b = st?.before || {};
+        await ctx.speak(`Your treasury — OPERATIONS POINTS. Economy ${fmt(b.economy)}, Violence ${fmt(b.violence)}, Diplomacy ${fmt(b.diplomacy)}. Every order spends from these buckets; they refill each Turn, capped by your tier.`);
+        said = true;
+      } catch (_) {}
+    }
+    if (!said) await ctx.speak("Operations Points — OP — fund every order you give. They refill each Turn, capped by your tier.");
+    await _pause(1000);
+    await ctx.speak("Now the heartbeat that refills them: the TURN. Advancing one regens your OP toward its caps, resolves every queued order, and ticks the clock. We'll run a true PREVIEW — all rhythm, zero consequences.");
+    ctx.riff({ beat: "stewardship_turn", line: "Explaining OP and the Turn cycle; about to run a (now genuinely safe) dry-run preview.", intent: "Clinical, a touch grand. One line." });
+  },
+
+  detect: (ctx, done) => {
+    ctx.prompt({
+      title: "◇ OPERATOR",
+      content: `<p>Feel the <b>Turn cycle</b>. This runs a real <b>preview</b> — the rhythm of a Turn with nothing committed to the living world.</p><p>Ready?</p>`,
+      label: "Run a practice Turn (preview)"
+    }).then(async () => {
+      const turn = globalThis.game?.bbttcc?.api?.turn;
+      try { if (turn?.advanceTurn) await turn.advanceTurn({ apply: false }); }
+      catch (e) { console.warn(TAG, "dry-run turn failed", e); }
+      await ctx.speak("That's a Turn — previewed. In the living world it'd refill your OP and resolve every queued order. Nothing was committed here. You've got the rhythm.");
+      done();
+    });
+    return null;
+  },
+
+  exit: async (ctx) => {
+    try { if (ctx._sandboxHex?.hexUuid) await _stage()?.unclaimHex?.(ctx._sandboxHex.hexUuid); } catch (_) {}
+    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
+    ctx._spawned = [];
+    ctx._sandboxHex = null;
+    await ctx.speak("Stewardship: learned. You can hold ground and run it. One thing left before the real test— *bzzt* —you'll have to GO somewhere dangerous.");
+  }
+};
+
 /* ───────────────────────── REGISTRATION ───────────────────────── */
 Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
@@ -185,6 +290,6 @@ Hooks.once("ready", () => {
     console.warn(TAG, "onboarding namespace not ready — beats NOT registered.");
     return;
   }
-  for (const beat of [incarnation, meatsuit, driving]) ns.beats.register(beat);
+  for (const beat of [incarnation, meatsuit, driving, stewardshipClaim, stewardshipTurn]) ns.beats.register(beat);
   console.log(TAG, "Registered beats:", ns.beats.list().map(b => b.id).join(", "));
 });
