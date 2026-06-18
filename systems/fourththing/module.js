@@ -1003,7 +1003,7 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   // player-controlled actors during active combat. NPCs/foes are GM-driven (fire
   // multiattacks freely — the Action chip still tracks usage), and out of combat
   // there are no rounds to limit. The rig per-weapon gate below is unaffected.
-  const _ftEnforceActionGate = !options.skipActionGate && !!game.combat?.started && !_ftIsFoeActor(actor);
+  const _ftEnforceActionGate = !options.skipActionGate && _ftIsActionEconomyActive(actor);
   if (_ftEnforceActionGate) {
     const sysActs = (actor?.system?.system ?? actor?.system ?? {})?.actions;
     if (sysActs && sysActs.actionUsed) {
@@ -3477,6 +3477,19 @@ function _ftIsFoeActor(actor) {
     return actor.flags?.["bbttcc-auto-link"]?.entityKind === "npc";
   }
   return false;
+}
+// Action-economy gates only bind when the actor is actually taking turns in an ACTIVE
+// combat. No combat — or the actor isn't a combatant in the running one — means actions
+// are free (no "New Turn" treadmill outside combat). Foes stay GM-driven (never gated).
+function _ftInActiveCombat(actor) {
+  try {
+    const c = game.combat;
+    if (!c?.started || !actor?.id) return false;
+    return !!c.combatants?.some?.(cb => cb?.actorId === actor.id);
+  } catch (_) { return false; }
+}
+function _ftIsActionEconomyActive(actor) {
+  return !!actor && _ftInActiveCombat(actor) && !_ftIsFoeActor(actor);
 }
 function _ftSurgeAllowed(actor) {
   if (!_ftIsFoeActor(actor)) return true; // PCs / bosses / rigs unchanged
@@ -6998,7 +7011,7 @@ async function castManifestation(actor, item, {
     // 2026-05-29 (playtest #3/#9) — per-turn "already used" lockout only binds
     // player actors in active combat. NPCs/foes are GM-driven; out of combat there
     // are no rounds. Let the cast through (chip still tracks usage on resolve).
-    const _ftEnforceCastGate = !!game.combat?.started && !_ftIsFoeActor(actor);
+    const _ftEnforceCastGate = _ftIsActionEconomyActive(actor);
     if (_ftEnforceCastGate && poolKey && rawSys?.actions?.[poolKey]) {
       // Canon §5 — Elite bonus manifestation. If an Action-type cast is
       // blocked because actionUsed is already burned, an Elite may spend
@@ -23602,11 +23615,15 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
   const piloting  = Number(stSys?.skills?.piloting?.value) || 0;
 
   const warn = (msg) => { ui.notifications?.warn(msg); return false; };
+  // Action economy only binds when this crew is in an ACTIVE combat (the rig or the
+  // steward is a combatant). Out of combat there are no rounds — don't force "New Turn".
+  // Role gates (Pilot/Engineer/Gunner) ALWAYS apply.
+  const _econActive = (_ftInActiveCombat(steward) || _ftInActiveCombat(rig)) && !_ftIsFoeActor(steward);
   const requirePilot    = () => role === "pilot"    || warn(`${steward.name}: only the Pilot can do that (role: ${role}).`);
   const requireEngineer = () => role === "engineer" || warn(`${steward.name}: only the Engineer can repair (role: ${role}).`);
-  const requirePilotGate = () => !stCmb.pilotActionUsedThisRound || warn(`${steward.name}: pilot action already taken this round.`);
-  const requireAction    = () => !sysActs.actionUsed              || warn(`${steward.name}: action already used this turn.`);
-  const requireBonus     = () => !sysActs.bonusUsed               || warn(`${steward.name}: bonus action already used this turn.`);
+  const requirePilotGate = () => !_econActive || !stCmb.pilotActionUsedThisRound || warn(`${steward.name}: pilot action already taken this round.`);
+  const requireAction    = () => !_econActive || !sysActs.actionUsed              || warn(`${steward.name}: action already used this turn.`);
+  const requireBonus     = () => !_econActive || !sysActs.bonusUsed               || warn(`${steward.name}: bonus action already used this turn.`);
   const setRigCombat = (patch) => rig.setFlag("fourththing", "combat", { ...cmb, ...patch });
   const setPilotGate = () => steward.setFlag("fourththing", "combat", { ...stCmb, pilotActionUsedThisRound: true });
   const setEngGate   = () => steward.setFlag("fourththing", "combat", { ...stCmb, engineerRepairedThisRound: true });
@@ -23816,7 +23833,7 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       // this steward, reduce the bleed amount by `tier` (min 0). Flag on
       // the steward; consumed by the crew bleed-through hook.
       if (stCmb.holdingOn) { warn(`${steward.name}: already holding on this round.`); return; }
-      if (sysActs.reactionUsed) { warn(`${steward.name}: reaction already used this turn.`); return; }
+      if (_econActive && sysActs.reactionUsed) { warn(`${steward.name}: reaction already used this turn.`); return; }
       if (_ftReactionsDenied(steward)) { warn(`${steward.name}: reactions are denied this round.`); return; }
       await steward.update({
         "system.actions.reactionUsed": true,
