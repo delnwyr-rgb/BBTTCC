@@ -148,6 +148,112 @@ function _registerOps() {
     return { ok: true };
   });
 
+  // ─── Phase 4 (finale) ops ────────────────────────────────────────────────
+
+  // A disposable hostile faction to raid. A valid raid target is just an actor
+  // flagged bbttcc-factions.isFaction (cf. isFaction() in module.raid-console.js);
+  // we also stamp it spawned so teardown only ever deletes its own scaffolding.
+  reg("spawnHostileFaction", async ({ name = "The Rust Syndicate" }) => {
+    // Reuse an existing spawned hostile faction (clean replay) if present.
+    let actor = (game.actors?.contents ?? []).find(
+      a => a.getFlag?.(MODULE_ID, "spawned") && a.getFlag?.(MODULE_ID, "kind") === "hostileFaction"
+    );
+    if (actor) return { actorId: actor.id };
+    const folder = await _folder();
+    try {
+      actor = await Actor.create({
+        name, type: "npc", folder: folder?.id, img: "icons/svg/tower.svg",
+        prototypeToken: { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name },
+        flags: {
+          "bbttcc-factions": { isFaction: true, disposition: "hostile" },
+          [MODULE_ID]: { spawned: true, kind: "hostileFaction" }
+        }
+      });
+    } catch (e) { console.warn(TAG, "spawnHostileFaction create failed", e); return { actorId: null }; }
+    return { actorId: actor?.id || null };
+  });
+
+  // Author (or reset) a territory hex on a tutorial scene, optionally claimed by a
+  // faction. Same 12-point hexagon shape the Territory Dashboard recognises as
+  // ensureSandboxHex, but keyed (origin / hostile) and placeable left/right so the
+  // travel beat has a real two-hex crossing. Idempotent by flags[MODULE_ID].tutorialHex.
+  reg("ensureHex", async ({ sceneId, key = "hostile", name = "Hostile Hold", factionId = "", status = "occupied", xFrac = 0.5, yFrac = 0.5, r = 130, fillColor = "#ff5a3a", strokeColor = "#ffd0c2" } = {}) => {
+    const scene = game.scenes?.get?.(sceneId);
+    if (!scene) return null;
+    let dr = scene.drawings?.find(d => d.getFlag?.(MODULE_ID, "tutorialHex") === key);
+    if (dr) {
+      try {
+        await dr.update({
+          "flags.bbttcc-territory.factionId": factionId || "",
+          "flags.bbttcc-territory.status": factionId ? status : "unclaimed",
+          "flags.bbttcc-territory.population": factionId ? "occupied" : "uninhabited"
+        });
+      } catch (_) {}
+      return { hexUuid: dr.uuid, drawingId: dr.id, sceneId };
+    }
+    const cx = Math.round(scene.width * xFrac), cy = Math.round(scene.height * yFrac);
+    const start = Math.PI / 6, abs = [];
+    for (let i = 0; i < 6; i++) { const a = start + i * Math.PI / 3; abs.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]); }
+    const minX = Math.min(...abs.map(p => p[0])), minY = Math.min(...abs.map(p => p[1]));
+    const points = []; for (const [x, y] of abs) points.push(Math.round(x - minX), Math.round(y - minY));
+    const data = {
+      shape: { type: "p", points },
+      x: Math.round(minX), y: Math.round(minY),
+      fillColor, fillAlpha: 0.18, strokeColor, strokeAlpha: 0.9, strokeWidth: 4,
+      text: name, fontSize: 28, textColor: "#ffffff",
+      flags: {
+        "bbttcc-territory": {
+          isHex: true, kind: "territory-hex", name,
+          status: factionId ? status : "unclaimed", type: "wilderness", size: "none",
+          population: factionId ? "occupied" : "uninhabited", capital: false,
+          factionId: factionId || "",
+          resources: { food: 0, materials: 0, trade: 0, military: 0, knowledge: 0 },
+          createdAt: Date.now()
+        },
+        [MODULE_ID]: { spawned: true, tutorialHex: key }
+      }
+    };
+    const [created] = await scene.createEmbeddedDocuments("Drawing", [data]);
+    return { hexUuid: created.uuid, drawingId: created.id, sceneId };
+  });
+
+  // Pre-seed the Raid Console's persisted session on the player's REAL faction so the
+  // console opens already pointed at a target + raid type (the console reads this flag on
+  // first render via _applySessionIfNewer). This is the same flag the console itself writes.
+  reg("setRaidSession", async ({ factionId, session }) => {
+    const f = game.actors?.get?.(factionId);
+    if (!f || !session) return { ok: false };
+    try { await f.setFlag("bbttcc-raid", "raidSession", session); return { ok: true }; }
+    catch (e) { console.warn(TAG, "setRaidSession failed", e); return { ok: false }; }
+  });
+
+  reg("clearRaidSession", async ({ factionId }) => {
+    const f = game.actors?.get?.(factionId);
+    if (!f) return { ok: false };
+    try { await f.unsetFlag("bbttcc-raid", "raidSession"); } catch (_) {}
+    return { ok: true };
+  });
+
+  // Graduation teardown: clear the real faction's stale raid pointer (its tutorial target
+  // is about to vanish), delete spawned finale drawings + tokens on the tutorial scene, and
+  // delete spawned hostile faction actors. Flag-scoped so it can only remove its own props.
+  reg("teardownFinale", async ({ factionId = "", sceneId = "" } = {}) => {
+    if (factionId) { try { await game.actors?.get?.(factionId)?.unsetFlag?.("bbttcc-raid", "raidSession"); } catch (_) {} }
+    const scene = sceneId ? game.scenes?.get?.(sceneId) : null;
+    if (scene) {
+      const drawIds = (scene.drawings?.contents ?? Array.from(scene.drawings ?? []))
+        .filter(d => d.getFlag?.(MODULE_ID, "spawned") && d.getFlag?.(MODULE_ID, "tutorialHex")).map(d => d.id);
+      if (drawIds.length) { try { await scene.deleteEmbeddedDocuments("Drawing", drawIds); } catch (_) {} }
+      const tokIds = (scene.tokens?.contents ?? Array.from(scene.tokens ?? []))
+        .filter(t => t.getFlag?.(MODULE_ID, "spawned")).map(t => t.id);
+      if (tokIds.length) { try { await scene.deleteEmbeddedDocuments("Token", tokIds); } catch (_) {} }
+    }
+    for (const a of (game.actors?.contents ?? [])) {
+      try { if (a.getFlag?.(MODULE_ID, "spawned") && a.getFlag?.(MODULE_ID, "kind") === "hostileFaction") await a.delete(); } catch (_) {}
+    }
+    return { ok: true };
+  });
+
   reg("cleanup", async ({ tokens = [], actorIds = [] }) => {
     for (const t of tokens) {
       try { const sc = game.scenes?.get?.(t.sceneId); if (sc && t.tokenId) await sc.deleteEmbeddedDocuments("Token", [t.tokenId]); } catch (_) {}
@@ -158,7 +264,7 @@ function _registerOps() {
     return { ok: true };
   });
 
-  console.log(TAG, "GM ops registered: spawnDummy, ensureToken, mintRig, cleanup.");
+  console.log(TAG, "GM ops registered: spawnDummy, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
 }
 
 /* ─── Public helpers (called by beats; resolve ids -> Documents) ────────────── */
@@ -211,6 +317,35 @@ async function unclaimHex(hexUuid) {
   await _runAsGM("unclaimHex", { hexUuid });
 }
 
+/** Spawn (or reuse) a disposable hostile faction to raid. Returns the Actor or null. */
+async function spawnHostileFaction(name = "The Rust Syndicate") {
+  const res = await _runAsGM("spawnHostileFaction", { name });
+  return res?.actorId ? (await _ns()?.relay?.resolveActor?.(res.actorId)) || null : null;
+}
+
+/** Author/reset a tutorial territory hex. opts: {key,name,factionId,status,xFrac,yFrac,fillColor,strokeColor}. Returns {hexUuid,drawingId,sceneId}. */
+async function ensureHex(scene, opts = {}) {
+  if (!scene) return null;
+  return await _runAsGM("ensureHex", { sceneId: scene.id, ...opts });
+}
+
+/** Pre-seed the Raid Console session on the player's real faction so it opens pre-targeted. */
+async function setRaidSession(factionId, session) {
+  if (!factionId || !session) return;
+  await _runAsGM("setRaidSession", { factionId, session });
+}
+
+/** Clear the raid session pointer off the player's real faction. */
+async function clearRaidSession(factionId) {
+  if (!factionId) return;
+  await _runAsGM("clearRaidSession", { factionId });
+}
+
+/** Graduation teardown — clear raid pointer + delete spawned finale props on a scene. */
+async function teardownFinale(factionId, sceneId) {
+  await _runAsGM("teardownFinale", { factionId, sceneId });
+}
+
 /**
  * Tear down staged scaffolding. Each item may carry:
  *   .token / .doc — a TokenDocument to delete   .actor — an Actor (deleted only if spawned-flagged)
@@ -229,5 +364,5 @@ async function cleanup(items = []) {
 Hooks.once("ready", () => {
   _registerOps();
   const ns = _ns();
-  if (ns) ns.stage = { ensureTokenOnScene, spawnDummy, mintRig, disembark, ensureSandboxHex, claimHex, unclaimHex, cleanup, folder: _folder };
+  if (ns) ns.stage = { ensureTokenOnScene, spawnDummy, mintRig, disembark, ensureSandboxHex, claimHex, unclaimHex, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup, folder: _folder };
 });

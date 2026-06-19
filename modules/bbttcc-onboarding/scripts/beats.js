@@ -2,9 +2,14 @@
  * The ordered beat definitions.
  *   Phase 1: incarnation
  *   Phase 2: meatsuit (test real abilities), driving (pilot the real rig)
+ *   Phase 3: stewardship — claim a sandbox hex, read OP + run a dry-run Turn
+ *   Phase 4 (finale): travel into a hostile hex → triple raid (violence / intrigue /
+ *           presence, player-driven pre-targeted consoles) → graduation dive into live Bad Eden
  *
  * Each beat drives a REAL subsystem the player owns and detects completion off that
- * subsystem's existing hook. All spawns are contained to dedicated tutorial Scenes.
+ * subsystem's existing hook (with manual-prompt fallbacks so a player is never trapped).
+ * All spawns are contained to dedicated tutorial Scenes and flagged so teardown only ever
+ * removes its own scaffolding; the player practices on their REAL steward, rig and faction.
  */
 
 const MODULE_ID = "bbttcc-onboarding";
@@ -283,6 +288,227 @@ const stewardshipTurn = {
   }
 };
 
+/* ═════════════════════════ PHASE 4 — FINALE ═════════════════════════
+ * travel into a hostile hex → triple raid (violence / intrigue / presence,
+ * player-driven, pre-targeted consoles) → graduation dive into live Bad Eden.
+ * Targets are spawned scaffolding; the player raids with their REAL faction.
+ */
+
+/**
+ * Find-or-create the finale targets, resolved by FLAG so the finale survives a
+ * reload/resume (no reliance on ctx surviving across separate start() calls):
+ *   • a disposable hostile faction (the enemy),
+ *   • its hold (hostile hex) — the raid target,
+ *   • the player's Forward Camp (origin hex) — the travel start.
+ * Returns { scene, hostile, hostileHex, originHex }.
+ */
+async function _finaleTargets(ctx) {
+  const stage = _stage();
+  const scene = ctx.scene("hostile-hex");
+  if (!scene || !stage) return { scene: scene || null, hostile: null, hostileHex: null, originHex: null };
+  const hostile = await stage.spawnHostileFaction?.("The Rust Syndicate");
+  const originHex = await stage.ensureHex?.(scene, {
+    key: "origin", name: "Forward Camp", factionId: ctx.faction?.id || "",
+    status: "occupied", xFrac: 0.28, yFrac: 0.5, fillColor: "#3aa0ff", strokeColor: "#bfe3ff"
+  });
+  const hostileHex = await stage.ensureHex?.(scene, {
+    key: "hostile", name: "Rust Syndicate Hold", factionId: hostile?.id || "",
+    status: "occupied", xFrac: 0.72, yFrac: 0.5, fillColor: "#ff5a3a", strokeColor: "#ffd0c2"
+  });
+  return { scene, hostile: hostile || null, hostileHex: hostileHex || null, originHex: originHex || null };
+}
+
+/* ───────────────────────── TRAVEL ───────────────────────── */
+// Cross from the Forward Camp into the hostile hold using the REAL Travel interface.
+// Detected off `bbttcc:afterTravel`; a manual fallback prompt prevents a trap if the
+// travel engine won't plot a course on a gridless practice scene.
+const travel = {
+  id: "travel",
+  title: "Cross Into Hostile Ground",
+  scope: "shared",
+
+  enter: async (ctx) => {
+    ctx._spawned = [];
+    await ctx.speak("Stewardship is holding what's yours. The real test is TAKING what isn't. There's a frontier hold squatting on contested ground — the Rust Syndicate. We're going to pay them a visit.");
+    await _pause(900);
+
+    const scene = ctx.scene("hostile-hex");
+    if (scene) { await _enterScene(scene, "Hostile Frontier"); await _pause(800); }
+    else console.warn(TAG, "No 'hostile-hex' tutorial Scene — run tools/onboarding-setup.macro.js.");
+
+    ctx._finale = await _finaleTargets(ctx);
+
+    const stage = _stage();
+    if (scene && stage) {
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, { x: Math.round(scene.width * 0.28), y: Math.round(scene.height * 0.66) });
+      if (st.created) ctx._spawned.push({ token: st.doc });
+    }
+    await _pause(500);
+    await ctx.speak("Two holds ahead: your Forward Camp, and the Syndicate's. Plot a course and TRAVEL across — open your Travel interface and make the crossing.");
+    ctx.riff({ beat: "travel", line: "Player is about to travel into hostile territory for the finale.", intent: "Tense, conspiratorial. One line." });
+  },
+
+  detect: (ctx, done) => {
+    const hostileUuid = ctx._finale?.hostileHex?.hexUuid;
+    const sceneId = ctx._finale?.scene?.id;
+    const onTravel = (data = {}) => {
+      const toUuid = data?.to?.uuid;
+      const onScene = (data?.to?.obj?.parent?.id === sceneId) || (data?.hexTo?.parent?.id === sceneId);
+      if ((hostileUuid && toUuid === hostileUuid) || (sceneId && onScene)) done();
+    };
+    Hooks.on("bbttcc:afterTravel", onTravel);
+    // Fallback — never trap the player if Travel won't drive on a practice scene.
+    ctx.prompt({
+      title: "◇ OPERATOR",
+      content: `<p>Make the crossing to the <b>Rust Syndicate Hold</b> through your Travel interface.</p><p><i>(Practice scene — if Travel won't plot a course here, I'll wave you across.)</i></p>`,
+      label: "Make the crossing"
+    }).then(() => done());
+    return () => Hooks.off("bbttcc:afterTravel", onTravel);
+  },
+
+  exit: async (ctx) => {
+    await ctx.speak("You're across. They've seen you now — no walking this back. Time to choose HOW you take them.");
+  }
+};
+
+/* ───────────────────────── TRIPLE RAID (factory) ───────────────────────── */
+// One pre-targeted, player-driven raid per approach. We pre-seed the Raid Console's
+// session flag on the player's REAL faction (the same flag the console persists) so it
+// opens already pointed at the hostile hold + the right raid type; the player runs the
+// rounds. Advance is a player-driven "Conclude" prompt (un-trappable), coloured by the
+// real `bbttcc:raid:roundCommit` hook as they commit rounds.
+function makeRaidBeat({ id, title, activityKey, intro, instruct, after }) {
+  return {
+    id, title, scope: "shared",
+
+    enter: async (ctx) => {
+      const f = ctx.faction;
+      const fin = ctx._finale || (ctx._finale = await _finaleTargets(ctx));
+      const scene = fin.scene || ctx.scene("hostile-hex");
+      if (scene) { await _enterScene(scene, title); await _pause(500); }
+
+      if (!f) { await ctx.speak("No faction on file to raid under— *bzzt* —I can't open a war console without one. Lead a faction, then replay the finale."); return; }
+
+      const hex = fin.hostileHex;
+      // Pre-seed the console session (read on first render via the console's session-apply).
+      const session = {
+        rev: Date.now(), ts: Date.now(), by: globalThis.game?.user?.id || "",
+        attackerId: f.id, supportFactionIds: [],
+        activityKey, difficulty: "normal",
+        targetType: "hex", targetUuid: hex?.hexUuid || "",
+        targetName: hex ? "Rust Syndicate Hold" : "—",
+        defenderId: fin.hostile?.id || "",
+        rounds: [], logWar: false, includeDefender: true
+      };
+      try { await _stage()?.setRaidSession?.(f.id, session); } catch (_) {}
+
+      await ctx.speak(intro);
+      await _pause(400);
+      try { await globalThis.game?.bbttcc?.api?.raid?.openConsole?.({ factionId: f.id }); }
+      catch (e) { console.warn(TAG, `openConsole (${activityKey}) failed`, e); }
+
+      ctx.riff({ beat: id, line: `Player is about to run a ${activityKey} raid against the tutorial hostile hold.`, intent: "Coach them through this one approach. One line." });
+    },
+
+    detect: (ctx, done) => {
+      const fid = ctx.faction?.id;
+      let rounds = 0;
+      const onCommit = (data = {}) => {
+        if (fid && String(data.attackerId || "") !== String(fid)) return;
+        rounds++;
+        ctx.riff?.({ beat: id, line: `Player committed round ${rounds} of the ${activityKey} raid (outcome: ${data.outcome || "?"}).`, intent: "React to the round outcome. One short line." });
+      };
+      Hooks.on("bbttcc:raid:roundCommit", onCommit);
+      ctx.prompt({ title: "◇ OPERATOR", content: instruct, label: "Conclude this raid" }).then(() => done());
+      return () => Hooks.off("bbttcc:raid:roundCommit", onCommit);
+    },
+
+    exit: async (ctx) => {
+      if (after) await ctx.speak(after);
+    }
+  };
+}
+
+const raidViolence = makeRaidBeat({
+  id: "raid_violence",
+  title: "Raid — Violence",
+  activityKey: "violence",
+  intro: "First approach: the blunt one. VIOLENCE. Your console's loaded and aimed at the Rust hold — pick your maneuvers and run the rounds. Make it loud.",
+  instruct: `<p>Run the <b>Violence</b> raid — select maneuvers and commit a round or two against the <b>Rust Syndicate Hold</b>.</p><p>When you've felt the rhythm of assault, conclude.</p>`,
+  after: "Loud and effective. But not every door wants kicking. Some you pick— *bzzt* —quietly."
+});
+
+const raidIntrigue = makeRaidBeat({
+  id: "raid_intrigue",
+  title: "Raid — Intrigue",
+  activityKey: "intrigue",
+  intro: "Second approach: the quiet one. INTRIGUE. Same target, different knife — slip in, raise the alarm meter at your own pace, take them from inside. Console's re-aimed; go.",
+  instruct: `<p>Run the <b>Intrigue</b> raid — work the infiltration/alarm scenario against the <b>Rust Syndicate Hold</b>.</p><p>When you've felt how the quiet game plays, conclude.</p>`,
+  after: "Subtle. They never saw the hand in their pocket. One approach left, and it's the strangest— *bzzt* —winning without a single blow."
+});
+
+const raidPresence = makeRaidBeat({
+  id: "raid_presence",
+  title: "Raid — Presence",
+  activityKey: "presence",
+  intro: "Last approach: the velvet one. PRESENCE — courtly intrigue. You don't break the hold, you out-talk it; bend influence until they fold to your face. Console's re-aimed; hold court.",
+  instruct: `<p>Run the <b>Presence</b> raid — play the courtly/influence scenario against the <b>Rust Syndicate Hold</b>.</p><p>When you've felt how soft power lands, conclude.</p>`,
+  after: "And that's the whole grammar of taking ground — fist, knife, and word."
+});
+
+/* ───────────────────────── GRADUATION ───────────────────────── */
+// Tear down ALL finale scaffolding, clear the real faction's stale raid pointer, mark the
+// world's onboarding complete, and dive into the LIVE Bad Eden map (pull the table if a GM
+// is driving). Players keep their real steward/rig/faction — they just walk out the door.
+const graduation = {
+  id: "graduation",
+  title: "Graduation",
+  scope: "shared",
+
+  enter: async (ctx) => {
+    await ctx.speak("Three approaches, one enemy folded. Violence, intrigue, presence — you can take ground any way the moment demands. That's a Steward.");
+    await _pause(1000);
+    await ctx.speak("Training's done, One. No more sandbox, no more straw adversaries. From here it's the real Bad Eden — your hold, your rig, your faction, live in the weave. Go fix what broke. *bzzt*");
+  },
+
+  detect: (ctx, done) => {
+    ctx.prompt({
+      title: "◇ OPERATOR",
+      content: `<p>You're ready. Step out of the tutorial and into the <b>living world</b>.</p><p>Everything you practiced is real now.</p>`,
+      label: "Enter Bad Eden"
+    }).then(() => done());
+    return null;
+  },
+
+  exit: async (ctx) => {
+    const ns = globalThis.game?.bbttcc?.onboarding;
+    const f = ctx.faction;
+    const sceneId = ctx._finale?.scene?.id || ctx.scene("hostile-hex")?.id;
+
+    // Sever the real faction's stale raid pointer + delete every spawned finale prop.
+    try { await _stage()?.teardownFinale?.(f?.id, sceneId); } catch (_) {}
+    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
+    ctx._spawned = []; ctx._finale = null;
+
+    // Mark the world's onboarding complete (GM only; players can still replay).
+    try { if (globalThis.game?.user?.isGM) await ns?.settings?.set?.("completed", true); } catch (_) {}
+
+    // Dive into the live Bad Eden map — pull the whole table if a GM is driving.
+    const main = ns?.resolve?.mainMap?.();
+    const tx = _tx();
+    if (main && tx?.dive) {
+      try { await tx.dive(main.uuid, { focus: { x: main.width / 2, y: main.height / 2 }, audience: "activate", label: "Bad Eden" }); }
+      catch (e) { console.warn(TAG, "graduation dive failed; viewing instead", e); try { await main.view?.(); } catch (_) {} }
+    } else if (main) {
+      try { await main.view?.(); } catch (_) {}
+    } else {
+      console.warn(TAG, "No live Bad Eden map resolved for the graduation dive.");
+    }
+
+    await ctx.speak("Connection handed off. You're live. Good luck, One — you'll need it. *bzzt* —Operator out.");
+  }
+};
+
 /* ───────────────────────── REGISTRATION ───────────────────────── */
 Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
@@ -290,6 +516,11 @@ Hooks.once("ready", () => {
     console.warn(TAG, "onboarding namespace not ready — beats NOT registered.");
     return;
   }
-  for (const beat of [incarnation, meatsuit, driving, stewardshipClaim, stewardshipTurn]) ns.beats.register(beat);
+  const ordered = [
+    incarnation, meatsuit, driving,
+    stewardshipClaim, stewardshipTurn,
+    travel, raidViolence, raidIntrigue, raidPresence, graduation
+  ];
+  for (const beat of ordered) ns.beats.register(beat);
   console.log(TAG, "Registered beats:", ns.beats.list().map(b => b.id).join(", "));
 });

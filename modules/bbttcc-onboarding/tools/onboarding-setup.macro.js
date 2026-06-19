@@ -18,9 +18,8 @@
     { key: "incarnation",    name: "Onboarding — Incarnation",   w: 2000, h: 1400, color: "#0b0e16" },
     { key: "meatsuit-range", name: "Onboarding — Proving Range", w: 2000, h: 1400, color: "#10131c" },
     { key: "driving-course", name: "Onboarding — Test Track",    w: 3000, h: 1800, color: "#0e1018" },
-    { key: "sandbox-hex",    name: "Onboarding — Sandbox Hold",  w: 2400, h: 1800, color: "#0c120c" }
-    // future phases:
-    // { key: "hostile-hex",    name: "Onboarding — Hostile Hex",   w: 2400, h: 2000, color: "#1a0c0c" },
+    { key: "sandbox-hex",    name: "Onboarding — Sandbox Hold",  w: 2400, h: 1800, color: "#0c120c" },
+    { key: "hostile-hex",    name: "Onboarding — Hostile Frontier", w: 3000, h: 1800, color: "#1a0c0c" }
   ];
 
   const made = [], reused = [];

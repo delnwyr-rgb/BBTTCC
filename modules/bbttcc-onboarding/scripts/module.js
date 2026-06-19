@@ -86,6 +86,32 @@ function findTutorialScene(key) {
   catch (_) { return null; }
 }
 
+/**
+ * The LIVE Bad Eden map the graduation dive lands on. There is no canonical "main map"
+ * flag/setting, so resolve in priority order:
+ *   1) a scene a GM opted in via flags[MODULE_ID].mainMap (convention hook for later),
+ *   2) the non-tutorial scene with the MOST bbttcc-territory hex drawings (the hex map),
+ *   3) the active scene if it isn't a tutorial scene,
+ *   4) null (caller falls back to a plain teardown without a dive).
+ */
+function resolveMainMap() {
+  try {
+    const scenes = (game.scenes?.contents ?? []);
+    const isTut = (s) => !!s.getFlag?.(MODULE_ID, "tutorialScene");
+    const opted = scenes.find(s => s.getFlag?.(MODULE_ID, "mainMap"));
+    if (opted) return opted;
+    const hexCount = (s) => {
+      try { return (s.drawings?.contents ?? Array.from(s.drawings ?? [])).filter(d => d.getFlag?.("bbttcc-territory", "isHex") || d.flags?.["bbttcc-territory"]?.isHex).length; }
+      catch (_) { return 0; }
+    };
+    const ranked = scenes.filter(s => !isTut(s)).map(s => ({ s, n: hexCount(s) })).sort((a, b) => b.n - a.n);
+    if (ranked[0]?.n > 0) return ranked[0].s;
+    const active = game.scenes?.active;
+    if (active && !isTut(active)) return active;
+    return ranked[0]?.s || null;
+  } catch (_) { return null; }
+}
+
 // ----- Namespace bootstrap -----
 function _install() {
   try {
@@ -112,7 +138,8 @@ function _install() {
         steward: resolveSteward,
         faction: resolveFaction,
         rig: resolveRig,
-        scene: findTutorialScene
+        scene: findTutorialScene,
+        mainMap: resolveMainMap
       }
 
       // .speak/.riff attached by operator-voice.js; .beats/.start/... by director.js
