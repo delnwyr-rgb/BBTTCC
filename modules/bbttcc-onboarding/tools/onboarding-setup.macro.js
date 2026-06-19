@@ -4,9 +4,9 @@
  * each with flags["bbttcc-onboarding"].tutorialScene = "<key>" so the director resolves
  * them by flag (no stale UUIDs). Re-run anytime — existing scenes are reused, not duped.
  *
- * Phase 1 seeds only the INCARNATION scene (solid-colour background so it always renders;
- * swap in art via Scene config anytime). Later phases extend the SCENES list below
- * (meatsuit range, driving course, sandbox hex, hostile hex...).
+ * Seeds all tutorial scenes for Phases 1–4: incarnation, proving range, test track,
+ * sandbox hold, and hostile frontier (solid-colour backgrounds so they always render;
+ * swap in art via Scene config anytime).
  *
  * After running:  game.bbttcc.onboarding.start()
  */
