@@ -98,13 +98,22 @@ try {
 }
 
       // TREND
+      // Morale buoyancy is PASSIVE recovery for the absence of pressure — it must not
+      // push morale UPWARD against active Darkness (or Darkness loses its teeth and the
+      // homeostasis permanently indemnifies a faction from darkness/radiation danger).
+      // So while Darkness.global >= 1 we suppress only the *upward* lift; downward drift
+      // (morale above home) and all Loyalty behavior are unchanged. When clean (Darkness 0)
+      // buoyancy works normally. Radiation's morale danger flows through Darkness (Radiated
+      // hexes raise Darkness), so gating on Darkness covers both.
+      const darkG=Number((get(A,`flags.${MODF}.darkness`,{})||{}).global ?? 0);
       const mHome=Number(get(A,`flags.${MODF}.moraleHome`,50));
       const mStep=Number(get(A,`flags.${MODF}.moraleStep`,1));
       const lHome=Number(get(A,`flags.${MODF}.loyaltyHome`,50));
       const lStep=Number(get(A,`flags.${MODF}.loyaltyStep`,1));
       const mCur=Number(get(A,`flags.${MODF}.morale`,0))||0;
       const lCur=Number(get(A,`flags.${MODF}.loyalty`,0))||0;
-      const mNext=clamp(trendNext(mCur,mHome,mStep),0,100);
+      let mNext=clamp(trendNext(mCur,mHome,mStep),0,100);
+      if(darkG>=1) mNext=Math.min(mNext,mCur);   // no upward buoyancy under Darkness pressure
       const lNext=clamp(trendNext(lCur,lHome,lStep),0,100);
       if(mNext!==mCur){updates["morale"]=mNext;any=true;}
       if(lNext!==lCur){updates["loyalty"]=lNext;any=true;}
