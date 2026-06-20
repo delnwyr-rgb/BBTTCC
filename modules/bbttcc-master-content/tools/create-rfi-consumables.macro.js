@@ -1,6 +1,6 @@
 // Bad Eden — Create RFI-native Consumables (Sprint: New Gear)
 // ─────────────────────────────────────────────────────────────────────────────
-// Adds 15 fourththing-shaped consumables to `bbttcc-master-content.items`.
+// Adds 17 fourththing-shaped consumables to `bbttcc-master-content.items`.
 // Each ships with a `flags.fourththing.rfi.item.consume` block read by the
 // runConsumeEffects engine — clicking [Use] on the inventory tab rolls dice,
 // adjusts tracks (integrity / stress / clarity / noise / radiation / burn /
@@ -116,6 +116,25 @@ const CONSUMABLES = [
     signature: "Half a wasteland's worth of sin, pulled out clean.",
     lore: "Heavy chelating dose. Burns going in. Binds and excretes everything radioactive in the system.",
     consume: { effects: [{ kind: "track", track: "radiation", op: "subtract", delta: 50 }], decrement: true }
+  },
+
+  // ── Mutation cure (gene-cleanse) ─────────────────────────────────────────
+  // Radiation MUTATIONS are permanent transformations (they outlast a detox).
+  // These are the in-fiction cure: kind "mutation" routes through the consume
+  // engine to the radiation mutations API, deleting the mutation + its effect AE.
+  {
+    name: "Gene-Cleanse Serum",
+    tier: "III", charges: 1,
+    signature: "The body forgets one thing the radiation taught it.",
+    lore: "Retroviral scrub-kit. Targets a single mutation and unwrites it from the marrow — you choose which scar to lose.",
+    consume: { effects: [{ kind: "mutation", op: "cleanse", count: 1 }], decrement: true }
+  },
+  {
+    name: "Gene-Purge Infusion",
+    tier: "III", charges: 1,
+    signature: "Every borrowed shape, returned at once.",
+    lore: "Full-spectrum genomic reset, vault-grade and brutal. Strips away every radiation mutation — boon and bane alike — in one searing pass.",
+    consume: { effects: [{ kind: "mutation", op: "cleanseAll" }], decrement: true }
   },
 
   // ── Blood Debt ──────────────────────────────────────────────────────────

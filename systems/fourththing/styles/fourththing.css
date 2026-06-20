@@ -2278,6 +2278,7 @@
 .ft-rad-display {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.4rem;
   margin: 0.35rem 0;
   font-size: 0.78rem;
@@ -2286,6 +2287,12 @@
 .ft-rad-label { opacity: 0.5; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; }
 .ft-rad-val   { font-weight: 600; color: #f2994a; }
 .ft-rad-thresholds { font-size: 0.65rem; opacity: 0.45; }
+.ft-rad-tier {
+  font-size: 0.66rem; font-weight: 700; line-height: 1;
+  padding: 0.12rem 0.4rem; border: 1px solid currentColor; border-radius: 999px;
+}
+.ft-rad-penalties { flex-basis: 100%; font-size: 0.66rem; font-weight: 600; opacity: 0.9; }
+.ft-rad-display.ft-rad-sick { opacity: 1; }
 
 /* Collapsed item rows — all tabs use the same <details> pattern */
 .ft-item-list { display: flex; flex-direction: column; gap: 0.2rem; }

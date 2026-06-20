@@ -97,6 +97,18 @@ class BBTTCCRadiationModule {
     const lvlKey   = lvl?.key ?? "safe";
     const actorLbl = actor.type === "character" ? "Player Character" : "NPC";
 
+    // Human labels for the safe aeBonus effect channels (mirrors the mutation
+    // enhancer's DEF_LABEL) so the sheet can surface what each mutation does.
+    const DEFLBL = {
+      "system.derived.guard.aeBonus":     "Guard",
+      "system.derived.evasion.aeBonus":   "Evasion",
+      "system.derived.resolve.aeBonus":   "Resolve",
+      "system.derived.initiative.bonus":  "Initiative",
+      "system.derived.integrity.aeBonus": "Max Integrity",
+      "system.derived.stress.aeBonus":    "Max Stress",
+      "system.magic.castBonus":           "Casting"
+    };
+
     const mutItems = (mutations || []).map(m => {
       const tierLabel = m.tier
         ? m.tier.charAt(0).toUpperCase() + m.tier.slice(1)
@@ -105,14 +117,21 @@ class BBTTCCRadiationModule {
       const name  = foundry.utils.escapeHTML(m.name || "Mutation");
       const src   = foundry.utils.escapeHTML(m.source || "radiation");
       const rpStr = m.rpAtTrigger != null ? ` (RP ${m.rpAtTrigger})` : "";
+      const effStr = Array.isArray(m.effects) && m.effects.length
+        ? m.effects.map(e => `${Number(e.value) >= 0 ? "+" : "−"}${Math.abs(Number(e.value))} ${DEFLBL[e.key] ?? e.key}`).join(", ")
+        : "";
+      const effHtml = effStr
+        ? `<br/><span style="font-size:0.85em;color:#7ec850;font-weight:600;">⚙ ${foundry.utils.escapeHTML(effStr)}</span>`
+        : "";
       return `
         <li class="effect-item">
           <i class="fas fa-biohazard"></i>
-          <div>
+          <div style="flex:1;">
             <strong>[${tierLabel}] ${name}</strong><br/>
-            <span style="font-size:0.9em;">${desc}</span><br/>
+            <span style="font-size:0.9em;">${desc}</span>${effHtml}<br/>
             <span style="font-size:0.8em; opacity:0.8;">Source: ${src}${rpStr}</span>
           </div>
+          <button type="button" class="reset-button" data-cure-mutation="${m.id}" title="Cure this mutation — removes it and its effects permanently" style="align-self:flex-start;">Cure</button>
         </li>
       `;
     }).join("");
@@ -206,9 +225,10 @@ class BBTTCCRadiationModule {
                 <li><strong>51+ RP (High+):</strong> Mutation events begin; Darkness presses in.</li>
               </ul>
               <p class="hint">
-                Exact mutation tables and mechanical effects can be added later. For now,
-                mutations are narrative tags that respond to how the faction engages with
-                the world.
+                Mutations are <strong>permanent transformations</strong> — each carries a
+                double-edged mechanical effect (a boon and a bane) and persists even after
+                radiation is cleared. They are removed only deliberately, via the
+                <em>Cure</em> button below (or a gene-cleanse remedy).
               </p>
             </div>
           </section>
@@ -329,6 +349,22 @@ class BBTTCCRadiationModule {
         } catch (e) {
           console.warn("[bbttcc-radiation] clear failed:", e);
           ui.notifications?.error?.("Failed to clear Radiation (see console).");
+        }
+      });
+
+      // Cure a single mutation — removes it from the ledger AND deletes its
+      // persistent effect AE (the API handles both). Mutations are permanent, so
+      // this deliberate cure is the canonical removal path.
+      overlay.on("click.bbttcc-radiation", "[data-cure-mutation]", async (ev) => {
+        ev.preventDefault();
+        const id = ev.currentTarget.dataset.cureMutation;
+        if (!id || !mutApi || typeof mutApi.remove !== "function") return;
+        try {
+          await mutApi.remove(actorId, id);
+          app.render(false);
+        } catch (e) {
+          console.warn("[bbttcc-radiation] cure mutation failed:", e);
+          ui.notifications?.error?.("Failed to cure mutation (see console).");
         }
       });
 

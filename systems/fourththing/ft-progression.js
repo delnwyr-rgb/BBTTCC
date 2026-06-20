@@ -98,9 +98,13 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
   const aeSkillBonus = getAEBonusForSkill(actor, skill);
   const { bonus: aeAttrBonus, contribs: aeAttrContribs } = getAEBonusForAttr(actor, attribute);
   const aeBonus    = aeSkillBonus + aeAttrBonus;
+  // Radiation Sickness — flat penalty to every aptitude check. Read from the
+  // system helper (exposed on game.fourththing) so the threshold ladder stays
+  // single-source; defaults to 0 if unavailable.
+  const radPenalty = game.fourththing?.radiationBite?.(actor)?.rollPenalty ?? 0;
   // Use raw rank for the additive numeric bonus so chat-card math still
   // reflects the stored value; rankData.bonus reflects the clamped table.
-  const totalBonus = attrVal + Number(rank) + aeBonus;
+  const totalBonus = attrVal + Number(rank) + aeBonus - radPenalty;
 
   // Master (rank 4) and Legendary (rank 5+) roll 3d10 keep best 2. Everyone else rolls 2d10.
   const poolSize = rankClamped >= 4 ? 3 : 2;
@@ -204,7 +208,7 @@ export async function skillRollWithRank(actor, { attribute, skill, label = "", a
     if (floorAdd > 0) mechNote = `floor 4 (+${floorAdd})`;
   }
 
-  return { total, roll, rank, rankData, attrVal, aeBonus, totalBonus,
+  return { total, roll, rank, rankData, attrVal, aeBonus, totalBonus, radPenalty,
            aeSkillBonus, aeAttrBonus, aeAttrContribs,
            isFumble, mechNote, rerollNote, formula, label, skill, attribute,
            surgeBanked, doubleTen, dieResults, kept };

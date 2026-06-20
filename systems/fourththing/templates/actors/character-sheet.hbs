@@ -416,11 +416,14 @@
           </div>
           {{/if}}
 
-          {{!-- #4: Radiation display-only (editable via Radiation button) --}}
-          <div class="ft-rad-display">
+          {{!-- #4: Radiation — RP + auto tier + active penalties (editable via Radiation button) --}}
+          <div class="ft-rad-display{{#if radiation.sick}} ft-rad-sick{{/if}}">
             <span class="ft-rad-label">Radiation</span>
             <span class="ft-rad-val">{{system.radiation.rp}} RP</span>
-            <span class="ft-rad-thresholds">Minor {{system.radiation.thresholds.minor}} / Major {{system.radiation.thresholds.major}} / Severe {{system.radiation.thresholds.severe}}</span>
+            <span class="ft-rad-tier" style="color:{{radiation.color}};border-color:{{radiation.color}}">☢ {{radiation.tierLabel}}</span>
+            {{#if radiation.penalties.length}}
+            <span class="ft-rad-penalties" style="color:{{radiation.color}}">{{#each radiation.penalties}}{{this}}{{#unless @last}} · {{/unless}}{{/each}}</span>
+            {{/if}}
           </div>
 
           <div class="ft-dark">

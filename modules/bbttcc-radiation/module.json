@@ -33,7 +33,8 @@
     "scripts/bbttcc-radiation-zone.enhancer.js",
     "scripts/bbttcc-radiation-mutations.enhancer.js",
     "scripts/radiation-turn.enhancer.js",
-    "scripts/api.radiation.js"
+    "scripts/api.radiation.js",
+    "scripts/radiation-effects.js"
   ],
   "styles": [
     "styles/radiation-styles.css"

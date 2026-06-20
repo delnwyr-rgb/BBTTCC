@@ -340,9 +340,38 @@
     const max = (obj.max != null) ? Number(obj.max) : null;
     return { cur, max };
   }
+  // Radiation tier chip — surfaces the steward's current Radiation Sickness tier
+  // and its active bite right on the HUD. Hidden when Clean at 0 RP.
+  const RAD_COLORS = {
+    radiationIrradiated: "#7ec850",
+    radiationSickened:   "#b6d038",
+    radiationPoisoned:   "#d99a1c",
+    radiationTerminal:   "#c0392b"
+  };
+  function radChipHTML(steward) {
+    const radApi = game.bbttcc?.api?.radiation;
+    const rp   = Number(radApi?.get?.(steward.id) ?? foundry.utils.getProperty(steward, "system.radiation.rp") ?? 0);
+    const tier = radApi?.tierFor?.(steward);
+    const sick = !!tier?.key;
+    if (!rp && !sick) return "";  // Clean & 0 RP → nothing to show
+    const label = tier?.label ?? "Clean";
+    const color = sick ? (RAD_COLORS[tier.key] ?? "#c0392b") : "#7ec850";
+    const bits = [];
+    if (tier?.rollPenalty)  bits.push(`−${tier.rollPenalty} all rolls`);
+    if (tier?.integrityCap) bits.push(`max Integrity −${tier.integrityCap}`);
+    if (tier?.loseReaction) bits.push("lose Reaction/turn");
+    if (tier?.loseAction)   bits.push("lose Action/turn");
+    if (tier?.tick)         bits.push(`${tier.tick} Integrity/turn`);
+    const tip = `Radiation ${rp} RP — ${label}${bits.length ? ` · ${bits.join(" · ")}` : ""}`;
+    return `<button type="button" class="bbttcc-res-chip bbttcc-rad-chip${sick?' is-rad-sick':''}"
+      disabled style="--rad-color:${color}"
+      title="${esc(tip)}">
+      <i class="fas fa-radiation"></i><span>${esc(label)}</span>
+      <span class="bbttcc-res-val">${rp}</span>
+    </button>`;
+  }
   function resStripHTML(steward) {
     const keys = poolsFor(steward);
-    if (!keys.length) return "";
     const chips = keys.map(key => {
       const def = POOL_DEFS[key];
       const v = readPool(steward, key);
@@ -360,7 +389,9 @@
         <span class="bbttcc-res-val">${valTxt}</span>
       </button>`;
     }).join("");
-    return `<div class="bbttcc-resstrip">${chips}</div>`;
+    const radChip = radChipHTML(steward);
+    if (!chips && !radChip) return "";
+    return `<div class="bbttcc-resstrip">${chips}${radChip}</div>`;
   }
 
   // Prominent "Spend Surge" action — the headline of the new action economy.

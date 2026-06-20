@@ -9654,8 +9654,44 @@ FT.CONDITIONS = {
   charmed:    { label: "Charmed",    color: "#e07ec6", desc: "Cannot take hostile action against the source; source has reroll-lowest on social checks against you." },
   compelled:  { label: "Compelled",  color: "#7d3cff", desc: "On your turn you must spend at least one action toward a directive named by the source; otherwise you may act freely." },
   dying:      { label: "Dying",      color: "#8b0000", desc: "Integrity reduced to 0. Make a Last Stand roll at the start of each of your turns. 3 successes → stabilize at 1 Integrity. 3 failures → Cross the Threshold." },
-  surprise:   { label: "Surprised",  color: "#cc7a00", desc: "Cannot take any action on the first round of combat. Ends at the start of your next turn." }
+  surprise:   { label: "Surprised",  color: "#cc7a00", desc: "Cannot take any action on the first round of combat. Ends at the start of your next turn." },
+  // ── Radiation Sickness ladder ──────────────────────────────────────────────
+  // Auto-managed by bbttcc-radiation (radiation-effects.js) to mirror the actor's
+  // current RP tier. The numeric bite (roll penalty / Integrity cap / action tax /
+  // per-turn tick) is read from game.bbttcc.api.radiation.tierFor() at the roll,
+  // prepareDerivedData, and turn-start sites. Never toggle these by hand — set RP.
+  radiationIrradiated: { label: "Irradiated", color: "#7ec850", img: "icons/svg/radiation.svg", desc: "Radiation 25+. −1 to all rolls." },
+  radiationSickened:   { label: "Sickened",   color: "#b6d038", img: "icons/svg/biohazard.svg", desc: "Radiation 50+. −2 to all rolls; max Integrity −5. Mutations set in." },
+  radiationPoisoned:   { label: "Poisoned",   color: "#d99a1c", img: "icons/svg/poison.svg", desc: "Radiation 75+. −3 to all rolls; max Integrity −10; lose your Reaction each turn; 1d4 Integrity at the start of your turn." },
+  radiationTerminal:   { label: "Terminal",   color: "#c0392b", img: "icons/svg/skull.svg", desc: "Radiation 100+. −4 to all rolls; max Integrity −20; lose your Action each turn; 1d6 Integrity at the start of your turn." }
 };
+
+// ── Radiation Sickness — mechanical bite ────────────────────────────────────
+// The single source of truth for what RADIATION DOES. Thresholds mirror the
+// display ladder in bbttcc-radiation/scripts/radiation-effects.js (TIERS) — keep
+// the two aligned. Read off the unified RP store (system.radiation.rp) so the
+// lookup is synchronous and safe inside prepareDerivedData (no game.bbttcc race).
+//   rollPenalty  — flat −N to every aptitude / attack / cast roll
+//   integrityCap — reduces derived max Integrity
+//   loseReaction / loseAction — taxed at the start of the actor's turn
+//   tick         — Integrity damage rolled at the start of the actor's turn
+FT.RADIATION_BITE = [
+  { min: 100, key: "radiationTerminal",   rollPenalty: 4, integrityCap: 20, loseReaction: true,  loseAction: true,  tick: "1d6" },
+  { min: 75,  key: "radiationPoisoned",   rollPenalty: 3, integrityCap: 10, loseReaction: true,  loseAction: false, tick: "1d4" },
+  { min: 50,  key: "radiationSickened",   rollPenalty: 2, integrityCap: 5,  loseReaction: false, loseAction: false, tick: null  },
+  { min: 25,  key: "radiationIrradiated", rollPenalty: 1, integrityCap: 0,  loseReaction: false, loseAction: false, tick: null  }
+];
+function _ftRadiationBite(actor) {
+  const none = { rp: 0, key: null, rollPenalty: 0, integrityCap: 0, loseReaction: false, loseAction: false, tick: null };
+  // Radiation is a Steward-level mechanic — only characters/NPCs carry RP.
+  // Bosses/rigs (no radiation track) and factions (they live on Darkness) are exempt.
+  if (!actor || (actor.type !== "character" && actor.type !== "npc")) return none;
+  if (actor.getFlag?.("bbttcc-factions", "isFaction") === true) return none;
+  const rawSys = actor.system?.system ?? actor.system;
+  const rp = Number(rawSys?.radiation?.rp || 0);
+  for (const t of FT.RADIATION_BITE) if (rp >= t.min) return { ...t, rp };
+  return none;
+}
 
 FT.DEFENSES = {
   guard:   { label: "Guard",   formula: "10 + Violence + Body",    desc: "Resists physical force"       },
@@ -10100,6 +10136,53 @@ async function _ftResolveAmount(actor, eff) {
 // item's applyOnUse template AEs onto the recipient. Returns the chat summary
 // (<li> fragments). Charges + the chat card are handled once by the caller.
 // Instant formulas re-evaluate per recipient (each target gets its own roll).
+// Gene-cleanse helper — removes radiation mutations (and their effect AEs) via
+// the radiation module's mutations API. Returns a one-line summary string.
+async function _ftCleanseMutations(recipient, { all = false, count = 1 } = {}) {
+  const mutApi = game.bbttcc?.api?.radiation?.mutations;
+  if (!mutApi?.list || !mutApi?.remove) return "gene-cleanse: radiation module not ready";
+  const list = (mutApi.list(recipient) || []).slice();
+  if (!list.length) return "gene-cleanse: no mutations to cure";
+  let chosen;
+  if (all || count >= list.length) {
+    chosen = list;
+  } else {
+    chosen = await _ftPromptMutationCleanse(recipient, list, count);
+    if (!chosen || !chosen.length) return "gene-cleanse: cancelled (no mutation cured)";
+  }
+  for (const m of chosen) await mutApi.remove(recipient, m.id);
+  return `gene-cleanse: cured <b>${chosen.length}</b> mutation${chosen.length === 1 ? "" : "s"} — ${chosen.map(m => foundry.utils.escapeHTML(m.name)).join(", ")}`;
+}
+
+// Picker — choose up to `count` mutations to cure. Resolves to the chosen
+// mutation objects (empty array = cancelled).
+async function _ftPromptMutationCleanse(recipient, list, count) {
+  const rows = list.map(m => `
+    <label style="display:flex;gap:0.4rem;align-items:flex-start;margin:0.25rem 0;">
+      <input type="checkbox" name="ft-cleanse" value="${m.id}"/>
+      <span><b>${foundry.utils.escapeHTML(m.name)}</b>
+        <span style="opacity:0.7">[${foundry.utils.escapeHTML(m.tier || "")}]</span></span>
+    </label>`).join("");
+  const content = `<form>
+    <p style="font-size:0.85rem;margin:0 0 0.4rem">Choose up to <b>${count}</b> mutation${count === 1 ? "" : "s"} to cure on <b>${foundry.utils.escapeHTML(recipient.name)}</b>:</p>
+    ${rows}
+  </form>`;
+  return new Promise(resolve => {
+    new Dialog({
+      title: "Gene-Cleanse",
+      content,
+      buttons: {
+        cure:   { icon: '<i class="fas fa-dna"></i>', label: "Cure", callback: (html) => {
+          const ids = Array.from($(html).find("input[name='ft-cleanse']:checked")).map(el => el.value).slice(0, count);
+          resolve(list.filter(m => ids.includes(m.id)));
+        }},
+        cancel: { label: "Cancel", callback: () => resolve([]) }
+      },
+      default: "cure"
+    }).render(true);
+  });
+}
+
 async function _ftApplyConsumeToRecipient(recipient, item, consume) {
   const updates = {};
   const summary = [];
@@ -10131,6 +10214,15 @@ async function _ftApplyConsumeToRecipient(recipient, item, consume) {
       // canonical toggle so it lands as a native status AE (token icon + States
       // tab + immunity-aware), not a bare boolean.
       conditionOps.push({ key, on: eff.op !== "remove" });
+    } else if (eff.kind === "mutation") {
+      // Gene-cleanse — cure radiation mutations. op "cleanseAll"/"clear" purges
+      // every mutation; otherwise cure up to `count` (default 1), letting the
+      // user pick which scar to lose. Effect AEs are removed by the API.
+      const note = await _ftCleanseMutations(recipient, {
+        all:   eff.op === "cleanseAll" || eff.op === "clear",
+        count: Math.max(1, Number(eff.count) || 1)
+      });
+      summary.push(`<li>${note}</li>`);
     }
   }
 
@@ -10759,7 +10851,8 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
                                 rolledParts = [],
                                 explosionDice = [], surgeBanked = 0, doubleTen = false,
                                 costNote = "", signature = "", thirdThing = "",
-                                itemUuid = "", ignoreResists = false, nonlethal = false }) {
+                                itemUuid = "", ignoreResists = false, nonlethal = false,
+                                radPenalty = 0 }) {
   const ic = FT.INTENT_COLORS[intent] ?? "#888";
   const defData = FT.DEFENSES[defense] ?? { label: defense };
   const diceRow = diceResults.map(d =>
@@ -10841,6 +10934,7 @@ function buildAttackChatHTML({ label, intent, skill, defense, defenseValue,
     <span class="ft-formula-parts">
       <span class="ft-fp" title="${ftCap(intent)}">+${attrVal}</span>
       <span class="ft-fp" title="${ftCap(skill)}">+${skillVal}</span>
+      ${radPenalty ? `<span class="ft-fp" style="color:#e8c84a" title="Radiation Sickness">☢ −${radPenalty}</span>` : ""}
     </span>
   </div>
   <div class="ft-result-row ${success ? "ft-success" : "ft-failure"}">
@@ -12939,7 +13033,10 @@ Hooks.once("init", function () {
       const fp = actor.flags?.fourththing?.bulwark?.frameOneShot?.push;
       if (fp?.roll != null && attribute === "body") _framePushBonus = Math.max(0, Number(fp.roll) || 0);
     }
-    const totalBonus = attrVal + skillVal + aeAttr + aeSkill + _framePushBonus;
+    // Radiation Sickness — flat penalty to faculty checks AND sheet aptitude
+    // checks (both route through attributeTest via the sheet's _onFtRoll).
+    const _radPen = _ftRadiationBite(actor).rollPenalty;
+    const totalBonus = attrVal + skillVal + aeAttr + aeSkill + _framePushBonus - _radPen;
 
     // Dreamwalker per-rest one-shot bonus dice — consumed on use.
     const _dw = _ftReadDwOneShots(actor, { context: "check" });
@@ -12999,6 +13096,7 @@ Hooks.once("init", function () {
       noteBits.push(`Passives: ${parts.join(", ")}`);
     }
     if (_framePushBonus > 0) noteBits.push(`⛰ Frame Push +${_framePushBonus} (Body)`);
+    if (_radPen > 0)         noteBits.push(`☢ Radiation −${_radPen}`);
     if (rerollResult.applied.length) {
       const parts = rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`);
       noteBits.push(`Reroll: ${parts.join(", ")}`);
@@ -13014,9 +13112,14 @@ Hooks.once("init", function () {
       ? `${formula} = ${roll.total} → <b>${adjustedTotal}</b>`
       : `${formula} = <b>${roll.total}</b>`;
 
+    // Title: prefer an explicit label, else name the roll by its faculty/aptitude
+    // ("Violence Check", "Mind Check", "Athletics Check") rather than the generic
+    // "Roll for Initiation Check" fallback.
+    const _cardTitle = label
+      || (skill || attribute ? `${ftCap(skill || attribute)} Check` : "Roll for Initiation Check");
     await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
-      flavor:  `<div class="fourththing-roll"><h3>${label || "Roll for Initiation Check"}</h3>
+      flavor:  `<div class="fourththing-roll"><h3>${_cardTitle}</h3>
                 <p><b>Formula:</b> ${totalHtml}</p>${noteHtml}</div>`
     });
 
@@ -13055,7 +13158,7 @@ Hooks.once("init", function () {
     const attr = attribute || sk.attribute || "violence";
     const lbl  = label || sk.label || ftCap(skill);
     const result = await skillRollWithRank(actor, { attribute: attr, skill, label: lbl, allowSurge: _ftSurgeAllowed(actor) });
-    const { total, roll, rankData, attrVal, aeBonus, isFumble, mechNote, rerollNote,
+    const { total, roll, rankData, attrVal, aeBonus, radPenalty, isFumble, mechNote, rerollNote,
             surgeBanked, doubleTen, dieResults, kept } = result;
     const rankColor = rankData?.color ?? "#888";
     const notes = [mechNote, rerollNote].filter(Boolean).join(" · ");
@@ -13081,6 +13184,7 @@ Hooks.once("init", function () {
           <span class="ft-fp" title="${ftEscapeHtml(attr)}">+${attrVal}</span>
           <span class="ft-fp" title="rank ${rankData?.bonus}">+${rankData?.bonus ?? 0}</span>
           ${aeBonus ? `<span class="ft-fp ft-ae-bonus" title="AE bonuses">+${aeBonus}</span>` : ""}
+          ${radPenalty ? `<span class="ft-fp" style="color:#e8c84a" title="Radiation Sickness">☢ −${radPenalty}</span>` : ""}
         </div>
         <div class="ft-roll-result ${isFumble ? 'ft-fumble' : total >= 20 ? 'ft-success' : ''}">
           <span class="ft-total">${isFumble ? '✗ Fumble' : total}</span>
@@ -13167,7 +13271,15 @@ Hooks.once("init", function () {
     const _castTier  = _ftCasterTier(actor);
     const _castTierBonus = _castSurge.tierSurge ? _castTier : 0;
 
-    const posTotal = attrI + attrC + clarity + totalAlign + aeIntent + aeChannel + aeClarity + _castTierBonus;
+    // Radiation Sickness — flat penalty to the cast's positive total.
+    const _castRadPen = _ftRadiationBite(actor).rollPenalty;
+    // Clean caster channel — a single-read net cast modifier (mutations/effects
+    // can push it + as a clarity-boon or − as a noise-bane). We do NOT use raw
+    // magic.clarity/noise.value AEs: those double-count here (read live above AND
+    // summed by the aeClarity/aeNoise walker). Foundry applies an AE on
+    // system.magic.castBonus to this field; we read it exactly once.
+    const _aeCastBonus = Number(sys.magic?.castBonus) || 0;
+    const posTotal = attrI + attrC + clarity + totalAlign + aeIntent + aeChannel + aeClarity + _castTierBonus - _castRadPen + _aeCastBonus;
     // RFI canon: d10s explode on 10. Each explosion banks +1 Surge; double-10
     // base flags Act Again. Same engine as Engage/Steward — keeps all three
     // tactical roll paths visually + mechanically consistent.
@@ -13268,7 +13380,9 @@ Hooks.once("init", function () {
                                     total, difficulty, success, misfireData, diceResults,
                                     terrainLabel: terrain.terrainLabel,
                                     explosionDice, surgeBanked: explosions, doubleTen,
-                                    costNote, signature, thirdThing }) + restraintNote + (aeContribs.length
+                                    costNote, signature, thirdThing }) + restraintNote + (_castRadPen > 0
+        ? `<p style="font-size:0.78rem;color:#7ec850;margin:0.2rem 0 0">☢ Radiation: −${_castRadPen} to cast</p>`
+        : "") + (aeContribs.length
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">Passives: ${
             aeContribs.map(c => `${c.value >= 0 ? "+" : ""}${c.value} ${c.label} (${c.src})`).join(", ")
           }</p>`
@@ -13788,7 +13902,10 @@ Hooks.once("init", function () {
     }
 
     const flankMod  = Math.max(0, Number(flankBonus) || 0);
-    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus - echoPenalty;
+    // Radiation Sickness — flat accuracy penalty (folded into the strike's flat
+    // modifier so it's visible in the roll formula).
+    const _radPen   = _ftRadiationBite(actor).rollPenalty;
+    const total_mod = attrVal + skillVal + aeAttr + aeSkill + flankMod + signalBonus + aimedMod - suppression + tierBonus - echoPenalty - _radPen;
     // ── Aptitude rank + roll mode → dice pool ────────────────────────────────
     // Strikes roll the SAME rank-aware pool as an Aptitude check so a weapon hit
     // benefits identically. The rank's flat +N is already in total_mod; here the
@@ -14065,7 +14182,8 @@ Hooks.once("init", function () {
         damageRolledTotal, damageDiceTooltip,
         damageType, damageFlavor, rolledParts: success ? rolledParts : [],
         costNote, signature, thirdThing,
-        itemUuid, ignoreResists: !!_surge.sunderingBlow, nonlethal: _nonlethalHit
+        itemUuid, ignoreResists: !!_surge.sunderingBlow, nonlethal: _nonlethalHit,
+        radPenalty: _radPen
       }) + restraintNote + (flankMod > 0
         ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">⚔ Flanking: +${flankMod} (${flankMod + 1} melee threats)</p>`
         : "") + (aeContribs.length
@@ -14077,7 +14195,7 @@ Hooks.once("init", function () {
             rerollResult.applied.map(r => `${r.mode === "reroll-lowest" ? "↑" : "↓"} ${r.before}→${r.after} (${r.source})`).join(", ")
           }</p>`
         : "") + (_rankPoolNote
-        ? `<p style="font-size:0.78rem;color:#e8c84a;margin:0.2rem 0 0">${ftEscapeHtml(_rankPoolNote)}</p>`
+        ? `<p style="font-size:0.78rem;color:#ffd54a;font-weight:600;margin:0.2rem 0 0">${ftEscapeHtml(_rankPoolNote)}</p>`
         : "") + _ftSurgeBoostBanner(_surge) + _legendaryBtn
     });
 
@@ -15099,13 +15217,18 @@ Hooks.once("init", function () {
     const existing = actor.effects?.find(e => e.flags?.fourththing?.condition === condKey);
     if (on) {
       if (existing) return;
+      const condImg = cond.img ?? "icons/svg/aura.svg";
       await actor.createEmbeddedDocuments("ActiveEffect", [{
         name:    cond.label,
-        icon:    "icons/svg/aura.svg",
-        img:     "icons/svg/aura.svg",
+        icon:    condImg,
+        img:     condImg,
         tint:    cond.color,
         origin:  actor.uuid,
         statuses: [condKey],
+        // Conditions carry no duration. Under the default CONDITIONAL showIcon the
+        // token only draws *temporary* effects, so condition icons never appeared
+        // on tokens. Force ALWAYS so every applied condition is visible on-token.
+        showIcon: CONST.ACTIVE_EFFECT_SHOW_ICON.ALWAYS,
         changes: _ftConditionAEChanges(condKey),
         flags:   { fourththing: { condition: condKey } }
       }]);
@@ -15113,6 +15236,10 @@ Hooks.once("init", function () {
       await existing.delete();
     }
   }
+
+  // Exposed so the separate ft-progression.js roll path (and any external caller)
+  // can read the radiation bite without importing this module.
+  game.fourththing.radiationBite = _ftRadiationBite;
 
   game.fourththing.toggleCondition = async function (actor, condKey) {
     const rawSys  = actor.system?.system ?? actor.system;
@@ -15915,6 +16042,18 @@ Hooks.once("init", function () {
       if (this.items?.some?.(i => String(i.system?.identifier ?? "") === "bbttcc_feat_grim_persistence")) {
         sys.derived.integrity.max += 2 * charLevel;
       }
+      // Effect/mutation bonus to max Integrity — single-application aeBonus channel
+      // (same pattern as the defenses below). Foundry applies the AE to .aeBonus
+      // before derive; we fold it in and re-stamp so it survives the next cycle.
+      const _aeIntMax = Number(sys.derived.integrity.aeBonus) || 0;
+      if (_aeIntMax) sys.derived.integrity.max = Math.max(1, sys.derived.integrity.max + _aeIntMax);
+      sys.derived.integrity.aeBonus = _aeIntMax;
+      // Radiation Sickness caps max Integrity (Sickened −5 / Poisoned −10 /
+      // Terminal −20). Floor at 1 so the cap alone can't reduce max to 0 — the
+      // per-turn tick is what carries lethality. The value-clamp below then pulls
+      // current Integrity down to the reduced max automatically.
+      const _radCap = _ftRadiationBite(this).integrityCap;
+      if (_radCap > 0) sys.derived.integrity.max = Math.max(1, sys.derived.integrity.max - _radCap);
       // Clamp value to max — `??=` only seeded when undefined, so stale values
       // from earlier maxes (e.g. NPC seeded at 120 then re-stat to 46) leaked
       // through and displayed as 120/46. Treat max as the cap on every prepare.
@@ -15936,6 +16075,10 @@ Hooks.once("init", function () {
       sys.derived.stress.max       = 10 + 2 * m + s + (charLevel - 1) * stressPerLevel;
       sys.derived.stress.bracket   = intBracket.bracket;
       sys.derived.stress.perLevel  = stressPerLevel;
+      // Effect/mutation bonus to max Stress — single-application aeBonus channel.
+      const _aeStrMax = Number(sys.derived.stress.aeBonus) || 0;
+      if (_aeStrMax) sys.derived.stress.max = Math.max(1, sys.derived.stress.max + _aeStrMax);
+      sys.derived.stress.aeBonus = _aeStrMax;
       {
         const cur = sys.derived.stress.value ?? sys.derived.stress.max;
         sys.derived.stress.value = Math.max(0, Math.min(cur, sys.derived.stress.max));
@@ -16263,6 +16406,37 @@ Hooks.once("init", function () {
       "system.actions.movementUsedFt":  0,
       "system.actions.movementBudgetFt": walkFt
     });
+
+    // ── Radiation Sickness — per-turn bite (action tax + Integrity tick) ──────
+    // Poisoned taxes your Reaction; Terminal taxes your Action too, and both
+    // bleed Integrity at the start of your turn. Non-idempotent, and this handler
+    // fires on every client, so gate to the primary GM — the GM owns every
+    // combatant and applies it authoritatively exactly once. _ftRadiationBite
+    // already returns a no-op for non-radiation actors (bosses/rigs/factions).
+    if (game.user?.isGM && (!game.users?.activeGM || game.users.activeGM === game.user)) {
+      const _rad = _ftRadiationBite(actor);
+      if (_rad.loseReaction || _rad.loseAction) {
+        const _tax = {};
+        if (_rad.loseReaction) _tax["system.actions.reactionUsed"] = true;
+        if (_rad.loseAction)   _tax["system.actions.actionUsed"]   = true;
+        try { await actor.update(_tax); } catch (_e) { /* no permission — skip */ }
+      }
+      if (_rad.tick) {
+        try {
+          const _rt = new Roll(_rad.tick);
+          await _rt.evaluate();
+          const _cond = FT.CONDITIONS?.[_rad.key];
+          await game.fourththing.rolls._applyDamageToActor(actor, _rt.total, {
+            track: "integrity", ignoreResists: true
+          });
+          ChatMessage.create({
+            speaker: ChatMessage.getSpeaker({ actor }),
+            content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:${_cond?.color ?? '#c0392b'}">`
+              + `☢ <b>${ftEscapeHtml(actor.name)}</b> — Radiation ${_cond?.label ?? 'Sickness'}: −${_rt.total} Integrity (${_rad.tick})</span></div>`
+          });
+        } catch (_e) { console.warn("Roll for Initiation | radiation tick failed", _e); }
+      }
+    }
 
     // Expired-AE culling (playtest 2026-06-06: "Surge: Brace never drops off the
     // States tab"). Foundry computes duration.remaining for round/turn-based AEs
@@ -17520,6 +17694,25 @@ Hooks.once("init", function () {
         details,
         derived,
         magic:         { ...magic, clarityPips, noisePercent: (magic.noise.value ?? 0) * 10 },
+        radiation:     (() => {
+          // Player-legible radiation tier: name, color, and the active bite so
+          // the sheet shows the dread at a glance (not just a number).
+          const bite = _ftRadiationBite(actor);
+          const cond = bite.key ? FT.CONDITIONS[bite.key] : null;
+          const bits = [];
+          if (bite.rollPenalty)  bits.push(`−${bite.rollPenalty} to all rolls`);
+          if (bite.integrityCap) bits.push(`max Integrity −${bite.integrityCap}`);
+          if (bite.loseReaction) bits.push("lose Reaction each turn");
+          if (bite.loseAction)   bits.push("lose Action each turn");
+          if (bite.tick)         bits.push(`${bite.tick} Integrity / turn`);
+          return {
+            rp:        bite.rp,
+            tierLabel: cond?.label ?? "Clean",
+            color:     cond?.color ?? "#7ec850",
+            penalties: bits,
+            sick:      !!bite.key
+          };
+        })(),
         conditions:    conditionList,
         activeConditions,
         isDying,

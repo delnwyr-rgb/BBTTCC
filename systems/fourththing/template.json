@@ -249,7 +249,11 @@
         "restrained": false,
         "charmed": false,
         "compelled": false,
-        "dying": false
+        "dying": false,
+        "radiationIrradiated": false,
+        "radiationSickened": false,
+        "radiationPoisoned": false,
+        "radiationTerminal": false
       },
       "lastStand": {
         "active": false,
@@ -418,7 +422,11 @@
         "restrained": false,
         "charmed": false,
         "compelled": false,
-        "dying": false
+        "dying": false,
+        "radiationIrradiated": false,
+        "radiationSickened": false,
+        "radiationPoisoned": false,
+        "radiationTerminal": false
       },
       "actions": {
         "actionUsed": false,
