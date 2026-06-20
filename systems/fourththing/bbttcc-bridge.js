@@ -300,7 +300,7 @@ async function ftIndexHeritagePack(packKey) {
   if (!pack) return [];
   try {
     const idx = await pack.getIndex({ fields: ["name", "type", "system.identifier", "flags.bbttcc.kind", "flags.bbttcc.family"] });
-    return idx
+    const candidates = idx
       .filter(e => {
         const t = String(e.type || "").toLowerCase();
         if (t !== "feat") return false;
@@ -321,6 +321,9 @@ async function ftIndexHeritagePack(packKey) {
         const identifier = String(sys.identifier ?? e["system.identifier"] ?? "").toLowerCase();
         const flags = (e.flags && e.flags.bbttcc) || {};
         const kind = String(flags.kind ?? e["flags.bbttcc.kind"] ?? "").toLowerCase();
+        // Shape 1 = an explicit heritage ROOT (selectable option). Shape 2 = a
+        // lineage tier-1 feature standing in as a root only when no real root exists.
+        const isRoot = kind === "heritage" || identifier.endsWith("_heritage");
         let family = String(flags.family ?? e["flags.bbttcc.family"] ?? "").toLowerCase();
         if (!family) {
           // Lineage tier-1 shape: family = the kind/species identifier so the
@@ -333,8 +336,17 @@ async function ftIndexHeritagePack(packKey) {
             if (m) family = m[1];
           }
         }
-        return { id: e._id, name: e.name, family };
-      })
+        return { id: e._id, name: e.name, family, isRoot };
+      });
+
+    // When a family has any explicit heritage root (Shape 1), drop its Shape-2
+    // lineage tier-1 fallbacks — those are heritage CONTENTS ("Qliph-Scarred
+    // (Chthonic): What the Deep Dark Taught You"), not selectable heritages. A
+    // family with ONLY the tier-1 shape keeps it as its root (back-compat).
+    const familiesWithRoot = new Set(candidates.filter(c => c.isRoot).map(c => c.family));
+    return candidates
+      .filter(c => c.isRoot || !familiesWithRoot.has(c.family))
+      .map(({ id, name, family }) => ({ id, name, family }))
       .sort((a, b) => String(a.name).localeCompare(String(b.name)));
   } catch (err) {
     console.warn(`Roll For Initiation | ftIndexHeritagePack(${packKey}) failed:`, err);
