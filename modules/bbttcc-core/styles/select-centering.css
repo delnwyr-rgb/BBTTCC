@@ -1,0 +1,47 @@
+/* ============================================================================
+   Bad Eden — Global <select> vertical-centering fix
+   (bbttcc-core/styles/select-centering.css  — loaded LAST in core styles[])
+   ----------------------------------------------------------------------------
+   Symptom: dropdown text sits high/low inside the box instead of centered.
+   Cause:   module select rules set a fixed height / min-height (or none) but no
+            matching line-height, and mixed box-sizing — so the selected-text
+            line-box isn't centered in the control.
+
+   Fix:     apply the proven centering trio (height:auto + min-height +
+            line-height + border-box + vertical-align:middle). This is the same
+            recipe as bbttcc-raid's .bbttcc-raid-dialog-form select, which is the
+            one select rule in the repo that already centers correctly.
+
+   Why this WINS without !important: the existing higher-specificity module
+   rules set background/border/padding/min-height but DO NOT set line-height,
+   box-sizing, vertical-align, or height — so those centering properties apply
+   from here regardless of specificity. We deliberately do NOT override each
+   module's colours or horizontal padding.
+
+   Scope: our app containers + Foundry dialog/application/window wrappers — i.e.
+   every Bad Eden dropdown — without touching Foundry's own core sidebar/settings
+   selects.
+   ========================================================================= */
+
+[class*="bbttcc"] select,
+[class*="ft-"] select,
+.application select,
+.window-app select,
+.dialog select,
+.dialog-v2 select {
+  box-sizing: border-box;
+  height: auto;
+  min-height: 1.9rem;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+/* Keep the option list legible/consistent where the OS honours it. */
+[class*="bbttcc"] select option,
+[class*="ft-"] select option,
+.application select option,
+.window-app select option,
+.dialog select option,
+.dialog-v2 select option {
+  line-height: 1.4;
+}
