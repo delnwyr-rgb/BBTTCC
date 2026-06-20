@@ -552,7 +552,7 @@ async function _ftAtomicSwap(actor, cfg, newKey) {
 export async function applyActorClassChange(actor, newKey) {
   // Cascade: clear subclass first (subclasses are class-specific)
   await applyActorSubclassChange(actor, "");
-  return _ftAtomicSwap(actor, {
+  const result = await _ftAtomicSwap(actor, {
     types: "class",
     packKey: FT_ID_PACK_CLASSES,
     flagName: "className",
@@ -563,6 +563,36 @@ export async function applyActorClassChange(actor, newKey) {
     namePrefixMatch: /^([A-Z][a-zA-Z'\- ]+?)\s+—\s+Tier/,
     label: "class"
   }, newKey);
+
+  // Retroactively apply the new class's STARTING APTITUDE AUTOGRANTS. _ftAtomicSwap
+  // imports the new class + its L1 features but does not set the granted skill
+  // ranks, so switching class (e.g. Cosmic Linguist → Aurablade) left the new
+  // class's starting aptitudes (Aurablade's Violence skills) unset. Mirror the
+  // character wizard's post-import pass (character-wizard.js). All three helpers
+  // are idempotent and additive — they never lower a rank, so a player's
+  // self-raised ranks survive a class swap (we intentionally do NOT revoke the
+  // prior class's granted ranks, to avoid destroying earned progress).
+  try {
+    const prog = game.fourththing?._progression;
+    if (prog?.applyPathFeatures) {
+      try { await prog.applyPathFeatures(actor); }
+      catch (e) { console.warn("RFI | class-change applyPathFeatures failed", e); }
+    }
+    const grantSkills = game.fourththing?.applySkillGrantsFromFeatures ?? prog?.applySkillGrantsFromFeatures;
+    if (typeof grantSkills === "function") {
+      try { await grantSkills(actor); }
+      catch (e) { console.warn("RFI | class-change applySkillGrantsFromFeatures failed", e); }
+    }
+    const promoteAEs = game.fourththing?.promoteStampedAptitudeAEs ?? prog?.promoteStampedAptitudeAEs;
+    if (typeof promoteAEs === "function") {
+      try { await promoteAEs(actor); }
+      catch (e) { console.warn("RFI | class-change promoteStampedAptitudeAEs failed", e); }
+    }
+  } catch (e) {
+    console.warn("RFI | class-change post-grant pass failed", e);
+  }
+
+  return result;
 }
 
 export async function applyActorAncestryChange(actor, newKey) {
@@ -1419,10 +1449,18 @@ async function ftBuildEditContext(actor) {
   // Heritage dropdown is filtered by the current ancestry's family — Cryptidkin
   // species shows only Cryptidkin heritages, etc. Family is read from the
   // embedded ancestry item's bbttcc flag, falling back to system.identifier.
-  let currentAncestryFamily = String(embeddedAncestry?.flags?.bbttcc?.family ?? "").toLowerCase();
-  if (!currentAncestryFamily) {
-    currentAncestryFamily = String(embeddedAncestry?.system?.identifier ?? "").toLowerCase();
-  }
+  // Normalize family keys: lowercase + hyphen→underscore. The species item's
+  // system.identifier uses hyphens ("qliph-scarred") while heritage `family`
+  // flags use underscores ("qliph_scarred"), so an un-normalized compare hid
+  // every Qliph-Scarred / Sephirotic Scion heritage from this edit dropdown
+  // (single-word ancestries like "human" were unaffected — no separator). Also
+  // prefer the canonical `ancestryKey` flag, which is already underscored.
+  const _normFam = (s) => String(s ?? "").toLowerCase().replace(/-/g, "_");
+  let currentAncestryFamily = _normFam(
+    embeddedAncestry?.flags?.bbttcc?.family
+    ?? embeddedAncestry?.flags?.bbttcc?.ancestryKey
+    ?? embeddedAncestry?.system?.identifier
+  );
   const allHeritages = await ftIndexHeritagePack(FT_ID_PACK_ANCESTRIES);
   // Cross-cutting heritage families bypass the species filter — Sephirotic
   // Heritages key off sephirah alignment, not ancestry, so a Human or
@@ -1430,7 +1468,7 @@ async function ftBuildEditContext(actor) {
   // here as they're authored.
   const CROSS_CUTTING_FAMILIES = new Set(["sephirotic"]);
   const filteredHeritages = currentAncestryFamily
-    ? allHeritages.filter(h => !h.family || h.family === currentAncestryFamily || CROSS_CUTTING_FAMILIES.has(h.family))
+    ? allHeritages.filter(h => !h.family || _normFam(h.family) === currentAncestryFamily || CROSS_CUTTING_FAMILIES.has(_normFam(h.family)))
     : allHeritages;
 
   return {
