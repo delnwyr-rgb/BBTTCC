@@ -1,0 +1,53 @@
+/* ============================================================================
+   Bad Eden — Global readability layer  (bbttcc-core/styles/readability.css)
+   ----------------------------------------------------------------------------
+   Standardize LIGHT text on DARK surfaces across the app. This file only fixes
+   the two cross-cutting offenders that are safe to touch everywhere:
+
+     1. Foundry chat dice readouts (.dice-formula / .dice-total) — Foundry core
+        gives these light backgrounds, so on our dark roll cards they render as
+        light-on-light. Force a dark plate + light text.
+     2. <select> option lists — native <option> text was dark-on-dark inside our
+        dark selects (anchor-hex multiselect, etc.). Chromium (Foundry's engine)
+        honours option colours, so set a dark plate + light text.
+
+   Deliberately NOT a blanket `color: light` — that would wreck the brass
+   buttons (dark text on gold is correct) and the light-background faction
+   creation wizard. Surface-specific fixes for those live in their own files.
+   Loaded LAST in bbttcc-core styles[].
+   ========================================================================= */
+
+/* --- 1. Chat dice readouts: dark plate, light text ----------------------- */
+.chat-message .dice-roll .dice-formula,
+.chat-message .dice-roll .dice-total,
+.chat-message .dice-tooltip .part-formula,
+.chat-message .dice-tooltip .part-total {
+  background: rgba(2, 6, 20, 0.88);
+  color: #e8eefc;
+  border: 1px solid rgba(120, 160, 255, 0.20);
+  text-shadow: none;
+}
+.chat-message .dice-roll .dice-total {
+  font-weight: 700;
+}
+
+/* --- 2. <select> option lists: dark plate, light text -------------------- */
+[class*="bbttcc"] select option,
+[class*="ft-"] select option,
+.application select option,
+.window-app select option,
+.dialog select option,
+.dialog-v2 select option,
+.chat-message select option {
+  background-color: #0b1226;
+  color: #e8eefc;
+}
+/* Selected entries in multiselects stay legible (accent plate). */
+[class*="bbttcc"] select option:checked,
+[class*="ft-"] select option:checked,
+.application select option:checked,
+.window-app select option:checked,
+.dialog select option:checked {
+  background: linear-gradient(#16304a, #16304a);
+  color: #f4fcff;
+}

@@ -27,7 +27,8 @@
     "styles/be-theme.css",
     "styles/gottgait-story-console.css",
     "styles/bbttcc-bridge.css",
-    "styles/select-centering.css"
+    "styles/select-centering.css",
+    "styles/readability.css"
   ],
   "packs": []
 }

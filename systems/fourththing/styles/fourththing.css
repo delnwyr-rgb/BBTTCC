@@ -3957,7 +3957,14 @@
 }
 .chat-message .fourththing-roll p,
 .chat-message .fourththing-roll div,
-.chat-message .fourththing-roll span {
+.chat-message .fourththing-roll span,
+.chat-message .fourththing-roll h1,
+.chat-message .fourththing-roll h2,
+.chat-message .fourththing-roll h3,
+.chat-message .fourththing-roll h4,
+.chat-message .fourththing-roll b,
+.chat-message .fourththing-roll strong,
+.chat-message .fourththing-roll li {
   color: inherit;
 }
 

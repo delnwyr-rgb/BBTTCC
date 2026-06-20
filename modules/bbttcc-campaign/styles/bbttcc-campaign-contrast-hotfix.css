@@ -55,3 +55,30 @@
 .bbttcc.bbttcc-hexchrome textarea::placeholder {
   color: rgba(233, 237, 245, 0.45);
 }
+
+/* -------------------------------------------------------------------------
+ * Single-class .bbttcc-hexchrome coverage.
+ * The scene/actor pickers carry only `bbttcc-hexchrome` (no bare `bbttcc`),
+ * so all the `.bbttcc.bbttcc-hexchrome` rules above silently miss them — which
+ * is why the Pick-Scene rows rendered dim. Mirror the core readability rules at
+ * the single-class scope. (The faction creation wizard is NOT hexchrome, so its
+ * intentional dark-on-light text is untouched.)
+ * ------------------------------------------------------------------------- */
+.bbttcc-hexchrome .window-content,
+.bbttcc-hexchrome table,
+.bbttcc-hexchrome th,
+.bbttcc-hexchrome td {
+  color: #e8edf5;
+}
+
+.bbttcc-hexchrome .bbttcc-muted,
+.bbttcc-hexchrome .hint {
+  color: #b9c3d3;
+}
+
+/* Bare Foundry `.button` defaulted to dark text on the dark panel
+ * (e.g. "Pick Political Tags…"). Brass primaries use `.bbttcc-btn-primary`,
+ * so they are unaffected by this. */
+.bbttcc-hexchrome .button {
+  color: #e8edf5;
+}
