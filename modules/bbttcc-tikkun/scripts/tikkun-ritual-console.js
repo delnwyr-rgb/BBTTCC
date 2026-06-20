@@ -55,7 +55,7 @@ class BBTTCC_RitualConsole extends HBM(AppV2) {
   static DEFAULT_OPTIONS = {
     id: "bbttcc-ritual-console",
     title: "Bad Eden — Final Ritual",
-    classes: ["bbttcc", "bbttcc-ritual-console"],
+    classes: ["bbttcc", "bbttcc-ritual-console", "bbttcc-be", "bbttcc-theme-player"],
     width: 960,
     height: 720,
     resizable: true,

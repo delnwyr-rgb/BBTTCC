@@ -555,7 +555,7 @@
   class BBTTCC_TravelConsole extends _HandlebarsApplicationMixin(_ApplicationV2) {
     static DEFAULT_OPTIONS = {
       id: "bbttcc-travel-console",
-      classes: ["bbttcc", "bbttcc-travel-console", "themed", "theme-dark"],
+      classes: ["bbttcc", "bbttcc-travel-console", "themed", "theme-dark", "bbttcc-be", "bbttcc-theme-player"],
       window: {
         title: "Bad Eden: Travel Console",
         icon: "fas fa-route",
@@ -615,8 +615,8 @@
             .bbttcc-travel-hero {
               border-radius: 12px;
               padding: 0.7rem 0.95rem;
-              background: linear-gradient(90deg, rgba(255,215,80,0.12), rgba(95,168,255,0.10));
-              border: 1px solid rgba(95,168,255,0.30);
+              background: linear-gradient(90deg, rgba(255,215,80,0.12), rgba(76,245,255,0.10));
+              border: 1px solid rgba(76,245,255,0.30);
               box-shadow: 0 0 0 1px rgba(10,20,40,0.6) inset;
             }
             .bbttcc-travel-hero-title {
@@ -642,7 +642,7 @@
             .tc-panel {
               background: linear-gradient(180deg, rgba(20,35,65,0.55) 0%, rgba(20,35,65,0.30) 100%);
               border-radius: 12px;
-              border: 1px solid rgba(95,168,255,0.28);
+              border: 1px solid rgba(76,245,255,0.28);
               box-shadow: 0 0 0 1px rgba(10,20,40,0.6) inset, 0 6px 16px rgba(5,10,25,0.45);
               padding: 0.85rem 1rem 1rem;
             }
@@ -666,13 +666,13 @@
               font-weight: 700;
               letter-spacing: 0.10em;
               text-transform: uppercase;
-              color: rgba(95,168,255,0.85);
+              color: rgba(76,245,255,0.85);
             }
             .bbttcc-travel-select,
             .bbttcc-travel-button {
               padding: 0.35rem 0.6rem;
               border-radius: 6px;
-              border: 1px solid rgba(95,168,255,0.35);
+              border: 1px solid rgba(76,245,255,0.35);
               font-size: 0.85rem;
               background: rgba(20,35,65,0.5);
               color: #f4f0e0;
@@ -680,7 +680,7 @@
             }
             .bbttcc-travel-select:hover,
             .bbttcc-travel-button:hover {
-              border-color: rgba(95,168,255,0.65);
+              border-color: rgba(76,245,255,0.65);
               background: rgba(20,35,65,0.7);
             }
             .bbttcc-travel-select:focus,
@@ -691,14 +691,14 @@
             }
             .bbttcc-travel-button {
               cursor: pointer;
-              background: linear-gradient(135deg, rgba(95,168,255,0.14) 0%, rgba(20,35,65,0.65) 100%);
+              background: linear-gradient(135deg, rgba(76,245,255,0.14) 0%, rgba(20,35,65,0.65) 100%);
               padding: 0.4rem 0.85rem;
               border-radius: 999px;
               font-weight: 600;
               letter-spacing: 0.04em;
             }
             .bbttcc-travel-button:hover {
-              background: linear-gradient(135deg, rgba(255,215,80,0.18) 0%, rgba(95,168,255,0.18) 100%);
+              background: linear-gradient(135deg, rgba(255,215,80,0.18) 0%, rgba(76,245,255,0.18) 100%);
             }
             .bbttcc-travel-actions {
               display: flex;
@@ -708,7 +708,7 @@
             }
             /* Phase 2: pick-on-map + auto-plan controls */
             .bbttcc-travel-button.is-active {
-              background: linear-gradient(135deg, rgba(255,215,80,0.42) 0%, rgba(95,168,255,0.36) 100%) !important;
+              background: linear-gradient(135deg, rgba(255,215,80,0.42) 0%, rgba(76,245,255,0.36) 100%) !important;
               border-color: rgba(255,215,80,0.75) !important;
               color: #fff;
               box-shadow: 0 0 0 1px rgba(255,215,80,0.3), 0 0 12px rgba(255,215,80,0.18);
@@ -727,24 +727,24 @@
             .rp-pick-status.is-shown { display: block; }
             .rp-manual-entry {
               margin-top: 0.5rem;
-              border-top: 1px dashed rgba(95,168,255,0.18);
+              border-top: 1px dashed rgba(76,245,255,0.18);
               padding-top: 0.45rem;
             }
             .rp-manual-entry summary {
               cursor: pointer;
               font-size: 0.74rem;
-              color: rgba(95,168,255,0.75);
+              color: rgba(76,245,255,0.75);
               text-transform: uppercase;
               letter-spacing: 0.08em;
               user-select: none;
             }
-            .rp-manual-entry summary:hover { color: rgba(95,168,255,1); }
+            .rp-manual-entry summary:hover { color: rgba(76,245,255,1); }
             .rp-legs {
               margin-top: 0.6rem;
               max-height: 280px;
               overflow: auto;
               border-radius: 8px;
-              border: 1px solid rgba(95,168,255,0.22);
+              border: 1px solid rgba(76,245,255,0.22);
               background: rgba(10,20,40,0.55);
             }
             .rp-leg-row {
@@ -752,13 +752,13 @@
               gap: 0.5rem;
               align-items: center;
               padding: 0.35rem 0.65rem;
-              border-bottom: 1px solid rgba(95,168,255,0.18);
+              border-bottom: 1px solid rgba(76,245,255,0.18);
               font-size: 0.82rem;
               cursor: pointer;
               transition: background 0.15s ease;
             }
             .rp-leg-row:last-child { border-bottom: none; }
-            .rp-leg-row:hover { background: rgba(95,168,255,0.12); }
+            .rp-leg-row:hover { background: rgba(76,245,255,0.12); }
             .rp-leg-idx {
               font-size: 0.78rem;
               font-weight: 700;
@@ -768,11 +768,11 @@
             }
             .rp-leg-main { flex: 1; }
             .rp-leg-terrain { color: rgba(244,240,224,0.72); font-size: 0.76rem; margin-top: 0.1rem; }
-            .rp-leg-cost { font-size: 0.78rem; color: rgba(95,168,255,0.92); white-space: nowrap; font-weight: 600; }
+            .rp-leg-cost { font-size: 0.78rem; color: rgba(76,245,255,0.92); white-space: nowrap; font-weight: 600; }
             .rp-leg-remove {
               padding: 0.15rem 0.5rem;
               border-radius: 999px;
-              border: 1px solid rgba(95,168,255,0.35);
+              border: 1px solid rgba(76,245,255,0.35);
               background: rgba(20,35,65,0.5);
               cursor: pointer;
               font-size: 0.72rem;
@@ -803,7 +803,7 @@
               font-size: 0.72rem;
               padding: 2px 7px;
               border-radius: 999px;
-              border: 1px solid rgba(95,168,255,0.55);
+              border: 1px solid rgba(76,245,255,0.55);
               color: #bae6fd;
               background: rgba(10,20,40,0.55);
               display: inline-flex;
@@ -871,7 +871,7 @@
             .rp-stack-chip input.rp-stack-mult {
               width: 3.2rem; font-size: 0.72rem;
               background: rgba(10,20,40,0.6);
-              border: 1px solid rgba(95,168,255,0.35);
+              border: 1px solid rgba(76,245,255,0.35);
               color: #f4f0e0;
               border-radius: 4px;
               padding: 1px 4px;
@@ -894,7 +894,7 @@
               display: flex; flex-direction: column; gap: 0.2rem;
               padding: 0.4rem 0.5rem;
               background: rgba(10,20,40,0.55);
-              border: 1px solid rgba(95,168,255,0.30);
+              border: 1px solid rgba(76,245,255,0.30);
               border-radius: 6px;
               font-size: 0.78rem;
             }
@@ -912,7 +912,7 @@
               max-height: 18rem; overflow-y: auto;
               padding: 0.4rem 0.5rem;
               background: rgba(10,20,40,0.5);
-              border: 1px solid rgba(95,168,255,0.30);
+              border: 1px solid rgba(76,245,255,0.30);
               border-radius: 6px;
             }
             .rp-abilities-empty { font-size: 0.78rem; opacity: 0.7; font-style: italic; }
@@ -937,13 +937,13 @@
               border-radius: 4px;
               background: rgba(20,35,65,0.45);
             }
-            .rp-ability-actor li:hover { background: rgba(95,168,255,0.18); }
+            .rp-ability-actor li:hover { background: rgba(76,245,255,0.18); }
             .rp-ability-label { flex: 1 1 auto; color: #bae6fd; cursor: help; }
             .rp-ability-use {
               flex: 0 0 auto;
               font-size: 0.7rem;
               padding: 1px 8px;
-              background: linear-gradient(135deg, rgba(255,215,80,0.30) 0%, rgba(95,168,255,0.30) 100%);
+              background: linear-gradient(135deg, rgba(255,215,80,0.30) 0%, rgba(76,245,255,0.30) 100%);
               color: #fff;
               border: 1px solid rgba(255,215,80,0.55);
               border-radius: 999px;
@@ -956,7 +956,7 @@
               border-radius: 999px;
               padding: 3px 10px;
               font-size: 0.78rem;
-              border: 1px solid rgba(95,168,255,0.35);
+              border: 1px solid rgba(76,245,255,0.35);
               background: rgba(20,35,65,0.5);
               color: #f4f0e0;
             }
@@ -972,7 +972,7 @@
               font-weight: 700;
               letter-spacing: 0.10em;
               text-transform: uppercase;
-              color: rgba(95,168,255,0.85);
+              color: rgba(76,245,255,0.85);
             }
             .rp-out {
               font-size: 0.82rem;
@@ -981,25 +981,25 @@
               color: #f4f0e0;
               border-radius: 6px;
               padding: 0.4rem 0.6rem;
-              border: 1px solid rgba(95,168,255,0.30);
+              border: 1px solid rgba(76,245,255,0.30);
               white-space: pre-line;
               line-height: 1.5;
             }
-            .bbttcc-travel-console .rad-tier-none   { background: rgba(20,35,65,0.5); border-color: rgba(95,168,255,0.35); color:#f4f0e0; }
+            .bbttcc-travel-console .rad-tier-none   { background: rgba(20,35,65,0.5); border-color: rgba(76,245,255,0.35); color:#f4f0e0; }
             .bbttcc-travel-console .rad-tier-low    { background: rgba(22,163,74,0.16);  border-color: rgba(22,163,74,0.85);  color:#bbf7d0; }
             .bbttcc-travel-console .rad-tier-moderate{background: rgba(234,179,8,0.20);  border-color: rgba(202,138,4,0.95); color:#facc15; }
             .bbttcc-travel-console .rad-tier-high   { background: rgba(249,115,22,0.20); border-color: rgba(234,88,12,0.95); color:#fed7aa; }
             .bbttcc-travel-console .rad-tier-extreme{ background: rgba(220,38,38,0.22);  border-color: rgba(185,28,28,0.98); color:#fecaca; }
             .tc-right-buttons { display:flex; flex-wrap:wrap; gap:0.45rem; margin-top:0.7rem; }
             .tc-right-buttons .bbttcc-travel-button.primary {
-              background: linear-gradient(135deg, rgba(255,215,80,0.30) 0%, rgba(95,168,255,0.30) 100%);
+              background: linear-gradient(135deg, rgba(255,215,80,0.30) 0%, rgba(76,245,255,0.30) 100%);
               color: #fff;
               border-color: rgba(255,215,80,0.55);
               font-weight: 700;
               letter-spacing: 0.05em;
             }
             .tc-right-buttons .bbttcc-travel-button.primary:hover {
-              background: linear-gradient(135deg, rgba(255,215,80,0.45) 0%, rgba(95,168,255,0.45) 100%);
+              background: linear-gradient(135deg, rgba(255,215,80,0.45) 0%, rgba(76,245,255,0.45) 100%);
               filter: brightness(1.05);
             }
           </style>

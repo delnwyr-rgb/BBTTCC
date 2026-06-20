@@ -16,7 +16,7 @@
   background:
     radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
     radial-gradient(circle at 100% 0, rgba(251,113,133,0.18), transparent 55%),
-    radial-gradient(circle at 0 100%, rgba(56,189,248,0.18), transparent 60%),
+    radial-gradient(circle at 0 100%, rgba(76,245,255,0.18), transparent 60%),
     linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
 }
 
@@ -25,7 +25,7 @@
   background:
     radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
     radial-gradient(circle at 100% 0, rgba(251,113,133,0.18), transparent 55%),
-    radial-gradient(circle at 0 100%, rgba(56,189,248,0.18), transparent 60%),
+    radial-gradient(circle at 0 100%, rgba(76,245,255,0.18), transparent 60%),
     linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
 }
 
@@ -46,10 +46,10 @@
   border-radius: 0.6rem;
   background:
     linear-gradient(135deg, rgba(15,23,42,0.96), rgba(30,64,175,0.96));
-  border: 1px solid rgba(59,130,246,0.55);
+  border: 1px solid rgba(76,245,255,0.55);
   box-shadow:
     0 0 0 1px rgba(15,23,42,0.9),
-    0 0 18px rgba(59,130,246,0.35);
+    0 0 18px rgba(76,245,255,0.35);
 }
 
 /* Character name / summary area */
@@ -99,7 +99,7 @@
   border-radius: 0.55rem;
   border: 1px solid rgba(30,64,175,0.75);
   background:
-    radial-gradient(circle at 50% -10%, rgba(59,130,246,0.45), transparent 60%),
+    radial-gradient(circle at 50% -10%, rgba(76,245,255,0.45), transparent 60%),
     linear-gradient(180deg, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
   box-shadow:
     0 0 0 1px rgba(15,23,42,0.95),
@@ -162,12 +162,12 @@
 .bbttcc-character-sheet .tabs .item.active {
   background:
     linear-gradient(135deg, rgba(30,64,175,0.95), rgba(147,51,234,0.95));
-  border-color: rgba(59,130,246,0.9);
+  border-color: rgba(76,245,255,0.9);
   color: #e5e7eb;
   opacity: 1;
   box-shadow:
     0 0 0 1px rgba(15,23,42,0.95),
-    0 0 14px rgba(59,130,246,0.5);
+    0 0 14px rgba(76,245,255,0.5);
 }
 
 /* Tables / lists inside the body */
@@ -217,8 +217,8 @@
 .bbttcc-character-sheet select:focus,
 .bbttcc-character-sheet textarea:focus {
   outline: none;
-  border-color: rgba(59,130,246,0.9);
-  box-shadow: 0 0 0 1px rgba(59,130,246,0.7);
+  border-color: rgba(76,245,255,0.9);
+  box-shadow: 0 0 0 1px rgba(76,245,255,0.7);
 }
 
 .bbttcc-character-sheet .resource,
@@ -361,9 +361,9 @@
 }
 
 .bbttcc-character-sheet .bbttcc-pill-primary {
-  border-color: rgba(59,130,246,0.9);
+  border-color: rgba(76,245,255,0.9);
   background:
-    radial-gradient(circle at 0 0, rgba(59,130,246,0.4), transparent 55%),
+    radial-gradient(circle at 0 0, rgba(76,245,255,0.4), transparent 55%),
     rgba(15,23,42,0.96);
 }
 
@@ -395,7 +395,7 @@
   background:
     radial-gradient(circle at 0 0, rgba(148,163,184,0.18), transparent 55%),
     radial-gradient(circle at 100% 0, rgba(251,113,133,0.18), transparent 55%),
-    radial-gradient(circle at 0 100%, rgba(56,189,248,0.18), transparent 60%),
+    radial-gradient(circle at 0 100%, rgba(76,245,255,0.18), transparent 60%),
     linear-gradient(145deg, rgba(15,23,42,0.98), rgba(15,23,42,0.96));
   border-radius: 0.85rem;
   box-shadow:
@@ -512,9 +512,9 @@
   text-transform: uppercase;
   letter-spacing: 0.14em;
   border-radius: 999px;
-  border: 1px solid rgba(59,130,246,0.9);
+  border: 1px solid rgba(76,245,255,0.9);
   background:
-    radial-gradient(circle at 0 0, rgba(59,130,246,0.45), transparent 55%),
+    radial-gradient(circle at 0 0, rgba(76,245,255,0.45), transparent 55%),
     linear-gradient(135deg, rgba(30,64,175,0.96), rgba(147,51,234,0.96));
   color: #e5e7eb;
   cursor: pointer;
@@ -551,7 +551,7 @@
   gap: 0.35rem;
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
-  border: 1px solid rgba(59,130,246,0.75);
+  border: 1px solid rgba(76,245,255,0.75);
   background: rgba(15,23,42,0.92);
   color: #e5e7eb;
   font-size: 11px;
@@ -864,7 +864,7 @@ form[data-bbttcc-root-shell-off="1"]::after {
   padding: 0.35rem 0.4rem;
   border-radius: 0.4rem;
   background: rgba(15,23,42,0.55);
-  border: 1px solid rgba(56,189,248,0.18);
+  border: 1px solid rgba(76,245,255,0.18);
 }
 
 .bbttcc-character-sheet .bbttcc-resource-main {
@@ -905,8 +905,8 @@ form[data-bbttcc-root-shell-off="1"]::after {
   padding: 0 0.35rem;
   margin-left: 0.25rem;
   border-radius: 0.4rem;
-  background: rgba(56,189,248,0.18);
-  border: 1px solid rgba(56,189,248,0.45);
+  background: rgba(76,245,255,0.18);
+  border: 1px solid rgba(76,245,255,0.45);
   font-size: 9px;
   color: #e5e7eb;
 }
@@ -981,8 +981,8 @@ form[data-bbttcc-root-shell-off="1"]::after {
   display: inline-block;
   padding: 0 0.32rem;
   border-radius: 3px;
-  background: rgba(56,189,248,0.16);
-  border: 1px solid rgba(56,189,248,0.4);
+  background: rgba(76,245,255,0.16);
+  border: 1px solid rgba(76,245,255,0.4);
   font-size: 9px;
   color: #e0f2fe;
   white-space: nowrap;
@@ -1067,7 +1067,7 @@ form[data-bbttcc-root-shell-off="1"]::after {
   height: 18px;
   margin-right: 0.35rem;
   padding: 0;
-  border: 1px solid rgba(56,189,248,0.6);
+  border: 1px solid rgba(76,245,255,0.6);
   border-radius: 3px;
   background: rgba(15,23,42,0.85);
   color: #38bdf8;
@@ -1080,10 +1080,10 @@ form[data-bbttcc-root-shell-off="1"]::after {
   transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
 .bbttcc-ft-use-btn:hover {
-  background: rgba(56,189,248,0.22);
+  background: rgba(76,245,255,0.22);
   color: #f0f9ff;
-  border-color: rgba(56,189,248,0.9);
+  border-color: rgba(76,245,255,0.9);
 }
 .bbttcc-ft-use-btn:active {
-  background: rgba(56,189,248,0.4);
+  background: rgba(76,245,255,0.4);
 }

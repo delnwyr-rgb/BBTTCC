@@ -2721,7 +2721,7 @@ function hydrateNativeBBTTCCQuickbar(app, root) {
   const actor = app?.actor ?? app?.object;
   if (!actor || !root) return;
 
-  root.classList.add("bbttcc-character-sheet");
+  root.classList.add("bbttcc-character-sheet", "bbttcc-be", "bbttcc-theme-player");
   root.dataset.bbttccNative = "1";
 
   // NOTE (Option B refactor): we used to force window-content overflow:auto and
@@ -4317,7 +4317,7 @@ async function enhanceBBTTCCSheet(app, html) {
     // Any actor sheet render can destabilize existing tab DOM. Heal other open character sheets on next tick.
     _bbttccScheduleHeal();
 
-    root.classList.add("bbttcc-character-sheet");
+    root.classList.add("bbttcc-character-sheet", "bbttcc-be", "bbttcc-theme-player");
     _bbttccMarkCharacterWindowScroll(root);
     _bbttccInstallCharacterShellNormalizer(root);
     _bbttccStripCharacterShellClasses(root);
@@ -4355,7 +4355,7 @@ async function enhanceBBTTCCSheet(app, html) {
         try {
           const liveRoot = getRoot(app.element);
           if (!liveRoot) return;
-          liveRoot.classList.add("bbttcc-character-sheet");
+          liveRoot.classList.add("bbttcc-character-sheet", "bbttcc-be", "bbttcc-theme-player");
           _bbttccMarkCharacterWindowScroll(liveRoot);
           _bbttccInstallCharacterShellNormalizer(liveRoot);
           _bbttccStripCharacterShellClasses(liveRoot);

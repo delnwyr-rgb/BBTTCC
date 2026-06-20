@@ -2303,7 +2303,7 @@ class BBTTCCFactionSheet extends ActorSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "bbttcc-faction-sheet",
-      classes: ["bbttcc", "sheet", "actor"],
+      classes: ["bbttcc", "sheet", "actor", "bbttcc-be", "bbttcc-theme-player"],
       template: `modules/${MODULE_ID}/templates/faction-sheet.hbs`,
       width: 1000,
       height: 920,
