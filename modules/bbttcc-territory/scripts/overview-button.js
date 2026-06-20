@@ -263,7 +263,7 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
     id:"bbttcc-relationships-config",
     title:"Faction Relationships",
     width:560, height:"auto", resizable:true,
-    classes:["bbttcc","bbttcc-relations"]
+    classes:["bbttcc","bbttcc-relations","bbttcc-be","bbttcc-theme-gm"]
   };
 
   constructor(actor, options={}) {
@@ -290,15 +290,15 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
     return `<section class="bbttcc-relations-shell" style="padding:.75rem;">
       <style>
         .bbttcc-relations .window-content {
-          background: radial-gradient(circle at top left, rgba(59,130,246,0.25), transparent 55%),
-                      radial-gradient(circle at bottom right, rgba(14,165,233,0.25), transparent 55%),
+          background: radial-gradient(circle at top left, rgba(224,169,63,0.25), transparent 55%),
+                      radial-gradient(circle at bottom right, rgba(224,169,63,0.25), transparent 55%),
                       #020617;
           padding: 0.75rem;
         }
         .bbttcc-relations .bbttcc-rel-card {
           background:
-            radial-gradient(circle at top left, rgba(59,130,246,0.20), transparent 60%),
-            radial-gradient(circle at bottom right, rgba(34,197,94,0.16), transparent 60%),
+            radial-gradient(circle at top left, rgba(224,169,63,0.20), transparent 60%),
+            radial-gradient(circle at bottom right, rgba(176,114,18,0.16), transparent 60%),
             rgba(15,23,42,0.96);
           border-radius: 12px;
           border: 1px solid rgba(148,163,184,0.7);
@@ -328,7 +328,7 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
           opacity: 0.85;
         }
         .bbttcc-relations .bbttcc-rel-subtitle strong {
-          color: #38bdf8;
+          color: #e0a93f;
         }
         .bbttcc-relations .bbttcc-rel-table-wrapper {
           margin-top: 0.5rem;
@@ -344,7 +344,7 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
         }
         .bbttcc-relations .bbttcc-table thead {
           background: linear-gradient(to right, #020617, #020617, #0b1120);
-          color: #c7d2fe;
+          color: #e8c48a;
           text-transform: uppercase;
           letter-spacing: 0.06em;
           font-size: 0.7rem;
@@ -352,7 +352,7 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
         .bbttcc-relations .bbttcc-table th,
         .bbttcc-relations .bbttcc-table td {
           padding: 0.4rem 0.55rem;
-          border-bottom: 1px solid rgba(30,64,175,0.35);
+          border-bottom: 1px solid rgba(176,114,18,0.35);
         }
         .bbttcc-relations .bbttcc-table th {
           font-weight: 600;
@@ -364,7 +364,7 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
           background: rgba(15,23,42,0.88);
         }
         .bbttcc-relations .bbttcc-table tbody tr:hover {
-          background: rgba(37,99,235,0.25);
+          background: rgba(224,169,63,0.25);
         }
         .bbttcc-relations .bbttcc-rel-status {
           min-width: 8rem;
@@ -381,8 +381,8 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
         }
         .bbttcc-relations select[data-target]:focus {
           outline: none;
-          border-color: #38bdf8;
-          box-shadow: 0 0 0 1px rgba(56,189,248,0.7);
+          border-color: #e0a93f;
+          box-shadow: 0 0 0 1px rgba(224,169,63,0.7);
           background: rgba(15,23,42,1);
         }
         .bbttcc-relations small[data-hint-for] {
@@ -407,10 +407,14 @@ class BBTTCC_RelationshipsConfig extends foundry.applications.api.ApplicationV2 
           cursor: pointer;
         }
         .bbttcc-relations footer.bbttcc-rel-footer button.default {
-          border-color: #38bdf8;
-          background: linear-gradient(135deg, #0ea5e9, #22c55e);
-          color: #020617;
-          font-weight: 600;
+          border: 1px solid rgba(255,207,92,0.85);
+          background:
+            radial-gradient(circle at 0 0, rgba(255,222,140,0.55), transparent 55%),
+            linear-gradient(135deg, #e0a82e, #b5740f);
+          color: #1a1205;
+          font-weight: 800;
+          text-shadow: 0 1px 0 rgba(255,240,200,0.5);
+          box-shadow: inset 0 1px 0 rgba(255,245,210,0.55), inset 0 -2px 3px rgba(90,55,5,0.45), 0 1px 2px rgba(0,0,0,0.45);
         }
         .bbttcc-relations footer.bbttcc-rel-footer button.default:disabled {
           opacity: 0.7;

@@ -185,10 +185,11 @@
   background: rgba(var(--be-accent-rgb), 0.07);
 }
 
-/* --- Buttons --- (.bbttcc-btn / .bbttcc-button / bare <button>) --- */
+/* --- Buttons --- (the explicit .bbttcc-btn / .bbttcc-button convention only;
+   bare <button> is left to each app's own rules so we never fight app styling
+   or Foundry's window-header controls). --- */
 .bbttcc-be .bbttcc-btn,
-.bbttcc-be .bbttcc-button,
-.bbttcc-be button:not(.window-header button):not([class*="header-control"]) {
+.bbttcc-be .bbttcc-button {
   font-family: var(--be-font-body);
   color: var(--be-text);
   background: rgba(var(--be-accent-rgb), 0.10);
@@ -197,13 +198,13 @@
   transition: background 0.12s ease, box-shadow 0.12s ease;
 }
 .bbttcc-be .bbttcc-btn:hover,
-.bbttcc-be .bbttcc-button:hover,
-.bbttcc-be button:not(.window-header button):not([class*="header-control"]):hover {
+.bbttcc-be .bbttcc-button:hover {
   background: var(--be-accent-soft);
   box-shadow: var(--be-accent-glow);
 }
 .bbttcc-be .bbttcc-btn-primary,
-.bbttcc-be .bbttcc-button.primary {
+.bbttcc-be .bbttcc-button.primary,
+.bbttcc-be .bbttcc-btn--primary {
   color: #051018;
   background: var(--be-accent);
   border-color: var(--be-accent-strong);
@@ -240,46 +241,48 @@
       PLAYER -> crystalline blue pills (faceted gem / gel highlight)
    ======================================================================== */
 
-/* --- GM: polished brass door-plate buttons -------------------------------- */
-/* Lifted from campaign-builder.css .bbttcc-btn-primary (the brass plate) and
-   given inset bevels so it reads like engraved metal. Applies to every button
-   in a GM app; .bbttcc-btn-primary turns the brightness up. */
+/* --- GM buttons: brass is PRIMARY-ONLY (owner decision) -------------------- */
+/* Secondary/default .bbttcc-btn = dark bronze-edged plate; full brass door-plate
+   is reserved for the primary action so dense panels don't become a wall of gold.
+   Bare <button>s are intentionally not matched here — apps that want a prominent
+   bare button brass do it in their own rule (e.g. territory dashboard toolbar). */
 .bbttcc-be.bbttcc-theme-gm .bbttcc-btn,
-.bbttcc-be.bbttcc-theme-gm .bbttcc-button,
-.bbttcc-be.bbttcc-theme-gm button:not(.window-header button):not([class*="header-control"]) {
-  border: 1px solid rgba(255, 207, 92, 0.85);
+.bbttcc-be.bbttcc-theme-gm .bbttcc-button {
+  border: 1px solid rgba(224, 169, 63, 0.55);
   border-radius: 999px;
+  background: linear-gradient(135deg, rgba(20, 16, 9, 0.98), rgba(40, 30, 12, 0.95));
+  color: #e8e2d4;
+}
+.bbttcc-be.bbttcc-theme-gm .bbttcc-btn:hover,
+.bbttcc-be.bbttcc-theme-gm .bbttcc-button:hover {
+  filter: brightness(1.08);
+  border-color: rgba(224, 169, 63, 0.85);
+  box-shadow: 0 0 10px rgba(224, 169, 63, 0.25);
+}
+
+/* PRIMARY → polished brass door-plate (lifted from Campaign Builder). */
+.bbttcc-be.bbttcc-theme-gm .bbttcc-btn-primary,
+.bbttcc-be.bbttcc-theme-gm .bbttcc-button.primary,
+.bbttcc-be.bbttcc-theme-gm .bbttcc-btn--primary {
+  border: 1px solid rgba(255, 207, 92, 0.85);
   background:
     radial-gradient(circle at 0 0, rgba(255, 222, 140, 0.55), transparent 55%),
     linear-gradient(135deg, #e0a82e, #b5740f);
   color: #1a1205;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-weight: 800;
   text-shadow: 0 1px 0 rgba(255, 240, 200, 0.5);
   box-shadow:
     inset 0 1px 0 rgba(255, 245, 210, 0.55),   /* top edge sheen */
     inset 0 -2px 3px rgba(90, 55, 5, 0.45),     /* recessed bottom */
     0 1px 2px rgba(0, 0, 0, 0.45);              /* lift off the panel */
 }
-.bbttcc-be.bbttcc-theme-gm .bbttcc-btn:hover,
-.bbttcc-be.bbttcc-theme-gm .bbttcc-button:hover,
-.bbttcc-be.bbttcc-theme-gm button:not(.window-header button):not([class*="header-control"]):hover {
+.bbttcc-be.bbttcc-theme-gm .bbttcc-btn-primary:hover,
+.bbttcc-be.bbttcc-theme-gm .bbttcc-button.primary:hover,
+.bbttcc-be.bbttcc-theme-gm .bbttcc-btn--primary:hover {
   filter: brightness(1.07);
-  background:
-    radial-gradient(circle at 0 0, rgba(255, 232, 160, 0.65), transparent 55%),
-    linear-gradient(135deg, #e0a82e, #b5740f);
   box-shadow:
     inset 0 1px 0 rgba(255, 245, 210, 0.65),
     0 0 14px rgba(220, 150, 40, 0.55);
-}
-.bbttcc-be.bbttcc-theme-gm .bbttcc-btn-primary,
-.bbttcc-be.bbttcc-theme-gm .bbttcc-button.primary {
-  background:
-    radial-gradient(circle at 0 0, rgba(255, 238, 175, 0.7), transparent 55%),
-    linear-gradient(135deg, #f2bd3c, #c47f12);
-  border-color: rgba(255, 224, 150, 0.95);
-  font-weight: 800;
 }
 
 /* --- PLAYER: crystalline blue pills ---------------------------------------- */

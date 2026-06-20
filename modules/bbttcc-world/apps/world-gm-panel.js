@@ -153,7 +153,7 @@
       try{
         var merged = foundry.utils.mergeObject(base, {
           id: "bbttcc-world-gm-panel",
-          classes: ["bbttcc-world-gm-panel-app"],
+          classes: ["bbttcc-world-gm-panel-app", "bbttcc", "bbttcc-be", "bbttcc-theme-gm"],
           title: "Bad Eden — GM God Panel",
           tag: "form",
           window: { icon: "fas fa-hand-sparkles", resizable: true }

@@ -1906,7 +1906,7 @@ class BBTTCCRigConsole extends foundry.applications.api.HandlebarsApplicationMix
     id: "bbttcc-rig-console",
     window: { title: "Bad Eden Rig Config", icon: "fas fa-truck-monster" },
     position: { width: 780, height: "auto" },
-    classes: ["bbttcc", "bbttcc-rig-config", "sheet"],
+    classes: ["bbttcc", "bbttcc-rig-config", "sheet", "bbttcc-be", "bbttcc-theme-gm"],
     resizable: true
   };
 
