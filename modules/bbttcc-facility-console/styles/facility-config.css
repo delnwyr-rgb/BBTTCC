@@ -60,7 +60,7 @@
   margin: 0;
   font-size: 13px;
   font-weight: 600;
-  color: #dbeafe;
+  color: #ffcf5c;
 }
 
 .bbttcc-card-header p {
@@ -133,8 +133,8 @@
 .bbttcc-card-body select:focus,
 .bbttcc-card-body textarea:focus {
   outline: none;
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+  border-color: #e0a93f;
+  box-shadow: 0 0 0 1px rgba(224, 169, 63, 0.6);
 }
 
 .bbttcc-card-body textarea {
@@ -166,26 +166,32 @@
 }
 
 .bbttcc-button.primary {
-  background: radial-gradient(circle at 0 0, #0ea5e9 0, #1d4ed8 40%, #020617 100%);
-  color: #e5e7eb;
-  border-color: rgba(56, 189, 248, 0.8);
+  background:
+    radial-gradient(circle at 0 0, rgba(255, 222, 140, 0.55), transparent 55%),
+    linear-gradient(135deg, #e0a82e, #b5740f);
+  color: #1a1205;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 240, 200, 0.5);
+  border-color: rgba(255, 207, 92, 0.85);
   box-shadow:
-    0 0 0 1px rgba(15, 23, 42, 1),
-    0 0 14px rgba(56, 189, 248, 0.5);
+    inset 0 1px 0 rgba(255, 245, 210, 0.55),
+    inset 0 -2px 3px rgba(90, 55, 5, 0.45),
+    0 1px 2px rgba(0, 0, 0, 0.45);
 }
 
 .bbttcc-button.primary:hover {
   transform: translateY(-1px);
+  filter: brightness(1.07);
   box-shadow:
-    0 0 0 1px rgba(15, 23, 42, 1),
-    0 0 18px rgba(56, 189, 248, 0.8);
+    inset 0 1px 0 rgba(255, 245, 210, 0.65),
+    0 0 16px rgba(224, 169, 63, 0.55);
 }
 
 .bbttcc-button.primary:active {
   transform: translateY(0);
   box-shadow:
-    0 0 0 1px rgba(15, 23, 42, 1),
-    0 0 10px rgba(56, 189, 248, 0.5);
+    inset 0 1px 0 rgba(255, 245, 210, 0.55),
+    0 0 10px rgba(224, 169, 63, 0.5);
 }
 
 /* header button on the native item sheet */
@@ -194,7 +200,7 @@ a.bbttcc-facility-button {
   padding: 0 0.5rem;
   font-size: 11px;
   background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(37, 99, 235, 0.9);
+  border: 1px solid rgba(224, 169, 63, 0.9);
   color: #e5e7eb;
   display: inline-flex;
   align-items: center;
@@ -202,8 +208,8 @@ a.bbttcc-facility-button {
 }
 
 a.bbttcc-facility-button:hover {
-  background: rgba(30, 64, 175, 0.95);
-  border-color: #38bdf8;
+  background: rgba(176, 114, 18, 0.95);
+  border-color: #e0a93f;
 }
 
 
@@ -234,7 +240,7 @@ a.bbttcc-facility-button:hover {
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
   background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba(59, 130, 246, 0.4);
+  border: 1px solid rgba(224, 169, 63, 0.4);
   color: #e5e7eb;
   font-size: 11px;
 }

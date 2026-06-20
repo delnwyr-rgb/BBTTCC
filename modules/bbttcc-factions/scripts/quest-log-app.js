@@ -145,7 +145,7 @@
       id: "bbttcc-quest-log",
       window: { title: "Bad Eden Quest Log", icon: "fas fa-scroll" },
       position: { width: 980, height: 720 },
-      classes: ["bbttcc", "bbttcc-quest-log", "sheet"],
+      classes: ["bbttcc", "bbttcc-quest-log", "sheet", "bbttcc-be", "bbttcc-theme-player"],
       resizable: true
     };
 

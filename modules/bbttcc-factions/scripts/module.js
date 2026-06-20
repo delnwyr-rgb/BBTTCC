@@ -2474,7 +2474,7 @@ class BBTTCCFactionSheet extends ActorSheet {
 
     const total = rows.reduce((s,r)=>s + (Number.isFinite(r.total) ? r.total : 0), 0);
     const powerKey   = computePowerKey(total);
-    const powerLevelLabel  = game.i18n?.localize?.(`Bad Eden.PowerLevels.${powerKey}`) || powerKey;
+    const powerLevelLabel  = game.i18n?.localize?.(`BBTTCC.PowerLevels.${powerKey}`) || powerKey;
 
     const territoryThisScene = await _collectTerritoryForScope(this.actor, "scene");
     const territoryTotals    = await _collectTerritoryForScope(this.actor, "all");

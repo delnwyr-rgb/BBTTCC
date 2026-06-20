@@ -24,6 +24,7 @@
     "scripts/combat.dnd5e.js"
   ],
   "styles": [
+    "styles/be-theme.css",
     "styles/gottgait-story-console.css",
     "styles/bbttcc-bridge.css"
   ],

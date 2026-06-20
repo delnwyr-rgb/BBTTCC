@@ -1015,7 +1015,7 @@ export class BBTTCCMarketApp extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "bbttcc-market",
     window: { title: "Bad Eden Market", icon: "fas fa-store", resizable: true },
     position: { width: 980, height: 720 },
-    classes: ["bbttcc", "bbttcc-market", "sheet"],
+    classes: ["bbttcc", "bbttcc-market", "sheet", "bbttcc-be", "bbttcc-theme-player"],
     resizable: true
   };
 

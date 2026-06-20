@@ -87,7 +87,7 @@ export class BBTTCC_TerritoryDashboard extends foundry.applications.api.Handleba
     foundry.utils.deepClone(super.DEFAULT_OPTIONS || {}),
     {
     id: "bbttcc-territory-dashboard",
-    classes: ["bbttcc","bbttcc-territory-dashboard"],
+    classes: ["bbttcc","bbttcc-territory-dashboard","bbttcc-be","bbttcc-theme-gm"],
     position: { width: 1200, height: 600 },
     window: {
       title: "Bad Eden Territory Dashboard",

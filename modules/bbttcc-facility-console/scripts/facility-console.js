@@ -381,7 +381,7 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
       width: 820,
       height: "auto"
     },
-    classes: ["bbttcc", "bbttcc-facility-config", "sheet"],
+    classes: ["bbttcc", "bbttcc-facility-config", "sheet", "bbttcc-be", "bbttcc-theme-gm"],
     resizable: true
   };
 
