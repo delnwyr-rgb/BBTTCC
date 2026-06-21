@@ -26445,15 +26445,21 @@ Hooks.once("ready", () => _ftRenderRaidHud());
 // `bbttcc-character-options` AND scans actor items for "Crew Type:" /
 // "Occult Association:" naming convention.
 //
-// Colors + glyphs are name-hashed (no canonical color exists in the
-// schema) — stable per crew/association name across sessions.
+// Accent colors are name-hashed (no canonical color exists in the schema) —
+// stable per crew/association name across sessions. Rendered as hover-only
+// text labels (see _ftDrawAffiliationPanel), not always-on icons.
 
 const _FT_AFFIL_PALETTE = [
   0xd4a35f, 0x7ec0ff, 0xa6e22e, 0xeb5757, 0xff8ac4,
   0xb87fff, 0xe8c84a, 0x3ce67c, 0xff9a3c, 0x9bb4d8
 ];
 
-const _FT_OCCULT_GLYPHS = ["✶", "❖", "✦", "✷", "☥", "✸", "✺", "❂", "✪", "❀"];
+// Per-category label text colours — crews read gold, associations read cyan,
+// matching the project's GM-amber / player-cyan accent split. The chip's left
+// tick stays name-hashed from _FT_AFFIL_PALETTE so repeat affiliations look
+// visually stable.
+const _FT_AFFIL_TEXT_CREW   = 0xffd28a;
+const _FT_AFFIL_TEXT_OCCULT = 0x9be3ff;
 
 function _ftHashFromString(s) {
   const str = String(s || "");
@@ -26462,7 +26468,6 @@ function _ftHashFromString(s) {
   return Math.abs(h);
 }
 function _ftHashColorFromString(s) { return _FT_AFFIL_PALETTE[_ftHashFromString(s) % _FT_AFFIL_PALETTE.length]; }
-function _ftHashGlyphFromString(s) { return _FT_OCCULT_GLYPHS[_ftHashFromString(s) % _FT_OCCULT_GLYPHS.length]; }
 
 // Strategic-map cache. WeakMap on scene doc — auto-clears on scene swap.
 const _ftStrategicMapCache = new WeakMap();
@@ -26518,34 +26523,61 @@ function _ftScanActorAffiliations(actor, kind) {
   return Array.from(out);
 }
 
-function _ftDrawCrewBanner(token) {
+// Hover-only affiliation panel. Crews + occult associations both render as a
+// stacked list of text chips above the token — readable LABELS, not the old
+// always-on crew banner + cryptic occult glyphs. Hidden by default; revealed
+// only while the token is hovered or controlled (mirrors Foundry's "When
+// Hovered" nameplate/bar display mode), so a high-affiliation steward stays
+// uncluttered until you look at it. When both categories are present each gets
+// a dim section header.
+function _ftDrawAffiliationPanel(token) {
   if (!token?.actor) return;
-  if (token._ftCrewBanner) {
-    try { token.removeChild(token._ftCrewBanner); token._ftCrewBanner.destroy({ children: true }); } catch (_) {}
-    token._ftCrewBanner = null;
+  // Tear down our panel + any legacy containers from the old icon design.
+  for (const key of ["_ftAffiliationPanel", "_ftCrewBanner", "_ftOccultMarker"]) {
+    if (token[key]) {
+      try { token.removeChild(token[key]); token[key].destroy({ children: true }); } catch (_) {}
+      token[key] = null;
+    }
   }
   if (_ftSceneIsStrategicMap(canvas?.scene)) return;
   if (!["character", "npc"].includes(token.actor.type)) return;
 
-  const crews = _ftScanActorAffiliations(token.actor, "crew");
-  if (!crews.length) return;
+  const crews  = _ftScanActorAffiliations(token.actor, "crew");
+  const assocs = _ftScanActorAffiliations(token.actor, "occult");
+  if (!crews.length && !assocs.length) return;
 
   const w = token.w ?? token.width ?? 100;
   const container = new PIXI.Container();
   container.eventMode = "none";
 
-  const chipH = 13;
+  const chipH = 14;
   const chipGap = 2;
-  // Stack chips upward from just above the token
-  let yOff = -(chipH + 4);
-  for (let i = crews.length - 1; i >= 0; i--) {
-    const name = crews[i];
-    const color = _ftHashColorFromString(name);
+  const sectionGap = 5;
+  const showHeaders = crews.length > 0 && assocs.length > 0;
 
+  const rows = []; // { el, h, header }
+  let maxW = 0;
+
+  const addHeader = (label) => {
+    const t = new PIXI.Text(label, new PIXI.TextStyle({
+      fontFamily: "Signika, Arial, sans-serif",
+      fontSize: 8,
+      fontWeight: "bold",
+      fill: 0xbcd0e8,
+      letterSpacing: 1,
+      stroke: 0x000000,
+      strokeThickness: 2
+    }));
+    rows.push({ el: t, h: t.height, header: true });
+    maxW = Math.max(maxW, t.width);
+  };
+
+  const addChip = (name, textColor) => {
+    const accent = _ftHashColorFromString(name);
     const txt = new PIXI.Text(name, new PIXI.TextStyle({
       fontFamily: "Signika, Arial, sans-serif",
       fontSize: 10,
-      fill: 0xffd28a,
+      fill: textColor,
       stroke: 0x000000,
       strokeThickness: 2
     }));
@@ -26554,80 +26586,56 @@ function _ftDrawCrewBanner(token) {
 
     const chip = new PIXI.Graphics();
     chip.beginFill(0x000000, 0.65);
-    chip.lineStyle(1.5, color, 0.95);
+    chip.lineStyle(1.5, accent, 0.95);
     chip.drawRoundedRect(0, 0, chipW, chipH, 2);
     chip.endFill();
     const tick = new PIXI.Graphics();
-    tick.beginFill(color, 1);
+    tick.beginFill(accent, 1);
     tick.drawRect(0, 2, 3, chipH - 4);
     tick.endFill();
     chip.addChild(tick);
     txt.position.set(6, 1);
     chip.addChild(txt);
 
-    chip.x = (w - chipW) / 2;
-    chip.y = yOff;
-    container.addChild(chip);
-    yOff -= (chipH + chipGap);
+    rows.push({ el: chip, h: chipH, header: false });
+    maxW = Math.max(maxW, chipW);
+  };
+
+  if (crews.length) {
+    if (showHeaders) addHeader("CREWS");
+    for (const name of crews) addChip(name, _FT_AFFIL_TEXT_CREW);
   }
+  if (assocs.length) {
+    if (showHeaders) addHeader("ASSOCIATIONS");
+    for (const name of assocs) addChip(name, _FT_AFFIL_TEXT_OCCULT);
+  }
+
+  // Lay out top-to-bottom, each row centred on the token, with a little extra
+  // breathing room above each section header after the first.
+  let y = 0;
+  for (let i = 0; i < rows.length; i++) {
+    const { el, h, header } = rows[i];
+    if (i > 0 && header) y += sectionGap - chipGap;
+    el.x = (w - el.width) / 2;
+    el.y = y;
+    container.addChild(el);
+    y += h + chipGap;
+  }
+
+  // Float the whole stack just above the token's top edge, hidden until hover.
+  container.x = 0;
+  container.y = -(y + 4);
+  container.visible = !!token.hover;
 
   token.addChild(container);
-  token._ftCrewBanner = container;
-}
-
-function _ftDrawOccultMarker(token) {
-  if (!token?.actor) return;
-  if (token._ftOccultMarker) {
-    try { token.removeChild(token._ftOccultMarker); token._ftOccultMarker.destroy({ children: true }); } catch (_) {}
-    token._ftOccultMarker = null;
-  }
-  if (_ftSceneIsStrategicMap(canvas?.scene)) return;
-  if (!["character", "npc"].includes(token.actor.type)) return;
-
-  const associations = _ftScanActorAffiliations(token.actor, "occult");
-  if (!associations.length) return;
-
-  const h = token.h ?? token.height ?? 100;
-  const container = new PIXI.Container();
-  container.eventMode = "none";
-
-  const glyphSize = 14;
-  let xOff = 2;
-  for (const name of associations) {
-    const color = _ftHashColorFromString(name);
-    const glyph = _ftHashGlyphFromString(name);
-    const cx = xOff + glyphSize * 0.55;
-    const cy = h - glyphSize * 0.55 - 2;
-
-    const bg = new PIXI.Graphics();
-    bg.beginFill(0x000000, 0.7);
-    bg.lineStyle(1.2, color, 0.95);
-    bg.drawCircle(cx, cy, glyphSize * 0.55);
-    bg.endFill();
-
-    const txt = new PIXI.Text(glyph, new PIXI.TextStyle({
-      fontFamily: "Arial, sans-serif",
-      fontSize: glyphSize - 3,
-      fill: color
-    }));
-    txt.anchor.set(0.5, 0.5);
-    txt.position.set(cx, cy);
-
-    container.addChild(bg);
-    container.addChild(txt);
-    xOff += glyphSize + 2;
-  }
-
-  token.addChild(container);
-  token._ftOccultMarker = container;
+  token._ftAffiliationPanel = container;
 }
 
 function _ftRefreshAffiliationsForActor(actor) {
   if (!canvas?.tokens) return;
   const tokens = canvas.tokens.placeables.filter(t => t.actor?.id === actor?.id);
   for (const tok of tokens) {
-    try { _ftDrawCrewBanner(tok); } catch (_) {}
-    try { _ftDrawOccultMarker(tok); } catch (_) {}
+    try { _ftDrawAffiliationPanel(tok); } catch (_) {}
   }
 }
 
@@ -26637,8 +26645,7 @@ function _ftRefreshAffiliationsForActor(actor) {
 Hooks.on("drawToken", (token) => {
   try {
     if (token?.actor?.type === "character" || token?.actor?.type === "npc") {
-      _ftDrawCrewBanner(token);
-      _ftDrawOccultMarker(token);
+      _ftDrawAffiliationPanel(token);
     }
   } catch (e) { console.warn("[fourththing] affiliation marker draw failed", e); }
 });
@@ -26670,11 +26677,18 @@ Hooks.on("canvasReady", () => {
   for (const tok of canvas.tokens.placeables) {
     try {
       if (tok.actor?.type === "character" || tok.actor?.type === "npc") {
-        _ftDrawCrewBanner(tok);
-        _ftDrawOccultMarker(tok);
+        _ftDrawAffiliationPanel(tok);
       }
     } catch (_) {}
   }
+});
+
+// Reveal the affiliation panel on mouse-hover only, hide it otherwise — the
+// panel is built hidden, so this is the only thing that surfaces it. Selecting
+// a token does NOT reveal it.
+Hooks.on("hoverToken", (token, hovered) => {
+  const c = token?._ftAffiliationPanel;
+  if (c) c.visible = !!hovered;
 });
 
 // ─── Phase 5 — Multi-scene Violence Raid Orchestrator (2026-05-12) ────────
