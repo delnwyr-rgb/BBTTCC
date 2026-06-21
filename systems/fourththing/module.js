@@ -20888,6 +20888,227 @@ Hooks.once("init", function () {
     get title() { return this.actor?.name ?? "Rig"; }
   }
 
+
+  // ── Effect categorize/sort/group helper (shared by character + item sheets) ──
+  // Looks up each effect's primary change-key in the fourththing AE registry
+  // (game.fourththing.ae) to derive a category, sorts by [category, name],
+  // and produces both a flat sorted list AND a grouped {category, effects[]}[]
+  // shape so templates can render section headers without an extra pass.
+  // Effects with no change rows fall under "Empty"; unregistered keys fall
+  // under "Other / Custom".
+  function _ftCategorizeEffects(rows) {
+    const reg = game.fourththing?.ae;
+    const get = reg?.get ? reg.get.bind(reg) : () => null;
+    const CAT_ORDER = [
+      "Attributes", "Skills", "Magic / Manifestation", "Manifestation Discipline",
+      "Manifestation Item", "Derived Stats", "Resources", "Defenses", "Conditions",
+      "Last Stand", "Blood Debt", "Radiation", "Actions", "Details",
+      "Item Flags", "Faction", "Hex / Strategic", "Other / Custom", "Empty"
+    ];
+    const catRank = (c) => {
+      const i = CAT_ORDER.indexOf(c);
+      return i < 0 ? CAT_ORDER.length : i;
+    };
+    const out = rows.map(r => {
+      const firstKey = r._primaryKey || "";
+      let cat;
+      if (!firstKey) cat = "Empty";
+      else {
+        const meta = get(firstKey);
+        cat = meta?.category || "Other / Custom";
+      }
+      return { ...r, category: cat };
+    });
+    out.sort((a, b) => {
+      const ra = catRank(a.category), rb = catRank(b.category);
+      if (ra !== rb) return ra - rb;
+      if (a.category !== b.category) return a.category.localeCompare(b.category);
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    });
+    const groups = [];
+    let cur = null;
+    for (const r of out) {
+      if (!cur || cur.category !== r.category) {
+        cur = { category: r.category, effects: [] };
+        groups.push(cur);
+      }
+      cur.effects.push(r);
+    }
+    return { flat: out, groups };
+  }
+
+  // ── Item Active Effect helpers (shared by Power/Weapon/Feature sheets) ──
+  // Builds the context shape the item-effects.hbs partial expects, and the
+  // four action handlers wired through DEFAULT_OPTIONS.actions. The change-key
+  // input on the spawned ActiveEffectConfig dialog gets the typeahead via the
+  // ae-key-picker.enhancer.js render hook — no extra wiring needed here.
+  function _ftBuildItemEffectsContext(item) {
+    const rows = [];
+    const effs = (item?.effects?.contents) ? item.effects.contents : [];
+    for (const e of effs) {
+      const changes = Array.isArray(e.changes) ? e.changes : [];
+      const changeTags = changes.slice(0, 6).map(c => {
+        const key = String(c?.key || "").trim();
+        const v   = String(c?.value ?? "");
+        const short = key.split(".").slice(-2).join(".") || "(unset)";
+        return {
+          text: `${short} ${v ? "= " + v : ""}`.trim(),
+          full: `${key}${v ? "  =  " + v : ""}`
+        };
+      });
+      rows.push({
+        id:       e.id,
+        name:     e.name || "(unnamed effect)",
+        icon:     e.icon || e.img || "icons/svg/aura.svg",
+        disabled: !!e.disabled,
+        // Bucket B: this AE is a durational template that the use-pipeline clones
+        // onto the user on consume (flags.fourththing.applyOnUse). Surfaced so the
+        // On-Use editor can flag it without opening the AE config.
+        applyOnUse: !!e.flags?.fourththing?.applyOnUse,
+        changeTags,
+        _primaryKey: changes[0]?.key || ""
+      });
+    }
+    return _ftCategorizeEffects(rows);
+  }
+
+  async function _ftOnAddItemEffect(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const created = await item.createEmbeddedDocuments("ActiveEffect", [{
+      name:     "New Effect",
+      icon:     "icons/svg/aura.svg",
+      changes:  [],
+      disabled: false,
+      flags:    { fourththing: { source: "manual" } }
+    }]);
+    if (created[0]) created[0].sheet?.render(true);
+  }
+
+  function _ftEffectIdFrom(target) {
+    const row = target?.closest?.("[data-effect-id]");
+    return row?.dataset?.effectId || target?.dataset?.effectId || null;
+  }
+
+  async function _ftOnEditItemEffect(event, target) {
+    const item = this.item;
+    const id   = _ftEffectIdFrom(target);
+    const eff  = item?.effects?.get(id);
+    if (eff) eff.sheet?.render(true);
+  }
+
+  async function _ftOnDeleteItemEffect(event, target) {
+    const item = this.item;
+    const id   = _ftEffectIdFrom(target);
+    if (!item || !id) return;
+    const eff = item.effects.get(id);
+    if (!eff) return;
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: "Delete Effect" },
+      content: `<p>Delete <strong>${foundry.utils.escapeHTML(eff.name)}</strong>?</p>`
+    }).catch(() => false);
+    if (ok) await eff.delete();
+  }
+
+  async function _ftOnToggleItemEffect(event, target) {
+    const item = this.item;
+    const id   = _ftEffectIdFrom(target);
+    const eff  = item?.effects?.get(id);
+    if (!eff) return;
+    await eff.update({ disabled: !eff.disabled });
+  }
+
+  // 2026-05-29 — Multi-damage-type editor (weapon + power sheets). Reads the
+  // RAW array (not the validated one) so a freshly-added blank row isn't
+  // dropped before the user fills it in. New rows default to 1d6 kinetic.
+  function _ftReadDamagePartsRaw(item) {
+    const raw = item?.system?.damageParts;
+    if (Array.isArray(raw)) return foundry.utils.deepClone(raw);
+    if (raw && typeof raw === "object") return Object.values(foundry.utils.deepClone(raw));
+    return [];
+  }
+  async function _ftOnAddDamagePart(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const parts = _ftReadDamagePartsRaw(item);
+    parts.push({ formula: "1d6", type: "kinetic", flavor: "", track: "integrity" });
+    await item.update({ "system.damageParts": parts });
+  }
+  async function _ftOnDeleteDamagePart(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const idx = Number(target?.dataset?.idx ?? target?.closest?.("[data-idx]")?.dataset?.idx);
+    const parts = _ftReadDamagePartsRaw(item);
+    if (Number.isInteger(idx) && idx >= 0 && idx < parts.length) {
+      parts.splice(idx, 1);
+      await item.update({ "system.damageParts": parts });
+    }
+  }
+
+  // ── Bucket B — On-Use editor (consume.effects[]) ───────────────────────────
+  // The instant half of an on-use item: the dice/track rows that runConsumeEffects
+  // rolls + applies. Lives in flags.fourththing.rfi.item.consume.effects[]. The
+  // durational half (durations, status icons, +stat buffs) is authored as
+  // applyOnUse Active Effects in the Effects section. Mirrors the damageParts
+  // pattern: read the RAW array (object-or-array tolerant) → splice → write back.
+  const FT_ONUSE_OPS = {
+    add:      "Add / Restore / Apply",
+    subtract: "Subtract / Drain",
+    set:      "Set to",
+    setMax:   "Set to Max",
+    remove:   "Remove (condition)"
+  };
+  const FT_ONUSE_KINDS = { track: "Track", condition: "Condition" };
+
+  function _ftReadConsumeEffectsRaw(item) {
+    const raw = foundry.utils.getProperty(item, "flags.fourththing.rfi.item.consume.effects");
+    if (Array.isArray(raw)) return foundry.utils.deepClone(raw);
+    if (raw && typeof raw === "object") return Object.values(foundry.utils.deepClone(raw));
+    return [];
+  }
+  async function _ftOnAddOnUseEffect(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const effects = _ftReadConsumeEffectsRaw(item);
+    effects.push({ kind: "track", track: "integrity", op: "add", formula: "1d6" });
+    await item.update({ "flags.fourththing.rfi.item.consume.effects": effects });
+  }
+  async function _ftOnDeleteOnUseEffect(event, target) {
+    const item = this.item;
+    if (!item) return;
+    const idx = Number(target?.dataset?.idx ?? target?.closest?.("[data-idx]")?.dataset?.idx);
+    const effects = _ftReadConsumeEffectsRaw(item);
+    if (Number.isInteger(idx) && idx >= 0 && idx < effects.length) {
+      effects.splice(idx, 1);
+      await item.update({ "flags.fourththing.rfi.item.consume.effects": effects });
+    }
+  }
+  // Flag/unflag an item Active Effect as an applyOnUse template (cloned onto the
+  // user on consume). applyOnUse templates must be transfer:false so they don't
+  // also passively apply to the holder while sitting in inventory.
+  async function _ftOnToggleApplyOnUse(event, target) {
+    const item = this.item;
+    const id   = _ftEffectIdFrom(target);
+    const eff  = item?.effects?.get(id);
+    if (!eff) return;
+    const next = !eff.flags?.fourththing?.applyOnUse;
+    const update = { "flags.fourththing.applyOnUse": next };
+    if (next) update.transfer = false; // template, not a passive transfer effect
+    await eff.update(update);
+  }
+
+  // Open this manifestation item in the Manifestation Engine (wizard V2) for a
+  // richer guided edit (2026-05-29). Writes back to the same item in place.
+  async function _ftOnOpenManifestationEngine(event, target) {
+    const item = this.item;
+    if (!item) return;
+    try { await openManifestationWizardV2(item.actor ?? null, { existingItem: item }); }
+    catch (e) {
+      console.warn("[fourththing] open Manifestation Engine failed", e);
+      ui.notifications?.error("Manifestation Engine failed to open (see console).");
+    }
+  }
+
   // ── FourthThingPowerSheet ─────────────────────────────────────────────────
   class FourthThingPowerSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
