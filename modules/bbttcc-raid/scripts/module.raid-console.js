@@ -1202,7 +1202,9 @@ async function pickTargetHex({ prompt="Click a Bad Eden hex…" } = {}) {
   return res;
 }
 
-// --- Target picker (Hex OR Rig) --------------------------------------------
+// --- Target picker (Hex / Facility / Rig) ----------------------------------
+// "Creature" (boss-as-target) was retired 2026-06-21 — bosses are now plain
+// NPC monsters; you raid the boss's faction via its hex, like any other raid.
 async function pickTargetHexOrRig(vm){
   const choice = await new Promise((resolve) => {
     new Dialog({
@@ -1211,8 +1213,7 @@ async function pickTargetHexOrRig(vm){
       buttons: {
         hex: { label: "Hex", callback: () => resolve("hex") },
         facility: { label: "Facility", callback: () => resolve("facility") },
-        rig: { label: "Rig", callback: () => resolve("rig") },
-        creature: { label: "Creature", callback: () => resolve("creature") }
+        rig: { label: "Rig", callback: () => resolve("rig") }
       },
       default: "hex",
       close: () => resolve(null)

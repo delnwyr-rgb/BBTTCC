@@ -4336,13 +4336,6 @@ async function enhanceBBTTCCSheet(app, html) {
       return;
     }
 
-    // 2026-05-15 — Boss sheet (fourththing) gets a slim Affiliations surface
-    // so bosses can author affiliations and contribute OP to their faction.
-    if (String(actor.type || "").toLowerCase() === "boss") {
-      _ftMountBossAffiliationsSurface(app, root);
-      return;
-    }
-
     if (isPC && !actor.getFlag?.("bbttcc-factions", "isFaction")) {
       // Ensure Esoteric Magic feats route through dnd5e.useItem (dialog-safe)
       patchEsotericDisplayCardRoutingOnce();
@@ -4521,69 +4514,6 @@ function _ftBuildAffiliationsCardHTML(actor) {
       <div class="bbttcc-aff-total-pills">${totalHtml}</div>
     </div>
   </section>`;
-}
-
-/** Build the chooser button row HTML used by the boss-sheet mount.
- *  Mirrors the NPC quickbar's six chooser buttons (incl. ancestry).
- */
-function _ftBuildBossAffChooserRowHTML() {
-  return `<div class="bbttcc-quickbar-actions bbttcc-quickbar-options" data-bbttcc-boss-chooser="1">
-    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="archetype">Archetype</button>
-    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="crew">Crew Type</button>
-    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="occult">Occult</button>
-    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="political">Philosophy</button>
-    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="sephirothicAlignment">Sephirotic</button>
-    <button type="button" class="bbttcc-button-link" data-bbttcc-choose="ancestry">Ancestry</button>
-  </div>`;
-}
-
-/** Mount the Affiliations card + chooser row on a boss sheet.
- *  Boss sheet is a custom fourththing template; we inject inside the body
- *  area near the top so the surface is visible without tab switching.
- */
-function _ftMountBossAffiliationsSurface(app, root) {
-  try {
-    const actor = app?.actor ?? app?.object;
-    if (!actor || !root) return;
-    if (String(actor.type || "").toLowerCase() !== "boss") return;
-
-    // Drop any prior surface (re-render path)
-    root.querySelectorAll("[data-bbttcc-boss-aff='1']").forEach(el => el.remove());
-
-    // Find a mount target — boss sheet has .ft-identity at top of sheet body
-    const mount =
-      root.querySelector(".ft-boss-identity") ||
-      root.querySelector(".ft-identity") ||
-      root.querySelector(".sheet-body") ||
-      root.querySelector("form") ||
-      root;
-    if (!mount) return;
-
-    const wrap = document.createElement("section");
-    wrap.dataset.bbttccBossAff = "1";
-    wrap.className = "bbttcc-boss-aff-wrap";
-    wrap.innerHTML = `
-      ${_ftBuildBossAffChooserRowHTML()}
-      ${_ftBuildAffiliationsCardHTML(actor)}
-    `;
-    // Insert directly after the identity block (or prepend to body fallback)
-    if (mount.parentNode && mount.classList?.contains("ft-identity")) {
-      mount.parentNode.insertBefore(wrap, mount.nextSibling);
-    } else {
-      mount.prepend(wrap);
-    }
-
-    // Wire chooser buttons
-    wrap.querySelectorAll("[data-bbttcc-choose]").forEach((btn) => {
-      btn.addEventListener("click", async (ev) => {
-        ev.preventDefault();
-        const slot = String(ev.currentTarget.dataset.bbttccChoose || "");
-        await openBBTTCCIdentityChooser(actor, app, slot);
-      });
-    });
-  } catch (e) {
-    WARN("Boss affiliations surface mount failed", e);
-  }
 }
 
 /** Mount or refresh the Affiliations card just below the Bad Eden quickbar. */

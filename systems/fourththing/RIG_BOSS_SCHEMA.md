@@ -1,6 +1,14 @@
 # Rig / Boss Schema — Phase 0 Canon
 *Locked: 2026-05-07. Source of truth for the Rig + Boss + Facility modernization sprint.*
 
+> ⚠️ **BOSS ACTOR TYPE RETIRED 2026-06-21.** The `boss` actor type, its sheet,
+> phase-ladder / Surge / legendary-action machinery, the raid-registry bridge,
+> and the raid console's "creature" target were all removed. Boss fights are now
+> plain NPC **Monsters** (`type:"npc"`), and a "boss raid" is run by the boss's
+> **faction** (raid the hex, like any other raid). The boss simply buffs/threatens
+> on canvas. Everything below about the Boss actor type is **historical** — the Rig
+> sections remain canonical. See `BOSS_RETIREMENT_PLAN.md`.
+
 ---
 
 ## 0. Top-line decisions (locked)

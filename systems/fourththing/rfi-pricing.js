@@ -107,14 +107,6 @@ export const RIG_BRACKET_MULT = {
   siege:    50   // stationary forge/fortress/relic-installation
 };
 
-// Boss bounty / hire / ransom multipliers (rubric §9). Apply to
-// tierBase × bracketMult.
-export const BOSS_PRICING_MULT = {
-  bounty: 0.6,   // paid out for slaying — credited to the pool matching method
-  hire:   1.5,   // cost to retain a tameable / pact-bound boss
-  ransom: 1.0    // cost to recover a captured / hostage boss
-};
-
 // Cross-pool surcharge (rubric §1.5).
 export const CROSS_POOL_FRICTION = 1.5;
 
@@ -194,22 +186,6 @@ export function computeRigListPrice({ tier, bracket } = {}) {
   return roundToFive(tierBaseMarks(tier) * rigBracketMult(bracket));
 }
 
-/**
- * Boss bounty / hire / ransom prices in marks (rubric §9).
- *   bounty  = tierBase × bracketMult × 0.6
- *   hire    = tierBase × bracketMult × 1.5
- *   ransom  = tierBase × bracketMult × 1.0
- *
- * Returns { bounty, hire, ransom }. Caller decides which to use.
- */
-export function computeBossPricing({ tier, bracket } = {}) {
-  const base = tierBaseMarks(tier) * rigBracketMult(bracket);
-  return {
-    bounty: roundToFive(base * BOSS_PRICING_MULT.bounty),
-    hire:   roundToFive(base * BOSS_PRICING_MULT.hire),
-    ransom: roundToFive(base * BOSS_PRICING_MULT.ransom)
-  };
-}
 
 /**
  * Facility list price in marks (rubric §8).
@@ -320,12 +296,12 @@ export const RfiPricing = {
   // schema
   MARKS_PER_OP, TIER_BASE_MARKS, CATEGORY_MULT_BY_FRAME, OP_POOLS, OP_POOL_LABELS,
   NATIVE_POOL_BY_FRAME, TECH_MULT, BOUND_MULT, SALE_BACK_FRACTION, CROSS_POOL_FRICTION,
-  TIER_FEE_MARKS, RIG_BRACKET_MULT, BOSS_PRICING_MULT,
+  TIER_FEE_MARKS, RIG_BRACKET_MULT,
   // math
   tierBaseMarks, categoryMult, defaultCurrencyForFrame,
   computeListPrice, computeSaleBack, isOverride,
   tierFeeForTier, materialUnitPriceMarks,
-  rigBracketMult, computeRigListPrice, computeBossPricing, computeFacilityListPrice,
+  rigBracketMult, computeRigListPrice, computeFacilityListPrice,
   // defaults
   defaultPriceFor, emptyTechShape,
   // persistence

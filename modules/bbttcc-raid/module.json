@@ -1,7 +1,7 @@
 {
   "id": "bbttcc-raid",
   "title": "Raid & Siege Engine",
-  "description": "Raid and siege management engine: maneuvers, doctrines, boss behaviors, and agent API.",
+  "description": "Raid and siege management engine: maneuvers, doctrines, and agent API.",
   "version": "1.3.14.4",
   "authors": [
     {
@@ -49,15 +49,6 @@
     "scripts/siege-tick.js",
     "scripts/siege-events.js",
     "scripts/siege-layer-transition.js",
-    "scripts/boss/bossRegistry.js",
-    "scripts/boss/applyBehaviors.js",
-    "scripts/boss/boss-behaviors.console-hook.enhancer.js",
-    "scripts/boss/boss-behaviors.hook.enhancer.js",
-    "scripts/boss/boss-creature-doctrine.ui.enhancer.js",
-    "scripts/boss/boss-templates.js",
-    "scripts/boss/boss-powers.js",
-    "scripts/boss/boss-config-app.js",
-    "scripts/boss/bosses.gloomgill.js",
     "scripts/targets/resolveTarget.js",
     "scripts/ui/bbttcc-tooltip-resolver.js",
     "scripts/raid-victory.enhancer.js",

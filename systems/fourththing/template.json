@@ -3,8 +3,7 @@
     "types": [
       "character",
       "npc",
-      "rig",
-      "boss"
+      "rig"
     ],
     "character": {
       "biography": {
@@ -504,77 +503,6 @@
         "speed": 1,
         "range": 5,
         "hazardResist": 0
-      },
-      "tags": []
-    },
-    "boss": {
-      "identity": {
-        "archetype": "",
-        "archetypeTags": [],
-        "factionId": "",
-        "portraitVariants": []
-      },
-      "phases": {
-        "ladder": [],
-        "currentPhase": 0
-      },
-      "integrity": {
-        "value": 60,
-        "max": 60,
-        "tier": 1,
-        "bracket": "heavy"
-      },
-      "defenses": {
-        "resistances": [],
-        "immunities": [],
-        "vulnerabilities": []
-      },
-      "conditionImmunities": [],
-      "manifestations": {
-        "library": [],
-        "surge": {
-          "current": 0,
-          "max": 6,
-          "exploded": 0
-        },
-        "momentum": 0
-      },
-      "doctrine": {
-        "slot": "",
-        "maneuverKeys": []
-      },
-      "powers": {
-        "powers": [],
-        "cooldowns": {}
-      },
-      "behaviors": {
-        "behaviors": [],
-        "triggerState": {}
-      },
-      "raidStats": {
-        "rounds": 0,
-        "morale": 3,
-        "infiltration": 0,
-        "alarm": 0
-      },
-      "raidProfile": {
-        "key": "",
-        "mode": "hybrid",
-        "moraleHits": 4,
-        "hitTrack": "",
-        "tagsRaw": "",
-        "opStats": {
-          "violence": 0,
-          "nonlethal": 0,
-          "intrigue": 0,
-          "economy": 0,
-          "softpower": 0,
-          "diplomacy": 0,
-          "logistics": 0,
-          "culture": 0,
-          "faith": 0
-        },
-        "behaviorsRaw": "[]"
       },
       "tags": []
     }

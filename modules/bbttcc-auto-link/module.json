@@ -18,7 +18,6 @@
     "scripts/character-wizard.js",
     "scripts/npc-builder.js",
     "scripts/monster-builder.js",
-    "scripts/boss-builder.js",
     "scripts/rig-builder.js"
   ],
   "styles": [

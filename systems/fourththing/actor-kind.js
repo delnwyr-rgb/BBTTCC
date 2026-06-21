@@ -1,14 +1,14 @@
 /**
  * Roll for Initiation — canonical Actor "kind" resolver + stored tag.
  * ----------------------------------------------------------------------------
- * The system distinguishes actor KINDS inconsistently: rigs/bosses are real
- * Foundry actor `type`s, but factions are `type:"npc"` + an `isFaction` flag,
+ * The system distinguishes actor KINDS inconsistently: rigs are a real
+ * Foundry actor `type`, but factions are `type:"npc"` + an `isFaction` flag,
  * and the auto-link builders stamp `flags["bbttcc-auto-link"].entityKind`
- * ("monster"/"boss"/"npc"/"rig"/"facility"). That patchwork is why some actor
+ * ("monster"/"npc"/"rig"/"facility"). That patchwork is why some actor
  * dropdowns can't filter cleanly.
  *
  * `actorKind(actor)` collapses all of that into ONE canonical answer:
- *   "faction" | "rig" | "facility" | "boss" | "steward" | "monster" | "npc"
+ *   "faction" | "rig" | "facility" | "steward" | "monster" | "npc"
  *
  * It is the single source of truth. `flags.fourththing.kind` is a denormalized
  * CACHE of that answer, stamped on create/update and backfilled by migration v2,
@@ -22,13 +22,12 @@ const AUTOLINK = "bbttcc-auto-link";
 const FACTIONS = "bbttcc-factions";
 
 /** Canonical kinds, in no particular order. */
-export const ACTOR_KINDS = ["faction", "rig", "facility", "boss", "steward", "monster", "npc"];
+export const ACTOR_KINDS = ["faction", "rig", "facility", "steward", "monster", "npc"];
 
 /** Builder-stamped entityKind values that map 1:1 to a canonical kind. */
 const ENTITY_KIND_MAP = {
   rig: "rig",
   facility: "facility",
-  boss: "boss",
   monster: "monster",
   npc: "npc"
 };
@@ -37,7 +36,7 @@ const ENTITY_KIND_MAP = {
  * Resolve an actor's canonical kind. Pure + defensive (safe on partial docs).
  * Priority: faction flag → builder entityKind → Foundry actor type.
  * @param {Actor|object} actor
- * @returns {"faction"|"rig"|"facility"|"boss"|"steward"|"monster"|"npc"|"unknown"}
+ * @returns {"faction"|"rig"|"facility"|"steward"|"monster"|"npc"|"unknown"}
  */
 export function actorKind(actor) {
   if (!actor) return "unknown";
@@ -60,7 +59,6 @@ export function actorKind(actor) {
   // 3. Fall back on the Foundry actor type.
   switch (actor.type) {
     case "rig":       return "rig";
-    case "boss":      return "boss";
     case "character": return "steward"; // a character with no entityKind:npc is a PC/steward
     case "npc":       return "npc";      // a bare npc that isn't a faction or builder-monster
     default:          return actor.type || "unknown";

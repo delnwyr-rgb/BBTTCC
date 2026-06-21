@@ -1480,19 +1480,6 @@ Hooks.on("bbttcc:rig:destroyed", ({ rig } = {}) => {
   try { ftPlayCombatVfx(rig, "explosion"); } catch (e) { console.warn("[fourththing] explosion VFX", e); }
 });
 
-// 2026-05-13 — Mirror VFX subscribers for boss damage. Impact ring on
-// every hit; explosion on defeat (integrity → 0). Same animation pattern
-// as rigs so the visual language is consistent.
-Hooks.on("bbttcc:boss:damaged", ({ boss, amount } = {}) => {
-  if (!boss || !(amount > 0)) return;
-  try { ftPlayCombatVfx(boss, "impact"); } catch (e) { console.warn("[fourththing] boss impact VFX", e); }
-});
-
-Hooks.on("bbttcc:boss:defeated", ({ boss } = {}) => {
-  if (!boss) return;
-  try { ftPlayCombatVfx(boss, "explosion"); } catch (e) { console.warn("[fourththing] boss defeat VFX", e); }
-});
-
 function ftManifestationGuide(sephirah = "tiferet") {
   const seph = FT.SEPHIROTH[sephirah] ?? FT.SEPHIROTH.tiferet;
   const prompts = {
@@ -3498,24 +3485,10 @@ async function ftApplyManifestationCost(actor, assessment) {
   };
 }
 
-// Caster-pool + caster-tier helpers (2026-05-11) — Boss Sheet Slice 2.
-// Bosses don't have system.magic.clarity (Steward Clarity pool) or
-// system.details.tier — their adversarial analogues are
-// system.manifestations.surge and system.integrity.tier. These helpers
-// normalize the read/write paths so castManifestation + ftChargeUpkeep can
-// stay actor-type agnostic.
+// Caster-pool + caster-tier helpers (2026-05-11). Normalize the read/write
+// paths so castManifestation + ftChargeUpkeep can stay actor-type agnostic.
 function _ftCasterPool(actor) {
   const sys = actor?.system?.system ?? actor?.system ?? {};
-  if (actor?.type === "boss") {
-    const s = sys.manifestations?.surge ?? {};
-    return {
-      writePath: "system.manifestations.surge.current",
-      maxPath:   "system.manifestations.surge.max",
-      current:   Number(s.current) || 0,
-      max:       Number(s.max) || 0,
-      label:     "Surge"
-    };
-  }
   const c = sys.magic?.clarity ?? {};
   return {
     writePath: "system.magic.clarity.value",
@@ -3527,15 +3500,14 @@ function _ftCasterPool(actor) {
 }
 function _ftCasterTier(actor) {
   const sys = actor?.system?.system ?? actor?.system ?? {};
-  if (actor?.type === "boss") return Math.max(1, Math.min(4, Number(sys.integrity?.tier) || 1));
   return Math.max(1, Math.min(4, Number(sys?.details?.tier) || 1));
 }
 
 // 2026-05-26 — Foe surge gating. NPCs (classed, type "character" +
 // entityKind "npc") and Monsters (stat-block type "npc") only bank/spend
 // Surge when the GM explicitly enables it per-foe (`flags.fourththing
-// .surgeEnabled === true`). PCs, bosses, and rigs are unaffected. Lets the
-// GM experiment with which foes (e.g. Elites) get Surge without it being on
+// .surgeEnabled === true`). PCs and rigs are unaffected. Lets the GM
+// experiment with which foes (e.g. Elites) get Surge without it being on
 // by default for every mook.
 // Best-effort actor disposition: prefer a live token, fall back to prototype.
 // Returns a CONST.TOKEN_DISPOSITIONS number, or null if undeterminable.
@@ -3555,7 +3527,6 @@ function _ftActorDisposition(actor) {
 }
 function _ftIsFoeActor(actor) {
   if (!actor) return false;
-  if (actor.type === "boss") return false; // bosses run their own surge pool
   if (actor.type === "npc") return true; // Monsters (stat-block actors)
   // 2026-05-29 — disposition-based foe detection: any actor whose token is
   // HOSTILE counts as a foe regardless of actor type/flags. Fixes Surge
@@ -3582,7 +3553,7 @@ function _ftIsActionEconomyActive(actor) {
   return !!actor && _ftInActiveCombat(actor) && !_ftIsFoeActor(actor);
 }
 function _ftSurgeAllowed(actor) {
-  if (!_ftIsFoeActor(actor)) return true; // PCs / bosses / rigs unchanged
+  if (!_ftIsFoeActor(actor)) return true; // PCs / rigs unchanged
   return actor.flags?.fourththing?.surgeEnabled === true;
 }
 // Sheet-context shape for the per-foe Surge toggle + bank-cap editor.
@@ -3611,16 +3582,11 @@ function _ftBankedRerollContext(actor) {
   return { count: rerolls.length, sources, tooltip: sources.length ? `Banked reroll-lowest from: ${sources.join(", ")}. Auto-fires on your next check / save / attack.` : "" };
 }
 
-// Tier-scaled Surge bank cap. T1=4, T2=6, T3=8, T4=10. Bosses use their own
-// `system.manifestations.surge.max` (typically 6, set at create time).
-// Foes (NPC/Monster) may override the cap via `flags.fourththing.surgeCap`
-// (used for Elites). 2026-05-26.
+// Tier-scaled Surge bank cap. T1=4, T2=6, T3=8, T4=10. Foes (NPC/Monster)
+// may override the cap via `flags.fourththing.surgeCap` (used for Elites).
+// 2026-05-26.
 function _ftSurgeCap(actor) {
   if (!actor) return 10;
-  if (actor.type === "boss") {
-    const sys = actor.system?.system ?? actor.system ?? {};
-    return Number(sys?.manifestations?.surge?.max) || 6;
-  }
   if (_ftIsFoeActor(actor)) {
     const ovr = Number(actor.flags?.fourththing?.surgeCap);
     if (Number.isFinite(ovr) && ovr > 0) return Math.floor(ovr);
@@ -3644,20 +3610,6 @@ async function _ftBankSurge(actor, n, { fromHarvest = false } = {}) {
     try { await _ftHarmonyHarvest(actor, n); } catch (e) { console.warn("[ft] harmony harvest failed", e); }
   }
   const sys = actor.system?.system ?? actor.system ?? {};
-  if (actor.type === "boss") {
-    const s    = sys?.manifestations?.surge ?? { current: 0, max: 6, exploded: 0 };
-    const cur  = Number(s.current) || 0;
-    const max  = Number(s.max) || 6;
-    const expS = Number(s.exploded) || 0;
-    const next = Math.min(max, cur + n);
-    try {
-      await actor.update({
-        "system.manifestations.surge.current": next,
-        "system.manifestations.surge.exploded": expS + n
-      });
-    } catch (e) { /* missing surge fields — silent */ }
-    return next - cur;
-  }
   const cur  = Number(sys?.resources?.surge?.value) || 0;
   const cap  = _ftSurgeCap(actor);
   const next = Math.min(cap, cur + n);
@@ -7053,10 +7005,8 @@ async function castManifestation(actor, item, {
   // (sustained / bound / enduring "forms"). The active "working" register
   // (instant resolution) is reserved for TCCs as their primary tool.
   // Items without an explicit stability are treated as legacy and pass through.
-  // Boss actors (2026-05-11) are exempt — they are adversarial casters whose
-  // entire shtick is resolving Workings against the party.
   const declaredStability = mf?.stability ?? null;
-  if (!miracle && declaredStability === "instant" && !actorIsTCC && actor?.type !== "boss") {
+  if (!miracle && declaredStability === "instant" && !actorIsTCC) {
     ui.notifications?.warn(`${actor.name}: only Trad Caster Classes (Cosmic Linguist, Wyrdlens Adept, Dreamwalker, Pactkeeper) can resolve a working in the active register. Non-TCCs may sustain forms.`);
     return false;
   }
@@ -7084,27 +7034,14 @@ async function castManifestation(actor, item, {
 
   // Activation pool gate. Original (Phase C 2026-05-XX) honored
   // `manifestation.activation.consumePool` on the item. Extended by Action
-  // Economy canon Phase B (2026-05-19): bosses now spend per-round
-  // Manifestation Slots (canon §6.2) instead of system.actions; elites get
-  // a free bonus manifestation per round (canon §5).
+  // Economy canon Phase B (2026-05-19): elites get a free bonus manifestation
+  // per round (canon §5).
   const POOL_KEY_FROM_TYPE = { action: "actionUsed", bonus: "bonusUsed", reaction: "reactionUsed" };
   const isElite = actor?.flags?.["bbttcc-auto-link"]?.eliteTier === true;
   const bonusManiUsed = actor?.flags?.fourththing?.combat?.bonusManifestationUsedThisRound === true;
   let _useEliteBonusMani = false;
 
-  if (actor?.type === "boss") {
-    // Canon §6.2 — Tier-many Manifestation Slots per round. Default-init
-    // when the flag is absent (first cast of an unseeded boss).
-    const slotsCur = actor?.flags?.fourththing?.bossManifestationSlots;
-    const slotsMax = Math.max(1, Math.min(4, Number(slotsCur?.max) || _ftCasterTier(actor)));
-    const current  = Number.isFinite(Number(slotsCur?.current))
-      ? Math.max(0, Number(slotsCur.current))
-      : slotsMax;
-    if (current <= 0) {
-      ui.notifications?.warn(`${actor.name}: Manifestation Slots exhausted (${slotsMax}/round; refills on round advance).`);
-      return false;
-    }
-  } else if (!miracle && item && mf?.activation?.consumePool) {
+  if (!miracle && item && mf?.activation?.consumePool) {
     const poolKey = POOL_KEY_FROM_TYPE[mf.activation.type];
     if (mf.activation.type === "reaction" && _ftReactionsDenied(actor)) {
       ui.notifications?.warn(`${actor.name}: reactions are denied this round (Aurablade Fury).`);
@@ -7147,7 +7084,6 @@ async function castManifestation(actor, item, {
   // TCCs get a -1 cast discount that floors at 0 for safety).
   // freeClarity:true bypasses the Clarity cost entirely (Phase C 2026-05-07
   // — Dreamwalker Dream-Cache deploy fires this; Blood Debt + Noise still due).
-  // Boss casts (2026-05-11) draw from the Surge bank via _ftCasterPool.
   const tccDiscount = actorIsTCC ? 1 : 0;
   const clarityCost = (cfg.ascendant || freeClarity || miracle) ? 0 : Math.max(0, baseClarity + cfg.clarityShift - tccDiscount);
   const casterPool = _ftCasterPool(actor);
@@ -7233,20 +7169,9 @@ async function castManifestation(actor, item, {
     catch (e) { console.warn("[ft] wyrdlens cast-gen failed", e); }
   }
   if (item && castSuccess) {
-    // Phase B 2026-05-19 — Action economy debit (boss slots / elite bonus
-    // mani / standard pool). Mirrors the pre-gate above.
-    if (actor?.type === "boss") {
-      const slotsCur = actor?.flags?.fourththing?.bossManifestationSlots;
-      const slotsMax = Math.max(1, Math.min(4, Number(slotsCur?.max) || _ftCasterTier(actor)));
-      const current  = Number.isFinite(Number(slotsCur?.current))
-        ? Math.max(0, Number(slotsCur.current))
-        : slotsMax;
-      try {
-        await actor.update({
-          "flags.fourththing.bossManifestationSlots": { max: slotsMax, current: Math.max(0, current - 1) }
-        });
-      } catch (e) { console.warn("[fourththing] boss manifestation-slot debit failed", e); }
-    } else if (mf?.activation?.consumePool) {
+    // Phase B 2026-05-19 — Action economy debit (elite bonus mani / standard
+    // pool). Mirrors the pre-gate above.
+    if (mf?.activation?.consumePool) {
       const poolKey = POOL_KEY_FROM_TYPE[mf.activation.type];
       if (poolKey) {
         if (_useEliteBonusMani) {
@@ -7574,10 +7499,9 @@ async function castManifestation(actor, item, {
   }
 
   // Apply resource changes now that the roll is committed.
-  // Caster-pool writePath is type-aware: stewards debit Clarity, bosses Surge.
   const updates = {};
   if (clarityCost > 0) updates[casterPool.writePath] = Math.max(0, curClarity - clarityCost);
-  if (noiseGain > 0 && actor?.type !== "boss") {
+  if (noiseGain > 0) {
     const curNoise = Number(rawSys?.magic?.noise?.value) || 0;
     const maxNoise = Number(rawSys?.magic?.noise?.max) || 10;
     updates["system.magic.noise.value"] = Math.min(maxNoise, curNoise + noiseGain);
@@ -13325,17 +13249,10 @@ Hooks.once("init", function () {
       if (!label || label === "Manifestation") label = item.name ?? label;
     }
     const sys      = actor.system?.system ?? actor.system;
-    // Boss casts (2026-05-11) — bosses don't carry Steward-shaped attributes
-    // or a Clarity pool, so synthesize: intent/channel attrs default to the
-    // boss tier (a T3 boss gets +3 +3 push), Clarity := current Surge, Noise
-    // := 0. Keeps the magicTest formula shape uniform across actor types.
-    const isBossCaster = actor?.type === "boss";
-    const bossTier = isBossCaster ? Math.max(1, Math.min(4, Number(sys?.integrity?.tier) || 1)) : 0;
-    const attrI    = isBossCaster ? bossTier : (sys.attributes?.[intent]?.value  ?? 0);
-    const attrC    = isBossCaster ? bossTier : (sys.attributes?.[channel]?.value ?? 0);
-    const clarity  = isBossCaster ? (Number(sys?.manifestations?.surge?.current) || 0)
-                                   : (sys.magic?.clarity?.value ?? 3);
-    const noise    = isBossCaster ? 0 : (sys.magic?.noise?.value   ?? 0);
+    const attrI    = sys.attributes?.[intent]?.value  ?? 0;
+    const attrC    = sys.attributes?.[channel]?.value ?? 0;
+    const clarity  = sys.magic?.clarity?.value ?? 3;
+    const noise    = sys.magic?.noise?.value   ?? 0;
     const alignMod = ftAlignmentMod(sephirah, intent, channel);
 
     // Passive AE bonuses on intent/channel attributes, magic.clarity, magic.noise.
@@ -13436,7 +13353,7 @@ Hooks.once("init", function () {
     if (explosions > 0) {
       await _ftBankSurge(actor, explosions);
     }
-    if (doubleTen && !isBossCaster) await actor.setFlag("fourththing", "bonusActionAvailable", true);
+    if (doubleTen) await actor.setFlag("fourththing", "bonusActionAvailable", true);
 
     // Shape B reroll grants — context "caster-check" + per-attribute narrowing
     // covers the two pieces of magic vocabulary that came up in the survey.
@@ -14687,15 +14604,13 @@ Hooks.once("init", function () {
       await fireTriggers(actor, "on-would-drop-to-zero", { amount: dmg, scope: "self" });
     }
 
-    // B11.B (2026-05-12): rigs and bosses store canonical integrity at
-    // system.integrity, not system.derived.integrity (which is a read-only
-    // mirror seeded in prepareDerivedData). Write to the canonical store.
-    // Rigs additionally flip identity.state to "destroyed" on the transition
-    // from >0 to 0 (token wreck overlay reads identity.state). Bosses use
-    // their phase ladder for "defeated" semantics — no state flip here.
+    // B11.B (2026-05-12): rigs store canonical integrity at system.integrity,
+    // not system.derived.integrity (which is a read-only mirror seeded in
+    // prepareDerivedData). Write to the canonical store. Rigs additionally
+    // flip identity.state to "destroyed" on the transition from >0 to 0 (the
+    // token wreck overlay reads identity.state).
     const isRig = actor.type === "rig";
-    const isBoss = actor.type === "boss";
-    const isStructural = isRig || isBoss;
+    const isStructural = isRig;
     const rigDestroyed = isRig && track === "integrity" && cur > 0 && newVal <= 0;
     const writeKey = (isStructural && track === "integrity")
       ? "system.integrity.value"
@@ -14703,9 +14618,6 @@ Hooks.once("init", function () {
     const updates = { [writeKey]: newVal };
     if (rigDestroyed) updates["system.identity.state"] = "destroyed";
     Object.assign(updates, oneShotClears);
-    if (isBoss && track === "integrity") {
-      console.log(`[fourththing] boss damage: ${actor.name} integrity ${cur} → ${newVal} (writeKey=${writeKey})`);
-    }
     await actor.update(updates);
 
     // Phoenix Oath eruption — stabilized at 1 above; now blast nearby hostiles
@@ -14739,18 +14651,6 @@ Hooks.once("init", function () {
         await _ftCascadeRigDestruction(actor);
       }
     }
-    // 2026-05-13 — Boss damage hooks (parallel to rig hooks). Powers the
-    // boss-impact + boss-defeat VFX subscribers. Bosses don't trigger a
-    // crew cascade — defeat is tracked via integrity + phase ladder.
-    if (isBoss && track === "integrity") {
-      if (dmg > 0) {
-        Hooks.callAll("bbttcc:boss:damaged", { boss: actor, amount: dmg, type: damageType, flavor: damageFlavor, newIntegrity: newVal });
-      }
-      if (newVal <= 0 && cur > 0) {
-        Hooks.callAll("bbttcc:boss:defeated", { boss: actor, finalHit: dmg });
-      }
-    }
-
     // Soul-Smith forge: integrity damage to self or a nearby ally stokes a Smith's
     // forge (Surge + Burn). Awaited in try/catch so it can never break damage apply.
     if (track === "integrity" && dmg > 0) {
@@ -14806,7 +14706,7 @@ Hooks.once("init", function () {
   // getHealth(actor) → {value, max} of the primary track (integrity on RFI; HP on
   // dnd5e). null when unreadable so callers can tell "at floor" from "no field".
   game.bbttcc.combat.getHealth = function (actor) {
-    const isStruct = actor && ["rig", "boss"].includes(actor.type);
+    const isStruct = actor && actor.type === "rig";
     const raw = actor?.system?.system ?? actor?.system;
     const t = isStruct ? raw?.integrity : raw?.derived?.integrity;
     const value = Number(t?.value);
@@ -15016,11 +14916,11 @@ Hooks.once("init", function () {
   // Aurablade flavor Surge gen — called by ft-class-automation when Burn is gained.
   game.fourththing.aurabladeFlavorSurge = _ftAurabladeFlavorSurge;
 
-  // createManifestationItemData — exposed 2026-05-17 so the Bad Eden Boss
-  // Builder (bbttcc-auto-link/scripts/boss-builder.js) can synthesize
-  // template-appropriate manifestations as embedded items at boss-create
-  // time without having to replicate the schema. Same shape the wizard
-  // produces; safe to call with minimal `values` objects.
+  // createManifestationItemData — exposed 2026-05-17 so the Bad Eden actor
+  // builders (bbttcc-auto-link) can synthesize template-appropriate
+  // manifestations as embedded items at create time without replicating the
+  // schema. Same shape the wizard produces; safe to call with minimal
+  // `values` objects.
   game.fourththing.createManifestationItemData = createManifestationItemData;
   game.fourththing.actions.somaBreak = async function (actor, { confirmed = false } = {}) {
     if (!actor) return;
@@ -16046,47 +15946,6 @@ Hooks.once("init", function () {
       // from frame bracket; Resolve is flat. All three +tier on top. Live here
       // so the existing manifestation/weapon attack path (which reads
       // `derived.<defense>.value`) Just Works against rigs.
-      // Boss defense derive (2026-05-12 playtest fix). Mirrors the rig
-      // branch but defaults to the heavier "heavy" bracket. Bosses store
-      // canonical integrity + defenses at the same paths rigs do; same
-      // mirror pattern. The write-path fix below routes damage to canonical.
-      if (this.type === "boss" && sys?.integrity) {
-        const bracket = sys.integrity.bracket || "heavy";
-        const tier = Math.max(1, Math.min(4, Number(sys.integrity.tier) || 1));
-        const table = FT_RIG_DEFENSE_BY_BRACKET[bracket] ?? FT_RIG_DEFENSE_BY_BRACKET.heavy;
-        sys.derived         ??= {};
-        sys.derived.guard   ??= {}; sys.derived.guard.value   = table.guard   + tier;
-        sys.derived.evasion ??= {}; sys.derived.evasion.value = table.evasion + tier;
-        sys.derived.resolve ??= {}; sys.derived.resolve.value = table.resolve + tier;
-        sys.derived.defenseBracket = bracket;
-        // Mirror canonical so the unified _applyDamageToActor reads work.
-        sys.derived.integrity ??= {};
-        sys.derived.integrity.value = Number(sys.integrity.value) || 0;
-        sys.derived.integrity.max   = Number(sys.integrity.max)   || 0;
-        sys.derived.defenses = sys.defenses ?? { resistances: [], immunities: [], vulnerabilities: [] };
-        // Damage-tracking unification 2026-05-13 — Phase ladder is now a
-        // DERIVED VIEW of integrity. As integrity drops, phaseIdx advances
-        // proportionally through the authored ladder. The boss sheet's
-        // phase pill and the raid console's hit-track readout both read
-        // this derived value going forward. The stored
-        // `phases.currentPhase` field stays for back-compat / GM override
-        // (a GM can manually set it; otherwise the derived value wins).
-        const ladder = Array.isArray(sys?.phases?.ladder) ? sys.phases.ladder : [];
-        const intMax = Number(sys.integrity.max) || 0;
-        if (ladder.length > 0 && intMax > 0) {
-          const intPct = Math.max(0, Math.min(1, Number(sys.integrity.value) / intMax));
-          const dmgPct = 1 - intPct;
-          const derivedIdx = Math.min(ladder.length - 1, Math.floor(dmgPct * ladder.length));
-          sys.derived.phaseIdx = derivedIdx;
-          sys.derived.phaseLabel = String(ladder[derivedIdx]?.label || ladder[derivedIdx]?.name || `Phase ${derivedIdx + 1}`);
-          // Live-update the canonical currentPhase as well so existing UIs
-          // that read `system.phases.currentPhase` stay in sync without
-          // needing to know about the derived value.
-          sys.phases.currentPhase = derivedIdx;
-        }
-        return;
-      }
-
       if (this.type === "rig" && sys?.integrity) {
         const bracket = ftRigBracketFor(this);
         const tier = Math.max(1, Math.min(4, Number(sys.integrity.tier) || 1));
@@ -21029,1677 +20888,6 @@ Hooks.once("init", function () {
     get title() { return this.actor?.name ?? "Rig"; }
   }
 
-  // ── FourthThingBossSheet (Phase 3 — RIG_BOSS_SCHEMA.md) ────────────────────
-  // Adversarial bosses with phase ladder, Surge bank, manifestation library,
-  // OP-economy raid profile, registry-loaded powers + behaviors. Tabbed:
-  // Identity / Phases / Combat / Manifest / Powers / Behaviors / Raid / GM.
-  // Absorbs the full authoring affordance of bbttcc-raid/boss-config-app.js
-  // (BOSS_TEMPLATES + BOSS_POWERS + BOSS_POWER_PACKS surfaced via GM tab).
-  class FourthThingBossSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
-
-    static DEFAULT_OPTIONS = {
-      classes:  ["fourththing", "sheet", "actor", "boss"],
-      position: { width: 1080, height: 920 },
-      window:   { resizable: true },
-      actions:  {
-        ftEditPortrait:        FourthThingCharacterSheet._onFtEditPortrait,
-        ftToggleEditMode:      FourthThingCharacterSheet._onFtToggleEditMode,
-        ftDefenseCycle:        FourthThingCharacterSheet._onFtDefenseCycle,
-        ftDefenseRoll:         FourthThingCharacterSheet._onFtDefenseRoll,
-        ftVulnToggle:          FourthThingCharacterSheet._onFtVulnToggle,
-        ftCondImmuneToggle:    FourthThingCharacterSheet._onFtCondImmuneToggle,
-        ftSurgeSpend:          FourthThingCharacterSheet._onFtSurgeSpend,
-        ftItemEdit:            FourthThingCharacterSheet._onFtItemEdit,
-        ftItemDelete:          FourthThingCharacterSheet._onFtItemDelete,
-        // Boss-specific
-        ftBossIntegrityAdjust: FourthThingBossSheet._onFtBossIntegrityAdjust,
-        ftBossSurgeAdjust:     FourthThingBossSheet._onFtBossSurgeAdjust,
-        ftBossMomentumAdjust:  FourthThingBossSheet._onFtBossMomentumAdjust,
-        ftBossPhaseAdvance:    FourthThingBossSheet._onFtBossPhaseAdvance,
-        ftBossPhaseRetreat:    FourthThingBossSheet._onFtBossPhaseRetreat,
-        ftBossPhaseAdd:        FourthThingBossSheet._onFtBossPhaseAdd,
-        ftBossPhaseRemove:     FourthThingBossSheet._onFtBossPhaseRemove,
-        ftBossTemplateApply:   FourthThingBossSheet._onFtBossTemplateApply,
-        ftBossPowerAdd:        FourthThingBossSheet._onFtBossPowerAdd,
-        ftBossPowerRemove:     FourthThingBossSheet._onFtBossPowerRemove,
-        ftBossPackApply:       FourthThingBossSheet._onFtBossPackApply,
-        ftBossNormalize:       FourthThingBossSheet._onFtBossNormalize,
-        ftBossManeuverAdd:     FourthThingBossSheet._onFtBossManeuverAdd,
-        ftBossManeuverPick:    FourthThingBossSheet._onFtBossManeuverPick,
-        ftBossManeuverRemove:  FourthThingBossSheet._onFtBossManeuverRemove,
-        // Phase 8 polish (2026-05-10)
-        ftBossManifestPick:    FourthThingBossSheet._onFtBossManifestPick,
-        ftBossManifestCreate:  FourthThingBossSheet._onFtBossManifestCreate,
-        ftBossManifestCast:    FourthThingBossSheet._onFtBossManifestCast,
-        ftBossManifestRemove:  FourthThingBossSheet._onFtBossManifestRemove,
-        ftBossBehaviorPhaseSet: FourthThingBossSheet._onFtBossBehaviorPhaseSet,
-        // B13.C — 2026-05-17
-        ftBossDuplicate:       FourthThingBossSheet._onFtBossDuplicate,
-        // Action Economy canon §6.3 (Phase C 2026-05-19)
-        ftBossLegendaryOpen:   FourthThingBossSheet._onFtBossLegendaryOpen,
-        ftBossLegendaryAuthor: FourthThingBossSheet._onFtBossLegendaryAuthor,
-        ftBossLegendaryRemove: FourthThingBossSheet._onFtBossLegendaryRemove,
-        ftBossLegendaryReset:  FourthThingBossSheet._onFtBossLegendaryReset
-      },
-      dragDrop: [{ dragSelector: "[data-item-id]", dropSelector: null }],
-      form:     { submitOnChange: true, closeOnSubmit: false }
-    };
-
-    static PARTS = {
-      sheet: { template: "systems/fourththing/templates/actors/boss-sheet.hbs" }
-    };
-
-    tabGroups = { primary: "identity" };
-
-    async _prepareContext(options) {
-      const actor   = this.actor;
-      const rawSys  = actor.system?.system ?? actor.system;
-      const sysData = rawSys?.toObject ? rawSys.toObject() : JSON.parse(JSON.stringify(rawSys ?? {}));
-
-      const integrity = sysData.integrity ?? { value: 0, max: 0, tier: 1, bracket: "heavy" };
-      const integrityPct = integrity.max > 0
-        ? Math.max(0, Math.min(100, Math.round((Number(integrity.value)||0) / Number(integrity.max) * 100)))
-        : 0;
-
-      const phases = sysData.phases ?? { ladder: [], currentPhase: 0 };
-      const ladder = (Array.isArray(phases.ladder) ? phases.ladder : []).map((p, i) => ({
-        idx: i,
-        label: p.label ?? `Phase ${i+1}`,
-        integrityThreshold: p.integrityThreshold ?? 0,
-        manifestationGrants: Array.isArray(p.manifestationGrants) ? p.manifestationGrants : [],
-        surgeBoost: p.surgeBoost ?? 0,
-        active: i === phases.currentPhase
-      }));
-      const currentPhaseEntry = ladder[phases.currentPhase] ?? null;
-
-      const factionId = sysData.identity?.factionId ?? "";
-      const faction   = factionId ? game.actors?.get(factionId) : null;
-
-      // Defense rows — every top-level FT.DAMAGE_TYPES plus its constrained
-      // sub-flavors (thermal→cold/hot, chemical→acid/base) as resistable rows.
-      const defenseRows = _ftDefenseEditRows(sysData.defenses).map(r => ({
-        key: r.key, flavor: r.flavor, label: r.label, sub: r.sub,
-        isResist: r.baseResist, isImmune: r.baseImmune, isVuln: r.baseVuln,
-        cycleState: r.baseImmune ? "immune" : (r.baseResist ? "resist" : "none")
-      }));
-
-      // Manifestation library — resolve UUIDs for display. Each row carries
-      // tier + tag chips so the GM can scan the library and recognize at-a-
-      // glance whether an entry matches the boss's tier band and archetype.
-      const manifestations = sysData.manifestations ?? { library: [], surge: { current: 0, max: 6 }, momentum: 0 };
-      const bossTierCtx = Math.max(1, Math.min(4, Number(sysData.integrity?.tier) || 1));
-      const libraryItems = [];
-      for (const uuid of (manifestations.library ?? [])) {
-        try {
-          const doc = await fromUuid(uuid);
-          if (!doc) continue;
-          const ds = doc.system ?? {};
-          const flagTags = doc.flags?.fourththing?.bossArchetypeTags;
-          const sysTags  = ds.tags;
-          const rawTags  = Array.isArray(flagTags) && flagTags.length ? flagTags
-                          : (Array.isArray(sysTags) ? sysTags : []);
-          const tags = rawTags.map(t => String(t || "").trim()).filter(Boolean);
-          const tier = Math.max(1, Math.min(4, Number(ds?.manifestation?.tier) || Number(ds?.tier) || 1));
-          libraryItems.push({
-            uuid, name: doc.name, img: doc.img,
-            tier,
-            tags,
-            tagChipsShown: tags.slice(0, 3),
-            tagChipsMore:  Math.max(0, tags.length - 3),
-            inReach: tier <= bossTierCtx + 1,
-            overTier: tier > bossTierCtx + 1
-          });
-        } catch (e) { /* skip broken refs */ }
-      }
-
-      // Bridge to bbttcc-raid registries (BOSS_TEMPLATES + BOSS_POWERS + BOSS_POWER_PACKS).
-      const bossApi = game.bbttcc?.api?.raid ?? {};
-      const templateOptions = (bossApi.bossTemplates ?? []).map(t => ({ key: t.key, label: t.label, description: t.description }));
-
-      // Compute the set of installed behavior IDs from raidProfile.behaviorsRaw
-      // so the picker dropdowns + catalog browser can mark which powers
-      // are already on this boss. Without this, GMs see all powers listed
-      // identically and hit "already present" dedupe warnings when adding.
-      // (2026-05-17 patch — user feedback: dedupe was reading as an error.)
-      const installedBehaviorIds = (() => {
-        const raw = sysData.raidProfile?.behaviorsRaw || "[]";
-        let parsed;
-        try { parsed = JSON.parse(raw); } catch { parsed = []; }
-        if (!Array.isArray(parsed)) return new Set();
-        return new Set(parsed.map(b => String(b?.id ?? b?.key ?? "").trim()).filter(Boolean));
-      })();
-      const _powerInstalled = (powerKey) => {
-        const allPwrs = bossApi.bossPowers ?? [];
-        const p = allPwrs.find(x => x.key === powerKey);
-        const id = p?.behavior?.id ?? powerKey;
-        return installedBehaviorIds.has(String(id));
-      };
-
-      const packOptions = (bossApi.bossPowerPacks ?? []).map(p => {
-        const powers = Array.isArray(p.powers) ? p.powers : [];
-        const installedInPack = powers.filter(_powerInstalled).length;
-        return {
-          key: p.key,
-          label: p.label,
-          description: p.description,
-          count: powers.length,
-          installedCount: installedInPack,
-          allInstalled: powers.length > 0 && installedInPack === powers.length
-        };
-      });
-
-      // Slice 3 (2026-05-11) — phase-grouped boss powers. The bossPowers
-      // registry carries `behavior.phase` ("round_end" | "after_roll" |
-      // "round_start"); group so the GM sees what fires when. when/effects
-      // summaries are derived inline (best-effort — the registry shape is
-      // legacy-shaped JSON).
-      const _summarizeWhen = (when) => {
-        if (!when || typeof when !== "object") return "";
-        const parts = [];
-        for (const [k, v] of Object.entries(when)) {
-          if (typeof v === "boolean") parts.push(v ? k : `!${k}`);
-          else parts.push(`${k}=${v}`);
-        }
-        return parts.join(" · ");
-      };
-      const _summarizeWorldEffects = (we) => {
-        if (!we || typeof we !== "object") return "";
-        const bits = [];
-        if (Array.isArray(we.factionEffects)) {
-          for (const f of we.factionEffects) {
-            const fp = Object.entries(f)
-              .filter(([_, v]) => v != null && v !== 0)
-              .map(([k, v]) => `${k}=${v}`);
-            if (fp.length) bits.push(fp.join(", "));
-          }
-        }
-        if (we.warLog) bits.push(`log: ${String(we.warLog).slice(0, 60)}${String(we.warLog).length > 60 ? "…" : ""}`);
-        return bits.join(" · ");
-      };
-      const _powerRow = (p) => {
-        const when    = p?.behavior?.when ?? null;
-        const effects = p?.behavior?.effects?.worldEffects ?? null;
-        const endRaid = p?.behavior?.endRaid?.outcome ?? "";
-        const id = p?.behavior?.id ?? p.key;
-        return {
-          key: p.key,
-          label: p.label,
-          description: p.description ?? "",
-          phase: p?.behavior?.phase ?? "any",
-          whenSummary:    _summarizeWhen(when),
-          effectsSummary: _summarizeWorldEffects(effects),
-          endRaid,
-          installed: installedBehaviorIds.has(String(id))
-        };
-      };
-      const allPowerRows = (bossApi.bossPowers ?? []).map(_powerRow);
-      const PHASE_ORDER = ["round_start", "after_roll", "round_end", "any"];
-      const _phaseLabel = (p) => ({
-        round_start: "Round Start",
-        after_roll:  "After Roll",
-        round_end:   "Round End",
-        any:         "Any / Unphased"
-      })[p] ?? p;
-      const _phaseMap = {};
-      for (const row of allPowerRows) {
-        (_phaseMap[row.phase] ??= []).push(row);
-      }
-      const phaseGroupedPowers = PHASE_ORDER
-        .filter(p => _phaseMap[p]?.length)
-        .map(p => ({ phase: p, label: _phaseLabel(p), powers: _phaseMap[p] }));
-      // Powers not in PHASE_ORDER buckets (defensive — registry growth).
-      for (const p of Object.keys(_phaseMap)) {
-        if (PHASE_ORDER.includes(p)) continue;
-        phaseGroupedPowers.push({ phase: p, label: _phaseLabel(p), powers: _phaseMap[p] });
-      }
-      // Flat list still exposed for the simple Add-Power select fallback.
-      const powerOptions = allPowerRows.map(p => ({ key: p.key, label: p.label, phase: p.phase }));
-
-      // Slice 3 — Standard Maneuvers catalog. Reads game.bbttcc.api.raid.EFFECTS,
-      // normalizes (lowercase raidTypes, merged opCosts), buckets by tier, and
-      // surfaces deduped raidType options for the picker filter.
-      const _normManLower = (s) => String(s || "").trim().toLowerCase();
-      const _maneuverFromEffect = (key, e) => {
-        const tier = Number(e?.tier);
-        const tierBucket = (tier >= 1 && tier <= 4) ? `T${tier}` : "untiered";
-        const rt = Array.isArray(e?.raidTypes) ? e.raidTypes.map(_normManLower).filter(Boolean) : [];
-        const rtDedup = [...new Set(rt)];
-        const opCostMerge = {};
-        const src = e?.opCosts ?? e?.cost ?? {};
-        for (const [k, v] of Object.entries(src)) {
-          const nk = _normManLower(k);
-          const nv = Number(v) || 0;
-          if (!nv) continue;
-          opCostMerge[nk] = Math.max(opCostMerge[nk] || 0, nv);
-        }
-        return {
-          key, label: e?.label ?? key,
-          tier: Number.isFinite(tier) ? tier : null,
-          tierBucket,
-          raidTypes: rtDedup,
-          opCosts: opCostMerge,
-          opSummary: Object.entries(opCostMerge).map(([k, v]) => `${v} ${k}`).join(" · "),
-          text: String(e?.text ?? "").slice(0, 140),
-          rarity: e?.rarity ?? "",
-          family: e?.family ?? ""
-        };
-      };
-      const EFFECTS = bossApi.EFFECTS ?? {};
-      const maneuverOptions = Object.entries(EFFECTS)
-        .filter(([_, e]) => (e?.kind ?? "maneuver") === "maneuver")
-        .map(([k, e]) => _maneuverFromEffect(k, e))
-        .sort((a, b) => {
-          const ta = a.tier ?? 99, tb = b.tier ?? 99;
-          return ta - tb || a.label.localeCompare(b.label);
-        });
-      // Deduped raidType set for the filter dropdown.
-      const _rtSet = new Set();
-      for (const m of maneuverOptions) for (const rt of m.raidTypes) _rtSet.add(rt);
-      const maneuverRaidTypes = [...(_rtSet)].sort();
-      // Group maneuvers by tier bucket for the picker optgroups.
-      const _bucketOrder = ["T1", "T2", "T3", "T4", "untiered"];
-      const _byBucket = {};
-      for (const m of maneuverOptions) (_byBucket[m.tierBucket] ??= []).push(m);
-      const maneuverByBucket = _bucketOrder
-        .filter(b => _byBucket[b]?.length)
-        .map(b => ({
-          bucket: b,
-          label: (b === "untiered") ? "Untiered (legacy)" : b,
-          count: _byBucket[b].length,
-          isUntiered: b === "untiered",
-          maneuvers: _byBucket[b]
-        }));
-
-      // Raid profile — legacy OP economy
-      const raidProfile = sysData.raidProfile ?? {
-        key: "", mode: "hybrid", moraleHits: 4, hitTrack: "", tagsRaw: "",
-        opStats: {}, behaviorsRaw: "[]"
-      };
-      const opEntries = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"]
-        .map(k => ({ key: k, label: k.charAt(0).toUpperCase() + k.slice(1), value: Number(raidProfile.opStats?.[k] ?? 0) }));
-      let behaviorsParsed = [];
-      try { behaviorsParsed = JSON.parse(raidProfile.behaviorsRaw || "[]"); } catch { behaviorsParsed = []; }
-      const behaviorRows = (Array.isArray(behaviorsParsed) ? behaviorsParsed : []).map((b, i) => ({
-        idx: i,
-        id: b.id ?? b.key ?? `behavior-${i}`,
-        label: b.label ?? b.id ?? `Behavior ${i+1}`,
-        phase: b.phase ?? "—",
-        whenSummary: b.when ? Object.entries(b.when).map(([k,v]) => `${k}=${v}`).join(", ") : "",
-        endRaid: b.endRaid ? (b.endRaid.outcome ?? "yes") : ""
-      }));
-
-      // Doctrine maneuverKeys (legacy raid doctrine) — Slice 3 resolves each
-      // stored key against the maneuverOptions catalog so the pills can show
-      // labels + tier badges. Unresolved keys still render as raw pills (with
-      // a "?" marker) so the GM can spot stale/typo'd doctrines.
-      const doctrine = sysData.doctrine ?? { slot: "", maneuverKeys: [] };
-      const maneuverKeys = Array.isArray(doctrine.maneuverKeys) ? doctrine.maneuverKeys : [];
-      const _manIdx = {};
-      for (const m of maneuverOptions) _manIdx[m.key] = m;
-      const maneuverPills = maneuverKeys.map(k => {
-        const m = _manIdx[k];
-        if (m) return { key: k, label: m.label, tier: m.tier, tierBucket: m.tierBucket, opSummary: m.opSummary, raidTypes: m.raidTypes, found: true };
-        return { key: k, label: k, tier: null, tierBucket: "untiered", opSummary: "", raidTypes: [], found: false };
-      });
-
-      const activeTab = this.tabGroups.primary ?? "identity";
-      const gmEdit    = game.user?.isGM && (game.settings.get("bbttcc-core","gmEditMode") ?? false);
-
-      const tabs = [
-        { id: "identity", label: "Identity",      visible: true,  active: activeTab === "identity" },
-        { id: "phases",   label: "Phase Ladder",  visible: true,  active: activeTab === "phases" },
-        { id: "combat",   label: "Combat",        visible: true,  active: activeTab === "combat" },
-        { id: "manifest", label: "Manifestations",visible: true,  active: activeTab === "manifest" },
-        { id: "powers",   label: "Powers",        visible: true,  active: activeTab === "powers" },
-        { id: "behaviors",label: "Behaviors",     visible: true,  active: activeTab === "behaviors" },
-        { id: "raid",     label: "Raid Profile",  visible: true,  active: activeTab === "raid" },
-        { id: "gmedit",   label: "GM Edit",       visible: gmEdit,active: activeTab === "gmedit" }
-      ];
-
-      return {
-        actor,
-        faction: faction ? { id: faction.id, name: faction.name, img: faction.img } : null,
-        system: sysData,
-        identity: sysData.identity ?? {},
-        identityArchetypeTagsCsv: Array.isArray(sysData?.identity?.archetypeTags)
-          ? sysData.identity.archetypeTags.join(", ") : "",
-        phases,
-        ladder,
-        currentPhaseEntry,
-        integrity,
-        integrityPct,
-        defenses: sysData.defenses ?? { resistances: [], immunities: [], vulnerabilities: [] },
-        defenseRows,
-        manifestations,
-        libraryItems,
-        // Action Economy canon §6.2 + §6.3 (Phase C 2026-05-19). Combat
-        // resource counters surfaced on the Combat tab. Lazy-init from
-        // current tier when flags are missing so a fresh boss shows
-        // full slots without waiting for the next round advance.
-        bossManifestationSlots: (() => {
-          const raw = actor?.flags?.fourththing?.bossManifestationSlots ?? {};
-          const tier = _ftCasterTier(actor);
-          const max = Math.max(1, Math.min(4, Number(raw.max) || tier));
-          const cur = Number.isFinite(Number(raw.current)) ? Math.max(0, Number(raw.current)) : max;
-          return { max, current: cur };
-        })(),
-        bossLegendaryActions: (() => {
-          const raw = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
-          const tier = _ftCasterTier(actor);
-          const max = _ftBossLegendaryMax(tier);
-          const cur = Number.isFinite(Number(raw.current)) ? Math.max(0, Math.min(max, Number(raw.current))) : max;
-          const menu = Array.isArray(raw.menu) ? raw.menu : [];
-          return { max, current: cur, menu, tier, enabled: max > 0 };
-        })(),
-        doctrine,
-        maneuverKeys,
-        maneuverPills,
-        maneuverOptions,
-        maneuverByBucket,
-        maneuverRaidTypes,
-        phaseGroupedPowers,
-        powers: sysData.powers ?? { powers: [], cooldowns: {} },
-        behaviors: sysData.behaviors ?? { behaviors: [], triggerState: {} },
-        raidStats: sysData.raidStats ?? { rounds: 0, morale: 3, infiltration: 0, alarm: 0 },
-        raidProfile,
-        opEntries,
-        behaviorRows,
-        templateOptions,
-        powerOptions,
-        packOptions,
-        tabs,
-        activeTab,
-        gmEdit
-      };
-    }
-
-    _onRender(context, options) {
-      super._onRender?.(context, options);
-      this._bindBossTabs();
-      this._applyActiveBossTab();
-      this._bindBossDragDrop();
-      this._bindBossInlineEditors();
-      this._bindBossManeuverInput();
-    }
-
-    // Empty-input guard on the Add Maneuver button (Phase 8 polish, 2026-05-10).
-    // The button is rendered with `disabled`; this listener toggles it as the
-    // user types, so the click never fires on an empty key and the user never
-    // sees the "Enter a maneuver key" warning.
-    _bindBossManeuverInput() {
-      const input = this.element?.querySelector("input[data-role=maneuver-key-input]");
-      const btn   = this.element?.querySelector(".ft-maneuver-add-btn");
-      if (!input || !btn) return;
-      if (input.dataset.ftManeuverInputBound === "1") return;
-      input.dataset.ftManeuverInputBound = "1";
-      const update = () => {
-        const has = String(input.value || "").trim().length > 0;
-        btn.disabled = !has;
-        btn.dataset.tooltip = has ? "Add this maneuver to the doctrine." : "Type a maneuver key first.";
-      };
-      input.addEventListener("input", update);
-      input.addEventListener("change", update);
-      update();
-    }
-
-    _bindBossTabs() {
-      const el = this.element;
-      if (!el) return;
-      el.querySelectorAll(".ft-tabs .item").forEach(btn => {
-        if (btn.dataset.ftTabBound === "1") return;
-        btn.dataset.ftTabBound = "1";
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          this.tabGroups.primary = btn.dataset.tab;
-          this._applyActiveBossTab();
-        });
-      });
-    }
-
-    _applyActiveBossTab() {
-      const el = this.element;
-      if (!el) return;
-      const active = this.tabGroups.primary ?? "identity";
-      el.querySelectorAll(".ft-tabs .item").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === active));
-      el.querySelectorAll(".ft-body .tab").forEach(tab => tab.classList.toggle("active", tab.dataset.tab === active));
-    }
-
-    _bindBossDragDrop() {
-      const el = this.element;
-      if (!el || el.dataset.ftBossDropBound === "1") return;
-      el.dataset.ftBossDropBound = "1";
-      el.addEventListener("dragover", (ev) => ev.preventDefault());
-      el.addEventListener("drop",     (ev) => this._onDrop(ev));
-    }
-
-    _bindBossInlineEditors() {
-      const el = this.element;
-      if (!el) return;
-      el.querySelectorAll("[data-ft-boss-edit]").forEach(node => {
-        if (node.dataset.ftBossBound === "1") return;
-        node.dataset.ftBossBound = "1";
-        node.addEventListener("change", async (ev) => {
-          const path = ev.currentTarget.dataset.ftBossEdit;
-          if (!path) return;
-          const raw = ev.currentTarget.value;
-          const num = Number(raw);
-          const isNum = ev.currentTarget.type === "number" || (raw !== "" && !isNaN(num));
-          await this.actor.update({ [path]: isNum ? num : raw });
-        });
-      });
-      // CSV-array variant (2026-05-11 — Boss Sheet Slice 2). Comma-separated
-      // text input writes to an array path. Used by `identity.archetypeTags`.
-      el.querySelectorAll("[data-ft-boss-edit-csv]").forEach(node => {
-        if (node.dataset.ftBossCsvBound === "1") return;
-        node.dataset.ftBossCsvBound = "1";
-        node.addEventListener("change", async (ev) => {
-          const path = ev.currentTarget.dataset.ftBossEditCsv;
-          if (!path) return;
-          const arr = String(ev.currentTarget.value || "")
-            .split(",")
-            .map(s => s.trim().toLowerCase())
-            .filter(Boolean);
-          await this.actor.update({ [path]: arr });
-        });
-      });
-    }
-
-    async _onDrop(event) {
-      event.preventDefault();
-      try {
-        const raw = event.dataTransfer?.getData("text/plain");
-        if (!raw) return;
-        let data;
-        try { data = JSON.parse(raw); } catch { return; }
-
-        // Drop manifestation Item / boss-template / generic embed
-        if (data?.type === "Item") {
-          const item = await Item.implementation.fromDropData(data);
-          if (!item) return;
-          // Boss-template — apply config payload
-          const subtype = item.getFlag?.("fourththing", "rigGear")?.subtype;
-          if (subtype === "boss-template") {
-            return this._applyBossTemplate(item);
-          }
-          // Manifestation (power) → add to library by UUID, don't embed
-          if (item.type === "power") {
-            const library = Array.isArray(this.actor.system?.manifestations?.library)
-              ? [...this.actor.system.manifestations.library] : [];
-            if (!library.includes(item.uuid)) library.push(item.uuid);
-            await this.actor.update({ "system.manifestations.library": library });
-            return;
-          }
-          // Otherwise embed (boss-augment etc.)
-          const itemData = item.toObject();
-          delete itemData._id;
-          foundry.utils.setProperty(itemData, "flags.core.sourceId", item.uuid);
-          await this.actor.createEmbeddedDocuments("Item", [itemData]);
-          return;
-        }
-
-        // Drop a faction actor → set faction binding
-        if (data?.type === "Actor") {
-          const dropped = await Actor.implementation.fromDropData(data);
-          if (!dropped) return;
-          const isFaction = !!(dropped.flags?.["bbttcc-factions"]?.isFaction
-                             || dropped.flags?.["bbttcc-factions"]?.op
-                             || dropped.flags?.["bbttcc-factions"]?.identity);
-          if (isFaction) {
-            return this.actor.update({ "system.identity.factionId": dropped.id });
-          }
-        }
-      } catch (err) {
-        console.error("Roll for Initiation | Boss _onDrop failed:", err);
-        ui.notifications?.error("Could not drop that — see console.");
-      }
-    }
-
-    async _applyBossTemplate(tplItem) {
-      const cfg = tplItem.getFlag?.("fourththing", "bossTemplate")?.config;
-      if (!cfg) { ui.notifications?.warn("Template has no config payload."); return; }
-      const update = {};
-      const flatten = (obj, prefix) => {
-        for (const [k, v] of Object.entries(obj ?? {})) {
-          const path = prefix ? `${prefix}.${k}` : k;
-          if (v !== null && typeof v === "object" && !Array.isArray(v)) flatten(v, path);
-          else update[`system.${path}`] = v;
-        }
-      };
-      // Apply identity, raidProfile, doctrine, integrity, manifestations.surge/momentum
-      if (cfg.identity)       flatten(cfg.identity,       "identity");
-      if (cfg.raidProfile)    flatten(cfg.raidProfile,    "raidProfile");
-      if (cfg.doctrine)       flatten(cfg.doctrine,       "doctrine");
-      if (cfg.integrity)      flatten(cfg.integrity,      "integrity");
-      if (cfg.manifestations) {
-        if (cfg.manifestations.surge)    flatten(cfg.manifestations.surge,    "manifestations.surge");
-        if (cfg.manifestations.momentum != null) update["system.manifestations.momentum"] = cfg.manifestations.momentum;
-      }
-      // Phase ladder is array — set whole
-      if (cfg.phases) {
-        if (Array.isArray(cfg.phases.ladder))    update["system.phases.ladder"]       = cfg.phases.ladder;
-        if (cfg.phases.currentPhase != null)     update["system.phases.currentPhase"] = cfg.phases.currentPhase;
-      }
-      await this.actor.update(update);
-      ui.notifications?.info(`Applied boss template: ${tplItem.name}`);
-    }
-
-    // ── Static action handlers ──────────────────────────────────────────────
-    static async _onFtBossIntegrityAdjust(event, target) {
-      const delta = Number(target.dataset?.delta ?? 0);
-      if (!delta) return;
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const cur = Number(sys.integrity?.value ?? 0);
-      const max = Number(sys.integrity?.max ?? 0);
-      const next = Math.max(0, Math.min(max, cur + delta));
-      return this.actor.update({ "system.integrity.value": next });
-    }
-
-    static async _onFtBossSurgeAdjust(event, target) {
-      const delta = Number(target.dataset?.delta ?? 0);
-      if (!delta) return;
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const cur = Number(sys.manifestations?.surge?.current ?? 0);
-      const max = Number(sys.manifestations?.surge?.max ?? 6);
-      const next = Math.max(0, Math.min(max, cur + delta));
-      return this.actor.update({ "system.manifestations.surge.current": next });
-    }
-
-    static async _onFtBossMomentumAdjust(event, target) {
-      const delta = Number(target.dataset?.delta ?? 0);
-      if (!delta) return;
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const cur = Number(sys.manifestations?.momentum ?? 0);
-      const next = Math.max(0, cur + delta);
-      return this.actor.update({ "system.manifestations.momentum": next });
-    }
-
-    static async _onFtBossPhaseAdvance(event, target) {
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const ladder = Array.isArray(sys.phases?.ladder) ? sys.phases.ladder : [];
-      const cur = Number(sys.phases?.currentPhase ?? 0);
-      if (cur >= ladder.length - 1) return;
-      const next = cur + 1;
-      const nextEntry = ladder[next];
-      const update = { "system.phases.currentPhase": next };
-      if (nextEntry?.surgeBoost) {
-        const curSurge = Number(sys.manifestations?.surge?.current ?? 0);
-        const maxSurge = Number(sys.manifestations?.surge?.max ?? 6);
-        update["system.manifestations.surge.current"] = Math.min(maxSurge, curSurge + Number(nextEntry.surgeBoost));
-      }
-      await this.actor.update(update);
-      ui.notifications?.info(`${this.actor.name}: entered ${nextEntry?.label ?? `Phase ${next+1}`}.`);
-    }
-
-    static async _onFtBossPhaseRetreat(event, target) {
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const cur = Number(sys.phases?.currentPhase ?? 0);
-      if (cur <= 0) return;
-      return this.actor.update({ "system.phases.currentPhase": cur - 1 });
-    }
-
-    static async _onFtBossPhaseAdd(event, target) {
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const ladder = Array.isArray(sys.phases?.ladder) ? [...sys.phases.ladder] : [];
-      ladder.push({
-        label: `Phase ${ladder.length + 1}`,
-        integrityThreshold: 50,
-        onEnterEffects: [],
-        manifestationGrants: [],
-        surgeBoost: 0
-      });
-      return this.actor.update({ "system.phases.ladder": ladder });
-    }
-
-    static async _onFtBossPhaseRemove(event, target) {
-      const idx = Number(target.closest("[data-phase-idx]")?.dataset?.phaseIdx ?? -1);
-      if (idx < 0) return;
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const ladder = Array.isArray(sys.phases?.ladder) ? [...sys.phases.ladder] : [];
-      ladder.splice(idx, 1);
-      const cur = Math.min(Number(sys.phases?.currentPhase ?? 0), Math.max(0, ladder.length - 1));
-      return this.actor.update({ "system.phases.ladder": ladder, "system.phases.currentPhase": cur });
-    }
-
-    static async _onFtBossTemplateApply(event, target) {
-      const tplKey = this.element?.querySelector("[data-role=template-picker]")?.value;
-      if (!tplKey) { ui.notifications?.warn("Pick a template first."); return; }
-      const tpl = (game.bbttcc?.api?.raid?.bossTemplates ?? []).find(t => t.key === tplKey);
-      if (!tpl) { ui.notifications?.warn("Template not found."); return; }
-      const d = tpl.defaults ?? {};
-      const update = {};
-      if (d.mode)      update["system.raidProfile.mode"]       = d.mode;
-      if (d.hitTrack)  update["system.raidProfile.hitTrack"]   = d.hitTrack;
-      if (d.tags)      update["system.raidProfile.tagsRaw"]    = d.tags;
-      if (d.stats) {
-        for (const [k, v] of Object.entries(d.stats)) {
-          update[`system.raidProfile.opStats.${k}`] = Number(v) || 0;
-        }
-      }
-      if (Array.isArray(d.behaviors)) {
-        update["system.raidProfile.behaviorsRaw"] = JSON.stringify(d.behaviors, null, 2);
-      }
-      await this.actor.update(update);
-      ui.notifications?.info(`Applied template: ${tpl.label}`);
-    }
-
-    static async _onFtBossPowerAdd(event, target) {
-      const powerKey = this.element?.querySelector("[data-role=power-picker]")?.value;
-      if (!powerKey) { ui.notifications?.warn("Pick a power first."); return; }
-      const power = (game.bbttcc?.api?.raid?.bossPowers ?? []).find(p => p.key === powerKey);
-      if (!power) { ui.notifications?.warn("Power not found."); return; }
-      const sys = this.actor.system?.system ?? this.actor.system;
-      let parsed = [];
-      try { parsed = JSON.parse(sys.raidProfile?.behaviorsRaw || "[]"); } catch { parsed = []; }
-      if (!Array.isArray(parsed)) parsed = [];
-      // Avoid dupes by id. Clearer message — this is the expected outcome
-      // when the boss was created via a starter chip that already seeded a
-      // power pack (e.g. Qliphothic Auditor → Audit Pack → Audit Pressure).
-      const id = power.behavior?.id ?? power.key;
-      if (parsed.some(b => (b.id ?? b.key) === id)) {
-        ui.notifications?.info(`"${power.label}" is already installed on this boss — see the Behaviors tab.`);
-        return;
-      }
-      parsed.push(foundry.utils.deepClone(power.behavior ?? { id, label: power.label }));
-      ui.notifications?.info(`Added power: ${power.label}.`);
-      return this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
-    }
-
-    static async _onFtBossPowerRemove(event, target) {
-      const idx = Number(target.closest("[data-behavior-idx]")?.dataset?.behaviorIdx ?? -1);
-      if (idx < 0) return;
-      const sys = this.actor.system?.system ?? this.actor.system;
-      let parsed = [];
-      try { parsed = JSON.parse(sys.raidProfile?.behaviorsRaw || "[]"); } catch { parsed = []; }
-      if (!Array.isArray(parsed)) parsed = [];
-      parsed.splice(idx, 1);
-      return this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
-    }
-
-    static async _onFtBossPackApply(event, target) {
-      const packKey = this.element?.querySelector("[data-role=pack-picker]")?.value;
-      if (!packKey) { ui.notifications?.warn("Pick a power pack first."); return; }
-      const pack = (game.bbttcc?.api?.raid?.bossPowerPacks ?? []).find(p => p.key === packKey);
-      if (!pack) { ui.notifications?.warn("Pack not found."); return; }
-      const powerKeys = Array.isArray(pack.powers) ? pack.powers : [];
-      const allPowers = game.bbttcc?.api?.raid?.bossPowers ?? [];
-      const sys = this.actor.system?.system ?? this.actor.system;
-      let parsed = [];
-      try { parsed = JSON.parse(sys.raidProfile?.behaviorsRaw || "[]"); } catch { parsed = []; }
-      if (!Array.isArray(parsed)) parsed = [];
-      let added = 0;
-      for (const pk of powerKeys) {
-        const p = allPowers.find(x => x.key === pk);
-        if (!p) continue;
-        const id = p.behavior?.id ?? p.key;
-        if (parsed.some(b => (b.id ?? b.key) === id)) continue;
-        parsed.push(foundry.utils.deepClone(p.behavior ?? { id, label: p.label }));
-        added++;
-      }
-      await this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
-      // Clearer message — if 0 were added, surface why (everything was
-      // already installed, e.g. from a starter-chip seed). If some were
-      // added, say how many of the pack's total powers landed.
-      if (added === 0) {
-        ui.notifications?.info(`"${pack.label}" — all ${powerKeys.length} powers were already installed. See the Behaviors tab.`);
-      } else if (added < powerKeys.length) {
-        ui.notifications?.info(`Applied "${pack.label}": ${added} new behavior(s) added (${powerKeys.length - added} already installed).`);
-      } else {
-        ui.notifications?.info(`Applied "${pack.label}": ${added} new behavior(s) added.`);
-      }
-    }
-
-    static async _onFtBossNormalize(event, target) {
-      const sys = this.actor.system?.system ?? this.actor.system;
-      let parsed = [];
-      try { parsed = JSON.parse(sys.raidProfile?.behaviorsRaw || "[]"); } catch { parsed = []; }
-      if (!Array.isArray(parsed)) parsed = [];
-      // Deduplicate by id, normalize phase strings, drop empty entries
-      const seen = new Set();
-      const cleaned = [];
-      for (const b of parsed) {
-        if (!b || typeof b !== "object") continue;
-        const id = String(b.id ?? b.key ?? "").trim();
-        if (!id || seen.has(id)) continue;
-        seen.add(id);
-        const phase = String(b.phase ?? "").trim() || "round_end";
-        cleaned.push({ ...b, id, phase });
-      }
-      await this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(cleaned, null, 2) });
-      ui.notifications?.info(`Normalized: ${cleaned.length} behaviors.`);
-    }
-
-    static async _onFtBossManeuverAdd(event, target) {
-      const input = this.element?.querySelector("input[data-role=maneuver-key-input]");
-      const key = String(input?.value ?? "").trim();
-      if (!key) { ui.notifications?.warn("Enter a maneuver key."); return; }
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const list = Array.isArray(sys.doctrine?.maneuverKeys) ? [...sys.doctrine.maneuverKeys] : [];
-      if (list.includes(key)) { ui.notifications?.warn(`Maneuver ${key} already present.`); return; }
-      list.push(key);
-      if (input) input.value = "";
-      return this.actor.update({ "system.doctrine.maneuverKeys": list });
-    }
-
-    static async _onFtBossManeuverRemove(event, target) {
-      const key = target.closest("[data-maneuver-key]")?.dataset?.maneuverKey;
-      if (!key) return;
-      const sys = this.actor.system?.system ?? this.actor.system;
-      const list = (Array.isArray(sys.doctrine?.maneuverKeys) ? sys.doctrine.maneuverKeys : []).filter(k => k !== key);
-      return this.actor.update({ "system.doctrine.maneuverKeys": list });
-    }
-
-    // Slice 3 (2026-05-11): curated maneuver picker. Replaces the free-text
-    // input. Filters the EFFECTS catalog by tier band and raidType. Untiered
-    // legacy entries are a selectable bucket. Writes to doctrine.maneuverKeys
-    // with dedup; reuses the same array contract _onFtBossManeuverRemove uses.
-    static async _onFtBossManeuverPick(event, target) {
-      event?.preventDefault?.();
-      const DialogV2 = foundry.applications.api?.DialogV2;
-      if (!DialogV2) { ui.notifications?.error("DialogV2 unavailable."); return; }
-
-      const actor = this.actor;
-      const sysData = actor.system?.system ?? actor.system ?? {};
-      const bossTier = Math.max(1, Math.min(4, Number(sysData?.integrity?.tier) || 1));
-      const bossApi = game.bbttcc?.api?.raid ?? {};
-      const EFFECTS = bossApi.EFFECTS ?? {};
-      const existing = new Set(Array.isArray(sysData?.doctrine?.maneuverKeys) ? sysData.doctrine.maneuverKeys : []);
-
-      // Build the same maneuverOptions shape used by _prepareContext, but
-      // keyed for inline use in the dialog. (Duplicated here intentionally —
-      // _prepareContext fires per-render, the dialog needs a snapshot too.)
-      const _norm = s => String(s || "").trim().toLowerCase();
-      const all = Object.entries(EFFECTS)
-        .filter(([_, e]) => (e?.kind ?? "maneuver") === "maneuver")
-        .map(([k, e]) => {
-          const tier = Number(e?.tier);
-          const rt = Array.isArray(e?.raidTypes) ? [...new Set(e.raidTypes.map(_norm).filter(Boolean))] : [];
-          const opSrc = e?.opCosts ?? e?.cost ?? {};
-          const opMerged = {};
-          for (const [k2, v] of Object.entries(opSrc)) {
-            const nk = _norm(k2); const nv = Number(v) || 0;
-            if (nv) opMerged[nk] = Math.max(opMerged[nk] || 0, nv);
-          }
-          return {
-            key: k,
-            label: e?.label ?? k,
-            tier: Number.isFinite(tier) ? tier : null,
-            tierBucket: (tier >= 1 && tier <= 4) ? `T${tier}` : "untiered",
-            raidTypes: rt,
-            opSummary: Object.entries(opMerged).map(([k2, v]) => `${v} ${k2}`).join(" · "),
-            text: String(e?.text ?? "").slice(0, 160)
-          };
-        })
-        .sort((a, b) => (a.tier ?? 99) - (b.tier ?? 99) || a.label.localeCompare(b.label));
-
-      if (!all.length) {
-        ui.notifications?.warn("No maneuvers in game.bbttcc.api.raid.EFFECTS — is bbttcc-raid loaded?");
-        return;
-      }
-
-      const rtSet = new Set();
-      for (const m of all) for (const rt of m.raidTypes) rtSet.add(rt);
-      const raidTypeOpts = [...rtSet].sort();
-
-      // The two filter dropdowns + the maneuver select. Filter state is held
-      // on local vars; rebuildSelect rewrites the <select> innerHTML in place.
-      let filterTier = "match";  // match = ≤ bossTier+1 (default — most useful)
-      let filterRT   = "any";
-
-      const renderOpt = (m) => {
-        const cost = m.opSummary ? ` · ${m.opSummary}` : "";
-        const dup  = existing.has(m.key) ? " ✓" : "";
-        return `<option value="${ftEscapeHtml(m.key)}">${ftEscapeHtml(m.label)} — ${m.tierBucket}${cost}${dup}</option>`;
-      };
-
-      const applyFilters = () => {
-        const within = (m) => {
-          if (filterTier === "all") return true;
-          if (filterTier === "untiered") return m.tierBucket === "untiered";
-          if (filterTier === "match") return m.tier == null || m.tier <= bossTier + 1;
-          if (filterTier.startsWith("T")) return `T${m.tier}` === filterTier;
-          return true;
-        };
-        const rtOk = (m) => filterRT === "any" || m.raidTypes.includes(filterRT);
-        return all.filter(m => within(m) && rtOk(m));
-      };
-
-      const buildSelect = () => {
-        const list = applyFilters();
-        if (!list.length) return `<option value="" disabled>No maneuvers match this filter.</option>`;
-        // Group within filter result by tier bucket.
-        const order = ["T1", "T2", "T3", "T4", "untiered"];
-        const grouped = {};
-        for (const m of list) (grouped[m.tierBucket] ??= []).push(m);
-        return order
-          .filter(b => grouped[b]?.length)
-          .map(b => {
-            const label = (b === "untiered") ? "Untiered (legacy)" : b;
-            return `<optgroup label="${label}">${grouped[b].map(renderOpt).join("")}</optgroup>`;
-          })
-          .join("");
-      };
-
-      let pickedKey = null;
-
-      const tierOptions = `
-        <option value="match" selected>Boss-reach (≤ T${bossTier + 1}) + untiered</option>
-        <option value="T1">T1</option>
-        <option value="T2">T2</option>
-        <option value="T3">T3</option>
-        <option value="T4">T4</option>
-        <option value="untiered">Untiered (legacy)</option>
-        <option value="all">All</option>`;
-
-      const rtOptionsHtml = `<option value="any" selected>Any raidType</option>` +
-        raidTypeOpts.map(rt => `<option value="${ftEscapeHtml(rt)}">${ftEscapeHtml(rt)}</option>`).join("");
-
-      const dialog = new DialogV2({
-        window: { title: `Add Raid Maneuver — ${actor.name}`, resizable: true },
-        position: { width: 720, height: 640 },
-        content: `
-          <form style="display:flex;flex-direction:column;height:100%;min-height:0;">
-            <p style="margin:0 0 0.45rem 0;font-size:0.82rem;opacity:0.85;flex:0 0 auto;">
-              Boss tier <b>T${bossTier}</b> · ${all.length} maneuvers in catalog · ✓ already on doctrine
-            </p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.5rem;flex:0 0 auto;">
-              <label style="font-size:0.78rem;display:flex;flex-direction:column;gap:0.15rem;">Tier
-                <select name="tier">${tierOptions}</select></label>
-              <label style="font-size:0.78rem;display:flex;flex-direction:column;gap:0.15rem;">Raid Type
-                <select name="rt">${rtOptionsHtml}</select></label>
-            </div>
-            <select name="key" size="20" style="width:100%;flex:1 1 auto;min-height:300px;overflow-y:auto;">${buildSelect()}</select>
-          </form>`,
-        buttons: [
-          { action: "confirm", label: "Add", default: true,
-            callback: (_e, _b, dlg) => { pickedKey = dlg.element.querySelector("select[name=key]")?.value || null; } },
-          { action: "cancel", label: "Cancel", callback: () => { pickedKey = null; } }
-        ],
-        rejectClose: false
-      });
-
-      await dialog.render(true);
-      try {
-        const root = dialog.element;
-        const tierSel = root?.querySelector("select[name=tier]");
-        const rtSel   = root?.querySelector("select[name=rt]");
-        const keySel  = root?.querySelector("select[name=key]");
-        const rebuild = () => {
-          filterTier = tierSel?.value || "match";
-          filterRT   = rtSel?.value   || "any";
-          if (keySel) keySel.innerHTML = buildSelect();
-        };
-        tierSel?.addEventListener("change", rebuild);
-        rtSel?.addEventListener("change", rebuild);
-      } catch (e) { console.warn("[boss-maneuver-pick] filter wire failed", e); }
-
-      if (typeof dialog.wait === "function") await dialog.wait().catch(() => null);
-      else await new Promise(r => { const t = () => dialog.rendered ? setTimeout(t, 100) : r(); t(); });
-
-      if (!pickedKey) return;
-      if (existing.has(pickedKey)) { ui.notifications?.warn(`Maneuver ${pickedKey} already on doctrine.`); return; }
-      const list = [...existing, pickedKey];
-      await this.actor.update({ "system.doctrine.maneuverKeys": list });
-      ui.notifications?.info(`Added maneuver: ${pickedKey}.`);
-    }
-
-    // Phase 8 polish (2026-05-10): explicit picker for adding a `power` item
-    // to the manifestation library, so users have a non-drag-drop path.
-    static async _onFtBossManifestPick(event, target) {
-      event?.preventDefault?.();
-      const DialogV2 = foundry.applications.api?.DialogV2;
-      if (!DialogV2) { ui.notifications?.error("DialogV2 unavailable."); return; }
-
-      const actor = this.actor;
-      const sysData = actor.system?.system ?? actor.system ?? {};
-      const bossTier = Math.max(1, Math.min(4, Number(sysData?.integrity?.tier) || 1));
-      const bossTags = new Set(
-        (Array.isArray(sysData?.identity?.archetypeTags) ? sysData.identity.archetypeTags : [])
-          .map(t => String(t || "").trim().toLowerCase()).filter(Boolean)
-      );
-
-      // Collect all `power` items across compendia + world. Capture tier + tags.
-      // Tags: prefer flags.fourththing.bossArchetypeTags[]; fall back to
-      // system.tags[]; empty array → "untagged" pool.
-      const candidates = [];
-      const pushCand = (d, packLabel) => {
-        const itemSys = d.system ?? {};
-        const flagTags = d.flags?.fourththing?.bossArchetypeTags;
-        const sysTags  = itemSys.tags;
-        const rawTags  = Array.isArray(flagTags) && flagTags.length ? flagTags
-                        : (Array.isArray(sysTags) ? sysTags : []);
-        const tags = rawTags.map(t => String(t || "").trim().toLowerCase()).filter(Boolean);
-        const tier = Math.max(1, Math.min(4, Number(itemSys?.manifestation?.tier) || Number(itemSys?.tier) || 1));
-        candidates.push({
-          uuid: d.uuid, name: d.name, img: d.img, pack: packLabel,
-          tier, tags
-        });
-      };
-      for (const pack of game.packs) {
-        if (pack.documentName !== "Item") continue;
-        try {
-          const docs = await pack.getDocuments();
-          for (const d of docs) if (d.type === "power") pushCand(d, pack.collection);
-        } catch (e) { console.warn(`[boss-manifest-pick] pack ${pack.collection} failed`, e); }
-      }
-      for (const d of game.items) if (d.type === "power") pushCand(d, "(world)");
-      candidates.sort((a, b) => a.tier - b.tier || a.name.localeCompare(b.name));
-
-      if (!candidates.length) {
-        ui.notifications?.warn("No `power` (manifestation) items found in compendia or world.");
-        return;
-      }
-
-      // Bucket by archetype-tag relevance. Tier cap is boss tier + 1 (so the
-      // GM can drop in a Reach option) — items above that fall into the "Other"
-      // bucket and only appear when Show All is checked.
-      const tierCap = bossTier + 1;
-      const buckets = { match: [], universal: [], untagged: [], other: [] };
-      for (const c of candidates) {
-        const overTier = c.tier > tierCap;
-        const tagged   = c.tags.length > 0;
-        const isUniversal = c.tags.includes("boss-universal");
-        const tagOverlap  = bossTags.size && c.tags.some(t => bossTags.has(t));
-        if (overTier) { buckets.other.push(c); continue; }
-        if (tagOverlap) buckets.match.push(c);
-        else if (isUniversal) buckets.universal.push(c);
-        else if (!tagged) buckets.untagged.push(c);
-        else buckets.other.push(c);
-      }
-
-      // Slice 2 polish (2026-05-12): native <select size="10"> wasn't reliably
-      // rendering its option list inside DialogV2 (cramped on Mac/Safari, blank
-      // on some skins). Replaced with a div-based clickable row list — same
-      // data, more controllable styling, and the + Add buttons live ON the
-      // rows themselves so the GM can stage multiple adds without closing.
-      const bossTagsLabel = bossTags.size
-        ? `[${[...bossTags].slice(0, 4).join(", ")}${bossTags.size > 4 ? "…" : ""}]`
-        : "(none set on this boss)";
-
-      const renderRow = (c, groupKey, inLibrary) => `
-        <div class="ft-boss-pick-row" data-uuid="${c.uuid}" data-group="${groupKey}">
-          <img src="${c.img || "icons/svg/mystery-man.svg"}" class="ft-boss-pick-row-img" alt=""/>
-          <span class="ft-manifest-chip ft-tier-pill ft-tier-${c.tier} ft-boss-pick-row-tier">T${c.tier}</span>
-          <span class="ft-boss-pick-row-name">${ftEscapeHtml(c.name)}</span>
-          ${c.tags.length ? `<span class="ft-boss-pick-row-tags">${c.tags.slice(0,3).map(t => `<span class="ft-tag-chip">${ftEscapeHtml(t)}</span>`).join("")}${c.tags.length > 3 ? `<span class="ft-tag-chip ft-tag-chip-more">+${c.tags.length - 3}</span>` : ""}</span>` : ""}
-          <button type="button" class="ft-mini-btn ft-boss-pick-add" data-uuid="${c.uuid}"${inLibrary ? " disabled" : ""}>${inLibrary ? "✓ In Library" : "+ Add"}</button>
-        </div>`;
-
-      const renderGroupBlock = (label, list, groupKey, libSet) => {
-        if (!list.length) return "";
-        return `
-          <div class="ft-boss-pick-group">
-            <div class="ft-boss-pick-group-label">${ftEscapeHtml(label)} <span class="ft-boss-pick-group-count">(${list.length})</span></div>
-            ${list.map(c => renderRow(c, groupKey, libSet.has(c.uuid))).join("")}
-          </div>`;
-      };
-
-      const buildList = (showAll, libSet) => {
-        const blocks = [
-          renderGroupBlock("Archetype Matches", buckets.match, "match", libSet),
-          renderGroupBlock("Universal",         buckets.universal, "universal", libSet),
-          renderGroupBlock("Untagged",          buckets.untagged, "untagged", libSet)
-        ];
-        if (showAll) blocks.push(renderGroupBlock("Other / Out of Tier", buckets.other, "other", libSet));
-        const inner = blocks.filter(Boolean).join("");
-        return inner || `<div class="ft-boss-pick-empty">No candidates match the current filter.</div>`;
-      };
-
-      // Live library snapshot — updated on each + Add click.
-      const initialLib = Array.isArray(actor.system?.manifestations?.library) ? [...actor.system.manifestations.library] : [];
-      const liveLib = new Set(initialLib);
-
-      const dialog = new DialogV2({
-        window: { title: `Add Manifestation — ${actor.name}` },
-        content: `
-          <div class="ft-boss-pick-dialog">
-            <p style="margin:0 0 0.35rem 0;font-size:0.82rem;opacity:0.9;">
-              Boss tier <b>T${bossTier}</b> · archetype tags ${ftEscapeHtml(bossTagsLabel)}
-            </p>
-            <p style="margin:0 0 0.5rem 0;font-size:0.74rem;opacity:0.65;">
-              Click <b>+ Add</b> on a row to add it to the library. Library updates immediately — add as many as you like, then close.
-            </p>
-            <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;margin:0 0 0.5rem 0;">
-              <input type="checkbox" name="showAll"/>Show all (include out-of-tier and tag-mismatched)
-            </label>
-            <div class="ft-boss-pick-row-list" data-role="pick-list">${buildList(false, liveLib)}</div>
-          </div>`,
-        buttons: [
-          { action: "done", label: "Done", default: true, callback: () => {} }
-        ],
-        rejectClose: false
-      });
-
-      await dialog.render(true);
-
-      // Wire interactions: Show All toggles the list rebuild; each + Add commits
-      // immediately and disables the row. The list refresh preserves liveLib
-      // state so already-added rows stay marked.
-      try {
-        const root = dialog.element;
-        const listEl = root?.querySelector("[data-role=pick-list]");
-        const cb = root?.querySelector("input[name=showAll]");
-        const rebuild = () => { if (listEl) listEl.innerHTML = buildList(!!cb?.checked, liveLib); };
-        cb?.addEventListener("change", rebuild);
-        // Delegated click handler on the row list — survives rebuilds.
-        listEl?.addEventListener("click", async (ev) => {
-          const btn = ev.target?.closest?.(".ft-boss-pick-add");
-          if (!btn || btn.disabled) return;
-          const uuid = btn.dataset.uuid;
-          if (!uuid || liveLib.has(uuid)) return;
-          liveLib.add(uuid);
-          // Optimistic UI flip before the actor write resolves.
-          btn.disabled = true;
-          btn.textContent = "✓ In Library";
-          try {
-            await actor.update({ "system.manifestations.library": [...liveLib] });
-          } catch (e) {
-            console.warn("[boss-manifest-pick] add failed", e);
-            liveLib.delete(uuid);
-            btn.disabled = false;
-            btn.textContent = "+ Add";
-            ui.notifications?.error("Could not add manifestation. See console.");
-          }
-        });
-      } catch (e) { console.warn("[boss-manifest-pick] wire failed", e); }
-
-      if (typeof dialog.wait === "function") await dialog.wait().catch(() => null);
-      else await new Promise(r => { const t = () => dialog.rendered ? setTimeout(t, 100) : r(); t(); });
-    }
-
-    // Boss Sheet Polish (2026-05-12): wire the canonical V2 Manifestation
-    // Wizard to the boss sheet. Opens the wizard in author-only mode
-    // (actor=null) so the engine creates a world Item rather than embedding
-    // on the boss (the boss library is a UUID array, not embedded items).
-    // The resulting Item's UUID is auto-appended to system.manifestations.library.
-    // Starter defaults to "working" — bosses are adversarial Workings-casters;
-    // the actor=null mode bypasses the non-TCC restraint gate on Workings.
-    static async _onFtBossManifestCreate(event, target) {
-      event?.preventDefault?.();
-      const actor = this.actor;
-      const wiz = game.fourththing?.wizardV2;
-      if (typeof wiz !== "function") {
-        ui.notifications?.error("Manifestation Wizard V2 unavailable (game.fourththing.wizardV2 is not exposed).");
-        return;
-      }
-      // Use the dedicated folder if the GM has authored one for boss content;
-      // otherwise drop at world-items root. Folder lookup is best-effort by name.
-      const folder = game.folders?.find?.(f =>
-        f.type === "Item" && /boss\s*manifestations?/i.test(f.name || "")) ?? null;
-      const created = await wiz(null, { kind: "power", starter: "working", targetFolder: folder });
-      if (!created) return; // user cancelled
-      const lib = Array.isArray(actor.system?.manifestations?.library)
-        ? [...actor.system.manifestations.library] : [];
-      if (!lib.includes(created.uuid)) {
-        lib.push(created.uuid);
-        await actor.update({ "system.manifestations.library": lib });
-      }
-      ui.notifications?.info(`${actor.name}: added "${created.name}" to manifestation library.`);
-    }
-
-    // Boss Sheet Slice 2 (2026-05-11): invoke a manifestation from the curated
-    // library. Resolves the UUID, opens a slim boss-flavored cast dialog, then
-    // calls the shared castManifestation engine. Boss state (Surge pool,
-    // integrity.tier) is read by _ftCasterPool/_ftCasterTier inside the engine.
-    static async _onFtBossManifestCast(event, target) {
-      event?.preventDefault?.();
-      const uuid = target?.dataset?.uuid;
-      if (!uuid) return;
-      const item = await fromUuid(uuid).catch(() => null);
-      if (!item || item.type !== "power") {
-        ui.notifications?.warn("Manifestation not found (broken UUID?).");
-        return;
-      }
-      const actor = this.actor;
-      const sysData = actor.system?.system ?? actor.system ?? {};
-      const bossTier = Math.max(1, Math.min(4, Number(sysData?.integrity?.tier) || 1));
-      const itemSys  = item.system ?? {};
-      const mf       = ftNormalizeManifestationData(itemSys, "power");
-      const manTier  = Math.max(1, Math.min(4, Number(mf?.tier) || 1));
-      const intent   = itemSys.intent   ?? "presence";
-      const channel  = itemSys.channel  ?? "soul";
-      const sephirah = itemSys.sephirah ?? "tiferet";
-      const stability = mf?.stability ?? "instant";
-      const stabilityLabel = FT.MANIFESTATION_STABILITIES?.[stability]?.label ?? ftCap(stability);
-      const surge = sysData.manifestations?.surge ?? { current: 0, max: 6 };
-      const reachBy = manTier - bossTier;
-      const baseClarity = FT.MANIFESTATION_TIERS?.[manTier]?.clarityCost ?? 1;
-      const dcDefault = ftTierCastDC(manTier);
-
-      const mkOpts = (map, current) =>
-        Object.entries(map).map(([k, v]) =>
-          `<option value="${k}"${k === current ? " selected" : ""}>${v.label}</option>`
-        ).join("");
-
-      const reachBlock = (reachBy === 1) ? `
-        <div class="ft-cast-field ft-cast-span-2 ft-reach-block">
-          <label>Reach — manifestation is <b>T${manTier}</b>, boss is <b>T${bossTier}</b></label>
-          <div class="ft-mode-row">
-            <label class="ft-mode-opt"><input type="radio" name="reachPath" value="surge" checked/>
-              <b>Surge</b> <span>cast at T${manTier}; misfire rolls on T${manTier} column</span></label>
-          </div>
-        </div>`
-        : (reachBy > 1) ? `
-        <div class="ft-cast-field ft-cast-span-2 ft-reach-block ft-reach-fail">
-          <label>Out of reach</label>
-          <p class="ft-prev-align-note" style="color:#ff8a8a">Manifestation is T${manTier}, boss is T${bossTier}. Reach only allows +1 tier.</p>
-        </div>` : "";
-
-      const hasArea = mf?.area?.shape && mf.area.shape !== "none";
-      const hasSaveShape = mf?.resolution?.shape === "save";
-      const aoeBlock = hasArea ? `
-        <div class="ft-cast-field ft-cast-span-2 ft-aoe-opts-block">
-          ${hasSaveShape ? `<label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d4ff;margin-bottom:0.2rem">
-            <input type="checkbox" name="useAoeSavePrompts" checked/>
-            <span>⚖ Prompt each target for their save</span>
-          </label>` : ""}
-          <label style="display:flex;gap:0.5rem;align-items:center;cursor:pointer;color:#a0d8a0">
-            <input type="checkbox" name="aoeApplyConfirm" checked/>
-            <span>⚔ Apply Damage button (uncheck to auto-apply instantly)</span>
-          </label>
-        </div>` : "";
-
-      const ascendantDisabled = bossTier < 3 ? "disabled" : "";
-
-      const content = `
-        <div class="ft-cast-dialog ft-boss-cast-dialog">
-          <div class="ft-cast-header-row">
-            <span class="ft-manifest-chip ft-tier-pill ft-tier-${manTier}">T${manTier}</span>
-            <span class="ft-manifest-chip">${stabilityLabel}</span>
-            <span class="ft-manifest-chip" data-tooltip="Base Surge cost (Clarity stand-in for boss casts).">Base ${baseClarity} Surge</span>
-            <span class="ft-manifest-chip">Surge ${surge.current}/${surge.max}</span>
-          </div>
-          <div class="ft-cast-grid">
-            <div class="ft-cast-field ft-cast-span-2">
-              <label>Mode (stance) — shifts Surge cost &amp; misfire</label>
-              <div class="ft-mode-row">
-                <label class="ft-mode-opt"><input type="radio" name="castMode" value="hermetic" checked/>
-                  <b>Hermetic</b> <span>+1 Surge · misfire d10 −2</span></label>
-                <label class="ft-mode-opt"><input type="radio" name="castMode" value="chaos"/>
-                  <b>Chaos</b> <span>−1 Surge · misfire d10 +2</span></label>
-                <label class="ft-mode-opt"><input type="radio" name="castMode" value="ascendant" ${ascendantDisabled}/>
-                  <b>Ascendant</b> <span>no Surge · no misfire${bossTier < 3 ? " · <em>T3+ boss</em>" : ""}</span></label>
-              </div>
-            </div>
-            ${reachBlock}
-            <div class="ft-cast-field"><label>Intent</label>
-              <select name="intent">${mkOpts(FT.INTENTS, intent)}</select></div>
-            <div class="ft-cast-field"><label>Channel</label>
-              <select name="channel">${mkOpts(FT.CHANNELS, channel)}</select></div>
-            <div class="ft-cast-field"><label>Sephirah</label>
-              <select name="sephirah">${mkOpts(FT.SEPHIROTH, sephirah)}</select></div>
-            <div class="ft-cast-field">
-              <label>Difficulty (DC) <span style="opacity:0.55;font-weight:400;font-size:0.78em">— T${manTier} baseline ${dcDefault}</span></label>
-              <input type="number" name="difficulty" value="${dcDefault}" min="5" max="30"/></div>
-          </div>
-          ${aoeBlock}
-          ${(mf?.signature || mf?.thirdThing) ? `
-          <div class="ft-manifest-costbox">
-            <div class="ft-prev-label">Identity of the manifestation</div>
-            ${mf.signature ? `<div class="ft-prev-align-note"><b>Signature:</b> ${ftEscapeHtml(mf.signature)}</div>` : ""}
-            ${mf.thirdThing ? `<div class="ft-prev-align-note"><b>Third Thing:</b> ${ftEscapeHtml(mf.thirdThing)}</div>` : ""}
-          </div>` : ""}
-        </div>`;
-
-      new Dialog({
-        title:   `Boss Invoke: ${item.name}`,
-        content,
-        buttons: {
-          cast: {
-            icon:  "<i class='fas fa-magic'></i>",
-            label: "Invoke",
-            callback: async (html) => {
-              const dc   = parseInt(html.find("[name='difficulty']").val()) || dcDefault;
-              const selI = html.find("[name='intent']").val()   || intent;
-              const selC = html.find("[name='channel']").val()  || channel;
-              const selS = html.find("[name='sephirah']").val() || sephirah;
-              const mode = html.find("[name='castMode']:checked").val() || "hermetic";
-              const reachPathVal = html.find("[name='reachPath']:checked").val() || "";
-              const targetTokens = Array.from(game.user?.targets ?? []);
-              const targetActor  = targetTokens[0]?.actor ?? null;
-              const useAoeSavePrompts = html.find("[name='useAoeSavePrompts']").is(":checked") === true;
-              const aoeApplyConfirm   = html.find("[name='aoeApplyConfirm']").is(":checked")   === true;
-              return castManifestation(actor, item, {
-                intent: selI, channel: selC, sephirah: selS,
-                label: item.name, difficulty: dc, mode, reachPath: reachPathVal,
-                target: targetActor,
-                useAoeSavePrompts, aoeApplyConfirm
-              });
-            }
-          },
-          cancel: { label: "Cancel" }
-        },
-        default: "cast"
-      }).render(true);
-    }
-
-    // Boss sheet polish (2026-05-11): remove a manifestation entry from the
-    // curated library. UUID-keyed because library is an array of UUIDs.
-    static async _onFtBossManifestRemove(event, target) {
-      event?.preventDefault?.();
-      const uuid = target?.dataset?.uuid;
-      if (!uuid) return;
-      const lib = Array.isArray(this.actor.system?.manifestations?.library) ? [...this.actor.system.manifestations.library] : [];
-      const next = lib.filter(u => u !== uuid);
-      if (next.length === lib.length) return; // nothing to remove
-      await this.actor.update({ "system.manifestations.library": next });
-    }
-
-    // Phase 8 polish: inline phase dropdown on behaviors table. Reads the
-    // chosen phase from the select, parses the existing behaviorsRaw JSON,
-    // updates the matching index, re-stringifies.
-    static async _onFtBossBehaviorPhaseSet(event, target) {
-      const idx = Number(target?.dataset?.behaviorIdx);
-      if (!Number.isFinite(idx)) return;
-      const valueRaw = target?.value ?? "any";
-      const value = (valueRaw === "any") ? "any" : Number(valueRaw);
-      const sys = this.actor.system?.system ?? this.actor.system;
-      let parsed;
-      try { parsed = JSON.parse(sys.raidProfile?.behaviorsRaw || "[]"); } catch { parsed = []; }
-      if (!Array.isArray(parsed) || !parsed[idx]) return;
-      parsed[idx].phase = value;
-      return this.actor.update({ "system.raidProfile.behaviorsRaw": JSON.stringify(parsed, null, 2) });
-    }
-
-    // Action Economy canon §6.3 (Phase C 2026-05-19). Opens the Legendary
-    // Action picker — three built-in entries (Move / Strike / Cast a
-    // Manifestation) plus any authored menu entries on this boss. Each
-    // click debits 1 legendary slot and emits a chat card describing the
-    // action. Downstream resolution (the strike roll, the cast, the
-    // narrative move) is GM-driven from the card.
-    static async _onFtBossLegendaryOpen(event, _target) {
-      event?.preventDefault?.();
-      const actor = this.actor;
-      const tier  = _ftCasterTier(actor);
-      const max   = _ftBossLegendaryMax(tier);
-      if (max <= 0) {
-        return ui.notifications?.warn?.(`${actor.name} is T${tier} — Legendary Actions are T3+ only.`);
-      }
-      const flag = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
-      const current = Number.isFinite(Number(flag.current))
-        ? Math.max(0, Math.min(max, Number(flag.current)))
-        : max;
-      if (current <= 0) {
-        return ui.notifications?.warn?.(`${actor.name}: no Legendary Actions remaining this round.`);
-      }
-      const menu = Array.isArray(flag.menu) ? flag.menu : [];
-
-      const builtin = [
-        { id: "move",   icon: "🚶", label: "Move",                description: "Up to half speed." },
-        { id: "strike", icon: "⚔",  label: "Strike",              description: "1 weapon attack. Does NOT consume the boss's normal Action." },
-        { id: "cast",   icon: "✦",  label: "Cast a Manifestation", description: "Cast as legendary — counts against Manifestation Slots (§6.2)." }
-      ];
-      const all = [...builtin, ...menu];
-
-      const rows = all.map((e, i) => {
-        const isBuiltin = i < builtin.length;
-        const idx = isBuiltin ? -1 : (i - builtin.length);
-        return `<button type="button" class="ft-legend-pick" data-legend-id="${ftEscapeHtml(String(e.id || ""))}" data-legend-idx="${idx}" data-legend-builtin="${isBuiltin ? "1" : "0"}" style="display:block;width:100%;text-align:left;padding:0.45rem 0.6rem;margin:0.25rem 0;border:1px solid #888;border-radius:6px;background:#1a1a1a;color:#e0e0e0;cursor:pointer">
-          <span style="font-size:1.1rem">${ftEscapeHtml(e.icon || "⚜")}</span>
-          <b style="margin-left:0.4rem">${ftEscapeHtml(e.label || "(unnamed)")}</b>
-          ${e.description ? `<div style="font-size:0.75rem;opacity:0.85;margin-top:0.2rem">${ftEscapeHtml(e.description)}</div>` : ""}
-        </button>`;
-      }).join("");
-
-      const content = `
-        <div class="ft-cast-dialog ft-legendary-pick" style="display:flex;flex-direction:column;gap:0.3rem">
-          <div style="margin-bottom:0.4rem;font-size:0.85rem;opacity:0.9">
-            <b>${ftEscapeHtml(actor.name)}</b> — Legendary Actions <b>${current}/${max}</b> · T${tier}
-          </div>
-          <div class="ft-legend-list">${rows}</div>
-        </div>`;
-
-      const dialog = new Dialog({
-        title: `Legendary Action — ${actor.name}`,
-        content,
-        buttons: { cancel: { label: "Close" } },
-        default: "cancel",
-        render: (html) => {
-          const root = (html?.find ? html[0] : html);
-          (root?.querySelectorAll?.(".ft-legend-pick") ?? []).forEach(btn => {
-            btn.addEventListener("click", async () => {
-              if (btn.disabled) return;
-              btn.disabled = true;
-              const id = btn.dataset.legendId;
-              const isBuiltin = btn.dataset.legendBuiltin === "1";
-              const idx = isBuiltin ? -1 : Number(btn.dataset.legendIdx);
-              const live = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
-              const liveCur = Number.isFinite(Number(live.current)) ? Number(live.current) : max;
-              if (liveCur <= 0) {
-                ui.notifications?.warn?.(`${actor.name}: no Legendary Actions remaining.`);
-                return;
-              }
-              const liveMenu = Array.isArray(live.menu) ? live.menu : [];
-              await actor.update({
-                "flags.fourththing.bossLegendaryActions": {
-                  max,
-                  current: Math.max(0, liveCur - 1),
-                  menu: liveMenu
-                }
-              });
-              const entry = isBuiltin ? builtin.find(b => b.id === id) : liveMenu[idx];
-              await _ftPostBossLegendaryChat(actor, entry, { remaining: Math.max(0, liveCur - 1), max });
-              try { dialog.close(); } catch (_) { /* ignore */ }
-            });
-          });
-        }
-      }, { width: 460 }).render(true);
-    }
-
-    static async _onFtBossLegendaryAuthor(event, _target) {
-      event?.preventDefault?.();
-      const actor = this.actor;
-      const content = `
-        <form class="ft-cast-dialog" style="display:flex;flex-direction:column;gap:0.5rem">
-          <label style="display:flex;flex-direction:column;gap:0.2rem">
-            <span style="font-size:0.78rem">Label</span>
-            <input type="text" name="label" placeholder="e.g. Aura Pulse" style="background:#1a1a1a;color:#e0e0e0;border:1px solid #555;border-radius:4px;padding:0.3rem"/>
-          </label>
-          <label style="display:flex;flex-direction:column;gap:0.2rem">
-            <span style="font-size:0.78rem">Icon (single emoji or symbol)</span>
-            <input type="text" name="icon" value="⚜" style="background:#1a1a1a;color:#e0e0e0;border:1px solid #555;border-radius:4px;padding:0.3rem;width:5rem"/>
-          </label>
-          <label style="display:flex;flex-direction:column;gap:0.2rem">
-            <span style="font-size:0.78rem">Description</span>
-            <textarea name="description" rows="4" placeholder="What happens when this legendary action fires — narrative + mechanics." style="background:#1a1a1a;color:#e0e0e0;border:1px solid #555;border-radius:4px;padding:0.3rem"></textarea>
-          </label>
-        </form>`;
-
-      new Dialog({
-        title: `Add Legendary Action — ${actor.name}`,
-        content,
-        buttons: {
-          add: {
-            label: "Add",
-            icon: "<i class='fas fa-plus'></i>",
-            callback: async (html) => {
-              const $h = html?.find ? html : $(html);
-              const label = String($h.find("[name=label]").val() || "").trim();
-              const icon  = String($h.find("[name=icon]").val()  || "⚜").trim();
-              const description = String($h.find("[name=description]").val() || "").trim();
-              if (!label) { ui.notifications?.warn?.("Label required."); return; }
-              const id = "auth_" + Math.random().toString(36).slice(2, 8);
-              const existing = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
-              const tier = _ftCasterTier(actor);
-              const max = _ftBossLegendaryMax(tier);
-              const current = Number.isFinite(Number(existing.current)) ? Number(existing.current) : max;
-              const menu = [...(Array.isArray(existing.menu) ? existing.menu : []), { id, icon, label, description }];
-              await actor.update({
-                "flags.fourththing.bossLegendaryActions": { max, current, menu }
-              });
-            }
-          },
-          cancel: { label: "Cancel" }
-        },
-        default: "add"
-      }, { width: 480 }).render(true);
-    }
-
-    static async _onFtBossLegendaryRemove(event, target) {
-      event?.preventDefault?.();
-      const idx = Number(target?.dataset?.idx);
-      if (!Number.isFinite(idx)) return;
-      const actor = this.actor;
-      const existing = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
-      const menu = (Array.isArray(existing.menu) ? [...existing.menu] : []);
-      if (idx < 0 || idx >= menu.length) return;
-      menu.splice(idx, 1);
-      const tier = _ftCasterTier(actor);
-      const max = _ftBossLegendaryMax(tier);
-      const current = Number.isFinite(Number(existing.current)) ? Number(existing.current) : max;
-      await actor.update({
-        "flags.fourththing.bossLegendaryActions": { max, current, menu }
-      });
-    }
-
-    static async _onFtBossLegendaryReset(event, _target) {
-      event?.preventDefault?.();
-      await _ftRefillBossLegendaryActions(this.actor);
-      await _ftRefillBossManifestationSlots(this.actor);
-      ui.notifications?.info?.(`${this.actor.name}: Legendary Actions + Manifestation Slots refilled.`);
-    }
-
-    // B13.C — 2026-05-17. Opens the Boss Builder pre-filled with this
-    // boss's current state so the GM can tweak before creating a new
-    // actor. Doesn't modify the source boss.
-    static async _onFtBossDuplicate(_event, _target) {
-      try {
-        const api = globalThis.BBTTCC_BossBuilder
-                 ?? game.bbttcc?.api?.bossBuilder;
-        if (typeof api?.seedFromActor !== "function" || typeof api?.open !== "function") {
-          return ui.notifications?.warn?.("Boss Builder not available — cannot duplicate.");
-        }
-        const seed = api.seedFromActor(this.actor);
-        if (!seed) return ui.notifications?.warn?.("Could not build a duplicate seed for this boss.");
-        await api.open({ seed });
-      } catch (err) {
-        console.error("[fourththing] _onFtBossDuplicate failed", err);
-        ui.notifications?.error?.("Could not open the Boss Builder for duplication.");
-      }
-    }
-
-    get title() { return this.actor?.name ?? "Boss"; }
-  }
-
-  // ── Effect categorize/sort/group helper (shared by character + item sheets) ──
-  // Looks up each effect's primary change-key in the fourththing AE registry
-  // (game.fourththing.ae) to derive a category, sorts by [category, name],
-  // and produces both a flat sorted list AND a grouped {category, effects[]}[]
-  // shape so templates can render section headers without an extra pass.
-  // Effects with no change rows fall under "Empty"; unregistered keys fall
-  // under "Other / Custom".
-  function _ftCategorizeEffects(rows) {
-    const reg = game.fourththing?.ae;
-    const get = reg?.get ? reg.get.bind(reg) : () => null;
-    const CAT_ORDER = [
-      "Attributes", "Skills", "Magic / Manifestation", "Manifestation Discipline",
-      "Manifestation Item", "Derived Stats", "Resources", "Defenses", "Conditions",
-      "Last Stand", "Blood Debt", "Radiation", "Actions", "Details",
-      "Item Flags", "Faction", "Hex / Strategic", "Other / Custom", "Empty"
-    ];
-    const catRank = (c) => {
-      const i = CAT_ORDER.indexOf(c);
-      return i < 0 ? CAT_ORDER.length : i;
-    };
-    const out = rows.map(r => {
-      const firstKey = r._primaryKey || "";
-      let cat;
-      if (!firstKey) cat = "Empty";
-      else {
-        const meta = get(firstKey);
-        cat = meta?.category || "Other / Custom";
-      }
-      return { ...r, category: cat };
-    });
-    out.sort((a, b) => {
-      const ra = catRank(a.category), rb = catRank(b.category);
-      if (ra !== rb) return ra - rb;
-      if (a.category !== b.category) return a.category.localeCompare(b.category);
-      return String(a.name || "").localeCompare(String(b.name || ""));
-    });
-    const groups = [];
-    let cur = null;
-    for (const r of out) {
-      if (!cur || cur.category !== r.category) {
-        cur = { category: r.category, effects: [] };
-        groups.push(cur);
-      }
-      cur.effects.push(r);
-    }
-    return { flat: out, groups };
-  }
-
-  // ── Item Active Effect helpers (shared by Power/Weapon/Feature sheets) ──
-  // Builds the context shape the item-effects.hbs partial expects, and the
-  // four action handlers wired through DEFAULT_OPTIONS.actions. The change-key
-  // input on the spawned ActiveEffectConfig dialog gets the typeahead via the
-  // ae-key-picker.enhancer.js render hook — no extra wiring needed here.
-  function _ftBuildItemEffectsContext(item) {
-    const rows = [];
-    const effs = (item?.effects?.contents) ? item.effects.contents : [];
-    for (const e of effs) {
-      const changes = Array.isArray(e.changes) ? e.changes : [];
-      const changeTags = changes.slice(0, 6).map(c => {
-        const key = String(c?.key || "").trim();
-        const v   = String(c?.value ?? "");
-        const short = key.split(".").slice(-2).join(".") || "(unset)";
-        return {
-          text: `${short} ${v ? "= " + v : ""}`.trim(),
-          full: `${key}${v ? "  =  " + v : ""}`
-        };
-      });
-      rows.push({
-        id:       e.id,
-        name:     e.name || "(unnamed effect)",
-        icon:     e.icon || e.img || "icons/svg/aura.svg",
-        disabled: !!e.disabled,
-        // Bucket B: this AE is a durational template that the use-pipeline clones
-        // onto the user on consume (flags.fourththing.applyOnUse). Surfaced so the
-        // On-Use editor can flag it without opening the AE config.
-        applyOnUse: !!e.flags?.fourththing?.applyOnUse,
-        changeTags,
-        _primaryKey: changes[0]?.key || ""
-      });
-    }
-    return _ftCategorizeEffects(rows);
-  }
-
-  async function _ftOnAddItemEffect(event, target) {
-    const item = this.item;
-    if (!item) return;
-    const created = await item.createEmbeddedDocuments("ActiveEffect", [{
-      name:     "New Effect",
-      icon:     "icons/svg/aura.svg",
-      changes:  [],
-      disabled: false,
-      flags:    { fourththing: { source: "manual" } }
-    }]);
-    if (created[0]) created[0].sheet?.render(true);
-  }
-
-  function _ftEffectIdFrom(target) {
-    const row = target?.closest?.("[data-effect-id]");
-    return row?.dataset?.effectId || target?.dataset?.effectId || null;
-  }
-
-  async function _ftOnEditItemEffect(event, target) {
-    const item = this.item;
-    const id   = _ftEffectIdFrom(target);
-    const eff  = item?.effects?.get(id);
-    if (eff) eff.sheet?.render(true);
-  }
-
-  async function _ftOnDeleteItemEffect(event, target) {
-    const item = this.item;
-    const id   = _ftEffectIdFrom(target);
-    if (!item || !id) return;
-    const eff = item.effects.get(id);
-    if (!eff) return;
-    const ok = await foundry.applications.api.DialogV2.confirm({
-      window: { title: "Delete Effect" },
-      content: `<p>Delete <strong>${foundry.utils.escapeHTML(eff.name)}</strong>?</p>`
-    }).catch(() => false);
-    if (ok) await eff.delete();
-  }
-
-  async function _ftOnToggleItemEffect(event, target) {
-    const item = this.item;
-    const id   = _ftEffectIdFrom(target);
-    const eff  = item?.effects?.get(id);
-    if (!eff) return;
-    await eff.update({ disabled: !eff.disabled });
-  }
-
-  // 2026-05-29 — Multi-damage-type editor (weapon + power sheets). Reads the
-  // RAW array (not the validated one) so a freshly-added blank row isn't
-  // dropped before the user fills it in. New rows default to 1d6 kinetic.
-  function _ftReadDamagePartsRaw(item) {
-    const raw = item?.system?.damageParts;
-    if (Array.isArray(raw)) return foundry.utils.deepClone(raw);
-    if (raw && typeof raw === "object") return Object.values(foundry.utils.deepClone(raw));
-    return [];
-  }
-  async function _ftOnAddDamagePart(event, target) {
-    const item = this.item;
-    if (!item) return;
-    const parts = _ftReadDamagePartsRaw(item);
-    parts.push({ formula: "1d6", type: "kinetic", flavor: "", track: "integrity" });
-    await item.update({ "system.damageParts": parts });
-  }
-  async function _ftOnDeleteDamagePart(event, target) {
-    const item = this.item;
-    if (!item) return;
-    const idx = Number(target?.dataset?.idx ?? target?.closest?.("[data-idx]")?.dataset?.idx);
-    const parts = _ftReadDamagePartsRaw(item);
-    if (Number.isInteger(idx) && idx >= 0 && idx < parts.length) {
-      parts.splice(idx, 1);
-      await item.update({ "system.damageParts": parts });
-    }
-  }
-
-  // ── Bucket B — On-Use editor (consume.effects[]) ───────────────────────────
-  // The instant half of an on-use item: the dice/track rows that runConsumeEffects
-  // rolls + applies. Lives in flags.fourththing.rfi.item.consume.effects[]. The
-  // durational half (durations, status icons, +stat buffs) is authored as
-  // applyOnUse Active Effects in the Effects section. Mirrors the damageParts
-  // pattern: read the RAW array (object-or-array tolerant) → splice → write back.
-  const FT_ONUSE_OPS = {
-    add:      "Add / Restore / Apply",
-    subtract: "Subtract / Drain",
-    set:      "Set to",
-    setMax:   "Set to Max",
-    remove:   "Remove (condition)"
-  };
-  const FT_ONUSE_KINDS = { track: "Track", condition: "Condition" };
-
-  function _ftReadConsumeEffectsRaw(item) {
-    const raw = foundry.utils.getProperty(item, "flags.fourththing.rfi.item.consume.effects");
-    if (Array.isArray(raw)) return foundry.utils.deepClone(raw);
-    if (raw && typeof raw === "object") return Object.values(foundry.utils.deepClone(raw));
-    return [];
-  }
-  async function _ftOnAddOnUseEffect(event, target) {
-    const item = this.item;
-    if (!item) return;
-    const effects = _ftReadConsumeEffectsRaw(item);
-    effects.push({ kind: "track", track: "integrity", op: "add", formula: "1d6" });
-    await item.update({ "flags.fourththing.rfi.item.consume.effects": effects });
-  }
-  async function _ftOnDeleteOnUseEffect(event, target) {
-    const item = this.item;
-    if (!item) return;
-    const idx = Number(target?.dataset?.idx ?? target?.closest?.("[data-idx]")?.dataset?.idx);
-    const effects = _ftReadConsumeEffectsRaw(item);
-    if (Number.isInteger(idx) && idx >= 0 && idx < effects.length) {
-      effects.splice(idx, 1);
-      await item.update({ "flags.fourththing.rfi.item.consume.effects": effects });
-    }
-  }
-  // Flag/unflag an item Active Effect as an applyOnUse template (cloned onto the
-  // user on consume). applyOnUse templates must be transfer:false so they don't
-  // also passively apply to the holder while sitting in inventory.
-  async function _ftOnToggleApplyOnUse(event, target) {
-    const item = this.item;
-    const id   = _ftEffectIdFrom(target);
-    const eff  = item?.effects?.get(id);
-    if (!eff) return;
-    const next = !eff.flags?.fourththing?.applyOnUse;
-    const update = { "flags.fourththing.applyOnUse": next };
-    if (next) update.transfer = false; // template, not a passive transfer effect
-    await eff.update(update);
-  }
-
-  // Open this manifestation item in the Manifestation Engine (wizard V2) for a
-  // richer guided edit (2026-05-29). Writes back to the same item in place.
-  async function _ftOnOpenManifestationEngine(event, target) {
-    const item = this.item;
-    if (!item) return;
-    try { await openManifestationWizardV2(item.actor ?? null, { existingItem: item }); }
-    catch (e) {
-      console.warn("[fourththing] open Manifestation Engine failed", e);
-      ui.notifications?.error("Manifestation Engine failed to open (see console).");
-    }
-  }
-
   // ── FourthThingPowerSheet ─────────────────────────────────────────────────
   class FourthThingPowerSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
 
@@ -23193,9 +21381,6 @@ Hooks.once("init", function () {
   });
   (foundry.applications.apps.DocumentSheetConfig ?? DocumentSheetConfig).registerSheet(Actor, "fourththing", FourthThingRigSheet, {
     types: ["rig"], makeDefault: true, label: "Rig Sheet"
-  });
-  (foundry.applications.apps.DocumentSheetConfig ?? DocumentSheetConfig).registerSheet(Actor, "fourththing", FourthThingBossSheet, {
-    types: ["boss"], makeDefault: true, label: "Boss Sheet"
   });
   (foundry.applications.apps.DocumentSheetConfig ?? DocumentSheetConfig).registerSheet(Item, "fourththing", FourthThingPowerSheet, {
     types: ["power"], makeDefault: true, label: "Manifestation Sheet"
@@ -25550,67 +23735,6 @@ async function _ftClearPerRoundCombatFlags(actor) {
   } catch (e) { console.warn("[fourththing] clear per-round combat flags failed", e); }
 }
 
-// Action Economy canon §6.2 (Phase B 2026-05-19). Refill a boss's
-// Manifestation Slots at round start. Tier-many casts per round
-// (T1=1...T4=4). Force-merge via setFlag — since `current` is the only
-// field that needs to update, we can safely write the whole object.
-async function _ftRefillBossManifestationSlots(actor) {
-  if (!actor || actor.type !== "boss") return;
-  const tier = _ftCasterTier(actor);
-  const max  = Math.max(1, Math.min(4, tier));
-  try {
-    await actor.update({
-      "flags.fourththing.bossManifestationSlots": { max, current: max }
-    });
-  } catch (e) { console.warn("[fourththing] boss manifestation-slot refill failed", e); }
-}
-
-// Action Economy canon §6.3 (Phase C 2026-05-19). Legendary Actions
-// per round derived from boss tier: T1/T2 = 0, T3 = 1, T4 = 2. Used
-// between PC turns; refilled on round start alongside Manifestation
-// Slots. Menu entries (authored per-boss) are preserved across refills;
-// only `current` is reset to `max`.
-function _ftBossLegendaryMax(tier) {
-  const t = Math.max(1, Math.min(4, Number(tier) || 1));
-  return t === 3 ? 1 : t === 4 ? 2 : 0;
-}
-
-async function _ftRefillBossLegendaryActions(actor) {
-  if (!actor || actor.type !== "boss") return;
-  const tier = _ftCasterTier(actor);
-  const max  = _ftBossLegendaryMax(tier);
-  const existing = actor?.flags?.fourththing?.bossLegendaryActions ?? {};
-  const menu = Array.isArray(existing.menu) ? existing.menu : [];
-  try {
-    await actor.update({
-      "flags.fourththing.bossLegendaryActions": { max, current: max, menu }
-    });
-  } catch (e) { console.warn("[fourththing] boss legendary-action refill failed", e); }
-}
-
-// Phase C 2026-05-19 — Chat card emitter for a fired Legendary Action.
-// The picker dialog debits the slot and calls this; subsequent gameplay
-// (the actual strike/cast/move resolution) is GM-driven from here, since
-// each action's downstream effect varies per boss and authored entry.
-async function _ftPostBossLegendaryChat(actor, entry, { remaining, max }) {
-  const icon = entry?.icon || "⚜";
-  const label = entry?.label || "Legendary Action";
-  const description = entry?.description || "";
-  await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    content: `<div class="fourththing-roll" style="border-color:#c8a0ff">
-      <div class="ft-roll-header">
-        <span class="ft-roll-name" style="color:#c8a0ff">⚜ Legendary Action — ${ftEscapeHtml(actor.name)}</span>
-        <span class="ft-seph-pill" style="background:#3a2a4a;border-color:#7a5aa0;color:#dac8ff">${remaining}/${max} left</span>
-      </div>
-      <div style="margin-top:0.3rem;font-size:0.95rem">
-        <span style="font-size:1.1rem">${ftEscapeHtml(icon)}</span>
-        <b style="margin-left:0.3rem">${ftEscapeHtml(label)}</b>
-      </div>
-      ${description ? `<p style="margin:0.3rem 0 0;font-size:0.78rem;opacity:0.9">${ftEscapeHtml(description)}</p>` : ""}
-    </div>`
-  });
-}
 
 async function _ftClearRigPerRoundFlags(rig) {
   if (!rig) return;
@@ -25644,10 +23768,6 @@ async function _ftClearRigPerRoundFlags(rig) {
 
 // GM-side fan-out: clear per-round flags for every boarded steward on
 // every rig + the rigs themselves. Used by the raid round commit hook.
-// Action Economy canon §6.2 (Phase B 2026-05-19) — additionally refills
-// boss Manifestation Slots for every boss in the world. Bosses don't
-// need to be in a combat tracker to need a refill (raid scenes drive
-// most boss combat).
 async function _ftClearAllBoardedPerRoundFlags() {
   if (!game.user?.isGM) return;
   for (const rig of (game.actors ?? [])) {
@@ -25662,12 +23782,6 @@ async function _ftClearAllBoardedPerRoundFlags() {
     }
     if (anyBoarded) await _ftClearRigPerRoundFlags(rig);
   }
-  for (const a of (game.actors ?? [])) {
-    if (a.type === "boss") {
-      await _ftRefillBossManifestationSlots(a);
-      await _ftRefillBossLegendaryActions(a);
-    }
-  }
 }
 
 // Listen for the raid-console round commit hook (emitted by
@@ -25678,8 +23792,6 @@ Hooks.on("bbttcc:raid:roundCommit", () => {
 
 // Foundry combat tracker round advance: when the round number changes,
 // clear per-round flags on every combatant (and the rigs they're piloting).
-// Action Economy canon §6.2 (Phase B 2026-05-19) — additionally refills
-// boss Manifestation Slots on any boss combatant.
 Hooks.on("updateCombat", async (combat, change) => {
   if (!game.user?.isGM) return;
   if (!("round" in (change ?? {}))) return;
@@ -25717,11 +23829,6 @@ Hooks.on("updateCombat", async (combat, change) => {
         } catch (e) { console.warn("[fourththing] steward action-economy reset failed", e); }
         clearedStewardIds.add(slot.actorId);
       }
-      continue;
-    }
-    if (a.type === "boss") {
-      await _ftRefillBossManifestationSlots(a);
-      await _ftRefillBossLegendaryActions(a);
       continue;
     }
     if (a.type === "character" || a.type === "npc") {
@@ -25806,125 +23913,16 @@ Hooks.once("ready", () => {
   game.fourththing.vfx.playSweepArc = ftPlaySweepArcVfx;
 });
 
-// ─── Phase 7: Raid console bridge ──────────────────────────────────────────
-// Boss actors auto-register their def into `game.bbttcc.api.raid.boss` so
-// they appear in the raid console's creature picker alongside legacy defs.
-// One-way sync: actor → registry. Mutations to system.raidProfile /
-// doctrine.maneuverKeys / name / img re-register. Live integrity sync
-// (raid-engine writeback to actor) is a follow-up.
-
-function _ftBossActorToRaidDef(bossActor) {
-  if (!bossActor || bossActor.type !== "boss") return null;
-  const sys = bossActor.system?.system ?? bossActor.system;
-  const rp  = sys?.raidProfile ?? {};
-  if (!rp.key || !String(rp.key).trim()) return null;
-  let behaviors = [];
-  try { behaviors = JSON.parse(rp.behaviorsRaw || "[]"); } catch { behaviors = []; }
-  if (!Array.isArray(behaviors)) behaviors = [];
-  return {
-    key:          String(rp.key).trim(),
-    label:        bossActor.name,
-    image:        bossActor.img,
-    mode:         rp.mode ?? "hybrid",
-    moraleHits:   Number(rp.moraleHits ?? 4),
-    hitTrack:     rp.hitTrack ?? "",
-    tags:         rp.tagsRaw ?? "",
-    stats:        foundry.utils.deepClone(rp.opStats ?? {}),
-    behaviors,
-    maneuverKeys: Array.isArray(sys?.doctrine?.maneuverKeys) ? [...sys.doctrine.maneuverKeys] : [],
-    actorId:      bossActor.id,
-    sourceActor:  bossActor.uuid
-  };
-}
-
-function _ftRegisterBossActor(bossActor) {
-  try {
-    const def = _ftBossActorToRaidDef(bossActor);
-    if (!def) return;
-    const api = game.bbttcc?.api?.raid?.boss;
-    if (!api?.registerBoss) return;
-    api.registerBoss(def.key, def);
-  } catch (e) {
-    console.warn("[fourththing/raid-bridge] register failed", e);
-  }
-}
-
-function _ftUnregisterBossActor(bossActor) {
-  try {
-    const sys = bossActor.system?.system ?? bossActor.system;
-    const key = sys?.raidProfile?.key;
-    if (!key) return;
-    const api = game.bbttcc?.api?.raid?.boss;
-    if (!api?.unregisterBoss) return;
-    api.unregisterBoss(key);
-  } catch (e) {
-    console.warn("[fourththing/raid-bridge] unregister failed", e);
-  }
-}
-
-Hooks.on("createActor", (actor) => {
-  if (actor?.type === "boss") _ftRegisterBossActor(actor);
-});
-
-Hooks.on("updateActor", (actor, changes) => {
-  if (actor?.type !== "boss") return;
-  const triggers = ["name", "img", "system.raidProfile", "system.doctrine.maneuverKeys"];
-  if (triggers.some(t => foundry.utils.hasProperty(changes, t))) {
-    _ftRegisterBossActor(actor);
-  }
-});
-
-Hooks.on("deleteActor", (actor) => {
-  if (actor?.type === "boss") _ftUnregisterBossActor(actor);
-});
-
-let _ftBossSeedRan = false;
-function _ftSeedBossActorsToRegistry() {
-  if (_ftBossSeedRan) return;
-  if (!game.bbttcc?.api?.raid?.boss?.registerBoss) return;
-  _ftBossSeedRan = true;
-  let seeded = 0, skipped = 0;
-  for (const actor of game.actors ?? []) {
-    if (actor.type !== "boss") continue;
-    if (!actor.system?.raidProfile?.key) { skipped++; continue; }
-    _ftRegisterBossActor(actor);
-    seeded++;
-  }
-  if (seeded || skipped) {
-    console.log(`[fourththing/raid-bridge] seeded ${seeded} Boss actors into raid registry (${skipped} skipped — no raidProfile.key)`);
-  }
-}
-
-Hooks.once("ready", () => {
-  // bossRegistry.js attaches its API at "ready" too — give it a tick to land
-  setTimeout(_ftSeedBossActorsToRegistry, 1500);
-  game.fourththing = game.fourththing ?? {};
-  game.fourththing.boss = game.fourththing.boss ?? {};
-  game.fourththing.boss.registerActor     = _ftRegisterBossActor;
-  game.fourththing.boss.unregisterActor   = _ftUnregisterBossActor;
-  game.fourththing.boss.actorToRaidDef    = _ftBossActorToRaidDef;
-  game.fourththing.boss.seedAllToRegistry = _ftSeedBossActorsToRegistry;
-});
-
 // ─── Phase 8: Token visual canon ───────────────────────────────────────────
-// Rig tokens get mobility-coded corner brackets; boss tokens get a colored
-// phase ring. Overlays draw on top of the standard token texture, redraw
-// on relevant updates, and clean up on token destroy.
+// Rig tokens get mobility-coded corner brackets. Overlays draw on top of the
+// standard token texture, redraw on relevant updates, and clean up on token
+// destroy.
 
 const _FT_RIG_BRACKET_COLOR = {
   stationary: 0x8a5a2b,  // anchor brown
   mobile:     0xd4a35f,  // wheel gold
   hybrid:     0xc36a2b   // mixed amber
 };
-
-// Phase ring color ramp — neutral → warm → urgent
-const _FT_BOSS_PHASE_COLORS = [
-  0xcccccc,  // 0 (initial / observed)
-  0xf2c94c,  // 1 (yellow / pressured)
-  0xf2994a,  // 2 (orange / wounded)
-  0xeb5757,  // 3 (red / cornered)
-  0x9c1f1f   // 4+ (deep red / final)
-];
 
 function _ftDrawRigVisualCanon(token) {
   if (!token?.actor || token.actor.type !== "rig") return;
@@ -25995,57 +23993,12 @@ function _ftDrawRigVisualCanon(token) {
   token._ftRigCanon = g;
 }
 
-function _ftDrawBossPhaseRing(token) {
-  if (!token?.actor || token.actor.type !== "boss") return;
-
-  if (token._ftBossRing) {
-    token.removeChild(token._ftBossRing);
-    token._ftBossRing.destroy({ children: true });
-    token._ftBossRing = null;
-  }
-
-  const sys = token.actor.system?.system ?? token.actor.system;
-  const phases = sys?.phases ?? { ladder: [], currentPhase: 0 };
-  const ladder = Array.isArray(phases.ladder) ? phases.ladder : [];
-  const cur    = Math.max(0, Math.min(_FT_BOSS_PHASE_COLORS.length - 1, Number(phases.currentPhase) || 0));
-  const total  = Math.max(1, ladder.length);
-
-  const w = token.w ?? token.width  ?? 100;
-  const h = token.h ?? token.height ?? 100;
-  const cx = w / 2, cy = h / 2;
-  const radius = Math.min(w, h) / 2 + 4;
-  const color = _FT_BOSS_PHASE_COLORS[cur] ?? 0xcccccc;
-
-  const g = new PIXI.Graphics();
-  g.lineStyle(4, color, 0.85);
-  g.drawCircle(cx, cy, radius);
-
-  // Phase ladder pip arc — fills clockwise from top, segment per phase
-  if (total > 1) {
-    g.lineStyle(0);
-    const segArc = (Math.PI * 2) / total;
-    for (let i = 0; i < total; i++) {
-      const angleStart = -Math.PI / 2 + i * segArc;
-      const angleEnd   = angleStart + segArc * 0.85;  // small gap between segs
-      const segColor   = i <= cur
-        ? (_FT_BOSS_PHASE_COLORS[Math.min(i, _FT_BOSS_PHASE_COLORS.length - 1)] ?? color)
-        : 0x444444;
-      g.lineStyle(3, segColor, i <= cur ? 0.95 : 0.4);
-      g.arc(cx, cy, radius + 6, angleStart, angleEnd, false);
-    }
-  }
-
-  token.addChild(g);
-  token._ftBossRing = g;
-}
-
 function _ftRefreshTokenCanonForActor(actor) {
   if (!canvas?.tokens) return;
   const tokens = canvas.tokens.placeables.filter(t => t.actor?.id === actor.id);
   for (const tok of tokens) {
     try {
       if (actor.type === "rig")  _ftDrawRigVisualCanon(tok);
-      if (actor.type === "boss") _ftDrawBossPhaseRing(tok);
     } catch (e) { /* swallow */ }
   }
 }
@@ -26054,7 +24007,6 @@ function _ftRefreshTokenCanonForActor(actor) {
 Hooks.on("drawToken", (token) => {
   try {
     if (token?.actor?.type === "rig")  _ftDrawRigVisualCanon(token);
-    if (token?.actor?.type === "boss") _ftDrawBossPhaseRing(token);
   } catch (e) { /* swallow */ }
 });
 
@@ -26065,85 +24017,7 @@ Hooks.on("updateActor", (actor, changes) => {
       _ftRefreshTokenCanonForActor(actor);
     }
   }
-  if (actor?.type === "boss") {
-    if (foundry.utils.hasProperty(changes, "system.phases.currentPhase")
-     || foundry.utils.hasProperty(changes, "system.phases.ladder")) {
-      _ftRefreshTokenCanonForActor(actor);
-    }
-  }
 });
-
-
-
-// ─── Carryover 1: Auto phase-advance on integrity threshold ────────────────
-Hooks.on("updateActor", async (actor, changes) => {
-  if (actor?.type !== "boss") return;
-  if (!foundry.utils.hasProperty(changes, "system.integrity.value")) return;
-  if (!game.user?.isGM) return;
-
-  const sys = actor.system?.system ?? actor.system;
-  const ladder = Array.isArray(sys?.phases?.ladder) ? sys.phases.ladder : [];
-  if (!ladder.length) return;
-
-  const cur = Math.max(0, Number(sys?.phases?.currentPhase ?? 0));
-  const max = Number(sys?.integrity?.max ?? 0);
-  if (max <= 0) return;
-  const value = Number(sys?.integrity?.value ?? 0);
-  const pct   = (value / max) * 100;
-
-  let target = cur;
-  for (let i = ladder.length - 1; i > cur; i--) {
-    const t = Number(ladder[i].integrityThreshold ?? 100);
-    if (pct <= t) { target = i; break; }
-  }
-  if (target <= cur) return;
-
-  const update = { "system.phases.currentPhase": target };
-  let surgeAdd = 0;
-  const newGrants = [];
-  for (let i = cur + 1; i <= target; i++) {
-    const p = ladder[i];
-    if (p?.surgeBoost) surgeAdd += Number(p.surgeBoost) || 0;
-    if (Array.isArray(p?.manifestationGrants)) newGrants.push(...p.manifestationGrants);
-  }
-  if (surgeAdd) {
-    const curSurge = Number(sys?.manifestations?.surge?.current ?? 0);
-    const maxSurge = Number(sys?.manifestations?.surge?.max ?? 6);
-    update["system.manifestations.surge.current"] = Math.min(maxSurge, curSurge + surgeAdd);
-  }
-  if (newGrants.length) {
-    const lib = Array.isArray(sys?.manifestations?.library) ? [...sys.manifestations.library] : [];
-    for (const uuid of newGrants) {
-      if (uuid && !lib.includes(uuid)) lib.push(uuid);
-    }
-    update["system.manifestations.library"] = lib;
-  }
-
-  await actor.update(update);
-
-  const targetEntry = ladder[target];
-  const phaseLabel  = targetEntry?.label ?? `Phase ${target + 1}`;
-  const esc = (s) => foundry.utils.escapeHTML?.(String(s)) ?? String(s);
-  ChatMessage.create({
-    speaker: { alias: actor.name },
-    content: [
-      `<div style="border-left:3px solid #d4a35f;padding-left:.5rem;">`,
-      `<strong>${esc(actor.name)}</strong> enters <em>${esc(phaseLabel)}</em>.`,
-      surgeAdd ? `<br><small>+${surgeAdd} Surge</small>` : "",
-      newGrants.length ? `<br><small>+${newGrants.length} manifestation grant${newGrants.length === 1 ? "" : "s"}</small>` : "",
-      `</div>`
-    ].join("")
-  });
-});
-
-// ─── Carryover 2: RETIRED 2026-05-14 (Damage Tracking Unification) ─────────
-// Previously mirrored `bbttcc-raid.bossState[bossKey].damageStep` → boss
-// actor's `system.integrity.value`. Replaced by the raid console writing
-// integrity directly via `_applyDamageToActor` at round commit (see
-// bbttcc-raid/scripts/module.raid-console.js — "Damage Tracking
-// Unification 2026-05-13" block in _commitRound). The bossState world
-// setting remains as a legacy read surface for behaviors / AI code that
-// references damageStep; new code reads from integrity directly.
 
 // ─── Carryover 3: Legacy config-app shim button binder ─────────────────────
 // The retired rig-config-app.hbs and facility-config-app.hbs templates render
@@ -26315,14 +24189,10 @@ function _ftBuildRaidHudHtml(consoleApp) {
   const alarm   = Number(tgtSys?.raidStats?.alarm)        || 0;
   const infilt  = Number(tgtSys?.raidStats?.infiltration) || 0;
 
-  // 2026-05-13 — Phase pill is target-type-aware. Three modes:
-  //   • Hex target: read bound Battle Scenes from
-  //     `hex.flags.bbttcc-raid.battleScenes` + `currentSceneIdx` → show
-  //     "Scene N/M — <label>" (the actual multi-scene progression).
-  //   • Boss/creature target: read `phases.currentPhase` + `phases.ladder` →
-  //     show the authored phase label (e.g., "Throned / Wounded / Broken").
-  //   • Neither applies → omit the phase pill entirely (no more "Phase 1"
-  //     fallback that doesn't mean anything).
+  // 2026-05-13 — Phase pill for hex targets: read bound Battle Scenes from
+  // `hex.flags.bbttcc-raid.battleScenes` + `currentSceneIdx` → show
+  // "Scene N/M — <label>" (the actual multi-scene progression). Non-hex
+  // targets omit the pill entirely (no meaningless "Phase 1" fallback).
   let phaseLabel = "";
   let phaseHasContent = false;
   const targetType = String(consoleVm?.targetType || "").toLowerCase();
@@ -26339,14 +24209,6 @@ function _ftBuildRaidHudHtml(consoleApp) {
         phaseHasContent = true;
       }
     } catch (_) { /* noop */ }
-  } else if (target) {
-    const phaseIdx = Number(tgtSys?.phases?.currentPhase) || 0;
-    const phaseLadder = Array.isArray(tgtSys?.phases?.ladder) ? tgtSys.phases.ladder : [];
-    if (phaseLadder.length > 0) {
-      const phaseEntry = phaseLadder[phaseIdx];
-      phaseLabel = phaseEntry?.label || phaseEntry?.name || `Phase ${phaseIdx + 1}`;
-      phaseHasContent = true;
-    }
   }
 
   const integrityVal = Number(tgtSys?.integrity?.value) || 0;
@@ -26395,7 +24257,7 @@ function _ftBuildRaidHudHtml(consoleApp) {
     <strong style="color:${preset.color};">${esc(activityLabel)}</strong>
     <span style="opacity:.6;">·</span>
     <span>Round <b>${(kind === "intrigue" && infilState) ? Number(infilState.round || 0) : (roundNo || 1)}</b></span>
-    ${phaseHasContent ? `<span style="opacity:.6;">·</span><span title="${targetType === "hex" ? "Battle scene progression" : "Boss phase"}">${esc(phaseLabel)}</span>` : ""}
+    ${phaseHasContent ? `<span style="opacity:.6;">·</span><span title="Battle scene progression">${esc(phaseLabel)}</span>` : ""}
     ${target ? `<span style="opacity:.6;">·</span><span style="opacity:.85;" title="Target">${esc(targetName)}</span>` : (consoleVm?.targetName ? `<span style="opacity:.6;">·</span><span style="opacity:.85;" title="Target">${esc(consoleVm.targetName)}</span>` : "")}
     ${meterHtml ? `<span style="opacity:.6;">·</span>${meterHtml}` : ""}
     <button type="button" class="ft-raid-hud-dismiss" title="Dismiss until next round" style="margin-left:.3rem;padding:0 .45rem;background:transparent;border:1px solid #666;color:#999;border-radius:3px;cursor:pointer;font-family:inherit;font-size:0.85rem;line-height:1.3;">×</button>
@@ -27139,15 +25001,12 @@ Hooks.on("renderApplicationV2", (app, html) => {
   } catch (e) { console.warn("[fourththing] battle-scenes panel injection failed", e); }
 });
 
-// Bridge new actor-type bosses into the raid console's boss registry
-// (2026-05-12 playtest fix). The raid console reads bosses from
-// `game.bbttcc.api.raid.boss` via `bossApi.list()` / `bossApi.get(key)`.
-// Legacy pattern was per-boss files (bosses.gloomgill.js) calling
-// `registerBoss(key, def)` at world-ready. Our fourththing actor-type
-// bosses carry the same shape in `actor.system.raidProfile` etc. but
-// never auto-register, so they don't appear in the creature picker.
-// This bridge auto-registers every boss-type actor on ready, and keeps
-// the registry in sync on create/update/delete.
+// Auto-link rig + PC prototype tokens so canvas-token damage/drops propagate
+// to the base actor (unlinked tokens hold synthetic actorData that gets lost).
+// (Formerly this block also bridged actor-type bosses into the raid registry;
+// the `boss` actor type was retired 2026-06-21 — boss fights are now plain
+// NPC monsters and you raid the boss's faction, so only the auto-link sweeps
+// remain.)
 // Polls until a probe returns truthy; resolves with the value or null on
 // timeout. Used to wait for the bbttcc-raid module's APIs to attach during
 // world load — there's a race window where fourththing's `ready` hook can
@@ -27164,87 +25023,14 @@ async function _ftWaitForApi(probe, { timeoutMs = 5000, intervalMs = 100 } = {})
 
 Hooks.once("ready", async () => {
   try {
-    const bossApi = await _ftWaitForApi(() => {
-      const api = game.bbttcc?.api?.raid?.boss;
-      return api?.registerBoss ? api : null;
-    });
-    if (!bossApi) {
-      console.warn("[fourththing] boss bridge: raid.boss API never appeared after 5s — skipping");
-      return;
-    }
-    console.log("[fourththing] boss bridge: raid.boss API ready, attaching bridge");
-
-    function _ftBuildBossDefFromActor(actor) {
-      const sys = actor.system?.system ?? actor.system ?? {};
-      const profile = sys.raidProfile ?? {};
-      const doctrine = sys.doctrine  ?? {};
-      const behaviorsBlock = sys.behaviors ?? {};
-      const ladder = Array.isArray(sys.phases?.ladder) ? sys.phases.ladder : [];
-
-      let hitTrack = profile.hitTrack;
-      if (typeof hitTrack === "string") {
-        hitTrack = hitTrack.split(",").map(s => s.trim()).filter(Boolean);
-      }
-      if (!Array.isArray(hitTrack) || !hitTrack.length) {
-        // Fall back to phase ladder labels if no explicit hitTrack
-        hitTrack = ladder.map(p => String(p?.label || p?.name || "")).filter(Boolean);
-      }
-
-      const tags = (typeof profile.tagsRaw === "string"
-        ? profile.tagsRaw.split(",").map(s => s.trim()).filter(Boolean)
-        : (Array.isArray(profile.tags) ? profile.tags : []));
-
-      return {
-        label: actor.name,
-        mode: String(profile.mode || "abstract"),
-        tags,
-        hitTrack: hitTrack.length ? hitTrack : undefined,
-        moraleHits: Number(profile.moraleHits) || 1,
-        stats: (profile.opStats && typeof profile.opStats === "object") ? profile.opStats : {},
-        maneuverKeys: Array.isArray(doctrine.maneuverKeys) ? doctrine.maneuverKeys : [],
-        behaviors: Array.isArray(behaviorsBlock.behaviors) ? behaviorsBlock.behaviors : [],
-        presentation: { image: actor.img || "" },
-        meta: { actorId: actor.id, actorUuid: actor.uuid }
-      };
-    }
-
-    function _ftBossKey(actor) {
-      // Prefer the GM-authored `raidProfile.key` slug (matches the older
-      // Phase 7 bridge AND the legacy boss registry pattern, e.g.,
-      // "hex-warlord"). Fall back to actor.id only when no slug is set.
-      const sys = actor?.system?.system ?? actor?.system ?? {};
-      const slug = String(sys?.raidProfile?.key ?? "").trim();
-      return slug || actor.id;
-    }
-
-    function _ftSyncBossActor(actor) {
-      if (!actor || actor.type !== "boss") return;
-      try {
-        bossApi.registerBoss(_ftBossKey(actor), _ftBuildBossDefFromActor(actor));
-        // Auto-link prototype token so canvas-token damage updates the base
-        // actor's `system.integrity.value` (otherwise unlinked tokens hold
-        // synthetic actorData overrides and the base actor stays unchanged).
-        if (actor.prototypeToken?.actorLink !== true) {
-          actor.update({ "prototypeToken.actorLink": true }).catch(() => {});
-        }
-      } catch (e) {
-        console.warn(`[fourththing] boss bridge: failed to register "${actor.name}"`, e);
-      }
-    }
-
-    // 2026-05-13 — Extended to cover BOTH bosses AND rigs. Same problem:
-    // unlinked tokens hold synthetic actorData; damage writes get lost on
-    // the canvas while the base sheet stays full HP. Linked tokens
-    // propagate writes cleanly to the base actor.
-    // 2026-05-20 — Also covers PCs. Playtest burn: GM double-clicked a
-    // canvas PC token (unlinked), dropped a manifestation onto the
-    // synthetic copy. Player never saw it. Then the player dropped the
-    // same manifestation from their sidebar sheet onto the world actor,
-    // and the GM saw two distinct copies (one synthetic, one world).
+    // 2026-05-13 — Auto-link RIG tokens; 2026-05-20 — also PCs. Same problem:
+    // unlinked tokens hold synthetic actorData; damage writes / dropped
+    // manifestations get lost on the canvas while the base sheet stays
+    // unchanged. Linked tokens propagate writes cleanly to the base actor.
     // PCs MUST be linked. NPC characters (entityKind === "npc") and
     // monster type:"npc" actors are intentionally NOT auto-linked —
     // they're allowed to hold per-instance state across multiple tokens.
-    const _ftLinkableTypes = new Set(["boss", "rig"]);
+    const _ftLinkableTypes = new Set(["rig"]);
 
     function _ftIsPCActor(actor) {
       if (actor?.type !== "character") return false;
@@ -27270,7 +25056,7 @@ Hooks.once("ready", async () => {
             relinked += updates.length;
           }
         }
-        if (relinked) console.log(`[fourththing] auto-link sweep: relinked ${relinked} deployed boss/rig/PC token(s)`);
+        if (relinked) console.log(`[fourththing] auto-link sweep: relinked ${relinked} deployed rig/PC token(s)`);
       } catch (e) {
         console.warn("[fourththing] auto-link sweep failed", e);
       }
@@ -27289,9 +25075,8 @@ Hooks.once("ready", async () => {
       } catch (e) { console.warn("[fourththing] PC prototype-link sweep failed", e); }
     }
 
-    // 2026-05-13 — Auto-link RIG actors' prototype tokens too (mirroring the
-    // boss bridge auto-link). New tokens placed AFTER this point are
-    // linked by default.
+    // 2026-05-13 — Auto-link RIG actors' prototype tokens. New tokens placed
+    // AFTER this point are linked by default.
     function _ftEnsureRigsLinked() {
       try {
         for (const actor of (game.actors?.contents ?? [])) {
@@ -27304,7 +25089,7 @@ Hooks.once("ready", async () => {
     }
 
     // 2026-05-13 — Catch any NEW token placement and force-link if it's a
-    // boss/rig type. Handles the timing gap where a token is dropped on
+    // rig (or PC). Handles the timing gap where a token is dropped on
     // canvas before the prototype-token auto-link sweep can take effect.
     Hooks.on("createToken", async (tokenDoc) => {
       try {
@@ -27315,50 +25100,11 @@ Hooks.once("ready", async () => {
       } catch (e) { console.warn("[fourththing] createToken auto-link failed", e); }
     });
 
-    // Initial bulk register
-    let count = 0;
-    for (const actor of (game.actors?.contents ?? [])) {
-      if (actor.type === "boss") {
-        _ftSyncBossActor(actor);
-        count++;
-      }
-    }
-    console.log(`[fourththing] boss bridge: registered ${count} actor-type bosses with raid registry`);
     _ftEnsureRigsLinked();
     _ftEnsurePCsLinked();
     _ftLinkExistingTokens();
-
-    // Keep in sync on actor changes
-    Hooks.on("createActor", (actor) => {
-      if (actor?.type === "boss") _ftSyncBossActor(actor);
-    });
-    Hooks.on("updateActor", (actor, changed) => {
-      if (actor?.type !== "boss") return;
-      const relevant = changed?.name !== undefined
-        || changed?.img  !== undefined
-        || changed?.system?.raidProfile
-        || changed?.system?.doctrine
-        || changed?.system?.behaviors
-        || changed?.system?.phases?.ladder;
-      if (relevant) _ftSyncBossActor(actor);
-    });
-    Hooks.on("deleteActor", (actor) => {
-      if (actor?.type === "boss" && typeof bossApi.unregisterBoss === "function") {
-        try { bossApi.unregisterBoss(actor.id); } catch (_) {}
-      }
-    });
-
-    // RETIRED 2026-05-14 (Damage Tracking Unification). The `updateSetting`
-    // hook that mirrored `bbttcc-raid.bossState[bossKey].damageStep` →
-    // `system.phases.currentPhase` + `system.raidStats.morale` is no longer
-    // needed: the phase is derived from integrity in prepareDerivedData,
-    // and morale was deprecated as a boss-level concept (bosses have
-    // integrity + phases; morale lives on factions). The raid console
-    // writes integrity directly at round commit. See raid-console.js
-    // "Damage Tracking Unification" comment in _commitRound + the
-    // unified _ensureRoundBossMeta read path.
   } catch (e) {
-    console.warn("[fourththing] boss bridge init failed", e);
+    console.warn("[fourththing] auto-link bridge init failed", e);
   }
 });
 

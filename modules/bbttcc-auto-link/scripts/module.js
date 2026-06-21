@@ -31,7 +31,7 @@ function findActorDirHeader(root) {
 function _hideNativeCreateActorButton(root) {
   // 2026-05-16 — Classed Monsters sprint. The Roll For Initiation workflow
   // routes actor creation through Bad Eden builders (RFI Character / NPC /
-  // Boss / Rig). Hide Foundry's native "Create Actor" button so users
+  // Monster / Rig). Hide Foundry's native "Create Actor" button so users
   // don't accidentally create raw type:'npc' actors that bypass the
   // entityKind-flagged PC-sheet workflow.
   if (!root) return;
@@ -55,7 +55,6 @@ function _hideNativeCreateActorButton(root) {
     if (el.dataset.bbttccCreateCharacter === "1") continue;
     if (el.dataset.bbttccCreateNpc === "1") continue;
     if (el.dataset.bbttccCreateMonster === "1") continue;
-    if (el.dataset.bbttccCreateBoss === "1") continue;
     if (el.dataset.bbttccCreateRig === "1") continue;
     // Match by text content for theme variations — anything labeled "Create Actor"
     // or "Create Document" gets hidden. Folder, Search, etc. pass through.
@@ -172,34 +171,6 @@ function injectButtons(html) {
 
   // Also make sure existing Monster button isn't tagged as a Create-Actor
   // target by the hider — add to the skip list.
-
-  // Create Boss (B13 Builder UI — MCE-pattern authoring dialog).
-  // See bbttcc-auto-link/scripts/boss-builder.js for the dialog + actor shape.
-  if (!header.querySelector("[data-bbttcc-create-boss]")) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.dataset.bbttccCreateBoss = "1";
-    btn.innerHTML = `<i class="fas fa-crown"></i> Create Boss`;
-    btn.title = "Create an RFI Boss actor (Crucible-style authoring dialog with starter chips and phase ladder).";
-
-    btn.addEventListener("click", async () => {
-      try {
-        const api = globalThis.BBTTCC_BossBuilder || game.bbttcc?.api?.bossBuilder;
-        if (typeof api?.open !== "function") {
-          WARN("Boss Builder not loaded.");
-          ui.notifications?.error?.("Boss Builder not available — check that bbttcc-auto-link/scripts/boss-builder.js loaded.");
-          return;
-        }
-        await api.open();
-      } catch (e) {
-        WARN("Could not open Boss Builder", e);
-        ui.notifications?.error?.("Boss Builder failed to open.");
-      }
-    });
-
-    header.appendChild(btn);
-    LOG("Injected Actors Directory button: Create Boss");
-  }
 
   // Create Rig (B13 Builder UI — MCE-pattern authoring dialog).
   // See bbttcc-auto-link/scripts/rig-builder.js for the dialog + actor shape.

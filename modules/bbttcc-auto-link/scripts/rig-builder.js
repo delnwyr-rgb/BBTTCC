@@ -1,6 +1,6 @@
 /* Bad Eden Auto-Link — RFI Rig Builder
  *
- * Sibling to boss-builder.js. Mints a type:"rig" actor authored against the
+ * Sibling to npc-builder.js. Mints a type:"rig" actor authored against the
  * fourththing rig schema (identity / integrity / capacity / travel / defenses).
  *
  * Modeled on the Manifestation Creation Engine — single resizable panel with
