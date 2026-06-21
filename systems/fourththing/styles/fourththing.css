@@ -376,6 +376,22 @@
 
 .ft-def-chips-edit .ft-chip-edit:hover { filter: brightness(1.2); }
 
+/* Sub-flavor chips (thermal: cold/hot, chemical: acid/base) read as nested
+   under their parent type — smaller, indented, slightly dimmer. */
+.ft-def-chips-edit .ft-chip-sub {
+  font-size: 0.82em;
+  margin-left: 0.9rem;
+  opacity: 0.92;
+}
+
+/* Sub-flavor rows in the boss/rig defense tables — indent the type label
+   so cold/hot/acid/base read as nested under their parent damage type. */
+.ft-defense-table .ft-def-row-sub .ft-def-type {
+  padding-left: 1.4rem;
+  font-size: 0.88em;
+  opacity: 0.9;
+}
+
 .ft-def-chips-edit .ft-chip-none {
   opacity: 0.5;
   background: rgba(15,23,42,0.35);

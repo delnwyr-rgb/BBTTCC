@@ -255,12 +255,12 @@
           </thead>
           <tbody>
             {{#each defenseRows as |row|}}
-            <tr>
+            <tr{{#if row.sub}} class="ft-def-row-sub"{{/if}}>
               <td class="ft-def-type">{{row.label}}</td>
-              <td class="ft-def-cell ft-def-cell--{{row.cycleState}}" data-action="ftDefenseCycle" data-type="{{row.key}}" data-tooltip="Click to cycle: none → resist → immune → none">
+              <td class="ft-def-cell ft-def-cell--{{row.cycleState}}" data-action="ftDefenseCycle" data-type="{{row.key}}"{{#if row.flavor}} data-flavor="{{row.flavor}}"{{/if}} data-tooltip="Click to cycle: none → resist → immune → none">
                 {{#if row.isImmune}}Immune{{else}}{{#if row.isResist}}Resist{{else}}—{{/if}}{{/if}}
               </td>
-              <td class="ft-def-cell{{#if row.isVuln}} active{{/if}}" data-action="ftVulnToggle" data-type="{{row.key}}" data-tooltip="Toggle vulnerability to {{row.label}}">
+              <td class="ft-def-cell{{#if row.isVuln}} active{{/if}}" data-action="ftVulnToggle" data-type="{{row.key}}"{{#if row.flavor}} data-flavor="{{row.flavor}}"{{/if}} data-tooltip="Toggle vulnerability to {{row.label}}">
                 {{#if row.isVuln}}✓ Vulnerable{{else}}—{{/if}}
               </td>
             </tr>

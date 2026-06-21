@@ -690,14 +690,14 @@
       <summary><h3 style="display:inline">Defense / Condition Immunity Editor</h3></summary>
       <label class="ft-def-editor-label">Resist / immune (cycle)</label>
       <div class="ft-def-chips ft-def-chips-edit">
-        {{#each defenseTypes as |t|}}
-          <button type="button" class="ft-chip ft-chip-edit {{#if t.baseImmune}}ft-chip-immune{{else if t.baseResist}}ft-chip-resist{{else}}ft-chip-none{{/if}}" data-action="ftDefenseCycle" data-type="{{t.key}}" data-tooltip="{{t.label}}">{{#if t.baseImmune}}⦿{{else if t.baseResist}}◑{{else}}○{{/if}} {{t.label}}</button>
+        {{#each defenseEditTypes as |t|}}
+          <button type="button" class="ft-chip ft-chip-edit {{#if t.baseImmune}}ft-chip-immune{{else if t.baseResist}}ft-chip-resist{{else}}ft-chip-none{{/if}}{{#if t.sub}} ft-chip-sub{{/if}}" data-action="ftDefenseCycle" data-type="{{t.key}}"{{#if t.flavor}} data-flavor="{{t.flavor}}"{{/if}} data-tooltip="{{t.label}}">{{#if t.baseImmune}}⦿{{else if t.baseResist}}◑{{else}}○{{/if}} {{t.label}}</button>
         {{/each}}
       </div>
       <label class="ft-def-editor-label">Vulnerable (toggle)</label>
       <div class="ft-def-chips ft-def-chips-edit">
-        {{#each defenseTypes as |t|}}
-          <button type="button" class="ft-chip ft-chip-edit {{#if t.baseVuln}}ft-chip-vuln{{else}}ft-chip-none{{/if}}" data-action="ftVulnToggle" data-type="{{t.key}}">{{#if t.baseVuln}}▲{{else}}○{{/if}} {{t.label}}</button>
+        {{#each defenseEditTypes as |t|}}
+          <button type="button" class="ft-chip ft-chip-edit {{#if t.baseVuln}}ft-chip-vuln{{else}}ft-chip-none{{/if}}{{#if t.sub}} ft-chip-sub{{/if}}" data-action="ftVulnToggle" data-type="{{t.key}}"{{#if t.flavor}} data-flavor="{{t.flavor}}"{{/if}}>{{#if t.baseVuln}}▲{{else}}○{{/if}} {{t.label}}</button>
         {{/each}}
       </div>
       <label class="ft-def-editor-label">Condition immune (toggle)</label>

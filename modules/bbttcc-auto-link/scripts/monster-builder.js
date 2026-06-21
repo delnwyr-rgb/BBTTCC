@@ -1016,6 +1016,11 @@ async function _commit(root) {
         templateCategory: category || null
       },
       fourththing: {
+        // Creature-type tag the Manifestation Engine matches on for "+Xd6 vs
+        // <type>" conditional damage (FT.CREATURE_TYPES, kept 1:1 with
+        // CREATURE_CATEGORIES above). Stamped on create so ME bonuses apply
+        // without the GM hand-setting the flag.
+        ...(category ? { creatureType: category } : {}),
         rfi: {
           actor: {
             tier: tierRoman,

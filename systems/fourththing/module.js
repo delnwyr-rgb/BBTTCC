@@ -1840,7 +1840,7 @@ async function _ftPhoenixOathEruption(actor) {
         const roll = new Roll(`2d6 + ${tier}`);
         await roll.evaluate();
         await game.fourththing.rolls._applyDamageToActor(tok.actor, roll.total, {
-          op: "damage", track: "integrity", damageType: "energy", damageFlavor: "fire"
+          op: "damage", track: "integrity", damageType: "thermal", damageFlavor: "hot"
         });
         hits.push(`${tok.actor.name} (${roll.total})`);
       } catch (_e) { /* skip this token */ }
@@ -2033,9 +2033,10 @@ function ftNormalizeDamageParts(raw) {
     if (!p || typeof p !== "object") continue;
     const formula = String(p.formula ?? "").trim();
     if (!formula) continue;
-    const type   = String(p.type ?? "kinetic").toLowerCase();
+    let   type   = String(p.type ?? "kinetic").toLowerCase();
+    let   flavor = String(p.flavor ?? "");
+    if (type === "energy") { const a = _ftAliasEnergyDamage(type, flavor); type = a.type; flavor = a.flavor; }
     const track  = String(p.track || FT.DAMAGE_TYPES?.[type]?.track || "integrity");
-    const flavor = String(p.flavor ?? "");
     out.push({ formula, type, flavor, track });
     if (out.length >= 6) break;
   }
@@ -2052,7 +2053,8 @@ function ftNormalizeChainConfig(raw) {
   out.count           = Math.max(1, Math.min(8, Math.floor(Number(raw.count) || 3)));
   out.range           = Math.max(5, Math.min(120, Math.floor(Number(raw.range) || 30)));
   out.damageFormula   = String(raw.damageFormula ?? "1d6").trim() || "1d6";
-  const dt            = String(raw.damageType ?? "").toLowerCase();
+  let   dt            = String(raw.damageType ?? "").toLowerCase();
+  if (dt === "energy") dt = _ftAliasEnergyDamage(dt, "").type;  // chain has no flavor → electrical
   out.damageType      = (dt && FT.DAMAGE_TYPES?.[dt]) ? dt : "";
   out.carryConditions = raw.carryConditions === true;
   out.carryEffects    = raw.carryEffects === true;
@@ -2082,12 +2084,18 @@ function ftNormalizeAppliedEffects(raw) {
   }
   // Resists / immunes: accept array OR object-map shape from the wizard.
   const validTypes = new Set(Object.keys(FT.DAMAGE_TYPES ?? {}));
+  // Legacy broad "energy" resist/immune grant → the full energy family.
+  const addType = (set, k) => {
+    const key = String(k ?? "").toLowerCase();
+    if (key === "energy") { for (const t of ["electrical", "thermal", "chemical"]) set.add(t); }
+    else if (validTypes.has(key)) set.add(key);
+  };
   const collectTypes = (src) => {
     const set = new Set();
     if (Array.isArray(src)) {
-      for (const k of src) if (validTypes.has(k)) set.add(k);
+      for (const k of src) addType(set, k);
     } else if (src && typeof src === "object") {
-      for (const [k, v] of Object.entries(src)) if (v === true && validTypes.has(k)) set.add(k);
+      for (const [k, v] of Object.entries(src)) if (v === true) addType(set, k);
     }
     return [...set];
   };
@@ -2960,6 +2968,11 @@ function ftNormalizeDamageRoll(system = {}) {
   dr.attribute = String(dr.attribute ?? "");
   dr.type      = String(dr.type ?? "kinetic");
   dr.flavor    = String(dr.flavor ?? "");
+  // Retire legacy broad "energy" → electrical/thermal/chemical by flavor.
+  if (dr.type.toLowerCase() === "energy") {
+    const a = _ftAliasEnergyDamage(dr.type, dr.flavor);
+    dr.type = a.type; dr.flavor = a.flavor;
+  }
   dr.track     = String(dr.track ?? "integrity");
   return dr;
 }
@@ -8474,6 +8487,16 @@ function _ftWizV2Sel(name, map, current, { tooltip = "" } = {}) {
 function _ftWizV2Txt(name, value, placeholder = "") {
   return `<input type="text" name="${name}" value="${ftEscapeHtml(String(value ?? ""))}" placeholder="${ftEscapeHtml(placeholder)}"/>`;
 }
+// Damage flavor control — a constrained dropdown when the chosen damage type has
+// a defined sub-flavor set (FT.DAMAGE_FLAVORS, e.g. thermal→cold/hot), otherwise
+// a freeform text box (poison "inhaled", cosmetic tags). The wizard re-renders
+// the step when the paired damage-type <select> changes (see the change listener
+// in the wizard shell), so this control swaps shape to match the new type.
+function _ftWizV2FlavorField(name, type, current) {
+  const fl = FT.DAMAGE_FLAVORS?.[String(type ?? "").toLowerCase()];
+  if (fl) return _ftWizV2Sel(name, { "": "— none —", ...fl }, String(current ?? ""));
+  return _ftWizV2Txt(name, current ?? "", "optional tag");
+}
 function _ftWizV2Num(name, value, { min = 0, max = 999 } = {}) {
   return `<input type="number" name="${name}" value="${Number(value) || 0}" min="${min}" max="${max}"/>`;
 }
@@ -8587,7 +8610,7 @@ function _ftWizV2RenderEffectPower(state) {
       <div class="ft-cast-field"><label>Faculty bonus</label>${_ftWizV2Sel("damageRoll.attribute", { "": "— none —", ..._ftWizV2FacultiesMap() }, dr.attribute ?? "")}</div>
       <div class="ft-cast-field"><label>Damage type</label>${_ftWizV2Sel("damageRoll.type", FT.DAMAGE_TYPES, dr.type ?? "kinetic")}</div>
       <div class="ft-cast-field"><label>Track</label>${_ftWizV2Sel("damageRoll.track", { integrity: "Integrity", stress: "Stress", clarity: "Clarity", noise: "Noise" }, dr.track ?? "integrity")}</div>
-      <div class="ft-cast-field ft-cast-span-2"><label>Damage flavor</label>${_ftWizV2Txt("damageRoll.flavor", dr.flavor, "e.g. 'fire' (energy:fire) or 'sanctified'")}</div>
+      <div class="ft-cast-field ft-cast-span-2"><label>Damage flavor</label>${_ftWizV2FlavorField("damageRoll.flavor", dr.type ?? "kinetic", dr.flavor)}</div>
     </div>
     <div class="ft-wiz-v2-subhead" style="margin-top:0.6rem">Conditions Applied</div>
     <p style="font-size:0.74rem;opacity:0.7;margin:0 0 0.4rem;font-style:italic">Pick states the working inflicts. Applied only when resolution lands (full or half). Tooltips show effects.</p>
@@ -8725,7 +8748,7 @@ function _ftWizV2RenderDamagePartsBlock(state) {
         <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Dice</label>${_ftWizV2Txt(`damageParts.${slot}.formula`, r.formula ?? "", "1d6")}</div>
         <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Type</label>${_ftWizV2Sel(`damageParts.${slot}.type`, FT.DAMAGE_TYPES, r.type ?? "kinetic")}</div>
         <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Track</label>${_ftWizV2Sel(`damageParts.${slot}.track`, TRACK_OPTS, r.track ?? "integrity")}</div>
-        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Flavor</label>${_ftWizV2Txt(`damageParts.${slot}.flavor`, r.flavor ?? "", "fire")}</div>
+        <div class="ft-cast-field"><label class="ft-wiz-v2-mod-row-label">Flavor</label>${_ftWizV2FlavorField(`damageParts.${slot}.flavor`, r.type ?? "kinetic", r.flavor)}</div>
       </div>`;
   };
   return `
@@ -9636,6 +9659,21 @@ async function openManifestationWizardV2(actor, { kind = "power", starter = "", 
           }
         }
       });
+
+      // Damage-type → flavor reactivity. When a damage-type <select> changes,
+      // harvest + re-render the current step so the paired flavor control swaps
+      // between a constrained dropdown (thermal/chemical) and a freeform box.
+      wizRoot.addEventListener("change", (ev) => {
+        const sel = ev.target;
+        if (!sel || sel.tagName !== "SELECT") return;
+        const nm = sel.getAttribute("name") || "";
+        if (nm !== "damageRoll.type" && !/^damageParts\.[^.]+\.type$/.test(nm)) return;
+        _ftWizV2Harvest(wizRoot, state);
+        const fresh = _ftWizV2RenderShell(actor, state, STEPS);
+        const tmp = document.createElement("div");
+        tmp.innerHTML = fresh;
+        wizRoot.innerHTML = tmp.firstElementChild?.innerHTML ?? "";
+      });
     });
   });
 }
@@ -9699,13 +9737,18 @@ FT.DEFENSES = {
   resolve: { label: "Resolve", formula: "10 + Presence + Soul",    desc: "Resists mental/psychic force" }
 };
 
-// Canonical RFI damage list (v1.0 compliance sweep).
-// Elemental fiction (fire/cold/lightning/acid) folds into "energy" — preserved on items
-// via the separate damageFlavor field. Radiation is a distinct track that ticks
+// Canonical RFI damage list. Radiation is a distinct track that ticks
 // system.radiation.rp instead of an integrity/stress bar.
+// Top-level damage types. The old broad "energy" type was retired 2026-06-20 —
+// it was too powerful as a single resist line — and split into three first-class
+// energy-family types (electrical / thermal / chemical). Legacy content authored
+// as type:"energy" is mapped forward at read/apply time by _ftAliasEnergyDamage,
+// so no data/pack migration is needed.
 FT.DAMAGE_TYPES = {
   kinetic:    { label: "Kinetic",    track: "integrity" },
-  energy:     { label: "Energy",     track: "integrity" },
+  electrical: { label: "Electrical", track: "integrity" },
+  thermal:    { label: "Thermal",    track: "integrity" },
+  chemical:   { label: "Chemical",   track: "integrity" },
   poison:     { label: "Poison",     track: "integrity" },
   psychic:    { label: "Psychic",    track: "stress"    },
   sephirotic: { label: "Sephirotic", track: "integrity" },
@@ -9713,30 +9756,83 @@ FT.DAMAGE_TYPES = {
   radiation:  { label: "Radiation",  track: "radiation" }
 };
 
+// Constrained sub-flavors per damage type. A type listed here renders a real
+// dropdown (in the Manifestation Engine) and resistable sub-chips (in the
+// defense editor) instead of a freeform text box. Types absent here keep a
+// freeform flavor field for cosmetic/legacy tags (e.g. poison "inhaled").
+// Resist matching is type-first then flavor: a broad "thermal" resist catches
+// both cold & hot; a "thermal:cold" resist catches only cold.
+FT.DAMAGE_FLAVORS = {
+  thermal:  { cold: "Cold", hot: "Hot"  },
+  chemical: { acid: "Acid", base: "Base" }
+};
+
+// Back-compat shim — maps the retired broad "energy" damage type forward to the
+// new energy-family types by its (legacy, freeform) flavor. Non-energy types pass
+// through untouched. Returns { type, flavor }. Bare/unrecognized energy → the
+// flat "electrical" default (raw force). Broad "energy" on the DEFENSE side is
+// expanded to all three types in _ftMergeEntries, not here.
+function _ftAliasEnergyDamage(type, flavor) {
+  const t = String(type ?? "").toLowerCase();
+  if (t !== "energy") return { type: t, flavor: String(flavor ?? "") };
+  const f = String(flavor ?? "").toLowerCase();
+  if (f === "cold" || f === "ice" || f === "frost")                 return { type: "thermal",    flavor: "cold" };
+  if (f === "fire" || f === "hot" || f === "flame" || f === "heat" || f === "burn") return { type: "thermal", flavor: "hot" };
+  if (f === "acid")                                                 return { type: "chemical",   flavor: "acid" };
+  if (f === "base" || f === "alkaline" || f === "caustic")          return { type: "chemical",   flavor: "base" };
+  // electrical (thunder/lightning/shock) and bare/unknown energy → flat electrical.
+  return { type: "electrical", flavor: "" };
+}
+
+// Build the defense-editor row list: every top-level damage type, plus its
+// constrained sub-flavors (thermal→cold/hot, chemical→acid/base) as resistable
+// sub-rows. Each row carries its current base state. Shared by the character
+// popout editor and the NPC sheet inline editor so both stay in lockstep.
+// `base` = the actor's system.defenses { resistances, immunities, vulnerabilities }.
+function _ftDefenseEditRows(base) {
+  base = base || {};
+  const has = (arr, key) => (arr ?? []).some(e =>
+    (typeof e === "string" && e.toLowerCase() === key) ||
+    (e && typeof e === "object" && String(e.type ?? "").toLowerCase() === key && !e.flavor));
+  const hasF = (arr, key, flv) => (arr ?? []).some(e =>
+    e && typeof e === "object" && String(e.type ?? "").toLowerCase() === key && String(e.flavor ?? "").toLowerCase() === flv);
+  const rows = [];
+  for (const [k, cfg] of Object.entries(FT.DAMAGE_TYPES)) {
+    rows.push({ key: k, flavor: "", label: cfg.label, sub: false,
+      baseResist: has(base.resistances, k), baseImmune: has(base.immunities, k), baseVuln: has(base.vulnerabilities, k) });
+    const fl = FT.DAMAGE_FLAVORS?.[k];
+    if (fl) for (const [fk, flabel] of Object.entries(fl)) {
+      rows.push({ key: k, flavor: fk, label: `${cfg.label}: ${flabel}`, sub: true,
+        baseResist: hasF(base.resistances, k, fk), baseImmune: hasF(base.immunities, k, fk), baseVuln: hasF(base.vulnerabilities, k, fk) });
+    }
+  }
+  return rows;
+}
+
 // Phase E — Creature types. Used by manifestation + weapon conditional damage
-// rows ("+Xd6 vs Outsider"). Stored on the target actor via
+// rows ("+Xd6 vs Undead"). Stored on the target actor via
 // `flags.fourththing.creatureType` as either a single string or an array of
-// strings (an actor can match multiple, e.g. an infernal outsider). PCs default
-// to "humanoid" via the ftActorCreatureTypes helper if the flag is unset.
+// strings (an actor can match multiple). PCs default to "humanoid" via the
+// ftActorCreatureTypes helper if the flag is unset.
+//
+// Canon: these are the RFI-native monster categories, kept 1:1 with the Create
+// Monster builder's CREATURE_CATEGORIES (bbttcc-auto-link/scripts/monster-builder.js)
+// so the keys the builder stamps onto created NPCs (flags.fourththing.creatureType)
+// match these exactly. Keep the two lists in sync if either changes.
 FT.CREATURE_TYPES = {
-  humanoid:  { label: "Humanoid"  },
-  beast:     { label: "Beast"     },
-  undead:    { label: "Undead"    },
-  construct: { label: "Construct" },
-  elemental: { label: "Elemental" },
-  fae:       { label: "Fae"       },
-  outsider:  { label: "Outsider"  },
-  infernal:  { label: "Infernal"  },
-  celestial: { label: "Celestial" },
-  dragon:    { label: "Dragon"    },
-  eidolon:   { label: "Eidolon"   },
-  aberration:{ label: "Aberration"}
+  beast:     { label: "Beast"      },
+  humanoid:  { label: "Humanoid"   },
+  undead:    { label: "Undead"     },
+  construct: { label: "Construct"  },
+  aberration:{ label: "Aberration" },
+  fiend:     { label: "Fiend"      },
+  elemental: { label: "Elemental"  },
+  swarm:     { label: "Swarm"      }
 };
 
 // Resolves an actor's creature type(s) for conditional-damage matching.
-// Accepts the flag as either a string (single type) or an array (multi-type
-// — a Dragon-blooded outsider is both "dragon" and "outsider"). Unknown
-// strings are filtered out. PC actors with no flag default to "humanoid".
+// Accepts the flag as either a string (single type) or an array (multi-type).
+// Unknown strings are filtered out. PC actors with no flag default to "humanoid".
 function ftActorCreatureTypes(actor) {
   if (!actor) return [];
   const raw = actor.flags?.fourththing?.creatureType ?? actor.flags?.fourththing?.creatureTypes ?? null;
@@ -9904,21 +10000,36 @@ async function ftPerformCombatAction(actor, key) {
 // An entry matches a hit when types match AND (entry has no flavor OR flavor matches).
 function _ftNormalizeDefenseEntry(e, validTypeSet) {
   if (e == null) return null;
+  let type, flavor;
   if (typeof e === "string") {
-    const type = e.toLowerCase();
-    return validTypeSet.has(type) ? { type, flavor: null } : null;
+    type = e.toLowerCase(); flavor = null;
+  } else if (typeof e === "object") {
+    type = String(e.type ?? "").toLowerCase();
+    flavor = e.flavor ? String(e.flavor).toLowerCase() : null;
+  } else return null;
+  // Legacy flavored "energy" defense (e.g. {energy, fire}) → energy-family type.
+  // Broad "energy" (no flavor) is expanded to all 3 types in _ftMergeEntries.
+  if (type === "energy" && flavor) {
+    const a = _ftAliasEnergyDamage(type, flavor);
+    type = a.type; flavor = a.flavor || null;
   }
-  if (typeof e === "object") {
-    const type = String(e.type ?? "").toLowerCase();
-    if (!validTypeSet.has(type)) return null;
-    const flavor = e.flavor ? String(e.flavor).toLowerCase() : null;
-    return { type, flavor };
-  }
-  return null;
+  if (!validTypeSet.has(type)) return null;
+  return { type, flavor };
 }
 
 function _ftMergeEntries(target, entries, validTypeSet) {
   for (const raw of (Array.isArray(entries) ? entries : [])) {
+    // Legacy broad "energy" defense → split into the full energy family
+    // (electrical + thermal + chemical), per the 2026-06-20 retirement.
+    const isBroadEnergy =
+      (typeof raw === "string" && raw.toLowerCase() === "energy") ||
+      (raw && typeof raw === "object" && String(raw.type ?? "").toLowerCase() === "energy" && !raw.flavor);
+    if (isBroadEnergy) {
+      for (const t of ["electrical", "thermal", "chemical"]) {
+        if (validTypeSet.has(t)) target.set(`${t}|`, { type: t, flavor: null });
+      }
+      continue;
+    }
     const norm = _ftNormalizeDefenseEntry(raw, validTypeSet);
     if (!norm) continue;
     target.set(`${norm.type}|${norm.flavor ?? ""}`, norm);
@@ -14311,6 +14422,14 @@ Hooks.once("init", function () {
   } = {}) {
     if (!actor) return null;
 
+    // Retire legacy broad "energy" → energy-family type+flavor at the universal
+    // apply chokepoint, so even callers that read a stored damageType:"energy"
+    // straight off an un-resaved item resist correctly (and chat tags read right).
+    if (String(damageType).toLowerCase() === "energy") {
+      const _a = _ftAliasEnergyDamage(damageType, damageFlavor);
+      damageType = _a.type; damageFlavor = _a.flavor;
+    }
+
     // BBTTCC combat interceptors (Phase 1) — registered pre-damage handlers on
     // game.bbttcc.combat (e.g. bbttcc-structures' integrity/plates router, which
     // replaced its fulcrum monkeypatch). This is the universal chokepoint, so an
@@ -16938,16 +17057,30 @@ Hooks.once("init", function () {
   // Extracted so the inline NPC sheet editor AND the character-sheet popout
   // dialog can share mutation logic without duplicating the array handling.
 
-  async function ftApplyDefenseCycle(actor, key) {
-    if (!actor || !key || !FT.DAMAGE_TYPES[key]) return;
+  // Flavor-aware entry match/make. A bare (no-flavor) entry stores as a flat
+  // string (the legacy convention); a flavored entry stores as {type, flavor}.
+  const _ftDefMatch = (e, type, flavor) => {
+    const t = String(type).toLowerCase();
+    const f = flavor ? String(flavor).toLowerCase() : "";
+    if (!f) return (typeof e === "string" && e.toLowerCase() === t) ||
+                   (e && typeof e === "object" && String(e.type ?? "").toLowerCase() === t && !e.flavor);
+    return e && typeof e === "object" && String(e.type ?? "").toLowerCase() === t && String(e.flavor ?? "").toLowerCase() === f;
+  };
+  const _ftDefMake = (type, flavor) =>
+    flavor ? { type: String(type).toLowerCase(), flavor: String(flavor).toLowerCase() } : String(type).toLowerCase();
+  // Validate an optional flavor against the type's constrained set.
+  const _ftDefFlavorOk = (type, flavor) => !flavor || !!FT.DAMAGE_FLAVORS?.[String(type).toLowerCase()]?.[String(flavor).toLowerCase()];
+
+  async function ftApplyDefenseCycle(actor, key, flavor = "") {
+    if (!actor || !key || !FT.DAMAGE_TYPES[key] || !_ftDefFlavorOk(key, flavor)) return;
     const rawSys = actor.system?.system ?? actor.system;
     const base = rawSys?.defenses ?? { resistances: [], immunities: [] };
     const resistances = Array.isArray(base.resistances) ? [...base.resistances] : [];
     const immunities  = Array.isArray(base.immunities)  ? [...base.immunities]  : [];
-    const ri = resistances.indexOf(key);
-    const ii = immunities.indexOf(key);
-    if (ri < 0 && ii < 0) resistances.push(key);
-    else if (ri >= 0)     { resistances.splice(ri, 1); immunities.push(key); }
+    const ri = resistances.findIndex(e => _ftDefMatch(e, key, flavor));
+    const ii = immunities.findIndex(e => _ftDefMatch(e, key, flavor));
+    if (ri < 0 && ii < 0) resistances.push(_ftDefMake(key, flavor));
+    else if (ri >= 0)     { resistances.splice(ri, 1); immunities.push(_ftDefMake(key, flavor)); }
     else                  immunities.splice(ii, 1);
     await actor.update({
       "system.defenses.resistances": resistances,
@@ -16955,17 +17088,14 @@ Hooks.once("init", function () {
     });
   }
 
-  async function ftApplyVulnToggle(actor, key) {
-    if (!actor || !key || !FT.DAMAGE_TYPES[key]) return;
+  async function ftApplyVulnToggle(actor, key, flavor = "") {
+    if (!actor || !key || !FT.DAMAGE_TYPES[key] || !_ftDefFlavorOk(key, flavor)) return;
     const rawSys = actor.system?.system ?? actor.system;
     const base = rawSys?.defenses ?? {};
     const list = Array.isArray(base.vulnerabilities) ? [...base.vulnerabilities] : [];
-    const idx = list.findIndex(e =>
-      (typeof e === "string" && e.toLowerCase() === key) ||
-      (e && typeof e === "object" && String(e.type ?? "").toLowerCase() === key && !e.flavor)
-    );
+    const idx = list.findIndex(e => _ftDefMatch(e, key, flavor));
     if (idx >= 0) list.splice(idx, 1);
-    else          list.push(key);
+    else          list.push(_ftDefMake(key, flavor));
     await actor.update({ "system.defenses.vulnerabilities": list });
   }
 
@@ -16987,17 +17117,9 @@ Hooks.once("init", function () {
     const sysData = rawSys?.toObject ? rawSys.toObject() : JSON.parse(JSON.stringify(rawSys ?? {}));
     const base = sysData.defenses ?? { resistances: [], immunities: [], vulnerabilities: [] };
     const condBase = Array.isArray(sysData.conditionImmunities) ? sysData.conditionImmunities : [];
-    const _hasBase = (arr, key) => (arr ?? []).some(e =>
-      (typeof e === "string" && e.toLowerCase() === key) ||
-      (e && typeof e === "object" && String(e.type ?? "").toLowerCase() === key && !e.flavor)
-    );
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
-    const types = Object.entries(FT.DAMAGE_TYPES).map(([k, cfg]) => ({
-      key: k, label: cfg.label,
-      baseResist: _hasBase(base.resistances, k),
-      baseImmune: _hasBase(base.immunities,  k),
-      baseVuln:   _hasBase(base.vulnerabilities, k)
-    }));
+    // Each top-level type, plus its constrained sub-flavors as resistable chips.
+    const types = _ftDefenseEditRows(base);
     const conds = Object.entries(FT.CONDITIONS ?? {}).map(([k, cfg]) => ({
       key: k, label: cfg.label,
       baseImmune: condBase.map(x => String(x ?? "").toLowerCase()).includes(k)
@@ -17006,12 +17128,16 @@ Hooks.once("init", function () {
     const cycleChip = t => {
       const cls  = t.baseImmune ? "ft-chip-immune" : t.baseResist ? "ft-chip-resist" : "ft-chip-none";
       const icon = t.baseImmune ? "⦿" : t.baseResist ? "◑" : "○";
-      return `<button type="button" class="ft-chip ft-chip-edit ${cls}" data-ft-def-action="cycle" data-type="${esc(t.key)}" title="${esc(t.label)}: click to cycle none → resist → immune">${icon} ${esc(t.label)}</button>`;
+      const fattr = t.flavor ? ` data-flavor="${esc(t.flavor)}"` : "";
+      const subcls = t.sub ? " ft-chip-sub" : "";
+      return `<button type="button" class="ft-chip ft-chip-edit ${cls}${subcls}" data-ft-def-action="cycle" data-type="${esc(t.key)}"${fattr} title="${esc(t.label)}: click to cycle none → resist → immune">${icon} ${esc(t.label)}</button>`;
     };
     const vulnChip = t => {
       const cls  = t.baseVuln ? "ft-chip-vuln" : "ft-chip-none";
       const icon = t.baseVuln ? "▲" : "○";
-      return `<button type="button" class="ft-chip ft-chip-edit ${cls}" data-ft-def-action="vuln" data-type="${esc(t.key)}" title="${esc(t.label)}: click to toggle vulnerability (×2)">${icon} ${esc(t.label)}</button>`;
+      const fattr = t.flavor ? ` data-flavor="${esc(t.flavor)}"` : "";
+      const subcls = t.sub ? " ft-chip-sub" : "";
+      return `<button type="button" class="ft-chip ft-chip-edit ${cls}${subcls}" data-ft-def-action="vuln" data-type="${esc(t.key)}"${fattr} title="${esc(t.label)}: click to toggle vulnerability (×2)">${icon} ${esc(t.label)}</button>`;
     };
     const condChip = c => {
       const cls  = c.baseImmune ? "ft-chip-cond-immune" : "ft-chip-none";
@@ -19179,11 +19305,11 @@ Hooks.once("init", function () {
     // sheet (which still renders the editor inline) and the character-sheet
     // popout dialog share one source of truth for mutation logic.
     static async _onFtDefenseCycle(event, target) {
-      return ftApplyDefenseCycle(this.actor, target.dataset.type);
+      return ftApplyDefenseCycle(this.actor, target.dataset.type, target.dataset.flavor ?? "");
     }
 
     static async _onFtVulnToggle(event, target) {
-      return ftApplyVulnToggle(this.actor, target.dataset.type);
+      return ftApplyVulnToggle(this.actor, target.dataset.type, target.dataset.flavor ?? "");
     }
 
     static async _onFtCondImmuneToggle(event, target) {
@@ -19201,8 +19327,8 @@ Hooks.once("init", function () {
           btn.addEventListener("click", async (ev) => {
             ev.preventDefault();
             const act = btn.dataset.ftDefAction;
-            if (act === "cycle")     await ftApplyDefenseCycle(actor, btn.dataset.type);
-            else if (act === "vuln") await ftApplyVulnToggle(actor, btn.dataset.type);
+            if (act === "cycle")     await ftApplyDefenseCycle(actor, btn.dataset.type, btn.dataset.flavor ?? "");
+            else if (act === "vuln") await ftApplyVulnToggle(actor, btn.dataset.type, btn.dataset.flavor ?? "");
             else if (act === "cond") await ftApplyCondImmuneToggle(actor, btn.dataset.condition);
             // Rebuild the body in place so chip icons refresh.
             bodyEl.innerHTML = ftBuildDefenseEditorDialogHTML(actor);
@@ -20126,6 +20252,7 @@ Hooks.once("init", function () {
       return {
         actor, system: sysData,
         defenseTypes: defenseTypeList,
+        defenseEditTypes: _ftDefenseEditRows(defensesBase),
         condImmunityList: condList,
         DAMAGE_TYPES: FT.DAMAGE_TYPES,
         CONDITIONS:   FT.CONDITIONS,
@@ -20478,20 +20605,13 @@ Hooks.once("init", function () {
         { id: "gmedit",   label: "GM Edit",   visible: gmEdit,                active: activeTab === "gmedit" }
       ];
 
-      // Defense rows — canonical FT.DAMAGE_TYPES (7 RFI types)
-      const resistList = sysData.defenses?.resistances     ?? [];
-      const immuneList = sysData.defenses?.immunities      ?? [];
-      const vulnList   = sysData.defenses?.vulnerabilities ?? [];
-      const defenseRows = Object.entries(FT.DAMAGE_TYPES ?? {}).map(([key, info]) => {
-        const isResist = resistList.includes(key);
-        const isImmune = immuneList.includes(key);
-        const isVuln   = vulnList.some(e =>
-          (typeof e === "string" && e.toLowerCase() === key) ||
-          (e && typeof e === "object" && String(e.type ?? "").toLowerCase() === key && !e.flavor)
-        );
-        const cycleState = isImmune ? "immune" : (isResist ? "resist" : "none");
-        return { key, label: info.label ?? key, isResist, isImmune, isVuln, cycleState };
-      });
+      // Defense rows — every top-level FT.DAMAGE_TYPES plus its constrained
+      // sub-flavors (thermal→cold/hot, chemical→acid/base) as resistable rows.
+      const defenseRows = _ftDefenseEditRows(sysData.defenses).map(r => ({
+        key: r.key, flavor: r.flavor, label: r.label, sub: r.sub,
+        isResist: r.baseResist, isImmune: r.baseImmune, isVuln: r.baseVuln,
+        cycleState: r.baseImmune ? "immune" : (r.baseResist ? "resist" : "none")
+      }));
 
       // B11.A (2026-05-12) — Guard/Evasion/Resolve trio derived in
       // FourthThingActor.prepareDerivedData from frame bracket + tier. Surfaced
@@ -20995,19 +21115,13 @@ Hooks.once("init", function () {
       const factionId = sysData.identity?.factionId ?? "";
       const faction   = factionId ? game.actors?.get(factionId) : null;
 
-      // Defense rows (canonical FT.DAMAGE_TYPES)
-      const resistList = sysData.defenses?.resistances     ?? [];
-      const immuneList = sysData.defenses?.immunities      ?? [];
-      const vulnList   = sysData.defenses?.vulnerabilities ?? [];
-      const defenseRows = Object.entries(FT.DAMAGE_TYPES ?? {}).map(([key, info]) => {
-        const isResist = resistList.includes(key);
-        const isImmune = immuneList.includes(key);
-        const isVuln   = vulnList.some(e =>
-          (typeof e === "string" && e.toLowerCase() === key) ||
-          (e && typeof e === "object" && String(e.type ?? "").toLowerCase() === key && !e.flavor)
-        );
-        return { key, label: info.label ?? key, isResist, isImmune, isVuln };
-      });
+      // Defense rows — every top-level FT.DAMAGE_TYPES plus its constrained
+      // sub-flavors (thermal→cold/hot, chemical→acid/base) as resistable rows.
+      const defenseRows = _ftDefenseEditRows(sysData.defenses).map(r => ({
+        key: r.key, flavor: r.flavor, label: r.label, sub: r.sub,
+        isResist: r.baseResist, isImmune: r.baseImmune, isVuln: r.baseVuln,
+        cycleState: r.baseImmune ? "immune" : (r.baseResist ? "resist" : "none")
+      }));
 
       // Manifestation library — resolve UUIDs for display. Each row carries
       // tier + tag chips so the GM can scan the library and recognize at-a-
