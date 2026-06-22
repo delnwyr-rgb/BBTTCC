@@ -1345,6 +1345,16 @@
           <button type="button" class="ft-forge-btn" data-action="ftForge"  data-tooltip="Open the Forge — craft items from materials you've gathered">⚒ Forge</button>
         </div>
       </div>
+      {{#if equipProfWarnings.length}}
+        <div class="ft-inv-prof-banner" data-tooltip="Untrained gear gives no benefit (armor) or is wielded untrained (weapons) until you raise the gating skill.">
+          <span class="ft-inv-prof-banner-icon">⚠</span>
+          <span class="ft-inv-prof-banner-text">
+            Not proficient with {{equipProfWarnings.length}}
+            {{#if (eq equipProfWarnings.length 1)}}item{{else}}items{{/if}}:
+            {{#each equipProfWarnings as |w|}}<strong>{{w.name}}</strong>{{#unless @last}}, {{/unless}}{{/each}}
+          </span>
+        </div>
+      {{/if}}
       {{> "systems/fourththing/templates/partials/inventory-list.hbs" items=gear}}
     </div>
 

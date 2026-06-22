@@ -1,11 +1,15 @@
 <div class="ft-inventory">
   {{#if items.length}}
     {{#each items as |row|}}
-      <div class="ft-inv-row{{#if row.isEquipped}} is-equipped{{/if}}" data-item-id="{{row.id}}">
+      <div class="ft-inv-row{{#if row.isEquipped}} is-equipped{{/if}}{{#if row.notProficient}} not-proficient{{/if}}" data-item-id="{{row.id}}">
         <img class="ft-inv-img" src="{{row.img}}" alt="" />
 
         {{#if row.tier}}
           <span class="ft-inv-tier ft-inv-tier-{{row.tier}}" title="Tier {{row.tier}}">T{{row.tier}}</span>
+        {{/if}}
+
+        {{#if row.notProficient}}
+          <span class="ft-inv-prof-warn" data-tooltip="{{row.profTip}}" title="{{row.profTip}}">⚠</span>
         {{/if}}
 
         <a class="ft-inv-name" data-action="ftItemEdit" title="Open item sheet">{{row.name}}</a>

@@ -4015,6 +4015,35 @@
 }
 .ft-inv-row:hover { background: rgba(20,24,36,0.55); }
 .ft-inv-row.is-equipped { border-left-color: #d4a35f; background: rgba(48,40,24,0.45); }
+/* Carried but untrained: amber rail + warning glyph. An equipped-yet-untrained
+   item is the live failure, so it reads slightly hotter. */
+.ft-inv-row.not-proficient { border-left-color: #d4894f; }
+.ft-inv-row.not-proficient.is-equipped { border-left-color: #e07b3c; background: rgba(56,34,20,0.5); }
+.ft-inv-prof-warn {
+  flex: 0 0 auto;
+  color: #f0a44d;
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1;
+  cursor: help;
+  text-shadow: 0 0 4px rgba(224,123,60,0.5);
+}
+/* Inventory-tab summary banner when any carried gear is untrained. */
+.ft-inv-prof-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.2rem 0 0.55rem;
+  padding: 0.45rem 0.7rem;
+  background: rgba(80,46,18,0.4);
+  border: 1px solid rgba(224,123,60,0.45);
+  border-left: 3px solid #e07b3c;
+  border-radius: 3px;
+  font-size: 0.82rem;
+  color: #f1d3b4;
+}
+.ft-inv-prof-banner-icon { color: #f0a44d; font-size: 1rem; line-height: 1; flex: 0 0 auto; }
+.ft-inv-prof-banner-text strong { color: #ffd8b0; font-weight: 700; }
 .ft-inv-img {
   width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.10);
   border-radius: 3px; flex: 0 0 28px; background: rgba(0,0,0,0.3);

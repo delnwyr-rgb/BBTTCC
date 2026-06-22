@@ -9803,6 +9803,25 @@ function _ftArmorGateSkill(item) {
   return "weave";
 }
 
+// Equipment proficiency for inventory display. Returns null for items that
+// aren't gated by a skill (plain gear). Armor gates on its weight skill
+// (weave/warding/plating); weapons on their resolved combat skill. `trained`
+// is false only at rank 0 — the rank at which armor grants ZERO benefit (see
+// FT.ARMOR_RANK_SCALE: mult 0 at rank 0) and a weapon is wielded untrained.
+// Surfaced as a sheet warning so the otherwise-silent failure (e.g. armor that
+// quietly contributes nothing while worn) is visible to the player.
+function _ftEquipProficiency(actor, item) {
+  const sysData = actor?.system?.system ?? actor?.system ?? {};
+  const skills  = sysData?.skills ?? {};
+  let skillKey = null;
+  if (item?.type === "armor")       skillKey = _ftArmorGateSkill(item);
+  else if (item?.type === "weapon") skillKey = ftResolveWeaponSkill(actor, item?.system?.skill, item?.system?.category);
+  if (!skillKey) return null;
+  const rank  = Number(skills?.[skillKey]?.value ?? 0) || 0;
+  const label = skills?.[skillKey]?.label || ftCap(skillKey);
+  return { skillKey, rank, label, trained: rank >= 1 };
+}
+
 // ─── Combat Actions (Phase 1: codified RFI action lexicon) ────────────────────
 // Each entry consumes a pool (action/bonus/reaction) and applies a mechanical
 // effect — flag, derived bump (read in prepareDerivedData), or chained roll.
@@ -17670,6 +17689,91 @@ Hooks.once("init", function () {
         awaitingReincarnation: !!actor.flags?.fourththing?.awaitingReincarnation
       };
 
+      // Inventory: armor + gear + mundane (non-crafted) weapons. Crafted
+      // gear/armor/weapons live in the Manifestations tab instead. Each row is
+      // enriched with RFI flag data, a key stat line, and a proficiency check so
+      // the partial can render without reaching back into raw item docs.
+      // Hoisted out of the context literal so the untrained subset can also feed
+      // the inventory warning banner (equipProfWarnings below).
+      const gearRows = [
+        ...Array.from(actor.items).filter(i => ["armor","gear"].includes(i.type) && !RfiItems.is.isManifestation(i)),
+        ...mundaneWeapons
+      ].map(i => {
+        const rfi = RfiItems.get(i);
+        const isEquipped = i.type === "armor"
+          ? !!i.system?.equipped
+          : !!i.getFlag("fourththing", "equipped");
+        const dmg = i.system?.damage?.formula;
+        const dmgType = i.system?.damage?.type;
+        const stat = i.type === "weapon"
+            ? `${dmg ?? ""}${dmgType ? ` ${dmgType}` : ""}${i.system?.category ? ` · ${i.system.category}` : ""}`.trim()
+          : i.type === "armor"
+            ? (() => {
+                const sgn = (n) => (n > 0 ? `+${n}` : `${n}`);
+                const gB = _ftArmorStatRaw(i, "guard"), eB = _ftArmorStatRaw(i, "evasion"), rB = _ftArmorStatRaw(i, "resolve");
+                return [
+                  gB ? `Guard ${sgn(gB)}`     : "",
+                  eB ? `Evasion ${sgn(eB)}`   : "",
+                  rB ? `Resolve ${sgn(rB)}`   : "",
+                  i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
+                ].filter(Boolean).join(" · ");
+              })()
+          : (() => {
+              // Gear stat line: prefer consumable charges, then resistance grants
+              // (so "shields rad" reads better than "misc"), then the first non-
+              // boilerplate tag. Falls back to the slot only if nothing else is
+              // worth saying.
+              const rfi = RfiItems.get(i);
+              if (rfi?.frame === "consumable") {
+                const ch = Number(rfi.charges ?? 0);
+                return ch > 1 ? `${ch} doses` : "single-use";
+              }
+              const grantedResist = i.flags?.fourththing?.grants?.resistances;
+              if (Array.isArray(grantedResist) && grantedResist.length) {
+                const types = grantedResist.map(g => typeof g === "string" ? g : g?.type).filter(Boolean);
+                if (types.length) return `resists ${types.join(", ")}`;
+              }
+              const tags = Array.isArray(i.system?.tags) ? i.system.tags : [];
+              const meaningful = tags.find(t => !/^(consumable|gear|misc|tier-)/i.test(String(t)));
+              if (meaningful) return String(meaningful);
+              return rfi?.frame || i.system?.slot || "";
+            })();
+        const qty = Number(i.system?.quantity ?? 0);
+        // Proficiency: armor/weapons gate on a skill the steward may lack. At
+        // rank 0 the item silently does nothing (armor) or is wielded untrained
+        // (weapon) — surface that so it isn't a mystery.
+        const prof = _ftEquipProficiency(actor, i);
+        const notProficient = !!prof && !prof.trained;
+        const profTip = notProficient
+          ? `Not trained in ${prof.label} (rank 0) — ${i.type === "armor"
+              ? "this armor grants no defensive benefit while worn"
+              : "wielded untrained"}. Raise ${prof.label} to gain its benefit.`
+          : "";
+        return {
+          id:    i.id,
+          uuid:  i.uuid,
+          name:  i.name,
+          img:   i.img,
+          type:  i.type,
+          stat,
+          qty:   qty > 1 ? qty : null,
+          isEquipped,
+          rfi:   rfi ?? null,
+          tier:  rfi?.tier ?? null,
+          frame: rfi?.frame ?? null,
+          origin: rfi?.origin ?? null,
+          signature: rfi?.signature ?? "",
+          // Proficiency flag for the inventory row warning badge.
+          notProficient,
+          profTip,
+          profSkill: prof?.label ?? "",
+          // True when the item carries a consume block — surfaces the Use
+          // button on the inventory row.
+          isConsumable: !!rfi?.consume,
+          charges:      Number(rfi?.charges ?? 0) || null
+        };
+      });
+
       return {
         actor,
         system:        sysData,
@@ -17787,74 +17891,10 @@ Hooks.once("init", function () {
           identity: featuresEnriched.filter(f => f.group === "identity"),
           other:    featuresEnriched.filter(f => f.group === "other")
         },
-        // Inventory: armor + gear + mundane (non-crafted) weapons. Crafted
-        // gear/armor/weapons live in the Manifestations tab instead. Each row
-        // is enriched with RFI flag data + a key stat line so the partial can
-        // render without reaching back into raw item docs.
-        gear: [
-          ...Array.from(actor.items).filter(i => ["armor","gear"].includes(i.type) && !RfiItems.is.isManifestation(i)),
-          ...mundaneWeapons
-        ].map(i => {
-          const rfi = RfiItems.get(i);
-          const isEquipped = i.type === "armor"
-            ? !!i.system?.equipped
-            : !!i.getFlag("fourththing", "equipped");
-          const dmg = i.system?.damage?.formula;
-          const dmgType = i.system?.damage?.type;
-          const stat = i.type === "weapon"
-              ? `${dmg ?? ""}${dmgType ? ` ${dmgType}` : ""}${i.system?.category ? ` · ${i.system.category}` : ""}`.trim()
-            : i.type === "armor"
-              ? (() => {
-                  const sgn = (n) => (n > 0 ? `+${n}` : `${n}`);
-                  const gB = _ftArmorStatRaw(i, "guard"), eB = _ftArmorStatRaw(i, "evasion"), rB = _ftArmorStatRaw(i, "resolve");
-                  return [
-                    gB ? `Guard ${sgn(gB)}`     : "",
-                    eB ? `Evasion ${sgn(eB)}`   : "",
-                    rB ? `Resolve ${sgn(rB)}`   : "",
-                    i.system?.armorSkill ? `[${i.system.armorSkill}]` : ""
-                  ].filter(Boolean).join(" · ");
-                })()
-            : (() => {
-                // Gear stat line: prefer consumable charges, then resistance grants
-                // (so "shields rad" reads better than "misc"), then the first non-
-                // boilerplate tag. Falls back to the slot only if nothing else is
-                // worth saying.
-                const rfi = RfiItems.get(i);
-                if (rfi?.frame === "consumable") {
-                  const ch = Number(rfi.charges ?? 0);
-                  return ch > 1 ? `${ch} doses` : "single-use";
-                }
-                const grantedResist = i.flags?.fourththing?.grants?.resistances;
-                if (Array.isArray(grantedResist) && grantedResist.length) {
-                  const types = grantedResist.map(g => typeof g === "string" ? g : g?.type).filter(Boolean);
-                  if (types.length) return `resists ${types.join(", ")}`;
-                }
-                const tags = Array.isArray(i.system?.tags) ? i.system.tags : [];
-                const meaningful = tags.find(t => !/^(consumable|gear|misc|tier-)/i.test(String(t)));
-                if (meaningful) return String(meaningful);
-                return rfi?.frame || i.system?.slot || "";
-              })();
-          const qty = Number(i.system?.quantity ?? 0);
-          return {
-            id:    i.id,
-            uuid:  i.uuid,
-            name:  i.name,
-            img:   i.img,
-            type:  i.type,
-            stat,
-            qty:   qty > 1 ? qty : null,
-            isEquipped,
-            rfi:   rfi ?? null,
-            tier:  rfi?.tier ?? null,
-            frame: rfi?.frame ?? null,
-            origin: rfi?.origin ?? null,
-            signature: rfi?.signature ?? "",
-            // True when the item carries a consume block — surfaces the Use
-            // button on the inventory row.
-            isConsumable: !!rfi?.consume,
-            charges:      Number(rfi?.charges ?? 0) || null
-          };
-        }),
+        gear: gearRows,
+        // Items the steward carries but is untrained with (rank 0 in the gating
+        // skill). Drives the inventory-tab warning banner.
+        equipProfWarnings: gearRows.filter(r => r.notProficient),
         manifestedGear: Array.from(actor.items).filter(i => ["armor","gear"].includes(i.type) && RfiItems.is.isManifestation(i)),
         ...(() => {
           // Shared change-formatter used by BOTH activeEffects (editable list)
@@ -20093,12 +20133,23 @@ Hooks.once("init", function () {
               return rfi?.frame || i.system?.slot || "";
             })();
         const qty = Number(i.system?.quantity ?? 0);
+        // Proficiency: armor/weapons gate on a skill the actor may lack. At rank
+        // 0 armor grants no benefit and a weapon is wielded untrained — surface
+        // that rather than letting it fail silently.
+        const prof = _ftEquipProficiency(actor, i);
+        const notProficient = !!prof && !prof.trained;
+        const profTip = notProficient
+          ? `Not trained in ${prof.label} (rank 0) — ${i.type === "armor"
+              ? "this armor grants no defensive benefit while worn"
+              : "wielded untrained"}. Raise ${prof.label} to gain its benefit.`
+          : "";
         return {
           id: i.id, uuid: i.uuid, name: i.name, img: i.img, type: i.type,
           stat, qty: qty > 1 ? qty : null, isEquipped,
           rfi: rfi ?? null,
           tier: rfi?.tier ?? null, frame: rfi?.frame ?? null, origin: rfi?.origin ?? null,
           signature: rfi?.signature ?? "",
+          notProficient, profTip, profSkill: prof?.label ?? "",
           isConsumable: !!rfi?.consume,
           charges: Number(rfi?.charges ?? 0) || null
         };
@@ -20130,6 +20181,7 @@ Hooks.once("init", function () {
         enrichedSkills,
         gear,
         hasInventory: gear.length > 0,
+        equipProfWarnings: gear.filter(r => r.notProficient),
         conditionList,
         activeConditions,
         hasActiveConditions: activeConditions.length > 0,
