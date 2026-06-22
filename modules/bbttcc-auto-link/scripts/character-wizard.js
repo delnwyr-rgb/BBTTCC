@@ -13,6 +13,85 @@ const GUIDED_KEY = "guidedCharacterCreation";
 const log = (...a) => console.log("[" + MOD + "]", ...a);
 const warn = (...a) => console.warn("[" + MOD + "]", ...a);
 
+/* ──────────────────────────────────────────────────────────────────────────
+ * Aptitude-grant integrity guard — THE durable fix for the recurring
+ * "aptitude stuck at rank 1 / can't be raised" bug (2026-06-21).
+ *
+ * Crew-type and archetype compendium items ship Active Effects that grant a
+ * starting skill rank via a change of type "downgrade" value 1 on
+ * `system.skills.<key>.value`. In Foundry v14 "downgrade" = min(current, value)
+ * → it CAPS the skill at 1 instead of FLOORING it, so the aptitude can never be
+ * raised on the sheet. A proficiency grant must be "upgrade" (max(current,
+ * value)). See repair-aptitude-grants.macro.js for the long-form writeup.
+ *
+ * The one-shot migration + repair macro only fix actors that ALREADY exist.
+ * Every new wizard build (or manual drag of a dirty archetype/crew item)
+ * re-imported the downgrade straight from the still-dirty compendium — which is
+ * why this kept coming back after we "fixed" it.
+ *
+ * These two global hooks normalize downgrade→upgrade on EVERY skill-value grant
+ * at the moment any Item or ActiveEffect is created, so no dirty pack data can
+ * ever reach an actor again regardless of the path (wizard, drag-drop, macro,
+ * future bad content). Everything that is not a downgrade on a skill value is
+ * left untouched, so the hooks are a no-op for all other creation.
+ * ────────────────────────────────────────────────────────────────────────── */
+const _FT_SKILL_VALUE_RE = /^system\.skills\.[^.]+\.value$/;
+
+function _ftNormalizeSkillGrantChanges(changes) {
+  if (!Array.isArray(changes)) return { changes, dirty: false };
+  let dirty = false;
+  const next = changes.map((c) => {
+    if (c && c.type === "downgrade" && _FT_SKILL_VALUE_RE.test(String(c.key || ""))) {
+      dirty = true;
+      const clone = { ...c, type: "upgrade" };
+      delete clone.mode; // never persist the deprecated numeric shim
+      return clone;
+    }
+    return c;
+  });
+  return { changes: next, dirty };
+}
+
+if (!globalThis.__ftAptitudeGuardInstalled) {
+  globalThis.__ftAptitudeGuardInstalled = true;
+
+  Hooks.on("preCreateActiveEffect", (effect) => {
+    try {
+      const src = effect.toObject ? effect.toObject() : effect;
+      const cur = (src.system && src.system.changes) || src.changes || [];
+      const { changes, dirty } = _ftNormalizeSkillGrantChanges(cur);
+      if (dirty) {
+        effect.updateSource({ "system.changes": changes });
+        warn(`aptitude-guard: flipped downgrade→upgrade skill grant on effect "${effect.name}"`);
+      }
+    } catch (e) { warn("aptitude-guard (effect) failed", e); }
+  });
+
+  Hooks.on("preCreateItem", (item) => {
+    try {
+      const obj = item.toObject ? item.toObject() : item;
+      const effects = obj.effects;
+      if (!Array.isArray(effects) || !effects.length) return;
+      let anyDirty = false;
+      const next = effects.map((e) => {
+        const cur = (e.system && e.system.changes) || e.changes || [];
+        const { changes, dirty } = _ftNormalizeSkillGrantChanges(cur);
+        if (!dirty) return e;
+        anyDirty = true;
+        const ne = foundry.utils.deepClone(e);
+        ne.system = ne.system || {};
+        ne.system.changes = changes;       // v14 canonical location
+        if (Array.isArray(ne.changes)) ne.changes = changes; // keep shim in sync
+        return ne;
+      });
+      if (anyDirty) {
+        item.updateSource({ effects: next });
+        warn(`aptitude-guard: normalized skill grants on item "${item.name}"`);
+      }
+    } catch (e) { warn("aptitude-guard (item) failed", e); }
+  });
+}
+
 const PACK_KEYS = {
   archetype: "bbttcc-character-options.character-archetypes",
   crew: "bbttcc-character-options.crew-types",
