@@ -30,7 +30,7 @@
   'use strict';
 
   const CONFIG = {
-    DRY_RUN: true,                                   // <-- set false to actually write descriptions
+    DRY_RUN: false,                                   // <-- set false to actually write descriptions
     GENERATE_AES: false,                              // <-- set true to also mint knob-mapped Active Effects (somaModifiers→attribute)
     PACK_IDS: [                                       // Item compendia in scope (auto-detected if present)
       'fourththing.starter-manifestations',
@@ -91,11 +91,11 @@
     const m = sys.manifestation || {};
     const isPower = typeof sys.channel === 'string' || (sys.category === 'manifestation' && !sys.skill);
 
-    let dmgFormula='', dmgType='', dmgTrack='', dmgFlavor='';
+    let dmgFormula='', dmgType='', dmgTrack='', dmgFlavor='', dmgAttr='';
     if (sys.damage && typeof sys.damage === 'object') {
-      dmgFormula=sys.damage.formula||''; dmgType=sys.damage.type||''; dmgTrack=sys.damage.track||''; dmgFlavor=sys.damage.damageFlavor||'';
+      dmgFormula=sys.damage.formula||''; dmgType=sys.damage.type||''; dmgTrack=sys.damage.track||''; dmgFlavor=sys.damage.damageFlavor||''; dmgAttr=sys.damage.attribute||'';
     } else if (typeof sys.damage === 'string') {
-      dmgFormula=sys.damage; dmgType=sys.damageType||''; dmgFlavor=sys.damageFlavor||'';
+      dmgFormula=sys.damage; dmgType=sys.damageType||''; dmgFlavor=sys.damageFlavor||''; dmgAttr=sys.attribute||'';
     }
     let anyMagnitude=false;
     if (present(dmgFormula)) {
@@ -106,6 +106,7 @@
       if (present(dmgFlavor)) d += ` <span style="opacity:.75">(${esc(dmgFlavor)})</span>`;
       lines.push({ label:'Damage', val:d });
     }
+    if (present(dmgAttr)) lines.push({ label:'Faculty', val:esc(titleCase(dmgAttr)) });
     if (present(sys.skill)) lines.push({ label:'Attack', val:`${esc(titleCase(sys.skill))}${present(sys.intent)?` (${esc(titleCase(sys.intent))})`:''}` });
     else if (present(sys.intent) && isPower) lines.push({ label:'Intent', val:esc(titleCase(sys.intent)) });
     if (present(sys.activation)) lines.push({ label:'Action', val:esc(titleCase(sys.activation)) });
@@ -176,10 +177,25 @@
     const sys = item.system || {};
     const c = rfi.consume || {};
     const effects = Array.isArray(c.effects) ? c.effects : [];
-    const eff = effects.map(e => e.kind === 'track' ? renderTrackEffect(e) : (e.text ? esc(e.text) : '')).filter(Boolean);
+    const renderEffect = (e) => {
+      if (e.kind === 'track') return renderTrackEffect(e);
+      if (e.kind === 'condition') {
+        const verb = e.op === 'remove' ? 'Cure' : (e.op === 'add' ? 'Inflict' : titleCase(e.op || ''));
+        return `${verb} <strong>${esc(titleCase(e.condition || 'condition'))}</strong>`;
+      }
+      if (e.kind === 'mutation') {
+        if (e.op === 'cleanseAll') return 'Cleanse <strong>all</strong> mutations';
+        if (e.op === 'cleanse') { const n = Number(e.count ?? 1); return `Cleanse <strong>${esc(n)}</strong> mutation${n > 1 ? 's' : ''}`; }
+        return `${esc(titleCase(e.op || ''))} mutation`;
+      }
+      return e.text ? esc(e.text) : '';
+    };
+    const eff = effects.map(renderEffect).filter(Boolean);
     let anyMagnitude = false;
     if (eff.length) { anyMagnitude = true; lines.push({ label:'On use', val:eff.join('; ') }); }
-    const g = rfi.grants || {};
+    // Grants live at flags.fourththing.grants (where the DEFENSE ENGINE reads) — prefer
+    // that over the rfi-flag copy, so top-level-grant items (e.g. Rad Suits) surface.
+    const g = item.flags?.fourththing?.grants ?? rfi.grants ?? {};
     const isArmor = item.type==='armor' || rfi.frame==='armor';
 
     // Gather GM-editable AE grant rows once (flags.fourththing.grant.*). Numeric
@@ -256,7 +272,7 @@
 
     // PRIORITY 1: RFI flag block — the live gear/consumable mechanics source.
     const armorRes = (item.type==='armor' || rfi?.frame==='armor') ? normResList(sys.resistances) : [];
-    if (rfi && (rfi.consume?.effects?.length || rfi.grants || armorRes.length || rfi.charges != null || rfi.price?.marks != null)) {
+    if (rfi && (rfi.consume?.effects?.length || rfi.grants || item.flags?.fourththing?.grants || armorRes.length || rfi.charges != null || rfi.price?.marks != null)) {
       const { lines, anyMagnitude } = rfiBlock(rfi, item);
       const aeChanges = CONFIG.GENERATE_AES ? grantsToAEChanges(rfi) : [];
       if (lines.length && anyMagnitude) {
