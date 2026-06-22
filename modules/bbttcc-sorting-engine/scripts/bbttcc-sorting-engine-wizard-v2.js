@@ -55,6 +55,154 @@ const FACULTY_LABELS = {
 const FACULTY_STARTING_ARRAY = [5, 4, 3, 3, 2, 2];
 
 // ============================================================================
+// Chargen aptitudes — the 20 free-pick aptitudes (armor skills excluded; those
+// come from Path). Single source of truth for the picker AND the recommended-
+// build apply logic below. Label format: "Name (Faculty)".
+// ============================================================================
+
+const CHARGEN_APTITUDES = [
+  ["melee",         "Melee (Violence)"],
+  ["brawl",         "Brawl (Violence)"],
+  ["firearms",      "Firearms (Violence)"],
+  ["athletics",     "Athletics (Violence)"],
+  ["stealth",       "Stealth (Intrigue)"],
+  ["hacking",       "Hacking (Intrigue)"],
+  ["tinkering",     "Tinkering (Intrigue)"],
+  ["streetwise",    "Streetwise (Intrigue)"],
+  ["diplomacy",     "Diplomacy (Presence)"],
+  ["intimidation",  "Intimidation (Presence)"],
+  ["empathy",       "Empathy (Presence)"],
+  ["performance",   "Performance (Presence)"],
+  ["perception",    "Perception (Mind)"],
+  ["investigation", "Investigation (Mind)"],
+  ["lore",          "Lore (Mind)"],
+  ["occult",        "Occult (Mind)"],
+  ["faith",         "Faith (Soul)"],
+  ["meditation",    "Meditation (Soul)"],
+  ["ritual",        "Ritual (Soul)"],
+  ["insight",       "Insight (Soul)"]
+];
+const APTITUDE_LABEL = Object.fromEntries(CHARGEN_APTITUDES.map(([k, l]) => [k, l]));
+
+// ============================================================================
+// Player-facing build canon — primary faculties + recommended build per Path.
+// ----------------------------------------------------------------------------
+// PURPOSE: surface "what are this class's primary stats" + a one-click suggested
+// build on the wizard's final (review) screen. There is no authoritative RFI
+// "primary faculty" field on the class items — the legacy dnd5e `primaryAbility`
+// is vestigial (cha/wis/etc, only on some classes) and does NOT map to the six
+// RFI faculties. So this block IS the canon. Designer-owned: edit freely.
+//
+// Each entry:
+//   primary    — ordered list of FACULTY_KEYS this class leans on (1–2)
+//   array      — recommended allocation of the starting array [5,4,3,3,2,2]
+//                across all six faculties (must be a permutation of that array)
+//   aptitudes  — recommended 3 free Yesod picks (CHARGEN_APTITUDES keys). The
+//                Apply button skips any already auto-granted and backfills.
+//   playstyle  — one-line pitch shown under the recommendation.
+// Keys match the Path display names used by the Sorting Engine spec exactly.
+// ============================================================================
+
+const CLASS_BUILD_GUIDE = {
+  "Bulwark": {
+    primary: ["body", "violence"],
+    array: { violence: 4, intrigue: 2, presence: 3, body: 5, mind: 3, soul: 2 },
+    aptitudes: ["athletics", "intimidation", "perception"],
+    playstyle: "Immovable front-line anchor — soak the hit, hold the line, and punish whoever tries to break through."
+  },
+  "Aurablade": {
+    primary: ["violence", "soul"],
+    array: { violence: 5, intrigue: 2, presence: 3, body: 3, mind: 2, soul: 4 },
+    aptitudes: ["athletics", "intimidation", "meditation"],
+    playstyle: "Emotion-fueled melee duelist — every turn asks: escalate into Burn, or stabilize?"
+  },
+  "Soul-Smith": {
+    primary: ["soul", "body"],
+    array: { violence: 3, intrigue: 2, presence: 2, body: 4, mind: 3, soul: 5 },
+    aptitudes: ["faith", "meditation", "tinkering"],
+    playstyle: "Forge-healer — repair allies and the world, and run the furnace hot when it counts."
+  },
+  "Shadow Courier": {
+    primary: ["intrigue", "violence"],
+    array: { violence: 4, intrigue: 5, presence: 3, body: 3, mind: 2, soul: 2 },
+    aptitudes: ["stealth", "streetwise", "hacking"],
+    playstyle: "Mobility and infiltration — the package always moves; the fight rearranges around you."
+  },
+  "Harmony Marshal": {
+    primary: ["presence", "soul"],
+    array: { violence: 2, intrigue: 2, presence: 5, body: 3, mind: 3, soul: 4 },
+    aptitudes: ["diplomacy", "empathy", "performance"],
+    playstyle: "The party's conductor — a reroll engine that makes the heroes don't trip over each other."
+  },
+  "Pactkeeper": {
+    primary: ["presence", "mind"],
+    array: { violence: 2, intrigue: 2, presence: 5, body: 3, mind: 4, soul: 3 },
+    aptitudes: ["diplomacy", "intimidation", "lore"],
+    playstyle: "Binds by clause and civic writ — the longer the pacts run, the more leverage you hold."
+  },
+  "Cosmic Linguist": {
+    primary: ["mind", "soul"],
+    array: { violence: 2, intrigue: 2, presence: 3, body: 3, mind: 5, soul: 4 },
+    aptitudes: ["lore", "occult", "investigation"],
+    playstyle: "Edits reality as text — a debuff caster who always gets the next word."
+  },
+  "Wyrdlens Adept": {
+    primary: ["mind", "soul"],
+    array: { violence: 2, intrigue: 3, presence: 3, body: 2, mind: 5, soul: 4 },
+    aptitudes: ["perception", "investigation", "insight"],
+    playstyle: "Perception as force — read the seam in any structure and turn the flaw against it."
+  },
+  "Dreamwalker": {
+    primary: ["soul", "mind"],
+    array: { violence: 2, intrigue: 2, presence: 3, body: 3, mind: 4, soul: 5 },
+    aptitudes: ["meditation", "ritual", "occult"],
+    playstyle: "Reads the Tree — an oracle caster whose work between scenes is the fuel for the fight."
+  }
+};
+
+// One-line emphasis per Doctrine (subclass). Doctrines don't change your faculty
+// array — they inherit the parent Path's build — so this is just the flavor of
+// where each one points. Keys match the Sorting Engine spec doctrine names.
+const DOCTRINE_EMPHASIS = {
+  // Aurablade
+  "Blood Hymn":        "Fury aura — escalation and force; turn pain into momentum.",
+  "Stillheart":        "Resolve aura — defense and refusal; become the line that doesn't move.",
+  "Void Edge":         "Dread aura — suppression and collapse; kill belief, not bodies.",
+  // Bulwark
+  "Path of the Avalanche": "Offensive wall — bank the blow, then erupt outward.",
+  "Path of the Cataclyst": "Catastrophic entry — sunder armor and breach the structure itself.",
+  "Path of the Mountain":  "Pure anchor — immovable, immune to being moved, the cornerstone allies form on.",
+  // Cosmic Linguist
+  "Annotator":         "Margins and footnotes — stack riders and rerolls onto every reading.",
+  "Metaphor Apostle":  "Reality as figure of speech — broad, sweeping reinterpretations.",
+  "Redactor":          "Strike the clause — deny, silence, and remove a foe's options.",
+  // Dreamwalker
+  "Trance of the Quiet Sun":     "Steady oracle — protective dreamstates and reliable foresight.",
+  "Trance of the Sapphire Gate": "Threshold work — reality hacks and reach across distance.",
+  "Trance of the Thousand Faces":"Many selves — flexibility, disguise, and shifting the moment.",
+  // Harmony Marshal
+  "Mandate of Accord":   "Cohesion — heal attrition and clear conditions off the line.",
+  "Mandate of Overwatch":"Positioning — free reactions and watch the whole field.",
+  "Mandate of Resolve":  "Stand firm — rerolls that refuse to let the party break.",
+  // Pactkeeper
+  "Archivist of Precedent":         "Cite the past — leverage compounds from established clauses.",
+  "Auditor":                        "Find the breach — expose and penalize broken terms.",
+  "Steward of Living Communities":  "Shelter the bound — sustain pacts that protect a whole community.",
+  // Shadow Courier
+  "Route of the Black Stair":     "Hidden ways — vanish, reposition, and open doors that aren't there.",
+  "Route of the Last Mile":       "Delivery at speed — the package arrives no matter what stands between.",
+  "Route of the Wayfarer Tongue": "Roads and tongues — move information and people through any border.",
+  // Soul-Smith
+  "Forge of Bound Light":   "Ward and reforge — hold allies at 1 and call the fallen back.",
+  "Forge of the Spark Reclaimer": "Cleanse corruption — purify Sparks and temper wounds into armor.",
+  "Forge of Victory":       "Run hot — Overheated forge-works that hit twice as hard.",
+  // Wyrdlens Adept
+  "Refraction of Foresight": "See the thread — banked rerolls and pre-emptive reads.",
+  "Refraction of Mercy":     "Bend harm aside — DR, freed reactions, and protective refraction.",
+  "Refraction of Truth":     "Expose the seam — strip a foe's defenses by reading it correctly."
+};
+
+// ============================================================================
 // Live description loading — pulls descriptions + images from the canonical
 // content packs at runtime, matching what the existing character-wizard does.
 // Single source of truth: the live compendium items.
@@ -888,28 +1036,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
   }
 
   _buildChargenAptitudesHtml() {
-    const APTITUDES = [
-      ["melee",         "Melee (Violence)"],
-      ["brawl",         "Brawl (Violence)"],
-      ["firearms",      "Firearms (Violence)"],
-      ["athletics",     "Athletics (Violence)"],
-      ["stealth",       "Stealth (Intrigue)"],
-      ["hacking",       "Hacking (Intrigue)"],
-      ["tinkering",     "Tinkering (Intrigue)"],
-      ["streetwise",    "Streetwise (Intrigue)"],
-      ["diplomacy",     "Diplomacy (Presence)"],
-      ["intimidation",  "Intimidation (Presence)"],
-      ["empathy",       "Empathy (Presence)"],
-      ["performance",   "Performance (Presence)"],
-      ["perception",    "Perception (Mind)"],
-      ["investigation", "Investigation (Mind)"],
-      ["lore",          "Lore (Mind)"],
-      ["occult",        "Occult (Mind)"],
-      ["faith",         "Faith (Soul)"],
-      ["meditation",    "Meditation (Soul)"],
-      ["ritual",        "Ritual (Soul)"],
-      ["insight",       "Insight (Soul)"]
-    ];
+    const APTITUDES = CHARGEN_APTITUDES;
     const slots = this._chargenAptitudes;
     const autoGranted = this._autoGrantedAptitudes();
     return `
@@ -974,6 +1101,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       </div>` : "";
 
     const rankInfo = this._rankInfoFor(cat, name);
+    const recommendedHtml = this._buildRecommendedBuildHtml(cat, name);
 
     if (!loadedDoc) {
       // Loading state — the async fetch is in flight
@@ -982,6 +1110,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
           <div class="bbttcc-twv2-describe-cat">${_esc(this._categoryLabel(cat))}</div>
           <h3 class="bbttcc-twv2-describe-name">${_esc(name)}</h3>
           ${rankInfo}
+          ${recommendedHtml}
           <div class="bbttcc-twv2-describe-body bbttcc-twv2-describe-loading"><em>Loading description from compendium…</em></div>
           ${traitWeightHtml}
         </div>
@@ -1006,10 +1135,86 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
             ${rankInfo}
           </div>
         </div>
+        ${recommendedHtml}
         <div class="bbttcc-twv2-describe-body">${loadedDoc.descriptionHtml}</div>
         ${traitWeightHtml}
       </div>
     `;
+  }
+
+  // Recommended-build card for the description pane. Renders only for Path and
+  // Doctrine focus; doctrines inherit their parent Path's build (faculties don't
+  // change at subclass) plus a one-line emphasis. Returns "" for everything else.
+  _buildRecommendedBuildHtml(category, name) {
+    if (category !== "path" && category !== "doctrine") return "";
+
+    let className = null;
+    let doctrineName = null;
+    if (category === "path") {
+      className = name;
+    } else {
+      doctrineName = name;
+      className = this._parentClassOfDoctrine(name);
+    }
+    const guide = className ? CLASS_BUILD_GUIDE[className] : null;
+    if (!guide) return "";
+
+    const primaryPills = guide.primary
+      .map(k => `<span class="bbttcc-twv2-rec-faculty">${_esc(FACULTY_LABELS[k] || k)}</span>`)
+      .join("");
+    const arrayHtml = FACULTY_KEYS
+      .map(k => `<span class="bbttcc-twv2-rec-cell ${guide.primary.includes(k) ? "is-primary" : ""}">
+          <span class="bbttcc-twv2-rec-cell-label">${_esc(FACULTY_LABELS[k])}</span>
+          <span class="bbttcc-twv2-rec-cell-val">${guide.array[k]}</span>
+        </span>`)
+      .join("");
+    const aptHtml = guide.aptitudes
+      .map(k => `<span class="bbttcc-twv2-rec-apt">${_esc(APTITUDE_LABEL[k] || k)}</span>`)
+      .join("");
+
+    const inheritNote = doctrineName
+      ? `<div class="bbttcc-twv2-rec-inherit">Inherits the <strong>${_esc(className)}</strong> build.</div>`
+      : "";
+    const emphasis = doctrineName ? (DOCTRINE_EMPHASIS[doctrineName] || "") : "";
+    const emphasisHtml = emphasis
+      ? `<p class="bbttcc-twv2-rec-emphasis">${_esc(emphasis)}</p>`
+      : "";
+
+    return `
+      <div class="bbttcc-twv2-describe-section bbttcc-twv2-rec">
+        <div class="bbttcc-twv2-describe-section-title">Recommended Build</div>
+        ${inheritNote}
+        ${emphasisHtml}
+        <div class="bbttcc-twv2-rec-line">
+          <span class="bbttcc-twv2-rec-key">Primary faculties</span>
+          <span class="bbttcc-twv2-rec-faculties">${primaryPills}</span>
+        </div>
+        <div class="bbttcc-twv2-rec-line">
+          <span class="bbttcc-twv2-rec-key">Faculty array</span>
+          <span class="bbttcc-twv2-rec-array">${arrayHtml}</span>
+        </div>
+        <div class="bbttcc-twv2-rec-line">
+          <span class="bbttcc-twv2-rec-key">Free aptitudes</span>
+          <span class="bbttcc-twv2-rec-apts">${aptHtml}</span>
+        </div>
+        <p class="bbttcc-twv2-rec-playstyle">${_esc(guide.playstyle)}</p>
+        <button type="button" data-action="apply-recommended" data-rec-class="${_esc(className)}" class="bbttcc-twv2-btn bbttcc-twv2-rec-apply">Apply recommended build ▾</button>
+      </div>
+    `;
+  }
+
+  // Resolve a doctrine's parent Path name from the Sorting Engine spec — the
+  // same source the doctrine dropdown ranks against, so any focused doctrine
+  // resolves regardless of how CLASS_BUILD_GUIDE doctrine flavor is keyed.
+  _parentClassOfDoctrine(doctrineName) {
+    const spec = BBTTCCSortingEngineV2.getSpec();
+    const table = spec?.resolverWeights?.doctrine;
+    if (!table) return null;
+    for (const [className, doctrines] of Object.entries(table)) {
+      if (className.startsWith("_")) continue;
+      if (doctrines && doctrines[doctrineName]) return className;
+    }
+    return null;
   }
 
   _traitWeightsFor(category, name) {
@@ -1064,6 +1269,7 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
 
     // Render loading state immediately so the pane responds to focus changes
     pane.innerHTML = this._buildDescriptionPaneHtml(null);
+    this._wirePaneActions(pane);
 
     if (!name) return;
 
@@ -1073,10 +1279,23 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       if (this._focusedCategory !== cat || this._focusedOptionName !== name) return;
       // Re-query the pane (DOM may have re-rendered during the fetch)
       const livePane = this.element?.querySelector("[data-describe-pane]");
-      if (livePane) livePane.innerHTML = this._buildDescriptionPaneHtml(doc);
+      if (livePane) {
+        livePane.innerHTML = this._buildDescriptionPaneHtml(doc);
+        this._wirePaneActions(livePane);
+      }
     } catch (e) {
       WARN("description load failed", e);
     }
+  }
+
+  // Re-attach [data-action] click handlers inside the description pane. The pane
+  // is innerHTML-swapped by _refreshDescribePane (outside _wireHandlers), so its
+  // buttons — e.g. "Apply recommended build" — need re-wiring after each swap.
+  _wirePaneActions(pane) {
+    if (!pane) return;
+    pane.querySelectorAll("[data-action]").forEach(el => {
+      el.addEventListener("click", ev => this._onAction(ev, el));
+    });
   }
 
   // ============================================================================
@@ -1276,7 +1495,37 @@ class BBTTCCTreeWizardV2 extends ApplicationV2 {
       case "skip-descent":      return this._onSkipDescent();
       case "back-to-descent":   return this._onBackToDescent();
       case "finalize":          return this._onFinalize();
+      case "apply-recommended": return this._onApplyRecommended(el);
     }
+  }
+
+  // Apply the recommended build for a Path: fill the Malkuth faculty array and
+  // the three Yesod aptitude picks in one click. Both remain fully editable.
+  // Aptitude picks skip anything the class already auto-grants and backfill from
+  // the remaining pool so the player still lands exactly three valid picks.
+  async _onApplyRecommended(el) {
+    const className = el?.dataset?.recClass;
+    const guide = className ? CLASS_BUILD_GUIDE[className] : null;
+    if (!guide) return;
+
+    // Faculty array — copy so later edits don't mutate the canon table.
+    this._faculties = { ...guide.array };
+
+    // Aptitude picks — drop auto-granted/duplicates, backfill to exactly 3.
+    const auto = this._autoGrantedAptitudes();
+    const validKeys = new Set(CHARGEN_APTITUDES.map(([k]) => k));
+    const picks = [];
+    const tryAdd = (k) => {
+      if (picks.length >= 3) return;
+      if (!validKeys.has(k) || auto.has(k) || picks.includes(k)) return;
+      picks.push(k);
+    };
+    guide.aptitudes.forEach(tryAdd);
+    if (picks.length < 3) CHARGEN_APTITUDES.forEach(([k]) => tryAdd(k));
+    this._chargenAptitudes = [picks[0] || "", picks[1] || "", picks[2] || ""];
+
+    ui.notifications?.info(`Applied the recommended ${className} build — tweak any line you like.`);
+    await this.render({ force: true });
   }
 
   async _onSkipDescent() {
@@ -2173,6 +2422,69 @@ function _injectStylesOnce() {
       font-size: 11.5px; padding: 3px 9px; border-radius: 10px;
       background: rgba(95,168,255,0.15); border: 1px solid rgba(95,168,255,0.35);
       color: rgba(244,240,224,0.85);
+    }
+
+    /* Recommended-build card (amber accent to set it apart from the blue data) */
+    .bbttcc-twv2-rec {
+      border-top: 1px solid rgba(230,180,90,0.30);
+      background: rgba(230,180,90,0.05);
+      margin-left: -6px; margin-right: -6px; padding: 12px 10px 12px;
+      border-radius: 6px;
+    }
+    .bbttcc-twv2-rec .bbttcc-twv2-describe-section-title { color: rgba(230,180,90,0.95); }
+    .bbttcc-twv2-rec-inherit { font-size: 11.5px; color: rgba(244,240,224,0.7); margin-bottom: 4px; }
+    .bbttcc-twv2-rec-inherit strong { color: rgba(230,180,90,0.95); }
+    .bbttcc-twv2-rec-emphasis {
+      font-size: 12px; font-style: italic; color: rgba(244,240,224,0.8);
+      margin: 2px 0 10px;
+    }
+    .bbttcc-twv2-rec-line {
+      display: flex; gap: 8px; align-items: baseline; margin-bottom: 8px;
+    }
+    .bbttcc-twv2-rec-key {
+      flex: 0 0 92px; font-size: 10.5px; text-transform: uppercase;
+      letter-spacing: 0.5px; color: rgba(244,240,224,0.55); padding-top: 2px;
+    }
+    .bbttcc-twv2-rec-faculties { display: flex; flex-wrap: wrap; gap: 6px; }
+    .bbttcc-twv2-rec-faculty {
+      font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 10px;
+      background: rgba(230,180,90,0.18); border: 1px solid rgba(230,180,90,0.45);
+      color: rgba(244,240,224,0.95);
+    }
+    .bbttcc-twv2-rec-array { display: flex; flex-wrap: wrap; gap: 4px; }
+    .bbttcc-twv2-rec-cell {
+      display: flex; flex-direction: column; align-items: center;
+      min-width: 40px; padding: 3px 4px; border-radius: 5px;
+      background: rgba(95,168,255,0.08); border: 1px solid rgba(95,168,255,0.18);
+    }
+    .bbttcc-twv2-rec-cell.is-primary {
+      background: rgba(230,180,90,0.14); border-color: rgba(230,180,90,0.4);
+    }
+    .bbttcc-twv2-rec-cell-label {
+      font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.3px;
+      color: rgba(244,240,224,0.55);
+    }
+    .bbttcc-twv2-rec-cell-val { font-size: 14px; font-weight: 700; color: rgba(244,240,224,0.95); }
+    .bbttcc-twv2-rec-cell.is-primary .bbttcc-twv2-rec-cell-val { color: rgba(230,180,90,0.95); }
+    .bbttcc-twv2-rec-apts { display: flex; flex-wrap: wrap; gap: 6px; }
+    .bbttcc-twv2-rec-apt {
+      font-size: 11px; padding: 2px 8px; border-radius: 9px;
+      background: rgba(95,168,255,0.12); border: 1px solid rgba(95,168,255,0.30);
+      color: rgba(244,240,224,0.85);
+    }
+    .bbttcc-twv2-rec-playstyle {
+      font-size: 12px; line-height: 1.45; color: rgba(244,240,224,0.85);
+      margin: 4px 0 12px;
+    }
+    .bbttcc-twv2-rec-apply {
+      width: 100%; justify-content: center;
+      background: rgba(230,180,90,0.18) !important;
+      border-color: rgba(230,180,90,0.5) !important;
+      color: rgba(244,240,224,0.95) !important;
+    }
+    .bbttcc-twv2-rec-apply:hover {
+      background: rgba(230,180,90,0.30) !important;
+      border-color: rgba(230,180,90,0.75) !important;
     }
 
     /* Errors */
