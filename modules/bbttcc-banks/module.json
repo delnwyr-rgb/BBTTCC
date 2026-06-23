@@ -1,0 +1,42 @@
+{
+  "id": "bbttcc-banks",
+  "title": "Banks & Loot",
+  "description": "Personal, faction, and coalition banks (item + marks storage) plus on-screen lootable containers (corpses, chests, terminals).",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Shattered Lens Studios"
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e"
+      },
+      {
+        "id": "fourththing",
+        "type": "system",
+        "compatibility": {
+          "verified": "14"
+        }
+      }
+    ],
+    "requires": []
+  },
+  "esmodules": [
+    "scripts/vault-core.js",
+    "scripts/personal-bank-app.js",
+    "scripts/faction-bank-app.js"
+  ],
+  "scripts": [],
+  "styles": [
+    "styles/banks.css"
+  ],
+  "languages": [],
+  "packs": [],
+  "socket": false
+}

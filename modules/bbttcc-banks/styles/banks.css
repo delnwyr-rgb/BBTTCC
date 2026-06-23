@@ -1,0 +1,224 @@
+/* modules/bbttcc-banks/styles/banks.css
+   Banks & Loot — leans on bbttcc-core be-theme tokens (var(--be-*)).
+   The app carries .bbttcc-be .bbttcc-theme-player, so window chrome is already themed. */
+
+.bbttcc-bank .bbttcc-bank-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  color: var(--be-text, #e5f1ff);
+  font-family: var(--be-font-body, system-ui);
+}
+
+.bbttcc-bank .bbttcc-bank-note {
+  margin: 0;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--be-text-muted, #9fb3d9);
+  background: var(--be-bg-soft, rgba(10, 24, 55, 0.96));
+  border: 1px solid var(--be-border, rgba(115, 179, 255, 0.22));
+  border-left: 3px solid var(--be-accent-border, rgba(76, 245, 255, 0.55));
+  border-radius: var(--be-radius, 8px);
+}
+.bbttcc-bank .bbttcc-bank-note i { color: var(--be-accent, #4cf5ff); }
+.bbttcc-bank .bbttcc-bank-note strong { color: var(--be-structural, #ffcf5c); }
+
+.bbttcc-bank .bbttcc-bank-note-gm { border-left-color: var(--be-structural, #ffcf5c); }
+.bbttcc-bank .bbttcc-bank-note-gm i { color: var(--be-structural, #ffcf5c); }
+
+/* Deposit destination selector (personal bank). */
+.bbttcc-bank .bbttcc-bank-dest {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+.bbttcc-bank .bbttcc-bank-dest label { color: var(--be-text-muted, #9fb3d9); white-space: nowrap; }
+.bbttcc-bank .bbttcc-bank-dest select {
+  flex: 1 1 auto;
+  background: var(--be-recessed, rgba(2, 6, 20, 0.96));
+  color: var(--be-text, #e5f1ff);
+  border: 1px solid var(--be-border, rgba(115, 179, 255, 0.22));
+  border-radius: 6px;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* Salvage badge on carried rows (refines into Marks). */
+.bbttcc-bank .bbttcc-bank-salvage {
+  margin-left: 0.35rem;
+  font-size: 0.68rem;
+  padding: 0.02rem 0.35rem;
+  border-radius: 999px;
+  color: #ffe49b;
+  background: rgba(255, 207, 92, 0.14);
+  border: 1px solid rgba(255, 207, 92, 0.5);
+}
+.bbttcc-bank .bbttcc-bank-salvage i { margin-right: 0.12rem; }
+
+/* Treasury readout (faction bank). */
+.bbttcc-bank .bbttcc-treasury { margin: 0.2rem 0; }
+.bbttcc-bank .bbttcc-treasury h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--be-structural, #ffcf5c);
+}
+.bbttcc-bank .bbttcc-treasury-grid { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.bbttcc-bank .bbttcc-treasury-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.2rem 0.55rem;
+  border-radius: 8px;
+  background: var(--be-bg-soft, rgba(10, 24, 55, 0.96));
+  border: 1px solid var(--be-border, rgba(115, 179, 255, 0.22));
+}
+.bbttcc-bank .bbttcc-treasury-chip.is-full { border-color: var(--be-danger, #ff7b7b); }
+.bbttcc-bank .bbttcc-treasury-chip .lbl {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--be-text-muted, #9fb3d9);
+}
+.bbttcc-bank .bbttcc-treasury-chip .val { font-size: 0.82rem; color: var(--be-structural, #ffcf5c); }
+
+/* Faction-bank toolbar: coalition toggle + withdraw recipient. */
+.bbttcc-bank .bbttcc-bank-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+}
+.bbttcc-bank .bbttcc-bank-spacer { flex: 1 1 auto; }
+.bbttcc-bank .bbttcc-bank-coalition { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+.bbttcc-bank .bbttcc-bank-coalition small { color: var(--be-text-muted, #9fb3d9); }
+.bbttcc-bank .bbttcc-bank-coalition-badge { color: var(--be-structural, #ffcf5c); }
+.bbttcc-bank .bbttcc-bank-recipient { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--be-text-muted, #9fb3d9); }
+.bbttcc-bank .bbttcc-bank-recipient select {
+  background: var(--be-recessed, rgba(2, 6, 20, 0.96));
+  color: var(--be-text, #e5f1ff);
+  border: 1px solid var(--be-border, rgba(115, 179, 255, 0.22));
+  border-radius: 6px;
+  padding: 0.1rem 0.4rem;
+}
+
+.bbttcc-bank .bbttcc-bank-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.bbttcc-bank .bbttcc-bank-col {
+  background: var(--be-bg, rgba(3, 10, 30, 0.98));
+  border: 1px solid var(--be-border, rgba(115, 179, 255, 0.22));
+  border-radius: var(--be-radius, 8px);
+  padding: 0.5rem;
+  min-height: 6rem;
+}
+.bbttcc-bank .bbttcc-bank-col h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--be-structural, #ffcf5c);
+  border-bottom: 1px solid var(--be-border, rgba(115, 179, 255, 0.22));
+  padding-bottom: 0.3rem;
+}
+
+.bbttcc-bank .bbttcc-bank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.bbttcc-bank .bbttcc-bank-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0.35rem;
+  background: var(--be-bg-soft, rgba(10, 24, 55, 0.96));
+  border: 1px solid var(--be-border, rgba(115, 179, 255, 0.22));
+  border-radius: 6px;
+}
+.bbttcc-bank .bbttcc-bank-row img {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  border: none;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.bbttcc-bank .bbttcc-bank-name {
+  flex: 1 1 auto;
+  font-size: 0.82rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bbttcc-bank .bbttcc-bank-tier {
+  margin-left: 0.35rem;
+  font-size: 0.68rem;
+  padding: 0.02rem 0.3rem;
+  border-radius: 999px;
+  color: var(--be-data, #bcd3ff);
+  border: 1px solid var(--be-border, rgba(115, 179, 255, 0.22));
+}
+.bbttcc-bank .bbttcc-bank-qty {
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  color: var(--be-text-muted, #9fb3d9);
+}
+
+.bbttcc-bank .bbttcc-bank-btn {
+  flex: 0 0 auto;
+  font-size: 0.74rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--be-text, #e5f1ff);
+  background: var(--be-accent-soft, rgba(76, 245, 255, 0.16));
+  border: 1px solid var(--be-accent-border, rgba(76, 245, 255, 0.55));
+  white-space: nowrap;
+}
+.bbttcc-bank .bbttcc-bank-btn:hover {
+  box-shadow: var(--be-accent-glow, 0 0 16px rgba(76, 245, 255, 0.22));
+}
+.bbttcc-bank .bbttcc-bank-btn:disabled { opacity: 0.5; cursor: default; }
+
+.bbttcc-bank .bbttcc-bank-empty {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--be-text-muted, #9fb3d9);
+  padding: 0.4rem 0.2rem;
+}
+
+/* Steward-sheet "Bank" button.
+   Header variant: rides on Foundry's .header-control styling, just tinted cyan. */
+.bbttcc-bank-open.header-control i { color: #4cf5ff; }
+.bbttcc-bank-open.header-control:hover i { text-shadow: 0 0 8px rgba(76, 245, 255, 0.6); }
+
+/* Floating fallback (no window-header found): a small accent pill in content. */
+.bbttcc-bank-open-floating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0.25rem;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  cursor: pointer;
+  color: #e5f1ff;
+  background: rgba(76, 245, 255, 0.14);
+  border: 1px solid rgba(76, 245, 255, 0.5);
+  border-radius: 999px;
+}
+.bbttcc-bank-open-floating:hover { box-shadow: 0 0 12px rgba(76, 245, 255, 0.3); }
+.bbttcc-bank-open-floating i { color: #4cf5ff; }
