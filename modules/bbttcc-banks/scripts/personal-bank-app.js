@@ -22,18 +22,17 @@ const { ApplicationV2 } = foundry.applications.api;
 const PHYSICAL_GEAR_TYPES = new Set(["weapon", "armor", "gear"]);
 const PHYSICAL_STABILITIES = new Set(["bound", "enduring"]);
 
-// Returns "gear" | "manifestation" | null.
+// Returns "gear" | "manifestation" | null. Uses the system's manifestation predicate
+// so mundane weapons (empty template-default manifestation block) bank as gear, while
+// real (bound/enduring) manifestations bank as manifestations.
 function _bankCategory(item) {
   if (!item) return null;
-  const type = item.type;
-  const mf = item.system?.manifestation || null;
-  const stab = String(mf?.stability ?? "").toLowerCase();
-  // A real manifestation declares form/function/stability/signature (or is type "power").
-  const isManifestation = type === "power" || (mf && (stab || mf.form || mf.function || mf.signature));
-  if (isManifestation) {
+  const real = game?.bbttcc?.api?.banks?.isRealManifestation?.(item) ?? false;
+  if (real) {
+    const stab = String(item.system?.manifestation?.stability ?? "").toLowerCase();
     return PHYSICAL_STABILITIES.has(stab) ? "manifestation" : null; // ephemeral → not bankable
   }
-  return PHYSICAL_GEAR_TYPES.has(type) ? "gear" : null;
+  return PHYSICAL_GEAR_TYPES.has(item.type) ? "gear" : null;
 }
 function _isBankable(item) { return !!_bankCategory(item); }
 

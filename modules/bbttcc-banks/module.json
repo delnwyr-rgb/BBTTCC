@@ -30,7 +30,8 @@
   "esmodules": [
     "scripts/vault-core.js",
     "scripts/personal-bank-app.js",
-    "scripts/faction-bank-app.js"
+    "scripts/faction-bank-app.js",
+    "scripts/loot.js"
   ],
   "scripts": [],
   "styles": [
@@ -38,5 +39,5 @@
   ],
   "languages": [],
   "packs": [],
-  "socket": false
+  "socket": true
 }

@@ -200,6 +200,24 @@
   padding: 0.4rem 0.2rem;
 }
 
+/* Loot: locked container panel. */
+.bbttcc-loot .bbttcc-loot-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  padding: 1rem;
+  color: var(--be-text-muted, #9fb3d9);
+}
+.bbttcc-loot .bbttcc-loot-locked > i { font-size: 1.6rem; color: var(--be-accent, #4cf5ff); }
+.bbttcc-loot .bbttcc-loot-locked strong { color: var(--be-structural, #ffcf5c); }
+
+/* Loot: Token HUD control buttons. */
+.bbttcc-loot-hud { color: #e5f1ff; }
+.bbttcc-loot-hud.bbttcc-loot-hud-active i { color: #ffcf5c; }
+.bbttcc-loot-hud:hover i { text-shadow: 0 0 8px rgba(255, 207, 92, 0.6); }
+
 /* Steward-sheet "Bank" button.
    Header variant: rides on Foundry's .header-control styling, just tinted cyan. */
 .bbttcc-bank-open.header-control i { color: #4cf5ff; }

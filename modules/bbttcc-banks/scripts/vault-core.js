@@ -57,6 +57,25 @@ function _isFactionActor(a) {
   } catch { return false; }
 }
 
+// Is this item a REAL manifestation (ephemeral — not physical loot/gear)?
+// Uses the system's own predicate when available: a mundane weapon carries only an
+// EMPTY template-default manifestation block and is NOT a manifestation. A real one
+// has concept/signature filled, is type "power", is tagged, or is crafted-origin.
+// (systems/fourththing/rfi-items.js → game.fourththing.items.is.isManifestation)
+function isRealManifestation(it) {
+  try {
+    const sys = game?.fourththing?.items?.is?.isManifestation;
+    if (typeof sys === "function") return !!sys(it);
+  } catch (_e) {}
+  if (!it) return false;
+  if (it.type === "power") return true;
+  const mf = it.system?.manifestation;
+  if (mf && (String(mf.concept ?? "").trim() || String(mf.signature ?? "").trim())) return true;
+  const tags = Array.isArray(it.system?.tags) ? it.system.tags : [];
+  if (tags.some(t => String(t).toLowerCase() === "manifestation")) return true;
+  try { return it.getFlag?.("fourththing", "rfi.item")?.origin === "crafted"; } catch { return false; }
+}
+
 // Salvage payload: an item that refines into Marks when banked at a faction.
 // Stamped at flags["bbttcc-banks"].salvage = { markValue, bucket }.
 function _salvageOf(payload) {
@@ -439,6 +458,7 @@ function _attach() {
     root.setCoalitionLead = setCoalitionLead;
     root.canManage = _canManage;
     root.isFactionActor = _isFactionActor;
+    root.isRealManifestation = isRealManifestation;
     root.OP_BUCKETS = OP_BUCKETS.slice();
     // openPersonalBank / openFactionBank are installed by the app files.
     root.MOD_ID = MOD_ID;

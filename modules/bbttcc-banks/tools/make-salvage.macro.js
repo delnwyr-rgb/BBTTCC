@@ -8,10 +8,11 @@
   const MOD = "bbttcc-banks";
   const BUCKETS = ["violence", "nonlethal", "intrigue", "economy", "softpower", "diplomacy", "logistics", "culture", "faith"];
 
-  // Target = selected token's actor, else the first character you own.
+  // Target = selected token's actor (any type — Steward OR loot container),
+  // else the first character you own.
   const actor = canvas.tokens?.controlled?.[0]?.actor
     ?? game.actors?.contents?.find(a => a.type === "character" && a.isOwner);
-  if (!actor) return ui.notifications.warn("Select a Steward token (or own a character) first.");
+  if (!actor) return ui.notifications.warn("Select a token (Steward or container) first.");
 
   const items = actor.items.filter(i => ["weapon", "armor", "gear"].includes(i.type)
     && !i.system?.manifestation); // physical gear, not manifestations
