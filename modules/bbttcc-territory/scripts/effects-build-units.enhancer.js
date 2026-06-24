@@ -370,16 +370,199 @@ try {
     log("Injected Build Unit buttons into Hex Config.");
   }
 
+  // ── Scene Links (water + air verticals, 2026-06-23) ─────────────────────────
+  // Generic per-band Scene linker injected into the Hex Config. Picks a pre-built
+  // Scene for each band; linking stamps the target scene's environment flag
+  // (flags.fourththing.<envFlag> = { band }) + a ⬅ return link + auto-enables the
+  // 3D elevation tableau, and records the band→scene map on the hex
+  // (flags.bbttcc-travel.<flagKey>). DEPTH_CFG (water→dive) + ALT_CFG (air→ascend).
+  const WATER_KEYS = new Set(["river", "lake", "sea", "ocean", "reef", "depths", "abyss"]);
+  const UNDERWATER_KEYS = new Set(["reef", "depths", "abyss"]);
+
+  async function _resolveTravelFaction(verb) {
+    const tok = canvas.tokens?.controlled?.[0]?.actor;
+    const fid = tok && foundry.utils.getProperty(tok, "flags.bbttcc-factions.factionId");
+    if (fid && game.actors.get(fid)) return fid;
+    const factions = game.actors.filter(a => a?.getFlag?.("bbttcc-factions", "isFaction"));
+    if (!factions.length) return null;
+    const list = factions.slice().sort((a, b) => a.name.localeCompare(b.name));
+    return await new Promise((resolve) => {
+      const opts = list.map(f => `<option value="${f.id}">${htmlEscape(f.name)}</option>`).join("");
+      new Dialog({
+        title: `${verb} — choose faction`,
+        content: `<p>Which faction?</p><select id="sl-fac" style="width:100%;">${opts}</select>`,
+        buttons: { ok: { label: verb, callback: (h) => resolve(h[0].querySelector("#sl-fac")?.value || null) },
+                   cancel: { label: "Cancel", callback: () => resolve(null) } },
+        default: "ok", close: () => resolve(null)
+      }).render(true);
+    });
+  }
+
+  function injectSceneLinks(app, html, el, cfg) {
+    try {
+      if (!game.user?.isGM) return;
+      const root = el || (html instanceof jQuery ? html[0] : html);
+      // ONLY inject into the Hex Configuration form. No `|| root` fallback —
+      // that leaked the panel onto every other window (character sheets, macro
+      // editor, …) that lacks a .bbttcc-hex-config host.
+      const host = root?.querySelector?.(".bbttcc-hex-config");
+      if (!host || host.querySelector(`[data-bbttcc='${cfg.id}']`)) return;
+
+      Promise.resolve(resolveHexDocument(app, html)).then(async (doc) => {
+        if (!doc || !doc.uuid) return;
+        // Defense in depth: the resolver can return whatever document the app
+        // owns (an Actor for a sheet, a Macro, …). Only a territory hex Drawing
+        // gets the links.
+        if (doc.documentName !== "Drawing") return;
+        const tf = (doc.flags && doc.flags[MOD_T]) ? doc.flags[MOD_T] : {};
+        const rawTerr = tf.terrain?.key || tf.terrainKey || tf.terrainType || tf.terrain || "";
+        const norm = game.bbttcc?.api?.territory?.normalizeTerrainKey?.(rawTerr) || String(rawTerr || "").toLowerCase();
+        if (!cfg.showFor(norm)) return;
+        if (host.querySelector(`[data-bbttcc='${cfg.id}']`)) return;
+
+        const links = (doc.flags?.["bbttcc-travel"]?.[cfg.flagKey] && typeof doc.flags["bbttcc-travel"][cfg.flagKey] === "object")
+          ? doc.flags["bbttcc-travel"][cfg.flagKey] : {};
+        const selfSceneId = doc.parent?.id || null;
+        const scenes = (game.scenes?.contents || []).filter(s => s.id !== selfSceneId).sort((a, b) => a.name.localeCompare(b.name));
+
+        const rowFor = (band) => {
+          const cur = links[band.key] || "";
+          const linked = !!cur;
+          const opts = [`<option value="">— none —</option>`]
+            .concat(scenes.map(s => `<option value="${s.uuid}" ${s.uuid === cur ? "selected" : ""}>${htmlEscape(s.name)}</option>`))
+            .join("");
+          return `
+            <div class="form-group" style="margin:0.3rem 0;">
+              <label style="font-size:11px;">${band.label} <span style="opacity:0.6;">— ${band.note}</span></label>
+              <div style="display:flex; gap:0.35rem; align-items:center;">
+                <select name="sl.${band.key}" style="flex:1;">${opts}</select>
+                <button type="button" class="bbttcc-btn" data-sl-link="${band.key}">Link</button>
+                <button type="button" class="bbttcc-btn" data-sl-open="${band.key}" ${linked ? "" : "disabled"}>Open</button>
+                <button type="button" class="bbttcc-btn" data-sl-go="${band.key}" ${linked ? "" : "disabled"}>${cfg.verb}</button>
+              </div>
+            </div>`;
+        };
+
+        const wrap = document.createElement("fieldset");
+        wrap.setAttribute("data-bbttcc", cfg.id);
+        wrap.style.cssText = `margin-top:0.75rem; border:1px solid ${cfg.border}; border-radius:0.75rem; padding:0.6rem 0.7rem 0.65rem; background:${cfg.bg};`;
+        wrap.innerHTML = `
+          <legend style="padding:0 0.25rem; opacity:0.9; font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:${cfg.color};">${cfg.legend}</legend>
+          <p class="hint" style="margin:0 0 0.4rem;">${cfg.hint}</p>
+          ${cfg.bands.map(rowFor).join("")}
+        `;
+        host.appendChild(wrap);
+
+        wrap.addEventListener("click", async (ev) => {
+          const btn = ev.target?.closest?.("button[data-sl-link],button[data-sl-open],button[data-sl-go]");
+          if (!btn) return;
+          ev.preventDefault(); ev.stopPropagation();
+          const band = btn.getAttribute("data-sl-link") || btn.getAttribute("data-sl-open") || btn.getAttribute("data-sl-go");
+          const sel = wrap.querySelector(`select[name="sl.${band}"]`);
+
+          if (btn.hasAttribute("data-sl-link")) {
+            try {
+              const sceneUuid = sel?.value || "";
+              const map = { ...(doc.flags?.["bbttcc-travel"]?.[cfg.flagKey] || {}) };
+              if (sceneUuid) {
+                const scene = await fromUuid(sceneUuid);
+                if (scene?.update) {
+                  const sceneUpdate = {
+                    [`flags.fourththing.${cfg.envFlag}`]: { band },
+                    "flags.bbttcc-travel.returnLink": { targetSceneUuid: doc.parent?.uuid, label: cfg.returnLabel },
+                    "flags.bbttcc-travel.hexScene": true,
+                    // Origin hex + surface scene — lets Surface/Descend step UP one
+                    // band at a time (reef→surface, abyss→deep→reef→surface).
+                    "flags.bbttcc-travel.diveOrigin": { hexUuid: doc.uuid, surfaceSceneUuid: doc.parent?.uuid, env: cfg.envFlag }
+                  };
+                  if (!scene.flags?.["bbttcc-raid"]?.tableau) {
+                    sceneUpdate["flags.bbttcc-raid.tableau"] = {
+                      enabled: true, axis: "elevation", depthSource: "elevation", baseElevation: 0,
+                      // Scene-top (surface/ceiling) biggest, ground (elev 0) mid,
+                      // deeper = smaller. Render pinned so depth never sinks the token.
+                      nearElev: 40, farElev: -40, minScale: 0.35, maxScale: 1.25, curve: 1.5, zSortByY: true
+                    };
+                  }
+                  await scene.update(sceneUpdate);
+                }
+                map[band] = sceneUuid;
+                ui.notifications?.info?.(`Linked ${band} → "${scene?.name || sceneUuid}" (3D depth on).`);
+              } else {
+                delete map[band];
+                ui.notifications?.info?.(`Unlinked ${band}.`);
+              }
+              await doc.update({ [`flags.bbttcc-travel.${cfg.flagKey}`]: map });
+              app.render(false);
+            } catch (e) { warn(`${cfg.id} link failed`, e); ui.notifications?.error?.("Link failed — see console."); }
+            return;
+          }
+          if (btn.hasAttribute("data-sl-open")) {
+            try { const sc = await fromUuid(sel?.value); if (sc?.view) await sc.view(); } catch (e) { warn("open scene failed", e); }
+            return;
+          }
+          if (btn.hasAttribute("data-sl-go")) {
+            const fn = game.bbttcc?.api?.travel?.[cfg.apiName];
+            if (!fn) { ui.notifications?.error?.(`${cfg.verb} API not ready.`); return; }
+            const factionId = await _resolveTravelFaction(cfg.verb);
+            if (!factionId) return;
+            const res = await fn(factionId, doc.uuid, { band });
+            if (res?.ok) ui.notifications?.info?.(`${cfg.verb} → ${res.band}…`);
+            else if (res?.message) ui.notifications?.warn?.(res.message);
+            return;
+          }
+        });
+
+        log(`Injected ${cfg.id} into Hex Config.`);
+      });
+    } catch (e) { warn(`${cfg.id} inject failed`, e); }
+  }
+
+  const DEPTH_CFG = {
+    id: "depth-links", legend: "🌊 Underwater — Depth Links", color: "#9ad7ff",
+    border: "rgba(31,143,221,0.55)", bg: "linear-gradient(160deg, rgba(8,30,45,0.98), rgba(10,40,58,1))",
+    hint: "Link a pre-built scene to each depth. Linking marks it underwater + adds a ⬅ Surface return + 3D depth. Diving needs a submersible rated for the band (reef 1 · deep 2 · abyss 3).",
+    bands: [
+      { key: "reef",  label: "Reef",   note: "shallow · Submerged + ½ move, no pressure" },
+      { key: "deep",  label: "Depths", note: "deep · Crushing 1d4/turn (unrated)" },
+      { key: "abyss", label: "Abyss",  note: "crushing · 1d6/turn (unrated)" }
+    ],
+    flagKey: "diveScenes", envFlag: "underwater", returnLabel: "Surface", verb: "Dive", apiName: "dive",
+    showFor: (norm) => WATER_KEYS.has(norm)
+  };
+  const ALT_CFG = {
+    id: "altitude-links", legend: "✈️ Aerial — Altitude Links", color: "#bfe3ff",
+    border: "rgba(124,198,255,0.55)", bg: "linear-gradient(160deg, rgba(10,22,40,0.98), rgba(14,30,55,1))",
+    hint: "Link a pre-built scene to each altitude. Linking marks it aerial + adds a ⬅ Descend return + 3D depth. Ascending needs a flyer (air); orbit needs a space craft.",
+    bands: [
+      { key: "sky",          label: "Sky",          note: "low · Airborne, fly-gated move" },
+      { key: "stratosphere", label: "Stratosphere", note: "high · thin air, fall if no lift" },
+      { key: "orbit",        label: "Orbit",        note: "space · Vacuum 1d6/turn unless sealed" }
+    ],
+    flagKey: "skyScenes", envFlag: "aloft", returnLabel: "Descend", verb: "Ascend", apiName: "ascend",
+    showFor: (_norm) => !UNDERWATER_KEYS.has(_norm)
+  };
+
   function install() {
-    Hooks.on("renderApplication", (app, html) => {
+    // Hook BOTH render events — the Hex Config exists as a V1 Dialog
+    // (renderApplication) AND an ApplicationV2 sheet (renderApplicationV2).
+    const onRender = (app, html) => {
       try {
         injectButtons(app, html);
       } catch (e) {
-        warn("renderApplication handler failed:", e);
+        warn("render handler (buttons) failed:", e);
       }
-    });
+      try {
+        const el = (html instanceof jQuery ? html[0] : html);
+        injectSceneLinks(app, html, el, DEPTH_CFG);
+        injectSceneLinks(app, html, el, ALT_CFG);
+      } catch (e) {
+        warn("scene-links handler failed:", e);
+      }
+    };
+    Hooks.on("renderApplication", onRender);
+    Hooks.on("renderApplicationV2", onRender);
 
-    console.log(TAG, "Hex Config BU enhancer installed.");
+    console.log(TAG, "Hex Config BU enhancer installed (V1 + V2).");
   }
 
   Hooks.once("ready", install);

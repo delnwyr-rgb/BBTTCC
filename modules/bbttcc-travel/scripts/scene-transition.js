@@ -224,7 +224,7 @@
   function removeBackButton() { document.getElementById("bbttcc-scene-back")?.remove(); }
   function removePullTable()  { document.getElementById("bbttcc-scene-pull")?.remove(); }
 
-  function addBackButton(targetUuid, label) {
+  function addBackButton(targetUuid, label, { smart = false } = {}) {
     removeBackButton();
     const btn = document.createElement("div");
     btn.id = "bbttcc-scene-back";
@@ -233,8 +233,14 @@
       background:rgba(20,20,20,.9); color:#fff; padding:6px 10px; border-radius:8px;
       cursor:pointer; font:12px Helvetica; box-shadow:0 0 6px rgba(0,0,0,.35);`;
     btn.textContent = `⬅ ${label || "Back"}`;
-    btn.title = `Return to ${label || "the previous scene"}`;
-    btn.onclick = () => tx()?.back(targetUuid, { label });
+    btn.title = smart
+      ? "Move up one level (toward the surface/ground)"
+      : `Return to ${label || "the previous scene"}`;
+    // Dive/ascend scenes step UP one depth/altitude band at a time via the smart
+    // travel.surface(); everyone else returns straight to the target scene.
+    btn.onclick = smart
+      ? () => game.bbttcc?.api?.travel?.surface?.()
+      : () => tx()?.back(targetUuid, { label });
     document.body.appendChild(btn);
   }
 
@@ -262,7 +268,11 @@
 
     // Back button: configured returnLink flag, else the scene we dived FROM.
     // (returnLink gating avoids doubling the hub's own legacy "World Map" button.)
-    if (f.returnLink?.targetSceneUuid) addBackButton(f.returnLink.targetSceneUuid, f.returnLink.label);
+    // A depth/altitude dive scene (flags.bbttcc-travel.diveOrigin) gets the SMART
+    // button — it steps up one band at a time via game.bbttcc.api.travel.surface().
+    if (f.diveOrigin && game.bbttcc?.api?.travel?.surface) {
+      addBackButton(null, f.returnLink?.label || (f.diveOrigin.env === "aloft" ? "Descend" : "Surface"), { smart: true });
+    } else if (f.returnLink?.targetSceneUuid) addBackButton(f.returnLink.targetSceneUuid, f.returnLink.label);
     else if (dived && _lastDive.originUuid) addBackButton(_lastDive.originUuid, "Back");
 
     // Pull-table: GM, scene not yet activated, and it's either a flagged hex scene

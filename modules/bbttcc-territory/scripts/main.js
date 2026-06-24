@@ -439,6 +439,12 @@ const BBTTCC_TERRAIN_LABELS = {
   lake:          "Lake",
   sea:           "Sea",
   ocean:         "Sea / Ocean",
+  reef:          "Reef (underwater)",
+  depths:        "Depths (underwater)",
+  abyss:         "Abyss (underwater)",
+  sky:           "Sky (aerial)",
+  stratosphere:  "Stratosphere (aerial)",
+  orbit:         "Orbit (space)",
   ruins:         "Ruins / Urban",
   urbanWreckage: "Urban Wreckage",
   wasteland:     "Wasteland / Radiation",
@@ -475,6 +481,12 @@ function bbttccNormalizeTerrainKey(raw) {
     (low.includes("desert") || low.includes("ash")) ? "desert" :
     (low.includes("river") || low.includes("lake")) ? "river" :
     (low.includes("sea") || low.includes("ocean")) ? "ocean" :
+    (low.includes("abyss")) ? "abyss" :
+    (low.includes("reef")) ? "reef" :
+    (low.includes("depth") || low === "deep" || low.includes("deeps")) ? "depths" :
+    (low.includes("orbit") || low.includes("space")) ? "orbit" :
+    (low.includes("strato") || low.includes("high-alt") || low.includes("highalt")) ? "stratosphere" :
+    (low.includes("sky") || low.includes("aerial") || low.includes("aloft")) ? "sky" :
     (low.includes("ruin") || low.includes("urban")) ? "ruins" :
     (low.includes("wasteland") || low.includes("radiation")) ? "wasteland" :
     (low.includes("plain") || low.includes("grass")) ? "plains" :

@@ -37,6 +37,19 @@ const MOBILITIES = [
   { key: "hybrid",     label: "Hybrid (tows, redeploys)" }
 ];
 
+// Movement domains — which terrain mediums a rig can cross. Mirrors
+// FT.MOVEMENT_DOMAINS in the system. Travel hard-gates on these (a land-only
+// rig can't enter ocean). Most chassis are land-only; watercraft/subs/flyers
+// declare more. Kept here so the builder can validate without the system loaded.
+const MOVEMENT_DOMAINS = ["land", "water-surface", "water-sub", "air", "space"];
+function _normalizeDomains(raw) {
+  const arr = Array.isArray(raw)
+    ? raw
+    : String(raw || "").split(",");
+  const out = arr.map(x => String(x).trim().toLowerCase()).filter(d => MOVEMENT_DOMAINS.includes(d));
+  return out.length ? [...new Set(out)] : ["land"];
+}
+
 // Starter chassis — bracket × mobility narrative seeds. Click a chip to
 // prefill the form. These are NARRATIVE; the GM can always override the
 // underlying bracket/capacity numbers after a chip seeds them.
@@ -141,6 +154,101 @@ const CHASSIS_STARTERS = [
       capacity: { pilot: [0,0], gunner: [0,0], engineer: [1,2], crew: [1,4] },
       tags: "workshop, fabrication, repair, facility",
       loadout: { frame: "Forge Facility Frame", weapons: [], systems: ["Repair Bay", "Comms Array"], outputs: ["Mounted Forge"] }
+    }
+  },
+  // ── Watercraft (water-surface) & submersibles (water-sub) ─────────────────
+  // 2026-06-23 water vertical. These declare travel.domains so the movement-
+  // domain gate lets them cross rivers/lakes/seas/oceans (and, for the sub,
+  // dive the reef/deep/abyss bands). A land-only rig is hard-blocked from water.
+  {
+    key: "light_skiff",
+    label: "Light Skiff",
+    description: "A fast, shallow-draft boat. Runs rivers and coastlines, scouts the water, raids and is gone.",
+    defaults: {
+      bracket: "light", mobility: "mobile", tier: 1,
+      capacity: { pilot: [1,1], gunner: [0,1], engineer: [0,0], crew: [0,3] },
+      tags: "watercraft, boat, scout, water-surface",
+      travel: { speed: 5, range: 14, domains: ["water-surface"] },
+      loadout: { frame: "Light Skiff Frame", weapons: ["Twin Autocannons"], systems: ["Sensor Suite"] }
+    }
+  },
+  {
+    key: "medium_barge",
+    label: "Sail Barge",
+    description: "A broad water hauler. Ferries crew and matériel across lakes and seas; slow but sea-worthy.",
+    defaults: {
+      bracket: "medium", mobility: "mobile", tier: 2,
+      capacity: { pilot: [1,1], gunner: [0,2], engineer: [0,1], crew: [2,6] },
+      tags: "watercraft, barge, transport, water-surface",
+      travel: { speed: 3, range: 18, domains: ["water-surface"] },
+      loadout: { frame: "Sail Barge Frame", weapons: ["Twin Autocannons"], systems: ["Reinforced Plating", "Comms Array"] }
+    }
+  },
+  {
+    key: "heavy_warship",
+    label: "Warship",
+    description: "An armored gunship of the waterways. Trades speed for plating and broadside mounts; rules the surface.",
+    defaults: {
+      bracket: "heavy", mobility: "mobile", tier: 3,
+      capacity: { pilot: [1,1], gunner: [1,4], engineer: [0,1], crew: [2,6] },
+      tags: "watercraft, warship, gunship, water-surface",
+      travel: { speed: 3, range: 16, domains: ["water-surface"] },
+      loadout: { frame: "War Rig Frame", weapons: ["Twin Autocannons", "Mortar Battery"], systems: ["Reinforced Plating", "Sensor Suite"] }
+    }
+  },
+  {
+    key: "submersible",
+    label: "Submersible",
+    description: "A pressure hull that dives below the surface. Crosses water and descends to the reef and the depths; rated against the crush.",
+    defaults: {
+      bracket: "medium", mobility: "mobile", tier: 2,
+      capacity: { pilot: [1,1], gunner: [0,1], engineer: [1,1], crew: [0,4] },
+      tags: "watercraft, submersible, sub, water-sub",
+      // water-sub covers surface too (a sub can run on top); depthRating 2 = can
+      // reach the 'deep' band without taking Crushing pressure (abyss still bites).
+      travel: { speed: 3, range: 14, domains: ["water-sub"], depthRating: 2 },
+      loadout: { frame: "Sail Barge Frame", weapons: ["Twin Autocannons"], systems: ["Reinforced Plating", "Sensor Suite"] }
+    }
+  },
+  // ── Aircraft (air) & orbital structures (space) ───────────────────────────
+  // 2026-06-23 air vertical. Air-domain rigs fly OVER land and water (the travel
+  // gate treats air/space as near-universal overworld movers) and can Ascend
+  // into sky/stratosphere aerial scenes; a Space-domain craft also reaches orbit.
+  {
+    key: "light_flyer",
+    label: "Skiff Flyer",
+    description: "A light aircraft — flits over any terrain, scouts from the air, lands where wheels can't. Crosses land and water by flying over them.",
+    defaults: {
+      bracket: "light", mobility: "mobile", tier: 2,
+      capacity: { pilot: [1,1], gunner: [0,1], engineer: [0,0], crew: [0,2] },
+      tags: "aircraft, flyer, scout, air",
+      travel: { speed: 6, range: 16, domains: ["air"] },
+      loadout: { frame: "Light Skiff Frame", weapons: ["Twin Autocannons"], systems: ["Sensor Suite"] }
+    }
+  },
+  {
+    key: "heavy_dropship",
+    label: "Dropship / Gunship",
+    description: "An armored aircraft — hauls a squad or rains fire from above. Flies over land and water; armored enough to take the return fire.",
+    defaults: {
+      bracket: "heavy", mobility: "mobile", tier: 3,
+      capacity: { pilot: [1,1], gunner: [1,3], engineer: [0,1], crew: [2,6] },
+      tags: "aircraft, dropship, gunship, air",
+      travel: { speed: 5, range: 14, domains: ["air"] },
+      loadout: { frame: "War Rig Frame", weapons: ["Twin Autocannons", "Mortar Battery"], systems: ["Reinforced Plating", "Sensor Suite"] }
+    }
+  },
+  {
+    key: "orbital_bunker",
+    category: "facility",
+    label: "Orbital Bunker",
+    description: "A sealed station in orbit — watches the hexes below, weathers vacuum, and threatens an arc from on high. Stationary; bind it to a hex.",
+    defaults: {
+      bracket: "siege", mobility: "stationary", tier: 3,
+      capacity: { pilot: [0,0], gunner: [1,3], engineer: [1,2], crew: [2,8] },
+      tags: "orbital, bunker, station, space, facility, sealed",
+      travel: { speed: 0, range: 0, domains: ["space"] },
+      loadout: { frame: "Garrison Fort Frame", weapons: ["Mortar Battery"], systems: ["Reinforced Plating", "Sensor Suite", "Comms Array"] }
     }
   },
   {
@@ -1369,7 +1477,13 @@ async function _commit(root) {
       },
       defenses: { resistances, immunities, vulnerabilities },
       output: { modules: [], basePerTurn: {} },
-      travel: { speed, range, hazardResist },
+      // Movement domains are not yet a form field — carry them from the selected
+      // starter chassis so a Submersible/Skiff build keeps its water domain.
+      travel: {
+        speed, range, hazardResist,
+        domains: _normalizeDomains(chosen?.defaults?.travel?.domains),
+        depthRating: Math.max(0, Math.min(3, Number(chosen?.defaults?.travel?.depthRating ?? 0) || 0))
+      },
       tags
     },
     prototypeToken: {
@@ -1610,7 +1724,13 @@ function _rigDataFromChassis(chassis, { factionOwnerId = "" } = {}) {
       travel: {
         speed: Math.max(0, Number(d.travel?.speed ?? bracketDef.speed) || 0),
         range: Math.max(0, Number(d.travel?.range ?? bracketDef.range) || 0),
-        hazardResist: Math.max(0, Number(d.travel?.hazardResist ?? 0) || 0)
+        hazardResist: Math.max(0, Number(d.travel?.hazardResist ?? 0) || 0),
+        // Movement domains gate which terrain mediums this rig can cross (water/
+        // air/space). Default land-only — only purpose-built chassis declare more.
+        domains: _normalizeDomains(d.travel?.domains),
+        // Deepest band a water-sub can withstand without Crushing pressure:
+        // 0 = surface only, 1 = reef, 2 = deep, 3 = abyss.
+        depthRating: Math.max(0, Math.min(3, Number(d.travel?.depthRating ?? 0) || 0))
       },
       tags: csv(d.tags)
     },

@@ -28,8 +28,32 @@
 
   const DEFAULTS = Object.freeze({
     enabled: false,
+    // Depth axis: "y" = forced-perspective by screen position (the original
+    // courtly tableau); "elevation" = fake-3D by the token's Foundry elevation,
+    // so descending (lower elevation) reads as further/smaller and rising reads
+    // as closer/larger. Underwater/air/space scenes auto-enable the elevation axis.
+    axis: "y",
     frontY: 800,
     backY:  200,
+    // Elevation-axis bounds (in the scene's elevation units). nearElev maps to
+    // maxScale (closest/biggest), farElev to minScale (furthest/smallest).
+    // Default model: scene-TOP (surface/ceiling) is biggest, the ground map at
+    // elevation 0 sits mid, and descending below reads as deeper/smaller. Render
+    // order is pinned to baseElevation so depth NEVER sinks a token under the map.
+    nearElev: 40,
+    farElev:  -40,
+    // Where to read a token's depth from:
+    //   "elevation" → token.document.elevation (move via Token HUD; best with
+    //                 Foundry Levels OFF).
+    //   "flag"      → flags.bbttcc-raid.<depthFlag> (leaves real elevation alone,
+    //                 so Levels keeps every token on one floor; move via the tune
+    //                 macro's ± nudge). Use this when running Levels.
+    depthSource: "elevation",
+    depthFlag: "tableauDepth",
+    // The fixed render-plane elevation for tableau tokens. Foundry sorts the
+    // canvas by elevation, drawing elevation<0 BEHIND the background; pinning the
+    // mesh to one plane keeps depth purely cosmetic (scale + sort), never sunk.
+    baseElevation: 0,
     minScale: 0.25,
     maxScale: 1.00,
     // Ease-in: closer-to-back shrinks fast, closer-to-front stays near full.
@@ -62,6 +86,8 @@
     if (!token?.mesh) return;
     try {
       token.mesh.sort = 0;
+      // Restore the real render elevation we may have pinned to the base plane.
+      token.mesh.elevation = Number(token.document?.elevation ?? 0);
       token.renderFlags?.set?.({ refreshMesh: true, refreshShader: true });
     } catch (_e) {}
   }
@@ -79,9 +105,23 @@
       if (!cfg) return;
       if (!isTableauActor(token.document)) return;
 
-      const y = Number(token.document?.y ?? 0);
-      const range = (cfg.frontY - cfg.backY) || 1;
-      const tRaw = clamp((y - cfg.backY) / range, 0, 1);
+      // Depth driver: screen-Y (forced perspective) or elevation (fake 3D).
+      // tRaw ∈ [0,1]: 0 = furthest (minScale), 1 = closest (maxScale). sortKey
+      // orders draw depth (higher = drawn on top / nearer the camera).
+      let tRaw, sortKey;
+      if (String(cfg.axis) === "elevation") {
+        const depth = (String(cfg.depthSource) === "flag")
+          ? Number(foundry.utils.getProperty(token.document, `flags.${MOD}.${cfg.depthFlag || "tableauDepth"}`) ?? 0)
+          : Number(token.document?.elevation ?? 0);
+        const span = (Number(cfg.nearElev) - Number(cfg.farElev)) || 1;
+        tRaw = clamp((depth - Number(cfg.farElev)) / span, 0, 1);
+        sortKey = depth;
+      } else {
+        const y = Number(token.document?.y ?? 0);
+        const range = (cfg.frontY - cfg.backY) || 1;
+        tRaw = clamp((y - cfg.backY) / range, 0, 1);
+        sortKey = y;
+      }
       // Curve > 1 makes the back of the stage shrink fast while keeping
       // front-of-stage near full size. Linear = 1.0.
       const curveExp = Math.max(0.1, Number(cfg.curve ?? 1));
@@ -114,8 +154,17 @@
         token.nameplate.position.set(w / 2, oy + h * s + 4);
       }
 
+      // On the elevation axis, pin the token's RENDER elevation to a constant
+      // base plane. Foundry draws elevation<0 behind the scene background, so
+      // without this a token "one foot down" vanishes under the map. Depth then
+      // controls scale + relative sort only; document.elevation is untouched
+      // (vision / Levels still see the real value).
+      if (String(cfg.axis) === "elevation") {
+        try { token.mesh.elevation = Number(cfg.baseElevation ?? 0); } catch (_e) {}
+      }
+
       if (cfg.zSortByY) {
-        token.mesh.sort = Math.round(y);
+        token.mesh.sort = Math.round(sortKey);
         // Ensure parent will honour zIndex/sort.
         const parent = token.mesh.parent;
         if (parent && parent.sortableChildren !== true) {
@@ -151,6 +200,9 @@
     if (!scene || !canvas?.scene || canvas.scene.id !== scene.id) return;
     const cfg = scene.flags?.[MOD]?.tableau;
     if (!cfg) return;
+    // The front/back lines are a screen-Y concept — meaningless on the elevation
+    // axis (depth is the token's elevation, not its position). Skip them there.
+    if (String(cfg.axis) === "elevation") return;
     const front = Number(cfg.frontY ?? 0);
     const back  = Number(cfg.backY  ?? 0);
     const w     = canvas.dimensions?.width || 1920;
@@ -272,14 +324,20 @@
   // Clear guides on scene swap so we don't orphan PIXI graphics.
   Hooks.on("canvasTearDown", () => clearGuides());
 
-  // Token flag flipped → recompute that token (and reset if turned off).
+  // Token flag flipped → recompute (or reset if turned off). Elevation change →
+  // recompute too, so moving a token up/down on an elevation-axis scene re-scales
+  // it live (refreshToken also fires, but watch elevation explicitly for safety).
   Hooks.on("updateToken", (tokenDoc, changes) => {
-    const flagTouched = foundry.utils.getProperty(changes, `flags.${MOD}.tableauActor`);
-    if (flagTouched === undefined) return;
+    const flagTouched  = foundry.utils.getProperty(changes, `flags.${MOD}.tableauActor`);
+    const elevTouched  = changes?.elevation !== undefined;
+    // The custom depth flag (flag-source mode) — recompute when it moves.
+    const depthTouched = foundry.utils.getProperty(changes, `flags.${MOD}`) !== undefined
+      && /tableauDepth|depth/i.test(JSON.stringify(changes?.flags?.[MOD] ?? {}));
+    if (flagTouched === undefined && !elevTouched && !depthTouched) return;
     const tk = tokenDoc.object;
     if (!tk) return;
-    if (flagTouched === true) applyDepth(tk);
-    else resetToken(tk);
+    if (flagTouched === false) { resetToken(tk); return; }
+    applyDepth(tk);
   });
 
   // --- GM API surface ------------------------------------------------------
@@ -316,6 +374,15 @@
         const doc = tokenOrDoc?.document ?? tokenOrDoc;
         if (!doc?.update) return;
         await doc.update({ [`flags.${MOD}.tableauActor`]: !!on });
+      },
+      // Set/nudge a token's tableau depth in "flag" source mode (leaves real
+      // elevation alone — Levels-safe). `relative:true` adds to the current value.
+      setDepth: async (tokenOrDoc, value, { relative = false, scene = canvas?.scene } = {}) => {
+        const doc = tokenOrDoc?.document ?? tokenOrDoc;
+        if (!doc?.update) return;
+        const flag = String(getTableau(scene)?.depthFlag || "tableauDepth");
+        const cur = Number(foundry.utils.getProperty(doc, `flags.${MOD}.${flag}`) ?? 0);
+        await doc.update({ [`flags.${MOD}.${flag}`]: relative ? cur + Number(value) : Number(value) });
       },
       applyAll,
       showGuides: (scene = canvas?.scene) => drawGuides(scene),

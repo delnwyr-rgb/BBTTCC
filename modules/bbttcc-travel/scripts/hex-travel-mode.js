@@ -363,7 +363,15 @@
     for (let i=0;i<hexes.length-1;i++) {
       const hexFrom = hexes[i], hexTo = hexes[i+1];
       try {
-        await H().travelHex({ factionId: actor.id, hexFrom, hexTo, tokenId: token.id });
+        const r = await H().travelHex({ factionId: actor.id, hexFrom, hexTo, tokenId: token.id });
+        // Honor a refusal from the engine — the movement-domain hard gate (and
+        // Scout-Sign aborts) return { ok:false } WITHOUT throwing, so we must
+        // check the result or the token moves anyway. Don't move; stop the route.
+        if (r && r.ok === false) {
+          if (r.blocked) ui.notifications?.warn?.(r.summary || "Travel blocked — this faction has no rig that can cross that terrain.");
+          else if (!r.aborted) ui.notifications?.warn?.(r.summary || `Travel stopped on leg ${i+1}.`);
+          return;
+        }
         const to = canvas.drawings.get(hexTo);
         if (to) await token.document.update({ x: to.center.x - token.w/2, y: to.center.y - token.h/2 });
       } catch (e) {

@@ -684,6 +684,20 @@
           <button type="button" data-action="ftMoveAdjust" data-delta="5"  class="ft-move-adjust" data-tooltip="Spend 5 ft (manual narrative move).">+5</button>
         </div>
 
+        {{!-- Breath meter — only shown underwater (Submerged/Drowning). Spends one
+             each turn while Submerged; at 0 you Drown (1d6 Integrity/turn). --}}
+        {{#if breath}}
+        <div class="ft-move-row" data-tooltip="Breath underwater. Spends one each turn while Submerged; at 0 you start Drowning (1d6 Integrity/turn). Max = base + Body.">
+          <div class="ft-move-meter{{#if breath.drowning}} ft-move-over{{/if}}">
+            <div class="ft-move-fill" style="width:{{breath.pct}}%; background:{{#if breath.drowning}}#0a4a78{{else}}#1f8fdd{{/if}};"></div>
+            <span class="ft-move-label">
+              🫧 Breath: <b>{{breath.value}}</b> / {{breath.max}}
+              {{#if breath.drowning}}<span class="ft-move-over-tag">drowning</span>{{/if}}
+            </span>
+          </div>
+        </div>
+        {{/if}}
+
         {{!-- Mode chips — surface every speed > 0. Walk always shows; climb/swim/fly
              only when granted by ancestry/feat/AE. Each chip shows ft + sq @ active grid. --}}
         <div class="ft-move-modes">

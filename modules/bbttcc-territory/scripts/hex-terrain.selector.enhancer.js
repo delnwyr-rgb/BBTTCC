@@ -34,6 +34,12 @@
       desert:        {label:"Desert / Ash Wastes"},
       river:         {label:"River / Lake"},
       ocean:         {label:"Sea / Ocean"},
+      reef:          {label:"Reef (underwater · shallow)"},
+      depths:        {label:"Depths (underwater · deep)"},
+      abyss:         {label:"Abyss (underwater · crushing)"},
+      sky:           {label:"Sky (aerial · low)"},
+      stratosphere:  {label:"Stratosphere (aerial · high)"},
+      orbit:         {label:"Orbit (space)"},
       ruins:         {label:"Ruins / Urban"},
       wasteland:     {label:"Wasteland / Radiation"}
     };

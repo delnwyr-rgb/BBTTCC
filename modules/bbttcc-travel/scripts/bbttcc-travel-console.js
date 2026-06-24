@@ -1936,6 +1936,40 @@
           if (!factionId) { $rout.textContent = "Pick a faction first."; return; }
           if (!legs.length) { $rout.textContent = "Add at least one leg."; return; }
 
+          // ── Movement-domain pre-flight (water / air / space HARD GATE) ──────
+          // Refuse to execute a route the faction can't physically make BEFORE we
+          // prompt for overrides, spend OP, or run the visual token move. The core
+          // travelHex also gates per-leg, but the Console's visual mover animates
+          // the whole planned path regardless of per-leg results — so the only way
+          // to truly stop the token is to refuse Execute up front (owner ask,
+          // 2026-06-23). Build/bring a capable rig, trim the route, or flip off the
+          // "Travel: Enforce Movement Domains" setting.
+          try {
+            const domApi = game.bbttcc?.api?.travel?.domains;
+            const gateOn = (() => { try { return game.settings.get("bbttcc-core", "travelDomainGate") !== false; } catch { return true; } })();
+            if (gateOn && domApi?.canEnterTerrainKey) {
+              for (let gi = 0; gi < legs.length; gi++) {
+                const dHex = hexes.find(h => h.id === legs[gi].toId);
+                const tKey = dHex?.terrainKey || "";
+                const gate = domApi.canEnterTerrainKey(factionId, tKey);
+                if (gate && gate.ok === false) {
+                  const need = (gate.required || [])
+                    .map(k => game.fourththing?.constants?.MOVEMENT_DOMAINS?.[k]?.label || k).join(" or ");
+                  const where = gate.medium === "water"
+                    ? (gate.depthBand === "surface" ? "open water" : `the ${gate.depthBand}`)
+                    : gate.medium;
+                  const facName = game.actors.get(factionId)?.name || "This faction";
+                  const msg = `⛔ Route blocked at leg ${gi + 1} (${tKey || "?"}): ${facName} has no rig that can cross ${where}. Needs a rig with: ${need}. Build or bring one, trim the route, or have the GM disable the domain gate.`;
+                  $rout.textContent = msg;
+                  ui.notifications?.warn?.(msg);
+                  return; // ← do NOT execute, spend, or move the token
+                }
+              }
+            }
+          } catch (e) {
+            console.warn(TAG, "domain pre-flight failed (non-fatal, allowing execute)", e);
+          }
+
           // GM travel cost + encounter controls (manual overrides)
           // - costMult: multiply OP costs for each leg (after terrain/gate discounts)
           // - costAdd:  additive deltas per OP type (positive/negative)

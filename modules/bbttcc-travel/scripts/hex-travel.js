@@ -15,6 +15,7 @@
 (() => {
   const MOD_FCT = "bbttcc-factions";
   const MOD_TERR = "bbttcc-territory";
+  const SCOPE_TRV = "bbttcc-travel";
 
   // --- Config ----------------------------------------------------------------
   // Costs are MARKS (1 OP = 10 marks). Per-step terrain cost = N OP × 10.
@@ -31,10 +32,21 @@ const TERRAIN_TABLE = {
     "mire":          { cost: { economy:20, nonLethal:10 }, tier:3, bias:"hazard" },
     "desert":        { cost: { economy:20 }, tier:2, bias:"discovery" },
     "ashWastes":     { cost: { economy:20 }, tier:2, bias:"discovery" },
-    "river":         { cost: { economy:10, logistics:10 }, tier:1, bias:"discovery" },
-    "lake":          { cost: { economy:10, logistics:10 }, tier:1, bias:"discovery" },
-    "sea":           { cost: { economy:30, logistics:20 }, tier:4, bias:"discovery" },
-    "ocean":         { cost: { economy:30, logistics:20 }, tier:4, bias:"discovery" },
+    "river":         { cost: { economy:10, logistics:10 }, tier:1, bias:"discovery", medium:"water", depthBand:"surface" },
+    "lake":          { cost: { economy:10, logistics:10 }, tier:1, bias:"discovery", medium:"water", depthBand:"surface" },
+    "sea":           { cost: { economy:30, logistics:20 }, tier:4, bias:"discovery", medium:"water", depthBand:"surface" },
+    "ocean":         { cost: { economy:30, logistics:20 }, tier:4, bias:"discovery", medium:"water", depthBand:"surface" },
+    // Underwater dive bands — reached by Diving from a surface-water hex (see
+    // game.bbttcc.api.travel.dive). Each band requires a water-sub (submersible)
+    // rig; depth governs Crushing pressure in underwater combat (FT.SUBMERSION_BITE).
+    "reef":          { cost: { economy:20, logistics:10 }, tier:2, bias:"discovery", medium:"water", depthBand:"reef" },
+    "depths":        { cost: { economy:30, logistics:20 }, tier:3, bias:"hazard",    medium:"water", depthBand:"deep" },
+    "abyss":         { cost: { economy:40, logistics:20 }, tier:4, bias:"extreme",   medium:"water", depthBand:"abyss" },
+    // Aerial bands — reached by Ascending from a hex (see game.bbttcc.api.travel
+    // .ascend). Sky/stratosphere need an air rig (flyer); orbit needs a space rig.
+    "sky":           { cost: { economy:10, logistics:10 }, tier:2, bias:"discovery", medium:"air",   altBand:"sky" },
+    "stratosphere":  { cost: { economy:20, logistics:20 }, tier:3, bias:"hazard",    medium:"air",   altBand:"stratosphere" },
+    "orbit":         { cost: { economy:40, logistics:30 }, tier:4, bias:"extreme",   medium:"space", altBand:"orbit" },
     "ruins":         { cost: { economy:10, intrigue:10 }, tier:2, bias:"mix" },
     "urbanWreckage": { cost: { economy:10, intrigue:10 }, tier:2, bias:"mix" },
     "wasteland":     { cost: { economy:10, faith:10 }, tier:4, bias:"extreme" },
@@ -170,6 +182,246 @@ const TERRAIN_TABLE = {
     }
     return map;
   })();
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // MOVEMENT DOMAINS — terrain↔rig medium gating (water vertical, 2026-06-23)
+  // ───────────────────────────────────────────────────────────────────────────
+  // A rig declares system.travel.domains (array of FT.MOVEMENT_DOMAINS keys).
+  // To traverse a hex whose terrain medium ≠ land, the travelling faction must
+  // own a rig whose domains cover that medium (on-foot parties always have land).
+  // Surface water needs water-surface OR water-sub (a sub can run on the surface);
+  // a depth band (reef/deep/abyss) needs water-sub specifically. Air → air|space;
+  // space → space. Default (no medium on a terrain) = land.
+  const RIG_TYPE = "rig";
+  const RIG_FLAG = "bbttcc-factions";
+
+  // The medium a terrain spec belongs to. Falls back to "land".
+  function terrainMedium(spec) {
+    const m = String(spec?.medium || "").toLowerCase();
+    return m || "land";
+  }
+
+  // Which domain keys satisfy a terrain spec. Returns null for plain land
+  // (no gate). For water, surface accepts surface OR sub; depth requires sub.
+  function requiredDomainsForTerrain(spec) {
+    const medium = terrainMedium(spec);
+    // Land is unrestricted (everyone has "land"); a flyer/orbital also passes.
+    if (medium === "land") return null;
+    if (medium === "water") {
+      const band = String(spec?.depthBand || "surface").toLowerCase();
+      // Surface water: a boat, a sub, OR anything that flies over it (air/space).
+      // Underwater bands (reef/deep/abyss): only a submersible can go down.
+      return (band === "surface")
+        ? ["water-surface", "water-sub", "air", "space"]
+        : ["water-sub"];
+    }
+    // Air (sky/stratosphere): a flyer or an orbital craft.
+    if (medium === "air")   return ["air", "space"];
+    // Space (orbit): orbital only.
+    if (medium === "space") return ["space"];
+    return null;
+  }
+
+  // Domains a single rig provides (defaults to land if unset/legacy).
+  function rigDomains(rig) {
+    const sys = rig?.system?.system ?? rig?.system ?? {};
+    const raw = sys?.travel?.domains;
+    const list = Array.isArray(raw) ? raw.map(d => String(d).toLowerCase()).filter(Boolean) : [];
+    return list.length ? list : ["land"];
+  }
+
+  // Rigs a faction can travel with: type:"rig", mobile/hybrid (a stationary
+  // emplacement can't ferry the party), linked to the faction via either the
+  // identity.factionOwnerId field or the bbttcc-factions.factionId flag.
+  function factionRigs(factionId) {
+    const fid = String(factionId || "");
+    if (!fid) return [];
+    return Array.from(game.actors ?? []).filter(a => {
+      if (a?.type !== RIG_TYPE) return false;
+      const sys = a?.system?.system ?? a?.system ?? {};
+      const mobility = String(sys?.identity?.mobility || "mobile").toLowerCase();
+      if (mobility === "stationary") return false;
+      const ownerA = String(sys?.identity?.factionOwnerId || "");
+      const ownerB = String(a?.flags?.[RIG_FLAG]?.factionId || "");
+      return ownerA === fid || ownerB === fid;
+    });
+  }
+
+  // The union of domains a faction can field: always "land" (on-foot members)
+  // plus every domain across its mobile/hybrid rigs.
+  function factionTravelDomains(factionId) {
+    const set = new Set(["land"]);
+    for (const rig of factionRigs(factionId)) for (const d of rigDomains(rig)) set.add(d);
+    return set;
+  }
+
+  // The gate check: can this faction enter a hex of this terrain spec?
+  // Returns { ok, medium, required, have, rigs } — ok:true when unrestricted
+  // (land) or the faction has at least one satisfying domain.
+  function canFactionEnterTerrain(factionId, spec) {
+    const required = requiredDomainsForTerrain(spec);
+    const have = factionTravelDomains(factionId);
+    if (!required) return { ok: true, medium: terrainMedium(spec), required: null, have: [...have] };
+    const ok = required.some(d => have.has(d));
+    return {
+      ok,
+      medium: terrainMedium(spec),
+      depthBand: String(spec?.depthBand || "surface"),
+      required,
+      have: [...have],
+      rigs: ok ? factionRigs(factionId).filter(r => rigDomains(r).some(d => required.includes(d))).map(r => r.name) : []
+    };
+  }
+
+  // ── Diving (P2): surface-water hex → underwater scene via transition.dive ──
+  // A surface-water hex Drawing carries flags["bbttcc-travel"].diveScene (target
+  // scene uuid) + .diveBand (reef/deep/abyss). The underwater scene carries a
+  // returnLink (⬅ Surface) + flags.fourththing.underwater = { band }. Diving is
+  // gated on the faction owning a submersible (water-sub) RATED for the band's
+  // depth. Setup via tools/setup-underwater-dive.macro.js.
+  const DEPTH_BAND_INDEX = { surface: 0, reef: 1, deep: 2, depths: 2, abyss: 3 };
+
+  // Deepest band the faction's submersibles can safely reach (-1 = owns no sub).
+  function factionSubDepth(factionId) {
+    let best = -1;
+    for (const rig of factionRigs(factionId)) {
+      if (!rigDomains(rig).includes("water-sub")) continue;
+      const sys = rig?.system?.system ?? rig?.system ?? {};
+      best = Math.max(best, Number(sys?.travel?.depthRating ?? 0) || 0);
+    }
+    return best;
+  }
+
+  // Per-hex band→sceneUuid map (set via the Hex Config "Depth Links" section).
+  // Falls back to the legacy single diveScene/diveBand pair.
+  function hexDiveScenes(hexDoc) {
+    const f = hexDoc?.flags?.[SCOPE_TRV] || hexDoc?.document?.flags?.[SCOPE_TRV] || {};
+    const map = (f.diveScenes && typeof f.diveScenes === "object") ? { ...f.diveScenes } : {};
+    if (f.diveScene) { const b = String(f.diveBand || "reef").toLowerCase(); if (!map[b]) map[b] = f.diveScene; }
+    // Keep only entries with a real value, lowercase the band keys.
+    const out = {};
+    for (const [b, v] of Object.entries(map)) if (v) out[String(b).toLowerCase()] = v;
+    return out;
+  }
+
+  async function diveFromHex(factionId, hexUuid, opts = {}) {
+    const transition = game.bbttcc?.api?.transition;
+    if (!transition?.dive) return { ok: false, reason: "no-transition-api", message: "Scene transition primitive not loaded." };
+    let hexDoc = null;
+    try { hexDoc = await fromUuid(hexUuid); } catch (_e) {}
+    const map = hexDiveScenes(hexDoc);
+    const linked = Object.keys(map);
+    if (!linked.length) return { ok: false, reason: "no-dive-link", message: "This hex has no depth links — open its Hex Config → Depth Links and assign a scene." };
+
+    const subDepth = factionSubDepth(factionId);
+    if (subDepth < 0) { const m = "No submersible — diving needs a rig with the Water (Submerged) domain."; ui.notifications?.warn?.(m); return { ok: false, reason: "no-sub", message: m }; }
+
+    // Bands the sub can reach (depthRating ≥ band index), deepest first.
+    const reachable = linked.filter(b => (DEPTH_BAND_INDEX[b] ?? 1) <= subDepth)
+                            .sort((a, b) => (DEPTH_BAND_INDEX[b] ?? 1) - (DEPTH_BAND_INDEX[a] ?? 1));
+    if (!reachable.length) {
+      const shallowest = Math.min(...linked.map(b => DEPTH_BAND_INDEX[b] ?? 1));
+      const m = `Your submersible (depth ${subDepth}) can't reach this hex's depths (shallowest link needs ${shallowest}).`;
+      ui.notifications?.warn?.(m); return { ok: false, reason: "too-shallow", message: m };
+    }
+
+    // Pick the requested band if it's linked + reachable, else the deepest reachable.
+    let band = String(opts.band || "").toLowerCase();
+    if (!band || !reachable.includes(band)) band = reachable[0];
+    const sceneUuid = map[band];
+    await transition.dive(sceneUuid, { hexUuid, label: `Dive — ${band}`, flashColor: "#1f8fdd", audience: opts.audience || "view", focus: opts.focus, ...opts });
+    return { ok: true, band, sceneUuid };
+  }
+
+  // Ascend ONE band toward the surface/ground (reef/deep/abyss · sky/strat/orbit).
+  // From a depth/altitude scene, step to the next-shallower linked band of the
+  // same originating hex; only when there's no shallower band linked does it
+  // return all the way to the surface/ground scene. Used by both water (Surface)
+  // and air (Descend) — symmetric "one level up toward the origin".
+  async function surfaceFromScene(opts = {}) {
+    const transition = game.bbttcc?.api?.transition;
+    if (!transition?.back) return { ok: false, reason: "no-transition-api" };
+    const sc = canvas?.scene || game.scenes?.active || null;
+    const f = sc?.flags?.[SCOPE_TRV] || {};
+    const uw = sc?.flags?.fourththing?.underwater;
+    const al = sc?.flags?.fourththing?.aloft;
+    const env = uw ? "underwater" : (al ? "aloft" : null);
+    const band = (uw || al)?.band ? String((uw || al).band).toLowerCase() : null;
+    const origin = f.diveOrigin;
+    const water = env !== "aloft";
+    const flashColor = water ? "#1f8fdd" : "#7cc6ff";
+
+    // Stepwise: is there a shallower band of this hex linked? If so, go there.
+    if (env && band && origin?.hexUuid) {
+      const idx = water ? DEPTH_BAND_INDEX : ALT_BAND_INDEX;
+      let hex = null; try { hex = await fromUuid(origin.hexUuid); } catch (_e) {}
+      const map = hex ? (water ? hexDiveScenes(hex) : hexSkyScenes(hex)) : {};
+      const cur = idx[band] ?? 1;
+      const lower = Object.keys(map)
+        .filter(b => (idx[b] ?? 1) < cur)
+        .sort((a, b) => (idx[b] ?? 1) - (idx[a] ?? 1)); // closest band below first
+      if (lower.length) {
+        const nextBand = lower[0];
+        await transition.back(map[nextBand], { label: nextBand, flashColor, ...opts });
+        return { ok: true, band: nextBand, stepped: true };
+      }
+    }
+
+    // No shallower band — surface/descend all the way to the recorded origin.
+    const target = origin?.surfaceSceneUuid || f.returnLink?.targetSceneUuid;
+    if (!target) { const m = "This scene has no ground/surface to return to."; ui.notifications?.warn?.(m); return { ok: false, reason: "no-return-link", message: m }; }
+    await transition.back(target, { label: f.returnLink?.label || (water ? "Surface" : "Descend"), flashColor, ...opts });
+    return { ok: true, surfaced: true };
+  }
+
+  // ── Ascending (air vertical): hex → aerial scene via transition.dive ────────
+  // Mirrors diving. A hex Drawing carries flags["bbttcc-travel"].skyScenes
+  // (band → scene uuid; sky/stratosphere/orbit). The aerial scene carries a
+  // returnLink (⬅ Descend) + flags.fourththing.aloft = { band }. Gated on the
+  // faction owning a flyer (air) — or an orbital craft (space) for the orbit band.
+  const ALT_BAND_INDEX = { sky: 1, stratosphere: 2, orbit: 3 };
+
+  // Highest altitude band a faction can reach: space → orbit(3), air → strat(2).
+  function factionAirReach(factionId) {
+    const have = factionTravelDomains(factionId);
+    if (have.has("space")) return 3;
+    if (have.has("air")) return 2;
+    return 0;
+  }
+
+  function hexSkyScenes(hexDoc) {
+    const f = hexDoc?.flags?.[SCOPE_TRV] || hexDoc?.document?.flags?.[SCOPE_TRV] || {};
+    const map = (f.skyScenes && typeof f.skyScenes === "object") ? { ...f.skyScenes } : {};
+    const out = {};
+    for (const [b, v] of Object.entries(map)) if (v) out[String(b).toLowerCase()] = v;
+    return out;
+  }
+
+  async function ascendFromHex(factionId, hexUuid, opts = {}) {
+    const transition = game.bbttcc?.api?.transition;
+    if (!transition?.dive) return { ok: false, reason: "no-transition-api", message: "Scene transition primitive not loaded." };
+    let hexDoc = null;
+    try { hexDoc = await fromUuid(hexUuid); } catch (_e) {}
+    const map = hexSkyScenes(hexDoc);
+    const linked = Object.keys(map);
+    if (!linked.length) return { ok: false, reason: "no-sky-link", message: "This hex has no altitude links — open its Hex Config → Altitude Links and assign a scene." };
+
+    const reach = factionAirReach(factionId);
+    if (reach <= 0) { const m = "No flyer — ascending needs a rig with the Air domain (orbit needs Space)."; ui.notifications?.warn?.(m); return { ok: false, reason: "no-flyer", message: m }; }
+
+    const reachable = linked.filter(b => (ALT_BAND_INDEX[b] ?? 1) <= reach)
+                            .sort((a, b) => (ALT_BAND_INDEX[b] ?? 1) - (ALT_BAND_INDEX[a] ?? 1));
+    if (!reachable.length) {
+      const m = "Your craft can't reach this hex's altitude — orbit needs a Space-domain rig.";
+      ui.notifications?.warn?.(m); return { ok: false, reason: "too-high", message: m };
+    }
+
+    let band = String(opts.band || "").toLowerCase();
+    if (!band || !reachable.includes(band)) band = reachable[0];
+    const sceneUuid = map[band];
+    await transition.dive(sceneUuid, { hexUuid, label: `Ascend — ${band}`, flashColor: "#7cc6ff", audience: opts.audience || "view", focus: opts.focus, ...opts });
+    return { ok: true, band, sceneUuid };
+  }
 
   function getHexAtPoint(x, y) {
     const dwgs = canvas.drawings.placeables;
@@ -337,6 +589,7 @@ const TERRAIN_TABLE = {
   const ENC_DIAL_NS = "bbttcc-core"; // always-registered module, avoids unregistered-key crashes
   const ENC_BASE_DC_KEY = "travelEncounterBaseDC";
   const ENC_TIER_STEP_KEY = "travelEncounterTierStep";
+  const DOMAIN_GATE_KEY = "travelDomainGate";
 
   function _ensureEncounterDialSettings() {
     try {
@@ -352,6 +605,13 @@ const TERRAIN_TABLE = {
           name: "Travel: Encounter DC per Tier",
           hint: "Extra DC added per terrain danger tier (1-4). HIGHER = dangerous terrain ramps encounter chance faster. Default 2.",
           scope: "world", config: true, type: Number, default: 2
+        });
+      }
+      if (!game.settings?.settings?.has(`${ENC_DIAL_NS}.${DOMAIN_GATE_KEY}`)) {
+        game.settings.register(ENC_DIAL_NS, DOMAIN_GATE_KEY, {
+          name: "Travel: Enforce Movement Domains",
+          hint: "When ON, a faction can only enter water/air/space hexes if it owns a rig that handles that medium (a boat, a sub, a flyer). When OFF, any faction can travel anywhere. Default ON.",
+          scope: "world", config: true, type: Boolean, default: true
         });
       }
     } catch (e) {
@@ -583,6 +843,35 @@ const distanceMiles = milesPerHex ? (distanceUnits * milesPerHex) : null;
 
     if (gateOverride) {
       ctx.gate = gateOverride;
+    }
+
+    // ──────────────────────────────────────────────────────────────────────
+    // MOVEMENT-DOMAIN HARD GATE (water vertical, 2026-06-23)
+    // A faction can't drive onto water / into the air / out to orbit without a
+    // rig that handles that medium. Bail BEFORE any OP spend or hook. GM can
+    // override per-call with opts.bypassDomainGate (Travel Console "force") or
+    // disable globally via the world setting.
+    // ──────────────────────────────────────────────────────────────────────
+    try {
+      _ensureEncounterDialSettings();
+      let gateOn = true;
+      try { gateOn = game.settings.get(ENC_DIAL_NS, DOMAIN_GATE_KEY) !== false; } catch (_e) {}
+      if (gateOn && opts.bypassDomainGate !== true) {
+        const gate = canFactionEnterTerrain(factionId, spec);
+        if (!gate.ok) {
+          const domLabel = (k) => game.fourththing?.constants?.MOVEMENT_DOMAINS?.[k]?.label || k;
+          const need = gate.required.map(domLabel).join(" or ");
+          const mediumWord = gate.medium === "water"
+            ? (gate.depthBand === "surface" ? "open water" : `the ${gate.depthBand}`)
+            : gate.medium;
+          const msg = `${actor.name} can't cross into ${mediumWord} (${key}) — needs a rig with: ${need}. Build or bring one, or have the GM force passage.`;
+          ui.notifications?.warn?.(msg);
+          console.log(TAG, "Domain gate BLOCKED travel:", { factionId, terrain: key, ...gate });
+          return { ok: false, blocked: true, reason: "domain-gate", terrainKey: key, gate, summary: msg };
+        }
+      }
+    } catch (e) {
+      console.warn(TAG, "domain gate check failed (non-fatal, allowing travel)", e);
     }
 
     // Ley Gate discount (Option 1): reduce OP cost by strength
@@ -1487,6 +1776,32 @@ function registerTravelAPI() {
     getHexTerrainSpec,
     _encounterDc
   };
+
+  // Movement-domain gating surface — reused by combat (underwater zone detection),
+  // the dive transition, and any UI that wants to preview reachability.
+  api.travel.domains = {
+    terrainMedium,
+    requiredDomainsForTerrain,
+    rigDomains,
+    factionRigs,
+    factionTravelDomains,
+    canFactionEnterTerrain,
+    // Convenience: gate a faction against a terrain KEY (resolves the spec).
+    canEnterTerrainKey: (factionId, terrainKey) => {
+      const spec = TERRAIN_TABLE[terrainKey] || TERRAIN_NORM[normalizeTerrainKey(terrainKey)] || null;
+      return canFactionEnterTerrain(factionId, spec || {});
+    },
+    factionSubDepth,
+    factionAirReach
+  };
+
+  // Diving: surface-water hex ⇵ underwater scene (gated on a depth-rated sub).
+  api.travel.dive    = diveFromHex;
+  api.travel.surface = surfaceFromScene;
+  // Ascending: hex ⇵ aerial scene (gated on an air/space rig). surface() also
+  // descends — it just follows whatever returnLink the active scene carries.
+  api.travel.ascend  = ascendFromHex;
+  api.travel.descend = surfaceFromScene;
 
   console.log(TAG, "Hex Travel Visual Engine registered.", {
     hasWrapper: (api.travelHex !== travelHex),

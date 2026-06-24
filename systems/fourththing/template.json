@@ -502,7 +502,9 @@
       "travel": {
         "speed": 1,
         "range": 5,
-        "hazardResist": 0
+        "hazardResist": 0,
+        "domains": ["land"],
+        "depthRating": 0
       },
       "tags": []
     }

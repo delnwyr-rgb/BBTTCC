@@ -9617,6 +9617,22 @@ FT.CONDITIONS = {
   compelled:  { label: "Compelled",  color: "#7d3cff", desc: "On your turn you must spend at least one action toward a directive named by the source; otherwise you may act freely." },
   dying:      { label: "Dying",      color: "#8b0000", desc: "Integrity reduced to 0. Make a Last Stand roll at the start of each of your turns. 3 successes → stabilize at 1 Integrity. 3 failures → Cross the Threshold." },
   surprise:   { label: "Surprised",  color: "#cc7a00", desc: "Cannot take any action on the first round of combat. Ends at the start of your next turn." },
+  // ── Submersion ladder (water / underwater) ─────────────────────────────────
+  // Applied by the environment, not by manifestations: a steward in an underwater
+  // zone is Submerged; once their breath budget is spent they begin Drowning; at
+  // crushing depth (deep/abyss bands) an unrated hull/suit takes Crushing pressure.
+  // The numeric bite (breath, drowning/crush tick) lives in FT.SUBMERSION_BITE.
+  submerged:  { label: "Submerged",  color: "#1f8fdd", img: "icons/svg/water.svg",  desc: "Underwater. Move at Swim speed (no Swim speed → movement halved). Ranged kinetic attacks have disadvantage; open flame and Thermal (hot) fizzle; Electrical strikes everyone in the zone. Breath is limited — see your Breath track." },
+  drowning:   { label: "Drowning",   color: "#0a4a78", img: "icons/svg/drown.svg",  desc: "Out of breath. 1d6 Integrity at the start of each of your turns until you surface or breathe." },
+  crushing:   { label: "Crushing",   color: "#0d3550", img: "icons/svg/falling.svg", desc: "Crushing depth. Unless your hull/suit is pressure-rated, 1d4 Integrity at the start of each of your turns." },
+  // ── Aerial ladder (sky / air / orbit) ───────────────────────────────────────
+  // Applied by an aerial scene (flags.fourththing.aloft = { band }). Everyone in
+  // the scene is Airborne; an actor with no lift (no Fly speed / flags.fourththing
+  // .canFly) or who is knocked off-balance starts Falling; at orbit, exposure to
+  // Vacuum. Numeric bite lives in FT.AERIAL.
+  airborne:   { label: "Airborne",   color: "#7cc6ff", img: "icons/svg/wing.svg",    desc: "Aloft. Move at Fly speed (no Fly speed → movement halved). Ranged attacks dominate; you have height. Lose your lift — no Fly speed, or knocked Prone/Staggered/Restrained — and you start Falling." },
+  falling:    { label: "Falling",    color: "#3a6ea5", img: "icons/svg/falling.svg", desc: "Plummeting. Impact damage at the start of each of your turns until you hit ground, are caught, or regain flight." },
+  vacuum:     { label: "Vacuum",     color: "#1b2440", img: "icons/svg/explosion.svg", desc: "Exposed to vacuum. Unless your suit/hull is sealed, 1d6 Integrity at the start of each of your turns (suffocation + cold)." },
   // ── Radiation Sickness ladder ──────────────────────────────────────────────
   // Auto-managed by bbttcc-radiation (radiation-effects.js) to mirror the actor's
   // current RP tier. The numeric bite (roll penalty / Integrity cap / action tax /
@@ -9654,6 +9670,86 @@ function _ftRadiationBite(actor) {
   for (const t of FT.RADIATION_BITE) if (rp >= t.min) return { ...t, rp };
   return none;
 }
+
+// ── Movement domains (which medium a rig can operate in) ────────────────────
+// A rig declares system.travel.domains (array). Travel HARD-GATES on the match:
+// to traverse a water/air/space hex the faction must own a rig whose domains
+// cover that medium (on-foot parties always have "land"). Default rig = land-only.
+// The terrain↔domain requirement + faction-domain resolution live in
+// bbttcc-travel/scripts/hex-travel.js (game.bbttcc.api.travel.domains.*).
+FT.MOVEMENT_DOMAINS = {
+  "land":          { label: "Land",              short: "Land",  desc: "Ground travel — the default for any rig or on-foot party." },
+  "water-surface": { label: "Water (Surface)",   short: "Surf",  desc: "Floats and crosses rivers, lakes, seas, and oceans on the surface." },
+  "water-sub":     { label: "Water (Submerged)", short: "Sub",   desc: "Dives below the surface — reefs, depths, and the abyss." },
+  "air":           { label: "Air",               short: "Air",   desc: "Flies over any terrain; ignores ground hazards." },
+  "space":         { label: "Space / Orbital",   short: "Orbit", desc: "Operates in vacuum and orbit." }
+};
+
+// ── Submersion — environmental bite for underwater scenes ───────────────────
+// Mirrors FT.RADIATION_BITE. A steward/NPC standing in an underwater scene (a
+// scene flagged flags.fourththing.underwater = { band }) is Submerged and spends
+// Breath each turn; at 0 Breath they Drown (Integrity tick). At crushing depth
+// (deep/abyss) an actor without pressure protection takes Crushing damage too.
+// Applied GM-side at turn-start in _ftHandleTurnStart; cleared when they surface.
+FT.DEPTH_BANDS = { reef: 1, deep: 2, depths: 2, abyss: 3 };
+FT.SUBMERSION = {
+  breathBase: 3,                               // breath turns before drowning (+ Body)
+  drownTick:  "1d6",                           // Integrity/turn while Drowning
+  crushFromBand: 2,                            // bands ≥ this (deep/abyss) crush…
+  crushTick:  { deep: "1d4", depths: "1d4", abyss: "1d6" }  // …unless pressure-rated
+};
+
+// The underwater band of the actor's current scene, or null if not underwater.
+function _ftActorSubmersionBand(actor) {
+  if (!actor || (actor.type !== "character" && actor.type !== "npc")) return null;
+  const scene = actor?.getActiveTokens?.(true)?.[0]?.scene
+    || actor?.token?.parent
+    || canvas?.scene || null;
+  const band = String(scene?.flags?.fourththing?.underwater?.band || "").toLowerCase();
+  return FT.DEPTH_BANDS[band] ? band : null;
+}
+
+// Protected from submersion (sealed-sub crew / aquatic adaptation / immunity).
+function _ftSubmersionImmune(actor) {
+  if (foundry.utils.getProperty(actor, "flags.fourththing.aquaticAdapted")) return true;
+  const rawSys = actor?.system?.system ?? actor?.system ?? {};
+  const ci = rawSys?.derived?.defenses?.conditionImmunities ?? rawSys?.conditionImmunities ?? [];
+  return Array.isArray(ci) && (ci.includes("submerged") || ci.includes("drowning"));
+}
+function _ftPressureRated(actor) {
+  return !!foundry.utils.getProperty(actor, "flags.fourththing.pressureRated")
+      || !!foundry.utils.getProperty(actor, "flags.fourththing.aquaticAdapted");
+}
+
+// ── Aerial — environmental bite for sky / orbit scenes ──────────────────────
+// Mirrors submersion. A scene flagged flags.fourththing.aloft = { band } makes
+// everyone Airborne; an actor with no lift (no Fly speed / flags.fourththing
+// .canFly) or knocked off-balance starts Falling (impact tick by band). At the
+// orbit band, exposure to Vacuum unless the actor is sealed (pressureRated).
+FT.ALTITUDE_BANDS = { sky: 1, stratosphere: 2, orbit: 3 };
+FT.AERIAL = {
+  fallTick: { sky: "2d6", stratosphere: "4d6" },   // impact/turn while Falling (no ground at orbit)
+  vacuumTick: "1d6"                                  // suffocation + cold/turn at orbit, unsealed
+};
+
+// The aloft band of the actor's current scene, or null if not aloft.
+function _ftActorAloftBand(actor) {
+  if (!actor || (actor.type !== "character" && actor.type !== "npc")) return null;
+  const scene = actor?.getActiveTokens?.(true)?.[0]?.scene
+    || actor?.token?.parent
+    || canvas?.scene || null;
+  const band = String(scene?.flags?.fourththing?.aloft?.band || "").toLowerCase();
+  return FT.ALTITUDE_BANDS[band] ? band : null;
+}
+
+// Does this actor have lift (own flight / flagged able to fly)?
+function _ftHasLift(actor) {
+  const rawSys = actor?.system?.system ?? actor?.system ?? {};
+  if (Number(rawSys?.derived?.movement?.fly) > 0) return true;
+  return !!foundry.utils.getProperty(actor, "flags.fourththing.canFly");
+}
+// Sealed against vacuum (pressure-rated suit / hull, reused from the deep).
+function _ftSealedEnv(actor) { return _ftPressureRated(actor); }
 
 FT.DEFENSES = {
   guard:   { label: "Guard",   formula: "10 + Violence + Body",    desc: "Resists physical force"       },
@@ -16372,6 +16468,111 @@ Hooks.once("init", function () {
   // Shared turn-start handler. De-duped across every turn-change hook Foundry
   // has shipped (v11 combatTurn, v12+ combatTurnChange, and updateCombat as a
   // low-level fallback) so the same turn only rolls Last Stand once.
+  // ── Submersion — per-turn underwater bite (breath / drowning / crush) ───────
+  function _ftHasCondition(actor, key) {
+    const rawSys = actor?.system?.system ?? actor?.system ?? {};
+    return rawSys?.conditions?.[key] === true;
+  }
+  async function _ftEnsureCondition(actor, key, on) {
+    if (!!_ftHasCondition(actor, key) === !!on) return;       // already in desired state
+    try { await game.fourththing.toggleCondition(actor, key); } catch (_e) {}
+  }
+  function _ftBreathMax(actor) {
+    const rawSys = actor?.system?.system ?? actor?.system ?? {};
+    const body = Number(rawSys?.attributes?.body?.value ?? 0) || 0;
+    return Math.max(1, FT.SUBMERSION.breathBase + Math.max(0, body));
+  }
+  async function _ftClearSubmersion(actor) {
+    // Surfaced (or never underwater) — drop the conditions and refill breath.
+    for (const k of ["submerged", "drowning", "crushing"]) await _ftEnsureCondition(actor, k, false);
+    if (foundry.utils.getProperty(actor, "flags.fourththing.breath") != null) {
+      try { await actor.unsetFlag("fourththing", "breath"); } catch (_e) {}
+    }
+  }
+  async function _ftSubmersionTurn(actor, band) {
+    // 1) Always Submerged while underwater.
+    await _ftEnsureCondition(actor, "submerged", true);
+
+    // 2) Breath budget — init on the first submerged turn, then spend one.
+    const max = _ftBreathMax(actor);
+    let breath = Number(foundry.utils.getProperty(actor, "flags.fourththing.breath"));
+    if (!Number.isFinite(breath)) breath = max;
+    breath = Math.max(0, breath - 1);
+    try { await actor.setFlag("fourththing", "breath", breath); } catch (_e) {}
+
+    // 3) Out of breath → Drowning + Integrity tick. Otherwise show the breath
+    //    countdown so the (otherwise invisible) clock is on screen.
+    if (breath <= 0) {
+      await _ftEnsureCondition(actor, "drowning", true);
+      try {
+        const r = new Roll(FT.SUBMERSION.drownTick); await r.evaluate();
+        await game.fourththing.rolls._applyDamageToActor(actor, r.total, { track: "integrity", ignoreResists: true });
+        ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:#0a4a78">🫁 <b>${ftEscapeHtml(actor.name)}</b> is <b>Drowning</b>: −${r.total} Integrity (${FT.SUBMERSION.drownTick})</span></div>` });
+      } catch (_e) { console.warn("Roll for Initiation | drown tick failed", _e); }
+    } else {
+      await _ftEnsureCondition(actor, "drowning", false);
+      const low = breath <= 1;
+      ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+        content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:${low ? '#0a4a78' : '#1f8fdd'}">🫧 <b>${ftEscapeHtml(actor.name)}</b> holds breath underwater — <b>${breath}/${max}</b> left${low ? " (next turn: <b>Drowning</b>)" : ""}.</span></div>` });
+    }
+
+    // 4) Crushing depth (deep/abyss) → pressure tick unless pressure-rated.
+    const bandIdx = FT.DEPTH_BANDS[band] || 0;
+    if (bandIdx >= FT.SUBMERSION.crushFromBand && !_ftPressureRated(actor)) {
+      await _ftEnsureCondition(actor, "crushing", true);
+      const f = FT.SUBMERSION.crushTick[band] || "1d4";
+      try {
+        const r = new Roll(f); await r.evaluate();
+        await game.fourththing.rolls._applyDamageToActor(actor, r.total, { track: "integrity", ignoreResists: true });
+        ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:#0d3550">🌊 <b>${ftEscapeHtml(actor.name)}</b> — Crushing depth (${band}): −${r.total} Integrity (${f})</span></div>` });
+      } catch (_e) { console.warn("Roll for Initiation | crush tick failed", _e); }
+    } else {
+      await _ftEnsureCondition(actor, "crushing", false);
+    }
+  }
+
+  // ── Aerial — per-turn bite (airborne / falling / vacuum) ────────────────────
+  async function _ftClearAloft(actor) {
+    for (const k of ["airborne", "falling", "vacuum"]) await _ftEnsureCondition(actor, k, false);
+  }
+  async function _ftAloftTurn(actor, band) {
+    await _ftEnsureCondition(actor, "airborne", true);
+
+    // Orbit: no ground to fall to → Vacuum (unless sealed), never Falling.
+    if (band === "orbit") {
+      await _ftEnsureCondition(actor, "falling", false);
+      if (_ftSealedEnv(actor)) { await _ftEnsureCondition(actor, "vacuum", false); return; }
+      await _ftEnsureCondition(actor, "vacuum", true);
+      try {
+        const r = new Roll(FT.AERIAL.vacuumTick); await r.evaluate();
+        await game.fourththing.rolls._applyDamageToActor(actor, r.total, { track: "integrity", ignoreResists: true });
+        ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:#1b2440">🌌 <b>${ftEscapeHtml(actor.name)}</b> — Vacuum exposure: −${r.total} Integrity (${FT.AERIAL.vacuumTick})</span></div>` });
+      } catch (_e) { console.warn("Roll for Initiation | vacuum tick failed", _e); }
+      return;
+    }
+
+    // Sky / stratosphere: no Vacuum, but Fall if you can't hold the air —
+    // no lift (Fly speed / canFly) OR knocked off-balance (prone/staggered/restrained).
+    await _ftEnsureCondition(actor, "vacuum", false);
+    const destabilized = _ftHasCondition(actor, "prone") || _ftHasCondition(actor, "staggered") || _ftHasCondition(actor, "restrained");
+    const aloftOk = _ftHasLift(actor) && !destabilized;
+    if (!aloftOk) {
+      await _ftEnsureCondition(actor, "falling", true);
+      const f = FT.AERIAL.fallTick[band] || "2d6";
+      try {
+        const r = new Roll(f); await r.evaluate();
+        await game.fourththing.rolls._applyDamageToActor(actor, r.total, { track: "integrity", ignoreResists: true });
+        ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:#3a6ea5">💨 <b>${ftEscapeHtml(actor.name)}</b> is <b>Falling</b>: −${r.total} Integrity impact (${f})</span></div>` });
+      } catch (_e) { console.warn("Roll for Initiation | fall tick failed", _e); }
+    } else {
+      await _ftEnsureCondition(actor, "falling", false);
+    }
+  }
+
   let _ftLastTurnKey = null;
   async function _ftHandleTurnStart(source, combat, current) {
     if (!combat) return;
@@ -16394,14 +16595,24 @@ Hooks.once("init", function () {
     if (!actor) return;
 
     // Reset per-turn action economy + reseed movement budget from current walk speed.
+    // Underwater: a Submerged actor moves at Swim speed (half walk if no Swim speed).
     const sysSnap = actor.system?.system ?? actor.system;
     const walkFt  = Number(sysSnap?.derived?.movement?.walk) || 30;
+    const _subBand   = _ftActorSubmersionBand(actor);
+    const _submerged = !!_subBand && !_ftSubmersionImmune(actor);
+    const _swimFt    = Number(sysSnap?.derived?.movement?.swim) || 0;
+    const _aloftBand = _ftActorAloftBand(actor);
+    const _aloft     = !!_aloftBand;
+    const _flyFt     = Number(sysSnap?.derived?.movement?.fly) || 0;
+    let moveFt = walkFt;
+    if (_submerged)  moveFt = _swimFt > 0 ? _swimFt : Math.floor(walkFt / 2);   // swim underwater
+    else if (_aloft) moveFt = _flyFt  > 0 ? _flyFt  : Math.floor(walkFt / 2);   // fly when aloft
     await actor.update({
       "system.actions.actionUsed":      false,
       "system.actions.bonusUsed":       false,
       "system.actions.reactionUsed":    false,
       "system.actions.movementUsedFt":  0,
-      "system.actions.movementBudgetFt": walkFt
+      "system.actions.movementBudgetFt": moveFt
     });
 
     // ── Radiation Sickness — per-turn bite (action tax + Integrity tick) ──────
@@ -16433,6 +16644,28 @@ Hooks.once("init", function () {
           });
         } catch (_e) { console.warn("Roll for Initiation | radiation tick failed", _e); }
       }
+    }
+
+    // ── Submersion — per-turn underwater bite (breath / drowning / crush) ─────
+    // GM-authoritative once per turn (same gate as radiation). Underwater scenes
+    // carry flags.fourththing.underwater.band (set by the dive setup macro). When
+    // the actor isn't underwater this clears any lingering submersion conditions
+    // and refills breath. No-ops for non-character/npc and pressure-rated actors.
+    if (game.user?.isGM && (!game.users?.activeGM || game.users.activeGM === game.user)) {
+      try {
+        if (_submerged) await _ftSubmersionTurn(actor, _subBand);
+        else await _ftClearSubmersion(actor);
+      } catch (_e) { console.warn("Roll for Initiation | submersion turn failed", _e); }
+    }
+
+    // ── Aerial — per-turn bite (airborne / falling / vacuum) ──────────────────
+    // GM-authoritative once per turn. Aerial scenes carry flags.fourththing.aloft
+    // .band (set by the Altitude Links setup). Clears when the actor isn't aloft.
+    if (game.user?.isGM && (!game.users?.activeGM || game.users.activeGM === game.user)) {
+      try {
+        if (_aloft && (actor.type === "character" || actor.type === "npc")) await _ftAloftTurn(actor, _aloftBand);
+        else await _ftClearAloft(actor);
+      } catch (_e) { console.warn("Roll for Initiation | aerial turn failed", _e); }
     }
 
     // Expired-AE culling (playtest 2026-06-06: "Surge: Brace never drops off the
@@ -17857,6 +18090,25 @@ Hooks.once("init", function () {
               swim:  sqRound(mv.swim),
               fly:   sqRound(mv.fly)
             }
+          };
+        })(),
+        // Breath meter — only surfaced while underwater (Submerged/Drowning) or
+        // when a breath value is still on the actor. Hidden otherwise so the bar
+        // doesn't clutter land play. Mirrors FT.SUBMERSION (max = base + Body).
+        breath: (() => {
+          const conds = sysData?.conditions ?? {};
+          const submerged = conds.submerged === true || conds.drowning === true;
+          const raw = foundry.utils.getProperty(actor, "flags.fourththing.breath");
+          const has = Number.isFinite(Number(raw));
+          if (!submerged && !has) return null;
+          const body = Number(sysData?.attributes?.body?.value ?? 0) || 0;
+          const base = Number(FT?.SUBMERSION?.breathBase ?? 3);
+          const max = Math.max(1, base + Math.max(0, body));
+          const value = has ? Math.max(0, Math.min(max, Number(raw))) : max;
+          return {
+            value, max,
+            pct: max > 0 ? Math.round(Math.min(100, (value / max) * 100)) : 0,
+            drowning: value <= 0
           };
         })(),
         ftFlags:       actor.flags?.fourththing ?? {},
@@ -20246,6 +20498,20 @@ Hooks.once("init", function () {
               fly:   sqRound(mv.fly)
             }
           };
+        })(),
+        // Breath meter — parity with the Steward sheet. Only surfaces underwater
+        // (Submerged/Drowning) or while a breath value lingers. max = base + Body.
+        breath: (() => {
+          const conds = sysData?.conditions ?? {};
+          const submerged = conds.submerged === true || conds.drowning === true;
+          const raw = foundry.utils.getProperty(actor, "flags.fourththing.breath");
+          const has = Number.isFinite(Number(raw));
+          if (!submerged && !has) return null;
+          const body = Number(sysData?.attributes?.body?.value ?? 0) || 0;
+          const base = Number(FT?.SUBMERSION?.breathBase ?? 3);
+          const max = Math.max(1, base + Math.max(0, body));
+          const value = has ? Math.max(0, Math.min(max, Number(raw))) : max;
+          return { value, max, pct: max > 0 ? Math.round(Math.min(100, (value / max) * 100)) : 0, drowning: value <= 0 };
         })(),
         // NPC Parity Sprint A (2026-05-14) — top-level surfaces that the
         // ftSurgeSpend / ftActAgain / ftCombatAction panels read. Mirrors

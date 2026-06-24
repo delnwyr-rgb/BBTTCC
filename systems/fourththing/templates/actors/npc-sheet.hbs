@@ -262,6 +262,18 @@
       <button type="button" data-action="ftMoveAdjust" data-delta="5"  class="ft-npc-tool" data-tooltip="Spend 5 ft (manual narrative move).">+5</button>
     </div>
 
+    {{#if breath}}
+    <div class="ft-move-row" data-tooltip="Breath underwater. Spends one each turn while Submerged; at 0 you Drown (1d6 Integrity/turn). Max = base + Body." style="display:flex; align-items:center; gap:.3rem; flex:1 1 auto; min-width:150px;">
+      <div class="ft-move-meter{{#if breath.drowning}} ft-move-over{{/if}}" style="position:relative; flex:1 1 auto; min-width:100px; height:1.4rem; border:1px solid rgba(120,120,120,0.4); border-radius:3px; background:rgba(0,0,0,0.2); overflow:hidden;">
+        <div class="ft-move-fill" style="width:{{breath.pct}}%; height:100%; background:{{#if breath.drowning}}rgba(10,74,120,0.6){{else}}rgba(31,143,221,0.4){{/if}};"></div>
+        <span class="ft-move-label" style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; font-size:0.75rem; gap:.25rem;">
+          🫧 Breath: <b>{{breath.value}}</b> / {{breath.max}}
+          {{#if breath.drowning}}<span style="color:#3a8fd6;">drowning</span>{{/if}}
+        </span>
+      </div>
+    </div>
+    {{/if}}
+
     <div class="ft-combat-actions" style="display:flex; gap:.2rem; flex-wrap:wrap;">
       <button type="button" data-action="ftCombatAction" data-combat-action="dash"      class="ft-npc-tool" data-tooltip="Spend your action to add your walk speed to your movement budget for this turn.">🏃 Dash</button>
       <button type="button" data-action="ftCombatAction" data-combat-action="disengage" class="ft-npc-tool {{#if ftFlags.combat.disengaged}}used{{/if}}" data-tooltip="Your movement does not provoke attacks of opportunity until end of turn.">🚶 Disengage</button>
