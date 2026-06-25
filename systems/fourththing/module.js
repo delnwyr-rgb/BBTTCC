@@ -25535,6 +25535,13 @@ Hooks.on("renderApplicationV2", (app, html) => {
   try {
     const className = app?.constructor?.name ?? "";
     if (!className.includes("HexSheet") && !className.includes("BBTTCC_Hex")) return;
+    // 2026-06-25 — Battle Scenes management consolidated onto the GM Hex EDITOR
+    // (bbttcc-territory/effects-build-units.enhancer.js, alongside Depth/Altitude
+    // Links). The player-facing Hex Sheet no longer shows this panel. The
+    // battleScenes API + GM activation relay are unchanged — only this sheet-side
+    // UI injection is retired. Delete this early-return to restore it.
+    return;
+    // eslint-disable-next-line no-unreachable
     const hexDoc = app._hexDoc ?? app.document ?? app.drawing ?? app.object;
     if (!hexDoc) return;
     const root = html instanceof HTMLElement ? html : html?.[0];

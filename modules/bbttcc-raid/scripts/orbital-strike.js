@@ -289,6 +289,64 @@
     return { ok: true, bunker: bunker.name, hex: hexName, hits, alarmRaised };
   }
 
+  // ── Token-HUD trigger: fire FROM this bunker token ────────────────────────
+  // Arms a one-click target capture from a specific Orbital Bunker. Auto-routes:
+  // clicking a hex → strategic bombardment of that hex; clicking open ground →
+  // tactical strike at the point.
+  function _armOrbitalStrikeFromBunker(bunker) {
+    const getHexAtPoint = game.bbttcc?.api?._hexTravel?.getHexAtPoint;
+    const worldFromEvent = (ev) => {
+      try {
+        if (ev?.data?.getLocalPosition) return ev.data.getLocalPosition(canvas.app.stage);
+        if (ev?.global) return canvas.stage.worldTransform.applyInverse(ev.global);
+      } catch (_e) {}
+      return canvas.mousePosition ?? { x: 0, y: 0 };
+    };
+    let done = false;
+    const cleanup = () => {
+      if (done) return; done = true;
+      try { canvas.stage.off("pointerdown", onDown); } catch (_e) {}
+      try { window.removeEventListener("keydown", onKey, true); } catch (_e) {}
+    };
+    const onKey = (e) => { if (e.key === "Escape") { cleanup(); ui.notifications.info("Orbital strike cancelled."); } };
+    const onDown = async (evt) => {
+      if (done) return;
+      cleanup();
+      const p = worldFromEvent(evt);
+      const hex = (typeof getHexAtPoint === "function") ? getHexAtPoint(p.x, p.y) : null;
+      const res = (hex?.document?.uuid)
+        ? await orbitalStrikeHex({ bunkerId: bunker.id, hexUuid: hex.document.uuid })
+        : await orbitalStrike({ bunkerId: bunker.id, x: p.x, y: p.y });
+      if (!res?.ok && res?.message) ui.notifications.warn(res.message);
+    };
+    ui.notifications.info(`🛰️ ${bunker.name} armed — click a target (hex = strategic, open ground = tactical). Esc to cancel.`);
+    window.addEventListener("keydown", onKey, true);
+    canvas.stage.once("pointerdown", onDown);
+  }
+
+  // Add a 🛰️ Orbital Strike button to an Orbital Bunker's Token HUD (GM only).
+  Hooks.on("renderTokenHUD", (hud, html) => {
+    try {
+      if (!game.user?.isGM) return;
+      const actor = hud?.object?.actor;
+      if (!actor || actor.type !== "rig" || !_rigDomains(actor).includes("space")) return;
+      const root = html instanceof HTMLElement ? html : (html?.[0] ?? html);
+      const col = root?.querySelector?.(".col.right");
+      if (!col || col.querySelector('[data-action="bbttcc-orbital-strike"]')) return;
+      const btn = document.createElement("div");
+      btn.className = "control-icon";
+      btn.dataset.action = "bbttcc-orbital-strike";
+      btn.title = "Orbital Strike — click a target (hex = strategic bombardment · open ground = tactical strike).";
+      btn.innerHTML = `<i class="fa-solid fa-satellite"></i>`;
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        try { hud.clear?.(); } catch (_e) {}   // close the HUD so it doesn't eat the target click
+        _armOrbitalStrikeFromBunker(actor);
+      });
+      col.appendChild(btn);
+    } catch (e) { console.warn(TAG, "orbital HUD button failed", e); }
+  });
+
   function install() {
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.api = game.bbttcc.api || {};

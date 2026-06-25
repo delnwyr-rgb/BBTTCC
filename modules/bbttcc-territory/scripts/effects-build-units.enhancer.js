@@ -542,6 +542,85 @@ try {
     showFor: (_norm) => !UNDERWATER_KEYS.has(_norm)
   };
 
+  // ── Battle Scenes (consolidated onto the Hex Editor, 2026-06-25) ────────────
+  // Bind/activate/unbind raid battle scenes for this hex — moved here from the
+  // (player-facing) Hex Sheet so all hex→scene linkage lives on the GM editor.
+  // Uses the system API game.bbttcc.api.raid.battleScenes.{list,current,bind,
+  // unbind,activate}.
+  function injectBattleScenes(app, html, el) {
+    try {
+      if (!game.user?.isGM) return;
+      const root = el || (html instanceof jQuery ? html[0] : html);
+      const host = root?.querySelector?.(".bbttcc-hex-config");
+      if (!host || host.querySelector("[data-bbttcc='battle-scenes']")) return;
+      const api = game.bbttcc?.api?.raid?.battleScenes;
+      if (!api?.list) return;
+
+      Promise.resolve(resolveHexDocument(app, html)).then(async (doc) => {
+        if (!doc || !doc.uuid || doc.documentName !== "Drawing") return;
+        if (host.querySelector("[data-bbttcc='battle-scenes']")) return;
+
+        const list = api.list(doc) || [];
+        const curIdx = Number(api.current?.(doc) || 0);
+        const selfSceneId = doc.parent?.id || null;
+        const boundIds = new Set(list.map(e => e.sceneId));
+        const scenes = (game.scenes?.contents || [])
+          .filter(s => s.id !== selfSceneId && !boundIds.has(s.id))
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        const rows = list.length ? list.map((e, i) => {
+          const cur = i === curIdx;
+          return `<div class="form-group" style="display:flex; align-items:center; gap:0.35rem; margin:0.2rem 0;">
+            <span style="flex:0 0 1.3em; text-align:center; color:${cur ? "#a6e22e" : "#888"};">${cur ? "▶" : (i + 1) + "."}</span>
+            <span style="flex:1 1 auto; color:#ffd28a;">${htmlEscape(e.label || e.sceneId)}</span>
+            <button type="button" class="bbttcc-btn" data-bs-activate="${i}">Activate</button>
+            <button type="button" class="bbttcc-btn" data-bs-unbind="${htmlEscape(e.sceneId)}" title="Unbind (scene not deleted)">×</button>
+          </div>`;
+        }).join("") : `<p class="hint" style="margin:0.2rem 0; font-style:italic; opacity:0.6;">No battle scenes bound yet.</p>`;
+
+        const opts = [`<option value="">— pick a scene —</option>`]
+          .concat(scenes.map(s => `<option value="${s.id}">${htmlEscape(s.name)}</option>`)).join("");
+
+        const wrap = document.createElement("fieldset");
+        wrap.setAttribute("data-bbttcc", "battle-scenes");
+        wrap.style.cssText = "margin-top:0.75rem; border:1px solid rgba(212,163,95,0.55); border-radius:0.75rem; padding:0.6rem 0.7rem 0.65rem; background:linear-gradient(160deg, rgba(38,28,12,0.98), rgba(48,34,12,1));";
+        wrap.innerHTML = `
+          <legend style="padding:0 0.25rem; opacity:0.9; font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:#ffd28a;">⚔ Battle Scenes</legend>
+          <p class="hint" style="margin:0 0 0.4rem;">Link battle/raid scenes to this hex. ▶ = current. Activate sends everyone there.</p>
+          <div class="ft-bs-list">${rows}</div>
+          <div class="form-group" style="display:flex; gap:0.35rem; align-items:center; margin-top:0.4rem;">
+            <select name="bs-pick" style="flex:1;">${opts}</select>
+            <button type="button" class="bbttcc-btn" data-bs-bind>+ Bind</button>
+          </div>`;
+        host.appendChild(wrap);
+
+        wrap.addEventListener("click", async (ev) => {
+          const btn = ev.target?.closest?.("button[data-bs-bind],button[data-bs-activate],button[data-bs-unbind]");
+          if (!btn) return;
+          ev.preventDefault(); ev.stopPropagation();
+          try {
+            if (btn.hasAttribute("data-bs-bind")) {
+              const sel = wrap.querySelector('select[name="bs-pick"]');
+              const scene = sel?.value ? game.scenes?.get(sel.value) : null;
+              if (!scene) { ui.notifications?.warn?.("Pick a scene to bind."); return; }
+              await api.bind(doc, scene);
+              app.render(false);
+            } else if (btn.hasAttribute("data-bs-activate")) {
+              await api.activate(doc, Number(btn.getAttribute("data-bs-activate")));
+            } else if (btn.hasAttribute("data-bs-unbind")) {
+              const ok = await Dialog.confirm({ title: "Unbind battle scene", content: "<p>Remove this scene from the hex's battle list? The scene itself isn't deleted.</p>" });
+              if (!ok) return;
+              await api.unbind(doc, btn.getAttribute("data-bs-unbind"));
+              app.render(false);
+            }
+          } catch (e) { warn("battle-scenes action failed", e); ui.notifications?.error?.("Battle scene action failed — see console."); }
+        });
+
+        log("Injected Battle Scenes into Hex Config.");
+      });
+    } catch (e) { warn("battle-scenes inject failed", e); }
+  }
+
   function install() {
     // Hook BOTH render events — the Hex Config exists as a V1 Dialog
     // (renderApplication) AND an ApplicationV2 sheet (renderApplicationV2).
@@ -555,6 +634,7 @@ try {
         const el = (html instanceof jQuery ? html[0] : html);
         injectSceneLinks(app, html, el, DEPTH_CFG);
         injectSceneLinks(app, html, el, ALT_CFG);
+        injectBattleScenes(app, html, el);
       } catch (e) {
         warn("scene-links handler failed:", e);
       }
