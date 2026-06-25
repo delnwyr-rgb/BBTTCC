@@ -204,13 +204,99 @@
     return { ok: true, bunker: bunker.name, x, y, radiusGrid };
   }
 
+  // Center of a hex Drawing in world coords (rendered placeable → bounds fallback).
+  function _hexCenter(hexDoc) {
+    const o = hexDoc.object;
+    if (o?.center) return o.center;
+    const x = Number(hexDoc.x || 0), y = Number(hexDoc.y || 0);
+    const w = Number(hexDoc.shape?.width || hexDoc.width || 100);
+    const h = Number(hexDoc.shape?.height || hexDoc.height || 100);
+    return { x: x + w / 2, y: y + h / 2 };
+  }
+
+  // ── Strategic-map variant: bombard a HEX ──────────────────────────────────
+  // Pounds everything stationed at the target hex (rigs / facilities / bosses)
+  // and raises its alarm — softening it before a raid. Per-world-turn cooldown.
+  async function orbitalStrikeHex(opts = {}) {
+    if (!game.user?.isGM) { ui.notifications?.warn?.("Orbital strike: GM only."); return { ok: false, reason: "not-gm" }; }
+    let hexDoc = null;
+    if (opts.hexUuid) { try { hexDoc = await fromUuid(opts.hexUuid); } catch (_e) {} }
+    if (!hexDoc) return { ok: false, reason: "no-hex", message: "No target hex." };
+
+    let factionId = opts.factionId ? String(opts.factionId) : null;
+    let bunker = opts.bunkerId ? game.actors?.get(opts.bunkerId) : null;
+    if (!bunker) bunker = findOrbitalBunker(factionId);
+    if (!bunker) { const m = "No Orbital Bunker available — build a Space-domain rig (Rig Builder → Orbital Bunker)."; ui.notifications?.warn?.(m); return { ok: false, reason: "no-bunker", message: m }; }
+    factionId = factionId || _rigFaction(bunker) || null;
+
+    // Cooldown: one strategic strike per world turn.
+    const cd = Number(opts.cooldownTurns ?? 1);
+    const turn = Number(game.bbttcc?.api?.world?.getState?.().turn ?? 0) || 0;
+    if (!opts.bypassCooldown) {
+      const last = Number(bunker.getFlag(MOD, "orbitalLastTurn") ?? -999);
+      if (turn - last < cd) { const m = `Orbital strike recharging — ${cd - (turn - last)} turn(s) left.`; ui.notifications?.warn?.(m); return { ok: false, reason: "cooldown", message: m }; }
+    }
+
+    // Cost: Violence OP (strategic strikes cost more than tactical).
+    const cost = Number(opts.opCost ?? 40);
+    if (!opts.bypassCost && factionId && cost > 0) {
+      const op = game.bbttcc?.api?.op;
+      if (op?.commit) {
+        const r = await op.commit(factionId, { violence: -cost }, { context: "orbital-strike-hex", bunker: bunker.name });
+        if (!r?.ok) { const m = `Not enough Violence OP for the strike (needs ${cost}).`; ui.notifications?.warn?.(m); return { ok: false, reason: "cost", message: m }; }
+      }
+    }
+
+    const TERR = "bbttcc-territory";
+    const damage = Number(opts.damage ?? 40);
+    const alarmDelta = Number(opts.alarmDelta ?? 3);
+    const hexName = String(foundry.utils.getProperty(hexDoc, `flags.${TERR}.name`) || hexDoc.text || "the hex");
+
+    // 1) Pound everything stationed at the hex (rigs / facilities / bosses).
+    const apply = game.bbttcc?.combat?.applyDamage || ((a, d, o) => game.fourththing?.rolls?._applyDamageToActor?.(a, d, o));
+    const rows = (game.bbttcc?.api?.territory?.holdings?.readHoldings?.(hexDoc) || []).filter(r => r?.actor);
+    const hits = [];
+    for (const r of rows) {
+      try {
+        await apply(r.actor, damage, { track: "integrity", damageType: "kinetic", source: "orbital-strike-hex" });
+        hits.push(`${r.actor.name}${r.kind ? ` (${r.kind})` : ""}`);
+      } catch (e) { console.warn(TAG, "holding damage failed", r?.id, e); }
+    }
+
+    // 2) Raise the hex alarm (you announced yourself), unless locked.
+    const tf = hexDoc.flags?.[TERR] || {};
+    let alarmRaised = 0;
+    if (alarmDelta > 0 && tf.alarm?.locked !== true) {
+      const cur = Number(tf.alarm?.value ?? 0) || 0;
+      const next = Math.min(99, cur + alarmDelta);
+      try { await hexDoc.update({ [`flags.${TERR}.alarm.value`]: next }); alarmRaised = next - cur; }
+      catch (e) { console.warn(TAG, "alarm raise failed", e); }
+    }
+
+    // 3) VFX on the hex (best-effort) + cooldown stamp.
+    try {
+      const c = _hexCenter(hexDoc);
+      const gs = canvas?.scene?.grid?.size || 100;
+      _runStrikeVfx(c.x, c.y, gs * 1.2, { telegraphMs: 1600, onDetonate: () => _shakeFlash() });
+    } catch (_e) {}
+    try { await bunker.setFlag(MOD, "orbitalLastTurn", turn); } catch (_e) {}
+
+    // 4) Report.
+    const body = hits.length ? `Smashed: ${hits.map(foundry.utils.escapeHTML).join(", ")}.` : "Nothing was stationed there to hit.";
+    ChatMessage.create({
+      content: `<div class="fourththing-roll"><b style="color:#ffb060;">🛰️💥 ORBITAL BOMBARDMENT</b> — ${foundry.utils.escapeHTML(bunker.name)} hammers <b>${foundry.utils.escapeHTML(hexName)}</b>!<br>${body}${alarmRaised ? `<br>⚠ Alarm +${alarmRaised}.` : ""}</div>`
+    });
+    return { ok: true, bunker: bunker.name, hex: hexName, hits, alarmRaised };
+  }
+
   function install() {
     game.bbttcc = game.bbttcc || {};
     game.bbttcc.api = game.bbttcc.api || {};
     game.bbttcc.api.raid = game.bbttcc.api.raid || {};
     game.bbttcc.api.raid.orbitalStrike = orbitalStrike;
+    game.bbttcc.api.raid.orbitalStrikeHex = orbitalStrikeHex;
     game.bbttcc.api.raid.findOrbitalBunker = findOrbitalBunker;
-    console.log(TAG, "ready. API: game.bbttcc.api.raid.orbitalStrike");
+    console.log(TAG, "ready. API: game.bbttcc.api.raid.orbitalStrike(+Hex)");
   }
   Hooks.once("ready", install);
   try { if (game?.ready) install(); } catch (_e) {}
