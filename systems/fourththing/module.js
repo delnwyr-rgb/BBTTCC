@@ -9751,6 +9751,62 @@ function _ftHasLift(actor) {
 // Sealed against vacuum (pressure-rated suit / hull, reused from the deep).
 function _ftSealedEnv(actor) { return _ftPressureRated(actor); }
 
+// ── Environmental damage-type interactions (underwater / vacuum) ────────────
+// Mechanizes what was previously GM rules-text. Scene-based (the fight is in the
+// medium): Thermal-hot/open flame fizzles (no oxygen / steam-quench); Electrical
+// conducts through water and arcs to nearby submerged tokens; Ranged-kinetic is
+// at disadvantage underwater (water resists projectiles — handled in attackTest).
+// Tunable here; cold thermal + all other types are unaffected.
+FT.ENV_DAMAGE = {
+  thermalHotFactor: 0.25,   // ×dmg for thermal:hot underwater OR in vacuum
+  arcFraction:      0.5,    // electrical underwater arcs this × to neighbours
+  arcRadiusGrid:    2       // …within this many grid squares of the target
+};
+
+// The actor's current scene (token scene → bound token → active scene).
+function _ftActorScene(actor) {
+  return actor?.getActiveTokens?.(true)?.[0]?.scene || actor?.token?.parent || canvas?.scene || null;
+}
+// Which damage-modifying environment the actor stands in: "underwater" | "vacuum" | null.
+function _ftEnvOf(actor) {
+  const sc = _ftActorScene(actor);
+  if (sc?.flags?.fourththing?.underwater) return "underwater";
+  if (String(sc?.flags?.fourththing?.aloft?.band || "").toLowerCase() === "orbit") return "vacuum";
+  return null;
+}
+// Electrical conducts through water: arc a fraction to every OTHER token within
+// arcRadiusGrid of the primary target on the same underwater scene. Guarded
+// against re-entry by the _noEnvArc flag on the recursive apply.
+async function _ftElectricalArc(primaryActor, baseDmg, { damageType, damageFlavor, track } = {}) {
+  const scene = _ftActorScene(primaryActor);
+  if (!scene?.flags?.fourththing?.underwater) return;
+  const gs = scene.grid?.size || canvas?.grid?.size || 100;
+  const ptok = primaryActor.getActiveTokens?.(true)?.[0]?.document
+    || (scene.tokens?.contents || []).find(t => t.actorId === primaryActor.id);
+  if (!ptok) return;
+  const cx = Number(ptok.x) + (Number(ptok.width || 1) * gs) / 2;
+  const cy = Number(ptok.y) + (Number(ptok.height || 1) * gs) / 2;
+  const radiusPx = (Number(FT.ENV_DAMAGE.arcRadiusGrid) || 2) * gs;
+  const arc = Math.max(1, Math.round((Number(baseDmg) || 0) * (Number(FT.ENV_DAMAGE.arcFraction) || 0.5)));
+  const hit = [];
+  for (const t of (scene.tokens?.contents || [])) {
+    if (t.id === ptok.id || !t.actor) continue;
+    const tx = Number(t.x) + (Number(t.width || 1) * gs) / 2;
+    const ty = Number(t.y) + (Number(t.height || 1) * gs) / 2;
+    if (Math.hypot(tx - cx, ty - cy) > radiusPx) continue;
+    try {
+      await game.fourththing.rolls._applyDamageToActor(t.actor, arc, { op: "damage", track, damageType, damageFlavor, _noEnvArc: true });
+      hit.push(t.actor.name);
+    } catch (_e) { /* skip this neighbour */ }
+  }
+  if (hit.length) {
+    ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: primaryActor }),
+      content: `<div class="fourththing-roll"><span class="ft-condition-applied" style="color:#7fd0ff">⚡ The charge arcs through the water — ${hit.length} also struck for ${arc}: ${hit.map(ftEscapeHtml).join(", ")}</span></div>`
+    });
+  }
+}
+
 FT.DEFENSES = {
   guard:   { label: "Guard",   formula: "10 + Violence + Body",    desc: "Resists physical force"       },
   evasion: { label: "Evasion", formula: "10 + Intrigue + Body",    desc: "Resists being struck at all"  },
@@ -14057,7 +14113,14 @@ Hooks.once("init", function () {
     // disadvantage each add a die too (keep best / worst 2). Explosions follow
     // the existing rule: only a normal-mode roll for a Surge-enabled actor
     // explodes; advantage/disadvantage stay clean (no surge), as before.
-    const _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack });
+    // Underwater: water resists projectiles — a RANGED KINETIC attack (firearms/
+    // archery/thrown all resolve to the firearms skill) rolls at disadvantage.
+    // Scene-based on the attacker. Melee, manifestations, and other types unaffected.
+    const _rangedKineticUnderwater =
+      String(damageType).toLowerCase() === "kinetic" &&
+      String(skill).toLowerCase() === "firearms" &&
+      _ftEnvOf(actor) === "underwater";
+    const _attkMode    = _ftResolveRollMode({ user: rollMode, forcedDis: _abDisAttack || _rangedKineticUnderwater });
     const _rankClamped = Math.max(0, Math.min(5, Number(skillVal) || 0));
     const _rankData    = SKILL_RANK_DATA[_rankClamped] ?? SKILL_RANK_DATA[0];
     const _masterPool  = _rankClamped >= 4;                       // Master / Legendary
@@ -14450,7 +14513,7 @@ Hooks.once("init", function () {
   game.fourththing.rolls._applyDamageToActor = async function (actor, baseDmg, {
     op = "damage", track = "integrity", damageType = "", damageFlavor = "",
     perTargetMultiplier = 1, ignoreResists = false, nonlethal = false,
-    _skipInterceptors = false
+    _skipInterceptors = false, _noEnvArc = false
   } = {}) {
     if (!actor) return null;
 
@@ -14460,6 +14523,25 @@ Hooks.once("init", function () {
     if (String(damageType).toLowerCase() === "energy") {
       const _a = _ftAliasEnergyDamage(damageType, damageFlavor);
       damageType = _a.type; damageFlavor = _a.flavor;
+    }
+
+    // ── Environmental damage interactions (underwater / vacuum) ───────────────
+    // Mechanizes the old GM rules-text. Scene-based; skip the environment's OWN
+    // ticks (ignoreResists) and arc re-entry (_noEnvArc). Fire/heat fizzles to a
+    // sliver; electrical arcs ½ to nearby submerged tokens. See FT.ENV_DAMAGE.
+    if (op === "damage" && !ignoreResists) {
+      const _env = _ftEnvOf(actor);
+      if (_env) {
+        const _dt = String(damageType).toLowerCase();
+        const _fl = String(damageFlavor).toLowerCase();
+        if (_dt === "thermal" && _fl === "hot") {
+          baseDmg = Math.max(0, Math.round((Number(baseDmg) || 0) * FT.ENV_DAMAGE.thermalHotFactor));
+        }
+        if (_dt === "electrical" && _env === "underwater" && !_noEnvArc) {
+          try { await _ftElectricalArc(actor, baseDmg, { damageType, damageFlavor, track }); }
+          catch (_e) { console.warn("[fourththing] electrical arc failed", _e); }
+        }
+      }
     }
 
     // BBTTCC combat interceptors (Phase 1) — registered pre-damage handlers on
