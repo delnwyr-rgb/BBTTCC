@@ -1092,6 +1092,8 @@
 
               <div class="tc-right-buttons">
                 <button type="button" data-action="rp-reverse" class="bbttcc-travel-button">⤵ Reverse Route</button>
+                <button type="button" data-action="rp-dive" class="bbttcc-travel-button" data-tooltip="Dive the selected faction into the underwater scene linked to the hex it's standing on (needs a depth-rated submersible).">🌊 Dive Here</button>
+                <button type="button" data-action="rp-ascend" class="bbttcc-travel-button" data-tooltip="Ascend the selected faction into the aerial scene linked to the hex it's standing on (needs a flyer; orbit needs a space craft).">✈️ Ascend Here</button>
                 <button type="button" data-action="rp-exec" class="bbttcc-travel-button primary">▶ Execute Route</button>
               </div>
 
@@ -1929,6 +1931,41 @@
         $rout.textContent = `Route reversed (${newLegs.length} leg${newLegs.length === 1 ? "" : "s"}).`;
         ui.notifications?.info?.(`Travel route reversed: ${newLegs.length} leg${newLegs.length === 1 ? "" : "s"}.`);
       };
+
+      // 🌊 Dive Here / ✈️ Ascend Here — send the selected faction into the
+      // underwater/aerial scene linked to the hex it's standing on. Resolves the
+      // hex from the faction token (getHexAtPoint), then a selected Drawing, then
+      // the route's last destination. Gating (a depth-rated sub / an air-or-space
+      // rig) is enforced by game.bbttcc.api.travel.dive / .ascend.
+      const _resolveActionHexUuid = (factionId) => {
+        const tok = pickTokenForFaction(factionId);
+        const getHexAtPoint = game.bbttcc?.api?._hexTravel?.getHexAtPoint;
+        if (tok?.center && typeof getHexAtPoint === "function") {
+          const hx = getHexAtPoint(tok.center.x, tok.center.y);
+          if (hx?.document?.uuid) return hx.document.uuid;
+        }
+        const drw = canvas.drawings?.controlled?.[0];
+        if (drw?.document?.uuid) return drw.document.uuid;
+        if (legs.length) return legs[legs.length - 1]?.toUuid || null;
+        return null;
+      };
+      const _bindVertical = (sel, apiName, verb, needHint) => {
+        const btn = content.querySelector(`[data-action="${sel}"]`);
+        if (!btn) return;
+        btn.onclick = async () => {
+          const factionId = $fac.value;
+          if (!factionId) { $rout.textContent = "Pick a faction first."; return; }
+          const fn = game.bbttcc?.api?.travel?.[apiName];
+          if (!fn) { ui.notifications?.warn?.(`${verb} API not ready.`); return; }
+          const hexUuid = _resolveActionHexUuid(factionId);
+          if (!hexUuid) { $rout.textContent = needHint; return; }
+          const res = await fn(factionId, hexUuid);
+          if (res?.ok) { const m = `${verb} → ${res.band}…`; $rout.textContent = m; ui.notifications?.info?.(m); }
+          else { const m = res?.message || `${verb} failed.`; $rout.textContent = m; ui.notifications?.warn?.(m); }
+        };
+      };
+      _bindVertical("rp-dive",   "dive",   "Diving",   "Dive: stand the faction's token on a hex with depth links (or select that hex), then Dive Here.");
+      _bindVertical("rp-ascend", "ascend", "Ascending", "Ascend: stand the faction's token on a hex with altitude links (or select that hex), then Ascend Here.");
 
       content.querySelector('[data-action="rp-exec"]').onclick = async () => {
         try {
