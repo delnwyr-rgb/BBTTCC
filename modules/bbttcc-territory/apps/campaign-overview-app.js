@@ -294,15 +294,52 @@ function readGreatWorkDisplay(faction) {
 
 /* ================= Campaign Overview App (AppV2 + HBS) ================= */
 class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
-  static DEFAULT_OPTIONS = {
-    id: "bbttcc-campaign-overview",
-    title: "Bad Eden — Campaign Overview",
-    width: 980,
-    height: 600,
-    resizable: true,
-    classes: ["bbttcc","bbttcc-overview","bbttcc-be","bbttcc-theme-gm"]
-  };
+  // Mirror the Territory Dashboard's AppV2 option shape so the window is actually
+  // resizable and sized via position/window (legacy flat width/height/resizable
+  // keys are ignored by ApplicationV2). Do NOT mutate the shared super defaults.
+  static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+    foundry.utils.deepClone(super.DEFAULT_OPTIONS || {}),
+    {
+      id: "bbttcc-campaign-overview",
+      classes: ["bbttcc","bbttcc-overview","bbttcc-be","bbttcc-theme-gm"],
+      position: { width: 1100, height: 640 },
+      window: {
+        title: "Bad Eden — Campaign Overview",
+        resizable: true,
+        controls: [],
+        icon: ""
+      }
+    },
+    { inplace: false }
+  );
   static PARTS = { body: { template: `modules/${MOD}/templates/campaign-overview.hbs` } };
+
+  constructor(options={}) {
+    super(options);
+    // Protect against upstream mutations of the window option shape.
+    try {
+      this.options.window ??= {};
+      if (!Array.isArray(this.options.window.controls)) this.options.window.controls = [];
+      if (this.options.window.icon == null) this.options.window.icon = "";
+    } catch (_) {}
+    this._bbttccScrollTop = 0;
+  }
+
+  _findScroller() {
+    const root = this.element;
+    return root?.querySelector?.(".window-content") || root;
+  }
+
+  _rememberScroll() {
+    try { this._bbttccScrollTop = this._findScroller()?.scrollTop ?? 0; } catch {}
+  }
+
+  _restoreScroll() {
+    try {
+      const sc = this._findScroller();
+      if (sc && typeof this._bbttccScrollTop === "number") sc.scrollTop = this._bbttccScrollTop;
+    } catch {}
+  }
 
   async _preparePartContext(partId, context) {
     if (partId !== "body") return context;
@@ -415,6 +452,9 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
     await super._onRender(ctx, opts);
     const root = this.element;
     if (!(root instanceof HTMLElement)) return;
+
+    // Keep the scroll position stable across re-renders.
+    this._restoreScroll();
 
     // -----------------------------------------------------------------------
     // 1) Rename "Power" header → "Status"

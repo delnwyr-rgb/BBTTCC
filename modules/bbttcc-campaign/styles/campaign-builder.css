@@ -748,8 +748,24 @@
 }
 
 .bbttcc-hexchrome .bbttcc-reorder-index{
-  width: 64px;
+  /* Sits in the flex reorder pill — pin its size so it can't collapse to a
+     tiny square, and keep it wide enough for 3-digit indices (e.g. 533). */
+  flex: 0 0 auto;
+  width: 60px;
+  min-width: 60px;
   text-align: center;
+}
+
+/* Show all digits of a multi-digit index without the number spinner eating
+   horizontal room (the ▲/▼ buttons already cover stepping). */
+.bbttcc-hexchrome .bbttcc-reorder-index::-webkit-outer-spin-button,
+.bbttcc-hexchrome .bbttcc-reorder-index::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+.bbttcc-hexchrome .bbttcc-reorder-index{
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 

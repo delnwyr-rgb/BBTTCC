@@ -60,6 +60,29 @@
   background: rgba(0,0,0,0.06);
 }
 
+/* ===== Campaign Overview: same scroll/resize behaviour as the Dashboard ===== */
+
+/* Let the body section manage scroll; the window itself stays fixed. */
+#bbttcc-campaign-overview .window-content {
+  overflow: hidden;
+  padding: 0.75rem;
+}
+
+/* The summary section scrolls within the resizable window. */
+#bbttcc-campaign-overview section.bbttcc-campaign-overview {
+  display: block;
+  max-height: calc(100% - 56px);   /* header strip + a touch of padding */
+  overflow: auto;
+  padding-bottom: 0.25rem;
+}
+
+/* Sticky header row so column labels stay visible while scrolling. */
+#bbttcc-campaign-overview .bbttcc-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
 /* =========================================
    Bad Eden Top Control Bar — Hexchrome HUD
 ========================================= */
