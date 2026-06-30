@@ -509,18 +509,30 @@ function _rcSyncManeuverSelectionsFromDOM(app, idx, round){
 
     const att = [];
     const def = [];
+    const support = {}; // { [factionId]: string[] }
     host.querySelectorAll('.mans-wrap input[type="checkbox"][data-maneuver][data-side]:checked').forEach((cb)=>{
       const k = String(cb.getAttribute("data-maneuver") || "").trim();
       const side = String(cb.getAttribute("data-side") || "").trim().toLowerCase();
       if (!k) return;
       if (side === "def") def.push(k);
-      else att.push(k);
+      else if (side === "support") {
+        const fid = String(cb.getAttribute("data-faction-id") || "").trim();
+        if (!fid) return;
+        (support[fid] ||= []).push(k);
+      } else att.push(k);
     });
 
     // Only apply if we found any checkboxes (avoid wiping in scenario modes).
     if (att.length || def.length) {
       round.mansSelected = att;
       round.mansSelectedDef = def;
+    }
+    // Support is keyed independently per faction; only overwrite when this
+    // render actually exposed support checkboxes (guard against scenario wipe).
+    if (Object.keys(support).length) {
+      round.mansSelectedSupport = support;
+    }
+    if (att.length || def.length || Object.keys(support).length) {
       return true;
     }
   } catch(_e) {}
@@ -1550,16 +1562,30 @@ function _rcInitFiredMan(r) {
   r.meta.firedManeuvers ||= {};
   r.meta.firedManeuvers.att ||= {};
   r.meta.firedManeuvers.def ||= {};
+  // Support is faction-keyed: { [factionId]: { [key]: {...} } }
+  r.meta.firedManeuvers.support ||= {};
   return r.meta.firedManeuvers;
 }
-function _rcWasManFired(r, side, key) {
+// Resolve the once-per-round gate bucket for a given side. For support, the
+// bucket is namespaced per support faction id (factionId), so each supporter
+// has its own independent fire gate.
+function _rcFiredBucket(r, side, factionId) {
   const fm = _rcInitFiredMan(r);
-  const bucket = (String(side) === "def") ? fm.def : fm.att;
+  if (String(side) === "support") {
+    const fid = String(factionId || "").trim();
+    if (!fid) return null;
+    fm.support[fid] ||= {};
+    return fm.support[fid];
+  }
+  return (String(side) === "def") ? fm.def : fm.att;
+}
+function _rcWasManFired(r, side, key, factionId = null) {
+  const bucket = _rcFiredBucket(r, side, factionId);
   return !!bucket?.[String(key)];
 }
-function _rcMarkManFired(r, side, key) {
-  const fm = _rcInitFiredMan(r);
-  const bucket = (String(side) === "def") ? fm.def : fm.att;
+function _rcMarkManFired(r, side, key, factionId = null) {
+  const bucket = _rcFiredBucket(r, side, factionId);
+  if (!bucket) return false;
   const k = String(key);
   if (bucket[k]) return false;
   bucket[k] = { firedAt: Date.now() };
@@ -1573,7 +1599,7 @@ const _RC_FM_FIRE_STYLES = {
   "fired":       { lbl: "✓ fired",        bg: "rgba(64,64,64,0.45)",  fg: "#cfcfcf", brd: "rgba(120,120,120,0.55)", title: "Already fired this round." }
 };
 
-function _rcFireRowHTML(fireMode, key, side, isFired) {
+function _rcFireRowHTML(fireMode, key, side, isFired, factionId = "") {
   const baseStyle = `display:inline-block;padding:1px .4em;border-radius:4px;font-size:.7em;font-weight:600;letter-spacing:.03em;vertical-align:middle;margin-left:.35rem;`;
   if (isFired) {
     const s = _RC_FM_FIRE_STYLES.fired;
@@ -1581,7 +1607,8 @@ function _rcFireRowHTML(fireMode, key, side, isFired) {
   }
   const s = _RC_FM_FIRE_STYLES[fireMode] || _RC_FM_FIRE_STYLES.anytime;
   if (fireMode === "anytime") {
-    return `<button type="button" class="bbttcc-fm-fire" data-fire-maneuver="${key}" data-fire-side="${side}" title="${s.title}" style="${baseStyle}background:${s.bg};color:${s.fg};border:1px solid ${s.brd};cursor:pointer;">${s.lbl}</button>`;
+    const facAttr = factionId ? ` data-fire-faction-id="${factionId}"` : "";
+    return `<button type="button" class="bbttcc-fm-fire" data-fire-maneuver="${key}" data-fire-side="${side}"${facAttr} title="${s.title}" style="${baseStyle}background:${s.bg};color:${s.fg};border:1px solid ${s.brd};cursor:pointer;">${s.lbl}</button>`;
   }
   return `<span class="bbttcc-fm-fire" data-fm-pending="${fireMode}" title="${s.title}" style="${baseStyle}background:${s.bg};color:${s.fg};border:1px solid ${s.brd};opacity:.85;">${s.lbl}</span>`;
 }
@@ -1707,6 +1734,9 @@ async function _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender)
     const simFn = agent?.simulate?.maneuver;
     if (typeof simFn !== "function") return { ok: false, note: "no-agent-api" };
 
+    // For support, `attacker` carries the support faction actor — its effects
+    // attribute to that supporter while offensive/target effects still land on
+    // the defender/target (DEFENDER-tagged effects keep defenderId).
     const attackerId = attacker?.id || null;
     const defenderId = defender?.id || null;
     // Fire Now happens before outcome is known; treat as success so anytime
@@ -1714,6 +1744,7 @@ async function _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender)
     // proper tier-aware effects to the remaining (unfired) maneuvers later.
     const tier0 = _b2NormOutcomeTier(r.outcome || "");
     const baseTier = (tier0 === "unknown") ? "success" : tier0;
+    // Support is attacker-aligned for outcome (offense), NOT defender-inverted.
     const sideTier = (String(side) === "def")
       ? (baseTier === "fail" ? "success" : "fail")
       : baseTier;
@@ -1802,12 +1833,16 @@ function manDefLabel(key) {
 
 async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre = null, app = null) {
   if (!r || !key) return false;
-  if (_rcWasManFired(r, side, key)) return false;
+  // For support, the firing faction is the support actor passed as attackerPre;
+  // its own id namespaces the fire gate + anytime budget.
+  const _supportFid = (String(side) === "support") ? (attackerPre?.id || null) : null;
+  if (_rcWasManFired(r, side, key, _supportFid)) return false;
   // S2 anytime budget guard (2026-05-14, MANEUVER_CATALOG_SPEC §3): tier-scoped fire cap.
   try {
     const _budget = game.bbttcc?.api?.raid?.anytimeBudget;
     if (_budget?.canFire) {
-      const _fid = (String(side) === "att" ? r?.attackerId : r?.defenderId) || null;
+      const _fid = (String(side) === "support" ? _supportFid
+        : (String(side) === "att" ? r?.attackerId : r?.defenderId)) || null;
       const _check = _budget.canFire(key, { factionId: _fid, sceneId: canvas?.scene?.id, raidId: r?.raidId });
       if (_check && _check.ok === false) {
         ui.notifications?.warn(`Anytime budget exhausted (${_check.scope}) — ${key} cannot fire again this ${String(_check.scope || "").replace("per-", "")}.`);
@@ -1815,11 +1850,12 @@ async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre 
       }
     }
   } catch (_eBudget) {}
+  // Support: `attackerPre` IS the firing support faction (attribution thread).
   const attacker = attackerPre || (r.attackerId ? await getActorByIdOrUuid(r.attackerId).catch(()=>null) : null);
   const defender = defenderPre || await _rcResolveDefenderForFire(r);
   const manDef = (game.bbttcc?.api?.raid?.EFFECTS || {})[String(key)] || { label: key };
   const fireMode = _rcGetFireMode(manDef);
-  _rcMarkManFired(r, side, key);
+  _rcMarkManFired(r, side, key, _supportFid);
   _rcPlayManFireVfx(side, attacker, defender);
   await _rcRouteManFireFx(key, fireMode, r, app, manDef, attacker, defender, side);
 
@@ -1845,10 +1881,9 @@ async function _rcFireOneManeuver(r, side, key, attackerPre = null, defenderPre 
     const applyRes = await _rcApplyManeuverEffectsNow(app, r, side, key, attacker, defender);
     if (applyRes?.ok) {
       try {
-        const fm = _rcInitFiredMan(r);
-        const bucket = (String(side) === "def") ? fm.def : fm.att;
+        const bucket = _rcFiredBucket(r, side, _supportFid);
         const k = String(key);
-        if (bucket[k]) {
+        if (bucket && bucket[k]) {
           bucket[k].mechApplied = true;
           bucket[k].appliedAt = Date.now();
         }
@@ -1876,6 +1911,21 @@ async function _rcAutoFireMode(r, mode, attackerPre = null, defenderPre = null, 
       const fm = _rcGetFireMode(eff);
       if (fm !== want) continue;
       const ok = await _rcFireOneManeuver(r, lane.side, key, attackerPre, defenderPre, app);
+      if (ok) fired++;
+    }
+  }
+  // Support lane: one sub-lane per support faction. The support actor is threaded
+  // as the firing faction (attribution), so it must be resolved per faction.
+  const supportSel = (r.mansSelectedSupport && typeof r.mansSelectedSupport === "object") ? r.mansSelectedSupport : {};
+  for (const [sfid, keys] of Object.entries(supportSel)) {
+    if (!Array.isArray(keys) || !keys.length) continue;
+    const sfActor = await getActorByIdOrUuid(sfid).catch(()=>null);
+    if (!sfActor) continue;
+    for (const key of keys) {
+      const eff = EFFECTS[String(key)];
+      const fm = _rcGetFireMode(eff);
+      if (fm !== want) continue;
+      const ok = await _rcFireOneManeuver(r, "support", key, sfActor, defenderPre, app);
       if (ok) fired++;
     }
   }
@@ -3071,6 +3121,7 @@ _renderScenarioHUD(host, round){
 
       round.mansSelected    = Array.isArray(round.mansSelected)    ? round.mansSelected    : [];
       round.mansSelectedDef = Array.isArray(round.mansSelectedDef) ? round.mansSelectedDef : [];
+      round.mansSelectedSupport ||= {};
 
       const wrap = document.createElement("div");
       wrap.style.display="grid"; wrap.style.gridTemplateColumns = (isGMView && keysD.length) ? "1fr 1fr" : "1fr"; wrap.style.gap=".5rem";
@@ -3159,70 +3210,142 @@ _renderScenarioHUD(host, round){
       host.appendChild(wrap);
       host.appendChild(projBox);
 
-      // Coalition OP Contributions (GM-only)
+      // Coalition OP Contributions + Maneuvers.
+      // Visible to the GM AND to owners of any listed support faction. Each
+      // support faction's OP-stage chips + maneuver picker are individually
+      // gated below by ownership (_rcIsGMUser() || sf.isOwner) so a player only
+      // ever sees/uses controls for factions they own.
       try {
-        if (_rcIsGMUser() && Array.isArray(round.supportFactionIds) && round.supportFactionIds.length) {
-          const supportWrap = document.createElement("div");
-          supportWrap.className = "bbttcc-support-stage";
-          supportWrap.style.marginTop = ".5rem";
-          supportWrap.style.padding = ".45rem .55rem";
-          supportWrap.style.borderRadius = "10px";
-          supportWrap.style.border = "1px solid rgba(148,163,184,0.22)";
-          supportWrap.style.background = "rgba(2,6,23,0.18)";
-
-          const title = document.createElement("div");
-          title.style.fontWeight = "700";
-          title.style.marginBottom = ".35rem";
-          title.textContent = "Coalition OP Contributions";
-          supportWrap.appendChild(title);
+        if (Array.isArray(round.supportFactionIds) && round.supportFactionIds.length) {
+          round.mansSelectedSupport ||= {};
 
           const supportActors = (round.supportFactionIds || [])
             .map(id => game.actors?.get?.(id))
-            .filter(Boolean);
+            .filter(Boolean)
+            // Only GMs see every supporter; players see the ones they own.
+            .filter(sf => _rcIsGMUser() || sf.isOwner);
 
-          for (const sf of supportActors) {
-            const row = document.createElement("div");
-            row.style.marginBottom = ".35rem";
+          if (supportActors.length) {
+            const supportWrap = document.createElement("div");
+            supportWrap.className = "bbttcc-support-stage";
+            supportWrap.style.marginTop = ".5rem";
+            supportWrap.style.padding = ".45rem .55rem";
+            supportWrap.style.borderRadius = "10px";
+            supportWrap.style.border = "1px solid rgba(148,163,184,0.22)";
+            supportWrap.style.background = "rgba(2,6,23,0.18)";
 
-            const hdr = document.createElement("div");
-            hdr.style.fontSize = "12px";
-            hdr.style.marginBottom = ".2rem";
-            hdr.innerHTML = `<b>${foundry.utils.escapeHTML(String(sf.name || sf.id))}</b>`;
-            row.appendChild(hdr);
+            const title = document.createElement("div");
+            title.style.fontWeight = "700";
+            title.style.marginBottom = ".35rem";
+            title.textContent = "Coalition OP Contributions & Maneuvers";
+            supportWrap.appendChild(title);
 
-            const keys = OP_KEYS.slice();
-            const grid = document.createElement("div");
-            grid.style.display = "flex";
-            grid.style.flexWrap = "wrap";
-            grid.style.gap = ".25rem";
+            const roundOpen = !!round.open && !round.committed && !round.cancelled;
+            // Inline OP-cost renderer (mkCost lives inside mkFS and is out of scope here).
+            const mkCostSupport = (cost)=>{
+              const {op} = lcKeysCost(cost);
+              const parts=[]; for (const [ck,cv] of Object.entries(op||{})){ if(!cv) continue; parts.push(`${ck}:${cv}`); }
+              return parts.length? ` <small style="opacity:.8;">(OP ${parts.join(", ")})</small>` : "";
+            };
 
-            for (const k of keys) {
-              const staged = Number(round?.localStaged?.support?.[sf.id]?.[k] || 0);
-              const bank = Number(getOPBank(sf)?.[k] || 0);
+            for (const sf of supportActors) {
+              const row = document.createElement("div");
+              row.style.marginBottom = ".35rem";
 
-              const chip = document.createElement("div");
-              chip.style.display = "inline-flex";
-              chip.style.alignItems = "center";
-              chip.style.gap = ".2rem";
-              chip.style.padding = ".15rem .35rem";
-              chip.style.border = "1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.18))";
-              chip.style.borderRadius = "999px";
-              chip.style.background = "var(--ft-hud-bg-3, rgba(15,23,42,0.28))";
+              const hdr = document.createElement("div");
+              hdr.style.fontSize = "12px";
+              hdr.style.marginBottom = ".2rem";
+              hdr.innerHTML = `<b>${foundry.utils.escapeHTML(String(sf.name || sf.id))}</b>`;
+              row.appendChild(hdr);
 
-              chip.innerHTML = `
-                <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="-1">−</button>
-                <span><b>${k}</b>: ${staged} / ${bank}</span>
-                <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="1">+</button>
-              `;
+              const keys = OP_KEYS.slice();
+              const grid = document.createElement("div");
+              grid.style.display = "flex";
+              grid.style.flexWrap = "wrap";
+              grid.style.gap = ".25rem";
 
-              grid.appendChild(chip);
+              for (const k of keys) {
+                const staged = Number(round?.localStaged?.support?.[sf.id]?.[k] || 0);
+                const bank = Number(getOPBank(sf)?.[k] || 0);
+
+                const chip = document.createElement("div");
+                chip.style.display = "inline-flex";
+                chip.style.alignItems = "center";
+                chip.style.gap = ".2rem";
+                chip.style.padding = ".15rem .35rem";
+                chip.style.border = "1px solid var(--ft-hud-border-soft, rgba(148,163,184,0.18))";
+                chip.style.borderRadius = "999px";
+                chip.style.background = "var(--ft-hud-bg-3, rgba(15,23,42,0.28))";
+
+                chip.innerHTML = `
+                  <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="-1">−</button>
+                  <span><b>${k}</b>: ${staged} / ${bank}</span>
+                  <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="1">+</button>
+                `;
+
+                grid.appendChild(chip);
+              }
+
+              row.appendChild(grid);
+
+              // Per-support projected maneuver+staged OP spend (live recalc target).
+              const proj = document.createElement("div");
+              proj.style.fontSize = "11px";
+              proj.style.opacity = ".85";
+              proj.innerHTML = `<i>Projected OP Spend:</i> <b><span data-proj-support="${sf.id}"></span></b>`;
+              row.appendChild(proj);
+
+              // --- Support maneuver picker (parity with the attacker lane) ---
+              // Gate each candidate maneuver by this support faction's own
+              // doctrine/tier/unlock. Support fires offensively → side:"support",
+              // attacker-aligned; rigRole is empty (support has no rig combat role).
+              const mapSupport = {};
+              for (const [k, v] of Object.entries(mapAttRaw || {})) {
+                const gate = _canFactionUseManeuver(sf, k, { side:"support", activityKey: round.activityKey, targetType: round.targetType, rigCombatCtx: { rigRole: "" } });
+                if (gate.ok) mapSupport[k] = v;
+              }
+              const supKeys = Object.keys(mapSupport);
+              const selSupport = Array.isArray(round.mansSelectedSupport?.[sf.id]) ? round.mansSelectedSupport[sf.id] : [];
+
+              if (supKeys.length) {
+                const fs = document.createElement("fieldset");
+                fs.className = "bbttcc-mans";
+                fs.style.marginTop = ".3rem";
+                const lg = document.createElement("legend");
+                lg.textContent = "Support Maneuvers";
+                fs.appendChild(lg);
+
+                const mgrid = document.createElement("div");
+                mgrid.className = "mans-wrap";
+                mgrid.style.display="grid"; mgrid.style.gridTemplateColumns="1fr 1fr"; mgrid.style.gap=".25rem .5rem";
+
+                for (const k of supKeys) {
+                  const m = mapSupport[k];
+                  const id = `m-support-${sf.id}-${round.roundId}-${k}`;
+                  const checked = selSupport.includes(k);
+                  const fireMode = _rcGetFireMode(m);
+                  const fired = _rcWasManFired(round, "support", k, sf.id);
+                  const showFire = (checked || fired) && roundOpen;
+                  const fireHTML = showFire ? _rcFireRowHTML(fireMode, k, "support", fired, sf.id) : "";
+                  const grantedBy = _crewGrantingManeuver(sf, k);
+                  const grantBadge = grantedBy
+                    ? ` <span class="bbttcc-crew-grant" title="Unlocked by this faction's active crew / association: ${foundry.utils.escapeHTML(grantedBy)}" style="font-size:.66em;font-weight:600;color:#9fe0b0;background:#102818;border:1px solid #3f8a55;border-radius:6px;padding:0 .35em;white-space:nowrap;">✦ ${foundry.utils.escapeHTML(grantedBy)}</span>`
+                    : "";
+                  const lbl = document.createElement("label");
+                  lbl.style.display="flex"; lbl.style.alignItems="center"; lbl.style.gap=".25rem"; lbl.style.flexWrap="wrap";
+                  lbl.dataset.fmRow = fireMode;
+                  lbl.innerHTML = `<input type="checkbox" ${checked?"checked":""} data-maneuver="${k}" data-side="support" data-faction-id="${sf.id}" id="${id}"><span>${m?.label||k}</span>${grantBadge}${_rcFireModeBadgeHTML(fireMode)}<span class="bbttcc-tip-icon" data-tip-kind="maneuver" data-tip-key="${k}" >ⓘ</span>${mkCostSupport(m?.cost)}${fireHTML}`;
+                  mgrid.appendChild(lbl);
+                }
+                fs.appendChild(mgrid);
+                row.appendChild(fs);
+              }
+
+              supportWrap.appendChild(row);
             }
 
-            row.appendChild(grid);
-            supportWrap.appendChild(row);
+            host.appendChild(supportWrap);
           }
-
-          host.appendChild(supportWrap);
         }
       } catch(_eSupportStage) {}      // --- GM: Pending World Effects (MVP Apply Button) --------------------
       // World-level maneuver effects are stored under round.meta.intents.pending.worldEffects.
@@ -3368,13 +3491,23 @@ _renderScenarioHUD(host, round){
 
       const recalc = ()=>{
         const sumA = {}, sumD = {};
+        const sumSupport = {}; // { [factionId]: { [opKey]: n } }
         const cat = round.view?.cat || primaryKeyFor(round.activityKey);
 
         host.querySelectorAll('.mans-wrap input[type="checkbox"][data-maneuver]:checked')
           .forEach(cb=>{
             const eff = EFFECTS[cb.dataset.maneuver]; if (!eff) return;
             const {op} = lcKeysCost(_rcCostOf(eff));
-            const dst = cb.dataset.side==="def" ? sumD : sumA;
+            const side = String(cb.dataset.side || "att");
+            // Support maneuver cost is charged to the support faction's OWN bank,
+            // so it must NOT fold into the attacker projection.
+            let dst;
+            if (side === "def") dst = sumD;
+            else if (side === "support") {
+              const fid = String(cb.dataset.factionId || "").trim();
+              if (!fid) return;
+              dst = (sumSupport[fid] ||= {});
+            } else dst = sumA;
             for (const [k,v] of Object.entries(op||{})){
               const kk = String(k).toLowerCase();
               dst[kk] = (dst[kk]||0) + Number(v||0);
@@ -3384,15 +3517,27 @@ _renderScenarioHUD(host, round){
         const stagedA = Number(round?.localStaged?.att?.[cat]||0);
         const stagedD = Number(round?.localStaged?.def?.[cat]||0);
 
-        let stagedSupport = 0;
+        // Each support faction's staged OP is its OWN spend → per-faction sum,
+        // never folded into the attacker projection.
         const supportStage = round?.localStaged?.support || {};
-        for (const bucket of Object.values(supportStage)) {
-          stagedSupport += Number(bucket?.[cat] || 0);
+        for (const [sfid, bucket] of Object.entries(supportStage)) {
+          for (const [k, v] of Object.entries(bucket || {})) {
+            const n = Number(v || 0);
+            if (!n) continue;
+            const kk = String(k).toLowerCase();
+            const dst = (sumSupport[sfid] ||= {});
+            dst[kk] = (dst[kk] || 0) + n;
+          }
         }
 
         if (stagedA > 0) sumA[cat] = (sumA[cat]||0) + stagedA;
-        if (stagedSupport > 0) sumA[cat] = (sumA[cat]||0) + stagedSupport;
         if (stagedD > 0) sumD[cat] = (sumD[cat]||0) + stagedD;
+
+        // Render per-support projected spend.
+        host.querySelectorAll("[data-proj-support]").forEach(el=>{
+          const fid = String(el.getAttribute("data-proj-support") || "");
+          el.textContent = textForSpend(sumSupport[fid] || {});
+        });
 
         const tgtA1 = host.querySelector("[data-proj-att]");       if (tgtA1) tgtA1.textContent = textForSpend(sumA);
         const tgtD1 = host.querySelector("[data-proj-def]");       if (tgtD1) tgtD1.textContent = textForSpend(sumD);
@@ -3421,8 +3566,17 @@ _renderScenarioHUD(host, round){
           const el = ev.target;
           if (!el?.matches?.('.mans-wrap input[type="checkbox"][data-maneuver]')) return;
           const key  = el.dataset.maneuver;
-          const side = el.dataset.side==="def" ? "def" : "att";
-          const arr  = (side==="def" ? round.mansSelectedDef : round.mansSelected);
+          const rawSide = String(el.dataset.side || "att");
+          const side = (rawSide === "def") ? "def" : (rawSide === "support") ? "support" : "att";
+          let arr;
+          if (side === "support") {
+            const fid = String(el.dataset.factionId || "").trim();
+            if (!fid) return;
+            round.mansSelectedSupport ||= {};
+            arr = (round.mansSelectedSupport[fid] ||= []);
+          } else {
+            arr = (side==="def" ? round.mansSelectedDef : round.mansSelected);
+          }
           const i = arr.indexOf(key);
           if (el.checked && i<0) arr.push(key);
           if (!el.checked && i>=0) arr.splice(i,1);
@@ -3445,10 +3599,14 @@ _renderScenarioHUD(host, round){
 
   _collectMans(idx){
     const r = this.vm.rounds[idx] || {};
-    if (Array.isArray(r.mansSelected) || Array.isArray(r.mansSelectedDef)) {
-      return { att: (r.mansSelected||[]).slice(), def: (r.mansSelectedDef||[]).slice() };
+    const support = {};
+    for (const [fid, keys] of Object.entries(r.mansSelectedSupport || {})) {
+      support[fid] = Array.isArray(keys) ? keys.slice() : [];
     }
-    return { att: [], def: [] };
+    if (Array.isArray(r.mansSelected) || Array.isArray(r.mansSelectedDef)) {
+      return { att: (r.mansSelected||[]).slice(), def: (r.mansSelectedDef||[]).slice(), support };
+    }
+    return { att: [], def: [], support };
   }
 
   async _preparePartContext(part, context) {
@@ -4163,6 +4321,7 @@ r.view = {
         diffOffset: 0,
         mansSelected: [],
         mansSelectedDef: [],
+        mansSelectedSupport: {}, // { [supportFactionId]: string[] }
         meta: this.__pendingHoldings ? { holdings: Object.assign({}, this.__pendingHoldings) } : {}
       };
       this.__pendingHoldings = null;
@@ -4182,6 +4341,13 @@ r.view = {
       if (last) {
         if (Array.isArray(last.mansSelected))    round.mansSelected    = last.mansSelected.slice();
         if (Array.isArray(last.mansSelectedDef)) round.mansSelectedDef = last.mansSelectedDef.slice();
+        if (last.mansSelectedSupport && typeof last.mansSelectedSupport === "object") {
+          const carried = {};
+          for (const [fid, keys] of Object.entries(last.mansSelectedSupport)) {
+            carried[fid] = Array.isArray(keys) ? keys.slice() : [];
+          }
+          round.mansSelectedSupport = carried;
+        }
       }
 
       // B3: Logistical Surge — if attacker has a pending "repeat last maneuver for free" token, pre-seed it on this new round.
@@ -4316,7 +4482,7 @@ r.view = {
 
       const act = btn.dataset.manageAct;
       if (act === "close")  { r.open = false; return this.render(); }
-      if (act === "cancel") { r.cancelled = true; r.open = false; r.mansSelected=[]; r.mansSelectedDef=[]; return this.render(); }
+      if (act === "cancel") { r.cancelled = true; r.open = false; r.mansSelected=[]; r.mansSelectedDef=[]; r.mansSelectedSupport={}; return this.render(); }
       if (act === "diff")   { const d=Number(btn.dataset.delta||0); r.diffOffset = clamp(Number(r.diffOffset||0)+d,-50,50); return this.render(); }
       if (act === "stage")  { return this._stageOP(idx, btn.dataset); }
       if (act === "commit") { return this._commitRound(idx); }
@@ -4336,7 +4502,31 @@ r.view = {
       }
       const key  = String(btn.dataset.fireManeuver || "").trim();
       const side = String(btn.dataset.fireSide || "att").toLowerCase();
+      const fireFid = String(btn.dataset.fireFactionId || "").trim();
       if (!key) return;
+
+      if (side === "support") {
+        // Support: owner of THAT support faction may fire (GM too). The fire
+        // helper re-gates the maneuver by the faction's own doctrine/tier.
+        const sfActor = fireFid ? game.actors?.get?.(fireFid) : null;
+        if (!sfActor) { try { ui.notifications?.warn?.("Support faction not found."); } catch(_e) {} return; }
+        if (!_rcIsGMUser() && !sfActor.isOwner) {
+          try { ui.notifications?.warn?.("You can only fire maneuvers for factions you control."); } catch(_e) {}
+          return;
+        }
+        try { _rcSyncManeuverSelectionsFromDOM(this, idx, r); } catch(_eSyncFire) {}
+        const selectedS = Array.isArray(r.mansSelectedSupport?.[fireFid]) ? r.mansSelectedSupport[fireFid] : [];
+        if (!selectedS.includes(key)) {
+          try { ui.notifications?.info?.("Select the maneuver first."); } catch(_e) {}
+          return;
+        }
+        btn.disabled = true;
+        // Thread the support actor as the firing faction (attribution).
+        await _rcFireOneManeuver(r, "support", key, sfActor, null, this);
+        this.render();
+        return;
+      }
+
       // Player safety: players can only fire attacker-side maneuvers.
       if (!_rcIsGMUser() && side !== "att") {
         try { ui.notifications?.warn?.("Only the GM can fire defender maneuvers."); } catch(_e) {}
@@ -5033,6 +5223,7 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
 
           const manOpA = {};
           const manOpD = {};
+          const manOpSupport = {}; // { [factionId]: { [opKey]: n } }
           const addInto = (dst, src)=>{ for (const [k,v] of Object.entries(src||{})){ const kk=String(k).toLowerCase(); dst[kk]=(dst[kk]||0)+Number(v||0); } };
 
           for (const key of listA){
@@ -5052,6 +5243,27 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           const stagedD = Number(r?.localStaged?.def?.[cat]||0);
           if (stagedA>0) manOpA[cat] = (manOpA[cat]||0)+stagedA;
           if (stagedD>0) manOpD[cat] = (manOpD[cat]||0)+stagedD;
+
+          // Support OP — staged + maneuver costs, charged to each support
+          // faction's OWN bank. (Pre-existing gap: scenario commit spent none.)
+          const supportStageS = r?.localStaged?.support || {};
+          for (const [sfid, bucket] of Object.entries(supportStageS)) {
+            const clean = {};
+            for (const [k, v] of Object.entries(bucket || {})) {
+              const n = Number(v || 0);
+              if (n > 0) clean[String(k).toLowerCase()] = n;
+            }
+            if (Object.keys(clean).length) manOpSupport[String(sfid)] = clean;
+          }
+          for (const [sfid, keys] of Object.entries(r.mansSelectedSupport || {})) {
+            if (!Array.isArray(keys) || !keys.length) continue;
+            const dst = (manOpSupport[String(sfid)] ||= {});
+            for (const key of keys) {
+              const eff = EFFECTS[key]; if (!eff) continue;
+              const {op} = lcKeysCost(_rcCostOf(eff));
+              addInto(dst, op);
+            }
+          }
 
           // Snapshot defender bank once resolved (for double-spend safety)
           try { if (__bankDefBefore == null && defender) __bankDefBefore = getOPBank(defender); } catch(_eB) {}
@@ -5082,6 +5294,21 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
 
           await _applyOPDeltaDual(attacker, _negate(expectA));
           if (defender) await _applyOPDeltaDual(defender, _negate(expectD));
+
+          // Support factions spend their own OP (staged + maneuvers).
+          for (const [sfid, spend] of Object.entries(manOpSupport)) {
+            const sf = await getActorByIdOrUuid(sfid);
+            if (!sf) continue;
+            const curS = getOPBank(sf);
+            const expectS = foundry.utils.duplicate(spend || {});
+            for (const k of Object.keys(expectS)) {
+              const need = Number(expectS[k] || 0);
+              if (!need) { expectS[k] = 0; continue; }
+              const now = Number(curS[k] || 0);
+              expectS[k] = Math.max(0, Math.min(need, now));
+            }
+            await _applyOPDeltaDual(sf, _negate(expectS));
+          }
         } catch (eSpend) {
           warn("scenario maneuver OP spend failed (non-fatal)", eSpend);
         }
@@ -5277,6 +5504,17 @@ const __b3DefModeFinal = __b3MergeMode(__b3DefMode, __b3ThisRound?.rollModeDef);
         }
       }
       if (Object.keys(clean).length) manOpSupport[String(sfid)] = clean;
+    }
+    // Support maneuver OP — charged to each support faction's OWN bank.
+    for (const [sfid, keys] of Object.entries(r.mansSelectedSupport || {})) {
+      if (!Array.isArray(keys) || !keys.length) continue;
+      const dst = (manOpSupport[String(sfid)] ||= {});
+      for (const key of keys) {
+        const eff = EFFECTS[key];
+        if (!eff) continue;
+        const { op } = lcKeysCost(_rcCostOf(eff));
+        addInto(dst, op);
+      }
     }
     // Apply OP spend (maneuvers + staged).
     // We compare current banks to the snapshot taken at commit start to avoid double-spend
@@ -6248,6 +6486,11 @@ try {
 
           mansSelected: Array.isArray(prior.mansSelected) ? prior.mansSelected.slice() : [],
           mansSelectedDef: Array.isArray(prior.mansSelectedDef) ? prior.mansSelectedDef.slice() : [],
+          mansSelectedSupport: (() => {
+            const out = {};
+            for (const [fid, keys] of Object.entries(prior.mansSelectedSupport || {})) out[fid] = Array.isArray(keys) ? keys.slice() : [];
+            return out;
+          })(),
 
           meta: {
             b3: {
@@ -7612,7 +7855,9 @@ function _b2ApplyNullifyAllManeuvers(byManeuver, { attackerSuccess=false } = {})
     const side = String(row0.side||"").toLowerCase().trim();
     // RETUNED 2026-05-24 (MANEUVER_BALANCE_PASS.md §3.D): Void-Signal Collapse
     // nullifies ENEMY maneuvers only — the attacker-side caster's own still resolve.
-    if (side === "att") continue;
+    // Support is attacker-aligned (allied), so it is preserved alongside "att"
+    // (Void-Signal is attacker-cast, gated on attackerSuccess by the caller).
+    if (side === "att" || side === "support") continue;
     // Strip bundles but preserve audit trail
     const clean = foundry.utils.duplicate(row0 || {});
     clean.bundle = { factionEffects: [], scenarioEffects: [], roundEffects: [], worldEffects: [] };
@@ -7821,6 +8066,16 @@ const __tier = (__tier0 !== "unknown") ? __tier0
   const mansDef = _b2SafeArr(round.mansSelectedDef).map(k => String(k||"").trim()).filter(Boolean);
   const __hasDefReversal = mansDef.map(k=>String(k||"").toLowerCase()).includes("defender_s_reversal");
 
+  // Support maneuvers, per faction. Each supporter is attacker-aligned for the
+  // outcome tier (offense), and its self-effects attribute to its own id.
+  const mansSupport = {}; // { [factionId]: string[] }
+  for (const [fid, keys] of Object.entries(round.mansSelectedSupport || {})) {
+    const fidS = String(fid || "").trim();
+    if (!fidS) continue;
+    const arr = _b2SafeArr(keys).map(k => String(k||"").trim()).filter(Boolean);
+    if (arr.length) mansSupport[fidS] = arr;
+  }
+
   const merged = {
     roundEffects: [],
     scenarioEffects: [],
@@ -7880,16 +8135,68 @@ const __tier = (__tier0 !== "unknown") ? __tier0
     }
   }
 
+  // Support variant of addOne: the support faction is the firing faction, so
+  // its self-effects (ATTACKER/unspecified) attribute to sfid; offensive/target
+  // (DEFENDER) effects still land on the real defender. Outcome follows the
+  // attacker tier (offense), never the defender inversion.
+  async function addOneSupport(maneuverKey, sfid){
+    try {
+      const ctx = Object.assign({}, ctxBase, {
+        outcomeTier: __tier,
+        attackerFactionId: sfid,
+        meta: Object.assign({}, ctxBase.meta, { attackerId: sfid, source: "support" })
+      });
+      const res = await simFn(Object.assign({}, ctx, { maneuverKey })) || {};
+      const bundle = res.previewWorldEffects || null;
+      if (!bundle) return;
+
+      const fx = _b2FixFactionIds(bundle.factionEffects || [], { attackerId: sfid, defenderId });
+      merged.factionEffects.push(...fx);
+      merged.scenarioEffects.push(...(bundle.scenarioEffects || []));
+      merged.roundEffects.push(...(bundle.roundEffects || []));
+      merged.worldEffects.push(...(bundle.worldEffects || []));
+
+      merged.byManeuver.push({
+        side: "support",
+        factionId: sfid,
+        maneuverKey: maneuverKey,
+        meta: bundle.meta || null,
+        bundle: {
+          factionEffects: foundry.utils.duplicate(bundle.factionEffects || []),
+          scenarioEffects: foundry.utils.duplicate(bundle.scenarioEffects || []),
+          roundEffects: foundry.utils.duplicate(bundle.roundEffects || []),
+          worldEffects: foundry.utils.duplicate(bundle.worldEffects || [])
+        },
+        has: {
+          faction: !!(bundle.factionEffects && bundle.factionEffects.length),
+          scenario: !!(bundle.scenarioEffects && bundle.scenarioEffects.length),
+          round: !!(bundle.roundEffects && bundle.roundEffects.length),
+          world: !!(bundle.worldEffects && bundle.worldEffects.length)
+        }
+      });
+    } catch (e) {
+      merged.byManeuver.push({ side: "support", factionId: sfid, maneuverKey, error: String(e) });
+    }
+  }
+
   // Surface C v2: skip maneuvers that already had their mechanical effects
   // applied via Fire Now. The fire helper set mechApplied:true on the round's
   // firedManeuvers bucket; replaying them here would double-apply.
   const __firedAtt = round?.meta?.firedManeuvers?.att || {};
   const __firedDef = round?.meta?.firedManeuvers?.def || {};
+  const __firedSupport = round?.meta?.firedManeuvers?.support || {};
   const mansAttFresh = mansAtt.filter(k => !__firedAtt[String(k)]?.mechApplied);
   const mansDefFresh = mansDef.filter(k => !__firedDef[String(k)]?.mechApplied);
 
   for (const k of mansAttFresh) await addOne(k, "att");
   for (const k of mansDefFresh) await addOne(k, "def");
+
+  // Support maneuvers — per faction, fired ones (mechApplied) skipped for idempotency.
+  for (const [sfid, keys] of Object.entries(mansSupport)) {
+    const firedFor = __firedSupport[sfid] || {};
+    const fresh = keys.filter(k => !firedFor[String(k)]?.mechApplied);
+    for (const k of fresh) await addOneSupport(k, sfid);
+  }
 
 
   // Batch B: apply cancel/interdict directives BEFORE applying faction/scenario effects.
@@ -7953,6 +8260,9 @@ const __tier = (__tier0 !== "unknown") ? __tier0
 
 
 // Batch C: Defender’s Reversal — reflect first attacker bundle onto defender when attacker failed (defender won).
+  // Support rows (side:"support") are intentionally EXCLUDED from reflection:
+  // _b2ApplyReflectFirst only matches the source on side==="att" and the
+  // reversal on side==="def", so a support faction's bundle is never reflected.
   try {
     const defenderSuccess = (String(__tier||"") === "fail");
     const rr = _b2ApplyReflectFirst(merged.byManeuver, { attackerId: attackerId, defenderId: defenderId, defenderSuccess: defenderSuccess });
