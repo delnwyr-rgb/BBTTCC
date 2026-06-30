@@ -57,6 +57,9 @@
       effects: [{ type: "alarmDecay", delta: 3, reason: "Disable Alarm" }] },
 
     { key: "pick_lock", label: "Pick Lock", tier: 1, costBand: "light",
+      // Explicitly canonical intrigue (not only the infiltration_alarm scenario alias)
+      // so it surfaces in any Intrigue raid, scenario or not. 2026-06-21.
+      raidTypes: ["infiltration_alarm", "intrigue"],
       cost: { intrigue: 10 },
       effectsText: "Bypass a barrier: +1 progress.",
       description: "<p>A barrier yields to patient hands. <b>+1 progress toward the objective.</b></p>",

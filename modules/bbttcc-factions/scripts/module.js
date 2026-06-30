@@ -2719,15 +2719,48 @@ const doctrine = await (async () => {
     })
     .sort((a,b)=> String(a.name||"").localeCompare(String(b.name||"")));
 
+  // Courtly Secrets are NOT doctrine items — they're items flagged
+  // flags.bbttcc-raid.secret (effectKey + acquisition). List them for the
+  // Assets sheet alongside maneuvers/activities. Newest first.
+  const _secApi = game.bbttcc?.api?.raid?.courtlySecrets;
+  const pickSecrets = () => all
+    .filter(it => it?.flags?.["bbttcc-raid"]?.secret)
+    .map(it => {
+      const s = it.flags["bbttcc-raid"].secret || {};
+      const acq = String(s.acquisition || "earned").toLowerCase();
+      const effectKey = String(s.effectKey || "");
+      return {
+        id: it.id,
+        name: it.name,
+        img: it.img,
+        effectKey,
+        desc: (typeof _secApi?.describeEffect === "function") ? _secApi.describeEffect(effectKey) : effectKey,
+        acquisition: acq,
+        stolen: acq === "stolen",
+        acquiredAt: Number(s.acquiredAt || 0)
+      };
+    })
+    .sort((a, b) => (b.acquiredAt - a.acquiredAt) || String(a.name || "").localeCompare(String(b.name || "")));
+
   return {
     maneuvers: pick("maneuver"),
-    strategics: pick("strategic")
+    strategics: pick("strategic"),
+    secrets: pickSecrets()
   };
 })();
 
     return {
       ...d,
       isGM: !!game.user?.isGM,
+      isOwner: !!this.actor?.isOwner,
+      // A courtly secret is playable only inside an active Courtly scenario this
+      // faction is a participant in (mirrors playSecret's own scenario guard).
+      secretsPlayable: (() => {
+        try {
+          const st = game.bbttcc?.api?.raid?._lastCourtly?.getState?.() || null;
+          return !!(st && (st.attackerId === this.actor?.id || st.defenderId === this.actor?.id));
+        } catch (_e) { return false; }
+      })(),
       gmEditMode: !!game.user?.isGM && !!game.settings?.get?.('bbttcc-core','gmEditMode'),
       rigs, // <-- top-level (defensive)
       fx: {
@@ -3079,6 +3112,28 @@ try {
   const root = (html?.[0] instanceof HTMLElement) ? html[0] : (this.element?.[0] ?? this.element);
   if (root && root instanceof HTMLElement && !root.dataset.bbttccDoctrineBound) {
     root.dataset.bbttccDoctrineBound = "1";
+
+    // CLICK: play a Courtly Secret — the faction's owner (or GM) during an active
+    // Courtly scenario. playSecret enforces scenario/side/consume; we just route.
+    root.addEventListener("click", async (ev) => {
+      const btn = ev.target?.closest?.('[data-secret-act="play"]');
+      if (!btn || btn.disabled) return;
+      ev.preventDefault();
+      const itemId = String(btn.getAttribute("data-item-id") || "").trim();
+      if (!itemId) return;
+      const api = game.bbttcc?.api?.raid?.courtlySecrets;
+      if (!api?.playSecret) return ui.notifications?.warn?.("Courtly secrets API not loaded.");
+      btn.disabled = true;
+      try {
+        const res = await api.playSecret(this.actor.id, itemId);
+        if (res?.ok) ui.notifications?.info?.("Courtly secret played.");
+        // else: playSecret already surfaced the reason (no scenario / side mismatch).
+      } catch (e) {
+        console.warn("[bbttcc-factions] play secret failed", e);
+        ui.notifications?.error?.("Failed to play secret (see console).");
+      }
+      this.render(false);
+    });
 
     // CLICK actions: open / add / remove
     root.addEventListener("click", async (ev) => {

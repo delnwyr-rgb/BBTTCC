@@ -49,6 +49,25 @@
     "doubleAgent"
   ]);
 
+  // Human-readable one-liner per effect key — single source of truth for the
+  // faction Assets sheet + any Play UI. Keep in sync with the handlers below.
+  const EFFECT_INFO = Object.freeze({
+    rollPlus2:     "Queue +2 to your next courtly roll",
+    forceReroll:   "Force your opponent to reroll their next exchange",
+    influenceDmg2: "Deal 2 Influence damage outside an exchange",
+    clearScandal:  "Clear your own Scandal flag",
+    favorPlus1:    "+1 Favor with a chosen courtier (your side)",
+    favorShift:    "−1 Favor with two courtiers (toward your opponent)",
+    rollPlus3:     "Queue +3 to your next courtly roll",
+    influenceDmg3: "Deal 3 Influence damage outside an exchange",
+    coverTracks:   "−2 Suspicion",
+    favorPlus2:    "+2 Favor with a chosen courtier (your side)",
+    doubleAgent:   "Flip a courtier — −1 to the opponent, +1 to you"
+  });
+  function describeEffect(key) {
+    return EFFECT_INFO[String(key || "")] || String(key || "");
+  }
+
   const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
 
   function _scenario() {
@@ -274,7 +293,7 @@
     game.bbttcc.api ??= {};
     game.bbttcc.api.raid ??= {};
     game.bbttcc.api.raid.courtlySecrets = {
-      addSecret, playSecret, getSecrets, enforceCap, EFFECT_KEYS
+      addSecret, playSecret, getSecrets, enforceCap, EFFECT_KEYS, EFFECT_INFO, describeEffect
     };
   }
 

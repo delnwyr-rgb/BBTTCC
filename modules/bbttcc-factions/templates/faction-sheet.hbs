@@ -647,6 +647,61 @@
           </div>
         </fieldset>
 
+        <fieldset class="bbttcc-card bbttcc-card-ops">
+          <legend style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
+            <span>Courtly Secrets</span>
+            {{#if fx.doctrine.secrets.length}}
+              <span class="hint" style="font-weight:600; opacity:.7;">{{fx.doctrine.secrets.length}} / 5</span>
+            {{/if}}
+          </legend>
+
+          <div class="bbttcc-doctrine-dropzone" data-doctrine-drop="1" data-kind="secret" style="padding:.15rem 0;">
+            {{#if fx.doctrine.secrets.length}}
+            <table class="bbttcc-table">
+              <tbody>
+                {{#each fx.doctrine.secrets as |it|}}
+                <tr class="bbttcc-doctrine-row" data-item-id="{{it.id}}" data-kind="secret" data-key="{{it.effectKey}}">
+                  <td style="width:28px;">
+                    {{#if it.img}}<img src="{{it.img}}" style="width:22px; height:22px; border-radius:6px; object-fit:cover;"/>{{/if}}
+                  </td>
+                  <td>
+                    <a href="#" class="bbttcc-doctrine-name" data-doctrine-act="open" data-item-id="{{it.id}}" data-kind="secret" data-key="{{it.effectKey}}" style="font-weight:800; text-decoration:none; color:inherit;">{{it.name}}</a>
+                    {{#if it.desc}}<div class="hint" style="font-size:10px; opacity:.7; margin-top:1px;">{{it.desc}}</div>{{/if}}
+                  </td>
+                  <td class="center" style="width:64px;">
+                    {{#if it.stolen}}
+                      <span style="font-size:10px; font-weight:700; color:#fca5a5; background:#3b1212; border:1px solid #7f1d1d; border-radius:6px; padding:0 .35em;" data-tooltip="Stolen — playing it raises Suspicion +2">Stolen</span>
+                    {{else}}
+                      <span style="font-size:10px; font-weight:700; color:#9fe0b0; background:#102818; border:1px solid #3f8a55; border-radius:6px; padding:0 .35em;" data-tooltip="Earned">Earned</span>
+                    {{/if}}
+                  </td>
+                  {{#if ../isOwner}}
+                  <td class="center" style="width:58px;">
+                    {{#if ../secretsPlayable}}
+                      <button type="button" class="bbttcc-pill-btn" data-secret-act="play" data-item-id="{{it.id}}" style="padding:2px 9px; font-size:10px;" data-tooltip="Play this secret in the active Courtly raid">Play</button>
+                    {{else}}
+                      <button type="button" class="bbttcc-pill-btn" disabled style="padding:2px 9px; font-size:10px; opacity:.4; cursor:not-allowed;" data-tooltip="Playable only during an active Courtly (Presence) raid this faction is part of">Play</button>
+                    {{/if}}
+                  </td>
+                  {{/if}}
+                  {{#if ../isGM}}
+                  <td class="center" style="width:44px;">
+                    <a class="button" href="#" data-doctrine-act="remove" data-item-id="{{it.id}}" data-tooltip="Remove"><i class="fas fa-trash"></i></a>
+                  </td>
+                  {{/if}}
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+            {{else}}
+              <p class="hint" style="margin:.35rem 0 0;">No courtly secrets held.</p>
+            {{/if}}
+            {{#if isGM}}
+              <p class="hint" style="margin:.35rem 0 0;">GM: drag a Courtly Secret item here to grant it (held at most 5 — the oldest is dropped).</p>
+            {{/if}}
+          </div>
+        </fieldset>
+
       </div>
     </section>
 

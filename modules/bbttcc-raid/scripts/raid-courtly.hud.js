@@ -217,6 +217,7 @@
               <img src="${esc(i.img || "icons/svg/book.svg")}" style="width:24px;height:24px;border-radius:2px;flex:0 0 auto;"/>
               <div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.78rem;">${esc(i.name)}</div>
               <span style="font-size:0.66rem;color:${acqColor};border:1px solid ${acqColor};border-radius:6px;padding:0 5px;">${esc(acq)}</span>
+              <button type="button" class="ft-courtly-secret-play" draggable="false" title="Play this secret now" style="font-size:0.66rem;color:${VIOLET};border:1px solid ${VIOLET};background:#1a1426;border-radius:4px;padding:1px 8px;cursor:pointer;flex:0 0 auto;">Play</button>
             </div>`;
           }).join("");
       return `<div style="display:flex;flex-direction:column;gap:3px;">
@@ -277,6 +278,23 @@
       row.addEventListener("dragend", () => {
         row.style.opacity = "";
         if (_infEl) { _infEl.style.outline = ""; _infEl.style.outlineOffset = ""; }
+      });
+    });
+    // Phase C.2 — click-to-play: a discoverable button alongside drag-to-play.
+    // Same path as the Influence drop zone (playSecret enforces scenario/side).
+    el.querySelectorAll(".ft-courtly-secret-play").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const row = btn.closest(".ft-courtly-secret");
+        const actorId = row?.dataset?.actorId;
+        const itemId  = row?.dataset?.itemId;
+        if (!actorId || !itemId) return;
+        const api = game.bbttcc?.api?.raid?.courtlySecrets;
+        if (!api?.playSecret) { ui.notifications?.error?.("Courtly secrets API not loaded."); return; }
+        btn.disabled = true;
+        try { await api.playSecret(actorId, itemId); }
+        catch (err) { console.warn(TAG, "playSecret(click) failed", err); ui.notifications?.error?.("Play failed — see console."); }
       });
     });
   }
