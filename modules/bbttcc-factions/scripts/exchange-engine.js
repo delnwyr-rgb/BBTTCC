@@ -202,6 +202,61 @@ async function _applyDeltas(actor, delta, contextLabel) {
   }
 }
 
+// Apply a per-actor delta map with real atomicity: credits land before debits,
+// and any mid-apply failure rolls every actor back to its pre-state. Snapshots the
+// flag-based stores (opBank + buildUnits); materials are reversed via stockpile.
+// Returns { ok, error? }. Replaces the old best-effort sequential loop that could
+// strand a sender's debit when a receiver credit threw.
+async function _applyDeltasAtomic(deltas, contextLabel) {
+  // Order credit-leaning actors first, debit-leaning last (net marks + BU, desc).
+  const _net = (d) => Object.values(d.marks || {}).reduce((s, v) => s + Number(v || 0), 0) + Number(d.bu || 0);
+  const entries = Array.from(deltas.entries()).sort((a, b) => _net(b[1]) - _net(a[1]));
+
+  // Snapshot rollback-safe stores for every involved actor before mutating.
+  const snap = new Map(); // actorId → { opBank, buildUnits }
+  for (const [actorId] of entries) {
+    const actor = game.actors.get(actorId);
+    if (!actor) continue;
+    snap.set(actorId, {
+      opBank: foundry.utils.deepClone(actor.getFlag(MOD_ID, "opBank") ?? {}),
+      buildUnits: _readBU(actor),
+    });
+  }
+
+  const matApplied = []; // { actor, materialKey, dq } — reversed on rollback
+  try {
+    for (const [actorId, delta] of entries) {
+      const actor = game.actors.get(actorId);
+      if (!actor) throw new Error(`actor ${actorId} not found`);
+      await _applyDeltas(actor, delta, contextLabel);
+      for (const [matKey, dq] of Object.entries(delta.materials || {})) {
+        if (dq) matApplied.push({ actor, materialKey: matKey, dq });
+      }
+    }
+  } catch (e) {
+    console.warn(TAG, "atomic apply failed — rolling back", e);
+    // Restore flag stores for all actors we snapshotted.
+    for (const [actorId, s] of snap) {
+      const actor = game.actors.get(actorId);
+      if (!actor) continue;
+      try {
+        await actor.update({
+          [`flags.${MOD_ID}.opBank`]: s.opBank,
+          [`flags.${MOD_ID}.buildUnits`]: s.buildUnits,
+        });
+      } catch (re) { console.error(TAG, "ROLLBACK FAILED (flags) for", actor?.name, re); }
+    }
+    // Reverse any materials we managed to move (newest first).
+    const stock = game?.bbttcc?.api?.factions?.stockpile;
+    for (const m of matApplied.reverse()) {
+      try { await stock?.adjust?.(m.actor, m.materialKey, -m.dq, { reason: `${contextLabel} (rollback)` }); }
+      catch (re) { console.error(TAG, "ROLLBACK FAILED (material)", m.materialKey, re); }
+    }
+    return { ok: false, error: e?.message || "apply failed (rolled back)" };
+  }
+  return { ok: true };
+}
+
 async function _writeWarLogs(A, B, summary) {
   for (const actor of [A, B]) {
     try {
@@ -265,17 +320,10 @@ async function share({ from, to, offer, reason } = {}) {
     transfers.push({ from: A.id, to: B.id, kind: "material", materialKey: matKey, sent: qty, received: qty, lost: 0 });
   }
 
-  // Apply atomically (best-effort sequential; OP engine handles its own caps/underflow).
+  // Apply atomically — credits land before debits, full rollback on any failure.
   const deltas = _aggregateDeltas(transfers);
-  try {
-    for (const [actorId, delta] of deltas) {
-      const actor = game.actors.get(actorId);
-      await _applyDeltas(actor, delta, `Allied Send: ${A.name} → ${B.name}`);
-    }
-  } catch (e) {
-    console.warn(TAG, "share apply failed", e);
-    return { ok: false, error: e?.message || "Apply failed" };
-  }
+  const applied = await _applyDeltasAtomic(deltas, `Allied Send: ${A.name} → ${B.name}`);
+  if (!applied.ok) return { ok: false, error: applied.error };
 
   const summary = `Allied Send: ${A.name} → ${B.name} (${_summarize(o)})${reason ? ` — ${reason}` : ""}`;
   await _writeWarLogs(A, B, summary);
@@ -306,17 +354,10 @@ async function trade({ from, to, offer, ask, reason } = {}) {
   const planRes = plan({ from: A, to: B, offer, ask, friction });
   if (!planRes.ok) return { ok: false, error: `Trade plan failed: ${planRes.blockedBy}`, ...planRes };
 
-  // Apply atomically (sequential per actor; OP engine handles caps/underflow).
+  // Apply atomically — credits land before debits, full rollback on any failure.
   const deltas = _aggregateDeltas(planRes.transfers);
-  try {
-    for (const [actorId, delta] of deltas) {
-      const actor = game.actors.get(actorId);
-      await _applyDeltas(actor, delta, `Trade: ${A.name} ↔ ${B.name}`);
-    }
-  } catch (e) {
-    console.warn(TAG, "trade apply failed", e);
-    return { ok: false, error: e?.message || "Apply failed" };
-  }
+  const applied = await _applyDeltasAtomic(deltas, `Trade: ${A.name} ↔ ${B.name}`);
+  if (!applied.ok) return { ok: false, error: `Trade apply failed: ${applied.error}` };
 
   const summary = `Trade: ${A.name} ↔ ${B.name} — ${A.name} sent ${_summarize(_normResource(offer))}, received ${_summarize(_normResource(ask))} (mutual ${ct.mutualTier}, ${(friction*100)|0}% friction)${reason ? `; ${reason}` : ""}`;
   await _writeWarLogs(A, B, summary);
@@ -334,6 +375,38 @@ async function trade({ from, to, offer, ask, reason } = {}) {
   return { ok: true, applied: { transfers: planRes.transfers, losses: planRes.losses, summary, friction, mutualTier: ct.mutualTier } };
 }
 
+// Re-render any open Raid Console (AppV2 id "bbttcc-raid-console") so a cross-actor
+// OP change is reflected immediately — an exchange updates a different actor than the
+// open card, which won't otherwise re-render on its own.
+function _rerenderRaidConsole() {
+  const RID = "bbttcc-raid-console";
+  try {
+    const inst = foundry.applications?.instances;
+    inst?.forEach?.((app) => {
+      const id = String(app?.options?.id || app?.id || "");
+      if (id.startsWith(RID) && app.rendered) app.render(false);
+    });
+  } catch (e) { console.warn(TAG, "raid console refresh (v2) failed", e); }
+  try {
+    for (const w of Object.values(ui.windows || {})) { // legacy AppV1, defensive
+      const id = String(w?.options?.id || w?.id || "");
+      if (id.startsWith(RID) && w.rendered) w.render(false);
+    }
+  } catch (e) { console.warn(TAG, "raid console refresh (v1) failed", e); }
+}
+
+// After any exchange, refresh the two faction sheets + the Raid Console so the
+// transferred OP is visible right away (fixes the "sent it but it never showed up").
+function _refreshAfterExchange(data) {
+  try {
+    for (const id of [data?.fromId, data?.toId]) {
+      const a = id && game.actors.get(String(id).replace(/^Actor\./, ""));
+      if (a?.sheet?.rendered) a.sheet.render(false);
+    }
+    _rerenderRaidConsole();
+  } catch (e) { console.warn(TAG, "exchange refresh failed", e); }
+}
+
 function _attach() {
   try {
     game.bbttcc ??= {};
@@ -344,6 +417,14 @@ function _attach() {
     root.share = share;
     root.trade = trade;
     root.OP_KEYS = OP_KEYS.slice();
+
+    // Install the post-exchange refresh once.
+    if (!game.bbttcc.__exchangeRefreshHook) {
+      Hooks.on("bbttcc:economy:share", _refreshAfterExchange);
+      Hooks.on("bbttcc:economy:exchange", _refreshAfterExchange);
+      game.bbttcc.__exchangeRefreshHook = true;
+    }
+
     console.log(TAG, "Exchange API ready → game.bbttcc.api.factions.exchange.{plan,share,trade}");
   } catch (e) {
     console.warn(TAG, "Exchange API wiring failed", e);
