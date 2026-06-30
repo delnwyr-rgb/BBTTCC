@@ -20625,6 +20625,7 @@ Hooks.once("init", function () {
         resources: sysData?.resources ?? {},
         ftFlags:   actor?.flags?.fourththing ?? {},
         ftFoeSurge: _ftFoeSurgeContext(actor),
+        restraintDie: _ftRestraintContext(actor),
         isEditable: this.isEditable,
         isGM: !!game.user?.isGM,
       };
