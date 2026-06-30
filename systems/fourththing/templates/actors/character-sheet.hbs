@@ -457,6 +457,11 @@
           ↑ {{bankedRerolls.count}} banked reroll{{#if (gte bankedRerolls.count 2)}}s{{/if}} <span style="opacity:0.65">— auto-fires next roll</span>
         </div>
         {{/if}}
+        {{#if restraintDie.pending}}
+        <div class="ft-restraint-pip" data-tooltip="{{restraintDie.tooltip}}" style="display:inline-flex;align-items:center;gap:.3rem;margin-top:.35rem;padding:.1rem .45rem;font-size:0.74rem;background:rgba(155,155,255,0.12);border:1px solid rgba(155,155,255,0.45);border-radius:10px;color:#b0b0ff">
+          ✦ +1d{{restraintDie.sides}} Restraint{{#if restraintDie.target}} vs. {{restraintDie.target}}{{/if}} <span style="opacity:0.65">— auto-fires next roll vs. target</span>
+        </div>
+        {{/if}}
         {{#if ftFoeSurge.isFoe}}
         {{!-- Per-foe Surge gate (2026-05-26). Off by default for NPCs/Monsters;
               GM enables it + tunes the bank cap (Elites get a bigger reservoir). --}}

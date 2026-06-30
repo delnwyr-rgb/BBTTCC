@@ -3582,6 +3582,29 @@ function _ftBankedRerollContext(actor) {
   return { count: rerolls.length, sources, tooltip: sources.length ? `Banked reroll-lowest from: ${sources.join(", ")}. Auto-fires on your next check / save / attack.` : "" };
 }
 
+// Restraint-die pip context — a pulled-punch +1d4 banked vs. a specific target
+// (flags.fourththing.restraint, set by bankRestraint when a Steward pulls the
+// punch). Auto-fires on the holder's next roll vs. that same target, then clears.
+// Surfaced on the sheet so the pending die isn't chat-card-only / invisible.
+function _ftRestraintContext(actor) {
+  const r = actor?.flags?.fourththing?.restraint;
+  if (!r || !(Number(r.reduction) > 0)) return { pending: false };
+  const sides = Number(r.sides) || 4;
+  let target = "";
+  try {
+    const tgt = game.actors?.get?.(r.targetId)
+             || canvas?.tokens?.get?.(r.targetId)?.actor
+             || canvas?.tokens?.placeables?.find?.(t => t.actor?.id === r.targetId)?.actor;
+    target = tgt?.name || "";
+  } catch (e) { /* name is decorative */ }
+  return {
+    pending: true,
+    sides,
+    target,
+    tooltip: `Pulled-punch Restraint die: +1d${sides}${target ? ` vs. ${target}` : ""}. Auto-fires on your next roll vs. that target, then clears.`
+  };
+}
+
 // Tier-scaled Surge bank cap. T1=4, T2=6, T3=8, T4=10. Foes (NPC/Monster)
 // may override the cap via `flags.fourththing.surgeCap` (used for Elites).
 // 2026-05-26.
@@ -18196,6 +18219,7 @@ Hooks.once("init", function () {
         ftFlags:       actor.flags?.fourththing ?? {},
         ftFoeSurge:    _ftFoeSurgeContext(actor),
         bankedRerolls: _ftBankedRerollContext(actor),
+        restraintDie:  _ftRestraintContext(actor),
         resources,
         activePools,
         burnBand,
