@@ -74,26 +74,37 @@
     if (!o?.frame) { tile._bbttccFrame = null; return; }
     const L = frameLayer();
     if (!L) return;
-    const w = doc.width, h = doc.height, hw = w / 2, hh = h / 2;
+    const w = doc.width, h = doc.height;
+    const mesh = tile.mesh;
+    const ax = mesh?.anchor?.x ?? 0.5, ay = mesh?.anchor?.y ?? 0.5;
     const g = new PIXI.Graphics();
     g.name = `frame:${doc.id}`;
     g.eventMode = "none";
-    g.position.set(doc.x + hw, doc.y + hh);            // centre it; world coords
-    g.rotation = ((doc.rotation || 0) * Math.PI) / 180;
+    // Bind to the mesh's ACTUAL transform (anchor point + rotation), converted into
+    // the frame layer's space, so the frame can't drift from the image. Fallback to
+    // document coords only if the mesh isn't drawn yet.
+    if (mesh?.parent) {
+      g.position.copyFrom(L.toLocal(mesh.getGlobalPosition(new PIXI.Point())));
+      g.rotation = mesh.rotation || 0;
+    } else {
+      g.position.set(doc.x + w / 2, doc.y + h / 2);
+      g.rotation = ((doc.rotation || 0) * Math.PI) / 180;
+    }
     const col   = o.frameColor ?? 0xe0a82e;            // Hexchrome gold
     const sheen = 0xfff1a8;
     const rad   = o.frameRadius ?? Math.min(w, h) * 0.06;
     const t     = o.frameThickness ?? Math.max(3, Math.min(w, h) * 0.012);
     const gi    = o.frameGlow ?? 1;                    // halo intensity multiplier
-    const rr = (a, b, r) => g.drawRoundedRect(-a, -b, a * 2, b * 2, Math.max(0, r));
+    const left = -ax * w, top = -ay * h;               // rect placed per mesh anchor
+    const rect = (inset, r) => g.drawRoundedRect(left + inset, top + inset, w - 2 * inset, h - 2 * inset, Math.max(0, r));
     for (const [mult, a] of [[3.4, 0.05], [2.4, 0.08], [1.6, 0.13]]) {  // wide soft halo
       g.lineStyle({ width: t * mult, color: col, alpha: a * gi, join: "round" });
-      rr(hw, hh, rad);
+      rect(0, rad);
     }
     g.lineStyle({ width: t, color: col, alpha: 0.95, join: "round" });   // crisp border
-    rr(hw, hh, rad);
+    rect(0, rad);
     g.lineStyle({ width: Math.max(1, t * 0.4), color: sheen, alpha: 0.5, join: "round" }); // inner sheen
-    rr(hw - t, hh - t, Math.max(0, rad - t));
+    rect(t, Math.max(0, rad - t));
     g.alpha = 1;
     L.addChild(g);
     tile._bbttccFrame = g;
