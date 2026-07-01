@@ -156,6 +156,11 @@ function decorateSheet(app, html) {
     if (!target.length) return;
     target.find("#bbttcc-epic-ascension").remove();
 
+    // Don't clutter a Steward's sheet with the Gate for most of their life — the panel only
+    // appears once they enter the Boiling-Point band (L18+), or once they've Converged (which
+    // latches, so it stays visible forever after even if their level later dips).
+    if (!c.inBand && !converged) return;
+
     const statusLine = converged
       ? `<div class="bbttcc-epic-status ${path === "keter" ? "is-keter" : "is-thaumiel"}">── CONVERGED · ${path.toUpperCase()} ──</div>`
       : `<div class="bbttcc-epic-status is-pending">Not yet converged</div>`;
