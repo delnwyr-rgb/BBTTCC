@@ -20,6 +20,8 @@
 !bbttcc-core/**
 !bbttcc-encounters/
 !bbttcc-encounters/**
+!bbttcc-epic/
+!bbttcc-epic/**
 !bbttcc-facility-console/
 !bbttcc-facility-console/**
 !bbttcc-factions/

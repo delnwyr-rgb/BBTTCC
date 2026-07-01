@@ -1,0 +1,30 @@
+{
+  "id": "bbttcc-epic",
+  "title": "Bad Eden: Epic Play",
+  "description": "Epic-tier capstone for Bad Eden (RFI fourththing only). P1 — The Gate: per-Steward Convergence detection (Tier-5 band + enlightenment apex), the 'mojo returns' beat, sheet readout, and the bbttcc:epic:converged hook. Later phases add Presence, World-Health, the Adversary Response, and Crown/Thaumiel capstones.",
+  "version": "0.1.0",
+  "authors": [
+    { "name": "Bad Eden" }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "14"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "fourththing",
+        "type": "system",
+        "compatibility": {
+          "verified": "14"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/epic-gate.js"
+  ],
+  "styles": [
+    "styles/epic.css"
+  ]
+}

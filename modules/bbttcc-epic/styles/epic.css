@@ -1,0 +1,69 @@
+/* Bad Eden — Epic Play · P1 styling
+   Two accents: Keter (luminous gold/cyan) vs Thaumiel (dark red). Kept self-contained
+   so it works whether or not the be-theme tokens are present. */
+
+/* ── Sheet "Ascension" panel ───────────────────────────────────────────────── */
+.bbttcc-epic-ascension {
+  margin: .35rem 0;
+  padding: .4rem .5rem;
+  border: 1px solid var(--color-border-dark, #3a3f4b);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(20,26,40,.55), rgba(12,16,26,.55));
+  color: var(--color-text-light-highlight, #e9eef7);
+  font-size: .82rem;
+}
+.bbttcc-epic-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: .5rem; margin-bottom: .25rem;
+}
+.bbttcc-epic-head strong { letter-spacing: .04em; text-transform: uppercase; }
+.bbttcc-epic-head small { opacity: .6; font-size: .7rem; }
+
+.bbttcc-epic-status {
+  text-align: center; font-weight: 700; letter-spacing: .06em;
+  margin: .15rem 0 .3rem; padding: .12rem 0; border-radius: 5px;
+}
+.bbttcc-epic-status.is-pending { opacity: .6; font-weight: 500; letter-spacing: .02em; }
+.bbttcc-epic-status.is-keter {
+  color: #ffe69a;
+  text-shadow: 0 0 8px rgba(120,200,255,.55), 0 0 2px rgba(255,230,154,.8);
+  background: rgba(120,200,255,.08);
+}
+.bbttcc-epic-status.is-thaumiel {
+  color: #ff9a9a;
+  text-shadow: 0 0 8px rgba(200,40,40,.5);
+  background: rgba(200,40,40,.1);
+}
+
+.bbttcc-epic-axes { display: flex; flex-direction: column; gap: .12rem; }
+.bbttcc-epic-axis { display: flex; align-items: center; gap: .4rem; }
+.bbttcc-epic-axis .be-ok  { color: #7ee0a0; font-weight: 700; }
+.bbttcc-epic-axis .be-no  { color: #c98; opacity: .8; font-weight: 700; }
+.bbttcc-epic-axis .be-axis-label { flex: 0 0 auto; }
+.bbttcc-epic-axis .be-axis-note  { margin-left: auto; opacity: .65; font-size: .74rem; }
+
+/* ── Chat "mojo returns" beat ──────────────────────────────────────────────── */
+.bbttcc-epic-beat {
+  padding: .55rem .65rem; border-radius: 8px;
+  border: 1px solid rgba(120,200,255,.35);
+  background: radial-gradient(120% 120% at 50% 0%, rgba(40,60,110,.45), rgba(10,14,24,.6));
+  color: #eaf2ff;
+}
+.bbttcc-epic-beat.is-thaumiel {
+  border-color: rgba(200,40,40,.4);
+  background: radial-gradient(120% 120% at 50% 0%, rgba(80,16,16,.5), rgba(14,8,8,.65));
+  color: #ffecec;
+}
+.bbttcc-epic-beat-title {
+  text-align: center; font-weight: 800; letter-spacing: .08em;
+  font-size: 1.02rem; margin-bottom: .3rem;
+  color: #ffe69a; text-shadow: 0 0 10px rgba(120,200,255,.6);
+}
+.bbttcc-epic-beat.is-thaumiel .bbttcc-epic-beat-title {
+  color: #ff9a9a; text-shadow: 0 0 10px rgba(200,40,40,.55);
+}
+.bbttcc-epic-beat-body { font-size: .9rem; line-height: 1.35; }
+.bbttcc-epic-beat-foot {
+  margin-top: .4rem; padding-top: .3rem; border-top: 1px solid rgba(255,255,255,.12);
+  font-size: .7rem; opacity: .6; text-align: center;
+}
