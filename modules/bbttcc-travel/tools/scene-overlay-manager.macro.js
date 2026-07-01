@@ -2,11 +2,13 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // BAD EDEN · SCENE OVERLAY MANAGER — companion to scene-overlay-helper.macro.js.
 // Lists every overlay Tile on the CURRENT scene (those carrying the
-// flags["bbttcc-travel"].overlay stamp), with per-overlay show/hide + delete, plus
-// bulk Show-all / Hide-all / Delete-all. Use it to declutter, A/B a look, or clean up
-// before re-running the placer. Only touches OUR overlay tiles — hand-placed art Tiles
-// (no overlay flag) are left alone.
-// Self-contained. No ft-deploy / restart needed — paste into a GM Script macro and run.
+// flags["bbttcc-travel"].overlay stamp), with per-overlay show/hide + delete, bulk
+// Show/Hide/Delete-all, AND toggle the gold "Hexchrome" glow-FRAME on/off without
+// re-placing. Use it to declutter, A/B a look, or clean up. Only touches OUR overlay
+// tiles — hand-placed art Tiles (no overlay flag) are left alone.
+// Bundles the SAME effect renderer as the helper (guarded by one shared key, so running
+// both never double-hooks) → blend/pulse/frame render even if the helper wasn't run this
+// session. Self-contained. No ft-deploy / restart — paste into a GM Script macro and run.
 (async () => {
   if (!game.user?.isGM) return ui.notifications.warn("GM only.");
   if (!canvas?.scene)   return ui.notifications.warn("No active scene — view a scene first.");
@@ -15,6 +17,90 @@
   const scene = canvas.scene;
   const log = (...a) => console.log("[overlay-manager]", ...a);
 
+  // ── SHARED EFFECT RENDERER (identical to scene-overlay-helper.macro.js) ──────
+  //   Bundled so this manager renders blend/pulse/frame standalone — even if the
+  //   helper wasn't run this session. Registers ONCE via the shared guard key, so
+  //   running both macros never double-hooks. (Ideal permanent home: a bbttcc-travel
+  //   init script; until then both siblings carry a copy.)
+  game.bbttcc = game.bbttcc || {};
+  const blendOf = (name) => {
+    const B = PIXI.BLEND_MODES;
+    return ({ normal: B.NORMAL, add: B.ADD, screen: B.SCREEN, multiply: B.MULTIPLY, overlay: B.OVERLAY ?? B.NORMAL })[name] ?? B.NORMAL;
+  };
+  const frameLayer = () => {
+    if (!canvas?.primary) return null;
+    let L = game.bbttcc.__overlayFrameLayer;
+    if (!L || L._destroyed || L.parent !== canvas.primary) {
+      L = new PIXI.Container();
+      L.label = L.name = "bbttcc-overlay-frames";
+      L.sortableChildren = true; L.eventMode = "none"; L.zIndex = 8000;
+      canvas.primary.addChild(L);
+      game.bbttcc.__overlayFrameLayer = L;
+    }
+    return L;
+  };
+  const clearFrame = (id) => {
+    const L = game.bbttcc.__overlayFrameLayer;
+    if (!L || L._destroyed) return;
+    const ex = L.children?.find((c) => c.name === `frame:${id}`);
+    if (ex) { L.removeChild(ex); ex.destroy({ children: true }); }
+  };
+  const drawFrame = (tile) => {
+    const doc = tile?.document; if (!doc) return;
+    clearFrame(doc.id);
+    const o = doc.getFlag?.(MOD, "overlay");
+    if (!o?.frame) { tile._bbttccFrame = null; return; }
+    const L = frameLayer(); if (!L) return;
+    const w = doc.width, h = doc.height, hw = w / 2, hh = h / 2;
+    const g = new PIXI.Graphics();
+    g.name = `frame:${doc.id}`; g.eventMode = "none";
+    g.position.set(doc.x + hw, doc.y + hh);
+    g.rotation = ((doc.rotation || 0) * Math.PI) / 180;
+    const col = o.frameColor ?? 0xe0a82e, sheen = 0xfff1a8;
+    const rad = o.frameRadius ?? Math.min(w, h) * 0.06;
+    const t = o.frameThickness ?? Math.max(3, Math.min(w, h) * 0.012);
+    const gi = o.frameGlow ?? 1;
+    const rr = (a, b, r) => g.drawRoundedRect(-a, -b, a * 2, b * 2, Math.max(0, r));
+    for (const [m, a] of [[3.4, 0.05], [2.4, 0.08], [1.6, 0.13]]) { g.lineStyle({ width: t * m, color: col, alpha: a * gi, join: "round" }); rr(hw, hh, rad); }
+    g.lineStyle({ width: t, color: col, alpha: 0.95, join: "round" }); rr(hw, hh, rad);
+    g.lineStyle({ width: Math.max(1, t * 0.4), color: sheen, alpha: 0.5, join: "round" }); rr(hw - t, hh - t, Math.max(0, rad - t));
+    g.alpha = 1; L.addChild(g); tile._bbttccFrame = g;
+  };
+  const applyOverlay = (tile) => {
+    const o = tile?.document?.getFlag?.(MOD, "overlay");
+    const mesh = tile?.mesh;
+    if (o && mesh) {
+      mesh.blendMode = blendOf(o.blend);
+      if (o.tint != null) { try { mesh.tint = Number(o.tint); } catch (_e) {} }
+      if (!o.pulse) mesh.alpha = o.baseAlpha ?? 1;
+    }
+    drawFrame(tile);
+  };
+  const tickPulse = () => {
+    const dt = (canvas?.app?.ticker?.deltaMS ?? 16) / 1000;
+    for (const tile of (canvas?.tiles?.placeables ?? [])) {
+      const o = tile?.document?.getFlag?.(MOD, "overlay");
+      if (!o?.pulse) continue;
+      tile._bbttccPhase = (tile._bbttccPhase ?? 0) + dt * (o.pulseSpeed ?? 1);
+      const s = Math.sin(tile._bbttccPhase), amp = o.pulseAmp ?? 0.25;
+      const mesh = tile?.mesh;
+      if (mesh) { mesh.alpha = Math.max(0, Math.min(1, (o.baseAlpha ?? 1) + amp * s)); mesh.blendMode = blendOf(o.blend); }
+      const fr = tile._bbttccFrame;
+      if (o.frame && fr && !fr._destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+    }
+  };
+  if (!game.bbttcc.__overlayHooked) {
+    Hooks.on("drawTile", applyOverlay);
+    Hooks.on("refreshTile", applyOverlay);
+    Hooks.on("deleteTile", (d) => clearFrame(d.id));
+    Hooks.on("canvasReady", () => { game.bbttcc.__overlayFrameLayer = null; });
+    canvas.app.ticker.add(tickPulse);
+    game.bbttcc.__overlayHooked = true;
+    game.bbttcc.overlayApply = applyOverlay;
+    log("effect hooks + pulse ticker registered (from manager)");
+  }
+  for (const tile of (canvas?.tiles?.placeables ?? [])) applyOverlay(tile);
+
   const overlays = scene.tiles.filter((t) => t.getFlag?.(MOD, "overlay"));
   if (!overlays.length) return ui.notifications.info("No BBTTCC overlays on this scene.");
 
@@ -22,7 +108,7 @@
   const rows = overlays.map((t, i) => {
     const o = t.getFlag(MOD, "overlay") ?? {};
     const dim = `${Math.round(t.width)}×${Math.round(t.height)}`;
-    const tags = [o.blend, o.pulse ? "pulse" : null, t.hidden ? "HIDDEN" : null].filter(Boolean).join(" · ");
+    const tags = [o.blend, o.pulse ? "pulse" : null, o.frame ? "frame" : null, t.hidden ? "HIDDEN" : null].filter(Boolean).join(" · ");
     return `<tr>
       <td><input type="checkbox" name="sel" value="${t.id}" checked></td>
       <td style="opacity:${t.hidden ? .5 : 1}"><code>${foundry.utils.escapeHTML?.(basename(t.texture?.src)) ?? basename(t.texture?.src)}</code></td>
@@ -62,9 +148,11 @@
       });
     },
     buttons: [
-      { action: "hide",      label: "Hide ticked",   callback: (_e, _b, d) => ({ op: "hide",   ids: selectedIds(d) }) },
-      { action: "show",      label: "Show ticked",   callback: (_e, _b, d) => ({ op: "show",   ids: selectedIds(d) }) },
-      { action: "delete",    label: "Delete ticked", callback: (_e, _b, d) => ({ op: "delete", ids: selectedIds(d) }) },
+      { action: "hide",      label: "Hide ticked",   callback: (_e, _b, d) => ({ op: "hide",     ids: selectedIds(d) }) },
+      { action: "show",      label: "Show ticked",   callback: (_e, _b, d) => ({ op: "show",     ids: selectedIds(d) }) },
+      { action: "frameOn",   label: "Frame ON",      callback: (_e, _b, d) => ({ op: "frameOn",  ids: selectedIds(d) }) },
+      { action: "frameOff",  label: "Frame off",     callback: (_e, _b, d) => ({ op: "frameOff", ids: selectedIds(d) }) },
+      { action: "delete",    label: "Delete ticked", callback: (_e, _b, d) => ({ op: "delete",   ids: selectedIds(d) }) },
       { action: "hideAll",   label: "Hide all",      callback: () => ({ op: "hide",   ids: overlays.map((t) => t.id) }) },
       { action: "showAll",   label: "Show all",      callback: () => ({ op: "show",   ids: overlays.map((t) => t.id) }) },
       { action: "deleteAll", label: "Delete ALL",    callback: () => ({ op: "delete", ids: overlays.map((t) => t.id) }) },
@@ -74,6 +162,26 @@
   if (!result || result === "cancel" || !result.ids?.length) return;
 
   const { op, ids } = result;
+
+  if (op === "frameOn" || op === "frameOff") {
+    const on = op === "frameOn";
+    const updates = ids.map((id) => {
+      if (!on) return { _id: id, [`flags.${MOD}.overlay.frame`]: false };
+      const o = scene.tiles.get(id)?.getFlag(MOD, "overlay") ?? {};
+      return {
+        _id: id,
+        [`flags.${MOD}.overlay.frame`]: true,
+        [`flags.${MOD}.overlay.frameColor`]: o.frameColor ?? 0xe0a82e,  // Hexchrome gold default
+        [`flags.${MOD}.overlay.frameGlow`]: o.frameGlow ?? 1,
+      };
+    });
+    await scene.updateEmbeddedDocuments("Tile", updates);
+    // refreshTile fires on update and redraws, but force-apply too for immediacy.
+    for (const id of ids) { const t = canvas.tiles?.get?.(id); if (t) game.bbttcc.overlayApply?.(t); }
+    log(`${op} ${ids.length}`);
+    return ui.notifications.info(`Gold frame ${on ? "ON" : "off"} for ${ids.length} overlay(s).`);
+  }
+
   if (op === "delete") {
     if (op === "delete" && ids.length === overlays.length) {
       const ok = await DialogV2.confirm({
