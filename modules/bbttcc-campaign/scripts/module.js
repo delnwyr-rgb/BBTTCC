@@ -18,6 +18,49 @@ const SETTING_TABLES = "encounterTables";
 const SETTING_QUESTS = "quests";
 const SETTING_ACTIVE_CAMPAIGN = "activeCampaignId";
 const SETTING_LAST_TURN_ANNOUNCED = "lastTurnAnnounced"; // Campaign Turn Flow announcements
+const SETTING_OVERSHOOT_BEATS = "overshoot.drawsBeats";  // Reality-Tear → Adversary beat draw
+
+// Forgotten-Cause arc (Wendigo leyline network). Per-world 0–4 "something OFF"
+// escalation meter, bumped each time a Wendigo travel-encounter beat resolves.
+// Step 1 of the meter wiring: store + increment only (escalation cards, feud
+// flags, and the Dougan>=3 gate land in later steps).
+const SETTING_WENDIGO_RUNG = "wendigoRung";
+const SETTING_DOUGAN_POINTED = "wendigoDouganPointed"; // step 4: Dougan has pointed to the Confluence (fire-once)
+const WENDIGO_RUNG_MAX = 4;
+const WENDIGO_TRAVEL_BEAT_IDS = new Set([
+  "acid_bog_logistics_success",
+  "acid_bog_logistics_failure",
+  "enc_broken_bridge_go_around_success",
+  "enc_broken_bridge_go_around_fail",
+  "enc_minor_radiation_pocket_go_around",
+  "enc_minor_radiation_pocket_go_around_fail"
+]);
+// Per-rung "something OFF" detail Mal posts when a Wendigo travel beat resolves
+// (step 2). Indexed by the post-increment rung (1–4); escalates funny -> uncanny
+// -> awful, matching the Wendigo leyline-network spec.
+const WENDIGO_RUNG_DETAILS = {
+  1: "One of them hands your canteen back with a small, courteous bow. You are fairly sure you never dropped your canteen.",
+  2: "One thanks you &mdash; warmly, and at some length &mdash; for the excellent directions. You did not give it any.",
+  3: "One calls a name after you as you go. Not yours. The name of someone you used to know, and don&rsquo;t, anymore.",
+  4: "One presses into your hands a thing you have not lost yet. (You will, next leg.) And you find, already, that you cannot picture the face that handed it over."
+};
+// Mal's aphorism, used only at the deep rungs — punctuation, never every card.
+const WENDIGO_RUNG_MAL = {
+  3: "They know a name you&rsquo;d stopped saying out loud. Ask who&rsquo;s been keeping it warm.",
+  4: "You keep calling them kind. Kind things give. These ones keep the change."
+};
+
+// Forgotten-Cause arc, step 3 — feud state flags on the Jackalopes faction actor.
+// The Confluence endings set whether the original cause was recovered (→ the Summit
+// can truly close the Ledger); the Summit success/failure move the Grievance heat;
+// `break` is peace-by-deletion (erases the grievance's ghost, ends the feud). Flags
+// live on the faction actor under "bbttcc-factions" (canonical per-faction store).
+const FF_NS = "bbttcc-factions";
+const FORGOTTEN_CAUSE_FACTION_ID = "U5YaO2p189LBMvVq"; // "The Jackalopes" (Ember) — fallback if a beat carries no factionEffects
+const FEUD_CONFLUENCE_RECOVER_IDS = new Set(["wendigo_confluence_repair", "wendigo_confluence_redirect"]);
+const FEUD_BREAK_ID = "wendigo_confluence_break";
+const FEUD_SUMMIT_SUCCESS_ID = "gullywasher_cultural_summit_success";
+const FEUD_SUMMIT_FAILURE_ID = "gullywasher_cultural_summit_failure";
 
 const DEFAULT_FACTION_UUID = "Actor.LjUgo0DxmSuEXMbs";
 const DEBT_PREFIX = "[HV_DEBT:";
@@ -3296,11 +3339,34 @@ async function runCampaign(id, ctx = {}) {
   await executeBeat(c, first, ctx);
 }
 
+// Story Director — state-gated beat-entry redirect (step 5). Returns a replacement
+// beat id (or null) to run *instead* of the requested one, BEFORE it executes — so
+// the redirected-away beat's dialog AND worldEffects never fire. Today it enforces
+// one rule: the Cultural Summit only closes the Ledger if the original cause was
+// recovered; without it, the success beat reroutes to the failure beat (and the
+// feud subscriber then raises Grievance off that failure). Generalizes as the
+// director grows. Fail-soft: any error → no redirect.
+function _beatEntryRedirect(beatId) {
+  try {
+    if (beatId === FEUD_SUMMIT_SUCCESS_ID) {
+      const fac = game.actors?.get?.(FORGOTTEN_CAUSE_FACTION_ID);
+      const recovered = !!fac?.getFlag?.(FF_NS, "feudCauseRecovered");
+      if (!recovered) {
+        log("[feud] Cultural Summit reached without the recovered cause → rerouting success → failure.");
+        return FEUD_SUMMIT_FAILURE_ID;
+      }
+    }
+  } catch (e) { warn("[feud] beat-entry redirect failed:", e); }
+  return null;
+}
+
 async function runBeat(id, beatId, ctx = {}) {
   const c = getCampaign(id);
   if (!c) return ui.notifications?.warn?.(`Campaign '${id}' not found.`);
-  const b = (c.beats || []).find(x => x.id === beatId);
-  if (!b) return ui.notifications?.warn?.(`Beat '${beatId}' not found in '${id}'.`);
+  const redirectId = _beatEntryRedirect(beatId);                  // step 5: state-gated reroute
+  const effectiveId = (redirectId && redirectId !== beatId) ? redirectId : beatId;
+  const b = (c.beats || []).find(x => x.id === effectiveId);
+  if (!b) return ui.notifications?.warn?.(`Beat '${effectiveId}' not found in '${id}'.`);
   await executeBeat(c, b, ctx);
 }
 
@@ -3490,6 +3556,44 @@ async function _gmPromptDebtBeat({ campaignId, beatId, beatLabel, hexUuid }) {
 // Injector
 // ---------------------------------------------------------------------------
 
+// ─── Story Director: the Gate organ (`inject.requires`) ──────────────────────
+// A beat may carry `inject.requires` — a condition, or an array of conditions
+// (AND-combined), gating whether the injector will offer it. Each condition is
+// { flag, gte|lte|eq }, where `flag` names a meter source resolved by
+// _resolveGateValue. Today only "wendigoRung" (a world setting) resolves; extend
+// the switch for faction flags / quest steps / turn / darkness as the director
+// grows. Fail-OPEN on a thrown error (never hide a beat because the evaluator
+// broke); fail-CLOSED + warn on an unknown source (a misconfigured gate must not
+// silently fire a story beat early). Beats with no `requires` are unaffected.
+function _resolveGateValue(name) {
+  switch (name) {
+    case "wendigoRung": return _wendigoRungGet();
+    default: return null;            // unknown source — caller treats as unmet + warns
+  }
+}
+function _beatRequiresMet(beat) {
+  try {
+    const req = beat?.inject?.requires;
+    if (!req) return true;                         // ungated → always eligible
+    const conds = Array.isArray(req) ? req : [req];
+    for (const c of conds) {
+      if (!c || typeof c !== "object") continue;
+      const val = _resolveGateValue(c.flag);
+      if (val === null) {
+        warn(`[inject.requires] unknown gate source '${c.flag}' on beat '${beat?.id}' — treating as unmet.`);
+        return false;
+      }
+      if (c.gte != null && !(val >= Number(c.gte))) return false;
+      if (c.lte != null && !(val <= Number(c.lte))) return false;
+      if (c.eq  != null && !(val === c.eq)) return false;
+    }
+    return true;                                   // all conditions held (AND)
+  } catch (e) {
+    warn("[inject.requires] eval failed (fail-open):", e);
+    return true;
+  }
+}
+
 async function injectorFire(ctx = {}) {
   const {
     campaignId = null,
@@ -3557,6 +3661,7 @@ async function injectorFire(ctx = {}) {
     for (const b of beats) {
       const inject = b.inject || {};
       if (!_matchesTravelThreshold(b)) continue;
+      if (!_beatRequiresMet(b)) continue;          // Story Director gate (inject.requires)
 
       if (inject.oncePerHex && hexUuid) {
         const k = _injectKeyFor(b, { campaignId: c.id, hexUuid });
@@ -3680,6 +3785,125 @@ function installInjectorHooks() {
   Hooks.on("bbttcc.travel_threshold", handler);
 
   log("Injector hooks installed (trigger.travel_threshold / bbttcc:travel_threshold / bbttcc.travel_threshold).");
+}
+
+// ─── Reality Tear → Adversary draws a Beat ───────────────────────────────────
+// The fourththing system broadcasts `fourththing.overshoot` whenever a roll
+// overshoots its DC into a Reality-Tear band (systems/fourththing/module.js,
+// applyOvershoot). The two strong bands narrate an Adversary response —
+// "Adversary / Watcher takes notice" (rupture) and "Adversary draws a Beat"
+// (sundering). Here we make that real by drawing a tag-matched Beat through the
+// existing injector. GM-authored `adversary`-tagged beats are the content; if
+// none are tagged, this is a graceful no-op plus a one-line GM nudge. The system
+// stays fully decoupled — it only emits the hook.
+const _OVERSHOOT_BEAT_TAGS = {
+  rupture:   ["adversary", "reality-tear", "reality-rupture", "notice"],
+  sundering: ["adversary", "reality-tear", "reality-sundering", "draw"]
+};
+
+function _bbttccBandCap(b) { return b ? b.charAt(0).toUpperCase() + b.slice(1) : b; }
+
+// Only ONE GM should perform the world-writing draw so a multi-GM table doesn't
+// draw N copies. Prefer Foundry's designated activeGM; fall back to the
+// lowest-id active GM.
+function _bbttccIsPrimaryGM() {
+  try {
+    const active = game.users?.activeGM;
+    if (active) return active.isSelf === true;
+  } catch (_e) {}
+  try {
+    const gms = (game.users?.filter?.(u => u.isGM && u.active) ?? []).slice();
+    if (!gms.length) return false;
+    gms.sort((a, b) => String(a.id).localeCompare(String(b.id)));
+    return gms[0]?.id === game.user?.id;
+  } catch (_e) { return !!game.user?.isGM; }
+}
+
+// Perform the actual draw on the GM client. `info` is the socket-safe shape:
+// { actorUuid, targetUuid, over, band, kind }.
+async function _drawAdversaryBeat(info = {}) {
+  try {
+    if (!game.settings.get(MOD_ID, SETTING_OVERSHOOT_BEATS)) return;
+    const band = String(info.band || "");
+    const tags = _OVERSHOOT_BEAT_TAGS[band];
+    if (!tags) return; // ripple / tear / unknown — no Adversary response
+
+    const campaignId = getActiveCampaignId();
+    if (!campaignId) { log("Overshoot beat: no active campaign — skipping."); return; }
+
+    const over   = Number(info.over) || 0;
+    const actor  = info.actorUuid  ? (globalThis.fromUuidSync?.(info.actorUuid)  ?? null) : null;
+    const target = info.targetUuid ? (globalThis.fromUuidSync?.(info.targetUuid) ?? null) : null;
+
+    const res = await injectorFire({
+      campaignId,
+      tags: tags.join(" "),
+      autoDebt:   false,  // overshoot is itself the trigger — don't double-count war-log debt
+      promptDebt: false,  // fire directly, no GM debt dialog
+      allowMulti: false,
+      maxFire:    1
+    });
+
+    const fired = Array.isArray(res?.fired) ? res.fired : [];
+    if (fired.length) {
+      log(`Overshoot ${band} (+${over}) drew Adversary beat(s): ${fired.map(f => f.beatId).join(", ")}`);
+    } else {
+      // Nothing authored to match — nudge the GM so the narrative line isn't empty.
+      const who = actor?.name  ? ` by ${actor.name}`  : "";
+      const vs  = target?.name ? ` vs. ${target.name}` : "";
+      try {
+        ChatMessage.create({
+          whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+          content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#ff8a3d">✦ Reality ${_bbttccBandCap(band)} — Adversary stirs${who}${vs}</span></div><p style="margin:.2rem 0;font-size:.8rem;opacity:.85">No <b>adversary</b>-tagged Beat is authored in the active campaign, so none could be drawn. Author one (tags: <code>${tags.join(", ")}</code>) to give this teeth.</p></div>`
+        });
+      } catch (_eMsg) {}
+      log(`Overshoot ${band} (+${over}): no adversary-tagged beat to draw (reason: ${res?.reason ?? "none"}).`);
+    }
+  } catch (e) {
+    warn("Adversary beat draw failed:", e);
+  }
+}
+
+// Hook entry — runs on the rolling client. The primary GM draws directly;
+// everyone else (players, non-primary GMs) relays a socket-safe payload, since
+// only the GM can write campaign/world state and the overshoot is usually a
+// player's roll.
+function _onOvershootHook(payload = {}) {
+  try {
+    const band = String(payload?.band || "");
+    if (!_OVERSHOOT_BEAT_TAGS[band]) return; // only rupture / sundering summon a response
+    const info = {
+      actorUuid:  payload?.actor?.uuid  ?? null,
+      targetUuid: payload?.target?.uuid ?? null,
+      over:       Number(payload?.over) || 0,
+      band,
+      kind:       String(payload?.kind || "tactical")
+    };
+    if (_bbttccIsPrimaryGM()) {
+      _drawAdversaryBeat(info);
+    } else {
+      try { game.socket.emit(`module.${MOD_ID}`, { type: "bbttccOvershootBeat", info }); } catch (_e) {}
+    }
+  } catch (e) {
+    warn("Overshoot hook handler failed:", e);
+  }
+}
+
+// Socket receiver — the primary GM draws on behalf of a player (or non-primary
+// GM) who overshot. Shares the module channel with beat audio, which ignores
+// any message whose type isn't its own.
+function _installOvershootSocket() {
+  try {
+    const sock = game?.socket;
+    if (!sock || typeof sock.on !== "function") return;
+    sock.on(`module.${MOD_ID}`, (msg) => {
+      try {
+        if (!msg || msg.type !== "bbttccOvershootBeat") return;
+        if (!_bbttccIsPrimaryGM()) return;
+        _drawAdversaryBeat(msg.info || {});
+      } catch (e) { warn("Overshoot socket handler failed:", e); }
+    });
+  } catch (_e) {}
 }
 
 function getActiveCampaignId() {
@@ -4270,6 +4494,128 @@ function buildCampaignAPI() {
 }
 
 // INIT
+/* ── Forgotten-Cause arc: Wendigo rung meter (step 1) ─────────────────────────
+ * Per-world 0–WENDIGO_RUNG_MAX counter, bumped once each time a Wendigo travel-
+ * encounter beat resolves. World-scope setting → only the GM (who drives the
+ * beat dialog and fires `bbttcc:beat:resolved`) writes it. Pure reaction: no
+ * existing beat behavior changes. Escalation cards / feud flags / Dougan gate
+ * follow in later steps.
+ * ───────────────────────────────────────────────────────────────────────────*/
+function _wendigoRungGet() {
+  try { return Number(game.settings.get(MOD_ID, SETTING_WENDIGO_RUNG)) || 0; }
+  catch (_e) { return 0; }
+}
+// Post Mal's per-rung "something OFF" card for the given (post-increment) rung.
+async function _postWendigoRungCard(rung) {
+  try {
+    if (!game.user?.isGM) return;                 // GM posts once; ChatMessage broadcasts to all
+    const r = Math.max(1, Math.min(WENDIGO_RUNG_MAX, Number(rung) || 1));
+    const detail = WENDIGO_RUNG_DETAILS[r];
+    if (!detail) return;
+    const mal = WENDIGO_RUNG_MAL[r];
+    const content =
+        `<div style="border-left:3px solid #6b8f9e;padding:.35em .6em;">`
+      + `<div style="font-variant:small-caps;letter-spacing:.04em;opacity:.7;font-size:.85em;">&hellip; something a little OFF about those Wendigo</div>`
+      + `<div style="margin-top:.25em;">${detail}</div>`
+      + (mal ? `<div style="margin-top:.4em;font-style:italic;opacity:.85;">&mdash; ${mal}</div>` : "")
+      + `</div>`;
+    await ChatMessage.create({ content, speaker: { alias: "Mal" } });
+  } catch (e) {
+    warn("[wendigo-rung] card failed:", e);
+  }
+}
+async function _onBeatResolvedWendigoRung({ beat } = {}) {
+  try {
+    if (!game.user?.isGM) return;                 // only the GM can write world settings
+    const id = beat?.id;
+    if (!id || !WENDIGO_TRAVEL_BEAT_IDS.has(id)) return;
+    const cur = _wendigoRungGet();
+    const next = Math.min(WENDIGO_RUNG_MAX, cur + 1);
+    if (next !== cur) {
+      await game.settings.set(MOD_ID, SETTING_WENDIGO_RUNG, next);
+      log(`[wendigo-rung] '${id}' fired → rung ${cur} → ${next}.`);
+    } else {
+      log(`[wendigo-rung] '${id}' fired; already at max rung ${cur}.`);
+    }
+    await _postWendigoRungCard(next);             // every Wendigo encounter gets its OFF card
+  } catch (e) {
+    warn("[wendigo-rung] increment failed:", e);
+  }
+}
+
+// Resolve the feud's faction actor — prefer the beat's own factionEffects target
+// (data-driven, world-portable), else the known Jackalopes id.
+function _feudFactionActor(beat) {
+  try {
+    const fid = beat?.worldEffects?.factionEffects?.find?.(fe => fe?.factionId)?.factionId
+              || FORGOTTEN_CAUSE_FACTION_ID;
+    return game.actors?.get?.(fid) || null;
+  } catch (_e) { return null; }
+}
+// Step 3 subscriber: move the feud state when the Confluence / Cultural Summit
+// beats resolve. Separate from the rung subscriber (own beat-id set). GM-only
+// (faction-flag writes need the GM, who drives the beat).
+async function _onBeatResolvedFeudState({ beat } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    const id = beat?.id;
+    if (!id) return;
+    const isRecover  = FEUD_CONFLUENCE_RECOVER_IDS.has(id);
+    const isBreak    = id === FEUD_BREAK_ID;
+    const isSummitOK = id === FEUD_SUMMIT_SUCCESS_ID;
+    const isSummitNo = id === FEUD_SUMMIT_FAILURE_ID;
+    if (!(isRecover || isBreak || isSummitOK || isSummitNo)) return;
+
+    const fac = _feudFactionActor(beat);
+    if (!fac) { warn(`[feud] '${id}' fired but the Jackalope faction actor was not found.`); return; }
+
+    if (isRecover) {
+      // The recovered cause: the Summit can now truly close the Ledger.
+      await fac.setFlag(FF_NS, "feudCauseRecovered", true);
+      log(`[feud] '${id}' → ${fac.name}: feudCauseRecovered = true.`);
+    } else if (isBreak) {
+      // Peace-by-deletion: the grievance's ghost is erased; the feud quietly ends,
+      // no Summit needed. No recovered cause survives a severed network.
+      await fac.setFlag(FF_NS, "feudHeat", 0);
+      await fac.setFlag(FF_NS, "feudCauseRecovered", false);
+      await fac.setFlag(FF_NS, "feudResolvedByDeletion", true);
+      log(`[feud] '${id}' → ${fac.name}: peace-by-deletion (feudHeat=0, resolvedByDeletion).`);
+    } else if (isSummitOK) {
+      // The Ledger closes: Grievance zeroed, feud reconciled.
+      await fac.setFlag(FF_NS, "feudHeat", 0);
+      await fac.setFlag(FF_NS, "feudResolved", true);
+      log(`[feud] '${id}' → ${fac.name}: Summit closed the Ledger (feudHeat=0, resolved).`);
+    } else if (isSummitNo) {
+      // A botched Summit raises the Grievance.
+      const cur = Number(fac.getFlag(FF_NS, "feudHeat")) || 0;
+      await fac.setFlag(FF_NS, "feudHeat", cur + 1);
+      log(`[feud] '${id}' → ${fac.name}: Summit failed (feudHeat ${cur} → ${cur + 1}).`);
+    }
+  } catch (e) {
+    warn("[feud] state update failed:", e);
+  }
+}
+
+// Step 4: when the Dougan convo resolves and the world's Wendigo rung is >= 3,
+// Dougan upgrades his line into a direct pointer at the Confluence. Fires once
+// (latched by SETTING_DOUGAN_POINTED) — which also breaks the pointer's
+// "back to the bar" → convo-hub → re-fire loop. GM-only (drives the beat).
+async function _onBeatResolvedDouganPointer({ beat, campaign } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    if (beat?.id !== "fixit_gullywasher_interior_convo") return;
+    if (_wendigoRungGet() < 3) return;
+    if (game.settings.get(MOD_ID, SETTING_DOUGAN_POINTED)) return;     // already pointed
+    const campaignId = campaign?.id || getActiveCampaignId();
+    if (!campaignId) return;
+    await game.settings.set(MOD_ID, SETTING_DOUGAN_POINTED, true);     // latch BEFORE firing
+    log("[dougan] rung>=3 at the Gullywasher → pointing to the Confluence.");
+    await game.bbttcc.api.campaign.runBeat(campaignId, "gullywasher_dougan_points_to_confluence");
+  } catch (e) {
+    warn("[dougan] pointer failed:", e);
+  }
+}
+
 Hooks.once("init", () => {
   game.settings.register(MOD_ID, SETTING_CAMPAIGNS, {
     name: "Bad Eden Campaign Definitions",
@@ -4328,6 +4674,28 @@ Hooks.once("init", () => {
     default: 0
   });
 
+  // Forgotten-Cause arc: per-world Wendigo "something OFF" rung (0–4). Bumped
+  // when a Wendigo travel-encounter beat resolves; gates the Dougan -> Confluence
+  // pointer (rung >= 3) and the Mal escalation cards (wired in later steps).
+  game.settings.register(MOD_ID, SETTING_WENDIGO_RUNG, {
+    name: "Bad Eden Wendigo Rung",
+    hint: "Internal: per-world Wendigo 'something OFF' escalation meter (0–4). Do not edit manually.",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0
+  });
+
+  // Step 4: fire-once latch so Dougan points to the Confluence at most once.
+  game.settings.register(MOD_ID, SETTING_DOUGAN_POINTED, {
+    name: "Bad Eden Dougan Pointed",
+    hint: "Internal: whether Dougan has already pointed players to the Wendigo Confluence. Do not edit manually.",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: false
+  });
+
   // Phase 0 observability: verbose beat-audio console tracing. Off by default.
   // When on, every enter/exit of the audio path logs caller, token, src, and
   // flags so we can prove behavior before/after each audio-refactor phase.
@@ -4338,6 +4706,15 @@ Hooks.once("init", () => {
     config: true,
     type: Boolean,
     default: false
+  });
+
+  game.settings.register(MOD_ID, SETTING_OVERSHOOT_BEATS, {
+    name: "Reality Tear — Adversary draws a Beat",
+    hint: "When a roll overshoots its DC into the Rupture (+40) or Sundering (+50) band, draw a matching 'adversary'-tagged Beat from the active campaign (the injector auto-selects it). Off = the system's Reality-Tear chat line stays purely narrative.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
   });
 
   try {
@@ -4359,6 +4736,18 @@ Hooks.once("ready", () => {
   game.bbttcc.api ??= {};
   game.bbttcc.api.campaign = buildCampaignAPI();
   installInjectorHooks();
+  // Reality Tear → Adversary draws a Beat. Listen for the system's overshoot
+  // broadcast; primary GM draws a tag-matched beat, players relay via socket.
+  Hooks.on("fourththing.overshoot", _onOvershootHook);
+  _installOvershootSocket();
+  // Forgotten-Cause arc (step 1): bump the per-world Wendigo rung when a Wendigo
+  // travel beat resolves. Pure reactive subscriber — no behavior change to beats.
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedWendigoRung);
+  // Forgotten-Cause arc (step 3): move feud state (causeRecovered / heat /
+  // peace-by-deletion) when the Confluence + Cultural Summit beats resolve.
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedFeudState);
+  // Step 4: Dougan points to the Confluence when his convo resolves at rung >= 3.
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedDouganPointer);
   // BeatAudioManager owns the socket listener and all audio state.
   try { globalThis.__bbttccBeatAudioManager?.init(); } catch (_eMgrInit) {}
   _installBeatAudioSocket();
