@@ -8,10 +8,14 @@
 //   • Fit: cover the whole scene, or a custom size in grid squares at your view centre.
 //   • Layer: Ground (below tokens, e.g. floor circuitry) or Overlay (above tokens, e.g. wards).
 //   • Optional gentle alpha PULSE so sigils breathe.
+//   • GOLD FRAME GLOW: the GM control-bar "Hexchrome" halo drawn as a glowing bordered
+//     frame around the tile (PIXI Graphics, not a texture filter — reliable, no shader
+//     clash; tracks the tile on move/rotate; breathes if Pulse is also on).
 //   • Snap-to-grid, opacity, and a "clear existing overlays first" toggle for fast iteration.
 // HOW IT WORKS: Foundry Tiles have no blendMode in their schema, so we stash the look in
 //   flags["bbttcc-travel"].overlay and re-apply it to tile.mesh on drawTile/refreshTile +
-//   a ticker for the pulse. The hooks register ONCE per session (idempotent guard).
+//   a ticker for the pulse. The gold frame is drawn into a container on canvas.primary
+//   (world-space) keyed by tile id. The hooks register ONCE per session (idempotent guard).
 // MAKE IT PERMANENT: this macro's hook block survives until reload. To keep overlays
 //   blended across reloads, lift the `applyOverlay` / `tickPulse` / hook-registration
 //   block verbatim into a bbttcc-travel init script (no schema change needed).
@@ -24,7 +28,9 @@
   const OVERLAY_LIB = "art/bbttcc/GOTTGAIT/Circuits and Sigils"; // FilePicker starting folder
   const log = (...a) => console.log("[overlay-helper]", ...a);
 
-  // ── 1. PERSISTENT BLEND APPLIER (registered once per session) ───────────────
+  // ── 1. PERSISTENT EFFECT APPLIER (registered once per session) ──────────────
+  game.bbttcc = game.bbttcc || {};
+
   const blendOf = (name) => {
     const B = PIXI.BLEND_MODES;
     return ({
@@ -36,38 +42,102 @@
     })[name] ?? B.NORMAL;
   };
 
+  // -- Gold glow-FRAME: the GM control-bar "Hexchrome" look as a drawn frame around
+  //    a tile. Same proven recipe as the capital-hex overlays (main.js): concentric
+  //    strokes = wide low-alpha halo + crisp border + inner sheen, on a container
+  //    parented to canvas.primary (world-space, so it survives pan/zoom for free). --
+  const frameLayer = () => {
+    if (!canvas?.primary) return null;
+    let L = game.bbttcc.__overlayFrameLayer;
+    if (!L || L._destroyed || L.parent !== canvas.primary) {
+      L = new PIXI.Container();
+      L.label = L.name = "bbttcc-overlay-frames";
+      L.sortableChildren = true;
+      L.eventMode = "none";
+      L.zIndex = 8000;
+      canvas.primary.addChild(L);
+      game.bbttcc.__overlayFrameLayer = L;
+    }
+    return L;
+  };
+  const clearFrame = (id) => {
+    const L = game.bbttcc.__overlayFrameLayer;
+    if (!L || L._destroyed) return;
+    const ex = L.children?.find((c) => c.name === `frame:${id}`);
+    if (ex) { L.removeChild(ex); ex.destroy({ children: true }); }
+  };
+  const drawFrame = (tile) => {
+    const doc = tile?.document;
+    if (!doc) return;
+    clearFrame(doc.id);
+    const o = doc.getFlag?.(MOD, "overlay");
+    if (!o?.frame) { tile._bbttccFrame = null; return; }
+    const L = frameLayer();
+    if (!L) return;
+    const w = doc.width, h = doc.height, hw = w / 2, hh = h / 2;
+    const g = new PIXI.Graphics();
+    g.name = `frame:${doc.id}`;
+    g.eventMode = "none";
+    g.position.set(doc.x + hw, doc.y + hh);            // centre it; world coords
+    g.rotation = ((doc.rotation || 0) * Math.PI) / 180;
+    const col   = o.frameColor ?? 0xe0a82e;            // Hexchrome gold
+    const sheen = 0xfff1a8;
+    const rad   = o.frameRadius ?? Math.min(w, h) * 0.06;
+    const t     = o.frameThickness ?? Math.max(3, Math.min(w, h) * 0.012);
+    const gi    = o.frameGlow ?? 1;                    // halo intensity multiplier
+    const rr = (a, b, r) => g.drawRoundedRect(-a, -b, a * 2, b * 2, Math.max(0, r));
+    for (const [mult, a] of [[3.4, 0.05], [2.4, 0.08], [1.6, 0.13]]) {  // wide soft halo
+      g.lineStyle({ width: t * mult, color: col, alpha: a * gi, join: "round" });
+      rr(hw, hh, rad);
+    }
+    g.lineStyle({ width: t, color: col, alpha: 0.95, join: "round" });   // crisp border
+    rr(hw, hh, rad);
+    g.lineStyle({ width: Math.max(1, t * 0.4), color: sheen, alpha: 0.5, join: "round" }); // inner sheen
+    rr(hw - t, hh - t, Math.max(0, rad - t));
+    g.alpha = 1;
+    L.addChild(g);
+    tile._bbttccFrame = g;
+  };
+
   const applyOverlay = (tile) => {
     const o = tile?.document?.getFlag?.(MOD, "overlay");
     const mesh = tile?.mesh;
-    if (!o || !mesh) return;
-    mesh.blendMode = blendOf(o.blend);
-    if (o.tint != null) { try { mesh.tint = Number(o.tint); } catch (_e) {} }
-    if (!o.pulse) mesh.alpha = o.baseAlpha ?? 1;   // pulse path drives alpha in the ticker
+    if (o && mesh) {
+      mesh.blendMode = blendOf(o.blend);
+      if (o.tint != null) { try { mesh.tint = Number(o.tint); } catch (_e) {} }
+      if (!o.pulse) mesh.alpha = o.baseAlpha ?? 1;   // pulse path drives alpha in the ticker
+    }
+    drawFrame(tile);                                  // (re)draw the gold frame if enabled
   };
 
   const tickPulse = () => {
     const dt = (canvas?.app?.ticker?.deltaMS ?? 16) / 1000;
     for (const tile of (canvas?.tiles?.placeables ?? [])) {
       const o = tile?.document?.getFlag?.(MOD, "overlay");
-      const mesh = tile?.mesh;
-      if (!o?.pulse || !mesh) continue;
+      if (!o?.pulse) continue;
       tile._bbttccPhase = (tile._bbttccPhase ?? 0) + dt * (o.pulseSpeed ?? 1);
-      const base = o.baseAlpha ?? 1, amp = o.pulseAmp ?? 0.25;
-      mesh.alpha = Math.max(0, Math.min(1, base + amp * Math.sin(tile._bbttccPhase)));
-      mesh.blendMode = blendOf(o.blend);          // keep enforced through refreshes
+      const s = Math.sin(tile._bbttccPhase), amp = o.pulseAmp ?? 0.25;
+      const mesh = tile?.mesh;
+      if (mesh) {
+        mesh.alpha = Math.max(0, Math.min(1, (o.baseAlpha ?? 1) + amp * s));
+        mesh.blendMode = blendOf(o.blend);            // keep enforced through refreshes
+      }
+      const fr = tile._bbttccFrame;                   // breathe the frame in sync too
+      if (o.frame && fr && !fr._destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
     }
   };
 
-  game.bbttcc = game.bbttcc || {};
   if (!game.bbttcc.__overlayHooked) {
     Hooks.on("drawTile", applyOverlay);
-    Hooks.on("refreshTile", applyOverlay);
+    Hooks.on("refreshTile", applyOverlay);            // fires on move/resize/rotate → frame tracks
+    Hooks.on("deleteTile", (d) => clearFrame(d.id));
+    Hooks.on("canvasReady", () => { game.bbttcc.__overlayFrameLayer = null; }); // primary rebuilt on scene swap
     canvas.app.ticker.add(tickPulse);
     game.bbttcc.__overlayHooked = true;
-    game.bbttcc.overlayApply = applyOverlay;       // exposed for re-apply / debugging
-    log("blend hooks + pulse ticker registered");
+    game.bbttcc.overlayApply = applyOverlay;          // exposed for re-apply / debugging
+    log("effect hooks + pulse ticker registered");
   }
-  // Re-blend anything already on this scene (e.g. after a reload + re-run).
+  // Re-apply to anything already on this scene (e.g. after a reload + re-run).
   for (const tile of (canvas?.tiles?.placeables ?? [])) applyOverlay(tile);
 
   // ── 2. PICK THE OVERLAY IMAGE ───────────────────────────────────────────────
@@ -130,6 +200,12 @@
         &nbsp; amp <input type="number" name="pulseAmp" value="0.2" min="0" max="0.5" step="0.05" style="width:55px">
         speed <input type="number" name="pulseSpeed" value="1.2" min="0.1" max="5" step="0.1" style="width:55px"></span>
 
+      <label>Gold frame glow</label>
+      <span><input type="checkbox" name="frame"> halo frame (the GM-bar "Hexchrome" look)
+        &nbsp; colour <input type="text" name="frameColor" value="#e0a82e" style="width:80px">
+        intensity <input type="number" name="frameGlow" value="1" min="0" max="3" step="0.25" style="width:55px">
+        <br><small style="opacity:.7">draws a glowing bordered frame around the tile (pairs with Pulse to breathe)</small></span>
+
       <label>Snap to grid</label>
       <span><input type="checkbox" name="snap" checked></span>
 
@@ -158,6 +234,9 @@
             pulse: f.pulse.checked,
             pulseAmp: Number(f.pulseAmp.value) || 0.2,
             pulseSpeed: Number(f.pulseSpeed.value) || 1.2,
+            frame: f.frame.checked,
+            frameColor: (f.frameColor.value || "").trim(),
+            frameGlow: Number(f.frameGlow.value) || 1,
             snap: f.snap.checked,
             wipe: f.wipe.checked,
           };
@@ -194,6 +273,11 @@
   let tintNum = null;
   if (opts.tint) { try { tintNum = foundry.utils.Color.from(opts.tint).valueOf(); } catch (_e) {} }
 
+  let frameColorNum = 0xe0a82e;   // Hexchrome gold default
+  if (opts.frame && opts.frameColor) {
+    try { frameColorNum = foundry.utils.Color.from(opts.frameColor).valueOf(); } catch (_e) {}
+  }
+
   // ── 5. OPTIONAL WIPE + CREATE ───────────────────────────────────────────────
   if (opts.wipe) {
     const stale = scene.tiles.filter((t) => t.getFlag?.(MOD, "overlay")).map((t) => t.id);
@@ -217,6 +301,9 @@
       pulse: opts.pulse,
       pulseAmp: opts.pulseAmp,
       pulseSpeed: opts.pulseSpeed,
+      frame: opts.frame,
+      frameColor: frameColorNum,
+      frameGlow: opts.frameGlow,
     } } },
   };
 
@@ -226,6 +313,6 @@
   const placeable = canvas.tiles?.get?.(doc.id);
   if (placeable) applyOverlay(placeable);
 
-  ui.notifications.info(`Overlay placed (${opts.blend}${opts.pulse ? " · pulsing" : ""}). Drag/scale it on the Tiles layer.`);
+  ui.notifications.info(`Overlay placed (${opts.blend}${opts.frame ? " · gold frame" : ""}${opts.pulse ? " · pulsing" : ""}). Drag/scale it on the Tiles layer.`);
   log("placed overlay tile", doc.id, tileData);
 })();
