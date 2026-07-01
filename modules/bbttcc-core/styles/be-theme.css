@@ -326,3 +326,66 @@
     inset 0 -3px 8px rgba(10, 30, 85, 0.55),
     0 0 16px rgba(90, 205, 255, 0.45);
 }
+
+/* ===========================================================================
+   9. GLOW UTILITIES  — "more of it, anywhere."
+   ---------------------------------------------------------------------------
+   Drop these class names on ANY element to give it the Bad Eden halo. They
+   auto-adopt the accent colour (cyan inside a .bbttcc-theme-player app, amber
+   inside .bbttcc-theme-gm) and fall back to cyan when used outside a themed
+   app (e.g. raw HUD nodes). Tune per-element with inline vars:
+
+       <div class="bbttcc-glow">                       default halo
+       <div class="bbttcc-glow bbttcc-glow-strong">    punchier
+       <span class="bbttcc-glow-text">                 glowing text / icon
+       <div class="bbttcc-glow bbttcc-glow-pulse">     breathing halo
+       <div class="bbttcc-glow-self">                  glows in its OWN colour
+       <div class="bbttcc-glow" style="--be-glow-blur:34px; --be-glow-alpha:0.55">
+
+   NOTE: .bbttcc-glow sets `box-shadow`, so on an element that already has its
+   own box-shadow, prefer adding the glow to that element's own rule via
+   `var(--be-accent-glow)` instead of stacking this class.
+   ------------------------------------------------------------------------ */
+
+/* Outer accent halo (tunable). Uses --be-accent-rgb -> auto cyan/amber. */
+.bbttcc-glow {
+  box-shadow: 0 0 var(--be-glow-blur, 18px)
+              rgba(var(--be-accent-rgb, 76, 245, 255), var(--be-glow-alpha, 0.35));
+}
+.bbttcc-glow-soft   { --be-glow-blur: 11px; --be-glow-alpha: 0.20; }
+.bbttcc-glow-strong { --be-glow-blur: 30px; --be-glow-alpha: 0.55; }
+
+/* Text / icon halo. */
+.bbttcc-glow-text {
+  text-shadow: 0 0 var(--be-glow-text-blur, 8px)
+               rgba(var(--be-accent-rgb, 76, 245, 255), var(--be-glow-text-alpha, 0.55));
+}
+
+/* Glow in the element's OWN colour (great for status chips / coloured meters,
+   à la the faction dashboard's `0 0 6px currentColor` trick). */
+.bbttcc-glow-self {
+  box-shadow: 0 0 var(--be-glow-blur, 12px) currentColor;
+}
+
+/* Breathing pulse — self-contained; combine with any glow class or use alone.
+   Speed override: style="--be-glow-pulse-speed: 1.6s". */
+.bbttcc-glow-pulse {
+  animation-name: bbttcc-glow-pulse;
+  animation-duration: var(--be-glow-pulse-speed, 2.6s);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+@keyframes bbttcc-glow-pulse {
+  0%, 100% { box-shadow: 0 0 var(--be-glow-pulse-min, 9px)
+                         rgba(var(--be-accent-rgb, 76, 245, 255), var(--be-glow-pulse-min-a, 0.16)); }
+  50%      { box-shadow: 0 0 var(--be-glow-pulse-max, 26px)
+                         rgba(var(--be-accent-rgb, 76, 245, 255), var(--be-glow-pulse-max-a, 0.45)); }
+}
+
+/* Accessibility: honour reduced-motion — hold a steady halo, no breathing. */
+@media (prefers-reduced-motion: reduce) {
+  .bbttcc-glow-pulse {
+    animation: none;
+    box-shadow: 0 0 20px rgba(var(--be-accent-rgb, 76, 245, 255), 0.34);
+  }
+}
