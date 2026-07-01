@@ -116,6 +116,7 @@
     if (o && mesh) {
       mesh.blendMode = blendOf(o.blend);
       if (o.tint != null) { try { mesh.tint = Number(o.tint); } catch (_e) {} }
+      else { try { mesh.tint = 0xffffff; } catch (_e) {} }   // clear tint when removed
       if (!o.pulse) mesh.alpha = o.baseAlpha ?? 1;   // pulse path drives alpha in the ticker
     }
     drawFrame(tile);                                  // (re)draw the gold frame if enabled

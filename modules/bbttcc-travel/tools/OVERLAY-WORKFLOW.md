@@ -97,6 +97,9 @@ Then drag/scale the tile on the Tiles layer like any tile.
 
 Paste-run as a GM Script macro. Lists every overlay on the current scene:
 
+- **Edit…** — tick ONE overlay → reopens the full Helper-style dialog pre-filled with its
+  current settings; change blend / layer / opacity / rotation / tint / pulse / frame / even
+  swap the image, and it updates the tile in place (no re-placing).
 - Per-overlay + bulk **Show / Hide / Delete**.
 - **Frame ON / Frame off** — toggle the gold frame on existing overlays *without re-placing*.
 - **Frame colour** picker — Frame ON applies (and **recolours**) to the chosen colour, so the

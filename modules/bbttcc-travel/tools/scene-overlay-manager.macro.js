@@ -3,9 +3,10 @@
 // BAD EDEN · SCENE OVERLAY MANAGER — companion to scene-overlay-helper.macro.js.
 // Lists every overlay Tile on the CURRENT scene (those carrying the
 // flags["bbttcc-travel"].overlay stamp), with per-overlay show/hide + delete, bulk
-// Show/Hide/Delete-all, AND toggle the gold "Hexchrome" glow-FRAME on/off without
-// re-placing. Use it to declutter, A/B a look, or clean up. Only touches OUR overlay
-// tiles — hand-placed art Tiles (no overlay flag) are left alone.
+// Show/Hide/Delete-all, toggle the gold "Hexchrome" glow-FRAME on/off, and EDIT — re-open
+// the full Helper-style interface for one overlay to retune its look / geometry / image in
+// place. Use it to declutter, A/B a look, or clean up. Only touches OUR overlay tiles —
+// hand-placed art Tiles (no overlay flag) are left alone.
 // Bundles the SAME effect renderer as the helper (guarded by one shared key, so running
 // both never double-hooks) → blend/pulse/frame render even if the helper wasn't run this
 // session. Self-contained. No ft-deploy / restart — paste into a GM Script macro and run.
@@ -80,6 +81,7 @@
     if (o && mesh) {
       mesh.blendMode = blendOf(o.blend);
       if (o.tint != null) { try { mesh.tint = Number(o.tint); } catch (_e) {} }
+      else { try { mesh.tint = 0xffffff; } catch (_e) {} }   // clear tint when removed
       if (!o.pulse) mesh.alpha = o.baseAlpha ?? 1;
     }
     drawFrame(tile);
@@ -150,6 +152,123 @@
   const selectedIds = (dlg) =>
     [...dlg.element.querySelectorAll('input[name="sel"]:checked')].map((el) => el.value);
 
+  // Re-open the full Helper-style interface for ONE existing overlay and update it
+  // in place (look + geometry + optionally swap the image).
+  const editOverlay = async (id) => {
+    const t = scene.tiles.get(id);
+    if (!t) return;
+    const o = t.getFlag(MOD, "overlay") ?? {};
+    const FP = foundry.applications?.apps?.FilePicker?.implementation ?? FilePicker;
+    const hex = (n, dflt) => (n != null ? foundry.utils.Color.from(n).toString() : dflt);
+    const sel = (v, want) => (v === want ? "selected" : "");
+    const curLayer = (t.elevation ?? 0) > 0 ? "overlay" : "ground";
+    const src0 = String(t.texture?.src || "");
+    const esc = (s) => foundry.utils.escapeHTML?.(s) ?? s;
+
+    const content = `
+      <form class="bbttcc-overlay-edit" style="display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;">
+        <label>Image</label>
+        <span><code id="ov-src">${esc(basename(src0))}</code>
+          <button type="button" name="pick" style="margin-left:6px">Change…</button>
+          <input type="hidden" name="newSrc" value=""></span>
+
+        <label>Blend</label>
+        <select name="blend">
+          <option value="add" ${sel(o.blend, "add")}>Add — glowing light</option>
+          <option value="screen" ${sel(o.blend, "screen")}>Screen — softer glow</option>
+          <option value="multiply" ${sel(o.blend, "multiply")}>Multiply — burn-in</option>
+          <option value="normal" ${sel(o.blend, "normal")}>Normal — flat decal</option>
+        </select>
+
+        <label>Layer</label>
+        <select name="layer">
+          <option value="ground" ${sel(curLayer, "ground")}>Ground — below tokens</option>
+          <option value="overlay" ${sel(curLayer, "overlay")}>Overlay — above tokens</option>
+        </select>
+
+        <label>Opacity</label>
+        <input type="number" name="alpha" value="${o.baseAlpha ?? 0.85}" min="0" max="1" step="0.05" style="width:70px">
+
+        <label>Rotation (°)</label>
+        <input type="number" name="rotation" value="${Math.round(t.rotation ?? 0)}" min="0" max="359" step="15" style="width:70px">
+
+        <label>Tint</label>
+        <span><input type="checkbox" name="tintOn" ${o.tint != null ? "checked" : ""}> apply
+          <input type="color" name="tint" value="${hex(o.tint, "#39d6ff")}" style="width:46px;height:24px;vertical-align:middle;padding:0;border:none;background:none"></span>
+
+        <label>Pulse</label>
+        <span><input type="checkbox" name="pulse" ${o.pulse ? "checked" : ""}> breathe
+          &nbsp; amp <input type="number" name="pulseAmp" value="${o.pulseAmp ?? 0.2}" min="0" max="0.5" step="0.05" style="width:55px">
+          speed <input type="number" name="pulseSpeed" value="${o.pulseSpeed ?? 1.2}" min="0.1" max="5" step="0.1" style="width:55px"></span>
+
+        <label>Gold frame glow</label>
+        <span><input type="checkbox" name="frame" ${o.frame ? "checked" : ""}> halo frame
+          &nbsp; colour <input type="color" name="frameColor" value="${hex(o.frameColor, "#e0a82e")}" style="width:46px;height:24px;vertical-align:middle;padding:0;border:none;background:none">
+          intensity <input type="number" name="frameGlow" value="${o.frameGlow ?? 1}" min="0" max="3" step="0.25" style="width:55px"></span>
+      </form>`;
+
+    const vals = await DialogV2.wait({
+      window: { title: `Edit overlay — ${basename(src0)}` },
+      content,
+      rejectClose: false,
+      render: (_ev, dlg) => {
+        dlg.element.querySelector('button[name="pick"]')?.addEventListener("click", () => {
+          new FP({ type: "image", current: src0, callback: (p) => {
+            dlg.element.querySelector('input[name="newSrc"]').value = p;
+            const c = dlg.element.querySelector("#ov-src"); if (c) c.textContent = basename(p);
+          } }).render(true);
+        });
+      },
+      buttons: [
+        { action: "save", label: "Save", default: true, callback: (_e, _b, d) => {
+          const f = d.element.querySelector("form").elements;
+          return {
+            newSrc: (f.newSrc.value || "").trim(),
+            blend: f.blend.value,
+            layer: f.layer.value,
+            alpha: Math.max(0, Math.min(1, Number(f.alpha.value) || 0.85)),
+            rotation: ((Number(f.rotation.value) || 0) % 360 + 360) % 360,
+            tint: f.tintOn.checked ? (f.tint.value || "").trim() : "",
+            pulse: f.pulse.checked,
+            pulseAmp: Number(f.pulseAmp.value) || 0.2,
+            pulseSpeed: Number(f.pulseSpeed.value) || 1.2,
+            frame: f.frame.checked,
+            frameColor: (f.frameColor.value || "").trim(),
+            frameGlow: Number(f.frameGlow.value) || 1,
+          };
+        } },
+        { action: "cancel", label: "Cancel" },
+      ],
+    });
+    if (!vals || vals === "cancel") return;
+
+    let tintNum = null;
+    if (vals.tint) { try { tintNum = foundry.utils.Color.from(vals.tint).valueOf(); } catch (_e) {} }
+    let frameColorNum = 0xe0a82e;
+    try { frameColorNum = foundry.utils.Color.from(vals.frameColor || "#e0a82e").valueOf(); } catch (_e) {}
+
+    const upd = {
+      _id: id,
+      rotation: vals.rotation,
+      elevation: vals.layer === "overlay" ? 20 : 0,
+      sort: vals.layer === "overlay" ? 100 : -10,
+      [`flags.${MOD}.overlay.blend`]: vals.blend,
+      [`flags.${MOD}.overlay.baseAlpha`]: vals.alpha,
+      [`flags.${MOD}.overlay.tint`]: tintNum,
+      [`flags.${MOD}.overlay.pulse`]: vals.pulse,
+      [`flags.${MOD}.overlay.pulseAmp`]: vals.pulseAmp,
+      [`flags.${MOD}.overlay.pulseSpeed`]: vals.pulseSpeed,
+      [`flags.${MOD}.overlay.frame`]: vals.frame,
+      [`flags.${MOD}.overlay.frameColor`]: frameColorNum,
+      [`flags.${MOD}.overlay.frameGlow`]: vals.frameGlow,
+    };
+    if (vals.newSrc) upd["texture.src"] = vals.newSrc;
+    await scene.updateEmbeddedDocuments("Tile", [upd]);
+    const pl = canvas.tiles?.get?.(id); if (pl) game.bbttcc.overlayApply?.(pl);
+    log(`edited ${id}`);
+    ui.notifications.info(`Overlay updated${vals.newSrc ? " (image replaced)" : ""}.`);
+  };
+
   const result = await DialogV2.wait({
     window: { title: "Scene Overlay Manager" },
     content,
@@ -162,6 +281,7 @@
       });
     },
     buttons: [
+      { action: "edit",      label: "Edit…",         callback: (_e, _b, d) => ({ op: "edit",     ids: selectedIds(d) }) },
       { action: "hide",      label: "Hide ticked",   callback: (_e, _b, d) => ({ op: "hide",     ids: selectedIds(d) }) },
       { action: "show",      label: "Show ticked",   callback: (_e, _b, d) => ({ op: "show",     ids: selectedIds(d) }) },
       { action: "frameOn",   label: "Frame ON",      callback: (_e, _b, d) => ({ op: "frameOn",  ids: selectedIds(d), frameColor: d.element.querySelector('input[name="frameColor"]')?.value || "#e0a82e" }) },
@@ -176,6 +296,11 @@
   if (!result || result === "cancel" || !result.ids?.length) return;
 
   const { op, ids } = result;
+
+  if (op === "edit") {
+    if (ids.length !== 1) return ui.notifications.warn("Tick exactly ONE overlay to edit.");
+    return editOverlay(ids[0]);
+  }
 
   if (op === "frameOn" || op === "frameOff") {
     const on = op === "frameOn";
