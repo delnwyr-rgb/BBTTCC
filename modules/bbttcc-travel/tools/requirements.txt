@@ -1,0 +1,4 @@
+# Host-side authoring deps for whiten-to-alpha.py (NOT loaded by Foundry).
+#   python3 -m pip install -r requirements.txt
+pillow>=10
+numpy>=1.24
