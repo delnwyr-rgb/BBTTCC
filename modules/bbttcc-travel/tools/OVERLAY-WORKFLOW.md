@@ -83,8 +83,10 @@ Dialog options:
 - **Blend** — Add / Screen (glow), Multiply (burn-in), Normal (flat).
 - **Fit** — cover whole scene, or custom size in grid squares at the view centre.
 - **Layer** — Ground (below tokens; floor art) / Overlay (above tokens; wards).
-- **Opacity**, **Rotation** (round-sigil friendly), **Tint** (colour picker + "apply" toggle).
-- **Pulse** — gentle breathing (amp + speed).
+- **Opacity**, **Tint** (colour picker + "apply" toggle).
+- **Spin** — continuous rotation around the tile centre (speed in °/sec, negative = reverse;
+  round-sigil / orbital-ring friendly). The gold frame spins with it.
+- **Pulse** — gentle breathing (amp + speed). Stacks with Spin.
 - **Gold frame glow** — the GM control-bar "Hexchrome" halo drawn as a glowing frame around
   the tile (colour picker + intensity). Pairs with Pulse to breathe.
 - **Snap to grid**, **Clear old overlays first**.

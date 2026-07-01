@@ -7,7 +7,8 @@
 //   • Blend modes: Add / Screen (the glow looks), Multiply (burn-in), or Normal.
 //   • Fit: cover the whole scene, or a custom size in grid squares at your view centre.
 //   • Layer: Ground (below tokens, e.g. floor circuitry) or Overlay (above tokens, e.g. wards).
-//   • Optional gentle alpha PULSE so sigils breathe.
+//   • Optional gentle alpha PULSE so sigils breathe, and SPIN (continuous rotation
+//     around the tile centre, speed in °/sec, ± = direction — great for round sigils).
 //   • GOLD FRAME GLOW: the GM control-bar "Hexchrome" halo drawn as a glowing bordered
 //     frame around the tile (PIXI Graphics, not a texture filter — reliable, no shader
 //     clash; tracks the tile on move/rotate; breathes if Pulse is also on).
@@ -122,33 +123,52 @@
     drawFrame(tile);                                  // (re)draw the gold frame if enabled
   };
 
-  const tickPulse = () => {
+  const tick = () => {
     const dt = (canvas?.app?.ticker?.deltaMS ?? 16) / 1000;
     for (const tile of (canvas?.tiles?.placeables ?? [])) {
       const o = tile?.document?.getFlag?.(MOD, "overlay");
-      if (!o?.pulse) continue;
-      tile._bbttccPhase = (tile._bbttccPhase ?? 0) + dt * (o.pulseSpeed ?? 1);
-      const s = Math.sin(tile._bbttccPhase), amp = o.pulseAmp ?? 0.25;
+      if (!o) continue;
       const mesh = tile?.mesh;
-      if (mesh) {
-        mesh.alpha = Math.max(0, Math.min(1, (o.baseAlpha ?? 1) + amp * s));
-        mesh.blendMode = blendOf(o.blend);            // keep enforced through refreshes
+      const fr = tile._bbttccFrame;
+      // SPIN — continuous rotation around the tile centre (speed °/sec, ± = direction).
+      if (o.spin && mesh) {
+        const base = ((tile.document.rotation || 0) * Math.PI) / 180;
+        tile._bbttccSpin = (tile._bbttccSpin ?? 0) + ((o.spinSpeed ?? 30) * Math.PI / 180) * dt;
+        mesh.rotation = base + tile._bbttccSpin;
+        if (o.frame && fr && !fr._destroyed) fr.rotation = mesh.rotation;   // frame spins along
       }
-      const fr = tile._bbttccFrame;                   // breathe the frame in sync too
-      if (o.frame && fr && !fr._destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+      // PULSE — breathing alpha (mesh + frame).
+      if (o.pulse) {
+        tile._bbttccPhase = (tile._bbttccPhase ?? 0) + dt * (o.pulseSpeed ?? 1);
+        const s = Math.sin(tile._bbttccPhase), amp = o.pulseAmp ?? 0.25;
+        if (mesh) { mesh.alpha = Math.max(0, Math.min(1, (o.baseAlpha ?? 1) + amp * s)); mesh.blendMode = blendOf(o.blend); }
+        if (o.frame && fr && !fr._destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+      }
     }
   };
 
-  if (!game.bbttcc.__overlayHooked) {
-    Hooks.on("drawTile", applyOverlay);
-    Hooks.on("refreshTile", applyOverlay);            // fires on move/resize/rotate → frame tracks
-    Hooks.on("deleteTile", (d) => clearFrame(d.id));
-    Hooks.on("canvasReady", () => { game.bbttcc.__overlayFrameLayer = null; }); // primary rebuilt on scene swap
-    canvas.app.ticker.add(tickPulse);
-    game.bbttcc.__overlayHooked = true;
-    game.bbttcc.overlayApply = applyOverlay;          // exposed for re-apply / debugging
-    log("effect hooks + pulse ticker registered");
+  // (Re)register hooks + ticker, tearing down any prior registration this session so a
+  // re-paste always hot-swaps the latest logic (no stale closures, no double-apply).
+  const onDelete = (d) => clearFrame(d.id);
+  const onReady = () => { game.bbttcc.__overlayFrameLayer = null; };  // primary rebuilt on scene swap
+  const prev = game.bbttcc.__overlayReg;
+  if (prev) {
+    try {
+      Hooks.off("drawTile", prev.applyOverlay);
+      Hooks.off("refreshTile", prev.applyOverlay);
+      Hooks.off("deleteTile", prev.onDelete);
+      Hooks.off("canvasReady", prev.onReady);
+      canvas.app.ticker.remove(prev.tick);
+    } catch (_e) {}
   }
+  Hooks.on("drawTile", applyOverlay);
+  Hooks.on("refreshTile", applyOverlay);              // fires on move/resize → frame tracks
+  Hooks.on("deleteTile", onDelete);
+  Hooks.on("canvasReady", onReady);
+  canvas.app.ticker.add(tick);
+  game.bbttcc.__overlayReg = { applyOverlay, tick, onDelete, onReady };
+  game.bbttcc.overlayApply = applyOverlay;            // exposed for re-apply / debugging
+  log("effect hooks + ticker (re)registered");
   // Re-apply to anything already on this scene (e.g. after a reload + re-run).
   for (const tile of (canvas?.tiles?.placeables ?? [])) applyOverlay(tile);
 
@@ -200,9 +220,10 @@
       <label>Opacity</label>
       <input type="number" name="alpha" value="0.85" min="0" max="1" step="0.05" style="width:70px">
 
-      <label>Rotation (°)</label>
-      <span><input type="number" name="rotation" value="0" min="0" max="359" step="15" style="width:70px">
-        <small style="opacity:.7">spins around its center — handy for round sigils</small></span>
+      <label>Spin</label>
+      <span><input type="checkbox" name="spin"> rotate around centre
+        &nbsp; speed <input type="number" name="spinSpeed" value="30" min="-360" max="360" step="5" style="width:64px"> °/sec
+        <small style="opacity:.7">(− = counter-clockwise — great for round sigils)</small></span>
 
       <label>Tint (optional)</label>
       <span><input type="checkbox" name="tintOn"> apply
@@ -242,7 +263,8 @@
             h: Number(f.h.value) || 6,
             layer: f.layer.value,
             alpha: Math.max(0, Math.min(1, Number(f.alpha.value) || 0.85)),
-            rotation: ((Number(f.rotation.value) || 0) % 360 + 360) % 360,
+            spin: f.spin.checked,
+            spinSpeed: Number(f.spinSpeed.value) || 30,
             tint: f.tintOn.checked ? (f.tint.value || "").trim() : "",
             pulse: f.pulse.checked,
             pulseAmp: Number(f.pulseAmp.value) || 0.2,
@@ -300,7 +322,7 @@
   const tileData = {
     texture: { src, scaleX: 1, scaleY: 1, alphaThreshold: 0, ...(tintNum != null ? { tint: opts.tint } : {}) },
     x, y, width, height,
-    rotation: opts.rotation ?? 0,
+    rotation: 0,                            // base angle; spin animates on top of this
     elevation: opts.layer === "overlay" ? 20 : 0,
     sort: opts.layer === "overlay" ? 100 : -10,
     hidden: false,
@@ -314,6 +336,8 @@
       pulse: opts.pulse,
       pulseAmp: opts.pulseAmp,
       pulseSpeed: opts.pulseSpeed,
+      spin: opts.spin,
+      spinSpeed: opts.spinSpeed,
       frame: opts.frame,
       frameColor: frameColorNum,
       frameGlow: opts.frameGlow,
@@ -326,6 +350,6 @@
   const placeable = canvas.tiles?.get?.(doc.id);
   if (placeable) applyOverlay(placeable);
 
-  ui.notifications.info(`Overlay placed (${opts.blend}${opts.frame ? " · gold frame" : ""}${opts.pulse ? " · pulsing" : ""}). Drag/scale it on the Tiles layer.`);
+  ui.notifications.info(`Overlay placed (${opts.blend}${opts.frame ? " · gold frame" : ""}${opts.pulse ? " · pulsing" : ""}${opts.spin ? " · spinning" : ""}). Drag/scale it on the Tiles layer.`);
   log("placed overlay tile", doc.id, tileData);
 })();

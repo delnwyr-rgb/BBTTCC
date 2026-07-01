@@ -86,29 +86,48 @@
     }
     drawFrame(tile);
   };
-  const tickPulse = () => {
+  const tick = () => {
     const dt = (canvas?.app?.ticker?.deltaMS ?? 16) / 1000;
     for (const tile of (canvas?.tiles?.placeables ?? [])) {
       const o = tile?.document?.getFlag?.(MOD, "overlay");
-      if (!o?.pulse) continue;
-      tile._bbttccPhase = (tile._bbttccPhase ?? 0) + dt * (o.pulseSpeed ?? 1);
-      const s = Math.sin(tile._bbttccPhase), amp = o.pulseAmp ?? 0.25;
+      if (!o) continue;
       const mesh = tile?.mesh;
-      if (mesh) { mesh.alpha = Math.max(0, Math.min(1, (o.baseAlpha ?? 1) + amp * s)); mesh.blendMode = blendOf(o.blend); }
       const fr = tile._bbttccFrame;
-      if (o.frame && fr && !fr._destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+      if (o.spin && mesh) {   // continuous rotation around centre (speed °/sec, ± = direction)
+        const base = ((tile.document.rotation || 0) * Math.PI) / 180;
+        tile._bbttccSpin = (tile._bbttccSpin ?? 0) + ((o.spinSpeed ?? 30) * Math.PI / 180) * dt;
+        mesh.rotation = base + tile._bbttccSpin;
+        if (o.frame && fr && !fr._destroyed) fr.rotation = mesh.rotation;
+      }
+      if (o.pulse) {
+        tile._bbttccPhase = (tile._bbttccPhase ?? 0) + dt * (o.pulseSpeed ?? 1);
+        const s = Math.sin(tile._bbttccPhase), amp = o.pulseAmp ?? 0.25;
+        if (mesh) { mesh.alpha = Math.max(0, Math.min(1, (o.baseAlpha ?? 1) + amp * s)); mesh.blendMode = blendOf(o.blend); }
+        if (o.frame && fr && !fr._destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+      }
     }
   };
-  if (!game.bbttcc.__overlayHooked) {
-    Hooks.on("drawTile", applyOverlay);
-    Hooks.on("refreshTile", applyOverlay);
-    Hooks.on("deleteTile", (d) => clearFrame(d.id));
-    Hooks.on("canvasReady", () => { game.bbttcc.__overlayFrameLayer = null; });
-    canvas.app.ticker.add(tickPulse);
-    game.bbttcc.__overlayHooked = true;
-    game.bbttcc.overlayApply = applyOverlay;
-    log("effect hooks + pulse ticker registered (from manager)");
+  // (Re)register + tear down any prior registration so a re-paste hot-swaps cleanly.
+  const onDelete = (d) => clearFrame(d.id);
+  const onReady = () => { game.bbttcc.__overlayFrameLayer = null; };
+  const prev = game.bbttcc.__overlayReg;
+  if (prev) {
+    try {
+      Hooks.off("drawTile", prev.applyOverlay);
+      Hooks.off("refreshTile", prev.applyOverlay);
+      Hooks.off("deleteTile", prev.onDelete);
+      Hooks.off("canvasReady", prev.onReady);
+      canvas.app.ticker.remove(prev.tick);
+    } catch (_e) {}
   }
+  Hooks.on("drawTile", applyOverlay);
+  Hooks.on("refreshTile", applyOverlay);
+  Hooks.on("deleteTile", onDelete);
+  Hooks.on("canvasReady", onReady);
+  canvas.app.ticker.add(tick);
+  game.bbttcc.__overlayReg = { applyOverlay, tick, onDelete, onReady };
+  game.bbttcc.overlayApply = applyOverlay;
+  log("effect hooks + ticker (re)registered (from manager)");
   for (const tile of (canvas?.tiles?.placeables ?? [])) applyOverlay(tile);
 
   const overlays = scene.tiles.filter((t) => t.getFlag?.(MOD, "overlay"));
@@ -118,7 +137,7 @@
   const rows = overlays.map((t, i) => {
     const o = t.getFlag(MOD, "overlay") ?? {};
     const dim = `${Math.round(t.width)}×${Math.round(t.height)}`;
-    const tags = [o.blend, o.pulse ? "pulse" : null, o.frame ? "frame" : null, t.hidden ? "HIDDEN" : null].filter(Boolean).join(" · ");
+    const tags = [o.blend, o.pulse ? "pulse" : null, o.spin ? "spin" : null, o.frame ? "frame" : null, t.hidden ? "HIDDEN" : null].filter(Boolean).join(" · ");
     return `<tr>
       <td><input type="checkbox" name="sel" value="${t.id}" checked></td>
       <td style="opacity:${t.hidden ? .5 : 1}"><code>${foundry.utils.escapeHTML?.(basename(t.texture?.src)) ?? basename(t.texture?.src)}</code></td>
@@ -189,8 +208,9 @@
         <label>Opacity</label>
         <input type="number" name="alpha" value="${o.baseAlpha ?? 0.85}" min="0" max="1" step="0.05" style="width:70px">
 
-        <label>Rotation (°)</label>
-        <input type="number" name="rotation" value="${Math.round(t.rotation ?? 0)}" min="0" max="359" step="15" style="width:70px">
+        <label>Spin</label>
+        <span><input type="checkbox" name="spin" ${o.spin ? "checked" : ""}> rotate around centre
+          &nbsp; speed <input type="number" name="spinSpeed" value="${o.spinSpeed ?? 30}" min="-360" max="360" step="5" style="width:64px"> °/sec</span>
 
         <label>Tint</label>
         <span><input type="checkbox" name="tintOn" ${o.tint != null ? "checked" : ""}> apply
@@ -227,7 +247,8 @@
             blend: f.blend.value,
             layer: f.layer.value,
             alpha: Math.max(0, Math.min(1, Number(f.alpha.value) || 0.85)),
-            rotation: ((Number(f.rotation.value) || 0) % 360 + 360) % 360,
+            spin: f.spin.checked,
+            spinSpeed: Number(f.spinSpeed.value) || 30,
             tint: f.tintOn.checked ? (f.tint.value || "").trim() : "",
             pulse: f.pulse.checked,
             pulseAmp: Number(f.pulseAmp.value) || 0.2,
@@ -249,7 +270,7 @@
 
     const upd = {
       _id: id,
-      rotation: vals.rotation,
+      rotation: vals.spin ? 0 : (t.rotation ?? 0),   // base angle; spin animates on top
       elevation: vals.layer === "overlay" ? 20 : 0,
       sort: vals.layer === "overlay" ? 100 : -10,
       [`flags.${MOD}.overlay.blend`]: vals.blend,
@@ -258,6 +279,8 @@
       [`flags.${MOD}.overlay.pulse`]: vals.pulse,
       [`flags.${MOD}.overlay.pulseAmp`]: vals.pulseAmp,
       [`flags.${MOD}.overlay.pulseSpeed`]: vals.pulseSpeed,
+      [`flags.${MOD}.overlay.spin`]: vals.spin,
+      [`flags.${MOD}.overlay.spinSpeed`]: vals.spinSpeed,
       [`flags.${MOD}.overlay.frame`]: vals.frame,
       [`flags.${MOD}.overlay.frameColor`]: frameColorNum,
       [`flags.${MOD}.overlay.frameGlow`]: vals.frameGlow,
