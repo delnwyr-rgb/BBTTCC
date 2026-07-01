@@ -5,7 +5,8 @@
 #   alpha pic.png                              transparent, no glow
 #   glow  pic.png                              transparent + baked feather/halo
 #   glow  sigil.png --glow-radius 8 --bg black tuned glow, art drawn on black
-# Output lands next to the input as <name>-overlay.png / <name>-overlay-glow.png.
+#   glow  ~/art/Circuits                       BATCH a whole folder -> <folder>/overlays/
+# Output: single file -> next to the input; folder -> a new "overlays/" subfolder.
 
 _OVERLAY_PY="$HOME/.venvs/overlay/bin/python"
 _OVERLAY_TOOL="$HOME/modules/bbttcc-travel/tools/whiten-to-alpha.py"

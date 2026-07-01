@@ -22,6 +22,10 @@ USAGE:
   # tune the glow + source on a BLACK background instead of white
   python3 whiten-to-alpha.py sigil.png out.png --glow --glow-radius 8 --glow-intensity 0.85 --bg black
 
+  # BATCH: convert a whole folder -> writes into <folder>/overlays/
+  python3 whiten-to-alpha.py ~/art/Circuits --glow
+  python3 whiten-to-alpha.py ~/art/Circuits --glow --out-dir ~/art/ready
+
 OPTIONS:
   --bg {white,black}     background color to remove (default: white)
   --glow                 bake a feathered halo behind the lines
@@ -66,23 +70,12 @@ def soft_glow(base, radius, intensity):
     return to_rgba(col, ga)
 
 
-def main():
-    p = argparse.ArgumentParser(description="white/black background -> transparent overlay PNG")
-    p.add_argument("input")
-    p.add_argument("output", nargs="?")
-    p.add_argument("--bg", choices=["white", "black"], default="white")
-    p.add_argument("--glow", action="store_true")
-    p.add_argument("--glow-radius", type=float, default=6.0)
-    p.add_argument("--glow-intensity", type=float, default=0.7)
-    p.add_argument("--no-trim", action="store_true")
-    args = p.parse_args()
+IMG_EXTS = (".png", ".jpg", ".jpeg", ".webp", ".bmp", ".tif", ".tiff")
 
-    out = args.output
-    if not out:
-        stem, _ = os.path.splitext(args.input)
-        out = f"{stem}-overlay{'-glow' if args.glow else ''}.png"
 
-    rgb, alpha = color_to_alpha(Image.open(args.input), args.bg)
+def convert_one(inp, outp, args):
+    """Convert a single image file inp -> outp per args. Returns (w, h)."""
+    rgb, alpha = color_to_alpha(Image.open(inp), args.bg)
     res = to_rgba(rgb, alpha)
 
     if args.glow:
@@ -99,8 +92,57 @@ def main():
         if bbox:
             res = res.crop(bbox)
 
-    res.save(out)
-    w, h = res.size
+    res.save(outp)
+    return res.size
+
+
+def _out_name(inp, glow):
+    stem, _ = os.path.splitext(os.path.basename(inp))
+    return f"{stem}-overlay{'-glow' if glow else ''}.png"
+
+
+def main():
+    p = argparse.ArgumentParser(description="white/black background -> transparent overlay PNG (file or folder)")
+    p.add_argument("input", help="an image file OR a folder of images (batch mode)")
+    p.add_argument("output", nargs="?", help="output file (single) — ignored in folder mode")
+    p.add_argument("--bg", choices=["white", "black"], default="white")
+    p.add_argument("--glow", action="store_true")
+    p.add_argument("--glow-radius", type=float, default=6.0)
+    p.add_argument("--glow-intensity", type=float, default=0.7)
+    p.add_argument("--no-trim", action="store_true")
+    p.add_argument("--out-dir", help="folder mode: where to write (default: <input>/overlays)")
+    args = p.parse_args()
+
+    # ── FOLDER (batch) MODE ──────────────────────────────────────────────────
+    if os.path.isdir(args.input):
+        out_dir = args.out_dir or os.path.join(args.input, "overlays")
+        os.makedirs(out_dir, exist_ok=True)
+        # Skip non-images and our own outputs so re-runs don't reprocess results.
+        files = sorted(
+            f for f in os.listdir(args.input)
+            if f.lower().endswith(IMG_EXTS)
+            and not f.lower().endswith(("-overlay.png", "-overlay-glow.png"))
+        )
+        if not files:
+            print(f"no source images in {args.input}")
+            return
+        ok = 0
+        for f in files:
+            src = os.path.join(args.input, f)
+            dst = os.path.join(out_dir, _out_name(src, args.glow))
+            try:
+                w, h = convert_one(src, dst, args)
+                print(f"  ✓ {f}  ->  {os.path.basename(dst)}  ({w}x{h})")
+                ok += 1
+            except Exception as e:  # noqa: BLE001 — keep batch going on a bad file
+                print(f"  ✗ {f}  SKIPPED  ({e})")
+        print(f"done: {ok}/{len(files)} -> {out_dir}{'  +glow' if args.glow else ''}")
+        return
+
+    # ── SINGLE FILE MODE ─────────────────────────────────────────────────────
+    out = args.output or os.path.join(
+        os.path.dirname(args.input), _out_name(args.input, args.glow))
+    w, h = convert_one(args.input, out, args)
     print(f"wrote {out}  ({w}x{h}){'  +glow' if args.glow else ''}")
 
 
