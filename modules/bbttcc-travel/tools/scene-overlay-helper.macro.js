@@ -21,7 +21,7 @@
   if (!canvas?.scene)   return ui.notifications.warn("No active scene — view a scene first.");
 
   const MOD = "bbttcc-travel";                 // flag scope (a real, registered module)
-  const OVERLAY_LIB = "art/bbttcc/";           // FilePicker starting folder (your art root)
+  const OVERLAY_LIB = "art/bbttcc/GOTTGAIT/Circuits and Sigils"; // FilePicker starting folder
   const log = (...a) => console.log("[overlay-helper]", ...a);
 
   // ── 1. PERSISTENT BLEND APPLIER (registered once per session) ───────────────
