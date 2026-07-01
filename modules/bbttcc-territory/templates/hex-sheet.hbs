@@ -427,22 +427,18 @@
           <div style="font-weight:700;">{{ownerName}}</div>
         </div>
 
-        <div class="bbttcc-hex-card" style="padding:8px 10px;">
-          <div class="bbttcc-muted" style="font-size:.8rem;">Facilities</div>
-          <div class="bbttcc-row" style="margin-top:6px;">
-            <span style="min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{facilitySummary}}</span>
-            <button type="button" class="bbttcc-btn" data-action="open-facilities">Open Builder</button>
-          </div>
-        </div>
+        {{!-- Facilities card retired 2026-06-30: facilities were unified with rigs
+              (2026-05-07 sprint) and now surface under Holdings below. The legacy
+              "Open Builder" entry point is removed. --}}
 
         {{!-- Holdings Phase A (2026-05-14) — strategic↔tactical bridge.
               Rigs, Bosses, Facilities stationed at this hex. Provides
               defender DC bonuses when this hex is raided AND can be
               deployed as tactical units on bound battle scenes. --}}
         <div class="bbttcc-hex-card bbttcc-holdings-card" style="padding:8px 10px;">
-          <div class="bbttcc-row" style="margin-bottom:6px; align-items:center;">
-            <div style="font-weight:800;">Holdings</div>
-            <div style="display:flex; align-items:center; gap:6px;">
+          <div class="bbttcc-row" style="margin-bottom:6px; align-items:center; justify-content:space-between; gap:8px;">
+            <div style="font-weight:800; flex:1 1 auto; min-width:0;">Holdings</div>
+            <div style="display:flex; align-items:center; gap:6px; flex:0 0 auto;">
               <span class="bbttcc-pill bbttcc-pill-soft" data-tooltip="Total strategic raid bonus from Holdings stationed at this hex." style="color:#fbbf24;">+{{holdings.totalBonus}}</span>
               {{#if isGM}}
                 {{#if holdings.hasAny}}
