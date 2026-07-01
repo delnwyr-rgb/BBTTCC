@@ -2418,30 +2418,47 @@ async function _resolveActorRef(ref) {
   }
 }
 
+// Resolve a campaign's participating factions (the "coalition") to Actor docs.
+// Source = `campaign.factionIds` (the roster authored in the Campaign Builder;
+// UUIDs, primary forced to index 0), with the primary `campaign.factionId` folded
+// in and de-duped by actor.id. Falls back to `ctx.factionId` ONLY when no roster
+// exists (backward-compatible). factionIds holds UUIDs → resolve to Actor docs
+// before keying on actor.id. This is the coalition quest-progress fans out across.
+async function _resolveCampaignFactions(campaign, ctx) {
+  const refs = [];
+  if (campaign && Array.isArray(campaign.factionIds) && campaign.factionIds.length) refs.push(...campaign.factionIds);
+  if (campaign && campaign.factionId) refs.push(campaign.factionId);
+  if (!refs.length && ctx && ctx.factionId) refs.push(ctx.factionId);   // fallback: no roster
+  const out = [];
+  const seen = new Set();
+  for (const ref of refs) {
+    if (!ref) continue;
+    const actor = await _resolveActorRef(ref);
+    if (!actor || !actor.id || seen.has(actor.id)) continue;
+    seen.add(actor.id);
+    out.push(actor);
+  }
+  return out;
+}
+
 async function _maybePromptQuestAcceptance(campaign, beat, ctx) {
   try {
     const questId = beat && (beat.questId || beat.questID || beat.quest);
     const role = String(beat && beat.questRole || "").trim();
     if (!questId || role !== "start") return;
 
-    // Resolve target faction
-    const factionId = (ctx && ctx.factionId) || (campaign && campaign.factionId) || null;
-    if (!factionId) {
+    // Resolve the coalition (campaign.factionIds); dedup + prompt off the primary.
+    const factions = await _resolveCampaignFactions(campaign, ctx);
+    if (!factions.length) {
       if (ui && ui.notifications && ui.notifications.warn) ui.notifications.warn("Quest acceptance: No faction configured for this campaign.");
       return;
     }
-        const faction = await _resolveActorRef(factionId);
-    if (!faction) {
-      if (ui && ui.notifications && ui.notifications.warn) ui.notifications.warn("Quest acceptance: Faction not found.");
-      return;
-    }
-
-    // Already accepted?
     const MOD = "bbttcc-factions";
+    const faction = factions[0];                 // primary — drives the single prompt + dedup
     const cur = (faction.getFlag ? (faction.getFlag(MOD, "quests") || {}) : {});
     const active = (cur && cur.active) ? cur.active : {};
     const completed = (cur && cur.completed) ? cur.completed : {};
-    if (active[questId] || completed[questId]) return;
+    if (active[questId] || completed[questId]) return;   // coalition already has it
 
     // Resolve quest name (best effort)
     let questName = questId;
@@ -2452,9 +2469,10 @@ async function _maybePromptQuestAcceptance(campaign, beat, ctx) {
     } catch (e) {}
 
     const title = "Accept Quest?";
+    const memberNote = factions.length > 1 ? (" + " + (factions.length - 1) + " allied faction(s)") : "";
     const content =
       "<p><b>" + questName + "</b></p>" +
-      "<p>Add this quest to <b>" + faction.name + "</b>'s Quest Log?</p>";
+      "<p>Add this quest to <b>" + faction.name + "</b>" + memberNote + "'s Quest Log?</p>";
 
     let accepted = false;
     try {
@@ -2476,30 +2494,32 @@ async function _maybePromptQuestAcceptance(campaign, beat, ctx) {
 
     if (!accepted) return;
 
-    // Write tracking
-    let next;
-    try {
-      next = foundry.utils && foundry.utils.deepClone ? foundry.utils.deepClone(cur) : JSON.parse(JSON.stringify(cur || {}));
-    } catch (e3) {
-      next = {};
-    }
-    next.schemaVersion = next.schemaVersion || 1;
-    next.active = next.active || {};
-    next.completed = next.completed || {};
-    next.archived = next.archived || {};
-    next.active[questId] = {
-      v: 1,
-      questId: questId,
-      status: "active",
-      acceptedTs: Date.now(),
-      lastTouchedTs: Date.now(),
-      notes: "",
-      progress: { beats: {} },
-      history: [{ ts: Date.now(), type: "accept", by: (game.user ? game.user.id : null) }]
-    };
-
-    if (faction.setFlag) {
-      await faction.setFlag(MOD, "quests", next);
+    // Write tracking — fan out the identical accept entry to every coalition member
+    // (reconcile-on-write: each member's own quests flag, only this questId added).
+    const acceptTs = Date.now();
+    for (const member of factions) {
+      const mcur = (member.getFlag ? (member.getFlag(MOD, "quests") || {}) : {}) || {};
+      let mnext;
+      try {
+        mnext = foundry.utils && foundry.utils.deepClone ? foundry.utils.deepClone(mcur) : JSON.parse(JSON.stringify(mcur || {}));
+      } catch (e3) { mnext = {}; }
+      mnext.schemaVersion = mnext.schemaVersion || 1;
+      mnext.active = mnext.active || {};
+      mnext.completed = mnext.completed || {};
+      mnext.archived = mnext.archived || {};
+      if (mnext.active[questId] || mnext.completed[questId]) continue;   // this member already has it
+      mnext.active[questId] = {
+        v: 1,
+        questId: questId,
+        status: "active",
+        acceptedTs: acceptTs,
+        lastTouchedTs: acceptTs,
+        notes: "",
+        progress: { beats: {} },
+        history: [{ ts: acceptTs, type: "accept", by: (game.user ? game.user.id : null) }]
+      };
+      if (member.setFlag) await member.setFlag(MOD, "quests", mnext);
+      try { if (member.sheet && member.sheet.render) member.sheet.render(true); } catch (e6) {}
     }
 
     // Notify (toast + GM whisper)
@@ -2507,12 +2527,10 @@ async function _maybePromptQuestAcceptance(campaign, beat, ctx) {
     try {
       const gmIds = (game.users || []).filter(function(u){ return u && u.isGM; }).map(function(u){ return u.id; });
       if (ChatMessage && ChatMessage.create) {
-        ChatMessage.create({ whisper: gmIds, content: "<p><b>Bad Eden Quest:</b> accepted <i>" + questName + "</i> for <b>" + faction.name + "</b>.</p>" });
+        const who = factions.length > 1 ? ("the coalition (" + factions.length + " factions)") : ("<b>" + faction.name + "</b>");
+        ChatMessage.create({ whisper: gmIds, content: "<p><b>Bad Eden Quest:</b> accepted <i>" + questName + "</i> for " + who + ".</p>" });
       }
     } catch (e5) {}
-
-    // Force-refresh open faction sheets
-    try { if (faction.sheet && faction.sheet.render) faction.sheet.render(true); } catch (e6) {}
   } catch (e) {
     console.warn("[bbttcc-campaign] Quest acceptance failed", e);
   }
@@ -2524,20 +2542,20 @@ async function _applyQuestEffects(campaign, beat, ctx) {
     const rows = Array.isArray(we && we.questEffects) ? we.questEffects : [];
     if (!rows.length) return { applied: false, count: 0 };
 
-    const factionId = (ctx && ctx.factionId) || (campaign && campaign.factionId) || null;
-    if (!factionId) {
+    const factions = await _resolveCampaignFactions(campaign, ctx);
+    if (!factions.length) {
       ui.notifications?.warn?.("Quest effects: No faction configured for this campaign.");
       return { applied: false, count: 0 };
     }
 
-    const faction = await _resolveActorRef(factionId);
-    if (!faction) {
-      ui.notifications?.warn?.("Quest effects: Faction not found.");
-      return { applied: false, count: 0 };
-    }
-
     const MOD = "bbttcc-factions";
+    let anyFaction = false;
+    let totalApplied = 0;
 
+    // Fan out to the whole coalition (campaign.factionIds): reconcile-on-write — each
+    // member's own quests flag is read, cloned, and mutated for just this questId, so
+    // shared story progress lands identically on every participating faction.
+    for (const faction of factions) {
     const cur = (faction.getFlag ? (faction.getFlag(MOD, "quests") || {}) : {}) || {};
     let next;
     try {
@@ -2679,21 +2697,23 @@ async function _applyQuestEffects(campaign, beat, ctx) {
       applied++;
     }
 
-    if (!applied) return { applied: false, count: 0 };
+    if (!applied) continue;                      // nothing to write for this member
+    anyFaction = true;
+    totalApplied = applied;                      // identical across members
 
     if (faction.setFlag) {
       await faction.setFlag(MOD, "quests", next);
     }
-
     try {
       if (faction.sheet && faction.sheet.render) faction.sheet.render(true);
     } catch (_eSheet) {}
+    }                                            // end coalition fan-out loop
 
+    if (!anyFaction) return { applied: false, count: 0 };
     try {
       ui.notifications?.info?.("Quest effects applied.");
     } catch (_eToast) {}
-
-    return { applied: true, count: applied };
+    return { applied: true, count: totalApplied, factions: factions.length };
   } catch (e) {
     console.warn("[bbttcc-campaign] Quest effects failed", e);
     return { applied: false, count: 0, error: e };
