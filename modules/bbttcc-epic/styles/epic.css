@@ -84,6 +84,17 @@
 }
 .bbttcc-epic-faction-presence .be-pr-count { margin-left: auto; opacity: .55; font-size: .7rem; }
 
+/* ── World-Health chip (P3) — GM readout on the Campaign Overview ──────────── */
+.bbttcc-epic-worldhealth {
+  display: flex; align-items: center; gap: .5rem;
+  margin: .3rem .4rem; padding: .4rem .6rem;
+  border: 1px solid rgba(120,200,255,.35); border-radius: 8px;
+  background: linear-gradient(180deg, rgba(20,34,50,.6), rgba(12,18,30,.6));
+  color: #dbeeff; font-size: .85rem;
+}
+.bbttcc-epic-worldhealth b { color: #bfe3ff; font-variant-numeric: tabular-nums; text-shadow: 0 0 6px rgba(120,200,255,.45); }
+.bbttcc-epic-worldhealth .be-wh-mark { color: #ffe69a; text-shadow: 0 0 8px rgba(255,220,140,.6); font-size: 1rem; }
+
 /* ── Chat "mojo returns" beat ──────────────────────────────────────────────── */
 .bbttcc-epic-beat {
   padding: .55rem .65rem; border-radius: 8px;

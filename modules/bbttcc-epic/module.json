@@ -23,7 +23,8 @@
   },
   "esmodules": [
     "scripts/epic-gate.js",
-    "scripts/presence.js"
+    "scripts/presence.js",
+    "scripts/repair.js"
   ],
   "styles": [
     "styles/epic.css"

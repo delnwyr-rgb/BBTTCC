@@ -15,6 +15,7 @@
 // never routed through ft-progression.tierForLevel. 100% additive new module.
 
 import { buildPresenceRows, wirePresenceButtons, clearPresence } from "./presence.js";
+import { worldHealth } from "./repair.js";
 
 const MOD = "bbttcc-epic";
 const ENL = "bbttcc-character-options"; // owner of the enlightenment flag we read
@@ -159,10 +160,16 @@ function decorateSheet(app, html) {
       ? `<div class="bbttcc-epic-status ${path === "keter" ? "is-keter" : "is-thaumiel"}">── CONVERGED · ${path.toUpperCase()} ──</div>`
       : `<div class="bbttcc-epic-status is-pending">Not yet converged</div>`;
 
+    // P3: the Outer Malkuth axis is now live (% of hexes reunified & aligned; ✓ at 100%).
+    let wh = null;
+    try { wh = worldHealth(); } catch (_e) {}
+    const outerNote = (wh && wh.total) ? `${wh.pct}% · ${wh.aligned}/${wh.total} hexes` : "— no hexes —";
+    const outerOk = !!(wh && wh.total && wh.pct >= 100);
+
     const rows = [
       axisRow(`Boiling-Point band (L18+)`, c.inBand, `Lvl ${c.level}${c.inBand ? " · in band" : " · need 18"}`),
       axisRow(`Soul apex (Enlightened)`, c.soulApex, c.soulApex ? (c.isCorrupt ? "qliphothic path" : "") : `current: ${titleCase(c.enl)}`),
-      axisRow(`Outer Malkuth (world)`, false, `— pending P3 —`),
+      axisRow(`Outer Malkuth (world)`, outerOk, outerNote),
     ].join("");
 
     // P2: Presence chip (+ GM party line) — empty string until the Steward is Converged.
