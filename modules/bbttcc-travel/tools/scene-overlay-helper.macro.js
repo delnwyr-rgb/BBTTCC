@@ -203,8 +203,9 @@
       <span><input type="number" name="rotation" value="0" min="0" max="359" step="15" style="width:70px">
         <small style="opacity:.7">spins around its center — handy for round sigils</small></span>
 
-      <label>Tint (hex, opt)</label>
-      <input type="text" name="tint" placeholder="#39d6ff" style="width:90px">
+      <label>Tint (optional)</label>
+      <span><input type="checkbox" name="tintOn"> apply
+        <input type="color" name="tint" value="#39d6ff" style="width:46px;height:24px;vertical-align:middle;padding:0;border:none;background:none"></span>
 
       <label>Pulse</label>
       <span><input type="checkbox" name="pulse"> breathe
@@ -213,7 +214,7 @@
 
       <label>Gold frame glow</label>
       <span><input type="checkbox" name="frame"> halo frame (the GM-bar "Hexchrome" look)
-        &nbsp; colour <input type="text" name="frameColor" value="#e0a82e" style="width:80px">
+        &nbsp; colour <input type="color" name="frameColor" value="#e0a82e" style="width:46px;height:24px;vertical-align:middle;padding:0;border:none;background:none">
         intensity <input type="number" name="frameGlow" value="1" min="0" max="3" step="0.25" style="width:55px">
         <br><small style="opacity:.7">draws a glowing bordered frame around the tile (pairs with Pulse to breathe)</small></span>
 
@@ -241,7 +242,7 @@
             layer: f.layer.value,
             alpha: Math.max(0, Math.min(1, Number(f.alpha.value) || 0.85)),
             rotation: ((Number(f.rotation.value) || 0) % 360 + 360) % 360,
-            tint: (f.tint.value || "").trim(),
+            tint: f.tintOn.checked ? (f.tint.value || "").trim() : "",
             pulse: f.pulse.checked,
             pulseAmp: Number(f.pulseAmp.value) || 0.2,
             pulseSpeed: Number(f.pulseSpeed.value) || 1.2,

@@ -128,6 +128,12 @@
   const content = `
     <p style="margin:0 0 6px"><small style="opacity:.75">Tick the overlays to act on, then choose an action. Bulk buttons act on the ticked rows; “All” buttons ignore the ticks.</small></p>
     <form class="bbttcc-overlay-manager">
+      <p style="margin:0 0 8px">
+        <label>Frame colour
+          <input type="color" name="frameColor" value="#e0a82e" style="width:46px;height:24px;vertical-align:middle;padding:0;border:none;background:none">
+        </label>
+        <small style="opacity:.65">— applied when you hit <b>Frame ON</b> (recolours existing frames too)</small>
+      </p>
       <table style="width:100%;border-collapse:collapse">
         <thead><tr style="text-align:left;border-bottom:1px solid var(--color-border-light-2,#666)">
           <th><input type="checkbox" name="selAll" checked title="select all"></th>
@@ -158,7 +164,7 @@
     buttons: [
       { action: "hide",      label: "Hide ticked",   callback: (_e, _b, d) => ({ op: "hide",     ids: selectedIds(d) }) },
       { action: "show",      label: "Show ticked",   callback: (_e, _b, d) => ({ op: "show",     ids: selectedIds(d) }) },
-      { action: "frameOn",   label: "Frame ON",      callback: (_e, _b, d) => ({ op: "frameOn",  ids: selectedIds(d) }) },
+      { action: "frameOn",   label: "Frame ON",      callback: (_e, _b, d) => ({ op: "frameOn",  ids: selectedIds(d), frameColor: d.element.querySelector('input[name="frameColor"]')?.value || "#e0a82e" }) },
       { action: "frameOff",  label: "Frame off",     callback: (_e, _b, d) => ({ op: "frameOff", ids: selectedIds(d) }) },
       { action: "delete",    label: "Delete ticked", callback: (_e, _b, d) => ({ op: "delete",   ids: selectedIds(d) }) },
       { action: "hideAll",   label: "Hide all",      callback: () => ({ op: "hide",   ids: overlays.map((t) => t.id) }) },
@@ -173,13 +179,15 @@
 
   if (op === "frameOn" || op === "frameOff") {
     const on = op === "frameOn";
+    let colNum = 0xe0a82e;   // Hexchrome gold fallback
+    try { colNum = foundry.utils.Color.from(result.frameColor || "#e0a82e").valueOf(); } catch (_e) {}
     const updates = ids.map((id) => {
       if (!on) return { _id: id, [`flags.${MOD}.overlay.frame`]: false };
       const o = scene.tiles.get(id)?.getFlag(MOD, "overlay") ?? {};
       return {
         _id: id,
         [`flags.${MOD}.overlay.frame`]: true,
-        [`flags.${MOD}.overlay.frameColor`]: o.frameColor ?? 0xe0a82e,  // Hexchrome gold default
+        [`flags.${MOD}.overlay.frameColor`]: colNum,           // the picked colour (recolours)
         [`flags.${MOD}.overlay.frameGlow`]: o.frameGlow ?? 1,
       };
     });
