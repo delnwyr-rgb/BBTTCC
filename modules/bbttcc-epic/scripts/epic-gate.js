@@ -14,6 +14,8 @@
 // 1–4 (TIER_ROMAN has no slot 5), so Epic's "Tier 5" band is its OWN concept here,
 // never routed through ft-progression.tierForLevel. 100% additive new module.
 
+import { buildPresenceRows, wirePresenceButtons, clearPresence } from "./presence.js";
+
 const MOD = "bbttcc-epic";
 const ENL = "bbttcc-character-options"; // owner of the enlightenment flag we read
 const NS  = "[bbttcc-epic]";
@@ -96,8 +98,11 @@ async function _evaluate(actor) {
 // were"), but a GM can clear it after a respec / mistaken trigger.
 export async function resetConvergence(actor) {
   if (!actor) return;
-  try { await actor.unsetFlag(MOD, "converged"); log(`reset convergence on ${actor.name}`); }
-  catch (e) { warn("reset failed", e); }
+  try {
+    await actor.unsetFlag(MOD, "converged");
+    await clearPresence(actor); // un-remembering who you are drops your Weight from the world (P2)
+    log(`reset convergence on ${actor.name}`);
+  } catch (e) { warn("reset failed", e); }
 }
 
 // ─── The "mojo returns" beat ─────────────────────────────────────────────────────
@@ -160,14 +165,19 @@ function decorateSheet(app, html) {
       axisRow(`Outer Malkuth (world)`, false, `— pending P3 —`),
     ].join("");
 
+    // P2: Presence chip (+ GM party line) — empty string until the Steward is Converged.
+    const presenceRows = buildPresenceRows(actor);
+
     const panel = $(`
       <section id="bbttcc-epic-ascension" class="bbttcc-epic-ascension">
         <div class="bbttcc-epic-head"><strong>Ascension</strong><small>The Gate · Bad Eden</small></div>
         ${statusLine}
         <div class="bbttcc-epic-axes">${rows}</div>
+        ${presenceRows ? `<div class="bbttcc-epic-presence-wrap">${presenceRows}</div>` : ""}
       </section>
     `);
     target.prepend(panel);
+    if (presenceRows) wirePresenceButtons(panel, actor);
   } catch (_e) { /* never break a sheet render */ }
 }
 

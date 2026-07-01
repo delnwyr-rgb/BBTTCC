@@ -42,6 +42,48 @@
 .bbttcc-epic-axis .be-axis-label { flex: 0 0 auto; }
 .bbttcc-epic-axis .be-axis-note  { margin-left: auto; opacity: .65; font-size: .74rem; }
 
+/* ── Presence (P2): per-Steward chip + GM party line + faction chip ────────── */
+.bbttcc-epic-presence-wrap {
+  margin-top: .35rem; padding-top: .3rem;
+  border-top: 1px solid rgba(255,255,255,.12);
+  display: flex; flex-direction: column; gap: .18rem;
+}
+.bbttcc-epic-presence, .bbttcc-epic-party {
+  display: flex; align-items: center; gap: .45rem;
+}
+.be-pr-label { flex: 0 0 auto; opacity: .7; text-transform: uppercase; letter-spacing: .04em; font-size: .7rem; }
+.be-pr-val {
+  font-weight: 800; font-variant-numeric: tabular-nums;
+  min-width: 1.4em; text-align: center;
+  color: #bfe3ff; text-shadow: 0 0 6px rgba(120,200,255,.4);
+}
+.be-pr-val.is-masked { color: #9aa4b2; text-shadow: none; letter-spacing: .06em; font-size: .74rem; }
+.bbttcc-epic-mask-btn {
+  margin-left: auto; padding: .05rem .5rem; font-size: .72rem; line-height: 1.4;
+  border: 1px solid rgba(120,200,255,.35); border-radius: 5px;
+  background: rgba(120,200,255,.08); color: #dbeeff; cursor: pointer;
+}
+.bbttcc-epic-mask-btn:hover { background: rgba(120,200,255,.18); }
+
+.bbttcc-epic-party .be-pr-band, .bbttcc-epic-faction-presence .be-pr-band {
+  font-size: .72rem; padding: .02rem .4rem; border-radius: 4px; opacity: .95;
+}
+.be-band-low  { background: rgba(120,200,255,.12); color: #bfe3ff; }
+.be-band-mid  { background: rgba(255,210,120,.14); color: #ffe0a0; }
+.be-band-high { background: rgba(255,140,80,.16);  color: #ffc0a0; }
+.be-band-apex { background: rgba(220,60,60,.20);   color: #ffb0b0; text-shadow: 0 0 6px rgba(220,60,60,.5); }
+.be-pr-hunted { font-size: .72rem; opacity: .8; }
+.be-pr-hunted.is-me { color: #ffcf7a; opacity: 1; text-shadow: 0 0 6px rgba(255,180,80,.5); }
+
+.bbttcc-epic-faction-presence {
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  margin: .35rem 0; padding: .35rem .5rem;
+  border: 1px solid var(--color-border-dark, #3a3f4b); border-radius: 8px;
+  background: linear-gradient(180deg, rgba(20,26,40,.5), rgba(12,16,26,.5));
+  color: var(--color-text-light-highlight, #e9eef7);
+}
+.bbttcc-epic-faction-presence .be-pr-count { margin-left: auto; opacity: .55; font-size: .7rem; }
+
 /* ── Chat "mojo returns" beat ──────────────────────────────────────────────── */
 .bbttcc-epic-beat {
   padding: .55rem .65rem; border-radius: 8px;
