@@ -19,6 +19,8 @@ const SETTING_QUESTS = "quests";
 const SETTING_ACTIVE_CAMPAIGN = "activeCampaignId";
 const SETTING_LAST_TURN_ANNOUNCED = "lastTurnAnnounced"; // Campaign Turn Flow announcements
 const SETTING_OVERSHOOT_BEATS = "overshoot.drawsBeats";  // Reality-Tear → Adversary beat draw
+const SETTING_DIRECTOR_ENABLED = "director.enabled";     // Story Director: World-Turn tick on/off
+const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runtime state (budget, fired beats, level floors)
 
 // Forgotten-Cause arc (Wendigo leyline network). Per-world 0–4 "something OFF"
 // escalation meter, bumped each time a Wendigo travel-encounter beat resolves.
@@ -3446,6 +3448,17 @@ async function _applyBeatTimePoints(campaign, beat, ctx = {}) {
 
 
 function _getTurnNumberSafe() {
+  // The authoritative world turn lives at bbttcc-world's worldState.turn —
+  // `game.bbttcc.api.turn` has never exposed getTurnNumber/turnNumber, so the
+  // old read below always returned 0 (which also made injector cooldownTurns
+  // a silent no-op). World API first; legacy paths kept as a fallback.
+  try {
+    const w = game.bbttcc?.api?.world;
+    if (w?.getState) {
+      const t = Number(w.getState()?.turn);
+      if (Number.isFinite(t) && t > 0) return t;
+    }
+  } catch (e) {}
   try {
     const t = game.bbttcc?.api?.turn;
     if (t?.getTurnNumber) return Number(t.getTurnNumber()) || 0;
@@ -3593,6 +3606,7 @@ async function _gmPromptDebtBeat({ campaignId, beatId, beatLabel, hexUuid }) {
 function _resolveGateValue(name) {
   switch (name) {
     case "wendigoRung": return _wendigoRungGet();
+    case "turn": return _getTurnNumberSafe();      // world turn — e.g. { flag:"turn", gte:6 }
     default: return null;            // unknown source — caller treats as unmet + warns
   }
 }
@@ -3880,6 +3894,328 @@ function installInjectorHooks() {
   Hooks.on("bbttcc.travel_threshold", handler);
 
   log("Injector hooks installed (trigger.travel_threshold / bbttcc:travel_threshold / bbttcc.travel_threshold).");
+}
+
+// ═══ STORY DIRECTOR (Phase 3) — chain registry + World-Turn tick + level cadence ═══
+//
+// The director is the loop that fires authored main-story beats at the right
+// cadence amid free hex play. Phase 3 = the World-Turn tick: every APPLIED turn
+// advance, look at the active campaign's STORY beats (any beat carrying a
+// `storyChain` field), keep the ones whose `inject.requires` gate passes
+// (quest-aware since Phase 2), and offer the highest-priority one to the GM
+// (veto prompt) — at most ONE story beat per world turn (the drip budget).
+// Chains need no separate authoring surface: `storyChain` groups beats, the
+// beats array order is the in-chain order, and inter-chain dependencies are
+// just gates. Pressure metering + extra seams are Phase 4.
+//
+// LEVEL CADENCE rides the same organ. A milestone beat may carry
+//   worldEffects.levelEffects = { stewardLevelFloor: N, factionTierFloor: T }
+// Floors are MONOTONIC (only ever rise) and stored in directorState. Reconcile
+// raises whoever is below the floor: stewards get a public Level-Up chat card
+// whose button runs the fourththing level-up wizard (the engine guarantees the
+// level; the player keeps the choices — click again while still below floor);
+// coalition factions are raised directly to the tier floor (guided-campaign
+// bypass of the reach/stability/identity gates, owner-locked 2026-07-01) with
+// OP caps lifted to the tier band. Reconcile re-runs on every turn tick so
+// late joiners and reincarnated stewards snap back onto the curve.
+// Owner-locked cadence ladder: one TIER per campaign arc — Valhaulan arc ends
+// at L6/T2, then L11/T3, L16/T4, L18+ epic gate.
+
+function _readDirectorState() {
+  try {
+    const s = game.settings.get(MOD_ID, SETTING_DIRECTOR_STATE);
+    const o = (s && typeof s === "object") ? foundry.utils.deepClone(s) : {};
+    o.firedStoryBeats = (o.firedStoryBeats && typeof o.firedStoryBeats === "object") ? o.firedStoryBeats : {};
+    o.levelPrompts = (o.levelPrompts && typeof o.levelPrompts === "object") ? o.levelPrompts : {};
+    o.lastStoryTurn = Number(o.lastStoryTurn) || 0;
+    o.stewardLevelFloor = Number(o.stewardLevelFloor) || 0;
+    o.factionTierFloor = Number(o.factionTierFloor) || 0;
+    return o;
+  } catch (e) {
+    return { firedStoryBeats: {}, levelPrompts: {}, lastStoryTurn: 0, stewardLevelFloor: 0, factionTierFloor: 0 };
+  }
+}
+async function _writeDirectorState(state) {
+  await game.settings.set(MOD_ID, SETTING_DIRECTOR_STATE, state || {});
+  return state || {};
+}
+
+function _storyBeatsFor(campaign) {
+  const beats = Array.isArray(campaign?.beats) ? campaign.beats : [];
+  return beats.filter(b => b && (b.storyChain || b.inject?.storyChain));
+}
+function _storyChainOf(beat) {
+  return String(beat?.storyChain || beat?.inject?.storyChain || "").trim() || null;
+}
+function _storyPriorityRank(beat) {
+  const p = String(beat?.priority || beat?.inject?.priority || "normal").trim();
+  if (p === "high") return 0;
+  if (p === "background") return 2;
+  return 1;
+}
+
+// GM veto prompt — the director PROPOSES, the GM decides (mirror of the debt
+// prompt). Declining does NOT mark the beat fired; it is offered again on a
+// later tick while its gate still holds.
+async function _gmPromptStoryBeat(beat, turn, eligibleCount) {
+  return new Promise((resolve) => {
+    const chain = _storyChainOf(beat);
+    const content = `
+      <p><b>Story Director</b> — Turn ${turn}: conditions are right for a story beat.</p>
+      <p style="margin:4px 0"><b>${beat?.label || beat?.id}</b>${chain ? ` <span style="opacity:.7">(chain: ${chain})</span>` : ""}</p>
+      ${eligibleCount > 1 ? `<p style="opacity:.7;font-size:.9em">${eligibleCount - 1} other story beat(s) also eligible — highest priority offered first.</p>` : ""}
+      <p style="opacity:.8;font-size:.9em">Fire it now? (Declining keeps it eligible for a later turn.)</p>
+    `;
+    new Dialog({
+      title: "Bad Eden: Story Director",
+      content,
+      buttons: {
+        run:     { icon: '<i class="fas fa-play"></i>', label: "Fire",    callback: () => resolve(true) },
+        decline: { icon: '<i class="fas fa-clock"></i>', label: "Not now", callback: () => resolve(false) }
+      },
+      default: "run",
+      close: () => resolve(false)
+    }).render(true);
+  });
+}
+
+// The director tick. Runs GM-side on every APPLIED world-turn advance (also
+// callable manually via game.bbttcc.api.campaign.director.tick()).
+// opts: { turn?, force? (ignore the per-turn budget), silent? (skip GM prompt) }
+async function directorTick(opts = {}) {
+  try {
+    if (!game.user?.isGM) return { fired: null, reason: "not_gm" };
+    let enabled = true;
+    try { enabled = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_ENABLED); } catch (_e) {}
+    if (!enabled) return { fired: null, reason: "disabled" };
+
+    const turn = Number(opts.turn) || _getTurnNumberSafe();
+    const state = _readDirectorState();
+    if (!opts.force && turn > 0 && state.lastStoryTurn === turn)
+      return { fired: null, reason: "budget_spent", turn };
+
+    const campaignId = getActiveCampaignId();
+    const campaign = campaignId ? getCampaign(campaignId) : null;
+    if (!campaign) return { fired: null, reason: "no_active_campaign" };
+
+    const story = _storyBeatsFor(campaign);
+    if (!story.length) return { fired: null, reason: "no_story_beats", turn };
+
+    const candidates = [];
+    for (const b of story) {
+      if (state.firedStoryBeats[b.id] && !b.inject?.repeatable) continue;
+      if (!(await _beatRequiresMet(b, campaign, {}))) continue;
+      candidates.push(b);
+    }
+    if (!candidates.length) return { fired: null, reason: "no_eligible", turn, storyBeats: story.length };
+
+    // Highest priority wins; ties resolve by authored order (stable sort).
+    const pick = candidates
+      .map((b, i) => ({ b, i }))
+      .sort((x, y) => (_storyPriorityRank(x.b) - _storyPriorityRank(y.b)) || (x.i - y.i))[0].b;
+
+    const ok = opts.silent ? true : await _gmPromptStoryBeat(pick, turn, candidates.length);
+    if (!ok) return { fired: null, reason: "gm_declined", offered: pick.id, turn };
+
+    state.firedStoryBeats[pick.id] = { turn, ts: Date.now() };
+    state.lastStoryTurn = turn;
+    await _writeDirectorState(state);
+    log(`[director] firing story beat '${pick.id}' (chain: ${_storyChainOf(pick) || "—"}) on turn ${turn}.`);
+    await runBeat(campaignId, pick.id);
+    return { fired: pick.id, chain: _storyChainOf(pick), turn };
+  } catch (e) {
+    warn("[director] tick failed:", e);
+    return { fired: null, reason: "error", error: String(e?.message || e) };
+  }
+}
+
+// GM inspection view: the chain registry, derived from the active campaign's
+// story beats. Per chain: beats in authored order with fired/eligible status.
+async function directorChains() {
+  const campaignId = getActiveCampaignId();
+  const campaign = campaignId ? getCampaign(campaignId) : null;
+  if (!campaign) return {};
+  const state = _readDirectorState();
+  const out = {};
+  for (const b of _storyBeatsFor(campaign)) {
+    const chain = _storyChainOf(b) || "(unchained)";
+    out[chain] = out[chain] || [];
+    out[chain].push({
+      beatId: b.id,
+      label: b.label || b.id,
+      priority: String(b.priority || b.inject?.priority || "normal"),
+      fired: state.firedStoryBeats[b.id] || null,
+      eligible: await _beatRequiresMet(b, campaign, {})
+    });
+  }
+  return out;
+}
+
+// ── Level cadence ────────────────────────────────────────────────────────────
+
+// Mirror of bbttcc-factions' raiseOpCapsToTierBand (module-private there).
+// Explicit opCaps shadow tier-derived bands forever, so a tier raise must lift
+// them; max()-only, never lowers; no explicit caps → derived path follows tier.
+const _FT_OP_KEYS = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+const _FT_CAP_BAND = [50, 70, 90, 110, 130];
+async function _directorRaiseFactionOpCaps(actor, tier) {
+  try {
+    const t = Math.max(0, Math.min(4, Math.floor(Number(tier) || 0)));
+    const band = _FT_CAP_BAND[t] ?? _FT_CAP_BAND[0];
+    const raw = foundry.utils.getProperty(actor, "flags.bbttcc-factions.opCaps");
+    if (!raw || typeof raw !== "object") return false;
+    const next = {};
+    let changed = false;
+    for (const k of _FT_OP_KEYS) {
+      const cur = Math.max(0, Math.floor(Number(raw[k]) || 0));
+      next[k] = Math.max(cur, band);
+      if (next[k] !== cur) changed = true;
+    }
+    if (!changed) return false;
+    await actor.update({ "flags.bbttcc-factions.opCaps": next });
+    return true;
+  } catch (e) {
+    warn("[director] opCaps raise failed for", actor?.name, e);
+    return false;
+  }
+}
+
+async function _postLevelUpCard(actor, fromLevel, floor, milestone) {
+  const gap = floor - fromLevel;
+  const content = `
+    <div style="border:1px solid #7a5c2e;border-radius:6px;padding:8px 10px">
+      <p style="margin:0 0 4px 0">🎉 <b>${actor.name}</b> — <b>Level Up!</b></p>
+      ${milestone ? `<p style="margin:0 0 4px 0;opacity:.8">Milestone: <i>${milestone}</i></p>` : ""}
+      <p style="margin:0 0 6px 0">Level ${fromLevel} → <b>${floor}</b>${gap > 1 ? ` (${gap} level-ups banked — click once per level)` : ""}</p>
+      <button type="button" class="bbttcc-director-levelup" data-actor-id="${actor.id}" data-floor="${floor}">
+        <i class="fas fa-angles-up"></i> Level Up
+      </button>
+    </div>`;
+  await ChatMessage.create({ content, speaker: { alias: "Story Director" } });
+}
+
+async function _postFactionTierCard(lines, tierFloor, milestone) {
+  const content = `
+    <div style="border:1px solid #7a5c2e;border-radius:6px;padding:8px 10px">
+      <p style="margin:0 0 4px 0">🏰 <b>Coalition grows in stature</b>${milestone ? ` — <i>${milestone}</i>` : ""}</p>
+      <p style="margin:0">${lines.join("<br>")}</p>
+      <p style="margin:4px 0 0 0;opacity:.8;font-size:.9em">OP pool ceilings raised to the Tier ${tierFloor} band.</p>
+    </div>`;
+  await ChatMessage.create({ content, speaker: { alias: "Story Director" } });
+}
+
+// Raise anyone below the stored floors. Stewards = each non-GM user's ASSIGNED
+// character (the canonical "party" — assign characters in Player Configuration).
+// One card per (steward, floor) — re-running is spam-free; opts.force re-posts.
+// Factions = the active campaign's coalition roster.
+async function directorReconcileLevels(opts = {}) {
+  const out = { stewardsPrompted: [], factionsRaised: [] };
+  try {
+    if (!game.user?.isGM) return out;
+    const state = _readDirectorState();
+    const floor = state.stewardLevelFloor;
+    const tierFloor = state.factionTierFloor;
+    if (floor <= 1 && tierFloor <= 0) return out;
+    let stateChanged = false;
+
+    if (floor > 1) {
+      const seen = new Set();
+      for (const user of game.users) {
+        if (user.isGM) continue;
+        const a = user.character;
+        if (!a || a.type !== "character" || seen.has(a.id)) continue;
+        seen.add(a.id);
+        const sys = a.system?.system ?? a.system;
+        const lvl = Number(sys?.details?.level ?? 1) || 1;
+        if (lvl >= floor) continue;
+        if (!opts.force && Number(state.levelPrompts[a.id]) >= floor) continue;
+        state.levelPrompts[a.id] = floor;
+        stateChanged = true;
+        await _postLevelUpCard(a, lvl, floor, opts.milestone);
+        out.stewardsPrompted.push(a.name);
+      }
+    }
+
+    if (tierFloor > 0) {
+      const campaignId = getActiveCampaignId();
+      const campaign = opts.campaign || (campaignId ? getCampaign(campaignId) : null);
+      const factions = campaign ? await _resolveCampaignFactions(campaign, opts.ctx || {}) : [];
+      const lines = [];
+      for (const f of factions) {
+        const cur = Number(f.getFlag("bbttcc-factions", "tier") ?? 0) || 0;
+        if (cur >= tierFloor) continue;
+        await f.update({ "flags.bbttcc-factions.tier": tierFloor });
+        await _directorRaiseFactionOpCaps(f, tierFloor);
+        lines.push(`<b>${f.name}</b>: Tier ${cur} → <b>Tier ${tierFloor}</b>`);
+        out.factionsRaised.push(`${f.name} T${cur}→T${tierFloor}`);
+        log(`[director] faction '${f.name}' tier ${cur} → ${tierFloor} (cadence floor).`);
+      }
+      if (lines.length) await _postFactionTierCard(lines, tierFloor, opts.milestone);
+    }
+
+    if (stateChanged) await _writeDirectorState(state);
+  } catch (e) {
+    warn("[director] reconcileLevels failed:", e);
+  }
+  return out;
+}
+
+// Beat-resolved subscriber: milestone beats raise the floors.
+// worldEffects.levelEffects = { stewardLevelFloor?, factionTierFloor? }
+async function _onBeatResolvedLevelEffects({ campaign, beat, ctx } = {}) {
+  try {
+    if (!game.user?.isGM) return;                 // only the GM writes world settings
+    const fx = beat?.worldEffects?.levelEffects;
+    if (!fx || typeof fx !== "object") return;
+    const state = _readDirectorState();
+    let changed = false;
+    const lf = Math.floor(Number(fx.stewardLevelFloor) || 0);
+    if (lf > state.stewardLevelFloor) { state.stewardLevelFloor = lf; changed = true; }
+    const tf = Math.floor(Number(fx.factionTierFloor) || 0);
+    if (tf > state.factionTierFloor) { state.factionTierFloor = tf; changed = true; }
+    if (!changed) return;
+    await _writeDirectorState(state);
+    log(`[director] level floors raised by beat '${beat?.id}': steward L${state.stewardLevelFloor}, faction T${state.factionTierFloor}.`);
+    await directorReconcileLevels({ milestone: beat?.label || beat?.id, campaign, ctx });
+  } catch (e) {
+    warn("[director] levelEffects subscriber failed:", e);
+  }
+}
+
+// Level-Up card button → the fourththing level-up wizard, on the CLICKING
+// client (players own their steward; the wizard's choices are theirs). Same
+// document-level delegation idiom as the beat-audio Play button.
+let __bbttccDirectorLevelupDelegationInstalled = false;
+function _installDirectorLevelupDelegation() {
+  if (__bbttccDirectorLevelupDelegationInstalled) return;
+  __bbttccDirectorLevelupDelegationInstalled = true;
+  try {
+    document.addEventListener("click", async (ev) => {
+      try {
+        const btn = ev.target?.closest?.(".bbttcc-director-levelup");
+        if (!btn) return;
+        ev.preventDefault();
+        const actor = game.actors?.get(btn.dataset.actorId);
+        if (!actor) return void ui.notifications?.warn("Steward not found.");
+        if (!actor.isOwner) return void ui.notifications?.warn("Only this steward's owner (or a GM) can level them.");
+        const floor = Number(btn.dataset.floor) || 0;
+        const sysBefore = actor.system?.system ?? actor.system;
+        const before = Number(sysBefore?.details?.level ?? 1) || 1;
+        if (floor && before >= floor)
+          return void ui.notifications?.info(`${actor.name} is already at the milestone level (L${before}).`);
+        const levelUp = game.fourththing?._progression?.levelUp;
+        if (typeof levelUp !== "function")
+          return void ui.notifications?.error("Level-up wizard unavailable (fourththing progression API missing).");
+        await levelUp(actor);
+        const sysAfter = actor.system?.system ?? actor.system;
+        const after = Number(sysAfter?.details?.level ?? before) || before;
+        if (floor && after < floor)
+          ui.notifications?.info(`${actor.name} is L${after} — ${floor - after} more level-up(s) banked. Click the button again.`);
+      } catch (eH) {
+        warn("[director] level-up button failed:", eH);
+      }
+    }, { capture: false });
+  } catch (_e) {}
 }
 
 // ─── Reality Tear → Adversary draws a Beat ───────────────────────────────────
@@ -4571,6 +4907,12 @@ function buildCampaignAPI() {
     runCampaign,
     runBeat,
     injector: { fire: injectorFire },
+    director: {
+      tick: directorTick,
+      chains: directorChains,
+      reconcileLevels: directorReconcileLevels,
+      state: _readDirectorState
+    },
     tables: { listTables, getTable, saveTable, createTable, deleteTable, getAllTables, setAllTables, runRandomTable },
     quests: { listQuests, getQuest, saveQuest, createQuest, deleteQuest, setQuestStatus, getAllQuests, setAllQuests },
     io: {
@@ -4812,6 +5154,22 @@ Hooks.once("init", () => {
     default: true
   });
 
+  game.settings.register(MOD_ID, SETTING_DIRECTOR_ENABLED, {
+    name: "Story Director — World-Turn tick",
+    hint: "Each applied world-turn advance, the Story Director checks the active campaign's story beats (beats with a storyChain) and offers the highest-priority eligible one to the GM — at most one story beat per turn. Off = story beats only fire by hand or via other channels.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
+  game.settings.register(MOD_ID, SETTING_DIRECTOR_STATE, {
+    scope: "world",
+    config: false,
+    type: Object,
+    default: {}
+  });
+
   try {
     const H = globalThis.Handlebars;
     if (H) {
@@ -4843,6 +5201,25 @@ Hooks.once("ready", () => {
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedFeudState);
   // Step 4: Dougan points to the Confluence when his convo resolves at rung >= 3.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedDouganPointer);
+  // Story Director (Phase 3): milestone beats raise steward/faction level floors.
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedLevelEffects);
+  // Story Director (Phase 3): the World-Turn tick. Apply-only (skip previews);
+  // the advanceTurn driver fires this hook locally on the advancing GM client,
+  // and the world clock is already bumped when it arrives. Reconcile runs each
+  // turn too, so late joiners / reincarnated stewards snap back onto the curve.
+  Hooks.on("bbttcc:advanceTurn:end", (tctx) => {
+    try {
+      if (!tctx || tctx.apply !== true) return;
+      if (!game.user?.isGM) return;
+      directorTick({}).catch(e => warn("[director] turn tick failed:", e));
+      directorReconcileLevels({}).catch(e => warn("[director] turn reconcile failed:", e));
+    } catch (e) {
+      warn("[director] advanceTurn listener failed:", e);
+    }
+  });
+  // Story Director: Level-Up chat-card button (runs on every client — players
+  // click their own steward's card).
+  _installDirectorLevelupDelegation();
   // BeatAudioManager owns the socket listener and all audio state.
   try { globalThis.__bbttccBeatAudioManager?.init(); } catch (_eMgrInit) {}
   _installBeatAudioSocket();
