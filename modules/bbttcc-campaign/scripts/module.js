@@ -3578,12 +3578,17 @@ async function _gmPromptDebtBeat({ campaignId, beatId, beatLabel, hexUuid }) {
 
 // ─── Story Director: the Gate organ (`inject.requires`) ──────────────────────
 // A beat may carry `inject.requires` — a condition, or an array of conditions
-// (AND-combined), gating whether the injector will offer it. Each condition is
-// { flag, gte|lte|eq }, where `flag` names a meter source resolved by
-// _resolveGateValue. Today only "wendigoRung" (a world setting) resolves; extend
-// the switch for faction flags / quest steps / turn / darkness as the director
-// grows. Fail-OPEN on a thrown error (never hide a beat because the evaluator
-// broke); fail-CLOSED + warn on an unknown source (a misconfigured gate must not
+// (AND-combined), gating whether the injector will offer it. Condition shapes:
+//   { flag, gte|lte|eq }              — a meter source resolved by _resolveGateValue
+//                                       (today only "wendigoRung", a world setting)
+//   { questBucket, is }               — quest sits in the coalition's
+//                                       active|completed|archived bucket
+//   { beatMark, quest, state }        — beat is marked "seen"|"completed" in that
+//                                       quest's progress ("completed" satisfies "seen")
+// Quest state = the coalition's shared per-faction quests flag (fan-out keeps all
+// campaign.factionIds members identical → read one; see _coalitionQuestTrack).
+// Fail-OPEN on a thrown error (never hide a beat because the evaluator broke);
+// fail-CLOSED + warn on an unknown/misconfigured condition (a bad gate must not
 // silently fire a story beat early). Beats with no `requires` are unaffected.
 function _resolveGateValue(name) {
   switch (name) {
@@ -3591,13 +3596,83 @@ function _resolveGateValue(name) {
     default: return null;            // unknown source — caller treats as unmet + warns
   }
 }
-function _beatRequiresMet(beat) {
+
+const QUEST_GATE_BUCKETS = ["active", "completed", "archived"];
+
+// The coalition's shared quest-progress track, read off the first resolved
+// campaign faction. Returns the { active, completed, archived } buckets object,
+// or null when the campaign has no resolvable faction (→ quest gates unmet).
+// Deliberately does NOT catch: a throw rejects the memoized promise, reaches
+// _beatRequiresMet's outer catch, and fails OPEN. Memoized per campaign object
+// (listCampaigns builds fresh objects each injectorFire, so the WeakMap acts as
+// a per-fire cache) so many quest-gated beats resolve the roster once.
+const _questTrackMemo = new WeakMap();
+function _coalitionQuestTrack(campaign, ctx) {
+  if (!campaign || typeof campaign !== "object") return Promise.resolve(null);
+  if (!_questTrackMemo.has(campaign)) {
+    _questTrackMemo.set(campaign, (async () => {
+      const factions = await _resolveCampaignFactions(campaign, ctx);
+      const faction = factions[0];
+      if (!faction || typeof faction.getFlag !== "function") return null;
+      return faction.getFlag("bbttcc-factions", "quests") || {};
+    })());
+  }
+  return _questTrackMemo.get(campaign);
+}
+
+async function _beatRequiresMet(beat, campaign, ctx) {
   try {
     const req = beat?.inject?.requires;
     if (!req) return true;                         // ungated → always eligible
     const conds = Array.isArray(req) ? req : [req];
     for (const c of conds) {
       if (!c || typeof c !== "object") continue;
+
+      // { questBucket: "<questId>", is: "active"|"completed"|"archived" }
+      if (c.questBucket != null) {
+        const bucket = String(c.is || "").trim();
+        if (!QUEST_GATE_BUCKETS.includes(bucket)) {
+          warn(`[inject.requires] questBucket condition on beat '${beat?.id}' has unknown bucket '${c.is}' — treating as unmet.`);
+          return false;
+        }
+        const track = await _coalitionQuestTrack(campaign, ctx);
+        if (!track) {
+          warn(`[inject.requires] questBucket gate on beat '${beat?.id}' but the campaign has no resolvable faction — treating as unmet.`);
+          return false;
+        }
+        if (!track[bucket]?.[String(c.questBucket)]) return false;
+        continue;
+      }
+
+      // { beatMark: "<beatId>", quest: "<questId>", state: "seen"|"completed" }
+      if (c.beatMark != null) {
+        const questId = String(c.quest || "").trim();
+        const want = String(c.state || "seen").trim();
+        if (!questId) {
+          warn(`[inject.requires] beatMark condition on beat '${beat?.id}' is missing 'quest' — treating as unmet.`);
+          return false;
+        }
+        if (want !== "seen" && want !== "completed") {
+          warn(`[inject.requires] beatMark condition on beat '${beat?.id}' has unknown state '${c.state}' — treating as unmet.`);
+          return false;
+        }
+        const track = await _coalitionQuestTrack(campaign, ctx);
+        if (!track) {
+          warn(`[inject.requires] beatMark gate on beat '${beat?.id}' but the campaign has no resolvable faction — treating as unmet.`);
+          return false;
+        }
+        let entry = null;
+        for (const bk of QUEST_GATE_BUCKETS) {
+          entry = track[bk]?.[questId];
+          if (entry) break;
+        }
+        const got = String(entry?.progress?.beats?.[String(c.beatMark)]?.state || "");
+        const ok = (want === "seen") ? (got === "seen" || got === "completed") : (got === "completed");
+        if (!ok) return false;
+        continue;
+      }
+
+      // { flag: "<meter>", gte|lte|eq } — the original meter form
       const val = _resolveGateValue(c.flag);
       if (val === null) {
         warn(`[inject.requires] unknown gate source '${c.flag}' on beat '${beat?.id}' — treating as unmet.`);
@@ -3681,7 +3756,7 @@ async function injectorFire(ctx = {}) {
     for (const b of beats) {
       const inject = b.inject || {};
       if (!_matchesTravelThreshold(b)) continue;
-      if (!_beatRequiresMet(b)) continue;          // Story Director gate (inject.requires)
+      if (!(await _beatRequiresMet(b, c, ctx))) continue;   // Story Director gate (inject.requires)
 
       if (inject.oncePerHex && hexUuid) {
         const k = _injectKeyFor(b, { campaignId: c.id, hexUuid });
