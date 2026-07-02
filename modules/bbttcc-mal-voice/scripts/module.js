@@ -54,7 +54,7 @@ Hooks.once("init", () => {
 
   game.settings.register(MODULE_ID, "model", {
     name:    "Model",
-    hint:    "Model identifier. For Anthropic: claude-sonnet-4-7 or claude-opus-4-7. For OpenAI: gpt-4o or gpt-4o-mini. For Ollama: llama3, mistral, etc. Leave blank to use provider default.",
+    hint:    "Model identifier. For Anthropic: claude-sonnet-5 (default — best balance), claude-haiku-4-5 (cheapest, high-frequency barks), claude-opus-4-8 (premium, ~2x Sonnet cost). For Ollama: llama3, mistral, etc. Leave blank to use provider default.",
     scope:   "world",
     config:  true,
     type:    String,

@@ -100,6 +100,10 @@ function _normalize(spec) {
     outputChannel, speakAs,
     triggers,
     contextBuilder,
+    // Foundation v2: stream replies into the chat card token-by-token
+    // (chat channel only); prepend the shared cached lore primer.
+    stream:  spec.stream === true,
+    useLore: spec.useLore !== false,
     // Free-form metadata bag for voice-specific extensions.
     meta: (spec.meta && typeof spec.meta === "object") ? { ...spec.meta } : {}
   };
@@ -200,6 +204,8 @@ function schema() {
     speakAs:        "object, { alias?, actorId?, tokenId? }",
     triggers:       "array of { hook, filter?: fn|string, debounceMs?: number }",
     contextBuilder: "function | 'default' | string key for trigger engine to resolve",
+    stream:         "boolean, default false — stream reply into the chat card token-by-token",
+    useLore:        "boolean, default true — prepend the shared cached Bad Eden lore primer",
     meta:           "object, free-form extension bag"
   };
 }

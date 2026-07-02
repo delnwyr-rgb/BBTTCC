@@ -87,12 +87,17 @@ function _budgetCheck(voice, costEstimateUSD) {
 }
 
 // ----- Build the chat message data -----
+// Styled wrapper so voice lines are visually distinct. Shared by the
+// buffered path and the streaming updater.
+function _styledContent(text) {
+  return `<div class="bbttcc-mal-voice" style="border-left:3px solid #c66;padding:.4em .6em;background:rgba(204,102,102,.06);font-style:italic">${_escape(text)}</div>`;
+}
+
 function _buildMessageData(voice, text, whisper) {
   const speakAs = voice.speakAs || {};
   const alias = speakAs.alias || voice.name || voice.id;
 
-  // Use a styled wrapper so Mal's lines are visually distinct.
-  const styled = `<div class="bbttcc-mal-voice" style="border-left:3px solid #c66;padding:.4em .6em;background:rgba(204,102,102,.06);font-style:italic">${_escape(text)}</div>`;
+  const styled = _styledContent(text);
 
   const data = {
     content: styled,
@@ -166,6 +171,71 @@ async function render({ voice, text, context } = {}) {
   return { ok: false, error: "UNKNOWN_CHANNEL", message: `Output channel '${channel}' not recognized` };
 }
 
+// ----- Public: beginStream({ voice, context }) -----
+// Streaming render: creates the chat card immediately (with a typing cursor),
+// then the trigger engine feeds accumulated text into handle.update() as SSE
+// deltas arrive. Updates are throttled to ~300ms so we don't hammer the
+// ChatMessage document with per-token writes. finalize() writes the clean
+// final text; cancel() deletes the card (provider call failed).
+async function beginStream({ voice, context } = {}) {
+  if (!voice) throw new Error("voice required");
+
+  let effectiveAudience = (context?._audienceOverride) || voice.audience;
+  if (voice.audience === "trigger-resolved" && !context?._audienceOverride) {
+    warn(`voice '${voice.id}' declared audience 'trigger-resolved' without context._audienceOverride; falling back to GM whisper`);
+    effectiveAudience = "gm";
+  }
+  const { whisper } = _resolveAudience(effectiveAudience);
+  const data = _buildMessageData(voice, "…", whisper);
+  data.flags[MODULE_ID] = Object.assign(data.flags[MODULE_ID] || {}, { effectiveAudience, streaming: true });
+
+  const msg = await ChatMessage.create(data);
+  if (!msg) throw new Error("ChatMessage.create returned nothing");
+
+  const THROTTLE_MS = 300;
+  let lastPush = 0;
+  let pending = null;
+  let timer = null;
+  let closed = false;
+
+  const push = async (text, done) => {
+    if (closed && !done) return;
+    try {
+      await msg.update({ content: _styledContent(done ? text : `${text} ▌`) });
+    } catch (e) { warn("stream update failed:", e?.message); }
+  };
+
+  return {
+    messageId: msg.id,
+    update(text) {
+      if (closed) return;
+      pending = text;
+      const now = Date.now();
+      if (now - lastPush >= THROTTLE_MS) {
+        lastPush = now;
+        push(pending, false);
+      } else if (!timer) {
+        timer = setTimeout(() => {
+          timer = null;
+          lastPush = Date.now();
+          if (!closed && pending != null) push(pending, false);
+        }, THROTTLE_MS);
+      }
+    },
+    async finalize(text) {
+      closed = true;
+      if (timer) { clearTimeout(timer); timer = null; }
+      await push(text, true);
+      return { ok: true, messageId: msg.id, channel: "chat", audience: voice.audience };
+    },
+    async cancel() {
+      closed = true;
+      if (timer) { clearTimeout(timer); timer = null; }
+      try { await msg.delete(); } catch (_e) {}
+    }
+  };
+}
+
 // ----- Install -----
 function _install() {
   try {
@@ -173,6 +243,7 @@ function _install() {
     globalThis.game.bbttcc.mal ??= {};
     globalThis.game.bbttcc.mal.output = Object.assign(globalThis.game.bbttcc.mal.output || {}, {
       render,
+      beginStream,
       _resolveAudience,
       _buildMessageData
     });

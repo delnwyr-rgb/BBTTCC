@@ -12179,6 +12179,29 @@ async function ftGenerateEchoRosterMembers({ entryName, kind = "crew", count = 3
       const faction = (actor && typeof getLinkedFaction === "function") ? getLinkedFaction(actor) : null;
       const kindLabel = (k === "occult") ? "Occult Association" : "Awesome Crew";
       const systemPrompt = `You generate fictional roster members for a tabletop RPG set in Bad Eden. Return ONLY a JSON array — no prose, no code fences. Each element: {"name": string, "role": string (a short job/specialty, 1-4 words), "hook": string (ONE sentence: who they were to the Steward — a debt, scar, or piece of unfinished business)}. Keep names and hooks vivid, grounded, and specific to this world.\n\n${FT_ECHO_FLAVOR_PRIMER}`;
+      // Structured-output schema: newer bbttcc-mal-voice adapters constrain the
+      // reply to this shape (guaranteed-valid JSON, no fence-stripping needed);
+      // older adapters ignore `schema` and we fall back to the text parser.
+      const echoSchema = {
+        type: "object",
+        properties: {
+          members: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                name: { type: "string" },
+                role: { type: "string" },
+                hook: { type: "string" }
+              },
+              required: ["name", "role", "hook"],
+              additionalProperties: false
+            }
+          }
+        },
+        required: ["members"],
+        additionalProperties: false
+      };
       const userMessage = JSON.stringify({
         task: `Invent ${n} roster members from one of the Steward's past lives.`,
         pastLife: String(entryName ?? "").trim(),
@@ -12192,9 +12215,12 @@ async function ftGenerateEchoRosterMembers({ entryName, kind = "crew", count = 3
         count: n,
         outputFormat: '[{"name":"...","role":"...","hook":"..."}]'
       });
-      const res = await call({ systemPrompt, userMessage, maxTokens: 90 + n * 110, temperature: 0.95 });
-      if (res?.ok && res.text) {
-        const parsed = _ftParseEchoGenJson(res.text);
+      // system as a cached block: repeated "Suggest members" clicks within the
+      // hour reuse the big flavor primer at ~0.1x price (old adapters fall back
+      // to the plain systemPrompt string).
+      const res = await call({ system: [{ text: systemPrompt, cache: "1h" }], systemPrompt, userMessage, schema: echoSchema, maxTokens: 90 + n * 110, temperature: 0.95 });
+      if (res?.ok && (res.json || res.text)) {
+        const parsed = Array.isArray(res.json?.members) ? res.json.members : _ftParseEchoGenJson(res.text);
         const members = parsed.slice(0, n).map(m => ({
           name: String(m.name ?? "").trim(),
           role: String(m.role ?? "").trim(),

@@ -31,6 +31,7 @@
   },
   "esmodules": [
     "scripts/module.js",
+    "scripts/lore-primer.js",
     "scripts/providers/anthropic.js",
     "scripts/voice-registry.js",
     "scripts/voices/mal.js",

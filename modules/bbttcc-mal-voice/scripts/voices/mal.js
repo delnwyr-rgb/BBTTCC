@@ -107,6 +107,8 @@ const MAL_VOICE = {
   temperature:  0.9,
   audience:     "broadcast",
   outputChannel: "chat",
+  stream:       true,                // type-on effect: Mal's line streams into the chat card
+  useLore:      true,                // shared cached Bad Eden lore primer prepended
   speakAs: {
     alias:   "Mal",                  // displayed as the speaker name on the chat card
     // actorId left empty — user can configure a Mal portrait actor in settings later

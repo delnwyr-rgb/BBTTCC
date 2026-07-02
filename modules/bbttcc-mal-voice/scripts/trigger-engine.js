@@ -129,7 +129,13 @@ function _passesFilter(trigger, triggerArgs) {
 }
 
 // ----- Provider dispatch -----
-async function _callProvider(voice, context) {
+// System prompt is assembled as cached blocks: [shared lore primer, voice
+// persona], both flagged for 1h-TTL prompt caching. The primer block is
+// byte-identical across ALL voices, so after the first call each hour it's
+// served from Anthropic's prompt cache at ~0.1x input price — every voice
+// gets deep world grounding nearly free. Volatile per-trigger context stays
+// in the user message where it can't invalidate the cached prefix.
+async function _callProvider(voice, context, streamHandle = null) {
   const settings = globalThis.game?.bbttcc?.mal?.settings;
   if (!settings) return { ok: false, error: "MODULE_NOT_READY", message: "game.bbttcc.mal not installed" };
 
@@ -139,13 +145,24 @@ async function _callProvider(voice, context) {
     return { ok: false, error: "PROVIDER_NOT_INSTALLED", message: `Provider '${providerName}' not installed (Phase 2A ships anthropic only)` };
   }
 
+  const lore = globalThis.game?.bbttcc?.mal?.lore;
+  const usePrimer = (voice.useLore !== false) && (lore?.enabled?.() !== false);
+  const primer = usePrimer ? (lore?.getPrimer?.() || "") : "";
+
+  const system = [];
+  if (primer) system.push({ text: primer, cache: "1h" });
+  if (voice.systemPrompt) system.push({ text: voice.systemPrompt, cache: "1h" });
+
   const userMessage = JSON.stringify(context, null, 2);
   return await provider.call({
-    systemPrompt: voice.systemPrompt,
+    system,
+    systemPrompt: voice.systemPrompt,   // back-compat for older adapters
     userMessage,
     model:        voice.model || undefined,
     maxTokens:    voice.maxTokens,
-    temperature:  voice.temperature
+    temperature:  voice.temperature,
+    stream:       !!streamHandle,
+    onDelta:      streamHandle ? (text) => streamHandle.update(text) : undefined
   });
 }
 
@@ -199,17 +216,32 @@ async function fire(voiceId, triggerArgs = {}) {
     context = { trigger: { hook, args: triggerArgs.args || {} }, snapshot: null, mode: "snark", lengthHint: 30 };
   }
 
+  // Streaming: open a live chat card BEFORE the provider call so deltas have
+  // somewhere to land. Falls back to buffered output if beginStream fails.
+  let streamHandle = null;
+  const output = globalThis.game?.bbttcc?.mal?.output;
+  if (voice.stream === true && output?.beginStream) {
+    try { streamHandle = await output.beginStream({ voice, context }); }
+    catch (e) { warn(`beginStream failed for '${voiceId}':`, e?.message); streamHandle = null; }
+  }
+
   // Call provider
   const t0 = performance.now();
-  const result = await _callProvider(voice, context);
+  const result = await _callProvider(voice, context, streamHandle);
   const durationMs = Math.round(performance.now() - t0);
   if (!result.ok) {
     warn(`provider call failed for '${voiceId}' (${result.error}): ${result.message}`);
+    if (streamHandle) { try { await streamHandle.cancel(); } catch (_e) {} }
     return result;
   }
 
   // Render output
-  await _output(voice, result.text || "", context);
+  if (streamHandle) {
+    try { await streamHandle.finalize(result.text || ""); }
+    catch (e) { warn("finalize failed:", e?.message); }
+  } else {
+    await _output(voice, result.text || "", context);
+  }
 
   // Append to call log (capped ring buffer at 200)
   try {
@@ -223,6 +255,8 @@ async function fire(voiceId, triggerArgs = {}) {
         model: result.model,
         inputTokens: result.inputTokens,
         outputTokens: result.outputTokens,
+        cacheReadTokens: result.cacheReadTokens ?? 0,
+        cacheWriteTokens: result.cacheWriteTokens ?? 0,
         costUSD: result.costEstimateUSD,
         durationMs
       });
