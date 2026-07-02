@@ -20,7 +20,13 @@ const SETTING_ACTIVE_CAMPAIGN = "activeCampaignId";
 const SETTING_LAST_TURN_ANNOUNCED = "lastTurnAnnounced"; // Campaign Turn Flow announcements
 const SETTING_OVERSHOOT_BEATS = "overshoot.drawsBeats";  // Reality-Tear → Adversary beat draw
 const SETTING_DIRECTOR_ENABLED = "director.enabled";     // Story Director: World-Turn tick on/off
-const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runtime state (budget, fired beats, level floors)
+const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runtime state (budget, fired beats, level floors, pressure)
+const SETTING_DIRECTOR_PRESSURE_THRESHOLD = "director.pressureThreshold"; // pressure needed for a MID-TURN director look
+// Phase 4 pressure accrual weights: how much each seam event raises story pressure.
+// The World-Turn tick is the guaranteed heartbeat regardless; pressure only
+// governs whether the director ALSO looks mid-turn (travel legs, raid rounds,
+// resolved beats). Firing a story beat resets pressure; a GM decline halves it.
+const DIRECTOR_PRESSURE = { turn: 30, leg: 8, raidRound: 10, beat: 3 };
 
 // Forgotten-Cause arc (Wendigo leyline network). Per-world 0–4 "something OFF"
 // escalation meter, bumped each time a Wendigo travel-encounter beat resolves.
@@ -3765,8 +3771,14 @@ async function injectorFire(ctx = {}) {
 
   // Build candidates
   const candidates = [];
+  const dstate = _readDirectorState();
   for (const c of campaigns) {
     const beats = Array.isArray(c.beats) ? c.beats : [];
+    // Phase 4 foreshadow: chains "in motion" (any story beat already fired) —
+    // vignettes tagged foreshadow.<chain> score higher once their chain lives.
+    const chainsInMotion = new Set(
+      _storyBeatsFor(c).filter(sb => dstate.firedStoryBeats[sb.id]).map(_storyChainOf).filter(Boolean)
+    );
     for (const b of beats) {
       const inject = b.inject || {};
       if (!_matchesTravelThreshold(b)) continue;
@@ -3784,8 +3796,16 @@ async function injectorFire(ctx = {}) {
         if (turn > 0 && (turn - lastTurn) < cd) continue;
       }
 
-      const score = _scoreBeat(b, ctxTags);
+      let score = _scoreBeat(b, ctxTags);
       if (score <= 0) continue;
+
+      // Foreshadow bonus: this vignette plants a clue for a chain that's in motion.
+      for (const t of _splitTags(b.tags)) {
+        if (t.indexOf("foreshadow.") === 0 && chainsInMotion.has(t.slice("foreshadow.".length))) {
+          score += 15;
+          break;
+        }
+      }
 
       candidates.push({ campaignId: c.id, beatId: b.id, score, beat: b });
     }
@@ -3906,7 +3926,9 @@ function installInjectorHooks() {
 // (veto prompt) — at most ONE story beat per world turn (the drip budget).
 // Chains need no separate authoring surface: `storyChain` groups beats, the
 // beats array order is the in-chain order, and inter-chain dependencies are
-// just gates. Pressure metering + extra seams are Phase 4.
+// just gates. Phase 4 adds PRESSURE + mid-turn seams (travel legs, raid
+// rounds, resolved beats) and foreshadow-tag scoring — see the pressure
+// section below the chains view.
 //
 // LEVEL CADENCE rides the same organ. A milestone beat may carry
 //   worldEffects.levelEffects = { stewardLevelFloor: N, factionTierFloor: T }
@@ -3930,9 +3952,10 @@ function _readDirectorState() {
     o.lastStoryTurn = Number(o.lastStoryTurn) || 0;
     o.stewardLevelFloor = Number(o.stewardLevelFloor) || 0;
     o.factionTierFloor = Number(o.factionTierFloor) || 0;
+    o.pressure = Math.max(0, Number(o.pressure) || 0);
     return o;
   } catch (e) {
-    return { firedStoryBeats: {}, levelPrompts: {}, lastStoryTurn: 0, stewardLevelFloor: 0, factionTierFloor: 0 };
+    return { firedStoryBeats: {}, levelPrompts: {}, lastStoryTurn: 0, stewardLevelFloor: 0, factionTierFloor: 0, pressure: 0 };
   }
 }
 async function _writeDirectorState(state) {
@@ -4015,11 +4038,20 @@ async function directorTick(opts = {}) {
       .sort((x, y) => (_storyPriorityRank(x.b) - _storyPriorityRank(y.b)) || (x.i - y.i))[0].b;
 
     const ok = opts.silent ? true : await _gmPromptStoryBeat(pick, turn, candidates.length);
-    if (!ok) return { fired: null, reason: "gm_declined", offered: pick.id, turn };
+    // Re-read state after the (possibly long) GM prompt — seam listeners may
+    // have accrued pressure meanwhile; writing the stale copy would clobber it.
+    if (!ok) {
+      const fresh = _readDirectorState();
+      fresh.pressure = Math.floor(fresh.pressure / 2);   // back off, rebuild
+      await _writeDirectorState(fresh);
+      return { fired: null, reason: "gm_declined", offered: pick.id, turn };
+    }
 
-    state.firedStoryBeats[pick.id] = { turn, ts: Date.now() };
-    state.lastStoryTurn = turn;
-    await _writeDirectorState(state);
+    const fresh = _readDirectorState();
+    fresh.firedStoryBeats[pick.id] = { turn, ts: Date.now() };
+    fresh.lastStoryTurn = turn;
+    fresh.pressure = 0;                                   // story landed — release
+    await _writeDirectorState(fresh);
     log(`[director] firing story beat '${pick.id}' (chain: ${_storyChainOf(pick) || "—"}) on turn ${turn}.`);
     await runBeat(campaignId, pick.id);
     return { fired: pick.id, chain: _storyChainOf(pick), turn };
@@ -4049,6 +4081,46 @@ async function directorChains() {
     });
   }
   return out;
+}
+
+// ── Pressure + mid-turn seams (Phase 4) ─────────────────────────────────────
+// Pressure = TIMING, gates = ELIGIBILITY, kept strictly separate. Pressure
+// accrues from play (turns, travel legs, raid rounds, resolved beats). The
+// World-Turn tick always looks (heartbeat, budget-capped); the mid-turn seams
+// below only wake the director when pressure has crossed the GM-configurable
+// threshold — so story arrives in the flow of play when it's been building,
+// instead of only at turn boundaries. Fire → pressure 0; decline → halved.
+
+async function _directorAddPressure(n, source) {
+  try {
+    if (!game.user?.isGM) return 0;
+    const amt = Number(n) || 0;
+    if (!amt) return _readDirectorState().pressure;
+    const state = _readDirectorState();
+    state.pressure = Math.max(0, state.pressure + amt);
+    await _writeDirectorState(state);
+    return state.pressure;
+  } catch (e) {
+    warn("[director] addPressure failed:", e);
+    return 0;
+  }
+}
+
+async function _directorSeamLook(source) {
+  try {
+    if (!game.user?.isGM) return;
+    let enabled = true;
+    try { enabled = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_ENABLED); } catch (_e) {}
+    if (!enabled) return;
+    let threshold = 60;
+    try { threshold = Number(game.settings.get(MOD_ID, SETTING_DIRECTOR_PRESSURE_THRESHOLD)) || 60; } catch (_e) {}
+    const state = _readDirectorState();
+    if (state.pressure < threshold) return;
+    log(`[director] pressure ${state.pressure} >= ${threshold} at seam '${source}' — looking.`);
+    await directorTick({});   // budget, gates, and the GM veto all still apply
+  } catch (e) {
+    warn("[director] seam look failed:", e);
+  }
 }
 
 // ── Level cadence ────────────────────────────────────────────────────────────
@@ -4911,7 +4983,8 @@ function buildCampaignAPI() {
       tick: directorTick,
       chains: directorChains,
       reconcileLevels: directorReconcileLevels,
-      state: _readDirectorState
+      state: _readDirectorState,
+      addPressure: _directorAddPressure
     },
     tables: { listTables, getTable, saveTable, createTable, deleteTable, getAllTables, setAllTables, runRandomTable },
     quests: { listQuests, getQuest, saveQuest, createQuest, deleteQuest, setQuestStatus, getAllQuests, setAllQuests },
@@ -5170,6 +5243,15 @@ Hooks.once("init", () => {
     default: {}
   });
 
+  game.settings.register(MOD_ID, SETTING_DIRECTOR_PRESSURE_THRESHOLD, {
+    name: "Story Director — mid-turn pressure threshold",
+    hint: "Story pressure builds from play (world turn +30, travel leg +8, raid round +10, resolved beat +3). When it crosses this threshold, the director may also offer a story beat MID-turn (travel legs, raid rounds, beat resolutions) instead of waiting for the next turn tick. Firing resets pressure; declining halves it. Higher = story only at turn boundaries; lower = story leans into the flow of play.",
+    scope: "world",
+    config: true,
+    type: Number,
+    default: 60
+  });
+
   try {
     const H = globalThis.Handlebars;
     if (H) {
@@ -5211,11 +5293,43 @@ Hooks.once("ready", () => {
     try {
       if (!tctx || tctx.apply !== true) return;
       if (!game.user?.isGM) return;
-      directorTick({}).catch(e => warn("[director] turn tick failed:", e));
+      _directorAddPressure(DIRECTOR_PRESSURE.turn, "turn")
+        .then(() => directorTick({}))
+        .catch(e => warn("[director] turn tick failed:", e));
       directorReconcileLevels({}).catch(e => warn("[director] turn reconcile failed:", e));
     } catch (e) {
       warn("[director] advanceTurn listener failed:", e);
     }
+  });
+  // Story Director (Phase 4): mid-turn seams. Each accrues pressure; the
+  // director only actually looks once pressure crosses the threshold (see
+  // _directorSeamLook — budget + gates + GM veto still apply).
+  Hooks.on("bbttcc:afterTravel", (tctx) => {
+    try {
+      if (!game.user?.isGM) return;
+      _directorAddPressure(DIRECTOR_PRESSURE.leg, "travel")
+        .then(() => _directorSeamLook("travel"))
+        .catch(e => warn("[director] travel seam failed:", e));
+    } catch (e) { warn("[director] afterTravel listener failed:", e); }
+  });
+  Hooks.on("bbttcc:raid:roundCommit", (rctx) => {
+    try {
+      if (!game.user?.isGM) return;
+      _directorAddPressure(DIRECTOR_PRESSURE.raidRound, "raid")
+        .then(() => _directorSeamLook("raid"))
+        .catch(e => warn("[director] raid seam failed:", e));
+    } catch (e) { warn("[director] roundCommit listener failed:", e); }
+  });
+  Hooks.on("bbttcc:beat:resolved", (bctx) => {
+    try {
+      if (!game.user?.isGM) return;
+      // Story beats don't build story pressure (no feedback loop): the beat
+      // the director just fired must not immediately re-arm the director.
+      if (bctx?.beat && _storyChainOf(bctx.beat)) return;
+      _directorAddPressure(DIRECTOR_PRESSURE.beat, "beat")
+        .then(() => _directorSeamLook("beat"))
+        .catch(e => warn("[director] beat seam failed:", e));
+    } catch (e) { warn("[director] beat-resolved seam listener failed:", e); }
   });
   // Story Director: Level-Up chat-card button (runs on every client — players
   // click their own steward's card).
