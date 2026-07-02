@@ -104,6 +104,8 @@ function _normalize(spec) {
     // (chat channel only); prepend the shared cached lore primer.
     stream:  spec.stream === true,
     useLore: spec.useLore !== false,
+    // Optional chat-card palette override: { border, bg, fontStyle }.
+    style:   (spec.style && typeof spec.style === "object") ? { ...spec.style } : null,
     // Free-form metadata bag for voice-specific extensions.
     meta: (spec.meta && typeof spec.meta === "object") ? { ...spec.meta } : {}
   };
@@ -206,6 +208,7 @@ function schema() {
     contextBuilder: "function | 'default' | string key for trigger engine to resolve",
     stream:         "boolean, default false — stream reply into the chat card token-by-token",
     useLore:        "boolean, default true — prepend the shared cached Bad Eden lore primer",
+    style:          "object|null, { border, bg, fontStyle } chat-card palette override",
     meta:           "object, free-form extension bag"
   };
 }

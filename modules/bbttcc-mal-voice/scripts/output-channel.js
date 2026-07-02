@@ -88,16 +88,22 @@ function _budgetCheck(voice, costEstimateUSD) {
 
 // ----- Build the chat message data -----
 // Styled wrapper so voice lines are visually distinct. Shared by the
-// buffered path and the streaming updater.
-function _styledContent(text) {
-  return `<div class="bbttcc-mal-voice" style="border-left:3px solid #c66;padding:.4em .6em;background:rgba(204,102,102,.06);font-style:italic">${_escape(text)}</div>`;
+// buffered path and the streaming updater. Voices may override the palette
+// via voice.style = { border, bg, fontStyle } (e.g. the Watcher's void-violet
+// vs Mal's default crimson).
+function _styledContent(text, voice) {
+  const s = (voice && typeof voice.style === "object" && voice.style) || {};
+  const border    = s.border    || "#c66";
+  const bg        = s.bg        || "rgba(204,102,102,.06)";
+  const fontStyle = s.fontStyle || "italic";
+  return `<div class="bbttcc-mal-voice" style="border-left:3px solid ${border};padding:.4em .6em;background:${bg};font-style:${fontStyle}">${_escape(text)}</div>`;
 }
 
 function _buildMessageData(voice, text, whisper) {
   const speakAs = voice.speakAs || {};
   const alias = speakAs.alias || voice.name || voice.id;
 
-  const styled = _styledContent(text);
+  const styled = _styledContent(text, voice);
 
   const data = {
     content: styled,
@@ -201,7 +207,7 @@ async function beginStream({ voice, context } = {}) {
   const push = async (text, done) => {
     if (closed && !done) return;
     try {
-      await msg.update({ content: _styledContent(done ? text : `${text} ▌`) });
+      await msg.update({ content: _styledContent(done ? text : `${text} ▌`, voice) });
     } catch (e) { warn("stream update failed:", e?.message); }
   };
 

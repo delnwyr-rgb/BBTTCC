@@ -35,6 +35,7 @@
     "scripts/providers/anthropic.js",
     "scripts/voice-registry.js",
     "scripts/voices/mal.js",
+    "scripts/voices/watcher.js",
     "scripts/voices/gm-advisor.js",
     "scripts/voices/faction-advisor.js",
     "scripts/output-channel.js",
