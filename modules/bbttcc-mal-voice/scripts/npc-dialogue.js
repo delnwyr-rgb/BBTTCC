@@ -41,9 +41,13 @@ const TEST_CHOICES = new Map();  // actorId -> choices[]
 
 function _stripHtml(s) {
   if (!s) return "";
+  // Block-level closers become newlines BEFORE textContent flattening —
+  // otherwise `<p>@after: x</p><p>body</p>` collapses to one line and the
+  // leading-tag conventions (@after / @knownBy) can't find their line end.
+  const html = String(s).replace(/<(?:br|\/p|\/div|\/li|\/h[1-6]|\/blockquote)[^>]*>/gi, "$&\n");
   const d = document.createElement("div");
-  d.innerHTML = String(s);
-  return (d.textContent || "").replace(/\s+\n/g, "\n").trim();
+  d.innerHTML = html;
+  return (d.textContent || "").replace(/[ \t]*\n\s*/g, "\n").trim();
 }
 
 function _esc(s) {
@@ -109,7 +113,7 @@ function _personaTopics(actor) {
 // `npcCommonJournal`, default "NPC Common Knowledge") is included for EVERY
 // NPC — the gazetteer of what any local knows: places, who's who, who holds
 // what, current events. Write it once, all NPCs know it.
-function _commonKnowledge({ maxChars = 6000 } = {}) {
+function _commonKnowledge({ maxChars = 6000, state = null } = {}) {
   let journalName = "NPC Common Knowledge";
   try { journalName = String(game.settings.get(MODULE_ID, "npcCommonJournal") || "").trim() || journalName; } catch (_e) {}
   const entry = game.journal?.getName?.(journalName) || game.journal?.contents?.find(j => j.name === journalName);
@@ -118,7 +122,14 @@ function _commonKnowledge({ maxChars = 6000 } = {}) {
   let used = 0;
   for (const page of entry.pages?.contents ?? []) {
     if (page.type !== "text" || used >= maxChars) continue;
-    const text = _stripHtml(page.text?.content || "");
+    const raw = _stripHtml(page.text?.content || "");
+    // Tag conventions apply here too: @knownBy pages are scoped (dossier
+    // channel, not everyone's), @after pages stay hidden until the story
+    // arrives (fails closed), and tag lines never reach the model.
+    const { gate, knownBy, body } = _parsePageTags(raw);
+    if (knownBy) continue;
+    if (gate && !_questKnown(state, gate.questId, gate.needCompleted)) continue;
+    const text = body.trim();
     if (!text) continue;
     const chunk = `— ${page.name}:\n${text}`.slice(0, maxChars - used);
     parts.push(chunk);
@@ -154,18 +165,112 @@ function _questKnown(state, questId, needCompleted = false) {
   return has(state.quests?.completed) || has(state.quests?.active);
 }
 
-// Journal page gating convention: a page whose FIRST non-empty line is
-//   @after: <questId>            (known once the quest is active or completed)
-//   @after: <questId>:completed  (known only once completed)
-// is invisible to NPCs until the campaign reaches it. The tag line is
-// stripped from the content that reaches the model.
+// Journal page tag conventions — tags live on the page's LEADING lines (any
+// order, one per line), and are stripped from the content that reaches the
+// model:
+//   @after: <questId>            page invisible until the quest is active/completed
+//   @after: <questId>:completed  page invisible until the quest is completed
+//   @knownBy: <who>, <who>, …    WORLD DOSSIER page — injected WHOLE into the
+//                                knowledge of exactly the listed NPCs (never
+//                                substring-swept). <who> = an actor name, an
+//                                actor id, `faction:<name-or-id>`, or `all`.
+//                                The page's SUBJECT knows it implicitly (page
+//                                name == actor name).
+function _parsePageTags(text) {
+  let rest = String(text || "");
+  let gate = null;
+  let knownBy = null;
+  // Consume tag lines (and blank lines between them) from the top.
+  for (;;) {
+    const mAfter = rest.match(/^\s*@after:\s*([\w:-]+?)(?::(completed))?\s*(?:\n|$)/i);
+    if (mAfter) {
+      gate = { questId: mAfter[1], needCompleted: !!mAfter[2] };
+      rest = rest.slice(mAfter[0].length);
+      continue;
+    }
+    const mKnown = rest.match(/^\s*@knownby:\s*([^\n]+?)\s*(?:\n|$)/i);
+    if (mKnown) {
+      knownBy = mKnown[1].split(",").map(s => s.trim()).filter(Boolean);
+      rest = rest.slice(mKnown[0].length);
+      continue;
+    }
+    break;
+  }
+  return { gate, knownBy, body: rest };
+}
+
+// Back-compat shim (old name, @after only).
 function _parseAfterTag(text) {
-  const m = String(text || "").match(/^\s*@after:\s*([\w:-]+?)(?::(completed))?\s*(?:\n|$)/i);
-  if (!m) return { gate: null, body: text };
-  return {
-    gate: { questId: m[1], needCompleted: !!m[2] },
-    body: String(text).slice(m[0].length)
+  const { gate, body } = _parsePageTags(text);
+  return { gate, body };
+}
+
+// ---------------------------------------------------------------------------
+// WORLD DOSSIER — the persistent, authorable knowledge substrate.
+//
+// Any journal page carrying a leading `@knownBy:` tag is a dossier page: an
+// explicit fact-sheet about one entity (a person, place, or faction) that the
+// listed NPCs know WHOLE — deterministic curated knowledge, not substring
+// luck. Convention: keep them in a "World Dossier" journal, one page per
+// entity, but the tag works in any journal. `@after:` composes for facts the
+// NPC only learns once the story arrives (fails closed without story state).
+// This is the STATIC/authored layer; `memories` stays the layer that grows
+// from play.
+// ---------------------------------------------------------------------------
+
+function _gatherDossier(actor, { maxChars = 12000, state = null } = {}) {
+  const name = String(actor?.name || "").trim().toLowerCase();
+  if (!name) return "";
+  const ids = new Set([String(actor.id || ""), name]);
+  const factionId = actor.flags?.["bbttcc-factions"]?.factionId
+    || actor.system?.faction?.id || actor.system?.factionId || null;
+  const factionName = factionId ? String(game.actors?.get?.(factionId)?.name || "").toLowerCase() : "";
+
+  // Tier: 0 = names this actor (or is their own page), 1 = faction knowledge,
+  // 2 = public ("all"). When the corpus outgrows the budget, the most personal
+  // knowledge survives — an NPC never loses THEIR people to a gazetteer page.
+  const tierOf = (who) => {
+    const w = String(who || "").trim();
+    const low = w.toLowerCase();
+    if (!low) return -1;
+    if (low === "all") return 2;
+    if (low.startsWith("faction:")) {
+      const f = low.slice(8).trim();
+      return (!!f && (f === factionName || (factionId && w.slice(8).trim() === factionId))) ? 1 : -1;
+    }
+    return (ids.has(low) || ids.has(w)) ? 0 : -1;   // actor name (case-insensitive) or raw id
   };
+
+  const found = [];
+  try {
+    for (const entry of game.journal?.contents ?? []) {
+      for (const page of entry.pages?.contents ?? []) {
+        if (page.type !== "text") continue;
+        const raw = _stripHtml(page.text?.content || "");
+        const { gate, knownBy, body } = _parsePageTags(raw);
+        if (!knownBy) continue;                                     // not a dossier page
+        if (gate && !_questKnown(state, gate.questId, gate.needCompleted)) continue;
+        const isSelf = String(page.name || "").trim().toLowerCase() === name;
+        const tiers = knownBy.map(tierOf).filter(t => t >= 0);
+        if (!isSelf && !tiers.length) continue;
+        const text = body.trim();
+        if (!text) continue;
+        const tier = isSelf ? 0 : Math.min(...tiers);
+        found.push({ tier, chunk: `— ${page.name}:\n${text.slice(0, 2000)}` });
+      }
+    }
+  } catch (e) { warn("dossier sweep failed:", e?.message); }
+
+  // Personal first; authored (journal) order within a tier. Fill to budget.
+  found.sort((a, b) => a.tier - b.tier);
+  const parts = [];
+  let used = 0;
+  for (const f of found) {
+    if (used + f.chunk.length > maxChars) break;
+    parts.push(f.chunk);
+    used += f.chunk.length;
+  }
+  return parts.join("\n\n");
 }
 
 function _gatherWorldLore(actor, { maxChars = 9000, state = null } = {}) {
@@ -197,7 +302,8 @@ function _gatherWorldLore(actor, { maxChars = 9000, state = null } = {}) {
       for (const page of entry.pages?.contents ?? []) {
         if (page.type !== "text") continue;
         const raw = _stripHtml(page.text?.content || "");
-        const { gate, body } = _parseAfterTag(raw);
+        const { gate, knownBy, body } = _parsePageTags(raw);
+        if (knownBy) continue;   // dossier pages travel whole via _gatherDossier, never line-swept
         if (gate && !_questKnown(state, gate.questId, gate.needCompleted)) continue;
         const text = body;
         if (!text || !matches(text)) continue;
@@ -255,7 +361,7 @@ ${active ? `\nUNDERWAY (your live concerns right now):\n${active}` : ""}
 ${notyet ? `\nNOT YET (these do not exist for you — never mention, never hint, never grieve them):\n${notyet}` : ""}`;
 }
 
-function _buildPersonaPrompt(actor, lore = null, state = null) {
+function _buildPersonaPrompt(actor, lore = null, state = null, dossier = null) {
   const sys = actor.system?.system ?? actor.system ?? {};
   const name = actor.name;
   const role = _npcRole(sys);
@@ -289,8 +395,9 @@ function _buildPersonaPrompt(actor, lore = null, state = null) {
   facts.push(`Rough power tier: ${tier} (express through demeanor, never numbers)`);
   if (sceneName)   facts.push(`Current scene: ${sceneName}`);
 
-  const worldLore = (lore === null) ? _gatherWorldLore(actor) : String(lore || "");
-  const common = _commonKnowledge();
+  const worldLore = (lore === null) ? _gatherWorldLore(actor, { state }) : String(lore || "");
+  const dossierText = (dossier === null) ? _gatherDossier(actor, { state }) : String(dossier || "");
+  const common = _commonKnowledge({ state });
 
   return `You are ${name}, a character living in Bad Eden. You are IN CONVERSATION with one or more Stewards standing in front of you. Stay completely in character as ${name} at all times.
 
@@ -299,6 +406,7 @@ ${facts.map(f => `• ${f}`).join("\n")}
 ${notes ? `\n## YOUR STORY (bio/notes — this is what shaped you)\n${notes}` : ""}
 ${memories.length ? `\n## SHARED HISTORY (things that truly happened between you and the Stewards — you remember these firsthand and may refer back to them)\n${memories.join("\n")}` : ""}
 ${common ? `\n## COMMON KNOWLEDGE (what any local knows — places, people, who holds what)\n${common}` : ""}
+${dossierText ? `\n## PEOPLE & PLACES YOU KNOW (your own firsthand knowledge — these facts are true and familiar to you; speak of them naturally, in your own voice, from your own point of view)\n${dossierText}` : ""}
 ${worldLore ? `\n## WHAT THE CHRONICLE SAYS (about you, and about things you know)\nThese are events, descriptions, and moments involving you or subjects you know about. Past-tense entries are lived history or established fact — you remember or have heard them from your own point of view. Future-sounding or conditional entries have NOT happened: treat them at most as rumors, premonitions, or things you're entangled in but don't fully understand — never state them as fact, and never reveal them as "beats", "choices", or any other game construct. Where the YOUR PRESENT MOMENT section below disagrees with anything here, the PRESENT MOMENT wins.\n\n${worldLore}` : ""}
 ${_presentMomentSection(state)}
 ${gmNotes ? `\n## PRIVATE TRUTH (GM notes — these facts are TRUE about you and guide everything you say, but you NEVER recite them verbatim, and you guard anything marked secret the way a real person guards secrets)\n${gmNotes}` : ""}
@@ -354,10 +462,11 @@ function _defineAppClass() {
       this._history = _loadHistory(actor);   // [{role, content, speaker, ts}]
       this._busy = false;
       this._els = {};
-      // World-lore sweep is async now (story-state gated) — runs in
-      // _renderHTML on open; byte-stable across the conversation so the
+      // World-lore + dossier sweeps are async now (story-state gated) — run
+      // in _renderHTML on open; byte-stable across the conversation so the
       // cached persona block keeps hitting.
       this._lore = null;
+      this._dossier = null;
       this._storyState = null;
     }
 
@@ -368,7 +477,8 @@ function _defineAppClass() {
       if (this._lore === null) {
         this._storyState = await _storyState(this.actor);
         this._lore = _gatherWorldLore(this.actor, { state: this._storyState });
-        log(`world lore for '${this.actor.name}': ${this._lore.length} chars` +
+        this._dossier = _gatherDossier(this.actor, { state: this._storyState });
+        log(`world lore for '${this.actor.name}': ${this._lore.length} chars, dossier: ${this._dossier.length} chars` +
             (this._storyState ? " (story-state gated)" : " (no story state API — ungated)"));
       }
       const root = document.createElement("div");
@@ -650,7 +760,7 @@ How to handle them:
         this._storyState = await _storyState(this.actor);
         const system = [];
         if (usePrimer) system.push({ text: lore?.getPrimer?.() || "", cache: "1h" });
-        system.push({ text: _buildPersonaPrompt(this.actor, this._lore, this._storyState), cache: true });
+        system.push({ text: _buildPersonaPrompt(this.actor, this._lore, this._storyState, this._dossier), cache: true });
 
         // Story moments: closed-enum tool + an UNCACHED system section (quest
         // state changes between sends; keep it after the cached breakpoints).
@@ -779,7 +889,7 @@ async function editPersona(actor) {
   if (!game.user.isGM) return;
   const cur = actor.getFlag(MODULE_ID, "persona") || {};
   const content = `
-    <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;"><b>Knowledge topics</b> — comma-separated names/places/subjects <b>${_esc(actor.name)}</b> knows about. The journal/beat sweep pulls every paragraph mentioning these, so "Dougan Marsh, The Gullywasher" makes those stories part of what they know.</p>
+    <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;"><b>Knowledge topics</b> — comma-separated names/places/subjects <b>${_esc(actor.name)}</b> knows about. The journal/beat sweep pulls every paragraph mentioning these, so "Dougan Marsh, The Gullywasher" makes those stories part of what they know. (For curated whole-page facts, prefer a World Dossier journal page tagged <code>@knownBy: ${_esc(actor.name)}</code> — it's injected verbatim, no keyword luck.)</p>
     <input type="text" name="topics" style="width:100%;margin-bottom:.6em;" placeholder="Dougan Marsh, The Gullywasher, Port Kudzu…" value="${_esc(cur.topics || "")}"/>
     <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;"><b>Private GM truth</b> — knowledge, secrets, agenda, speech quirks. Shapes every reply; never quoted to players.</p>
     <textarea name="notes" rows="10" style="width:100%;">${_esc(cur.notes || "")}</textarea>`;
@@ -830,7 +940,8 @@ async function editPersona(actor) {
   if (app) {
     app._storyState = await _storyState(actor);
     app._lore = _gatherWorldLore(actor, { state: app._storyState });
-    log(`persona saved; lore re-swept for '${actor.name}' (${app._lore.length} chars)`);
+    app._dossier = _gatherDossier(actor, { state: app._storyState });
+    log(`persona saved; lore re-swept for '${actor.name}' (${app._lore.length} chars, dossier ${app._dossier.length})`);
   }
   ui.notifications?.info(`Persona saved for ${actor.name}.`);
 }
@@ -1037,7 +1148,8 @@ function _install() {
       },
       _apps: APPS,
       _buildPersonaPrompt,
-      _gatherWorldLore
+      _gatherWorldLore,
+      _gatherDossier
     });
     log("NPC dialogue installed (game.bbttcc.mal.npc.talkTo).");
   } catch (e) {
