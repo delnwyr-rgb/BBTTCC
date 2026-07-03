@@ -290,6 +290,9 @@
                       <td class="bbttcc-col-beat">
                         <div class="bbttcc-beat-primary">
                           <span class="bbttcc-beat-label">{{row.beat.label}}</span>
+                          {{#if row.fired}}
+                            <span class="bbttcc-chip" style="color:#5ac878;border-color:rgba(90,200,120,.55);" title="Already fired (Story Director record{{#if row.firedTurn}}, turn {{row.firedTurn}}{{/if}}) — running again asks for confirmation">✓ fired{{#if row.firedTurn}} T{{row.firedTurn}}{{/if}}</span>
+                          {{/if}}
                           {{#if row.questName}}
                             <span class="bbttcc-chip bbttcc-chip-quest" title="Quest: {{row.questName}} ({{row.questStatus}})">📜 {{row.questName}}</span>
                           {{/if}}

@@ -413,6 +413,20 @@
             beats: [{ key: "campaign.tableFire", label: "Random Table Fire…" }]
           });
 
+          // Story Director record: badge beats that already fired on ANY
+          // surface (director tick, Builder, this console, NPC dialogue).
+          var dstate = null;
+          try {
+            dstate = (game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign && game.bbttcc.api.campaign.director && typeof game.bbttcc.api.campaign.director.state === "function")
+              ? game.bbttcc.api.campaign.director.state()
+              : null;
+          } catch (_eDS) { dstate = null; }
+          var _firedMark = function (beatId) {
+            if (!dstate || !beatId) return "";
+            var f = (dstate.firedStoryBeats && dstate.firedStoryBeats[beatId]) || (dstate.dialogueFired && dstate.dialogueFired[beatId]);
+            return f ? " ✓" : "";
+          };
+
           // All beats (UN-CAPPED, scroll handled by CSS)
           var all = [];
           for (var i = 0; i < activeBeats.length; i++) {
@@ -422,7 +436,7 @@
             if (!_beatPassesConsoleFilters(b, filters)) continue;
             all.push({
               key: "campaign.run:" + activeCampaign.id + ":" + bid,
-              label: (String(i + 1).padStart ? String(i + 1).padStart(2, "0") : (i + 1)) + " — " + _fmtBeatLabel(b)
+              label: (String(i + 1).padStart ? String(i + 1).padStart(2, "0") : (i + 1)) + " — " + _fmtBeatLabel(b) + _firedMark(bid)
             });
           }
 
@@ -449,7 +463,7 @@
               if (!bbid) continue;
               if (!_hasTag(bb, g.tag)) continue;
               if (!_beatPassesConsoleFilters(bb, filters)) continue;
-              picks.push({ key: "campaign.run:" + activeCampaign.id + ":" + bbid, label: _fmtBeatLabel(bb) });
+              picks.push({ key: "campaign.run:" + activeCampaign.id + ":" + bbid, label: _fmtBeatLabel(bb) + _firedMark(bbid) });
               if (picks.length >= 24) break;
             }
             if (picks.length) campaignGroups.push({ id: "campaign-" + g.id, label: g.label, description: g.description, beats: picks });
@@ -593,6 +607,24 @@
                   }
                   if (typeof campaignRunBeat !== "function") {
                     if (ui && ui.notifications && ui.notifications.warn) ui.notifications.warn("Campaign runBeat API not found.");
+                    return;
+                  }
+                  // Soft-lock: already-fired beats (Story Director record, any
+                  // surface) get one confirm — never blocked.
+                  var firedRec = null;
+                  try {
+                    var dst = (game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign && game.bbttcc.api.campaign.director && typeof game.bbttcc.api.campaign.director.state === "function")
+                      ? game.bbttcc.api.campaign.director.state()
+                      : null;
+                    firedRec = dst ? ((dst.firedStoryBeats && dst.firedStoryBeats[beatId]) || (dst.dialogueFired && dst.dialogueFired[beatId])) : null;
+                  } catch (_eSoft) { firedRec = null; }
+                  if (firedRec) {
+                    Dialog.confirm({
+                      title: "Beat already fired",
+                      content: "<p>This beat has already fired" + (firedRec.turn ? " (turn " + firedRec.turn + ")" : "") + " according to the Story Director record.</p><p>Run it again anyway?</p>"
+                    }).then(function (ok) {
+                      if (ok) Promise.resolve(campaignRunBeat(campaignId3, beatId));
+                    });
                     return;
                   }
                   Promise.resolve(campaignRunBeat(campaignId3, beatId));

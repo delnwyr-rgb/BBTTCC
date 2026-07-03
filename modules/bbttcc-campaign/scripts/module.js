@@ -22,6 +22,7 @@ const SETTING_OVERSHOOT_BEATS = "overshoot.drawsBeats";  // Reality-Tear → Adv
 const SETTING_DIRECTOR_ENABLED = "director.enabled";     // Story Director: World-Turn tick on/off
 const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runtime state (budget, fired beats, level floors, pressure)
 const SETTING_DIRECTOR_PRESSURE_THRESHOLD = "director.pressureThreshold"; // pressure needed for a MID-TURN director look
+const SETTING_DIRECTOR_AUTOINVITE = "director.autoInvite"; // auto-post "NPC wants a word" cards when speaker moments open
 // Phase 4 pressure accrual weights: how much each seam event raises story pressure.
 // The World-Turn tick is the guaranteed heartbeat regardless; pressure only
 // governs whether the director ALSO looks mid-turn (travel legs, raid rounds,
@@ -483,6 +484,10 @@ function _announceTurnAvailabilityIfNeeded() {
 
     if (!entries.length) return;
 
+    // Director record: badge beats that have already fired on any surface.
+    var dstate = null;
+    try { dstate = _readDirectorState(); } catch (_eDS) { dstate = null; }
+
     var lines = [];
     lines.push('<p><b>Strategic Turn ' + String(turn) + '  -  Now Available</b></p>');
     lines.push('<ul>');
@@ -491,7 +496,12 @@ function _announceTurnAvailabilityIfNeeded() {
       var lbl = String(e.label || e.beatId || "Beat");
       var bid = String(e.beatId || "");
       var typ = String(e.type || "");
-      lines.push('<li><b>' + foundry.utils.escapeHTML(lbl) + '</b> <span style="opacity:.75">(' + foundry.utils.escapeHTML(typ) + ')  - </span> <code>' + foundry.utils.escapeHTML(bid) + '</code></li>');
+      var fired = null;
+      try { fired = dstate ? _beatFiredInfo(dstate, bid) : null; } catch (_eF) { fired = null; }
+      var firedBadge = fired
+        ? ' <span style="color:#5ac878;font-size:.85em" title="Already fired (' + fired.via + (fired.turn ? ', turn ' + fired.turn : "") + ')">&#10003; fired</span>'
+        : '';
+      lines.push('<li><b>' + foundry.utils.escapeHTML(lbl) + '</b>' + firedBadge + ' <span style="opacity:.75">(' + foundry.utils.escapeHTML(typ) + ')  - </span> <code>' + foundry.utils.escapeHTML(bid) + '</code></li>');
     }
     lines.push('</ul>');
 
@@ -3965,6 +3975,7 @@ function _readDirectorState() {
     const o = (s && typeof s === "object") ? foundry.utils.deepClone(s) : {};
     o.firedStoryBeats = (o.firedStoryBeats && typeof o.firedStoryBeats === "object") ? o.firedStoryBeats : {};
     o.dialogueFired = (o.dialogueFired && typeof o.dialogueFired === "object") ? o.dialogueFired : {};
+    o.invited = (o.invited && typeof o.invited === "object") ? o.invited : {};
     o.levelPrompts = (o.levelPrompts && typeof o.levelPrompts === "object") ? o.levelPrompts : {};
     o.lastStoryTurn = Number(o.lastStoryTurn) || 0;
     o.stewardLevelFloor = Number(o.stewardLevelFloor) || 0;
@@ -3972,7 +3983,7 @@ function _readDirectorState() {
     o.pressure = Math.max(0, Number(o.pressure) || 0);
     return o;
   } catch (e) {
-    return { firedStoryBeats: {}, levelPrompts: {}, lastStoryTurn: 0, stewardLevelFloor: 0, factionTierFloor: 0, pressure: 0 };
+    return { firedStoryBeats: {}, dialogueFired: {}, invited: {}, levelPrompts: {}, lastStoryTurn: 0, stewardLevelFloor: 0, factionTierFloor: 0, pressure: 0 };
   }
 }
 async function _writeDirectorState(state) {
@@ -4062,6 +4073,16 @@ async function directorTick(opts = {}) {
     const candidates = [];
     for (const b of story) {
       if (state.firedStoryBeats[b.id] && !b.inject?.repeatable) continue;
+      const sid = String(b.speakerActorId || "").trim();
+      if (sid) {
+        // Speaker beats are conversations: consumed ones are done, invited
+        // ones are already pointed at, and an OPEN dialogue window with that
+        // NPC means the moment is live right now — the director stands down
+        // and lets the conversation carry it.
+        if (state.dialogueFired[b.id] && !b.inject?.repeatable) continue;
+        if (state.invited[b.id]) continue;
+        if (game.bbttcc?.mal?.npc?._apps?.has?.(sid)) { log(`[director] '${b.id}' suppressed — speaker in conversation.`); continue; }
+      }
       if (!(await _beatRequiresMet(b, campaign, {}))) continue;
       candidates.push(b);
     }
@@ -4071,6 +4092,30 @@ async function directorTick(opts = {}) {
     const pick = candidates
       .map((b, i) => ({ b, i }))
       .sort((x, y) => (_storyPriorityRank(x.b) - _storyPriorityRank(y.b)) || (x.i - y.i))[0].b;
+
+    // A speaker beat never fires as narration from the tick — the director
+    // INVITES instead (owner-locked handoff doctrine): GM veto → public
+    // "wants a word" card → the moment plays out through dialogue.enact.
+    const pickSid = String(pick.speakerActorId || "").trim();
+    if (pickSid) {
+      const speaker = game.actors?.get?.(pickSid);
+      if (speaker) {
+        const okInvite = opts.silent ? true : await _gmPromptTalkInvite(pick, speaker, turn);
+        if (!okInvite) {
+          await _mutateDirectorState(s => { s.pressure = Math.floor(s.pressure / 2); });
+          return { fired: null, reason: "gm_declined", offered: pick.id, turn };
+        }
+        await _mutateDirectorState(s => {
+          s.invited[pick.id] = { turn, ts: Date.now(), via: "director" };
+          s.lastStoryTurn = turn;     // an invitation IS this turn's story movement
+          s.pressure = 0;
+        });
+        await _postTalkInvitation(speaker, [pick]);
+        log(`[director] invitation posted for '${pick.id}' via ${speaker.name} on turn ${turn}.`);
+        return { fired: null, invited: pick.id, speaker: speaker.name, turn };
+      }
+      // Speaker actor missing (deleted?) — fall through to a normal fire.
+    }
 
     const ok = opts.silent ? true : await _gmPromptStoryBeat(pick, turn, candidates.length);
     // State writes go through the serialized mutate queue — the GM prompt can
@@ -4662,6 +4707,148 @@ function _onBeatResolvedSpeakerMemory({ beat, outcome } = {}) {
   } catch (e) {
     warn("[dialogue] speaker memory listener failed:", e);
   }
+}
+
+// ─── Surface reconciliation (2026-07-03 integration arc) ────────────────────
+// Owner-locked doctrine: consumption is GLOBAL, offering is per-surface.
+// (1) ANY surface firing a storyChain beat marks directorState.firedStoryBeats
+//     — before this, only the director's own tick wrote it, so the director
+//     was blind to GM menu/Console fires and could re-offer a played moment.
+// (2) GM surfaces (Builder / Story Console / turn whisper) BADGE fired beats
+//     and soft-confirm re-runs — never blocked; the base menu stays a full
+//     fallback.
+// (3) Speaker beats are conversations, not cinema: the director INVITES
+//     ("Mara wants a word" chat card → Talk button) instead of narrating, and
+//     stands down entirely while that NPC's dialogue window is open GM-side.
+
+// Fired-state lookup shared by the badges/whisper/soft-locks.
+function _beatFiredInfo(state, beatId) {
+  const id = String(beatId || "").trim();
+  if (!id) return null;
+  const f = state?.firedStoryBeats?.[id];
+  const d = state?.dialogueFired?.[id];
+  if (!f && !d) return null;
+  return { via: f ? "story" : "dialogue", turn: (f && f.turn) || null };
+}
+
+// (1) Unified fired-marking: every storyChain beat resolution lands in
+// firedStoryBeats, whichever surface ran it. Idempotent — the director tick
+// pre-marks its own fires before runBeat and this skips existing entries.
+function _onBeatResolvedStoryMark({ beat } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    if (!beat?.id || !_storyChainOf(beat)) return;
+    _mutateDirectorState(s => {
+      if (!s.firedStoryBeats[beat.id])
+        s.firedStoryBeats[beat.id] = { turn: _getTurnNumberSafe(), ts: Date.now(), via: "resolved" };
+    }).catch(e => warn("[director] story-mark failed:", e));
+  } catch (e) { warn("[director] story-mark listener failed:", e); }
+}
+
+// (3) The invitation card — the narration→conversation handoff. Public,
+// diegetic, opt-in: a Talk button opens the NPC's dialogue window on the
+// clicking player's own client (mal-voice provides talkTo; the card degrades
+// to a plain nudge without it). Authorable `beat.inviteText` replaces the
+// default line.
+async function _postTalkInvitation(actor, beats = []) {
+  try {
+    const esc = foundry.utils.escapeHTML;
+    const first = Array.isArray(beats) ? beats[0] : beats;
+    const inviteText = String(first?.inviteText || "").trim() || "wants a word.";
+    await ChatMessage.create({
+      speaker: { alias: "Bad Eden" },
+      content: `<div class="bbttcc-talk-invite" style="border-left:3px solid #4db8b0;padding:.45em .6em;background:rgba(77,184,176,.08);">
+        <img src="${esc(actor.img || "icons/svg/mystery-man.svg")}" style="width:28px;height:28px;object-fit:cover;border:1px solid #666;border-radius:4px;vertical-align:middle;margin-right:.4em;"/>
+        <b>${esc(actor.name)}</b> ${esc(inviteText)}<br>
+        <button type="button" data-bbttcc-talk="${esc(actor.id)}" style="width:auto;padding:.25em .8em;margin-top:.35em;">
+          <i class="fa-solid fa-comments"></i> Talk to ${esc(actor.name)}</button>
+      </div>`,
+      flags: { [MOD_ID]: { talkInvite: { actorId: actor.id, beatIds: (Array.isArray(beats) ? beats : [beats]).map(b => b?.id).filter(Boolean) } } }
+    });
+  } catch (e) { warn("[dialogue] talk invitation failed:", e); }
+}
+
+function _bindTalkInviteButtons(message, root) {
+  try {
+    if (!root || !message?.getFlag?.(MOD_ID, "talkInvite")) return;
+    for (const btn of root.querySelectorAll("[data-bbttcc-talk]")) {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        const talkTo = game.bbttcc?.mal?.npc?.talkTo;
+        const actor = game.actors?.get?.(btn.dataset.bbttccTalk);
+        if (!actor) return ui.notifications?.warn?.("That person is nowhere to be found.");
+        if (typeof talkTo !== "function") return ui.notifications?.warn?.("NPC dialogue (bbttcc-mal-voice) is not available.");
+        talkTo(actor);
+      });
+    }
+  } catch (e) { warn("[dialogue] invite button bind failed:", e); }
+}
+
+// Talk buttons open the NPC dialogue window on the clicking user's own client
+// (players and GM alike). Top-level registration so cards already in the chat
+// log re-bind on reload; v13+ fires renderChatMessageHTML, older cores the
+// jQuery renderChatMessage — bind both defensively.
+Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindTalkInviteButtons(message, html); } catch (_e) {} });
+Hooks.on("renderChatMessage",     (message, html) => { try { _bindTalkInviteButtons(message, html?.[0] ?? html); } catch (_e) {} });
+
+// GM veto for director-driven invitations (mirror of _gmPromptStoryBeat).
+async function _gmPromptTalkInvite(beat, speaker, turn) {
+  return new Promise((resolve) => {
+    const chain = _storyChainOf(beat);
+    new Dialog({
+      title: "Bad Eden: Story Director",
+      content: `
+        <p><b>Story Director</b> — Turn ${turn}: a story moment is live, carried by <b>${foundry.utils.escapeHTML(speaker?.name || "an NPC")}</b>.</p>
+        <p style="margin:4px 0"><b>${beat?.label || beat?.id}</b>${chain ? ` <span style="opacity:.7">(chain: ${chain})</span>` : ""}</p>
+        <p style="opacity:.8;font-size:.9em">Speaker beats play out in conversation, not narration. Post a public "${foundry.utils.escapeHTML(speaker?.name || "NPC")} wants a word" invitation? (Declining keeps the moment quietly available in dialogue.)</p>`,
+      buttons: {
+        invite:  { icon: '<i class="fas fa-comments"></i>', label: "Invite",  callback: () => resolve(true) },
+        decline: { icon: '<i class="fas fa-clock"></i>',    label: "Not now", callback: () => resolve(false) }
+      },
+      default: "invite",
+      close: () => resolve(false)
+    }).render(true);
+  });
+}
+
+// (3b) Newly-opened speaker moments announce themselves: after each beat
+// resolution (quest effects already applied), any speaker beat that has
+// BECOME offerable and was never invited gets one invitation card — grouped
+// per NPC, marked in directorState.invited so it never repeats. Chained onto
+// _speakerMemoryChain so the just-resolved beat's own consumption mark is
+// written before we compute offerability. Setting-gated (director.autoInvite).
+function _onBeatResolvedInviteScan({ beat } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    let auto = true;
+    try { auto = !!game.settings.get(MOD_ID, SETTING_DIRECTOR_AUTOINVITE); } catch (_e) {}
+    if (!auto) return;
+    const resolvedId = beat?.id || null;
+    _speakerMemoryChain = _speakerMemoryChain.then(async () => {
+      const campaignId = getActiveCampaignId();
+      const campaign = campaignId ? getCampaign(campaignId) : null;
+      if (!campaign) return;
+      const state = _readDirectorState();
+      const sids = new Set((campaign.beats || [])
+        .filter(b => b && String(b.speakerActorId || "").trim())
+        .map(b => String(b.speakerActorId).trim()));
+      for (const sid of sids) {
+        const actor = game.actors?.get?.(sid);
+        if (!actor) continue;
+        // Mid-conversation: the moment is already live in that window.
+        if (game.bbttcc?.mal?.npc?._apps?.has?.(sid)) continue;
+        const offerable = (await _dialogueOfferableBeats(sid, {}))
+          .map(r => r.beat)
+          .filter(b => b.id !== resolvedId && !state.invited[b.id]);
+        if (!offerable.length) continue;
+        await _mutateDirectorState(s => {
+          for (const b of offerable) s.invited[b.id] = { ts: Date.now(), via: "auto" };
+        });
+        await _postTalkInvitation(actor, offerable);
+        log(`[dialogue] invitation posted: ${actor.name} (${offerable.map(b => b.id).join(", ")})`);
+      }
+    }).catch(e => warn("[dialogue] invite scan failed:", e));
+  } catch (e) { warn("[dialogue] invite-scan listener failed:", e); }
 }
 
 // ─── Reality Tear → Adversary draws a Beat ───────────────────────────────────
@@ -5622,6 +5809,15 @@ Hooks.once("init", () => {
     default: {}
   });
 
+  game.settings.register(MOD_ID, SETTING_DIRECTOR_AUTOINVITE, {
+    name: "Story Director — auto-invite to conversations",
+    hint: "When a story moment carried by an NPC (a beat with a speaker) becomes available, post a public '<NPC> wants a word' chat card with a Talk button — the narration→conversation handoff. Each moment invites once. Off = moments stay quietly available in dialogue and via the director's turn-tick prompt.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: true
+  });
+
   game.settings.register(MOD_ID, SETTING_DIRECTOR_PRESSURE_THRESHOLD, {
     name: "Story Director — mid-turn pressure threshold",
     hint: "Story pressure builds from play (world turn +30, travel leg +8, raid round +10, resolved beat +3). When it crosses this threshold, the director may also offer a story beat MID-turn (travel legs, raid rounds, beat resolutions) instead of waiting for the next turn tick. Firing resets pressure; declining halves it. Higher = story only at turn boundaries; lower = story leans into the flow of play.",
@@ -5667,6 +5863,12 @@ Hooks.once("ready", () => {
   // Dialogue-driven beats: NPC event memory + one-shot moment consumption for
   // beats with a speakerActorId (any resolution surface — menu or dialogue).
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedSpeakerMemory);
+  // Surface reconciliation: EVERY storyChain beat resolution marks
+  // firedStoryBeats (consumption is global, whichever surface ran it) …
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedStoryMark);
+  // … and newly-opened speaker moments announce themselves with a public
+  // "wants a word" invitation card (once each; setting director.autoInvite).
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedInviteScan);
   // Story Director (Phase 3): the World-Turn tick. Apply-only (skip previews);
   // the advanceTurn driver fires this hook locally on the advancing GM client,
   // and the world clock is already bumped when it arrives. Reconcile runs each

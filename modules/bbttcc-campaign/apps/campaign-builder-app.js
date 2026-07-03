@@ -1427,6 +1427,11 @@ const activeCampaignId = _getActiveCampaignId();
 
     // Enrich beat rows with quest labels/status for UI chips
     try {
+      // Story Director record: badge beats that already fired on ANY surface
+      // (director tick, this Builder, Story Console, NPC dialogue). Soft-lock:
+      // badge + confirm on re-run, never blocked.
+      let dstate = null;
+      try { dstate = game.bbttcc?.api?.campaign?.director?.state?.() || null; } catch (_eDS) { dstate = null; }
       for (const row of beatsFiltered) {
         const qid = String(row?.beat?.questId || "").trim();
         if (qid && questMap[qid]) {
@@ -1438,6 +1443,10 @@ const activeCampaignId = _getActiveCampaignId();
           row.questName = null;
           row.questStatus = null;
         }
+        const bid = String(row?.beat?.id || "");
+        const f = dstate ? (dstate.firedStoryBeats?.[bid] || dstate.dialogueFired?.[bid]) : null;
+        row.fired = !!f;
+        row.firedTurn = (f && f.turn) || null;
       }
     } catch (_eQRows) {}
 
@@ -4347,6 +4356,22 @@ try {
 
       const campaignId = this.campaignId;
       if (!campaignId) return ui.notifications?.warn?.("Select a campaign first.");
+
+      // Soft-lock: a beat the director record shows as already fired (any
+      // surface) asks for one confirmation — never blocked, the GM menu
+      // stays a full fallback.
+      try {
+        const dstate = game.bbttcc?.api?.campaign?.director?.state?.() || null;
+        const f = dstate ? (dstate.firedStoryBeats?.[beatId] || dstate.dialogueFired?.[beatId]) : null;
+        if (f) {
+          const beat = (api.getCampaign?.(campaignId)?.beats || []).find(b => String(b?.id) === String(beatId));
+          const ok = await Dialog.confirm({
+            title: "Beat already fired",
+            content: `<p><b>${foundry.utils.escapeHTML(beat?.label || beatId)}</b> has already fired${f.turn ? ` (turn ${f.turn})` : ""} according to the Story Director record.</p><p>Run it again anyway?</p>`
+          });
+          if (!ok) return;
+        }
+      } catch (_eSoft) { /* fail-open: the menu must never break */ }
 
       await api.runBeat(campaignId, beatId);
     });
