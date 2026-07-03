@@ -1963,6 +1963,18 @@ async function _rollChoiceCheck(choice, ctx={}) {
 async function _runBeatDialog(campaign, beat, ctx={}) {
   try { if (ctx && ctx.allowDesperation == null) ctx.allowDesperation = true; } catch (_eAD) {}
 
+  // Dialogue-driven enactment (mal-voice contract): a choice already committed
+  // through NPC conversation arrived via ctx.__enactChoice — resolve it through
+  // the same semantics as a dialog pick, with NO dialog UI and NO player-facing
+  // broadcast (the conversation itself was the surface). executeBeat still
+  // applies the host beat's worldEffects/questEffects and fires beat:resolved
+  // with this result as the outcome, exactly like a menu pick.
+  if (ctx && ctx.__enactChoice != null) {
+    const r = await _enactChoiceCore(campaign, beat, Number(ctx.__enactChoice), ctx);
+    try { ctx.__enactResult = r; } catch (_eER) {}
+    return r;
+  }
+
   const title = `${beat.label || beat.id || "Beat"}`;
   const desc = String(beat.description || "").trim();
   const choices = Array.isArray(beat.choices) ? beat.choices : [];
@@ -3649,10 +3661,13 @@ async function _beatRequiresMet(beat, campaign, ctx) {
       if (!c || typeof c !== "object") continue;
 
       // { questBucket: "<questId>", is: "active"|"completed"|"archived" }
+      // or the negation { questBucket, isNot: "<bucket>" } — true when the quest
+      // is NOT in that bucket (e.g. "offer this until the quest is underway").
       if (c.questBucket != null) {
-        const bucket = String(c.is || "").trim();
+        const negated = c.is == null && c.isNot != null;
+        const bucket = String((negated ? c.isNot : c.is) || "").trim();
         if (!QUEST_GATE_BUCKETS.includes(bucket)) {
-          warn(`[inject.requires] questBucket condition on beat '${beat?.id}' has unknown bucket '${c.is}' — treating as unmet.`);
+          warn(`[inject.requires] questBucket condition on beat '${beat?.id}' has unknown bucket '${negated ? c.isNot : c.is}' — treating as unmet.`);
           return false;
         }
         const track = await _coalitionQuestTrack(campaign, ctx);
@@ -3660,7 +3675,8 @@ async function _beatRequiresMet(beat, campaign, ctx) {
           warn(`[inject.requires] questBucket gate on beat '${beat?.id}' but the campaign has no resolvable faction — treating as unmet.`);
           return false;
         }
-        if (!track[bucket]?.[String(c.questBucket)]) return false;
+        const inBucket = !!track[bucket]?.[String(c.questBucket)];
+        if (negated ? inBucket : !inBucket) return false;
         continue;
       }
 
@@ -3948,6 +3964,7 @@ function _readDirectorState() {
     const s = game.settings.get(MOD_ID, SETTING_DIRECTOR_STATE);
     const o = (s && typeof s === "object") ? foundry.utils.deepClone(s) : {};
     o.firedStoryBeats = (o.firedStoryBeats && typeof o.firedStoryBeats === "object") ? o.firedStoryBeats : {};
+    o.dialogueFired = (o.dialogueFired && typeof o.dialogueFired === "object") ? o.dialogueFired : {};
     o.levelPrompts = (o.levelPrompts && typeof o.levelPrompts === "object") ? o.levelPrompts : {};
     o.lastStoryTurn = Number(o.lastStoryTurn) || 0;
     o.stewardLevelFloor = Number(o.stewardLevelFloor) || 0;
@@ -3961,6 +3978,24 @@ function _readDirectorState() {
 async function _writeDirectorState(state) {
   await game.settings.set(MOD_ID, SETTING_DIRECTOR_STATE, state || {});
   return state || {};
+}
+
+// ALL directorState mutations flow through this serialized queue. Multiple
+// listeners write concurrently off the same event (pressure accrual on
+// beat:resolved vs dialogue-consumption marks vs tick fires) and bare
+// read-modify-writes lose updates — live-caught 2026-07-02: a pressure write
+// clobbered a dialogueFired mark, which could re-offer a consumed one-shot
+// dialogue moment. The mutator receives the fresh state and edits in place.
+let _directorStateQueue = Promise.resolve();
+function _mutateDirectorState(mutator) {
+  const p = _directorStateQueue.then(async () => {
+    const state = _readDirectorState();
+    await mutator(state);
+    await _writeDirectorState(state);
+    return state;
+  });
+  _directorStateQueue = p.catch(() => {});
+  return p;
 }
 
 function _storyBeatsFor(campaign) {
@@ -4038,20 +4073,18 @@ async function directorTick(opts = {}) {
       .sort((x, y) => (_storyPriorityRank(x.b) - _storyPriorityRank(y.b)) || (x.i - y.i))[0].b;
 
     const ok = opts.silent ? true : await _gmPromptStoryBeat(pick, turn, candidates.length);
-    // Re-read state after the (possibly long) GM prompt — seam listeners may
-    // have accrued pressure meanwhile; writing the stale copy would clobber it.
+    // State writes go through the serialized mutate queue — the GM prompt can
+    // stay open a long time while seam listeners accrue pressure concurrently.
     if (!ok) {
-      const fresh = _readDirectorState();
-      fresh.pressure = Math.floor(fresh.pressure / 2);   // back off, rebuild
-      await _writeDirectorState(fresh);
+      await _mutateDirectorState(s => { s.pressure = Math.floor(s.pressure / 2); });   // back off, rebuild
       return { fired: null, reason: "gm_declined", offered: pick.id, turn };
     }
 
-    const fresh = _readDirectorState();
-    fresh.firedStoryBeats[pick.id] = { turn, ts: Date.now() };
-    fresh.lastStoryTurn = turn;
-    fresh.pressure = 0;                                   // story landed — release
-    await _writeDirectorState(fresh);
+    await _mutateDirectorState(s => {
+      s.firedStoryBeats[pick.id] = { turn, ts: Date.now() };
+      s.lastStoryTurn = turn;
+      s.pressure = 0;                                     // story landed — release
+    });
     log(`[director] firing story beat '${pick.id}' (chain: ${_storyChainOf(pick) || "—"}) on turn ${turn}.`);
     await runBeat(campaignId, pick.id);
     return { fired: pick.id, chain: _storyChainOf(pick), turn };
@@ -4096,9 +4129,7 @@ async function _directorAddPressure(n, source) {
     if (!game.user?.isGM) return 0;
     const amt = Number(n) || 0;
     if (!amt) return _readDirectorState().pressure;
-    const state = _readDirectorState();
-    state.pressure = Math.max(0, state.pressure + amt);
-    await _writeDirectorState(state);
+    const state = await _mutateDirectorState(s => { s.pressure = Math.max(0, s.pressure + amt); });
     return state.pressure;
   } catch (e) {
     warn("[director] addPressure failed:", e);
@@ -4188,7 +4219,7 @@ async function directorReconcileLevels(opts = {}) {
     const floor = state.stewardLevelFloor;
     const tierFloor = state.factionTierFloor;
     if (floor <= 1 && tierFloor <= 0) return out;
-    let stateChanged = false;
+    const promptsToSet = {};
 
     if (floor > 1) {
       const seen = new Set();
@@ -4201,8 +4232,7 @@ async function directorReconcileLevels(opts = {}) {
         const lvl = Number(sys?.details?.level ?? 1) || 1;
         if (lvl >= floor) continue;
         if (!opts.force && Number(state.levelPrompts[a.id]) >= floor) continue;
-        state.levelPrompts[a.id] = floor;
-        stateChanged = true;
+        promptsToSet[a.id] = floor;
         await _postLevelUpCard(a, lvl, floor, opts.milestone);
         out.stewardsPrompted.push(a.name);
       }
@@ -4225,7 +4255,13 @@ async function directorReconcileLevels(opts = {}) {
       if (lines.length) await _postFactionTierCard(lines, tierFloor, opts.milestone);
     }
 
-    if (stateChanged) await _writeDirectorState(state);
+    if (Object.keys(promptsToSet).length) {
+      await _mutateDirectorState(s => {
+        for (const [id, f] of Object.entries(promptsToSet)) {
+          s.levelPrompts[id] = Math.max(Number(s.levelPrompts[id]) || 0, f);
+        }
+      });
+    }
   } catch (e) {
     warn("[director] reconcileLevels failed:", e);
   }
@@ -4239,14 +4275,14 @@ async function _onBeatResolvedLevelEffects({ campaign, beat, ctx } = {}) {
     if (!game.user?.isGM) return;                 // only the GM writes world settings
     const fx = beat?.worldEffects?.levelEffects;
     if (!fx || typeof fx !== "object") return;
-    const state = _readDirectorState();
     let changed = false;
-    const lf = Math.floor(Number(fx.stewardLevelFloor) || 0);
-    if (lf > state.stewardLevelFloor) { state.stewardLevelFloor = lf; changed = true; }
-    const tf = Math.floor(Number(fx.factionTierFloor) || 0);
-    if (tf > state.factionTierFloor) { state.factionTierFloor = tf; changed = true; }
+    const state = await _mutateDirectorState(s => {
+      const lf = Math.floor(Number(fx.stewardLevelFloor) || 0);
+      if (lf > s.stewardLevelFloor) { s.stewardLevelFloor = lf; changed = true; }
+      const tf = Math.floor(Number(fx.factionTierFloor) || 0);
+      if (tf > s.factionTierFloor) { s.factionTierFloor = tf; changed = true; }
+    });
     if (!changed) return;
-    await _writeDirectorState(state);
     log(`[director] level floors raised by beat '${beat?.id}': steward L${state.stewardLevelFloor}, faction T${state.factionTierFloor}.`);
     await directorReconcileLevels({ milestone: beat?.label || beat?.id, campaign, ctx });
   } catch (e) {
@@ -4288,6 +4324,344 @@ function _installDirectorLevelupDelegation() {
       }
     }, { capture: false });
   } catch (_e) {}
+}
+
+// ═══ DIALOGUE-DRIVEN BEATS (mal-voice contract) ══════════════════════════════
+//
+// Contract: badeden-bible/new-content/dialogue-driven-beats-spec.md.
+// Beat choices surface through natural NPC conversation (bbttcc-mal-voice):
+// a beat may carry `speakerActorId` — the actor who EMBODIES its choices. The
+// dialogue engine queries choicesFor(actorId) each send; when the conversation
+// naturally reaches the decision and a Steward commits, it calls enact(), which
+// runs the SAME pipeline as picking that choice in the beat dialog. Dialogue is
+// the surface; the director stays the spine — the tool enum is closed, nothing
+// fires without enact, and the menu path remains fully functional.
+//
+// Offerability = all existing director gating (inject.requires incl. quest
+// buckets/marks/isNot, cooldownTurns, oncePerHex when ctx.hexUuid given, story
+// fired-once) PLUS one-shot consumption: a speaker beat that has resolved (any
+// surface — menu, travel, dialogue) is not re-offered unless inject.repeatable.
+// Authoring pattern: repeatable hubs consume via quest-state gates ("Delay"
+// keeps the moment open; sealing the deal completes the quest and closes it);
+// one-shot moral moments consume on first resolution.
+//
+// NPC event memory: whenever a beat with speakerActorId resolves, a plain-text
+// line (authorable `beat.memoryText`, else generated from label + chosen
+// choice) is appended to the actor's flags["bbttcc-mal-voice"].memories
+// ({ts, text}, cap 30) — how Mara remembers the Leygate handoff when she later
+// calls about Pip, whichever surface it happened on.
+
+const SPEAKER_MEMORY_CAP = 30;
+
+// All beats the given actor currently embodies AND may offer. Shared by
+// choicesFor (query) and enact (guardrail re-verification).
+async function _dialogueOfferableBeats(actorId, ctx = {}) {
+  const out = [];
+  const aid = String(actorId || "").trim();
+  if (!aid) return out;
+  const campaignId = getActiveCampaignId();
+  const campaign = campaignId ? getCampaign(campaignId) : null;
+  if (!campaign) return out;
+  const state = _readDirectorState();
+  const injState = _readInjectState();
+  const turn = _getTurnNumberSafe();
+  for (const b of (Array.isArray(campaign.beats) ? campaign.beats : [])) {
+    if (!b || String(b.speakerActorId || "").trim() !== aid) continue;
+    const repeatable = !!b.inject?.repeatable;
+    if (!repeatable && (state.dialogueFired[b.id] || (b.storyChain && state.firedStoryBeats[b.id]))) continue;
+    const cd = Number(b.inject?.cooldownTurns || 0) || 0;
+    if (cd > 0) {
+      const ck = _cooldownKeyFor(b, { campaignId: campaign.id });
+      const lastTurn = Number(injState[ck] || 0) || 0;
+      if (turn > 0 && (turn - lastTurn) < cd) continue;
+    }
+    if (b.inject?.oncePerHex && ctx.hexUuid) {
+      const k = _injectKeyFor(b, { campaignId: campaign.id, hexUuid: ctx.hexUuid });
+      if (injState[k]) continue;
+    }
+    if (!(await _beatRequiresMet(b, campaign, ctx))) continue;
+    out.push({ campaign, beat: b });
+  }
+  return out;
+}
+
+// Query API (contract §2): the choices currently offerable through this NPC.
+// Empty array = no live story moments (the dialogue engine omits the tool).
+async function dialogueChoicesFor(actorId, ctx = {}) {
+  try {
+    const rows = [];
+    for (const { beat } of await _dialogueOfferableBeats(actorId, ctx)) {
+      const choices = Array.isArray(beat.choices) ? beat.choices : [];
+      choices.forEach((ch, i) => {
+        const label = String(ch?.label || "").trim();
+        if (!label) return;
+        rows.push({
+          beatId: beat.id,
+          beatLabel: beat.label || beat.id,
+          choiceIndex: i,
+          choiceKey: `${beat.id}:${i}`,
+          label,
+          description: String(ch?.description || "").trim()
+        });
+      });
+    }
+    return rows;
+  } catch (e) {
+    warn("[dialogue] choicesFor failed:", e);
+    return [];
+  }
+}
+
+// The distilled choice-resolution semantics of the beat dialog's pick handler
+// (GM adjudication / auto roll / OP gate + spend / route to next), with no UI.
+// Reuses the exact same helpers; returns the dialog's finish(...) shape plus
+// routedBeatId / error, and becomes the beat's `outcome` on bbttcc:beat:resolved.
+async function _enactChoiceCore(campaign, beat, i, ctx = {}) {
+  const choices = Array.isArray(beat.choices) ? beat.choices : [];
+  const ch = choices[i];
+  // e.g. a beat-entry redirect swapped in a beat whose choices don't line up —
+  // fall out safely rather than firing an arbitrary choice.
+  if (!ch) return { acted: false, error: "Choice " + i + " not found on beat '" + (beat?.id || "?") + "' (possibly redirected)." };
+  const label = String(ch.label || `Choice ${i + 1}`);
+  const factionId = ctx.factionId || beat.factionId || campaign.factionId || null;
+  let faction = null;
+  if (factionId) { try { faction = await _resolveFaction(factionId); } catch (_eF) {} }
+  const rosterActorId = ctx.rosterActorId || null;
+  const supportOpKey = String(ctx.supportOpKey || "").trim().toLowerCase();
+  const supportSpend = _num(ctx.supportSpend, 0);
+
+  if (_choiceHasCheck(ch)) {
+    const statTxt0 = String(ch.checkStat || "").trim().toLowerCase();
+    const isOp = statTxt0.indexOf("op.") === 0;
+    const mode = String(ch.checkMode || "").trim().toLowerCase();
+
+    // GM adjudication (explicit "gm" stat, or any non-OP check not marked auto)
+    if (_isGMAdjudicatedChoice(ch) || (!isOp && mode !== "auto")) {
+      const prompt = String((ch && (ch.checkPrompt || ch.prompt)) || "").trim();
+      const dcTxt = (ch.checkDC != null && String(ch.checkDC).trim() !== "") ? String(_num(ch.checkDC, 0)) : "";
+      const prettyStat = _choiceCheckLabel(String(ch.checkStat || "").trim() || "gm");
+      const body =
+        '<div style="font-weight:700;">' + _escapeHtml(label) + '</div>' +
+        '<div style="opacity:.8;font-size:12px;margin-top:4px;">(committed in conversation — dialogue-driven beat)</div>' +
+        (prompt ? '<div style="opacity:0.92;margin-top:6px;">' + _escapeHtml(prompt).replace(/\n/g, "<br/>") + '</div>' : '') +
+        ((prettyStat || dcTxt)
+          ? '<div style="opacity:0.9;font-size:12px;margin-top:6px;">' +
+              (prettyStat ? '<b>Check:</b> ' + _escapeHtml(prettyStat) : '') +
+              (dcTxt ? ((prettyStat ? '  -  ' : '') + '<b>Difficulty:</b> ' + _escapeHtml(dcTxt)) : '') +
+            '</div>'
+          : '');
+      const ok = await _gmAdjudicate(label, body);
+      const nextId = ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
+      if (nextId) await runBeat(campaign.id, nextId);
+      return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
+               check: { stat: String(ch.checkStat || "gm").trim().toLowerCase(), dc: _num(ch.checkDC, 0), ok: !!ok, kind: "gm" } };
+    }
+
+    // OP gating (1 OP to attempt) — mirror of the dialog handler
+    if (isOp) {
+      try {
+        const opKey = String(statTxt0.split(".")[1] || "").trim().toLowerCase();
+        if (faction && opKey) {
+          const gate = _evalOpGateForKey(faction, opKey, ctx.allowDesperation !== false);
+          if (!gate.ok) return { acted: false, error: "This action requires 1 " + _opKeyLabel(opKey) + " OP and the faction cannot pay." };
+          if (gate.mode === "desperation") {
+            const okD = await _confirmDesperation(opKey);
+            if (!okD) return { acted: false, error: "Desperation spend declined by the GM." };
+          }
+          await _spendOneOpForAttempt(faction, opKey, "Campaign OP check: " + (beat.label || beat.id || ""));
+        }
+      } catch (_eG) {}
+    }
+    if (supportOpKey && supportSpend > 0 && faction) {
+      const pool2 = _readOpBank(faction, supportOpKey);
+      if (pool2 < supportSpend) return { acted: false, error: "Not enough " + _opKeyLabel(supportOpKey) + " OP for backing." };
+      const okSpend2 = await _spendFactionOpSupport(faction, supportOpKey, supportSpend, "Faction backing: " + (beat.label || beat.id || ""));
+      if (!okSpend2) return { acted: false, error: "Could not spend faction OP for backing." };
+    }
+
+    const res = await _rollChoiceCheck(ch, { factionId, rosterActorId, supportOpKey, supportSpend });
+    try {
+      ui.notifications?.info?.(`${label}: ${res.total}${res.kind === "op" ? ` (1d20 + ${res.bonus})` : ""} vs DC ${res.dc}  ->  ${res.ok ? "SUCCESS" : "FAIL"}`);
+    } catch (_eN) {}
+    const nextId = res.ok ? (ch.next || "") : (ch.failNext || beat.outcomes?.failure || "");
+    if (nextId) await runBeat(campaign.id, nextId);
+    return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch,
+             check: { stat: res.stat, dc: res.dc, total: res.total, ok: res.ok, kind: res.kind, bonus: (res.bonus != null ? res.bonus : null) } };
+  }
+
+  // No check: route to next
+  const nextId = ch.next || "";
+  if (nextId) await runBeat(campaign.id, nextId);
+  return { acted: true, routed: !!nextId, routedBeatId: nextId || null, choiceIndex: i, choice: ch };
+}
+
+// Execution API (contract §3): run a committed conversational choice through
+// the real pipeline. Returns { ok, summary, error? } — `summary` is what the
+// NPC's model reads back as the tool_result and narrates onward from.
+async function dialogueEnact(opts = {}) {
+  try {
+    if (!game.user?.isGM) return { ok: false, error: "dialogue.enact must run on a GM client." };
+    const beatId = String(opts.beatId || "").trim();
+    const idx = Number(opts.choiceIndex);
+    const speakerActorId = opts.speakerActorId != null ? String(opts.speakerActorId) : null;
+    const userId = opts.userId != null ? String(opts.userId) : null;
+
+    const campaignId = getActiveCampaignId();
+    const campaign = campaignId ? getCampaign(campaignId) : null;
+    if (!campaign) return { ok: false, error: "No active campaign." };
+    const beat = (campaign.beats || []).find(b => b?.id === beatId);
+    if (!beat) return { ok: false, error: "Beat '" + beatId + "' not found in the active campaign." };
+    const choice = Array.isArray(beat.choices) ? beat.choices[idx] : null;
+    if (!choice) return { ok: false, error: "Choice " + opts.choiceIndex + " not found on beat '" + beatId + "'." };
+    if (speakerActorId && String(beat.speakerActorId || "") !== speakerActorId)
+      return { ok: false, error: "That beat is not embodied by this speaker." };
+
+    // Guardrail: re-verify the moment is STILL offerable (gates may have moved
+    // since choicesFor; consumed moments must not fire twice).
+    const offer = await _dialogueOfferableBeats(String(beat.speakerActorId || speakerActorId || ""), opts.ctx || {});
+    if (!offer.some(o => o.beat.id === beatId))
+      return { ok: false, error: "That story moment is no longer available." };
+
+    log(`[dialogue] enacting ${beatId}:${idx}` + (speakerActorId ? ` via speaker ${speakerActorId}` : ""));
+    const ctx = { ...(opts.ctx || {}), source: "dialogue", speakerActorId: beat.speakerActorId || speakerActorId || null, userId, __enactChoice: idx };
+    await runBeat(campaign.id, beatId, ctx);
+    const res = ctx.__enactResult || null;
+    if (res && res.error) return { ok: false, error: res.error };
+    if (!res || !res.acted) return { ok: false, error: "The choice did not resolve (see console)." };
+
+    // Plain-text mechanical account for the NPC's model to narrate from.
+    const routedLabel = res.routedBeatId
+      ? ((campaign.beats || []).find(b => b?.id === res.routedBeatId)?.label || res.routedBeatId)
+      : null;
+    let summary = `The moment happens: "${String(choice.label || "").trim()}"`;
+    if (res.check) {
+      summary += res.check.kind === "gm"
+        ? ` — the GM ruled it ${res.check.ok ? "a success" : "a failure"}`
+        : ` — the check came up ${res.check.ok ? "a success" : "a failure"} (${res.check.total} vs DC ${res.check.dc})`;
+    }
+    summary += ".";
+    if (routedLabel) summary += ` It leads on to "${routedLabel}".`;
+
+    // GM log whisper (transcript excerpt when provided).
+    try {
+      const speakerName = (speakerActorId && game.actors?.get?.(speakerActorId)?.name) || beat.speakerActorId || "NPC";
+      const tx = Array.isArray(opts.transcript) ? opts.transcript.join("<br>") : String(opts.transcript || "").trim();
+      await ChatMessage.create({
+        whisper: game.users.filter(u => u.isGM).map(u => u.id),
+        content: `<b>🗣 Dialogue-driven beat enacted</b><br><b>${speakerName}</b> → "${beat.label || beat.id}" / choice "${String(choice.label || "").trim()}"<br><i>${summary}</i>` +
+          (tx ? `<hr><span style="opacity:.8;font-size:.9em">${tx}</span>` : "")
+      });
+    } catch (_eW) {}
+
+    try { Hooks.callAll("bbttcc:dialogue:choiceEnacted", { beatId, choiceIndex: idx, speakerActorId, userId }); } catch (_eH) {}
+    return { ok: true, summary };
+  } catch (e) {
+    warn("[dialogue] enact failed:", e);
+    return { ok: false, error: String(e?.message || e) };
+  }
+}
+
+// Story-state snapshot (contract ADDENDUM, 2026-07-02): narrative time for the
+// NPC knowledge layer. Live testing showed an NPC given her whole written story
+// pushes future arcs (Pip's rescue on the first Fixit visit) — knowing what has
+// NOT happened is load-bearing. Moments already respect time via choicesFor
+// gates; this gives knowledge the same spine: mal-voice filters the chronicle
+// sweep to FIRED beats, suppresses `unstarted` quests ("never allude"), and
+// builds the "YOUR PRESENT MOMENT" persona section from the buckets.
+// `unstarted` is campaign-scoped (quests the active campaign's beats reference,
+// not the whole registry) — a suppression list, not a spoiler dump. archived
+// counts as completed (it HAS happened). firedBeatIds = director fires +
+// speaker-beat resolutions + per-beat quest progress marks (best available
+// "actually fired" record). actorId reserved for per-NPC scoping later.
+async function dialogueStoryStateFor(_actorId = null) {
+  const empty = { turn: null, quests: { completed: [], active: [], unstarted: [] }, firedBeatIds: [] };
+  try {
+    const campaignId = getActiveCampaignId();
+    const campaign = campaignId ? getCampaign(campaignId) : null;
+    if (!campaign) return empty;
+
+    const turnN = _getTurnNumberSafe();
+
+    let reg = {};
+    try { reg = getAllQuests() || {}; } catch (_eR) {}
+    const row = (id) => ({ id, title: String(reg?.[id]?.name || id) });
+
+    const track = (await _coalitionQuestTrack(campaign, {})) || {};
+    const activeIds = Object.keys(track.active || {});
+    const completedIds = [...Object.keys(track.completed || {}), ...Object.keys(track.archived || {})];
+    const started = new Set([...activeIds, ...completedIds]);
+
+    // Quests this campaign references: beats' questId + questEffects rows.
+    const referenced = new Set();
+    const beats = Array.isArray(campaign.beats) ? campaign.beats : [];
+    for (const b of beats) {
+      const qid = String(b?.questId || "").trim();
+      if (qid) referenced.add(qid);
+      for (const r of (Array.isArray(b?.worldEffects?.questEffects) ? b.worldEffects.questEffects : [])) {
+        const q2 = String(r?.questId || "").trim();
+        if (q2) referenced.add(q2);
+      }
+    }
+    const unstartedIds = [...referenced].filter(id => !started.has(id));
+
+    const state = _readDirectorState();
+    const fired = new Set([...Object.keys(state.firedStoryBeats), ...Object.keys(state.dialogueFired)]);
+    for (const bucket of ["active", "completed", "archived"]) {
+      for (const entry of Object.values(track[bucket] || {})) {
+        for (const bid of Object.keys(entry?.progress?.beats || {})) fired.add(bid);
+      }
+    }
+
+    return {
+      turn: turnN > 0 ? turnN : null,
+      quests: {
+        completed: completedIds.map(row),
+        active: activeIds.map(row),
+        unstarted: unstartedIds.map(row)
+      },
+      firedBeatIds: [...fired]
+    };
+  } catch (e) {
+    warn("[dialogue] storyStateFor failed:", e);
+    return empty;
+  }
+}
+
+// NPC event memory (contract §4) + one-shot consumption. Fires for EVERY
+// resolution surface (menu, travel, dialogue) so the NPC remembers regardless
+// of how the moment happened. Serialized through one promise chain: a routed
+// chain resolves several speaker beats back-to-back, and concurrent
+// read-modify-writes of the memories flag / directorState would drop entries.
+let _speakerMemoryChain = Promise.resolve();
+function _onBeatResolvedSpeakerMemory({ beat, outcome } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    const sid = String(beat?.speakerActorId || "").trim();
+    if (!sid) return;
+    _speakerMemoryChain = _speakerMemoryChain.then(async () => {
+      // Consume the moment (unless the beat is authored repeatable).
+      try {
+        await _mutateDirectorState(s => {
+          if (!s.dialogueFired[beat.id]) s.dialogueFired[beat.id] = { ts: Date.now() };
+        });
+      } catch (_eS) {}
+
+      const actor = game.actors?.get?.(sid);
+      if (!actor) return;
+      let text = String(beat.memoryText || "").trim();
+      if (!text) {
+        const chLabel = String(outcome?.choice?.label || "").trim();
+        text = `${beat.label || beat.id}${chLabel ? ` — the Stewards chose "${chLabel}"` : ""}.`;
+      }
+      const cur = foundry.utils.getProperty(actor, "flags.bbttcc-mal-voice.memories");
+      const arr = Array.isArray(cur) ? cur.slice(-(SPEAKER_MEMORY_CAP - 1)) : [];
+      arr.push({ ts: Date.now(), text });
+      await actor.update({ "flags.bbttcc-mal-voice.memories": arr });
+      log(`[dialogue] memory written for ${actor.name}: ${text}`);
+    }).catch(e => warn("[dialogue] speaker memory failed:", e));
+  } catch (e) {
+    warn("[dialogue] speaker memory listener failed:", e);
+  }
 }
 
 // ─── Reality Tear → Adversary draws a Beat ───────────────────────────────────
@@ -4986,6 +5360,11 @@ function buildCampaignAPI() {
       state: _readDirectorState,
       addPressure: _directorAddPressure
     },
+    dialogue: {
+      choicesFor: dialogueChoicesFor,
+      enact: dialogueEnact,
+      storyStateFor: dialogueStoryStateFor
+    },
     tables: { listTables, getTable, saveTable, createTable, deleteTable, getAllTables, setAllTables, runRandomTable },
     quests: { listQuests, getQuest, saveQuest, createQuest, deleteQuest, setQuestStatus, getAllQuests, setAllQuests },
     io: {
@@ -5285,6 +5664,9 @@ Hooks.once("ready", () => {
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedDouganPointer);
   // Story Director (Phase 3): milestone beats raise steward/faction level floors.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedLevelEffects);
+  // Dialogue-driven beats: NPC event memory + one-shot moment consumption for
+  // beats with a speakerActorId (any resolution surface — menu or dialogue).
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedSpeakerMemory);
   // Story Director (Phase 3): the World-Turn tick. Apply-only (skip previews);
   // the advanceTurn driver fires this hook locally on the advancing GM client,
   // and the world clock is already bumped when it arrives. Reconcile runs each
