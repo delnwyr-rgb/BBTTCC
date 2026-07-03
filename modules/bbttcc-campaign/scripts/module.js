@@ -2549,7 +2549,9 @@ async function _maybePromptQuestAcceptance(campaign, beat, ctx) {
         history: [{ ts: acceptTs, type: "accept", by: (game.user ? game.user.id : null) }]
       };
       if (member.setFlag) await member.setFlag(MOD, "quests", mnext);
-      try { if (member.sheet && member.sheet.render) member.sheet.render(true); } catch (e6) {}
+      // Refresh, never OPEN: force-rendering here popped every coalition
+      // faction's sheet on quest accept (owner hit this 2026-07-03).
+      try { if (member.sheet?.rendered) member.sheet.render(false); } catch (e6) {}
     }
 
     // Notify (toast + GM whisper)
@@ -2735,7 +2737,8 @@ async function _applyQuestEffects(campaign, beat, ctx) {
       await faction.setFlag(MOD, "quests", next);
     }
     try {
-      if (faction.sheet && faction.sheet.render) faction.sheet.render(true);
+      // Refresh, never OPEN (same popping-sheets fix as the accept path).
+      if (faction.sheet?.rendered) faction.sheet.render(false);
     } catch (_eSheet) {}
     }                                            // end coalition fan-out loop
 
@@ -4412,6 +4415,15 @@ async function _dialogueOfferableBeats(actorId, ctx = {}) {
   const turn = _getTurnNumberSafe();
   for (const b of (Array.isArray(campaign.beats) ? campaign.beats : [])) {
     if (!b || String(b.speakerActorId || "").trim() !== aid) continue;
+    // A speaker beat with NO labeled choices is a memory-carrier (outcome
+    // beats wear speakerActorId so the NPC remembers when they resolve) —
+    // it is never a conversation moment: nothing to offer, nothing to
+    // enact, and the invite scan must not announce it.
+    if (!(b.choices || []).some(ch => String(ch?.label || "").trim())) continue;
+    // Authored opt-out: outcome/routing nodes that DO carry choices (bounce-
+    // backs like "Try something else", vestigial "Leave") but must only be
+    // reached by routing, never offered as a conversation entry.
+    if (b.dialogueOffer === false) continue;
     const repeatable = !!b.inject?.repeatable;
     if (!repeatable && (state.dialogueFired[b.id] || (b.storyChain && state.firedStoryBeats[b.id]))) continue;
     const cd = Number(b.inject?.cooldownTurns || 0) || 0;
@@ -4434,19 +4446,24 @@ async function _dialogueOfferableBeats(actorId, ctx = {}) {
 // Empty array = no live story moments (the dialogue engine omits the tool).
 async function dialogueChoicesFor(actorId, ctx = {}) {
   try {
+    const stripHtml = (s) => String(s || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
     const rows = [];
     for (const { beat } of await _dialogueOfferableBeats(actorId, ctx)) {
       const choices = Array.isArray(beat.choices) ? beat.choices : [];
+      // The beat's description is the NPC's authored script for the scene —
+      // the dialogue engine plays it in-voice when the conversation arrives.
+      const beatDescription = stripHtml(beat.description);
       choices.forEach((ch, i) => {
         const label = String(ch?.label || "").trim();
         if (!label) return;
         rows.push({
           beatId: beat.id,
           beatLabel: beat.label || beat.id,
+          beatDescription,
           choiceIndex: i,
           choiceKey: `${beat.id}:${i}`,
           label,
-          description: String(ch?.description || "").trim()
+          description: stripHtml(ch?.description)
         });
       });
     }

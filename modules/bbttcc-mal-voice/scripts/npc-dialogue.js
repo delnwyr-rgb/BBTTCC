@@ -113,7 +113,7 @@ function _personaTopics(actor) {
 // `npcCommonJournal`, default "NPC Common Knowledge") is included for EVERY
 // NPC — the gazetteer of what any local knows: places, who's who, who holds
 // what, current events. Write it once, all NPCs know it.
-function _commonKnowledge({ maxChars = 6000, state = null } = {}) {
+function _commonKnowledge({ maxChars = 9000, state = null } = {}) {
   let journalName = "NPC Common Knowledge";
   try { journalName = String(game.settings.get(MODULE_ID, "npcCommonJournal") || "").trim() || journalName; } catch (_e) {}
   const entry = game.journal?.getName?.(journalName) || game.journal?.contents?.find(j => j.name === journalName);
@@ -636,18 +636,33 @@ function _defineAppClass() {
     }
 
     _momentsSection(choices) {
-      const lines = choices.map(c =>
-        `• [${c.choiceKey}] ${c.label}${c.description ? ` — ${c.description}` : ""}${c.beatLabel ? ` (moment of: ${c.beatLabel})` : ""}`);
+      // Group rows by beat: each beat is a SCENE with an authored script
+      // (the beat description — the NPC's own pre-written dialog) and the
+      // real paths on the table (the choices).
+      const scenes = new Map();
+      for (const c of choices) {
+        const key = String(c.beatId ?? c.beatLabel ?? c.choiceKey);
+        if (!scenes.has(key)) scenes.set(key, { label: c.beatLabel || "", script: c.beatDescription || "", rows: [] });
+        scenes.get(key).rows.push(c);
+      }
+      const blocks = [...scenes.values()].map(s =>
+        `◈ SCENE: ${s.label}` +
+        (s.script ? `\n  Your script (authored for you — deliver its substance in your own voice when the scene opens):\n  ${s.script}` : "") +
+        `\n  The real paths on the table:\n` +
+        s.rows.map(c => `  • [${c.choiceKey}] ${c.label}${c.description ? ` — ${c.description}` : ""}`).join("\n"));
+
       return `## STORY MOMENTS YOU MAY ENACT (via the enact_story_choice tool)
 These are real crossroads in the story that YOU embody right now:
-${lines.join("\n")}
+
+${blocks.join("\n\n")}
 
 How to handle them:
-1. Weave them into conversation as yourself — your agenda, your words. NEVER present them as a list, a menu, or "options".
-2. Only call the tool when a Steward has CLEARLY committed in the conversation ("yes, we'll do it", handing over the thing, agreeing to go). Talking about a moment is not committing to it.
-3. If the Stewards decline or drift away, let it go gracefully — the moment remains open for another day.
-4. After the tool returns, narrate what just happened in character, in your own voice.
-5. Never mention the tool, keys, beats, or choices as game constructs.`;
+1. THE MOMENT A STEWARD RAISES A SCENE'S SUBJECT (asks for the thing, names the problem), MOVE INTO THE SCENE: play your script, then lay the real paths before them plainly, in your own voice, as natural offers — "we could trade proper… or talk a shared arrangement… or you can walk". Do NOT make them guess what's possible; you are the one holding the terms. Just never recite them as a numbered menu.
+2. Path descriptions are the narrator talking to the players — treat them as scene direction (stakes, tone, costs, consequences). NEVER read them aloud, and never name dice, checks, points, or costs by game words; translate stakes into your own speech (a fair swap, a favor owed, a hard price, bad blood).
+3. Only call the tool when a Steward has CLEARLY committed in the conversation ("yes, we'll do it", handing over the thing, agreeing to go). Talking about a path is not committing to it.
+4. If the Stewards decline or drift away, let it go gracefully — the moment remains open for another day.
+5. After the tool returns, narrate what just happened in character, in your own voice.
+6. Never mention the tool, keys, beats, or choices as game constructs.`;
     }
 
     // Executes (or routes for approval) an enact_story_choice tool call.
