@@ -24,7 +24,8 @@
  *   game.bbttcc.mal.providers.anthropic.call({
  *     systemPrompt?: string,             // legacy single-string system
  *     system?: string | Array<{ text, cache?: boolean|"5m"|"1h" }>,
- *     userMessage:  string,
+ *     userMessage?: string,              // single-turn shorthand
+ *     messages?: Array<{ role: "user"|"assistant", content: string }>,  // multi-turn (wins over userMessage)
  *     model?:       string,              // default from settings
  *     maxTokens?:   number,              // default 256
  *     temperature?: number,              // dropped on models that reject it
@@ -229,13 +230,25 @@ async function call(opts = {}) {
   const userMessage = opts.userMessage || "";
   const streaming   = !!opts.stream;
 
-  if (!userMessage) return _err("EMPTY_MESSAGE", "userMessage is required");
+  // Multi-turn conversations pass `messages` directly; `userMessage` is the
+  // single-turn shorthand. The API is stateless — send full history each call.
+  let messages;
+  if (Array.isArray(opts.messages) && opts.messages.length) {
+    messages = opts.messages
+      .filter(m => m && (m.role === "user" || m.role === "assistant") && m.content)
+      .map(m => ({ role: m.role, content: String(m.content) }));
+    if (!messages.length) return _err("EMPTY_MESSAGE", "messages[] contained no valid turns");
+    if (messages[0].role !== "user") messages.unshift({ role: "user", content: "(the conversation begins)" });
+  } else {
+    if (!userMessage) return _err("EMPTY_MESSAGE", "userMessage or messages[] is required");
+    messages = [{ role: "user", content: userMessage }];
+  }
 
   const caps = _modelCaps(model);
   const body = {
     model,
     max_tokens: maxTokens,
-    messages: [{ role: "user", content: userMessage }]
+    messages
   };
   if (!caps.noSampling && Number.isFinite(temperature)) body.temperature = temperature;
   if (opts.thinking && !caps.neverSendThinking) body.thinking = opts.thinking;
