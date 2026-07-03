@@ -25,7 +25,9 @@
  *     systemPrompt?: string,             // legacy single-string system
  *     system?: string | Array<{ text, cache?: boolean|"5m"|"1h" }>,
  *     userMessage?: string,              // single-turn shorthand
- *     messages?: Array<{ role: "user"|"assistant", content: string }>,  // multi-turn (wins over userMessage)
+ *     messages?: Array<{ role: "user"|"assistant", content: string|Array }>,  // multi-turn (wins over userMessage; content blocks pass through)
+ *     tools?:      Array<object>,        // Anthropic tool definitions
+ *     toolChoice?: object,               // e.g. {type:"none"} to suppress further calls
  *     model?:       string,              // default from settings
  *     maxTokens?:   number,              // default 256
  *     temperature?: number,              // dropped on models that reject it
@@ -158,7 +160,9 @@ function _usageFromData(u) {
 }
 
 // Consume an SSE response body, invoking onDelta with the accumulated text.
-// Returns { text, usage, stopReason, model } or throws a structured error.
+// Also reconstructs tool_use blocks (content_block_start type tool_use +
+// input_json_delta accumulation) so callers can run the tool loop.
+// Returns { text, content, toolUses, usage, stopReason, model } or throws.
 async function _consumeStream(resp, onDelta) {
   const reader = resp.body.getReader();
   const decoder = new TextDecoder();
@@ -167,6 +171,7 @@ async function _consumeStream(resp, onDelta) {
   let stopReason = null;
   let respModel = null;
   const usage = { inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, cacheWriteTokens: 0 };
+  const blocks = new Map();   // stream index -> partial block record
 
   const handleEvent = (evt) => {
     switch (evt?.type) {
@@ -175,10 +180,31 @@ async function _consumeStream(resp, onDelta) {
         Object.assign(usage, _usageFromData(evt.message?.usage));
         break;
       }
+      case "content_block_start": {
+        const cb = evt.content_block;
+        if (cb?.type === "tool_use") {
+          blocks.set(evt.index, { type: "tool_use", id: cb.id, name: cb.name, _json: "" });
+        } else if (cb?.type === "text") {
+          blocks.set(evt.index, { type: "text", text: "" });
+        }
+        break;
+      }
       case "content_block_delta": {
+        const rec = blocks.get(evt.index);
         if (evt.delta?.type === "text_delta") {
           text += evt.delta.text;
+          if (rec?.type === "text") rec.text += evt.delta.text;
           if (onDelta) { try { onDelta(text, evt.delta.text); } catch (_e) {} }
+        } else if (evt.delta?.type === "input_json_delta" && rec?.type === "tool_use") {
+          rec._json += evt.delta.partial_json || "";
+        }
+        break;
+      }
+      case "content_block_stop": {
+        const rec = blocks.get(evt.index);
+        if (rec?.type === "tool_use") {
+          try { rec.input = rec._json ? JSON.parse(rec._json) : {}; } catch (_e) { rec.input = {}; }
+          delete rec._json;
         }
         break;
       }
@@ -212,7 +238,14 @@ async function _consumeStream(resp, onDelta) {
     }
   }
 
-  return { text: text.trim(), usage, stopReason, model: respModel };
+  // Rebuild the assistant content array in stream order (echo it back verbatim
+  // in tool_result continuations).
+  const content = [...blocks.entries()].sort((a, b) => a[0] - b[0]).map(([, rec]) => {
+    if (rec.type === "tool_use") return { type: "tool_use", id: rec.id, name: rec.name, input: rec.input ?? {} };
+    return { type: "text", text: rec.text };
+  }).filter(b => b.type === "tool_use" || (b.text && b.text.length));
+
+  return { text: text.trim(), content, usage, stopReason, model: respModel };
 }
 
 async function call(opts = {}) {
@@ -236,7 +269,9 @@ async function call(opts = {}) {
   if (Array.isArray(opts.messages) && opts.messages.length) {
     messages = opts.messages
       .filter(m => m && (m.role === "user" || m.role === "assistant") && m.content)
-      .map(m => ({ role: m.role, content: String(m.content) }));
+      // Strings pass as strings; content-block arrays (tool_use / tool_result
+      // round-trips) pass through untouched.
+      .map(m => ({ role: m.role, content: (typeof m.content === "string") ? m.content : m.content }));
     if (!messages.length) return _err("EMPTY_MESSAGE", "messages[] contained no valid turns");
     if (messages[0].role !== "user") messages.unshift({ role: "user", content: "(the conversation begins)" });
   } else {
@@ -259,6 +294,10 @@ async function call(opts = {}) {
 
   if (opts.schema && typeof opts.schema === "object") {
     body.output_config = { format: { type: "json_schema", schema: opts.schema } };
+  }
+  if (Array.isArray(opts.tools) && opts.tools.length) {
+    body.tools = opts.tools;
+    if (opts.toolChoice && typeof opts.toolChoice === "object") body.tool_choice = opts.toolChoice;
   }
   if (streaming) body.stream = true;
 
@@ -314,7 +353,7 @@ async function call(opts = {}) {
       } catch (e) {
         return _err(e.code || "STREAM_ERROR", e?.message || String(e), { retried });
       }
-      return _finish(streamed.text, streamed.model || model, streamed.usage, streamed.stopReason, retried, opts, debug);
+      return _finish(streamed.text, streamed.model || model, streamed.usage, streamed.stopReason, retried, opts, debug, streamed.content);
     }
 
     // ----- Buffered path -----
@@ -325,17 +364,24 @@ async function call(opts = {}) {
       return _err("BAD_RESPONSE", `Could not parse response JSON (status ${resp.status})`, { retried });
     }
 
-    const textBlocks = Array.isArray(data?.content) ? data.content.filter(b => b?.type === "text") : [];
-    const text = textBlocks.map(b => b.text || "").join("").trim();
-    return _finish(text, data?.model || model, _usageFromData(data?.usage), data?.stop_reason || null, retried, opts, debug);
+    const content = Array.isArray(data?.content) ? data.content : [];
+    const text = content.filter(b => b?.type === "text").map(b => b.text || "").join("").trim();
+    return _finish(text, data?.model || model, _usageFromData(data?.usage), data?.stop_reason || null, retried, opts, debug, content);
   }
 
   // Should never reach here, but defensively:
   return _err("UNKNOWN", "Retry loop exhausted without resolution");
 }
 
-function _finish(text, model, usage, stopReason, retried, opts, debug) {
+function _finish(text, model, usage, stopReason, retried, opts, debug, content = null) {
   const costEstimateUSD = _estimateCost(model, usage.inputTokens, usage.outputTokens, usage.cacheReadTokens, usage.cacheWriteTokens);
+
+  // Tool calls the model requested this turn (empty array when none). The
+  // caller executes them and continues the conversation by echoing `content`
+  // back as the assistant turn plus a user turn of tool_result blocks.
+  const toolUses = Array.isArray(content)
+    ? content.filter(b => b?.type === "tool_use").map(b => ({ id: b.id, name: b.name, input: b.input ?? {} }))
+    : [];
 
   // Structured output: the constrained reply is guaranteed-valid JSON text.
   let json = null;
@@ -351,6 +397,8 @@ function _finish(text, model, usage, stopReason, retried, opts, debug) {
     ok:               true,
     text,
     json,
+    content:          content ?? (text ? [{ type: "text", text }] : []),
+    toolUses,
     model,
     inputTokens:      usage.inputTokens,
     outputTokens:     usage.outputTokens,

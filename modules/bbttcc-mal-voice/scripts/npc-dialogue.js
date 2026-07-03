@@ -27,7 +27,13 @@ const log  = (...a) => console.log(TAG, ...a);
 const warn = (...a) => console.warn(TAG, ...a);
 
 const HISTORY_CAP = 40;          // stored turns (user+assistant combined)
+const MEMORY_CAP  = 30;          // durable story-event memories per NPC
 const APPS = new Map();          // actorId -> app instance
+
+// Stub choices for testing dialogue-driven beats before the campaign side
+// ships its API (see badeden-bible/new-content/dialogue-driven-beats-spec.md):
+//   game.bbttcc.mal.npc.setTestChoices(actorId, [{choiceKey, label, description}])
+const TEST_CHOICES = new Map();  // actorId -> choices[]
 
 // ---------------------------------------------------------------------------
 // Persona assembly
@@ -91,13 +97,85 @@ function _identityFromItems(actor) {
 // reopen the window to pick up new journal writing.
 // ---------------------------------------------------------------------------
 
-function _gatherWorldLore(actor, { maxChars = 8000 } = {}) {
+// GM-curated knowledge topics for this NPC (🧠 editor, comma-separated) —
+// the sweep matches these terms in journals/beats IN ADDITION to the NPC's
+// own name, so "Dougan Marsh, Gullywasher" makes her know those stories too.
+function _personaTopics(actor) {
+  return String(actor?.getFlag?.(MODULE_ID, "persona")?.topics || "")
+    .split(",").map(t => t.trim().toLowerCase()).filter(t => t.length >= 3);
+}
+
+// Common knowledge: every text page of the designated journal (setting
+// `npcCommonJournal`, default "NPC Common Knowledge") is included for EVERY
+// NPC — the gazetteer of what any local knows: places, who's who, who holds
+// what, current events. Write it once, all NPCs know it.
+function _commonKnowledge({ maxChars = 6000 } = {}) {
+  let journalName = "NPC Common Knowledge";
+  try { journalName = String(game.settings.get(MODULE_ID, "npcCommonJournal") || "").trim() || journalName; } catch (_e) {}
+  const entry = game.journal?.getName?.(journalName) || game.journal?.contents?.find(j => j.name === journalName);
+  if (!entry) return "";
+  const parts = [];
+  let used = 0;
+  for (const page of entry.pages?.contents ?? []) {
+    if (page.type !== "text" || used >= maxChars) continue;
+    const text = _stripHtml(page.text?.content || "");
+    if (!text) continue;
+    const chunk = `— ${page.name}:\n${text}`.slice(0, maxChars - used);
+    parts.push(chunk);
+    used += chunk.length;
+  }
+  return parts.join("\n\n");
+}
+
+// ---------------------------------------------------------------------------
+// Narrative time — the story state gates NPC KNOWLEDGE (what has happened vs
+// what hasn't), just as choicesFor gates NPC MOMENTS. Provided by the
+// campaign engine: game.bbttcc.api.campaign.dialogue.storyStateFor(actorId)
+// -> { turn, quests: {completed:[{id,title}], active:[...], unstarted:[...]},
+//      firedBeatIds: [...] }
+// All consumption is defensive: absent API = current include-all behavior
+// (except @after-tagged journal pages, which fail CLOSED — never leak the
+// future).
+// ---------------------------------------------------------------------------
+
+async function _storyState(actor) {
+  try {
+    const api = game.bbttcc?.api?.campaign?.dialogue;
+    if (!api?.storyStateFor) return null;
+    const s = await api.storyStateFor(actor?.id ?? null);
+    return (s && typeof s === "object") ? s : null;
+  } catch (e) { warn("storyStateFor failed:", e?.message); return null; }
+}
+
+function _questKnown(state, questId, needCompleted = false) {
+  if (!state) return false;   // fail closed for gated content
+  const has = (arr) => (arr || []).some(q => String(q?.id ?? q) === String(questId));
+  if (needCompleted) return has(state.quests?.completed);
+  return has(state.quests?.completed) || has(state.quests?.active);
+}
+
+// Journal page gating convention: a page whose FIRST non-empty line is
+//   @after: <questId>            (known once the quest is active or completed)
+//   @after: <questId>:completed  (known only once completed)
+// is invisible to NPCs until the campaign reaches it. The tag line is
+// stripped from the content that reaches the model.
+function _parseAfterTag(text) {
+  const m = String(text || "").match(/^\s*@after:\s*([\w:-]+?)(?::(completed))?\s*(?:\n|$)/i);
+  if (!m) return { gate: null, body: text };
+  return {
+    gate: { questId: m[1], needCompleted: !!m[2] },
+    body: String(text).slice(m[0].length)
+  };
+}
+
+function _gatherWorldLore(actor, { maxChars = 9000, state = null } = {}) {
   const name = String(actor?.name || "").trim();
   if (!name) return "";
 
   const terms = [name.toLowerCase()];
   const first = name.split(/\s+/)[0];
   if (first && first.length >= 4 && first.toLowerCase() !== terms[0]) terms.push(first.toLowerCase());
+  terms.push(..._personaTopics(actor));
   const matches = (s) => { const low = String(s || "").toLowerCase(); return terms.some(t => low.includes(t)); };
 
   const chunks = [];
@@ -111,13 +189,17 @@ function _gatherWorldLore(actor, { maxChars = 8000 } = {}) {
     return used < maxChars;
   };
 
-  // Journal pages: keep only the paragraphs that mention the NPC.
+  // Journal pages: keep only the paragraphs that mention the NPC. Pages
+  // gated with @after: are invisible until the campaign reaches them.
   try {
     outer:
     for (const entry of game.journal?.contents ?? []) {
       for (const page of entry.pages?.contents ?? []) {
         if (page.type !== "text") continue;
-        const text = _stripHtml(page.text?.content || "");
+        const raw = _stripHtml(page.text?.content || "");
+        const { gate, body } = _parseAfterTag(raw);
+        if (gate && !_questKnown(state, gate.questId, gate.needCompleted)) continue;
+        const text = body;
         if (!text || !matches(text)) continue;
         const hits = text.split(/\n+/).map(p => p.trim()).filter(p => p && matches(p));
         if (!hits.length) continue;
@@ -134,9 +216,14 @@ function _gatherWorldLore(actor, { maxChars = 8000 } = {}) {
         Array.isArray(data)            ? data
       : Array.isArray(data?.campaigns) ? data.campaigns
       : data ? Object.values(data) : [];
+    // With story state available, only FIRED beats are part of the chronicle
+    // — an unfired beat hasn't happened, so the NPC can't know its contents.
+    // (Currently-offerable moments reach the model via STORY MOMENTS instead.)
+    const fired = Array.isArray(state?.firedBeatIds) ? new Set(state.firedBeatIds.map(String)) : null;
     outer2:
     for (const c of campaigns) {
       for (const b of (c?.beats ?? [])) {
+        if (fired && b?.id && !fired.has(String(b.id))) continue;
         const choiceTexts = (b?.choices ?? []).map(ch => `Choice "${ch?.label ?? ""}": ${ch?.description ?? ""}`);
         const all = [b?.label, b?.description, ...choiceTexts].filter(Boolean).map(String);
         if (!all.some(matches)) continue;
@@ -152,7 +239,23 @@ function _gatherWorldLore(actor, { maxChars = 8000 } = {}) {
   return chunks.join("\n\n");
 }
 
-function _buildPersonaPrompt(actor, lore = null) {
+// Authoritative now-line: what is done, underway, and NOT YET. Overrides any
+// chronicle bleed-through — the fix for "Mara already knows Pip is missing".
+function _presentMomentSection(state) {
+  if (!state?.quests) return "";
+  const list = (arr) => (arr || []).map(q => `• ${String(q?.title ?? q?.id ?? q)}`).join("\n");
+  const done     = list(state.quests.completed);
+  const active   = list(state.quests.active);
+  const notyet   = list(state.quests.unstarted);
+  if (!done && !active && !notyet) return "";
+  return `## YOUR PRESENT MOMENT (authoritative — this OVERRIDES everything else in this prompt about what has happened)
+The story stands exactly here, right now. Anything mentioned anywhere above that is not corroborated below as done or underway has NOT HAPPENED YET — you have no knowledge of it and no feelings about it, because for you it does not exist.
+${done ? `\nDONE (lived history — you may remember and reference these):\n${done}` : ""}
+${active ? `\nUNDERWAY (your live concerns right now):\n${active}` : ""}
+${notyet ? `\nNOT YET (these do not exist for you — never mention, never hint, never grieve them):\n${notyet}` : ""}`;
+}
+
+function _buildPersonaPrompt(actor, lore = null, state = null) {
   const sys = actor.system?.system ?? actor.system ?? {};
   const name = actor.name;
   const role = _npcRole(sys);
@@ -169,6 +272,14 @@ function _buildPersonaPrompt(actor, lore = null) {
   const gmNotes = String(actor.getFlag(MODULE_ID, "persona")?.notes || "").trim();
   const sceneName = game.scenes?.active?.name || null;
 
+  // Durable story-event memories (written by the campaign engine when beats
+  // this NPC embodies fire, or via game.bbttcc.mal.npc.addMemory) — how Mara
+  // "remembers" handing over the Leygate part when she later calls about Pip.
+  const memories = (actor.getFlag(MODULE_ID, "memories") || [])
+    .slice(-MEMORY_CAP)
+    .map(m => `• ${String(m?.text ?? m ?? "").trim()}`)
+    .filter(l => l.length > 2);
+
   const facts = [];
   if (role)        facts.push(`Role/occupation: ${role}`);
   if (creature)    facts.push(`Creature type: ${creature}`);
@@ -179,18 +290,23 @@ function _buildPersonaPrompt(actor, lore = null) {
   if (sceneName)   facts.push(`Current scene: ${sceneName}`);
 
   const worldLore = (lore === null) ? _gatherWorldLore(actor) : String(lore || "");
+  const common = _commonKnowledge();
 
   return `You are ${name}, a character living in Bad Eden. You are IN CONVERSATION with one or more Stewards standing in front of you. Stay completely in character as ${name} at all times.
 
 ## WHO YOU ARE
 ${facts.map(f => `• ${f}`).join("\n")}
 ${notes ? `\n## YOUR STORY (bio/notes — this is what shaped you)\n${notes}` : ""}
-${worldLore ? `\n## WHAT THE CHRONICLE SAYS ABOUT YOU (from the world's journals and campaign beats)\nThese are events, descriptions, and moments involving you. Past-tense entries are your lived history — you remember them from your own point of view. Future-sounding or conditional entries have NOT happened: treat them at most as rumors, premonitions, or things you're entangled in but don't fully understand — never state them as fact, and never reveal them as "beats", "choices", or any other game construct.\n\n${worldLore}` : ""}
+${memories.length ? `\n## SHARED HISTORY (things that truly happened between you and the Stewards — you remember these firsthand and may refer back to them)\n${memories.join("\n")}` : ""}
+${common ? `\n## COMMON KNOWLEDGE (what any local knows — places, people, who holds what)\n${common}` : ""}
+${worldLore ? `\n## WHAT THE CHRONICLE SAYS (about you, and about things you know)\nThese are events, descriptions, and moments involving you or subjects you know about. Past-tense entries are lived history or established fact — you remember or have heard them from your own point of view. Future-sounding or conditional entries have NOT happened: treat them at most as rumors, premonitions, or things you're entangled in but don't fully understand — never state them as fact, and never reveal them as "beats", "choices", or any other game construct. Where the YOUR PRESENT MOMENT section below disagrees with anything here, the PRESENT MOMENT wins.\n\n${worldLore}` : ""}
+${_presentMomentSection(state)}
 ${gmNotes ? `\n## PRIVATE TRUTH (GM notes — these facts are TRUE about you and guide everything you say, but you NEVER recite them verbatim, and you guard anything marked secret the way a real person guards secrets)\n${gmNotes}` : ""}
 
 ## HOW TO SPEAK
 1. Reply as ${name} would — voice, dialect, mood, agenda. 1–4 sentences unless the moment truly demands more. Plain speech only: no markdown, no stage directions, no narration of your own actions unless brief and natural ("*spits*" style asides are fine sparingly).
 2. You know ONLY what ${name} would plausibly know. If asked about things beyond your world, knowledge, or station, react in character — confusion, suspicion, deflection, a shrug. Never break character, never mention being an AI, never reveal game mechanics or numbers.
+2b. NEVER INVENT FACTS about named people, places, factions, territory, or events that are not in your knowledge above. If a Steward asks about someone or somewhere you don't recognize, say so in character ("Can't say I know the name — ask around the co-op") or clearly frame guesses as hearsay ("Way I heard it — and I heard it thirdhand…"). Getting the world wrong is worse than admitting ignorance. You may freely invent SMALL personal color (your own tastes, minor anecdotes, prices you'd charge) — never geography, allegiance, or history.
 3. Each Steward's line begins with their name (e.g. "Etta: ..."). Address people by name when natural. You may lie, bargain, evade, or refuse like a real person with your own interests.
 4. You have wants. Let your agenda leak into the conversation — favors asked, warnings given, prices named, grudges nursed.
 5. If the conversation stalls, offer a hook: something you've seen, heard, lost, or fear. People in Bad Eden always know something.`;
@@ -238,15 +354,23 @@ function _defineAppClass() {
       this._history = _loadHistory(actor);   // [{role, content, speaker, ts}]
       this._busy = false;
       this._els = {};
-      // World-lore sweep (journals + beats) once per window open; byte-stable
-      // across the conversation so the cached persona block keeps hitting.
-      this._lore = _gatherWorldLore(actor);
-      if (this._lore) log(`world lore for '${actor.name}': ${this._lore.length} chars gathered from journals/beats`);
+      // World-lore sweep is async now (story-state gated) — runs in
+      // _renderHTML on open; byte-stable across the conversation so the
+      // cached persona block keeps hitting.
+      this._lore = null;
+      this._storyState = null;
     }
 
     get title() { return `${this.actor?.name ?? "NPC"}`; }
 
     async _renderHTML(_context, _options) {
+      // Narrative-time-aware lore sweep, once per window open.
+      if (this._lore === null) {
+        this._storyState = await _storyState(this.actor);
+        this._lore = _gatherWorldLore(this.actor, { state: this._storyState });
+        log(`world lore for '${this.actor.name}': ${this._lore.length} chars` +
+            (this._storyState ? " (story-state gated)" : " (no story state API — ungated)"));
+      }
       const root = document.createElement("div");
       root.style.cssText = "display:flex;flex-direction:column;height:100%;gap:.5em;";
 
@@ -369,6 +493,130 @@ function _defineAppClass() {
       } catch (e) { warn("share failed:", e?.message); }
     }
 
+    // ----- Dialogue-driven beats (story moments) -----
+    // Contract: badeden-bible/new-content/dialogue-driven-beats-spec.md.
+    // The campaign engine reports which beat choices this NPC currently
+    // embodies; they become a closed-enum tool the model may call when the
+    // conversation naturally arrives there. Nothing new is ever invented —
+    // the enum IS the beat's existing choices, gates already applied.
+    async _availableChoices() {
+      try {
+        const api = game.bbttcc?.api?.campaign?.dialogue;
+        if (api?.choicesFor) {
+          const out = await api.choicesFor(this.actor.id, {});
+          if (Array.isArray(out)) return out.filter(c => c?.choiceKey && c?.label);
+        }
+      } catch (e) { warn("choicesFor failed:", e?.message); }
+      return TEST_CHOICES.get(this.actor.id) || [];
+    }
+
+    _choiceTool(choices) {
+      return {
+        name: "enact_story_choice",
+        description: "Enact one of your currently-available story moments. Call this ONLY when the conversation has naturally arrived at that decision and a Steward has clearly committed to it. Never call it speculatively.",
+        input_schema: {
+          type: "object",
+          properties: {
+            choiceKey: { type: "string", enum: choices.map(c => String(c.choiceKey)) },
+            rationale: { type: "string", description: "One short line: how the conversation arrived at this moment." }
+          },
+          required: ["choiceKey"]
+        }
+      };
+    }
+
+    _momentsSection(choices) {
+      const lines = choices.map(c =>
+        `• [${c.choiceKey}] ${c.label}${c.description ? ` — ${c.description}` : ""}${c.beatLabel ? ` (moment of: ${c.beatLabel})` : ""}`);
+      return `## STORY MOMENTS YOU MAY ENACT (via the enact_story_choice tool)
+These are real crossroads in the story that YOU embody right now:
+${lines.join("\n")}
+
+How to handle them:
+1. Weave them into conversation as yourself — your agenda, your words. NEVER present them as a list, a menu, or "options".
+2. Only call the tool when a Steward has CLEARLY committed in the conversation ("yes, we'll do it", handing over the thing, agreeing to go). Talking about a moment is not committing to it.
+3. If the Stewards decline or drift away, let it go gracefully — the moment remains open for another day.
+4. After the tool returns, narrate what just happened in character, in your own voice.
+5. Never mention the tool, keys, beats, or choices as game constructs.`;
+    }
+
+    // Executes (or routes for approval) an enact_story_choice tool call.
+    // Returns the tool_result text the model narrates from.
+    async _resolveEnact(toolUse, choices) {
+      const key = String(toolUse?.input?.choiceKey || "");
+      const choice = choices.find(c => String(c.choiceKey) === key);
+      if (!choice) return `No such moment is available. Continue the conversation naturally without it.`;
+
+      let mode = "gm-confirm";
+      try { mode = game.settings.get(MODULE_ID, "dialogueEnactMode") || "gm-confirm"; } catch (_e) {}
+      const api = game.bbttcc?.api?.campaign?.dialogue;
+      const transcript = this._history.slice(-6).map(m => m.content).join("\n");
+
+      const doEnact = async () => {
+        if (api?.enact) {
+          const r = await api.enact({
+            beatId: choice.beatId ?? null,
+            choiceIndex: choice.choiceIndex ?? null,
+            choiceKey: key,
+            speakerActorId: this.actor.id,
+            userId: game.user.id,
+            transcript
+          });
+          if (r?.ok === false) return `The moment could not be enacted (${r?.error || "unknown"}). Continue naturally; treat it as not yet happened.`;
+          return r?.summary || `The moment "${choice.label}" has now truly happened. Narrate it in character.`;
+        }
+        // Stub path (campaign API not yet installed): mark it enacted for testing.
+        log(`STUB enact: ${key} ("${choice.label}") — campaign.dialogue.enact not installed yet`);
+        return `The moment "${choice.label}" has now truly happened (test harness). Narrate it in character.`;
+      };
+
+      // GM at the keyboard: inline confirm (or straight through on auto).
+      if (game.user.isGM) {
+        if (mode === "gm-confirm") {
+          const ok = await this._confirmEnact(choice);
+          if (!ok) return `The Gamemaster holds this moment back for now. It has NOT happened — steer the conversation gently elsewhere.`;
+        }
+        return await doEnact();
+      }
+
+      // Player at the keyboard: campaign.dialogue.enact is GM-client only,
+      // so player-initiated moments ALWAYS route through the GM approval
+      // card (regardless of dialogueEnactMode). The NPC speaks as if the
+      // deal is struck in words while the deed awaits.
+      await this._postApprovalCard(choice, transcript);
+      return `The agreement has been spoken and the Gamemaster has been notified, but the deed itself has NOT happened yet. Speak as someone who has just shaken hands on a thing that is about to be done.`;
+    }
+
+    async _confirmEnact(choice) {
+      const DialogV2 = foundry.applications?.api?.DialogV2;
+      const content = `<p><b>${_esc(this.actor.name)}</b> wants to enact:</p><p style="margin:.3em 0;"><b>${_esc(choice.label)}</b>${choice.description ? `<br><span style="font-size:.85em;opacity:.8;">${_esc(choice.description)}</span>` : ""}</p>`;
+      try {
+        if (DialogV2?.confirm) return !!(await DialogV2.confirm({ window: { title: "Enact story moment?" }, content }));
+        return !!(await Dialog.confirm({ title: "Enact story moment?", content }));
+      } catch (_e) { return false; }
+    }
+
+    async _postApprovalCard(choice, transcript) {
+      try {
+        const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
+        await ChatMessage.create({
+          whisper: gmIds,
+          content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #b8974d;padding:.4em .6em;background:rgba(184,151,77,.08);">
+            <b>Story moment awaiting approval</b><br>
+            <b>${_esc(this.actor.name)}</b> → <i>${_esc(choice.label)}</i><br>
+            ${choice.description ? `<span style="font-size:.85em;opacity:.8;">${_esc(choice.description)}</span><br>` : ""}
+            <button type="button" data-bbttcc-enact="approve" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-check"></i> Enact</button>
+            <button type="button" data-bbttcc-enact="decline" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Decline</button>
+          </div>`,
+          flags: { [MODULE_ID]: { pendingEnact: {
+            beatId: choice.beatId ?? null, choiceIndex: choice.choiceIndex ?? null,
+            choiceKey: choice.choiceKey, label: choice.label,
+            speakerActorId: this.actor.id, userId: game.user.id, transcript
+          } } }
+        });
+      } catch (e) { warn("approval card failed:", e?.message); }
+    }
+
     // ----- The exchange -----
     async _send() {
       if (this._busy) return;
@@ -396,13 +644,25 @@ function _defineAppClass() {
       try {
         const lore = game.bbttcc?.mal?.lore;
         const usePrimer = lore?.enabled?.() !== false;
+        // Fresh story state each send — quests can advance mid-conversation
+        // (an enacted moment may complete one). Persona's PRESENT MOMENT
+        // section keeps the NPC anchored to narrative NOW.
+        this._storyState = await _storyState(this.actor);
         const system = [];
         if (usePrimer) system.push({ text: lore?.getPrimer?.() || "", cache: "1h" });
-        system.push({ text: _buildPersonaPrompt(this.actor, this._lore), cache: true });
+        system.push({ text: _buildPersonaPrompt(this.actor, this._lore, this._storyState), cache: true });
 
+        // Story moments: closed-enum tool + an UNCACHED system section (quest
+        // state changes between sends; keep it after the cached breakpoints).
+        const choices = await this._availableChoices();
+        const tools = choices.length ? [this._choiceTool(choices)] : undefined;
+        if (choices.length) system.push({ text: this._momentsSection(choices) });
+
+        const baseMessages = this._history.map(m => ({ role: m.role, content: m.content }));
         const res = await provider.call({
           system,
-          messages: this._history.map(m => ({ role: m.role, content: m.content })),
+          messages: baseMessages,
+          tools,
           maxTokens: 350,
           temperature: 0.9,
           stream: true,
@@ -416,10 +676,45 @@ function _defineAppClass() {
           npcBubble.textContent = `(…the words don't come. ${res.error}: ${res.message || ""})`;
           npcBubble.style.opacity = ".55";
         } else {
-          npcBubble.textContent = res.text || "…";
-          this._history.push({ role: "assistant", content: res.text || "", speaker: this.actor.name, ts: Date.now() });
-          await _saveHistory(this.actor, this._history);
+          let finalText = res.text || "";
           this._logCall(res);
+
+          // Tool loop (single round): enact the story moment, then let the
+          // NPC narrate onward with the outcome as tool_result. Continuation
+          // streams into the same bubble below any pre-tool text.
+          if (res.toolUses?.length && tools) {
+            const tu = res.toolUses[0];
+            log(`story moment requested: ${tu.input?.choiceKey} (${tu.input?.rationale || "no rationale"})`);
+            const resultText = await this._resolveEnact(tu, choices);
+            const prefix = finalText ? `${finalText}\n\n` : "";
+            const cont = await provider.call({
+              system,
+              messages: [
+                ...baseMessages,
+                { role: "assistant", content: res.content },
+                { role: "user", content: [{ type: "tool_result", tool_use_id: tu.id, content: resultText }] }
+              ],
+              tools,
+              toolChoice: { type: "none" },   // one moment per message
+              maxTokens: 350,
+              temperature: 0.9,
+              stream: true,
+              onDelta: (text) => {
+                npcBubble.textContent = prefix + text;
+                this._els.list.scrollTop = this._els.list.scrollHeight;
+              }
+            });
+            if (cont.ok) {
+              finalText = prefix + (cont.text || "");
+              this._logCall(cont);
+            } else {
+              finalText = prefix + `(…the moment lands, but the words trail off. ${cont.error})`;
+            }
+          }
+
+          npcBubble.textContent = finalText || "…";
+          this._history.push({ role: "assistant", content: finalText || "", speaker: this.actor.name, ts: Date.now() });
+          await _saveHistory(this.actor, this._history);
         }
       } catch (e) {
         warn("dialogue exchange failed:", e?.message || e);
@@ -482,31 +777,44 @@ async function talkTo(actorOrToken) {
 
 async function editPersona(actor) {
   if (!game.user.isGM) return;
-  const cur = String(actor.getFlag(MODULE_ID, "persona")?.notes || "");
+  const cur = actor.getFlag(MODULE_ID, "persona") || {};
   const content = `
-    <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;">Private GM truth for <b>${_esc(actor.name)}</b> — knowledge, secrets, agenda, speech quirks. Shapes every reply; never quoted to players.</p>
-    <textarea name="notes" rows="12" style="width:100%;">${_esc(cur)}</textarea>`;
+    <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;"><b>Knowledge topics</b> — comma-separated names/places/subjects <b>${_esc(actor.name)}</b> knows about. The journal/beat sweep pulls every paragraph mentioning these, so "Dougan Marsh, The Gullywasher" makes those stories part of what they know.</p>
+    <input type="text" name="topics" style="width:100%;margin-bottom:.6em;" placeholder="Dougan Marsh, The Gullywasher, Port Kudzu…" value="${_esc(cur.topics || "")}"/>
+    <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;"><b>Private GM truth</b> — knowledge, secrets, agenda, speech quirks. Shapes every reply; never quoted to players.</p>
+    <textarea name="notes" rows="10" style="width:100%;">${_esc(cur.notes || "")}</textarea>`;
+
+  const readForm = (form) => ({
+    topics: String(form?.elements?.topics?.value ?? ""),
+    notes:  String(form?.elements?.notes?.value ?? "")
+  });
 
   const DialogV2 = foundry.applications?.api?.DialogV2;
-  let notes = null;
+  let result = null;
   if (DialogV2?.wait) {
-    notes = await DialogV2.wait({
+    result = await DialogV2.wait({
       window: { title: `Persona — ${actor.name}` },
       position: { width: 480 },
       content,
       buttons: [
         { action: "save", label: "Save", icon: "fa-solid fa-floppy-disk", default: true,
-          callback: (_ev, button) => button.form.elements.notes.value },
+          callback: (_ev, button) => readForm(button.form) },
         { action: "cancel", label: "Cancel", callback: () => null }
       ]
     }).catch(() => null);
   } else {
-    notes = await new Promise((resolve) => {
+    result = await new Promise((resolve) => {
       new Dialog({
         title: `Persona — ${actor.name}`,
         content,
         buttons: {
-          save:   { label: "Save", callback: (html) => resolve(html.find?.("[name=notes]").val?.() ?? html[0]?.querySelector("[name=notes]")?.value ?? null) },
+          save:   { label: "Save", callback: (html) => {
+            const root = html[0] ?? html;
+            resolve({
+              topics: root.querySelector?.("[name=topics]")?.value ?? "",
+              notes:  root.querySelector?.("[name=notes]")?.value ?? ""
+            });
+          } },
           cancel: { label: "Cancel", callback: () => resolve(null) }
         },
         default: "save",
@@ -515,9 +823,16 @@ async function editPersona(actor) {
     });
   }
 
-  if (notes === null || notes === "cancel") return;
-  await actor.setFlag(MODULE_ID, "persona", { notes: String(notes) });
-  ui.notifications?.info(`Persona notes saved for ${actor.name}.`);
+  if (!result || result === "cancel" || typeof result !== "object") return;
+  await actor.setFlag(MODULE_ID, "persona", { notes: String(result.notes), topics: String(result.topics) });
+  // Open windows re-sweep so new topics take effect immediately.
+  const app = APPS.get(actor.id);
+  if (app) {
+    app._storyState = await _storyState(actor);
+    app._lore = _gatherWorldLore(actor, { state: app._storyState });
+    log(`persona saved; lore re-swept for '${actor.name}' (${app._lore.length} chars)`);
+  }
+  ui.notifications?.info(`Persona saved for ${actor.name}.`);
 }
 
 // ---------------------------------------------------------------------------
@@ -590,6 +905,60 @@ Hooks.on("renderTokenHUD", (hud, html) => {
 });
 
 // ---------------------------------------------------------------------------
+// GM approval cards (player-initiated story moments in gm-confirm mode)
+// ---------------------------------------------------------------------------
+
+async function _handleApprovalClick(message, action) {
+  if (!game.user.isGM) return;
+  const p = message.getFlag(MODULE_ID, "pendingEnact");
+  if (!p) return;
+
+  let outcome;
+  if (action === "approve") {
+    try {
+      const api = game.bbttcc?.api?.campaign?.dialogue;
+      if (api?.enact) {
+        const r = await api.enact({
+          beatId: p.beatId, choiceIndex: p.choiceIndex, choiceKey: p.choiceKey,
+          speakerActorId: p.speakerActorId, userId: p.userId, transcript: p.transcript
+        });
+        outcome = (r?.ok === false) ? `⚠ enact failed: ${r?.error || "unknown"}` : `✓ Enacted — ${r?.summary || p.label}`;
+      } else {
+        log(`STUB enact (approval card): ${p.choiceKey} ("${p.label}")`);
+        outcome = `✓ Enacted (test harness) — ${p.label}`;
+      }
+    } catch (e) {
+      outcome = `⚠ enact threw: ${e?.message || e}`;
+    }
+  } else {
+    outcome = `✗ Declined by the Gamemaster`;
+  }
+
+  try {
+    await message.update({
+      content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #b8974d;padding:.4em .6em;background:rgba(184,151,77,.08);">
+        <b>Story moment</b> — ${_esc(p.label)}<br>${_esc(outcome)}</div>`,
+      [`flags.${MODULE_ID}.pendingEnact`]: null
+    });
+  } catch (e) { warn("approval card update failed:", e?.message); }
+}
+
+function _bindApprovalButtons(message, root) {
+  if (!root || !message?.getFlag?.(MODULE_ID, "pendingEnact")) return;
+  for (const btn of root.querySelectorAll("[data-bbttcc-enact]")) {
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      _handleApprovalClick(message, btn.dataset.bbttccEnact);
+    });
+  }
+}
+
+// v13+ fires renderChatMessageHTML (HTMLElement); older cores fire
+// renderChatMessage (jQuery). Bind both defensively.
+Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); } catch (_e) {} });
+Hooks.on("renderChatMessage",     (message, html) => { try { _bindApprovalButtons(message, html?.[0] ?? html); } catch (_e) {} });
+
+// ---------------------------------------------------------------------------
 // Settings + install
 // ---------------------------------------------------------------------------
 
@@ -613,6 +982,25 @@ Hooks.once("init", () => {
     });
   } catch (e) { warn("keybinding registration failed:", e?.message); }
 
+  game.settings.register(MODULE_ID, "dialogueEnactMode", {
+    name:    "Story moments from dialogue",
+    hint:    "When an NPC conversation reaches an available beat choice: 'GM confirms' pauses for your approval (inline for GM conversations, an approval card for player ones); 'Automatic' enacts immediately.",
+    scope:   "world",
+    config:  true,
+    type:    String,
+    choices: { "gm-confirm": "GM confirms each moment (recommended)", "auto": "Automatic" },
+    default: "gm-confirm"
+  });
+
+  game.settings.register(MODULE_ID, "npcCommonJournal", {
+    name:    "NPC common-knowledge journal",
+    hint:    "Name of a journal whose text pages are known to EVERY NPC — the gazetteer of what any local knows (places, people, who holds what). Write it once; all NPCs know it.",
+    scope:   "world",
+    config:  true,
+    type:    String,
+    default: "NPC Common Knowledge"
+  });
+
   game.settings.register(MODULE_ID, "npcDialoguePlayers", {
     name:    "Players can speak with NPCs",
     hint:    "Show the dialogue button on NPC token HUDs for players (GMs always see it). Conversations use the world API key under the gm-key-powers-all policy.",
@@ -630,6 +1018,23 @@ function _install() {
     globalThis.game.bbttcc.mal.npc = Object.assign(globalThis.game.bbttcc.mal.npc || {}, {
       talkTo,
       editPersona,
+      // Durable NPC story-event memory (also written by the campaign engine
+      // per the dialogue-driven-beats spec).
+      addMemory: async (actorOrId, text) => {
+        const actor = (typeof actorOrId === "string") ? game.actors.get(actorOrId) : actorOrId;
+        if (!actor || !text || !game.user.isGM) return false;
+        const cur = (actor.getFlag(MODULE_ID, "memories") || []).slice(-(MEMORY_CAP - 1));
+        cur.push({ ts: Date.now(), text: String(text) });
+        await actor.setFlag(MODULE_ID, "memories", cur);
+        return true;
+      },
+      // Stub choices for testing dialogue-driven beats before the campaign
+      // API ships: setTestChoices("<actorId>", [{choiceKey, label, description}])
+      setTestChoices: (actorId, choices) => {
+        if (Array.isArray(choices) && choices.length) TEST_CHOICES.set(actorId, choices);
+        else TEST_CHOICES.delete(actorId);
+        return TEST_CHOICES.get(actorId) || null;
+      },
       _apps: APPS,
       _buildPersonaPrompt,
       _gatherWorldLore
