@@ -211,13 +211,19 @@ function injectFactionChip(app, html) {
     const party = actor?.getFlag?.(MOD, "presenceParty");
     if (!party) return; // characters + non-epic factions have none
     const $html = $wrap(html); if (!$html || !$html.length) return;
-    const target = $html.find(".sheet-body").first().length ? $html.find(".sheet-body").first() : $html;
-    if (!target.length) return;
-    target.find("#bbttcc-epic-faction-presence").remove();
+    // Land INSIDE the sheet's content, never on the app root: AppV2 hands the
+    // whole window element to the render hook, and prepending to it put the
+    // chip ABOVE the title bar where the frame's layout stretched it into a
+    // giant empty banner (owner hit this on faction sheets 2026-07-03).
+    let target = $html.find(".sheet-body").first();
+    if (!target.length) target = $html.find(".window-content").first();
+    if (!target.length) target = $html.hasClass("window-content") ? $html : null;
+    if (!target || !target.length) return;
+    $html.find("#bbttcc-epic-faction-presence").remove();
     const bandInfo = presenceFactor(party.total);
     const huntedName = party.huntedId ? (game.actors?.get(party.huntedId)?.name ?? "—") : "— none —";
     const chip = $(`
-      <section id="bbttcc-epic-faction-presence" class="bbttcc-epic-faction-presence">
+      <section id="bbttcc-epic-faction-presence" class="bbttcc-epic-faction-presence" style="flex:0 0 auto;align-self:stretch;">
         <span class="be-pr-label">Presence</span>
         <span class="be-pr-val">${party.total}</span>
         <span class="be-pr-band be-band-${bandInfo.key}">${bandInfo.label}</span>
