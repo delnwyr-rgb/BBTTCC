@@ -369,6 +369,11 @@ function _normalizeCampaign(id, data = {}) {
   const factionIdFinal = primary || factionIds[0] || null;
 
   return {
+    // Preserve extension fields (npcPlacements, future additions) — this used
+    // to return a FIXED shape, silently stripping anything it didn't know
+    // about on every read AND permanently on every save (live-caught
+    // 2026-07-03: npcPlacements vanished between the seeder and the engine).
+    ...(data && typeof data === "object" ? data : {}),
     id,
     label,
     title: label,
@@ -2734,6 +2739,21 @@ async function _applyQuestEffects(campaign, beat, ctx) {
     totalApplied = applied;                      // identical across members
 
     if (faction.setFlag) {
+      // setFlag MERGES objects: keys deleted from `next` (bucket transitions
+      // via moveQuest/removeFromAllBuckets) silently SURVIVE in the database.
+      // Live-caught 2026-07-03: completing the stabilizer quest left it in
+      // BOTH active and completed, so "is active" gates never closed and the
+      // sealed Leygate deal stayed offerable. Explicitly delete removed keys
+      // first, then merge the new state.
+      try {
+        const del = {};
+        for (const bucket of ["active", "completed", "archived"]) {
+          for (const qid of Object.keys((cur && cur[bucket]) || {})) {
+            if (!next[bucket] || !next[bucket][qid]) del[`flags.${MOD}.quests.${bucket}.-=${qid}`] = null;
+          }
+        }
+        if (Object.keys(del).length) await faction.update(del, { render: false });
+      } catch (eDel) { console.warn("[bbttcc-campaign] quest bucket deletion sync failed", eDel); }
       await faction.setFlag(MOD, "quests", next);
     }
     try {
@@ -4592,9 +4612,10 @@ async function dialogueEnact(opts = {}) {
     if (!res || !res.acted) return { ok: false, error: "The choice did not resolve (see console)." };
 
     // Plain-text mechanical account for the NPC's model to narrate from.
-    const routedLabel = res.routedBeatId
-      ? ((campaign.beats || []).find(b => b?.id === res.routedBeatId)?.label || res.routedBeatId)
+    const routedBeat = res.routedBeatId
+      ? (campaign.beats || []).find(b => b?.id === res.routedBeatId)
       : null;
+    const routedLabel = routedBeat ? (routedBeat.label || routedBeat.id) : (res.routedBeatId || null);
     let summary = `The moment happens: "${String(choice.label || "").trim()}"`;
     if (res.check) {
       summary += res.check.kind === "gm"
@@ -4603,6 +4624,22 @@ async function dialogueEnact(opts = {}) {
     }
     summary += ".";
     if (routedLabel) summary += ` It leads on to "${routedLabel}".`;
+
+    // The routed OUTCOME beat's description is the authored curtain call —
+    // per-outcome closing scene (the reveal, the stinger, who exits where).
+    // Play it: post it player-facing as narration, and hand its text to the
+    // NPC's model so the in-window continuation mirrors the authored scene
+    // instead of inventing its own ending.
+    if (routedBeat && String(routedBeat.description || "").trim()) {
+      try {
+        await ChatMessage.create({
+          speaker: { alias: "Bad Eden" },
+          content: `<div class="bbttcc-narration" style="border-left:3px solid #b8974d;padding:.45em .6em;background:rgba(184,151,77,.08);">${routedBeat.description}</div>`
+        });
+      } catch (_eN) {}
+      const plain = String(routedBeat.description).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+      if (plain) summary += ` THE SCENE PLAYS OUT AS AUTHORED (deliver its substance in your own voice, then let the scene close): ${plain}`;
+    }
 
     // GM log whisper (transcript excerpt when provided).
     try {
@@ -4789,6 +4826,8 @@ function _bindTalkInviteButtons(message, root) {
   try {
     if (!root || !message?.getFlag?.(MOD_ID, "talkInvite")) return;
     for (const btn of root.querySelectorAll("[data-bbttcc-talk]")) {
+      if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
+      btn.dataset.bbttccBound = "1";
       btn.addEventListener("click", (ev) => {
         ev.preventDefault();
         const talkTo = game.bbttcc?.mal?.npc?.talkTo;
@@ -4807,6 +4846,284 @@ function _bindTalkInviteButtons(message, root) {
 // jQuery renderChatMessage — bind both defensively.
 Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindTalkInviteButtons(message, html); } catch (_e) {} });
 Hooks.on("renderChatMessage",     (message, html) => { try { _bindTalkInviteButtons(message, html?.[0] ?? html); } catch (_e) {} });
+
+// (3c) Narrative handoff — "the way forward" card. Authored per beat:
+//   beat.handoff = { beatId, focus?, text? }
+// When one of THIS beat's moments is enacted through conversation, post a
+// public card presenting the handoff beat's choices as curated doors —
+// `focus` (a choice label) leads and is highlighted, `text` is the diegetic
+// line ("Mara nods you toward the Arc Bay…"). Buttons run the chosen door's
+// next beat via runBeat — GM-driven like every launch surface; players see
+// the signpost. This is how a closed deal points at the next scene.
+function _onDialogueChoiceEnactedHandoff({ beatId } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    const campaignId = getActiveCampaignId();
+    const campaign = campaignId ? getCampaign(campaignId) : null;
+    if (!campaign) return;
+    const beat = (campaign.beats || []).find(b => b?.id === beatId);
+    const h = beat?.handoff;
+    if (!h?.beatId) return;
+    const hub = (campaign.beats || []).find(b => b?.id === String(h.beatId));
+    if (!hub) return warn(`[dialogue] handoff target '${h.beatId}' not found`);
+    const esc = foundry.utils.escapeHTML;
+    const doors = (hub.choices || [])
+      .map((ch, i) => ({ label: String(ch?.label || "").trim(), next: String(ch?.next || "").trim(), i }))
+      .filter(d => d.label && d.next);
+    if (!doors.length) return;
+    const focus = String(h.focus || "").trim().toLowerCase();
+    doors.sort((a, b) => (a.label.toLowerCase() === focus ? -1 : 0) - (b.label.toLowerCase() === focus ? -1 : 0));
+    const btn = (d, lead) => `<button type="button" data-bbttcc-handoff="${esc(campaignId)}:${esc(d.next)}"
+      style="width:auto;padding:.25em .8em;margin:.15em .25em 0 0;${lead ? "border-color:#4db8b0;box-shadow:0 0 4px rgba(77,184,176,.55);font-weight:bold;" : "opacity:.85;"}">
+      ${lead ? '<i class="fa-solid fa-location-arrow"></i> ' : ""}${esc(d.label)}</button>`;
+    ChatMessage.create({
+      speaker: { alias: "Bad Eden" },
+      content: `<div class="bbttcc-handoff" style="border-left:3px solid #4db8b0;padding:.45em .6em;background:rgba(77,184,176,.08);">
+        <i>${esc(String(h.text || "The way forward:"))}</i><br>
+        ${doors.map((d, idx) => btn(d, focus && idx === 0 && d.label.toLowerCase() === focus)).join("")}
+      </div>`,
+      flags: { [MOD_ID]: { handoffCard: { beatId: beat.id, hubId: hub.id } } }
+    }).catch(e => warn("[dialogue] handoff card failed:", e));
+  } catch (e) { warn("[dialogue] handoff listener failed:", e); }
+}
+Hooks.on("bbttcc:dialogue:choiceEnacted", _onDialogueChoiceEnactedHandoff);
+
+function _bindHandoffButtons(message, root) {
+  try {
+    if (!root || !message?.getFlag?.(MOD_ID, "handoffCard")) return;
+    for (const btn of root.querySelectorAll("[data-bbttcc-handoff]")) {
+      if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
+      btn.dataset.bbttccBound = "1";
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        if (!game.user.isGM) return ui.notifications?.info?.("The way opens when the GM leads on.");
+        const [cid, target] = String(btn.dataset.bbttccHandoff).split(":");
+        if (cid && target) runBeat(cid, target);
+      });
+    }
+    // Scene doors: activate the beat's scene + narrate its description —
+    // the party MOVES, but the beat does not resolve and no menu opens
+    // (the moment stays alive in the conversation).
+    for (const btn of root.querySelectorAll("[data-bbttcc-scenedoor]")) {
+      if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
+      btn.dataset.bbttccBound = "1";
+      btn.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        if (!game.user.isGM) return ui.notifications?.info?.("The way opens when the GM leads on.");
+        try {
+          const beatId = String(btn.dataset.bbttccScenedoor || "");
+          const campaign = getCampaign(getActiveCampaignId());
+          const beat = (campaign?.beats || []).find(b => b?.id === beatId);
+          if (!beat) return ui.notifications?.warn?.("That way has closed (beat not found).");
+          const sid = String(beat.sceneId || beat.refs?.sceneId || "").replace(/^Scene\./, "");
+          const scene = sid ? game.scenes?.get?.(sid) : null;
+          if (scene && !scene.active) await scene.activate();
+          const desc = String(beat.description || "").trim();
+          if (desc) await ChatMessage.create({
+            speaker: { alias: "Bad Eden" },
+            content: `<div class="bbttcc-narration" style="border-left:3px solid #b8974d;padding:.45em .6em;background:rgba(184,151,77,.08);">${desc}</div>`
+          });
+        } catch (e) { warn("[dialogue] scene door failed:", e); }
+      });
+    }
+  } catch (e) { warn("[dialogue] handoff button bind failed:", e); }
+}
+Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindHandoffButtons(message, html); } catch (_e) {} });
+Hooks.on("renderChatMessage",     (message, html) => { try { _bindHandoffButtons(message, html?.[0] ?? html); } catch (_e) {} });
+
+// (3d) Mid-conversation doors — point_the_way. The fiction moves before the
+// enact does ("she leads him back through the crates…") and the WORLD must
+// be able to follow. Doors an NPC can open right now = each offerable
+// moment's own SCENE (beat.sceneId — "take them there") + its handoff hub's
+// choices. The dialogue engine offers these as a closed-enum tool; calling
+// it posts a public signpost card. GM clicks the door: scene doors ACTIVATE
+// the beat's scene + narrate its description (no beat resolution, no menu —
+// the moment stays in the conversation); run doors fire runBeat as usual.
+async function dialogueDoorsFor(actorId, ctx = {}) {
+  try {
+    const doors = [];
+    const seen = new Set();
+    const campaignId = getActiveCampaignId();
+    const campaign = campaignId ? getCampaign(campaignId) : null;
+    for (const { beat } of await _dialogueOfferableBeats(actorId, ctx)) {
+      const sid = String(beat.sceneId || beat.refs?.sceneId || "").trim();
+      if (sid && !seen.has(`scene:${beat.id}`)) {
+        seen.add(`scene:${beat.id}`);
+        doors.push({ key: `scene:${beat.id}`, label: String(beat.label || beat.id), kind: "scene" });
+      }
+      const h = beat.handoff;
+      if (h?.beatId && campaign) {
+        const hub = (campaign.beats || []).find(b => b?.id === String(h.beatId));
+        for (const ch of (hub?.choices || [])) {
+          const label = String(ch?.label || "").trim();
+          const next = String(ch?.next || "").trim();
+          if (!label || !next || seen.has(`run:${next}`)) continue;
+          seen.add(`run:${next}`);
+          doors.push({ key: `run:${next}`, label, kind: "run" });
+        }
+      }
+    }
+    // PERSON doors — the baton pass. Other NPCs who hold live story moments
+    // AND have a token in the active scene ("she's right there") become
+    // doors too: "I'll walk you over" hands the conversation to them.
+    try {
+      const aid = String(actorId || "").trim();
+      const sids = new Set((campaign?.beats || [])
+        .filter(b => b && String(b.speakerActorId || "").trim() && String(b.speakerActorId).trim() !== aid)
+        .map(b => String(b.speakerActorId).trim()));
+      const present = new Set((game.scenes?.active?.tokens ?? []).map(t => t.actorId).filter(Boolean));
+      for (const sid of sids) {
+        if (!present.has(sid) || seen.has(`talk:${sid}`)) continue;
+        const other = game.actors?.get?.(sid);
+        if (!other) continue;
+        const offerable = await _dialogueOfferableBeats(sid, {});
+        if (!offerable.length) continue;
+        seen.add(`talk:${sid}`);
+        doors.push({ key: `talk:${sid}`, label: `Hand them to ${other.name}`, kind: "talk" });
+      }
+    } catch (_eP) { /* scene/token data unavailable — place+run doors still work */ }
+    return doors;
+  } catch (e) { warn("[dialogue] doorsFor failed:", e); return []; }
+}
+
+async function dialoguePointTheWay({ actorId, doorKey, line, transcript } = {}) {
+  try {
+    const doors = await dialogueDoorsFor(actorId, {});
+    const door = doors.find(d => String(d.key) === String(doorKey || ""));
+    if (!door) return { ok: false, error: "no such door" };
+    const actor = game.actors?.get?.(String(actorId || ""));
+    const esc = foundry.utils.escapeHTML;
+
+    // Person door — the baton pass: open the target NPC's conversation on
+    // this client right away (the talk continues), and post a Talk card so
+    // the rest of the table can step in too.
+    if (door.kind === "talk") {
+      const target = game.actors?.get?.(door.key.slice(5));
+      if (!target) return { ok: false, error: "that person is gone" };
+      await ChatMessage.create({
+        speaker: { alias: "Bad Eden" },
+        content: `<div class="bbttcc-talk-invite" style="border-left:3px solid #4db8b0;padding:.45em .6em;background:rgba(77,184,176,.08);">
+          <i>${esc(String(line || "").trim() || `${actor?.name || "Someone"} hands you to ${target.name}.`)}</i><br>
+          <button type="button" data-bbttcc-talk="${esc(target.id)}" style="width:auto;padding:.25em .8em;margin-top:.3em;border-color:#4db8b0;box-shadow:0 0 4px rgba(77,184,176,.55);font-weight:bold;">
+            <i class="fa-solid fa-comments"></i> Talk to ${esc(target.name)}</button>
+        </div>`,
+        flags: { [MOD_ID]: { talkInvite: { actorId: target.id, via: "pointTheWay" } } }
+      });
+      // The handed-to NPC speaks FIRST (nudge opens the window and feeds the
+      // scene note); fall back to just opening the window if nudge is absent.
+      try {
+        const npcApi = game.bbttcc?.mal?.npc;
+        if (npcApi?.nudge) {
+          // Carry the scene across the baton pass: the handed-to NPC sees the
+          // tail of the previous conversation as things they just witnessed.
+          const tail = String(transcript || "").trim().slice(-1500);
+          npcApi.nudge(target,
+            `The Stewards have just been handed to you${actor ? ` by ${actor.name}` : ""}: "${String(line || "").trim() || "they're all yours"}".`
+            + (tail ? `\nWhat just happened, which you witnessed or were just told (treat as known, react accordingly):\n${tail}` : ""))
+            .catch?.(() => {});
+        } else npcApi?.talkTo?.(target);
+      } catch (_eT) {}
+      return { ok: true, summary: `${target.name} now has the Stewards' attention — your part of the conversation winds down naturally.` };
+    }
+
+    const attr = door.kind === "scene"
+      ? `data-bbttcc-scenedoor="${esc(door.key.slice(6))}"`
+      : `data-bbttcc-handoff="${esc(getActiveCampaignId())}:${esc(door.key.slice(4))}"`;
+    await ChatMessage.create({
+      speaker: { alias: "Bad Eden" },
+      content: `<div class="bbttcc-handoff" style="border-left:3px solid #4db8b0;padding:.45em .6em;background:rgba(77,184,176,.08);">
+        <i>${esc(String(line || "").trim() || `${actor?.name || "Someone"} points the way.`)}</i><br>
+        <button type="button" ${attr} style="width:auto;padding:.25em .8em;margin-top:.3em;border-color:#4db8b0;box-shadow:0 0 4px rgba(77,184,176,.55);font-weight:bold;">
+          <i class="fa-solid fa-location-arrow"></i> ${esc(door.label)}</button>
+      </div>`,
+      flags: { [MOD_ID]: { handoffCard: { via: "pointTheWay", doorKey: door.key } } }
+    });
+    return { ok: true, summary: `The way to "${door.label}" now stands open before the Stewards — continue leading them in character.` };
+  } catch (e) { warn("[dialogue] pointTheWay failed:", e); return { ok: false, error: String(e?.message || e) }; }
+}
+
+// ─── Situational NPC placement (2026-07-03) ─────────────────────────────────
+// "The scenes consult the quest status to see where people should be."
+// campaign.npcPlacements = [{ actorId, rules: [{ when: <requires conds>,
+// sceneId | sceneName, x?, y?, hidden? }] }] — per NPC, ordered rules in the
+// SAME gate vocabulary as beats (questBucket is/isNot, flags, beatMark);
+// first matching rule wins; empty/absent `when` = always (the default spot).
+// The engine reconciles the VIEWED scene on canvasReady and re-checks when
+// beats resolve — so Miliard leaves the back room the moment the rite ends
+// and is waiting at the Gullywasher when anyone next looks. Only actors
+// listed in npcPlacements are ever touched. GM-side (token CRUD).
+
+function _placementSceneId(rule) {
+  const sid = String(rule?.sceneId || "").replace(/^Scene\./, "").trim();
+  if (sid && game.scenes?.get?.(sid)) return sid;
+  const name = String(rule?.sceneName || "").trim();
+  if (name) {
+    const s = game.scenes?.getName?.(name) || game.scenes?.contents?.find(x => x.name === name);
+    if (s) return s.id;
+  }
+  return null;
+}
+
+async function _placementRuleMatches(rule, campaign) {
+  const conds = rule?.when;
+  if (!conds || (Array.isArray(conds) && !conds.length)) return true;   // default spot
+  try { return await _beatRequiresMet({ id: "npc-placement", inject: { requires: conds } }, campaign, {}); }
+  catch (_e) { return false; }
+}
+
+async function reconcileNpcPlacements({ sceneId = null, reason = "manual" } = {}) {
+  try {
+    if (!game.user?.isGM) return { ok: false, reason: "not_gm" };
+    if (game.users?.activeGM && !game.users.activeGM.isSelf) return { ok: false, reason: "not_primary_gm" };
+    const scene = sceneId ? game.scenes?.get?.(String(sceneId).replace(/^Scene\./, "")) : canvas?.scene;
+    if (!scene) return { ok: false, reason: "no_scene" };
+    const campaignId = getActiveCampaignId();
+    const campaign = campaignId ? getCampaign(campaignId) : null;
+    const placements = Array.isArray(campaign?.npcPlacements) ? campaign.npcPlacements : [];
+    if (!placements.length) return { ok: true, changed: 0 };
+
+    let changed = 0;
+    for (const p of placements) {
+      const actor = game.actors?.get?.(String(p?.actorId || ""));
+      if (!actor) continue;
+      let desired = null;
+      for (const rule of (Array.isArray(p.rules) ? p.rules : [])) {
+        if (await _placementRuleMatches(rule, campaign)) { desired = rule; break; }
+      }
+      if (!desired) continue;                                   // no opinion — leave the world alone
+      const desiredSceneId = _placementSceneId(desired);
+      const here = scene.tokens.filter(t => t.actorId === actor.id);
+      if (desiredSceneId === scene.id) {
+        if (!here.length) {
+          const td = await actor.getTokenDocument({
+            x: Number.isFinite(desired.x) ? desired.x : Math.round(scene.width / 2),
+            y: Number.isFinite(desired.y) ? desired.y : Math.round(scene.height / 2),
+            hidden: !!desired.hidden
+          });
+          await scene.createEmbeddedDocuments("Token", [td.toObject()]);
+          changed++;
+          log(`[placement] ${actor.name} appears in '${scene.name}' (${reason}).`);
+        }
+      } else if (desiredSceneId && here.length) {
+        await scene.deleteEmbeddedDocuments("Token", here.map(t => t.id));
+        changed++;
+        log(`[placement] ${actor.name} is elsewhere now — removed from '${scene.name}' (${reason}).`);
+      }
+    }
+    return { ok: true, changed };
+  } catch (e) { warn("[placement] reconcile failed:", e); return { ok: false, error: String(e?.message || e) }; }
+}
+
+Hooks.on("canvasReady", () => {
+  try { reconcileNpcPlacements({ reason: "canvasReady" }).catch(() => {}); } catch (_e) {}
+});
+Hooks.on("bbttcc:beat:resolved", () => {
+  // Quest state may have moved people. Chain after the consumption writes.
+  try {
+    if (!game.user?.isGM) return;
+    setTimeout(() => reconcileNpcPlacements({ reason: "beat:resolved" }).catch(() => {}), 500);
+  } catch (_e) {}
+});
 
 // GM veto for director-driven invitations (mirror of _gmPromptStoryBeat).
 async function _gmPromptTalkInvite(beat, speaker, turn) {
@@ -5567,8 +5884,11 @@ function buildCampaignAPI() {
     dialogue: {
       choicesFor: dialogueChoicesFor,
       enact: dialogueEnact,
-      storyStateFor: dialogueStoryStateFor
+      storyStateFor: dialogueStoryStateFor,
+      doorsFor: dialogueDoorsFor,
+      pointTheWay: dialoguePointTheWay
     },
+    placements: { reconcile: reconcileNpcPlacements },
     tables: { listTables, getTable, saveTable, createTable, deleteTable, getAllTables, setAllTables, runRandomTable },
     quests: { listQuests, getQuest, saveQuest, createQuest, deleteQuest, setQuestStatus, getAllQuests, setAllQuests },
     io: {
