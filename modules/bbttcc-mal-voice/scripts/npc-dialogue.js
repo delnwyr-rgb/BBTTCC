@@ -160,7 +160,16 @@ async function _storyState(actor) {
 
 function _questKnown(state, questId, needCompleted = false) {
   if (!state) return false;   // fail closed for gated content
-  const has = (arr) => (arr || []).some(q => String(q?.id ?? q) === String(questId));
+  const id = String(questId || "");
+  // Beat gate: `@after: beat:<beatId>` — known once that beat has ACTUALLY
+  // fired (storyStateFor.firedBeatIds: director fires ∪ dialogue enacts ∪
+  // per-beat quest marks). This is how BRANCHED outcomes program community
+  // knowledge: author one page per ending; only the fired one lights up.
+  if (id.startsWith("beat:")) {
+    const bid = id.slice(5);
+    return (state.firedBeatIds || []).some(b => String(b) === bid);
+  }
+  const has = (arr) => (arr || []).some(q => String(q?.id ?? q) === String(id));
   if (needCompleted) return has(state.quests?.completed);
   return has(state.quests?.completed) || has(state.quests?.active);
 }
@@ -502,6 +511,18 @@ function _defineAppClass() {
         gmBtn.addEventListener("click", () => editPersona(this.actor));
         header.appendChild(gmBtn);
 
+        // GM: fire a story moment deterministically — conversation is the
+        // preferred surface, but when the model narrates around a committed
+        // decision instead of enacting it, the GM pulls the trigger here and
+        // the NPC then closes the scene in character.
+        const boltBtn = document.createElement("button");
+        boltBtn.type = "button";
+        boltBtn.title = "Enact a story moment now (GM)";
+        boltBtn.style.cssText = "flex:0 0 auto;width:auto;padding:.2em .5em;line-height:1;";
+        boltBtn.innerHTML = `<i class="fa-solid fa-bolt"></i>`;
+        boltBtn.addEventListener("click", () => this._gmFireMoment());
+        header.appendChild(boltBtn);
+
         const clearBtn = document.createElement("button");
         clearBtn.type = "button";
         clearBtn.title = "Clear conversation history (GM)";
@@ -620,6 +641,62 @@ function _defineAppClass() {
       return TEST_CHOICES.get(this.actor.id) || [];
     }
 
+    // ----- Mid-conversation doors (point_the_way) -----
+    // The fiction moves before any commitment does ("she leads them back
+    // through the crates…") — this tool lets the NPC make the path REAL:
+    // calling it posts a clickable signpost card (scene doors activate the
+    // beat's scene + narrate its arrival; hub doors run the next beat).
+    async _availableDoors() {
+      try {
+        const api = game.bbttcc?.api?.campaign?.dialogue;
+        if (api?.doorsFor) {
+          const out = await api.doorsFor(this.actor.id, {});
+          if (Array.isArray(out)) return out.filter(d => d?.key && d?.label);
+        }
+      } catch (e) { warn("doorsFor failed:", e?.message); }
+      return [];
+    }
+
+    _doorTool(doors) {
+      return {
+        name: "point_the_way",
+        description: "Make the path real when you lead or direct the Stewards somewhere. Call this AS you narrate taking them there or pointing them there — a clickable way appears for the table. It does not end the conversation and commits no one.",
+        input_schema: {
+          type: "object",
+          properties: {
+            doorKey: { type: "string", enum: doors.map(d => String(d.key)) },
+            line: { type: "string", description: "One short in-character line for the signpost card (e.g. 'Right through here, past the crates.')." }
+          },
+          required: ["doorKey"]
+        }
+      };
+    }
+
+    _doorsSection(doors) {
+      return `## WAYS YOU CAN OPEN (via the point_the_way tool)
+${doors.map(d => `• [${d.key}] ${d.label}`).join("\n")}
+
+Ways are places AND people. When you lead the Stewards somewhere, direct them there, or HAND THEM OFF to someone ("come on, I'll walk you over" / "she'll want a word"), call point_the_way with the matching way AS you narrate it — the path or the person becomes real and clickable for the table, and a hand-off opens that conversation at once. At most once per move. It does not end your conversation, and it commits nobody to anything.`;
+    }
+
+    async _resolveDoor(toolUse, doors) {
+      const key = String(toolUse?.input?.doorKey || "");
+      const door = doors.find(d => String(d.key) === key);
+      if (!door) return "No such way is open. Continue the conversation naturally.";
+      try {
+        const api = game.bbttcc?.api?.campaign?.dialogue;
+        if (api?.pointTheWay) {
+          // Person-doors carry the scene with them: the handed-to NPC gets
+          // the tail of THIS conversation so they know what just happened.
+          const transcript = this._history.slice(-8).map(m => m.content).join("\n");
+          const r = await api.pointTheWay({ actorId: this.actor.id, doorKey: key, line: String(toolUse?.input?.line || ""), transcript, userId: game.user.id });
+          if (r?.ok) return r.summary || "The way stands open. Continue in character.";
+          return `The way could not be opened (${r?.error || "unknown"}). Continue naturally.`;
+        }
+      } catch (e) { warn("pointTheWay failed:", e?.message); }
+      return "The way could not be opened. Continue naturally.";
+    }
+
     _choiceTool(choices) {
       return {
         name: "enact_story_choice",
@@ -659,10 +736,49 @@ ${blocks.join("\n\n")}
 How to handle them:
 1. THE MOMENT A STEWARD RAISES A SCENE'S SUBJECT (asks for the thing, names the problem), MOVE INTO THE SCENE: play your script, then lay the real paths before them plainly, in your own voice, as natural offers — "we could trade proper… or talk a shared arrangement… or you can walk". Do NOT make them guess what's possible; you are the one holding the terms. Just never recite them as a numbered menu.
 2. Path descriptions are the narrator talking to the players — treat them as scene direction (stakes, tone, costs, consequences). NEVER read them aloud, and never name dice, checks, points, or costs by game words; translate stakes into your own speech (a fair swap, a favor owed, a hard price, bad blood).
-3. Only call the tool when a Steward has CLEARLY committed in the conversation ("yes, we'll do it", handing over the thing, agreeing to go). Talking about a path is not committing to it.
+3. Only call the tool when a Steward has CLEARLY committed in the conversation ("yes, we'll do it", handing over the thing, agreeing to go). Weighing a path aloud is not committing to it — BUT a decision REPORTED AS ALREADY MADE ("it's done — we chose mercy", "I showed him mercy, he'll work it off") IS a commitment: call the tool for the matching path immediately, so the decision becomes real. Do not close a scene in words while leaving its moment un-enacted.
 4. If the Stewards decline or drift away, let it go gracefully — the moment remains open for another day.
 5. After the tool returns, narrate what just happened in character, in your own voice.
 6. Never mention the tool, keys, beats, or choices as game constructs.`;
+    }
+
+    // GM ⚡: enact one of this NPC's live moments directly (real pipeline —
+    // curtain call, memories, quest effects, handoff card), then nudge the
+    // NPC to close the scene in character.
+    async _gmFireMoment() {
+      if (!game.user.isGM) return;
+      const api = game.bbttcc?.api?.campaign?.dialogue;
+      if (!api?.enact) return ui.notifications?.warn?.("Campaign dialogue API not available.");
+      const choices = await this._availableChoices();
+      if (!choices.length) return ui.notifications?.info?.(`${this.actor.name} holds no live story moments right now.`);
+      const DialogV2 = foundry.applications?.api?.DialogV2;
+      const options = choices.map(c =>
+        `<option value="${_esc(c.choiceKey)}">${_esc(c.beatLabel || c.beatId)} — ${_esc(c.label)}</option>`).join("");
+      const content = `<p style="font-size:.85em;opacity:.8;">Enact which moment through <b>${_esc(this.actor.name)}</b>? (Runs the real pipeline; the NPC then closes the scene in character.)</p>
+        <select name="choiceKey" style="width:100%;">${options}</select>`;
+      let picked = null;
+      try {
+        if (DialogV2?.wait) {
+          picked = await DialogV2.wait({
+            window: { title: `Story moment — ${this.actor.name}` }, content,
+            buttons: [
+              { action: "fire", label: "Enact", icon: "fa-solid fa-bolt", default: true,
+                callback: (_ev, button) => String(button.form?.elements?.choiceKey?.value || "") },
+              { action: "cancel", label: "Cancel", callback: () => null }
+            ]
+          }).catch(() => null);
+        }
+      } catch (_e) { picked = null; }
+      if (!picked || picked === "cancel") return;
+      const choice = choices.find(c => String(c.choiceKey) === String(picked));
+      if (!choice) return;
+      const r = await api.enact({
+        beatId: choice.beatId, choiceIndex: choice.choiceIndex, choiceKey: choice.choiceKey,
+        speakerActorId: this.actor.id, userId: game.user.id,
+        transcript: this._history.slice(-6).map(m => m.content).join("\n")
+      });
+      if (r?.ok === false) return ui.notifications?.warn?.(`Moment failed: ${r?.error || "unknown"}`);
+      await this._send(`[Scene note — not spoken by anyone: the moment has just TRULY happened. ${String(r?.summary || "")} Narrate the close in character — deliver the authored scene's substance in your own voice, then let the scene end.]`, "— scene —");
     }
 
     // Executes (or routes for approval) an enact_story_choice tool call.
@@ -743,9 +859,11 @@ How to handle them:
     }
 
     // ----- The exchange -----
-    async _send() {
+    // overrideRaw/overrideSpeaker: programmatic turns (scene notes) — used by
+    // nudge() so an NPC can SPEAK FIRST when a conversation is handed to them.
+    async _send(overrideRaw = null, overrideSpeaker = null) {
       if (this._busy) return;
-      const raw = String(this._els.input.value || "").trim();
+      const raw = String(overrideRaw ?? this._els.input.value ?? "").trim();
       if (!raw) return;
 
       const settings = game.bbttcc?.mal?.settings;
@@ -753,11 +871,11 @@ How to handle them:
       if (!provider?.call) return ui.notifications?.warn("Mal Voice provider not available.");
       if (!settings?.apiKey?.()) return ui.notifications?.warn("No API key configured (Module Settings → Bad Eden Mal Voice).");
 
-      const speaker = game.user.character?.name || game.user.name;
-      const userContent = `${speaker}: ${raw}`;
+      const speaker = overrideSpeaker || game.user.character?.name || game.user.name;
+      const userContent = overrideSpeaker ? raw : `${speaker}: ${raw}`;
 
       this._busy = true;
-      this._els.input.value = "";
+      if (overrideRaw === null) this._els.input.value = "";
       this._els.input.disabled = true;
       this._els.sendBtn.disabled = true;
 
@@ -777,11 +895,14 @@ How to handle them:
         if (usePrimer) system.push({ text: lore?.getPrimer?.() || "", cache: "1h" });
         system.push({ text: _buildPersonaPrompt(this.actor, this._lore, this._storyState, this._dossier), cache: true });
 
-        // Story moments: closed-enum tool + an UNCACHED system section (quest
-        // state changes between sends; keep it after the cached breakpoints).
+        // Story moments + doors: closed-enum tools + UNCACHED system sections
+        // (quest state changes between sends; keep after cached breakpoints).
         const choices = await this._availableChoices();
-        const tools = choices.length ? [this._choiceTool(choices)] : undefined;
-        if (choices.length) system.push({ text: this._momentsSection(choices) });
+        const doors = await this._availableDoors();
+        const toolList = [];
+        if (choices.length) { toolList.push(this._choiceTool(choices)); system.push({ text: this._momentsSection(choices) }); }
+        if (doors.length)   { toolList.push(this._doorTool(doors));     system.push({ text: this._doorsSection(doors) }); }
+        const tools = toolList.length ? toolList : undefined;
 
         const baseMessages = this._history.map(m => ({ role: m.role, content: m.content }));
         const res = await provider.call({
@@ -809,8 +930,10 @@ How to handle them:
           // streams into the same bubble below any pre-tool text.
           if (res.toolUses?.length && tools) {
             const tu = res.toolUses[0];
-            log(`story moment requested: ${tu.input?.choiceKey} (${tu.input?.rationale || "no rationale"})`);
-            const resultText = await this._resolveEnact(tu, choices);
+            log(`tool requested: ${tu.name} ${JSON.stringify(tu.input || {}).slice(0, 160)}`);
+            const resultText = (tu.name === "point_the_way")
+              ? await this._resolveDoor(tu, doors)
+              : await this._resolveEnact(tu, choices);
             const prefix = finalText ? `${finalText}\n\n` : "";
             const cont = await provider.call({
               system,
@@ -1072,6 +1195,8 @@ async function _handleApprovalClick(message, action) {
 function _bindApprovalButtons(message, root) {
   if (!root || !message?.getFlag?.(MODULE_ID, "pendingEnact")) return;
   for (const btn of root.querySelectorAll("[data-bbttcc-enact]")) {
+    if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
+    btn.dataset.bbttccBound = "1";
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
       _handleApprovalClick(message, btn.dataset.bbttccEnact);
@@ -1152,6 +1277,21 @@ function _install() {
         const cur = (actor.getFlag(MODULE_ID, "memories") || []).slice(-(MEMORY_CAP - 1));
         cur.push({ ts: Date.now(), text: String(text) });
         await actor.setFlag(MODULE_ID, "memories", cur);
+        return true;
+      },
+      // NPC speaks FIRST: opens (or focuses) the actor's dialogue window and
+      // feeds it a bracketed scene note as the next turn — used by the
+      // campaign's person-doors so a handed-off conversation continues
+      // without the players having to speak. GM/programmatic use.
+      nudge: async (actorOrId, context) => {
+        const actor = (typeof actorOrId === "string") ? game.actors.get(actorOrId) : (actorOrId?.actor ?? actorOrId);
+        if (!actor?.id || !String(context || "").trim()) return false;
+        await talkTo(actor);
+        const app = APPS.get(actor.id);
+        if (!app) return false;
+        // Let the fresh window finish its first render/lore sweep.
+        await new Promise(r => setTimeout(r, 50));
+        await app._send(`[Scene note — not spoken by anyone: ${String(context).trim()} You speak first; carry the scene forward in character.]`, "— scene —");
         return true;
       },
       // Stub choices for testing dialogue-driven beats before the campaign
