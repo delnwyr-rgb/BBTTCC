@@ -1010,6 +1010,46 @@ How to handle them:
 // Public API
 // ---------------------------------------------------------------------------
 
+// Intro-on-open (owner-locked audio doctrine, 2026-07-04): when a conversation
+// window OPENS for an NPC who is hosting a live story moment with recorded
+// audio, that recording plays — it IS the NPC's opening line; the live AI
+// dialogue continues from it. Fires only on a fresh window (focusing an open
+// one replays nothing), GM-side only (the BeatAudioManager broadcasts to
+// players itself when the beat says so). The first offerable moment with
+// audio wins; outcome stingers play separately at enact (curtain call).
+async function _playIntroAudio(actor) {
+  try {
+    if (!game.user?.isGM) return;
+    let on = true;
+    try { on = !!game.settings.get(MODULE_ID, "dialogueIntroAudio"); } catch (_e) {}
+    if (!on) return;
+    const api = game.bbttcc?.api?.campaign;
+    const rows = (await api?.dialogue?.choicesFor?.(actor.id, {})) || [];
+    if (!rows.length) return;
+    let beats = null;
+    try {
+      const campId = api?.getActiveCampaignId?.();
+      const camp = api?.getCampaign?.(campId);
+      beats = Array.isArray(camp?.beats) ? camp.beats : null;
+      if (!beats) {
+        const raw = game.settings.get("bbttcc-campaign", "campaigns");
+        const data = typeof raw === "string" ? JSON.parse(raw) : raw;
+        beats = data?.[campId]?.beats || [];
+      }
+    } catch (_e) { return; }
+    for (const r of rows) {
+      const b = beats.find(x => x?.id === r.beatId);
+      if (!b?.audio?.enabled) continue;
+      if (!String(b.audio.src || b.audio.playlistSoundUuid || "").trim()) continue;
+      log(`intro-on-open: playing '${b.id}' audio for ${actor.name}`);
+      await api?.audio?.play?.(b, { trigger: "dialogue-intro" });
+      return;
+    }
+  } catch (e) {
+    warn("intro-on-open audio failed:", e?.message || e);
+  }
+}
+
 async function talkTo(actorOrToken) {
   const actor = actorOrToken?.actor ?? actorOrToken;
   if (!actor?.id) return ui.notifications?.warn("No actor to talk to.");
@@ -1020,7 +1060,9 @@ async function talkTo(actorOrToken) {
   if (app) return app.render({ force: true });
   app = new App(actor);
   APPS.set(actor.id, app);
-  return app.render({ force: true });
+  const rendered = app.render({ force: true });
+  _playIntroAudio(actor).catch(() => {});   // fresh window only — never on re-focus
+  return rendered;
 }
 
 async function editPersona(actor) {
@@ -1241,6 +1283,15 @@ Hooks.once("init", () => {
     type:    String,
     choices: { "gm-confirm": "GM confirms each moment (recommended)", "auto": "Automatic" },
     default: "gm-confirm"
+  });
+
+  game.settings.register(MODULE_ID, "dialogueIntroAudio", {
+    name:    "Play recorded intro when a conversation opens",
+    hint:    "When an NPC dialogue window opens and that NPC is hosting a live story moment with recorded audio, play the recording as the NPC's opening — live AI dialogue continues from it. Outcome-beat audio plays separately when a choice enacts (the curtain call).",
+    scope:   "world",
+    config:  true,
+    type:    Boolean,
+    default: true
   });
 
   game.settings.register(MODULE_ID, "npcCommonJournal", {

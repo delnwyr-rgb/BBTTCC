@@ -23,6 +23,7 @@ const SETTING_DIRECTOR_ENABLED = "director.enabled";     // Story Director: Worl
 const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runtime state (budget, fired beats, level floors, pressure)
 const SETTING_DIRECTOR_PRESSURE_THRESHOLD = "director.pressureThreshold"; // pressure needed for a MID-TURN director look
 const SETTING_DIRECTOR_AUTOINVITE = "director.autoInvite"; // auto-post "NPC wants a word" cards when speaker moments open
+const SETTING_DIRECTOR_TTONLY_CHAINS = "director.turnTickOnlyChains"; // CSV of storyChains that only fire on the world-turn tick (seam-excluded)
 // Phase 4 pressure accrual weights: how much each seam event raises story pressure.
 // The World-Turn tick is the guaranteed heartbeat regardless; pressure only
 // governs whether the director ALSO looks mid-turn (travel legs, raid rounds,
@@ -2891,8 +2892,12 @@ async function executeBeat(campaign, beat, ctx = {}) {
   // Journal auto-open (optional)
   _maybeShowBeatJournal(beat);
 
-  // Beat audio (optional)
-  await _maybePlayBeatAudio(beat);
+  // Beat audio (optional). Dialogue-sourced runs skip it: under the
+  // intro-on-open doctrine the hub's recording already played when the
+  // conversation window opened, and the routed OUTCOME beat's audio is
+  // played by dialogueEnact at the curtain call — replaying the hub track
+  // mid-conversation would double-perform.
+  if (String(ctx?.source || "") !== "dialogue") await _maybePlayBeatAudio(beat);
 
   // Cinematic beats run through Encounter Engine step runner (auto-advance supported).
   // IMPORTANT: do NOT also activate beat.sceneId here, or you'll "eat" the chain.
@@ -4093,8 +4098,22 @@ async function directorTick(opts = {}) {
     const story = _storyBeatsFor(campaign);
     if (!story.length) return { fired: null, reason: "no_story_beats", turn };
 
+    // Seam-excluded chains (interleave doctrine): spine legs should land on
+    // world-turn ticks so hex play breathes between them — a mid-turn seam
+    // (travel / raid round / beat:resolved) must not fire the next leg the
+    // instant the previous one completes. Gates stay the same; only TIMING
+    // narrows. Configured as a CSV setting; default = the Valhaulan spine.
+    let ttOnly = new Set();
+    if (opts.seam) {
+      try {
+        ttOnly = new Set(String(game.settings.get(MOD_ID, SETTING_DIRECTOR_TTONLY_CHAINS) || "")
+          .split(",").map(s => s.trim()).filter(Boolean));
+      } catch (_e) {}
+    }
+
     const candidates = [];
     for (const b of story) {
+      if (opts.seam && ttOnly.has(_storyChainOf(b) || "")) continue;
       if (state.firedStoryBeats[b.id] && !b.inject?.repeatable) continue;
       const sid = String(b.speakerActorId || "").trim();
       if (sid) {
@@ -4216,7 +4235,7 @@ async function _directorSeamLook(source) {
     const state = _readDirectorState();
     if (state.pressure < threshold) return;
     log(`[director] pressure ${state.pressure} >= ${threshold} at seam '${source}' — looking.`);
-    await directorTick({});   // budget, gates, and the GM veto all still apply
+    await directorTick({ seam: source });   // budget, gates, GM veto still apply; turn-tick-only chains excluded
   } catch (e) {
     warn("[director] seam look failed:", e);
   }
@@ -4630,6 +4649,9 @@ async function dialogueEnact(opts = {}) {
     // Play it: post it player-facing as narration, and hand its text to the
     // NPC's model so the in-window continuation mirrors the authored scene
     // instead of inventing its own ending.
+    // Outcome stinger (intro-on-open doctrine): the routed beat's recording
+    // plays AT the curtain call — the enact is its moment on the dialogue path.
+    if (routedBeat) { try { await _maybePlayBeatAudio(routedBeat); } catch (_eA) {} }
     if (routedBeat && String(routedBeat.description || "").trim()) {
       try {
         await ChatMessage.create({
@@ -6162,6 +6184,15 @@ Hooks.once("init", () => {
     config: true,
     type: Number,
     default: 60
+  });
+
+  game.settings.register(MOD_ID, SETTING_DIRECTOR_TTONLY_CHAINS, {
+    name: "Story Director — turn-tick-only chains",
+    hint: "Comma-separated storyChain names that only fire on the world-turn tick, never from mid-turn seams (travel legs, raid rounds, beat resolutions). Keeps spine legs from cascading the moment their gate opens — hex play breathes between them. Gates are unchanged; only timing narrows.",
+    scope: "world",
+    config: true,
+    type: String,
+    default: "valhaulan_spine"
   });
 
   try {
