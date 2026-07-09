@@ -24,6 +24,12 @@ const SETTING_DIRECTOR_STATE = "directorState";          // Story Director runti
 const SETTING_DIRECTOR_PRESSURE_THRESHOLD = "director.pressureThreshold"; // pressure needed for a MID-TURN director look
 const SETTING_DIRECTOR_AUTOINVITE = "director.autoInvite"; // auto-post "NPC wants a word" cards when speaker moments open
 const SETTING_DIRECTOR_TTONLY_CHAINS = "director.turnTickOnlyChains"; // CSV of storyChains that only fire on the world-turn tick (seam-excluded)
+// Turn Ledger (2026-07-08): one World Turn = a time budget in days. Beats and
+// travel legs debit it (world.addTime — the previously-dormant sink); the
+// remainder banks into development. Soft budget: overspend carries as debt.
+const SETTING_TURN_TIME_BUDGET = "ledger.turnTimeBudget";           // days per Strategic Turn (world.time.turnLength syncs to this)
+const SETTING_LEDGER_ENTRIES = "ledgerEntries";                     // this turn's debit entries (what the days went to)
+const SETTING_LEDGER_TRAVEL_TIER_DAYS = "ledger.travelDaysPerTier"; // CSV days-to-cross one hex, terrain tiers 1..4
 // Phase 4 pressure accrual weights: how much each seam event raises story pressure.
 // The World-Turn tick is the guaranteed heartbeat regardless; pressure only
 // governs whether the director ALSO looks mid-turn (travel legs, raid rounds,
@@ -886,8 +892,12 @@ function _weightedPick(entries) {
 /**
  * Run a random encounter table by selecting an entry and delegating to runBeat().
  * Tables select beats. Beats execute exactly as-is (dialogs, encounters, world effects).
+ *
+ * Pass { dryRun: true } to roll through the SAME condition filter + weighted
+ * pick but return the selection WITHOUT executing the beat (no scene, no
+ * dialogs, no world effects, no time cost). Used by the Builder's Preview Roll.
  */
-async function runRandomTable({ tableId, hexUuid = null, tags = "", ctx = {} } = {}) {
+async function runRandomTable({ tableId, hexUuid = null, tags = "", ctx = {}, dryRun = false } = {}) {
   if (!tableId) throw new Error("runRandomTable: tableId required");
 
   const table = getTable(tableId);
@@ -918,6 +928,11 @@ async function runRandomTable({ tableId, hexUuid = null, tags = "", ctx = {} } =
     warn("runRandomTable: pick missing campaignId/beatId", pick);
     ui.notifications?.warn?.(`Random Table '${table.label || tableId}': entry missing campaignId/beatId.`);
     return { ok: false, reason: "bad_entry" };
+  }
+
+  if (dryRun) {
+    log("Random Table dry-run (beat NOT executed)", { tableId, campaignId, beatId, hexUuid, tags });
+    return { ok: true, dryRun: true, tableId, campaignId, beatId };
   }
 
   log("Random Table fired", { tableId, campaignId, beatId, hexUuid, tags });
@@ -3464,9 +3479,10 @@ function _getWorldTurnLengthSafe() {
 }
 
 function _timePointsForBeat(beat, ctx = {}) {
-  // Explicit override wins
+  // Explicit override wins. Fractions are legal — a half-day site visit is
+  // timePoints 0.5 (Turn Ledger 2026-07-08; the old floor() turned 0.5 into 0).
   const raw = Number(beat?.timePoints ?? beat?.time?.points ?? ctx?.timePoints ?? 0);
-  if (Number.isFinite(raw) && raw > 0) return Math.floor(raw);
+  if (Number.isFinite(raw) && raw > 0) return Math.round(raw * 100) / 100;
 
   // Map timeScale to default points
   const scale = String(beat?.timeScale ?? beat?.time?.scale ?? "").trim().toLowerCase();
@@ -3500,6 +3516,182 @@ async function _applyBeatTimePoints(campaign, beat, ctx = {}) {
     warn("applyBeatTimePoints failed:", e);
     return false;
   }
+}
+
+// ── Turn Ledger (2026-07-08) ─────────────────────────────────────────────────
+// world.addTime is the clock; this is the LEDGER over it. Entries record what
+// the days went to (for the turn-end whisper and the HUD chip); the travel
+// listener converts legs into days; the advanceTurn:end listener settles the
+// month — whisper summary, debt carry, entry reset. Owner-locked design:
+// T=30 days · soft budget (overage borrows from next turn) · party ledger,
+// unspent days auto-bank into development (P4 wires the funding gate).
+
+function _ledgerBudgetSetting() {
+  try {
+    const n = Number(game.settings.get(MOD_ID, SETTING_TURN_TIME_BUDGET));
+    if (Number.isFinite(n) && n > 0) return n;
+  } catch (_e) {}
+  return 30;
+}
+
+function _ledgerEntriesRead() {
+  try {
+    const raw = game.settings.get(MOD_ID, SETTING_LEDGER_ENTRIES);
+    return {
+      turn: Number(raw?.turn) || 0,
+      entries: Array.isArray(raw?.entries) ? raw.entries : []
+    };
+  } catch (_e) { return { turn: 0, entries: [] }; }
+}
+
+function _ledgerGet() {
+  const w = game.bbttcc?.api?.world;
+  const b = w?.getTimeBudget ? w.getTimeBudget() : { budget: _ledgerBudgetSetting(), spent: 0, remaining: _ledgerBudgetSetting(), debt: 0 };
+  return { ...b, entries: _ledgerEntriesRead().entries };
+}
+
+async function _ledgerSpend(points, meta = {}) {
+  const w = game.bbttcc?.api?.world;
+  if (!w?.addTime) return { ok: false, reason: "no_world_api" };
+  return w.addTime(points, { source: meta.source || "manual", note: meta.note || "", ...meta });
+}
+
+// Single funnel: EVERY accrual (beat path calls world.addTime directly, travel
+// and manual spends come through _ledgerSpend) lands here exactly once, on the
+// GM client that performed the write.
+function _onTimeAccruedLedger(payload) {
+  try {
+    if (!game.user?.isGM) return;
+    const data = _ledgerEntriesRead();
+    data.turn = _getTurnNumberSafe();
+    data.entries.push({
+      at: Date.now(),
+      points: Number(payload?.points) || 0,
+      source: String(payload?.source || "manual"),
+      note: String(payload?.note || "")
+    });
+    if (data.entries.length > 300) data.entries = data.entries.slice(-300);
+    game.settings.set(MOD_ID, SETTING_LEDGER_ENTRIES, data);
+  } catch (e) { warn("[ledger] accrual record failed:", e); }
+}
+
+function _ledgerTravelTierDays() {
+  try {
+    const parts = String(game.settings.get(MOD_ID, SETTING_LEDGER_TRAVEL_TIER_DAYS) || "")
+      .split(",").map(s => Number(s.trim()));
+    if (parts.length >= 4 && parts.slice(0, 4).every(Number.isFinite)) return parts;
+  } catch (_e) {}
+  return [1, 1, 2, 3];
+}
+
+// Travel legs carry distance (hex units) + terrain tier, not time — convert.
+// Exactly-once accounting across the hook's THREE emitters: (a) hex-travel's
+// resolution emit (plain, has distance) — debit; (b) the travel console's
+// informational re-emit for encounter legs (has .encounter, source
+// "travel-console") — skip, (a) already paid; (c) the GM-arbitration relay for
+// PLAYER travel (has .encounter, source "travel-console-relay") — debit: it is
+// the only GM-side fire for that leg (defaults price it at ~1 day; plain
+// player legs never reach the GM client — same pre-existing limitation as
+// director travel pressure).
+function _onAfterTravelLedger(tctx) {
+  try {
+    if (!game.user?.isGM) return;
+    if (tctx?.encounter && String(tctx?.source || "") !== "travel-console-relay") return;
+    const units = Math.max(1, Number(tctx?.distanceUnits) || 1);
+    const tier = Math.min(4, Math.max(1, Number(tctx?.terrainTier) || 1));
+    const perHex = Number(_ledgerTravelTierDays()[tier - 1]) || 1;
+    const days = Math.round(units * perHex * 100) / 100;
+    if (!(days > 0)) return;
+    const terrain = String(tctx?.terrainKey || "terrain");
+    _ledgerSpend(days, { source: "travel", note: `Travel: ${terrain} (tier ${tier}) × ${units} hex` })
+      .catch(e => warn("[ledger] travel debit failed:", e));
+  } catch (e) { warn("[ledger] travel listener failed:", e); }
+}
+
+// Turn-end settle: whisper where the month went, carry overspend as debt into
+// the new month (it starts pre-spent), reset entries, re-sync budget setting.
+async function _onAdvanceTurnEndLedger(tctx) {
+  if (!tctx || tctx.apply !== true) return;
+  if (!game.user?.isGM) return;
+  const w = game.bbttcc?.api?.world;
+  if (!w?.getTimeBudget || !w?.getState || !w?.setState) return;
+
+  const before = w.getTimeBudget();
+  const { entries } = _ledgerEntriesRead();
+  const esc = foundry.utils.escapeHTML;
+
+  const bySource = {};
+  for (const e of entries) {
+    const k = String(e?.source || "manual");
+    bySource[k] = Math.round(((bySource[k] || 0) + (Number(e?.points) || 0)) * 100) / 100;
+  }
+  const srcRows = Object.entries(bySource)
+    .map(([k, v]) => `<tr><td>${esc(k)}</td><td style="text-align:right">${v}</td></tr>`).join("");
+  const detailRows = entries.slice(-40)
+    .map(e => `<tr><td style="opacity:.8">${esc(String(e?.source || ""))}</td><td style="text-align:right">${Number(e?.points) || 0}</td><td>${esc(String(e?.note || ""))}</td></tr>`).join("");
+
+  const banked = before.remaining;
+  const debt = before.debt;
+  const verdict = debt > 0
+    ? `<p>⚠ The month ran <b>${debt} day(s) over</b> — the debt carries: the new month starts on Day ${debt}.</p>`
+    : `<p><b>${banked} day(s) unspent</b> bank into development.</p>`;
+
+  try {
+    await ChatMessage.create({
+      content: `
+        <div class="bbttcc-turn-ledger-summary">
+          <h3>Turn Ledger — where the month went</h3>
+          <p>Spent <b>${before.spent}</b> of <b>${before.budget}</b> days.</p>
+          ${srcRows ? `<table style="width:100%"><tbody>${srcRows}</tbody></table>` : `<p style="opacity:.7">No time debits recorded this turn.</p>`}
+          ${verdict}
+          ${detailRows ? `<details><summary>Entries (${entries.length})</summary><table style="width:100%;font-size:.9em"><tbody>${detailRows}</tbody></table></details>` : ""}
+        </div>`,
+      whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+      speaker: { alias: "Turn Ledger" }
+    });
+  } catch (e) { warn("[ledger] turn-end whisper failed:", e); }
+
+  try {
+    const budget = _ledgerBudgetSetting();
+    const s = w.getState();
+    const carried = Math.max(0, Math.round((s.time.progress - s.time.turnLength) * 100) / 100);
+    s.time.turnLength = budget;
+    s.time.progress = carried;
+    await w.setState(s);
+    await game.settings.set(MOD_ID, SETTING_LEDGER_ENTRIES, {
+      turn: _getTurnNumberSafe(),
+      entries: carried > 0
+        ? [{ at: Date.now(), points: carried, source: "debt", note: `Carried from last turn — the month starts ${carried} day(s) in the hole` }]
+        : []
+    });
+  } catch (e) { warn("[ledger] turn-end reset failed:", e); }
+}
+
+// GM-facing time price on director offers: the party chooses knowing what the
+// moment displaces ("that's a day the wall crew doesn't get"). Player-facing
+// surfaces stay silent about costs (mal-voice doctrine).
+function _ledgerOfferPriceLine(beat) {
+  try {
+    const tp = _timePointsForBeat(beat);
+    if (!tp) return "";
+    const lg = _ledgerGet();
+    const context = lg.budget > 0 ? ` — Day ${lg.spent} of ${lg.budget}${lg.debt > 0 ? `, ${lg.debt} owed` : ""}` : "";
+    return `<p style="opacity:.75;font-size:.9em"><i class="fas fa-hourglass-half"></i> Time: ≈ ${tp} day(s)${context}.</p>`;
+  } catch (_e) { return ""; }
+}
+
+// Keep the world clock's month length in step with the setting (GM, on ready).
+async function _ledgerSyncBudget() {
+  try {
+    const w = game.bbttcc?.api?.world;
+    if (!w?.getState || !w?.setState) return;
+    const budget = _ledgerBudgetSetting();
+    const s = w.getState();
+    if (s.time.turnLength === budget) return;
+    s.time.turnLength = budget;
+    await w.setState(s);
+    log(`[ledger] world.time.turnLength synced to ${budget} (Turn Time Budget setting).`);
+  } catch (e) { warn("[ledger] budget sync failed:", e); }
 }
 
 
@@ -4060,6 +4252,7 @@ async function _gmPromptStoryBeat(beat, turn, eligibleCount) {
     const content = `
       <p><b>Story Director</b> — Turn ${turn}: conditions are right for a story beat.</p>
       <p style="margin:4px 0"><b>${beat?.label || beat?.id}</b>${chain ? ` <span style="opacity:.7">(chain: ${chain})</span>` : ""}</p>
+      ${_ledgerOfferPriceLine(beat)}
       ${eligibleCount > 1 ? `<p style="opacity:.7;font-size:.9em">${eligibleCount - 1} other story beat(s) also eligible — highest priority offered first.</p>` : ""}
       <p style="opacity:.8;font-size:.9em">Fire it now? (Declining keeps it eligible for a later turn.)</p>
     `;
@@ -5156,6 +5349,7 @@ async function _gmPromptTalkInvite(beat, speaker, turn) {
       content: `
         <p><b>Story Director</b> — Turn ${turn}: a story moment is live, carried by <b>${foundry.utils.escapeHTML(speaker?.name || "an NPC")}</b>.</p>
         <p style="margin:4px 0"><b>${beat?.label || beat?.id}</b>${chain ? ` <span style="opacity:.7">(chain: ${chain})</span>` : ""}</p>
+        ${_ledgerOfferPriceLine(beat)}
         <p style="opacity:.8;font-size:.9em">Speaker beats play out in conversation, not narration. Post a public "${foundry.utils.escapeHTML(speaker?.name || "NPC")} wants a word" invitation? (Declining keeps the moment quietly available in dialogue.)</p>`,
       buttons: {
         invite:  { icon: '<i class="fas fa-comments"></i>', label: "Invite",  callback: () => resolve(true) },
@@ -5911,6 +6105,12 @@ function buildCampaignAPI() {
       pointTheWay: dialoguePointTheWay
     },
     placements: { reconcile: reconcileNpcPlacements },
+    ledger: {
+      get: _ledgerGet,
+      spend: _ledgerSpend,
+      remaining: () => _ledgerGet().remaining,
+      timePointsForBeat: _timePointsForBeat
+    },
     tables: { listTables, getTable, saveTable, createTable, deleteTable, getAllTables, setAllTables, runRandomTable },
     quests: { listQuests, getQuest, saveQuest, createQuest, deleteQuest, setQuestStatus, getAllQuests, setAllQuests },
     io: {
@@ -6051,6 +6251,122 @@ async function _onBeatResolvedDouganPointer({ beat, campaign } = {}) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Central hover-help: the "campaign" dictionary (bbttcc-core, game.bbttcc.help).
+// Consumed by templates via {{bbttccTip 'campaign' '<key>'}} and by JS-built DOM
+// via game.bbttcc.help.tip("campaign", key). The Operator tour reads the SAME
+// entries (help.entry / help.dict), so tooltip and tour text can never drift.
+// House style: "Name — what it is. What it does mechanically. When/why."
+// The Builder is a GM-only surface (toolbar button is GM-gated), so entries do
+// not carry a "GM —" prefix.
+// ---------------------------------------------------------------------------
+const CAMPAIGN_HELP = {
+  // ── Header / tabs ─────────────────────────────────────────────────────────
+  title: "Campaign Builder — the GM authoring console for campaign spines: beats, quests, travel encounter tables, bundles, and the flow visualizer. The heading shows the currently selected campaign.",
+  "campaign-id": "Campaign ID — the campaign's stable key in the world setting. Bundles, encounter-table entries, and beat references all point at this id; it never changes after creation.",
+  tabs: "Tabs — the Builder's five surfaces: Campaign (list, bundles, settings), Travel Tables, Beats, Quests, and the Visualizer. Switching tabs is pure UI — nothing fires.",
+  "tab-campaign": "Campaign — manage campaign definitions: create/select/delete campaigns, set the world's Active campaign, export/import bundles, and edit label, description, and the faction roster.",
+  "tab-travel": "Travel Tables — the travel encounter tables the travel engine rolls when a journey leg triggers an encounter. Create, repair, preview, and edit them here.",
+  "tab-beats": "Beats — the selected campaign's content, beat by beat, in canonical order: filters, reordering, and Run/Edit per row. A beat is one runnable unit (scene + dialog + effects).",
+  "tab-quests": "Quests — the quest registry for this campaign: status bookkeeping, ordering, and hex links (map hints) per quest. Beats join a quest via beat.questId.",
+  "tab-flow": "Visualizer — a read-only pan/zoom flow map of the campaign built from beat links (Next/Success/Failure/Choices). Two views: quest bubbles (overview) or the per-beat decision tree (detail).",
+
+  // ── Campaign tab ──────────────────────────────────────────────────────────
+  campaigns: "Campaigns — every campaign definition stored in this world (hidden world setting). Click one to load it into the Beats/Quests/Visualizer tabs; the ★ Active one is what the automated systems read.",
+  "select-campaign": "Select — loads this campaign into the Builder (Beats, Quests, Visualizer, Selected Campaign panel). Selection is UI-only; it does not change the world's Active campaign.",
+  "active-chip": "★ Active — this is the world's Active campaign. The Story Director's turn tick, Reality-Tear adversary beat draws, and Strategic-Turn 'now available' announcements all read the Active campaign only.",
+  "set-active": "Set Active — makes this the world's Active campaign (world setting). The Story Director tick, Reality-Tear adversary draws, and Turn-N availability announcements only ever look at the Active campaign.",
+  "run-campaign": "Run First Beat — executes this campaign's FIRST beat right now (journal, narration audio, scene, dialog, world effects, time cost). Exactly 'run beat #1' — not a queue and not a mode.",
+  "delete-campaign": "Delete — permanently removes this campaign and all its beats from the world setting (confirm first, no undo). Quests and encounter tables live in separate registries and survive; the confirm dialog lists every encounter table whose entries point at this campaign's beats, since those entries go dead.",
+  "new-campaign": "+ New Campaign — creates an empty campaign, sets it Active, and selects it. In the dialog, check every involved faction (all checked factions receive credit and world-effect fan-out); the radio marks the ★ primary (beat inheritance, war-log targeting, casualty defaults).",
+  bundles: "Bundles — move whole campaigns between worlds. A bundle is a JournalEntry compendium entry carrying the campaign, optionally plus the global encounter tables and the quest registry.",
+  "io-export": "Export — writes the selected campaign into an unlocked JournalEntry compendium as a bundle entry. Options: include the global encounter tables, include the quest registry, and scrub world-specific scene/actor/journal references.",
+  "io-import": "Import — reads a bundle entry from a JournalEntry compendium. Merge overwrites the campaign with the same id; Duplicate creates a new id with your prefix. Optionally sets the import Active; unresolved references are reported for Remap.",
+  "io-remap": "Remap — after an import, re-links beat references to Scenes/Actors/Journals by matching the stable flags.bbttcc.key values recorded at export time. Anything unresolvable is listed in the console.",
+  "io-scan-keys": "Key Report — lists every Scene/Actor/Journal missing a flags.bbttcc.key stable key. Set keys on anything your beats reference BEFORE exporting, or Remap can't reconnect them in the destination world.",
+  selected: "Selected Campaign — a read-only snapshot of the loaded campaign (label, description, faction roster). Use Campaign Settings… to change anything here.",
+  "campaign-settings": "Campaign Settings… — edit the label, description, and active-faction roster, and toggle Active. Changing the ★ primary faction also rewrites every beat and world-effect row that inherited the old primary so they point at the new one.",
+  "meta-label": "Label — the campaign's display name. Read-only here; edit via Campaign Settings….",
+  "meta-description": "Description — GM notes for the campaign. Read-only here; edit via Campaign Settings….",
+  "active-factions": "Active Factions — the campaign roster. Every listed faction receives credit / world-mutation fan-out from beats; the ★ Primary is the default target for beat inheritance, the war log, and casualty defaults.",
+  "primary-chip": "★ Primary — the campaign's default faction: beats set to 'inherit' resolve to it, and it is the default for war-log targeting and casualty bookkeeping.",
+
+  // ── Travel Tables tab ─────────────────────────────────────────────────────
+  "travel-list": "Travel Tables — encounter tables with scope 'travel' from the global table registry. The travel engine resolves them by EXACT id (travel_<terrain>_t<tier>) when a leg rolls an encounter — a table with a malformed id silently never fires (use Fix Travel Tables).",
+  "travel-terrain": "Terrain — filters the list to one terrain (parsed from table id/tags/label). Display filter only; it never changes which table the engine rolls in play.",
+  "travel-tier": "Tier — filters the list to one tier (the _t<n> id suffix). Display filter only.",
+  "travel-show-all": "Show All — clears the terrain and tier filters so every travel table is listed.",
+  "travel-preview": "Preview Roll — a true DRY RUN: rolls the travel table matching the current terrain/tier through the live engine's own conditions and weights, then shows which beat WOULD fire — nothing executes (no scene, no dialogs, no world effects, no time). The result dialog offers a clearly-labeled 'Run This Beat Now' button if you want to fire it for real.",
+  "fix-travel-tables": "Fix Travel Tables — scans for non-canonical or duplicate travel ids and for entries whose terrain/tier conditions contradict their own table, shows a review plan, and only writes after you confirm. Run it whenever a terrain 'stopped producing' encounters.",
+  "new-travel-table": "+ New Travel Table — creates an empty travel table; the id is composed automatically as travel_<terrain>_t<tier> so the engine can resolve it, then the Table Editor opens. Entries point at campaign beats with weights and conditions.",
+  "travel-scope": "Scope — where the table applies. 'travel' tables are resolved automatically by the travel engine; other scopes only fire when run by hand or by another system.",
+  "travel-tags": "Tags — free-form labels on the table. Terrain/tier tags also serve as a parsing fallback when the id is malformed (Fix Travel Tables uses them to recover the canonical id).",
+  "edit-table": "Edit — opens the Table Editor. Each entry is (campaign, beat, weight, conditions); a roll filters entries by conditions, then weighted-picks ONE beat and runs it.",
+  "duplicate-table": "Duplicate — copies this table's entries into a new table. Travel copies must pick a terrain/tier (the id is composed to stay engine-resolvable); other tables take a free slugified id.",
+  "delete-table": "Delete — removes the table from the registry (confirm, no undo). The beats its entries pointed at are untouched.",
+
+  // ── Beats tab ─────────────────────────────────────────────────────────────
+  "beats-list": "Beats — the selected campaign's beats in canonical array order. Order matters: it is the # column, the Visualizer's root (first beat), and what Run (campaign) fires first.",
+  "beats-count": "Shown / total — how many beats survive the current filters, out of the campaign's full list.",
+  "beats-search": "Filter — live text match against beat id, label, and type. Display only.",
+  "beats-type": "Type — show only one beat type (the list is collected from this campaign's beats: cinematic, encounter, custom…).",
+  "beats-turn": "Turn — show only beats assigned to one Strategic Turn (beat.turnNumber, or a turn:N tag). 'Unassigned' = beats with no turn gate.",
+  "beats-quest": "Quest — show only beats linked to one quest (beat.questId, set in the Beat Editor).",
+  "beats-quest-status": "Quest status — show only beats whose linked quest is active / completed / archived. Independent of the Quests tab's status dropdown; filtering here never filters there.",
+  "reindex-beats": "Compact Order — rewrites the beats array, dropping null/empty slots, and renumbers the # column. Housekeeping only; run it if numbering looks wrong after heavy editing.",
+  "add-beat": "+ Add Beat — appends a stub beat to the END of the list and opens it in the Beat Editor. Remember: the FIRST beat in the list is what Run (campaign) fires.",
+  "fired-chip": "✓ fired — the Story Director record shows this beat already ran on some surface (director tick, this Builder, Story Console, or NPC dialogue). Soft lock: ▶ Run asks for one confirmation; it never blocks.",
+  "quest-chip": "Quest — the quest this beat belongs to (beat.questId) and that quest's current status. Assigned in the Beat Editor.",
+  "turn-chip": "Turn gate — this beat is whispered to the GM as 'now available' when the Strategic Turn reaches this number (world turn-availability map). Advisory only: you can still run the beat at any time.",
+  "move-top": "⤒ — move this beat to the top of the canonical order (position 1).",
+  "move-up": "▲ — move this beat one slot up in the canonical order.",
+  "move-down": "▼ — move this beat one slot down in the canonical order.",
+  "move-bottom": "⤓ — move this beat to the bottom of the canonical order.",
+  "set-index": "Set index — type a 1-based position; the beat is spliced to that slot in the canonical order. Order drives the # column, the Visualizer root, and Run (campaign).",
+  "run-beat": "▶ Run — executes the beat NOW: journal auto-open, narration audio, scene activation (or cinematic chain), description/choices dialog, encounter launch, world & quest effects, and its time cost (timeScale → world time points). Already-fired beats ask for one confirm.",
+  "edit-beat": "Edit — opens the Beat Editor (label/type/turn, scene, dialog & choices, outcomes, actors, encounter, world effects, audio…). Saving an id change rewrites other beats' outcome/choice links to follow it.",
+  "beat-menu": "More actions — Duplicate and Delete.",
+  "duplicate-beat": "Duplicate — deep-copies the beat under a new id (…_copy_xxxx), appends it to the list, and opens it in the editor. Its outcome/choice links still point wherever the original pointed.",
+  "delete-beat": "Delete — removes the beat (no undo). The confirm dialog first scans for anything linking to it (other beats' next/outcome/choice routes and encounter-table entries) and offers 'Delete + Clear Links' (also nulls those routes and removes the table entries) or 'Delete Only' (leaves them dangling).",
+
+  // ── Quests tab ────────────────────────────────────────────────────────────
+  "quests-list": "Quests — the world quest registry filtered to this campaign. A quest is grouping + bookkeeping: beats reference it via beat.questId, hexes via quest links; status feeds filters and the Visualizer's bubble colors.",
+  "quest-search": "Search — live text match on quest name and id. Display only.",
+  "quest-status": "Status — filter quests by active / completed / archived. Independent control: it no longer affects the Beats tab's quest-status filter.",
+  "new-quest": "+ New Quest — creates a quest record scoped to the selected campaign. The Quest ID is the stable key beats reference (beat.questId) — it is locked after creation.",
+  "quest-status-chip": "Status — active (in play), completed, or archived. Status is bookkeeping: it colors the Visualizer bubble and drives filters; beats linked to the quest still run regardless.",
+  "link-hex": "＋ Link Hex — arms a one-shot canvas picker: click a Bad Eden hex drawing to link it to this quest (two-way: a flag on the hex + quest.hexIds). Clicking anything that isn't a hex cancels.",
+  "hex-hint-status": "hinted / fog-gated — players see this quest's marker on the hex if the hex is fog-revealed OR its hint is on ('hinted' = rumor preview through fog). The GM always sees everything.",
+  "toggle-hint": "Reveal / Hide — toggles this one hex's hint flag: Reveal lets players see the quest marker through fog; Hide returns it to fog-gated visibility.",
+  "reveal-all-hints": "Reveal All Hints — turns the hint flag ON for every hex linked to this quest, so players see all of its markers through fog.",
+  "clear-all-hints": "Clear Hints — turns every linked hex's hint flag OFF (back to fog-gated visibility).",
+  "pan-to-hex": "⌖ — switches to the hex's scene if needed and pans the canvas to the hex.",
+  "unlink-hex": "✕ — removes the hex↔quest link on both sides (confirm). The hex and the quest themselves are untouched.",
+  "quest-move-up": "▲ — swap this quest one slot up in the FULL registry order (the sort used in quest lists, dropdowns, and the Visualizer's bubbles). With a search/status filter active the true neighbor may be hidden, so the visible list can look unchanged.",
+  "quest-move-down": "▼ — swap this quest one slot down in the FULL registry order (with a filter active the swap partner may be a hidden quest).",
+  "edit-quest": "Edit — change the quest's name, status, and description. The Quest ID is locked because beats reference it.",
+  "complete-quest": "Complete — sets status to 'completed'. Pure bookkeeping: filters update and the Visualizer bubble turns green; beats keep their questId and can still run.",
+  "archive-quest": "Archive — sets status to 'archived' (shelved: hidden by the Active filter, gray in the Visualizer). Reversible with Reopen.",
+  "reopen-quest": "Reopen — sets the quest's status back to 'active'.",
+  "delete-quest": "Delete — removes the quest record from the registry (confirm). Beats KEEP their questId (their chip just loses its name). Every linked hex is listed in the confirm and unlinked automatically (both sides) — no orphaned hex flags.",
+
+  // ── Visualizer tab ────────────────────────────────────────────────────────
+  flow: "Visualizer — a read-only flow map of the selected campaign built from beat links: Next/Success/Failure are solid edges (green/red for outcomes), Choices are dashed. Nothing here mutates the campaign.",
+  "flow-toggle-travel": "Show/Hide Travel — include or exclude the travel lane (beats with timeScale 'leg' or a travel tag) from the graph.",
+  "flow-zoom-in": "Zoom in — enlarges the graph (+15% per click).",
+  "flow-zoom-out": "Zoom out — shrinks the graph (−15% per click).",
+  "flow-reset": "Reset — returns zoom and pan to the default, which re-fits and re-centers the graph on the next draw.",
+  "flow-canvas": "Flow map — drag the background to pan. Beats view: click a node to open it in the Beat Editor. Quests view: click a bubble to expand its inner beat chips; click a chip to edit that beat.",
+  "flow-turn": "Turn — restrict the graph to beats assigned to one Strategic Turn (All Turns = the whole campaign).",
+  "flow-quest": "Quest — keep only that quest's beats PLUS everything reachable from them (forward closure), so cross-quest hand-offs stay visible.",
+  "flow-view": "View — Quests (overview): one bubble per quest with aggregated cross-quest links. Beats (detail): the full per-beat decision tree. Your choice persists per user."
+};
+
+function _registerCampaignHelp() {
+  try { game.bbttcc?.help?.register?.("campaign", CAMPAIGN_HELP); }
+  catch (e) { warn("campaign help registration failed:", e); }
+}
+
 Hooks.once("init", () => {
   game.settings.register(MOD_ID, SETTING_CAMPAIGNS, {
     name: "Bad Eden Campaign Definitions",
@@ -6107,6 +6423,32 @@ Hooks.once("init", () => {
     config: false,
     type: Number,
     default: 0
+  });
+
+  // Turn Ledger (2026-07-08): one World Turn = a time budget in days.
+  game.settings.register(MOD_ID, SETTING_TURN_TIME_BUDGET, {
+    name: "Bad Eden: Turn Time Budget (days)",
+    hint: "Days in one Strategic Turn — the month. Beats and travel debit it; unspent days bank into development at turn end. world.time.turnLength is kept in sync with this.",
+    scope: "world",
+    config: true,
+    type: Number,
+    default: 30
+  });
+  game.settings.register(MOD_ID, SETTING_LEDGER_ENTRIES, {
+    name: "Bad Eden Turn Ledger Entries",
+    hint: "Internal: this turn's time debits (source, days, note). Reset on each applied turn advance.",
+    scope: "world",
+    config: false,
+    type: Object,
+    default: { turn: 0, entries: [] }
+  });
+  game.settings.register(MOD_ID, SETTING_LEDGER_TRAVEL_TIER_DAYS, {
+    name: "Bad Eden: Travel Days per Hex by Tier",
+    hint: "CSV: days to cross one hex for terrain tiers 1..4 (default 1,1,2,3). Calibration-pass fodder — tune with the global DC pass.",
+    scope: "world",
+    config: true,
+    type: String,
+    default: "1,1,2,3"
   });
 
   // Forgotten-Cause arc: per-world Wendigo "something OFF" rung (0–4). Bumped
@@ -6200,10 +6542,20 @@ Hooks.once("init", () => {
     if (H) {
       if (!H.helpers.add) H.registerHelper("add", (a, b) => Number(a || 0) + Number(b || 0));
       if (!H.helpers.eq)  H.registerHelper("eq", (a, b) => a === b);
+      // Fallback {{bbttccTip}} so our templates render even when this module's
+      // init runs before bbttcc-core's (or bbttcc-core is disabled — a mustache
+      // with args and no helper would otherwise throw "Missing helper").
+      if (!H.helpers.bbttccTip) {
+        H.registerHelper("bbttccTip", (appKey, key) => game.bbttcc?.help?.tip?.(appKey, key) ?? "");
+      }
     }
   } catch (e) {
     warn("Handlebars helpers failed:", e);
   }
+
+  // Central help dictionary (best-effort here; re-run at ready in case
+  // bbttcc-core's init hasn't installed game.bbttcc.help yet).
+  _registerCampaignHelp();
 
   log("Initialized, settings registered, helpers ready.");
 });
@@ -6213,6 +6565,8 @@ Hooks.once("ready", () => {
   game.bbttcc ??= { api: {} };
   game.bbttcc.api ??= {};
   game.bbttcc.api.campaign = buildCampaignAPI();
+  // Help registry is guaranteed installed by now (bbttcc-core init < any ready).
+  _registerCampaignHelp();
   installInjectorHooks();
   // Reality Tear → Adversary draws a Beat. Listen for the system's overshoot
   // broadcast; primary GM draws a tag-matched beat, players relay via socket.
@@ -6253,6 +6607,16 @@ Hooks.once("ready", () => {
       warn("[director] advanceTurn listener failed:", e);
     }
   });
+  // Turn Ledger (2026-07-08): record every accrual, convert travel legs to
+  // days, settle the month on each applied turn advance. The beat debit path
+  // (_applyBeatTimePoints → world.addTime) lights up on its own now that the
+  // sink exists — no beat-side wiring needed here.
+  Hooks.on("bbttcc:time:accrued", _onTimeAccruedLedger);
+  Hooks.on("bbttcc:afterTravel", _onAfterTravelLedger);
+  Hooks.on("bbttcc:advanceTurn:end", (tctx) => {
+    _onAdvanceTurnEndLedger(tctx).catch(e => warn("[ledger] turn-end listener failed:", e));
+  });
+  if (game.user?.isGM) _ledgerSyncBudget();
   // Story Director (Phase 4): mid-turn seams. Each accrues pressure; the
   // director only actually looks once pressure crosses the threshold (see
   // _directorSeamLook — budget + gates + GM veto still apply).

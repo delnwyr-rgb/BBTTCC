@@ -94,11 +94,15 @@
     s.time.epoch = toInt(s.time.epoch, 0);
     s.time.turnLength = toInt(s.time.turnLength, 1);
     if (s.time.turnLength < 1) s.time.turnLength = 1;
-    // Progress is "time points" toward the next Strategic Turn.
-    s.time.progress = toInt(s.time.progress, 0);
-    if (s.time.progress < 0) s.time.progress = 0;
-    // Keep progress bounded to avoid runaway values; turnLength is the natural ceiling.
-    if (s.time.turnLength > 0 && s.time.progress > s.time.turnLength) s.time.progress = s.time.turnLength;
+    // Progress is "time points" (days) spent inside the current Strategic Turn.
+    // Turn Ledger (2026-07-08): fractional days are legal (half-day site visits),
+    // and progress MAY exceed turnLength — the soft budget borrows from the next
+    // turn and the Ledger carries the overage as debt. Only a runaway guard caps it.
+    var prog = Number(s.time.progress);
+    if (!isFinite(prog)) prog = 0;
+    if (prog < 0) prog = 0;
+    if (s.time.turnLength > 0 && prog > s.time.turnLength * 4) prog = s.time.turnLength * 4;
+    s.time.progress = Math.round(prog * 100) / 100;
 
     // Locks
     if (!s.locks || typeof s.locks !== "object") s.locks = {};
@@ -490,7 +494,10 @@
     if (patch.time && typeof patch.time === "object") {
       if (patch.time.epoch != null) next.time.epoch = toInt(patch.time.epoch, next.time.epoch);
       if (patch.time.turnLength != null) next.time.turnLength = toInt(patch.time.turnLength, next.time.turnLength);
-      if (patch.time.progress != null) next.time.progress = toInt(patch.time.progress, next.time.progress);
+      if (patch.time.progress != null) {
+        var pv = Number(patch.time.progress);            // fractional days are legal (Turn Ledger)
+        if (isFinite(pv)) next.time.progress = pv;
+      }
       if (next.time.turnLength < 1) next.time.turnLength = 1;
       if (next.time.progress < 0) next.time.progress = 0;
     }
@@ -573,6 +580,57 @@
     return applyGMEdit({ pressureMod: value }, opts);
   }
 
+  // ── Turn Ledger (2026-07-08) ────────────────────────────────────────────
+  // One Strategic Turn = a time budget: time.turnLength days; everything the
+  // table does debits time.progress. addTime is the sink the campaign module's
+  // beat-time path has always called (dormant until now). Soft budget: progress
+  // may exceed turnLength — the Ledger carries the overage into the next turn
+  // as debt. No auto-advance: the GM's Turn Driver alone ends a turn
+  // (opts.autoAdvance is accepted for back-compat and ignored).
+  function getTimeBudget(){
+    var s = getState();
+    var budget = s.time.turnLength;
+    var spent = s.time.progress;
+    var delta = Math.round((budget - spent) * 100) / 100;
+    return {
+      budget: budget,
+      spent: spent,
+      remaining: Math.max(0, delta),
+      debt: Math.max(0, -delta)
+    };
+  }
+
+  function addTime(points, opts){
+    opts = opts || {};
+    var p = Number(points);
+    if (!isFinite(p) || p === 0) return Promise.resolve({ ok:false, reason:"no_points" });
+    if (!game.user || !game.user.isGM) return Promise.resolve({ ok:false, reason:"not_gm" });
+
+    var s = getState();
+    var next = deepClone(s);
+    next.time.progress = Math.round((s.time.progress + p) * 100) / 100;
+
+    var write;
+    try {
+      write = setState(next);   // deliberately NOT applyGMEdit — per-beat/leg debits must not spam the world log
+    } catch(e){
+      return Promise.reject(e);
+    }
+    return Promise.resolve(write).then(function(){
+      var b = getTimeBudget();
+      var payload = {
+        points: p,
+        source: opts.source != null ? String(opts.source) : "manual",
+        note: opts.note != null ? String(opts.note) : "",
+        meta: opts,
+        budget: b.budget, spent: b.spent, remaining: b.remaining, debt: b.debt
+      };
+      try { Hooks.callAll("bbttcc:time:accrued", payload); } catch(eH){ warn("time:accrued hook failed", eH); }
+      log("addTime", payload);
+      return { ok:true, spent: b.spent, remaining: b.remaining, debt: b.debt };
+    });
+  }
+
   function attach(){
     ensureSettingsRegistered();
     if (!game || !game.bbttcc) game.bbttcc = {};
@@ -587,6 +645,10 @@
     api.bumpTurn = bumpTurn;
     api.setDarkness = setDarkness;
     api.setPressureMod = setPressureMod;
+
+    // Turn Ledger (2026-07-08): the sink the campaign beat-time path calls.
+    api.addTime = addTime;
+    api.getTimeBudget = getTimeBudget;
 
     api.getWorldLogs = getWorldLogs;
 

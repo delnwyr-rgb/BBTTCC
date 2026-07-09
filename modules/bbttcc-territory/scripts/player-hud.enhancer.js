@@ -769,6 +769,22 @@
       ? `<span class="bbttcc-hud-badge" title="Acting from ${esc(rig.name)} — abilities emanate from the rig"><i class="fas fa-truck-monster"></i>${esc(rig.name)}</span>`
       : "";
 
+    // Turn Ledger chip (2026-07-08): where the month stands. Days spent are the
+    // party's shared clock — what remains banks into development at turn end.
+    const ledgerChip = (() => {
+      try {
+        const lg = game.bbttcc?.api?.campaign?.ledger?.get?.();
+        if (!lg || !(lg.budget > 0)) return "";
+        const debtBadge = lg.debt > 0
+          ? ` <span class="bbttcc-hud-ledger-debt" title="The month is overdrawn — the debt carries into the new month" style="color:var(--cb-warn, #e0a34e)">+${lg.debt} owed</span>`
+          : "";
+        return `<div class="bbttcc-hud-ledger" style="padding:2px 8px;font-size:.85em;opacity:.85"
+          title="Turn Ledger — time spent this World Turn. Unspent days bank into development.">
+          <i class="fas fa-hourglass-half"></i> Day ${lg.spent} of ${lg.budget}${debtBadge}
+        </div>`;
+      } catch (_e) { return ""; }
+    })();
+
     tray.innerHTML = `
       <div class="bbttcc-player-hud-tray-header">
         <span>${esc(steward.name)}${badge}</span>
@@ -777,6 +793,7 @@
           <button type="button" data-tray-close title="Close">✕</button>
         </span>
       </div>
+      ${ledgerChip}
       <div class="bbttcc-player-hud-tray-body">${abilitiesTrayHTML(steward)}</div>
       <div class="bbttcc-tray-grip" data-tray-grip title="Drag to resize"></div>
     `;
@@ -953,8 +970,9 @@
     return !!rig && actor.id === rig.id;
   }
 
-  // GMs: follow the controlled token Token-Action-HUD style — auto-open/refresh
-  // the abilities tray for whatever is selected, and hide it when nothing is.
+  // GMs: track the controlled token so the Abilities button targets the
+  // selection, and let an ALREADY-OPEN tray follow it — but never auto-open
+  // on select (2026-07-05, owner call: tabs only engage on click).
   // Debounced so the release→control pair fired when switching tokens (which
   // momentarily leaves zero controlled) doesn't flicker the tray closed/open.
   const gmSyncFromControl = foundry.utils.debounce(() => {
@@ -964,13 +982,25 @@
     if (ctrl.length) {
       _gmActorId = ctrl[ctrl.length - 1]?.actor?.id ?? _gmActorId;
       _groupCache.actorId = null; // new subject — reclassify on render
-      renderTray(host);           // auto-appear + follow the selection
+      refreshTrayIfOpen();        // follow the selection only if the tray is open
     } else {
       document.getElementById(TRAY_ID)?.remove(); // nothing selected — hide
     }
   }, 30);
 
   Hooks.once("ready", buildHud);
+  // Turn Ledger chip stays live: world settings replicate to every client, so
+  // watching the two backing settings refreshes the "Day X of Y" readout for
+  // players too (the accrual hooks themselves only fire on the GM client).
+  Hooks.on("updateSetting", (setting) => {
+    try {
+      const k = String(setting?.key || "");
+      if (k !== "bbttcc-world.worldState" && k !== "bbttcc-campaign.ledgerEntries") return;
+      const tray = document.getElementById(TRAY_ID);
+      const host = document.getElementById(HUD_ID);
+      if (tray && host) renderTray(host);
+    } catch (_e) {}
+  });
   Hooks.on("canvasReady", () => { if (shouldShow()) { buildHud(); refreshTrayIfOpen(); refreshTravelStackPill(); } });
   Hooks.on("controlToken", () => {
     if (game.user?.isGM) return gmSyncFromControl();

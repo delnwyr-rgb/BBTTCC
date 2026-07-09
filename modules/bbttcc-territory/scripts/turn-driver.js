@@ -1175,6 +1175,36 @@ async function promotePostToTurn(){
 
 /* --------------------------- (1) Planned raids --------------------------- */
 // DRY = preview from warLogs; APPLY = call compat per faction with factionId
+//
+// Turn Ledger P4 (2026-07-08, owner-locked "time = 2nd currency"): planned
+// strategic activities are FUNDED BY THE MONTH'S UNSPENT DAYS. Each entry has
+// a day price; entries the remainder can't fund HOLD (stay planned into the
+// next turn — the crew visibly waits) and only funded entries reach
+// consumePlanned. Funded days are debited to the world clock as
+// source:"development". Worlds without the ledger API degrade to old behavior.
+const LEDGER_DAY_COST = {
+  develop_infrastructure_std: 3,
+  infrastructure_expansion: 3,
+  establish_outpost: 3,
+  upgrade_outpost_settlement: 3,
+  develop_outpost_stability: 2,
+  establish_supply_line: 2,
+  establish_trade_route: 2
+};
+function ledgerDayCostFor(key){
+  const k = String(key || "").toLowerCase();
+  if (LEDGER_DAY_COST[k] != null) return LEDGER_DAY_COST[k];
+  if (/^found_site_/.test(k)) return 2;
+  return 2;                                  // default: any planned activity = 2 days
+}
+function ledgerRemainingDays(){
+  try {
+    const b = game.bbttcc?.api?.world?.getTimeBudget?.();
+    if (b && Number.isFinite(b.remaining)) return b.remaining;
+  } catch (_e) {}
+  return null;                               // ledger absent — no gating
+}
+
 async function plannedRaidsStep({ apply=false } = {}){
   const raid = game.bbttcc?.api?.raid;
   if (!raid) return { changed:false, rows:[] };
@@ -1183,6 +1213,33 @@ async function plannedRaidsStep({ apply=false } = {}){
   await Promise.all(FXS.map(A => migrateWarLogPluralIfNeeded(A)));
 
   if (apply && typeof raid.consumePlanned === "function") {
+    // ── Turn Ledger funding pass: hold what the month can't pay for ────────
+    const budgeted = ledgerRemainingDays();
+    let daysLeft = budgeted == null ? Infinity : budgeted;
+    const funded = [];
+    const held = [];
+    if (budgeted != null) {
+      for (const F of FXS) {
+        const flags = F.flags?.[MOD_FACTIONS] || {};
+        const logs = Array.isArray(flags.warLogs) ? clone(flags.warLogs) : [];
+        let dirty = false;
+        for (const e of logs) {
+          if (String(e?.type).toLowerCase() !== "planned") continue;
+          const key = String(e.activity || e.activityKey || "").toLowerCase();
+          const price = ledgerDayCostFor(key);
+          if (price <= daysLeft) {
+            daysLeft = Math.round((daysLeft - price) * 100) / 100;
+            funded.push({ faction: F.name, key, price });
+          } else {
+            e.type = "planned_hold";        // shielded from consumePlanned, restored below
+            dirty = true;
+            held.push({ faction: F.name, key, price });
+          }
+        }
+        if (dirty) await F.update({ [`flags.${MOD_FACTIONS}.warLogs`]: logs });
+      }
+    }
+
     let changed = false;
     const rows = [];
     for (const F of FXS) {
@@ -1191,6 +1248,41 @@ async function plannedRaidsStep({ apply=false } = {}){
         if (res?.changed || res?.applied || res?.didWork || res?.count) changed = true;
         if (Array.isArray(res?.rows)) rows.push(...res.rows);
       } catch (e) { warn("consumePlanned error for", F?.name, e); }
+    }
+
+    // Restore holds → planned (they queue again next turn).
+    if (held.length) {
+      for (const F of FXS) {
+        const flags = F.flags?.[MOD_FACTIONS] || {};
+        const logs = Array.isArray(flags.warLogs) ? clone(flags.warLogs) : [];
+        let dirty = false;
+        for (const e of logs) {
+          if (String(e?.type).toLowerCase() === "planned_hold") { e.type = "planned"; dirty = true; }
+        }
+        if (dirty) await F.update({ [`flags.${MOD_FACTIONS}.warLogs`]: logs });
+      }
+    }
+
+    // Debit the funded labor to the world clock (shows in the Ledger whisper).
+    const fundedDays = Math.round(funded.reduce((a, x) => a + x.price, 0) * 100) / 100;
+    if (budgeted != null && fundedDays > 0) {
+      try {
+        await game.bbttcc.api.world.addTime(fundedDays, {
+          source: "development",
+          note: `Development labor: ${funded.length} planned action(s) funded (${fundedDays} days)`
+        });
+      } catch (e) { warn("ledger development debit failed", e); }
+    }
+    if (held.length) {
+      const esc = foundry.utils.escapeHTML;
+      try {
+        await ChatMessage.create({
+          content: `<p><i class="fas fa-hourglass-half"></i> <b>Turn Ledger:</b> the month ran out of days — ${held.length} planned action(s) HOLD until next turn (the crew waited):</p>
+            <ul>${held.map(h => `<li><b>${esc(h.faction)}</b>: ${esc(h.key.replace(/_/g, " "))} (${h.price}d)</li>`).join("")}</ul>`,
+          whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
+          speaker: { alias: "Bad Eden Turn Driver" }
+        });
+      } catch (_e) {}
     }
     return { changed, rows };
   }
@@ -1215,15 +1307,25 @@ async function plannedRaidsStep({ apply=false } = {}){
       const label = spec?.label || (key ? key.replace(/_/g," ").replace(/\b\w/g,c=>c.toUpperCase()) : "(unknown)");
       const cost = spec?.cost || {};
       const afford = canAfford(bank, cost);
-      rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford });
+      rows.push({ faction: F.name, factionId: F.id, activity: key, label, cost, canAfford: afford, days: ledgerDayCostFor(key) });
       any = true;
+    }
+  }
+
+  // Turn Ledger: simulate the funding pass so the preview shows what would hold.
+  const previewBudget = ledgerRemainingDays();
+  if (previewBudget != null) {
+    let sim = previewBudget;
+    for (const r of rows) {
+      r.fundable = r.days <= sim;
+      if (r.fundable) sim = Math.round((sim - r.days) * 100) / 100;
     }
   }
 
   const fmt = (c)=>OP_KEYS.filter(k=>safeNum(c[k])>0).map(k=>`${c[k]} ${k}`).join(", ")||"—";
   await ChatMessage.create({
     content: any
-      ? `<p><i>Planned Activities (Dry Preview)</i></p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)} ${r.canAfford?"":"<em>(cannot afford)</em>"}</li>`).join("")}</ul>`
+      ? `<p><i>Planned Activities (Dry Preview)</i>${previewBudget != null ? ` — <i class="fas fa-hourglass-half"></i> ${previewBudget} day(s) available to fund them` : ""}</p><ul>${rows.map(r => `<li><b>${foundry.utils.escapeHTML(r.faction)}</b>: ${foundry.utils.escapeHTML(r.label)} — ${fmt(r.cost)}${r.days ? ` · ${r.days}d` : ""} ${r.canAfford?"":"<em>(cannot afford)</em>"}${r.fundable === false ? " <em>(would HOLD — out of days)</em>" : ""}</li>`).join("")}</ul>`
       : `<p><i>Planned Activities (Dry Preview)</i>: none queued.</p>`,
     whisper: game.users?.filter(u => u.isGM).map(u => u.id) ?? [],
     speaker: { alias: "Bad Eden Turn Driver" }
@@ -1543,8 +1645,10 @@ async function enqueueTurnRequest({
   if (!key) return { ok: false, error: "no key provided" };
 
   const v = (value && typeof value === "object") ? value : {};
-  const MOD_TERRITORY = MOD_TERRITORY ?? "bbttcc-territory";
-  const MOD_FACTIONS  = MOD_FACTIONS  ?? "bbttcc-factions";
+  // (The local `const MOD_X = MOD_X ?? …` shadows that lived here were TDZ
+  // self-references — they threw on EVERY keyed request, killing beat Turn
+  // Requests and the Minor Repair activity. Module-scope consts cover this.
+  // Fixed 2026-07-08.)
 
   const hexTarget =
     hexUuid ||

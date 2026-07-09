@@ -222,6 +222,17 @@
       before, after
     });
 
+    // Turn Ledger (2026-07-08, "time = 2nd currency"): a build action is a day
+    // of crew labor. Best-effort — addTime is GM-gated, so a non-GM spend
+    // degrades to free (calibration-pass note; the strategic-activity gate in
+    // the Turn Driver carries the real teeth).
+    try {
+      await game.bbttcc?.api?.world?.addTime?.(1, {
+        source: "development",
+        note: `Build action: ${actionKey} @ ${hexName} (${A.name})`
+      });
+    } catch (_eLg) {}
+
     return { ok:true, action:actionKey, cost, before, after, hexChanged };
   }
 

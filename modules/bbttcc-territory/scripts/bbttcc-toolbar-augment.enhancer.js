@@ -93,9 +93,22 @@
 
               const sceneId = canvas?.scene?.id || null;
 
+              // Turn Ledger (2026-07-08): show where the month stands before
+              // the GM commits — unspent days bank into development, overspend
+              // carries into the next month as debt.
+              let ledgerLine = "";
+              try {
+                const lg = game.bbttcc?.api?.campaign?.ledger?.get?.();
+                if (lg && lg.budget > 0) {
+                  ledgerLine = lg.debt > 0
+                    ? `<p><i class="fas fa-hourglass-half"></i> <b>Turn Ledger:</b> Day ${lg.spent} of ${lg.budget} — the month is overdrawn by <b>${lg.debt} day(s)</b>; the debt carries into the new month.</p>`
+                    : `<p><i class="fas fa-hourglass-half"></i> <b>Turn Ledger:</b> Day ${lg.spent} of ${lg.budget} — <b>${lg.remaining} day(s)</b> unspent will bank into development.</p>`;
+                }
+              } catch (_eLg) {}
+
               const ok = await Dialog.confirm({
                 title: "Advance Turn",
-                content: "<p>Advance the strategic turn now? This will apply all pending effects.</p>",
+                content: `<p>Advance the strategic turn now? This will apply all pending effects.</p>${ledgerLine}`,
                 yes: () => true,
                 no: () => false,
                 defaultYes: false,
