@@ -17,9 +17,10 @@
 //   flags["bbttcc-travel"].overlay and re-apply it to tile.mesh on drawTile/refreshTile +
 //   a ticker for the pulse. The gold frame is drawn into a container on canvas.primary
 //   (world-space) keyed by tile id. The hooks register ONCE per session (idempotent guard).
-// MAKE IT PERMANENT: this macro's hook block survives until reload. To keep overlays
-//   blended across reloads, lift the `applyOverlay` / `tickPulse` / hook-registration
-//   block verbatim into a bbttcc-travel init script (no schema change needed).
+// PERMANENT SINCE 2026-07-04: the renderer now ALSO lives in the module at
+//   scripts/scene-overlay-renderer.js (loaded at init → overlays survive reloads with
+//   no ritual). This macro's copy remains for in-session hot-swap tuning — pasting it
+//   tears down the module registration and takes over until the next reload.
 // Self-contained. No ft-deploy needed to try it — paste into a GM macro and run.
 (async () => {
   if (!game.user?.isGM) return ui.notifications.warn("GM only.");
@@ -130,11 +131,20 @@
       if (!o) continue;
       const mesh = tile?.mesh;
       const fr = tile._bbttccFrame;
-      // SPIN — continuous rotation around the tile centre (speed °/sec, ± = direction).
+      // SPIN — rotation around the tile centre (speed °/sec, ± = direction).
+      // spinMode "sway" = oscillate back & forth across spinArc° (total sweep)
+      // instead of full circles; peak angular speed ≈ |spinSpeed|.
       if (o.spin && mesh) {
         const base = ((tile.document.rotation || 0) * Math.PI) / 180;
-        tile._bbttccSpin = (tile._bbttccSpin ?? 0) + ((o.spinSpeed ?? 30) * Math.PI / 180) * dt;
-        mesh.rotation = base + tile._bbttccSpin;
+        const rate = ((o.spinSpeed ?? 30) * Math.PI) / 180;
+        if (o.spinMode === "sway") {
+          const half = Math.max(0.01, ((o.spinArc ?? 60) * Math.PI) / 360);  // ± half the sweep
+          tile._bbttccSpin = (tile._bbttccSpin ?? 0) + Math.abs(rate) * dt;
+          mesh.rotation = base + half * Math.sin(tile._bbttccSpin / half);
+        } else {
+          tile._bbttccSpin = (tile._bbttccSpin ?? 0) + rate * dt;
+          mesh.rotation = base + tile._bbttccSpin;
+        }
         if (o.frame && fr && !fr._destroyed) fr.rotation = mesh.rotation;   // frame spins along
       }
       // PULSE — breathing alpha (mesh + frame).
@@ -222,8 +232,14 @@
 
       <label>Spin</label>
       <span><input type="checkbox" name="spin"> rotate around centre
-        &nbsp; speed <input type="number" name="spinSpeed" value="30" min="-360" max="360" step="5" style="width:64px"> °/sec
-        <small style="opacity:.7">(− = counter-clockwise — great for round sigils)</small></span>
+        &nbsp; <select name="spinMode">
+          <option value="cw" selected>&#10227; clockwise</option>
+          <option value="ccw">&#10226; counter-clockwise</option>
+          <option value="sway">&#8646; sway back &amp; forth</option>
+        </select>
+        speed <input type="number" name="spinSpeed" value="30" min="0" max="360" step="5" style="width:64px"> °/sec
+        arc <input type="number" name="spinArc" value="60" min="5" max="360" step="5" style="width:60px">°
+        <br><small style="opacity:.7">arc = total sweep, sway only — great for pendulum wards; CW/CCW spin round sigils</small></span>
 
       <label>Tint (optional)</label>
       <span><input type="checkbox" name="tintOn"> apply
@@ -264,7 +280,9 @@
             layer: f.layer.value,
             alpha: Math.max(0, Math.min(1, Number(f.alpha.value) || 0.85)),
             spin: f.spin.checked,
-            spinSpeed: Number(f.spinSpeed.value) || 30,
+            spinMode: f.spinMode.value,
+            spinSpeed: (f.spinMode.value === "ccw" ? -1 : 1) * Math.abs(Number(f.spinSpeed.value) || 30),
+            spinArc: Number(f.spinArc.value) || 60,
             tint: f.tintOn.checked ? (f.tint.value || "").trim() : "",
             pulse: f.pulse.checked,
             pulseAmp: Number(f.pulseAmp.value) || 0.2,
@@ -337,7 +355,9 @@
       pulseAmp: opts.pulseAmp,
       pulseSpeed: opts.pulseSpeed,
       spin: opts.spin,
+      spinMode: opts.spinMode,
       spinSpeed: opts.spinSpeed,
+      spinArc: opts.spinArc,
       frame: opts.frame,
       frameColor: frameColorNum,
       frameGlow: opts.frameGlow,

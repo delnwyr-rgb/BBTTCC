@@ -21,6 +21,7 @@
     "scripts/travel.arc.engine.js"
   ],
   "scripts": [
+    "scripts/scene-overlay-renderer.js",
     "scripts/bbttcc-travel-console.js",
     "scripts/bbttcc-travel-visuals.js",
     "scripts/api.travel.js",

@@ -37,7 +37,7 @@ Two commands, both wrappers over `whiten-to-alpha.py`:
 
 ```bash
 # single file  → writes <name>-overlay.png / <name>-overlay-glow.png next to the input
-glow  ~/Desktop/mysigil.png
+glow  ~/Desktop/circuit1-overlay.png
 alpha ~/Desktop/mycircuit.png
 
 # whole FOLDER (batch) → writes into <folder>/overlays/

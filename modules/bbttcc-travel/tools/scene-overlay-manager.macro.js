@@ -21,8 +21,8 @@
   // ── SHARED EFFECT RENDERER (identical to scene-overlay-helper.macro.js) ──────
   //   Bundled so this manager renders blend/pulse/frame standalone — even if the
   //   helper wasn't run this session. Registers ONCE via the shared guard key, so
-  //   running both macros never double-hooks. (Ideal permanent home: a bbttcc-travel
-  //   init script; until then both siblings carry a copy.)
+  //   running both macros never double-hooks. (Permanent home since 2026-07-04:
+  //   scripts/scene-overlay-renderer.js — this copy is for in-session hot-swap tuning.)
   game.bbttcc = game.bbttcc || {};
   const blendOf = (name) => {
     const B = PIXI.BLEND_MODES;
@@ -93,10 +93,17 @@
       if (!o) continue;
       const mesh = tile?.mesh;
       const fr = tile._bbttccFrame;
-      if (o.spin && mesh) {   // continuous rotation around centre (speed °/sec, ± = direction)
+      if (o.spin && mesh) {   // rotation around centre; spinMode "sway" = oscillate across spinArc°
         const base = ((tile.document.rotation || 0) * Math.PI) / 180;
-        tile._bbttccSpin = (tile._bbttccSpin ?? 0) + ((o.spinSpeed ?? 30) * Math.PI / 180) * dt;
-        mesh.rotation = base + tile._bbttccSpin;
+        const rate = ((o.spinSpeed ?? 30) * Math.PI) / 180;
+        if (o.spinMode === "sway") {
+          const half = Math.max(0.01, ((o.spinArc ?? 60) * Math.PI) / 360);  // ± half the sweep
+          tile._bbttccSpin = (tile._bbttccSpin ?? 0) + Math.abs(rate) * dt;
+          mesh.rotation = base + half * Math.sin(tile._bbttccSpin / half);
+        } else {
+          tile._bbttccSpin = (tile._bbttccSpin ?? 0) + rate * dt;
+          mesh.rotation = base + tile._bbttccSpin;
+        }
         if (o.frame && fr && !fr._destroyed) fr.rotation = mesh.rotation;
       }
       if (o.pulse) {
@@ -134,12 +141,15 @@
   if (!overlays.length) return ui.notifications.info("No BBTTCC overlays on this scene.");
 
   const basename = (p) => String(p || "").split("/").pop() || "(no image)";
+  // Rows default UNTICKED; overlay tiles currently selected (controlled) on the
+  // canvas come pre-ticked — click a tile, run the manager, and it's ready to act on.
+  const controlled = new Set((canvas.tiles?.controlled ?? []).map((p) => p.id));
   const rows = overlays.map((t, i) => {
     const o = t.getFlag(MOD, "overlay") ?? {};
     const dim = `${Math.round(t.width)}×${Math.round(t.height)}`;
-    const tags = [o.blend, o.pulse ? "pulse" : null, o.spin ? "spin" : null, o.frame ? "frame" : null, t.hidden ? "HIDDEN" : null].filter(Boolean).join(" · ");
+    const tags = [o.blend, o.pulse ? "pulse" : null, o.spin ? (o.spinMode === "sway" ? "sway" : "spin") : null, o.frame ? "frame" : null, t.hidden ? "HIDDEN" : null].filter(Boolean).join(" · ");
     return `<tr>
-      <td><input type="checkbox" name="sel" value="${t.id}" checked></td>
+      <td><input type="checkbox" name="sel" value="${t.id}" ${controlled.has(t.id) ? "checked" : ""}></td>
       <td style="opacity:${t.hidden ? .5 : 1}"><code>${foundry.utils.escapeHTML?.(basename(t.texture?.src)) ?? basename(t.texture?.src)}</code></td>
       <td style="white-space:nowrap"><small>${dim}</small></td>
       <td><small style="opacity:.75">${tags || "normal"}</small></td>
@@ -147,7 +157,7 @@
   }).join("");
 
   const content = `
-    <p style="margin:0 0 6px"><small style="opacity:.75">Tick the overlays to act on, then choose an action. Bulk buttons act on the ticked rows; “All” buttons ignore the ticks.</small></p>
+    <p style="margin:0 0 6px"><small style="opacity:.75">Tick the overlays to act on, then choose an action. Nothing is ticked by default — overlay tiles you have selected on the canvas come pre-ticked. Bulk buttons act on the ticked rows; “All” buttons ignore the ticks.</small></p>
     <form class="bbttcc-overlay-manager">
       <p style="margin:0 0 8px">
         <label>Frame colour
@@ -157,7 +167,7 @@
       </p>
       <table style="width:100%;border-collapse:collapse">
         <thead><tr style="text-align:left;border-bottom:1px solid var(--color-border-light-2,#666)">
-          <th><input type="checkbox" name="selAll" checked title="select all"></th>
+          <th><input type="checkbox" name="selAll" title="select all"></th>
           <th>Image</th><th>Size</th><th>Look</th>
         </tr></thead>
         <tbody>${rows}</tbody>
@@ -181,6 +191,8 @@
     const hex = (n, dflt) => (n != null ? foundry.utils.Color.from(n).toString() : dflt);
     const sel = (v, want) => (v === want ? "selected" : "");
     const curLayer = (t.elevation ?? 0) > 0 ? "overlay" : "ground";
+    // Older tiles have no spinMode — infer direction from the sign of spinSpeed.
+    const curSpinMode = o.spinMode ?? ((o.spinSpeed ?? 30) < 0 ? "ccw" : "cw");
     const src0 = String(t.texture?.src || "");
     const esc = (s) => foundry.utils.escapeHTML?.(s) ?? s;
 
@@ -210,7 +222,14 @@
 
         <label>Spin</label>
         <span><input type="checkbox" name="spin" ${o.spin ? "checked" : ""}> rotate around centre
-          &nbsp; speed <input type="number" name="spinSpeed" value="${o.spinSpeed ?? 30}" min="-360" max="360" step="5" style="width:64px"> °/sec</span>
+          &nbsp; <select name="spinMode">
+            <option value="cw" ${sel(curSpinMode, "cw")}>&#10227; clockwise</option>
+            <option value="ccw" ${sel(curSpinMode, "ccw")}>&#10226; counter-clockwise</option>
+            <option value="sway" ${sel(curSpinMode, "sway")}>&#8646; sway back &amp; forth</option>
+          </select>
+          speed <input type="number" name="spinSpeed" value="${Math.abs(o.spinSpeed ?? 30)}" min="0" max="360" step="5" style="width:64px"> °/sec
+          arc <input type="number" name="spinArc" value="${o.spinArc ?? 60}" min="5" max="360" step="5" style="width:60px">°
+          <small style="opacity:.7">(arc = total sweep, sway only)</small></span>
 
         <label>Tint</label>
         <span><input type="checkbox" name="tintOn" ${o.tint != null ? "checked" : ""}> apply
@@ -248,7 +267,9 @@
             layer: f.layer.value,
             alpha: Math.max(0, Math.min(1, Number(f.alpha.value) || 0.85)),
             spin: f.spin.checked,
-            spinSpeed: Number(f.spinSpeed.value) || 30,
+            spinMode: f.spinMode.value,
+            spinSpeed: (f.spinMode.value === "ccw" ? -1 : 1) * Math.abs(Number(f.spinSpeed.value) || 30),
+            spinArc: Number(f.spinArc.value) || 60,
             tint: f.tintOn.checked ? (f.tint.value || "").trim() : "",
             pulse: f.pulse.checked,
             pulseAmp: Number(f.pulseAmp.value) || 0.2,
@@ -280,7 +301,9 @@
       [`flags.${MOD}.overlay.pulseAmp`]: vals.pulseAmp,
       [`flags.${MOD}.overlay.pulseSpeed`]: vals.pulseSpeed,
       [`flags.${MOD}.overlay.spin`]: vals.spin,
+      [`flags.${MOD}.overlay.spinMode`]: vals.spinMode,
       [`flags.${MOD}.overlay.spinSpeed`]: vals.spinSpeed,
+      [`flags.${MOD}.overlay.spinArc`]: vals.spinArc,
       [`flags.${MOD}.overlay.frame`]: vals.frame,
       [`flags.${MOD}.overlay.frameColor`]: frameColorNum,
       [`flags.${MOD}.overlay.frameGlow`]: vals.frameGlow,
