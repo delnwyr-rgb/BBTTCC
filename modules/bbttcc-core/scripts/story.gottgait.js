@@ -1,13 +1,22 @@
 // modules/bbttcc-core/scripts/story.gottgait.js
+//
+// GOTTGAIT story state store. Slimmed 2026-07-08: the original demo engine
+// (runBeat with two demo beats, bindContext, ensureStoryContext, planActivity,
+// maybeAdvanceTurn, getStage) was unreachable scaffolding — the Story Console
+// routes every button through game.bbttcc.api.campaign.* now. What remains is
+// the world-setting state store the console + GM Advisor read, and the beat
+// log every campaign/travel fire appends to (now CAPPED — it grew forever and
+// rewrote the whole world setting on each append).
 (() => {
   const TAG = "[GOTTGAIT Story]";
   const MODULE_ID = "bbttcc-core";
   const SETTING_KEY = "gottgaitStoryState";
+  const BEAT_LOG_CAP = 100;
 
   Hooks.once("init", () => {
     game.settings.register(MODULE_ID, SETTING_KEY, {
       name: "GOTTGAIT Story State",
-      hint: "Internal storage for the GOTTGAIT adventure story engine.",
+      hint: "Internal storage for the story console (filters, last dialog values, beat log).",
       scope: "world",
       config: false,
       type: Object,
@@ -42,190 +51,11 @@
       const state = getState();
       state.beats ??= [];
       state.beats.push({ ts: Date.now(), message, data });
+      if (state.beats.length > BEAT_LOG_CAP) state.beats = state.beats.slice(-BEAT_LOG_CAP);
       await setState(state);
     }
 
-    function getAPIs() {
-      const api = game.bbttcc?.api ?? {};
-      return {
-        raid: api.raid,
-        encounters: api.encounters,
-        travel: api.travel,
-        turn: api.turn
-      };
-    }
-
-    function _listFactionActors() {
-      try {
-        const all = Array.from(game.actors ?? []);
-        // Faction-kind only. Old check (mere bbttcc-factions flag presence)
-        // leaked faction-owned rigs/stewards; route through actorKind with a
-        // strict isFaction/sysType fallback.
-        const kindOf = (a) => game.bbttcc?.api?.actorKind?.(a)
-          ?? ((a?.flags?.["bbttcc-factions"]?.isFaction === true
-               || String(a?.type || "").toLowerCase() === "faction") ? "faction" : "");
-        return all.filter(a => kindOf(a) === "faction");
-      } catch {
-        return [];
-      }
-    }
-
-    async function _promptForContext() {
-      const state = getState();
-
-      const factionActors = _listFactionActors();
-      const factionOptions = factionActors
-        .map(a => `<option value="${a.uuid}">${a.name}</option>`)
-        .join("");
-
-      const content = `
-        <form class="bbttcc-form">
-          <div class="form-group">
-            <label>Story Faction (Faction Actor)</label>
-            <select name="factionUuid">
-              ${factionOptions || `<option value="">(No faction actors found)</option>`}
-            </select>
-            <p class="notes">This is the default <b>Faction</b> used by Story Console buttons.</p>
-          </div>
-
-          <div class="form-group">
-            <label>Story Hex ID</label>
-            <input type="text"
-                   name="hexUuid"
-                   value="${state.storyHexUuid || ""}"
-                   placeholder="e.g. test-hex-17" />
-            <p class="notes">This is your Bad Eden <b>hexUuid</b> (raw string). Not a Foundry UUID.</p>
-          </div>
-        </form>
-      `;
-
-      return await new Promise(resolve => {
-        new Dialog({
-          title: "GOTTGAIT: Bind Story Context",
-          content,
-          buttons: {
-            save: {
-              icon: '<i class="fas fa-save"></i>',
-              label: "Save",
-              callback: html => {
-                const form = html[0]?.querySelector("form");
-                const fd = new FormData(form);
-                resolve({
-                  storyFactionUuid: String(fd.get("factionUuid") || "").trim() || null,
-                  storyHexUuid: String(fd.get("hexUuid") || "").trim() || null
-                });
-              }
-            },
-            cancel: { icon: '<i class="fas fa-times"></i>', label: "Cancel", callback: () => resolve(null) }
-          },
-          default: "save"
-        }).render(true);
-      });
-    }
-
-    async function ensureStoryContext() {
-      const state = getState();
-
-      let factionUuid = state.storyFactionUuid || null;
-      let hexUuid = state.storyHexUuid || null;
-
-      // Validate faction UUID
-      let faction = null;
-      if (factionUuid) {
-        try { faction = await fromUuid(factionUuid); } catch {}
-        if (!faction) factionUuid = null;
-      }
-
-      // ✅ IMPORTANT CHANGE:
-      // hexUuid is a Bad Eden raw string identifier, NOT a Foundry UUID.
-      // We accept it as-is (no fromUuid validation), so we don't re-prompt forever.
-
-      if (!factionUuid || !hexUuid) {
-        const picked = await _promptForContext();
-        if (!picked) throw new Error(`${TAG} Story context not bound (cancelled).`);
-
-        factionUuid = picked.storyFactionUuid || factionUuid;
-        hexUuid = picked.storyHexUuid || hexUuid;
-
-        await updateState({ storyFactionUuid: factionUuid, storyHexUuid: hexUuid });
-      }
-
-      // Re-resolve faction after save
-      faction = factionUuid ? await fromUuid(factionUuid) : null;
-      if (!faction) throw new Error(`${TAG} No valid faction bound to story context.`);
-      return { faction, hexUuid };
-    }
-
-    async function planActivity({ factionId, activityKey, targetUuid, label }) {
-      const { raid } = getAPIs();
-      if (!raid?.planActivity) {
-        ui.notifications?.warn?.("GOTTGAIT Story: raid.planActivity not available.");
-        return null;
-      }
-      const payload = { factionId, activityKey, targetUuid, label };
-      console.log(TAG, "Planning Strategic Activity via raid.planActivity:", payload);
-      const result = await raid.planActivity(payload);
-      await logBeat("Strategic Activity Planned", payload);
-      return result;
-    }
-
-    async function maybeAdvanceTurn({ label = "GOTTGAIT Demo Turn" } = {}) {
-      const { turn } = getAPIs();
-      if (!turn?.advanceTurn) return;
-      try { await turn.advanceTurn({ source: "gottgait-story", label }); }
-      catch (e) { console.warn(TAG, "turn.advanceTurn failed:", e); }
-    }
-
-    const gottgait = {
-      getState,
-      setState,
-      updateState,
-      logBeat,
-
-      async bindContext() {
-        const picked = await _promptForContext();
-        if (!picked) return null;
-        await updateState(picked);
-        ui.notifications?.info?.("GOTTGAIT story context saved.");
-        return picked;
-      },
-
-      async runBeat(key, arg) {
-        const { faction, hexUuid } = await ensureStoryContext();
-
-        switch (key) {
-          case "act0.claim_hex": {
-            await logBeat("Act 0: Claim Hex / Outpost", { faction: faction.name, hexUuid });
-            ui.notifications?.info?.(`Act0 claim_hex bound to ${faction.name} @ ${hexUuid}`);
-            return;
-          }
-
-          case "turn.establish_outpost": {
-            await planActivity({
-              factionId: faction.id,
-              activityKey: "establish_outpost",
-              targetUuid: hexUuid,
-              label: "Story Console: Establish Outpost"
-            });
-            await maybeAdvanceTurn({ label: "GOTTGAIT: Establish Outpost" });
-            return;
-          }
-
-          default: {
-            await logBeat("Story Beat (unhandled)", { key, arg, faction: faction.name, hexUuid });
-            ui.notifications?.warn?.(`GOTTGAIT: Beat '${key}' not yet wired in this build.`);
-            return;
-          }
-        }
-      },
-
-      getStage() {
-        const s = getState();
-        return s.stage || "none";
-      }
-    };
-
-    game.bbttcc.api.story.gottgait = gottgait;
-    console.log(TAG, "Installed game.bbttcc.api.story.gottgait (world-safe)");
+    game.bbttcc.api.story.gottgait = { getState, setState, updateState, logBeat };
+    console.log(TAG, "Installed game.bbttcc.api.story.gottgait (state store, log capped at", BEAT_LOG_CAP, ")");
   });
 })();

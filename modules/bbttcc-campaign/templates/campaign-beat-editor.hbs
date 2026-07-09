@@ -12,7 +12,7 @@
   </header>
 
   {{!-- Tabs --}}
-  <nav class="bbttcc-tabs bbttcc-beat-tabs">
+  <nav class="bbttcc-tabs bbttcc-beat-tabs" data-tour="beats.tabs">
     <button type="button" class="bbttcc-tab {{#if (eq activeTab "core")}}is-active{{/if}}" data-action="tab" data-tab="core">Core</button>
     <button type="button" class="bbttcc-tab {{#if (eq activeTab "injection")}}is-active{{/if}}" data-action="tab" data-tab="injection">Injection</button>
     <button type="button" class="bbttcc-tab {{#if (eq activeTab "scene")}}is-active{{/if}}" data-action="tab" data-tab="scene">Scene</button>
@@ -22,19 +22,19 @@
 
   {{!-- CORE TAB --}}
   <section class="bbttcc-tab-panel {{#unless (eq activeTab "core")}}is-hidden{{/unless}}" data-tab="core">
-    <section class="bbttcc-beat-section">
+    <section class="bbttcc-beat-section" data-tour="beats.basicInfo">
       <h3>Basic Info</h3>
       <div class="bbttcc-form-grid bbttcc-form-grid-2">
         <div class="form-group">
-          <label>Beat ID</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'id'}}">Beat ID</label>
           <input type="text" name="id" value="{{beat.id}}" />
         </div>
         <div class="form-group">
-          <label>Label</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'label'}}">Label</label>
           <input type="text" name="label" value="{{beat.label}}" />
         </div>
         <div class="form-group">
-          <label>Type</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'type'}}">Type</label>
           <select name="type">
             {{#each beatTypes as |t|}}
               <option value="{{t}}" {{#if (eq t ../beat.type)}}selected{{/if}}>{{t}}</option>
@@ -42,15 +42,17 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Time Points (override)</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'timePoints'}}">Time Points (override)
+            <span class="bbttcc-muted" style="font-size:.72rem; opacity:.75; border:1px solid rgba(148,163,184,.4); border-radius:8px; padding:0 .35rem; margin-left:.35rem; vertical-align:middle;">dormant — no time accrual yet</span>
+          </label>
           <input type="number" name="timePoints" value="{{beat.timePoints}}" min="0" step="1"
                  placeholder="(blank = use timeScale default)" />
           <p class="bbttcc-muted bbttcc-mt-xs">
-            If set, this overrides the timeScale mapping for Strategic Turn progression.
+            Would override the timeScale mapping for Strategic-Turn time accrual — which is not live yet (the world API has no addTime). Stored for future wiring.
           </p>
         </div>
         <div class="form-group">
-          <label>Time Scale</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'timeScale'}}">Time Scale</label>
           <select name="timeScale">
             {{#each timeScales as |ts|}}
               <option value="{{ts}}" {{#if (eq ts ../beat.timeScale)}}selected{{/if}}>{{ts}}</option>
@@ -59,8 +61,8 @@
         </div>
 
         {{!-- Player-facing mirror toggle --}}
-        <div class="form-group bbttcc-col-full">
-          <label class="checkbox">
+        <div class="form-group bbttcc-col-full" data-tour="beats.playerFacing">
+          <label class="checkbox" data-tooltip="{{bbttccTip 'beats' 'playerFacing'}}">
             <input type="checkbox" name="playerFacing" {{#if beat.playerFacing}}checked{{/if}}>
             Player-Facing (Read-Only Mirror)
           </label>
@@ -71,8 +73,8 @@
 
 
         {{!-- Quest linkage --}}
-        <div class="form-group">
-          <label>Quest</label>
+        <div class="form-group" data-tour="beats.questLinkage">
+          <label data-tooltip="{{bbttccTip 'beats' 'questId'}}">Quest</label>
           <select name="questId">
             <option value="" {{#unless beat.questId}}selected{{/unless}}>(None)</option>
             {{#each questOptions as |q|}}
@@ -87,7 +89,7 @@
         </div>
 
         <div class="form-group">
-          <label>Quest Step (optional)</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'questStep'}}">Quest Step (optional)</label>
           <input type="number" name="questStep" value="{{beat.questStep}}" min="0" step="1" placeholder="e.g. 2" />
           <p class="bbttcc-muted bbttcc-mt-xs">
             Ordering hint only — does not change runtime behavior.
@@ -95,7 +97,7 @@
         </div>
 
         <div class="form-group">
-          <label>Quest Role (optional)</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'questRole'}}">Quest Role (optional)</label>
           <select name="questRole">
             <option value="" {{#unless beat.questRole}}selected{{/unless}}>(None)</option>
             <option value="start" {{#if (eq beat.questRole "start")}}selected{{/if}}>start</option>
@@ -112,19 +114,19 @@
 
     {{!-- ENCOUNTER FIELDS (only shown when type=encounter) --}}
     {{#if (eq beat.type "encounter")}}
-      <section class="bbttcc-beat-section">
-        <h3>Encounter</h3>
+      <section class="bbttcc-beat-section" data-tour="beats.encounter">
+        <h3 data-tooltip="{{bbttccTip 'beats' 'encounter'}}">Encounter</h3>
         <div class="bbttcc-form-grid bbttcc-form-grid-3">
           <div class="form-group">
-            <label>Encounter Key</label>
+            <label data-tooltip="{{bbttccTip 'beats' 'encounterKey'}}">Encounter Key</label>
             <input type="text" name="encounter-key" value="{{beat.encounter.key}}" placeholder="e.g. demo_gloomgill_raid" />
           </div>
           <div class="form-group">
-            <label>Tier</label>
+            <label data-tooltip="{{bbttccTip 'beats' 'encounterTier'}}">Tier</label>
             <input type="number" name="encounter-tier" value="{{beat.encounter.tier}}" min="0" step="1" placeholder="e.g. 3" />
           </div>
           <div class="form-group">
-            <label>Actor Name</label>
+            <label data-tooltip="{{bbttccTip 'beats' 'encounterActorName'}}">Actor Name</label>
             <input type="text" name="encounter-actor-name" value="{{beat.encounter.actorName}}" placeholder="e.g. Gloomgill the Accountable" />
           </div>
         </div>
@@ -134,10 +136,10 @@
       </section>
     {{/if}}
 
-    <section class="bbttcc-beat-section">
+    <section class="bbttcc-beat-section" data-tour="beats.description">
       <h3>Description</h3>
       <div class="form-group">
-        <label>Beat Description</label>
+        <label data-tooltip="{{bbttccTip 'beats' 'description'}}">Beat Description</label>
         <textarea name="description"
           class="bbttcc-textarea-lg"
           rows="8"
@@ -149,11 +151,11 @@
 
   {{!-- INJECTION TAB --}}
   <section class="bbttcc-tab-panel {{#unless (eq activeTab "injection")}}is-hidden{{/unless}}" data-tab="injection">
-    <section class="bbttcc-beat-section">
-      <h3>Injection</h3>
+    <section class="bbttcc-beat-section" data-tour="beats.injection">
+      <h3 data-tooltip="{{bbttccTip 'beats' 'injection'}}">Injection</h3>
 
       <div class="form-group">
-        <label>Tags</label>
+        <label data-tooltip="{{bbttccTip 'beats' 'tags'}}">Tags</label>
         {{#if tagChips.length}}
           <div class="bbttcc-chip-row">
             {{#each tagChips as |t|}}
@@ -168,14 +170,14 @@
         {{/if}}
 
         <div class="bbttcc-inline-group bbttcc-inline-actions">
-          <button type="button" class="bbttcc-btn" data-action="pick-tags">Pick Tags…</button>
+          <button type="button" class="bbttcc-btn" data-action="pick-tags" data-tooltip="{{bbttccTip 'beats' 'pickTags'}}">Pick Tags…</button>
         </div>
 
         <input type="hidden" name="tags" value="{{beat.tags}}" />
 
         {{!-- Political Tags (AAE) --}}
-        <div class="bbttcc-field">
-          <label>Political Tags (AAE)</label>
+        <div class="bbttcc-field" data-tour="beats.politicalTags">
+          <label data-tooltip="{{bbttccTip 'beats' 'politicalTags'}}">Political Tags (AAE)</label>
           <div class="bbttcc-tag-row bbttcc-flex-wrap-35">
             {{#each politicalTagChips}}
               <a class="bbttcc-tag-chip bbttcc-chip-soft" href="#"
@@ -200,20 +202,20 @@
         </div>
       </div> {{!-- ✅ closes the Tags form-group --}}
 
-      <div class="bbttcc-form-grid bbttcc-form-grid-3">
+      <div class="bbttcc-form-grid bbttcc-form-grid-3" data-tour="beats.injectGating">
         <div class="form-group">
-          <label>Once Per Hex</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'oncePerHex'}}">Once Per Hex</label>
           <select name="inject-once-per-hex">
             <option value="false" {{#unless inject.oncePerHex}}selected{{/unless}}>No</option>
             <option value="true" {{#if inject.oncePerHex}}selected{{/if}}>Yes</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Cooldown (Turns)</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'cooldownTurns'}}">Cooldown (Turns)</label>
           <input type="number" name="inject-cooldown-turns" value="{{inject.cooldownTurns}}" min="0" />
         </div>
         <div class="form-group">
-          <label>Repeatable</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'repeatable'}}">Repeatable</label>
           <select name="inject-repeatable">
             <option value="true" {{#if inject.repeatable}}selected{{/if}}>Yes</option>
             <option value="false" {{#unless inject.repeatable}}selected{{/unless}}>No</option>
@@ -221,36 +223,38 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Governance</label>
+      <div class="form-group" data-tour="beats.governance">
+        <label data-tooltip="{{bbttccTip 'beats' 'governance'}}">Governance
+          <span class="bbttcc-muted" style="font-size:.72rem; opacity:.75; border:1px solid rgba(148,163,184,.4); border-radius:8px; padding:0 .35rem; margin-left:.35rem; vertical-align:middle;">not wired — engine reads trigger context</span>
+        </label>
         <div class="bbttcc-form-grid bbttcc-form-grid-2">
           <div class="form-group">
-            <label>Prompt GM</label>
-            <select name="inject-prompt-gm">
+            <label data-tooltip="{{bbttccTip 'beats' 'promptGM'}}">Prompt GM</label>
+            <select name="inject-prompt-gm" disabled>
               <option value="inherit" {{#if (eq inject.promptGM "inherit")}}selected{{/if}}>Inherit</option>
               <option value="true" {{#if (eq inject.promptGM true)}}selected{{/if}}>Yes</option>
               <option value="false" {{#if (eq inject.promptGM false)}}selected{{/if}}>No</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Fallback on Decline</label>
-            <select name="inject-fallback-on-decline">
+            <label data-tooltip="{{bbttccTip 'beats' 'fallbackOnDecline'}}">Fallback on Decline</label>
+            <select name="inject-fallback-on-decline" disabled>
               <option value="inherit" {{#if (eq inject.fallbackOnDecline "inherit")}}selected{{/if}}>Inherit</option>
               <option value="true" {{#if (eq inject.fallbackOnDecline true)}}selected{{/if}}>Yes</option>
               <option value="false" {{#if (eq inject.fallbackOnDecline false)}}selected{{/if}}>No</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Allow Multi</label>
-            <select name="inject-allow-multi">
+            <label data-tooltip="{{bbttccTip 'beats' 'allowMulti'}}">Allow Multi</label>
+            <select name="inject-allow-multi" disabled>
               <option value="inherit" {{#if (eq inject.allowMulti "inherit")}}selected{{/if}}>Inherit</option>
               <option value="true" {{#if (eq inject.allowMulti true)}}selected{{/if}}>Yes</option>
               <option value="false" {{#if (eq inject.allowMulti false)}}selected{{/if}}>No</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Global Once Per Hex</label>
-            <select name="inject-once-per-hex-global">
+            <label data-tooltip="{{bbttccTip 'beats' 'oncePerHexGlobal'}}">Global Once Per Hex</label>
+            <select name="inject-once-per-hex-global" disabled>
               <option value="inherit" {{#if (eq inject.oncePerHexGlobal "inherit")}}selected{{/if}}>Inherit</option>
               <option value="true" {{#if (eq inject.oncePerHexGlobal true)}}selected{{/if}}>Yes</option>
               <option value="false" {{#if (eq inject.oncePerHexGlobal false)}}selected{{/if}}>No</option>
@@ -258,7 +262,7 @@
           </div>
         </div>
         <p class="bbttcc-muted">
-          Stored on the beat for GUI authoring. Engine behavior is unchanged unless the injector reads them.
+          Disabled: the injector reads these four switches from the travel-trigger call, not from the beat, so authoring them here would do nothing. Values already stored on the beat are preserved on save.
         </p>
       </div>
     </section>
@@ -270,8 +274,8 @@
       <h3>Scene</h3>
 
       {{!-- Standard linked scene (legacy / non-cinematic) --}}
-      <div class="form-group">
-        <label>Linked Scene</label>
+      <div class="form-group" data-tour="beats.linkedScene">
+        <label data-tooltip="{{bbttccTip 'beats' 'linkedScene'}}">Linked Scene</label>
         <div class="bbttcc-scene-linkbox">
           <div class="bbttcc-scene-title">
             🎬 {{#if sceneName}}{{sceneName}}{{else}}No scene linked{{/if}}
@@ -282,7 +286,7 @@
           <div class="bbttcc-inline-group bbttcc-inline-actions">
             <button type="button" class="bbttcc-btn" data-action="pick-scene">Pick Scene…</button>
             {{#if beat.sceneId}}
-              <button type="button" class="bbttcc-btn" data-action="activate-scene">Activate</button>
+              <button type="button" class="bbttcc-btn" data-action="activate-scene" data-tooltip="{{bbttccTip 'beats' 'activateScene'}}">Activate</button>
               <button type="button" class="bbttcc-btn" data-action="clear-scene">Clear</button>
             {{/if}}
           </div>
@@ -292,8 +296,8 @@
 
       {{!-- CINEMATIC (timed scene chain) --}}
       {{#if (eq beat.type "cinematic")}}
-        <div class="form-group bbttcc-mt-14">
-          <label>Cinematic</label>
+        <div class="form-group bbttcc-mt-14" data-tour="beats.cinematic">
+          <label data-tooltip="{{bbttccTip 'beats' 'cinematic'}}">Cinematic</label>
 
           <div class="bbttcc-scene-linkbox bbttcc-pad-12">
             <div class="bbttcc-muted bbttcc-mb-8">
@@ -303,7 +307,7 @@
 
             <div class="bbttcc-form-grid bbttcc-form-grid-2">
               <div class="form-group">
-                <label class="bbttcc-flex-center">
+                <label class="bbttcc-flex-center" data-tooltip="{{bbttccTip 'beats' 'cinematicEnabled'}}">
                   <input type="checkbox" name="cinematic-enabled" {{#if beat.cinematic.enabled}}checked{{/if}} />
                   <span>Enable Cinematic</span>
                 </label>
@@ -313,7 +317,7 @@
               </div>
 
               <div class="form-group">
-                <label>Duration (ms)</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'cinematicDuration'}}">Duration (ms)</label>
                 <input type="number" name="cinematic-duration-ms" value="{{beat.cinematic.durationMs}}" min="0" step="250" placeholder="e.g. 12000" />
                 <p class="bbttcc-muted bbttcc-mt-xs">
                   How long to hold the Start Scene before advancing.
@@ -323,7 +327,7 @@
 
             <div class="bbttcc-form-grid bbttcc-form-grid-2 bbttcc-mt-10">
               <div class="form-group">
-                <label>Start Scene</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'cinematicStart'}}">Start Scene</label>
                 <div class="bbttcc-scene-linkbox">
                   <div class="bbttcc-scene-title">
                     🎞️ {{#if cinematicStartName}}{{cinematicStartName}}{{else}}No start scene linked{{/if}}
@@ -343,7 +347,7 @@
               </div>
 
               <div class="form-group">
-                <label>Next Scene</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'cinematicNext'}}">Next Scene</label>
                 <div class="bbttcc-scene-linkbox">
                   <div class="bbttcc-scene-title">
                     🎬 {{#if cinematicNextName}}{{cinematicNextName}}{{else}}No next scene linked{{/if}}
@@ -368,18 +372,19 @@
     </section>
 
     {{!-- JOURNAL (auto-open on run) --}}
-    <section class="bbttcc-beat-section">
+    <section class="bbttcc-beat-section" data-tour="beats.journal">
       <h3>Journal</h3>
       <div class="form-group">
-        <label>Auto-Open Journal Entry</label>
+        <label data-tooltip="{{bbttccTip 'beats' 'journal'}}">Auto-Open Journal Entry</label>
         <div class="bbttcc-flex-wrap-6">
-          <label class="bbttcc-check bbttcc-inline-center">
+          <label class="bbttcc-check bbttcc-inline-center" data-tooltip="{{bbttccTip 'beats' 'journalEnabled'}}">
             <input type="checkbox" name="journal-enabled" {{#if beat.journal.enabled}}checked{{/if}} />
             <span>Auto-open on Beat run</span>
           </label>
-          <label class="bbttcc-check bbttcc-inline-center">
+          <label class="bbttcc-check bbttcc-inline-center" data-tooltip="{{bbttccTip 'beats' 'journalForce'}}">
             <input type="checkbox" name="journal-force" {{#if beat.journal.force}}checked{{/if}} />
             <span>Force open (GM)</span>
+            <span class="bbttcc-muted" style="font-size:.72rem; opacity:.75; border:1px solid rgba(148,163,184,.4); border-radius:8px; padding:0 .35rem; margin-left:.35rem; vertical-align:middle;">dormant — runtime ignores this</span>
           </label>
         </div>
 
@@ -391,7 +396,7 @@
             <code>{{beat.journal.entryId}}</code>
           </div>
           <div class="bbttcc-inline-group bbttcc-inline-actions">
-            <button type="button" class="bbttcc-btn" data-action="pick-journal">Pick Journal…</button>
+            <button type="button" class="bbttcc-btn" data-action="pick-journal" data-tooltip="{{bbttccTip 'beats' 'journalEntry'}}">Pick Journal…</button>
             {{#if beat.journal.entryId}}
               <button type="button" class="bbttcc-btn" data-action="open-journal-now">Open</button>
               <button type="button" class="bbttcc-btn" data-action="clear-journal">Clear</button>
@@ -406,10 +411,10 @@
       </div>
     </section>
 
-    <section class="bbttcc-beat-section">
+    <section class="bbttcc-beat-section" data-tour="beats.actors">
       <h3>Actors</h3>
       <div class="form-group">
-        <label>Actors (UUID list)</label>
+        <label data-tooltip="{{bbttccTip 'beats' 'actors'}}">Actors (UUID list)</label>
         {{#if beat.actors.length}}
           {{#each beat.actors as |auuid index|}}
             <div class="bbttcc-actor-row">
@@ -427,18 +432,18 @@
 
   {{!-- CHOICES TAB --}}
   <section class="bbttcc-tab-panel {{#unless (eq activeTab "choices")}}is-hidden{{/unless}}" data-tab="choices">
-    <section class="bbttcc-beat-section">
-      <h3>Choices</h3>
+    <section class="bbttcc-beat-section" data-tour="beats.choices">
+      <h3 data-tooltip="{{bbttccTip 'beats' 'choices'}}">Choices</h3>
       {{#if hasChoices}}
         {{#each beat.choices as |ch index|}}
-          <div class="bbttcc-choice-row bbttcc-inset-panel">
+          <div class="bbttcc-choice-row bbttcc-inset-panel" {{#unless index}}data-tour="beats.choiceRow"{{/unless}}>
             <div class="bbttcc-form-grid bbttcc-form-grid-2">
               <div class="form-group">
-                <label>Choice Label (button)</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'choiceLabel'}}">Choice Label (button)</label>
                 <input type="text" name="choice-label" value="{{ch.label}}" placeholder="e.g. Ask about the vault door" />
               </div>
               <div class="form-group">
-                <label>Next Beat (success / route)</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'choiceNext'}}">Next Beat (success / route)</label>
                 {{#if ../beatIdOptions.length}}
                   <select name="choice-next">
                     <option value="">(None)</option>
@@ -455,13 +460,13 @@
             </div>
 
             <div class="form-group">
-              <label>Choice Description (shown under the button list)</label>
+              <label data-tooltip="{{bbttccTip 'beats' 'choiceDesc'}}">Choice Description (shown under the button list)</label>
               <textarea name="choice-desc" rows="3" placeholder="Optional: what this choice means / asks / risks.">{{ch.description}}</textarea>
             </div>
 
             <div class="bbttcc-form-grid bbttcc-form-grid-4">
               <div class="form-group">
-                <label>Check Stat (optional)</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'choiceCheckStat'}}">Check Stat (optional)</label>
                 {{#if ../skillStatOptions.length}}
                   <select name="choice-check-stat">
                     <option value="">(No check)</option>
@@ -477,12 +482,12 @@
               </div>
 
               <div class="form-group">
-                <label>DC</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'choiceCheckDC'}}">DC</label>
                 <input type="number" name="choice-check-dc" value="{{ch.checkDC}}" placeholder="0" />
               </div>
 
               <div class="form-group bbttcc-col-span-2">
-                <label>Failure Beat (optional)</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'choiceFailNext'}}">Failure Beat (optional)</label>
                 {{#if ../beatIdOptions.length}}
                   <select name="choice-fail-next">
                     <option value="">(Fallback: Beat Failure Outcome)</option>
@@ -500,10 +505,10 @@
 
             <div class="bbttcc-flex-between">
               <div class="bbttcc-flex-gap6">
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="move-choice-up" data-index="{{index}}" title="Move up">▲</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="move-choice-down" data-index="{{index}}" title="Move down">▼</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="move-choice-up" data-index="{{index}}" data-tooltip="{{bbttccTip 'beats' 'moveChoice'}}">▲</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="move-choice-down" data-index="{{index}}" data-tooltip="{{bbttccTip 'beats' 'moveChoice'}}">▼</button>
               </div>
-              <button type="button" class="bbttcc-link-button text-danger" data-action="remove-choice" data-index="{{index}}">
+              <button type="button" class="bbttcc-link-button text-danger" data-action="remove-choice" data-index="{{index}}" data-tooltip="{{bbttccTip 'beats' 'removeChoice'}}">
                 Remove Choice
               </button>
             </div>
@@ -513,17 +518,58 @@
         <p class="bbttcc-muted">No choices configured. Add rows to create dialog options or branching decision points.</p>
       {{/if}}
 
-      <button type="button" class="bbttcc-btn" data-action="add-choice">+ Add Choice</button>
+      <button type="button" class="bbttcc-btn" data-action="add-choice" data-tooltip="{{bbttccTip 'beats' 'addChoice'}}">+ Add Choice</button>
+    </section>
+
+    {{!-- OUTCOMES (beat.outcomes) — fallback routing for failed choice checks
+          and the direct success/failure targets of outcome_trigger beats. --}}
+    <section class="bbttcc-beat-section" data-tour="beats.outcomes">
+      <h3 data-tooltip="{{bbttccTip 'beats' 'outcomes'}}">Outcomes</h3>
+      <p class="bbttcc-muted">
+        Fallback routes on <code>beat.outcomes</code>: a failed choice check with no Failure Beat of its own falls back to <b>Failure</b>; <code>outcome_trigger</code> beats run <b>Success</b> (or, if unset, Failure) directly.
+      </p>
+      <div class="bbttcc-form-grid bbttcc-form-grid-2">
+        <div class="form-group">
+          <label data-tooltip="{{bbttccTip 'beats' 'outcomeSuccess'}}">Success Beat</label>
+          {{#if beatIdOptions.length}}
+            <select name="outcome-success">
+              <option value="">(None)</option>
+              {{#each beatIdOptions as |bopt|}}
+                <option value="{{bopt.id}}" {{#if (eq bopt.id ../beat.outcomes.success)}}selected{{/if}}>
+                  {{bopt.label}} ({{bopt.id}})
+                </option>
+              {{/each}}
+            </select>
+          {{else}}
+            <input type="text" name="outcome-success" value="{{beat.outcomes.success}}" placeholder="beat id" />
+          {{/if}}
+        </div>
+        <div class="form-group">
+          <label data-tooltip="{{bbttccTip 'beats' 'outcomeFailure'}}">Failure Beat</label>
+          {{#if beatIdOptions.length}}
+            <select name="outcome-failure">
+              <option value="">(None)</option>
+              {{#each beatIdOptions as |bopt|}}
+                <option value="{{bopt.id}}" {{#if (eq bopt.id ../beat.outcomes.failure)}}selected{{/if}}>
+                  {{bopt.label}} ({{bopt.id}})
+                </option>
+              {{/each}}
+            </select>
+          {{else}}
+            <input type="text" name="outcome-failure" value="{{beat.outcomes.failure}}" placeholder="beat id" />
+          {{/if}}
+        </div>
+      </div>
     </section>
   </section>
 
   {{!-- WORLD EFFECTS TAB --}}
   <section class="bbttcc-tab-panel {{#unless (eq activeTab "effects")}}is-hidden{{/unless}}" data-tab="effects">
-    <section class="bbttcc-beat-section">
-      <h3>World Effects</h3>
+    <section class="bbttcc-beat-section" data-tour="beats.worldEffects">
+      <h3 data-tooltip="{{bbttccTip 'beats' 'worldEffects'}}">World Effects</h3>
 
-      <div class="form-group">
-        <label>Territory Outcome</label>
+      <div class="form-group" data-tour="beats.territoryOutcome">
+        <label data-tooltip="{{bbttccTip 'beats' 'territoryOutcome'}}">Territory Outcome</label>
         <select name="world-territory-outcome">
           {{#each territoryOutcomeOptions as |opt|}}
             <option value="{{opt.id}}" {{#if (eq opt.id ../worldEffects.territoryOutcome)}}selected{{/if}}>{{opt.label}}</option>
@@ -532,7 +578,7 @@
       </div>
 
       <div class="form-group">
-        <label>Faction Effects</label>
+        <label data-tooltip="{{bbttccTip 'beats' 'factionEffectsLegacy'}}">Faction Effects</label>
         {{#if worldEffects.factionEffects.length}}
           {{#each worldEffects.factionEffects as |fx index|}}
             <div class="bbttcc-world-faction-row">
@@ -555,8 +601,8 @@
         <button type="button" class="bbttcc-btn" data-action="add-faction-effect">+ Add Faction Effect</button>
       </div>
 
-      <div class="form-group">
-        <label>Radiation Delta (RP)</label>
+      <div class="form-group" data-tour="beats.radiationDelta">
+        <label data-tooltip="{{bbttccTip 'beats' 'radiationDelta'}}">Radiation Delta (RP)</label>
         <input type="number" name="world-radiation-delta" value="{{worldEffects.radiationDelta}}" placeholder="0" />
       </div>
 
@@ -564,14 +610,14 @@
             When set, resolves through tikkun-beat-listener.enhancer.js into
             the spark API. Spark dropdown lists every item authored in the
             bbttcc-tikkun.sparks pack. --}}
-      <div class="form-group bbttcc-divider-top">
-        <label class="bbttcc-fw-600">Spark Link (auto-progression)</label>
+      <div class="form-group bbttcc-divider-top" data-tour="beats.sparkLink">
+        <label class="bbttcc-fw-600" data-tooltip="{{bbttccTip 'beats' 'sparkLink'}}">Spark Link (auto-progression)</label>
         <p class="bbttcc-muted bbttcc-section-hint">
           Pair this beat with a Tikkun spark and choose what happens when it resolves. Leave Action blank to disable.
         </p>
         <div class="bbttcc-grid-111">
           <div>
-            <label class="bbttcc-fs-78">Spark</label>
+            <label class="bbttcc-fs-78" data-tooltip="{{bbttccTip 'beats' 'sparkLinkSpark'}}">Spark</label>
             <select name="spark-link-uuid">
               {{#each sparkLinkOptions as |opt|}}
                 <option value="{{opt.uuid}}" {{#if (eq opt.uuid ../sparkLink.sparkUuid)}}selected{{/if}}>{{opt.label}}</option>
@@ -579,7 +625,7 @@
             </select>
           </div>
           <div>
-            <label class="bbttcc-fs-78">Action</label>
+            <label class="bbttcc-fs-78" data-tooltip="{{bbttccTip 'beats' 'sparkLinkAction'}}">Action</label>
             <select name="spark-link-action">
               {{#each sparkLinkActions as |opt|}}
                 <option value="{{opt.id}}" {{#if (eq opt.id ../sparkLink.action)}}selected{{/if}}>{{opt.label}}</option>
@@ -587,7 +633,7 @@
             </select>
           </div>
           <div>
-            <label class="bbttcc-fs-78" data-tooltip="Phase C: misaligned methods cause Corruption.">Method Tag</label>
+            <label class="bbttcc-fs-78" data-tooltip="{{bbttccTip 'beats' 'sparkLinkMethod'}}">Method Tag</label>
             <select name="spark-link-method">
               {{#each sparkLinkMethods as |opt|}}
                 <option value="{{opt.id}}" {{#if (eq opt.id ../sparkLink.methodTag)}}selected{{/if}}>{{opt.label}}</option>
@@ -601,14 +647,14 @@
             gates open (or closed). Consumed by
             bbttcc-territory/scripts/bbttcc-gate-beat-listener.js on the
             bbttcc:beat:resolved hook. --}}
-      <div class="form-group bbttcc-divider-top">
-        <label class="bbttcc-fw-600">Gate Unlocks (Leygate network)</label>
+      <div class="form-group bbttcc-divider-top" data-tour="beats.gateUnlocks">
+        <label class="bbttcc-fw-600" data-tooltip="{{bbttccTip 'beats' 'gateUnlocks'}}">Gate Unlocks (Leygate network)</label>
         <p class="bbttcc-muted bbttcc-section-hint">
           Flip <code>leylines.gate.enabled</code> on one or more hexes when this beat resolves. Ctrl/Cmd-click in the picker to select multiple anchors (use both ends of a pair for a fully-open corridor).
         </p>
         <div class="bbttcc-grid-21">
           <div>
-            <label class="bbttcc-fs-78">Anchor Hex(es)</label>
+            <label class="bbttcc-fs-78" data-tooltip="{{bbttccTip 'beats' 'gateUnlockHexes'}}">Anchor Hex(es)</label>
             <select name="gate-unlock-hex" multiple size="5" class="bbttcc-w-full">
               {{#each gateUnlockHexOptions as |opt|}}
                 <option value="{{opt.uuid}}" {{#if opt.selected}}selected{{/if}}>{{opt.label}}</option>
@@ -616,7 +662,7 @@
             </select>
           </div>
           <div>
-            <label class="bbttcc-fs-78">Action</label>
+            <label class="bbttcc-fs-78" data-tooltip="{{bbttccTip 'beats' 'gateUnlockAction'}}">Action</label>
             <select name="gate-unlock-action">
               {{#each gateUnlockActions as |opt|}}
                 <option value="{{opt.id}}" {{#if (eq opt.id ../gateUnlockSelectedAction)}}selected{{/if}}>{{opt.label}}</option>
@@ -627,18 +673,18 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Turn Requests</label>
+      <div class="form-group" data-tour="beats.turnRequests">
+        <label data-tooltip="{{bbttccTip 'beats' 'turnRequests'}}">Turn Requests</label>
         {{#if worldEffects.turnRequests.length}}
           {{#each worldEffects.turnRequests as |req index|}}
             <div class="bbttcc-world-request-row bbttcc-filter-panel">
               <div class="form-group bbttcc-mw-12">
-                <label>Request Key</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'turnRequestKey'}}">Request Key</label>
                 <input type="text" name="world-request-key" value="{{req.key}}" placeholder="e.g. clearRockslide" />
               </div>
 
               <div class="form-group bbttcc-mw-10">
-                <label>Mode</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'turnRequestMode'}}">Mode</label>
                 <select name="world-request-mode">
                   <option value="" {{#unless req.value.mode}}selected{{/unless}}>(none)</option>
                   <option value="set" {{#if (eq req.value.mode "set")}}selected{{/if}}>set</option>
@@ -649,7 +695,7 @@
               </div>
 
               <div class="form-group bbttcc-grow-14">
-                <label>Target</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'turnRequestTarget'}}">Target</label>
                 <select name="world-request-target">
                   {{#each @root.requestTargetOptions as |opt|}}
                     <option value="{{opt.id}}" {{#if (eq opt.id req.value.target)}}selected{{/if}}>{{opt.label}}</option>
@@ -658,12 +704,12 @@
               </div>
 
               <div class="form-group bbttcc-mw-8">
-                <label>Amount</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'turnRequestAmount'}}">Amount</label>
                 <input type="number" name="world-request-amount" value="{{req.value.amount}}" placeholder="0" />
               </div>
 
               <div class="form-group bbttcc-grow-16">
-                <label>Note</label>
+                <label data-tooltip="{{bbttccTip 'beats' 'turnRequestNote'}}">Note</label>
                 <input type="text" name="world-request-note" value="{{req.value.note}}" placeholder="Optional note / receipt" />
               </div>
 
@@ -677,18 +723,18 @@
         {{/if}}
        <button type="button" class="bbttcc-btn" data-action="add-turn-request">+ Add Turn Request</button>
         <p class="bbttcc-muted bbttcc-mt-xs">
-          Structured turn requests only. No raw JSON needed.
+          Structured turn requests only. No raw JSON needed. Rows are stored on the beat, but the turn engine's intake (api.turn.enqueueRequest) currently errors on every request, so they are dropped with a console warning when the beat resolves.
         </p>
       </div>
 
       
-<div class="form-group">
-  <label>Quest Effects</label>
+<div class="form-group" data-tour="beats.questEffects">
+  <label data-tooltip="{{bbttccTip 'beats' 'questEffects'}}">Quest Effects</label>
   {{#if worldEffects.questEffects.length}}
     {{#each worldEffects.questEffects as |qfx index|}}
       <div class="bbttcc-world-questfx-row bbttcc-filter-panel">
         <div class="form-group bbttcc-mw-10">
-          <label>Action</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'questfxAction'}}">Action</label>
           <select name="world-questfx-action">
             <option value="accept" {{#if (eq qfx.action "accept")}}selected{{/if}}>Accept</option>
             <option value="complete" {{#if (eq qfx.action "complete")}}selected{{/if}}>Complete</option>
@@ -698,7 +744,7 @@
         </div>
 
         <div class="form-group bbttcc-grow-16">
-          <label>Quest</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'questfxQuest'}}">Quest</label>
           <select name="world-questfx-questId">
             <option value="">(Pick quest)</option>
             {{#each @root.questOptions as |q|}}
@@ -710,7 +756,7 @@
         </div>
 
         <div class="form-group bbttcc-grow-14">
-          <label>Beat (optional)</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'questfxBeat'}}">Beat (optional)</label>
           <select name="world-questfx-beatId">
             <option value="">(None)</option>
             {{#each @root.beatIdOptions as |bopt|}}
@@ -722,7 +768,7 @@
         </div>
 
         <div class="form-group bbttcc-mw-10">
-          <label>State</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'questfxState'}}">State</label>
           <select name="world-questfx-state">
             <option value="" {{#unless qfx.state}}selected{{/unless}}>(none)</option>
             <option value="seen" {{#if (eq qfx.state "seen")}}selected{{/if}}>seen</option>
@@ -731,7 +777,7 @@
         </div>
 
         <div class="form-group bbttcc-grow-16">
-          <label>Note (optional)</label>
+          <label data-tooltip="{{bbttccTip 'beats' 'questfxText'}}">Note (optional)</label>
           <input type="text" name="world-questfx-text" value="{{qfx.text}}" placeholder="Short receipt / note for the quest log" />
         </div>
 
@@ -749,15 +795,15 @@
   </p>
 </div>
 
-<div class="form-group">
-        <label>War Log Note</label>
+<div class="form-group" data-tour="beats.warlog">
+        <label data-tooltip="{{bbttccTip 'beats' 'warlog'}}">War Log Note</label>
         <textarea name="world-warlog" rows="4" placeholder="Optional note to append to the War Log for this beat.">{{worldEffects.warLog}}</textarea>
       </div>
     </section>
   </section>
 
-  <footer class="bbttcc-beat-footer">
-    <button type="submit" class="bbttcc-btn-primary" data-action="save-beat">Save</button>
-    <button type="button" class="bbttcc-btn" data-action="cancel">Cancel</button>
+  <footer class="bbttcc-beat-footer" data-tour="beats.footer">
+    <button type="submit" class="bbttcc-btn-primary" data-action="save-beat" data-tooltip="{{bbttccTip 'beats' 'saveBeat'}}">Save</button>
+    <button type="button" class="bbttcc-btn" data-action="cancel" data-tooltip="{{bbttccTip 'beats' 'cancel'}}">Cancel</button>
   </footer>
 </form>

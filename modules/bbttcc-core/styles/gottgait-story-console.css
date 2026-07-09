@@ -199,120 +199,29 @@
     0 0 4px rgba(27, 208, 255, 0.35);
 }
 
-/* Right side: log ---------------------------------------------------------- */
-
-.bbttcc.gottgait-console .gottgait-console-log {
-  padding: 0.45rem 0.55rem;
-  background: radial-gradient(circle at top right, rgba(6, 18, 34, 0.9), rgba(3, 8, 18, 0.98));
-  border-radius: 0.6rem;
-  border: 1px solid rgba(36, 74, 118, 0.95);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.8),
-    0 0 18px rgba(1, 8, 16, 0.9);
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.bbttcc.gottgait-console .gottgait-console-log h3 {
-  margin: 0;
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #e8f4ff;
-}
-
-.bbttcc.gottgait-console .gottgait-log-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-height: 8.5rem;
-  overflow-y: auto;
-}
-
-.bbttcc.gottgait-console .gottgait-log-row {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 0.25rem 0.4rem;
-  align-items: baseline;
-  padding: 0.2rem 0.15rem;
-  border-bottom: 1px solid rgba(28, 54, 86, 0.6);
-}
-
-.bbttcc.gottgait-console .gottgait-log-row:last-child {
-  border-bottom: none;
-}
-
-.bbttcc.gottgait-console .gottgait-log-time {
-  font-size: 0.7rem;
-  color: #6f8398;
-}
-
-.bbttcc.gottgait-console .gottgait-log-message {
-  font-size: 0.78rem;
-  color: #cad7e8;
-}
-
-.bbttcc.gottgait-console .gottgait-log-empty {
-  margin: 0.3rem 0 0;
-  font-size: 0.75rem;
-  color: #7f93aa;
-}
-
-/* Make the Story Console scrollable if content is tall */
-.bbttcc.gottgait-console .window-content {
-  max-height: calc(100vh - 140px); /* leave room for header & margins */
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-/* Ensure root fills the available content area nicely */
-.bbttcc.gottgait-console .gottgait-console-root {
-  height: 100%;
-  box-sizing: border-box;
-}
-
-/* Responsive: narrow console stacks log under groups ----------------------- */
-
-@media (max-width: 720px) {
-  .bbttcc.gottgait-console .gottgait-console-body {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .bbttcc.gottgait-console .gottgait-console-log {
-    margin-top: 0.5rem;
-  }
-}
-
 /* ==========================================================
-   Resizable window fix (append-only)
-   - Ensures the console stretches to the window height
-   - Keeps scrolling inside the two columns
+   Window layout (consolidated 2026-07-08)
+   Replaces: the dead right-column log styles (the template
+   dropped the log column), a `.window-app` block that never
+   matched (AppV2 uses .application), and three stacked
+   append-only resize patches that fought each other.
    ========================================================== */
 
 .bbttcc.gottgait-console .window-content {
-  /* Remove max-height clamps that fight resize handles */
-  max-height: none !important;
-
-  /* Let content fill the window */
-  height: 100% !important;
-
-  /* Critical: allow inner flex/grid children to shrink/scroll */
-  min-height: 0 !important;
-
-  /* Prefer scroll inside panels instead of the whole window-content */
-  overflow: hidden !important;
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden; /* panels scroll internally */
 }
 
-/* Root fills the window-content area */
 .bbttcc.gottgait-console .gottgait-console-root {
   height: 100%;
   min-height: 0;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
 }
 
-/* Header stays fixed; body grows/shrinks */
 .bbttcc.gottgait-console .gottgait-console-header {
   flex: 0 0 auto;
 }
@@ -322,51 +231,13 @@
   min-height: 0; /* critical for scroll regions */
 }
 
-/* Make both columns scroll internally */
-.bbttcc.gottgait-console .gottgait-console-groups,
-.bbttcc.gottgait-console .gottgait-console-log {
+@media (max-width: 720px) {
+  .bbttcc.gottgait-console .gottgait-console-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.bbttcc.gottgait-console .gottgait-console-groups {
   min-height: 0;
   overflow: auto;
-}
-
-
-
-/* ================================
-   Bad Eden RESIZE PATCH (Story Console)
-   - Ensures the window is resizable in Foundry v13 ApplicationV2
-   - Keeps scrolling inside the two columns
-   ================================ */
-
-.bbttcc.gottgait-console.window-app {
-  min-width: 720px;
-  min-height: 520px;
-}
-
-.bbttcc.gottgait-console .window-content{
-  height: 100% !important;
-  min-height: 0 !important;
-  overflow: hidden !important; /* allow handle + inner scroll areas */
-}
-
-.bbttcc.gottgait-console .gottgait-console-root{
-  height: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.bbttcc.gottgait-console .gottgait-console-body{
-  flex: 1 1 auto;
-  min-height: 0;
-}
-
-.bbttcc.gottgait-console .gottgait-console-groups,
-.bbttcc.gottgait-console .gottgait-console-log{
-  min-height: 0;
-  overflow: auto;
-}
-
-/* If any prior rules set max-height clamps, kill them for this app. */
-.bbttcc.gottgait-console .window-content{
-  max-height: none !important;
 }

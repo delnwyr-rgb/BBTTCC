@@ -156,7 +156,10 @@ async function spendMarksByPools(factionId, deltasMap, meta = {}) {
   const res = await opApi.commit(factionId, deltasMap, {
     source: "market",
     label:  meta?.label || "Market Purchase",
-    note:   meta?.note  || ""
+    note:   meta?.note  || "",
+    // Refunds restore a pre-purchase balance; if that balance was already
+    // over cap, the engine's overcap-increase refusal must not eat the refund.
+    ...(meta?.allowOvercap ? { allowOvercap: true } : {})
   });
   if (!res?.committed) return { ok: false, committed: false, underflow: res?.underflow ?? null };
   return { ok: true, committed: true, cost: Math.abs(total) };
@@ -320,7 +323,14 @@ function costLabel(cost) {
   return parts.concat(rest).join(" · ") || "0";
 }
 
-// Short labels for the 6 canonical OP pools (Phase 5). Matches the picker
+// The 9 canonical OP pool keys (matches the bbttcc-core bridge keys array and
+// the op-engine bank normalization). openBuyConfirmDialog iterates these for
+// the pay-from picker + balance snapshot; op.commit accepts deltas on any of
+// them. Native pricing (rfi-pricing v1) only ever assigns the first six as an
+// item's native pool, but any bank pool can foot the bill at ×1.5 friction.
+const OP_POOLS = ["violence", "nonlethal", "intrigue", "economy", "softpower", "diplomacy", "logistics", "culture", "faith"];
+
+// Short labels for the canonical OP pools (Phase 5). Matches the picker
 // labels in rfi-pricing.js but abbreviated for tight market UI surfaces.
 const POOL_SHORT_LABEL = {
   economy:   "Econ",
@@ -328,7 +338,10 @@ const POOL_SHORT_LABEL = {
   nonlethal: "NonL",
   intrigue:  "Intr",
   softpower: "Soft",
-  diplomacy: "Dip"
+  diplomacy: "Dip",
+  logistics: "Logi",
+  culture:   "Cult",
+  faith:     "Faith"
 };
 function poolShortLabel(k) { return POOL_SHORT_LABEL[String(k || "").toLowerCase()] ?? String(k || "Econ"); }
 
@@ -391,7 +404,12 @@ function _normalizeEntry(e) {
   const id = String(e?.id || _makeId("entry"));
   const kind = String(e?.kind || "gear");
   const costObj = (e?.cost && typeof e.cost === "object") ? e.cost : { economy: Number(e?.econ ?? e?.cost ?? 0) || 0 };
+  // Preserve-first: spread the source entry so fields this normalizer doesn't
+  // model (rarity, tier, future authoring keys) survive the whole-catalog
+  // re-normalization done by editor save/add/dup/del/import. Known fields are
+  // then overwritten with their normalized forms.
   const out = {
+    ...((e && typeof e === "object") ? e : {}),
     id,
     vendorId: String(e?.vendorId || ""),
     kind,
@@ -400,6 +418,7 @@ function _normalizeEntry(e) {
     cost: { ...costObj, economy: Number(costObj.economy ?? 0) || 0 }
   };
   if (kind === "gear") out.uuid = String(e?.uuid || "");
+  if (kind === "actor") out.uuid = String(e?.uuid || "");
   if (kind === "rig") out.rigData = e?.rigData || {};
   if (kind === "facility") out.facilityPatch = e?.facilityPatch || {};
   if (kind === "hex_asset") out.asset = e?.asset || { key:"", label:"" };
@@ -410,11 +429,69 @@ function _normalizeEntry(e) {
 function _entryPayloadString(e) {
   const kind = String(e?.kind || "");
   if (kind === "gear") return String(e?.uuid || "");
+  if (kind === "actor") return String(e?.uuid || "");
   if (kind === "rig") return JSON.stringify(e?.rigData || {}, null, 2);
   if (kind === "facility") return JSON.stringify(e?.facilityPatch || {}, null, 2);
   if (kind === "hex_asset") return JSON.stringify(e?.asset || {}, null, 2);
   if (kind === "rig_upgrade" || kind === "facility_upgrade") return JSON.stringify(e?.patch || {}, null, 2);
   return "";
+}
+
+/* ===================== Help / tooltip dictionary (central registry) =====================
+
+   Registered into game.bbttcc.help (bbttcc-core) under appKey "market" at ready.
+   Consumed three ways:
+     - templates:   data-tooltip="{{bbttccTip 'market' '<key>'}}"
+     - JS DOM:      game.bbttcc.help.tip("market", "<key>")  (horizon chips, buy dialog)
+     - tours:       inert data-tour="market.<key>" anchors use the same keys.
+   Style: "Name — what it is. What it does mechanically. When/why you'd use it."
+*/
+const MARKET_TIPS = {
+  // ---- Market app (player-facing) ----
+  context:   "Context — who is buying and where deliveries land. Vendor + Buyer Faction are required; Buyer Character only matters for gear, the Delivery Hex only for facility/asset purchases. All picks persist per client between sessions.",
+  vendor:    "Vendor — which market you are browsing. Players only see markets the GM has flagged Active; the GM sees inactive ones suffixed '(inactive)'. Your selection is remembered per client.",
+  faction:   "Buyer Faction — the faction whose OP bank pays for every purchase here (1 OP = 10 marks). Players see factions they own; the GM sees all. The purchase receipt is written to this faction's war log.",
+  character: "Buyer Character — where purchased GEAR lands: a copy of the item is created in this character's inventory, stamped as vendor-bought. Required before buying gear; ignored for rigs, facilities, and hex assets.",
+  hex:       "Delivery Hex UUID — target hex for facility, facility-upgrade, and hex-asset purchases (a Drawing UUID, e.g. Scene.<id>.Drawing.<id>). Facilities merge onto the hex's primary facility; assets append to its asset list. Those purchases cannot complete without it. Gear and rigs ignore this field.",
+  note:      "Notes — free text stamped onto the purchase receipt (faction war log entry + GM whisper). Use it to record why, or for whom, the purchase was made.",
+  manage:    "Manage Catalogs — GM-only editor for vendors and their catalog entries. Add or rename markets, toggle player visibility, drag-drop items in, set costs.",
+  catalog:   "Catalog — the selected vendor's stock, filtered by search/category and sorted. Each row shows kind, RFI tier, list cost, and an Economic Horizon chip with the final price your faction actually pays.",
+  search:    "Search — live filter on entry name, blurb, and kind text within the selected vendor's catalog.",
+  category:  "Category — filters the list. Weapons / Armor / Gear / Consumables subdivide gear entries by the underlying item's type (consumables are detected via RFI frame, slot, or tag); the remaining options match the entry kind directly (rig, facility, hex asset, upgrades).",
+  sort:      "Sort — Name (A→Z), or RFI Tier (I–IV) ascending/descending. Entries with no tier sort after Tier IV; equal-tier rows stay alphabetized.",
+  openDoc:   "Open item sheet — inspect the actual item (stats, description, tier) before you spend marks on it.",
+  cost:      "Cost — the list price. RFI flag-priced items show their native pool in marks (e.g. 'Viol 50 marks'); 'Split' items pay each portion to its own pool; legacy entries show catalog Economy OP (1 OP = 10 marks). The Horizon chip shows the final scaled price your faction pays.",
+  chip:      "Economic Horizon — your faction's tier sets its rarity horizon (Tier A→Uncommon, B→Rare, C→Very Rare). At or under the horizon, gear is Standard Issue (free; rigs/facilities/assets still pay base cost). Above it the price strains: ×1 / ×2 / ×4 at 1 / 2 / 3+ rarity steps over. Artifacts are never purchasable — discovery only.",
+  buy:       "Buy — commits the purchase: confirmation first (flag-priced items let you pay from a non-native pool at ×1.5 friction), then the marks are spent from the Buyer Faction's OP bank and the goods are delivered — gear to the Buyer Character's inventory, rigs to the faction, facilities/assets/upgrades to the Delivery Hex, actor entries cloned into the world under the buying faction. Writes a war-log receipt and whispers the GM.",
+  payFromPool: "Pay from — which OP pool covers the bill. The native pool pays list price; any other pool pays ×1.5 (cross-pool friction). Balances shown are the faction's current opBank, in marks.",
+  splitPay:  "Split payment — this item's price is divided across multiple OP pools. Each portion is always paid from its native pool; there is no cross-pool override on split items.",
+
+  // ---- Catalog editor (GM-facing) ----
+  editorVendor:  "Vendor — which market's catalog you are editing. The vendor fields and every entry row below belong to this vendor.",
+  vendorAdd:     "Add Vendor — creates a new market ('New Vendor') and selects it, saved immediately. New markets start Active (player-visible); rename and stock it, then Save.",
+  entryAdd:      "Add Entry — prepends a blank gear entry (Economy OP cost 1) to this vendor's catalog, saved immediately. Fill in its fields, then hit Save to persist the edits.",
+  vendorDel:     "Delete Market — removes the selected vendor from the vendor list.",
+  save:          "Save — writes the vendor fields and every entry row on screen into the world settings. Field edits are NOT persisted until you Save; add / duplicate / delete / drop-import actions save on their own.",
+  vendorActive:  "Active — player-visibility switch. Unchecked, this market is hidden from the player Market app entirely (the GM still sees it, marked '(inactive)'). Stage a market before opening it, or close one narratively.",
+  vendorName:    "Name — the market's display name, shown in every vendor picker.",
+  vendorBlurb:   "Blurb — one line of flavor for this market. Informational only.",
+  vendorTags:    "Tags — comma-separated labels stored on the vendor. Informational metadata (readable via the market API); no mechanical effect.",
+  dropzone:      "Drop zone — drag Items or whole Folders from the sidebar or a compendium here. Each item becomes a Gear entry with its UUID prefilled and a default cost of 1 Economy OP, saved immediately.",
+  editorEntries: "Entries — every catalog row this vendor stocks. Edit fields inline (then Save), or use the row buttons to duplicate / delete.",
+  entryName:     "Name — the entry's display name in the player catalog (independent of the underlying item's own name).",
+  entryKind:     "Kind — what the purchase delivers. gear → item copy to the buyer character; rig → new rig on the buying faction; facility → merged onto the delivery hex's primary facility; hex_asset → appended to the hex's asset list; rig_upgrade / facility_upgrade → JSON patch merged onto an existing rig / the hex facility; actor → clones a prebuilt Actor (rig/boss/NPC) into the world, assigned to the buying faction.",
+  entryCost:     "Economy OP Cost — the legacy base price, in Economy OP (fractional allowed; 1 OP = 10 marks). For gear whose item carries a stamped RFI flag price (flags.fourththing.rfi.item.price), the flag price overrides this number. The final charge is scaled by the buyer's Economic Horizon (×1/×2/×4 over-horizon; Standard Issue gear is free).",
+  entryBlurb:    "Blurb — one line of flavor shown under the entry in the player catalog.",
+  entryPayload:  "Payload — what actually gets delivered. Gear / actor: the source document UUID. Rig: the rigData JSON. Facility: the facilityPatch JSON. Hex asset: {key, label} JSON. Upgrades: a JSON patch (rig upgrades can pick their target via patch.target rigId / name / latest).",
+  entryDup:      "Duplicate — clones this entry (name suffixed '(Copy)') to the top of the catalog, saved immediately.",
+  entryDel:      "Delete — removes this entry from the catalog immediately. No confirmation."
+};
+
+// data-tooltip attribute snippet for JS-built HTML strings (buy-confirm dialog).
+// Guarded: bbttcc-core may be disabled, in which case this renders nothing.
+function _tipAttr(key) {
+  const t = game.bbttcc?.help?.tip?.("market", key) || "";
+  return t ? ` data-tooltip="${esc(t)}"` : "";
 }
 
 /* ===================== Settings: vendors + catalogs ===================== */
@@ -542,6 +619,17 @@ Hooks.once("init", () => {
     type: Object,
     default: { vendorId: DEFAULT_VENDORS[0].id, factionId: "", characterId: "", hexUuid: "", q: "", kind: "", category: "", sort: "name", note: "" }
   });
+
+  // Fallback {{bbttccTip}} helper so our templates render even when this
+  // module's init runs before bbttcc-core's (or bbttcc-core is disabled —
+  // a mustache with args and no helper would otherwise throw "Missing helper").
+  // Delegates to the central registry at call time, so whichever module wins
+  // the registration race, the lookup is identical.
+  try {
+    if (!Handlebars.helpers.bbttccTip) {
+      Handlebars.registerHelper("bbttccTip", (appKey, key) => game.bbttcc?.help?.tip?.(appKey, key) ?? "");
+    }
+  } catch (e) { warn("bbttccTip fallback helper registration failed", e); }
 });
 
 /* ===================== Core purchase pipeline ===================== */
@@ -761,7 +849,7 @@ async function deliverHexAsset(hexUuid, asset) {
  * Pre-purchase confirmation dialog with cross-pool override (Phase 5.5).
  *
  * For flag-priced gear: shows native pool + cost, lets buyer pick any of the
- * 6 pools to pay from, applies × 1.5 friction on non-native picks (rubric §1.5).
+ * 9 pools to pay from, applies × 1.5 friction on non-native picks (rubric §1.5).
  * For split items: shows the per-pool breakdown, no override (split always
  * pays native — that's the whole point of split).
  * For legacy catalog entries (no flag price): skipped — returns immediately
@@ -773,16 +861,37 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
   const flagPrice = await resolveItemFlagPrice(entry);
   if (!flagPrice) return { ok: true, payFromPool: null };   // legacy path
 
-  // Split items: confirm-only, no override.
+  // Horizon-scaled cost — MUST mirror purchase()'s math exactly, or the dialog
+  // shows a different number than what actually commits (fixed 2026-07-07):
+  // Standard Issue gear is free, over-horizon strains ×2/×4, non-gear kinds
+  // pay base within horizon.
+  const dOPtoMarks = (game.bbttcc?.api?.op?.OP_TO_MARKS ?? 10);
+  const dBaseCost = Number(flagPrice.marks) / dOPtoMarks;
+  const dDistance = rarityDistance(await resolveEntryRarity(entry), factionEconomicHorizon(faction));
+  const dKind = String(entry.kind || "").toLowerCase();
+  let dEconCost = scaledEconomyCost(dBaseCost, dDistance);
+  if (dDistance <= 0 && dKind && dKind !== "gear") dEconCost = dBaseCost;
+  const scaledMarks = Math.round(dEconCost * dOPtoMarks);
+  const rawMarks = Number(flagPrice.marks) || 0;
+  const scaleNote = (scaledMarks !== rawMarks)
+    ? (scaledMarks === 0
+        ? ` <em>(Standard Issue — free at your Horizon; list ${rawMarks} marks)</em>`
+        : ` <em>(horizon-scaled from ${rawMarks} marks)</em>`)
+    : "";
+
+  // Split items: confirm-only, no override. Portions display horizon-scaled,
+  // matching purchase()'s proportional split of the scaled total.
   if (flagPrice.split && Object.keys(flagPrice.split).length) {
+    const dSplitSum = Object.values(flagPrice.split).reduce((a, v) => a + (Number(v) || 0), 0);
+    const dScale = dSplitSum > 0 ? (scaledMarks / dSplitSum) : 1;
     const parts = Object.entries(flagPrice.split)
       .filter(([_, v]) => Number(v) > 0)
-      .map(([k, v]) => `<li><strong>${POOL_SHORT_LABEL[k] ?? k}:</strong> ${v} marks</li>`).join("");
+      .map(([k, v]) => `<li><strong>${POOL_SHORT_LABEL[k] ?? k}:</strong> ${Math.round((Number(v) || 0) * dScale)} marks</li>`).join("");
     const DialogV2 = foundry.applications.api?.DialogV2;
     if (!DialogV2) return { ok: true, payFromPool: null };
     const confirmed = await DialogV2.confirm({
       window: { title: `Buy — ${entry.name}` },
-      content: `<p><b>${entry.name}</b> requires split payment:</p><ul>${parts}</ul>
+      content: `<p><b>${entry.name}</b> requires split payment:</p><ul${_tipAttr("splitPay")} data-tour="market.splitPay">${parts}</ul>
                 <p style="font-size:0.85rem;opacity:0.7;">Split items always pay each portion to its native pool — no override.</p>`,
       defaultYes: true,
       rejectClose: false
@@ -801,7 +910,7 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
   const balances = {};
   for (const p of OP_POOLS) balances[p] = Number(opBank[p]) || 0;
 
-  const nativeMarks = Number(flagPrice.marks) || 0;
+  const nativeMarks = scaledMarks;
   const crossMarks = Math.round(nativeMarks * (game.fourththing?.pricing?.CROSS_POOL_FRICTION ?? 1.5));
 
   const opts = OP_POOLS.map(p => {
@@ -821,8 +930,8 @@ async function openBuyConfirmDialog({ entry, factionId, faction }) {
     window: { title: `Buy — ${entry.name}` },
     content: `
       <form>
-        <p><b>${entry.name}</b> — native pool: <strong>${POOL_SHORT_LABEL[nativePool] ?? nativePool}</strong> (${nativeMarks} marks)</p>
-        <div style="margin:0.6rem 0;">
+        <p><b>${entry.name}</b> — native pool: <strong>${POOL_SHORT_LABEL[nativePool] ?? nativePool}</strong> (${nativeMarks} marks)${scaleNote}</p>
+        <div style="margin:0.6rem 0;"${_tipAttr("payFromPool")} data-tour="market.payFromPool">
           <label style="font-weight:600;display:block;margin-bottom:0.3rem;">Pay from:</label>
           <select name="payFromPool" style="width:100%;">${opts}</select>
         </div>
@@ -896,6 +1005,35 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
     econCost = baseCost;
   }
 
+  // 0) Validate delivery prerequisites BEFORE spending — the OP engine has no
+  //    rollback, so a delivery failure after commit would strand the marks.
+  //    Warn + throw a pre-notified error (the Market app's buy handler skips
+  //    its own error toast for these; direct API callers still get the throw).
+  const _abortPurchase = (msg) => {
+    ui.notifications?.warn?.(msg);
+    const err = new Error(msg);
+    err.notified = true;
+    throw err;
+  };
+  if (kind === "gear") {
+    if (!characterId) _abortPurchase("Select a Buyer Character before buying gear.");
+    if (!game.actors.get(characterId)) _abortPurchase("Buyer Character not found.");
+    if (!String(entry.uuid || "").trim()) _abortPurchase(`No gear UUID set on catalog entry "${entry.name}".`);
+    if (!(await fromUuid(entry.uuid).catch(() => null))) _abortPurchase(`Could not resolve gear UUID for "${entry.name}".`);
+  } else if (kind === "facility" || kind === "hex_asset" || kind === "facility_upgrade") {
+    if (!String(hexUuid || "").trim()) _abortPurchase(`Set a Delivery Hex UUID before buying "${entry.name}" (${kindLabel(kind)}).`);
+    if (!(await fromUuid(hexUuid).catch(() => null))) _abortPurchase("Delivery Hex UUID could not be resolved.");
+  } else if (kind === "actor") {
+    const src = String(entry.uuid || "").trim() ? await fromUuid(entry.uuid).catch(() => null) : null;
+    if (!src) _abortPurchase(`Actor UUID on "${entry.name}" is missing or could not be resolved.`);
+    if (src.documentName !== "Actor") _abortPurchase(`Catalog entry "${entry.name}" UUID does not point to an Actor (got ${src.documentName}).`);
+  } else if (kind === "rig") {
+    if (typeof game.bbttcc?.api?.factions?.addRig !== "function") _abortPurchase("Factions rig API not available — cannot deliver a rig.");
+  } else if (kind === "rig_upgrade") {
+    const rigs = faction.getFlag(MOD_FACTIONS, "rigs");
+    if (!Array.isArray(rigs) || !rigs.length) _abortPurchase("Faction has no rigs to upgrade.");
+  }
+
   // Build per-pool marks deltas (negative). For flag-priced gear: split items
   // pay each portion to its native pool; single-currency items pay the whole
   // amount to their native pool. Legacy catalog entries (no flag price) keep
@@ -932,37 +1070,58 @@ async function purchase({ entryId, factionId, characterId, hexUuid, note, payFro
     throw new Error(`Insufficient OP in ${pools} (or OP engine refused commit).`);
   }
 
-  // 2) Deliver
+  // 2) Deliver. On failure, refund the exact spend through the same payment
+  //    path (mirrored deltas) so a broken delivery never strands the marks.
   let delivered = null;
 
-  if (kind === "gear") {
-    await deliverGearToCharacter(characterId, entry.uuid, 1);
-    delivered = { to: "character", characterId };
-  } else if (kind === "rig") {
-    const rig = await deliverRigToFaction(factionId, entry.rigData);
-    delivered = { to: "faction", rigId: rig?.rigId || null };
-  } else if (kind === "facility") {
-    await deliverFacilityToHex(hexUuid, entry.facilityPatch);
-    delivered = { to: "hex", hexUuid };
-  } else if (kind === "hex_asset") {
-    await deliverHexAsset(hexUuid, entry.asset);
-    delivered = { to: "hex", hexUuid };
-  } else if (kind === "rig_upgrade") {
-    const patch = entry.patch || {};
-    const res = await applyRigUpgradePatch(factionId, patch, { note });
-    delivered = { to: "faction", rigUpgrade: true, ...res };
-  } else if (kind === "facility_upgrade") {
-    const patch = entry.patch || {};
-    await applyFacilityUpgradePatch(hexUuid, patch);
-    delivered = { to: "hex", facilityUpgrade: true, hexUuid };
-  } else if (kind === "actor") {
-    // Phase 9 (2026-05-11): clone a pre-built actor (rig/boss/NPC/bestiary)
-    // into the world and assign to buyer faction. Source actor template stays
-    // intact for re-purchase.
-    const res = await deliverActorByUuid(factionId, entry.uuid);
-    delivered = { to: "faction", actorTemplate: true, ...res };
-  } else {
-    throw new Error(`Unsupported kind: ${kind}`);
+  try {
+    if (kind === "gear") {
+      await deliverGearToCharacter(characterId, entry.uuid, 1);
+      delivered = { to: "character", characterId };
+    } else if (kind === "rig") {
+      const rig = await deliverRigToFaction(factionId, entry.rigData);
+      delivered = { to: "faction", rigId: rig?.rigId || null };
+    } else if (kind === "facility") {
+      await deliverFacilityToHex(hexUuid, entry.facilityPatch);
+      delivered = { to: "hex", hexUuid };
+    } else if (kind === "hex_asset") {
+      await deliverHexAsset(hexUuid, entry.asset);
+      delivered = { to: "hex", hexUuid };
+    } else if (kind === "rig_upgrade") {
+      const patch = entry.patch || {};
+      const res = await applyRigUpgradePatch(factionId, patch, { note });
+      delivered = { to: "faction", rigUpgrade: true, ...res };
+    } else if (kind === "facility_upgrade") {
+      const patch = entry.patch || {};
+      await applyFacilityUpgradePatch(hexUuid, patch);
+      delivered = { to: "hex", facilityUpgrade: true, hexUuid };
+    } else if (kind === "actor") {
+      // Phase 9 (2026-05-11): clone a pre-built actor (rig/boss/NPC/bestiary)
+      // into the world and assign to buyer faction. Source actor template stays
+      // intact for re-purchase.
+      const res = await deliverActorByUuid(factionId, entry.uuid);
+      delivered = { to: "faction", actorTemplate: true, ...res };
+    } else {
+      throw new Error(`Unsupported kind: ${kind}`);
+    }
+  } catch (deliverErr) {
+    if (spendRes.cost > 0) {
+      try {
+        const refundDeltas = {};
+        for (const [pool, v] of Object.entries(payDeltas)) refundDeltas[pool] = -(Number(v) || 0);
+        const refundRes = await spendMarksByPools(factionId, refundDeltas, {
+          label: `Refund — ${entry.name}`,
+          note: `Automatic refund: delivery failed (${deliverErr?.message || deliverErr}).`,
+          allowOvercap: true
+        });
+        if (!refundRes?.ok) throw new Error("OP engine refused the refund commit.");
+        ui.notifications?.warn?.(`Delivery failed for "${entry.name}" — the spent marks were refunded.`);
+      } catch (refundErr) {
+        console.error(`[${MODULE_ID}] delivery failed AND the refund failed — restore the faction's OP manually`, { payDeltas, deliverErr, refundErr });
+        ui.notifications?.error?.(`Delivery failed for "${entry.name}" AND the automatic refund failed — restore the faction's OP manually (see console).`);
+      }
+    }
+    throw deliverErr;
   }
 
   // 3) Receipt (faction war log)
@@ -1289,7 +1448,13 @@ try {
       const chip = document.createElement("span");
       chip.className = "bbttcc-market-chip";
       chip.textContent = spec.text || "";
-      if (spec.title) chip.title = spec.title;
+      // Central help text + this row's rarity/horizon breakdown as one Foundry
+      // tooltip; fall back to a native title when the help registry is absent.
+      const chipHelp = game.bbttcc?.help?.tip?.("market", "chip") || "";
+      if (chipHelp) chip.dataset.tooltip = spec.title ? `${chipHelp}<br><br>${esc(spec.title)}` : chipHelp;
+      else if (spec.title) chip.title = spec.title;
+      // Tour anchor — first chip only, so the anchor is unique.
+      if (!root.querySelector('[data-tour="market.chip"]')) chip.dataset.tour = "market.chip";
 
       chip.style.cssText =
         "display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;line-height:16px;margin-right:8px;" +
@@ -1385,7 +1550,8 @@ try {
         this.render(false);
       } catch (e) {
         console.error(e);
-        ui.notifications?.error?.(e?.message || "Purchase failed.");
+        // Pre-spend validation aborts already warned the user (err.notified).
+        if (!e?.notified) ui.notifications?.error?.(e?.message || "Purchase failed.");
       }
     }, { capture: true, signal: sig });
   }
@@ -1412,7 +1578,6 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
     super(options);
     this._abort = null;
     this._saving = false;
-    this._confirmDelete = { vendorId: null, ts: 0 };
     const vendors = _vendorsArray().map(_normalizeVendor);
     this.vendorId = vendors?.[0]?.id || "vendor";
   }
@@ -1497,7 +1662,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
     const act = btn.dataset.action;
 
     if (act === "vendor-add") return this._vendorAdd();
-    if (act === "vendor-del") return this._vendorDeleteSelected(); // toast-confirmed
+    if (act === "vendor-del") return this._vendorDeleteSelected(); // dialog-confirmed
     if (act === "entry-add") return this._entryAdd();
     if (act === "save") return this._saveAll();
 
@@ -1531,6 +1696,7 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
 
     const all = _catalogArray().map(_normalizeEntry);
     const keep = all.filter(e => e.vendorId !== vendorId);
+    const prevById = new Map(all.filter(e => e.vendorId === vendorId).map(e => [e.id, e]));
 
     const rows = [...root.querySelectorAll("[data-entry-id]")];
     const entries = rows.map(row => {
@@ -1541,9 +1707,19 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
       const blurb = row.querySelector("[data-k='blurb']")?.value || "";
       const payload = row.querySelector("[data-k='payload']")?.value || "";
 
-      const base = { id, vendorId, kind, name, blurb, cost: { economy: econ } };
+      // Merge the form fields over the existing entry so fields the form
+      // doesn't surface (rarity, tier, non-economy cost pools, ...) survive
+      // a Save instead of being rebuilt from scratch.
+      const prev = prevById.get(id) || {};
+      const base = { ...prev, id, vendorId, kind, name, blurb, cost: { ...(prev.cost || {}), economy: econ } };
+      if (prev.kind && prev.kind !== kind) {
+        // Kind changed: drop the old kind's payload field so e.g. a stale gear
+        // uuid can't ghost-price the row (resolveItemFlagPrice reads entry.uuid
+        // regardless of kind).
+        delete base.uuid; delete base.rigData; delete base.facilityPatch; delete base.asset; delete base.patch;
+      }
 
-      if (kind === "gear") return _normalizeEntry({ ...base, uuid: payload.trim() });
+      if (kind === "gear" || kind === "actor") return _normalizeEntry({ ...base, uuid: payload.trim() });
       if (kind === "rig") return _normalizeEntry({ ...base, rigData: _safeJsonParse(payload, {}) });
       if (kind === "facility") return _normalizeEntry({ ...base, facilityPatch: _safeJsonParse(payload, {}) });
       if (kind === "hex_asset") return _normalizeEntry({ ...base, asset: _safeJsonParse(payload, {}) });
@@ -1581,6 +1757,36 @@ export class BBTTCCMarketCatalogEditorApp extends HandlebarsApplicationMixin(App
     vendors.push(_normalizeVendor({ id, name: "New Vendor", blurb: "", tags: [] }));
     await game.settings.set(MODULE_ID, "vendors", vendors);
     this.vendorId = id;
+    this.render(false);
+  }
+
+  async _vendorDeleteSelected() {
+    const vendorId = this.vendorId;
+    const vendors = _vendorsArray().map(_normalizeVendor);
+    const idx = vendors.findIndex(v => v.id === vendorId);
+    if (idx < 0) return ui.notifications?.warn?.("No market selected to delete.");
+    const vendor = vendors[idx];
+
+    const entryCount = _catalogArray().filter(e => String(e?.vendorId) === String(vendorId)).length;
+    const DialogV2 = foundry.applications.api?.DialogV2;
+    if (!DialogV2) return ui.notifications?.warn?.("Confirmation dialog unavailable — market not deleted.");
+    const confirmed = await DialogV2.confirm({
+      window: { title: "Delete Market" },
+      content: `<p>Delete <b>${esc(vendor.name)}</b> and its <b>${entryCount}</b> catalog entr${entryCount === 1 ? "y" : "ies"}?</p>
+                <p style="font-size:0.85rem;opacity:0.7;">This cannot be undone.</p>`,
+      defaultYes: false,
+      rejectClose: false
+    }).catch(() => false);
+    if (!confirmed) return;
+
+    vendors.splice(idx, 1);
+    // Drop the vendor's entries verbatim (no re-normalization needed for a pure filter).
+    const nextCatalog = _catalogArray().filter(e => String(e?.vendorId) !== String(vendorId));
+    await game.settings.set(MODULE_ID, "vendors", vendors);
+    await game.settings.set(MODULE_ID, "catalog", nextCatalog);
+    ui.notifications?.info?.(`Deleted market "${vendor.name}" (${entryCount} entries removed).`);
+
+    this.vendorId = vendors[0]?.id || "";
     this.render(false);
   }
 
@@ -1660,6 +1866,10 @@ Hooks.once("ready", () => {
   game.bbttcc ??= {};
   game.bbttcc.api ??= {};
   game.bbttcc.api.market ??= {};
+
+  // Central help registry (bbttcc-core). Guarded — core may be disabled; by
+  // ready, core's init has definitely run if it's enabled, so this is order-safe.
+  game.bbttcc?.help?.register?.("market", MARKET_TIPS);
 
   game.bbttcc.api.market.purchase = purchase;
   game.bbttcc.api.market.openMarket = (() => {

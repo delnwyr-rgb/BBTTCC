@@ -100,15 +100,30 @@ async function _clearBridgeDebtAndLocks(actor){
     }catch(_e){ return {}; }
   }
 
-  function readFactionTierLetter(faction){
+  function readFactionTier(faction){
     try{
       var a=((faction.flags||{})["bbttcc-factions"]||{});
-      var t = (a.tier!=null?a.tier:null) || (a.factionTier!=null?a.factionTier:null) || (a.tierBand!=null?a.tierBand:null) || (a.tierLetter!=null?a.tierLetter:null);
-      var s=String(t||"A").trim().toUpperCase();
-      return (s==="B"||s==="C")?s:"A";
-    }catch(_e){ return "A"; }
+      var t = (a.tier!=null?a.tier:(a.factionTier!=null?a.factionTier:(a.tierBand!=null?a.tierBand:a.tierLetter)));
+      return (t==null||t==="") ? null : t;
+    }catch(_e){ return null; }
   }
 
+  // Integrity price per OP by faction tier. bbttcc-factions stores tier as a
+  // NUMBER 0–4 (the letter A/B/C scheme this file originally read never matched,
+  // so the price was silently flat 10 — fixed 2026-07-06). Letters still honored
+  // for any legacy data. Price points kept: low tier 10 → T2 7 → T3+ 5.
+  function integrityCostPerOp(faction){
+    var t = readFactionTier(faction);
+    var s = String(t==null?"":t).trim().toUpperCase();
+    if(s==="C") return 5;
+    if(s==="B") return 7;
+    if(s===""||s==="A") return 10;
+    var n = Number(s);
+    if(isFinite(n)) return n>=3 ? 5 : (n===2 ? 7 : 10);
+    return 10;
+  }
+
+  // Legacy letter-tier signature kept for any external macro callers.
   function hpCostPerOp(tier){ return tier==="C"?5:(tier==="B"?7:10); }
 
   async function resolveActorByIdOrUuid(idOrUuid){
@@ -143,7 +158,12 @@ async function _clearBridgeDebtAndLocks(actor){
     var api = (game.bbttcc && game.bbttcc.api) ? game.bbttcc.api : null;
     var op = api ? api.op : null;
     if(!op || typeof op.commit!=="function") throw new Error("bbttcc api.op.commit not available");
-    return op.commit(factionId, deltas, reason||"Bridge");
+    // op-engine expects a CONTEXT OBJECT ({source,label,allowOvercap}); the old
+    // string reason meant every option read as undefined (fixed 2026-07-06).
+    var ctx = (typeof reason === "string" || reason == null)
+      ? { source: "bridge", label: String(reason || "Bridge") }
+      : reason;
+    return op.commit(factionId, deltas, ctx);
   }
 
   function _now(){ return Date.now(); }
@@ -352,45 +372,36 @@ async function _clearBridgeDebtAndLocks(actor){
     if(!faction) throw new Error("Faction actor not found");
     if(!opKey) throw new Error("Missing OP key");
 
-    var tier = readFactionTierLetter(faction);
-    var integrityPer = Math.max(1, num(opts.integrityPerOpOverride, num(opts.hpPerOpOverride, hpCostPerOp(tier))));
+    var integrityPer = Math.max(1, num(opts.integrityPerOpOverride, num(opts.hpPerOpOverride, integrityCostPerOp(faction))));
 
     // Blood Debt accrual: 1 BD point per OP yielded (narrative IOU).
     var bloodDebtDelta = opAmount;
 
     var debitMeta = { type: sacType, opKey: opKey, opAmount: opAmount };
 
+    // ── Phase 1: validate & stage (NO writes). The deposit can be refused by
+    // the op-engine (bank cap), so nothing may burn until it has committed.
+    var doDebit = null;
+    var lock = {
+      ts: _now(), kind: sacType, opKey: opKey, opAmount: opAmount,
+      factionId: faction.id, factionName: faction.name, note: note, resolved: false
+    };
+
     if (sacType === "integrity") {
       var integrityCost = integrityPer * opAmount;
-      await _debitIntegrity(pc, integrityCost);
+      var haveI = num(_readIntegrity(pc).value, 0);
+      if (haveI < integrityCost) throw new Error("Not enough Integrity (need "+integrityCost+", have "+haveI+")");
       debitMeta.integrityCost = integrityCost;
-      await _addLock(pc, {
-        ts: _now(),
-        kind: "integrity",
-        integrityCost: integrityCost,
-        opKey: opKey,
-        opAmount: opAmount,
-        factionId: faction.id,
-        factionName: faction.name,
-        note: note,
-        resolved: false
-      });
+      lock.integrityCost = integrityCost;
+      doDebit = function(){ return _debitIntegrity(pc, integrityCost); };
     }
     else if (sacType === "stress") {
       var stressCost = Math.max(1, num(opts.stressPerOpOverride, 2)) * opAmount;
-      await _debitStress(pc, stressCost);
+      var haveS = num(_readStress(pc).value, 0);
+      if (haveS < stressCost) throw new Error("Not enough Stress (need "+stressCost+", have "+haveS+")");
       debitMeta.stressCost = stressCost;
-      await _addLock(pc, {
-        ts: _now(),
-        kind: "stress",
-        stressCost: stressCost,
-        opKey: opKey,
-        opAmount: opAmount,
-        factionId: faction.id,
-        factionName: faction.name,
-        note: note,
-        resolved: false
-      });
+      lock.stressCost = stressCost;
+      doDebit = function(){ return _debitStress(pc, stressCost); };
     }
     else if (sacType === "aptitude") {
       var aptKey  = String(opts.aptitudeKey || opts.skillKey || "").trim().toLowerCase();
@@ -398,43 +409,50 @@ async function _clearBridgeDebtAndLocks(actor){
       // 1 rank yields rankPerOp OP. ceil(opAmount/rankPerOp) ranks burned.
       var ranksToBurn = Math.max(1, Math.ceil(opAmount / rankPerOp));
       if (!aptKey) throw new Error("Aptitude sacrifice requires opts.aptitudeKey (e.g. 'athletics').");
-      await _debitAptitudeRank(pc, aptKey, ranksToBurn);
+      var haveR = _readSkillRank(pc, aptKey);
+      if (haveR < ranksToBurn) throw new Error("Not enough rank in "+aptKey+" (need "+ranksToBurn+", have "+haveR+")");
       debitMeta.aptitudeKey = aptKey;
       debitMeta.ranksBurned = ranksToBurn;
-      await _addLock(pc, {
-        ts: _now(),
-        kind: "aptitude",
-        aptitudeKey: aptKey,
-        ranks: ranksToBurn,
-        opKey: opKey,
-        opAmount: opAmount,
-        factionId: faction.id,
-        factionName: faction.name,
-        note: note,
-        resolved: false
-      });
+      lock.aptitudeKey = aptKey;
+      lock.ranks = ranksToBurn;
+      doDebit = function(){ return _debitAptitudeRank(pc, aptKey, ranksToBurn); };
     }
     else if (sacType === "manifestation") {
       var opPerLock = Math.max(1, num(opts.opPerLockoutTier, 4));
       var lockTiers = Math.max(1, Math.ceil(opAmount / opPerLock));
-      var lockRes = await _addManifestationLockout(pc, lockTiers);
       debitMeta.lockoutTiers = lockTiers;
-      debitMeta.lockoutTotal = lockRes.total;
-      await _addLock(pc, {
-        ts: _now(),
-        kind: "manifestation",
-        lockoutTiers: lockTiers,
-        opKey: opKey,
-        opAmount: opAmount,
-        factionId: faction.id,
-        factionName: faction.name,
-        note: note,
-        resolved: false
-      });
+      lock.lockoutTiers = lockTiers;
+      doDebit = async function(){
+        var lockRes = await _addManifestationLockout(pc, lockTiers);
+        debitMeta.lockoutTotal = lockRes.total;
+      };
     }
     else {
       throw new Error("Unknown RFI sacrifice type: "+sacRaw+" (canonical: integrity, stress, aptitude, manifestation)");
     }
+
+    // ── Phase 2: deposit marks first. Engine canon (Phase A 2026-05-09):
+    // 1 OP = 10 marks. The commit result was previously IGNORED, so a refused
+    // deposit (bank at cap) still burned the steward's resources — fixed 2026-07-06.
+    var deltas = {}; deltas[opKey] = +(opAmount * 10);
+    var commitRes = await opCommit(faction.id, deltas, "Manifestation ("+sacType+"): "+pc.name+" → +"+opAmount+" "+opLabel(opKey)+" OP");
+    if (!commitRes || commitRes.committed === false || commitRes.ok === false) {
+      throw new Error("Faction OP deposit refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : " (bank at cap?)")+" — nothing was sacrificed.");
+    }
+
+    // ── Phase 3: debit the steward. If this somehow fails after the pre-check,
+    // claw the deposit back so the books stay balanced.
+    try {
+      await doDebit();
+    } catch (eDebit) {
+      try {
+        var refund = {}; refund[opKey] = -(opAmount * 10);
+        await opCommit(faction.id, refund, "Refund: failed sacrifice debit for "+pc.name);
+      } catch (_eRefund) { warn("refund after failed debit ALSO failed — manual GM fix needed", _eRefund); }
+      throw eDebit;
+    }
+
+    await _addLock(pc, lock);
 
     // Native Blood Debt ledger if fourththing is loaded; else legacy fallback.
     await _recordBloodDebt(pc, bloodDebtDelta, {
@@ -442,10 +460,6 @@ async function _clearBridgeDebtAndLocks(actor){
       tag:    "Sacrifice: "+sacType,
       note:   note
     });
-
-    // Grant marks to faction. Engine canon (Phase A 2026-05-09): 1 OP = 10 marks.
-    var deltas = {}; deltas[opKey] = +(opAmount * 10);
-    await opCommit(faction.id, deltas, "Manifestation ("+sacType+"): "+pc.name+" → +"+opAmount+" "+opLabel(opKey)+" OP");
 
     // GM whisper
     try{
@@ -500,15 +514,33 @@ async function _clearBridgeDebtAndLocks(actor){
     if (poolMarks < spendMarks) throw new Error("Not enough "+opLabel(opKey)+" OP (need "+spend+", have "+(poolMarks/10)+")");
 
     var deltas={}; deltas[opKey] = -Math.abs(spendMarks);
-    await opCommit(faction.id, deltas, "Backing: spent "+spend+" "+opLabel(opKey)+" OP for "+actor.name);
+    var commitRes = await opCommit(faction.id, deltas, "Backing: spent "+spend+" "+opLabel(opKey)+" OP for "+actor.name);
+    if (!commitRes || commitRes.committed === false || commitRes.ok === false) {
+      throw new Error("Faction OP spend refused"+((commitRes && commitRes.error) ? ": "+commitRes.error : "")+" — no roll fired.");
+    }
 
-    var baseRoll = null;
-    if(rollKind==="skill" && typeof actor.rollSkill==="function") baseRoll = await actor.rollSkill(rollKey, {chatMessage:false});
-    else if(rollKind==="save" && typeof actor.rollAbilitySave==="function") baseRoll = await actor.rollAbilitySave(rollKey, {chatMessage:false});
-    else if(rollKind==="ability" && typeof actor.rollAbilityTest==="function") baseRoll = await actor.rollAbilityTest(rollKey, {chatMessage:false});
-    else baseRoll = await (new Roll("1d20")).evaluate({async:true});
-
-    var baseTotal = num(baseRoll.total,0);
+    // Fire the steward's REAL RFI roll. The old dnd5e paths (actor.rollSkill /
+    // rollAbilitySave / rollAbilityTest) never existed on fourththing actors, so
+    // every backing roll silently fell through to a bare 1d20 — fixed 2026-07-06.
+    // skill → rank-aware aptitude check; attribute/ability/save → faculty test.
+    var ftRolls = (game.fourththing && game.fourththing.rolls) ? game.fourththing.rolls : null;
+    var baseRoll = null, baseTotal = 0, baseDesc = "";
+    if (rollKind === "skill" && rollKey && ftRolls && typeof ftRolls.skillCheck === "function") {
+      var skRes = await ftRolls.skillCheck(actor, { skill: rollKey });
+      baseTotal = num(skRes && skRes.total, 0);
+      baseRoll  = (skRes && skRes.roll) || null;
+      baseDesc  = opLabel(rollKey) + " (Aptitude)";
+    }
+    else if (rollKey && ftRolls && typeof ftRolls.attributeTest === "function") {
+      baseRoll  = await ftRolls.attributeTest(actor, { attribute: rollKey, label: opLabel(rollKey) + " Test" });
+      baseTotal = num(baseRoll && baseRoll.total, 0);
+      baseDesc  = opLabel(rollKey) + " (Faculty)";
+    }
+    else {
+      baseRoll  = await (new Roll("2d10x10")).evaluate();
+      baseTotal = num(baseRoll.total, 0);
+      baseDesc  = "2d10 (exploding, untyped)";
+    }
     var finalTotal = baseTotal;
 
     if(mode==="dice"){
@@ -520,11 +552,11 @@ async function _clearBridgeDebtAndLocks(actor){
         var parts=[]; for(var i=0;i<spend;i++) parts.push(String(dicePerOp));
         expr = parts.join(" + ");
       }
-      var br = await (new Roll(expr)).evaluate({async:true});
+      var br = await (new Roll(expr)).evaluate();
       finalTotal = baseTotal + num(br.total,0);
       await ChatMessage.create({ content:
         '<div class="bbttcc-muted"><b>Faction Backing</b>: '+faction.name+' spent <b>'+spend+' '+opLabel(opKey)+' OP</b> for '+actor.name+'.</div>'+
-        '<div>Roll: <b>'+baseTotal+'</b> +<b>'+expr+'</b> = <b>'+finalTotal+'</b></div>'+
+        '<div>'+baseDesc+': <b>'+baseTotal+'</b> +<b>'+expr+'</b> = <b>'+finalTotal+'</b></div>'+
         '<div class="bbttcc-muted">Bonus dice total: <b>'+br.total+'</b></div>'
       });
       return { ok:true, baseTotal:baseTotal, finalTotal:finalTotal, mode:mode, diceExpr:expr, spend:spend, opKey:opKey, roll:baseRoll };
@@ -534,9 +566,41 @@ async function _clearBridgeDebtAndLocks(actor){
     finalTotal = baseTotal + bonus;
     await ChatMessage.create({ content:
       '<div class="bbttcc-muted"><b>Faction Backing</b>: '+faction.name+' spent <b>'+spend+' '+opLabel(opKey)+' OP</b> for '+actor.name+'.</div>'+
-      '<div>Roll: <b>'+baseTotal+'</b> +<b>'+bonus+'</b> = <b>'+finalTotal+'</b></div>'
+      '<div>'+baseDesc+': <b>'+baseTotal+'</b> +<b>'+bonus+'</b> = <b>'+finalTotal+'</b></div>'
     });
     return { ok:true, baseTotal:baseTotal, finalTotal:finalTotal, mode:mode, flatBonus:bonus, spend:spend, opKey:opKey, roll:baseRoll };
+  }
+
+  // ── Hover-help (2026-07-06) ──────────────────────────────────────────────
+  // One dictionary; mirrored into the central registry (game.bbttcc.help,
+  // appKey "bridge") at attach() so the Operator tours read the same text.
+  var BRIDGE_TIPS = {
+    open:        "Bad Eden Bridge — move power between a Steward and their faction: sacrifice body/mind for faction OP, or spend faction OP to back a personal roll.",
+    faction:     "Faction — the OP bank on the far side of the bridge. Sacrifices deposit here; Backing spends from here. Locked to your bound faction when opened from a sheet.",
+    actor:       "Steward — the body paying the price (Manifestation) or receiving the boost (Backing). The list follows the selected faction's roster when one exists.",
+    mOpKey:      "OP Type — which of the nine OP tracks the faction receives. Bank math: 1 OP = 10 marks.",
+    mOpQty:      "OP Qty — how many OP to generate. Every OP yielded accrues 1 Blood Debt on the steward (the narrative IOU the world collects on).",
+    sacrifice:   "Sacrifice — what the steward burns: Integrity (tier-priced meat), Stress (2/OP mind), Aptitude ranks (3 OP per rank, restored at the next Soma Break), or a Manifestation tier lockout (4 OP per tier, clears at Soma Break/scene end).",
+    sacIntegrity:"Integrity cost per OP scales with faction tier — T0–1: 10 · T2: 7 · T3+: 5. Debited from the Integrity track; you must have the full cost on hand.",
+    stressPerOp: "Stress / OP — Stress track points burned per OP (default 2). The track floors at 0 and you need the full cost available.",
+    aptKey:      "Aptitude key — the skill whose ranks burn (e.g. athletics, stealth, occult). The burn is flag-tracked and restores automatically at the next Soma Break.",
+    opPerRank:   "OP / Rank — OP yielded per rank burned (default 3). Ranks burned = ceiling(OP Qty ÷ this).",
+    opPerLock:   "OP / Tier-lock — OP yielded per manifestation tier locked (default 4). Lockouts stack, gate casting, and clear at Soma Break.",
+    mNote:       "Note — stamped on the Blood Debt ledger entry and the GM receipt whisper.",
+    manifestBtn: "Deposits the OP marks FIRST (a full bank refuses and nothing burns), then debits the resource, records a Blood Debt lock on the steward, and whispers a receipt to the GM.",
+    bOpKey:      "OP Type — which faction OP track pays for the backing.",
+    bSpend:      "Spend — OP drawn from the faction bank (1 OP = 10 marks). Refused if the bank is short.",
+    bRollKind:   "Roll — Aptitude fires the steward's full rank-aware skill check (rerolls, floors, surge); Faculty fires a bare attribute test.",
+    bRollKey:    "Key — which aptitude or faculty to roll. The list follows the selected steward and shows current values.",
+    bMode:       "Mode — Flat adds +2 per OP to the roll total; Bonus Dice rolls extra dice (default 1d6 per OP) and adds them.",
+    bDice:       "Dice / OP — the die granted per OP in dice mode (default 1d6).",
+    backingBtn:  "Spends the OP (verified against the bank), fires the steward's real roll, and posts base + backing = total to chat."
+  };
+  function tipAttr(key){
+    var t = BRIDGE_TIPS[key] || "";
+    if(!t) return "";
+    try { t = foundry.utils.escapeHTML(t); } catch(_e){}
+    return ' data-tooltip="'+t+'" data-tour="bridge.'+key+'"';
   }
 
   function buildBridgeDialog(actor){
@@ -596,8 +660,8 @@ async function _clearBridgeDebtAndLocks(actor){
     var html =
       '<div class="bbttcc-choice-roll-dialog" style="min-width:560px;">'+
       ' <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:10px;">'+
-      '  <div style="flex:1; min-width:240px;"><label><b>Faction</b></label><select name="factionId" style="width:100%;" ' + (lockFaction ? 'disabled' : '') + '>'+factionOptions+'</select></div>'+
-      '  <div style="flex:1; min-width:240px;"><label><b>PC / Actor</b></label><select name="actorId" style="width:100%;" ' + (lockActor ? 'disabled' : '') + '>'+actorOptions+'</select></div>'+
+      '  <div style="flex:1; min-width:240px;"'+tipAttr("faction")+'><label><b>Faction</b></label><select name="factionId" style="width:100%;" ' + (lockFaction ? 'disabled' : '') + '>'+factionOptions+'</select></div>'+
+      '  <div style="flex:1; min-width:240px;"'+tipAttr("actor")+'><label><b>PC / Actor</b></label><select name="actorId" style="width:100%;" ' + (lockActor ? 'disabled' : '') + '>'+actorOptions+'</select></div>'+
       ' </div>'+
 
       ' <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">'+
@@ -606,12 +670,12 @@ async function _clearBridgeDebtAndLocks(actor){
       '   <div style="font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:11px; margin-bottom:8px;">Manifestation</div>'+
 
       '   <div style="display:flex; gap:8px; align-items:flex-end;">'+
-      '    <div style="flex:1;"><label>OP Type</label><select name="m_opKey" style="width:100%;">'+opOptions+'</select></div>'+
-      '    <div style="width:120px;"><label>OP Qty</label><input name="m_amount" type="number" min="1" step="1" value="1" style="width:100%;"/></div>'+
+      '    <div style="flex:1;"'+tipAttr("mOpKey")+'><label>OP Type</label><select name="m_opKey" style="width:100%;">'+opOptions+'</select></div>'+
+      '    <div style="width:120px;"'+tipAttr("mOpQty")+'><label>OP Qty</label><input name="m_amount" type="number" min="1" step="1" value="1" style="width:100%;"/></div>'+
       '   </div>'+
 
       '   <div style="display:flex; gap:8px; align-items:flex-end; margin-top:8px;">'+
-      '    <div style="flex:1;"><label>Sacrifice</label>'+
+      '    <div style="flex:1;"'+tipAttr("sacrifice")+'><label>Sacrifice</label>'+
       '      <select name="m_sacType" style="width:100%;">'+
       '        <option value="integrity">Integrity</option>'+
       '        <option value="stress">Stress</option>'+
@@ -619,37 +683,37 @@ async function _clearBridgeDebtAndLocks(actor){
       '        <option value="manifestation">Manifestation Lockout</option>'+
       '      </select>'+
       '    </div>'+
-      '    <div style="width:140px;"><label>Note (optional)</label><input name="m_note" type="text" value="" style="width:100%;"/></div>'+
+      '    <div style="width:140px;"'+tipAttr("mNote")+'><label>Note (optional)</label><input name="m_note" type="text" value="" style="width:100%;"/></div>'+
       '   </div>'+
 
-      '   <div data-sac-panel="integrity" style="margin-top:8px;">'+
-      '     <div class="bbttcc-muted">Integrity cost per OP scales by faction tier (A=10, B=7, C=5). Integrity is debited and Blood Debt accrues.</div>'+
+      '   <div data-sac-panel="integrity" style="margin-top:8px;"'+tipAttr("sacIntegrity")+'>'+
+      '     <div class="bbttcc-muted">Integrity cost per OP scales by faction tier (T0–1: 10 · T2: 7 · T3+: 5). Integrity is debited and Blood Debt accrues.</div>'+
       '   </div>'+
 
       '   <div data-sac-panel="stress" style="margin-top:8px; display:none;">'+
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
-      '       <div style="width:140px;"><label>Stress / OP</label><input name="m_stressPerOp" type="number" min="1" step="1" value="2" style="width:100%;"/></div>'+
+      '       <div style="width:140px;"'+tipAttr("stressPerOp")+'><label>Stress / OP</label><input name="m_stressPerOp" type="number" min="1" step="1" value="2" style="width:100%;"/></div>'+
       '     </div>'+
       '     <div class="bbttcc-muted">Default: 2 Stress = 1 OP. The steward\'s Stress track depletes by this amount.</div>'+
       '   </div>'+
 
       '   <div data-sac-panel="aptitude" style="margin-top:8px; display:none;">'+
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
-      '       <div style="flex:1;"><label>Aptitude key</label><input name="m_aptKey" type="text" value="" placeholder="e.g. athletics, stealth, occult" style="width:100%;"/></div>'+
-      '       <div style="width:140px;"><label>OP / Rank</label><input name="m_opPerRank" type="number" min="1" step="1" value="3" style="width:100%;"/></div>'+
+      '       <div style="flex:1;"'+tipAttr("aptKey")+'><label>Aptitude key</label><input name="m_aptKey" type="text" value="" placeholder="e.g. athletics, stealth, occult" style="width:100%;"/></div>'+
+      '       <div style="width:140px;"'+tipAttr("opPerRank")+'><label>OP / Rank</label><input name="m_opPerRank" type="number" min="1" step="1" value="3" style="width:100%;"/></div>'+
       '     </div>'+
       '     <div class="bbttcc-muted">Default: 1 rank burned = 3 OP. Burned ranks restore at the next Soma Break (flag-tracked).</div>'+
       '   </div>'+
 
       '   <div data-sac-panel="manifestation" style="margin-top:8px; display:none;">'+
       '     <div style="display:flex; gap:8px; align-items:flex-end;">'+
-      '       <div style="width:140px;"><label>OP / Tier-lock</label><input name="m_opPerLock" type="number" min="1" step="1" value="4" style="width:100%;"/></div>'+
+      '       <div style="width:140px;"'+tipAttr("opPerLock")+'><label>OP / Tier-lock</label><input name="m_opPerLock" type="number" min="1" step="1" value="4" style="width:100%;"/></div>'+
       '     </div>'+
       '     <div class="bbttcc-muted">Default: 1 manifestation tier locked (this scene) = 4 OP. Lockout flag clears at scene end / Soma Break.</div>'+
       '   </div>'+
 
       '   <div style="margin-top:10px;">'+
-      '     <button type="button" class="bbttcc-sacrifice-btn" data-action="manifest" style="border-color: rgba(244,63,94,0.55); background: rgba(244,63,94,0.10); color:#ffd6de;">Sacrifice & Grant OP</button>'+
+      '     <button type="button" class="bbttcc-sacrifice-btn" data-action="manifest"'+tipAttr("manifestBtn")+' style="border-color: rgba(244,63,94,0.55); background: rgba(244,63,94,0.10); color:#ffd6de;">Sacrifice & Grant OP</button>'+
       '     <div class="bbttcc-muted" style="margin-top:6px;">Debits the selected resource, grants faction OP, and records a Blood Debt lock.</div>'+
       '   </div>'+
       '  </div>'+
@@ -657,23 +721,23 @@ async function _clearBridgeDebtAndLocks(actor){
       '  <div style="border:1px solid rgba(148,163,184,0.25); border-radius:12px; padding:12px; background: rgba(15,23,42,0.35);">'+
       '   <div style="font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:11px; margin-bottom:8px;">Backing</div>'+
       '   <div style="display:flex; gap:8px; align-items:flex-end;">'+
-      '    <div style="flex:1;"><label>OP Type</label><select name="b_opKey" style="width:100%;">'+opOptions+'</select></div>'+
-      '    <div style="width:120px;"><label>Spend</label><input name="b_spend" type="number" min="1" step="1" value="1" style="width:100%;"/></div>'+
+      '    <div style="flex:1;"'+tipAttr("bOpKey")+'><label>OP Type</label><select name="b_opKey" style="width:100%;">'+opOptions+'</select></div>'+
+      '    <div style="width:120px;"'+tipAttr("bSpend")+'><label>Spend</label><input name="b_spend" type="number" min="1" step="1" value="1" style="width:100%;"/></div>'+
       '   </div>'+
       '   <div style="display:flex; gap:8px; align-items:flex-end; margin-top:8px;">'+
-      '    <div style="flex:1;"><label>Roll</label><select name="b_kind" style="width:100%;">'+
-      '      <option value="skill">Skill</option><option value="ability">Ability</option><option value="save">Save</option>'+
+      '    <div style="flex:1;"'+tipAttr("bRollKind")+'><label>Roll</label><select name="b_kind" style="width:100%;">'+
+      '      <option value="skill">Aptitude</option><option value="attribute">Faculty</option>'+
       '    </select></div>'+
-      '    <div style="flex:1;"><label>Key</label><input name="b_key" type="text" value="stealth" style="width:100%;"/></div>'+
+      '    <div style="flex:1;"'+tipAttr("bRollKey")+'><label>Key</label><select name="b_key" style="width:100%;"><option value="">—</option></select></div>'+
       '   </div>'+
       '   <div style="display:flex; gap:8px; align-items:flex-end; margin-top:8px;">'+
-      '    <div style="flex:1;"><label>Mode</label><select name="b_mode" style="width:100%;">'+
+      '    <div style="flex:1;"'+tipAttr("bMode")+'><label>Mode</label><select name="b_mode" style="width:100%;">'+
       '      <option value="flat">Flat Bonus (+2 / OP)</option><option value="dice">Bonus Dice (+1d6 / OP)</option>'+
       '    </select></div>'+
-      '    <div style="width:140px;"><label>Dice / OP</label><input name="b_dice" type="text" value="1d6" style="width:100%;"/></div>'+
+      '    <div style="width:140px;"'+tipAttr("bDice")+'><label>Dice / OP</label><input name="b_dice" type="text" value="1d6" style="width:100%;"/></div>'+
       '   </div>'+
       '   <div style="margin-top:10px;">'+
-      '    <button type="button" class="bbttcc-sacrifice-btn" data-action="backing" style="border-color: rgba(56,189,248,0.55); background: rgba(56,189,248,0.10); color:#d6f3ff;">Spend OP & Roll</button>'+
+      '    <button type="button" class="bbttcc-sacrifice-btn" data-action="backing"'+tipAttr("backingBtn")+' style="border-color: rgba(56,189,248,0.55); background: rgba(56,189,248,0.10); color:#d6f3ff;">Spend OP & Roll</button>'+
       '    <div class="bbttcc-muted" style="margin-top:6px;">Rolls, applies backing, posts the combined total to chat.</div>'+
       '   </div>'+
       '  </div>'+
@@ -715,11 +779,40 @@ async function _clearBridgeDebtAndLocks(actor){
           }catch(_e){}
         }
 
+        // Backing "Key" select follows the chosen steward: aptitudes (skills) or
+        // faculties (attributes) with current values, instead of a free-text
+        // guess at internal keys (2026-07-06).
+        function populateRollKeys(){
+          try{
+            var aid = (lockActor && actor) ? actor.id : root.find("select[name='actorId']").val();
+            var a = game.actors.get(String(aid||"")) || (lockActor ? actor : null);
+            var sys = a ? ((a.system && a.system.system) ? a.system.system : a.system) : null;
+            var kind = String(root.find("select[name='b_kind']").val()||"skill");
+            var sel = root.find("select[name='b_key']");
+            if (!sel.length) return;
+            var cur = sel.val() || "";
+            var src = (kind === "skill") ? ((sys && sys.skills) || {}) : ((sys && sys.attributes) || {});
+            var opts = Object.keys(src).map(function(k){
+              var e = src[k] || {};
+              var lbl = e.label ? String(e.label) : opLabel(k);
+              return '<option value="'+k+'" '+(k===cur?"selected":"")+'>'+lbl+' ('+num(e.value,0)+')</option>';
+            }).join("");
+            sel.html(opts || '<option value="">—</option>');
+          }catch(_e){}
+        }
+
         setTimeout(function(){
           try{
             populateActorsFromFaction();
+            populateRollKeys();
             root.off("change.bbttccBridgeFaction", "select[name='factionId']");
-            root.on("change.bbttccBridgeFaction", "select[name='factionId']", function(){ populateActorsFromFaction(); });
+            root.on("change.bbttccBridgeFaction", "select[name='factionId']", function(){ populateActorsFromFaction(); populateRollKeys(); });
+
+            root.off("change.bbttccBridgeActor", "select[name='actorId']");
+            root.on("change.bbttccBridgeActor", "select[name='actorId']", function(){ populateRollKeys(); });
+
+            root.off("change.bbttccBridgeKind", "select[name='b_kind']");
+            root.on("change.bbttccBridgeKind", "select[name='b_kind']", function(){ populateRollKeys(); });
 
             root.off("change.bbttccBridgeSac", "select[name='m_sacType']");
             root.on("change.bbttccBridgeSac", "select[name='m_sacType']", function(){
@@ -901,6 +994,40 @@ try{
     try{
       Hooks.on("renderActorSheet", injectHeaderButtonViaHook);
     }catch(_eR){}
+
+    // AppV2 sheets — the two V1 hooks above NEVER fire for ActorSheetV2, so the
+    // Bridge was unreachable from the fourththing Steward sheet (only the V1
+    // faction sheet had the button). Fixed 2026-07-06.
+    try{
+      var injectV2 = function(app){
+        try{
+          var actorV2 = app && (app.actor || app.document);
+          if(!actorV2 || actorV2.documentName!=="Actor") return;
+          if(actorV2.type !== "character" && !((actorV2.flags||{})["bbttcc-factions"])) return;
+          var el = (app.element instanceof HTMLElement) ? app.element : (app.element && app.element[0]);
+          if(!el) return;
+          var header = el.querySelector(".window-header");
+          if(!header || header.querySelector(".bbttcc-bridge-btn")) return;
+          var btn = document.createElement("a");
+          btn.className = "bbttcc-bridge-btn";
+          btn.style.cssText = "margin-left:6px; flex:0 0 auto; display:inline-flex; align-items:center; gap:4px; cursor:pointer;";
+          try { btn.dataset.tooltip = BRIDGE_TIPS.open; } catch(_eT){}
+          btn.innerHTML = '<i class="fas fa-exchange-alt"></i> Bridge';
+          btn.addEventListener("click", function(ev){ ev.preventDefault(); ev.stopPropagation(); openBridgeForActor(actorV2); });
+          var titleEl = header.querySelector(".window-title");
+          if(titleEl && titleEl.after) titleEl.after(btn); else header.appendChild(btn);
+        }catch(_e){}
+      };
+      Hooks.on("renderFourthThingCharacterSheet", injectV2);
+    }catch(_eV2){}
+
+    // Central hover-help registry (bbttcc-help.js loads first in this module) —
+    // same text the Operator tours will step through.
+    try{
+      if(game.bbttcc.help && typeof game.bbttcc.help.register === "function"){
+        game.bbttcc.help.register("bridge", BRIDGE_TIPS);
+      }
+    }catch(_eHelp){}
 
     warn("ready — api mounted at game.bbttcc.api.bridge (open/manifest/manifestHp/backing)");
   }

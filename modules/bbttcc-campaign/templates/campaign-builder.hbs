@@ -4,8 +4,12 @@
   - Campaign management / import-export live under Campaign tab
   - Travel tab shows current travel tables, creation, duplicate, edit/delete
   - Beats / Quests / Visualizer preserved
+  - Hover-help: data-tooltip via {{bbttccTip 'campaign' '<key>'}} (central registry
+    in bbttcc-core; dictionary registered by scripts/module.js).
+  - Tour anchors: stable data-tour="campaign.<key>" on major regions
+    (first-row-only inside repeats).
 --}}
-<section class="bbttcc-campaign-builder-root">
+<section class="bbttcc-campaign-builder-root" data-tour="campaign.root">
 
   {{#unless apiReady}}
     <div class="bbttcc-campaign-builder-empty">
@@ -16,58 +20,59 @@
 
   {{#if apiReady}}
     <section class="bbttcc-campaign-main bbttcc-campaign-main--full">
-      <header class="bbttcc-campaign-main-header">
+      <header class="bbttcc-campaign-main-header" data-tour="campaign.header">
         <div class="bbttcc-row bbttcc-row-space-between bbttcc-row-wrap">
           <div>
-            <h3>{{#if selectedCampaign}}{{selectedCampaign.label}}{{else}}Campaign Builder{{/if}}</h3>
+            <h3 data-tooltip="{{bbttccTip 'campaign' 'title'}}">{{#if selectedCampaign}}{{selectedCampaign.label}}{{else}}Campaign Builder{{/if}}</h3>
             {{#if selectedCampaign}}
-              <p class="bbttcc-campaign-main-id">ID: <code>{{selectedCampaign.id}}</code></p>
+              <p class="bbttcc-campaign-main-id" data-tooltip="{{bbttccTip 'campaign' 'campaign-id'}}">ID: <code>{{selectedCampaign.id}}</code></p>
             {{/if}}
           </div>
         </div>
 
-        <div class="bbttcc-main-tabs">
-          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'campaign')}}is-active{{/if}}" data-action="main-tab" data-tab="campaign">Campaign</button>
-          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'travel')}}is-active{{/if}}" data-action="main-tab" data-tab="travel">Travel Tables</button>
-          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'beats')}}is-active{{/if}}" data-action="main-tab" data-tab="beats">Beats</button>
-          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'quests')}}is-active{{/if}}" data-action="main-tab" data-tab="quests">Quests</button>
-          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'flow')}}is-active{{/if}}" data-action="main-tab" data-tab="flow">Visualizer</button>
+        <div class="bbttcc-main-tabs" data-tour="campaign.tabs" data-tooltip="{{bbttccTip 'campaign' 'tabs'}}">
+          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'campaign')}}is-active{{/if}}" data-action="main-tab" data-tab="campaign" data-tour="campaign.tab-campaign" data-tooltip="{{bbttccTip 'campaign' 'tab-campaign'}}">Campaign</button>
+          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'travel')}}is-active{{/if}}" data-action="main-tab" data-tab="travel" data-tour="campaign.tab-travel" data-tooltip="{{bbttccTip 'campaign' 'tab-travel'}}">Travel Tables</button>
+          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'beats')}}is-active{{/if}}" data-action="main-tab" data-tab="beats" data-tour="campaign.tab-beats" data-tooltip="{{bbttccTip 'campaign' 'tab-beats'}}">Beats</button>
+          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'quests')}}is-active{{/if}}" data-action="main-tab" data-tab="quests" data-tour="campaign.tab-quests" data-tooltip="{{bbttccTip 'campaign' 'tab-quests'}}">Quests</button>
+          <button type="button" class="bbttcc-tabbtn {{#if (eq mainTab 'flow')}}is-active{{/if}}" data-action="main-tab" data-tab="flow" data-tour="campaign.tab-flow" data-tooltip="{{bbttccTip 'campaign' 'tab-flow'}}">Visualizer</button>
         </div>
       </header>
 
       {{!-- CAMPAIGN TAB --}}
-      <section class="{{#unless (eq mainTab 'campaign')}}is-hidden{{/unless}}" data-main-tab="campaign">
+      <section class="{{#unless (eq mainTab 'campaign')}}is-hidden{{/unless}}" data-main-tab="campaign" data-tour="campaign.panel-campaign">
         <section class="bbttcc-campaign-main-meta">
           <div class="bbttcc-campaign-grid">
-            <section class="bbttcc-panel-card">
+            <section class="bbttcc-panel-card" data-tour="campaign.campaigns">
               <header class="bbttcc-beats-header">
-                <h4>Campaigns</h4>
-                <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="new-campaign">+ New Campaign</button>
+                <h4 data-tooltip="{{bbttccTip 'campaign' 'campaigns'}}">Campaigns</h4>
+                <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="new-campaign" data-tour="campaign.new-campaign" data-tooltip="{{bbttccTip 'campaign' 'new-campaign'}}">+ New Campaign</button>
               </header>
 
               {{#if campaigns.length}}
                 <ul class="bbttcc-simple-list bbttcc-campaigns-list bbttcc-campaigns-list--grid">
                   {{#each campaigns as |c|}}
-                    <li class="bbttcc-campaigns-list-item {{#if (eq ../selectedCampaign.id c.id)}}is-selected{{/if}}">
+                    <li class="bbttcc-campaigns-list-item {{#if (eq ../selectedCampaign.id c.id)}}is-selected{{/if}}" {{#if @first}}data-tour="campaign.campaign-row"{{/if}}>
                       <div class="bbttcc-row bbttcc-row-space-between bbttcc-row-wrap bbttcc-gap-10">
                         <button type="button"
                                 class="bbttcc-campaign-list-item"
                                 data-action="select-campaign"
-                                data-campaign-id="{{c.id}}">
+                                data-campaign-id="{{c.id}}"
+                                data-tooltip="{{bbttccTip 'campaign' 'select-campaign'}}">
                           <span class="bbttcc-campaign-list-title">{{c.label}}</span>
                           <span class="bbttcc-campaign-list-id"><code>{{c.id}}</code></span>
                         </button>
 
                         <div class="bbttcc-campaign-list-row-actions">
                           {{#if c.isActive}}
-                            <span class="bbttcc-chip" title="Active campaign">★ Active</span>
+                            <span class="bbttcc-chip" data-tooltip="{{bbttccTip 'campaign' 'active-chip'}}">★ Active</span>
                           {{else}}
-                            <button type="button" class="bbttcc-link-button" data-action="set-active-campaign" data-campaign-id="{{c.id}}">Set Active</button>
+                            <button type="button" class="bbttcc-link-button" data-action="set-active-campaign" data-campaign-id="{{c.id}}" data-tooltip="{{bbttccTip 'campaign' 'set-active'}}">Set Active</button>
                           {{/if}}
                           <span class="bbttcc-inline-separator">·</span>
-                          <button type="button" class="bbttcc-link-button" data-action="run-campaign" data-campaign-id="{{c.id}}">Run</button>
+                          <button type="button" class="bbttcc-link-button" data-action="run-campaign" data-campaign-id="{{c.id}}" data-tooltip="{{bbttccTip 'campaign' 'run-campaign'}}">Run First Beat</button>
                           <span class="bbttcc-inline-separator">·</span>
-                          <button type="button" class="bbttcc-link-button text-danger" data-action="delete-campaign" data-campaign-id="{{c.id}}">Delete</button>
+                          <button type="button" class="bbttcc-link-button text-danger" data-action="delete-campaign" data-campaign-id="{{c.id}}" data-tooltip="{{bbttccTip 'campaign' 'delete-campaign'}}">Delete</button>
                         </div>
                       </div>
                     </li>
@@ -78,45 +83,45 @@
               {{/if}}
             </section>
 
-            <section class="bbttcc-panel-card">
+            <section class="bbttcc-panel-card" data-tour="campaign.bundles">
               <header class="bbttcc-beats-header">
-                <h4>Bundles</h4>
+                <h4 data-tooltip="{{bbttccTip 'campaign' 'bundles'}}">Bundles</h4>
                 <div class="bbttcc-row bbttcc-row-gap-sm">
-                  <button type="button" class="bbttcc-btn" data-action="io-export">Export</button>
-                  <button type="button" class="bbttcc-btn" data-action="io-import">Import</button>
-                  <button type="button" class="bbttcc-btn" data-action="io-remap">Remap</button>
-                  <button type="button" class="bbttcc-btn" data-action="io-scan-keys">Key Report</button>
+                  <button type="button" class="bbttcc-btn" data-action="io-export" data-tooltip="{{bbttccTip 'campaign' 'io-export'}}">Export</button>
+                  <button type="button" class="bbttcc-btn" data-action="io-import" data-tooltip="{{bbttccTip 'campaign' 'io-import'}}">Import</button>
+                  <button type="button" class="bbttcc-btn" data-action="io-remap" data-tooltip="{{bbttccTip 'campaign' 'io-remap'}}">Remap</button>
+                  <button type="button" class="bbttcc-btn" data-action="io-scan-keys" data-tooltip="{{bbttccTip 'campaign' 'io-scan-keys'}}">Key Report</button>
                 </div>
               </header>
               <p class="bbttcc-muted">Export and import campaign bundles through JournalEntry compendia.</p>
             </section>
 
             {{#if selectedCampaign}}
-              <section class="bbttcc-panel-card">
+              <section class="bbttcc-panel-card" data-tour="campaign.selected">
                 <header class="bbttcc-beats-header">
-                  <h4>Selected Campaign</h4>
-                  <button type="button" class="bbttcc-btn" data-action="save-campaign-meta" data-campaign-id="{{selectedCampaign.id}}">Campaign Settings…</button>
+                  <h4 data-tooltip="{{bbttccTip 'campaign' 'selected'}}">Selected Campaign</h4>
+                  <button type="button" class="bbttcc-btn" data-action="save-campaign-meta" data-campaign-id="{{selectedCampaign.id}}" data-tour="campaign.settings" data-tooltip="{{bbttccTip 'campaign' 'campaign-settings'}}">Campaign Settings…</button>
                 </header>
 
                 <div class="bbttcc-form-grid">
                   <div class="form-group">
-                    <label>Label</label>
-                    <input type="text" value="{{selectedCampaign.label}}" readonly />
+                    <label data-tooltip="{{bbttccTip 'campaign' 'meta-label'}}">Label</label>
+                    <input type="text" value="{{selectedCampaign.label}}" readonly data-tooltip="{{bbttccTip 'campaign' 'meta-label'}}" />
                   </div>
                   <div class="form-group">
-                    <label>Description</label>
-                    <textarea rows="4" readonly>{{selectedCampaign.description}}</textarea>
+                    <label data-tooltip="{{bbttccTip 'campaign' 'meta-description'}}">Description</label>
+                    <textarea rows="4" readonly data-tooltip="{{bbttccTip 'campaign' 'meta-description'}}">{{selectedCampaign.description}}</textarea>
                   </div>
                 </div>
 
                 {{#if selectedCampaign.activeFactions.length}}
-                  <div class="bbttcc-muted bbttcc-mt-8">
+                  <div class="bbttcc-muted bbttcc-mt-8" data-tour="campaign.active-factions" data-tooltip="{{bbttccTip 'campaign' 'active-factions'}}">
                     <strong>Active Factions:</strong>
                     <ul class="bbttcc-inset-list">
                       {{#each selectedCampaign.activeFactions as |f|}}
                         <li>
                           {{f.name}}
-                          {{#if f.isPrimary}}<span class="bbttcc-chip bbttcc-ml-6" title="Primary — used for beat inheritance, war log, casualty defaults">★ Primary</span>{{/if}}
+                          {{#if f.isPrimary}}<span class="bbttcc-chip bbttcc-ml-6" data-tooltip="{{bbttccTip 'campaign' 'primary-chip'}}">★ Primary</span>{{/if}}
                         </li>
                       {{/each}}
                     </ul>
@@ -129,17 +134,17 @@
       </section>
 
       {{!-- TRAVEL TAB --}}
-      <section class="{{#unless (eq mainTab 'travel')}}is-hidden{{/unless}}" data-main-tab="travel">
+      <section class="{{#unless (eq mainTab 'travel')}}is-hidden{{/unless}}" data-main-tab="travel" data-tour="campaign.panel-travel">
         <section class="bbttcc-campaign-main-meta">
           <header class="bbttcc-beats-header bbttcc-beats-header-polish">
             <div class="bbttcc-beats-header-left">
-              <h4>Travel Tables</h4>
+              <h4 data-tooltip="{{bbttccTip 'campaign' 'travel-list'}}">Travel Tables</h4>
               <div class="bbttcc-muted bbttcc-beats-count">{{travelTablesFiltered.length}} shown</div>
             </div>
 
             <div class="bbttcc-beats-toolbar">
-              <div class="bbttcc-beats-filters bbttcc-gap-8">
-                <select class="bbttcc-select bbttcc-select-sm" data-role="travel-terrain">
+              <div class="bbttcc-beats-filters bbttcc-gap-8" data-tour="campaign.travel-filters">
+                <select class="bbttcc-select bbttcc-select-sm" data-role="travel-terrain" data-tooltip="{{bbttccTip 'campaign' 'travel-terrain'}}">
                   <option value="" {{#if (eq travelTerrain "")}}selected{{/if}}>All terrains</option>
                   <option value="plains" {{#if (eq travelTerrain "plains")}}selected{{/if}}>plains</option>
                   <option value="forest" {{#if (eq travelTerrain "forest")}}selected{{/if}}>forest</option>
@@ -153,7 +158,7 @@
                   <option value="wasteland" {{#if (eq travelTerrain "wasteland")}}selected{{/if}}>wasteland</option>
                 </select>
 
-                <select class="bbttcc-select bbttcc-select-sm" data-role="travel-tier">
+                <select class="bbttcc-select bbttcc-select-sm" data-role="travel-tier" data-tooltip="{{bbttccTip 'campaign' 'travel-tier'}}">
                   <option value="0" {{#if (eq travelTier 0)}}selected{{/if}}>All tiers</option>
                   <option value="1" {{#if (eq travelTier 1)}}selected{{/if}}>Tier 1</option>
                   <option value="2" {{#if (eq travelTier 2)}}selected{{/if}}>Tier 2</option>
@@ -161,16 +166,16 @@
                   <option value="4" {{#if (eq travelTier 4)}}selected{{/if}}>Tier 4</option>
                 </select>
 
-                <button type="button" class="bbttcc-btn" data-action="travel-show-all">Show All</button>
-                <button type="button" class="bbttcc-btn" data-action="travel-preview">Preview Roll</button>
-                <button type="button" class="bbttcc-btn" data-action="fix-travel-ids" title="Scan travel tables for non-canonical/duplicate IDs and mismatched entry terrain/tier conditions, then repair them">🔧 Fix Travel Tables</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="new-travel-table">+ New Travel Table</button>
+                <button type="button" class="bbttcc-btn" data-action="travel-show-all" data-tooltip="{{bbttccTip 'campaign' 'travel-show-all'}}">Show All</button>
+                <button type="button" class="bbttcc-btn" data-action="travel-preview" data-tooltip="{{bbttccTip 'campaign' 'travel-preview'}}">Preview Roll</button>
+                <button type="button" class="bbttcc-btn" data-action="fix-travel-ids" data-tour="campaign.travel-fix" data-tooltip="{{bbttccTip 'campaign' 'fix-travel-tables'}}">🔧 Fix Travel Tables</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="new-travel-table" data-tour="campaign.travel-new" data-tooltip="{{bbttccTip 'campaign' 'new-travel-table'}}">+ New Travel Table</button>
               </div>
             </div>
           </header>
 
           {{#if travelPreview}}
-            <p class="bbttcc-muted bbttcc-m-preview">
+            <p class="bbttcc-muted bbttcc-m-preview" data-tooltip="{{bbttccTip 'campaign' 'travel-preview'}}">
               Preview: <strong>{{travelPreview.label}}</strong>
               <span class="bbttcc-inline-separator">·</span>
               <code>{{travelPreview.tableId}}</code>
@@ -178,28 +183,28 @@
           {{/if}}
 
           {{#if travelTablesFiltered.length}}
-            <table class="bbttcc-table bbttcc-table-beats">
+            <table class="bbttcc-table bbttcc-table-beats" data-tour="campaign.travel-table">
               <thead>
                 <tr>
                   <th>Table</th>
-                  <th>Scope</th>
-                  <th>Tags</th>
+                  <th data-tooltip="{{bbttccTip 'campaign' 'travel-scope'}}">Scope</th>
+                  <th data-tooltip="{{bbttccTip 'campaign' 'travel-tags'}}">Tags</th>
                   <th class="bbttcc-col-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {{#each travelTablesFiltered as |t|}}
-                  <tr>
+                  <tr {{#if @first}}data-tour="campaign.travel-row"{{/if}}>
                     <td>
                       <div class="bbttcc-strong">{{t.label}}</div>
                       <div class="bbttcc-muted"><code>{{t.id}}</code></div>
                     </td>
-                    <td><span class="bbttcc-chip">{{t.scope}}</span></td>
+                    <td><span class="bbttcc-chip" data-tooltip="{{bbttccTip 'campaign' 'travel-scope'}}">{{t.scope}}</span></td>
                     <td>
                       {{#if t.tags.length}}
                         <div class="bbttcc-row bbttcc-row-gap-sm bbttcc-row-wrap">
                           {{#each t.tags as |tag|}}
-                            <span class="bbttcc-chip"><code>{{tag}}</code></span>
+                            <span class="bbttcc-chip" data-tooltip="{{bbttccTip 'campaign' 'travel-tags'}}"><code>{{tag}}</code></span>
                           {{/each}}
                         </div>
                       {{else}}
@@ -208,11 +213,11 @@
                     </td>
                     <td class="bbttcc-col-actions">
                       <div class="bbttcc-row bbttcc-row-gap-sm bbttcc-row-wrap bbttcc-justify-end">
-                        <button type="button" class="bbttcc-link-button" data-action="edit-table" data-table-id="{{t.id}}">Edit</button>
+                        <button type="button" class="bbttcc-link-button" data-action="edit-table" data-table-id="{{t.id}}" data-tooltip="{{bbttccTip 'campaign' 'edit-table'}}">Edit</button>
                         <span class="bbttcc-inline-separator">·</span>
-                        <button type="button" class="bbttcc-link-button" data-action="duplicate-table" data-table-id="{{t.id}}">Duplicate</button>
+                        <button type="button" class="bbttcc-link-button" data-action="duplicate-table" data-table-id="{{t.id}}" data-tooltip="{{bbttccTip 'campaign' 'duplicate-table'}}">Duplicate</button>
                         <span class="bbttcc-inline-separator">·</span>
-                        <button type="button" class="bbttcc-link-button text-danger" data-action="delete-table" data-table-id="{{t.id}}">Delete</button>
+                        <button type="button" class="bbttcc-link-button text-danger" data-action="delete-table" data-table-id="{{t.id}}" data-tooltip="{{bbttccTip 'campaign' 'delete-table'}}">Delete</button>
                       </div>
                     </td>
                   </tr>
@@ -226,108 +231,105 @@
       </section>
 
       {{!-- BEATS TAB --}}
-      <section class="{{#unless (eq mainTab 'beats')}}is-hidden{{/unless}}" data-main-tab="beats">
+      <section class="{{#unless (eq mainTab 'beats')}}is-hidden{{/unless}}" data-main-tab="beats" data-tour="campaign.panel-beats">
         <section class="bbttcc-campaign-main-beats">
           <header class="bbttcc-beats-header bbttcc-beats-header-polish">
             <div class="bbttcc-beats-header-left">
-              <h4>Beats</h4>
-              <div class="bbttcc-muted bbttcc-beats-count"><span>{{beatsFiltered.length}}</span> / <span>{{selectedCampaign.beats.length}}</span></div>
+              <h4 data-tooltip="{{bbttccTip 'campaign' 'beats-list'}}">Beats</h4>
+              <div class="bbttcc-muted bbttcc-beats-count" data-tooltip="{{bbttccTip 'campaign' 'beats-count'}}"><span>{{beatsFiltered.length}}</span> / <span>{{selectedCampaign.beats.length}}</span></div>
             </div>
 
             <div class="bbttcc-beats-toolbar">
-              <div class="bbttcc-beats-filters">
-                <input type="text" class="bbttcc-input bbttcc-input-sm" placeholder="Filter beats… (id, label, type)" value="{{beatSearch}}" data-action="beats-search" />
-                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-type">
+              <div class="bbttcc-beats-filters" data-tour="campaign.beats-filters">
+                <input type="text" class="bbttcc-input bbttcc-input-sm" placeholder="Filter beats… (id, label, type)" value="{{beatSearch}}" data-action="beats-search" data-tooltip="{{bbttccTip 'campaign' 'beats-search'}}" />
+                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-type" data-tooltip="{{bbttccTip 'campaign' 'beats-type'}}">
                   <option value="all" {{#if (eq beatTypeFilter "all")}}selected{{/if}}>All types</option>
                   {{#each beatTypes as |t|}}
                     <option value="{{t}}" {{#if (eq t ../beatTypeFilter)}}selected{{/if}}>{{t}}</option>
                   {{/each}}
                 </select>
-                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-turn">
+                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-turn" data-tooltip="{{bbttccTip 'campaign' 'beats-turn'}}">
                   <option value="all" {{#if (eq beatTurnFilter "all")}}selected{{/if}}>All turns</option>
                   <option value="unassigned" {{#if (eq beatTurnFilter "unassigned")}}selected{{/if}}>Unassigned</option>
                   {{#each beatTurnOptions as |t|}}
                     <option value="{{t}}" {{#if (eq t ../beatTurnFilter)}}selected{{/if}}>Turn {{t}}</option>
                   {{/each}}
                 </select>
-                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-quest">
+                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-quest" data-tooltip="{{bbttccTip 'campaign' 'beats-quest'}}">
                   <option value="all" {{#if (eq questFilter "all")}}selected{{/if}}>(All quests)</option>
                   {{#each questsAll as |q|}}
                     <option value="{{q.id}}" {{#if (eq q.id ../questFilter)}}selected{{/if}}>{{q.name}}</option>
                   {{/each}}
                 </select>
-                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-quest-status">
-                  <option value="all" {{#if (eq questStatusFilter "all")}}selected{{/if}}>All quest status</option>
-                  <option value="active" {{#if (eq questStatusFilter "active")}}selected{{/if}}>Active</option>
-                  <option value="completed" {{#if (eq questStatusFilter "completed")}}selected{{/if}}>Completed</option>
-                  <option value="archived" {{#if (eq questStatusFilter "archived")}}selected{{/if}}>Archived</option>
+                <select class="bbttcc-select bbttcc-select-sm" data-action="beats-quest-status" data-tooltip="{{bbttccTip 'campaign' 'beats-quest-status'}}">
+                  <option value="all" {{#if (eq beatQuestStatusFilter "all")}}selected{{/if}}>All quest status</option>
+                  <option value="active" {{#if (eq beatQuestStatusFilter "active")}}selected{{/if}}>Active</option>
+                  <option value="completed" {{#if (eq beatQuestStatusFilter "completed")}}selected{{/if}}>Completed</option>
+                  <option value="archived" {{#if (eq beatQuestStatusFilter "archived")}}selected{{/if}}>Archived</option>
                 </select>
               </div>
 
               <div class="bbttcc-row bbttcc-row-gap-sm">
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="reindex-beats">Reindex</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="add-beat">+ Add Beat</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="reindex-beats" data-tooltip="{{bbttccTip 'campaign' 'reindex-beats'}}">Compact Order</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="add-beat" data-tour="campaign.beats-add" data-tooltip="{{bbttccTip 'campaign' 'add-beat'}}">+ Add Beat</button>
               </div>
             </div>
           </header>
 
           {{#if beatsFiltered.length}}
             <div data-role="beats-scroll">
-              <table class="bbttcc-table bbttcc-table-beats">
+              <table class="bbttcc-table bbttcc-table-beats" data-tour="campaign.beats-table">
                 <thead>
                   <tr>
                     <th>#</th>
                     <th>Beat</th>
                     <th>Type</th>
-                    <th>Turn</th>
+                    <th data-tooltip="{{bbttccTip 'campaign' 'turn-chip'}}">Turn</th>
                     <th class="bbttcc-col-actions">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {{#each beatsFiltered as |row|}}
-                    <tr class="bbttcc-beat-row" data-beat-row-id="{{row.beat.id}}">
+                    <tr class="bbttcc-beat-row" data-beat-row-id="{{row.beat.id}}" {{#if @first}}data-tour="campaign.beat-row"{{/if}}>
                       <td class="bbttcc-col-idx">{{row.n}}</td>
                       <td class="bbttcc-col-beat">
                         <div class="bbttcc-beat-primary">
                           <span class="bbttcc-beat-label">{{row.beat.label}}</span>
                           {{#if row.fired}}
-                            <span class="bbttcc-chip" style="color:#5ac878;border-color:rgba(90,200,120,.55);" title="Already fired (Story Director record{{#if row.firedTurn}}, turn {{row.firedTurn}}{{/if}}) — running again asks for confirmation">✓ fired{{#if row.firedTurn}} T{{row.firedTurn}}{{/if}}</span>
+                            <span class="bbttcc-chip" style="color:#5ac878;border-color:rgba(90,200,120,.55);" data-tooltip="{{bbttccTip 'campaign' 'fired-chip'}}">✓ fired{{#if row.firedTurn}} T{{row.firedTurn}}{{/if}}</span>
                           {{/if}}
                           {{#if row.questName}}
-                            <span class="bbttcc-chip bbttcc-chip-quest" title="Quest: {{row.questName}} ({{row.questStatus}})">📜 {{row.questName}}</span>
+                            <span class="bbttcc-chip bbttcc-chip-quest" data-tooltip="{{bbttccTip 'campaign' 'quest-chip'}}">📜 {{row.questName}}</span>
                           {{/if}}
                         </div>
                         <div class="bbttcc-muted bbttcc-beat-secondary"><code>{{row.beat.id}}</code></div>
                       </td>
-                      <td class="bbttcc-col-type"><span class="bbttcc-chip bbttcc-chip-type">{{row.beat.type}}</span></td>
+                      <td class="bbttcc-col-type"><span class="bbttcc-chip bbttcc-chip-type" data-tooltip="{{bbttccTip 'campaign' 'beats-type'}}">{{row.beat.type}}</span></td>
                       <td class="bbttcc-col-turn">
                         {{#if row.beat.turnNumber}}
-                          <span class="bbttcc-chip" title="Available on Turn {{row.beat.turnNumber}}">T{{row.beat.turnNumber}}</span>
+                          <span class="bbttcc-chip" data-tooltip="{{bbttccTip 'campaign' 'turn-chip'}}">T{{row.beat.turnNumber}}</span>
                         {{else}}
                           <span class="bbttcc-muted">—</span>
                         {{/if}}
                       </td>
-                      <td class="bbttcc-col-actions">
+                      <td class="bbttcc-col-actions" {{#if @first}}data-tour="campaign.beat-actions"{{/if}}>
                         <div class="bbttcc-actions-inline bbttcc-actions-inline-reorder">
-                          <div class="bbttcc-reorder-inline" title="Reorder">
-                            <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="move-beat-top" data-beat-id="{{row.beat.id}}" title="Move to top">⤒</button>
-                            <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="move-beat-up" data-beat-id="{{row.beat.id}}" title="Move up">▲</button>
-                            <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="move-beat-down" data-beat-id="{{row.beat.id}}" title="Move down">▼</button>
-                            <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="move-beat-bottom" data-beat-id="{{row.beat.id}}" title="Move to bottom">⤓</button>
-                            <input type="number" min="1" class="bbttcc-input bbttcc-input-xs bbttcc-reorder-index" value="{{row.n}}" data-action="set-beat-index" data-beat-id="{{row.beat.id}}" title="Set index (1-based)" />
+                          <div class="bbttcc-reorder-inline">
+                            <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="move-beat-top" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'move-top'}}">⤒</button>
+                            <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="move-beat-up" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'move-up'}}">▲</button>
+                            <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="move-beat-down" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'move-down'}}">▼</button>
+                            <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="move-beat-bottom" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'move-bottom'}}">⤓</button>
+                            <input type="number" min="1" class="bbttcc-input bbttcc-input-xs bbttcc-reorder-index" value="{{row.n}}" data-action="set-beat-index" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'set-index'}}" />
                           </div>
 
-                          <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="run-beat" data-beat-id="{{row.beat.id}}">▶ Run</button>
-                          <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="edit-beat" data-beat-id="{{row.beat.id}}">Edit</button>
+                          <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="run-beat" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'run-beat'}}">▶ Run</button>
+                          <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="edit-beat" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'edit-beat'}}">Edit</button>
 
                           <details class="bbttcc-actions-menu">
-                            <summary class="bbttcc-link-button">⋯</summary>
+                            <summary class="bbttcc-link-button" data-tooltip="{{bbttccTip 'campaign' 'beat-menu'}}">⋯</summary>
                             <div class="bbttcc-actions-menu-pop">
-                              {{#if (eq row.beat.type "encounter")}}
-                                <button type="button" class="bbttcc-link-button" data-action="generate-outcome-beats" data-beat-id="{{row.beat.id}}">Outcome Beats</button>
-                              {{/if}}
-                              <button type="button" class="bbttcc-link-button" data-action="duplicate-beat" data-beat-id="{{row.beat.id}}">Duplicate</button>
-                              <button type="button" class="bbttcc-link-button text-danger" data-action="delete-beat" data-beat-id="{{row.beat.id}}">Delete</button>
+                              <button type="button" class="bbttcc-link-button" data-action="duplicate-beat" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'duplicate-beat'}}">Duplicate</button>
+                              <button type="button" class="bbttcc-link-button text-danger" data-action="delete-beat" data-beat-id="{{row.beat.id}}" data-tooltip="{{bbttccTip 'campaign' 'delete-beat'}}">Delete</button>
                             </div>
                           </details>
                         </div>
@@ -344,53 +346,53 @@
       </section>
 
       {{!-- QUESTS TAB --}}
-      <section class="{{#unless (eq mainTab 'quests')}}is-hidden{{/unless}}" data-main-tab="quests">
+      <section class="{{#unless (eq mainTab 'quests')}}is-hidden{{/unless}}" data-main-tab="quests" data-tour="campaign.panel-quests">
         <section class="bbttcc-campaign-main-meta bbttcc-mt-12">
           <header class="bbttcc-beats-header bbttcc-beats-header-polish">
             <div class="bbttcc-beats-header-left">
-              <h4>Quests</h4>
+              <h4 data-tooltip="{{bbttccTip 'campaign' 'quests-list'}}">Quests</h4>
               <div class="bbttcc-muted bbttcc-beats-count"><span>{{questsFiltered.length}}</span></div>
             </div>
 
             <div class="bbttcc-beats-toolbar">
-              <div class="bbttcc-beats-filters bbttcc-gap-8">
-                <input type="text" class="bbttcc-input bbttcc-input-sm" placeholder="Search quests… (name/id)" value="{{questSearch}}" data-action="quest-search" />
-                <select class="bbttcc-select bbttcc-select-sm" data-action="quest-status">
+              <div class="bbttcc-beats-filters bbttcc-gap-8" data-tour="campaign.quests-filters">
+                <input type="text" class="bbttcc-input bbttcc-input-sm" placeholder="Search quests… (name/id)" value="{{questSearch}}" data-action="quest-search" data-tooltip="{{bbttccTip 'campaign' 'quest-search'}}" />
+                <select class="bbttcc-select bbttcc-select-sm" data-action="quest-status" data-tooltip="{{bbttccTip 'campaign' 'quest-status'}}">
                   <option value="all" {{#if (eq questStatusFilter "all")}}selected{{/if}}>All</option>
                   <option value="active" {{#if (eq questStatusFilter "active")}}selected{{/if}}>Active</option>
                   <option value="completed" {{#if (eq questStatusFilter "completed")}}selected{{/if}}>Completed</option>
                   <option value="archived" {{#if (eq questStatusFilter "archived")}}selected{{/if}}>Archived</option>
                 </select>
               </div>
-              <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="new-quest">+ New Quest</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-primary" data-action="new-quest" data-tour="campaign.quests-new" data-tooltip="{{bbttccTip 'campaign' 'new-quest'}}">+ New Quest</button>
             </div>
           </header>
 
           {{#if questsFiltered.length}}
-            <table class="bbttcc-table bbttcc-table-quests">
+            <table class="bbttcc-table bbttcc-table-quests" data-tour="campaign.quests-table">
               <thead>
                 <tr>
                   <th>Quest</th>
-                  <th>Status</th>
+                  <th data-tooltip="{{bbttccTip 'campaign' 'quest-status-chip'}}">Status</th>
                   <th class="bbttcc-col-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {{#each questsFiltered as |q|}}
-                  <tr>
+                  <tr {{#if @first}}data-tour="campaign.quest-row"{{/if}}>
                     <td>
                       <div class="bbttcc-strong">📜 {{q.name}}</div>
                       <div class="bbttcc-muted"><code>{{q.id}}</code></div>
                       {{#if q.description}}
                         <div class="bbttcc-muted bbttcc-desc-note">{{q.description}}</div>
                       {{/if}}
-                      <div class="bbttcc-quest-hexlinks bbttcc-mt-6">
+                      <div class="bbttcc-quest-hexlinks bbttcc-mt-6" {{#if @first}}data-tour="campaign.quest-hexlinks"{{/if}}>
                         <div class="bbttcc-row bbttcc-row-gap-sm bbttcc-items-center">
-                          <span class="bbttcc-muted bbttcc-fs-78">Linked Hexes ({{q.linkedHexCount}}):</span>
-                          <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-link-hex-pick" data-quest-id="{{q.id}}" title="Click a hex on the canvas to link">＋ Link Hex</button>
+                          <span class="bbttcc-muted bbttcc-fs-78" data-tooltip="{{bbttccTip 'campaign' 'hex-hint-status'}}">Linked Hexes ({{q.linkedHexCount}}):</span>
+                          <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-link-hex-pick" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'link-hex'}}">＋ Link Hex</button>
                           {{#if q.hasLinkedHexes}}
-                            <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-reveal-all-hints" data-quest-id="{{q.id}}" title="Mark every linked hex hint-visible">Reveal All Hints</button>
-                            <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-clear-all-hints" data-quest-id="{{q.id}}" title="Hide all hints (back to fog-gated)">Clear Hints</button>
+                            <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-reveal-all-hints" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'reveal-all-hints'}}">Reveal All Hints</button>
+                            <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-clear-all-hints" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'clear-all-hints'}}">Clear Hints</button>
                           {{/if}}
                         </div>
                         {{#if q.hasLinkedHexes}}
@@ -398,37 +400,37 @@
                             {{#each q.linkedHexes as |h|}}
                               <div class="bbttcc-row bbttcc-row-gap-sm bbttcc-hexlink-row">
                                 <span class="bbttcc-flex-auto">⬢ {{h.hexName}} <span class="bbttcc-muted bbttcc-fs-74">/ {{h.sceneName}}</span></span>
-                                <span class="bbttcc-chip bbttcc-hexstatus {{#if h.hinted}}is-hinted{{/if}}">{{#if h.hinted}}hinted{{else}}fog-gated{{/if}}</span>
-                                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-toggle-hex-hint" data-quest-id="{{../q.id}}" data-drawing-id="{{h.drawingId}}" data-scene-id="{{h.sceneId}}">{{#if h.hinted}}Hide{{else}}Reveal{{/if}}</button>
-                                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-pan-to-hex" data-drawing-id="{{h.drawingId}}" data-scene-id="{{h.sceneId}}" title="Pan canvas to this hex">⌖</button>
-                                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-unlink-hex" data-quest-id="{{../q.id}}" data-drawing-id="{{h.drawingId}}">✕</button>
+                                <span class="bbttcc-chip bbttcc-hexstatus {{#if h.hinted}}is-hinted{{/if}}" data-tooltip="{{bbttccTip 'campaign' 'hex-hint-status'}}">{{#if h.hinted}}hinted{{else}}fog-gated{{/if}}</span>
+                                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-toggle-hex-hint" data-quest-id="{{../q.id}}" data-drawing-id="{{h.drawingId}}" data-scene-id="{{h.sceneId}}" data-tooltip="{{bbttccTip 'campaign' 'toggle-hint'}}">{{#if h.hinted}}Hide{{else}}Reveal{{/if}}</button>
+                                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-pan-to-hex" data-drawing-id="{{h.drawingId}}" data-scene-id="{{h.sceneId}}" data-tooltip="{{bbttccTip 'campaign' 'pan-to-hex'}}">⌖</button>
+                                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="quest-unlink-hex" data-quest-id="{{../q.id}}" data-drawing-id="{{h.drawingId}}" data-tooltip="{{bbttccTip 'campaign' 'unlink-hex'}}">✕</button>
                               </div>
                             {{/each}}
                           </div>
                         {{/if}}
                       </div>
                     </td>
-                    <td><span class="bbttcc-chip bbttcc-chip-queststatus">{{q.status}}</span></td>
-                    <td class="bbttcc-col-actions">
+                    <td><span class="bbttcc-chip bbttcc-chip-queststatus" data-tooltip="{{bbttccTip 'campaign' 'quest-status-chip'}}">{{q.status}}</span></td>
+                    <td class="bbttcc-col-actions" {{#if @first}}data-tour="campaign.quest-actions"{{/if}}>
                       <div class="bbttcc-row bbttcc-row-gap-sm bbttcc-row-wrap bbttcc-quest-reorder bbttcc-justify-end">
-                        <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="quest-move-up" data-quest-id="{{q.id}}" title="Move up">▲</button>
-                        <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="quest-move-down" data-quest-id="{{q.id}}" title="Move down">▼</button>
+                        <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="quest-move-up" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'quest-move-up'}}">▲</button>
+                        <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-btn-ico" data-action="quest-move-down" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'quest-move-down'}}">▼</button>
                         <span class="bbttcc-inline-separator">·</span>
-                        <button type="button" class="bbttcc-link-button" data-action="edit-quest" data-quest-id="{{q.id}}">Edit</button>
+                        <button type="button" class="bbttcc-link-button" data-action="edit-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'edit-quest'}}">Edit</button>
                         <span class="bbttcc-inline-separator">·</span>
                         {{#if (eq q.status "active")}}
-                          <button type="button" class="bbttcc-link-button" data-action="complete-quest" data-quest-id="{{q.id}}">Complete</button>
+                          <button type="button" class="bbttcc-link-button" data-action="complete-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'complete-quest'}}">Complete</button>
                           <span class="bbttcc-inline-separator">·</span>
-                          <button type="button" class="bbttcc-link-button" data-action="archive-quest" data-quest-id="{{q.id}}">Archive</button>
+                          <button type="button" class="bbttcc-link-button" data-action="archive-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'archive-quest'}}">Archive</button>
                         {{else if (eq q.status "completed")}}
-                          <button type="button" class="bbttcc-link-button" data-action="reopen-quest" data-quest-id="{{q.id}}">Reopen</button>
+                          <button type="button" class="bbttcc-link-button" data-action="reopen-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'reopen-quest'}}">Reopen</button>
                           <span class="bbttcc-inline-separator">·</span>
-                          <button type="button" class="bbttcc-link-button" data-action="archive-quest" data-quest-id="{{q.id}}">Archive</button>
+                          <button type="button" class="bbttcc-link-button" data-action="archive-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'archive-quest'}}">Archive</button>
                         {{else}}
-                          <button type="button" class="bbttcc-link-button" data-action="reopen-quest" data-quest-id="{{q.id}}">Reopen</button>
+                          <button type="button" class="bbttcc-link-button" data-action="reopen-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'reopen-quest'}}">Reopen</button>
                         {{/if}}
                         <span class="bbttcc-inline-separator">·</span>
-                        <button type="button" class="bbttcc-link-button text-danger" data-action="delete-quest" data-quest-id="{{q.id}}">Delete</button>
+                        <button type="button" class="bbttcc-link-button text-danger" data-action="delete-quest" data-quest-id="{{q.id}}" data-tooltip="{{bbttccTip 'campaign' 'delete-quest'}}">Delete</button>
                       </div>
                     </td>
                   </tr>
@@ -442,26 +444,26 @@
       </section>
 
       {{!-- VISUALIZER TAB --}}
-      <section class="{{#unless (eq mainTab 'flow')}}is-hidden{{/unless}}" data-main-tab="flow">
+      <section class="{{#unless (eq mainTab 'flow')}}is-hidden{{/unless}}" data-main-tab="flow" data-tour="campaign.panel-flow">
         <section class="bbttcc-campaign-main-flow">
           <header class="bbttcc-beats-header bbttcc-beats-header-polish">
             <div class="bbttcc-beats-header-left">
-              <h4>Campaign Visualizer</h4>
+              <h4 data-tooltip="{{bbttccTip 'campaign' 'flow'}}">Campaign Visualizer</h4>
               <div class="bbttcc-muted bbttcc-beats-count">Org Chart</div>
             </div>
 
             <div class="bbttcc-beats-toolbar">
-              <div class="bbttcc-row bbttcc-row-gap-sm bbttcc-items-center">
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-toggle-travel">{{#if flowShowTravel}}Hide Travel{{else}}Show Travel{{/if}}</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-zoom-out">−</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-zoom-in">+</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-reset">Reset</button>
+              <div class="bbttcc-row bbttcc-row-gap-sm bbttcc-items-center" data-tour="campaign.flow-controls">
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-toggle-travel" data-tooltip="{{bbttccTip 'campaign' 'flow-toggle-travel'}}">{{#if flowShowTravel}}Hide Travel{{else}}Show Travel{{/if}}</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-zoom-out" data-tooltip="{{bbttccTip 'campaign' 'flow-zoom-out'}}">−</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-zoom-in" data-tooltip="{{bbttccTip 'campaign' 'flow-zoom-in'}}">+</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-reset" data-tooltip="{{bbttccTip 'campaign' 'flow-reset'}}">Reset</button>
               </div>
             </div>
           </header>
 
           <div class="bbttcc-muted bbttcc-m-hint">Drag to pan. Click a node to open the Beat Editor.</div>
-          <div data-role="flowviz"></div>
+          <div data-role="flowviz" data-tour="campaign.flow-canvas" data-tooltip="{{bbttccTip 'campaign' 'flow-canvas'}}"></div>
         </section>
       </section>
     </section>

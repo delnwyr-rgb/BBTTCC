@@ -4028,8 +4028,9 @@ Hooks.once("init", () => {
 
 // RFI strategic layer: reset faction Momentum each turn-advance.
 // Hook fired by bbttcc-campaign Turn Driver after an Advance Turn completes.
-Hooks.on("bbttcc:advanceTurn:end", async () => {
+Hooks.on("bbttcc:advanceTurn:end", async (ctx) => {
   try {
+    if (ctx?.apply === false) return; // dry-run preview — never zero banked momentum
     if (!game.user?.isGM) return;   // only the GM writes the reset
     for (const a of (game.actors?.contents ?? [])) {
       if (!isFactionActor(a)) continue;

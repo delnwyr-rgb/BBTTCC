@@ -182,36 +182,36 @@
     }
   </style>
 
-  <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;">
-    <h2 class="flex0">Campaign Overview</h2>
+  <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;" data-tour="overview.header">
+    <h2 class="flex0" data-tooltip="{{bbttccTip 'overview' 'header'}}">Campaign Overview</h2>
     <span class="flex1"></span>
-    <small class="flex0">Read-only summary across all scenes</small>
+    <small class="flex0" data-tooltip="{{bbttccTip 'overview' 'scope'}}">Read-only summary across all scenes</small>
   </header>
 
-  <table class="bbttcc-table" style="width:100%;">
+  <table class="bbttcc-table" style="width:100%;" data-tour="overview.table">
     <thead>
       <tr>
-        <th style="text-align:left;">Faction</th>
-        <th style="width:8rem;" data-col="power">Status</th>
-        <th style="width:6rem;">Hexes</th>
-        <th style="width:20rem;">Scenes</th>
-        <th style="width:20rem;">Resources (per turn)</th>
-        <th style="width:6rem;">Defense</th>
-        <th style="width:7rem;">Open</th>
+        <th style="text-align:left;" data-tooltip="{{bbttccTip 'overview' 'colFaction'}}">Faction</th>
+        <th style="width:8rem;" data-col="power" data-tooltip="{{bbttccTip 'overview' 'colStatus'}}">Status</th>
+        <th style="width:6rem;" data-tooltip="{{bbttccTip 'overview' 'colHexes'}}">Hexes</th>
+        <th style="width:20rem;" data-tooltip="{{bbttccTip 'overview' 'colScenes'}}">Scenes</th>
+        <th style="width:20rem;" data-tooltip="{{bbttccTip 'overview' 'colResources'}}">Resources (per turn)</th>
+        <th style="width:6rem;" data-tooltip="{{bbttccTip 'overview' 'colDefense'}}">Defense</th>
+        <th style="width:7rem;" data-tooltip="{{bbttccTip 'overview' 'colOpen'}}">Open</th>
       </tr>
     </thead>
     <tbody>
       {{#each rows}}
-      <tr>
+      <tr {{#if @first}}data-tour="overview.row"{{/if}}>
         <td>
           {{#if hasActor}}
             <strong>{{factionName}}</strong>
           {{else}}
-            <em>{{factionName}}</em>
+            <em data-tooltip="{{bbttccTip 'overview' 'rowUnclaimed'}}">{{factionName}}</em>
           {{/if}}
         </td>
 
-        <td class="center" data-col="power">
+        <td class="center" data-col="power" data-tooltip="{{bbttccTip 'overview' 'colStatus'}}">
           {{#if hasActor}}
             <span class="bbttcc-pill bbttcc-pill-primary">{{powerLabel}}</span>
           {{else}}
@@ -239,7 +239,7 @@
 
         <td class="center">
           {{#if hasActor}}
-            <button data-open-faction="{{factionId}}" title="Open faction sheet">
+            <button data-open-faction="{{factionId}}" data-tooltip="{{bbttccTip 'overview' 'colOpen'}}" {{#if @first}}data-tour="overview.open"{{/if}}>
               <i class="fas fa-user"></i> Open
             </button>
           {{else}} — {{/if}}
@@ -248,7 +248,7 @@
       {{/each}}
 
       {{#unless rows.length}}
-        <tr><td colspan="8" class="center"><em>No Bad Eden territory found in the world.</em></td></tr>
+        <tr><td colspan="7" class="center"><em>No Bad Eden territory found in the world.</em></td></tr>
       {{/unless}}
     </tbody>
   </table>

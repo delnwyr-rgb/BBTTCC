@@ -77,6 +77,65 @@ function findScroller(root) {
   return root?.querySelector?.(".window-content") || root;
 }
 
+/* ============== Help / tooltip dictionary (central registry) ==============
+   Registered into game.bbttcc.help (bbttcc-core) under appKey "dashboard" at
+   ready. Consumed two ways:
+     - template:  data-tooltip="{{bbttccTip 'dashboard' '<key>'}}"  (territory-dashboard.hbs)
+     - JS DOM:    game.bbttcc.help.tip("dashboard", "<key>")        (Sheet button enhancer)
+   Inert data-tour="dashboard.<key>" anchors in the template mark tour stops.
+   Style: "Name — what it is. What it does mechanically. When/why you'd use it."
+   Numbers are read from the actual engines: main.js (auto pips by type,
+   integration multipliers ×1.05/×1.10/×1.20, capital chrome), the size table
+   (×0.5…×3, defense +0…+4), advance-turn.tracks.js (turn income), and
+   overview-button.js (pristine-wilderness defaults for new/adopted hexes). */
+const DASHBOARD_TIPS = {
+  // ---- Header ----
+  header:     "Territory Dashboard — the GM's live spreadsheet for every territory hex on the current Scene. Owner, status, type, size, population, capital, and resource pips are all editable inline; each change saves straight onto the hex drawing (watch for the ✓ Saved toast).",
+  sceneScope: "Scene scope — this table lists only hexes placed on the Scene you are viewing. For the all-scenes, all-factions rollup, open the Campaign Overview instead.",
+  refresh:    "Refresh — re-scan the current Scene's drawings and redraw the table. Use it after creating, moving, or editing hexes outside this window; the dashboard also auto-refreshes when a hex is edited via the GM panel or API.",
+  planTravel: "Plan Travel — open the Travel Console to plot a route across the hex map. Travel resolves per-leg using each hex's terrain and tier.",
+  adoptHexes: "Adopt Hexes — flag this Scene's plain six-sided drawings as Bad Eden territory hexes so they appear in this table. Adopted hexes start as pristine wilderness: unclaimed, type Wilderness, uninhabited, capital off, all resource pips 0. The button only appears while unadopted 6-gons exist.",
+
+  // ---- Filter bar ----
+  filters:          "Filters — narrow the table without touching the hexes themselves. All active filters combine (AND); the counter on the right shows how many rows match. Filter choices survive refreshes and inline edits.",
+  filterName:       "Search — live, case-insensitive substring match on the hex name.",
+  filterOwner:      "Owner filter — show only hexes held by one faction, or only unclaimed hexes.",
+  filterStatus:     "Status filter — show only hexes in one claim state (Unclaimed, Contested, Occupied, Liberated).",
+  filterType:       "Type filter — show only one hex type (Settlement, Fortress, Mine, Farm…).",
+  filterTerrain:    "Terrain filter — show only one terrain. The list offers just the terrains actually in use on this Scene.",
+  filterSize:       "Size filter — show only hexes of one settlement scale (Outpost … Megalopolis).",
+  filterPopulation: "Population filter — show only hexes at one population level (Uninhabited, Low, Medium, High).",
+  filterCapital:    "Capital filter — show only capital hexes, or only non-capitals.",
+  filterStage:      "Integration stage filter — show only hexes at one development stage, from Untouched Wilderness (0) to Integrated Heartland (6).",
+  clearFilters:     "Clear — reset every filter at once and show all of this Scene's hexes again.",
+  filterCount:      "Match counter — how many hexes are currently shown versus the Scene's total after filtering.",
+
+  // ---- Table columns (the same tips ride the inline editors in each row) ----
+  colName:       "Name — the hex's display name, stored on the drawing. Rename it via Edit (GM Hex Config) or the Hex Sheet.",
+  colOwner:      "Owner — the faction that holds this hex. The owner collects its resource yields as OP each turn and defends it when raided; unclaimed hexes pay no one. Assigning an owner to an unclaimed hex flips its status to Occupied automatically.",
+  colStatus:     "Status — the hex's claim state: Unclaimed, Contested, Occupied, or Liberated. Setting a hex back to Unclaimed clears its owner automatically.",
+  colType:       "Type — what the hex is. When no manual pips are stored, type sets the auto-calculated base production: Farm 20 Food/5 Trade, Mine 20 Materials/5 Trade, Settlement 10 Trade/5 Military, Fortress 20 Military, Port 15 Trade/5 Food, Factory 15 Materials/5 Military, Research 20 Knowledge, Temple 10 Knowledge/5 Trade, Ruins 5 Materials.",
+  colTerrain:    "Terrain — the hex's physical terrain, set via the terrain selector on the map. Terrain drives travel costs and encounter tables; it is read-only in this table.",
+  colSize:       "Size — settlement scale. Multiplies the hex's base production (Outpost ×0.5, Village ×0.75, Town ×1, City ×1.5, Metropolis ×2, Megalopolis ×3) and adds intrinsic defense (Village/Town +1, City +2, Metropolis +3, Megalopolis +4).",
+  colPopulation: "Population — how peopled the hex is (Uninhabited → High). New and adopted hexes start Uninhabited as the pristine-wilderness signal; today this is a GM story dial rather than a production input.",
+  colIntegration:"Integration — development progress 0–6 with its stage name. At 3+ all production is multiplied ×1.05, at 5 ×1.10, at 6 ×1.20. It advances through the integration turn engine and acts of repair; adjust it via the Hex Sheet or GM tools, not here.",
+  colCapital:    "Capital — marks the faction's home hex. Capitals get gold crest chrome on the map and sort first in the faction sheet's territory list; the faction-creation wizard stamps one automatically. It is a marker, not a production bonus.",
+  colFood:       "Food — this hex's Food pips. Each turn the owner converts pips into OP marks, and Food also feeds Logistics 1:1. Edits save straight onto the hex.",
+  colMaterials:  "Materials — this hex's Materials pips. Converts to the owner's OP each turn, and every 2 Materials pips across a faction's hexes generate 1 Build Unit at end of turn.",
+  colTrade:      "Trade — this hex's Trade pips. Converts into the owning faction's OP marks each turn.",
+  colMilitary:   "Military — this hex's Military pips. Converts into the owning faction's OP marks each turn.",
+  colKnowledge:  "Knowledge — this hex's Knowledge pips. Converts into the owning faction's OP marks each turn.",
+  colXY:         "X,Y — the drawing's canvas coordinates on this Scene. Use Focus to pan the camera there.",
+  colCreated:    "Created — when this drawing was first flagged as a territory hex.",
+  colActions:    "Actions — per-hex tools: Focus pans the canvas, Edit opens the GM Hex Config, Sheet opens the full Hex Sheet, Delete removes the drawing.",
+
+  // ---- Row actions ----
+  rowFocus:  "Focus — pan and zoom the canvas to this hex.",
+  rowEdit:   "Edit — open the GM Hex Config (claim/configure) for this hex. With GM Edit Mode on, the hex's UUID is also surfaced for scripting.",
+  rowDelete: "Delete — permanently remove this hex drawing from the Scene (asks for confirmation). The claim, pips, and history stored on the drawing are lost with it.",
+  rowSheet:  "Sheet — open this hex's full Hex Sheet: yields, resource nodes, Build Units, Holdings, dossier, and improvement timeline."
+};
+
 /* ---------- AppV2 (Handlebars parts) ---------- */
 export class BBTTCC_TerritoryDashboard extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
 
@@ -481,6 +540,10 @@ globalThis.BBTTCC_TerritoryDashboardCtor = BBTTCC_TerritoryDashboard;
 Hooks.once("ready", () => {
   game.bbttcc = game.bbttcc || {};
   game.bbttcc.apps = game.bbttcc.apps || {};
+
+  // Explanation tooltips → central registry (bbttcc-core). Guarded: no-op when
+  // bbttcc-core is disabled; the {{bbttccTip}} helper then renders "".
+  try { game.bbttcc?.help?.register?.("dashboard", DASHBOARD_TIPS); } catch (_eHelp) {}
 
   // Live refresh: if a hex is edited via GM panel / API, re-render dashboard so values update.
   Hooks.on("bbttcc:territory:hexUpdated", (_payload) => {

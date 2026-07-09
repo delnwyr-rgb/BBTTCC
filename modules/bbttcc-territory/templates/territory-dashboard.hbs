@@ -270,31 +270,31 @@
     }
   </style>
 
-  <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;">
-    <h2 class="flex0">{{localize "BBTTCC.Dashboard.Title"}} – {{sceneName}}</h2>
+  <header class="flexrow" style="gap:.5rem; align-items:center; margin-bottom:.5rem;" data-tour="dashboard.header">
+    <h2 class="flex0" data-tooltip="{{bbttccTip 'dashboard' 'header'}}">{{localize "BBTTCC.Dashboard.Title"}} – {{sceneName}}</h2>
 
-    <button class="flex0" data-action="refresh" title="Refresh the list">
+    <button class="flex0" data-action="refresh" data-tooltip="{{bbttccTip 'dashboard' 'refresh'}}" data-tour="dashboard.refresh">
       <i class="fas fa-sync"></i> Refresh
     </button>
 
-    <button class="flex0" data-action="open-travel-console" title="Plan a travel route across the hex map">
+    <button class="flex0" data-action="open-travel-console" data-tooltip="{{bbttccTip 'dashboard' 'planTravel'}}" data-tour="dashboard.planTravel">
       <i class="fas fa-route"></i> Plan Travel
     </button>
 
     {{#if adoptionCount}}
-    <button class="flex0" data-action="adopt-hexes" title="Flag plain 6-gon drawings as territory hexes">
+    <button class="flex0" data-action="adopt-hexes" data-tooltip="{{bbttccTip 'dashboard' 'adoptHexes'}}" data-tour="dashboard.adoptHexes">
       <i class="fas fa-plus-square"></i> Adopt {{adoptionCount}} Hexes
     </button>
     {{/if}}
 
     <span class="flex1"></span>
-    <small class="flex0">Only hexes actually placed in this Scene are shown.</small>
+    <small class="flex0" data-tooltip="{{bbttccTip 'dashboard' 'sceneScope'}}">Only hexes actually placed in this Scene are shown.</small>
   </header>
 
-  <div class="bbttcc-filters">
-    <input type="search" data-filter="name" placeholder="Search name…" autocomplete="off" />
+  <div class="bbttcc-filters" data-tooltip="{{bbttccTip 'dashboard' 'filters'}}" data-tour="dashboard.filters">
+    <input type="search" data-filter="name" placeholder="Search name…" autocomplete="off" data-tooltip="{{bbttccTip 'dashboard' 'filterName'}}" />
 
-    <select data-filter="owner" title="Filter by owner">
+    <select data-filter="owner" data-tooltip="{{bbttccTip 'dashboard' 'filterOwner'}}">
       <option value="">All owners</option>
       <option value="__unclaimed__">(Unclaimed)</option>
       {{#each ownerList}}
@@ -302,7 +302,7 @@
       {{/each}}
     </select>
 
-    <select data-filter="status" title="Filter by status">
+    <select data-filter="status" data-tooltip="{{bbttccTip 'dashboard' 'filterStatus'}}">
       <option value="">All statuses</option>
       <option value="unclaimed">Unclaimed</option>
       <option value="contested">Contested</option>
@@ -310,7 +310,7 @@
       <option value="liberated">Liberated</option>
     </select>
 
-    <select data-filter="type" title="Filter by type">
+    <select data-filter="type" data-tooltip="{{bbttccTip 'dashboard' 'filterType'}}">
       <option value="">All types</option>
       <option value="settlement">Settlement</option>
       <option value="fortress">Fortress</option>
@@ -325,14 +325,14 @@
       <option value="ruins">Ruins</option>
     </select>
 
-    <select data-filter="terrain" title="Filter by terrain">
+    <select data-filter="terrain" data-tooltip="{{bbttccTip 'dashboard' 'filterTerrain'}}">
       <option value="">All terrain</option>
       {{#each terrainList}}
         <option value="{{key}}">{{label}}</option>
       {{/each}}
     </select>
 
-    <select data-filter="size" title="Filter by size">
+    <select data-filter="size" data-tooltip="{{bbttccTip 'dashboard' 'filterSize'}}">
       <option value="">All sizes</option>
       <option value="none">None</option>
       <option value="outpost">Outpost</option>
@@ -343,7 +343,7 @@
       <option value="megalopolis">Megalopolis</option>
     </select>
 
-    <select data-filter="population" title="Filter by population">
+    <select data-filter="population" data-tooltip="{{bbttccTip 'dashboard' 'filterPopulation'}}">
       <option value="">All populations</option>
       <option value="uninhabited">Uninhabited</option>
       <option value="low">Low</option>
@@ -351,13 +351,13 @@
       <option value="high">High</option>
     </select>
 
-    <select data-filter="capital" title="Filter by capital flag">
+    <select data-filter="capital" data-tooltip="{{bbttccTip 'dashboard' 'filterCapital'}}">
       <option value="">Capital: All</option>
       <option value="yes">Capital</option>
       <option value="no">Non-capital</option>
     </select>
 
-    <select data-filter="integrationStage" title="Filter by integration stage">
+    <select data-filter="integrationStage" data-tooltip="{{bbttccTip 'dashboard' 'filterStage'}}">
       <option value="">All stages</option>
       <option value="wild">Untouched Wilderness</option>
       <option value="outpost">Foothold / Outpost</option>
@@ -366,39 +366,40 @@
       <option value="integrated">Integrated Heartland</option>
     </select>
 
-    <button type="button" data-action="clear-filters" title="Clear all filters">
+    <button type="button" data-action="clear-filters" data-tooltip="{{bbttccTip 'dashboard' 'clearFilters'}}">
       <i class="fas fa-times"></i> Clear
     </button>
 
-    <span class="bbttcc-filter-count" data-role="filter-count"></span>
+    <span class="bbttcc-filter-count" data-role="filter-count" data-tooltip="{{bbttccTip 'dashboard' 'filterCount'}}" data-tour="dashboard.filterCount"></span>
   </div>
 
-  <table class="bbttcc-table">
+  <table class="bbttcc-table" data-tour="dashboard.table">
     <thead>
       <tr>
-        <th style="width:10rem;">Name</th>
-        <th>Owner</th>
-        <th>Status</th>
-        <th>Type</th>
-        <th>Terrain</th>
-        <th>Size</th>
-        <th>Population</th>
-        <th>Integration</th>
-        <th>Capital</th>
-        <th>Food</th>
-        <th>Materials</th>
-        <th>Trade</th>
-        <th>Military</th>
-        <th>Knowledge</th>
-        <th>X,Y</th>
-        <th>Created</th>
-        <th>Actions</th>
+        <th style="width:10rem;" data-tooltip="{{bbttccTip 'dashboard' 'colName'}}">Name</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colOwner'}}">Owner</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colStatus'}}">Status</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colType'}}">Type</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colTerrain'}}">Terrain</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colSize'}}">Size</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colPopulation'}}">Population</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colIntegration'}}">Integration</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colCapital'}}">Capital</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colFood'}}">Food</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colMaterials'}}">Materials</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colTrade'}}">Trade</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colMilitary'}}">Military</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colKnowledge'}}">Knowledge</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colXY'}}">X,Y</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colCreated'}}">Created</th>
+        <th data-tooltip="{{bbttccTip 'dashboard' 'colActions'}}">Actions</th>
       </tr>
     </thead>
 
     <tbody>
       {{#each rows}}
       <tr class="bbttcc-hex-row"
+          {{#if @first}}data-tour="dashboard.row"{{/if}}
           data-name="{{name}}"
           data-owner="{{ownerId}}"
           data-status="{{status}}"
@@ -415,7 +416,7 @@
         </td>
 
         <td>
-          <select data-edit="factionId" data-id="{{id}}">
+          <select data-edit="factionId" data-id="{{id}}" data-tooltip="{{bbttccTip 'dashboard' 'colOwner'}}">
             <option value="">{{localize "BBTTCC.Common.Unclaimed"}}</option>
             {{#if ../ownerList}}
               {{#each ../ownerList}}
@@ -426,7 +427,7 @@
         </td>
 
         <td>
-          <select data-edit="status" data-id="{{id}}">
+          <select data-edit="status" data-id="{{id}}" data-tooltip="{{bbttccTip 'dashboard' 'colStatus'}}">
             <option value="unclaimed" {{#if (bbttcc_eq status "unclaimed")}}selected{{/if}}>Unclaimed</option>
             <option value="contested" {{#if (bbttcc_eq status "contested")}}selected{{/if}}>Contested</option>
             <option value="occupied"  {{#if (bbttcc_eq status "occupied")}}selected{{/if}}>Occupied</option>
@@ -435,7 +436,7 @@
         </td>
 
         <td>
-          <select data-edit="type" data-id="{{id}}">
+          <select data-edit="type" data-id="{{id}}" data-tooltip="{{bbttccTip 'dashboard' 'colType'}}">
             <option value="settlement" {{#if (bbttcc_eq type "settlement")}}selected{{/if}}>Settlement</option>
             <option value="fortress"   {{#if (bbttcc_eq type "fortress")}}selected{{/if}}>Fortress</option>
             <option value="mine"       {{#if (bbttcc_eq type "mine")}}selected{{/if}}>Mine</option>
@@ -457,7 +458,7 @@
         </td>
 
         <td>
-          <select data-edit="size" data-id="{{id}}">
+          <select data-edit="size" data-id="{{id}}" data-tooltip="{{bbttccTip 'dashboard' 'colSize'}}">
             <option value="none"       {{#if (bbttcc_eq size "none")}}selected{{/if}}>None (×0.0)</option>
             <option value="outpost"     {{#if (bbttcc_eq size "outpost")}}selected{{/if}}     {{#if (bbttcc_eq size "small")}}selected{{/if}}>Outpost (×0.5)</option>
             <option value="village"     {{#if (bbttcc_eq size "village")}}selected{{/if}}>Village (×0.75)</option>
@@ -469,7 +470,7 @@
         </td>
 
         <td>
-          <select data-edit="population" data-id="{{id}}">
+          <select data-edit="population" data-id="{{id}}" data-tooltip="{{bbttccTip 'dashboard' 'colPopulation'}}">
             <option value="uninhabited" {{#if (bbttcc_eq population "uninhabited")}}selected{{/if}}>Uninhabited (0)</option>
             <option value="low"    {{#if (bbttcc_eq population "low")}}selected{{/if}}>Low</option>
             <option value="medium" {{#if (bbttcc_eq population "medium")}}selected{{/if}}>Medium</option>
@@ -477,7 +478,7 @@
           </select>
         </td>
 
-        <td data-col="integration">
+        <td data-col="integration" data-tooltip="{{bbttccTip 'dashboard' 'colIntegration'}}">
           <div style="white-space:nowrap;">
             <strong>{{integrationProgress}} / {{integrationMax}}</strong><br/>
             <small>
@@ -487,28 +488,28 @@
         </td>
 
         <td class="center">
-          <input type="checkbox" data-edit="capital" data-id="{{id}}" {{#if capital}}checked{{/if}}/>
+          <input type="checkbox" data-edit="capital" data-id="{{id}}" data-tooltip="{{bbttccTip 'dashboard' 'colCapital'}}" {{#if capital}}checked{{/if}}/>
         </td>
 
         <!-- Resources -->
-        <td><input type="number" data-edit="resources.food"      data-id="{{id}}" value="{{resources.food}}"      style="width:4rem;" /></td>
-        <td><input type="number" data-edit="resources.materials" data-id="{{id}}" value="{{resources.materials}}" style="width:4rem;" /></td>
-        <td><input type="number" data-edit="resources.trade"     data-id="{{id}}" value="{{resources.trade}}"     style="width:4rem;" /></td>
-        <td><input type="number" data-edit="resources.military"  data-id="{{id}}" value="{{resources.military}}"  style="width:4rem;" /></td>
-        <td><input type="number" data-edit="resources.knowledge" data-id="{{id}}" value="{{resources.knowledge}}" style="width:4rem;" /></td>
+        <td><input type="number" data-edit="resources.food"      data-id="{{id}}" value="{{resources.food}}"      style="width:4rem;" data-tooltip="{{bbttccTip 'dashboard' 'colFood'}}" /></td>
+        <td><input type="number" data-edit="resources.materials" data-id="{{id}}" value="{{resources.materials}}" style="width:4rem;" data-tooltip="{{bbttccTip 'dashboard' 'colMaterials'}}" /></td>
+        <td><input type="number" data-edit="resources.trade"     data-id="{{id}}" value="{{resources.trade}}"     style="width:4rem;" data-tooltip="{{bbttccTip 'dashboard' 'colTrade'}}" /></td>
+        <td><input type="number" data-edit="resources.military"  data-id="{{id}}" value="{{resources.military}}"  style="width:4rem;" data-tooltip="{{bbttccTip 'dashboard' 'colMilitary'}}" /></td>
+        <td><input type="number" data-edit="resources.knowledge" data-id="{{id}}" value="{{resources.knowledge}}" style="width:4rem;" data-tooltip="{{bbttccTip 'dashboard' 'colKnowledge'}}" /></td>
 
         <td><code>{{x}}, {{y}}</code></td>
         <td><small>{{createdAt}}</small></td>
 
         <td>
-          <div class="flexrow" style="gap:.25rem; justify-content:flex-end;">
-            <button data-action="focus" data-id="{{id}}" title="{{localize 'BBTTCC.Common.Focus'}}">
+          <div class="flexrow" style="gap:.25rem; justify-content:flex-end;" {{#if @first}}data-tour="dashboard.actions"{{/if}}>
+            <button data-action="focus" data-id="{{id}}" data-tooltip="{{bbttccTip 'dashboard' 'rowFocus'}}">
               <i class="fas fa-crosshairs"></i> {{localize "BBTTCC.Common.Focus"}}
             </button>
-            <button data-action="edit" data-id="{{id}}" data-uuid="{{uuid}}" title="Edit this hex">
+            <button data-action="edit" data-id="{{id}}" data-uuid="{{uuid}}" data-tooltip="{{bbttccTip 'dashboard' 'rowEdit'}}">
               <i class="fas fa-flag"></i> Edit
             </button>
-            <button data-action="delete" data-id="{{id}}" data-uuid="{{uuid}}" title="Delete this hex">
+            <button data-action="delete" data-id="{{id}}" data-uuid="{{uuid}}" data-tooltip="{{bbttccTip 'dashboard' 'rowDelete'}}">
               <i class="fas fa-trash"></i> Delete
             </button>
           </div>

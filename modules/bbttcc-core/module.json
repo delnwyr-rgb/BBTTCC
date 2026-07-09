@@ -2,7 +2,7 @@
   "id": "bbttcc-core",
   "title": "Strategic Layer Core",
   "description": "Core registry for the strategic-layer engines (factions, territory, raid, campaign).",
-  "version": "13.1.16",
+  "version": "13.1.17",
   "compatibility": {
     "minimum": "12",
     "verified": "14"
@@ -13,6 +13,7 @@
     }
   ],
   "esmodules": [
+    "scripts/bbttcc-help.js",
     "scripts/window-defaults.enhancer.js",
     "scripts/module.js",
     "scripts/story.gottgait.js",

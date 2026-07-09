@@ -2,7 +2,7 @@
   "id": "bbttcc-onboarding",
   "title": "Bad Eden — Onboarding",
   "description": "Diegetic tutorial/onboarding flow. The Operator — a glitchy tutorial daemon voiced on top of Mal — walks new Stewards through incarnation, testing their meatsuit and rig, hex stewardship + the Turn cycle, and a hostile-hex finale (violence / intrigue / diplomacy raids) before graduating into live Bad Eden. Players practice on their REAL steward, rig and faction.",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "authors": [
     {
       "name": "Shattered Lens Studios"
@@ -29,7 +29,11 @@
     "scripts/relay.js",
     "scripts/stage.js",
     "scripts/director.js",
-    "scripts/beats.js"
+    "scripts/beats.js",
+    "scripts/tours.js",
+    "scripts/tour-defs.js",
+    "scripts/tour-beats.js",
+    "scripts/incarnation-forge.js"
   ],
   "styles": [
     "styles/onboarding.css"

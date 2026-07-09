@@ -2,7 +2,7 @@
   "id": "bbttcc-campaign",
   "title": "Campaign Beat Builder",
   "description": "Campaign authoring engine: multi-beat adventures, branching flows, scene/actor integration, and beat-level tracking.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": {
     "minimum": "13",
     "verified": "13"
@@ -20,15 +20,13 @@
     "scripts/audio/beat-audio-manager.js",
     "scripts/module.js",
     "scripts/world-mutation-engine.js",
-    "scripts/campaign-toolbar-button.js",
-    "scripts/story-console-bridge.js"
+    "scripts/campaign-toolbar-button.js"
   ],
   "styles": [
     "styles/campaign-builder.css",
     "styles/bbttcc-campaign-polish.css",
     "styles/bbttcc-campaign-contrast-hotfix.css",
-    "styles/bbttcc-campaign-builder-pass3.css",
-    "styles/bbttcc-campaign-story-bridge.css"
+    "styles/bbttcc-campaign-builder-pass3.css"
   ],
   "socket": true,
   "relationships": {

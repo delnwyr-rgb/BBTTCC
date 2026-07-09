@@ -1,11 +1,12 @@
 {{!-- modules/bbttcc-facility-console/templates/facility-config-app.hbs --}}
 {{!-- RETIRED 2026-05-08 — replaced by Rig actor sheet (mobility=stationary). --}}
 {{!-- Original 272-line form preserved at facility-config-app.hbs.legacy-2026-05-08 --}}
+{{!-- Tooltips: central registry appKey "facilities" (registered in facility-console.js). --}}
 
-<form class="bbttcc-facility-config-shim" autocomplete="off" style="height:100%;display:flex;flex-direction:column;min-height:0;padding:1rem;">
+<form class="bbttcc-facility-config-shim" autocomplete="off" data-tour="facilities.console" style="height:100%;display:flex;flex-direction:column;min-height:0;padding:1rem;">
   <div class="bbttcc-card" style="padding:1rem;border:1px solid #d4a35f;background:rgba(212,163,95,0.08);border-radius:6px;">
 
-    <h2 style="margin-top:0;color:#ffd28a;">Facility Config — Retired</h2>
+    <h2 style="margin-top:0;color:#ffd28a;" data-tooltip="{{bbttccTip 'facilities' 'retired'}}" data-tour="facilities.retired">Facility Config — Retired</h2>
 
     <p style="line-height:1.5;">
       Facilities were unified with rigs in the
@@ -21,19 +22,19 @@
     </p>
 
     <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;">
-      <button type="button" class="bbttcc-button primary" data-ft-shim-action="create-facility" style="padding:.5rem .9rem;">
+      <button type="button" class="bbttcc-button primary" data-ft-shim-action="create-facility" data-tooltip="{{bbttccTip 'facilities' 'createFacility'}}" data-tour="facilities.createFacility" style="padding:.5rem .9rem;">
         <i class="fas fa-plus"></i>&nbsp;Create New Facility (Stationary Rig)
       </button>
-      <button type="button" class="bbttcc-button" data-ft-shim-action="open-actors-rigs" style="padding:.5rem .9rem;">
+      <button type="button" class="bbttcc-button" data-ft-shim-action="open-actors-rigs" data-tooltip="{{bbttccTip 'facilities' 'openActors'}}" data-tour="facilities.openActors" style="padding:.5rem .9rem;">
         <i class="fas fa-list"></i>&nbsp;Open Actors Directory
       </button>
-      <button type="button" class="bbttcc-button" data-ft-shim-action="show-legacy" style="padding:.5rem .9rem;">
+      <button type="button" class="bbttcc-button" data-ft-shim-action="show-legacy" data-tooltip="{{bbttccTip 'facilities' 'showLegacy'}}" data-tour="facilities.showLegacy" style="padding:.5rem .9rem;">
         <i class="fas fa-archive"></i>&nbsp;Show Legacy Audit Data
       </button>
     </div>
 
-    <details style="margin-top:1rem;">
-      <summary style="cursor:pointer;color:#d4a35f;">Why unified?</summary>
+    <details style="margin-top:1rem;" data-tour="facilities.whyUnified">
+      <summary style="cursor:pointer;color:#d4a35f;" data-tooltip="{{bbttccTip 'facilities' 'whyUnified'}}">Why unified?</summary>
       <p style="line-height:1.6;color:#ccc;font-size:0.85rem;">
         A facility <em>is</em> a rig that doesn't move. Mobile rigs become stationary
         when they park; hybrid rigs (sail barges, mobile facilities) toggle between modes.

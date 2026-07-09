@@ -118,8 +118,9 @@
   }
 
   Hooks.once("ready", () => {
-    Hooks.on("bbttcc:advanceTurn:end", async (...args) => {
+    Hooks.on("bbttcc:advanceTurn:end", async (ctx) => {
       try {
+        if (ctx?.apply === false) return; // dry-run preview — no derived-pressure writes
         // Defer one tick so garrison upkeep + facility effects + war logs settle first.
         await new Promise(resolve => setTimeout(resolve, 0));
         await writePressureForAll();

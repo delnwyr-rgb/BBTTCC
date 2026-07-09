@@ -366,6 +366,71 @@ function turnEffectPresetOptions() {
   return FACILITY_TURN_EFFECT_PRESETS.map((preset) => ({ key: preset.key, label: preset.name }));
 }
 
+/* ===================== Help / tooltip dictionary (central registry) =====================
+
+   Registered into game.bbttcc.help (bbttcc-core) under appKey "facilities" at ready.
+   Consumed three ways:
+     - templates:   data-tooltip="{{bbttccTip 'facilities' '<key>'}}"
+     - JS DOM:      _tipAttr("<key>") in the legacy row builders below
+     - tours:       inert data-tour="facilities.<key>" anchors use the same keys.
+   Style: "Name — what it is. What it does mechanically. When/why you'd use it."
+
+   NOTE: the live UI is the 2026-05-08 retirement shim (facility-config-app.hbs) —
+   three routing buttons. The legacy form logic in this class (row builders, chip
+   pickers, save) is dormant: it targets form.bbttcc-facility-config-form, which the
+   shim template no longer renders. Legacy-row keys are kept registered so the tips
+   survive if that form is ever restored, and so the engines' behavior stays
+   documented in one place.
+*/
+const FACILITY_TIPS = {
+  // ---- Live retirement shim ----
+  console:
+    "Facility Console — the legacy hex-bound facility editor, retired 2026-05-08. A facility is now a stationary Rig actor (mobility 'stationary') authored on the Rig sheet with the same gear catalog and defense engine as mobile rigs. This window only routes you to that new authoring path; legacy facility data already saved on the hex is preserved and still read by the raid and turn engines.",
+  retired:
+    "Retired notice — why this editor is gone. Since the 2026-05-07 Rig & Boss Modernization Sprint, a facility is simply a Rig actor that does not move (hybrid rigs toggle between mobile and stationary). Nothing in this window edits the hex anymore.",
+  createFacility:
+    "GM — Create New Facility (Stationary Rig) — creates a fresh Rig actor named 'New Facility' with mobility 'stationary' (state 'parked'), opens its sheet, and closes this window. Author everything there: modules, defenses, hex binding. Creating world Actors needs the Create Actors permission, so in practice this is a GM button.",
+  openActors:
+    "Open Actors Directory — brings the Actors sidebar tab forward so you can find existing facilities. Filter by actor type 'rig' — stationary rigs are your facilities.",
+  showLegacy:
+    "GM — Show Legacy Audit Data — prints the preserved pre-unification rig/facility flag JSON below the buttons, read-only, so old data can be audited or hand-migrated onto a Rig actor. Never edits anything.",
+  whyUnified:
+    "Why unified? — design note. One actor type means an output module works identically on a Forge Facility (full output) or a War Rig deployed to a scene (50% output during deployment). One catalog, one defense engine, infinite flavor.",
+
+  // ---- Legacy JS-built upgrade rows (dormant unless the pre-2026-05-08 form returns) ----
+  upgradeRow:
+    "Upgrades — structural improvements recorded on the facility (walls, gatehouse, stores…). Each row is stored on the hex's primary facility on Save; costs are bookkeeping in MARKS (1 OP = 10 marks).",
+  upgradeKey:
+    "Key — machine id for this upgrade (e.g. 'reinforced-walls'). Stored with the upgrade record on the hex; keep it unique per facility.",
+  upgradeName: "Name — the upgrade's display name.",
+  upgradeTier:
+    "Tier — the upgrade's own tier rating (presets ship at Tier 1–2). Stored on the record; informational grouping only.",
+  upgradeSdrBonus:
+    "SDR Bonus — intended bump to the facility's Structure Defense Rating from this upgrade. Stored on the upgrade record; no engine currently sums it automatically, so fold it into the facility's SDR by hand.",
+  upgradeCost:
+    "Cost — the upgrade's recorded price per OP pool, in MARKS (1 OP = 10 marks). Bookkeeping only: this console does not charge it (Market facility-upgrade purchases charge their own catalog price).",
+  upgradeDescription: "Description — flavor / rules text for the upgrade.",
+  upgradeRemove: "Remove — deletes this upgrade row from the facility. Takes effect on Save.",
+
+  // ---- Legacy JS-built per-turn effect rows ----
+  effectRow:
+    "Per-turn effects — OP income/upkeep this facility generates for its owning faction every Advance Turn (Apply), read by the bbttcc-territory turn engine while 'auto-apply turn effects' is on.",
+  effectKey:
+    "Key — machine id for this per-turn effect (e.g. 'castle-economy-hub'). Named in the GM 'Facility Turn Effects' summary whisper each turn.",
+  effectName: "Name — the effect's display name.",
+  effectDescription: "Description — what the effect represents in fiction.",
+  effectDelta:
+    "Per-turn OP delta — MARKS (1 OP = 10 marks) added to (positive) or drained from (negative) the owning faction's OP bank in each pool, applied on Advance Turn (Apply only). Fires only while the facility's 'auto-apply turn effects' integration flag is on; the OP engine refuses the whole commit if it would underflow, and GMs get a summary whisper either way.",
+  effectRemove: "Remove — deletes this per-turn effect row. Takes effect on Save."
+};
+
+// data-tooltip attribute snippet for JS-built HTML strings (legacy row builders).
+// Guarded: bbttcc-core may be disabled, in which case this renders nothing.
+function _tipAttr(key) {
+  const t = game.bbttcc?.help?.tip?.("facilities", key) || "";
+  return t ? ` data-tooltip="${foundry.utils.escapeHTML(t)}"` : "";
+}
+
 const _appApi = foundry?.applications?.api || {};
 const AppV2 = _appApi.ApplicationV2 || globalThis.Application || Application;
 const HBM = _appApi.HandlebarsApplicationMixin || ((Base) => class extends Base {});
@@ -539,6 +604,11 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
 
   _syncUpgradesField(form) {
     const rows = Array.from(form.querySelectorAll(".bbttcc-facility-upgrade-row"));
+    // Stable tour anchor on the FIRST row only (kept correct across add/remove).
+    rows.forEach((row, i) => {
+      if (i === 0) row.dataset.tour = "facilities.upgradeRow";
+      else delete row.dataset.tour;
+    });
     const upgrades = rows.map((row) => normalizeUpgrade({
       key: row.querySelector('[data-field="key"]')?.value,
       name: row.querySelector('[data-field="name"]')?.value,
@@ -560,6 +630,11 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
 
   _syncTurnEffectsField(form) {
     const rows = Array.from(form.querySelectorAll(".bbttcc-facility-turn-effect-row"));
+    // Stable tour anchor on the FIRST row only (kept correct across add/remove).
+    rows.forEach((row, i) => {
+      if (i === 0) row.dataset.tour = "facilities.effectRow";
+      else delete row.dataset.tour;
+    });
     const effects = rows.map((row) => normalizeTurnEffect({
       key: row.querySelector('[data-field="key"]')?.value,
       name: row.querySelector('[data-field="name"]')?.value,
@@ -594,12 +669,12 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
     return `
       <article class="bbttcc-facility-upgrade-row">
         <div class="bbttcc-inline-grid bbttcc-grid-upgrade-top">
-          <div class="field"><label>Key</label><input type="text" data-field="key" value="${foundry.utils.escapeHTML(u.key)}"></div>
-          <div class="field"><label>Name</label><input type="text" data-field="name" value="${foundry.utils.escapeHTML(u.name)}"></div>
-          <div class="field"><label>Tier</label><input type="number" min="0" data-field="tier" value="${u.tier}"></div>
-          <div class="field"><label>SDR Bonus</label><input type="number" data-field="structureDefenseRatingBonus" value="${u.structureDefenseRatingBonus}"></div>
+          <div class="field"${_tipAttr("upgradeKey")}><label>Key</label><input type="text" data-field="key" value="${foundry.utils.escapeHTML(u.key)}"></div>
+          <div class="field"${_tipAttr("upgradeName")}><label>Name</label><input type="text" data-field="name" value="${foundry.utils.escapeHTML(u.name)}"></div>
+          <div class="field"${_tipAttr("upgradeTier")}><label>Tier</label><input type="number" min="0" data-field="tier" value="${u.tier}"></div>
+          <div class="field"${_tipAttr("upgradeSdrBonus")}><label>SDR Bonus</label><input type="number" data-field="structureDefenseRatingBonus" value="${u.structureDefenseRatingBonus}"></div>
         </div>
-        <div class="bbttcc-inline-grid bbttcc-grid-upgrade-costs">
+        <div class="bbttcc-inline-grid bbttcc-grid-upgrade-costs"${_tipAttr("upgradeCost")}>
           <div class="field"><label>Violence</label><input type="number" data-field="costViolence" value="${u.opCost.violence}"></div>
           <div class="field"><label>Economy</label><input type="number" data-field="costEconomy" value="${u.opCost.economy}"></div>
           <div class="field"><label>Logistics</label><input type="number" data-field="costLogistics" value="${u.opCost.logistics}"></div>
@@ -608,8 +683,8 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
           <div class="field"><label>Soft Power</label><input type="number" data-field="costSoftpower" value="${u.opCost.softpower}"></div>
         </div>
         <div class="bbttcc-row-actions-grid">
-          <div class="field full"><label>Description</label><textarea data-field="description" rows="2">${foundry.utils.escapeHTML(u.description)}</textarea></div>
-          <div class="bbttcc-row-actions"><button type="button" class="bbttcc-button secondary" data-action="remove-upgrade">Remove</button></div>
+          <div class="field full"${_tipAttr("upgradeDescription")}><label>Description</label><textarea data-field="description" rows="2">${foundry.utils.escapeHTML(u.description)}</textarea></div>
+          <div class="bbttcc-row-actions"><button type="button" class="bbttcc-button secondary" data-action="remove-upgrade"${_tipAttr("upgradeRemove")}>Remove</button></div>
         </div>
       </article>`;
   }
@@ -619,11 +694,11 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
     return `
       <article class="bbttcc-facility-turn-effect-row">
         <div class="bbttcc-inline-grid bbttcc-grid-effect-top">
-          <div class="field"><label>Key</label><input type="text" data-field="key" value="${foundry.utils.escapeHTML(e.key)}"></div>
-          <div class="field"><label>Name</label><input type="text" data-field="name" value="${foundry.utils.escapeHTML(e.name)}"></div>
+          <div class="field"${_tipAttr("effectKey")}><label>Key</label><input type="text" data-field="key" value="${foundry.utils.escapeHTML(e.key)}"></div>
+          <div class="field"${_tipAttr("effectName")}><label>Name</label><input type="text" data-field="name" value="${foundry.utils.escapeHTML(e.name)}"></div>
         </div>
-        <div class="field full"><label>Description</label><textarea data-field="description" rows="2">${foundry.utils.escapeHTML(e.description)}</textarea></div>
-        <div class="bbttcc-inline-grid bbttcc-grid-effect-costs">
+        <div class="field full"${_tipAttr("effectDescription")}><label>Description</label><textarea data-field="description" rows="2">${foundry.utils.escapeHTML(e.description)}</textarea></div>
+        <div class="bbttcc-inline-grid bbttcc-grid-effect-costs"${_tipAttr("effectDelta")}>
           <div class="field"><label>Violence</label><input type="number" data-field="violence" value="${e.opDelta.violence}"></div>
           <div class="field"><label>Nonlethal</label><input type="number" data-field="nonlethal" value="${e.opDelta.nonlethal}"></div>
           <div class="field"><label>Intrigue</label><input type="number" data-field="intrigue" value="${e.opDelta.intrigue}"></div>
@@ -634,7 +709,7 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
           <div class="field"><label>Culture</label><input type="number" data-field="culture" value="${e.opDelta.culture}"></div>
           <div class="field"><label>Faith</label><input type="number" data-field="faith" value="${e.opDelta.faith}"></div>
         </div>
-        <div class="bbttcc-row-actions"><button type="button" class="bbttcc-button secondary" data-action="remove-turn-effect">Remove</button></div>
+        <div class="bbttcc-row-actions"><button type="button" class="bbttcc-button secondary" data-action="remove-turn-effect"${_tipAttr("effectRemove")}>Remove</button></div>
       </article>`;
   }
 
@@ -936,9 +1011,27 @@ export class BBTTCCFacilityConsole extends HBM(AppV2) {
   }
 }
 
+Hooks.once('init', () => {
+  // Fallback {{bbttccTip}} helper so our templates render even when this
+  // module's init runs before bbttcc-core's (or bbttcc-core is disabled —
+  // a mustache with args and no helper would otherwise throw "Missing helper").
+  // Delegates to the central registry at call time, so whichever module wins
+  // the registration race, the lookup is identical.
+  try {
+    if (!Handlebars.helpers.bbttccTip) {
+      Handlebars.registerHelper("bbttccTip", (appKey, key) => game.bbttcc?.help?.tip?.(appKey, key) ?? "");
+    }
+  } catch (e) { console.warn('[bbttcc-facility-console] bbttccTip fallback helper registration failed', e); }
+});
+
 Hooks.on('ready', () => {
   game.bbttcc ??= {};
   game.bbttcc.apps ??= {};
   game.bbttcc.apps.FacilityConsole = BBTTCCFacilityConsole;
+
+  // Central help registry (bbttcc-core). Guarded — core may be disabled; by
+  // ready, core's init has definitely run if it's enabled, so this is order-safe.
+  game.bbttcc?.help?.register?.("facilities", FACILITY_TIPS);
+
   console.debug('[bbttcc-facility-console] FacilityConsole registered on game.bbttcc.apps');
 });

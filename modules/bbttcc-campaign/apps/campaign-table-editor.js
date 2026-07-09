@@ -572,7 +572,9 @@ export class BBTTCCCampaignTableEditorApp extends Application {
     ui.notifications && ui.notifications.info && ui.notifications.info("Preview Roll: " + tableLabel);
 
     try {
-      const res = await tablesApi.runRandomTable({ tableId: tableId, tags: tags });
+      // dryRun: preview must never execute the rolled beat (same trap the
+      // Builder's travel-preview had — fixed 2026-07-08).
+      const res = await tablesApi.runRandomTable({ tableId: tableId, tags: tags, dryRun: true });
 
       const campaignId = String((res && res.campaignId) || "").trim();
       const beatId = String((res && res.beatId) || "").trim();

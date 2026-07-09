@@ -46,6 +46,32 @@ function randomID(length) {
 // Overlay layer id for portaled popovers (Campaign Builder)
 const PORTAL_LAYER_ID = "bbttcc-campaign-popover-layer";
 
+// Inline styles that portalOpen() stamps on a popover while it lives in the
+// overlay layer. Cleared by _restorePortalPop() when the popover goes home.
+const PORTAL_POP_STYLE_PROPS = [
+  "position", "top", "left", "right", "bottom", "zIndex", "pointerEvents",
+  "maxHeight", "overflow", "minWidth", "background", "border", "borderRadius",
+  "boxShadow", "padding"
+];
+
+// Return a portaled popover to its owning <details> element (if still in the
+// DOM) and strip every inline style portalOpen() applied. Single source of
+// truth for the reset — called from the cleanup path, both document handlers,
+// the layer handler, the scroll handler, and portalClose().
+function _restorePortalPop(pop) {
+  try {
+    if (!pop) return;
+    const ownerId = pop.getAttribute("data-bbttcc-owner") || "";
+    const owner = ownerId
+      ? document.querySelector(`details.bbttcc-actions-menu[data-bbttcc-portal-id="${ownerId}"]`)
+      : null;
+    if (owner) owner.appendChild(pop);
+    pop.removeAttribute("data-bbttcc-portaled");
+    pop.removeAttribute("data-bbttcc-owner");
+    for (const prop of PORTAL_POP_STYLE_PROPS) pop.style[prop] = "";
+  } catch (_e) {}
+}
+
 // --- Travel table id helpers (shared by New/Duplicate/Repair) ---------------
 // Travel encounter tables MUST be named travel_<terrain>_t<tier> or the engine's
 // resolveTravelTableId() can't find them. Keep terrain keys aligned with the
@@ -172,95 +198,6 @@ async function _openTableEditor(tableId) {
     ui.notifications?.error?.("Could not open Table Editor. See console (likely missing file path).");
   }
 }
-
-// ---------------------------------------------------------------------------
-// Travel Encounter Tables UI helpers (Campaign-scoped)
-// ---------------------------------------------------------------------------
-
-const TRAVEL_CATS = [
-  { key: "hazard",    label: "Hazard" },
-  { key: "monster",   label: "Monster" },
-  { key: "rare",      label: "Rare" },
-  { key: "worldboss", label: "Worldboss" }
-];
-
-function _getTravelEncounterEngineCatalog() {
-  // Source: game.bbttcc.api.travel.__encounters.tables + optional lookup()
-  const enc = game.bbttcc?.api?.travel?.__encounters;
-  const tables = enc?.tables || null;
-  const lookup = (typeof enc?.lookup === "function") ? enc.lookup.bind(enc) : null;
-
-  const out = {};
-  for (const c of TRAVEL_CATS) out[c.key] = [];
-
-  if (!tables || typeof tables !== "object") return out;
-
-  for (const [cat, list] of Object.entries(tables)) {
-    if (!out[cat]) continue;
-    if (!Array.isArray(list)) continue;
-    out[cat] = list
-      .filter(e => e && e.key)
-      .map(e => ({
-        key: String(e.key),
-        label: String(e.label || e.key),
-        weight: Number(e.weight ?? 1) || 1,
-        terrains: Array.isArray(e.terrains) ? e.terrains.slice() : [],
-        minTier: (e.minTier != null) ? Number(e.minTier) : null,
-        maxTier: (e.maxTier != null) ? Number(e.maxTier) : null
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label, game.i18n.lang));
-  }
-
-  // If lookup exists, we can enrich labels for keys not present in category lists later.
-  out.__lookup = lookup;
-  return out;
-}
-
-function _readCampaignTravelTables(campaign) {
-  // Stored as: campaign.encounterTables.travel[cat] = [keys...]
-  const cfg = campaign?.encounterTables?.travel;
-  if (!cfg || typeof cfg !== "object") return {};
-  const out = {};
-  for (const c of TRAVEL_CATS) {
-    const arr = Array.isArray(cfg[c.key]) ? cfg[c.key] : [];
-    out[c.key] = arr.map(String);
-  }
-  return out;
-}
-
-function _writeCampaignTravelTables(campaign, nextTables) {
-  campaign.encounterTables ??= {};
-  campaign.encounterTables.travel ??= {};
-  for (const c of TRAVEL_CATS) {
-    const arr = Array.isArray(nextTables?.[c.key]) ? nextTables[c.key] : [];
-    // Normalize, dedupe, preserve order
-    const seen = new Set();
-    const out = [];
-    for (const k of arr.map(String)) {
-      const kk = String(k || "").trim();
-      if (!kk) continue;
-      if (seen.has(kk)) continue;
-      seen.add(kk);
-      out.push(kk);
-    }
-    campaign.encounterTables.travel[c.key] = out;
-  }
-}
-
-function _labelForKey(engineCatalog, cat, key) {
-  const list = engineCatalog?.[cat] || [];
-  const hit = list.find(x => String(x.key) === String(key));
-  if (hit) return hit.label;
-  const lookup = engineCatalog?.__lookup;
-  if (typeof lookup === "function") {
-    try {
-      const e = lookup(key);
-      if (e && e.label) return String(e.label);
-    } catch (_e) {}
-  }
-  return String(key);
-}
-
 
 function _isTravelTableRecord(table) {
   try {
@@ -418,32 +355,6 @@ if (q) {
 }
 
 // ---------------------------------------------------------------------------
-// Flow helper
-// ---------------------------------------------------------------------------
-
-function buildFlowNodes(campaign) {
-  const beats = Array.isArray(campaign.beats) ? campaign.beats : [];
-  if (!beats.length) return [];
-  const startId = beats[0]?.id;
-
-  return beats.map(b => {
-    const links = [];
-    if (b.outcomes) {
-      if (b.outcomes.success) links.push({ kind: "Success", label: "Success", toId: b.outcomes.success });
-      if (b.outcomes.failure) links.push({ kind: "Failure", label: "Failure", toId: b.outcomes.failure });
-    }
-    if (Array.isArray(b.choices)) {
-      b.choices.forEach((choice, idx) => {
-        const lbl = choice.label || `Choice ${idx + 1}`;
-        if (choice.next) links.push({ kind: "Choice", label: lbl, toId: choice.next });
-      });
-    }
-    return { id: b.id, label: b.label || b.id, type: b.type || "unknown", isStart: b.id === startId, links };
-  });
-}
-
-
-// ---------------------------------------------------------------------------
 // Flow Visualizer (Org Chart)
 // - Replaces the legacy Flow tab list with a pan/zoom SVG graph.
 // - Canon rules:
@@ -592,10 +503,11 @@ function _buildFlowGraph(campaign, opts) {
 
   var showTravel = !!opts.showTravel;
 
+  // Cinematic detection (beat.type === "cinematic"). Cinematic beats are
+  // FIRST-CLASS in the visualizer (flow glue) — detected but never excluded;
+  // node/chip renderers use it for the purple accent styling.
   var isCinematic = function (b) {
-    // Cinematic beats are FIRST-CLASS in the visualizer (they are flow glue).
-    // We no longer exclude them.
-    return false;
+    return String((b && b.type) || "").trim().toLowerCase() === "cinematic";
   };
 
   var isTravel = function (b) {
@@ -1101,6 +1013,7 @@ function _buildFlowGraph(campaign, opts) {
       timeScale: String(b2.timeScale || "scene"),
       turnNumber: tn2,
       isTravel: false,
+      isCinematic: isCinematic(b2),
       _order: i
     });
   }
@@ -1243,8 +1156,13 @@ export class BBTTCCCampaignBuilderApp extends Application {
     this.beatTypeFilter = options.beatTypeFilter ?? "all";
     this.beatTurnFilter = options.beatTurnFilter ?? "all"; // "all" | "unassigned" | "1" | "2" | ...
 
-    // Quest filter (beats list)
+    // Quest filters (beats list). beatQuestStatusFilter is the Beats tab's own
+    // quest-status dropdown — deliberately independent from the Quests tab's
+    // questStatusFilter so filtering one tab never filters the other.
     this.questFilter = options.questFilter ?? "all";     // "all" | questId
+    this.beatQuestStatusFilter = options.beatQuestStatusFilter ?? "all"; // "all" | active | completed | archived
+
+    // Quest filters (Quests tab)
     this.questStatusFilter = options.questStatusFilter ?? "all"; // "all" | active | completed | archived
     this.questSearch = options.questSearch ?? "";
 
@@ -1277,7 +1195,7 @@ export class BBTTCCCampaignBuilderApp extends Application {
     this.mainTab = options.mainTab ?? "campaign";
 
     // Scroll state (non-persistent)
-    this._scrollState = { beatsTop: 0, sidebarTop: 0, mainTop: 0, lastBeatId: null };
+    this._scrollState = { beatsTop: 0, mainTop: 0, lastBeatId: null };
 
     // Travel tables UI state (non-persistent)
     this.travelTerrain = options.travelTerrain ?? "plains";
@@ -1293,28 +1211,7 @@ export class BBTTCCCampaignBuilderApp extends Application {
       const layer = document.getElementById(PORTAL_LAYER_ID);
       if (layer) {
         // Restore any portaled nodes back into their owner details elements (if still present)
-        layer.querySelectorAll(".bbttcc-actions-menu-pop[data-bbttcc-portaled=\"1\"]").forEach(pop => {
-          const ownerId = pop.getAttribute("data-bbttcc-owner") || "";
-          const owner = ownerId ? document.querySelector(`details.bbttcc-actions-menu[data-bbttcc-portal-id=\"${ownerId}\"]`) : null;
-          if (owner) owner.appendChild(pop);
-          pop.removeAttribute("data-bbttcc-portaled");
-          pop.removeAttribute("data-bbttcc-owner");
-          pop.style.position = "";
-          pop.style.top = "";
-          pop.style.left = "";
-          pop.style.right = "";
-          pop.style.bottom = "";
-          pop.style.zIndex = "";
-          pop.style.pointerEvents = "";
-          pop.style.maxHeight = "";
-          pop.style.overflow = "";
-          pop.style.minWidth = "";
-          pop.style.background = "";
-          pop.style.border = "";
-          pop.style.borderRadius = "";
-          pop.style.boxShadow = "";
-          pop.style.padding = "";
-        });
+        layer.querySelectorAll(".bbttcc-actions-menu-pop[data-bbttcc-portaled=\"1\"]").forEach(pop => _restorePortalPop(pop));
 
         // If empty, remove it
         if (!layer.querySelector(".bbttcc-actions-menu-pop")) layer.remove();
@@ -1341,10 +1238,6 @@ export class BBTTCCCampaignBuilderApp extends Application {
         tables: [],
         engineTables: [],
         selectedCampaign: null,
-        flowNodes: [],
-        travelCats: TRAVEL_CATS,
-        travelEngine: {},
-        travelTables: {},
         travelTerrain: this.travelTerrain,
         travelTier: this.travelTier,
         travelPreview: this.travelPreview
@@ -1393,16 +1286,9 @@ const activeCampaignId = _getActiveCampaignId();
       if (selectedCampaign) this.campaignId = selectedCampaign.id;
     }
 
-    const flowNodes = selectedCampaign ? buildFlowNodes(selectedCampaign) : [];
-
-    const flowGraph = selectedCampaign ? _buildFlowGraph(selectedCampaign, {
-      turn: this.flowTurn,
-      questId: this.flowQuestId,
-      showTravel: this.flowShowTravel,
-      viewMode: this.flowViewMode,
-      expandedQuests: this.flowExpandedQuests
-    }) : null;
-
+    // NOTE: the flow graph is built ONCE, inside _mountFlowVisualizer() (which
+    // resolves the campaign fresh from the API). It is intentionally NOT built
+    // here — the template never reads it.
 
     const beatTypes = selectedCampaign ? collectBeatTypes(selectedCampaign) : [];
 
@@ -1421,7 +1307,7 @@ const activeCampaignId = _getActiveCampaignId();
     })();
 
     const beatsFiltered = selectedCampaign
-      ? filterBeats(selectedCampaign, this.beatSearch, this.beatTypeFilter, this.beatTurnFilter, this.questFilter, this.questStatusFilter, questMap)
+      ? filterBeats(selectedCampaign, this.beatSearch, this.beatTypeFilter, this.beatTurnFilter, this.questFilter, this.beatQuestStatusFilter, questMap)
       : [];
 
 
@@ -1449,11 +1335,6 @@ const activeCampaignId = _getActiveCampaignId();
         row.firedTurn = (f && f.turn) || null;
       }
     } catch (_eQRows) {}
-
-
-    // Travel encounter catalog + current campaign config (campaign-scoped)
-    const travelEngine = _getTravelEncounterEngineCatalog();
-    const travelTables = selectedCampaign ? _readCampaignTravelTables(selectedCampaign) : {};
 
 
     // Quests (manager UI)
@@ -1501,8 +1382,6 @@ const activeCampaignId = _getActiveCampaignId();
       tables,
       engineTables,
       selectedCampaign,
-      flowNodes,
-      flowGraph,
       flowShowTravel: !!this.flowShowTravel,
       flowZoom: this.flowZoom,
       flowPanX: (this.flowPan && this.flowPan.x) ? this.flowPan.x : 0,
@@ -1511,6 +1390,7 @@ const activeCampaignId = _getActiveCampaignId();
       beatTypeFilter: this.beatTypeFilter,
       beatTurnFilter: this.beatTurnFilter,
       questFilter: this.questFilter,
+      beatQuestStatusFilter: this.beatQuestStatusFilter,
       questStatusFilter: this.questStatusFilter,
       questSearch: this.questSearch,
       questsFiltered,
@@ -1522,9 +1402,6 @@ const activeCampaignId = _getActiveCampaignId();
       beatsFiltered,
 
       // Travel Tables UI
-      travelCats: TRAVEL_CATS,
-      travelEngine,
-      travelTables,
       travelTerrain: this.travelTerrain,
       travelTier: this.travelTier,
       travelPreview: this.travelPreview,
@@ -1676,12 +1553,10 @@ const activeCampaignId = _getActiveCampaignId();
       const el = (root[0] instanceof HTMLElement) ? root[0] : root[0];
       if (!el) return;
 
-      const sidebar = el.querySelector(".bbttcc-campaign-sidebar");
       const beatsScroll = el.querySelector("[data-role='beats-scroll']");
       const main = el.querySelector(".bbttcc-campaign-main");
 
-      this._scrollState ||= { beatsTop: 0, sidebarTop: 0, mainTop: 0, lastBeatId: null };
-      this._scrollState.sidebarTop = sidebar ? (sidebar.scrollTop || 0) : (this._scrollState.sidebarTop || 0);
+      this._scrollState ||= { beatsTop: 0, mainTop: 0, lastBeatId: null };
       this._scrollState.beatsTop = beatsScroll ? (beatsScroll.scrollTop || 0) : (this._scrollState.beatsTop || 0);
       this._scrollState.mainTop = main ? (main.scrollTop || 0) : (this._scrollState.mainTop || 0);
     } catch (e) {}
@@ -1694,12 +1569,10 @@ const activeCampaignId = _getActiveCampaignId();
       const el = (root[0] instanceof HTMLElement) ? root[0] : root[0];
       if (!el) return;
 
-      const sidebar = el.querySelector(".bbttcc-campaign-sidebar");
       const beatsScroll = el.querySelector("[data-role='beats-scroll']");
       const main = el.querySelector(".bbttcc-campaign-main");
 
       const st = this._scrollState || {};
-      if (sidebar && Number.isFinite(st.sidebarTop)) sidebar.scrollTop = st.sidebarTop;
       if (beatsScroll && Number.isFinite(st.beatsTop)) beatsScroll.scrollTop = st.beatsTop;
       if (main && Number.isFinite(st.mainTop)) main.scrollTop = st.mainTop;
 
@@ -1755,17 +1628,36 @@ const activeCampaignId = _getActiveCampaignId();
 
       // Inject a compact Turn selector bar (no template changes required).
       try {
+        // Central hover-help for JS-built controls (dictionary registered by
+        // scripts/module.js under the "campaign" namespace).
+        const _tip = (key) => { try { return game.bbttcc?.help?.tip?.("campaign", key) || ""; } catch (_e) { return ""; } };
+
+        // HexChrome styling: use the --cb-* design tokens (scoped on the app
+        // root by campaign-builder.css) instead of hand-inlined colors.
+        const styleBarSelect = (el) => {
+          el.style.padding = "4px 8px";
+          el.style.borderRadius = "var(--cb-radius)";
+          el.style.border = "1px solid var(--cb-border)";
+          el.style.background = "var(--cb-bg-soft)";
+          el.style.color = "var(--cb-text-main)";
+        };
+        const styleBarLabel = (el) => {
+          el.style.fontWeight = "800";
+          el.style.color = "var(--cb-data)";
+        };
+
         const bar = document.createElement("div");
         bar.className = "bbttcc-flowviz-bar";
+        bar.dataset.tour = "campaign.flow-bar";
         bar.style.display = "flex";
         bar.style.alignItems = "center";
         bar.style.justifyContent = "space-between";
         bar.style.gap = "12px";
         bar.style.padding = "6px 8px";
         bar.style.margin = "0 0 8px 0";
-        bar.style.border = "1px solid rgba(148,163,184,0.22)";
-        bar.style.borderRadius = "10px";
-        bar.style.background = "rgba(2,6,23,0.25)";
+        bar.style.border = "1px solid var(--cb-border)";
+        bar.style.borderRadius = "var(--cb-radius)";
+        bar.style.background = "var(--cb-bg-soft)";
 
         const left = document.createElement("div");
         left.style.display = "flex";
@@ -1773,16 +1665,14 @@ const activeCampaignId = _getActiveCampaignId();
         left.style.gap = "10px";
 
         const lbl = document.createElement("div");
-        lbl.style.fontWeight = "800";
-        lbl.style.opacity = "0.75";
+        styleBarLabel(lbl);
         lbl.textContent = "Turn";
+        const _turnTip = _tip("flow-turn");
+        if (_turnTip) lbl.dataset.tooltip = _turnTip;
 
         const sel = document.createElement("select");
-        sel.style.padding = "4px 8px";
-        sel.style.borderRadius = "8px";
-        sel.style.border = "1px solid rgba(148,163,184,0.25)";
-        sel.style.background = "rgba(15,23,42,0.35)";
-        sel.style.color = "rgba(255,255,255,0.92)";
+        if (_turnTip) sel.dataset.tooltip = _turnTip;
+        styleBarSelect(sel);
 
         const turns = Array.isArray(graph.turns) && graph.turns.length ? graph.turns : [graph.turnNumber || 1];
 
@@ -1816,16 +1706,14 @@ const activeCampaignId = _getActiveCampaignId();
 
         // Quest filter
         const qLbl = document.createElement("div");
-        qLbl.style.fontWeight = "800";
-        qLbl.style.opacity = "0.75";
+        styleBarLabel(qLbl);
         qLbl.textContent = "Quest";
+        const _questTip = _tip("flow-quest");
+        if (_questTip) qLbl.dataset.tooltip = _questTip;
 
         const qSel = document.createElement("select");
-        qSel.style.padding = "4px 8px";
-        qSel.style.borderRadius = "8px";
-        qSel.style.border = "1px solid rgba(148,163,184,0.25)";
-        qSel.style.background = "rgba(15,23,42,0.35)";
-        qSel.style.color = "rgba(255,255,255,0.92)";
+        if (_questTip) qSel.dataset.tooltip = _questTip;
+        styleBarSelect(qSel);
 
         const optQAll = document.createElement("option");
         optQAll.value = "all";
@@ -1857,16 +1745,14 @@ const activeCampaignId = _getActiveCampaignId();
 
         // View mode selector (Beats | Quests) — B9 trim
         const vLbl = document.createElement("div");
-        vLbl.style.fontWeight = "800";
-        vLbl.style.opacity = "0.75";
+        styleBarLabel(vLbl);
         vLbl.textContent = "View";
+        const _viewTip = _tip("flow-view");
+        if (_viewTip) vLbl.dataset.tooltip = _viewTip;
 
         const vSel = document.createElement("select");
-        vSel.style.padding = "4px 8px";
-        vSel.style.borderRadius = "8px";
-        vSel.style.border = "1px solid rgba(148,163,184,0.25)";
-        vSel.style.background = "rgba(15,23,42,0.35)";
-        vSel.style.color = "rgba(255,255,255,0.92)";
+        if (_viewTip) vSel.dataset.tooltip = _viewTip;
+        styleBarSelect(vSel);
 
         for (const [val, label] of [["quests", "Quests (overview)"], ["beats", "Beats (detail)"]]) {
           const o = document.createElement("option");
@@ -1901,7 +1787,7 @@ const activeCampaignId = _getActiveCampaignId();
         right.style.gap = "8px";
 
         const hint = document.createElement("div");
-        hint.style.opacity = "0.55";
+        hint.style.color = "var(--cb-text-muted)";
         hint.style.fontSize = "12px";
         hint.textContent = "Flow map (includes cinematics; optional filters)";
         right.appendChild(hint);
@@ -2325,7 +2211,7 @@ const activeCampaignId = _getActiveCampaignId();
         let stroke = "rgba(148,163,184,0.28)";
         if (n.isTravel) { fill = "rgba(30,41,59,0.55)"; stroke = "rgba(56,189,248,0.30)"; }
         if (String(n.type) === "encounter") { stroke = "rgba(245,158,11,0.35)"; }
-        if (String(n.type) === "cinematic") { stroke = "rgba(168,85,247,0.40)"; }
+        if (n.isCinematic) { stroke = "rgba(168,85,247,0.40)"; }
 
         rect.setAttribute("fill", fill);
         rect.setAttribute("stroke", stroke);
@@ -2427,107 +2313,6 @@ const activeCampaignId = _getActiveCampaignId();
       }
       } // end legacy beat-mode node renderer
 
-
-      // ---------------------------
-      // Thread Index Panel (right side, 4 columns)
-      // ---------------------------
-      try {
-        if (graph && graph.threadBuckets && graph.panelWidth) {
-          const PANEL_MARGIN = 60;
-          const colGap = 24;
-          const colW = 190;
-
-          const panelX = (graph.size.w - graph.panelWidth) + PANEL_MARGIN;
-          const panelY = 70;
-
-          const drawText = (txt, x, y, size, weight, opacity) => {
-            const t = document.createElementNS(svgNS, "text");
-            t.setAttribute("x", String(x));
-            t.setAttribute("y", String(y));
-            t.setAttribute("fill", `rgba(255,255,255,${opacity})`);
-            t.setAttribute("font-size", String(size));
-            t.setAttribute("font-weight", String(weight));
-            t.textContent = txt;
-            return t;
-          };
-
-          const drawChip = (beat, x, y) => {
-            const gg = document.createElementNS(svgNS, "g");
-            gg.style.cursor = "pointer";
-
-            const r = document.createElementNS(svgNS, "rect");
-            r.setAttribute("x", String(x));
-            r.setAttribute("y", String(y));
-            r.setAttribute("rx", "10");
-            r.setAttribute("ry", "10");
-            r.setAttribute("width", String(colW));
-            r.setAttribute("height", "34");
-            r.setAttribute("fill", "rgba(15,23,42,0.35)");
-            r.setAttribute("stroke", "rgba(148,163,184,0.18)");
-            r.setAttribute("stroke-width", "1");
-            gg.appendChild(r);
-
-            const label = String(beat.label || beat.id || "").trim();
-            const text = label.length > 18 ? (label.slice(0, 18) + "…") : label;
-
-            const t = document.createElementNS(svgNS, "text");
-            t.setAttribute("x", String(x + 8));
-            t.setAttribute("y", String(y + 13));
-            t.setAttribute("fill", "rgba(255,255,255,0.86)");
-            t.setAttribute("font-size", "11");
-            t.setAttribute("font-weight", "700");
-            t.textContent = text;
-            gg.appendChild(t);
-
-            const idt = document.createElementNS(svgNS, "text");
-            idt.setAttribute("x", String(x + 8));
-            idt.setAttribute("y", String(y + 27));
-            idt.setAttribute("fill", "rgba(255,255,255,0.62)");
-            idt.setAttribute("font-size", "9.5");
-            idt.textContent = String(beat.id || "");
-            gg.appendChild(idt);
-
-            const title = document.createElementNS(svgNS, "title");
-            title.textContent = `${label}\n${beat.id}\n(${beat.type || "custom"})`;
-            gg.appendChild(title);
-
-            gg.addEventListener("click", (ev) => {
-              ev.preventDefault();
-              ev.stopPropagation();
-              const full = nodeById[String(beat.id)] || null;
-              if (!full) return;
-              this._openBeatEditor(campaign.id, this._ensureBeatShape(full), "core");
-            });
-
-            return gg;
-          };
-
-          const buckets = [graph.threadBuckets.a, graph.threadBuckets.c, graph.threadBuckets.d, graph.threadBuckets.e];
-          for (let bi = 0; bi < buckets.length; bi++) {
-            const buck = buckets[bi];
-            const x = panelX + bi * (colW + colGap);
-            let y = panelY;
-
-            g.appendChild(drawText(buck.label, x, y, 13, 800, 0.45));
-            y += 22;
-
-            const beats = Array.isArray(buck.beats) ? buck.beats : [];
-            for (let ri = 0; ri < beats.length; ri++) {
-              g.appendChild(drawChip(beats[ri], x, y));
-              y += 40;
-              if (ri > 30) break;
-            }
-          }
-
-          const sep = document.createElementNS(svgNS, "rect");
-          sep.setAttribute("x", String(panelX - 26));
-          sep.setAttribute("y", "40");
-          sep.setAttribute("width", "2");
-          sep.setAttribute("height", String(graph.size.h - 80));
-          sep.setAttribute("fill", "rgba(148,163,184,0.18)");
-          g.appendChild(sep);
-        }
-      } catch (_ePanel) {}
       // Pan interaction
       let dragging = false;
       let start = { x: 0, y: 0, px: 0, py: 0 };
@@ -2683,26 +2468,6 @@ const activeCampaignId = _getActiveCampaignId();
         appRoot.style.maxWidth = "none";
       }
 
-      const layout = rootEl.querySelector(".bbttcc-campaign-layout");
-      const sidebar = rootEl.querySelector(".bbttcc-campaign-sidebar");
-      const main = rootEl.querySelector(".bbttcc-campaign-main");
-      if (layout && sidebar && main) {
-        layout.style.display = "flex";
-        layout.style.width = "100%";
-        layout.style.height = "100%";
-        layout.style.maxWidth = "none";
-        layout.style.gap = "12px";
-
-        sidebar.style.height = "100%";
-        sidebar.style.overflow = "auto";
-
-        main.style.flex = "1 1 auto";
-        main.style.minWidth = "0";
-        main.style.width = "100%";
-        main.style.height = "100%";
-        main.style.overflow = "hidden";
-      }
-
       // Active panel should fill main
       const activePanel = rootEl.querySelector(".bbttcc-campaign-main > section[data-main-tab]:not(.is-hidden)");
       if (activePanel) {
@@ -2719,56 +2484,6 @@ const activeCampaignId = _getActiveCampaignId();
       }
     } catch (_e) {}
   }
-
-// -----------------------------------------------------------------------
-// Campaign I/O Controls (Export/Import/Remap)
-// - Injects a small "Bundles" card into the sidebar (no template edits).
-// - Uses game.bbttcc.api.campaign.io (module.js) to do the heavy lifting.
-// -----------------------------------------------------------------------
-_ensureCampaignIOControls(rootEl) {
-  try {
-    if (!rootEl) return;
-    if (rootEl.querySelector("[data-bbttcc-campaign-io='1']")) return;
-
-    var sidebar = rootEl.querySelector(".bbttcc-campaign-sidebar") || rootEl.querySelector(".sidebar") || null;
-    if (!sidebar) return;
-
-    var card = document.createElement("section");
-    card.className = "bbttcc-card bbttcc-campaign-io";
-    card.setAttribute("data-bbttcc-campaign-io", "1");
-    card.style.marginBottom = "12px";
-
-    card.innerHTML = `
-      <header class="bbttcc-card__head" style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
-        <div>
-          <div class="bbttcc-card__title">Bundles</div>
-          <div class="bbttcc-muted" style="opacity:.8; font-size:.85rem;">Export / import campaigns via compendium Journal Entries.</div>
-        </div>
-      </header>
-      <div class="bbttcc-card__body" style="display:flex; flex-direction:column; gap:.5rem;">
-        <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-          <button type="button" class="bbttcc-button" data-action="io-export"><i class="fas fa-upload"></i> Export</button>
-          <button type="button" class="bbttcc-button" data-action="io-import"><i class="fas fa-download"></i> Import</button>
-          <button type="button" class="bbttcc-button" data-action="io-remap"><i class="fas fa-link"></i> Remap</button>
-        </div>
-        <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
-          <button type="button" class="bbttcc-button" data-action="io-scan-keys"><i class="fas fa-tags"></i> Key Report</button>
-        </div>
-        <div class="bbttcc-muted" style="font-size:.8rem; opacity:.75;">
-          Uses <code>flags.bbttcc.key</code> on Scenes/Actors/Journals to remap references after import.
-        </div>
-      </div>
-    `;
-
-    // Insert near the top of the sidebar, after the campaign list header if possible.
-    var anchor =
-      sidebar.querySelector(".bbttcc-card") ||
-      sidebar.firstElementChild ||
-      null;
-    if (anchor && anchor.parentElement === sidebar) sidebar.insertBefore(card, anchor);
-    else sidebar.prepend(card);
-  } catch (_e) {}
-}
 
 async _ioExportDialog() {
   const api = this._requireApi(); if (!api) return;
@@ -3235,7 +2950,8 @@ try {
       this.render(false);
     });
     html.find("[data-action='beats-quest-status']").on("change", ev => {
-      this.questStatusFilter = String(ev.currentTarget?.value ?? "all");
+      // Beats tab's OWN quest-status filter (independent from the Quests tab).
+      this.beatQuestStatusFilter = String(ev.currentTarget?.value ?? "all");
       this.render(false);
     });
 
@@ -3243,32 +2959,6 @@ try {
     // ---------------------------
     // Encounter Tables (Random Encounter Tables UI) — existing
     // ---------------------------
-
-    html.find("[data-action='new-table']").on("click", async ev => {
-      ev.preventDefault();
-      const api = this._requireApi(); if (!api) return;
-      const tablesApi = api.tables;
-      if (!tablesApi?.createTable) return ui.notifications?.warn?.("Encounter Tables API not ready.");
-
-      const id = `table_${randomID()}`;
-      const label = await Dialog.prompt({
-        title: "New Encounter Table",
-        content: `
-          <p>Create a new Random Encounter Table. Tables select beats; beats run normally.</p>
-          <div class="form-group">
-            <label>Label</label>
-            <input type="text" name="label" value="New Table (${id.slice(0, 8)})" />
-          </div>
-        `,
-        label: "Create",
-        callback: html => html.find("input[name='label']")[0]?.value || `New Table (${id.slice(0, 8)})`
-      });
-
-      await tablesApi.createTable(id, { id, label, scope: "global", tags: [], entries: [] });
-      await _openTableEditor(id);
-      this.render();
-    });
-
 
     html.find("[data-action='new-travel-table']").on("click", async ev => {
       ev.preventDefault();
@@ -3573,78 +3263,8 @@ try {
     });
 
     // ---------------------------
-    // NEW: Campaign-Scoped Travel Encounter Tables UI
+    // Travel table filters + preview
     // ---------------------------
-
-    const saveCampaign = async (campaign) => {
-      const api = this._requireApi(); if (!api) return;
-      if (!api.saveCampaign) throw new Error("Campaign API saveCampaign not available.");
-      await api.saveCampaign(campaign.id, campaign);
-    };
-
-    html.find("[data-action='travel-add']").on("click", async (ev) => {
-      ev.preventDefault();
-      const cat = ev.currentTarget?.dataset?.cat;
-      if (!cat) return;
-      const campaign = this._loadCurrentCampaignClone();
-      if (!campaign) return;
-
-      const select = rootEl.querySelector(`select[data-role="travel-pick"][data-cat="${cat}"]`);
-      const key = String(select?.value || "").trim();
-      if (!key) return ui.notifications?.warn?.("Pick an encounter key first.");
-
-      const current = _readCampaignTravelTables(campaign);
-      current[cat] ??= [];
-      if (!current[cat].includes(key)) current[cat].push(key);
-
-      _writeCampaignTravelTables(campaign, current);
-      await saveCampaign(campaign);
-
-      ui.notifications?.info?.(`Added ${key} to Travel ${cat} table.`);
-      this.render(false);
-    });
-
-    html.find("[data-action='travel-remove']").on("click", async (ev) => {
-      ev.preventDefault();
-      const cat = ev.currentTarget?.dataset?.cat;
-      const key = ev.currentTarget?.dataset?.key;
-      if (!cat || !key) return;
-
-      const campaign = this._loadCurrentCampaignClone();
-      if (!campaign) return;
-
-      const current = _readCampaignTravelTables(campaign);
-      current[cat] = (current[cat] || []).filter(k => String(k) !== String(key));
-
-      _writeCampaignTravelTables(campaign, current);
-      await saveCampaign(campaign);
-
-      this.render(false);
-    });
-
-    html.find("[data-action='travel-clear-cat']").on("click", async (ev) => {
-      ev.preventDefault();
-      const cat = ev.currentTarget?.dataset?.cat;
-      if (!cat) return;
-
-      const yes = await Dialog.confirm({
-        title: "Clear Travel Category?",
-        content: `<p>Clear the <strong>${_escapeHtml(cat)}</strong> travel encounter list for this campaign?</p>`
-      });
-      if (!yes) return;
-
-      const campaign = this._loadCurrentCampaignClone();
-      if (!campaign) return;
-
-      const current = _readCampaignTravelTables(campaign);
-      current[cat] = [];
-
-      _writeCampaignTravelTables(campaign, current);
-      await saveCampaign(campaign);
-
-      ui.notifications?.info?.(`Cleared Travel ${cat} list.`);
-      this.render(false);
-    });
 
     html.find("[data-role='travel-terrain']").on("change", ev => {
       this.travelTerrain = String(ev.currentTarget?.value || "").trim().toLowerCase();
@@ -3660,28 +3280,6 @@ try {
       ev.preventDefault();
       this.travelTerrain = "";
       this.travelTier = 0;
-      this.render(false);
-    });
-
-    html.find("[data-action='travel-clone-cat']").on("click", async (ev) => {
-      ev.preventDefault();
-      const cat = ev.currentTarget?.dataset?.cat;
-      if (!cat) return;
-
-      const engine = _getTravelEncounterEngineCatalog();
-      const list = (engine[cat] || []).map(e => String(e.key)).filter(Boolean);
-      if (!list.length) return ui.notifications?.warn?.(`No engine entries found for ${cat}.`);
-
-      const campaign = this._loadCurrentCampaignClone();
-      if (!campaign) return;
-
-      const current = _readCampaignTravelTables(campaign);
-      current[cat] = list;
-
-      _writeCampaignTravelTables(campaign, current);
-      await saveCampaign(campaign);
-
-      ui.notifications?.info?.(`Cloned engine defaults into Travel ${cat}.`);
       this.render(false);
     });
 
@@ -3754,24 +3352,65 @@ try {
       }
 
       try {
-        const res = await tablesApi.runRandomTable({ tableId, tags: "preview" });
+        // TRUE DRY-RUN: runRandomTable({ dryRun: true }) rolls the table (same
+        // conditions + weights as the live engine) but returns the pick WITHOUT
+        // executing the beat — no scene activation, no dialogs, no world
+        // effects, no time cost.
+        const res = await tablesApi.runRandomTable({ tableId, tags: "preview", dryRun: true });
         const beatId = String(res?.beatId || "").trim();
         const resCampaignId = String(res?.campaignId || campaignId || "").trim();
 
         // Pretty beat label from the campaign, fall back to the raw id.
         let beatLabel = beatId || "(none)";
+        let beatType = "";
         try {
           const cc = game.bbttcc?.api?.campaign?.getCampaign?.(resCampaignId);
           const beat = Array.isArray(cc?.beats) ? cc.beats.find(b => b?.id === beatId) : null;
-          if (beat) beatLabel = String(beat.label || beat.title || beatId).trim();
+          if (beat) {
+            beatLabel = String(beat.label || beat.title || beatId).trim();
+            beatType = String(beat.type || "").trim();
+          }
         } catch (_e) {}
 
         this.travelPreview = beatId
           ? { tableId, beatId, label: beatLabel, campaignId: resCampaignId }
           : null;
 
-        if (beatId) ui.notifications?.info?.(`Preview: ${tableId} → ${beatLabel}`);
-        else ui.notifications?.warn?.(`Table ${tableId} rolled no eligible beat (check entries/weights).`);
+        if (!beatId) {
+          ui.notifications?.warn?.(`Table ${tableId} rolled no eligible beat (check entries/weights).`);
+        } else if (res?.dryRun !== true) {
+          // Engine older than the dry-run API: it executed the beat for real.
+          ui.notifications?.warn?.(`Preview: ${tableId} → ${beatLabel} — but the tables engine has no dry-run support and RAN the beat.`);
+        } else {
+          // Show the result with a clearly-labeled escalation path.
+          const runIt = await Dialog.wait({
+            title: "Travel Preview — Dry Run",
+            content: `
+              <div class="bbttcc-travel-preview-result">
+                <p><b>${_escapeHtml(beatLabel)}</b>${beatType ? ` <span class="bbttcc-muted">(${_escapeHtml(beatType)})</span>` : ""}</p>
+                <p class="bbttcc-muted">
+                  Table <code>${_escapeHtml(tableId)}</code>
+                  → beat <code>${_escapeHtml(beatId)}</code>
+                  ${resCampaignId ? ` · campaign <code>${_escapeHtml(resCampaignId)}</code>` : ""}
+                </p>
+                <p>This was a <b>dry run</b> — nothing has fired. Each preview re-rolls the weights.</p>
+              </div>`,
+            buttons: {
+              run: {
+                icon: '<i class="fas fa-play"></i>',
+                label: "Run This Beat Now (for real)",
+                callback: () => true
+              },
+              close: { label: "Close", callback: () => false }
+            },
+            default: "close",
+            close: () => false
+          });
+
+          if (runIt && game.bbttcc?.api?.campaign?.runBeat) {
+            await game.bbttcc.api.campaign.runBeat(resCampaignId, beatId, { tableId, tags: "preview" });
+          }
+        }
       } catch (err) {
         console.error(TAG, "Travel preview roll failed", err);
         ui.notifications?.error?.(`Travel preview failed: ${err?.message || err}`);
@@ -3869,9 +3508,30 @@ try {
       const api = this._requireApi(); if (!api) return;
       if (!api.deleteCampaign) return ui.notifications?.warn?.("Campaign API missing deleteCampaign().");
 
+      // Cascade-or-warn: encounter/travel tables point at beats by
+      // (campaignId, beatId). Deleting the campaign leaves those entries
+      // dangling — list them so the GM knows what will silently stop firing.
+      const tableRefs = [];
+      try {
+        const allTables = api.tables?.getAllTables?.() || {};
+        for (const [tid, t] of Object.entries(allTables)) {
+          const entries = Array.isArray(t?.entries) ? t.entries : [];
+          const n = entries.filter(e => String(e?.campaignId || "").trim() === String(id)).length;
+          if (n) tableRefs.push({ tableId: tid, label: String(t?.label || tid), count: n });
+        }
+      } catch (_eScan) {}
+
+      const refsHtml = tableRefs.length
+        ? `<p><b>⚠ ${tableRefs.length} encounter table(s) reference this campaign's beats:</b></p>
+           <ul style="margin:.25rem 0 .5rem 1.1rem;max-height:30vh;overflow:auto;">
+             ${tableRefs.map(r => `<li><code>${_escapeHtml(r.tableId)}</code> (${_escapeHtml(r.label)}) — ${r.count} entr${r.count === 1 ? "y" : "ies"}</li>`).join("")}
+           </ul>
+           <p class="bbttcc-muted">Those entries will go dead (roll → nothing). Clean them up in the Table Editor afterwards.</p>`
+        : "";
+
       const yes = await Dialog.confirm({
         title: "Delete Campaign?",
-        content: `<p>Delete campaign <strong>${_escapeHtml(id)}</strong>? This cannot be undone.</p>`
+        content: `<p>Delete campaign <strong>${_escapeHtml(id)}</strong> and all its beats? This cannot be undone.</p>${refsHtml}`
       });
       if (!yes) return;
 
@@ -3888,24 +3548,10 @@ try {
 
       const api = this._requireApi(); if (!api) return;
       if (!api.runCampaign) {
-        ui.notifications?.warn?.("Campaign API missing runCampaign(); use Run First Beat instead.");
+        ui.notifications?.warn?.("Campaign API missing runCampaign().");
         return;
       }
       await api.runCampaign(id);
-    });
-
-    html.find("[data-action='run-first-beat']").on("click", async ev => {
-      ev.preventDefault();
-      const campaignId = ev.currentTarget?.dataset?.campaignId;
-      if (!campaignId) return;
-
-      const api = this._requireApi(); if (!api) return;
-      const c = api.getCampaign ? api.getCampaign(campaignId) : null;
-      const first = c?.beats?.[0]?.id;
-      if (!first) return ui.notifications?.warn?.("Campaign has no beats.");
-      if (!api.runBeat) return ui.notifications?.warn?.("Campaign API missing runBeat().");
-
-      await api.runBeat(campaignId, first);
     });
 
     html.find("[data-action='save-campaign-meta']").on("click", async ev => {
@@ -4119,14 +3765,38 @@ try {
       if (!qid) return;
       const qapi = _questApi(); if (!qapi) return;
 
+      // Cascade: hex↔quest links are unlinked automatically (both sides) via
+      // the territory quest-links API, so no orphaned hex flags are left behind.
+      const ql = game?.bbttcc?.api?.territory?.questLinks || null;
+      let linkedHexes = [];
+      try { linkedHexes = ql?.listHexesForQuest ? (ql.listHexesForQuest(qid) || []) : []; } catch (_eLH) {}
+
+      const hexHtml = linkedHexes.length
+        ? `<p><b>${linkedHexes.length} linked hex${linkedHexes.length === 1 ? "" : "es"}</b> will be unlinked automatically:</p>
+           <ul style="margin:.25rem 0 .5rem 1.1rem;max-height:30vh;overflow:auto;">
+             ${linkedHexes.map(h => `<li>⬢ ${_escapeHtml(h.hexName || h.drawingId || "?")}${h.sceneName ? ` <span class="bbttcc-muted">/ ${_escapeHtml(h.sceneName)}</span>` : ""}</li>`).join("")}
+           </ul>`
+        : "";
+
       const yes = await Dialog.confirm({
         title: "Delete Quest?",
-        content: `<p>Delete quest <strong>${_escapeHtml(qid)}</strong>? Beats will keep their questId, but the quest will vanish from the registry.</p>`
+        content: `<p>Delete quest <strong>${_escapeHtml(qid)}</strong>? Beats will keep their questId, but the quest will vanish from the registry.</p>${hexHtml}`
       });
       if (!yes) return;
 
+      // Unlink hexes first (both sides), then delete the registry record.
+      let unlinked = 0;
+      if (ql?.unlinkHexQuest) {
+        for (const h of linkedHexes) {
+          try { await ql.unlinkHexQuest(h.drawingId, qid); unlinked++; }
+          catch (eU) { console.warn(TAG, "delete-quest: unlink failed for hex", h?.drawingId, eU); }
+        }
+      }
+
       await qapi.deleteQuest(qid);
-      ui.notifications?.info?.("Quest deleted.");
+      ui.notifications?.info?.(unlinked
+        ? `Quest deleted (${unlinked} hex link${unlinked === 1 ? "" : "s"} removed).`
+        : "Quest deleted.");
       this.render(false);
     });
 
@@ -4140,13 +3810,18 @@ try {
       this.render(false);
     });
 
-    // Quest reorder (registry order)
+    // Quest reorder (registry order).
+    // IMPORTANT: always swap against the FULL unfiltered quest order — never the
+    // filtered/searched view. Otherwise ▲/▼ under an active filter would swap
+    // order values across hidden quests and scramble the registry. With an
+    // active filter the swap partner may be a hidden neighbor, so the visible
+    // list can legitimately look unchanged.
     const _swapQuestOrder = async (qid, dir) => {
       const api = this._requireApi(); if (!api) return;
       const qapi = api.quests;
       if (!qapi || !qapi.listQuests || !qapi.saveQuest) return ui.notifications?.warn?.("Quest API not ready.");
 
-      const list = qapi.listQuests({ campaignId: this.campaignId || null, status: this.questStatusFilter || "all", search: this.questSearch || "" }) || [];
+      const list = qapi.listQuests({ campaignId: this.campaignId || null, status: "all", search: "" }) || [];
       const quests = Array.isArray(list) ? list.slice() : [];
 
       quests.sort((a,b) => {
@@ -4387,17 +4062,134 @@ try {
       const campaignId = this.campaignId;
       if (!campaignId) return;
 
-      const yes = await Dialog.confirm({
-        title: "Delete Beat?",
-        content: `<p>Delete beat <strong>${_escapeHtml(beatId)}</strong>? This cannot be undone.</p>`
-      });
-      if (!yes) return;
+      const norm = s => String(s || "").trim();
+      const target = norm(beatId);
 
+      // Cascade-or-warn: scan the campaign's OTHER beats for links that point
+      // at this beat (next / outcomes.success / outcomes.failure /
+      // choices[].next / choices[].failNext), plus encounter-table entries.
       const campaign = foundry.utils.deepClone(api.getCampaign(campaignId));
-      campaign.beats = (campaign.beats || []).filter(b => String(b?.id) !== String(beatId));
+      const beats = Array.isArray(campaign?.beats) ? campaign.beats : [];
+
+      const beatRefs = []; // { fromId, fromLabel, where }
+      for (const b of beats) {
+        if (!b || typeof b !== "object") continue;
+        const fromId = norm(b.id);
+        if (!fromId || fromId === target) continue;
+
+        const where = [];
+        if (norm(b.next) === target) where.push("next");
+        if (norm(b.outcomes?.success) === target) where.push("outcomes.success");
+        if (norm(b.outcomes?.failure) === target) where.push("outcomes.failure");
+        const choices = Array.isArray(b.choices) ? b.choices : [];
+        choices.forEach((ch, i) => {
+          if (!ch) return;
+          if (norm(ch.next) === target) where.push(`choice ${i + 1} → next`);
+          if (norm(ch.failNext) === target) where.push(`choice ${i + 1} → failNext`);
+        });
+
+        if (where.length) beatRefs.push({ fromId, fromLabel: String(b.label || fromId), where });
+      }
+
+      const tableRefs = []; // { tableId, label, count }
+      try {
+        const allTables = api.tables?.getAllTables?.() || {};
+        for (const [tid, t] of Object.entries(allTables)) {
+          const entries = Array.isArray(t?.entries) ? t.entries : [];
+          const n = entries.filter(e =>
+            norm(e?.campaignId) === norm(campaignId) && norm(e?.beatId) === target
+          ).length;
+          if (n) tableRefs.push({ tableId: tid, label: String(t?.label || tid), count: n });
+        }
+      } catch (_eScan) {}
+
+      const hasRefs = beatRefs.length || tableRefs.length;
+
+      let refsHtml = "";
+      if (hasRefs) {
+        const beatRows = beatRefs.map(r =>
+          `<li><b>${_escapeHtml(r.fromLabel)}</b> <code>${_escapeHtml(r.fromId)}</code> — ${_escapeHtml(r.where.join(", "))}</li>`
+        ).join("");
+        const tableRows = tableRefs.map(r =>
+          `<li>Table <code>${_escapeHtml(r.tableId)}</code> (${_escapeHtml(r.label)}) — ${r.count} entr${r.count === 1 ? "y" : "ies"}</li>`
+        ).join("");
+        refsHtml = `
+          <p><b>⚠ Other content links to this beat:</b></p>
+          <ul style="margin:.25rem 0 .5rem 1.1rem;max-height:30vh;overflow:auto;">${beatRows}${tableRows}</ul>
+          <p class="bbttcc-muted"><b>Delete + Clear Links</b> also nulls those routes and removes the table entries. <b>Delete Only</b> leaves them dangling (dead routes, silent no-op table rolls).</p>`;
+      }
+
+      let choice;
+      if (hasRefs) {
+        choice = await Dialog.wait({
+          title: "Delete Beat?",
+          content: `<p>Delete beat <strong>${_escapeHtml(beatId)}</strong>? This cannot be undone.</p>${refsHtml}`,
+          buttons: {
+            cascade: {
+              icon: '<i class="fas fa-broom"></i>',
+              label: "Delete + Clear Links",
+              callback: () => "cascade"
+            },
+            del: {
+              icon: '<i class="fas fa-trash"></i>',
+              label: "Delete Only",
+              callback: () => "delete"
+            },
+            cancel: { label: "Cancel", callback: () => null }
+          },
+          default: "cancel",
+          close: () => null
+        });
+      } else {
+        const yes = await Dialog.confirm({
+          title: "Delete Beat?",
+          content: `<p>Delete beat <strong>${_escapeHtml(beatId)}</strong>? Nothing else links to it. This cannot be undone.</p>`
+        });
+        choice = yes ? "delete" : null;
+      }
+      if (!choice) return;
+
+      // Remove the beat; optionally clear every dangling link found above.
+      campaign.beats = beats.filter(b => norm(b?.id) !== target);
+      if (choice === "cascade") {
+        for (const b of campaign.beats) {
+          if (!b || typeof b !== "object") continue;
+          if (norm(b.next) === target) b.next = null;
+          if (b.outcomes) {
+            if (norm(b.outcomes.success) === target) b.outcomes.success = null;
+            if (norm(b.outcomes.failure) === target) b.outcomes.failure = null;
+          }
+          for (const ch of (Array.isArray(b.choices) ? b.choices : [])) {
+            if (!ch) continue;
+            if (norm(ch.next) === target) ch.next = null;
+            if (norm(ch.failNext) === target) ch.failNext = null;
+          }
+        }
+      }
 
       await api.saveCampaign(campaignId, campaign);
-      ui.notifications?.info?.("Beat deleted.");
+
+      // Table-entry cascade (global registry, separate save).
+      if (choice === "cascade" && tableRefs.length && api.tables?.getAllTables && api.tables?.setAllTables) {
+        try {
+          const allTables = foundry.utils.deepClone(api.tables.getAllTables() || {});
+          for (const r of tableRefs) {
+            const t = allTables[r.tableId];
+            if (!t || !Array.isArray(t.entries)) continue;
+            t.entries = t.entries.filter(e =>
+              !(norm(e?.campaignId) === norm(campaignId) && norm(e?.beatId) === target)
+            );
+          }
+          await api.tables.setAllTables(allTables);
+        } catch (eTab) {
+          console.warn(TAG, "delete-beat: table-entry cascade failed", eTab);
+          ui.notifications?.warn?.("Beat deleted, but clearing encounter-table entries failed (see console).");
+        }
+      }
+
+      ui.notifications?.info?.(choice === "cascade"
+        ? `Beat deleted; ${beatRefs.length} beat link(s) cleared${tableRefs.length ? ` and ${tableRefs.reduce((s, r) => s + r.count, 0)} table entr(ies) removed` : ""}.`
+        : "Beat deleted.");
       this.render(false);
     });
 
@@ -4559,15 +4351,6 @@ html.find("[data-action='reindex-beats']").on("click", async ev => {
 });
 
 
-    // Outcome beats helper (optional)
-    html.find("[data-action='generate-outcome-beats']").on("click", async ev => {
-      ev.preventDefault();
-      const beatId = ev.currentTarget?.dataset?.beatId;
-      if (!beatId) return;
-      ui.notifications?.info?.("Outcome beats generator not implemented in this build.");
-    });
-  
-
     // ---------------------------
     // Actions Menu Popover (⋯) — portal to overlay to avoid clipping
     // Preserves original buttons (functional) and styling; no cloning.
@@ -4618,28 +4401,7 @@ html.find("[data-action='reindex-beats']").on("click", async ev => {
             document.querySelectorAll(".bbttcc-campaign-builder details.bbttcc-actions-menu[open]")
               .forEach(d => d.removeAttribute("open"));
 
-            layerNow.querySelectorAll(".bbttcc-actions-menu-pop[data-bbttcc-portaled=\"1\"]").forEach(pop => {
-              const ownerId = pop.getAttribute("data-bbttcc-owner") || "";
-              const owner = ownerId ? document.querySelector(`details.bbttcc-actions-menu[data-bbttcc-portal-id=\"${ownerId}\"]`) : null;
-              if (owner) owner.appendChild(pop);
-              pop.removeAttribute("data-bbttcc-portaled");
-              pop.removeAttribute("data-bbttcc-owner");
-              pop.style.position = "";
-              pop.style.top = "";
-              pop.style.left = "";
-              pop.style.right = "";
-              pop.style.bottom = "";
-              pop.style.zIndex = "";
-              pop.style.pointerEvents = "";
-              pop.style.maxHeight = "";
-              pop.style.overflow = "";
-              pop.style.minWidth = "";
-              pop.style.background = "";
-              pop.style.border = "";
-              pop.style.borderRadius = "";
-              pop.style.boxShadow = "";
-              pop.style.padding = "";
-            });
+            layerNow.querySelectorAll(".bbttcc-actions-menu-pop[data-bbttcc-portaled=\"1\"]").forEach(pop => _restorePortalPop(pop));
 
             if (!layerNow.querySelector(".bbttcc-actions-menu-pop")) layerNow.remove();
           }, { capture: true });
@@ -4655,28 +4417,7 @@ html.find("[data-action='reindex-beats']").on("click", async ev => {
             document.querySelectorAll(".bbttcc-campaign-builder details.bbttcc-actions-menu[open]")
               .forEach(d => d.removeAttribute("open"));
 
-            layerNow.querySelectorAll(".bbttcc-actions-menu-pop[data-bbttcc-portaled=\"1\"]").forEach(pop => {
-              const ownerId = pop.getAttribute("data-bbttcc-owner") || "";
-              const owner = ownerId ? document.querySelector(`details.bbttcc-actions-menu[data-bbttcc-portal-id=\"${ownerId}\"]`) : null;
-              if (owner) owner.appendChild(pop);
-              pop.removeAttribute("data-bbttcc-portaled");
-              pop.removeAttribute("data-bbttcc-owner");
-              pop.style.position = "";
-              pop.style.top = "";
-              pop.style.left = "";
-              pop.style.right = "";
-              pop.style.bottom = "";
-              pop.style.zIndex = "";
-              pop.style.pointerEvents = "";
-              pop.style.maxHeight = "";
-              pop.style.overflow = "";
-              pop.style.minWidth = "";
-              pop.style.background = "";
-              pop.style.border = "";
-              pop.style.borderRadius = "";
-              pop.style.boxShadow = "";
-              pop.style.padding = "";
-            });
+            layerNow.querySelectorAll(".bbttcc-actions-menu-pop[data-bbttcc-portaled=\"1\"]").forEach(pop => _restorePortalPop(pop));
 
             if (!layerNow.querySelector(".bbttcc-actions-menu-pop")) layerNow.remove();
           }, { capture: true });
@@ -4699,28 +4440,7 @@ html.find("[data-action='reindex-beats']").on("click", async ev => {
         // Restore any portaled nodes back into their original details elements
         try {
           document.querySelectorAll(`#${LAYER_ID} .bbttcc-actions-menu-pop[data-bbttcc-portaled="1"]`)
-            .forEach(pop => {
-              const ownerId = pop.getAttribute("data-bbttcc-owner") || "";
-              const owner = ownerId ? document.querySelector(`details.bbttcc-actions-menu[data-bbttcc-portal-id="${ownerId}"]`) : null;
-              if (owner) owner.appendChild(pop);
-              pop.removeAttribute("data-bbttcc-portaled");
-              pop.removeAttribute("data-bbttcc-owner");
-              pop.style.position = "";
-              pop.style.top = "";
-              pop.style.left = "";
-              pop.style.right = "";
-              pop.style.bottom = "";
-              pop.style.zIndex = "";
-              pop.style.pointerEvents = "";
-              pop.style.maxHeight = "";
-              pop.style.overflow = "";
-              pop.style.minWidth = "";
-        pop.style.background = "";
-        pop.style.border = "";
-        pop.style.borderRadius = "";
-        pop.style.boxShadow = "";
-        pop.style.padding = "";
-            });
+            .forEach(pop => _restorePortalPop(pop));
         } catch (_e) {}
       }, { capture: true });
 
@@ -4805,21 +4525,7 @@ html.find("[data-action='reindex-beats']").on("click", async ev => {
         if (!detailsEl) return;
         const pop = document.querySelector(`#${LAYER_ID} .bbttcc-actions-menu-pop[data-bbttcc-owner="${detailsEl.dataset.bbttccPortalId || ""}"]`);
         if (!pop) return;
-
-        detailsEl.appendChild(pop);
-
-        pop.removeAttribute("data-bbttcc-portaled");
-        pop.removeAttribute("data-bbttcc-owner");
-        pop.style.position = "";
-        pop.style.top = "";
-        pop.style.left = "";
-        pop.style.right = "";
-        pop.style.bottom = "";
-        pop.style.zIndex = "";
-        pop.style.pointerEvents = "";
-        pop.style.maxHeight = "";
-        pop.style.overflow = "";
-        pop.style.minWidth = "";
+        _restorePortalPop(pop);
       } catch (e) {
         console.warn(TAG, "portalClose failed:", e);
       }
@@ -4844,28 +4550,7 @@ html.find("[data-action='reindex-beats']").on("click", async ev => {
           // Restore any portaled nodes immediately.
           const layer = document.getElementById(LAYER_ID);
           if (layer) {
-            layer.querySelectorAll(".bbttcc-actions-menu-pop[data-bbttcc-portaled=\"1\"]").forEach(pop => {
-              const ownerId = pop.getAttribute("data-bbttcc-owner") || "";
-              const owner = ownerId ? document.querySelector(`details.bbttcc-actions-menu[data-bbttcc-portal-id=\"${ownerId}\"]`) : null;
-              if (owner) owner.appendChild(pop);
-              pop.removeAttribute("data-bbttcc-portaled");
-              pop.removeAttribute("data-bbttcc-owner");
-              pop.style.position = "";
-              pop.style.top = "";
-              pop.style.left = "";
-              pop.style.right = "";
-              pop.style.bottom = "";
-              pop.style.zIndex = "";
-              pop.style.pointerEvents = "";
-              pop.style.maxHeight = "";
-              pop.style.overflow = "";
-              pop.style.minWidth = "";
-              pop.style.background = "";
-              pop.style.border = "";
-              pop.style.borderRadius = "";
-              pop.style.boxShadow = "";
-              pop.style.padding = "";
-            });
+            layer.querySelectorAll(".bbttcc-actions-menu-pop[data-bbttcc-portaled=\"1\"]").forEach(pop => _restorePortalPop(pop));
           }
         }, { capture: true, passive: true });
       }

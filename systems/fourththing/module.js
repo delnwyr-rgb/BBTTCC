@@ -24736,12 +24736,19 @@ Hooks.on("renderApplicationV2", (app, html) => {
               return d;
             })();
             const actor = app.actor ?? app.object ?? app.faction;
+            // BBTTCCFacilityConsole has no actor — its subject is a hex
+            // (app._hex / app.hexUuid), which is where legacy facility data
+            // actually lives. Without this the dump was always empty (fixed
+            // 2026-07-08).
+            let hexDoc = app._hex ?? null;
+            if (!hexDoc && app.hexUuid) hexDoc = await fromUuid(app.hexUuid).catch(() => null);
             const legacy = actor?.flags?.["bbttcc-factions"]?.rigs
                         ?? actor?.flags?.["bbttcc-territory"]?.facilities
+                        ?? hexDoc?.flags?.["bbttcc-territory"]?.facilities
                         ?? null;
             cont.textContent = legacy && Object.keys(legacy).length
               ? JSON.stringify(legacy, null, 2)
-              : "(no legacy rig/facility data on this actor)";
+              : "(no legacy rig/facility data on this actor or hex)";
           }
         } catch (e) {
           console.warn("Roll for Initiation | shim button failed", e);

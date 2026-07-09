@@ -39,3 +39,88 @@
 
 .bbttcc-onboarding-prompt b { color: #9fe0ff; }
 .bbttcc-onboarding-prompt i { color: #cbb8ff; font-style: italic; }
+
+/* ── Interface tours (tours.js) ────────────────────────────────────────── */
+
+.ob-tour-highlight {
+  position: fixed;
+  display: none;
+  z-index: 100000;
+  pointer-events: none; /* the spotlighted control stays clickable */
+  border: 2px solid #7fd6ff;
+  border-radius: 8px;
+  box-shadow:
+    0 0 12px rgba(127, 214, 255, 0.65),
+    0 0 0 100vmax rgba(4, 10, 18, 0.62);
+  transition: left 0.22s ease, top 0.22s ease, width 0.22s ease, height 0.22s ease;
+}
+
+.ob-tour-card {
+  position: fixed;
+  display: none;
+  z-index: 100001;
+  width: 340px;
+  max-width: 90vw;
+  padding: 0.7rem 0.85rem 0.6rem;
+  background: linear-gradient(160deg, #0b1520 0%, #0e1b2a 100%);
+  border: 1px solid #2c5a7a;
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 10px rgba(95, 184, 255, 0.18);
+  font-family: "Signika", sans-serif;
+  color: #dff0ff;
+}
+
+.ob-tour-card .ob-tour-tag {
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #7fd6ff;
+  opacity: 0.85;
+  text-shadow: 0 0 6px rgba(95, 184, 255, 0.45);
+  margin-bottom: 0.25rem;
+}
+
+.ob-tour-card .ob-tour-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #9fe0ff;
+  margin-bottom: 0.3rem;
+}
+
+.ob-tour-card .ob-tour-body {
+  font-size: 0.83rem;
+  line-height: 1.35;
+  margin-bottom: 0.55rem;
+}
+
+.ob-tour-card .ob-tour-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ob-tour-card .ob-tour-count {
+  font-size: 0.72rem;
+  color: #7f97ad;
+}
+
+.ob-tour-card .ob-tour-btns { display: flex; gap: 0.35rem; }
+
+.ob-tour-card button {
+  background: #14283a;
+  color: #cfe8ff;
+  border: 1px solid #2c5a7a;
+  border-radius: 6px;
+  padding: 0.18rem 0.6rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  cursor: pointer;
+  width: auto;
+}
+.ob-tour-card button:hover { background: #1d3a54; box-shadow: 0 0 6px rgba(127, 214, 255, 0.4); }
+.ob-tour-card button:disabled { opacity: 0.4; cursor: default; }
+.ob-tour-card button.ob-tour-end { background: transparent; border-color: #4a3a3a; color: #c09090; }
+
+.ob-tour-pick { display: block; margin: 0.3rem 0; cursor: pointer; }
+.ob-tour-pick em { color: #cbb8ff; font-size: 0.8em; }

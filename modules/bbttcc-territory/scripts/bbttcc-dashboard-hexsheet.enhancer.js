@@ -48,6 +48,13 @@
     btn.innerHTML = `<i class="fas fa-scroll"></i> Sheet`;
     btn.style.marginLeft = "4px";
 
+    // Explanation tooltip from the central help registry (guarded — no-op when
+    // bbttcc-core is disabled or the dictionary hasn't registered yet).
+    try {
+      const t = game.bbttcc?.help?.tip?.("dashboard", "rowSheet") || "";
+      if (t) btn.dataset.tooltip = t;
+    } catch (_e) {}
+
     btn.addEventListener("click", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();

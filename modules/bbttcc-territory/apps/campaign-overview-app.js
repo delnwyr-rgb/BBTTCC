@@ -292,6 +292,54 @@ function readGreatWorkDisplay(faction) {
   }
 }
 
+/* ============== Help / tooltip dictionary (central registry) ==============
+   Registered into game.bbttcc.help (bbttcc-core) under appKey "overview" at
+   ready. Consumed three ways:
+     - template:  data-tooltip="{{bbttccTip 'overview' '<key>'}}"  (campaign-overview.hbs)
+     - JS DOM:    _ovTip("<key>")  (injected Faction-Health columns, World-Health chip)
+     - tours:     inert data-tour="overview.<key>" anchors use the same keys.
+   Style: "Name — what it is. What it does mechanically. When/why you'd use it."
+   Numbers are read from the actual engines: this file (STATUS_BANDS,
+   SIZE_TABLE, MODS, SEPHIROT, effHexWithAll), bbttcc-tikkun api.tikkun.js
+   (getGreatWorkState thresholds: sparks 3 / VP 10 / Unity 30 / Darkness ≤3,
+   corrupted sparks excluded), and bbttcc-epic repair.js + presence.js
+   (World-Health = aligned/total hexes; Reach by Presence band 1/2/3/5). */
+const OVERVIEW_TIPS = {
+  // ---- Header / strip ----
+  header:      "Campaign Overview — the GM's read-only rollup of every faction in the world: territory, per-turn yields, defense, faction health, and Great Work readiness, aggregated across all Scenes. Nothing here edits anything; use Open to jump to a faction sheet.",
+  scope:       "Scope — this table aggregates every territory hex on every Scene in the world, unlike the Territory Dashboard, which shows only the current Scene.",
+  worldHealth: "World-Health — the Act-I win track: the percentage of all hexes that are both reunified under a protagonist (converged-Steward) faction and healed (Purified, or per-hex Darkness ≤ 3). At 100% Malkuth aligns and Act I completes. Reach is how many acts of repair the party can perform per turn, set by their pooled Presence band: Low 1, Mid 2, High 3, Apex 5.",
+
+  // ---- Base columns ----
+  colFaction:   "Faction — every Bad Eden faction actor in the world, plus an Unclaimed row that aggregates ownerless hexes.",
+  colStatus:    "Status — the faction's power band, from its total OPs (the faction's own value plus every member's contribution): Emerging 0–99, Growing 100–199, Established 200–299, Powerful 300–399, Dominant 400+.",
+  colHexes:     "Hexes — how many territory hexes the faction holds across all Scenes.",
+  colScenes:    "Scenes — which Scenes the faction's hexes sit on.",
+  colResources: "Resources (per turn) — the faction's summed effective yields: each hex's base pips × size multiplier × modifiers, plus sephirot bonuses, totalled across every holding. This is the production the turn engine converts into OP income.",
+  colDefense:   "Defense — the summed defensive bonuses across the faction's hexes, from size (Village/Town +1 … Megalopolis +4), modifiers (Fortified +3, Well-Maintained +1, Difficult Terrain +1…), and sephirot (Gevurah +1). Each hex's own share applies when that hex is raided.",
+  colOpen:      "Open — jump to this faction's full sheet.",
+  rowUnclaimed: "Unclaimed — the aggregate of every hex with no owning faction. Its yields flow to no one until the hexes are claimed.",
+
+  // ---- Injected Faction-Health / Great-Work columns ----
+  health:  "Faction Health — VP, Unity, Morale, Loyalty, Darkness, Sparks, and Great Work, read live from each faction actor and the Tikkun engine.",
+  vp:      "VP — Victory Points on the faction's victory track. Great Work readiness requires VP ≥ 10.",
+  unity:   "Unity — the faction's internal cohesion (%). Great Work readiness requires Unity ≥ 30.",
+  morale:  "Morale — the faction's fighting spirit (%), read from the faction sheet's health flags; raids, upkeep, and events move it.",
+  loyalty: "Loyalty — how loyal the faction's population and membership are (%), read from the faction sheet's health flags; hex modifiers like Loyal/Hostile Population push it during play.",
+  dark:    "Darkness — the faction's global Qliphothic taint. It climbs 1 per turn while the faction owns any Radiated hex, and cleansing Purified territory lowers it. Great Work readiness requires Darkness ≤ 3.",
+  sparks:  "Sparks — integrated Holy Sparks toward the Great Work, shown against the threshold of 3. Corrupted sparks do not count until they are repaired and re-deposited.",
+  gw:      "Great Work — the readiness verdict: Ready when Sparks ≥ 3, Unity ≥ 30, VP ≥ 10, Darkness ≤ 3, and no corrupted sparks are held; Approaching when partway there. Hover a row's cell to see the exact blockers."
+};
+
+// Stamp a registry tooltip onto a JS-built element (skips silently when the
+// registry isn't available — e.g. bbttcc-core disabled).
+function _ovTip(el, key) {
+  try {
+    const t = game.bbttcc?.help?.tip?.("overview", key) || "";
+    if (t && el) el.dataset.tooltip = t;
+  } catch (_e) {}
+}
+
 /* ================= Campaign Overview App (AppV2 + HBS) ================= */
 class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplicationMixin(foundry.applications.api.ApplicationV2) {
   // Mirror the Territory Dashboard's AppV2 option shape so the window is actually
@@ -493,7 +541,11 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
             const key = bandFor(totalOPs);
             labelText = game.i18n?.localize?.(`BBTTCC.PowerLevels.${key}`) || key;
           }
-          td.textContent = labelText;
+          // Write into the styled pill when present — td.textContent nuked the
+          // .bbttcc-pill span so Status rendered unstyled (fixed 2026-07-08).
+          const pill = td.querySelector(".bbttcc-pill");
+          if (pill) pill.textContent = labelText;
+          else td.textContent = labelText;
         }
       }
     } catch (e) {
@@ -527,11 +579,14 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
       ];
 
       // Append new header cells
+      let firstHealthTh = true;
       for (const col of HEALTH_COLS) {
         const th = document.createElement("th");
         th.dataset.bbttccHealth = "1";
         th.textContent = col.label;
         th.style.whiteSpace = "nowrap";
+        _ovTip(th, col.key);
+        if (firstHealthTh) { th.dataset.tour = "overview.health"; firstHealthTh = false; }
         headRow.appendChild(th);
       }
 
@@ -569,7 +624,9 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
           td.textContent = vals[col.key];
 
           if (col.key === "gw" && gwState && gwState.title) {
-            td.title = gwState.title;
+            // Per-row verdict detail (the exact blockers) wins over the generic
+            // column explanation, rendered through Foundry's tooltip manager.
+            td.dataset.tooltip = gwState.title;
           }
 
           tr.appendChild(td);
@@ -596,6 +653,21 @@ class BBTTCC_CampaignOverview extends foundry.applications.api.HandlebarsApplica
       try { actor.sheet?.render(true, { focus: true }); }
       catch (e) { warn("Failed to open faction sheet", e); ui.notifications?.error?.("Could not open that faction (see console)."); }
     }, { capture: true, signal: sig });
+
+    // -----------------------------------------------------------------------
+    // 5) World-Health strip tooltip + tour anchor.
+    //    bbttcc-epic injects #bbttcc-epic-worldhealth from the
+    //    renderBBTTCC_CampaignOverview hook, which fires AFTER _onRender —
+    //    so stamp on the next tick, once the chip exists (RFI + GM only).
+    // -----------------------------------------------------------------------
+    setTimeout(() => {
+      try {
+        const chip = this.element?.querySelector?.("#bbttcc-epic-worldhealth");
+        if (!chip) return;
+        _ovTip(chip, "worldHealth");
+        chip.dataset.tour = "overview.worldHealth";
+      } catch (_e) {}
+    }, 0);
   }
 
   async close(opts) {
@@ -611,10 +683,20 @@ Hooks.once("ready", () => {
     game.bbttcc ??= { api: {} };
     game.bbttcc.api ??= {};
     game.bbttcc.api.territory ??= {};
+
+    // Explanation tooltips → central registry (bbttcc-core). Guarded: no-op
+    // when bbttcc-core is disabled; {{bbttccTip}} then renders "".
+    try { game.bbttcc?.help?.register?.("overview", OVERVIEW_TIPS); } catch (_eHelp) {}
+    let _overviewApp = null;
     game.bbttcc.api.territory.openCampaignOverview = () => {
       const C = globalThis.BBTTCC_CampaignOverviewCtor;
-      if (typeof C === "function") new C().render(true, { focus: true });
-      else ui.notifications?.warn?.("Campaign Overview app not available.");
+      if (typeof C !== "function") return ui.notifications?.warn?.("Campaign Overview app not available.");
+      // Singleton: repeated toolbar clicks were stacking fresh windows with
+      // the same DOM id (fixed 2026-07-08).
+      const alive = _overviewApp && (_overviewApp.rendered || _overviewApp.element?.isConnected);
+      if (!alive) _overviewApp = new C();
+      _overviewApp.render(true, { focus: true });
+      return _overviewApp;
     };
     log("Campaign Overview opener registered.");
   } catch (e) { warn("Failed to register Campaign Overview opener", e); }

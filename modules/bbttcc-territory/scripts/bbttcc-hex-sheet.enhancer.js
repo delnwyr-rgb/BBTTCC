@@ -57,6 +57,37 @@
     return s;
   }
 
+  // Radiation severity band (mirrors main.js `_radTier` + the HEX_TIPS copy):
+  // I at 1–2, II at 3–5, III at 6–9, IV at 10+; "—" when clean.
+  function radTier(rad) {
+    const r = Math.max(0, Math.round(Number(rad) || 0));
+    if (r <= 0) return "—";
+    if (r <= 2) return "I";
+    if (r <= 5) return "II";
+    if (r <= 9) return "III";
+    return "IV";
+  }
+
+  // Canonical pressure stores are flags.bbttcc-territory.mods.radiation and
+  // .mods.darkness — that's what the turn engine (advance-turn.tracks.js
+  // decay/spread, api.turn.processRequests.js) reads and writes. Older hexes
+  // may only carry the legacy shapes main.js once wrote
+  // (radiation.value / darkness.local); read those as a one-time fallback so
+  // old hexes don't display zero. Writes always land on mods.*.
+  function readRadiation(tf) {
+    const mods = (tf && typeof tf.mods === "object" && tf.mods) ? tf.mods : {};
+    if (mods.radiation !== undefined) return Math.max(0, Number(mods.radiation) || 0);
+    const legacy = (tf && tf.radiation && typeof tf.radiation === "object") ? tf.radiation.value : (tf ? tf.radiation : 0);
+    return Math.max(0, Number(legacy) || 0);
+  }
+
+  function readDarkness(tf) {
+    const mods = (tf && typeof tf.mods === "object" && tf.mods) ? tf.mods : {};
+    if (mods.darkness !== undefined) return Math.max(0, Number(mods.darkness) || 0);
+    const legacy = (tf && tf.darkness && typeof tf.darkness === "object") ? tf.darkness.local : (tf ? (tf.localDarkness ?? tf.darkness) : 0);
+    return Math.max(0, Number(legacy) || 0);
+  }
+
   function _safeHexSheetId(hexUuid){
     try {
       var raw = String(hexUuid || '');
@@ -90,6 +121,117 @@
     const expired = (exp > 0 && curTurn > 0 && curTurn >= exp);
     return { enabled, expired, exp };
   }
+
+  /* ============== Help / tooltip dictionary (central registry) ==============
+     Registered into game.bbttcc.help (bbttcc-core) under appKey "hex" at ready.
+     Consumed three ways:
+       - templates:   data-tooltip="{{bbttccTip 'hex' '<key>'}}"  (hex-sheet.hbs)
+       - JS DOM:      _hexTipApply(el, "<key>")  (Active Effects chips, Quests card)
+       - tours:       inert data-tour="hex.<key>" anchors use the same keys.
+     Style: "Name — what it is. What it does mechanically. When/why you'd use it."
+     Numbers below are read from the actual engines: advance-turn.tracks.js
+     (radiation decay/spread, darkness, Purified cleanup, BU accrual),
+     territory-build-units.enhancer.js (BU costs/effects), main.js
+     (production trace, radiation tiers, size/integration multipliers),
+     hex-resource-nodes.enhancer.js (harvest), and the Holdings tables above. */
+  const HEX_TIPS = {
+    // ---- Identity / sidebar ----
+    art:       "Hex Artwork — a portrait image for this territory, stored on the hex. Click to view it full-size; the GM can click to set or replace it.",
+    identity:  "Hex identity — name, size, and type. Type sets the hex's base resource pips; size multiplies them (outpost ×0.5, village ×0.75, town ×1, city ×1.5, metropolis ×2, megalopolis ×3).",
+    status:    "Status — the hex's claim state (unclaimed until a faction takes it). Claimed hexes feed their owner's OP income every turn and can be engineered with Build Units.",
+    owner:     "Owner — the faction that controls this hex. The owner collects its resource yields as OP each turn, earns Build Units from its Materials pips, and defends it when raided. Unclaimed hexes pay no one.",
+
+    // ---- Holdings ----
+    holdings:          "Holdings — rigs, bosses, and facilities stationed at this hex. Each adds a strategic bonus to the defender's DC when this hex is raided, and the GM can deploy them as linked tokens onto a bound battle scene for tactical play.",
+    holdingsBonus:     "Total Holdings bonus — the summed defender-DC bonus from everything stationed here. The rigs lane and the facilities lane are each soft-capped at +15; boss bonuses stack uncapped.",
+    holdingsBosses:    "Bosses — stationed boss actors. Bonus scales with the boss's tier: T1 +2, T2 +4, T3 +6, T4 +10. Bosses also lend their doctrine keys to the hex's defense.",
+    holdingsRigs:      "Rigs — mobile rigs stationed here. Bonus by weight bracket: light +1, medium +3, heavy +5, siege +8 (personal rigs add nothing). This lane is soft-capped at +15 total.",
+    holdingsFacilities:"Facilities — stationary rigs stationed here. Bonus by kind: garrison/fort +5, hex-cannon +5, forge +3, trade/market +2, anything else +1. This lane is soft-capped at +15 total.",
+    holdingsMissing:   "Stale reference — a stationed actor that no longer exists in the world (deleted). It contributes nothing; the GM can clear it with ×.",
+    holdingsStation:   "GM — Station: pick rigs, bosses, or facilities from the world roster and station them at this hex. The owning faction's assets are listed first; other factions' assets sit under an expander.",
+    holdingsDeploy:    "GM — Deploy: spawn every stationed Holding as a linked token on this hex's bound battle scene (bind one via the Battle Scenes panel first). Linked tokens write damage back to the real actor, so hurt persists across rounds and scenes.",
+    holdingsRecall:    "GM — Recall: remove this hex's previously deployed Holding tokens from the bound battle scene. The actors themselves are untouched.",
+    holdingsRemove:    "GM — remove this entry from the hex's Holdings. Only the station reference is cleared; the actor itself is not deleted.",
+    holdingsNeglect:   "Neglected — garrison upkeep went unpaid. Each unpaid turn advances the counter; at 3 total unpaid turns the stationed Holdings defect and abandon the hex.",
+    holdingsAbandoned: "Recently abandoned — Holdings defected from this hex after garrison upkeep went unpaid too long. Re-station assets via ＋ Station; this badge fades about 30 days after the event.",
+
+    // ---- Tracks & State ----
+    tracks:      "Tracks & State — the hex's live gauges: Integration (how developed it is), Radiation, local Darkness, and any active weather.",
+    integration: "Integration (0–6) — how thoroughly the owner has absorbed this hex. 0 wild, 1–2 outpost, 3–4 developing, 5 settled, 6 integrated heartland. Higher integration multiplies all production: ×1.05 at 3+, ×1.10 at 5, ×1.20 at 6.",
+    radiation:   "Radiation — this hex's radiation level. It decays 1 per turn on its own, but at 3+ it can spread each turn (25% chance per neighbor, up to the 6 nearest hexes). While a hex is Radiated, its owning faction's global Darkness climbs 1 per turn. Purify the hex to zero it out.",
+    darkness:    "Local Darkness — Qliphothic taint pooled in this hex itself, tracked separately from the owning faction's global Darkness. Faction Darkness rises 1/turn while the faction owns any Radiated hex, and cleansing a Purified hex drops it by 2.",
+    weather:     "Weather — active weather on this hex and how many turns it has left. Hover the chip for the full effect breakdown; weather is written by the Travel engine and ticks down each turn.",
+
+    // ---- Pressure & Conditions ----
+    pressure:      "Pressure & Conditions — radiation severity plus any persistent condition tags on this hex. Conditions are set by GM tools and turn effects (raid fallout, cleansing rituals) and drive the turn engine's radiation/darkness bookkeeping.",
+    radiationTier: "Radiation Tier — severity band from the radiation value: I at 1–2, II at 3–5, III at 6–9, IV at 10+. '—' means no radiation.",
+    conditions:    "Conditions — persistent tags on this hex. Radiated marks active radiation (auto-set when it spreads, auto-cleared when it decays to 0). Purified cleanses this hex AND its ~6 nearest neighbors each turn and lowers the owner's global Darkness by 2. Contaminated and Corrupted mark lasting damage from raids and rituals.",
+    gmRad:         "GM — nudge this hex's radiation up or down (±1 / ±5). It then decays 1 per turn and, at 3+, can spread to neighboring hexes.",
+    gmDark:        "GM — nudge this hex's local Darkness up or down by 1.",
+    gmConditions:  "GM — toggle a persistent condition tag on this hex (Radiated, Contaminated, Purified, Corrupted). The turn engine reads these: Purified cleanses each turn; Radiated feeds the owner's Darkness.",
+    gmCondClear:   "GM — clear every condition tag from this hex at once.",
+
+    // ---- Tabs / stage ----
+    tabOverview: "Overview — the live control surface: recorded yields, resource nodes, Build Unit engineering, and notes.",
+    tabDossier:  "Dossier — the hex's story and math: production trace, active modifiers, the full improvement timeline, and suggested next steps.",
+    stagePill:   "Integration stage — plain-language name for the hex's integration progress: Untouched Wilderness (0) → Foothold/Outpost (1–2) → Developing Territory (3–4) → Settled Province (5) → Integrated Heartland (6).",
+
+    // ---- Overview pane ----
+    yields:      "Resources / Yields — the resource pips recorded on this hex (Food, Materials, Trade, Military, Knowledge). Each turn they convert into OP marks for the owning faction — leyline flow modulates the take (surge ×1.3, stagnation ×0.6) and Food also feeds Logistics 1:1. Every 2 Materials pips across a faction's hexes generate 1 Build Unit at end of turn.",
+    nodes:       "Resource Nodes — harvestable material deposits on this hex. Each shows its material, RFI tier, the gather check (DC + attribute), its yield roll, and remaining charges. Depleted nodes hide from players until the GM regrows them.",
+    nodeHarvest: "Harvest — roll 2d10 + the listed attribute (passive bonuses apply) against the node's DC. Success rolls the yield formula, delivers that many units of the material to your character's inventory, and consumes 1 charge; failure costs nothing.",
+    nodeRich:    "Rich node — a lucky strike carrying extra charges.",
+    nodeAdd:     "GM — author a new resource node on this hex: pick the material, tier, attribute, DC, charges, and yield formula.",
+    nodeRegrow:  "GM — reset every node on this hex to its maximum charges, including depleted ones players can no longer see.",
+    nodeDelete:  "GM — permanently remove this node from the hex. Charges and any rich/discovered state are lost.",
+    buildUnits:  "Build Units (Engineering) — spend the owning faction's BU on physical work in this hex. BU are generated at end of turn from Materials pips across all owned hexes (every 2 pips → 1 BU). Anyone with owner permission on the owning faction — or the GM — can spend here.",
+    buFortify:   "Fortify Hex — spends BU (world setting, default 2) to stamp the Fortified modifier on this hex: +3 defense when it is raided. Already-Fortified hexes don't stack a second copy.",
+    buRepair:    "Repair Hex — spends BU (world setting, default 1) to remove the Damaged Infrastructure modifier (−25% production). Only useful when the hex actually carries that damage.",
+    buAsset:     "Build Asset — spends BU (world setting, default 3) and logs the construction to the faction war log. The asset system itself is still a placeholder: nothing is stamped on the hex yet beyond the spend.",
+    gmNotes:     "GM Notes — free-text notes stored on this hex by the GM. Anyone who can open the sheet can read them; edit them via the GM Hex Config.",
+
+    // ---- Dossier pane ----
+    whatsHere:  "What's Here — the hex's current identity: integration stage, sephirothic alignment if set, and the production trace showing how base pips become final output.",
+    sephirot:   "Sephirot — the sephirah this hex is aligned to. Alignment adds flat bonuses to the hex's effective output (e.g. Keter +1 to all resources, Gevurah +3 Military +1 Defense, Malkuth +4 Trade) and matters to campaign goals that want aligned territory.",
+    production: "Production trace — how output is computed: base pips from the hex type, × size multiplier (outpost 0.5 … megalopolis 3.0), × integration multiplier (×1.05 at 3+, ×1.10 at 5, ×1.20 at 6). Modifiers and sephirot bonuses apply on top in the live income engine.",
+    prodManual: "Manual override — the pips stored on this hex override the auto-calculated production.",
+    modifiers:  "Active Modifiers — named effects stamped on this hex (Fortified +3 defense, Trade Hub +50% trade, Damaged Infrastructure −25% production, Radiation Zone −75%…). They scale the hex's production and defense every turn; each entry records when and how it arrived.",
+    timeline:   "How We Got Here — the hex's append-only improvement ledger: builds, modifier changes, size/type/sephirot changes, integration steps, raid outcomes. Newest first; the last 60 entries are shown.",
+    nextSteps:  "What's Next — a coach panel that reads the hex's current state and suggests concrete follow-ups: integration pushes, type/size upgrades, sephirot alignment, modifier fixes, and owner actions.",
+    planPill:   "Open the Activity Planner with this activity, this hex, and the owning faction preselected — plan the suggested move in one click.",
+
+    // ---- JS-built cards ----
+    quests:       "Quests — campaign quests linked to this hex. Players see links on visible hexes (or ones the GM has hinted); the GM sees everything plus hint controls.",
+    questLink:    "GM — link an existing campaign quest to this hex, optionally revealing the hint immediately (players then see the quest on this hex even while it is fogged).",
+    questHint:    "GM — toggle the hint. Revealed: players can see this quest on the hex even under fog. Hidden: the link stays fog-gated.",
+    questUnlink:  "GM — remove the link between this quest and this hex. The quest itself is untouched.",
+    worldMods:    "GM — Active Effects: persistent world-modifier effects stored on this hex, each with its expiry turn. Click a chip to enable or disable it in place.",
+    worldModChip: "GM — click to toggle this world modifier on/off. '(to Tn)' is its expiry turn; disabled or expired chips render dimmed."
+  };
+
+  // Stamp a registry tooltip onto a JS-built element (skips silently when the
+  // registry isn't available — e.g. bbttcc-core disabled).
+  function _hexTipApply(el, key) {
+    try {
+      const t = game.bbttcc?.help?.tip?.("hex", key) || "";
+      if (t && el) el.dataset.tooltip = t;
+    } catch (_e) {}
+  }
+
+  // Fallback {{bbttccTip}} helper so hex-sheet.hbs renders even when this
+  // script's templates hit Handlebars before bbttcc-core's init has run (or
+  // bbttcc-core is disabled — a mustache with args and no helper would throw
+  // "Missing helper"). Delegates to the central registry at call time, so
+  // whichever module wins the registration race, the lookup is identical.
+  Hooks.once("init", function () {
+    try {
+      if (!Handlebars.helpers.bbttccTip) {
+        Handlebars.registerHelper("bbttccTip", function (appKey, key) {
+          return game.bbttcc?.help?.tip?.(appKey, key) ?? "";
+        });
+      }
+    } catch (e) { warn("bbttccTip fallback helper registration failed", e); }
+  });
 
   // ─── Holdings Phase A (2026-05-14) ─────────────────────────────────────
   // Strategic bonus tables locked by holdings design memo. Rigs and
@@ -442,6 +584,10 @@
           radiationPips: pips(0,6),
           darkness: 0,
           darknessPips: pips(0,6),
+          radiationTier: "—",
+          conditionsCount: "0",
+          hasConditions: false,
+          conditions: [],
           hexImage: "",
           isGM: !!(game.user && game.user.isGM),
           notes: "Could not resolve hex for UUID: " + this.hexUuid
@@ -467,9 +613,15 @@
       const integ = tf.integration || {};
       const integProg = Number((typeof integ.progress !== "undefined") ? integ.progress : 0);
 
-      const mods = tf.mods || {};
-      const rad = Number(mods.radiation || 0);
-      const dark = Number(mods.darkness || 0);
+      const rad = readRadiation(tf);
+      const dark = readDarkness(tf);
+
+      // Pressure & Conditions — persistent tags read from the canonical
+      // flags.bbttcc-territory.conditions array (what the turn engine's
+      // darkness feed / Purified cleanup consume).
+      const conditions = Array.isArray(tf.conditions)
+        ? tf.conditions.map(c => String(c).trim()).filter(Boolean)
+        : [];
 
       const fac = (tf.facilities && tf.facilities.primary) ? tf.facilities.primary : {};
       const facType = (fac && fac.facilityType) ? fac.facilityType : "";
@@ -616,11 +768,14 @@
         : 0;
       // Player can spend if they have OWNER permission on the owning faction actor (or are GM).
       const buCanEngineer = buHasOwner && (isGMUser || !!owner.isOwner);
-      const _tip = (cost, label) => {
+      // Blocked states explain the blocker; the affordable state pulls the
+      // full mechanical explanation from the central help registry (falling
+      // back to the short label when bbttcc-core is unavailable).
+      const _tip = (cost, label, helpKey) => {
         if (!buHasOwner) return "This hex has no owning faction.";
         if (!buCanEngineer) return `Only ${owner.name} (or GM) can engineer this hex.`;
         if (buBalance < cost) return `Need ${cost} BU; ${owner.name} has ${buBalance}.`;
-        return `${label} — spends ${cost} BU.`;
+        return (game.bbttcc?.help?.tip?.("hex", helpKey) || "") || `${label} — spends ${cost} BU.`;
       };
       const buildUnits = {
         enabled: buApiAvail,
@@ -631,9 +786,9 @@
         canRepair:  buCanEngineer && buBalance >= cRep,
         canAsset:   buCanEngineer && buBalance >= cAss,
         costs: { fortify: cFort, repair: cRep, asset: cAss },
-        fortifyTip: _tip(cFort, "Fortify Hex"),
-        repairTip:  _tip(cRep,  "Repair Hex"),
-        assetTip:   _tip(cAss,  "Build Asset"),
+        fortifyTip: _tip(cFort, "Fortify Hex", "buFortify"),
+        repairTip:  _tip(cRep,  "Repair Hex", "buRepair"),
+        assetTip:   _tip(cAss,  "Build Asset", "buAsset"),
         hint: !buHasOwner
           ? "Assign an owner to this hex before spending Build Units."
           : !buCanEngineer
@@ -723,6 +878,10 @@
         radiationPips: pips(rad,6),
         darkness: dark,
         darknessPips: pips(dark,6),
+        radiationTier: radTier(rad),
+        conditionsCount: String(conditions.length),
+        hasConditions: conditions.length > 0,
+        conditions: conditions,
         weather,
         hexImage: hexImage,
         isGM: isGMUser,
@@ -1281,6 +1440,70 @@
         }
       }, { capture:true, signal: sig });
 
+      // ───────────── Pressure & Conditions — GM controls ─────────────
+      // hex-rad / hex-dark nudge the canonical turn-engine stores
+      // (flags.bbttcc-territory.mods.radiation / .darkness); hex-cond toggles
+      // the named tag in flags.bbttcc-territory.conditions; hex-cond-clear
+      // empties the tag list. Radiation keeps its "Radiated" tag in sync the
+      // same way advance-turn.tracks.js does (tagged while > 0, cleared at 0).
+      root.addEventListener("click", async (ev) => {
+        let btn = null;
+        try {
+          btn = (ev.target && ev.target.closest)
+            ? ev.target.closest('[data-action="hex-rad"],[data-action="hex-dark"],[data-action="hex-cond"],[data-action="hex-cond-clear"]')
+            : null;
+        } catch (e) { btn = null; }
+        if (!btn) return;
+        ev.preventDefault(); ev.stopPropagation();
+        if (!game.user?.isGM) return;
+
+        const doc = this._hexDoc;
+        if (!doc) { ui.notifications?.warn("Hex doc not resolved."); return; }
+
+        const action = String(btn.getAttribute("data-action") || "");
+        const tf = (doc.flags && doc.flags[MOD_T]) ? doc.flags[MOD_T] : {};
+        const mods = (tf.mods && typeof tf.mods === "object") ? foundry.utils.deepClone(tf.mods) : {};
+        let conds = Array.isArray(tf.conditions) ? tf.conditions.slice() : [];
+
+        if (action === "hex-rad") {
+          const delta = Number(btn.getAttribute("data-delta") || 0) || 0;
+          const next = Math.max(0, readRadiation(tf) + delta);
+          mods.radiation = next;
+          if (next > 0 && !conds.includes("Radiated")) conds.push("Radiated");
+          if (next === 0) conds = conds.filter(c => c !== "Radiated");
+        } else if (action === "hex-dark") {
+          const delta = Number(btn.getAttribute("data-delta") || 0) || 0;
+          mods.darkness = Math.max(0, readDarkness(tf) + delta);
+        } else if (action === "hex-cond") {
+          const name = String(btn.getAttribute("data-cond") || "").trim();
+          if (!name) return;
+          if (conds.includes(name)) {
+            conds = conds.filter(c => c !== name);
+            // Mirror the engine's invariant (Radiated ⇔ radiation > 0).
+            if (name === "Radiated") mods.radiation = 0;
+          } else {
+            conds.push(name);
+            // Spread floors freshly-Radiated hexes at 1 — do the same here.
+            if (name === "Radiated") mods.radiation = Math.max(1, readRadiation(tf));
+          }
+        } else if (action === "hex-cond-clear") {
+          conds = [];
+        } else {
+          return;
+        }
+
+        try {
+          await doc.update({
+            [`flags.${MOD_T}.mods`]: mods,
+            [`flags.${MOD_T}.conditions`]: Array.from(new Set(conds))
+          }, { parent: doc.parent });
+          this.render({ force: false });
+        } catch (eP) {
+          warn("pressure control failed", eP);
+          ui.notifications?.error("Pressure update failed — see console.");
+        }
+      }, { capture:true, signal: sig });
+
       root.addEventListener("click", async (ev) => {
         let img = null;
         try {
@@ -1352,9 +1575,10 @@
           if (txt === "Tracks & State") { tracksCard = c; break; }
         }
         if (!tracksCard) {
-          // No matching card (template changed). Skip chips.
-          return;
-        }
+          // No matching card (template changed). Skip chips — must not
+          // `return` here: that bailed out of _onRender before the Quests
+          // card below could inject (fixed 2026-07-07).
+        } else {
 
         // Remove prior injected block
         const prev = tracksCard.querySelector('[data-bbttcc-worldmods="1"]');
@@ -1362,6 +1586,7 @@
 
         const box = document.createElement('div');
         box.setAttribute('data-bbttcc-worldmods', '1');
+        box.setAttribute('data-tour', 'hex.worldMods');
         box.style.marginTop = '10px';
         box.style.paddingTop = '8px';
         box.style.borderTop = '1px solid rgba(148,163,184,0.18)';
@@ -1370,6 +1595,7 @@
         head.textContent = 'Active Effects';
         head.style.fontWeight = '800';
         head.style.marginBottom = '6px';
+        _hexTipApply(head, 'worldMods');
         box.appendChild(head);
 
         const wrap = document.createElement('div');
@@ -1412,6 +1638,7 @@
             if (!st.enabled) chip.style.opacity = '0.45';
             else if (st.expired) chip.style.opacity = '0.55';
 
+            _hexTipApply(chip, 'worldModChip');
             wrap.appendChild(chip);
           }
         }
@@ -1451,6 +1678,7 @@
         }, { capture: true, signal: sig });
         }
         }
+        }
       } catch (eMods) {
         // non-fatal
       }
@@ -1475,12 +1703,14 @@
             const card = document.createElement('div');
             card.className = 'bbttcc-hex-card';
             card.setAttribute('data-bbttcc-quests-card', '1');
+            card.setAttribute('data-tour', 'hex.quests');
 
             const header = document.createElement('div');
             header.style.cssText = "display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;";
             const title = document.createElement('div');
             title.style.cssText = "font-weight:800;";
             title.innerHTML = "📜 Quests";
+            _hexTipApply(title, 'quests');
             header.appendChild(title);
             if (isGMUser) {
               const linkBtn = document.createElement('button');
@@ -1488,6 +1718,7 @@
               linkBtn.className = "bbttcc-btn bbttcc-btn-small";
               linkBtn.setAttribute('data-action', 'bbttcc-quest-link-add');
               linkBtn.textContent = "+ Link Quest";
+              _hexTipApply(linkBtn, 'questLink');
               header.appendChild(linkBtn);
             }
             card.appendChild(header);
@@ -1536,6 +1767,7 @@
                   tBtn.setAttribute('data-action', 'bbttcc-quest-toggle-hint');
                   tBtn.setAttribute('data-quest-id', q.questId);
                   tBtn.textContent = q.hinted ? "Hide Hint" : "Reveal Hint";
+                  _hexTipApply(tBtn, 'questHint');
                   ctrls.appendChild(tBtn);
 
                   const uBtn = document.createElement('button');
@@ -1544,6 +1776,7 @@
                   uBtn.setAttribute('data-action', 'bbttcc-quest-unlink');
                   uBtn.setAttribute('data-quest-id', q.questId);
                   uBtn.textContent = "Unlink";
+                  _hexTipApply(uBtn, 'questUnlink');
                   ctrls.appendChild(uBtn);
                 }
                 row.appendChild(ctrls);
@@ -1662,6 +1895,11 @@
   Hooks.once("ready", function () {
     ensureNS();
 
+    // Central help registry (bbttcc-core). Order-safe + guarded: if the
+    // registry is absent (core disabled) the sheet simply renders without
+    // hover help.
+    try { game.bbttcc?.help?.register?.("hex", HEX_TIPS); } catch (_eHelp) {}
+
     game.bbttcc.api.territory.openHexSheet = function (hexUuid) {
       if (!hexUuid) {
         if (ui && ui.notifications && ui.notifications.warn) ui.notifications.warn("openHexSheet: hexUuid required.");
@@ -1671,8 +1909,14 @@
 
       const existing = game.bbttcc.apps.hexSheets[key];
       if (existing) {
-        existing.render({ force: true, focus: true });
-        return existing;
+        // Reuse only a live app. A stale cache entry with a detached DOM
+        // used to swallow the open-click entirely (fixed 2026-07-07).
+        const el = (existing.element instanceof HTMLElement) ? existing.element : (existing.element && existing.element[0]);
+        if (existing.rendered || (el && el.isConnected)) {
+          existing.render({ force: true, focus: true });
+          return existing;
+        }
+        delete game.bbttcc.apps.hexSheets[key];
       }
 
       const app = new BBTTCC_HexSheet(key);

@@ -8,11 +8,11 @@
     <header class="bbttcc-market-head">
       <div>
         <div class="bbttcc-market-title">Bad Eden Market</div>
-        <div class="bbttcc-muted">Procurement console: spend faction Economy OP to buy gear, rigs, facilities, and hex assets.</div>
+        <div class="bbttcc-muted">Procurement console: spend faction OP (pool set by item pricing) to buy gear, rigs, facilities, and hex assets.</div>
       </div>
       <div class="bbttcc-market-actions">
         {{#if isGM}}
-        <button type="button" class="bbttcc-button" data-action="manage">
+        <button type="button" class="bbttcc-button" data-action="manage" data-tooltip="{{bbttccTip 'market' 'manage'}}" data-tour="market.manage">
           <i class="fas fa-gear"></i> Manage Catalogs
         </button>
         {{/if}}
@@ -20,14 +20,14 @@
     </header>
 
     <section class="bbttcc-market-grid">
-      <section class="bbttcc-card">
-        <header class="bbttcc-card-header">
+      <section class="bbttcc-card" data-tour="market.context">
+        <header class="bbttcc-card-header" data-tooltip="{{bbttccTip 'market' 'context'}}">
           <h2>Context</h2>
           <p>Pick vendor, buyer, and (optionally) a delivery hex.</p>
         </header>
 
         <div class="bbttcc-card-body">
-          <div class="field">
+          <div class="field" data-tooltip="{{bbttccTip 'market' 'vendor'}}" data-tour="market.vendor">
             <label>Vendor</label>
             <select name="vendorId" data-role="vendor">
               {{#each vendors}}
@@ -36,7 +36,7 @@
             </select>
           </div>
 
-          <div class="field">
+          <div class="field" data-tooltip="{{bbttccTip 'market' 'faction'}}" data-tour="market.faction">
             <label>Buyer Faction</label>
             <select name="factionId" data-role="faction">
               <option value="">(Select)</option>
@@ -47,7 +47,7 @@
             <small>Economy OP is spent from this faction.</small>
           </div>
 
-          <div class="field">
+          <div class="field" data-tooltip="{{bbttccTip 'market' 'character'}}" data-tour="market.character">
             <label>Buyer Character (for gear)</label>
             <select name="characterId" data-role="character">
               <option value="">(Optional)</option>
@@ -58,21 +58,21 @@
             <small>Gear deliveries go to this character's inventory.</small>
           </div>
 
-          <div class="field">
+          <div class="field" data-tooltip="{{bbttccTip 'market' 'hex'}}" data-tour="market.hex">
             <label>Delivery Hex UUID (for facilities/hex assets)</label>
             <input type="text" name="hexUuid" data-role="hexUuid" value="{{hexUuid}}" placeholder="Scene.<id>.Drawing.<id> or Drawing UUID"/>
             <small>If empty, facility/hex purchases will be blocked (by design).</small>
           </div>
 
-          <div class="field">
+          <div class="field" data-tooltip="{{bbttccTip 'market' 'note'}}" data-tour="market.note">
             <label>Notes (receipt)</label>
             <input type="text" name="note" data-role="note" value="{{note}}" placeholder="Optional…"/>
           </div>
         </div>
       </section>
 
-      <section class="bbttcc-card bbttcc-market-catalog">
-        <header class="bbttcc-card-header">
+      <section class="bbttcc-card bbttcc-market-catalog" data-tour="market.catalog">
+        <header class="bbttcc-card-header" data-tooltip="{{bbttccTip 'market' 'catalog'}}">
           <h2>Catalog</h2>
           <p>{{vendorName}}</p>
           {{#if vendorStatusLine}}<p class="bbttcc-muted">{{vendorStatusLine}}</p>{{/if}}
@@ -80,8 +80,8 @@
 
         <div class="bbttcc-card-body">
           <div class="bbttcc-market-filters">
-            <input type="text" data-role="q" value="{{q}}" placeholder="Search…"/>
-            <select data-role="category">
+            <input type="text" data-role="q" value="{{q}}" placeholder="Search…" data-tooltip="{{bbttccTip 'market' 'search'}}" data-tour="market.search"/>
+            <select data-role="category" data-tooltip="{{bbttccTip 'market' 'category'}}" data-tour="market.category">
               <option value=""                 {{#if (eq category ""               )}}selected{{/if}}>All categories</option>
               <option value="weapon"           {{#if (eq category "weapon"         )}}selected{{/if}}>Weapons</option>
               <option value="armor"            {{#if (eq category "armor"          )}}selected{{/if}}>Armor</option>
@@ -93,7 +93,7 @@
               <option value="rig_upgrade"      {{#if (eq category "rig_upgrade"    )}}selected{{/if}}>Rig Upgrade</option>
               <option value="facility_upgrade" {{#if (eq category "facility_upgrade")}}selected{{/if}}>Facility Upgrade</option>
             </select>
-            <select data-role="sort">
+            <select data-role="sort" data-tooltip="{{bbttccTip 'market' 'sort'}}" data-tour="market.sort">
               <option value="name"     {{#if (eq sort "name"    )}}selected{{/if}}>Sort: Name (A→Z)</option>
               <option value="tier_asc" {{#if (eq sort "tier_asc")}}selected{{/if}}>Sort: Tier (low→high)</option>
               <option value="tier_desc"{{#if (eq sort "tier_desc")}}selected{{/if}}>Sort: Tier (high→low)</option>
@@ -111,16 +111,16 @@
                 <div class="bbttcc-market-item__main">
                   <div class="bbttcc-market-item__name">
                     {{#if canOpen}}
-                      <a href="#" class="bbttcc-market-item__link" data-action="openDoc" data-uuid="{{docUuid}}" title="Open item sheet">{{name}}</a>
+                      <a href="#" class="bbttcc-market-item__link" data-action="openDoc" data-uuid="{{docUuid}}" data-tooltip="{{bbttccTip 'market' 'openDoc'}}" {{#if @first}}data-tour="market.openDoc"{{/if}}>{{name}}</a>
                     {{else}}
                       {{name}}
                     {{/if}}
                   </div>
-                  <div class="bbttcc-muted">{{kindLabel}}{{#if tierLabel}} · {{tierLabel}}{{/if}} · Cost: <b>{{costLabel}}</b></div>
+                  <div class="bbttcc-muted" data-tooltip="{{bbttccTip 'market' 'cost'}}" {{#if @first}}data-tour="market.cost"{{/if}}>{{kindLabel}}{{#if tierLabel}} · {{tierLabel}}{{/if}} · Cost: <b>{{costLabel}}</b></div>
                   {{#if blurb}}<div class="bbttcc-muted">{{blurb}}</div>{{/if}}
                 </div>
                 <div class="bbttcc-market-item__btns">
-                  <button type="button" class="bbttcc-button primary" data-action="buy">Buy</button>
+                  <button type="button" class="bbttcc-button primary" data-action="buy" data-tooltip="{{bbttccTip 'market' 'buy'}}" {{#if @first}}data-tour="market.buy"{{/if}}>Buy</button>
                 </div>
               </article>
             {{/each}}

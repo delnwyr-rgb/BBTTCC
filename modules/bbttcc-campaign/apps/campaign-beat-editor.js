@@ -24,6 +24,8 @@ function __bbttccInstallBeatEditorUnlockHook() {
           try { if (typeof app._ensureCasualtiesUI === "function") app._ensureCasualtiesUI(arg); } catch (e1e) { console.warn("[Bad Eden] casualties inject failed:", e1e); }
           try { if (typeof app._ensureTurnAssignUI === "function") app._ensureTurnAssignUI(arg); } catch (e2) { console.warn("[Bad Eden] turn assign inject failed:", e2); }
           try { if (typeof app._ensureAudioUI === "function") app._ensureAudioUI(arg); } catch (e2a) { console.warn("[Bad Eden] audio inject failed:", e2a); }
+          // Stamp help tooltips onto the injected panels (data-help → data-tooltip).
+          try { _applyBeatsHelp(arg?.[0] instanceof HTMLElement ? arg[0] : arg); } catch (e2b) {}
           try { __bbttccAutosizeAppWindow(app); } catch (e3) {}
         }, 50);
       } catch (e) {
@@ -46,6 +48,235 @@ try { if (game && game.ready) __bbttccInstallBeatEditorUnlockHook(); } catch (e)
 // modules/bbttcc-campaign/apps/campaign-beat-editor.js
 
 const TAG = "[bbttcc-campaign][BeatEditor]";
+
+// ---------------------------------------------------------------------------
+// Beats help dictionary — hover tooltips + Operator tour text.
+// Registered into the central registry (game.bbttcc.help, bbttcc-core) under
+// the "beats" namespace. The template reads it via {{bbttccTip 'beats' 'key'}};
+// JS-injected panels mark elements data-help="<key>" and _applyBeatsHelp()
+// stamps data-tooltip from the same dictionary. ONE source of truth.
+// Honesty rule: every tip states what the RUNTIME actually does (executeBeat /
+// injectorFire / world-mutation-engine); fields the current runtime does not
+// consume say so instead of pretending.
+// ---------------------------------------------------------------------------
+const BEATS_HELP = {
+  // --- Tabs / shell ---
+  tabs: "Core = identity, description, audio · Injection = tags + travel-injection gating · Scene = linked scene, journal, actors · Choices = player-facing branches + success/failure Outcomes routing · World Effects = what changes when the beat resolves.",
+
+  // --- Core tab ---
+  id: "Beat ID — the key everything routes by: choice Next/Failure targets, quest-effect Beat marks, and the fired-once ledgers. Saving with a new id is treated as a rename of this beat; re-check any other beat whose routes still point at the old id.",
+  label: "Label — display name in the Campaign Builder, the run dialog, and turn-availability callouts. Cosmetic; routing always uses the Beat ID.",
+  type: "Type — picks the runtime path when the beat runs: dialog / skill_scene / travel / custom just show Description + Choices; scene_transition also spawns the Scene-tab Actors; encounter launches the keyed encounter scenario; outcome_trigger runs its success/failure resolution key directly; cinematic runs the timed Start→Next scene chain.",
+  timeScale: "Time Scale — narrative size, mapped to time points: moment/campaign 0 · scene/leg 1 · turn = full turn length (default 12) · arc = 3 turns. Stored for Strategic-Turn time accrual — which is not live yet (the world API has no addTime), so today this is informational.",
+  timePoints: "Time Points (override) — replaces the Time Scale mapping when set. Time accrual is not live yet (world API lacks addTime), so this value is stored but currently adds no Strategic-Turn time.",
+  playerFacing: "Player-Facing — when the beat runs, players get a read-only mirror window (title, description, choice list) delivered over a chat courier. They can watch but not click; only the GM's dialog resolves anything.",
+  questId: "Quest — ties the beat to a questline for Builder filtering and bookkeeping. Completion is NOT automatic: to close the quest, author a Quest Effect row (World Effects tab) with action Complete on the beat that should finish it.",
+  questStep: "Quest Step — ordering hint for the Builder's quest view. No runtime effect.",
+  questRole: "Quest Role — start / core / optional / resolution. Only 'start' is live: when that beat runs, the GM gets a quest-acceptance prompt. The other roles are display labels.",
+  turnNumber: "Available Turn — groups the beat under a Strategic Turn in the Builder and, on turn advance, whispers the GM a 'Now Available' callout (already-fired beats get badged). It never auto-fires the beat; the GM still runs it by hand.",
+  description: "Description — the narrative body. Shown in the GM run dialog (and mirrored to players when Player-Facing). Safe to keep on every beat.",
+
+  // Encounter (type=encounter only)
+  encounter: "Encounter routing — stored on beat.encounter; when this beat runs, the runtime launches an Encounter-Engine scenario by Key.",
+  encounterKey: "Encounter Key — the scenario id the Encounter Engine runs when this beat fires. Without a key the beat falls back to plain description + choices.",
+  encounterTier: "Tier — forwarded as scenario metadata to the Encounter Engine; the beat runner itself ignores it. Whether it scales anything depends on the encounter engine.",
+  encounterActorName: "Actor Name — stored with the encounter payload as a hint for the scenario; the beat runner only routes by Key and does not spawn from this by itself.",
+
+  // Audio (injected panel, Core tab)
+  audio: "Beat Audio — one narration track per beat: a Playlist Sound (preferred) or a raw file. Plays GM-side when the beat runs. Intro-on-open rule: when the beat fires from a dialogue conversation, the run skips this — the track already played as the NPC's opener when the conversation window opened; a routed outcome beat's track plays at the curtain call instead.",
+  audioEnabled: "Enable audio — master switch. Off = the audio manager refuses to play this beat's track anywhere (run, dialogue open, curtain call, preview still warns).",
+  audioPlaylist: "Playlist Sound — routes playback through Foundry's native PlaylistSound (preload, player broadcast, and stop are handled by document sync). Takes precedence over the raw file path below.",
+  audioSrc: "Audio File — raw-path fallback used only when no Playlist Sound is set. Keep files inside the module folder so paths stay stable across deploys.",
+  audioPick: "Pick — browse for an audio file; picking also pre-warms the sound cache so the first play isn't cold.",
+  audioPlay: "Play — GM-local preview through the audio manager (never broadcasts; same dedupe rules as live playback).",
+  audioStop: "Stop — stops the editor preview AND any currently-playing beat narration (broadcasting the stop to players if the narration was broadcast).",
+  audioVolume: "Volume — 0–100% for raw-file playback (clamped, default 85%). Playlist Sounds play at their playlist-configured volume.",
+  audioAutoplay: "Auto-play when beat runs — fire the track automatically as the beat executes (right after the journal auto-open, before the scene/dialog). Off = the track only plays from explicit Play controls.",
+  audioLoop: "Loop — repeat until stopped. Meant for ambience; leave off for narration lines.",
+  audioBroadcast: "Play for players — raw-file playback is GM-local by default; check this to broadcast it to connected players when the beat runs. Playlist Sounds broadcast natively regardless.",
+
+  // --- Injection tab ---
+  injection: "Injection — how this beat volunteers itself when a travel threshold fires. Only beats tagged inject.travel_threshold enter the candidate pool; the best tag-overlap score wins (ties break deterministically by campaign:beat id).",
+  tags: "Tags — canonical author tags (space-separated; aliases normalize on save, e.g. 'gilbert' → theme.auditor). inject.travel_threshold makes the beat a travel-injection candidate; theme.* tags add selection score when the trigger context shares them; casualties.* tags are written by the Casualties panel and read by the Casualty Engine on resolution.",
+  pickTags: "Pick Tags… — checkbox catalog of the canonical tags (threads, triggers, casualties). Saves back into the Tags field.",
+  politicalTags: "Political Tags (AAE) — politics.* tags handed to the Authoritarian-Axis Engine after world effects resolve; they drive faction political drift and downstream consequences.",
+  oncePerHex: "Once Per Hex — after this beat fires on a hex, the injector skips it for that same hex on later triggers (per campaign:beat:hex ledger).",
+  cooldownTurns: "Cooldown (Turns) — minimum Strategic Turns between injector firings (current world turn minus last-fire turn). 0 = no cooldown. Needs a live world turn number to have teeth.",
+  repeatable: "Repeatable — read by the Story Director: No = once the beat is marked fired (on any surface — tick, seam, or dialogue), the director never offers it again; Yes = it can come back.",
+  governance: "Governance — per-beat overrides for injector behavior. ⚠ Not wired: the injector reads these switches from the travel-trigger call, not from the beat, so the four selectors are DISABLED here. Any values already stored on the beat are preserved untouched on save.",
+  promptGM: "Prompt GM — intended: ask the GM before firing this beat. Not wired (the injector takes this option from the trigger call, not the beat), so the control is disabled; a stored value is preserved on save.",
+  fallbackOnDecline: "Fallback on Decline — intended: if the GM declines this beat, try the next candidate instead of aborting. Not wired (read from the trigger call, not the beat); control disabled, stored value preserved.",
+  allowMulti: "Allow Multi — intended: let one trigger fire more than one beat. Not wired (read from the trigger call, not the beat); control disabled, stored value preserved.",
+  oncePerHexGlobal: "Global Once Per Hex — intended: once ANY beat fires on a hex, that hex is done for everyone. Not wired (read from the trigger call, not the beat); control disabled, stored value preserved.",
+
+  // --- Scene tab ---
+  linkedScene: "Linked Scene — activated for the table when the beat runs (non-cinematic path). Cinematic beats must leave this blank — the editor clears it — because a linked scene would pop the dialog before the cinematic chain launches.",
+  activateScene: "Activate — switch the table to this scene right now (authoring convenience; does not run the beat).",
+  cinematic: "Cinematic — timed two-scene chain: activate the Start Scene, hold for Duration, then activate the Next Scene. Any dialog/choices run non-blocking alongside the chain.",
+  cinematicEnabled: "Enable Cinematic — turns the chain on; either this flag or Type=cinematic selects the cinematic path. Linked Scene stays blank on cinematics.",
+  cinematicDuration: "Duration (ms) — how long the Start Scene holds before the Next Scene auto-activates (a GM-side timer). 0, or no Next Scene, means no auto-advance.",
+  cinematicStart: "Start Scene — first scene of the chain (the cutscene). Legacy beats that stored this in Linked Scene are migrated automatically.",
+  cinematicNext: "Next Scene — activated after Duration elapses; use it to bounce the table back into the fight scene after the cutscene.",
+  journal: "Auto-Open Journal — when the beat runs, this Journal Entry opens for the GM first, before audio, scene, and dialog. Handy for scripts and read-alouds.",
+  journalEnabled: "Auto-open on Beat run — master switch for the journal auto-open (GM-side).",
+  journalForce: "Force open (GM) — stored on beat.journal.force but the runtime does not read it; the auto-open is GM-only either way.",
+  journalEntry: "Journal Entry — which entry auto-opens. Pick sets it; Open previews it now without running the beat.",
+  actors: "Actors (UUID list) — on scene_transition beats these actors are spawned when the beat runs. Other beat types carry the list as authoring reference only.",
+
+  // --- Choices tab ---
+  choices: "Choices — the buttons offered in the run dialog. Each can gate on a check and route to another beat. Routing runs the target beat IN FULL (scene, audio, effects) before this beat finishes resolving — so a routed child's effects land before this beat's own World Effects.",
+  choiceLabel: "Choice Label — the button text in the beat dialog (GM view and the player mirror).",
+  choiceNext: "Next Beat — runs this beat on pick (or on a passed check). It executes immediately and completely before the current beat's own effects apply.",
+  choiceDesc: "Choice Description — optional text listed under the buttons; good for stakes, costs, and what the table is really deciding.",
+  choiceCheckStat: "Check Stat — gate for this choice. GM Adjudication = pass/fail modal, no dice. op.* = faction roll: 1d20 + (bank + roster) OP vs DC — costs 1 OP to attempt and supports faction-backing spends. Abilities / saves / skills roll on the selected roster actor; if no roster actor is selected the GM adjudicates instead.",
+  choiceCheckDC: "DC — the check total must meet or beat this number. Ignored when no Check Stat is set.",
+  choiceFailNext: "Failure Beat — where a failed check routes. Blank = fall back to this beat's Failure Outcome (the Outcomes section below); if that is also blank, a failure routes nowhere and the dialog simply closes.",
+  addChoice: "Add Choice — appends a row. In-progress edits in existing rows are preserved.",
+  removeChoice: "Remove Choice — click twice within 1.5s to confirm (or Shift-click to skip the confirm).",
+  moveChoice: "Reorder — button order here is the display order in the run dialog.",
+
+  // Outcomes (fallback routing)
+  outcomes: "Outcomes — this beat's fallback routes (beat.outcomes). A failed choice check with no Failure Beat of its own falls back to the Failure outcome; outcome_trigger beats run their Success (or, if unset, Failure) target directly when they fire.",
+  outcomeSuccess: "Success Beat — for outcome_trigger beats, the beat that runs when this trigger fires (preferred over Failure). Stored at beat.outcomes.success.",
+  outcomeFailure: "Failure Beat — the shared fallback for failed choice checks whose row has no Failure Beat, and the outcome_trigger target when Success is blank. Stored at beat.outcomes.failure.",
+
+  // --- World Effects tab ---
+  worldEffects: "World Effects — applied when the beat resolves, in engine order: Territory Outcome → Faction deltas → Unlocks → Relationship steps → World Modifiers → Radiation → Turn Requests → War Log; Quest Effects and Casualties follow after.",
+  territoryOutcome: "Territory Outcome — hands this key to the Territory/Resolution engine against the run-context hex: Justice Reformation, Liberation, Best Friends Integration, Retribution/Subjugation, or Salt the Earth. The outcome mechanics live in the resolution engine, not the beat.",
+  factionEffectsLegacy: "Faction Effects (legacy editor) — hidden and disabled once the Faction GM Effects panel below injects; only that panel's rows are harvested on save (this block stays functional only as a fallback if the panel fails to load).",
+  radiationDelta: "Radiation Delta — a GLOBAL shift: adjusts Radiation Pressure for everyone (radiation.adjustAll), not one hex. Positive = hotter world.",
+  sparkLink: "Spark Link — Tikkun progression. On beat resolution the tikkun listener routes into the spark API: Identify marks the spark known, Acquire gains it, Integrate absorbs it personally, Deposit banks it to the faction. Leave Action blank to disable.",
+  sparkLinkSpark: "Spark — which authored spark (bbttcc-tikkun.sparks pack) this beat advances. Both Spark and Action are required or the link saves as disabled.",
+  sparkLinkAction: "Action — what happens to the spark when the beat resolves. Blank disables the whole link.",
+  sparkLinkMethod: "Method Tag — how the work was done (mirrors the OP tracks). Phase C corruption check: a method misaligned with the spark corrupts it. Blank inherits the method from the run context.",
+  gateUnlocks: "Gate Unlocks — on resolution the territory gate listener flips leylines.gate.enabled on the selected anchor hexes. Enable both ends of a pair for a fully-open corridor; Travel/Trade adjacency goes live immediately.",
+  gateUnlockHexes: "Anchor Hex(es) — every leyline-aware hex across all scenes; Ctrl/Cmd-click for multiple. ⚠-prefixed rows are orphan links to deleted or cross-world hexes, kept selected so they don't silently drop on save.",
+  gateUnlockAction: "Action — one action for all selected anchors: Enable opens the gates, Disable closes them.",
+  turnRequests: "Turn Requests — structured requests handed to the Strategic-Turn engine when the beat fires (api.turn.enqueueRequest); the queue is consumed on the next Advance Turn (Apply). Rows without a key are dropped on save.",
+  turnRequestKey: "Request Key — the request's identifier (e.g. clearRockslide). Rows without a key are discarded on save.",
+  turnRequestMode: "Mode — set / add / remove / clear, stored under value.mode for the (future) turn engine.",
+  turnRequestTarget: "Target — a hex, faction, quest, or beat this request points at (stored under value.target).",
+  turnRequestAmount: "Amount — numeric payload for the request (stored under value.amount; 0 is omitted).",
+  turnRequestNote: "Note — receipt text stored under value.note.",
+  questEffects: "Quest Effects — updates the party Quest Log on every coalition faction: Accept → active, Complete → completed, Beat Mark stamps per-beat progress, Note appends a history line. Author Complete on the terminal beat, not a routing hub — routed children resolve before the parent's own effects.",
+  questfxAction: "Action — Accept moves the quest to active; Complete closes it; Beat Mark records progress on a specific beat (what beat-requirement gates read); Note just appends to history.",
+  questfxQuest: "Quest — which registered questline this row updates. Rows without a quest are discarded on save.",
+  questfxBeat: "Beat (optional) — for Beat Mark rows: which beat the progress stamp attaches to (defaults to this beat).",
+  questfxState: "State — the mark recorded on the beat progress entry: 'seen' or 'completed'. Beat-requirement gates ({beatMark}) test exactly this value.",
+  questfxText: "Note — short receipt shown in the quest log history.",
+  warlog: "War Log Note — appended to the war log of the target faction (the first Faction Effect row's faction, else the run-context faction) with this beat's receipt.",
+
+  // Unlock Rewards (injected)
+  unlocks: "Unlock Rewards — on resolution, grants the checked maneuvers / strategic activities to the war faction (first Faction-Effect faction, else the run-context faction) as narrative unlocks. They then surface in the Raid Console / Strategic Planner.",
+  unlockManeuvers: "Maneuvers — raid-console actions from the raid EFFECTS catalog. Checked keys unlock on the faction when the beat resolves.",
+  unlockStrategics: "Strategic Activities — planner actions, same grant path as maneuvers.",
+
+  // World Modifiers (injected)
+  worldModifiers: "World Modifiers — persistent GM-only chips written onto a hex (flags.bbttcc-territory.worldModifiers) with created/expiry turns. Target hex = run context first, else the Target Hex picker below; with neither, the modifier is skipped.",
+  targetHex: "Target Hex — pins the modifier to a specific hex so manually-run beats (no travel context) still land somewhere. Lists the current scene's hexes only.",
+  harmonizedGrove: "Harmonized Grove — the authored modifier: forest hostility bias −1, Soft Power may pacify, +1 diplomacy on the next hex, adjacency derived.",
+  wmDuration: "Duration (turns) — the modifier expires this many Strategic Turns after it lands. 0 = no scheduled expiry (also true if the world turn isn't tracking).",
+  wmEnabled: "Enabled — write the chip active. Unchecked, the modifier is still written to the hex but marked disabled.",
+
+  // Relationship Effects (injected)
+  relationshipEffects: "Faction Relationship Effects — when the beat resolves, the world-mutation engine steps two factions' relation along at_war → hostile → unfriendly → neutral → friendly → allied (clamped). Each row writes Faction A's relations ledger; check Reciprocal to also write B's.",
+  relFactionA: "Faction A — the side whose relations ledger gets written (A's view of B). Saved as the row's sourceFactionId.",
+  relFactionB: "Faction B — the faction the status change points at. Saved as the row's targetFactionId.",
+  relStep: "Step — ladder movement −2…+2 along at_war → hostile → unfriendly → neutral → friendly → allied, clamped at both ends. 0-step rows are dropped on save.",
+  relReciprocal: "Reciprocal — also apply the same step in the other direction (B's view of A). Saved as a second mirrored row (B→A) that the engine applies alongside this one; on reopen the mirror stays folded into this checkbox.",
+  relNote: "Note — receipt text saved as the row's 'reason'; it shows up in the relationship change receipts/logs.",
+
+  // Faction GM Effects (injected)
+  factionGMEffects: "Faction GM Effects — beat-driven faction deltas applied on resolution: Morale/Loyalty (clamped % meters), Unity/Darkness (world victory/darkness), VP, plus per-track OP Bank deltas routed through the OP Engine. Replaces the legacy Faction Effects rows (same storage).",
+  fxFaction: "Faction — who takes the deltas. New rows default to the campaign's faction; a row with no faction is skipped on save.",
+  fxMorale: "Morale Δ — clamped percentage meter on the faction; negative erodes it.",
+  fxLoyalty: "Loyalty Δ — clamped percentage meter on the faction; negative erodes it.",
+  fxUnity: "Unity Δ — feeds the world victory ledger for this faction.",
+  fxDarkness: "Darkness Δ — feeds world Darkness attributed to this faction. Use for corrupting outcomes.",
+  fxVP: "Victory (VP) Δ — direct Victory Point adjustment for the faction.",
+  fxAllowOvercap: "Allow OP Overcap — OP deltas normally refuse to raise a track past its cap (and always refuse underflow). Check to let this beat exceed the cap.",
+  fxOpBank: "OP Bank Δ — per-track OP deltas (positive or negative) applied through the OP Engine: underflow refused; overcap refused unless Allow Overcap is on.",
+
+  // Casualties (injected)
+  casualties: "Casualties — writes standardized casualties.* tags into the beat's Tags; the Casualty Engine reads them on resolution: hex severity hits the hex's integration/development, attacker/defender severities hit Morale/Loyalty/Victory (war weariness).",
+  casHex: "Hex Casualties — collateral severity applied to the target hex: Minor → Catastrophic (catastrophic = devastation).",
+  casAttacker: "Attacker Casualties — losses for the attacking faction; Moderate+ starts costing Morale, Major+ Loyalty, Catastrophic also Victory.",
+  casDefender: "Defender Casualties — optional symmetry: same ladder applied to the defending faction.",
+  casAtrocity: "Atrocity — marks the act as cruelty / massacre / terror tactics; can spike Darkness on Major+ hex casualty outcomes.",
+
+  // Tour-region anchors (no single field to hover; used by the Operator tour)
+  basicInfo: "Basic Info — the beat's identity: id (routing key), label, type (runtime path), time scale, and quest linkage.",
+  questLinkage: "Quest linkage — ties this beat to a questline for filtering and prompts; actual completion is authored as a Quest Effect on the World Effects tab.",
+  injectGating: "Injection gating — the three live injector switches: Once Per Hex, Cooldown, and Repeatable (Story Director re-offers).",
+  choiceRow: "A choice row — button label, optional check + DC, success route (Next Beat), and failure route (Failure Beat).",
+  footer: "Save commits the whole form to the Campaign Builder; Cancel discards everything since the last save.",
+
+  // Footer
+  saveBeat: "Save — harvests the whole form (all tabs + injected panels) and hands the beat to the Campaign Builder via the updateBeat hook; id changes ride along as renames. Unsaved panels are lost on Cancel.",
+  cancel: "Cancel — close without saving; everything since the last Save is discarded."
+};
+
+function _beatsTip(key) {
+  try {
+    const t = game?.bbttcc?.help?.tip?.("beats", key);
+    if (t) return t;
+  } catch (_e) {}
+  const raw = BEATS_HELP[key];
+  return (typeof raw === "string") ? raw : (raw?.text || "");
+}
+
+function _registerBeatsHelp() {
+  try {
+    if (typeof game?.bbttcc?.help?.register === "function") {
+      game.bbttcc.help.register("beats", BEATS_HELP);
+      return true;
+    }
+  } catch (_e) {}
+  return false;
+}
+// Late-load safe: this file is dynamically imported (often post-ready), so try
+// immediately; if bbttcc-core's registry isn't up yet, retry on init/ready.
+// register() merges, so double-registration is harmless.
+if (!_registerBeatsHelp()) {
+  try { Hooks.once("init", _registerBeatsHelp); } catch (_e) {}
+  try { Hooks.once("ready", _registerBeatsHelp); } catch (_e) {}
+}
+
+// Fallback {{bbttccTip}} helper — bbttcc-core registers the real one at its
+// init; this guard only fills the gap if core is missing/disabled so the
+// template never renders an unknown helper. Guarded: double-registration is
+// impossible (the Campaign Builder relies on the same guard).
+try {
+  if (globalThis.Handlebars && !Handlebars.helpers.bbttccTip) {
+    Handlebars.registerHelper("bbttccTip", (appKey, key) => {
+      try {
+        const t = game?.bbttcc?.help?.tip?.(appKey, key);
+        if (t) return t;
+      } catch (_e) {}
+      if (appKey === "beats") {
+        const raw = BEATS_HELP[key];
+        return (typeof raw === "string") ? raw : (raw?.text || "");
+      }
+      return "";
+    });
+  }
+} catch (_e) {}
+
+// Stamp data-tooltip onto every [data-help="<key>"] element under root from
+// the beats dictionary (covers the JS-injected panels, which can't use the
+// Handlebars helper). Idempotent; unknown keys are left alone.
+function _applyBeatsHelp(htmlOrEl) {
+  try {
+    const root = (htmlOrEl && htmlOrEl[0] instanceof HTMLElement) ? htmlOrEl[0]
+      : (htmlOrEl instanceof HTMLElement) ? htmlOrEl
+      : null;
+    if (!root || !root.querySelectorAll) return;
+    for (const el of root.querySelectorAll("[data-help]")) {
+      const t = _beatsTip(el.dataset.help);
+      if (t) el.dataset.tooltip = t;
+    }
+  } catch (_e) {}
+}
 
 
 // Lazy loaders (avoid static imports to prevent parse issues in some Foundry launchers)
@@ -954,6 +1185,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
       const wrap = document.createElement("div");
       wrap.setAttribute("data-bbttcc-unlocks", "1");
+      wrap.setAttribute("data-tour", "beats.unlocks");
       wrap.style.marginTop = "10px";
       wrap.style.padding = "10px";
       wrap.style.border = "1px solid rgba(148,163,184,0.25)";
@@ -962,6 +1194,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
       const title = document.createElement("div");
       title.textContent = "Unlock Rewards (Faction Outcome)";
+      title.dataset.help = "unlocks";
       title.style.fontWeight = "800";
       title.style.marginBottom = "6px";
       title.style.letterSpacing = "0.02em";
@@ -1004,6 +1237,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
         const lab = document.createElement("div");
         lab.textContent = labelText;
+        lab.dataset.help = (kind === "maneuvers") ? "unlockManeuvers" : "unlockStrategics";
         lab.style.fontWeight = "700";
         lab.style.marginBottom = "6px";
         pane.appendChild(lab);
@@ -1140,7 +1374,9 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
   // ---------------------------------------------------------------------------
   // Relationship Effects (Status Step) UI
-  // Stored at: beat.worldEffects.relationshipEffects = [{ aFactionId, bFactionId, steps, reciprocal, note }]
+  // Stored at: beat.worldEffects.relationshipEffects in the world-mutation-engine
+  // shape: [{ sourceFactionId, targetFactionId, step, reason, reciprocal?, mirrored? }]
+  // (legacy rows { aFactionId, bFactionId, steps, note } are migrated on load).
   // ---------------------------------------------------------------------------
   _ensureRelationshipEffectsUI(html) {
     try {
@@ -1221,7 +1457,23 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
         }).join("");
       };
 
-      const existing = Array.isArray(this.beat?.worldEffects?.relationshipEffects) ? this.beat.worldEffects.relationshipEffects : [];
+      // Rows are STORED in the world-mutation-engine shape:
+      //   { sourceFactionId, targetFactionId, step, reason, reciprocal?, mirrored? }
+      // Legacy rows saved by the pre-wiring panel used
+      //   { aFactionId, bFactionId, steps, reciprocal, note }
+      // — migrate both into the panel's display shape here. Mirrored rows
+      // (the save-time B→A expansion of a Reciprocal row) stay folded into
+      // their primary row's Reciprocal checkbox instead of showing twice.
+      const rawRel = Array.isArray(this.beat?.worldEffects?.relationshipEffects) ? this.beat.worldEffects.relationshipEffects : [];
+      const existing = rawRel
+        .filter(r => r && !r.mirrored)
+        .map(r => ({
+          aFactionId: String(r.sourceFactionId ?? r.aFactionId ?? "").trim(),
+          bFactionId: String(r.targetFactionId ?? r.bFactionId ?? "").trim(),
+          steps: Math.round(Number(r.step ?? r.steps ?? r.delta ?? 0) || 0),
+          reciprocal: !!r.reciprocal,
+          note: String(r.reason ?? r.note ?? "").trim()
+        }));
 
       const rowHtml = (fx, idx) => {
         const a = String(fx?.aFactionId || "");
@@ -1234,7 +1486,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
           <div class="bbttcc-relfx-row" data-index="${idx}">
             <div class="bbttcc-relfx-grid">
               <label class="bbttcc-relfx-field">
-                <div class="bbttcc-muted">Faction A</div>
+                <div class="bbttcc-muted" data-help="relFactionA">Faction A</div>
                 <select class="bbttcc-relfx-a">
                   <option value="" ${a? "" : "selected"}>—</option>
                   ${_factionOptions(a)}
@@ -1242,7 +1494,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
               </label>
 
               <label class="bbttcc-relfx-field">
-                <div class="bbttcc-muted">Faction B</div>
+                <div class="bbttcc-muted" data-help="relFactionB">Faction B</div>
                 <select class="bbttcc-relfx-b">
                   <option value="" ${b? "" : "selected"}>—</option>
                   ${_factionOptions(b)}
@@ -1250,7 +1502,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
               </label>
 
               <label class="bbttcc-relfx-field">
-                <div class="bbttcc-muted">Step</div>
+                <div class="bbttcc-muted" data-help="relStep">Step</div>
                 <select class="bbttcc-relfx-steps">
                   ${stepOpt(-2, "−2 (Hard shift)")}
                   ${stepOpt(-1, "−1 (Down)")}
@@ -1261,12 +1513,12 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
               </label>
 
               <label class="bbttcc-relfx-field bbttcc-relfx-field--check">
-                <div class="bbttcc-muted">Reciprocal</div>
+                <div class="bbttcc-muted" data-help="relReciprocal">Reciprocal</div>
                 <input type="checkbox" class="bbttcc-relfx-recip" ${reciprocal ? "checked" : ""}/>
               </label>
 
               <label class="bbttcc-relfx-field bbttcc-relfx-field--wide">
-                <div class="bbttcc-muted">Note (optional)</div>
+                <div class="bbttcc-muted" data-help="relNote">Note (optional)</div>
                 <input type="text" class="bbttcc-relfx-note" value="${foundry.utils.escapeHTML(note)}" placeholder="Why this happened (shows in logs)"/>
               </label>
 
@@ -1281,10 +1533,10 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       };
 
       const htmlBlock = `
-        <section class="bbttcc-relfx bbttcc-card" style="margin-top:.75rem;">
+        <section class="bbttcc-relfx bbttcc-card" data-tour="beats.relationshipEffects" style="margin-top:.75rem;">
           <header class="bbttcc-card__head" style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
             <div>
-              <div class="bbttcc-card__title">Faction Relationship Effects (Status Step)</div>
+              <div class="bbttcc-card__title" data-help="relationshipEffects">Faction Relationship Effects (Status Step)</div>
               <div class="bbttcc-muted" style="opacity:.85; font-size:.9rem;">
                 Adjust relationship status between two factions when this beat resolves. (−2 to +2)
               </div>
@@ -1323,6 +1575,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
         const idx = Date.now();
         if (!$rows.find(".bbttcc-relfx-row").length) $rows.empty();
         $rows.append(rowHtml(seed, idx));
+        try { _applyBeatsHelp($rows[0]); } catch (_eTip) {}
       };
 
       $panel.find(".bbttcc-relfx-add").on("click", ev => {
@@ -1375,14 +1628,11 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       // Avoid double-inject
       if ($tab.find?.(".bbttcc-fxgm").length) return;
 
-      // Hide the legacy Faction Effects editor block (keep it in DOM, but out of sight)
-      try {
-        const $legacyBtn = $tab.find?.("[data-action='add-faction-effect']").first?.();
-        if ($legacyBtn && $legacyBtn.length) {
-          const $legacyBox = $legacyBtn.closest?.(".bbttcc-card, .form-group, .bbttcc-panel, section, div") || null;
-          if ($legacyBox && $legacyBox.length) $legacyBox.css("display", "none");
-        }
-      } catch (_eHide) {}
+      // NOTE: the legacy Faction Effects block is hidden + neutralized BELOW,
+      // only after this panel successfully injects. Its inputs share names
+      // (world-faction-id etc.) with the rows emitted here; if both stayed in
+      // FormData, _saveFromForm's fd.getAll() harvest would double every row
+      // and misalign the VP/OP index mapping.
 
       // Faction list
       const _isFactionActor = (a) => {
@@ -1485,7 +1735,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
           <div class="bbttcc-fxgm-row" data-index="${idx}">
             <div class="bbttcc-fxgm-head">
               <label class="bbttcc-fxgm-field">
-                <div class="bbttcc-muted">Faction</div>
+                <div class="bbttcc-muted" data-help="fxFaction">Faction</div>
                 <select name="world-faction-id" class="bbttcc-fxgm-faction">
                   <option value="" ${fId ? "" : "selected"}>—</option>
                   ${_factionOptions(fId)}
@@ -1501,34 +1751,34 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
 
             <div class="bbttcc-fxgm-grid">
               <label class="bbttcc-fxgm-field">
-                <div class="bbttcc-muted">Morale Δ</div>
+                <div class="bbttcc-muted" data-help="fxMorale">Morale Δ</div>
                 <input type="number" step="1" name="world-faction-morale" value="${m}"/>
               </label>
               <label class="bbttcc-fxgm-field">
-                <div class="bbttcc-muted">Loyalty Δ</div>
+                <div class="bbttcc-muted" data-help="fxLoyalty">Loyalty Δ</div>
                 <input type="number" step="1" name="world-faction-loyalty" value="${l}"/>
               </label>
               <label class="bbttcc-fxgm-field">
-                <div class="bbttcc-muted">Unity Δ</div>
+                <div class="bbttcc-muted" data-help="fxUnity">Unity Δ</div>
                 <input type="number" step="1" name="world-faction-unity" value="${u}"/>
               </label>
               <label class="bbttcc-fxgm-field">
-                <div class="bbttcc-muted">Darkness Δ</div>
+                <div class="bbttcc-muted" data-help="fxDarkness">Darkness Δ</div>
                 <input type="number" step="1" name="world-faction-darkness" value="${d}"/>
               </label>
               <label class="bbttcc-fxgm-field">
-                <div class="bbttcc-muted">Victory (VP) Δ</div>
+                <div class="bbttcc-muted" data-help="fxVP">Victory (VP) Δ</div>
                 <input type="number" step="1" name="world-faction-vp" value="${vp}"/>
               </label>
 
               <label class="bbttcc-fxgm-field bbttcc-fxgm-field--check">
-                <div class="bbttcc-muted">Allow OP Overcap</div>
+                <div class="bbttcc-muted" data-help="fxAllowOvercap">Allow OP Overcap</div>
                 <input type="checkbox" name="world-faction-op-allowOvercap" ${allowOvercap ? "checked" : ""}/>
               </label>
             </div>
 
             <details class="bbttcc-fxgm-op" ${OP_KEYS.some(k => _safeNum(fx?.opDeltas?.[k],0)!==0) ? "open" : ""}>
-              <summary><b>OP Bank Δ</b> <span class="bbttcc-muted">(use positive/negative; respects caps unless Allow Overcap)</span></summary>
+              <summary data-help="fxOpBank"><b>OP Bank Δ</b> <span class="bbttcc-muted">(use positive/negative; respects caps unless Allow Overcap)</span></summary>
               <div class="bbttcc-fxgm-opgrid">
                 ${opInputs}
               </div>
@@ -1538,10 +1788,10 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       };
 
       const block = `
-        <section class="bbttcc-fxgm bbttcc-card" style="margin-top:.75rem;">
+        <section class="bbttcc-fxgm bbttcc-card" data-tour="beats.factionGMEffects" style="margin-top:.75rem;">
           <header class="bbttcc-card__head" style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
             <div>
-              <div class="bbttcc-card__title">Faction GM Effects (Beats)</div>
+              <div class="bbttcc-card__title" data-help="factionGMEffects">Faction GM Effects (Beats)</div>
               <div class="bbttcc-muted" style="opacity:.85; font-size:.9rem;">
                 Beat-driven faction adjustments, including OP Bank deltas. (Use sparingly. Great for “Faction Short Rest” beats.)
               </div>
@@ -1582,6 +1832,23 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
       const $panel = $tab.find(".bbttcc-fxgm").last();
       const $rows = $panel.find(".bbttcc-fxgm-rows");
 
+      // Now that the replacement panel exists, hide the legacy Faction Effects
+      // block AND disable its form controls. display:none alone does NOT
+      // remove inputs from FormData — disabled does — so this is what stops
+      // the legacy rows double-harvesting alongside the fxgm rows on save.
+      // If this injection had failed earlier, the legacy block stays visible
+      // and enabled as the functional fallback editor.
+      try {
+        const $legacyBtn = $tab.find?.("[data-action='add-faction-effect']").first?.();
+        if ($legacyBtn && $legacyBtn.length) {
+          const $legacyBox = $legacyBtn.closest?.(".bbttcc-card, .form-group, .bbttcc-panel, section, div") || null;
+          if ($legacyBox && $legacyBox.length) {
+            $legacyBox.css("display", "none");
+            $legacyBox.find("input, select, textarea, button").prop("disabled", true);
+          }
+        }
+      } catch (_eHide) {}
+
       const refreshEmpty = () => {
         if ($rows.find(".bbttcc-fxgm-row").length) return;
         $rows.html(`<div class="bbttcc-muted" style="opacity:.75;">No faction effects yet.</div>`);
@@ -1601,6 +1868,7 @@ export class BBTTCCCampaignBeatEditorApp extends Application {
         };
         if (!$rows.find(".bbttcc-fxgm-row").length) $rows.empty();
         $rows.append(rowHtml(seed, Date.now()));
+        try { _applyBeatsHelp($rows[0]); } catch (_eTip) {}
       };
 
       $panel.find(".bbttcc-fxgm-add").on("click", (ev) => {
@@ -1728,10 +1996,10 @@ _ensureCasualtiesUI(html) {
     const curAt = _hasAtrocity();
 
     const block = `
-      <section class="bbttcc-casfx bbttcc-card" style="margin-top:.75rem;">
+      <section class="bbttcc-casfx bbttcc-card" data-tour="beats.casualties" style="margin-top:.75rem;">
         <header class="bbttcc-card__head" style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
           <div>
-            <div class="bbttcc-card__title">Casualties (Beat Outcome)</div>
+            <div class="bbttcc-card__title" data-help="casualties">Casualties (Beat Outcome)</div>
             <div class="bbttcc-muted" style="opacity:.85; font-size:.9rem;">
               Select casualty severity to automatically write standardized casualty tags. The Casualty Engine applies effects on beat resolution.
             </div>
@@ -1740,25 +2008,25 @@ _ensureCasualtiesUI(html) {
         <div class="bbttcc-card__body">
           <div class="bbttcc-casfx-grid">
             <label class="bbttcc-casfx-field">
-              <div class="bbttcc-muted">Hex Casualties</div>
+              <div class="bbttcc-muted" data-help="casHex">Hex Casualties</div>
               <select class="bbttcc-casfx-hex">
                 ${_opts(curHex)}
               </select>
             </label>
             <label class="bbttcc-casfx-field">
-              <div class="bbttcc-muted">Attacker Casualties</div>
+              <div class="bbttcc-muted" data-help="casAttacker">Attacker Casualties</div>
               <select class="bbttcc-casfx-att">
                 ${_opts(curA)}
               </select>
             </label>
             <label class="bbttcc-casfx-field">
-              <div class="bbttcc-muted">Defender Casualties</div>
+              <div class="bbttcc-muted" data-help="casDefender">Defender Casualties</div>
               <select class="bbttcc-casfx-def">
                 ${_opts(curD)}
               </select>
             </label>
             <label class="bbttcc-casfx-field bbttcc-casfx-field--check">
-              <div class="bbttcc-muted">Atrocity</div>
+              <div class="bbttcc-muted" data-help="casAtrocity">Atrocity</div>
               <input type="checkbox" class="bbttcc-casfx-atrocity" ${curAt ? "checked" : ""}/>
             </label>
           </div>
@@ -1836,6 +2104,7 @@ _ensureWorldModifiersUI(html) {
       // Wrapper
       const wrap = document.createElement("div");
       wrap.setAttribute("data-bbttcc-world-modifiers", "1");
+      wrap.setAttribute("data-tour", "beats.worldModifiers");
       wrap.style.marginTop = "10px";
       wrap.style.padding = "10px";
       wrap.style.border = "1px solid rgba(148,163,184,0.25)";
@@ -1844,6 +2113,7 @@ _ensureWorldModifiersUI(html) {
 
       const title = document.createElement("div");
       title.textContent = "World Modifiers (Persistent Outcome)";
+      title.dataset.help = "worldModifiers";
       title.style.fontWeight = "800";
       title.style.marginBottom = "6px";
       title.style.letterSpacing = "0.02em";
@@ -1863,6 +2133,7 @@ _ensureWorldModifiersUI(html) {
 
       const lab = document.createElement("label");
       lab.textContent = "Target Hex (optional)";
+      lab.dataset.help = "targetHex";
       lab.style.display = "block";
       lab.style.fontWeight = "700";
       lab.style.marginBottom = "4px";
@@ -1923,6 +2194,7 @@ _ensureWorldModifiersUI(html) {
       const body = document.createElement("div");
       const name = document.createElement("div");
       name.textContent = "Harmonized Grove";
+      name.dataset.help = "harmonizedGrove";
       name.style.fontWeight = "800";
       body.appendChild(name);
 
@@ -1940,6 +2212,7 @@ _ensureWorldModifiersUI(html) {
       controls.style.alignItems = "center";
 
       const durWrap = document.createElement("label");
+      durWrap.dataset.help = "wmDuration";
       durWrap.style.display = "flex";
       durWrap.style.gap = "6px";
       durWrap.style.alignItems = "center";
@@ -1960,6 +2233,7 @@ _ensureWorldModifiersUI(html) {
 
       // Enabled toggle
       const enLab = document.createElement("label");
+      enLab.dataset.help = "wmEnabled";
       enLab.style.display = "flex";
       enLab.style.gap = "6px";
       enLab.style.alignItems = "center";
@@ -2078,9 +2352,11 @@ _ensureWorldModifiersUI(html) {
       const wrap = document.createElement("div");
       wrap.className = "form-group";
       wrap.setAttribute("data-bbttcc-turn-assign", "1");
+      wrap.setAttribute("data-tour", "beats.turnNumber");
 
       const lab = document.createElement("label");
       lab.textContent = "Available Turn (optional)";
+      lab.dataset.help = "turnNumber";
       wrap.appendChild(lab);
 
       const input = document.createElement("input");
@@ -2159,6 +2435,7 @@ _ensureWorldModifiersUI(html) {
     const wrap = document.createElement("section");
     wrap.className = "bbttcc-card";
     wrap.setAttribute("data-bbttcc-audio", "1");
+    wrap.setAttribute("data-tour", "beats.audio");
     wrap.style.marginTop = ".75rem";
   
     const esc = (s) => foundry.utils.escapeHTML(String(s ?? ""));
@@ -2196,20 +2473,20 @@ _ensureWorldModifiersUI(html) {
     wrap.innerHTML = `
       <header class="bbttcc-card__head" style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
         <div>
-          <div class="bbttcc-card__title">Beat Audio (Narration)</div>
+          <div class="bbttcc-card__title" data-help="audio">Beat Audio (Narration)</div>
           <div class="bbttcc-muted" style="opacity:.85; font-size:.9rem;">
             Attach audio to this beat. Prefer the Playlist Sound picker — it handles preload, player broadcast, and stop natively via Foundry. The file path below is a legacy fallback.
           </div>
         </div>
       </header>
       <div class="bbttcc-card__body">
-        <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+        <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px;" data-help="audioEnabled">
           <input type="checkbox" name="audio-enabled" ${aud.enabled ? "checked" : ""}/>
           <span><b>Enable audio</b></span>
         </label>
 
         <div class="form-group">
-          <label>Playlist Sound (preferred)</label>
+          <label data-help="audioPlaylist">Playlist Sound (preferred)</label>
           <select name="audio-playlist-sound-uuid" style="width:100%;">
             ${playlistOptionsHtml}
           </select>
@@ -2219,34 +2496,34 @@ _ensureWorldModifiersUI(html) {
         </div>
   
         <div class="form-group">
-          <label>Audio File (src)</label>
+          <label data-help="audioSrc">Audio File (src)</label>
           <div style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;">
             <input type="text" name="audio-src" value="${esc(aud.src || "")}" placeholder="sounds/narration/beat_intro.ogg" style="flex:1 1 420px; min-width:260px;"/>
-            <button type="button" class="bbttcc-button" data-action="audio-pick"><i class="fas fa-folder-open"></i> Pick</button>
-            <button type="button" class="bbttcc-button" data-action="audio-play"><i class="fas fa-play"></i> Play</button>
-            <button type="button" class="bbttcc-button" data-action="audio-stop"><i class="fas fa-stop"></i> Stop</button>
+            <button type="button" class="bbttcc-button" data-action="audio-pick" data-help="audioPick"><i class="fas fa-folder-open"></i> Pick</button>
+            <button type="button" class="bbttcc-button" data-action="audio-play" data-help="audioPlay"><i class="fas fa-play"></i> Play</button>
+            <button type="button" class="bbttcc-button" data-action="audio-stop" data-help="audioStop"><i class="fas fa-stop"></i> Stop</button>
           </div>
           <p class="bbttcc-muted" style="margin:.25rem 0 0; opacity:.75;">Tip: keep narration in your module folder (e.g. <code>modules/bbttcc-campaign/sounds/…</code>) so paths stay stable.</p>
         </div>
   
         <div class="bbttcc-form-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); gap:.6rem; align-items:end;">
           <label class="form-group" style="margin:0;">
-            <div class="bbttcc-muted">Volume</div>
+            <div class="bbttcc-muted" data-help="audioVolume">Volume</div>
             <input type="range" name="audio-volume" min="0" max="1" step="0.01" value="${Number.isFinite(Number(aud.volume)) ? String(aud.volume) : "0.85"}" />
             <div class="bbttcc-muted" data-role="audio-volume-readout" style="font-size:.85rem; opacity:.75; margin-top:4px;">${Number.isFinite(Number(aud.volume)) ? String(Math.round(Number(aud.volume)*100)) : "85"}%</div>
           </label>
   
           <label class="form-group" style="margin:0; display:flex; flex-direction:column; gap:6px;">
             <div class="bbttcc-muted">Options</div>
-            <label style="display:flex; align-items:center; gap:8px;">
+            <label style="display:flex; align-items:center; gap:8px;" data-help="audioAutoplay">
               <input type="checkbox" name="audio-autoplay" ${aud.autoplay ? "checked" : ""}/>
               <span>Auto-play when beat runs</span>
             </label>
-            <label style="display:flex; align-items:center; gap:8px;">
+            <label style="display:flex; align-items:center; gap:8px;" data-help="audioLoop">
               <input type="checkbox" name="audio-loop" ${aud.loop ? "checked" : ""}/>
               <span>Loop</span>
             </label>
-            <label style="display:flex; align-items:center; gap:8px;">
+            <label style="display:flex; align-items:center; gap:8px;" data-help="audioBroadcast">
               <input type="checkbox" name="audio-broadcast" ${aud.broadcastPlayers ? "checked" : ""}/>
               <span>Play for players (broadcast)</span>
             </label>
@@ -2426,6 +2703,9 @@ _ensureWorldModifiersUI(html) {
     // Inject Beat Audio (Narration) panel (anchored in Core tab)
     try { this._ensureAudioUI(html); } catch (eAudio) { console.warn(TAG, "ensureAudioUI failed:", eAudio); }
 
+    // Stamp help tooltips onto the injected panels (data-help → data-tooltip).
+    try { _applyBeatsHelp(html); } catch (_eHelp) {}
+
     // After all dynamic UI injection, autosize the window so footer buttons are never clipped.
     try { setTimeout(() => { __bbttccAutosizeAppWindow(this); }, 0); } catch (_eAuto) {}
 
@@ -2438,9 +2718,8 @@ _ensureWorldModifiersUI(html) {
       const tab = ev.currentTarget?.dataset?.tab;
       if (!tab) return;
 
-      // Preserve in-progress edits across tab switches.
-      try { if (typeof this._syncCoreFromForm === "function") this._syncCoreFromForm(); } catch (e0) {}
-      try { if (typeof this._syncChoicesFromForm === "function") this._syncChoicesFromForm(); } catch (e1) {}
+      // Preserve in-progress edits across tab switches (Core + Choices + World Effects).
+      this._syncFormToBeat();
 
       this.activeTab = tab;
       this.render(false);
@@ -2454,6 +2733,7 @@ _ensureWorldModifiersUI(html) {
         selectedTags: _tagArray(this.beat.tags || ""),
         tagCatalog: TAG_CATALOG,
         onSelect: (tags) => {
+          this._syncFormToBeat();
           _setTagsValue(this, (tags || []).join(" "));
           this.render(false);
         }
@@ -2464,6 +2744,7 @@ _ensureWorldModifiersUI(html) {
       ev.preventDefault();
       const tag = ev.currentTarget?.dataset?.tag;
       if (!tag) return;
+      this._syncFormToBeat();
       _setTagsValue(this, _tagArray(this.beat.tags || "").filter(t => t !== tag).join(" "));
       this.render(false);
     });
@@ -2477,6 +2758,7 @@ _ensureWorldModifiersUI(html) {
         selectedTags: _tagArray(this.beat.politicalTags || ""),
         tagCatalog: _getPoliticalTagCatalog(),
         onSelect: (tags) => {
+          this._syncFormToBeat();
           _setPoliticalTagsValue(this, (tags || []).join(" "));
           this.render(false);
         }
@@ -2487,6 +2769,7 @@ _ensureWorldModifiersUI(html) {
       ev.preventDefault();
       const tag = ev.currentTarget?.dataset?.tag;
       if (!tag) return;
+      this._syncFormToBeat();
       _setPoliticalTagsValue(this, _tagArray(this.beat.politicalTags || "").filter(t => t !== tag).join(" "));
       this.render(false);
     });
@@ -2498,6 +2781,7 @@ _ensureWorldModifiersUI(html) {
       if (!Picker) { ui.notifications?.error?.("Scene Picker failed to load. See console."); return; }
       new Picker({
         onSelect: (scene) => {
+          this._syncFormToBeat();
           this.beat.sceneId = scene?.uuid || (scene?.id ? `Scene.${scene.id}` : null);
           this.render();
         }
@@ -2522,6 +2806,7 @@ _ensureWorldModifiersUI(html) {
 
     html.find("[data-action='clear-scene']").on("click", ev => {
       ev.preventDefault();
+      this._syncFormToBeat();
       this.beat.sceneId = null;
       this.render(false);
     });
@@ -2534,6 +2819,7 @@ _ensureWorldModifiersUI(html) {
       if (!Picker) { ui.notifications?.error?.("Scene Picker failed to load. See console."); return; }
       new Picker({
         onSelect: (scene) => {
+          this._syncFormToBeat();
           this.beat.cinematic ??= { enabled: false, startSceneId: null, durationMs: 8000, nextSceneId: null };
           this.beat.cinematic.startSceneId = scene?.uuid || (scene?.id ? `Scene.${scene.id}` : null);
           this.render();
@@ -2547,6 +2833,7 @@ _ensureWorldModifiersUI(html) {
       if (!Picker) { ui.notifications?.error?.("Scene Picker failed to load. See console."); return; }
       new Picker({
         onSelect: (scene) => {
+          this._syncFormToBeat();
           this.beat.cinematic ??= { enabled: false, startSceneId: null, durationMs: 8000, nextSceneId: null };
           this.beat.cinematic.nextSceneId = scene?.uuid || (scene?.id ? `Scene.${scene.id}` : null);
           this.render();
@@ -2588,6 +2875,7 @@ _ensureWorldModifiersUI(html) {
 
     html.find("[data-action='clear-cinematic-start']").on("click", ev => {
       ev.preventDefault();
+      this._syncFormToBeat();
       this.beat.cinematic ??= { enabled: false, startSceneId: null, durationMs: 8000, nextSceneId: null };
       this.beat.cinematic.startSceneId = null;
       this.render(false);
@@ -2595,6 +2883,7 @@ _ensureWorldModifiersUI(html) {
 
     html.find("[data-action='clear-cinematic-next']").on("click", ev => {
       ev.preventDefault();
+      this._syncFormToBeat();
       this.beat.cinematic ??= { enabled: false, startSceneId: null, durationMs: 8000, nextSceneId: null };
       this.beat.cinematic.nextSceneId = null;
       this.render(false);
@@ -2609,6 +2898,7 @@ _ensureWorldModifiersUI(html) {
 
     html.find("[data-action='clear-journal']").on("click", ev => {
       ev.preventDefault();
+      this._syncFormToBeat();
       this.beat.journal ??= { enabled: false, entryId: null, force: false };
       this.beat.journal.entryId = null;
       this.render(false);
@@ -2633,6 +2923,7 @@ _ensureWorldModifiersUI(html) {
       new Picker({
         onSelect: (actor) => {
           if (!actor?.uuid) return;
+          this._syncFormToBeat();
           this.beat.actors ??= [];
           if (!this.beat.actors.includes(actor.uuid)) this.beat.actors.push(actor.uuid);
           this.render(false);
@@ -2644,6 +2935,7 @@ _ensureWorldModifiersUI(html) {
       ev.preventDefault();
       const idx = Number(ev.currentTarget?.dataset?.index);
       if (!Number.isFinite(idx)) return;
+      this._syncFormToBeat();
       this.beat.actors.splice(idx, 1);
       this.render(false);
     });
@@ -2652,8 +2944,8 @@ _ensureWorldModifiersUI(html) {
     html.find("[data-action='add-choice']").on("click", ev => {
       ev.preventDefault();
 
-      // Preserve any unsaved edits in existing choice rows before we append a new one.
-      this._syncChoicesFromForm();
+      // Preserve any unsaved edits (all tabs) before we append a new row.
+      this._syncFormToBeat();
 
       this.beat.choices ??= [];
       this.beat.choices.push({
@@ -2672,8 +2964,8 @@ _ensureWorldModifiersUI(html) {
       const idx = Number(ev.currentTarget?.dataset?.index);
       if (!Number.isFinite(idx)) return;
 
-      // Preserve unsaved edits before removing.
-      try { if (typeof this._syncChoicesFromForm === "function") this._syncChoicesFromForm(); } catch (e0) {}
+      // Preserve unsaved edits (all tabs) before removing.
+      this._syncFormToBeat();
 
       // Confirmation toast (easy to misclick). Hold Shift to bypass.
       const bypass = !!ev.shiftKey;
@@ -2696,6 +2988,7 @@ _ensureWorldModifiersUI(html) {
     html.find("[data-action='add-faction-effect']").on("click", ev => {
       ev.preventDefault();
 
+      this._syncFormToBeat();
       this.beat.worldEffects ??= {};
       this.beat.worldEffects.factionEffects ??= [];
 
@@ -2717,20 +3010,19 @@ _ensureWorldModifiersUI(html) {
       ev.preventDefault();
       const idx = Number(ev.currentTarget?.dataset?.index);
       if (!Number.isFinite(idx)) return;
+      this._syncFormToBeat();
       this.beat.worldEffects.factionEffects.splice(idx, 1);
       this.render(false);
     });
 
     html.find("[data-action='add-turn-request']").on("click", ev => {
       ev.preventDefault();
+      this._syncFormToBeat();
       this.beat.worldEffects = this.beat.worldEffects || {};
       this.beat.worldEffects.turnRequests = this.beat.worldEffects.turnRequests || [];
       this.beat.worldEffects.turnRequests.push({
         key: "",
-        mode: "",
-        target: "",
-        amount: 0,
-        note: ""
+        value: { mode: "", target: "", amount: 0, note: "" }
       });
       this.render(false);
     });
@@ -2739,12 +3031,14 @@ _ensureWorldModifiersUI(html) {
       ev.preventDefault();
       const idx = Number(ev.currentTarget?.dataset?.index);
       if (!Number.isFinite(idx)) return;
+      this._syncFormToBeat();
       this.beat.worldEffects.turnRequests.splice(idx, 1);
       this.render(false);
     });
 
     html.find("[data-action='add-quest-effect']").on("click", ev => {
       ev.preventDefault();
+      this._syncFormToBeat();
       this.beat.worldEffects ??= {};
       this.beat.worldEffects.questEffects ??= [];
       this.beat.worldEffects.questEffects.push({
@@ -2761,6 +3055,7 @@ _ensureWorldModifiersUI(html) {
       ev.preventDefault();
       const idx = Number(ev.currentTarget?.dataset?.index);
       if (!Number.isFinite(idx)) return;
+      this._syncFormToBeat();
       this.beat.worldEffects ??= {};
       this.beat.worldEffects.questEffects ??= [];
       this.beat.worldEffects.questEffects.splice(idx, 1);
@@ -2813,6 +3108,7 @@ _ensureWorldModifiersUI(html) {
             label: "Confirm",
             callback: (html) => {
               const picked = html.find("input[name='journalPick']:checked").val() || "";
+              this._syncFormToBeat();
               this.beat.journal ??= { enabled: false, entryId: null, force: false };
               this.beat.journal.entryId = picked ? _normalizeJournalUuid(picked) : null;
               this.render(false);
@@ -2946,8 +3242,26 @@ _syncCoreFromForm() {
       this.beat.questStep = (!qStepRaw) ? null : (isFinite(qs) ? Math.max(0, Math.floor(qs)) : null);
     }
 
-    const qRole = _val("input[name='questRole']");
+    // questRole is a <select> in the template (was queried as input — never matched,
+    // so the field silently reverted on tab switches). Match by name only.
+    const qRole = _val("[name='questRole']");
     if (qRole != null) this.beat.questRole = String(qRole || "").trim() || null;
+
+    // Encounter fields (rendered only when type=encounter; skip when absent)
+    const encKey = _val("input[name='encounter-key']");
+    if (encKey != null) {
+      this.beat.encounter ??= { key: "", tier: null, actorName: "" };
+      this.beat.encounter.key = String(encKey || "").trim() || null;
+      const encTier = _val("input[name='encounter-tier']");
+      this.beat.encounter.tier = (encTier === "" || encTier == null) ? null : Math.max(0, Math.floor(_safeNum(encTier, 0)));
+      const encActor = _val("input[name='encounter-actor-name']");
+      if (encActor != null) this.beat.encounter.actorName = String(encActor || "").trim() || null;
+    }
+
+    // Journal switches (entryId itself is maintained live by the picker)
+    this.beat.journal ??= { enabled: false, entryId: null, force: false };
+    this.beat.journal.enabled = _checked("input[name='journal-enabled']");
+    this.beat.journal.force = _checked("input[name='journal-force']");
 
     // Tags
     const tags = _val("textarea[name='tags'], input[name='tags']");
@@ -3012,6 +3326,219 @@ _syncCoreFromForm() {
     } catch (e) {
       console.warn(TAG, "syncChoicesFromForm failed:", e);
     }
+  }
+
+  /**
+   * Harvest the World-Effects surfaces (plain template fields + injected
+   * fxgm/relfx panels) from FormData/DOM into this.beat. ONE implementation
+   * shared by Save and the re-render sync so Effects-tab edits never silently
+   * revert on render(false).
+   *
+   * mode:
+   *  - "sync" (default): keep EVERY row, including incomplete/blank ones, so
+   *    array indexes stay aligned with the rendered rows (add/remove handlers
+   *    splice by data-index) and in-progress rows survive re-renders.
+   *    Reciprocal relationship rows stay single (UI shape, flag preserved).
+   *  - "save": drop incomplete rows (legacy save behavior) and expand each
+   *    Reciprocal relationship row into a mirrored B→A second row — the
+   *    world-mutation engine applies one direction per row.
+   */
+  _harvestEffectsFromForm(fd, { mode = "sync" } = {}) {
+    const forSave = (mode === "save");
+    this.beat.worldEffects ??= {};
+    const we = this.beat.worldEffects;
+
+    // --- Plain fields ---
+    const tOut = fd.get("world-territory-outcome");
+    if (tOut != null) we.territoryOutcome = String(tOut || "").trim() || null;
+
+    const rad = fd.get("world-radiation-delta");
+    if (rad != null) we.radiationDelta = _safeNum(rad, 0);
+
+    const wl = fd.get("world-warlog");
+    if (wl != null) we.warLog = String(wl || "").trim() || "";
+
+    // --- Outcomes (success/failure fallback routing, Choices tab) ---
+    try {
+      this.beat.outcomes ??= { success: null, failure: null };
+      const oS = fd.get("outcome-success");
+      if (oS != null) this.beat.outcomes.success = String(oS || "").trim() || null;
+      const oF = fd.get("outcome-failure");
+      if (oF != null) this.beat.outcomes.failure = String(oF || "").trim() || null;
+    } catch (_eOut) {}
+
+    // --- Spark Link (tikkun-beat-listener reads beat.sparkLink on resolve) ---
+    const sparkLinkUuid   = String(fd.get("spark-link-uuid")   || "").trim();
+    const sparkLinkAction = String(fd.get("spark-link-action") || "").trim();
+    const sparkLinkMethod = String(fd.get("spark-link-method") || "").trim();
+    if (sparkLinkUuid && sparkLinkAction) {
+      this.beat.sparkLink = { sparkUuid: sparkLinkUuid, action: sparkLinkAction, methodTag: sparkLinkMethod || "" };
+    } else {
+      this.beat.sparkLink = { sparkUuid: "", action: "", methodTag: "" };
+    }
+
+    // --- Gate Unlocks (bbttcc-territory gate-beat-listener reads beat.gateUnlocks) ---
+    const gateUnlockHexes  = fd.getAll("gate-unlock-hex").map(v => String(v || "").trim()).filter(Boolean);
+    const gateUnlockAction = String(fd.get("gate-unlock-action") || "enable").trim().toLowerCase();
+    const guAction = (gateUnlockAction === "disable") ? "disable" : "enable";
+    this.beat.gateUnlocks = gateUnlockHexes.map(uuid => ({ hexUuid: uuid, action: guAction }));
+
+    // --- Faction effects (fxgm panel rows; the legacy block is disabled → excluded from FormData) ---
+    const fxFaction = fd.getAll("world-faction-id").map(v => String(v || "").trim());
+    const fxMorale = fd.getAll("world-faction-morale").map(v => _safeNum(v, 0));
+    const fxLoyalty = fd.getAll("world-faction-loyalty").map(v => _safeNum(v, 0));
+    const fxUnity = fd.getAll("world-faction-unity").map(v => _safeNum(v, 0));
+    const fxDark = fd.getAll("world-faction-darkness").map(v => _safeNum(v, 0));
+
+    const factionEffects = [];
+    const fxN = Math.max(fxFaction.length, fxMorale.length, fxLoyalty.length, fxUnity.length, fxDark.length);
+    for (let i = 0; i < fxN; i++) {
+      if (forSave && !fxFaction[i]) continue;
+      factionEffects.push({
+        factionId: fxFaction[i] || "",
+        moraleDelta: fxMorale[i] ?? 0,
+        loyaltyDelta: fxLoyalty[i] ?? 0,
+        unityDelta: fxUnity[i] ?? 0,
+        darknessDelta: fxDark[i] ?? 0
+      });
+    }
+    we.factionEffects = factionEffects;
+
+    // Extended Faction GM Effects: VP + OP Bank deltas (aligned by index with world-faction-id)
+    try {
+      const fxVP = fd.getAll("world-faction-vp").map(v => _safeNum(v, 0));
+
+      const opArr = {};
+      const OP_KEYS2 = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
+      for (const k of OP_KEYS2) {
+        opArr[k] = fd.getAll("world-faction-op-" + k).map(v => _safeNum(v, 0));
+      }
+
+      // DOM-based allowOvercap alignment (checkboxes only appear in FormData
+      // when checked, so per-row alignment must come from the DOM rows).
+      let allowByRow = [];
+      try {
+        const rowEls = Array.from(this.element?.find?.(".bbttcc-fxgm-row") || []);
+        allowByRow = rowEls.map(el => !!$(el).find("input[name='world-faction-op-allowOvercap']").prop("checked"));
+      } catch (_eOC) { allowByRow = []; }
+
+      // In save mode, rows with a blank faction were skipped above; walk the
+      // raw index alongside the kept rows so VP/OP/overcap stay aligned.
+      let kept = 0;
+      for (let i = 0; i < fxN; i++) {
+        if (forSave && !fxFaction[i]) continue;
+        const row = we.factionEffects[kept++];
+        if (!row) continue;
+
+        const vp = fxVP[i] ?? 0;
+        if (vp) row.vpDelta = vp;
+
+        const deltas = {};
+        for (const k of OP_KEYS2) {
+          const dv = opArr[k][i] ?? 0;
+          if (dv) deltas[k] = dv;
+        }
+        row.opDeltas = deltas;
+
+        row.allowOvercap = !!(allowByRow[i] ?? false);
+      }
+    } catch (_eFxExt) {
+      // ignore
+    }
+
+    // --- Turn requests (structured; no raw JSON authoring) ---
+    const rqKeys   = fd.getAll("world-request-key").map(v => String(v || "").trim());
+    const rqModes  = fd.getAll("world-request-mode").map(v => String(v || "").trim());
+    const rqTargets= fd.getAll("world-request-target").map(v => String(v || "").trim());
+    const rqAmts   = fd.getAll("world-request-amount").map(v => _safeNum(v, 0));
+    const rqNotes  = fd.getAll("world-request-note").map(v => String(v || "").trim());
+
+    const turnRequests = [];
+    const rqN = Math.max(rqKeys.length, rqModes.length, rqTargets.length, rqAmts.length, rqNotes.length);
+    for (let i = 0; i < rqN; i++) {
+      const key = rqKeys[i] || "";
+      if (forSave && !key) continue;
+
+      const value = {};
+      if (rqModes[i]) value.mode = rqModes[i];
+      if (rqTargets[i]) value.target = rqTargets[i];
+      if (rqAmts[i]) value.amount = rqAmts[i];
+      if (rqNotes[i]) value.note = rqNotes[i];
+
+      turnRequests.push({ key: key, value: value });
+    }
+    we.turnRequests = turnRequests;
+
+    // --- Relationship Effects (injected relfx panel; DOM rows, not names) ---
+    // Saved in the world-mutation-engine shape:
+    //   { sourceFactionId, targetFactionId, step, reason }
+    // Save mode expands a Reciprocal row into a second, mirrored B→A row
+    // (flagged mirrored:true so the panel folds it back on reopen).
+    try {
+      const relRows = Array.from(this.element?.find?.(".bbttcc-relfx-row") || []);
+      const rel = [];
+      for (const el of relRows) {
+        const $el = $(el);
+        const a = String($el.find(".bbttcc-relfx-a").val() || "").trim();
+        const b = String($el.find(".bbttcc-relfx-b").val() || "").trim();
+        const steps = Math.floor(_safeNum($el.find(".bbttcc-relfx-steps").val(), 0));
+        const reciprocal = !!$el.find(".bbttcc-relfx-recip").prop("checked");
+        const note = String($el.find(".bbttcc-relfx-note").val() || "").trim();
+        if (forSave && (!a || !b || !steps)) continue; // drop incomplete rows and 0 steps on save only
+        rel.push({ sourceFactionId: a, targetFactionId: b, step: steps, reason: note, reciprocal });
+        if (forSave && reciprocal) {
+          rel.push({ sourceFactionId: b, targetFactionId: a, step: steps, reason: note, mirrored: true });
+        }
+      }
+      we.relationshipEffects = rel;
+    } catch (_eRel) {
+      we.relationshipEffects = Array.isArray(we.relationshipEffects) ? we.relationshipEffects : [];
+    }
+
+    // --- Quest effects ---
+    const qxAct = fd.getAll("world-questfx-action").map(v => String(v || "").trim());
+    const qxQid = fd.getAll("world-questfx-questId").map(v => String(v || "").trim());
+    const qxBid = fd.getAll("world-questfx-beatId").map(v => String(v || "").trim());
+    const qxSt  = fd.getAll("world-questfx-state").map(v => String(v || "").trim());
+    const qxTx  = fd.getAll("world-questfx-text").map(v => String(v || "").trim());
+
+    const questEffects = [];
+    const qxN = Math.max(qxAct.length, qxQid.length, qxBid.length, qxSt.length, qxTx.length);
+    for (let i = 0; i < qxN; i++) {
+      const questId = qxQid[i] || "";
+      if (forSave && !questId) continue;
+      questEffects.push({
+        action: qxAct[i] || "accept",
+        questId,
+        beatId: qxBid[i] || "",
+        state: qxSt[i] || "",
+        text: qxTx[i] || ""
+      });
+    }
+    we.questEffects = questEffects;
+  }
+
+  /**
+   * Re-render sync for the World Effects surfaces (and beat.outcomes). Called
+   * on tab switches and before every handler that triggers render(false), so
+   * plain Effects-tab fields no longer silently revert mid-edit.
+   */
+  _syncEffectsFromForm() {
+    try {
+      let form = this.element?.find?.("form.bbttcc-beat-editor-form")?.[0];
+      if (!form) form = this.element?.find?.("form")?.[0];
+      if (!form || !(form instanceof HTMLFormElement)) return;
+      this._harvestEffectsFromForm(new FormData(form), { mode: "sync" });
+    } catch (e) {
+      console.warn(TAG, "syncEffectsFromForm failed:", e);
+    }
+  }
+
+  /** Full in-progress-edit sync (Core + Choices/Audio + World Effects). */
+  _syncFormToBeat() {
+    try { if (typeof this._syncCoreFromForm === "function") this._syncCoreFromForm(); } catch (_e0) {}
+    try { if (typeof this._syncChoicesFromForm === "function") this._syncChoicesFromForm(); } catch (_e1) {}
+    try { if (typeof this._syncEffectsFromForm === "function") this._syncEffectsFromForm(); } catch (_e2) {}
   }
 
   _getCampaignDefaultFactionId() {
@@ -3189,10 +3716,17 @@ _syncCoreFromForm() {
     inj.oncePerHex = _boolFromSelect(fd.get("inject-once-per-hex"), false);
     inj.cooldownTurns = Math.max(0, _safeNum(fd.get("inject-cooldown-turns"), 0));
     inj.repeatable = _boolFromSelect(fd.get("inject-repeatable"), true);
-    inj.promptGM = _triFromSelect(fd.get("inject-prompt-gm"));
-    inj.fallbackOnDecline = _triFromSelect(fd.get("inject-fallback-on-decline"));
-    inj.allowMulti = _triFromSelect(fd.get("inject-allow-multi"));
-    inj.oncePerHexGlobal = _triFromSelect(fd.get("inject-once-per-hex-global"));
+    // Governance quartet — the four selects are DISABLED in the template (the
+    // injector never reads them from the beat), and disabled controls are
+    // excluded from FormData. Preserve whatever the beat already stores.
+    const _triKeep = (name, cur) => {
+      const v = fd.get(name);
+      return (v == null) ? (cur !== undefined ? cur : "inherit") : _triFromSelect(v);
+    };
+    inj.promptGM = _triKeep("inject-prompt-gm", inj.promptGM);
+    inj.fallbackOnDecline = _triKeep("inject-fallback-on-decline", inj.fallbackOnDecline);
+    inj.allowMulti = _triKeep("inject-allow-multi", inj.allowMulti);
+    inj.oncePerHexGlobal = _triKeep("inject-once-per-hex-global", inj.oncePerHexGlobal);
 
     // Actors
     const actorUuids = fd.getAll("actor-uuid").map(v => String(v || "").trim()).filter(Boolean);
@@ -3220,183 +3754,10 @@ _syncCoreFromForm() {
     }
     this.beat.choices = choices;
 
-    // World Effects
-    this.beat.worldEffects ??= {};
-    const we = this.beat.worldEffects;
-
-    we.territoryOutcome = String(fd.get("world-territory-outcome") || "").trim() || null;
-    we.radiationDelta = _safeNum(fd.get("world-radiation-delta"), 0);
-    we.warLog = String(fd.get("world-warlog") || "").trim() || "";
-
-    // Spark Link (Phase B of B3). Persists onto beat.sparkLink so the
-    // tikkun-beat-listener can read it on bbttcc:beat:resolved.
-    const sparkLinkUuid   = String(fd.get("spark-link-uuid")   || "").trim();
-    const sparkLinkAction = String(fd.get("spark-link-action") || "").trim();
-    const sparkLinkMethod = String(fd.get("spark-link-method") || "").trim();
-    if (sparkLinkUuid && sparkLinkAction) {
-      this.beat.sparkLink = {
-        sparkUuid: sparkLinkUuid,
-        action:    sparkLinkAction,
-        methodTag: sparkLinkMethod || ""
-      };
-    } else {
-      this.beat.sparkLink = { sparkUuid: "", action: "", methodTag: "" };
-    }
-
-    // Gate Unlocks. bbttcc-territory's gate-beat-listener consumes
-    // beat.gateUnlocks: [{hexUuid, action}] on bbttcc:beat:resolved.
-    const gateUnlockHexes  = fd.getAll("gate-unlock-hex").map(v => String(v || "").trim()).filter(Boolean);
-    const gateUnlockAction = String(fd.get("gate-unlock-action") || "enable").trim().toLowerCase();
-    const guAction = (gateUnlockAction === "disable") ? "disable" : "enable";
-    this.beat.gateUnlocks = gateUnlockHexes.map(uuid => ({ hexUuid: uuid, action: guAction }));
-
-    // Faction effects arrays
-    const fxFaction = fd.getAll("world-faction-id").map(v => String(v || "").trim());
-    const fxMorale = fd.getAll("world-faction-morale").map(v => _safeNum(v, 0));
-    const fxLoyalty = fd.getAll("world-faction-loyalty").map(v => _safeNum(v, 0));
-    const fxUnity = fd.getAll("world-faction-unity").map(v => _safeNum(v, 0));
-    const fxDark = fd.getAll("world-faction-darkness").map(v => _safeNum(v, 0));
-
-    const factionEffects = [];
-    const fxN = Math.max(fxFaction.length, fxMorale.length, fxLoyalty.length, fxUnity.length, fxDark.length);
-    for (let i = 0; i < fxN; i++) {
-      if (!fxFaction[i]) continue;
-      factionEffects.push({
-        factionId: fxFaction[i],
-        moraleDelta: fxMorale[i] ?? 0,
-        loyaltyDelta: fxLoyalty[i] ?? 0,
-        unityDelta: fxUnity[i] ?? 0,
-        darknessDelta: fxDark[i] ?? 0
-      });
-    }
-    we.factionEffects = factionEffects;
-
-    // Extended Faction GM Effects: VP + OP Bank deltas (if authored)
-    try {
-      const fxVP = fd.getAll("world-faction-vp").map(v => _safeNum(v, 0));
-
-      // OP delta arrays (aligned by index with world-faction-id)
-      const opArr = {};
-      const OP_KEYS2 = ["violence","nonlethal","intrigue","economy","softpower","diplomacy","logistics","culture","faith"];
-      for (const k of OP_KEYS2) {
-        opArr[k] = fd.getAll("world-faction-op-" + k).map(v => _safeNum(v, 0));
-      }
-      const allowOC = fd.getAll("world-faction-op-allowOvercap").map(v => {
-        // Checkboxes return "on" for checked; absent for unchecked (so getAll only includes checked boxes).
-        // We need per-row alignment; safest is to read via DOM below. We'll default false here and fix in DOM pass.
-        return true;
-      });
-
-      // DOM-based allowOvercap alignment (per row)
-      let allowByRow = [];
-      try {
-        const rowEls = Array.from(this.element?.find?.(".bbttcc-fxgm-row") || []);
-        allowByRow = rowEls.map(el => !!$(el).find("input[name='world-faction-op-allowOvercap']").prop("checked"));
-      } catch (_eOC) { allowByRow = []; }
-
-      const nFx = Math.max(we.factionEffects.length, fxVP.length, ...Object.values(opArr).map(a => a.length));
-      for (let i = 0; i < nFx; i++) {
-        const row = we.factionEffects[i];
-        if (!row) continue;
-
-        // VP
-        const vp = fxVP[i] ?? 0;
-        if (vp) row.vpDelta = vp;
-
-        // OP deltas
-        const deltas = {};
-        for (const k of OP_KEYS2) {
-          const dv = opArr[k][i] ?? 0;
-          if (dv) deltas[k] = dv;
-        }
-        row.opDeltas = deltas;
-
-        // Allow overcap
-        row.allowOvercap = !!(allowByRow[i] ?? false);
-      }
-    } catch (_eFxExt) {
-      // ignore
-    }
-
-
-    // Turn requests arrays (structured; no raw JSON authoring)
-    const rqKeys   = fd.getAll("world-request-key").map(v => String(v || "").trim());
-    const rqModes  = fd.getAll("world-request-mode").map(v => String(v || "").trim());
-    const rqTargets= fd.getAll("world-request-target").map(v => String(v || "").trim());
-    const rqAmts   = fd.getAll("world-request-amount").map(v => _safeNum(v, 0));
-    const rqNotes  = fd.getAll("world-request-note").map(v => String(v || "").trim());
-
-    const turnRequests = [];
-    const rqN = Math.max(rqKeys.length, rqModes.length, rqTargets.length, rqAmts.length, rqNotes.length);
-
-    for (let i = 0; i < rqN; i++) {
-      const key = rqKeys[i] || "";
-      if (!key) continue;
-
-      const mode = rqModes[i] || "";
-      const target = rqTargets[i] || "";
-      const amount = rqAmts[i] || 0;
-      const note = rqNotes[i] || "";
-
-      const value = {};
-      if (mode) value.mode = mode;
-      if (target) value.target = target;
-      if (amount) value.amount = amount;
-      if (note) value.note = note;
-
-      turnRequests.push({
-        key: key,
-        value: value
-      });
-    }
-
-    we.turnRequests = turnRequests;
-
-    // Relationship Effects (Status Step) — injected UI (not in HBS)
-    try {
-      const relRows = Array.from(this.element?.find?.(".bbttcc-relfx-row") || []);
-      const rel = [];
-      for (const el of relRows) {
-        const $el = $(el);
-        const a = String($el.find(".bbttcc-relfx-a").val() || "").trim();
-        const b = String($el.find(".bbttcc-relfx-b").val() || "").trim();
-        const steps = Math.floor(_safeNum($el.find(".bbttcc-relfx-steps").val(), 0));
-        const reciprocal = !!$el.find(".bbttcc-relfx-recip").prop("checked");
-        const note = String($el.find(".bbttcc-relfx-note").val() || "").trim();
-        if (!a || !b || !steps) continue; // ignore incomplete rows and 0 steps
-        rel.push({ aFactionId: a, bFactionId: b, steps, reciprocal, note });
-      }
-      we.relationshipEffects = rel;
-    } catch (_eRel) {
-      we.relationshipEffects = Array.isArray(we.relationshipEffects) ? we.relationshipEffects : [];
-    }
-
-
-
-// Quest effects arrays
-const qxAct = fd.getAll("world-questfx-action").map(v => String(v || "").trim());
-const qxQid = fd.getAll("world-questfx-questId").map(v => String(v || "").trim());
-const qxBid = fd.getAll("world-questfx-beatId").map(v => String(v || "").trim());
-const qxSt  = fd.getAll("world-questfx-state").map(v => String(v || "").trim());
-const qxTx  = fd.getAll("world-questfx-text").map(v => String(v || "").trim());
-
-const questEffects = [];
-const qxN = Math.max(qxAct.length, qxQid.length, qxBid.length, qxSt.length, qxTx.length);
-for (let i = 0; i < qxN; i++) {
-  if (!qxAct[i] && !qxQid[i] && !qxBid[i] && !qxSt[i] && !qxTx[i]) continue;
-  const action = qxAct[i] || "accept";
-  const questId = qxQid[i] || "";
-  if (!questId) continue;
-  questEffects.push({
-    action,
-    questId,
-    beatId: qxBid[i] || "",
-    state: qxSt[i] || "",
-    text: qxTx[i] || ""
-  });
-}
-we.questEffects = questEffects;
-
+    // World Effects (+ beat.outcomes, sparkLink, gateUnlocks) — ONE shared
+    // harvester with the re-render sync; "save" mode drops incomplete rows
+    // and expands Reciprocal relationship rows into mirrored engine rows.
+    this._harvestEffectsFromForm(fd, { mode: "save" });
 
     console.log(TAG, "Saving beat via hook:", { campaignId: this.campaignId, beat: this.beat });
 

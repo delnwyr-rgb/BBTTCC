@@ -57,12 +57,20 @@
   }
 
   function watchToolbar() {
+    // The button is GM-only — for players attachStoryButton() always returns
+    // false, which used to leave a body-wide MutationObserver running for the
+    // whole session AND stack a fresh one on every canvasReady (the old one
+    // was overwritten without disconnect). Fixed 2026-07-08.
+    if (!game.user?.isGM) return;
     if (attachStoryButton()) return;
+
+    try { globalThis.__bbttccStoryToolbarObserver?.disconnect(); } catch (_e) {}
 
     // If toolbar or story API aren't ready yet, watch the DOM and try again
     const obs = new MutationObserver(() => {
       if (attachStoryButton()) {
         obs.disconnect();
+        if (globalThis.__bbttccStoryToolbarObserver === obs) globalThis.__bbttccStoryToolbarObserver = null;
       }
     });
     obs.observe(document.body, { childList: true, subtree: true });

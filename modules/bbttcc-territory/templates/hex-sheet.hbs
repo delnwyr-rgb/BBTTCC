@@ -402,27 +402,27 @@
 
     <aside class="bbttcc-pane bbttcc-hex-card">
       {{#if hexImage}}
-        <div class="bbttcc-hex-art" data-action="hex-image-edit" title="{{#if isGM}}Click to change image{{else}}Click to view{{/if}}">
+        <div class="bbttcc-hex-art" data-action="hex-image-edit" data-tooltip="{{bbttccTip 'hex' 'art'}}" data-tour="hex.art">
           <img src="{{hexImage}}" alt="{{name}}"/>
         </div>
       {{else}}
         {{#if isGM}}
-          <div class="bbttcc-hex-art" data-action="hex-image-edit" title="Click to set hex image">
+          <div class="bbttcc-hex-art" data-action="hex-image-edit" data-tooltip="{{bbttccTip 'hex' 'art'}}" data-tour="hex.art">
             <div class="bbttcc-hex-art-empty">+ Add Hex Artwork</div>
           </div>
         {{/if}}
       {{/if}}
 
-      <div class="bbttcc-row" style="align-items:baseline;">
-        <div style="min-width:0;">
+      <div class="bbttcc-row" style="align-items:baseline;" data-tour="hex.identity">
+        <div style="min-width:0;" data-tooltip="{{bbttccTip 'hex' 'identity'}}">
           <div class="bbttcc-hex-title">{{name}}</div>
           <div class="bbttcc-muted">{{size}} {{type}}</div>
         </div>
-        <div><span class="bbttcc-pill">⬢ {{status}}</span></div>
+        <div><span class="bbttcc-pill" data-tooltip="{{bbttccTip 'hex' 'status'}}" data-tour="hex.status">⬢ {{status}}</span></div>
       </div>
 
       <div class="bbttcc-pane-scroll">
-        <div class="bbttcc-hex-card" style="padding:8px 10px;">
+        <div class="bbttcc-hex-card" style="padding:8px 10px;" data-tooltip="{{bbttccTip 'hex' 'owner'}}" data-tour="hex.owner">
           <div class="bbttcc-muted" style="font-size:.8rem;">Owner</div>
           <div style="font-weight:700;">{{ownerName}}</div>
         </div>
@@ -435,29 +435,29 @@
               Rigs, Bosses, Facilities stationed at this hex. Provides
               defender DC bonuses when this hex is raided AND can be
               deployed as tactical units on bound battle scenes. --}}
-        <div class="bbttcc-hex-card bbttcc-holdings-card" style="padding:8px 10px;">
+        <div class="bbttcc-hex-card bbttcc-holdings-card" style="padding:8px 10px;" data-tour="hex.holdings">
           <div class="bbttcc-row" style="margin-bottom:6px; align-items:center; justify-content:space-between; gap:8px;">
-            <div style="font-weight:800; flex:1 1 auto; min-width:0;">Holdings</div>
+            <div style="font-weight:800; flex:1 1 auto; min-width:0;" data-tooltip="{{bbttccTip 'hex' 'holdings'}}">Holdings</div>
             <div style="display:flex; align-items:center; gap:6px; flex:0 0 auto;">
-              <span class="bbttcc-pill bbttcc-pill-soft" data-tooltip="Total strategic raid bonus from Holdings stationed at this hex." style="color:#fbbf24;">+{{holdings.totalBonus}}</span>
+              <span class="bbttcc-pill bbttcc-pill-soft" data-tooltip="{{bbttccTip 'hex' 'holdingsBonus'}}" data-tour="hex.holdingsBonus" style="color:#fbbf24;">+{{holdings.totalBonus}}</span>
               {{#if isGM}}
                 {{#if holdings.hasAny}}
-                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-deploy" title="Spawn Holdings as tokens on the bound battle scene (Phase 5).">🎯 Deploy</button>
-                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-recall" title="Remove this hex's deployed Holdings tokens from the bound battle scene." style="opacity:.85;">↩ Recall</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-deploy" data-tooltip="{{bbttccTip 'hex' 'holdingsDeploy'}}" data-tour="hex.holdingsDeploy">🎯 Deploy</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-recall" data-tooltip="{{bbttccTip 'hex' 'holdingsRecall'}}" style="opacity:.85;">↩ Recall</button>
                 {{/if}}
-                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-add" title="Station a rig, boss, or facility at this hex">＋ Station</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-add" data-tooltip="{{bbttccTip 'hex' 'holdingsStation'}}" data-tour="hex.holdingsStation">＋ Station</button>
               {{/if}}
             </div>
           </div>
 
           {{!-- Holdings Phase D — neglect / abandonment surface --}}
           {{#if holdings.isNeglected}}
-            <div class="bbttcc-row bbttcc-holdings-neglect" data-tooltip="Garrison upkeep was unpaid last turn. If the hex stays unpaid for {{holdings.neglectThreshold}} total turns, stationed Holdings defect." style="margin-bottom:6px; padding:5px 8px; border-radius:6px; border:1px solid rgba(217,119,6,0.5); background:rgba(217,119,6,0.1);">
+            <div class="bbttcc-row bbttcc-holdings-neglect" data-tooltip="{{bbttccTip 'hex' 'holdingsNeglect'}}" style="margin-bottom:6px; padding:5px 8px; border-radius:6px; border:1px solid rgba(217,119,6,0.5); background:rgba(217,119,6,0.1);">
               <span style="color:#d97706; font-weight:700;">⚠ Neglected</span>
               <span style="margin-left:auto; color:#fbbf24;">{{holdings.neglectTurns}}/{{holdings.neglectThreshold}} unpaid</span>
             </div>
           {{else if holdings.abandonedRecent}}
-            <div class="bbttcc-row bbttcc-holdings-abandoned" data-tooltip="Holdings defected from this hex due to unpaid garrison upkeep. Re-station via ＋ Station." style="margin-bottom:6px; padding:5px 8px; border-radius:6px; border:1px solid rgba(185,28,28,0.5); background:rgba(185,28,28,0.12);">
+            <div class="bbttcc-row bbttcc-holdings-abandoned" data-tooltip="{{bbttccTip 'hex' 'holdingsAbandoned'}}" style="margin-bottom:6px; padding:5px 8px; border-radius:6px; border:1px solid rgba(185,28,28,0.5); background:rgba(185,28,28,0.12);">
               <span style="color:#fca5a5; font-weight:700;">💔 Recently abandoned</span>
               {{#if holdings.lastAbandonedCount}}
                 <span style="margin-left:auto; color:#fca5a5; font-size:.78rem;">{{holdings.lastAbandonedCount}} unit(s) lost</span>
@@ -467,7 +467,7 @@
 
           {{#if holdings.hasAny}}
             {{#if holdings.bosses.length}}
-              <div class="bbttcc-muted" style="font-size:.75rem; margin-top:6px; text-transform:uppercase; letter-spacing:.06em;">Bosses · +{{holdings.bossesBonus}}</div>
+              <div class="bbttcc-muted" style="font-size:.75rem; margin-top:6px; text-transform:uppercase; letter-spacing:.06em;" data-tooltip="{{bbttccTip 'hex' 'holdingsBosses'}}">Bosses · +{{holdings.bossesBonus}}</div>
               {{#each holdings.bosses}}
               <div class="bbttcc-row bbttcc-holdings-row" style="margin-top:4px; gap:6px; align-items:center;">
                 <span style="flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
@@ -476,14 +476,14 @@
                 </span>
                 <span class="bbttcc-pill" style="color:#fbbf24; font-size:.75rem;">+{{bonus}}</span>
                 {{#if ../isGM}}
-                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-remove" data-kind="boss" data-id="{{id}}" title="Remove from Holdings" style="opacity:.7;">×</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-remove" data-kind="boss" data-id="{{id}}" data-tooltip="{{bbttccTip 'hex' 'holdingsRemove'}}" style="opacity:.7;">×</button>
                 {{/if}}
               </div>
               {{/each}}
             {{/if}}
 
             {{#if holdings.rigs.length}}
-              <div class="bbttcc-muted" style="font-size:.75rem; margin-top:8px; text-transform:uppercase; letter-spacing:.06em;">Rigs · +{{holdings.rigsBonus}}{{#if holdings.rigsCapped}} <span style="color:#f97316;">(cap)</span>{{/if}}</div>
+              <div class="bbttcc-muted" style="font-size:.75rem; margin-top:8px; text-transform:uppercase; letter-spacing:.06em;" data-tooltip="{{bbttccTip 'hex' 'holdingsRigs'}}">Rigs · +{{holdings.rigsBonus}}{{#if holdings.rigsCapped}} <span style="color:#f97316;">(cap)</span>{{/if}}</div>
               {{#each holdings.rigs}}
               <div class="bbttcc-row bbttcc-holdings-row" style="margin-top:4px; gap:6px; align-items:center;">
                 <span style="flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
@@ -492,14 +492,14 @@
                 </span>
                 <span class="bbttcc-pill" style="color:#fbbf24; font-size:.75rem;">+{{bonus}}</span>
                 {{#if ../isGM}}
-                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-remove" data-kind="rig" data-id="{{id}}" title="Remove from Holdings" style="opacity:.7;">×</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-remove" data-kind="rig" data-id="{{id}}" data-tooltip="{{bbttccTip 'hex' 'holdingsRemove'}}" style="opacity:.7;">×</button>
                 {{/if}}
               </div>
               {{/each}}
             {{/if}}
 
             {{#if holdings.facilities.length}}
-              <div class="bbttcc-muted" style="font-size:.75rem; margin-top:8px; text-transform:uppercase; letter-spacing:.06em;">Facilities · +{{holdings.facilitiesBonus}}{{#if holdings.facilitiesCapped}} <span style="color:#f97316;">(cap)</span>{{/if}}</div>
+              <div class="bbttcc-muted" style="font-size:.75rem; margin-top:8px; text-transform:uppercase; letter-spacing:.06em;" data-tooltip="{{bbttccTip 'hex' 'holdingsFacilities'}}">Facilities · +{{holdings.facilitiesBonus}}{{#if holdings.facilitiesCapped}} <span style="color:#f97316;">(cap)</span>{{/if}}</div>
               {{#each holdings.facilities}}
               <div class="bbttcc-row bbttcc-holdings-row" style="margin-top:4px; gap:6px; align-items:center;">
                 <span style="flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
@@ -508,19 +508,19 @@
                 </span>
                 <span class="bbttcc-pill" style="color:#fbbf24; font-size:.75rem;">+{{bonus}}</span>
                 {{#if ../isGM}}
-                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-remove" data-kind="rig" data-id="{{id}}" title="Remove from Holdings" style="opacity:.7;">×</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-remove" data-kind="rig" data-id="{{id}}" data-tooltip="{{bbttccTip 'hex' 'holdingsRemove'}}" style="opacity:.7;">×</button>
                 {{/if}}
               </div>
               {{/each}}
             {{/if}}
 
             {{#if holdings.missing.length}}
-              <div class="bbttcc-muted" style="font-size:.7rem; margin-top:8px; color:#f87171;">⚠ {{holdings.missing.length}} stale reference(s) — actor removed from world</div>
+              <div class="bbttcc-muted" style="font-size:.7rem; margin-top:8px; color:#f87171;" data-tooltip="{{bbttccTip 'hex' 'holdingsMissing'}}">⚠ {{holdings.missing.length}} stale reference(s) — actor removed from world</div>
               {{#each holdings.missing}}
               <div class="bbttcc-row bbttcc-holdings-row" style="margin-top:4px; gap:6px; opacity:.6;">
                 <span style="flex:1 1 auto; font-size:.75rem;">{{label}}</span>
                 {{#if ../isGM}}
-                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-remove" data-kind="any" data-id="{{id}}" title="Clear stale reference" style="opacity:.7;">×</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="holdings-remove" data-kind="any" data-id="{{id}}" data-tooltip="{{bbttccTip 'hex' 'holdingsRemove'}}" style="opacity:.7;">×</button>
                 {{/if}}
               </div>
               {{/each}}
@@ -530,27 +530,27 @@
           {{/if}}
         </div>
 
-        <div class="bbttcc-hex-card" style="padding:8px 10px;">
-          <div style="font-weight:800; margin-bottom:6px;">Tracks &amp; State</div>
+        <div class="bbttcc-hex-card" style="padding:8px 10px;" data-tour="hex.tracks">
+          <div style="font-weight:800; margin-bottom:6px;" data-tooltip="{{bbttccTip 'hex' 'tracks'}}">Tracks &amp; State</div>
 
-          <div class="bbttcc-row">
+          <div class="bbttcc-row" data-tooltip="{{bbttccTip 'hex' 'integration'}}" data-tour="hex.integration">
             <span>Integration ({{integrationProgress}}/6)</span>
             <span class="bbttcc-track" style="color:#22c55e;">{{integrationPips}}</span>
           </div>
 
-          <div class="bbttcc-row">
+          <div class="bbttcc-row" data-tooltip="{{bbttccTip 'hex' 'radiation'}}" data-tour="hex.radiation">
             <span>Radiation ({{radiation}})</span>
             <span class="bbttcc-track" style="color:#f97316;">{{radiationPips}}</span>
           </div>
 
-          <div class="bbttcc-row">
+          <div class="bbttcc-row" data-tooltip="{{bbttccTip 'hex' 'darkness'}}" data-tour="hex.darkness">
             <span>Local Darkness ({{darkness}})</span>
             <span class="bbttcc-track" style="color:#a855f7;">{{darknessPips}}</span>
           </div>
 
           {{#if weather.active}}
           <div class="bbttcc-row" style="margin-top:6px;">
-            <span>Weather</span>
+            <span data-tooltip="{{bbttccTip 'hex' 'weather'}}">Weather</span>
             <span class="bbttcc-pill bbttcc-pill-soft" data-tooltip="{{weather.tooltip}}" data-tooltip-direction="UP" style="color:#88c8ff;">
               ☁ {{weather.label}} <small style="opacity:0.7;">({{weather.remainingTurns}})</small>
             </span>
@@ -558,20 +558,20 @@
           {{/if}}
         </div>
 
-        <div class="bbttcc-hex-card" style="padding:8px 10px;" data-bbttcc-pressure="1">
+        <div class="bbttcc-hex-card" style="padding:8px 10px;" data-bbttcc-pressure="1" data-tour="hex.pressure">
           <div class="bbttcc-row" style="margin-bottom:6px;">
-            <div style="font-weight:800;">Pressure &amp; Conditions</div>
+            <div style="font-weight:800;" data-tooltip="{{bbttccTip 'hex' 'pressure'}}">Pressure &amp; Conditions</div>
             {{#if isGM}}
               <span class="bbttcc-pill bbttcc-pill-soft">GM</span>
             {{/if}}
           </div>
 
-          <div class="bbttcc-row">
+          <div class="bbttcc-row" data-tooltip="{{bbttccTip 'hex' 'radiationTier'}}">
             <span>Radiation Tier</span>
             <span class="bbttcc-pill bbttcc-pill-soft">{{radiationTier}}</span>
           </div>
 
-          <div class="bbttcc-row" style="margin-top:6px;">
+          <div class="bbttcc-row" style="margin-top:6px;" data-tooltip="{{bbttccTip 'hex' 'conditions'}}">
             <span>Conditions</span>
             <span class="bbttcc-muted" style="font-size:.82rem;">{{conditionsCount}}</span>
           </div>
@@ -589,9 +589,9 @@
           {{#if isGM}}
             <hr class="bbttcc-hr"/>
 
-            <div class="bbttcc-muted" style="font-size:.78rem; margin-bottom:6px;">GM Controls</div>
+            <div class="bbttcc-muted" style="font-size:.78rem; margin-bottom:6px;" data-tour="hex.gmControls">GM Controls</div>
 
-            <div class="bbttcc-row" style="align-items:center;">
+            <div class="bbttcc-row" style="align-items:center;" data-tooltip="{{bbttccTip 'hex' 'gmRad'}}">
               <span>Radiation</span>
               <div class="bbttcc-chiprow" style="justify-content:flex-end;">
                 <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-rad" data-delta="-5">-5</button>
@@ -601,7 +601,7 @@
               </div>
             </div>
 
-            <div class="bbttcc-row" style="align-items:center; margin-top:6px;">
+            <div class="bbttcc-row" style="align-items:center; margin-top:6px;" data-tooltip="{{bbttccTip 'hex' 'gmDark'}}">
               <span>Darkness</span>
               <div class="bbttcc-chiprow" style="justify-content:flex-end;">
                 <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-dark" data-delta="-1">-1</button>
@@ -610,11 +610,11 @@
             </div>
 
             <div class="bbttcc-chiprow" style="margin-top:8px;">
-              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond" data-cond="Radiated">Toggle Radiated</button>
-              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond" data-cond="Contaminated">Toggle Contaminated</button>
-              <button type="button" class="bbttcc-btn bbttcc-btn-small bbttcc-btn-good" data-action="hex-cond" data-cond="Purified">Toggle Purified</button>
-              <button type="button" class="bbttcc-btn bbttcc-btn-small bbttcc-btn-danger" data-action="hex-cond" data-cond="Corrupted">Toggle Corrupted</button>
-              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond-clear">Clear All</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond" data-cond="Radiated" data-tooltip="{{bbttccTip 'hex' 'gmConditions'}}">Toggle Radiated</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond" data-cond="Contaminated" data-tooltip="{{bbttccTip 'hex' 'gmConditions'}}">Toggle Contaminated</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small bbttcc-btn-good" data-action="hex-cond" data-cond="Purified" data-tooltip="{{bbttccTip 'hex' 'gmConditions'}}">Toggle Purified</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small bbttcc-btn-danger" data-action="hex-cond" data-cond="Corrupted" data-tooltip="{{bbttccTip 'hex' 'gmConditions'}}">Toggle Corrupted</button>
+              <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="hex-cond-clear" data-tooltip="{{bbttccTip 'hex' 'gmCondClear'}}">Clear All</button>
             </div>
 
             <div class="bbttcc-muted" style="font-size:.75rem; margin-top:6px;">
@@ -628,23 +628,25 @@
 
     <main class="bbttcc-pane bbttcc-hex-card">
 
-      <div class="bbttcc-tabs" role="tablist">
+      <div class="bbttcc-tabs" role="tablist" data-tour="hex.tabs">
         <button type="button"
                 class="bbttcc-tab {{#if isOverview}}active{{/if}}"
                 data-bbttcc-hex-tab="overview"
+                data-tooltip="{{bbttccTip 'hex' 'tabOverview'}}"
                 role="tab">Overview</button>
         <button type="button"
                 class="bbttcc-tab {{#if isDossier}}active{{/if}}"
                 data-bbttcc-hex-tab="dossier"
+                data-tooltip="{{bbttccTip 'hex' 'tabDossier'}}"
                 role="tab">Dossier</button>
         {{#if dossier.stageLabel}}
-          <span class="bbttcc-stage-pill" style="margin-left:auto;" title="Integration stage">⬢ {{dossier.stageLabel}}</span>
+          <span class="bbttcc-stage-pill" style="margin-left:auto;" data-tooltip="{{bbttccTip 'hex' 'stagePill'}}" data-tour="hex.stage">⬢ {{dossier.stageLabel}}</span>
         {{/if}}
       </div>
 
       <div data-bbttcc-hex-pane="overview" class="bbttcc-pane-scroll" {{#unless isOverview}}style="display:none;"{{/unless}}>
-        <div class="bbttcc-hex-card">
-          <div style="font-weight:800; margin-bottom:6px;">Resources / Yields</div>
+        <div class="bbttcc-hex-card" data-tour="hex.yields">
+          <div style="font-weight:800; margin-bottom:6px;" data-tooltip="{{bbttccTip 'hex' 'yields'}}">Resources / Yields</div>
           {{#if hasResources}}
             <div class="bbttcc-grid">
               {{#each resourcesList}}
@@ -656,13 +658,13 @@
           {{/if}}
         </div>
 
-        <div class="bbttcc-hex-card">
+        <div class="bbttcc-hex-card" data-tour="hex.nodes">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <div style="font-weight:800;">Resource Nodes</div>
+            <div style="font-weight:800;" data-tooltip="{{bbttccTip 'hex' 'nodes'}}">Resource Nodes</div>
             {{#if isGM}}
               <div style="display:flex; gap:.3rem;">
-                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="add-hex-node" title="Add a resource node (GM)">＋ Add</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="regrow-hex-nodes" title="Reset all node charges to max (GM)">⟳ Regrow</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="add-hex-node" data-tooltip="{{bbttccTip 'hex' 'nodeAdd'}}">＋ Add</button>
+                <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="regrow-hex-nodes" data-tooltip="{{bbttccTip 'hex' 'nodeRegrow'}}">⟳ Regrow</button>
               </div>
             {{/if}}
           </div>
@@ -673,16 +675,16 @@
                   <div>
                     <div style="font-weight:700;">
                       {{materialName}}
-                      {{#if rich}}<span style="color:#facc15;" title="Rich node — extra charges">★</span>{{/if}}
+                      {{#if rich}}<span style="color:#facc15;" data-tooltip="{{bbttccTip 'hex' 'nodeRich'}}">★</span>{{/if}}
                       <span style="opacity:.6; font-size:.78rem; margin-left:4px;">T{{tier}}</span>
                     </div>
                     <div style="opacity:.75; font-size:.78rem;">DC {{dc}} · {{skill}} · yield {{yieldFormula}}</div>
                     <div style="opacity:.7; font-size:.74rem;">Charges: <b>{{charges}}</b> / {{maxCharges}}</div>
                   </div>
                   <div style="display:flex; gap:.3rem; align-items:center;">
-                    <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="harvest-hex-node" data-node-id="{{id}}">Harvest</button>
+                    <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="harvest-hex-node" data-node-id="{{id}}" data-tooltip="{{bbttccTip 'hex' 'nodeHarvest'}}" {{#if @first}}data-tour="hex.harvest"{{/if}}>Harvest</button>
                     {{#if ../isGM}}
-                      <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="delete-hex-node" data-node-id="{{id}}" title="Remove this node (GM)" style="opacity:.7;">×</button>
+                      <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="delete-hex-node" data-node-id="{{id}}" data-tooltip="{{bbttccTip 'hex' 'nodeDelete'}}" style="opacity:.7;">×</button>
                     {{/if}}
                   </div>
                 </div>
@@ -697,11 +699,12 @@
         </div>
 
         {{#if buildUnits.enabled}}
-        <div class="bbttcc-hex-card">
+        <div class="bbttcc-hex-card" data-tour="hex.buildUnits">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-            <div style="font-weight:800;">Build Units (Engineering)</div>
+            <div style="font-weight:800;" data-tooltip="{{bbttccTip 'hex' 'buildUnits'}}">Build Units (Engineering)</div>
             {{#if buildUnits.hasOwner}}
               <span data-tooltip="Owning faction: {{buildUnits.ownerName}} · Build Units available: {{buildUnits.balance}}"
+                    data-tour="hex.buBalance"
                     style="display:inline-flex; align-items:center; gap:.3rem; padding:.1rem .55rem; border:1px solid rgba(232,200,74,.45); border-radius:10px; font-size:11px; color:#e8c84a; background:rgba(232,200,74,.08); white-space:nowrap;">
                 <i class="fas fa-hammer" style="font-size:10px; opacity:.85;"></i>
                 BU: <b>{{buildUnits.balance}}</b>
@@ -712,15 +715,15 @@
           </div>
           <div class="bbttcc-chiprow" style="gap:.35rem; flex-wrap:wrap;">
             <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="bu-spend" data-bu-action="fortify"
-                    {{#unless buildUnits.canFortify}}disabled{{/unless}} data-tooltip="{{buildUnits.fortifyTip}}">
+                    {{#unless buildUnits.canFortify}}disabled{{/unless}} data-tooltip="{{buildUnits.fortifyTip}}" data-tour="hex.fortify">
               Fortify Hex — {{buildUnits.costs.fortify}} BU
             </button>
             <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="bu-spend" data-bu-action="repair"
-                    {{#unless buildUnits.canRepair}}disabled{{/unless}} data-tooltip="{{buildUnits.repairTip}}">
+                    {{#unless buildUnits.canRepair}}disabled{{/unless}} data-tooltip="{{buildUnits.repairTip}}" data-tour="hex.repair">
               Repair Hex — {{buildUnits.costs.repair}} BU
             </button>
             <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="bu-spend" data-bu-action="asset"
-                    {{#unless buildUnits.canAsset}}disabled{{/unless}} data-tooltip="{{buildUnits.assetTip}}">
+                    {{#unless buildUnits.canAsset}}disabled{{/unless}} data-tooltip="{{buildUnits.assetTip}}" data-tour="hex.asset">
               Build Asset — {{buildUnits.costs.asset}} BU
             </button>
           </div>
@@ -728,31 +731,31 @@
         </div>
         {{/if}}
 
-        <div class="bbttcc-hex-card">
-          <div style="font-weight:800; margin-bottom:6px;">GM Notes</div>
+        <div class="bbttcc-hex-card" data-tour="hex.gmNotes">
+          <div style="font-weight:800; margin-bottom:6px;" data-tooltip="{{bbttccTip 'hex' 'gmNotes'}}">GM Notes</div>
           <div class="bbttcc-muted" style="white-space:pre-wrap;">{{notes}}</div>
         </div>
       </div>
 
       <div data-bbttcc-hex-pane="dossier" class="bbttcc-pane-scroll" {{#unless isDossier}}style="display:none;"{{/unless}}>
 
-        <div class="bbttcc-hex-card">
-          <div style="font-weight:800; margin-bottom:6px;">What's Here</div>
-          <div class="bbttcc-row">
+        <div class="bbttcc-hex-card" data-tour="hex.whatsHere">
+          <div style="font-weight:800; margin-bottom:6px;" data-tooltip="{{bbttccTip 'hex' 'whatsHere'}}">What's Here</div>
+          <div class="bbttcc-row" data-tooltip="{{bbttccTip 'hex' 'stagePill'}}">
             <span>Stage</span>
             <strong>{{dossier.stageLabel}}</strong>
           </div>
           {{#if dossier.sephirotName}}
-            <div class="bbttcc-row" style="margin-top:4px;">
+            <div class="bbttcc-row" style="margin-top:4px;" data-tooltip="{{bbttccTip 'hex' 'sephirot'}}" data-tour="hex.sephirot">
               <span>Sephirot</span>
               <strong style="text-transform:capitalize;">{{dossier.sephirotName}}</strong>
             </div>
           {{/if}}
           {{#if dossier.productionShown}}
             <hr class="bbttcc-hr"/>
-            <div class="bbttcc-muted" style="font-size:.78rem; margin-bottom:4px;">
+            <div class="bbttcc-muted" style="font-size:.78rem; margin-bottom:4px;" data-tooltip="{{bbttccTip 'hex' 'production'}}">
               Production trace
-              {{#if dossier.manualOverride}}<span style="color:#facc15; margin-left:6px;" title="Manual override active">(manual)</span>{{/if}}
+              {{#if dossier.manualOverride}}<span style="color:#facc15; margin-left:6px;" data-tooltip="{{bbttccTip 'hex' 'prodManual'}}">(manual)</span>{{/if}}
             </div>
             <div class="bbttcc-prod-table">
               <div class="bbttcc-prod-head">Resource</div>
@@ -772,8 +775,8 @@
           {{/if}}
         </div>
 
-        <div class="bbttcc-hex-card">
-          <div style="font-weight:800; margin-bottom:6px;">Active Modifiers</div>
+        <div class="bbttcc-hex-card" data-tour="hex.modifiers">
+          <div style="font-weight:800; margin-bottom:6px;" data-tooltip="{{bbttccTip 'hex' 'modifiers'}}">Active Modifiers</div>
           {{#if dossier.hasActiveModifiers}}
             {{#each dossier.activeModifiers}}
               <div class="bbttcc-mod-row">
@@ -791,8 +794,8 @@
           {{/if}}
         </div>
 
-        <div class="bbttcc-hex-card">
-          <div style="font-weight:800; margin-bottom:6px;">How We Got Here</div>
+        <div class="bbttcc-hex-card" data-tour="hex.timeline">
+          <div style="font-weight:800; margin-bottom:6px;" data-tooltip="{{bbttccTip 'hex' 'timeline'}}">How We Got Here</div>
           {{#if dossier.hasTimeline}}
             <div class="bbttcc-timeline">
               {{#each dossier.timeline}}
@@ -816,8 +819,8 @@
           {{/if}}
         </div>
 
-        <div class="bbttcc-hex-card">
-          <div style="font-weight:800; margin-bottom:6px;">What's Next</div>
+        <div class="bbttcc-hex-card" data-tour="hex.nextSteps">
+          <div style="font-weight:800; margin-bottom:6px;" data-tooltip="{{bbttccTip 'hex' 'nextSteps'}}">What's Next</div>
           {{#if dossier.nextStepsHasAny}}
 
             {{#if dossier.nextSteps.integration.length}}
@@ -835,7 +838,7 @@
                                   class="bbttcc-act-pill"
                                   data-bbttcc-deep-plan="1"
                                   data-activity-key="{{this}}"
-                                  title="Open Activity Planner with this activity + hex preselected">{{this}}</button>
+                                  data-tooltip="{{bbttccTip 'hex' 'planPill'}}">{{this}}</button>
                         {{/each}}
                       </div>
                     {{/if}}
@@ -859,7 +862,7 @@
                                   class="bbttcc-act-pill"
                                   data-bbttcc-deep-plan="1"
                                   data-activity-key="{{this}}"
-                                  title="Open Activity Planner with this activity + hex preselected">{{this}}</button>
+                                  data-tooltip="{{bbttccTip 'hex' 'planPill'}}">{{this}}</button>
                         {{/each}}
                       </div>
                     {{/if}}
@@ -896,7 +899,7 @@
                                   class="bbttcc-act-pill"
                                   data-bbttcc-deep-plan="1"
                                   data-activity-key="{{this}}"
-                                  title="Open Activity Planner with this activity + hex preselected">{{this}}</button>
+                                  data-tooltip="{{bbttccTip 'hex' 'planPill'}}">{{this}}</button>
                         {{/each}}
                       </div>
                     {{/if}}

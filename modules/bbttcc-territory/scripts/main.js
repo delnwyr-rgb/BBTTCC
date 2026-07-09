@@ -3387,7 +3387,7 @@ Hooks.on("deleteDrawing", (doc) => {
             darkness: 0,
             darknessPips: _pips(0, 6),
             radiationTier: "—",
-            conditionsCount: "—",
+            conditionsCount: "0",
             hasConditions: false,
             conditions: [],
             hasResources: false,
@@ -3398,9 +3398,12 @@ Hooks.on("deleteDrawing", (doc) => {
       }
 
       // Tracks (alpha-safe)
+      // Canonical stores are flags.bbttcc-territory.mods.{radiation,darkness}
+      // (what the turn engine reads/writes); the .value/.local shapes are
+      // legacy read-only fallbacks so old hexes don't show zero.
       const integration = _clamp(tf.integration?.progress ?? tf.integrationProgress ?? 0, 0, 6);
-      const radiation = Math.max(0, _toInt(tf.radiation?.value ?? tf.radiation ?? 0, 0));
-      const darkness = Math.max(0, _toInt(tf.darkness?.local ?? tf.localDarkness ?? tf.darkness ?? 0, 0));
+      const radiation = Math.max(0, _toInt(tf.mods?.radiation ?? tf.radiation?.value ?? tf.radiation ?? 0, 0));
+      const darkness = Math.max(0, _toInt(tf.mods?.darkness ?? tf.darkness?.local ?? tf.localDarkness ?? tf.darkness ?? 0, 0));
 
       // Facilities (alpha-safe)
       const facs = Array.isArray(tf.facilities) ? tf.facilities : [];
@@ -3632,16 +3635,19 @@ Hooks.on("deleteDrawing", (doc) => {
           return;
         }
 
-        // GM adjust radiation (writes to flags.bbttcc-territory.radiation.value)
+        // GM adjust radiation (writes to the canonical
+        // flags.bbttcc-territory.mods.radiation the turn engine reads;
+        // legacy radiation.value is a read-only fallback for old hexes)
         if (act === "hex-rad") {
           ev.preventDefault(); ev.stopPropagation();
           const delta = Number(btn.getAttribute("data-delta") || 0) || 0;
           const dr = await this._resolveDrawing();
           if (!dr) return;
           const tf = dr.flags?.[MOD] ?? {};
-          const cur = Math.max(0, _toInt(tf.radiation?.value ?? tf.radiation ?? 0, 0));
+          const cur = Math.max(0, _toInt(tf.mods?.radiation ?? tf.radiation?.value ?? tf.radiation ?? 0, 0));
           const next = Math.max(0, cur + delta);
-          await dr.setFlag(MOD, "radiation", Object.assign({}, (tf.radiation && typeof tf.radiation === "object") ? tf.radiation : {}, { value: next }));
+          const mods = Object.assign({}, (tf.mods && typeof tf.mods === "object") ? tf.mods : {}, { radiation: next });
+          await dr.setFlag(MOD, "mods", mods);
           this.render({ force: true });
           return;
         }
