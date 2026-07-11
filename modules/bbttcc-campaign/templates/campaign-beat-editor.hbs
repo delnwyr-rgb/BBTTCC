@@ -43,12 +43,12 @@
         </div>
         <div class="form-group">
           <label data-tooltip="{{bbttccTip 'beats' 'timePoints'}}">Time Points (override)
-            <span class="bbttcc-muted" style="font-size:.72rem; opacity:.75; border:1px solid rgba(148,163,184,.4); border-radius:8px; padding:0 .35rem; margin-left:.35rem; vertical-align:middle;">dormant — no time accrual yet</span>
+            <span class="bbttcc-muted" style="font-size:.72rem; opacity:.75; border:1px solid rgba(148,163,184,.4); border-radius:8px; padding:0 .35rem; margin-left:.35rem; vertical-align:middle;">⏳ LIVE — Turn Ledger</span>
           </label>
-          <input type="number" name="timePoints" value="{{beat.timePoints}}" min="0" step="1"
+          <input type="number" name="timePoints" value="{{beat.timePoints}}" min="0" step="0.5"
                  placeholder="(blank = use timeScale default)" />
           <p class="bbttcc-muted bbttcc-mt-xs">
-            Would override the timeScale mapping for Strategic-Turn time accrual — which is not live yet (the world API has no addTime). Stored for future wiring.
+            Days this beat debits from the World Turn's time budget when it resolves (Turn Ledger, live 2026-07-08). Overrides the timeScale mapping — an explicit 0 makes the beat free, and fractions work (0.5 = half a day). Blank falls back to timeScale (moment 0 · scene/leg 1 · turn = full month).
           </p>
         </div>
         <div class="form-group">

@@ -3479,10 +3479,16 @@ function _getWorldTurnLengthSafe() {
 }
 
 function _timePointsForBeat(beat, ctx = {}) {
-  // Explicit override wins. Fractions are legal — a half-day site visit is
-  // timePoints 0.5 (Turn Ledger 2026-07-08; the old floor() turned 0.5 into 0).
-  const raw = Number(beat?.timePoints ?? beat?.time?.points ?? ctx?.timePoints ?? 0);
-  if (Number.isFinite(raw) && raw > 0) return Math.round(raw * 100) / 100;
+  // Explicit override wins — INCLUDING an explicit 0. This matters: the beat
+  // editor stamped timeScale "scene" on ~500 beats as a form default (never
+  // human intent), which maps to a full day each. timePoints: 0 is how the
+  // backfill seeder silences that noise per beat. Fractions are legal — a
+  // half-day site visit is timePoints 0.5 (the old floor() turned 0.5 into 0).
+  const rawVal = beat?.timePoints ?? beat?.time?.points ?? ctx?.timePoints;
+  if (rawVal != null && rawVal !== "") {
+    const raw = Number(rawVal);
+    if (Number.isFinite(raw) && raw >= 0) return Math.round(raw * 100) / 100;
+  }
 
   // Map timeScale to default points
   const scale = String(beat?.timeScale ?? beat?.time?.scale ?? "").trim().toLowerCase();
