@@ -30,7 +30,7 @@
   'use strict';
 
   const CONFIG = {
-    DRY_RUN: false,                                   // <-- set false to actually write descriptions
+    DRY_RUN: true,                                   // <-- set false to actually write descriptions
     GENERATE_AES: false,                              // <-- set true to also mint knob-mapped Active Effects (somaModifiers→attribute)
     PACK_IDS: [                                       // Item compendia in scope (auto-detected if present)
       'fourththing.starter-manifestations',

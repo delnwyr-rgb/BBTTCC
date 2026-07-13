@@ -52,6 +52,8 @@
 !bbttcc-travel/**
 !bbttcc-world/
 !bbttcc-world/**
+!surge-powers/
+!surge-powers/**
 
 # Allow root docs if added later
 !README.md
