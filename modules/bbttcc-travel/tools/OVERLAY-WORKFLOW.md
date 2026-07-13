@@ -138,3 +138,5 @@ alpha FILE|FOLDER   [--bg black --no-trim --out-dir DIR]
 
 **Golden path:** white-background art → `glow` → drop in the art folder → helper → **Add** blend. Done.
 ```
+
+glow ~/Desktop/my-circuits --bg black --glow-radius 12 --glow-intensity 0.9

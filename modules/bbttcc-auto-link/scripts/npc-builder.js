@@ -14,6 +14,46 @@
  */
 
 const MOD = "bbttcc-auto-link";
+const CALLINGS_PACK = "bbttcc-character-options.npc-callings";
+
+async function _callingOptions() {
+  const pack = game.packs.get(CALLINGS_PACK);
+  if (!pack) return null;
+  try {
+    const index = await pack.getIndex({ fields: ["type"] });
+    const callings = index.filter(e => e.type === "class")
+      .map(e => ({ id: e._id, name: e.name }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    if (!callings.length) return null;
+    return ['<option value="">— None (drag items later) —</option>']
+      .concat(callings.map(c => `<option value="${c.id}">${foundry.utils.escapeHTML(c.name)}</option>`))
+      .join("");
+  } catch { return null; }
+}
+
+/* Grant a Calling to a freshly-built NPC: the class item, every tier feature
+ * at or below the NPC's tier, and the aptitude kit (signature rank = tier,
+ * secondary = tier − 1) read from the class item's flags. */
+async function _grantCalling(actor, callingId, tier) {
+  const pack = game.packs.get(CALLINGS_PACK);
+  if (!pack) return;
+  const classDoc = await pack.getDocument(callingId);
+  const calling = classDoc?.flags?.fourththing?.calling;
+  if (!classDoc || !calling?.key) return;
+
+  const docs = await pack.getDocuments();
+  const feats = docs
+    .filter(d => d.type === "feature"
+      && d.flags?.fourththing?.calling?.key === calling.key
+      && Number(d.flags.fourththing.calling.tier ?? 99) <= tier)
+    .sort((a, b) => Number(a.flags.fourththing.calling.tier) - Number(b.flags.fourththing.calling.tier));
+  await actor.createEmbeddedDocuments("Item", [classDoc, ...feats].map(d => d.toObject()));
+
+  const kit = {};
+  if (calling.signature) kit[`system.skills.${calling.signature}.value`] = tier;
+  if (calling.secondary) kit[`system.skills.${calling.secondary}.value`] = Math.max(0, tier - 1);
+  if (Object.keys(kit).length) await actor.update(kit);
+}
 
 function _factionOptions() {
   const factions = (game.actors?.contents ?? [])
@@ -36,6 +76,14 @@ function _factionOptions() {
 
 export async function openNPCBuilder() {
   const factionOpts = _factionOptions();
+  const callingOpts = await _callingOptions();
+
+  const callingGroup = callingOpts ? `
+      <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
+        <label style="font-weight:600;">Calling</label>
+        <select data-bbttcc-field="callingId" style="padding:0.35rem 0.5rem; border-radius:3px;">${callingOpts}</select>
+        <span style="opacity:0.65; font-size:0.75rem;">Non-Surge NPC-grade class: grants the Calling, its tier features, and its aptitude kit.</span>
+      </div>` : "";
 
   // No outer <form> tag — Foundry's Dialog wraps content in its own <form>
   // element and nested forms get stripped by the browser. Use a <div> wrapper
@@ -64,6 +112,8 @@ export async function openNPCBuilder() {
           <option value="4">Tier IV (level 17+)</option>
         </select>
       </div>
+
+      ${callingGroup}
 
       <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
         <label style="font-weight:600;">Faction</label>
@@ -103,6 +153,7 @@ export async function openNPCBuilder() {
             ok: true,
             name:        read("name"),
             tier:        read("tier"),
+            callingId:   read("callingId"),
             factionId:   read("factionId"),
             disposition: read("disposition")
           };
@@ -161,6 +212,16 @@ export async function openNPCBuilder() {
     return null;
   }
   if (!actor) return null;
+
+  const callingId = String(result.callingId || "").trim();
+  if (callingId) {
+    try {
+      await _grantCalling(actor, callingId, tier);
+    } catch (err) {
+      console.error("[bbttcc-auto-link/npc-builder] Calling grant failed", err);
+      ui.notifications?.warn?.(`NPC created, but the Calling grant failed: ${err?.message || err}`);
+    }
+  }
 
   actor.sheet?.render(true);
   ui.notifications?.info?.(`Created RFI NPC: ${actor.name} (tier ${tier})`);
