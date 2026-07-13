@@ -11,7 +11,11 @@
 //   flags.bbttcc-raid.secret = {
 //     acquisition: "earned" | "stolen",
 //     effectKey:   "rollPlus2" | "forceReroll" | "influenceDmg2"
-//                | "clearScandal" | "favorPlus1" | "favorShift",
+//                | "clearScandal" | "favorPlus1" | "favorShift" | …
+//                — MAY be a compound "a+b" string (2026-07-12): multiple
+//                effects fire in order on a single play. effectKeys (array)
+//                mirrors it; single-key legacy items keep working unchanged.
+//     effectKeys: ["rollPlus2", "coverTracks"]   (optional mirror array)
 //     raidId:      <scenario instance id, optional>,
 //     acquiredAt:  <timestamp ms>
 //   }
@@ -46,7 +50,14 @@
     "influenceDmg3",
     "coverTracks",
     "favorPlus2",
-    "doubleAgent"
+    "doubleAgent",
+    // ── Secret-extraction expansion (2026-07-12) — new keys composed from the
+    //    same scenario primitives; all non-interactive (no courtier picker) so
+    //    they chain cleanly inside compound "a+b" secrets.
+    "oppRollMinus2",
+    "stirThePot",
+    "discardStolen",
+    "freezePurse"
   ]);
 
   // Human-readable one-liner per effect key — single source of truth for the
@@ -62,9 +73,28 @@
     influenceDmg3: "Deal 3 Influence damage outside an exchange",
     coverTracks:   "−2 Suspicion",
     favorPlus2:    "+2 Favor with a chosen courtier (your side)",
-    doubleAgent:   "Flip a courtier — −1 to the opponent, +1 to you"
+    doubleAgent:   "Flip a courtier — −1 to the opponent, +1 to you",
+    oppRollMinus2: "Queue −2 to your opponent's next courtly roll",
+    stirThePot:    "+2 Suspicion — destabilize the court (defection favors the influence leader)",
+    discardStolen: "Your opponent discards a random STOLEN secret",
+    freezePurse:   "No OP may be spent by either side next exchange"
   });
+
+  // A secret's effect field may be compound: "rollPlus2+coverTracks" (or
+  // comma-separated, or an array). Normalize to an array of VALID keys.
+  function normEffectKeys(v) {
+    const parts = Array.isArray(v) ? v : String(v || "").split(/[+,]/);
+    const out = [];
+    for (const p of parts) {
+      const k = String(p || "").trim();
+      if (k && EFFECT_KEYS.includes(k) && !out.includes(k)) out.push(k);
+    }
+    return out;
+  }
+
   function describeEffect(key) {
+    const keys = normEffectKeys(key);
+    if (keys.length > 1) return keys.map(k => EFFECT_INFO[k] || k).join(" + ");
     return EFFECT_INFO[String(key || "")] || String(key || "");
   }
 
@@ -111,11 +141,13 @@
     if (!source) { ui.notifications?.error?.("Courtly secrets: source secret not found."); return null; }
 
     const acquisition = (opts.acquisition === "stolen") ? "stolen" : "earned";
-    const effectKey = String(source.flags?.[MOD_R]?.secret?.effectKey || opts.effectKey || "");
-    if (!EFFECT_KEYS.includes(effectKey)) {
-      ui.notifications?.error?.(`Courtly secrets: unknown effectKey "${effectKey}".`);
+    const srcMeta = source.flags?.[MOD_R]?.secret || {};
+    const effectKeys = normEffectKeys(srcMeta.effectKeys ?? srcMeta.effectKey ?? opts.effectKeys ?? opts.effectKey);
+    if (!effectKeys.length) {
+      ui.notifications?.error?.(`Courtly secrets: no valid effectKey in "${srcMeta.effectKeys ?? srcMeta.effectKey ?? opts.effectKeys ?? opts.effectKey ?? ""}".`);
       return null;
     }
+    const effectKey = effectKeys.join("+");   // display/back-compat form
 
     const scenario = _scenario();
     const raidId = scenario?.getState?.()?.attackerId
@@ -127,7 +159,7 @@
     foundry.utils.mergeObject(baseData, {
       flags: {
         [MOD_R]: {
-          secret: { acquisition, effectKey, raidId, acquiredAt: Date.now() }
+          secret: { acquisition, effectKey, effectKeys, raidId, acquiredAt: Date.now() }
         }
       }
     });
@@ -219,6 +251,24 @@
     return { effect: "doubleAgent", courtier: courtier.name };
   }
 
+  // ── Secret-extraction expansion (2026-07-12) new handlers ─────────────────
+  async function _effectOppRollMinus2(actor, side, scenario) {
+    scenario.queueRollMod(side.oppSide, -2, `secret:oppRollMinus2:${actor.name}`);
+    return { effect: "oppRollMinus2", queued: `−2 to opponent's (${side.oppSide}) next roll` };
+  }
+  async function _effectStirThePot(actor, side, scenario) {
+    await scenario.raiseSuspicion(2, `secret:stirThePot:${actor.name}`);
+    return { effect: "stirThePot", suspicion: "+2" };
+  }
+  async function _effectDiscardStolen(actor, side, scenario) {
+    const discarded = await scenario.discardSecret(side.oppSide, { acquisition: "stolen" });
+    return { effect: "discardStolen", discarded: discarded || "nothing to discard" };
+  }
+  async function _effectFreezePurse(actor, side, scenario) {
+    const lock = scenario.lockSpend(1, 0);
+    return { effect: "freezePurse", lock };
+  }
+
   const HANDLERS = Object.freeze({
     rollPlus2:     _effectRollPlus2,
     forceReroll:   _effectForceReroll,
@@ -230,7 +280,11 @@
     influenceDmg3: _effectInfluenceDmg3,
     coverTracks:   _effectCoverTracks,
     favorPlus2:    _effectFavorPlus2,
-    doubleAgent:   _effectDoubleAgent
+    doubleAgent:   _effectDoubleAgent,
+    oppRollMinus2: _effectOppRollMinus2,
+    stirThePot:    _effectStirThePot,
+    discardStolen: _effectDiscardStolen,
+    freezePurse:   _effectFreezePurse
   });
 
   async function playSecret(actorId, itemId, opts = {}) {
@@ -247,15 +301,38 @@
     const side = _holderSide(actor, scenario);
     if (!side) { ui.notifications?.error?.("Courtly secrets: holder is not attacker or defender of the active scenario."); return { ok: false, error: "side-mismatch" }; }
 
-    const effectKey = String(secretMeta.effectKey || "");
-    const handler = HANDLERS[effectKey];
-    if (!handler) { ui.notifications?.error?.(`Courtly secrets: unknown effectKey "${effectKey}".`); return { ok: false, error: "no-handler" }; }
+    const effectKeys = normEffectKeys(secretMeta.effectKeys ?? secretMeta.effectKey);
+    if (!effectKeys.length || effectKeys.some(k => !HANDLERS[k])) {
+      ui.notifications?.error?.(`Courtly secrets: unknown effectKey "${secretMeta.effectKeys ?? secretMeta.effectKey ?? ""}".`);
+      return { ok: false, error: "no-handler" };
+    }
+    const effectKey = effectKeys.join("+");
 
-    let result;
-    try { result = await handler(actor, side, scenario); }
-    catch (e) { console.warn(TAG, "handler failed", e); ui.notifications?.error?.("Courtly secrets: effect handler errored — see console."); return { ok: false, error: "handler-threw" }; }
-
-    if (result?.cancelled) return { ok: false, cancelled: true };
+    // Compound secrets fire their effects IN ORDER. Cancelling the FIRST
+    // effect (courtier-picker dialogs) aborts the whole play with the item
+    // intact; cancelling a LATER one merely skips it — earlier effects have
+    // already landed, so the secret is consumed regardless.
+    const results = [];
+    let applied = 0;
+    for (const k of effectKeys) {
+      let r;
+      try { r = await HANDLERS[k](actor, side, scenario); }
+      catch (e) {
+        console.warn(TAG, `handler "${k}" failed`, e);
+        ui.notifications?.error?.(`Courtly secrets: effect "${k}" errored — see console.`);
+        if (applied === 0) return { ok: false, error: "handler-threw" };
+        results.push({ effect: k, errored: true });
+        continue;
+      }
+      if (r?.cancelled) {
+        if (applied === 0) return { ok: false, cancelled: true };
+        results.push({ effect: k, skipped: "cancelled" });
+        continue;
+      }
+      applied++;
+      results.push(r);
+    }
+    const result = (results.length === 1) ? results[0] : { effects: results };
 
     // Consume item, fire suspicion bump, broadcast.
     await actor.deleteEmbeddedDocuments("Item", [item.id]);
@@ -293,7 +370,7 @@
     game.bbttcc.api ??= {};
     game.bbttcc.api.raid ??= {};
     game.bbttcc.api.raid.courtlySecrets = {
-      addSecret, playSecret, getSecrets, enforceCap, EFFECT_KEYS, EFFECT_INFO, describeEffect
+      addSecret, playSecret, getSecrets, enforceCap, EFFECT_KEYS, EFFECT_INFO, describeEffect, normEffectKeys
     };
   }
 

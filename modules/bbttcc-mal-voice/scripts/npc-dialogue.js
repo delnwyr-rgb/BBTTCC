@@ -17,6 +17,13 @@
  * GM conversations persist across sessions; player conversations persist
  * for the session (in-memory) and on top of whatever the GM's flag holds.
  *
+ * Courtly bridge: the persona can carry EXTRACTABLE SECRETS (🧠 editor).
+ * When a conversation truly meets a secret's unlock condition, the NPC
+ * divulges it via the divulge_secret tool and the asking faction gains a
+ * courtly Secret Item (bbttcc-raid's courtlySecrets API) — player
+ * extractions pause on a GM approval card, GM extractions confirm inline.
+ * Fail-soft: without the courtlySecrets API the feature stays dormant.
+ *
  * Settings: `npcDialoguePlayers` — allow players to open dialogues (GM
  * always can).
  */
@@ -88,6 +95,145 @@ function _identityFromItems(actor) {
   if (species.length)  out.push(`Ancestry: ${species.join(", ")}`);
   if (feats.length)    out.push(`Identity: ${feats.join("; ")}`);
   return out;
+}
+
+// ---------------------------------------------------------------------------
+// EXTRACTABLE SECRETS — conversation as espionage (courtly bridge).
+//
+// The GM arms an NPC with extractable secrets in the 🧠 persona editor, one
+// per line:  Label :: effectKey :: unlock condition :: the truth to reveal
+// When a Steward genuinely meets a secret's condition in conversation, the
+// model calls divulge_secret AS it speaks the truth; the mechanical payoff
+// (a courtly Secret Item on the asking faction, playable in courtly raids)
+// routes through a GM approval card for player conversations — the same
+// trust model as story moments. A divulged secret is spent
+// (persona.secretsUsed); re-arm by changing its label. Requires bbttcc-raid's
+// courtlySecrets API; without it the whole feature stays dormant.
+// ---------------------------------------------------------------------------
+
+const SECRETS_PACK_ID = "bbttcc-master-content.courtly-secrets";
+
+function _secretsApi() {
+  const api = game.bbttcc?.api?.raid?.courtlySecrets;
+  return api?.addSecret ? api : null;
+}
+
+function _secretSlug(label) {
+  return String(label || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40);
+}
+
+// Parse the persona's authored secret lines. Bad lines are skipped with a
+// console warning, never thrown.
+function _parseSecretLines(raw) {
+  const api = _secretsApi();
+  const out = [];
+  for (const line of String(raw || "").split("\n")) {
+    const t = line.trim();
+    if (!t || t.startsWith("#")) continue;
+    const parts = t.split("::").map(s => s.trim());
+    if (parts.length < 4) { warn(`secret line needs 4 '::' fields, skipped: "${t.slice(0, 60)}"`); continue; }
+    const [label, , condition] = parts;
+    let effectKey = parts[1];
+    const truth = parts.slice(3).join(" :: ");
+    // effectKey may be compound ("rollPlus2+coverTracks") — normalize via the
+    // raid API when present; a line with NO valid key is skipped.
+    if (api?.normEffectKeys) {
+      const keys = api.normEffectKeys(effectKey);
+      if (!keys.length) {
+        warn(`secret "${label}" has unknown effectKey "${effectKey}", skipped (valid: ${(api.EFFECT_KEYS || []).join(", ")})`);
+        continue;
+      }
+      effectKey = keys.join("+");
+    }
+    const key = _secretSlug(label);
+    if (!key || !condition || !truth) continue;
+    if (out.some(s => s.key === key)) continue;   // duplicate labels collapse
+    out.push({ key, label, effectKey, condition, truth });
+  }
+  return out;
+}
+
+function _armedSecrets(actor) {
+  if (!_secretsApi()) return [];   // no courtly bridge on this world — dormant
+  const persona = actor.getFlag(MODULE_ID, "persona") || {};
+  const used = persona.secretsUsed || {};
+  return _parseSecretLines(persona.secretsRaw).filter(s => !used[s.key]);
+}
+
+// Faction resolution mirrors bbttcc-factions' internal helpers (it exposes no
+// public API for these): isFaction flag or system.details.type.value, and a
+// character belongs via flag factionId / system.faction.id / faction name.
+function _isFactionActor(a) {
+  try {
+    if (a?.getFlag?.("bbttcc-factions", "isFaction")) return true;
+    if (foundry.utils.getProperty(a, "system.details.type.value") === "faction") return true;
+  } catch (_e) {}
+  return false;
+}
+function _allFactions() { return (game.actors?.contents || []).filter(_isFactionActor); }
+function _factionOfCharacter(char) {
+  if (!char) return null;
+  try {
+    const byId = char.getFlag?.("bbttcc-factions", "factionId");
+    if (byId && game.actors?.get(byId)) return game.actors.get(byId);
+    const sys = char.system?.system ?? char.system ?? {};
+    const sysFid = sys?.faction?.id;
+    if (sysFid && game.actors?.get(String(sysFid))) return game.actors.get(String(sysFid));
+    const byName = String(char.getFlag?.("bbttcc-factions", "factionName") || sys?.faction?.name || "").trim();
+    if (byName) return _allFactions().find(f => String(f.name).trim() === byName) || null;
+  } catch (_e) {}
+  return null;
+}
+
+// Grant the mechanical payoff: clone a template from the courtly-secrets pack
+// (matching effectKey, any template as fallback — addSecret honors the flag
+// we stamp on the clone), re-skin it as THIS secret, hand it to the faction,
+// spend the persona entry, and write the NPC's memory of having talked.
+// Always runs on a GM client (inline confirm or approval card).
+async function _grantSecret({ npcActor, def, factionId, acquisition, speakerName }) {
+  const api = _secretsApi();
+  if (!api) return { ok: false, error: "courtly secrets API not available" };
+  const faction = game.actors?.get(String(factionId || ""));
+  if (!faction) return { ok: false, error: "no faction chosen" };
+  const pack = game.packs?.get(SECRETS_PACK_ID);
+  const docs = pack ? await pack.getDocuments() : [];
+  // Compound-aware template match: exact effect set → same first effect → any
+  // (the flags stamped on the clone below carry the real effect list anyway).
+  const norm = (v) => api.normEffectKeys ? api.normEffectKeys(v) : [String(v || "")].filter(Boolean);
+  const wantKeys = norm(def.effectKey);
+  const docKeys = (d) => { const m = d.flags?.["bbttcc-raid"]?.secret; return norm(m?.effectKeys ?? m?.effectKey); };
+  const template = docs.find(d => docKeys(d).join("+") === wantKeys.join("+"))
+    || docs.find(d => docKeys(d)[0] === wantKeys[0])
+    || docs[0] || null;
+  if (!template) return { ok: false, error: `courtly-secrets compendium missing/empty (${SECRETS_PACK_ID})` };
+
+  const source = template.clone({
+    name: def.label,
+    system: { description: { value:
+      `<p><em>${_esc(def.truth)}</em></p><p style="opacity:.75;font-size:.9em;">Divulged in conversation by ${_esc(npcActor.name)} (${_esc(acquisition)}). ${_esc(api.describeEffect?.(def.effectKey) || def.effectKey)}.</p>` } },
+    flags: { "bbttcc-raid": { secret: { effectKey: wantKeys.join("+"), effectKeys: wantKeys } } }
+  });
+  const created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+") });
+  if (!created) return { ok: false, error: "addSecret refused (see notifications)" };
+
+  const persona = npcActor.getFlag(MODULE_ID, "persona") || {};
+  const secretsUsed = { ...(persona.secretsUsed || {}) };
+  secretsUsed[def.key] = { ts: Date.now(), by: String(speakerName || ""), acquisition, label: def.label };
+  await npcActor.setFlag(MODULE_ID, "persona", { ...persona, secretsUsed });
+
+  try {
+    await game.bbttcc?.mal?.npc?.addMemory?.(npcActor,
+      acquisition === "stolen"
+        ? `${speakerName || "A Steward"} pried the truth about "${def.label}" out of me — I regret letting it slip.`
+        : `I trusted ${speakerName || "a Steward"} with the truth about "${def.label}".`);
+  } catch (_e) {}
+  try {
+    Hooks.callAll("bbttcc:dialogue:secretDivulged", {
+      npcActorId: npcActor.id, factionId: faction.id, key: def.key, label: def.label,
+      effectKey: def.effectKey, acquisition, itemId: created.id
+    });
+  } catch (_e) {}
+  return { ok: true, created, faction };
 }
 
 // ---------------------------------------------------------------------------
@@ -858,6 +1004,134 @@ How to handle them:
       } catch (e) { warn("approval card failed:", e?.message); }
     }
 
+    // ----- Extractable secrets (courtly bridge) -----
+    async _availableSecrets() {
+      try { return _armedSecrets(this.actor); }
+      catch (e) { warn("secrets sweep failed:", e?.message); return []; }
+    }
+
+    _secretTool(secrets) {
+      return {
+        name: "divulge_secret",
+        description: "Reveal one of the secrets you guard. Call this ONLY when this conversation has genuinely met that secret's unlock condition — never speculatively, never because you were merely asked. Call it AS you give the truth up, then speak it plainly in character.",
+        input_schema: {
+          type: "object",
+          properties: {
+            secretKey: { type: "string", enum: secrets.map(s => String(s.key)) },
+            method: {
+              type: "string", enum: ["earned", "stolen"],
+              description: "earned = you share it willingly (trust, fair trade, true persuasion). stolen = it was pried out of you (deception, coercion, drink, a slip you already regret)."
+            },
+            rationale: { type: "string", description: "One short line: how the condition was met." }
+          },
+          required: ["secretKey", "method"]
+        }
+      };
+    }
+
+    _secretsSection(secrets) {
+      return `## SECRETS YOU GUARD (via the divulge_secret tool)
+These truths are yours and yours alone. Each has a price — the condition under which, and ONLY under which, you would let it go:
+
+${secrets.map(s => `• [${s.key}] ${s.label}
+  THE TRUTH: ${s.truth}
+  YOU WILL ONLY TELL IF: ${s.condition}`).join("\n")}
+
+How to guard them:
+1. Deflect, deny, redirect — like a real person with something to lose. You may let a Steward FEEL there is more beneath ("that's co-op business", a look away, a too-quick answer), but never hint at the substance.
+2. When the conversation GENUINELY meets a secret's condition — truly met, not merely gestured at — call divulge_secret AS you give it up, then speak the truth plainly in your own voice, the whole of it. Judge the method honestly: freely given is "earned"; tricked, coerced, or slipped is "stolen".
+3. One secret per reply, and a told secret is TOLD — never tease it again as if still hidden.
+4. Never mention the tool, conditions, keys, or anything mechanical. The Stewards only ever hear a person deciding to talk.`;
+    }
+
+    // Executes (or routes for approval) a divulge_secret tool call. The words
+    // are spoken in the conversation either way — what the approval gates is
+    // the MECHANICAL leverage (the courtly Secret Item).
+    async _resolveDivulge(toolUse, secrets) {
+      const key = String(toolUse?.input?.secretKey || "");
+      const def = secrets.find(s => String(s.key) === key);
+      if (!def) return "No such secret is yours to tell. Continue the conversation naturally.";
+      const method = (toolUse?.input?.method === "stolen") ? "stolen" : "earned";
+      const speakerName = game.user.character?.name || game.user.name;
+      const faction = _factionOfCharacter(game.user.character);
+
+      // GM at the keyboard: inline confirm, grant immediately.
+      if (game.user.isGM) {
+        const picked = await this._confirmDivulge(def, method, faction);
+        if (!picked) return "You hold your tongue after all — the truth stays yours for now. Steer the conversation gently elsewhere.";
+        const r = await _grantSecret({ npcActor: this.actor, def, factionId: picked.factionId, acquisition: picked.acquisition, speakerName });
+        if (!r.ok) {
+          warn(`secret grant failed: ${r.error}`);
+          return `You have let the truth out — speak it plainly now, in your own voice. (Table note: the leverage could not be recorded — ${r.error}.)`;
+        }
+        return "You have let the truth out. Speak it plainly now, in your own voice — the whole of it.";
+      }
+
+      // Player at the keyboard: the mechanical grant is GM-client work, so it
+      // always routes through the approval card (like player story moments).
+      await this._postSecretCard(def, method, String(toolUse?.input?.rationale || ""), faction, speakerName);
+      return "You have let the truth out. Speak it plainly now, in your own voice — the whole of it. Whether it becomes a weapon is not yours to know.";
+    }
+
+    async _confirmDivulge(def, method, faction) {
+      const DialogV2 = foundry.applications?.api?.DialogV2;
+      const factions = _allFactions();
+      if (!factions.length) { ui.notifications?.warn?.("No faction actors exist to receive the secret."); return null; }
+      const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
+      const content = `
+        <p><b>${_esc(this.actor.name)}</b> is ready to divulge <b>${_esc(def.label)}</b>.</p>
+        <p style="font-size:.85em;opacity:.85;margin:.3em 0;"><em>${_esc(def.truth)}</em></p>
+        <p style="font-size:.8em;opacity:.7;margin:.3em 0;">Condition: ${_esc(def.condition)} — model judged it met (${_esc(method)}).<br>Effect if granted: ${_esc(_secretsApi()?.describeEffect?.(def.effectKey) || def.effectKey)}</p>
+        <div class="form-group"><label>Leverage goes to</label><select name="factionId" style="width:100%;">${opts}</select></div>`;
+      const read = (button, acq) => ({ factionId: String(button.form?.elements?.factionId?.value || ""), acquisition: acq });
+      try {
+        if (DialogV2?.wait) {
+          const r = await DialogV2.wait({
+            window: { title: `Divulge secret — ${this.actor.name}` },
+            position: { width: 440 },
+            content,
+            buttons: [
+              { action: "earned", label: "Grant (earned)", icon: "fa-solid fa-handshake", default: method === "earned",
+                callback: (_ev, button) => read(button, "earned") },
+              { action: "stolen", label: "Grant (stolen)", icon: "fa-solid fa-user-secret", default: method === "stolen",
+                callback: (_ev, button) => read(button, "stolen") },
+              { action: "withhold", label: "Withhold", callback: () => null }
+            ]
+          }).catch(() => null);
+          return (r && typeof r === "object" && r.factionId) ? r : null;
+        }
+      } catch (_e) {}
+      return null;
+    }
+
+    async _postSecretCard(def, method, rationale, faction, speakerName) {
+      try {
+        const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
+        const factions = _allFactions();
+        const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
+        await ChatMessage.create({
+          whisper: gmIds,
+          content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #7a4db8;padding:.4em .6em;background:rgba(122,77,184,.08);">
+            <b>Secret divulged — leverage awaiting approval</b><br>
+            <b>${_esc(this.actor.name)}</b> gave up <i>${_esc(def.label)}</i> to ${_esc(speakerName)} <small style="opacity:.7;">(model judged: ${_esc(method)})</small><br>
+            <span style="font-size:.85em;opacity:.85;"><em>${_esc(def.truth)}</em></span><br>
+            <span style="font-size:.8em;opacity:.7;">Condition: ${_esc(def.condition)}${rationale ? ` — ${_esc(rationale)}` : ""}</span><br>
+            <span style="font-size:.8em;opacity:.7;">Effect if granted: ${_esc(_secretsApi()?.describeEffect?.(def.effectKey) || def.effectKey)}. The NPC has already said the words — granting only attaches the leverage.</span><br>
+            ${factions.length ? `<label style="font-size:.8em;">Leverage to <select name="bbttccSecretFaction" style="width:auto;max-width:60%;">${opts}</select></label><br>` : ""}
+            <button type="button" data-bbttcc-secret="earned" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-handshake"></i> Grant (earned)</button>
+            <button type="button" data-bbttcc-secret="stolen" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-user-secret"></i> Grant (stolen)</button>
+            <button type="button" data-bbttcc-secret="decline" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Withhold</button>
+          </div>`,
+          flags: { [MODULE_ID]: { pendingSecret: {
+            npcActorId: this.actor.id, key: def.key, label: def.label, effectKey: def.effectKey,
+            truth: def.truth, condition: def.condition, method,
+            factionId: faction?.id || null, speakerName, userId: game.user.id,
+            transcript: this._history.slice(-6).map(m => m.content).join("\n")
+          } } }
+        });
+      } catch (e) { warn("secret card failed:", e?.message); }
+    }
+
     // ----- The exchange -----
     // overrideRaw/overrideSpeaker: programmatic turns (scene notes) — used by
     // nudge() so an NPC can SPEAK FIRST when a conversation is handed to them.
@@ -899,9 +1173,11 @@ How to handle them:
         // (quest state changes between sends; keep after cached breakpoints).
         const choices = await this._availableChoices();
         const doors = await this._availableDoors();
+        const secrets = await this._availableSecrets();
         const toolList = [];
         if (choices.length) { toolList.push(this._choiceTool(choices)); system.push({ text: this._momentsSection(choices) }); }
         if (doors.length)   { toolList.push(this._doorTool(doors));     system.push({ text: this._doorsSection(doors) }); }
+        if (secrets.length) { toolList.push(this._secretTool(secrets)); system.push({ text: this._secretsSection(secrets) }); }
         const tools = toolList.length ? toolList : undefined;
 
         const baseMessages = this._history.map(m => ({ role: m.role, content: m.content }));
@@ -933,6 +1209,8 @@ How to handle them:
             log(`tool requested: ${tu.name} ${JSON.stringify(tu.input || {}).slice(0, 160)}`);
             const resultText = (tu.name === "point_the_way")
               ? await this._resolveDoor(tu, doors)
+              : (tu.name === "divulge_secret")
+              ? await this._resolveDivulge(tu, secrets)
               : await this._resolveEnact(tu, choices);
             const prefix = finalText ? `${finalText}\n\n` : "";
             const cont = await provider.call({
@@ -1065,18 +1343,397 @@ async function talkTo(actorOrToken) {
   return rendered;
 }
 
+// ---------------------------------------------------------------------------
+// Persona editor (ApplicationV2) — topics, private truth, and the extractable
+// SECRETS BUILDER: one card per secret with an effect-key dropdown instead of
+// hand-typed `::` lines, plus Re-arm buttons for spent secrets. Storage stays
+// the persona.secretsRaw line format so the runtime parser, spent-tracking,
+// and anything already authored are unchanged — the builder is purely an
+// authoring surface. The old raw-text dialog remains as the fallback for
+// pre-ApplicationV2 cores.
+// ---------------------------------------------------------------------------
+
+const PERSONA_APPS = new Map();   // actorId -> editor instance
+
+// Lenient split for the builder: never drops a malformed line — whatever the
+// GM typed shows up in the fields for repair. (Strict validation stays in
+// _parseSecretLines at runtime.)
+function _parseSecretLinesLenient(raw) {
+  const out = [];
+  for (const line of String(raw || "").split("\n")) {
+    const t = line.trim();
+    if (!t || t.startsWith("#")) continue;
+    const parts = t.split("::").map(s => s.trim());
+    out.push({ label: parts[0] || "", effectKey: parts[1] || "", condition: parts[2] || "", truth: parts.slice(3).join(" :: ") });
+  }
+  return out;
+}
+
+// Shared post-save: any open dialogue window re-sweeps so changes take
+// effect immediately.
+async function _afterPersonaSave(actor) {
+  const app = APPS.get(actor.id);
+  if (app) {
+    app._storyState = await _storyState(actor);
+    app._lore = _gatherWorldLore(actor, { state: app._storyState });
+    app._dossier = _gatherDossier(actor, { state: app._storyState });
+    log(`persona saved; lore re-swept for '${actor.name}' (${app._lore.length} chars, dossier ${app._dossier.length})`);
+  }
+}
+
+let PersonaEditorApp = null;
+
+function _definePersonaEditor() {
+  if (PersonaEditorApp) return PersonaEditorApp;
+  const Base = foundry.applications?.api?.ApplicationV2;
+  if (!Base) return null;
+
+  PersonaEditorApp = class extends Base {
+    static DEFAULT_OPTIONS = {
+      classes: ["bbttcc-npc-persona-editor"],
+      window: { icon: "fa-solid fa-brain", resizable: true },
+      position: { width: 560, height: 660 }
+    };
+
+    constructor(actor, options = {}) {
+      super({ ...options, id: `bbttcc-npc-persona-${actor.id}` });
+      this.actor = actor;
+      this._cur = actor.getFlag(MODULE_ID, "persona") || {};
+      this._used = { ...(this._cur.secretsUsed || {}) };
+      this._els = {};
+    }
+
+    get title() { return `Persona — ${this.actor?.name ?? "NPC"}`; }
+
+    _hint(html) {
+      const p = document.createElement("p");
+      p.style.cssText = "font-size:.8em;opacity:.75;margin:0;";
+      p.innerHTML = html;
+      return p;
+    }
+
+    async _renderHTML(_context, _options) {
+      const cur = this._cur;
+      const api = _secretsApi();
+      const root = document.createElement("div");
+      root.style.cssText = "display:flex;flex-direction:column;gap:.5em;height:100%;padding:.5em;";
+
+      // Whole window is a drop target for existing courtly secrets.
+      const unmark = () => { if (this._els.rows) { this._els.rows.style.outline = ""; this._els.rows.style.outlineOffset = ""; } };
+      root.addEventListener("dragover", (ev) => {
+        ev.preventDefault();
+        if (this._els.rows) { this._els.rows.style.outline = "2px dashed #a78bfa"; this._els.rows.style.outlineOffset = "3px"; }
+      });
+      root.addEventListener("dragleave", unmark);
+      root.addEventListener("drop", (ev) => { unmark(); this._onDropSecret(ev); });
+
+      const scroll = document.createElement("div");
+      scroll.style.cssText = "flex:1 1 auto;overflow-y:auto;display:flex;flex-direction:column;gap:.45em;padding-right:.3em;";
+      root.appendChild(scroll);
+
+      scroll.appendChild(this._hint(`<b>Knowledge topics</b> — comma-separated names/places/subjects <b>${_esc(this.actor.name)}</b> knows about. The journal/beat sweep pulls every paragraph mentioning these, so "Dougan Marsh, The Gullywasher" makes those stories part of what they know. (For curated whole-page facts, prefer a World Dossier journal page tagged <code>@knownBy: ${_esc(this.actor.name)}</code> — it's injected verbatim, no keyword luck.)`));
+      const topics = document.createElement("input");
+      topics.type = "text";
+      topics.placeholder = "Dougan Marsh, The Gullywasher, Port Kudzu…";
+      topics.value = String(cur.topics || "");
+      scroll.appendChild(topics);
+      this._els.topics = topics;
+
+      scroll.appendChild(this._hint(`<b>Private GM truth</b> — knowledge, secrets, agenda, speech quirks. Shapes every reply; never quoted to players.`));
+      const notes = document.createElement("textarea");
+      notes.rows = 8;
+      notes.style.cssText = "width:100%;resize:vertical;";
+      notes.value = String(cur.notes || "");
+      scroll.appendChild(notes);
+      this._els.notes = notes;
+
+      scroll.appendChild(this._hint(`<b>Extractable secrets</b> — when a conversation genuinely meets a secret's unlock condition, ${_esc(this.actor.name)} divulges it and the asking Steward's faction gains it as courtly leverage (player extractions pause on a GM approval card; yours confirm inline). A divulged secret is spent until you re-arm it below. <b>Drag any courtly secret</b> (compendium row or faction-held item) onto this window to arm it here — you only write the unlock condition.${api ? "" : " <b>⚠ Courtly secrets API not detected (bbttcc-raid) — secrets stay dormant.</b>"}`));
+
+      const rows = document.createElement("div");
+      rows.style.cssText = "display:flex;flex-direction:column;";
+      scroll.appendChild(rows);
+      this._els.rows = rows;
+      for (const s of _parseSecretLinesLenient(cur.secretsRaw)) this._addSecretRow(s);
+
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.style.cssText = "width:auto;align-self:flex-start;padding:.25em .7em;";
+      addBtn.innerHTML = `<i class="fa-solid fa-plus"></i> Add secret`;
+      if (!api) { addBtn.disabled = true; addBtn.title = "bbttcc-raid courtly secrets API not detected"; }
+      addBtn.addEventListener("click", () => this._addSecretRow({}));
+      scroll.appendChild(addBtn);
+
+      this._els.usedWrap = document.createElement("div");
+      scroll.appendChild(this._els.usedWrap);
+      this._renderUsed();
+
+      const footer = document.createElement("div");
+      footer.style.cssText = "display:flex;gap:.4em;flex:0 0 auto;justify-content:flex-end;";
+      const save = document.createElement("button");
+      save.type = "button";
+      save.style.cssText = "width:auto;padding:.3em 1em;";
+      save.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Save`;
+      save.addEventListener("click", () => this._save());
+      const cancel = document.createElement("button");
+      cancel.type = "button";
+      cancel.style.cssText = "width:auto;padding:.3em 1em;";
+      cancel.textContent = "Cancel";
+      cancel.addEventListener("click", () => this.close());
+      footer.append(save, cancel);
+      root.appendChild(footer);
+
+      return root;
+    }
+
+    _replaceHTML(result, content, _options) {
+      content.replaceChildren(result);
+      content.style.display = "flex";
+      content.style.flexDirection = "column";
+    }
+
+    _addSecretRow(data = {}) {
+      const api = _secretsApi();
+      const row = document.createElement("fieldset");
+      row.style.cssText = "border:1px solid rgba(120,120,120,.4);border-radius:4px;padding:.45em .55em;margin:0 0 .5em;display:flex;flex-direction:column;gap:.35em;";
+      row.dataset.secretRow = "1";
+
+      const top = document.createElement("div");
+      top.style.cssText = "display:flex;gap:.4em;align-items:center;";
+      const label = document.createElement("input");
+      label.type = "text";
+      label.placeholder = "Label — the secret's name (e.g. The second ledger)";
+      label.style.cssText = "flex:1;min-width:0;";
+      label.value = String(data.label || "");
+      label.dataset.f = "label";
+      const del = document.createElement("button");
+      del.type = "button";
+      del.title = "Remove this secret";
+      del.style.cssText = "flex:0 0 auto;width:auto;padding:.2em .5em;line-height:1;";
+      del.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+      del.addEventListener("click", () => row.remove());
+      top.append(label, del);
+      row.appendChild(top);
+
+      // Effects: 1..n stacked selects — a compound secret fires them all in
+      // order on a single play (serialized "a+b" in the line format).
+      const effectsWrap = document.createElement("div");
+      effectsWrap.style.cssText = "display:flex;flex-direction:column;gap:.25em;";
+      row.appendChild(effectsWrap);
+      const initKeys = String(data.effectKey || "").split(/[+,]/).map(s => s.trim()).filter(Boolean);
+      if (!initKeys.length) initKeys.push("");
+      for (const k of initKeys) this._addEffectSelect(effectsWrap, k);
+      const addFx = document.createElement("a");
+      addFx.style.cssText = "font-size:.75em;opacity:.7;cursor:pointer;align-self:flex-start;";
+      addFx.innerHTML = `<i class="fa-solid fa-plus"></i> add another effect`;
+      addFx.addEventListener("click", () => this._addEffectSelect(effectsWrap, ""));
+      row.appendChild(addFx);
+
+      const cond = document.createElement("input");
+      cond.type = "text";
+      cond.placeholder = "Unlock condition — what a Steward must do or prove in conversation";
+      cond.value = String(data.condition || "");
+      cond.dataset.f = "condition";
+      row.appendChild(cond);
+
+      const truth = document.createElement("textarea");
+      truth.rows = 2;
+      truth.placeholder = "The truth — what the NPC actually reveals when it's given up";
+      truth.style.cssText = "width:100%;resize:vertical;";
+      truth.value = String(data.truth || "");
+      truth.dataset.f = "truth";
+      row.appendChild(truth);
+
+      this._els.rows.appendChild(row);
+      if (!data.label) label.focus();
+      return row;
+    }
+
+    _addEffectSelect(effectsWrap, key = "") {
+      const api = _secretsApi();
+      const line = document.createElement("div");
+      line.style.cssText = "display:flex;gap:.3em;align-items:center;";
+      const effect = document.createElement("select");
+      effect.dataset.f = "effectKey";
+      effect.style.cssText = "flex:1;min-width:0;";
+      const keys = api?.EFFECT_KEYS || [];
+      if (key && !keys.includes(key)) {
+        // Legacy/typo key: keep it visible and selected rather than silently
+        // rewriting the secret — runtime will warn until the GM repicks.
+        const o = document.createElement("option");
+        o.value = key;
+        o.textContent = `${key} — ⚠ unknown effect key`;
+        o.selected = true;
+        effect.appendChild(o);
+      }
+      for (const k of keys) {
+        const o = document.createElement("option");
+        o.value = k;
+        o.textContent = `${k} — ${api?.EFFECT_INFO?.[k] || k}`;
+        if (k === key) o.selected = true;
+        effect.appendChild(o);
+      }
+      const rm = document.createElement("button");
+      rm.type = "button";
+      rm.title = "Remove this effect";
+      rm.style.cssText = "flex:0 0 auto;width:auto;padding:.15em .45em;line-height:1;";
+      rm.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+      rm.addEventListener("click", () => {
+        if (effectsWrap.querySelectorAll('select[data-f="effectKey"]').length <= 1)
+          return ui.notifications?.warn?.("A secret needs at least one effect.");
+        line.remove();
+      });
+      line.append(effect, rm);
+      effectsWrap.appendChild(line);
+      return line;
+    }
+
+    // Drag-and-drop: an existing courtly secret (compendium row, faction-held
+    // item, or a Secrets & Leverage HUD row) dropped anywhere on this window
+    // becomes a prefilled card — the GM only writes the unlock condition.
+    async _onDropSecret(ev) {
+      ev.preventDefault();
+      let data = null;
+      try {
+        const raw = ev.dataTransfer.getData("application/bbttcc-courtly-secret")
+                 || ev.dataTransfer.getData("text/plain");
+        data = JSON.parse(raw || "{}");
+      } catch (_e) { return; }
+      let item = null;
+      try {
+        if (data?.kind === "courtly-secret" && data.actorId && data.itemId) {
+          item = game.actors?.get(data.actorId)?.items?.get(data.itemId) || null;
+        } else if (data?.type === "Item" && data.uuid) {
+          item = await foundry.utils.fromUuid(data.uuid);
+        }
+      } catch (_e) {}
+      if (!item) return;
+      const meta = item.flags?.["bbttcc-raid"]?.secret;
+      if (!meta) return ui.notifications?.warn?.(`"${item.name}" is not a courtly secret.`);
+      const api = _secretsApi();
+      const keys = api?.normEffectKeys
+        ? api.normEffectKeys(meta.effectKeys ?? meta.effectKey)
+        : [String(meta.effectKey || "")].filter(Boolean);
+      this._addSecretRow({
+        label: item.name,
+        effectKey: keys.join("+"),
+        condition: "",
+        truth: _stripHtml(item.system?.description?.value || "")
+      });
+      ui.notifications?.info?.(`"${item.name}" armed — write its unlock condition, then Save.`);
+    }
+
+    _renderUsed() {
+      const wrap = this._els.usedWrap;
+      if (!wrap) return;
+      wrap.replaceChildren();
+      const entries = Object.entries(this._used);
+      if (!entries.length) return;
+      wrap.appendChild(this._hint(`<b>Divulged</b> — spent secrets stay spent until re-armed:`));
+      for (const [key, u] of entries) {
+        const line = document.createElement("div");
+        line.style.cssText = "display:flex;align-items:center;gap:.5em;font-size:.8em;opacity:.85;margin:.15em 0;";
+        const txt = document.createElement("span");
+        txt.style.cssText = "flex:1;min-width:0;";
+        txt.textContent = `✓ ${u?.label || key} — divulged to ${u?.by || "?"} (${u?.acquisition || "earned"})`;
+        const rearm = document.createElement("button");
+        rearm.type = "button";
+        rearm.style.cssText = "flex:0 0 auto;width:auto;padding:.15em .5em;line-height:1;";
+        rearm.innerHTML = `<i class="fa-solid fa-rotate-left"></i> Re-arm`;
+        rearm.addEventListener("click", () => { delete this._used[key]; this._renderUsed(); });
+        line.append(txt, rearm);
+        wrap.appendChild(line);
+      }
+    }
+
+    _collectLines() {
+      // Fields can't carry the '::' separator or newlines — collapse both.
+      const clean = (s) => String(s || "").replace(/\s*\n+\s*/g, " ").split("::").join(":").trim();
+      const lines = [];
+      for (const row of this._els.rows.querySelectorAll("[data-secret-row]")) {
+        const get = (f) => row.querySelector(`[data-f="${f}"]`)?.value ?? "";
+        const label = clean(get("label"));
+        const effectKey = Array.from(row.querySelectorAll('select[data-f="effectKey"]'))
+          .map(s => String(s.value || "").trim()).filter(Boolean)
+          .filter((v, i, a) => a.indexOf(v) === i)
+          .join("+");
+        const condition = clean(get("condition"));
+        const truth = clean(get("truth"));
+        if (!label && !condition && !truth) continue;   // untouched blank row
+        if (!label || !condition || !truth) {
+          ui.notifications?.warn?.(`Secret "${label || "(unnamed)"}" needs a label, condition, AND truth — not saved.`);
+          continue;
+        }
+        lines.push(`${label} :: ${effectKey} :: ${condition} :: ${truth}`);
+      }
+      return lines;
+    }
+
+    async _save() {
+      const secretsRaw = this._collectLines().join("\n");
+      // Flag updates MERGE nested objects, so a re-armed (deleted) secretsUsed
+      // key would silently survive a plain setFlag — issue explicit `-=`
+      // deletions first.
+      const removed = Object.keys(this._cur.secretsUsed || {}).filter(k => !(k in this._used));
+      if (removed.length) {
+        await this.actor.update(Object.fromEntries(
+          removed.map(k => [`flags.${MODULE_ID}.persona.secretsUsed.-=${k}`, null])));
+      }
+      await this.actor.setFlag(MODULE_ID, "persona", {
+        notes: String(this._els.notes.value ?? ""),
+        topics: String(this._els.topics.value ?? ""),
+        secretsRaw,
+        secretsUsed: this._used
+      });
+      await _afterPersonaSave(this.actor);
+      ui.notifications?.info(`Persona saved for ${this.actor.name}.`);
+      this.close();
+    }
+
+    async close(options) {
+      PERSONA_APPS.delete(this.actor?.id);
+      return super.close(options);
+    }
+  };
+
+  return PersonaEditorApp;
+}
+
 async function editPersona(actor) {
   if (!game.user.isGM) return;
+  const App = _definePersonaEditor();
+  if (App) {
+    let app = PERSONA_APPS.get(actor.id);
+    if (app) return app.render({ force: true });
+    app = new App(actor);
+    PERSONA_APPS.set(actor.id, app);
+    return app.render({ force: true });
+  }
+  return _editPersonaLegacy(actor);
+}
+
+// Raw-text fallback (pre-ApplicationV2 cores only).
+async function _editPersonaLegacy(actor) {
   const cur = actor.getFlag(MODULE_ID, "persona") || {};
+  const secretsApi = _secretsApi();
+  const keysHint = secretsApi
+    ? Object.entries(secretsApi.EFFECT_INFO || {}).map(([k, v]) => `${k} — ${v}`).join("\n")
+    : "";
+  const usedLines = Object.values(cur.secretsUsed || {})
+    .map(u => `✓ ${_esc(u.label)} — divulged to ${_esc(u.by || "?")} (${_esc(u.acquisition)})`).join("<br>");
   const content = `
     <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;"><b>Knowledge topics</b> — comma-separated names/places/subjects <b>${_esc(actor.name)}</b> knows about. The journal/beat sweep pulls every paragraph mentioning these, so "Dougan Marsh, The Gullywasher" makes those stories part of what they know. (For curated whole-page facts, prefer a World Dossier journal page tagged <code>@knownBy: ${_esc(actor.name)}</code> — it's injected verbatim, no keyword luck.)</p>
     <input type="text" name="topics" style="width:100%;margin-bottom:.6em;" placeholder="Dougan Marsh, The Gullywasher, Port Kudzu…" value="${_esc(cur.topics || "")}"/>
     <p style="font-size:.8em;opacity:.75;margin:0 0 .4em;"><b>Private GM truth</b> — knowledge, secrets, agenda, speech quirks. Shapes every reply; never quoted to players.</p>
-    <textarea name="notes" rows="10" style="width:100%;">${_esc(cur.notes || "")}</textarea>`;
+    <textarea name="notes" rows="10" style="width:100%;">${_esc(cur.notes || "")}</textarea>
+    <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Extractable secrets</b> — one per line: <code>Label :: effectKey :: unlock condition :: the truth to reveal</code>.<br>When a conversation genuinely meets a secret's condition, ${_esc(actor.name)} divulges it and the asking Steward's faction gains it as courtly leverage (player extractions pause on a GM approval card; yours confirm inline). A divulged secret is spent — change its label to re-arm it.${secretsApi ? "" : " <b>⚠ Courtly secrets API not detected (bbttcc-raid) — this section stays dormant.</b>"}</p>
+    <textarea name="secretsRaw" rows="4" style="width:100%;" placeholder="The second ledger :: rollPlus2 :: they prove they already suspect the books are cooked :: The true tallies live under the third floorboard of the counting room.">${_esc(cur.secretsRaw || "")}</textarea>
+    ${keysHint ? `<details style="font-size:.75em;opacity:.7;margin:.2em 0;"><summary>Valid effect keys</summary><pre style="white-space:pre-wrap;margin:.2em 0;">${_esc(keysHint)}</pre></details>` : ""}
+    ${usedLines ? `<p style="font-size:.75em;opacity:.7;margin:.2em 0;">${usedLines}</p>` : ""}`;
 
   const readForm = (form) => ({
-    topics: String(form?.elements?.topics?.value ?? ""),
-    notes:  String(form?.elements?.notes?.value ?? "")
+    topics:     String(form?.elements?.topics?.value ?? ""),
+    notes:      String(form?.elements?.notes?.value ?? ""),
+    secretsRaw: String(form?.elements?.secretsRaw?.value ?? "")
   });
 
   const DialogV2 = foundry.applications?.api?.DialogV2;
@@ -1101,8 +1758,9 @@ async function editPersona(actor) {
           save:   { label: "Save", callback: (html) => {
             const root = html[0] ?? html;
             resolve({
-              topics: root.querySelector?.("[name=topics]")?.value ?? "",
-              notes:  root.querySelector?.("[name=notes]")?.value ?? ""
+              topics:     root.querySelector?.("[name=topics]")?.value ?? "",
+              notes:      root.querySelector?.("[name=notes]")?.value ?? "",
+              secretsRaw: root.querySelector?.("[name=secretsRaw]")?.value ?? ""
             });
           } },
           cancel: { label: "Cancel", callback: () => resolve(null) }
@@ -1114,15 +1772,14 @@ async function editPersona(actor) {
   }
 
   if (!result || result === "cancel" || typeof result !== "object") return;
-  await actor.setFlag(MODULE_ID, "persona", { notes: String(result.notes), topics: String(result.topics) });
-  // Open windows re-sweep so new topics take effect immediately.
-  const app = APPS.get(actor.id);
-  if (app) {
-    app._storyState = await _storyState(actor);
-    app._lore = _gatherWorldLore(actor, { state: app._storyState });
-    app._dossier = _gatherDossier(actor, { state: app._storyState });
-    log(`persona saved; lore re-swept for '${actor.name}' (${app._lore.length} chars, dossier ${app._dossier.length})`);
-  }
+  const secretsRaw = String(result.secretsRaw ?? "");
+  await actor.setFlag(MODULE_ID, "persona", {
+    notes: String(result.notes), topics: String(result.topics),
+    secretsRaw, secretsUsed: cur.secretsUsed || {}
+  });
+  const armed = _parseSecretLines(secretsRaw).filter(s => !(cur.secretsUsed || {})[s.key]);
+  if (secretsRaw.trim()) log(`persona secrets: ${armed.length} armed for '${actor.name}' (skipped lines warn above)`);
+  await _afterPersonaSave(actor);
   ui.notifications?.info(`Persona saved for ${actor.name}.`);
 }
 
@@ -1246,10 +1903,61 @@ function _bindApprovalButtons(message, root) {
   }
 }
 
+// Secret extraction cards (player-initiated divulge_secret) — same shape as
+// story-moment approval, but the words are ALREADY spoken; the card only
+// gates the mechanical leverage (earned/stolen courtly Secret Item).
+async function _handleSecretCardClick(message, action, root) {
+  if (!game.user.isGM) return;
+  const p = message.getFlag(MODULE_ID, "pendingSecret");
+  if (!p) return;
+
+  let outcome;
+  if (action === "decline") {
+    outcome = "✗ Withheld — the words were spoken, but the table grants no leverage.";
+  } else {
+    const acquisition = action === "stolen" ? "stolen" : "earned";
+    const factionId = root?.querySelector?.("[name=bbttccSecretFaction]")?.value || p.factionId;
+    const npcActor = game.actors?.get(p.npcActorId);
+    if (!npcActor) {
+      outcome = "⚠ NPC actor no longer exists — nothing granted.";
+    } else {
+      const def = { key: p.key, label: p.label, effectKey: p.effectKey, condition: p.condition, truth: p.truth };
+      try {
+        const r = await _grantSecret({ npcActor, def, factionId, acquisition, speakerName: p.speakerName });
+        outcome = r.ok
+          ? `✓ Granted (${acquisition}) — "${p.label}" is now leverage held by ${r.faction.name}`
+          : `⚠ grant failed: ${r.error}`;
+      } catch (e) {
+        outcome = `⚠ grant threw: ${e?.message || e}`;
+      }
+    }
+  }
+
+  try {
+    await message.update({
+      content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #7a4db8;padding:.4em .6em;background:rgba(122,77,184,.08);">
+        <b>Secret</b> — ${_esc(p.label)}<br>${_esc(outcome)}</div>`,
+      [`flags.${MODULE_ID}.pendingSecret`]: null
+    });
+  } catch (e) { warn("secret card update failed:", e?.message); }
+}
+
+function _bindSecretButtons(message, root) {
+  if (!root || !message?.getFlag?.(MODULE_ID, "pendingSecret")) return;
+  for (const btn of root.querySelectorAll("[data-bbttcc-secret]")) {
+    if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
+    btn.dataset.bbttccBound = "1";
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      _handleSecretCardClick(message, btn.dataset.bbttccSecret, root);
+    });
+  }
+}
+
 // v13+ fires renderChatMessageHTML (HTMLElement); older cores fire
 // renderChatMessage (jQuery). Bind both defensively.
-Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); } catch (_e) {} });
-Hooks.on("renderChatMessage",     (message, html) => { try { _bindApprovalButtons(message, html?.[0] ?? html); } catch (_e) {} });
+Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); _bindSecretButtons(message, html); } catch (_e) {} });
+Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _bindApprovalButtons(message, r); _bindSecretButtons(message, r); } catch (_e) {} });
 
 // ---------------------------------------------------------------------------
 // Settings + install
