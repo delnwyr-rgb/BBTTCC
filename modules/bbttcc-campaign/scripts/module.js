@@ -78,6 +78,59 @@ const FEUD_BREAK_ID = "wendigo_confluence_break";
 const FEUD_SUMMIT_SUCCESS_ID = "gullywasher_cultural_summit_success";
 const FEUD_SUMMIT_FAILURE_ID = "gullywasher_cultural_summit_failure";
 
+// Bandit Accord arc (Drowned South swamp bandits, HEX-VIGNETTES-2026-07-08 §3).
+// Twin per-world meters — MERCY (spared bandits) and FEAR (executed ones) —
+// armed only once the opening beat announces the theme (owner decision
+// 2026-07-13 #3: nothing counts before the announcement). Wendigo-rung clone.
+const SETTING_BANDIT_ARMED = "banditLedgerArmed";
+const SETTING_BANDIT_MERCY = "banditMercy";
+const SETTING_BANDIT_FEAR  = "banditFear";
+const BANDIT_OPENING_BEAT_ID = "bandit_accord_opening";
+const BANDIT_ARMS_DOWN_BEAT_ID     = "bandit_ambush_arms_down";
+const BANDIT_ARMS_DOWN_ACCEPT_ID   = "bandit_arms_down_accept";
+const BANDIT_ARMS_DOWN_VIOLENCE_ID = "bandit_arms_down_violence";
+const BANDIT_HUMILIATION_BEAT_ID   = "bandit_summit_humiliation";
+// Mercy rungs (post-increment mercy count → rung): 1 word-spreads ≥2 ·
+// 2 volunteers ≥3 · 3 arms-down ≥4 · 4 the-envoy ≥6. The summit itself is
+// routed from the envoy beat's choices, not a rung.
+const BANDIT_MERCY_RUNG_AT = [2, 3, 4, 6];   // index+1 = rung
+// The ambush family resolves by id pattern (win_free/win_jail = mercy,
+// win_kill = fear) so outcome-id spelling variants in the live corpus still
+// count; the authored arms-down beats are matched by exact id above.
+const BANDIT_ENC_RE     = /^enc_bandit/i;
+const BANDIT_MERCY_RE   = /(free|jail)/i;
+const BANDIT_FEAR_RE    = /kill|execute/i;
+// Reed-telegraph cards (posted when a rung is NEWLY reached), funny → moving.
+const BANDIT_RUNG_DETAILS = {
+  1: "A spared bandit leaves a fish on your waypost. Cleaned. The good kind. No note &mdash; in the Drowned South, that IS the note.",
+  2: "Two of them are waiting at the Muster gate at dawn, hats in hands, boots almost clean. They have practiced saying &lsquo;gainful&rsquo; and it shows.",
+  3: "An ambush breaks off mid-spring &mdash; arms down before the reeds stop moving. &lsquo;We yield. Is the program still open?&rsquo; The reeds pass it along like a password.",
+  4: "A punt noses out of the mist under a white rag: a letter in a waxed pouch, and a lieutenant who salutes everything that moves. The Bandit Lord requests a summit."
+};
+const BANDIT_RUNG_MAL = {
+  3: "You&rsquo;ve invented a weapon that recruits the people it&rsquo;s pointed at. Do keep it loaded.",
+  4: "Mercy compounds faster than fear. Fear discounts. Ask any lender."
+};
+
+// The Cadence (HEX-VIGNETTES-2026-07-08 §1, owner decision #5: RECURRING
+// soft-power antagonist / support-faction cameo reward). Three world flags,
+// written by the outcome beats, read by inject.requires gates:
+//   cadenceRespect     1 = out-danced with style; ONE allied-raid cameo owed
+//   cadenceTribute     1 = lost gracefully; standing rematch offer each turn
+//   cadenceUncontested 1 = refused; they perform AT your border until answered
+const SETTING_CADENCE_RESPECT     = "cadenceRespect";
+const SETTING_CADENCE_TRIBUTE     = "cadenceTribute";
+const SETTING_CADENCE_UNCONTESTED = "cadenceUncontested";
+const CADENCE_OUTCOME_FLAGS = {
+  cadence_win_style: { respect: 1, tribute: 0, uncontested: 0 },  // cameo opens
+  cadence_win_ugly:  { respect: 0, tribute: 0, uncontested: 0 },  // you won the hex, lost the region
+  cadence_lose:      {             tribute: 1, uncontested: 0 },  // rematch stands
+  cadence_refuse:    {                         uncontested: 1 },  // the border show begins
+  cadence_cameo_spent: { respect: 0 }   // the owed raid is CALLED IN (the offer's
+                                        // "hold the favor" exit resolves the parent
+                                        // cadence_cameo beat without touching flags)
+};
+
 const DEFAULT_FACTION_UUID = "Actor.LjUgo0DxmSuEXMbs";
 const DEBT_PREFIX = "[HV_DEBT:";
 
@@ -3861,6 +3914,11 @@ function _resolveGateValue(name) {
   switch (name) {
     case "wendigoRung": return _wendigoRungGet();
     case "turn": return _getTurnNumberSafe();      // world turn — e.g. { flag:"turn", gte:6 }
+    case "banditMercy": return _banditMeterGet(SETTING_BANDIT_MERCY);   // Bandit Accord mercy count
+    case "banditFear":  return _banditMeterGet(SETTING_BANDIT_FEAR);    // Bandit Accord fear count
+    case "cadenceRespect":     return _banditMeterGet(SETTING_CADENCE_RESPECT);     // Cadence: cameo owed
+    case "cadenceTribute":     return _banditMeterGet(SETTING_CADENCE_TRIBUTE);     // Cadence: rematch standing
+    case "cadenceUncontested": return _banditMeterGet(SETTING_CADENCE_UNCONTESTED); // Cadence: border show
     default: return null;            // unknown source — caller treats as unmet + warns
   }
 }
@@ -6257,6 +6315,127 @@ async function _onBeatResolvedDouganPointer({ beat, campaign } = {}) {
   }
 }
 
+/* ── Bandit Accord: the mercy ledger (Wendigo-rung clone) ─────────────────────
+ * Two per-world counters bumped by bandit-encounter resolutions, ARMED only
+ * once the opening beat announces the theme. Mercy (freed/jailed) climbs the
+ * rung ladder toward the summit; fear (killed) is the parallel suppressor.
+ * The arms-down variant (offered automatically at rung ≥ 3 when an ambush
+ * fires) counts double on accept; violence there resets mercy to the rung-2
+ * threshold and the story of it travels (dossier page gates on the beat).
+ * Pure reaction — no existing beat behavior changes. GM-only writes.
+ * ───────────────────────────────────────────────────────────────────────────*/
+function _banditMeterGet(key) {
+  try { return Number(game.settings.get(MOD_ID, key)) || 0; }
+  catch (_e) { return 0; }
+}
+function _banditArmed() {
+  try { return !!game.settings.get(MOD_ID, SETTING_BANDIT_ARMED); }
+  catch (_e) { return false; }
+}
+// Highest rung the given mercy count has reached (0 = none).
+function _banditRungFor(mercy) {
+  let rung = 0;
+  for (let i = 0; i < BANDIT_MERCY_RUNG_AT.length; i++) if (mercy >= BANDIT_MERCY_RUNG_AT[i]) rung = i + 1;
+  return rung;
+}
+async function _postBanditRungCard(rung) {
+  try {
+    if (!game.user?.isGM) return;                 // GM posts once; ChatMessage broadcasts to all
+    const detail = BANDIT_RUNG_DETAILS[rung];
+    if (!detail) return;
+    const mal = BANDIT_RUNG_MAL[rung];
+    const content =
+        `<div style="border-left:3px solid #7a8f6b;padding:.35em .6em;">`
+      + `<div style="font-variant:small-caps;letter-spacing:.04em;opacity:.7;font-size:.85em;">&hellip; word moves through the reeds</div>`
+      + `<div style="margin-top:.25em;">${detail}</div>`
+      + (mal ? `<div style="margin-top:.4em;font-style:italic;opacity:.85;">&mdash; ${mal}</div>` : "")
+      + `</div>`;
+    await ChatMessage.create({ content, speaker: { alias: "Mal" } });
+  } catch (e) {
+    warn("[bandit-ledger] card failed:", e);
+  }
+}
+async function _onBeatResolvedBanditLedger({ beat, campaign } = {}) {
+  try {
+    if (!game.user?.isGM) return;                 // only the GM can write world settings
+    const id = beat?.id;
+    if (!id) return;
+
+    // The opening beat arms the ledger (owner decision: nothing counts before it).
+    if (id === BANDIT_OPENING_BEAT_ID) {
+      if (!_banditArmed()) {
+        await game.settings.set(MOD_ID, SETTING_BANDIT_ARMED, true);
+        log("[bandit-ledger] opening beat fired — the mercy ledger is ARMED.");
+      }
+      return;
+    }
+    if (!_banditArmed()) return;
+
+    const mercy = _banditMeterGet(SETTING_BANDIT_MERCY);
+    const fear  = _banditMeterGet(SETTING_BANDIT_FEAR);
+
+    // Rung ≥ 3: an ambush that fires surrenders BEFORE the roll — offer the
+    // arms-down variant (Dougan-pointer pattern; repeatable, GM veto is the
+    // beat dialog itself).
+    if (BANDIT_ENC_RE.test(id) && !BANDIT_MERCY_RE.test(id) && !BANDIT_FEAR_RE.test(id)) {
+      if (_banditRungFor(mercy) >= 3) {
+        const campaignId = campaign?.id || getActiveCampaignId();
+        if (campaignId) {
+          log("[bandit-ledger] ambush at rung ≥ 3 → arms-down variant.");
+          await game.bbttcc.api.campaign.runBeat(campaignId, BANDIT_ARMS_DOWN_BEAT_ID);
+        }
+      }
+      return;
+    }
+
+    // Classify the resolution.
+    let mercyDelta = 0, fearDelta = 0, resetToRung2 = false, inheritRemnant = false;
+    if (id === BANDIT_ARMS_DOWN_ACCEPT_ID) mercyDelta = 2;                     // mercy counts double here
+    else if (id === BANDIT_ARMS_DOWN_VIOLENCE_ID) { resetToRung2 = true; fearDelta = 1; }
+    else if (id === BANDIT_HUMILIATION_BEAT_ID) inheritRemnant = true;         // FEAR inherits the remnant
+    else if (BANDIT_ENC_RE.test(id) && BANDIT_MERCY_RE.test(id)) mercyDelta = 1;
+    else if (BANDIT_ENC_RE.test(id) && BANDIT_FEAR_RE.test(id))  fearDelta = 1;
+    else return;
+
+    const nextMercy = resetToRung2
+      ? Math.min(mercy, BANDIT_MERCY_RUNG_AT[1])   // back to the rung-2 threshold
+      : mercy + mercyDelta;
+    const nextFear = inheritRemnant ? Math.max(fear, mercy) : fear + fearDelta;
+
+    if (nextMercy !== mercy) await game.settings.set(MOD_ID, SETTING_BANDIT_MERCY, nextMercy);
+    if (nextFear !== fear)   await game.settings.set(MOD_ID, SETTING_BANDIT_FEAR, nextFear);
+    log(`[bandit-ledger] '${id}' → mercy ${mercy} → ${nextMercy}, fear ${fear} → ${nextFear}.`);
+
+    // A newly reached rung gets its reed-telegraph card (one per rung step).
+    const before = _banditRungFor(mercy), after = _banditRungFor(nextMercy);
+    for (let r = before + 1; r <= after; r++) await _postBanditRungCard(r);
+    if (resetToRung2 && before > _banditRungFor(nextMercy))
+      log(`[bandit-ledger] violence at a surrender — mercy reset to rung 2; the story travels.`);
+  } catch (e) {
+    warn("[bandit-ledger] update failed:", e);
+  }
+}
+
+/* ── The Cadence: dance-battle state flags ────────────────────────────────────
+ * The outcome beats write three world flags; the standing offers (rematch /
+ * border performance / the owed cameo) are director beats gated on them via
+ * inject.requires. Pure reaction, GM-only writes, no beat behavior changes.
+ * ───────────────────────────────────────────────────────────────────────────*/
+async function _onBeatResolvedCadence({ beat } = {}) {
+  try {
+    if (!game.user?.isGM) return;
+    const fx = CADENCE_OUTCOME_FLAGS[beat?.id];
+    if (!fx) return;
+    const KEYS = { respect: SETTING_CADENCE_RESPECT, tribute: SETTING_CADENCE_TRIBUTE, uncontested: SETTING_CADENCE_UNCONTESTED };
+    for (const [k, v] of Object.entries(fx)) {
+      if (_banditMeterGet(KEYS[k]) !== v) await game.settings.set(MOD_ID, KEYS[k], v);
+    }
+    log(`[cadence] '${beat.id}' → ${Object.entries(fx).map(([k, v]) => `${k}=${v}`).join(", ")}.`);
+  } catch (e) {
+    warn("[cadence] state update failed:", e);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Central hover-help: the "campaign" dictionary (bbttcc-core, game.bbttcc.help).
 // Consumed by templates via {{bbttccTip 'campaign' '<key>'}} and by JS-built DOM
@@ -6479,6 +6658,48 @@ Hooks.once("init", () => {
     default: false
   });
 
+  // Bandit Accord: the mercy ledger — armed latch + twin meters (mercy/fear).
+  game.settings.register(MOD_ID, SETTING_BANDIT_ARMED, {
+    name: "Bad Eden Bandit Ledger Armed",
+    hint: "Internal: whether the Bandit Accord opening beat has announced the theme (mercy counts only after). Do not edit manually.",
+    scope: "world",
+    config: false,
+    type: Boolean,
+    default: false
+  });
+  game.settings.register(MOD_ID, SETTING_BANDIT_MERCY, {
+    name: "Bad Eden Bandit Mercy",
+    hint: "Internal: Bandit Accord mercy count (spared/jailed bandits). Do not edit manually.",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0
+  });
+  game.settings.register(MOD_ID, SETTING_BANDIT_FEAR, {
+    name: "Bad Eden Bandit Fear",
+    hint: "Internal: Bandit Accord fear count (killed bandits; suppresses the mercy arc). Do not edit manually.",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0
+  });
+
+  // The Cadence: dance-battle standing-state flags (0/1), written by outcomes.
+  for (const [key, name] of [
+    [SETTING_CADENCE_RESPECT, "Bad Eden Cadence Respect"],
+    [SETTING_CADENCE_TRIBUTE, "Bad Eden Cadence Tribute"],
+    [SETTING_CADENCE_UNCONTESTED, "Bad Eden Cadence Uncontested"]
+  ]) {
+    game.settings.register(MOD_ID, key, {
+      name,
+      hint: "Internal: Cadence dance-battle standing state (0/1). Do not edit manually.",
+      scope: "world",
+      config: false,
+      type: Number,
+      default: 0
+    });
+  }
+
   // Phase 0 observability: verbose beat-audio console tracing. Off by default.
   // When on, every enter/exit of the audio path logs caller, token, src, and
   // flags so we can prove behavior before/after each audio-refactor phase.
@@ -6586,6 +6807,12 @@ Hooks.once("ready", () => {
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedFeudState);
   // Step 4: Dougan points to the Confluence when his convo resolves at rung >= 3.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedDouganPointer);
+  // Bandit Accord: mercy/fear ledger — armed by the opening beat, bumped by
+  // bandit-encounter resolutions, offers the arms-down variant at rung ≥ 3.
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedBanditLedger);
+  // The Cadence: outcome beats write the respect/tribute/uncontested flags
+  // that gate the standing offers (rematch, border show, the owed cameo).
+  Hooks.on("bbttcc:beat:resolved", _onBeatResolvedCadence);
   // Story Director (Phase 3): milestone beats raise steward/faction level floors.
   Hooks.on("bbttcc:beat:resolved", _onBeatResolvedLevelEffects);
   // Dialogue-driven beats: NPC event memory + one-shot moment consumption for
