@@ -31,18 +31,24 @@
   const frameLayer = () => {
     if (!canvas?.primary) return null;
     let L = game.bbttcc.__overlayFrameLayer;
-    if (!L || L._destroyed || L.parent !== canvas.primary) {
-      L = new PIXI.Container();
-      L.label = L.name = "bbttcc-overlay-frames";
-      L.sortableChildren = true; L.eventMode = "none"; L.zIndex = 8000;
-      canvas.primary.addChild(L);
+    if (!L || L.destroyed || L.parent !== canvas.primary) {
+      // Adopt an existing layer on this scene's primary before creating a new
+      // one — a lost reference must NEVER orphan a still-rendering layer, or
+      // its frames duplicate (clearFrame only searches the current layer).
+      L = canvas.primary.children?.find((c) => c.name === "bbttcc-overlay-frames" && !c.destroyed);
+      if (!L) {
+        L = new PIXI.Container();
+        L.label = L.name = "bbttcc-overlay-frames";
+        L.sortableChildren = true; L.eventMode = "none"; L.zIndex = 8000;
+        canvas.primary.addChild(L);
+      }
       game.bbttcc.__overlayFrameLayer = L;
     }
     return L;
   };
   const clearFrame = (id) => {
     const L = game.bbttcc.__overlayFrameLayer;
-    if (!L || L._destroyed) return;
+    if (!L || L.destroyed) return;
     const ex = L.children?.find((c) => c.name === `frame:${id}`);
     if (ex) { L.removeChild(ex); ex.destroy({ children: true }); }
   };
@@ -89,6 +95,7 @@
   const tick = () => {
     const dt = (canvas?.app?.ticker?.deltaMS ?? 16) / 1000;
     for (const tile of (canvas?.tiles?.placeables ?? [])) {
+      try {
       const o = tile?.document?.getFlag?.(MOD, "overlay");
       if (!o) continue;
       const mesh = tile?.mesh;
@@ -104,19 +111,30 @@
           tile._bbttccSpin = (tile._bbttccSpin ?? 0) + rate * dt;
           mesh.rotation = base + tile._bbttccSpin;
         }
-        if (o.frame && fr && !fr._destroyed) fr.rotation = mesh.rotation;
+        if (o.frame && fr && !fr.destroyed) fr.rotation = mesh.rotation;
       }
       if (o.pulse) {
         tile._bbttccPhase = (tile._bbttccPhase ?? 0) + dt * (o.pulseSpeed ?? 1);
         const s = Math.sin(tile._bbttccPhase), amp = o.pulseAmp ?? 0.25;
         if (mesh) { mesh.alpha = Math.max(0, Math.min(1, (o.baseAlpha ?? 1) + amp * s)); mesh.blendMode = blendOf(o.blend); }
-        if (o.frame && fr && !fr._destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+        if (o.frame && fr && !fr.destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+      }
+      } catch (_e) {
+        // Stale mesh mid-scene-swap must not throw out of a ticker callback.
       }
     }
   };
   // (Re)register + tear down any prior registration so a re-paste hot-swaps cleanly.
   const onDelete = (d) => clearFrame(d.id);
-  const onReady = () => { game.bbttcc.__overlayFrameLayer = null; };
+  // Scene swap: null the ref at canvasTearDown (the layer dies with the old
+  // primary). Nulling at canvasReady orphaned the just-built layer → dup frames.
+  const onTearDown = () => { game.bbttcc.__overlayFrameLayer = null; };
+  // Post-settle sweep: redraw frames with the real mesh transforms.
+  const onReady = () => {
+    for (const tile of (canvas?.tiles?.placeables ?? [])) {
+      try { applyOverlay(tile); } catch (_e) {}
+    }
+  };
   const prev = game.bbttcc.__overlayReg;
   if (prev) {
     try {
@@ -124,6 +142,7 @@
       Hooks.off("refreshTile", prev.applyOverlay);
       Hooks.off("deleteTile", prev.onDelete);
       Hooks.off("canvasReady", prev.onReady);
+      if (prev.onTearDown) Hooks.off("canvasTearDown", prev.onTearDown);
       canvas.app.ticker.remove(prev.tick);
     } catch (_e) {}
   }
@@ -131,8 +150,9 @@
   Hooks.on("refreshTile", applyOverlay);
   Hooks.on("deleteTile", onDelete);
   Hooks.on("canvasReady", onReady);
+  Hooks.on("canvasTearDown", onTearDown);
   canvas.app.ticker.add(tick);
-  game.bbttcc.__overlayReg = { applyOverlay, tick, onDelete, onReady };
+  game.bbttcc.__overlayReg = { applyOverlay, tick, onDelete, onReady, onTearDown };
   game.bbttcc.overlayApply = applyOverlay;
   log("effect hooks + ticker (re)registered (from manager)");
   for (const tile of (canvas?.tiles?.placeables ?? [])) applyOverlay(tile);

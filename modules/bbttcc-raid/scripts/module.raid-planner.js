@@ -991,17 +991,29 @@ if (_fid) {
 
       const onMove = (ev) => {
         if (!dragging) return;
+        // Lost the mouseup (released off-window / mid-render)? End the drag
+        // rather than gluing the planner to an unpressed cursor.
+        if ((ev.buttons & 1) === 0) return onUp();
         const left = ev.clientX - offsetX;
         const top  = ev.clientY - offsetY;
         outer.style.left = `${left}px`;
         outer.style.top  = `${top}px`;
       };
 
-      const onUp = () => { dragging = false; };
+      const onUp = () => {
+        dragging = false;
+        window.removeEventListener("mousemove", onMove);
+        window.removeEventListener("mouseup", onUp);
+      };
 
-      outer.addEventListener("mousedown", onDown);
-      window.addEventListener("mousemove", onMove);
-      window.addEventListener("mouseup", onUp);
+      // Window listeners live only for the duration of a drag — binding them
+      // permanently leaked a mousemove/mouseup pair per planner instance.
+      outer.addEventListener("mousedown", (ev) => {
+        onDown(ev);
+        if (!dragging) return;
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("mouseup", onUp);
+      });
 
       this._dragInstalled = true;
       log("Activity Planner drag installed (outer container).");

@@ -23857,8 +23857,13 @@ function _ftMakeHudDraggable(el, opts = {}) {
   // 2) Re-apply saved position on every call. The HUDs' own default
   //    positioners (e.g. _ftPositionCrewHud) run before us, so we need
   //    to overwrite them with the user's saved drag position each render.
+  //    NEVER while a drag is live on this element — HUDs re-render on
+  //    canvasReady etc., and snapping to the saved spot mid-drag makes the
+  //    panel fight the cursor (the "window retreats from my cursor" bug).
   const saved = load();
-  if (saved.left != null && saved.top != null) {
+  if (el.__ftHudDrag?.dragging) {
+    /* mid-drag render: leave position to the drag handler */
+  } else if (saved.left != null && saved.top != null) {
     el.style.left = saved.left + "px";
     el.style.top  = saved.top  + "px";
     el.style.right = "auto";
@@ -23915,22 +23920,41 @@ function _ftMakeHudDraggable(el, opts = {}) {
     // fires its click handler. Without this, pointer capture stole the
     // gesture and the manifest's per-steward click was suppressed.
     const DRAG_THRESHOLD_PX = 4;
-    let pointerDown = false, dragging = false;
+    // Drag state lives ON the element so re-renders (which re-run this helper
+    // but skip this one-time block) can see a live drag and stay hands-off.
+    const drag = el.__ftHudDrag = { down: false, dragging: false };
     let sx = 0, sy = 0, ox = 0, oy = 0, capturedId = null;
     el.addEventListener("pointerdown", (e) => {
       if (e.target.closest("button, a, input, select, textarea, .ft-hud-ctrl, .ft-hud-chip")) return;
       const r = el.getBoundingClientRect();
-      pointerDown = true;
+      drag.down = true;
       sx = e.clientX; sy = e.clientY; ox = r.left; oy = r.top;
       capturedId = e.pointerId;
     });
+    const endDrag = (e) => {
+      const wasDragging = drag.dragging;
+      drag.down = false; drag.dragging = false;
+      if (wasDragging) {
+        try { el.releasePointerCapture?.(e.pointerId); } catch (_) {}
+        el.style.cursor = "";
+        // Skip the save when the element left the DOM mid-drag (rect is 0,0).
+        if (el.isConnected) {
+          const r = el.getBoundingClientRect();
+          save({ ...load(), left: Math.round(r.left), top: Math.round(r.top) });
+        }
+      }
+    };
     el.addEventListener("pointermove", (e) => {
-      if (!pointerDown) return;
-      if (!dragging) {
+      if (!drag.down) return;
+      // Self-heal: if the primary button is no longer held, the pointerup was
+      // lost (re-render/teardown mid-drag) — end the drag instead of letting
+      // the panel glue itself to an unpressed cursor.
+      if ((e.buttons & 1) === 0) { endDrag(e); return; }
+      if (!drag.dragging) {
         if (Math.abs(e.clientX - sx) < DRAG_THRESHOLD_PX
          && Math.abs(e.clientY - sy) < DRAG_THRESHOLD_PX) return;
-        dragging = true;
-        el.setPointerCapture?.(capturedId);
+        drag.dragging = true;
+        try { el.setPointerCapture?.(capturedId); } catch (_) {}
         el.style.cursor = "grabbing";
       }
       const left = Math.max(0, Math.min(window.innerWidth - 40,  ox + e.clientX - sx));
@@ -23939,18 +23963,12 @@ function _ftMakeHudDraggable(el, opts = {}) {
       el.style.top  = top  + "px";
       el.style.right = "auto"; el.style.bottom = "auto"; el.style.transform = "none";
     });
-    const endDrag = (e) => {
-      const wasDragging = dragging;
-      pointerDown = false; dragging = false;
-      if (wasDragging) {
-        el.releasePointerCapture?.(e.pointerId);
-        el.style.cursor = "";
-        const r = el.getBoundingClientRect();
-        save({ ...load(), left: Math.round(r.left), top: Math.round(r.top) });
-      }
-    };
     el.addEventListener("pointerup",     endDrag);
     el.addEventListener("pointercancel", endDrag);
+    // Fires whenever the browser strips our capture (element hidden/replaced,
+    // OS-level cancel) — the case the old code missed, which left ALL pointer
+    // events routed to this element: HUD stuck to cursor + dead canvas pan.
+    el.addEventListener("lostpointercapture", endDrag);
   }
 }
 // Expose for cross-module use (territory toolbar, future HUDs).
@@ -24309,20 +24327,37 @@ Hooks.once("ready", () => _ftRenderPassengerManifest());
 // strategy scene to a 25 ft/sq rig-combat scene and the sheets keep
 // showing 6 sq/30 ft until manually closed-and-reopened. Covers both
 // the V13 ApplicationV2 registry and the legacy ui.windows map.
+// Track whether the primary button is held anywhere, so scene-change work can
+// avoid re-rendering windows mid-drag (a render re-seats the frame under the
+// user's cursor → the window glues to / fights the cursor).
+let __ftPrimaryPointerHeld = false;
+window.addEventListener("pointerdown",   (e) => { if (e.button === 0) __ftPrimaryPointerHeld = true;  }, true);
+window.addEventListener("pointerup",     (e) => { if (e.button === 0) __ftPrimaryPointerHeld = false; }, true);
+window.addEventListener("pointercancel", ()  => { __ftPrimaryPointerHeld = false; }, true);
+window.addEventListener("blur",          ()  => { __ftPrimaryPointerHeld = false; });
 Hooks.on("canvasReady", () => {
-  const seen = new Set();
-  const apps = [
-    ...Object.values(ui.windows ?? {}),
-    ...((foundry?.applications?.instances instanceof Map) ? Array.from(foundry.applications.instances.values()) : [])
-  ];
-  for (const app of apps) {
-    if (!app || seen.has(app)) continue;
-    seen.add(app);
-    const a = app?.actor;
-    if (!a) continue;
-    if (a.type === "character" || a.type === "npc" || a.type === "rig") {
-      try { app.render(false); } catch (e) { /* swallow */ }
+  const rerenderOpenSheets = () => {
+    const seen = new Set();
+    const apps = [
+      ...Object.values(ui.windows ?? {}),
+      ...((foundry?.applications?.instances instanceof Map) ? Array.from(foundry.applications.instances.values()) : [])
+    ];
+    for (const app of apps) {
+      if (!app || seen.has(app)) continue;
+      seen.add(app);
+      const a = app?.actor;
+      if (!a) continue;
+      if (a.type === "character" || a.type === "npc" || a.type === "rig") {
+        try { app.render(false); } catch (e) { /* swallow */ }
+      }
     }
+  };
+  // Cinematic dives land on canvasReady while the user may be mid-drag on a
+  // sheet — wait for the button to come up before re-rendering everything.
+  if (__ftPrimaryPointerHeld) {
+    window.addEventListener("pointerup", () => setTimeout(rerenderOpenSheets, 30), { once: true, capture: true });
+  } else {
+    rerenderOpenSheets();
   }
 });
 Hooks.once("ready", () => _ftRenderCrewHud());

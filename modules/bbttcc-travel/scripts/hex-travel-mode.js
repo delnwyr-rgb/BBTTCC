@@ -88,6 +88,7 @@
     try { ACTIVE.hud?.remove(); } catch(e){}
     try { ACTIVE._gfx?.destroy(true); } catch(e){}
     ACTIVE = null;
+    if (game.bbttcc?.api?.travelPlanner) game.bbttcc.api.travelPlanner._active = null;
   }
 
   function openPanel({ factionId, tokenId }) {
@@ -406,6 +407,13 @@
   }
 
   Hooks.on("canvasReady", addSceneButton);
+
+  // Scene swap: the planner's path/graphics reference the OLD scene's hex
+  // placeables, and canvas.stage children are NOT auto-removed on teardown —
+  // a leftover route overlay re-renders on the next scene as ghost hex
+  // outlines near the origin. Close the whole panel (closePanel destroys the
+  // graphics, DOM, hooks and stage listener in one place).
+  Hooks.on("canvasTearDown", () => { try { closePanel(); } catch (_e) {} });
 
   Hooks.once("ready", () => {
     game.bbttcc = game.bbttcc || { api:{} };

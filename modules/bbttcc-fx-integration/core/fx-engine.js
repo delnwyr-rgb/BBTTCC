@@ -423,6 +423,9 @@ function canvasPulse(position, opts = {}) {
 
   const ticker = canvas.app?.ticker;
   const update = () => {
+    // Scene swap mid-pulse can destroy the ring — unhook instead of throwing
+    // from a ticker callback every frame.
+    if (ring.destroyed) { if (ticker) ticker.remove(update); return; }
     const now = performance.now();
     const t = Math.min(1, (now - start) / Math.max(1, lifetime));
     const currentR = radius + (radius * 0.85 * t);

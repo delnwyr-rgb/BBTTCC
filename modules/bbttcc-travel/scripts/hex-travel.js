@@ -632,6 +632,18 @@ const TERRAIN_TABLE = {
 
   // --- Visuals ---------------------------------------------------------------
 
+  // Transient FX cleanup registry. These effects live on canvas.stage, which is
+  // NOT rebuilt on a scene swap — a travel trail / popup / pulse still animating
+  // when the scene changes would survive onto the next scene (ghost graphics at
+  // old-scene coords). Every effect registers its cleanup here; timers route
+  // through it, and canvasTearDown reaps whatever is still alive.
+  const _fxCleanups = new Set();
+  function _onFxDone(fn) {
+    const done = () => { _fxCleanups.delete(done); try { fn(); } catch (_e) {} };
+    _fxCleanups.add(done);
+    return done;
+  }
+
   function drawTrail(a, b, color = "#33AAFF") {
     if (!VISUALS.trail) return;
     const g = new PIXI.Graphics();
@@ -639,7 +651,8 @@ const TERRAIN_TABLE = {
     g.moveTo(a.x, a.y);
     g.lineTo(b.x, b.y);
     canvas.stage.addChild(g);
-    setTimeout(() => g.destroy(true), VISUALS.trailFadeMs);
+    const done = _onFxDone(() => { if (!g.destroyed) g.destroy(true); });
+    setTimeout(done, VISUALS.trailFadeMs);
   }
 
   function popupText(pos, text) {
@@ -651,14 +664,16 @@ const TERRAIN_TABLE = {
     t.anchor.set(0.5, 1.2);
     t.position.set(pos.x, pos.y);
     canvas.stage.addChild(t);
+    const done = _onFxDone(() => { if (!t.destroyed) t.destroy(true); });
     const dy = -40;
     const ms = VISUALS.popupMs;
     const start = Date.now();
     const tick = () => {
+      if (t.destroyed) { done(); return; }   // reaped by a scene swap mid-flight
       const p = Math.min(1, (Date.now() - start) / ms);
       t.position.y = pos.y + dy * p;
       t.alpha = 1 - p;
-      if (p < 1) requestAnimationFrame(tick); else t.destroy(true);
+      if (p < 1) requestAnimationFrame(tick); else done();
     };
     tick();
   }
@@ -671,6 +686,7 @@ const TERRAIN_TABLE = {
       state++;
       const on = state % 2 === 1;
       try {
+        if (token.destroyed) return;         // token died (scene swap) — done() reaps
         token.border = token.border || new PIXI.Graphics();
         token.border.clear();
         token.border.lineStyle(6, c, on ? 0.9 : 0.2);
@@ -679,11 +695,12 @@ const TERRAIN_TABLE = {
         if (!token.border.parent) canvas.stage.addChild(token.border);
       } catch(e) {}
     }, 150);
-    setTimeout(() => {
+    const done = _onFxDone(() => {
       clearInterval(id);
-      try { token.border?.destroy(true); } catch(e) {}
+      try { if (token.border && !token.border.destroyed) token.border.destroy(true); } catch(e) {}
       token.border = null;
-    }, VISUALS.pulseMs);
+    });
+    setTimeout(done, VISUALS.pulseMs);
   }
 
   let _encounterSymbols = new Map();
@@ -712,9 +729,16 @@ const TERRAIN_TABLE = {
     const rec = _encounterSymbols.get(hexId);
     if (!rec) return;
     clearInterval(rec.id);
-    try { rec.icon.destroy(true); } catch(e) {}
+    try { if (!rec.icon.destroyed) rec.icon.destroy(true); } catch(e) {}
     _encounterSymbols.delete(hexId);
   }
+
+  // Scene swap: reap every transient effect still animating (they live on the
+  // persistent canvas.stage and would ghost onto the next scene otherwise).
+  Hooks.on("canvasTearDown", () => {
+    for (const done of [..._fxCleanups]) done();
+    for (const hexId of [..._encounterSymbols.keys()]) removeEncounterIcon(hexId);
+  });
 
   // --- Core Travel -----------------------------------------------------------
 

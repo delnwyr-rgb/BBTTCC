@@ -77,6 +77,9 @@
       };
 
       const tick = () => {
+        // Scene swap mid-strike destroys root/g with the old canvas groups —
+        // bail out (and unhook) instead of throwing from a ticker every frame.
+        if (root.destroyed || g.destroyed) return cleanup();
         elapsed += canvas.app.ticker.deltaMS;
         g.clear();
         if (elapsed < telegraphMs) {

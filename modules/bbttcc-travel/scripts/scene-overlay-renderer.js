@@ -30,20 +30,26 @@
   const frameLayer = () => {
     if (!canvas?.primary) return null;
     let L = game.bbttcc.__overlayFrameLayer;
-    if (!L || L._destroyed || L.parent !== canvas.primary) {
-      L = new PIXI.Container();
-      L.label = L.name = "bbttcc-overlay-frames";
-      L.sortableChildren = true;
-      L.eventMode = "none";
-      L.zIndex = 8000;
-      canvas.primary.addChild(L);
+    if (!L || L.destroyed || L.parent !== canvas.primary) {
+      // Adopt an existing layer on this scene's primary before creating a new
+      // one — a lost reference must NEVER orphan a still-rendering layer, or
+      // its frames duplicate (clearFrame only searches the current layer).
+      L = canvas.primary.children?.find((c) => c.name === "bbttcc-overlay-frames" && !c.destroyed);
+      if (!L) {
+        L = new PIXI.Container();
+        L.label = L.name = "bbttcc-overlay-frames";
+        L.sortableChildren = true;
+        L.eventMode = "none";
+        L.zIndex = 8000;
+        canvas.primary.addChild(L);
+      }
       game.bbttcc.__overlayFrameLayer = L;
     }
     return L;
   };
   const clearFrame = (id) => {
     const L = game.bbttcc.__overlayFrameLayer;
-    if (!L || L._destroyed) return;
+    if (!L || L.destroyed) return;
     const ex = L.children?.find((c) => c.name === `frame:${id}`);
     if (ex) { L.removeChild(ex); ex.destroy({ children: true }); }
   };
@@ -106,6 +112,7 @@
   const tick = () => {
     const dt = (canvas?.app?.ticker?.deltaMS ?? 16) / 1000;
     for (const tile of (canvas?.tiles?.placeables ?? [])) {
+      try {
       const o = tile?.document?.getFlag?.(MOD, "overlay");
       if (!o) continue;
       const mesh = tile?.mesh;
@@ -124,20 +131,38 @@
           tile._bbttccSpin = (tile._bbttccSpin ?? 0) + rate * dt;
           mesh.rotation = base + tile._bbttccSpin;
         }
-        if (o.frame && fr && !fr._destroyed) fr.rotation = mesh.rotation;   // frame spins along
+        if (o.frame && fr && !fr.destroyed) fr.rotation = mesh.rotation;   // frame spins along
       }
       // PULSE — breathing alpha (mesh + frame).
       if (o.pulse) {
         tile._bbttccPhase = (tile._bbttccPhase ?? 0) + dt * (o.pulseSpeed ?? 1);
         const s = Math.sin(tile._bbttccPhase), amp = o.pulseAmp ?? 0.25;
         if (mesh) { mesh.alpha = Math.max(0, Math.min(1, (o.baseAlpha ?? 1) + amp * s)); mesh.blendMode = blendOf(o.blend); }
-        if (o.frame && fr && !fr._destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+        if (o.frame && fr && !fr.destroyed) fr.alpha = Math.max(0, Math.min(1, 1 - amp + amp * s));
+      }
+      } catch (_e) {
+        // A stale/destroyed mesh mid-scene-swap must not throw out of a ticker
+        // callback — an uncaught error here stalls the frame's remaining ticker
+        // listeners (canvas pan animation included) EVERY frame.
       }
     }
   };
 
   const onDelete = (d) => clearFrame(d.id);
-  const onReady = () => { game.bbttcc.__overlayFrameLayer = null; };  // primary rebuilt on scene swap
+  // Scene swap: the old layer dies WITH the old primary group during teardown —
+  // drop the reference then (never at canvasReady: by ready-time the new scene's
+  // drawTile pass has already built a live layer, and nulling the ref there
+  // orphaned it → every later refreshTile drew into a SECOND layer → the
+  // "duplicated glowing border" bug).
+  const onTearDown = () => { game.bbttcc.__overlayFrameLayer = null; };
+  // After the scene settles, re-apply every overlay: frames drawn mid-draw can
+  // capture a not-yet-settled mesh transform (frame stranded near the origin);
+  // this sweep redraws them in place with the real transforms.
+  const onReady = () => {
+    for (const tile of (canvas?.tiles?.placeables ?? [])) {
+      try { applyOverlay(tile); } catch (_e) {}
+    }
+  };
 
   // Hooks register at init so the initial canvas draw (which fires drawTile per tile
   // BEFORE "ready") is already covered. The ticker + a safety re-apply sweep land at
@@ -152,6 +177,7 @@
         Hooks.off("refreshTile", prev.applyOverlay);
         Hooks.off("deleteTile", prev.onDelete);
         Hooks.off("canvasReady", prev.onReady);
+        if (prev.onTearDown) Hooks.off("canvasTearDown", prev.onTearDown);
         canvas?.app?.ticker?.remove(prev.tick);
       } catch (_e) {}
     }
@@ -159,7 +185,8 @@
     Hooks.on("refreshTile", applyOverlay);              // fires on move/resize → frame tracks
     Hooks.on("deleteTile", onDelete);
     Hooks.on("canvasReady", onReady);
-    game.bbttcc.__overlayReg = { applyOverlay, tick, onDelete, onReady };
+    Hooks.on("canvasTearDown", onTearDown);
+    game.bbttcc.__overlayReg = { applyOverlay, tick, onDelete, onReady, onTearDown };
     game.bbttcc.overlayApply = applyOverlay;            // exposed for re-apply / debugging
     log("overlay renderer hooks registered (module init)");
   });

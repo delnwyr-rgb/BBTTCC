@@ -182,7 +182,7 @@ function pixiPulse(pos, color = 0x66ccff) {
     const ring = new PIXI.Graphics(); ring.position.set(pos.x, pos.y); canvas.stage.addChild(ring);
     const gs = Number(canvas?.grid?.size || 100), start = performance.now(), life = 850, base = gs * 0.9;
     const ticker = canvas.app?.ticker; if (!ticker) { ring.destroy(); return; }
-    const step = () => { const t = Math.min(1, (performance.now() - start) / life); ring.clear(); ring.lineStyle(4, color, Math.max(0, 0.9 * (1 - t))); ring.drawCircle(0, 0, base + base * 0.9 * t); if (t >= 1) { ticker.remove(step); ring.destroy(); } };
+    const step = () => { if (ring.destroyed) { ticker.remove(step); return; } const t = Math.min(1, (performance.now() - start) / life); ring.clear(); ring.lineStyle(4, color, Math.max(0, 0.9 * (1 - t))); ring.drawCircle(0, 0, base + base * 0.9 * t); if (t >= 1) { ticker.remove(step); ring.destroy(); } };
     ticker.add(step);
   } catch (_e) {}
 }
