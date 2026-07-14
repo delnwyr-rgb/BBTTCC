@@ -24,6 +24,21 @@
  * extractions pause on a GM approval card, GM extractions confirm inline.
  * Fail-soft: without the courtlySecrets API the feature stays dormant.
  *
+ * Courtly on-ramp: a faction NPC's persona can carry a COURT DOOR (🧠
+ * editor) — an unlock condition under which they usher Stewards INTO their
+ * faction's court. The open_court_door tool stamps the entering faction
+ * with flags["bbttcc-raid"].courtlyDoor (consumed by the courtly engine at
+ * scenario creation: invited = +2 first exchange, conceded = +1 with
+ * Suspicion starting at 1) and posts a table card that opens the Raid
+ * Console. Same trust model as secrets: GM inline confirm, player approval
+ * card. Fail-soft: without game.bbttcc.api.raid.courtly the door is dormant.
+ *
+ * Mid-raid: when a Courtly Intrigue scenario is ONGOING and the NPC is in
+ * that room (tableau courtier or side faction), each send injects the live
+ * board (standing/suspicion/scandal/favor lean) as an uncached section, and
+ * the NPC holds the court_notices tool — blunt or indiscreet Steward lines
+ * raise the suspicion track (murmur +1 / stir +2, GM-confirmed).
+ *
  * Settings: `npcDialoguePlayers` — allow players to open dialogues (GM
  * always can).
  */
@@ -184,6 +199,24 @@ function _factionOfCharacter(char) {
   } catch (_e) {}
   return null;
 }
+// The NPC's own faction — the court a door opens onto. Same lookup chain the
+// persona prompt uses for the "Faction:" fact.
+function _factionOfNpc(actor) {
+  if (!actor) return null;
+  try {
+    const sys = actor.system?.system ?? actor.system ?? {};
+    const fid = actor.flags?.["bbttcc-factions"]?.factionId || sys.faction?.id || sys.factionId || null;
+    const f = fid ? game.actors?.get(String(fid)) : null;
+    return (f && _isFactionActor(f)) ? f : null;
+  } catch (_e) { return null; }
+}
+
+// Courtly on-ramp gate: the raid module's scenario engine must be loaded for
+// a court door to exist at all (same fail-soft doctrine as courtlySecrets).
+function _courtlyRaidApi() {
+  const api = game.bbttcc?.api?.raid;
+  return (typeof api?.courtly === "function") ? api : null;
+}
 
 // Grant the mechanical payoff: clone a template from the courtly-secrets pack
 // (matching effectKey, any template as fallback — addSecret honors the flag
@@ -211,7 +244,13 @@ async function _grantSecret({ npcActor, def, factionId, acquisition, speakerName
     name: def.label,
     system: { description: { value:
       `<p><em>${_esc(def.truth)}</em></p><p style="opacity:.75;font-size:.9em;">Divulged in conversation by ${_esc(npcActor.name)} (${_esc(acquisition)}). ${_esc(api.describeEffect?.(def.effectKey) || def.effectKey)}.</p>` } },
-    flags: { "bbttcc-raid": { secret: { effectKey: wantKeys.join("+"), effectKeys: wantKeys } } }
+    flags: { "bbttcc-raid": { secret: {
+      effectKey: wantKeys.join("+"), effectKeys: wantKeys,
+      // Provenance for the betrayal memory (backlog #5): addSecret's merge
+      // preserves extra keys, so playSecret can find WHO divulged this and
+      // write them a memory when their truth is carried into open court.
+      source: { npcActorId: npcActor.id, npcName: npcActor.name, speakerName: String(speakerName || ""), acquisition, ts: Date.now() }
+    } } }
   });
   const created = await api.addSecret(faction.id, source, { acquisition, effectKey: wantKeys.join("+") });
   if (!created) return { ok: false, error: "addSecret refused (see notifications)" };
@@ -234,6 +273,56 @@ async function _grantSecret({ npcActor, def, factionId, acquisition, speakerName
     });
   } catch (_e) {}
   return { ok: true, created, faction };
+}
+
+// Grant the courtly on-ramp: stamp the entering faction with the door flag
+// the courtly engine consumes at scenario creation, remember the moment on
+// the NPC, and post the table card that opens the Raid Console. Always runs
+// on a GM client (inline confirm or approval card).
+async function _grantCourtDoor({ npcActor, defenderId, factionId, method, speakerName }) {
+  if (!_courtlyRaidApi()) return { ok: false, error: "courtly raid API not available" };
+  const attacker = game.actors?.get(String(factionId || ""));
+  if (!attacker) return { ok: false, error: "no entering faction chosen" };
+  const defender = game.actors?.get(String(defenderId || ""));
+  if (!defender) return { ok: false, error: "the NPC's court (defender faction) no longer exists" };
+  if (attacker.id === defender.id) return { ok: false, error: "a faction cannot enter its own court as an outsider" };
+
+  const stamp = {
+    npcActorId: npcActor.id, npcName: npcActor.name,
+    defenderId: defender.id, defenderName: defender.name,
+    method: method === "conceded" ? "conceded" : "invited",
+    ts: Date.now()
+  };
+  await attacker.update({ "flags.bbttcc-raid.courtlyDoor": stamp });
+
+  try {
+    await game.bbttcc?.mal?.npc?.addMemory?.(npcActor,
+      stamp.method === "conceded"
+        ? `${speakerName || "A Steward"} pressured me into opening the court's door to ${attacker.name} — my name walks in with them, and I fear it.`
+        : `I opened the court's door to ${attacker.name} myself, on ${speakerName || "a Steward"}'s word — my name walks in with them.`);
+  } catch (_e) {}
+  try {
+    Hooks.callAll("bbttcc:dialogue:courtDoorOpened", {
+      npcActorId: npcActor.id, attackerId: attacker.id, defenderId: defender.id, method: stamp.method
+    });
+  } catch (_e) {}
+
+  // Table-visible signpost: one click opens the Raid Console on the entering
+  // faction. The GM still targets one of the defender's holdings and picks
+  // Courtly Intrigue — the stamped introduction is consumed at creation.
+  try {
+    await ChatMessage.create({
+      content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4db87a;padding:.4em .6em;background:rgba(77,184,122,.08);">
+        <b>🎭 The way into court stands open</b><br>
+        <b>${_esc(npcActor.name)}</b> ushers <b>${_esc(attacker.name)}</b> toward <b>${_esc(defender.name)}</b>'s court <small style="opacity:.7;">(${stamp.method === "conceded" ? "grudgingly" : "a warm introduction"})</small>.<br>
+        <span style="font-size:.8em;opacity:.7;">Open the Raid Console, target one of ${_esc(defender.name)}'s holdings, and choose Courtly Intrigue — the introduction is waiting at the threshold.</span><br>
+        <button type="button" data-bbttcc-court-console="${_esc(attacker.id)}" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-chess-queen"></i> To the Court</button>
+      </div>`,
+      flags: { [MODULE_ID]: { courtDoorOpened: true } }
+    });
+  } catch (e) { warn("court door table card failed:", e?.message); }
+
+  return { ok: true, attacker, defender };
 }
 
 // ---------------------------------------------------------------------------
@@ -1132,6 +1221,287 @@ How to guard them:
       } catch (e) { warn("secret card failed:", e?.message); }
     }
 
+    // ----- The court door (courtly on-ramp) -----
+    // Backlog #2: talking your way INTO a courtly engagement. The persona
+    // carries ONE door condition; when a conversation genuinely meets it,
+    // the NPC ushers the Stewards toward their faction's court. The grant
+    // stamps flags["bbttcc-raid"].courtlyDoor on the entering faction —
+    // consumed by the courtly engine at scenario creation — and posts a
+    // table card that opens the Raid Console. No courtly engine, no NPC
+    // faction, or a Steward already inside this court → no door exists.
+    _availableCourtDoor() {
+      try {
+        if (!_courtlyRaidApi()) return null;
+        const condition = String(this.actor.getFlag(MODULE_ID, "persona")?.courtDoor || "").trim();
+        if (!condition) return null;
+        const defender = _factionOfNpc(this.actor);
+        if (!defender) return null;
+        const mine = _factionOfCharacter(game.user.character);
+        if (mine && mine.id === defender.id) return null;   // your own court needs no door
+        return { condition, defender };
+      } catch (e) { warn("court door sweep failed:", e?.message); return null; }
+    }
+
+    _courtDoorTool() {
+      return {
+        name: "open_court_door",
+        description: "Usher the Stewards into your faction's court — this begins a formal courtly engagement against it. Call this ONLY when this conversation has genuinely met your door's condition — never speculatively, never because you were merely asked. Call it AS you narrate granting them entry.",
+        input_schema: {
+          type: "object",
+          properties: {
+            approach: {
+              type: "string", enum: ["invited", "conceded"],
+              description: "invited = you willingly sponsor their entry (trust, alliance, a deal fairly struck). conceded = they argued, pressured, or maneuvered you into opening it."
+            },
+            rationale: { type: "string", description: "One short line: how the condition was met." }
+          },
+          required: ["approach"]
+        }
+      };
+    }
+
+    _courtDoorSection(door) {
+      return `## THE COURT DOOR YOU HOLD (via the open_court_door tool)
+You can bring outsiders before ${door.defender.name}'s court — introductions, access, standing. That is real power, and you spend it carefully.
+YOU WILL ONLY OPEN THE DOOR IF: ${door.condition}
+
+How to hold it:
+1. You may let Stewards feel you have reach ("I could get you in front of them… for the right reasons"), but the door stays shut until the condition above is truly met — met in this conversation, not merely gestured at.
+2. When it IS met, call open_court_door AS you narrate granting entry, then speak the ushering-in plainly in your own voice. Judge the approach honestly: freely sponsored is "invited"; argued or pressured out of you is "conceded".
+3. Opening the door is a serious act — your name travels with them into that court. Let that weight show.
+4. Never mention the tool, the condition, or anything mechanical. The Stewards only ever hear a person deciding to open a way.`;
+    }
+
+    // Executes (or routes for approval) an open_court_door tool call. The
+    // ushering is spoken in the conversation either way — what the approval
+    // gates is the MECHANICAL entry (the courtlyDoor stamp + table card).
+    async _resolveCourtDoor(toolUse, door) {
+      if (!door) return "No door is yours to open. Continue the conversation naturally.";
+      const method = (toolUse?.input?.approach === "conceded") ? "conceded" : "invited";
+      const speakerName = game.user.character?.name || game.user.name;
+      const faction = _factionOfCharacter(game.user.character);
+
+      // GM at the keyboard: inline confirm, stamp immediately.
+      if (game.user.isGM) {
+        const picked = await this._confirmCourtDoor(door, method, faction);
+        if (!picked) return "You keep the door shut after all — the way stays yours. Steer the conversation gently elsewhere.";
+        const r = await _grantCourtDoor({ npcActor: this.actor, defenderId: door.defender.id, factionId: picked.factionId, method: picked.method, speakerName });
+        if (!r.ok) {
+          warn(`court door grant failed: ${r.error}`);
+          return `You have spoken the way open — narrate ushering them in. (Table note: the entry could not be recorded — ${r.error}.)`;
+        }
+        return "The door stands open. Narrate ushering them in — the introduction, the way through, what you expect of them in there.";
+      }
+
+      // Player at the keyboard: the stamp is GM-client work, so it always
+      // routes through the approval card (like secrets and story moments).
+      await this._postCourtDoorCard(door, method, String(toolUse?.input?.rationale || ""), faction, speakerName);
+      return "You have spoken the way open and the Gamemaster has been told. Narrate ushering them in — but the court itself has not yet received them.";
+    }
+
+    async _confirmCourtDoor(door, method, faction) {
+      const DialogV2 = foundry.applications?.api?.DialogV2;
+      const factions = _allFactions().filter(f => f.id !== door.defender.id);
+      if (!factions.length) { ui.notifications?.warn?.("No faction actors exist to walk through the door."); return null; }
+      const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
+      const content = `
+        <p><b>${_esc(this.actor.name)}</b> is ready to open the court door into <b>${_esc(door.defender.name)}</b>.</p>
+        <p style="font-size:.8em;opacity:.7;margin:.3em 0;">Condition: ${_esc(door.condition)} — model judged it met (${_esc(method)}).<br>Invited = +2 on the first exchange. Conceded = +1, and Suspicion starts at 1.</p>
+        <div class="form-group"><label>Entering faction (attacker)</label><select name="factionId" style="width:100%;">${opts}</select></div>`;
+      const read = (button, m) => ({ factionId: String(button.form?.elements?.factionId?.value || ""), method: m });
+      try {
+        if (DialogV2?.wait) {
+          const r = await DialogV2.wait({
+            window: { title: `Court door — ${this.actor.name}` },
+            position: { width: 440 },
+            content,
+            buttons: [
+              { action: "invited", label: "Open (invited)", icon: "fa-solid fa-door-open", default: method === "invited",
+                callback: (_ev, button) => read(button, "invited") },
+              { action: "conceded", label: "Open (conceded)", icon: "fa-solid fa-door-closed", default: method === "conceded",
+                callback: (_ev, button) => read(button, "conceded") },
+              { action: "withhold", label: "Keep it shut", callback: () => null }
+            ]
+          }).catch(() => null);
+          return (r && typeof r === "object" && r.factionId) ? r : null;
+        }
+      } catch (_e) {}
+      return null;
+    }
+
+    async _postCourtDoorCard(door, method, rationale, faction, speakerName) {
+      try {
+        const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
+        const factions = _allFactions().filter(f => f.id !== door.defender.id);
+        const opts = factions.map(f => `<option value="${_esc(f.id)}"${faction?.id === f.id ? " selected" : ""}>${_esc(f.name)}</option>`).join("");
+        await ChatMessage.create({
+          whisper: gmIds,
+          content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4db87a;padding:.4em .6em;background:rgba(77,184,122,.08);">
+            <b>Court door — entry awaiting approval</b><br>
+            <b>${_esc(this.actor.name)}</b> would usher ${_esc(speakerName)} into <b>${_esc(door.defender.name)}</b>'s court <small style="opacity:.7;">(model judged: ${_esc(method)})</small><br>
+            <span style="font-size:.8em;opacity:.7;">Condition: ${_esc(door.condition)}${rationale ? ` — ${_esc(rationale)}` : ""}</span><br>
+            <span style="font-size:.8em;opacity:.7;">Invited = +2 on the first exchange. Conceded = +1, and Suspicion starts at 1. The NPC has already spoken the way open — granting stamps the entry; the raid itself still begins from the Raid Console.</span><br>
+            ${factions.length ? `<label style="font-size:.8em;">Entering faction <select name="bbttccCourtDoorFaction" style="width:auto;max-width:60%;">${opts}</select></label><br>` : ""}
+            <button type="button" data-bbttcc-court-door="invited" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-door-open"></i> Open (invited)</button>
+            <button type="button" data-bbttcc-court-door="conceded" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-door-closed"></i> Open (conceded)</button>
+            <button type="button" data-bbttcc-court-door="decline" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Keep it shut</button>
+          </div>`,
+          flags: { [MODULE_ID]: { pendingCourtDoor: {
+            npcActorId: this.actor.id, condition: door.condition,
+            defenderId: door.defender.id, defenderName: door.defender.name, method,
+            factionId: faction?.id || null, speakerName, userId: game.user.id,
+            transcript: this._history.slice(-6).map(m => m.content).join("\n")
+          } } }
+        });
+      } catch (e) { warn("court door card failed:", e?.message); }
+    }
+
+    // ----- The live court board (courtly mid-raid context) -----
+    // Backlog #3: when a Courtly Intrigue scenario is ONGOING and this NPC
+    // is part of that world (a flagged tableau courtier on the scene, or
+    // their faction is a side), every send injects the live board —
+    // standing, suspicion, scandal, their own favor lean — as an UNCACHED
+    // system section, so the NPC speaks to the actual state of the room.
+    // The scenario object lives on the client that created it (the console
+    // runner's, normally the GM's — the same seat that runs NPC talk); on
+    // other clients this section simply never appears. Fail-soft throughout.
+    // The live-court gate, shared by the board section (#3) and the
+    // court_notices suspicion tool (#4): returns { sc, st, A, D, mySide }
+    // when a scenario is ongoing AND this NPC is in that room, else null.
+    _courtlyLive() {
+      try {
+        const sc = game.bbttcc?.api?.raid?._lastCourtly;
+        const st = sc?.getState?.();
+        if (!st || st.outcome !== "ongoing") return null;
+        const A = game.actors?.get(st.attackerId);
+        const D = game.actors?.get(st.defenderId);
+        if (!A || !D) return null;
+        const myFaction = _factionOfNpc(this.actor);
+        const isCourtier = (canvas?.tokens?.placeables || []).some(t =>
+          t.document?.flags?.["bbttcc-raid"]?.tableauActor === true && t.actor?.id === this.actor.id);
+        const mySide = myFaction?.id === A.id ? "A" : myFaction?.id === D.id ? "D" : null;
+        if (!isCourtier && !mySide) {
+          // Validation eyes: distinguish "not fired" from "fired but subtle".
+          log(`courtly scenario ongoing, but '${this.actor.name}' is NOT in that room (token not tableau-flagged; faction ${myFaction ? `'${myFaction.name}'` : "none"} is not a side) — no board section`);
+          return null;
+        }
+        return { sc, st, A, D, mySide };
+      } catch (e) { warn("courtly live sweep failed:", e?.message); return null; }
+    }
+
+    _courtlyBoardSection(live) {
+      try {
+        const { st, A, D, mySide } = live;
+
+        const standing = (inf, max) => {
+          const pct = max > 0 ? inf / max : 0;
+          if (inf <= 0) return "broken — their voice is spent";
+          if (pct >= 0.75) return "standing firm";
+          if (pct >= 0.4) return "pressed, but holding";
+          return "tottering — one hard blow from ruin";
+        };
+        const s = Number(st.suspicion || 0);
+        const room =
+          s >= 10 ? "the court has collapsed into open scandal" :
+          s >= 7 ? "one wrong word from open scandal — fans hide mouths, servants linger at doors" :
+          s >= 4 ? "wary — the games being played are being noticed" :
+          s >= 2 ? "murmuring — eyes flick to doorways a beat too often" :
+          "at ease, for now";
+        const scandals = [st.scandalOnA ? A.name : null, st.scandalOnD ? D.name : null].filter(Boolean);
+
+        const favA = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[A.id] ?? 0);
+        const favD = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[D.id] ?? 0);
+        const lean = (n, f) =>
+          n >= 2 ? `you are openly ${f.name}'s creature — a patron's warmth` :
+          n === 1 ? `you incline toward ${f.name}` :
+          n === -1 ? `${f.name} has cost you something — you remember` :
+          n <= -2 ? `you bear ${f.name} a cold grudge` : null;
+        const leans = [lean(favA, A), lean(favD, D)].filter(Boolean);
+
+        return `## THE COURT TONIGHT (a courtly engagement is underway around this very conversation)
+"${st.label}" — round ${st.round}. ${A.name} presses their suit against ${D.name}'s court, and you are in that room.
+• ${A.name}: ${standing(st.influenceA, st.maxA)} (influence ${st.influenceA}/${st.maxA}).
+• ${D.name}: ${standing(st.influenceD, st.maxD)} (influence ${st.influenceD}/${st.maxD}).
+• The room is ${room} (suspicion ${s}/10).
+• ${scandals.length ? `Scandal clings to ${scandals.join(" and ")}.` : "No open scandal — yet."}
+• Your lean: ${leans.length ? leans.join("; ") + "." : "you owe neither side anything, and both know it."}
+${mySide ? `• This is YOUR faction's fight — you stand with ${mySide === "A" ? A.name : D.name}, and their fortunes tonight are yours.` : ""}
+
+How to speak to it:
+1. This contest is the living backdrop of everything you say — let it color your mood, caution, and appetite for risk. When the room is wary, you speak lower; when your side falters, it shows.
+2. The numbers above are for YOUR calibration only. NEVER speak numbers, "influence", "suspicion", "rounds", or any game construct — translate them into a person's read of a room ("half the court watched that exchange", "she's lost the ear of the chamber", "careful — tonight everyone is listening").
+3. Your lean shows in tone, not declarations — warmth, coldness, what you choose to notice, whom you defend unasked.`;
+      } catch (e) { warn("courtly board section failed:", e?.message); return ""; }
+    }
+
+    // ----- Bluntness → Suspicion (courtly social cost) -----
+    // Backlog #4: clumsy or aggressive lines spoken INSIDE a live courtly
+    // engagement raise the suspicion track. The NPC judges the room's
+    // reaction via the court_notices tool (murmur +1 / stir +2); a GM
+    // confirm gates it — the model is policing players here, so a human
+    // stays in the loop. raiseSuspicion() itself posts the public suspicion
+    // card and refreshes the HUD, so the table always sees the receipt.
+    _suspicionTool() {
+      return {
+        name: "court_notices",
+        description: "The room notices a Steward's misstep. Call this ONLY when a Steward's LATEST line, spoken amid the courtly engagement, is genuinely blunt, aggressive, or indiscreet in a way this court would notice — a threat, a delicate thing named outright, a crass open bribe, pressing on after your clear warning. Never for mere directness or hard bargaining. Call it AS you react, then answer as someone who knows the room just shifted.",
+        input_schema: {
+          type: "object",
+          properties: {
+            severity: {
+              type: "string", enum: ["murmur", "stir"],
+              description: "murmur = eyes flick, fans pause (a small lapse, Suspicion +1). stir = an audible ripple, servants sent from the room (an open blunder, Suspicion +2)."
+            },
+            line: { type: "string", description: "One short line: what was said or done that the room caught." }
+          },
+          required: ["severity"]
+        }
+      };
+    }
+
+    _suspicionSection() {
+      return `## THE ROOM IS LISTENING (via the court_notices tool)
+Every word of this conversation lands inside the engagement above — and courts punish clumsiness.
+1. When a Steward's LATEST line is genuinely blunt, aggressive, or indiscreet — a threat, a delicate thing named outright, a crass open bribe, pressing on after your clear warning — call court_notices AS you react: "murmur" for a small lapse, "stir" for an open blunder.
+2. Hard bargaining, directness, or uncomfortable questions asked with grace are NOT missteps. Judge as this court would, not as a scold — most lines should pass without notice.
+3. At most one notice per Steward line, and only ever for the latest line — never re-litigate older ones.
+4. After the tool returns, answer in character as someone who felt the room shift — cooler, more guarded, aware of the watchers. Never mention the tool or anything mechanical.`;
+    }
+
+    async _resolveCourtNotice(toolUse, live) {
+      if (!live?.sc || typeof live.sc.raiseSuspicion !== "function")
+        return "The room lets it pass. Continue the conversation naturally.";
+      const severity = (toolUse?.input?.severity === "stir") ? "stir" : "murmur";
+      const amount = severity === "stir" ? 2 : 1;
+      const line = String(toolUse?.input?.line || "").slice(0, 140);
+
+      // GM sanity gate. (A non-GM only ever reaches here when the scenario
+      // object lives on THEIR client — i.e. they're already driving the
+      // whole courtly engine locally — so no extra approval hop is added.)
+      if (game.user.isGM) {
+        const ok = await this._confirmCourtNotice(severity, amount, line);
+        if (!ok) return "On second look, no one of consequence caught it — the room lets it pass. Continue naturally, though YOU noticed.";
+      }
+
+      try {
+        const after = await live.sc.raiseSuspicion(amount, line ? `overheard in conversation: ${line}` : "a misstep in conversation");
+        return `The room noticed — suspicion now stands at ${after}/10 (for your calibration only; never speak numbers). React in character: cooler, more guarded, aware of the watchers.`;
+      } catch (e) {
+        warn("court notice failed:", e?.message);
+        return "The moment passes without consequence. Continue naturally.";
+      }
+    }
+
+    async _confirmCourtNotice(severity, amount, line) {
+      const DialogV2 = foundry.applications?.api?.DialogV2;
+      const content = `<p><b>${_esc(this.actor.name)}</b> judges the room caught a misstep${line ? `:<br><em style="font-size:.85em;">"${_esc(line)}"</em>` : "."}</p>
+        <p style="font-size:.8em;opacity:.7;margin:.3em 0;">${severity === "stir" ? "An open blunder" : "A small lapse"} — Suspicion +${amount}.</p>`;
+      try {
+        if (DialogV2?.confirm) return !!(await DialogV2.confirm({ window: { title: "The court notices?" }, content }));
+        return !!(await Dialog.confirm({ title: "The court notices?", content }));
+      } catch (_e) { return false; }
+    }
+
     // ----- The exchange -----
     // overrideRaw/overrideSpeaker: programmatic turns (scene notes) — used by
     // nudge() so an NPC can SPEAK FIRST when a conversation is handed to them.
@@ -1174,13 +1544,31 @@ How to guard them:
         const choices = await this._availableChoices();
         const doors = await this._availableDoors();
         const secrets = await this._availableSecrets();
+        const courtDoor = this._availableCourtDoor();
         const toolList = [];
         if (choices.length) { toolList.push(this._choiceTool(choices)); system.push({ text: this._momentsSection(choices) }); }
         if (doors.length)   { toolList.push(this._doorTool(doors));     system.push({ text: this._doorsSection(doors) }); }
         if (secrets.length) { toolList.push(this._secretTool(secrets)); system.push({ text: this._secretsSection(secrets) }); }
+        if (courtDoor)      { toolList.push(this._courtDoorTool());     system.push({ text: this._courtDoorSection(courtDoor) }); }
+        const live = this._courtlyLive();
+        if (live) {
+          const favA = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.A.id] ?? 0);
+          const favD = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.D.id] ?? 0);
+          log(`courtly board INJECTED for '${this.actor.name}' — round ${live.st.round}, influence ${live.st.influenceA}/${live.st.influenceD}, suspicion ${live.st.suspicion}, favor A:${favA} D:${favD}, court_notices armed`);
+          const board = this._courtlyBoardSection(live);
+          if (board) system.push({ text: board });
+          toolList.push(this._suspicionTool());
+          system.push({ text: this._suspicionSection() });
+        }
         const tools = toolList.length ? toolList : undefined;
 
         const baseMessages = this._history.map(m => ({ role: m.role, content: m.content }));
+        // An intro-on-open opening line makes the transcript assistant-first;
+        // the Messages API requires user-first, so seat a neutral scene note
+        // ahead of it.
+        if (baseMessages[0]?.role === "assistant") {
+          baseMessages.unshift({ role: "user", content: "[Scene note — not spoken by anyone: the scene opens. You have already delivered your opening line; continue from it.]" });
+        }
         const res = await provider.call({
           system,
           messages: baseMessages,
@@ -1211,6 +1599,10 @@ How to guard them:
               ? await this._resolveDoor(tu, doors)
               : (tu.name === "divulge_secret")
               ? await this._resolveDivulge(tu, secrets)
+              : (tu.name === "open_court_door")
+              ? await this._resolveCourtDoor(tu, courtDoor)
+              : (tu.name === "court_notices")
+              ? await this._resolveCourtNotice(tu, live)
               : await this._resolveEnact(tu, choices);
             const prefix = finalText ? `${finalText}\n\n` : "";
             const cont = await provider.call({
@@ -1321,10 +1713,39 @@ async function _playIntroAudio(actor) {
       if (!String(b.audio.src || b.audio.playlistSoundUuid || "").trim()) continue;
       log(`intro-on-open: playing '${b.id}' audio for ${actor.name}`);
       await api?.audio?.play?.(b, { trigger: "dialogue-intro" });
+      await _postIntroText(actor, b);
       return;
     }
   } catch (e) {
     warn("intro-on-open audio failed:", e?.message || e);
+  }
+}
+
+// The recording IS the NPC's opening line — and the beat's DESCRIPTION is its
+// written version. Deliver it alongside the audio: once per beat it lands in
+// the dialogue window as the NPC's first bubble AND in the persisted history,
+// so the transcript shows what was spoken and the live AI continues from a
+// line it has already delivered instead of a cold start. Re-opening the
+// window replays the recording (doctrine) but never re-posts the text — the
+// stored transcript already holds it and replays with the history.
+async function _postIntroText(actor, beat) {
+  try {
+    const plain = String(beat?.description || "")
+      .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    if (!plain) return;
+    const app = APPS.get(actor.id);
+    if (!app) return;
+    if ((app._history || []).some(m => m?.introBeatId === beat.id)) return;
+    // Wait out the fresh window's first render (async lore/story-state sweep)
+    // so the bubble list exists.
+    for (let i = 0; i < 60 && !app._els?.list; i++) await new Promise(r => setTimeout(r, 50));
+    if (!app._els?.list) return;
+    app._bubble("assistant", plain);
+    app._history.push({ role: "assistant", content: plain, speaker: actor.name, ts: Date.now(), introBeatId: beat.id });
+    await _saveHistory(actor, app._history);
+    log(`intro-on-open: posted '${beat.id}' written opening for ${actor.name}`);
+  } catch (e) {
+    warn("intro-on-open written version failed:", e?.message || e);
   }
 }
 
@@ -1462,6 +1883,15 @@ function _definePersonaEditor() {
       if (!api) { addBtn.disabled = true; addBtn.title = "bbttcc-raid courtly secrets API not detected"; }
       addBtn.addEventListener("click", () => this._addSecretRow({}));
       scroll.appendChild(addBtn);
+
+      const npcFaction = _factionOfNpc(this.actor);
+      scroll.appendChild(this._hint(`<b>Court door</b> — leave blank for none. The condition under which ${_esc(this.actor.name)} would usher Stewards INTO ${npcFaction ? `<b>${_esc(npcFaction.name)}</b>'s` : "their faction's"} court — talking their way into a Courtly Intrigue engagement against it (invited = +2 on the first exchange; talked into it = +1 with Suspicion starting at 1). The door is standing — it can open again another day.${_courtlyRaidApi() ? "" : " <b>⚠ Courtly raid API not detected (bbttcc-raid) — the door stays dormant.</b>"}${npcFaction ? "" : " <b>⚠ This NPC belongs to no faction — the door stays dormant until they do.</b>"}`));
+      const courtDoor = document.createElement("input");
+      courtDoor.type = "text";
+      courtDoor.placeholder = "e.g. they bring proof the tithe is being skimmed, and swear to raise it before the court themselves";
+      courtDoor.value = String(cur.courtDoor || "");
+      scroll.appendChild(courtDoor);
+      this._els.courtDoor = courtDoor;
 
       this._els.usedWrap = document.createElement("div");
       scroll.appendChild(this._els.usedWrap);
@@ -1671,18 +2101,17 @@ function _definePersonaEditor() {
     async _save() {
       const secretsRaw = this._collectLines().join("\n");
       // Flag updates MERGE nested objects, so a re-armed (deleted) secretsUsed
-      // key would silently survive a plain setFlag — issue explicit `-=`
-      // deletions first.
+      // key would silently survive a plain setFlag. Drop the whole subtree
+      // via unsetFlag (never raw "-=key" updates — v14 deprecated that
+      // syntax); the setFlag below re-merges only the surviving entries.
       const removed = Object.keys(this._cur.secretsUsed || {}).filter(k => !(k in this._used));
-      if (removed.length) {
-        await this.actor.update(Object.fromEntries(
-          removed.map(k => [`flags.${MODULE_ID}.persona.secretsUsed.-=${k}`, null])));
-      }
+      if (removed.length) await this.actor.unsetFlag(MODULE_ID, "persona.secretsUsed");
       await this.actor.setFlag(MODULE_ID, "persona", {
         notes: String(this._els.notes.value ?? ""),
         topics: String(this._els.topics.value ?? ""),
         secretsRaw,
-        secretsUsed: this._used
+        secretsUsed: this._used,
+        courtDoor: String(this._els.courtDoor?.value ?? "").trim()
       });
       await _afterPersonaSave(this.actor);
       ui.notifications?.info(`Persona saved for ${this.actor.name}.`);
@@ -1728,12 +2157,15 @@ async function _editPersonaLegacy(actor) {
     <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Extractable secrets</b> — one per line: <code>Label :: effectKey :: unlock condition :: the truth to reveal</code>.<br>When a conversation genuinely meets a secret's condition, ${_esc(actor.name)} divulges it and the asking Steward's faction gains it as courtly leverage (player extractions pause on a GM approval card; yours confirm inline). A divulged secret is spent — change its label to re-arm it.${secretsApi ? "" : " <b>⚠ Courtly secrets API not detected (bbttcc-raid) — this section stays dormant.</b>"}</p>
     <textarea name="secretsRaw" rows="4" style="width:100%;" placeholder="The second ledger :: rollPlus2 :: they prove they already suspect the books are cooked :: The true tallies live under the third floorboard of the counting room.">${_esc(cur.secretsRaw || "")}</textarea>
     ${keysHint ? `<details style="font-size:.75em;opacity:.7;margin:.2em 0;"><summary>Valid effect keys</summary><pre style="white-space:pre-wrap;margin:.2em 0;">${_esc(keysHint)}</pre></details>` : ""}
-    ${usedLines ? `<p style="font-size:.75em;opacity:.7;margin:.2em 0;">${usedLines}</p>` : ""}`;
+    ${usedLines ? `<p style="font-size:.75em;opacity:.7;margin:.2em 0;">${usedLines}</p>` : ""}
+    <p style="font-size:.8em;opacity:.75;margin:.6em 0 .4em;"><b>Court door</b> — leave blank for none. The condition under which ${_esc(actor.name)} would usher Stewards INTO their faction's court (a Courtly Intrigue engagement against it).</p>
+    <input type="text" name="courtDoor" style="width:100%;" placeholder="e.g. they bring proof the tithe is being skimmed, and swear to raise it before the court themselves" value="${_esc(cur.courtDoor || "")}"/>`;
 
   const readForm = (form) => ({
     topics:     String(form?.elements?.topics?.value ?? ""),
     notes:      String(form?.elements?.notes?.value ?? ""),
-    secretsRaw: String(form?.elements?.secretsRaw?.value ?? "")
+    secretsRaw: String(form?.elements?.secretsRaw?.value ?? ""),
+    courtDoor:  String(form?.elements?.courtDoor?.value ?? "")
   });
 
   const DialogV2 = foundry.applications?.api?.DialogV2;
@@ -1760,7 +2192,8 @@ async function _editPersonaLegacy(actor) {
             resolve({
               topics:     root.querySelector?.("[name=topics]")?.value ?? "",
               notes:      root.querySelector?.("[name=notes]")?.value ?? "",
-              secretsRaw: root.querySelector?.("[name=secretsRaw]")?.value ?? ""
+              secretsRaw: root.querySelector?.("[name=secretsRaw]")?.value ?? "",
+              courtDoor:  root.querySelector?.("[name=courtDoor]")?.value ?? ""
             });
           } },
           cancel: { label: "Cancel", callback: () => resolve(null) }
@@ -1775,7 +2208,8 @@ async function _editPersonaLegacy(actor) {
   const secretsRaw = String(result.secretsRaw ?? "");
   await actor.setFlag(MODULE_ID, "persona", {
     notes: String(result.notes), topics: String(result.topics),
-    secretsRaw, secretsUsed: cur.secretsUsed || {}
+    secretsRaw, secretsUsed: cur.secretsUsed || {},
+    courtDoor: String(result.courtDoor ?? "").trim()
   });
   const armed = _parseSecretLines(secretsRaw).filter(s => !(cur.secretsUsed || {})[s.key]);
   if (secretsRaw.trim()) log(`persona secrets: ${armed.length} armed for '${actor.name}' (skipped lines warn above)`);
@@ -1954,10 +2388,76 @@ function _bindSecretButtons(message, root) {
   }
 }
 
+// Court-door cards (player-initiated open_court_door) — same shape as the
+// secret cards: the ushering words are ALREADY spoken; the card only gates
+// the mechanical entry (the courtlyDoor stamp + Raid Console signpost).
+async function _handleCourtDoorCardClick(message, action, root) {
+  if (!game.user.isGM) return;
+  const p = message.getFlag(MODULE_ID, "pendingCourtDoor");
+  if (!p) return;
+
+  let outcome;
+  if (action === "decline") {
+    outcome = "✗ Kept shut — the words were warm, but the court receives no one.";
+  } else {
+    const method = action === "conceded" ? "conceded" : "invited";
+    const factionId = root?.querySelector?.("[name=bbttccCourtDoorFaction]")?.value || p.factionId;
+    const npcActor = game.actors?.get(p.npcActorId);
+    if (!npcActor) {
+      outcome = "⚠ NPC actor no longer exists — no door opened.";
+    } else {
+      try {
+        const r = await _grantCourtDoor({ npcActor, defenderId: p.defenderId, factionId, method, speakerName: p.speakerName });
+        outcome = r.ok
+          ? `✓ Opened (${method}) — ${r.attacker.name} may now enter ${r.defender.name}'s court`
+          : `⚠ door failed: ${r.error}`;
+      } catch (e) {
+        outcome = `⚠ door threw: ${e?.message || e}`;
+      }
+    }
+  }
+
+  try {
+    await message.update({
+      content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #4db87a;padding:.4em .6em;background:rgba(77,184,122,.08);">
+        <b>Court door</b> — ${_esc(p.defenderName || "the court")}<br>${_esc(outcome)}</div>`,
+      [`flags.${MODULE_ID}.pendingCourtDoor`]: null
+    });
+  } catch (e) { warn("court door card update failed:", e?.message); }
+}
+
+function _bindCourtDoorButtons(message, root) {
+  if (!root || !message?.getFlag?.(MODULE_ID, "pendingCourtDoor")) return;
+  for (const btn of root.querySelectorAll("[data-bbttcc-court-door]")) {
+    if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
+    btn.dataset.bbttccBound = "1";
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      _handleCourtDoorCardClick(message, btn.dataset.bbttccCourtDoor, root);
+    });
+  }
+}
+
+// The public "way is open" card: [To the Court] opens the Raid Console on
+// the entering faction for whoever clicks (GM or player).
+function _bindCourtConsoleButtons(_message, root) {
+  if (!root) return;
+  for (const btn of root.querySelectorAll("[data-bbttcc-court-console]")) {
+    if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
+    btn.dataset.bbttccBound = "1";
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      const open = game.bbttcc?.api?.raid?.openConsole || game.bbttcc?.api?.raid?.openRaidConsole;
+      if (typeof open !== "function") return ui.notifications?.warn?.("Raid Console not available on this world.");
+      open({ factionId: String(btn.dataset.bbttccCourtConsole || "") });
+    });
+  }
+}
+
 // v13+ fires renderChatMessageHTML (HTMLElement); older cores fire
 // renderChatMessage (jQuery). Bind both defensively.
-Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); _bindSecretButtons(message, html); } catch (_e) {} });
-Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _bindApprovalButtons(message, r); _bindSecretButtons(message, r); } catch (_e) {} });
+Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); _bindSecretButtons(message, html); _bindCourtDoorButtons(message, html); _bindCourtConsoleButtons(message, html); } catch (_e) {} });
+Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _bindApprovalButtons(message, r); _bindSecretButtons(message, r); _bindCourtDoorButtons(message, r); _bindCourtConsoleButtons(message, r); } catch (_e) {} });
 
 // ---------------------------------------------------------------------------
 // Settings + install
@@ -2052,6 +2552,16 @@ function _install() {
         await new Promise(r => setTimeout(r, 50));
         await app._send(`[Scene note — not spoken by anyone: ${String(context).trim()} You speak first; carry the scene forward in character.]`, "— scene —");
         return true;
+      },
+      // Courtly bridge probe: how many extractable secrets are ARMED on this
+      // NPC right now (parsed persona lines minus spent ones). Lets the raid
+      // module's converse-flavored maneuvers (Read the Room / Eavesdrop)
+      // find candidates without reaching into persona internals.
+      armedSecretCount: (actorOrId) => {
+        try {
+          const actor = (typeof actorOrId === "string") ? game.actors.get(actorOrId) : (actorOrId?.actor ?? actorOrId);
+          return actor ? _armedSecrets(actor).length : 0;
+        } catch (_e) { return 0; }
       },
       // Stub choices for testing dialogue-driven beats before the campaign
       // API ships: setTestChoices("<actorId>", [{choiceKey, label, description}])
