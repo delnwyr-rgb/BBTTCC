@@ -15,6 +15,79 @@
 
 const MOD = "bbttcc-auto-link";
 const CALLINGS_PACK = "bbttcc-character-options.npc-callings";
+const ANCESTRIES_PACK = "bbttcc-master-content.ancestries";
+const BRIDGE_PATH = "systems/fourththing/bbttcc-bridge.js";
+
+/* Ancestry + heritage enumeration mirrors the steward sheet's indexers
+ * (ftIndexItemPackByType / ftIndexHeritagePack in bbttcc-bridge.js — not
+ * exported, so the shapes are replicated here). The GRANTS themselves go
+ * through the bridge's exported applyActorAncestryChange /
+ * applyActorHeritageChange so builder-made NPCs match sheet-edited ones. */
+
+const _normFam = (s) => String(s ?? "").toLowerCase().replace(/-/g, "_");
+// Cross-cutting heritage families bypass the ancestry filter (they key off
+// sephirah alignment, not species) — keep in sync with bbttcc-bridge.js.
+const CROSS_CUTTING_HERITAGE_FAMILIES = new Set(["sephirotic"]);
+
+async function _ancestryIndex() {
+  const pack = game.packs.get(ANCESTRIES_PACK);
+  if (!pack) return [];
+  try {
+    const idx = await pack.getIndex({ fields: ["name", "type", "system.identifier", "flags.bbttcc.family", "flags.bbttcc.ancestryKey"] });
+    return idx
+      .filter(e => e.type === "species" || e.type === "race")
+      .map(e => {
+        const flags = e.flags?.bbttcc ?? {};
+        return {
+          id: e._id, name: e.name,
+          family: _normFam(flags.family ?? e["flags.bbttcc.family"]
+            ?? flags.ancestryKey ?? e["flags.bbttcc.ancestryKey"]
+            ?? e.system?.identifier ?? e["system.identifier"])
+        };
+      })
+      .sort((a, b) => String(a.name).localeCompare(String(b.name)));
+  } catch (err) {
+    console.warn("[bbttcc-auto-link/npc-builder] ancestry index failed", err);
+    return [];
+  }
+}
+
+async function _heritageIndex() {
+  const pack = game.packs.get(ANCESTRIES_PACK);
+  if (!pack) return [];
+  try {
+    const idx = await pack.getIndex({ fields: ["name", "type", "system.identifier", "flags.bbttcc.kind", "flags.bbttcc.family"] });
+    const candidates = idx
+      .filter(e => String(e.type || "").toLowerCase() === "feat")
+      .map(e => {
+        const identifier = String(e.system?.identifier ?? e["system.identifier"] ?? "").toLowerCase();
+        const flags = e.flags?.bbttcc ?? {};
+        const kind = String(flags.kind ?? e["flags.bbttcc.kind"] ?? "").toLowerCase();
+        // Shape 1: explicit heritage root. Shape 2: lineage tier-1 standing in
+        // as the root for species that ship no separate root item.
+        const isRoot = kind === "heritage" || identifier.endsWith("_heritage");
+        const isTier1 = kind && identifier.endsWith("_tier1") && identifier.startsWith(`${kind}_`);
+        if (!isRoot && !isTier1) return null;
+        let family = _normFam(flags.family ?? e["flags.bbttcc.family"]);
+        if (!family) {
+          if (isTier1) family = _normFam(kind);
+          else { const m = identifier.match(/^([a-z0-9]+)_/); if (m) family = m[1]; }
+        }
+        return { id: e._id, name: e.name, family, isRoot };
+      })
+      .filter(Boolean);
+    // Families with an explicit root drop their tier-1 fallbacks (those are
+    // heritage CONTENTS, not selectable heritages).
+    const familiesWithRoot = new Set(candidates.filter(c => c.isRoot).map(c => c.family));
+    return candidates
+      .filter(c => c.isRoot || !familiesWithRoot.has(c.family))
+      .map(({ id, name, family }) => ({ id, name, family }))
+      .sort((a, b) => String(a.name).localeCompare(String(b.name)));
+  } catch (err) {
+    console.warn("[bbttcc-auto-link/npc-builder] heritage index failed", err);
+    return [];
+  }
+}
 
 async function _callingOptions() {
   const pack = game.packs.get(CALLINGS_PACK);
@@ -77,6 +150,13 @@ function _factionOptions() {
 export async function openNPCBuilder() {
   const factionOpts = _factionOptions();
   const callingOpts = await _callingOptions();
+  const ancestries  = await _ancestryIndex();
+  const heritages   = await _heritageIndex();
+  const esc = (s) => foundry.utils.escapeHTML(String(s));
+
+  const ancestryOpts = ['<option value="">— None —</option>']
+    .concat(ancestries.map(a => `<option value="${a.id}" data-family="${esc(a.family)}">${esc(a.name)}</option>`))
+    .join("");
 
   const callingGroup = callingOpts ? `
       <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
@@ -115,6 +195,18 @@ export async function openNPCBuilder() {
 
       ${callingGroup}
 
+      ${ancestries.length ? `
+      <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
+        <label style="font-weight:600;">Ancestry</label>
+        <select data-bbttcc-field="ancestryId" style="padding:0.35rem 0.5rem; border-radius:3px;">${ancestryOpts}</select>
+      </div>
+
+      <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
+        <label style="font-weight:600;">Heritage</label>
+        <select data-bbttcc-field="heritageId" style="padding:0.35rem 0.5rem; border-radius:3px;"></select>
+        <span style="opacity:0.65; font-size:0.75rem;">Filtered by the chosen ancestry (Sephirotic heritages are always available).</span>
+      </div>` : ""}
+
       <div class="form-group" style="display:flex; flex-direction:column; gap:0.2rem;">
         <label style="font-weight:600;">Faction</label>
         <select data-bbttcc-field="factionId" style="padding:0.35rem 0.5rem; border-radius:3px;">${factionOpts}</select>
@@ -131,9 +223,9 @@ export async function openNPCBuilder() {
       </div>
 
       <p style="opacity:0.7; font-size:0.78rem; margin:0.4rem 0 0;">
-        After creation: open the sheet and drag Class / Ancestry / Heritage /
-        Archetype / Crew / Occult / Sephirotic items from compendiums to flesh
-        out the NPC. All abilities will function the same as on a PC sheet.
+        After creation: open the sheet and drag Archetype / Crew / Occult /
+        Sephirotic items from compendiums to flesh out the NPC further. All
+        abilities will function the same as on a PC sheet.
       </p>
     </div>
   `;
@@ -154,6 +246,8 @@ export async function openNPCBuilder() {
             name:        read("name"),
             tier:        read("tier"),
             callingId:   read("callingId"),
+            ancestryId:  read("ancestryId"),
+            heritageId:  read("heritageId"),
             factionId:   read("factionId"),
             disposition: read("disposition")
           };
@@ -161,7 +255,28 @@ export async function openNPCBuilder() {
       },
       cancel: { label: "Cancel", callback: () => ({ ok: false }) }
     },
-    default: "create"
+    default: "create",
+    // Heritage dropdown re-filters live as the ancestry changes — same
+    // family rules as the steward sheet's edit dropdowns.
+    render: (html) => {
+      const root = (html instanceof HTMLElement ? html : html[0]);
+      const ancSel = root?.querySelector('[data-bbttcc-field="ancestryId"]');
+      const herSel = root?.querySelector('[data-bbttcc-field="heritageId"]');
+      if (!ancSel || !herSel) return;
+      const rebuild = () => {
+        const fam = _normFam(ancSel.selectedOptions[0]?.dataset?.family ?? "");
+        const keep = herSel.value;
+        const opts = heritages.filter(h => !fam || !h.family
+          || _normFam(h.family) === fam
+          || CROSS_CUTTING_HERITAGE_FAMILIES.has(_normFam(h.family)));
+        herSel.innerHTML = ['<option value="">— None —</option>']
+          .concat(opts.map(h => `<option value="${h.id}">${esc(h.name)}</option>`))
+          .join("");
+        if (opts.some(h => h.id === keep)) herSel.value = keep;
+      };
+      ancSel.addEventListener("change", rebuild);
+      rebuild();
+    }
   });
 
   if (!result?.ok) return null;
@@ -220,6 +335,24 @@ export async function openNPCBuilder() {
     } catch (err) {
       console.error("[bbttcc-auto-link/npc-builder] Calling grant failed", err);
       ui.notifications?.warn?.(`NPC created, but the Calling grant failed: ${err?.message || err}`);
+    }
+  }
+
+  // Ancestry + heritage go through the system bridge — the same apply
+  // functions the steward sheet's edit dropdowns call, so the NPC gets the
+  // species item, L1 advancement grants, lineage stamps, and nativeLinks
+  // flags exactly as if edited by hand. Ancestry FIRST (its cascade clears
+  // heritage), then heritage.
+  const ancestryId = String(result.ancestryId || "").trim();
+  const heritageId = String(result.heritageId || "").trim();
+  if (ancestryId || heritageId) {
+    try {
+      const bridge = await import(foundry.utils.getRoute(BRIDGE_PATH));
+      if (ancestryId) await bridge.applyActorAncestryChange(actor, ancestryId);
+      if (heritageId) await bridge.applyActorHeritageChange(actor, heritageId);
+    } catch (err) {
+      console.error("[bbttcc-auto-link/npc-builder] ancestry/heritage grant failed", err);
+      ui.notifications?.warn?.(`NPC created, but the ancestry/heritage grant failed: ${err?.message || err} — drag them onto the sheet instead.`);
     }
   }
 
