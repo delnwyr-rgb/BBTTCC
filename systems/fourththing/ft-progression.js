@@ -1318,7 +1318,15 @@ export async function levelUp(actor) {
 export async function openSpendSkillPoints(actor) {
   const rawSys   = actor.system?.system ?? actor.system;
   const points   = rawSys?.details?.skillPoints ?? 0;
-  const skills   = rawSys?.skills ?? {};
+  // ⚠ Read SOURCE ranks (toObject), never derived — same fix as the pip
+  // handler _onFtSetSkillRank. Derived rank = source + live AEs, so a skill
+  // with an ancestry/heritage "+1 <skill>" AE showed its CURRENT one rank
+  // high, and clicking +1 wrote (derived+1) into SOURCE — folding the AE
+  // bonus into source while the AE stayed live on top (the "extra point when
+  // I spend" bug, Rank Test / Furrykin +1 Athletics, 2026-07-13). The AE keeps
+  // displaying in the AE column; source must not absorb it.
+  const srcRoot  = actor.toObject().system;
+  const skills   = srcRoot?.system?.skills ?? srcRoot?.skills ?? {};
 
   if (points <= 0) {
     return ui.notifications.warn(`${actor.name}: No aptitude points available.`);
@@ -1561,8 +1569,11 @@ export function extractSkillGrantsFromFeature(featureDesc) {
 
 // Apply skill grants from an actor's features — sets rank 1 if currently 0
 export async function applySkillGrantsFromFeatures(actor) {
-  const rawSys  = actor.system?.system ?? actor.system;
-  const skills  = rawSys?.skills ?? {};
+  // Read SOURCE ranks (toObject), never derived: derived includes live AEs,
+  // so a skill with source 0 + a +1 AE read as 1 and silently skipped its
+  // grant (and every writer below must compare against what update() writes).
+  const _srcRoot = actor.toObject().system;
+  const skills  = _srcRoot?.system?.skills ?? _srcRoot?.skills ?? {};
   const updates = {};
   const granted = [];
 
@@ -1617,15 +1628,30 @@ export async function applySkillGrantsFromFeatures(actor) {
 // the embedded item copy so it can't double-apply. Idempotent — safe to
 // re-run; converted AEs stay disabled and are skipped on subsequent passes.
 export async function promoteStampedAptitudeAEs(actor) {
-  const rawSys  = actor.system?.system ?? actor.system;
-  const skills  = rawSys?.skills ?? {};
+  // ⚠ ROOT-CAUSE FIX 2026-07-13 (the recurring "1 dot + ancestry bonus → rank
+  // maxes at 5" bug). Two invariants this function must hold:
+  //   1. Read SOURCE ranks (toObject), never derived — derived includes every
+  //      live AE (the stamp being promoted AND unrelated passives), so each
+  //      pass compounded: 1 dot + stamp + passive read as 3, wrote 4, …
+  //   2. Promote each grant EXACTLY ONCE PER ACTOR, tracked in an actor-flag
+  //      ledger keyed by (item name | skill). The old guard was "disable the
+  //      AE" — but heritage/ancestry/class swaps DELETE and RE-IMPORT their
+  //      granting items with fresh ENABLED stamps, so every swap re-promoted
+  //      onto the already-promoted source. The ledger survives item churn.
+  //      (Re-promoting after a swap to a DIFFERENT grant with its own name is
+  //      allowed — consistent with the bridge's no-revoke-on-swap policy.)
+  const _srcRoot = actor.toObject().system;
+  const skills  = _srcRoot?.system?.skills ?? _srcRoot?.skills ?? {};
+  const ledger  = foundry.utils.deepClone(actor.getFlag("fourththing", "aptitudePromotions") ?? {});
+  let ledgerDirty = false;
   const updates = {};
   const promoted = [];
   const aeDisableOps = []; // [{ item, effectId }]
+  const _ledgerKey = (itemName, skillKey) =>
+    `${String(itemName ?? "").toLowerCase().replace(/\s+/g, " ").trim()}|${skillKey}`;
 
   for (const item of Array.from(actor.items ?? [])) {
     for (const effect of Array.from(item.effects ?? [])) {
-      if (effect.disabled) continue;
       if (!effect.flags?.fourththing?.aptitudeStamp) continue;
       let touched = false;
       for (const change of effect.changes ?? []) {
@@ -1637,23 +1663,34 @@ export async function promoteStampedAptitudeAEs(actor) {
         if (skills[skillKey] === undefined) continue;
         const delta = Number(change.value) || 0;
         if (!delta) continue;
+        touched = true;                       // this is a promotable stamp change —
+        const lk = _ledgerKey(item.name, skillKey);
+        if (ledger[lk]) continue;             // already promoted once; just ensure the AE ends disabled
         const currentSource = Number(updates[`system.skills.${skillKey}.value`] ?? skills[skillKey]?.value ?? 0);
         const newSource = Math.max(0, Math.min(5, currentSource + delta));
         if (newSource !== currentSource) {
           updates[`system.skills.${skillKey}.value`] = newSource;
           promoted.push({ skill: skillKey, from: currentSource, to: newSource, source: item.name });
         }
-        touched = true;
+        ledger[lk] = { delta, item: item.name, at: Date.now() };
+        ledgerDirty = true;
       }
-      if (touched) aeDisableOps.push({ item, effectId: effect.id });
+      // Disable EVERY promotable stamp that is still enabled — including ones
+      // skipped via the ledger (a re-imported stamp must not stay live on top
+      // of its promoted rank).
+      if (touched && !effect.disabled) aeDisableOps.push({ item, effectId: effect.id });
     }
   }
 
-  if (Object.keys(updates).length > 0) await actor.update(updates);
+  if (Object.keys(updates).length > 0 || ledgerDirty) {
+    await actor.update({ ...updates, "flags.fourththing.aptitudePromotions": ledger });
+  }
   for (const op of aeDisableOps) {
     try {
       await op.item.updateEmbeddedDocuments("ActiveEffect", [{ _id: op.effectId, disabled: true }]);
-    } catch (e) { /* swallow — best-effort cleanup */ }
+    } catch (e) {
+      console.warn(`[fourththing] promoteStampedAptitudeAEs: failed to disable stamp AE on "${op.item?.name}" — the ledger will prevent re-promotion, but the AE may display doubled until disabled by hand`, e);
+    }
   }
   // 2026-05-20 — Defensive clamp. The per-skill min(5, …) inside the loop
   // protects against a single delta over 5, but doesn't catch source ranks
@@ -1671,8 +1708,11 @@ export async function promoteStampedAptitudeAEs(actor) {
 // Standalone repair macro at bbttcc-master-content/tools.
 export async function clampSkillRanksToCap(actor, cap = 5) {
   if (!actor) return [];
-  const rawSys  = actor.system?.system ?? actor.system;
-  const skills  = rawSys?.skills ?? {};
+  // Read SOURCE ranks (toObject), never derived — clamping the derived value
+  // (source + live AEs) into source RAISED source whenever AEs pushed the
+  // display over cap (e.g. source 4 + two +1 AEs = 6 → wrote source 5).
+  const _srcRoot = actor.toObject().system;
+  const skills  = _srcRoot?.system?.skills ?? _srcRoot?.skills ?? {};
   const updates = {};
   const clamped = [];
   for (const [key, skill] of Object.entries(skills)) {
