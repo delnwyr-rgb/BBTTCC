@@ -25,7 +25,7 @@
  * changes nothing. Flip to false and re-run to apply. Run as GM.
  */
 (async () => {
-  const DRY_RUN = false;
+  const DRY_RUN = true;                 // <-- set false to apply
 
   const FOLDER_NAME   = "Bad Eden NPCs";     // under "Game Content"
   const PARENT_HINT   = "Game Content";
