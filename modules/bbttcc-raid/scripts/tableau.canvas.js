@@ -65,6 +65,33 @@
   const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
   const lerp  = (a, b, t)   => a + (b - a) * t;
 
+  // Foundry's texture-fit base scale for a token mesh: the mesh.scale that
+  // renders the art at the token's FOOTPRINT (what Foundry's own refresh
+  // computes from texture.fit). Token art spans wildly different source
+  // resolutions — a 2000px portrait idles near 0.05, a 100px sprite near 1.0 —
+  // so any depth scale must multiply onto this base, never replace it.
+  // texture.scaleX sign is preserved so directional-art mirroring survives.
+  function fitScale(token) {
+    const texW = Number(token?.mesh?.texture?.width)  || 0;
+    const texH = Number(token?.mesh?.texture?.height) || 0;
+    const w = Number(token?.w) || 0;
+    const h = Number(token?.h) || 0;
+    if (!(texW > 0 && texH > 0 && w > 0 && h > 0)) return null;
+    const fit = String(token.document?.texture?.fit || "contain");
+    let bx, by;
+    switch (fit) {
+      case "fill":   bx = w / texW; by = h / texH; break;
+      case "cover":  bx = by = Math.max(w / texW, h / texH); break;
+      case "width":  bx = by = w / texW; break;
+      case "height": bx = by = h / texH; break;
+      default:       bx = by = Math.min(w / texW, h / texH); break; // contain
+    }
+    return {
+      x: bx * Number(token.document?.texture?.scaleX ?? 1),
+      y: by * Number(token.document?.texture?.scaleY ?? 1)
+    };
+  }
+
   function getTableau(scene) {
     if (!scene) return null;
     const raw = scene.flags?.[MOD]?.tableau;
@@ -128,7 +155,16 @@
       const tCurved = Math.pow(tRaw, curveExp);
       const s = lerp(cfg.minScale, cfg.maxScale, tCurved);
 
-      token.mesh.scale.set(s, s);
+      // `s` is a factor RELATIVE to the token's normal on-canvas size;
+      // mesh.scale is ABSOLUTE (texture px → world px). Writing `s` directly
+      // discards the fit math and renders art at nativeSize × s — high-res
+      // tokens blow up to poster size no matter what footprint the GM sets.
+      // Scale the fit base instead, so depth honours token size + token image
+      // scale like every other render path. (No texture yet → skip; the
+      // drawToken re-apply lands once the mesh has real dimensions.)
+      const base = fitScale(token);
+      if (!base) return;
+      token.mesh.scale.set(base.x * s, base.y * s);
 
       // Scale border + bars to match the visual, anchored to the mesh's
       // visual center (which sits at the token's footprint center because
