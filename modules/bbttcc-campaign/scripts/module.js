@@ -4019,6 +4019,88 @@ async function _beatRequiresMet(beat, campaign, ctx) {
   }
 }
 
+// Per-condition gate report for GM consoles (2026-07-14, situation-console
+// arc). Same three condition forms and the same met-semantics as
+// _beatRequiresMet, but returns WHICH conditions hold instead of one bool:
+//   { gated, met, conditions: [{ text, met, kind, current }] }
+// Never throws; on evaluation error mirrors the evaluator's fail-open with
+// { met:true, error:true }.
+async function _beatGateReport(beat, campaign, ctx = {}) {
+  const out = { gated: false, met: true, conditions: [], error: false };
+  try {
+    const req = beat?.inject?.requires;
+    if (!req) return out;
+    const conds = Array.isArray(req) ? req : [req];
+    if (!conds.length) return out;
+    out.gated = true;
+
+    let questNames = {};
+    try { questNames = getAllQuests() || {}; } catch (_e) {}
+    const qName = (qid) => questNames[String(qid)]?.name || String(qid);
+
+    for (const c of conds) {
+      if (!c || typeof c !== "object") continue;
+
+      if (c.questBucket != null) {
+        const negated = c.is == null && c.isNot != null;
+        const bucket = String((negated ? c.isNot : c.is) || "").trim();
+        const text = `quest “${qName(c.questBucket)}” ${negated ? "not " : ""}${bucket || "?"}`;
+        if (!QUEST_GATE_BUCKETS.includes(bucket)) {
+          out.conditions.push({ text: text + " (unknown bucket)", met: false, kind: "questBucket" });
+          out.met = false;
+          continue;
+        }
+        const track = await _coalitionQuestTrack(campaign, ctx);
+        const inBucket = !!track?.[bucket]?.[String(c.questBucket)];
+        const ok = track ? (negated ? !inBucket : inBucket) : false;
+        out.conditions.push({ text, met: ok, kind: "questBucket" });
+        if (!ok) out.met = false;
+        continue;
+      }
+
+      if (c.beatMark != null) {
+        const questId = String(c.quest || "").trim();
+        const want = String(c.state || "seen").trim();
+        const text = `beat “${String(c.beatMark)}” ${want}${questId ? ` (${qName(questId)})` : ""}`;
+        if (!questId || (want !== "seen" && want !== "completed")) {
+          out.conditions.push({ text: text + " (malformed)", met: false, kind: "beatMark" });
+          out.met = false;
+          continue;
+        }
+        const track = await _coalitionQuestTrack(campaign, ctx);
+        let entry = null;
+        for (const bk of QUEST_GATE_BUCKETS) { entry = track?.[bk]?.[questId]; if (entry) break; }
+        const got = String(entry?.progress?.beats?.[String(c.beatMark)]?.state || "");
+        const ok = (want === "seen") ? (got === "seen" || got === "completed") : (got === "completed");
+        out.conditions.push({ text, met: ok, kind: "beatMark", current: got || "(unseen)" });
+        if (!ok) out.met = false;
+        continue;
+      }
+
+      const val = _resolveGateValue(c.flag);
+      const op = c.gte != null ? `≥ ${c.gte}` : c.lte != null ? `≤ ${c.lte}` : c.eq != null ? `= ${c.eq}` : "?";
+      const text = `${String(c.flag)} ${op}`;
+      if (val === null) {
+        out.conditions.push({ text: text + " (unknown meter)", met: false, kind: "flag" });
+        out.met = false;
+        continue;
+      }
+      let ok = true;
+      if (c.gte != null && !(val >= Number(c.gte))) ok = false;
+      if (c.lte != null && !(val <= Number(c.lte))) ok = false;
+      if (c.eq  != null && !(val === c.eq)) ok = false;
+      out.conditions.push({ text, met: ok, kind: "flag", current: val });
+      if (!ok) out.met = false;
+    }
+    return out;
+  } catch (e) {
+    warn("[gateReport] eval failed (fail-open, matching _beatRequiresMet):", e);
+    out.met = true;
+    out.error = true;
+    return out;
+  }
+}
+
 async function injectorFire(ctx = {}) {
   const {
     campaignId = null,
@@ -6154,6 +6236,19 @@ function buildCampaignAPI() {
     runCampaign,
     runBeat,
     injector: { fire: injectorFire },
+    // Gate introspection for GM consoles: report(beat, campaign?, ctx?) gives
+    // per-condition met/unmet; requiresMet is the boolean the engine itself uses.
+    gates: {
+      report: async (beat, campaign, ctx = {}) => {
+        const c = campaign || getCampaign(getActiveCampaignId());
+        return _beatGateReport(beat, c, ctx);
+      },
+      requiresMet: async (beat, campaign, ctx = {}) => {
+        const c = campaign || getCampaign(getActiveCampaignId());
+        return _beatRequiresMet(beat, c, ctx);
+      },
+      value: _resolveGateValue
+    },
     director: {
       tick: directorTick,
       chains: directorChains,

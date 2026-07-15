@@ -1387,3 +1387,62 @@
   border-radius: 999px;
   padding: 3px 12px;
 }
+
+/* ── Now Panel (situation console Stage 2) ───────────────────────────────── */
+.bbttcc-campaign-builder-root .bbttcc-flow-row { display: flex; gap: 10px; align-items: stretch; min-height: 0; }
+.bbttcc-campaign-builder-root .bbttcc-flow-svgwrap { flex: 1 1 auto; min-width: 0; }
+.bbttcc-campaign-builder-root .bbttcc-now-panel {
+  flex: 0 0 300px; max-width: 300px; overflow-y: auto; max-height: 76vh;
+  display: flex; flex-direction: column; gap: 8px; padding: 8px;
+  border: 1px solid var(--cb-border, rgba(148,163,184,0.25));
+  border-radius: 12px; background: var(--cb-bg-soft, rgba(10,15,28,0.5));
+  font-size: 12px;
+}
+.bbttcc-campaign-builder-root .bbttcc-now-head {
+  font-weight: 800; letter-spacing: .12em; font-size: 12px;
+  color: var(--cb-data, #93c5fd); display: flex; justify-content: space-between; align-items: baseline;
+  padding: 4px 6px 6px; border-bottom: 1px solid var(--cb-border, rgba(148,163,184,0.2));
+}
+.bbttcc-campaign-builder-root .bbttcc-now-head span { color: var(--cb-text-muted, #94a3b8); font-weight: 600; letter-spacing: 0; }
+.bbttcc-campaign-builder-root .bbttcc-now-sec { border: 1px solid rgba(148,163,184,0.14); border-radius: 8px; background: rgba(2,6,23,0.25); }
+.bbttcc-campaign-builder-root .bbttcc-now-sec summary { cursor: pointer; padding: 6px 8px; font-weight: 700; letter-spacing: .04em; }
+.bbttcc-campaign-builder-root .bbttcc-now-sec .bd { padding: 2px 6px 8px; display: flex; flex-direction: column; gap: 4px; }
+.bbttcc-campaign-builder-root .bbttcc-now-item {
+  display: flex; justify-content: space-between; gap: 6px; align-items: baseline;
+  width: 100%; text-align: left; padding: 4px 7px; border-radius: 6px;
+  border: 1px solid transparent; background: transparent; color: var(--cb-text-main, #e2e8f0);
+  font-size: 12px; line-height: 1.35; cursor: pointer;
+}
+.bbttcc-campaign-builder-root .bbttcc-now-item:hover { background: rgba(148,163,184,0.10); border-color: rgba(148,163,184,0.25); }
+.bbttcc-campaign-builder-root .bbttcc-now-item .t { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bbttcc-campaign-builder-root .bbttcc-now-item .x { flex: 0 0 auto; color: var(--cb-text-muted, #94a3b8); font-size: 11px; }
+.bbttcc-campaign-builder-root .bbttcc-now-item .x em { font-style: normal; opacity: .8; }
+.bbttcc-campaign-builder-root .bbttcc-now-empty { color: var(--cb-text-muted, #94a3b8); font-size: 11.5px; padding: 2px 7px; font-style: italic; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .hd { display: flex; justify-content: space-between; padding: 2px 7px 0; font-weight: 700; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .ct { color: var(--cb-text-muted, #94a3b8); font-variant-numeric: tabular-nums; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .bar,
+.bbttcc-campaign-builder-root .bbttcc-now-meter .bar {
+  display: block; height: 6px; border-radius: 3px; background: rgba(148,163,184,0.15); overflow: hidden; margin: 3px 7px;
+}
+.bbttcc-campaign-builder-root .bbttcc-now-chain .bar i,
+.bbttcc-campaign-builder-root .bbttcc-now-meter .bar i { display: block; height: 100%; background: var(--cb-data, #38bdf8); border-radius: 3px; }
+.bbttcc-campaign-builder-root .bbttcc-now-chain .done { color: rgba(74,222,128,0.9); font-size: 11px; padding: 0 7px 4px; }
+.bbttcc-campaign-builder-root .bbttcc-now-meter { display: grid; grid-template-columns: 1fr 72px 52px; gap: 6px; align-items: center; padding: 0 7px; }
+.bbttcc-campaign-builder-root .bbttcc-now-meter .lb { color: var(--cb-text-main, #e2e8f0); }
+.bbttcc-campaign-builder-root .bbttcc-now-meter .bar { margin: 0; }
+.bbttcc-campaign-builder-root .bbttcc-now-meter .vl { text-align: right; font-variant-numeric: tabular-nums; color: var(--cb-text-muted, #94a3b8); }
+.bbttcc-campaign-builder-root .bbttcc-now-rel { padding: 3px 7px; border-radius: 6px; display: flex; gap: 5px; align-items: baseline; }
+.bbttcc-campaign-builder-root .bbttcc-now-rel .tr { margin-left: auto; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.bbttcc-campaign-builder-root .bbttcc-now-rel.bad .tr { color: #f87171; }
+.bbttcc-campaign-builder-root .bbttcc-now-rel.warn .tr { color: #fbbf24; }
+.bbttcc-campaign-builder-root .bbttcc-now-rel.good .tr { color: #4ade80; }
+
+/* ── Command Deck (situation console Stage 3) ────────────────────────────── */
+.bbttcc-campaign-builder-root .bbttcc-now-row { display: flex; gap: 4px; align-items: center; }
+.bbttcc-campaign-builder-root .bbttcc-now-row .bbttcc-now-item { flex: 1 1 auto; min-width: 0; }
+.bbttcc-campaign-builder-root .bbttcc-now-run {
+  flex: 0 0 auto; width: 24px; height: 22px; padding: 0; line-height: 1;
+  border-radius: 6px; font-size: 10px; cursor: pointer;
+  border: 1px solid rgba(74,222,128,0.45); background: rgba(34,197,94,0.12); color: #4ade80;
+}
+.bbttcc-campaign-builder-root .bbttcc-now-run:hover { background: rgba(34,197,94,0.28); border-color: rgba(74,222,128,0.8); }

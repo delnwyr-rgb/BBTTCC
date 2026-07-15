@@ -1002,6 +1002,7 @@ function _buildFlowGraph(campaign, opts) {
           isTravel: isTravel(lbb),
           isCinematic: isCinematic(lbb),
           gates: gateStrings(lbb),
+          rt: (opts.runtime && opts.runtime.byId && opts.runtime.byId[lId]) || null,
           laneId: lid,
           _order: rows[lni].order
         });
@@ -1142,6 +1143,7 @@ function _buildFlowGraph(campaign, opts) {
       turnNumber: tn2,
       isTravel: false,
       isCinematic: isCinematic(b2),
+      rt: (opts.runtime && opts.runtime.byId && opts.runtime.byId[id2]) || null,
       _order: i
     });
   }
@@ -1717,7 +1719,320 @@ const activeCampaignId = _getActiveCampaignId();
   // -----------------------------------------------------------------------
   // Flow Visualizer (Org Chart) — replaces the legacy Flow tab list
   // -----------------------------------------------------------------------
-  _mountFlowVisualizer(rootEl) {
+  // -----------------------------------------------------------------------
+  // Truth Layer (situation-console Stage 1, 2026-07-14): per-beat runtime
+  // state for the visualizer — fired? ready? blocked on which condition?
+  // autofire class? audio? Reads the same ledgers the engine fires from.
+  // -----------------------------------------------------------------------
+  async _computeFlowRuntime(campaign) {
+    const NS = "bbttcc-campaign";
+    const api = game.bbttcc?.api?.campaign;
+    const beats = Array.isArray(campaign?.beats) ? campaign.beats : [];
+
+    let dstate = {};
+    try { dstate = api?.director?.state?.() || {}; } catch (_e) {}
+    let inject = {};
+    try {
+      inject = game.settings.get(NS, "injectState") || {};
+      if (typeof inject === "string") inject = JSON.parse(inject);
+    } catch (_e) { inject = {}; }
+    let turn = 0;
+    try { turn = Number(game.bbttcc?.api?.world?.getState?.()?.turn) || 0; } catch (_e) {}
+    let ledger = null;
+    try { ledger = api?.ledger?.get?.() || null; } catch (_e) {}
+
+    // Beats that fire on hex entry: drawing flags + campaign overrides.
+    const hexEntry = new Set();
+    try {
+      for (const scene of game.scenes) {
+        for (const dr of scene.drawings.contents) {
+          const be = dr.flags?.["bbttcc-territory"]?.campaign?.onEnterBeatId;
+          if (be) hexEntry.add(String(be));
+        }
+      }
+      const ov = Object.assign({}, campaign?.hexOverrides || {}, campaign?.overrides?.hex || {});
+      for (const v of Object.values(ov)) {
+        const b = v?.onEnterBeatId || v?.beatId;
+        if (b) hexEntry.add(String(b));
+      }
+    } catch (_e) {}
+
+    const cid = String(campaign?.id || "");
+    const fired = dstate.firedStoryBeats || {};
+    const dlgFired = dstate.dialogueFired || {};
+    const invited = dstate.invited || {};
+
+    const byId = {};
+    for (const b of beats) {
+      if (!b?.id) continue;
+      const id = String(b.id);
+      const f = fired[id] || dlgFired[id] || null;
+      const rec = {
+        fired: !!f,
+        firedTurn: (f && typeof f === "object" && Number.isFinite(Number(f.turn))) ? Number(f.turn) : null,
+        invited: !!invited[id],
+        repeatable: !!b.inject?.repeatable,
+        auto: [],
+        hasAudio: !!(b.audio?.enabled && (b.audio.src || b.audio.playlistSoundUuid)),
+        gated: false, ready: false, blocked: false, reasons: [], cooldownUntil: null
+      };
+      if (b.storyChain || b.inject?.storyChain) rec.auto.push("director");
+      if (String(b.tags || "").toLowerCase().includes("inject.")) rec.auto.push("inject");
+      if (hexEntry.has(id)) rec.auto.push("hex");
+      if (String(b.speakerActorId || "").trim()
+        && Array.isArray(b.choices) && b.choices.some(c => String(c?.label || "").trim())
+        && b.dialogueOffer !== false) rec.auto.push("dialogue");
+
+      try {
+        const rep = await api?.gates?.report?.(b, campaign, {});
+        if (rep?.gated) {
+          rec.gated = true;
+          rec.reasons = rep.conditions || [];
+          if (rep.met) rec.ready = true; else rec.blocked = true;
+        }
+      } catch (_e) {}
+
+      try {
+        const cd = Number(b.inject?.cooldownTurns || 0);
+        if (cd > 0) {
+          const last = inject[`${cid}:${id}:cooldown`];
+          const lastTurn = (typeof last === "number") ? last : Number(last?.turn);
+          if (Number.isFinite(lastTurn) && (turn - lastTurn) < cd) {
+            rec.cooldownUntil = lastTurn + cd;
+            rec.ready = false;
+          }
+        }
+      } catch (_e) {}
+
+      rec.state = (rec.fired && !rec.repeatable) ? "fired"
+        : rec.blocked ? "blocked"
+        : (rec.cooldownUntil != null) ? "cooling"
+        : (rec.gated || rec.auto.length) ? "ready"
+        : "idle";
+      byId[id] = rec;
+    }
+    return { byId, turn, ledger };
+  }
+
+  // -----------------------------------------------------------------------
+  // Command Deck (situation-console Stage 3, 2026-07-14): execute from the
+  // console — run a beat with the soft-lock confirm, launch the Reset
+  // Console / Campaign Census tools.
+  // -----------------------------------------------------------------------
+  async _runBeatFromConsole(beatId) {
+    try {
+      const api = this._requireApi();
+      if (!api?.runBeat) return ui.notifications?.warn?.("Campaign API missing runBeat.");
+      const campaignId = this.campaignId;
+      const id = String(beatId || "").trim();
+      if (!campaignId || !id) return;
+
+      let firedAlready = false;
+      try {
+        const ds = game.bbttcc?.api?.campaign?.director?.state?.() || {};
+        firedAlready = !!(ds.firedStoryBeats?.[id] || ds.dialogueFired?.[id]);
+      } catch (_e) {}
+      if (firedAlready) {
+        const content = `<p><code>${id}</code> is marked as already fired. Run it again?</p>`;
+        let ok = false;
+        try {
+          ok = foundry.applications?.api?.DialogV2?.confirm
+            ? await foundry.applications.api.DialogV2.confirm({ window: { title: "Beat already fired" }, content })
+            : await Dialog.confirm({ title: "Beat already fired", content });
+        } catch (_e) { ok = false; }
+        if (!ok) return;
+      }
+
+      await api.runBeat(campaignId, id);
+      ui.notifications?.info?.(`▶ Beat fired: ${id}`);
+      this.render(false); // refresh the truth layer + Now Panel
+    } catch (e) {
+      console.warn(TAG, "console run-beat failed", e);
+      ui.notifications?.error?.("Run failed — see console (F12).");
+    }
+  }
+
+  async _execToolMacro(fileBase, label) {
+    try {
+      if (!game.user?.isGM) return;
+      // Prefer a world Macro document if the owner has one; fall back to
+      // executing the module tool file directly.
+      const pat = new RegExp(String(label).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+      const mac = game.macros?.find?.(m => pat.test(String(m?.name || "")));
+      if (mac) { await mac.execute(); return; }
+      const resp = await fetch(`modules/bbttcc-campaign/tools/${fileBase}`);
+      if (!resp.ok) throw new Error(`fetch ${fileBase}: HTTP ${resp.status}`);
+      const src = await resp.text();
+      new Function(src)();
+    } catch (e) {
+      console.warn(TAG, `${label} launch failed`, e);
+      ui.notifications?.error?.(`${label} failed to launch — see console (F12).`);
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  // Now Panel (situation-console Stage 2, 2026-07-14): the right rail —
+  // where the world stands, what pressure it's under, what can happen next.
+  // -----------------------------------------------------------------------
+  async _buildNowPanel(campaign, runtime) {
+    if (!runtime || !campaign) return null;
+    const NS = "bbttcc-campaign";
+    const api = game.bbttcc?.api?.campaign;
+    const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+    const beats = Array.isArray(campaign.beats) ? campaign.beats : [];
+    const beatById = {};
+    for (const b of beats) if (b?.id) beatById[String(b.id)] = b;
+
+    let questNames = {};
+    try {
+      for (const q of (api?.quests?.listQuests?.({ status: "all" }) || [])) questNames[q.id] = q.name || q.id;
+    } catch (_e) {}
+    const questOf = b => b?.questId ? (questNames[String(b.questId)] || String(b.questId)) : "";
+
+    const flyBtn = (id, label, extra = "", runnable = false) =>
+      `<div class="bbttcc-now-row">` +
+      `<button type="button" class="bbttcc-now-item" data-fly="${esc(id)}"><span class="t">${esc(label)}</span>${extra ? `<span class="x">${extra}</span>` : ""}</button>` +
+      (runnable ? `<button type="button" class="bbttcc-now-run" data-run="${esc(id)}" data-tooltip="Run this beat now">▶</button>` : "") +
+      `</div>`;
+
+    // ── chains ────────────────────────────────────────────────────────────
+    let chainsHtml = "";
+    try {
+      const chains = await api?.director?.chains?.() || {};
+      const rows = [];
+      for (const [name, list] of Object.entries(chains)) {
+        if (!Array.isArray(list) || !list.length) continue;
+        const fired = list.filter(x => x.fired).length;
+        const next = list.find(x => !x.fired);
+        const pct = Math.round((fired / list.length) * 100);
+        rows.push(
+          `<div class="bbttcc-now-chain">
+            <div class="hd"><span class="nm">${esc(name)}</span><span class="ct">${fired}/${list.length}</span></div>
+            <div class="bar"><i style="width:${pct}%"></i></div>
+            ${next ? flyBtn(next.beatId, "→ " + (next.label || next.beatId), next.eligible ? "⚡" : "⛩", !!next.eligible) : `<div class="done">chain complete</div>`}
+          </div>`);
+      }
+      if (rows.length) chainsHtml = rows.join("");
+    } catch (_e) {}
+
+    // ── pressures / meters ────────────────────────────────────────────────
+    const getSetting = (k, d = 0) => { try { const v = game.settings.get(NS, k); return v == null ? d : v; } catch (_e) { return d; } };
+    let pressure = 0;
+    try { pressure = Number(api?.director?.state?.()?.pressure) || 0; } catch (_e) {}
+    const pThresh = Number(getSetting("director.pressureThreshold", 60)) || 60;
+    const wendigo = Number(getSetting("wendigoRung", 0)) || 0;
+    const meterRow = (label, val, max = null) => {
+      const pct = max ? Math.min(100, Math.round((Number(val) / max) * 100)) : null;
+      return `<div class="bbttcc-now-meter"><span class="lb">${esc(label)}</span>` +
+        (pct != null ? `<span class="bar"><i style="width:${pct}%"></i></span>` : "") +
+        `<span class="vl">${esc(String(val))}${max ? " / " + max : ""}</span></div>`;
+    };
+    let metersHtml =
+      meterRow("Director pressure", pressure, pThresh) +
+      meterRow("Wendigo rung", wendigo, 4) +
+      meterRow("Bandit mercy", getSetting("banditMercy")) +
+      meterRow("Bandit fear", getSetting("banditFear")) +
+      meterRow("Cadence respect", getSetting("cadenceRespect")) +
+      meterRow("Cadence tribute", getSetting("cadenceTribute")) +
+      meterRow("Cadence uncontested", getSetting("cadenceUncontested"));
+
+    // ── faction relations (non-neutral pairs, most extreme first) ────────
+    let relHtml = "";
+    try {
+      const rel = game.bbttcc?.api?.factions?.relations;
+      if (rel?.list) {
+        const factions = game.actors.filter(a => {
+          try { return !!a.getFlag("bbttcc-factions", "isFaction") || a.system?.details?.type?.value === "faction"; }
+          catch (_e) { return false; }
+        });
+        let pairs = [];
+        for (const f of factions) {
+          for (const r of (rel.list(f.id) || [])) {
+            if (!r || String(r.tier) === "neutral") continue;
+            pairs.push({ from: f.name, to: r.name, tier: String(r.tier), idx: Number(r.tierIdx ?? 3) });
+          }
+        }
+        pairs.sort((a, b) => Math.abs(b.idx - 3) - Math.abs(a.idx - 3));
+        pairs = pairs.slice(0, 10);
+        const tierCls = t => (t === "at_war" || t === "hostile") ? "bad" : (t === "unfriendly") ? "warn" : "good";
+        relHtml = pairs.map(p =>
+          `<div class="bbttcc-now-rel ${tierCls(p.tier)}"><span class="a">${esc(p.from)}</span> ▸ <span class="b">${esc(p.to)}</span><span class="tr">${esc(p.tier.replace("_", " "))}</span></div>`
+        ).join("") || `<div class="bbttcc-now-empty">all quiet — every relation neutral</div>`;
+      }
+    } catch (_e) {}
+
+    // ── available now / coming up / recent ───────────────────────────────
+    const AUTO_ICO = { director: "⚙", inject: "🎲", hex: "⬢", dialogue: "🗣" };
+    const readyBeats = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready")
+      .sort((a, b) => {
+        const ra = runtime.byId[String(a.id)], rb = runtime.byId[String(b.id)];
+        const da = ra.auto.includes("director") ? 0 : 1, db = rb.auto.includes("director") ? 0 : 1;
+        if (da !== db) return da - db;
+        return String(a.label || a.id).localeCompare(String(b.label || b.id));
+      });
+    const readyHtml = readyBeats.slice(0, 25).map(b => {
+      const rt = runtime.byId[String(b.id)];
+      const ico = rt.auto.map(a => AUTO_ICO[a] || "").join("");
+      const q = questOf(b);
+      return flyBtn(b.id, (b.label || b.id), `${ico}${rt.hasAudio ? "🔊" : ""}${q ? ` <em>${esc(q)}</em>` : ""}`, true);
+    }).join("") + (readyBeats.length > 25 ? `<div class="bbttcc-now-empty">+ ${readyBeats.length - 25} more…</div>` : "");
+
+    const comingRows = [];
+    for (const b of beats) {
+      const rt = runtime.byId[String(b.id)];
+      if (!rt) continue;
+      if (rt.state === "blocked") {
+        const unmet = (rt.reasons || []).filter(r => !r.met);
+        if (unmet.length === 1) comingRows.push({ b, why: unmet[0].text + (unmet[0].current !== undefined ? ` (now ${unmet[0].current})` : "") });
+      } else if (rt.state === "cooling") {
+        comingRows.push({ b, why: `cooling until T${rt.cooldownUntil}` });
+      }
+    }
+    const comingHtml = comingRows.slice(0, 15).map(r =>
+      flyBtn(r.b.id, (r.b.label || r.b.id), `<em>${esc(r.why)}</em>`)
+    ).join("") + (comingRows.length > 15 ? `<div class="bbttcc-now-empty">+ ${comingRows.length - 15} more…</div>` : "");
+
+    let recentHtml = "";
+    try {
+      const ds = api?.director?.state?.() || {};
+      const hist = [];
+      for (const src of [ds.firedStoryBeats || {}, ds.dialogueFired || {}]) {
+        for (const [id, m] of Object.entries(src)) hist.push({ id, turn: m?.turn, ts: Number(m?.ts) || 0 });
+      }
+      hist.sort((a, b) => b.ts - a.ts);
+      recentHtml = hist.slice(0, 10).map(h =>
+        flyBtn(h.id, (beatById[h.id]?.label || h.id), h.turn != null ? `T${h.turn}` : "")
+      ).join("") || `<div class="bbttcc-now-empty">nothing fired yet — the world is young</div>`;
+    } catch (_e) {}
+
+    // ── assemble ──────────────────────────────────────────────────────────
+    const rail = document.createElement("div");
+    rail.className = "bbttcc-now-panel";
+    const sec = (title, body, open = true) =>
+      `<details class="bbttcc-now-sec" ${open ? "open" : ""}><summary>${title}</summary><div class="bd">${body}</div></details>`;
+    rail.innerHTML =
+      `<div class="bbttcc-now-head">NOW · TURN ${esc(String(runtime.turn))}` +
+      (runtime.ledger ? `<span>${esc(String(runtime.ledger.spent))}/${esc(String(runtime.ledger.budget))} days${Number(runtime.ledger.debt) ? ` · debt ${esc(String(runtime.ledger.debt))}` : ""}</span>` : "") +
+      `</div>` +
+      (chainsHtml ? sec("⚙ Story chains", chainsHtml) : "") +
+      sec("🌡 Pressures", metersHtml) +
+      (relHtml ? sec("🤝 Faction relations", relHtml) : "") +
+      sec(`⚡ Available now (${readyBeats.length})`, readyHtml || `<div class="bbttcc-now-empty">nothing eligible right now</div>`) +
+      sec(`⏳ Coming up (${comingRows.length})`, comingHtml || `<div class="bbttcc-now-empty">no beats within one condition</div>`) +
+      sec("✓ Recently fired", recentHtml, false);
+
+    rail.addEventListener("click", ev => {
+      const run = ev.target?.closest?.("[data-run]");
+      if (run) { ev.preventDefault(); ev.stopPropagation(); this._runBeatFromConsole(run.dataset.run); return; }
+      const btn = ev.target?.closest?.("[data-fly]");
+      if (!btn) return;
+      ev.preventDefault();
+      this.__flowFlyTo?.(btn.dataset.fly);
+    });
+    return rail;
+  }
+
+  async _mountFlowVisualizer(rootEl) {
     try {
       if (!rootEl) return;
 
@@ -1734,13 +2049,18 @@ const activeCampaignId = _getActiveCampaignId();
         return;
       }
 
+      // Truth Layer: live runtime state (fired/ready/blocked/autofire/audio).
+      let runtime = null;
+      try { runtime = await this._computeFlowRuntime(campaign); } catch (eRt) { console.warn(TAG, "flow runtime failed", eRt); }
+
       // Turn/Chapter decision-tree visualizer. Default = latest turn with content.
       const graph = _buildFlowGraph(campaign, {
         turn: this.flowTurn,
         questId: this.flowQuestId,
         showTravel: this.flowShowTravel,
         viewMode: this.flowViewMode,
-        expandedQuests: this.flowExpandedQuests
+        expandedQuests: this.flowExpandedQuests,
+        runtime
       });
       if (!graph || !graph.nodes || !graph.nodes.length) {
         host.innerHTML = "<p class='bbttcc-muted'>No beats to visualize.</p>";
@@ -1957,12 +2277,42 @@ const activeCampaignId = _getActiveCampaignId();
       meta.className = "bbttcc-muted";
       meta.style.margin = "0 0 6px 0";
       meta.style.fontSize = "12px";
-      meta.innerHTML =
-        "<span><b>" + String(graph.nodes.length) + "</b> nodes</span>" +
-        " <span class='bbttcc-inline-separator'>·</span> " +
+      const sep = " <span class='bbttcc-inline-separator'>·</span> ";
+      let metaHtml =
+        "<span><b>" + String(graph.nodes.length) + "</b> nodes</span>" + sep +
         "<span><b>" + String(graph.edges.length) + "</b> links</span>" +
-        (this.flowShowTravel ? " <span class='bbttcc-inline-separator'>·</span> <span>Travel lane: <b>shown</b></span>" : "");
+        (this.flowShowTravel ? sep + "<span>Travel lane: <b>shown</b></span>" : "");
+      if (runtime) {
+        metaHtml += sep + `<span>Turn <b>${runtime.turn}</b></span>`;
+        if (runtime.ledger && Number.isFinite(Number(runtime.ledger.spent)) && Number.isFinite(Number(runtime.ledger.budget))) {
+          metaHtml += sep + `<span>${runtime.ledger.spent}/${runtime.ledger.budget} days</span>`;
+        }
+        const counts = { ready: 0, blocked: 0, fired: 0, audio: 0 };
+        for (const r of Object.values(runtime.byId)) {
+          if (r.state === "ready") counts.ready++;
+          if (r.state === "blocked") counts.blocked++;
+          if (r.state === "fired") counts.fired++;
+          if (r.hasAudio) counts.audio++;
+        }
+        metaHtml += sep +
+          `<span style="color:rgba(74,222,128,0.95)">⚡ ${counts.ready} ready</span>` + sep +
+          `<span style="color:rgba(245,158,11,0.95)">⛩ ${counts.blocked} blocked</span>` + sep +
+          `<span style="color:rgba(148,163,184,0.9)">✓ ${counts.fired} fired</span>` + sep +
+          `<span style="color:rgba(34,211,238,0.95)">🔊 ${counts.audio}</span>`;
+      }
+      meta.innerHTML = metaHtml;
       host.appendChild(meta);
+
+      // Stage 2 layout: map + Now Panel side by side.
+      const flowRow = document.createElement("div");
+      flowRow.className = "bbttcc-flow-row";
+      host.appendChild(flowRow);
+      const svgWrap = document.createElement("div");
+      svgWrap.className = "bbttcc-flow-svgwrap";
+      flowRow.appendChild(svgWrap);
+      let nowPanel = null;
+      try { nowPanel = await this._buildNowPanel(campaign, runtime); } catch (eNP) { console.warn(TAG, "now-panel failed", eNP); }
+      if (nowPanel) flowRow.appendChild(nowPanel);
 
       const svgNS = "http://www.w3.org/2000/svg";
       const svg = document.createElementNS(svgNS, "svg");
@@ -2417,6 +2767,15 @@ const activeCampaignId = _getActiveCampaignId();
         const gates = Array.isArray(n.gates) ? n.gates : [];
         if (gates.length) accent = "rgba(245,158,11,0.85)";
 
+        // Truth Layer: live state drives the card's border + dimming.
+        const rt = n.rt || null;
+        const state = rt?.state || null;
+        let stateStroke = "rgba(148,163,184,0.22)";
+        let stateStrokeW = "1.2";
+        if (state === "ready")   { stateStroke = "rgba(74,222,128,0.70)";  stateStrokeW = "2"; }
+        if (state === "blocked") { stateStroke = "rgba(245,158,11,0.60)";  stateStrokeW = "1.6"; }
+        if (state === "cooling") { stateStroke = "rgba(56,189,248,0.55)";  stateStrokeW = "1.6"; }
+
         const rect = document.createElementNS(svgNS, "rect");
         rect.setAttribute("x", String(p.x));
         rect.setAttribute("y", String(p.y));
@@ -2425,9 +2784,10 @@ const activeCampaignId = _getActiveCampaignId();
         rect.setAttribute("width", String(NODE_W));
         rect.setAttribute("height", String(NODE_H));
         rect.setAttribute("fill", "url(#bbttcc-node-grad)");
-        rect.setAttribute("stroke", "rgba(148,163,184,0.22)");
-        rect.setAttribute("stroke-width", "1.2");
+        rect.setAttribute("stroke", stateStroke);
+        rect.setAttribute("stroke-width", stateStrokeW);
         node.appendChild(rect);
+        if (state === "fired") node.setAttribute("opacity", "0.45");
 
         // Left accent bar
         const bar = document.createElementNS(svgNS, "rect");
@@ -2500,18 +2860,75 @@ const activeCampaignId = _getActiveCampaignId();
         addBadge(String(n.type || "custom").toUpperCase(), "rgba(148,163,184,0.40)");
         if (n.turnNumber) addBadge("T" + String(n.turnNumber), "rgba(34,197,94,0.45)");
         if (n.isTravel) addBadge("LEG", "rgba(56,189,248,0.45)");
-        if (gates.length) addBadge("⛩ " + String(gates.length), "rgba(245,158,11,0.65)");
+        if (gates.length || rt?.gated) addBadge("⛩ " + String(gates.length || (rt?.reasons?.length ?? 0)), "rgba(245,158,11,0.65)");
 
-        // Tooltip
+        // Truth Layer bottom row: state · autofire class · audio
+        const by2 = p.y + NODE_H - 29;
+        let bx2 = p.x + NODE_W - BADGE_INSET;
+        const addBadge2 = (text, line) => {
+          const w = Math.max(34, Math.round(14 + text.length * 6.4));
+          bx2 -= w;
+          badge(text, bx2, by2, w, line);
+          bx2 -= 6;
+        };
+        if (rt) {
+          if (rt.state === "fired") addBadge2("✓ FIRED" + (rt.firedTurn != null ? " T" + rt.firedTurn : ""), "rgba(34,197,94,0.55)");
+          else if (rt.state === "ready") addBadge2("⚡ READY", "rgba(74,222,128,0.80)");
+          else if (rt.state === "blocked") addBadge2("⛩ BLOCKED", "rgba(245,158,11,0.75)");
+          else if (rt.state === "cooling") addBadge2("⏳ T" + String(rt.cooldownUntil), "rgba(56,189,248,0.60)");
+          if (rt.invited && rt.state !== "fired") addBadge2("✉ INVITED", "rgba(168,85,247,0.55)");
+          if (rt.hasAudio) addBadge2("🔊", "rgba(34,211,238,0.55)");
+          const AUTO_LBL = { director: "⚙ DIR", inject: "🎲 INJ", hex: "⬢ HEX", dialogue: "🗣 DLG" };
+          for (const a of (rt.auto || [])) addBadge2(AUTO_LBL[a] || a, "rgba(148,163,184,0.40)");
+
+          // Command Deck: ▶ run affordance on ready beats (bottom-left)
+          if (rt.state === "ready") {
+            const runG = document.createElementNS(svgNS, "g");
+            runG.style.cursor = "pointer";
+            const rcx = p.x + 26, rcy = p.y + NODE_H - 22;
+            const rc = document.createElementNS(svgNS, "circle");
+            rc.setAttribute("cx", String(rcx)); rc.setAttribute("cy", String(rcy)); rc.setAttribute("r", "12");
+            rc.setAttribute("fill", "rgba(34,197,94,0.18)");
+            rc.setAttribute("stroke", "rgba(74,222,128,0.80)");
+            rc.setAttribute("stroke-width", "1.5");
+            const tri = document.createElementNS(svgNS, "path");
+            tri.setAttribute("d", `M ${rcx - 3.5} ${rcy - 5} L ${rcx + 5.5} ${rcy} L ${rcx - 3.5} ${rcy + 5} Z`);
+            tri.setAttribute("fill", "rgba(74,222,128,0.95)");
+            const rtT = document.createElementNS(svgNS, "title");
+            rtT.textContent = "Run this beat now";
+            runG.appendChild(rc); runG.appendChild(tri); runG.appendChild(rtT);
+            runG.addEventListener("click", (ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              this._runBeatFromConsole(n.id);
+            });
+            node.appendChild(runG);
+          }
+        }
+
+        // Tooltip — the full situation readout for this beat
         const title = document.createElementNS(svgNS, "title");
-        title.textContent =
+        let tip =
           `${n.label}\n` +
           `id: ${n.id}\n` +
-          `type: ${n.type}\n` +
-          `timeScale: ${n.timeScale}\n` +
-          (n.turnNumber ? `turn: ${n.turnNumber}\n` : "") +
-          (n.isTravel ? "travel: yes\n" : "travel: no\n") +
-          (gates.length ? `gated on: ${gates.join("  AND  ")}\n` : "");
+          `type: ${n.type} · timeScale: ${n.timeScale}` +
+          (n.turnNumber ? ` · turn ${n.turnNumber}` : "") +
+          (n.isTravel ? " · travel" : "") + "\n";
+        if (rt) {
+          tip += `state: ${String(rt.state || "idle").toUpperCase()}` +
+            (rt.firedTurn != null ? ` (fired T${rt.firedTurn})` : "") +
+            (rt.cooldownUntil != null ? ` (cooling until T${rt.cooldownUntil})` : "") +
+            (rt.invited ? " · invited" : "") + "\n";
+          if (rt.reasons && rt.reasons.length) {
+            tip += "gates:\n" + rt.reasons.map(r =>
+              `  ${r.met ? "✓" : "✗"} ${r.text}${r.current !== undefined ? `  (now: ${r.current})` : ""}`).join("\n") + "\n";
+          }
+          if (rt.auto && rt.auto.length) tip += `autofire: ${rt.auto.join(", ")}\n`;
+          tip += rt.hasAudio ? "audio: 🔊 recorded\n" : "audio: silent\n";
+        } else if (gates.length) {
+          tip += `gated on: ${gates.join("  AND  ")}\n`;
+        }
+        title.textContent = tip;
         node.appendChild(title);
 
         // Click handler -> open beat editor
@@ -2639,7 +3056,36 @@ const activeCampaignId = _getActiveCampaignId();
           applyTransform();
         }
       } catch (_eC) {}
-      host.appendChild(svg);
+      svgWrap.appendChild(svg);
+
+      // Fly-to-node hook for the Now Panel (closure over this mount's camera).
+      this.__flowFlyTo = (beatId) => {
+        try {
+          const id = String(beatId || "");
+          const p = graph.pos[id];
+          if (!p) { ui.notifications?.info?.("That beat isn't in the current view/filter."); return; }
+          const gn = graphNodeById[id] || {};
+          const w = gn.width || NODE_W, h = gn.height || NODE_H;
+          const vm = viewMap();
+          // zoom so the node reads comfortably (~45% of viewport width)
+          let z = (0.45 * vm.rw / vm.s) / w;
+          z = Math.max(BBTTCCCampaignBuilderApp._FLOW_ZOOM_MIN, Math.min(BBTTCCCampaignBuilderApp._FLOW_ZOOM_MAX, z));
+          const ucx = (vm.rw / 2 - vm.ox) / vm.s;
+          const ucy = (vm.rh / 2 - vm.oy) / vm.s;
+          this.flowZoom = Math.round(z * 1000) / 1000;
+          this.flowPan = { x: ucx - (p.x + w / 2) * z, y: ucy - (p.y + h / 2) * z };
+          applyTransform();
+          // brief pulse on the target
+          const gEl = svg.querySelector(`g[data-beat-id="${CSS.escape(id)}"] rect`);
+          if (gEl) {
+            const prevW = gEl.getAttribute("stroke-width");
+            const prevS = gEl.getAttribute("stroke");
+            gEl.setAttribute("stroke", "rgba(34,211,238,0.95)");
+            gEl.setAttribute("stroke-width", "5");
+            setTimeout(() => { try { gEl.setAttribute("stroke", prevS); gEl.setAttribute("stroke-width", prevW); } catch (_e) {} }, 1300);
+          }
+        } catch (eF) { console.warn(TAG, "flyTo failed", eF); }
+      };
     } catch (e) {
       console.warn(TAG, "Flow visualizer render failed:", e);
       try {
@@ -3196,6 +3642,16 @@ try {
       ev.preventDefault();
       this._flowResetView();
       this.render(false);
+    });
+
+    // Command Deck launchers (Stage 3)
+    html.find("[data-action='flow-run-reset']").on("click", ev => {
+      ev.preventDefault();
+      this._execToolMacro("reset-console.macro.js", "Reset Console");
+    });
+    html.find("[data-action='flow-census']").on("click", ev => {
+      ev.preventDefault();
+      this._execToolMacro("campaign-census.macro.js", "Campaign Census");
     });
 
 
