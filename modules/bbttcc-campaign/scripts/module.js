@@ -6544,7 +6544,7 @@ const CAMPAIGN_HELP = {
   "flow-canvas": "Flow map — drag the background to pan. Beats view: click a node to open it in the Beat Editor. Quests view: click a bubble to expand its inner beat chips; click a chip to edit that beat.",
   "flow-turn": "Turn — restrict the graph to beats assigned to one Strategic Turn (All Turns = the whole campaign).",
   "flow-quest": "Quest — keep only that quest's beats PLUS everything reachable from them (forward closure), so cross-quest hand-offs stay visible.",
-  "flow-view": "View — Quests (overview): one bubble per quest with aggregated cross-quest links. Lanes (arc): one horizontal lane per quest in authoring order, every beat shown (nothing pruned), gates surfaced as ⛩ badges. Beats (detail): the per-beat decision tree (root-reachable only). Your choice persists per user."
+  "flow-view": "View — Quests (overview): one bubble per quest with aggregated cross-quest links. Lanes (arc): one horizontal lane per quest in authoring order, every beat shown (nothing pruned), gates surfaced as ⛩ badges. Beats (detail): the per-beat decision tree — disconnected beats root their own trees to the right. Your choice persists per user."
 };
 
 function _registerCampaignHelp() {

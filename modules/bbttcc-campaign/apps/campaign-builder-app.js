@@ -1114,20 +1114,18 @@ function _buildFlowGraph(campaign, opts) {
 
   if (rootId) assign(rootId, 0);
 
-  // Build nodes list reachable from root (and keep root even if isolated)
-  var reachable = {};
-  var q = [];
-  if (rootId) { reachable[rootId] = true; q.push(rootId); }
-  while (q.length) {
-    var cur = q.shift();
-    var kids2 = adj[cur] || [];
-    for (i = 0; i < kids2.length; i++) {
-      var nx = kids2[i];
-      if (reachable[nx]) continue;
-      reachable[nx] = true;
-      q.push(nx);
-    }
+  // Forest pass (2026-07-14): the old layout only rendered beats REACHABLE
+  // from the first beat — a quest whose opening beat had no outgoing links
+  // (e.g. a dialog beat other beats route INTO) showed as "1 node". Every
+  // beat not yet placed now roots its own tree, laid out to the right in
+  // authoring order, so Beats view always shows the full filtered set.
+  for (i = 0; i < beats.length; i++) {
+    var bidF = String(beats[i].id);
+    if (!assigned[bidF]) assign(bidF, 0);
   }
+
+  // Every filtered beat is placed — render them all.
+  var reachable = assigned;
 
   var nodes = [];
   for (i = 0; i < beats.length; i++) {
