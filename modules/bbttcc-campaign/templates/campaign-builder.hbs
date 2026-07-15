@@ -281,7 +281,7 @@
               <table class="bbttcc-table bbttcc-table-beats" data-tour="campaign.beats-table">
                 <thead>
                   <tr>
-                    <th>#</th>
+                    <th data-tooltip="Display position only — this number shifts whenever beats are reordered or inserted. The stable address every link, gate, and quest mark routes by is the beat id shown under the label.">Pos</th>
                     <th>Beat</th>
                     <th>Type</th>
                     <th data-tooltip="{{bbttccTip 'campaign' 'turn-chip'}}">Turn</th>
@@ -302,7 +302,7 @@
                             <span class="bbttcc-chip bbttcc-chip-quest" data-tooltip="{{bbttccTip 'campaign' 'quest-chip'}}">📜 {{row.questName}}</span>
                           {{/if}}
                         </div>
-                        <div class="bbttcc-muted bbttcc-beat-secondary"><code>{{row.beat.id}}</code></div>
+                        <div class="bbttcc-muted bbttcc-beat-secondary"><code>{{row.beat.id}}</code><button type="button" class="bbttcc-link-button bbttcc-copy-id" data-action="copy-beat-id" data-beat-id="{{row.beat.id}}" data-tooltip="Copy the stable beat id">⧉</button></div>
                       </td>
                       <td class="bbttcc-col-type"><span class="bbttcc-chip bbttcc-chip-type" data-tooltip="{{bbttccTip 'campaign' 'beats-type'}}">{{row.beat.type}}</span></td>
                       <td class="bbttcc-col-turn">
@@ -453,16 +453,18 @@
             </div>
 
             <div class="bbttcc-beats-toolbar">
-              <div class="bbttcc-row bbttcc-row-gap-sm bbttcc-items-center" data-tour="campaign.flow-controls">
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-toggle-travel" data-tooltip="{{bbttccTip 'campaign' 'flow-toggle-travel'}}">{{#if flowShowTravel}}Hide Travel{{else}}Show Travel{{/if}}</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-zoom-out" data-tooltip="{{bbttccTip 'campaign' 'flow-zoom-out'}}">−</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-zoom-in" data-tooltip="{{bbttccTip 'campaign' 'flow-zoom-in'}}">+</button>
-                <button type="button" class="bbttcc-btn bbttcc-btn-xs" data-action="flow-reset" data-tooltip="{{bbttccTip 'campaign' 'flow-reset'}}">Reset</button>
+              <div class="bbttcc-flow-controls" data-tour="campaign.flow-controls">
+                <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-flow-ctl" data-action="flow-toggle-travel" data-tooltip="{{bbttccTip 'campaign' 'flow-toggle-travel'}}">{{#if flowShowTravel}}🧭 Travel on{{else}}🧭 Travel off{{/if}}</button>
+                <span class="bbttcc-flow-ctl-group">
+                  <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-flow-ctl" data-action="flow-zoom-out" data-tooltip="{{bbttccTip 'campaign' 'flow-zoom-out'}}">−</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-flow-ctl" data-action="flow-zoom-in" data-tooltip="{{bbttccTip 'campaign' 'flow-zoom-in'}}">+</button>
+                  <button type="button" class="bbttcc-btn bbttcc-btn-xs bbttcc-flow-ctl" data-action="flow-reset" data-tooltip="{{bbttccTip 'campaign' 'flow-reset'}}">⤢ Fit</button>
+                </span>
               </div>
             </div>
           </header>
 
-          <div class="bbttcc-muted bbttcc-m-hint">Drag to pan. Click a node to open the Beat Editor.</div>
+          <div class="bbttcc-muted bbttcc-m-hint">Scroll to zoom (at the cursor) · drag anywhere to pan · click a node to open the Beat Editor.</div>
           <div data-role="flowviz" data-tour="campaign.flow-canvas" data-tooltip="{{bbttccTip 'campaign' 'flow-canvas'}}"></div>
         </section>
       </section>

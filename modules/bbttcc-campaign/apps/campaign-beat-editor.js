@@ -2712,6 +2712,21 @@ _ensureWorldModifiersUI(html) {
     html.find("[data-action='cancel']").on("click", ev => { ev.preventDefault(); this.close(); });
     html.find("[data-action='save-beat']").on("click", ev => { ev.preventDefault(); this._saveFromForm(ev.currentTarget); });
 
+    // Copy the stable beat id from the header
+    html.find("[data-action='copy-beat-id']").on("click", async ev => {
+      ev.preventDefault();
+      const beatId = ev.currentTarget?.dataset?.beatId || this._originalBeatId || this.beat?.id;
+      if (!beatId) return;
+      try {
+        if (game.clipboard?.copyPlainText) await game.clipboard.copyPlainText(String(beatId));
+        else await navigator.clipboard.writeText(String(beatId));
+        ui.notifications?.info?.(`Copied beat id: ${beatId}`);
+      } catch (e) {
+        console.warn(TAG, "copy-beat-id failed", e);
+        ui.notifications?.warn?.(`Could not copy — beat id is: ${beatId}`);
+      }
+    });
+
     // Tabs
     html.find("[data-action='tab']").on("click", ev => {
       ev.preventDefault();

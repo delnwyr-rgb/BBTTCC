@@ -6538,13 +6538,13 @@ const CAMPAIGN_HELP = {
   // ── Visualizer tab ────────────────────────────────────────────────────────
   flow: "Visualizer — a read-only flow map of the selected campaign built from beat links: Next/Success/Failure are solid edges (green/red for outcomes), Choices are dashed. Nothing here mutates the campaign.",
   "flow-toggle-travel": "Show/Hide Travel — include or exclude the travel lane (beats with timeScale 'leg' or a travel tag) from the graph.",
-  "flow-zoom-in": "Zoom in — enlarges the graph (+15% per click).",
-  "flow-zoom-out": "Zoom out — shrinks the graph (−15% per click).",
-  "flow-reset": "Reset — returns zoom and pan to the default, which re-fits and re-centers the graph on the next draw.",
+  "flow-zoom-in": "Zoom in (+30% per click). Tip: the mouse wheel zooms straight to the cursor.",
+  "flow-zoom-out": "Zoom out (−30% per click). Tip: the mouse wheel zooms straight to the cursor.",
+  "flow-reset": "Fit — returns zoom and pan to the whole-graph view.",
   "flow-canvas": "Flow map — drag the background to pan. Beats view: click a node to open it in the Beat Editor. Quests view: click a bubble to expand its inner beat chips; click a chip to edit that beat.",
   "flow-turn": "Turn — restrict the graph to beats assigned to one Strategic Turn (All Turns = the whole campaign).",
   "flow-quest": "Quest — keep only that quest's beats PLUS everything reachable from them (forward closure), so cross-quest hand-offs stay visible.",
-  "flow-view": "View — Quests (overview): one bubble per quest with aggregated cross-quest links. Beats (detail): the full per-beat decision tree. Your choice persists per user."
+  "flow-view": "View — Quests (overview): one bubble per quest with aggregated cross-quest links. Lanes (arc): one horizontal lane per quest in authoring order, every beat shown (nothing pruned), gates surfaced as ⛩ badges. Beats (detail): the per-beat decision tree (root-reachable only). Your choice persists per user."
 };
 
 function _registerCampaignHelp() {

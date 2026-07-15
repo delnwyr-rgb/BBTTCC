@@ -898,6 +898,136 @@ function _buildFlowGraph(campaign, opts) {
     };
   }
 
+  // ---------------------------------------------------------------------------
+  // Lane-mode branch (Atlas census follow-up, 2026-07-14): quest lanes × authoring
+  // order. Unlike the tree modes this shows EVERY filtered beat (no root-
+  // reachability pruning — orphan constellations stay visible), one horizontal
+  // lane per quest, x = authoring order. Gates (inject.requires) surface as a
+  // node badge + tooltip. Returns early with the laneGrid graph.
+  // ---------------------------------------------------------------------------
+  if (String(opts.viewMode || "beats") === "lanes") {
+    var UNASSIGNED_L = "__unassigned__";
+
+    // Resolve quest definitions (name + status + order) via the campaign API.
+    var lDefs = {};
+    try {
+      var lapi = game.bbttcc && game.bbttcc.api && game.bbttcc.api.campaign ? game.bbttcc.api.campaign.quests : null;
+      var lList = (lapi && typeof lapi.listQuests === "function")
+        ? lapi.listQuests({ campaignId: campaign.id, status: "all" })
+        : [];
+      for (var lqi = 0; lqi < (lList || []).length; lqi++) {
+        var lqd = lList[lqi];
+        if (lqd && lqd.id) lDefs[String(lqd.id)] = lqd;
+      }
+    } catch (_eLDefs) {}
+
+    // Human-readable gate strings from beat.inject.requires.
+    var gateStrings = function (b) {
+      try {
+        var req = b && b.inject && b.inject.requires;
+        if (!req) return [];
+        var arr = Array.isArray(req) ? req : [req];
+        var out = [];
+        for (var gi = 0; gi < arr.length; gi++) {
+          var c = arr[gi];
+          if (!c || typeof c !== "object") continue;
+          if (c.flag) {
+            var op = (c.gte != null) ? ("≥ " + c.gte) : (c.lte != null) ? ("≤ " + c.lte) : (c.eq != null) ? ("= " + c.eq) : "?";
+            out.push(String(c.flag) + " " + op);
+          } else if (c.questBucket) {
+            var qn = (lDefs[String(c.questBucket)] && lDefs[String(c.questBucket)].name) || String(c.questBucket);
+            out.push("quest “" + qn + "” " + (c.is ? ("is " + c.is) : ("not " + c.isNot)));
+          } else if (c.beatMark) {
+            out.push("beat “" + String(c.beatMark) + "” " + String(c.state || "seen"));
+          }
+        }
+        return out;
+      } catch (eG) { return []; }
+    };
+
+    // Group filtered beats by questId, preserving authoring order within lanes.
+    var laneBeats = {};
+    for (var lbi = 0; lbi < beats.length; lbi++) {
+      var lb = beats[lbi];
+      if (!lb || !lb.id) continue;
+      var lqid = String(lb.questId || "").trim() || UNASSIGNED_L;
+      (laneBeats[lqid] = laneBeats[lqid] || []).push({ beat: lb, order: lbi });
+    }
+
+    // Lane order: quest.order asc, then name; unassigned last.
+    var laneIds = Object.keys(laneBeats);
+    var laneName = function (qid) {
+      if (qid === UNASSIGNED_L) return "Unassigned";
+      return (lDefs[qid] && lDefs[qid].name) ? String(lDefs[qid].name) : qid;
+    };
+    laneIds.sort(function (a, b) {
+      var au = (a === UNASSIGNED_L), bu = (b === UNASSIGNED_L);
+      if (au !== bu) return au ? 1 : -1;
+      var ao = (lDefs[a] && lDefs[a].order != null) ? Number(lDefs[a].order) : 999999;
+      var bo = (lDefs[b] && lDefs[b].order != null) ? Number(lDefs[b].order) : 999999;
+      if (ao !== bo) return ao - bo;
+      return laneName(a).localeCompare(laneName(b));
+    });
+
+    var L_NODE_W = 420;
+    var L_NODE_H = 130;
+    var L_PAD_X = 150;
+    var L_PAD_Y = 96;     // room for the first lane label
+    var L_GAP_X = 70;     // dense horizontal rhythm inside a lane
+    var L_GAP_Y = 130;    // lane pitch gap (label lives in here)
+
+    var lNodes = [];
+    var lPos = {};
+    var lanesMeta = [];
+    var lMaxX = 0, lMaxY = 0;
+
+    for (var li2 = 0; li2 < laneIds.length; li2++) {
+      var lid = laneIds[li2];
+      var rows = laneBeats[lid];
+      var yPix2 = L_PAD_Y + li2 * (L_NODE_H + L_GAP_Y);
+      var lStatus = (lid !== UNASSIGNED_L && lDefs[lid] && lDefs[lid].status) ? String(lDefs[lid].status) : "";
+      lanesMeta.push({ id: lid, name: laneName(lid), status: lStatus, count: rows.length, y: yPix2 });
+
+      for (var lni = 0; lni < rows.length; lni++) {
+        var lbb = rows[lni].beat;
+        var lId = String(lbb.id);
+        var lTurn = getTurn(lbb);
+        var xPix2 = L_PAD_X + lni * (L_NODE_W + L_GAP_X);
+        lNodes.push({
+          id: lId,
+          label: String(lbb.label || lbb.id || lId),
+          type: String(lbb.type || "custom"),
+          timeScale: String(lbb.timeScale || "scene"),
+          turnNumber: (lTurn == null) ? null : lTurn,
+          isTravel: isTravel(lbb),
+          isCinematic: isCinematic(lbb),
+          gates: gateStrings(lbb),
+          laneId: lid,
+          _order: rows[lni].order
+        });
+        lPos[lId] = { x: xPix2, y: yPix2 };
+        if (xPix2 + L_NODE_W > lMaxX) lMaxX = xPix2 + L_NODE_W;
+        if (yPix2 + L_NODE_H > lMaxY) lMaxY = yPix2 + L_NODE_H;
+      }
+    }
+
+    return {
+      v: 4,
+      mode: "laneGrid",
+      viewMode: "lanes",
+      turnNumber: selectedTurn,
+      turns: turns,
+      nodes: lNodes,
+      edges: edges,          // all beat-level edges among filtered beats — no pruning
+      pos: lPos,
+      lanes: lanesMeta,
+      // Tight floors — a single filtered lane should not float in dead space.
+      size: { w: Math.max(1200, lMaxX + L_PAD_X), h: Math.max(360, lMaxY + 110) },
+      constants: { NODE_W: L_NODE_W, NODE_H: L_NODE_H },
+      rootId: (lNodes[0] && lNodes[0].id) || null
+    };
+  }
+
   // Root = first meaningful beat in authoring order (selected turn)
   var rootId = (beats[0] && beats[0].id) ? String(beats[0].id) : null;
 
@@ -1183,7 +1313,7 @@ export class BBTTCCCampaignBuilderApp extends Application {
     let _viewModeFlag = null;
     try { _viewModeFlag = game.user?.getFlag?.("bbttcc-campaign", "flowViewMode") ?? null; } catch (_e) {}
     this.flowViewMode = options.flowViewMode || _viewModeFlag || "quests";
-    if (this.flowViewMode !== "beats" && this.flowViewMode !== "quests") this.flowViewMode = "quests";
+    if (this.flowViewMode !== "beats" && this.flowViewMode !== "quests" && this.flowViewMode !== "lanes") this.flowViewMode = "quests";
     this.flowExpandedQuests = new Set(); // questIds expanded inline (session-scope)
 
     // Debounced renders for text inputs (prevents focus loss while typing)
@@ -1754,7 +1884,7 @@ const activeCampaignId = _getActiveCampaignId();
         if (_viewTip) vSel.dataset.tooltip = _viewTip;
         styleBarSelect(vSel);
 
-        for (const [val, label] of [["quests", "Quests (overview)"], ["beats", "Beats (detail)"]]) {
+        for (const [val, label] of [["quests", "Quests (overview)"], ["lanes", "Lanes (arc)"], ["beats", "Beats (detail)"]]) {
           const o = document.createElement("option");
           o.value = val;
           o.textContent = label;
@@ -1764,7 +1894,7 @@ const activeCampaignId = _getActiveCampaignId();
 
         vSel.addEventListener("change", (ev) => {
           const v = String(ev.target.value || "quests");
-          this.flowViewMode = (v === "beats") ? "beats" : "quests";
+          this.flowViewMode = (v === "beats" || v === "lanes") ? v : "quests";
           // Persist user's preference across sessions.
           try { game.user?.setFlag?.("bbttcc-campaign", "flowViewMode", this.flowViewMode); } catch (_e) {}
           // Clear expansion when leaving quest mode so re-entry is clean.
@@ -1805,7 +1935,7 @@ const activeCampaignId = _getActiveCampaignId();
         const p0y = (this.flowPan && Number.isFinite(this.flowPan.y)) ? this.flowPan.y : 0;
         const isDefaultView = (Math.abs(z0 - 1) < 0.001) && (p0x === 0) && (p0y === 0);
 
-        if (isDefaultView && graph && graph.rootId && graph.pos && graph.pos[graph.rootId]) {
+        if (isDefaultView && graph && graph.mode !== "laneGrid" && graph.rootId && graph.pos && graph.pos[graph.rootId]) {
           // Favor readable chips over full-fit. We center root slightly right of center (accounts for sidebar),
           // and near the top quarter.
           const rootPos = graph.pos[graph.rootId];
@@ -1880,7 +2010,9 @@ const activeCampaignId = _getActiveCampaignId();
         const p0y = (this.flowPan && Number.isFinite(this.flowPan.y)) ? this.flowPan.y : 0;
         const isDefaultView = (Math.abs(z0 - 1) < 0.001) && (p0x === 0) && (p0y === 0);
 
-        if (isDefaultView) {
+        if (isDefaultView && graph.mode !== "laneGrid") {
+          // (laneGrid opens at zoom 1 / pan 0 — with the viewBox letterbox
+          //  that IS the whole-graph fit; wheel-zoom from there.)
           let hostRect2 = null;
           try { hostRect2 = host.getBoundingClientRect(); } catch (_eFit) { hostRect2 = null; }
           const availW = hostRect2 && hostRect2.width ? Math.floor(hostRect2.width) : 980;
@@ -1919,6 +2051,19 @@ const activeCampaignId = _getActiveCampaignId();
       defs.appendChild(mkMarker("bbttcc-arrow", "rgba(148,163,184,0.55)"));
       defs.appendChild(mkMarker("bbttcc-arrow-success", "rgba(34,197,94,0.65)"));
       defs.appendChild(mkMarker("bbttcc-arrow-failure", "rgba(239,68,68,0.65)"));
+
+      // Node body gradient (2026-07 facelift): quiet vertical falloff so the
+      // cards read as raised chips instead of flat slabs.
+      const nodeGrad = document.createElementNS(svgNS, "linearGradient");
+      nodeGrad.setAttribute("id", "bbttcc-node-grad");
+      nodeGrad.setAttribute("x1", "0"); nodeGrad.setAttribute("y1", "0");
+      nodeGrad.setAttribute("x2", "0"); nodeGrad.setAttribute("y2", "1");
+      for (const [off, col] of [["0%", "rgba(38,48,72,0.95)"], ["55%", "rgba(21,28,46,0.95)"], ["100%", "rgba(12,17,32,0.97)"]]) {
+        const st = document.createElementNS(svgNS, "stop");
+        st.setAttribute("offset", off); st.setAttribute("stop-color", col);
+        nodeGrad.appendChild(st);
+      }
+      defs.appendChild(nodeGrad);
       svg.appendChild(defs);
 
       const NODE_W = graph.constants.NODE_W;
@@ -1932,6 +2077,56 @@ const activeCampaignId = _getActiveCampaignId();
       for (const gn of (graph.nodes || [])) graphNodeById[String(gn.id)] = gn;
 
       const isQuestMode = (graph.mode === "questTree");
+      const isLaneMode = (graph.mode === "laneGrid");
+
+      // Lane labels + separators go under everything (lane mode only).
+      if (isLaneMode && Array.isArray(graph.lanes)) {
+        const statusColorL = (s) => {
+          const k = String(s || "").toLowerCase();
+          if (k === "completed") return "rgba(34,197,94,0.85)";
+          if (k === "archived") return "rgba(148,163,184,0.70)";
+          if (k === "active") return "rgba(245,158,11,0.85)";
+          return "rgba(148,163,184,0.45)";
+        };
+        for (const lane of graph.lanes) {
+          const sep = document.createElementNS(svgNS, "line");
+          sep.setAttribute("x1", "24");
+          sep.setAttribute("y1", String(lane.y - 34));
+          sep.setAttribute("x2", String(graph.size.w - 24));
+          sep.setAttribute("y2", String(lane.y - 34));
+          sep.setAttribute("stroke", "rgba(148,163,184,0.12)");
+          sep.setAttribute("stroke-width", "1");
+          g.appendChild(sep);
+
+          const dot = document.createElementNS(svgNS, "circle");
+          dot.setAttribute("cx", "36");
+          dot.setAttribute("cy", String(lane.y - 15));
+          dot.setAttribute("r", "5");
+          dot.setAttribute("fill", statusColorL(lane.status));
+          g.appendChild(dot);
+
+          const lt = document.createElementNS(svgNS, "text");
+          lt.setAttribute("x", "50");
+          lt.setAttribute("y", String(lane.y - 10));
+          lt.setAttribute("font-size", "14");
+          lt.setAttribute("font-weight", "800");
+          lt.setAttribute("letter-spacing", "2");
+          lt.style.fill = "var(--cb-data, #93c5fd)";
+          lt.textContent = String(lane.name || "").toUpperCase();
+          g.appendChild(lt);
+
+          const lc = document.createElementNS(svgNS, "text");
+          lc.setAttribute("x", "50");
+          lc.setAttribute("y", String(lane.y - 10));
+          lc.setAttribute("dx", String(12 + String(lane.name || "").length * 11));
+          lc.setAttribute("font-size", "11");
+          lc.setAttribute("font-weight", "600");
+          lc.setAttribute("letter-spacing", "1");
+          lc.setAttribute("fill", "rgba(148,163,184,0.75)");
+          lc.textContent = `${lane.count} BEAT${lane.count === 1 ? "" : "S"}${lane.status ? " · " + String(lane.status).toUpperCase() : ""}`;
+          g.appendChild(lc);
+        }
+      }
 
       // Draw edges first (under nodes)
       for (const e of graph.edges) {
@@ -1945,16 +2140,33 @@ const activeCampaignId = _getActiveCampaignId();
         const srcH = (srcNode && srcNode.height) ? srcNode.height : NODE_H;
         const dstW = (dstNode && dstNode.width) ? dstNode.width : NODE_W;
 
-        const x1 = a.x + (srcW / 2);
-        const y1 = a.y + srcH;
-        const x2 = b.x + (dstW / 2);
-        const y2 = b.y;
-
-        const dy = Math.max(60, (y2 - y1) * 0.55);
-        const c1x = x1;
-        const c1y = y1 + dy;
-        const c2x = x2;
-        const c2y = y2 - dy;
+        let x1, y1, x2, y2, c1x, c1y, c2x, c2y;
+        if (isLaneMode) {
+          // Horizontal flow: leave the source's right edge, enter the target's
+          // left edge. Backward/self-column links bow underneath instead.
+          const forward = (b.x > a.x + srcW);
+          if (forward) {
+            x1 = a.x + srcW; y1 = a.y + (srcH / 2);
+            x2 = b.x;        y2 = b.y + (NODE_H / 2);
+            const dx = Math.max(46, (x2 - x1) * 0.45);
+            c1x = x1 + dx; c1y = y1;
+            c2x = x2 - dx; c2y = y2;
+          } else {
+            x1 = a.x + (srcW / 2); y1 = a.y + srcH;
+            x2 = b.x + (dstW / 2); y2 = b.y + NODE_H;
+            const bow = 70 + Math.min(120, Math.abs(x1 - x2) * 0.08);
+            c1x = x1; c1y = y1 + bow;
+            c2x = x2; c2y = y2 + bow;
+          }
+        } else {
+          x1 = a.x + (srcW / 2);
+          y1 = a.y + srcH;
+          x2 = b.x + (dstW / 2);
+          y2 = b.y;
+          const dy = Math.max(60, (y2 - y1) * 0.55);
+          c1x = x1; c1y = y1 + dy;
+          c2x = x2; c2y = y2 - dy;
+        }
 
         const path = document.createElementNS(svgNS, "path");
         path.setAttribute("d", `M ${x1} ${y1} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${x2} ${y2}`);
@@ -2198,96 +2410,99 @@ const activeCampaignId = _getActiveCampaignId();
         node.setAttribute("data-beat-id", n.id);
         node.style.cursor = "pointer";
 
+        // Accent per type — used for the edge stroke, the left accent bar,
+        // and the badge line color (2026-07 facelift).
+        let accent = "rgba(148,163,184,0.55)";
+        if (n.isTravel) accent = "rgba(56,189,248,0.70)";
+        if (String(n.type) === "encounter") accent = "rgba(245,158,11,0.60)";
+        if (n.isCinematic) accent = "rgba(168,85,247,0.70)";
+        const gates = Array.isArray(n.gates) ? n.gates : [];
+        if (gates.length) accent = "rgba(245,158,11,0.85)";
+
         const rect = document.createElementNS(svgNS, "rect");
         rect.setAttribute("x", String(p.x));
         rect.setAttribute("y", String(p.y));
-        rect.setAttribute("rx", "14");
-        rect.setAttribute("ry", "14");
+        rect.setAttribute("rx", "10");
+        rect.setAttribute("ry", "10");
         rect.setAttribute("width", String(NODE_W));
         rect.setAttribute("height", String(NODE_H));
-
-        // Styling by type/timeScale
-        let fill = "rgba(15,23,42,0.55)";
-        let stroke = "rgba(148,163,184,0.28)";
-        if (n.isTravel) { fill = "rgba(30,41,59,0.55)"; stroke = "rgba(56,189,248,0.30)"; }
-        if (String(n.type) === "encounter") { stroke = "rgba(245,158,11,0.35)"; }
-        if (n.isCinematic) { stroke = "rgba(168,85,247,0.40)"; }
-
-        rect.setAttribute("fill", fill);
-        rect.setAttribute("stroke", stroke);
-        rect.setAttribute("stroke-width", "2");
-
+        rect.setAttribute("fill", "url(#bbttcc-node-grad)");
+        rect.setAttribute("stroke", "rgba(148,163,184,0.22)");
+        rect.setAttribute("stroke-width", "1.2");
         node.appendChild(rect);
+
+        // Left accent bar
+        const bar = document.createElementNS(svgNS, "rect");
+        bar.setAttribute("x", String(p.x + 2));
+        bar.setAttribute("y", String(p.y + 8));
+        bar.setAttribute("rx", "2");
+        bar.setAttribute("ry", "2");
+        bar.setAttribute("width", "4");
+        bar.setAttribute("height", String(NODE_H - 16));
+        bar.setAttribute("fill", accent);
+        node.appendChild(bar);
 
         // Top line: label (truncate)
         const label = document.createElementNS(svgNS, "text");
-        label.setAttribute("x", String(p.x + 12));
-        label.setAttribute("y", String(p.y + 28));
-        label.setAttribute("fill", "rgba(255,255,255,0.92)");
+        label.setAttribute("x", String(p.x + 18));
+        label.setAttribute("y", String(p.y + 30));
+        label.setAttribute("fill", "rgba(240,244,252,0.96)");
         label.setAttribute("font-size", "15");
         label.setAttribute("font-weight", "700");
         const lbl = n.label.length > 34 ? (n.label.slice(0, 34) + "…") : n.label;
         label.textContent = lbl;
         node.appendChild(label);
 
-        // Second line: id
+        // Second line: the stable id, in mono
         const sub = document.createElementNS(svgNS, "text");
-        sub.setAttribute("x", String(p.x + 12));
-        sub.setAttribute("y", String(p.y + 50));
-        sub.setAttribute("fill", "rgba(255,255,255,0.70)");
-        sub.setAttribute("font-size", "11");
+        sub.setAttribute("x", String(p.x + 18));
+        sub.setAttribute("y", String(p.y + 52));
+        sub.setAttribute("fill", "rgba(148,163,184,0.80)");
+        sub.setAttribute("font-size", "10.5");
+        sub.setAttribute("font-family", "ui-monospace, Menlo, Consolas, monospace");
         sub.textContent = n.id;
         node.appendChild(sub);
 
-        // Badges (type, turn, LEG)
-        const badge = (text, bx, by, w, color) => {
+        // Badges — quiet outline chips, uppercase micro-type
+        const badge = (text, bx, by, w, line) => {
           const r = document.createElementNS(svgNS, "rect");
           r.setAttribute("x", String(bx));
           r.setAttribute("y", String(by));
-          r.setAttribute("rx", "10");
-          r.setAttribute("ry", "10");
+          r.setAttribute("rx", "9");
+          r.setAttribute("ry", "9");
           r.setAttribute("width", String(w));
-          r.setAttribute("height", "20");
-          r.setAttribute("fill", color);
-          r.setAttribute("stroke", "rgba(255,255,255,0.10)");
+          r.setAttribute("height", "18");
+          r.setAttribute("fill", "rgba(2,6,23,0.35)");
+          r.setAttribute("stroke", line);
+          r.setAttribute("stroke-width", "1");
           const t = document.createElementNS(svgNS, "text");
-          t.setAttribute("x", String(bx + 10));
-          t.setAttribute("y", String(by + 14));
-          t.setAttribute("fill", "rgba(255,255,255,0.92)");
-          t.setAttribute("font-size", "11");
+          t.setAttribute("x", String(bx + w / 2));
+          t.setAttribute("y", String(by + 13));
+          t.setAttribute("text-anchor", "middle");
+          t.setAttribute("fill", "rgba(226,232,240,0.92)");
+          t.setAttribute("font-size", "10");
           t.setAttribute("font-weight", "700");
+          t.setAttribute("letter-spacing", "0.8");
           t.textContent = text;
           node.appendChild(r);
           node.appendChild(t);
         };
 
         // Right-aligned badges (INSET for breathing room)
-        const by = p.y + 10;
-        const BADGE_INSET = 50; // tweak freely
+        const by = p.y + 11;
+        const BADGE_INSET = 14;
         let bx = p.x + NODE_W - BADGE_INSET;
-
-        // Type badge
-        const tText = String(n.type || "custom").toUpperCase();
-        const tw = Math.max(54, Math.min(96, 10 + (tText.length * 7)));
-        bx -= tw;
-        badge(tText, bx, by, tw, "rgba(148,163,184,0.18)");
-        bx -= 8;
-
-        // Turn badge (optional)
-        if (n.turnNumber) {
-          const tt = "T" + String(n.turnNumber);
-          const w = 38;
+        const addBadge = (text, line) => {
+          const w = Math.max(34, Math.round(14 + text.length * 6.4));
           bx -= w;
-          badge(tt, bx, by, w, "rgba(34,197,94,0.18)");
-          bx -= 8;
-        }
+          badge(text, bx, by, w, line);
+          bx -= 6;
+        };
 
-        // LEG badge for travel
-        if (n.isTravel) {
-          const w = 46;
-          bx -= w;
-          badge("LEG", bx, by, w, "rgba(56,189,248,0.18)");
-        }
+        addBadge(String(n.type || "custom").toUpperCase(), "rgba(148,163,184,0.40)");
+        if (n.turnNumber) addBadge("T" + String(n.turnNumber), "rgba(34,197,94,0.45)");
+        if (n.isTravel) addBadge("LEG", "rgba(56,189,248,0.45)");
+        if (gates.length) addBadge("⛩ " + String(gates.length), "rgba(245,158,11,0.65)");
 
         // Tooltip
         const title = document.createElementNS(svgNS, "title");
@@ -2297,7 +2512,8 @@ const activeCampaignId = _getActiveCampaignId();
           `type: ${n.type}\n` +
           `timeScale: ${n.timeScale}\n` +
           (n.turnNumber ? `turn: ${n.turnNumber}\n` : "") +
-          (n.isTravel ? "travel: yes\n" : "travel: no\n");
+          (n.isTravel ? "travel: yes\n" : "travel: no\n") +
+          (gates.length ? `gated on: ${gates.join("  AND  ")}\n` : "");
         node.appendChild(title);
 
         // Click handler -> open beat editor
@@ -2313,25 +2529,50 @@ const activeCampaignId = _getActiveCampaignId();
       }
       } // end legacy beat-mode node renderer
 
-      // Pan interaction
+      // -----------------------------------------------------------------
+      // Camera: drag anywhere to pan (incl. over nodes; a real drag
+      // suppresses the node click), mouse wheel zooms to the cursor.
+      // The g-transform works in viewBox USER units while mouse events are
+      // SCREEN px — everything must convert through the viewBox scale `s`
+      // (with xMidYMid letterbox offsets), or drags crawl and zoom drifts.
+      // -----------------------------------------------------------------
+      const viewMap = () => {
+        let r = null;
+        try { r = svg.getBoundingClientRect(); } catch (_e) { r = null; }
+        const rw = r && r.width ? r.width : 980;
+        const rh = r && r.height ? r.height : 720;
+        const s = Math.min(rw / graph.size.w, rh / graph.size.h) || 1;
+        const ox = (rw - graph.size.w * s) / 2;
+        const oy = (rh - graph.size.h * s) / 2;
+        return { r, rw, rh, s, ox, oy };
+      };
+      const panXY = () => ({
+        x: (this.flowPan && Number.isFinite(this.flowPan.x)) ? this.flowPan.x : 0,
+        y: (this.flowPan && Number.isFinite(this.flowPan.y)) ? this.flowPan.y : 0
+      });
+
       let dragging = false;
-      let start = { x: 0, y: 0, px: 0, py: 0 };
+      let movedFar = false;
+      let start = { x: 0, y: 0, px: 0, py: 0, s: 1 };
 
       const onDown = (ev) => {
-        // Only pan when background is grabbed (not node clicks)
-        if (ev && ev.target && ev.target.closest && ev.target.closest("g[data-beat-id]")) return;
+        if (ev.button !== 0 && ev.button !== 1) return;
         dragging = true;
+        movedFar = false;
         svg.style.cursor = "grabbing";
-        const px = (this.flowPan && Number.isFinite(this.flowPan.x)) ? this.flowPan.x : 0;
-        const py = (this.flowPan && Number.isFinite(this.flowPan.y)) ? this.flowPan.y : 0;
-        start = { x: ev.clientX, y: ev.clientY, px, py };
+        const p = panXY();
+        const vm = viewMap();
+        start = { x: ev.clientX, y: ev.clientY, px: p.x, py: p.y, s: vm.s || 1 };
+        ev.preventDefault();
       };
 
       const onMove = (ev) => {
         if (!dragging) return;
         const dx = ev.clientX - start.x;
         const dy = ev.clientY - start.y;
-        this.flowPan = { x: start.px + dx, y: start.py + dy };
+        if (!movedFar && (Math.abs(dx) + Math.abs(dy)) > 5) movedFar = true;
+        // screen px → user units so the graph tracks the cursor 1:1
+        this.flowPan = { x: start.px + dx / start.s, y: start.py + dy / start.s };
         applyTransform();
       };
 
@@ -2341,10 +2582,40 @@ const activeCampaignId = _getActiveCampaignId();
         svg.style.cursor = "grab";
       };
 
-      bg.addEventListener("mousedown", onDown);
+      svg.addEventListener("mousedown", onDown);
       svg.addEventListener("mousemove", onMove);
       svg.addEventListener("mouseup", onUp);
       svg.addEventListener("mouseleave", onUp);
+
+      // A drag that actually moved must not fire the node's click-to-edit.
+      svg.addEventListener("click", (ev) => {
+        if (!movedFar) return;
+        movedFar = false;
+        ev.preventDefault();
+        ev.stopPropagation();
+      }, true);
+
+      // Wheel = zoom to cursor.
+      const ZMIN = BBTTCCCampaignBuilderApp._FLOW_ZOOM_MIN;
+      const ZMAX = BBTTCCCampaignBuilderApp._FLOW_ZOOM_MAX;
+      svg.addEventListener("wheel", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const oldZ = Number(this.flowZoom || 1) || 1;
+        const newZ = Math.max(ZMIN, Math.min(ZMAX, oldZ * Math.exp(-ev.deltaY * 0.0016)));
+        if (newZ === oldZ) return;
+        const vm = viewMap();
+        const mx = vm.r ? (ev.clientX - vm.r.left) : vm.rw / 2;
+        const my = vm.r ? (ev.clientY - vm.r.top) : vm.rh / 2;
+        // mouse position in user units
+        const ux = (mx - vm.ox) / vm.s;
+        const uy = (my - vm.oy) / vm.s;
+        const p = panXY();
+        const k = newZ / oldZ;
+        this.flowPan = { x: ux - (ux - p.x) * k, y: uy - (uy - p.y) * k };
+        this.flowZoom = Math.round(newZ * 1000) / 1000;
+        applyTransform();
+      }, { passive: false });
 
 
       // If we have a pending center target, compute pan based on host dimensions.
@@ -2381,10 +2652,17 @@ const activeCampaignId = _getActiveCampaignId();
   }
 
   _flowZoomBy(delta) {
+    // Multiplicative steps (±30%) with a wide clamp — lane graphs are huge in
+    // user units, so deep zoom-in must be reachable. Wheel zoom uses the same
+    // clamp via _FLOW_ZOOM_MIN/MAX.
     const z = Number(this.flowZoom || 1) || 1;
-    const next = Math.max(0.4, Math.min(2.5, z + delta));
-    this.flowZoom = Math.round(next * 100) / 100;
+    const factor = delta >= 0 ? 1.3 : (1 / 1.3);
+    const next = Math.max(BBTTCCCampaignBuilderApp._FLOW_ZOOM_MIN, Math.min(BBTTCCCampaignBuilderApp._FLOW_ZOOM_MAX, z * factor));
+    this.flowZoom = Math.round(next * 1000) / 1000;
   }
+
+  static _FLOW_ZOOM_MIN = 0.04;
+  static _FLOW_ZOOM_MAX = 40;
 
   _flowResetView() {
     this.flowZoom = 1;
@@ -4191,6 +4469,21 @@ try {
         ? `Beat deleted; ${beatRefs.length} beat link(s) cleared${tableRefs.length ? ` and ${tableRefs.reduce((s, r) => s + r.count, 0)} table entr(ies) removed` : ""}.`
         : "Beat deleted.");
       this.render(false);
+    });
+
+    // Copy the stable beat id (the ordinal "Pos" column is display-only)
+    html.find("[data-action='copy-beat-id']").on("click", async ev => {
+      ev.preventDefault();
+      const beatId = ev.currentTarget?.dataset?.beatId;
+      if (!beatId) return;
+      try {
+        if (game.clipboard?.copyPlainText) await game.clipboard.copyPlainText(String(beatId));
+        else await navigator.clipboard.writeText(String(beatId));
+        ui.notifications?.info?.(`Copied beat id: ${beatId}`);
+      } catch (e) {
+        console.warn(TAG, "copy-beat-id failed", e);
+        ui.notifications?.warn?.(`Could not copy — beat id is: ${beatId}`);
+      }
     });
 
     // Duplicate beat (shallow clone, new id)
