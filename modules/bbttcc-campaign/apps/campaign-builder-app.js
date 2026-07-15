@@ -1825,6 +1825,7 @@ const activeCampaignId = _getActiveCampaignId();
         firedTurn: (f && typeof f === "object" && Number.isFinite(Number(f.turn))) ? Number(f.turn) : null,
         invited: !!invited[id],
         repeatable: !!b.inject?.repeatable,
+        ambient: !!b.pacing?.ambient,   // self-firing — no GM trigger on the play surface
         auto: [],
         hasAudio: !!(b.audio?.enabled && (b.audio.src || b.audio.playlistSoundUuid)),
         gated: false, ready: false, blocked: false, reasons: [], cooldownUntil: null
@@ -2051,7 +2052,8 @@ const activeCampaignId = _getActiveCampaignId();
       const rt = runtime.byId[String(b.id)];
       const ico = rt.auto.map(a => AUTO_ICO[a] || "").join("");
       const q = questOf(b);
-      return flyBtn(b.id, stripPrefix(b.label || b.id, q), `${ico}${rt.hasAudio ? "🔊" : ""}${q ? ` <em>${esc(q)}</em>` : ""}`, true);
+      // Ambient rows: assess (fly/ⓘ) yes, execute (▶) no — they fire themselves.
+      return flyBtn(b.id, stripPrefix(b.label || b.id, q), `${ico}${rt.hasAudio ? "🔊" : ""}${q ? ` <em>${esc(q)}</em>` : ""}`, !isAmbientBeat(b));
     };
     const readyHtml =
       readyStory.slice(0, 25).map(readyRow).join("") +
@@ -3117,8 +3119,10 @@ const activeCampaignId = _getActiveCampaignId();
           const AUTO_LBL = { director: "⚙ DIR", inject: "🎲 INJ", hex: "⬢ HEX", dialogue: "🗣 DLG" };
           for (const a of (rt.auto || [])) addBadge2(AUTO_LBL[a] || a, "rgba(148,163,184,0.40)");
 
-          // Command Deck: ▶ run affordance on ready beats (bottom-left)
-          if (rt.state === "ready") {
+          // Command Deck: ▶ run affordance on ready beats (bottom-left).
+          // Ambient beats fire THEMSELVES (travel/hex) — no GM trigger here;
+          // the Beats tab remains the manual override.
+          if (rt.state === "ready" && !rt.ambient) {
             const runG = document.createElementNS(svgNS, "g");
             runG.style.cursor = "pointer";
             const rcx = p.x + 26, rcy = p.y + NODE_H - 22;
@@ -3160,6 +3164,7 @@ const activeCampaignId = _getActiveCampaignId();
               `  ${r.met ? "✓" : "✗"} ${r.text}${r.current !== undefined ? `  (now: ${r.current})` : ""}`).join("\n") + "\n";
           }
           if (rt.auto && rt.auto.length) tip += `autofire: ${rt.auto.join(", ")}\n`;
+          if (rt.ambient) tip += "ambient: fires itself — force-run from the Beats tab if needed\n";
           tip += rt.hasAudio ? "audio: 🔊 recorded\n" : "audio: silent\n";
         } else if (gates.length) {
           tip += `gated on: ${gates.join("  AND  ")}\n`;
