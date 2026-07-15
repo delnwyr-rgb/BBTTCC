@@ -1155,17 +1155,37 @@ const campaignEngineTour = {
       text: "The quest registry: status lifecycle (edit, complete, archive, reopen), and hex links — bind a quest to territory, and players discover it when the hex is fog-revealed or you toggle its hint. GMs see everything; the hint switches control what players see.\nPan-to-hex jumps the canvas; the faction sheets' Quest Logs read from here."
     },
     {
-      id: "flow", title: "The Flow map",
+      id: "flow", title: "The Visualizer — where you PLAY it",
       pre: '[data-action="main-tab"][data-tab="flow"]',
       selector: '[data-tour="campaign.flow-canvas"]',
       optional: true,
-      text: "The whole campaign as a graph — beats as nodes, links as edges, filterable by turn and quest, zoomable.\nWhen a chain surprises you in play, this is where you find out why."
+      text: "Every other room in this machine BUILDS the campaign. This room plays it. Beats are live cards: ⚡ ready now, ⛩ blocked (hover for exactly which condition, with its current value), ✓ fired — dimmed and turn-stamped, ⏳ cooling. A green ▶ on a ready card fires it right here.\nScroll to zoom at the cursor, drag anywhere to pan, click a card to open its editor.",
+      speak: "The other tabs are the workshop. This is the— *bzzt* —cockpit."
+    },
+    {
+      id: "flowscope", title: "Scope — the map that grows",
+      selector: '[data-tour="campaign.flow-scope"]',
+      optional: true,
+      text: "▶ In play (the default) shows only the living map: the trail behind you, what's ready or cooling now, and what's within one unlock of the table. 🛠 Everything is the author's full corpus — all 600-odd beats.\nIn play, the map GROWS as the campaign is played. Act 6 stays invisible until the world walks toward it."
     },
     {
       id: "flowbar", title: "The flow toolbar",
       selector: '[data-tour="campaign.flow-bar"]',
       optional: true,
-      text: "Turn, quest and view filters for the graph. Narrow to one quest's thread to see its whole arc — the fastest way to sanity-check a storyline before it goes live."
+      text: "Turn, Quest, Act and View filters — they stack with Scope. Act slices one act of the funnel (Ambient = the phase-free pool: travel encounters, the Garden); Lanes view lays quests out as horizontal timelines, the fastest way to sanity-check an arc.\n🔄 Reset opens the Reset Console; 📊 Census prints the campaign's health report."
+    },
+    {
+      id: "flowmeta", title: "The truth strip",
+      selector: '[data-tour="campaign.flow-meta"]',
+      optional: true,
+      text: "Where the world stands, in one line: current ACT and its name, world turn, days spent against the month's budget, and the live counts — ⚡ ready · ⛩ blocked · ✓ fired · 🔊 voiced.\nWhen anyone asks 'where are we in the campaign?', the answer is this strip."
+    },
+    {
+      id: "nowpanel", title: "The Now Panel — your co-pilot",
+      selector: '[data-tour="campaign.now-panel"]',
+      optional: true,
+      text: "On a brand-new campaign this opens with one unmissable card: 🎬 BEGIN — the canonical opening beat and a big ▶. Your first click requires zero knowledge.\nBelow it: ⚡ Available now (story beats first; the self-firing 🎲 ambient pool folded away), ⏳ Coming up with the exact condition each beat waits on, and sections that wake as they gain signal — chains, pressures, faction relations. Every row: click to fly the camera there, ⓘ for the full description, ▶ to fire. Drag the left edge to widen.",
+      speak: "It starts with one button. It ends with a war room. That's— —static— —intentional."
     }
   ]
 };

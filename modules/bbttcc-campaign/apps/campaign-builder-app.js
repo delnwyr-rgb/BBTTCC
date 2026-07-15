@@ -2126,6 +2126,7 @@ const activeCampaignId = _getActiveCampaignId();
     // ── assemble ──────────────────────────────────────────────────────────
     const rail = document.createElement("div");
     rail.className = "bbttcc-now-panel";
+    rail.dataset.tour = "campaign.now-panel";
     const sec = (title, body, open = true) =>
       `<details class="bbttcc-now-sec" ${open ? "open" : ""}><summary>${title}</summary><div class="bd">${body}</div></details>`;
     // Progressive disclosure: actionable first, zero-signal sections start
@@ -2304,6 +2305,7 @@ const activeCampaignId = _getActiveCampaignId();
           if (scCur === val) o.selected = true;
           scSel.appendChild(o);
         }
+        scSel.dataset.tour = "campaign.flow-scope";
         scSel.addEventListener("change", (ev) => {
           this.flowScope = String(ev.target.value || "play");
           try { game.user?.setFlag?.("bbttcc-campaign", "flowScope", this.flowScope); } catch (_e) {}
@@ -2503,6 +2505,7 @@ const activeCampaignId = _getActiveCampaignId();
       // Controls summary (small)
       const meta = document.createElement("div");
       meta.className = "bbttcc-muted";
+      meta.dataset.tour = "campaign.flow-meta";
       meta.style.margin = "0 0 6px 0";
       meta.style.fontSize = "12px";
       const sep = " <span class='bbttcc-inline-separator'>·</span> ";
