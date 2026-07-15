@@ -113,10 +113,16 @@
       `<span title="Court Bonus" style="font-size:0.7rem;padding:1px 5px;border:1px solid ${color};border-radius:8px;color:${color};">★ ${side} ${n > 0 ? "+" : ""}${n}</span>`;
     const outChip = outcome === "ongoing" ? "" :
       `<span style="font-size:0.7rem;padding:1px 6px;background:#3a2a1a;color:#ffd28a;border:1px solid #ffd28a;border-radius:3px;">${esc(outcome.toUpperCase())}</span>`;
+    // Concluded scenarios linger on the HUD (the record of how it ended)
+    // until the next commit replaces them — make that state unmistakable
+    // instead of looking like a live board (owner confusion 2026-07-14).
+    const ended = outcome !== "ongoing";
+    const endedNote = !ended ? "" :
+      `<div style="margin-top:.35rem;font-size:0.68rem;color:#ffd28a;opacity:.85;font-style:italic;">Concluded — committing the next courtly exchange opens a fresh board.</div>`;
 
-    return `<div id="ft-courtly-influence" class="ft-hud-panel ft-hud-acc-cyan" style="position:fixed;left:12px;top:60px;width:300px;padding:.5rem .7rem;">
+    return `<div id="ft-courtly-influence" class="ft-hud-panel ft-hud-acc-cyan" style="position:fixed;left:12px;top:60px;width:300px;padding:.5rem .7rem;${ended ? "opacity:.62;filter:saturate(.6);" : ""}">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem;">
-        <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ Courtly Intrigue</span>
+        <span style="color:${CYAN};font-weight:600;letter-spacing:.04em;">⚜ Courtly Intrigue${ended ? " — ended" : ""}</span>
         <span style="font-size:0.72rem;color:#999;">Round ${round}</span>
       </div>
       <div style="display:flex;flex-direction:column;gap:.4rem;">
@@ -137,6 +143,7 @@
         ${cbChip(cbD, DEF_COLOR, "def")}
         ${outChip}
       </div>
+      ${endedNote}
     </div>`;
   }
 

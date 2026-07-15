@@ -4845,8 +4845,12 @@ const __b3DefMode  = String(__b3Pending?.nextRoll?.def?.mode || "normal");
           return;
         }
 
-        // Create once per console session (or when attacker/defender changes)
-        if (!this.__courtlyScenario || this.__courtlyScenarioAtt !== attacker.id || this.__courtlyScenarioDef !== defender.id) {
+        // Create once per console session — or when attacker/defender changes,
+        // or the held scenario has already RESOLVED. A rematch of the same
+        // court gets a fresh board instead of "scenario already resolved"
+        // (owner hit this validating the courtly sprint 2026-07-14).
+        const __prevCourtSt = this.__courtlyScenario?.getState?.() || null;
+        if (!this.__courtlyScenario || !__prevCourtSt || __prevCourtSt.outcome !== "ongoing" || this.__courtlyScenarioAtt !== attacker.id || this.__courtlyScenarioDef !== defender.id) {
           const init = await new Promise((resolve) => {
             new Dialog({
               title: "Courtly Intrigue — Initialize",

@@ -66,6 +66,25 @@
     } catch (_e) {}
   }
 
+  // Convo-sprint #3 multiplayer completion (2026-07-14): relay the scenario
+  // STATE snapshot to all clients whenever it changes. The raid console's
+  // existing courtlyHook socket handler re-fires bbttcc:courtly:state
+  // locally on every client, so player-side consumers (npc-dialogue's
+  // live-court board) can read a synced snapshot even though the scenario
+  // OBJECT lives only on the committing client. `__relayed` guards the
+  // echo — a re-fired hook must never re-emit.
+  Hooks.on("bbttcc:courtly:state", (payload) => {
+    try {
+      if (!payload || payload.__relayed) return;
+      const st = payload.state || payload?.scenario?.getState?.() || null;
+      if (!st) return;
+      game.socket?.emit?.(`module.${MOD_R}`, {
+        t: "courtlyHook", hook: "bbttcc:courtly:state",
+        payload: { state: st, __relayed: true }
+      });
+    } catch (_e) {}
+  });
+
   async function playRollFX(ctx = {}) {
     try {
       const fx = getFX();
@@ -325,11 +344,11 @@
       const dCapDelta = Number(D.flags?.["bbttcc-raid"]?.nextCourtlyInfluenceCapDelta || 0);
       if (aCapDelta) {
         initInfluenceA = Math.max(1, initInfluenceA + aCapDelta);
-        await A.update({ "flags.bbttcc-raid.-=nextCourtlyInfluenceCapDelta": null });
+        await A.unsetFlag(MOD_R, "nextCourtlyInfluenceCapDelta");
       }
       if (dCapDelta) {
         initInfluenceD = Math.max(1, initInfluenceD + dCapDelta);
-        await D.update({ "flags.bbttcc-raid.-=nextCourtlyInfluenceCapDelta": null });
+        await D.unsetFlag(MOD_R, "nextCourtlyInfluenceCapDelta");
       }
       const state = {
         attackerId: A.id,
@@ -397,6 +416,34 @@
       }
       await _consumeScarsForSide(A, "A");
       await _consumeScarsForSide(D, "D");
+
+      // Conversation door (bbttcc-mal-voice on-ramp): an NPC ushered the
+      // attacker into THIS court in dialogue (open_court_door tool). Consumed
+      // only when the scenario's defender matches the door's — a door into
+      // one court says nothing about another. Invited = warm introduction
+      // (+2 on the first exchange); conceded = grudging access (+1, and the
+      // court starts wary at Suspicion 1). Flag deleted after consume per
+      // [[foundry-setflag-recursive-merge]].
+      const door = A.flags?.[MOD_R]?.courtlyDoor;
+      if (door && String(door.defenderId || "") === D.id) {
+        const invited = door.method !== "conceded";
+        state.pendingMods.push({
+          side: "A", type: "bonus", value: invited ? 2 : 1,
+          source: `door:${invited ? "invited" : "conceded"}(${door.npcName || "an insider"})`,
+          fireOnRound: 1
+        });
+        if (!invited) state.suspicion = Math.max(state.suspicion, 1);
+        // unsetFlag, not a raw "-=key" update — v14 deprecated the legacy
+        // deletion syntax (owner hit the compat error 2026-07-14); the core
+        // helper always emits whatever the running core expects.
+        await A.unsetFlag(MOD_R, "courtlyDoor");
+        const esc = foundry.utils.escapeHTML;
+        await sendChat([
+          `${esc(door.npcName || "An insider")} holds the door: ${invited
+            ? `${esc(A.name)} enters on a warm introduction (+2 on the first exchange).`
+            : `${esc(A.name)} pushed their way in (+1 on the first exchange, but the court is already wary — Suspicion starts at 1).`}`
+        ], { title: `${label}: The Door Was Opened In Conversation` });
+      }
 
       function presenceBonus(actor) {
         const flags = actor.flags?.[MODF] || {};
@@ -766,6 +813,11 @@
           `Rolls: Attacker ${atkTotal} vs Defender ${defTotal} (margin ${margin >= 0 ? "+"+margin : margin})`,
           `Result: ${result.toUpperCase()} — Influence ${beforeA}/${beforeD} → ${state.influenceA}/${state.influenceD}`
         ];
+        // One-shot mods (door introductions, scar penalties, secret plays)
+        // were consumed silently before 2026-07-14 — surface the receipt.
+        if (consumedMods.length) {
+          lines.splice(3, 0, `Mods: <small style="opacity:.8;">${consumedMods.map(m => foundry.utils.escapeHTML(m)).join("; ")}</small>`);
+        }
         if (suspDelta !== 0 || uneasy) {
           lines.push(`Suspicion ${suspBefore} → ${state.suspicion}${uneasy ? " <small style=\"opacity:.7;\">(court uneasy)</small>" : ""}${susReasons.length ? ` <small style=\"opacity:.7;\">(${susReasons.join("; ")})</small>` : ""}`);
         }
@@ -996,6 +1048,65 @@
         return created;
       }
 
+      // Backlog #3 (convo sprint) — Converse-flavored secret gathering.
+      // Read the Room / Eavesdrop are conversations, not card draws: if any
+      // flagged tableau courtier has ARMED extractable secrets (probed via
+      // bbttcc-mal-voice's armedSecretCount API), offer to open a REAL
+      // dialogue with them — nudged with maneuver-specific framing — and let
+      // the divulge_secret bridge decide what (if anything) is given up.
+      // Fail-soft: no mal-voice, no candidates, or the table prefers it →
+      // the classic blind compendium draw, exactly as before.
+      async function converseSecret(side, acquisition = "earned", flavor = "readTheRoom") {
+        const s = _normSide(side);
+        if (!s) return null;
+        const mal = game.bbttcc?.mal?.npc;
+        const canConverse = typeof mal?.nudge === "function" && typeof mal?.armedSecretCount === "function";
+        const candidates = !canConverse ? [] : (canvas?.tokens?.placeables || [])
+          .filter(t => t.document?.flags?.[MOD_R]?.tableauActor === true && t.actor)
+          .map(t => ({ actor: t.actor, armed: mal.armedSecretCount(t.actor) }))
+          .filter(c => c.armed > 0);
+        if (!candidates.length) return drawSecret(s, acquisition);
+
+        const asker = s === "A" ? A : D;
+        const isRead = flavor !== "eavesdrop";
+        const title = isRead ? "Read the Room" : "Eavesdrop";
+        const opts2 = candidates.map(c =>
+          `<option value="${esc(c.actor.id)}">${esc(c.actor.name)} (${c.armed} guarded truth${c.armed === 1 ? "" : "s"})</option>`).join("");
+        const pick = await new Promise(resolve => {
+          new Dialog({
+            title: `${title} — a conversation, or the blind draw?`,
+            content: `<form>
+              <p style="font-size:.85em;opacity:.85;">${isRead
+                ? "Someone in this court is holding something. Work them in a REAL conversation — what they give up is what you get (routed through the usual divulge/approval flow) — or take the blind draw."
+                : "Slip within earshot of someone unguarded. What slips out is what you get (an overheard truth counts as stolen) — or take the blind draw."}</p>
+              <div class="form-group"><label>Courtier</label><select name="cid">${opts2}</select></div>
+            </form>`,
+            buttons: {
+              talk: { label: isRead ? "Work them" : "Listen in", callback: html => resolve({ mode: "talk", actor: game.actors.get(html[0].querySelector("[name=cid]").value) || null }) },
+              draw: { label: "Blind draw", callback: () => resolve({ mode: "draw" }) },
+              cancel: { label: "Cancel", callback: () => resolve(null) }
+            },
+            default: "talk",
+            close: () => resolve(null)
+          }, { width: 420 }).render(true);
+        });
+        if (!pick) return null;
+        if (pick.mode === "draw" || !pick.actor) return drawSecret(s, acquisition);
+
+        const npc = pick.actor;
+        await sendChat([isRead
+          ? `${esc(asker.name)} reads the room — and marks <b>${esc(npc.name)}</b>. Work the conversation; what they give up is what you get.`
+          : `${esc(asker.name)} finds an alcove within earshot of <b>${esc(npc.name)}</b>. What slips out is what you get.`
+        ], { title: `${label}: ${title}` });
+        const context = isRead
+          ? `Amid the courtly engagement "${label}", ${asker.name} reads the room — and a Steward draws close to YOU through the press of the court. You feel seen, weighed, and strangely inclined to talk. Open with a remark that betrays your mood tonight and a hint of what weighs on you.`
+          : `You believe yourself UNOBSERVED — an alcove, a colonnade, a breath alone amid the courtly engagement "${label}". Think aloud in character: what worries you tonight, whom you distrust, what you would never say in the open. Words spoken to no one can still be overheard — if the pressure of this night would TRULY loosen one of your guarded truths, you may let it slip, and a slipped truth is a stolen one. Judge that honestly.`;
+        try { await mal.nudge(npc, context); }
+        catch (e) { console.warn(TAG, "converse nudge failed, falling back to draw", e); return drawSecret(s, acquisition); }
+        try { Hooks.callAll("bbttcc:courtly:state", { scenario: apiObj, state: getState() }); } catch (_e) {}
+        return { conversed: npc.id };
+      }
+
       // Phase D — Patron's Word: spend −1 favor on a courtier with favor >= 2
       // toward self side, then queue a +3 bonus on next non-Intimidate action.
       async function spendFavorAndBoost(side, opts = {}) {
@@ -1099,6 +1210,8 @@
                 await armLastWord(resolveSide(eff.side), eff.source || "The Last Word"); break;
               case "drawSecret":
                 await drawSecret(resolveSide(eff.side), eff.acquisition || "earned"); break;
+              case "converseSecret":
+                await converseSecret(resolveSide(eff.side), eff.acquisition || "earned", eff.flavor || "readTheRoom"); break;
               case "spendFavor":
                 await spendFavorAndBoost(selfSide, { minFavor: eff.minFavor ?? 2 }); break;
               case "noteForGM":
@@ -1240,7 +1353,7 @@
         if (lines.length) await sendChat(lines, { title: `${label}: ${kind || "Outcome"}` });
       }
 
-      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, spendFavorAndBoost, applyEffects, burnScandalScar, armLastWord };
+      const apiObj = { step, getState, raiseSuspicion, lowerSuspicion, adjustFavor, queueRollMod, queueReroll, dealInfluenceDamage, clearScandal, queueActionBonus, discardSecret, lockSpend, drawSecret, converseSecret, spendFavorAndBoost, applyEffects, burnScandalScar, armLastWord };
 
       // Convenience for GM
       raidApi._lastCourtly = apiObj;

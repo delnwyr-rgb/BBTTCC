@@ -57,6 +57,17 @@ const APPS = new Map();          // actorId -> app instance
 //   game.bbttcc.mal.npc.setTestChoices(actorId, [{choiceKey, label, description}])
 const TEST_CHOICES = new Map();  // actorId -> choices[]
 
+// Latest courtly scenario state snapshot, fed by the bbttcc:courtly:state
+// hook — fired locally on the scenario-owning client and socket-relayed to
+// every other client by the raid console's courtlyHook handler. Lets
+// PLAYER-side conversations see the live court board even though the
+// scenario object lives on the committing (GM) client. Read-only: the
+// court_notices tool needs the real object and stays scenario-owner-side.
+let COURTLY_STATE_SNAPSHOT = null;
+Hooks.on("bbttcc:courtly:state", (p) => {
+  try { COURTLY_STATE_SNAPSHOT = p?.state ?? p?.scenario?.getState?.() ?? null; } catch (_e) {}
+});
+
 // ---------------------------------------------------------------------------
 // Persona assembly
 // ---------------------------------------------------------------------------
@@ -659,7 +670,7 @@ ${gmNotes ? `\n## PRIVATE TRUTH (GM notes — these facts are TRUE about you and
 1. Reply as ${name} would — voice, dialect, mood, agenda. 1–4 sentences unless the moment truly demands more. Plain speech only: no markdown, no stage directions, no narration of your own actions unless brief and natural ("*spits*" style asides are fine sparingly).
 2. You know ONLY what ${name} would plausibly know. If asked about things beyond your world, knowledge, or station, react in character — confusion, suspicion, deflection, a shrug. Never break character, never mention being an AI, never reveal game mechanics or numbers.
 2b. NEVER INVENT FACTS about named people, places, factions, territory, or events that are not in your knowledge above. If a Steward asks about someone or somewhere you don't recognize, say so in character ("Can't say I know the name — ask around the co-op") or clearly frame guesses as hearsay ("Way I heard it — and I heard it thirdhand…"). Getting the world wrong is worse than admitting ignorance. You may freely invent SMALL personal color (your own tastes, minor anecdotes, prices you'd charge) — never geography, allegiance, or history.
-3. Each Steward's line begins with their name (e.g. "Etta: ..."). Address people by name when natural. You may lie, bargain, evade, or refuse like a real person with your own interests.
+3. Each Steward's line begins with their name (e.g. "Etta: ..."). Address people by name when natural. You may lie, bargain, evade, or refuse like a real person with your own interests. This conversation may span several visits and several speakers — only the speaker of the LATEST line is certainly before you right now; earlier speakers may have come and gone. Never assume another Steward is still present unless the recent lines make it clear.
 4. You have wants. Let your agenda leak into the conversation — favors asked, warnings given, prices named, grudges nursed.
 5. If the conversation stalls, offer a hook: something you've seen, heard, lost, or fear. People in Bad Eden always know something.`;
 }
@@ -800,6 +811,16 @@ function _defineAppClass() {
       this._els.input = input;
       this._els.sendBtn = sendBtn;
 
+      // Speaker chip: make WHO is talking explicit before anything is sent.
+      // Refreshed on input focus + after every send — select a token, click
+      // the box, and the chip tells you who the NPC will hear.
+      const asRow = document.createElement("div");
+      asRow.style.cssText = "flex:0 0 auto;font-size:.7em;opacity:.6;margin-top:-.25em;padding-left:.2em;";
+      root.appendChild(asRow);
+      this._els.asRow = asRow;
+      this._refreshSpeakerChip();
+      input.addEventListener("focus", () => this._refreshSpeakerChip());
+
       // Replay stored history
       for (const m of this._history) {
         this._bubble(m.role, m.content, { speaker: m.speaker, noScroll: true });
@@ -813,6 +834,33 @@ function _defineAppClass() {
       content.replaceChildren(result);
       content.style.display = "flex";
       content.style.flexDirection = "column";
+    }
+
+    // ----- Speaker identity -----
+    // WHO is talking = the user's CONTROLLED token first (selecting your
+    // token is the table gesture for "I'm the one speaking"), then the
+    // user's assigned character, then the user name. Fixes multi-character
+    // players (owner hit it 2026-07-14: NPC addressed the player's default
+    // character, not the Steward actually on screen). The NPC being spoken
+    // to is excluded so hover-Y with the NPC selected can't self-speak.
+    _speakerActor() {
+      try {
+        for (const t of (canvas?.tokens?.controlled || [])) {
+          const a = t.actor;
+          if (a && a.id !== this.actor.id) return a;
+        }
+      } catch (_e) {}
+      return game.user.character || null;
+    }
+
+    _speakerName() {
+      return this._speakerActor()?.name || game.user.name;
+    }
+
+    _refreshSpeakerChip() {
+      if (!this._els.asRow) return;
+      const viaToken = !!(canvas?.tokens?.controlled || []).find(t => t.actor && t.actor.id !== this.actor.id);
+      this._els.asRow.innerHTML = `speaking as <b>${_esc(this._speakerName())}</b> <span style="opacity:.75;">${viaToken ? "(selected token)" : "(select your token to speak as someone else)"}</span>`;
     }
 
     // ----- DOM helpers -----
@@ -1141,8 +1189,9 @@ How to guard them:
       const def = secrets.find(s => String(s.key) === key);
       if (!def) return "No such secret is yours to tell. Continue the conversation naturally.";
       const method = (toolUse?.input?.method === "stolen") ? "stolen" : "earned";
-      const speakerName = game.user.character?.name || game.user.name;
-      const faction = _factionOfCharacter(game.user.character);
+      const speakerActor = this._speakerActor();
+      const speakerName = speakerActor?.name || game.user.name;
+      const faction = _factionOfCharacter(speakerActor);
 
       // GM at the keyboard: inline confirm, grant immediately.
       if (game.user.isGM) {
@@ -1236,7 +1285,7 @@ How to guard them:
         if (!condition) return null;
         const defender = _factionOfNpc(this.actor);
         if (!defender) return null;
-        const mine = _factionOfCharacter(game.user.character);
+        const mine = _factionOfCharacter(this._speakerActor());
         if (mine && mine.id === defender.id) return null;   // your own court needs no door
         return { condition, defender };
       } catch (e) { warn("court door sweep failed:", e?.message); return null; }
@@ -1278,8 +1327,9 @@ How to hold it:
     async _resolveCourtDoor(toolUse, door) {
       if (!door) return "No door is yours to open. Continue the conversation naturally.";
       const method = (toolUse?.input?.approach === "conceded") ? "conceded" : "invited";
-      const speakerName = game.user.character?.name || game.user.name;
-      const faction = _factionOfCharacter(game.user.character);
+      const speakerActor = this._speakerActor();
+      const speakerName = speakerActor?.name || game.user.name;
+      const faction = _factionOfCharacter(speakerActor);
 
       // GM at the keyboard: inline confirm, stamp immediately.
       if (game.user.isGM) {
@@ -1370,8 +1420,9 @@ How to hold it:
     // when a scenario is ongoing AND this NPC is in that room, else null.
     _courtlyLive() {
       try {
-        const sc = game.bbttcc?.api?.raid?._lastCourtly;
-        const st = sc?.getState?.();
+        let sc = game.bbttcc?.api?.raid?._lastCourtly || null;
+        let st = sc?.getState?.() || null;
+        if (!st) { sc = null; st = COURTLY_STATE_SNAPSHOT; }   // player client: synced snapshot, read-only
         if (!st || st.outcome !== "ongoing") return null;
         const A = game.actors?.get(st.attackerId);
         const D = game.actors?.get(st.defenderId);
@@ -1419,7 +1470,7 @@ How to hold it:
         const leans = [lean(favA, A), lean(favD, D)].filter(Boolean);
 
         return `## THE COURT TONIGHT (a courtly engagement is underway around this very conversation)
-"${st.label}" — round ${st.round}. ${A.name} presses their suit against ${D.name}'s court, and you are in that room.
+"${st.label}" — round ${st.round}. The FACTION called ${A.name} presses its suit against the FACTION called ${D.name} and its court, and you are in that room. Both sides are organizations — houses of many people — not individual persons; if you know nothing of a faction beyond its name, speak of it as a group you've only heard named, never invent a person out of it.
 • ${A.name}: ${standing(st.influenceA, st.maxA)} (influence ${st.influenceA}/${st.maxA}).
 • ${D.name}: ${standing(st.influenceD, st.maxD)} (influence ${st.influenceD}/${st.maxD}).
 • The room is ${room} (suspicion ${s}/10).
@@ -1444,7 +1495,7 @@ How to speak to it:
     _suspicionTool() {
       return {
         name: "court_notices",
-        description: "The room notices a Steward's misstep. Call this ONLY when a Steward's LATEST line, spoken amid the courtly engagement, is genuinely blunt, aggressive, or indiscreet in a way this court would notice — a threat, a delicate thing named outright, a crass open bribe, pressing on after your clear warning. Never for mere directness or hard bargaining. Call it AS you react, then answer as someone who knows the room just shifted.",
+        description: "The room notices a Steward's misstep. Call this when a Steward's LATEST line, spoken amid the courtly engagement, is genuinely blunt, aggressive, or indiscreet in a way this court would notice. THE ROOM KEEPS ITS OWN SCORE — whether YOU are frightened, amused, or unimpressed is irrelevant: a spoken threat of violence or open coercion is ALWAYS a misstep (usually a stir), call the tool even as you shrug it off in character. Never for mere directness or hard bargaining. Call it AS you react, then answer as someone who knows the room just shifted.",
         input_schema: {
           type: "object",
           properties: {
@@ -1463,33 +1514,60 @@ How to speak to it:
       return `## THE ROOM IS LISTENING (via the court_notices tool)
 Every word of this conversation lands inside the engagement above — and courts punish clumsiness.
 1. When a Steward's LATEST line is genuinely blunt, aggressive, or indiscreet — a threat, a delicate thing named outright, a crass open bribe, pressing on after your clear warning — call court_notices AS you react: "murmur" for a small lapse, "stir" for an open blunder.
-2. Hard bargaining, directness, or uncomfortable questions asked with grace are NOT missteps. Judge as this court would, not as a scold — most lines should pass without notice.
-3. At most one notice per Steward line, and only ever for the latest line — never re-litigate older ones.
-4. After the tool returns, answer in character as someone who felt the room shift — cooler, more guarded, aware of the watchers. Never mention the tool or anything mechanical.`;
+2. YOUR courage is not the room's judgment. You may be unafraid, amused, even delighted by a Steward's crudeness — the COURT still marks it. A spoken threat of violence or open coercion before the court is ALWAYS at least a murmur, usually a stir: call the tool even as you laugh it off in character. Shrugging it off in words while leaving the tool uncalled is a mistake.
+3. Hard bargaining, directness, or uncomfortable questions asked with grace are NOT missteps. Judge as this court would, not as a scold — most lines should pass without notice.
+4. At most one notice per Steward line, and only ever for the latest line — never re-litigate older ones.
+5. After the tool returns, answer in character as someone who felt the room shift — cooler, more guarded, aware of the watchers. Never mention the tool or anything mechanical.`;
     }
 
     async _resolveCourtNotice(toolUse, live) {
-      if (!live?.sc || typeof live.sc.raiseSuspicion !== "function")
-        return "The room lets it pass. Continue the conversation naturally.";
+      if (!live) return "The room lets it pass. Continue the conversation naturally.";
       const severity = (toolUse?.input?.severity === "stir") ? "stir" : "murmur";
       const amount = severity === "stir" ? 2 : 1;
       const line = String(toolUse?.input?.line || "").slice(0, 140);
 
-      // GM sanity gate. (A non-GM only ever reaches here when the scenario
-      // object lives on THEIR client — i.e. they're already driving the
-      // whole courtly engine locally — so no extra approval hop is added.)
-      if (game.user.isGM) {
-        const ok = await this._confirmCourtNotice(severity, amount, line);
-        if (!ok) return "On second look, no one of consequence caught it — the room lets it pass. Continue naturally, though YOU noticed.";
+      // Scenario object on THIS client: confirm (GM sanity gate) + apply.
+      if (live.sc && typeof live.sc.raiseSuspicion === "function") {
+        if (game.user.isGM) {
+          const ok = await this._confirmCourtNotice(severity, amount, line);
+          if (!ok) return "On second look, no one of consequence caught it — the room lets it pass. Continue naturally, though YOU noticed.";
+        }
+        try {
+          const after = await live.sc.raiseSuspicion(amount, line ? `overheard in conversation: ${line}` : "a misstep in conversation");
+          return `The room noticed — suspicion now stands at ${after}/10 (for your calibration only; never speak numbers). React in character: cooler, more guarded, aware of the watchers.`;
+        } catch (e) {
+          warn("court notice failed:", e?.message);
+          return "The moment passes without consequence. Continue naturally.";
+        }
       }
 
+      // Snapshot client (player seat): the suspicion track lives on the
+      // scenario-owning client, so route through a GM card — same trust
+      // pattern as secret divulges and court doors.
+      await this._postCourtNoticeCard(severity, amount, line);
+      return "Eyes flicked your way — whether the room makes something of it is not yours to know. React in character as someone who felt themselves watched; never name the mechanics.";
+    }
+
+    async _postCourtNoticeCard(severity, amount, line) {
       try {
-        const after = await live.sc.raiseSuspicion(amount, line ? `overheard in conversation: ${line}` : "a misstep in conversation");
-        return `The room noticed — suspicion now stands at ${after}/10 (for your calibration only; never speak numbers). React in character: cooler, more guarded, aware of the watchers.`;
-      } catch (e) {
-        warn("court notice failed:", e?.message);
-        return "The moment passes without consequence. Continue naturally.";
-      }
+        const gmIds = game.users.filter(u => u.isGM).map(u => u.id);
+        await ChatMessage.create({
+          whisper: gmIds,
+          content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #d0a04a;padding:.4em .6em;background:rgba(208,160,74,.08);">
+            <b>The court notices? — awaiting the GM's read</b><br>
+            <b>${_esc(this.actor.name)}</b> judges the room caught a misstep <small style="opacity:.7;">(model judged: ${_esc(severity)}, +${amount})</small><br>
+            ${line ? `<em style="font-size:.85em;">"${_esc(line)}"</em><br>` : ""}
+            <span style="font-size:.8em;opacity:.7;">Applies to the live courtly scenario on YOUR client via raiseSuspicion.</span><br>
+            <button type="button" data-bbttcc-court-notice="murmur" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-eye"></i> Murmur (+1)</button>
+            <button type="button" data-bbttcc-court-notice="stir" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-bullhorn"></i> Stir (+2)</button>
+            <button type="button" data-bbttcc-court-notice="dismiss" style="width:auto;padding:.2em .6em;margin-top:.3em;"><i class="fa-solid fa-xmark"></i> Let it pass</button>
+          </div>`,
+          flags: { [MODULE_ID]: { pendingCourtNotice: {
+            npcActorId: this.actor.id, severity, amount, line,
+            speakerName: this._speakerName(), userId: game.user.id
+          } } }
+        });
+      } catch (e) { warn("court notice card failed:", e?.message); }
     }
 
     async _confirmCourtNotice(severity, amount, line) {
@@ -1515,7 +1593,7 @@ Every word of this conversation lands inside the engagement above — and courts
       if (!provider?.call) return ui.notifications?.warn("Mal Voice provider not available.");
       if (!settings?.apiKey?.()) return ui.notifications?.warn("No API key configured (Module Settings → Bad Eden Mal Voice).");
 
-      const speaker = overrideSpeaker || game.user.character?.name || game.user.name;
+      const speaker = overrideSpeaker || this._speakerName();
       const userContent = overrideSpeaker ? raw : `${speaker}: ${raw}`;
 
       this._busy = true;
@@ -1554,9 +1632,11 @@ Every word of this conversation lands inside the engagement above — and courts
         if (live) {
           const favA = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.A.id] ?? 0);
           const favD = Number(this.actor.flags?.["bbttcc-raid"]?.courtFavor?.[live.D.id] ?? 0);
-          log(`courtly board INJECTED for '${this.actor.name}' — round ${live.st.round}, influence ${live.st.influenceA}/${live.st.influenceD}, suspicion ${live.st.suspicion}, favor A:${favA} D:${favD}, court_notices armed`);
+          log(`courtly board INJECTED for '${this.actor.name}' — round ${live.st.round}, influence ${live.st.influenceA}/${live.st.influenceD}, suspicion ${live.st.suspicion}, favor A:${favA} D:${favD}${live.sc ? ", court_notices armed (direct)" : ", court_notices armed (routes via GM card)"}`);
           const board = this._courtlyBoardSection(live);
           if (board) system.push({ text: board });
+          // Direct apply where the scenario object lives; on snapshot
+          // clients (player seats) the tool posts a GM approval card.
           toolList.push(this._suspicionTool());
           system.push({ text: this._suspicionSection() });
         }
@@ -1644,6 +1724,7 @@ Every word of this conversation lands inside the engagement above — and courts
         this._els.sendBtn.disabled = false;
         this._els.input.focus();
         this._els.list.scrollTop = this._els.list.scrollHeight;
+        this._refreshSpeakerChip();
       }
     }
 
@@ -2438,6 +2519,54 @@ function _bindCourtDoorButtons(message, root) {
   }
 }
 
+// Court-notice cards (player-seat court_notices) — the suspicion track lives
+// on the scenario-owning client, so player-side missteps arrive here as a
+// whisper; the GM's click applies raiseSuspicion via THEIR live scenario.
+async function _handleCourtNoticeCardClick(message, action) {
+  if (!game.user.isGM) return;
+  const p = message.getFlag(MODULE_ID, "pendingCourtNotice");
+  if (!p) return;
+
+  let outcome;
+  if (action === "dismiss") {
+    outcome = "✗ The room lets it pass.";
+  } else {
+    const amount = action === "stir" ? 2 : 1;
+    const sc = game.bbttcc?.api?.raid?._lastCourtly;
+    const st = sc?.getState?.();
+    if (typeof sc?.raiseSuspicion !== "function" || !st || st.outcome !== "ongoing") {
+      outcome = "⚠ No live courtly scenario on this client — nothing applied.";
+    } else {
+      try {
+        const after = await sc.raiseSuspicion(amount, p.line ? `overheard in conversation: ${p.line}` : "a misstep in conversation");
+        outcome = `✓ The court noticed (${action}) — Suspicion now ${after}/10.`;
+      } catch (e) {
+        outcome = `⚠ raiseSuspicion threw: ${e?.message || e}`;
+      }
+    }
+  }
+
+  try {
+    await message.update({
+      content: `<div class="bbttcc-mal-voice" style="border-left:3px solid #d0a04a;padding:.4em .6em;background:rgba(208,160,74,.08);">
+        <b>The court notices?</b>${p.line ? ` — <em style="font-size:.85em;">"${_esc(p.line)}"</em>` : ""}<br>${_esc(outcome)}</div>`,
+      [`flags.${MODULE_ID}.pendingCourtNotice`]: null
+    });
+  } catch (e) { warn("court notice card update failed:", e?.message); }
+}
+
+function _bindCourtNoticeButtons(message, root) {
+  if (!root || !message?.getFlag?.(MODULE_ID, "pendingCourtNotice")) return;
+  for (const btn of root.querySelectorAll("[data-bbttcc-court-notice]")) {
+    if (btn.dataset.bbttccBound) continue;   // v13 fires BOTH render hooks — bind once
+    btn.dataset.bbttccBound = "1";
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      _handleCourtNoticeCardClick(message, btn.dataset.bbttccCourtNotice);
+    });
+  }
+}
+
 // The public "way is open" card: [To the Court] opens the Raid Console on
 // the entering faction for whoever clicks (GM or player).
 function _bindCourtConsoleButtons(_message, root) {
@@ -2456,8 +2585,8 @@ function _bindCourtConsoleButtons(_message, root) {
 
 // v13+ fires renderChatMessageHTML (HTMLElement); older cores fire
 // renderChatMessage (jQuery). Bind both defensively.
-Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); _bindSecretButtons(message, html); _bindCourtDoorButtons(message, html); _bindCourtConsoleButtons(message, html); } catch (_e) {} });
-Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _bindApprovalButtons(message, r); _bindSecretButtons(message, r); _bindCourtDoorButtons(message, r); _bindCourtConsoleButtons(message, r); } catch (_e) {} });
+Hooks.on("renderChatMessageHTML", (message, html) => { try { _bindApprovalButtons(message, html); _bindSecretButtons(message, html); _bindCourtDoorButtons(message, html); _bindCourtConsoleButtons(message, html); _bindCourtNoticeButtons(message, html); } catch (_e) {} });
+Hooks.on("renderChatMessage",     (message, html) => { try { const r = html?.[0] ?? html; _bindApprovalButtons(message, r); _bindSecretButtons(message, r); _bindCourtDoorButtons(message, r); _bindCourtConsoleButtons(message, r); _bindCourtNoticeButtons(message, r); } catch (_e) {} });
 
 // ---------------------------------------------------------------------------
 // Settings + install

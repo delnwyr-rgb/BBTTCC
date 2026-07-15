@@ -80,10 +80,10 @@
     {
       key: "courtly_read_the_room", label: "Read the Room", tier: 1, costBand: "light",
       cost: { intrigue: 10 },
-      effectsText: "Draw 1 Earned Secret.",
-      description: "<p>You attend to the right glances, the right silences. Something useful coalesces. <b>Draw 1 Earned secret</b> from the courtly secrets compendium.</p>",
+      effectsText: "Mark a courtier and work them in conversation (or draw 1 Earned Secret blind).",
+      description: "<p>You attend to the right glances, the right silences — and mark the one holding something. <b>Open a real conversation with a courtier</b> (they'll feel seen, and inclined to talk); whatever they give up routes through the usual divulge flow. No willing courtier on the tableau, or you'd rather not talk? <b>Draw 1 Earned secret</b> blind instead.</p>",
       effects: [
-        { type: "drawSecret", side: "self", acquisition: "earned" }
+        { type: "converseSecret", side: "self", acquisition: "earned", flavor: "readTheRoom" }
       ]
     },
     {
@@ -118,10 +118,10 @@
     {
       key: "courtly_eavesdrop", label: "Eavesdrop", tier: 2, costBand: "light",
       cost: { intrigue: 10 },
-      effectsText: "Draw 1 Earned Secret (courtier-flavored).",
-      description: "<p>A wall, an alcove, a half-open door. Patience does the rest. <b>Draw 1 Earned secret</b> tied to a courtier (GM may rename to taste).</p>",
+      effectsText: "Listen in on an unguarded courtier (a slipped truth is Stolen) — or draw 1 Earned Secret blind.",
+      description: "<p>A wall, an alcove, a half-open door. Patience does the rest. <b>Listen in on a courtier who believes themselves alone</b> — they think aloud, and if the night's pressure truly loosens one of their guarded truths, it slips (an overheard truth counts as <b>Stolen</b>). No candidate on the tableau? <b>Draw 1 Earned secret</b> blind instead.</p>",
       effects: [
-        { type: "drawSecret", side: "self", acquisition: "earned" }
+        { type: "converseSecret", side: "self", acquisition: "earned", flavor: "eavesdrop" }
       ]
     },
     {

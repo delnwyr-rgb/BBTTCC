@@ -345,6 +345,38 @@
     }).catch(() => {});
     try { Hooks.callAll("bbttcc:courtly:state", { scenario, state: scenario.getState() }); } catch (_e) {}
 
+    // Backlog #5 (convo sprint) — the betrayal memory. A secret divulged in
+    // conversation carries its source NPC (flags.secret.source, stamped by
+    // bbttcc-mal-voice's grant); when that truth is PLAYED in open court,
+    // the divulger remembers who carried it there — and it stings harder
+    // when it was turned against their own faction. Fail-soft: no source
+    // (blind-drawn/forged secrets), no mal-voice, or a non-GM client (memory
+    // writes are GM-only) → nothing happens.
+    try {
+      const src = secretMeta.source;
+      const addMemory = game.bbttcc?.mal?.npc?.addMemory;
+      if (src?.npcActorId && typeof addMemory === "function") {
+        const npc = game.actors?.get(String(src.npcActorId));
+        if (npc) {
+          const oppName = game.actors?.get(side.oppFactionId)?.name || "the other side";
+          const npcSys = npc.system?.system ?? npc.system ?? {};
+          const npcFactionId = npc.flags?.["bbttcc-factions"]?.factionId || npcSys.faction?.id || npcSys.factionId || null;
+          const ownSide = npcFactionId && String(npcFactionId) === String(side.oppFactionId);
+          const confided = src.speakerName ? ` to ${src.speakerName}` : "";
+          const text = ownSide
+            ? `${actor.name} played my truth about "${item.name}" in open court — AGAINST MY OWN PEOPLE. I gave that up in conversation${confided}, and they made it a knife. I will not forgive who carried it there.`
+            : `${actor.name} played my truth about "${item.name}" before the court against ${oppName}. What I said in confidence${confided} is a public weapon now — I remember exactly who carried it there.`;
+          await addMemory(npc, text);
+          try {
+            Hooks.callAll("bbttcc:dialogue:secretBetrayed", {
+              npcActorId: npc.id, byFactionId: actor.id, againstFactionId: side.oppFactionId,
+              itemName: item.name, acquisition: secretMeta.acquisition, ownSide: !!ownSide
+            });
+          } catch (_e) {}
+        }
+      }
+    } catch (e) { console.warn(TAG, "betrayal memory failed", e); }
+
     // Phase F — broadcast secret-play VFX to all clients (chip pulse + chat).
     try {
       const evt = {
