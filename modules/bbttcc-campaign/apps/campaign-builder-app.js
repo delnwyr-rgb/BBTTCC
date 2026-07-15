@@ -638,6 +638,38 @@ function _buildFlowGraph(campaign, opts) {
     beats = beats.filter(function (bx) { return actOf(bx) === actFilter; });
   }
 
+  // Scope (play console, 2026-07-15): the Builder authors, the Visualizer
+  // PLAYS. "play" renders the living map only — the trail (fired), the
+  // present (ready / invited / cooling) and the horizon (blocked by exactly
+  // one unmet condition — where a storyPhase gate only counts if it is the
+  // very NEXT act; without that rule every future beat is "one condition
+  // away" from its own phase gate and the whole campaign floods back in).
+  // "all" = the author's full corpus.
+  var scope = (opts.scope == null) ? "all" : String(opts.scope);
+  if (scope === "play" && opts.runtime && opts.runtime.byId) {
+    var curPhase = 0;
+    try { curPhase = Number(game.settings.get("bbttcc-campaign", "storyPhase")) || 0; } catch (ePh) {}
+    var inPlay = function (b) {
+      var rt = opts.runtime.byId[String(b.id)];
+      if (!rt) return false;
+      if (rt.state === "fired" || rt.state === "ready" || rt.state === "cooling") return true;
+      if (rt.invited) return true;
+      if (rt.state === "blocked") {
+        var unmet = (rt.reasons || []).filter(function (r) { return !r.met; });
+        if (unmet.length !== 1) return false;
+        var r0 = unmet[0];
+        if (r0 && r0.kind === "flag" && /^storyPhase\b/.test(String(r0.text || ""))) {
+          var m = String(r0.text).match(/≥\s*(\d+)/);
+          var want = m ? Number(m[1]) : 99;
+          return want <= curPhase + 1;
+        }
+        return true;
+      }
+      return false;
+    };
+    beats = beats.filter(inPlay);
+  }
+
   // Nodes by id
   var byId = {};
   for (i = 0; i < beats.length; i++) byId[String(beats[i].id)] = beats[i];
@@ -1919,12 +1951,14 @@ const activeCampaignId = _getActiveCampaignId();
 
     // ── chains ────────────────────────────────────────────────────────────
     let chainsHtml = "";
+    let chainsSignal = false;   // any progress → section opens
     try {
       const chains = await api?.director?.chains?.() || {};
       const rows = [];
       for (const [name, list] of Object.entries(chains)) {
         if (!Array.isArray(list) || !list.length) continue;
         const fired = list.filter(x => x.fired).length;
+        if (fired > 0) chainsSignal = true;
         const next = list.find(x => !x.fired);
         const pct = Math.round((fired / list.length) * 100);
         rows.push(
@@ -1957,9 +1991,13 @@ const activeCampaignId = _getActiveCampaignId();
       meterRow("Cadence respect", getSetting("cadenceRespect")) +
       meterRow("Cadence tribute", getSetting("cadenceTribute")) +
       meterRow("Cadence uncontested", getSetting("cadenceUncontested"));
+    const metersSignal = (pressure > 0) || (wendigo > 0) ||
+      ["banditMercy", "banditFear", "cadenceRespect", "cadenceTribute", "cadenceUncontested"]
+        .some(k => (Number(getSetting(k)) || 0) > 0);
 
     // ── faction relations (non-neutral pairs, most extreme first) ────────
     let relHtml = "";
+    let relSignal = false;
     try {
       const rel = game.bbttcc?.api?.factions?.relations;
       if (rel?.list) {
@@ -1976,6 +2014,7 @@ const activeCampaignId = _getActiveCampaignId();
         }
         pairs.sort((a, b) => Math.abs(b.idx - 3) - Math.abs(a.idx - 3));
         pairs = pairs.slice(0, 10);
+        relSignal = pairs.length > 0;
         const tierCls = t => (t === "at_war" || t === "hostile") ? "bad" : (t === "unfriendly") ? "warn" : "good";
         relHtml = pairs.map(p =>
           `<div class="bbttcc-now-rel ${tierCls(p.tier)}"><span class="a">${esc(p.from)}</span> ▸ <span class="b">${esc(p.to)}</span><span class="tr">${esc(p.tier.replace("_", " "))}</span></div>`
@@ -1983,65 +2022,125 @@ const activeCampaignId = _getActiveCampaignId();
       }
     } catch (_e) {}
 
-    // ── available now / coming up / recent ───────────────────────────────
+    // ── available now / coming up / recent (play-console pass 2026-07-15) ─
     const AUTO_ICO = { director: "⚙", inject: "🎲", hex: "⬢", dialogue: "🗣" };
-    const readyBeats = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready")
+    let curPhase = 0;
+    try { curPhase = Number(game.settings.get(NS, "storyPhase")) || 0; } catch (_e) {}
+
+    // "Slide 03 — …" beats "Offices of Fates and Destini…" ×20.
+    const stripPrefix = (label, qn) => {
+      const l = String(label || ""), q = String(qn || "");
+      if (q && l.toLowerCase().startsWith(q.toLowerCase())) {
+        const rest = l.slice(q.length).replace(/^[\s,;:·—–-]+/, "");
+        if (rest.length >= 3) return rest;
+      }
+      return l;
+    };
+    const isAmbientBeat = b => !!b?.pacing?.ambient;
+
+    const readyAll = beats.filter(b => runtime.byId[String(b.id)]?.state === "ready");
+    const readyStory = readyAll.filter(b => !isAmbientBeat(b))
       .sort((a, b) => {
         const ra = runtime.byId[String(a.id)], rb = runtime.byId[String(b.id)];
         const da = ra.auto.includes("director") ? 0 : 1, db = rb.auto.includes("director") ? 0 : 1;
         if (da !== db) return da - db;
         return String(a.label || a.id).localeCompare(String(b.label || b.id));
       });
-    const readyHtml = readyBeats.slice(0, 25).map(b => {
+    const readyAmbient = readyAll.filter(isAmbientBeat);
+    const readyRow = b => {
       const rt = runtime.byId[String(b.id)];
       const ico = rt.auto.map(a => AUTO_ICO[a] || "").join("");
       const q = questOf(b);
-      return flyBtn(b.id, (b.label || b.id), `${ico}${rt.hasAudio ? "🔊" : ""}${q ? ` <em>${esc(q)}</em>` : ""}`, true);
-    }).join("") + (readyBeats.length > 25 ? `<div class="bbttcc-now-empty">+ ${readyBeats.length - 25} more…</div>` : "");
+      return flyBtn(b.id, stripPrefix(b.label || b.id, q), `${ico}${rt.hasAudio ? "🔊" : ""}${q ? ` <em>${esc(q)}</em>` : ""}`, true);
+    };
+    const readyHtml =
+      readyStory.slice(0, 25).map(readyRow).join("") +
+      (readyStory.length > 25 ? `<div class="bbttcc-now-empty">+ ${readyStory.length - 25} more…</div>` : "") +
+      (readyAmbient.length
+        ? `<details class="bbttcc-now-sub"><summary>🎲 Ambient pool (${readyAmbient.length}) — fires itself via travel/hexes</summary>` +
+          readyAmbient.slice(0, 15).map(readyRow).join("") +
+          (readyAmbient.length > 15 ? `<div class="bbttcc-now-empty">+ ${readyAmbient.length - 15} more…</div>` : "") +
+          `</details>`
+        : "");
 
+    // Horizon rule: a lone unmet storyPhase gate only counts as "coming up"
+    // when it is the very NEXT act — otherwise the whole funnel floods in.
+    const horizonOk = r => {
+      if (r && r.kind === "flag" && /^storyPhase\b/.test(String(r.text || ""))) {
+        const m = String(r.text).match(/≥\s*(\d+)/);
+        return (m ? Number(m[1]) : 99) <= curPhase + 1;
+      }
+      return true;
+    };
     const comingRows = [];
     for (const b of beats) {
       const rt = runtime.byId[String(b.id)];
       if (!rt) continue;
       if (rt.state === "blocked") {
         const unmet = (rt.reasons || []).filter(r => !r.met);
-        if (unmet.length === 1) comingRows.push({ b, why: unmet[0].text + (unmet[0].current !== undefined ? ` (now ${unmet[0].current})` : "") });
+        if (unmet.length === 1 && horizonOk(unmet[0])) {
+          comingRows.push({ b, why: unmet[0].text + (unmet[0].current !== undefined ? ` (now ${unmet[0].current})` : "") });
+        }
       } else if (rt.state === "cooling") {
         comingRows.push({ b, why: `cooling until T${rt.cooldownUntil}` });
       }
     }
     const comingHtml = comingRows.slice(0, 15).map(r =>
-      flyBtn(r.b.id, (r.b.label || r.b.id), `<em>${esc(r.why)}</em>`)
+      flyBtn(r.b.id, stripPrefix(r.b.label || r.b.id, questOf(r.b)), `<em>${esc(r.why)}</em>`)
     ).join("") + (comingRows.length > 15 ? `<div class="bbttcc-now-empty">+ ${comingRows.length - 15} more…</div>` : "");
 
     let recentHtml = "";
+    let histCount = 0;
     try {
       const ds = api?.director?.state?.() || {};
       const hist = [];
       for (const src of [ds.firedStoryBeats || {}, ds.dialogueFired || {}]) {
         for (const [id, m] of Object.entries(src)) hist.push({ id, turn: m?.turn, ts: Number(m?.ts) || 0 });
       }
+      histCount = hist.length;
       hist.sort((a, b) => b.ts - a.ts);
       recentHtml = hist.slice(0, 10).map(h =>
         flyBtn(h.id, (beatById[h.id]?.label || h.id), h.turn != null ? `T${h.turn}` : "")
       ).join("") || `<div class="bbttcc-now-empty">nothing fired yet — the world is young</div>`;
     } catch (_e) {}
 
+    // Cold-start hero: nothing has fired yet → one unmissable first verb.
+    // "First" = the first ready story beat in AUTHORING order (the canonical
+    // opening), not the sorted list.
+    let heroHtml = "";
+    if (histCount === 0 && readyStory.length) {
+      const first = beats.find(b => !isAmbientBeat(b) && runtime.byId[String(b.id)]?.state === "ready");
+      if (first) {
+        const fq = questOf(first);
+        heroHtml =
+          `<div class="bbttcc-now-hero">` +
+          `<div class="k">🎬 BEGIN</div>` +
+          `<div class="t">${esc(first.label || first.id)}</div>` +
+          (fq ? `<div class="q">${esc(fq)}</div>` : "") +
+          `<button type="button" class="bbttcc-now-hero-run" data-run="${esc(first.id)}">▶ Run the opening beat</button>` +
+          (readyStory.length > 1 ? `<div class="alt">…or browse ${readyStory.length - 1} other available beat${readyStory.length === 2 ? "" : "s"} below</div>` : "") +
+          `</div>`;
+      }
+    }
+
     // ── assemble ──────────────────────────────────────────────────────────
     const rail = document.createElement("div");
     rail.className = "bbttcc-now-panel";
     const sec = (title, body, open = true) =>
       `<details class="bbttcc-now-sec" ${open ? "open" : ""}><summary>${title}</summary><div class="bd">${body}</div></details>`;
+    // Progressive disclosure: actionable first, zero-signal sections start
+    // collapsed — the rail grows back to full depth as the campaign does.
     rail.innerHTML =
       `<div class="bbttcc-now-grip" data-tooltip="Drag to resize the panel"></div>` +
-      `<div class="bbttcc-now-head"><button type="button" class="bbttcc-now-expand" data-expand data-tooltip="Toggle wide panel">⟷</button>ACT ${(() => { try { return Number(game.settings.get(NS, "storyPhase")) || 0; } catch (_e) { return 0; } })()} · TURN ${esc(String(runtime.turn))}` +
+      `<div class="bbttcc-now-head"><button type="button" class="bbttcc-now-expand" data-expand data-tooltip="Toggle wide panel">⟷</button>ACT ${curPhase} · TURN ${esc(String(runtime.turn))}` +
       (runtime.ledger ? `<span>${esc(String(runtime.ledger.spent))}/${esc(String(runtime.ledger.budget))} days${Number(runtime.ledger.debt) ? ` · debt ${esc(String(runtime.ledger.debt))}` : ""}</span>` : "") +
       `</div>` +
-      (chainsHtml ? sec("⚙ Story chains", chainsHtml) : "") +
-      sec("🌡 Pressures", metersHtml) +
-      (relHtml ? sec("🤝 Faction relations", relHtml) : "") +
-      sec(`⚡ Available now (${readyBeats.length})`, readyHtml || `<div class="bbttcc-now-empty">nothing eligible right now</div>`) +
-      sec(`⏳ Coming up (${comingRows.length})`, comingHtml || `<div class="bbttcc-now-empty">no beats within one condition</div>`) +
+      heroHtml +
+      sec(`⚡ Available now (${readyStory.length}${readyAmbient.length ? ` · 🎲 ${readyAmbient.length}` : ""})`, readyHtml || `<div class="bbttcc-now-empty">nothing eligible right now</div>`) +
+      sec(`⏳ Coming up (${comingRows.length})`, comingHtml || `<div class="bbttcc-now-empty">nothing within one condition of unlocking</div>`) +
+      (chainsHtml ? sec("⚙ Story chains", chainsHtml, chainsSignal) : "") +
+      sec("🌡 Pressures", metersHtml, metersSignal) +
+      (relHtml ? sec("🤝 Faction relations", relHtml, relSignal) : "") +
       sec("✓ Recently fired", recentHtml, false);
 
     // Width: persisted per user; drag the left-edge grip or toggle ⟷ wide.
@@ -2134,6 +2233,7 @@ const activeCampaignId = _getActiveCampaignId();
         viewMode: this.flowViewMode,
         expandedQuests: this.flowExpandedQuests,
         actFilter: this.flowActFilter ?? "all",
+        scope: this.flowScope ?? (game.user?.getFlag?.("bbttcc-campaign", "flowScope") ?? "play"),
         runtime
       });
       if (!graph || !graph.nodes || !graph.nodes.length) {
@@ -2185,6 +2285,31 @@ const activeCampaignId = _getActiveCampaignId();
         left.style.display = "flex";
         left.style.alignItems = "center";
         left.style.gap = "10px";
+
+        // Scope: the play-console dial. "In play" = the living map (trail +
+        // present + next-act horizon); "Everything" = the author's corpus.
+        const scLbl = document.createElement("div");
+        styleBarLabel(scLbl);
+        scLbl.textContent = "Scope";
+        scLbl.dataset.tooltip = "In play: only fired beats, beats ready or cooling now, and beats one condition from unlocking (next act at most) — the map grows as the campaign is played. Everything: the full authored corpus.";
+        const scSel = document.createElement("select");
+        scSel.dataset.tooltip = scLbl.dataset.tooltip;
+        styleBarSelect(scSel);
+        const scCur = String(this.flowScope ?? (game.user?.getFlag?.("bbttcc-campaign", "flowScope") ?? "play"));
+        this.flowScope = scCur;
+        for (const [val, label] of [["play", "▶ In play"], ["all", "🛠 Everything"]]) {
+          const o = document.createElement("option");
+          o.value = val;
+          o.textContent = label;
+          if (scCur === val) o.selected = true;
+          scSel.appendChild(o);
+        }
+        scSel.addEventListener("change", (ev) => {
+          this.flowScope = String(ev.target.value || "play");
+          try { game.user?.setFlag?.("bbttcc-campaign", "flowScope", this.flowScope); } catch (_e) {}
+          this._flowResetView();
+          this.render(false);
+        });
 
         const lbl = document.createElement("div");
         styleBarLabel(lbl);
@@ -2320,6 +2445,8 @@ const activeCampaignId = _getActiveCampaignId();
           this.render(false);
         });
 
+        left.appendChild(scLbl);
+        left.appendChild(scSel);
         left.appendChild(lbl);
         left.appendChild(sel);
         left.appendChild(qLbl);
