@@ -3308,6 +3308,15 @@ async function executeBeat(campaign, beat, ctx = {}) {
       warn("Quest effects failed:", eQuestFx);
     }
 
+    // Phase Charter closers (worldEffects.phaseAdvance) — advance the act +
+    // raise leveling floors. Runs after quest effects so a closer can both
+    // complete its quest and open the next act in one beat.
+    try {
+      await _applyPhaseAdvance(campaign, beat);
+    } catch (ePhase) {
+      warn("Phase advance failed:", ePhase);
+    }
+
     // -------------------------------------------------------------------
     // Casualty Engine (Beat tags)  -  applies hex/faction casualty effects + war logs
     // Runs after worldEffects apply so it can append receipts and use ctx/hex resolution.
@@ -3671,6 +3680,19 @@ function _onAfterTravelLedger(tctx) {
 // the new month (it starts pre-spent), reset entries, re-sync budget setting.
 async function _onAdvanceTurnEndLedger(tctx) {
   if (!tctx || tctx.apply !== true) return;
+
+  // Phase Charter calendar doors: the clock keeps its own promises. If the
+  // world turn has reached a hard-door threshold and the phase lags, advance
+  // it (the GM whisper names the door; the authored summons beat is the
+  // narrative face — run it from the console when it appears).
+  try {
+    const tNow = _getTurnNumberSafe();
+    for (const [turnGte, phaseMin] of PHASE_CALENDAR_DOORS) {
+      if (tNow >= turnGte) await _storyPhaseAdvance(phaseMin, { via: `calendar hard door (turn ${tNow})` });
+    }
+  } catch (ePhaseCal) {
+    warn("[phase] calendar door check failed:", ePhaseCal);
+  }
   if (!game.user?.isGM) return;
   const w = game.bbttcc?.api?.world;
   if (!w?.getTimeBudget || !w?.getState || !w?.setState) return;
@@ -3910,9 +3932,81 @@ async function _gmPromptDebtBeat({ campaignId, beatId, beatLabel, hexUuid }) {
 // Fail-OPEN on a thrown error (never hide a beat because the evaluator broke);
 // fail-CLOSED + warn on an unknown/misconfigured condition (a bad gate must not
 // silently fire a story beat early). Beats with no `requires` are unaffected.
+// ---------------------------------------------------------------------------
+// Phase Charter machinery (2026-07-15, PHASE-CHARTER-2026-07-15.md v1.2):
+// storyPhase is the campaign's act ladder. Landmark "closer" beats carry
+// worldEffects.phaseAdvance = { set: N }; floors come from PHASE_FLOORS so the
+// charter's leveling ladder lives in exactly one place. Phase only ever RISES.
+// ---------------------------------------------------------------------------
+const SETTING_STORY_PHASE = "storyPhase";
+const PHASE_NAMES = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", "THE VAULT & THE SKY", "THATWARDS HO!", "GLOOMGILL"];
+const PHASE_FLOORS = { 2: { steward: 2, faction: 1 }, 3: { steward: 4, faction: 2 }, 4: { steward: 6, faction: 3 }, 5: { steward: 8, faction: 4 }, 6: { steward: 9, faction: 4 } };
+// Calendar hard doors (charter §2): turn threshold → minimum phase.
+const PHASE_CALENDAR_DOORS = [[2, 2], [6, 3], [10, 4], [14, 5]];
+
+function _storyPhaseGet() {
+  try { return Number(game.settings.get(MOD_ID, SETTING_STORY_PHASE)) || 0; } catch (_e) { return 0; }
+}
+
+async function _storyPhaseAdvance(target, { via = "beat" } = {}) {
+  const cur = _storyPhaseGet();
+  const next = Math.max(cur, Math.floor(Number(target) || 0));
+  if (next === cur) return false;
+  await game.settings.set(MOD_ID, SETTING_STORY_PHASE, next);
+  const floors = PHASE_FLOORS[next];
+  if (floors) {
+    await _mutateDirectorState(async (st) => {
+      st.stewardLevelFloor = Math.max(Number(st.stewardLevelFloor) || 0, floors.steward);
+      st.factionTierFloor = Math.max(Number(st.factionTierFloor) || 0, floors.faction);
+    });
+    try { await directorReconcileLevels({ reason: `phase ${next}` }); } catch (eR) { warn("[phase] reconcileLevels failed:", eR); }
+  }
+  const nm = PHASE_NAMES[next] || `PHASE ${next}`;
+  try {
+    await ChatMessage.create({
+      whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+      content: `<div class="bbttcc-phase-advance"><h3>🚦 ACT ${next} — ${nm}</h3>` +
+        `<p>Story phase advanced (${via}).` +
+        (floors ? ` Level floors raised: steward <b>${floors.steward}</b>, faction <b>T${floors.faction}</b>.` : "") +
+        `</p></div>`
+    });
+  } catch (_e) {}
+  return true;
+}
+
+async function _applyPhaseAdvance(campaign, beat) {
+  const pa = beat?.worldEffects?.phaseAdvance;
+  if (!pa || pa.set == null) return;
+  await _storyPhaseAdvance(pa.set, { via: `beat “${beat.label || beat.id}”` });
+}
+
+// Deed gate value: how many atlas hexes the coalition's factions hold.
+// Cadence's opener uses { flag:"hexesClaimed", gte:2 } — the home hex counts
+// as the first, so the first EXPANSION trips the wire.
+function _hexesClaimedCount() {
+  try {
+    const cid = getActiveCampaignId();
+    const camp = cid ? getCampaign(cid) : null;
+    const fids = new Set((camp?.factionIds || []).map(String));
+    if (!fids.size) return 0;
+    let n = 0;
+    for (const scene of game.scenes) {
+      for (const dr of scene.drawings.contents) {
+        const f = dr.flags?.["bbttcc-territory"];
+        if (!f) continue;
+        if (!(f.isHex === true || f.kind === "territory-hex" || f.hexId)) continue;
+        if (fids.has(String(f.factionId || ""))) n++;
+      }
+    }
+    return n;
+  } catch (_e) { return 0; }
+}
+
 function _resolveGateValue(name) {
   switch (name) {
     case "wendigoRung": return _wendigoRungGet();
+    case "storyPhase": return _storyPhaseGet();    // Phase Charter act ladder
+    case "hexesClaimed": return _hexesClaimedCount(); // coalition-held hex count
     case "turn": return _getTurnNumberSafe();      // world turn — e.g. { flag:"turn", gte:6 }
     case "banditMercy": return _banditMeterGet(SETTING_BANDIT_MERCY);   // Bandit Accord mercy count
     case "banditFear":  return _banditMeterGet(SETTING_BANDIT_FEAR);    // Bandit Accord fear count
@@ -6737,6 +6831,18 @@ Hooks.once("init", () => {
   game.settings.register(MOD_ID, SETTING_WENDIGO_RUNG, {
     name: "Bad Eden Wendigo Rung",
     hint: "Internal: per-world Wendigo 'something OFF' escalation meter (0–4). Do not edit manually.",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0
+  });
+
+  // Phase Charter act ladder (PHASE-CHARTER-2026-07-15.md). Advanced by
+  // landmark closer beats (worldEffects.phaseAdvance) and calendar hard
+  // doors; GM can override via the Reset Console's World section.
+  game.settings.register(MOD_ID, SETTING_STORY_PHASE, {
+    name: "Bad Eden Story Phase",
+    hint: "Internal: the campaign's act (0 Offices → 6 Gloomgill). Gates use { flag:'storyPhase', gte:N }.",
     scope: "world",
     config: false,
     type: Number,

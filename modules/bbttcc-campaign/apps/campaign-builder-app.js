@@ -617,6 +617,27 @@ function _buildFlowGraph(campaign, opts) {
     });
   }
 
+  // Act filter (Phase Charter, 2026-07-15): slice the graph to one act of the
+  // funnel. A beat's act = the gte of its storyPhase gate; pacing.ambient
+  // beats form their own "ambient" slice; spine/system beats (no storyPhase
+  // gate) only appear under "All Acts".
+  var actFilter = (opts.actFilter == null) ? "all" : String(opts.actFilter);
+  if (actFilter !== "all") {
+    var actOf = function (b) {
+      try {
+        if (b && b.pacing && b.pacing.ambient) return "ambient";
+        var req = b && b.inject && b.inject.requires;
+        var arr = Array.isArray(req) ? req : (req ? [req] : []);
+        for (var ai = 0; ai < arr.length; ai++) {
+          var c = arr[ai];
+          if (c && c.flag === "storyPhase") return String(Math.floor(Number(c.gte != null ? c.gte : c.eq) || 0));
+        }
+        return null;
+      } catch (e) { return null; }
+    };
+    beats = beats.filter(function (bx) { return actOf(bx) === actFilter; });
+  }
+
   // Nodes by id
   var byId = {};
   for (i = 0; i < beats.length; i++) byId[String(beats[i].id)] = beats[i];
@@ -1892,6 +1913,7 @@ const activeCampaignId = _getActiveCampaignId();
     const flyBtn = (id, label, extra = "", runnable = false) =>
       `<div class="bbttcc-now-row">` +
       `<button type="button" class="bbttcc-now-item" data-fly="${esc(id)}"><span class="t">${esc(label)}</span>${extra ? `<span class="x">${extra}</span>` : ""}</button>` +
+      `<button type="button" class="bbttcc-now-info" data-info="${esc(id)}" data-tooltip="Show the full beat description">ⓘ</button>` +
       (runnable ? `<button type="button" class="bbttcc-now-run" data-run="${esc(id)}" data-tooltip="Run this beat now">▶</button>` : "") +
       `</div>`;
 
@@ -2011,7 +2033,8 @@ const activeCampaignId = _getActiveCampaignId();
     const sec = (title, body, open = true) =>
       `<details class="bbttcc-now-sec" ${open ? "open" : ""}><summary>${title}</summary><div class="bd">${body}</div></details>`;
     rail.innerHTML =
-      `<div class="bbttcc-now-head">NOW · TURN ${esc(String(runtime.turn))}` +
+      `<div class="bbttcc-now-grip" data-tooltip="Drag to resize the panel"></div>` +
+      `<div class="bbttcc-now-head"><button type="button" class="bbttcc-now-expand" data-expand data-tooltip="Toggle wide panel">⟷</button>ACT ${(() => { try { return Number(game.settings.get(NS, "storyPhase")) || 0; } catch (_e) { return 0; } })()} · TURN ${esc(String(runtime.turn))}` +
       (runtime.ledger ? `<span>${esc(String(runtime.ledger.spent))}/${esc(String(runtime.ledger.budget))} days${Number(runtime.ledger.debt) ? ` · debt ${esc(String(runtime.ledger.debt))}` : ""}</span>` : "") +
       `</div>` +
       (chainsHtml ? sec("⚙ Story chains", chainsHtml) : "") +
@@ -2021,7 +2044,57 @@ const activeCampaignId = _getActiveCampaignId();
       sec(`⏳ Coming up (${comingRows.length})`, comingHtml || `<div class="bbttcc-now-empty">no beats within one condition</div>`) +
       sec("✓ Recently fired", recentHtml, false);
 
+    // Width: persisted per user; drag the left-edge grip or toggle ⟷ wide.
+    const NOW_W_DEFAULT = 300, NOW_W_WIDE = 540, NOW_W_MIN = 240, NOW_W_MAX = 720;
+    let nowW = NOW_W_DEFAULT;
+    try { nowW = Number(game.user?.getFlag?.(NS, "nowPanelWidth")) || NOW_W_DEFAULT; } catch (_e) {}
+    const setW = (w, persist = false) => {
+      nowW = Math.max(NOW_W_MIN, Math.min(NOW_W_MAX, Math.round(w)));
+      rail.style.flexBasis = nowW + "px";
+      rail.style.maxWidth = nowW + "px";
+      if (persist) { try { game.user?.setFlag?.(NS, "nowPanelWidth", nowW); } catch (_e) {} }
+    };
+    setW(nowW);
+
+    const grip = rail.querySelector(".bbttcc-now-grip");
+    if (grip) {
+      grip.addEventListener("mousedown", ev => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const startX = ev.clientX, startW = nowW;
+        const onMove = e => setW(startW + (startX - e.clientX));
+        const onUp = () => {
+          document.removeEventListener("mousemove", onMove);
+          document.removeEventListener("mouseup", onUp);
+          setW(nowW, true);
+        };
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("mouseup", onUp);
+      });
+    }
+
     rail.addEventListener("click", ev => {
+      const exp = ev.target?.closest?.("[data-expand]");
+      if (exp) { ev.preventDefault(); setW(nowW >= NOW_W_WIDE ? NOW_W_DEFAULT : NOW_W_WIDE, true); return; }
+      const info = ev.target?.closest?.("[data-info]");
+      if (info) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const id = String(info.dataset.info || "");
+        const row = info.closest(".bbttcc-now-row");
+        const next = row?.nextElementSibling;
+        if (next && next.classList?.contains("bbttcc-now-detail")) { next.remove(); return; }
+        const b = beatById[id];
+        const desc = String(b?.description || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+        const det = document.createElement("div");
+        det.className = "bbttcc-now-detail";
+        det.innerHTML =
+          `<div class="ttl">${esc(b?.label || id)}</div>` +
+          `<div class="idl">${esc(id)}${b?.questId ? ` · ${esc(questOf(b))}` : ""}</div>` +
+          `<div class="ds${desc ? "" : " none"}">${desc ? esc(desc) : "(no description authored)"}</div>`;
+        row?.after(det);
+        return;
+      }
       const run = ev.target?.closest?.("[data-run]");
       if (run) { ev.preventDefault(); ev.stopPropagation(); this._runBeatFromConsole(run.dataset.run); return; }
       const btn = ev.target?.closest?.("[data-fly]");
@@ -2060,6 +2133,7 @@ const activeCampaignId = _getActiveCampaignId();
         showTravel: this.flowShowTravel,
         viewMode: this.flowViewMode,
         expandedQuests: this.flowExpandedQuests,
+        actFilter: this.flowActFilter ?? "all",
         runtime
       });
       if (!graph || !graph.nodes || !graph.nodes.length) {
@@ -2191,6 +2265,31 @@ const activeCampaignId = _getActiveCampaignId();
           this.render(false);
         });
 
+        // Act filter (Phase Charter): slice the map to one act of the funnel.
+        const aLbl = document.createElement("div");
+        styleBarLabel(aLbl);
+        aLbl.textContent = "Act";
+        aLbl.dataset.tooltip = "Filter to one act of the Phase Charter funnel — a beat's act is its storyPhase gate. Ambient = the phase-free pool (travel encounters, the Garden). Spine/system beats appear only under All Acts.";
+        const aSel = document.createElement("select");
+        aSel.dataset.tooltip = aLbl.dataset.tooltip;
+        styleBarSelect(aSel);
+        const ACT_NAMES = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", "THE VAULT & THE SKY", "THATWARDS HO!", "GLOOMGILL"];
+        const actCur = String(this.flowActFilter ?? "all");
+        for (const [val, label] of [["all", "All Acts"],
+          ...ACT_NAMES.map((n, i) => [String(i), `ACT ${i} — ${n}`]),
+          ["ambient", "Ambient pool"]]) {
+          const o = document.createElement("option");
+          o.value = val;
+          o.textContent = label;
+          if (actCur === val) o.selected = true;
+          aSel.appendChild(o);
+        }
+        aSel.addEventListener("change", (ev) => {
+          this.flowActFilter = String(ev.target.value || "all");
+          this._flowResetView();
+          this.render(false);
+        });
+
         // View mode selector (Beats | Quests) — B9 trim
         const vLbl = document.createElement("div");
         styleBarLabel(vLbl);
@@ -2225,6 +2324,8 @@ const activeCampaignId = _getActiveCampaignId();
         left.appendChild(sel);
         left.appendChild(qLbl);
         left.appendChild(qSel);
+        left.appendChild(aLbl);
+        left.appendChild(aSel);
         left.appendChild(vLbl);
         left.appendChild(vSel);
         bar.appendChild(left);
@@ -2283,6 +2384,11 @@ const activeCampaignId = _getActiveCampaignId();
         "<span><b>" + String(graph.edges.length) + "</b> links</span>" +
         (this.flowShowTravel ? sep + "<span>Travel lane: <b>shown</b></span>" : "");
       if (runtime) {
+        try {
+          const ph = Number(game.settings.get("bbttcc-campaign", "storyPhase")) || 0;
+          const PHN = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", "THE VAULT & THE SKY", "THATWARDS HO!", "GLOOMGILL"];
+          metaHtml += sep + `<span style="color:var(--cb-data,#93c5fd);font-weight:800;letter-spacing:.08em">ACT ${ph} — ${PHN[ph] || "?"}</span>`;
+        } catch (_ePh) {}
         metaHtml += sep + `<span>Turn <b>${runtime.turn}</b></span>`;
         if (runtime.ledger && Number.isFinite(Number(runtime.ledger.spent)) && Number.isFinite(Number(runtime.ledger.budget))) {
           metaHtml += sep + `<span>${runtime.ledger.spent}/${runtime.ledger.budget} days</span>`;

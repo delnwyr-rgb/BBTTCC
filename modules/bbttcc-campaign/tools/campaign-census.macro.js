@@ -70,8 +70,12 @@
     for (const c of (Array.isArray(b?.choices) ? b.choices : [])) { chk(c?.next, "choice"); chk(c?.failNext, "choice_fail"); }
   }
 
-  // ── gates + chains ────────────────────────────────────────────────────────
+  // ── gates + chains + Phase Charter lint ──────────────────────────────────
   const gated = beats.filter(b => b?.inject?.requires).length;
+  // Charter Law 1 (default-closed): every beat carries a gate or an explicit
+  // pacing.ambient marking. Anything else is a lint hit.
+  const lintUngated = beats.filter(b => b?.id && !b?.inject?.requires && !b?.pacing?.ambient).map(b => String(b.id));
+  const storyPhase = (() => { try { return Number(game.settings.get(NS, "storyPhase")) || 0; } catch (_e) { return 0; } })();
   const chains = {};
   for (const b of beats) {
     const c = String(b?.storyChain || b?.inject?.storyChain || "").trim();
@@ -125,7 +129,9 @@
     generated: new Date().toISOString(), world: game.world?.id, campaignId,
     totals: { beats: beats.length, quests: Object.keys(quests).length, authored: nAuthored, voiced: nVoiced,
       silent: nAuthored ? silentList.length : 0, orphans: orphans.length, gated, hexes: hexRows.length,
-      hexesDevoted: hexRows.filter(h => h.devoted).length },
+      hexesDevoted: hexRows.filter(h => h.devoted).length,
+      storyPhase, lintUngatedNonAmbient: lintUngated.length },
+    lintUngated: lintUngated.slice(0, 40),
     voByQuest: voTable, silentBeats: silentList, orphanBeatIds: orphans,
     brokenBeatLinks: brokenLinks, brokenHexOnEnter: brokenHexes, blankHexes, hexByRegion, chains,
     missingAudioFiles: CHECK_AUDIO_FILES ? missingAudio : "(not checked)"
@@ -151,9 +157,12 @@
     content: `
       <div class="bbttcc-census">
         <h3>📊 Campaign Census</h3>
-        <p><b>${beats.length}</b> beats · <b>${nVoiced}</b> voiced / <b>${nAuthored}</b> authored
+        <p><b>ACT ${storyPhase}</b> · <b>${beats.length}</b> beats · <b>${nVoiced}</b> voiced / <b>${nAuthored}</b> authored
         (<b style="color:#c95555">${silentList.length} silent</b>) · <b>${orphans.length}</b> orphan beat(s)
         · <b>${gated}</b> gated · hexes devoted <b>${hexRows.filter(h => h.devoted).length}/${hexRows.length}</b></p>
+        <p><b>Charter lint:</b> ${lintUngated.length
+          ? `<b style="color:#c4622d">${lintUngated.length} ungated non-ambient beat(s)</b> — first ones in console`
+          : `<b style="color:#4e9d62">0 ungated non-ambient — default-closed holds</b>`}</p>
         <p><b>Top silent quests</b></p>
         <table><tr><th>Quest</th><th>Silent</th><th>Voiced</th></tr>${topSilent}</table>
         <p><b>Hex coverage by region</b></p>

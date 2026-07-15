@@ -251,6 +251,8 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;">
         <label style="display:flex;justify-content:space-between;gap:8px;align-items:center;">World turn
           <input type="number" class="rc-world" data-key="turn" value="${Number(wstate.turn) || 0}" style="width:70px;"></label>
+        <label style="display:flex;justify-content:space-between;gap:8px;align-items:center;">Story phase (act 0–6)
+          <input type="number" min="0" max="6" class="rc-meter" data-key="storyPhase" value="${Number(getSetting("storyPhase", 0)) || 0}" style="width:70px;"></label>
         <label style="display:flex;justify-content:space-between;gap:8px;align-items:center;">Days spent this turn
           <input type="number" step="0.1" class="rc-world" data-key="timeProgress" value="${Number(wstate.time?.progress) || 0}" style="width:70px;"></label>
         <label style="display:flex;justify-content:space-between;gap:8px;align-items:center;">Director pressure
