@@ -35,7 +35,9 @@
   // ── owner-tunable tables (mirror the approved worksheet) ─────────────────
   const PHASE_BY_QUEST = {
     "Offices of Fates and Destinies": 0,
-    "Thatward's Ho — Opening": 0,
+    // The Opening unlocks WHEN the incarnation closer fires (it sets
+    // storyPhase = 1) — gte 0 would leave it green before the Offices run.
+    "Thatward's Ho — Opening": 1,
     "Allesh-Gilliam": 2, "Allesh-Gilliam — The Town Militia": 2, "Allesh-Gilliam — The Confessor's Debt": 2,
     "Lyrenn": 2, "Lyrenn - The Gentle Pest": 2, "Lyrenn - The Field That Remembers You": 2,
     "Lyrenn - The Forest Will Not Be Fought": 2, "Lyrenn — The Red Thread": 2, "Lyrenn — The Land Remembers": 2,
@@ -68,6 +70,12 @@
     "khezek_tor_main_scene",
     "fixit_cinematic_intro", "fixit_intro_scene", "fixit_saloon_cinematic",
   ]);
+
+  // Gate corrections for already-groomed worlds: beat id → the storyPhase
+  // gte it SHOULD carry. Applied even when a storyPhase gate already exists
+  // (the normal pass never touches existing gates). Owner-caught 2026-07-15:
+  // the Opening pair shipped at gte 0 and sat green before the Offices ran.
+  const GATE_FIXUPS = { thatwards_ho_cold_open: 1, thatwards_ho_opening_scene: 1 };
 
   const CADENCE_OPENER = "cadence_declaration";
   const CLOSERS = {
@@ -185,6 +193,18 @@
     if (id === CADENCE_OPENER && !hasCond(b.inject.requires, c => c && c.flag === "hexesClaimed")) {
       b.inject.requires.push({ flag: "hexesClaimed", gte: 2 });
       changes++; report.push(`⚡ Cadence opener armed: hexesClaimed ≥ 2`);
+    }
+
+    // Explicit corrections override an existing (wrong) storyPhase gate.
+    const fixTo = GATE_FIXUPS[id];
+    if (fixTo != null) {
+      const req2 = Array.isArray(b.inject?.requires) ? b.inject.requires : (b.inject?.requires ? [b.inject.requires] : []);
+      const c0 = req2.find(c => c && c.flag === "storyPhase");
+      if (c0 && Number(c0.gte) !== fixTo) {
+        c0.gte = fixTo;
+        b.inject.requires = req2;
+        changes++; report.push(`⚡ gate corrected: ${id} storyPhase → gte ${fixTo}`);
+      }
     }
   }
   for (const [k, n] of Object.entries(tally)) report.push(`⚡ ${String(n).padStart(3)} beat(s): ${k}`);
