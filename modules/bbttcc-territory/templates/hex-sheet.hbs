@@ -436,8 +436,12 @@
               defender DC bonuses when this hex is raided AND can be
               deployed as tactical units on bound battle scenes. --}}
         <div class="bbttcc-hex-card bbttcc-holdings-card" style="padding:8px 10px;" data-tour="hex.holdings">
-          <div class="bbttcc-row" style="margin-bottom:6px; align-items:center; justify-content:space-between; gap:8px;">
-            <div style="font-weight:800; flex:1 1 auto; min-width:0;" data-tooltip="{{bbttccTip 'hex' 'holdings'}}">Holdings</div>
+          {{!-- flex-wrap + label clipping (2026-07-15): .bbttcc-row is nowrap flex,
+                and on narrow sheets the button cluster shrank the label below its
+                own text, which then painted UNDER the buttons. Wrap drops the
+                buttons to their own line instead; ellipsis is the backstop. --}}
+          <div class="bbttcc-row" style="margin-bottom:6px; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+            <div style="font-weight:800; flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" data-tooltip="{{bbttccTip 'hex' 'holdings'}}">Holdings</div>
             <div style="display:flex; align-items:center; gap:6px; flex:0 0 auto;">
               <span class="bbttcc-pill bbttcc-pill-soft" data-tooltip="{{bbttccTip 'hex' 'holdingsBonus'}}" data-tour="hex.holdingsBonus" style="color:#fbbf24;">+{{holdings.totalBonus}}</span>
               {{#if isGM}}
