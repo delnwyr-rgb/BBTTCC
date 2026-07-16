@@ -68,6 +68,27 @@
         log(`Removed ${overviewButtons.length - 1} duplicate Overview button(s).`);
       }
 
+      // "Return to World Map" — every scene gets a way home. The hub is the
+      // scene flagged bbttcc-travel.isWorldHub; ride the shared transition
+      // primitive so the zoom-out/flash matches every other scene move.
+      const hub = game.scenes?.find?.(s => s.getFlag?.("bbttcc-travel", "isWorldHub"));
+      if (hub) {
+        ensureButton(toolbar, {
+          id: "bbttcc-btn-world-map",
+          label: "World Map",
+          icon: "globe",
+          onClick: () => {
+            if (canvas?.scene?.id === hub.id) {
+              ui.notifications?.info?.("Already on the world map.");
+              return;
+            }
+            const back = game.bbttcc?.api?.transition?.back;
+            if (back) back(hub.uuid, { label: "World Map" });
+            else hub.view();
+          }
+        });
+      }
+
       const bbttccUi = game.bbttcc?.ui || {};
       if (bbttccUi.travelConsole) {
         ensureButton(toolbar, {
@@ -135,7 +156,7 @@
       }
 
       killLegacyTravelPills();
-      log("Bad Eden control bar augmented (Travel Console + Turn Driver).");
+      log("Bad Eden control bar augmented (World Map + Travel Console + Turn Driver).");
     } catch (e) {
       warn("augmentToolbar error", e);
     }

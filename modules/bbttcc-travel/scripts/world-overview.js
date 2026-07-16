@@ -306,6 +306,60 @@
     _stateLayer = layer;
   }
 
+  // ---------- Bad Eden Glow: region name labels (hub landing page) ----------
+  // Additive blurred copy of each region name, gently breathing — pure display
+  // layer (no doc writes), rebuilt on every canvasReady like the state layer.
+  // PIXI 7.4.3: flat dropShadow* TextStyle props + PIXI.BlurFilter are correct.
+  let _glowLayer = null, _glowTick = null;
+  function clearLabelGlow() {
+    if (_glowTick) { try { canvas.app?.ticker?.remove(_glowTick); } catch (e) {} _glowTick = null; }
+    try { _glowLayer?.destroy({ children: true }); } catch (e) {}
+    _glowLayer = null;
+  }
+  function refreshLabelGlow() {
+    clearLabelGlow();
+    if (!isWorldHub()) return;
+    const layer = new PIXI.Container();
+    layer.zIndex = 869;             // just under the status lines (870)
+    layer.eventMode = "none";       // never intercept region clicks
+    const sprites = [];
+    for (const d of regionDrawings()) {
+      const doc = d.document;
+      const name = String(doc.text || regionLinkOf(d)?.label || "").trim();
+      if (!name) continue;
+      const nf = Number(doc.fontSize) || 48;
+      const style = new PIXI.TextStyle({
+        fontFamily: doc.fontFamily || "Signika, sans-serif",
+        fontSize: nf, fill: 0x66e8ff, align: "center", fontWeight: "bold",
+        dropShadow: true, dropShadowColor: "#22c8e6", dropShadowDistance: 0,
+        dropShadowBlur: Math.max(6, Math.round(nf * 0.45)), dropShadowAlpha: 0.9
+      });
+      const txt = new PIXI.Text(name, style);
+      txt.anchor.set(0.5, 0.5);
+      const sw = Number(doc.shape?.width  ?? doc.width  ?? 0);
+      const sh = Number(doc.shape?.height ?? doc.height ?? 0);
+      txt.position.set(Number(doc.x) + sw / 2, Number(doc.y) + sh / 2);
+      txt.blendMode = PIXI.BLEND_MODES.ADD;
+      try { txt.filters = [new PIXI.BlurFilter(Math.max(2, nf * 0.10))]; } catch (e) {}
+      layer.addChild(txt);
+      sprites.push(txt);
+    }
+    if (!sprites.length) return;
+    canvas.stage.addChild(layer);
+    _glowLayer = layer;
+    let t = 0;
+    _glowTick = () => {
+      t += (canvas.app?.ticker?.deltaMS ?? 16.7) / 1000;
+      for (let i = 0; i < sprites.length; i++) {
+        const s = sprites[i];
+        if (s.destroyed) continue;
+        // per-label phase offset so the map breathes, not blinks
+        s.alpha = 0.62 + 0.30 * (0.5 + 0.5 * Math.sin(t * 2.1 + i * 0.9));
+      }
+    };
+    canvas.app.ticker.add(_glowTick);
+  }
+
   // ---------- stage interaction (overview hub) ----------
   function localPos(event) {
     const stage = canvas.app.stage;
@@ -391,9 +445,11 @@
     removeBackButton();
     unbindStage();
     clearRegionState();
+    clearLabelGlow();
     if (isWorldHub()) {
       bindStage();
       refreshRegionState();
+      refreshLabelGlow();
       const n = regionDrawings().length;
       ui.notifications?.info?.(`World Overview: click a region to dive in (${n} linked).`);
     } else if (hubUuidOf()) {
@@ -410,6 +466,7 @@
       dive: (uuid, focus) => diveToScene(uuid, focus),
       back: () => diveBack(),
       refreshRegionState,          // 2.5: recompute region status lines on demand
+      refreshLabelGlow,            // Bad Eden Glow on region names, on demand
       _hitRegionAt: hitRegionAt,
       _isHub: isWorldHub
     };
