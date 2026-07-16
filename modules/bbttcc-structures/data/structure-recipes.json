@@ -11,7 +11,7 @@
         "w": 6,
         "h": 1
       },
-      "tokenImg": "icons/svg/anvil.svg",
+      "tokenImg": "icons/svg/castle.svg",
       "facilityMode": true,
       "materialOf": [
         {
@@ -656,7 +656,7 @@
         "w": 2,
         "h": 2
       },
-      "tokenImg": "icons/svg/anvil.svg",
+      "tokenImg": "icons/svg/lightning.svg",
       "facilityMode": false,
       "collapseProfileOverride": {
         "damageDice": "1d6",
@@ -1075,6 +1075,760 @@
           "key": "bronze-nail",
           "qty": 2
         }
+      ]
+    },
+    {
+      "_section": "TOWNBUILDER PHASE 1.5 — type-flavored settlement buildings (TOWNBUILDER_SPEC §6b). Signature structures per hex type so each settlement menu feels like itself. facilityMode:true on the T2/T3 anchors, false on T1 scatter.",
+      "id": "grain-silo",
+      "name": "Grain Silo",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "A clay-daubed timber drum on stilts with a salt-lined throat. Holds the harvest, the seed-stock, and the town's entire argument for surviving winter. The mice have opinions; the cat is negotiable.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/barrel.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 4
+        },
+        {
+          "key": "river-clay",
+          "qty": 3
+        },
+        {
+          "key": "wild-grain",
+          "qty": 2
+        },
+        {
+          "key": "hex-rope",
+          "qty": 1
+        }
+      ],
+      "settlementTypes": [
+        "farm"
+      ],
+      "specialNote": "A stocked silo feeds the hex — GM may waive travel rations provisioned here"
+    },
+    {
+      "id": "terraced-field-frames",
+      "name": "Terraced Field Frames",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "Stepped planting boxes pegged into the slope and strung level with hex-rope, so the rain walks down politely instead of taking the topsoil with it. The frames are simple. The argument they settle with gravity is not.",
+      "footprintGrid": {
+        "w": 4,
+        "h": 1
+      },
+      "tokenImg": "icons/svg/windmill.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0
+      },
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 5
+        },
+        {
+          "key": "hex-rope",
+          "qty": 3
+        },
+        {
+          "key": "river-clay",
+          "qty": 2
+        },
+        {
+          "key": "wild-grain",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "farm"
+      ]
+    },
+    {
+      "id": "herd-byre",
+      "name": "Herd Byre",
+      "category": "utility",
+      "tierGate": 2,
+      "description": "A warm-walled winter barn — timber over bog-iron footings, herd-leather weatherskirts, a salt-lick bolted by the door like a shrine to appetite. Whatever you graze out there sleeps in here, and the wall between you and it at night is exactly as thick as you paid for.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/pawprint.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 6
+        },
+        {
+          "key": "herd-leather",
+          "qty": 4
+        },
+        {
+          "key": "bog-iron",
+          "qty": 2
+        },
+        {
+          "key": "salt-block",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "farm"
+      ]
+    },
+    {
+      "id": "adit-winch-house",
+      "name": "Adit Winch-House",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "A plank shed hunched over the mine mouth, all drum and rope and one lever worn smooth by nervous hands. Lowers the crew down in the morning. The whole town listens for how many turns it takes to bring them back up.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/cave.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 4
+        },
+        {
+          "key": "hex-rope",
+          "qty": 3
+        },
+        {
+          "key": "bog-iron",
+          "qty": 2
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 1
+        }
+      ],
+      "settlementTypes": [
+        "mine"
+      ]
+    },
+    {
+      "id": "ore-sluice",
+      "name": "Ore Sluice",
+      "category": "utility",
+      "tierGate": 2,
+      "description": "A long soft-alloy trough on a clay bed, running borrowed river through crushed stone until the worthless part leaves and the arguable part stays. Cold work, loud water, and every so often something in the riffles that makes the whole line go quiet.",
+      "footprintGrid": {
+        "w": 4,
+        "h": 1
+      },
+      "tokenImg": "icons/svg/waterfall.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "soft-alloy",
+          "qty": 5
+        },
+        {
+          "key": "cold-iron",
+          "qty": 3
+        },
+        {
+          "key": "river-clay",
+          "qty": 4
+        },
+        {
+          "key": "ore-vein",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "mine"
+      ]
+    },
+    {
+      "id": "deep-vein-rebreather-shed",
+      "name": "Deep-Vein Rebreather Shed",
+      "category": "utility",
+      "tierGate": 3,
+      "description": "Rad-iron lockers of pre-Fall breathing rigs, each one packed with living moss filters that eat what the deep seams exhale. Suit up, buddy-check, and mind the rule painted over the door: the moss goes home before you do.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/mole.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "rad-iron",
+          "qty": 4
+        },
+        {
+          "key": "prefall-component",
+          "qty": 3
+        },
+        {
+          "key": "reagent-moss",
+          "qty": 4
+        },
+        {
+          "key": "soft-alloy",
+          "qty": 3
+        }
+      ],
+      "settlementTypes": [
+        "mine"
+      ],
+      "specialNote": "Working rebreathers — GM may ease Radiation exposure for crews delving from this hex"
+    },
+    {
+      "id": "ferry-slip",
+      "name": "Ferry Slip",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "A stone-toed ramp and a rope-and-pole landing where the flat-bottom boats nose in. The schedule is a bell, the manifest is a shout, and the fare is whatever the ferryman decides you look like you can afford.",
+      "footprintGrid": {
+        "w": 4,
+        "h": 1
+      },
+      "tokenImg": "icons/svg/anchor.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d4",
+        "fallFt": 0
+      },
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 5
+        },
+        {
+          "key": "hex-rope",
+          "qty": 3
+        },
+        {
+          "key": "mountain-stone",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "port"
+      ]
+    },
+    {
+      "id": "dock-crane",
+      "name": "Dock Crane",
+      "category": "utility",
+      "tierGate": 2,
+      "description": "A cold-iron jib on a timber tower, geared down so one stubborn person can swing a rig engine over the water and set it down like an apology. The counterweight is a rock with a name. Do not stand under the name.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/clockwork.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 5
+        },
+        {
+          "key": "cold-iron",
+          "qty": 4
+        },
+        {
+          "key": "hex-iron-cleat",
+          "qty": 3
+        },
+        {
+          "key": "hex-rope",
+          "qty": 3
+        }
+      ],
+      "settlementTypes": [
+        "port"
+      ],
+      "specialNote": "Heavy lift on the waterline — GM may speed rig loading/unloading through this hex"
+    },
+    {
+      "id": "harbormasters-exchange",
+      "name": "Harbormaster's Exchange",
+      "category": "civic",
+      "tierGate": 3,
+      "description": "Stone below, scribed-steel shutters above, and a wall of courier-glass panes that flicker with the day's berths and debts. Every cargo on the water has a line here, written in oath-ink that itches when the manifest lies. The harbormaster has seen your paperwork. The harbormaster is not impressed.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 3
+      },
+      "tokenImg": "icons/svg/coins.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "mountain-stone",
+          "qty": 8
+        },
+        {
+          "key": "scribed-steel",
+          "qty": 4
+        },
+        {
+          "key": "courier-glass",
+          "qty": 3
+        },
+        {
+          "key": "freshwater-pearl",
+          "qty": 2
+        },
+        {
+          "key": "oath-ink",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "port"
+      ]
+    },
+    {
+      "id": "assembly-shed",
+      "name": "Assembly Shed",
+      "category": "utility",
+      "tierGate": 1,
+      "description": "A long open bay of benches, bins, and bronze-nailed jigs where salvage goes in confused and comes out purposeful. Nothing here is precise. Everything here is repeatable, which out here is better.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/item-bag.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 4
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 4
+        },
+        {
+          "key": "bronze-nail",
+          "qty": 2
+        },
+        {
+          "key": "soft-alloy",
+          "qty": 1
+        }
+      ],
+      "settlementTypes": [
+        "factory"
+      ]
+    },
+    {
+      "id": "press-line",
+      "name": "Press Line",
+      "category": "utility",
+      "tierGate": 2,
+      "description": "A row of cold-iron presses driven off one salvaged heart-coil, thumping out plates, pins, and cleats in a rhythm the whole hex learns to sleep through. When the line stops, everyone wakes up. That is the alarm system.",
+      "footprintGrid": {
+        "w": 4,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/clockwork.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "cold-iron",
+          "qty": 5
+        },
+        {
+          "key": "bog-iron",
+          "qty": 4
+        },
+        {
+          "key": "scrap-salvage",
+          "qty": 4
+        },
+        {
+          "key": "heart-coil",
+          "qty": 1
+        }
+      ],
+      "settlementTypes": [
+        "factory"
+      ]
+    },
+    {
+      "id": "pattern-vault",
+      "name": "Pattern Vault",
+      "category": "utility",
+      "tierGate": 3,
+      "description": "A scribed-steel strongroom for the things a factory actually runs on: master templates, jig patterns, and pre-Fall reference pieces sealed in witness-resin so they remember being measured. Burn the town and it rebuilds. Lose the vault and it forgets how.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/chest.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "scribed-steel",
+          "qty": 6
+        },
+        {
+          "key": "hex-script",
+          "qty": 4
+        },
+        {
+          "key": "prefall-component",
+          "qty": 3
+        },
+        {
+          "key": "witness-resin",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "factory"
+      ]
+    },
+    {
+      "id": "field-archive",
+      "name": "Field Archive",
+      "category": "civic",
+      "tierGate": 1,
+      "description": "A weatherproofed reading shed — cloth-lined shelves, a ledger chained to the desk, and every entry made in oath-ink because field notes that lie kill people later. Smells of resin, dust, and the specific patience of whoever files the intake.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/book.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 5
+      },
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 4
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 2
+        },
+        {
+          "key": "oath-ink",
+          "qty": 2
+        },
+        {
+          "key": "witness-resin",
+          "qty": 1
+        }
+      ],
+      "settlementTypes": [
+        "research"
+      ]
+    },
+    {
+      "id": "instrument-loft",
+      "name": "Instrument Loft",
+      "category": "civic",
+      "tierGate": 2,
+      "description": "A raised observation floor stiff with tripods, lens-rigs, and courier-glass repeaters angled at the horizon, the leylines, and one another. Half the instruments measure the world. The other half measure the first half, which is how you know it's a real lab.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/eye.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 5
+        },
+        {
+          "key": "focusing-lens",
+          "qty": 2
+        },
+        {
+          "key": "courier-glass",
+          "qty": 2
+        },
+        {
+          "key": "bronze-nail",
+          "qty": 3
+        }
+      ],
+      "settlementTypes": [
+        "research"
+      ]
+    },
+    {
+      "id": "resonance-cellar",
+      "name": "Resonance Cellar",
+      "category": "civic",
+      "tierGate": 3,
+      "description": "A stone room sunk below frost line, quiet enough to hear the world's pitch. Tuning forks on anchor-quartz mounts, walls glazed in memory-resin that plays back yesterday's hum for comparison. Researchers whisper down here out of method. Everyone else does it out of instinct.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/sound.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "mountain-stone",
+          "qty": 8
+        },
+        {
+          "key": "sept-tuning-fork",
+          "qty": 3
+        },
+        {
+          "key": "anchor-quartz",
+          "qty": 3
+        },
+        {
+          "key": "memory-resin",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "research"
+      ],
+      "specialNote": "Tuned to the local leyline — GM may grant advantage on leyline/resonance research made here"
+    },
+    {
+      "id": "open-air-sanctum",
+      "name": "Open-Air Sanctum",
+      "category": "civic",
+      "tierGate": 1,
+      "description": "A ring of standing stones threaded with blessing-cord, floored in wild herbs that bruise fragrant underfoot. No roof — the point is that nothing stands between the congregation and what they're addressing. Attendance is best in fair weather and most sincere in foul.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/temple.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d6",
+        "fallFt": 0
+      },
+      "materialOf": [
+        {
+          "key": "mountain-stone",
+          "qty": 4
+        },
+        {
+          "key": "blessed-thread",
+          "qty": 2
+        },
+        {
+          "key": "prayer-binding",
+          "qty": 2
+        },
+        {
+          "key": "wild-herb",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "temple"
+      ]
+    },
+    {
+      "id": "bellframe",
+      "name": "Bellframe",
+      "category": "civic",
+      "tierGate": 2,
+      "description": "A timber tower hung with one great voice and a choir of brass thumb-bells, tuned against a sept fork so the whole peal lands in key. Rings the hours, the weddings, and the third pattern — the one nobody practices and everybody knows.",
+      "footprintGrid": {
+        "w": 2,
+        "h": 1
+      },
+      "tokenImg": "icons/svg/tower.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 5
+        },
+        {
+          "key": "brass-thumb-bell",
+          "qty": 4
+        },
+        {
+          "key": "hex-iron-cleat",
+          "qty": 2
+        },
+        {
+          "key": "sept-tuning-fork",
+          "qty": 1
+        }
+      ],
+      "settlementTypes": [
+        "temple"
+      ],
+      "specialNote": "Heard across the hex — GM may treat the peal as a settlement-wide alarm"
+    },
+    {
+      "id": "reliquary-walk",
+      "name": "Reliquary Walk",
+      "category": "civic",
+      "tierGate": 3,
+      "description": "A covered stone colonnade of niches — finger-bones of the consented dead behind witness-glass, gold-leaf name-plates, threshold-wax seals renewed every festival. Pilgrims walk it slowly. Locals walk it daily, which the dead are said to prefer.",
+      "footprintGrid": {
+        "w": 4,
+        "h": 1
+      },
+      "tokenImg": "icons/svg/statue.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "mountain-stone",
+          "qty": 8
+        },
+        {
+          "key": "sacred-gold-leaf",
+          "qty": 2
+        },
+        {
+          "key": "witness-glass",
+          "qty": 3
+        },
+        {
+          "key": "threshold-wax",
+          "qty": 2
+        },
+        {
+          "key": "finger-bone",
+          "qty": 3
+        }
+      ],
+      "settlementTypes": [
+        "temple"
+      ]
+    },
+    {
+      "id": "common-hall",
+      "name": "Common Hall",
+      "category": "civic",
+      "tierGate": 1,
+      "description": "One big timber room the whole town fits inside, barely, on purpose. Meetings, weddings, trials, storm shelter — same benches, different seating charts. The door bar is oak and the agenda is whoever stands up first.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/house.svg",
+      "facilityMode": false,
+      "collapseProfileOverride": {
+        "damageDice": "1d8",
+        "fallFt": 10
+      },
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 6
+        },
+        {
+          "key": "mountain-stone",
+          "qty": 3
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "settlement"
+      ]
+    },
+    {
+      "id": "the-inn",
+      "name": "The Inn",
+      "category": "civic",
+      "tierGate": 2,
+      "description": "Stone hearth, timber bones, leather-slung beds upstairs and a taproom below where the road empties its pockets and its rumors in the same motion. Every town wants one. The ones that have one can't remember being anything else.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 3
+      },
+      "tokenImg": "icons/svg/hanging-sign.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "ash-wood",
+          "qty": 8
+        },
+        {
+          "key": "mountain-stone",
+          "qty": 4
+        },
+        {
+          "key": "sept-cloth",
+          "qty": 4
+        },
+        {
+          "key": "herd-leather",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "settlement",
+        "port"
+      ],
+      "specialNote": "The road talks here — GM may surface travel rumors and hooks to guests overnighting"
+    },
+    {
+      "id": "bathhouse",
+      "name": "Bathhouse",
+      "category": "civic",
+      "tierGate": 2,
+      "description": "Clay pipes, a soft-alloy boiler, salt-scrub basins, and stone benches in the steam where rank and grudge boil off with the road dust. Arguments are traditionally suspended past the second door. Traditionally.",
+      "footprintGrid": {
+        "w": 3,
+        "h": 2
+      },
+      "tokenImg": "icons/svg/regen.svg",
+      "facilityMode": true,
+      "materialOf": [
+        {
+          "key": "mountain-stone",
+          "qty": 6
+        },
+        {
+          "key": "river-clay",
+          "qty": 4
+        },
+        {
+          "key": "soft-alloy",
+          "qty": 3
+        },
+        {
+          "key": "salt-block",
+          "qty": 2
+        }
+      ],
+      "settlementTypes": [
+        "settlement"
       ]
     }
   ]
