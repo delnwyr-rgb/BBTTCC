@@ -87,15 +87,34 @@
   };
 
   // ── dialogue-layer inventory ──────────────────────────────────────────────
-  const npcRows = (game.actors?.contents || []).map(a => {
+  // TWO stores: world actors, and UNLINKED tokens — talking to an unlinked
+  // token saves history into its actor-delta, which game.actors never sees
+  // (that's how Pike went missing, 2026-07-15). Token rows only count the
+  // delta's OWN state: inherited base-actor flags clear via the world row.
+  const malCounts = (f) => ({
+    msgs:  Array.isArray(f?.dialogue?.messages) ? f.dialogue.messages.length : 0,
+    mems:  Array.isArray(f?.memories) ? f.memories.length : 0,
+    spent: Object.keys(f?.persona?.secretsUsed || {}).length,
+  });
+  const npcRows = [];
+  for (const a of (game.actors?.contents || [])) {
     const f = a.flags?.[MAL];
-    if (!f) return null;
-    const msgs = Array.isArray(f.dialogue?.messages) ? f.dialogue.messages.length : 0;
-    const mems = Array.isArray(f.memories) ? f.memories.length : 0;
-    const spent = Object.keys(f.persona?.secretsUsed || {}).length;
-    if (!msgs && !mems && !spent) return null;
-    return { id: a.id, name: a.name, msgs, mems, spent };
-  }).filter(Boolean).sort((a, b) => a.name.localeCompare(b.name));
+    if (!f) continue;
+    const n = malCounts(f);
+    if (!n.msgs && !n.mems && !n.spent) continue;
+    npcRows.push({ uuid: a.uuid, name: a.name, where: "", ...n });
+  }
+  for (const scene of (game.scenes?.contents || [])) {
+    for (const t of (scene.tokens?.contents || [])) {
+      if (t.actorLink) continue;                     // linked → the world-actor row covers it
+      const f = t.delta?.flags?.[MAL];               // the token's own state only
+      if (!f) continue;
+      const n = malCounts(f);
+      if (!n.msgs && !n.mems && !n.spent) continue;
+      npcRows.push({ uuid: t.uuid, name: t.name || t.actor?.name || "(token)", where: ` · token @ ${scene.name}`, ...n });
+    }
+  }
+  npcRows.sort((a, b) => a.name.localeCompare(b.name));
 
   // ── quest inventory ───────────────────────────────────────────────────────
   const bucketOf = (qid) => BUCKETS.find(bk => track?.[bk]?.[qid]) || null;
@@ -207,8 +226,8 @@
 
   const npcRowsHtml = npcRows.map(n => `
     <label class="rc-row" style="display:flex;gap:6px;align-items:baseline;padding:2px 4px;">
-      <input type="checkbox" class="rc-npc" value="${esc(n.id)}">
-      <span style="flex:1;"><b>${esc(n.name)}</b></span>
+      <input type="checkbox" class="rc-npc" value="${esc(n.uuid)}">
+      <span style="flex:1;"><b>${esc(n.name)}</b><span style="opacity:.55;font-size:.78em;">${esc(n.where)}</span></span>
       <span style="opacity:.6;font-size:.78em;white-space:nowrap;">${n.msgs} msg · ${n.mems} mem · ${n.spent} spent secret${n.spent === 1 ? "" : "s"}</span>
     </label>`).join("") || `<p style="opacity:.6;margin:.3em;">No NPCs carry dialogue state.</p>`;
 
@@ -401,9 +420,24 @@
       root.querySelector(".rc-npc-all")?.addEventListener("change", (ev) => {
         for (const cb of root.querySelectorAll(".rc-npc")) cb.checked = ev.target.checked;
       });
-      const npcSel = () => [...root.querySelectorAll(".rc-npc:checked")].map(cb => game.actors.get(cb.value)).filter(Boolean);
+      // Rows carry uuids: "Actor.X" for world actors, "Scene.X.Token.Y" for
+      // unlinked tokens (their delta is its own dialogue store) — resolve to
+      // the actor the dialogue window actually wrote to.
+      const resolveNpc = async (ref) => {
+        let d = null; try { d = await fromUuid(String(ref)); } catch (_e) {}
+        if (d?.documentName === "Token") d = d.actor;
+        return d?.documentName === "Actor" ? d : null;
+      };
+      const npcSel = async () => {
+        const out = [];
+        for (const cb of root.querySelectorAll(".rc-npc:checked")) {
+          const a = await resolveNpc(cb.value);
+          if (a) out.push(a);
+        }
+        return out;
+      };
       const npcOp = (btn, label, fn) => btn.addEventListener("click", busyWrap(btn, async () => {
-        const actors = npcSel();
+        const actors = await npcSel();
         if (!actors.length) return say("no NPCs selected.");
         for (const a of actors) await fn(a);
         say(`🗣 ${label}: ${actors.map(a => esc(a.name)).join(", ")}`);
@@ -439,9 +473,9 @@
         for (const [k] of [...FLAGS_BOOL]) { try { await game.settings.set(NS, k, false); } catch (_e) {} }
         try { await game.settings.set(NS, "ledgerEntries", []); } catch (_e) {}
         try { await game.settings.set(NS, "lastTurnAnnounced", 0); } catch (_e) {}
-        // NPC dialogue layer
+        // NPC dialogue layer (world actors AND unlinked-token deltas)
         for (const n of npcRows) {
-          const a = game.actors.get(n.id);
+          const a = await resolveNpc(n.uuid);
           if (!a) continue;
           try { await a.unsetFlag(MAL, "dialogue"); } catch (_e) {}
           try { await a.unsetFlag(MAL, "memories"); } catch (_e) {}

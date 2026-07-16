@@ -3529,7 +3529,7 @@ async function runCampaign(id, ctx = {}) {
 // recovered; without it, the success beat reroutes to the failure beat (and the
 // feud subscriber then raises Grievance off that failure). Generalizes as the
 // director grows. Fail-soft: any error → no redirect.
-function _beatEntryRedirect(beatId) {
+function _beatEntryRedirect(beatId, campaign) {
   try {
     if (beatId === FEUD_SUMMIT_SUCCESS_ID) {
       const fac = game.actors?.get?.(FORGOTTEN_CAUSE_FACTION_ID);
@@ -3539,14 +3539,30 @@ function _beatEntryRedirect(beatId) {
         return FEUD_SUMMIT_FAILURE_ID;
       }
     }
-  } catch (e) { warn("[feud] beat-entry redirect failed:", e); }
+    // Phase-entry redirect (hospitality pass): a beat may carry
+    // phaseEntry = { belowPhase: N, to: "beat_id" } — while storyPhase < N,
+    // entering it lands on `to` instead (its Phase-1 hospitality variant).
+    // This is the seam that keeps choice navigation phase-honest: runBeat
+    // deliberately ignores inject.requires (gates are the Director's concern),
+    // so "Leave → quest hub" wiring needs the reroute to happen here.
+    const b = (campaign?.beats || []).find(x => String(x?.id) === String(beatId));
+    const pe = b?.phaseEntry;
+    if (pe && pe.to && Number.isFinite(Number(pe.belowPhase)) && _storyPhaseGet() < Number(pe.belowPhase)) {
+      const to = String(pe.to);
+      if ((campaign?.beats || []).some(x => String(x?.id) === to)) {
+        log(`[phaseEntry] '${beatId}' → '${to}' (storyPhase ${_storyPhaseGet()} < ${Number(pe.belowPhase)})`);
+        return to;
+      }
+      warn(`[phaseEntry] '${beatId}' names missing redirect target '${to}' — running the original.`);
+    }
+  } catch (e) { warn("[director] beat-entry redirect failed:", e); }
   return null;
 }
 
 async function runBeat(id, beatId, ctx = {}) {
   const c = getCampaign(id);
   if (!c) return ui.notifications?.warn?.(`Campaign '${id}' not found.`);
-  const redirectId = _beatEntryRedirect(beatId);                  // step 5: state-gated reroute
+  const redirectId = _beatEntryRedirect(beatId, c);               // step 5: state-gated reroute
   const effectiveId = (redirectId && redirectId !== beatId) ? redirectId : beatId;
   const b = (c.beats || []).find(x => x.id === effectiveId);
   if (!b) return ui.notifications?.warn?.(`Beat '${effectiveId}' not found in '${id}'.`);
