@@ -281,6 +281,15 @@
     const easeMult  = EASE_MULT[String(spec.garrisonEase || "normal")] ?? 1.0;
     const extraMult = N(spec.integrationCostMult || 1.0);
 
+    // 4½) Tikkun Dividend — the arc-1 legacy meter (bbttcc-campaign) makes
+    // integration run lighter: ×(1 − 0.15·dividend), floored at 0.25.
+    const tikkunMult = (() => {
+      try {
+        const t = Number(game.bbttcc?.api?.campaign?.tikkun?.get?.() ?? 0) || 0;
+        return Math.max(0.25, 1 - 0.15 * t);
+      } catch (_e) { return 1.0; }
+    })();
+
     // 5) Size + status multipliers
     const sizeMult   = SIZE_MULT[size]     ?? 1.0;
     const statusMult = STATUS_MULT[status] ?? 1.0;
@@ -300,7 +309,7 @@
     if (has(mods, "Loyal Population"))   modMult *= LOYALTY_MULT;
 
     // 8) Final multipliers (order: phase → outcome → ease/spec → size/status → mods/conds/hostility)
-    let totalMult = outMult * easeMult * extraMult * sizeMult * statusMult * modMult * condMult;
+    let totalMult = outMult * easeMult * extraMult * tikkunMult * sizeMult * statusMult * modMult * condMult;
     vec = mulVector(vec, totalMult);
 
     // Edge case: if outcome is "good" but vec is ~0 after all math, don't bother

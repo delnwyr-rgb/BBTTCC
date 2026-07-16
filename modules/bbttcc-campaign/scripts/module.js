@@ -3317,6 +3317,14 @@ async function executeBeat(campaign, beat, ctx = {}) {
       warn("Phase advance failed:", ePhase);
     }
 
+    // Tikkun Dividend rungs + anchor-hex Purified cascades (landmark closers).
+    try {
+      await _applyTikkunDelta(campaign, beat);
+      await _applyPurifyHexes(campaign, beat);
+    } catch (eTik) {
+      warn("Tikkun effects failed:", eTik);
+    }
+
     // -------------------------------------------------------------------
     // Casualty Engine (Beat tags)  -  applies hex/faction casualty effects + war logs
     // Runs after worldEffects apply so it can append receipts and use ctx/hex resolution.
@@ -4024,6 +4032,71 @@ async function _applyPhaseAdvance(campaign, beat) {
   await _storyPhaseAdvance(pa.set, { via: `beat “${beat.label || beat.id}”` });
 }
 
+// ---------------------------------------------------------------------------
+// Tikkun Dividend (FINALE-WIN-COUPLING-2026-07-15.md v2): the arc-1 legacy
+// meter. Earned ONLY by landmark outcome beats carrying
+// worldEffects.tikkunDelta = { add: 1 } (Seal restored · Finale on friendly
+// terms · Gloomgill passed). Read by the epic isHexAligned predicate, the
+// leyline purity drift, and garrison integration upkeep — redemption's
+// home-field advantage. Like storyPhase, it only ever RISES; arc-1 rungs cap
+// at 3, TIKKUN_MAX leaves headroom for arc-2 rungs.
+// ---------------------------------------------------------------------------
+const SETTING_TIKKUN = "tikkunDividend";
+const TIKKUN_MAX = 5;
+
+function _tikkunGet() {
+  try {
+    return Math.max(0, Math.min(TIKKUN_MAX, Number(game.settings.get(MOD_ID, SETTING_TIKKUN)) || 0));
+  } catch (_e) { return 0; }
+}
+
+async function _applyTikkunDelta(campaign, beat) {
+  const add = Math.floor(Number(beat?.worldEffects?.tikkunDelta?.add) || 0);
+  if (add <= 0) return;
+  const cur = _tikkunGet();
+  const next = Math.min(TIKKUN_MAX, cur + add);
+  if (next === cur) return;
+  await game.settings.set(MOD_ID, SETTING_TIKKUN, next);
+  try {
+    await ChatMessage.create({
+      whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+      content: `<div class="bbttcc-phase-advance"><h3>✨ TIKKUN ×${next}</h3>` +
+        `<p>The land remembers how this was done — <b>${beat.label || beat.id}</b>. ` +
+        `Redemption comes easier: hexes count healed at darkness ≤ <b>${3 + next}</b>, ` +
+        `integration runs <b>${15 * next}%</b> lighter.</p></div>`
+    });
+  } catch (_e) {}
+}
+
+// worldEffects.purifyHexes: ["Hex Name", ...] — anchor cascades: the story's
+// landmark outcomes visibly heal the hexes the story touched (the Purified
+// condition then spreads via the existing per-turn neighbor cleansing).
+// Hex lookup is NBSP-safe by name across all scenes.
+async function _applyPurifyHexes(campaign, beat) {
+  const names = beat?.worldEffects?.purifyHexes;
+  if (!Array.isArray(names) || !names.length) return;
+  const setC = game.bbttcc?.api?.territory?.setCondition;
+  if (typeof setC !== "function") { warn("purifyHexes: territory.setCondition unavailable"); return; }
+  // NBSP-safe + decoration-safe: hex labels can grow a leading "✦ " when
+  // claimed — strip leading non-letter marks so the name still matches.
+  const normH = s => String(s || "").replace(/\s+/g, " ").trim()
+    .replace(/^[^\p{L}\p{N}]+/u, "").trim().toLowerCase();
+  const wanted = new Map(names.map(n => [normH(n), n]));
+  for (const sc of game.scenes ?? []) {
+    for (const dr of sc.drawings ?? []) {
+      if (!wanted.size) return;
+      const tf = dr.flags?.["bbttcc-territory"];
+      if (!tf || !(tf.isHex === true || tf.kind === "territory-hex" || tf.hexId)) continue;
+      const nm = normH(dr.text || tf.name);
+      if (!wanted.has(nm)) continue;
+      wanted.delete(nm);
+      try { await setC(dr.uuid, "Purified", true); }
+      catch (e) { warn(`purifyHexes: failed on "${nm}"`, e); }
+    }
+  }
+  for (const [, orig] of wanted) warn(`purifyHexes: hex not found: "${orig}"`);
+}
+
 // Deed gate value: how many atlas hexes the coalition's factions hold.
 // Cadence's opener uses { flag:"hexesClaimed", gte:2 } — the home hex counts
 // as the first, so the first EXPANSION trips the wire.
@@ -4050,6 +4123,7 @@ function _resolveGateValue(name) {
   switch (name) {
     case "wendigoRung": return _wendigoRungGet();
     case "storyPhase": return _storyPhaseGet();    // Phase Charter act ladder
+    case "tikkunDividend": return _tikkunGet();    // arc-1 legacy meter (0–5)
     case "hexesClaimed": return _hexesClaimedCount(); // coalition-held hex count
     case "turn": return _getTurnNumberSafe();      // world turn — e.g. { flag:"turn", gte:6 }
     case "banditMercy": return _banditMeterGet(SETTING_BANDIT_MERCY);   // Bandit Accord mercy count
@@ -6387,6 +6461,9 @@ function buildCampaignAPI() {
       },
       value: _resolveGateValue
     },
+    // Tikkun Dividend — cross-module readers (epic repair, territory turn
+    // engine, garrison upkeep) come through here; falls back to 0 if absent.
+    tikkun: { get: _tikkunGet, max: TIKKUN_MAX },
     director: {
       tick: directorTick,
       chains: directorChains,
@@ -6887,6 +6964,17 @@ Hooks.once("init", () => {
   game.settings.register(MOD_ID, SETTING_STORY_PHASE, {
     name: "Bad Eden Story Phase",
     hint: "Internal: the campaign's act (0 Offices → 6 Gloomgill). Gates use { flag:'storyPhase', gte:N }.",
+    scope: "world",
+    config: false,
+    type: Number,
+    default: 0
+  });
+
+  // Tikkun Dividend (FINALE-WIN-COUPLING-2026-07-15.md v2): arc-1 legacy
+  // meter, raised only by landmark closers (worldEffects.tikkunDelta).
+  game.settings.register(MOD_ID, SETTING_TIKKUN, {
+    name: "Bad Eden Tikkun Dividend",
+    hint: "Internal: earned redemption ease (0–5). Raised by landmark outcome beats; read by epic alignment, purity drift, and integration upkeep.",
     scope: "world",
     config: false,
     type: Number,

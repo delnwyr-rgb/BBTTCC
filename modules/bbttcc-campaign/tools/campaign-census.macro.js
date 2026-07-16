@@ -76,6 +76,11 @@
   // pacing.ambient marking. Anything else is a lint hit.
   const lintUngated = beats.filter(b => b?.id && !b?.inject?.requires && !b?.pacing?.ambient).map(b => String(b.id));
   const storyPhase = (() => { try { return Number(game.settings.get(NS, "storyPhase")) || 0; } catch (_e) { return 0; } })();
+  const tikkun = (() => { try { return Number(game.settings.get(NS, "tikkunDividend")) || 0; } catch (_e) { return 0; } })();
+  // World-Health (epic module) — the win-track %, when the epic module is live.
+  const worldHealth = (() => {
+    try { return game.fourththing?.epic?.worldHealth?.() || null; } catch (_e) { return null; }
+  })();
   const chains = {};
   for (const b of beats) {
     const c = String(b?.storyChain || b?.inject?.storyChain || "").trim();
@@ -130,7 +135,9 @@
     totals: { beats: beats.length, quests: Object.keys(quests).length, authored: nAuthored, voiced: nVoiced,
       silent: nAuthored ? silentList.length : 0, orphans: orphans.length, gated, hexes: hexRows.length,
       hexesDevoted: hexRows.filter(h => h.devoted).length,
-      storyPhase, lintUngatedNonAmbient: lintUngated.length },
+      storyPhase, tikkunDividend: tikkun,
+      worldHealth: worldHealth ? `${worldHealth.pct}% (${worldHealth.aligned}/${worldHealth.total})` : "(epic module not live)",
+      lintUngatedNonAmbient: lintUngated.length },
     lintUngated: lintUngated.slice(0, 40),
     voByQuest: voTable, silentBeats: silentList, orphanBeatIds: orphans,
     brokenBeatLinks: brokenLinks, brokenHexOnEnter: brokenHexes, blankHexes, hexByRegion, chains,
@@ -157,7 +164,7 @@
     content: `
       <div class="bbttcc-census">
         <h3>📊 Campaign Census</h3>
-        <p><b>ACT ${storyPhase}</b> · <b>${beats.length}</b> beats · <b>${nVoiced}</b> voiced / <b>${nAuthored}</b> authored
+        <p><b>ACT ${storyPhase}</b>${tikkun ? ` · <b style="color:#fbbf24">✨ TIKKUN ×${tikkun}</b>` : ""}${worldHealth ? ` · ☉ World-Health <b>${worldHealth.pct}%</b> (${worldHealth.aligned}/${worldHealth.total})` : ""} · <b>${beats.length}</b> beats · <b>${nVoiced}</b> voiced / <b>${nAuthored}</b> authored
         (<b style="color:#c95555">${silentList.length} silent</b>) · <b>${orphans.length}</b> orphan beat(s)
         · <b>${gated}</b> gated · hexes devoted <b>${hexRows.filter(h => h.devoted).length}/${hexRows.length}</b></p>
         <p><b>Charter lint:</b> ${lintUngated.length

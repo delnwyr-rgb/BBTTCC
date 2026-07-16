@@ -2520,6 +2520,8 @@ const activeCampaignId = _getActiveCampaignId();
           const ph = Number(game.settings.get("bbttcc-campaign", "storyPhase")) || 0;
           const PHN = ["THE OFFICES", "SETTLING", "SPARKS", "THE WIDENING TRAIL", "THE VAULT & THE SKY", "THATWARDS HO!", "GLOOMGILL"];
           metaHtml += sep + `<span style="color:var(--cb-data,#93c5fd);font-weight:800;letter-spacing:.08em">ACT ${ph} — ${PHN[ph] || "?"}</span>`;
+          const tik = Number(game.bbttcc?.api?.campaign?.tikkun?.get?.() ?? 0) || 0;
+          if (tik > 0) metaHtml += sep + `<span style="color:var(--cb-accent,#fbbf24);font-weight:800;letter-spacing:.08em" data-tooltip="Tikkun Dividend — earned redemption ease: hexes heal at darkness ≤ ${3 + tik}, integration ${15 * tik}% lighter">✨ TIKKUN ×${tik}</span>`;
         } catch (_ePh) {}
         metaHtml += sep + `<span>Turn <b>${runtime.turn}</b></span>`;
         if (runtime.ledger && Number.isFinite(Number(runtime.ledger.spent)) && Number.isFinite(Number(runtime.ledger.budget))) {

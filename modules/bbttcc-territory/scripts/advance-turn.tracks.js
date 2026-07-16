@@ -959,6 +959,11 @@
   // LEYLINES: PURITY DRIFT (Darkness ↔ Sephirotic alignment)
   // ===========================================================================
 
+  // Tikkun Dividend — guarded cross-module read (0 when campaign module absent).
+  function _tikkunBonus() {
+    try { return Number(game.bbttcc?.api?.campaign?.tikkun?.get?.() ?? 0) || 0; } catch (_e) { return 0; }
+  }
+
   async function doLeylinePurityDrift() {
     const draws = canvas?.drawings?.placeables ?? [];
     if (!draws.length) return;
@@ -981,8 +986,10 @@
       // Darkness corrupts the grid
       if (darkness >= 7 && purity > -5) purity -= 1;
 
-      // Sephirotic alignment heals (only when low darkness)
-      else if (darkness <= 3 && isSephirothic(tf) && purity < 5) purity += 1;
+      // Sephirotic alignment heals (only when low darkness). The Tikkun
+      // Dividend (arc-1 legacy meter, bbttcc-campaign) raises the healing
+      // threshold — land redeemed kindly keeps healing under heavier shade.
+      else if (darkness <= 3 + _tikkunBonus() && isSephirothic(tf) && purity < 5) purity += 1;
 
       if (purity !== Number(ley.purity || 0)) {
         ley.purity = purity;

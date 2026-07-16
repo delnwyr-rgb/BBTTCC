@@ -58,8 +58,16 @@ function repProtagonistFaction() {
   return null;
 }
 
+// ── Tikkun Dividend (arc-1 legacy meter, bbttcc-campaign) ──────────────────────────
+// Earned by landmark campaign closers; relaxes the healed threshold below.
+// Guarded read — 0 when the campaign module is absent.
+function tikkunBonus() {
+  try { return Number(game.bbttcc?.api?.campaign?.tikkun?.get?.() ?? 0) || 0; } catch (_e) { return 0; }
+}
+
 // ── "Aligned" predicate (OWNER-TUNABLE core dial) ──────────────────────────────────
 // reunified (under a protagonist banner) AND healed (Purified OR per-hex darkness ≤ max).
+// The Tikkun Dividend raises the max — redemption earned in arc 1 keeps paying.
 function isHexAligned(d, protagonists) {
   const tf = d?.flags?.[TER] ?? {};
   const fid = tf.factionId || tf.ownerId || "";
@@ -68,7 +76,7 @@ function isHexAligned(d, protagonists) {
   if (purified) return true;
   const faction = game.actors?.get(fid);
   const dark = Number(faction?.getFlag(FCT, "darkness")?.[d.id] ?? 0) || 0;
-  return dark <= ALIGN_DARKNESS_MAX;
+  return dark <= ALIGN_DARKNESS_MAX + tikkunBonus();
 }
 
 // ── World-Health (derived, cached in-memory, invalidated on change) ────────────────
