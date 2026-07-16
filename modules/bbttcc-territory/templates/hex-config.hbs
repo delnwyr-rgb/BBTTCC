@@ -20,7 +20,7 @@
   .bbttcc-hex-config header.flexrow {
     gap: 0.75rem;
     align-items: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.6rem;
     padding: 0.4rem 0.55rem 0.45rem;
     border-radius: 0.75rem;
     background: linear-gradient(135deg, rgba(15,23,42,0.98), rgba(30,64,175,0.98));
@@ -37,13 +37,55 @@
   }
   .bbttcc-hex-config header.flexrow small { font-size: 11px; opacity: 0.85; }
 
-  .bbttcc-hex-config .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 0.9rem;
-    max-width: 100%;
+  /* ── Top tabs ─────────────────────────────────────────────── */
+  .bbttcc-hex-config .ft-hexcfg-tabs {
+    display: flex;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+    padding: 0.3rem 0.35rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(55,65,81,0.95);
+    background: linear-gradient(160deg, rgba(15,23,42,0.98), rgba(15,23,42,1));
+    box-shadow: 0 0 0 1px rgba(15,23,42,0.9);
   }
+  .bbttcc-hex-config .ft-hexcfg-tab {
+    flex: 1 1 auto;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .bbttcc-hex-config .ft-hexcfg-tab:hover {
+    color: #e5e7eb;
+    border-color: rgba(59,130,246,0.45);
+    box-shadow: none;
+  }
+  .bbttcc-hex-config .ft-hexcfg-tab.active {
+    color: #e5e7eb;
+    border-color: rgba(59,130,246,0.8);
+    background: linear-gradient(135deg, rgba(30,64,175,0.55), rgba(15,23,42,0.9));
+    box-shadow: 0 0 12px rgba(59,130,246,0.35);
+  }
+  .bbttcc-hex-config .ft-hexcfg-tab[data-ft-tab="gm"].active {
+    border-color: rgba(212,163,95,0.8);
+    background: linear-gradient(135deg, rgba(146,94,28,0.5), rgba(15,23,42,0.9));
+    box-shadow: 0 0 12px rgba(212,163,95,0.3);
+  }
+
+  /* Panels: one visible at a time, but ALL stay in the DOM so the Save
+     button's FormData sweep still reads every field on every tab. */
+  .bbttcc-hex-config .grid { display: block; max-width: 100%; }
   .bbttcc-hex-config .col { min-width: 0; }
+  .bbttcc-hex-config .ft-hexcfg-panel { display: none; }
+  .bbttcc-hex-config .ft-hexcfg-panel.active { display: block; }
 
   .bbttcc-hex-config fieldset {
     border-radius: 0.75rem;
@@ -112,9 +154,16 @@
     {{#if createdAt}}<small class="flex0" title="Created">{{createdAt}}</small>{{/if}}
   </header>
 
+  <nav class="ft-hexcfg-tabs">
+    <button type="button" class="ft-hexcfg-tab active" data-ft-tab="overview">Overview</button>
+    <button type="button" class="ft-hexcfg-tab" data-ft-tab="resources">Modifiers &amp; Resources</button>
+    <button type="button" class="ft-hexcfg-tab" data-ft-tab="leylines">Leylines</button>
+    {{#if isGM}}<button type="button" class="ft-hexcfg-tab" data-ft-tab="gm">GM Overrides</button>{{/if}}
+  </nav>
+
   <section class="grid">
-    <!-- LEFT COLUMN -->
-    <div class="col">
+    <!-- TAB: OVERVIEW -->
+    <div class="col ft-hexcfg-panel active" data-ft-tab-panel="overview">
       <div class="form-group">
         <label>Name</label>
         <input type="text" name="{{#if namePath}}{{namePath}}{{else}}name{{/if}}" value="{{name}}">
@@ -185,8 +234,8 @@
       <div class="form-group">
         <label>Integration</label>
         <div class="row" style="align-items:baseline;">
-          <div class="flex0"><strong>{{integrationProgress}} / {{integrationMax}}</strong></div>
-          <div class="flex1"><small style="opacity:.85;">{{#if integrationStageLabel}}{{integrationStageLabel}}{{else}}—{{/if}}</small></div>
+          <div class="flex0"><strong data-ft-integ-progress>{{integrationProgress}} / {{integrationMax}}</strong></div>
+          <div class="flex1"><small style="opacity:.85;" data-ft-integ-stage>{{#if integrationStageLabel}}{{integrationStageLabel}}{{else}}—{{/if}}</small></div>
         </div>
         <p class="hint">
           Tracks how far this hex has progressed from untouched wilderness to a fully integrated province.<br/>
@@ -216,9 +265,9 @@
       </div>
     </div>
 
-    <!-- RIGHT COLUMN -->
-    <div class="col">
-      <fieldset style="margin-bottom:.75rem;">
+    <!-- TAB: MODIFIERS & RESOURCES -->
+    <div class="col ft-hexcfg-panel" data-ft-tab-panel="resources">
+      <fieldset class="form-group" data-bbttcc="modifiers" style="margin-bottom:.75rem;">
         <legend>Modifiers</legend>
         <label class="checkbox"><input type="checkbox" name="modifiers" value="Well-Maintained" {{#if (bbttcc_contains modifiers "Well-Maintained")}}checked{{/if}}> <span>Well-Maintained</span></label>
         <label class="checkbox"><input type="checkbox" name="modifiers" value="Fortified" {{#if (bbttcc_contains modifiers "Fortified")}}checked{{/if}}> <span>Fortified</span></label>
@@ -235,7 +284,28 @@
         <p class="hint">These affect yields (and sometimes Defense/flags). They match the math used by Campaign Overview and the Turn Driver.</p>
       </fieldset>
 
-      <!-- LEYLINES PANEL -->
+      <fieldset style="margin-bottom:.75rem;">
+        <legend>Resources (per turn)</legend>
+        <div class="form-group"><label>Food</label> <input type="number" name="resources.food" value="{{resources.food}}" min="0" step="1"></div>
+        <div class="form-group"><label>Materials</label> <input type="number" name="resources.materials" value="{{resources.materials}}" min="0" step="1"></div>
+        <div class="form-group"><label>Trade</label> <input type="number" name="resources.trade" value="{{resources.trade}}" min="0" step="1"></div>
+        <div class="form-group"><label>Military</label> <input type="number" name="resources.military" value="{{resources.military}}" min="0" step="1"></div>
+        <div class="form-group"><label>Knowledge</label> <input type="number" name="resources.knowledge" value="{{resources.knowledge}}" min="0" step="1"></div>
+        <p class="hint">Leave all five at <strong>0</strong> to let the system compute effective yields from <em>Type × Size</em> plus Alignment &amp; Modifiers (Population not used yet). This matches the Overview and Turn math.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Save Behavior</legend>
+        <label class="checkbox">
+          <input type="checkbox" name="manualOverride" {{#if manualOverrideChecked}}checked{{/if}}>
+          <span>Manual resource override</span>
+        </label>
+        <p class="hint">Unchecked → save <em>auto-calculated</em> resources from Type × Size × Alignment + Modifiers (recommended).</p>
+      </fieldset>
+    </div>
+
+    <!-- TAB: LEYLINES -->
+    <div class="col ft-hexcfg-panel" data-ft-tab-panel="leylines">
       <fieldset class="bbttcc-leylines-panel" style="margin-bottom:.75rem;">
         <legend>Leylines</legend>
 
@@ -371,16 +441,13 @@
           </div>
         </div>
       </fieldset>
-
-      <fieldset>
-        <legend>Resources (per turn)</legend>
-        <div class="form-group"><label>Food</label> <input type="number" name="resources.food" value="{{resources.food}}" min="0" step="1"></div>
-        <div class="form-group"><label>Materials</label> <input type="number" name="resources.materials" value="{{resources.materials}}" min="0" step="1"></div>
-        <div class="form-group"><label>Trade</label> <input type="number" name="resources.trade" value="{{resources.trade}}" min="0" step="1"></div>
-        <div class="form-group"><label>Military</label> <input type="number" name="resources.military" value="{{resources.military}}" min="0" step="1"></div>
-        <div class="form-group"><label>Knowledge</label> <input type="number" name="resources.knowledge" value="{{resources.knowledge}}" min="0" step="1"></div>
-        <p class="hint">Leave all five at <strong>0</strong> to let the system compute effective yields from <em>Type × Size</em> plus Alignment &amp; Modifiers (Population not used yet). This matches the Overview and Turn math.</p>
-      </fieldset>
     </div>
+
+    {{#if isGM}}
+    <!-- TAB: GM OVERRIDES (manual-edit panel injects here) -->
+    <div class="col ft-hexcfg-panel" data-ft-tab-panel="gm">
+      <p class="hint" data-ft-gm-placeholder>The GM manual-edit panel appears here when <strong>GM Edit Mode</strong> is enabled in the Bad Eden Core (bbttcc-core) settings.</p>
+    </div>
+    {{/if}}
   </section>
 </section>

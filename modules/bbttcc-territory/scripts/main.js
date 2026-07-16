@@ -1815,6 +1815,80 @@ function bbttccNumOrBlank(v){
   const n = Number(v);
   return Number.isFinite(n) ? String(n) : "";
 }
+function bbttccIntegrationStageLabel(p){
+  if (p >= 6) return "Integrated Heartland";
+  if (p === 5) return "Settled Province";
+  if (p >= 3) return "Developing Territory";
+  if (p >= 1) return "Foothold / Outpost";
+  return "Untouched Wilderness";
+}
+
+/* Refresh the GM panel inputs + the Overview integration display from the
+ * hex's persisted flags, WITHOUT re-rendering the dialog. This is what lets
+ * GM Apply/Clear keep unsaved edits alive in the rest of the form. */
+async function bbttccRefreshHexConfigFromFlags(wrap, form, dr){
+  const fresh = await fromUuid(dr.uuid);
+  const tf = fresh?.flags?.[MOD] || {};
+  const travel = tf.travel || {};
+  const dev    = tf.development || {};
+  const integ  = tf.integration || {};
+  const alarm  = tf.alarm || {};
+  const camp   = tf.campaign || {};
+
+  const setVal = (name, v) => { const el = wrap.querySelector(`[name="${name}"]`); if (el) el.value = v; };
+  const setChk = (name, v) => { const el = wrap.querySelector(`[name="${name}"]`); if (el) el.checked = !!v; };
+
+  setVal("gm.travel.unitsOverride", bbttccNumOrBlank(travel.unitsOverride));
+  setVal("gm.development.stage", bbttccNumOrBlank((dev.stage != null) ? dev.stage : integ.progress));
+  setChk("gm.development.locked", dev.locked === true || integ.locked === true);
+  setVal("gm.alarm.value", bbttccNumOrBlank(alarm.value));
+  setChk("gm.alarm.locked", alarm.locked === true);
+  setVal("gm.campaign.onEnterBeatId", camp.onEnterBeatId || "");
+  setVal("gm.note", "");
+
+  // Integration readout on the Overview tab reflects the new stage instantly.
+  try {
+    const rawProgress = Number(integ.progress);
+    const prog = Math.max(0, Math.min(6, Math.round(Number.isFinite(rawProgress) ? rawProgress : 0)));
+    const progEl  = form.querySelector("[data-ft-integ-progress]");
+    if (progEl) progEl.textContent = `${prog} / 6`;
+    const stageEl = form.querySelector("[data-ft-integ-stage]");
+    if (stageEl) stageEl.textContent = bbttccIntegrationStageLabel(prog);
+  } catch (_) {}
+
+  return tf;
+}
+
+/* Tab switching for the Hex Config dialog. The listener sits on the app's
+ * persistent window element (not the form) so it survives content re-renders
+ * (e.g. Build Unit buttons call app.render(false)). */
+function bbttccWireHexConfigTabs(dlg){
+  const MAX_TRIES = 40;
+  let tries = 0;
+  (function attempt(){
+    tries += 1;
+    const host = (dlg.element && dlg.element[0]) ? dlg.element[0] : dlg.element;
+    const form = host?.querySelector?.("form.bbttcc-hex-config");
+    if (!form) {
+      if (tries < MAX_TRIES) setTimeout(attempt, 25);
+      return;
+    }
+    if (host.dataset.ftHexcfgTabsWired === "1") return;
+    host.dataset.ftHexcfgTabsWired = "1";
+    host.addEventListener("click", (ev) => {
+      const btn = ev.target?.closest?.("[data-ft-tab]");
+      if (!btn) return;
+      ev.preventDefault();
+      const key = btn.getAttribute("data-ft-tab");
+      const liveForm = host.querySelector("form.bbttcc-hex-config");
+      if (!liveForm) return;
+      for (const b of liveForm.querySelectorAll("[data-ft-tab]"))
+        b.classList.toggle("active", b === btn);
+      for (const p of liveForm.querySelectorAll("[data-ft-tab-panel]"))
+        p.classList.toggle("active", p.getAttribute("data-ft-tab-panel") === key);
+    });
+  })();
+}
 
 function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
   try {
@@ -1914,7 +1988,11 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
           </div>
         `;
 
-        form.appendChild(wrap);
+        // Prefer the dedicated GM tab panel; fall back to the form root for
+        // the fallback (template-failed) layout which has no tabs.
+        const gmHost = form.querySelector('[data-ft-tab-panel="gm"]') || form;
+        try { gmHost.querySelector("[data-ft-gm-placeholder]")?.remove(); } catch (_) {}
+        gmHost.appendChild(wrap);
 
         function q(sel){ return wrap.querySelector(sel); }
         function val(name){ const el = q('[name="' + name + '"]'); return el ? (el.value || "") : ""; }
@@ -1971,10 +2049,11 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
   });
 
 
-  // Verify + log (high-signal when other UIs don’t update)
+  // Refresh the GM panel + integration readout IN PLACE. Closing/reopening
+  // the dialog here used to discard any unsaved edits on the other tabs
+  // (e.g. a pending Owner change) — never do that again.
   try {
-    const fresh = await fromUuid(dr.uuid);
-    const tf2 = fresh?.flags?.[MOD] || {};
+    const tf2 = await bbttccRefreshHexConfigFromFlags(wrap, form, dr);
     console.log("[bbttcc-territory] GM clear verify", {
       uuid: dr.uuid,
       travel: tf2.travel,
@@ -1987,11 +2066,7 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
 
   try { Hooks.callAll && Hooks.callAll("bbttcc:territory:hexUpdated", { hexUuid: dr.uuid }); } catch(e) {}
 
-  // IMPORTANT: OPEN map can wedge reopening if the close callback doesn’t fire in time.
-  try { OPEN.delete(dr.id); } catch(e) {}
-
-  try { await dlg.close(); } catch(e) {}
-  try { setTimeout(function(){ openHexEditorByUuid(dr.uuid); }, 75); } catch(e) {}
+  ui?.notifications?.info?.("GM overrides cleared. Unsaved edits on other tabs are untouched — hit Save to keep them.");
 } catch (e) {
   console.warn("[bbttcc-territory] GM clear failed", e);
   ui?.notifications?.error?.("GM Clear failed — see console.");
@@ -2024,9 +2099,10 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
             try {
   await setHexFn({ hexUuid: dr.uuid, patch: patch, note: note || "GM edit hex" });
 
+  // Refresh IN PLACE (see the clear handler) — unsaved edits on the other
+  // tabs must survive an Apply.
   try {
-    const fresh = await fromUuid(dr.uuid);
-    const tf2 = fresh?.flags?.[MOD] || {};
+    const tf2 = await bbttccRefreshHexConfigFromFlags(wrap, form, dr);
     console.log("[bbttcc-territory] GM apply verify", {
       uuid: dr.uuid,
       travel: tf2.travel,
@@ -2039,9 +2115,7 @@ function bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr){
 
   try { Hooks.callAll && Hooks.callAll("bbttcc:territory:hexUpdated", { hexUuid: dr.uuid }); } catch(e) {}
 
-  try { OPEN.delete(dr.id); } catch(e) {}
-  try { await dlg.close(); } catch(e) {}
-  try { setTimeout(function(){ openHexEditorByUuid(dr.uuid); }, 75); } catch(e) {}
+  ui?.notifications?.info?.("GM overrides applied. Unsaved edits on other tabs are untouched — hit Save to keep them.");
 } catch (e) {
   console.warn("[bbttcc-territory] GM apply failed", e);
   ui?.notifications?.error?.("GM Apply failed — see console.");
@@ -2094,6 +2168,9 @@ async function openHexEditorByUuid(uuid){
   const integrationStageLabel = integrationStageLabels[integrationStageKey] || "—";
 
   const context = {
+    isGM: !!game.user?.isGM,
+    // Save Behavior checkbox (lives on the Modifiers & Resources tab)
+    manualOverrideChecked: !!((f.manualOverride === true) && Object.values((f.resources || {})).some(n => Number(n || 0) > 0)),
     name: f.name ?? dr.text ?? "",
     ownerId: f.factionId ?? "",
     ownerList: buildOwnerList(),
@@ -2192,9 +2269,11 @@ async function openHexEditorByUuid(uuid){
   })();
 
   let html = "";
+  let usedFallback = false;
   try {
     html = await renderTpl(TPL_HEX_CONFIG, context);
   } catch (err) {
+    usedFallback = true;
     console.error(`[${MOD}] hex-config template render failed`, { template: TPL_HEX_CONFIG, uuid, err });
     const esc = (s) => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     html = `
@@ -2208,17 +2287,19 @@ async function openHexEditorByUuid(uuid){
       </div>`;
   }
 
-  // Manual override toggle (injected, non-invasive)
-  const overrideBlock = `
+  // Manual override toggle — the primary template now renders this on the
+  // Modifiers & Resources tab (context.manualOverrideChecked). Only the
+  // template-failed fallback layout still needs it appended here.
+  const overrideBlock = usedFallback ? `
     <fieldset style="margin-top:.5rem; border:1px solid #666; border-radius:6px; padding:.5rem;">
       <legend style="padding:0 .25rem; opacity:.9;">Save Behavior</legend>
       <label class="checkbox">
-        <input type="checkbox" name="manualOverride" ${((f.manualOverride === true) && Object.values((f.resources||{})).some(n=>Number(n||0)>0)) ? "checked" : ""}>
+        <input type="checkbox" name="manualOverride" ${context.manualOverrideChecked ? "checked" : ""}>
         <span>Manual resource override</span>
       </label>
       <p class="hint">Unchecked → save <em>auto-calculated</em> resources from Type × Size × Alignment + Modifiers (recommended).</p>
     </fieldset>
-  `;
+  ` : "";
 
   const dlg = new Dialog(
   {
@@ -2647,9 +2728,29 @@ async function openHexEditorByUuid(uuid){
 
   OPEN.set(dr.id, dlg);
   dlg.render(true);
+  // Top-tab switching (Overview / Modifiers & Resources / Leylines / GM)
+  bbttccWireHexConfigTabs(dlg);
   // Phase 2: GM Manual Edit panel injection (Dialog content is V1)
   bbttccInjectGMPanelIntoHexConfigDialog(dlg, dr);
 }
+
+/* Re-renders of the Hex Config dialog (e.g. the Build Unit buttons call
+ * app.render(false) after a spend) rebuild the content from the open-time
+ * HTML, wiping the injected GM panel. Re-inject it on every render; the
+ * injector is idempotent via its [data-bbttcc='gm-edit-panel'] guard, and
+ * options.uuid was stamped onto the Dialog at open time. */
+Hooks.on("renderDialog", (app, html) => {
+  try {
+    const root = (html && html[0]) ? html[0] : html;
+    const form = root?.querySelector?.("form.bbttcc-hex-config");
+    if (!form) return;
+    const uuid = app?.options?.uuid;
+    if (!uuid) return;
+    fromUuid(uuid).then((doc) => {
+      if (doc) bbttccInjectGMPanelIntoHexConfigDialog(app, doc);
+    }).catch(() => {});
+  } catch (_) {}
+});
 
 /* ---------------- Create Hex ---------------- */
 function buildHexData({ x,y }){
