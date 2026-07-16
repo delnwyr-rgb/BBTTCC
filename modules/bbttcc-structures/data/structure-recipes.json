@@ -1,5 +1,5 @@
 {
-  "_comment": "Phase D — 5 starter Structure recipes per STRUCTURE_DAMAGE_SPEC.md §7. Each recipe has a materialOf array (materialKey + qty) that the recipe engine consumes from a faction stockpile via game.bbttcc.api.factions.stockpile.adjust. footprintGrid drives token size. Special overrides: collapseProfile customization (e.g. Sept Bridge collapses at Damaged not Breached).",
+  "_comment": "Phase D — 5 starter Structure recipes per STRUCTURE_DAMAGE_SPEC.md §7. Each recipe has a materialOf array (materialKey + qty) that the recipe engine consumes from a faction stockpile via game.bbttcc.api.factions.stockpile.adjust. footprintGrid drives token size. Special overrides: collapseProfile customization (e.g. Sept Bridge collapses at Damaged not Breached). | settlementTypes (2026-07-15, TOWNBUILDER_SPEC §6a): which hex types show this recipe in the Townbuilder menu; MISSING field = shows on every type.",
   "recipes": [
     {
       "id": "sept-wall",
@@ -30,6 +30,9 @@
           "key": "yesodium",
           "qty": 1
         }
+      ],
+      "settlementTypes": [
+        "fortress"
       ]
     },
     {
@@ -57,6 +60,9 @@
           "key": "yesodium",
           "qty": 2
         }
+      ],
+      "settlementTypes": [
+        "fortress"
       ]
     },
     {
@@ -119,7 +125,10 @@
         }
       ],
       "specialAbility": "ward-radiate+1",
-      "specialNote": "+1 ward resist to all adjacent Structures (stackable)"
+      "specialNote": "+1 ward resist to all adjacent Structures (stackable)",
+      "settlementTypes": [
+        "fortress"
+      ]
     },
     {
       "id": "sept-bridge",
@@ -156,7 +165,10 @@
           "qty": 1
         }
       ],
-      "specialNote": "Collapse fires at Damaged state — the ravine is the whole point"
+      "specialNote": "Collapse fires at Damaged state — the ravine is the whole point",
+      "settlementTypes": [
+        "fortress"
+      ]
     },
     {
       "_section": "SIEGE LAYERS — heavy fortress-grade walls purpose-built as breachable siege layers (high Plates + Threshold). The Strategic Siege engine stacks these as a besieged hex's structureActorIds; also buildable by hand from Rig Builder → Infrastructure → Fortifications.",
@@ -189,7 +201,10 @@
           "qty": 4
         }
       ],
-      "specialNote": "Outer siege layer (~142 Plates, no sephirotic → can be fully Razed). Pair as transitionRule 'razed' or 'threshold'."
+      "specialNote": "Outer siege layer (~142 Plates, no sephirotic → can be fully Razed). Pair as transitionRule 'razed' or 'threshold'.",
+      "settlementTypes": [
+        "fortress"
+      ]
     },
     {
       "id": "siege-barbican-gate",
@@ -221,7 +236,10 @@
           "qty": 8
         }
       ],
-      "specialNote": "Middle siege layer (~114 Plates, ward-resist vs breaching). Good as transitionRule 'threshold' (≤0.25)."
+      "specialNote": "Middle siege layer (~114 Plates, ward-resist vs breaching). Good as transitionRule 'threshold' (≤0.25).",
+      "settlementTypes": [
+        "fortress"
+      ]
     },
     {
       "id": "siege-inner-keep",
@@ -249,7 +267,10 @@
           "qty": 4
         }
       ],
-      "specialNote": "Innermost siege layer (~96 Plates, ward-resist, no sephirotic → fully Razable). Final layer — breach it to win the storm."
+      "specialNote": "Innermost siege layer (~96 Plates, ward-resist, no sephirotic → fully Razable). Final layer — breach it to win the storm.",
+      "settlementTypes": [
+        "fortress"
+      ]
     },
     {
       "_section": "FLIMSY INFRASTRUCTURE — breakable scenery, not fortress walls. Mostly cloth/wood/salvage (low Plates, low Threshold so almost anything chips them), no sephirotic (so they can be fully Razed), light collapse profiles (a rig drives THROUGH these). facilityMode:false — these are scatter, not Holdings-scale facilities.",
@@ -409,6 +430,11 @@
           "key": "scrap-salvage",
           "qty": 1
         }
+      ],
+      "settlementTypes": [
+        "settlement",
+        "farm",
+        "port"
       ]
     },
     {
@@ -440,6 +466,11 @@
           "key": "scrap-salvage",
           "qty": 1
         }
+      ],
+      "settlementTypes": [
+        "settlement",
+        "farm",
+        "port"
       ]
     },
     {
@@ -476,7 +507,12 @@
           "qty": 1
         }
       ],
-      "specialNote": "A perch, not a fortification — tips and drops its occupant when breached"
+      "specialNote": "A perch, not a fortification — tips and drops its occupant when breached",
+      "settlementTypes": [
+        "settlement",
+        "farm",
+        "port"
+      ]
     },
     {
       "id": "roadside-shrine",
@@ -507,6 +543,11 @@
           "key": "blessed-thread",
           "qty": 1
         }
+      ],
+      "settlementTypes": [
+        "settlement",
+        "farm",
+        "port"
       ]
     },
     {
@@ -784,6 +825,11 @@
           "key": "sun-glass",
           "qty": 2
         }
+      ],
+      "settlementTypes": [
+        "settlement",
+        "port",
+        "factory"
       ]
     },
     {
@@ -815,6 +861,11 @@
           "key": "courier-glass",
           "qty": 2
         }
+      ],
+      "settlementTypes": [
+        "settlement",
+        "port",
+        "mine"
       ]
     },
     {
@@ -846,6 +897,11 @@
           "key": "hex-script",
           "qty": 3
         }
+      ],
+      "settlementTypes": [
+        "settlement",
+        "research",
+        "temple"
       ]
     },
     {
@@ -877,6 +933,9 @@
           "key": "hex-glyph-plate",
           "qty": 3
         }
+      ],
+      "settlementTypes": [
+        "fortress"
       ]
     },
     {
@@ -943,6 +1002,10 @@
           "key": "prayer-binding",
           "qty": 3
         }
+      ],
+      "settlementTypes": [
+        "settlement",
+        "temple"
       ]
     },
     {
@@ -974,6 +1037,9 @@
           "key": "herd-leather",
           "qty": 4
         }
+      ],
+      "settlementTypes": [
+        "fortress"
       ]
     },
     {

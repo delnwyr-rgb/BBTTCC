@@ -187,7 +187,7 @@
     buildUnits:  "Build Units (Engineering) — spend the owning faction's BU on physical work in this hex. BU are generated at end of turn from Materials pips across all owned hexes (every 2 pips → 1 BU). Anyone with owner permission on the owning faction — or the GM — can spend here.",
     buFortify:   "Fortify Hex — spends BU (world setting, default 2) to stamp the Fortified modifier on this hex: +3 defense when it is raided. Already-Fortified hexes don't stack a second copy.",
     buRepair:    "Repair Hex — spends BU (world setting, default 1) to remove the Damaged Infrastructure modifier (−25% production). Only useful when the hex actually carries that damage.",
-    buAsset:     "Build Asset — spends BU (world setting, default 3) and logs the construction to the faction war log. The asset system itself is still a placeholder: nothing is stamped on the hex yet beyond the spend.",
+    buAsset:     "🏗️ Townbuilder — raise named buildings as the settlement develops. The menu unlocks by hex size and filters by settlement type; civilian buildings cost BU by tier (1/2/3), fortifications cost the Construct Asset BU price plus stockpile materials. Every build spawns a real structure actor and is recorded in the settlement journal.",
     gmNotes:     "GM Notes — free-text notes stored on this hex by the GM. Anyone who can open the sheet can read them; edit them via the GM Hex Config.",
 
     // ---- Dossier pane ----
@@ -777,6 +777,10 @@
         if (buBalance < cost) return `Need ${cost} BU; ${owner.name} has ${buBalance}.`;
         return (game.bbttcc?.help?.tip?.("hex", helpKey) || "") || `${label} — spends ${cost} BU.`;
       };
+      // 🏗️ Townbuilder (2026-07-15): when loaded, the Asset button opens the
+      // Townbuilder app (its menu shows per-recipe costs), so it isn't gated
+      // on the flat Construct Asset cost — only on engineer permission.
+      const tbAvail = !!(game?.bbttcc?.api?.territory?.townbuilder?.open);
       const buildUnits = {
         enabled: buApiAvail,
         hasOwner: buHasOwner,
@@ -784,11 +788,16 @@
         balance: buBalance,
         canFortify: buCanEngineer && buBalance >= cFort,
         canRepair:  buCanEngineer && buBalance >= cRep,
-        canAsset:   buCanEngineer && buBalance >= cAss,
+        canAsset:   tbAvail ? buCanEngineer : (buCanEngineer && buBalance >= cAss),
         costs: { fortify: cFort, repair: cRep, asset: cAss },
         fortifyTip: _tip(cFort, "Fortify Hex", "buFortify"),
         repairTip:  _tip(cRep,  "Repair Hex", "buRepair"),
-        assetTip:   _tip(cAss,  "Build Asset", "buAsset"),
+        assetTip:   tbAvail
+          ? (!buHasOwner ? "This hex has no owning faction."
+             : !buCanEngineer ? `Only ${owner.name} (or GM) can engineer this hex.`
+             : "🏗️ Townbuilder — raise named buildings as the settlement develops. Civilian builds cost BU by tier; fortifications cost BU + materials.")
+          : _tip(cAss, "Build Asset", "buAsset"),
+        assetLabel: tbAvail ? "🏗️ Townbuilder" : `Build Asset — ${cAss} BU`,
         hint: !buHasOwner
           ? "Assign an owner to this hex before spending Build Units."
           : !buCanEngineer
@@ -1407,14 +1416,24 @@
         const action = btn.getAttribute("data-bu-action");
         if (!action) return;
 
+        const hexDoc = this._hexDoc;
+        if (!hexDoc) { ui.notifications?.warn?.("Hex doc not resolved."); return; }
+
+        // 🏗️ Townbuilder (2026-07-15): Asset opens the settlement builder app.
+        if (action === "asset" && game?.bbttcc?.api?.territory?.townbuilder?.open) {
+          try { await game.bbttcc.api.territory.townbuilder.open({ hexUuid: hexDoc.uuid }); }
+          catch (err) {
+            console.warn("[bbttcc-hex-sheet] Townbuilder open failed", err);
+            ui.notifications?.error?.("Townbuilder failed to open — see console.");
+          }
+          return;
+        }
+
         const buApi = game?.bbttcc?.api?.territory?.buildUnits;
         if (!buApi?.spendForAction) {
           ui.notifications?.error?.("Build Units API not loaded.");
           return;
         }
-
-        const hexDoc = this._hexDoc;
-        if (!hexDoc) { ui.notifications?.warn?.("Hex doc not resolved."); return; }
 
         const tf = (hexDoc.flags && hexDoc.flags[MOD_T]) ? hexDoc.flags[MOD_T] : {};
         const factionId = tf.factionId || tf.ownerId || null;

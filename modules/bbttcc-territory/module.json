@@ -49,6 +49,7 @@
     "scripts/territory-garrison-upkeep.enhancer.js",
     "scripts/territory-integration.enhancer.js",
     "scripts/territory-build-units.enhancer.js",
+    "scripts/townbuilder.js",
     "scripts/effects-build-units.enhancer.js",
     "scripts/bbttcc-hex-sheet.enhancer.js",
     "scripts/bbttcc-dashboard-hexsheet.enhancer.js",

@@ -724,7 +724,7 @@
             </button>
             <button type="button" class="bbttcc-btn bbttcc-btn-small" data-action="bu-spend" data-bu-action="asset"
                     {{#unless buildUnits.canAsset}}disabled{{/unless}} data-tooltip="{{buildUnits.assetTip}}" data-tour="hex.asset">
-              Build Asset — {{buildUnits.costs.asset}} BU
+              {{buildUnits.assetLabel}}
             </button>
           </div>
           <div class="bbttcc-muted" style="font-size:.78rem; margin-top:6px;">{{buildUnits.hint}}</div>
