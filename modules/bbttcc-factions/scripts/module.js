@@ -1001,6 +1001,23 @@ async function effHexWithAll(dr) {
   };
   const auto = !!f.autoCalc || Object.values(stored).every(n => n === 0);
   const base = auto ? calcBaseByType(f.type ?? "settlement") : stored;
+
+  // 🏛️ Townbuilder districts (2026-07-16, TOWNBUILDER_SPEC §7): each founded
+  // district adds a share of ITS type's baseline profile to the hex, pre-size
+  // multiplication — a city's Port District yields city-scaled port trade.
+  // Share is the bbttcc-territory world setting districtYieldShare (default 0.5).
+  try {
+    const districts = Array.isArray(f.settlement?.districts) ? f.settlement.districts : [];
+    if (districts.length) {
+      let share = 0.5;
+      try { share = Math.max(0, Number(game.settings.get("bbttcc-territory", "districtYieldShare") ?? 0.5)) || 0; } catch (_e) {}
+      for (const d of districts) {
+        const p = calcBaseByType(String(d?.type || ""));
+        for (const k of HR_KEYS) base[k] = Number(base[k]) + share * Number(p[k] || 0);
+      }
+    }
+  } catch (_eDistrict) {}
+
   const sized = Object.fromEntries(Object.entries(base).map(([k,v]) => [k, Number(v) * mult]));
 
   let factorAll = 1.0;
