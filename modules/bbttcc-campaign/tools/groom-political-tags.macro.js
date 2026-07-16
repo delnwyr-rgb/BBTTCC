@@ -60,6 +60,7 @@
     // — The Cadence
     cadence_win_style: { tags: "pluralism voluntary" },
     cadence_win_ugly:  { tags: "coercive" },
+    cadence_lose:      { tags: "taxation" },   // tribute + a standing rematch
 
     // — Fifteen-Year Siege
     siege_break:   { tags: "coercive domination" },

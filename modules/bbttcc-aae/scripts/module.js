@@ -156,7 +156,12 @@ const TAG_ALIASES = {
 };
 
 function _canonTags(tags = []) {
-  return tags.map(t => TAG_ALIASES[t] || t);
+  return tags.map(t => {
+    // The Beat Editor's canonical form is "politics.<key>" — strip the
+    // namespace so editor-authored tags score against the bare weight keys.
+    const k = t.startsWith("politics.") ? t.slice(9) : t;
+    return TAG_ALIASES[k] || k;
+  });
 }
 
 // Authoring catalog — the single source the Beat Editor's tag picker pulls
