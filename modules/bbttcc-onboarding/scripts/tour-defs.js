@@ -9,7 +9,9 @@
  *   ✅ hex-sheet ✅ travel-console ✅ planner-hud ✅ raid-console
  *   ✅ rig-sheet ✅ market ✅ banks
  *   GM: ✅ faction-gm ✅ facilities ✅ hex-craft ✅ turn-driver ✅ dashboard
- *       ✅ overview ✅ campaign-engine ✅ beat-editor ✅ story-console — ALL DONE
+ *       ✅ overview ✅ campaign-engine ✅ beat-editor — ALL DONE
+ *   (story-console tour retired 2026-07-15 with the GOTTGAIT Story Console —
+ *    the Visualizer's play console is the story surface now.)
  */
 
 const TAG = "[onboarding/tour-defs]";
@@ -1286,73 +1288,6 @@ const beatEditorTour = {
   ]
 };
 
-/* ───────────────────── GM · Story Console ───────────────────── */
-// Mal's manual mission control — same engine the Story Director runs
-// autonomously. Text from the "story" help dictionary (bbttcc-core).
-
-const storyConsoleTour = {
-  id: "story-console",
-  title: "Mal's Remote Control (Story Console)",
-  audience: "gm",
-  intro: "GM channel. Opening the GOTTGAIT Story Console — the manual override on the story engine. The Story Director fires beats on its own schedule; this window is you, reaching past it, saying 'this one, now'.",
-  outro: "Story Console toured. Director for the drumbeat, console for the solo. Every fire from either lands in the same ledger — the story never forgets who pulled the trigger.",
-
-  open: async () => {
-    const openConsole = game.bbttcc?.api?.story?.openGOTTGAITConsole;
-    if (!openConsole) { ui.notifications?.warn?.("Story Console not loaded — is bbttcc-core enabled?"); return null; }
-    return openConsole() || null; // window: #gottgait-story-console
-  },
-
-  steps: [
-    {
-      id: "root", title: "The manual override",
-      selector: '[data-tour="story.root"]',
-      text: "Every button here calls the same campaign APIs the autonomous Story Director uses — run a beat, fire the injector, roll an encounter table — and every fire is recorded in the shared director ledger.\nDirector = automatic. Console = you."
-    },
-    {
-      id: "filters", title: "Quest & Turn filters",
-      selector: '[data-tour="story.filters"]',
-      text: "Narrow every beat list below by quest binding or authored turn number. These persist world-wide (all GMs share them), so the console reopens where you left it."
-    },
-    {
-      id: "advisor", title: "The GM Advisor",
-      selector: '[data-tour="story.advisor"]',
-      text: "Reads the world's vital signs — faction Stability, logistics Overextension, table Narrative momentum — and makes a Difficulty call (hold or raise), with beat and table suggestions to match.\nMal adds an editorial one-liner. Hover each band in the report for what it means.",
-      speak: "The Advisor reads the room. Mal reads the Advisor. You read Mal. Chain of command— *bzzt* —functioning."
-    },
-    {
-      id: "activate", title: "Activate — one switch, whole engine",
-      selector: '[data-tour="story.activate"]',
-      optional: true,
-      text: "Sets the active campaign for EVERYTHING — the Story Director's autonomous firing, quests, doors, turn announcements, and this console — in one click.\n(Until today this button only switched the console and quietly left the Director on the old campaign. One setting now.)"
-    },
-    {
-      id: "builder", title: "Straight to the Builder",
-      selector: '[data-tour="story.builder"]',
-      optional: true,
-      text: "Opens the Campaign Engine on this campaign — for when running beats turns into editing them. The Builder and Beat Editor have their own tours."
-    },
-    {
-      id: "injector", title: "Injector Fire",
-      selector: '[data-tour="story.injector"]',
-      optional: true,
-      text: "Fires the tag-matched beat injector by hand: point it at a hex, give it tags, and it pulls an eligible beat exactly as travel would — same gating, same once-per-hex rules, same ledger entry."
-    },
-    {
-      id: "tables", title: "Random tables — Mal's dice",
-      selector: '[data-tour="story.tables"]',
-      optional: true,
-      text: "Rolls an encounter table on demand — hex and tags filter eligibility, and the rolled beat runs for real. This is the loaded one; the Builder's Preview Roll is the rehearsal."
-    },
-    {
-      id: "beats", title: "Run any beat, now",
-      selector: '[data-tour="story.beats"]',
-      optional: true,
-      text: "The filtered beat list for the active campaign. One click runs the beat through the full pipeline — journal, audio, scene, dialog, effects.\n✓ badges mark already-fired beats, and re-running one asks first — the soft-lock reads the Director's ledger."
-    }
-  ]
-};
-
 /* ───────────────────── registration ───────────────────── */
 
 Hooks.once("ready", () => {
@@ -1376,6 +1311,5 @@ Hooks.once("ready", () => {
   tours.register(overviewTour);
   tours.register(campaignEngineTour);
   tours.register(beatEditorTour);
-  tours.register(storyConsoleTour);
-  console.log(TAG, "registered: steward-sheet, bridge, faction-sheet, faction-gm, hex-sheet, travel-console, planner-hud, raid-console, rig-sheet, market, banks, facilities, hex-craft, turn-driver, dashboard, overview, campaign-engine, beat-editor, story-console");
+  console.log(TAG, "registered: steward-sheet, bridge, faction-sheet, faction-gm, hex-sheet, travel-console, planner-hud, raid-console, rig-sheet, market, banks, facilities, hex-craft, turn-driver, dashboard, overview, campaign-engine, beat-editor");
 });

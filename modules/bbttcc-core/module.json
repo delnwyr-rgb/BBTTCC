@@ -17,16 +17,13 @@
     "scripts/window-defaults.enhancer.js",
     "scripts/module.js",
     "scripts/story.gottgait.js",
-    "scripts/gottgait-story-console.js",
     "scripts/bbttcc-ui-cleanup.enhancer.js",
     "scripts/api.gm.js",
-    "scripts/bbttcc-story-button.enhancer.js",
     "scripts/bbttcc-bridge.js",
     "scripts/combat.dnd5e.js"
   ],
   "styles": [
     "styles/be-theme.css",
-    "styles/gottgait-story-console.css",
     "styles/bbttcc-bridge.css",
     "styles/select-centering.css",
     "styles/readability.css"
