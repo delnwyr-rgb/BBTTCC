@@ -106,37 +106,93 @@ const TAG_WEIGHTS = {
   marxist: {
     redistributive: +2, collective_ownership: +3, unionized: +2, mutual_aid: +1, anti_exploitation: +3,
     privatization: -2, profit_extraction: -3, austerity: -2, coercive: -1, surveillance: -1, censorship: -1,
-    procedural_violation: -1, purge: -2
+    procedural_violation: -1, purge: -2, property_rights: -3, clerical_rule: -2, ethnonationalism: -2
   },
   liberal: {
     rights_respected: +3, due_process: +3, consent: +2, repression: -3, transparency: +2, pluralism: +1,
-    coercive: -2, surveillance: -2, censorship: -3, procedural_violation: -3, collective_punishment: -3, purge: -2
+    property_rights: +1, security: -1,
+    coercive: -2, surveillance: -2, censorship: -3, procedural_violation: -3, collective_punishment: -3, purge: -2,
+    clerical_rule: -2, ethnonationalism: -3
   },
   social_democratic: {
     harm_reduction: +3, welfare: +2, redistributive: +2, mutual_aid: +2, regulation: +1,
-    austerity: -3, privatization: -2, coercive: -1, surveillance: -1, censorship: -1, procedural_violation: -1
+    austerity: -3, privatization: -2, coercive: -1, surveillance: -1, censorship: -1, procedural_violation: -1,
+    ethnonationalism: -2
   },
   libertarian: {
-    voluntary: +3, deregulation: +2, privatization: +1, consent: +2, decentralize: +1,
-    coercive: -3, repression: -3, surveillance: -2, censorship: -3, redistributive: -2, regulation: -2, taxation: -2, procedural_violation: -1
+    voluntary: +3, deregulation: +2, privatization: +1, consent: +2, decentralize: +1, property_rights: +3,
+    coercive: -3, repression: -3, surveillance: -2, censorship: -3, redistributive: -2, regulation: -2, taxation: -2, procedural_violation: -1,
+    security: -1, clerical_rule: -2
   },
   authoritarian: {
     order: +3, enforcement: +2, coercive: +2, surveillance: +2, censorship: +1, emergency_powers: +2,
+    security: +2, repression: +2, ethnonationalism: +1,
     decentralize: -2, civil_disobedience: -3, mutiny: -3, pluralism: -1
   },
   theocratic: {
-    doctrine: +3, sacred_law: +3, ritual: +2, purification: +2, censorship: +1, enforcement: +1,
+    doctrine: +3, sacred_law: +3, ritual: +2, purification: +2, censorship: +1, enforcement: +1, clerical_rule: +3,
     heresy: -3, profanation: -3, pluralism: -2, secular_compromise: -2
   },
   fascist: {
     unity: +3, domination: +2, purge: +3, coercive: +2, surveillance: +2, censorship: +2, scapegoat: +3,
+    ethnonationalism: +3, security: +1, repression: +2,
     pluralism: -3, dissent: -3, mercy: -2, compromise: -2
   },
   anarchist: {
     mutual_aid: +3, decentralize: +2, voluntary: +2, direct_action: +2, repression: -3, solidarity: +2,
-    coercive: -3, surveillance: -3, censorship: -3, hierarchy: -2, enforcement: -2, centralize: -2
+    coercive: -3, surveillance: -3, censorship: -3, hierarchy: -2, enforcement: -2, centralize: -2,
+    property_rights: -2, clerical_rule: -2, ethnonationalism: -3, security: -1
   }
 };
+
+// The beat editor's authored vocabulary predates the weight table and used its
+// own spellings; canonicalize so those tags score instead of silently reading 0.
+const TAG_ALIASES = {
+  redistribution:  "redistributive",
+  union_power:     "unionized",
+  collectivize:    "collective_ownership",
+  civil_liberties: "rights_respected",
+  faith_law:       "sacred_law"
+};
+
+function _canonTags(tags = []) {
+  return tags.map(t => TAG_ALIASES[t] || t);
+}
+
+// Authoring catalog — the single source the Beat Editor's tag picker pulls
+// (it already probes aae.getPoliticalTagCatalog and only falls back to its
+// built-in list when this is absent). Keys here are the CANONICAL weight keys.
+const POLITICAL_TAG_CATALOG = [
+  { key: "order",                label: "Order",            hint: "Prioritize stability and control." },
+  { key: "security",             label: "Security",         hint: "Protect against threats; safety-first framing." },
+  { key: "surveillance",         label: "Surveillance",     hint: "Monitoring, informants, tracking." },
+  { key: "repression",           label: "Repression",       hint: "Crackdowns, suppression of dissent." },
+  { key: "censorship",           label: "Censorship",       hint: "Silence speech, control the record." },
+  { key: "emergency_powers",     label: "Emergency Powers", hint: "Suspend normal rules for the crisis." },
+  { key: "redistributive",       label: "Redistribution",   hint: "Transfer wealth/resources to reduce inequality." },
+  { key: "privatization",        label: "Privatization",    hint: "Shift assets/services to private control." },
+  { key: "deregulation",         label: "Deregulation",     hint: "Reduce rules; increase market freedom." },
+  { key: "welfare",              label: "Welfare",          hint: "Social support, safety nets, public aid." },
+  { key: "taxation",             label: "Taxation",         hint: "Levies, tithes, tribute demanded." },
+  { key: "unionized",            label: "Union Power",      hint: "Organized labor, collective bargaining." },
+  { key: "collective_ownership", label: "Collectivize",     hint: "Collective ownership/management." },
+  { key: "rights_respected",     label: "Civil Liberties",  hint: "Speech, assembly, autonomy protections." },
+  { key: "due_process",          label: "Due Process",      hint: "Fair hearing, evidence, no summary judgment." },
+  { key: "transparency",         label: "Transparency",     hint: "Open books, public truth, no cover-ups." },
+  { key: "property_rights",      label: "Property Rights",  hint: "Strong private ownership and enforcement." },
+  { key: "sacred_law",           label: "Faith Law",        hint: "Religious doctrine shaping law and policy." },
+  { key: "clerical_rule",        label: "Clerical Rule",    hint: "Priesthood/temple authority in governance." },
+  { key: "ethnonationalism",     label: "Ethnonationalism", hint: "In-group supremacy; purity politics." },
+  { key: "purge",                label: "Purge",            hint: "Removal of enemies; scapegoating; cleansing." },
+  { key: "mercy",                label: "Mercy",            hint: "Clemency, forgiveness, sparing the beaten." },
+  { key: "mutual_aid",           label: "Mutual Aid",       hint: "Community self-support outside institutions." },
+  { key: "direct_action",        label: "Direct Action",    hint: "Act now, ask no permission — strikes, sabotage." },
+  { key: "decentralize",         label: "Decentralize",     hint: "Local control; dismantle central authority." }
+];
+
+function getPoliticalTagCatalog() {
+  return POLITICAL_TAG_CATALOG.map(t => ({ ...t }));
+}
 
 function _scoreTagsForPhilosophy(philosophyKey, tags = []) {
   const w = TAG_WEIGHTS[philosophyKey] || {};
@@ -386,7 +442,7 @@ function _computeDistribution(actors = []) {
 
 async function applyPoliticalImpact({ factionId, actorIds = [], tags = [], source = null } = {}) {
   const fId = _normStr(factionId);
-  const tagList = _tagArray(tags);
+  const tagList = _canonTags(_tagArray(tags));
 
   if (!fId) return { ok: false, reason: "missing_factionId" };
   if (!tagList.length) return { ok: false, reason: "no_tags" };
@@ -584,6 +640,7 @@ const AAE_API = {
   listPoliticalPhilosophies,
   getPoliticalPhilosophy,
   setPoliticalPhilosophy,
+  getPoliticalTagCatalog,
 
   // Faction drift + impact
   readFactionDriftState,

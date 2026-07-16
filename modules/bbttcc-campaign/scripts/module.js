@@ -3418,6 +3418,34 @@ async function executeBeat(campaign, beat, ctx = {}) {
             warn("AAE decision record failed:", e);
           }
 
+          // ---- Table visibility (2026-07-15): drift flags and the warlog
+          // never reach the table, so pressure lands as a GM chat card —
+          // majors name the dissenting stewards so the pressure has faces.
+          try {
+            if (res?.ok && res.severity && res.severity !== "neutral") {
+              const sevLabel = _prettySeverity(String(res.severity));
+              const dd = Number(res.driftDelta ?? 0) || 0;
+              const dissenters = (res.perActor || []).filter(p =>
+                p.severity === "dissonance_major" || p.severity === "dissonance_critical");
+              const fName = game.actors?.get?.(factionId)?.name || "Faction";
+              const rows = [
+                `<b>${fName}</b> — ${sevLabel} (drift ${dd >= 0 ? "+" : ""}${dd} → ${res.driftScoreAfter ?? "?"} · ${res.severityState || "stable"})`,
+                res.centerLabel ? `Center: ${res.centerLabel}` : null,
+                tags.length ? `Tags: ${tags.join(", ")}` : null,
+                dialogRes?.choice?.label ? `Choice: ${dialogRes.choice.label}` : null,
+                res.minorityPressure ? `<b>⚠ Minority pressure</b> — a dissenting bloc escalates this.` : null,
+                dissenters.length ? `Dissenting stewards: ${dissenters.map(p => `<b>${p.name}</b> (${p.philosophy})`).join(", ")}` : null
+              ].filter(Boolean);
+              const gmIds = (game.users?.filter?.(u => u.isGM) || []).map(u => u.id);
+              await ChatMessage.create({
+                content: `<div class="bbttcc-aae-pressure"><h3>🗳️ Political Pressure</h3><p>${rows.join("</p><p>")}</p></div>`,
+                whisper: gmIds
+              });
+            }
+          } catch (e) {
+            warn("AAE pressure chat card failed:", e);
+          }
+
           // ---- Consequences (alpha-safe, uses World Mutation Engine)
           try {
             const severity = String(res?.severity || "neutral");
