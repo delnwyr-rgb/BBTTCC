@@ -83,7 +83,7 @@ Allesh-Gilliam doesn't ask what you're going to fix. It asks whether you'll eat 
 Where to first?`,
       [
         C("The HQ", "allesh_gilliam_hq_cinematics",
-          "Your new command center / former Snarky Burger. Go stand in it and feel like you're in charge. Practice your in-charge face. You have one, right?"),
+          "Your new command center / former S'narchy Burger. Go stand in it and feel like you're in charge. Practice your in-charge face. You have one, right?"),
         C("Marshal Pike, at the HQ", "allesh_gilliam_yarrow_welcome",
           "The man himself. He will not get up. Go say hi anyway — it's how the coffee happens."),
         C("St Gilliam's", "allesh_gilliam_st_gilliams_cinematics",

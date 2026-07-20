@@ -16,7 +16,7 @@
 ## HIGH gaps (4)
 - **Antidote Cartridge** (gear, master-content.items) — prose present but states no magnitudes
 - **Memory Restorative** (gear, master-content.items) — empty description, no structured data
-- **Snarky Burger Special Sauce (Sealed Packet, Pre-Fall)** (gear, master-content.items) — prose present but states no magnitudes
+- **S'narchy Burger Special Sauce (Sealed Packet, Pre-Fall)** (gear, master-content.items) — prose present but states no magnitudes
 - **Witness-Decoy Pin** (gear, master-content.items) — prose present but states no magnitudes
 
 ## MED gaps (9)

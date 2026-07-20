@@ -798,15 +798,15 @@
     },
     {
       "id": "snarky-burger-outpost",
-      "name": "Snarky Burger Outpost",
+      "name": "S'narchy Burger Outpost",
       "category": "civic",
       "tierGate": 1,
-      "description": "A reclaimed fast-food franchise turned frontier waystation. The mascot sign still flickers sarcasm at passers-by; the drive-thru speaker has been rewired into a perimeter intercom. Sells certainty now instead of burgers. The booths make surprisingly good map tables.",
+      "description": "A reclaimed fast-food franchise turned frontier waystation. The neon mascot — a furious burger mid-obscene-gesture — still flickers sarcasm at passers-by; the drive-thru speaker has been rewired into a perimeter intercom. Sells certainty now instead of burgers. The booths make surprisingly good map tables.",
       "footprintGrid": {
         "w": 3,
         "h": 2
       },
-      "tokenImg": "icons/svg/house.svg",
+      "tokenImg": "modules/bbttcc-structures/art/snarchy-mascot-glow.png",
       "facilityMode": true,
       "materialOf": [
         {

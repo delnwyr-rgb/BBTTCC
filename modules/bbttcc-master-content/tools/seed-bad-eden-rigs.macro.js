@@ -13,7 +13,7 @@
 //
 //   1. Jackalope Haggle-Wagon           → Jackalopes        (medium · T2)
 //   2. Valhaulan Lullaby-Barge          → Valhaulans        (heavy  · T2)
-//   3. Snarky Burger Drive-Thru (Mobile)→ Avuncular/Allesh  (medium · T2 · hybrid)
+//   3. S'narchy Burger Drive-Thru (Mobile)→ Avuncular/Allesh  (medium · T2 · hybrid)
 //   4. Sephirotic Pilgrim-Tram          → Sephirotic Scions (medium · T2)
 //   5. Menhir Kin Standing-Stone Crawler→ Menhir Kin        (siege  · T3)
 //   6. Sarmoung Whisper-Skiff           → Sarmoung Brotherhd (light · T2)
@@ -81,12 +81,12 @@
       loadout: { frame: "War Rig Frame", weapons: ["Mortar Battery","Twin Autocannons"], systems: ["Reinforced Plating","Repair Bay"] }
     },
     {
-      name: "Snarky Burger Drive-Thru (Mobile Unit)", img: "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
+      name: "S'narchy Burger Drive-Thru (Mobile Unit)", img: "art/bbttcc/GOTTGAIT/BBTTCC%20Button%20Icons/bbttcc_icons_shout_1.png",
       archetype: "Mobile Sanctuary", bracket: "medium", tier: 2, mobility: "hybrid", disposition: 1,
       travel: { speed: 3, range: 14, hazardResist: 1 },
       tags: ["sanctuary","civic","home-town","faction-rig"],
       factionKeywords: ["avuncular","allesh","gilliam"], resistances: ["psychic"], immunities: ["fear"],
-      concept: "When Allesh-Gilliam needs to move the whole HQ, it folds the repurposed Snarky Burger into a self-propelled drive-thru. The order speaker still works. It will take your order whether you stop or not. PROUDLY OVERCOOKED SINCE THE SHATTERING.",
+      concept: "When Allesh-Gilliam needs to move the whole HQ, it folds the repurposed S'narchy Burger into a self-propelled drive-thru. The order speaker still works. It will take your order whether you stop or not. PROUDLY OVERCOOKED SINCE THE SHATTERING.",
       signature: "A moving home town — the wrongness of the wastes falls quiet around it, and the coffee is, against all odds, fresh.",
       loadout: { frame: "Forge Facility Frame", weapons: [], systems: ["Repair Bay","Comms Array","Sensor Suite"], outputs: ["Quartermaster Dispenser"] }
     },

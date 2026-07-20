@@ -15,7 +15,7 @@ const NAMES = [
   // ── HIGH — usable consumables, no consume.effects ──
   "Antidote Cartridge", "Discount Summoning Circle (10% off)", "Gene-Cleanse Serum",
   "Gene-Purge Infusion", "Memory Restorative", "Self-Wrapping Sandwich",
-  "Snarky Burger Special Sauce (Sealed Packet, Pre-Fall)", "The Apologizing Burger",
+  "S'narchy Burger Special Sauce (Sealed Packet, Pre-Fall)", "The Apologizing Burger",
   "Witness-Decoy Pin",
   // ── MED — prose, no magnitudes ──
   "Whataburger Coupon, Unredeemed (Vintage)", "Witness Receipt",

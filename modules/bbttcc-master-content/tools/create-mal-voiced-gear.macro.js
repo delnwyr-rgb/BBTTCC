@@ -18,13 +18,13 @@ const FORCE   = false;
 const ITEMS = [
   // ── 1 ────────────────────────────────────────────────────────────────────
   {
-    name: "Snarky Burger Mascot's Final Smile",
+    name: "S'narchy Burger Mascot's Final Smile",
     targetType: "gear",
     rfi: {
       tier: "I", frame: "talisman", origin: "looted", bound: "free",
       signature: "Frozen mid-sarcasm. Honestly relatable.",
       lore: "<p>A jagged shard of pre-Fall enamel signage. The mascot's grin is preserved exactly as it was when the world stopped being funny on purpose. Most people pin it to a coat. Some keep it in a pocket. A few have tried to throw it away. It comes back. Probably. I haven't checked.</p>"
-        + "<p><b>Mascot's Last Dignity.</b> Reroll the lowest die on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember Snarky Burger. Other people make their saving throw against being charmed by your obvious bad taste.</p>",
+        + "<p><b>Mascot's Last Dignity.</b> Reroll the lowest die on the first Intimidate or Mock check you make each scene. Other people see the brooch. Other people remember S'narchy Burger. Other people make their saving throw against being charmed by your obvious bad taste.</p>",
       materialOf: ["enamel-pin", "pre-fall-signage", "frozen-sarcasm"]
     },
     system: { slot: "trinket", tags: ["mal-voiced", "pre-fall", "talisman"] }
@@ -334,13 +334,13 @@ const ITEMS = [
 
   // ── 20 ───────────────────────────────────────────────────────────────────
   {
-    name: "Snarky Burger Special Sauce (Sealed Packet, Pre-Fall)",
+    name: "S'narchy Burger Special Sauce (Sealed Packet, Pre-Fall)",
     targetType: "gear",
     rfi: {
       tier: "III", frame: "consumable", origin: "found", bound: "free",
       signature: "Hasn't expired in twenty-seven years. People say if you eat it, you stop being able to lie. People say a lot of things.",
       lore: "<p>A small foil packet. The logo is half-flaked. The expiration date is, generously, optimistic. The seal is intact. The contents are, against all known food science and several known thermodynamic principles, still safe. Allesh Gilliam has a quiet trade in these. Lyrenn refuses to touch them. Khezek Tor takes them as wages.</p>"
-        + "<p><b>The Sauce That Knows.</b> Eat (action). For the next scene, you cannot tell a lie. (You may decline to speak. You may speak truthfully. You may speak incompletely. You cannot affirm a falsehood.) NPCs notice. Some will trust you more. Some will leave the room. Mal: \"This is Snarky Burger Special Sauce. We don't know why it works. We've stopped asking.\"</p>",
+        + "<p><b>The Sauce That Knows.</b> Eat (action). For the next scene, you cannot tell a lie. (You may decline to speak. You may speak truthfully. You may speak incompletely. You cannot affirm a falsehood.) NPCs notice. Some will trust you more. Some will leave the room. Mal: \"This is S'narchy Burger Special Sauce. We don't know why it works. We've stopped asking.\"</p>",
       materialOf: ["pre-fall-condiment", "sealed-foil", "actually-suspect-additives"],
       charges: 1
     },

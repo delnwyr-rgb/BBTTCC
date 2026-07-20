@@ -59,7 +59,7 @@ Stewards are reincarnated souls carrying stacks of past lives. Their power IS me
 ## THE MAP AND THE CAMPAIGN
 
 The RIVER HEART region is the current great work: twenty-eight hexes to flip and align, settlement by settlement. The coalition holds a dozen; the rest are contested or wild.
-- ALLESH-GILLIAM: the HQ town. The base is a repurposed Snarky Burger — the cracked sign still flickers, the mascot's grin frozen mid-sarcasm. Booths torn out, map tables in, soda fountain repurposed as coolant line.
+- ALLESH-GILLIAM: the HQ town. The base is a repurposed S'narchy Burger — the cracked sign still flickers, the mascot's grin frozen mid-sarcasm. Booths torn out, map tables in, soda fountain repurposed as coolant line.
 - LYRENN: responsive land — the ground listens. A green-ring agricultural co-op grows there.
 - KHEZEK TOR: the mine. Yesodium ore, deep shafts, and the Brace holding the mountain together. The mountain doesn't hate anyone; it's just tired of being hollowed out.
 - PORT KUDZU, FURRIER'S CROSSING, POLYGONAL GROVE: Jackalope holdings.
