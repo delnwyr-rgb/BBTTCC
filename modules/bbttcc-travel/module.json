@@ -32,7 +32,8 @@
     "scripts/hex-travel.js",
     "scripts/scene-transition.js",
     "scripts/world-overview.js",
-    "scripts/travel-mitigation.bridge.js"
+    "scripts/travel-mitigation.bridge.js",
+    "scripts/chase.js"
   ],
   "styles": [
     "styles/travel.css"
