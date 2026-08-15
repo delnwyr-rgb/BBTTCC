@@ -1,0 +1,33 @@
+{
+  "_id": "becallingkpr0t01",
+  "name": "Keeper — Apprentice (Tier I)",
+  "type": "feature",
+  "img": "icons/svg/temple.svg",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "keeper",
+      "tier-1"
+    ],
+    "description": {
+      "value": "<p><strong>Keeper — Apprentice</strong> (Tier I).</p><p><strong>Trade — The rites:</strong> Weddings, funerals, blessings; participants recover 2×tier Stress between scenes. <span style=\"opacity:0.7\">Standard fee 10 marks (Soft Power).</span></p><p><strong>Trick — Steady the Soul</strong> <em>(1/scene)</em>: An ally rerolls a failed Resolve defense or immediately shakes a fear effect.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 601000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "keeper",
+        "tier": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "becallingbrv0t03",
+  "name": "Bravo — Master (Tier III)",
+  "type": "feature",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "bravo",
+      "tier-3"
+    ],
+    "description": {
+      "value": "<p><strong>Bravo — Master</strong> (Tier III).</p><p><strong>Trade — Muscle for the job:</strong> Accompany one operation as a combatant (full stat participation). <span style=\"opacity:0.7\">Standard fee 90 marks (Violence).</span></p><p><strong>Trick — Veteran's Read</strong> <em>(1/scene)</em>: Declare one enemy's next move aloud; all allies get +2 to defend against exactly that.</p><p><em>Master step:</em> the Bravo's Knack (Shieldwall) improves at this tier — see the class entry.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 103000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "bravo",
+        "tier": 3
+      }
+    }
+  }
+}

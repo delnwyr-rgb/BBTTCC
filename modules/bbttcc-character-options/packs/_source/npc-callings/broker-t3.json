@@ -1,0 +1,33 @@
+{
+  "_id": "becallingbrk0t03",
+  "name": "Broker — Master (Tier III)",
+  "type": "feature",
+  "img": "icons/svg/sound.svg",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "broker",
+      "tier-3"
+    ],
+    "description": {
+      "value": "<p><strong>Broker — Master</strong> (Tier III).</p><p><strong>Trade — Shape the story:</strong> Seed or smother one rumor across a settlement over a downtime. <span style=\"opacity:0.7\">Standard fee 90 marks (Diplomacy or Soft Power (GM picks by job)).</span></p><p><strong>Trick — Name-Drop</strong> <em>(1/scene)</em>: Invoke a connection to open one door; the GM decides what string comes attached.</p><p><em>Master step:</em> the Broker's Knack (Fair Price) improves at this tier — see the class entry.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 303000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "broker",
+        "tier": 3
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "becallingopr0t04",
+  "name": "Operator — Archon (Tier IV)",
+  "type": "feature",
+  "img": "icons/svg/cowled.svg",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "operator",
+      "tier-4"
+    ],
+    "description": {
+      "value": "<p><strong>Operator — Archon</strong> (Tier IV).</p><p><strong>Trade — Papers, clean:</strong> Forge documents/seals good enough to pass sept or Witness scrutiny once. <span style=\"opacity:0.7\">Standard fee 270 marks (Intrigue).</span></p><p><strong>Trick — Ghost Ledger</strong> <em>(1/scene)</em>: One small fact of record (a manifest line, a name on a list, a shipment count) has always read the way the Operator needs it to.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 204000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "operator",
+        "tier": 4
+      }
+    }
+  }
+}

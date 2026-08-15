@@ -1,0 +1,33 @@
+{
+  "_id": "becallingstw0t02",
+  "name": "Stalwart — Initiate (Tier II)",
+  "type": "feature",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "stalwart",
+      "tier-2"
+    ],
+    "description": {
+      "value": "<p><strong>Stalwart — Initiate</strong> (Tier II).</p><p><strong>Trade — Keep her running:</strong> One rig repair tick between scenes (engineer-grade maintenance). <span style=\"opacity:0.7\">Standard fee 30 marks (Economy).</span></p><p><strong>Trick — Endure</strong> <em>(1/scene)</em>: Halve one incoming instance of kinetic damage.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 402000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "stalwart",
+        "tier": 2
+      }
+    }
+  }
+}

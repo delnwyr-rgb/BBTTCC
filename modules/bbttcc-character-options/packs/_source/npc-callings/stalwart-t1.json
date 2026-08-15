@@ -1,0 +1,33 @@
+{
+  "_id": "becallingstw0t01",
+  "name": "Stalwart — Apprentice (Tier I)",
+  "type": "feature",
+  "img": "icons/svg/anchor.svg",
+  "system": {
+    "category": "calling",
+    "source": "Callings",
+    "tags": [
+      "calling",
+      "stalwart",
+      "tier-1"
+    ],
+    "description": {
+      "value": "<p><strong>Stalwart — Apprentice</strong> (Tier I).</p><p><strong>Trade — Haul and raise:</strong> A day's heavy labor — cargo moved, wall raised, field cleared. <span style=\"opacity:0.7\">Standard fee 10 marks (Economy).</span></p><p><strong>Trick — Put Your Back Into It</strong> <em>(1/scene)</em>: Auto-succeed one feat of raw strength or endurance of tier-appropriate difficulty.</p>",
+      "chat": ""
+    }
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 401000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "fourththing": {
+      "calling": {
+        "key": "stalwart",
+        "tier": 1
+      }
+    }
+  }
+}
