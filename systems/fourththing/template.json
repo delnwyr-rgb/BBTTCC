@@ -180,7 +180,7 @@
       },
       "magic": {
         "clarity": {
-          "value": 3,
+          "value": 5,
           "max": 5
         },
         "noise": {
@@ -357,7 +357,7 @@
       },
       "magic": {
         "clarity": {
-          "value": 2,
+          "value": 5,
           "max": 5
         },
         "noise": {
