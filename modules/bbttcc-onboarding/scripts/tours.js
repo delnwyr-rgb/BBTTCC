@@ -252,6 +252,6 @@ async function menu() {
 Hooks.once("ready", () => {
   const ns = _ns();
   if (!ns) return console.warn(TAG, "onboarding namespace missing — tours not exposed.");
-  ns.tours = { register, list, get, start, stop, menu };
+  ns.tours = { register, list, get, start, stop, menu, active: () => !!_active };
   console.log(TAG, `tour engine ready — ${_tours.size} tour(s) registered.`);
 });

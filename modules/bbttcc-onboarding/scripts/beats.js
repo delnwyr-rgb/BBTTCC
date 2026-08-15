@@ -19,12 +19,38 @@ const _tx = () => globalThis.game?.bbttcc?.api?.transition || null;
 const _stage = () => globalThis.game?.bbttcc?.onboarding?.stage || null;
 const _pause = (ms) => new Promise(r => setTimeout(r, ms)); // beat pacing — let steps land
 
+/** Resolve a tutorial scene or say so LOUDLY (chat + toast + console). A missing scene
+ * must never silently degrade a beat into "nothing visibly happened" (owner playtest
+ * 2026-08-12: Proving Range vanished and the whole meatsuit scenario went invisible).
+ * Beats resolve scenes by flags["bbttcc-onboarding"].tutorialScene — a scene REBUILT
+ * by hand (e.g. swapped for an animated map) loses the flag unless it's re-stamped. */
+async function _requireScene(ctx, key, label) {
+  const scene = ctx.scene(key);
+  if (scene) return scene;
+  console.warn(TAG, `No '${key}' tutorial Scene — nothing carries flags["${MODULE_ID}"].tutorialScene="${key}". Run tools/onboarding-setup.macro.js, or re-stamp the flag if the scene was rebuilt: scene.setFlag("${MODULE_ID}","tutorialScene","${key}")`);
+  ui.notifications?.warn?.(`Onboarding: the "${label}" tutorial scene is missing (rebuilt without its flag?). GM: run onboarding-setup.macro.js or re-stamp the flag. Continuing without the scene.`);
+  await ctx.speak(`Hm. The ${label} stage is dark — someone rearranged my furniture and didn't tell me. *bzzt* We'll run this module without the set dressing.`);
+  return null;
+}
+
+/** Canvas point at a fractional position inside the VISIBLE scene rect, shifted into
+ * this run's LANE. Canvas coordinates include the scene padding — `scene.width * frac`
+ * lands shifted into the top-left dead zone (owner playtest 2026-08-13: vehicles spawned
+ * off-track). The lane shift keeps concurrent players' scaffolding off each other. */
+function _scenePoint(scene, fx, fy, lane = 0) {
+  const laneFrac = _stage()?.laneFrac;
+  const y = typeof laneFrac === "function" ? laneFrac(fy, lane) : fy;
+  const d = scene?.dimensions;
+  if (d?.sceneWidth) return { x: Math.round(d.sceneX + d.sceneWidth * fx), y: Math.round(d.sceneY + d.sceneHeight * y) };
+  return { x: Math.round((scene?.width ?? 2000) * fx), y: Math.round((scene?.height ?? 1400) * y) };
+}
+
 /** Dive into a tutorial Scene (GM-solo/non-destructive), falling back to a plain view. */
-async function _enterScene(scene, label) {
+async function _enterScene(scene, label, lane = 0) {
   if (!scene) return;
   const tx = _tx();
   try {
-    if (tx?.dive) await tx.dive(scene.uuid, { focus: { x: scene.width / 2, y: scene.height / 2 }, audience: "view", label });
+    if (tx?.dive) await tx.dive(scene.uuid, { focus: _scenePoint(scene, 0.5, 0.5, lane), audience: "view", label });
     else await scene.view?.();
   } catch (e) {
     console.warn(TAG, `dive into "${label}" failed; viewing instead`, e);
@@ -42,9 +68,8 @@ const incarnation = {
     await ctx.speak("Connection established. You were The One — a perfect run, god-mode earned, a story told true enough to become load-bearing in the weave of things.");
     await ctx.speak("So we spun you back in to fix what broke. The catch— *bzzt* —you'll be doing it from inside a homemade Foundry video game. Mine. Try not to touch the walls.");
 
-    const scene = ctx.scene("incarnation");
-    if (scene) await _enterScene(scene, "Incarnate");
-    else console.warn(TAG, "No 'incarnation' tutorial Scene — run tools/onboarding-setup.macro.js. Continuing without the dive.");
+    const scene = await _requireScene(ctx, "incarnation", "Incarnation");
+    if (scene) await _enterScene(scene, "Incarnate", ctx.lane);
 
     ctx.riff({ beat: "incarnation", line: "Welcome the reincarnated One into the homemade game and prep them to take a body.", intent: "Ominous, glitchy, a little funny. One short aside." });
   },
@@ -79,30 +104,43 @@ const meatsuit = {
     await ctx.speak("Body's warm. Let's make sure it works before something tries to end it. Open your sheet — that's YOUR interface now, not a tutorial mock-up.");
     await _pause(900);
 
-    const scene = ctx.scene("meatsuit-range");
-    if (scene) { await _enterScene(scene, "Proving Range"); await _pause(800); } // let the dive settle before spawning
+    const scene = await _requireScene(ctx, "meatsuit-range", "Proving Range");
+    if (scene) { await _enterScene(scene, "Proving Range", ctx.lane); await _pause(800); } // let the dive settle before spawning
 
     // Contain the steward + dummy to the range (never the live map).
     const stage = _stage();
     if (stage && scene) {
-      const st = await stage.ensureTokenOnScene(ctx.steward, scene, { x: Math.round(scene.width * 0.4), y: Math.round(scene.height * 0.5) });
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.4, 0.5, ctx.lane));
       if (st.created) ctx._spawned.push({ token: st.doc });
-      const dummy = await stage.spawnDummy(scene, { x: Math.round(scene.width * 0.6), y: Math.round(scene.height * 0.5), name: "Straw Adversary" });
+      const dummy = await stage.spawnDummy(scene, { ..._scenePoint(scene, 0.6, 0.5, ctx.lane), name: "Straw Adversary" });
       if (dummy) ctx._spawned.push(dummy);
     }
     await _pause(500);
     try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
-    await ctx.speak("Pick any ability and fire it — doesn't matter which, I just need to see the meat answer the mind. Target the straw adversary for a flourish.");
+    await ctx.speak("Pick one ABILITY and fire it — a real power off your sheet's ability list or the HUD tray, not an aptitude check like Violence. Doesn't matter which; I just need to see the meat answer the mind. Target the straw adversary for a flourish.");
     ctx.riff({ beat: "meatsuit", line: "Player is about to test their real abilities for the first time.", intent: "Encourage them to swing. Dry, glitchy, one line." });
   },
 
   detect: (ctx, done) => {
+    const FALLBACK_TITLE = "◇ OPERATOR — Proof of Life";
     const onAnim = (data = {}) => {
       const a = data.actor || data.sourceToken?.actor;
       if (a?.id === ctx.steward?.id) done();
     };
     Hooks.on("fourththing:itemAnimated", onAnim);
-    return () => Hooks.off("fourththing:itemAnimated", onAnim);
+    // Untrappable fallback (owner playtest 2026-08-11: this was the only beat
+    // without one — a player whose ability never animates was stuck forever).
+    ctx.prompt({
+      title: FALLBACK_TITLE,
+      content:
+        `<p>Fire one <b>ability</b> — an actual power from your sheet's ability list (or the HUD tray), <i>not</i> an aptitude check like Violence.</p>` +
+        `<p><i>Nothing sparking — empty list, gremlins, stage fright? Use the button and I'll wave you through.</i></p>`,
+      label: "Wave me through"
+    }).then(() => done());
+    return () => {
+      Hooks.off("fourththing:itemAnimated", onAnim);
+      globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
+    };
   },
 
   exit: async (ctx) => {
@@ -113,8 +151,19 @@ const meatsuit = {
 };
 
 /* ───────────────────────── DRIVING ───────────────────────── */
-// Pilot the faction's REAL starter rig (mint a Hexmobile if absent). Detected when the
-// rig's hexesMoved increments (the "steer" crew action), off `updateActor`.
+// Pilot the faction's REAL starter rig (mint a player-owned Hexmobile if absent) through
+// an obstacle gauntlet: four wrecks block the Test Track (storm brewing at the far end);
+// the beat completes when every wreck is destroyed (integrity 0 or token gone), with an
+// untrappable Conclude prompt as the escape hatch. Steering still gets its nod via the
+// hexesMoved listener — it just no longer ends the beat on its own.
+const OBSTACLE_ART = (f) => `modules/${MODULE_ID}/art/${f}`;
+const DRIVING_OBSTACLES = [
+  { name: "Rusted Sedan",   img: OBSTACLE_ART("obstacle-wreck-sedan.webp"),   xFrac: 0.34, yFrac: 0.42, size: 2 },
+  { name: "Dead Hauler",    img: OBSTACLE_ART("obstacle-wreck-hauler.webp"),  xFrac: 0.50, yFrac: 0.58, size: 2 },
+  { name: "Gutted Runner",  img: OBSTACLE_ART("obstacle-wreck-runner.webp"),  xFrac: 0.66, yFrac: 0.40, size: 2 },
+  { name: "Downed Chopper", img: OBSTACLE_ART("obstacle-wreck-chopper.webp"), xFrac: 0.82, yFrac: 0.55, size: 3 }
+];
+
 const driving = {
   id: "driving",
   title: "Test the Driving",
@@ -123,62 +172,117 @@ const driving = {
   enter: async (ctx) => {
     ctx._spawned = [];
     ctx._rig = null;
-    await ctx.speak("Every Steward gets a rig. Yours is parked — let's see if you can move it without folding it into a wall.");
+    ctx._obstacles = [];
+    await ctx.speak("Every Steward gets a rig. Yours is parked trackside — let's see if you can move it without folding it into a wall.");
     await _pause(900);
 
     let rig = ctx.rig; // resolves the faction's real rig
     if (!rig && ctx.faction) {
-      rig = await _stage()?.mintRig?.(ctx.faction.id, "hexmobile"); // routes through GM relay
+      // Routes through the GM relay; userId grants the onboarding player OWNER on the mint.
+      rig = await _stage()?.mintRig?.(ctx.faction.id, "hexmobile", { userId: ctx.user?.id });
       if (rig) { await ctx.speak("No rig on file— *bzzt* —minted you a Hexmobile on the house. Don't get attached."); await _pause(700); }
     }
     ctx._rig = rig || null;
 
-    const scene = ctx.scene("driving-course");
-    if (scene) { await _enterScene(scene, "Test Track"); await _pause(800); }
+    const scene = await _requireScene(ctx, "driving-course", "Test Track");
+    if (scene) { await _enterScene(scene, "Test Track", ctx.lane); await _pause(800); }
 
     const stage = _stage();
     if (scene && stage) {
       // Place the Steward FIRST — the meatsuit beat removed the range token on cleanup,
       // so without this there's no pilot on the Test Track to board the rig with.
-      const st = await stage.ensureTokenOnScene(ctx.steward, scene, { x: Math.round(scene.width * 0.42), y: Math.round(scene.height * 0.5) });
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.10, 0.5, ctx.lane));
       if (st.created) ctx._spawned.push({ token: st.doc });
       if (rig) {
-        const rt = await stage.ensureTokenOnScene(rig, scene, { x: Math.round(scene.width * 0.55), y: Math.round(scene.height * 0.5) });
+        const rt = await stage.ensureTokenOnScene(rig, scene, _scenePoint(scene, 0.17, 0.5, ctx.lane));
         if (rt.created) ctx._spawned.push({ token: rt.doc });
+      }
+      // The gauntlet: wrecks strewn between the start line and the storm.
+      for (const ob of DRIVING_OBSTACLES) {
+        const sp = await stage.spawnObstacle?.(scene, {
+          name: ob.name, img: ob.img, size: ob.size,
+          ..._scenePoint(scene, ob.xFrac, ob.yFrac, ctx.lane)
+        });
+        if (sp) { ctx._spawned.push(sp); ctx._obstacles.push(sp); }
       }
     }
     await _pause(500);
     try { rig?.sheet?.render(true, { focus: true }); } catch (_) {}
-    if (rig) await ctx.speak("Board it and take the pilot seat, then use the STEER action — watch for the blue ring. (Steer spends a pilot action, so if it balks, start or advance a combat turn to refresh one.)");
+    if (rig) await ctx.speak("Board it and take the pilot seat, then STEER — watch for the blue ring. (Steer spends a pilot action; if it balks, start or advance a combat turn to refresh one.) Then the fun part: four wrecks squat on your track. Put every one of them back into scrap — ram them, shoot them, whatever the rig's got — before that storm at the far end gets bored.");
     else await ctx.speak("Couldn't find or mint a rig for your faction. Make sure you lead a faction, then re-run this beat. Skipping the test track for now.");
 
-    ctx.riff({ beat: "driving", line: "Player is about to pilot their rig for the first time.", intent: "Gruff driving-instructor daemon. One line." });
+    ctx.riff({ beat: "driving", line: "Player is about to pilot their rig through a wreck-strewn obstacle course for the first time.", intent: "Gruff driving-instructor daemon. One line." });
   },
 
   detect: (ctx, done) => {
     const rig = ctx._rig;
+    const FALLBACK_TITLE = "◇ OPERATOR — Test Track";
+    const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
     if (!rig) {
       // No rig to test — gate on a manual continue rather than hang.
-      ctx.prompt({ title: "◇ OPERATOR", content: "<p>No rig to test right now. Continue when ready.</p>", label: "Continue" }).then(() => done());
-      return null;
+      ctx.prompt({ title: FALLBACK_TITLE, content: "<p>No rig to test right now. Continue when ready.</p>", label: "Continue" }).then(() => done());
+      return closeFallback;
     }
+
+    const obstacleActorIds = new Set((ctx._obstacles || []).map(o => o.actor?.id).filter(Boolean));
+    const obstacleTokenIds = new Set((ctx._obstacles || []).map(o => o.token?.id).filter(Boolean));
+    const total = obstacleActorIds.size;
+    const downed = new Set();
+    let steered = false;
+
+    const scrapped = (actor) => {
+      downed.add(actor?.id ?? actor);
+      const left = total - downed.size;
+      if (left > 0 && actor?.name) ctx.speak?.(`${actor.name} — scrapped. ${left} to go.`);
+      if (downed.size >= total) done();
+    };
     const onUpd = (actor, changed) => {
-      if (actor?.id !== rig.id) return;
-      const moved = changed?.flags?.fourththing?.combat?.hexesMoved;
-      if (moved !== undefined && Number(moved) > 0) done();
+      if (actor?.id === rig.id) {
+        const moved = changed?.flags?.fourththing?.combat?.hexesMoved;
+        if (moved !== undefined && Number(moved) > 0 && !steered) {
+          steered = true;
+          if (total > 0) ctx.speak?.("Rolling. Now the wrecks — flatten all four.");
+          else done(); // no obstacles staged (no GM online?) — steering alone completes, as before
+        }
+        return;
+      }
+      if (!obstacleActorIds.has(actor?.id) || downed.has(actor?.id)) return;
+      const sys = actor.system?.system ?? actor.system;
+      const val = Number(foundry.utils.getProperty(sys, "derived.integrity.value") ?? NaN);
+      if (!Number.isNaN(val) && val <= 0) scrapped(actor);
+    };
+    const onDelTok = (tokenDoc) => {
+      if (!obstacleTokenIds.has(tokenDoc?.id)) return;
+      const aid = tokenDoc?.actorId;
+      if (aid && obstacleActorIds.has(aid) && !downed.has(aid)) scrapped(tokenDoc.actor ?? aid);
     };
     Hooks.on("updateActor", onUpd);
-    return () => Hooks.off("updateActor", onUpd);
+    Hooks.on("deleteToken", onDelTok);
+    // Escape hatch — never trap the player on the track.
+    ctx.prompt({
+      title: FALLBACK_TITLE,
+      content: total > 0
+        ? `<p>Steer the rig and destroy all <b>${total} wrecks</b> blocking the track — ram them or shoot them.</p><p><i>Stuck, or the track won't cooperate? Conclude and move on.</i></p>`
+        : `<p>Steer the rig — that's the whole test today.</p><p><i>Stuck? Conclude and move on.</i></p>`,
+      label: "Conclude the test drive"
+    }).then(() => done());
+
+    return () => {
+      Hooks.off("updateActor", onUpd);
+      Hooks.off("deleteToken", onDelTok);
+      closeFallback();
+    };
   },
 
   exit: async (ctx) => {
-    if (ctx._rig) await ctx.speak("Moving. Sloppy, but moving. The rig'll forgive you; the terrain won't. Parking it — next module.");
+    if (ctx._rig) await ctx.speak("Moving, wrecking, surviving — the whole grammar of the road. The rig'll forgive you; the terrain won't. Parking it — next module.");
     const stage = _stage();
     // Sever the boarding connection FIRST (un-hides the Steward's tokens everywhere),
     // THEN remove the tutorial tokens — order matters so no real token is left hidden.
     try { await stage?.disembark?.(ctx.steward?.id, ctx._rig?.id); } catch (_) {}
     try { await stage?.cleanup?.(ctx._spawned || []); } catch (_) {}
     ctx._spawned = [];
+    ctx._obstacles = [];
     ctx._rig = null;
   }
 };
@@ -197,13 +301,13 @@ const stewardshipClaim = {
     await ctx.speak("Now the real work — stewardship. A hex is yours to shape, but first you have to CLAIM it. This one's a sandbox; nothing you do here touches the living world.");
     await _pause(900);
 
-    const scene = ctx.scene("sandbox-hex");
-    if (scene) { await _enterScene(scene, "Sandbox Hold"); await _pause(800); }
+    const scene = await _requireScene(ctx, "sandbox-hex", "Sandbox Hold");
+    if (scene) { await _enterScene(scene, "Sandbox Hold", ctx.lane); await _pause(800); }
 
     const stage = _stage();
     if (scene && stage?.ensureSandboxHex) ctx._sandboxHex = await stage.ensureSandboxHex(scene, "Tutelary Hold");
     if (scene && stage) {
-      const st = await stage.ensureTokenOnScene(ctx.steward, scene, { x: Math.round(scene.width * 0.5), y: Math.round(scene.height * 0.66) });
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.5, 0.66, ctx.lane));
       if (st.created) ctx._spawned.push({ token: st.doc });
     }
     await _pause(500);
@@ -288,6 +392,60 @@ const stewardshipTurn = {
   }
 };
 
+/* ───────────────────────── OUTFITTING ───────────────────────── */
+// Gear up at the Long Market before the frontier (owner call 2026-08-13: "use the
+// Market tutorial as a gear-up opportunity so they land geared up"). The training
+// STIPEND lands here (moved from the travel beat) so the player has marks to spend;
+// the Market opens on the real steward; buying riffs via createItem; the gate is an
+// untrappable "geared up" conclude — only the player knows when they're dressed.
+const outfitting = {
+  id: "outfitting",
+  title: "Outfitting",
+  scope: "personal",
+
+  enter: async (ctx) => {
+    await ctx.speak("Before you cross into hostile ground, two problems: you're broke and you're under-dressed. Fixing both— *bzzt*");
+    await _pause(700);
+
+    // Training stipend — a fresh faction's banks are empty, and the Market, Travel
+    // and raid maneuvers ahead all bill real OP. 130 marks/pool = the cost-band
+    // ceiling, so nothing downstream is money-locked.
+    if (ctx.faction) {
+      const g = await _stage()?.grantOp?.(ctx.faction.id, {
+        economy: 130, violence: 130, intrigue: 130, diplomacy: 130, nonlethal: 60, softpower: 60
+      });
+      if (g?.ok) { await ctx.speak("A training stipend just hit your faction's OP banks. Fuel, favors and ammunition — on the house, this once."); await _pause(600); }
+    }
+
+    try { globalThis.game?.bbttcc?.api?.market?.openMarket?.(); }
+    catch (e) { console.warn(TAG, "market open failed", e); }
+    await _pause(600);
+    await ctx.speak("This is the LONG MARKET. Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
+    ctx.riff({ beat: "outfitting", line: "Player is gearing up at the Market before the finale.", intent: "Quartermaster energy — dry, practical. One line." });
+  },
+
+  detect: (ctx, done) => {
+    const onBuy = (item) => {
+      if (item?.parent?.id === ctx.steward?.id) {
+        ctx.riff?.({ beat: "outfitting", line: `Player acquired "${item.name}".`, intent: "One dry quartermaster nod at the purchase." });
+      }
+    };
+    Hooks.on("createItem", onBuy);
+    ctx.prompt({
+      title: "◇ OPERATOR — Outfitting",
+      content:
+        `<p>Spend some stipend: buy gear from the <b>Market</b>, then <b>equip it</b> on your sheet.</p>` +
+        `<p>Mind the training warnings — owning a cannon isn't the same as being able to aim it.</p>`,
+      label: "Geared up — move out"
+    }).then(() => done());
+    return () => Hooks.off("createItem", onBuy);
+  },
+
+  exit: async (ctx) => {
+    await ctx.speak("Look at you — dressed for the apocalypse you're about to drive into. The Syndicate won't know what pulled up.");
+  }
+};
+
 /* ═════════════════════════ PHASE 4 — FINALE ═════════════════════════
  * travel into a hostile hex → triple raid (violence / intrigue / presence,
  * player-driven, pre-targeted consoles) → graduation dive into live Bad Eden.
@@ -332,15 +490,14 @@ const travel = {
     await ctx.speak("Stewardship is holding what's yours. The real test is TAKING what isn't. There's a frontier hold squatting on contested ground — the Rust Syndicate. We're going to pay them a visit.");
     await _pause(900);
 
-    const scene = ctx.scene("hostile-hex");
-    if (scene) { await _enterScene(scene, "Hostile Frontier"); await _pause(800); }
-    else console.warn(TAG, "No 'hostile-hex' tutorial Scene — run tools/onboarding-setup.macro.js.");
+    const scene = await _requireScene(ctx, "hostile-hex", "Hostile Frontier");
+    if (scene) { await _enterScene(scene, "Hostile Frontier", ctx.lane); await _pause(800); }
 
     ctx._finale = await _finaleTargets(ctx);
 
     const stage = _stage();
     if (scene && stage) {
-      const st = await stage.ensureTokenOnScene(ctx.steward, scene, { x: Math.round(scene.width * 0.28), y: Math.round(scene.height * 0.66) });
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.28, 0.66, ctx.lane));
       if (st.created) ctx._spawned.push({ token: st.doc });
     }
     await _pause(500);
@@ -385,7 +542,7 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after }) {
       const f = ctx.faction;
       const fin = ctx._finale || (ctx._finale = await _finaleTargets(ctx));
       const scene = fin.scene || ctx.scene("hostile-hex");
-      if (scene) { await _enterScene(scene, title); await _pause(500); }
+      if (scene) { await _enterScene(scene, title, ctx.lane); await _pause(500); }
 
       if (!f) { await ctx.speak("No faction on file to raid under— *bzzt* —I can't open a war console without one. Lead a faction, then replay the finale."); return; }
 
@@ -493,11 +650,18 @@ const graduation = {
     // Mark the world's onboarding complete (GM only; players can still replay).
     try { if (globalThis.game?.user?.isGM) await ns?.settings?.set?.("completed", true); } catch (_) {}
 
-    // Dive into the live Bad Eden map — pull the whole table if a GM is driving.
+    // Dive into the live Bad Eden map. "activate" pulls the WHOLE table — never do
+    // that while another Steward is still mid-tutorial (it would yank them out of
+    // their own run). Solo graduations keep the original table-pull behaviour.
+    let othersLive = 0;
+    try { othersLive = Number((await _stage()?.runList?.(ctx.user?.id))?.count) || 0; } catch (_) {}
+    const audience = othersLive > 0 ? "view" : "activate";
+    if (othersLive > 0) console.log(TAG, `graduation: ${othersLive} other run(s) live — diving solo (audience:"view").`);
+
     const main = ns?.resolve?.mainMap?.();
     const tx = _tx();
     if (main && tx?.dive) {
-      try { await tx.dive(main.uuid, { focus: { x: main.width / 2, y: main.height / 2 }, audience: "activate", label: "Bad Eden" }); }
+      try { await tx.dive(main.uuid, { focus: _scenePoint(main, 0.5, 0.5, ctx.lane), audience, label: "Bad Eden" }); }
       catch (e) { console.warn(TAG, "graduation dive failed; viewing instead", e); try { await main.view?.(); } catch (_) {} }
     } else if (main) {
       try { await main.view?.(); } catch (_) {}
@@ -519,6 +683,7 @@ Hooks.once("ready", () => {
   const ordered = [
     incarnation, meatsuit, driving,
     stewardshipClaim, stewardshipTurn,
+    outfitting,
     travel, raidViolence, raidIntrigue, raidPresence, graduation
   ];
   for (const beat of ordered) ns.beats.register(beat);

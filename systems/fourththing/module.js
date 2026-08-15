@@ -1031,7 +1031,12 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
   // 2026-05-13 — Per-weapon gate (was per-gunner). A gunner with multiple
   // rig weapons can fire each one once per round. Tracked in
   // `combat.rigWeaponsFiredThisRound[weaponId]`. Cleared on _onFtNewTurn.
-  if (rig && actor?.flags?.fourththing?.combat?.rigWeaponsFiredThisRound?.[item.id]) {
+  // 2026-08-11 — like every other action-economy gate (2026-05-29 doctrine:
+  // "out of combat there are no rounds"), this only binds in ACTIVE combat.
+  // The map is only cleared on New Turn, so out of combat it never reset —
+  // one shot locked the weapon forever (bit the onboarding Test Track).
+  const _ftRigWeaponGateActive = rig && (_ftInActiveCombat(actor) || _ftInActiveCombat(rig));
+  if (_ftRigWeaponGateActive && actor?.flags?.fourththing?.combat?.rigWeaponsFiredThisRound?.[item.id]) {
     ui.notifications?.warn(`${actor.name}: ${item.name} already fired this round.`);
     return;
   }
@@ -1154,10 +1159,13 @@ async function ftOpenEngageDialog(actor, item, options = {}) {
           // panel's visual state + downstream debugging.
           if (rig && result) {
             // 2026-05-13 — Per-weapon gate: stamp the specific weapon id in
-            // a map so other weapons stay fire-able this round.
+            // a map so other weapons stay fire-able this round. 2026-08-11 —
+            // stamped only during ACTIVE combat: out of combat the map never
+            // clears (New Turn only), so a stamp would carry a stale lock
+            // into the next combat's first round.
             const combat = actor.flags?.fourththing?.combat ?? {};
             const fired = { ...(combat.rigWeaponsFiredThisRound ?? {}) };
-            fired[item.id] = true;
+            if (_ftInActiveCombat(actor) || _ftInActiveCombat(rig)) fired[item.id] = true;
             await actor.setFlag("fourththing", "combat", {
               ...combat,
               rigWeaponsFiredThisRound: fired,
@@ -15155,6 +15163,11 @@ Hooks.once("init", function () {
   game.fourththing.ftOpenEngageDialog = ftOpenEngageDialog;
   game.fourththing.ftOpenCastDialog   = ftOpenCastDialog;
   game.fourththing.classifyPrinciple  = ftClassifyPrinciple;
+  // ftPlayAutoAnimation — exposed 2026-08-11 so the player HUD's ability buttons
+  // fire the same AA/VFX bridge (and the fourththing:itemAnimated hook) as the
+  // sheet's use path. ft-class-automation already calls this via optional
+  // chaining (miss animations) — that call comes alive with this export too.
+  game.fourththing.ftPlayAutoAnimation = ftPlayAutoAnimation;
   // Owner-or-GM-relay effect/condition writer (used by steward actions + the
   // Breaker dialog's Armor Sunder on foes the player doesn't own).
   game.fourththing.applyEffectsToTarget = _ftApplyEffectsToTarget;

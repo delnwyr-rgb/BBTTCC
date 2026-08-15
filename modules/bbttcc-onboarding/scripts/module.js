@@ -35,6 +35,15 @@ Hooks.once("init", () => {
     scope: "world", config: true, type: Boolean, default: true
   });
 
+  // Live run registry — { [userId]: { lane, ts, name } }. Written GM-side via the
+  // relay (world settings are GM-only). Powers parallel-safe onboarding: stable
+  // spawn LANES so concurrent players never stack scaffolding on each other, and
+  // the "is anyone else still in the tutorial?" check that keeps graduation from
+  // yanking the table out from under someone mid-flow.
+  game.settings.register(MODULE_ID, "activeRuns", {
+    scope: "world", config: false, type: Object, default: {}
+  });
+
   log("Settings registered.");
 });
 
@@ -84,6 +93,44 @@ function resolveRig(faction) {
 function findTutorialScene(key) {
   try { return (game.scenes?.contents ?? []).find(s => s.getFlag?.(MODULE_ID, "tutorialScene") === key) || null; }
   catch (_) { return null; }
+}
+
+/** Valid tutorial scene keys, in flow order. */
+const TUTORIAL_SCENE_KEYS = ["incarnation", "meatsuit-range", "driving-course", "sandbox-hex", "hostile-hex"];
+
+/**
+ * Point a tutorial key at a Scene (GM only), clearing the key off whatever held it —
+ * two scenes claiming one key would leave resolution to whichever sorted first.
+ * Scenes get rebuilt often here, and a rebuilt scene loses its flag.
+ *   game.bbttcc.onboarding.wireScene("meatsuit-range", "6YetGOfAK3IhsZ9k")
+ * Accepts a bare id, a "Scene.<id>" uuid, a Scene document, or a scene NAME.
+ */
+async function wireScene(key, sceneOrId) {
+  if (!game.user?.isGM) { ui.notifications?.warn?.("wireScene: GM only."); return null; }
+  if (!TUTORIAL_SCENE_KEYS.includes(key)) {
+    ui.notifications?.error?.(`wireScene: unknown key "${key}". Valid: ${TUTORIAL_SCENE_KEYS.join(", ")}`);
+    return null;
+  }
+  const raw = sceneOrId?.documentName === "Scene" ? sceneOrId
+    : game.scenes?.get?.(String(sceneOrId ?? "").replace(/^Scene\./, ""))
+      ?? game.scenes?.getName?.(String(sceneOrId ?? ""));
+  if (!raw) { ui.notifications?.error?.(`wireScene: no scene matches "${sceneOrId}".`); return null; }
+
+  for (const s of (game.scenes ?? [])) {
+    if (s.id !== raw.id && s.getFlag?.(MODULE_ID, "tutorialScene") === key) {
+      try { await s.unsetFlag(MODULE_ID, "tutorialScene"); }   // v14: unsetFlag, never "-=key"
+      catch (e) { warn("wireScene: could not clear old flag on", s.name, e); }
+    }
+  }
+  await raw.setFlag(MODULE_ID, "tutorialScene", key);
+  log(`wired "${key}" → ${raw.name} (${raw.id}).`);
+  ui.notifications?.info?.(`Onboarding: "${key}" now uses scene "${raw.name}".`);
+  return raw;
+}
+
+/** Which scene each tutorial key currently resolves to (null = unwired). */
+function sceneWiring() {
+  return Object.fromEntries(TUTORIAL_SCENE_KEYS.map(k => [k, findTutorialScene(k)?.name ?? null]));
 }
 
 /**
@@ -140,7 +187,13 @@ function _install() {
         rig: resolveRig,
         scene: findTutorialScene,
         mainMap: resolveMainMap
-      }
+      },
+
+      // Scene wiring (GM): tutorial beats resolve scenes by flag, and a rebuilt
+      // scene loses that flag. See tools/wire-tutorial-scenes.macro.js for a GUI.
+      wireScene,
+      sceneWiring,
+      TUTORIAL_SCENE_KEYS
 
       // .speak/.riff attached by operator-voice.js; .beats/.start/... by director.js
     });

@@ -649,6 +649,11 @@
   }
   async function fireAbility(steward, item) {
     await ensureEmanateFromRig(steward);
+    // Parity with the sheet's use path (_onFtUseFeature): fire the AA/VFX bridge so
+    // fourththing:itemAnimated listeners (onboarding gates, fx layers) hear HUD-fired
+    // abilities too — without this, the onboarding meatsuit beat only advanced when
+    // the ability was fired from the sheet.
+    try { game.fourththing?.ftPlayAutoAnimation?.(steward, item, { hit: true }); } catch (_e) {}
     const dispatch = game.fourththing?._classAutomation?.dispatchFeatureAction;
     if (typeof dispatch === "function") {
       try {

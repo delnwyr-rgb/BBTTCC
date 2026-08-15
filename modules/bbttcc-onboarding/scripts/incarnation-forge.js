@@ -142,22 +142,33 @@ async function _foundFaction(ctx) {
   await ctx.speak("A body needs a banner, One. Before you drive, claim, or raid, the world wants to know: in whose name?");
 
   const DV2 = foundry?.applications?.api?.DialogV2;
+  const FOUND_TITLE = "◇ OPERATOR — Found Your Faction";
+  const nsUi = ns?.ui;
   let picked = null;
   const content =
     `<div class="bbttcc-onboarding-prompt">` +
     `<p>Found your faction — the bigger body your Steward moves inside. You can rename, recrest and rebuild everything later from the faction sheet.</p>` +
     `<div class="form-group"><label><b>Faction name</b></label><input type="text" name="factionName" placeholder="e.g. The Furrier's Fixit Farm" style="width:100%;"/></div>` +
     `<div class="form-group"><label>Creed (optional, one line)</label><input type="text" name="factionCreed" placeholder="What you tell recruits at the fire." style="width:100%;"/></div>` +
+    `<div class="form-group"><label><b>Starter rig</b> (free — same choice as faction creation)</label>` +
+    `<label style="display:block;margin:0.2em 0;"><input type="radio" name="rigChassis" value="hexmobile" checked/> <b>Hexmobile</b> — scout-and-skirmish land ride, two riders</label>` +
+    `<label style="display:block;margin:0.2em 0;"><input type="radio" name="rigChassis" value="space_marine"/> <b>Space Marine</b> — single-pilot power-armor mech</label>` +
+    `</div>` +
+    `<div class="form-group"><label>Starter rig name (optional)</label><input type="text" name="rigName" placeholder="Name your ride." style="width:100%;"/></div>` +
     `</div>`;
   if (DV2?.wait) {
+    nsUi?.raiseDialogByTitle?.(FOUND_TITLE);
     await DV2.wait({
-      window: { title: "◇ OPERATOR — Found Your Faction" }, content,
+      window: { title: FOUND_TITLE }, content,
+      position: { ...(nsUi?.PROMPT_POSITION ?? { top: 96, left: 120, width: 440 }) },
       buttons: [
         { action: "found", label: "Raise the banner", default: true, callback: (_ev, btn) => {
             const rootEl = btn?.form ?? btn;
             picked = {
               name: rootEl?.querySelector?.('[name="factionName"]')?.value || "",
-              creed: rootEl?.querySelector?.('[name="factionCreed"]')?.value || ""
+              creed: rootEl?.querySelector?.('[name="factionCreed"]')?.value || "",
+              rigName: rootEl?.querySelector?.('[name="rigName"]')?.value || "",
+              rigChassis: rootEl?.querySelector?.('[name="rigChassis"]:checked')?.value || "hexmobile"
             };
           } },
         { action: "later", label: "Not yet" }
@@ -182,7 +193,36 @@ async function _foundFaction(ctx) {
   if (ctx && faction) ctx.faction = faction; // refresh the beat context in place
 
   await ctx.speak(`${faction?.name || picked.name} — raised, rostered, and yours. OP banks empty, reputation unwritten. Best possible start— *bzzt* —nowhere to go but everywhere.`);
+
+  // Every new banner comes with its free starter Hexmobile — minted NOW, named by the
+  // player, owned by the player (the driving beat and rig tour both need that ownership).
+  try {
+    const rigRes = await ns.runAsGM("mintRig", {
+      factionId: res.factionId, chassis: picked.rigChassis || "hexmobile",
+      userId: ctx.user?.id || game.user.id,
+      name: picked.rigName || ""
+    });
+    if (rigRes?.rigId) {
+      const rig = await ns.relay.resolveActor(rigRes.rigId);
+      const flavor = picked.rigChassis === "space_marine" ? "power-armor humming" : "keys in it";
+      await ctx.speak(`Parked out front: ${rig?.name || "your starter rig"} — ${flavor}. Yours to drive, yours to answer for.`);
+    }
+  } catch (e) { console.warn(TAG, "starter rig mint failed (driving beat will retry)", e); }
+
   try { faction?.sheet?.render(true); } catch (_) {}
+
+  // Faction-sheet tour offered HERE, the moment the banner rises (owner ask
+  // 2026-08-11 — it used to arrive at stewardship_turn, after the hex review).
+  // Same tour id as the stewardship_turn offer; that one is skipIfTaken, so it
+  // only re-fires as a safety net if the player declines now.
+  try {
+    await ns.offerTour?.({
+      tour: "faction-sheet",
+      prompt: "That banner comes with a control room. Your faction sheet is where everything rolls up — OP banks, roster, health tracks, the order queue. Tour it now, before the world starts billing you?",
+      label: "Tour my faction"
+    });
+  } catch (e) { console.warn(TAG, "founding faction-tour offer failed", e); }
+
   return faction;
 }
 
