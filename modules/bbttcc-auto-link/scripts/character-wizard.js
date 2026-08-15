@@ -921,6 +921,28 @@ async function runGuidedCreatePipeline(payload, opts) {
     warn("post-wizard auto-grant failed", e);
   }
 
+  // Fresh operatives leave chargen with a FULL Clarity pool for THEIR build
+  // (owner ruling 2026-08-15). template.json can only seed a flat 5, but the
+  // real ceiling is DERIVED in prepareDerivedData: tier base (5/7/10/14) + 5
+  // if the class is a TCC + every discipline `clarityMaxBonus` on the feats we
+  // just imported (Dreamwalker's Oneiric Reservoir is +2, so a T1 Dreamwalker
+  // is 12, not 5). That means this has to run LAST — after the class/subclass/
+  // path-feature imports — and read the recomputed max off actor.system.
+  // (Reading derived is correct here: we want the ceiling, and we write only
+  // the current value. Ranks/faculties are the opposite — see ftSourceSystem
+  // in systems/fourththing/module.js.)
+  try {
+    const magicNow   = (actor.system && actor.system.system ? actor.system.system : actor.system || {}).magic || {};
+    const clarityMax = Number(magicNow.clarity && magicNow.clarity.max) || 0;
+    const clarityNow = Number(magicNow.clarity && magicNow.clarity.value) || 0;
+    if (clarityMax > 0 && clarityNow !== clarityMax) {
+      await actor.update({ "system.magic.clarity.value": clarityMax });
+      log("chargen Clarity filled to " + clarityMax + " for " + actor.name);
+    }
+  } catch (e) {
+    warn("chargen Clarity fill failed (non-fatal)", e);
+  }
+
   await storeGuidedState(actor, {
     stage: "complete",
     name: payload.name || actor.name || "New Operative",

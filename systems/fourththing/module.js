@@ -837,6 +837,29 @@ function ftLabelFromMap(map, key, fallback = "") {
 // Legacy weapon skill keys → canonical actor skill keys. Pre-2026-05 weapons
 // authored with `system.skill: "ranged"` etc. don't match any actor skill on
 // the steward, which made the engage dropdown fall to the first option.
+// ─── SOURCE system data reader ───────────────────────────────────────────────
+// ⚠ ROOT FIX 2026-08-15 — the aptitude/faculty ratchet ("Insight 9", "Athletics 8").
+// `fourththing` registers NO DataModel (template.json only), so Foundry's
+// TypeDataField.initialize() returns a plain deepClone — `actor.system` is a
+// PLAIN OBJECT that applyActiveEffects() has already mutated in place
+// (setProperty(actor, "system.skills.insight.value", …)). Two consequences:
+//   1. `actor.system.<x>.value` is DERIVED (source + every live AE). Roll paths
+//      that add appliedEffects on top of it count every AE twice.
+//   2. `rawSys?.toObject ? … : JSON.parse(JSON.stringify(rawSys))` — the guard
+//      used in every sheet _prepareContext — ALWAYS takes the JSON branch,
+//      because plain objects have no toObject(). Sheet contexts were therefore
+//      derived, and any writable input rendered from them submits source+AE
+//      back into SOURCE (all sheets are submitOnChange) → the bonus folds in
+//      permanently, once per sheet edit, forever.
+// Anything that WRITES a stored value — or renders an <input> that will be
+// written back — must read through here. Display-only reads may keep using
+// actor.system. (Actor#toObject() is a real Document method, so this is the
+// one reliable source read; `actor._source.system` is equivalent but uncloned.)
+function ftSourceSystem(actor) {
+  const root = actor?.toObject?.()?.system ?? actor?._source?.system ?? {};
+  return root?.system ?? root;
+}
+
 const FT_LEGACY_SKILL_ALIASES = {
   ranged: "firearms", gun: "firearms", guns: "firearms",
   gunnery: "firearms", archery: "firearms", bow: "firearms", marksmanship: "firearms",
@@ -12534,7 +12557,11 @@ function buildEchoRosterMemberRowHTML(member = {}) {
       <textarea data-row-field="notes" rows="2" placeholder="Who are they to the Steward? Debts, mentorships, friendships, rivalries, unfinished business…" style="grid-column:span 3;resize:vertical;">${ftEscapeHtml(notes)}</textarea>
 
       <input type="hidden" data-row-field="portrait" value="${ftEscapeHtml(portrait)}"/>
-      <input type="text" data-row-field="actorUuid" placeholder="Linked NPC actor UUID (optional, e.g. Actor.xxxxxxxxxxxxxxxx)" value="${ftEscapeHtml(actorUuid)}" style="grid-column:span 3;font-size:.8rem;opacity:.85;"/>
+      <input type="text" data-row-field="actorUuid" placeholder="Linked NPC actor UUID (optional, e.g. Actor.xxxxxxxxxxxxxxxx)" value="${ftEscapeHtml(actorUuid)}" style="grid-column:span 2;font-size:.8rem;opacity:.85;"/>
+      <span style="display:flex;gap:.25rem;justify-content:flex-end;">
+        <button type="button" data-row-action="mint-echo" title="Mint this member as a real NPC actor — Calling, Echo Boon, and tier gear" style="padding:.15rem .5rem;font-size:.8rem;white-space:nowrap;${actorUuid ? "display:none;" : ""}">🎭 Mint</button>
+        <button type="button" data-row-action="open-echo" title="Open the linked NPC's sheet" style="padding:.15rem .5rem;font-size:.8rem;white-space:nowrap;${actorUuid ? "" : "display:none;"}">📜 Sheet</button>
+      </span>
     </div>
   </div>`;
 }
@@ -12557,6 +12584,7 @@ function buildEchoRosterHTML(entryName, kind, roster) {
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-top:.5rem;">
       <button type="button" data-roster-action="suggest" title="Generate setting-flavored members you can keep, edit, or delete — no writing required" style="padding:.3rem .7rem;"><i class="fas fa-wand-magic-sparkles"></i> Suggest members</button>
+      <button type="button" data-roster-action="mint-all" title="Mint every unlinked member as a real NPC actor — Callings auto-picked, Echo Boons, tier gear" style="padding:.3rem .7rem;"><i class="fas fa-theater-masks"></i> Mint All</button>
       <button type="button" data-roster-action="add-member" style="padding:.3rem .7rem;"><i class="fas fa-user-plus"></i> Add Member</button>
     </div>
   </div>`;
@@ -12630,7 +12658,67 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
           }
         });
 
-        // Per-row actions: pick portrait, remove.
+        // Echo Mint plumbing — read a member straight off a row's inputs so
+        // unsaved edits count; paint a freshly minted actor's uuid back in.
+        const readRowMember = (row) => {
+          const read = (field) => {
+            const el = row.querySelector(`[data-row-field='${field}']`);
+            return el ? String(el.value ?? "") : "";
+          };
+          return {
+            id: row.dataset.rowId || foundry.utils.randomID(12),
+            name: read("name").trim(),
+            role: read("role").trim(),
+            notes: read("notes"),
+            portrait: read("portrait").trim(),
+            actorUuid: read("actorUuid").trim()
+          };
+        };
+        const paintRowUuid = (row, uuid) => {
+          const input = row.querySelector("[data-row-field='actorUuid']");
+          if (input) input.value = uuid;
+          const mintBtn = row.querySelector("[data-row-action='mint-echo']");
+          const openBtn = row.querySelector("[data-row-action='open-echo']");
+          if (mintBtn) mintBtn.style.display = "none";
+          if (openBtn) openBtn.style.display = "";
+        };
+
+        // 🎭 Mint All — every named row without a linked actor, one dialog.
+        $html.find("[data-roster-action='mint-all']").on("click", async (ev) => {
+          ev.preventDefault();
+          const mint = game.bbttcc?.api?.npcBuilder?.mintEchoRoster;
+          if (typeof mint !== "function") {
+            ui.notifications?.warn("Echo minting needs the BBTTCC Auto-Link module enabled.");
+            return;
+          }
+          const rows = $html.find(".ft-roster-row").get();
+          const jobs = rows
+            .map((row) => ({ row, member: readRowMember(row) }))
+            .filter(({ member }) => member.name && !member.actorUuid);
+          if (!jobs.length) {
+            ui.notifications?.info("Every named member already has a linked actor — nothing to mint.");
+            return;
+          }
+          const btn = ev.currentTarget;
+          const original = btn.innerHTML;
+          btn.disabled = true;
+          btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Minting…`;
+          try {
+            const minted = await mint({ steward: actor, entryName, kind, members: jobs.map(j => j.member) });
+            for (const { memberId, uuid } of (minted ?? [])) {
+              const job = jobs.find(j => j.member.id === memberId);
+              if (job && uuid) paintRowUuid(job.row, uuid);
+            }
+          } catch (e) {
+            console.warn("Echo Roster | mint-all failed:", e);
+            ui.notifications?.warn("Echo minting failed — see console.");
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = original;
+          }
+        });
+
+        // Per-row actions: pick portrait, remove, mint/open echo NPC.
         $html.on("click", "[data-row-action]", (ev) => {
           ev.preventDefault();
           const btn = ev.currentTarget;
@@ -12640,6 +12728,42 @@ async function openEchoRosterEditor(actor, entryName, kind = "crew") {
           if (action === "remove") {
             row.remove();
             refreshEmpty();
+            return;
+          }
+          if (action === "mint-echo") {
+            (async () => {
+              const mint = game.bbttcc?.api?.npcBuilder?.mintEchoMember;
+              if (typeof mint !== "function") {
+                ui.notifications?.warn("Echo minting needs the BBTTCC Auto-Link module enabled.");
+                return;
+              }
+              const member = readRowMember(row);
+              if (!member.name) { ui.notifications?.warn("Give the member a name before minting."); return; }
+              if (member.actorUuid) { ui.notifications?.info("Already linked — use 📜 Sheet."); return; }
+              btn.disabled = true;
+              try {
+                const minted = await mint({ steward: actor, entryName, kind, member });
+                if (minted) {
+                  paintRowUuid(row, minted.uuid);
+                  minted.sheet?.render(true);
+                }
+              } catch (e) {
+                console.warn("Echo Roster | mint failed:", e);
+                ui.notifications?.warn("Echo minting failed — see console.");
+              } finally {
+                btn.disabled = false;
+              }
+            })();
+            return;
+          }
+          if (action === "open-echo") {
+            (async () => {
+              const uuid = readRowMember(row).actorUuid;
+              if (!uuid) { ui.notifications?.warn("No linked actor UUID on this member."); return; }
+              const doc = await fromUuid(uuid).catch(() => null);
+              if (doc?.sheet) doc.sheet.render(true);
+              else ui.notifications?.warn(`Could not resolve ${uuid} — was the NPC deleted?`);
+            })();
             return;
           }
           if (action === "pick-portrait") {
@@ -13263,9 +13387,14 @@ Hooks.once("init", function () {
     attribute, skill = null, label = "",
     dc = null, target = null, applyOvershoot = false, restraintReduction = 0, kind = "tactical"
   } = {}) {
-    const rawSys   = actor.system?.system ?? actor.system;
-    const attrVal  = rawSys?.attributes?.[attribute]?.value ?? 0;
-    const skillVal = skill ? (rawSys?.skills?.[skill]?.value ?? 0) : 0;
+    // ⚠ SOURCE reads (2026-08-15). `actor.system` is AE-applied for this
+    // DataModel-less system (see ftSourceSystem), and the aeAttr/aeSkill sweep
+    // below adds the same passives AGAIN — every AE bonus was landing twice on
+    // every roll. Base ranks come from source; appliedEffects supply the bonus
+    // exactly once, and the chat breakdown still itemises it.
+    const srcSys   = ftSourceSystem(actor);
+    const attrVal  = srcSys?.attributes?.[attribute]?.value ?? 0;
+    const skillVal = skill ? (srcSys?.skills?.[skill]?.value ?? 0) : 0;
 
     // Passive AE bonuses (mode 2 = ADD) on the attribute and (optional) skill.
     // Roll path was bypassing actor.appliedEffects entirely — Aurablade auras,
@@ -14092,9 +14221,14 @@ Hooks.once("init", function () {
     rollMode = "normal",
     itemUuid = ""
   } = {}) {
-    const rawSys  = actor.system?.system ?? actor.system;
-    const attrVal  = rawSys?.attributes?.[intent]?.value ?? 0;
-    const skillVal = rawSys?.skills?.[skill]?.value      ?? 0;
+    // ⚠ SOURCE reads (2026-08-15). `actor.system` is AE-applied for this
+    // DataModel-less system (see ftSourceSystem), and the aeAttr/aeSkill sweep
+    // below adds the same passives AGAIN — every AE bonus was landing twice on
+    // every roll. Base ranks come from source; appliedEffects supply the bonus
+    // exactly once, and the chat breakdown still itemises it.
+    const srcSys  = ftSourceSystem(actor);
+    const attrVal  = srcSys?.attributes?.[intent]?.value ?? 0;
+    const skillVal = srcSys?.skills?.[skill]?.value      ?? 0;
 
     // 2026-05-19 — Consume signal bonus on the attacker. Signaler (a crew
     // member's bonus action) sets flags.fourththing.combat.signalBonus on
@@ -17627,13 +17761,20 @@ Hooks.once("init", function () {
       // deletes stored source keys, and the sheet's {{#each attributes}}
       // rendered them as anomalous empty boxes (playtest 2026-06-07).
       const _FT_FACULTY_KEYS = ["violence", "intrigue", "presence", "body", "mind", "soul"];
-      const _rawAttributes = sysData.attributes ?? {};
+      // ⚠ Faculties + aptitudes render from SOURCE, never from sysData — both
+      // carry writable <input name="system.…"> twins that the submitOnChange
+      // form posts back on every sheet edit. sysData is AE-applied (see
+      // ftSourceSystem), so rendering these from it folded the AE bonus into
+      // source once per edit (the "Insight 9" ratchet, 2026-08-15). The AE
+      // column + totalBonus add the live bonus on top for display.
+      const _srcSys = ftSourceSystem(actor);
+      const _rawAttributes = _srcSys.attributes ?? {};
       const attributes = Object.fromEntries(_FT_FACULTY_KEYS.map(k => [k, _rawAttributes[k] ?? { value: 0 }]));
       {
         const fossils = Object.keys(_rawAttributes).filter(k => !_FT_FACULTY_KEYS.includes(k));
         if (fossils.length) console.warn(`Roll for Initiation | ${actor.name}: ignoring non-canonical attribute keys [${fossils.join(", ")}] — remove with actor.update({"system.attributes.-=${fossils[0]}": null})`);
       }
-      const skills     = sysData.skills     ?? {};
+      const skills     = _srcSys.skills     ?? {};
       const derived    = sysData.derived    ?? {};
       const magic      = sysData.magic      ?? {};
       const conditions = sysData.conditions ?? {};
@@ -18540,7 +18681,15 @@ Hooks.once("init", function () {
         if (!root) return;
         const sheet = root.querySelector(".ft-sheet");
         const editMode = !!sheet?.classList?.contains?.("ft-edit-mode");
-        const fields = root.querySelectorAll(".ft-edit-only input, .ft-edit-only select, .ft-edit-only textarea");
+        // Both shapes: a field INSIDE an `.ft-edit-only` panel, and a field that
+        // carries the class ITSELF (the aptitude rank inputs at
+        // character-sheet.hbs:896 / npc-sheet.hbs:658 — the descendant-only
+        // selector never matched those, so they stayed enabled and submitted
+        // on every form change; half of the 2026-08-15 aptitude ratchet).
+        const fields = root.querySelectorAll(
+          ".ft-edit-only input, .ft-edit-only select, .ft-edit-only textarea, " +
+          "input.ft-edit-only, select.ft-edit-only, textarea.ft-edit-only"
+        );
         for (const el of fields) el.disabled = !editMode;
       } catch (e) { console.warn("[fourththing] _ftSyncEditOnlyInputs failed", e); }
     }
@@ -20451,15 +20600,20 @@ Hooks.once("init", function () {
 
       // Canonical 6 only — same fossil-key guard as the character sheet
       // (legacy hp/movement attribute keys rendered as anomalous boxes).
+      // ⚠ SOURCE read — same ratchet fix as the steward sheet (2026-08-15):
+      // these render writable `system.attributes.*.value` / `system.skills.*.value`
+      // inputs and the form is submitOnChange, so an AE-applied value here folds
+      // into source on every edit. See ftSourceSystem.
+      const _srcSys = ftSourceSystem(actor);
       const attributeRows = ["violence", "intrigue", "presence", "body", "mind", "soul"].map((key) => ({
-        key, label: ftCap(key), value: Number(sysData.attributes?.[key]?.value ?? 0)
+        key, label: ftCap(key), value: Number(_srcSys.attributes?.[key]?.value ?? 0)
       }));
 
       // Aptitudes — derive from the master schema so NPCs render the full
       // ladder even when `system.skills` is the default empty bag. AE bonuses
       // route through the same getAllSkillAEBonuses path as stewards so an
       // ancestry/heritage that grants +1 Perception lights up here too.
-      const skillsStored = sysData.skills ?? {};
+      const skillsStored = _srcSys.skills ?? {};
       const skillAE      = getAllSkillAEBonuses ? getAllSkillAEBonuses(actor) : {};
       const attrAE       = getAllAttrAEBonuses  ? getAllAttrAEBonuses(actor)  : {};
       const enrichedSkills = FT_SKILL_MASTER.map(spec => {
@@ -20472,7 +20626,7 @@ Hooks.once("init", function () {
         const skillAEB = skillAE[spec.key] ?? 0;
         const attrAEB  = attrAE[spec.attribute] ?? 0;
         const aeB    = skillAEB + attrAEB;
-        const attrV  = sysData.attributes?.[spec.attribute]?.value ?? 0;
+        const attrV  = _srcSys.attributes?.[spec.attribute]?.value ?? 0;
         const pips   = Array.from({length: 5}, (_, i) => ({
           idx:    i + 1,
           filled: i < rankClamped,
