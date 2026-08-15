@@ -2421,13 +2421,22 @@ class BBTTCCFactionSheet extends ActorSheet {
 
       rosterActors.push(a);
 
+      // 2026-08-15 — per-key cells show contribution INCLUDING the affiliation
+      // layer. They used to show the raw contribution while the Roster Totals row
+      // summed contribution + affiliation, so a column visibly failed to add up
+      // (one member showing Economy 2 under a total of 3). The Aff column still
+      // reports how much of the row came from affiliations, with its breakdown
+      // tooltip, and `total` is unchanged.
+      const shown = {};
+      for (const k in totals) shown[k] = Number(contrib[k] || 0) + Number(affPerKey[k] || 0);
+
       roster.push({
         id: a.id, name: a.name, img: a.img,
         total: Object.values(contrib).reduce((s,v)=>s+(Number(v)||0),0) + affRowSum,
         affTotal: affRowSum,
         affTooltip: affTip || "No affiliations contribute to OP.",
         affPerKey,
-        ...contrib
+        ...shown
       });
     }
 
@@ -2467,8 +2476,21 @@ class BBTTCCFactionSheet extends ActorSheet {
       1;
     const level = Math.max(1, Number(lvlRaw) || 1);
 
-    // Alpha-safe derivation: Level 1 cap=5, then +2 per level.
-    const derivedCapPer = 5 + Math.max(0, level - 1) * 2;
+    // 2026-08-15 — caps here are in MARKS, matching op-engine's _readCaps and the
+    // post-migration opCaps/opCapPer flags (see "already in MARKS" at the starting-
+    // package seeder). The old fallback derived `5 + 2/level` in OP-era units, so a
+    // faction with no explicit caps produced an OP-unit ceiling that was then
+    // compared against a marks-unit bank — the header read "300 / 45" for a bank of
+    // 30 OP against a 45 OP ceiling. Tier band mirrors op-engine exactly.
+    const TIER_CAP_BAND_MARKS = [50, 70, 90, 110, 130];   // T0..T4, per bucket
+    const derivedCapPerMarks = (() => {
+      let tier = Number(this.actor.getFlag(MODULE_ID, "tier"));
+      if (!Number.isFinite(tier) || tier < 0) {
+        tier = Number(this.actor.getFlag(MODULE_ID, "progression")?.victory?.tierFromBadge) || 0;
+      }
+      tier = Math.max(0, Math.min(4, Math.floor(tier)));
+      return TIER_CAP_BAND_MARKS[tier];
+    })();
 
     const opCaps = (() => {
       const out = {};
@@ -2476,7 +2498,7 @@ class BBTTCCFactionSheet extends ActorSheet {
         for (const k of OP_KEYS) out[k] = Math.max(0, Number(rawCaps[k] ?? 0) || 0);
         return out;
       }
-      const per = Number.isFinite(capPer) ? capPer : derivedCapPer;
+      const per = Number.isFinite(capPer) ? capPer : derivedCapPerMarks;
       for (const k of OP_KEYS) out[k] = Math.max(0, Number(per) || 0);
       return out;
     })();
@@ -2653,9 +2675,14 @@ const politicalPressure = {
         };
       });
 
-    // Header totals (bank-only)
-    const bankTotal = OP_KEYS.reduce((s, k) => s + clamp0(opBank?.[k]), 0);
-    const bankPotential = OP_KEYS.reduce((s, k) => s + clamp0(opCaps?.[k]), 0);
+    // Header totals (bank-only). Both sides are summed in MARKS then shown in OP,
+    // so the header speaks the same unit as every other OP readout on the sheet.
+    const _marksToOP = (m) => {
+      const n = (Number(m) || 0) / 10;
+      return Number.isInteger(n) ? n : Number(n.toFixed(1));
+    };
+    const bankTotal     = _marksToOP(OP_KEYS.reduce((s, k) => s + clamp0(opBank?.[k]), 0));
+    const bankPotential = _marksToOP(OP_KEYS.reduce((s, k) => s + clamp0(opCaps?.[k]), 0));
 
     const raidPlan  = _raidPlanFromFlags(this.actor);
 

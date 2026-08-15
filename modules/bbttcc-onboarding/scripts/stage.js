@@ -179,16 +179,34 @@ function _registerOps() {
     return { rigId: rig?.id || null };
   });
 
-  // Training stipend — credit the faction's OP banks (allowOvercap) so tutorial
-  // Travel / raid maneuvers are never money-locked. Costs live in the 0–130 marks
-  // band, so a 130-mark credit per pool covers any single tutorial action.
+  // Training stipend — TOP UP the faction's OP banks so tutorial Travel / raid
+  // maneuvers are never money-locked.
+  //
+  // 2026-08-15 — was `commit(marks, {allowOvercap:true})`, i.e. ADD this much,
+  // ceiling be damned, every single run. Eleven playtest runs left a Tier-0
+  // faction holding 143 OP against a 5 OP cap (owner: "op totals look strange").
+  // Now: credit at most `marks[pool]`, and never past the faction's own per-bucket
+  // cap — so it fills an empty bank, tops up a spent one, and is a no-op on a full
+  // one. Replay-safe by construction, and it can't invent OP the tier can't hold.
   reg("grantOp", async ({ factionId, marks = {} }) => {
     const op = globalThis.game?.bbttcc?.api?.op;
-    if (!op?.commit || !factionId) return { ok: false };
+    if (!op?.commit || !op?.preview || !factionId) return { ok: false, granted: {} };
     try {
-      const r = await op.commit(factionId, marks, { context: "onboarding-stipend", allowOvercap: true });
-      return { ok: r?.ok !== false };
-    } catch (e) { console.warn(TAG, "grantOp failed", e); return { ok: false }; }
+      const state = await op.preview(factionId, {}, {});   // read current banks + caps
+      const before = state?.before || {};
+      const caps   = state?.caps   || {};
+      const deltas = {};
+      for (const [pool, want] of Object.entries(marks)) {
+        const cap = Number(caps[pool]);
+        const cur = Number(before[pool]) || 0;
+        const room = Number.isFinite(cap) && cap > 0 ? cap - cur : Number(want) || 0;
+        const give = Math.max(0, Math.min(Number(want) || 0, room));
+        if (give > 0) deltas[pool] = give;
+      }
+      if (!Object.keys(deltas).length) return { ok: true, granted: {}, alreadyFull: true };
+      const r = await op.commit(factionId, deltas, { context: "onboarding-stipend" });
+      return { ok: r?.ok !== false, granted: deltas };
+    } catch (e) { console.warn(TAG, "grantOp failed", e); return { ok: false, granted: {} }; }
   });
 
   // Destructible tutorial scenery (Test Track wrecks). default-OWNER so any player's
@@ -525,10 +543,12 @@ async function mintRig(factionId, chassis = "hexmobile", { userId = "", name = "
   return res?.rigId ? (await _ns()?.relay?.resolveActor?.(res.rigId)) || null : null;
 }
 
-/** Credit the faction's OP banks (training stipend). marks: { economy: 130, ... } */
+/** Top up the faction's OP banks toward cap (training stipend). marks = per-pool ceiling
+ *  to credit, e.g. { economy: 130, ... }. Never exceeds the faction's per-bucket cap.
+ *  Returns { ok, granted:{pool:marks}, alreadyFull? }. */
 async function grantOp(factionId, marks = {}) {
-  if (!factionId) return { ok: false };
-  return (await _runAsGM("grantOp", { factionId, marks })) ?? { ok: false };
+  if (!factionId) return { ok: false, granted: {} };
+  return (await _runAsGM("grantOp", { factionId, marks })) ?? { ok: false, granted: {} };
 }
 
 /** Spawn a destructible tutorial obstacle + token on `scene`. Returns { actor, token } or null. */

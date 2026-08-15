@@ -414,7 +414,12 @@ const outfitting = {
       const g = await _stage()?.grantOp?.(ctx.faction.id, {
         economy: 130, violence: 130, intrigue: 130, diplomacy: 130, nonlethal: 60, softpower: 60
       });
-      if (g?.ok) { await ctx.speak("A training stipend just hit your faction's OP banks. Fuel, favors and ammunition — on the house, this once."); await _pause(600); }
+      // Tops up toward the tier cap, so a replay on full banks credits nothing —
+      // don't announce a stipend that didn't land.
+      if (g?.ok && Object.keys(g.granted || {}).length) {
+        await ctx.speak("A training stipend just topped up your faction's OP banks — up to what your tier can hold, not a mark more. Fuel, favors and ammunition, on the house.");
+        await _pause(600);
+      }
     }
 
     try { globalThis.game?.bbttcc?.api?.market?.openMarket?.(); }
