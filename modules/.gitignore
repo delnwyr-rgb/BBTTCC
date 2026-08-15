@@ -61,3 +61,35 @@
 
 # macOS junk
 .DS_Store
+
+# ── Re-exclude churn INSIDE the allowed modules ───────────────────────────
+# ⚠ Order matters. The `!bbttcc-*/**` negations above re-include *everything*
+# under each module, which silently overrode the equivalent rules in the ROOT
+# .gitignore (a deeper .gitignore wins for files beneath it). These have to be
+# restated here, after the negations, to actually take effect.
+# NOTE: `packs/_source/**.json` is deliberately NOT matched — that is authored
+# pack source and belongs in the repo.
+
+# Migration snapshots and local backups
+**/.backup-*/
+**/packs-backup-*/
+**/items.bak-*/
+**/items-broken-*/
+**/*.zip
+**/*.tar
+**/*.tar.gz
+**/*.tgz
+
+# LevelDB pack runtime artifacts — Foundry rotates these on every compendium
+# access; they churn constantly and carry no source signal.
+**/packs/**/CURRENT
+**/packs/**/LOCK
+**/packs/**/LOG
+**/packs/**/LOG.old
+**/packs/**/MANIFEST-*
+**/packs/**/*.log
+**/packs/**/*.ldb
+
+# Python bytecode
+**/__pycache__/
+**/*.pyc
