@@ -93,3 +93,6 @@
 # Python bytecode
 **/__pycache__/
 **/*.pyc
+
+# macOS AppleDouble resource forks (created on non-HFS volumes)
+**/._*
