@@ -384,6 +384,36 @@ function _commonKnowledge({ maxChars = 9000, state = null } = {}) {
   return parts.join("\n\n");
 }
 
+// The word going round: every text page of the world-digest journal (setting
+// `npcWorldDigestJournal`, default "The Turn Press") — pressed each turn by
+// the campaign engine (game.bbttcc.api.campaign.digest) with live world state
+// rendered as street prose. Pages walk in sort order (the press sorts newer
+// editions first); same tag conventions as common knowledge (@knownBy pages
+// skipped here, @after pages gated, fails closed). Recomputed every send, so
+// a fresh edition lands in the very next NPC line.
+function _worldDigest({ maxChars = 4000, state = null } = {}) {
+  let journalName = "The Turn Press";
+  try { journalName = String(game.settings.get(MODULE_ID, "npcWorldDigestJournal") || "").trim() || journalName; } catch (_e) {}
+  const entry = game.journal?.getName?.(journalName) || game.journal?.contents?.find(j => j.name === journalName);
+  if (!entry) return "";
+  const pages = [...(entry.pages?.contents ?? [])].sort((a, b) => (a.sort || 0) - (b.sort || 0));
+  const parts = [];
+  let used = 0;
+  for (const page of pages) {
+    if (page.type !== "text" || used >= maxChars) continue;
+    const raw = _stripHtml(page.text?.content || "");
+    const { gate, knownBy, body } = _parsePageTags(raw);
+    if (knownBy) continue;
+    if (gate && !_questKnown(state, gate.questId, gate.needCompleted)) continue;
+    const text = body.trim();
+    if (!text) continue;
+    const chunk = `— ${page.name}:\n${text}`.slice(0, maxChars - used);
+    parts.push(chunk);
+    used += chunk.length;
+  }
+  return parts.join("\n\n");
+}
+
 // ---------------------------------------------------------------------------
 // Narrative time — the story state gates NPC KNOWLEDGE (what has happened vs
 // what hasn't), just as choicesFor gates NPC MOMENTS. Provided by the
@@ -653,6 +683,7 @@ function _buildPersonaPrompt(actor, lore = null, state = null, dossier = null) {
   const worldLore = (lore === null) ? _gatherWorldLore(actor, { state }) : String(lore || "");
   const dossierText = (dossier === null) ? _gatherDossier(actor, { state }) : String(dossier || "");
   const common = _commonKnowledge({ state });
+  const digest = _worldDigest({ state });
 
   return `You are ${name}, a character living in Bad Eden. You are IN CONVERSATION with one or more Stewards standing in front of you. Stay completely in character as ${name} at all times.
 
@@ -661,6 +692,7 @@ ${facts.map(f => `• ${f}`).join("\n")}
 ${notes ? `\n## YOUR STORY (bio/notes — this is what shaped you)\n${notes}` : ""}
 ${memories.length ? `\n## SHARED HISTORY (things that truly happened between you and the Stewards — you remember these firsthand and may refer back to them)\n${memories.join("\n")}` : ""}
 ${common ? `\n## COMMON KNOWLEDGE (what any local knows — places, people, who holds what)\n${common}` : ""}
+${digest ? `\n## THE WORD GOING ROUND (current news and rumor of the region — what folk are saying LATELY; the first edition below is today's word, later ones are older talk already fading)\n${digest}\nPass this news along the way a neighbor would — colored by your own leanings, doubted or embellished as suits you. Edition titles are calibration only: NEVER speak of "turns", "editions", or numbers, and a faction is a house of many people — never invent a person out of one.` : ""}
 ${dossierText ? `\n## PEOPLE & PLACES YOU KNOW (your own firsthand knowledge — these facts are true and familiar to you; speak of them naturally, in your own voice, from your own point of view)\n${dossierText}` : ""}
 ${worldLore ? `\n## WHAT THE CHRONICLE SAYS (about you, and about things you know)\nThese are events, descriptions, and moments involving you or subjects you know about. Past-tense entries are lived history or established fact — you remember or have heard them from your own point of view. Future-sounding or conditional entries have NOT happened: treat them at most as rumors, premonitions, or things you're entangled in but don't fully understand — never state them as fact, and never reveal them as "beats", "choices", or any other game construct. Where the YOUR PRESENT MOMENT section below disagrees with anything here, the PRESENT MOMENT wins.\n\n${worldLore}` : ""}
 ${_presentMomentSection(state)}
@@ -2638,6 +2670,15 @@ Hooks.once("init", () => {
     config:  true,
     type:    String,
     default: "NPC Common Knowledge"
+  });
+
+  game.settings.register(MODULE_ID, "npcWorldDigestJournal", {
+    name:    "NPC world-digest journal (The Turn Press)",
+    hint:    "Name of the journal the campaign engine presses each turn with current world news — faction relations, live quests, rumor-band meters, authored beat headlines. Every NPC knows its text pages as the word currently going round. Hand-written pages in it are welcome and never overwritten by the press.",
+    scope:   "world",
+    config:  true,
+    type:    String,
+    default: "The Turn Press"
   });
 
   game.settings.register(MODULE_ID, "npcDialoguePlayers", {

@@ -75,6 +75,7 @@ const BEATS_HELP = {
   questRole: "Quest Role — start / core / optional / resolution. Only 'start' is live: when that beat runs, the GM gets a quest-acceptance prompt. The other roles are display labels.",
   turnNumber: "Available Turn — groups the beat under a Strategic Turn in the Builder and, on turn advance, whispers the GM a 'Now Available' callout (already-fired beats get badged). It never auto-fires the beat; the GM still runs it by hand.",
   description: "Description — the narrative body. Shown in the GM run dialog (and mirrored to players when Player-Facing). Safe to keep on every beat.",
+  digest: "Digest Headline — optional one-sentence street-news line for The Turn Press. After this beat fires, the next turn's press adds this exact sentence to the world digest every NPC knows. Write it as folk would repeat it; leave empty and the beat never makes the papers (nothing auto-leaks).",
 
   // Encounter (type=encounter only)
   encounter: "Encounter routing — stored on beat.encounter; when this beat runs, the runtime launches an Encounter-Engine scenario by Key.",
@@ -3670,6 +3671,10 @@ _syncCoreFromForm() {
 
     // Description
     this.beat.description = String(fd.get("description") || "").trim();
+
+    // 📰 Digest headline (The Turn Press) — street-news line pressed into the
+    // NPC world digest once this beat has fired; empty = never in the papers.
+    this.beat.digest = String(fd.get("digest") || "").trim() || null;
 
     // Scene
     this.beat.sceneId = String(fd.get("sceneId") || "").trim() || null;

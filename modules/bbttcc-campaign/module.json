@@ -20,6 +20,7 @@
     "scripts/audio/beat-audio-manager.js",
     "scripts/module.js",
     "scripts/world-mutation-engine.js",
+    "scripts/world-digest.js",
     "scripts/campaign-toolbar-button.js"
   ],
   "styles": [

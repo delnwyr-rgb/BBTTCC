@@ -147,6 +147,12 @@
           placeholder="Narrate what’s happening in this beat.">{{beat.description}}</textarea>
         <p class="bbttcc-muted">Freeform narrative text. Safe to store on every beat for GM reference.</p>
       </div>
+      <div class="form-group">
+        <label data-tooltip="{{bbttccTip 'beats' 'digest'}}">📰 Digest Headline</label>
+        <input type="text" name="digest" value="{{beat.digest}}"
+          placeholder="e.g. The leygate at Khezek Tor hums again — first time in living memory." />
+        <p class="bbttcc-muted">Optional street news for The Turn Press: once this beat fires, this sentence joins what every NPC knows. Empty = never in the papers.</p>
+      </div>
     </section>
   </section>
 

@@ -11,7 +11,8 @@
  *                active / completed / archived / remove from log), fanned
  *                out identically to every coalition faction + registry sync.
  *  🌍 World    — turn number, time spent, ledger entries, director pressure
- *                + level floors, wendigo/bandit/cadence meters.
+ *                + level floors, wendigo/bandit/cadence meters, and (opt-in)
+ *                📰 un-printing The Turn Press's per-turn editions.
  *  🗣 Dialogue — per-NPC: clear conversation history, clear memories,
  *                re-arm spent secrets.
  *  🧨 Full campaign reset — all of the above back to a fresh world
@@ -21,7 +22,8 @@
  * (worldState + faction flags + current-scene hex flags — faction flags
  * include the quest track, so a rollback restores quest state too).
  * NEVER touched: campaign/beat definitions, quest definitions, personas
- * (except spent-secret marks), hex flags, NPC actors.
+ * (except spent-secret marks), hex flags, NPC actors, the NPC common-
+ * knowledge gazetteer, and The Turn Press's authored Opening edition.
  */
 (async () => {
   const NS  = "bbttcc-campaign";
@@ -288,6 +290,7 @@
       <div style="display:flex;gap:6px;margin-top:6px;align-items:center;">
         <button type="button" class="rc-world-apply" style="width:auto;">Apply world changes</button>
         <label style="font-size:.85em;opacity:.8;"><input type="checkbox" class="rc-clear-ledger"> also clear this turn's ledger entries</label>
+        <label style="font-size:.85em;opacity:.8;"><input type="checkbox" class="rc-clear-press"> 📰 also un-print The Turn Press editions</label>
       </div>
       <p style="opacity:.55;font-size:.78em;margin:.4em 0 0;">Level floors are normally monotonic — lowering them only matters for a true replay (already-raised stewards/factions are NOT demoted).</p>`)}
 
@@ -411,6 +414,16 @@
         if (root.querySelector(".rc-clear-ledger")?.checked) {
           try { await game.settings.set(NS, "ledgerEntries", []); changed.push("ledger cleared"); } catch (_e) {}
         }
+        // 📰 Rewinding the turn without this leaves NPCs quoting news from a
+        // future that no longer happened. Opening edition + hand-written
+        // pages survive.
+        if (root.querySelector(".rc-clear-press")?.checked) {
+          try {
+            const r = await game.bbttcc?.api?.campaign?.digest?.clear?.();
+            if (r?.ok) changed.push(`press un-printed (${r.removed})`);
+            else say("⚠ Turn Press clear unavailable (digest API missing).");
+          } catch (e) { say(`⚠ press clear: ${esc(e?.message || e)}`); }
+        }
         try { await game.settings.set(NS, "lastTurnAnnounced", val("turn")); } catch (_e) {}
         say(`🌍 world applied: ${changed.join(", ")}`);
         ui.notifications.info("World state applied.");
@@ -455,7 +468,7 @@
       // 🧨 Full reset
       const nukeBtn = root.querySelector(".rc-nuke");
       nukeBtn.addEventListener("click", busyWrap(nukeBtn, async () => {
-        if (!await Dialog.confirm({ title: "🧨 Reset the world?", content: `<p>Re-arm <b>every</b> beat, empty the quest log, reset turn/time/meters, and wipe all NPC dialogue state?</p><p><b>A snapshot is taken first.</b> Definitions and hexes are untouched.</p>` })) return;
+        if (!await Dialog.confirm({ title: "🧨 Reset the world?", content: `<p>Re-arm <b>every</b> beat, empty the quest log, reset turn/time/meters, wipe all NPC dialogue state, and un-print The Turn Press?</p><p><b>A snapshot is taken first.</b> Definitions, hexes, and the Press's authored Opening edition are untouched.</p>` })) return;
         if (!await Dialog.confirm({ title: "Really?", content: `<p>Second confirmation — this rewinds the whole campaign's runtime state to Turn 1.</p>` })) return;
         await snapshot("Before FULL reset");
         // beats + director + injector
@@ -473,6 +486,14 @@
         for (const [k] of [...FLAGS_BOOL]) { try { await game.settings.set(NS, k, false); } catch (_e) {} }
         try { await game.settings.set(NS, "ledgerEntries", []); } catch (_e) {}
         try { await game.settings.set(NS, "lastTurnAnnounced", 0); } catch (_e) {}
+        // 📰 The Turn Press — un-print every turn edition, so the world's
+        // NPCs stop knowing things that no longer happened. The authored
+        // Opening edition and hand-written pages survive by design.
+        let pressCleared = 0;
+        try {
+          const r = await game.bbttcc?.api?.campaign?.digest?.clear?.();
+          if (r?.ok) pressCleared = r.removed || 0;
+        } catch (_e) {}
         // NPC dialogue layer (world actors AND unlinked-token deltas)
         for (const n of npcRows) {
           const a = await resolveNpc(n.uuid);
@@ -482,7 +503,7 @@
           const persona = clone(a.getFlag(MAL, "persona") || {});
           if (Object.keys(persona.secretsUsed || {}).length) { persona.secretsUsed = {}; await replaceFlag(a, MAL, "persona", persona); }
         }
-        say(`🧨 FULL RESET complete — ${firedIds.length} beats re-armed, quest log emptied, turn → 1, ${npcRows.length} NPC(s) wiped. Close and reopen the console to see fresh state.`);
+        say(`🧨 FULL RESET complete — ${firedIds.length} beats re-armed, quest log emptied, turn → 1, ${npcRows.length} NPC(s) wiped, ${pressCleared} press edition(s) un-printed. Close and reopen the console to see fresh state.`);
         ui.notifications.info("🧨 World reset to Turn 1. Reopen the console for fresh state.");
       }));
     }
