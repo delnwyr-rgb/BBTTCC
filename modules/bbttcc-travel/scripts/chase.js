@@ -33,8 +33,12 @@
  *
  * BEAT SEAM (same contract style as bbttcc-gate-beat-listener):
  *   beat.chase = { quarry:{factionId:"..."}, pursuer:{name:"Raider Buggies",
- *     speed:3, bonus:2}, route:["badlands","badlands","river"], lead:3 }
- *   → fired on Hooks "bbttcc:beat:resolved", GM client only.
+ *     speed:3, bonus:2}, route:["badlands","badlands","river"], lead:3,
+ *     onCaught:"beat_id", onEscaped:"beat_id" }
+ *   → fired on Hooks "bbttcc:beat:resolved", GM client only. campaignId is
+ *   captured from the resolving beat's campaign; onCaught/onEscaped beat ids
+ *   are run via api.campaign.runBeat when the chase ends (ctx.source="chase",
+ *   ctx.chaseOutcome carries the result). Aborted chases fire neither.
  * Emits Hooks.callAll("bbttcc:chase:resolved", {state, outcome}) when done.
  * ========================================================================= */
 (() => {
@@ -425,6 +429,18 @@
     CHASE = null;
     redrawConsole();
     Hooks.callAll("bbttcc:chase:resolved", { state, outcome, note });
+
+    // Story follow-up: beat-launched chases can carry onCaught/onEscaped beat
+    // ids — run the matching one so the chase resolves back into the campaign.
+    try {
+      const fu = state.followUp ?? {};
+      const nextBeat = outcome === "caught" ? fu.onCaught
+        : outcome === "escaped" ? fu.onEscaped : null;
+      if (nextBeat && fu.campaignId && game.bbttcc?.api?.campaign?.runBeat) {
+        await game.bbttcc.api.campaign.runBeat(fu.campaignId, nextBeat,
+          { source: "chase", chaseOutcome: outcome, chaseLabel: state.label });
+      }
+    } catch (e) { console.error(`[${MOD}] chase follow-up beat failed`, e); }
     return state;
   }
 
@@ -448,6 +464,11 @@
       id: foundry.utils.randomID(), status: "active",
       label: config.label ?? `${quarry.name} vs ${pursuer.name}`,
       playerSide: config.playerSide ?? "quarry",
+      followUp: {
+        campaignId: config.campaignId ?? null,
+        onCaught: config.onCaught ?? null,
+        onEscaped: config.onEscaped ?? null
+      },
       quarry, pursuer, lead, escapeAt, legIndex: 0, legs, log: []
     };
     CHASE = state;
@@ -585,10 +606,21 @@
 
     // Beat seam — same contract style as bbttcc-gate-beat-listener:
     // author `beat.chase = {quarry, pursuer, route, lead, escapeAt, label}` on any beat.
-    Hooks.on("bbttcc:beat:resolved", ({ beat } = {}) => {
+    Hooks.on("bbttcc:beat:resolved", ({ campaign, beat, ctx } = {}) => {
       try {
         if (!beat?.chase || !game.user?.isGM) return;
-        startChase(beat.chase);
+        const cfg = foundry.utils.duplicate(beat.chase);
+        // Side spec {fromCtx:true} resolves to the faction actually playing the
+        // beat (hex-enter ctx → beat.factionId → campaign.factionId), so beats
+        // can be authored campaign-neutral.
+        const ctxFactionId = ctx?.factionId ?? beat?.factionId ?? campaign?.factionId ?? null;
+        for (const key of ["quarry", "pursuer"]) {
+          if (cfg[key]?.fromCtx) {
+            cfg[key] = ctxFactionId ? { factionId: ctxFactionId }
+              : { name: cfg[key].name ?? "The Party", speed: 3, tier: 2 };
+          }
+        }
+        startChase({ campaignId: campaign?.id ?? null, ...cfg });
       } catch (e) { console.error(`[${MOD}] chase beat listener`, e); }
     });
 
