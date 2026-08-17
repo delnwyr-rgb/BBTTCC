@@ -1726,6 +1726,26 @@ function _ftDistanceBetweenTokens(tokenA, tokenB) {
   return px * ftPerPixel;
 }
 
+// Edge-to-edge gap between two tokens, in feet (0 when touching or overlapping).
+// Center-to-center (_ftDistanceBetweenTokens) is wrong for contact checks once
+// tokens are bigger than 1×1: a 2×2 rig parked against a 3×3 wreck reads ~2.5
+// squares apart by centre while its bumper is on the target. 2026-08-17.
+function _ftTokenEdgeGapFt(tokenA, tokenB) {
+  if (!tokenA || !tokenB) return Infinity;
+  const grid = canvas?.grid;
+  if (!grid) return Infinity;
+  const rect = (t) => {
+    const w = t.w ?? t.width ?? grid.size;
+    const h = t.h ?? t.height ?? grid.size;
+    return { x1: t.x, y1: t.y, x2: t.x + w, y2: t.y + h };
+  };
+  const a = rect(tokenA), b = rect(tokenB);
+  const dx = Math.max(0, Math.max(b.x1 - a.x2, a.x1 - b.x2));
+  const dy = Math.max(0, Math.max(b.y1 - a.y2, a.y1 - b.y2));
+  const ftPerPixel = (grid.distance ?? 5) / (grid.size ?? 100);
+  return Math.hypot(dx, dy) * ftPerPixel;
+}
+
 // 2026-05-29 (playtest #1) — Effective range in feet for any weapon/manifestation
 // item. Real numeric ranges replacing flavor "near/far". Resolution order:
 //   1. explicit `system.manifestation.rangeFt` override (>0)
@@ -23469,6 +23489,24 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const _ramTargets = _resolveTargetActors();
       const targetActor = _ramTargets[0];
       if (!targetActor) { ui.notifications?.warn("Target a token first (the ram needs an objective)."); return; }
+
+      // 2026-08-17 — Ram is a COLLISION: it has to reach. Ungated, a rig could ram
+      // something across the map. Reach is one square/hex measured edge-to-edge,
+      // so token size counts. Skipped when either side has no token on this scene
+      // (never block on missing data), and the GM keeps the system's usual
+      // "Proceeding (GM's call)" override that the weapon range check uses.
+      const _ramRigTok = rig?.getActiveTokens?.()?.[0] ?? null;
+      const _ramTgtTok = targetActor?.getActiveTokens?.()?.[0] ?? null;
+      if (_ramRigTok && _ramTgtTok) {
+        const gapFt   = _ftTokenEdgeGapFt(_ramRigTok, _ramTgtTok);
+        const reachFt = Number(canvas?.grid?.distance ?? 5);
+        if (Number.isFinite(gapFt) && gapFt > reachFt + 0.5) {
+          const msg = `${rig.name} is ~${Math.round(gapFt)} ft from ${targetActor.name} — a ram needs contact (within ${reachFt} ft). Drive closer first.`;
+          if (!game.user?.isGM) { ui.notifications?.warn(msg); return; }
+          ui.notifications?.warn(`${msg} Proceeding (GM's call).`);
+        }
+      }
+
       const weight = FT_RIG_BRACKET_WEIGHT[bracket] || 3;
       const baseDice = Math.max(1, tier * weight);
       // Piloting: +1 ram die per rank (caps with skill ladder, but
@@ -23876,6 +23914,10 @@ Hooks.on("renderTokenHUD", (hud, html, data) => {
                           ?? actor.system?.faction?.id ?? null;
           const rel = game.bbttcc?.api?.factions?.relations;
           const allowedRig = (rig) => {
+            // Tutorial scenery: onboarding's destructible wrecks are rig-typed and
+            // player-owned (so ram/weapon damage lands client-side), which would
+            // otherwise list four derelicts as boardable transport. 2026-08-17.
+            if (rig.getFlag?.("bbttcc-onboarding", "kind") === "obstacle") return false;
             if (game.user.isGM) return true;
             if (rig.testUserPermission?.(game.user, "OWNER")) return true;   // personally owned
             const owner = rig.system?.identity?.factionOwnerId || null;

@@ -99,6 +99,12 @@
       if (sc) {
         try {
           await sc.setFlag(MOD, "tutorialScene", k.key);
+          // Players must be able to VIEW it or the beat's dive lands nowhere.
+          const OBSERVER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
+          if ((sc.ownership?.default ?? 0) < OBSERVER) {
+            await sc.update({ ownership: { ...(sc.ownership ?? {}), default: OBSERVER } });
+            console.log(`[wire-scenes] raised "${sc.name}" to default OBSERVER (players can enter).`);
+          }
           changes.push(`${k.key} → ${sc.name}`);
         } catch (e) { console.error("[wire-scenes] setFlag failed", sc.name, e); }
       }

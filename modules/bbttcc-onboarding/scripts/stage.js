@@ -179,6 +179,28 @@ function _registerOps() {
     return { rigId: rig?.id || null };
   });
 
+  // Make sure the onboarding player actually OWNS the actors the tutorial drives.
+  // Everything downstream — Market buyer list (players only see factions they own),
+  // raid console writes, faction/rig sheet edits — silently fails without it, and
+  // a faction founded before the ownership grant existed (or one whose grant was
+  // lost) produces exactly the "lacks permission to update Actor" wall.
+  reg("ensureOwned", async ({ actorIds = [], userId }) => {
+    if (!userId) return { ok: false, granted: [] };
+    const OWNER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
+    const granted = [];
+    for (const id of actorIds) {
+      const a = game.actors?.get?.(String(id || ""));
+      if (!a) continue;
+      if ((a.ownership?.[userId] ?? 0) >= OWNER) continue;
+      try {
+        await a.update({ ownership: { ...(a.ownership ?? {}), [userId]: OWNER } });
+        granted.push(a.name);
+      } catch (e) { console.warn(TAG, "ensureOwned failed for", a.name, e); }
+    }
+    if (granted.length) console.log(TAG, "ensureOwned granted OWNER on:", granted.join(", "));
+    return { ok: true, granted };
+  });
+
   // Training stipend — TOP UP the faction's OP banks so tutorial Travel / raid
   // maneuvers are never money-locked.
   //
@@ -211,25 +233,29 @@ function _registerOps() {
 
   // Destructible tutorial scenery (Test Track wrecks). default-OWNER so any player's
   // damage application lands; flagged spawned so teardown can only ever delete these.
-  reg("spawnObstacle", async ({ sceneId, x = 1000, y = 1000, name = "Rusted Wreck", img = "", size = 2, integrity = 12, ownerUserId = "" }) => {
+  reg("spawnObstacle", async ({ sceneId, x = 1000, y = 1000, name = "Rusted Wreck", img = "", size = 2, integrity = 12, bracket = "light", ownerUserId = "" }) => {
     const folder = await _folder();
+    // RIG-typed (2026-08-17): these are derelict vehicles, so they should BE rigs —
+    // npc-typed wrecks got the steward sheet (faculties, Clarity, manifestations)
+    // and a 10-point npc integrity track that shrugged off ramming. As rigs they
+    // take ram/weapon damage on `system.integrity`, run the destruction cascade,
+    // and fire `bbttcc:rig:destroyed` — which is what the driving beat now gates on.
+    // (Last Stand is character-only, so rigs stay clear of the dying cycle too.)
+    const hp = Math.max(1, Number(integrity) || 12);
     const actor = await Actor.create({
-      name, type: "npc", folder: folder?.id, img: img || "icons/svg/hazard.svg",
+      name, type: "rig", folder: folder?.id, img: img || "icons/svg/hazard.svg",
       ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
       prototypeToken: Object.assign(
         { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name, width: size, height: size },
         img ? { texture: { src: img } } : {}
       ),
-      system: { details: { level: 1 }, attributes: { violence: 0, intrigue: 0, presence: 0, body: 6, mind: 1, soul: 1 } },
+      system: {
+        identity: { mobility: "stationary", state: "parked", factionOwnerId: "" },
+        integrity: { value: hp, max: hp, tier: 1, bracket }
+      },
       flags: { [MODULE_ID]: { spawned: true, kind: "obstacle", ownerUserId } }
     });
     if (!actor) return null;
-    try {
-      await actor.update({
-        "system.derived.integrity.value": Math.max(1, Number(integrity) || 12),
-        "system.derived.stress.value": 0
-      });
-    } catch (_) {}
     let tokenId = null;
     const scene = game.scenes?.get?.(sceneId);
     if (scene) {
@@ -444,6 +470,28 @@ function _registerOps() {
     catch (e) { console.warn(TAG, "setRaidSession failed", e); return { ok: false }; }
   });
 
+  // Raids are GM-DRIVEN: the console's attacker picker, round commit and end-raid
+  // controls all live behind {{#if isGM}}. A player can stage OP into their
+  // commitments but cannot open or resolve a round. So the tutorial hands the GM
+  // the console already pointed at the student's faction, and whispers why.
+  reg("openRaidConsoleForGM", async ({ factionId, playerName = "", activityKey = "" }) => {
+    const raid = globalThis.game?.bbttcc?.api?.raid;
+    const faction = game.actors?.get?.(String(factionId || ""));
+    if (!raid?.openConsole || !faction) return { ok: false };
+    try {
+      await raid.openConsole({ factionId: faction.id });
+      await ChatMessage.create({
+        whisper: game.users.filter(u => u.isGM).map(u => u.id),
+        speaker: { alias: "◇ OPERATOR" },
+        content: `<p><b>Onboarding raid — you're the table.</b> ${playerName || "A student"} has reached the` +
+                 ` <b>${activityKey || "raid"}</b> stage against the Rust Syndicate, attacking as <b>${faction.name}</b>.</p>` +
+                 `<p>Their console is staging-only; round setup and commits are GM-side. I've opened yours on their faction —` +
+                 ` run a round or two, then they'll conclude the beat themselves.</p>`
+      });
+      return { ok: true };
+    } catch (e) { console.warn(TAG, "openRaidConsoleForGM failed", e); return { ok: false }; }
+  });
+
   reg("clearRaidSession", async ({ factionId }) => {
     const f = game.actors?.get?.(factionId);
     if (!f) return { ok: false };
@@ -543,6 +591,14 @@ async function mintRig(factionId, chassis = "hexmobile", { userId = "", name = "
   return res?.rigId ? (await _ns()?.relay?.resolveActor?.(res.rigId)) || null : null;
 }
 
+/** Grant the player OWNER on the actors the tutorial drives (faction / rig / steward). */
+async function ensureOwned(actorIds = [], userId = "") {
+  const uid = userId || _run.userId || game.user?.id;
+  const ids = (Array.isArray(actorIds) ? actorIds : [actorIds]).filter(Boolean);
+  if (!ids.length || !uid) return { ok: false, granted: [] };
+  return (await _runAsGM("ensureOwned", { actorIds: ids, userId: uid })) ?? { ok: false, granted: [] };
+}
+
 /** Top up the faction's OP banks toward cap (training stipend). marks = per-pool ceiling
  *  to credit, e.g. { economy: 130, ... }. Never exceeds the faction's per-bucket cap.
  *  Returns { ok, granted:{pool:marks}, alreadyFull? }. */
@@ -602,6 +658,12 @@ async function setRaidSession(factionId, session) {
   await _runAsGM("setRaidSession", { factionId, session });
 }
 
+/** Open the GM's raid console on this faction + whisper them why (raids are GM-run). */
+async function openRaidConsoleForGM(factionId, { playerName = "", activityKey = "" } = {}) {
+  if (!factionId) return { ok: false };
+  return (await _runAsGM("openRaidConsoleForGM", { factionId, playerName, activityKey })) ?? { ok: false };
+}
+
 /** Clear the raid session pointer off the player's real faction. */
 async function clearRaidSession(factionId) {
   if (!factionId) return;
@@ -632,9 +694,9 @@ Hooks.once("ready", () => {
   _registerOps();
   const ns = _ns();
   if (ns) ns.stage = {
-    ensureTokenOnScene, spawnDummy, spawnObstacle, mintRig, grantOp, disembark,
+    ensureTokenOnScene, spawnDummy, spawnObstacle, mintRig, grantOp, ensureOwned, disembark,
     ensureSandboxHex, claimHex, unclaimHex, spawnHostileFaction, ensureHex,
-    setRaidSession, clearRaidSession, teardownFinale, cleanup, folder: _folder,
+    setRaidSession, clearRaidSession, openRaidConsoleForGM, teardownFinale, cleanup, folder: _folder,
     setRunContext, runContext, runBegin, runEnd, runList, laneFrac: _laneFrac
   };
 });

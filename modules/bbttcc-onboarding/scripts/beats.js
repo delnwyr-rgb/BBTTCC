@@ -157,11 +157,15 @@ const meatsuit = {
 // untrappable Conclude prompt as the escape hatch. Steering still gets its nod via the
 // hexesMoved listener — it just no longer ends the beat on its own.
 const OBSTACLE_ART = (f) => `modules/${MODULE_ID}/art/${f}`;
+// Integrity is deliberately LOW. Ram feeds half the damage dealt back into the
+// rammer, and a starter Hexmobile is personal-bracket (ram = 1d6 + Piloting), so
+// tough wrecks would scrap the player's own rig before the gauntlet ended. These
+// are derelicts — a couple of autocannon bursts or one good ram each.
 const DRIVING_OBSTACLES = [
-  { name: "Rusted Sedan",   img: OBSTACLE_ART("obstacle-wreck-sedan.webp"),   xFrac: 0.34, yFrac: 0.42, size: 2 },
-  { name: "Dead Hauler",    img: OBSTACLE_ART("obstacle-wreck-hauler.webp"),  xFrac: 0.50, yFrac: 0.58, size: 2 },
-  { name: "Gutted Runner",  img: OBSTACLE_ART("obstacle-wreck-runner.webp"),  xFrac: 0.66, yFrac: 0.40, size: 2 },
-  { name: "Downed Chopper", img: OBSTACLE_ART("obstacle-wreck-chopper.webp"), xFrac: 0.82, yFrac: 0.55, size: 3 }
+  { name: "Rusted Sedan",   img: OBSTACLE_ART("obstacle-wreck-sedan.webp"),   xFrac: 0.34, yFrac: 0.42, size: 2, integrity: 5 },
+  { name: "Dead Hauler",    img: OBSTACLE_ART("obstacle-wreck-hauler.webp"),  xFrac: 0.50, yFrac: 0.58, size: 2, integrity: 7 },
+  { name: "Gutted Runner",  img: OBSTACLE_ART("obstacle-wreck-runner.webp"),  xFrac: 0.66, yFrac: 0.40, size: 2, integrity: 5 },
+  { name: "Downed Chopper", img: OBSTACLE_ART("obstacle-wreck-chopper.webp"), xFrac: 0.82, yFrac: 0.55, size: 3, integrity: 8 }
 ];
 
 const driving = {
@@ -200,7 +204,7 @@ const driving = {
       // The gauntlet: wrecks strewn between the start line and the storm.
       for (const ob of DRIVING_OBSTACLES) {
         const sp = await stage.spawnObstacle?.(scene, {
-          name: ob.name, img: ob.img, size: ob.size,
+          name: ob.name, img: ob.img, size: ob.size, integrity: ob.integrity,
           ..._scenePoint(scene, ob.xFrac, ob.yFrac, ctx.lane)
         });
         if (sp) { ctx._spawned.push(sp); ctx._obstacles.push(sp); }
@@ -208,7 +212,15 @@ const driving = {
     }
     await _pause(500);
     try { rig?.sheet?.render(true, { focus: true }); } catch (_) {}
-    if (rig) await ctx.speak("Board it and take the pilot seat, then STEER — watch for the blue ring. (Steer spends a pilot action; if it balks, start or advance a combat turn to refresh one.) Then the fun part: four wrecks squat on your track. Put every one of them back into scrap — ram them, shoot them, whatever the rig's got — before that storm at the far end gets bored.");
+    if (rig) {
+      // Boarding is the one step with no discoverable affordance — it lives in the
+      // token HUD, which a new player has no reason to open (owner ask 2026-08-17).
+      await ctx.speak(`Getting aboard: select your Steward's token, then RIGHT-CLICK it to open the token HUD and press the 🚚 truck button — that boards the nearest rig and seats you. Your Steward's token tucks into ${rig.name}; from here you drive the rig, not the body.`);
+      await _pause(900);
+      await ctx.speak("Seated? Now STEER — watch for the blue ring. (Steer spends a pilot action; if it balks, start or advance a combat turn to refresh one.)");
+      await _pause(700);
+      await ctx.speak("Then the fun part: four dead vehicles squat on your track — real rigs, just nobody's driving them any more. Put every one back into scrap. Cleanest way is the guns: target a wreck and fire. RAM works too — target it, use Ram — but physics bills both parties, so you'll wear half of what you deal. Clear all four before that storm at the far end gets bored.");
+    }
     else await ctx.speak("Couldn't find or mint a rig for your faction. Make sure you lead a faction, then re-run this beat. Skipping the test track for now.");
 
     ctx.riff({ beat: "driving", line: "Player is about to pilot their rig through a wreck-strewn obstacle course for the first time.", intent: "Gruff driving-instructor daemon. One line." });
@@ -231,10 +243,16 @@ const driving = {
     let steered = false;
 
     const scrapped = (actor) => {
-      downed.add(actor?.id ?? actor);
+      const id = actor?.id ?? actor;
+      if (downed.has(id)) return;
+      downed.add(id);
       const left = total - downed.size;
       if (left > 0 && actor?.name) ctx.speak?.(`${actor.name} — scrapped. ${left} to go.`);
       if (downed.size >= total) done();
+    };
+    // Wrecks are rig-typed, so the system's own destruction cascade announces them.
+    const onRigDestroyed = ({ rig: wreck } = {}) => {
+      if (wreck?.id && obstacleActorIds.has(wreck.id)) scrapped(wreck);
     };
     const onUpd = (actor, changed) => {
       if (actor?.id === rig.id) {
@@ -247,27 +265,33 @@ const driving = {
         return;
       }
       if (!obstacleActorIds.has(actor?.id) || downed.has(actor?.id)) return;
+      // Backstop for the hook: rig integrity, or the destroyed state being set directly.
       const sys = actor.system?.system ?? actor.system;
-      const val = Number(foundry.utils.getProperty(sys, "derived.integrity.value") ?? NaN);
-      if (!Number.isNaN(val) && val <= 0) scrapped(actor);
+      const val = Number(foundry.utils.getProperty(sys, "integrity.value") ?? NaN);
+      const state = foundry.utils.getProperty(sys, "identity.state");
+      if ((!Number.isNaN(val) && val <= 0) || state === "destroyed") scrapped(actor);
     };
     const onDelTok = (tokenDoc) => {
       if (!obstacleTokenIds.has(tokenDoc?.id)) return;
       const aid = tokenDoc?.actorId;
       if (aid && obstacleActorIds.has(aid) && !downed.has(aid)) scrapped(tokenDoc.actor ?? aid);
     };
+    Hooks.on("bbttcc:rig:destroyed", onRigDestroyed);
     Hooks.on("updateActor", onUpd);
     Hooks.on("deleteToken", onDelTok);
     // Escape hatch — never trap the player on the track.
     ctx.prompt({
       title: FALLBACK_TITLE,
       content: total > 0
-        ? `<p>Steer the rig and destroy all <b>${total} wrecks</b> blocking the track — ram them or shoot them.</p><p><i>Stuck, or the track won't cooperate? Conclude and move on.</i></p>`
+        ? `<p><b>Board:</b> select your Steward's token, right-click it, and press the <b>🚚 truck</b> button in the token HUD.</p>` +
+          `<p><b>Drive:</b> use <b>Steer</b> from the rig's pilot actions, then destroy all <b>${total} wrecks</b> — target one and fire the rig's weapons, or <b>Ram</b> it (ramming costs you half the damage back).</p>` +
+          `<p><i>Stuck, or the track won't cooperate? Conclude and move on.</i></p>`
         : `<p>Steer the rig — that's the whole test today.</p><p><i>Stuck? Conclude and move on.</i></p>`,
       label: "Conclude the test drive"
     }).then(() => done());
 
     return () => {
+      Hooks.off("bbttcc:rig:destroyed", onRigDestroyed);
       Hooks.off("updateActor", onUpd);
       Hooks.off("deleteToken", onDelTok);
       closeFallback();
@@ -410,22 +434,49 @@ const outfitting = {
     // Training stipend — a fresh faction's banks are empty, and the Market, Travel
     // and raid maneuvers ahead all bill real OP. 130 marks/pool = the cost-band
     // ceiling, so nothing downstream is money-locked.
+    // The Market only lists factions the player OWNS, and every OP write needs it
+    // too — repair the grant before anything depends on it.
+    try { await _stage()?.ensureOwned?.([ctx.faction?.id, ctx.rig?.id, ctx.steward?.id], ctx.user?.id); }
+    catch (e) { console.warn(TAG, "ownership repair failed", e); }
+
     if (ctx.faction) {
       const g = await _stage()?.grantOp?.(ctx.faction.id, {
         economy: 130, violence: 130, intrigue: 130, diplomacy: 130, nonlethal: 60, softpower: 60
       });
       // Tops up toward the tier cap, so a replay on full banks credits nothing —
-      // don't announce a stipend that didn't land.
-      if (g?.ok && Object.keys(g.granted || {}).length) {
-        await ctx.speak("A training stipend just topped up your faction's OP banks — up to what your tier can hold, not a mark more. Fuel, favors and ammunition, on the house.");
+      // don't announce a stipend that didn't land. Name the faction and the amount:
+      // several playtest runs each found their OWN faction, and "nothing changed"
+      // usually means the player was looking at a previous run's banner.
+      const granted = g?.granted || {};
+      if (g?.ok && Object.keys(granted).length) {
+        const econOP = ((Number(granted.economy) || 0) / 10).toFixed(1).replace(/\.0$/, "");
+        await ctx.speak(`A training stipend just topped up ${ctx.faction.name} — up to what your tier can hold, not a mark more (Economy +${econOP} OP). Check that banner's sheet, not an older one.`);
+        await _pause(600);
+      } else if (g?.alreadyFull) {
+        await ctx.speak(`${ctx.faction.name}'s banks are already full to the tier cap — nothing to top up. Spend freely.`);
         await _pause(600);
       }
     }
 
+    // Pre-seed the Market's context (client-scoped) so it opens pointed at the
+    // player's own faction and Steward. Left unset it opens on "(Select)" and the
+    // first Buy dies with "Buyer faction not found" — owner playtest 2026-08-17.
+    try {
+      const MKT = "bbttcc-market";
+      const cur = game.settings.get(MKT, "lastContext") || {};
+      await game.settings.set(MKT, "lastContext", {
+        ...cur,
+        factionId: ctx.faction?.id || cur.factionId || "",
+        characterId: ctx.steward?.id || cur.characterId || ""
+      });
+    } catch (e) { console.warn(TAG, "market context pre-seed failed", e); }
+
     try { globalThis.game?.bbttcc?.api?.market?.openMarket?.(); }
     catch (e) { console.warn(TAG, "market open failed", e); }
     await _pause(600);
-    await ctx.speak("This is the LONG MARKET. Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
+    await ctx.speak(`This is the LONG MARKET. I've already set the buyer to ${ctx.faction?.name || "your faction"} and the receiver to ${ctx.steward?.name || "you"} — if either box reads "(Select)", pick them yourself or the till refuses you.`);
+    await _pause(700);
+    await ctx.speak("Buy what you can afford and can actually USE — your sheet warns you when a weapon or armor sits beyond your training. Watch the price line: it's in MARKS, and ten marks is one OP. And gear does nothing in a duffel bag: EQUIP it from your sheet once it arrives.");
     ctx.riff({ beat: "outfitting", line: "Player is gearing up at the Market before the finale.", intent: "Quartermaster energy — dry, practical. One line." });
   },
 
@@ -569,6 +620,19 @@ function makeRaidBeat({ id, title, activityKey, intro, instruct, after }) {
       try { await globalThis.game?.bbttcc?.api?.raid?.openConsole?.({ factionId: f.id }); }
       catch (e) { console.warn(TAG, `openConsole (${activityKey}) failed`, e); }
 
+      // Raids are GM-driven — the player's console is staging-only (attacker
+      // picker / round commit / end-raid are all {{#if isGM}}). Hand the GM a
+      // console already pointed at this faction so the round can actually run.
+      const gmRes = await _stage()?.openRaidConsoleForGM?.(f.id, {
+        playerName: ctx.steward?.name || ctx.user?.name || "",
+        activityKey
+      });
+      if (!globalThis.game?.user?.isGM) {
+        if (gmRes?.ok) await ctx.speak("Your GM's console just lit up on your banner — they run the rounds, you feed them. Stage your OP and pick your maneuvers; they'll roll it.");
+        else await ctx.speak("Heads up: rounds are resolved GM-side, and I couldn't reach one. Stage what you like — you'll need a GM at the table to actually roll this raid.");
+        await _pause(500);
+      }
+
       ctx.riff({ beat: id, line: `Player is about to run a ${activityKey} raid against the tutorial hostile hold.`, intent: "Coach them through this one approach. One line." });
     },
 
@@ -596,7 +660,7 @@ const raidViolence = makeRaidBeat({
   title: "Raid — Violence",
   activityKey: "violence",
   intro: "First approach: the blunt one. VIOLENCE. Your console's loaded and aimed at the Rust hold — pick your maneuvers and run the rounds. Make it loud.",
-  instruct: `<p>Run the <b>Violence</b> raid — select maneuvers and commit a round or two against the <b>Rust Syndicate Hold</b>.</p><p>When you've felt the rhythm of assault, conclude.</p>`,
+  instruct: `<p>The <b>Violence</b> raid on the <b>Rust Syndicate Hold</b> is staged and aimed.</p><p><b>You:</b> stage your OP and pick maneuvers in the console. <b>Your GM:</b> commits the rounds — their console is already open on your banner.</p><p>When you've felt the rhythm of assault, conclude.</p>`,
   after: "Loud and effective. But not every door wants kicking. Some you pick— *bzzt* —quietly."
 });
 
@@ -605,7 +669,7 @@ const raidIntrigue = makeRaidBeat({
   title: "Raid — Intrigue",
   activityKey: "intrigue",
   intro: "Second approach: the quiet one. INTRIGUE. Same target, different knife — slip in, raise the alarm meter at your own pace, take them from inside. Console's re-aimed; go.",
-  instruct: `<p>Run the <b>Intrigue</b> raid — work the infiltration/alarm scenario against the <b>Rust Syndicate Hold</b>.</p><p>When you've felt how the quiet game plays, conclude.</p>`,
+  instruct: `<p>The <b>Intrigue</b> raid is aimed at the same hold — infiltration and the alarm meter.</p><p><b>You:</b> stage OP and choose the quiet maneuvers. <b>Your GM:</b> rolls the rounds.</p><p>When you've felt how the quiet game plays, conclude.</p>`,
   after: "Subtle. They never saw the hand in their pocket. One approach left, and it's the strangest— *bzzt* —winning without a single blow."
 });
 
@@ -614,7 +678,7 @@ const raidPresence = makeRaidBeat({
   title: "Raid — Presence",
   activityKey: "presence",
   intro: "Last approach: the velvet one. PRESENCE — courtly intrigue. You don't break the hold, you out-talk it; bend influence until they fold to your face. Console's re-aimed; hold court.",
-  instruct: `<p>Run the <b>Presence</b> raid — play the courtly/influence scenario against the <b>Rust Syndicate Hold</b>.</p><p>When you've felt how soft power lands, conclude.</p>`,
+  instruct: `<p>The <b>Presence</b> raid — courtly influence against the same hold.</p><p><b>You:</b> stage OP and choose how you press. <b>Your GM:</b> resolves each round.</p><p>When you've felt how soft power lands, conclude.</p>`,
   after: "And that's the whole grammar of taking ground — fist, knife, and word."
 });
 

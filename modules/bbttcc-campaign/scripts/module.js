@@ -530,6 +530,14 @@ function _gmIds() {
 
 function _announceTurnAvailabilityIfNeeded() {
   try {
+    // GM-only. This persists the world setting `lastTurnAnnounced` and its whole
+    // output is a GM whisper, but it ran on every client from bbttcc:advanceTurn:end
+    // — so a player advancing/previewing a Turn threw "lacks permission to update
+    // Setting" (the try/catch swallowed the JS error, Foundry still logged the
+    // server rejection). 2026-08-17. Also: with several GMs the lastTurnAnnounced
+    // check keeps the whisper single anyway.
+    if (!game.user?.isGM) return;
+
     var w = _getWorldAPI();
     if (!w || typeof w.getState !== "function" || typeof w.getTurnBeats !== "function") return;
 
@@ -7262,7 +7270,11 @@ Hooks.once("ready", () => {
   try {
     if (!globalThis.__bbttccCampaignTurnFlowHookInstalled) {
       globalThis.__bbttccCampaignTurnFlowHookInstalled = true;
-      Hooks.on("bbttcc:advanceTurn:end", function(){ _announceTurnAvailabilityIfNeeded(); });
+      // A preview (apply:false) hasn't advanced anything — don't announce it.
+      Hooks.on("bbttcc:advanceTurn:end", function(payload){
+        if (payload && payload.apply === false) return;
+        _announceTurnAvailabilityIfNeeded();
+      });
     }
   } catch (_e1) {}
 });

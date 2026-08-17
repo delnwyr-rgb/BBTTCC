@@ -123,14 +123,62 @@ async function wireScene(key, sceneOrId) {
     }
   }
   await raw.setFlag(MODULE_ID, "tutorialScene", key);
+
+  // Players have to be able to VIEW the scene or the beat's dive lands nowhere —
+  // scenes default to no player ownership, and a hand-built replacement won't have
+  // been granted any. Raise to OBSERVER (never lower an existing higher grant).
+  const OBSERVER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
+  if ((raw.ownership?.default ?? 0) < OBSERVER) {
+    try {
+      await raw.update({ ownership: { ...(raw.ownership ?? {}), default: OBSERVER } });
+      log(`wireScene: raised "${raw.name}" to default OBSERVER so players can enter it.`);
+    } catch (e) { warn("wireScene: ownership raise failed — players may not be able to enter", raw.name, e); }
+  }
+
   log(`wired "${key}" → ${raw.name} (${raw.id}).`);
   ui.notifications?.info?.(`Onboarding: "${key}" now uses scene "${raw.name}".`);
   return raw;
 }
 
-/** Which scene each tutorial key currently resolves to (null = unwired). */
+/**
+ * Pin the scene graduation dives into (GM only). Without this, resolveMainMap
+ * guesses — "the non-tutorial scene with the most territory hexes" — which lands
+ * wherever the hex map happens to be densest (the Iron Reaches, in practice).
+ *   game.bbttcc.onboarding.setKickoffMap("Bad Eden — Port Kudzu")
+ * Pass null to clear the pin and go back to auto-resolving.
+ */
+async function setKickoffMap(sceneOrId) {
+  if (!game.user?.isGM) { ui.notifications?.warn?.("setKickoffMap: GM only."); return null; }
+  for (const s of (game.scenes ?? [])) {
+    if (s.getFlag?.(MODULE_ID, "mainMap")) { try { await s.unsetFlag(MODULE_ID, "mainMap"); } catch (_) {} }
+  }
+  if (sceneOrId === null || sceneOrId === "") {
+    ui.notifications?.info?.("Onboarding: graduation landing unpinned (auto-resolves again).");
+    return null;
+  }
+  const sc = sceneOrId?.documentName === "Scene" ? sceneOrId
+    : game.scenes?.get?.(String(sceneOrId ?? "").replace(/^Scene\./, ""))
+      ?? game.scenes?.getName?.(String(sceneOrId ?? ""));
+  if (!sc) { ui.notifications?.error?.(`setKickoffMap: no scene matches "${sceneOrId}".`); return null; }
+  await sc.setFlag(MODULE_ID, "mainMap", true);
+  log(`graduation landing pinned to "${sc.name}" (${sc.id}).`);
+  ui.notifications?.info?.(`Onboarding: graduates now land on "${sc.name}".`);
+  return sc;
+}
+
+/**
+ * Diagnostic: what each tutorial key resolves to, and whether a player could
+ * actually enter it. `playersCanView:false` means the dive will fail for players
+ * even though the flag is correct — re-run wireScene to grant OBSERVER.
+ */
 function sceneWiring() {
-  return Object.fromEntries(TUTORIAL_SCENE_KEYS.map(k => [k, findTutorialScene(k)?.name ?? null]));
+  const OBSERVER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OBSERVER;
+  return Object.fromEntries(TUTORIAL_SCENE_KEYS.map(k => {
+    const sc = findTutorialScene(k);
+    return [k, sc
+      ? { scene: sc.name, id: sc.id, playersCanView: (sc.ownership?.default ?? 0) >= OBSERVER }
+      : null];
+  }));
 }
 
 /**
@@ -193,6 +241,7 @@ function _install() {
       // scene loses that flag. See tools/wire-tutorial-scenes.macro.js for a GUI.
       wireScene,
       sceneWiring,
+      setKickoffMap,
       TUTORIAL_SCENE_KEYS
 
       // .speak/.riff attached by operator-voice.js; .beats/.start/... by director.js

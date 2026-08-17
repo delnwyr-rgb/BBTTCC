@@ -119,8 +119,17 @@
 
   Hooks.once("ready", () => {
     // End-of-turn is where badges/VP are most likely to have just changed.
-    Hooks.on("bbttcc:advanceTurn:end", async () => {
+    // 2026-08-17 — two guards, both load-bearing:
+    //   • GM-only. This writes world state to EVERY faction; on a player client
+    //     each faction they don't own throws "lacks permission to update Actor"
+    //     (six red toasts per Turn during onboarding), and with several clients
+    //     connected every one of them raced to write the same snapshots.
+    //   • Respect the dry run. `bbttcc:advanceTurn:end` carries { apply }, and a
+    //     preview (apply:false) must not mutate victory snapshots or set tier.
+    Hooks.on("bbttcc:advanceTurn:end", async (payload = {}) => {
       try {
+        if (!game.user?.isGM) return;
+        if (payload?.apply === false) return;
         // Defer one tick to ensure victory/badge enhancers have finished writing first.
         await new Promise(r => setTimeout(r, 0));
         await runForAllFactions();
@@ -132,6 +141,7 @@
     // Also update when a faction actor's victory flag changes (manual edits or scripts).
     Hooks.on("updateActor", async (actor, data) => {
       try {
+        if (!game.user?.isGM) return;   // same write, same permission wall
         if (!isFactionActor(actor)) return;
         const touchedVictory =
           foundry.utils.hasProperty(data, `flags.${MODF}.victory`) ||

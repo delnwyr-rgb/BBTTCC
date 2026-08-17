@@ -89,6 +89,24 @@ export async function writeWeatherToHex(hexDoc, weatherKey) {
 
   const dur = rollBetween(weather.duration?.min ?? 1, weather.duration?.max ?? 1);
 
+  // 2026-08-17 — Hexes are Drawings, and players can't update Drawing flags: a
+  // player-driven travel step rolled weather here and hit "User X lacks
+  // permission to update Drawing […]" (owner playtest). Weather is real, shared
+  // state — not informational metadata — so relay the write to the GM rather
+  // than dropping it, and let it persist for everyone.
+  if (!game.user?.isGM) {
+    try {
+      if (!game.users?.some?.(u => u.isGM && u.active)) return;  // nobody to write it
+      game.socket?.emit?.("module.bbttcc-travel", {
+        action: "weather-write-request",
+        hexUuid: hexDoc.uuid,
+        weatherKey,
+        duration: dur
+      });
+    } catch (e) { console.warn("[bbttcc-travel.weather] relay emit failed", e); }
+    return;
+  }
+
   try {
     return await hexDoc.update({
       "flags.bbttcc-territory.weather": {
@@ -103,3 +121,36 @@ export async function writeWeatherToHex(hexDoc, weatherKey) {
     return null;
   }
 }
+
+/* GM side of the weather relay: apply a player's rolled weather to the hex.
+ * Single-GM guard mirrors the encounter-arbitration relay (lowest-id active GM). */
+Hooks.once("ready", () => {
+  if (!game.socket || globalThis.__bbttccTravelWeatherRelayBound) return;
+  globalThis.__bbttccTravelWeatherRelayBound = true;
+
+  game.socket.on("module.bbttcc-travel", async (payload) => {
+    try {
+      if (payload?.action !== "weather-write-request") return;
+      if (!game.user?.isGM) return;
+      const activeGMs = Array.from(game.users || []).filter(u => u.active && u.isGM);
+      const primaryGM = activeGMs.sort((a, b) => String(a.id).localeCompare(String(b.id)))[0];
+      if (primaryGM && primaryGM.id !== game.user.id) return;
+
+      const weather = WEATHER_ARCHETYPES[payload.weatherKey];
+      if (!weather) return;
+      const hexDoc = await fromUuid(String(payload.hexUuid || ""));
+      if (!hexDoc?.update) return;
+
+      await hexDoc.update({
+        "flags.bbttcc-territory.weather": {
+          key: payload.weatherKey,
+          label: weather.label || payload.weatherKey,
+          remainingTurns: Number(payload.duration) || 1,
+          ts: Date.now()
+        }
+      });
+    } catch (e) {
+      console.warn("[bbttcc-travel.weather] relayed write failed", e);
+    }
+  });
+});
