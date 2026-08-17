@@ -10167,11 +10167,46 @@ async function ftPerformCombatAction(actor, key) {
 //   - structured   { type: "energy", flavor: "fire" }  (only energy w/ fire flavor)
 // The pipeline applies immunity (×0), then vulnerability (×2), then resistance (×½, floor).
 // An entry matches a hit when types match AND (entry has no flavor OR flavor matches).
+// dnd5e damage names → RFI types, for content authored before the RFI damage
+// list existed (every ancestry/heritage pack came through the 5e converter).
+// NOT invented here: this composes the two mappings the project already treats
+// as canon — ft-translation.js's FT_TERM_MAP (radiant→sephirotic,
+// necrotic/darkness→qliphothic, bludgeoning/piercing/slashing/force→kinetic)
+// with _ftAliasEnergyDamage for the energy family. Applied only when the name
+// is NOT already a valid RFI type, so poison/psychic/radiation pass untouched.
+const _FT_LEGACY_DEFENSE_ALIASES = {
+  radiant:     { type: "sephirotic", flavor: null },
+  necrotic:    { type: "qliphothic", flavor: null },
+  darkness:    { type: "qliphothic", flavor: null },
+  bludgeoning: { type: "kinetic",    flavor: null },
+  piercing:    { type: "kinetic",    flavor: null },
+  slashing:    { type: "kinetic",    flavor: null },
+  force:       { type: "kinetic",    flavor: null },
+  cold:        { type: "thermal",    flavor: "cold" },
+  ice:         { type: "thermal",    flavor: "cold" },
+  frost:       { type: "thermal",    flavor: "cold" },
+  fire:        { type: "thermal",    flavor: "hot"  },
+  flame:       { type: "thermal",    flavor: "hot"  },
+  heat:        { type: "thermal",    flavor: "hot"  },
+  burn:        { type: "thermal",    flavor: "hot"  },
+  acid:        { type: "chemical",   flavor: "acid" },
+  lightning:   { type: "electrical", flavor: null },
+  thunder:     { type: "electrical", flavor: null },
+  shock:       { type: "electrical", flavor: null }
+};
+
 function _ftNormalizeDefenseEntry(e, validTypeSet) {
   if (e == null) return null;
   let type, flavor;
   if (typeof e === "string") {
-    type = e.toLowerCase(); flavor = null;
+    // Documented "type:flavor" form — FT.DAMAGE_FLAVORS says in as many words
+    // that "a 'thermal:cold' resist catches only cold", but the string branch
+    // used to drop everything after the colon, leaving "thermal:cold" to fail
+    // the validTypes check and vanish. Every string-valued grant path (the
+    // flags.fourththing.grant.* AE rows especially) can now express a flavor.
+    const parts = e.toLowerCase().split(":");
+    type   = String(parts[0] ?? "").trim();
+    flavor = String(parts[1] ?? "").trim() || null;
   } else if (typeof e === "object") {
     type = String(e.type ?? "").toLowerCase();
     flavor = e.flavor ? String(e.flavor).toLowerCase() : null;
@@ -10181,6 +10216,12 @@ function _ftNormalizeDefenseEntry(e, validTypeSet) {
   if (type === "energy" && flavor) {
     const a = _ftAliasEnergyDamage(type, flavor);
     type = a.type; flavor = a.flavor || null;
+  }
+  // 5e-era names (cold / necrotic / radiant / force / lightning …) map forward
+  // at READ time, the same way retired "energy" does — no pack migration.
+  if (!validTypeSet.has(type) && _FT_LEGACY_DEFENSE_ALIASES[type]) {
+    const a = _FT_LEGACY_DEFENSE_ALIASES[type];
+    type = a.type; flavor = flavor ?? a.flavor;
   }
   if (!validTypeSet.has(type)) return null;
   return { type, flavor };
@@ -10292,10 +10333,26 @@ function ftComputeDefenses(actor, sys) {
       // Changes tab. resistMap is Set-keyed, so duplicating an existing flag-grant is
       // idempotent. Disabled AEs are skipped (per-effect on/off for the GM).
       const GRANT_RE = /^flags\.fourththing\.grant\.(resists|resistances|immunes|immunities|vulns|vulnerabilities|condImmunes|conditionImmunities)$/;
+      // 🪤 2026-08-16 — every ancestry/heritage that came through the 5e
+      // converter authored its resistances as dnd5e trait keys
+      // (system.traits.dr/di/dv/ci.value). RFI keeps resistances at
+      // system.defenses.*, so those AEs applied to a phantom `system.traits`
+      // branch nothing reads: 15 of them across the packs were pure dead
+      // weight, which is why Cutter Isbell's Neanderthal cold resistance never
+      // showed. Read them here as grants — same equipped/skill gates as every
+      // other grant, values mapped forward by _FT_LEGACY_DEFENSE_ALIASES. Same
+      // read-time policy as the retired "energy" type: no pack migration, and
+      // any future 5e-derived import works on arrival.
+      const LEGACY_TRAIT_RE = /^system\.traits\.(dr|di|dv|ci)\.value$/;
+      const LEGACY_BUCKET = { dr: "resists", di: "immunes", dv: "vulns", ci: "condImmunes" };
       for (const ae of item.effects) {
         if (ae.disabled) continue;
         for (const ch of (ae.changes ?? [])) {
-          const m = GRANT_RE.exec(String(ch?.key || ""));
+          const key = String(ch?.key || "");
+          const m = GRANT_RE.exec(key) ?? (() => {
+            const lm = LEGACY_TRAIT_RE.exec(key);
+            return lm ? [key, LEGACY_BUCKET[lm[1]]] : null;
+          })();
           if (!m) continue;
           const vals = String(ch.value ?? "").split(",").map(s => s.trim()).filter(Boolean);
           const bucket = m[1];

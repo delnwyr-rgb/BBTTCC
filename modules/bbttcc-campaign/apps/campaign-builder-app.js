@@ -2228,6 +2228,13 @@ const activeCampaignId = _getActiveCampaignId();
       let runtime = null;
       try { runtime = await this._computeFlowRuntime(campaign); } catch (eRt) { console.warn(TAG, "flow runtime failed", eRt); }
 
+      // Resolve Scope ONCE. It used to be read inline here and again (from the
+      // user flag) inside the bar builder; the in-scope quest probe below has to
+      // agree with the graph it is describing, and on first render this.flowScope
+      // is still unset.
+      const flowScopeNow = String(this.flowScope ?? (game.user?.getFlag?.("bbttcc-campaign", "flowScope") ?? "play"));
+      this.flowScope = flowScopeNow;
+
       // Turn/Chapter decision-tree visualizer. Default = latest turn with content.
       const graph = _buildFlowGraph(campaign, {
         turn: this.flowTurn,
@@ -2236,16 +2243,44 @@ const activeCampaignId = _getActiveCampaignId();
         viewMode: this.flowViewMode,
         expandedQuests: this.flowExpandedQuests,
         actFilter: this.flowActFilter ?? "all",
-        scope: this.flowScope ?? (game.user?.getFlag?.("bbttcc-campaign", "flowScope") ?? "play"),
+        scope: flowScopeNow,
         runtime
       });
-      if (!graph || !graph.nodes || !graph.nodes.length) {
-        host.innerHTML = "<p class='bbttcc-muted'>No beats to visualize.</p>";
-        return;
-      }
+      // 2026-08-15 — an empty result must NOT swallow the filter bar. It used
+      // to `return` here, which left the band unrendered: filter yourself into
+      // a combination with no beats (Scope "In play" + a quest that isn't) and
+      // the only way back was reloading the app. The header RESET only clears
+      // zoom/pan, not filters. The bar is built below regardless; the
+      // empty-state notice + a Clear-filters escape hatch are appended after.
+      const flowEmpty = !graph || !graph.nodes || !graph.nodes.length;
+
+      // Which quests actually have beats under the OTHER active filters
+      // (scope/turn/act, quest filter deliberately ignored)? Building the graph
+      // in quest mode with questId "all" answers that exactly, and reuses the
+      // scope logic instead of re-deriving it here. Feeds the Quest dropdown so
+      // an unreachable quest can't be picked in the first place.
+      let questsInScope = null;
+      try {
+        const probe = (graph && graph.viewMode === "quests" && String(this.flowQuestId || "all") === "all")
+          ? graph
+          : _buildFlowGraph(campaign, {
+              turn: this.flowTurn,
+              questId: "all",
+              showTravel: this.flowShowTravel,
+              viewMode: "quests",
+              expandedQuests: new Set(),
+              actFilter: this.flowActFilter ?? "all",
+              scope: flowScopeNow,
+              runtime
+            });
+        const ids = (probe && Array.isArray(probe.nodes) ? probe.nodes : [])
+          .map(n => String(n && n.questId || "").trim())
+          .filter(Boolean);
+        if (ids.length) questsInScope = new Set(ids);
+      } catch (_eProbe) {}
 
       // Keep local state in sync (graph decides the fallback).
-      try { this.flowTurn = graph.turnNumber; } catch (e) {}
+      try { if (!flowEmpty) this.flowTurn = graph.turnNumber; } catch (e) {}
 
       // Clear previous render
       host.innerHTML = "";
@@ -2298,8 +2333,7 @@ const activeCampaignId = _getActiveCampaignId();
         const scSel = document.createElement("select");
         scSel.dataset.tooltip = scLbl.dataset.tooltip;
         styleBarSelect(scSel);
-        const scCur = String(this.flowScope ?? (game.user?.getFlag?.("bbttcc-campaign", "flowScope") ?? "play"));
-        this.flowScope = scCur;
+        const scCur = flowScopeNow;
         for (const [val, label] of [["play", "▶ In play"], ["all", "🛠 Everything"]]) {
           const o = document.createElement("option");
           o.value = val;
@@ -2325,7 +2359,18 @@ const activeCampaignId = _getActiveCampaignId();
         if (_turnTip) sel.dataset.tooltip = _turnTip;
         styleBarSelect(sel);
 
-        const turns = Array.isArray(graph.turns) && graph.turns.length ? graph.turns : [graph.turnNumber || 1];
+        // Empty results still need a usable Turn list, and the turn the user
+        // actually picked must stay visible in it even when nothing matched —
+        // otherwise the select silently reads "All Turns" while flowTurn is set.
+        const turns = (() => {
+          const base = (graph && Array.isArray(graph.turns) && graph.turns.length)
+            ? graph.turns.slice()
+            : (graph && graph.turnNumber ? [graph.turnNumber] : []);
+          if (this.flowTurn != null && !base.some(t => String(t) === String(this.flowTurn))) base.push(this.flowTurn);
+          if (!base.length) base.push(1);
+          return base.sort((a, b) => Number(a) - Number(b));
+        })();
+        const turnSelected = (this.flowTurn != null) ? String(this.flowTurn) : String((graph && graph.turnNumber) || 1);
 
         // "All" (no turn filter)
         const optAll = document.createElement("option");
@@ -2338,7 +2383,7 @@ const activeCampaignId = _getActiveCampaignId();
           const opt = document.createElement("option");
           opt.value = String(turns[ti]);
           opt.textContent = "Turn " + String(turns[ti]);
-          if (this.flowTurn != null && String(turns[ti]) === String(graph.turnNumber || 1)) opt.selected = true;
+          if (this.flowTurn != null && String(turns[ti]) === turnSelected) opt.selected = true;
           sel.appendChild(opt);
         }
 
@@ -2377,13 +2422,34 @@ const activeCampaignId = _getActiveCampaignId();
           const qs = qapi?.listQuests ? (qapi.listQuests({ campaignId: campaign.id, status: "all", search: "" }) || []) : [];
           const arr = Array.isArray(qs) ? qs.slice() : [];
           arr.sort((a,b)=>String(a.name||a.id||"").localeCompare(String(b.name||b.id||""), game.i18n.lang));
+          // 2026-08-15 — offer only quests that HAVE beats under the other
+          // active filters (scope/turn/act). Picking e.g. an out-of-play quest
+          // while Scope is "In play" used to render an empty map with no way
+          // back. `questsInScope` is null when the probe couldn't run — then we
+          // fall back to listing everything rather than showing an empty list.
+          const curQ = String(this.flowQuestId || "all");
+          let curListed = false;
           for (let qi=0; qi<arr.length; qi++) {
             const q = arr[qi];
             if (!q || !q.id) continue;
+            const qid = String(q.id);
+            if (questsInScope && !questsInScope.has(qid) && qid !== curQ) continue;
             const o = document.createElement("option");
-            o.value = String(q.id);
-            o.textContent = String(q.name || q.id);
-            if (String(this.flowQuestId || "all") === String(q.id)) o.selected = true;
+            o.value = qid;
+            const unreachable = !!(questsInScope && !questsInScope.has(qid));
+            o.textContent = unreachable
+              ? "⚠ " + String(q.name || qid) + " — no beats in this scope"
+              : String(q.name || qid);
+            if (curQ === qid) { o.selected = true; curListed = true; }
+            qSel.appendChild(o);
+          }
+          // Selection that no longer resolves to a quest at all (deleted quest,
+          // stale flag): keep it visible so the select never lies about state.
+          if (curQ !== "all" && !curListed) {
+            const o = document.createElement("option");
+            o.value = curQ;
+            o.textContent = "⚠ " + curQ + " — not found";
+            o.selected = true;
             qSel.appendChild(o);
           }
         } catch (_eQ) {}
@@ -2475,6 +2541,58 @@ const activeCampaignId = _getActiveCampaignId();
 
         host.appendChild(bar);
       } catch (eBar) {}
+
+      // Empty result — the bar is mounted above, so this is now a state you can
+      // steer out of. Name the filters that are actually narrowing the view and
+      // give a one-click way back (the header RESET only clears zoom/pan).
+      if (flowEmpty) {
+        try {
+          const empty = document.createElement("div");
+          empty.className = "bbttcc-muted";
+          empty.style.padding = "10px 2px";
+
+          const active = [];
+          if (flowScopeNow === "play") active.push("Scope <b>In play</b>");
+          if (this.flowTurn != null) active.push("Turn <b>" + String(this.flowTurn) + "</b>");
+          if (this.flowQuestId && String(this.flowQuestId) !== "all") active.push("a <b>Quest</b> filter");
+          if (this.flowActFilter && String(this.flowActFilter) !== "all") active.push("an <b>Act</b> filter");
+
+          const msg = document.createElement("p");
+          msg.style.margin = "0 0 8px 0";
+          msg.innerHTML = active.length
+            ? "No beats match the current filters — " + active.join(" · ") + "."
+            : "No beats to visualize.";
+          empty.appendChild(msg);
+
+          if (active.length) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.textContent = "↺ Clear filters";
+            btn.dataset.tooltip = "Reset Turn, Quest and Act to All. Scope stays as you set it — flip it above if you want the full authored corpus.";
+            btn.style.padding = "4px 10px";
+            btn.style.borderRadius = "var(--cb-radius)";
+            btn.style.border = "1px solid var(--cb-border)";
+            btn.style.background = "var(--cb-bg-soft)";
+            btn.style.color = "var(--cb-text-main)";
+            btn.style.cursor = "pointer";
+            btn.addEventListener("click", (ev) => {
+              ev.preventDefault();
+              this.flowTurn = null;
+              this.flowQuestId = "all";
+              this.flowActFilter = "all";
+              this._flowResetView();
+              this.render(false);
+            });
+            empty.appendChild(btn);
+          }
+          host.appendChild(empty);
+        } catch (_eEmpty) {
+          host.appendChild(Object.assign(document.createElement("p"), {
+            className: "bbttcc-muted", textContent: "No beats to visualize."
+          }));
+        }
+        return;
+      }
 
 
       // Auto-center root beat when the view is in its default state.
