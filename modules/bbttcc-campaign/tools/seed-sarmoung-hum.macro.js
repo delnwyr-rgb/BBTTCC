@@ -34,7 +34,7 @@
  * DRY_RUN default true. Idempotent. Backs up campaigns before writing. GM only.
  */
 (async () => {
-  const DRY_RUN = false;                 // <-- set false to apply
+  const DRY_RUN = false;                  // <-- set false to apply
   const NS   = "bbttcc-campaign";
   const TERR = "bbttcc-territory";
   if (!game.user?.isGM) return ui.notifications.error("GM only.");
@@ -55,24 +55,30 @@
    * a hex with no onEnter beat and a band-style name (Foo.c) over a proper one.
    * "adjacent:A+B" requires adjacency to BOTH (house 8's "pair ground").
    */
+  /* 🔒 PINNED 2026-08-16. `adjacent:` / `prefer:` are DISCOVERY tools, not
+   * permanent bindings — leaving them live means every tweak to the ranking
+   * re-decides canon. The 2026-08-16 dry run proved it: adding a band-spread
+   * tie-break silently relocated three already-blessed houses, including
+   * house 6 off the Drowned Kudzu ground that §7 celebrates as the root
+   * hiding in the Swarm's own overgrowth. Once a house is placed and blessed,
+   * it gets a literal hex name and stops being an algorithm's opinion.
+   * (The discovery machinery stays below for siting NEW houses.) */
   const HOUSES = [
-    { n: 1, region: "River Heart",      hex: "adjacent:Port Kudzu",        note: "the house the Swarm watches — the humble neighbour, not the port" },
-    { n: 2, region: "River Heart",      hex: "Odaroloc River",             prefer: "near:Lake Suspicious", note: "the bend that HEARS THE LAKE — fisher's house" },
-    // ⚠ CANON MOVED 2026-08-15: the Garden was placed in the NORTHERN MARCHES
-    // (owner built it from "Inconvenient Mountains.a"), so a Saltwake hex could
-    // never satisfy "within sight of the Garden". House 3 follows the Garden.
-    { n: 3, region: "Northern Marches", hex: "adjacent:Founder's Garden",  note: "KEEPS THE GARDENERS — the humble neighbour of the Garden" },
-    { n: 4, region: "Saltwake Coast",   hex: "Hexen Myre",                 prefer: "fringe", note: "the house the Cluster watches — Hexen Myre FRINGE (band hex, already unremarkable)" },
-    { n: 5, region: "Drowned South",    hex: "adjacent:The Anchor Reach",  note: "roof-notation half-drowned — beside the Reach, not on it" },
-    { n: 6, region: "Drowned South",    hex: "adjacent:The Singing Mire",  note: "the EDGE of the mire — the song IS the notation, hummed" },
-    { n: 7, region: "Northern Marches", hex: "adjacent:The Rotating Chapel", note: "NEXT DOOR to the loud decoy — the Chapel takes the eye, the house takes the walk" },
-    { n: 8, region: "Northern Marches", hex: "adjacent:Probably Beaumont+Maybe Beaumont", note: "the PAIR GROUND — one position needs two dancers" },
-    // 🔒 THE EMPTY HOUSE. "CanYAWN Amirite" is the Iron Reaches canyon band —
-    // and the ninth house's address being a groan-pun IS the camouflage ruling
-    // working (§1.5 "The Shape That Cannot Be Evidence"): no proud eye stops
-    // on that name. Fringe-picked = the most remote of the band.
-    { n: 9, region: "Iron Reaches",     hex: "CanYAWN Amirite",            prefer: "fringe", note: "THE EMPTY HOUSE — the canyon nobody looks at twice" }
+    { n: 1, region: "River Heart",      hex: "PolygonForest.c",      note: "beside Port Kudzu — the house the Swarm watches" },
+    { n: 2, region: "River Heart",      hex: "Odaroloc River.a",     note: "the bend that hears the lake — fisher's house" },
+    // Moved 2026-08-16: the Garden was corrected to the COAST, so house 3 comes
+    // home to the Saltwake and §7's original instinct stands. One hex from it.
+    { n: 3, region: "Saltwake Coast",   hex: "Saltwake Reach d",     note: "KEEPS THE GARDENERS — one hex from Founder's Garden" },
+    { n: 4, region: "Saltwake Coast",   hex: "Hexen Myre.o",         note: "the myre's fringe — the house the Cluster watches" },
+    { n: 5, region: "Drowned South",    hex: "Saltwake Reach b",     note: "beside The Anchor Reach — roof-notation half-drowned" },
+    { n: 6, region: "Drowned South",    hex: "Drowned Kudzu Reach c", note: "the mire's edge — and it stands on old SWARM vivarium ground (§7)" },
+    { n: 7, region: "Northern Marches", hex: "Hexen Myre.c",         note: "next door to the Rotating Chapel — the decoy takes the eye, the house takes the walk" },
+    { n: 8, region: "Northern Marches", hex: "Hexen Myre.f",         note: "the pair ground — touches both Beaumonts" },
+    // 🔒 THE EMPTY HOUSE. The ninth's address being a groan-pun IS the
+    // camouflage ruling working (§1.5): no proud eye stops on that name.
+    { n: 9, region: "Iron Reaches",     hex: "CanYAWN Amirite.a",    note: "THE EMPTY HOUSE — the canyon nobody looks at twice" }
   ];
+
 
   // ── load ──────────────────────────────────────────────────────────────────
   let campsRaw = game.settings.get(NS, "campaigns");
@@ -91,8 +97,16 @@
 
   // ── beat shapes (house pattern) ───────────────────────────────────────────
   // T1 hum: background director beat, anonymous, single flat exit, no effects.
-  const hum = (id, label, description) => ({
+  const hum = (id, label, description, phase) => ({
     id, label,
+    // Lane: the existing 90-beat ambient container, NOT a Sarmoung quest of
+    // their own (owner ruling 2026-08-15). Left unassigned they pooled under
+    // "UNASSIGNED" in the flow map; given their own lane they would group the
+    // six into a shape anyone reading the quest list could spot. Tier 1 is
+    // camouflage — the hum belongs with every other thing you notice from the
+    // road. Cost, accepted: the ladder is no longer visible as its own arc in
+    // the Visualizer; storyChain "sarmoung_hum" remains the way to find them.
+    questId: "quest_travel_encounters",
     type: "dialog",
     timeScale: "scene",
     timePoints: 0,
@@ -103,7 +117,13 @@
     inject: {
       cooldownTurns: 0, repeatable: false, oncePerHex: false,
       promptGM: "inherit", fallbackOnDecline: "inherit",
-      allowMulti: "inherit", oncePerHexGlobal: "inherit"
+      allowMulti: "inherit", oncePerHexGlobal: "inherit",
+      // ⚠ 2026-08-15 — the first cut of this seeder shipped NO `requires`, so
+      // all six hum beats unlocked in Act 0 and stood in the play console's
+      // "Available now" list together on Turn 1. The ladder gives Tier 1 the
+      // whole run of "now → Gloomgill" (acts 0–5), not one act. One beat per
+      // act, alternating doctrines — see RELEASE ORDER below.
+      requires: [{ flag: "storyPhase", gte: phase }]
     },
     actors: [],
     // ONE exit, no branch, no check, no reward. Noticing is its own thing.
@@ -125,26 +145,41 @@
   });
 
   // ── TIER 1 — THE HUM (3 quiet, 3 loud) ────────────────────────────────────
+  //
+  // RELEASE ORDER (owner ruling 2026-08-15) — one per act, doctrines ALTERNATING.
+  // The end-of-Tier-1 line is "some places out here go quiet and some go loud,
+  // and we don't know why": that only reads as a pattern if the two kinds have
+  // been seen against each other, so they interleave rather than running as two
+  // blocks. Kudzu goes last — it's the one that most implies a system.
+  //   Act 0 OFFICES ······· Tent at the Edge of Town        quiet
+  //   Act 1 SETTLING ······ Meeting Under the Big Canvas    loud
+  //   Act 2 SPARKS ········ Travelers Who Won't Eat         quiet
+  //   Act 3 WIDENING TRAIL  She Already Knew How            loud
+  //   Act 4 VAULT & SKY ··· The Post with the Tally on It   quiet
+  //   Act 5 THATWARDS HO! · The House the Kudzu Wrote On    loud
+  // Gates are `gte`, so they accumulate — by Act 5 all six are live and any the
+  // party hasn't met yet are still in the pool. Source stays grouped by doctrine
+  // (matching the codex); the act numbers carry the interleave.
   const BEATS = [
     // ── Cluster ground grows QUIET ──────────────────────────────────────────
     hum("hum_quiet_tent", "The Tent at the Edge of Town",
-      "Someone has put up a tent at the edge of the settlement — white canvas, guyed out square, so clean it looks subtracted from the landscape rather than added to it. Inside: cots, all made. A woman changes water in a basin nobody is using. She is kind to you in a completely unremarkable way, answers everything you ask, and volunteers nothing. On the walk back somebody in your party says the thing out loud: this town used to be LOUD. You were here — what, a season ago? There were dogs. There was an argument about a fence that everyone in earshot had opinions about. Nobody can tell you when it stopped. Nobody seems to have noticed it stopping. The fence is still there, and the argument is not."),
+      "Someone has put up a tent at the edge of the settlement — white canvas, guyed out square, so clean it looks subtracted from the landscape rather than added to it. Inside: cots, all made. A woman changes water in a basin nobody is using. She is kind to you in a completely unremarkable way, answers everything you ask, and volunteers nothing. On the walk back somebody in your party says the thing out loud: this town used to be LOUD. You were here — what, a season ago? There were dogs. There was an argument about a fence that everyone in earshot had opinions about. Nobody can tell you when it stopped. Nobody seems to have noticed it stopping. The fence is still there, and the argument is not.", 0),
 
     hum("hum_quiet_decline", "Travelers Who Won't Eat",
-      "Two of them, on the road, on foot, immaculate — which out here is the strangest thing a person can be. No dust past the ankle. They know the courtesies, all of them, in the right order, and they use your name back to you correctly the first time. They pay for the meal. They pay OVER, cheerfully, waving off change. And then they do not eat it: the bowls sit cooling in front of them for the entire conversation, and at the end they thank the cook for it, specifically and warmly, and leave it exactly as it came. They ask after your dead. Not morbidly — the way you'd ask after somebody's knee. They seem genuinely glad to hear the number."),
+      "Two of them, on the road, on foot, immaculate — which out here is the strangest thing a person can be. No dust past the ankle. They know the courtesies, all of them, in the right order, and they use your name back to you correctly the first time. They pay for the meal. They pay OVER, cheerfully, waving off change. And then they do not eat it: the bowls sit cooling in front of them for the entire conversation, and at the end they thank the cook for it, specifically and warmly, and leave it exactly as it came. They ask after your dead. Not morbidly — the way you'd ask after somebody's knee. They seem genuinely glad to hear the number.", 2),
 
     hum("hum_quiet_ledger", "The Post with the Tally on It",
-      "It's a waypost, and the tally cut into it is old enough that the newest marks have weathered grey. Someone maintains this. The wood's been oiled where the numbers are. And the numbers only ever go DOWN — you can read the sequence backward down the post, each figure smaller than the one above it, no additions anywhere, no corrections, the arithmetic of something being carefully and patiently subtracted from over a very long time. The most recent cut is not recent. Whatever it was counting either finished, or got small enough that counting stopped being the point."),
+      "It's a waypost, and the tally cut into it is old enough that the newest marks have weathered grey. Someone maintains this. The wood's been oiled where the numbers are. And the numbers only ever go DOWN — you can read the sequence backward down the post, each figure smaller than the one above it, no additions anywhere, no corrections, the arithmetic of something being carefully and patiently subtracted from over a very long time. The most recent cut is not recent. Whatever it was counting either finished, or got small enough that counting stopped being the point.", 4),
 
     // ── Swarm ground grows LOUD ─────────────────────────────────────────────
     hum("hum_loud_revival", "The Meeting Under the Big Canvas",
-      "The tent holds three hundred and the town holds eighty, and yet here we all are. It's a good meeting — genuinely, annoyingly good; the singing is excellent and the food is free and abundant and the welcome is so total that you're four songs deep before the arithmetic lands. Nobody here is FROM here. You ask a man where he's traveled in from and he looks pleased and a little puzzled, like you've asked him what color the alphabet is, and says he's been coming for years. Everyone is delighted. Everyone is new. Somebody presses a second helping on you and will not be argued out of it."),
+      "The tent holds three hundred and the town holds eighty, and yet here we all are. It's a good meeting — genuinely, annoyingly good; the singing is excellent and the food is free and abundant and the welcome is so total that you're four songs deep before the arithmetic lands. Nobody here is FROM here. You ask a man where he's traveled in from and he looks pleased and a little puzzled, like you've asked him what color the alphabet is, and says he's been coming for years. Everyone is delighted. Everyone is new. Somebody presses a second helping on you and will not be argued out of it.", 1),
 
     hum("hum_loud_echo", "She Already Knew How",
-      "She came back three months ago — an ordinary resolution, the kind the hexes do when they're settled and well-tended, nothing anybody would remark on. Except she came back knowing a trade. Not remembering one: KNOWING one, hands-first, the whole grammar of it, well enough that the smith has stopped correcting her and started watching. Asked who taught her, she gives you a completely open face and says she doesn't know, and you can tell it's not evasion, it's the actual answer. It doesn't distress her. It distresses the smith, who has been doing this for thirty years and had to be taught."),
+      "She came back three months ago — an ordinary resolution, the kind the hexes do when they're settled and well-tended, nothing anybody would remark on. Except she came back knowing a trade. Not remembering one: KNOWING one, hands-first, the whole grammar of it, well enough that the smith has stopped correcting her and started watching. Asked who taught her, she gives you a completely open face and says she doesn't know, and you can tell it's not evasion, it's the actual answer. It doesn't distress her. It distresses the smith, who has been doing this for thirty years and had to be taught.", 3),
 
     hum("hum_loud_handwriting", "The House the Kudzu Wrote On",
-      "The kudzu has taken the whole southern wall, which is normal, and gone in through the window and out through the roof, which is also normal, and made a shape on the way that is not. From the road it's just growth. From up the slope, at the wrong time of afternoon, with the light across it, the vine on that wall runs in long connected loops with consistent spacing and a consistent slant, and the word your brain reaches for before you can stop it is CURSIVE. It doesn't spell anything. You check. It doesn't spell anything in any alphabet anyone in the party can read, and it keeps not spelling anything for as long as you stand there looking at it, which is longer than you meant to."),
+      "The kudzu has taken the whole southern wall, which is normal, and gone in through the window and out through the roof, which is also normal, and made a shape on the way that is not. From the road it's just growth. From up the slope, at the wrong time of afternoon, with the light across it, the vine on that wall runs in long connected loops with consistent spacing and a consistent slant, and the word your brain reaches for before you can stop it is CURSIVE. It doesn't spell anything. You check. It doesn't spell anything in any alphabet anyone in the party can read, and it keeps not spelling anything for as long as you stand there looking at it, which is longer than you meant to.", 5),
 
     // ── TIER 2 assets — authored, NOT offered (the T2 seeder arms these) ─────
     plain("t2_eye_honey_use", "The Thin Sour Honey",
@@ -157,7 +192,27 @@
   ];
 
   for (const nb of BEATS) {
-    if (byId.get(nb.id)) { report.push(`· ok beat (already) ${nb.id}`); continue; }
+    const existing = byId.get(nb.id);
+    if (existing) {
+      // GATE REPAIR — worlds seeded before 2026-08-15 got these beats with no
+      // `requires`, so all six sat in "Available now" from Turn 1. Re-running
+      // the seeder now retro-fits the act gate onto the beats already in play.
+      // Prose is NOT touched: if you have edited a beat in the Beats tab, your
+      // text stands. Only inject.requires is reconciled.
+      const fixes = [];
+      const want = nb.inject?.requires;
+      if (want && JSON.stringify(existing.inject?.requires ?? null) !== JSON.stringify(want)) {
+        existing.inject = Object.assign({}, existing.inject || {}, { requires: want });
+        fixes.push(`storyPhase ≥ ${want[0].gte}`);
+      }
+      if (nb.questId && String(existing.questId || "") !== nb.questId) {
+        existing.questId = nb.questId;
+        fixes.push(`lane → ${nb.questId}`);
+      }
+      if (fixes.length) { changes++; report.push(`↻ ${nb.id}: ${fixes.join(" · ")}`); continue; }
+      report.push(`· ok beat (already) ${nb.id}`);
+      continue;
+    }
     camp.beats.push(nb); byId.set(nb.id, nb);
     changes++;
     report.push(`✚ beat: ${nb.id} ${nb.storyChain === "sarmoung_hum" ? "[T1 hum]" : "[T2 — authored, NOT offered]"}`);
@@ -167,6 +222,21 @@
   const scenes = game.scenes.contents;
 
   // Every hex in the world, once: {doc, label, key, scene}
+  /* 🪤 Hexes are POLYGON drawings (shape.type "p"): width/height are null and
+   * the outline lives in shape.points. The old `x + width/2` math therefore
+   * collapsed to plain `x` — which happened to work only because every hex
+   * shares one shape, so the offset cancelled. Average the vertices instead. */
+  const hexCenter = (dr) => {
+    const sh = dr.shape || {};
+    const pts = sh.points || [];
+    if (pts.length >= 6) {
+      let sx = 0, sy = 0, n = 0;
+      for (let i = 0; i + 1 < pts.length; i += 2) { sx += pts[i]; sy += pts[i + 1]; n++; }
+      return { cx: (dr.x || 0) + sx / n, cy: (dr.y || 0) + sy / n };
+    }
+    return { cx: (dr.x || 0) + ((sh.width || 0) / 2), cy: (dr.y || 0) + ((sh.height || 0) / 2) };
+  };
+
   const ALL_HEXES = scenes.flatMap(sc =>
     (sc.drawings?.contents || [])
       .filter(dr => dr.flags?.[TERR])
@@ -175,8 +245,7 @@
         label: dr.text || dr.flags[TERR]?.name || "(unnamed)",
         key: norm(dr.text || dr.flags[TERR]?.name),
         scene: sc.name,
-        cx: (dr.x || 0) + ((dr.shape?.width || 0) / 2),
-        cy: (dr.y || 0) + ((dr.shape?.height || 0) / 2)
+        ...hexCenter(dr)
       }))
   );
   const inRegion = (h, region) => {
@@ -193,13 +262,20 @@
   };
   // "near:X" — several houses are defined by what they can SEE or HEAR
   // ("hears the lake", "keeps the gardeners"), which is a distance question.
-  const resolveAnchor = (name) => {
+  /* Anchors are resolved REGION-FIRST. A landmark can be renamed and re-sited
+   * (Founder's Garden moved Marches → Saltwake Coast), which can leave two
+   * hexes answering to one name; a global first-match would silently anchor to
+   * the ghost. Returns {hex, dupes} so the caller can shout about it. */
+  const resolveAnchor = (name, region) => {
     const want = norm(name);
-    if (!want) return null;
-    return ALL_HEXES.find(h => h.key === want)
-        || ALL_HEXES.find(h => h.key.startsWith(want) || want.startsWith(h.key))
-        || ALL_HEXES.find(h => h.key.includes(want) || want.includes(h.key))
-        || null;
+    if (!want) return { hex: null, dupes: [] };
+    const hit = (pool) => pool.find(h => h.key === want)
+      || pool.find(h => h.key.startsWith(want) || want.startsWith(h.key))
+      || pool.find(h => h.key.includes(want) || want.includes(h.key))
+      || null;
+    const all = ALL_HEXES.filter(h => h.key === want);
+    const scoped = region ? ALL_HEXES.filter(h => inRegion(h, region)) : ALL_HEXES;
+    return { hex: hit(scoped) || hit(ALL_HEXES), dupes: all.length > 1 ? all : [] };
   };
   const rankNear = (cands, anchor) => [...cands].sort((a, b) =>
     Math.hypot(a.cx - anchor.cx, a.cy - anchor.cy) - Math.hypot(b.cx - anchor.cx, b.cy - anchor.cy));
@@ -220,11 +296,12 @@
 
   /* "adjacent:A" (or "adjacent:A+B") — the least-notable neighbour.
    * Ranking: no onEnter beat first, then band-style name, then nearest. */
-  const findAdjacent = (spec, region) => {
+  const findAdjacent = (spec, region, houseNum) => {
     const names = spec.split("+").map(s => s.trim()).filter(Boolean);
-    const anchors = names.map(n => ({ name: n, hex: resolveAnchor(n) }));
+    const anchors = names.map(n => { const r = resolveAnchor(n, region); return { name: n, hex: r.hex, dupes: r.dupes }; });
     const missing = anchors.filter(a => !a.hex).map(a => a.name);
     if (missing.length) return { hit: null, how: "anchor-missing", cands: [], anchorName: missing.join(", ") };
+    const dupes = anchors.flatMap(a => a.dupes.length ? [`"${a.name}" ×${a.dupes.length} (${a.dupes.map(d => d.scene).join(", ")})`] : []);
 
     const scene = anchors[0].hex.scene;
     const reach = (SPACING || 0) * 1.45;
@@ -233,17 +310,39 @@
     const neigh = ALL_HEXES.filter(h =>
       h.scene === scene &&
       !anchors.some(a => a.hex === h) &&
+      // never propose ground another house already holds
+      !(h.doc.flags?.[NS]?.sarmoungHouse && h.doc.flags[NS].sarmoungHouse !== houseNum) &&
       anchors.every(a => Math.hypot(h.cx - a.hex.cx, h.cy - a.hex.cy) <= reach)
     );
     if (!neigh.length) return { hit: null, how: "no-neighbour", cands: [], anchorName: names.join(" + ") };
 
+    const dTo = (h) => Math.hypot(h.cx - anchors[0].hex.cx, h.cy - anchors[0].hex.cy);
+    // Which band does a hex belong to? ("Hexen Myre.l" → "hexenmyre")
+    const band = (label) => norm(String(label).replace(/[.\s][a-z]$/i, ""));
+    // How many houses already stand on that band, anywhere in the world? The
+    // pilgrimage is a route ACROSS the map, so when neighbours tie, spread.
+    const bandLoad = (h) => ALL_HEXES.filter(x =>
+      x.doc.flags?.[NS]?.sarmoungHouse && x.doc.flags[NS].sarmoungHouse !== houseNum
+      && band(x.label) === band(h.label)).length;
     const ranked = [...neigh].sort((a, b) =>
       (hasOwnBeat(a) - hasOwnBeat(b)) ||
       (isBandName(b.label) - isBandName(a.label)) ||
-      (Math.hypot(a.cx - anchors[0].hex.cx, a.cy - anchors[0].hex.cy) -
-       Math.hypot(b.cx - anchors[0].hex.cx, b.cy - anchors[0].hex.cy))
+      // treat sub-pixel distance differences as a genuine tie, or float noise
+      // silently decides and the alphabetical tie-break never runs
+      (Math.abs(dTo(a) - dTo(b)) > 1 ? dTo(a) - dTo(b) : 0) ||
+      (bandLoad(a) - bandLoad(b)) ||
+      // ⚠ STABLE tie-break. Without it, equally-ranked neighbours sorted by
+      // scene order, so a harmless re-run could silently relocate a house —
+      // and the reconciler would dutifully retire the old marker.
+      a.label.localeCompare(b.label)
     );
-    return { hit: ranked[0], how: `adjacent to ${names.join(" + ")}`, cands: ranked.slice(1, 5) };
+    const tied = ranked.filter(h => !hasOwnBeat(h) === !hasOwnBeat(ranked[0])
+      && Math.abs(dTo(h) - dTo(ranked[0])) < 1);
+    return {
+      hit: ranked[0],
+      how: `adjacent to ${names.join(" + ")}${tied.length > 1 ? ` — ${tied.length}-way tie, took first alphabetically` : ""}${dupes.length ? ` ⚠ DUPLICATE ANCHOR: ${dupes.join("; ")}` : ""}`,
+      cands: ranked.slice(1, 6)
+    };
   };
 
   /* 3-stage matcher. Hex display names use a Name.letter convention
@@ -276,7 +375,8 @@
         }
         if (pref.startsWith("near:")) {
           const anchorName = pref.slice(5);
-          const anchor = resolveAnchor(anchorName);
+          const { hex: anchor, dupes: aDupes } = resolveAnchor(anchorName, house.region);
+          if (aDupes.length) return { hit: null, how: "anchor-ambiguous", cands: hits, anchorName: `${anchorName} — ${aDupes.length} hexes answer to that name (${aDupes.map(d => d.scene).join(", ")})` };
           if (!anchor) return { hit: null, how: "anchor-missing", cands: hits, anchorName };
           // Cross-scene distance is meaningless; prefer same-scene candidates.
           const same = hits.filter(x => x.scene === anchor.scene);
@@ -307,7 +407,7 @@
       const doc = await fromUuid(h.hex.slice(5)).catch(() => null);
       if (doc?.documentName === "Drawing") { hex = doc; how = "uuid"; }
     } else if (/^adjacent:/i.test(h.hex)) {
-      const m = findAdjacent(h.hex.slice(9), h.region);
+      const m = findAdjacent(h.hex.slice(9), h.region, h.n);
       if (m.hit) { hex = m.hit.doc; how = m.how; alts = m.cands; }
       else if (m.how === "anchor-missing") {
         report.push(`⚠ house ${h.n} — landmark "${m.anchorName}" not found, SKIPPED (can't find its neighbour).`);
