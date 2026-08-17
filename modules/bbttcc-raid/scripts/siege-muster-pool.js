@@ -233,7 +233,7 @@
     if (!globalThis.__bbttcc_siege_muster_pool_trickle_hook) {
       // Defer a tick so the turn driver's fresh logistics.band lands first (same pattern
       // as faction-pressure.enhancer.js).
-      Hooks.on("bbttcc:advanceTurn:end", () => { setTimeout(() => { _trickle().catch(e => console.warn(TAG, "trickle threw", e)); }, 50); });
+      Hooks.on("bbttcc:advanceTurn:end", () => { if (!game.user?.isGM) return; setTimeout(() => { _trickle().catch(e => console.warn(TAG, "trickle threw", e)); }, 50); });
       globalThis.__bbttcc_siege_muster_pool_trickle_hook = true;
     }
     console.log(TAG, "ready — game.bbttcc.api.siege.pool.{get,quote,raiseTroops,debit,credit,…}");

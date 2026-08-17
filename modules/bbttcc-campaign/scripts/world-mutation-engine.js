@@ -688,6 +688,7 @@ async function scheduleDeferredOP({ factionId, label, source, beatCtx, whenTurn,
       if (globalThis.__bbttccOpScheduleTickHandler && typeof globalThis.__bbttccOpScheduleTickHandler === "function") return;
 
       globalThis.__bbttccOpScheduleTickHandler = function(ctx){
+        if (!game.user?.isGM) return;   // world-state writes run once, on the GM
         if (ctx?.apply === false) return; // dry-run / preview — don't tick OP schedules
         // Fire-and-forget; do not block Turn Driver.
         tickOpSchedulesAllFactions({}).catch(e => console.warn(TAG, "tickOpSchedulesAllFactions failed", e));

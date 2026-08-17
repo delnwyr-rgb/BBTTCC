@@ -203,6 +203,7 @@
 
   Hooks.on("bbttcc:advanceTurn:end", async (...args) => {
     try {
+      if (!game.user?.isGM) return;   // world-state writes run once, on the GM
       // Defer one tick so all other end-of-turn enhancers
       // (garrison upkeep, war logs, etc.) have finished writing.
       await new Promise(resolve => setTimeout(resolve, 0));

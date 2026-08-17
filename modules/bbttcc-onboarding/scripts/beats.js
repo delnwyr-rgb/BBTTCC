@@ -110,9 +110,12 @@ const meatsuit = {
     // Contain the steward + dummy to the range (never the live map).
     const stage = _stage();
     if (stage && scene) {
-      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.4, 0.5, ctx.lane));
+      // Placement tuned to the owner's Proving Ground art (2026-08-17): the old
+      // 0.40/0.50 spot put the Steward in the river west of the bridge. Both marks
+      // now sit on the dry bank on the near side, Steward just short of the dummy.
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, 0.60, 0.62, ctx.lane));
       if (st.created) ctx._spawned.push({ token: st.doc });
-      const dummy = await stage.spawnDummy(scene, { ..._scenePoint(scene, 0.6, 0.5, ctx.lane), name: "Straw Adversary" });
+      const dummy = await stage.spawnDummy(scene, { ..._scenePoint(scene, 0.62, 0.52, ctx.lane), name: "Straw Adversary" });
       if (dummy) ctx._spawned.push(dummy);
     }
     await _pause(500);

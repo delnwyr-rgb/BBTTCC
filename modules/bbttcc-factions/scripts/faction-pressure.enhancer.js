@@ -120,6 +120,7 @@
   Hooks.once("ready", () => {
     Hooks.on("bbttcc:advanceTurn:end", async (ctx) => {
       try {
+        if (!game.user?.isGM) return;   // world-state writes run once, on the GM
         if (ctx?.apply === false) return; // dry-run preview — no derived-pressure writes
         // Defer one tick so garrison upkeep + facility effects + war logs settle first.
         await new Promise(resolve => setTimeout(resolve, 0));

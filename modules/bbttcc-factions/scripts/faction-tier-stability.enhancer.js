@@ -85,6 +85,7 @@
   Hooks.once("ready", () => {
     Hooks.on("bbttcc:advanceTurn:end", async (ctx) => {
       try {
+        if (!game.user?.isGM) return;   // world-state writes run once, on the GM
         // Only advance stability counters on Apply turns if ctx.apply is provided.
         if (ctx && typeof ctx === "object" && "apply" in ctx && !ctx.apply) return;
 

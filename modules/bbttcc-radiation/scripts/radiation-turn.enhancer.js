@@ -51,6 +51,7 @@
   }
 
   async function handleAdvanceTurnEnd(ctx = {}) {
+    if (!game.user?.isGM) return;   // world-state writes run once, on the GM
     if (ctx?.apply === false) return; // dry-run / preview — never mutate radiation
     try {
       const radApi = game.bbttcc?.api?.radiation;

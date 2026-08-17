@@ -223,6 +223,7 @@
   }
 
   async function handleAdvanceTurnEnd(ctx = {}) {
+    if (!game.user?.isGM) return;   // world-state writes run once, on the GM
     if (ctx?.apply === false) return; // dry-run / preview — never drift zones
     const radSettings = game.settings;
     const enableDrift = radSettings?.get(MOD_SCN, "enableZoneDrift") ?? true;

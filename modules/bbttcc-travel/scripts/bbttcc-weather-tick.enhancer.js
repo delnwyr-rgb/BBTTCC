@@ -35,6 +35,7 @@
 
   function install() {
     Hooks.on("bbttcc:advanceTurn:end", () => {
+      if (!game.user?.isGM) return;   // world-state writes run once, on the GM
       // Let other end-of-turn hooks finish first
       setTimeout(() => { tickWeather(); }, 0);
     });
