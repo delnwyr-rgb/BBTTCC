@@ -141,6 +141,67 @@ async function prompt({ title = "Operator", content = "", label = "Continue" } =
   });
 }
 
+/** Slide deck — a stepped teaching card with Back / Next / Finish.
+ *
+ *  Beats that teach a CONCEPT (Crew, Surge, the manifestation dials) have no UI
+ *  element to point a tour ring at, and a wall of Operator chat lines scrolls
+ *  away unread. A deck holds still and lets the player go back a step.
+ *
+ *  Implemented as one dialog PER SLIDE sharing a single id: DialogV2.wait
+ *  resolves on button press, so re-opening under the same id swaps the content
+ *  and keeps the prefix sweep (closeAllOnboardingPrompts) able to find it.
+ *  Slides: { title, body, speak? }. Resolves "done" when finished, or null if
+ *  the player closed the deck (a closed deck must never wedge a beat — callers
+ *  treat null as "they've seen enough").
+ */
+async function deck({ title = "Operator", slides = [], label = "Got it", speak = null } = {}) {
+  const list = (Array.isArray(slides) ? slides : []).filter(Boolean);
+  if (!list.length) return "done";
+  const DV2 = foundry?.applications?.api?.DialogV2;
+  let i = 0;
+  while (i < list.length) {
+    const sl = list[i];
+    const first = i === 0;
+    const last  = i === list.length - 1;
+    const heading = `${title} — ${sl.title}`;
+    // The Operator narrates a slide only when it asks for it; keeps the chat
+    // log from becoming a duplicate of the deck.
+    if (sl.speak && typeof speak === "function") { try { await speak(sl.speak); } catch (_) {} }
+    const content = `<div class="bbttcc-onboarding-deck">
+        <p class="bbttcc-deck-step" style="margin:0 0 .4rem;font-size:.72rem;letter-spacing:.06em;opacity:.6;text-transform:uppercase">Slide ${i + 1} of ${list.length}</p>
+        <h3 style="margin:0 0 .5rem;font-size:1rem;color:#d4a35f">${sl.title}</h3>
+        <div class="bbttcc-deck-body">${sl.body}</div>
+      </div>`;
+    const buttons = [];
+    if (!first) buttons.push({ action: "back", label: "← Back" });
+    buttons.push({ action: "next", label: last ? label : "Next →", default: true });
+
+    let action = null;
+    if (DV2?.wait) {
+      try {
+        action = await DV2.wait({
+          id: promptIdFor(title),
+          window: { title: heading },
+          content,
+          position: { ...PROMPT_POSITION, width: 520 },
+          buttons, rejectClose: false, modal: false
+        });
+      } catch (_) { action = null; }
+    } else {
+      action = await new Promise((res) => {
+        const btns = {};
+        if (!first) btns.back = { label: "← Back", callback: () => res("back") };
+        btns.next = { label: last ? label : "Next →", callback: () => res("next") };
+        new Dialog({ title: heading, content, buttons: btns, default: "next", close: () => res(null) },
+          { id: promptIdFor(title), ...PROMPT_POSITION, width: 520 }).render(true);
+      });
+    }
+    if (action === null) return null;          // closed — don't wedge the beat
+    i = action === "back" ? Math.max(0, i - 1) : i + 1;
+  }
+  return "done";
+}
+
 let _running = false;
 
 async function start({ user = game.user, fromStart = false } = {}) {
@@ -183,6 +244,7 @@ async function start({ user = game.user, fromStart = false } = {}) {
       speak: _speak,
       riff: (a, o) => (ns?.riff ? ns.riff(a, o) : Promise.resolve(null)),
       prompt,
+      deck: (opts = {}) => deck({ speak: _speak, ...opts }),
       director: { registerBeat, listBeats, getBeat }
     };
 
@@ -274,7 +336,7 @@ Hooks.once("ready", () => {
   const ns = globalThis.game?.bbttcc?.onboarding;
   if (!ns) return;
   ns.beats = { register: registerBeat, list: listBeats, get: getBeat };
-  ns.ui = Object.assign(ns.ui ?? {}, { raiseDialogByTitle, closeDialogByTitle, closeAllOnboardingPrompts, promptIdFor, PROMPT_POSITION });
+  ns.ui = Object.assign(ns.ui ?? {}, { raiseDialogByTitle, closeDialogByTitle, closeAllOnboardingPrompts, promptIdFor, PROMPT_POSITION, deck });
   Object.assign(ns, { start, skip, reset, status, activeRuns, isRunning: () => _running });
 
   try {

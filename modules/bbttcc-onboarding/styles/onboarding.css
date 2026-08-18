@@ -124,3 +124,28 @@
 
 .ob-tour-pick { display: block; margin: 0.3rem 0; cursor: pointer; }
 .ob-tour-pick em { color: #cbb8ff; font-size: 0.8em; }
+
+/* ── Teaching slides (ctx.deck) ─────────────────────────────────────────────
+   Concept beats — Crew, Surge, the manifestation dials — have no UI element to
+   ring, and chat lines scroll away unread. The deck holds still instead. */
+.bbttcc-onboarding-deck .bbttcc-deck-body { font-size: 0.86rem; line-height: 1.5; }
+.bbttcc-onboarding-deck .bbttcc-deck-body p { margin: 0 0 0.5rem; }
+.bbttcc-onboarding-deck .bbttcc-deck-body ul { margin: 0.25rem 0 0.6rem; padding-left: 1.1rem; }
+.bbttcc-onboarding-deck .bbttcc-deck-body li { margin: 0.18rem 0; }
+.bbttcc-onboarding-deck .bbttcc-deck-body b { color: #e8c84a; }
+.bbttcc-onboarding-deck .bbttcc-deck-body code {
+  background: rgba(127, 214, 255, 0.10);
+  border: 1px solid rgba(127, 214, 255, 0.25);
+  border-radius: 4px; padding: 0 0.25rem; font-size: 0.9em;
+}
+.bbttcc-onboarding-deck .bbttcc-deck-key {
+  display: block; margin: 0.4rem 0 0; padding: 0.4rem 0.55rem;
+  background: rgba(212, 163, 95, 0.10);
+  border-left: 3px solid #d4a35f; border-radius: 3px;
+  font-size: 0.82rem;
+}
+/* The engine's own glossary, embedded verbatim on the last slide. */
+.bbttcc-onboarding-deck .ft-manifest-glossary-row {
+  margin: 0.25rem 0; font-size: 0.78rem; line-height: 1.45;
+}
+.bbttcc-onboarding-deck .ft-manifest-glossary-row b { color: #7fd6ff; }

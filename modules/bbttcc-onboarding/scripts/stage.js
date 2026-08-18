@@ -131,6 +131,127 @@ function _registerOps() {
     return { actorId: actor.id, tokenId, sceneId };
   });
 
+  /* ─── Combat simulator (Proving Ground) ─────────────────────────────────────
+   * Foes are NPC-typed for the same reason the wrecks aren't characters: the
+   * Last Stand engine binds `type === "character"` only, so an npc drops clean
+   * on zero instead of opening the dying cycle mid-tutorial. default-OWNER
+   * because damage application runs CLIENT-SIDE when the player owns the
+   * target — an unowned foe silently eats the hit (the trap the wrecks hit on
+   * 2026-08-17). HP is NOT set directly: `derived.integrity.max` is computed as
+   * 10 + 3×body + level scaling, so we shape toughness through `body` and then
+   * fill the track to whatever the engine derived. The beat reads the live max
+   * for its surrender threshold, so it stays correct however that formula moves.
+   */
+  reg("spawnFoe", async ({ sceneId, x = 1000, y = 1000, elevation = 0, name = "Foe", img = "",
+                          size = 1, foeClass = "qliphothic", body = 3, level = 1,
+                          resistances = [], vulnerabilities = [], ownerUserId = "" }) => {
+    const folder = await _folder();
+    const actor = await Actor.create({
+      name, type: "npc", folder: folder?.id, img: img || "icons/svg/mystery-man.svg",
+      ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER },
+      prototypeToken: Object.assign(
+        { actorLink: false, disposition: CONST.TOKEN_DISPOSITIONS.HOSTILE, name, width: size, height: size },
+        img ? { texture: { src: img } } : {}
+      ),
+      system: {
+        details: { level: Math.max(1, Number(level) || 1) },
+        attributes: { body: { value: Math.max(1, Number(body) || 3) } },
+        defenses: { resistances, immunities: [], vulnerabilities }
+      },
+      flags: { [MODULE_ID]: { spawned: true, kind: "foe", foeClass, ownerUserId } }
+    });
+    if (!actor) return null;
+    // Fill the tracks AFTER create — max is derived, so it isn't known until the
+    // document exists (same two-step spawnDummy uses).
+    let integrityMax = 0;
+    try {
+      const sys = actor.system?.system ?? actor.system;
+      integrityMax = Number(sys?.derived?.integrity?.max) || 0;
+      await actor.update({
+        "system.derived.integrity.value": integrityMax,
+        "system.derived.stress.value": Number(sys?.derived?.stress?.max) || 0
+      });
+    } catch (e) { console.warn(TAG, "foe track fill failed", e); }
+
+    let tokenId = null;
+    const scene = game.scenes?.get?.(sceneId);
+    if (scene) {
+      try {
+        const td = (await actor.getTokenDocument({ x, y })).toObject();
+        if (Number(elevation)) td.elevation = Number(elevation);
+        td.flags = Object.assign({}, td.flags, { [MODULE_ID]: { spawned: true, ownerUserId } });
+        const [c] = await scene.createEmbeddedDocuments("Token", [td]);
+        tokenId = c.id;
+      } catch (e) { console.warn(TAG, "foe token place failed", e); }
+    }
+    return { actorId: actor.id, tokenId, sceneId, integrityMax };
+  });
+
+  // Darkness is a MANUAL track (system.darkness.value, 0–10 on the sheet) — no
+  // engine writes it, so the simulator has to. Killing a sentient is allowed;
+  // this is what it costs. Clamped, and reports what actually landed so the
+  // Operator never announces a point that didn't stick.
+  reg("raiseDarkness", async ({ actorId, amount = 1, reason = "" }) => {
+    const actor = game.actors?.get?.(String(actorId || ""));
+    if (!actor) return { ok: false, before: 0, after: 0 };
+    const sys = actor.system?.system ?? actor.system;
+    const before = Number(sys?.darkness?.value) || 0;
+    const after = Math.min(10, Math.max(0, before + (Number(amount) || 0)));
+    if (after === before) return { ok: true, before, after, capped: true };
+    try {
+      await actor.update({ "system.darkness.value": after });
+      console.log(TAG, `Darkness ${before} → ${after} on ${actor.name}${reason ? ` (${reason})` : ""}`);
+    } catch (e) { console.warn(TAG, "raiseDarkness failed", e); return { ok: false, before, after: before }; }
+    return { ok: true, before, after };
+  });
+
+  // A sentient foe folds instead of dying. Routed through the system's own
+  // toggleCondition so the condition AE + chat card fire exactly as they would
+  // in a real fight — but read first, because toggle would UNSET an already-set
+  // Calmed on a replayed beat.
+  reg("foeSurrender", async ({ actorId, holdAt = 1 }) => {
+    const actor = game.actors?.get?.(String(actorId || ""));
+    if (!actor) return { ok: false };
+    const sys = actor.system?.system ?? actor.system;
+    if (sys?.conditions?.calmed !== true) {
+      try { await game.fourththing?.toggleCondition?.(actor, "calmed"); }
+      catch (e) { console.warn(TAG, "foeSurrender toggleCondition failed", e); }
+    }
+    // Never leave a surrendered foe one stray splash from dying — floor the track.
+    const cur = Number(sys?.derived?.integrity?.value) || 0;
+    const floor = Math.max(1, Number(holdAt) || 1);
+    if (cur < floor) {
+      try { await actor.update({ "system.derived.integrity.value": floor }); } catch (_) {}
+    }
+    return { ok: true };
+  });
+
+  // Knock a foe off the gantry. The engine's aerial ladder is altitude-BAND
+  // scale (sky / stratosphere / orbit) — there is no rooftop-scale forced
+  // movement, and every push in the system says "GM resolves the knockback".
+  // So the Proving Ground's rickety gantry resolves it here: drop the token to
+  // ground, apply the sky-band impact tick, and leave them Prone.
+  reg("shoveOffPerch", async ({ sceneId, tokenId, actorId, formula = "2d6" }) => {
+    const scene = game.scenes?.get?.(String(sceneId || ""));
+    const tokenDoc = scene?.tokens?.get?.(String(tokenId || ""));
+    const actor = game.actors?.get?.(String(actorId || ""));
+    if (!tokenDoc || !actor) return { ok: false, damage: 0 };
+    try { await tokenDoc.update({ elevation: 0 }); }
+    catch (e) { console.warn(TAG, "shoveOffPerch elevation drop failed", e); }
+    let total = 0;
+    try {
+      const r = new Roll(String(formula || "2d6"));
+      await r.evaluate();
+      total = Number(r.total) || 0;
+      await game.fourththing?.rolls?._applyDamageToActor?.(actor, total, { track: "integrity", ignoreResists: true });
+    } catch (e) { console.warn(TAG, "shoveOffPerch impact failed", e); }
+    try {
+      const sys = actor.system?.system ?? actor.system;
+      if (sys?.conditions?.prone !== true) await game.fourththing?.toggleCondition?.(actor, "prone");
+    } catch (_) {}
+    return { ok: true, damage: total };
+  });
+
   reg("ensureToken", async ({ actorId, sceneId, x = 1000, y = 1000, ownerUserId = "" }) => {
     const actor = game.actors?.get?.(actorId);
     const scene = game.scenes?.get?.(sceneId);
@@ -154,10 +275,23 @@ function _registerOps() {
   reg("mintRig", async ({ factionId, chassis = "hexmobile", userId = "", name = "" }) => {
     const rb = globalThis.game?.bbttcc?.api?.rigBuilder;
     if (!rb?.mintFromChassis || !factionId) return { rigId: null };
+    const OWNER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
     // Idempotent: a faction that already owns a rig gets that one back, never a twin.
     const existing = (game.actors?.contents ?? []).find(a => a.type === "rig" &&
       (a.getFlag?.("fourththing", "factionOwnerId") === factionId || a.system?.identity?.factionOwnerId === factionId));
-    if (existing) return { rigId: existing.id, existed: true };
+    if (existing) {
+      // 🔒 owner ruling 2026-08-17 — the starter rig is the player's REAL rig and
+      // stays theirs after graduation, so a same-character replay hands the SAME
+      // vehicle back. Re-assert the grant on the way through: a rig minted before
+      // ownership was wired (or one whose grant got lost) would otherwise come
+      // back un-drivable, and boarding now needs OWNER to move the rig's token.
+      // Promote-only — never lowers a level the GM raised.
+      if (userId && Number(existing.ownership?.[userId] ?? 0) < OWNER) {
+        try { await existing.update({ ownership: { ...(existing.ownership ?? {}), [userId]: OWNER } }); }
+        catch (e) { console.warn(TAG, "mintRig: re-grant OWNER on existing rig failed", e); }
+      }
+      return { rigId: existing.id, existed: true };
+    }
 
     const overrides = {};
     const cleanName = String(name || "").trim();
@@ -172,8 +306,9 @@ function _registerOps() {
         texture: { src: art.img }, width: art.size, height: art.size
       });
     }
-    // The onboarding player OWNS their starter rig — sheet, tour, crew slots, the lot.
-    if (userId) overrides.ownership = { default: 0, [userId]: CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER };
+    // The onboarding player OWNS their starter rig — sheet, tour, crew slots, and
+    // (2026-08-17) the token itself, which boarding now hands them the controls of.
+    if (userId) overrides.ownership = { default: 0, [userId]: OWNER };
 
     const rig = await rb.mintFromChassis(chassis, { factionOwnerId: factionId, free: true, overrides });
     return { rigId: rig?.id || null };
@@ -540,7 +675,7 @@ function _registerOps() {
     return { ok: true };
   });
 
-  console.log(TAG, "GM ops registered: spawnDummy, spawnObstacle, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
+  console.log(TAG, "GM ops registered: spawnDummy, spawnObstacle, spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch, ensureToken, mintRig, ensureSandboxHex, claimHex, unclaimHex, disembark, spawnHostileFaction, ensureHex, setRaidSession, clearRaidSession, teardownFinale, cleanup.");
 }
 
 /* ─── Public helpers (called by beats; resolve ids -> Documents) ────────────── */
@@ -605,6 +740,34 @@ async function ensureOwned(actorIds = [], userId = "") {
 async function grantOp(factionId, marks = {}) {
   if (!factionId) return { ok: false, granted: {} };
   return (await _runAsGM("grantOp", { factionId, marks })) ?? { ok: false, granted: {} };
+}
+
+/** Spawn a combat-simulator foe + token. opts: {x,y,elevation,name,img,size,foeClass,body,level,
+ *  resistances,vulnerabilities}. Returns { actor, token, integrityMax } or null. */
+async function spawnFoe(scene, opts = {}) {
+  const res = await _runAsGM("spawnFoe", { sceneId: scene?.id, ...opts, ..._ownedBy() });
+  if (!res?.actorId) return null;
+  const actor = await _ns()?.relay?.resolveActor?.(res.actorId);
+  const token = res.tokenId ? await _ns()?.relay?.resolveToken?.(res.sceneId, res.tokenId) : null;
+  return { actor: actor || null, token: token || null, integrityMax: Number(res.integrityMax) || 0 };
+}
+
+/** Add to an actor's Darkness track (0–10, manual — nothing else writes it). Returns {ok,before,after}. */
+async function raiseDarkness(actorId, amount = 1, reason = "") {
+  if (!actorId) return { ok: false, before: 0, after: 0 };
+  return (await _runAsGM("raiseDarkness", { actorId, amount, reason })) ?? { ok: false, before: 0, after: 0 };
+}
+
+/** A sentient foe folds: Calmed + integrity floored so a stray hit can't finish them. */
+async function foeSurrender(actorId, holdAt = 1) {
+  if (!actorId) return { ok: false };
+  return (await _runAsGM("foeSurrender", { actorId, holdAt })) ?? { ok: false };
+}
+
+/** Knock an elevated foe off its perch: token to ground + impact damage + Prone. */
+async function shoveOffPerch(scene, tokenId, actorId, formula = "2d6") {
+  if (!scene?.id || !tokenId || !actorId) return { ok: false, damage: 0 };
+  return (await _runAsGM("shoveOffPerch", { sceneId: scene.id, tokenId, actorId, formula })) ?? { ok: false, damage: 0 };
 }
 
 /** Spawn a destructible tutorial obstacle + token on `scene`. Returns { actor, token } or null. */
@@ -695,6 +858,7 @@ Hooks.once("ready", () => {
   const ns = _ns();
   if (ns) ns.stage = {
     ensureTokenOnScene, spawnDummy, spawnObstacle, mintRig, grantOp, ensureOwned, disembark,
+    spawnFoe, raiseDarkness, foeSurrender, shoveOffPerch,
     ensureSandboxHex, claimHex, unclaimHex, spawnHostileFaction, ensureHex,
     setRaidSession, clearRaidSession, openRaidConsoleForGM, teardownFinale, cleanup, folder: _folder,
     setRunContext, runContext, runBegin, runEnd, runList, laneFrac: _laneFrac

@@ -3,6 +3,13 @@
  *   Phase 1: incarnation
  *   Phase 2: meatsuit (test real abilities), driving (pilot the real rig)
  *   Phase 3: stewardship — claim a sandbox hex, read OP + run a dry-run Turn
+ *   Phase 3b: outfitting (gear up at the Market)
+ *   Phase 3c: teaching slides — crew_occult → surge → manifestations. Concept
+ *           beats, so they use ctx.deck (stepped slides) plus a hands-on gate.
+ *           They sit BEFORE the fight (owner 2026-08-17) so the player walks
+ *           into it with a crew behind them and something of their own making.
+ *   Phase 3d: combat_sim (live-fire on the Proving Ground: qliphothic to kill,
+ *           sentient to spare, Darkness for the ones you don't)
  *   Phase 4 (finale): travel into a hostile hex → triple raid (violence / intrigue /
  *           presence, player-driven pre-targeted consoles) → graduation dive into live Bad Eden
  *
@@ -130,7 +137,12 @@ const meatsuit = {
       const a = data.actor || data.sourceToken?.actor;
       if (a?.id === ctx.steward?.id) done();
     };
+    // A manifestation IS an ability, and a cast that never animates used to
+    // leave this gate waiting (2026-08-17: the system now emits a real cast
+    // event, so take it as proof of life too).
+    const onCast = (actor) => { if (actor?.id === ctx.steward?.id) done(); };
     Hooks.on("fourththing:itemAnimated", onAnim);
+    Hooks.on("fourththing.manifestationCast", onCast);
     // Untrappable fallback (owner playtest 2026-08-11: this was the only beat
     // without one — a player whose ability never animates was stuck forever).
     ctx.prompt({
@@ -142,6 +154,7 @@ const meatsuit = {
     }).then(() => done());
     return () => {
       Hooks.off("fourththing:itemAnimated", onAnim);
+      Hooks.off("fourththing.manifestationCast", onCast);
       globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
     };
   },
@@ -220,6 +233,11 @@ const driving = {
       // token HUD, which a new player has no reason to open (owner ask 2026-08-17).
       await ctx.speak(`Getting aboard: select your Steward's token, then RIGHT-CLICK it to open the token HUD and press the 🚚 truck button — that boards the nearest rig and seats you. Your Steward's token tucks into ${rig.name}; from here you drive the rig, not the body.`);
       await _pause(900);
+      // 2026-08-17 — boarding now moves the canvas selection onto the rig token
+      // (system-side, ftBoardRig → _ftSyncBoardSelection). Say so, or the swap
+      // reads as "my token vanished".
+      await ctx.speak(`The moment you're seated your selection jumps to ${rig.name} itself — that's deliberate. The lit-up token is the one you move now. Your Steward is inside it, riding along.`);
+      await _pause(700);
       await ctx.speak("Seated? Now STEER — watch for the blue ring. (Steer spends a pilot action; if it balks, start or advance a combat turn to refresh one.)");
       await _pause(700);
       await ctx.speak("Then the fun part: four dead vehicles squat on your track — real rigs, just nobody's driving them any more. Put every one back into scrap. Cleanest way is the guns: target a wreck and fire. RAM works too — target it, use Ram — but physics bills both parties, so you'll wear half of what you deal. Clear all four before that storm at the far end gets bored.");
@@ -286,7 +304,7 @@ const driving = {
     ctx.prompt({
       title: FALLBACK_TITLE,
       content: total > 0
-        ? `<p><b>Board:</b> select your Steward's token, right-click it, and press the <b>🚚 truck</b> button in the token HUD.</p>` +
+        ? `<p><b>Board:</b> select your Steward's token, right-click it, and press the <b>🚚 truck</b> button in the token HUD. Boarding hands the selection to the <b>rig's</b> token — move that one from here on.</p>` +
           `<p><b>Drive:</b> use <b>Steer</b> from the rig's pilot actions, then destroy all <b>${total} wrecks</b> — target one and fire the rig's weapons, or <b>Ram</b> it (ramming costs you half the damage back).</p>` +
           `<p><i>Stuck, or the track won't cooperate? Conclude and move on.</i></p>`
         : `<p>Steer the rig — that's the whole test today.</p><p><i>Stuck? Conclude and move on.</i></p>`,
@@ -502,6 +520,803 @@ const outfitting = {
 
   exit: async (ctx) => {
     await ctx.speak("Look at you — dressed for the apocalypse you're about to drive into. The Syndicate won't know what pulled up.");
+  }
+};
+
+/* ═════════════════════ PHASE 3c — TEACHING SLIDES ═════════════════════
+ * Three concept beats between the Market and the Proving Ground. Owner ask
+ * 2026-08-17: these come BEFORE the fight, "so the player has a manifestation
+ * ready to go, and a crew to summon" — the simulator is then a test of things
+ * they own, not a first encounter with ideas they've never met.
+ *
+ * These teach CONCEPTS, not screen furniture, so they use ctx.deck (stepped
+ * slides that hold still) rather than tour rings or a wall of chat lines. Every
+ * beat ends in a hands-on gate against the real interface, and every gate has an
+ * untrappable escape.
+ *
+ * Numbers quoted in the slides come from the engine, not from a second copy:
+ * the manifestation deck embeds `game.fourththing.manifestationGlossaryHTML()`
+ * verbatim — the same glossary the cast dialog's coach panel appends.
+ */
+
+/** The engine's own glossary, or a pointer to it if the system isn't exposing it
+ *  (older system build) — never a paraphrase that can drift out of true. */
+function _glossaryHTML() {
+  try {
+    const html = globalThis.game?.fourththing?.manifestationGlossaryHTML?.();
+    if (html) return html;
+  } catch (e) { console.warn(TAG, "glossary unavailable", e); }
+  return `<p><em>The full glossary lives under the Invoke dialog's coach panel — open any manifestation and hit Invoke to read it.</em></p>`;
+}
+
+/* ───────────────────── CREW & OCCULT ASSOCIATION ───────────────────── */
+// The Steward's Crew + Occult choice writes into the FACTION's echoAssets and
+// unlocks raid maneuvers for the whole banner — a character-sheet dropdown with
+// strategic-layer consequences, which is exactly why it needs saying out loud.
+const crewOccult = {
+  id: "crew_occult",
+  title: "The People You Know",
+  scope: "personal",
+
+  enter: async (ctx) => {
+    await ctx.speak("Before you point a weapon at anything — you're not alone out here, and the game knows it. *bzzt* Two lines on your sheet decide what your whole faction can do.");
+    await _pause(800);
+
+    await ctx.deck({
+      title: "◇ OPERATOR — Crew & Occult",
+      label: "Show me my sheet",
+      slides: [
+        {
+          title: "Two lines, one big lever",
+          speak: "Read these slides. There's a test after, and the test is the rest of your life.",
+          body: `<p>Your sheet carries an <b>Awesome Crew</b> and an <b>Occult Association</b>. They look like flavour text. They are not.</p>
+            <p>Both feed your faction's <b>Echo Assets</b> — the pool of people and traditions your banner can actually call on.</p>
+            <span class="bbttcc-deck-key">One Steward's dropdown changes what an entire faction may attempt. That's the biggest lever on the sheet, and it's two clicks.</span>`
+        },
+        {
+          title: "What they actually unlock",
+          body: `<p>Raid <b>maneuvers</b> — the special moves in the Raid Console — are gated. Most are locked until something on your side grants them.</p>
+            <p>Three things grant maneuvers:</p>
+            <ul>
+              <li>your faction's active <b>Crews</b></li>
+              <li>its active <b>Occult Associations</b></li>
+              <li>the <b>classes</b> on its roster</li>
+            </ul>
+            <p>In the Raid Console a granted maneuver wears a green <b>✦ badge</b> naming exactly who unlocked it for you.</p>`
+        },
+        {
+          title: "Why it's a real choice",
+          body: `<p>You are not picking a favourite. You're picking <b>which options exist</b> when your faction is in trouble.</p>
+            <p>A crew of smugglers and a crew of field medics do not open the same doors, and neither does a Kabbalist versus an Alchemist.</p>
+            <span class="bbttcc-deck-key">Swap them whenever the fiction supports it — but swap them <em>deliberately</em>. Your GM will notice what you can suddenly do.</span>`
+        },
+        {
+          title: "The roster — they're people, not a stat",
+          speak: "Here's the part that surprises everyone.",
+          body: `<p>Each Crew and Association carries a <b>roster</b>: the named people you've met through it. Companions, rivals, mentors, debts running both directions.</p>
+            <p>You don't have to invent them cold — <b>✨ Suggest members</b> writes setting-flavoured people you can keep, edit or bin.</p>
+            <p>And <b>Mint</b> turns a roster entry into a <b>real NPC actor</b> — Calling picked, Echo Boons applied, gear to your tier. They stop being a line of text and start being someone the GM can put on the map.</p>`
+        },
+        {
+          title: "Spotlight — calling one in",
+          body: `<p>Once per scene you may <b>Invoke</b> a roster member: pull one of them into the moment, on screen, doing the thing they're good at.</p>
+            <p>One spotlight per scene, refreshed by a <b>Scene Break</b>. Members flagged <b>Default present</b> are the ones pre-selected when the crew turns up in a raid.</p>
+            <span class="bbttcc-deck-key">This is the summon. Your Crew is not a bonus — it's a rolodex with teeth, and once a scene you get to cash one in.</span>`
+        }
+      ]
+    });
+
+    // Identity edit lives behind the sheet's edit toggle — say so, or they hunt.
+    try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
+    await _pause(600);
+    await ctx.speak("Sheet's up. Flip on EDIT mode (the pencil, top right) and find Awesome Crew and Occult Association in the identity block. Pick one of each — anything; you can change them later.");
+    await _pause(900);
+    // The manager is where Roster / Invoke / Manifest all live — one door for
+    // the three verbs the slides just described.
+    try {
+      const mgr = globalThis.game?.fourththing?.echoAssets?.openManager;
+      if (typeof mgr === "function") {
+        await mgr(ctx.steward);
+        await ctx.speak("That's your Echo Assets panel — every Crew and Association you carry, with ROSTER and INVOKE on each row. Open a roster, hit ✨ Suggest members, and mint one of them into a real person.");
+      } else {
+        await ctx.speak("Your Echo Assets panel lives on the sheet — that's where each Crew and Association gets its ROSTER and its once-a-scene INVOKE.");
+      }
+    } catch (e) { console.warn(TAG, "echo assets manager failed to open", e); }
+    ctx.riff({ beat: "crew_occult", line: "Player is choosing their Crew and Occult Association for the first time.", intent: "One dry line about the company they keep." });
+  },
+
+  detect: (ctx, done) => {
+    const FALLBACK_TITLE = "◇ OPERATOR — Crew & Occult";
+    const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
+    let spoke = false;
+
+    // The sheet writes these through bbttcc-character-options; watch the actor
+    // rather than guessing at the flag path, so any storage shape trips it.
+    const onUpd = (actor) => {
+      if (actor?.id !== ctx.steward?.id || spoke) return;
+      const picked = _crewOccultOf(ctx.steward);
+      if (!picked.crew && !picked.occult) return;
+      spoke = true;
+      const named = [picked.crew, picked.occult].filter(Boolean).join(" · ");
+      ctx.speak?.(`Logged: ${named}. Your banner just inherited whatever they know.`);
+      _reportGrants(ctx).catch(e => console.warn(TAG, "grant report failed", e));
+    };
+    // A minted crew member is a brand-new NPC actor — worth a nod, since that's
+    // the moment the roster stops being text and starts being someone.
+    const onMint = (actor) => {
+      if (actor?.type !== "npc") return;
+      const co = _crewOccultOf(ctx.steward);
+      if (!co.crew && !co.occult) return;
+      ctx.speak?.(`${actor.name} just became a real person on the board. That's your crew — findable, killable, and yours to call.`);
+    };
+    Hooks.on("updateActor", onUpd);
+    Hooks.on("createActor", onMint);
+
+    ctx.prompt({
+      title: FALLBACK_TITLE,
+      content:
+        `<p><b>1.</b> On your sheet: turn on <b>Edit</b> (pencil, top right), then set <b>Awesome Crew</b> and <b>Occult Association</b> in the identity block. Both feed your faction's Echo Assets and unlock raid maneuvers for the whole banner.</p>` +
+        `<p><b>2.</b> In the <b>Echo Assets</b> panel, open a <b>Roster</b>, try <b>✨ Suggest members</b>, and <b>Mint</b> one into a real NPC.</p>` +
+        `<p><i>Once per scene you can <b>Invoke</b> a roster member to pull them on screen — that's your summon.</i></p>` +
+        `<p><i>Lists empty or the panel won't open? Continue — you can set all of this any time.</i></p>`,
+      label: "Company noted"
+    }).then(() => done());
+
+    return () => { Hooks.off("updateActor", onUpd); Hooks.off("createActor", onMint); closeFallback(); };
+  },
+
+  exit: async (ctx) => {
+    await ctx.speak("Good. People are infrastructure, One — the only kind that argues back. One spotlight a scene; spend it on the moment that deserves it.");
+  }
+};
+
+/** Read the Steward's crew / occult labels. `setActorEchoAssetSlot`
+ *  (bbttcc-bridge.js) writes BOTH the identity block and a per-slot shortcut
+ *  flag, so check the identity block first and fall back to the shortcut. */
+function _crewOccultOf(steward) {
+  const co = steward?.flags?.["bbttcc-character-options"] ?? {};
+  const read = (slot) => {
+    const ident = co.identity?.[slot];
+    return String(ident?.displayName || ident?.name || co[slot]?.name || "").trim();
+  };
+  return { crew: read("crew"), occult: read("occult") };
+}
+
+/** Tell the player what their choice actually opened, using the raid module's
+ *  own grant map — no second copy of the crew→maneuver table lives here. */
+async function _reportGrants(ctx) {
+  const grants = globalThis.game?.bbttcc?.api?.raid?.crewGrants;
+  const faction = ctx.faction;
+  if (!grants?.forFaction || !faction) return;
+  const keys = grants.forFaction(faction) ?? [];
+  if (!keys.length) {
+    await ctx.speak("No new maneuvers off that pairing yet — the grant shows up once your faction registers the Echo Asset. Your GM can confirm it.");
+    return;
+  }
+  const named = keys.slice(0, 6).map(k => {
+    const by = grants.grantedBy?.(faction, k);
+    return by ? `${k} (${by})` : k;
+  });
+  await ctx.speak(`${faction.name} can now attempt ${keys.length} granted maneuver${keys.length === 1 ? "" : "s"}: ${named.join(", ")}${keys.length > 6 ? "…" : ""}. Look for the ✦ badges in the Raid Console.`);
+}
+
+/* ───────────────────────────── SURGE ───────────────────────────── */
+// Surge is the meta-currency that pays for the reach/"overcast" move taught in
+// the next beat, so it comes first.
+const surgeBeat = {
+  id: "surge",
+  title: "Surge",
+  scope: "personal",
+
+  enter: async (ctx) => {
+    const sys = ctx.steward?.system?.system ?? ctx.steward?.system ?? {};
+    const cur = Number(sys?.resources?.surge?.value) || 0;
+    const max = Number(sys?.resources?.surge?.max) || 10;
+
+    await ctx.speak("Next: the currency nobody explains until it's too late. *bzzt* Surge.");
+    await _pause(700);
+
+    await ctx.deck({
+      title: "◇ OPERATOR — Surge",
+      label: "Open my Combat tab",
+      slides: [
+        {
+          title: "What Surge is",
+          speak: "You've been earning this since your first roll. Nobody told you. That's on me.",
+          body: `<p><b>Surge</b> is a separate bank sitting beside your health and your Clarity. It never modifies a roll by itself — it <b>buys</b> things.</p>
+            <p>Right now you're holding <b>${cur} / ${max}</b>.</p>
+            <span class="bbttcc-deck-key">It is the only resource in the game you earn by <em>succeeding</em>, rather than by spending something else.</span>`
+        },
+        {
+          title: "How you bank it",
+          body: `<p>Dice in this system <b>explode</b>: roll a ten, roll again and add. Every explosion banks you <b>+1 Surge</b>.</p>
+            <p>That means Surge accrues from playing well and rolling hot — attacks, checks, saves, all of it. You've almost certainly banked some already without noticing.</p>
+            <p>The bank has a ceiling, so it's use-it-or-waste-it once you're full.</p>`
+        },
+        {
+          title: "How you spend it",
+          body: `<p>Your sheet's <b>Combat</b> tab has a <b>✦ Surge</b> panel with a <b>Spend</b> button.</p>
+            <p>It offers universal options plus whatever your class brings — Forge-Weld, Rallying Words, Brace, and the rest. Costs run from cheap tricks to the ones that end an argument.</p>
+            <span class="bbttcc-deck-key">And one more use, which the next beat is entirely about: Surge is how you cast <b>above your tier</b>.</span>`
+        }
+      ]
+    });
+
+    try { ctx.steward?.sheet?.render(true, { focus: true }); } catch (_) {}
+    await _pause(600);
+    await ctx.speak(cur > 0
+      ? `Combat tab, ✦ Surge panel — you're holding ${cur}. Open Spend and read what's on the menu. You don't have to buy anything; just learn where the shop is.`
+      : "Combat tab, ✦ Surge panel. You're empty right now — the bank fills the moment your dice start exploding. Open Spend anyway and read the menu so you know what you're saving for.");
+    ctx.riff({ beat: "surge", line: "Player is being shown the Surge economy for the first time.", intent: "One line — the daemon is slightly embarrassed it didn't mention this earlier." });
+  },
+
+  detect: (ctx, done) => {
+    const FALLBACK_TITLE = "◇ OPERATOR — Surge";
+    const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
+    // Banking Surge mid-beat is worth a nod — it's the clearest possible proof
+    // of the rule we just described.
+    let noted = false;
+    const onUpd = (actor, changed) => {
+      if (actor?.id !== ctx.steward?.id || noted) return;
+      const v = foundry.utils.getProperty(changed, "system.resources.surge.value");
+      if (v === undefined) return;
+      noted = true;
+      ctx.speak?.(`There — Surge just moved to ${v}. That's the dice paying you.`);
+    };
+    Hooks.on("updateActor", onUpd);
+    ctx.prompt({
+      title: FALLBACK_TITLE,
+      content:
+        `<p>Sheet → <b>Combat</b> tab → the <b>✦ Surge</b> panel. Press <b>Spend</b> and read the menu.</p>` +
+        `<p>Banked by exploding dice (+1 per explosion). Spent on class powers — and on reaching above your tier, which is next.</p>`,
+      label: "I know where it lives"
+    }).then(() => done());
+    return () => { Hooks.off("updateActor", onUpd); closeFallback(); };
+  },
+
+  exit: async (ctx) => {
+    await ctx.speak("Surge banked is a decision you haven't made yet. Try not to die holding ten of them.");
+  }
+};
+
+/* ──────────────────── MANIFESTATIONS & CASTING ──────────────────── */
+// The big one: the dials, then BUILD one in the real Manifestation Engine, then
+// FIRE it. Reach (the "overcast" move) is taught here because it's a knob on the
+// Invoke dialog, not a separate system.
+const manifestations = {
+  id: "manifestations",
+  title: "The Reality Dials",
+  scope: "personal",
+
+  enter: async (ctx) => {
+    ctx._maniBefore = new Set((ctx.steward?.items ?? [])
+      .filter(i => i.type === "power" || i.type === "weapon").map(i => i.id));
+
+    await ctx.speak("Last classroom module, and it's the one the whole setting hangs on. *bzzt* Manifestations — how a Steward argues with reality and occasionally wins.");
+    await _pause(900);
+
+    await ctx.deck({
+      title: "◇ OPERATOR — Manifestations",
+      label: "Build me one",
+      slides: [
+        {
+          title: "Workings and Forms",
+          speak: "Sit up. This is the part the manual gets wrong and I get right.",
+          body: `<p>Everything you manifest is one of two shapes.</p>
+            <ul>
+              <li><b>Workings</b> are instant. They happen, they resolve, they're over.</li>
+              <li><b>Forms</b> persist — sustained, bound or enduring — and cost you <b>upkeep</b> every tick to keep holding open.</li>
+            </ul>
+            <span class="bbttcc-deck-key">Only Trad Caster Classes may manifest Workings. Everyone else shapes the world by <em>holding it open</em>, not by intervening directly. That's a setting statement as much as a rule.</span>`
+        },
+        {
+          title: "Clarity — what it costs",
+          body: `<p><b>Clarity</b> is your focus pool, and it is the price of every cast: <b>T1 = 1, T2 = 2, T3 = 3, T4 = 5</b>, plus upkeep per tick on anything you're sustaining.</p>
+            <p>Your maximum scales with your own tier (5 / 7 / 10 / 14). A <b>Soma Break</b> refills it; a <b>Scene Break</b> half-fills it and shaves a point of Noise.</p>
+            <p>Run dry and you simply cannot cast. Budget it like ammunition.</p>`
+        },
+        {
+          title: "Stance — the three ways to cast",
+          body: `<p>Every Invoke asks for a stance, and the stance moves three dials at once:</p>
+            <ul>
+              <li><b>Hermetic</b> — +1 Clarity, no Noise, misfire shifted <b>−2</b> (safer), slower setup.</li>
+              <li><b>Chaos</b> — −1 Clarity, <b>+2 Noise</b>, misfire shifted <b>+2</b> (worse), fast.</li>
+              <li><b>Ascendant</b> — T3+ only. Pays <b>+1 Blood Debt</b> instead of Clarity. No Noise, no misfire at all.</li>
+            </ul>
+            <span class="bbttcc-deck-key">Cheap, safe, quiet: pick two. That's the whole design.</span>`
+        },
+        {
+          title: "Misfire, and the ledgers",
+          body: `<p>Fail a cast and you roll <b>misfire</b> — a d10 table running from a mild reality flicker at 1–2 up to catastrophic resonance at 10. Your stance biases that die, and so does your Noise.</p>
+            <p><b>Blood Debt</b> is a separate ledger that catches up with you later, on the GM's schedule rather than yours.</p>
+            <span class="bbttcc-deck-key">Neither of these is a punishment for playing badly. They're the price list for playing fast.</span>`
+        },
+        {
+          title: "Noise — the one that compounds",
+          speak: "Pay attention to this one. It's the resource people ruin themselves with.",
+          body: `<p><b>Noise</b> is the residue Chaos leaves behind: <b>+2 per cast</b>, on a 0–10 track. It does <b>not</b> decay on its own — a Scene Break shaves exactly <b>one</b> point.</p>
+            <p>It is not decoration. Every single point is a flat <b>−1 to your own cast rolls</b>, forever, until you bring it down.</p>
+            <p>And it bands:</p>
+            <ul>
+              <li><b>Humming</b> (3+) — −1 to Intrigue checks. Something nearby can read you.</li>
+              <li><b>Loud</b> (5+) — −2 to Intrigue, and your misfires roll <b>one band worse</b>.</li>
+              <li><b>Screaming</b> (8+) — −3 to Intrigue, misfires <b>two bands worse</b>, and the Lattice is looking directly at you.</li>
+            </ul>
+            <span class="bbttcc-deck-key">Chaos is cheaper and faster. The bill arrives later, it arrives compounding, and it makes you easy to find. Spend it on purpose.</span>`
+        },
+        {
+          title: "Reach — casting above your tier",
+          body: `<p>This is the overcast move, and it has a hard limit: you may reach <b>exactly one tier above your own</b>. Two is refused outright.</p>
+            <p>Reaching costs one of two things, and the Invoke dialog makes you choose:</p>
+            <ul>
+              <li><b>Surge</b> — you cast at the higher tier, but if you fail, the misfire rolls on that <em>higher</em> column.</li>
+              <li><b>Blood Debt</b> — +1 Blood Debt, a clean cast, and no misfire at all.</li>
+            </ul>
+            <span class="bbttcc-deck-key">Surge risks the present. Blood Debt mortgages the future. Neither is free, and the game remembers both.</span>`
+        },
+        {
+          title: "The full glossary",
+          body: `<p>Straight from the engine — the same reference the Invoke dialog carries under its coach panel:</p>${_glossaryHTML()}`
+        }
+      ]
+    });
+
+    await ctx.speak("Theory's done. Now build one — the Manifestation Engine walks you through it step by step. Make something small and useful; you'll be firing it in a minute, and then again for real.");
+    await _pause(600);
+    try {
+      const ft = globalThis.game?.fourththing;
+      // Prefer the shape chooser: it is the canonical "author a new one" door,
+      // it TCC-gates Workings for us, and it makes the player spend the
+      // Workings-vs-Forms slide they just read. Wizard direct is the fallback.
+      if (typeof ft?.openManifestationStarterDialog === "function") {
+        ft.openManifestationStarterDialog(ctx.steward);
+      } else if (typeof ft?.wizardV2 === "function") {
+        ft.wizardV2(ctx.steward, { kind: "power", starter: "ritual" });
+      } else {
+        ui.notifications?.warn?.("Manifestation Engine unavailable — open it from your sheet's Manifestations tab.");
+        await ctx.speak("Engine won't open from here — *bzzt* — use the Manifestations tab on your sheet and hit the build button.");
+      }
+    } catch (e) {
+      console.warn(TAG, "manifestation engine failed to open", e);
+      await ctx.speak("Engine threw a spanner. Build one from your sheet's Manifestations tab instead.");
+    }
+    ctx.riff({ beat: "manifestations", line: "Player is authoring their first manifestation in the engine.", intent: "One line — the daemon is genuinely interested in what they'll make." });
+  },
+
+  detect: (ctx, done) => {
+    const FALLBACK_TITLE = "◇ OPERATOR — Manifestations";
+    const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
+    let built = false, fired = false;
+    const finish = () => { if (built && fired) done(); };
+
+    // Built: a new power/weapon lands on the Steward.
+    const onCreate = (item) => {
+      if (built || item?.parent?.id !== ctx.steward?.id) return;
+      if (item.type !== "power" && item.type !== "weapon") return;
+      if (ctx._maniBefore?.has(item.id)) return;
+      built = true;
+      ctx._maniName = item.name;
+      ctx.speak?.(`"${item.name}" — authored and on your sheet. Now INVOKE it. Watch the stance buttons and the cost line as you do; that's the whole lesson in one dialog.`);
+      finish();
+    };
+    // Fired: the system's real cast event (added 2026-08-17). It carries the
+    // whole moment — tier, stance, reach, success, misfire, cost — so the beat
+    // can speak to what the player actually DID instead of guessing.
+    //
+    // This replaced a Clarity-decrease heuristic, which was silently wrong for
+    // every zero-cost cast (Ascendant, TCC Chaos T1, free-Clarity, T0 Fiat).
+    // itemAnimated stays as the backstop for a cast routed through a path that
+    // doesn't reach castManifestation.
+    const markFired = (why) => {
+      if (fired) return;
+      fired = true;
+      console.log(TAG, `manifestations: cast detected via ${why}`);
+      finish();
+    };
+    const onCast = (actor, info = {}) => {
+      if (actor?.id !== ctx.steward?.id) return;
+      // Say the interesting thing back to them. Reaching above your tier on a
+      // first cast deserves more than a generic nod, and so does a misfire.
+      if (info.reached) {
+        ctx.speak?.(`You reached — T${info.tier} out of a T${info.stewardTier} body, paid in ${info.reachPath === "bloodDebt" ? "Blood Debt" : "Surge"}. Bold. The ledger noticed.`);
+      } else if (info.misfire) {
+        ctx.speak?.("It got away from you — that's a misfire, and misfires are data. Read the card; the table it rolled on is the one your stance chose.");
+      } else if (info.success) {
+        ctx.speak?.(`"${info.label}" lands. Cost you ${info.cost?.clarity ?? 0} Clarity${info.cost?.noise ? ` and ${info.cost.noise} Noise` : ""}. Reality filed the paperwork.`);
+      } else {
+        ctx.speak?.("Didn't take. No shame in it — the cost was paid either way, which is the part worth remembering.");
+      }
+      markFired("fourththing.manifestationCast");
+    };
+    const onAnim = (data = {}) => {
+      const a = data.actor || data.sourceToken?.actor;
+      if (a?.id !== ctx.steward?.id) return;
+      ctx.speak?.("There it is. Reality filed the paperwork.");
+      markFired("itemAnimated (backstop)");
+    };
+    Hooks.on("createItem", onCreate);
+    Hooks.on("fourththing.manifestationCast", onCast);
+    Hooks.on("fourththing:itemAnimated", onAnim);
+
+    ctx.prompt({
+      title: FALLBACK_TITLE,
+      content:
+        `<p><b>1.</b> Build a manifestation in the <b>Manifestation Engine</b> (it should be open; otherwise your sheet's Manifestations tab has the build button).</p>` +
+        `<p><b>2.</b> <b>Invoke</b> it from your sheet — read the stance options and the cost line before you commit.</p>` +
+        `<p><i>Engine misbehaving, or you'd rather build one later? Move on — you can author manifestations any time.</i></p>`,
+      label: "Move on"
+    }).then(() => done());
+
+    return () => {
+      Hooks.off("createItem", onCreate);
+      Hooks.off("fourththing.manifestationCast", onCast);
+      Hooks.off("fourththing:itemAnimated", onAnim);
+      closeFallback();
+    };
+  },
+
+  exit: async (ctx) => {
+    await ctx.speak(ctx._maniName
+      ? `${ctx._maniName} is yours now — it goes where you go. Keep it in reach; you're about to need it.`
+      : "You can author manifestations whenever the mood takes you. Keep at least one loaded before trouble finds you.");
+    await _pause(700);
+    await ctx.speak("Crew at your back, Surge in the bank, something of your own making in your hands. That's a Steward. *bzzt* — Now we find out whether any of it survives contact.");
+    ctx._maniBefore = null;
+  }
+};
+
+/* ═════════════════════════ COMBAT SIMULATOR ═════════════════════════
+ * The Proving Ground, live-fire. Placed AFTER outfitting (so the gear they just
+ * bought gets used) and BEFORE travel (so nobody meets the Syndicate having never
+ * thrown a punch). Owner's design, 2026-08-17.
+ *
+ * Two kinds of enemy, and the difference IS the lesson:
+ *   QLIPHOTHIC — hollow things wearing a shape. Put them down; nothing is lost.
+ *   SENTIENT   — people. They fold once they're clearly losing. Killing them
+ *                anyway is ALLOWED — and puts a point on the Steward's DARKNESS
+ *                track. The consequence teaches the moral spine, not just the
+ *                buttons; the simulator never blocks the kill, it just remembers.
+ *
+ * The waves also make the player USE the kit: husks shrug off kinetic (so the
+ * bought gun alone won't finish them), one waits on a gantry (so elevation and
+ * knocking things off it come up), and the last wave is a vehicle (so they board
+ * their own rig and fight from it).
+ */
+
+// ⚠ POSITIONS ARE FIRST-PASS and want an eyeball pass in-world. Only two points
+// on the owner's Proving Ground art are known-good — the dry bank at ~0.60/0.62
+// and ~0.62/0.52, from the meatsuit beat's 2026-08-17 nudge (the earlier marks
+// put the Steward in the river). Everything below is laid out around that bank
+// and kept in ONE table so nudging is a one-line edit per foe.
+const SIM_STEWARD_AT = { xFrac: 0.62, yFrac: 0.66 };
+const SIM_RIG_AT     = { xFrac: 0.70, yFrac: 0.70 };
+
+const SIM_WAVES = [
+  {
+    key: "husks",
+    // Hollow things. Resistant to kinetic, vulnerable to sephirotic — a bought
+    // rifle does half, a manifestation does double. That asymmetry is the
+    // damage-type lesson, delivered by the foes rather than by a lecture.
+    brief: "Three hollow things on the field. Qliphothic — nobody's home, nothing to save. Put them down.",
+    coach: "Read them before you shoot: they're RESISTANT to kinetic and VULNERABLE to sephirotic. Your rifle will feel blunt; anything with light in it will not. This is what the manifestation you just authored is FOR — mix your damage types, that's the whole trick.",
+    foes: [
+      { name: "Hollow Thing",   foeClass: "qliphothic", body: 4, xFrac: 0.46, yFrac: 0.58,
+        resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "Hollow Thing",   foeClass: "qliphothic", body: 4, xFrac: 0.40, yFrac: 0.46,
+        resistances: ["kinetic"], vulnerabilities: ["sephirotic"] },
+      { name: "Gantry Hollow",  foeClass: "qliphothic", body: 3, xFrac: 0.52, yFrac: 0.40, elevation: 20, perch: true,
+        resistances: ["kinetic"], vulnerabilities: ["sephirotic"] }
+    ]
+  },
+  {
+    key: "scavengers",
+    // People. Deliberately tougher than the husks (body 5 ≈ 25 integrity) so
+    // there is ROOM to notice the track falling and stop — a one-shot kill would
+    // teach nothing except that the lesson was unwinnable.
+    brief: "Second wave's different. Two scavengers — Sentient. Living people, scared and armed.",
+    coach: "Watch their INTEGRITY as you work. Take them low and they fold — that's a save, and it costs you nothing. Put them at zero and that's a kill: allowed, nobody will stop you, and it goes on your Darkness. Your call, One. It always is.",
+    foes: [
+      { name: "Scavenger — Bit",  foeClass: "sentient", body: 5, xFrac: 0.44, yFrac: 0.62 },
+      { name: "Scavenger — Coll", foeClass: "sentient", body: 5, xFrac: 0.38, yFrac: 0.52 }
+    ]
+  },
+  {
+    key: "guntruck",
+    // Rig-typed, so it takes ram/weapon damage on system.integrity and fires the
+    // system's own bbttcc:rig:destroyed cascade — the same detection the driving
+    // beat gates on. Nothing crews it, so there is no sentient question here.
+    brief: "Last one's dug in at the far end. A gun-truck — qliphothic-run, no driver worth the name.",
+    coach: "This is a VEHICLE. Fight it with yours: select your Steward, right-click, 🚚 board your rig, and bring the guns. On foot you'll be outranged and outweighed.",
+    rig: { name: "Qliphothic Gun-Truck", xFrac: 0.36, yFrac: 0.56, size: 2, integrity: 14, bracket: "medium" }
+  }
+];
+
+const combatSim = {
+  id: "combat_sim",
+  title: "The Proving Ground",
+  scope: "personal",
+
+  enter: async (ctx) => {
+    ctx._spawned = [];
+    ctx._sim = {
+      scene: null,
+      waveIdx: -1,
+      records: new Map(),          // actorId → foe record for the CURRENT wave
+      tally: { husksDown: 0, saved: 0, killed: 0, rigsWrecked: 0, darkness: 0 },
+      advancing: false,
+      finished: false
+    };
+
+    await ctx.speak("Gear's bought, crew's behind you, and you're carrying something you built yourself. Now the part the manuals skip: what all of it does when something is trying to end you. Proving Ground, live-fire. *bzzt*");
+    await _pause(900);
+
+    // Same scene as the meatsuit beat — the owner's Proving Ground art, reused
+    // rather than authoring a second arena (owner ask 2026-08-17).
+    const scene = await _requireScene(ctx, "meatsuit-range", "Proving Ground");
+    ctx._sim.scene = scene;
+    if (scene) { await _enterScene(scene, "Proving Ground", ctx.lane); await _pause(800); }
+
+    // Everything below writes to actors the player must own — repair the grant
+    // before the first shot rather than after the first permission wall.
+    try { await _stage()?.ensureOwned?.([ctx.faction?.id, ctx.rig?.id, ctx.steward?.id], ctx.user?.id); }
+    catch (e) { console.warn(TAG, "sim ownership repair failed", e); }
+
+    const stage = _stage();
+    if (scene && stage) {
+      const st = await stage.ensureTokenOnScene(ctx.steward, scene, _scenePoint(scene, SIM_STEWARD_AT.xFrac, SIM_STEWARD_AT.yFrac, ctx.lane));
+      if (st?.created) ctx._spawned.push({ token: st.doc });
+      // The rig rides along from the start — wave 3 needs it, and a player who
+      // wants to fight the whole sim from the cab should be able to.
+      if (ctx.rig) {
+        const rt = await stage.ensureTokenOnScene(ctx.rig, scene, _scenePoint(scene, SIM_RIG_AT.xFrac, SIM_RIG_AT.yFrac, ctx.lane));
+        if (rt?.created) ctx._spawned.push({ token: rt.doc });
+      }
+    }
+
+    // The foes have no AI — somebody has to play them. Tell the GM what's coming
+    // and what the beat is watching for, so the opposition can actually push back
+    // instead of standing there being shot. Same whisper pattern the raid beats use.
+    try {
+      await ChatMessage.create({
+        whisper: game.users.filter(u => u.isGM).map(u => u.id),
+        speaker: { alias: "◇ OPERATOR" },
+        content:
+          `<p><b>Onboarding combat simulator — ${ctx.steward?.name || "a student"} is on the Proving Ground.</b></p>` +
+          `<p>Three waves, spawned one at a time as each clears: <b>3 hollow</b> (qliphothic — one starts on a gantry at elevation 20)` +
+          ` → <b>2 scavengers</b> (sentient) → <b>1 gun-truck</b> (rig).</p>` +
+          `<p>Nothing runs them but you — take their turns if you want a real fight. The beat watches integrity itself:` +
+          ` a sentient dropped to 40% or less <b>surrenders</b> (Calmed, track floored); killed outright, it adds <b>+1 Darkness</b>` +
+          ` to ${ctx.steward?.name || "the student"}. Both outcomes are legal — please don't talk them out of either one.</p>`
+      });
+    } catch (e) { console.warn(TAG, "combat sim GM briefing failed", e); }
+
+    await _pause(500);
+    await ctx.speak("Ground rules. Two kinds of thing come at you out here. QLIPHOTHIC are hollow — a shape with nothing living in it. Kill them; there's nothing to save. SENTIENT are people. People fold when they're losing, and a folded enemy is a saved one.");
+    await _pause(1000);
+    await ctx.speak("You can kill the sentient ones. I won't stop you, and neither will the rules. It'll just show up on your DARKNESS track, and it stays there. That's not a punishment, One — it's a receipt.");
+    ctx.riff({ beat: "combat_sim", line: "Player is about to fight their first live-fire simulation — hollow things first, then people they could spare.", intent: "Drill-instructor daemon with one uneasy note about the second wave. One line." });
+  },
+
+  detect: (ctx, done) => {
+    const sim = ctx._sim;
+    const stage = _stage();
+    const FALLBACK_TITLE = "◇ OPERATOR — Proving Ground";
+    const closeFallback = () => globalThis.game?.bbttcc?.onboarding?.ui?.closeDialogByTitle?.(FALLBACK_TITLE);
+
+    if (!sim?.scene || !stage) {
+      // No stage to fight on (missing scene, or no GM online to run the spawn
+      // ops) — say so and let them pass rather than gating on foes that will
+      // never exist.
+      ctx.prompt({
+        title: FALLBACK_TITLE,
+        content: "<p>The Proving Ground isn't available right now — no arena, or no GM online to run the simulation.</p><p>Continue when ready; you can replay this beat later.</p>",
+        label: "Continue"
+      }).then(() => done());
+      return closeFallback;
+    }
+
+    /** Current integrity for either shape of actor. Rigs keep the canonical value
+     *  at system.integrity; characters/npcs at system.derived.integrity. */
+    const integrityOf = (actor, isRig) => {
+      const sys = actor?.system?.system ?? actor?.system;
+      const raw = isRig
+        ? foundry.utils.getProperty(sys, "integrity.value")
+        : foundry.utils.getProperty(sys, "derived.integrity.value");
+      const n = Number(raw);
+      return Number.isFinite(n) ? n : null;
+    };
+
+    const finish = () => {
+      if (sim.finished) return;
+      sim.finished = true;
+      done();
+    };
+
+    /** Spawn the next wave, or end the simulation when they're all resolved. */
+    const advance = async () => {
+      if (sim.advancing || sim.finished) return;
+      sim.advancing = true;
+      try {
+        sim.waveIdx += 1;
+        sim.records.clear();
+        const wave = SIM_WAVES[sim.waveIdx];
+        if (!wave) { finish(); return; }
+
+        await ctx.speak(wave.brief);
+        await _pause(700);
+
+        if (wave.rig) {
+          const sp = await stage.spawnObstacle?.(sim.scene, {
+            name: wave.rig.name, size: wave.rig.size, integrity: wave.rig.integrity, bracket: wave.rig.bracket,
+            ..._scenePoint(sim.scene, wave.rig.xFrac, wave.rig.yFrac, ctx.lane)
+          });
+          if (sp?.actor) {
+            ctx._spawned.push(sp);
+            sim.records.set(sp.actor.id, {
+              actorId: sp.actor.id, tokenId: sp.token?.id || null, name: sp.actor.name,
+              foeClass: "qliphothic", isRig: true, perch: false, resolved: false,
+              max: Number(wave.rig.integrity) || 0, last: Number(wave.rig.integrity) || 0
+            });
+          }
+        } else {
+          for (const f of (wave.foes || [])) {
+            const sp = await stage.spawnFoe?.(sim.scene, {
+              name: f.name, foeClass: f.foeClass, body: f.body, size: f.size ?? 1,
+              elevation: f.elevation ?? 0,
+              resistances: f.resistances ?? [], vulnerabilities: f.vulnerabilities ?? [],
+              ..._scenePoint(sim.scene, f.xFrac, f.yFrac, ctx.lane)
+            });
+            if (!sp?.actor) continue;
+            ctx._spawned.push(sp);
+            const max = Number(sp.integrityMax) || Number(integrityOf(sp.actor, false)) || 0;
+            sim.records.set(sp.actor.id, {
+              actorId: sp.actor.id, tokenId: sp.token?.id || null, name: sp.actor.name,
+              foeClass: f.foeClass, isRig: false, perch: !!f.perch, resolved: false,
+              shoved: false, max, last: max
+            });
+          }
+        }
+
+        if (!sim.records.size) {
+          // Nothing spawned (relay dropped, or the wave is empty) — don't hang
+          // the player on foes that don't exist.
+          console.warn(TAG, `combat sim: wave "${wave.key}" spawned nothing — skipping it.`);
+          sim.advancing = false;
+          return advance();
+        }
+
+        await _pause(500);
+        await ctx.speak(wave.coach);
+      } catch (e) {
+        console.warn(TAG, "combat sim wave advance failed", e);
+      } finally {
+        sim.advancing = false;
+      }
+    };
+
+    /** Retire one foe and, when the wave is clear, roll on. */
+    const resolveFoe = async (rec, how) => {
+      if (!rec || rec.resolved) return;
+      rec.resolved = true;
+      if (how === "saved") {
+        sim.tally.saved += 1;
+        try { await stage.foeSurrender?.(rec.actorId); } catch (_) {}
+        await ctx.speak?.(`${rec.name} drops their weapon — hands up, still breathing. That's a save.`);
+      } else if (how === "killed" && rec.foeClass === "sentient") {
+        sim.tally.killed += 1;
+        // The receipt. Darkness is a manual track — nothing else writes it.
+        let landed = null;
+        try { landed = await stage.raiseDarkness?.(ctx.steward?.id, 1, `killed ${rec.name} (onboarding sim)`); } catch (_) {}
+        if (landed?.ok && landed.after > landed.before) {
+          sim.tally.darkness += (landed.after - landed.before);
+          await ctx.speak?.(`${rec.name} is dead. Darkness ${landed.before} → ${landed.after}. I'm not scolding you, One — I'm just the one who writes it down.`);
+        } else {
+          await ctx.speak?.(`${rec.name} is dead. That one was a person.`);
+        }
+      } else if (how === "gone") {
+        console.log(TAG, `combat sim: "${rec.name}" left the board unresolved — not scored.`);
+      } else if (rec.isRig) {
+        sim.tally.rigsWrecked += 1;
+        await ctx.speak?.(`${rec.name} — wrecked. Nothing in it was ever alive.`);
+      } else {
+        sim.tally.husksDown += 1;
+        const left = [...sim.records.values()].filter(r => !r.resolved).length;
+        if (left > 0) await ctx.speak?.(`${rec.name} folds into nothing. ${left} still standing.`);
+      }
+      if ([...sim.records.values()].every(r => r.resolved)) {
+        await _pause(600);
+        await advance();
+      }
+    };
+
+    const onUpd = (actor, changed) => {
+      const rec = sim.records.get(actor?.id);
+      if (!rec || rec.resolved || sim.finished) return;
+      const val = integrityOf(actor, rec.isRig);
+      if (val === null) return;
+
+      // The gantry gives way. There is no rooftop-scale forced movement in the
+      // engine — every push in the system reads "GM resolves the knockback" —
+      // so the Proving Ground's rickety gantry resolves it here: first solid hit
+      // while it's up there and it goes over the rail (owner ask: knocking
+      // enemies out of buildings).
+      if (rec.perch && !rec.shoved && val < rec.last) {
+        rec.shoved = true;
+        (async () => {
+          const r = await stage.shoveOffPerch?.(sim.scene, rec.tokenId, rec.actorId);
+          if (r?.ok) await ctx.speak?.(`The gantry rail gives — ${rec.name} goes over the side and lands hard (${r.damage} impact). Height is a weapon, One. Use it on them before they use it on you.`);
+        })().catch(e => console.warn(TAG, "perch shove failed", e));
+      }
+      rec.last = val;
+
+      if (val <= 0) { resolveFoe(rec, "killed").catch(e => console.warn(TAG, "resolve(killed) failed", e)); return; }
+      // Sentients fold once they're clearly losing. Floor of 2 so a tiny-track
+      // foe still gets a window instead of jumping straight from full to dead.
+      if (rec.foeClass === "sentient" && rec.max > 0 && val <= Math.max(2, Math.ceil(rec.max * 0.4))) {
+        resolveFoe(rec, "saved").catch(e => console.warn(TAG, "resolve(saved) failed", e));
+      }
+    };
+
+    // Rig-typed foes announce their own death through the system's cascade —
+    // the same hook the driving beat's wrecks fire.
+    const onRigDestroyed = ({ rig } = {}) => {
+      const rec = sim.records.get(rig?.id);
+      if (rec) resolveFoe(rec, "killed").catch(e => console.warn(TAG, "resolve(rig) failed", e));
+    };
+
+    // Someone deleted the token instead of fighting it — retire it so the wave can
+    // still clear, but score it as neither a save nor a kill: the player didn't
+    // earn either number.
+    const onDelTok = (tokenDoc) => {
+      const rec = sim.records.get(tokenDoc?.actorId);
+      if (rec) resolveFoe(rec, "gone").catch(() => {});
+    };
+
+    Hooks.on("updateActor", onUpd);
+    Hooks.on("bbttcc:rig:destroyed", onRigDestroyed);
+    Hooks.on("deleteToken", onDelTok);
+
+    // First wave.
+    advance().catch(e => console.warn(TAG, "combat sim failed to start", e));
+
+    // Escape hatch — never trap the player in the simulator.
+    ctx.prompt({
+      title: FALLBACK_TITLE,
+      content:
+        `<p><b>Qliphothic</b> foes — kill them. <b>Sentient</b> foes — take them low and they surrender; killing them instead is allowed and adds <b>Darkness</b>.</p>` +
+        `<p>Mind damage types (the hollow ones shrug off kinetic), use height, and board your rig for the last wave.</p>` +
+        `<p><i>Stuck, or the simulation won't cooperate? End it and move on.</i></p>`,
+      label: "End the simulation"
+    }).then(() => finish());
+
+    return () => {
+      Hooks.off("updateActor", onUpd);
+      Hooks.off("bbttcc:rig:destroyed", onRigDestroyed);
+      Hooks.off("deleteToken", onDelTok);
+      closeFallback();
+    };
+  },
+
+  exit: async (ctx) => {
+    const t = ctx._sim?.tally || { husksDown: 0, saved: 0, killed: 0, rigsWrecked: 0, darkness: 0 };
+    await ctx.speak(`Simulation closed. ${t.husksDown} hollow put down, ${t.rigsWrecked} vehicle${t.rigsWrecked === 1 ? "" : "s"} wrecked, ${t.saved} spared, ${t.killed} killed.`);
+    await _pause(800);
+    if (t.killed > 0 && t.saved > 0) {
+      await ctx.speak(`You saved some and you didn't save others. That's the honest answer most Stewards give, and Darkness sits at ${t.darkness > 0 ? `+${t.darkness}` : "unchanged"} because of it. Carry it and keep going.`);
+    } else if (t.killed > 0) {
+      await ctx.speak("Clean, fast, and nobody walked away. It works. It always works. Ask yourself in ten turns whether it was still worth what it cost.");
+    } else if (t.saved > 0) {
+      await ctx.speak("Everyone who could be spared was spared. Harder than killing, every single time. Darkness track's clean — I noticed, and so will other things.");
+    } else {
+      await ctx.speak("Field's clear. Whatever else the Bad Eden takes from you, it won't be by surprise now.");
+    }
+
+    // Sever any boarding FIRST (un-hides the Steward's tokens everywhere), THEN
+    // remove the tutorial tokens — same ordering the driving beat needs.
+    try { await _stage()?.disembark?.(ctx.steward?.id, ctx.rig?.id); } catch (_) {}
+    try { await _stage()?.cleanup?.(ctx._spawned || []); } catch (_) {}
+    ctx._spawned = [];
+    ctx._sim = null;
   }
 };
 
@@ -756,6 +1571,8 @@ Hooks.once("ready", () => {
     incarnation, meatsuit, driving,
     stewardshipClaim, stewardshipTurn,
     outfitting,
+    crewOccult, surgeBeat, manifestations,
+    combatSim,
     travel, raidViolence, raidIntrigue, raidPresence, graduation
   ];
   for (const beat of ordered) ns.beats.register(beat);
