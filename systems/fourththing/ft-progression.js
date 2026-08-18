@@ -672,7 +672,7 @@ export async function fireResourceGrants(actor, cadence) {
 // Items declare triggers under flags.fourththing.triggers = [{
 //   event:    "on-attack-hit"|"on-damage-taken"|"on-skill-fail"
 //          |"on-self-or-ally-hit"|"on-would-drop-to-zero"|"on-soma-break"
-//          |"on-move"|"on-delivery"|"on-agreement"|... (closed enum, see survey),
+//          |"on-move"|"on-delivery"|"on-agreement"|"on-cast"|... (closed enum, see survey),
 //   predicate?: { tag?:[...], dieMin?:N, scope?:"self"|"ally"|"enemy", typeMatch?:"melee"|"radiant"|... },
 //   limit?:    { window:"turn"|"round"|"scene"|"soma-break"|"short-rest"|"session", uses:N },
 //   effect:    { kind, args } where kind ∈ {
@@ -684,6 +684,17 @@ export async function fireResourceGrants(actor, cadence) {
 //                "chat-prompt"        args:{templateKey, body?}  // GM-resolves manually
 //              }
 // }]
+//
+// on-cast (2026-08-17) — fires once per RESOLVED manifestation, from
+// castManifestation's single exit (every gate rejection returns long before it).
+//   tags   — stance ("hermetic"/"chaos"/"ascendant"), outcome ("success"/"fail",
+//            plus "misfire"), reach ("reach" + "reach-surge"/"reach-bloodDebt"),
+//            "miracle", tier ("t1".."t4"), stability ("instant"/"sustained"/
+//            "bound"/"enduring"), and the cast's intent + channel.
+//   amount — the manifestation's TIER, so {amountMin:3} = "T3 or above".
+//   maxDie — highest single die on the cast roll, as on-attack-hit does.
+// e.g. {event:"on-cast", predicate:{tag:["chaos"]}, limit:{window:"scene",uses:1},
+//       effect:{kind:"grant-resource", args:{resource:"surge", amount:1}}}
 //
 // Engine API:
 //   collectTriggers(actor, event)      → list of {trigger, sourceItemName, sourceItemId}

@@ -459,8 +459,34 @@ const FT_RIG_DEFENSE_BY_BRACKET = {
 // (`${tier × weight}d6`, target full, attacker half). Mirrors the
 // defense table's bracket axis. Light vs heavy → light takes more.
 const FT_RIG_BRACKET_WEIGHT = {
-  personal: 1, light: 2, medium: 3, heavy: 4, siege: 5
+  personal: 1, light: 2, medium: 3, heavy: 4, siege: 5,
+  // 2026-08-17 — the Rig Builder authors power-armour frames with bracket
+  // "mecha", which was never in this table: every mecha collision quietly took
+  // the `|| 3` fallback at the call sites. Stated explicitly so the number is a
+  // decision instead of an accident. Value keeps today's behaviour exactly —
+  // retune here if a walker should hit harder than a medium truck.
+  mecha: 3
 };
+
+// ─── Sail trim (2026-08-17) ──────────────────────────────────────────────────
+// Sail frames have always shipped raise-sail / lower-sail / tack-against-wind in
+// their action lists, but no sail state ever existed, so all three fell through
+// to the stub card. Trim lives on the rig at `flags.fourththing.combat.sail` and
+// is deliberately NOT a per-round flag — canvas you set stays set until someone
+// changes it. Absent/unknown reads as "working", which is a no-op, so every rig
+// that never touches a sail is unaffected.
+const FT_SAIL_TRIM = {
+  full:    { label: "Full Sail",    speedMult: 2,   evasion: -2, state: "sail-full",
+             blurb: "double steer distance, −2 Evasion" },
+  working: { label: "Working Sail", speedMult: 1,   evasion:  0, state: null,
+             blurb: "normal steer distance" },
+  reefed:  { label: "Reefed",       speedMult: 0.5, evasion: +2, state: "sail-reefed",
+             blurb: "half steer distance (min 1), +2 Evasion" }
+};
+function ftRigSailKey(rig) {
+  const key = String(rig?.flags?.fourththing?.combat?.sail || "working");
+  return FT_SAIL_TRIM[key] ? key : "working";
+}
 
 function ftRigBracketFor(actor) {
   const sys = actor?.system?.system ?? actor?.system ?? {};
@@ -829,7 +855,120 @@ function ftAlignmentMod(sephirah, intent, channel) {
 }
 
 function ftCap(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ""; }
-function ftNoiseClass(n) { return n >= 8 ? "noise-critical" : n >= 5 ? "noise-high" : n >= 3 ? "noise-mid" : "noise-ok"; }
+// ─── Noise bands ─────────────────────────────────────────────────────────────
+// 2026-08-17 — these thresholds used to live inlined in ftNoiseClass and nowhere
+// else, so nothing in the codebase could reason about them. That is precisely
+// why nothing could ever notice the thresholds the manifestation glossary talks
+// about ("high Noise feeds Corruption / Intrigue detection / Lattice attention
+// at GM thresholds") — the numbers existed only to pick a CSS class.
+// One ordered table now (high → low); ftNoiseClass reads it, and so does the
+// watcher below that announces a band change. Cutoffs unchanged: 8 / 5 / 3.
+// Each band carries its BITE (2026-08-17). Noise already had one real mechanical
+// effect — every point subtracts flat from your own cast total (see magicTest's
+// `- totalNoise`) — but the glossary promises two more that nothing implemented:
+// "Intrigue detection" and "Lattice attention". Those are these two columns:
+//   detection    — flat penalty to INTRIGUE-faculty checks. Being loud in the
+//                  weave makes covert work harder; it does NOT touch other
+//                  faculties, so this can't become a general debuff.
+//   misfireShift — pushes the misfire d10 UP when a cast fails. The Lattice
+//                  leaning on your work makes a failure fail worse. Deliberately
+//                  a DIFFERENT axis from the flat cast penalty, so a loud caster
+//                  is taxed once on the roll and once on the consequence — never
+//                  twice on the same number.
+// No per-turn attrition tick on purpose: Noise is self-inflicted by choosing
+// Chaos, and the linear cast penalty is already steep at the top band (−8 to −10
+// on a 2d10 roll). Chaos should be loud and unstable, not a slow poisoning.
+const FT_NOISE_BANDS = [
+  { key: "critical", min: 8, css: "noise-critical", label: "Screaming", color: "#ff6b6b",
+    detection: 3, misfireShift: 2,
+    meaning: "The Lattice is looking straight at them. −3 to Intrigue checks, misfires roll two bands worse, and every cast is already eating a −8-or-worse penalty. Corruption and worse attention are live at your discretion." },
+  { key: "high",     min: 5, css: "noise-high",     label: "Loud",      color: "#ffa94d",
+    detection: 2, misfireShift: 1,
+    meaning: "Loud enough to be found by anything that hunts by residue. −2 to Intrigue checks and misfires roll one band worse." },
+  { key: "mid",      min: 3, css: "noise-mid",      label: "Humming",   color: "#ffd43b",
+    detection: 1, misfireShift: 0,
+    meaning: "A detectable signature — anyone reading the weave nearby has something to read. −1 to Intrigue checks." },
+  { key: "ok",       min: 0, css: "noise-ok",       label: "Quiet",     color: "#8ce99a",
+    detection: 0, misfireShift: 0,
+    meaning: "Below the floor — nothing is listening yet." }
+];
+function ftNoiseBand(n) {
+  const v = Math.max(0, Number(n) || 0);
+  return FT_NOISE_BANDS.find(b => v >= b.min) ?? FT_NOISE_BANDS[FT_NOISE_BANDS.length - 1];
+}
+
+// The active Noise bite for an actor, shaped like _ftRadiationBite so the two
+// friction counters read the same way at every call site. Noise is a Steward
+// mechanic: rigs have no magic track, and factions live on Darkness instead.
+function _ftNoiseBite(actor) {
+  const none = { noise: 0, key: null, label: "Quiet", detection: 0, misfireShift: 0 };
+  if (!actor || (actor.type !== "character" && actor.type !== "npc")) return none;
+  if (actor.getFlag?.("bbttcc-factions", "isFaction") === true) return none;
+  const rawSys = actor.system?.system ?? actor.system;
+  const noise = Math.max(0, Number(rawSys?.magic?.noise?.value) || 0);
+  const band = ftNoiseBand(noise);
+  return { noise, key: band.key, label: band.label, detection: band.detection ?? 0, misfireShift: band.misfireShift ?? 0 };
+}
+function ftNoiseClass(n) { return ftNoiseBand(n).css; }
+
+// Read a value out of an update payload whichever shape it arrived in. Foundry
+// expands dotted keys before preUpdate, but callers in this file write both
+// `{"system.magic.noise.value": n}` and nested objects — check both rather than
+// depend on when expansion happens.
+function _ftChangedValue(changed, path) {
+  const nested = foundry.utils.getProperty(changed, path);
+  return nested !== undefined ? nested : changed?.[path];
+}
+
+// ─── Noise watcher ───────────────────────────────────────────────────────────
+// 2026-08-17 — Blood Debt has had `fourththing.bloodDebtChanged` for months;
+// Noise never got an equivalent, so a Steward could climb from Quiet to
+// Screaming without a single line of code noticing.
+//
+// WATCHED rather than routed through a setter, deliberately: Noise is written
+// from five different places in this file alone (chaos-cast gain, the misfire
+// "tear" band, Qliphothic Echo, Qliphothic terrain-on-failure, Scene Break
+// shave) and can also move via an Active Effect (see ae-keys-registry) or a GM
+// editing the sheet by hand. A pre/post update pair sees every one of those
+// without touching — or being able to break — any of them.
+Hooks.on("preUpdateActor", (actor, changed, options) => {
+  const next = _ftChangedValue(changed, "system.magic.noise.value");
+  if (next === undefined) return;
+  const prev = Number((actor.system?.system ?? actor.system)?.magic?.noise?.value) || 0;
+  const to = Math.max(0, Number(next) || 0);
+  if (to === prev) return;
+  // Rides along on the update so every client can report the same transition —
+  // `changed` alone never carries the previous value.
+  options.ftNoise = { from: prev, to };
+});
+
+Hooks.on("updateActor", (actor, changed, options, userId) => {
+  const n = options?.ftNoise;
+  if (!n) return;
+  const prevBand = ftNoiseBand(n.from);
+  const band     = ftNoiseBand(n.to);
+  const changedBand = band.key !== prevBand.key;
+  Hooks.callAll("fourththing.noiseChanged", actor, {
+    from: n.from, to: n.to, delta: n.to - n.from,
+    band: band.key, bandLabel: band.label,
+    prevBand: prevBand.key, prevBandLabel: prevBand.label,
+    crossedUp:   changedBand && n.to > n.from,
+    crossedDown: changedBand && n.to < n.from
+  });
+
+  // Announce an UPWARD band change once — from the client that made the write —
+  // whispered to the GMs, since every consequence of it is theirs to spend.
+  if (!changedBand || n.to < n.from || game.user?.id !== userId) return;
+  ChatMessage.create({
+    whisper: game.users.filter(u => u.isGM).map(u => u.id),
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="fourththing-roll" style="border-color:${band.color}">
+        <div class="ft-roll-header"><span class="ft-roll-name" style="color:${band.color}">📡 Noise threshold — ${ftEscapeHtml(actor.name)} is ${ftEscapeHtml(band.label)}</span></div>
+        <p style="margin:0.2rem 0;font-size:0.82rem">Noise <b>${n.from} → ${n.to}</b> · ${ftEscapeHtml(prevBand.label)} → <b>${ftEscapeHtml(band.label)}</b></p>
+        <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85">${ftEscapeHtml(band.meaning)}</p>
+      </div>`
+  }).catch(e => console.warn("[fourththing] noise band card failed", e));
+});
 function ftLabelFromMap(map, key, fallback = "") {
   return map?.[key]?.label ?? fallback ?? key;
 }
@@ -913,7 +1052,7 @@ function ftFindMeleeAttackItem(actor) {
 // with pre-flight: weapon must be a rig-weapon on a rig, caller must be
 // boarded on that rig as gunner/crew. The dialog itself enforces the
 // destroyed-rig guard and the per-round gunner gate.
-async function ftRigWeaponFire(steward, weapon) {
+async function ftRigWeaponFire(steward, weapon, options = {}) {
   if (!steward || !weapon) return;
   const subtype = weapon?.flags?.fourththing?.rigGear?.subtype;
   if (subtype !== "rig-weapon" || weapon.parent?.type !== "rig") {
@@ -955,7 +1094,7 @@ async function ftRigWeaponFire(steward, weapon) {
     ui.notifications?.warn(`${steward.name}: only Gunner or Crew can fire rig weapons (role: ${boardedRole}).`);
     return;
   }
-  return ftOpenEngageDialog(steward, weapon);
+  return ftOpenEngageDialog(steward, weapon, options);
 }
 
 // Cross-version user targeting (v14 removed User#updateTokenTargets — found
@@ -1285,7 +1424,8 @@ const _FT_COMBAT_VFX_PRESETS = {
   steam:     { color: 0xffb066, ringWidth: 4, maxRadiusMult: 1.50, durationMs: 820 },  // vent-heat
   surge:     { color: 0x6ee7b7, ringWidth: 4, maxRadiusMult: 1.20, durationMs: 640 },  // boost-system
   signal:    { color: 0xc1a3ff, ringWidth: 2, maxRadiusMult: 2.00, durationMs: 900 },  // signal (wide comms pulse)
-  suppress:  { color: 0xef6b4d, ringWidth: 4, maxRadiusMult: 1.60, durationMs: 760 }   // suppression
+  suppress:  { color: 0xef6b4d, ringWidth: 4, maxRadiusMult: 1.60, durationMs: 760 },  // suppression
+  stomp:     { color: 0xc9a227, ringWidth: 6, maxRadiusMult: 0.95, durationMs: 540 }   // stomp (heavy, tight, dust)
 };
 
 function _ftPlaceableForActor(actor) {
@@ -7187,13 +7327,19 @@ async function castManifestation(actor, item, {
   if (bloodDebtCost > 0) costPieces.push(`Blood Debt +${bloodDebtCost}`);
   if (noiseGain > 0) costPieces.push(`Noise +${noiseGain}`);
   if (reachPath) costPieces.push(`Reach→T${manTier} via ${reachPath === "surge" ? "Surge" : "Blood Debt"}`);
+  if (noiseMisfireShift > 0) costPieces.push(`Noise ${_ftNoiseBite(actor).label} — misfire +${noiseMisfireShift}`);
   if (cfg.ascendant) costPieces.push("Ascendant");
   if (tccDiscount > 0 && !cfg.ascendant) costPieces.push(`TCC discount −${tccDiscount}`);
   const costNote = costPieces.join(" · ") || "No mechanical cost";
 
   // Discipline misfire shift folds into modeMisfireBias (negative=better).
   const disciplineBandShift = Number(getMisfireBandShift(actor)) || 0;
-  const totalMisfireBias = cfg.misfireBias + disciplineBandShift;
+  // Noise "Lattice attention" (2026-08-17): a loud caster's failures land harder.
+  // Distinct axis from the flat `- totalNoise` already applied to the cast roll —
+  // that one decides IF you fail, this one decides how badly. Never both on the
+  // same number.
+  const noiseMisfireShift = _ftNoiseBite(actor).misfireShift;
+  const totalMisfireBias = cfg.misfireBias + disciplineBandShift + noiseMisfireShift;
 
   // Surface discipline shifts in the cost note so the GM/player sees the deltas.
   const discNote = summarizeDiscipline(actor);
@@ -7597,6 +7743,74 @@ async function castManifestation(actor, item, {
   if (item && ["sustained", "bound", "enduring"].includes(stability) && result?.success !== false) {
     await ftAddActiveManifestation(actor, item, { tier: manTier, stability, mode, reachPath, target, stabilizeBonus: rs.stabilize || 0 });
   }
+
+  // ⚡ Phase C trigger: on-cast (2026-08-17). Class automation could already
+  // react to swinging a sword (on-attack-hit) or being hit (on-damage-taken),
+  // but never to MANIFESTING — the one thing this setting is actually about, so
+  // no authored feature could key off it.
+  //
+  // Tags let a trigger discriminate by stance, outcome, reach, tier, stability
+  // and the manifestation's own intent/channel. `amount` is the manifestation's
+  // TIER, so a predicate of {amountMin: 3} reads as "when you cast T3 or above";
+  // `maxDie` mirrors on-attack-hit so {dieMin: 10} reads as "on an exploding
+  // cast". Fired BEFORE the notification hook below so any resource a trigger
+  // grants has already landed by the time listeners look.
+  try {
+    const castTags = [
+      mode,
+      result?.success !== false ? "success" : "fail",
+      result?.misfireData ? "misfire" : null,
+      reachPath ? "reach" : null,
+      reachPath ? `reach-${reachPath}` : null,
+      miracle ? "miracle" : null,
+      `t${manTier}`,
+      stability,
+      intent, channel
+    ].filter(Boolean);
+    const castDice = (result?.roll?.dice ?? [])
+      .flatMap(d => (d?.results ?? []).map(r => Number(r?.result) || 0));
+    await fireTriggers(actor, "on-cast", {
+      tags:   castTags,
+      maxDie: castDice.length ? Math.max(...castDice) : 0,
+      amount: manTier,
+      scope:  "self"
+    });
+  } catch (e) { console.warn("[fourththing] on-cast triggers failed", e); }
+
+  // 🪝 2026-08-17 — the one event the system never emitted. Casting is the
+  // setting's central verb, but only its CONSEQUENCES were hookable
+  // (fourththing.bloodDebtChanged, fourththing.overshoot, fourththing:itemAnimated),
+  // so listeners had to reconstruct the moment from shards. The onboarding
+  // teaching beat was reduced to watching Clarity fall — silently wrong for
+  // every zero-cost cast, since clarityCost floors at 0 for Ascendant, miracle,
+  // freeClarity, T0 Fiat, and a TCC casting T1 in Chaos (1 −1 stance −1 TCC).
+  //
+  // Fired at the SINGLE exit, so it only ever describes a cast that actually
+  // resolved: every gate above (lockout, out-of-reach, unaffordable, pool
+  // refusal) returns false long before this line. Wrapped so a listener that
+  // throws can't corrupt the caller's return value.
+  //
+  // Dot-namespaced to match the system's other ten hooks (fourththing.stabilized,
+  // .bloodDebtChanged, .enteredLastStand, …). `fourththing:itemAnimated` is the
+  // lone colon holdout and stays that way — other code already listens to it.
+  try {
+    Hooks.callAll("fourththing.manifestationCast", actor, {
+      item:        item ?? null,
+      label,
+      tier:        manTier,          // the manifestation's tier
+      stewardTier,                   // the caster's own — differs whenever reached
+      mode,                          // hermetic | chaos | ascendant
+      stance:      cfg?.label ?? mode,
+      reachPath:   reachPath || "",  // "" | "surge" | "bloodDebt"
+      reached:     !!reachPath,
+      success:     result?.success !== false,
+      misfire:     result?.misfireData ?? null,
+      target:      target ?? null,
+      stability,                     // instant | sustained | bound | enduring
+      miracle:     !!miracle,
+      cost: { clarity: clarityCost, noise: noiseGain, bloodDebt: bloodDebtCost }
+    });
+  } catch (e) { console.warn("[fourththing] fourththing.manifestationCast listener threw", e); }
 
   return result;
 }
@@ -10958,7 +11172,7 @@ const FT_KNOB_TIPS = {
   reach:       "Reach — casting one tier above your own. Surge: misfire on the higher column. Blood Debt: +1 Blood Debt, no misfire. Two tiers above is rejected. Cosmic Linguist Discipline reduces Blood-Debt-reach cost.",
   misfire:     "Misfire — d10 failure table (1-2 mild → 10 catastrophic). Hermetic shifts d10 −2, Chaos +2, Ascendant skips. Reach pushes the column up by one tier. Wyrdlens Discipline shifts the d10 down (better outcomes).",
   concurrency: "Concurrency — count of sustained / bound / enduring manifestations active at once. No hard cap; soft-capped by Clarity needed to pay each tick's upkeep. Pactkeeper Discipline grants free upkeep slots (first N entries cost 0).",
-  noise:       "Noise — metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool. Doesn't drop on its own; high Noise feeds Corruption / Intrigue detection / Lattice attention at GM thresholds. Hermetic and Ascendant generate 0 Noise. Scene Break shaves 1.",
+  noise:       "Noise — metaphysical residue from Chaos-mode casts (+2 per cast). 0–10 pool, and it doesn't drop on its own; Scene Break shaves 1. Hermetic and Ascendant generate 0. BITE: every point is a flat −1 to your own cast rolls, and the band adds more — Humming (3+) −1 to Intrigue checks; Loud (5+) −2 and misfires roll one band worse; Screaming (8+) −3 and two bands worse, with Corruption / Lattice attention live at the GM's discretion.",
   bloodDebt:   "Blood Debt — separate ledger that catches up later. Accrued by Blood-Debt-reach (+1) and Ascendant casts (+1). High Blood Debt has narrative consequences set by the GM.",
   workings:    "Workings vs Forms — Workings (instant) resolve and end. Forms (sustained / bound / enduring) persist and pay upkeep. Only Trad Caster Classes can manifest workings; non-TCCs are restricted to forms.",
   tccDiscount: "TCC discount — Trad Caster Classes pay 1 less Clarity per cast (floor 0). Stacks with mode shifts. Surfaces in the cost note when it fires.",
@@ -10974,7 +11188,8 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
   const attrI    = sys.attributes?.[intent]?.value  ?? 0;
   const attrC    = sys.attributes?.[channel]?.value ?? 0;
   const alignMod = ftAlignmentMod(sephirah, intent, channel);
-  const nc       = ftNoiseClass(noise);
+  const nc        = ftNoiseClass(noise);
+  const noiseBandInfo = ftNoiseBand(noise);
   const signature = item?.system?.manifestation?.signature ?? "";
   const thirdThing = item?.system?.manifestation?.thirdThing ?? "";
 
@@ -11144,9 +11359,9 @@ function buildCastDialogHTML(actor, { intent, channel, sephirah, label, item = n
         <span class="ft-prev-label">Clarity</span>
         <span class="ft-prev-val ft-clarity">${clarity} / ${clarityMax}</span>
       </span>
-      <span class="ft-prev-stat" title="${FT_KNOB_TIPS.noise}">
+      <span class="ft-prev-stat" title="${FT_KNOB_TIPS.noise}&#10;&#10;${ftEscapeHtml(noiseBandInfo.label)} — ${ftEscapeHtml(noiseBandInfo.meaning)}">
         <span class="ft-prev-label">Noise</span>
-        <span class="ft-prev-val ${nc}">${noise}</span>
+        <span class="ft-prev-val ${nc}">${noise}${noiseBandInfo.key !== "ok" ? ` <small style="opacity:0.8">${ftEscapeHtml(noiseBandInfo.label)}</small>` : ""}</span>
       </span>
       <span class="ft-prev-stat" title="${FT_KNOB_TIPS.bloodDebt}">
         <span class="ft-prev-label">Blood Debt</span>
@@ -13505,7 +13720,13 @@ Hooks.once("init", function () {
     // Radiation Sickness — flat penalty to faculty checks AND sheet aptitude
     // checks (both route through attributeTest via the sheet's _onFtRoll).
     const _radPen = _ftRadiationBite(actor).rollPenalty;
-    const totalBonus = attrVal + skillVal + aeAttr + aeSkill + _framePushBonus - _radPen;
+    // Noise "Intrigue detection" (2026-08-17) — the glossary's second promised
+    // consequence, finally real. Scoped to INTRIGUE checks alone: a caster
+    // trailing metaphysical residue is harder to hide, but Noise must not become
+    // a general debuff (it already taxes every cast total directly).
+    const _noiseBite = _ftNoiseBite(actor);
+    const _noisePen  = attribute === "intrigue" ? _noiseBite.detection : 0;
+    const totalBonus = attrVal + skillVal + aeAttr + aeSkill + _framePushBonus - _radPen - _noisePen;
 
     // Dreamwalker per-rest one-shot bonus dice — consumed on use.
     const _dw = _ftReadDwOneShots(actor, { context: "check" });
@@ -15374,6 +15595,21 @@ Hooks.once("init", function () {
   game.fourththing.ftOpenEngageDialog = ftOpenEngageDialog;
   game.fourththing.ftOpenCastDialog   = ftOpenCastDialog;
   game.fourththing.classifyPrinciple  = ftClassifyPrinciple;
+  // The manifestation glossary + knob tooltips, exposed 2026-08-17 so the
+  // onboarding teaching slides quote the ENGINE's own definitions instead of
+  // paraphrasing them into a second, drifting copy. Same HTML the cast dialog's
+  // coach panel appends below itself.
+  game.fourththing.manifestationGlossaryHTML = buildManifestationGlossaryHTML;
+  // Noise band lookup, exposed alongside the `fourththing.noiseChanged` hook so
+  // a listener can label a transition without re-deriving the cutoffs.
+  game.fourththing.noiseBand  = ftNoiseBand;
+  game.fourththing.noiseBands = FT_NOISE_BANDS;
+  // The "what shape is it?" chooser that fronts the wizard — TCC-gated, and the
+  // canonical way to author a NEW manifestation. Exposed so the onboarding
+  // teaching beat opens the same door the sheet does, rather than jumping past
+  // the shape choice it just spent a slide explaining.
+  game.fourththing.openManifestationStarterDialog = openManifestationStarterDialog;
+  game.fourththing.knobTips = FT_KNOB_TIPS;
   // ftPlayAutoAnimation — exposed 2026-08-11 so the player HUD's ability buttons
   // fire the same AA/VFX bridge (and the fourththing:itemAnimated hook) as the
   // sheet's use path. ft-class-automation already calls this via optional
@@ -15729,6 +15965,7 @@ Hooks.once("init", function () {
   // Exposed so the separate ft-progression.js roll path (and any external caller)
   // can read the radiation bite without importing this module.
   game.fourththing.radiationBite = _ftRadiationBite;
+  game.fourththing.noiseBite     = _ftNoiseBite;
 
   game.fourththing.toggleCondition = async function (actor, condKey) {
     const rawSys  = actor.system?.system ?? actor.system;
@@ -16435,6 +16672,11 @@ Hooks.once("init", function () {
         if (cmb.holding) sys.derived.guard.value   += Number(cmb.holdingBonus ?? 1);
         if (cmb.evading) sys.derived.evasion.value += Number(cmb.evadingBonus ?? 2);
         if (cmb.brace)   sys.derived.guard.value   += Number(cmb.braceBonus   ?? 1);
+        // Sail trim is persistent, not per-round: full canvas is fast and clumsy,
+        // reefed is slow and nimble. No sail set ⇒ "working" ⇒ 0, so rigs that
+        // never raise a sail are untouched.
+        const _sailEva = FT_SAIL_TRIM[String(cmb.sail || "")]?.evasion ?? 0;
+        if (_sailEva) sys.derived.evasion.value += _sailEva;
         // B11.B mirror: canonical integrity + defenses surface through the
         // derived path so the unified _applyDamageToActor read flow Just
         // Works for rigs. Writes still target system.integrity.value (the
@@ -22768,11 +23010,95 @@ function _ftFindRigsForSteward(stewardId) {
  * @param {Actor} rig     - rig actor
  * @param {string} role   - "pilot" | "gunner" | "engineer" | "crew" (default: best fit)
  */
-async function ftBoardRig(steward, rig, role = null) {
+/** 🚚 Boarding should hand the player the vehicle, not leave them holding an
+ *  invisible passenger. The board flow hides the steward's token but Foundry
+ *  keeps it CONTROLLED — so it sits under the rig icon, and every click on the
+ *  rig just re-selects the invisible token beneath it. Players can't tell they
+ *  are driving the wrong thing, and won't think to re-select (owner report
+ *  2026-08-17). These helpers move the canvas selection with the fiction:
+ *  board → control the rig, disembark → control the steward again.
+ *
+ *  Selection is per-CLIENT state, but boarding runs GM-side (see the relay
+ *  above), so the GM broadcasts the swap once the token work is done and each
+ *  client decides for itself whether the message is about them.
+ */
+function _ftSyncBoardSelection({ stewardId, rigId, mode = "board", initiatorUserId = null } = {}) {
+  try {
+    if (!canvas?.ready || !canvas.tokens) return;
+    const steward = game.actors?.get(stewardId);
+    if (!steward) return;
+
+    // Whose selection is this? The user who clicked (GM or player), plus the
+    // player who owns the steward when someone boarded on their behalf (the
+    // onboarding director does exactly that). Everyone else no-ops — never
+    // steal a bystander's selection, and never yank the GM's just because a
+    // player at the far end of the map climbed into a truck.
+    const iAmInitiator = !!initiatorUserId && game.user?.id === initiatorUserId;
+    const iOwnSteward  = !game.user?.isGM && !!steward.isOwner;
+    if (!iAmInitiator && !iOwnSteward) return;
+
+    const tokensFor = (actorId) => actorId ? canvas.tokens.placeables.filter(t => t.actor?.id === actorId) : [];
+    const stewardTokens = tokensFor(stewardId);
+    const rigTokens     = tokensFor(rigId);
+    // Foundry only lets a user control a token they OWN. Crew who hold mere
+    // Observer on the rig (the default grant — see _ftGrantRigObserverToStewardOwners)
+    // physically cannot select it.
+    const canDrive = (tok) => !!tok && (game.user?.isGM || !!tok.actor?.isOwner);
+
+    if (mode === "board") {
+      const rigToken = rigTokens.find(canDrive) ?? rigTokens[0] ?? null;
+      if (!rigToken) return;                       // rig isn't on this scene
+      if (!canDrive(rigToken)) {
+        // Passenger, not pilot. Leave the selection alone and say why, rather
+        // than deselecting them into nothing.
+        if (stewardTokens.some(t => t.controlled)) {
+          ui.notifications?.info(`Aboard ${rigToken.actor?.name ?? "the rig"} as crew — whoever owns it drives.`);
+        }
+        return;
+      }
+      for (const t of stewardTokens) t.release();
+      rigToken.control({ releaseOthers: true });
+      ui.notifications?.info(`You have the controls — move ${rigToken.actor?.name ?? "the rig"}, not ${steward.name}.`);
+    } else {
+      // Disembark: only hand the selection back if there's something to hand
+      // it to, so a failed lookup can't leave the client with nothing selected.
+      const stewardToken = stewardTokens.find(canDrive) ?? null;
+      if (!stewardToken) return;
+      for (const t of rigTokens) t.release();
+      stewardToken.control({ releaseOthers: true });
+      ui.notifications?.info(`Back on foot — ${steward.name} is yours again.`);
+    }
+  } catch (e) {
+    console.warn("[fourththing] board selection sync failed", e);
+  }
+}
+
+/** Tell every client to re-point its selection. The socket emit does NOT loop
+ *  back to the sender, so the local client is synced by hand. */
+function _ftBroadcastBoardSelection(payload) {
+  try { game.socket?.emit?.("system.fourththing", { t: "ft-boardSelection", ...payload }); }
+  catch (e) { console.warn("[fourththing] board selection broadcast failed", e); }
+  _ftSyncBoardSelection(payload);
+}
+
+async function ftBoardRig(steward, rig, role = null, { initiatorUserId = game.user?.id ?? null } = {}) {
   if (!steward || !rig || rig.type !== "rig") return;
   if (rig.system?.identity?.state === "destroyed") {
     ui.notifications?.warn(`${rig.name} is destroyed and cannot be boarded.`);
     return;
+  }
+  // 2026-08-17 — the crew action `counter-sabotage` ("repel boarders") is a
+  // reaction that seals the rig for the round; this is its consumer. Only NEW
+  // arrivals are refused — anyone already in a crew slot can still re-seat, so
+  // a crew's own defence can never lock them out of their own rig.
+  {
+    const _repelling = rig.flags?.fourththing?.combat?.counterSabotage;
+    const _alreadyCrew = (rig.system?.crew?.slots ?? []).some(sl => sl?.actorId === steward.id);
+    if (_repelling && !_alreadyCrew) {
+      const _by = rig.flags?.fourththing?.combat?.counterSabotageBy;
+      ui.notifications?.warn(`${rig.name} is repelling boarders${_by ? ` (${_by})` : ""} — ${steward.name} cannot get aboard this round.`);
+      return;
+    }
   }
 
   // 2026-05-18 — Boarding mutates the rig actor (system.crew.slots),
@@ -22790,7 +23116,7 @@ async function ftBoardRig(steward, rig, role = null) {
       ui.notifications?.warn("No GM is online to confirm boarding.");
       return;
     }
-    game.socket?.emit?.("system.fourththing", { t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role });
+    game.socket?.emit?.("system.fourththing", { t: "ft-boardRig", stewardId: steward.id, rigId: rig.id, role, initiatorUserId });
     ui.notifications?.info(`Boarding request sent — ${steward.name} → ${rig.name}.`);
     return;
   }
@@ -22867,6 +23193,21 @@ async function ftBoardRig(steward, rig, role = null) {
       if (!stewardTokens.length) continue;
       const rigTokenDoc = scene.tokens.find(t => t.actorId === rig.id) ?? null;
       const rigSight = rigTokenDoc?.sight?.toObject?.() ?? rigTokenDoc?.sight ?? null;
+      // 🔦 2026-08-17 — the rig token is about to BECOME the driver's avatar
+      // (selection moves to it, see _ftSyncBoardSelection), so it has to be
+      // able to see. Rig tokens are routinely authored with vision off — the
+      // same reason the steward's copied sight is force-enabled below — and a
+      // CONTROLLED sightless token is a black screen. Switch it on, marking
+      // that we did so disembark can put it back as the GM authored it.
+      if (rigTokenDoc && rigTokenDoc.sight?.enabled === false) {
+        try {
+          await scene.updateEmbeddedDocuments("Token", [{
+            _id: rigTokenDoc.id,
+            "sight.enabled": true,
+            "flags.fourththing.boardVisionOverride": true
+          }]);
+        } catch (e) { console.warn("[fourththing] board: rig vision enable failed", e); }
+      }
       const updates = stewardTokens.map(t => {
         const u = { _id: t.id, hidden: true };
         if (rigTokenDoc) {
@@ -22904,6 +23245,9 @@ async function ftBoardRig(steward, rig, role = null) {
 
   // Refresh rig token (boarded count badge)
   _ftRefreshRigTokenBadge(rig);
+
+  // Hand the wheel over on every client that cares (see _ftSyncBoardSelection).
+  _ftBroadcastBoardSelection({ stewardId: steward.id, rigId: rig.id, mode: "board", initiatorUserId });
 
   ui.notifications?.info(`${steward.name} boarded ${rig.name} as ${slots[idx].role}.`);
 }
@@ -22955,7 +23299,7 @@ Hooks.once("ready", async () => {
  *  2026-05-19 — Was a single-rig clear keyed on the actor flag; that
  *  left orphan crew.slots on prior rigs after a delete-replace token
  *  cycle or a boarding that bypassed disembark. Now sweeps all rigs. */
-async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
+async function ftDisembarkSteward(steward, { rigId: explicitRigId, initiatorUserId = game.user?.id ?? null } = {}) {
   if (!steward) return;
   const flag = steward.getFlag?.("fourththing", "boardedRig");
 
@@ -23005,7 +23349,8 @@ async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
         game.socket?.emit?.("system.fourththing", {
           t: "ft-disembarkSteward",
           stewardId: steward.id,
-          rigId
+          rigId,
+          initiatorUserId
         });
       }
       ui.notifications?.info(`Disembark request sent — ${steward.name}.`);
@@ -23052,6 +23397,37 @@ async function ftDisembarkSteward(steward, { rigId: explicitRigId } = {}) {
     });
     try { await scene.updateEmbeddedDocuments("Token", updates); }
     catch (e) { console.warn("[fourththing] disembark: token restore failed", e); }
+  }
+
+  // Put back any rig-token vision we switched on at board time (see ftBoardRig)
+  // — but only once the cab is actually empty; a second crew member may still
+  // be driving it.
+  if (game.user?.isGM) for (const rig of clearedRigs) {
+    if ((rig.system?.crew?.slots ?? []).some(s => s?.actorId)) continue;
+    for (const scene of (game.scenes ?? [])) {
+      const toks = scene.tokens.filter(t => t.actorId === rig.id && t.getFlag?.("fourththing", "boardVisionOverride"));
+      if (!toks.length) continue;
+      try {
+        await scene.updateEmbeddedDocuments("Token", toks.map(t => ({
+          _id: t.id,
+          "sight.enabled": false,
+          // Written false rather than deleted — v14 dropped the "-=key" form.
+          "flags.fourththing.boardVisionOverride": false
+        })));
+      } catch (e) { console.warn("[fourththing] disembark: rig vision restore failed", e); }
+    }
+  }
+
+  // Give the steward's token back the selection, symmetric to the board swap.
+  // GM-gated like the token restore above — the broadcast is what reaches the
+  // player's client.
+  if (game.user?.isGM) {
+    _ftBroadcastBoardSelection({
+      stewardId: steward.id,
+      rigId: clearedRigs[0]?.id ?? explicitRigId ?? flag?.rigId ?? null,
+      mode: "disembark",
+      initiatorUserId
+    });
   }
 
   // Per-rig badge refresh + chat card.
@@ -23136,24 +23512,25 @@ const _FT_CREW_ACTION_DESC = {
   ram:             "Pilot charge — ram a TARGETED token: (tier × bracket + Piloting)d6 collision damage, half fed back to your rig. Structures take it as Plate damage and can collapse.",
   "hold-position": "Steady the rig — gunners gain advantage until next pilot turn.",
   evasive:         "Disadvantage on attacks against the rig until next turn.",
-  swerve:          "Reaction — avoid an incoming attack (skill check vs incoming roll).",
-  "tack-against-wind": "Sail-frame variant: move + grant +reach against downwind targets.",
-  "raise-sail":    "Toggle sail to high-speed mode.",
-  "lower-sail":    "Toggle sail to low-speed mode.",
+  swerve:          "Reaction — the off-turn dodge: +(2 + Piloting) Evasion until your next pilot turn. Shares the Evading state, so it does not stack with Evasive.",
+  "tack-against-wind": "Pilot action — beat upwind at HALF steer distance; in exchange Ram and Stomp reach one extra square this round.",
+  "raise-sail":    "Bonus — make sail one step (Reefed → Working → Full). Full Sail: double steer distance, −2 Evasion. Trim persists between rounds.",
+  "lower-sail":    "Bonus — shorten sail one step (Full → Working → Reefed). Reefed: half steer distance, +2 Evasion. Trim persists between rounds.",
   "fire-weapon":   "Activate equipped rig-weapon (use the buttons below).",
   "aimed-shot":    "Spend action + bonus — increased damage / accuracy on next fire.",
   suppression:     "Use weapon to impose a condition (per weapon's grant).",
-  reload:          "Refresh weapon ammo or cooldown.",
-  "opportunity-fire": "Reaction — fire at enemy entering reach.",
+  reload:          "Action — clear ONE fired weapon's per-round gate so it can fire again this round. Heat still applies.",
+  "opportunity-fire": "Reaction — snap-fire a rig weapon off-turn. Spends the reaction, not the action; the weapon's own heat + round gates still apply.",
   repair:          "Tinkering check — restore rig integrity.",
   "boost-system":  "Bonus — temp buff to a `rig-system` until end of round.",
   "vent-heat":     "Vent rig heat (Engineer −2 / Pilot −1, bonus action) — clears the overheat weapon-lock.",
-  "cycle-power":   "Reset a cooldown.",
-  "counter-sabotage": "Reaction — cancel a hostile boarding or sabotage attempt.",
-  "operate-module":"Activate a specific `rig-system` or `output-module`.",
+  "cycle-power":   "Engineer bonus — reset ONE crewmate's spent per-round gate (pilot action or repair). Once per round.",
+  "counter-sabotage": "Reaction — repel boarders: nobody NEW can board this rig until next round. Existing crew unaffected.",
+  "operate-module":"Action — run a fitted rig-system or output-module (once per module per round). An enhanced system runs at +1 tier.",
   brace:           "Bonus — soft defense buff.",
   signal:          "Bonus — coordination buff to crew or allies.",
-  "hold-on":       "Reaction — reduce damage to self when the rig is hit."
+  "hold-on":       "Reaction — reduce damage to self when the rig is hit.",
+  stomp:           "Pilot melee — bring a foot down on a TARGETED token in contact: (tier × bracket)d6 kinetic, no recoil, target is knocked Prone."
 };
 
 // ─── Crew Action: Active Effect + Heat helpers (2026-05-19) ────────
@@ -23169,7 +23546,14 @@ const _FT_RIG_STATE_AE = {
   brace:          { label: "Braced",           icon: "icons/svg/anchor.svg" },
   "boost-system": { label: "System Enhanced",  icon: "icons/svg/upgrade.svg" },
   overheat:       { label: "Overheated",       icon: "icons/svg/fire.svg", negative: true },
-  suppressed:     { label: "Suppressed",       icon: "icons/svg/down.svg",  negative: true }
+  suppressed:     { label: "Suppressed",       icon: "icons/svg/down.svg",  negative: true },
+  // 2026-08-17 — states behind the previously-inert sail / tack / repel actions.
+  // sail-* are PERSISTENT (never cleared by the per-round sweep); tacking and
+  // repelling are per-round like the rest.
+  "sail-full":    { label: "Full Sail",        icon: "icons/svg/wing.svg",   persistent: true },
+  "sail-reefed":  { label: "Reefed",           icon: "icons/svg/anchor.svg", persistent: true },
+  tacking:        { label: "Tacking",          icon: "icons/svg/sound.svg" },
+  repelling:      { label: "Repelling Boarders", icon: "icons/svg/shield.svg" }
 };
 
 async function _ftEnsureRigStateAE(rig, key, { extraDesc = "" } = {}) {
@@ -23185,7 +23569,10 @@ async function _ftEnsureRigStateAE(rig, key, { extraDesc = "" } = {}) {
       icon: meta.icon, // V12 compat
       description: extraDesc,
       origin: rig.uuid,
-      duration: { rounds: 1 },
+      // Per-round states expire with the round; the sail-trim states are a
+      // standing order that the round sweep deliberately skips, so giving them
+      // a 1-round duration would leave them sitting there permanently expired.
+      duration: meta.persistent ? {} : { rounds: 1 },
       flags: { fourththing: { rigState: key } }
     }]);
     return created;
@@ -23303,6 +23690,12 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
   // Tinkering powers repair. Intrigue faculty is the +mod baseline;
   // skill rank scales the per-action bonus.
   const piloting  = Number(stSys?.skills?.piloting?.value) || 0;
+  // Does this frame have a Gunner seat authored at all? If not, whoever is
+  // aboard may fire — same rule ftRigWeaponFire applies. Used by reload +
+  // opportunity-fire so a solo pilot isn't locked out of their own guns.
+  const hasGunnerRoleForFire = Number(rig?.system?.crew?.capacity?.gunner?.max
+                            ?? frameItem?.flags?.fourththing?.rigFrame?.capacity?.gunner?.max
+                            ?? 0) > 0;
 
   const warn = (msg) => { ui.notifications?.warn(msg); return false; };
   // Action economy only binds when this crew is in an ACTIVE combat (the rig or the
@@ -23327,7 +23720,11 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const prevMoved = Number(cmb.hexesMoved) || 0;
       // Piloting boost: one extra hex per 2 ranks (rounded down).
       const pilotingHexBonus = Math.floor(piloting / 2);
-      const effHexes  = speed + pilotingHexBonus;
+      // Sail trim scales the distance (no-op on every rig that isn't a sail frame).
+      const sailKey   = ftRigSailKey(rig);
+      const sailTrim  = FT_SAIL_TRIM[sailKey];
+      const rawHexes  = speed + pilotingHexBonus;
+      const effHexes  = Math.max(1, Math.floor(rawHexes * sailTrim.speedMult));
       const ftSpeed   = effHexes * 30;
       await setRigCombat({ hexesMoved: prevMoved + effHexes });
       await setPilotGate();
@@ -23336,10 +23733,13 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const pilotingNote = pilotingHexBonus > 0
         ? ` <span style="opacity:0.75">(base ${speed} + ${pilotingHexBonus} from Piloting ${piloting})</span>`
         : "";
+      const sailNote = sailKey !== "working"
+        ? ` <span style="opacity:0.75">· ${sailTrim.label} ×${sailTrim.speedMult}</span>`
+        : "";
       ChatMessage.create({
         speaker: cardSpeaker,
         content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#d4a35f">🎮 ${steward.name} steers ${rig.name}</span></div>
-          <p style="margin:0.2rem 0;font-size:0.82rem">Pilot action — rig may move up to <b>${effHexes} hex</b> (~<b>${ftSpeed} ft</b>) this round.${pilotingNote}</p></div>`
+          <p style="margin:0.2rem 0;font-size:0.82rem">Pilot action — rig may move up to <b>${effHexes} hex</b> (~<b>${ftSpeed} ft</b>) this round.${pilotingNote}${sailNote}</p></div>`
       });
       return;
     }
@@ -23556,7 +23956,9 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
       const _ramTgtTok = targetActor?.getActiveTokens?.()?.[0] ?? null;
       if (_ramRigTok && _ramTgtTok) {
         const gapFt   = _ftTokenEdgeGapFt(_ramRigTok, _ramTgtTok);
-        const reachFt = Number(canvas?.grid?.distance ?? 5);
+        // Tacking (sail frames) buys one extra square of reach for this round's
+        // collision — that's what "+reach against downwind targets" pays for.
+        const reachFt = Number(canvas?.grid?.distance ?? 5) * (cmb.tacking ? 2 : 1);
         if (Number.isFinite(gapFt) && gapFt > reachFt + 0.5) {
           const msg = `${rig.name} is ~${Math.round(gapFt)} ft from ${targetActor.name} — a ram needs contact (within ${reachFt} ft). Drive closer first.`;
           if (!game.user?.isGM) { ui.notifications?.warn(msg); return; }
@@ -23611,6 +24013,372 @@ async function _ftHandleCrewAction(steward, rig, actionId, frameItem, { targetId
         flavor: `<div class="ft-roll-header"><span class="ft-roll-name" style="color:#eb5757">💥 ${rig.name} rams ${targetActor.name}</span></div>
           <p style="margin:0.2rem 0;font-size:0.82rem"><b>${dice}d6</b> · ${bracket} ×${weight} × T${tier}${pilotingRamNote} → <b>${dmgTarget}</b> dmg (target)${recoilNote}</p>
           <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85">${descT}${descS ? `<br>${descS}` : ""}</p>`
+      });
+      return;
+    }
+
+    // 2026-08-17 — Mecha frames have shipped a "stomp" pilot action ever since the
+    // Rig Builder started authoring them, but the system never had a handler. The
+    // crew HUD renders whatever ids a frame declares, unfiltered, so the button
+    // appeared, fell through to `default:` and posted a bare card — no damage, no
+    // target, no action spent ("Stomp didn't seem to do anything", owner report).
+    // Built as Ram's opposite number rather than a weaker Ram: you're bringing a
+    // foot down, not colliding at speed, so there is no feedback — but no Piloting
+    // dice either, and the payoff is the target flat on the ground.
+    case "stomp": {
+      if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
+      // Same relay-safe target capture Ram uses, so a player pilot's target
+      // survives the GM round-trip instead of resolving to the GM's selection.
+      const _stompTargets = _resolveTargetActors();
+      const stompTarget = _stompTargets[0];
+      if (!stompTarget) { ui.notifications?.warn("Target a token first — a stomp needs something underfoot."); return; }
+
+      // Contact, measured EDGE-to-edge: centre-to-centre lies the moment either
+      // token is bigger than 1×1 (same gate, same reason, as Ram).
+      const _stRigTok = rig?.getActiveTokens?.()?.[0] ?? null;
+      const _stTgtTok = stompTarget?.getActiveTokens?.()?.[0] ?? null;
+      if (_stRigTok && _stTgtTok) {
+        const gapFt   = _ftTokenEdgeGapFt(_stRigTok, _stTgtTok);
+        // Tacking (sail frames) buys one extra square of reach for this round's
+        // collision — that's what "+reach against downwind targets" pays for.
+        const reachFt = Number(canvas?.grid?.distance ?? 5) * (cmb.tacking ? 2 : 1);
+        if (Number.isFinite(gapFt) && gapFt > reachFt + 0.5) {
+          const msg = `${rig.name} is ~${Math.round(gapFt)} ft from ${stompTarget.name} — a stomp needs contact (within ${reachFt} ft). Step closer first.`;
+          if (!game.user?.isGM) { ui.notifications?.warn(msg); return; }
+          ui.notifications?.warn(`${msg} Proceeding (GM's call).`);
+        }
+      }
+
+      const stompWeight = FT_RIG_BRACKET_WEIGHT[bracket] || 3;
+      const stompDice   = Math.max(1, tier * stompWeight);
+      const stompRoll   = new Roll(`${stompDice}d6`);
+      await stompRoll.evaluate();
+      const stompDmg = Math.max(1, Number(stompRoll.total) || 1);
+      const stompDesc = await game.fourththing.rolls._applyDamageToActor(stompTarget, stompDmg, {
+        op: "damage", track: "integrity", damageType: "kinetic", damageFlavor: "stomp"
+      });
+
+      // Knocked flat. Rigs carry no conditions track and a building can't be
+      // prone, so those just take the damage. toggleCondition would UNSET an
+      // already-prone target, hence the read first; it also refuses the
+      // condition outright if the target is immune.
+      let proneNote = "";
+      const stompIsStruct = !!stompTarget?.flags?.["bbttcc-structures"]?.hasStructure;
+      if (stompTarget.type !== "rig" && !stompIsStruct) {
+        const tSys = stompTarget.system?.system ?? stompTarget.system;
+        if (tSys?.conditions?.prone === true) {
+          proneNote = ` · <span style="opacity:0.7">already prone</span>`;
+        } else {
+          try {
+            await game.fourththing.toggleCondition(stompTarget, "prone");
+            proneNote = ` · <b>Prone</b>`;
+          } catch (e) { console.warn("[fourththing] stomp: prone apply failed", e); }
+        }
+      }
+
+      // Impact lands on the target's square, not the mech's — the foot comes down there.
+      try { ftPlayCombatVfx(stompTarget, "stomp"); } catch (e) { console.warn("[fourththing] stomp VFX", e); }
+      // No hexesMoved: unlike Ram this is not a charge, the rig stays put.
+      await setPilotGate();
+      await consumeAction();
+      await stompRoll.toMessage({
+        speaker: cardSpeaker,
+        flavor: `<div class="ft-roll-header"><span class="ft-roll-name" style="color:#c9a227">🦶 ${rig.name} stomps ${stompTarget.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem"><b>${stompDice}d6</b> · ${bracket} ×${stompWeight} × T${tier} → <b>${stompDmg}</b> dmg · <span style="opacity:0.7">no recoil</span>${proneNote}</p>
+          <p style="margin:0.2rem 0;font-size:0.78rem;opacity:0.85">${stompDesc}</p>`
+      });
+      return;
+    }
+
+    // ═══ 2026-08-17 — the nine inert frame actions ═══════════════════════════
+    // The crew HUD renders whatever ids a frame declares, unfiltered, but these
+    // nine had no handler: they fell to `default:` and printed their blurb with
+    // nothing behind it. Each now does one real, bounded thing, reusing the
+    // existing per-round flag + state-AE + clear machinery rather than inventing
+    // a parallel one. (Found while fixing `stomp`, which didn't even have a blurb.)
+
+    // Evasive costs your ACTION on your turn; swerve is the same dodge bought
+    // with your REACTION off it. Shares the `evading` state so the two can't
+    // stack into a double bonus — which is also why it refuses when already set.
+    case "swerve": {
+      if (!requirePilot()) return;
+      if (cmb.evading) { warn(`${rig.name} is already evading — a swerve would add nothing.`); return; }
+      if (_econActive && sysActs.reactionUsed) { warn(`${steward.name}: reaction already used this turn.`); return; }
+      if (_ftReactionsDenied(steward)) { warn(`${steward.name}: reactions are denied this round.`); return; }
+      const swerveBonus = 2 + piloting;
+      await setRigCombat({ evading: true, evadingBonus: swerveBonus });
+      await steward.update({ "system.actions.reactionUsed": true });
+      await _ftEnsureRigStateAE(rig, "evading", { extraDesc: `+${swerveBonus} Evasion until next pilot turn (swerve).` });
+      try { ftPlayCombatVfx(rig, "evade"); } catch (e) { console.warn("[fourththing] swerve VFX", e); }
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#9be7ff">↩ ${steward.name} swerves ${rig.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Reaction — <b>+${swerveBonus} Evasion</b> until the next pilot turn.${piloting > 0 ? ` <span style="opacity:0.75">(base 2 + Piloting ${piloting})</span>` : ""}</p></div>`
+      });
+      return;
+    }
+
+    // Sail trim. Bonus action so a pilot can re-trim and still steer or fight.
+    // Persistent by design — set canvas stays set until someone changes it, so
+    // this is the one rig state the per-round sweep leaves alone.
+    case "raise-sail":
+    case "lower-sail": {
+      if (!requirePilot() || !requireBonus()) return;
+      const order = ["reefed", "working", "full"];
+      const curKey = ftRigSailKey(rig);
+      const step   = actionId === "raise-sail" ? 1 : -1;
+      const nextKey = order[Math.max(0, Math.min(order.length - 1, order.indexOf(curKey) + step))];
+      if (nextKey === curKey) {
+        warn(`${rig.name} is already at ${FT_SAIL_TRIM[curKey].label}.`);
+        return;
+      }
+      await setRigCombat({ sail: nextKey });
+      await consumeBonus();
+      // Swap the persistent trim AE (only one can be up at a time).
+      for (const k of ["sail-full", "sail-reefed"]) await _ftClearRigStateAE(rig, k);
+      const nextTrim = FT_SAIL_TRIM[nextKey];
+      if (nextTrim.state) await _ftEnsureRigStateAE(rig, nextTrim.state, { extraDesc: nextTrim.blurb });
+      try { ftPlayCombatVfx(rig, step > 0 ? "steer" : "anchor"); } catch (e) { console.warn("[fourththing] sail VFX", e); }
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#88ccff">⛵ ${steward.name} ${step > 0 ? "makes" : "shortens"} sail on ${rig.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">${FT_SAIL_TRIM[curKey].label} → <b>${nextTrim.label}</b> <span style="opacity:0.75">(${nextTrim.blurb})</span>.</p></div>`
+      });
+      return;
+    }
+
+    // Beating upwind: you give up distance to gain the weather gauge. Half
+    // steer distance, and this round's collision (ram / stomp) reaches one
+    // extra square — the reach gate reads `cmb.tacking`.
+    case "tack-against-wind": {
+      if (!requirePilot() || !requirePilotGate() || !requireAction()) return;
+      const tackHexes = Math.max(1, Math.floor((speed + Math.floor(piloting / 2)) / 2));
+      await setRigCombat({ hexesMoved: (Number(cmb.hexesMoved) || 0) + tackHexes, tacking: true });
+      await setPilotGate();
+      await consumeAction();
+      await _ftEnsureRigStateAE(rig, "tacking", { extraDesc: "Collisions reach one extra square this round." });
+      try { ftPlayCombatVfx(rig, "steer"); } catch (e) { console.warn("[fourththing] tack VFX", e); }
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#88ccff">🌬 ${steward.name} tacks ${rig.name} against the wind</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Up to <b>${tackHexes} hex</b> (half distance) — but <b>Ram and Stomp reach one extra square</b> until the next pilot turn.</p></div>`
+      });
+      return;
+    }
+
+    // Clear ONE weapon's per-round fire gate so it can fire again this round.
+    // Costs the action, so it's a real trade: your turn for a second burst.
+    // Heat still accrues on the shot itself, which stays the actual limiter.
+    case "reload": {
+      const canReload = role === "gunner" || role === "crew" || !hasGunnerRoleForFire;
+      if (!canReload) { warn(`${steward.name}: only Gunner or Crew can reload (role: ${role}).`); return; }
+      if (!requireAction()) return;
+      const firedMap = stCmb.rigWeaponsFiredThisRound ?? {};
+      const spent = (rig.items ?? []).filter(it =>
+        it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-weapon" && firedMap[it.id]);
+      if (!spent.length) { warn(`Nothing to reload — no weapon on ${rig.name} has fired this round.`); return; }
+      const esc = (v) => foundry.utils.escapeHTML?.(String(v)) ?? String(v);
+      let pickedId = spent[0].id;
+      if (spent.length > 1) {
+        const opts = spent.map(w => `<option value="${esc(w.id)}">${esc(w.name)}</option>`).join("");
+        pickedId = await new Promise(resolve => {
+          new Dialog({
+            title: "Reload",
+            content: `<p style="font-size:0.85rem">Which weapon are you bringing back online?</p>
+              <select name="weaponId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
+            buttons: {
+              ok:     { label: "Reload", callback: (html) => resolve(html.find("[name=weaponId]").val()) },
+              cancel: { label: "Cancel", callback: () => resolve(null) }
+            },
+            default: "ok",
+            close: () => resolve(null)
+          }).render(true);
+        });
+        if (!pickedId) return;
+      }
+      const weapon = rig.items.get(pickedId);
+      if (!weapon) return;
+      // Write FALSE rather than deleting the key: flag objects merge on update,
+      // so a delete would be a silent no-op (the burn the per-round sweep warns
+      // about). The fire gate is a truthiness test, so false re-arms it cleanly.
+      await steward.update({
+        [`flags.fourththing.combat.rigWeaponsFiredThisRound.${pickedId}`]: false
+      });
+      await consumeAction();
+      try { ftPlayCombatVfx(rig, "surge"); } catch (e) { console.warn("[fourththing] reload VFX", e); }
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#e8c84a">🔄 ${steward.name} reloads ${weapon.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Cleared its per-round gate — <b>${weapon.name} may fire again this round</b>. <span style="opacity:0.7">Heat still applies.</span></p></div>`
+      });
+      return;
+    }
+
+    // Fire a rig weapon off-turn. Spends the REACTION, then routes into the
+    // canonical fire path with skipActionGate so it doesn't also eat the action.
+    case "opportunity-fire": {
+      const canFire = role === "gunner" || role === "crew" || !hasGunnerRoleForFire;
+      if (!canFire) { warn(`${steward.name}: only Gunner or Crew can fire (role: ${role}).`); return; }
+      if (_econActive && sysActs.reactionUsed) { warn(`${steward.name}: reaction already used this turn.`); return; }
+      if (_ftReactionsDenied(steward)) { warn(`${steward.name}: reactions are denied this round.`); return; }
+      const weapons = (rig.items ?? []).filter(it => it.getFlag?.("fourththing", "rigGear")?.subtype === "rig-weapon");
+      if (!weapons.length) { warn(`${rig.name} has no rig-weapons to fire.`); return; }
+      const esc2 = (v) => foundry.utils.escapeHTML?.(String(v)) ?? String(v);
+      let firedId = weapons[0].id;
+      if (weapons.length > 1) {
+        const opts = weapons.map(w => `<option value="${esc2(w.id)}">${esc2(w.name)}</option>`).join("");
+        firedId = await new Promise(resolve => {
+          new Dialog({
+            title: "Opportunity Fire",
+            content: `<p style="font-size:0.85rem">Snap off which weapon?</p>
+              <select name="weaponId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
+            buttons: {
+              ok:     { label: "Fire", callback: (html) => resolve(html.find("[name=weaponId]").val()) },
+              cancel: { label: "Cancel", callback: () => resolve(null) }
+            },
+            default: "ok",
+            close: () => resolve(null)
+          }).render(true);
+        });
+        if (!firedId) return;
+      }
+      const weapon = rig.items.get(firedId);
+      if (!weapon) return;
+      // Reaction is spent BEFORE the dialog: the shot's own gates (heat,
+      // per-weapon round lock) may still refuse it, and a refused snap shot
+      // has still cost you the moment.
+      await steward.update({ "system.actions.reactionUsed": true });
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#eb8757">⚡ ${steward.name} fires on the opportunity</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Reaction — snap shot with <b>${weapon.name}</b> from ${rig.name}.</p></div>`
+      });
+      await ftRigWeaponFire(steward, weapon, { skipActionGate: true });
+      return;
+    }
+
+    // Engineer's reset: hand ONE crewmate back a per-round gate they've already
+    // spent (the pilot's action-of-the-round, or an engineer's repair). Bounded
+    // by its own once-per-round gate so it can't loop.
+    case "cycle-power": {
+      if (!requireEngineer() || !requireBonus()) return;
+      if (_econActive && stCmb.cycledThisRound) { warn(`${steward.name}: already cycled power this round.`); return; }
+      const crew = (rig.system?.crew?.slots ?? [])
+        .map(sl => ({ slot: sl, actor: sl?.actorId ? game.actors?.get(sl.actorId) : null }))
+        .filter(e => e.actor);
+      const resettable = crew.filter(e => {
+        const c = e.actor.flags?.fourththing?.combat ?? {};
+        return c.pilotActionUsedThisRound || c.engineerRepairedThisRound;
+      });
+      if (!resettable.length) { warn(`No one aboard ${rig.name} has a spent gate to cycle.`); return; }
+      const esc3 = (v) => foundry.utils.escapeHTML?.(String(v)) ?? String(v);
+      let targetId = resettable[0].actor.id;
+      if (resettable.length > 1) {
+        const opts = resettable.map(e => `<option value="${esc3(e.actor.id)}">${esc3(e.actor.name)} (${esc3(e.slot.role ?? "crew")})</option>`).join("");
+        targetId = await new Promise(resolve => {
+          new Dialog({
+            title: "Cycle Power",
+            content: `<p style="font-size:0.85rem">Whose console are you rebooting?</p>
+              <select name="crewId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
+            buttons: {
+              ok:     { label: "Cycle", callback: (html) => resolve(html.find("[name=crewId]").val()) },
+              cancel: { label: "Cancel", callback: () => resolve(null) }
+            },
+            default: "ok",
+            close: () => resolve(null)
+          }).render(true);
+        });
+        if (!targetId) return;
+      }
+      const mate = game.actors?.get(targetId);
+      if (!mate) return;
+      const mc = mate.flags?.fourththing?.combat ?? {};
+      // Same reasoning as reload: set false instead of deleting. Both gates are
+      // read as truthiness (requirePilotGate / the repair guard), so this clears
+      // them without depending on flag-delete syntax.
+      const cleared = [];
+      const upd = {};
+      if (mc.pilotActionUsedThisRound)  { upd["flags.fourththing.combat.pilotActionUsedThisRound"]  = false; cleared.push("pilot action"); }
+      if (mc.engineerRepairedThisRound) { upd["flags.fourththing.combat.engineerRepairedThisRound"] = false; cleared.push("repair"); }
+      await mate.update(upd);
+      await steward.update({ "flags.fourththing.combat.cycledThisRound": true });
+      await consumeBonus();
+      try { ftPlayCombatVfx(rig, "surge"); } catch (e) { console.warn("[fourththing] cycle-power VFX", e); }
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#6ee7b7">🔌 ${steward.name} cycles power for ${mate.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Reset this round's <b>${cleared.join(" + ")}</b> gate. <span style="opacity:0.7">Once per round.</span></p></div>`
+      });
+      return;
+    }
+
+    // Repel boarders. Sets a per-round flag that ftBoardRig honours: nobody new
+    // gets aboard this rig until the next round. Existing crew are unaffected.
+    case "counter-sabotage": {
+      if (_econActive && sysActs.reactionUsed) { warn(`${steward.name}: reaction already used this turn.`); return; }
+      if (_ftReactionsDenied(steward)) { warn(`${steward.name}: reactions are denied this round.`); return; }
+      if (cmb.counterSabotage) { warn(`${rig.name} is already repelling boarders this round.`); return; }
+      await setRigCombat({ counterSabotage: true, counterSabotageBy: steward.name });
+      await steward.update({ "system.actions.reactionUsed": true });
+      await _ftEnsureRigStateAE(rig, "repelling", { extraDesc: "No new crew can board this rig until next round." });
+      try { ftPlayCombatVfx(rig, "ward"); } catch (e) { console.warn("[fourththing] counter-sabotage VFX", e); }
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#6fb3ff">🛡 ${steward.name} repels boarders</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Reaction — <b>nobody new boards ${rig.name}</b> until the next round. Crew already aboard are unaffected.</p></div>`
+      });
+      return;
+    }
+
+    // Run a fitted rig-system or output-module. Once per module per round, and
+    // the module's own description is surfaced so the table can see what it
+    // actually does — these are authored items, so the text IS the mechanic.
+    case "operate-module": {
+      if (!requireAction()) return;
+      const modules = (rig.items ?? []).filter(it => {
+        const sub = it.getFlag?.("fourththing", "rigGear")?.subtype;
+        return sub === "rig-system" || sub === "output-module";
+      });
+      if (!modules.length) { warn(`${rig.name} has no systems or output modules fitted.`); return; }
+      const operated = cmb.operatedModules ?? {};
+      const available = modules.filter(m => !(_econActive && operated[m.id]));
+      if (!available.length) { warn(`Every module on ${rig.name} has already been run this round.`); return; }
+      const esc4 = (v) => foundry.utils.escapeHTML?.(String(v)) ?? String(v);
+      let modId = available[0].id;
+      if (available.length > 1) {
+        const opts = available.map(m => {
+          const sub = m.getFlag?.("fourththing", "rigGear")?.subtype === "output-module" ? "output" : "system";
+          return `<option value="${esc4(m.id)}">${esc4(m.name)} (${sub})</option>`;
+        }).join("");
+        modId = await new Promise(resolve => {
+          new Dialog({
+            title: "Operate Module",
+            content: `<p style="font-size:0.85rem">Which module are you running?</p>
+              <select name="modId" style="width:100%;margin-top:.5rem;">${opts}</select>`,
+            buttons: {
+              ok:     { label: "Operate", callback: (html) => resolve(html.find("[name=modId]").val()) },
+              cancel: { label: "Cancel", callback: () => resolve(null) }
+            },
+            default: "ok",
+            close: () => resolve(null)
+          }).render(true);
+        });
+        if (!modId) return;
+      }
+      const mod = rig.items.get(modId);
+      if (!mod) return;
+      // A boosted system runs at +1 effective tier — say so on the card, since
+      // that's the whole point of the engineer having spent a bonus on it.
+      const boosted = cmb.boostedSystemId === mod.id;
+      await setRigCombat({ operatedModules: { ...operated, [mod.id]: true } });
+      await consumeAction();
+      try { ftPlayCombatVfx(rig, "surge"); } catch (e) { console.warn("[fourththing] operate-module VFX", e); }
+      const modDesc = String(mod.system?.description?.value ?? "").trim();
+      ChatMessage.create({
+        speaker: cardSpeaker,
+        content: `<div class="fourththing-roll"><div class="ft-roll-header"><span class="ft-roll-name" style="color:#7ec0ff">⚙ ${steward.name} operates ${mod.name}</span></div>
+          <p style="margin:0.2rem 0;font-size:0.82rem">Run at <b>tier ${boosted ? tier + 1 : tier}</b>${boosted ? ` <span style="opacity:0.75">(enhanced)</span>` : ""} on ${rig.name}. <span style="opacity:0.7">Once per module per round.</span></p>
+          ${modDesc ? `<div style="margin:0.3rem 0 0;font-size:0.78rem;opacity:0.9">${modDesc}</div>` : ""}</div>`
       });
       return;
     }
@@ -23875,7 +24643,7 @@ function _ftBindCrewControls(rootEl, actor, ctx, { onDisembark } = {}) {
       ev.preventDefault();
       const actionId = btn.dataset.actionId;
       // 2026-05-19 — Capture the user's targeted actor ids at click time so
-      // target-using actions (signal / suppression / ram) survive the
+      // target-using actions (signal / suppression / ram / stomp) survive the
       // GM-relay round-trip. The relay handler runs on the GM client where
       // game.user.targets is the GM's selection, not the player's.
       const targetIds = Array.from(game.user?.targets ?? [])
@@ -24678,6 +25446,7 @@ async function _ftClearPerRoundCombatFlags(actor) {
                  c.lastFiredRigId || c.lastFiredWeaponId ||
                  c.pilotActionUsedThisRound || c.engineerRepairedThisRound ||
                  c.aimedShot || c.signalBonus || c.holdingOn || c.suppressed ||
+                 c.cycledThisRound ||
                  c.bonusManifestationUsedThisRound;
   if (!hasAny) return;
   try {
@@ -24696,6 +25465,8 @@ async function _ftClearPerRoundCombatFlags(actor) {
       "flags.fourththing.combat.-=signalBonus":               null,
       "flags.fourththing.combat.-=holdingOn":                 null,
       "flags.fourththing.combat.-=suppressed":                null,
+      // 2026-08-17 — engineer cycle-power's once-per-round gate.
+      "flags.fourththing.combat.-=cycledThisRound":           null,
       // Action Economy canon §5 — Elite bonus mani once-per-round flag.
       "flags.fourththing.combat.-=bonusManifestationUsedThisRound": null
     });
@@ -24715,6 +25486,7 @@ async function _ftClearRigPerRoundFlags(rig) {
   if (!c) return;
   const hasAny = c.holding || c.evading || c.brace || c.hexesMoved
               || c.boostedSystemId || c.boostedSystemName || c.boostedUntilRound
+              || c.tacking || c.counterSabotage || c.counterSabotageBy || c.operatedModules
               || c.holdingBonus !== undefined || c.evadingBonus !== undefined || c.braceBonus !== undefined;
   if (!hasAny) return;
   try {
@@ -24728,13 +25500,22 @@ async function _ftClearRigPerRoundFlags(rig) {
       "flags.fourththing.combat.-=braceBonus":       null,
       "flags.fourththing.combat.-=boostedSystemId":  null,
       "flags.fourththing.combat.-=boostedSystemName": null,
-      "flags.fourththing.combat.-=boostedUntilRound": null
+      "flags.fourththing.combat.-=boostedUntilRound": null,
+      // 2026-08-17 — tack / repel-boarders / per-module run gate.
+      "flags.fourththing.combat.-=tacking":            null,
+      "flags.fourththing.combat.-=counterSabotage":    null,
+      "flags.fourththing.combat.-=counterSabotageBy":  null,
+      "flags.fourththing.combat.-=operatedModules":    null
       // NOTE: heat is intentionally NOT cleared — persists across rounds,
       // only reduced by vent-heat (engineer bonus action).
+      // NOTE: `sail` is intentionally NOT cleared either — trim is a standing
+      // order, not a per-round state. Only raise-sail / lower-sail change it.
     });
   } catch (e) { console.warn("[fourththing] clear rig per-round flags failed", e); }
   // Clear the per-round state AEs (overheat is heat-driven, leave it).
-  for (const key of ["holding", "evading", "brace", "boost-system"]) {
+  // sail-full / sail-reefed are deliberately absent: those AEs mirror the
+  // persistent trim and must survive the round boundary with it.
+  for (const key of ["holding", "evading", "brace", "boost-system", "tacking", "repelling"]) {
     await _ftClearRigStateAE(rig, key);
   }
 }
@@ -25755,6 +26536,12 @@ function _ftRelaySeenRecently(key, windowMs = 3000) {
 }
 function _ftRelayHandler(msg) {
   try {
+    // Handled before the GM guard below: this one is aimed at the PLAYERS
+    // (canvas selection is per-client state), not at the GM relay.
+    if (msg?.t === "ft-boardSelection") {
+      _ftSyncBoardSelection(msg);
+      return;
+    }
     if (!game.user?.isGM) return;
     if (msg?.t === "ft-activateBattleScene") {
       if (_ftRelaySeenRecently(`activate:${msg.sceneId}:${msg.idx}`)) return;
@@ -25769,14 +26556,14 @@ function _ftRelayHandler(msg) {
       const steward = game.actors?.get(msg.stewardId);
       const rig     = game.actors?.get(msg.rigId);
       if (!steward || !rig) return;
-      ftBoardRig(steward, rig, msg.role || null);
+      ftBoardRig(steward, rig, msg.role || null, { initiatorUserId: msg.initiatorUserId ?? null });
     } else if (msg?.t === "ft-disembarkSteward") {
       if (_ftRelaySeenRecently(`disembark:${msg.stewardId}`)) return;
       const steward = game.actors?.get(msg.stewardId);
       if (!steward) return;
       // 2026-05-19 — Player-side already unset the steward's boardedRig
       // flag, so we need msg.rigId to still clean up the crew slot.
-      ftDisembarkSteward(steward, { rigId: msg.rigId || null });
+      ftDisembarkSteward(steward, { rigId: msg.rigId || null, initiatorUserId: msg.initiatorUserId ?? null });
     } else if (msg?.t === "ft-crewAction") {
       if (_ftRelaySeenRecently(`crewAction:${msg.stewardId}:${msg.rigId}:${msg.actionId}`)) return;
       const steward = game.actors?.get(msg.stewardId);
