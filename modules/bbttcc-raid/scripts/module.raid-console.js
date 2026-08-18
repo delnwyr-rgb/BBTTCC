@@ -94,7 +94,9 @@ function _bbttccFxPanelForRound(app, idx){
     const c = _normCost(cost);
     const parts = [];
     for (const k of Object.keys(c)){
-      parts.push(_prettyKey(k) + " " + String(c[k]));
+      // Costs are stored in marks; the tooltip says OP, so convert. _rcOP is
+      // defined below in module scope — this IIFE only runs on click.
+      parts.push(_prettyKey(k) + " " + _rcOP(c[k]) + " OP");
     }
     return parts.length ? parts.join(" • ") : "";
   }
@@ -353,7 +355,29 @@ function _bbttccFxPanelForRound(app, idx){
 
 
 // --- Handlebars Helperslpers -----------------------------------------------------
+// 1 OP = 10 marks. Every OP figure in this module — bank balances, staged
+// amounts, maneuver costs — is STORED in marks (see the op-engine: opBank,
+// opCaps and commit() are all marks). This console predates that migration and
+// printed the raw stored number under an "OP" label, so a 5 OP bank read as
+// "50" beside a 2 OP maneuver billed as "20" (owner report 2026-08-17).
+// DISPLAY ONLY — nothing downstream changes unit, so the raid math is untouched.
+const MARKS_PER_OP = 10;
+function _rcOP(marks) {
+  const fmt = globalThis.game?.bbttcc?.api?.op?.formatMarksAsOPNumber;
+  if (typeof fmt === "function") { try { return fmt(marks); } catch (_e) {} }
+  const op = (Number(marks) || 0) / MARKS_PER_OP;
+  return Number.isInteger(op) ? String(op) : op.toFixed(1);
+}
+
 Hooks.once("init", () => {
+  // Templates print marks through this helper. bbttcc-factions registers the
+  // same helper on its own init; this guarded copy just means the raid console
+  // still reads correctly if factions loads late or is disabled.
+  try {
+    if (globalThis.Handlebars && !Handlebars.helpers.bbttcc_marks) {
+      Handlebars.registerHelper("bbttcc_marks", v => _rcOP(v));
+    }
+  } catch (e) { console.warn("[bbttcc-raid] bbttcc_marks helper registration failed", e); }
   // Boss state persistence setting (world-scoped, hidden)
   try {
     if (game && game.settings && !game.settings.settings.has(RAID_ID + ".bossState")) {
@@ -539,7 +563,8 @@ function _rcSyncManeuverSelectionsFromDOM(app, idx, round){
   return false;
 }
 
-function textForSpend(sum){ return Object.keys(sum).length ? Object.entries(sum).map(([k,v])=>`${k}:${v}`).join(", ") : "—"; }
+// Projected spend readouts are labelled "Projected OP Spend" — sum is in marks.
+function textForSpend(sum){ return Object.keys(sum).length ? Object.entries(sum).map(([k,v])=>`${k}:${_rcOP(v)}`).join(", ") : "—"; }
 
 // ------------------------------------------------------------
 // Scenario HUD helpers (Compact Hex Chrome)
@@ -893,7 +918,10 @@ function _rcHasOpForActivity(attacker, activityKey){
   const k = primaryKeyFor(activityKey);
   const bank = _rcGetAttackerBank(attacker);
   const v = Number(bank[k]||0);
-  return { ok: (v>=1), key: k, pool: v };
+  // Banks are MARKS. The documented gate is "1 OP of the primary key", but the
+  // threshold was still written as 1 — i.e. one tenth of an OP — so a faction
+  // with pocket change passed a check that reads "requires 1 OP".
+  return { ok: (v>=MARKS_PER_OP), key: k, pool: v };
 }
 function _rcApplyGateToAddRoundButton(app){
   try {
@@ -916,7 +944,7 @@ function _rcApplyGateToAddRoundButton(app){
     if (!g.ok) {
       btn.prop("disabled", true);
       btn.addClass("bbttcc-roll-blocked");
-      btn.attr("title", "Action Unavailable\nRequires 1 " + _rcOpLabel(g.key) + " OP.\nThe attacker has 0 in this pool.");
+      btn.attr("title", "Action Unavailable\nRequires 1 " + _rcOpLabel(g.key) + " OP.\nThe attacker has " + _rcOP(g.pool) + " in this pool.");
       return;
     }
 
@@ -3147,7 +3175,8 @@ _renderScenarioHUD(host, round){
 
         const mkCost = (cost)=>{
           const {op} = lcKeysCost(cost);
-          const parts=[]; for (const [ck,cv] of Object.entries(op||{})){ if(!cv) continue; parts.push(`${ck}:${cv}`); }
+          // Stored in marks, chip says OP — convert (owner report 2026-08-17).
+          const parts=[]; for (const [ck,cv] of Object.entries(op||{})){ if(!cv) continue; parts.push(`${ck}:${_rcOP(cv)}`); }
           return parts.length? ` <small style="opacity:.8;">(OP ${parts.join(", ")})</small>` : "";
         };
 
@@ -3244,7 +3273,8 @@ _renderScenarioHUD(host, round){
             // Inline OP-cost renderer (mkCost lives inside mkFS and is out of scope here).
             const mkCostSupport = (cost)=>{
               const {op} = lcKeysCost(cost);
-              const parts=[]; for (const [ck,cv] of Object.entries(op||{})){ if(!cv) continue; parts.push(`${ck}:${cv}`); }
+              // Marks → OP, same as mkCost above.
+              const parts=[]; for (const [ck,cv] of Object.entries(op||{})){ if(!cv) continue; parts.push(`${ck}:${_rcOP(cv)}`); }
               return parts.length? ` <small style="opacity:.8;">(OP ${parts.join(", ")})</small>` : "";
             };
 
@@ -3278,9 +3308,9 @@ _renderScenarioHUD(host, round){
                 chip.style.background = "var(--ft-hud-bg-3, rgba(15,23,42,0.28))";
 
                 chip.innerHTML = `
-                  <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="-1">−</button>
-                  <span><b>${k}</b>: ${staged} / ${bank}</span>
-                  <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="1">+</button>
+                  <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="-10">−</button>
+                  <span><b>${k}</b>: ${_rcOP(staged)} / ${_rcOP(bank)} OP</span>
+                  <button type="button" data-manage-act="stage" data-who="support" data-faction-id="${sf.id}" data-key="${k}" data-delta="10">+</button>
                 `;
 
                 grid.appendChild(chip);
@@ -4118,7 +4148,7 @@ r.view = {
       // Raid OP gate: require 1 OP of the activity primary key to DECLARE a round.
       const gate = _rcHasOpForActivity(attacker, this.vm.activityKey);
       if (!gate.ok) {
-        ui.notifications?.warn?.("This raid round requires 1 " + _rcOpLabel(gate.key) + " OP. Attacker has 0.");
+        ui.notifications?.warn?.("This raid round requires 1 " + _rcOpLabel(gate.key) + " OP. Attacker has " + _rcOP(gate.pool) + ".");
         try { _rcApplyGateToAddRoundButton(this); } catch (_eG3) {}
         return;
       }

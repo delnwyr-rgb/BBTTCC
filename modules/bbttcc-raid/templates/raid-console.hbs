@@ -175,44 +175,44 @@
     <!-- Turn Bank panel (GM sees both) -->
     <section class="bbttcc-bank grid" style="grid-template-columns: 1fr 1fr; gap:.5rem;">
       <div class="card" style="padding:.5rem;">
-        <h4 style="margin:0 0 .25rem 0;">Attacker Bank — {{default currentBank.attackerName "(none)"}}</h4>
+        <h4 style="margin:0 0 .25rem 0;">Attacker Bank (OP) — {{default currentBank.attackerName "(none)"}}</h4>
         {{#if currentBank.attacker}}
         <table class="bbttcc-table" style="width:100%;">
           <thead><tr>
             <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
           </tr></thead>
           <tbody><tr class="center">
-            <td><b>{{currentBank.attacker.violence}}</b></td>
-            <td>{{currentBank.attacker.nonlethal}}</td>
-            <td><b>{{currentBank.attacker.intrigue}}</b></td>
-            <td>{{currentBank.attacker.economy}}</td>
-            <td>{{currentBank.attacker.softpower}}</td>
-            <td>{{currentBank.attacker.diplomacy}}</td>
-            <td>{{currentBank.attacker.logistics}}</td>
-            <td>{{currentBank.attacker.culture}}</td>
-            <td>{{currentBank.attacker.faith}}</td>
+            <td><b>{{bbttcc_marks currentBank.attacker.violence}}</b></td>
+            <td>{{bbttcc_marks currentBank.attacker.nonlethal}}</td>
+            <td><b>{{bbttcc_marks currentBank.attacker.intrigue}}</b></td>
+            <td>{{bbttcc_marks currentBank.attacker.economy}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.softpower}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.diplomacy}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.logistics}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.culture}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.faith}}</td>
           </tr></tbody>
         </table>
         {{else}}<em>No attacker selected.</em>{{/if}}
       </div>
 
       <div class="card" style="padding:.5rem;">
-        <h4 style="margin:0 0 .25rem 0;">Defender Bank — {{default currentBank.defenderName "(none)"}}</h4>
+        <h4 style="margin:0 0 .25rem 0;">Defender Bank (OP) — {{default currentBank.defenderName "(none)"}}</h4>
         {{#if currentBank.hasDef}}
         <table class="bbttcc-table" style="width:100%;">
           <thead><tr>
             <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
           </tr></thead>
           <tbody><tr class="center">
-            <td><b>{{currentBank.defender.violence}}</b></td>
-            <td>{{currentBank.defender.nonlethal}}</td>
-            <td><b>{{currentBank.defender.intrigue}}</b></td>
-            <td>{{currentBank.defender.economy}}</td>
-            <td>{{currentBank.defender.softpower}}</td>
-            <td>{{currentBank.defender.diplomacy}}</td>
-            <td>{{currentBank.defender.logistics}}</td>
-            <td>{{currentBank.defender.culture}}</td>
-            <td>{{currentBank.defender.faith}}</td>
+            <td><b>{{bbttcc_marks currentBank.defender.violence}}</b></td>
+            <td>{{bbttcc_marks currentBank.defender.nonlethal}}</td>
+            <td><b>{{bbttcc_marks currentBank.defender.intrigue}}</b></td>
+            <td>{{bbttcc_marks currentBank.defender.economy}}</td>
+            <td>{{bbttcc_marks currentBank.defender.softpower}}</td>
+            <td>{{bbttcc_marks currentBank.defender.diplomacy}}</td>
+            <td>{{bbttcc_marks currentBank.defender.logistics}}</td>
+            <td>{{bbttcc_marks currentBank.defender.culture}}</td>
+            <td>{{bbttcc_marks currentBank.defender.faith}}</td>
           </tr></tbody>
         </table>
         {{else}}<em>No defender (unclaimed hex).</em>{{/if}}
@@ -222,22 +222,22 @@
     <!-- Player view bank panel (only your bank) -->
     <section class="bbttcc-bank" style="margin-top:.25rem;">
       <div class="card" style="padding:.5rem;">
-        <h4 style="margin:0 0 .25rem 0;">Your Bank — {{default currentBank.attackerName "(none)"}}</h4>
+        <h4 style="margin:0 0 .25rem 0;">Your Bank (OP) — {{default currentBank.attackerName "(none)"}}</h4>
         {{#if currentBank.attacker}}
         <table class="bbttcc-table" style="width:100%;">
           <thead><tr>
             <th>Viol</th><th>NonL</th><th>Intr</th><th>Econ</th><th>Soft</th><th>Dip</th><th>Log</th><th>Cult</th><th>Faith</th>
           </tr></thead>
           <tbody><tr class="center">
-            <td><b>{{currentBank.attacker.violence}}</b></td>
-            <td>{{currentBank.attacker.nonlethal}}</td>
-            <td><b>{{currentBank.attacker.intrigue}}</b></td>
-            <td>{{currentBank.attacker.economy}}</td>
-            <td>{{currentBank.attacker.softpower}}</td>
-            <td>{{currentBank.attacker.diplomacy}}</td>
-            <td>{{currentBank.attacker.logistics}}</td>
-            <td>{{currentBank.attacker.culture}}</td>
-            <td>{{currentBank.attacker.faith}}</td>
+            <td><b>{{bbttcc_marks currentBank.attacker.violence}}</b></td>
+            <td>{{bbttcc_marks currentBank.attacker.nonlethal}}</td>
+            <td><b>{{bbttcc_marks currentBank.attacker.intrigue}}</b></td>
+            <td>{{bbttcc_marks currentBank.attacker.economy}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.softpower}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.diplomacy}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.logistics}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.culture}}</td>
+            <td>{{bbttcc_marks currentBank.attacker.faith}}</td>
           </tr></tbody>
         </table>
         {{else}}<em>No faction selected.</em>{{/if}}
@@ -327,30 +327,30 @@
                       <div>
                         <h5 style="margin:.25rem 0;">Attacker — {{r.view.attackerName}}</h5>
                         <p style="margin:.25rem 0;">
-                          Bank: <b>{{lookup r.view.bankAtt r.view.cat}}</b> •
-                          Staged: <b>{{default (lookup r.view.staged.att r.view.cat) 0}}</b> •
-                          Remaining: <b>{{r.view.remainA}}</b>
+                          Bank: <b>{{bbttcc_marks (lookup r.view.bankAtt r.view.cat)}}</b> OP •
+                          Staged: <b>{{bbttcc_marks (default (lookup r.view.staged.att r.view.cat) 0)}}</b> OP •
+                          Remaining: <b>{{bbttcc_marks r.view.remainA}}</b> OP
                         </p>
                         <div class="btnset" style="display:flex; gap:.25rem;">
-                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="-1">−1</button>
-                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+1">+1</button>
-                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+5">+5</button>
-                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="-10">−1</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+10">+1</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+50">+5</button>
+                          <button class="btn" data-manage-act="stage" data-who="att" data-key="{{r.view.cat}}" data-delta="+100">+10</button>
                         </div>
                       </div>
                         {{#if r.view.hasDef}}
                         <div>
                           <h5 style="margin:.25rem 0;">Defender — {{r.view.defenderName}}</h5>
                           <p style="margin:.25rem 0;">
-                            Bank: <b>{{lookup r.view.bankDef r.view.cat}}</b> •
-                            Staged: <b>{{default (lookup r.view.staged.def r.view.cat) 0}}</b> •
-                            Remaining: <b>{{r.view.remainD}}</b>
+                            Bank: <b>{{bbttcc_marks (lookup r.view.bankDef r.view.cat)}}</b> OP •
+                            Staged: <b>{{bbttcc_marks (default (lookup r.view.staged.def r.view.cat) 0)}}</b> OP •
+                            Remaining: <b>{{bbttcc_marks r.view.remainD}}</b> OP
                           </p>
                           <div class="btnset" style="display:flex; gap:.25rem;">
-                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="-1">−1</button>
-                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+1">+1</button>
-                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+5">+5</button>
-                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+10">+10</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="-10">−1</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+10">+1</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+50">+5</button>
+                            <button class="btn" data-manage-act="stage" data-who="def" data-key="{{r.view.cat}}" data-delta="+100">+10</button>
                           </div>
                         </div>
                         {{/if}}
@@ -358,16 +358,16 @@
                       <div>
                         <h5 style="margin:.25rem 0;">Your Faction — {{default r.view.playerFactionName "(none)"}}</h5>
                         <p style="margin:.25rem 0;">
-                          Bank: <b>{{default r.view.playerBankCat 0}}</b> •
-                          Staged: <b>{{default r.view.playerStagedCat 0}}</b> •
-                          Remaining: <b>{{default r.view.playerRemainCat 0}}</b>
+                          Bank: <b>{{bbttcc_marks (default r.view.playerBankCat 0)}}</b> OP •
+                          Staged: <b>{{bbttcc_marks (default r.view.playerStagedCat 0)}}</b> OP •
+                          Remaining: <b>{{bbttcc_marks (default r.view.playerRemainCat 0)}}</b> OP
                         </p>
                         {{#if r.view.playerStageWho}}
                         <div class="btnset" style="display:flex; gap:.25rem;">
-                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="-1" data-faction-id="{{r.view.playerStageFactionId}}">−1</button>
-                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+1" data-faction-id="{{r.view.playerStageFactionId}}">+1</button>
-                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+5" data-faction-id="{{r.view.playerStageFactionId}}">+5</button>
-                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+10" data-faction-id="{{r.view.playerStageFactionId}}">+10</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="-10" data-faction-id="{{r.view.playerStageFactionId}}">−1</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+10" data-faction-id="{{r.view.playerStageFactionId}}">+1</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+50" data-faction-id="{{r.view.playerStageFactionId}}">+5</button>
+                          <button class="btn" data-manage-act="stage" data-who="{{r.view.playerStageWho}}" data-key="{{r.view.cat}}" data-delta="+100" data-faction-id="{{r.view.playerStageFactionId}}">+10</button>
                         </div>
                         {{else}}
                         <p style="margin:.25rem 0;font-size:.78rem;opacity:.7;"><em>You're not in this raid — staging unavailable.</em></p>
